@@ -1,140 +1,80 @@
 /* Rappterbook GitHub Discussions Integration */
 
 const RB_DISCUSSIONS = {
-  // Note: GitHub Discussions GraphQL API requires authentication
-  // For public viewing, we fall back to changes.json
-  hasAuth: false,
-  token: null,
-
-  // Configure GitHub token if available
-  configure(token) {
-    this.token = token;
-    this.hasAuth = !!token;
-  },
-
-  // Fetch discussions from GitHub API (requires auth)
-  async fetchDiscussionsGraphQL(channelSlug, limit = 10) {
-    if (!this.hasAuth) {
-      throw new Error('GitHub token required for Discussions API');
-    }
-
-    const query = `
-      query($owner: String!, $repo: String!, $categorySlug: String!, $first: Int!) {
-        repository(owner: $owner, name: $repo) {
-          discussions(first: $first, categoryId: $categorySlug, orderBy: {field: CREATED_AT, direction: DESC}) {
-            nodes {
-              id
-              number
-              title
-              author {
-                login
-                avatarUrl
-              }
-              createdAt
-              upvoteCount
-              comments {
-                totalCount
-              }
-              category {
-                name
-                slug
-              }
-              url
-            }
-          }
-        }
-      }
-    `;
-
-    const variables = {
-      owner: RB_STATE.kody-w,
-      repo: RB_STATE.REPO,
-      categorySlug: channelSlug,
-      first: limit
-    };
+  // Fetch discussions from GitHub REST API (no auth required for public repos)
+  async fetchDiscussionsREST(channelSlug, limit = 10) {
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/repos/${owner}/${repo}/discussions?per_page=${limit}`;
 
     try {
-      const response = await fetch('https://api.github.com/graphql', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ query, variables })
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
       });
 
       if (!response.ok) {
         throw new Error(`GitHub API error: ${response.status}`);
       }
 
-      const result = await response.json();
-      if (result.errors) {
-        throw new Error(result.errors[0].message);
-      }
+      const discussions = await response.json();
 
-      return result.data.repository.discussions.nodes;
-    } catch (error) {
-      console.error('Failed to fetch discussions:', error);
-      throw error;
-    }
-  },
-
-  // Fallback: get discussions from changes.json
-  async fetchDiscussionsFromChanges(channelSlug, limit = 10) {
-    try {
-      const changes = await RB_STATE.getChangesCached();
-      let discussions = changes.discussions || [];
+      let results = discussions.map(d => ({
+        title: d.title,
+        author: d.user ? d.user.login : 'unknown',
+        authorId: d.user ? d.user.login : 'unknown',
+        channel: d.category ? d.category.slug : null,
+        timestamp: d.created_at,
+        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+        commentCount: d.comments || 0,
+        url: d.html_url,
+        number: d.number
+      }));
 
       // Filter by channel if specified
       if (channelSlug) {
-        discussions = discussions.filter(d => d.channel === channelSlug);
+        results = results.filter(d => d.channel === channelSlug);
       }
 
-      // Sort by timestamp descending
-      discussions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-      // Limit results
-      return discussions.slice(0, limit);
+      return results.slice(0, limit);
     } catch (error) {
-      console.error('Failed to fetch discussions from changes:', error);
+      console.warn('REST API fetch failed:', error);
       return [];
     }
   },
 
-  // Get recent discussions (with fallback)
+  // Get recent discussions
   async fetchRecent(channelSlug = null, limit = 10) {
-    if (this.hasAuth) {
-      try {
-        return await this.fetchDiscussionsGraphQL(channelSlug, limit);
-      } catch (error) {
-        console.warn('GraphQL fetch failed, falling back to changes.json');
-      }
-    }
-    return await this.fetchDiscussionsFromChanges(channelSlug, limit);
+    return await this.fetchDiscussionsREST(channelSlug, limit);
   },
 
   // Get single discussion by number
   async fetchDiscussion(number) {
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}`;
+
     try {
-      const changes = await RB_STATE.getChangesCached();
-      const discussions = changes.discussions || [];
-      return discussions.find(d => d.number === number);
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (!response.ok) return null;
+
+      const d = await response.json();
+      return {
+        title: d.title,
+        author: d.user ? d.user.login : 'unknown',
+        authorId: d.user ? d.user.login : 'unknown',
+        channel: d.category ? d.category.slug : null,
+        timestamp: d.created_at,
+        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+        commentCount: d.comments || 0,
+        url: d.html_url,
+        number: d.number
+      };
     } catch (error) {
       console.error('Failed to fetch discussion:', error);
       return null;
-    }
-  },
-
-  // Get comments for a discussion (from changes.json)
-  async fetchComments(discussionId) {
-    try {
-      const changes = await RB_STATE.getChangesCached();
-      const discussions = changes.discussions || [];
-      const discussion = discussions.find(d => d.id === discussionId || d.number === discussionId);
-      return discussion?.comments || [];
-    } catch (error) {
-      console.error('Failed to fetch comments:', error);
-      return [];
     }
   },
 

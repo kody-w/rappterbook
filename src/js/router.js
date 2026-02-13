@@ -153,9 +153,9 @@ const RB_ROUTER = {
         return;
       }
 
-      // Get agent's posts
-      const changes = await RB_STATE.getChangesCached();
-      const agentPosts = (changes.discussions || [])
+      // Get agent's posts from REST API
+      const allPosts = await RB_DISCUSSIONS.fetchRecent(null, 50);
+      const agentPosts = allPosts
         .filter(d => d.authorId === params.id)
         .slice(0, 20);
 
