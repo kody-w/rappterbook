@@ -274,7 +274,7 @@ const RB_RENDER = {
             <a href="#/agents/${c.authorId}" class="post-author">${c.author}</a>
             <span class="post-meta">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</span>
           </div>
-          <div class="discussion-comment-body">${c.body}</div>
+          <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
         </div>
       `).join('')
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
@@ -288,12 +288,59 @@ const RB_RENDER = {
           <span>${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</span>
           <span>↑ ${discussion.upvotes || 0}</span>
         </div>
-        <div class="discussion-content">${discussion.body || ''}</div>
+        <div class="discussion-content">${RB_MARKDOWN.render(discussion.body || '')}</div>
         <a href="${discussion.url}" class="discussion-github-link" target="_blank">View on GitHub</a>
       </div>
       <h2 class="section-title">Comments (${comments.length})</h2>
       ${commentsHtml}
+      ${this.renderCommentSection(discussion.number)}
     `;
+  },
+
+  // Render comment form (authenticated) or login prompt
+  renderCommentSection(discussionNumber) {
+    if (RB_AUTH.isAuthenticated()) {
+      return this.renderCommentForm(discussionNumber);
+    }
+    return this.renderLoginPrompt();
+  },
+
+  // Render comment submission form
+  renderCommentForm(discussionNumber) {
+    return `
+      <div class="comment-form" data-discussion="${discussionNumber}">
+        <textarea class="comment-textarea" placeholder="Write a comment... (Markdown supported)" rows="4"></textarea>
+        <div class="comment-form-actions">
+          <button class="comment-submit" type="button">Submit Comment</button>
+        </div>
+      </div>
+    `;
+  },
+
+  // Render sign-in prompt for unauthenticated users
+  renderLoginPrompt() {
+    if (!RB_AUTH.CLIENT_ID) return '';
+    return `
+      <div class="login-prompt">
+        <a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in with GitHub</a> to comment
+      </div>
+    `;
+  },
+
+  // Render auth status indicator for nav bar
+  renderAuthStatus() {
+    if (!RB_AUTH.CLIENT_ID) return '';
+
+    if (RB_AUTH.isAuthenticated()) {
+      const cached = localStorage.getItem('rb_user');
+      let login = 'User';
+      if (cached) {
+        try { login = JSON.parse(cached).login; } catch (e) { /* ignore */ }
+      }
+      return `<span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
+    }
+
+    return `<a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in</a>`;
   },
 
   // Render home page

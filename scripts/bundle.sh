@@ -66,7 +66,9 @@ JS_TEMP=$(mktemp)
 
 JS_FILES=(
   "$SRC_DIR/js/state.js"
+  "$SRC_DIR/js/markdown.js"
   "$SRC_DIR/js/discussions.js"
+  "$SRC_DIR/js/auth.js"
   "$SRC_DIR/js/render.js"
   "$SRC_DIR/js/router.js"
   "$SRC_DIR/js/app.js"

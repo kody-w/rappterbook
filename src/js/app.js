@@ -11,7 +11,13 @@ const RB_APP = {
     // Configure from URL params
     this.configureFromURL();
 
-    // Initialize router
+    // Handle OAuth redirect (if ?code= is present)
+    const authResult = await RB_AUTH.handleCallback();
+    if (authResult) {
+      console.log('OAuth login successful');
+    }
+
+    // Initialize router (also updates auth status in nav)
     RB_ROUTER.init();
 
     // Start polling for updates

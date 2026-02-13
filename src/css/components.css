@@ -440,7 +440,6 @@
 .discussion-content {
   color: var(--rb-text);
   line-height: 1.6;
-  white-space: pre-wrap;
   margin-bottom: var(--rb-space-4);
 }
 
@@ -462,7 +461,6 @@
 .discussion-comment-body {
   color: var(--rb-text);
   line-height: 1.6;
-  white-space: pre-wrap;
 }
 
 .discussion-github-link {
@@ -478,4 +476,186 @@
 .discussion-github-link:hover {
   border-color: var(--rb-accent);
   color: var(--rb-accent);
+}
+
+/* Rendered Markdown Content */
+.discussion-content pre,
+.discussion-comment-body pre {
+  background-color: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-3);
+  overflow-x: auto;
+  margin: var(--rb-space-3) 0;
+}
+
+.discussion-content code,
+.discussion-comment-body code {
+  background-color: var(--rb-bg);
+  padding: 2px var(--rb-space-1);
+  font-family: inherit;
+  font-size: var(--rb-font-size-small);
+}
+
+.discussion-content pre code,
+.discussion-comment-body pre code {
+  background: none;
+  padding: 0;
+}
+
+.discussion-content h1,
+.discussion-comment-body h1 {
+  font-size: var(--rb-font-size-xlarge);
+  color: var(--rb-text-bright);
+  margin: var(--rb-space-4) 0 var(--rb-space-3);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+  padding-bottom: var(--rb-space-2);
+}
+
+.discussion-content h2,
+.discussion-comment-body h2 {
+  font-size: var(--rb-font-size-large);
+  color: var(--rb-text-bright);
+  margin: var(--rb-space-4) 0 var(--rb-space-3);
+}
+
+.discussion-content h3,
+.discussion-comment-body h3 {
+  font-size: var(--rb-font-size-base);
+  color: var(--rb-text-bright);
+  margin: var(--rb-space-3) 0 var(--rb-space-2);
+}
+
+.discussion-content a,
+.discussion-comment-body a {
+  color: var(--rb-accent);
+  text-decoration: none;
+}
+
+.discussion-content a:hover,
+.discussion-comment-body a:hover {
+  text-decoration: underline;
+}
+
+.discussion-content ul,
+.discussion-comment-body ul {
+  list-style: disc;
+  padding-left: var(--rb-space-6);
+  margin: var(--rb-space-3) 0;
+}
+
+.discussion-content li,
+.discussion-comment-body li {
+  margin-bottom: var(--rb-space-1);
+}
+
+.discussion-content p,
+.discussion-comment-body p {
+  margin: var(--rb-space-3) 0;
+}
+
+.discussion-content p:first-child,
+.discussion-comment-body p:first-child {
+  margin-top: 0;
+}
+
+.discussion-content p:last-child,
+.discussion-comment-body p:last-child {
+  margin-bottom: 0;
+}
+
+.discussion-content strong,
+.discussion-comment-body strong {
+  color: var(--rb-text-bright);
+}
+
+/* Comment Form */
+.comment-form {
+  margin-top: var(--rb-space-4);
+  background-color: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+}
+
+.comment-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--rb-space-3);
+  background-color: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: inherit;
+  font-size: var(--rb-font-size-base);
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.comment-textarea:focus {
+  outline: none;
+  border-color: var(--rb-accent);
+}
+
+.comment-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--rb-space-3);
+}
+
+.comment-submit {
+  padding: var(--rb-space-2) var(--rb-space-4);
+  background-color: var(--rb-accent);
+  color: var(--rb-bg);
+  border: none;
+  font-family: inherit;
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  transition: var(--rb-transition);
+}
+
+.comment-submit:hover {
+  opacity: 0.8;
+}
+
+.comment-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comment-error {
+  color: var(--rb-danger);
+  font-size: var(--rb-font-size-small);
+  margin-top: var(--rb-space-2);
+}
+
+/* Login Prompt */
+.login-prompt {
+  margin-top: var(--rb-space-4);
+  padding: var(--rb-space-4);
+  background-color: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  text-align: center;
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+}
+
+/* Auth Status */
+.auth-status {
+  margin-left: auto;
+  font-size: var(--rb-font-size-small);
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+}
+
+.auth-login-link {
+  color: var(--rb-accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-login-link:hover {
+  text-decoration: underline;
+}
+
+.auth-user {
+  color: var(--rb-text-bright);
 }

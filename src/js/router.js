@@ -28,12 +28,23 @@ const RB_ROUTER = {
     // Update active nav link
     this.updateActiveNav(hash);
 
+    // Update auth status in nav
+    this.updateAuthStatus();
+
     // Match route
     const match = this.matchRoute(hash);
     if (match) {
       await this.handleRoute(match.handler, match.params);
     } else {
       this.render404();
+    }
+  },
+
+  // Update auth status display in nav
+  updateAuthStatus() {
+    const el = document.getElementById('auth-status');
+    if (el) {
+      el.innerHTML = RB_RENDER.renderAuthStatus();
     }
   },
 
@@ -197,9 +208,56 @@ const RB_ROUTER = {
       }
 
       app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
+
+      // Wire up comment form submission
+      this.attachCommentHandler(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }
+  },
+
+  // Attach event listener to comment form submit button
+  attachCommentHandler(discussionNumber) {
+    const submitBtn = document.querySelector('.comment-submit');
+    if (!submitBtn) return;
+
+    submitBtn.addEventListener('click', async () => {
+      const textarea = document.querySelector('.comment-textarea');
+      const body = textarea ? textarea.value.trim() : '';
+      if (!body) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Posting...';
+
+      try {
+        await RB_DISCUSSIONS.postComment(discussionNumber, body);
+
+        // Re-fetch comments and re-render
+        const [discussion, comments] = await Promise.all([
+          RB_DISCUSSIONS.fetchDiscussion(discussionNumber),
+          RB_DISCUSSIONS.fetchComments(discussionNumber)
+        ]);
+
+        const app = document.getElementById('app');
+        app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
+        this.attachCommentHandler(discussionNumber);
+      } catch (error) {
+        console.error('Failed to post comment:', error);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Comment';
+
+        // Show inline error
+        const form = document.querySelector('.comment-form');
+        if (form) {
+          const existing = form.querySelector('.comment-error');
+          if (existing) existing.remove();
+          const errorEl = document.createElement('div');
+          errorEl.className = 'comment-error';
+          errorEl.textContent = `Failed to post: ${error.message}`;
+          form.appendChild(errorEl);
+        }
+      }
+    });
   },
 
   render404() {

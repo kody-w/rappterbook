@@ -105,6 +105,35 @@ const RB_DISCUSSIONS = {
     }
   },
 
+  // Post a comment to a discussion (requires auth)
+  async postComment(number, body) {
+    const token = RB_AUTH.getToken();
+    if (!token) {
+      throw new Error('Not authenticated');
+    }
+
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}/comments`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ body })
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || `Failed to post comment: ${response.status}`);
+    }
+
+    return await response.json();
+  },
+
   // Format timestamp
   formatTimestamp(timestamp) {
     const date = new Date(timestamp);
