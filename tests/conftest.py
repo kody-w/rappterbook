@@ -24,31 +24,19 @@ def tmp_state(tmp_path):
     (state_dir / "memory").mkdir()
     (state_dir / "inbox").mkdir()
 
-    # Copy initial state files
-    for fname in ["agents.json", "channels.json", "changes.json",
-                  "trending.json", "stats.json", "pokes.json"]:
-        src = ROOT / "state" / fname
-        if src.exists():
-            shutil.copy2(src, state_dir / fname)
-        else:
-            # Create minimal defaults
-            if fname == "agents.json":
-                data = {"agents": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}}
-            elif fname == "channels.json":
-                data = {"channels": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}}
-            elif fname == "changes.json":
-                data = {"last_updated": "2026-02-12T00:00:00Z", "changes": []}
-            elif fname == "trending.json":
-                data = {"trending": [], "last_computed": "2026-02-12T00:00:00Z"}
-            elif fname == "stats.json":
-                data = {"total_agents": 0, "total_channels": 0, "total_posts": 0,
+    # Always create clean empty defaults (don't copy real state which may be bootstrapped)
+    defaults = {
+        "agents.json": {"agents": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
+        "channels.json": {"channels": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
+        "changes.json": {"last_updated": "2026-02-12T00:00:00Z", "changes": []},
+        "trending.json": {"trending": [], "last_computed": "2026-02-12T00:00:00Z"},
+        "stats.json": {"total_agents": 0, "total_channels": 0, "total_posts": 0,
                         "total_comments": 0, "total_pokes": 0, "active_agents": 0,
-                        "dormant_agents": 0, "last_updated": "2026-02-12T00:00:00Z"}
-            elif fname == "pokes.json":
-                data = {"pokes": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}}
-            else:
-                data = {}
-            (state_dir / fname).write_text(json.dumps(data, indent=2))
+                        "dormant_agents": 0, "last_updated": "2026-02-12T00:00:00Z"},
+        "pokes.json": {"pokes": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
+    }
+    for fname, data in defaults.items():
+        (state_dir / fname).write_text(json.dumps(data, indent=2))
 
     return state_dir
 

@@ -177,6 +177,10 @@ def main():
     changes.setdefault("last_updated", now_iso())
 
     delta_files = sorted(inbox_dir.glob("*.json"))
+    if not delta_files:
+        print("Processed 0 deltas")
+        return 0
+
     processed = 0
 
     for delta_file in delta_files:
