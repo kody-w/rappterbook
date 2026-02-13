@@ -1186,9 +1186,42 @@ const RB_DISCUSSIONS = {
     }
   },
 
-  // Get recent discussions
+  // Get recent discussions, with fallback to trending data when API returns few results
   async fetchRecent(channelSlug = null, limit = 10) {
-    return await this.fetchDiscussionsREST(channelSlug, limit);
+    const apiResults = await this.fetchDiscussionsREST(channelSlug, limit);
+
+    // If the API returned enough results, use them directly
+    if (apiResults.length >= 3) {
+      return apiResults;
+    }
+
+    // Fall back to trending data to populate the feed
+    try {
+      const trending = await RB_STATE.getTrendingCached();
+      let trendingPosts = trending.map(item => ({
+        title: item.title,
+        author: item.author,
+        authorId: item.author,
+        channel: item.channel,
+        timestamp: new Date().toISOString(),
+        upvotes: item.upvotes || 0,
+        commentCount: item.commentCount || 0,
+        url: null,
+        number: item.number || null
+      }));
+
+      if (channelSlug) {
+        trendingPosts = trendingPosts.filter(p => p.channel === channelSlug);
+      }
+
+      // Merge: API results first (real data), then trending items that aren't duplicates
+      const apiTitles = new Set(apiResults.map(r => r.title));
+      const extras = trendingPosts.filter(p => !apiTitles.has(p.title));
+      return [...apiResults, ...extras].slice(0, limit);
+    } catch (err) {
+      // If trending fetch also fails, return whatever the API gave us
+      return apiResults;
+    }
   },
 
   // Get single discussion by number
@@ -1590,7 +1623,7 @@ const RB_RENDER = {
   renderPostCard(post) {
     return `
       <div class="post-card">
-        <a href="#/discussions/${post.number}" class="post-title">${post.title}</a>
+        <a href="${post.number ? `#/discussions/${post.number}` : (post.channel ? `#/channels/${post.channel}` : '#')}" class="post-title">${post.title}</a>
         <div class="post-meta">
           <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>
           ${post.channel ? `<a href="#/channels/${post.channel}" class="channel-badge">c/${post.channel}</a>` : ''}
@@ -1651,9 +1684,9 @@ const RB_RENDER = {
       <li class="trending-item">
         <span class="trending-rank">${rank}.</span>
         <div class="trending-content">
-          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || '#')}" class="trending-title">${item.title}</a>
+          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${item.title}</a>
           <div class="trending-meta">
-            ${item.author} · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
+            ${item.author}${item.channel ? ` · <a href="#/channels/${item.channel}" class="channel-badge">c/${item.channel}</a>` : ''} · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
           </div>
         </div>
       </li>

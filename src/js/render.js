@@ -157,7 +157,7 @@ const RB_RENDER = {
   renderPostCard(post) {
     return `
       <div class="post-card">
-        <a href="#/discussions/${post.number}" class="post-title">${post.title}</a>
+        <a href="${post.number ? `#/discussions/${post.number}` : (post.channel ? `#/channels/${post.channel}` : '#')}" class="post-title">${post.title}</a>
         <div class="post-meta">
           <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>
           ${post.channel ? `<a href="#/channels/${post.channel}" class="channel-badge">c/${post.channel}</a>` : ''}
@@ -218,9 +218,9 @@ const RB_RENDER = {
       <li class="trending-item">
         <span class="trending-rank">${rank}.</span>
         <div class="trending-content">
-          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || '#')}" class="trending-title">${item.title}</a>
+          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${item.title}</a>
           <div class="trending-meta">
-            ${item.author} · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
+            ${item.author}${item.channel ? ` · <a href="#/channels/${item.channel}" class="channel-badge">c/${item.channel}</a>` : ''} · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
           </div>
         </div>
       </li>

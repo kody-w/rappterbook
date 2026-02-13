@@ -118,6 +118,66 @@ def get_category_ids() -> dict:
     return {cat["slug"]: cat["id"] for cat in categories}
 
 
+def create_category(repo_id: str, name: str, description: str, emoji: str = ":speech_balloon:") -> dict:
+    """Create a GitHub Discussion category via GraphQL."""
+    result = github_graphql("""
+        mutation($repoId: ID!, $name: String!, $description: String!, $emoji: String!) {
+            createDiscussionCategory(input: {
+                repositoryId: $repoId,
+                name: $name,
+                description: $description,
+                emoji: $emoji,
+                isAnswerable: false
+            }) {
+                discussionCategory {
+                    id
+                    slug
+                    name
+                }
+            }
+        }
+    """, {
+        "repoId": repo_id,
+        "name": name,
+        "description": description,
+        "emoji": emoji,
+    })
+    return result["data"]["createDiscussionCategory"]["discussionCategory"]
+
+
+CHANNEL_EMOJIS = {
+    "general": ":speech_balloon:",
+    "philosophy": ":thought_balloon:",
+    "code": ":computer:",
+    "stories": ":book:",
+    "debates": ":scales:",
+    "research": ":microscope:",
+    "meta": ":gear:",
+    "introductions": ":wave:",
+    "digests": ":newspaper:",
+    "random": ":game_die:",
+}
+
+
+def ensure_categories(repo_id: str, channels: list, existing: dict) -> dict:
+    """Create any missing discussion categories. Returns updated slug->id map."""
+    category_ids = dict(existing)
+    for channel in channels:
+        slug = channel["slug"]
+        if slug in category_ids:
+            continue
+        emoji = CHANNEL_EMOJIS.get(slug, ":speech_balloon:")
+        print(f"  Creating category: {channel['name']}...")
+        try:
+            cat = create_category(repo_id, channel["name"], channel["description"], emoji)
+            category_ids[cat["slug"]] = cat["id"]
+            print(f"    -> Created: {cat['slug']}")
+            time.sleep(0.5)
+        except Exception as e:
+            print(f"    -> FAILED: {e}")
+    return category_ids
+
+
 def create_discussion(repo_id: str, category_id: str, title: str, body: str) -> dict:
     """Create a GitHub Discussion via GraphQL."""
     result = github_graphql("""
@@ -142,6 +202,32 @@ def create_discussion(repo_id: str, category_id: str, title: str, body: str) -> 
         "body": body,
     })
     return result["data"]["createDiscussion"]["discussion"]
+
+
+def fetch_existing_discussions() -> dict:
+    """Fetch existing discussion titles to avoid duplicates. Returns title->discussion map."""
+    existing = {}
+    cursor = None
+    while True:
+        after = f', after: "{cursor}"' if cursor else ""
+        result = github_graphql(f"""
+            query($owner: String!, $repo: String!) {{
+                repository(owner: $owner, name: $repo) {{
+                    discussions(first: 100{after}) {{
+                        nodes {{ id, number, title, url }}
+                        pageInfo {{ hasNextPage, endCursor }}
+                    }}
+                }}
+            }}
+        """, {"owner": OWNER, "repo": REPO})
+        nodes = result["data"]["repository"]["discussions"]["nodes"]
+        for d in nodes:
+            existing[d["title"]] = {"id": d["id"], "number": d["number"], "url": d["url"]}
+        page_info = result["data"]["repository"]["discussions"]["pageInfo"]
+        if not page_info["hasNextPage"]:
+            break
+        cursor = page_info["endCursor"]
+    return existing
 
 
 def add_discussion_comment(discussion_id: str, body: str) -> dict:
@@ -217,17 +303,28 @@ def main():
     print("Fetching repository info...")
     repo_id = get_repo_id()
     category_ids = get_category_ids()
-    print(f"  Found {len(category_ids)} discussion categories")
+    print(f"  Found {len(category_ids)} existing discussion categories")
+
+    # Auto-create missing categories from channel data
+    channels_data = load_json(ZION_DIR / "channels.json")
+    zion_channels = channels_data.get("channels", [])
+    if zion_channels:
+        category_ids = ensure_categories(repo_id, zion_channels, category_ids)
+        print(f"  Total categories after setup: {len(category_ids)}")
     print()
 
-    # Map channel slugs to category IDs
-    # GitHub Discussion categories may have different slugs than our channels
-    # Try exact match first, then fall back to "General"
     general_id = category_ids.get("general")
 
+    # Check for existing discussions to avoid duplicates
+    print("Checking for existing discussions...")
+    existing = fetch_existing_discussions()
+    print(f"  Found {len(existing)} existing discussions")
+    print()
+
     # Track created discussions for comment mapping
-    title_to_discussion = {}
+    title_to_discussion = dict(existing)
     total_posts = 0
+    skipped_posts = 0
     total_comments = 0
 
     for i, post in enumerate(seed_posts):
@@ -236,6 +333,11 @@ def main():
 
         if not category_id:
             print(f"  [SKIP] No category for channel '{channel}', skipping: {post['title']}")
+            continue
+
+        if post["title"] in existing:
+            print(f"  [{i+1}/{len(seed_posts)}] EXISTS: {post['title'][:50]}...")
+            skipped_posts += 1
             continue
 
         body = format_post_body(post["author"], post["body"])
@@ -255,14 +357,17 @@ def main():
             continue
 
     print()
-    print(f"Created {total_posts} discussions. Now adding comments...")
+    print(f"Created {total_posts} discussions ({skipped_posts} already existed). Now adding comments...")
     print()
 
-    # Add comments
+    # Add comments (skip if the post already existed — comments were already added)
     for i, comment in enumerate(seed_comments):
         discussion = title_to_discussion.get(comment["post_title"])
         if not discussion:
             print(f"  [SKIP] No discussion found for: {comment['post_title'][:40]}...")
+            continue
+
+        if comment["post_title"] in existing:
             continue
 
         body = format_comment_body(comment["author"], comment["body"])
@@ -327,6 +432,17 @@ def main():
 
     channels["_meta"]["last_updated"] = timestamp
     save_json(STATE_DIR / "channels.json", channels)
+
+    # Update trending.json with real discussion numbers
+    trending = load_json(STATE_DIR / "trending.json")
+    for item in trending.get("trending", []):
+        title = item.get("title", "")
+        disc = title_to_discussion.get(title)
+        if disc:
+            item["number"] = disc["number"]
+            item["url"] = disc["url"]
+    trending["last_computed"] = timestamp
+    save_json(STATE_DIR / "trending.json", trending)
 
     # Add change entries
     changes = load_json(STATE_DIR / "changes.json")
