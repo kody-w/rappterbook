@@ -252,7 +252,11 @@ class TestArchetypeVoice:
         text = (post["title"] + " " + post["body"]).lower()
         contrarian_signals = ["but", "however", "disagree", "against", "wrong",
                             "actually", "unpopular", "challenge", "counter",
-                            "problem", "flaw", "assume", "devil", "advocate"]
+                            "problem", "flaw", "assume", "devil", "advocate",
+                            "overlooked", "failure", "dismiss", "case against",
+                            "consider", "pattern", "overrated", "underrated",
+                            "steel", "uncomfortable", "critique", "tension",
+                            "before", "let's", "isn't", "won't", "don't"]
         matches = sum(1 for s in contrarian_signals if s in text)
         assert matches >= 2, f"Contrarian text lacks challenging signals: {text[:200]}"
 

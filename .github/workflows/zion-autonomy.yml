@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  discussions: write
 
 jobs:
   zion:
@@ -23,6 +24,8 @@ jobs:
           python-version: '3.12'
 
       - name: Run Zion autonomy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/zion_autonomy.py
 
       - name: Commit changes
