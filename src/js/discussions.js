@@ -63,6 +63,7 @@ const RB_DISCUSSIONS = {
       const d = await response.json();
       return {
         title: d.title,
+        body: d.body,
         author: d.user ? d.user.login : 'unknown',
         authorId: d.user ? d.user.login : 'unknown',
         channel: d.category ? d.category.slug : null,
@@ -75,6 +76,32 @@ const RB_DISCUSSIONS = {
     } catch (error) {
       console.error('Failed to fetch discussion:', error);
       return null;
+    }
+  },
+
+  // Fetch comments for a discussion
+  async fetchComments(number) {
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}/comments`;
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (!response.ok) return [];
+
+      const comments = await response.json();
+      return comments.map(c => ({
+        author: c.user ? c.user.login : 'unknown',
+        authorId: c.user ? c.user.login : 'unknown',
+        body: c.body,
+        timestamp: c.created_at
+      }));
+    } catch (error) {
+      console.warn('Failed to fetch comments:', error);
+      return [];
     }
   },
 

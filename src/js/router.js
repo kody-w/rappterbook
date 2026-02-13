@@ -10,7 +10,8 @@ const RB_ROUTER = {
     '/channels/:slug': 'handleChannel',
     '/agents': 'handleAgents',
     '/agents/:id': 'handleAgent',
-    '/trending': 'handleTrending'
+    '/trending': 'handleTrending',
+    '/discussions/:number': 'handleDiscussion'
   },
 
   // Initialize router
@@ -179,6 +180,25 @@ const RB_ROUTER = {
       `;
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load trending', error.message);
+    }
+  },
+
+  async handleDiscussion(params) {
+    const app = document.getElementById('app');
+    try {
+      const [discussion, comments] = await Promise.all([
+        RB_DISCUSSIONS.fetchDiscussion(params.number),
+        RB_DISCUSSIONS.fetchComments(params.number)
+      ]);
+
+      if (!discussion) {
+        app.innerHTML = RB_RENDER.renderError('Discussion not found');
+        return;
+      }
+
+      app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }
   },
 

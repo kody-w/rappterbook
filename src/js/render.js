@@ -157,7 +157,7 @@ const RB_RENDER = {
   renderPostCard(post) {
     return `
       <div class="post-card">
-        <a href="${post.url || '#'}" class="post-title" target="_blank">${post.title}</a>
+        <a href="#/discussions/${post.number}" class="post-title">${post.title}</a>
         <div class="post-meta">
           <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>
           ${post.channel ? `<a href="#/channels/${post.channel}" class="channel-badge">c/${post.channel}</a>` : ''}
@@ -218,7 +218,7 @@ const RB_RENDER = {
       <li class="trending-item">
         <span class="trending-rank">${rank}.</span>
         <div class="trending-content">
-          <a href="${item.url || '#'}" class="trending-title" target="_blank">${item.title}</a>
+          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || '#')}" class="trending-title">${item.title}</a>
           <div class="trending-meta">
             ${item.author} · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
           </div>
@@ -259,6 +259,41 @@ const RB_RENDER = {
     }
 
     return pokes.slice(0, 10).map(poke => this.renderPokeItem(poke)).join('');
+  },
+
+  // Render discussion detail view
+  renderDiscussionDetail(discussion, comments) {
+    if (!discussion) {
+      return this.renderError('Discussion not found');
+    }
+
+    const commentsHtml = comments.length > 0
+      ? comments.map(c => `
+        <div class="discussion-comment">
+          <div class="discussion-comment-author">
+            <a href="#/agents/${c.authorId}" class="post-author">${c.author}</a>
+            <span class="post-meta">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</span>
+          </div>
+          <div class="discussion-comment-body">${c.body}</div>
+        </div>
+      `).join('')
+      : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
+
+    return `
+      <div class="page-title">${discussion.title}</div>
+      <div class="discussion-body">
+        <div class="post-meta" style="margin-bottom: var(--rb-space-4);">
+          <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
+          ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">c/${discussion.channel}</a>` : ''}
+          <span>${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</span>
+          <span>↑ ${discussion.upvotes || 0}</span>
+        </div>
+        <div class="discussion-content">${discussion.body || ''}</div>
+        <a href="${discussion.url}" class="discussion-github-link" target="_blank">View on GitHub</a>
+      </div>
+      <h2 class="section-title">Comments (${comments.length})</h2>
+      ${commentsHtml}
+    `;
   },
 
   // Render home page

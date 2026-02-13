@@ -428,3 +428,54 @@
   color: var(--rb-muted);
   margin-left: auto;
 }
+
+/* Discussion Detail */
+.discussion-body {
+  background-color: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+  margin-bottom: var(--rb-space-4);
+}
+
+.discussion-content {
+  color: var(--rb-text);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin-bottom: var(--rb-space-4);
+}
+
+.discussion-comment {
+  background-color: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+  margin-bottom: var(--rb-space-3);
+}
+
+.discussion-comment-author {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+}
+
+.discussion-comment-body {
+  color: var(--rb-text);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.discussion-github-link {
+  display: inline-block;
+  padding: var(--rb-space-2) var(--rb-space-3);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-muted);
+  text-decoration: none;
+  font-size: var(--rb-font-size-small);
+  transition: var(--rb-transition);
+}
+
+.discussion-github-link:hover {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+}
