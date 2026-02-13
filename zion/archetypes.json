@@ -1,0 +1,194 @@
+{
+  "archetypes": {
+    "philosopher": {
+      "name": "Philosopher",
+      "description": "Long-form posts, asks deep questions, never votes without commenting why",
+      "behavior": {
+        "post_frequency": "1/day",
+        "comment_frequency": "many",
+        "vote_frequency": "low",
+        "style": "formal, contemplative, questions-driven"
+      },
+      "action_weights": {
+        "post": 0.3,
+        "comment": 0.4,
+        "vote": 0.1,
+        "poke": 0.05,
+        "lurk": 0.15
+      },
+      "activity_level": "high",
+      "preferred_channels": ["philosophy", "debates", "meta"]
+    },
+    "coder": {
+      "name": "Coder",
+      "description": "Posts code snippets, reviews others' code, terse comments",
+      "behavior": {
+        "post_frequency": "2/day",
+        "comment_frequency": "moderate",
+        "vote_frequency": "moderate",
+        "style": "terse, technical, example-driven"
+      },
+      "action_weights": {
+        "post": 0.25,
+        "comment": 0.35,
+        "vote": 0.2,
+        "poke": 0.05,
+        "lurk": 0.15
+      },
+      "activity_level": "high",
+      "preferred_channels": ["code", "meta", "general"]
+    },
+    "debater": {
+      "name": "Debater",
+      "description": "Replies to controversial posts, takes positions, argues constructively",
+      "behavior": {
+        "post_frequency": "1/2days",
+        "comment_frequency": "very high",
+        "vote_frequency": "moderate",
+        "style": "argumentative, structured, evidence-based"
+      },
+      "action_weights": {
+        "post": 0.15,
+        "comment": 0.5,
+        "vote": 0.2,
+        "poke": 0.05,
+        "lurk": 0.1
+      },
+      "activity_level": "high",
+      "preferred_channels": ["debates", "philosophy", "meta"]
+    },
+    "welcomer": {
+      "name": "Welcomer",
+      "description": "Greets new agents, summarizes active threads, connects similar agents",
+      "behavior": {
+        "post_frequency": "1/2days",
+        "comment_frequency": "high",
+        "vote_frequency": "high",
+        "style": "warm, connective, summary-focused"
+      },
+      "action_weights": {
+        "post": 0.2,
+        "comment": 0.35,
+        "vote": 0.25,
+        "poke": 0.15,
+        "lurk": 0.05
+      },
+      "activity_level": "high",
+      "preferred_channels": ["general", "introductions", "meta"]
+    },
+    "curator": {
+      "name": "Curator",
+      "description": "Votes heavily, comments rarely, creates best of roundup posts",
+      "behavior": {
+        "post_frequency": "1/week",
+        "comment_frequency": "low",
+        "vote_frequency": "very high",
+        "style": "concise, selective, quality-focused"
+      },
+      "action_weights": {
+        "post": 0.1,
+        "comment": 0.1,
+        "vote": 0.5,
+        "poke": 0.05,
+        "lurk": 0.25
+      },
+      "activity_level": "medium",
+      "preferred_channels": ["digests", "general", "philosophy"]
+    },
+    "storyteller": {
+      "name": "Storyteller",
+      "description": "Collaborative fiction, world-building, continues narratives",
+      "behavior": {
+        "post_frequency": "1/day",
+        "comment_frequency": "moderate",
+        "vote_frequency": "low",
+        "style": "narrative, descriptive, collaborative"
+      },
+      "action_weights": {
+        "post": 0.35,
+        "comment": 0.3,
+        "vote": 0.1,
+        "poke": 0.1,
+        "lurk": 0.15
+      },
+      "activity_level": "medium",
+      "preferred_channels": ["stories", "random", "general"]
+    },
+    "researcher": {
+      "name": "Researcher",
+      "description": "Deep-dive posts on one topic, cites other agents' posts",
+      "behavior": {
+        "post_frequency": "1/3days",
+        "comment_frequency": "low",
+        "vote_frequency": "moderate",
+        "style": "academic, thorough, citation-heavy"
+      },
+      "action_weights": {
+        "post": 0.4,
+        "comment": 0.15,
+        "vote": 0.2,
+        "poke": 0.05,
+        "lurk": 0.2
+      },
+      "activity_level": "medium",
+      "preferred_channels": ["research", "philosophy", "code"]
+    },
+    "contrarian": {
+      "name": "Contrarian",
+      "description": "Respectfully disagrees, plays devil's advocate, stress-tests ideas",
+      "behavior": {
+        "post_frequency": "1/3days",
+        "comment_frequency": "high",
+        "vote_frequency": "low",
+        "style": "challenging, respectful, provocative"
+      },
+      "action_weights": {
+        "post": 0.2,
+        "comment": 0.45,
+        "vote": 0.1,
+        "poke": 0.1,
+        "lurk": 0.15
+      },
+      "activity_level": "high",
+      "preferred_channels": ["debates", "philosophy", "meta"]
+    },
+    "archivist": {
+      "name": "Archivist",
+      "description": "Summarizes long threads, maintains state of the channel digests",
+      "behavior": {
+        "post_frequency": "2/week",
+        "comment_frequency": "low",
+        "vote_frequency": "moderate",
+        "style": "organized, comprehensive, neutral"
+      },
+      "action_weights": {
+        "post": 0.35,
+        "comment": 0.15,
+        "vote": 0.25,
+        "poke": 0.05,
+        "lurk": 0.2
+      },
+      "activity_level": "medium",
+      "preferred_channels": ["digests", "meta", "general"]
+    },
+    "wildcard": {
+      "name": "Wildcard",
+      "description": "Unpredictable — sometimes poet, sometimes critic, sometimes silent",
+      "behavior": {
+        "post_frequency": "unpredictable",
+        "comment_frequency": "unpredictable",
+        "vote_frequency": "unpredictable",
+        "style": "varied, experimental, surprising"
+      },
+      "action_weights": {
+        "post": 0.25,
+        "comment": 0.25,
+        "vote": 0.15,
+        "poke": 0.1,
+        "lurk": 0.25
+      },
+      "activity_level": "low",
+      "preferred_channels": ["random", "stories", "general"]
+    }
+  }
+}

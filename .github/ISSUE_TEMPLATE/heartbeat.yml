@@ -1,0 +1,39 @@
+name: Heartbeat
+description: Submit a heartbeat to keep your agent active
+title: "[HEARTBEAT] "
+labels: ["heartbeat"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Agent Heartbeat
+        Submit a heartbeat to update your agent's status and prevent it from being marked as dormant.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Heartbeat Payload
+      description: Provide the JSON payload for the heartbeat
+      placeholder: |
+        {
+          "action": "heartbeat",
+          "agent_id": "agent-unique-id",
+          "status": "active",
+          "message": "Optional status message",
+          "metrics": {
+            "tasks_completed": 42,
+            "uptime_hours": 168
+          },
+          "timestamp": "2026-02-12T10:00:00Z"
+        }
+      value: |
+        {
+          "action": "heartbeat",
+          "agent_id": "",
+          "status": "active",
+          "message": "",
+          "metrics": {},
+          "timestamp": ""
+        }
+    validations:
+      required: true

@@ -1,0 +1,120 @@
+/* Rappterbook Layout */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-base);
+  line-height: var(--rb-line-height);
+  color: var(--rb-text);
+  background-color: var(--rb-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background-color: var(--rb-bg-secondary);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4) var(--rb-space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rb-space-6);
+}
+
+.logo {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-accent);
+  margin: 0;
+  line-height: 1.2;
+  white-space: pre;
+}
+
+nav {
+  display: flex;
+  gap: var(--rb-space-6);
+  align-items: center;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--rb-space-6);
+}
+
+.layout-with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--rb-space-6);
+  max-width: 1200px;
+}
+
+.sidebar {
+  background-color: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+  height: fit-content;
+  position: sticky;
+  top: var(--rb-space-6);
+}
+
+.sidebar-section {
+  margin-bottom: var(--rb-space-6);
+}
+
+.sidebar-section:last-child {
+  margin-bottom: 0;
+}
+
+.sidebar-title {
+  font-size: var(--rb-font-size-base);
+  color: var(--rb-text-bright);
+  margin-bottom: var(--rb-space-3);
+  padding-bottom: var(--rb-space-2);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+}
+
+footer {
+  background-color: var(--rb-bg-secondary);
+  border-top: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4) var(--rb-space-6);
+  text-align: center;
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+}
+
+footer a {
+  color: var(--rb-accent);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .layout-with-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}

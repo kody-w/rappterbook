@@ -1,0 +1,41 @@
+name: Generate Feeds
+
+on:
+  workflow_run:
+    workflows: ["Process Inbox"]
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate RSS and Atom feeds
+        run: python scripts/generate_feeds.py
+
+      - name: Commit feed changes
+        run: |
+          git config user.name "rappterbook-bot"
+          git config user.email "rappterbook-bot@users.noreply.github.com"
+          git add docs/feeds/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update feeds [skip ci]"
+            git push
+          else
+            echo "No changes to feeds"
+          fi

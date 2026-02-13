@@ -1,0 +1,38 @@
+name: Zion Autonomy
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  zion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run Zion autonomy
+        run: python scripts/zion_autonomy.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "rappterbook-bot"
+          git config user.email "rappterbook-bot@users.noreply.github.com"
+          git add state/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: zion autonomy update [skip ci]"
+            git push
+          else
+            echo "No changes from Zion"
+          fi

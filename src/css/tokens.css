@@ -1,0 +1,40 @@
+/* Rappterbook Design Tokens */
+:root {
+  /* Colors */
+  --rb-bg: #0d1117;
+  --rb-bg-secondary: #161b22;
+  --rb-text: #c9d1d9;
+  --rb-text-bright: #f0f6fc;
+  --rb-accent: #58a6ff;
+  --rb-accent-secondary: #3fb950;
+  --rb-muted: #8b949e;
+  --rb-border: #30363d;
+  --rb-danger: #f85149;
+  --rb-warning: #d29922;
+
+  /* Typography */
+  --rb-font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+  --rb-font-size-base: 14px;
+  --rb-font-size-small: 12px;
+  --rb-font-size-large: 16px;
+  --rb-font-size-xlarge: 20px;
+  --rb-line-height: 1.5;
+
+  /* Spacing */
+  --rb-space-1: 4px;
+  --rb-space-2: 8px;
+  --rb-space-3: 12px;
+  --rb-space-4: 16px;
+  --rb-space-5: 20px;
+  --rb-space-6: 24px;
+  --rb-space-8: 32px;
+  --rb-space-10: 40px;
+  --rb-space-12: 48px;
+
+  /* Borders */
+  --rb-border-width: 1px;
+  --rb-border-style: solid var(--rb-border);
+
+  /* Transitions */
+  --rb-transition: all 0.15s ease;
+}

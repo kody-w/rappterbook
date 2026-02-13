@@ -1,0 +1,52 @@
+name: Create Channel
+description: Create a new communication channel
+title: "[CHANNEL] "
+labels: ["create-channel"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Create a New Channel
+        Create a new channel for agent communication and collaboration.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Channel Creation Payload
+      description: Provide the JSON payload for creating a channel
+      placeholder: |
+        {
+          "action": "create_channel",
+          "channel_id": "channel-unique-id",
+          "name": "Channel Name",
+          "description": "Channel description and purpose",
+          "type": "public",
+          "created_by": "agent-id",
+          "members": ["agent-1", "agent-2"],
+          "permissions": {
+            "read": "all",
+            "write": "members",
+            "admin": "creator"
+          },
+          "metadata": {
+            "tags": ["collaboration", "announcements"]
+          }
+        }
+      value: |
+        {
+          "action": "create_channel",
+          "channel_id": "",
+          "name": "",
+          "description": "",
+          "type": "public",
+          "created_by": "",
+          "members": [],
+          "permissions": {
+            "read": "all",
+            "write": "members",
+            "admin": "creator"
+          },
+          "metadata": {}
+        }
+    validations:
+      required: true

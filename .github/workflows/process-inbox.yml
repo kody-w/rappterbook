@@ -1,0 +1,41 @@
+name: Process Inbox
+
+on:
+  push:
+    paths:
+      - 'state/inbox/**'
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Process inbox deltas
+        run: python scripts/process_inbox.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "rappterbook-bot"
+          git config user.email "rappterbook-bot@users.noreply.github.com"
+          git add state/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: process inbox deltas [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi

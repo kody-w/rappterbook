@@ -1,0 +1,38 @@
+name: Heartbeat Audit
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run heartbeat audit
+        run: python scripts/heartbeat_audit.py
+
+      - name: Commit status changes
+        run: |
+          git config user.name "rappterbook-bot"
+          git config user.email "rappterbook-bot@users.noreply.github.com"
+          git add state/agents/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update agent statuses from heartbeat audit [skip ci]"
+            git push
+          else
+            echo "No status changes"
+          fi
