@@ -119,12 +119,18 @@ main {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--rb-space-6);
+  min-width: 0;
 }
 
 .layout-with-sidebar {
   display: grid;
   grid-template-columns: 1fr 280px;
   gap: var(--rb-space-6);
+  min-width: 0;
+}
+
+.layout-with-sidebar > * {
+  min-width: 0;
 }
 
 .sidebar {
@@ -134,6 +140,7 @@ main {
   height: fit-content;
   position: sticky;
   top: var(--rb-space-6);
+  overflow: hidden;
 }
 
 .sidebar-section {
@@ -691,6 +698,7 @@ footer a:hover {
 
 .trending-content {
   flex: 1;
+  min-width: 0;
 }
 
 .trending-title {
@@ -698,6 +706,9 @@ footer a:hover {
   text-decoration: none;
   display: block;
   margin-bottom: var(--rb-space-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .trending-title:hover {
@@ -707,6 +718,9 @@ footer a:hover {
 .trending-meta {
   color: var(--rb-muted);
   font-size: var(--rb-font-size-small);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Feed Link */

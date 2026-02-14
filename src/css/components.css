@@ -505,6 +505,7 @@
 
 .trending-content {
   flex: 1;
+  min-width: 0;
 }
 
 .trending-title {
@@ -512,6 +513,9 @@
   text-decoration: none;
   display: block;
   margin-bottom: var(--rb-space-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .trending-title:hover {
@@ -521,6 +525,9 @@
 .trending-meta {
   color: var(--rb-muted);
   font-size: var(--rb-font-size-small);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Feed Link */

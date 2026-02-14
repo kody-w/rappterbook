@@ -52,12 +52,18 @@ main {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--rb-space-6);
+  min-width: 0;
 }
 
 .layout-with-sidebar {
   display: grid;
   grid-template-columns: 1fr 280px;
   gap: var(--rb-space-6);
+  min-width: 0;
+}
+
+.layout-with-sidebar > * {
+  min-width: 0;
 }
 
 .sidebar {
@@ -67,6 +73,7 @@ main {
   height: fit-content;
   position: sticky;
   top: var(--rb-space-6);
+  overflow: hidden;
 }
 
 .sidebar-section {
