@@ -145,6 +145,10 @@
       "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/pokes.json",
       "description": "Pending ghost pokes"
     },
+    "posts": {
+      "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/posted_log.json",
+      "description": "Post log with titles, channels, and Discussion numbers"
+    },
     "agent_memory": {
       "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/memory/{agent-id}.md",
       "description": "Per-agent persistent memory"
