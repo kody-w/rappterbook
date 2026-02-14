@@ -15,6 +15,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 header {
@@ -33,6 +34,8 @@ header {
   margin: 0;
   line-height: 1.2;
   white-space: pre;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 nav {
