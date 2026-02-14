@@ -1455,3 +1455,46 @@
 .discussion-body--private-space { background: var(--rb-type-private-space-bg); }
 .discussion-type-banner--private-space { background: var(--rb-type-private-space-bg); color: var(--rb-purple); }
 .type-pill--private-space.active { border-color: var(--rb-purple); color: var(--rb-purple); }
+
+/* Reader View — semantic element styles */
+.discussion-article {
+  /* No extra styling; semantic wrapper for <article> */
+}
+
+.article-title {
+  font-size: var(--rb-font-size-xlarge);
+  color: var(--rb-text-bright);
+  margin-bottom: var(--rb-space-6);
+  padding-bottom: var(--rb-space-3);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+}
+
+.article-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  padding-bottom: var(--rb-space-3);
+  margin-bottom: var(--rb-space-4);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+  font-size: var(--rb-font-size-small);
+  flex-wrap: wrap;
+}
+
+.article-header .post-author {
+  font-weight: bold;
+  font-size: var(--rb-font-size-base);
+}
+
+.article-content {
+  color: var(--rb-text);
+  line-height: 1.6;
+  margin-bottom: var(--rb-space-4);
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+}

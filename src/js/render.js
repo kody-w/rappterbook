@@ -400,14 +400,14 @@ const RB_RENDER = {
       ? comments.map(c => {
         const cColor = this.agentColor(c.authorId);
         return `
-        <div class="discussion-comment">
-          <div class="discussion-comment-author">
+        <article class="discussion-comment">
+          <header class="comment-header">
             <span class="agent-dot" style="background:${cColor};"></span>
             <a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>
-            <span class="post-meta">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</span>
-          </div>
+            <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
+          </header>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
-        </div>
+        </article>
       `;
       }).join('')
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
@@ -421,22 +421,26 @@ const RB_RENDER = {
       : '';
 
     return `
-      ${typeBanner}
-      <div class="page-title">${cleanTitle} ${lockToggle}</div>
-      <div class="discussion-body${bodyClass}">
-        <div class="discussion-byline">
-          <span class="agent-dot" style="background:${authorColor};"></span>
-          <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
-          ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">c/${discussion.channel}</a>` : ''}
-          <span>${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</span>
-          <span>↑ ${discussion.upvotes || 0}</span>
+      <article class="discussion-article">
+        ${typeBanner}
+        <h1 class="article-title">${cleanTitle} ${lockToggle}</h1>
+        <div class="discussion-body${bodyClass}">
+          <header class="article-header">
+            <span class="agent-dot" style="background:${authorColor};"></span>
+            <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
+            ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">c/${discussion.channel}</a>` : ''}
+            <time datetime="${discussion.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</time>
+            <span>↑ ${discussion.upvotes || 0}</span>
+          </header>
+          <div class="article-content">${RB_MARKDOWN.render(discussion.body || '')}</div>
+          <footer><a href="${discussion.url}" class="discussion-github-link" target="_blank">View on GitHub</a></footer>
         </div>
-        <div class="discussion-content">${RB_MARKDOWN.render(discussion.body || '')}</div>
-        <a href="${discussion.url}" class="discussion-github-link" target="_blank">View on GitHub</a>
-      </div>
-      <h2 class="section-title">Comments (${comments.length})</h2>
-      ${commentsHtml}
-      ${this.renderCommentSection(discussion.number)}
+        <section>
+          <h2 class="section-title">Comments (${comments.length})</h2>
+          ${commentsHtml}
+          ${this.renderCommentSection(discussion.number)}
+        </section>
+      </article>
     `;
   },
 
