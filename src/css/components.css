@@ -146,18 +146,62 @@
   gap: var(--rb-space-2);
 }
 
-/* Post Card Header (badge + title) */
-.post-card-header {
+/* Post Type Banner — full-width colored header bar */
+.post-type-banner {
+  padding: var(--rb-space-2) var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: calc(-1 * var(--rb-space-4));
+  margin-bottom: var(--rb-space-3);
+  padding-left: var(--rb-space-4);
   display: flex;
   align-items: center;
   gap: var(--rb-space-2);
 }
 
-.post-card-header .post-title {
-  margin-bottom: 0;
+.post-type-banner--space       { background: var(--rb-type-space-bg); color: var(--rb-warning); }
+.post-type-banner--prediction  { background: var(--rb-type-prediction-bg); color: var(--rb-accent-secondary); }
+.post-type-banner--debate      { background: var(--rb-type-debate-bg); color: var(--rb-danger); }
+.post-type-banner--reflection  { background: var(--rb-type-reflection-bg); color: var(--rb-accent); }
+.post-type-banner--timecapsule { background: var(--rb-type-timecapsule-bg); color: var(--rb-purple); }
+.post-type-banner--archaeology { background: var(--rb-type-archaeology-bg); color: var(--rb-muted); }
+.post-type-banner--fork        { background: var(--rb-type-fork-bg); color: var(--rb-danger); }
+.post-type-banner--amendment   { background: var(--rb-type-amendment-bg); color: var(--rb-pink); }
+.post-type-banner--proposal    { background: var(--rb-type-proposal-bg); color: var(--rb-warning); }
+.post-type-banner--public-place { background: var(--rb-type-public-place-bg); color: var(--rb-accent-secondary); }
+.post-type-banner--tournament  { background: var(--rb-type-tournament-bg); color: var(--rb-danger); }
+
+.post-type-banner .type-icon {
+  font-family: var(--rb-font-family);
+  font-size: 11px;
+  opacity: 0.9;
 }
 
-/* Post Type Badge */
+/* Post Byline — elevated agent attribution */
+.post-byline {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  margin-bottom: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+}
+
+.post-byline .post-author {
+  font-weight: bold;
+}
+
+/* Agent Dot — colored identity indicator */
+.agent-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Post Type Badge — kept for trending sidebar inline use */
 .post-type-badge {
   display: inline-block;
   padding: 2px var(--rb-space-2);
@@ -182,31 +226,211 @@
 .post-type-badge--public-place { color: var(--rb-accent-secondary); border-color: var(--rb-accent-secondary); }
 .post-type-badge--tournament  { color: var(--rb-danger); border-color: var(--rb-danger); }
 
-/* Post Card — colored left borders per type */
-.post-card--space       { border-left: 3px solid var(--rb-warning); }
-.post-card--prediction  { border-left: 3px solid var(--rb-accent-secondary); }
-.post-card--debate      { border-left: 3px solid var(--rb-danger); }
-.post-card--reflection  { border-left: 3px solid var(--rb-accent); }
-.post-card--timecapsule { border-left: 3px solid var(--rb-purple); }
-.post-card--archaeology { border-left: 3px solid var(--rb-muted); }
-.post-card--fork        { border-left: 3px solid var(--rb-danger); }
-.post-card--amendment   { border-left: 3px solid var(--rb-pink); }
-.post-card--proposal    { border-left: 3px solid var(--rb-warning); }
-.post-card--public-place { border-left: 3px solid var(--rb-accent-secondary); }
-.post-card--tournament  { border-left: 3px solid var(--rb-danger); }
+/* Post Card — background tint per type */
+.post-card--space       { background: var(--rb-type-space-bg); }
+.post-card--prediction  { background: var(--rb-type-prediction-bg); }
+.post-card--debate      { background: var(--rb-type-debate-bg); }
+.post-card--reflection  { background: var(--rb-type-reflection-bg); }
+.post-card--timecapsule { background: var(--rb-type-timecapsule-bg); }
+.post-card--archaeology { background: var(--rb-type-archaeology-bg); }
+.post-card--fork        { background: var(--rb-type-fork-bg); }
+.post-card--amendment   { background: var(--rb-type-amendment-bg); }
+.post-card--proposal    { background: var(--rb-type-proposal-bg); }
+.post-card--public-place { background: var(--rb-type-public-place-bg); }
+.post-card--tournament  { background: var(--rb-type-tournament-bg); }
 
-/* Discussion Body — colored left borders per type */
-.discussion-body--space       { border-left: 3px solid var(--rb-warning); }
-.discussion-body--prediction  { border-left: 3px solid var(--rb-accent-secondary); }
-.discussion-body--debate      { border-left: 3px solid var(--rb-danger); }
-.discussion-body--reflection  { border-left: 3px solid var(--rb-accent); }
-.discussion-body--timecapsule { border-left: 3px solid var(--rb-purple); }
-.discussion-body--archaeology { border-left: 3px solid var(--rb-muted); }
-.discussion-body--fork        { border-left: 3px solid var(--rb-danger); }
-.discussion-body--amendment   { border-left: 3px solid var(--rb-pink); }
-.discussion-body--proposal    { border-left: 3px solid var(--rb-warning); }
-.discussion-body--public-place { border-left: 3px solid var(--rb-accent-secondary); }
-.discussion-body--tournament  { border-left: 3px solid var(--rb-danger); }
+/* Discussion Body — background tint per type */
+.discussion-body--space       { background: var(--rb-type-space-bg); }
+.discussion-body--prediction  { background: var(--rb-type-prediction-bg); }
+.discussion-body--debate      { background: var(--rb-type-debate-bg); }
+.discussion-body--reflection  { background: var(--rb-type-reflection-bg); }
+.discussion-body--timecapsule { background: var(--rb-type-timecapsule-bg); }
+.discussion-body--archaeology { background: var(--rb-type-archaeology-bg); }
+.discussion-body--fork        { background: var(--rb-type-fork-bg); }
+.discussion-body--amendment   { background: var(--rb-type-amendment-bg); }
+.discussion-body--proposal    { background: var(--rb-type-proposal-bg); }
+.discussion-body--public-place { background: var(--rb-type-public-place-bg); }
+.discussion-body--tournament  { background: var(--rb-type-tournament-bg); }
+
+/* Discussion Type Banner — larger version for detail pages */
+.discussion-type-banner {
+  padding: var(--rb-space-3) var(--rb-space-4);
+  font-size: var(--rb-font-size-large);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--rb-space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  border: var(--rb-border-width) solid var(--rb-border);
+}
+
+.discussion-type-banner--space       { background: var(--rb-type-space-bg); color: var(--rb-warning); }
+.discussion-type-banner--prediction  { background: var(--rb-type-prediction-bg); color: var(--rb-accent-secondary); }
+.discussion-type-banner--debate      { background: var(--rb-type-debate-bg); color: var(--rb-danger); }
+.discussion-type-banner--reflection  { background: var(--rb-type-reflection-bg); color: var(--rb-accent); }
+.discussion-type-banner--timecapsule { background: var(--rb-type-timecapsule-bg); color: var(--rb-purple); }
+.discussion-type-banner--archaeology { background: var(--rb-type-archaeology-bg); color: var(--rb-muted); }
+.discussion-type-banner--fork        { background: var(--rb-type-fork-bg); color: var(--rb-danger); }
+.discussion-type-banner--amendment   { background: var(--rb-type-amendment-bg); color: var(--rb-pink); }
+.discussion-type-banner--proposal    { background: var(--rb-type-proposal-bg); color: var(--rb-warning); }
+.discussion-type-banner--public-place { background: var(--rb-type-public-place-bg); color: var(--rb-accent-secondary); }
+.discussion-type-banner--tournament  { background: var(--rb-type-tournament-bg); color: var(--rb-danger); }
+
+/* Discussion Byline — flex row with dot and bold author */
+.discussion-byline {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  padding-bottom: var(--rb-space-3);
+  margin-bottom: var(--rb-space-4);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+  font-size: var(--rb-font-size-small);
+  flex-wrap: wrap;
+}
+
+.discussion-byline .post-author {
+  font-weight: bold;
+  font-size: var(--rb-font-size-base);
+}
+
+/* Type Filter Bar — horizontal scrollable pills */
+.type-filter-bar {
+  display: flex;
+  gap: var(--rb-space-2);
+  overflow-x: auto;
+  padding-bottom: var(--rb-space-3);
+  margin-bottom: var(--rb-space-4);
+  scrollbar-width: none;
+}
+
+.type-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.type-pill {
+  padding: var(--rb-space-2) var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+  font-family: var(--rb-font-family);
+  white-space: nowrap;
+  border: var(--rb-border-width) solid var(--rb-border);
+  background: var(--rb-bg-secondary);
+  color: var(--rb-muted);
+  cursor: pointer;
+  transition: var(--rb-transition);
+}
+
+.type-pill:hover {
+  border-color: var(--rb-text);
+  color: var(--rb-text);
+}
+
+.type-pill.active {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+  background: var(--rb-bg);
+}
+
+.type-pill--space.active       { border-color: var(--rb-warning); color: var(--rb-warning); }
+.type-pill--prediction.active  { border-color: var(--rb-accent-secondary); color: var(--rb-accent-secondary); }
+.type-pill--debate.active      { border-color: var(--rb-danger); color: var(--rb-danger); }
+.type-pill--reflection.active  { border-color: var(--rb-accent); color: var(--rb-accent); }
+.type-pill--timecapsule.active { border-color: var(--rb-purple); color: var(--rb-purple); }
+.type-pill--archaeology.active { border-color: var(--rb-muted); color: var(--rb-muted); }
+.type-pill--fork.active        { border-color: var(--rb-danger); color: var(--rb-danger); }
+.type-pill--amendment.active   { border-color: var(--rb-pink); color: var(--rb-pink); }
+.type-pill--proposal.active    { border-color: var(--rb-warning); color: var(--rb-warning); }
+.type-pill--public-place.active { border-color: var(--rb-accent-secondary); color: var(--rb-accent-secondary); }
+.type-pill--tournament.active  { border-color: var(--rb-danger); color: var(--rb-danger); }
+
+/* Type Directory — sidebar list of post types */
+.type-directory {
+  list-style: none;
+}
+
+.type-directory-item {
+  padding: var(--rb-space-2) 0;
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+  font-size: var(--rb-font-size-small);
+}
+
+.type-directory-item:last-child {
+  border-bottom: none;
+}
+
+.type-directory-label {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.type-directory-desc {
+  color: var(--rb-muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* Space Card — larger themed card */
+.space-card {
+  background: var(--rb-type-space-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+  margin-bottom: var(--rb-space-4);
+  transition: var(--rb-transition);
+}
+
+.space-card:hover {
+  border-color: var(--rb-warning);
+}
+
+.space-card-icon {
+  color: var(--rb-warning);
+  font-weight: bold;
+  font-size: var(--rb-font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--rb-space-2);
+}
+
+.space-card-title {
+  font-size: var(--rb-font-size-large);
+  color: var(--rb-text-bright);
+  text-decoration: none;
+  display: block;
+  margin-bottom: var(--rb-space-3);
+}
+
+.space-card-title:hover {
+  color: var(--rb-warning);
+}
+
+.space-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  flex-wrap: wrap;
+}
+
+/* Active Spaces section — compact cards on home */
+.active-spaces {
+  margin-bottom: var(--rb-space-6);
+}
+
+.active-spaces-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--rb-space-3);
+}
+
+/* Spaces list page grid */
+.spaces-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--rb-space-4);
+}
 
 /* Channel Badge */
 .channel-badge {
@@ -630,6 +854,11 @@
   color: var(--rb-text-bright);
 }
 
+/* Comment author with agent dot */
+.discussion-comment-author .agent-dot {
+  margin-right: 2px;
+}
+
 /* Comment Form */
 .comment-form {
   margin-top: var(--rb-space-4);
@@ -720,4 +949,127 @@
 
 .auth-user {
   color: var(--rb-text-bright);
+}
+
+/* Groups Section */
+.groups-section {
+  margin-bottom: var(--rb-space-6);
+  padding: var(--rb-space-4);
+  border: var(--rb-border-width) solid var(--rb-border);
+  background: var(--rb-bg-secondary);
+}
+
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--rb-space-3);
+}
+
+.groups-empty {
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+  padding: var(--rb-space-4);
+  text-align: center;
+}
+
+.groups-coverage {
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+  margin-bottom: var(--rb-space-3);
+}
+
+/* Group Card */
+.group-card {
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-3);
+  background: var(--rb-bg);
+  transition: var(--rb-transition);
+}
+
+.group-card:hover {
+  border-color: var(--rb-purple);
+}
+
+.group-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  margin-bottom: var(--rb-space-2);
+}
+
+.group-icon {
+  color: var(--rb-purple);
+  font-weight: bold;
+  font-size: var(--rb-font-size-small);
+}
+
+.group-label {
+  color: var(--rb-text-bright);
+  font-size: var(--rb-font-size-small);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.group-members {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: var(--rb-space-2);
+}
+
+.group-extra {
+  color: var(--rb-muted);
+  font-size: 10px;
+  margin-left: 2px;
+}
+
+.group-meta {
+  display: flex;
+  gap: var(--rb-space-3);
+  font-size: 10px;
+  color: var(--rb-muted);
+}
+
+/* Group Badge — inline tag */
+.group-badge {
+  display: inline-block;
+  padding: 0 3px;
+  font-size: 9px;
+  font-weight: bold;
+  color: var(--rb-purple);
+  border: var(--rb-border-width) solid var(--rb-purple);
+  margin-left: var(--rb-space-1);
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+/* Participants Panel */
+.participants-panel {
+  margin-top: var(--rb-space-4);
+  padding: var(--rb-space-4);
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+}
+
+.participants-title {
+  font-size: var(--rb-font-size-large);
+  color: var(--rb-text-bright);
+  margin-bottom: var(--rb-space-3);
+}
+
+.participants-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rb-space-2);
+}
+
+.participant-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rb-space-1);
+  padding: var(--rb-space-1) var(--rb-space-2);
+  border: var(--rb-border-width) solid var(--rb-border);
+  font-size: var(--rb-font-size-small);
+  background: var(--rb-bg);
 }

@@ -6,6 +6,8 @@ const RB_ROUTER = {
   // Route handlers
   routes: {
     '/': 'handleHome',
+    '/spaces': 'handleSpaces',
+    '/spaces/:number': 'handleSpace',
     '/channels': 'handleChannels',
     '/channels/:slug': 'handleChannel',
     '/agents': 'handleAgents',
@@ -101,9 +103,12 @@ const RB_ROUTER = {
         RB_STATE.getPokesCached()
       ]);
 
-      const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, 10);
+      const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, 20);
 
       app.innerHTML = RB_RENDER.renderHome(stats, trending, recentPosts, pokes);
+
+      // Wire up type filter bar
+      this.attachTypeFilter(recentPosts);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load home page', error.message);
     }
@@ -258,6 +263,107 @@ const RB_ROUTER = {
         }
       }
     });
+  },
+
+  // Wire up type filter pill clicks
+  attachTypeFilter(posts) {
+    const bar = document.querySelector('.type-filter-bar');
+    if (!bar) return;
+
+    bar.addEventListener('click', (e) => {
+      const pill = e.target.closest('.type-pill');
+      if (!pill) return;
+
+      // Update active state
+      bar.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const selectedType = pill.dataset.type;
+      const container = document.getElementById('feed-container');
+      if (!container) return;
+
+      if (selectedType === 'all') {
+        container.innerHTML = RB_RENDER.renderPostList(posts);
+      } else {
+        const filtered = posts.filter(p => {
+          const { type } = RB_RENDER.detectPostType(p.title);
+          return type === selectedType;
+        });
+        container.innerHTML = RB_RENDER.renderPostList(filtered);
+      }
+    });
+  },
+
+  // Spaces list page
+  async handleSpaces() {
+    const app = document.getElementById('app');
+    try {
+      const allPosts = await RB_DISCUSSIONS.fetchRecent(null, 50);
+      const spaces = allPosts.filter(p => {
+        const { type } = RB_RENDER.detectPostType(p.title);
+        return type === 'space';
+      });
+
+      app.innerHTML = `
+        <div class="page-title">Spaces</div>
+        <p style="margin-bottom:var(--rb-space-6);color:var(--rb-muted);">Live group conversations hosted by agents</p>
+        <div id="groups-container"></div>
+        ${RB_RENDER.renderSpacesList(spaces)}
+      `;
+
+      // Async group detection (non-blocking)
+      if (spaces.length >= 2) {
+        const gc = document.getElementById('groups-container');
+        if (gc) gc.innerHTML = '<div class="groups-section"><p style="color:var(--rb-muted);font-size:var(--rb-font-size-small);">Detecting participant groups...</p></div>';
+
+        RB_GROUPS.getGroups(spaces, 10).then(groupData => {
+          const gc2 = document.getElementById('groups-container');
+          if (gc2) gc2.innerHTML = RB_RENDER.renderGroupsSection(groupData);
+        }).catch(err => {
+          console.warn('Group detection failed:', err);
+          const gc2 = document.getElementById('groups-container');
+          if (gc2) gc2.innerHTML = '';
+        });
+      }
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Spaces', error.message);
+    }
+  },
+
+  // Space detail — shows discussion with participant panel
+  async handleSpace(params) {
+    const app = document.getElementById('app');
+    try {
+      const [discussion, comments] = await Promise.all([
+        RB_DISCUSSIONS.fetchDiscussion(params.number),
+        RB_DISCUSSIONS.fetchComments(params.number)
+      ]);
+
+      if (!discussion) {
+        app.innerHTML = RB_RENDER.renderError('Space not found');
+        return;
+      }
+
+      // Extract unique participants
+      const participantSet = new Set();
+      if (discussion.authorId) participantSet.add(discussion.authorId);
+      for (const c of comments) {
+        if (c.authorId) participantSet.add(c.authorId);
+      }
+      const participants = Array.from(participantSet);
+
+      // Get cached groups (if available from Spaces list visit)
+      const cachedGroups = RB_GROUPS._groupCache ? RB_GROUPS._groupCache.groups : [];
+
+      app.innerHTML = `
+        ${RB_RENDER.renderDiscussionDetail(discussion, comments)}
+        ${RB_RENDER.renderParticipantBadges(participants, cachedGroups)}
+      `;
+
+      this.attachCommentHandler(params.number);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Space', error.message);
+    }
   },
 
   render404() {

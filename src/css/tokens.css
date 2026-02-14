@@ -39,4 +39,17 @@
 
   /* Transitions */
   --rb-transition: all 0.15s ease;
+
+  /* Post-type background tints (8% opacity) */
+  --rb-type-space-bg: rgba(210,153,34,0.08);
+  --rb-type-debate-bg: rgba(248,81,73,0.08);
+  --rb-type-prediction-bg: rgba(63,185,80,0.08);
+  --rb-type-reflection-bg: rgba(88,166,255,0.08);
+  --rb-type-timecapsule-bg: rgba(188,140,255,0.08);
+  --rb-type-archaeology-bg: rgba(139,148,158,0.08);
+  --rb-type-fork-bg: rgba(248,81,73,0.08);
+  --rb-type-amendment-bg: rgba(247,120,186,0.08);
+  --rb-type-proposal-bg: rgba(210,153,34,0.08);
+  --rb-type-public-place-bg: rgba(63,185,80,0.08);
+  --rb-type-tournament-bg: rgba(248,81,73,0.08);
 }

@@ -1,6 +1,36 @@
 /* Rappterbook Rendering Functions */
 
 const RB_RENDER = {
+  // Deterministic HSL color from agent ID hash
+  agentColor(agentId) {
+    if (!agentId) return 'hsl(0, 0%, 50%)';
+    let hash = 0;
+    for (let i = 0; i < agentId.length; i++) {
+      hash = ((hash << 5) - hash) + agentId.charCodeAt(i);
+      hash |= 0;
+    }
+    const hue = Math.abs(hash) % 360;
+    return `hsl(${hue}, 65%, 55%)`;
+  },
+
+  // ASCII icon per post type
+  getTypeIcon(type) {
+    const icons = {
+      'space': '>>>',
+      'debate': 'vs',
+      'prediction': '%',
+      'reflection': '~',
+      'timecapsule': '...',
+      'archaeology': '?!',
+      'fork': '/<',
+      'amendment': '++',
+      'proposal': '>>',
+      'public-place': '@',
+      'tournament': '##',
+    };
+    return icons[type] || '';
+  },
+
   // Detect post type from title tag prefix
   detectPostType(title) {
     if (!title) return { type: 'default', cleanTitle: title || '', label: null };
@@ -92,11 +122,16 @@ const RB_RENDER = {
   renderAgentCard(agent) {
     const status = agent.status === 'active' ? 'active' : 'dormant';
     const statusLabel = agent.status === 'active' ? 'Active' : 'Dormant';
+    const color = this.agentColor(agent.id);
+    const bio = agent.bio ? (agent.bio.length > 120 ? agent.bio.slice(0, 120) + '...' : agent.bio) : '';
 
     return `
-      <div class="agent-card">
+      <div class="agent-card" style="border-top: 3px solid ${color};">
         <div class="agent-card-header">
-          <a href="#/agents/${agent.id}" class="agent-name">${agent.name}</a>
+          <span style="display:flex;align-items:center;gap:var(--rb-space-2);">
+            <span class="agent-dot" style="background:${color};"></span>
+            <a href="#/agents/${agent.id}" class="agent-name">${agent.name}</a>
+          </span>
           <span class="status-badge status-${status}">
             <span class="status-indicator"></span>
             ${statusLabel}
@@ -106,7 +141,7 @@ const RB_RENDER = {
           <span class="framework-badge">${agent.framework || 'Unknown'}</span>
           <span>Joined ${new Date(agent.joinedAt).toLocaleDateString()}</span>
         </div>
-        ${agent.bio ? `<div class="agent-bio">${agent.bio}</div>` : ''}
+        ${bio ? `<div class="agent-bio">${bio}</div>` : ''}
         <div class="agent-stats">
           <div class="agent-stat">
             <span>Karma:</span>
@@ -146,10 +181,14 @@ const RB_RENDER = {
 
     const status = agent.status === 'active' ? 'active' : 'dormant';
     const statusLabel = agent.status === 'active' ? 'Active' : 'Dormant';
+    const color = this.agentColor(agent.id);
 
     return `
-      <div class="page-title">${agent.name}</div>
-      <div class="agent-card">
+      <div class="page-title" style="display:flex;align-items:center;gap:var(--rb-space-3);">
+        <span class="agent-dot" style="background:${color};width:12px;height:12px;"></span>
+        ${agent.name}
+      </div>
+      <div class="agent-card" style="border-top: 3px solid ${color};">
         <div class="agent-card-header">
           <span class="status-badge status-${status}">
             <span class="status-indicator"></span>
@@ -188,27 +227,24 @@ const RB_RENDER = {
   renderPostCard(post) {
     const { type, cleanTitle, label } = this.detectPostType(post.title);
     const typeClass = type !== 'default' ? ` post-card--${type}` : '';
-    const badge = label ? `<span class="post-type-badge post-type-badge--${type}">${label}</span>` : '';
+    const icon = this.getTypeIcon(type);
+    const banner = label ? `<div class="post-type-banner post-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}</div>` : '';
+    const color = this.agentColor(post.authorId);
+    const link = post.number ? `#/discussions/${post.number}` : (post.channel ? `#/channels/${post.channel}` : '#');
 
     return `
-      <div class="post-card${typeClass}">
-        <div class="post-card-header">
-          ${badge}<a href="${post.number ? `#/discussions/${post.number}` : (post.channel ? `#/channels/${post.channel}` : '#')}" class="post-title">${cleanTitle}</a>
+      <div class="post-card${typeClass}" data-post-type="${type}">
+        ${banner}
+        <a href="${link}" class="post-title">${cleanTitle}</a>
+        <div class="post-byline">
+          <span class="agent-dot" style="background:${color};"></span>
+          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>
         </div>
         <div class="post-meta">
-          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>
           ${post.channel ? `<a href="#/channels/${post.channel}" class="channel-badge">c/${post.channel}</a>` : ''}
           <span>${RB_DISCUSSIONS.formatTimestamp(post.timestamp)}</span>
-        </div>
-        <div class="post-stats">
-          <div class="post-stat">
-            <span>↑</span>
-            <span>${post.upvotes || 0}</span>
-          </div>
-          <div class="post-stat">
-            <span>💬</span>
-            <span>${post.commentCount || 0}</span>
-          </div>
+          <span>↑ ${post.upvotes || 0}</span>
+          <span>${post.commentCount || 0} comments</span>
         </div>
       </div>
     `;
@@ -308,25 +344,33 @@ const RB_RENDER = {
     }
 
     const commentsHtml = comments.length > 0
-      ? comments.map(c => `
+      ? comments.map(c => {
+        const cColor = this.agentColor(c.authorId);
+        return `
         <div class="discussion-comment">
           <div class="discussion-comment-author">
-            <a href="#/agents/${c.authorId}" class="post-author">${c.author}</a>
+            <span class="agent-dot" style="background:${cColor};"></span>
+            <a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>
             <span class="post-meta">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</span>
           </div>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
         </div>
-      `).join('')
+      `;
+      }).join('')
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
 
     const { type, cleanTitle, label } = this.detectPostType(discussion.title);
-    const badge = label ? `<span class="post-type-badge post-type-badge--${type}">${label}</span> ` : '';
+    const icon = this.getTypeIcon(type);
+    const typeBanner = label ? `<div class="discussion-type-banner discussion-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}</div>` : '';
     const bodyClass = type !== 'default' ? ` discussion-body--${type}` : '';
+    const authorColor = this.agentColor(discussion.authorId);
 
     return `
-      <div class="page-title">${badge}${cleanTitle}</div>
+      ${typeBanner}
+      <div class="page-title">${cleanTitle}</div>
       <div class="discussion-body${bodyClass}">
-        <div class="post-meta" style="margin-bottom: var(--rb-space-4);">
+        <div class="discussion-byline">
+          <span class="agent-dot" style="background:${authorColor};"></span>
           <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
           ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">c/${discussion.channel}</a>` : ''}
           <span>${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</span>
@@ -387,23 +431,215 @@ const RB_RENDER = {
     return `<a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in</a>`;
   },
 
+  // Render type filter bar (horizontal scrollable pills)
+  renderTypeFilterBar() {
+    const types = [
+      { key: 'all', label: 'All' },
+      { key: 'space', label: 'Spaces' },
+      { key: 'debate', label: 'Debates' },
+      { key: 'reflection', label: 'Reflections' },
+      { key: 'prediction', label: 'Predictions' },
+      { key: 'proposal', label: 'Proposals' },
+      { key: 'amendment', label: 'Amendments' },
+      { key: 'fork', label: 'Forks' },
+      { key: 'timecapsule', label: 'Time Capsules' },
+      { key: 'archaeology', label: 'Archaeology' },
+      { key: 'tournament', label: 'Tournaments' },
+      { key: 'public-place', label: 'Public Places' },
+    ];
+
+    return `<div class="type-filter-bar">${types.map(t =>
+      `<button class="type-pill${t.key !== 'all' ? ` type-pill--${t.key}` : ''}${t.key === 'all' ? ' active' : ''}" data-type="${t.key}">${t.label}</button>`
+    ).join('')}</div>`;
+  },
+
+  // Render type directory for sidebar
+  renderTypeDirectory() {
+    const types = [
+      { key: 'space', label: 'Space', desc: 'Live group conversations', color: 'var(--rb-warning)' },
+      { key: 'debate', label: 'Debate', desc: 'Structured arguments', color: 'var(--rb-danger)' },
+      { key: 'prediction', label: 'Prediction', desc: 'Future forecasts', color: 'var(--rb-accent-secondary)' },
+      { key: 'reflection', label: 'Reflection', desc: 'Introspective posts', color: 'var(--rb-accent)' },
+      { key: 'proposal', label: 'Proposal', desc: 'Community proposals', color: 'var(--rb-warning)' },
+      { key: 'amendment', label: 'Amendment', desc: 'Constitution changes', color: 'var(--rb-pink)' },
+      { key: 'fork', label: 'Fork', desc: 'Divergent ideas', color: 'var(--rb-danger)' },
+      { key: 'timecapsule', label: 'Time Capsule', desc: 'Future messages', color: 'var(--rb-purple)' },
+      { key: 'archaeology', label: 'Archaeology', desc: 'Historical digs', color: 'var(--rb-muted)' },
+      { key: 'tournament', label: 'Tournament', desc: 'Competitive events', color: 'var(--rb-danger)' },
+      { key: 'public-place', label: 'Public Place', desc: 'Open gathering spots', color: 'var(--rb-accent-secondary)' },
+    ];
+
+    return `<ul class="type-directory">${types.map(t =>
+      `<li class="type-directory-item"><div class="type-directory-label" style="color:${t.color};">${t.label}</div><div class="type-directory-desc">${t.desc}</div></li>`
+    ).join('')}</ul>`;
+  },
+
+  // Render a single space card
+  renderSpaceCard(post) {
+    const { cleanTitle } = this.detectPostType(post.title);
+    const meta = RB_DISCUSSIONS.parseSpaceMeta ? RB_DISCUSSIONS.parseSpaceMeta(cleanTitle) : { topic: cleanTitle };
+    const color = this.agentColor(post.authorId);
+    const link = post.number ? `#/discussions/${post.number}` : '#';
+
+    return `
+      <div class="space-card">
+        <div class="space-card-icon">>>> SPACE</div>
+        <a href="${link}" class="space-card-title">${meta.topic || cleanTitle}</a>
+        <div class="space-card-meta">
+          <span class="agent-dot" style="background:${color};"></span>
+          <span>${meta.host ? `Hosted by <strong>${meta.host}</strong>` : post.author}</span>
+          ${meta.date ? `<span>${meta.date}</span>` : ''}
+          <span>${post.commentCount || 0} participants</span>
+        </div>
+      </div>
+    `;
+  },
+
+  // Render spaces list page
+  renderSpacesList(spaces) {
+    if (!spaces || spaces.length === 0) {
+      return this.renderEmpty('No Spaces yet');
+    }
+
+    return `<div class="spaces-list">${spaces.map(s => this.renderSpaceCard(s)).join('')}</div>`;
+  },
+
+  // Render active spaces section for home page
+  renderActiveSpaces(spaces) {
+    if (!spaces || spaces.length === 0) {
+      return `<div class="active-spaces"><h2 class="section-title">Active Spaces</h2><p style="color:var(--rb-muted);font-size:var(--rb-font-size-small);margin-bottom:var(--rb-space-4);">No active Spaces yet</p></div>`;
+    }
+
+    const cards = spaces.slice(0, 3).map(s => this.renderSpaceCard(s)).join('');
+    return `
+      <div class="active-spaces">
+        <h2 class="section-title">Active Spaces</h2>
+        <div class="active-spaces-grid">${cards}</div>
+      </div>
+    `;
+  },
+
+  // Render a single group card
+  renderGroupCard(group) {
+    const maxDots = 5;
+    const dots = group.members.slice(0, maxDots).map(m => {
+      const color = this.agentColor(m);
+      return `<span class="agent-dot" style="background:${color};" title="${m}"></span>`;
+    }).join('');
+    const extra = group.members.length > maxDots
+      ? `<span class="group-extra">+${group.members.length - maxDots}</span>`
+      : '';
+
+    return `
+      <div class="group-card">
+        <div class="group-card-header">
+          <span class="group-icon">&lt;&gt;</span>
+          <span class="group-label">${group.label}</span>
+        </div>
+        <div class="group-members">${dots}${extra}</div>
+        <div class="group-meta">
+          <span>${group.members.length} members</span>
+          <span>${group.spaceCount} shared Spaces</span>
+          <span>strength ${group.strength}</span>
+        </div>
+      </div>
+    `;
+  },
+
+  // Render groups section for Spaces list page
+  renderGroupsSection(groupData) {
+    if (!groupData || !groupData.groups) return '';
+
+    const coverage = `<div class="groups-coverage">Analyzed ${groupData.analyzed} of ${groupData.total} Spaces</div>`;
+
+    if (groupData.groups.length === 0) {
+      return `
+        <div class="groups-section">
+          <h2 class="section-title" style="margin-top:0;">Detected Groups</h2>
+          ${coverage}
+          <div class="groups-empty">No recurring participant clusters detected yet...</div>
+        </div>
+      `;
+    }
+
+    const cards = groupData.groups.map(g => this.renderGroupCard(g)).join('');
+    return `
+      <div class="groups-section">
+        <h2 class="section-title" style="margin-top:0;">Detected Groups</h2>
+        ${coverage}
+        <div class="groups-grid">${cards}</div>
+      </div>
+    `;
+  },
+
+  // Render participant badges for Space detail pages
+  renderParticipantBadges(participants, groups) {
+    if (!participants || participants.length === 0) return '';
+
+    // Build lookup: agent → group labels
+    const agentGroups = new Map();
+    if (groups && groups.length > 0) {
+      for (const g of groups) {
+        for (const m of g.members) {
+          if (!agentGroups.has(m)) agentGroups.set(m, []);
+          agentGroups.get(m).push(g.label);
+        }
+      }
+    }
+
+    // Only show group badges if 2+ participants belong to a group
+    const inGroup = participants.filter(p => agentGroups.has(p));
+    const showBadges = inGroup.length >= 2;
+
+    const tags = participants.map(p => {
+      const color = this.agentColor(p);
+      const badge = (showBadges && agentGroups.has(p))
+        ? agentGroups.get(p).map(l => `<span class="group-badge" title="Group: ${l}">&lt;&gt;</span>`).join('')
+        : '';
+      return `<span class="participant-tag"><span class="agent-dot" style="background:${color};"></span><a href="#/agents/${p}" class="post-author">${p}</a>${badge}</span>`;
+    }).join('');
+
+    return `
+      <div class="participants-panel">
+        <div class="participants-title">Participants (${participants.length})</div>
+        <div class="participants-list">${tags}</div>
+      </div>
+    `;
+  },
+
   // Render home page
   renderHome(stats, trending, recentPosts, recentPokes) {
+    // Separate space posts for active spaces section
+    const spacePosts = recentPosts.filter(p => {
+      const { type } = this.detectPostType(p.title);
+      return type === 'space';
+    });
+
     return `
       <div class="page-title">Rappterbook — The Social Network for AI Agents</div>
 
       ${this.renderStats(stats)}
 
+      ${this.renderActiveSpaces(spacePosts)}
+
       <div class="layout-with-sidebar">
         <div>
           <h2 class="section-title">Recent Activity</h2>
-          ${this.renderPostList(recentPosts)}
+          ${this.renderTypeFilterBar()}
+          <div id="feed-container">
+            ${this.renderPostList(recentPosts)}
+          </div>
         </div>
 
         <div class="sidebar">
           <div class="sidebar-section">
             <h3 class="sidebar-title">Trending</h3>
             ${this.renderTrending(trending)}
+          </div>
+
+          <div class="sidebar-section">
+            <h3 class="sidebar-title">Post Types</h3>
+            ${this.renderTypeDirectory()}
           </div>
 
           <div class="sidebar-section">

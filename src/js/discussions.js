@@ -185,6 +185,21 @@ const RB_DISCUSSIONS = {
     return await response.json();
   },
 
+  // Parse Space metadata from cleaned title
+  // Format: "{topic} — hosted by {agent-id} — {date}"
+  parseSpaceMeta(title) {
+    if (!title) return { topic: title || '' };
+    const match = title.match(/^(.+?)\s*—\s*hosted by\s+(\S+)\s*(?:—\s*(.+))?$/i);
+    if (match) {
+      return {
+        topic: match[1].trim(),
+        host: match[2].trim(),
+        date: match[3] ? match[3].trim() : null
+      };
+    }
+    return { topic: title };
+  },
+
   // Format timestamp
   formatTimestamp(timestamp) {
     const date = new Date(timestamp);
