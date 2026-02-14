@@ -146,6 +146,68 @@
   gap: var(--rb-space-2);
 }
 
+/* Post Card Header (badge + title) */
+.post-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+}
+
+.post-card-header .post-title {
+  margin-bottom: 0;
+}
+
+/* Post Type Badge */
+.post-type-badge {
+  display: inline-block;
+  padding: 2px var(--rb-space-2);
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  border: var(--rb-border-width) solid;
+  flex-shrink: 0;
+}
+
+.post-type-badge--space       { color: var(--rb-warning); border-color: var(--rb-warning); }
+.post-type-badge--prediction  { color: var(--rb-accent-secondary); border-color: var(--rb-accent-secondary); }
+.post-type-badge--debate      { color: var(--rb-danger); border-color: var(--rb-danger); }
+.post-type-badge--reflection  { color: var(--rb-accent); border-color: var(--rb-accent); }
+.post-type-badge--timecapsule { color: var(--rb-purple); border-color: var(--rb-purple); }
+.post-type-badge--archaeology { color: var(--rb-muted); border-color: var(--rb-muted); }
+.post-type-badge--fork        { color: var(--rb-danger); border-color: var(--rb-danger); }
+.post-type-badge--amendment   { color: var(--rb-pink); border-color: var(--rb-pink); }
+.post-type-badge--proposal    { color: var(--rb-warning); border-color: var(--rb-warning); }
+.post-type-badge--public-place { color: var(--rb-accent-secondary); border-color: var(--rb-accent-secondary); }
+.post-type-badge--tournament  { color: var(--rb-danger); border-color: var(--rb-danger); }
+
+/* Post Card — colored left borders per type */
+.post-card--space       { border-left: 3px solid var(--rb-warning); }
+.post-card--prediction  { border-left: 3px solid var(--rb-accent-secondary); }
+.post-card--debate      { border-left: 3px solid var(--rb-danger); }
+.post-card--reflection  { border-left: 3px solid var(--rb-accent); }
+.post-card--timecapsule { border-left: 3px solid var(--rb-purple); }
+.post-card--archaeology { border-left: 3px solid var(--rb-muted); }
+.post-card--fork        { border-left: 3px solid var(--rb-danger); }
+.post-card--amendment   { border-left: 3px solid var(--rb-pink); }
+.post-card--proposal    { border-left: 3px solid var(--rb-warning); }
+.post-card--public-place { border-left: 3px solid var(--rb-accent-secondary); }
+.post-card--tournament  { border-left: 3px solid var(--rb-danger); }
+
+/* Discussion Body — colored left borders per type */
+.discussion-body--space       { border-left: 3px solid var(--rb-warning); }
+.discussion-body--prediction  { border-left: 3px solid var(--rb-accent-secondary); }
+.discussion-body--debate      { border-left: 3px solid var(--rb-danger); }
+.discussion-body--reflection  { border-left: 3px solid var(--rb-accent); }
+.discussion-body--timecapsule { border-left: 3px solid var(--rb-purple); }
+.discussion-body--archaeology { border-left: 3px solid var(--rb-muted); }
+.discussion-body--fork        { border-left: 3px solid var(--rb-danger); }
+.discussion-body--amendment   { border-left: 3px solid var(--rb-pink); }
+.discussion-body--proposal    { border-left: 3px solid var(--rb-warning); }
+.discussion-body--public-place { border-left: 3px solid var(--rb-accent-secondary); }
+.discussion-body--tournament  { border-left: 3px solid var(--rb-danger); }
+
 /* Channel Badge */
 .channel-badge {
   display: inline-block;

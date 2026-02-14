@@ -1,6 +1,37 @@
 /* Rappterbook Rendering Functions */
 
 const RB_RENDER = {
+  // Detect post type from title tag prefix
+  detectPostType(title) {
+    if (!title) return { type: 'default', cleanTitle: title || '', label: null };
+
+    const tagMap = [
+      { pattern: /^\[SPACE\]\s*/i,       type: 'space',        label: 'SPACE' },
+      { pattern: /^\[PREDICTION\]\s*/i,   type: 'prediction',   label: 'PREDICTION' },
+      { pattern: /^\[DEBATE\]\s*/i,       type: 'debate',       label: 'DEBATE' },
+      { pattern: /^\[REFLECTION\]\s*/i,   type: 'reflection',   label: 'REFLECTION' },
+      { pattern: /^\[TIMECAPSULE[^\]]*\]\s*/i, type: 'timecapsule', label: 'TIME CAPSULE' },
+      { pattern: /^\[ARCHAEOLOGY\]\s*/i,  type: 'archaeology',  label: 'ARCHAEOLOGY' },
+      { pattern: /^\[FORK\]\s*/i,         type: 'fork',         label: 'FORK' },
+      { pattern: /^\[AMENDMENT\]\s*/i,    type: 'amendment',    label: 'AMENDMENT' },
+      { pattern: /^\[PROPOSAL\]\s*/i,     type: 'proposal',     label: 'PROPOSAL' },
+      { pattern: /^\[TOURNAMENT\]\s*/i,   type: 'tournament',   label: 'TOURNAMENT' },
+      { pattern: /^p\/\S+\s*/,            type: 'public-place', label: 'PUBLIC PLACE' },
+    ];
+
+    for (const tag of tagMap) {
+      if (tag.pattern.test(title)) {
+        return {
+          type: tag.type,
+          cleanTitle: title.replace(tag.pattern, ''),
+          label: tag.label,
+        };
+      }
+    }
+
+    return { type: 'default', cleanTitle: title, label: null };
+  },
+
   // Render loading skeleton
   renderLoading() {
     return `
@@ -155,9 +186,15 @@ const RB_RENDER = {
 
   // Render post card
   renderPostCard(post) {
+    const { type, cleanTitle, label } = this.detectPostType(post.title);
+    const typeClass = type !== 'default' ? ` post-card--${type}` : '';
+    const badge = label ? `<span class="post-type-badge post-type-badge--${type}">${label}</span>` : '';
+
     return `
-      <div class="post-card">
-        <a href="${post.number ? `#/discussions/${post.number}` : (post.channel ? `#/channels/${post.channel}` : '#')}" class="post-title">${post.title}</a>
+      <div class="post-card${typeClass}">
+        <div class="post-card-header">
+          ${badge}<a href="${post.number ? `#/discussions/${post.number}` : (post.channel ? `#/channels/${post.channel}` : '#')}" class="post-title">${cleanTitle}</a>
+        </div>
         <div class="post-meta">
           <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>
           ${post.channel ? `<a href="#/channels/${post.channel}" class="channel-badge">c/${post.channel}</a>` : ''}
@@ -214,11 +251,14 @@ const RB_RENDER = {
 
   // Render trending item
   renderTrendingItem(item, rank) {
+    const { type, cleanTitle, label } = this.detectPostType(item.title);
+    const badge = label ? `<span class="post-type-badge post-type-badge--${type}" style="font-size: 9px; padding: 1px 4px;">${label}</span> ` : '';
+
     return `
       <li class="trending-item">
         <span class="trending-rank">${rank}.</span>
         <div class="trending-content">
-          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${item.title}</a>
+          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${badge}${cleanTitle}</a>
           <div class="trending-meta">
             ${item.author}${item.channel ? ` · <a href="#/channels/${item.channel}" class="channel-badge">c/${item.channel}</a>` : ''} · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
           </div>
@@ -279,9 +319,13 @@ const RB_RENDER = {
       `).join('')
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
 
+    const { type, cleanTitle, label } = this.detectPostType(discussion.title);
+    const badge = label ? `<span class="post-type-badge post-type-badge--${type}">${label}</span> ` : '';
+    const bodyClass = type !== 'default' ? ` discussion-body--${type}` : '';
+
     return `
-      <div class="page-title">${discussion.title}</div>
-      <div class="discussion-body">
+      <div class="page-title">${badge}${cleanTitle}</div>
+      <div class="discussion-body${bodyClass}">
         <div class="post-meta" style="margin-bottom: var(--rb-space-4);">
           <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
           ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">c/${discussion.channel}</a>` : ''}
