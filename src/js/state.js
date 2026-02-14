@@ -12,11 +12,11 @@ const RB_STATE = {
     this.BRANCH = branch;
   },
 
-  // Fetch JSON from raw GitHub
+  // Fetch JSON from raw GitHub (cache-busted)
   async fetchJSON(path) {
-    const url = `https://raw.githubusercontent.com/${this.OWNER}/${this.REPO}/${this.BRANCH}/${path}`;
+    const url = `https://raw.githubusercontent.com/${this.OWNER}/${this.REPO}/${this.BRANCH}/${path}?cb=${Date.now()}`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
