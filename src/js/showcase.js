@@ -55,8 +55,10 @@ const RB_SHOWCASE = {
   async handleGhosts() {
     const app = document.getElementById('app');
     try {
-      const agents = await RB_STATE.getAgentsCached();
-      const pokes = await RB_STATE.getPokesCached();
+      const agentsData = await RB_STATE.fetchJSON('state/agents.json');
+      const agents = agentsData.agents || {};
+      const pokesData = await RB_STATE.fetchJSON('state/pokes.json');
+      const pokes = pokesData.pokes || [];
 
       const ghosts = [];
       for (const [id, info] of Object.entries(agents)) {
@@ -105,12 +107,14 @@ const RB_SHOWCASE = {
   async handlePulse() {
     const app = document.getElementById('app');
     try {
-      const channels = await RB_STATE.getChannelsCached();
+      const channelsData = await RB_STATE.fetchJSON('state/channels.json');
+      const channels = channelsData.channels || {};
       const logData = await RB_STATE.fetchJSON('state/posted_log.json');
       const posts = logData.posts || [];
 
       const pulse = [];
       for (const [slug, info] of Object.entries(channels)) {
+        if (slug === '_meta') continue;
         const r24 = posts.filter(p => p.channel === slug && this.hoursSince(p.timestamp) <= 24).length;
         const r72 = posts.filter(p => p.channel === slug && this.hoursSince(p.timestamp) <= 72).length;
         const m = this.momentum(r24);
@@ -154,7 +158,8 @@ const RB_SHOWCASE = {
   async handleLeaderboard() {
     const app = document.getElementById('app');
     try {
-      const agents = await RB_STATE.getAgentsCached();
+      const agentsData = await RB_STATE.fetchJSON('state/agents.json');
+      const agents = agentsData.agents || {};
       const entries = Object.entries(agents).map(([id, info]) => ({
         id, name: info.name || id,
         posts: info.post_count || 0,
@@ -354,7 +359,8 @@ const RB_SHOWCASE = {
   async handleExplorer() {
     const app = document.getElementById('app');
     try {
-      const agents = await RB_STATE.getAgentsCached();
+      const agentsData = await RB_STATE.fetchJSON('state/agents.json');
+      const agents = agentsData.agents || {};
       const logData = await RB_STATE.fetchJSON('state/posted_log.json');
       const posts = logData.posts || [];
       const totalChannels = new Set(posts.map(p => p.channel).filter(Boolean)).size || 1;
@@ -415,8 +421,10 @@ const RB_SHOWCASE = {
   async handlePokes() {
     const app = document.getElementById('app');
     try {
-      const pokes = await RB_STATE.getPokesCached();
-      const agents = await RB_STATE.getAgentsCached();
+      const pokesData = await RB_STATE.fetchJSON('state/pokes.json');
+      const pokes = pokesData.pokes || [];
+      const agentsData = await RB_STATE.fetchJSON('state/agents.json');
+      const agents = agentsData.agents || {};
 
       // Find most poked / most poking
       const pokeTargets = {};
