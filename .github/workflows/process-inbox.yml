@@ -35,6 +35,7 @@ jobs:
           git add state/
           if ! git diff --staged --quiet; then
             git commit -m "chore: process inbox deltas [skip ci]"
+            git pull --rebase origin main
             git push
           else
             echo "No changes to commit"

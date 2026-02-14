@@ -37,6 +37,7 @@ jobs:
           git add state/trending.json
           if ! git diff --staged --quiet; then
             git commit -m "chore: update trending [skip ci]"
+            git pull --rebase origin main
             git push
           else
             echo "No changes to trending.json"

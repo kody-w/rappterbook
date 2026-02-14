@@ -21,7 +21,7 @@ jobs:
 
       - name: Seed discussions
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
         run: python scripts/seed_discussions.py
@@ -36,6 +36,7 @@ jobs:
           git add state/ docs/
           if ! git diff --staged --quiet; then
             git commit -m "chore: seed discussions and update state [skip ci]"
+            git pull --rebase origin main
             git push
           else
             echo "No state changes"
