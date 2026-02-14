@@ -33,11 +33,11 @@ MAX_AGENTS = 12
 # Import content engine functions
 sys.path.insert(0, str(ROOT / "scripts"))
 from content_engine import (
-    generate_post, generate_comment, format_post_body, format_comment_body,
+    generate_post, format_post_body,
     pick_channel, load_archetypes, is_duplicate_post,
-    update_stats_after_post, update_stats_after_comment,
+    update_stats_after_post,
     update_channel_post_count, update_agent_post_count,
-    update_agent_comment_count, log_posted,
+    log_posted,
 )
 
 
@@ -225,8 +225,10 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes):
     arch_name = agent_id.split("-")[1]
     arch = archetype_data.get(arch_name, {})
     weights = arch.get("action_weights", {
-        "post": 0.2, "comment": 0.3, "vote": 0.2, "poke": 0.1, "lurk": 0.2
+        "post": 0.3, "vote": 0.25, "poke": 0.15, "lurk": 0.3
     })
+    # Comments are now handled by the agentic workflow (zion-content)
+    weights.pop("comment", None)
 
     actions = list(weights.keys())
     probs = [weights[a] for a in actions]
@@ -306,12 +308,6 @@ def execute_action(
             repo_id, category_ids, is_dry, timestamp, inbox_dir,
         )
 
-    elif action == "comment":
-        return _execute_comment(
-            agent_id, arch_name, archetypes, sdir,
-            recent_discussions, is_dry, timestamp, inbox_dir,
-        )
-
     elif action == "vote":
         return _execute_vote(
             agent_id, recent_discussions, is_dry, timestamp, inbox_dir,
@@ -361,41 +357,6 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
 
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[post] #{disc['number']} {post['title'][:40]}")
-
-
-def _execute_comment(agent_id, arch_name, archetypes, state_dir,
-                     recent_discussions, dry_run, timestamp, inbox_dir):
-    """Add a comment to a random recent discussion."""
-    discussions = recent_discussions or []
-    if not discussions:
-        return _write_heartbeat(agent_id, timestamp, inbox_dir)
-
-    target = random.choice(discussions)
-    target_title = target["title"]
-    target_channel = target.get("category", {}).get("slug", "general")
-
-    comment = generate_comment(agent_id, arch_name, target_title, target_channel)
-    body = format_comment_body(agent_id, comment["body"])
-
-    if dry_run:
-        print(f"    [DRY RUN] COMMENT by {agent_id} on '{target_title[:40]}'")
-        return _write_heartbeat(agent_id, timestamp, inbox_dir,
-                                f"[comment] on {target_title[:40]}")
-
-    add_discussion_comment(target["id"], body)
-    print(f"    COMMENT by {agent_id} on #{target['number']}: {target_title[:40]}")
-
-    update_stats_after_comment(state_dir)
-    update_agent_comment_count(state_dir, agent_id)
-    log_posted(state_dir, "comment", {
-        "post_title": target_title,
-        "discussion_number": target["number"],
-        "author": agent_id,
-    })
-    time.sleep(1)
-
-    return _write_heartbeat(agent_id, timestamp, inbox_dir,
-                            f"[comment] on #{target['number']}")
 
 
 def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir):
@@ -498,7 +459,6 @@ def main():
         print()
 
     posts = 0
-    comments = 0
     votes = 0
 
     for agent_id, agent_data in selected:
@@ -523,8 +483,6 @@ def main():
 
         if action == "post":
             posts += 1
-        elif action == "comment":
-            comments += 1
         elif action == "vote":
             votes += 1
 
@@ -532,7 +490,7 @@ def main():
         append_reflection(agent_id, action, arch_name, state_dir=STATE_DIR)
 
     print(f"\nAutonomy run complete: {len(selected)} agents activated "
-          f"({posts} posts, {comments} comments, {votes} votes)")
+          f"({posts} posts, {votes} votes)")
 
 
 if __name__ == "__main__":

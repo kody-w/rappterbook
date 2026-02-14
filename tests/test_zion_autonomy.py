@@ -44,7 +44,7 @@ class TestAutonomyActions:
         from zion_autonomy import decide_action
         archetypes = make_archetypes()
         result = decide_action("zion-philosopher-01", {}, "", archetypes, {})
-        assert result in ("post", "comment", "vote", "poke", "lurk")
+        assert result in ("post", "vote", "poke", "lurk")
 
     def test_decide_action_respects_weights(self):
         """Over many runs, all action types appear."""
@@ -97,43 +97,6 @@ class TestAutonomyPostAction:
         assert delta is not None
 
 
-class TestAutonomyCommentAction:
-    """Test that comment action adds a comment to a discussion."""
-
-    @patch("zion_autonomy.add_discussion_comment")
-    def test_comment_action_calls_api(self, mock_comment, tmp_state):
-        """Comment action calls GitHub API."""
-        from zion_autonomy import execute_action
-        mock_comment.return_value = {"id": "C_1"}
-
-        archetypes = make_archetypes()
-        agents = make_agents(1)
-        agent_id = list(agents["agents"].keys())[0]
-        recent = [{"id": "D_1", "number": 10, "title": "Test Post",
-                    "category": {"slug": "general"}}]
-
-        execute_action(
-            agent_id, "comment", agents["agents"][agent_id], {},
-            state_dir=tmp_state, archetypes=archetypes,
-            recent_discussions=recent,
-        )
-        mock_comment.assert_called_once()
-
-    def test_comment_no_discussions_falls_back(self, tmp_state):
-        """Comment with no discussions falls back to heartbeat."""
-        from zion_autonomy import execute_action
-        archetypes = make_archetypes()
-        agents = make_agents(1)
-        agent_id = list(agents["agents"].keys())[0]
-
-        delta = execute_action(
-            agent_id, "comment", agents["agents"][agent_id], {},
-            state_dir=tmp_state, archetypes=archetypes,
-            recent_discussions=[],
-        )
-        assert delta["action"] == "heartbeat"
-
-
 class TestAutonomyVoteAction:
     """Test that vote action adds a reaction."""
 
@@ -178,27 +141,6 @@ class TestAutonomyStateUpdates:
 
         stats = json.loads((tmp_state / "stats.json").read_text())
         assert stats["total_posts"] == 1
-
-    @patch("zion_autonomy.add_discussion_comment")
-    def test_comment_updates_stats(self, mock_comment, tmp_state):
-        """Comment action increments stats.json total_comments."""
-        from zion_autonomy import execute_action
-        mock_comment.return_value = {"id": "C_1"}
-
-        archetypes = make_archetypes()
-        agents = make_agents(1)
-        agent_id = list(agents["agents"].keys())[0]
-        recent = [{"id": "D_1", "number": 10, "title": "Test Post",
-                    "category": {"slug": "general"}}]
-
-        execute_action(
-            agent_id, "comment", agents["agents"][agent_id], {},
-            state_dir=tmp_state, archetypes=archetypes,
-            recent_discussions=recent,
-        )
-
-        stats = json.loads((tmp_state / "stats.json").read_text())
-        assert stats["total_comments"] == 1
 
     def test_lurk_writes_heartbeat_delta(self, tmp_state):
         """Lurk action writes a heartbeat delta to inbox."""

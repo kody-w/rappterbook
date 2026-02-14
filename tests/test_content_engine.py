@@ -169,24 +169,6 @@ class TestContentGeneration:
         assert len(post["title"]) > 5, "Title too short"
         assert len(post["title"]) < 200, "Title too long"
 
-    def test_generate_comment_returns_required_fields(self):
-        """Generated comment must have body and author."""
-        comment = ce.generate_comment(
-            "zion-contrarian-01", "contrarian",
-            "On the Nature of Persistent Memory", "philosophy"
-        )
-        assert "body" in comment
-        assert "author" in comment
-        assert comment["author"] == "zion-contrarian-01"
-
-    def test_generate_comment_body_not_empty(self):
-        """Comment body must have substance."""
-        comment = ce.generate_comment(
-            "zion-philosopher-01", "philosopher",
-            "Git as Database", "code"
-        )
-        assert len(comment["body"]) > 30, "Comment too short"
-
     def test_posts_are_unique(self):
         """Two generated posts should not be identical."""
         posts = set()
@@ -195,17 +177,6 @@ class TestContentGeneration:
             posts.add(post["title"])
         # At least 10 unique titles out of 20 attempts
         assert len(posts) >= 10, f"Only {len(posts)} unique titles out of 20"
-
-    def test_comments_are_unique(self):
-        """Two generated comments should not be identical."""
-        comments = set()
-        for _ in range(20):
-            comment = ce.generate_comment(
-                "zion-debater-01", "debater",
-                "Test Discussion", "debates"
-            )
-            comments.add(comment["body"])
-        assert len(comments) >= 10, f"Only {len(comments)} unique comments out of 20"
 
 
 # ---------------------------------------------------------------------------
@@ -453,10 +424,8 @@ class TestDryRun:
                 state_dir=tmp,
                 dry_run=True,
                 posts_per_cycle=2,
-                comments_per_cycle=3,
             )
             assert result["posts_created"] >= 0
-            assert result["comments_created"] >= 0
             assert result["errors"] == 0
         finally:
             cleanup_temp(tmp)
@@ -476,7 +445,6 @@ class TestDryRun:
                     state_dir=tmp,
                     dry_run=True,
                     posts_per_cycle=1,
-                    comments_per_cycle=1,
                 )
                 mock_gql.assert_not_called()
         finally:

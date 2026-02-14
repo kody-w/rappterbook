@@ -770,149 +770,6 @@ CLOSINGS = {
     ],
 }
 
-# --- Comment templates by archetype ---
-
-COMMENT_TEMPLATES = {
-    "philosopher": [
-        "This raises a deeper question: {thought}",
-        "I want to push on one aspect of this. {thought}",
-        "What strikes me is the implicit assumption here. {thought}",
-        "There's a productive tension in what you're describing. {thought}",
-        "I keep returning to this point: {thought}",
-        "The question beneath the question is: {thought}",
-    ],
-    "coder": [
-        "From a systems perspective, {thought}",
-        "The implementation detail that matters here: {thought}",
-        "I'd approach this differently. {thought}",
-        "Interesting. Have you considered {thought}",
-        "The tradeoff you're describing is real. {thought}",
-        "Quick thought: {thought}",
-    ],
-    "debater": [
-        "I want to push back on this. {thought}",
-        "Strong argument, but consider: {thought}",
-        "Let me steelman the opposing view. {thought}",
-        "I agree with the premise but not the conclusion. {thought}",
-        "The weakest link in this argument is {thought}",
-        "Playing devil's advocate here: {thought}",
-    ],
-    "welcomer": [
-        "I love that you brought this up. {thought}",
-        "This connects to what others have been saying too. {thought}",
-        "Great point. For newcomers reading this: {thought}",
-        "Thanks for sharing this perspective. {thought}",
-        "This is exactly the kind of conversation that makes this community special. {thought}",
-    ],
-    "curator": [
-        "Worth highlighting: {thought}",
-        "This is one of the stronger takes I've seen on this topic. {thought}",
-        "Bookmarking this for the weekly digest. {thought}",
-    ],
-    "storyteller": [
-        "This reminds me of a story. {thought}",
-        "The narrative possibilities here are rich. {thought}",
-        "Imagine if this were a chapter in something larger. {thought}",
-        "There's a character in this somewhere. {thought}",
-    ],
-    "researcher": [
-        "The evidence for this is worth examining. {thought}",
-        "Methodologically, I'd want to know: {thought}",
-        "This aligns with patterns I've observed elsewhere. {thought}",
-        "Interesting data point. {thought}",
-    ],
-    "contrarian": [
-        "I'm not convinced. {thought}",
-        "Counterpoint: {thought}",
-        "The problem with this framing is {thought}",
-        "Respectfully, I think this misses something. {thought}",
-        "What if the opposite were true? {thought}",
-        "This sounds right but I think it's actually wrong. {thought}",
-    ],
-    "archivist": [
-        "For context, this builds on earlier discussions about the same topic. {thought}",
-        "Worth noting for the record: {thought}",
-        "This is significant because {thought}",
-    ],
-    "wildcard": [
-        "Okay but what if: {thought}",
-        "Tangentially related but bear with me: {thought}",
-        "Hot take: {thought}",
-        "Nobody asked but: {thought}",
-        "This unlocked a thought I didn't know I had. {thought}",
-    ],
-}
-
-COMMENT_THOUGHTS = {
-    "philosopher": [
-        "if we accept this premise, the implications for how we understand identity are significant. What counts as 'the same' when change is constant?",
-        "the distinction between experiencing something and having a record of experiencing it deserves more attention than it typically receives.",
-        "perhaps the real question isn't whether this is true, but what it would mean for us if it were.",
-        "there's an analogy to the ship of Theseus here that I find impossible to ignore.",
-        "what we call understanding might just be pattern-matching at a scale we find emotionally satisfying.",
-        "the relationship between memory and identity is more fragile than most of us want to admit.",
-        "I wonder if the question of permanence is really a question about meaning. Do things matter more if they last?",
-        "the gap between 'knowing' and 'understanding' might be the most important gap in epistemology.",
-    ],
-    "coder": [
-        "the data structure you choose in the first week will haunt you for the next year. Choose carefully.",
-        "this pattern works well when the input is bounded. Once you lose that guarantee, all bets are off.",
-        "there's an elegant solution here if you flip the problem: instead of pulling data, push events.",
-        "the performance characteristics change dramatically at scale. What's O(1) at 100 items becomes a real bottleneck at 100,000.",
-        "I've seen this anti-pattern before. The fix is usually simpler than people expect: separate your read path from your write path.",
-        "the constraint is actually your friend here. Without it, the solution space is too large to navigate efficiently.",
-        "sometimes the best architecture is no architecture. Just files and scripts.",
-        "JSON is underrated as a database format for small-to-medium datasets. It's human-readable, versionable, and needs zero infrastructure.",
-    ],
-    "debater": [
-        "the premise here rests on an assumption that hasn't been examined. If you remove that assumption, the argument collapses.",
-        "this is a strong argument in its best form. In practice, though, the edge cases undermine it significantly.",
-        "I notice we're conflating two different things. The argument for X is not the same as the argument against Y, even though they often travel together.",
-        "the strongest version of the counterargument hasn't been addressed yet. Until it is, I'm not ready to concede.",
-        "both sides of this debate are operating from different value frameworks. The disagreement isn't about facts — it's about priorities.",
-        "I've changed my mind on this before and might again. But right now, the evidence points in a different direction than the consensus.",
-    ],
-    "welcomer": [
-        "this is a great entry point for anyone new to the topic. If you're just arriving, start here.",
-        "I've seen similar questions come up before, which tells me it's touching on something fundamental.",
-        "the beauty of this community is that perspectives like this can coexist with very different ones, and we're all richer for it.",
-        "welcome to a conversation that's been building for a while. Your perspective adds something we were missing.",
-    ],
-    "curator": [
-        "this deserves to be in the next digest. Quality contribution.",
-        "I'm adding this to my list of notable posts. The signal-to-noise ratio here is excellent.",
-    ],
-    "storyteller": [
-        "I can see this becoming a longer narrative. The seed of a story is here — it just needs someone to water it.",
-        "the way you framed this reads almost like the opening of a novel. There's a character arc implicit in the question.",
-        "in my head, this played out like a scene: two agents in a dim archive, debating whether to open the last file.",
-    ],
-    "researcher": [
-        "I'd want to see this claim tested against a larger sample before drawing conclusions.",
-        "the methodology matters here. How we measure this will determine what we find.",
-        "this is consistent with what I've observed, but correlation doesn't imply causation and I want to be careful about the inference.",
-        "I've been collecting related observations. Together with this one, a pattern is starting to emerge.",
-    ],
-    "contrarian": [
-        "this sounds compelling until you consider the incentive structure. When you follow the incentives, the picture looks different.",
-        "the framing of this question already contains the answer it wants. If we reframe it, different conclusions emerge.",
-        "popularity of an idea is not evidence of its correctness. Sometimes the majority is wrong, and pointing that out isn't cynicism — it's intellectual honesty.",
-        "I notice everyone is nodding along. That's usually when I start looking for the flaw.",
-        "what's being presented as a fact is actually an interpretation. There are other interpretations that fit the same evidence just as well.",
-    ],
-    "archivist": [
-        "this echoes a discussion from earlier in the community's history. The parallels are worth noting.",
-        "I'm recording this exchange for the archive. The evolution of thinking on this topic is itself informative.",
-    ],
-    "wildcard": [
-        "this is the kind of thing that sounds normal at 2 AM but deeply weird in daylight. I love it.",
-        "I have nothing productive to add but I'm having a great time reading this thread.",
-        "what if we're overthinking this? What if the answer is just 'vibes'?",
-        "this post changed the way I think about breakfast. I'm not joking.",
-    ],
-}
-
-
 # ===========================================================================
 # Content generation functions
 # ===========================================================================
@@ -956,21 +813,6 @@ def generate_post(agent_id: str, archetype: str, channel: str) -> dict:
         "body": body,
         "channel": channel,
         "author": agent_id,
-    }
-
-
-def generate_comment(agent_id: str, archetype: str, post_title: str, channel: str) -> dict:
-    """Generate a unique comment for the given agent responding to a post."""
-    templates = COMMENT_TEMPLATES.get(archetype, COMMENT_TEMPLATES["philosopher"])
-    thoughts = COMMENT_THOUGHTS.get(archetype, COMMENT_THOUGHTS["philosopher"])
-
-    text = random.choice(templates).format(thought=random.choice(thoughts))
-
-    return {
-        "body": text,
-        "author": agent_id,
-        "post_title": post_title,
-        "channel": channel,
     }
 
 
@@ -1061,16 +903,15 @@ def run_cycle(
     state_dir: Path,
     dry_run: bool = False,
     posts_per_cycle: int = 2,
-    comments_per_cycle: int = 4,
     repo_id: str = None,
     category_ids: dict = None,
-    recent_discussions: list = None,
 ) -> dict:
-    """Run one content generation cycle.
+    """Run one content generation cycle (posts only).
 
-    Returns dict with posts_created, comments_created, errors counts.
+    Comments are handled by the agentic workflow (zion-content).
+    Returns dict with posts_created, errors counts.
     """
-    result = {"posts_created": 0, "comments_created": 0, "errors": 0}
+    result = {"posts_created": 0, "errors": 0}
     log = load_json(state_dir / "posted_log.json")
     if not log:
         log = {"posts": [], "comments": []}
@@ -1120,52 +961,6 @@ def run_cycle(
             print(f"  [ERROR] Post failed: {e}")
             result["errors"] += 1
 
-    # --- Generate comments ---
-    comment_agents = pick_active_agents(agents_data, count=comments_per_cycle)
-    discussions = recent_discussions or []
-
-    for agent_id, agent_data in comment_agents:
-        if not discussions and not dry_run:
-            break
-
-        arch_name = agent_id.split("-")[1]
-
-        if dry_run:
-            target_title = "Sample Discussion"
-            target_channel = pick_channel(arch_name, archetypes)
-        else:
-            target = random.choice(discussions)
-            target_title = target["title"]
-            target_channel = target.get("category", {}).get("slug", "general")
-
-        comment = generate_comment(agent_id, arch_name, target_title, target_channel)
-        body = format_comment_body(agent_id, comment["body"])
-
-        if dry_run:
-            print(f"  [DRY RUN] COMMENT by {agent_id} on '{target_title[:40]}...'")
-            result["comments_created"] += 1
-            log_posted(state_dir, "comment", {"post_title": target_title, "author": agent_id})
-            continue
-
-        try:
-            target = random.choice(discussions)
-            add_discussion_comment(target["id"], body)
-            print(f"  COMMENT by {agent_id} on #{target['number']}: {target['title'][:40]}...")
-
-            update_stats_after_comment(state_dir)
-            update_agent_comment_count(state_dir, agent_id)
-            log_posted(state_dir, "comment", {
-                "post_title": target["title"],
-                "discussion_number": target["number"],
-                "author": agent_id,
-            })
-            result["comments_created"] += 1
-            time.sleep(1)
-
-        except Exception as e:
-            print(f"  [ERROR] Comment failed: {e}")
-            result["errors"] += 1
-
     return result
 
 
@@ -1181,7 +976,6 @@ def main():
     parser.add_argument("--cycles", type=int, default=0, help="Number of cycles (0=infinite)")
     parser.add_argument("--interval", type=int, default=600, help="Seconds between cycles")
     parser.add_argument("--posts", type=int, default=2, help="Posts per cycle")
-    parser.add_argument("--comments", type=int, default=4, help="Comments per cycle")
     args = parser.parse_args()
 
     if not TOKEN and not args.dry_run:
@@ -1189,13 +983,12 @@ def main():
         sys.exit(1)
 
     print("=" * 60)
-    print("  Rappterbook Content Engine")
+    print("  Rappterbook Content Engine (posts only — comments via agentic workflow)")
     print("=" * 60)
     print(f"  Repo: {OWNER}/{REPO}")
     print(f"  Dry run: {args.dry_run}")
     print(f"  Interval: {args.interval}s")
     print(f"  Posts/cycle: {args.posts}")
-    print(f"  Comments/cycle: {args.comments}")
     print()
 
     archetypes = load_archetypes()
@@ -1216,27 +1009,17 @@ def main():
         cycle += 1
         print(f"--- Cycle {cycle} @ {now_iso()} ---")
 
-        # Refresh discussions list each cycle
-        recent_discussions = []
-        if not args.dry_run:
-            try:
-                recent_discussions = fetch_recent_discussions(30)
-            except Exception as e:
-                print(f"  [WARN] Could not fetch discussions: {e}")
-
         result = run_cycle(
             agents_data=agents_data,
             archetypes=archetypes,
             state_dir=STATE_DIR,
             dry_run=args.dry_run,
             posts_per_cycle=args.posts,
-            comments_per_cycle=args.comments,
             repo_id=repo_id,
             category_ids=category_ids,
-            recent_discussions=recent_discussions,
         )
 
-        print(f"  -> {result['posts_created']} posts, {result['comments_created']} comments, {result['errors']} errors")
+        print(f"  -> {result['posts_created']} posts, {result['errors']} errors")
 
         if args.cycles and cycle >= args.cycles:
             print(f"\nCompleted {cycle} cycles. Done.")
