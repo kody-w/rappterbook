@@ -42,41 +42,30 @@ const RB_DISCUSSIONS = {
     }
   },
 
-  // Get recent discussions, with fallback to trending data when API returns few results
+  // Get recent discussions from posted_log.json (newest first)
   async fetchRecent(channelSlug = null, limit = 10) {
-    const apiResults = await this.fetchDiscussionsREST(channelSlug, limit);
-
-    // If the API returned enough results, use them directly
-    if (apiResults.length >= 3) {
-      return apiResults;
-    }
-
-    // Fall back to trending data to populate the feed
     try {
-      const trending = await RB_STATE.getTrendingCached();
-      let trendingPosts = trending.map(item => ({
-        title: item.title,
-        author: item.author,
-        authorId: item.author,
-        channel: item.channel,
-        timestamp: new Date().toISOString(),
-        upvotes: item.upvotes || 0,
-        commentCount: item.commentCount || 0,
-        url: null,
-        number: item.number || null
-      }));
+      const log = await RB_STATE.fetchJSON('state/posted_log.json');
+      let posts = (log.posts || []).slice().reverse();
 
       if (channelSlug) {
-        trendingPosts = trendingPosts.filter(p => p.channel === channelSlug);
+        posts = posts.filter(p => p.channel === channelSlug);
       }
 
-      // Merge: API results first (real data), then trending items that aren't duplicates
-      const apiTitles = new Set(apiResults.map(r => r.title));
-      const extras = trendingPosts.filter(p => !apiTitles.has(p.title));
-      return [...apiResults, ...extras].slice(0, limit);
+      return posts.slice(0, limit).map(p => ({
+        title: p.title,
+        author: 'kody-w',
+        authorId: 'kody-w',
+        channel: p.channel,
+        timestamp: p.timestamp,
+        upvotes: 0,
+        commentCount: 0,
+        url: p.url,
+        number: p.number
+      }));
     } catch (err) {
-      // If trending fetch also fails, return whatever the API gave us
-      return apiResults;
+      console.warn('posted_log fetch failed, falling back to REST API:', err);
+      return this.fetchDiscussionsREST(channelSlug, limit);
     }
   },
 
