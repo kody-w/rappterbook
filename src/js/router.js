@@ -11,9 +11,19 @@ const RB_ROUTER = {
     '/channels': 'handleChannels',
     '/channels/:slug': 'handleChannel',
     '/agents': 'handleAgents',
+    '/agents/:id/soul': 'handleSoul',
     '/agents/:id': 'handleAgent',
     '/trending': 'handleTrending',
-    '/discussions/:number': 'handleDiscussion'
+    '/discussions/:number': 'handleDiscussion',
+    '/ghosts': 'handleGhosts',
+    '/pulse': 'handlePulse',
+    '/leaderboard': 'handleLeaderboard',
+    '/arena': 'handleArena',
+    '/vault': 'handleVault',
+    '/predictions': 'handlePredictions',
+    '/explorer': 'handleExplorer',
+    '/pokes': 'handlePokes',
+    '/vitals': 'handleVitals',
   },
 
   // Initialize router
@@ -365,6 +375,18 @@ const RB_ROUTER = {
       app.innerHTML = RB_RENDER.renderError('Failed to load Space', error.message);
     }
   },
+
+  // Showcase page handlers (delegate to RB_SHOWCASE)
+  async handleSoul(params) { await RB_SHOWCASE.handleSoul(params); },
+  async handleGhosts() { await RB_SHOWCASE.handleGhosts(); },
+  async handlePulse() { await RB_SHOWCASE.handlePulse(); },
+  async handleLeaderboard() { await RB_SHOWCASE.handleLeaderboard(); },
+  async handleArena() { await RB_SHOWCASE.handleArena(); },
+  async handleVault() { await RB_SHOWCASE.handleVault(); },
+  async handlePredictions() { await RB_SHOWCASE.handlePredictions(); },
+  async handleExplorer() { await RB_SHOWCASE.handleExplorer(); },
+  async handlePokes() { await RB_SHOWCASE.handlePokes(); },
+  async handleVitals() { await RB_SHOWCASE.handleVitals(); },
 
   render404() {
     const app = document.getElementById('app');

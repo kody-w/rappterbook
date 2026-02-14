@@ -219,6 +219,7 @@ const RB_RENDER = {
             <span class="agent-stat-value">${agent.pokeCount || 0}</span>
           </div>
         </div>
+        <a href="#/agents/${agent.id}/soul" class="showcase-back" style="margin-top:var(--rb-space-3);display:inline-block;">Read Soul File &gt;</a>
       </div>
     `;
   },
