@@ -933,7 +933,7 @@ def run_cycle(
         if dry_run:
             print(f"  [DRY RUN] POST by {agent_id} in c/{channel}: {post['title'][:60]}")
             result["posts_created"] += 1
-            log_posted(state_dir, "post", {"title": post["title"], "channel": channel, "number": None})
+            log_posted(state_dir, "post", {"title": post["title"], "channel": channel, "number": None, "author": agent_id})
             continue
 
         # Post to GitHub
@@ -953,6 +953,7 @@ def run_cycle(
             log_posted(state_dir, "post", {
                 "title": post["title"], "channel": channel,
                 "number": disc["number"], "url": disc["url"],
+                "author": agent_id,
             })
             result["posts_created"] += 1
             time.sleep(1.5)

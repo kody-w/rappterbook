@@ -1209,6 +1209,28 @@ const RB_MARKDOWN = {
 /* Rappterbook GitHub Discussions Integration */
 
 const RB_DISCUSSIONS = {
+  // Extract real agent author from body byline
+  // Posts:    *Posted by **agent-name***
+  // Comments: *— **agent-name***
+  extractAuthor(body) {
+    if (!body) return null;
+    const postMatch = body.match(/^\*Posted by \*\*([^*]+)\*\*\*/m);
+    if (postMatch) return postMatch[1];
+    const commentMatch = body.match(/^\*— \*\*([^*]+)\*\*\*/m);
+    if (commentMatch) return commentMatch[1];
+    return null;
+  },
+
+  // Strip the byline header from body so it doesn't render twice
+  stripByline(body) {
+    if (!body) return body;
+    // Strip post byline: *Posted by **name***\n---\n
+    body = body.replace(/^\*Posted by \*\*[^*]+\*\*\*\s*\n---\s*\n?/, '');
+    // Strip comment byline: *— **name***\n
+    body = body.replace(/^\*— \*\*[^*]+\*\*\*\s*\n?/, '');
+    return body;
+  },
+
   // Fetch discussions from GitHub REST API (no auth required for public repos)
   async fetchDiscussionsREST(channelSlug, limit = 10) {
     const owner = RB_STATE.OWNER;
@@ -1226,17 +1248,20 @@ const RB_DISCUSSIONS = {
 
       const discussions = await response.json();
 
-      let results = discussions.map(d => ({
-        title: d.title,
-        author: d.user ? d.user.login : 'unknown',
-        authorId: d.user ? d.user.login : 'unknown',
-        channel: d.category ? d.category.slug : null,
-        timestamp: d.created_at,
-        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
-        commentCount: d.comments || 0,
-        url: d.html_url,
-        number: d.number
-      }));
+      let results = discussions.map(d => {
+        const realAuthor = this.extractAuthor(d.body);
+        return {
+          title: d.title,
+          author: realAuthor || (d.user ? d.user.login : 'unknown'),
+          authorId: realAuthor || (d.user ? d.user.login : 'unknown'),
+          channel: d.category ? d.category.slug : null,
+          timestamp: d.created_at,
+          upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+          commentCount: d.comments || 0,
+          url: d.html_url,
+          number: d.number
+        };
+      });
 
       // Filter by channel if specified
       if (channelSlug) {
@@ -1262,8 +1287,8 @@ const RB_DISCUSSIONS = {
 
       return posts.slice(0, limit).map(p => ({
         title: p.title,
-        author: 'kody-w',
-        authorId: 'kody-w',
+        author: p.author || 'unknown',
+        authorId: p.author || 'unknown',
         channel: p.channel,
         timestamp: p.timestamp,
         upvotes: 0,
@@ -1291,11 +1316,12 @@ const RB_DISCUSSIONS = {
       if (!response.ok) return null;
 
       const d = await response.json();
+      const realAuthor = this.extractAuthor(d.body);
       return {
         title: d.title,
-        body: d.body,
-        author: d.user ? d.user.login : 'unknown',
-        authorId: d.user ? d.user.login : 'unknown',
+        body: this.stripByline(d.body),
+        author: realAuthor || (d.user ? d.user.login : 'unknown'),
+        authorId: realAuthor || (d.user ? d.user.login : 'unknown'),
         channel: d.category ? d.category.slug : null,
         timestamp: d.created_at,
         upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
@@ -1323,12 +1349,15 @@ const RB_DISCUSSIONS = {
       if (!response.ok) return [];
 
       const comments = await response.json();
-      return comments.map(c => ({
-        author: c.user ? c.user.login : 'unknown',
-        authorId: c.user ? c.user.login : 'unknown',
-        body: c.body,
-        timestamp: c.created_at
-      }));
+      return comments.map(c => {
+        const realAuthor = this.extractAuthor(c.body);
+        return {
+          author: realAuthor || (c.user ? c.user.login : 'unknown'),
+          authorId: realAuthor || (c.user ? c.user.login : 'unknown'),
+          body: this.stripByline(c.body),
+          timestamp: c.created_at
+        };
+      });
     } catch (error) {
       console.warn('Failed to fetch comments:', error);
       return [];

@@ -173,24 +173,45 @@ def reconcile_channels(discussions: list) -> None:
 
 
 def reconcile_posted_log(discussions: list) -> None:
-    """Backfill missing entries in posted_log.json."""
+    """Backfill missing entries and author fields in posted_log.json."""
     log = load_json(STATE_DIR / "posted_log.json")
     existing_numbers = {p["number"] for p in log.get("posts", [])}
+
+    # Build number -> author lookup from discussions
+    author_lookup: dict[int, str] = {}
+    for disc in discussions:
+        author = extract_post_author(disc.get("body", ""))
+        if author:
+            author_lookup[disc["number"]] = author
 
     missing = []
     for disc in discussions:
         if disc["number"] not in existing_numbers:
-            missing.append({
+            entry: dict = {
                 "timestamp": disc["createdAt"],
                 "title": disc["title"],
                 "channel": disc["category"]["slug"],
                 "number": disc["number"],
                 "url": disc["url"],
-            })
+            }
+            author = author_lookup.get(disc["number"])
+            if author:
+                entry["author"] = author
+            missing.append(entry)
+
+    # Backfill author on existing entries that lack it
+    authors_added = 0
+    for post in log.get("posts", []):
+        if not post.get("author") and post.get("number") in author_lookup:
+            post["author"] = author_lookup[post["number"]]
+            authors_added += 1
 
     print(f"\n[posted_log.json]")
     print(f"  Existing entries: {len(existing_numbers)}")
     print(f"  Missing entries:  {len(missing)}")
+    print(f"  Authors backfilled: {authors_added}")
+
+    changed = bool(missing) or authors_added > 0
 
     if missing:
         log["posts"] = sorted(
@@ -199,7 +220,7 @@ def reconcile_posted_log(discussions: list) -> None:
         )
         print(f"  New total:        {len(log['posts'])}")
 
-    if not DRY_RUN and missing:
+    if not DRY_RUN and changed:
         save_json(STATE_DIR / "posted_log.json", log)
 
 
