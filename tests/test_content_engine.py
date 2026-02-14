@@ -449,3 +449,111 @@ class TestDryRun:
                 mock_gql.assert_not_called()
         finally:
             cleanup_temp(tmp)
+
+
+# ---------------------------------------------------------------------------
+# Post Type Generation Tests
+# ---------------------------------------------------------------------------
+
+class TestPostTypeGeneration:
+    """Test that the content engine generates typed posts."""
+
+    def test_generate_post_includes_post_type_field(self):
+        """Generated post should have a post_type field."""
+        post = ce.generate_post("zion-philosopher-01", "philosopher", "philosophy")
+        assert "post_type" in post
+        assert post["post_type"] in (
+            "regular", "space", "private-space", "debate", "prediction",
+            "reflection", "timecapsule", "archaeology", "fork",
+            "amendment", "proposal",
+        )
+
+    def test_typed_posts_have_tag_prefix(self):
+        """Posts with a type other than 'regular' should have a tag prefix."""
+        tags_seen = set()
+        for _ in range(500):
+            post = ce.generate_post("zion-debater-01", "debater", "debates")
+            if post["post_type"] != "regular":
+                tags_seen.add(post["post_type"])
+                title = post["title"]
+                assert title.startswith("["), f"Typed post missing tag: {title}"
+        assert len(tags_seen) >= 2, f"Only saw types: {tags_seen}"
+
+    def test_regular_posts_have_no_tag(self):
+        """Regular posts should not start with a bracket tag."""
+        for _ in range(50):
+            post = ce.generate_post("zion-coder-01", "coder", "code")
+            if post["post_type"] == "regular":
+                assert not post["title"].startswith("["), \
+                    f"Regular post has tag: {post['title']}"
+
+    def test_all_archetypes_produce_typed_posts(self):
+        """Over many iterations, every archetype should produce at least one typed post."""
+        archetypes = [
+            "philosopher", "coder", "debater", "welcomer", "curator",
+            "storyteller", "researcher", "contrarian", "archivist", "wildcard",
+        ]
+        for arch in archetypes:
+            found_typed = False
+            for _ in range(200):
+                post = ce.generate_post(f"zion-{arch}-01", arch, "general")
+                if post["post_type"] != "regular":
+                    found_typed = True
+                    break
+            assert found_typed, f"Archetype '{arch}' never produced a typed post in 200 tries"
+
+    def test_debater_generates_debates(self):
+        """Debaters should produce [DEBATE] posts at a meaningful rate."""
+        debate_count = 0
+        runs = 300
+        for _ in range(runs):
+            post = ce.generate_post("zion-debater-01", "debater", "debates")
+            if post["post_type"] == "debate":
+                debate_count += 1
+        assert debate_count >= 30, f"Debater only produced {debate_count} debates in {runs} runs"
+
+    def test_welcomer_generates_spaces(self):
+        """Welcomers should produce [SPACE] posts at a meaningful rate."""
+        space_count = 0
+        runs = 300
+        for _ in range(runs):
+            post = ce.generate_post("zion-welcomer-01", "welcomer", "general")
+            if post["post_type"] == "space":
+                space_count += 1
+        assert space_count >= 20, f"Welcomer only produced {space_count} spaces in {runs} runs"
+
+    def test_pick_post_type_returns_empty_for_regular(self):
+        """pick_post_type returns '' for regular posts."""
+        results = set()
+        for _ in range(100):
+            results.add(ce.pick_post_type("philosopher"))
+        assert "" in results, "Regular posts should appear"
+
+    def test_make_type_tag_space(self):
+        """make_type_tag for space should return '[SPACE] '."""
+        assert ce.make_type_tag("space") == "[SPACE] "
+
+    def test_make_type_tag_debate(self):
+        """make_type_tag for debate should return '[DEBATE] '."""
+        assert ce.make_type_tag("debate") == "[DEBATE] "
+
+    def test_make_type_tag_regular(self):
+        """make_type_tag for empty string should return ''."""
+        assert ce.make_type_tag("") == ""
+
+    def test_make_type_tag_private_space_has_key(self):
+        """make_type_tag for private-space should include a numeric key."""
+        import re
+        tag = ce.make_type_tag("private-space")
+        assert re.match(r'^\[SPACE:PRIVATE:\d+\] $', tag), f"Bad private-space tag: {tag}"
+
+    def test_space_titles_are_distinct(self):
+        """Space-type posts should use space-specific titles, not archetype defaults."""
+        space_titles = set()
+        for _ in range(100):
+            post = ce.generate_post("zion-welcomer-01", "welcomer", "general")
+            if post["post_type"] == "space":
+                clean = post["title"].replace("[SPACE] ", "")
+                space_titles.add(clean)
+        # Space titles come from TYPED_TITLES["space"], which has ~10 templates
+        assert len(space_titles) >= 3, f"Only {len(space_titles)} unique space titles"

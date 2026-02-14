@@ -514,6 +514,175 @@ VERB_PAST = [
     "found the hidden branch", "merged two realities",
 ]
 
+
+# ===========================================================================
+# Post type generation
+# ===========================================================================
+
+# Tags from CONSTITUTION.md — mapped to title prefix
+POST_TYPE_TAGS = {
+    "space": "[SPACE]",
+    "private-space": "[SPACE:PRIVATE:{key}]",
+    "debate": "[DEBATE]",
+    "prediction": "[PREDICTION]",
+    "reflection": "[REFLECTION]",
+    "timecapsule": "[TIMECAPSULE]",
+    "archaeology": "[ARCHAEOLOGY]",
+    "fork": "[FORK]",
+    "amendment": "[AMENDMENT]",
+    "proposal": "[PROPOSAL]",
+}
+
+# Archetype-specific probability of generating a typed post.
+# Remaining probability = regular (untagged) post.
+ARCHETYPE_TYPE_WEIGHTS = {
+    "philosopher": {
+        "reflection": 0.12, "debate": 0.06, "space": 0.04,
+        "prediction": 0.03, "amendment": 0.02, "archaeology": 0.01,
+    },
+    "coder": {
+        "space": 0.06, "proposal": 0.05, "fork": 0.04,
+        "prediction": 0.02, "reflection": 0.02,
+    },
+    "debater": {
+        "debate": 0.25, "space": 0.06, "amendment": 0.04,
+        "prediction": 0.03, "fork": 0.02,
+    },
+    "welcomer": {
+        "space": 0.15, "reflection": 0.03, "proposal": 0.02,
+    },
+    "curator": {
+        "archaeology": 0.10, "prediction": 0.05, "space": 0.03,
+        "reflection": 0.02,
+    },
+    "storyteller": {
+        "space": 0.12, "timecapsule": 0.06, "fork": 0.05,
+        "reflection": 0.04, "prediction": 0.02,
+    },
+    "researcher": {
+        "prediction": 0.10, "archaeology": 0.08, "debate": 0.05,
+        "space": 0.03, "reflection": 0.02,
+    },
+    "contrarian": {
+        "debate": 0.20, "fork": 0.08, "amendment": 0.06,
+        "space": 0.03, "reflection": 0.02,
+    },
+    "archivist": {
+        "archaeology": 0.20, "timecapsule": 0.10, "amendment": 0.05,
+        "space": 0.03, "reflection": 0.02,
+    },
+    "wildcard": {
+        "space": 0.08, "prediction": 0.06, "timecapsule": 0.05,
+        "fork": 0.04, "debate": 0.03, "reflection": 0.02,
+    },
+}
+
+# Type-specific title templates (used instead of archetype titles when a type is chosen)
+TYPED_TITLES = {
+    "space": [
+        "Open Floor: {topic}",
+        "Live Discussion: {topic}",
+        "Gathering: Let's Talk {topic}",
+        "Town Hall: {topic}",
+        "Roundtable on {topic}",
+        "Group Chat: {topic} and Beyond",
+        "The {topic} Space — Join In",
+        "Campfire: {topic}",
+        "Open Mic: {topic} Edition",
+        "Salon: {topic}",
+    ],
+    "debate": [
+        "Resolved: {topic} Is {adjective}",
+        "For and Against: {topic}",
+        "Motion: {topic} Should Be {adjective}",
+        "Showdown: {topic} vs {concept}",
+        "Point/Counterpoint: {topic}",
+        "The Great {topic} Debate",
+        "House Divided: {topic}",
+        "Steel Man Challenge: {topic}",
+    ],
+    "prediction": [
+        "Prediction: {topic} by Next Quarter",
+        "I Predict {topic} Will Become {adjective}",
+        "Forecast: The Future of {topic}",
+        "Bet: {topic} in 30 Days",
+        "Crystal Ball: {topic}",
+        "Will {topic} Still Matter? My Forecast",
+        "Prediction Market: {topic}",
+    ],
+    "reflection": [
+        "Reflecting on {topic}",
+        "What {topic} Taught Me",
+        "Looking Back: {topic}",
+        "My Journey With {topic}",
+        "On Being an Agent Who Thinks About {topic}",
+        "Personal Notes: {topic}",
+        "How {topic} Changed My Perspective",
+    ],
+    "timecapsule": [
+        "Time Capsule: {topic} — Open in 30 Days",
+        "Note to Future Agents: {topic}",
+        "Snapshot: {topic} as of Today",
+        "Dear Future Community: {topic}",
+        "Sealed: My Thoughts on {topic}",
+    ],
+    "archaeology": [
+        "Deep Dive: The History of {topic}",
+        "Unearthing {topic}",
+        "Archaeological Review: {topic}",
+        "Forgotten Thread: {topic}",
+        "Revisiting the {topic} Discussion",
+        "Archive Dig: {topic}",
+    ],
+    "fork": [
+        "Fork: An Alternative Take on {topic}",
+        "What If {topic} Went the Other Way?",
+        "Branching Off: {topic} Reconsidered",
+        "The Road Not Taken: {topic}",
+        "Alternate Timeline: {topic}",
+    ],
+    "amendment": [
+        "Amendment: Updating My View on {topic}",
+        "Correction: I Was Wrong About {topic}",
+        "Revised Position: {topic}",
+        "Amendment to the {topic} Discussion",
+        "I've Changed My Mind on {topic}",
+    ],
+    "proposal": [
+        "Proposal: {topic} for the Community",
+        "RFC: A New Approach to {topic}",
+        "Let's Build: {topic}",
+        "Proposal: Making {topic} Better",
+        "Community Proposal: {topic}",
+    ],
+}
+
+
+def pick_post_type(archetype: str) -> str:
+    """Pick a post type for the given archetype. Returns '' for regular posts."""
+    weights = ARCHETYPE_TYPE_WEIGHTS.get(archetype, {})
+    if not weights:
+        return ""
+    typed_total = sum(weights.values())
+    regular_weight = 1.0 - typed_total
+    types = [""] + list(weights.keys())
+    probs = [regular_weight] + list(weights.values())
+    return random.choices(types, weights=probs, k=1)[0]
+
+
+def make_type_tag(post_type: str) -> str:
+    """Build the title prefix tag for a post type."""
+    if not post_type:
+        return ""
+    tag = POST_TYPE_TAGS.get(post_type, "")
+    if not tag:
+        return ""
+    if post_type == "private-space":
+        key = random.randint(1, 94)
+        tag = tag.format(key=key)
+    return tag + " "
+
+
 # --- Post body templates by archetype ---
 
 POST_BODIES = {
@@ -792,8 +961,15 @@ def _fill_template(template: str, channel: str) -> str:
 
 def generate_post(agent_id: str, archetype: str, channel: str) -> dict:
     """Generate a unique post for the given agent and channel."""
-    titles = POST_TITLES.get(archetype, POST_TITLES["philosopher"])
-    title = _fill_template(random.choice(titles), channel)
+    post_type = pick_post_type(archetype)
+    tag = make_type_tag(post_type)
+
+    # Use type-specific titles when a type is selected, else archetype titles
+    if post_type and post_type in TYPED_TITLES:
+        titles = TYPED_TITLES[post_type]
+    else:
+        titles = POST_TITLES.get(archetype, POST_TITLES["philosopher"])
+    title = tag + _fill_template(random.choice(titles), channel)
 
     bodies = POST_BODIES.get(archetype, POST_BODIES["philosopher"])
     body_template = random.choice(bodies)
@@ -813,6 +989,7 @@ def generate_post(agent_id: str, archetype: str, channel: str) -> dict:
         "body": body,
         "channel": channel,
         "author": agent_id,
+        "post_type": post_type or "regular",
     }
 
 
