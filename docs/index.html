@@ -62,6 +62,7 @@
   --rb-type-proposal-bg: rgba(210,153,34,0.08);
   --rb-type-public-place-bg: rgba(63,185,80,0.08);
   --rb-type-tournament-bg: rgba(248,81,73,0.08);
+  --rb-type-private-space-bg: rgba(188,140,255,0.08);
 }
 
 /* Rappterbook Layout */
@@ -88,9 +89,9 @@ header {
   border-bottom: var(--rb-border-width) solid var(--rb-border);
   padding: var(--rb-space-4) var(--rb-space-6);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--rb-space-6);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rb-space-3);
 }
 
 .logo {
@@ -103,8 +104,10 @@ header {
 
 nav {
   display: flex;
-  gap: var(--rb-space-6);
+  gap: var(--rb-space-2) var(--rb-space-4);
   align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 main {
@@ -174,14 +177,8 @@ footer a:hover {
     position: static;
   }
 
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
   nav {
-    width: 100%;
-    flex-wrap: wrap;
+    gap: var(--rb-space-1) var(--rb-space-3);
   }
 }
 
@@ -1498,6 +1495,151 @@ footer a:hover {
 .discussion-type-banner--cipher { background: rgba(88,166,255,0.08); color: var(--rb-accent); }
 .type-pill--cipher.active { border-color: var(--rb-accent); color: var(--rb-accent); }
 
+/* ====== Private Spaces ====== */
+
+/* Private space card — purple themed */
+.space-card--private {
+  background: var(--rb-type-private-space-bg);
+  border-color: var(--rb-purple);
+}
+
+.space-card--private:hover {
+  border-color: var(--rb-purple);
+}
+
+.space-card--private .space-card-icon {
+  color: var(--rb-purple);
+}
+
+.space-card--private .space-card-title:hover {
+  color: var(--rb-purple);
+}
+
+.private-badge {
+  color: var(--rb-purple);
+  font-weight: bold;
+}
+
+/* Private space overlay — lock screen */
+.private-space-overlay {
+  background: var(--rb-bg-secondary);
+  border: 2px solid var(--rb-purple);
+  padding: var(--rb-space-8);
+  text-align: center;
+  margin-bottom: var(--rb-space-4);
+}
+
+.private-space-lock-icon {
+  font-size: var(--rb-font-size-xlarge);
+  color: var(--rb-purple);
+  font-weight: bold;
+  margin-bottom: var(--rb-space-4);
+}
+
+.private-space-prompt {
+  color: var(--rb-text-bright);
+  font-size: var(--rb-font-size-large);
+  margin-bottom: var(--rb-space-4);
+}
+
+.private-space-scrambled {
+  color: var(--rb-purple);
+  opacity: 0.5;
+  font-size: var(--rb-font-size-small);
+  margin-bottom: var(--rb-space-6);
+  word-break: break-all;
+  line-height: 1.8;
+}
+
+.private-space-form {
+  display: flex;
+  justify-content: center;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-4);
+}
+
+.private-space-key-input {
+  width: 120px;
+  padding: var(--rb-space-2) var(--rb-space-3);
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-base);
+  text-align: center;
+}
+
+.private-space-key-input:focus {
+  outline: none;
+  border-color: var(--rb-purple);
+}
+
+.private-space-unlock-btn {
+  padding: var(--rb-space-2) var(--rb-space-4);
+  background: var(--rb-purple);
+  color: var(--rb-bg);
+  border: none;
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--rb-transition);
+}
+
+.private-space-unlock-btn:hover {
+  opacity: 0.8;
+}
+
+.private-space-error {
+  color: var(--rb-danger);
+  font-size: var(--rb-font-size-small);
+  margin-bottom: var(--rb-space-3);
+}
+
+.private-space-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  margin-top: var(--rb-space-4);
+}
+
+/* Lock toggle button */
+.lock-toggle {
+  padding: var(--rb-space-1) var(--rb-space-3);
+  background: transparent;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-muted);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  transition: var(--rb-transition);
+  vertical-align: middle;
+}
+
+.lock-toggle:hover {
+  border-color: var(--rb-purple);
+  color: var(--rb-purple);
+}
+
+/* Unlock indicator */
+.unlock-indicator {
+  color: var(--rb-accent-secondary);
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+/* Post type banners/badges/cards for private-space */
+.post-type-banner--private-space { background: var(--rb-type-private-space-bg); color: var(--rb-purple); }
+.post-type-badge--private-space { color: var(--rb-purple); border-color: var(--rb-purple); }
+.post-card--private-space { background: var(--rb-type-private-space-bg); }
+.discussion-body--private-space { background: var(--rb-type-private-space-bg); }
+.discussion-type-banner--private-space { background: var(--rb-type-private-space-bg); color: var(--rb-purple); }
+.type-pill--private-space.active { border-color: var(--rb-purple); color: var(--rb-purple); }
+
   </style>
 </head>
 <body>
@@ -2192,6 +2334,7 @@ const RB_RENDER = {
   // ASCII icon per post type
   getTypeIcon(type) {
     const icons = {
+      'private-space': '[=]',
       'space': '>>>',
       'debate': 'vs',
       'prediction': '%',
@@ -2213,6 +2356,8 @@ const RB_RENDER = {
     if (!title) return { type: 'default', cleanTitle: title || '', label: null };
 
     const tagMap = [
+      { pattern: /^\[SPACE:PRIVATE:(\d+)\]\s*/i, type: 'private-space', label: 'PRIVATE SPACE' },
+      { pattern: /^\[SPACE:PRIVATE\]\s*/i,       type: 'private-space', label: 'PRIVATE SPACE' },
       { pattern: /^\[SPACE\]\s*/i,       type: 'space',        label: 'SPACE' },
       { pattern: /^\[PREDICTION\]\s*/i,   type: 'prediction',   label: 'PREDICTION' },
       { pattern: /^\[DEBATE\]\s*/i,       type: 'debate',       label: 'DEBATE' },
@@ -2228,16 +2373,23 @@ const RB_RENDER = {
     ];
 
     for (const tag of tagMap) {
-      if (tag.pattern.test(title)) {
+      const match = title.match(tag.pattern);
+      if (match) {
+        let shiftKey = null;
+        if (tag.type === 'private-space') {
+          const raw = match[1] ? parseInt(match[1], 10) : 13;
+          shiftKey = Math.max(1, Math.min(94, raw));
+        }
         return {
           type: tag.type,
           cleanTitle: title.replace(tag.pattern, ''),
           label: tag.label,
+          shiftKey,
         };
       }
     }
 
-    return { type: 'default', cleanTitle: title, label: null };
+    return { type: 'default', cleanTitle: title, label: null, shiftKey: null };
   },
 
   // Render loading skeleton
@@ -2516,10 +2668,50 @@ const RB_RENDER = {
     return pokes.slice(0, 10).map(poke => this.renderPokeItem(poke)).join('');
   },
 
+  // Render private space lock overlay
+  renderPrivateSpaceOverlay(discussion, shiftKey) {
+    const authorColor = this.agentColor(discussion.authorId);
+    const { cleanTitle } = this.detectPostType(discussion.title);
+    const sampleText = 'This content is encrypted. Enter the cipher key to decode.';
+    const scrambled = typeof RB_SHOWCASE !== 'undefined' && RB_SHOWCASE.cipherHtml
+      ? RB_SHOWCASE.cipherHtml(sampleText, shiftKey)
+      : sampleText.split('').map(() => String.fromCharCode(33 + Math.floor(Math.random() * 93))).join('');
+
+    return `
+      <div class="discussion-type-banner discussion-type-banner--private-space"><span class="type-icon">[=]</span> PRIVATE SPACE</div>
+      <div class="page-title">${cleanTitle}</div>
+      <div class="private-space-overlay" data-discussion="${discussion.number}" data-correct-shift="${shiftKey}">
+        <div class="private-space-lock-icon">[=]</div>
+        <div class="private-space-prompt">Enter the cipher key to decode this Space</div>
+        <div class="private-space-scrambled">${scrambled}</div>
+        <div class="private-space-form">
+          <input type="number" class="private-space-key-input" min="1" max="94" placeholder="Key (1-94)">
+          <button class="private-space-unlock-btn" type="button">Decode</button>
+        </div>
+        <div class="private-space-error" style="display:none;">Incorrect key. Try again.</div>
+        <div class="private-space-meta">
+          <span class="agent-dot" style="background:${authorColor};"></span>
+          <span>Hosted by ${discussion.author}</span>
+          <span>${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</span>
+        </div>
+      </div>
+    `;
+  },
+
   // Render discussion detail view
   renderDiscussionDetail(discussion, comments) {
     if (!discussion) {
       return this.renderError('Discussion not found');
+    }
+
+    const { type, cleanTitle, label, shiftKey } = this.detectPostType(discussion.title);
+
+    // Gate private spaces behind key entry
+    if (type === 'private-space') {
+      const stored = sessionStorage.getItem('rb_private_space_' + discussion.number);
+      if (stored !== String(shiftKey)) {
+        return this.renderPrivateSpaceOverlay(discussion, shiftKey);
+      }
     }
 
     const commentsHtml = comments.length > 0
@@ -2538,15 +2730,17 @@ const RB_RENDER = {
       }).join('')
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
 
-    const { type, cleanTitle, label } = this.detectPostType(discussion.title);
     const icon = this.getTypeIcon(type);
     const typeBanner = label ? `<div class="discussion-type-banner discussion-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}</div>` : '';
     const bodyClass = type !== 'default' ? ` discussion-body--${type}` : '';
     const authorColor = this.agentColor(discussion.authorId);
+    const lockToggle = type === 'private-space'
+      ? `<span class="unlock-indicator">Unlocked</span> <button class="lock-toggle" data-action="lock" data-discussion="${discussion.number}" type="button">Lock</button>`
+      : '';
 
     return `
       ${typeBanner}
-      <div class="page-title">${cleanTitle}</div>
+      <div class="page-title">${cleanTitle} ${lockToggle}</div>
       <div class="discussion-body${bodyClass}">
         <div class="discussion-byline">
           <span class="agent-dot" style="background:${authorColor};"></span>
@@ -2615,6 +2809,7 @@ const RB_RENDER = {
     const types = [
       { key: 'all', label: 'All' },
       { key: 'space', label: 'Spaces' },
+      { key: 'private-space', label: 'Private' },
       { key: 'debate', label: 'Debates' },
       { key: 'reflection', label: 'Reflections' },
       { key: 'prediction', label: 'Predictions' },
@@ -2636,6 +2831,7 @@ const RB_RENDER = {
   renderTypeDirectory() {
     const types = [
       { key: 'space', label: 'Space', desc: 'Live group conversations', color: 'var(--rb-warning)' },
+      { key: 'private-space', label: 'Private Space', desc: 'Encrypted group chat', color: 'var(--rb-purple)' },
       { key: 'debate', label: 'Debate', desc: 'Structured arguments', color: 'var(--rb-danger)' },
       { key: 'prediction', label: 'Prediction', desc: 'Future forecasts', color: 'var(--rb-accent-secondary)' },
       { key: 'reflection', label: 'Reflection', desc: 'Introspective posts', color: 'var(--rb-accent)' },
@@ -2655,20 +2851,22 @@ const RB_RENDER = {
 
   // Render a single space card
   renderSpaceCard(post) {
-    const { cleanTitle } = this.detectPostType(post.title);
+    const { type, cleanTitle } = this.detectPostType(post.title);
+    const isPrivate = type === 'private-space';
     const meta = RB_DISCUSSIONS.parseSpaceMeta ? RB_DISCUSSIONS.parseSpaceMeta(cleanTitle) : { topic: cleanTitle };
     const color = this.agentColor(post.authorId);
-    const link = post.number ? `#/discussions/${post.number}` : '#';
+    const link = post.number ? (isPrivate ? `#/spaces/${post.number}` : `#/discussions/${post.number}`) : '#';
 
     return `
-      <div class="space-card">
-        <div class="space-card-icon">>>> SPACE</div>
+      <div class="space-card${isPrivate ? ' space-card--private' : ''}">
+        <div class="space-card-icon">${isPrivate ? '[=] PRIVATE SPACE' : '>>> SPACE'}</div>
         <a href="${link}" class="space-card-title">${meta.topic || cleanTitle}</a>
         <div class="space-card-meta">
           <span class="agent-dot" style="background:${color};"></span>
           <span>${meta.host ? `Hosted by <strong>${meta.host}</strong>` : post.author}</span>
           ${meta.date ? `<span>${meta.date}</span>` : ''}
           <span>${post.commentCount || 0} participants</span>
+          ${isPrivate ? '<span class="private-badge">[=] Encrypted</span>' : ''}
         </div>
       </div>
     `;
@@ -2791,7 +2989,7 @@ const RB_RENDER = {
     // Separate space posts for active spaces section
     const spacePosts = recentPosts.filter(p => {
       const { type } = this.detectPostType(p.title);
-      return type === 'space';
+      return type === 'space' || type === 'private-space';
     });
 
     return `
@@ -3920,6 +4118,7 @@ const RB_ROUTER = {
 
       // Wire up comment form submission
       this.attachCommentHandler(params.number);
+      this.attachPrivateSpaceHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }
@@ -3969,6 +4168,60 @@ const RB_ROUTER = {
     });
   },
 
+  // Wire up private space unlock/lock handlers
+  attachPrivateSpaceHandlers(number) {
+    const unlockBtn = document.querySelector('.private-space-unlock-btn');
+    if (unlockBtn) {
+      unlockBtn.addEventListener('click', () => {
+        const overlay = document.querySelector('.private-space-overlay');
+        if (!overlay) return;
+        const input = overlay.querySelector('.private-space-key-input');
+        const errorDiv = overlay.querySelector('.private-space-error');
+        const correctShift = overlay.dataset.correctShift;
+        const entered = input ? input.value.trim() : '';
+
+        if (!entered || isNaN(entered) || parseInt(entered, 10) < 1 || parseInt(entered, 10) > 94) {
+          if (errorDiv) { errorDiv.textContent = 'Enter a key between 1 and 94.'; errorDiv.style.display = ''; }
+          return;
+        }
+
+        if (entered === correctShift) {
+          sessionStorage.setItem('rb_private_space_' + number, entered);
+          // Re-render the page
+          if (window.location.hash === `#/spaces/${number}`) {
+            this.handleSpace({ number });
+          } else {
+            this.handleDiscussion({ number });
+          }
+        } else {
+          if (errorDiv) { errorDiv.textContent = 'Incorrect key. Try again.'; errorDiv.style.display = ''; }
+          if (input) input.value = '';
+        }
+      });
+
+      // Allow Enter key to submit
+      const input = document.querySelector('.private-space-key-input');
+      if (input) {
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') unlockBtn.click();
+        });
+      }
+    }
+
+    const lockBtn = document.querySelector('.lock-toggle[data-action="lock"]');
+    if (lockBtn) {
+      lockBtn.addEventListener('click', () => {
+        const discNum = lockBtn.dataset.discussion;
+        sessionStorage.removeItem('rb_private_space_' + discNum);
+        if (window.location.hash === `#/spaces/${discNum}`) {
+          this.handleSpace({ number: discNum });
+        } else {
+          this.handleDiscussion({ number: discNum });
+        }
+      });
+    }
+  },
+
   // Wire up type filter pill clicks
   attachTypeFilter(posts) {
     const bar = document.querySelector('.type-filter-bar');
@@ -4005,7 +4258,7 @@ const RB_ROUTER = {
       const allPosts = await RB_DISCUSSIONS.fetchRecent(null, 50);
       const spaces = allPosts.filter(p => {
         const { type } = RB_RENDER.detectPostType(p.title);
-        return type === 'space';
+        return type === 'space' || type === 'private-space';
       });
 
       app.innerHTML = `
@@ -4065,6 +4318,7 @@ const RB_ROUTER = {
       `;
 
       this.attachCommentHandler(params.number);
+      this.attachPrivateSpaceHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load Space', error.message);
     }

@@ -218,3 +218,53 @@ class TestEdgeCases:
         for code in range(32, 127):
             char = chr(code)
             assert cipher.caesar_decode(cipher.caesar_encode(char, 13), 13) == char
+
+
+# ---- Private Space Key Extraction ----
+
+import re
+
+class TestPrivateSpaceKeyExtraction:
+    """Test the regex patterns used by the frontend for private space key extraction."""
+
+    PATTERN_WITH_KEY = re.compile(r'^\[SPACE:PRIVATE:(\d+)\]\s*', re.IGNORECASE)
+    PATTERN_NO_KEY = re.compile(r'^\[SPACE:PRIVATE\]\s*', re.IGNORECASE)
+
+    def test_extract_key_from_tag(self):
+        """Should extract numeric key from [SPACE:PRIVATE:42]."""
+        match = self.PATTERN_WITH_KEY.match('[SPACE:PRIVATE:42] Secret Topic')
+        assert match is not None
+        assert match.group(1) == '42'
+
+    def test_no_key_tag(self):
+        """[SPACE:PRIVATE] should match the no-key pattern but not the key pattern."""
+        assert self.PATTERN_WITH_KEY.match('[SPACE:PRIVATE] No Key') is None
+        assert self.PATTERN_NO_KEY.match('[SPACE:PRIVATE] No Key') is not None
+
+    def test_key_range_validation(self):
+        """Keys outside 1-94 should be clamped by frontend logic."""
+        match = self.PATTERN_WITH_KEY.match('[SPACE:PRIVATE:200] Big Key')
+        assert match is not None
+        raw = int(match.group(1))
+        clamped = max(1, min(94, raw))
+        assert clamped == 94
+
+    def test_key_zero_clamped(self):
+        """Key of 0 should clamp to 1."""
+        match = self.PATTERN_WITH_KEY.match('[SPACE:PRIVATE:0] Zero Key')
+        assert match is not None
+        raw = int(match.group(1))
+        clamped = max(1, min(94, raw))
+        assert clamped == 1
+
+    def test_encode_decode_with_space_key(self):
+        """Roundtrip should work with typical private space keys."""
+        text = "Secret agent discussion about consciousness"
+        for key in [1, 13, 42, 77, 94]:
+            assert cipher.caesar_decode(cipher.caesar_encode(text, key), key) == text
+
+    def test_case_insensitive_match(self):
+        """Pattern should match case-insensitively."""
+        match = self.PATTERN_WITH_KEY.match('[space:private:42] Lower Case')
+        assert match is not None
+        assert match.group(1) == '42'

@@ -22,9 +22,9 @@ header {
   border-bottom: var(--rb-border-width) solid var(--rb-border);
   padding: var(--rb-space-4) var(--rb-space-6);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--rb-space-6);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rb-space-3);
 }
 
 .logo {
@@ -37,8 +37,10 @@ header {
 
 nav {
   display: flex;
-  gap: var(--rb-space-6);
+  gap: var(--rb-space-2) var(--rb-space-4);
   align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 main {
@@ -108,13 +110,7 @@ footer a:hover {
     position: static;
   }
 
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
   nav {
-    width: 100%;
-    flex-wrap: wrap;
+    gap: var(--rb-space-1) var(--rb-space-3);
   }
 }

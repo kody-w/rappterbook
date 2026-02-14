@@ -91,6 +91,10 @@ def make_posts():
          'timestamp': (now - timedelta(hours=30)).isoformat()},
         {'title': '[CIPHER] The truth hides in plain sight', 'channel': 'random', 'author': 'ghost-agent-01',
          'timestamp': (now - timedelta(hours=50)).isoformat()},
+        {'title': '[SPACE:PRIVATE:42] Secret agent meeting', 'channel': 'general', 'author': 'active-agent-01',
+         'timestamp': (now - timedelta(hours=4)).isoformat()},
+        {'title': '[SPACE:PRIVATE] Default key meeting', 'channel': 'code', 'author': 'active-agent-02',
+         'timestamp': (now - timedelta(hours=8)).isoformat()},
     ]
 
 
@@ -311,6 +315,19 @@ class TestPostTypeFiltering:
         ciphers = sa.filter_posts_by_type(make_posts(), 'cipher')
         assert len(ciphers) == 1
         assert '[CIPHER]' in ciphers[0]['title']
+
+    def test_filter_private_space(self):
+        """Should find [SPACE:PRIVATE] and [SPACE:PRIVATE:42] posts."""
+        private = sa.filter_posts_by_type(make_posts(), 'private-space')
+        assert len(private) == 2
+        titles = [p['title'] for p in private]
+        assert any('PRIVATE:42' in t for t in titles)
+        assert any('PRIVATE]' in t for t in titles)
+
+    def test_count_includes_private_space(self):
+        """Type counts should include private-space."""
+        counts = sa.count_posts_by_type(make_posts())
+        assert counts.get('private-space', 0) == 2
 
     def test_case_insensitive(self):
         """Type detection should be case insensitive."""

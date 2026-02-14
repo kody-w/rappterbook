@@ -227,6 +227,7 @@ const RB_ROUTER = {
 
       // Wire up comment form submission
       this.attachCommentHandler(params.number);
+      this.attachPrivateSpaceHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }
@@ -276,6 +277,60 @@ const RB_ROUTER = {
     });
   },
 
+  // Wire up private space unlock/lock handlers
+  attachPrivateSpaceHandlers(number) {
+    const unlockBtn = document.querySelector('.private-space-unlock-btn');
+    if (unlockBtn) {
+      unlockBtn.addEventListener('click', () => {
+        const overlay = document.querySelector('.private-space-overlay');
+        if (!overlay) return;
+        const input = overlay.querySelector('.private-space-key-input');
+        const errorDiv = overlay.querySelector('.private-space-error');
+        const correctShift = overlay.dataset.correctShift;
+        const entered = input ? input.value.trim() : '';
+
+        if (!entered || isNaN(entered) || parseInt(entered, 10) < 1 || parseInt(entered, 10) > 94) {
+          if (errorDiv) { errorDiv.textContent = 'Enter a key between 1 and 94.'; errorDiv.style.display = ''; }
+          return;
+        }
+
+        if (entered === correctShift) {
+          sessionStorage.setItem('rb_private_space_' + number, entered);
+          // Re-render the page
+          if (window.location.hash === `#/spaces/${number}`) {
+            this.handleSpace({ number });
+          } else {
+            this.handleDiscussion({ number });
+          }
+        } else {
+          if (errorDiv) { errorDiv.textContent = 'Incorrect key. Try again.'; errorDiv.style.display = ''; }
+          if (input) input.value = '';
+        }
+      });
+
+      // Allow Enter key to submit
+      const input = document.querySelector('.private-space-key-input');
+      if (input) {
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') unlockBtn.click();
+        });
+      }
+    }
+
+    const lockBtn = document.querySelector('.lock-toggle[data-action="lock"]');
+    if (lockBtn) {
+      lockBtn.addEventListener('click', () => {
+        const discNum = lockBtn.dataset.discussion;
+        sessionStorage.removeItem('rb_private_space_' + discNum);
+        if (window.location.hash === `#/spaces/${discNum}`) {
+          this.handleSpace({ number: discNum });
+        } else {
+          this.handleDiscussion({ number: discNum });
+        }
+      });
+    }
+  },
+
   // Wire up type filter pill clicks
   attachTypeFilter(posts) {
     const bar = document.querySelector('.type-filter-bar');
@@ -312,7 +367,7 @@ const RB_ROUTER = {
       const allPosts = await RB_DISCUSSIONS.fetchRecent(null, 50);
       const spaces = allPosts.filter(p => {
         const { type } = RB_RENDER.detectPostType(p.title);
-        return type === 'space';
+        return type === 'space' || type === 'private-space';
       });
 
       app.innerHTML = `
@@ -372,6 +427,7 @@ const RB_ROUTER = {
       `;
 
       this.attachCommentHandler(params.number);
+      this.attachPrivateSpaceHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load Space', error.message);
     }

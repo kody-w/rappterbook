@@ -126,6 +126,7 @@ def agent_leaderboard(agents: dict) -> dict:
 # ---------- 4. Post Type Filtering ----------
 
 POST_TYPE_PATTERNS = {
+    'private-space': '[SPACE:PRIVATE',
     'space': '[SPACE]',
     'debate': '[DEBATE]',
     'prediction': '[PREDICTION]',

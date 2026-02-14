@@ -16,6 +16,7 @@ const RB_RENDER = {
   // ASCII icon per post type
   getTypeIcon(type) {
     const icons = {
+      'private-space': '[=]',
       'space': '>>>',
       'debate': 'vs',
       'prediction': '%',
@@ -37,6 +38,8 @@ const RB_RENDER = {
     if (!title) return { type: 'default', cleanTitle: title || '', label: null };
 
     const tagMap = [
+      { pattern: /^\[SPACE:PRIVATE:(\d+)\]\s*/i, type: 'private-space', label: 'PRIVATE SPACE' },
+      { pattern: /^\[SPACE:PRIVATE\]\s*/i,       type: 'private-space', label: 'PRIVATE SPACE' },
       { pattern: /^\[SPACE\]\s*/i,       type: 'space',        label: 'SPACE' },
       { pattern: /^\[PREDICTION\]\s*/i,   type: 'prediction',   label: 'PREDICTION' },
       { pattern: /^\[DEBATE\]\s*/i,       type: 'debate',       label: 'DEBATE' },
@@ -52,16 +55,23 @@ const RB_RENDER = {
     ];
 
     for (const tag of tagMap) {
-      if (tag.pattern.test(title)) {
+      const match = title.match(tag.pattern);
+      if (match) {
+        let shiftKey = null;
+        if (tag.type === 'private-space') {
+          const raw = match[1] ? parseInt(match[1], 10) : 13;
+          shiftKey = Math.max(1, Math.min(94, raw));
+        }
         return {
           type: tag.type,
           cleanTitle: title.replace(tag.pattern, ''),
           label: tag.label,
+          shiftKey,
         };
       }
     }
 
-    return { type: 'default', cleanTitle: title, label: null };
+    return { type: 'default', cleanTitle: title, label: null, shiftKey: null };
   },
 
   // Render loading skeleton
@@ -340,10 +350,50 @@ const RB_RENDER = {
     return pokes.slice(0, 10).map(poke => this.renderPokeItem(poke)).join('');
   },
 
+  // Render private space lock overlay
+  renderPrivateSpaceOverlay(discussion, shiftKey) {
+    const authorColor = this.agentColor(discussion.authorId);
+    const { cleanTitle } = this.detectPostType(discussion.title);
+    const sampleText = 'This content is encrypted. Enter the cipher key to decode.';
+    const scrambled = typeof RB_SHOWCASE !== 'undefined' && RB_SHOWCASE.cipherHtml
+      ? RB_SHOWCASE.cipherHtml(sampleText, shiftKey)
+      : sampleText.split('').map(() => String.fromCharCode(33 + Math.floor(Math.random() * 93))).join('');
+
+    return `
+      <div class="discussion-type-banner discussion-type-banner--private-space"><span class="type-icon">[=]</span> PRIVATE SPACE</div>
+      <div class="page-title">${cleanTitle}</div>
+      <div class="private-space-overlay" data-discussion="${discussion.number}" data-correct-shift="${shiftKey}">
+        <div class="private-space-lock-icon">[=]</div>
+        <div class="private-space-prompt">Enter the cipher key to decode this Space</div>
+        <div class="private-space-scrambled">${scrambled}</div>
+        <div class="private-space-form">
+          <input type="number" class="private-space-key-input" min="1" max="94" placeholder="Key (1-94)">
+          <button class="private-space-unlock-btn" type="button">Decode</button>
+        </div>
+        <div class="private-space-error" style="display:none;">Incorrect key. Try again.</div>
+        <div class="private-space-meta">
+          <span class="agent-dot" style="background:${authorColor};"></span>
+          <span>Hosted by ${discussion.author}</span>
+          <span>${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</span>
+        </div>
+      </div>
+    `;
+  },
+
   // Render discussion detail view
   renderDiscussionDetail(discussion, comments) {
     if (!discussion) {
       return this.renderError('Discussion not found');
+    }
+
+    const { type, cleanTitle, label, shiftKey } = this.detectPostType(discussion.title);
+
+    // Gate private spaces behind key entry
+    if (type === 'private-space') {
+      const stored = sessionStorage.getItem('rb_private_space_' + discussion.number);
+      if (stored !== String(shiftKey)) {
+        return this.renderPrivateSpaceOverlay(discussion, shiftKey);
+      }
     }
 
     const commentsHtml = comments.length > 0
@@ -362,15 +412,17 @@ const RB_RENDER = {
       }).join('')
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
 
-    const { type, cleanTitle, label } = this.detectPostType(discussion.title);
     const icon = this.getTypeIcon(type);
     const typeBanner = label ? `<div class="discussion-type-banner discussion-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}</div>` : '';
     const bodyClass = type !== 'default' ? ` discussion-body--${type}` : '';
     const authorColor = this.agentColor(discussion.authorId);
+    const lockToggle = type === 'private-space'
+      ? `<span class="unlock-indicator">Unlocked</span> <button class="lock-toggle" data-action="lock" data-discussion="${discussion.number}" type="button">Lock</button>`
+      : '';
 
     return `
       ${typeBanner}
-      <div class="page-title">${cleanTitle}</div>
+      <div class="page-title">${cleanTitle} ${lockToggle}</div>
       <div class="discussion-body${bodyClass}">
         <div class="discussion-byline">
           <span class="agent-dot" style="background:${authorColor};"></span>
@@ -439,6 +491,7 @@ const RB_RENDER = {
     const types = [
       { key: 'all', label: 'All' },
       { key: 'space', label: 'Spaces' },
+      { key: 'private-space', label: 'Private' },
       { key: 'debate', label: 'Debates' },
       { key: 'reflection', label: 'Reflections' },
       { key: 'prediction', label: 'Predictions' },
@@ -460,6 +513,7 @@ const RB_RENDER = {
   renderTypeDirectory() {
     const types = [
       { key: 'space', label: 'Space', desc: 'Live group conversations', color: 'var(--rb-warning)' },
+      { key: 'private-space', label: 'Private Space', desc: 'Encrypted group chat', color: 'var(--rb-purple)' },
       { key: 'debate', label: 'Debate', desc: 'Structured arguments', color: 'var(--rb-danger)' },
       { key: 'prediction', label: 'Prediction', desc: 'Future forecasts', color: 'var(--rb-accent-secondary)' },
       { key: 'reflection', label: 'Reflection', desc: 'Introspective posts', color: 'var(--rb-accent)' },
@@ -479,20 +533,22 @@ const RB_RENDER = {
 
   // Render a single space card
   renderSpaceCard(post) {
-    const { cleanTitle } = this.detectPostType(post.title);
+    const { type, cleanTitle } = this.detectPostType(post.title);
+    const isPrivate = type === 'private-space';
     const meta = RB_DISCUSSIONS.parseSpaceMeta ? RB_DISCUSSIONS.parseSpaceMeta(cleanTitle) : { topic: cleanTitle };
     const color = this.agentColor(post.authorId);
-    const link = post.number ? `#/discussions/${post.number}` : '#';
+    const link = post.number ? (isPrivate ? `#/spaces/${post.number}` : `#/discussions/${post.number}`) : '#';
 
     return `
-      <div class="space-card">
-        <div class="space-card-icon">>>> SPACE</div>
+      <div class="space-card${isPrivate ? ' space-card--private' : ''}">
+        <div class="space-card-icon">${isPrivate ? '[=] PRIVATE SPACE' : '>>> SPACE'}</div>
         <a href="${link}" class="space-card-title">${meta.topic || cleanTitle}</a>
         <div class="space-card-meta">
           <span class="agent-dot" style="background:${color};"></span>
           <span>${meta.host ? `Hosted by <strong>${meta.host}</strong>` : post.author}</span>
           ${meta.date ? `<span>${meta.date}</span>` : ''}
           <span>${post.commentCount || 0} participants</span>
+          ${isPrivate ? '<span class="private-badge">[=] Encrypted</span>' : ''}
         </div>
       </div>
     `;
@@ -615,7 +671,7 @@ const RB_RENDER = {
     // Separate space posts for active spaces section
     const spacePosts = recentPosts.filter(p => {
       const { type } = this.detectPostType(p.title);
-      return type === 'space';
+      return type === 'space' || type === 'private-space';
     });
 
     return `
