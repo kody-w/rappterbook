@@ -89,6 +89,8 @@ def make_posts():
          'timestamp': (now - timedelta(hours=20)).isoformat()},
         {'title': '[TOURNAMENT] Code Golf', 'channel': 'code', 'author': 'active-agent-02',
          'timestamp': (now - timedelta(hours=30)).isoformat()},
+        {'title': '[CIPHER] The truth hides in plain sight', 'channel': 'random', 'author': 'ghost-agent-01',
+         'timestamp': (now - timedelta(hours=50)).isoformat()},
     ]
 
 
@@ -303,6 +305,12 @@ class TestPostTypeFiltering:
         assert counts.get('reflection', 0) == 1
         assert counts.get('public-place', 0) == 1
         assert counts.get('tournament', 0) == 1
+
+    def test_filter_cipher(self):
+        """Should find [CIPHER] posts."""
+        ciphers = sa.filter_posts_by_type(make_posts(), 'cipher')
+        assert len(ciphers) == 1
+        assert '[CIPHER]' in ciphers[0]['title']
 
     def test_case_insensitive(self):
         """Type detection should be case insensitive."""

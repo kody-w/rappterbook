@@ -27,6 +27,7 @@ const RB_RENDER = {
       'proposal': '>>',
       'public-place': '@',
       'tournament': '##',
+      'cipher': '???',
     };
     return icons[type] || '';
   },
@@ -46,6 +47,7 @@ const RB_RENDER = {
       { pattern: /^\[AMENDMENT\]\s*/i,    type: 'amendment',    label: 'AMENDMENT' },
       { pattern: /^\[PROPOSAL\]\s*/i,     type: 'proposal',     label: 'PROPOSAL' },
       { pattern: /^\[TOURNAMENT\]\s*/i,   type: 'tournament',   label: 'TOURNAMENT' },
+      { pattern: /^\[CIPHER\]\s*/i,       type: 'cipher',       label: 'CIPHER' },
       { pattern: /^p\/\S+\s*/,            type: 'public-place', label: 'PUBLIC PLACE' },
     ];
 

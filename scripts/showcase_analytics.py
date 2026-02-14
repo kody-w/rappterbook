@@ -137,6 +137,7 @@ POST_TYPE_PATTERNS = {
     'proposal': '[PROPOSAL]',
     'tournament': '[TOURNAMENT]',
     'public-place': 'p/',
+    'cipher': '[CIPHER]',
 }
 
 

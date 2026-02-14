@@ -24,6 +24,7 @@ const RB_ROUTER = {
     '/explorer': 'handleExplorer',
     '/pokes': 'handlePokes',
     '/vitals': 'handleVitals',
+    '/cipher': 'handleCipher',
   },
 
   // Initialize router
@@ -387,6 +388,7 @@ const RB_ROUTER = {
   async handleExplorer() { await RB_SHOWCASE.handleExplorer(); },
   async handlePokes() { await RB_SHOWCASE.handlePokes(); },
   async handleVitals() { await RB_SHOWCASE.handleVitals(); },
+  async handleCipher() { await RB_SHOWCASE.handleCipher(); },
 
   render404() {
     const app = document.getElementById('app');

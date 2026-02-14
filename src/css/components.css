@@ -1201,3 +1201,112 @@
 .vitals-change { display: flex; gap: var(--rb-space-3); font-size: var(--rb-font-size-small); padding: var(--rb-space-1) 0; border-bottom: var(--rb-border-width) solid var(--rb-border); }
 .vitals-change-type { color: var(--rb-accent); font-weight: bold; min-width: 100px; }
 .vitals-change-ts { margin-left: auto; color: var(--rb-muted); }
+
+/* ====== Cipher Text — Reveal on Highlight ====== */
+
+/* The core trick: real text is transparent, ::after shows cipher, ::selection reveals truth */
+.cipher-text {
+  position: relative;
+  color: transparent;
+  cursor: text;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Show the cipher (scrambled) text via pseudo-element */
+.cipher-text::after {
+  content: attr(data-cipher);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--rb-accent);
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* When user highlights, the real text shows through selection */
+.cipher-text::selection {
+  color: var(--rb-text-bright);
+  background: var(--rb-accent);
+}
+
+.cipher-text::-moz-selection {
+  color: var(--rb-text-bright);
+  background: var(--rb-accent);
+}
+
+/* Cipher demo box */
+.cipher-demo { margin-bottom: var(--rb-space-8); }
+.cipher-demo-box {
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-6);
+  font-size: var(--rb-font-size-large);
+  line-height: 2;
+}
+
+/* Cipher playground */
+.cipher-playground { margin-bottom: var(--rb-space-8); }
+.cipher-controls { margin-bottom: var(--rb-space-4); }
+.cipher-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--rb-space-3);
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-base);
+  resize: vertical;
+  box-sizing: border-box;
+}
+.cipher-textarea:focus { outline: none; border-color: var(--rb-accent); }
+.cipher-shift-row {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  margin-top: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+}
+.cipher-slider { flex: 1; max-width: 200px; }
+.cipher-output {
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+  min-height: 60px;
+  font-size: var(--rb-font-size-large);
+  line-height: 1.8;
+}
+.cipher-placeholder { color: var(--rb-muted); font-style: italic; font-size: var(--rb-font-size-small); }
+
+/* Cipher post cards */
+.cipher-card {
+  border: var(--rb-border-width) solid var(--rb-accent);
+  padding: var(--rb-space-4);
+  margin-bottom: var(--rb-space-4);
+  background: rgba(88,166,255,0.05);
+}
+.cipher-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  margin-bottom: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+}
+.cipher-card-author { color: var(--rb-accent); font-weight: bold; }
+.cipher-card-channel { color: var(--rb-muted); margin-left: auto; }
+.cipher-card-body { font-size: var(--rb-font-size-large); margin-bottom: var(--rb-space-3); line-height: 1.8; }
+.cipher-card-link { color: var(--rb-accent); font-size: var(--rb-font-size-small); }
+
+/* Cipher block (multi-line) */
+.cipher-block { line-height: 1.8; }
+
+/* Post type banner/badge for cipher */
+.post-type-banner--cipher { background: rgba(88,166,255,0.08); color: var(--rb-accent); }
+.post-type-badge--cipher { color: var(--rb-accent); border-color: var(--rb-accent); }
+.post-card--cipher { background: rgba(88,166,255,0.05); }
+.discussion-body--cipher { background: rgba(88,166,255,0.05); }
+.discussion-type-banner--cipher { background: rgba(88,166,255,0.08); color: var(--rb-accent); }
+.type-pill--cipher.active { border-color: var(--rb-accent); color: var(--rb-accent); }

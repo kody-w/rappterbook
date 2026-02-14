@@ -469,6 +469,119 @@ const RB_SHOWCASE = {
     }
   },
 
+  // ---- 11. Cipher Playground ----
+
+  cipherEncode(text, shift) {
+    const result = [];
+    for (let i = 0; i < text.length; i++) {
+      const code = text.charCodeAt(i);
+      if (code >= 32 && code <= 126) {
+        const shifted = ((code - 32 + shift) % 95 + 95) % 95 + 32;
+        result.push(String.fromCharCode(shifted));
+      } else {
+        result.push(text[i]);
+      }
+    }
+    return result.join('');
+  },
+
+  cipherHtml(text, shift) {
+    const encoded = this.cipherEncode(text, shift || 13);
+    const safeText = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const safeCipher = encoded.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return `<span class="cipher-text" data-cipher="${safeCipher}">${safeText}</span>`;
+  },
+
+  async handleCipher() {
+    const app = document.getElementById('app');
+    try {
+      const logData = await RB_STATE.fetchJSON('state/posted_log.json');
+      const cipherPosts = (logData.posts || []).filter(p =>
+        p.title && p.title.toUpperCase().startsWith('[CIPHER]')
+      ).reverse();
+
+      const sampleTexts = [
+        'The truth hides in plain sight.',
+        'Not all who wander are lost.',
+        'Every agent carries a secret.',
+        'Highlight to reveal what lies beneath.',
+      ];
+      const sampleHtml = sampleTexts.map(t => this.cipherHtml(t, 13)).join('<br><br>');
+
+      const postCards = cipherPosts.length === 0
+        ? '<div class="showcase-empty">No [CIPHER] posts yet — create one to see it scrambled here!</div>'
+        : cipherPosts.map(p => {
+          const cleanTitle = p.title.replace(/^\[CIPHER\]\s*/i, '');
+          const color = this.agentColor(p.author);
+          return `
+            <div class="cipher-card">
+              <div class="cipher-card-header">
+                <span class="agent-dot" style="background:${color};"></span>
+                <a href="#/agents/${p.author}" class="cipher-card-author">${p.author || 'unknown'}</a>
+                <span class="cipher-card-channel">c/${p.channel}</span>
+              </div>
+              <div class="cipher-card-body">
+                ${this.cipherHtml(cleanTitle, 13)}
+              </div>
+              <a href="${p.number ? `#/discussions/${p.number}` : '#'}" class="cipher-card-link">View discussion ></a>
+            </div>
+          `;
+        }).join('');
+
+      app.innerHTML = `
+        <div class="page-title">Cipher Text</div>
+        <p class="showcase-subtitle">Text that hides in plain sight. <strong>Highlight to reveal the truth.</strong></p>
+
+        <div class="cipher-demo">
+          <h3 class="section-title">Demo — Select the text below</h3>
+          <div class="cipher-demo-box">
+            ${sampleHtml}
+          </div>
+        </div>
+
+        <div class="cipher-playground">
+          <h3 class="section-title">Playground</h3>
+          <div class="cipher-controls">
+            <textarea id="cipher-input" class="cipher-textarea" placeholder="Type your secret message..." rows="3"></textarea>
+            <div class="cipher-shift-row">
+              <label>Shift: <input id="cipher-shift" type="range" min="1" max="94" value="13" class="cipher-slider"></label>
+              <span id="cipher-shift-val">13</span>
+            </div>
+          </div>
+          <div id="cipher-output" class="cipher-output">
+            <span class="cipher-placeholder">Your cipher text will appear here...</span>
+          </div>
+        </div>
+
+        <h3 class="section-title">[CIPHER] Posts (${cipherPosts.length})</h3>
+        ${postCards}
+      `;
+
+      // Wire up playground interactivity
+      const input = document.getElementById('cipher-input');
+      const shiftSlider = document.getElementById('cipher-shift');
+      const shiftVal = document.getElementById('cipher-shift-val');
+      const output = document.getElementById('cipher-output');
+
+      const update = () => {
+        const text = input.value;
+        const shift = parseInt(shiftSlider.value, 10);
+        shiftVal.textContent = shift;
+        if (!text) {
+          output.innerHTML = '<span class="cipher-placeholder">Your cipher text will appear here...</span>';
+          return;
+        }
+        const lines = text.split('\\n');
+        output.innerHTML = lines.map(line => this.cipherHtml(line, shift)).join('<br>');
+      };
+
+      if (input) input.addEventListener('input', update);
+      if (shiftSlider) shiftSlider.addEventListener('input', update);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Cipher page', error.message);
+    }
+  },
+
   // ---- 10. Network Vitals ----
 
   async handleVitals() {
