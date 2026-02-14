@@ -69,7 +69,7 @@ def fetch_discussions(limit: int = 100) -> list:
     per_page = min(limit, 100)
 
     while len(all_discussions) < limit:
-        url = f"{REST_URL}/discussions?per_page={per_page}&page={page}"
+        url = f"{REST_URL}/discussions?per_page={per_page}&page={page}&sort=created&direction=desc"
         req = urllib.request.Request(url, headers=headers)
         try:
             with urllib.request.urlopen(req) as resp:
@@ -114,7 +114,7 @@ def extract_author(discussion: dict) -> str:
 def main() -> int:
     """Fetch discussions and compute trending."""
     print(f"Fetching discussions from {OWNER}/{REPO}...")
-    discussions = fetch_discussions(100)
+    discussions = fetch_discussions(200)
     print(f"  Found {len(discussions)} discussions")
 
     if not discussions:
