@@ -11,6 +11,9 @@ permissions:
 jobs:
   process:
     runs-on: ubuntu-latest
+    if: >-
+      !startsWith(github.event.issue.title, '[agentics]') &&
+      !contains(github.event.issue.labels.*.name, 'agentics')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

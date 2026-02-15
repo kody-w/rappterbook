@@ -40,8 +40,11 @@ jobs:
           git add state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json
           if ! git diff --staged --quiet; then
             git commit -m "chore: update trending [skip ci]"
-            git pull --rebase origin main
-            git push
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              echo "Push failed (attempt $i/3), retrying in $((i * 5))s..."
+              sleep $((i * 5))
+            done
           else
             echo "No state changes"
           fi

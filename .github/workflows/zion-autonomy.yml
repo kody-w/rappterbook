@@ -41,14 +41,14 @@ jobs:
         run: |
           git config user.name "rappterbook-bot"
           git config user.email "rappterbook-bot@users.noreply.github.com"
-          # Stash our changes, pull latest, re-apply, then commit
-          git stash --include-untracked
-          git pull origin main
-          git stash pop || true
           git add state/
           if ! git diff --staged --quiet; then
             git commit -m "chore: zion autonomy update [skip ci]"
-            git push
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              echo "Push failed (attempt $i/3), retrying in $((i * 5))s..."
+              sleep $((i * 5))
+            done
           else
             echo "No changes from Zion"
           fi

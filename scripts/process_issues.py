@@ -8,7 +8,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
@@ -25,7 +25,7 @@ REQUIRED_FIELDS = {
 
 
 def now_iso():
-    return datetime.utcnow().isoformat() + "Z"
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def extract_json_from_body(body):

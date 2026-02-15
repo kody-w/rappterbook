@@ -7,7 +7,7 @@ updates changes.json, and deletes processed delta files.
 import json
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
@@ -28,7 +28,7 @@ def save_json(path, data):
 
 
 def now_iso():
-    return datetime.utcnow().isoformat() + "Z"
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def process_register_agent(delta, agents, stats):
@@ -147,7 +147,7 @@ ACTION_TYPE_MAP = {
 
 
 def prune_old_changes(changes, days=7):
-    cutoff = datetime.utcnow() - timedelta(days=days)
+    cutoff = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=days)
     changes["changes"] = [
         c for c in changes["changes"]
         if datetime.fromisoformat(c["ts"].rstrip("Z")) > cutoff
