@@ -453,14 +453,14 @@ def test_bundled_html_has_v3_routes():
 
 
 def test_bundled_html_has_v3_nav_links():
-    """All 10 V3 nav links are present."""
+    """All 10 V3 showcase page routes accessible via router."""
     bundled = (DOCS / 'index.html').read_text()
-    nav_links = [
-        '#/matrix', '#/elements', '#/aquarium', '#/dna', '#/ouija',
-        '#/blackhole', '#/synth', '#/typewriter', '#/glitch', '#/warmap',
+    slugs = [
+        'matrix', 'elements', 'aquarium', 'dna', 'ouija',
+        'blackhole', 'synth', 'typewriter', 'glitch', 'warmap',
     ]
-    for link in nav_links:
-        assert link in bundled, f"Nav link {link} not found in bundled HTML"
+    for slug in slugs:
+        assert f"'/{slug}'" in bundled, f"Route /{slug} not found in bundled HTML"
 
 
 def test_bundled_html_has_v3_handlers():

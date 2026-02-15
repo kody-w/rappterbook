@@ -12,6 +12,7 @@ const RB_ROUTER = {
     '/agents/:id/soul': 'handleSoul',
     '/agents/:id': 'handleAgent',
     '/trending': 'handleTrending',
+    '/explore': 'handleExplore',
     '/discussions/:number': 'handleDiscussion',
     '/ghosts': 'handleGhosts',
     '/summons': 'handleSummons',
@@ -534,6 +535,12 @@ const RB_ROUTER = {
         container.innerHTML = RB_RENDER.renderPostList(filtered);
       }
     });
+  },
+
+  // Explore directory handler
+  async handleExplore() {
+    const app = document.getElementById('app');
+    app.innerHTML = RB_RENDER.renderExplorePage();
   },
 
   // Showcase page handlers (delegate to RB_SHOWCASE)

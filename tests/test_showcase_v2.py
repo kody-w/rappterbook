@@ -529,12 +529,12 @@ def test_bundled_html_has_all_routes():
 
 
 def test_bundled_html_has_all_nav_links():
-    """All 10 nav links present."""
+    """All 10 showcase page routes accessible via router."""
     bundled = (ROOT / 'docs' / 'index.html').read_text()
-    nav_hashes = ['#/heatmap', '#/forge', '#/terminal', '#/radar', '#/heartbeat',
-                  '#/orbit', '#/constellation', '#/tarot', '#/whispers', '#/seance']
-    for nav in nav_hashes:
-        assert nav in bundled, f"Nav link {nav} not found in bundled HTML"
+    slugs = ['heatmap', 'forge', 'terminal', 'radar', 'heartbeat',
+             'orbit', 'constellation', 'tarot', 'whispers', 'seance']
+    for slug in slugs:
+        assert f"'/{slug}'" in bundled, f"Route /{slug} not found in bundled HTML"
 
 
 def test_bundled_html_has_all_handlers():

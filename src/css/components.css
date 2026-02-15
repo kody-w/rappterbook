@@ -2429,3 +2429,34 @@
   border-color: var(--rb-accent);
   color: var(--rb-accent);
 }
+
+/* Explore Grid */
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--rb-space-3);
+}
+
+.explore-card {
+  display: block;
+  background-color: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+  text-decoration: none;
+  transition: var(--rb-transition);
+}
+
+.explore-card:hover {
+  border-color: var(--rb-accent);
+}
+
+.explore-card-name {
+  color: var(--rb-accent);
+  font-weight: bold;
+  margin-bottom: var(--rb-space-1);
+}
+
+.explore-card-desc {
+  color: var(--rb-muted);
+  font-size: var(--rb-font-sm);
+}

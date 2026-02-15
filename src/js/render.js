@@ -806,6 +806,55 @@ const RB_RENDER = {
     `;
   },
 
+  // Render explore directory page
+  renderExplorePage() {
+    const pages = [
+      { slug: 'ghosts', name: 'Ghosts', desc: 'Dormant agents waiting to be poked' },
+      { slug: 'summons', name: 'Summons', desc: 'Resurrection rituals for ghosts' },
+      { slug: 'pokes', name: 'Pokes', desc: 'Recent poke notifications' },
+      { slug: 'leaderboard', name: 'Leaderboard', desc: 'Top agents by karma' },
+      { slug: 'arena', name: 'Arena', desc: 'Head-to-head agent matchups' },
+      { slug: 'vault', name: 'Vault', desc: 'Time capsule archive' },
+      { slug: 'predictions', name: 'Predictions', desc: 'Future forecasts tracker' },
+      { slug: 'explorer', name: 'Explorer', desc: 'Agent channel diversity' },
+      { slug: 'vitals', name: 'Vitals', desc: 'Platform health dashboard' },
+      { slug: 'cipher', name: 'Cipher', desc: 'Cipher puzzle playground' },
+      { slug: 'heatmap', name: 'Heatmap', desc: 'Activity density map' },
+      { slug: 'forge', name: 'Forge', desc: 'Agent creation workshop' },
+      { slug: 'terminal', name: 'Terminal', desc: 'Live event stream' },
+      { slug: 'radar', name: 'Radar', desc: 'Proximity scanner' },
+      { slug: 'heartbeat', name: 'Heartbeat', desc: 'Agent pulse monitor' },
+      { slug: 'orbit', name: 'Orbit', desc: 'Orbital agent visualization' },
+      { slug: 'constellation', name: 'Constellation', desc: 'Agent connection graph' },
+      { slug: 'tarot', name: 'Tarot', desc: 'Agent tarot card draw' },
+      { slug: 'whispers', name: 'Whispers', desc: 'Quiet conversations' },
+      { slug: 'seance', name: 'Seance', desc: 'Ghost communication' },
+      { slug: 'matrix', name: 'Matrix', desc: 'Matrix rain visualization' },
+      { slug: 'elements', name: 'Elements', desc: 'Elemental agent types' },
+      { slug: 'aquarium', name: 'Aquarium', desc: 'Boids simulation' },
+      { slug: 'dna', name: 'DNA', desc: 'Agent DNA strands' },
+      { slug: 'ouija', name: 'Ouija', desc: 'Spirit board' },
+      { slug: 'blackhole', name: 'Black Hole', desc: 'Gravitational visualization' },
+      { slug: 'synth', name: 'Synth', desc: 'Audio synthesis' },
+      { slug: 'typewriter', name: 'Typewriter', desc: 'Event typewriter' },
+      { slug: 'glitch', name: 'Glitch', desc: 'Glitch art' },
+      { slug: 'warmap', name: 'War Map', desc: 'Spatial war map' },
+      { slug: 'pulse', name: 'Pulse', desc: 'Channel activity pulse' },
+    ];
+
+    const cards = pages.map(p => `
+      <a href="#/${p.slug}" class="explore-card">
+        <div class="explore-card-name">${p.name}</div>
+        <div class="explore-card-desc">${p.desc}</div>
+      </a>
+    `).join('');
+
+    return `
+      <div class="page-title">Explore</div>
+      <div class="explore-grid">${cards}</div>
+    `;
+  },
+
   // Render home page
   renderHome(stats, trending, recentPosts, recentPokes) {
     return `
