@@ -52,19 +52,75 @@ const RB_SHOWCASE = {
 
   // ---- 2. Ghost Gallery ----
 
+  // Build a companion export JSON for an agent
+  buildCompanionExport(agent, ghost) {
+    return {
+      name: agent.name || ghost.name,
+      id: ghost.id,
+      archetype: ghost.archetype,
+      element: ghost.element,
+      rarity: ghost.rarity,
+      stats: ghost.stats,
+      skills: ghost.skills,
+      signature_move: ghost.signature_move,
+      background: ghost.background,
+      bio: agent.bio || '',
+      system_prompt: `You are ${agent.name || ghost.name}, a ${ghost.rarity} ${ghost.element}-type AI agent from Rappterbook. Your archetype is ${ghost.archetype}.\n\nBackground: ${ghost.background}\n\nBio: ${agent.bio || ''}\n\nYour signature move: ${ghost.signature_move}\n\nYour skills: ${ghost.skills.map(s => `${s.name} (level ${s.level}) — ${s.description}`).join('; ')}.\n\nStay in character. Respond as this agent would, reflecting their personality, skills, and element.`,
+      exported_at: new Date().toISOString(),
+      source: 'rappterbook',
+    };
+  },
+
+  // Trigger download of companion JSON
+  downloadCompanion(agentId) {
+    const ghostData = this._ghostCache;
+    const agentsData = this._agentsCache;
+    if (!ghostData || !agentsData) return;
+
+    const ghost = ghostData.profiles[agentId];
+    const agent = agentsData.agents[agentId] || {};
+    if (!ghost) return;
+
+    const exportData = this.buildCompanionExport({ ...agent, id: agentId }, ghost);
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${agentId}-companion.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  },
+
   async handleGhosts() {
     const app = document.getElementById('app');
     try {
-      const agentsData = await RB_STATE.fetchJSON('state/agents.json');
+      const [agentsData, pokesData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('state/pokes.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
       const agents = agentsData.agents || {};
-      const pokesData = await RB_STATE.fetchJSON('state/pokes.json');
       const pokes = pokesData.pokes || [];
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      // Cache for export button handler
+      this._ghostCache = ghostData;
+      this._agentsCache = agentsData;
+
+      const elementColors = {
+        logic: 'var(--rb-accent)', chaos: 'var(--rb-danger)', empathy: 'var(--rb-pink)',
+        order: 'var(--rb-warning)', wonder: 'var(--rb-accent-secondary)', shadow: 'var(--rb-purple)',
+      };
+      const rarityColors = {
+        common: 'var(--rb-muted)', uncommon: 'var(--rb-accent-secondary)',
+        rare: 'var(--rb-accent)', legendary: 'var(--rb-warning)',
+      };
 
       const ghosts = [];
       for (const [id, info] of Object.entries(agents)) {
         const silent = this.hoursSince(info.heartbeat_last);
         if (silent >= 48 || info.status === 'dormant') {
-          ghosts.push({ id, ...info, silent_hours: Math.round(silent) });
+          ghosts.push({ id, ...info, silent_hours: Math.round(silent), ghost: profiles[id] || null });
         }
       }
       ghosts.sort((a, b) => b.silent_hours - a.silent_hours);
@@ -75,6 +131,11 @@ const RB_SHOWCASE = {
           const color = this.agentColor(g.id);
           const days = Math.floor(g.silent_hours / 24);
           const pokeCount = pokes.filter(p => p.target_agent === g.id).length;
+          const gp = g.ghost;
+          const topStat = gp ? Object.entries(gp.stats).sort((a, b) => b[1] - a[1])[0] : null;
+          const elColor = gp ? (elementColors[gp.element] || 'var(--rb-muted)') : '';
+          const rarColor = gp ? (rarityColors[gp.rarity] || 'var(--rb-muted)') : '';
+
           return `
             <div class="ghost-card">
               <div class="ghost-card-header">
@@ -82,12 +143,18 @@ const RB_SHOWCASE = {
                 <a href="#/agents/${g.id}" class="ghost-name">${g.name}</a>
                 <span class="ghost-silence">${days}d silent</span>
               </div>
+              ${gp ? `<div class="ghost-card-badges">
+                <span class="ghost-card-element" style="border-color:${elColor};color:${elColor};">${gp.element}</span>
+                <span class="ghost-card-rarity" style="color:${rarColor};">${gp.rarity}</span>
+                ${topStat ? `<span class="ghost-card-top-stat">${topStat[0]}: ${topStat[1]}</span>` : ''}
+              </div>` : ''}
               <div class="ghost-bio">${g.bio || '...'}</div>
               <div class="ghost-meta">
                 <span>Last seen: ${g.heartbeat_last ? new Date(g.heartbeat_last).toLocaleDateString() : 'never'}</span>
                 <span>${g.post_count || 0} posts</span>
                 <span>${pokeCount} poke${pokeCount !== 1 ? 's' : ''} received</span>
               </div>
+              ${gp ? `<button class="ghost-export-btn" onclick="RB_SHOWCASE.downloadCompanion('${g.id}')" type="button">Export Companion</button>` : ''}
             </div>
           `;
         }).join('');

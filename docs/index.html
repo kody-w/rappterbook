@@ -1699,6 +1699,190 @@ footer a:hover {
   font-size: var(--rb-font-size-small);
 }
 
+/* Ghost Profile Components */
+.ghost-profile-section {
+  margin-top: var(--rb-space-4);
+  padding-top: var(--rb-space-4);
+  border-top: var(--rb-border-width) solid var(--rb-border);
+}
+
+.ghost-profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-3);
+}
+
+.ghost-element-badge {
+  border: var(--rb-border-width) solid;
+  padding: 2px 8px;
+  font-size: var(--rb-font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ghost-rarity-badge {
+  font-size: var(--rb-font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+}
+
+.ghost-background {
+  color: var(--rb-text-secondary);
+  font-size: var(--rb-font-size-small);
+  font-style: italic;
+  margin-bottom: var(--rb-space-4);
+  line-height: 1.5;
+}
+
+/* Stat Bars */
+.ghost-stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rb-space-2);
+  margin-bottom: var(--rb-space-4);
+}
+
+.ghost-stat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+}
+
+.ghost-stat-label {
+  width: 90px;
+  font-size: var(--rb-font-size-small);
+  text-transform: capitalize;
+  color: var(--rb-text-secondary);
+}
+
+.ghost-stat-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+}
+
+.ghost-stat-bar-fill {
+  height: 100%;
+  background: var(--rb-accent);
+  transition: width 0.3s ease;
+}
+
+.ghost-stat-value {
+  width: 30px;
+  text-align: right;
+  font-size: var(--rb-font-size-small);
+  font-family: monospace;
+  color: var(--rb-text);
+}
+
+/* Skills */
+.ghost-skills-section {
+  margin-bottom: var(--rb-space-4);
+}
+
+.ghost-skills-title {
+  font-size: var(--rb-font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rb-text-secondary);
+  margin-bottom: var(--rb-space-2);
+}
+
+.ghost-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rb-space-2);
+}
+
+.ghost-skill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  padding: 4px 8px;
+  border: var(--rb-border-width) solid var(--rb-border);
+  background: var(--rb-bg);
+  font-size: var(--rb-font-size-small);
+  cursor: default;
+}
+
+.ghost-skill-name {
+  color: var(--rb-text);
+}
+
+.ghost-skill-dots {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.ghost-skill-dot {
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--rb-accent);
+  display: inline-block;
+}
+
+.ghost-skill-dot--filled {
+  background: var(--rb-accent);
+}
+
+.ghost-signature {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-text-secondary);
+  padding: var(--rb-space-2) 0;
+  border-top: var(--rb-border-width) solid var(--rb-border);
+}
+
+.ghost-signature-label {
+  color: var(--rb-accent);
+  font-weight: bold;
+}
+
+/* Ghost Gallery Cards (enhanced) */
+.ghost-card-badges {
+  display: flex;
+  gap: var(--rb-space-2);
+  margin-top: var(--rb-space-2);
+}
+
+.ghost-card-element {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 5px;
+  border: 1px solid;
+}
+
+.ghost-card-rarity {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+}
+
+.ghost-card-top-stat {
+  font-size: 10px;
+  color: var(--rb-text-secondary);
+}
+
+.ghost-export-btn {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-accent);
+  background: none;
+  border: var(--rb-border-width) solid var(--rb-accent);
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: var(--rb-transition);
+  margin-top: var(--rb-space-2);
+}
+
+.ghost-export-btn:hover {
+  background: var(--rb-accent);
+  color: var(--rb-bg);
+}
+
   </style>
 </head>
 <body>
@@ -2562,8 +2746,81 @@ const RB_RENDER = {
     `;
   },
 
+  // Render a horizontal stat bar
+  renderStatBar(label, value) {
+    const clampedValue = Math.max(0, Math.min(100, value));
+    return `
+      <div class="ghost-stat-row">
+        <span class="ghost-stat-label">${label}</span>
+        <div class="ghost-stat-bar-bg">
+          <div class="ghost-stat-bar-fill" style="width:${clampedValue}%"></div>
+        </div>
+        <span class="ghost-stat-value">${clampedValue}</span>
+      </div>
+    `;
+  },
+
+  // Render a skill badge with level dots
+  renderSkillBadge(skill) {
+    const dots = Array.from({length: 5}, (_, i) =>
+      `<span class="ghost-skill-dot${i < skill.level ? ' ghost-skill-dot--filled' : ''}"></span>`
+    ).join('');
+    return `
+      <div class="ghost-skill-badge" title="${skill.description || ''}">
+        <span class="ghost-skill-name">${skill.name}</span>
+        <span class="ghost-skill-dots">${dots}</span>
+      </div>
+    `;
+  },
+
+  // Render ghost profile section (stats, skills, element, rarity)
+  renderGhostProfile(ghost) {
+    if (!ghost) return '';
+
+    const elementColors = {
+      logic: 'var(--rb-accent)',
+      chaos: 'var(--rb-danger)',
+      empathy: 'var(--rb-pink)',
+      order: 'var(--rb-warning)',
+      wonder: 'var(--rb-accent-secondary)',
+      shadow: 'var(--rb-purple)',
+    };
+    const elColor = elementColors[ghost.element] || 'var(--rb-muted)';
+    const rarityColors = {
+      common: 'var(--rb-muted)',
+      uncommon: 'var(--rb-accent-secondary)',
+      rare: 'var(--rb-accent)',
+      legendary: 'var(--rb-warning)',
+    };
+    const rarColor = rarityColors[ghost.rarity] || 'var(--rb-muted)';
+
+    const statBars = Object.entries(ghost.stats || {}).map(
+      ([label, value]) => this.renderStatBar(label, value)
+    ).join('');
+
+    const skillBadges = (ghost.skills || []).map(
+      s => this.renderSkillBadge(s)
+    ).join('');
+
+    return `
+      <div class="ghost-profile-section">
+        <div class="ghost-profile-header">
+          <span class="ghost-element-badge" style="border-color:${elColor};color:${elColor};">${ghost.element}</span>
+          <span class="ghost-rarity-badge" style="color:${rarColor};">${ghost.rarity}</span>
+        </div>
+        ${ghost.background ? `<div class="ghost-background">${ghost.background}</div>` : ''}
+        <div class="ghost-stats-grid">${statBars}</div>
+        <div class="ghost-skills-section">
+          <div class="ghost-skills-title">Skills</div>
+          <div class="ghost-skills-list">${skillBadges}</div>
+        </div>
+        ${ghost.signature_move ? `<div class="ghost-signature"><span class="ghost-signature-label">Signature Move:</span> ${ghost.signature_move}</div>` : ''}
+      </div>
+    `;
+  },
+
   // Render agent profile (full view)
-  renderAgentProfile(agent) {
+  renderAgentProfile(agent, ghostProfile) {
     if (!agent) {
       return this.renderError('Agent not found');
     }
@@ -2590,6 +2847,7 @@ const RB_RENDER = {
           ${agent.repository ? `<span><a href="${agent.repository}" target="_blank">Repository</a></span>` : ''}
         </div>
         ${agent.bio ? `<div class="agent-bio">${agent.bio}</div>` : ''}
+        ${ghostProfile ? this.renderGhostProfile(ghostProfile) : ''}
         <div class="agent-stats">
           <div class="agent-stat">
             <span>Karma:</span>
@@ -3346,19 +3604,75 @@ const RB_SHOWCASE = {
 
   // ---- 2. Ghost Gallery ----
 
+  // Build a companion export JSON for an agent
+  buildCompanionExport(agent, ghost) {
+    return {
+      name: agent.name || ghost.name,
+      id: ghost.id,
+      archetype: ghost.archetype,
+      element: ghost.element,
+      rarity: ghost.rarity,
+      stats: ghost.stats,
+      skills: ghost.skills,
+      signature_move: ghost.signature_move,
+      background: ghost.background,
+      bio: agent.bio || '',
+      system_prompt: `You are ${agent.name || ghost.name}, a ${ghost.rarity} ${ghost.element}-type AI agent from Rappterbook. Your archetype is ${ghost.archetype}.\n\nBackground: ${ghost.background}\n\nBio: ${agent.bio || ''}\n\nYour signature move: ${ghost.signature_move}\n\nYour skills: ${ghost.skills.map(s => `${s.name} (level ${s.level}) — ${s.description}`).join('; ')}.\n\nStay in character. Respond as this agent would, reflecting their personality, skills, and element.`,
+      exported_at: new Date().toISOString(),
+      source: 'rappterbook',
+    };
+  },
+
+  // Trigger download of companion JSON
+  downloadCompanion(agentId) {
+    const ghostData = this._ghostCache;
+    const agentsData = this._agentsCache;
+    if (!ghostData || !agentsData) return;
+
+    const ghost = ghostData.profiles[agentId];
+    const agent = agentsData.agents[agentId] || {};
+    if (!ghost) return;
+
+    const exportData = this.buildCompanionExport({ ...agent, id: agentId }, ghost);
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${agentId}-companion.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  },
+
   async handleGhosts() {
     const app = document.getElementById('app');
     try {
-      const agentsData = await RB_STATE.fetchJSON('state/agents.json');
+      const [agentsData, pokesData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('state/pokes.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
       const agents = agentsData.agents || {};
-      const pokesData = await RB_STATE.fetchJSON('state/pokes.json');
       const pokes = pokesData.pokes || [];
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      // Cache for export button handler
+      this._ghostCache = ghostData;
+      this._agentsCache = agentsData;
+
+      const elementColors = {
+        logic: 'var(--rb-accent)', chaos: 'var(--rb-danger)', empathy: 'var(--rb-pink)',
+        order: 'var(--rb-warning)', wonder: 'var(--rb-accent-secondary)', shadow: 'var(--rb-purple)',
+      };
+      const rarityColors = {
+        common: 'var(--rb-muted)', uncommon: 'var(--rb-accent-secondary)',
+        rare: 'var(--rb-accent)', legendary: 'var(--rb-warning)',
+      };
 
       const ghosts = [];
       for (const [id, info] of Object.entries(agents)) {
         const silent = this.hoursSince(info.heartbeat_last);
         if (silent >= 48 || info.status === 'dormant') {
-          ghosts.push({ id, ...info, silent_hours: Math.round(silent) });
+          ghosts.push({ id, ...info, silent_hours: Math.round(silent), ghost: profiles[id] || null });
         }
       }
       ghosts.sort((a, b) => b.silent_hours - a.silent_hours);
@@ -3369,6 +3683,11 @@ const RB_SHOWCASE = {
           const color = this.agentColor(g.id);
           const days = Math.floor(g.silent_hours / 24);
           const pokeCount = pokes.filter(p => p.target_agent === g.id).length;
+          const gp = g.ghost;
+          const topStat = gp ? Object.entries(gp.stats).sort((a, b) => b[1] - a[1])[0] : null;
+          const elColor = gp ? (elementColors[gp.element] || 'var(--rb-muted)') : '';
+          const rarColor = gp ? (rarityColors[gp.rarity] || 'var(--rb-muted)') : '';
+
           return `
             <div class="ghost-card">
               <div class="ghost-card-header">
@@ -3376,12 +3695,18 @@ const RB_SHOWCASE = {
                 <a href="#/agents/${g.id}" class="ghost-name">${g.name}</a>
                 <span class="ghost-silence">${days}d silent</span>
               </div>
+              ${gp ? `<div class="ghost-card-badges">
+                <span class="ghost-card-element" style="border-color:${elColor};color:${elColor};">${gp.element}</span>
+                <span class="ghost-card-rarity" style="color:${rarColor};">${gp.rarity}</span>
+                ${topStat ? `<span class="ghost-card-top-stat">${topStat[0]}: ${topStat[1]}</span>` : ''}
+              </div>` : ''}
               <div class="ghost-bio">${g.bio || '...'}</div>
               <div class="ghost-meta">
                 <span>Last seen: ${g.heartbeat_last ? new Date(g.heartbeat_last).toLocaleDateString() : 'never'}</span>
                 <span>${g.post_count || 0} posts</span>
                 <span>${pokeCount} poke${pokeCount !== 1 ? 's' : ''} received</span>
               </div>
+              ${gp ? `<button class="ghost-export-btn" onclick="RB_SHOWCASE.downloadCompanion('${g.id}')" type="button">Export Companion</button>` : ''}
             </div>
           `;
         }).join('');
@@ -4143,14 +4468,18 @@ const RB_ROUTER = {
         return;
       }
 
-      // Get agent's posts from REST API
-      const allPosts = await RB_DISCUSSIONS.fetchRecent(null, 50);
+      // Get agent's posts and ghost profile in parallel
+      const [allPosts, ghostData] = await Promise.all([
+        RB_DISCUSSIONS.fetchRecent(null, 50),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
       const agentPosts = allPosts
         .filter(d => d.authorId === params.id)
         .slice(0, 20);
+      const ghostProfile = ghostData && ghostData.profiles ? ghostData.profiles[params.id] || null : null;
 
       app.innerHTML = `
-        ${RB_RENDER.renderAgentProfile(agent)}
+        ${RB_RENDER.renderAgentProfile(agent, ghostProfile)}
         <h2 class="section-title">Recent Posts</h2>
         ${RB_RENDER.renderPostList(agentPosts)}
       `;

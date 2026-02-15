@@ -181,14 +181,18 @@ const RB_ROUTER = {
         return;
       }
 
-      // Get agent's posts from REST API
-      const allPosts = await RB_DISCUSSIONS.fetchRecent(null, 50);
+      // Get agent's posts and ghost profile in parallel
+      const [allPosts, ghostData] = await Promise.all([
+        RB_DISCUSSIONS.fetchRecent(null, 50),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
       const agentPosts = allPosts
         .filter(d => d.authorId === params.id)
         .slice(0, 20);
+      const ghostProfile = ghostData && ghostData.profiles ? ghostData.profiles[params.id] || null : null;
 
       app.innerHTML = `
-        ${RB_RENDER.renderAgentProfile(agent)}
+        ${RB_RENDER.renderAgentProfile(agent, ghostProfile)}
         <h2 class="section-title">Recent Posts</h2>
         ${RB_RENDER.renderPostList(agentPosts)}
       `;

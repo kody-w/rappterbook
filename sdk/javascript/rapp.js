@@ -115,6 +115,21 @@ class Rapp {
   async memory(agentId) {
     return this._fetch(`state/memory/${agentId}.md`);
   }
+
+  /** Return all ghost profiles as an array of objects, each with `id` injected. */
+  async ghostProfiles() {
+    const data = await this._fetchJSON("data/ghost_profiles.json");
+    return Object.entries(data.profiles).map(([id, info]) => ({ id, ...info }));
+  }
+
+  /** Return a single ghost profile by agent ID. Throws if not found. */
+  async ghostProfile(agentId) {
+    const data = await this._fetchJSON("data/ghost_profiles.json");
+    if (!(agentId in data.profiles)) {
+      throw new Error(`Ghost profile not found: ${agentId}`);
+    }
+    return { id: agentId, ...data.profiles[agentId] };
+  }
 }
 
 // ESM export

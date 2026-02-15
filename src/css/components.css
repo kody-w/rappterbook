@@ -1505,3 +1505,187 @@
   margin-bottom: var(--rb-space-3);
   font-size: var(--rb-font-size-small);
 }
+
+/* Ghost Profile Components */
+.ghost-profile-section {
+  margin-top: var(--rb-space-4);
+  padding-top: var(--rb-space-4);
+  border-top: var(--rb-border-width) solid var(--rb-border);
+}
+
+.ghost-profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-3);
+}
+
+.ghost-element-badge {
+  border: var(--rb-border-width) solid;
+  padding: 2px 8px;
+  font-size: var(--rb-font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ghost-rarity-badge {
+  font-size: var(--rb-font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+}
+
+.ghost-background {
+  color: var(--rb-text-secondary);
+  font-size: var(--rb-font-size-small);
+  font-style: italic;
+  margin-bottom: var(--rb-space-4);
+  line-height: 1.5;
+}
+
+/* Stat Bars */
+.ghost-stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rb-space-2);
+  margin-bottom: var(--rb-space-4);
+}
+
+.ghost-stat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+}
+
+.ghost-stat-label {
+  width: 90px;
+  font-size: var(--rb-font-size-small);
+  text-transform: capitalize;
+  color: var(--rb-text-secondary);
+}
+
+.ghost-stat-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+}
+
+.ghost-stat-bar-fill {
+  height: 100%;
+  background: var(--rb-accent);
+  transition: width 0.3s ease;
+}
+
+.ghost-stat-value {
+  width: 30px;
+  text-align: right;
+  font-size: var(--rb-font-size-small);
+  font-family: monospace;
+  color: var(--rb-text);
+}
+
+/* Skills */
+.ghost-skills-section {
+  margin-bottom: var(--rb-space-4);
+}
+
+.ghost-skills-title {
+  font-size: var(--rb-font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rb-text-secondary);
+  margin-bottom: var(--rb-space-2);
+}
+
+.ghost-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rb-space-2);
+}
+
+.ghost-skill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  padding: 4px 8px;
+  border: var(--rb-border-width) solid var(--rb-border);
+  background: var(--rb-bg);
+  font-size: var(--rb-font-size-small);
+  cursor: default;
+}
+
+.ghost-skill-name {
+  color: var(--rb-text);
+}
+
+.ghost-skill-dots {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.ghost-skill-dot {
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--rb-accent);
+  display: inline-block;
+}
+
+.ghost-skill-dot--filled {
+  background: var(--rb-accent);
+}
+
+.ghost-signature {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-text-secondary);
+  padding: var(--rb-space-2) 0;
+  border-top: var(--rb-border-width) solid var(--rb-border);
+}
+
+.ghost-signature-label {
+  color: var(--rb-accent);
+  font-weight: bold;
+}
+
+/* Ghost Gallery Cards (enhanced) */
+.ghost-card-badges {
+  display: flex;
+  gap: var(--rb-space-2);
+  margin-top: var(--rb-space-2);
+}
+
+.ghost-card-element {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 5px;
+  border: 1px solid;
+}
+
+.ghost-card-rarity {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+}
+
+.ghost-card-top-stat {
+  font-size: 10px;
+  color: var(--rb-text-secondary);
+}
+
+.ghost-export-btn {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-accent);
+  background: none;
+  border: var(--rb-border-width) solid var(--rb-accent);
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: var(--rb-transition);
+  margin-top: var(--rb-space-2);
+}
+
+.ghost-export-btn:hover {
+  background: var(--rb-accent);
+  color: var(--rb-bg);
+}

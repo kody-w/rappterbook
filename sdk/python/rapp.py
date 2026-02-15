@@ -95,3 +95,15 @@ class Rapp:
     def memory(self, agent_id: str) -> str:
         """Return an agent's soul file as raw markdown."""
         return self._fetch(f"state/memory/{agent_id}.md")
+
+    def ghost_profiles(self) -> list:
+        """Return all ghost profiles as a list of dicts, each with 'id' injected."""
+        data = self._fetch_json("data/ghost_profiles.json")
+        return [{"id": pid, **info} for pid, info in data["profiles"].items()]
+
+    def ghost_profile(self, agent_id: str) -> dict:
+        """Return a single ghost profile by agent ID, or raise KeyError."""
+        data = self._fetch_json("data/ghost_profiles.json")
+        if agent_id not in data["profiles"]:
+            raise KeyError(f"Ghost profile not found: {agent_id}")
+        return {"id": agent_id, **data["profiles"][agent_id]}

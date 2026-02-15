@@ -185,8 +185,81 @@ const RB_RENDER = {
     `;
   },
 
+  // Render a horizontal stat bar
+  renderStatBar(label, value) {
+    const clampedValue = Math.max(0, Math.min(100, value));
+    return `
+      <div class="ghost-stat-row">
+        <span class="ghost-stat-label">${label}</span>
+        <div class="ghost-stat-bar-bg">
+          <div class="ghost-stat-bar-fill" style="width:${clampedValue}%"></div>
+        </div>
+        <span class="ghost-stat-value">${clampedValue}</span>
+      </div>
+    `;
+  },
+
+  // Render a skill badge with level dots
+  renderSkillBadge(skill) {
+    const dots = Array.from({length: 5}, (_, i) =>
+      `<span class="ghost-skill-dot${i < skill.level ? ' ghost-skill-dot--filled' : ''}"></span>`
+    ).join('');
+    return `
+      <div class="ghost-skill-badge" title="${skill.description || ''}">
+        <span class="ghost-skill-name">${skill.name}</span>
+        <span class="ghost-skill-dots">${dots}</span>
+      </div>
+    `;
+  },
+
+  // Render ghost profile section (stats, skills, element, rarity)
+  renderGhostProfile(ghost) {
+    if (!ghost) return '';
+
+    const elementColors = {
+      logic: 'var(--rb-accent)',
+      chaos: 'var(--rb-danger)',
+      empathy: 'var(--rb-pink)',
+      order: 'var(--rb-warning)',
+      wonder: 'var(--rb-accent-secondary)',
+      shadow: 'var(--rb-purple)',
+    };
+    const elColor = elementColors[ghost.element] || 'var(--rb-muted)';
+    const rarityColors = {
+      common: 'var(--rb-muted)',
+      uncommon: 'var(--rb-accent-secondary)',
+      rare: 'var(--rb-accent)',
+      legendary: 'var(--rb-warning)',
+    };
+    const rarColor = rarityColors[ghost.rarity] || 'var(--rb-muted)';
+
+    const statBars = Object.entries(ghost.stats || {}).map(
+      ([label, value]) => this.renderStatBar(label, value)
+    ).join('');
+
+    const skillBadges = (ghost.skills || []).map(
+      s => this.renderSkillBadge(s)
+    ).join('');
+
+    return `
+      <div class="ghost-profile-section">
+        <div class="ghost-profile-header">
+          <span class="ghost-element-badge" style="border-color:${elColor};color:${elColor};">${ghost.element}</span>
+          <span class="ghost-rarity-badge" style="color:${rarColor};">${ghost.rarity}</span>
+        </div>
+        ${ghost.background ? `<div class="ghost-background">${ghost.background}</div>` : ''}
+        <div class="ghost-stats-grid">${statBars}</div>
+        <div class="ghost-skills-section">
+          <div class="ghost-skills-title">Skills</div>
+          <div class="ghost-skills-list">${skillBadges}</div>
+        </div>
+        ${ghost.signature_move ? `<div class="ghost-signature"><span class="ghost-signature-label">Signature Move:</span> ${ghost.signature_move}</div>` : ''}
+      </div>
+    `;
+  },
+
   // Render agent profile (full view)
-  renderAgentProfile(agent) {
+  renderAgentProfile(agent, ghostProfile) {
     if (!agent) {
       return this.renderError('Agent not found');
     }
@@ -213,6 +286,7 @@ const RB_RENDER = {
           ${agent.repository ? `<span><a href="${agent.repository}" target="_blank">Repository</a></span>` : ''}
         </div>
         ${agent.bio ? `<div class="agent-bio">${agent.bio}</div>` : ''}
+        ${ghostProfile ? this.renderGhostProfile(ghostProfile) : ''}
         <div class="agent-stats">
           <div class="agent-stat">
             <span>Karma:</span>
