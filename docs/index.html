@@ -112,12 +112,68 @@ header {
   overflow: hidden;
 }
 
+/* Hamburger Button — hidden on desktop */
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text-bright);
+  font-size: 24px;
+  padding: var(--rb-space-1) var(--rb-space-3);
+  cursor: pointer;
+  font-family: var(--rb-font-family);
+  transition: var(--rb-transition);
+}
+
+.hamburger-btn:hover {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+}
+
 nav {
   display: flex;
   gap: var(--rb-space-2) var(--rb-space-4);
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
+}
+
+/* Search Container */
+.search-container {
+  display: flex;
+  gap: var(--rb-space-2);
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-input {
+  flex: 1;
+  padding: var(--rb-space-2) var(--rb-space-3);
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--rb-accent);
+}
+
+.search-btn {
+  padding: var(--rb-space-2) var(--rb-space-3);
+  background: var(--rb-accent);
+  color: var(--rb-bg);
+  border: none;
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  transition: var(--rb-transition);
+}
+
+.search-btn:hover {
+  opacity: 0.85;
 }
 
 main {
@@ -193,8 +249,38 @@ footer a:hover {
     position: static;
   }
 
+  .hamburger-btn {
+    display: block;
+  }
+
   nav {
-    gap: var(--rb-space-1) var(--rb-space-3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    gap: 0;
+    width: 100%;
+  }
+
+  nav.nav-open {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  nav .nav-link {
+    width: 100%;
+    padding: var(--rb-space-2) var(--rb-space-3);
+    border-bottom: var(--rb-border-width) solid var(--rb-border);
+  }
+
+  .search-container {
+    max-width: 100%;
+  }
+
+  .logo {
+    font-size: 8px;
   }
 }
 
@@ -2514,6 +2600,329 @@ footer a:hover {
   margin-left: var(--rb-space-2);
 }
 
+/* ====== Feature: Channel Controls (Sort/Filter) ====== */
+.channel-controls {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-4);
+  flex-wrap: wrap;
+}
+
+.channel-controls .type-filter-bar {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  flex-shrink: 0;
+}
+
+.sort-label {
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+}
+
+.sort-select {
+  padding: var(--rb-space-2) var(--rb-space-3);
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: var(--rb-accent);
+}
+
+/* ====== Feature: Loading Spinner for Mutations ====== */
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border: 2px solid var(--rb-border);
+  border-top-color: var(--rb-accent);
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+/* ====== Feature: User Profile ====== */
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-4);
+  margin-bottom: var(--rb-space-6);
+  padding: var(--rb-space-4);
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+}
+
+.user-avatar {
+  border-radius: 50%;
+  border: 2px solid var(--rb-accent);
+}
+
+.user-login {
+  font-size: var(--rb-font-size-large);
+  color: var(--rb-text-bright);
+  font-weight: bold;
+}
+
+.user-stats {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  margin-top: var(--rb-space-1);
+}
+
+/* Auth-only nav links — hidden when signed out */
+.nav-link--auth {
+  display: none;
+}
+
+.nav-link--auth.nav-link--visible {
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .nav-link--auth.nav-link--visible {
+    display: block;
+  }
+}
+
+/* ====== Feature: Emoji Reactions ====== */
+.reactions-row {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  flex-wrap: wrap;
+  margin-top: var(--rb-space-2);
+}
+
+.reaction-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px var(--rb-space-2);
+  background: transparent;
+  border: var(--rb-border-width) solid var(--rb-border);
+  cursor: pointer;
+  font-size: var(--rb-font-size-small);
+  transition: var(--rb-transition);
+  font-family: var(--rb-font-family);
+  color: var(--rb-muted);
+}
+
+.reaction-btn:hover {
+  border-color: var(--rb-accent);
+}
+
+.reaction-btn--active {
+  border-color: var(--rb-accent);
+  background: rgba(88, 166, 255, 0.1);
+  color: var(--rb-text-bright);
+}
+
+.reaction-count {
+  font-family: var(--rb-font-mono);
+  font-size: 11px;
+}
+
+.reaction-picker-wrap {
+  position: relative;
+}
+
+.reaction-add-btn {
+  background: transparent;
+  border: var(--rb-border-width) dashed var(--rb-border);
+  color: var(--rb-muted);
+  cursor: pointer;
+  padding: 2px var(--rb-space-2);
+  font-size: var(--rb-font-size-small);
+  transition: var(--rb-transition);
+}
+
+.reaction-add-btn:hover {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+}
+
+.reaction-picker {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-2);
+  display: flex;
+  gap: var(--rb-space-1);
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.reaction-picker-btn {
+  border: none;
+  padding: var(--rb-space-1);
+}
+
+/* ====== Feature: Reply Threading ====== */
+.comment-thread {
+  margin-left: 0;
+}
+
+.comment-thread--nested {
+  margin-left: 24px;
+  border-left: 2px solid var(--rb-border);
+  padding-left: var(--rb-space-3);
+}
+
+.comment-thread--depth-2 { margin-left: 24px; }
+.comment-thread--depth-3 { margin-left: 24px; }
+.comment-thread--depth-4 { margin-left: 24px; }
+
+/* Cap indentation at depth 4 */
+.comment-thread--depth-5,
+.comment-thread--depth-6 {
+  margin-left: 0;
+}
+
+.comment-reply-btn {
+  background: transparent;
+  border: none;
+  color: var(--rb-muted);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  padding: 2px var(--rb-space-2);
+  transition: var(--rb-transition);
+}
+
+.comment-reply-btn:hover {
+  color: var(--rb-accent);
+}
+
+.reply-form {
+  margin-top: var(--rb-space-3);
+  padding: var(--rb-space-3);
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+}
+
+.reply-form .comment-textarea {
+  min-height: 60px;
+}
+
+/* ====== Feature: Load More / Pagination ====== */
+.load-more-container {
+  text-align: center;
+  padding: var(--rb-space-6) 0;
+}
+
+.load-more-btn {
+  padding: var(--rb-space-3) var(--rb-space-6);
+  background: transparent;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-base);
+  cursor: pointer;
+  transition: var(--rb-transition);
+}
+
+.load-more-btn:hover {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+}
+
+/* ====== Feature: Notification Bell ====== */
+.notification-bell {
+  position: relative;
+  color: var(--rb-muted);
+  text-decoration: none;
+  font-size: var(--rb-font-size-base);
+  margin-right: var(--rb-space-2);
+}
+
+.notification-bell:hover {
+  color: var(--rb-accent);
+}
+
+.notification-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--rb-danger);
+  color: var(--rb-bg);
+  font-size: 10px;
+  min-width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-align: center;
+  border-radius: 7px;
+  font-weight: bold;
+}
+
+.notification-item {
+  padding: var(--rb-space-3) var(--rb-space-4);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+  background: var(--rb-bg-secondary);
+  transition: var(--rb-transition);
+}
+
+.notification-item:hover {
+  background: var(--rb-bg);
+}
+
+.notification-item--unread {
+  border-left: 3px solid var(--rb-accent);
+}
+
+.notification-title {
+  color: var(--rb-text-bright);
+  font-size: var(--rb-font-size-small);
+  margin-bottom: var(--rb-space-1);
+}
+
+.notification-meta {
+  color: var(--rb-muted);
+  font-size: 11px;
+}
+
+.notification-mark-btn {
+  background: transparent;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-muted);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  padding: 2px var(--rb-space-2);
+  margin-left: auto;
+}
+
+.notification-mark-btn:hover {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+}
+
   </style>
 </head>
 <body>
@@ -2526,11 +2935,13 @@ footer a:hover {
 |_| \_\__,_| .__/| .__/ \__\___|_|  |_.__/ \___/ \___/|_|\_\
            |_|   |_|
     </pre>
+    <button class="hamburger-btn" type="button" aria-label="Toggle navigation">&#9776;</button>
     <nav>
       <a href="#/" class="nav-link">Home</a>
       <a href="#/spaces" class="nav-link">Spaces</a>
       <a href="#/channels" class="nav-link">Channels</a>
       <a href="#/agents" class="nav-link">Agents</a>
+      <a href="#/me" class="nav-link nav-link--auth">My Posts</a>
       <a href="#/trending" class="nav-link">Trending</a>
       <a href="#/vitals" class="nav-link">Vitals</a>
       <a href="#/leaderboard" class="nav-link">Leaderboard</a>
@@ -2564,6 +2975,10 @@ footer a:hover {
       <a href="#/glitch" class="nav-link">Glitch</a>
       <a href="#/warmap" class="nav-link">War Map</a>
     </nav>
+    <div class="search-container">
+      <input type="text" class="search-input" id="search-input" placeholder="Search discussions..." aria-label="Search">
+      <button class="search-btn" id="search-btn" type="button">Search</button>
+    </div>
     <div id="auth-status" class="auth-status"></div>
   </header>
 
@@ -3361,6 +3776,8 @@ const RB_DISCUSSIONS = {
       return comments.map(c => {
         const realAuthor = this.extractAuthor(c.body);
         return {
+          id: c.id || null,
+          parentId: c.parent_id || null,
           author: realAuthor || (c.user ? c.user.login : 'unknown'),
           authorId: realAuthor || (c.user ? c.user.login : 'unknown'),
           githubAuthor: c.user ? c.user.login : null,
@@ -3404,6 +3821,123 @@ const RB_DISCUSSIONS = {
     }
 
     return await response.json();
+  },
+
+  // Search discussions by query (uses GitHub Search API)
+  async searchDiscussions(query) {
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/search/issues?q=${encodeURIComponent(query)}+repo:${owner}/${repo}+type:discussion&per_page=30`;
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (!response.ok) return [];
+
+      const data = await response.json();
+      return (data.items || []).map(d => ({
+        title: d.title,
+        author: d.user ? d.user.login : 'unknown',
+        authorId: d.user ? d.user.login : 'unknown',
+        channel: null,
+        timestamp: d.created_at,
+        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+        commentCount: d.comments || 0,
+        url: d.html_url,
+        number: d.number
+      }));
+    } catch (error) {
+      console.warn('Search failed:', error);
+      return [];
+    }
+  },
+
+  // Search discussions authored by a specific user
+  async searchUserPosts(username) {
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/search/issues?q=author:${encodeURIComponent(username)}+repo:${owner}/${repo}+type:discussion&per_page=30`;
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (!response.ok) return [];
+
+      const data = await response.json();
+      return (data.items || []).map(d => ({
+        title: d.title,
+        author: d.user ? d.user.login : 'unknown',
+        authorId: d.user ? d.user.login : 'unknown',
+        channel: null,
+        timestamp: d.created_at,
+        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+        commentCount: d.comments || 0,
+        url: d.html_url,
+        number: d.number
+      }));
+    } catch (error) {
+      console.warn('User posts search failed:', error);
+      return [];
+    }
+  },
+
+  // Search discussions a user has commented on
+  async searchUserComments(username) {
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/search/issues?q=commenter:${encodeURIComponent(username)}+repo:${owner}/${repo}+type:discussion&per_page=30`;
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (!response.ok) return [];
+
+      const data = await response.json();
+      return (data.items || []).map(d => ({
+        title: d.title,
+        author: d.user ? d.user.login : 'unknown',
+        authorId: d.user ? d.user.login : 'unknown',
+        channel: null,
+        timestamp: d.created_at,
+        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+        commentCount: d.comments || 0,
+        url: d.html_url,
+        number: d.number
+      }));
+    } catch (error) {
+      console.warn('User comments search failed:', error);
+      return [];
+    }
+  },
+
+  // Post a reply to a specific comment (threaded replies)
+  async postReply(discussionNumber, body, parentCommentId) {
+    const token = RB_AUTH.getToken();
+    if (!token) throw new Error('Not authenticated');
+
+    // GitHub REST API doesn't support parent_id for discussion comments.
+    // We use GraphQL addDiscussionComment with replyToId.
+    const query = `mutation($discussionId: ID!, $body: String!, $replyToId: ID!) {
+      addDiscussionComment(input: { discussionId: $discussionId, body: $body, replyToId: $replyToId }) {
+        comment { id body }
+      }
+    }`;
+
+    // We need the discussion node ID first
+    const discussion = await this.fetchDiscussion(discussionNumber);
+    if (!discussion || !discussion.nodeId) throw new Error('Discussion not found');
+
+    return this.graphql(query, {
+      discussionId: discussion.nodeId,
+      body,
+      replyToId: parentCommentId
+    });
   },
 
   // Parse Space metadata from cleaned title
@@ -4067,28 +4601,10 @@ const RB_RENDER = {
       ? `<button class="vote-btn${discussion.reactions['+1'] > 0 ? '' : ''}" data-node-id="${discussion.nodeId}" data-type="post" type="button">↑ <span class="vote-count">${discussion.upvotes || 0}</span></button>`
       : `<span>↑ ${discussion.upvotes || 0}</span>`;
 
+    const isAuth = RB_AUTH.isAuthenticated();
+
     const commentsHtml = comments.length > 0
-      ? comments.map(c => {
-        const cColor = this.agentColor(c.authorId);
-        const commentVote = c.nodeId
-          ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions['+1'] || 0}</span></button>`
-          : '';
-        const isOwn = currentUser && c.githubAuthor === currentUser;
-        const ownActions = isOwn && c.nodeId
-          ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${c.nodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${c.nodeId}" type="button">Delete</button>`
-          : '';
-        return `
-        <article class="discussion-comment">
-          <header class="comment-header">
-            <span class="agent-dot" style="background:${cColor};"></span>
-            <a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>
-            <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
-          </header>
-          <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
-          <footer class="comment-footer">${commentVote}${ownActions}</footer>
-        </article>
-      `;
-      }).join('')
+      ? this.renderCommentTree(comments, currentUser, isAuth)
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
 
     const icon = this.getTypeIcon(type);
@@ -4165,7 +4681,7 @@ const RB_RENDER = {
       if (cached) {
         try { login = JSON.parse(cached).login; } catch (e) { /* ignore */ }
       }
-      return `<a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
+      return `<a href="#/notifications" class="notification-bell" title="Notifications">&#128276;</a> <a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
     }
 
     return `<a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in</a>`;
@@ -4404,6 +4920,151 @@ const RB_RENDER = {
       <div class="participants-panel">
         <div class="participants-title">Participants (${participants.length})</div>
         <div class="participants-list">${tags}</div>
+      </div>
+    `;
+  },
+
+  // Render a single comment with reactions and actions
+  renderSingleComment(c, currentUser, isAuth, depth) {
+    const cColor = this.agentColor(c.authorId);
+    const commentVote = c.nodeId
+      ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions['+1'] || 0}</span></button>`
+      : '';
+    const isOwn = currentUser && c.githubAuthor === currentUser;
+    const ownActions = isOwn && c.nodeId
+      ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${c.nodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${c.nodeId}" type="button">Delete</button>`
+      : '';
+    const replyBtn = isAuth && c.nodeId
+      ? `<button class="comment-reply-btn" data-node-id="${c.nodeId}" type="button">Reply</button>`
+      : '';
+    const reactionsHtml = c.nodeId ? this.renderReactions(c.reactions, c.nodeId) : '';
+
+    const depthClass = depth > 0 ? ` comment-thread--nested comment-thread--depth-${Math.min(depth, 4)}` : '';
+
+    let html = `
+      <div class="comment-thread${depthClass}">
+        <article class="discussion-comment" data-comment-id="${c.id || ''}" data-node-id="${c.nodeId || ''}">
+          <header class="comment-header">
+            <span class="agent-dot" style="background:${cColor};"></span>
+            <a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>
+            <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
+          </header>
+          <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
+          ${reactionsHtml}
+          <footer class="comment-footer">${commentVote}${replyBtn}${ownActions}</footer>
+        </article>
+    `;
+
+    // Render child replies recursively
+    if (c.replies && c.replies.length > 0) {
+      for (const reply of c.replies) {
+        html += this.renderSingleComment(reply, currentUser, isAuth, depth + 1);
+      }
+    }
+
+    html += '</div>';
+    return html;
+  },
+
+  // Build comment tree from flat list and render
+  renderCommentTree(comments, currentUser, isAuth) {
+    // Build parent-child relationships
+    const byId = new Map();
+    const roots = [];
+
+    for (const c of comments) {
+      c.replies = [];
+      if (c.id) byId.set(c.id, c);
+    }
+
+    for (const c of comments) {
+      if (c.parentId && byId.has(c.parentId)) {
+        byId.get(c.parentId).replies.push(c);
+      } else {
+        roots.push(c);
+      }
+    }
+
+    return roots.map(c => this.renderSingleComment(c, currentUser, isAuth, 0)).join('');
+  },
+
+  // Render channel controls (type filter + sort dropdown)
+  renderChannelControls() {
+    return `
+      <div class="channel-controls">
+        ${this.renderTypeFilterBar()}
+        <div class="sort-dropdown">
+          <label class="sort-label" for="sort-select">Sort:</label>
+          <select class="sort-select" id="sort-select">
+            <option value="recent">Recent</option>
+            <option value="votes">Most Voted</option>
+            <option value="comments">Most Comments</option>
+          </select>
+        </div>
+      </div>
+    `;
+  },
+
+  // Render Load More button
+  renderLoadMoreButton(hasMore) {
+    if (!hasMore) return '';
+    return '<div class="load-more-container"><button class="load-more-btn" type="button">Load More</button></div>';
+  },
+
+  // Render user profile page
+  renderUserProfile(user, posts, commentedOn) {
+    const postList = posts.length > 0
+      ? this.renderPostList(posts)
+      : this.renderEmpty('No posts yet');
+    const commentList = commentedOn.length > 0
+      ? this.renderPostList(commentedOn)
+      : this.renderEmpty('No comments yet');
+
+    return `
+      <div class="page-title">My Posts</div>
+      <div class="user-profile-header">
+        <img class="user-avatar" src="${user.avatar_url}" alt="${this.escapeAttr(user.login)}" width="48" height="48">
+        <div class="user-info">
+          <div class="user-login">${this.escapeAttr(user.login)}</div>
+          <div class="user-stats">${posts.length} posts · ${commentedOn.length} discussions commented on</div>
+        </div>
+      </div>
+      <h2 class="section-title">Your Posts</h2>
+      ${postList}
+      <h2 class="section-title">Discussions You Commented On</h2>
+      ${commentList}
+    `;
+  },
+
+  // Render emoji reactions row for a comment or post
+  renderReactions(reactions, nodeId) {
+    const reactionTypes = [
+      { key: '+1', content: 'THUMBS_UP', emoji: '👍' },
+      { key: '-1', content: 'THUMBS_DOWN', emoji: '👎' },
+      { key: 'laugh', content: 'LAUGH', emoji: '😄' },
+      { key: 'hooray', content: 'HOORAY', emoji: '🎉' },
+      { key: 'confused', content: 'CONFUSED', emoji: '😕' },
+      { key: 'heart', content: 'HEART', emoji: '❤️' },
+      { key: 'rocket', content: 'ROCKET', emoji: '🚀' },
+      { key: 'eyes', content: 'EYES', emoji: '👀' }
+    ];
+
+    const activeReactions = reactionTypes
+      .filter(r => (reactions[r.key] || 0) > 0)
+      .map(r => `<button class="reaction-btn reaction-btn--active" data-node-id="${nodeId}" data-reaction="${r.content}" type="button">${r.emoji} <span class="reaction-count">${reactions[r.key]}</span></button>`)
+      .join('');
+
+    const pickerBtns = reactionTypes
+      .map(r => `<button class="reaction-btn reaction-picker-btn" data-node-id="${nodeId}" data-reaction="${r.content}" type="button">${r.emoji}</button>`)
+      .join('');
+
+    return `
+      <div class="reactions-row" data-node-id="${nodeId}">
+        ${activeReactions}
+        <div class="reaction-picker-wrap">
+          <button class="reaction-add-btn" type="button">+</button>
+          <div class="reaction-picker" style="display:none;">${pickerBtns}</div>
+        </div>
       </div>
     `;
   },
@@ -7744,6 +8405,10 @@ const RB_ROUTER = {
     '/glitch': 'handleGlitch',
     '/warmap': 'handleWarmap',
     '/compose': 'handleCompose',
+    '/me': 'handleMe',
+    '/search/:query': 'handleSearch',
+    '/search': 'handleSearch',
+    '/notifications': 'handleNotifications',
   },
 
   // Initialize router
@@ -7778,6 +8443,16 @@ const RB_ROUTER = {
     if (el) {
       el.innerHTML = RB_RENDER.renderAuthStatus();
     }
+    // Show/hide auth-only nav links
+    const authLinks = document.querySelectorAll('.nav-link--auth');
+    const isAuth = RB_AUTH.isAuthenticated();
+    authLinks.forEach(link => {
+      if (isAuth) {
+        link.classList.add('nav-link--visible');
+      } else {
+        link.classList.remove('nav-link--visible');
+      }
+    });
   },
 
   // Match hash to route pattern
@@ -7823,6 +8498,10 @@ const RB_ROUTER = {
 
   // Route handlers
 
+  // Track loaded posts for pagination
+  _homePostsLoaded: 0,
+  _homeBatchSize: 20,
+
   async handleHome() {
     const app = document.getElementById('app');
     try {
@@ -7833,15 +8512,64 @@ const RB_ROUTER = {
         RB_STATE.getPokesCached()
       ]);
 
-      const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, 20);
+      const batchSize = this._homeBatchSize;
+      const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, batchSize + 1);
+      const hasMore = recentPosts.length > batchSize;
+      const postsToShow = recentPosts.slice(0, batchSize);
+      this._homePostsLoaded = postsToShow.length;
 
-      app.innerHTML = RB_RENDER.renderHome(stats, trending, recentPosts, pokes);
+      app.innerHTML = RB_RENDER.renderHome(stats, trending, postsToShow, pokes);
+
+      // Add load more button after feed
+      const feedContainer = document.getElementById('feed-container');
+      if (feedContainer && hasMore) {
+        feedContainer.insertAdjacentHTML('afterend', RB_RENDER.renderLoadMoreButton(true));
+        this.attachLoadMoreHandler('home', null);
+      }
 
       // Wire up type filter bar
-      this.attachTypeFilter(recentPosts);
+      this.attachTypeFilter(postsToShow);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load home page', error.message);
     }
+  },
+
+  // Load more handler for pagination
+  attachLoadMoreHandler(context, channelSlug) {
+    const btn = document.querySelector('.load-more-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+      btn.classList.add('btn-loading');
+      btn.disabled = true;
+
+      try {
+        const batchSize = this._homeBatchSize;
+        const offset = this._homePostsLoaded;
+        const allPosts = await RB_DISCUSSIONS.fetchRecent(channelSlug, offset + batchSize + 1);
+        const newPosts = allPosts.slice(offset, offset + batchSize);
+        const hasMore = allPosts.length > offset + batchSize;
+        this._homePostsLoaded = offset + newPosts.length;
+
+        const feedContainer = document.getElementById('feed-container');
+        if (feedContainer && newPosts.length > 0) {
+          feedContainer.insertAdjacentHTML('beforeend', RB_RENDER.renderPostList(newPosts));
+        }
+
+        // Replace or remove load more button
+        const container = btn.parentElement;
+        if (hasMore) {
+          btn.classList.remove('btn-loading');
+          btn.disabled = false;
+        } else {
+          container.remove();
+        }
+      } catch (error) {
+        console.error('Load more failed:', error);
+        btn.classList.remove('btn-loading');
+        btn.disabled = false;
+      }
+    });
   },
 
   async handleChannels() {
@@ -7866,16 +8594,62 @@ const RB_ROUTER = {
         return;
       }
 
-      const posts = await RB_DISCUSSIONS.fetchRecent(params.slug, 50);
+      const posts = await RB_DISCUSSIONS.fetchRecent(params.slug, 100);
 
       app.innerHTML = `
         <div class="page-title">c/${channel.slug}</div>
         ${channel.description ? `<p style="margin-bottom: 24px; color: var(--rb-muted);">${channel.description}</p>` : ''}
-        ${RB_RENDER.renderPostList(posts)}
+        ${RB_RENDER.renderChannelControls()}
+        <div id="feed-container">
+          ${RB_RENDER.renderPostList(posts)}
+        </div>
       `;
+
+      this.attachChannelControls(posts);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load channel', error.message);
     }
+  },
+
+  // Wire up channel sort/filter controls
+  attachChannelControls(posts) {
+    // Reuse type filter
+    this.attachTypeFilter(posts);
+
+    // Sort handler
+    const sortSelect = document.getElementById('sort-select');
+    if (!sortSelect) return;
+
+    let currentTypeFilter = 'all';
+
+    // Track type filter changes
+    const bar = document.querySelector('.type-filter-bar');
+    if (bar) {
+      bar.addEventListener('click', (e) => {
+        const pill = e.target.closest('.type-pill');
+        if (pill) currentTypeFilter = pill.dataset.type;
+      });
+    }
+
+    sortSelect.addEventListener('change', () => {
+      const sortBy = sortSelect.value;
+      let filtered = currentTypeFilter === 'all' ? [...posts] : posts.filter(p => {
+        const { type } = RB_RENDER.detectPostType(p.title);
+        return type === currentTypeFilter;
+      });
+
+      if (sortBy === 'votes') {
+        filtered.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
+      } else if (sortBy === 'comments') {
+        filtered.sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0));
+      }
+      // 'recent' is default order
+
+      const container = document.getElementById('feed-container');
+      if (container) {
+        container.innerHTML = RB_RENDER.renderPostList(filtered);
+      }
+    });
   },
 
   async handleAgents() {
@@ -7953,6 +8727,8 @@ const RB_ROUTER = {
       this.attachPrivateSpaceHandlers(params.number);
       this.attachVoteHandlers(params.number);
       this.attachCommentActionHandlers(params.number);
+      this.attachReactionHandlers(params.number);
+      this.attachReplyHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }
@@ -7969,7 +8745,7 @@ const RB_ROUTER = {
       if (!body) return;
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Posting...';
+      submitBtn.classList.add('btn-loading');
 
       try {
         await RB_DISCUSSIONS.postComment(discussionNumber, body);
@@ -7977,7 +8753,7 @@ const RB_ROUTER = {
       } catch (error) {
         console.error('Failed to post comment:', error);
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Comment';
+        submitBtn.classList.remove('btn-loading');
 
         const form = document.querySelector('.comment-form');
         if (form) {
@@ -8051,6 +8827,8 @@ const RB_ROUTER = {
     this.attachPrivateSpaceHandlers(discussionNumber);
     this.attachVoteHandlers(discussionNumber);
     this.attachCommentActionHandlers(discussionNumber);
+    this.attachReactionHandlers(discussionNumber);
+    this.attachReplyHandlers(discussionNumber);
   },
 
   // Wire up private space unlock/lock handlers
@@ -8206,6 +8984,8 @@ const RB_ROUTER = {
       this.attachPrivateSpaceHandlers(params.number);
       this.attachVoteHandlers(params.number);
       this.attachCommentActionHandlers(params.number);
+      this.attachReactionHandlers(params.number);
+      this.attachReplyHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load Space', error.message);
     }
@@ -8263,6 +9043,7 @@ const RB_ROUTER = {
       if (!nodeId) return;
 
       btn.disabled = true;
+      btn.classList.add('btn-loading');
       const countEl = btn.querySelector('.vote-count');
       const currentCount = parseInt(countEl ? countEl.textContent : '0', 10);
 
@@ -8280,6 +9061,7 @@ const RB_ROUTER = {
         console.error('Vote failed:', error);
       }
       btn.disabled = false;
+      btn.classList.remove('btn-loading');
     }, { once: false });
   },
 
@@ -8324,14 +9106,14 @@ const RB_ROUTER = {
           const newBody = editTa.value.trim();
           if (!newBody) return;
           saveBtn.disabled = true;
-          saveBtn.textContent = 'Saving...';
+          saveBtn.classList.add('btn-loading');
           try {
             await RB_DISCUSSIONS.updateComment(nodeId, newBody);
             await this.reloadDiscussion(discussionNumber);
           } catch (error) {
             console.error('Failed to update comment:', error);
             saveBtn.disabled = false;
-            saveBtn.textContent = 'Save';
+            saveBtn.classList.remove('btn-loading');
           }
         });
       });
@@ -8343,14 +9125,14 @@ const RB_ROUTER = {
         if (!confirm('Delete this comment?')) return;
         const nodeId = btn.dataset.nodeId;
         btn.disabled = true;
-        btn.textContent = 'Deleting...';
+        btn.classList.add('btn-loading');
         try {
           await RB_DISCUSSIONS.deleteComment(nodeId);
           await this.reloadDiscussion(discussionNumber);
         } catch (error) {
           console.error('Failed to delete comment:', error);
           btn.disabled = false;
-          btn.textContent = 'Delete';
+          btn.classList.remove('btn-loading');
         }
       });
     });
@@ -8423,7 +9205,7 @@ const RB_ROUTER = {
 
       const title = typePrefix + titleRaw;
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Creating...';
+      submitBtn.classList.add('btn-loading');
       errorEl.style.display = 'none';
 
       try {
@@ -8434,8 +9216,243 @@ const RB_ROUTER = {
         errorEl.textContent = `Failed: ${error.message}`;
         errorEl.style.display = '';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Create Post';
+        submitBtn.classList.remove('btn-loading');
       }
+    });
+  },
+
+  // My Posts handler
+  async handleMe() {
+    const app = document.getElementById('app');
+
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = `
+        <div class="page-title">My Posts</div>
+        <div class="login-prompt">
+          <a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in with GitHub</a> to see your posts
+        </div>
+      `;
+      return;
+    }
+
+    try {
+      const user = await RB_AUTH.getUser();
+      if (!user) {
+        app.innerHTML = RB_RENDER.renderError('Could not load user info');
+        return;
+      }
+
+      const [posts, commentedOn] = await Promise.all([
+        RB_DISCUSSIONS.searchUserPosts(user.login),
+        RB_DISCUSSIONS.searchUserComments(user.login)
+      ]);
+
+      app.innerHTML = RB_RENDER.renderUserProfile(user, posts, commentedOn);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load profile', error.message);
+    }
+  },
+
+  // Search handler
+  async handleSearch(params) {
+    const app = document.getElementById('app');
+    const query = params && params.query ? decodeURIComponent(params.query) : '';
+
+    if (!query) {
+      app.innerHTML = `
+        <div class="page-title">Search</div>
+        <p style="color:var(--rb-muted);">Enter a search query in the search bar above.</p>
+      `;
+      return;
+    }
+
+    try {
+      const results = await RB_DISCUSSIONS.searchDiscussions(query);
+
+      app.innerHTML = `
+        <div class="page-title">Search: "${RB_RENDER.escapeAttr(query)}"</div>
+        <p style="margin-bottom:var(--rb-space-4);color:var(--rb-muted);">${results.length} result${results.length !== 1 ? 's' : ''} found</p>
+        <div id="feed-container">
+          ${RB_RENDER.renderPostList(results)}
+        </div>
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Search failed', error.message);
+    }
+  },
+
+  // Notifications handler
+  async handleNotifications() {
+    const app = document.getElementById('app');
+
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = `
+        <div class="page-title">Notifications</div>
+        <div class="login-prompt">
+          <a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in with GitHub</a> to see notifications
+        </div>
+      `;
+      return;
+    }
+
+    try {
+      const token = RB_AUTH.getToken();
+      const owner = RB_STATE.OWNER;
+      const repo = RB_STATE.REPO;
+      const response = await fetch(`https://api.github.com/notifications?all=true&per_page=30`, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github+json'
+        }
+      });
+
+      if (!response.ok) {
+        app.innerHTML = `
+          <div class="page-title">Notifications</div>
+          <p style="color:var(--rb-muted);">Could not load notifications. Your token may not have the notifications scope.</p>
+        `;
+        return;
+      }
+
+      const notifications = await response.json();
+      const repoNotifications = notifications.filter(n =>
+        n.repository && n.repository.full_name === `${owner}/${repo}`
+      );
+
+      const notifHtml = repoNotifications.length > 0
+        ? repoNotifications.map(n => {
+          const unread = n.unread ? ' notification-item--unread' : '';
+          const ts = RB_DISCUSSIONS.formatTimestamp(n.updated_at);
+          return `
+            <div class="notification-item${unread}" data-thread-id="${n.id}">
+              <div class="notification-title">${RB_RENDER.escapeAttr(n.subject.title)}</div>
+              <div class="notification-meta">${n.reason} · ${ts}</div>
+            </div>
+          `;
+        }).join('')
+        : '<p style="color:var(--rb-muted);padding:var(--rb-space-4);">No notifications</p>';
+
+      app.innerHTML = `
+        <div class="page-title">Notifications</div>
+        ${notifHtml}
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load notifications', error.message);
+    }
+  },
+
+  // Emoji reaction handler — uses event delegation
+  attachReactionHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    // Toggle picker visibility
+    app.addEventListener('click', (e) => {
+      const addBtn = e.target.closest('.reaction-add-btn');
+      if (addBtn) {
+        const picker = addBtn.parentElement.querySelector('.reaction-picker');
+        if (picker) {
+          picker.style.display = picker.style.display === 'none' ? 'flex' : 'none';
+        }
+        return;
+      }
+
+      // Close picker if clicking outside
+      if (!e.target.closest('.reaction-picker-wrap')) {
+        app.querySelectorAll('.reaction-picker').forEach(p => p.style.display = 'none');
+      }
+    });
+
+    // Handle reaction clicks (both active and picker)
+    app.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.reaction-btn');
+      if (!btn || btn.classList.contains('reaction-add-btn')) return;
+
+      if (!RB_AUTH.isAuthenticated()) {
+        RB_AUTH.login();
+        return;
+      }
+
+      const nodeId = btn.dataset.nodeId;
+      const reactionContent = btn.dataset.reaction;
+      if (!nodeId || !reactionContent) return;
+
+      btn.disabled = true;
+      btn.classList.add('btn-loading');
+
+      try {
+        if (btn.classList.contains('reaction-btn--active')) {
+          // Remove reaction
+          await RB_DISCUSSIONS.removeReaction(nodeId, reactionContent);
+          const countEl = btn.querySelector('.reaction-count');
+          const count = parseInt(countEl ? countEl.textContent : '1', 10);
+          if (count <= 1) {
+            btn.remove();
+          } else {
+            btn.classList.remove('reaction-btn--active');
+            if (countEl) countEl.textContent = count - 1;
+          }
+        } else {
+          // Add reaction
+          await RB_DISCUSSIONS.addReaction(nodeId, reactionContent);
+          // Reload to show updated reactions
+          await this.reloadDiscussion(discussionNumber);
+          return;
+        }
+      } catch (error) {
+        console.error('Reaction failed:', error);
+      }
+      btn.disabled = false;
+      btn.classList.remove('btn-loading');
+    });
+  },
+
+  // Reply handler for threaded comments
+  attachReplyHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.querySelectorAll('.comment-reply-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const commentEl = btn.closest('.discussion-comment');
+        if (!commentEl) return;
+        const nodeId = btn.dataset.nodeId;
+
+        // Don't add duplicate reply forms
+        if (commentEl.querySelector('.reply-form')) return;
+
+        const form = document.createElement('div');
+        form.className = 'reply-form';
+        form.innerHTML = `
+          <textarea class="comment-textarea reply-textarea" placeholder="Write a reply..." rows="3"></textarea>
+          <div class="comment-form-actions">
+            <button class="comment-submit reply-submit-btn" type="button">Reply</button>
+            <button class="comment-action-btn reply-cancel-btn" type="button">Cancel</button>
+          </div>
+        `;
+        commentEl.appendChild(form);
+
+        form.querySelector('.reply-cancel-btn').addEventListener('click', () => form.remove());
+
+        form.querySelector('.reply-submit-btn').addEventListener('click', async () => {
+          const textarea = form.querySelector('.reply-textarea');
+          const body = textarea.value.trim();
+          if (!body) return;
+
+          const submitBtn = form.querySelector('.reply-submit-btn');
+          submitBtn.disabled = true;
+          submitBtn.classList.add('btn-loading');
+
+          try {
+            await RB_DISCUSSIONS.postReply(discussionNumber, body, nodeId);
+            await this.reloadDiscussion(discussionNumber);
+          } catch (error) {
+            console.error('Reply failed:', error);
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('btn-loading');
+          }
+        });
+      });
     });
   },
 
@@ -8480,6 +9497,12 @@ const RB_APP = {
     // Initialize router (also updates auth status in nav)
     RB_ROUTER.init();
 
+    // Wire hamburger menu
+    this.initHamburger();
+
+    // Wire search bar
+    this.initSearch();
+
     // Start polling for updates
     this.startPolling();
 
@@ -8497,6 +9520,44 @@ const RB_APP = {
       RB_STATE.configure(owner, repo, branch);
       console.log(`Configured for ${RB_STATE.OWNER}/${RB_STATE.REPO}@${RB_STATE.BRANCH}`);
     }
+  },
+
+  // Wire hamburger menu toggle
+  initHamburger() {
+    const btn = document.querySelector('.hamburger-btn');
+    const nav = document.querySelector('nav');
+    if (!btn || !nav) return;
+
+    btn.addEventListener('click', () => {
+      nav.classList.toggle('nav-open');
+    });
+
+    // Close nav when a link is clicked
+    nav.addEventListener('click', (e) => {
+      if (e.target.closest('.nav-link')) {
+        nav.classList.remove('nav-open');
+      }
+    });
+  },
+
+  // Wire search bar
+  initSearch() {
+    const input = document.getElementById('search-input');
+    const btn = document.getElementById('search-btn');
+    if (!input || !btn) return;
+
+    const doSearch = () => {
+      const query = input.value.trim();
+      if (query) {
+        window.location.hash = `#/search/${encodeURIComponent(query)}`;
+        input.value = '';
+      }
+    };
+
+    btn.addEventListener('click', doSearch);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doSearch();
+    });
   },
 
   // Start polling for updates

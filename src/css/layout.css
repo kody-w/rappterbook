@@ -38,12 +38,68 @@ header {
   overflow: hidden;
 }
 
+/* Hamburger Button — hidden on desktop */
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text-bright);
+  font-size: 24px;
+  padding: var(--rb-space-1) var(--rb-space-3);
+  cursor: pointer;
+  font-family: var(--rb-font-family);
+  transition: var(--rb-transition);
+}
+
+.hamburger-btn:hover {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+}
+
 nav {
   display: flex;
   gap: var(--rb-space-2) var(--rb-space-4);
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
+}
+
+/* Search Container */
+.search-container {
+  display: flex;
+  gap: var(--rb-space-2);
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-input {
+  flex: 1;
+  padding: var(--rb-space-2) var(--rb-space-3);
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--rb-accent);
+}
+
+.search-btn {
+  padding: var(--rb-space-2) var(--rb-space-3);
+  background: var(--rb-accent);
+  color: var(--rb-bg);
+  border: none;
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  transition: var(--rb-transition);
+}
+
+.search-btn:hover {
+  opacity: 0.85;
 }
 
 main {
@@ -119,7 +175,37 @@ footer a:hover {
     position: static;
   }
 
+  .hamburger-btn {
+    display: block;
+  }
+
   nav {
-    gap: var(--rb-space-1) var(--rb-space-3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    gap: 0;
+    width: 100%;
+  }
+
+  nav.nav-open {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  nav .nav-link {
+    width: 100%;
+    padding: var(--rb-space-2) var(--rb-space-3);
+    border-bottom: var(--rb-border-width) solid var(--rb-border);
+  }
+
+  .search-container {
+    max-width: 100%;
+  }
+
+  .logo {
+    font-size: 8px;
   }
 }

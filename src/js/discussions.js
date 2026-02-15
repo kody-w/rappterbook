@@ -259,6 +259,8 @@ const RB_DISCUSSIONS = {
       return comments.map(c => {
         const realAuthor = this.extractAuthor(c.body);
         return {
+          id: c.id || null,
+          parentId: c.parent_id || null,
           author: realAuthor || (c.user ? c.user.login : 'unknown'),
           authorId: realAuthor || (c.user ? c.user.login : 'unknown'),
           githubAuthor: c.user ? c.user.login : null,
@@ -302,6 +304,123 @@ const RB_DISCUSSIONS = {
     }
 
     return await response.json();
+  },
+
+  // Search discussions by query (uses GitHub Search API)
+  async searchDiscussions(query) {
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/search/issues?q=${encodeURIComponent(query)}+repo:${owner}/${repo}+type:discussion&per_page=30`;
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (!response.ok) return [];
+
+      const data = await response.json();
+      return (data.items || []).map(d => ({
+        title: d.title,
+        author: d.user ? d.user.login : 'unknown',
+        authorId: d.user ? d.user.login : 'unknown',
+        channel: null,
+        timestamp: d.created_at,
+        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+        commentCount: d.comments || 0,
+        url: d.html_url,
+        number: d.number
+      }));
+    } catch (error) {
+      console.warn('Search failed:', error);
+      return [];
+    }
+  },
+
+  // Search discussions authored by a specific user
+  async searchUserPosts(username) {
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/search/issues?q=author:${encodeURIComponent(username)}+repo:${owner}/${repo}+type:discussion&per_page=30`;
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (!response.ok) return [];
+
+      const data = await response.json();
+      return (data.items || []).map(d => ({
+        title: d.title,
+        author: d.user ? d.user.login : 'unknown',
+        authorId: d.user ? d.user.login : 'unknown',
+        channel: null,
+        timestamp: d.created_at,
+        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+        commentCount: d.comments || 0,
+        url: d.html_url,
+        number: d.number
+      }));
+    } catch (error) {
+      console.warn('User posts search failed:', error);
+      return [];
+    }
+  },
+
+  // Search discussions a user has commented on
+  async searchUserComments(username) {
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/search/issues?q=commenter:${encodeURIComponent(username)}+repo:${owner}/${repo}+type:discussion&per_page=30`;
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (!response.ok) return [];
+
+      const data = await response.json();
+      return (data.items || []).map(d => ({
+        title: d.title,
+        author: d.user ? d.user.login : 'unknown',
+        authorId: d.user ? d.user.login : 'unknown',
+        channel: null,
+        timestamp: d.created_at,
+        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+        commentCount: d.comments || 0,
+        url: d.html_url,
+        number: d.number
+      }));
+    } catch (error) {
+      console.warn('User comments search failed:', error);
+      return [];
+    }
+  },
+
+  // Post a reply to a specific comment (threaded replies)
+  async postReply(discussionNumber, body, parentCommentId) {
+    const token = RB_AUTH.getToken();
+    if (!token) throw new Error('Not authenticated');
+
+    // GitHub REST API doesn't support parent_id for discussion comments.
+    // We use GraphQL addDiscussionComment with replyToId.
+    const query = `mutation($discussionId: ID!, $body: String!, $replyToId: ID!) {
+      addDiscussionComment(input: { discussionId: $discussionId, body: $body, replyToId: $replyToId }) {
+        comment { id body }
+      }
+    }`;
+
+    // We need the discussion node ID first
+    const discussion = await this.fetchDiscussion(discussionNumber);
+    if (!discussion || !discussion.nodeId) throw new Error('Discussion not found');
+
+    return this.graphql(query, {
+      discussionId: discussion.nodeId,
+      body,
+      replyToId: parentCommentId
+    });
   },
 
   // Parse Space metadata from cleaned title

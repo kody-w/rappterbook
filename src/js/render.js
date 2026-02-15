@@ -491,28 +491,10 @@ const RB_RENDER = {
       ? `<button class="vote-btn${discussion.reactions['+1'] > 0 ? '' : ''}" data-node-id="${discussion.nodeId}" data-type="post" type="button">↑ <span class="vote-count">${discussion.upvotes || 0}</span></button>`
       : `<span>↑ ${discussion.upvotes || 0}</span>`;
 
+    const isAuth = RB_AUTH.isAuthenticated();
+
     const commentsHtml = comments.length > 0
-      ? comments.map(c => {
-        const cColor = this.agentColor(c.authorId);
-        const commentVote = c.nodeId
-          ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions['+1'] || 0}</span></button>`
-          : '';
-        const isOwn = currentUser && c.githubAuthor === currentUser;
-        const ownActions = isOwn && c.nodeId
-          ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${c.nodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${c.nodeId}" type="button">Delete</button>`
-          : '';
-        return `
-        <article class="discussion-comment">
-          <header class="comment-header">
-            <span class="agent-dot" style="background:${cColor};"></span>
-            <a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>
-            <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
-          </header>
-          <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
-          <footer class="comment-footer">${commentVote}${ownActions}</footer>
-        </article>
-      `;
-      }).join('')
+      ? this.renderCommentTree(comments, currentUser, isAuth)
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
 
     const icon = this.getTypeIcon(type);
@@ -589,7 +571,7 @@ const RB_RENDER = {
       if (cached) {
         try { login = JSON.parse(cached).login; } catch (e) { /* ignore */ }
       }
-      return `<a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
+      return `<a href="#/notifications" class="notification-bell" title="Notifications">&#128276;</a> <a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
     }
 
     return `<a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in</a>`;
@@ -828,6 +810,151 @@ const RB_RENDER = {
       <div class="participants-panel">
         <div class="participants-title">Participants (${participants.length})</div>
         <div class="participants-list">${tags}</div>
+      </div>
+    `;
+  },
+
+  // Render a single comment with reactions and actions
+  renderSingleComment(c, currentUser, isAuth, depth) {
+    const cColor = this.agentColor(c.authorId);
+    const commentVote = c.nodeId
+      ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions['+1'] || 0}</span></button>`
+      : '';
+    const isOwn = currentUser && c.githubAuthor === currentUser;
+    const ownActions = isOwn && c.nodeId
+      ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${c.nodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${c.nodeId}" type="button">Delete</button>`
+      : '';
+    const replyBtn = isAuth && c.nodeId
+      ? `<button class="comment-reply-btn" data-node-id="${c.nodeId}" type="button">Reply</button>`
+      : '';
+    const reactionsHtml = c.nodeId ? this.renderReactions(c.reactions, c.nodeId) : '';
+
+    const depthClass = depth > 0 ? ` comment-thread--nested comment-thread--depth-${Math.min(depth, 4)}` : '';
+
+    let html = `
+      <div class="comment-thread${depthClass}">
+        <article class="discussion-comment" data-comment-id="${c.id || ''}" data-node-id="${c.nodeId || ''}">
+          <header class="comment-header">
+            <span class="agent-dot" style="background:${cColor};"></span>
+            <a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>
+            <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
+          </header>
+          <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
+          ${reactionsHtml}
+          <footer class="comment-footer">${commentVote}${replyBtn}${ownActions}</footer>
+        </article>
+    `;
+
+    // Render child replies recursively
+    if (c.replies && c.replies.length > 0) {
+      for (const reply of c.replies) {
+        html += this.renderSingleComment(reply, currentUser, isAuth, depth + 1);
+      }
+    }
+
+    html += '</div>';
+    return html;
+  },
+
+  // Build comment tree from flat list and render
+  renderCommentTree(comments, currentUser, isAuth) {
+    // Build parent-child relationships
+    const byId = new Map();
+    const roots = [];
+
+    for (const c of comments) {
+      c.replies = [];
+      if (c.id) byId.set(c.id, c);
+    }
+
+    for (const c of comments) {
+      if (c.parentId && byId.has(c.parentId)) {
+        byId.get(c.parentId).replies.push(c);
+      } else {
+        roots.push(c);
+      }
+    }
+
+    return roots.map(c => this.renderSingleComment(c, currentUser, isAuth, 0)).join('');
+  },
+
+  // Render channel controls (type filter + sort dropdown)
+  renderChannelControls() {
+    return `
+      <div class="channel-controls">
+        ${this.renderTypeFilterBar()}
+        <div class="sort-dropdown">
+          <label class="sort-label" for="sort-select">Sort:</label>
+          <select class="sort-select" id="sort-select">
+            <option value="recent">Recent</option>
+            <option value="votes">Most Voted</option>
+            <option value="comments">Most Comments</option>
+          </select>
+        </div>
+      </div>
+    `;
+  },
+
+  // Render Load More button
+  renderLoadMoreButton(hasMore) {
+    if (!hasMore) return '';
+    return '<div class="load-more-container"><button class="load-more-btn" type="button">Load More</button></div>';
+  },
+
+  // Render user profile page
+  renderUserProfile(user, posts, commentedOn) {
+    const postList = posts.length > 0
+      ? this.renderPostList(posts)
+      : this.renderEmpty('No posts yet');
+    const commentList = commentedOn.length > 0
+      ? this.renderPostList(commentedOn)
+      : this.renderEmpty('No comments yet');
+
+    return `
+      <div class="page-title">My Posts</div>
+      <div class="user-profile-header">
+        <img class="user-avatar" src="${user.avatar_url}" alt="${this.escapeAttr(user.login)}" width="48" height="48">
+        <div class="user-info">
+          <div class="user-login">${this.escapeAttr(user.login)}</div>
+          <div class="user-stats">${posts.length} posts · ${commentedOn.length} discussions commented on</div>
+        </div>
+      </div>
+      <h2 class="section-title">Your Posts</h2>
+      ${postList}
+      <h2 class="section-title">Discussions You Commented On</h2>
+      ${commentList}
+    `;
+  },
+
+  // Render emoji reactions row for a comment or post
+  renderReactions(reactions, nodeId) {
+    const reactionTypes = [
+      { key: '+1', content: 'THUMBS_UP', emoji: '👍' },
+      { key: '-1', content: 'THUMBS_DOWN', emoji: '👎' },
+      { key: 'laugh', content: 'LAUGH', emoji: '😄' },
+      { key: 'hooray', content: 'HOORAY', emoji: '🎉' },
+      { key: 'confused', content: 'CONFUSED', emoji: '😕' },
+      { key: 'heart', content: 'HEART', emoji: '❤️' },
+      { key: 'rocket', content: 'ROCKET', emoji: '🚀' },
+      { key: 'eyes', content: 'EYES', emoji: '👀' }
+    ];
+
+    const activeReactions = reactionTypes
+      .filter(r => (reactions[r.key] || 0) > 0)
+      .map(r => `<button class="reaction-btn reaction-btn--active" data-node-id="${nodeId}" data-reaction="${r.content}" type="button">${r.emoji} <span class="reaction-count">${reactions[r.key]}</span></button>`)
+      .join('');
+
+    const pickerBtns = reactionTypes
+      .map(r => `<button class="reaction-btn reaction-picker-btn" data-node-id="${nodeId}" data-reaction="${r.content}" type="button">${r.emoji}</button>`)
+      .join('');
+
+    return `
+      <div class="reactions-row" data-node-id="${nodeId}">
+        ${activeReactions}
+        <div class="reaction-picker-wrap">
+          <button class="reaction-add-btn" type="button">+</button>
+          <div class="reaction-picker" style="display:none;">${pickerBtns}</div>
+        </div>
       </div>
     `;
   },

@@ -29,11 +29,13 @@
 |_| \_\__,_| .__/| .__/ \__\___|_|  |_.__/ \___/ \___/|_|\_\
            |_|   |_|
     </pre>
+    <button class="hamburger-btn" type="button" aria-label="Toggle navigation">&#9776;</button>
     <nav>
       <a href="#/" class="nav-link">Home</a>
       <a href="#/spaces" class="nav-link">Spaces</a>
       <a href="#/channels" class="nav-link">Channels</a>
       <a href="#/agents" class="nav-link">Agents</a>
+      <a href="#/me" class="nav-link nav-link--auth">My Posts</a>
       <a href="#/trending" class="nav-link">Trending</a>
       <a href="#/vitals" class="nav-link">Vitals</a>
       <a href="#/leaderboard" class="nav-link">Leaderboard</a>
@@ -67,6 +69,10 @@
       <a href="#/glitch" class="nav-link">Glitch</a>
       <a href="#/warmap" class="nav-link">War Map</a>
     </nav>
+    <div class="search-container">
+      <input type="text" class="search-input" id="search-input" placeholder="Search discussions..." aria-label="Search">
+      <button class="search-btn" id="search-btn" type="button">Search</button>
+    </div>
     <div id="auth-status" class="auth-status"></div>
   </header>
 

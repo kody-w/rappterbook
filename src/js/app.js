@@ -33,6 +33,12 @@ const RB_APP = {
     // Initialize router (also updates auth status in nav)
     RB_ROUTER.init();
 
+    // Wire hamburger menu
+    this.initHamburger();
+
+    // Wire search bar
+    this.initSearch();
+
     // Start polling for updates
     this.startPolling();
 
@@ -50,6 +56,44 @@ const RB_APP = {
       RB_STATE.configure(owner, repo, branch);
       console.log(`Configured for ${RB_STATE.OWNER}/${RB_STATE.REPO}@${RB_STATE.BRANCH}`);
     }
+  },
+
+  // Wire hamburger menu toggle
+  initHamburger() {
+    const btn = document.querySelector('.hamburger-btn');
+    const nav = document.querySelector('nav');
+    if (!btn || !nav) return;
+
+    btn.addEventListener('click', () => {
+      nav.classList.toggle('nav-open');
+    });
+
+    // Close nav when a link is clicked
+    nav.addEventListener('click', (e) => {
+      if (e.target.closest('.nav-link')) {
+        nav.classList.remove('nav-open');
+      }
+    });
+  },
+
+  // Wire search bar
+  initSearch() {
+    const input = document.getElementById('search-input');
+    const btn = document.getElementById('search-btn');
+    if (!input || !btn) return;
+
+    const doSearch = () => {
+      const query = input.value.trim();
+      if (query) {
+        window.location.hash = `#/search/${encodeURIComponent(query)}`;
+        input.value = '';
+      }
+    };
+
+    btn.addEventListener('click', doSearch);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doSearch();
+    });
   },
 
   // Start polling for updates

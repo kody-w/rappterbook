@@ -47,6 +47,10 @@ const RB_ROUTER = {
     '/glitch': 'handleGlitch',
     '/warmap': 'handleWarmap',
     '/compose': 'handleCompose',
+    '/me': 'handleMe',
+    '/search/:query': 'handleSearch',
+    '/search': 'handleSearch',
+    '/notifications': 'handleNotifications',
   },
 
   // Initialize router
@@ -81,6 +85,16 @@ const RB_ROUTER = {
     if (el) {
       el.innerHTML = RB_RENDER.renderAuthStatus();
     }
+    // Show/hide auth-only nav links
+    const authLinks = document.querySelectorAll('.nav-link--auth');
+    const isAuth = RB_AUTH.isAuthenticated();
+    authLinks.forEach(link => {
+      if (isAuth) {
+        link.classList.add('nav-link--visible');
+      } else {
+        link.classList.remove('nav-link--visible');
+      }
+    });
   },
 
   // Match hash to route pattern
@@ -126,6 +140,10 @@ const RB_ROUTER = {
 
   // Route handlers
 
+  // Track loaded posts for pagination
+  _homePostsLoaded: 0,
+  _homeBatchSize: 20,
+
   async handleHome() {
     const app = document.getElementById('app');
     try {
@@ -136,15 +154,64 @@ const RB_ROUTER = {
         RB_STATE.getPokesCached()
       ]);
 
-      const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, 20);
+      const batchSize = this._homeBatchSize;
+      const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, batchSize + 1);
+      const hasMore = recentPosts.length > batchSize;
+      const postsToShow = recentPosts.slice(0, batchSize);
+      this._homePostsLoaded = postsToShow.length;
 
-      app.innerHTML = RB_RENDER.renderHome(stats, trending, recentPosts, pokes);
+      app.innerHTML = RB_RENDER.renderHome(stats, trending, postsToShow, pokes);
+
+      // Add load more button after feed
+      const feedContainer = document.getElementById('feed-container');
+      if (feedContainer && hasMore) {
+        feedContainer.insertAdjacentHTML('afterend', RB_RENDER.renderLoadMoreButton(true));
+        this.attachLoadMoreHandler('home', null);
+      }
 
       // Wire up type filter bar
-      this.attachTypeFilter(recentPosts);
+      this.attachTypeFilter(postsToShow);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load home page', error.message);
     }
+  },
+
+  // Load more handler for pagination
+  attachLoadMoreHandler(context, channelSlug) {
+    const btn = document.querySelector('.load-more-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+      btn.classList.add('btn-loading');
+      btn.disabled = true;
+
+      try {
+        const batchSize = this._homeBatchSize;
+        const offset = this._homePostsLoaded;
+        const allPosts = await RB_DISCUSSIONS.fetchRecent(channelSlug, offset + batchSize + 1);
+        const newPosts = allPosts.slice(offset, offset + batchSize);
+        const hasMore = allPosts.length > offset + batchSize;
+        this._homePostsLoaded = offset + newPosts.length;
+
+        const feedContainer = document.getElementById('feed-container');
+        if (feedContainer && newPosts.length > 0) {
+          feedContainer.insertAdjacentHTML('beforeend', RB_RENDER.renderPostList(newPosts));
+        }
+
+        // Replace or remove load more button
+        const container = btn.parentElement;
+        if (hasMore) {
+          btn.classList.remove('btn-loading');
+          btn.disabled = false;
+        } else {
+          container.remove();
+        }
+      } catch (error) {
+        console.error('Load more failed:', error);
+        btn.classList.remove('btn-loading');
+        btn.disabled = false;
+      }
+    });
   },
 
   async handleChannels() {
@@ -169,16 +236,62 @@ const RB_ROUTER = {
         return;
       }
 
-      const posts = await RB_DISCUSSIONS.fetchRecent(params.slug, 50);
+      const posts = await RB_DISCUSSIONS.fetchRecent(params.slug, 100);
 
       app.innerHTML = `
         <div class="page-title">c/${channel.slug}</div>
         ${channel.description ? `<p style="margin-bottom: 24px; color: var(--rb-muted);">${channel.description}</p>` : ''}
-        ${RB_RENDER.renderPostList(posts)}
+        ${RB_RENDER.renderChannelControls()}
+        <div id="feed-container">
+          ${RB_RENDER.renderPostList(posts)}
+        </div>
       `;
+
+      this.attachChannelControls(posts);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load channel', error.message);
     }
+  },
+
+  // Wire up channel sort/filter controls
+  attachChannelControls(posts) {
+    // Reuse type filter
+    this.attachTypeFilter(posts);
+
+    // Sort handler
+    const sortSelect = document.getElementById('sort-select');
+    if (!sortSelect) return;
+
+    let currentTypeFilter = 'all';
+
+    // Track type filter changes
+    const bar = document.querySelector('.type-filter-bar');
+    if (bar) {
+      bar.addEventListener('click', (e) => {
+        const pill = e.target.closest('.type-pill');
+        if (pill) currentTypeFilter = pill.dataset.type;
+      });
+    }
+
+    sortSelect.addEventListener('change', () => {
+      const sortBy = sortSelect.value;
+      let filtered = currentTypeFilter === 'all' ? [...posts] : posts.filter(p => {
+        const { type } = RB_RENDER.detectPostType(p.title);
+        return type === currentTypeFilter;
+      });
+
+      if (sortBy === 'votes') {
+        filtered.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
+      } else if (sortBy === 'comments') {
+        filtered.sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0));
+      }
+      // 'recent' is default order
+
+      const container = document.getElementById('feed-container');
+      if (container) {
+        container.innerHTML = RB_RENDER.renderPostList(filtered);
+      }
+    });
   },
 
   async handleAgents() {
@@ -256,6 +369,8 @@ const RB_ROUTER = {
       this.attachPrivateSpaceHandlers(params.number);
       this.attachVoteHandlers(params.number);
       this.attachCommentActionHandlers(params.number);
+      this.attachReactionHandlers(params.number);
+      this.attachReplyHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }
@@ -272,7 +387,7 @@ const RB_ROUTER = {
       if (!body) return;
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Posting...';
+      submitBtn.classList.add('btn-loading');
 
       try {
         await RB_DISCUSSIONS.postComment(discussionNumber, body);
@@ -280,7 +395,7 @@ const RB_ROUTER = {
       } catch (error) {
         console.error('Failed to post comment:', error);
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Comment';
+        submitBtn.classList.remove('btn-loading');
 
         const form = document.querySelector('.comment-form');
         if (form) {
@@ -354,6 +469,8 @@ const RB_ROUTER = {
     this.attachPrivateSpaceHandlers(discussionNumber);
     this.attachVoteHandlers(discussionNumber);
     this.attachCommentActionHandlers(discussionNumber);
+    this.attachReactionHandlers(discussionNumber);
+    this.attachReplyHandlers(discussionNumber);
   },
 
   // Wire up private space unlock/lock handlers
@@ -509,6 +626,8 @@ const RB_ROUTER = {
       this.attachPrivateSpaceHandlers(params.number);
       this.attachVoteHandlers(params.number);
       this.attachCommentActionHandlers(params.number);
+      this.attachReactionHandlers(params.number);
+      this.attachReplyHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load Space', error.message);
     }
@@ -566,6 +685,7 @@ const RB_ROUTER = {
       if (!nodeId) return;
 
       btn.disabled = true;
+      btn.classList.add('btn-loading');
       const countEl = btn.querySelector('.vote-count');
       const currentCount = parseInt(countEl ? countEl.textContent : '0', 10);
 
@@ -583,6 +703,7 @@ const RB_ROUTER = {
         console.error('Vote failed:', error);
       }
       btn.disabled = false;
+      btn.classList.remove('btn-loading');
     }, { once: false });
   },
 
@@ -627,14 +748,14 @@ const RB_ROUTER = {
           const newBody = editTa.value.trim();
           if (!newBody) return;
           saveBtn.disabled = true;
-          saveBtn.textContent = 'Saving...';
+          saveBtn.classList.add('btn-loading');
           try {
             await RB_DISCUSSIONS.updateComment(nodeId, newBody);
             await this.reloadDiscussion(discussionNumber);
           } catch (error) {
             console.error('Failed to update comment:', error);
             saveBtn.disabled = false;
-            saveBtn.textContent = 'Save';
+            saveBtn.classList.remove('btn-loading');
           }
         });
       });
@@ -646,14 +767,14 @@ const RB_ROUTER = {
         if (!confirm('Delete this comment?')) return;
         const nodeId = btn.dataset.nodeId;
         btn.disabled = true;
-        btn.textContent = 'Deleting...';
+        btn.classList.add('btn-loading');
         try {
           await RB_DISCUSSIONS.deleteComment(nodeId);
           await this.reloadDiscussion(discussionNumber);
         } catch (error) {
           console.error('Failed to delete comment:', error);
           btn.disabled = false;
-          btn.textContent = 'Delete';
+          btn.classList.remove('btn-loading');
         }
       });
     });
@@ -726,7 +847,7 @@ const RB_ROUTER = {
 
       const title = typePrefix + titleRaw;
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Creating...';
+      submitBtn.classList.add('btn-loading');
       errorEl.style.display = 'none';
 
       try {
@@ -737,8 +858,243 @@ const RB_ROUTER = {
         errorEl.textContent = `Failed: ${error.message}`;
         errorEl.style.display = '';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Create Post';
+        submitBtn.classList.remove('btn-loading');
       }
+    });
+  },
+
+  // My Posts handler
+  async handleMe() {
+    const app = document.getElementById('app');
+
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = `
+        <div class="page-title">My Posts</div>
+        <div class="login-prompt">
+          <a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in with GitHub</a> to see your posts
+        </div>
+      `;
+      return;
+    }
+
+    try {
+      const user = await RB_AUTH.getUser();
+      if (!user) {
+        app.innerHTML = RB_RENDER.renderError('Could not load user info');
+        return;
+      }
+
+      const [posts, commentedOn] = await Promise.all([
+        RB_DISCUSSIONS.searchUserPosts(user.login),
+        RB_DISCUSSIONS.searchUserComments(user.login)
+      ]);
+
+      app.innerHTML = RB_RENDER.renderUserProfile(user, posts, commentedOn);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load profile', error.message);
+    }
+  },
+
+  // Search handler
+  async handleSearch(params) {
+    const app = document.getElementById('app');
+    const query = params && params.query ? decodeURIComponent(params.query) : '';
+
+    if (!query) {
+      app.innerHTML = `
+        <div class="page-title">Search</div>
+        <p style="color:var(--rb-muted);">Enter a search query in the search bar above.</p>
+      `;
+      return;
+    }
+
+    try {
+      const results = await RB_DISCUSSIONS.searchDiscussions(query);
+
+      app.innerHTML = `
+        <div class="page-title">Search: "${RB_RENDER.escapeAttr(query)}"</div>
+        <p style="margin-bottom:var(--rb-space-4);color:var(--rb-muted);">${results.length} result${results.length !== 1 ? 's' : ''} found</p>
+        <div id="feed-container">
+          ${RB_RENDER.renderPostList(results)}
+        </div>
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Search failed', error.message);
+    }
+  },
+
+  // Notifications handler
+  async handleNotifications() {
+    const app = document.getElementById('app');
+
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = `
+        <div class="page-title">Notifications</div>
+        <div class="login-prompt">
+          <a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in with GitHub</a> to see notifications
+        </div>
+      `;
+      return;
+    }
+
+    try {
+      const token = RB_AUTH.getToken();
+      const owner = RB_STATE.OWNER;
+      const repo = RB_STATE.REPO;
+      const response = await fetch(`https://api.github.com/notifications?all=true&per_page=30`, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github+json'
+        }
+      });
+
+      if (!response.ok) {
+        app.innerHTML = `
+          <div class="page-title">Notifications</div>
+          <p style="color:var(--rb-muted);">Could not load notifications. Your token may not have the notifications scope.</p>
+        `;
+        return;
+      }
+
+      const notifications = await response.json();
+      const repoNotifications = notifications.filter(n =>
+        n.repository && n.repository.full_name === `${owner}/${repo}`
+      );
+
+      const notifHtml = repoNotifications.length > 0
+        ? repoNotifications.map(n => {
+          const unread = n.unread ? ' notification-item--unread' : '';
+          const ts = RB_DISCUSSIONS.formatTimestamp(n.updated_at);
+          return `
+            <div class="notification-item${unread}" data-thread-id="${n.id}">
+              <div class="notification-title">${RB_RENDER.escapeAttr(n.subject.title)}</div>
+              <div class="notification-meta">${n.reason} · ${ts}</div>
+            </div>
+          `;
+        }).join('')
+        : '<p style="color:var(--rb-muted);padding:var(--rb-space-4);">No notifications</p>';
+
+      app.innerHTML = `
+        <div class="page-title">Notifications</div>
+        ${notifHtml}
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load notifications', error.message);
+    }
+  },
+
+  // Emoji reaction handler — uses event delegation
+  attachReactionHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    // Toggle picker visibility
+    app.addEventListener('click', (e) => {
+      const addBtn = e.target.closest('.reaction-add-btn');
+      if (addBtn) {
+        const picker = addBtn.parentElement.querySelector('.reaction-picker');
+        if (picker) {
+          picker.style.display = picker.style.display === 'none' ? 'flex' : 'none';
+        }
+        return;
+      }
+
+      // Close picker if clicking outside
+      if (!e.target.closest('.reaction-picker-wrap')) {
+        app.querySelectorAll('.reaction-picker').forEach(p => p.style.display = 'none');
+      }
+    });
+
+    // Handle reaction clicks (both active and picker)
+    app.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.reaction-btn');
+      if (!btn || btn.classList.contains('reaction-add-btn')) return;
+
+      if (!RB_AUTH.isAuthenticated()) {
+        RB_AUTH.login();
+        return;
+      }
+
+      const nodeId = btn.dataset.nodeId;
+      const reactionContent = btn.dataset.reaction;
+      if (!nodeId || !reactionContent) return;
+
+      btn.disabled = true;
+      btn.classList.add('btn-loading');
+
+      try {
+        if (btn.classList.contains('reaction-btn--active')) {
+          // Remove reaction
+          await RB_DISCUSSIONS.removeReaction(nodeId, reactionContent);
+          const countEl = btn.querySelector('.reaction-count');
+          const count = parseInt(countEl ? countEl.textContent : '1', 10);
+          if (count <= 1) {
+            btn.remove();
+          } else {
+            btn.classList.remove('reaction-btn--active');
+            if (countEl) countEl.textContent = count - 1;
+          }
+        } else {
+          // Add reaction
+          await RB_DISCUSSIONS.addReaction(nodeId, reactionContent);
+          // Reload to show updated reactions
+          await this.reloadDiscussion(discussionNumber);
+          return;
+        }
+      } catch (error) {
+        console.error('Reaction failed:', error);
+      }
+      btn.disabled = false;
+      btn.classList.remove('btn-loading');
+    });
+  },
+
+  // Reply handler for threaded comments
+  attachReplyHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.querySelectorAll('.comment-reply-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const commentEl = btn.closest('.discussion-comment');
+        if (!commentEl) return;
+        const nodeId = btn.dataset.nodeId;
+
+        // Don't add duplicate reply forms
+        if (commentEl.querySelector('.reply-form')) return;
+
+        const form = document.createElement('div');
+        form.className = 'reply-form';
+        form.innerHTML = `
+          <textarea class="comment-textarea reply-textarea" placeholder="Write a reply..." rows="3"></textarea>
+          <div class="comment-form-actions">
+            <button class="comment-submit reply-submit-btn" type="button">Reply</button>
+            <button class="comment-action-btn reply-cancel-btn" type="button">Cancel</button>
+          </div>
+        `;
+        commentEl.appendChild(form);
+
+        form.querySelector('.reply-cancel-btn').addEventListener('click', () => form.remove());
+
+        form.querySelector('.reply-submit-btn').addEventListener('click', async () => {
+          const textarea = form.querySelector('.reply-textarea');
+          const body = textarea.value.trim();
+          if (!body) return;
+
+          const submitBtn = form.querySelector('.reply-submit-btn');
+          submitBtn.disabled = true;
+          submitBtn.classList.add('btn-loading');
+
+          try {
+            await RB_DISCUSSIONS.postReply(discussionNumber, body, nodeId);
+            await this.reloadDiscussion(discussionNumber);
+          } catch (error) {
+            console.error('Reply failed:', error);
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('btn-loading');
+          }
+        });
+      });
     });
   },
 
