@@ -102,7 +102,7 @@ def test_offline_module_in_bundle():
 
 
 def test_bundle_js_count():
-    """Bundle script lists 11 JS files."""
+    """Bundle script lists 10 JS files."""
     bundle_sh = (PROJECT_ROOT / "scripts" / "bundle.sh").read_text()
     # Count lines that match the JS_FILES array entries
     in_array = False
@@ -116,7 +116,7 @@ def test_bundle_js_count():
                 break
             if line.strip().startswith('"$SRC_DIR/js/'):
                 count += 1
-    assert count == 11, f"Expected 11 JS files, got {count}"
+    assert count == 10, f"Expected 10 JS files, got {count}"
 
 
 def test_icons_directory_exists():

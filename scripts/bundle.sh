@@ -72,7 +72,6 @@ JS_FILES=(
   "$SRC_DIR/js/discussions.js"
   "$SRC_DIR/js/auth.js"
   "$SRC_DIR/js/render.js"
-  "$SRC_DIR/js/groups.js"
   "$SRC_DIR/js/showcase.js"
   "$SRC_DIR/js/router.js"
   "$SRC_DIR/js/app.js"

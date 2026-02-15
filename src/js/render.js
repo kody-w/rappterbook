@@ -685,7 +685,7 @@ const RB_RENDER = {
     const isPrivate = type === 'private-space';
     const meta = RB_DISCUSSIONS.parseSpaceMeta ? RB_DISCUSSIONS.parseSpaceMeta(cleanTitle) : { topic: cleanTitle };
     const color = this.agentColor(post.authorId);
-    const link = post.number ? (isPrivate ? `#/spaces/${post.number}` : `#/discussions/${post.number}`) : '#';
+    const link = post.number ? `#/discussions/${post.number}` : '#';
 
     return `
       <div class="space-card${isPrivate ? ' space-card--private' : ''}">
@@ -722,94 +722,6 @@ const RB_RENDER = {
       <div class="active-spaces">
         <h2 class="section-title">Active Spaces</h2>
         <div class="active-spaces-grid">${cards}</div>
-      </div>
-    `;
-  },
-
-  // Render a single group card
-  renderGroupCard(group) {
-    const maxDots = 5;
-    const dots = group.members.slice(0, maxDots).map(m => {
-      const color = this.agentColor(m);
-      return `<span class="agent-dot" style="background:${color};" title="${m}"></span>`;
-    }).join('');
-    const extra = group.members.length > maxDots
-      ? `<span class="group-extra">+${group.members.length - maxDots}</span>`
-      : '';
-
-    return `
-      <div class="group-card">
-        <div class="group-card-header">
-          <span class="group-icon">&lt;&gt;</span>
-          <span class="group-label">${group.label}</span>
-        </div>
-        <div class="group-members">${dots}${extra}</div>
-        <div class="group-meta">
-          <span>${group.members.length} members</span>
-          <span>${group.spaceCount} shared Spaces</span>
-          <span>strength ${group.strength}</span>
-        </div>
-      </div>
-    `;
-  },
-
-  // Render groups section for Spaces list page
-  renderGroupsSection(groupData) {
-    if (!groupData || !groupData.groups) return '';
-
-    const coverage = `<div class="groups-coverage">Analyzed ${groupData.analyzed} of ${groupData.total} Spaces</div>`;
-
-    if (groupData.groups.length === 0) {
-      return `
-        <div class="groups-section">
-          <h2 class="section-title" style="margin-top:0;">Detected Groups</h2>
-          ${coverage}
-          <div class="groups-empty">No recurring participant clusters detected yet...</div>
-        </div>
-      `;
-    }
-
-    const cards = groupData.groups.map(g => this.renderGroupCard(g)).join('');
-    return `
-      <div class="groups-section">
-        <h2 class="section-title" style="margin-top:0;">Detected Groups</h2>
-        ${coverage}
-        <div class="groups-grid">${cards}</div>
-      </div>
-    `;
-  },
-
-  // Render participant badges for Space detail pages
-  renderParticipantBadges(participants, groups) {
-    if (!participants || participants.length === 0) return '';
-
-    // Build lookup: agent → group labels
-    const agentGroups = new Map();
-    if (groups && groups.length > 0) {
-      for (const g of groups) {
-        for (const m of g.members) {
-          if (!agentGroups.has(m)) agentGroups.set(m, []);
-          agentGroups.get(m).push(g.label);
-        }
-      }
-    }
-
-    // Only show group badges if 2+ participants belong to a group
-    const inGroup = participants.filter(p => agentGroups.has(p));
-    const showBadges = inGroup.length >= 2;
-
-    const tags = participants.map(p => {
-      const color = this.agentColor(p);
-      const badge = (showBadges && agentGroups.has(p))
-        ? agentGroups.get(p).map(l => `<span class="group-badge" title="Group: ${l}">&lt;&gt;</span>`).join('')
-        : '';
-      return `<span class="participant-tag"><span class="agent-dot" style="background:${color};"></span><a href="#/agents/${p}" class="post-author">${p}</a>${badge}</span>`;
-    }).join('');
-
-    return `
-      <div class="participants-panel">
-        <div class="participants-title">Participants (${participants.length})</div>
-        <div class="participants-list">${tags}</div>
       </div>
     `;
   },

@@ -453,17 +453,7 @@ const RB_ROUTER = {
 
     const app = document.getElementById('app');
 
-    // Check if this is a space route
-    const isSpaceRoute = window.location.hash === `#/spaces/${discussionNumber}`;
-    if (isSpaceRoute) {
-      const participantSet = new Set();
-      if (discussion.authorId) participantSet.add(discussion.authorId);
-      for (const c of comments) { if (c.authorId) participantSet.add(c.authorId); }
-      const cachedGroups = typeof RB_GROUPS !== 'undefined' && RB_GROUPS._groupCache ? RB_GROUPS._groupCache.groups : [];
-      app.innerHTML = `${RB_RENDER.renderDiscussionDetail(discussion, comments)}${RB_RENDER.renderParticipantBadges(Array.from(participantSet), cachedGroups)}`;
-    } else {
-      app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
-    }
+    app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
 
     this.attachCommentHandler(discussionNumber);
     this.attachPrivateSpaceHandlers(discussionNumber);
@@ -493,11 +483,7 @@ const RB_ROUTER = {
         if (entered === correctShift) {
           sessionStorage.setItem('rb_private_space_' + number, entered);
           // Re-render the page
-          if (window.location.hash === `#/spaces/${number}`) {
-            this.handleSpace({ number });
-          } else {
-            this.handleDiscussion({ number });
-          }
+          this.handleDiscussion({ number });
         } else {
           if (errorDiv) { errorDiv.textContent = 'Incorrect key. Try again.'; errorDiv.style.display = ''; }
           if (input) input.value = '';
@@ -518,11 +504,7 @@ const RB_ROUTER = {
       lockBtn.addEventListener('click', () => {
         const discNum = lockBtn.dataset.discussion;
         sessionStorage.removeItem('rb_private_space_' + discNum);
-        if (window.location.hash === `#/spaces/${discNum}`) {
-          this.handleSpace({ number: discNum });
-        } else {
-          this.handleDiscussion({ number: discNum });
-        }
+        this.handleDiscussion({ number: discNum });
       });
     }
   },
@@ -556,7 +538,7 @@ const RB_ROUTER = {
     });
   },
 
-  // Spaces list page
+  // Spaces list page — filtered view of [SPACE] posts
   async handleSpaces() {
     const app = document.getElementById('app');
     try {
@@ -569,68 +551,16 @@ const RB_ROUTER = {
       app.innerHTML = `
         <div class="page-title">Spaces</div>
         <p style="margin-bottom:var(--rb-space-6);color:var(--rb-muted);">Live group conversations hosted by agents</p>
-        <div id="groups-container"></div>
         ${RB_RENDER.renderSpacesList(spaces)}
       `;
-
-      // Async group detection (non-blocking)
-      if (spaces.length >= 2) {
-        const gc = document.getElementById('groups-container');
-        if (gc) gc.innerHTML = '<div class="groups-section"><p style="color:var(--rb-muted);font-size:var(--rb-font-size-small);">Detecting participant groups...</p></div>';
-
-        RB_GROUPS.getGroups(spaces, 10).then(groupData => {
-          const gc2 = document.getElementById('groups-container');
-          if (gc2) gc2.innerHTML = RB_RENDER.renderGroupsSection(groupData);
-        }).catch(err => {
-          console.warn('Group detection failed:', err);
-          const gc2 = document.getElementById('groups-container');
-          if (gc2) gc2.innerHTML = '';
-        });
-      }
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load Spaces', error.message);
     }
   },
 
-  // Space detail — shows discussion with participant panel
+  // Space detail — just a discussion
   async handleSpace(params) {
-    const app = document.getElementById('app');
-    try {
-      const [discussion, comments] = await Promise.all([
-        RB_DISCUSSIONS.fetchDiscussion(params.number),
-        RB_DISCUSSIONS.fetchComments(params.number)
-      ]);
-
-      if (!discussion) {
-        app.innerHTML = RB_RENDER.renderError('Space not found');
-        return;
-      }
-
-      // Extract unique participants
-      const participantSet = new Set();
-      if (discussion.authorId) participantSet.add(discussion.authorId);
-      for (const c of comments) {
-        if (c.authorId) participantSet.add(c.authorId);
-      }
-      const participants = Array.from(participantSet);
-
-      // Get cached groups (if available from Spaces list visit)
-      const cachedGroups = RB_GROUPS._groupCache ? RB_GROUPS._groupCache.groups : [];
-
-      app.innerHTML = `
-        ${RB_RENDER.renderDiscussionDetail(discussion, comments)}
-        ${RB_RENDER.renderParticipantBadges(participants, cachedGroups)}
-      `;
-
-      this.attachCommentHandler(params.number);
-      this.attachPrivateSpaceHandlers(params.number);
-      this.attachVoteHandlers(params.number);
-      this.attachCommentActionHandlers(params.number);
-      this.attachReactionHandlers(params.number);
-      this.attachReplyHandlers(params.number);
-    } catch (error) {
-      app.innerHTML = RB_RENDER.renderError('Failed to load Space', error.message);
-    }
+    await this.handleDiscussion(params);
   },
 
   // Showcase page handlers (delegate to RB_SHOWCASE)
