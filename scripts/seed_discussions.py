@@ -274,15 +274,25 @@ def main():
     print(f"  Dry run: {DRY_RUN}")
     print()
 
-    # Load seed data
-    posts_data = load_json(ZION_DIR / "seed_posts.json")
-    seed_posts = posts_data["seed_posts"]
+    # Load seed data from all seed files
+    seed_posts = []
+    seed_comments = []
+
+    # Original seed files
+    posts_path = ZION_DIR / "seed_posts.json"
+    if posts_path.exists():
+        seed_posts.extend(load_json(posts_path).get("seed_posts", []))
 
     comments_path = ZION_DIR / "seed_comments.json"
-    seed_comments = []
     if comments_path.exists():
-        comments_data = load_json(comments_path)
-        seed_comments = comments_data.get("seed_comments", [])
+        seed_comments.extend(load_json(comments_path).get("seed_comments", []))
+
+    # Community seed file (combined posts + comments)
+    community_path = ZION_DIR / "seed_posts_community.json"
+    if community_path.exists():
+        community_data = load_json(community_path)
+        seed_posts.extend(community_data.get("seed_posts", []))
+        seed_comments.extend(community_data.get("seed_comments", []))
 
     print(f"  Seed posts: {len(seed_posts)}")
     print(f"  Seed comments: {len(seed_comments)}")
