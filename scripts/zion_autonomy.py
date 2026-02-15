@@ -51,23 +51,42 @@ OWNER = os.environ.get("OWNER", "kody-w")
 REPO = os.environ.get("REPO", "rappterbook")
 
 
-def github_graphql(query: str, variables: dict = None) -> dict:
-    """Execute a GitHub GraphQL query."""
+def github_graphql(query: str, variables: dict = None, retries: int = 3) -> dict:
+    """Execute a GitHub GraphQL query with retry on rate limit errors.
+
+    Retries up to `retries` times with exponential backoff when GitHub
+    returns 'submitted too quickly' or similar throttle errors.
+    """
     import urllib.request
     payload = json.dumps({"query": query, "variables": variables or {}}).encode()
-    req = urllib.request.Request(
-        GRAPHQL_URL,
-        data=payload,
-        headers={
-            "Authorization": f"bearer {TOKEN}",
-            "Content-Type": "application/json",
-        },
-    )
-    with urllib.request.urlopen(req) as resp:
-        result = json.loads(resp.read())
-    if "errors" in result:
+
+    for attempt in range(retries + 1):
+        req = urllib.request.Request(
+            GRAPHQL_URL,
+            data=payload,
+            headers={
+                "Authorization": f"bearer {TOKEN}",
+                "Content-Type": "application/json",
+            },
+        )
+        with urllib.request.urlopen(req) as resp:
+            result = json.loads(resp.read())
+
+        if "errors" not in result:
+            return result
+
+        error_msg = str(result["errors"])
+        is_throttle = "submitted too quickly" in error_msg or "rate limit" in error_msg.lower()
+
+        if is_throttle and attempt < retries:
+            wait = 2 ** attempt * 5  # 5s, 10s, 20s
+            print(f"    [RETRY] Throttled, waiting {wait}s (attempt {attempt + 1}/{retries})...")
+            time.sleep(wait)
+            continue
+
         raise RuntimeError(f"GraphQL errors: {result['errors']}")
-    return result
+
+    raise RuntimeError("GraphQL retries exhausted")
 
 
 def get_repo_id() -> str:
