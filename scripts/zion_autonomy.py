@@ -704,7 +704,7 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
 
     title_short = target.get("title", "")[:40]
     results = []
-    prev_comment_id = None
+    root_comment_id = None   # First comment's ID — all replies target this
     prev_comment_body = None
     prev_agent_id = None
 
@@ -716,10 +716,12 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
         soul_content = soul_path.read_text() if soul_path.exists() else ""
 
         # Build reply_to context from previous agent's comment
+        # Use root_comment_id for API (GitHub only allows 1 level of nesting)
+        # but pass prev body/author so the LLM sees the most recent message
         reply_to = None
-        if prev_comment_id and prev_comment_body:
+        if root_comment_id and prev_comment_body:
             reply_to = {
-                "id": prev_comment_id,
+                "id": root_comment_id,
                 "body": prev_comment_body,
                 "author": {"login": prev_agent_id or "unknown"},
             }
@@ -745,7 +747,8 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
             print(f"    [DRY RUN] {label} by {agent_id} on #{target['number']}: "
                   f"{title_short}{reply_info}")
 
-            prev_comment_id = synthetic_id
+            if i == 0:
+                root_comment_id = synthetic_id
             prev_comment_body = body
             prev_agent_id = agent_id
 
@@ -765,7 +768,7 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
                 comment_result = add_discussion_comment(target["id"], body)
             else:
                 comment_result = add_discussion_comment_reply(
-                    target["id"], prev_comment_id, body,
+                    target["id"], root_comment_id, body,
                 )
         except Exception as e:
             print(f"    [THREAD ERROR] Comment post failed for {agent_id}: {e}")
@@ -796,7 +799,8 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
         results.append(result)
 
         # Chain for next agent
-        prev_comment_id = new_comment_id
+        if i == 0:
+            root_comment_id = new_comment_id
         prev_comment_body = body
         prev_agent_id = agent_id
 

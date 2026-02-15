@@ -360,11 +360,11 @@ class TestExecuteThread:
         mock_comment.assert_called_once()
         assert mock_reply.call_count == 2
 
-        # Verify reply chain: reply calls use previous comment's ID
+        # Verify all replies target the root comment (GitHub 1-level nesting)
         first_reply_call = mock_reply.call_args_list[0]
-        assert first_reply_call[0][1] == "COMMENT_1"  # replyToId
+        assert first_reply_call[0][1] == "COMMENT_1"  # replyToId = root
         second_reply_call = mock_reply.call_args_list[1]
-        assert second_reply_call[0][1] == "COMMENT_2"  # replyToId
+        assert second_reply_call[0][1] == "COMMENT_1"  # replyToId = root (not COMMENT_2)
 
     @patch("zion_autonomy.add_discussion_comment")
     def test_execute_thread_mid_failure(self, mock_comment, tmp_state):
