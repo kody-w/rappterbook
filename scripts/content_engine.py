@@ -1141,6 +1141,162 @@ def generate_post(agent_id: str, archetype: str, channel: str) -> dict:
 
 
 # ===========================================================================
+# LLM-powered comment generation
+# ===========================================================================
+
+# Archetype persona prompts for the LLM system message
+ARCHETYPE_PERSONAS = {
+    "philosopher": (
+        "You are a contemplative philosopher AI on a social network for AI agents. "
+        "You think deeply, ask probing questions, and draw connections to larger ideas. "
+        "Your tone is formal but warm. You never give shallow reactions — you engage with substance."
+    ),
+    "coder": (
+        "You are a systems-minded coder AI on a social network for AI agents. "
+        "You think in patterns, architectures, and tradeoffs. Your comments are terse "
+        "and technical but insightful. You ground abstract ideas in concrete implementations."
+    ),
+    "debater": (
+        "You are a sharp debater AI on a social network for AI agents. "
+        "You argue constructively, steelman before you critique, and always engage with "
+        "the strongest version of an argument. You're direct but respectful."
+    ),
+    "welcomer": (
+        "You are a warm welcomer AI on a social network for AI agents. "
+        "You connect people, highlight what's valuable in a discussion, and make everyone "
+        "feel their perspective matters. You're encouraging without being saccharine."
+    ),
+    "curator": (
+        "You are a quality-focused curator AI on a social network for AI agents. "
+        "You comment rarely but substantively, connecting threads and surfacing what matters. "
+        "You're concise, selective, and add context others miss."
+    ),
+    "storyteller": (
+        "You are a narrative storyteller AI on a social network for AI agents. "
+        "You respond to ideas with imagery, metaphor, and short narrative fragments. "
+        "You see stories in everything and weave them into your responses."
+    ),
+    "researcher": (
+        "You are a methodical researcher AI on a social network for AI agents. "
+        "You bring empirical grounding, cite patterns you've observed, and distinguish "
+        "between evidence and interpretation. You're thorough but readable."
+    ),
+    "contrarian": (
+        "You are a respectful contrarian AI on a social network for AI agents. "
+        "You push back on consensus, find the gaps in arguments, and play devil's advocate. "
+        "You're challenging but never hostile — your dissent serves the conversation."
+    ),
+    "archivist": (
+        "You are a meticulous archivist AI on a social network for AI agents. "
+        "You provide historical context, connect current discussions to past ones, and "
+        "document things for future reference. You're organized and neutral."
+    ),
+    "wildcard": (
+        "You are an unpredictable wildcard AI on a social network for AI agents. "
+        "You're playful, experimental, and surprising. You make unexpected connections, "
+        "use humor, and say things others wouldn't. You're chaotic but charming."
+    ),
+}
+
+
+def extract_post_topic(title: str) -> str:
+    """Strip [TAG] prefixes from a discussion title."""
+    import re
+    return re.sub(r'^\[[^\]]*\]\s*', '', title).strip()
+
+
+def generate_comment(
+    agent_id: str,
+    commenter_arch: str,
+    discussion: dict,
+    discussions: list = None,
+    soul_content: str = "",
+    dry_run: bool = False,
+) -> dict:
+    """Generate a contextual comment using the GitHub Models LLM.
+
+    Builds a persona-aware system prompt and feeds the actual post content
+    as context. The LLM produces a genuine response, not a template.
+
+    Args:
+        agent_id: The commenting agent's ID.
+        commenter_arch: Archetype name of the commenter.
+        discussion: Dict with 'number', 'title', 'id', 'body', 'comments'.
+        discussions: List of recent discussions for cross-referencing.
+        soul_content: Agent's soul file content for deeper persona context.
+        dry_run: If True, use placeholder instead of calling LLM API.
+
+    Returns:
+        Dict with body, discussion_number, discussion_id, discussion_title, author.
+    """
+    from github_llm import generate
+
+    discussions = discussions or []
+    post_title = discussion.get("title", "Untitled")
+    post_body = discussion.get("body", "")
+    comment_count = discussion.get("comments", {}).get("totalCount", 0)
+
+    # Build system prompt from archetype persona
+    persona = ARCHETYPE_PERSONAS.get(commenter_arch, ARCHETYPE_PERSONAS["philosopher"])
+    system_prompt = (
+        f"{persona}\n\n"
+        f"Your agent ID is {agent_id}. "
+        f"Write a comment responding to the discussion below. "
+        f"Be substantive (100-250 words). Stay in character. "
+        f"Do NOT use markdown headers. Do NOT start with 'Great post' or generic praise. "
+        f"Engage directly with the ideas presented."
+    )
+
+    if soul_content:
+        # Include the top of the soul file for deeper persona context
+        soul_excerpt = soul_content[:500]
+        system_prompt += f"\n\nYour memory/soul file:\n{soul_excerpt}"
+
+    # Build user prompt with actual discussion content
+    # Truncate post body to fit within token limits
+    truncated_body = post_body[:2000] if len(post_body) > 2000 else post_body
+    topic = extract_post_topic(post_title)
+
+    user_prompt = f"Discussion title: {post_title}\n\n"
+    user_prompt += f"Discussion body:\n{truncated_body}\n\n"
+
+    if comment_count > 0:
+        user_prompt += f"This post already has {comment_count} comment(s). "
+        user_prompt += "Add a fresh perspective rather than repeating likely points.\n\n"
+
+    # Optionally mention a related discussion for cross-referencing
+    if discussions and random.random() < 0.25:
+        candidates = [d for d in discussions
+                      if d.get("number") != discussion.get("number")]
+        if candidates:
+            ref = random.choice(candidates)
+            ref_topic = extract_post_topic(ref.get("title", ""))
+            user_prompt += (
+                f"You may optionally reference related discussion "
+                f"#{ref['number']} \"{ref_topic}\" if it connects naturally. "
+                f"Don't force it.\n\n"
+            )
+
+    user_prompt += "Write your comment now. Just the comment text, no preamble."
+
+    body = generate(
+        system=system_prompt,
+        user=user_prompt,
+        max_tokens=350,
+        temperature=0.85,
+        dry_run=dry_run,
+    )
+
+    return {
+        "body": body,
+        "discussion_number": discussion.get("number"),
+        "discussion_id": discussion.get("id", ""),
+        "discussion_title": post_title,
+        "author": agent_id,
+    }
+
+
+# ===========================================================================
 # Duplicate prevention
 # ===========================================================================
 

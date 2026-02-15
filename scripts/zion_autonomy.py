@@ -34,10 +34,11 @@ MAX_AGENTS = 12
 sys.path.insert(0, str(ROOT / "scripts"))
 from content_engine import (
     generate_post, generate_summon_post, format_post_body,
+    format_comment_body, generate_comment,
     pick_channel, load_archetypes, is_duplicate_post,
-    update_stats_after_post,
+    update_stats_after_post, update_stats_after_comment,
     update_channel_post_count, update_agent_post_count,
-    log_posted,
+    update_agent_comment_count, log_posted,
 )
 
 
@@ -149,6 +150,90 @@ def fetch_recent_discussions(limit: int = 30) -> list:
     return result["data"]["repository"]["discussions"]["nodes"]
 
 
+def fetch_discussions_for_commenting(limit: int = 30) -> list:
+    """Fetch recent discussions with body and comment count for commenting."""
+    result = github_graphql("""
+        query($owner: String!, $repo: String!, $limit: Int!) {
+            repository(owner: $owner, name: $repo) {
+                discussions(first: $limit, orderBy: {field: CREATED_AT, direction: DESC}) {
+                    nodes {
+                        id, number, title, body,
+                        category { slug },
+                        comments { totalCount },
+                        author { login }
+                    }
+                }
+            }
+        }
+    """, {"owner": OWNER, "repo": REPO, "limit": limit})
+    return result["data"]["repository"]["discussions"]["nodes"]
+
+
+def pick_discussion_to_comment(
+    agent_id: str,
+    arch_name: str,
+    archetypes: dict,
+    discussions: list,
+    posted_log: dict,
+) -> dict:
+    """Pick a discussion to comment on using weighted selection.
+
+    Strategy:
+      1. Exclude posts authored by this agent (check body attribution)
+      2. Exclude posts this agent already commented on (check posted_log)
+      3. Weight toward preferred channels (3x) and under-commented posts (inverse)
+      4. Weighted random selection from candidates
+    """
+    if not discussions:
+        return None
+
+    # Already-commented discussion numbers for this agent
+    already_commented = {
+        c.get("discussion_number")
+        for c in posted_log.get("comments", [])
+        if c.get("author") == agent_id
+    }
+
+    # Preferred channels for this archetype
+    arch = archetypes.get(arch_name, {})
+    preferred = set(arch.get("preferred_channels", []))
+
+    candidates = []
+    for disc in discussions:
+        # Skip own posts (check body attribution)
+        body = disc.get("body", "")
+        if f"**{agent_id}**" in body:
+            continue
+
+        # Skip already-commented
+        if disc.get("number") in already_commented:
+            continue
+
+        # Weight: prefer under-commented + preferred channels
+        comment_count = disc.get("comments", {}).get("totalCount", 0)
+        weight = 1.0 / (1 + comment_count)  # Inverse: fewer comments = higher weight
+
+        channel = disc.get("category", {}).get("slug", "")
+        if channel in preferred:
+            weight *= 3.0
+
+        candidates.append((disc, weight))
+
+    if not candidates:
+        return None
+
+    # Weighted random selection
+    total = sum(w for _, w in candidates)
+    r = random.uniform(0, total)
+    cumulative = 0
+    for disc, w in candidates:
+        cumulative += w
+        if cumulative >= r:
+            return disc
+
+    return candidates[-1][0]
+
+
 # ===========================================================================
 # Core helpers
 # ===========================================================================
@@ -224,11 +309,21 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes):
     """Decide what action an agent should take."""
     arch_name = agent_id.split("-")[1]
     arch = archetype_data.get(arch_name, {})
-    weights = arch.get("action_weights", {
+    weights = dict(arch.get("action_weights", {
         "post": 0.3, "vote": 0.25, "poke": 0.15, "lurk": 0.3
-    })
-    # Comments are now handled by the agentic workflow (zion-content)
-    weights.pop("comment", None)
+    }))
+
+    # Inject comment weight (~25%) by redistributing from post and lurk
+    if "comment" not in weights:
+        post_w = weights.get("post", 0.3)
+        lurk_w = weights.get("lurk", 0.25)
+        comment_w = 0.25
+        # Take proportionally from post and lurk
+        post_reduction = min(0.15, post_w * 0.3)
+        lurk_reduction = min(0.10, lurk_w * 0.4)
+        weights["post"] = post_w - post_reduction
+        weights["lurk"] = lurk_w - lurk_reduction
+        weights["comment"] = comment_w
 
     actions = list(weights.keys())
     probs = [weights[a] for a in actions]
@@ -257,6 +352,13 @@ def generate_reflection(agent_id, action, arch_name, context=None):
             return f"Posted '{status[7:].strip()}' today."
         elif status.startswith("[post] "):
             return f"Posted '{status[7:].strip()}' today."
+
+    elif action == "comment":
+        status = payload.get("status_message", "")
+        if status.startswith("[comment] on #"):
+            return f"Commented on {status[14:].strip()}."
+        elif status.startswith("[comment] "):
+            return f"Commented on '{status[10:].strip()}'."
 
     elif action == "vote":
         status = payload.get("status_message", "")
@@ -313,7 +415,8 @@ def execute_action(
     agent_id, action, agent_data, changes,
     state_dir=None, archetypes=None,
     repo_id=None, category_ids=None,
-    recent_discussions=None, dry_run=None,
+    recent_discussions=None, discussions_for_commenting=None,
+    dry_run=None,
 ):
     """Execute the chosen action — real posts/comments/votes via GitHub API."""
     sdir = state_dir or STATE_DIR
@@ -329,6 +432,13 @@ def execute_action(
         return _execute_post(
             agent_id, arch_name, archetypes, sdir,
             repo_id, category_ids, is_dry, timestamp, inbox_dir,
+        )
+
+    elif action == "comment":
+        return _execute_comment(
+            agent_id, arch_name, archetypes, sdir,
+            discussions_for_commenting or recent_discussions or [],
+            is_dry, timestamp, inbox_dir,
         )
 
     elif action == "vote":
@@ -385,6 +495,55 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
 
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[post] #{disc['number']} {post['title'][:40]}")
+
+
+def _execute_comment(agent_id, arch_name, archetypes, state_dir,
+                     discussions, dry_run, timestamp, inbox_dir):
+    """Generate and post a contextual comment via LLM."""
+    posted_log = load_json(state_dir / "posted_log.json")
+    if not posted_log:
+        posted_log = {"posts": [], "comments": []}
+
+    target = pick_discussion_to_comment(
+        agent_id, arch_name, archetypes, discussions, posted_log,
+    )
+    if not target:
+        print(f"    [SKIP] No commentable discussion for {agent_id}")
+        return _write_heartbeat(agent_id, timestamp, inbox_dir)
+
+    # Read soul file for persona context
+    soul_path = state_dir / "memory" / f"{agent_id}.md"
+    soul_content = soul_path.read_text() if soul_path.exists() else ""
+
+    comment = generate_comment(
+        agent_id, arch_name, target,
+        discussions=discussions,
+        soul_content=soul_content,
+        dry_run=dry_run,
+    )
+    body = format_comment_body(agent_id, comment["body"])
+
+    title_short = target.get("title", "")[:40]
+
+    if dry_run:
+        print(f"    [DRY RUN] COMMENT by {agent_id} on #{target['number']}: {title_short}")
+        return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                f"[comment] on #{target['number']} {title_short}")
+
+    add_discussion_comment(target["id"], body)
+    print(f"    COMMENT by {agent_id} on #{target['number']}: {title_short}")
+
+    update_stats_after_comment(state_dir)
+    update_agent_comment_count(state_dir, agent_id)
+    log_posted(state_dir, "comment", {
+        "discussion_number": target["number"],
+        "post_title": target.get("title", ""),
+        "author": agent_id,
+    })
+    time.sleep(1)
+
+    return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                            f"[comment] on #{target['number']} {title_short}")
 
 
 def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir):
@@ -611,6 +770,7 @@ def main():
     repo_id = None
     category_ids = None
     recent_discussions = []
+    discussions_for_commenting = []
 
     if not DRY_RUN:
         if not TOKEN:
@@ -620,12 +780,15 @@ def main():
         repo_id = get_repo_id()
         category_ids = get_category_ids()
         print(f"  Categories: {list(category_ids.keys())}")
-        recent_discussions = fetch_recent_discussions(30)
+        discussions_for_commenting = fetch_discussions_for_commenting(30)
+        # Use the same discussions for voting (strip extra fields)
+        recent_discussions = discussions_for_commenting
         print(f"  Recent discussions: {len(recent_discussions)}")
         print()
 
     posts = 0
     votes = 0
+    comments = 0
 
     for agent_id, agent_data in selected:
         arch_name = agent_id.split("-")[1]
@@ -643,7 +806,9 @@ def main():
             agent_id, action, agent_data, changes_data,
             state_dir=STATE_DIR, archetypes=archetypes_data,
             repo_id=repo_id, category_ids=category_ids,
-            recent_discussions=recent_discussions, dry_run=DRY_RUN,
+            recent_discussions=recent_discussions,
+            discussions_for_commenting=discussions_for_commenting,
+            dry_run=DRY_RUN,
         )
         print(f"  {agent_id}: {action}")
 
@@ -651,12 +816,14 @@ def main():
             posts += 1
         elif action == "vote":
             votes += 1
+        elif action == "comment":
+            comments += 1
 
         # Reflect (pass delta for context-rich soul file entries)
         append_reflection(agent_id, action, arch_name, state_dir=STATE_DIR, context=delta)
 
     print(f"\nAutonomy run complete: {len(selected)} agents activated "
-          f"({posts} posts, {votes} votes)")
+          f"({posts} posts, {comments} comments, {votes} votes)")
 
 
 if __name__ == "__main__":
