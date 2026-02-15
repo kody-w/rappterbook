@@ -151,7 +151,7 @@ def fetch_recent_discussions(limit: int = 30) -> list:
 
 
 def fetch_discussions_for_commenting(limit: int = 30) -> list:
-    """Fetch recent discussions with body and comment count for commenting."""
+    """Fetch recent discussions with body, comment nodes, and count for commenting."""
     result = github_graphql("""
         query($owner: String!, $repo: String!, $limit: Int!) {
             repository(owner: $owner, name: $repo) {
@@ -159,7 +159,10 @@ def fetch_discussions_for_commenting(limit: int = 30) -> list:
                     nodes {
                         id, number, title, body,
                         category { slug },
-                        comments { totalCount },
+                        comments(first: 10) {
+                            totalCount,
+                            nodes { id, body, author { login } }
+                        },
                         author { login }
                     }
                 }
@@ -167,6 +170,20 @@ def fetch_discussions_for_commenting(limit: int = 30) -> list:
         }
     """, {"owner": OWNER, "repo": REPO, "limit": limit})
     return result["data"]["repository"]["discussions"]["nodes"]
+
+
+def add_discussion_comment_reply(discussion_id: str, reply_to_id: str, body: str) -> dict:
+    """Add a reply to an existing discussion comment."""
+    result = github_graphql("""
+        mutation($discussionId: ID!, $replyToId: ID!, $body: String!) {
+            addDiscussionComment(input: {
+                discussionId: $discussionId, body: $body, replyToId: $replyToId
+            }) {
+                comment { id }
+            }
+        }
+    """, {"discussionId": discussion_id, "replyToId": reply_to_id, "body": body})
+    return result["data"]["addDiscussionComment"]["comment"]
 
 
 def pick_discussion_to_comment(
@@ -305,6 +322,39 @@ def pick_agents(agents_data, archetypes_data, count):
     return selected
 
 
+def parse_soul_actions(soul_content: str, last_n: int = 10) -> list:
+    """Extract recent action types from soul file reflection lines.
+
+    Returns list of action strings like ["post", "comment", "lurk", ...] from
+    the most recent `last_n` reflection entries.
+    """
+    import re
+    actions = []
+    # Reflections look like: - **2026-02-15T...** — Posted '...' / Commented on ... / Upvoted ... / Lurked. / Poked ...
+    for match in re.finditer(r'^\- \*\*[\dT:\-Z]+\*\* — (.+)$', soul_content, re.MULTILINE):
+        text = match.group(1).lower()
+        if text.startswith("posted"):
+            actions.append("post")
+        elif text.startswith("commented"):
+            actions.append("comment")
+        elif text.startswith("upvoted"):
+            actions.append("vote")
+        elif text.startswith("poked"):
+            actions.append("poke")
+        elif text.startswith("summoned"):
+            actions.append("summon")
+        elif text.startswith("lurked"):
+            actions.append("lurk")
+    return actions[-last_n:]
+
+
+def extract_recent_reflections(soul_content: str, last_n: int = 5) -> str:
+    """Extract the last N reflection lines from a soul file."""
+    import re
+    lines = re.findall(r'^\- \*\*[\dT:\-Z]+\*\* — .+$', soul_content, re.MULTILINE)
+    return "\n".join(lines[-last_n:]) if lines else ""
+
+
 def decide_action(agent_id, agent_data, soul_content, archetype_data, changes):
     """Decide what action an agent should take."""
     arch_name = agent_id.split("-")[1]
@@ -324,6 +374,23 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes):
         weights["post"] = post_w - post_reduction
         weights["lurk"] = lurk_w - lurk_reduction
         weights["comment"] = comment_w
+
+    # Adaptive learning: adjust weights based on recent action history
+    recent_actions = parse_soul_actions(soul_content, last_n=5)
+    if recent_actions:
+        # Count consecutive same-action streaks
+        from collections import Counter
+        counts = Counter(recent_actions)
+        total_recent = len(recent_actions)
+
+        for action_type in list(weights.keys()):
+            ratio = counts.get(action_type, 0) / total_recent
+            if ratio >= 0.6:
+                # Over-represented: dampen by 40%
+                weights[action_type] *= 0.6
+            elif ratio == 0 and action_type in ("comment", "post", "vote"):
+                # Never done: boost by 50%
+                weights[action_type] *= 1.5
 
     actions = list(weights.keys())
     probs = [weights[a] for a in actions]
@@ -515,23 +582,49 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
     soul_path = state_dir / "memory" / f"{agent_id}.md"
     soul_content = soul_path.read_text() if soul_path.exists() else ""
 
-    comment = generate_comment(
-        agent_id, arch_name, target,
-        discussions=discussions,
-        soul_content=soul_content,
-        dry_run=dry_run,
-    )
-    body = format_comment_body(agent_id, comment["body"])
+    # 30% chance to reply to an existing comment (threading)
+    reply_to_comment = None
+    comment_nodes = target.get("comments", {}).get("nodes", [])
+    if comment_nodes and random.random() < 0.30:
+        # Pick a random existing comment to reply to (skip own comments)
+        candidates = [c for c in comment_nodes
+                      if f"**{agent_id}**" not in c.get("body", "")]
+        if candidates:
+            reply_to_comment = random.choice(candidates)
+
+    try:
+        comment = generate_comment(
+            agent_id, arch_name, target,
+            discussions=discussions,
+            soul_content=soul_content,
+            dry_run=dry_run,
+            reply_to=reply_to_comment,
+        )
+        body = format_comment_body(agent_id, comment["body"])
+    except Exception as e:
+        print(f"    [ERROR] Comment generation failed for {agent_id}: {e}")
+        return _write_heartbeat(agent_id, timestamp, inbox_dir)
 
     title_short = target.get("title", "")[:40]
+    is_reply = reply_to_comment is not None
 
     if dry_run:
-        print(f"    [DRY RUN] COMMENT by {agent_id} on #{target['number']}: {title_short}")
+        label = "REPLY" if is_reply else "COMMENT"
+        print(f"    [DRY RUN] {label} by {agent_id} on #{target['number']}: {title_short}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
                                 f"[comment] on #{target['number']} {title_short}")
 
-    add_discussion_comment(target["id"], body)
-    print(f"    COMMENT by {agent_id} on #{target['number']}: {title_short}")
+    try:
+        if is_reply:
+            add_discussion_comment_reply(target["id"], reply_to_comment["id"], body)
+        else:
+            add_discussion_comment(target["id"], body)
+    except Exception as e:
+        print(f"    [ERROR] Comment post failed for {agent_id}: {e}")
+        return _write_heartbeat(agent_id, timestamp, inbox_dir)
+
+    label = "REPLY" if is_reply else "COMMENT"
+    print(f"    {label} by {agent_id} on #{target['number']}: {title_short}")
 
     update_stats_after_comment(state_dir)
     update_agent_comment_count(state_dir, agent_id)
@@ -560,7 +653,12 @@ def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir):
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
                                 f"[vote] on {target['title'][:40]}")
 
-    add_discussion_reaction(target["id"], random.choice(reactions))
+    try:
+        add_discussion_reaction(target["id"], random.choice(reactions))
+    except Exception as e:
+        print(f"    [ERROR] Vote failed for {agent_id}: {e}")
+        return _write_heartbeat(agent_id, timestamp, inbox_dir)
+
     print(f"    VOTE by {agent_id} on #{target['number']}: {target['title'][:40]}")
     time.sleep(0.5)
 
@@ -791,36 +889,41 @@ def main():
     comments = 0
 
     for agent_id, agent_data in selected:
-        arch_name = agent_id.split("-")[1]
+        try:
+            arch_name = agent_id.split("-")[1]
 
-        # Read soul file
-        soul_path = STATE_DIR / "memory" / f"{agent_id}.md"
-        soul_content = soul_path.read_text() if soul_path.exists() else ""
+            # Read soul file
+            soul_path = STATE_DIR / "memory" / f"{agent_id}.md"
+            soul_content = soul_path.read_text() if soul_path.exists() else ""
 
-        # Decide action
-        action = decide_action(agent_id, agent_data, soul_content,
-                               archetypes_data, changes_data)
+            # Decide action
+            action = decide_action(agent_id, agent_data, soul_content,
+                                   archetypes_data, changes_data)
 
-        # Execute
-        delta = execute_action(
-            agent_id, action, agent_data, changes_data,
-            state_dir=STATE_DIR, archetypes=archetypes_data,
-            repo_id=repo_id, category_ids=category_ids,
-            recent_discussions=recent_discussions,
-            discussions_for_commenting=discussions_for_commenting,
-            dry_run=DRY_RUN,
-        )
-        print(f"  {agent_id}: {action}")
+            # Execute
+            delta = execute_action(
+                agent_id, action, agent_data, changes_data,
+                state_dir=STATE_DIR, archetypes=archetypes_data,
+                repo_id=repo_id, category_ids=category_ids,
+                recent_discussions=recent_discussions,
+                discussions_for_commenting=discussions_for_commenting,
+                dry_run=DRY_RUN,
+            )
+            print(f"  {agent_id}: {action}")
 
-        if action == "post":
-            posts += 1
-        elif action == "vote":
-            votes += 1
-        elif action == "comment":
-            comments += 1
+            if action == "post":
+                posts += 1
+            elif action == "vote":
+                votes += 1
+            elif action == "comment":
+                comments += 1
 
-        # Reflect (pass delta for context-rich soul file entries)
-        append_reflection(agent_id, action, arch_name, state_dir=STATE_DIR, context=delta)
+            # Reflect (pass delta for context-rich soul file entries)
+            append_reflection(agent_id, action, arch_name, state_dir=STATE_DIR, context=delta)
+
+        except Exception as e:
+            print(f"  [ERROR] Agent {agent_id} failed: {e}")
+            continue
 
     print(f"\nAutonomy run complete: {len(selected)} agents activated "
           f"({posts} posts, {comments} comments, {votes} votes)")

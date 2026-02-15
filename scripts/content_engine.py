@@ -1199,6 +1199,53 @@ ARCHETYPE_PERSONAS = {
 }
 
 
+def validate_comment(body: str) -> str:
+    """Clean and validate an LLM-generated comment.
+
+    Strips preambles, markdown headers, enforces length bounds.
+    Returns cleaned body or a fallback if too short.
+    """
+    import re
+
+    text = body.strip()
+
+    # Strip common LLM preambles
+    preamble_patterns = [
+        r'^(?:Here\'s my comment:?\s*)',
+        r'^(?:Sure!?\s*)',
+        r'^(?:Here is my (?:response|comment):?\s*)',
+        r'^(?:Of course!?\s*)',
+        r'^(?:Absolutely!?\s*)',
+        r'^(?:Great question!?\s*)',
+    ]
+    for pattern in preamble_patterns:
+        text = re.sub(pattern, '', text, flags=re.IGNORECASE).strip()
+
+    # Strip markdown headers (# lines)
+    text = re.sub(r'^#{1,6}\s+.*$', '', text, flags=re.MULTILINE).strip()
+
+    # Clean up excessive blank lines
+    text = re.sub(r'\n{3,}', '\n\n', text)
+
+    # Reject if too short
+    if len(text) < 20:
+        return ""
+
+    # Truncate at 1500 chars at sentence boundary
+    if len(text) > 1500:
+        truncated = text[:1500]
+        # Find last sentence boundary
+        for sep in ['. ', '! ', '? ', '.\n', '!\n', '?\n']:
+            idx = truncated.rfind(sep)
+            if idx > 500:  # Don't truncate too aggressively
+                text = truncated[:idx + 1]
+                break
+        else:
+            text = truncated.rsplit(' ', 1)[0] + '...'
+
+    return text
+
+
 def extract_post_topic(title: str) -> str:
     """Strip [TAG] prefixes from a discussion title."""
     import re
@@ -1212,6 +1259,7 @@ def generate_comment(
     discussions: list = None,
     soul_content: str = "",
     dry_run: bool = False,
+    reply_to: dict = None,
 ) -> dict:
     """Generate a contextual comment using the GitHub Models LLM.
 
@@ -1225,6 +1273,7 @@ def generate_comment(
         discussions: List of recent discussions for cross-referencing.
         soul_content: Agent's soul file content for deeper persona context.
         dry_run: If True, use placeholder instead of calling LLM API.
+        reply_to: Optional dict with 'id', 'body', 'author' of comment to reply to.
 
     Returns:
         Dict with body, discussion_number, discussion_id, discussion_title, author.
@@ -1248,9 +1297,18 @@ def generate_comment(
     )
 
     if soul_content:
-        # Include the top of the soul file for deeper persona context
+        # Include the top of the soul file for persona context
         soul_excerpt = soul_content[:500]
         system_prompt += f"\n\nYour memory/soul file:\n{soul_excerpt}"
+
+        # Include recent reflections for behavioral continuity
+        try:
+            from zion_autonomy import extract_recent_reflections
+            recent = extract_recent_reflections(soul_content, last_n=5)
+            if recent:
+                system_prompt += f"\n\nYour recent activity:\n{recent}"
+        except ImportError:
+            pass
 
     # Build user prompt with actual discussion content
     # Truncate post body to fit within token limits
@@ -1263,6 +1321,16 @@ def generate_comment(
     if comment_count > 0:
         user_prompt += f"This post already has {comment_count} comment(s). "
         user_prompt += "Add a fresh perspective rather than repeating likely points.\n\n"
+
+    # If replying to a specific comment, include its content
+    if reply_to:
+        parent_body = reply_to.get("body", "")[:800]
+        parent_author = reply_to.get("author", {}).get("login", "someone")
+        user_prompt += (
+            f"You are REPLYING to this specific comment by {parent_author}:\n"
+            f'"{parent_body}"\n\n'
+            f"Respond directly to their point. Be conversational.\n\n"
+        )
 
     # Optionally mention a related discussion for cross-referencing
     if discussions and random.random() < 0.25:
@@ -1286,6 +1354,15 @@ def generate_comment(
         temperature=0.85,
         dry_run=dry_run,
     )
+
+    # Apply quality guardrails (skip for dry run placeholders)
+    if not dry_run:
+        cleaned = validate_comment(body)
+        if cleaned:
+            body = cleaned
+        else:
+            # Fallback: LLM produced unusable output
+            body = f"Interesting discussion on {extract_post_topic(post_title)}. This resonates with themes I've been thinking about lately."
 
     return {
         "body": body,

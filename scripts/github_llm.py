@@ -21,11 +21,20 @@ Usage:
 """
 import json
 import os
+import time
 import urllib.request
 import urllib.error
 
+from pathlib import Path
+from datetime import datetime, timezone
+
 API_URL = "https://models.github.ai/inference/chat/completions"
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
+
+# Budget tracking
+_ROOT = Path(__file__).resolve().parent.parent
+_STATE_DIR = Path(os.environ.get("STATE_DIR", _ROOT / "state"))
+_DAILY_BUDGET = int(os.environ.get("LLM_DAILY_BUDGET", "100"))
 
 # Model preference order — try Anthropic first (when available on GitHub Models),
 # then fall back to the most capable alternatives.
@@ -118,6 +127,10 @@ def generate(
     if dry_run:
         return _dry_run_fallback(system, user)
 
+    if not _check_budget():
+        print("  [LLM] Daily budget exceeded — returning dry-run fallback")
+        return _dry_run_fallback(system, user)
+
     if not TOKEN:
         raise RuntimeError("GITHUB_TOKEN required for LLM generation")
 
@@ -143,20 +156,78 @@ def generate(
         method="POST",
     )
 
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            result = json.loads(resp.read())
-    except urllib.error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"GitHub Models API error {exc.code}: {body}") from exc
-    except urllib.error.URLError as exc:
-        raise RuntimeError(f"GitHub Models API unreachable: {exc.reason}") from exc
+    max_retries = 2
+    retryable_codes = {429, 503}
+    last_exc = None
+
+    for attempt in range(max_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                result = json.loads(resp.read())
+            break
+        except urllib.error.HTTPError as exc:
+            last_exc = exc
+            if exc.code in retryable_codes and attempt < max_retries:
+                wait = (attempt + 1)  # 1s, 2s
+                print(f"  [LLM] Retrying after HTTP {exc.code} (attempt {attempt + 1}, wait {wait}s)")
+                time.sleep(wait)
+                # Rebuild request since the stream may be consumed
+                req = urllib.request.Request(
+                    API_URL, data=payload, method="POST",
+                    headers={"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"},
+                )
+                continue
+            body = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"GitHub Models API error {exc.code}: {body}") from exc
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"GitHub Models API unreachable: {exc.reason}") from exc
+    else:
+        body = last_exc.read().decode("utf-8", errors="replace") if last_exc else "unknown"
+        raise RuntimeError(f"GitHub Models API failed after {max_retries + 1} attempts: {body}")
+
+    _increment_budget()
 
     choices = result.get("choices", [])
     if not choices:
         raise RuntimeError(f"GitHub Models returned no choices: {result}")
 
     return choices[0]["message"]["content"].strip()
+
+
+def _check_budget() -> bool:
+    """Check if we're within the daily LLM call budget."""
+    usage_path = _STATE_DIR / "llm_usage.json"
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    try:
+        with open(usage_path) as f:
+            usage = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        usage = {"date": today, "calls": 0}
+
+    if usage.get("date") != today:
+        usage = {"date": today, "calls": 0}
+
+    return usage["calls"] < _DAILY_BUDGET
+
+
+def _increment_budget() -> None:
+    """Increment the daily LLM call counter."""
+    usage_path = _STATE_DIR / "llm_usage.json"
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    try:
+        with open(usage_path) as f:
+            usage = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        usage = {"date": today, "calls": 0}
+
+    if usage.get("date") != today:
+        usage = {"date": today, "calls": 0}
+
+    usage["calls"] += 1
+    usage_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(usage_path, "w") as f:
+        json.dump(usage, f, indent=2)
+        f.write("\n")
 
 
 def _dry_run_fallback(system: str, user: str) -> str:

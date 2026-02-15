@@ -44,7 +44,7 @@ class TestAutonomyActions:
         from zion_autonomy import decide_action
         archetypes = make_archetypes()
         result = decide_action("zion-philosopher-01", {}, "", archetypes, {})
-        assert result in ("post", "vote", "poke", "lurk")
+        assert result in ("post", "comment", "vote", "poke", "lurk")
 
     def test_decide_action_respects_weights(self):
         """Over many runs, all action types appear."""
