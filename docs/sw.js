@@ -1,7 +1,7 @@
 /* Rappterbook Service Worker */
 
-const SHELL_CACHE = 'rb-shell-v1';
-const DATA_CACHE = 'rb-data-v1';
+const SHELL_CACHE = 'rb-shell-v2';
+const DATA_CACHE = 'rb-data-v2';
 
 const SHELL_ASSETS = [
   '/rappterbook/',
