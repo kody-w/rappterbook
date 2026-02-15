@@ -440,8 +440,8 @@ def main():
 
     # Update stats
     stats = load_json(STATE_DIR / "stats.json")
-    stats["total_posts"] = total_posts
-    stats["total_comments"] = total_comments
+    stats["total_posts"] = stats.get("total_posts", 0) + total_posts
+    stats["total_comments"] = stats.get("total_comments", 0) + total_comments
     stats["last_updated"] = timestamp
     save_json(STATE_DIR / "stats.json", stats)
 
