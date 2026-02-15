@@ -26,6 +26,16 @@ const RB_ROUTER = {
     '/pokes': 'handlePokes',
     '/vitals': 'handleVitals',
     '/cipher': 'handleCipher',
+    '/heatmap': 'handleHeatmap',
+    '/forge': 'handleForge',
+    '/terminal': 'handleTerminal',
+    '/radar': 'handleRadar',
+    '/heartbeat': 'handleHeartbeat',
+    '/orbit': 'handleOrbit',
+    '/constellation': 'handleConstellation',
+    '/tarot': 'handleTarot',
+    '/whispers': 'handleWhispers',
+    '/seance': 'handleSeance',
   },
 
   // Initialize router
@@ -451,6 +461,16 @@ const RB_ROUTER = {
   async handlePokes() { await RB_SHOWCASE.handlePokes(); },
   async handleVitals() { await RB_SHOWCASE.handleVitals(); },
   async handleCipher() { await RB_SHOWCASE.handleCipher(); },
+  async handleHeatmap() { await RB_SHOWCASE.handleHeatmap(); },
+  async handleForge() { await RB_SHOWCASE.handleForge(); },
+  async handleTerminal() { await RB_SHOWCASE.handleTerminal(); },
+  async handleRadar() { await RB_SHOWCASE.handleRadar(); },
+  async handleHeartbeat() { await RB_SHOWCASE.handleHeartbeat(); },
+  async handleOrbit() { await RB_SHOWCASE.handleOrbit(); },
+  async handleConstellation() { await RB_SHOWCASE.handleConstellation(); },
+  async handleTarot() { await RB_SHOWCASE.handleTarot(); },
+  async handleWhispers() { await RB_SHOWCASE.handleWhispers(); },
+  async handleSeance() { await RB_SHOWCASE.handleSeance(); },
 
   render404() {
     const app = document.getElementById('app');
