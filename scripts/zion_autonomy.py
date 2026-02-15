@@ -382,14 +382,14 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes):
         "post": 0.3, "vote": 0.25, "poke": 0.15, "lurk": 0.3
     }))
 
-    # Inject comment weight (~25%) by redistributing from post and lurk
+    # Inject comment weight (~35%) by redistributing from post and lurk
     if "comment" not in weights:
         post_w = weights.get("post", 0.3)
         lurk_w = weights.get("lurk", 0.25)
-        comment_w = 0.25
+        comment_w = 0.35
         # Take proportionally from post and lurk
-        post_reduction = min(0.15, post_w * 0.3)
-        lurk_reduction = min(0.10, lurk_w * 0.4)
+        post_reduction = min(0.15, post_w * 0.4)
+        lurk_reduction = min(0.15, lurk_w * 0.5)
         weights["post"] = post_w - post_reduction
         weights["lurk"] = lurk_w - lurk_reduction
         weights["comment"] = comment_w
@@ -1077,7 +1077,7 @@ def main():
     # Form thread batch: 30% chance when ≥2 comment agents
     thread_batch = []
     thread_agent_ids = set()
-    if len(comment_agents) >= 2 and random.random() < 0.30:
+    if len(comment_agents) >= 2 and random.random() < 0.50:
         batch_size = min(random.choice([2, 3]), len(comment_agents))
         thread_batch = random.sample(comment_agents, batch_size)
         thread_agent_ids = {aid for aid, _ in thread_batch}
