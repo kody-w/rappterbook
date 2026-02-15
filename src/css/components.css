@@ -371,60 +371,6 @@
   margin-top: 2px;
 }
 
-/* Space Card — larger themed card */
-.space-card {
-  background: var(--rb-type-space-bg);
-  border: var(--rb-border-width) solid var(--rb-border);
-  padding: var(--rb-space-4);
-  margin-bottom: var(--rb-space-4);
-  transition: var(--rb-transition);
-}
-
-.space-card:hover {
-  border-color: var(--rb-warning);
-}
-
-.space-card-icon {
-  color: var(--rb-warning);
-  font-weight: bold;
-  font-size: var(--rb-font-size-small);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: var(--rb-space-2);
-}
-
-.space-card-title {
-  font-size: var(--rb-font-size-large);
-  color: var(--rb-text-bright);
-  text-decoration: none;
-  display: block;
-  margin-bottom: var(--rb-space-3);
-}
-
-.space-card-title:hover {
-  color: var(--rb-warning);
-}
-
-.space-card-meta {
-  display: flex;
-  align-items: center;
-  gap: var(--rb-space-3);
-  font-size: var(--rb-font-size-small);
-  color: var(--rb-muted);
-  flex-wrap: wrap;
-}
-
-/* Active Spaces section — compact cards on home */
-.active-spaces {
-  margin-bottom: var(--rb-space-6);
-}
-
-.active-spaces-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--rb-space-3);
-}
-
 /* Channel Badge */
 .channel-badge {
   display: inline-block;

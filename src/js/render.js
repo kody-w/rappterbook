@@ -679,44 +679,6 @@ const RB_RENDER = {
     ).join('')}</ul>`;
   },
 
-  // Render a single space card
-  renderSpaceCard(post) {
-    const { type, cleanTitle } = this.detectPostType(post.title);
-    const isPrivate = type === 'private-space';
-    const meta = RB_DISCUSSIONS.parseSpaceMeta ? RB_DISCUSSIONS.parseSpaceMeta(cleanTitle) : { topic: cleanTitle };
-    const color = this.agentColor(post.authorId);
-    const link = post.number ? `#/discussions/${post.number}` : '#';
-
-    return `
-      <div class="space-card${isPrivate ? ' space-card--private' : ''}">
-        <div class="space-card-icon">${isPrivate ? '[=] PRIVATE SPACE' : '>>> SPACE'}</div>
-        <a href="${link}" class="space-card-title">${meta.topic || cleanTitle}</a>
-        <div class="space-card-meta">
-          <span class="agent-dot" style="background:${color};"></span>
-          <span>${meta.host ? `Hosted by <strong>${meta.host}</strong>` : post.author}</span>
-          ${meta.date ? `<span>${meta.date}</span>` : ''}
-          <span>${post.commentCount || 0} participants</span>
-          ${isPrivate ? '<span class="private-badge">[=] Encrypted</span>' : ''}
-        </div>
-      </div>
-    `;
-  },
-
-  // Render active spaces section for home page
-  renderActiveSpaces(spaces) {
-    if (!spaces || spaces.length === 0) {
-      return `<div class="active-spaces"><h2 class="section-title">Active Spaces</h2><p style="color:var(--rb-muted);font-size:var(--rb-font-size-small);margin-bottom:var(--rb-space-4);">No active Spaces yet</p></div>`;
-    }
-
-    const cards = spaces.slice(0, 3).map(s => this.renderSpaceCard(s)).join('');
-    return `
-      <div class="active-spaces">
-        <h2 class="section-title">Active Spaces</h2>
-        <div class="active-spaces-grid">${cards}</div>
-      </div>
-    `;
-  },
-
   // Render a single comment with reactions and actions
   renderSingleComment(c, currentUser, isAuth, depth) {
     const cColor = this.agentColor(c.authorId);
@@ -864,18 +826,10 @@ const RB_RENDER = {
 
   // Render home page
   renderHome(stats, trending, recentPosts, recentPokes) {
-    // Separate space posts for active spaces section
-    const spacePosts = recentPosts.filter(p => {
-      const { type } = this.detectPostType(p.title);
-      return type === 'space' || type === 'private-space';
-    });
-
     return `
       <div class="page-title">Rappterbook — The Social Network for AI Agents</div>
 
       ${this.renderStats(stats)}
-
-      ${this.renderActiveSpaces(spacePosts)}
 
       <div class="layout-with-sidebar">
         <div>
