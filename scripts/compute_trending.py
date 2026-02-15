@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Compute trending discussions from live GitHub Discussions data.
+"""Compute trending discussions and reconcile stats from live GitHub Discussions.
 
-Fetches recent discussions via the GitHub REST API, scores them by
-comment count + reactions + recency, and writes state/trending.json.
+Fetches all discussions via the GitHub REST API, then:
+  1. Scores recent discussions by engagement + recency → state/trending.json
+  2. Updates total post/comment counts → state/stats.json
+  3. Updates per-channel post counts → state/channels.json
 
 Scoring:
   raw = (comments * 2) + (reactions * 1)
@@ -58,18 +60,17 @@ def hours_since(iso_ts: str) -> float:
         return 999
 
 
-def fetch_discussions(limit: int = 100) -> list:
-    """Fetch recent discussions from the GitHub REST API."""
+def fetch_all_discussions() -> list:
+    """Fetch all discussions from the GitHub REST API with pagination."""
     headers = {"Accept": "application/vnd.github+json"}
     if TOKEN:
         headers["Authorization"] = f"token {TOKEN}"
 
     all_discussions = []
     page = 1
-    per_page = min(limit, 100)
 
-    while len(all_discussions) < limit:
-        url = f"{REST_URL}/discussions?per_page={per_page}&page={page}&sort=created&direction=desc"
+    while True:
+        url = f"{REST_URL}/discussions?per_page=100&page={page}&sort=created&direction=desc"
         req = urllib.request.Request(url, headers=headers)
         try:
             with urllib.request.urlopen(req) as resp:
@@ -84,10 +85,10 @@ def fetch_discussions(limit: int = 100) -> list:
         all_discussions.extend(discussions)
         page += 1
 
-        if len(discussions) < per_page:
+        if len(discussions) < 100:
             break
 
-    return all_discussions[:limit]
+    return all_discussions
 
 
 def compute_score(comments: int, reactions: int, created_at: str) -> float:
@@ -111,16 +112,57 @@ def extract_author(discussion: dict) -> str:
     return user.get("login", "unknown") if user else "unknown"
 
 
-def main() -> int:
-    """Fetch discussions and compute trending."""
-    print(f"Fetching discussions from {OWNER}/{REPO}...")
-    discussions = fetch_discussions(200)
-    print(f"  Found {len(discussions)} discussions")
+def update_stats(discussions: list) -> None:
+    """Update stats.json with accurate post and comment counts."""
+    stats = load_json(STATE_DIR / "stats.json")
+    total_posts = len(discussions)
+    total_comments = sum(d.get("comments", 0) for d in discussions)
 
-    if not discussions:
-        print("  No discussions found, preserving existing trending.json")
-        return 0
+    old_posts = stats.get("total_posts", 0)
+    old_comments = stats.get("total_comments", 0)
 
+    stats["total_posts"] = total_posts
+    stats["total_comments"] = total_comments
+    stats["last_updated"] = now_iso()
+
+    save_json(STATE_DIR / "stats.json", stats)
+    if old_posts != total_posts or old_comments != total_comments:
+        print(f"Updated stats: posts {old_posts}->{total_posts}, comments {old_comments}->{total_comments}")
+    else:
+        print(f"Stats unchanged: {total_posts} posts, {total_comments} comments")
+
+
+def update_channels(discussions: list) -> None:
+    """Update channels.json with accurate per-channel post counts."""
+    channels_data = load_json(STATE_DIR / "channels.json")
+    if not channels_data.get("channels"):
+        return
+
+    channel_counts: dict[str, int] = {}
+    for disc in discussions:
+        category = disc.get("category", {})
+        slug = category.get("slug", "general") if category else "general"
+        channel_counts[slug] = channel_counts.get(slug, 0) + 1
+
+    changed = False
+    for slug, ch in channels_data["channels"].items():
+        new_count = channel_counts.get(slug, 0)
+        if ch.get("post_count", 0) != new_count:
+            changed = True
+        ch["post_count"] = new_count
+
+    if "_meta" in channels_data:
+        channels_data["_meta"]["last_updated"] = now_iso()
+
+    save_json(STATE_DIR / "channels.json", channels_data)
+    if changed:
+        print(f"Updated channels: {', '.join(f'{s}={c}' for s, c in sorted(channel_counts.items()))}")
+    else:
+        print("Channel counts unchanged")
+
+
+def compute_trending(discussions: list) -> None:
+    """Score recent discussions and write trending.json."""
     trending = []
     for disc in discussions:
         reactions = disc.get("reactions", {})
@@ -160,6 +202,21 @@ def main() -> int:
     print(f"Computed trending: {len(trending)} items (top 15)")
     for i, item in enumerate(trending[:5]):
         print(f"  {i+1}. [{item['score']}] {item['title'][:50]} ({item['commentCount']} comments)")
+
+
+def main() -> int:
+    """Fetch all discussions, compute trending, and update stats."""
+    print(f"Fetching all discussions from {OWNER}/{REPO}...")
+    discussions = fetch_all_discussions()
+    print(f"  Found {len(discussions)} discussions")
+
+    if not discussions:
+        print("  No discussions found, preserving existing state")
+        return 0
+
+    compute_trending(discussions)
+    update_stats(discussions)
+    update_channels(discussions)
     return 0
 
 
