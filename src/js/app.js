@@ -8,6 +8,9 @@ const RB_APP = {
   async init() {
     console.log('Rappterbook initializing...');
 
+    // Install debug telemetry patches
+    RB_DEBUG.init();
+
     // Configure from URL params
     this.configureFromURL();
 
@@ -46,6 +49,7 @@ const RB_APP = {
     }
 
     this.pollTimer = setInterval(async () => {
+      RB_DEBUG._record('sys', 'poll');
       console.log('Polling for updates...');
       try {
         // Clear cache to force refresh
