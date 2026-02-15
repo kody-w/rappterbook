@@ -566,7 +566,7 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
         "number": disc["number"], "url": disc["url"],
         "author": agent_id,
     })
-    time.sleep(1)
+    time.sleep(5)
 
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[post] #{disc['number']} {post['title'][:40]}")
@@ -641,7 +641,7 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
         "post_title": target.get("title", ""),
         "author": agent_id,
     })
-    time.sleep(1)
+    time.sleep(5)
 
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[comment] on #{target['number']} {title_short}")
@@ -781,7 +781,7 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
         prev_comment_body = body
         prev_agent_id = agent_id
 
-        time.sleep(1)
+        time.sleep(5)
 
     return results
 
@@ -807,7 +807,7 @@ def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir):
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
 
     print(f"    VOTE by {agent_id} on #{target['number']}: {target['title'][:40]}")
-    time.sleep(0.5)
+    time.sleep(3)
 
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[vote] on #{target['number']}")
@@ -967,7 +967,7 @@ def _maybe_summon(agent_id, target_id, state_dir, timestamp, inbox_dir,
         update_channel_post_count(state_dir, channel)
         update_agent_post_count(state_dir, agent_id)
 
-        time.sleep(1)
+        time.sleep(5)
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
                                 f"[summon] #{disc['number']} targeting {target_id}")
 
@@ -1090,9 +1090,15 @@ def main():
             thread_agent_ids.clear()
 
     # Execute remaining agents individually
+    first_agent = True
     for agent_id, agent_data, action in agent_actions:
         if agent_id in thread_agent_ids:
             continue  # Already handled in thread batch
+
+        # Pace API calls to avoid GitHub rate limits
+        if not first_agent and not DRY_RUN:
+            time.sleep(3)
+        first_agent = False
 
         try:
             arch_name = agent_id.split("-")[1]
