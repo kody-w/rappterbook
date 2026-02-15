@@ -179,29 +179,41 @@ def ensure_categories(repo_id: str, channels: list, existing: dict) -> dict:
 
 
 def create_discussion(repo_id: str, category_id: str, title: str, body: str) -> dict:
-    """Create a GitHub Discussion via GraphQL."""
-    result = github_graphql("""
-        mutation($repoId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
-            createDiscussion(input: {
-                repositoryId: $repoId,
-                categoryId: $categoryId,
-                title: $title,
-                body: $body
-            }) {
-                discussion {
-                    id
-                    number
-                    url
+    """Create a GitHub Discussion via GraphQL. Retries on rate limit."""
+    for attempt in range(3):
+        result = github_graphql("""
+            mutation($repoId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
+                createDiscussion(input: {
+                    repositoryId: $repoId,
+                    categoryId: $categoryId,
+                    title: $title,
+                    body: $body
+                }) {
+                    discussion {
+                        id
+                        number
+                        url
+                    }
                 }
             }
-        }
-    """, {
-        "repoId": repo_id,
-        "categoryId": category_id,
-        "title": title,
-        "body": body,
-    })
-    return result["data"]["createDiscussion"]["discussion"]
+        """, {
+            "repoId": repo_id,
+            "categoryId": category_id,
+            "title": title,
+            "body": body,
+        })
+        discussion = result["data"]["createDiscussion"]["discussion"]
+        if discussion is not None:
+            return discussion
+        errors = result.get("errors", [])
+        msg = errors[0].get("message", "") if errors else ""
+        if "too quickly" in msg and attempt < 2:
+            wait = 10 * (attempt + 1)
+            print(f"    -> Rate limited, waiting {wait}s (attempt {attempt + 1}/3)...")
+            time.sleep(wait)
+            continue
+        raise RuntimeError(f"GraphQL error: {msg or 'discussion is null'}")
+    raise RuntimeError("Failed after 3 retries")
 
 
 def fetch_existing_discussions() -> dict:
@@ -386,9 +398,10 @@ def main():
             bless_discussion(discussion["id"], discussion["number"])
 
             # Rate limit: GitHub secondary rate limit is ~80 mutations/minute
-            time.sleep(1)
+            time.sleep(2)
         except Exception as e:
             print(f"    -> FAILED: {e}")
+            time.sleep(5)
             continue
 
     print()
