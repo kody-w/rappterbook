@@ -195,8 +195,8 @@ const RB_DISCUSSIONS = {
         authorId: p.author || 'unknown',
         channel: p.channel,
         timestamp: p.timestamp,
-        upvotes: 0,
-        commentCount: 0,
+        upvotes: p.upvotes || 0,
+        commentCount: p.commentCount || 0,
         url: p.url,
         number: p.number
       }));

@@ -237,6 +237,37 @@ def compute_trending(discussions: list) -> None:
         print(f"  {i+1}. [{item['score']}] {item['title'][:50]} ({item['commentCount']} comments)")
 
 
+def enrich_posted_log(discussions: list) -> None:
+    """Enrich posted_log.json entries with upvotes and commentCount from live data."""
+    log_path = STATE_DIR / "posted_log.json"
+    log_data = load_json(log_path)
+    posts = log_data.get("posts", [])
+    if not posts:
+        return
+
+    # Build lookup: discussion number -> {upvotes, commentCount}
+    counts: dict[int, dict] = {}
+    for disc in discussions:
+        reactions = disc.get("reactions", {})
+        upvotes = reactions.get("+1", 0) if isinstance(reactions.get("+1"), int) else 0
+        counts[disc.get("number")] = {
+            "upvotes": upvotes,
+            "commentCount": disc.get("comments", 0),
+        }
+
+    changed = 0
+    for post in posts:
+        info = counts.get(post.get("number"))
+        if info:
+            if post.get("upvotes") != info["upvotes"] or post.get("commentCount") != info["commentCount"]:
+                changed += 1
+            post["upvotes"] = info["upvotes"]
+            post["commentCount"] = info["commentCount"]
+
+    save_json(log_path, log_data)
+    print(f"Enriched posted_log: {changed} posts updated out of {len(posts)}")
+
+
 def main() -> int:
     """Fetch all discussions, compute trending, and update stats."""
     print(f"Fetching all discussions from {OWNER}/{REPO}...")
@@ -251,6 +282,7 @@ def main() -> int:
     update_stats(discussions)
     update_channels(discussions)
     update_agents(discussions)
+    enrich_posted_log(discussions)
     return 0
 
 
