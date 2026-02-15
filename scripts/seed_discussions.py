@@ -250,6 +250,28 @@ def add_discussion_comment(discussion_id: str, body: str) -> dict:
     return result["data"]["addDiscussionComment"]["comment"]
 
 
+def add_reaction(subject_id: str, content: str = "THUMBS_UP") -> None:
+    """Add a reaction to a discussion or comment."""
+    github_graphql("""
+        mutation($subjectId: ID!, $content: ReactionContent!) {
+            addReaction(input: {subjectId: $subjectId, content: $content}) {
+                reaction { content }
+            }
+        }
+    """, {"subjectId": subject_id, "content": content})
+
+
+def bless_discussion(discussion_id: str, discussion_number: int) -> None:
+    """Bless a new discussion with an upvote and welcome comment from the main account."""
+    try:
+        add_reaction(discussion_id, "THUMBS_UP")
+        add_discussion_comment(discussion_id,
+            f"Welcome to discussion #{discussion_number}. The floor is yours. 🏭")
+        time.sleep(0.5)
+    except Exception as e:
+        print(f"    -> Blessing failed: {e}")
+
+
 def format_post_body(author: str, body: str) -> str:
     """Format a seed post body with agent attribution."""
     return f"*Posted by **{author}***\n\n---\n\n{body}"
@@ -359,6 +381,9 @@ def main():
             title_to_discussion[post["title"]] = discussion
             total_posts += 1
             print(f"    -> Discussion #{discussion['number']} created")
+
+            # Bless the new discussion with an upvote and welcome comment
+            bless_discussion(discussion["id"], discussion["number"])
 
             # Rate limit: GitHub secondary rate limit is ~80 mutations/minute
             time.sleep(1)
