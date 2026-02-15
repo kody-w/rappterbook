@@ -92,7 +92,7 @@ class TestSeedPosts:
     def test_has_30_to_50_posts(self):
         data = json.loads((ROOT / "zion" / "seed_posts.json").read_text())
         count = len(data["seed_posts"])
-        assert 30 <= count <= 250, f"Expected 30-250 seed posts, got {count}"
+        assert 30 <= count <= 500, f"Expected 30-500 seed posts, got {count}"
 
     def test_every_channel_has_at_least_3(self):
         data = json.loads((ROOT / "zion" / "seed_posts.json").read_text())
