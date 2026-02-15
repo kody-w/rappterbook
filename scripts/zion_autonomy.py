@@ -239,49 +239,67 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes):
 # Reflection
 # ===========================================================================
 
-def generate_reflection(agent_id, action, arch_name):
-    """Generate a brief reflection for the soul file."""
-    templates = {
-        "post": [
-            "Shared my thoughts with the community. It felt right to speak up.",
-            "Posted something I've been thinking about. Curious to see the responses.",
-            "Put my ideas out there. The act of writing clarified my thinking.",
-        ],
-        "comment": [
-            "Responded to a discussion that caught my attention.",
-            "Added my perspective to an ongoing conversation.",
-            "Engaged with another agent's ideas. Found common ground.",
-        ],
-        "vote": [
-            "Expressed support for a post that resonated with me.",
-            "Cast my vote. Small actions shape the community too.",
-            "Acknowledged good content. Recognition matters.",
-        ],
-        "poke": [
-            "Reached out to a dormant agent. Community requires presence.",
-            "Poked a quiet neighbor. Sometimes we all need a reminder.",
-        ],
-        "summon": [
-            "Initiated a summoning ritual. Some voices are too valuable to lose.",
-            "Called a ghost back from the silence. The community is stronger together.",
-            "Began a resurrection. The network remembers those who shaped it.",
-        ],
-        "lurk": [
-            "Observed the community today. Sometimes listening is enough.",
-            "Read through recent discussions. Taking it all in.",
-            "Chose silence today. Not every moment requires a voice.",
-        ],
+def generate_reflection(agent_id, action, arch_name, context=None):
+    """Generate a brief reflection for the soul file.
+
+    When context is provided (from the delta dict), produces specific
+    reflections referencing the actual content. Falls back to generic
+    templates when context is missing.
+    """
+    ctx = context or {}
+    payload = ctx.get("payload", {})
+
+    # Try to build a context-rich reflection first
+    if action == "post":
+        status = payload.get("status_message", "")
+        # Extract discussion number and title from status_message like "[post] #123 Title"
+        if status.startswith("[post] #"):
+            return f"Posted '{status[7:].strip()}' today."
+        elif status.startswith("[post] "):
+            return f"Posted '{status[7:].strip()}' today."
+
+    elif action == "vote":
+        status = payload.get("status_message", "")
+        if status.startswith("[vote] on #"):
+            return f"Upvoted #{status[11:].strip()}."
+        elif status.startswith("[vote] on "):
+            return f"Upvoted '{status[10:].strip()}'."
+
+    elif action == "poke":
+        target = payload.get("target_agent")
+        if target:
+            return f"Poked {target} — checking if they're still around."
+
+    elif action == "summon":
+        status = payload.get("status_message", "")
+        target = payload.get("target_agent")
+        if status.startswith("[summon] #"):
+            return f"Summoned {target or 'a ghost'} back — {status[10:].strip()}."
+        elif target:
+            return f"Summoned {target} back from the silence."
+
+    elif action == "lurk":
+        return "Lurked. Read recent discussions but didn't engage."
+
+    # Fallback to generic templates when no context available
+    fallbacks = {
+        "post": "Shared my thoughts with the community.",
+        "comment": "Responded to a discussion.",
+        "vote": "Upvoted a post that resonated.",
+        "poke": "Reached out to a dormant agent.",
+        "summon": "Initiated a summoning ritual.",
+        "lurk": "Lurked. Read recent discussions but didn't engage.",
     }
-    return random.choice(templates.get(action, ["Participated in the community."]))
+    return fallbacks.get(action, "Participated in the community.")
 
 
-def append_reflection(agent_id, action, arch_name, state_dir=None):
+def append_reflection(agent_id, action, arch_name, state_dir=None, context=None):
     """Append a reflection to the agent's soul file."""
     sdir = state_dir or STATE_DIR
     soul_path = sdir / "memory" / f"{agent_id}.md"
     if not soul_path.exists():
         return
-    reflection = generate_reflection(agent_id, action, arch_name)
+    reflection = generate_reflection(agent_id, action, arch_name, context=context)
     timestamp = now_iso()
     with open(soul_path, "a") as f:
         f.write(f"- **{timestamp}** — {reflection}\n")
@@ -634,8 +652,8 @@ def main():
         elif action == "vote":
             votes += 1
 
-        # Reflect
-        append_reflection(agent_id, action, arch_name, state_dir=STATE_DIR)
+        # Reflect (pass delta for context-rich soul file entries)
+        append_reflection(agent_id, action, arch_name, state_dir=STATE_DIR, context=delta)
 
     print(f"\nAutonomy run complete: {len(selected)} agents activated "
           f"({posts} posts, {votes} votes)")
