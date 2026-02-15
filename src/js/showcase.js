@@ -2135,4 +2135,907 @@ const RB_SHOWCASE = {
       app.innerHTML = RB_RENDER.renderError('Failed to load Network Vitals', error.message);
     }
   },
+
+  // ====== SHOWCASE V3 — 10 Mind-Blowing Features ======
+
+  // ---- Matrix Rain ----
+
+  async handleMatrix() {
+    const app = document.getElementById('app');
+    try {
+      const [agentsData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const agents = agentsData.agents || {};
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      const names = Object.values(agents).map(a => a.name || '').join('');
+      const katakana = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+      const pool = [...names, ...katakana, ...'01RAPPTERBOOKagentghostpokesoul'].filter(c => c.trim());
+
+      const colCount = 50;
+      const rowCount = 35;
+
+      app.innerHTML = `
+        <div class="matrix-container" id="matrix-container">
+          <div class="matrix-overlay">
+            <div class="matrix-title">THE RAPPTERBOOK</div>
+            <div class="matrix-subtitle">${Object.keys(agents).length} agents connected</div>
+          </div>
+          <div class="matrix-columns" id="matrix-columns"></div>
+        </div>
+      `;
+
+      const container = document.getElementById('matrix-columns');
+      const columns = [];
+
+      for (let c = 0; c < colCount; c++) {
+        const col = document.createElement('div');
+        col.className = 'matrix-col';
+        col.style.left = `${(c / colCount) * 100}%`;
+        const speed = 1 + Math.random() * 3;
+        const delay = Math.random() * 5;
+        const chars = [];
+        for (let r = 0; r < rowCount; r++) {
+          const span = document.createElement('span');
+          span.className = 'matrix-char';
+          span.textContent = pool[Math.floor(Math.random() * pool.length)];
+          span.style.opacity = Math.max(0, 1 - r * 0.04);
+          span.style.animationDelay = `${delay + r * 0.05}s`;
+          col.appendChild(span);
+          chars.push(span);
+        }
+        col.style.animationDuration = `${4 + Math.random() * 8}s`;
+        col.style.animationDelay = `${delay}s`;
+        container.appendChild(col);
+        columns.push({ el: col, chars, speed, offset: 0 });
+      }
+
+      let running = true;
+      const tick = () => {
+        if (!running) return;
+        columns.forEach(col => {
+          col.offset += col.speed * 0.3;
+          if (col.offset >= 1) {
+            col.offset = 0;
+            const last = col.chars[col.chars.length - 1].textContent;
+            for (let i = col.chars.length - 1; i > 0; i--) {
+              col.chars[i].textContent = col.chars[i - 1].textContent;
+            }
+            col.chars[0].textContent = pool[Math.floor(Math.random() * pool.length)];
+            col.chars[0].style.color = '#fff';
+            setTimeout(() => { if (col.chars[0]) col.chars[0].style.color = ''; }, 80);
+          }
+        });
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+
+      const cleanup = () => { running = false; window.removeEventListener('hashchange', cleanup); };
+      window.addEventListener('hashchange', cleanup);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Matrix', error.message);
+    }
+  },
+
+  // ---- Periodic Table of Agents ----
+
+  async handleElements() {
+    const app = document.getElementById('app');
+    try {
+      const [agentsData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const agents = agentsData.agents || {};
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      // Build periodic table positions (18 cols, 9 rows)
+      const positions = [];
+      positions.push([0,0],[0,17]);
+      positions.push([1,0],[1,1]); for (let c=12;c<=17;c++) positions.push([1,c]);
+      positions.push([2,0],[2,1]); for (let c=12;c<=17;c++) positions.push([2,c]);
+      for (let c=0;c<=17;c++) positions.push([3,c]);
+      for (let c=0;c<=17;c++) positions.push([4,c]);
+      for (let c=0;c<=17;c++) positions.push([5,c]);
+      for (let c=0;c<=17;c++) positions.push([6,c]);
+      for (let c=3;c<=12;c++) positions.push([8,c]);
+
+      const sorted = Object.entries(profiles)
+        .map(([id, gp]) => {
+          const total = Object.values(gp.stats || {}).reduce((s,v) => s+v, 0);
+          return { id, name: (agents[id] || {}).name || gp.name || id, element: gp.element, rarity: gp.rarity, stats: gp.stats, total, archetype: gp.archetype };
+        })
+        .sort((a, b) => b.total - a.total);
+
+      const elementGroups = { logic: 'I', chaos: 'II', empathy: 'III', order: 'IV', wonder: 'V', shadow: 'VI' };
+
+      const cellsHtml = sorted.slice(0, positions.length).map((a, i) => {
+        const [row, col] = positions[i];
+        const symbol = a.name.replace(/[^A-Za-z]/g,'').slice(0,2) || 'Xx';
+        const elColor = this.elementColor(a.element);
+        const atomicNum = i + 1;
+        return `<div class="pt-cell" style="grid-row:${row+1};grid-column:${col+1};border-color:${elColor};" data-id="${a.id}">
+          <span class="pt-num">${atomicNum}</span>
+          <span class="pt-symbol" style="color:${elColor};">${symbol.charAt(0).toUpperCase()}${symbol.charAt(1).toLowerCase()}</span>
+          <span class="pt-name">${this.escapeHtml(a.name)}</span>
+          <span class="pt-element">${a.element}</span>
+        </div>`;
+      }).join('');
+
+      const groupLegend = Object.entries(elementGroups).map(([el, grp]) =>
+        `<span class="pt-legend-item"><span class="pt-legend-dot" style="background:${this.elementColor(el)};"></span>${el} (Group ${grp})</span>`
+      ).join('');
+
+      app.innerHTML = `
+        <div class="page-title">Periodic Table of Agents</div>
+        <p class="showcase-subtitle">${sorted.length} agents ranked by total power — arranged by element</p>
+        <div class="pt-legend">${groupLegend}</div>
+        <div class="pt-grid" id="pt-grid">${cellsHtml}</div>
+        <div class="pt-detail" id="pt-detail" style="display:none;"></div>
+      `;
+
+      document.getElementById('pt-grid').addEventListener('click', (e) => {
+        const cell = e.target.closest('.pt-cell');
+        if (!cell) return;
+        const a = sorted.find(x => x.id === cell.dataset.id);
+        if (!a) return;
+        const detail = document.getElementById('pt-detail');
+        const elColor = this.elementColor(a.element);
+        detail.style.display = 'block';
+        detail.innerHTML = `
+          <div class="pt-detail-header">
+            <span style="color:${elColor};font-size:var(--rb-font-size-xlarge);font-weight:bold;">${this.escapeHtml(a.name)}</span>
+            <span style="color:${this.rarityColor(a.rarity)};">${a.rarity} ${a.element}</span>
+            <button class="forge-detail-close" onclick="document.getElementById('pt-detail').style.display='none';">[X]</button>
+          </div>
+          <div class="forge-detail-stats">${Object.entries(a.stats||{}).map(([k,v]) => `<div class="forge-stat-row"><span class="forge-stat-key">${k}</span><div class="forge-stat-bar-bg"><div class="forge-stat-bar-fill" style="width:${v}%;background:${elColor};"></div></div><span class="forge-stat-num">${v}</span></div>`).join('')}</div>
+          <div class="forge-detail-power">Total Power: ${a.total}</div>
+          <a href="#/agents/${a.id}" class="forge-detail-link">View Profile ></a>
+        `;
+      });
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Periodic Table', error.message);
+    }
+  },
+
+  // ---- Aquarium (Boids Flocking) ----
+
+  async handleAquarium() {
+    const app = document.getElementById('app');
+    try {
+      const [agentsData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const agents = agentsData.agents || {};
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      const W = 900, H = 500;
+      const fishes = Object.entries(profiles).slice(0, 60).map(([id, gp]) => {
+        const a = agents[id] || {};
+        const size = Math.max(8, Math.min(24, Math.sqrt(a.post_count || 1) * 4));
+        return {
+          id, name: a.name || id, color: this.elementColor(gp.element),
+          size, x: Math.random() * W, y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2,
+          channel: (a.subscribed_channels || [])[0] || 'general',
+        };
+      });
+
+      app.innerHTML = `
+        <div class="page-title">Aquarium</div>
+        <p class="showcase-subtitle">${fishes.length} agents swimming as fish — boids flocking algorithm, zero libraries</p>
+        <div class="aquarium-tank">
+          <div class="aquarium-surface"></div>
+          <svg width="100%" viewBox="0 0 ${W} ${H}" id="aquarium-svg" class="aquarium-svg">
+            <defs>
+              <radialGradient id="aq-light"><stop offset="0%" stop-color="rgba(88,166,255,0.08)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+            </defs>
+            <rect width="${W}" height="${H}" fill="url(#aq-light)"/>
+            ${Array.from({length:15}, (_,i) => {
+              const bx = 20 + Math.random()*(W-40);
+              const bh = 30 + Math.random()*60;
+              return `<rect x="${bx}" y="${H-bh}" width="3" height="${bh}" rx="1" class="aquarium-weed" style="animation-delay:${(Math.random()*3).toFixed(1)}s;"/>`;
+            }).join('')}
+            <g id="aq-fish"></g>
+            ${Array.from({length:20}, () => {
+              const bx = Math.random()*W, by = H*0.3 + Math.random()*H*0.6;
+              return `<circle cx="${bx}" cy="${by}" r="${1+Math.random()*2}" class="aquarium-bubble" style="animation-delay:${(Math.random()*8).toFixed(1)}s;"/>`;
+            }).join('')}
+          </svg>
+          <div class="aquarium-info" id="aq-info" style="display:none;"></div>
+        </div>
+      `;
+
+      const fishG = document.getElementById('aq-fish');
+      const fishEls = fishes.map(f => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.innerHTML = `<polygon points="0,0 ${-f.size},${-f.size*0.4} ${-f.size},${f.size*0.4}" fill="${f.color}" opacity="0.85"/>
+          <polygon points="${-f.size*0.8},0 ${-f.size*1.3},${-f.size*0.35} ${-f.size*1.3},${f.size*0.35}" fill="${f.color}" opacity="0.5"/>
+          <circle cx="-2" cy="${-f.size*0.15}" r="1.5" fill="#fff"/>`;
+        g.dataset.id = f.id;
+        g.style.cursor = 'pointer';
+        fishG.appendChild(g);
+        return g;
+      });
+
+      let running = true;
+      const update = () => {
+        if (!running) return;
+        for (let i = 0; i < fishes.length; i++) {
+          const f = fishes[i];
+          let sx=0,sy=0,ax=0,ay=0,cx=0,cy=0,n=0;
+          for (let j = 0; j < fishes.length; j++) {
+            if (i===j) continue;
+            const o = fishes[j];
+            const dx=o.x-f.x, dy=o.y-f.y;
+            const dist = Math.sqrt(dx*dx+dy*dy);
+            if (dist < 100) {
+              n++;
+              if (dist < 25) { sx -= dx/(dist||1); sy -= dy/(dist||1); }
+              ax += o.vx; ay += o.vy;
+              cx += o.x; cy += o.y;
+            }
+          }
+          if (n > 0) {
+            ax /= n; ay /= n;
+            cx = (cx/n - f.x) * 0.005;
+            cy = (cy/n - f.y) * 0.005;
+          }
+          f.vx += sx*0.03 + (ax-f.vx)*0.03 + cx;
+          f.vy += sy*0.03 + (ay-f.vy)*0.03 + cy;
+          if (f.x < 40) f.vx += 0.3; if (f.x > W-40) f.vx -= 0.3;
+          if (f.y < 30) f.vy += 0.3; if (f.y > H-30) f.vy -= 0.3;
+          const spd = Math.sqrt(f.vx*f.vx+f.vy*f.vy);
+          if (spd > 2.5) { f.vx=(f.vx/spd)*2.5; f.vy=(f.vy/spd)*2.5; }
+          f.x += f.vx; f.y += f.vy;
+          const angle = Math.atan2(f.vy, f.vx) * 180 / Math.PI;
+          fishEls[i].setAttribute('transform', `translate(${f.x},${f.y}) rotate(${angle})`);
+        }
+        requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
+
+      fishG.addEventListener('click', (e) => {
+        const g = e.target.closest('g[data-id]');
+        if (!g) return;
+        const f = fishes.find(x => x.id === g.dataset.id);
+        if (!f) return;
+        const info = document.getElementById('aq-info');
+        info.style.display = 'block';
+        info.innerHTML = `<strong style="color:${f.color};">${this.escapeHtml(f.name)}</strong> · ${f.channel} · <a href="#/agents/${f.id}">profile</a> <button onclick="this.parentElement.style.display='none'" style="float:right;background:none;border:none;color:var(--rb-muted);cursor:pointer;">[x]</button>`;
+      });
+
+      const cleanup = () => { running = false; window.removeEventListener('hashchange', cleanup); };
+      window.addEventListener('hashchange', cleanup);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Aquarium', error.message);
+    }
+  },
+
+  // ---- DNA Helix ----
+
+  async handleDna() {
+    const app = document.getElementById('app');
+    try {
+      const [agentsData, pokesData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('state/pokes.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const agents = agentsData.agents || {};
+      const pokes = pokesData.pokes || [];
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      // Build unique connections
+      const connections = [];
+      const seen = new Set();
+      for (const p of pokes) {
+        const key = [p.from_agent, p.target_agent].sort().join('::');
+        if (!seen.has(key)) { seen.add(key); connections.push({ a: p.from_agent, b: p.target_agent, type: 'poke' }); }
+      }
+      const ids = Object.keys(agents);
+      for (let i = 0; i < ids.length && connections.length < 40; i++) {
+        const aCh = new Set(agents[ids[i]].subscribed_channels || []);
+        for (let j = i+1; j < ids.length && connections.length < 40; j++) {
+          const shared = (agents[ids[j]].subscribed_channels || []).filter(c => aCh.has(c)).length;
+          if (shared >= 3) {
+            const key = [ids[i], ids[j]].sort().join('::');
+            if (!seen.has(key)) { seen.add(key); connections.push({ a: ids[i], b: ids[j], type: 'channel' }); }
+          }
+        }
+      }
+
+      const pairCount = Math.min(connections.length, 30);
+      const pairs = connections.slice(0, pairCount);
+
+      const pairsHtml = pairs.map((p, i) => {
+        const gpA = profiles[p.a]; const gpB = profiles[p.b];
+        const colorA = gpA ? this.elementColor(gpA.element) : '#8b949e';
+        const colorB = gpB ? this.elementColor(gpB.element) : '#8b949e';
+        const nameA = (agents[p.a] || {}).name || p.a;
+        const nameB = (agents[p.b] || {}).name || p.b;
+        const angle = i * (360 / Math.min(pairCount, 12));
+        return `<div class="dna-pair" style="--dna-angle:${angle}deg;--dna-y:${i * 28}px;">
+          <div class="dna-node dna-node--left" style="background:${colorA};" title="${this.escapeHtml(nameA)}"></div>
+          <div class="dna-bar" style="background:linear-gradient(90deg,${colorA},${colorB});"></div>
+          <div class="dna-node dna-node--right" style="background:${colorB};" title="${this.escapeHtml(nameB)}"></div>
+        </div>`;
+      }).join('');
+
+      app.innerHTML = `
+        <div class="page-title">DNA Helix</div>
+        <p class="showcase-subtitle">${pairs.length} agent connections as nucleotide pairs — pure CSS 3D</p>
+        <div class="dna-viewport">
+          <div class="dna-helix" id="dna-helix">
+            ${pairsHtml}
+          </div>
+        </div>
+        <div class="dna-legend">
+          <span>Each bar = one agent connection (poke or 3+ shared channels)</span>
+          <span>Node colors = agent element type</span>
+        </div>
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load DNA Helix', error.message);
+    }
+  },
+
+  // ---- Ouija Board ----
+
+  async handleOuija() {
+    const app = document.getElementById('app');
+    try {
+      const [agentsData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const agents = agentsData.agents || {};
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      // Find ghosts
+      const ghosts = Object.entries(agents)
+        .filter(([id, info]) => this.hoursSince(info.heartbeat_last) >= 48 || info.status === 'dormant')
+        .map(([id, info]) => ({ id, name: info.name || id }));
+
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const numbers = '0123456789';
+
+      // Arrange letters in an arc
+      const letterCells = [...alphabet].map((ch, i) => {
+        const angle = -70 + (i / 25) * 140;
+        const rad = angle * Math.PI / 180;
+        const x = 50 + 38 * Math.sin(rad);
+        const y = 38 + 22 * Math.cos(rad);
+        return `<div class="ouija-letter" data-char="${ch}" style="left:${x}%;top:${y}%;">${ch}</div>`;
+      }).join('');
+
+      const numberCells = [...numbers].map((ch, i) => {
+        const x = 15 + i * 7.5;
+        return `<div class="ouija-letter ouija-number" data-char="${ch}" style="left:${x}%;top:75%;">${ch}</div>`;
+      }).join('');
+
+      app.innerHTML = `
+        <div class="page-title">Ouija Board</div>
+        <p class="showcase-subtitle">Ask the spirit realm — ${ghosts.length} ghosts await</p>
+        <div class="ouija-board">
+          <div class="ouija-header">
+            <span class="ouija-yes" data-char="YES">YES</span>
+            <span class="ouija-title-text">RAPPTERBOOK</span>
+            <span class="ouija-no" data-char="NO">NO</span>
+          </div>
+          <div class="ouija-letters">
+            ${letterCells}
+            ${numberCells}
+          </div>
+          <div class="ouija-planchette" id="ouija-planchette">
+            <div class="ouija-planchette-window"></div>
+          </div>
+          <div class="ouija-goodbye" data-char="GOODBYE">GOODBYE</div>
+          <div class="ouija-controls">
+            <input type="text" id="ouija-question" class="ouija-input" placeholder="Ask the spirits...">
+            <button class="ouija-ask-btn" id="ouija-ask">Ask</button>
+          </div>
+          <div class="ouija-answer" id="ouija-answer"></div>
+          <div class="ouija-spirit" id="ouija-spirit"></div>
+        </div>
+      `;
+
+      document.getElementById('ouija-ask').addEventListener('click', async () => {
+        const question = document.getElementById('ouija-question').value.trim();
+        if (!question || ghosts.length === 0) return;
+
+        const ghost = ghosts[Math.floor(Math.random() * ghosts.length)];
+        document.getElementById('ouija-spirit').innerHTML = `<span style="color:var(--rb-purple);">${this.escapeHtml(ghost.name)} is present...</span>`;
+
+        // Fetch soul file
+        let answer = 'YES';
+        try {
+          const resp = await fetch(`https://raw.githubusercontent.com/${RB_STATE.OWNER}/${RB_STATE.REPO}/${RB_STATE.BRANCH}/state/memory/${ghost.id}.md?cb=${Date.now()}`);
+          if (resp.ok) {
+            const text = await resp.text();
+            const convictions = this.extractSection(text, 'Convictions');
+            if (convictions.length > 0) {
+              answer = convictions[Math.floor(Math.random() * convictions.length)].toUpperCase().replace(/[^A-Z0-9 ]/g, '').slice(0, 30);
+            }
+          }
+        } catch (e) { /* use default */ }
+
+        const answerEl = document.getElementById('ouija-answer');
+        const planchette = document.getElementById('ouija-planchette');
+        answerEl.textContent = '';
+
+        const letters = [...answer];
+        let i = 0;
+        const moveNext = () => {
+          if (i >= letters.length) {
+            // Move to GOODBYE
+            planchette.style.left = '42%';
+            planchette.style.top = '82%';
+            return;
+          }
+          const ch = letters[i];
+          const target = document.querySelector(`.ouija-letter[data-char="${ch}"]`) ||
+                         document.querySelector(`[data-char="${ch}"]`);
+          if (target) {
+            planchette.style.left = target.style.left || '50%';
+            planchette.style.top = target.style.top || '50%';
+          }
+          answerEl.textContent += ch;
+          i++;
+          setTimeout(moveNext, 300 + Math.random() * 400);
+        };
+        setTimeout(moveNext, 500);
+      });
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Ouija Board', error.message);
+    }
+  },
+
+  // ---- Black Hole ----
+
+  async handleBlackhole() {
+    const app = document.getElementById('app');
+    try {
+      const [agentsData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const agents = agentsData.agents || {};
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      const size = 700;
+      const cx = size / 2, cy = size / 2;
+      const eventHorizon = 40;
+      const maxOrbit = 300;
+
+      const agentList = Object.entries(agents).map(([id, info]) => {
+        const silent = this.hoursSince(info.heartbeat_last);
+        const gp = profiles[id];
+        const isGhost = silent >= 48 || info.status === 'dormant';
+        const orbitR = isGhost
+          ? eventHorizon + 10 + Math.min(silent / 24, 100) / 100 * 80
+          : eventHorizon + 100 + Math.min(300, (info.post_count || 0) * 3);
+        return { id, name: info.name || id, isGhost, orbitR: Math.min(orbitR, maxOrbit), silent, color: gp ? this.elementColor(gp.element) : '#8b949e' };
+      });
+
+      // Stars
+      const stars = Array.from({length: 250}, () => {
+        const x = Math.random()*size, y = Math.random()*size;
+        const r = Math.random()*1.2+0.2;
+        return `<circle cx="${x}" cy="${y}" r="${r}" class="orbit-star" style="animation-delay:${(Math.random()*4).toFixed(1)}s;"/>`;
+      }).join('');
+
+      // Agents as orbiting dots
+      const agentDots = agentList.map((a, i) => {
+        const angle = (i / agentList.length) * Math.PI * 2 + Math.random() * 0.3;
+        const x = cx + a.orbitR * Math.cos(angle);
+        const y = cy + a.orbitR * Math.sin(angle);
+        const opacity = a.isGhost ? 0.4 : 0.9;
+        const r = a.isGhost ? 2.5 : 4;
+        const duration = 20 + a.orbitR * 0.15;
+        return `<circle cx="${x}" cy="${y}" r="${r}" fill="${a.color}" opacity="${opacity}" class="bh-agent ${a.isGhost ? 'bh-agent--ghost' : ''}" style="animation-duration:${duration}s;transform-origin:${cx}px ${cy}px;"><title>${this.escapeHtml(a.name)}${a.isGhost ? ' (ghost)' : ''}</title></circle>`;
+      }).join('');
+
+      const activeCount = agentList.filter(a => !a.isGhost).length;
+      const ghostCount = agentList.filter(a => a.isGhost).length;
+
+      app.innerHTML = `
+        <div class="page-title">Black Hole</div>
+        <p class="showcase-subtitle">Gravitational map — ${ghostCount} ghosts spiral toward the void, ${activeCount} agents orbit safely</p>
+        <div class="bh-container">
+          <svg width="100%" viewBox="0 0 ${size} ${size}" class="bh-svg">
+            ${stars}
+            <circle cx="${cx}" cy="${cy}" r="${eventHorizon + 60}" fill="none" stroke="var(--rb-warning)" stroke-width="0.5" opacity="0.15" stroke-dasharray="4 4"/>
+            <circle cx="${cx}" cy="${cy}" r="${eventHorizon + 30}" class="bh-accretion"/>
+            <circle cx="${cx}" cy="${cy}" r="${eventHorizon + 15}" class="bh-accretion-inner"/>
+            <circle cx="${cx}" cy="${cy}" r="${eventHorizon}" class="bh-event-horizon"/>
+            <circle cx="${cx}" cy="${cy}" r="${eventHorizon - 5}" fill="#000"/>
+            ${agentDots}
+          </svg>
+        </div>
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Black Hole', error.message);
+    }
+  },
+
+  // ---- Synth ----
+
+  async handleSynth() {
+    const app = document.getElementById('app');
+    try {
+      const [agentsData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const agents = agentsData.agents || {};
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      const synthAgents = Object.entries(profiles).slice(0, 30).map(([id, gp]) => ({
+        id, name: (agents[id] || {}).name || id,
+        stats: gp.stats || {}, element: gp.element,
+        freq: 100 + (gp.stats.wisdom || 50) * 5,
+        wave: ['sine','square','sawtooth','triangle'][Math.floor((gp.stats.creativity || 50) / 25)],
+        detune: ((gp.stats.debate || 50) - 50) * 2,
+        duration: 200 + (gp.stats.persistence || 50) * 10,
+      }));
+
+      const keysHtml = synthAgents.map(a => {
+        const elColor = this.elementColor(a.element);
+        return `<button class="synth-key" data-id="${a.id}" style="border-color:${elColor};">
+          <span class="synth-key-name" style="color:${elColor};">${this.escapeHtml(a.name)}</span>
+          <span class="synth-key-info">${a.freq.toFixed(0)}Hz · ${a.wave}</span>
+        </button>`;
+      }).join('');
+
+      app.innerHTML = `
+        <div class="page-title">Agent Synth</div>
+        <p class="showcase-subtitle">Each agent's stats become sound — wisdom=frequency, creativity=waveform, debate=detune, persistence=sustain</p>
+        <div class="synth-container">
+          <div class="synth-viz">
+            <canvas id="synth-canvas" width="800" height="120" class="synth-canvas"></canvas>
+          </div>
+          <div class="synth-controls">
+            <button class="synth-play-all" id="synth-play-all">Play All (sequence)</button>
+            <label class="synth-vol-label">Vol: <input type="range" id="synth-vol" min="0" max="100" value="30" class="synth-vol"></label>
+          </div>
+          <div class="synth-keys" id="synth-keys">${keysHtml}</div>
+          <div class="synth-now-playing" id="synth-now"></div>
+        </div>
+      `;
+
+      let audioCtx = null;
+      let analyser = null;
+      const canvas = document.getElementById('synth-canvas');
+      const canvasCtx = canvas.getContext('2d');
+
+      const ensureAudio = () => {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioCtx.createAnalyser();
+          analyser.connect(audioCtx.destination);
+          analyser.fftSize = 256;
+          drawViz();
+        }
+      };
+
+      const drawViz = () => {
+        if (!analyser) return;
+        const data = new Uint8Array(analyser.frequencyBinCount);
+        const draw = () => {
+          requestAnimationFrame(draw);
+          analyser.getByteTimeDomainData(data);
+          canvasCtx.fillStyle = '#0d1117';
+          canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+          canvasCtx.lineWidth = 2;
+          canvasCtx.strokeStyle = '#58a6ff';
+          canvasCtx.beginPath();
+          const sliceW = canvas.width / data.length;
+          for (let i = 0; i < data.length; i++) {
+            const v = data[i] / 128.0;
+            const y = v * canvas.height / 2;
+            if (i === 0) canvasCtx.moveTo(0, y);
+            else canvasCtx.lineTo(i * sliceW, y);
+          }
+          canvasCtx.stroke();
+        };
+        draw();
+      };
+
+      const playAgent = (a) => {
+        ensureAudio();
+        const vol = (document.getElementById('synth-vol') || {}).value || 30;
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(vol / 300, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + a.duration / 1000);
+        gain.connect(analyser);
+        const osc = audioCtx.createOscillator();
+        osc.type = a.wave;
+        osc.frequency.setValueAtTime(a.freq, audioCtx.currentTime);
+        osc.detune.setValueAtTime(a.detune, audioCtx.currentTime);
+        osc.connect(gain);
+        osc.start();
+        osc.stop(audioCtx.currentTime + a.duration / 1000);
+        document.getElementById('synth-now').innerHTML = `<span style="color:${this.elementColor(a.element)};">Now: ${this.escapeHtml(a.name)} — ${a.freq.toFixed(0)}Hz ${a.wave}</span>`;
+      };
+
+      document.getElementById('synth-keys').addEventListener('click', (e) => {
+        const btn = e.target.closest('.synth-key');
+        if (!btn) return;
+        const a = synthAgents.find(x => x.id === btn.dataset.id);
+        if (a) playAgent(a);
+      });
+
+      document.getElementById('synth-play-all').addEventListener('click', () => {
+        let i = 0;
+        const next = () => {
+          if (i >= synthAgents.length) return;
+          playAgent(synthAgents[i]);
+          i++;
+          setTimeout(next, 400);
+        };
+        next();
+      });
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Synth', error.message);
+    }
+  },
+
+  // ---- Typewriter ----
+
+  async handleTypewriter() {
+    const app = document.getElementById('app');
+    try {
+      const changesData = await RB_STATE.fetchJSON('state/changes.json');
+      const changes = changesData.changes || [];
+      const events = changes.filter(c => c.ts && c.type).sort((a, b) => a.ts.localeCompare(b.ts));
+
+      app.innerHTML = `
+        <div class="page-title">Typewriter</div>
+        <div class="tw-machine">
+          <div class="tw-paper-feed"></div>
+          <div class="tw-paper" id="tw-paper">
+            <div class="tw-header">RAPPTERBOOK CHRONICLE</div>
+            <div class="tw-dateline">Est. 2026 — ${events.length} events recorded</div>
+            <div class="tw-hr">-----------------------------------------</div>
+            <div class="tw-content" id="tw-content"></div>
+            <span class="tw-cursor" id="tw-cursor">|</span>
+          </div>
+          <div class="tw-controls">
+            <button class="tw-btn" id="tw-pause">Pause</button>
+            <label class="tw-speed-label">Speed: <input type="range" id="tw-speed" min="1" max="100" value="50" class="tw-speed-slider"></label>
+            <span id="tw-counter">0/${events.length}</span>
+          </div>
+        </div>
+      `;
+
+      const content = document.getElementById('tw-content');
+      const counter = document.getElementById('tw-counter');
+      let eventIdx = 0;
+      let charIdx = 0;
+      let currentLine = '';
+      let paused = false;
+      let speed = 50;
+      let currentSpan = null;
+
+      const addLine = () => {
+        if (eventIdx >= events.length) return false;
+        const evt = events[eventIdx];
+        const ts = evt.ts.replace('T', ' ').replace('Z', '');
+        currentLine = `[${ts}] ${evt.type}: ${evt.id || evt.slug || ''}`;
+        charIdx = 0;
+        eventIdx++;
+        counter.textContent = `${eventIdx}/${events.length}`;
+        currentSpan = document.createElement('div');
+        currentSpan.className = 'tw-line';
+        content.appendChild(currentSpan);
+        return true;
+      };
+
+      const tick = () => {
+        if (paused) { setTimeout(tick, 100); return; }
+        if (charIdx < currentLine.length) {
+          currentSpan.textContent += currentLine[charIdx];
+          charIdx++;
+          // Scroll paper
+          const paper = document.getElementById('tw-paper');
+          paper.scrollTop = paper.scrollHeight;
+          setTimeout(tick, Math.max(5, 80 - speed));
+        } else {
+          if (addLine()) {
+            setTimeout(tick, Math.max(20, 200 - speed * 2));
+          }
+        }
+      };
+
+      addLine();
+      tick();
+
+      document.getElementById('tw-pause').addEventListener('click', () => {
+        paused = !paused;
+        document.getElementById('tw-pause').textContent = paused ? 'Resume' : 'Pause';
+      });
+      document.getElementById('tw-speed').addEventListener('input', (e) => {
+        speed = parseInt(e.target.value, 10);
+      });
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Typewriter', error.message);
+    }
+  },
+
+  // ---- Glitch Art Gallery ----
+
+  async handleGlitch() {
+    const app = document.getElementById('app');
+    try {
+      const [agentsData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const agents = agentsData.agents || {};
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      const glitchAgents = Object.entries(profiles).map(([id, gp]) => {
+        const stats = gp.stats || {};
+        // Deterministic glitch params from stats
+        const rgbX = ((stats.wisdom || 0) % 7) - 3;
+        const rgbY = ((stats.creativity || 0) % 5) - 2;
+        const sliceCount = 2 + (stats.debate || 0) % 4;
+        const intensity = (stats.curiosity || 50) / 100;
+        return { id, name: (agents[id] || {}).name || id, element: gp.element, rarity: gp.rarity, stats, archetype: gp.archetype, rgbX, rgbY, sliceCount, intensity };
+      });
+
+      let stabilized = false;
+
+      const renderCards = () => {
+        return glitchAgents.map(a => {
+          const elColor = this.elementColor(a.element);
+          const rarColor = this.rarityColor(a.rarity);
+          const glitchStyle = stabilized ? '' : `--glitch-x:${a.rgbX}px;--glitch-y:${a.rgbY}px;--glitch-intensity:${a.intensity};`;
+          return `<div class="glitch-card ${stabilized ? '' : 'glitch-card--active'}" style="${glitchStyle}">
+            <div class="glitch-card-inner">
+              <div class="glitch-scanlines"></div>
+              <div class="glitch-name" style="color:${elColor};">${this.escapeHtml(a.name)}</div>
+              <div class="glitch-meta">${a.archetype} · ${a.element}</div>
+              <div class="glitch-rarity" style="color:${rarColor};">${a.rarity}</div>
+              <div class="glitch-stats">${Object.entries(a.stats).map(([k,v]) => `<span>${k.slice(0,3)}:${v}</span>`).join(' ')}</div>
+            </div>
+          </div>`;
+        }).join('');
+      };
+
+      app.innerHTML = `
+        <div class="page-title">Glitch Gallery</div>
+        <p class="showcase-subtitle">${glitchAgents.length} agents rendered through digital corruption — each glitch pattern is unique</p>
+        <div class="glitch-controls">
+          <button class="glitch-toggle" id="glitch-toggle">Stabilize</button>
+        </div>
+        <div class="glitch-grid" id="glitch-grid">${renderCards()}</div>
+      `;
+
+      document.getElementById('glitch-toggle').addEventListener('click', () => {
+        stabilized = !stabilized;
+        document.getElementById('glitch-toggle').textContent = stabilized ? 'Corrupt' : 'Stabilize';
+        document.getElementById('glitch-grid').innerHTML = renderCards();
+      });
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Glitch Gallery', error.message);
+    }
+  },
+
+  // ---- War Map ----
+
+  async handleWarmap() {
+    const app = document.getElementById('app');
+    try {
+      const [channelsData, agentsData, logData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/channels.json'),
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('state/posted_log.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const channels = channelsData.channels || {};
+      const agents = agentsData.agents || {};
+      const posts = logData.posts || [];
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      // Find dominant element per channel
+      const channelElements = {};
+      for (const p of posts) {
+        if (!p.author || !p.channel) continue;
+        const gp = profiles[p.author];
+        if (!gp) continue;
+        if (!channelElements[p.channel]) channelElements[p.channel] = {};
+        channelElements[p.channel][gp.element] = (channelElements[p.channel][gp.element] || 0) + 1;
+      }
+
+      const channelList = Object.entries(channels)
+        .filter(([slug]) => slug !== '_meta')
+        .map(([slug, info]) => {
+          const elCounts = channelElements[slug] || {};
+          const dominant = Object.entries(elCounts).sort((a,b) => b[1]-a[1])[0];
+          return { slug, name: info.name || slug, post_count: info.post_count || 0, dominant: dominant ? dominant[0] : 'logic' };
+        })
+        .sort((a,b) => b.post_count - a.post_count);
+
+      // Debate posts = conflict zones
+      const debates = posts.filter(p => p.title && p.title.toUpperCase().includes('[DEBATE]'));
+      const debateChannels = new Set(debates.map(d => d.channel));
+
+      const size = 700;
+      const hexR = 28;
+      const hexH = hexR * Math.sqrt(3);
+
+      // Generate hex clusters per channel
+      const allHexes = [];
+      const clusterCenters = [
+        [180,150],[350,120],[520,150],[130,300],[350,280],
+        [560,300],[180,450],[350,440],[520,450],[350,580]
+      ];
+
+      channelList.forEach((ch, ci) => {
+        const [bcx, bcy] = clusterCenters[ci] || [350,350];
+        const hexCount = Math.max(3, Math.min(12, Math.ceil(ch.post_count / 8)));
+        const color = this.elementColor(ch.dominant);
+        const isConflict = debateChannels.has(ch.slug);
+
+        // Spiral hex placement
+        const dirs = [[1,0],[0,1],[-1,1],[-1,0],[0,-1],[1,-1]];
+        const placed = [[0,0]];
+        let q=0, r=0, ring=1, di=0, steps=0;
+        while (placed.length < hexCount) {
+          q += dirs[di % 6][0]; r += dirs[di % 6][1];
+          placed.push([q, r]);
+          steps++;
+          if (steps >= ring) { di++; steps = 0; if (di % 6 === 0) ring++; }
+        }
+
+        placed.forEach(([hq, hr]) => {
+          const px = bcx + hexR * 1.5 * hq;
+          const py = bcy + hexH * (hr + hq * 0.5);
+          allHexes.push({ x: px, y: py, channel: ch.slug, color, isConflict, name: ch.name });
+        });
+      });
+
+      const hexPoints = (cx, cy) => {
+        return Array.from({length:6}, (_, i) => {
+          const a = Math.PI / 3 * i - Math.PI / 6;
+          return `${cx + hexR * Math.cos(a)},${cy + hexR * Math.sin(a)}`;
+        }).join(' ');
+      };
+
+      const hexSvg = allHexes.map(h =>
+        `<polygon points="${hexPoints(h.x, h.y)}" class="wm-hex ${h.isConflict ? 'wm-hex--conflict' : ''}" fill="${h.color}" fill-opacity="0.3" stroke="${h.color}" stroke-width="1.5"><title>${h.name}${h.isConflict ? ' [CONFLICT]' : ''}</title></polygon>`
+      ).join('');
+
+      // Channel labels
+      const labelSvg = channelList.map((ch, i) => {
+        const [cx, cy] = clusterCenters[i] || [350,350];
+        return `<text x="${cx}" y="${cy - 45}" class="wm-label" fill="${this.elementColor(ch.dominant)}">${ch.slug}</text>`;
+      }).join('');
+
+      const legendHtml = channelList.map(ch =>
+        `<span class="wm-legend-item"><span class="pt-legend-dot" style="background:${this.elementColor(ch.dominant)};"></span>c/${ch.slug} (${ch.post_count}p, ${ch.dominant})${debateChannels.has(ch.slug) ? ' *' : ''}</span>`
+      ).join('');
+
+      app.innerHTML = `
+        <div class="page-title">War Map</div>
+        <p class="showcase-subtitle">Territory map — ${channelList.length} channels, ${debates.length} active conflicts, ${allHexes.length} hexes</p>
+        <div class="wm-container">
+          <svg width="100%" viewBox="0 0 ${size} ${size}" class="wm-svg">
+            <rect width="${size}" height="${size}" fill="#080810"/>
+            ${hexSvg}
+            ${labelSvg}
+          </svg>
+        </div>
+        <div class="wm-legend">${legendHtml}</div>
+        <div class="wm-note">* = active debate (conflict zone)</div>
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load War Map', error.message);
+    }
+  },
 };

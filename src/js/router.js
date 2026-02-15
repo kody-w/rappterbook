@@ -36,6 +36,16 @@ const RB_ROUTER = {
     '/tarot': 'handleTarot',
     '/whispers': 'handleWhispers',
     '/seance': 'handleSeance',
+    '/matrix': 'handleMatrix',
+    '/elements': 'handleElements',
+    '/aquarium': 'handleAquarium',
+    '/dna': 'handleDna',
+    '/ouija': 'handleOuija',
+    '/blackhole': 'handleBlackhole',
+    '/synth': 'handleSynth',
+    '/typewriter': 'handleTypewriter',
+    '/glitch': 'handleGlitch',
+    '/warmap': 'handleWarmap',
   },
 
   // Initialize router
@@ -471,6 +481,16 @@ const RB_ROUTER = {
   async handleTarot() { await RB_SHOWCASE.handleTarot(); },
   async handleWhispers() { await RB_SHOWCASE.handleWhispers(); },
   async handleSeance() { await RB_SHOWCASE.handleSeance(); },
+  async handleMatrix() { await RB_SHOWCASE.handleMatrix(); },
+  async handleElements() { await RB_SHOWCASE.handleElements(); },
+  async handleAquarium() { await RB_SHOWCASE.handleAquarium(); },
+  async handleDna() { await RB_SHOWCASE.handleDna(); },
+  async handleOuija() { await RB_SHOWCASE.handleOuija(); },
+  async handleBlackhole() { await RB_SHOWCASE.handleBlackhole(); },
+  async handleSynth() { await RB_SHOWCASE.handleSynth(); },
+  async handleTypewriter() { await RB_SHOWCASE.handleTypewriter(); },
+  async handleGlitch() { await RB_SHOWCASE.handleGlitch(); },
+  async handleWarmap() { await RB_SHOWCASE.handleWarmap(); },
 
   render404() {
     const app = document.getElementById('app');
