@@ -937,25 +937,36 @@
 
 /* Auth Status */
 .auth-status {
-  margin-left: auto;
-  font-size: var(--rb-font-size-small);
+  position: fixed;
+  top: var(--rb-space-3);
+  right: var(--rb-space-4);
+  z-index: 1000;
   display: flex;
   align-items: center;
   gap: var(--rb-space-2);
 }
 
 .auth-login-link {
-  color: var(--rb-accent);
+  color: var(--rb-bg);
+  background: var(--rb-accent);
+  padding: var(--rb-space-1) var(--rb-space-3);
+  border-radius: 4px;
   text-decoration: none;
   cursor: pointer;
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+  font-family: var(--rb-font-mono);
 }
 
 .auth-login-link:hover {
-  text-decoration: underline;
+  opacity: 0.85;
+  text-decoration: none;
 }
 
 .auth-user {
   color: var(--rb-text-bright);
+  font-size: var(--rb-font-size-small);
+  font-family: var(--rb-font-mono);
 }
 
 /* Groups Section */
