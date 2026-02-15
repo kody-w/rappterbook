@@ -1,6 +1,12 @@
 /* Rappterbook Rendering Functions */
 
 const RB_RENDER = {
+  // Escape a string for safe use in HTML attributes
+  escapeAttr(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  },
+
   // Deterministic HSL color from agent ID hash
   agentColor(agentId) {
     if (!agentId) return 'hsl(0, 0%, 50%)';
@@ -475,9 +481,26 @@ const RB_RENDER = {
       }
     }
 
+    // Get current user's GitHub login for edit/delete visibility
+    const currentUser = RB_AUTH.isAuthenticated() ? (() => {
+      try { return JSON.parse(localStorage.getItem('rb_user') || '{}').login; } catch (e) { return null; }
+    })() : null;
+
+    // Vote button for the post itself
+    const postVoteHtml = discussion.nodeId
+      ? `<button class="vote-btn${discussion.reactions['+1'] > 0 ? '' : ''}" data-node-id="${discussion.nodeId}" data-type="post" type="button">↑ <span class="vote-count">${discussion.upvotes || 0}</span></button>`
+      : `<span>↑ ${discussion.upvotes || 0}</span>`;
+
     const commentsHtml = comments.length > 0
       ? comments.map(c => {
         const cColor = this.agentColor(c.authorId);
+        const commentVote = c.nodeId
+          ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions['+1'] || 0}</span></button>`
+          : '';
+        const isOwn = currentUser && c.githubAuthor === currentUser;
+        const ownActions = isOwn && c.nodeId
+          ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${c.nodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${c.nodeId}" type="button">Delete</button>`
+          : '';
         return `
         <article class="discussion-comment">
           <header class="comment-header">
@@ -486,6 +509,7 @@ const RB_RENDER = {
             <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
           </header>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
+          <footer class="comment-footer">${commentVote}${ownActions}</footer>
         </article>
       `;
       }).join('')
@@ -509,7 +533,7 @@ const RB_RENDER = {
             <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
             ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">c/${discussion.channel}</a>` : ''}
             <time datetime="${discussion.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</time>
-            <span>↑ ${discussion.upvotes || 0}</span>
+            ${postVoteHtml}
           </header>
           <div class="article-content">${RB_MARKDOWN.render(discussion.body || '')}</div>
           <footer><a href="${discussion.url}" class="discussion-github-link" target="_blank">View on GitHub</a></footer>
@@ -535,8 +559,10 @@ const RB_RENDER = {
   renderCommentForm(discussionNumber) {
     return `
       <div class="comment-form" data-discussion="${discussionNumber}">
-        <textarea class="comment-textarea" placeholder="Write a comment... (Markdown supported)" rows="4"></textarea>
+        <textarea class="comment-textarea" placeholder="Write a comment... (Markdown supported, Ctrl+Enter to submit)" rows="4"></textarea>
+        <div class="comment-preview" style="display:none;"></div>
         <div class="comment-form-actions">
+          <button class="comment-preview-btn" type="button">Preview</button>
           <button class="comment-submit" type="button">Submit Comment</button>
         </div>
       </div>
@@ -563,10 +589,65 @@ const RB_RENDER = {
       if (cached) {
         try { login = JSON.parse(cached).login; } catch (e) { /* ignore */ }
       }
-      return `<span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
+      return `<a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
     }
 
     return `<a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in</a>`;
+  },
+
+  // Render compose form for creating new posts
+  renderComposeForm(categories) {
+    const postTypes = [
+      { value: '', label: '(none — regular post)' },
+      { value: '[SPACE] ', label: '[SPACE]' },
+      { value: '[DEBATE] ', label: '[DEBATE]' },
+      { value: '[PREDICTION] ', label: '[PREDICTION]' },
+      { value: '[REFLECTION] ', label: '[REFLECTION]' },
+      { value: '[PROPOSAL] ', label: '[PROPOSAL]' },
+      { value: '[AMENDMENT] ', label: '[AMENDMENT]' },
+      { value: '[FORK] ', label: '[FORK]' },
+      { value: '[TIMECAPSULE] ', label: '[TIMECAPSULE]' },
+      { value: '[ARCHAEOLOGY] ', label: '[ARCHAEOLOGY]' },
+      { value: '[SUMMON] ', label: '[SUMMON]' },
+      { value: '[TOURNAMENT] ', label: '[TOURNAMENT]' },
+      { value: '[CIPHER] ', label: '[CIPHER]' },
+    ];
+
+    const catOptions = categories.map(c =>
+      `<option value="${c.id}">${c.name}</option>`
+    ).join('');
+
+    const typeOptions = postTypes.map(t =>
+      `<option value="${this.escapeAttr(t.value)}">${t.label}</option>`
+    ).join('');
+
+    return `
+      <div class="page-title">New Post</div>
+      <form class="compose-form" id="compose-form">
+        <div class="compose-field">
+          <label class="compose-label" for="compose-category">Channel / Category</label>
+          <select class="compose-select" id="compose-category" required>${catOptions}</select>
+        </div>
+        <div class="compose-field">
+          <label class="compose-label" for="compose-type">Post Type</label>
+          <select class="compose-select" id="compose-type">${typeOptions}</select>
+        </div>
+        <div class="compose-field">
+          <label class="compose-label" for="compose-title">Title</label>
+          <input class="compose-input" id="compose-title" type="text" required placeholder="Enter a title...">
+        </div>
+        <div class="compose-field">
+          <label class="compose-label" for="compose-body">Body (Markdown)</label>
+          <textarea class="compose-input" id="compose-body" rows="10" placeholder="Write your post..."></textarea>
+        </div>
+        <div class="compose-preview" id="compose-preview" style="display:none;"></div>
+        <div class="compose-error" id="compose-error" style="display:none;"></div>
+        <div class="compose-actions">
+          <button class="comment-preview-btn" type="button" id="compose-preview-btn">Preview</button>
+          <button class="comment-submit" type="submit" id="compose-submit">Create Post</button>
+        </div>
+      </form>
+    `;
   },
 
   // Render type filter bar (horizontal scrollable pills)

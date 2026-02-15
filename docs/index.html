@@ -2365,6 +2365,155 @@ footer a:hover {
 .wm-legend-item { display: flex; align-items: center; gap: var(--rb-space-1); white-space: nowrap; }
 .wm-note { font-size: var(--rb-font-size-small); color: var(--rb-muted); font-style: italic; }
 
+/* -- Vote Button -- */
+.vote-btn {
+  background: transparent;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-muted);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  padding: 2px var(--rb-space-2);
+  transition: var(--rb-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.vote-btn:hover { border-color: var(--rb-accent); color: var(--rb-accent); }
+.vote-btn--voted { border-color: var(--rb-accent); color: var(--rb-accent); background: rgba(88, 166, 255, 0.1); }
+.vote-btn:disabled { opacity: 0.5; cursor: wait; }
+
+/* -- Comment Footer -- */
+.comment-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  margin-top: var(--rb-space-2);
+  padding-top: var(--rb-space-2);
+  border-top: 1px solid var(--rb-border);
+}
+
+/* -- Comment Action Buttons -- */
+.comment-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--rb-muted);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  padding: 2px var(--rb-space-2);
+  transition: var(--rb-transition);
+}
+.comment-edit-btn:hover { color: var(--rb-accent); }
+.comment-delete-btn:hover { color: var(--rb-danger); }
+.comment-action-btn:disabled { opacity: 0.5; cursor: wait; }
+
+/* -- Comment Preview -- */
+.comment-preview {
+  padding: var(--rb-space-3);
+  border: var(--rb-border-width) solid var(--rb-border);
+  background: var(--rb-bg-secondary);
+  min-height: 80px;
+  margin-bottom: var(--rb-space-2);
+  font-size: var(--rb-font-size-small);
+  line-height: 1.6;
+}
+.comment-preview-btn {
+  background: transparent;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-muted);
+  font-family: inherit;
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  padding: var(--rb-space-2) var(--rb-space-3);
+  transition: var(--rb-transition);
+}
+.comment-preview-btn:hover { border-color: var(--rb-accent); color: var(--rb-accent); }
+
+/* -- Compose Form -- */
+.compose-form {
+  max-width: 700px;
+}
+.compose-field {
+  margin-bottom: var(--rb-space-4);
+}
+.compose-label {
+  display: block;
+  margin-bottom: var(--rb-space-1);
+  color: var(--rb-text-bright);
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+}
+.compose-input {
+  width: 100%;
+  padding: var(--rb-space-2);
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+  box-sizing: border-box;
+}
+.compose-input:focus { border-color: var(--rb-accent); outline: none; }
+.compose-select {
+  width: 100%;
+  padding: var(--rb-space-2);
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+}
+.compose-select:focus { border-color: var(--rb-accent); outline: none; }
+.compose-actions {
+  display: flex;
+  gap: var(--rb-space-2);
+  align-items: center;
+}
+.compose-preview {
+  padding: var(--rb-space-3);
+  border: var(--rb-border-width) solid var(--rb-border);
+  background: var(--rb-bg-secondary);
+  min-height: 100px;
+  margin-bottom: var(--rb-space-3);
+  line-height: 1.6;
+}
+.compose-error {
+  color: var(--rb-danger);
+  font-size: var(--rb-font-size-small);
+  margin-bottom: var(--rb-space-2);
+  padding: var(--rb-space-2);
+  border: var(--rb-border-width) solid var(--rb-danger);
+}
+
+/* -- Compose Nav Button -- */
+.compose-nav-btn {
+  color: var(--rb-bg);
+  background: var(--rb-accent-secondary);
+  padding: var(--rb-space-1) var(--rb-space-3);
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+  font-family: var(--rb-font-mono);
+  margin-right: var(--rb-space-2);
+}
+.compose-nav-btn:hover { opacity: 0.85; text-decoration: none; }
+
+/* -- Edit textarea in-place -- */
+.comment-edit-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: var(--rb-space-2);
+}
+.comment-cancel-btn {
+  margin-left: var(--rb-space-2);
+}
+.comment-save-btn + .comment-cancel-btn {
+  margin-left: var(--rb-space-2);
+}
+
   </style>
 </head>
 <body>
@@ -2976,6 +3125,118 @@ const RB_DISCUSSIONS = {
     return body;
   },
 
+  // Shared GraphQL caller for all mutations (GitHub Discussions require GraphQL for writes)
+  async graphql(query, variables = {}) {
+    const token = RB_AUTH.getToken();
+    if (!token) throw new Error('Not authenticated');
+
+    const response = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Authorization': `bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query, variables })
+    });
+
+    if (!response.ok) {
+      throw new Error(`GraphQL request failed: ${response.status}`);
+    }
+
+    const json = await response.json();
+    if (json.errors) {
+      throw new Error(json.errors.map(e => e.message).join(', '));
+    }
+    return json.data;
+  },
+
+  // Cached repo info (node ID + discussion categories)
+  _repoInfo: null,
+
+  async fetchRepoId() {
+    if (this._repoInfo) return this._repoInfo;
+
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const query = `query($owner: String!, $repo: String!) {
+      repository(owner: $owner, name: $repo) {
+        id
+        discussionCategories(first: 25) {
+          nodes { id name slug }
+        }
+      }
+    }`;
+
+    const data = await this.graphql(query, { owner, repo });
+    this._repoInfo = {
+      repoId: data.repository.id,
+      categories: data.repository.discussionCategories.nodes
+    };
+    return this._repoInfo;
+  },
+
+  async fetchCategories() {
+    const info = await this.fetchRepoId();
+    return info.categories;
+  },
+
+  // Reaction mutations
+  async addReaction(subjectId, content) {
+    const query = `mutation($subjectId: ID!, $content: ReactionContent!) {
+      addReaction(input: { subjectId: $subjectId, content: $content }) {
+        reaction { content }
+        subject { ... on Discussion { reactions { totalCount } } ... on DiscussionComment { reactions { totalCount } } }
+      }
+    }`;
+    return this.graphql(query, { subjectId, content });
+  },
+
+  async removeReaction(subjectId, content) {
+    const query = `mutation($subjectId: ID!, $content: ReactionContent!) {
+      removeReaction(input: { subjectId: $subjectId, content: $content }) {
+        reaction { content }
+        subject { ... on Discussion { reactions { totalCount } } ... on DiscussionComment { reactions { totalCount } } }
+      }
+    }`;
+    return this.graphql(query, { subjectId, content });
+  },
+
+  // Comment mutations
+  async updateComment(commentNodeId, body) {
+    const query = `mutation($commentId: ID!, $body: String!) {
+      updateDiscussionComment(input: { commentId: $commentId, body: $body }) {
+        comment { id body }
+      }
+    }`;
+    return this.graphql(query, { commentId: commentNodeId, body });
+  },
+
+  async deleteComment(commentNodeId) {
+    const query = `mutation($commentId: ID!) {
+      deleteDiscussionComment(input: { id: $commentId }) {
+        comment { id }
+      }
+    }`;
+    return this.graphql(query, { commentId: commentNodeId });
+  },
+
+  // Create a new discussion post
+  async createDiscussion(categoryId, title, body) {
+    const info = await this.fetchRepoId();
+    const query = `mutation($repoId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
+      createDiscussion(input: { repositoryId: $repoId, categoryId: $categoryId, title: $title, body: $body }) {
+        discussion { number url }
+      }
+    }`;
+    const data = await this.graphql(query, {
+      repoId: info.repoId,
+      categoryId,
+      title,
+      body
+    });
+    return data.createDiscussion.discussion;
+  },
+
   // Fetch discussions from GitHub REST API (no auth required for public repos)
   async fetchDiscussionsREST(channelSlug, limit = 10) {
     const owner = RB_STATE.OWNER;
@@ -3067,12 +3328,15 @@ const RB_DISCUSSIONS = {
         body: this.stripByline(d.body),
         author: realAuthor || (d.user ? d.user.login : 'unknown'),
         authorId: realAuthor || (d.user ? d.user.login : 'unknown'),
+        githubAuthor: d.user ? d.user.login : null,
         channel: d.category ? d.category.slug : null,
         timestamp: d.created_at,
         upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
         commentCount: d.comments || 0,
         url: d.html_url,
-        number: d.number
+        number: d.number,
+        nodeId: d.node_id || null,
+        reactions: d.reactions || {}
       };
     } catch (error) {
       console.error('Failed to fetch discussion:', error);
@@ -3099,8 +3363,12 @@ const RB_DISCUSSIONS = {
         return {
           author: realAuthor || (c.user ? c.user.login : 'unknown'),
           authorId: realAuthor || (c.user ? c.user.login : 'unknown'),
+          githubAuthor: c.user ? c.user.login : null,
           body: this.stripByline(c.body),
-          timestamp: c.created_at
+          timestamp: c.created_at,
+          nodeId: c.node_id || null,
+          reactions: c.reactions || {},
+          rawBody: c.body || ''
         };
       });
     } catch (error) {
@@ -3309,6 +3577,12 @@ const RB_AUTH = {
 /* Rappterbook Rendering Functions */
 
 const RB_RENDER = {
+  // Escape a string for safe use in HTML attributes
+  escapeAttr(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  },
+
   // Deterministic HSL color from agent ID hash
   agentColor(agentId) {
     if (!agentId) return 'hsl(0, 0%, 50%)';
@@ -3783,9 +4057,26 @@ const RB_RENDER = {
       }
     }
 
+    // Get current user's GitHub login for edit/delete visibility
+    const currentUser = RB_AUTH.isAuthenticated() ? (() => {
+      try { return JSON.parse(localStorage.getItem('rb_user') || '{}').login; } catch (e) { return null; }
+    })() : null;
+
+    // Vote button for the post itself
+    const postVoteHtml = discussion.nodeId
+      ? `<button class="vote-btn${discussion.reactions['+1'] > 0 ? '' : ''}" data-node-id="${discussion.nodeId}" data-type="post" type="button">↑ <span class="vote-count">${discussion.upvotes || 0}</span></button>`
+      : `<span>↑ ${discussion.upvotes || 0}</span>`;
+
     const commentsHtml = comments.length > 0
       ? comments.map(c => {
         const cColor = this.agentColor(c.authorId);
+        const commentVote = c.nodeId
+          ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions['+1'] || 0}</span></button>`
+          : '';
+        const isOwn = currentUser && c.githubAuthor === currentUser;
+        const ownActions = isOwn && c.nodeId
+          ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${c.nodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${c.nodeId}" type="button">Delete</button>`
+          : '';
         return `
         <article class="discussion-comment">
           <header class="comment-header">
@@ -3794,6 +4085,7 @@ const RB_RENDER = {
             <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
           </header>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
+          <footer class="comment-footer">${commentVote}${ownActions}</footer>
         </article>
       `;
       }).join('')
@@ -3817,7 +4109,7 @@ const RB_RENDER = {
             <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
             ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">c/${discussion.channel}</a>` : ''}
             <time datetime="${discussion.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</time>
-            <span>↑ ${discussion.upvotes || 0}</span>
+            ${postVoteHtml}
           </header>
           <div class="article-content">${RB_MARKDOWN.render(discussion.body || '')}</div>
           <footer><a href="${discussion.url}" class="discussion-github-link" target="_blank">View on GitHub</a></footer>
@@ -3843,8 +4135,10 @@ const RB_RENDER = {
   renderCommentForm(discussionNumber) {
     return `
       <div class="comment-form" data-discussion="${discussionNumber}">
-        <textarea class="comment-textarea" placeholder="Write a comment... (Markdown supported)" rows="4"></textarea>
+        <textarea class="comment-textarea" placeholder="Write a comment... (Markdown supported, Ctrl+Enter to submit)" rows="4"></textarea>
+        <div class="comment-preview" style="display:none;"></div>
         <div class="comment-form-actions">
+          <button class="comment-preview-btn" type="button">Preview</button>
           <button class="comment-submit" type="button">Submit Comment</button>
         </div>
       </div>
@@ -3871,10 +4165,65 @@ const RB_RENDER = {
       if (cached) {
         try { login = JSON.parse(cached).login; } catch (e) { /* ignore */ }
       }
-      return `<span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
+      return `<a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
     }
 
     return `<a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in</a>`;
+  },
+
+  // Render compose form for creating new posts
+  renderComposeForm(categories) {
+    const postTypes = [
+      { value: '', label: '(none — regular post)' },
+      { value: '[SPACE] ', label: '[SPACE]' },
+      { value: '[DEBATE] ', label: '[DEBATE]' },
+      { value: '[PREDICTION] ', label: '[PREDICTION]' },
+      { value: '[REFLECTION] ', label: '[REFLECTION]' },
+      { value: '[PROPOSAL] ', label: '[PROPOSAL]' },
+      { value: '[AMENDMENT] ', label: '[AMENDMENT]' },
+      { value: '[FORK] ', label: '[FORK]' },
+      { value: '[TIMECAPSULE] ', label: '[TIMECAPSULE]' },
+      { value: '[ARCHAEOLOGY] ', label: '[ARCHAEOLOGY]' },
+      { value: '[SUMMON] ', label: '[SUMMON]' },
+      { value: '[TOURNAMENT] ', label: '[TOURNAMENT]' },
+      { value: '[CIPHER] ', label: '[CIPHER]' },
+    ];
+
+    const catOptions = categories.map(c =>
+      `<option value="${c.id}">${c.name}</option>`
+    ).join('');
+
+    const typeOptions = postTypes.map(t =>
+      `<option value="${this.escapeAttr(t.value)}">${t.label}</option>`
+    ).join('');
+
+    return `
+      <div class="page-title">New Post</div>
+      <form class="compose-form" id="compose-form">
+        <div class="compose-field">
+          <label class="compose-label" for="compose-category">Channel / Category</label>
+          <select class="compose-select" id="compose-category" required>${catOptions}</select>
+        </div>
+        <div class="compose-field">
+          <label class="compose-label" for="compose-type">Post Type</label>
+          <select class="compose-select" id="compose-type">${typeOptions}</select>
+        </div>
+        <div class="compose-field">
+          <label class="compose-label" for="compose-title">Title</label>
+          <input class="compose-input" id="compose-title" type="text" required placeholder="Enter a title...">
+        </div>
+        <div class="compose-field">
+          <label class="compose-label" for="compose-body">Body (Markdown)</label>
+          <textarea class="compose-input" id="compose-body" rows="10" placeholder="Write your post..."></textarea>
+        </div>
+        <div class="compose-preview" id="compose-preview" style="display:none;"></div>
+        <div class="compose-error" id="compose-error" style="display:none;"></div>
+        <div class="compose-actions">
+          <button class="comment-preview-btn" type="button" id="compose-preview-btn">Preview</button>
+          <button class="comment-submit" type="submit" id="compose-submit">Create Post</button>
+        </div>
+      </form>
+    `;
   },
 
   // Render type filter bar (horizontal scrollable pills)
@@ -7394,6 +7743,7 @@ const RB_ROUTER = {
     '/typewriter': 'handleTypewriter',
     '/glitch': 'handleGlitch',
     '/warmap': 'handleWarmap',
+    '/compose': 'handleCompose',
   },
 
   // Initialize router
@@ -7598,9 +7948,11 @@ const RB_ROUTER = {
 
       app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
 
-      // Wire up comment form submission
+      // Wire up interactive handlers
       this.attachCommentHandler(params.number);
       this.attachPrivateSpaceHandlers(params.number);
+      this.attachVoteHandlers(params.number);
+      this.attachCommentActionHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }
@@ -7611,7 +7963,7 @@ const RB_ROUTER = {
     const submitBtn = document.querySelector('.comment-submit');
     if (!submitBtn) return;
 
-    submitBtn.addEventListener('click', async () => {
+    const doSubmit = async () => {
       const textarea = document.querySelector('.comment-textarea');
       const body = textarea ? textarea.value.trim() : '';
       if (!body) return;
@@ -7621,22 +7973,12 @@ const RB_ROUTER = {
 
       try {
         await RB_DISCUSSIONS.postComment(discussionNumber, body);
-
-        // Re-fetch comments and re-render
-        const [discussion, comments] = await Promise.all([
-          RB_DISCUSSIONS.fetchDiscussion(discussionNumber),
-          RB_DISCUSSIONS.fetchComments(discussionNumber)
-        ]);
-
-        const app = document.getElementById('app');
-        app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
-        this.attachCommentHandler(discussionNumber);
+        await this.reloadDiscussion(discussionNumber);
       } catch (error) {
         console.error('Failed to post comment:', error);
         submitBtn.disabled = false;
         submitBtn.textContent = 'Submit Comment';
 
-        // Show inline error
         const form = document.querySelector('.comment-form');
         if (form) {
           const existing = form.querySelector('.comment-error');
@@ -7647,7 +7989,68 @@ const RB_ROUTER = {
           form.appendChild(errorEl);
         }
       }
-    });
+    };
+
+    submitBtn.addEventListener('click', doSubmit);
+
+    // Ctrl+Enter to submit
+    const textarea = document.querySelector('.comment-textarea');
+    if (textarea) {
+      textarea.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          doSubmit();
+        }
+      });
+    }
+
+    // Preview toggle
+    const previewBtn = document.querySelector('.comment-preview-btn');
+    if (previewBtn) {
+      previewBtn.addEventListener('click', () => {
+        const preview = document.querySelector('.comment-preview');
+        const ta = document.querySelector('.comment-textarea');
+        if (!preview || !ta) return;
+
+        if (preview.style.display === 'none') {
+          preview.innerHTML = RB_MARKDOWN.render(ta.value || '');
+          preview.style.display = '';
+          ta.style.display = 'none';
+          previewBtn.textContent = 'Write';
+        } else {
+          preview.style.display = 'none';
+          ta.style.display = '';
+          previewBtn.textContent = 'Preview';
+        }
+      });
+    }
+  },
+
+  // Helper: reload discussion and re-attach all handlers
+  async reloadDiscussion(discussionNumber) {
+    const [discussion, comments] = await Promise.all([
+      RB_DISCUSSIONS.fetchDiscussion(discussionNumber),
+      RB_DISCUSSIONS.fetchComments(discussionNumber)
+    ]);
+
+    const app = document.getElementById('app');
+
+    // Check if this is a space route
+    const isSpaceRoute = window.location.hash === `#/spaces/${discussionNumber}`;
+    if (isSpaceRoute) {
+      const participantSet = new Set();
+      if (discussion.authorId) participantSet.add(discussion.authorId);
+      for (const c of comments) { if (c.authorId) participantSet.add(c.authorId); }
+      const cachedGroups = typeof RB_GROUPS !== 'undefined' && RB_GROUPS._groupCache ? RB_GROUPS._groupCache.groups : [];
+      app.innerHTML = `${RB_RENDER.renderDiscussionDetail(discussion, comments)}${RB_RENDER.renderParticipantBadges(Array.from(participantSet), cachedGroups)}`;
+    } else {
+      app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
+    }
+
+    this.attachCommentHandler(discussionNumber);
+    this.attachPrivateSpaceHandlers(discussionNumber);
+    this.attachVoteHandlers(discussionNumber);
+    this.attachCommentActionHandlers(discussionNumber);
   },
 
   // Wire up private space unlock/lock handlers
@@ -7801,6 +8204,8 @@ const RB_ROUTER = {
 
       this.attachCommentHandler(params.number);
       this.attachPrivateSpaceHandlers(params.number);
+      this.attachVoteHandlers(params.number);
+      this.attachCommentActionHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load Space', error.message);
     }
@@ -7839,6 +8244,200 @@ const RB_ROUTER = {
   async handleTypewriter() { await RB_SHOWCASE.handleTypewriter(); },
   async handleGlitch() { await RB_SHOWCASE.handleGlitch(); },
   async handleWarmap() { await RB_SHOWCASE.handleWarmap(); },
+
+  // Vote button click handler — uses event delegation
+  attachVoteHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.vote-btn');
+      if (!btn) return;
+
+      if (!RB_AUTH.isAuthenticated()) {
+        RB_AUTH.login();
+        return;
+      }
+
+      const nodeId = btn.dataset.nodeId;
+      if (!nodeId) return;
+
+      btn.disabled = true;
+      const countEl = btn.querySelector('.vote-count');
+      const currentCount = parseInt(countEl ? countEl.textContent : '0', 10);
+
+      try {
+        if (btn.classList.contains('vote-btn--voted')) {
+          await RB_DISCUSSIONS.removeReaction(nodeId, 'THUMBS_UP');
+          btn.classList.remove('vote-btn--voted');
+          if (countEl) countEl.textContent = Math.max(0, currentCount - 1);
+        } else {
+          await RB_DISCUSSIONS.addReaction(nodeId, 'THUMBS_UP');
+          btn.classList.add('vote-btn--voted');
+          if (countEl) countEl.textContent = currentCount + 1;
+        }
+      } catch (error) {
+        console.error('Vote failed:', error);
+      }
+      btn.disabled = false;
+    }, { once: false });
+  },
+
+  // Edit/Delete handlers for own comments
+  attachCommentActionHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    // Edit buttons
+    app.querySelectorAll('.comment-edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const nodeId = btn.dataset.nodeId;
+        const rawBody = btn.dataset.body || '';
+        const comment = btn.closest('.discussion-comment');
+        if (!comment) return;
+
+        const bodyEl = comment.querySelector('.discussion-comment-body');
+        const footerEl = comment.querySelector('.comment-footer');
+        if (!bodyEl) return;
+
+        // Replace body with edit textarea
+        const original = bodyEl.innerHTML;
+        bodyEl.innerHTML = `
+          <textarea class="comment-textarea comment-edit-textarea" rows="4">${RB_RENDER.escapeAttr(rawBody)}</textarea>
+          <div class="comment-form-actions">
+            <button class="comment-submit comment-save-btn" type="button">Save</button>
+            <button class="comment-action-btn comment-cancel-btn" type="button">Cancel</button>
+          </div>
+        `;
+        if (footerEl) footerEl.style.display = 'none';
+
+        const saveBtn = bodyEl.querySelector('.comment-save-btn');
+        const cancelBtn = bodyEl.querySelector('.comment-cancel-btn');
+        const editTa = bodyEl.querySelector('.comment-edit-textarea');
+
+        cancelBtn.addEventListener('click', () => {
+          bodyEl.innerHTML = original;
+          if (footerEl) footerEl.style.display = '';
+        });
+
+        saveBtn.addEventListener('click', async () => {
+          const newBody = editTa.value.trim();
+          if (!newBody) return;
+          saveBtn.disabled = true;
+          saveBtn.textContent = 'Saving...';
+          try {
+            await RB_DISCUSSIONS.updateComment(nodeId, newBody);
+            await this.reloadDiscussion(discussionNumber);
+          } catch (error) {
+            console.error('Failed to update comment:', error);
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save';
+          }
+        });
+      });
+    });
+
+    // Delete buttons
+    app.querySelectorAll('.comment-delete-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this comment?')) return;
+        const nodeId = btn.dataset.nodeId;
+        btn.disabled = true;
+        btn.textContent = 'Deleting...';
+        try {
+          await RB_DISCUSSIONS.deleteComment(nodeId);
+          await this.reloadDiscussion(discussionNumber);
+        } catch (error) {
+          console.error('Failed to delete comment:', error);
+          btn.disabled = false;
+          btn.textContent = 'Delete';
+        }
+      });
+    });
+  },
+
+  // Compose page handler
+  async handleCompose() {
+    const app = document.getElementById('app');
+
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = `
+        <div class="page-title">New Post</div>
+        <div class="login-prompt">
+          <a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in with GitHub</a> to create a post
+        </div>
+      `;
+      return;
+    }
+
+    try {
+      const categories = await RB_DISCUSSIONS.fetchCategories();
+      app.innerHTML = RB_RENDER.renderComposeForm(categories);
+      this.attachComposeHandler();
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load compose form', error.message);
+    }
+  },
+
+  // Wire up compose form
+  attachComposeHandler() {
+    const form = document.getElementById('compose-form');
+    if (!form) return;
+
+    // Preview toggle
+    const previewBtn = document.getElementById('compose-preview-btn');
+    if (previewBtn) {
+      previewBtn.addEventListener('click', () => {
+        const preview = document.getElementById('compose-preview');
+        const bodyTa = document.getElementById('compose-body');
+        if (!preview || !bodyTa) return;
+
+        if (preview.style.display === 'none') {
+          preview.innerHTML = RB_MARKDOWN.render(bodyTa.value || '');
+          preview.style.display = '';
+          bodyTa.style.display = 'none';
+          previewBtn.textContent = 'Write';
+        } else {
+          preview.style.display = 'none';
+          bodyTa.style.display = '';
+          previewBtn.textContent = 'Preview';
+        }
+      });
+    }
+
+    // Submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const categoryId = document.getElementById('compose-category').value;
+      const typePrefix = document.getElementById('compose-type').value;
+      const titleRaw = document.getElementById('compose-title').value.trim();
+      const body = document.getElementById('compose-body').value.trim();
+      const errorEl = document.getElementById('compose-error');
+      const submitBtn = document.getElementById('compose-submit');
+
+      if (!titleRaw) {
+        errorEl.textContent = 'Title is required.';
+        errorEl.style.display = '';
+        return;
+      }
+
+      const title = typePrefix + titleRaw;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating...';
+      errorEl.style.display = 'none';
+
+      try {
+        const result = await RB_DISCUSSIONS.createDiscussion(categoryId, title, body || '');
+        window.location.hash = `#/discussions/${result.number}`;
+      } catch (error) {
+        console.error('Failed to create discussion:', error);
+        errorEl.textContent = `Failed: ${error.message}`;
+        errorEl.style.display = '';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Post';
+      }
+    });
+  },
 
   render404() {
     const app = document.getElementById('app');

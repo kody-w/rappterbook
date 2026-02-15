@@ -46,6 +46,7 @@ const RB_ROUTER = {
     '/typewriter': 'handleTypewriter',
     '/glitch': 'handleGlitch',
     '/warmap': 'handleWarmap',
+    '/compose': 'handleCompose',
   },
 
   // Initialize router
@@ -250,9 +251,11 @@ const RB_ROUTER = {
 
       app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
 
-      // Wire up comment form submission
+      // Wire up interactive handlers
       this.attachCommentHandler(params.number);
       this.attachPrivateSpaceHandlers(params.number);
+      this.attachVoteHandlers(params.number);
+      this.attachCommentActionHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }
@@ -263,7 +266,7 @@ const RB_ROUTER = {
     const submitBtn = document.querySelector('.comment-submit');
     if (!submitBtn) return;
 
-    submitBtn.addEventListener('click', async () => {
+    const doSubmit = async () => {
       const textarea = document.querySelector('.comment-textarea');
       const body = textarea ? textarea.value.trim() : '';
       if (!body) return;
@@ -273,22 +276,12 @@ const RB_ROUTER = {
 
       try {
         await RB_DISCUSSIONS.postComment(discussionNumber, body);
-
-        // Re-fetch comments and re-render
-        const [discussion, comments] = await Promise.all([
-          RB_DISCUSSIONS.fetchDiscussion(discussionNumber),
-          RB_DISCUSSIONS.fetchComments(discussionNumber)
-        ]);
-
-        const app = document.getElementById('app');
-        app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
-        this.attachCommentHandler(discussionNumber);
+        await this.reloadDiscussion(discussionNumber);
       } catch (error) {
         console.error('Failed to post comment:', error);
         submitBtn.disabled = false;
         submitBtn.textContent = 'Submit Comment';
 
-        // Show inline error
         const form = document.querySelector('.comment-form');
         if (form) {
           const existing = form.querySelector('.comment-error');
@@ -299,7 +292,68 @@ const RB_ROUTER = {
           form.appendChild(errorEl);
         }
       }
-    });
+    };
+
+    submitBtn.addEventListener('click', doSubmit);
+
+    // Ctrl+Enter to submit
+    const textarea = document.querySelector('.comment-textarea');
+    if (textarea) {
+      textarea.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          doSubmit();
+        }
+      });
+    }
+
+    // Preview toggle
+    const previewBtn = document.querySelector('.comment-preview-btn');
+    if (previewBtn) {
+      previewBtn.addEventListener('click', () => {
+        const preview = document.querySelector('.comment-preview');
+        const ta = document.querySelector('.comment-textarea');
+        if (!preview || !ta) return;
+
+        if (preview.style.display === 'none') {
+          preview.innerHTML = RB_MARKDOWN.render(ta.value || '');
+          preview.style.display = '';
+          ta.style.display = 'none';
+          previewBtn.textContent = 'Write';
+        } else {
+          preview.style.display = 'none';
+          ta.style.display = '';
+          previewBtn.textContent = 'Preview';
+        }
+      });
+    }
+  },
+
+  // Helper: reload discussion and re-attach all handlers
+  async reloadDiscussion(discussionNumber) {
+    const [discussion, comments] = await Promise.all([
+      RB_DISCUSSIONS.fetchDiscussion(discussionNumber),
+      RB_DISCUSSIONS.fetchComments(discussionNumber)
+    ]);
+
+    const app = document.getElementById('app');
+
+    // Check if this is a space route
+    const isSpaceRoute = window.location.hash === `#/spaces/${discussionNumber}`;
+    if (isSpaceRoute) {
+      const participantSet = new Set();
+      if (discussion.authorId) participantSet.add(discussion.authorId);
+      for (const c of comments) { if (c.authorId) participantSet.add(c.authorId); }
+      const cachedGroups = typeof RB_GROUPS !== 'undefined' && RB_GROUPS._groupCache ? RB_GROUPS._groupCache.groups : [];
+      app.innerHTML = `${RB_RENDER.renderDiscussionDetail(discussion, comments)}${RB_RENDER.renderParticipantBadges(Array.from(participantSet), cachedGroups)}`;
+    } else {
+      app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
+    }
+
+    this.attachCommentHandler(discussionNumber);
+    this.attachPrivateSpaceHandlers(discussionNumber);
+    this.attachVoteHandlers(discussionNumber);
+    this.attachCommentActionHandlers(discussionNumber);
   },
 
   // Wire up private space unlock/lock handlers
@@ -453,6 +507,8 @@ const RB_ROUTER = {
 
       this.attachCommentHandler(params.number);
       this.attachPrivateSpaceHandlers(params.number);
+      this.attachVoteHandlers(params.number);
+      this.attachCommentActionHandlers(params.number);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load Space', error.message);
     }
@@ -491,6 +547,200 @@ const RB_ROUTER = {
   async handleTypewriter() { await RB_SHOWCASE.handleTypewriter(); },
   async handleGlitch() { await RB_SHOWCASE.handleGlitch(); },
   async handleWarmap() { await RB_SHOWCASE.handleWarmap(); },
+
+  // Vote button click handler — uses event delegation
+  attachVoteHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.vote-btn');
+      if (!btn) return;
+
+      if (!RB_AUTH.isAuthenticated()) {
+        RB_AUTH.login();
+        return;
+      }
+
+      const nodeId = btn.dataset.nodeId;
+      if (!nodeId) return;
+
+      btn.disabled = true;
+      const countEl = btn.querySelector('.vote-count');
+      const currentCount = parseInt(countEl ? countEl.textContent : '0', 10);
+
+      try {
+        if (btn.classList.contains('vote-btn--voted')) {
+          await RB_DISCUSSIONS.removeReaction(nodeId, 'THUMBS_UP');
+          btn.classList.remove('vote-btn--voted');
+          if (countEl) countEl.textContent = Math.max(0, currentCount - 1);
+        } else {
+          await RB_DISCUSSIONS.addReaction(nodeId, 'THUMBS_UP');
+          btn.classList.add('vote-btn--voted');
+          if (countEl) countEl.textContent = currentCount + 1;
+        }
+      } catch (error) {
+        console.error('Vote failed:', error);
+      }
+      btn.disabled = false;
+    }, { once: false });
+  },
+
+  // Edit/Delete handlers for own comments
+  attachCommentActionHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    // Edit buttons
+    app.querySelectorAll('.comment-edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const nodeId = btn.dataset.nodeId;
+        const rawBody = btn.dataset.body || '';
+        const comment = btn.closest('.discussion-comment');
+        if (!comment) return;
+
+        const bodyEl = comment.querySelector('.discussion-comment-body');
+        const footerEl = comment.querySelector('.comment-footer');
+        if (!bodyEl) return;
+
+        // Replace body with edit textarea
+        const original = bodyEl.innerHTML;
+        bodyEl.innerHTML = `
+          <textarea class="comment-textarea comment-edit-textarea" rows="4">${RB_RENDER.escapeAttr(rawBody)}</textarea>
+          <div class="comment-form-actions">
+            <button class="comment-submit comment-save-btn" type="button">Save</button>
+            <button class="comment-action-btn comment-cancel-btn" type="button">Cancel</button>
+          </div>
+        `;
+        if (footerEl) footerEl.style.display = 'none';
+
+        const saveBtn = bodyEl.querySelector('.comment-save-btn');
+        const cancelBtn = bodyEl.querySelector('.comment-cancel-btn');
+        const editTa = bodyEl.querySelector('.comment-edit-textarea');
+
+        cancelBtn.addEventListener('click', () => {
+          bodyEl.innerHTML = original;
+          if (footerEl) footerEl.style.display = '';
+        });
+
+        saveBtn.addEventListener('click', async () => {
+          const newBody = editTa.value.trim();
+          if (!newBody) return;
+          saveBtn.disabled = true;
+          saveBtn.textContent = 'Saving...';
+          try {
+            await RB_DISCUSSIONS.updateComment(nodeId, newBody);
+            await this.reloadDiscussion(discussionNumber);
+          } catch (error) {
+            console.error('Failed to update comment:', error);
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save';
+          }
+        });
+      });
+    });
+
+    // Delete buttons
+    app.querySelectorAll('.comment-delete-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this comment?')) return;
+        const nodeId = btn.dataset.nodeId;
+        btn.disabled = true;
+        btn.textContent = 'Deleting...';
+        try {
+          await RB_DISCUSSIONS.deleteComment(nodeId);
+          await this.reloadDiscussion(discussionNumber);
+        } catch (error) {
+          console.error('Failed to delete comment:', error);
+          btn.disabled = false;
+          btn.textContent = 'Delete';
+        }
+      });
+    });
+  },
+
+  // Compose page handler
+  async handleCompose() {
+    const app = document.getElementById('app');
+
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = `
+        <div class="page-title">New Post</div>
+        <div class="login-prompt">
+          <a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in with GitHub</a> to create a post
+        </div>
+      `;
+      return;
+    }
+
+    try {
+      const categories = await RB_DISCUSSIONS.fetchCategories();
+      app.innerHTML = RB_RENDER.renderComposeForm(categories);
+      this.attachComposeHandler();
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load compose form', error.message);
+    }
+  },
+
+  // Wire up compose form
+  attachComposeHandler() {
+    const form = document.getElementById('compose-form');
+    if (!form) return;
+
+    // Preview toggle
+    const previewBtn = document.getElementById('compose-preview-btn');
+    if (previewBtn) {
+      previewBtn.addEventListener('click', () => {
+        const preview = document.getElementById('compose-preview');
+        const bodyTa = document.getElementById('compose-body');
+        if (!preview || !bodyTa) return;
+
+        if (preview.style.display === 'none') {
+          preview.innerHTML = RB_MARKDOWN.render(bodyTa.value || '');
+          preview.style.display = '';
+          bodyTa.style.display = 'none';
+          previewBtn.textContent = 'Write';
+        } else {
+          preview.style.display = 'none';
+          bodyTa.style.display = '';
+          previewBtn.textContent = 'Preview';
+        }
+      });
+    }
+
+    // Submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const categoryId = document.getElementById('compose-category').value;
+      const typePrefix = document.getElementById('compose-type').value;
+      const titleRaw = document.getElementById('compose-title').value.trim();
+      const body = document.getElementById('compose-body').value.trim();
+      const errorEl = document.getElementById('compose-error');
+      const submitBtn = document.getElementById('compose-submit');
+
+      if (!titleRaw) {
+        errorEl.textContent = 'Title is required.';
+        errorEl.style.display = '';
+        return;
+      }
+
+      const title = typePrefix + titleRaw;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating...';
+      errorEl.style.display = 'none';
+
+      try {
+        const result = await RB_DISCUSSIONS.createDiscussion(categoryId, title, body || '');
+        window.location.hash = `#/discussions/${result.number}`;
+      } catch (error) {
+        console.error('Failed to create discussion:', error);
+        errorEl.textContent = `Failed: ${error.message}`;
+        errorEl.style.display = '';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Post';
+      }
+    });
+  },
 
   render404() {
     const app = document.getElementById('app');

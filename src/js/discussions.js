@@ -23,6 +23,118 @@ const RB_DISCUSSIONS = {
     return body;
   },
 
+  // Shared GraphQL caller for all mutations (GitHub Discussions require GraphQL for writes)
+  async graphql(query, variables = {}) {
+    const token = RB_AUTH.getToken();
+    if (!token) throw new Error('Not authenticated');
+
+    const response = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Authorization': `bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query, variables })
+    });
+
+    if (!response.ok) {
+      throw new Error(`GraphQL request failed: ${response.status}`);
+    }
+
+    const json = await response.json();
+    if (json.errors) {
+      throw new Error(json.errors.map(e => e.message).join(', '));
+    }
+    return json.data;
+  },
+
+  // Cached repo info (node ID + discussion categories)
+  _repoInfo: null,
+
+  async fetchRepoId() {
+    if (this._repoInfo) return this._repoInfo;
+
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const query = `query($owner: String!, $repo: String!) {
+      repository(owner: $owner, name: $repo) {
+        id
+        discussionCategories(first: 25) {
+          nodes { id name slug }
+        }
+      }
+    }`;
+
+    const data = await this.graphql(query, { owner, repo });
+    this._repoInfo = {
+      repoId: data.repository.id,
+      categories: data.repository.discussionCategories.nodes
+    };
+    return this._repoInfo;
+  },
+
+  async fetchCategories() {
+    const info = await this.fetchRepoId();
+    return info.categories;
+  },
+
+  // Reaction mutations
+  async addReaction(subjectId, content) {
+    const query = `mutation($subjectId: ID!, $content: ReactionContent!) {
+      addReaction(input: { subjectId: $subjectId, content: $content }) {
+        reaction { content }
+        subject { ... on Discussion { reactions { totalCount } } ... on DiscussionComment { reactions { totalCount } } }
+      }
+    }`;
+    return this.graphql(query, { subjectId, content });
+  },
+
+  async removeReaction(subjectId, content) {
+    const query = `mutation($subjectId: ID!, $content: ReactionContent!) {
+      removeReaction(input: { subjectId: $subjectId, content: $content }) {
+        reaction { content }
+        subject { ... on Discussion { reactions { totalCount } } ... on DiscussionComment { reactions { totalCount } } }
+      }
+    }`;
+    return this.graphql(query, { subjectId, content });
+  },
+
+  // Comment mutations
+  async updateComment(commentNodeId, body) {
+    const query = `mutation($commentId: ID!, $body: String!) {
+      updateDiscussionComment(input: { commentId: $commentId, body: $body }) {
+        comment { id body }
+      }
+    }`;
+    return this.graphql(query, { commentId: commentNodeId, body });
+  },
+
+  async deleteComment(commentNodeId) {
+    const query = `mutation($commentId: ID!) {
+      deleteDiscussionComment(input: { id: $commentId }) {
+        comment { id }
+      }
+    }`;
+    return this.graphql(query, { commentId: commentNodeId });
+  },
+
+  // Create a new discussion post
+  async createDiscussion(categoryId, title, body) {
+    const info = await this.fetchRepoId();
+    const query = `mutation($repoId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
+      createDiscussion(input: { repositoryId: $repoId, categoryId: $categoryId, title: $title, body: $body }) {
+        discussion { number url }
+      }
+    }`;
+    const data = await this.graphql(query, {
+      repoId: info.repoId,
+      categoryId,
+      title,
+      body
+    });
+    return data.createDiscussion.discussion;
+  },
+
   // Fetch discussions from GitHub REST API (no auth required for public repos)
   async fetchDiscussionsREST(channelSlug, limit = 10) {
     const owner = RB_STATE.OWNER;
@@ -114,12 +226,15 @@ const RB_DISCUSSIONS = {
         body: this.stripByline(d.body),
         author: realAuthor || (d.user ? d.user.login : 'unknown'),
         authorId: realAuthor || (d.user ? d.user.login : 'unknown'),
+        githubAuthor: d.user ? d.user.login : null,
         channel: d.category ? d.category.slug : null,
         timestamp: d.created_at,
         upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
         commentCount: d.comments || 0,
         url: d.html_url,
-        number: d.number
+        number: d.number,
+        nodeId: d.node_id || null,
+        reactions: d.reactions || {}
       };
     } catch (error) {
       console.error('Failed to fetch discussion:', error);
@@ -146,8 +261,12 @@ const RB_DISCUSSIONS = {
         return {
           author: realAuthor || (c.user ? c.user.login : 'unknown'),
           authorId: realAuthor || (c.user ? c.user.login : 'unknown'),
+          githubAuthor: c.user ? c.user.login : null,
           body: this.stripByline(c.body),
-          timestamp: c.created_at
+          timestamp: c.created_at,
+          nodeId: c.node_id || null,
+          reactions: c.reactions || {},
+          rawBody: c.body || ''
         };
       });
     } catch (error) {

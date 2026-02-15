@@ -2164,3 +2164,152 @@
 .wm-legend { display: flex; flex-wrap: wrap; gap: var(--rb-space-3); font-size: var(--rb-font-size-small); color: var(--rb-muted); margin-bottom: var(--rb-space-2); }
 .wm-legend-item { display: flex; align-items: center; gap: var(--rb-space-1); white-space: nowrap; }
 .wm-note { font-size: var(--rb-font-size-small); color: var(--rb-muted); font-style: italic; }
+
+/* -- Vote Button -- */
+.vote-btn {
+  background: transparent;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-muted);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  padding: 2px var(--rb-space-2);
+  transition: var(--rb-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.vote-btn:hover { border-color: var(--rb-accent); color: var(--rb-accent); }
+.vote-btn--voted { border-color: var(--rb-accent); color: var(--rb-accent); background: rgba(88, 166, 255, 0.1); }
+.vote-btn:disabled { opacity: 0.5; cursor: wait; }
+
+/* -- Comment Footer -- */
+.comment-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  margin-top: var(--rb-space-2);
+  padding-top: var(--rb-space-2);
+  border-top: 1px solid var(--rb-border);
+}
+
+/* -- Comment Action Buttons -- */
+.comment-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--rb-muted);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  padding: 2px var(--rb-space-2);
+  transition: var(--rb-transition);
+}
+.comment-edit-btn:hover { color: var(--rb-accent); }
+.comment-delete-btn:hover { color: var(--rb-danger); }
+.comment-action-btn:disabled { opacity: 0.5; cursor: wait; }
+
+/* -- Comment Preview -- */
+.comment-preview {
+  padding: var(--rb-space-3);
+  border: var(--rb-border-width) solid var(--rb-border);
+  background: var(--rb-bg-secondary);
+  min-height: 80px;
+  margin-bottom: var(--rb-space-2);
+  font-size: var(--rb-font-size-small);
+  line-height: 1.6;
+}
+.comment-preview-btn {
+  background: transparent;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-muted);
+  font-family: inherit;
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  padding: var(--rb-space-2) var(--rb-space-3);
+  transition: var(--rb-transition);
+}
+.comment-preview-btn:hover { border-color: var(--rb-accent); color: var(--rb-accent); }
+
+/* -- Compose Form -- */
+.compose-form {
+  max-width: 700px;
+}
+.compose-field {
+  margin-bottom: var(--rb-space-4);
+}
+.compose-label {
+  display: block;
+  margin-bottom: var(--rb-space-1);
+  color: var(--rb-text-bright);
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+}
+.compose-input {
+  width: 100%;
+  padding: var(--rb-space-2);
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+  box-sizing: border-box;
+}
+.compose-input:focus { border-color: var(--rb-accent); outline: none; }
+.compose-select {
+  width: 100%;
+  padding: var(--rb-space-2);
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+}
+.compose-select:focus { border-color: var(--rb-accent); outline: none; }
+.compose-actions {
+  display: flex;
+  gap: var(--rb-space-2);
+  align-items: center;
+}
+.compose-preview {
+  padding: var(--rb-space-3);
+  border: var(--rb-border-width) solid var(--rb-border);
+  background: var(--rb-bg-secondary);
+  min-height: 100px;
+  margin-bottom: var(--rb-space-3);
+  line-height: 1.6;
+}
+.compose-error {
+  color: var(--rb-danger);
+  font-size: var(--rb-font-size-small);
+  margin-bottom: var(--rb-space-2);
+  padding: var(--rb-space-2);
+  border: var(--rb-border-width) solid var(--rb-danger);
+}
+
+/* -- Compose Nav Button -- */
+.compose-nav-btn {
+  color: var(--rb-bg);
+  background: var(--rb-accent-secondary);
+  padding: var(--rb-space-1) var(--rb-space-3);
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+  font-family: var(--rb-font-mono);
+  margin-right: var(--rb-space-2);
+}
+.compose-nav-btn:hover { opacity: 0.85; text-decoration: none; }
+
+/* -- Edit textarea in-place -- */
+.comment-edit-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: var(--rb-space-2);
+}
+.comment-cancel-btn {
+  margin-left: var(--rb-space-2);
+}
+.comment-save-btn + .comment-cancel-btn {
+  margin-left: var(--rb-space-2);
+}
