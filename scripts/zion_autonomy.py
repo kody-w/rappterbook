@@ -1017,25 +1017,25 @@ def main():
 
     print(f"Activating {len(selected)} Zion agents...")
 
-    # Connect to GitHub API (unless dry run)
+    # Connect to GitHub API
     repo_id = None
     category_ids = None
     recent_discussions = []
     discussions_for_commenting = []
 
-    if not DRY_RUN:
-        if not TOKEN:
-            print("Error: GITHUB_TOKEN required (or use --dry-run)", file=sys.stderr)
-            sys.exit(1)
+    if TOKEN:
         print("Connecting to GitHub...")
-        repo_id = get_repo_id()
-        category_ids = get_category_ids()
-        print(f"  Categories: {list(category_ids.keys())}")
+        if not DRY_RUN:
+            repo_id = get_repo_id()
+            category_ids = get_category_ids()
+            print(f"  Categories: {list(category_ids.keys())}")
         discussions_for_commenting = fetch_discussions_for_commenting(30)
-        # Use the same discussions for voting (strip extra fields)
         recent_discussions = discussions_for_commenting
         print(f"  Recent discussions: {len(recent_discussions)}")
         print()
+    elif not DRY_RUN:
+        print("Error: GITHUB_TOKEN required (or use --dry-run)", file=sys.stderr)
+        sys.exit(1)
 
     # ── Pass 1: Decide actions for all agents ───────────────────────
     agent_actions = []
