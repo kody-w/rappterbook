@@ -17,7 +17,7 @@ class TestBuildChannelMap:
         """Seed posts file contains title-to-channel mappings."""
         from recategorize_discussions import build_channel_map
         mapping = build_channel_map()
-        assert len(mapping) == 40
+        assert len(mapping) == 72
 
     def test_all_channels_present(self):
         """All 10 channels have at least one post mapped."""
