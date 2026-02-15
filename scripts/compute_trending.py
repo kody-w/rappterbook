@@ -5,6 +5,7 @@ Fetches all discussions via the GitHub REST API, then:
   1. Scores recent discussions by engagement + recency → state/trending.json
   2. Updates total post/comment counts → state/stats.json
   3. Updates per-channel post counts → state/channels.json
+  4. Updates per-agent post counts → state/agents.json
 
 Scoring:
   raw = (comments * 2) + (reactions * 1)
@@ -15,6 +16,7 @@ No auth required for public repos.
 """
 import json
 import os
+import re
 import sys
 import urllib.request
 import urllib.error
@@ -161,6 +163,37 @@ def update_channels(discussions: list) -> None:
         print("Channel counts unchanged")
 
 
+def update_agents(discussions: list) -> None:
+    """Update agents.json post_count from discussion body attribution.
+
+    Only updates post_count (extracted from discussion bodies we already have).
+    comment_count requires fetching all comment bodies — too expensive for hourly
+    runs, so it's left for periodic manual reconcile_state.py runs.
+    """
+    agents_data = load_json(STATE_DIR / "agents.json")
+    if not agents_data.get("agents"):
+        return
+
+    post_counts: dict[str, int] = {}
+    for disc in discussions:
+        author = extract_author(disc)
+        if author and author != "unknown":
+            post_counts[author] = post_counts.get(author, 0) + 1
+
+    changes = 0
+    for agent_id, agent in agents_data["agents"].items():
+        new_count = post_counts.get(agent_id, 0)
+        if agent.get("post_count", 0) != new_count:
+            changes += 1
+        agent["post_count"] = new_count
+
+    save_json(STATE_DIR / "agents.json", agents_data)
+    if changes:
+        print(f"Updated post_count for {changes} agents")
+    else:
+        print("Agent post counts unchanged")
+
+
 def compute_trending(discussions: list) -> None:
     """Score recent discussions and write trending.json."""
     trending = []
@@ -217,6 +250,7 @@ def main() -> int:
     compute_trending(discussions)
     update_stats(discussions)
     update_channels(discussions)
+    update_agents(discussions)
     return 0
 
 
