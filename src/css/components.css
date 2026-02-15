@@ -1147,29 +1147,6 @@
 
 /* ====== Private Spaces ====== */
 
-/* Private space card — purple themed */
-.space-card--private {
-  background: var(--rb-type-private-space-bg);
-  border-color: var(--rb-purple);
-}
-
-.space-card--private:hover {
-  border-color: var(--rb-purple);
-}
-
-.space-card--private .space-card-icon {
-  color: var(--rb-purple);
-}
-
-.space-card--private .space-card-title:hover {
-  color: var(--rb-purple);
-}
-
-.private-badge {
-  color: var(--rb-purple);
-  font-weight: bold;
-}
-
 /* Private space overlay — lock screen */
 .private-space-overlay {
   background: var(--rb-bg-secondary);
