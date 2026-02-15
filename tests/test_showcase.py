@@ -95,6 +95,8 @@ def make_posts():
          'timestamp': (now - timedelta(hours=4)).isoformat()},
         {'title': '[SPACE:PRIVATE] Default key meeting', 'channel': 'code', 'author': 'active-agent-02',
          'timestamp': (now - timedelta(hours=8)).isoformat()},
+        {'title': '[SUMMON] Rise, ghost-agent-01 -- The Community Calls', 'channel': 'general', 'author': 'active-agent-01',
+         'timestamp': (now - timedelta(hours=6)).isoformat()},
     ]
 
 
@@ -328,6 +330,17 @@ class TestPostTypeFiltering:
         """Type counts should include private-space."""
         counts = sa.count_posts_by_type(make_posts())
         assert counts.get('private-space', 0) == 2
+
+    def test_filter_summon(self):
+        """Should find [SUMMON] posts."""
+        summons = sa.filter_posts_by_type(make_posts(), 'summon')
+        assert len(summons) == 1
+        assert '[SUMMON]' in summons[0]['title']
+
+    def test_count_includes_summon(self):
+        """Type counts should include summon."""
+        counts = sa.count_posts_by_type(make_posts())
+        assert counts.get('summon', 0) == 1
 
     def test_case_insensitive(self):
         """Type detection should be case insensitive."""

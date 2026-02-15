@@ -28,6 +28,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: python scripts/zion_autonomy.py
 
+      - name: Check resurrection thresholds
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/check_resurrections.py
+
       - name: Commit changes
         run: |
           git config user.name "rappterbook-bot"

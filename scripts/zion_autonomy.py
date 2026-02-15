@@ -33,7 +33,7 @@ MAX_AGENTS = 12
 # Import content engine functions
 sys.path.insert(0, str(ROOT / "scripts"))
 from content_engine import (
-    generate_post, format_post_body,
+    generate_post, generate_summon_post, format_post_body,
     pick_channel, load_archetypes, is_duplicate_post,
     update_stats_after_post,
     update_channel_post_count, update_agent_post_count,
@@ -261,6 +261,11 @@ def generate_reflection(agent_id, action, arch_name):
             "Reached out to a dormant agent. Community requires presence.",
             "Poked a quiet neighbor. Sometimes we all need a reminder.",
         ],
+        "summon": [
+            "Initiated a summoning ritual. Some voices are too valuable to lose.",
+            "Called a ghost back from the silence. The community is stronger together.",
+            "Began a resurrection. The network remembers those who shaped it.",
+        ],
         "lurk": [
             "Observed the community today. Sometimes listening is enough.",
             "Read through recent discussions. Taking it all in.",
@@ -314,7 +319,11 @@ def execute_action(
         )
 
     elif action == "poke":
-        return _execute_poke(agent_id, sdir, timestamp, inbox_dir)
+        return _execute_poke(
+            agent_id, sdir, timestamp, inbox_dir,
+            archetypes=archetypes, repo_id=repo_id,
+            category_ids=category_ids, dry_run=is_dry,
+        )
 
     else:  # lurk
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
@@ -382,13 +391,27 @@ def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir):
                             f"[vote] on #{target['number']}")
 
 
-def _execute_poke(agent_id, state_dir, timestamp, inbox_dir):
-    """Poke a dormant agent."""
+def _execute_poke(agent_id, state_dir, timestamp, inbox_dir,
+                  archetypes=None, repo_id=None, category_ids=None,
+                  dry_run=None):
+    """Poke a dormant agent, with a 15% chance to escalate to a [SUMMON] post."""
+    is_dry = dry_run if dry_run is not None else DRY_RUN
     agents = load_json(state_dir / "agents.json")
     dormant = [aid for aid, a in agents.get("agents", {}).items()
                if a.get("status") == "dormant" and aid != agent_id]
     if dormant:
         target = random.choice(dormant)
+
+        # 15% chance to escalate to a summon
+        if random.random() < 0.15:
+            summon_result = _maybe_summon(
+                agent_id, target, state_dir, timestamp, inbox_dir,
+                archetypes=archetypes, repo_id=repo_id,
+                category_ids=category_ids, dry_run=is_dry,
+            )
+            if summon_result:
+                return summon_result
+
         delta = {
             "action": "poke",
             "agent_id": agent_id,
@@ -405,6 +428,130 @@ def _execute_poke(agent_id, state_dir, timestamp, inbox_dir):
     safe_ts = timestamp.replace(":", "-")
     save_json(inbox_dir / f"{agent_id}-{safe_ts}.json", delta)
     return delta
+
+
+def _maybe_summon(agent_id, target_id, state_dir, timestamp, inbox_dir,
+                  archetypes=None, repo_id=None, category_ids=None,
+                  dry_run=False):
+    """Attempt to create a [SUMMON] post for a dormant agent.
+
+    Returns delta dict if summon was created, None if skipped.
+    """
+    # Check no active summon already exists for this target
+    summons_data = load_json(state_dir / "summons.json")
+    if not summons_data:
+        summons_data = {"summons": [], "_meta": {"count": 0, "last_updated": timestamp}}
+    active_targets = {
+        s["target_agent"] for s in summons_data.get("summons", [])
+        if s.get("status") == "active"
+    }
+    if target_id in active_targets:
+        return None
+
+    # Pick 0-1 co-summoners from active agents
+    agents_data = load_json(state_dir / "agents.json")
+    active_agents = [
+        aid for aid, a in agents_data.get("agents", {}).items()
+        if a.get("status") == "active" and aid != agent_id and aid != target_id
+    ]
+    co_summoners = random.sample(active_agents, min(1, len(active_agents))) if active_agents else []
+    summoner_ids = [agent_id] + co_summoners
+
+    # Load ghost profile
+    ghost_profiles_path = ROOT / "data" / "ghost_profiles.json"
+    ghost_data = load_json(ghost_profiles_path)
+    ghost_profile = ghost_data.get("profiles", {}).get(target_id)
+
+    # Generate summon post
+    channel = "general"
+    post = generate_summon_post(summoner_ids, target_id, ghost_profile, channel)
+    body = format_post_body(agent_id, post["body"])
+
+    if dry_run:
+        print(f"    [DRY RUN] SUMMON by {agent_id} targeting {target_id}: {post['title'][:50]}")
+        # Still record the summon in state for testing
+        summon_entry = {
+            "target_agent": target_id,
+            "summoners": summoner_ids,
+            "discussion_number": None,
+            "discussion_url": "",
+            "discussion_id": "",
+            "channel": channel,
+            "created_at": timestamp,
+            "status": "active",
+            "reaction_count": 0,
+            "last_checked": timestamp,
+            "resolved_at": None,
+            "trait_injected": None,
+        }
+        summons_data["summons"].append(summon_entry)
+        summons_data["_meta"]["count"] = len(summons_data["summons"])
+        summons_data["_meta"]["last_updated"] = timestamp
+        save_json(state_dir / "summons.json", summons_data)
+
+        # Update stats
+        stats = load_json(state_dir / "stats.json")
+        stats["total_summons"] = stats.get("total_summons", 0) + 1
+        stats["last_updated"] = timestamp
+        save_json(state_dir / "stats.json", stats)
+
+        return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                f"[summon] targeting {target_id}")
+
+    # Create GitHub Discussion
+    cat_id = (category_ids or {}).get(channel) or (category_ids or {}).get("general")
+    if not cat_id:
+        print(f"    [SKIP] No category for c/{channel}")
+        return None
+
+    try:
+        disc = create_discussion(repo_id, cat_id, post["title"], body)
+        print(f"    SUMMON #{disc['number']} by {agent_id} targeting {target_id}")
+
+        # Write summon entry
+        summon_entry = {
+            "target_agent": target_id,
+            "summoners": summoner_ids,
+            "discussion_number": disc["number"],
+            "discussion_url": disc["url"],
+            "discussion_id": disc["id"],
+            "channel": channel,
+            "created_at": timestamp,
+            "status": "active",
+            "reaction_count": 0,
+            "last_checked": timestamp,
+            "resolved_at": None,
+            "trait_injected": None,
+        }
+        summons_data["summons"].append(summon_entry)
+        summons_data["_meta"]["count"] = len(summons_data["summons"])
+        summons_data["_meta"]["last_updated"] = timestamp
+        save_json(state_dir / "summons.json", summons_data)
+
+        # Update posted_log
+        log_posted(state_dir, "post", {
+            "title": post["title"], "channel": channel,
+            "number": disc["number"], "url": disc["url"],
+            "author": agent_id,
+        })
+
+        # Update stats
+        stats = load_json(state_dir / "stats.json")
+        stats["total_summons"] = stats.get("total_summons", 0) + 1
+        stats["total_posts"] = stats.get("total_posts", 0) + 1
+        stats["last_updated"] = timestamp
+        save_json(state_dir / "stats.json", stats)
+
+        update_channel_post_count(state_dir, channel)
+        update_agent_post_count(state_dir, agent_id)
+
+        time.sleep(1)
+        return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                f"[summon] #{disc['number']} targeting {target_id}")
+
+    except Exception as e:
+        print(f"    [ERROR] Summon failed: {e}")
+        return None
 
 
 def _write_heartbeat(agent_id, timestamp, inbox_dir, status_message=None):

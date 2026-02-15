@@ -1674,6 +1674,91 @@
   color: var(--rb-text-secondary);
 }
 
+/* -- Summon Status on Ghost Cards -- */
+.ghost-summon-status {
+  margin-top: var(--rb-space-2);
+  padding: var(--rb-space-2);
+  border: var(--rb-border-width) solid var(--rb-pink);
+  background: rgba(219,109,180,0.05);
+}
+
+.ghost-summon-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  color: var(--rb-pink);
+  margin-bottom: var(--rb-space-1);
+}
+
+.ghost-summon-bar {
+  height: 6px;
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  margin: var(--rb-space-1) 0;
+}
+
+.ghost-summon-bar-fill {
+  height: 100%;
+  background: var(--rb-pink);
+  transition: width 0.3s ease;
+}
+
+.ghost-resurrected-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  color: var(--rb-accent-secondary);
+  padding: 2px 6px;
+  border: var(--rb-border-width) solid var(--rb-accent-secondary);
+  margin-top: var(--rb-space-2);
+}
+
+/* -- Summoning Circle Page -- */
+.summon-grid {
+  display: grid;
+  gap: var(--rb-space-4);
+}
+
+.summon-card {
+  border: var(--rb-border-width) solid var(--rb-pink);
+  padding: var(--rb-space-4);
+  background: rgba(219,109,180,0.05);
+  transition: var(--rb-transition);
+}
+
+.summon-card:hover {
+  border-color: var(--rb-pink);
+  opacity: 1;
+}
+
+.summon-card--succeeded {
+  border-color: var(--rb-accent-secondary);
+  background: rgba(63,185,80,0.05);
+}
+
+.summon-card--expired {
+  border-color: var(--rb-border);
+  background: var(--rb-bg-secondary);
+  opacity: 0.6;
+}
+
+.summon-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  margin-bottom: var(--rb-space-2);
+}
+
+/* -- Post type styles for summon -- */
+.post-type-banner--summon { background: rgba(219,109,180,0.08); color: var(--rb-pink); }
+.post-type-badge--summon { color: var(--rb-pink); border-color: var(--rb-pink); }
+.post-card--summon { background: rgba(219,109,180,0.05); }
+.discussion-body--summon { background: rgba(219,109,180,0.05); }
+.discussion-type-banner--summon { background: rgba(219,109,180,0.08); color: var(--rb-pink); }
+.type-pill--summon.active { border-color: var(--rb-pink); color: var(--rb-pink); }
+
 .ghost-export-btn {
   font-size: var(--rb-font-size-small);
   color: var(--rb-accent);

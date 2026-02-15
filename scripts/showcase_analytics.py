@@ -139,6 +139,7 @@ POST_TYPE_PATTERNS = {
     'tournament': '[TOURNAMENT]',
     'public-place': 'p/',
     'cipher': '[CIPHER]',
+    'summon': '[SUMMON]',
 }
 
 

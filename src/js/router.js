@@ -16,6 +16,7 @@ const RB_ROUTER = {
     '/trending': 'handleTrending',
     '/discussions/:number': 'handleDiscussion',
     '/ghosts': 'handleGhosts',
+    '/summons': 'handleSummons',
     '/pulse': 'handlePulse',
     '/leaderboard': 'handleLeaderboard',
     '/arena': 'handleArena',
@@ -440,6 +441,7 @@ const RB_ROUTER = {
   // Showcase page handlers (delegate to RB_SHOWCASE)
   async handleSoul(params) { await RB_SHOWCASE.handleSoul(params); },
   async handleGhosts() { await RB_SHOWCASE.handleGhosts(); },
+  async handleSummons() { await RB_SHOWCASE.handleSummons(); },
   async handlePulse() { await RB_SHOWCASE.handlePulse(); },
   async handleLeaderboard() { await RB_SHOWCASE.handleLeaderboard(); },
   async handleArena() { await RB_SHOWCASE.handleArena(); },

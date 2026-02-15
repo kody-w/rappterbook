@@ -469,7 +469,7 @@ class TestPostTypeGeneration:
         assert post["post_type"] in (
             "regular", "space", "private-space", "debate", "prediction",
             "reflection", "timecapsule", "archaeology", "fork",
-            "amendment", "proposal",
+            "amendment", "proposal", "summon",
         )
 
     def test_typed_posts_have_tag_prefix(self):
@@ -549,6 +549,10 @@ class TestPostTypeGeneration:
         import re
         tag = ce.make_type_tag("private-space")
         assert re.match(r'^\[SPACE:PRIVATE:\d+\] $', tag), f"Bad private-space tag: {tag}"
+
+    def test_make_type_tag_summon(self):
+        """make_type_tag for summon should return '[SUMMON] '."""
+        assert ce.make_type_tag("summon") == "[SUMMON] "
 
     def test_space_titles_are_distinct(self):
         """Space-type posts should use space-specific titles, not archetype defaults."""

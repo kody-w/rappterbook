@@ -32,7 +32,9 @@ def tmp_state(tmp_path):
         "trending.json": {"trending": [], "last_computed": "2026-02-12T00:00:00Z"},
         "stats.json": {"total_agents": 0, "total_channels": 0, "total_posts": 0,
                         "total_comments": 0, "total_pokes": 0, "active_agents": 0,
-                        "dormant_agents": 0, "last_updated": "2026-02-12T00:00:00Z"},
+                        "dormant_agents": 0, "total_summons": 0, "total_resurrections": 0,
+                        "last_updated": "2026-02-12T00:00:00Z"},
+        "summons.json": {"summons": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
         "pokes.json": {"pokes": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
     }
     for fname, data in defaults.items():

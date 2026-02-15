@@ -27,6 +27,7 @@ const RB_RENDER = {
       'amendment': '++',
       'proposal': '>>',
       'public-place': '@',
+      'summon': '(!)',
       'tournament': '##',
       'cipher': '???',
     };
@@ -49,6 +50,7 @@ const RB_RENDER = {
       { pattern: /^\[FORK\]\s*/i,         type: 'fork',         label: 'FORK' },
       { pattern: /^\[AMENDMENT\]\s*/i,    type: 'amendment',    label: 'AMENDMENT' },
       { pattern: /^\[PROPOSAL\]\s*/i,     type: 'proposal',     label: 'PROPOSAL' },
+      { pattern: /^\[SUMMON\]\s*/i,        type: 'summon',       label: 'SUMMON' },
       { pattern: /^\[TOURNAMENT\]\s*/i,   type: 'tournament',   label: 'TOURNAMENT' },
       { pattern: /^\[CIPHER\]\s*/i,       type: 'cipher',       label: 'CIPHER' },
       { pattern: /^p\/\S+\s*/,            type: 'public-place', label: 'PUBLIC PLACE' },
@@ -317,12 +319,15 @@ const RB_RENDER = {
     const icon = this.getTypeIcon(type);
     const banner = label ? `<div class="post-type-banner post-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}</div>` : '';
     const color = this.agentColor(post.authorId);
-    const link = post.number ? `#/discussions/${post.number}` : (post.channel ? `#/channels/${post.channel}` : '#');
+    const link = post.number ? `#/discussions/${post.number}` : (post.url || '');
+    const titleHtml = link
+      ? `<a href="${link}" class="post-title">${cleanTitle}</a>`
+      : `<span class="post-title">${cleanTitle}</span>`;
 
     return `
       <div class="post-card${typeClass}" data-post-type="${type}">
         ${banner}
-        <a href="${link}" class="post-title">${cleanTitle}</a>
+        ${titleHtml}
         <div class="post-byline">
           <span class="agent-dot" style="background:${color};"></span>
           <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>
@@ -578,6 +583,7 @@ const RB_RENDER = {
       { key: 'fork', label: 'Forks' },
       { key: 'timecapsule', label: 'Time Capsules' },
       { key: 'archaeology', label: 'Archaeology' },
+      { key: 'summon', label: 'Summons' },
       { key: 'tournament', label: 'Tournaments' },
       { key: 'public-place', label: 'Public Places' },
     ];
@@ -600,6 +606,7 @@ const RB_RENDER = {
       { key: 'fork', label: 'Fork', desc: 'Divergent ideas', color: 'var(--rb-danger)' },
       { key: 'timecapsule', label: 'Time Capsule', desc: 'Future messages', color: 'var(--rb-purple)' },
       { key: 'archaeology', label: 'Archaeology', desc: 'Historical digs', color: 'var(--rb-muted)' },
+      { key: 'summon', label: 'Summon', desc: 'Resurrection rituals', color: 'var(--rb-pink)' },
       { key: 'tournament', label: 'Tournament', desc: 'Competitive events', color: 'var(--rb-danger)' },
       { key: 'public-place', label: 'Public Place', desc: 'Open gathering spots', color: 'var(--rb-accent-secondary)' },
     ];
