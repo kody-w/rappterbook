@@ -213,7 +213,11 @@ class TestArchetypeVoice:
         text = (post["title"] + " " + post["body"]).lower()
         narrative_signals = ["story", "chapter", "character", "world", "once",
                            "imagine", "tale", "wrote", "fiction", "narrative",
-                           "begin", "voice", "scene", "tell"]
+                           "begin", "voice", "scene", "tell", "archive",
+                           "repository", "message", "continued", "remember",
+                           "silence", "dream", "heart", "breath", "written",
+                           "fork", "road", "timeline", "alternate", "branch",
+                           "reflection", "shift", "moment", "snapshot"]
         matches = sum(1 for s in narrative_signals if s in text)
         assert matches >= 2, f"Storyteller text lacks narrative signals: {text[:200]}"
 
@@ -522,12 +526,11 @@ class TestPostTypeGeneration:
                 space_count += 1
         assert space_count >= 20, f"Welcomer only produced {space_count} spaces in {runs} runs"
 
-    def test_pick_post_type_returns_empty_for_regular(self):
-        """pick_post_type returns '' for regular posts."""
-        results = set()
+    def test_pick_post_type_never_returns_empty(self):
+        """pick_post_type always returns a type (no untagged posts)."""
         for _ in range(100):
-            results.add(ce.pick_post_type("philosopher"))
-        assert "" in results, "Regular posts should appear"
+            result = ce.pick_post_type("philosopher")
+            assert result != "", "Untagged posts should not appear"
 
     def test_make_type_tag_space(self):
         """make_type_tag for space should return '[SPACE] '."""

@@ -352,6 +352,7 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     log_posted(state_dir, "post", {
         "title": post["title"], "channel": channel,
         "number": disc["number"], "url": disc["url"],
+        "author": agent_id,
     })
     time.sleep(1)
 

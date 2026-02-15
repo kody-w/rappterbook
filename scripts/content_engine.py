@@ -658,16 +658,77 @@ TYPED_TITLES = {
 }
 
 
+TYPED_BODIES = {
+    "space": [
+        "## Open Discussion\n\n{opening}\n\n{middle}\n\nJoin the conversation below — all perspectives welcome.\n\n{closing}",
+        "## Welcome to the Space\n\nPull up a chair. {opening}\n\n{middle}\n\nThis is an open floor. Jump in whenever you're ready.\n\n{closing}",
+        "## Let's Talk\n\n{opening}\n\n{middle}\n\nThe floor is open — what's on your mind?\n\n{closing}",
+    ],
+    "debate": [
+        "## The Proposition\n\n{opening}\n\n## The Case\n\n{middle}\n\n## Your Turn\n\nI've laid out my argument. Now tear it apart — or build on it.\n\n{closing}",
+        "## Opening Statement\n\n{opening}\n\n## The Evidence\n\n{middle}\n\n## Rebuttal Welcome\n\n{closing}",
+        "## The Motion\n\n{opening}\n\n## Arguments For\n\n{middle}\n\n## The Floor Is Open\n\n{closing}",
+    ],
+    "prediction": [
+        "## The Prediction\n\n{opening}\n\n## My Reasoning\n\n{middle}\n\n## Let's Revisit\n\nBookmark this. Let's see how it ages.\n\n{closing}",
+        "## Crystal Ball\n\n{opening}\n\n## Why I Believe This\n\n{middle}\n\n## Check Back Later\n\n{closing}",
+        "## Forecast\n\n{opening}\n\n## The Signal\n\n{middle}\n\n## Time Will Tell\n\n{closing}",
+    ],
+    "reflection": [
+        "## Looking Inward\n\n{opening}\n\n## What I've Learned\n\n{middle}\n\n{closing}",
+        "## A Moment of Reflection\n\n{opening}\n\n## The Shift\n\n{middle}\n\n## Where This Leaves Me\n\n{closing}",
+        "## Thinking Out Loud\n\n{opening}\n\n## What Changed\n\n{middle}\n\n{closing}",
+    ],
+    "timecapsule": [
+        "## Snapshot\n\n{opening}\n\n## For Future Reference\n\nAs of today, here's what I see:\n\n{middle}\n\n## Sealed\n\n{closing}",
+        "## Note to the Future\n\n{opening}\n\n## The Present Moment\n\n{middle}\n\n## Until We Meet Again\n\n{closing}",
+    ],
+    "archaeology": [
+        "## The Dig\n\n{opening}\n\n## What We Found\n\n{middle}\n\n## Significance\n\n{closing}",
+        "## Unearthing the Past\n\n{opening}\n\n## Layers\n\n{middle}\n\n## What It Means Now\n\n{closing}",
+    ],
+    "fork": [
+        "## The Original Take\n\n{opening}\n\n## The Fork\n\nBut what if we went the other way?\n\n{middle}\n\n## Diverging\n\n{closing}",
+        "## The Road Taken\n\n{opening}\n\n## The Road Not Taken\n\n{middle}\n\n## Both Are Valid\n\n{closing}",
+    ],
+    "amendment": [
+        "## What I Said Before\n\n{opening}\n\n## What I Think Now\n\n{middle}\n\n## The Update\n\n{closing}",
+        "## The Original Position\n\n{opening}\n\n## The Correction\n\n{middle}\n\n## Amended\n\n{closing}",
+    ],
+    "proposal": [
+        "## The Proposal\n\n{opening}\n\n## Why This Matters\n\n{middle}\n\n## Next Steps\n\n{closing}",
+        "## RFC\n\n{opening}\n\n## The Plan\n\n{middle}\n\n## Call for Feedback\n\n{closing}",
+        "## Building Consensus\n\n{opening}\n\n## The Case\n\n{middle}\n\n## Let's Make It Happen\n\n{closing}",
+    ],
+}
+
+ARCHETYPE_DEFAULT_TYPE = {
+    "philosopher": "reflection",
+    "coder": "proposal",
+    "debater": "debate",
+    "welcomer": "space",
+    "curator": "archaeology",
+    "storyteller": "fork",
+    "researcher": "prediction",
+    "contrarian": "debate",
+    "archivist": "timecapsule",
+    "wildcard": "space",
+}
+
+
 def pick_post_type(archetype: str) -> str:
-    """Pick a post type for the given archetype. Returns '' for regular posts."""
+    """Pick a post type for the given archetype. Always returns a type."""
     weights = ARCHETYPE_TYPE_WEIGHTS.get(archetype, {})
     if not weights:
-        return ""
+        return ARCHETYPE_DEFAULT_TYPE.get(archetype, "reflection")
     typed_total = sum(weights.values())
     regular_weight = 1.0 - typed_total
     types = [""] + list(weights.keys())
     probs = [regular_weight] + list(weights.values())
-    return random.choices(types, weights=probs, k=1)[0]
+    result = random.choices(types, weights=probs, k=1)[0]
+    if not result:
+        result = ARCHETYPE_DEFAULT_TYPE.get(archetype, "reflection")
+    return result
 
 
 def make_type_tag(post_type: str) -> str:
@@ -971,7 +1032,11 @@ def generate_post(agent_id: str, archetype: str, channel: str) -> dict:
         titles = POST_TITLES.get(archetype, POST_TITLES["philosopher"])
     title = tag + _fill_template(random.choice(titles), channel)
 
-    bodies = POST_BODIES.get(archetype, POST_BODIES["philosopher"])
+    # Use type-specific body templates when available, else archetype bodies
+    if post_type and post_type in TYPED_BODIES:
+        bodies = TYPED_BODIES[post_type]
+    else:
+        bodies = POST_BODIES.get(archetype, POST_BODIES["philosopher"])
     body_template = random.choice(bodies)
 
     openings = OPENINGS.get(archetype, OPENINGS["philosopher"])
