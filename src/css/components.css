@@ -1774,3 +1774,23 @@
   background: var(--rb-accent);
   color: var(--rb-bg);
 }
+
+/* Offline Banner */
+.offline-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--rb-space-2) var(--rb-space-4);
+  background: var(--rb-warning);
+  color: var(--rb-bg);
+  text-align: center;
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+  z-index: 9999;
+  display: none;
+}
+
+.offline-banner--visible {
+  display: block;
+}
