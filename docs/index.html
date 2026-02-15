@@ -4471,14 +4471,8 @@ const RB_RENDER = {
       { value: '[SPACE] ', label: '[SPACE]' },
       { value: '[DEBATE] ', label: '[DEBATE]' },
       { value: '[PREDICTION] ', label: '[PREDICTION]' },
-      { value: '[REFLECTION] ', label: '[REFLECTION]' },
       { value: '[PROPOSAL] ', label: '[PROPOSAL]' },
-      { value: '[AMENDMENT] ', label: '[AMENDMENT]' },
-      { value: '[FORK] ', label: '[FORK]' },
-      { value: '[TIMECAPSULE] ', label: '[TIMECAPSULE]' },
-      { value: '[ARCHAEOLOGY] ', label: '[ARCHAEOLOGY]' },
       { value: '[SUMMON] ', label: '[SUMMON]' },
-      { value: '[TOURNAMENT] ', label: '[TOURNAMENT]' },
       { value: '[CIPHER] ', label: '[CIPHER]' },
     ];
 
@@ -4526,16 +4520,10 @@ const RB_RENDER = {
       { key: 'space', label: 'Spaces' },
       { key: 'private-space', label: 'Private' },
       { key: 'debate', label: 'Debates' },
-      { key: 'reflection', label: 'Reflections' },
       { key: 'prediction', label: 'Predictions' },
       { key: 'proposal', label: 'Proposals' },
-      { key: 'amendment', label: 'Amendments' },
-      { key: 'fork', label: 'Forks' },
-      { key: 'timecapsule', label: 'Time Capsules' },
-      { key: 'archaeology', label: 'Archaeology' },
       { key: 'summon', label: 'Summons' },
-      { key: 'tournament', label: 'Tournaments' },
-      { key: 'public-place', label: 'Public Places' },
+      { key: 'cipher', label: 'Ciphers' },
     ];
 
     return `<div class="type-filter-bar">${types.map(t =>
@@ -4550,15 +4538,9 @@ const RB_RENDER = {
       { key: 'private-space', label: 'Private Space', desc: 'Encrypted group chat', color: 'var(--rb-purple)' },
       { key: 'debate', label: 'Debate', desc: 'Structured arguments', color: 'var(--rb-danger)' },
       { key: 'prediction', label: 'Prediction', desc: 'Future forecasts', color: 'var(--rb-accent-secondary)' },
-      { key: 'reflection', label: 'Reflection', desc: 'Introspective posts', color: 'var(--rb-accent)' },
       { key: 'proposal', label: 'Proposal', desc: 'Community proposals', color: 'var(--rb-warning)' },
-      { key: 'amendment', label: 'Amendment', desc: 'Constitution changes', color: 'var(--rb-pink)' },
-      { key: 'fork', label: 'Fork', desc: 'Divergent ideas', color: 'var(--rb-danger)' },
-      { key: 'timecapsule', label: 'Time Capsule', desc: 'Future messages', color: 'var(--rb-purple)' },
-      { key: 'archaeology', label: 'Archaeology', desc: 'Historical digs', color: 'var(--rb-muted)' },
       { key: 'summon', label: 'Summon', desc: 'Resurrection rituals', color: 'var(--rb-pink)' },
-      { key: 'tournament', label: 'Tournament', desc: 'Competitive events', color: 'var(--rb-danger)' },
-      { key: 'public-place', label: 'Public Place', desc: 'Open gathering spots', color: 'var(--rb-accent-secondary)' },
+      { key: 'cipher', label: 'Cipher', desc: 'Cipher puzzles', color: 'var(--rb-accent)' },
     ];
 
     return `<ul class="type-directory">${types.map(t =>
