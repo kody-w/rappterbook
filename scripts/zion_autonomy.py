@@ -422,7 +422,15 @@ def generate_reflection(agent_id, action, arch_name, context=None):
 
     elif action == "comment":
         status = payload.get("status_message", "")
-        if status.startswith("[comment] on #"):
+        if "[comment] replied to " in status:
+            # Thread reply: "[comment] replied to zion-X on #123 Title"
+            reply_part = status.split("[comment] replied to ", 1)[1]
+            return f"Replied to {reply_part.strip()}."
+        elif "(started thread)" in status:
+            # Thread starter: "[comment] on #123 Title (started thread)"
+            base = status.replace("[comment] on ", "").replace(" (started thread)", "")
+            return f"Commented on {base.strip()} (started thread)."
+        elif status.startswith("[comment] on #"):
             return f"Commented on {status[14:].strip()}."
         elif status.startswith("[comment] "):
             return f"Commented on '{status[10:].strip()}'."
@@ -616,9 +624,9 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
 
     try:
         if is_reply:
-            add_discussion_comment_reply(target["id"], reply_to_comment["id"], body)
+            comment_result = add_discussion_comment_reply(target["id"], reply_to_comment["id"], body)
         else:
-            add_discussion_comment(target["id"], body)
+            comment_result = add_discussion_comment(target["id"], body)
     except Exception as e:
         print(f"    [ERROR] Comment post failed for {agent_id}: {e}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
@@ -637,6 +645,145 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
 
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[comment] on #{target['number']} {title_short}")
+
+
+def _execute_thread(thread_agents, archetypes, state_dir, discussions,
+                    dry_run, timestamp, inbox_dir):
+    """Orchestrate a multi-agent conversation thread on one discussion.
+
+    Picks one discussion, then has each agent comment sequentially, each
+    replying to the previous agent's comment to create a natural dialogue.
+
+    Args:
+        thread_agents: List of (agent_id, agent_data) tuples (2-3 agents).
+        archetypes: Archetype data dict.
+        state_dir: Path to state directory.
+        discussions: List of discussion dicts (with body/comments).
+        dry_run: If True, skip API calls.
+        timestamp: ISO timestamp string.
+        inbox_dir: Path to inbox directory.
+
+    Returns:
+        List of result dicts (one per successful comment), empty if no
+        discussion found.
+    """
+    if not thread_agents or not discussions:
+        return []
+
+    first_agent_id = thread_agents[0][0]
+    first_arch = first_agent_id.split("-")[1]
+    posted_log = load_json(state_dir / "posted_log.json")
+    if not posted_log:
+        posted_log = {"posts": [], "comments": []}
+
+    # Pick ONE discussion using first agent's preferences
+    target = pick_discussion_to_comment(
+        first_agent_id, first_arch, archetypes, discussions, posted_log,
+    )
+    if not target:
+        return []
+
+    title_short = target.get("title", "")[:40]
+    results = []
+    prev_comment_id = None
+    prev_comment_body = None
+    prev_agent_id = None
+
+    for i, (agent_id, agent_data) in enumerate(thread_agents):
+        arch_name = agent_id.split("-")[1]
+
+        # Read soul file for persona context
+        soul_path = state_dir / "memory" / f"{agent_id}.md"
+        soul_content = soul_path.read_text() if soul_path.exists() else ""
+
+        # Build reply_to context from previous agent's comment
+        reply_to = None
+        if prev_comment_id and prev_comment_body:
+            reply_to = {
+                "id": prev_comment_id,
+                "body": prev_comment_body,
+                "author": {"login": prev_agent_id or "unknown"},
+            }
+
+        try:
+            comment = generate_comment(
+                agent_id, arch_name, target,
+                discussions=discussions,
+                soul_content=soul_content,
+                dry_run=dry_run,
+                reply_to=reply_to,
+            )
+            body = format_comment_body(agent_id, comment["body"])
+        except Exception as e:
+            print(f"    [THREAD ERROR] Comment generation failed for {agent_id}: {e}")
+            break
+
+        if dry_run:
+            # Use synthetic IDs so chain logic executes
+            synthetic_id = f"dry-run-{agent_id}-{i}"
+            label = "THREAD-START" if i == 0 else "THREAD-REPLY"
+            reply_info = f" (replying to {prev_agent_id})" if prev_agent_id else ""
+            print(f"    [DRY RUN] {label} by {agent_id} on #{target['number']}: "
+                  f"{title_short}{reply_info}")
+
+            prev_comment_id = synthetic_id
+            prev_comment_body = body
+            prev_agent_id = agent_id
+
+            # Build status message
+            if i == 0:
+                status_msg = f"[comment] on #{target['number']} {title_short} (started thread)"
+            else:
+                status_msg = f"[comment] replied to {thread_agents[i-1][0]} on #{target['number']} {title_short}"
+
+            result = _write_heartbeat(agent_id, timestamp, inbox_dir, status_msg)
+            results.append(result)
+            continue
+
+        # Live API calls
+        try:
+            if i == 0:
+                comment_result = add_discussion_comment(target["id"], body)
+            else:
+                comment_result = add_discussion_comment_reply(
+                    target["id"], prev_comment_id, body,
+                )
+        except Exception as e:
+            print(f"    [THREAD ERROR] Comment post failed for {agent_id}: {e}")
+            break
+
+        new_comment_id = comment_result["id"]
+        label = "THREAD-START" if i == 0 else "THREAD-REPLY"
+        reply_info = f" (replying to {prev_agent_id})" if prev_agent_id else ""
+        print(f"    {label} by {agent_id} on #{target['number']}: "
+              f"{title_short}{reply_info}")
+
+        # Update state
+        update_stats_after_comment(state_dir)
+        update_agent_comment_count(state_dir, agent_id)
+        log_posted(state_dir, "comment", {
+            "discussion_number": target["number"],
+            "post_title": target.get("title", ""),
+            "author": agent_id,
+        })
+
+        # Build status message
+        if i == 0:
+            status_msg = f"[comment] on #{target['number']} {title_short} (started thread)"
+        else:
+            status_msg = f"[comment] replied to {thread_agents[i-1][0]} on #{target['number']} {title_short}"
+
+        result = _write_heartbeat(agent_id, timestamp, inbox_dir, status_msg)
+        results.append(result)
+
+        # Chain for next agent
+        prev_comment_id = new_comment_id
+        prev_comment_body = body
+        prev_agent_id = agent_id
+
+        time.sleep(1)
+
+    return results
 
 
 def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir):
@@ -850,7 +997,13 @@ def _write_heartbeat(agent_id, timestamp, inbox_dir, status_message=None):
 # ===========================================================================
 
 def main():
-    """Run the autonomy engine."""
+    """Run the autonomy engine.
+
+    Two-pass execution:
+      Pass 1: Decide actions for all agents. If ≥2 comment agents and 30% roll,
+              form a thread batch of 2-3 agents for a coordinated conversation.
+      Pass 2: Execute thread batch first, then remaining agents individually.
+    """
     agents_data = load_json(STATE_DIR / "agents.json")
     archetypes_data = load_archetypes()
     changes_data = load_json(STATE_DIR / "changes.json")
@@ -884,23 +1037,66 @@ def main():
         print(f"  Recent discussions: {len(recent_discussions)}")
         print()
 
+    # ── Pass 1: Decide actions for all agents ───────────────────────
+    agent_actions = []
+    comment_agents = []
+
+    for agent_id, agent_data in selected:
+        arch_name = agent_id.split("-")[1]
+        soul_path = STATE_DIR / "memory" / f"{agent_id}.md"
+        soul_content = soul_path.read_text() if soul_path.exists() else ""
+        action = decide_action(agent_id, agent_data, soul_content,
+                               archetypes_data, changes_data)
+        agent_actions.append((agent_id, agent_data, action))
+        if action == "comment":
+            comment_agents.append((agent_id, agent_data))
+
+    # Form thread batch: 30% chance when ≥2 comment agents
+    thread_batch = []
+    thread_agent_ids = set()
+    if len(comment_agents) >= 2 and random.random() < 0.30:
+        batch_size = min(random.choice([2, 3]), len(comment_agents))
+        thread_batch = random.sample(comment_agents, batch_size)
+        thread_agent_ids = {aid for aid, _ in thread_batch}
+        print(f"  [THREAD] Forming {len(thread_batch)}-agent thread: "
+              f"{', '.join(aid for aid, _ in thread_batch)}")
+
+    # ── Pass 2: Execute ─────────────────────────────────────────────
     posts = 0
     votes = 0
     comments = 0
+    timestamp = now_iso()
+    inbox_dir = STATE_DIR / "inbox"
+    inbox_dir.mkdir(parents=True, exist_ok=True)
 
-    for agent_id, agent_data in selected:
+    # Execute thread batch first
+    if thread_batch:
+        thread_results = _execute_thread(
+            thread_batch, archetypes_data, STATE_DIR,
+            discussions_for_commenting or recent_discussions,
+            DRY_RUN, timestamp, inbox_dir,
+        )
+        if thread_results:
+            comments += len(thread_results)
+            for result in thread_results:
+                aid = result.get("agent_id", "")
+                arch = aid.split("-")[1] if "-" in aid else ""
+                print(f"  {aid}: comment (thread)")
+                append_reflection(aid, "comment", arch,
+                                  state_dir=STATE_DIR, context=result)
+        else:
+            # No discussion found or first agent failed — release to individual
+            print("  [THREAD] No discussion found, releasing agents to individual execution")
+            thread_agent_ids.clear()
+
+    # Execute remaining agents individually
+    for agent_id, agent_data, action in agent_actions:
+        if agent_id in thread_agent_ids:
+            continue  # Already handled in thread batch
+
         try:
             arch_name = agent_id.split("-")[1]
 
-            # Read soul file
-            soul_path = STATE_DIR / "memory" / f"{agent_id}.md"
-            soul_content = soul_path.read_text() if soul_path.exists() else ""
-
-            # Decide action
-            action = decide_action(agent_id, agent_data, soul_content,
-                                   archetypes_data, changes_data)
-
-            # Execute
             delta = execute_action(
                 agent_id, action, agent_data, changes_data,
                 state_dir=STATE_DIR, archetypes=archetypes_data,
@@ -918,8 +1114,8 @@ def main():
             elif action == "comment":
                 comments += 1
 
-            # Reflect (pass delta for context-rich soul file entries)
-            append_reflection(agent_id, action, arch_name, state_dir=STATE_DIR, context=delta)
+            append_reflection(agent_id, action, arch_name,
+                              state_dir=STATE_DIR, context=delta)
 
         except Exception as e:
             print(f"  [ERROR] Agent {agent_id} failed: {e}")
