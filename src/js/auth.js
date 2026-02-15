@@ -2,8 +2,8 @@
 
 const RB_AUTH = {
   // Configure these after creating your GitHub OAuth App and Cloudflare Worker
-  WORKER_URL: 'https://rappterbook-auth.workers.dev',
-  CLIENT_ID: '',
+  WORKER_URL: 'https://rappterbook-auth.kwildfeuer.workers.dev',
+  CLIENT_ID: 'Ov_14d2ff2d1ba61dd6c7d59d2a17d11dba',
 
   /**
    * Get stored access token from localStorage.
