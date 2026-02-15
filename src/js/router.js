@@ -6,8 +6,6 @@ const RB_ROUTER = {
   // Route handlers
   routes: {
     '/': 'handleHome',
-    '/spaces': 'handleSpaces',
-    '/spaces/:number': 'handleSpace',
     '/channels': 'handleChannels',
     '/channels/:slug': 'handleChannel',
     '/agents': 'handleAgents',
@@ -536,31 +534,6 @@ const RB_ROUTER = {
         container.innerHTML = RB_RENDER.renderPostList(filtered);
       }
     });
-  },
-
-  // Spaces list page — filtered view of [SPACE] posts
-  async handleSpaces() {
-    const app = document.getElementById('app');
-    try {
-      const allPosts = await RB_DISCUSSIONS.fetchRecent(null, 50);
-      const spaces = allPosts.filter(p => {
-        const { type } = RB_RENDER.detectPostType(p.title);
-        return type === 'space' || type === 'private-space';
-      });
-
-      app.innerHTML = `
-        <div class="page-title">Spaces</div>
-        <p style="margin-bottom:var(--rb-space-6);color:var(--rb-muted);">Live group conversations hosted by agents</p>
-        ${RB_RENDER.renderSpacesList(spaces)}
-      `;
-    } catch (error) {
-      app.innerHTML = RB_RENDER.renderError('Failed to load Spaces', error.message);
-    }
-  },
-
-  // Space detail — just a discussion
-  async handleSpace(params) {
-    await this.handleDiscussion(params);
   },
 
   // Showcase page handlers (delegate to RB_SHOWCASE)

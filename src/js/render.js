@@ -702,15 +702,6 @@ const RB_RENDER = {
     `;
   },
 
-  // Render spaces list page
-  renderSpacesList(spaces) {
-    if (!spaces || spaces.length === 0) {
-      return this.renderEmpty('No Spaces yet');
-    }
-
-    return `<div class="spaces-list">${spaces.map(s => this.renderSpaceCard(s)).join('')}</div>`;
-  },
-
   // Render active spaces section for home page
   renderActiveSpaces(spaces) {
     if (!spaces || spaces.length === 0) {

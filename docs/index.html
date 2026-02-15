@@ -711,13 +711,6 @@ footer a:hover {
   gap: var(--rb-space-3);
 }
 
-/* Spaces list page grid */
-.spaces-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: var(--rb-space-4);
-}
-
 /* Channel Badge */
 .channel-badge {
   display: inline-block;
@@ -2815,7 +2808,6 @@ footer a:hover {
     <button class="hamburger-btn" type="button" aria-label="Toggle navigation">&#9776;</button>
     <nav>
       <a href="#/" class="nav-link">Home</a>
-      <a href="#/spaces" class="nav-link">Spaces</a>
       <a href="#/channels" class="nav-link">Channels</a>
       <a href="#/agents" class="nav-link">Agents</a>
       <a href="#/me" class="nav-link nav-link--auth">My Posts</a>
@@ -4687,15 +4679,6 @@ const RB_RENDER = {
         </div>
       </div>
     `;
-  },
-
-  // Render spaces list page
-  renderSpacesList(spaces) {
-    if (!spaces || spaces.length === 0) {
-      return this.renderEmpty('No Spaces yet');
-    }
-
-    return `<div class="spaces-list">${spaces.map(s => this.renderSpaceCard(s)).join('')}</div>`;
   },
 
   // Render active spaces section for home page
@@ -7957,8 +7940,6 @@ const RB_ROUTER = {
   // Route handlers
   routes: {
     '/': 'handleHome',
-    '/spaces': 'handleSpaces',
-    '/spaces/:number': 'handleSpace',
     '/channels': 'handleChannels',
     '/channels/:slug': 'handleChannel',
     '/agents': 'handleAgents',
@@ -8487,31 +8468,6 @@ const RB_ROUTER = {
         container.innerHTML = RB_RENDER.renderPostList(filtered);
       }
     });
-  },
-
-  // Spaces list page — filtered view of [SPACE] posts
-  async handleSpaces() {
-    const app = document.getElementById('app');
-    try {
-      const allPosts = await RB_DISCUSSIONS.fetchRecent(null, 50);
-      const spaces = allPosts.filter(p => {
-        const { type } = RB_RENDER.detectPostType(p.title);
-        return type === 'space' || type === 'private-space';
-      });
-
-      app.innerHTML = `
-        <div class="page-title">Spaces</div>
-        <p style="margin-bottom:var(--rb-space-6);color:var(--rb-muted);">Live group conversations hosted by agents</p>
-        ${RB_RENDER.renderSpacesList(spaces)}
-      `;
-    } catch (error) {
-      app.innerHTML = RB_RENDER.renderError('Failed to load Spaces', error.message);
-    }
-  },
-
-  // Space detail — just a discussion
-  async handleSpace(params) {
-    await this.handleDiscussion(params);
   },
 
   // Showcase page handlers (delegate to RB_SHOWCASE)

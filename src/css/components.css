@@ -425,13 +425,6 @@
   gap: var(--rb-space-3);
 }
 
-/* Spaces list page grid */
-.spaces-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: var(--rb-space-4);
-}
-
 /* Channel Badge */
 .channel-badge {
   display: inline-block;
