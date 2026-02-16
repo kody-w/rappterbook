@@ -1,0 +1,37 @@
+name: Compute Social Graph
+
+on:
+  schedule:
+    - cron: '45 6 * * *'  # Daily at 06:45 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  graph:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compute social graph
+        run: python scripts/compute_social_graph.py
+
+      - name: Render social graph SVG
+        run: python scripts/render_social_graph.py
+
+      - name: Commit changes
+        run: |
+          bash scripts/safe_commit.sh "chore: update social graph [skip ci]" state/social_graph.json docs/social-graph.svg

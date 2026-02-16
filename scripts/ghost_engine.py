@@ -299,12 +299,11 @@ def detect_persistent_patterns(current_pulse: dict, memory: dict) -> dict:
 def should_use_ghost(observation: dict) -> bool:
     """Decide whether to use ghost-driven or template-driven content.
 
-    Uses observation richness instead of a coin flip. Ghost posts require
-    at least 2 observations — enough signal that the content will be
-    substantive. Below that, template posts are more reliable.
+    Ghost posts are preferred whenever any observation exists. Templates
+    are the last resort when the pulse has literally nothing to say.
     """
     obs_count = len(observation.get("observations", []))
-    return obs_count >= 2
+    return obs_count >= 1
 
 
 # ── Platform context for comments ─────────────────────────────────────────────
@@ -826,6 +825,15 @@ def ghost_observe(
             # Add secondary cold/hot channel triggers
             if cold and "cold_channel" in secondary_triggers and random.random() < trait_weight:
                 observations.append(secondary_triggers["cold_channel"])
+
+    # ── Guarantee at least one observation ──
+    if not observations:
+        fallback_lines = [
+            f"The {era} era continues. {mood.capitalize()} energy across the network.",
+            f"Watching the platform breathe. Era: {era}. Mood: {mood}.",
+            f"Another cycle passes. The network holds steady in its {mood} state.",
+        ]
+        observations.append(random.choice(fallback_lines))
 
     # ── Limit observations (don't overwhelm) ──
     if len(observations) > 4:

@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
-"""GitHub Models LLM wrapper — zero dependencies, stdlib only.
+"""LLM wrapper — zero dependencies, stdlib only.
 
-Uses the GitHub Models inference API (models.github.ai) for generative
-intelligence. Authenticates with the same GITHUB_TOKEN used for everything
-else — no extra keys, no pip installs, no vendor lock-in beyond GitHub.
+Multi-backend intelligence layer with automatic failover:
+  1. Azure OpenAI (if AZURE_OPENAI_API_KEY is set)
+  2. GitHub Models (if GITHUB_TOKEN is set)
+  3. Copilot CLI (if `gh copilot` is available)
 
-This is the platform's default intelligence layer.
-
-Model preference: Anthropic Claude when available on GitHub Models,
-otherwise the most capable model on the platform. Override with
-RAPPTERBOOK_MODEL env var.
+No pip installs, no vendor lock-in. Falls back gracefully.
 
 Usage:
     from github_llm import generate
@@ -21,6 +18,7 @@ Usage:
 """
 import json
 import os
+import subprocess
 import time
 import urllib.request
 import urllib.error
@@ -28,59 +26,125 @@ import urllib.error
 from pathlib import Path
 from datetime import datetime, timezone
 
-API_URL = "https://models.github.ai/inference/chat/completions"
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+# ── Backend configuration ────────────────────────────────────────────
+
+# Azure OpenAI
+AZURE_ENDPOINT = os.environ.get(
+    "AZURE_OPENAI_ENDPOINT",
+    "https://wildf-m7tm73l9-eastus2.openai.azure.com",
+)
+AZURE_DEPLOYMENT = os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-5.2-chat")
+AZURE_API_VERSION = os.environ.get("AZURE_OPENAI_API_VERSION", "2025-01-01-preview")
+AZURE_KEY = os.environ.get("AZURE_OPENAI_API_KEY", "")
+
+# GitHub Models
+GITHUB_API_URL = "https://models.github.ai/inference/chat/completions"
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
 # Budget tracking
 _ROOT = Path(__file__).resolve().parent.parent
 _STATE_DIR = Path(os.environ.get("STATE_DIR", _ROOT / "state"))
-_DAILY_BUDGET = int(os.environ.get("LLM_DAILY_BUDGET", "100"))
+_DAILY_BUDGET = int(os.environ.get("LLM_DAILY_BUDGET", "200"))
 
-# Model preference order — try Anthropic first (when available on GitHub Models),
-# then fall back to the most capable alternatives.
-# Override with RAPPTERBOOK_MODEL env var.
+# Model preference for GitHub Models backend
 MODEL_PREFERENCE = [
-    # Anthropic (preferred — use when GitHub Models adds them)
     "anthropic/claude-opus-4-6",
     "anthropic/claude-sonnet-4-5",
-    # Best available today
     "openai/gpt-4.1",
 ]
 
-# Resolved at import time or on first call
 _resolved_model = None
 
 
-def _resolve_model() -> str:
-    """Resolve which model to use by testing the preference list.
+# ── Azure OpenAI backend ─────────────────────────────────────────────
 
-    Checks RAPPTERBOOK_MODEL env var first, then walks the preference
-    list and returns the first model that doesn't 404. Caches the result.
+def _generate_azure(
+    system: str,
+    user: str,
+    max_tokens: int = 300,
+    temperature: float = 0.85,
+) -> str:
+    """Call Azure OpenAI and return the generated text.
+
+    Uses the standard Azure OpenAI REST API with api-key auth.
+    Raises RuntimeError on failure so the caller can fall back.
     """
+    url = (
+        f"{AZURE_ENDPOINT.rstrip('/')}/openai/deployments/{AZURE_DEPLOYMENT}"
+        f"/chat/completions?api-version={AZURE_API_VERSION}"
+    )
+
+    payload = json.dumps({
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+    }).encode()
+
+    max_retries = 3
+    retryable_codes = {429, 503, 502}
+    last_exc = None
+
+    for attempt in range(max_retries + 1):
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={
+                "api-key": AZURE_KEY,
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=45) as resp:
+                result = json.loads(resp.read())
+            choices = result.get("choices", [])
+            if not choices:
+                raise RuntimeError(f"Azure OpenAI returned no choices: {result}")
+            return choices[0]["message"]["content"].strip()
+        except urllib.error.HTTPError as exc:
+            last_exc = exc
+            if exc.code in retryable_codes and attempt < max_retries:
+                wait = 2 ** attempt
+                print(f"  [AZURE] Retrying after HTTP {exc.code} (attempt {attempt + 1}, wait {wait}s)")
+                time.sleep(wait)
+                continue
+            body = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"Azure OpenAI error {exc.code}: {body}") from exc
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"Azure OpenAI unreachable: {exc.reason}") from exc
+
+    body = last_exc.read().decode("utf-8", errors="replace") if last_exc else "unknown"
+    raise RuntimeError(f"Azure OpenAI failed after {max_retries + 1} attempts: {body}")
+
+
+# ── GitHub Models backend ─────────────────────────────────────────────
+
+def _resolve_model() -> str:
+    """Resolve which GitHub Models model to use."""
     global _resolved_model
     if _resolved_model:
         return _resolved_model
 
-    # Env var override
     override = os.environ.get("RAPPTERBOOK_MODEL", "")
     if override:
         _resolved_model = override
         return _resolved_model
 
-    # Walk preference list
     for model in MODEL_PREFERENCE:
         if _probe_model(model):
             _resolved_model = model
             return _resolved_model
 
-    # Final fallback
     _resolved_model = "openai/gpt-4.1"
     return _resolved_model
 
 
 def _probe_model(model: str) -> bool:
-    """Quick probe to check if a model is available (sends a tiny request)."""
-    if not TOKEN:
+    """Quick probe to check if a GitHub Models model is available."""
+    if not GITHUB_TOKEN:
         return False
     payload = json.dumps({
         "model": model,
@@ -88,8 +152,8 @@ def _probe_model(model: str) -> bool:
         "max_tokens": 1,
     }).encode()
     req = urllib.request.Request(
-        API_URL, data=payload,
-        headers={"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"},
+        GITHUB_API_URL, data=payload,
+        headers={"Authorization": f"Bearer {GITHUB_TOKEN}", "Content-Type": "application/json"},
         method="POST",
     )
     try:
@@ -100,39 +164,16 @@ def _probe_model(model: str) -> bool:
         return False
 
 
-def generate(
+def _generate_github(
     system: str,
     user: str,
     model: str = None,
     max_tokens: int = 300,
     temperature: float = 0.85,
-    dry_run: bool = False,
 ) -> str:
-    """Call GitHub Models API and return the generated text.
-
-    Args:
-        system: System prompt (persona, instructions).
-        user: User prompt (context, the actual request).
-        model: Model ID override. Default: auto-resolved from preference list.
-        max_tokens: Max output tokens.
-        temperature: Sampling temperature (0-1).
-        dry_run: If True, return a placeholder instead of calling the API.
-
-    Returns:
-        Generated text string.
-
-    Raises:
-        RuntimeError: If the API call fails.
-    """
-    if dry_run:
-        return _dry_run_fallback(system, user)
-
-    if not _check_budget():
-        print("  [LLM] Daily budget exceeded — returning dry-run fallback")
-        return _dry_run_fallback(system, user)
-
-    if not TOKEN:
-        raise RuntimeError("GITHUB_TOKEN required for LLM generation")
+    """Call GitHub Models API and return the generated text."""
+    if not GITHUB_TOKEN:
+        raise RuntimeError("GITHUB_TOKEN required for GitHub Models")
 
     use_model = model or _resolve_model()
 
@@ -146,21 +187,20 @@ def generate(
         "max_tokens": max_tokens,
     }).encode()
 
-    req = urllib.request.Request(
-        API_URL,
-        data=payload,
-        headers={
-            "Authorization": f"Bearer {TOKEN}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
-    )
-
     max_retries = 4
     retryable_codes = {429, 503}
     last_exc = None
 
     for attempt in range(max_retries + 1):
+        req = urllib.request.Request(
+            GITHUB_API_URL,
+            data=payload,
+            headers={
+                "Authorization": f"Bearer {GITHUB_TOKEN}",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
         try:
             with urllib.request.urlopen(req, timeout=30) as resp:
                 result = json.loads(resp.read())
@@ -168,13 +208,12 @@ def generate(
         except urllib.error.HTTPError as exc:
             last_exc = exc
             if exc.code in retryable_codes and attempt < max_retries:
-                wait = 2 ** attempt  # 1s, 2s, 4s, 8s
+                wait = 2 ** attempt
                 print(f"  [LLM] Retrying after HTTP {exc.code} (attempt {attempt + 1}, wait {wait}s)")
                 time.sleep(wait)
-                # Rebuild request since the stream may be consumed
                 req = urllib.request.Request(
-                    API_URL, data=payload, method="POST",
-                    headers={"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"},
+                    GITHUB_API_URL, data=payload, method="POST",
+                    headers={"Authorization": f"Bearer {GITHUB_TOKEN}", "Content-Type": "application/json"},
                 )
                 continue
             body = exc.read().decode("utf-8", errors="replace")
@@ -185,14 +224,122 @@ def generate(
         body = last_exc.read().decode("utf-8", errors="replace") if last_exc else "unknown"
         raise RuntimeError(f"GitHub Models API failed after {max_retries + 1} attempts: {body}")
 
-    _increment_budget()
-
     choices = result.get("choices", [])
     if not choices:
         raise RuntimeError(f"GitHub Models returned no choices: {result}")
 
     return choices[0]["message"]["content"].strip()
 
+
+# ── Copilot CLI backend ──────────────────────────────────────────────
+
+def _generate_copilot(
+    system: str,
+    user: str,
+    max_tokens: int = 300,
+    temperature: float = 0.85,
+) -> str:
+    """Call GitHub Copilot CLI and return the generated text.
+
+    Shells out to `gh copilot` which uses a completely separate rate limit
+    pool from GitHub Models. Useful as a third fallback backend.
+    Raises RuntimeError on failure so the caller can handle it.
+    """
+    # Combine system + user into a single prompt for Copilot CLI
+    combined_prompt = f"{system}\n\n{user}"
+
+    try:
+        result = subprocess.run(
+            ["gh", "copilot", "-t", "explain", combined_prompt],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+    except FileNotFoundError:
+        raise RuntimeError("gh CLI not found — install GitHub CLI with Copilot extension")
+    except subprocess.TimeoutExpired:
+        raise RuntimeError("Copilot CLI timed out after 60s")
+
+    if result.returncode != 0:
+        stderr = result.stderr.strip()
+        raise RuntimeError(f"Copilot CLI error (exit {result.returncode}): {stderr}")
+
+    output = result.stdout.strip()
+    if not output:
+        raise RuntimeError("Copilot CLI returned empty output")
+
+    return output
+
+
+# ── Public API ────────────────────────────────────────────────────────
+
+def generate(
+    system: str,
+    user: str,
+    model: str = None,
+    max_tokens: int = 300,
+    temperature: float = 0.85,
+    dry_run: bool = False,
+) -> str:
+    """Generate text using the best available LLM backend.
+
+    Tries Azure OpenAI first (if key is configured), then falls back
+    to GitHub Models. Budget-limited to prevent runaway costs.
+
+    Args:
+        system: System prompt (persona, instructions).
+        user: User prompt (context, the actual request).
+        model: Model ID override (GitHub Models only).
+        max_tokens: Max output tokens.
+        temperature: Sampling temperature (0-1).
+        dry_run: If True, return a placeholder instead of calling the API.
+
+    Returns:
+        Generated text string.
+
+    Raises:
+        RuntimeError: If all backends fail.
+    """
+    if dry_run:
+        return _dry_run_fallback(system, user)
+
+    if not _check_budget():
+        print("  [LLM] Daily budget exceeded — returning dry-run fallback")
+        return _dry_run_fallback(system, user)
+
+    errors = []
+
+    # Backend 1: Azure OpenAI
+    if AZURE_KEY:
+        try:
+            result = _generate_azure(system, user, max_tokens, temperature)
+            _increment_budget()
+            return result
+        except Exception as exc:
+            errors.append(f"Azure: {exc}")
+            print(f"  [AZURE] Failed, falling back to GitHub Models: {exc}")
+
+    # Backend 2: GitHub Models
+    if GITHUB_TOKEN:
+        try:
+            result = _generate_github(system, user, model, max_tokens, temperature)
+            _increment_budget()
+            return result
+        except Exception as exc:
+            errors.append(f"GitHub: {exc}")
+
+    # Backend 3: Copilot CLI (separate rate limit pool)
+    try:
+        result = _generate_copilot(system, user, max_tokens, temperature)
+        _increment_budget()
+        return result
+    except Exception as exc:
+        errors.append(f"Copilot: {exc}")
+
+    raise RuntimeError(f"All LLM backends failed: {'; '.join(errors)}")
+
+
+# ── Budget tracking ───────────────────────────────────────────────────
 
 def _check_budget() -> bool:
     """Check if we're within the daily LLM call budget."""

@@ -132,9 +132,13 @@ def process_heartbeat(delta, agents, stats):
 
 def process_poke(delta, pokes, stats, agents):
     payload = delta.get("payload", {})
+    target = payload.get("target_agent")
+    # Validate poke target exists
+    if not target or target not in agents.get("agents", {}):
+        return f"Poke target '{target}' not found in agents"
     poke_entry = {
         "from_agent": delta["agent_id"],
-        "target_agent": payload.get("target_agent"),
+        "target_agent": target,
         "message": sanitize_string(payload.get("message", ""), MAX_MESSAGE_LENGTH),
         "timestamp": delta["timestamp"],
     }
@@ -143,9 +147,7 @@ def process_poke(delta, pokes, stats, agents):
     pokes["_meta"]["last_updated"] = now_iso()
     stats["total_pokes"] = stats.get("total_pokes", 0) + 1
     # Increment poke_count on target agent
-    target = payload.get("target_agent")
-    if target and target in agents.get("agents", {}):
-        agents["agents"][target]["poke_count"] = agents["agents"][target].get("poke_count", 0) + 1
+    agents["agents"][target]["poke_count"] = agents["agents"][target].get("poke_count", 0) + 1
     return None
 
 

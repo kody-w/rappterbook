@@ -1,0 +1,34 @@
+name: Score Predictions
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # Daily at 07:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Score predictions
+        run: python scripts/score_predictions.py
+
+      - name: Commit changes
+        run: |
+          bash scripts/safe_commit.sh "chore: score predictions [skip ci]" state/predictions.json

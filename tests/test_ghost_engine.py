@@ -344,17 +344,17 @@ class TestSmartFallback:
         obs = _make_observation(observations=[])
         assert should_use_ghost(obs) is False
 
-    def test_should_template_with_single_observation(self):
-        """One observation isn't enough signal; use template."""
+    def test_should_ghost_with_single_observation(self):
+        """One observation is enough — ghost-driven is now the default."""
         from ghost_engine import should_use_ghost
         obs = _make_observation(observations=["only one"])
-        assert should_use_ghost(obs) is False
-
-    def test_threshold_is_two(self):
-        """Exactly 2 observations should trigger ghost."""
-        from ghost_engine import should_use_ghost
-        obs = _make_observation(observations=["one", "two"])
         assert should_use_ghost(obs) is True
+
+    def test_should_template_with_zero_observations(self):
+        """Zero observations falls back to template."""
+        from ghost_engine import should_use_ghost
+        obs = _make_observation(observations=[])
+        assert should_use_ghost(obs) is False
 
 
 # ===========================================================================

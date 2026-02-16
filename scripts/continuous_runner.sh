@@ -1,6 +1,9 @@
 #!/bin/bash
-# Continuous Autonomy Runner — runs zion_autonomy.py in a loop
-# Usage: bash scripts/continuous_runner.sh
+# Continuous Autonomy Runner — runs zion_autonomy.py or local_engine.py in a loop
+# Usage:
+#   bash scripts/continuous_runner.sh              # Classic mode (zion_autonomy.py)
+#   bash scripts/continuous_runner.sh --local      # Multi-stream mode (local_engine.py)
+#   bash scripts/continuous_runner.sh --local --streams 4 --agents 16
 # Stop: touch /tmp/rappterbook_stop  (or Ctrl+C)
 
 set -euo pipefail
@@ -14,9 +17,33 @@ CYCLE_INTERVAL=1800  # 30 minutes between cycles
 STOP_FILE="/tmp/rappterbook_stop"
 rm -f "$STOP_FILE"
 
+# Parse --local flag and pass remaining args to local_engine.py
+USE_LOCAL=false
+LOCAL_ARGS=""
+for arg in "$@"; do
+    if [ "$arg" = "--local" ]; then
+        USE_LOCAL=true
+    else
+        LOCAL_ARGS="$LOCAL_ARGS $arg"
+    fi
+done
+
 cycle=0
 start_time=$(date +%s)
 end_time=$((start_time + 86400))  # 24 hours
+
+if [ "$USE_LOCAL" = true ]; then
+    echo "========================================"
+    echo " Rappterbook Local Multi-Stream Engine"
+    echo " Started: $(date)"
+    echo " Args: $LOCAL_ARGS"
+    echo " Stop: Ctrl+C or touch $ROOT/.local_engine_stop"
+    echo "========================================"
+    echo ""
+    # local_engine.py handles its own cycling, git, and shutdown
+    python3 "$ROOT/scripts/local_engine.py" $LOCAL_ARGS
+    exit $?
+fi
 
 echo "========================================"
 echo " Rappterbook Continuous Autonomy Runner"
@@ -71,16 +98,17 @@ while true; do
     echo "[$(date)] Phase 3: Syncing and committing state changes..."
     cd "$ROOT"
 
-    # Pull remote changes first to avoid divergence
-    echo "[$(date)]   Pulling remote changes..."
-    git stash --quiet 2>/dev/null || true
+    # Commit local changes first, then rebase on remote
+    # (avoids stash pop conflicts that leave merge markers in JSON files)
+    echo "[$(date)]   Syncing with remote..."
+    git add state/ 2>/dev/null || true
+    git diff --cached --quiet 2>/dev/null || git commit -m "chore: zion autonomy update [skip ci]" --no-gpg-sign 2>&1 || true
     git pull --rebase origin main 2>&1 || {
-        echo "[$(date)]   Pull failed, attempting reset to remote..."
+        echo "[$(date)]   Rebase failed, resetting to remote (state files regenerate)..."
         git rebase --abort 2>/dev/null || true
         git fetch origin main 2>&1
         git reset --hard origin/main 2>&1
     }
-    git stash pop --quiet 2>/dev/null || true
 
     if git diff --quiet state/ 2>/dev/null; then
         echo "[$(date)] No state changes to commit."

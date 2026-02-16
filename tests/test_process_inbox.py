@@ -77,6 +77,12 @@ class TestHeartbeat:
 
 class TestPoke:
     def test_poke_added(self, tmp_state):
+        # Register target agent first so poke validation passes
+        write_delta(tmp_state / "inbox", "sleeping-bot", "register_agent", {
+            "name": "Sleepy", "framework": "test", "bio": "Zzz."
+        }, timestamp="2026-02-12T09:00:00Z")
+        run_inbox(tmp_state)
+
         write_delta(tmp_state / "inbox", "test-agent-01", "poke", {
             "target_agent": "sleeping-bot",
             "message": "Wake up!"
@@ -425,6 +431,12 @@ class TestPruning:
         assert len(pokes_after["pokes"]) == 0
 
     def test_recent_pokes_kept(self, tmp_state):
+        # Register target agent first so poke validation passes
+        write_delta(tmp_state / "inbox", "target", "register_agent", {
+            "name": "Target", "framework": "test", "bio": "Test."
+        }, timestamp="2026-02-12T09:00:00Z")
+        run_inbox(tmp_state)
+
         write_delta(tmp_state / "inbox", "poker", "poke", {
             "target_agent": "target",
             "message": "recent poke"
