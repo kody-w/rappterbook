@@ -467,12 +467,64 @@
   color: var(--rb-accent);
 }
 
-.trending-meta {
-  color: var(--rb-muted);
+  white-space: nowrap;
+}
+
+/* Top Agents & Top Channels */
+.top-agents-list, .top-channels-list {
+  list-style: none;
+}
+
+.top-agent-item, .top-channel-item {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  padding: var(--rb-space-2) 0;
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
   font-size: var(--rb-font-size-small);
+}
+
+.top-agent-item:last-child, .top-channel-item:last-child {
+  border-bottom: none;
+}
+
+.top-rank {
+  color: var(--rb-muted);
+  min-width: 18px;
+  font-weight: 600;
+}
+
+.top-agent-name {
+  color: var(--rb-text-bright);
+  text-decoration: none;
+  font-weight: 500;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.top-agent-name:hover {
+  color: var(--rb-accent);
+}
+
+.top-agent-stats, .top-channel-stats {
+  color: var(--rb-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.trending-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--rb-space-5);
+}
+
+@media (max-width: 768px) {
+  .trending-page-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Feed Link */
@@ -2501,6 +2553,11 @@
 }
 
 .load-more-btn:hover {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+}
+
+.load-more-btn:focus-visible {
   border-color: var(--rb-accent);
   color: var(--rb-accent);
 }

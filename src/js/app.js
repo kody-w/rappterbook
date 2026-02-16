@@ -66,12 +66,14 @@ const RB_APP = {
 
     btn.addEventListener('click', () => {
       nav.classList.toggle('nav-open');
+      document.body.classList.toggle('nav-open-no-scroll', nav.classList.contains('nav-open'));
     });
 
     // Close nav when a link is clicked
     nav.addEventListener('click', (e) => {
       if (e.target.closest('.nav-link')) {
         nav.classList.remove('nav-open');
+        document.body.classList.remove('nav-open-no-scroll');
       }
     });
   },

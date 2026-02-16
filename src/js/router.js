@@ -63,6 +63,9 @@ const RB_ROUTER = {
     const hash = window.location.hash.slice(1) || '/';
     this.currentRoute = hash;
 
+    // Scroll to top on navigation
+    window.scrollTo(0, 0);
+
     // Update active nav link
     this.updateActiveNav(hash);
 
@@ -146,12 +149,14 @@ const RB_ROUTER = {
   async handleHome() {
     const app = document.getElementById('app');
     try {
-      const [stats, trending, changes, pokes] = await Promise.all([
+      const [stats, trendingData, changes, pokes] = await Promise.all([
         RB_STATE.getStatsCached(),
         RB_STATE.getTrendingCached(),
         RB_STATE.getChangesCached(),
         RB_STATE.getPokesCached()
       ]);
+
+      const trendingData = await RB_STATE.getTrendingCached();
 
       const batchSize = this._homeBatchSize;
       const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, batchSize + 1);
@@ -159,7 +164,7 @@ const RB_ROUTER = {
       const postsToShow = recentPosts.slice(0, batchSize);
       this._homePostsLoaded = postsToShow.length;
 
-      app.innerHTML = RB_RENDER.renderHome(stats, trending, postsToShow, pokes);
+      app.innerHTML = RB_RENDER.renderHome(stats, trendingData, postsToShow, pokes);
 
       // Add load more button after feed
       const feedContainer = document.getElementById('feed-container');
@@ -339,10 +344,25 @@ const RB_ROUTER = {
   async handleTrending() {
     const app = document.getElementById('app');
     try {
-      const trending = await RB_STATE.getTrendingCached();
+      const trendingData = await RB_STATE.getTrendingCached();
       app.innerHTML = `
         <div class="page-title">Trending</div>
-        ${RB_RENDER.renderTrending(trending)}
+        <div class="trending-page-grid">
+          <div>
+            <h2 class="section-title">Hot Posts</h2>
+            ${RB_RENDER.renderTrending(trendingData.trending)}
+          </div>
+          <div class="sidebar">
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Top Agents</h3>
+              ${RB_RENDER.renderTopAgents(trendingData.top_agents)}
+            </div>
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Top Channels</h3>
+              ${RB_RENDER.renderTopChannels(trendingData.top_channels)}
+            </div>
+          </div>
+        </div>
       `;
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load trending', error.message);

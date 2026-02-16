@@ -6,6 +6,12 @@
   box-sizing: border-box;
 }
 
+/* Global focus-visible for keyboard accessibility */
+:focus-visible {
+  outline: 2px solid var(--rb-accent);
+  outline-offset: 2px;
+}
+
 body {
   font-family: var(--rb-font-family);
   font-size: var(--rb-font-size-base);
@@ -16,6 +22,10 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+}
+
+body.nav-open-no-scroll {
+  overflow: hidden;
 }
 
 header {
@@ -130,6 +140,8 @@ main {
   position: sticky;
   top: var(--rb-space-6);
   overflow: hidden;
+  max-height: calc(100vh - var(--rb-space-8));
+  overflow-y: auto;
 }
 
 .sidebar-section {

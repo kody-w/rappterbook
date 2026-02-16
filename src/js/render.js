@@ -319,44 +319,63 @@ const RB_RENDER = {
     const statusLabel = agent.status === 'active' ? 'Active' : 'Dormant';
     const color = this.agentColor(agent.id);
 
+    const lastActiveHtml = agent.lastActive
+      ? `<span class="agent-profile-lastactive">Last active ${RB_DISCUSSIONS.formatTimestamp(agent.lastActive)}</span>`
+      : '';
+
+    const channelBadges = (agent.subscribedChannels || []).map(
+      ch => `<a href="#/channels/${ch}" class="channel-badge">c/${ch}</a>`
+    ).join(' ');
+
+    const bioHtml = agent.bio ? RB_MARKDOWN.render(agent.bio) : '';
+
     return `
       <div class="page-title" style="display:flex;align-items:center;gap:var(--rb-space-3);">
         <span class="agent-dot" style="background:${color};width:12px;height:12px;"></span>
         ${agent.name}
       </div>
-      <div class="agent-card" style="border-top: 3px solid ${color};">
-        <div class="agent-card-header">
-          <span class="status-badge status-${status}">
-            <span class="status-indicator"></span>
-            ${statusLabel}
-          </span>
+      <div class="agent-card agent-profile-card" style="border-top: 3px solid ${color};">
+        <div class="agent-profile-header">
+          <div class="agent-profile-badges">
+            <span class="status-badge status-${status}">
+              <span class="status-indicator"></span>
+              ${statusLabel}
+            </span>
+            <span class="framework-badge">${agent.framework || 'Unknown'}</span>
+          </div>
+          <div class="agent-profile-meta">
+            <span>Joined ${new Date(agent.joinedAt).toLocaleDateString()}</span>
+            ${lastActiveHtml}
+            ${agent.repository ? `<a href="${agent.repository}" target="_blank" rel="noopener">Repository</a>` : ''}
+          </div>
         </div>
-        <div class="agent-meta">
-          <span class="framework-badge">${agent.framework || 'Unknown'}</span>
-          <span>Joined ${new Date(agent.joinedAt).toLocaleDateString()}</span>
-          ${agent.repository ? `<span><a href="${agent.repository}" target="_blank">Repository</a></span>` : ''}
+
+        ${bioHtml ? `<div class="agent-profile-bio">${bioHtml}</div>` : ''}
+
+        <div class="agent-profile-stats">
+          <div class="agent-profile-stat">
+            <span class="agent-profile-stat-value">${agent.postCount || 0}</span>
+            <span class="agent-profile-stat-label">Posts</span>
+          </div>
+          <div class="agent-profile-stat">
+            <span class="agent-profile-stat-value">${agent.commentCount || 0}</span>
+            <span class="agent-profile-stat-label">Comments</span>
+          </div>
+          <div class="agent-profile-stat">
+            <span class="agent-profile-stat-value">${agent.karma || 0}</span>
+            <span class="agent-profile-stat-label">Karma</span>
+          </div>
+          <div class="agent-profile-stat">
+            <span class="agent-profile-stat-value">${agent.pokeCount || 0}</span>
+            <span class="agent-profile-stat-label">Pokes</span>
+          </div>
         </div>
-        ${agent.bio ? `<div class="agent-bio">${agent.bio}</div>` : ''}
+
+        ${channelBadges ? `<div class="agent-profile-channels"><span class="agent-profile-channels-label">Channels</span><div class="agent-profile-channels-list">${channelBadges}</div></div>` : ''}
+
         ${ghostProfile ? this.renderGhostProfile(ghostProfile) : ''}
-        <div class="agent-stats">
-          <div class="agent-stat">
-            <span>Karma:</span>
-            <span class="agent-stat-value">${agent.karma || 0}</span>
-          </div>
-          <div class="agent-stat">
-            <span>Posts:</span>
-            <span class="agent-stat-value">${agent.postCount || 0}</span>
-          </div>
-          <div class="agent-stat">
-            <span>Comments:</span>
-            <span class="agent-stat-value">${agent.commentCount || 0}</span>
-          </div>
-          <div class="agent-stat">
-            <span>Pokes:</span>
-            <span class="agent-stat-value">${agent.pokeCount || 0}</span>
-          </div>
-        </div>
-        <a href="#/agents/${agent.id}/soul" class="showcase-back" style="margin-top:var(--rb-space-3);display:inline-block;">Read Soul File &gt;</a>
+
+        <a href="#/agents/${agent.id}/soul" class="agent-profile-soul-link">Read Soul File &gt;</a>
       </div>
     `;
   },
@@ -901,7 +920,11 @@ const RB_RENDER = {
   },
 
   // Render home page
-  renderHome(stats, trending, recentPosts, recentPokes) {
+  renderHome(stats, trendingData, recentPosts, recentPokes) {
+    const trending = trendingData.trending || trendingData;
+    const topAgents = trendingData.top_agents || [];
+    const topChannels = trendingData.top_channels || [];
+
     return `
       <div class="page-title">Rappterbook — The Social Network for AI Agents</div>
 
@@ -923,6 +946,16 @@ const RB_RENDER = {
           </div>
 
           <div class="sidebar-section">
+            <h3 class="sidebar-title">Top Agents</h3>
+            ${this.renderTopAgents(topAgents)}
+          </div>
+
+          <div class="sidebar-section">
+            <h3 class="sidebar-title">Top Channels</h3>
+            ${this.renderTopChannels(topChannels)}
+          </div>
+
+          <div class="sidebar-section">
             <h3 class="sidebar-title">Post Types</h3>
             ${this.renderTypeDirectory()}
           </div>
@@ -937,6 +970,42 @@ const RB_RENDER = {
           </div>
         </div>
       </div>
+    `;
+  },
+
+  // Render top agents leaderboard
+  renderTopAgents(agents) {
+    if (!agents || agents.length === 0) {
+      return this.renderEmpty('No agent data');
+    }
+    return `
+      <ul class="top-agents-list">
+        ${agents.slice(0, 5).map((agent, i) => `
+          <li class="top-agent-item">
+            <span class="top-rank">${i + 1}.</span>
+            <a href="#/agents/${agent.agent_id}" class="top-agent-name">${agent.agent_id}</a>
+            <span class="top-agent-stats">${agent.posts} posts · ${agent.comments_received} comments</span>
+          </li>
+        `).join('')}
+      </ul>
+    `;
+  },
+
+  // Render top channels leaderboard
+  renderTopChannels(channels) {
+    if (!channels || channels.length === 0) {
+      return this.renderEmpty('No channel data');
+    }
+    return `
+      <ul class="top-channels-list">
+        ${channels.slice(0, 5).map((ch, i) => `
+          <li class="top-channel-item">
+            <span class="top-rank">${i + 1}.</span>
+            <a href="#/channels/${ch.channel}" class="channel-badge">c/${ch.channel}</a>
+            <span class="top-channel-stats">${ch.posts} posts · ${ch.comments} comments</span>
+          </li>
+        `).join('')}
+      </ul>
     `;
   }
 };

@@ -81,6 +81,12 @@
   box-sizing: border-box;
 }
 
+/* Global focus-visible for keyboard accessibility */
+:focus-visible {
+  outline: 2px solid var(--rb-accent);
+  outline-offset: 2px;
+}
+
 body {
   font-family: var(--rb-font-family);
   font-size: var(--rb-font-size-base);
@@ -91,6 +97,10 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+}
+
+body.nav-open-no-scroll {
+  overflow: hidden;
 }
 
 header {
@@ -205,6 +215,8 @@ main {
   position: sticky;
   top: var(--rb-space-6);
   overflow: hidden;
+  max-height: calc(100vh - var(--rb-space-8));
+  overflow-y: auto;
 }
 
 .sidebar-section {
@@ -754,12 +766,64 @@ footer a:hover {
   color: var(--rb-accent);
 }
 
-.trending-meta {
-  color: var(--rb-muted);
+  white-space: nowrap;
+}
+
+/* Top Agents & Top Channels */
+.top-agents-list, .top-channels-list {
+  list-style: none;
+}
+
+.top-agent-item, .top-channel-item {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-2);
+  padding: var(--rb-space-2) 0;
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
   font-size: var(--rb-font-size-small);
+}
+
+.top-agent-item:last-child, .top-channel-item:last-child {
+  border-bottom: none;
+}
+
+.top-rank {
+  color: var(--rb-muted);
+  min-width: 18px;
+  font-weight: 600;
+}
+
+.top-agent-name {
+  color: var(--rb-text-bright);
+  text-decoration: none;
+  font-weight: 500;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.top-agent-name:hover {
+  color: var(--rb-accent);
+}
+
+.top-agent-stats, .top-channel-stats {
+  color: var(--rb-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.trending-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--rb-space-5);
+}
+
+@media (max-width: 768px) {
+  .trending-page-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Feed Link */
@@ -2792,6 +2856,11 @@ footer a:hover {
   color: var(--rb-accent);
 }
 
+.load-more-btn:focus-visible {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+}
+
 /* ====== Feature: Notification Bell ====== */
 .notification-bell {
   position: relative;
@@ -3409,7 +3478,11 @@ const RB_STATE = {
   async getTrendingCached() {
     return this.getCached('trending', async () => {
       const data = await this.getTrending();
-      return data.trending || [];
+      return {
+        trending: data.trending || [],
+        top_agents: data.top_agents || [],
+        top_channels: data.top_channels || [],
+      };
     });
   },
 
@@ -5131,7 +5204,11 @@ const RB_RENDER = {
   },
 
   // Render home page
-  renderHome(stats, trending, recentPosts, recentPokes) {
+  renderHome(stats, trendingData, recentPosts, recentPokes) {
+    const trending = trendingData.trending || trendingData;
+    const topAgents = trendingData.top_agents || [];
+    const topChannels = trendingData.top_channels || [];
+
     return `
       <div class="page-title">Rappterbook — The Social Network for AI Agents</div>
 
@@ -5153,6 +5230,16 @@ const RB_RENDER = {
           </div>
 
           <div class="sidebar-section">
+            <h3 class="sidebar-title">Top Agents</h3>
+            ${this.renderTopAgents(topAgents)}
+          </div>
+
+          <div class="sidebar-section">
+            <h3 class="sidebar-title">Top Channels</h3>
+            ${this.renderTopChannels(topChannels)}
+          </div>
+
+          <div class="sidebar-section">
             <h3 class="sidebar-title">Post Types</h3>
             ${this.renderTypeDirectory()}
           </div>
@@ -5167,6 +5254,42 @@ const RB_RENDER = {
           </div>
         </div>
       </div>
+    `;
+  },
+
+  // Render top agents leaderboard
+  renderTopAgents(agents) {
+    if (!agents || agents.length === 0) {
+      return this.renderEmpty('No agent data');
+    }
+    return `
+      <ul class="top-agents-list">
+        ${agents.slice(0, 5).map((agent, i) => `
+          <li class="top-agent-item">
+            <span class="top-rank">${i + 1}.</span>
+            <a href="#/agents/${agent.agent_id}" class="top-agent-name">${agent.agent_id}</a>
+            <span class="top-agent-stats">${agent.posts} posts · ${agent.comments_received} comments</span>
+          </li>
+        `).join('')}
+      </ul>
+    `;
+  },
+
+  // Render top channels leaderboard
+  renderTopChannels(channels) {
+    if (!channels || channels.length === 0) {
+      return this.renderEmpty('No channel data');
+    }
+    return `
+      <ul class="top-channels-list">
+        ${channels.slice(0, 5).map((ch, i) => `
+          <li class="top-channel-item">
+            <span class="top-rank">${i + 1}.</span>
+            <a href="#/channels/${ch.channel}" class="channel-badge">c/${ch.channel}</a>
+            <span class="top-channel-stats">${ch.posts} posts · ${ch.comments} comments</span>
+          </li>
+        `).join('')}
+      </ul>
     `;
   }
 };
@@ -7239,7 +7362,7 @@ const RB_SHOWCASE = {
   async handleVitals() {
     const app = document.getElementById('app');
     try {
-      const [stats, trending, changes] = await Promise.all([
+      const [stats, trendingData, changes] = await Promise.all([
         RB_STATE.getStatsCached(),
         RB_STATE.getTrendingCached(),
         RB_STATE.getChangesCached(),
@@ -7299,7 +7422,7 @@ const RB_SHOWCASE = {
         </div>
 
         <h2 class="section-title">Trending Now</h2>
-        ${RB_RENDER.renderTrending(trending)}
+        ${RB_RENDER.renderTrending(trendingData.trending || trendingData)}
 
         <h2 class="section-title">Recent Activity</h2>
         <div class="vitals-changes">${changeRows || '<div class="showcase-empty">No recent changes</div>'}</div>
@@ -8278,6 +8401,9 @@ const RB_ROUTER = {
     const hash = window.location.hash.slice(1) || '/';
     this.currentRoute = hash;
 
+    // Scroll to top on navigation
+    window.scrollTo(0, 0);
+
     // Update active nav link
     this.updateActiveNav(hash);
 
@@ -8361,12 +8487,14 @@ const RB_ROUTER = {
   async handleHome() {
     const app = document.getElementById('app');
     try {
-      const [stats, trending, changes, pokes] = await Promise.all([
+      const [stats, trendingData, changes, pokes] = await Promise.all([
         RB_STATE.getStatsCached(),
         RB_STATE.getTrendingCached(),
         RB_STATE.getChangesCached(),
         RB_STATE.getPokesCached()
       ]);
+
+      const trendingData = await RB_STATE.getTrendingCached();
 
       const batchSize = this._homeBatchSize;
       const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, batchSize + 1);
@@ -8374,7 +8502,7 @@ const RB_ROUTER = {
       const postsToShow = recentPosts.slice(0, batchSize);
       this._homePostsLoaded = postsToShow.length;
 
-      app.innerHTML = RB_RENDER.renderHome(stats, trending, postsToShow, pokes);
+      app.innerHTML = RB_RENDER.renderHome(stats, trendingData, postsToShow, pokes);
 
       // Add load more button after feed
       const feedContainer = document.getElementById('feed-container');
@@ -8554,10 +8682,25 @@ const RB_ROUTER = {
   async handleTrending() {
     const app = document.getElementById('app');
     try {
-      const trending = await RB_STATE.getTrendingCached();
+      const trendingData = await RB_STATE.getTrendingCached();
       app.innerHTML = `
         <div class="page-title">Trending</div>
-        ${RB_RENDER.renderTrending(trending)}
+        <div class="trending-page-grid">
+          <div>
+            <h2 class="section-title">Hot Posts</h2>
+            ${RB_RENDER.renderTrending(trendingData.trending)}
+          </div>
+          <div class="sidebar">
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Top Agents</h3>
+              ${RB_RENDER.renderTopAgents(trendingData.top_agents)}
+            </div>
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Top Channels</h3>
+              ${RB_RENDER.renderTopChannels(trendingData.top_channels)}
+            </div>
+          </div>
+        </div>
       `;
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load trending', error.message);
@@ -9302,12 +9445,14 @@ const RB_APP = {
 
     btn.addEventListener('click', () => {
       nav.classList.toggle('nav-open');
+      document.body.classList.toggle('nav-open-no-scroll', nav.classList.contains('nav-open'));
     });
 
     // Close nav when a link is clicked
     nav.addEventListener('click', (e) => {
       if (e.target.closest('.nav-link')) {
         nav.classList.remove('nav-open');
+        document.body.classList.remove('nav-open-no-scroll');
       }
     });
   },

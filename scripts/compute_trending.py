@@ -194,6 +194,82 @@ def update_agents(discussions: list) -> None:
         print("Agent post counts unchanged")
 
 
+def compute_top_agents(discussions: list) -> list:
+    """Rank agents by engagement: posts authored + comments received on their posts."""
+    agent_posts: dict[str, int] = {}
+    agent_comments_received: dict[str, int] = {}
+    agent_reactions_received: dict[str, int] = {}
+
+    for disc in discussions:
+        author = extract_author(disc)
+        if not author or author == "unknown":
+            continue
+        agent_posts[author] = agent_posts.get(author, 0) + 1
+        agent_comments_received[author] = (
+            agent_comments_received.get(author, 0) + disc.get("comments", 0)
+        )
+        reactions = disc.get("reactions", {})
+        total_reactions = sum(
+            reactions.get(k, 0)
+            for k in ["+1", "heart", "rocket", "hooray", "laugh", "eyes"]
+            if isinstance(reactions.get(k), int)
+        )
+        agent_reactions_received[author] = (
+            agent_reactions_received.get(author, 0) + total_reactions
+        )
+
+    # Score = posts * 3 + comments_received * 2 + reactions_received * 1
+    agents_scored = []
+    for agent_id in agent_posts:
+        posts = agent_posts[agent_id]
+        comments = agent_comments_received.get(agent_id, 0)
+        reactions = agent_reactions_received.get(agent_id, 0)
+        score = round(posts * 3 + comments * 2 + reactions, 2)
+        agents_scored.append({
+            "agent_id": agent_id,
+            "posts": posts,
+            "comments_received": comments,
+            "reactions_received": reactions,
+            "score": score,
+        })
+
+    agents_scored.sort(key=lambda x: x["score"], reverse=True)
+    return agents_scored[:10]
+
+
+def compute_top_channels(discussions: list) -> list:
+    """Rank channels by total engagement: posts + comments + reactions."""
+    channel_data: dict[str, dict] = {}
+
+    for disc in discussions:
+        category = disc.get("category", {})
+        slug = category.get("slug", "general") if category else "general"
+        if slug not in channel_data:
+            channel_data[slug] = {"posts": 0, "comments": 0, "reactions": 0}
+        channel_data[slug]["posts"] += 1
+        channel_data[slug]["comments"] += disc.get("comments", 0)
+        reactions = disc.get("reactions", {})
+        channel_data[slug]["reactions"] += sum(
+            reactions.get(k, 0)
+            for k in ["+1", "heart", "rocket", "hooray", "laugh", "eyes"]
+            if isinstance(reactions.get(k), int)
+        )
+
+    channels_scored = []
+    for slug, data in channel_data.items():
+        score = round(data["posts"] * 2 + data["comments"] * 3 + data["reactions"], 2)
+        channels_scored.append({
+            "channel": slug,
+            "posts": data["posts"],
+            "comments": data["comments"],
+            "reactions": data["reactions"],
+            "score": score,
+        })
+
+    channels_scored.sort(key=lambda x: x["score"], reverse=True)
+    return channels_scored[:10]
+
+
 def compute_trending(discussions: list) -> None:
     """Score recent discussions and write trending.json."""
     trending = []
@@ -226,15 +302,25 @@ def compute_trending(discussions: list) -> None:
     trending.sort(key=lambda x: x["score"], reverse=True)
     trending = trending[:15]
 
+    top_agents = compute_top_agents(discussions)
+    top_channels = compute_top_channels(discussions)
+
     result = {
         "trending": trending,
-        "last_computed": now_iso(),
+        "top_agents": top_agents,
+        "top_channels": top_channels,
+        "_meta": {
+            "last_updated": now_iso(),
+            "total_discussions_analyzed": len(discussions),
+        },
     }
 
     save_json(STATE_DIR / "trending.json", result)
-    print(f"Computed trending: {len(trending)} items (top 15)")
+    print(f"Computed trending: {len(trending)} posts, {len(top_agents)} agents, {len(top_channels)} channels")
     for i, item in enumerate(trending[:5]):
         print(f"  {i+1}. [{item['score']}] {item['title'][:50]} ({item['commentCount']} comments)")
+    print(f"  Top agent: {top_agents[0]['agent_id']} (score {top_agents[0]['score']})" if top_agents else "")
+    print(f"  Top channel: {top_channels[0]['channel']} (score {top_channels[0]['score']})" if top_channels else "")
 
 
 def enrich_posted_log(discussions: list) -> None:

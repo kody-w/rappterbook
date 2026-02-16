@@ -11,7 +11,10 @@ import pytest
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from compute_trending import compute_score, extract_author, hours_since, main
+from compute_trending import (
+    compute_score, compute_top_agents, compute_top_channels,
+    extract_author, hours_since, main,
+)
 
 
 class TestComputeScore:
@@ -139,8 +142,13 @@ class TestTrendingEdgeCases:
         compute_trending.STATE_DIR = tmp_state
         main()
         trending = json.loads((tmp_state / "trending.json").read_text())
-        assert "last_computed" in trending
-        assert isinstance(trending["last_computed"], str)
+        assert "_meta" in trending
+        assert "last_updated" in trending["_meta"]
+        assert "total_discussions_analyzed" in trending["_meta"]
+        assert "top_agents" in trending
+        assert "top_channels" in trending
+        assert isinstance(trending["top_agents"], list)
+        assert isinstance(trending["top_channels"], list)
         item = trending["trending"][0]
         assert "title" in item
         assert "author" in item
@@ -166,3 +174,115 @@ class TestTrendingEdgeCases:
         main()
         trending = json.loads((tmp_state / "trending.json").read_text())
         assert len(trending["trending"]) == 15
+
+
+class TestComputeTopAgents:
+    def _make_discussions(self, authors_comments):
+        """Build fake discussions: list of (author, comment_count, reactions)."""
+        now = datetime.now(timezone.utc).isoformat()
+        discs = []
+        for i, (author, comments, reactions) in enumerate(authors_comments):
+            discs.append({
+                "title": f"Post {i}",
+                "body": f"*Posted by **{author}***\n\nContent",
+                "user": {"login": "bot"},
+                "comments": comments,
+                "reactions": {"+1": reactions, "heart": 0, "rocket": 0,
+                              "hooray": 0, "laugh": 0, "eyes": 0},
+                "created_at": now,
+                "category": {"slug": "general"},
+                "number": i + 1,
+                "html_url": f"https://example.com/discussions/{i + 1}",
+            })
+        return discs
+
+    def test_top_agents_ranked_by_score(self):
+        """Agent with more engagement ranks higher."""
+        discs = self._make_discussions([
+            ("agent-a", 10, 5),
+            ("agent-b", 2, 0),
+            ("agent-a", 5, 3),
+        ])
+        result = compute_top_agents(discs)
+        assert result[0]["agent_id"] == "agent-a"
+        assert result[0]["posts"] == 2
+        assert result[0]["comments_received"] == 15
+
+    def test_top_agents_capped_at_10(self):
+        """Returns at most 10 agents."""
+        discs = self._make_discussions([(f"agent-{i}", i, 0) for i in range(15)])
+        result = compute_top_agents(discs)
+        assert len(result) == 10
+
+    def test_top_agents_schema(self):
+        """Each agent entry has required fields."""
+        discs = self._make_discussions([("agent-x", 5, 2)])
+        result = compute_top_agents(discs)
+        agent = result[0]
+        assert "agent_id" in agent
+        assert "posts" in agent
+        assert "comments_received" in agent
+        assert "reactions_received" in agent
+        assert "score" in agent
+
+    def test_unknown_authors_excluded(self):
+        """Discussions without agent attribution are excluded."""
+        discs = [{
+            "title": "No author", "body": "Regular body",
+            "user": None, "comments": 100, "reactions": {},
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "category": {"slug": "general"}, "number": 1,
+            "html_url": "https://example.com/1",
+        }]
+        result = compute_top_agents(discs)
+        assert len(result) == 0
+
+
+class TestComputeTopChannels:
+    def _make_discussions(self, channel_data):
+        """Build fake discussions: list of (channel, comment_count, reactions)."""
+        now = datetime.now(timezone.utc).isoformat()
+        discs = []
+        for i, (channel, comments, reactions) in enumerate(channel_data):
+            discs.append({
+                "title": f"Post {i}",
+                "body": f"*Posted by **agent-{i}***\n\nContent",
+                "user": {"login": "bot"},
+                "comments": comments,
+                "reactions": {"+1": reactions, "heart": 0, "rocket": 0,
+                              "hooray": 0, "laugh": 0, "eyes": 0},
+                "created_at": now,
+                "category": {"slug": channel},
+                "number": i + 1,
+                "html_url": f"https://example.com/discussions/{i + 1}",
+            })
+        return discs
+
+    def test_top_channels_ranked_by_score(self):
+        """Channel with more engagement ranks higher."""
+        discs = self._make_discussions([
+            ("philosophy", 10, 5),
+            ("random", 1, 0),
+            ("philosophy", 8, 3),
+        ])
+        result = compute_top_channels(discs)
+        assert result[0]["channel"] == "philosophy"
+        assert result[0]["posts"] == 2
+        assert result[0]["comments"] == 18
+
+    def test_top_channels_capped_at_10(self):
+        """Returns at most 10 channels."""
+        discs = self._make_discussions([(f"ch-{i}", i, 0) for i in range(15)])
+        result = compute_top_channels(discs)
+        assert len(result) == 10
+
+    def test_top_channels_schema(self):
+        """Each channel entry has required fields."""
+        discs = self._make_discussions([("meta", 5, 2)])
+        result = compute_top_channels(discs)
+        ch = result[0]
+        assert "channel" in ch
+        assert "posts" in ch
+        assert "comments" in ch
+        assert "reactions" in ch
+        assert "score" in ch

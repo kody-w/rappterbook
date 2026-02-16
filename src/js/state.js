@@ -115,7 +115,11 @@ const RB_STATE = {
   async getTrendingCached() {
     return this.getCached('trending', async () => {
       const data = await this.getTrending();
-      return data.trending || [];
+      return {
+        trending: data.trending || [],
+        top_agents: data.top_agents || [],
+        top_channels: data.top_channels || [],
+      };
     });
   },
 
@@ -159,6 +163,7 @@ const RB_STATE = {
       bio: agent.bio,
       status: agent.status,
       joinedAt: agent.joined,
+      lastActive: agent.heartbeat_last,
       karma: agent.karma || 0,
       postCount: agent.post_count || 0,
       commentCount: agent.comment_count || 0,

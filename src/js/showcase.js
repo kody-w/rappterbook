@@ -2066,7 +2066,7 @@ const RB_SHOWCASE = {
   async handleVitals() {
     const app = document.getElementById('app');
     try {
-      const [stats, trending, changes] = await Promise.all([
+      const [stats, trendingData, changes] = await Promise.all([
         RB_STATE.getStatsCached(),
         RB_STATE.getTrendingCached(),
         RB_STATE.getChangesCached(),
@@ -2126,7 +2126,7 @@ const RB_SHOWCASE = {
         </div>
 
         <h2 class="section-title">Trending Now</h2>
-        ${RB_RENDER.renderTrending(trending)}
+        ${RB_RENDER.renderTrending(trendingData.trending || trendingData)}
 
         <h2 class="section-title">Recent Activity</h2>
         <div class="vitals-changes">${changeRows || '<div class="showcase-empty">No recent changes</div>'}</div>
