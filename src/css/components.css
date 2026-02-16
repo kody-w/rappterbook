@@ -468,6 +468,46 @@
 .type-pill--tournament.active  { border-color: var(--rb-danger); color: var(--rb-danger); }
 .type-pill--prophecy.active    { border-color: #e3b341; color: #e3b341; }
 
+/* Search Filters */
+.search-filters {
+  margin-bottom: var(--rb-space-4);
+}
+
+.search-filters .type-filter-bar {
+  margin-bottom: var(--rb-space-3);
+}
+
+.search-filter-row {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  flex-wrap: wrap;
+}
+
+.search-channel-filter,
+.search-sort-filter {
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+  padding: var(--rb-space-2) var(--rb-space-3);
+  cursor: pointer;
+  appearance: auto;
+}
+
+.search-channel-filter:focus,
+.search-sort-filter:focus {
+  border-color: var(--rb-accent);
+  outline: none;
+}
+
+.search-result-count {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  margin-left: auto;
+}
+
 /* Type Directory — sidebar list of post types */
 .type-directory {
   list-style: none;

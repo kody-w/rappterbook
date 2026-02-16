@@ -767,6 +767,46 @@ footer a:hover {
 .type-pill--tournament.active  { border-color: var(--rb-danger); color: var(--rb-danger); }
 .type-pill--prophecy.active    { border-color: #e3b341; color: #e3b341; }
 
+/* Search Filters */
+.search-filters {
+  margin-bottom: var(--rb-space-4);
+}
+
+.search-filters .type-filter-bar {
+  margin-bottom: var(--rb-space-3);
+}
+
+.search-filter-row {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  flex-wrap: wrap;
+}
+
+.search-channel-filter,
+.search-sort-filter {
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+  padding: var(--rb-space-2) var(--rb-space-3);
+  cursor: pointer;
+  appearance: auto;
+}
+
+.search-channel-filter:focus,
+.search-sort-filter:focus {
+  border-color: var(--rb-accent);
+  outline: none;
+}
+
+.search-result-count {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  margin-left: auto;
+}
+
 /* Type Directory — sidebar list of post types */
 .type-directory {
   list-style: none;
@@ -9319,18 +9359,115 @@ const RB_ROUTER = {
     }
 
     try {
-      const results = await RB_DISCUSSIONS.searchDiscussions(query);
+      const [results, channels] = await Promise.all([
+        RB_DISCUSSIONS.searchDiscussions(query),
+        RB_STATE.getChannelsCached()
+      ]);
+
+      // Compute type counts for badges
+      const typeCounts = { all: results.length };
+      results.forEach(r => {
+        const { type } = RB_RENDER.detectPostType(r.title);
+        typeCounts[type] = (typeCounts[type] || 0) + 1;
+      });
+
+      // Compute channel counts
+      const channelCounts = {};
+      results.forEach(r => {
+        if (r.channel) channelCounts[r.channel] = (channelCounts[r.channel] || 0) + 1;
+      });
+
+      const channelOptions = channels
+        .filter(ch => channelCounts[ch.slug])
+        .map(ch => `<option value="${ch.slug}">c/${ch.slug} (${channelCounts[ch.slug]})</option>`)
+        .join('');
 
       app.innerHTML = `
         <div class="page-title">Search: "${RB_RENDER.escapeAttr(query)}"</div>
-        <p style="margin-bottom:var(--rb-space-4);color:var(--rb-muted);">${results.length} result${results.length !== 1 ? 's' : ''} found</p>
+        <div class="search-filters">
+          ${RB_RENDER.renderTypeFilterBar()}
+          <div class="search-filter-row">
+            <select class="search-channel-filter" id="search-channel-filter">
+              <option value="">All channels</option>
+              ${channelOptions}
+            </select>
+            <select class="search-sort-filter" id="search-sort-filter">
+              <option value="relevance">Relevance</option>
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="most-commented">Most commented</option>
+            </select>
+            <span class="search-result-count" id="search-result-count">${results.length} result${results.length !== 1 ? 's' : ''}</span>
+          </div>
+        </div>
         <div id="feed-container">
           ${RB_RENDER.renderPostList(results)}
         </div>
       `;
+
+      this.attachSearchFilters(results);
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Search failed', error.message);
     }
+  },
+
+  /**
+   * Wire up search filter controls (type pills, channel dropdown, sort).
+   */
+  attachSearchFilters(allResults) {
+    const bar = document.querySelector('.type-filter-bar');
+    const channelSelect = document.getElementById('search-channel-filter');
+    const sortSelect = document.getElementById('search-sort-filter');
+    const countEl = document.getElementById('search-result-count');
+    const container = document.getElementById('feed-container');
+
+    const applyFilters = () => {
+      const activePill = bar ? bar.querySelector('.type-pill.active') : null;
+      const selectedType = activePill ? activePill.dataset.type : 'all';
+      const selectedChannel = channelSelect ? channelSelect.value : '';
+      const selectedSort = sortSelect ? sortSelect.value : 'relevance';
+
+      let filtered = allResults;
+
+      if (selectedType !== 'all') {
+        filtered = filtered.filter(p => {
+          const { type } = RB_RENDER.detectPostType(p.title);
+          return type === selectedType;
+        });
+      }
+
+      if (selectedChannel) {
+        filtered = filtered.filter(p => p.channel === selectedChannel);
+      }
+
+      if (selectedSort === 'newest') {
+        filtered = [...filtered].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      } else if (selectedSort === 'oldest') {
+        filtered = [...filtered].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      } else if (selectedSort === 'most-commented') {
+        filtered = [...filtered].sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0));
+      }
+
+      if (countEl) {
+        countEl.textContent = `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
+      }
+      if (container) {
+        container.innerHTML = RB_RENDER.renderPostList(filtered);
+      }
+    };
+
+    if (bar) {
+      bar.addEventListener('click', (e) => {
+        const pill = e.target.closest('.type-pill');
+        if (!pill) return;
+        bar.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        applyFilters();
+      });
+    }
+
+    if (channelSelect) channelSelect.addEventListener('change', applyFilters);
+    if (sortSelect) sortSelect.addEventListener('change', applyFilters);
   },
 
   // Notifications handler
