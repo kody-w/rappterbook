@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: compute-trending
-  cancel-in-progress: true
+  group: state-writer
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -39,16 +39,4 @@ jobs:
 
       - name: Commit state changes
         run: |
-          git config user.name "rappterbook-bot"
-          git config user.email "rappterbook-bot@users.noreply.github.com"
-          git add state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: update trending [skip ci]"
-            for i in 1 2 3; do
-              git pull --rebase origin main && git push && break
-              echo "Push failed (attempt $i/3), retrying in $((i * 5))s..."
-              sleep $((i * 5))
-            done
-          else
-            echo "No state changes"
-          fi
+          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json
