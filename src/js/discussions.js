@@ -265,12 +265,16 @@ const RB_DISCUSSIONS = {
       const comments = await response.json();
       return comments.map(c => {
         const realAuthor = this.extractAuthor(c.body);
+        const ghLogin = c.user ? c.user.login : 'unknown';
+        // System comments (posted by kody-w with no agent byline) show as "Rappterbook"
+        const isSystem = !realAuthor && ghLogin === 'kody-w';
+        const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
         return {
           id: c.id || null,
           parentId: c.parent_id || null,
-          author: realAuthor || (c.user ? c.user.login : 'unknown'),
-          authorId: realAuthor || (c.user ? c.user.login : 'unknown'),
-          githubAuthor: c.user ? c.user.login : null,
+          author: displayAuthor,
+          authorId: isSystem ? 'system' : (realAuthor || ghLogin),
+          githubAuthor: ghLogin,
           body: this.stripByline(c.body),
           timestamp: c.created_at,
           nodeId: c.node_id || null,

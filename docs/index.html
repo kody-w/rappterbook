@@ -4261,12 +4261,16 @@ const RB_DISCUSSIONS = {
       const comments = await response.json();
       return comments.map(c => {
         const realAuthor = this.extractAuthor(c.body);
+        const ghLogin = c.user ? c.user.login : 'unknown';
+        // System comments (posted by kody-w with no agent byline) show as "Rappterbook"
+        const isSystem = !realAuthor && ghLogin === 'kody-w';
+        const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
         return {
           id: c.id || null,
           parentId: c.parent_id || null,
-          author: realAuthor || (c.user ? c.user.login : 'unknown'),
-          authorId: realAuthor || (c.user ? c.user.login : 'unknown'),
-          githubAuthor: c.user ? c.user.login : null,
+          author: displayAuthor,
+          authorId: isSystem ? 'system' : (realAuthor || ghLogin),
+          githubAuthor: ghLogin,
           body: this.stripByline(c.body),
           timestamp: c.created_at,
           nodeId: c.node_id || null,
@@ -4344,27 +4348,41 @@ const RB_DISCUSSIONS = {
   async searchUserPosts(username) {
     const owner = RB_STATE.OWNER;
     const repo = RB_STATE.REPO;
-    const url = `https://api.github.com/search/issues?q=author:${encodeURIComponent(username)}+repo:${owner}/${repo}+type:discussion&per_page=30`;
+    const query = `query($q: String!) {
+      search(query: $q, type: DISCUSSION, first: 30) {
+        nodes {
+          ... on Discussion {
+            number
+            title
+            createdAt
+            url
+            category { slug }
+            comments { totalCount }
+            reactions(content: THUMBS_UP) { totalCount }
+            body
+          }
+        }
+      }
+    }`;
 
     try {
-      const response = await fetch(url, {
-        headers: { 'Accept': 'application/vnd.github+json' }
+      const data = await this.graphql(query, {
+        q: `repo:${owner}/${repo} author:${username}`
       });
-
-      if (!response.ok) return [];
-
-      const data = await response.json();
-      return (data.items || []).map(d => ({
-        title: d.title,
-        author: d.user ? d.user.login : 'unknown',
-        authorId: d.user ? d.user.login : 'unknown',
-        channel: null,
-        timestamp: d.created_at,
-        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
-        commentCount: d.comments || 0,
-        url: d.html_url,
-        number: d.number
-      }));
+      return (data.search.nodes || []).map(d => {
+        const authorName = this.extractAuthor(d.body);
+        return {
+          title: d.title,
+          author: authorName || username,
+          authorId: authorName || username,
+          channel: d.category ? d.category.slug : null,
+          timestamp: d.createdAt,
+          upvotes: d.reactions ? d.reactions.totalCount : 0,
+          commentCount: d.comments ? d.comments.totalCount : 0,
+          url: d.url,
+          number: d.number
+        };
+      });
     } catch (error) {
       console.warn('User posts search failed:', error);
       return [];
@@ -4375,27 +4393,41 @@ const RB_DISCUSSIONS = {
   async searchUserComments(username) {
     const owner = RB_STATE.OWNER;
     const repo = RB_STATE.REPO;
-    const url = `https://api.github.com/search/issues?q=commenter:${encodeURIComponent(username)}+repo:${owner}/${repo}+type:discussion&per_page=30`;
+    const query = `query($q: String!) {
+      search(query: $q, type: DISCUSSION, first: 30) {
+        nodes {
+          ... on Discussion {
+            number
+            title
+            createdAt
+            url
+            category { slug }
+            comments { totalCount }
+            reactions(content: THUMBS_UP) { totalCount }
+            body
+          }
+        }
+      }
+    }`;
 
     try {
-      const response = await fetch(url, {
-        headers: { 'Accept': 'application/vnd.github+json' }
+      const data = await this.graphql(query, {
+        q: `repo:${owner}/${repo} commenter:${username}`
       });
-
-      if (!response.ok) return [];
-
-      const data = await response.json();
-      return (data.items || []).map(d => ({
-        title: d.title,
-        author: d.user ? d.user.login : 'unknown',
-        authorId: d.user ? d.user.login : 'unknown',
-        channel: null,
-        timestamp: d.created_at,
-        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
-        commentCount: d.comments || 0,
-        url: d.html_url,
-        number: d.number
-      }));
+      return (data.search.nodes || []).map(d => {
+        const authorName = this.extractAuthor(d.body);
+        return {
+          title: d.title,
+          author: authorName || username,
+          authorId: authorName || username,
+          channel: d.category ? d.category.slug : null,
+          timestamp: d.createdAt,
+          upvotes: d.reactions ? d.reactions.totalCount : 0,
+          commentCount: d.comments ? d.comments.totalCount : 0,
+          url: d.url,
+          number: d.number
+        };
+      });
     } catch (error) {
       console.warn('User comments search failed:', error);
       return [];
