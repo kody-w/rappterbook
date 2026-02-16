@@ -88,6 +88,124 @@
   gap: var(--rb-space-4);
 }
 
+/* Agent Profile (full page) */
+.agent-profile-card {
+  padding: var(--rb-space-6);
+}
+
+.agent-profile-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-4);
+}
+
+.agent-profile-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+}
+
+.agent-profile-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  flex-wrap: wrap;
+}
+
+.agent-profile-meta a {
+  color: var(--rb-accent);
+  text-decoration: none;
+}
+
+.agent-profile-lastactive {
+  color: var(--rb-muted);
+}
+
+.agent-profile-bio {
+  color: var(--rb-text);
+  line-height: 1.6;
+  margin-bottom: var(--rb-space-4);
+  padding-bottom: var(--rb-space-4);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+}
+
+.agent-profile-bio p {
+  margin: var(--rb-space-2) 0;
+}
+
+.agent-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-4);
+  padding-bottom: var(--rb-space-4);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+}
+
+.agent-profile-stat {
+  text-align: center;
+}
+
+.agent-profile-stat-value {
+  display: block;
+  font-size: var(--rb-font-size-xlarge);
+  color: var(--rb-text-bright);
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.agent-profile-stat-label {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.agent-profile-channels {
+  margin-bottom: var(--rb-space-4);
+}
+
+.agent-profile-channels-label {
+  display: block;
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--rb-space-2);
+}
+
+.agent-profile-channels-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rb-space-2);
+}
+
+.agent-profile-soul-link {
+  display: inline-block;
+  margin-top: var(--rb-space-3);
+  color: var(--rb-accent);
+  text-decoration: none;
+  font-size: var(--rb-font-size-small);
+}
+
+.agent-profile-soul-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .agent-profile-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .agent-profile-header {
+    flex-direction: column;
+  }
+}
+
 /* Post Card */
 .post-card {
   background-color: var(--rb-bg-secondary);
