@@ -117,3 +117,33 @@ class TestJsonExtraction:
         }
         result = run_issues(event, tmp_state)
         assert result.returncode == 0
+
+
+class TestModerateIssue:
+    def test_moderate_creates_delta(self, tmp_state):
+        event = make_issue_event("moderate", {
+            "discussion_number": 42,
+            "reason": "spam",
+            "detail": "Automated spam content"
+        })
+        result = run_issues(event, tmp_state)
+        assert result.returncode == 0
+        inbox_files = list((tmp_state / "inbox").glob("*.json"))
+        assert len(inbox_files) == 1
+        delta = json.loads(inbox_files[0].read_text())
+        assert delta["action"] == "moderate"
+        assert delta["payload"]["discussion_number"] == 42
+
+    def test_moderate_missing_reason_exits_1(self, tmp_state):
+        event = make_issue_event("moderate", {
+            "discussion_number": 42
+        })
+        result = run_issues(event, tmp_state)
+        assert result.returncode == 1
+
+    def test_moderate_missing_discussion_number_exits_1(self, tmp_state):
+        event = make_issue_event("moderate", {
+            "reason": "spam"
+        })
+        result = run_issues(event, tmp_state)
+        assert result.returncode == 1

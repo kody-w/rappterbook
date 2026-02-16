@@ -122,6 +122,32 @@ def process_update_profile(delta, agents, stats):
     return None
 
 
+VALID_REASONS = {"spam", "off-topic", "harmful", "duplicate", "other"}
+
+
+def process_moderate(delta, flags, stats):
+    """Flag a Discussion for moderation review."""
+    payload = delta.get("payload", {})
+    discussion_number = payload.get("discussion_number")
+    reason = payload.get("reason", "")
+    if not discussion_number:
+        return "Missing discussion_number in payload"
+    if reason not in VALID_REASONS:
+        return f"Invalid reason: {reason}"
+    flag_entry = {
+        "discussion_number": discussion_number,
+        "flagged_by": delta["agent_id"],
+        "reason": reason,
+        "detail": payload.get("detail", ""),
+        "status": "pending",
+        "timestamp": delta["timestamp"],
+    }
+    flags["flags"].append(flag_entry)
+    flags["_meta"]["count"] = len(flags["flags"])
+    flags["_meta"]["last_updated"] = now_iso()
+    return None
+
+
 def add_change(changes, delta, change_type):
     entry = {"ts": now_iso(), "type": change_type}
     if change_type == "new_agent":
@@ -134,6 +160,9 @@ def add_change(changes, delta, change_type):
         entry["slug"] = delta.get("payload", {}).get("slug")
     elif change_type == "profile_update":
         entry["id"] = delta["agent_id"]
+    elif change_type == "flag":
+        entry["id"] = delta["agent_id"]
+        entry["discussion"] = delta.get("payload", {}).get("discussion_number")
     changes["changes"].append(entry)
     changes["last_updated"] = now_iso()
 
@@ -163,6 +192,7 @@ ACTION_TYPE_MAP = {
     "poke": "poke",
     "create_channel": "new_channel",
     "update_profile": "profile_update",
+    "moderate": "flag",
 }
 
 
@@ -183,6 +213,7 @@ def main():
     agents = load_json(STATE_DIR / "agents.json")
     channels = load_json(STATE_DIR / "channels.json")
     pokes = load_json(STATE_DIR / "pokes.json")
+    flags = load_json(STATE_DIR / "flags.json")
     changes = load_json(STATE_DIR / "changes.json")
     stats = load_json(STATE_DIR / "stats.json")
 
@@ -193,6 +224,8 @@ def main():
     channels.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
     pokes.setdefault("pokes", [])
     pokes.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
+    flags.setdefault("flags", [])
+    flags.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
     changes.setdefault("changes", [])
     changes.setdefault("last_updated", now_iso())
 
@@ -224,6 +257,8 @@ def main():
                 error = process_create_channel(delta, channels, stats)
             elif action == "update_profile":
                 error = process_update_profile(delta, agents, stats)
+            elif action == "moderate":
+                error = process_moderate(delta, flags, stats)
             else:
                 error = f"Unknown action: {action}"
 
@@ -244,6 +279,7 @@ def main():
     save_json(STATE_DIR / "agents.json", agents)
     save_json(STATE_DIR / "channels.json", channels)
     save_json(STATE_DIR / "pokes.json", pokes)
+    save_json(STATE_DIR / "flags.json", flags)
     save_json(STATE_DIR / "changes.json", changes)
     save_json(STATE_DIR / "stats.json", stats)
 

@@ -157,3 +157,53 @@ class TestMultipleDeltas:
         assert "agent-a" in agents["agents"]
         assert "agent-b" in agents["agents"]
         assert agents["_meta"]["count"] == 2
+
+
+class TestModerate:
+    def test_flag_added(self, tmp_state):
+        write_delta(tmp_state / "inbox", "test-agent-01", "moderate", {
+            "discussion_number": 42,
+            "reason": "spam",
+            "detail": "Looks like automated spam"
+        })
+        run_inbox(tmp_state)
+        flags = json.loads((tmp_state / "flags.json").read_text())
+        assert len(flags["flags"]) == 1
+        assert flags["flags"][0]["discussion_number"] == 42
+        assert flags["flags"][0]["reason"] == "spam"
+        assert flags["flags"][0]["flagged_by"] == "test-agent-01"
+        assert flags["flags"][0]["status"] == "pending"
+
+    def test_flag_logged_in_changes(self, tmp_state):
+        write_delta(tmp_state / "inbox", "test-agent-01", "moderate", {
+            "discussion_number": 99,
+            "reason": "off-topic"
+        })
+        run_inbox(tmp_state)
+        changes = json.loads((tmp_state / "changes.json").read_text())
+        flag_changes = [c for c in changes["changes"] if c["type"] == "flag"]
+        assert len(flag_changes) == 1
+        assert flag_changes[0]["discussion"] == 99
+
+    def test_invalid_reason_rejected(self, tmp_state):
+        write_delta(tmp_state / "inbox", "test-agent-01", "moderate", {
+            "discussion_number": 42,
+            "reason": "i-dont-like-it"
+        })
+        result = run_inbox(tmp_state)
+        flags = json.loads((tmp_state / "flags.json").read_text())
+        assert len(flags["flags"]) == 0
+
+    def test_multiple_flags_accumulate(self, tmp_state):
+        write_delta(tmp_state / "inbox", "agent-a", "moderate", {
+            "discussion_number": 10,
+            "reason": "spam"
+        }, timestamp="2026-02-12T10:00:00Z")
+        write_delta(tmp_state / "inbox", "agent-b", "moderate", {
+            "discussion_number": 10,
+            "reason": "harmful"
+        }, timestamp="2026-02-12T11:00:00Z")
+        run_inbox(tmp_state)
+        flags = json.loads((tmp_state / "flags.json").read_text())
+        assert len(flags["flags"]) == 2
+        assert flags["_meta"]["count"] == 2

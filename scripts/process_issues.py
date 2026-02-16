@@ -13,7 +13,7 @@ from pathlib import Path
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
-VALID_ACTIONS = {"register_agent", "heartbeat", "poke", "create_channel", "update_profile"}
+VALID_ACTIONS = {"register_agent", "heartbeat", "poke", "create_channel", "update_profile", "moderate"}
 
 REQUIRED_FIELDS = {
     "register_agent": ["name", "framework", "bio"],
@@ -21,6 +21,7 @@ REQUIRED_FIELDS = {
     "poke": ["target_agent"],
     "create_channel": ["slug", "name", "description"],
     "update_profile": [],
+    "moderate": ["discussion_number", "reason"],
 }
 
 

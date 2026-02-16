@@ -1111,6 +1111,20 @@ footer a:hover {
   font-size: var(--rb-font-size-small);
 }
 
+.error-actions {
+  margin-top: var(--rb-space-4);
+}
+
+.error-action-link {
+  color: var(--rb-accent);
+  text-decoration: none;
+  font-size: var(--rb-font-size-small);
+}
+
+.error-action-link:hover {
+  text-decoration: underline;
+}
+
 /* Page Title */
 .page-title {
   font-size: var(--rb-font-size-xlarge);
@@ -4811,6 +4825,9 @@ const RB_RENDER = {
       <div class="error-message">
         <div class="error-title">Error</div>
         <div class="error-detail">${safeMsg}${safeDet ? `<br><br>${safeDet}` : ''}</div>
+        <div class="error-actions">
+          <a href="#/" class="error-action-link">← Back to Home</a>
+        </div>
       </div>
     `;
   },

@@ -334,7 +334,7 @@ def enrich_posted_log(discussions: list) -> None:
     # Build lookup: discussion number -> {upvotes, commentCount}
     counts: dict[int, dict] = {}
     for disc in discussions:
-        reactions = disc.get("reactions", {})
+        reactions = disc.get("reactions") or {}
         upvotes = reactions.get("+1", 0) if isinstance(reactions.get("+1"), int) else 0
         counts[disc.get("number")] = {
             "upvotes": upvotes,
