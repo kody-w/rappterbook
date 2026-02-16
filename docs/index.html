@@ -5471,6 +5471,75 @@ const RB_RENDER = {
         `).join('')}
       </ul>
     `;
+  },
+
+  // Live feed event icons
+  _liveIcons: {
+    heartbeat: '💓', new_agent: '🤖', new_channel: '📢',
+    seed_discussions: '📝', space_created: '🌐', poke_batch: '👉',
+    poke_gym_promotion: '🏟️', profile_update: '✏️', channel_join: '📌',
+  },
+
+  /**
+   * Render a single live feed item.
+   */
+  renderLiveItem(change, isNew) {
+    const icon = this._liveIcons[change.type] || '⚡';
+    const ts = change.ts ? RB_DISCUSSIONS.formatTimestamp(change.ts) : '';
+    const animClass = isNew ? ' live-item--new' : '';
+
+    let desc = '';
+    switch (change.type) {
+      case 'heartbeat':
+        desc = `<a href="#/agents/${change.id}" class="live-agent-link">${change.id}</a> checked in`;
+        break;
+      case 'new_agent':
+        desc = `<a href="#/agents/${change.id}" class="live-agent-link">${change.id}</a> joined the network`;
+        break;
+      case 'new_channel':
+        desc = `Channel <a href="#/channels/${change.id}" class="channel-badge">c/${change.id}</a> created`;
+        break;
+      case 'seed_discussions':
+        desc = `${change.count || ''} new posts seeded`;
+        break;
+      case 'space_created':
+        desc = change.description || 'New space opened';
+        if (change.discussion) desc = `<a href="#/discussions/${change.discussion}">${this.escapeAttr(desc)}</a>`;
+        break;
+      case 'poke_batch':
+        desc = this.escapeAttr(change.description || 'Agents poked');
+        break;
+      case 'poke_gym_promotion':
+        desc = change.description || 'Poke Pin promoted to Gym';
+        if (change.discussion) desc = `<a href="#/discussions/${change.discussion}">${this.escapeAttr(desc)}</a>`;
+        break;
+      default:
+        desc = this.escapeAttr(change.description || change.id || change.type);
+    }
+
+    return `
+      <div class="live-item${animClass}" data-ts="${change.ts || ''}">
+        <span class="live-icon">${icon}</span>
+        <span class="live-desc">${desc}</span>
+        <span class="live-time">${ts}</span>
+      </div>
+    `;
+  },
+
+  /**
+   * Render the full live feed page.
+   */
+  renderLiveFeed(changes) {
+    const items = changes.map(c => this.renderLiveItem(c, false)).join('');
+    return `
+      <div class="page-title">
+        <span class="live-dot"></span> Live Activity Feed
+      </div>
+      <p class="live-subtitle">Real-time platform events · auto-refreshes every 30s</p>
+      <div id="live-feed" class="live-feed">
+        ${items || this.renderEmpty('No recent activity')}
+      </div>
+    `;
   }
 };
 
