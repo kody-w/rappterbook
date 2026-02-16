@@ -775,6 +775,17 @@ def ghost_observe(
         memory = load_ghost_memory(state_dir)
         patterns = detect_persistent_patterns(pulse, memory)
 
+        # Persist detected patterns for audit visibility
+        if patterns:
+            memory["patterns"] = {
+                "detected_at": pulse.get("timestamp", datetime.now(timezone.utc).isoformat()),
+                "persistent_mood": patterns.get("persistent_mood"),
+                "persistent_hot": patterns.get("persistent_hot", []),
+                "persistent_cold": patterns.get("persistent_cold", []),
+            }
+            mem_path = state_dir / "ghost_memory.json"
+            mem_path.write_text(json.dumps(memory, indent=2))
+
         if patterns.get("persistent_cold"):
             channels_str = ", ".join(f"c/{c}" for c in patterns["persistent_cold"][:2])
             observations.append(

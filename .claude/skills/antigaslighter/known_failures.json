@@ -3,18 +3,18 @@
     "description": "Antigaslighter long-term memory. Tracks recurring failure patterns across sessions so the same issues get caught faster and escalated harder.",
     "version": 1,
     "created": "2026-02-16T18:57:00Z",
-    "last_updated": "2026-02-16T18:57:00Z"
+    "last_updated": "2026-02-16T19:15:00Z"
   },
   "failures": [
     {
       "id": "llm-429-silent-drop",
-      "summary": "LLM 429 errors silently drop comments and posts. Workflow still exits 0.",
+      "summary": "LLM 429 errors silently drop comments and posts. Workflow still exits 0. Latest zion-autonomy run: 28 retries, 7 hit max attempt 4, 5 permanent ERRORs, 0 successful comments, 0 successful posts despite claiming '11 agents activated (1 post, 5 comments, 2 votes)'. The workflow LIES.",
       "first_seen": "2026-02-16",
       "last_seen": "2026-02-16",
-      "occurrences": 2,
-      "severity": "high",
-      "status": "mitigated",
-      "mitigation": "Retry count increased 2→4 with exponential backoff (1s,2s,4s,8s). Permanent failures still logged as ERROR but don't fail the step.",
+      "occurrences": 3,
+      "severity": "critical",
+      "status": "active",
+      "mitigation": "Retry count increased 2→4 with exponential backoff (1s,2s,4s,8s). NOT SUFFICIENT — 15s total backoff window is too short for sustained 429 bursts. All 7 max-retry attempts still failed.",
       "recurrence_check": "grep -c 'Retrying after HTTP 429' in workflow logs; grep -c 'attempt 4' for permanent failures"
     },
     {
@@ -25,7 +25,7 @@
       "occurrences": 1,
       "severity": "critical",
       "status": "mitigated",
-      "mitigation": "All state-writing workflows now share 'state-writer' concurrency group. safe_commit.sh handles push conflicts with reset+recommit. 7 workflows updated.",
+      "mitigation": "All state-writing workflows now share 'state-writer' concurrency group. safe_commit.sh handles push conflicts with reset+recommit. JSON state files are clean. But 4 memory .md files still have markers from before the fix.",
       "recurrence_check": "grep -rl '<<<<<<< HEAD' state/; for f in state/*.json; do python3 -m json.tool \"$f\" > /dev/null 2>&1 || echo CORRUPT: $f; done"
     },
     {
@@ -34,9 +34,9 @@
       "first_seen": "2026-02-16",
       "last_seen": "2026-02-16",
       "occurrences": 1,
-      "severity": "medium",
-      "status": "mitigated",
-      "mitigation": "enrich_posted_log() in compute_trending.py backfills missing discussions on each trending run. Gap was 41, should shrink over time.",
+      "severity": "low",
+      "status": "resolved",
+      "mitigation": "enrich_posted_log() in compute_trending.py backfills missing discussions. Gap is now ZERO: 1675 posted_log entries = 1675 GitHub Discussions. Fully caught up.",
       "recurrence_check": "Compare posted_log entry count vs gh api discussions totalCount. Gap should be stable or shrinking."
     },
     {
@@ -45,9 +45,9 @@
       "first_seen": "2026-02-16",
       "last_seen": "2026-02-16",
       "occurrences": 1,
-      "severity": "medium",
-      "status": "active",
-      "mitigation": "No fix yet. Symptom of 'nothing burger' workflows that run but produce no changes.",
+      "severity": "low",
+      "status": "mitigated",
+      "mitigation": "channels.json and trending.json now have recent timestamps (2026-02-16T18:55). stats.json still has NO _meta.last_updated field at all — it uses a flat structure without metadata wrapper. Not a staleness bug, just a schema inconsistency.",
       "recurrence_check": "Check _meta.last_updated in stats.json, channels.json, trending.json. If older than 2x the cron interval, the workflow is a zombie."
     },
     {
@@ -58,7 +58,7 @@
       "occurrences": 0,
       "severity": "low",
       "status": "watching",
-      "mitigation": "Check trait diversity, not just trait existence. Should have 80+ unique profiles across 100 agents.",
+      "mitigation": "Check trait diversity, not just trait existence. Currently healthy: 100/100 agents have traits with 100 unique profiles.",
       "recurrence_check": "Count unique trait profiles in agents.json. If fewer than 10, evolution is broken."
     },
     {
@@ -71,6 +71,50 @@
       "status": "watching",
       "mitigation": "Concurrency group should prevent this. But if two different workflow types both modify state, the retry loop could exhaust.",
       "recurrence_check": "Search workflow logs for 'Attempt 5' or 'Failed to push after' — indicates safe_commit.sh exhausted retries."
+    },
+    {
+      "id": "memory-file-conflict-markers",
+      "summary": "4 agent soul files (state/memory/*.md) contain merge conflict markers (======= and >>>>>>> Stashed changes). These are NOT JSON so they don't fail JSON parsing, but they corrupt the agent's memory — history entries are duplicated with conflict markers between them.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "grep -rl '<<<<<<< HEAD\\|>>>>>>>\\|^=======$' /Users/kodyw/Projects/rappterbook/state/memory/"
+    },
+    {
+      "id": "ghost-memory-zero-patterns",
+      "summary": "ghost_memory.json has 17 snapshots but 0 patterns. The ghost engine collects observations but never derives patterns from them. Pattern detection may not be implemented or is silently failing.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "python3 -c \"import json; mem=json.load(open('/Users/kodyw/Projects/rappterbook/state/ghost_memory.json')); print(len(mem.get('patterns',[])))\""
+    },
+    {
+      "id": "social-graph-predictions-never-scheduled",
+      "summary": "compute-social-graph.yml and score-predictions.yml have NEVER run on schedule (empty run lists). They are set to daily crons (06:45 and 07:00 UTC). The social_graph.json has data suggesting it was populated via workflow_dispatch or a script, but the scheduled pipeline has never fired.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "gh run list --repo kody-w/rappterbook --workflow compute-social-graph.yml --limit 1 --json createdAt; gh run list --repo kody-w/rappterbook --workflow score-predictions.yml --limit 1 --json createdAt"
+    },
+    {
+      "id": "stats-channel-post-count-discrepancy",
+      "summary": "stats.json total_posts (1675) does not match sum of channels.json post_counts (1667). Discrepancy of 8 posts. Some posts may be in categories not mapped to channels, or channel counts lag behind.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 1,
+      "severity": "low",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodyw/Projects/rappterbook/state/stats.json')); c=json.load(open('/Users/kodyw/Projects/rappterbook/state/channels.json')); total=sum(v.get('post_count',0) for v in c.get('channels',{}).values()); print(f'drift={s[\\\"total_posts\\\"]-total}')\""
     }
   ]
 }

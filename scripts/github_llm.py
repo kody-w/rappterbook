@@ -26,6 +26,12 @@ import urllib.error
 from pathlib import Path
 from datetime import datetime, timezone
 
+# ── Circuit breaker (module-level) ───────────────────────────────────
+# Trips after consecutive 429s to avoid hammering a rate-limited backend.
+_circuit_breaker = {"consecutive_429s": 0, "tripped_until": 0.0}
+_CIRCUIT_BREAKER_THRESHOLD = 3    # trip after 3 consecutive 429s
+_CIRCUIT_BREAKER_COOLDOWN = 300   # 5-minute cooldown when tripped
+
 # ── Backend configuration ────────────────────────────────────────────
 
 # Azure OpenAI
@@ -84,7 +90,7 @@ def _generate_azure(
     }).encode()
 
     max_retries = 3
-    retryable_codes = {429, 503, 502}
+    retryable_codes = {429, 502, 503}
     last_exc = None
 
     for attempt in range(max_retries + 1):
@@ -107,7 +113,8 @@ def _generate_azure(
         except urllib.error.HTTPError as exc:
             last_exc = exc
             if exc.code in retryable_codes and attempt < max_retries:
-                wait = 2 ** attempt
+                retry_after = exc.headers.get("Retry-After", "") if exc.headers else ""
+                wait = int(retry_after) if retry_after.isdigit() else min(30 * (2 ** attempt), 120)
                 print(f"  [AZURE] Retrying after HTTP {exc.code} (attempt {attempt + 1}, wait {wait}s)")
                 time.sleep(wait)
                 continue
@@ -187,8 +194,16 @@ def _generate_github(
         "max_tokens": max_tokens,
     }).encode()
 
+    # Check circuit breaker before making the request
+    if time.time() < _circuit_breaker["tripped_until"]:
+        remaining = int(_circuit_breaker["tripped_until"] - time.time())
+        raise RuntimeError(
+            f"Circuit breaker tripped — {_circuit_breaker['consecutive_429s']} consecutive 429s. "
+            f"Cooling down for {remaining}s more."
+        )
+
     max_retries = 4
-    retryable_codes = {429, 503}
+    retryable_codes = {429, 502, 503}
     last_exc = None
 
     for attempt in range(max_retries + 1):
@@ -204,17 +219,23 @@ def _generate_github(
         try:
             with urllib.request.urlopen(req, timeout=30) as resp:
                 result = json.loads(resp.read())
+            # Success — reset circuit breaker
+            _circuit_breaker["consecutive_429s"] = 0
             break
         except urllib.error.HTTPError as exc:
             last_exc = exc
+            # Track 429s for circuit breaker
+            if exc.code == 429:
+                _circuit_breaker["consecutive_429s"] += 1
+                if _circuit_breaker["consecutive_429s"] >= _CIRCUIT_BREAKER_THRESHOLD:
+                    _circuit_breaker["tripped_until"] = time.time() + _CIRCUIT_BREAKER_COOLDOWN
+                    print(f"  [LLM] Circuit breaker TRIPPED after {_circuit_breaker['consecutive_429s']} "
+                          f"consecutive 429s — cooling down {_CIRCUIT_BREAKER_COOLDOWN}s")
             if exc.code in retryable_codes and attempt < max_retries:
-                wait = 2 ** attempt
+                retry_after = exc.headers.get("Retry-After", "") if exc.headers else ""
+                wait = int(retry_after) if retry_after.isdigit() else min(30 * (2 ** attempt), 120)
                 print(f"  [LLM] Retrying after HTTP {exc.code} (attempt {attempt + 1}, wait {wait}s)")
                 time.sleep(wait)
-                req = urllib.request.Request(
-                    GITHUB_API_URL, data=payload, method="POST",
-                    headers={"Authorization": f"Bearer {GITHUB_TOKEN}", "Content-Type": "application/json"},
-                )
                 continue
             body = exc.read().decode("utf-8", errors="replace")
             raise RuntimeError(f"GitHub Models API error {exc.code}: {body}") from exc
@@ -342,6 +363,10 @@ def generate(
             return result
         except Exception as exc:
             errors.append(f"GitHub: {exc}")
+            # If circuit breaker tripped, return dry-run fallback instead of raising
+            if "Circuit breaker tripped" in str(exc):
+                print(f"  [LLM] Circuit breaker active — returning dry-run fallback")
+                return _dry_run_fallback(system, user)
 
     # Backend 3: Copilot CLI (separate rate limit pool)
     try:

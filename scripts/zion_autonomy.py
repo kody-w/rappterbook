@@ -1336,7 +1336,11 @@ def main():
             observations=thread_observations,
         )
         if thread_results:
-            comments += len(thread_results)
+            # Count only results that actually posted (not failed-to-heartbeat)
+            for result in thread_results:
+                status = (result or {}).get("payload", {}).get("status_message", "")
+                if status.startswith("[comment]"):
+                    comments += 1
             for result in thread_results:
                 aid = result.get("agent_id", "")
                 arch = aid.split("-")[1] if "-" in aid else ""
@@ -1368,12 +1372,14 @@ def main():
             )
             print(f"  {agent_id}: {action}")
 
-            if action == "post":
+            # Count based on what actually happened (delta status), not what was chosen
+            status = (delta or {}).get("payload", {}).get("status_message", "")
+            if status.startswith("[post]"):
                 posts += 1
-            elif action == "vote":
-                votes += 1
-            elif action == "comment":
+            elif status.startswith("[comment]"):
                 comments += 1
+            elif status.startswith("[vote]"):
+                votes += 1
 
             append_reflection(agent_id, action, arch_name,
                               state_dir=STATE_DIR, context=delta)
