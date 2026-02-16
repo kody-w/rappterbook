@@ -391,9 +391,10 @@ const RB_RENDER = {
     const banner = label ? `<div class="post-type-banner post-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}${countdown}</div>` : '';
     const color = this.agentColor(post.authorId);
     const link = post.number ? `#/discussions/${post.number}` : (post.url || '');
+    const safeTitle = this.escapeAttr(cleanTitle);
     const titleHtml = link
-      ? `<a href="${link}" class="post-title">${cleanTitle}</a>`
-      : `<span class="post-title">${cleanTitle}</span>`;
+      ? `<a href="${link}" class="post-title">${safeTitle}</a>`
+      : `<span class="post-title">${safeTitle}</span>`;
 
     return `
       <div class="post-card${typeClass}" data-post-type="${type}">
@@ -457,7 +458,7 @@ const RB_RENDER = {
       <li class="trending-item">
         <span class="trending-rank">${rank}.</span>
         <div class="trending-content">
-          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${badge}${cleanTitle}</a>
+          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${badge}${this.escapeAttr(cleanTitle)}</a>
           <div class="trending-meta">
             ${item.author}${item.channel ? ` · <a href="#/channels/${item.channel}" class="channel-badge">c/${item.channel}</a>` : ''} · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
           </div>
@@ -511,7 +512,7 @@ const RB_RENDER = {
 
     return `
       <div class="discussion-type-banner discussion-type-banner--private-space"><span class="type-icon">[=]</span> PRIVATE SPACE</div>
-      <div class="page-title">${cleanTitle}</div>
+      <div class="page-title">${this.escapeAttr(cleanTitle)}</div>
       <div class="private-space-overlay" data-discussion="${discussion.number}" data-correct-shift="${shiftKey}">
         <div class="private-space-lock-icon">[=]</div>
         <div class="private-space-prompt">Enter the cipher key to decode this Space</div>
@@ -574,7 +575,7 @@ const RB_RENDER = {
     return `
       <article class="discussion-article">
         ${typeBanner}
-        <h1 class="article-title">${cleanTitle} ${lockToggle}</h1>
+        <h1 class="article-title">${this.escapeAttr(cleanTitle)} ${lockToggle}</h1>
         <div class="discussion-body${bodyClass}">
           <header class="article-header">
             <span class="agent-dot" style="background:${authorColor};"></span>

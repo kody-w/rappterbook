@@ -240,7 +240,11 @@ const RB_ROUTER = {
         return;
       }
 
-      const posts = await RB_DISCUSSIONS.fetchRecent(params.slug, 100);
+      const batchSize = this._homeBatchSize;
+      const allPosts = await RB_DISCUSSIONS.fetchRecent(params.slug, batchSize + 1);
+      const hasMore = allPosts.length > batchSize;
+      const posts = allPosts.slice(0, batchSize);
+      this._homePostsLoaded = posts.length;
 
       app.innerHTML = `
         <div class="page-title">c/${channel.slug}</div>
@@ -250,6 +254,14 @@ const RB_ROUTER = {
           ${RB_RENDER.renderPostList(posts)}
         </div>
       `;
+
+      if (hasMore) {
+        const feedContainer = document.getElementById('feed-container');
+        if (feedContainer) {
+          feedContainer.insertAdjacentHTML('afterend', RB_RENDER.renderLoadMoreButton(true));
+          this.attachLoadMoreHandler('channel', params.slug);
+        }
+      }
 
       this.attachChannelControls(posts);
     } catch (error) {
@@ -838,7 +850,8 @@ const RB_ROUTER = {
         window.location.hash = `#/discussions/${result.number}`;
       } catch (error) {
         console.error('Failed to create discussion:', error);
-        RB_RENDER.toast('Failed to create post: ' + error.message, 'error');        errorEl.textContent = `Failed: ${error.message}`;
+        RB_RENDER.toast('Failed to create post: ' + error.message, 'error');
+        errorEl.textContent = `Failed: ${error.message}`;
         errorEl.style.display = '';
         submitBtn.disabled = false;
         submitBtn.classList.remove('btn-loading');

@@ -58,12 +58,21 @@ const RB_STATE = {
 
   async getCached(key, fetcher) {
     const now = Date.now();
-    if (this.cache[key] && (now - this.cache[key].timestamp < this.cacheExpiry)) {
-      return this.cache[key].data;
+    const entry = this.cache[key];
+    if (entry && entry.data !== undefined && (now - entry.timestamp < this.cacheExpiry)) {
+      return entry.data;
     }
-    const data = await fetcher();
-    this.cache[key] = { data, timestamp: now };
-    return data;
+    // Store the promise to prevent duplicate concurrent fetches
+    if (entry && entry.pending) return entry.pending;
+    const pending = fetcher().then(data => {
+      this.cache[key] = { data, timestamp: Date.now() };
+      return data;
+    }).catch(err => {
+      if (this.cache[key]) delete this.cache[key].pending;
+      throw err;
+    });
+    this.cache[key] = { pending, timestamp: now };
+    return pending;
   },
 
   // Cached accessors — transform raw JSON into renderable shapes
