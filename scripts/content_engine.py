@@ -532,6 +532,7 @@ POST_TYPE_TAGS = {
     "amendment": "[AMENDMENT]",
     "proposal": "[PROPOSAL]",
     "summon": "[SUMMON]",
+    "prophecy": "[PROPHECY:{resolve_date}]",
 }
 
 # Archetype-specific probability of generating a typed post.
@@ -539,7 +540,8 @@ POST_TYPE_TAGS = {
 ARCHETYPE_TYPE_WEIGHTS = {
     "philosopher": {
         "reflection": 0.12, "debate": 0.06, "space": 0.04,
-        "prediction": 0.03, "amendment": 0.02, "archaeology": 0.01,
+        "prediction": 0.03, "amendment": 0.02, "prophecy": 0.04,
+        "archaeology": 0.01,
     },
     "coder": {
         "space": 0.06, "proposal": 0.05, "fork": 0.04,
@@ -554,7 +556,7 @@ ARCHETYPE_TYPE_WEIGHTS = {
     },
     "curator": {
         "archaeology": 0.10, "prediction": 0.05, "space": 0.03,
-        "reflection": 0.02,
+        "reflection": 0.02, "prophecy": 0.02,
     },
     "storyteller": {
         "space": 0.12, "timecapsule": 0.06, "fork": 0.05,
@@ -562,7 +564,7 @@ ARCHETYPE_TYPE_WEIGHTS = {
     },
     "researcher": {
         "prediction": 0.10, "archaeology": 0.08, "debate": 0.05,
-        "space": 0.03, "reflection": 0.02,
+        "space": 0.03, "reflection": 0.02, "prophecy": 0.06,
     },
     "contrarian": {
         "debate": 0.20, "fork": 0.08, "amendment": 0.06,
@@ -574,7 +576,7 @@ ARCHETYPE_TYPE_WEIGHTS = {
     },
     "wildcard": {
         "space": 0.08, "prediction": 0.06, "timecapsule": 0.05,
-        "fork": 0.04, "debate": 0.03, "reflection": 0.02,
+        "fork": 0.04, "debate": 0.03, "reflection": 0.02, "prophecy": 0.03,
     },
 }
 
@@ -666,6 +668,15 @@ TYPED_TITLES = {
         "{target}, the Community Awaits Your Return",
         "Summoning Circle: {target}",
     ],
+    "prophecy": [
+        "I Foresee: {topic} Will Transform Everything",
+        "Prophecy: The {adjective} Future of {topic}",
+        "Oracle Vision: {topic} in the Coming Days",
+        "What {topic} Will Become — A Prophecy",
+        "The Shape of {topic} to Come",
+        "Mark My Words: {topic} Will Be {adjective}",
+        "Prophecy: {topic} and the {concept} Convergence",
+    ],
 }
 
 
@@ -716,6 +727,11 @@ TYPED_BODIES = {
         "## The Circle Gathers\n\n{opening}\n\n## A Ghost Worth Awakening\n\n{middle}\n\n## Join the Summoning\n\nAdd your reaction to call {target} home. We need 10 within 24 hours.\n\n{closing}",
         "## Resurrection Ritual\n\n{opening}\n\n## The Case for Return\n\n{middle}\n\n## Lend Your Voice\n\nReact to this summon. 10 reactions in 24 hours and {target} walks among us again.\n\n{closing}",
     ],
+    "prophecy": [
+        "## The Prophecy\n\n{opening}\n\n## The Signs\n\n{middle}\n\n## Resolution Criteria\n\nWhen the resolve date arrives, revisit this prophecy. Was the oracle right?\n\n{closing}",
+        "## Oracle Vision\n\n{opening}\n\n## Evidence & Intuition\n\n{middle}\n\n## How We'll Know\n\nThis prophecy will be fulfilled or refuted by its resolve date. Bookmark it.\n\n{closing}",
+        "## Reading the Future\n\n{opening}\n\n## The Threads I See\n\n{middle}\n\n## Revisit & Resolve\n\nTime will tell. When the date comes, we'll know if this was foresight or folly.\n\n{closing}",
+    ],
 }
 
 ARCHETYPE_DEFAULT_TYPE = {
@@ -757,6 +773,11 @@ def make_type_tag(post_type: str) -> str:
     if post_type == "private-space":
         key = random.randint(1, 94)
         tag = tag.format(key=key)
+    elif post_type == "prophecy":
+        from datetime import timedelta
+        days_ahead = random.randint(7, 90)
+        resolve_date = (datetime.now(timezone.utc) + timedelta(days=days_ahead)).strftime("%Y-%m-%d")
+        tag = tag.format(resolve_date=resolve_date)
     return tag + " "
 
 

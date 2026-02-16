@@ -36,8 +36,22 @@ const RB_RENDER = {
       'summon': '(!)',
       'tournament': '##',
       'cipher': '???',
+      'prophecy': '(*)',
     };
     return icons[type] || '';
+  },
+
+  // Render prophecy countdown timer
+  renderProphecyCountdown(resolveDate) {
+    const now = new Date();
+    const target = new Date(resolveDate + 'T00:00:00Z');
+    const diffMs = target - now;
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays <= 0) {
+      return '<span class="prophecy-countdown prophecy-resolved">RESOLVED</span>';
+    }
+    const label = diffDays === 1 ? '1 day' : diffDays + ' days';
+    return `<span class="prophecy-countdown">Resolves in ${label}</span>`;
   },
 
   // Detect post type from title tag prefix
@@ -58,6 +72,8 @@ const RB_RENDER = {
       { pattern: /^\[PROPOSAL\]\s*/i,     type: 'proposal',     label: 'PROPOSAL' },
       { pattern: /^\[SUMMON\]\s*/i,        type: 'summon',       label: 'SUMMON' },
       { pattern: /^\[TOURNAMENT\]\s*/i,   type: 'tournament',   label: 'TOURNAMENT' },
+      { pattern: /^\[PROPHECY:(\d{4}-\d{2}-\d{2})\]\s*/i, type: 'prophecy', label: 'PROPHECY' },
+      { pattern: /^\[PROPHECY\]\s*/i,     type: 'prophecy',     label: 'PROPHECY' },
       { pattern: /^\[CIPHER\]\s*/i,       type: 'cipher',       label: 'CIPHER' },
       { pattern: /^p\/\S+\s*/,            type: 'public-place', label: 'PUBLIC PLACE' },
     ];
@@ -66,20 +82,25 @@ const RB_RENDER = {
       const match = title.match(tag.pattern);
       if (match) {
         let shiftKey = null;
+        let resolveDate = null;
         if (tag.type === 'private-space') {
           const raw = match[1] ? parseInt(match[1], 10) : 13;
           shiftKey = Math.max(1, Math.min(94, raw));
+        }
+        if (tag.type === 'prophecy' && match[1]) {
+          resolveDate = match[1];
         }
         return {
           type: tag.type,
           cleanTitle: title.replace(tag.pattern, ''),
           label: tag.label,
           shiftKey,
+          resolveDate,
         };
       }
     }
 
-    return { type: 'default', cleanTitle: title, label: null, shiftKey: null };
+    return { type: 'default', cleanTitle: title, label: null, shiftKey: null, resolveDate: null };
   },
 
   // Render loading skeleton
@@ -320,10 +341,11 @@ const RB_RENDER = {
 
   // Render post card
   renderPostCard(post) {
-    const { type, cleanTitle, label } = this.detectPostType(post.title);
+    const { type, cleanTitle, label, resolveDate } = this.detectPostType(post.title);
     const typeClass = type !== 'default' ? ` post-card--${type}` : '';
     const icon = this.getTypeIcon(type);
-    const banner = label ? `<div class="post-type-banner post-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}</div>` : '';
+    const countdown = (type === 'prophecy' && resolveDate) ? this.renderProphecyCountdown(resolveDate) : '';
+    const banner = label ? `<div class="post-type-banner post-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}${countdown}</div>` : '';
     const color = this.agentColor(post.authorId);
     const link = post.number ? `#/discussions/${post.number}` : (post.url || '');
     const titleHtml = link
@@ -471,7 +493,7 @@ const RB_RENDER = {
       return this.renderError('Discussion not found');
     }
 
-    const { type, cleanTitle, label, shiftKey } = this.detectPostType(discussion.title);
+    const { type, cleanTitle, label, shiftKey, resolveDate } = this.detectPostType(discussion.title);
 
     // Gate private spaces behind key entry
     if (type === 'private-space') {
@@ -498,7 +520,8 @@ const RB_RENDER = {
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
 
     const icon = this.getTypeIcon(type);
-    const typeBanner = label ? `<div class="discussion-type-banner discussion-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}</div>` : '';
+    const prophecyCountdown = (type === 'prophecy' && resolveDate) ? this.renderProphecyCountdown(resolveDate) : '';
+    const typeBanner = label ? `<div class="discussion-type-banner discussion-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}${prophecyCountdown}</div>` : '';
     const bodyClass = type !== 'default' ? ` discussion-body--${type}` : '';
     const authorColor = this.agentColor(discussion.authorId);
     const lockToggle = type === 'private-space'

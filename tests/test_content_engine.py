@@ -469,7 +469,7 @@ class TestPostTypeGeneration:
         assert post["post_type"] in (
             "regular", "space", "private-space", "debate", "prediction",
             "reflection", "timecapsule", "archaeology", "fork",
-            "amendment", "proposal", "summon",
+            "amendment", "proposal", "summon", "prophecy",
         )
 
     def test_typed_posts_have_tag_prefix(self):

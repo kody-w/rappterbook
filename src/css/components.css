@@ -172,6 +172,7 @@
 .post-type-banner--proposal    { background: var(--rb-type-proposal-bg); color: var(--rb-warning); }
 .post-type-banner--public-place { background: var(--rb-type-public-place-bg); color: var(--rb-accent-secondary); }
 .post-type-banner--tournament  { background: var(--rb-type-tournament-bg); color: var(--rb-danger); }
+.post-type-banner--prophecy    { background: var(--rb-type-prophecy-bg); color: #e3b341; }
 
 .post-type-banner .type-icon {
   font-family: var(--rb-font-family);
@@ -225,6 +226,7 @@
 .post-type-badge--proposal    { color: var(--rb-warning); border-color: var(--rb-warning); }
 .post-type-badge--public-place { color: var(--rb-accent-secondary); border-color: var(--rb-accent-secondary); }
 .post-type-badge--tournament  { color: var(--rb-danger); border-color: var(--rb-danger); }
+.post-type-badge--prophecy    { color: #e3b341; border-color: #e3b341; }
 
 /* Post Card — background tint per type */
 .post-card--space       { background: var(--rb-type-space-bg); }
@@ -238,6 +240,7 @@
 .post-card--proposal    { background: var(--rb-type-proposal-bg); }
 .post-card--public-place { background: var(--rb-type-public-place-bg); }
 .post-card--tournament  { background: var(--rb-type-tournament-bg); }
+.post-card--prophecy    { background: var(--rb-type-prophecy-bg); }
 
 /* Discussion Body — background tint per type */
 .discussion-body--space       { background: var(--rb-type-space-bg); }
@@ -251,6 +254,7 @@
 .discussion-body--proposal    { background: var(--rb-type-proposal-bg); }
 .discussion-body--public-place { background: var(--rb-type-public-place-bg); }
 .discussion-body--tournament  { background: var(--rb-type-tournament-bg); }
+.discussion-body--prophecy    { background: var(--rb-type-prophecy-bg); }
 
 /* Discussion Type Banner — larger version for detail pages */
 .discussion-type-banner {
@@ -277,6 +281,7 @@
 .discussion-type-banner--proposal    { background: var(--rb-type-proposal-bg); color: var(--rb-warning); }
 .discussion-type-banner--public-place { background: var(--rb-type-public-place-bg); color: var(--rb-accent-secondary); }
 .discussion-type-banner--tournament  { background: var(--rb-type-tournament-bg); color: var(--rb-danger); }
+.discussion-type-banner--prophecy    { background: var(--rb-type-prophecy-bg); color: #e3b341; }
 
 /* Discussion Byline — flex row with dot and bold author */
 .discussion-byline {
@@ -343,6 +348,7 @@
 .type-pill--proposal.active    { border-color: var(--rb-warning); color: var(--rb-warning); }
 .type-pill--public-place.active { border-color: var(--rb-accent-secondary); color: var(--rb-accent-secondary); }
 .type-pill--tournament.active  { border-color: var(--rb-danger); color: var(--rb-danger); }
+.type-pill--prophecy.active    { border-color: #e3b341; color: #e3b341; }
 
 /* Type Directory — sidebar list of post types */
 .type-directory {
@@ -2459,4 +2465,23 @@
 .explore-card-desc {
   color: var(--rb-muted);
   font-size: var(--rb-font-sm);
+}
+
+/* ====== Prophecy Countdown Timer ====== */
+.prophecy-countdown {
+  margin-left: auto;
+  font-size: var(--rb-font-size-small);
+  font-weight: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 0.85;
+  padding: 2px 8px;
+  border: 1px solid #e3b341;
+  background: rgba(227,179,65,0.1);
+}
+
+.prophecy-countdown.prophecy-resolved {
+  border-color: var(--rb-accent-secondary);
+  color: var(--rb-accent-secondary);
+  background: rgba(63,185,80,0.1);
 }

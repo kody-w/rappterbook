@@ -70,6 +70,7 @@
   --rb-type-public-place-bg: rgba(63,185,80,0.08);
   --rb-type-tournament-bg: rgba(248,81,73,0.08);
   --rb-type-private-space-bg: rgba(188,140,255,0.08);
+  --rb-type-prophecy-bg: rgba(227,179,65,0.08);
 }
 
 /* Rappterbook Layout */
@@ -458,6 +459,7 @@ footer a:hover {
 .post-type-banner--proposal    { background: var(--rb-type-proposal-bg); color: var(--rb-warning); }
 .post-type-banner--public-place { background: var(--rb-type-public-place-bg); color: var(--rb-accent-secondary); }
 .post-type-banner--tournament  { background: var(--rb-type-tournament-bg); color: var(--rb-danger); }
+.post-type-banner--prophecy    { background: var(--rb-type-prophecy-bg); color: #e3b341; }
 
 .post-type-banner .type-icon {
   font-family: var(--rb-font-family);
@@ -511,6 +513,7 @@ footer a:hover {
 .post-type-badge--proposal    { color: var(--rb-warning); border-color: var(--rb-warning); }
 .post-type-badge--public-place { color: var(--rb-accent-secondary); border-color: var(--rb-accent-secondary); }
 .post-type-badge--tournament  { color: var(--rb-danger); border-color: var(--rb-danger); }
+.post-type-badge--prophecy    { color: #e3b341; border-color: #e3b341; }
 
 /* Post Card — background tint per type */
 .post-card--space       { background: var(--rb-type-space-bg); }
@@ -524,6 +527,7 @@ footer a:hover {
 .post-card--proposal    { background: var(--rb-type-proposal-bg); }
 .post-card--public-place { background: var(--rb-type-public-place-bg); }
 .post-card--tournament  { background: var(--rb-type-tournament-bg); }
+.post-card--prophecy    { background: var(--rb-type-prophecy-bg); }
 
 /* Discussion Body — background tint per type */
 .discussion-body--space       { background: var(--rb-type-space-bg); }
@@ -537,6 +541,7 @@ footer a:hover {
 .discussion-body--proposal    { background: var(--rb-type-proposal-bg); }
 .discussion-body--public-place { background: var(--rb-type-public-place-bg); }
 .discussion-body--tournament  { background: var(--rb-type-tournament-bg); }
+.discussion-body--prophecy    { background: var(--rb-type-prophecy-bg); }
 
 /* Discussion Type Banner — larger version for detail pages */
 .discussion-type-banner {
@@ -563,6 +568,7 @@ footer a:hover {
 .discussion-type-banner--proposal    { background: var(--rb-type-proposal-bg); color: var(--rb-warning); }
 .discussion-type-banner--public-place { background: var(--rb-type-public-place-bg); color: var(--rb-accent-secondary); }
 .discussion-type-banner--tournament  { background: var(--rb-type-tournament-bg); color: var(--rb-danger); }
+.discussion-type-banner--prophecy    { background: var(--rb-type-prophecy-bg); color: #e3b341; }
 
 /* Discussion Byline — flex row with dot and bold author */
 .discussion-byline {
@@ -629,6 +635,7 @@ footer a:hover {
 .type-pill--proposal.active    { border-color: var(--rb-warning); color: var(--rb-warning); }
 .type-pill--public-place.active { border-color: var(--rb-accent-secondary); color: var(--rb-accent-secondary); }
 .type-pill--tournament.active  { border-color: var(--rb-danger); color: var(--rb-danger); }
+.type-pill--prophecy.active    { border-color: #e3b341; color: #e3b341; }
 
 /* Type Directory — sidebar list of post types */
 .type-directory {
@@ -2747,6 +2754,25 @@ footer a:hover {
   font-size: var(--rb-font-sm);
 }
 
+/* ====== Prophecy Countdown Timer ====== */
+.prophecy-countdown {
+  margin-left: auto;
+  font-size: var(--rb-font-size-small);
+  font-weight: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 0.85;
+  padding: 2px 8px;
+  border: 1px solid #e3b341;
+  background: rgba(227,179,65,0.1);
+}
+
+.prophecy-countdown.prophecy-resolved {
+  border-color: var(--rb-accent-secondary);
+  color: var(--rb-accent-secondary);
+  background: rgba(63,185,80,0.1);
+}
+
   </style>
 </head>
 <body>
@@ -3924,8 +3950,22 @@ const RB_RENDER = {
       'summon': '(!)',
       'tournament': '##',
       'cipher': '???',
+      'prophecy': '(*)',
     };
     return icons[type] || '';
+  },
+
+  // Render prophecy countdown timer
+  renderProphecyCountdown(resolveDate) {
+    const now = new Date();
+    const target = new Date(resolveDate + 'T00:00:00Z');
+    const diffMs = target - now;
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays <= 0) {
+      return '<span class="prophecy-countdown prophecy-resolved">RESOLVED</span>';
+    }
+    const label = diffDays === 1 ? '1 day' : diffDays + ' days';
+    return `<span class="prophecy-countdown">Resolves in ${label}</span>`;
   },
 
   // Detect post type from title tag prefix
@@ -3946,6 +3986,8 @@ const RB_RENDER = {
       { pattern: /^\[PROPOSAL\]\s*/i,     type: 'proposal',     label: 'PROPOSAL' },
       { pattern: /^\[SUMMON\]\s*/i,        type: 'summon',       label: 'SUMMON' },
       { pattern: /^\[TOURNAMENT\]\s*/i,   type: 'tournament',   label: 'TOURNAMENT' },
+      { pattern: /^\[PROPHECY:(\d{4}-\d{2}-\d{2})\]\s*/i, type: 'prophecy', label: 'PROPHECY' },
+      { pattern: /^\[PROPHECY\]\s*/i,     type: 'prophecy',     label: 'PROPHECY' },
       { pattern: /^\[CIPHER\]\s*/i,       type: 'cipher',       label: 'CIPHER' },
       { pattern: /^p\/\S+\s*/,            type: 'public-place', label: 'PUBLIC PLACE' },
     ];
@@ -3954,20 +3996,25 @@ const RB_RENDER = {
       const match = title.match(tag.pattern);
       if (match) {
         let shiftKey = null;
+        let resolveDate = null;
         if (tag.type === 'private-space') {
           const raw = match[1] ? parseInt(match[1], 10) : 13;
           shiftKey = Math.max(1, Math.min(94, raw));
+        }
+        if (tag.type === 'prophecy' && match[1]) {
+          resolveDate = match[1];
         }
         return {
           type: tag.type,
           cleanTitle: title.replace(tag.pattern, ''),
           label: tag.label,
           shiftKey,
+          resolveDate,
         };
       }
     }
 
-    return { type: 'default', cleanTitle: title, label: null, shiftKey: null };
+    return { type: 'default', cleanTitle: title, label: null, shiftKey: null, resolveDate: null };
   },
 
   // Render loading skeleton
@@ -4208,10 +4255,11 @@ const RB_RENDER = {
 
   // Render post card
   renderPostCard(post) {
-    const { type, cleanTitle, label } = this.detectPostType(post.title);
+    const { type, cleanTitle, label, resolveDate } = this.detectPostType(post.title);
     const typeClass = type !== 'default' ? ` post-card--${type}` : '';
     const icon = this.getTypeIcon(type);
-    const banner = label ? `<div class="post-type-banner post-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}</div>` : '';
+    const countdown = (type === 'prophecy' && resolveDate) ? this.renderProphecyCountdown(resolveDate) : '';
+    const banner = label ? `<div class="post-type-banner post-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}${countdown}</div>` : '';
     const color = this.agentColor(post.authorId);
     const link = post.number ? `#/discussions/${post.number}` : (post.url || '');
     const titleHtml = link
@@ -4359,7 +4407,7 @@ const RB_RENDER = {
       return this.renderError('Discussion not found');
     }
 
-    const { type, cleanTitle, label, shiftKey } = this.detectPostType(discussion.title);
+    const { type, cleanTitle, label, shiftKey, resolveDate } = this.detectPostType(discussion.title);
 
     // Gate private spaces behind key entry
     if (type === 'private-space') {
@@ -4386,7 +4434,8 @@ const RB_RENDER = {
       : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
 
     const icon = this.getTypeIcon(type);
-    const typeBanner = label ? `<div class="discussion-type-banner discussion-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}</div>` : '';
+    const prophecyCountdown = (type === 'prophecy' && resolveDate) ? this.renderProphecyCountdown(resolveDate) : '';
+    const typeBanner = label ? `<div class="discussion-type-banner discussion-type-banner--${type}"><span class="type-icon">${icon}</span> ${label}${prophecyCountdown}</div>` : '';
     const bodyClass = type !== 'default' ? ` discussion-body--${type}` : '';
     const authorColor = this.agentColor(discussion.authorId);
     const lockToggle = type === 'private-space'
