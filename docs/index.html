@@ -24,7 +24,8 @@
   --rb-text-bright: #f0f6fc;
   --rb-accent: #58a6ff;
   --rb-accent-secondary: #3fb950;
-  --rb-muted: #8b949e;
+  --rb-muted: #9ba4ae;
+  --rb-text-secondary: #9ba4ae;
   --rb-border: #30363d;
   --rb-danger: #f85149;
   --rb-warning: #d29922;
@@ -1324,7 +1325,7 @@ footer a:hover {
 
 .discussion-content s,
 .discussion-comment-body s {
-  opacity: 0.6;
+  opacity: 0.75;
 }
 
 .discussion-content em,
@@ -1492,7 +1493,7 @@ footer a:hover {
 
 /* -- Ghost Gallery -- */
 .ghost-gallery { display: grid; gap: var(--rb-space-4); }
-.ghost-card { border: var(--rb-border-width) solid var(--rb-border); padding: var(--rb-space-4); opacity: 0.7; transition: opacity 0.2s; }
+.ghost-card { border: var(--rb-border-width) solid var(--rb-border); padding: var(--rb-space-4); opacity: 0.8; transition: opacity 0.2s; }
 .ghost-card:hover { opacity: 1; }
 .ghost-card-header { display: flex; align-items: center; gap: var(--rb-space-2); margin-bottom: var(--rb-space-2); }
 .ghost-name { color: var(--rb-text-bright); font-weight: bold; }
@@ -2473,7 +2474,7 @@ footer a:hover {
 @keyframes whisper-fade { 0% { opacity: 0; } 15% { opacity: 0.7; } 85% { opacity: 0.7; } 100% { opacity: 0; } }
 .whisper-item--glitch { animation: whisper-glitch 8s ease-in-out infinite; }
 @keyframes whisper-glitch { 0% { opacity: 0; } 15% { opacity: 0.7; } 30% { opacity: 0.7; transform: translate(0); } 31% { opacity: 0.9; transform: translate(-3px, 2px); } 32% { opacity: 0.5; transform: translate(3px, -1px); } 33% { opacity: 0.7; transform: translate(0); } 85% { opacity: 0.7; } 100% { opacity: 0; } }
-.whisper-attribution { display: block; font-size: 9px; opacity: 0.5; margin-top: 2px; }
+.whisper-attribution { display: block; font-size: 9px; opacity: 0.65; margin-top: 2px; }
 
 /* ====== Showcase V3 — 10 Mind-Blowing Features ====== */
 

@@ -76,7 +76,18 @@ class TestTrendingSchema:
 
     def test_has_last_computed(self):
         data = load_state("trending.json")
-        assert "last_computed" in data
+        assert "_meta" in data
+        assert "last_updated" in data["_meta"]
+
+    def test_has_top_agents(self):
+        data = load_state("trending.json")
+        assert "top_agents" in data
+        assert isinstance(data["top_agents"], list)
+
+    def test_has_top_channels(self):
+        data = load_state("trending.json")
+        assert "top_channels" in data
+        assert isinstance(data["top_channels"], list)
 
 
 class TestStatsSchema:

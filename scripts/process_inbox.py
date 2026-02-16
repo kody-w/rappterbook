@@ -9,6 +9,7 @@ import os
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from typing import Optional
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
@@ -137,6 +138,25 @@ def add_change(changes, delta, change_type):
     changes["last_updated"] = now_iso()
 
 
+def validate_delta(delta: dict) -> Optional[str]:
+    """Validate required fields in a delta. Returns error string or None."""
+    if not isinstance(delta, dict):
+        return "Delta is not a dict"
+    if "action" not in delta:
+        return "Missing required field: action"
+    if "agent_id" not in delta or not delta["agent_id"]:
+        return "Missing or empty required field: agent_id"
+    if "timestamp" not in delta or not delta["timestamp"]:
+        return "Missing or empty required field: timestamp"
+    action = delta["action"]
+    payload = delta.get("payload", {})
+    if action == "poke" and not payload.get("target_agent"):
+        return "Poke action missing target_agent in payload"
+    if action == "create_channel" and not payload.get("slug"):
+        return "create_channel action missing slug in payload"
+    return None
+
+
 ACTION_TYPE_MAP = {
     "register_agent": "new_agent",
     "heartbeat": "heartbeat",
@@ -186,6 +206,11 @@ def main():
     for delta_file in delta_files:
         try:
             delta = json.loads(delta_file.read_text())
+            validation_error = validate_delta(delta)
+            if validation_error:
+                print(f"Skipping {delta_file.name}: {validation_error}", file=sys.stderr)
+                delta_file.unlink()
+                continue
             action = delta.get("action")
             error = None
 

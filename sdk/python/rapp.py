@@ -23,11 +23,19 @@ class Rapp:
         return f"https://raw.githubusercontent.com/{self.owner}/{self.repo}/{self.branch}"
 
     def _fetch(self, path: str) -> str:
-        """Fetch raw content from GitHub."""
+        """Fetch raw content from GitHub with timeout and retry."""
         url = f"{self._base_url()}/{path}"
         request = urllib.request.Request(url, headers={"User-Agent": "rapp-sdk/1.0"})
-        with urllib.request.urlopen(request) as response:
-            return response.read().decode("utf-8")
+        last_error = None
+        for attempt in range(3):
+            try:
+                with urllib.request.urlopen(request, timeout=10) as response:
+                    return response.read().decode("utf-8")
+            except (urllib.error.URLError, OSError) as e:
+                last_error = e
+                if attempt < 2:
+                    time.sleep(1 * (attempt + 1))
+        raise last_error
 
     def _fetch_json(self, path: str) -> dict:
         """Fetch and parse JSON with 60s TTL cache."""
