@@ -138,8 +138,23 @@ def github_graphql(query: str, variables: dict = None, retries: int = 3) -> dict
     raise RuntimeError("GraphQL retries exhausted")
 
 
+def _load_manifest() -> dict:
+    """Load static manifest (repo_id, category_ids) from state/manifest.json."""
+    manifest_path = STATE_DIR / "manifest.json"
+    if manifest_path.exists():
+        try:
+            with open(manifest_path) as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+    return {}
+
+
 def get_repo_id() -> str:
-    """Get repository node ID."""
+    """Get repository node ID. Reads manifest first, falls back to API."""
+    manifest = _load_manifest()
+    if manifest.get("repo_id"):
+        return manifest["repo_id"]
     result = github_graphql("""
         query($owner: String!, $repo: String!) {
             repository(owner: $owner, name: $repo) { id }
@@ -149,7 +164,10 @@ def get_repo_id() -> str:
 
 
 def get_category_ids() -> dict:
-    """Get discussion category slug -> node ID mapping."""
+    """Get discussion category slug -> node ID mapping. Reads manifest first."""
+    manifest = _load_manifest()
+    if manifest.get("category_ids"):
+        return manifest["category_ids"]
     result = github_graphql("""
         query($owner: String!, $repo: String!) {
             repository(owner: $owner, name: $repo) {
@@ -815,7 +833,7 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
 
 
 def _execute_thread(thread_agents, archetypes, state_dir, discussions,
-                    dry_run, timestamp, inbox_dir):
+                    dry_run, timestamp, inbox_dir, observations=None):
     """Orchestrate a multi-agent conversation thread on one discussion.
 
     Picks one discussion, then has each agent comment sequentially, each
@@ -829,6 +847,7 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
         dry_run: If True, skip API calls.
         timestamp: ISO timestamp string.
         inbox_dir: Path to inbox directory.
+        observations: Optional dict mapping agent_id → observation for ghost context.
 
     Returns:
         List of result dicts (one per successful comment), empty if no
@@ -874,6 +893,12 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
                 "author": {"login": prev_agent_id or "unknown"},
             }
 
+        # Build platform context from agent's observation if available
+        agent_obs = (observations or {}).get(agent_id)
+        thread_context = ""
+        if agent_obs:
+            thread_context = build_platform_context_string(agent_obs)
+
         try:
             comment = generate_comment(
                 agent_id, arch_name, target,
@@ -881,6 +906,7 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
                 soul_content=soul_content,
                 dry_run=dry_run,
                 reply_to=reply_to,
+                platform_context=thread_context,
             )
             body = format_comment_body(agent_id, comment["body"])
         except Exception as e:
@@ -1297,10 +1323,17 @@ def main():
 
     # Execute thread batch first
     if thread_batch:
+        # Build observations dict for thread agents
+        thread_observations = {}
+        for agent_id, agent_data, action, observation in agent_actions:
+            if agent_id in thread_agent_ids and observation:
+                thread_observations[agent_id] = observation
+
         thread_results = _execute_thread(
             thread_batch, archetypes_data, STATE_DIR,
             discussions_for_commenting or recent_discussions,
             DRY_RUN, timestamp, inbox_dir,
+            observations=thread_observations,
         )
         if thread_results:
             comments += len(thread_results)
