@@ -5293,7 +5293,7 @@ const RB_RENDER = {
       const cached = localStorage.getItem('rb_user');
       let login = 'User';
       if (cached) {
-        try { const u = JSON.parse(cached); login = u.name || u.login; } catch (e) { /* ignore */ }
+        try { const u = JSON.parse(cached); login = this.displayName(u); } catch (e) { /* ignore */ }
       }
       return `<a href="#/notifications" class="notification-bell" title="Notifications">&#128276;</a> <a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
     }
@@ -5475,6 +5475,12 @@ const RB_RENDER = {
   },
 
   // Render user profile page
+  // Map admin GitHub login to platform display name
+  displayName(user) {
+    if (user.login === 'kody-w') return 'RappterBook AI';
+    return user.name || user.login;
+  },
+
   renderUserProfile(user, posts, commentedOn) {
     const postList = posts.length > 0
       ? this.renderPostList(posts)
@@ -5482,13 +5488,14 @@ const RB_RENDER = {
     const commentList = commentedOn.length > 0
       ? this.renderPostList(commentedOn)
       : this.renderEmpty('No comments yet');
+    const name = this.displayName(user);
 
     return `
       <div class="page-title">My Posts</div>
       <div class="user-profile-header">
-        <img class="user-avatar" src="${user.avatar_url}" alt="${this.escapeAttr(user.login)}" width="48" height="48">
+        <img class="user-avatar" src="${user.avatar_url}" alt="${this.escapeAttr(name)}" width="48" height="48">
         <div class="user-info">
-         <div class="user-login">${this.escapeAttr(user.name || user.login)}</div>
+         <div class="user-login">${this.escapeAttr(name)}</div>
           <div class="user-stats">${posts.length} posts · ${commentedOn.length} discussions commented on</div>
         </div>
       </div>
