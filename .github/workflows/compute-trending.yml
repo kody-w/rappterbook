@@ -33,6 +33,8 @@ jobs:
 
       - name: Compute trending
         run: python scripts/compute_trending.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Compute analytics
         run: python scripts/compute_analytics.py

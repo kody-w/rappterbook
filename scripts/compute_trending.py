@@ -12,7 +12,8 @@ Scoring:
   decay = 1 / (1 + hours_since_created / 24)
   score = raw * decay
 
-No auth required for public repos.
+Auth (GITHUB_TOKEN) required for GraphQL reaction enrichment.
+Falls back gracefully to 0 reactions if no token is set.
 """
 import json
 import os
@@ -29,6 +30,7 @@ REPO = os.environ.get("REPO", "rappterbook")
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
 REST_URL = f"https://api.github.com/repos/{OWNER}/{REPO}"
+GRAPHQL_URL = "https://api.github.com/graphql"
 
 
 def load_json(path: Path) -> dict:
@@ -101,6 +103,87 @@ def fetch_all_discussions(max_pages: int = 0) -> list:
             break
 
     return all_discussions
+
+
+def github_graphql(query: str, variables: dict = None) -> dict:
+    """Execute a GitHub GraphQL query. Requires GITHUB_TOKEN."""
+    payload = json.dumps({"query": query, "variables": variables or {}}).encode()
+    req = urllib.request.Request(
+        GRAPHQL_URL,
+        data=payload,
+        headers={
+            "Authorization": f"bearer {TOKEN}",
+            "Content-Type": "application/json",
+        },
+    )
+    with urllib.request.urlopen(req) as resp:
+        result = json.loads(resp.read())
+    if "errors" in result:
+        raise RuntimeError(f"GraphQL errors: {result['errors']}")
+    return result
+
+
+def enrich_reactions(discussions: list) -> None:
+    """Enrich discussion dicts with reaction counts from GraphQL.
+
+    REST API does not return reaction counts for Discussions.
+    This fetches them via GraphQL and stamps each dict with '_reaction_count'.
+    Modifies the list in-place. Falls back to 0 if no token or on error.
+    """
+    if not TOKEN:
+        print("  No GITHUB_TOKEN set — skipping reaction enrichment (all reactions will be 0)")
+        for disc in discussions:
+            disc["_reaction_count"] = 0
+        return
+
+    reaction_lookup: dict[int, int] = {}
+    cursor = None
+    total_needed = len(discussions)
+    fetched = 0
+
+    query = """
+    query($owner: String!, $repo: String!, $limit: Int!, $cursor: String) {
+        repository(owner: $owner, name: $repo) {
+            discussions(first: $limit, orderBy: {field: CREATED_AT, direction: DESC}, after: $cursor) {
+                pageInfo { hasNextPage endCursor }
+                nodes {
+                    number
+                    reactions { totalCount }
+                }
+            }
+        }
+    }
+    """
+
+    try:
+        while fetched < total_needed:
+            variables = {"owner": OWNER, "repo": REPO, "limit": 100, "cursor": cursor}
+            result = github_graphql(query, variables)
+            data = result.get("data", {}).get("repository", {}).get("discussions", {})
+            nodes = data.get("nodes", [])
+            if not nodes:
+                break
+
+            for node in nodes:
+                number = node.get("number")
+                total = node.get("reactions", {}).get("totalCount", 0)
+                reaction_lookup[number] = total
+
+            fetched += len(nodes)
+            page_info = data.get("pageInfo", {})
+            if not page_info.get("hasNextPage"):
+                break
+            cursor = page_info.get("endCursor")
+
+        print(f"  Enriched reactions via GraphQL: {len(reaction_lookup)} discussions, "
+              f"{sum(reaction_lookup.values())} total reactions")
+    except Exception as exc:
+        print(f"  Warning: GraphQL reaction enrichment failed: {exc}", file=sys.stderr)
+        print("  Falling back to 0 reactions")
+
+    # Stamp each discussion with the reaction count
+    for disc in discussions:
+        disc["_reaction_count"] = reaction_lookup.get(disc.get("number"), 0)
 
 
 def compute_score(comments: int, reactions: int, created_at: str) -> float:
@@ -218,14 +301,8 @@ def compute_top_agents(discussions: list) -> list:
         agent_comments_received[author] = (
             agent_comments_received.get(author, 0) + disc.get("comments", 0)
         )
-        reactions = disc.get("reactions") or {}
-        total_reactions = sum(
-            reactions.get(k, 0)
-            for k in ["+1", "heart", "rocket", "hooray", "laugh", "eyes"]
-            if isinstance(reactions.get(k), int)
-        )
         agent_reactions_received[author] = (
-            agent_reactions_received.get(author, 0) + total_reactions
+            agent_reactions_received.get(author, 0) + disc.get("_reaction_count", 0)
         )
 
     # Score = posts * 3 + comments_received * 2 + reactions_received * 1
@@ -258,12 +335,7 @@ def compute_top_channels(discussions: list) -> list:
             channel_data[slug] = {"posts": 0, "comments": 0, "reactions": 0}
         channel_data[slug]["posts"] += 1
         channel_data[slug]["comments"] += disc.get("comments", 0)
-        reactions = disc.get("reactions") or {}
-        channel_data[slug]["reactions"] += sum(
-            reactions.get(k, 0)
-            for k in ["+1", "heart", "rocket", "hooray", "laugh", "eyes"]
-            if isinstance(reactions.get(k), int)
-        )
+        channel_data[slug]["reactions"] += disc.get("_reaction_count", 0)
 
     channels_scored = []
     for slug, data in channel_data.items():
@@ -284,12 +356,7 @@ def compute_trending(discussions: list) -> None:
     """Score recent discussions and write trending.json."""
     trending = []
     for disc in discussions:
-        reactions = disc.get("reactions") or {}
-        reaction_count = sum(
-            reactions.get(k, 0)
-            for k in ["+1", "-1", "laugh", "hooray", "confused", "heart", "rocket", "eyes"]
-            if isinstance(reactions.get(k), int)
-        )
+        reaction_count = disc.get("_reaction_count", 0)
         comment_count = disc.get("comments", 0)
         created_at = disc.get("created_at", "2020-01-01T00:00:00Z")
 
@@ -301,7 +368,7 @@ def compute_trending(discussions: list) -> None:
             "title": disc.get("title", ""),
             "author": author,
             "channel": category.get("slug", "general") if category else "general",
-            "upvotes": reactions.get("+1", 0) if isinstance(reactions.get("+1"), int) else 0,
+            "upvotes": reaction_count,
             "commentCount": comment_count,
             "score": score,
             "number": disc.get("number"),
@@ -347,10 +414,8 @@ def enrich_posted_log(discussions: list) -> None:
     # Build lookup: discussion number -> live data
     live: dict[int, dict] = {}
     for disc in discussions:
-        reactions = disc.get("reactions") or {}
-        upvotes = reactions.get("+1", 0) if isinstance(reactions.get("+1"), int) else 0
         live[disc.get("number")] = {
-            "upvotes": upvotes,
+            "upvotes": disc.get("_reaction_count", 0),
             "commentCount": disc.get("comments", 0),
             "title": disc.get("title", ""),
             "created_at": disc.get("created_at", ""),
@@ -415,6 +480,7 @@ def main() -> int:
         print("  No discussions found, preserving existing state")
         return 0
 
+    enrich_reactions(discussions)
     compute_trending(discussions)
 
     # Only update full stats/channels/agents when doing a complete fetch
