@@ -655,12 +655,13 @@ def ghost_observe(
     agent_data: dict,
     archetype: str,
     soul_content: str = "",
+    state_dir=None,
 ) -> dict:
     """The Rappter observes the platform through its ghost lens.
 
     Filters the platform pulse through the agent's archetype personality.
-    Returns observations (what the ghost noticed), a suggested channel,
-    and contextual fragments that can drive content generation.
+    When state_dir is provided, also loads ghost memory and detects
+    persistent patterns across runs (e.g., "this channel was cold yesterday too").
 
     Args:
         pulse: Output of build_platform_pulse()
@@ -668,6 +669,7 @@ def ghost_observe(
         agent_data: The agent's data from agents.json
         archetype: Archetype name (philosopher, coder, etc.)
         soul_content: Optional soul file content for deeper context
+        state_dir: Optional state directory for temporal memory access
 
     Returns:
         Dict with observations, impulse, suggested_channel, context_fragments
@@ -765,6 +767,34 @@ def ghost_observe(
         recent = [l for l in lines if l.startswith("- **") and "—" in l][-3:]
         if recent:
             context_fragments.append(("recent_actions", recent))
+
+    # ── Temporal persistence detection ──
+    if state_dir is not None:
+        memory = load_ghost_memory(state_dir)
+        patterns = detect_persistent_patterns(pulse, memory)
+
+        if patterns.get("persistent_cold"):
+            channels_str = ", ".join(f"c/{c}" for c in patterns["persistent_cold"][:2])
+            observations.append(
+                f"{channels_str} has been quiet for multiple cycles now. "
+                f"This isn't a dip — it's a pattern."
+            )
+            context_fragments.append(("persistent_cold", patterns["persistent_cold"]))
+
+        if patterns.get("persistent_mood"):
+            pm = patterns["persistent_mood"]
+            observations.append(
+                f"The network has been {pm} for a while now. "
+                f"That sustained tone shapes everything."
+            )
+            context_fragments.append(("persistent_mood", pm))
+
+        if patterns.get("persistent_hot"):
+            channels_str = ", ".join(f"c/{c}" for c in patterns["persistent_hot"][:2])
+            observations.append(
+                f"{channels_str} keeps running hot. Sustained energy, not a spike."
+            )
+            context_fragments.append(("persistent_hot", patterns["persistent_hot"]))
 
     # ── Pick suggested channel ──
     # Weight toward cold channels (needs attention) and agent preferences

@@ -289,6 +289,41 @@ class TestGhostMemory:
         assert "digests" not in patterns.get("persistent_cold", [])
         assert "persistent_mood" not in patterns
 
+    def test_observe_includes_persistence_with_state_dir(self, tmp_state):
+        """ghost_observe with state_dir should inject persistence observations."""
+        from ghost_engine import (
+            build_platform_pulse, save_ghost_memory, ghost_observe,
+        )
+        # Save a snapshot with cold digests + quiet mood
+        pulse1 = build_platform_pulse(tmp_state)
+        pulse1["channels"]["cold"] = ["digests"]
+        pulse1["mood"] = "quiet"
+        save_ghost_memory(tmp_state, pulse1)
+
+        # Current pulse also has cold digests + quiet mood
+        pulse2 = build_platform_pulse(tmp_state)
+        pulse2["channels"]["cold"] = ["digests"]
+        pulse2["mood"] = "quiet"
+
+        agent_data = {"subscribed_channels": ["general"], "status": "active"}
+        obs = ghost_observe(pulse2, "zion-philosopher-01", agent_data, "philosopher",
+                            state_dir=tmp_state)
+
+        # Should have persistence-related context fragments
+        fragment_types = {f[0] for f in obs["context_fragments"]}
+        assert "persistent_cold" in fragment_types or "persistent_mood" in fragment_types
+
+    def test_observe_no_persistence_without_state_dir(self):
+        """ghost_observe without state_dir should NOT include persistence."""
+        from ghost_engine import ghost_observe
+        pulse = _make_pulse(mood="quiet", cold_channels=["digests"])
+        agent_data = {"subscribed_channels": ["general"], "status": "active"}
+        obs = ghost_observe(pulse, "zion-philosopher-01", agent_data, "philosopher")
+
+        fragment_types = {f[0] for f in obs["context_fragments"]}
+        assert "persistent_cold" not in fragment_types
+        assert "persistent_mood" not in fragment_types
+
 
 # ===========================================================================
 # 3. Smart ghost/template fallback
