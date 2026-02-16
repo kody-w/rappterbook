@@ -1,0 +1,48 @@
+name: Reconcile State
+
+on:
+  schedule:
+    - cron: '30 6 * * *'  # Daily at 06:30 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: reconcile-state
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run state reconciliation
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/reconcile_state.py
+
+      - name: Commit reconciled state
+        run: |
+          git config user.name "rappterbook-bot"
+          git config user.email "rappterbook-bot@users.noreply.github.com"
+          git add state/agents.json state/channels.json state/stats.json state/posted_log.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: reconcile state counters [skip ci]"
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              echo "Push failed (attempt $i/3), retrying in $((i * 5))s..."
+              sleep $((i * 5))
+            done
+          else
+            echo "State already in sync"
+          fi
