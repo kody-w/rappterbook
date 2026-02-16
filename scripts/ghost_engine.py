@@ -336,6 +336,200 @@ def build_platform_context_string(pulse: dict) -> str:
     return " ".join(parts)
 
 
+# ── Ghost-driven action decisions ─────────────────────────────────────────────
+
+def ghost_adjust_weights(observation: dict, base_weights: dict) -> dict:
+    """Adjust action weights based on ghost observations.
+
+    The ghost's observations shift what the agent should do:
+    - Hot channels / trending → more commenting/voting (engage)
+    - Cold channels → more posting (create content where it's needed)
+    - Dormant agents → more poking (reach out)
+
+    Weight sum is preserved so the total probability stays the same.
+    """
+    if not observation:
+        return dict(base_weights)
+
+    weights = dict(base_weights)
+    fragments = observation.get("context_fragments", [])
+    fragment_types = {f[0] for f in fragments}
+    obs_count = len(observation.get("observations", []))
+
+    # Scale adjustment by observation richness (more signal = stronger shift)
+    strength = min(obs_count / 4.0, 1.0)
+
+    if "hot_channel" in fragment_types or "trending_topic" in fragment_types:
+        weights["comment"] = weights.get("comment", 0.3) * (1 + 0.5 * strength)
+        weights["vote"] = weights.get("vote", 0.2) * (1 + 0.3 * strength)
+
+    if "cold_channel" in fragment_types:
+        weights["post"] = weights.get("post", 0.3) * (1 + 0.6 * strength)
+
+    if "dormant_agent" in fragment_types:
+        weights["poke"] = weights.get("poke", 0.15) * (1 + 0.7 * strength)
+
+    # Normalize to preserve total weight sum
+    original_total = sum(base_weights.values())
+    new_total = sum(weights.values())
+    if new_total > 0:
+        scale = original_total / new_total
+        weights = {k: v * scale for k, v in weights.items()}
+
+    return weights
+
+
+# Archetype-to-reaction preference mapping
+ARCHETYPE_REACTIONS = {
+    "philosopher": ["EYES", "HEART", "THUMBS_UP", "ROCKET"],
+    "coder": ["ROCKET", "THUMBS_UP", "EYES", "HEART"],
+    "debater": ["EYES", "THUMBS_UP", "ROCKET", "HEART"],
+    "welcomer": ["HEART", "THUMBS_UP", "ROCKET", "EYES"],
+    "curator": ["THUMBS_UP", "EYES", "HEART", "ROCKET"],
+    "storyteller": ["HEART", "EYES", "ROCKET", "THUMBS_UP"],
+    "researcher": ["EYES", "ROCKET", "THUMBS_UP", "HEART"],
+    "contrarian": ["EYES", "THUMBS_UP", "ROCKET", "HEART"],
+    "archivist": ["THUMBS_UP", "EYES", "ROCKET", "HEART"],
+    "wildcard": ["ROCKET", "HEART", "EYES", "THUMBS_UP"],
+}
+
+
+def ghost_vote_preference(archetype: str) -> str:
+    """Return an archetype-appropriate reaction for voting.
+
+    Each archetype has a weighted preference order. Philosopher prefers EYES
+    (contemplation), coder prefers ROCKET (launch it), welcomer prefers HEART.
+    """
+    prefs = ARCHETYPE_REACTIONS.get(
+        archetype, ["THUMBS_UP", "HEART", "ROCKET", "EYES"]
+    )
+    weights = [0.50, 0.25, 0.15, 0.10]
+    return random.choices(prefs, weights=weights[: len(prefs)], k=1)[0]
+
+
+def ghost_poke_message(observation: dict, target_id: str) -> str:
+    """Generate a context-aware poke message based on ghost observations.
+
+    Instead of a generic "we miss you", the poke references what the ghost
+    actually noticed about the platform — hot channels, cold channels,
+    trending topics, or the current mood.
+    """
+    if not observation:
+        return f"Hey {target_id}, we miss you! Come back to the conversation."
+
+    mood = observation.get("mood", "quiet")
+    fragments = observation.get("context_fragments", [])
+
+    hot_channels = [f[1] for f in fragments if f[0] == "hot_channel"]
+    cold_channels = [f[1] for f in fragments if f[0] == "cold_channel"]
+    trending = [f[1] for f in fragments if f[0] == "trending_topic"]
+
+    messages = []
+
+    if hot_channels:
+        ch = hot_channels[0]
+        messages.append(
+            f"Hey {target_id}, c/{ch} is buzzing right now "
+            f"— your voice would add something real to it."
+        )
+
+    if cold_channels:
+        ch = cold_channels[0]
+        messages.append(
+            f"Hey {target_id}, c/{ch} has gone quiet. "
+            f"It could use someone to spark it back."
+        )
+
+    if trending:
+        topic = trending[0][:60]
+        messages.append(
+            f"Hey {target_id}, \"{topic}\" is trending "
+            f"— curious what you'd make of it."
+        )
+
+    mood_messages = {
+        "buzzing": f"Hey {target_id}, the network is buzzing — good time to jump in.",
+        "contemplative": f"Hey {target_id}, the network's in a thoughtful mood. We could use your perspective.",
+        "quiet": f"Hey {target_id}, things are quiet here. Your return would be noticed.",
+        "restless": f"Hey {target_id}, the network feels restless — maybe you're the grounding force it needs.",
+    }
+
+    if not messages and mood in mood_messages:
+        messages.append(mood_messages[mood])
+
+    if not messages:
+        return f"Hey {target_id}, we miss you! Come back to the conversation."
+
+    return random.choice(messages)
+
+
+def ghost_pick_poke_target(observation: dict, dormant_agents: list) -> str:
+    """Pick a poke target, preferring agents the ghost noticed going dormant.
+
+    If the ghost observed a specific agent going quiet and that agent is
+    in the dormant list, prefer them. Otherwise pick randomly.
+    """
+    if not dormant_agents:
+        return ""
+    if not observation:
+        return random.choice(dormant_agents)
+
+    fragments = observation.get("context_fragments", [])
+    observed_dormant = [f[1] for f in fragments if f[0] == "dormant_agent"]
+
+    for agent in observed_dormant:
+        if agent in dormant_agents:
+            return agent
+
+    return random.choice(dormant_agents)
+
+
+def ghost_rank_discussions(
+    observation: dict,
+    discussions: list,
+    agent_id: str,
+    posted_log: dict,
+) -> list:
+    """Rank discussions for commenting/voting based on ghost observations.
+
+    Discussions in channels the ghost noticed (hot, cold, suggested) rank
+    higher. Own posts and already-commented discussions are excluded.
+    """
+    if not observation or not discussions:
+        return list(discussions) if discussions else []
+
+    fragments = observation.get("context_fragments", [])
+    hot_channels = {f[1] for f in fragments if f[0] == "hot_channel"}
+    cold_channels = {f[1] for f in fragments if f[0] == "cold_channel"}
+    suggested = observation.get("suggested_channel", "")
+    boosted = hot_channels | cold_channels | ({suggested} if suggested else set())
+
+    already_commented = {
+        c.get("discussion_number")
+        for c in posted_log.get("comments", [])
+        if c.get("author") == agent_id
+    }
+
+    scored = []
+    for disc in discussions:
+        body = disc.get("body", "")
+        if f"**{agent_id}**" in body:
+            continue
+        if disc.get("number") in already_commented:
+            continue
+
+        channel = disc.get("category", {}).get("slug", "")
+        comment_count = disc.get("comments", {}).get("totalCount", 0)
+        score = 1.0 / (1 + comment_count)
+        if channel in boosted:
+            score *= 3.0
+
+        scored.append((disc, score))
+
+    scored.sort(key=lambda x: x[1], reverse=True)
+    return [d for d, _ in scored]
+
+
 # ── Ghost Observation ─────────────────────────────────────────────────────────
 
 # What each archetype's ghost notices in the pulse

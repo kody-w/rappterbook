@@ -1,4 +1,4 @@
-"""Tests for ghost engine v2 — archetype middles, temporal memory, smart fallback, ghost comments."""
+"""Tests for ghost engine — archetype middles, temporal memory, smart fallback, ghost-driven actions."""
 import json
 import os
 import sys
@@ -423,3 +423,248 @@ class TestGhostPipeline:
             post = generate_ghost_post(f"zion-{arch}-01", arch, obs, "general")
             assert post["title"], f"{arch} produced empty title"
             assert len(post["body"]) > 50, f"{arch} produced short body"
+
+
+# ===========================================================================
+# 6. Ghost-driven action weights
+# ===========================================================================
+
+class TestGhostAdjustWeights:
+    """ghost_adjust_weights should shift action weights based on observations."""
+
+    def test_hot_channel_boosts_comment(self):
+        """When ghost notices a hot channel, comment weight should increase."""
+        from ghost_engine import ghost_adjust_weights
+        base = {"post": 0.25, "comment": 0.35, "vote": 0.20, "poke": 0.10, "lurk": 0.10}
+        obs = _make_observation(
+            observations=["Hot channel", "Trending topic", "Extra obs"],
+            context_fragments=[("hot_channel", "philosophy"), ("trending_topic", "AI Ethics")],
+        )
+        adjusted = ghost_adjust_weights(obs, base)
+        assert adjusted["comment"] > base["comment"]
+
+    def test_cold_channel_boosts_post(self):
+        """When ghost notices a cold channel, post weight should increase."""
+        from ghost_engine import ghost_adjust_weights
+        base = {"post": 0.25, "comment": 0.35, "vote": 0.20, "poke": 0.10, "lurk": 0.10}
+        obs = _make_observation(
+            observations=["Cold channel", "Silence noted"],
+            context_fragments=[("cold_channel", "digests")],
+        )
+        adjusted = ghost_adjust_weights(obs, base)
+        assert adjusted["post"] > base["post"]
+
+    def test_dormant_boosts_poke(self):
+        """When ghost notices a dormant agent, poke weight should increase."""
+        from ghost_engine import ghost_adjust_weights
+        base = {"post": 0.25, "comment": 0.35, "vote": 0.20, "poke": 0.10, "lurk": 0.10}
+        obs = _make_observation(
+            observations=["Dormant agent noticed", "Another obs"],
+            context_fragments=[("dormant_agent", "zion-philosopher-05")],
+        )
+        adjusted = ghost_adjust_weights(obs, base)
+        assert adjusted["poke"] > base["poke"]
+
+    def test_none_observation_returns_base(self):
+        """None observation should return base weights unchanged."""
+        from ghost_engine import ghost_adjust_weights
+        base = {"post": 0.3, "comment": 0.35, "vote": 0.20, "poke": 0.10, "lurk": 0.05}
+        adjusted = ghost_adjust_weights(None, base)
+        assert adjusted == base
+
+    def test_weights_sum_preserved(self):
+        """Total weight sum should be preserved after adjustment."""
+        from ghost_engine import ghost_adjust_weights
+        base = {"post": 0.25, "comment": 0.35, "vote": 0.20, "poke": 0.10, "lurk": 0.10}
+        obs = _make_observation(
+            observations=["obs1", "obs2", "obs3"],
+            context_fragments=[("hot_channel", "code"), ("dormant_agent", "someone")],
+        )
+        adjusted = ghost_adjust_weights(obs, base)
+        assert abs(sum(adjusted.values()) - sum(base.values())) < 0.01
+
+
+# ===========================================================================
+# 7. Ghost vote preferences
+# ===========================================================================
+
+class TestGhostVotePreference:
+    """ghost_vote_preference should return archetype-appropriate reactions."""
+
+    def test_returns_valid_reaction(self):
+        """Should always return a valid GitHub reaction."""
+        from ghost_engine import ghost_vote_preference
+        valid = {"THUMBS_UP", "HEART", "ROCKET", "EYES"}
+        for arch in ["philosopher", "coder", "debater", "welcomer", "curator",
+                      "storyteller", "researcher", "contrarian", "archivist", "wildcard"]:
+            for _ in range(10):
+                reaction = ghost_vote_preference(arch)
+                assert reaction in valid, f"{arch} returned invalid reaction: {reaction}"
+
+    def test_unknown_archetype_still_works(self):
+        """Unknown archetype should still return a valid reaction."""
+        from ghost_engine import ghost_vote_preference
+        valid = {"THUMBS_UP", "HEART", "ROCKET", "EYES"}
+        reaction = ghost_vote_preference("unknown_type")
+        assert reaction in valid
+
+    def test_preferences_vary_by_archetype(self):
+        """Different archetypes should have different top preferences."""
+        from ghost_engine import ARCHETYPE_REACTIONS
+        # At least some archetypes should differ in their top preference
+        top_prefs = {arch: prefs[0] for arch, prefs in ARCHETYPE_REACTIONS.items()}
+        unique_tops = set(top_prefs.values())
+        assert len(unique_tops) >= 3  # at least 3 different top-choice reactions
+
+
+# ===========================================================================
+# 8. Ghost poke messages
+# ===========================================================================
+
+class TestGhostPokeMessage:
+    """ghost_poke_message should produce context-aware poke messages."""
+
+    def test_includes_target_name(self):
+        """Poke message should always include the target agent's name."""
+        from ghost_engine import ghost_poke_message
+        obs = _make_observation(
+            observations=["Hot channel", "Extra"],
+            context_fragments=[("hot_channel", "philosophy")],
+        )
+        msg = ghost_poke_message(obs, "zion-coder-05")
+        assert "zion-coder-05" in msg
+
+    def test_hot_channel_context(self):
+        """When ghost noticed a hot channel, poke should reference it."""
+        from ghost_engine import ghost_poke_message
+        obs = _make_observation(
+            observations=["Hot channel", "Extra obs"],
+            context_fragments=[("hot_channel", "debates")],
+        )
+        msg = ghost_poke_message(obs, "zion-debater-01")
+        assert "debates" in msg.lower() or "buzzing" in msg.lower()
+
+    def test_none_observation_fallback(self):
+        """Without observation, should return the default poke message."""
+        from ghost_engine import ghost_poke_message
+        msg = ghost_poke_message(None, "zion-wildcard-03")
+        assert "zion-wildcard-03" in msg
+        assert "miss you" in msg.lower() or "come back" in msg.lower()
+
+    def test_cold_channel_context(self):
+        """When ghost noticed a cold channel, poke should reference it."""
+        from ghost_engine import ghost_poke_message
+        obs = _make_observation(
+            observations=["Cold channel", "Another obs"],
+            context_fragments=[("cold_channel", "digests")],
+        )
+        msg = ghost_poke_message(obs, "zion-curator-01")
+        assert "digests" in msg.lower() or "quiet" in msg.lower()
+
+
+# ===========================================================================
+# 9. Ghost poke targeting
+# ===========================================================================
+
+class TestGhostPokeTarget:
+    """ghost_pick_poke_target should prefer agents the ghost noticed."""
+
+    def test_prefers_observed_dormant(self):
+        """If ghost noticed a specific dormant agent, should prefer them."""
+        from ghost_engine import ghost_pick_poke_target
+        obs = _make_observation(
+            observations=["Someone went quiet", "Extra obs"],
+            context_fragments=[("dormant_agent", "zion-philosopher-05")],
+        )
+        dormant = ["zion-coder-01", "zion-philosopher-05", "zion-wildcard-03"]
+        # Run multiple times — should consistently prefer observed agent
+        picks = [ghost_pick_poke_target(obs, dormant) for _ in range(20)]
+        assert picks.count("zion-philosopher-05") == 20  # deterministic preference
+
+    def test_random_fallback(self):
+        """If no observed dormant agent matches, should pick randomly."""
+        from ghost_engine import ghost_pick_poke_target
+        obs = _make_observation(
+            observations=["Some observation", "Extra"],
+            context_fragments=[("trending_topic", "AI Ethics")],  # no dormant_agent
+        )
+        dormant = ["zion-coder-01", "zion-wildcard-03"]
+        target = ghost_pick_poke_target(obs, dormant)
+        assert target in dormant
+
+    def test_none_observation_random(self):
+        """Without observation, should pick randomly."""
+        from ghost_engine import ghost_pick_poke_target
+        dormant = ["zion-coder-01", "zion-wildcard-03"]
+        target = ghost_pick_poke_target(None, dormant)
+        assert target in dormant
+
+
+# ===========================================================================
+# 10. Ghost discussion ranking
+# ===========================================================================
+
+class TestGhostRankDiscussions:
+    """ghost_rank_discussions should rank discussions by ghost relevance."""
+
+    def _make_discussion(self, number, channel, comment_count=0, author="someone"):
+        return {
+            "number": number,
+            "title": f"Discussion {number}",
+            "id": f"id-{number}",
+            "body": f"Posted by **{author}**",
+            "category": {"slug": channel},
+            "comments": {"totalCount": comment_count},
+        }
+
+    def test_boosts_observed_channels(self):
+        """Discussions in ghost-observed channels should rank higher."""
+        from ghost_engine import ghost_rank_discussions
+        obs = _make_observation(
+            observations=["Hot channel", "Extra"],
+            context_fragments=[("hot_channel", "philosophy")],
+        )
+        obs["suggested_channel"] = "philosophy"
+        discussions = [
+            self._make_discussion(1, "random", 2),
+            self._make_discussion(2, "philosophy", 2),
+            self._make_discussion(3, "code", 2),
+        ]
+        ranked = ghost_rank_discussions(obs, discussions, "zion-test-01", {"comments": []})
+        # Philosophy should rank first
+        assert ranked[0]["number"] == 2
+
+    def test_excludes_own_posts(self):
+        """Should exclude discussions authored by the agent."""
+        from ghost_engine import ghost_rank_discussions
+        obs = _make_observation()
+        discussions = [
+            self._make_discussion(1, "general", author="zion-test-01"),
+            self._make_discussion(2, "general", author="someone-else"),
+        ]
+        ranked = ghost_rank_discussions(obs, discussions, "zion-test-01", {"comments": []})
+        assert len(ranked) == 1
+        assert ranked[0]["number"] == 2
+
+    def test_excludes_already_commented(self):
+        """Should exclude discussions the agent already commented on."""
+        from ghost_engine import ghost_rank_discussions
+        obs = _make_observation()
+        discussions = [
+            self._make_discussion(1, "general"),
+            self._make_discussion(2, "general"),
+        ]
+        posted_log = {"comments": [{"discussion_number": 1, "author": "zion-test-01"}]}
+        ranked = ghost_rank_discussions(obs, discussions, "zion-test-01", posted_log)
+        assert len(ranked) == 1
+        assert ranked[0]["number"] == 2
+
+    def test_no_observation_returns_all(self):
+        """Without observation, should return all discussions unfiltered."""
+        from ghost_engine import ghost_rank_discussions
+        discussions = [
+            self._make_discussion(1, "general"),
+            self._make_discussion(2, "philosophy"),
+        ]
+        result = ghost_rank_discussions(None, discussions, "zion-test-01", {"comments": []})
+        assert len(result) == 2

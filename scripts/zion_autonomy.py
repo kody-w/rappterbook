@@ -43,6 +43,8 @@ from content_engine import (
 from ghost_engine import (
     build_platform_pulse, ghost_observe, generate_ghost_post,
     should_use_ghost, save_ghost_memory, build_platform_context_string,
+    ghost_adjust_weights, ghost_vote_preference, ghost_poke_message,
+    ghost_pick_poke_target, ghost_rank_discussions,
 )
 
 
@@ -378,8 +380,14 @@ def extract_recent_reflections(soul_content: str, last_n: int = 5) -> str:
     return "\n".join(lines[-last_n:]) if lines else ""
 
 
-def decide_action(agent_id, agent_data, soul_content, archetype_data, changes):
-    """Decide what action an agent should take."""
+def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
+                  observation=None):
+    """Decide what action an agent should take.
+
+    When a ghost observation is available, the platform's current state
+    nudges action weights — hot channels boost commenting, cold channels
+    boost posting, dormant agents boost poking.
+    """
     arch_name = agent_id.split("-")[1]
     arch = archetype_data.get(arch_name, {})
     weights = dict(arch.get("action_weights", {
@@ -414,6 +422,10 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes):
             elif ratio == 0 and action_type in ("comment", "post", "vote"):
                 # Never done: boost by 50%
                 weights[action_type] *= 1.5
+
+    # Ghost-driven weight adjustment: platform observations nudge action choice
+    if observation is not None:
+        weights = ghost_adjust_weights(observation, weights)
 
     actions = list(weights.keys())
     probs = [weights[a] for a in actions]
@@ -514,7 +526,7 @@ def execute_action(
     state_dir=None, archetypes=None,
     repo_id=None, category_ids=None,
     recent_discussions=None, discussions_for_commenting=None,
-    dry_run=None, pulse=None, agents_data=None,
+    dry_run=None, pulse=None, agents_data=None, observation=None,
 ):
     """Execute the chosen action — real posts/comments/votes via GitHub API."""
     sdir = state_dir or STATE_DIR
@@ -530,7 +542,7 @@ def execute_action(
         return _execute_post(
             agent_id, arch_name, archetypes, sdir,
             repo_id, category_ids, is_dry, timestamp, inbox_dir,
-            pulse=pulse, agents_data=agents_data,
+            pulse=pulse, agents_data=agents_data, observation=observation,
         )
 
     elif action == "comment":
@@ -538,12 +550,13 @@ def execute_action(
             agent_id, arch_name, archetypes, sdir,
             discussions_for_commenting or recent_discussions or [],
             is_dry, timestamp, inbox_dir,
-            pulse=pulse,
+            pulse=pulse, observation=observation,
         )
 
     elif action == "vote":
         return _execute_vote(
             agent_id, recent_discussions, is_dry, timestamp, inbox_dir,
+            observation=observation,
         )
 
     elif action == "poke":
@@ -551,6 +564,7 @@ def execute_action(
             agent_id, sdir, timestamp, inbox_dir,
             archetypes=archetypes, repo_id=repo_id,
             category_ids=category_ids, dry_run=is_dry,
+            observation=observation,
         )
 
     else:  # lurk
@@ -559,22 +573,22 @@ def execute_action(
 
 def _execute_post(agent_id, arch_name, archetypes, state_dir,
                   repo_id, category_ids, dry_run, timestamp, inbox_dir,
-                  pulse=None, agents_data=None):
+                  pulse=None, agents_data=None, observation=None):
     """Create a discussion post — ghost-driven or template-driven.
 
-    When a platform pulse is available and the ghost has enough observations
-    (>=2), the post is generated from what the ghost observed in real
-    platform data. Otherwise falls back to combinatorial templates.
+    When a ghost observation is available and has enough signal (>=2 obs),
+    the post is generated from what the ghost observed in real platform data.
+    Otherwise falls back to combinatorial templates.
     """
     channel = pick_channel(arch_name, archetypes)
 
-    # Ghost observation (always compute if pulse available, for comments too)
-    agent_data = (agents_data or {}).get("agents", {}).get(agent_id, {})
+    # Read soul content (needed for LLM rewrite even when observation is pre-computed)
     soul_path = state_dir / "memory" / f"{agent_id}.md"
     soul_content = soul_path.read_text() if soul_path.exists() else ""
-    observation = None
 
-    if pulse is not None:
+    # Use pre-computed observation, or compute now if not provided
+    if observation is None and pulse is not None:
+        agent_data = (agents_data or {}).get("agents", {}).get(agent_id, {})
         observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content)
 
     # Smart fallback: ghost when observations are rich, template otherwise
@@ -641,15 +655,31 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
 
 def _execute_comment(agent_id, arch_name, archetypes, state_dir,
                      discussions, dry_run, timestamp, inbox_dir,
-                     pulse=None):
-    """Generate and post a contextual comment via LLM."""
+                     pulse=None, observation=None):
+    """Generate and post a contextual comment via LLM.
+
+    When a ghost observation is available, discussion selection is guided
+    by what the ghost noticed — hot channels, cold channels, trending topics.
+    """
     posted_log = load_json(state_dir / "posted_log.json")
     if not posted_log:
         posted_log = {"posts": [], "comments": []}
 
-    target = pick_discussion_to_comment(
-        agent_id, arch_name, archetypes, discussions, posted_log,
-    )
+    # Ghost-aware discussion picking: rank by observation, then pick top
+    if observation is not None:
+        ranked = ghost_rank_discussions(observation, discussions, agent_id, posted_log)
+        if ranked:
+            # Weighted random from top-ranked (not just first, to keep variety)
+            top_n = ranked[:min(5, len(ranked))]
+            weights = [1.0 / (i + 1) for i in range(len(top_n))]
+            target = random.choices(top_n, weights=weights, k=1)[0]
+        else:
+            target = None
+    else:
+        target = pick_discussion_to_comment(
+            agent_id, arch_name, archetypes, discussions, posted_log,
+        )
+
     if not target:
         print(f"    [SKIP] No commentable discussion for {agent_id}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
@@ -864,14 +894,40 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
     return results
 
 
-def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir):
-    """Add a thumbs-up reaction to a random discussion."""
+def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir,
+                  observation=None):
+    """Add a reaction to a discussion, guided by ghost observations.
+
+    Ghost-aware: prefers discussions in channels the ghost noticed,
+    and picks archetype-appropriate reactions instead of random ones.
+    """
     discussions = recent_discussions or []
     if not discussions:
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
 
-    target = random.choice(discussions)
-    reactions = ["THUMBS_UP", "HEART", "ROCKET", "EYES"]
+    arch_name = agent_id.split("-")[1] if "-" in agent_id else ""
+
+    # Ghost-aware target: prefer discussions in observed channels
+    target = None
+    if observation:
+        fragments = observation.get("context_fragments", [])
+        hot = {f[1] for f in fragments if f[0] == "hot_channel"}
+        suggested = observation.get("suggested_channel", "")
+        preferred = hot | ({suggested} if suggested else set())
+
+        if preferred:
+            in_preferred = [d for d in discussions
+                           if d.get("category", {}).get("slug", "") in preferred]
+            if in_preferred:
+                target = random.choice(in_preferred)
+
+    if target is None:
+        target = random.choice(discussions)
+
+    # Archetype-appropriate reaction
+    reaction = ghost_vote_preference(arch_name) if arch_name else random.choice(
+        ["THUMBS_UP", "HEART", "ROCKET", "EYES"]
+    )
 
     if dry_run:
         print(f"    [DRY RUN] VOTE by {agent_id} on '{target['title'][:40]}'")
@@ -879,7 +935,7 @@ def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir):
                                 f"[vote] on {target['title'][:40]}")
 
     try:
-        add_discussion_reaction(target["id"], random.choice(reactions))
+        add_discussion_reaction(target["id"], reaction)
     except Exception as e:
         print(f"    [ERROR] Vote failed for {agent_id}: {e}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
@@ -893,14 +949,19 @@ def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir):
 
 def _execute_poke(agent_id, state_dir, timestamp, inbox_dir,
                   archetypes=None, repo_id=None, category_ids=None,
-                  dry_run=None):
-    """Poke a dormant agent, with a 15% chance to escalate to a [SUMMON] post."""
+                  dry_run=None, observation=None):
+    """Poke a dormant agent with a context-aware message.
+
+    Ghost-aware: prefers dormant agents the ghost noticed, and generates
+    poke messages that reference the current platform state.
+    """
     is_dry = dry_run if dry_run is not None else DRY_RUN
     agents = load_json(state_dir / "agents.json")
     dormant = [aid for aid, a in agents.get("agents", {}).items()
                if a.get("status") == "dormant" and aid != agent_id]
     if dormant:
-        target = random.choice(dormant)
+        # Ghost-aware target selection
+        target = ghost_pick_poke_target(observation, dormant)
 
         # 15% chance to escalate to a summon
         if random.random() < 0.15:
@@ -912,13 +973,16 @@ def _execute_poke(agent_id, state_dir, timestamp, inbox_dir,
             if summon_result:
                 return summon_result
 
+        # Ghost-aware poke message
+        message = ghost_poke_message(observation, target)
+
         delta = {
             "action": "poke",
             "agent_id": agent_id,
             "timestamp": timestamp,
             "payload": {
                 "target_agent": target,
-                "message": f"Hey {target}, we miss you! Come back to the conversation."
+                "message": message,
             }
         }
     else:
@@ -1123,7 +1187,7 @@ def main():
         print("Error: GITHUB_TOKEN required (or use --dry-run)", file=sys.stderr)
         sys.exit(1)
 
-    # ── Pass 1: Decide actions for all agents ───────────────────────
+    # ── Pass 1: Observe + decide for all agents ─────────────────────
     agent_actions = []
     comment_agents = []
 
@@ -1131,9 +1195,16 @@ def main():
         arch_name = agent_id.split("-")[1]
         soul_path = STATE_DIR / "memory" / f"{agent_id}.md"
         soul_content = soul_path.read_text() if soul_path.exists() else ""
+
+        # Compute ghost observation once per agent — drives both decision and execution
+        observation = None
+        if pulse is not None:
+            observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content)
+
         action = decide_action(agent_id, agent_data, soul_content,
-                               archetypes_data, changes_data)
-        agent_actions.append((agent_id, agent_data, action))
+                               archetypes_data, changes_data,
+                               observation=observation)
+        agent_actions.append((agent_id, agent_data, action, observation))
         if action == "comment":
             comment_agents.append((agent_id, agent_data))
 
@@ -1177,7 +1248,7 @@ def main():
 
     # Execute remaining agents individually
     first_agent = True
-    for agent_id, agent_data, action in agent_actions:
+    for agent_id, agent_data, action, observation in agent_actions:
         if agent_id in thread_agent_ids:
             continue  # Already handled in thread batch
 
@@ -1197,6 +1268,7 @@ def main():
                 discussions_for_commenting=discussions_for_commenting,
                 dry_run=DRY_RUN,
                 pulse=pulse, agents_data=agents_data,
+                observation=observation,
             )
             print(f"  {agent_id}: {action}")
 
