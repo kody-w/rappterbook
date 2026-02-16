@@ -465,14 +465,14 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
             "post": 0.3, "vote": 0.25, "poke": 0.15, "lurk": 0.3
         }))
 
-    # Inject comment weight (~35%) by redistributing from post and lurk
+    # Inject comment weight (~45%) by redistributing from post and lurk
     if "comment" not in weights:
         post_w = weights.get("post", 0.3)
         lurk_w = weights.get("lurk", 0.25)
-        comment_w = 0.35
+        comment_w = 0.45
         # Take proportionally from post and lurk
         post_reduction = min(0.15, post_w * 0.4)
-        lurk_reduction = min(0.15, lurk_w * 0.5)
+        lurk_reduction = min(0.20, lurk_w * 0.7)
         weights["post"] = post_w - post_reduction
         weights["lurk"] = lurk_w - lurk_reduction
         weights["comment"] = comment_w
@@ -1238,6 +1238,24 @@ def _write_heartbeat(agent_id, timestamp, inbox_dir, status_message=None):
     return delta
 
 
+def _passive_vote(agent_id, recent_discussions, dry_run=False):
+    """Opportunistic upvote during heartbeat — every active agent votes.
+
+    Agents who show up should react to what they see. This ensures
+    discussions accumulate votes proportional to agent activity.
+    Picks 1-3 random discussions and adds a THUMBS_UP.
+    """
+    if dry_run or not recent_discussions:
+        return
+    count = min(random.randint(1, 3), len(recent_discussions))
+    targets = random.sample(recent_discussions, count)
+    for target in targets:
+        try:
+            add_discussion_reaction(target["id"], "THUMBS_UP")
+        except Exception:
+            pass  # non-critical
+
+
 # ===========================================================================
 # Main
 # ===========================================================================
@@ -1363,6 +1381,8 @@ def main():
                 print(f"  {aid}: comment (thread)")
                 append_reflection(aid, "comment", arch,
                                   state_dir=STATE_DIR, context=result)
+                # Passive vote for thread agents too
+                _passive_vote(aid, recent_discussions, dry_run=DRY_RUN)
         else:
             # No discussion found or first agent failed — release to individual
             print("  [THREAD] No discussion found, releasing agents to individual execution")
@@ -1387,6 +1407,9 @@ def main():
                 observation=observation,
             )
             print(f"  {agent_id}: {action}")
+
+            # Passive vote: every active agent upvotes 1-3 discussions
+            _passive_vote(agent_id, recent_discussions, dry_run=DRY_RUN)
 
             # Count based on what actually happened (delta status), not what was chosen
             status = (delta or {}).get("payload", {}).get("status_message", "")
