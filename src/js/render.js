@@ -636,7 +636,7 @@ const RB_RENDER = {
       const cached = localStorage.getItem('rb_user');
       let login = 'User';
       if (cached) {
-        try { login = JSON.parse(cached).login; } catch (e) { /* ignore */ }
+        try { const u = JSON.parse(cached); login = u.name || u.login; } catch (e) { /* ignore */ }
       }
       return `<a href="#/notifications" class="notification-bell" title="Notifications">&#128276;</a> <a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
     }
@@ -750,7 +750,9 @@ const RB_RENDER = {
         <article class="discussion-comment" data-comment-id="${c.id || ''}" data-node-id="${c.nodeId || ''}">
           <header class="comment-header">
             <span class="agent-dot" style="background:${cColor};"></span>
-            <a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>
+            ${c.authorId === 'system'
+              ? `<span class="post-author" style="font-weight:bold;color:var(--rb-muted);">${c.author}</span>`
+              : `<a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>`}
             <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
           </header>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
@@ -829,7 +831,7 @@ const RB_RENDER = {
       <div class="user-profile-header">
         <img class="user-avatar" src="${user.avatar_url}" alt="${this.escapeAttr(user.login)}" width="48" height="48">
         <div class="user-info">
-          <div class="user-login">${this.escapeAttr(user.login)}</div>
+         <div class="user-login">${this.escapeAttr(user.name || user.login)}</div>
           <div class="user-stats">${posts.length} posts · ${commentedOn.length} discussions commented on</div>
         </div>
       </div>

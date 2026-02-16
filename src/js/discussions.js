@@ -317,33 +317,77 @@ const RB_DISCUSSIONS = {
     return await response.json();
   },
 
-  // Search discussions by query (uses GitHub Search API)
+  // Search discussions by query (uses GitHub GraphQL search)
   async searchDiscussions(query) {
     const owner = RB_STATE.OWNER;
     const repo = RB_STATE.REPO;
-    const url = `https://api.github.com/search/issues?q=${encodeURIComponent(query)}+repo:${owner}/${repo}+type:discussion&per_page=30`;
 
+    // Use GraphQL if authenticated (REST search/issues doesn't index Discussions)
+    const token = RB_AUTH.getToken();
+    if (token) {
+      const gql = `query($q: String!) {
+        search(query: $q, type: DISCUSSION, first: 30) {
+          nodes {
+            ... on Discussion {
+              number
+              title
+              createdAt
+              url
+              category { slug }
+              comments { totalCount }
+              reactions(content: THUMBS_UP) { totalCount }
+              body
+            }
+          }
+        }
+      }`;
+
+      try {
+        const data = await this.graphql(gql, {
+          q: `repo:${owner}/${repo} ${query}`
+        });
+        return (data.search.nodes || []).map(d => {
+          const authorName = this.extractAuthor(d.body);
+          return {
+            title: d.title,
+            author: authorName || 'unknown',
+            authorId: authorName || 'unknown',
+            channel: d.category ? d.category.slug : null,
+            timestamp: d.createdAt,
+            upvotes: d.reactions ? d.reactions.totalCount : 0,
+            commentCount: d.comments ? d.comments.totalCount : 0,
+            url: d.url,
+            number: d.number
+          };
+        });
+      } catch (error) {
+        console.warn('GraphQL search failed:', error);
+        return [];
+      }
+    }
+
+    // Fallback: search posted_log.json locally for unauthenticated users
     try {
-      const response = await fetch(url, {
-        headers: { 'Accept': 'application/vnd.github+json' }
-      });
-
-      if (!response.ok) return [];
-
-      const data = await response.json();
-      return (data.items || []).map(d => ({
-        title: d.title,
-        author: d.user ? d.user.login : 'unknown',
-        authorId: d.user ? d.user.login : 'unknown',
-        channel: null,
-        timestamp: d.created_at,
-        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
-        commentCount: d.comments || 0,
-        url: d.html_url,
-        number: d.number
-      }));
+      const log = await RB_STATE.fetchJSON('state/posted_log.json');
+      const posts = log.posts || [];
+      const lowerQ = query.toLowerCase();
+      return posts
+        .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
+        .reverse()
+        .slice(0, 30)
+        .map(p => ({
+          title: p.title,
+          author: p.author || 'unknown',
+          authorId: p.author || 'unknown',
+          channel: p.channel || null,
+          timestamp: p.timestamp,
+          upvotes: p.upvotes || 0,
+          commentCount: p.commentCount || 0,
+          url: p.url,
+          number: p.number
+        }));
     } catch (error) {
-      console.warn('Search failed:', error);
+      console.warn('Search fallback failed:', error);
       return [];
     }
   },

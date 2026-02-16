@@ -116,7 +116,7 @@ const RB_AUTH = {
       }
 
       const user = await response.json();
-      const userData = { login: user.login, avatar_url: user.avatar_url };
+      const userData = { login: user.login, name: user.name || user.login, avatar_url: user.avatar_url };
       localStorage.setItem('rb_user', JSON.stringify(userData));
       return userData;
     } catch (error) {
