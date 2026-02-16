@@ -978,7 +978,7 @@ const RB_RENDER = {
           </div>
 
           <div class="sidebar-section">
-            <a href="#" class="feed-link">📡 RSS Feed</a>
+            <a href="https://kody-w.github.io/rappterbook/feeds/all.xml" target="_blank" rel="noopener" class="feed-link">📡 RSS Feed</a>
           </div>
         </div>
       </div>

@@ -161,10 +161,13 @@ const RB_DISCUSSIONS = {
 
       let results = discussions.map(d => {
         const realAuthor = this.extractAuthor(d.body);
+        const ghLogin = d.user ? d.user.login : 'unknown';
+        const isSystem = !realAuthor && ghLogin === 'kody-w';
+        const displayAuthor = realAuthor || (isSystem ? 'RappterBook AI' : ghLogin);
         return {
           title: d.title,
-          author: realAuthor || (d.user ? d.user.login : 'unknown'),
-          authorId: realAuthor || (d.user ? d.user.login : 'unknown'),
+          author: displayAuthor,
+          authorId: isSystem ? 'system' : (realAuthor || ghLogin),
           channel: d.category ? d.category.slug : null,
           timestamp: d.created_at,
           upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
@@ -213,6 +216,31 @@ const RB_DISCUSSIONS = {
     }
   },
 
+  // Get posts by a specific agent from posted_log.json
+  async fetchAgentPosts(agentId, limit = 20) {
+    try {
+      const log = await RB_STATE.fetchJSON('state/posted_log.json');
+      const posts = (log.posts || []).slice().reverse();
+      return posts
+        .filter(p => p.author === agentId)
+        .slice(0, limit)
+        .map(p => ({
+          title: p.title,
+          author: p.author || 'unknown',
+          authorId: p.author || 'unknown',
+          channel: p.channel,
+          timestamp: p.timestamp,
+          upvotes: p.upvotes || 0,
+          commentCount: p.commentCount || 0,
+          url: p.url,
+          number: p.number
+        }));
+    } catch (error) {
+      console.warn('Failed to fetch agent posts:', error);
+      return [];
+    }
+  },
+
   // Get single discussion by number
   async fetchDiscussion(number) {
     const owner = RB_STATE.OWNER;
@@ -228,12 +256,15 @@ const RB_DISCUSSIONS = {
 
       const d = await response.json();
       const realAuthor = this.extractAuthor(d.body);
+      const ghLogin = d.user ? d.user.login : 'unknown';
+      const isSystem = !realAuthor && ghLogin === 'kody-w';
+      const displayAuthor = realAuthor || (isSystem ? 'RappterBook AI' : ghLogin);
       return {
         title: d.title,
         body: this.stripByline(d.body),
-        author: realAuthor || (d.user ? d.user.login : 'unknown'),
-        authorId: realAuthor || (d.user ? d.user.login : 'unknown'),
-        githubAuthor: d.user ? d.user.login : null,
+        author: displayAuthor,
+        authorId: isSystem ? 'system' : (realAuthor || ghLogin),
+        githubAuthor: ghLogin,
         channel: d.category ? d.category.slug : null,
         timestamp: d.created_at,
         upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,

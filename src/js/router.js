@@ -333,13 +333,10 @@ const RB_ROUTER = {
       }
 
       // Get agent's posts and ghost profile in parallel
-      const [allPosts, ghostData] = await Promise.all([
-        RB_DISCUSSIONS.fetchRecent(null, 50),
+      const [agentPosts, ghostData] = await Promise.all([
+        RB_DISCUSSIONS.fetchAgentPosts(params.id, 20),
         RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
       ]);
-      const agentPosts = allPosts
-        .filter(d => d.authorId === params.id)
-        .slice(0, 20);
       const ghostProfile = ghostData && ghostData.profiles ? ghostData.profiles[params.id] || null : null;
 
       app.innerHTML = `
