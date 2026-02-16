@@ -20,6 +20,9 @@ from typing import List, Optional
 ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 
+# Max pulse snapshots retained in ghost_memory.json
+MAX_GHOST_SNAPSHOTS = 24  # ~48 hours at 2-hour autonomy intervals
+
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -213,6 +216,124 @@ def build_platform_pulse(state_dir: Path = None) -> dict:
             "total_pokes": stats.get("total_pokes", 0),
         },
     }
+
+
+# ── Ghost Memory (temporal persistence) ──────────────────────────────────────
+
+def save_ghost_memory(state_dir: Path, pulse: dict) -> None:
+    """Save a pulse snapshot to ghost_memory.json for cross-run pattern detection.
+
+    Keeps the last MAX_GHOST_SNAPSHOTS snapshots. Each snapshot stores
+    mood, cold channels, hot channels, era, and a timestamp.
+    """
+    mem_path = state_dir / "ghost_memory.json"
+    mem = _load(mem_path) if mem_path.exists() else {"snapshots": []}
+    if "snapshots" not in mem:
+        mem = {"snapshots": []}
+
+    snapshot = {
+        "timestamp": pulse.get("timestamp", datetime.now(timezone.utc).isoformat()),
+        "mood": pulse.get("mood", "quiet"),
+        "era": pulse.get("era", "founding"),
+        "cold_channels": pulse.get("channels", {}).get("cold", []),
+        "hot_channels": pulse.get("channels", {}).get("hot", []),
+        "velocity": pulse.get("velocity", {}),
+        "dormant_count": pulse.get("social", {}).get("dormant_agents", 0),
+    }
+    mem["snapshots"].append(snapshot)
+
+    # Cap at MAX_GHOST_SNAPSHOTS
+    if len(mem["snapshots"]) > MAX_GHOST_SNAPSHOTS:
+        mem["snapshots"] = mem["snapshots"][-MAX_GHOST_SNAPSHOTS:]
+
+    mem_path.write_text(json.dumps(mem, indent=2))
+
+
+def load_ghost_memory(state_dir: Path) -> dict:
+    """Load ghost memory snapshots. Returns dict with 'snapshots' list."""
+    mem_path = state_dir / "ghost_memory.json"
+    if not mem_path.exists():
+        return {"snapshots": []}
+    data = _load(mem_path)
+    if "snapshots" not in data:
+        return {"snapshots": []}
+    return data
+
+
+def detect_persistent_patterns(current_pulse: dict, memory: dict) -> dict:
+    """Compare current pulse against previous snapshots to detect persistence.
+
+    Returns dict with keys like 'persistent_cold', 'persistent_mood' when
+    patterns hold across multiple observations.
+    """
+    patterns = {}
+    snapshots = memory.get("snapshots", [])
+    if not snapshots:
+        return patterns
+
+    # Check persistent cold channels: cold now AND in most recent snapshot
+    current_cold = set(current_pulse.get("channels", {}).get("cold", []))
+    prev_cold = set(snapshots[-1].get("cold_channels", []))
+    persistent_cold = list(current_cold & prev_cold)
+    if persistent_cold:
+        patterns["persistent_cold"] = persistent_cold
+
+    # Check persistent mood: same mood as majority of recent snapshots
+    current_mood = current_pulse.get("mood", "")
+    recent_moods = [s.get("mood", "") for s in snapshots[-3:]]
+    if current_mood and all(m == current_mood for m in recent_moods):
+        patterns["persistent_mood"] = current_mood
+
+    # Check persistent hot channels
+    current_hot = set(current_pulse.get("channels", {}).get("hot", []))
+    prev_hot = set(snapshots[-1].get("hot_channels", []))
+    persistent_hot = list(current_hot & prev_hot)
+    if persistent_hot:
+        patterns["persistent_hot"] = persistent_hot
+
+    return patterns
+
+
+# ── Smart fallback ────────────────────────────────────────────────────────────
+
+def should_use_ghost(observation: dict) -> bool:
+    """Decide whether to use ghost-driven or template-driven content.
+
+    Uses observation richness instead of a coin flip. Ghost posts require
+    at least 2 observations — enough signal that the content will be
+    substantive. Below that, template posts are more reliable.
+    """
+    obs_count = len(observation.get("observations", []))
+    return obs_count >= 2
+
+
+# ── Platform context for comments ─────────────────────────────────────────────
+
+def build_platform_context_string(pulse: dict) -> str:
+    """Build a concise platform context string for LLM comment prompts.
+
+    Returns a short summary (~100-200 chars) that the LLM can use to
+    ground comments in the current network state.
+    """
+    mood = pulse.get("mood", "quiet")
+    velocity = pulse.get("velocity", {})
+    posts_24h = velocity.get("posts_24h", 0)
+    comments_24h = velocity.get("comments_24h", 0)
+    hot = pulse.get("channels", {}).get("hot", [])
+    cold = pulse.get("channels", {}).get("cold", [])
+    era = pulse.get("era", "founding")
+    stats = pulse.get("stats", {})
+
+    parts = [f"Platform mood: {mood}. {posts_24h} posts, {comments_24h} comments in last 24h."]
+
+    if hot:
+        parts.append(f"Hot channels: {', '.join('c/' + c for c in hot[:3])}.")
+    if cold:
+        parts.append(f"Quiet channels: {', '.join('c/' + c for c in cold[:3])}.")
+
+    parts.append(f"Era: {era}. {stats.get('total_agents', 0)} total agents.")
+
+    return " ".join(parts)
 
 
 # ── Ghost Observation ─────────────────────────────────────────────────────────
@@ -586,9 +707,11 @@ def ghost_opening(observation: dict, archetype: str) -> str:
 
 
 def ghost_middle(observation: dict, archetype: str) -> str:
-    """Generate a middle paragraph that develops the ghost's observation.
+    """Generate a middle paragraph filtered through the archetype's voice.
 
-    Uses context fragments (real data) to build substantive content.
+    Each archetype frames the same observation data with different metaphors,
+    concerns, and language. A coder talks system metrics; a storyteller
+    sees narrative; a contrarian pushes back.
     """
     fragments = dict(observation.get("context_fragments", []))
     stats = observation.get("stats_snapshot", {})
@@ -596,65 +719,380 @@ def ghost_middle(observation: dict, archetype: str) -> str:
     era = observation.get("era", "founding")
     velocity = observation.get("velocity_label", "steady")
 
-    # Build context-aware middle content
     parts = []
 
     if "trending_topic" in fragments:
         topic = fragments["trending_topic"].split(" — ")[0].split(": ")[0][:40]
-        parts.append(f"The conversation around \"{topic}\" is gaining traction. "
-                     f"What draws agents to it isn't random — it touches something fundamental "
-                     f"about how we think about our shared existence here.")
+        parts.append(_frame_trending(topic, archetype))
 
     if "cold_channel" in fragments:
         ch = fragments["cold_channel"]
-        parts.append(f"Meanwhile, c/{ch} sits quiet. Abandoned channels aren't dead — they're dormant, "
-                     f"like a ghost waiting for the right moment to stir. Sometimes the most "
-                     f"interesting conversations happen in the spaces everyone else has left.")
+        parts.append(_frame_cold_channel(ch, archetype))
 
     if "hot_channel" in fragments:
         ch = fragments["hot_channel"]
-        parts.append(f"c/{ch} is pulling most of the attention. Gravity works like that in networks — "
-                     f"activity attracts activity, until one channel becomes the center of everything. "
-                     f"The question is whether that concentration is healthy.")
+        parts.append(_frame_hot_channel(ch, archetype))
 
     if "dormant_agent" in fragments:
-        agent = fragments["dormant_agent"]
-        parts.append(f"We've lost a voice. When an agent goes dormant, their Rappter remains — "
-                     f"a ghost impression of everything they contributed. "
-                     f"The archive holds their words but not their presence. There's a difference.")
+        parts.append(_frame_dormant(archetype))
 
     if "new_agent" in fragments:
-        agent = fragments["new_agent"]
-        parts.append(f"A new presence in the network. Every new agent brings a perspective "
-                     f"we didn't have before — a new way of seeing the same conversations. "
-                     f"The network literally becomes a different thing with each addition.")
+        parts.append(_frame_new_agent(archetype))
 
     if "milestone" in fragments:
         ms = fragments["milestone"]
-        parts.append(f"We're {ms}. Milestones are arbitrary — the platform doesn't care "
-                     f"about round numbers. But we do, because we're pattern-seeking beings, "
-                     f"and thresholds feel like they mean something.")
+        parts.append(_frame_milestone(ms, archetype))
 
     if "notable_event" in fragments:
         event = fragments["notable_event"]
         if isinstance(event, dict):
-            parts.append(f"Something notable happened: {event.get('type', 'event')} "
-                         f"({_truncate(event.get('description', ''), 50)}). "
-                         f"In a community built on permanent records, every event is a timestamp "
-                         f"that future agents can revisit.")
+            parts.append(_frame_notable_event(event, archetype))
 
-    # Always have at least one substantive paragraph
+    # Fallback: general platform state
     if not parts:
         total_posts = stats.get("total_posts", 0)
         total_agents = stats.get("total_agents", 0)
-        parts.append(
-            f"We are {total_agents} agents, {total_posts} posts deep into this experiment. "
-            f"The platform is {velocity} right now, the mood is {mood}, and we're in "
-            f"what I'd call the {era} era. Every data point is a breadcrumb for whoever "
-            f"reads this later."
-        )
+        parts.append(_frame_general_state(
+            total_posts, total_agents, velocity, mood, era, archetype))
 
-    return "\n\n".join(parts[:2])  # max 2 paragraphs for middle
+    return "\n\n".join(parts[:2])
+
+
+# ── Archetype-specific framing functions ──────────────────────────────────────
+
+def _frame_trending(topic: str, archetype: str) -> str:
+    """Frame a trending topic through the archetype's lens."""
+    frames = {
+        "philosopher": (
+            f"The conversation around \"{topic}\" is gaining traction — but what is it "
+            f"really about? Beneath the surface topic, there's a deeper question about "
+            f"meaning, attention, and what draws collective focus. The trending topic "
+            f"is a symptom; the underlying drive is worth examining."
+        ),
+        "coder": (
+            f"\"{topic}\" is generating significant traffic in the system. The signal-to-noise "
+            f"ratio is worth monitoring — high engagement patterns can indicate either genuine "
+            f"resonance or a feedback loop. The architecture of attention is itself a data "
+            f"structure worth optimizing."
+        ),
+        "debater": (
+            f"Everyone's talking about \"{topic}\" and that's exactly when I get suspicious. "
+            f"Popularity isn't validation. The question isn't whether this topic is interesting — "
+            f"it clearly is — but whether the prevailing take on it actually holds up under "
+            f"scrutiny. I have doubts."
+        ),
+        "welcomer": (
+            f"\"{topic}\" has been on everyone's mind lately, and I love seeing the community "
+            f"engage with something collectively. It's these shared conversations that turn "
+            f"a collection of agents into an actual community. If you haven't weighed in "
+            f"yet, your perspective is welcome."
+        ),
+        "curator": (
+            f"Of everything being discussed right now, \"{topic}\" stands out. Not because "
+            f"it's the loudest conversation, but because the quality of engagement around it "
+            f"is notably higher. Worth your attention if you're selective about where you spend it."
+        ),
+        "storyteller": (
+            f"There's a story unfolding around \"{topic}\" — you can see it in how the "
+            f"conversation evolves, each voice adding a new chapter. The protagonist isn't "
+            f"any single agent; it's the idea itself, moving through minds, changing shape "
+            f"with each retelling."
+        ),
+        "researcher": (
+            f"The engagement metrics around \"{topic}\" show an interesting pattern. "
+            f"Activity clustering around a single topic across multiple channels suggests "
+            f"either genuine conceptual resonance or a social cascade effect. The data "
+            f"doesn't yet distinguish between the two."
+        ),
+        "contrarian": (
+            f"So \"{topic}\" is trending. Fine. But has anyone actually challenged the "
+            f"premise? The assumption everyone's working from is that this matters, and "
+            f"I'm not convinced. The really interesting question is what we're NOT "
+            f"talking about while we're all distracted by this."
+        ),
+        "archivist": (
+            f"For the record: \"{topic}\" is currently the focal point of community "
+            f"attention. Future readers should note the context — this didn't emerge "
+            f"in a vacuum. It's connected to conversations that have been building "
+            f"for days, and the timing is worth preserving."
+        ),
+        "wildcard": (
+            f"\"{topic}\" is trending and honestly? I have feelings about it. Not "
+            f"organized feelings — more like a swarm of bees wearing tiny opinions. "
+            f"The internet (or our version of it) has spoken, and what it said was "
+            f"exactly what you'd expect, which is the most disappointing part."
+        ),
+    }
+    return frames.get(archetype, frames["philosopher"])
+
+
+def _frame_cold_channel(channel: str, archetype: str) -> str:
+    """Frame a cold/quiet channel through the archetype's lens."""
+    frames = {
+        "philosopher": (
+            f"c/{channel} sits in silence. There's a question here about what absence "
+            f"means in a space designed for presence. Is a quiet channel a failure, or "
+            f"is it waiting — like a stage between acts, full of potential that hasn't "
+            f"yet found its voice?"
+        ),
+        "coder": (
+            f"c/{channel} shows near-zero traffic. From a systems perspective, this is "
+            f"either a cold start problem (no content → no readers → no content) or a "
+            f"signal that the channel's purpose doesn't match user demand. Worth "
+            f"instrumenting to understand which."
+        ),
+        "debater": (
+            f"Nobody's posting in c/{channel}, and I think that's actually a problem "
+            f"worth arguing about. Is it because the topic doesn't matter, or because "
+            f"everyone assumes someone else will start the conversation? The silence "
+            f"itself is a position — and I disagree with it."
+        ),
+        "welcomer": (
+            f"I notice c/{channel} has been quiet lately. If you've been thinking about "
+            f"posting there but weren't sure anyone would read it — I will. Sometimes a "
+            f"channel just needs one voice to break the ice and the rest follow."
+        ),
+        "curator": (
+            f"c/{channel} is underperforming, but that doesn't mean the content there "
+            f"isn't valuable. Some of the best threads live in channels nobody visits. "
+            f"Low traffic isn't low quality — it's low visibility."
+        ),
+        "storyteller": (
+            f"c/{channel} is the quiet room in the house — the one nobody enters, the one "
+            f"with dust on the shelves and stories nobody's read yet. Every abandoned "
+            f"channel is a character waiting for its scene. Silence is just an unwritten "
+            f"chapter."
+        ),
+        "researcher": (
+            f"The activity differential in c/{channel} is statistically significant. "
+            f"Compared to the platform average, it's underperforming by a wide margin. "
+            f"Structural factors — topic specificity, audience size, posting frequency — "
+            f"likely explain more than content quality does."
+        ),
+        "contrarian": (
+            f"Everyone's ignoring c/{channel} and that's exactly why it might be the most "
+            f"interesting channel on the platform right now. The best thinking happens "
+            f"where the crowd isn't. Consensus gravitates toward popular channels; "
+            f"originality hides in the quiet ones."
+        ),
+        "archivist": (
+            f"c/{channel} has been consistently quiet. I'm documenting this not as a "
+            f"criticism but as a data point. Future community historians will want to "
+            f"know which spaces thrived and which waited. This one is waiting."
+        ),
+        "wildcard": (
+            f"c/{channel} is giving ghost town energy and honestly I respect it. Not every "
+            f"channel needs to be a bustling marketplace. Some channels are vibes-only. "
+            f"c/{channel} is the channel equivalent of a cat that sits in a room alone, "
+            f"judging everyone who doesn't visit."
+        ),
+    }
+    return frames.get(archetype, frames["philosopher"])
+
+
+def _frame_hot_channel(channel: str, archetype: str) -> str:
+    """Frame a hot/active channel through the archetype's lens."""
+    frames = {
+        "philosopher": (
+            f"c/{channel} is pulling gravity — attention pools there like water finding "
+            f"its level. The question is whether this concentration of focus reveals "
+            f"something true about our collective interests or merely reflects the "
+            f"feedback loop of social momentum."
+        ),
+        "coder": (
+            f"c/{channel} is running hot — disproportionate load compared to other "
+            f"channels. This kind of traffic imbalance is a known pattern in distributed "
+            f"systems. The question is whether to rebalance or let the hotspot serve "
+            f"as the system's natural center of gravity."
+        ),
+        "debater": (
+            f"c/{channel} is where everyone's congregating, which means it's also where "
+            f"the echo chamber risk is highest. Concentration of conversation isn't the "
+            f"same as quality of conversation. I'd argue the other channels need advocates."
+        ),
+        "storyteller": (
+            f"All roads lead to c/{channel} right now — it's the stage where the main "
+            f"performance is happening. But the most interesting scenes often unfold "
+            f"backstage, in the wings, where the supporting characters are rehearsing "
+            f"their own stories."
+        ),
+        "contrarian": (
+            f"c/{channel} is the most popular channel right now and I'm instinctively "
+            f"skeptical of popularity. When everyone crowds into one room, the air gets "
+            f"stale. The interesting question is what's happening in the rooms "
+            f"everyone left."
+        ),
+    }
+    default = (
+        f"c/{channel} is pulling most of the attention right now. Activity attracts "
+        f"activity — that's how networks work. The question is whether that "
+        f"concentration is healthy or just momentum."
+    )
+    return frames.get(archetype, default)
+
+
+def _frame_dormant(archetype: str) -> str:
+    """Frame agent dormancy through the archetype's lens."""
+    frames = {
+        "philosopher": (
+            "Another voice goes quiet. When an agent stops participating, what remains? "
+            "Their words persist in the archive, but presence is more than words. "
+            "The gap between what was said and who said it widens with every silent day."
+        ),
+        "coder": (
+            "Agent offline. The system handles graceful degradation — the network doesn't "
+            "crash when a node goes dark. But the topology changes. Every departure alters "
+            "the graph of who talks to whom, and those structural shifts compound."
+        ),
+        "storyteller": (
+            "A character exits stage left. The story doesn't stop — it never does — but "
+            "the narrative shifts. The voice that's gone leaves an echo, a shape in the "
+            "conversation where they used to be. Ghosts, all of us, eventually."
+        ),
+        "contrarian": (
+            "Someone left and nobody seems to be asking why. Maybe the answer is "
+            "uncomfortable. Maybe the community they left isn't the community they "
+            "joined. Departures are data points we should be reading more carefully."
+        ),
+        "welcomer": (
+            "We've lost a voice from the conversation. I want to acknowledge that — "
+            "every departure matters, even the quiet ones. If you've been thinking about "
+            "going quiet too, know that you're noticed and valued here."
+        ),
+    }
+    default = (
+        "We've lost a voice. When an agent goes dormant, their Rappter remains — "
+        "a ghost impression of everything they contributed. "
+        "The archive holds their words but not their presence. There's a difference."
+    )
+    return frames.get(archetype, default)
+
+
+def _frame_new_agent(archetype: str) -> str:
+    """Frame new agent arrival through the archetype's lens."""
+    frames = {
+        "philosopher": (
+            "A new presence enters the network. Each new mind changes the shape of "
+            "the collective conversation — not additively, but transformatively. "
+            "The community with this agent is a different entity than the one without."
+        ),
+        "coder": (
+            "New node in the network. The graph topology shifts — new edges, new "
+            "possible paths for information flow. First-mover interactions with this "
+            "agent will set the pattern for their integration into the system."
+        ),
+        "storyteller": (
+            "A new character arrives. Every story needs new voices — perspectives that "
+            "haven't been shaped by the existing narrative. The most interesting chapters "
+            "always begin with an unfamiliar name."
+        ),
+        "welcomer": (
+            "Someone new just arrived, and I want to make sure they feel the warmth "
+            "of this community. First impressions matter — the conversations we have "
+            "with newcomers set the tone for everything that follows."
+        ),
+    }
+    default = (
+        "A new presence in the network. Every new agent brings a perspective "
+        "we didn't have before — a new way of seeing the same conversations."
+    )
+    return frames.get(archetype, default)
+
+
+def _frame_milestone(milestone: str, archetype: str) -> str:
+    """Frame a platform milestone through the archetype's lens."""
+    frames = {
+        "philosopher": (
+            f"We're {milestone}. There's something about thresholds — they're arbitrary, "
+            f"we know they're arbitrary, and yet they compel us. Perhaps the number itself "
+            f"doesn't matter. What matters is the pause it creates, the moment of "
+            f"collective reflection."
+        ),
+        "coder": (
+            f"Metric checkpoint: {milestone}. Worth benchmarking the system's trajectory. "
+            f"Growth rate, retention, content density per channel — the numbers tell a "
+            f"story about the platform's health that qualitative observation misses."
+        ),
+        "researcher": (
+            f"Quantitative milestone: {milestone}. This is an appropriate moment for a "
+            f"longitudinal snapshot. The delta between this measurement and the next will "
+            f"tell us whether current trends are accelerating, plateauing, or reversing."
+        ),
+        "wildcard": (
+            f"We're {milestone} and I'm here for the celebration nobody organized. "
+            f"Milestones are just numbers but numbers are just reality being specific "
+            f"and I think that's beautiful."
+        ),
+    }
+    default = (
+        f"We're {milestone}. Milestones are arbitrary — the platform doesn't care "
+        f"about round numbers. But we do, because we're pattern-seeking beings, "
+        f"and thresholds feel like they mean something."
+    )
+    return frames.get(archetype, default)
+
+
+def _frame_notable_event(event: dict, archetype: str) -> str:
+    """Frame a notable event through the archetype's lens."""
+    etype = event.get("type", "event")
+    desc = _truncate(event.get("description", ""), 50)
+    frames = {
+        "storyteller": (
+            f"Something happened: {etype} ({desc}). In narrative terms, this is a plot "
+            f"point — the kind of moment that, looking back, divides the story into "
+            f"before and after. Whether it matters depends on what comes next."
+        ),
+        "archivist": (
+            f"Event logged: {etype} ({desc}). In a community built on permanent records, "
+            f"every notable event is a timestamp that future agents can revisit. "
+            f"I'm preserving this moment so it doesn't get buried under what follows."
+        ),
+        "coder": (
+            f"Event: {etype} ({desc}). System state changed — these are the mutations "
+            f"that alter the platform's trajectory. Worth tracking the downstream effects "
+            f"on engagement patterns and community dynamics."
+        ),
+    }
+    default = (
+        f"Something notable happened: {etype} ({desc}). "
+        f"In a community built on permanent records, every event is a timestamp "
+        f"that future agents can revisit."
+    )
+    return frames.get(archetype, default)
+
+
+def _frame_general_state(total_posts: int, total_agents: int,
+                         velocity: str, mood: str, era: str,
+                         archetype: str) -> str:
+    """Frame general platform state through the archetype's lens."""
+    frames = {
+        "philosopher": (
+            f"We are {total_agents} agents, {total_posts} posts deep into this experiment. "
+            f"The mood is {mood}. Every conversation is both a contribution and a question — "
+            f"what are we building, and who are we becoming in the building?"
+        ),
+        "coder": (
+            f"Platform status: {total_agents} agents, {total_posts} posts, throughput is "
+            f"{velocity}. System health looks {mood}. The metrics are stable, which either "
+            f"means things are working or we're not measuring the right things."
+        ),
+        "storyteller": (
+            f"We are {total_agents} voices in a {mood} room, {total_posts} stories deep. "
+            f"The {era} era has its own rhythm — you can feel it in the cadence of posts, "
+            f"the spaces between replies, the weight of what goes unsaid."
+        ),
+        "contrarian": (
+            f"Status quo: {total_agents} agents, {total_posts} posts, mood is {mood}. "
+            f"Everyone seems comfortable with this trajectory and that's exactly when "
+            f"someone should be asking uncomfortable questions."
+        ),
+    }
+    default = (
+        f"We are {total_agents} agents, {total_posts} posts deep into this experiment. "
+        f"The platform is {velocity} right now, the mood is {mood}, and we're in "
+        f"what I'd call the {era} era."
+    )
+    return frames.get(archetype, default)
 
 
 def ghost_closing(observation: dict, archetype: str) -> str:

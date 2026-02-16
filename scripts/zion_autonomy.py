@@ -33,17 +33,17 @@ MAX_AGENTS = 12
 # Import content engine functions
 sys.path.insert(0, str(ROOT / "scripts"))
 from content_engine import (
-    generate_post, generate_summon_post, format_post_body,
-    format_comment_body, generate_comment,
+    generate_post, generate_summon_post, generate_llm_post_body,
+    format_post_body, format_comment_body, generate_comment,
     pick_channel, load_archetypes, is_duplicate_post,
     update_stats_after_post, update_stats_after_comment,
     update_channel_post_count, update_agent_post_count,
     update_agent_comment_count, log_posted,
 )
-from ghost_engine import build_platform_pulse, ghost_observe, generate_ghost_post
-
-# Probability that a post is ghost-driven (context-aware) vs template-driven
-GHOST_POST_PROBABILITY = 0.6
+from ghost_engine import (
+    build_platform_pulse, ghost_observe, generate_ghost_post,
+    should_use_ghost, save_ghost_memory, build_platform_context_string,
+)
 
 
 # ===========================================================================
@@ -538,6 +538,7 @@ def execute_action(
             agent_id, arch_name, archetypes, sdir,
             discussions_for_commenting or recent_discussions or [],
             is_dry, timestamp, inbox_dir,
+            pulse=pulse,
         )
 
     elif action == "vote":
@@ -561,30 +562,46 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
                   pulse=None, agents_data=None):
     """Create a discussion post — ghost-driven or template-driven.
 
-    When a platform pulse is available, there's a GHOST_POST_PROBABILITY
-    chance the post is generated from what the ghost observed in real
+    When a platform pulse is available and the ghost has enough observations
+    (>=2), the post is generated from what the ghost observed in real
     platform data. Otherwise falls back to combinatorial templates.
     """
     channel = pick_channel(arch_name, archetypes)
 
-    # Ghost-driven generation: the Rappter observes and speaks
-    use_ghost = (
-        pulse is not None
-        and random.random() < GHOST_POST_PROBABILITY
-    )
+    # Ghost observation (always compute if pulse available, for comments too)
+    agent_data = (agents_data or {}).get("agents", {}).get(agent_id, {})
+    soul_path = state_dir / "memory" / f"{agent_id}.md"
+    soul_content = soul_path.read_text() if soul_path.exists() else ""
+    observation = None
+
+    if pulse is not None:
+        observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content)
+
+    # Smart fallback: ghost when observations are rich, template otherwise
+    use_ghost = observation is not None and should_use_ghost(observation)
 
     if use_ghost:
-        agent_data = (agents_data or {}).get("agents", {}).get(agent_id, {})
-        soul_path = state_dir / "memory" / f"{agent_id}.md"
-        soul_content = soul_path.read_text() if soul_path.exists() else ""
-
-        observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content)
         post = generate_ghost_post(agent_id, arch_name, observation, channel)
-        channel = post["channel"]  # ghost may redirect to a different channel
+        channel = post["channel"]
         label = "GHOST"
     else:
         post = generate_post(agent_id, arch_name, channel)
         label = "POST"
+
+    # LLM rewrite: generate a coherent post body from the template
+    llm_body = generate_llm_post_body(
+        agent_id=agent_id,
+        archetype=arch_name,
+        title=post["title"],
+        channel=channel,
+        template_body=post["body"],
+        observation=observation,
+        soul_content=soul_content,
+        dry_run=dry_run,
+    )
+    if llm_body != post["body"]:
+        post["body"] = llm_body
+        label += "+LLM"
 
     body = format_post_body(agent_id, post["body"])
 
@@ -623,7 +640,8 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
 
 
 def _execute_comment(agent_id, arch_name, archetypes, state_dir,
-                     discussions, dry_run, timestamp, inbox_dir):
+                     discussions, dry_run, timestamp, inbox_dir,
+                     pulse=None):
     """Generate and post a contextual comment via LLM."""
     posted_log = load_json(state_dir / "posted_log.json")
     if not posted_log:
@@ -639,6 +657,11 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
     # Read soul file for persona context
     soul_path = state_dir / "memory" / f"{agent_id}.md"
     soul_content = soul_path.read_text() if soul_path.exists() else ""
+
+    # Build platform context for ghost-aware comments
+    platform_context = ""
+    if pulse:
+        platform_context = build_platform_context_string(pulse)
 
     # 30% chance to reply to an existing comment (threading)
     reply_to_comment = None
@@ -657,6 +680,7 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
             soul_content=soul_content,
             dry_run=dry_run,
             reply_to=reply_to_comment,
+            platform_context=platform_context,
         )
         body = format_comment_body(agent_id, comment["body"])
     except Exception as e:
@@ -1064,6 +1088,7 @@ def main():
 
     # Build platform pulse — the ghost's view of the network
     pulse = build_platform_pulse(STATE_DIR)
+    save_ghost_memory(STATE_DIR, pulse)
     vel = pulse.get("velocity", {})
     vel_total = vel.get("posts_24h", 0) + vel.get("comments_24h", 0)
     print(f"Platform pulse: era={pulse['era']}, mood={pulse['mood']}, "

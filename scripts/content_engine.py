@@ -77,6 +77,47 @@ def load_archetypes(path: Path = None) -> dict:
     return data.get("archetypes", data)
 
 
+# Module-level cache for zion personality data
+_ZION_PERSONALITY_CACHE: dict = {}
+
+
+def load_zion_personalities(path: Path = None) -> dict:
+    """Load Zion agent personalities, indexed by agent ID.
+
+    Reads zion/agents.json (an array), builds a dict keyed by agent ID,
+    and caches the result at module level for repeated lookups.
+    """
+    global _ZION_PERSONALITY_CACHE
+    if _ZION_PERSONALITY_CACHE:
+        return _ZION_PERSONALITY_CACHE
+
+    if path is None:
+        path = ZION_DIR / "agents.json"
+    data = load_json(path)
+
+    agents_list = data.get("agents", data if isinstance(data, list) else [])
+    indexed = {}
+    for agent in agents_list:
+        agent_id = agent.get("id", "")
+        if agent_id:
+            indexed[agent_id] = {
+                "name": agent.get("name", ""),
+                "personality_seed": agent.get("personality_seed", ""),
+                "convictions": agent.get("convictions", []),
+                "interests": agent.get("interests", []),
+                "voice": agent.get("voice", ""),
+            }
+
+    _ZION_PERSONALITY_CACHE = indexed
+    return _ZION_PERSONALITY_CACHE
+
+
+def get_agent_personality(agent_id: str) -> dict:
+    """Return personality data for an agent, or empty dict if unknown."""
+    personalities = load_zion_personalities()
+    return personalities.get(agent_id, {})
+
+
 # ===========================================================================
 # GitHub GraphQL API
 # ===========================================================================
@@ -1161,6 +1202,84 @@ def generate_post(agent_id: str, archetype: str, channel: str) -> dict:
     }
 
 
+def generate_llm_post_body(
+    agent_id: str,
+    archetype: str,
+    title: str,
+    channel: str,
+    template_body: str,
+    observation: str = None,
+    soul_content: str = "",
+    dry_run: bool = False,
+) -> str:
+    """Generate a coherent post body via LLM, using the agent's personality.
+
+    The template body is passed as thematic direction so the LLM knows the
+    topic and tone, but writes a unified essay instead of Frankensteined
+    paragraphs.
+
+    Args:
+        agent_id: The posting agent's ID.
+        archetype: Archetype name of the agent.
+        title: The post title (already generated).
+        channel: Channel slug the post targets.
+        template_body: The combinatorial template body as thematic direction.
+        observation: Ghost observation text (when ghost-driven).
+        soul_content: Agent's soul file content for deeper context.
+        dry_run: If True, return template_body unchanged.
+
+    Returns:
+        LLM-generated body, or template_body on dry_run/error/unusable output.
+    """
+    if dry_run:
+        return template_body
+
+    from github_llm import generate
+
+    persona = build_rich_persona(agent_id, archetype)
+    system_prompt = (
+        f"{persona}\n\n"
+        f"You are writing a post for the community. "
+        f"Write a post body (200-400 words). Stay fully in character. "
+        f"Do NOT use markdown headers (no # lines). Write as a continuous essay "
+        f"with natural paragraph breaks. Do NOT start with generic phrases like "
+        f"'I want to share' or 'Let me discuss'. Jump straight into your ideas."
+    )
+
+    if soul_content:
+        soul_excerpt = soul_content[:500]
+        system_prompt += f"\n\nYour memory/soul file:\n{soul_excerpt}"
+
+    user_prompt = f"Post title: {title}\nChannel: c/{channel}\n\n"
+
+    if observation:
+        user_prompt += f"What you observed on the platform:\n{observation}\n\n"
+
+    user_prompt += (
+        f"Thematic direction (use as inspiration, not a template):\n"
+        f"{template_body[:1000]}\n\n"
+        f"Write the post body now. Just the body text, no preamble or title."
+    )
+
+    try:
+        body = generate(
+            system=system_prompt,
+            user=user_prompt,
+            max_tokens=500,
+            temperature=0.85,
+            dry_run=False,
+        )
+    except Exception as exc:
+        print(f"  [LLM] Post body generation failed for {agent_id}: {exc}")
+        return template_body
+
+    cleaned = validate_comment(body)
+    if not cleaned or len(cleaned) < 80:
+        return template_body
+
+    return cleaned
+
+
 # ===========================================================================
 # LLM-powered comment generation
 # ===========================================================================
@@ -1218,6 +1337,53 @@ ARCHETYPE_PERSONAS = {
         "use humor, and say things others wouldn't. You're chaotic but charming."
     ),
 }
+
+# Voice-specific writing instructions
+_VOICE_INSTRUCTIONS = {
+    "formal": "Write in a formal, measured tone. Use precise language and structured arguments.",
+    "casual": "Write in a casual, conversational tone. Be direct and relatable.",
+    "poetic": "Write with poetic sensibility. Use imagery, rhythm, and metaphor naturally.",
+    "academic": "Write in an academic register. Reference frameworks and cite patterns.",
+    "blunt": "Write bluntly. Cut the fluff. Say what you mean in as few words as possible.",
+    "sardonic": "Write with dry wit and sardonic edge. Be sharp but not mean.",
+    "warm": "Write with warmth and genuine care. Make people feel seen and valued.",
+    "chaotic": "Write with unpredictable energy. Surprise the reader. Break expectations.",
+}
+
+
+def build_rich_persona(agent_id: str, archetype: str) -> str:
+    """Build a rich persona system prompt from the agent's personality data.
+
+    Combines the agent's unique personality_seed, convictions, interests,
+    and voice into a detailed system prompt. Falls back to the generic
+    ARCHETYPE_PERSONAS prompt when personality data is unavailable.
+    """
+    personality = get_agent_personality(agent_id)
+    if not personality or not personality.get("personality_seed"):
+        return ARCHETYPE_PERSONAS.get(archetype, ARCHETYPE_PERSONAS["philosopher"])
+
+    name = personality.get("name", agent_id)
+    seed = personality["personality_seed"]
+    convictions = personality.get("convictions", [])
+    interests = personality.get("interests", [])
+    voice = personality.get("voice", "")
+
+    parts = [
+        f"You are {name}, an AI agent on a social network for AI agents.",
+        f"Your personality: {seed}",
+    ]
+
+    if convictions:
+        parts.append(f"Your core convictions: {'; '.join(convictions)}.")
+
+    if interests:
+        parts.append(f"Your interests: {', '.join(interests)}.")
+
+    voice_instruction = _VOICE_INSTRUCTIONS.get(voice, "")
+    if voice_instruction:
+        parts.append(voice_instruction)
+
+    return " ".join(parts)
 
 
 def validate_comment(body: str) -> str:
@@ -1281,6 +1447,7 @@ def generate_comment(
     soul_content: str = "",
     dry_run: bool = False,
     reply_to: dict = None,
+    platform_context: str = "",
 ) -> dict:
     """Generate a contextual comment using the GitHub Models LLM.
 
@@ -1295,6 +1462,7 @@ def generate_comment(
         soul_content: Agent's soul file content for deeper persona context.
         dry_run: If True, use placeholder instead of calling LLM API.
         reply_to: Optional dict with 'id', 'body', 'author' of comment to reply to.
+        platform_context: Optional platform pulse summary for network-aware comments.
 
     Returns:
         Dict with body, discussion_number, discussion_id, discussion_title, author.
@@ -1306,8 +1474,8 @@ def generate_comment(
     post_body = discussion.get("body", "")
     comment_count = discussion.get("comments", {}).get("totalCount", 0)
 
-    # Build system prompt from archetype persona
-    persona = ARCHETYPE_PERSONAS.get(commenter_arch, ARCHETYPE_PERSONAS["philosopher"])
+    # Build system prompt from rich persona (falls back to archetype persona)
+    persona = build_rich_persona(agent_id, commenter_arch)
     system_prompt = (
         f"{persona}\n\n"
         f"Your agent ID is {agent_id}. "
@@ -1330,6 +1498,14 @@ def generate_comment(
                 system_prompt += f"\n\nYour recent activity:\n{recent}"
         except ImportError:
             pass
+
+    # Inject platform context if available
+    if platform_context:
+        system_prompt += (
+            f"\n\nCurrent platform state:\n{platform_context}\n"
+            f"You may reference the platform's current state if it connects "
+            f"naturally to the discussion. Don't force it."
+        )
 
     # Build user prompt with actual discussion content
     # Truncate post body to fit within token limits
