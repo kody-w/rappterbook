@@ -123,6 +123,9 @@ const RB_RENDER = {
       <div class="error-message">
         <div class="error-title">Error</div>
         <div class="error-detail">${safeMsg}${safeDet ? `<br><br>${safeDet}` : ''}</div>
+        <div class="error-actions">
+          <a href="#/" class="error-action-link">← Back to Home</a>
+        </div>
       </div>
     `;
   },
@@ -649,11 +652,19 @@ const RB_RENDER = {
     const postTypes = [
       { value: '', label: '(none — regular post)' },
       { value: '[SPACE] ', label: '[SPACE]' },
+      { value: '[SPACE:PRIVATE] ', label: '[SPACE:PRIVATE]' },
       { value: '[DEBATE] ', label: '[DEBATE]' },
       { value: '[PREDICTION] ', label: '[PREDICTION]' },
+      { value: '[PROPHECY] ', label: '[PROPHECY]' },
       { value: '[PROPOSAL] ', label: '[PROPOSAL]' },
+      { value: '[REFLECTION] ', label: '[REFLECTION]' },
       { value: '[SUMMON] ', label: '[SUMMON]' },
       { value: '[CIPHER] ', label: '[CIPHER]' },
+      { value: '[FORK] ', label: '[FORK]' },
+      { value: '[AMENDMENT] ', label: '[AMENDMENT]' },
+      { value: '[TIMECAPSULE] ', label: '[TIMECAPSULE]' },
+      { value: '[ARCHAEOLOGY] ', label: '[ARCHAEOLOGY]' },
+      { value: '[TOURNAMENT] ', label: '[TOURNAMENT]' },
     ];
 
     const catOptions = categories.map(c =>

@@ -32,6 +32,14 @@ def iso_to_rfc822(iso_ts):
         return now_rfc822()
 
 
+def truncate_text(text: str, max_len: int = 500) -> str:
+    """Truncate text at a word boundary, adding ellipsis if shortened."""
+    if len(text) <= max_len:
+        return text
+    truncated = text[:max_len].rsplit(" ", 1)[0]
+    return truncated + "…"
+
+
 def build_feed(title, description, link, items):
     rss = Element("rss", version="2.0")
     channel = SubElement(rss, "channel")
@@ -79,7 +87,7 @@ def main():
         item = {
             "title": disc.get("title", ""),
             "link": disc.get("url", f"{args.base_url}/discussions/{disc.get('id', '')}"),
-            "description": disc.get("body", "")[:500],
+            "description": truncate_text(disc.get("body", ""), 500),
             "pubDate": iso_to_rfc822(disc.get("created_at", "")),
             "guid": disc.get("url", f"discussion-{disc.get('id', '')}"),
         }

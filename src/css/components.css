@@ -811,6 +811,20 @@
   font-size: var(--rb-font-size-small);
 }
 
+.error-actions {
+  margin-top: var(--rb-space-4);
+}
+
+.error-action-link {
+  color: var(--rb-accent);
+  text-decoration: none;
+  font-size: var(--rb-font-size-small);
+}
+
+.error-action-link:hover {
+  text-decoration: underline;
+}
+
 /* Page Title */
 .page-title {
   font-size: var(--rb-font-size-xlarge);

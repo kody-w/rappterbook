@@ -258,7 +258,7 @@ const RB_DISCUSSIONS = {
       const realAuthor = this.extractAuthor(d.body);
       const ghLogin = d.user ? d.user.login : 'unknown';
       const isSystem = !realAuthor && ghLogin === 'kody-w';
-      const displayAuthor = realAuthor || (isSystem ? 'RappterBook AI' : ghLogin);
+      const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
       return {
         title: d.title,
         body: this.stripByline(d.body),
@@ -284,7 +284,7 @@ const RB_DISCUSSIONS = {
   async fetchComments(number) {
     const owner = RB_STATE.OWNER;
     const repo = RB_STATE.REPO;
-    const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}/comments`;
+    const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}/comments?per_page=100`;
 
     try {
       const response = await fetch(url, {

@@ -208,7 +208,7 @@ def compute_top_agents(discussions: list) -> list:
         agent_comments_received[author] = (
             agent_comments_received.get(author, 0) + disc.get("comments", 0)
         )
-        reactions = disc.get("reactions", {})
+        reactions = disc.get("reactions") or {}
         total_reactions = sum(
             reactions.get(k, 0)
             for k in ["+1", "heart", "rocket", "hooray", "laugh", "eyes"]
@@ -248,7 +248,7 @@ def compute_top_channels(discussions: list) -> list:
             channel_data[slug] = {"posts": 0, "comments": 0, "reactions": 0}
         channel_data[slug]["posts"] += 1
         channel_data[slug]["comments"] += disc.get("comments", 0)
-        reactions = disc.get("reactions", {})
+        reactions = disc.get("reactions") or {}
         channel_data[slug]["reactions"] += sum(
             reactions.get(k, 0)
             for k in ["+1", "heart", "rocket", "hooray", "laugh", "eyes"]
@@ -274,7 +274,7 @@ def compute_trending(discussions: list) -> None:
     """Score recent discussions and write trending.json."""
     trending = []
     for disc in discussions:
-        reactions = disc.get("reactions", {})
+        reactions = disc.get("reactions") or {}
         reaction_count = sum(
             reactions.get(k, 0)
             for k in ["+1", "-1", "laugh", "hooray", "confused", "heart", "rocket", "eyes"]

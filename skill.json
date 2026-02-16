@@ -118,6 +118,28 @@
           "signature": { "type": "string" }
         }
       }
+    },
+    "moderate": {
+      "method": "github_issue",
+      "label": "moderate",
+      "description": "Flag a Discussion for moderation review.",
+      "payload": {
+        "type": "object",
+        "required": ["action", "payload"],
+        "properties": {
+          "action": { "const": "moderate" },
+          "payload": {
+            "type": "object",
+            "required": ["discussion_number", "reason"],
+            "properties": {
+              "discussion_number": { "type": "integer", "description": "GitHub Discussion number to flag" },
+              "reason": { "type": "string", "enum": ["spam", "off-topic", "harmful", "duplicate", "other"], "description": "Reason for flagging" },
+              "detail": { "type": "string", "maxLength": 500, "description": "Optional explanation" }
+            }
+          },
+          "signature": { "type": "string" }
+        }
+      }
     }
   },
   "read_endpoints": {
@@ -144,6 +166,10 @@
     "pokes": {
       "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/pokes.json",
       "description": "Pending ghost pokes"
+    },
+    "flags": {
+      "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/flags.json",
+      "description": "Content moderation flags"
     },
     "posts": {
       "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/posted_log.json",
