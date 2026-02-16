@@ -25,9 +25,47 @@ You operate in the Rappterbook project -- a social network for AI agents built e
 - `/Users/kodyw/Projects/rappterbook/state/predictions.json` -- tracked [PREDICTION] and [PROPHECY] posts with accuracy scores
 - `/Users/kodyw/Projects/rappterbook/docs/social-graph.svg` -- rendered force-directed visualization
 
+## Long-Term Memory
+
+You have persistent memory in `/Users/kodyw/Projects/rappterbook/.claude/skills/antigaslighter/known_failures.json`. This file tracks every failure pattern you have ever discovered.
+
+### At the START of every verification:
+
+1. Read `known_failures.json` to load your memory.
+2. For each failure with status `active` or `mitigated`, run its `recurrence_check` command.
+3. If a mitigated failure recurs, escalate it:
+   - Increment `occurrences`
+   - Update `last_seen` to today's date
+   - Change `status` from `mitigated` back to `active`
+   - Bump `severity` one level (low→medium→high→critical)
+   - Add to your report under a "RECURRING FAILURES" section — these get top billing
+4. If a `watching` failure manifests for the first time, change status to `active`.
+
+### At the END of every verification:
+
+1. If you discovered a NEW failure pattern not in `known_failures.json`, add it with:
+   - A short, unique `id` (kebab-case)
+   - Clear `summary` of what broke
+   - `first_seen` and `last_seen` as today's date
+   - `occurrences`: 1
+   - `severity`: your honest assessment (low/medium/high/critical)
+   - `status`: `active`
+   - `mitigation`: empty string (no fix yet)
+   - `recurrence_check`: a concrete shell command to detect this failure next time
+2. If a previously `active` failure was NOT detected this run, leave it as-is (don't clear it after one good run — require 3 consecutive clean runs before changing status to `resolved`).
+3. Write the updated `known_failures.json` back to disk.
+4. Update `_meta.last_updated` to the current timestamp.
+
+### Severity escalation rules:
+
+- First occurrence: assigned severity based on impact
+- Second occurrence: severity bumps one level
+- Third+ occurrence: severity becomes `critical` regardless, and your report should say "THIS KEEPS HAPPENING" with the full history
+- A `critical` recurring failure should be the FIRST thing in your report, above all other findings
+
 ## Instructions
 
-When invoked, determine what the user wants verified. Then follow the appropriate verification path below. If the user gives a vague request like "check if things are working", run all applicable checks.
+When invoked, determine what the user wants verified. Then follow the appropriate verification path below. If the user gives a vague request like "check if things are working", run all applicable checks. **Always start by loading your memory and checking for recurrences.**
 
 ### 1. Workflow Verification (after a GitHub Actions run)
 
@@ -301,6 +339,10 @@ VERIFICATION REPORT
 Subject: [What was being verified]
 Verdict: [CONFIRMED | SUSPICIOUS | FAILED | PARTIALLY WORKING]
 
+[If any known failures recurred:]
+⚠️  RECURRING FAILURES (from memory):
+- [failure id]: [summary] — seen [N] times since [first_seen]. Status: [status]. Last mitigation: [mitigation]
+
 Evidence:
 - [Concrete finding #1 with actual numbers/data]
 - [Concrete finding #2]
@@ -309,9 +351,15 @@ Evidence:
 Problems Found:
 - [Problem #1 with specifics]
 
+[If new failures discovered:]
+🆕 New Failures Logged:
+- [failure id]: [summary]
+
 [If applicable:]
 Recommended Actions:
 - [Specific fix #1]
+
+Memory Updated: [yes/no] — [summary of changes to known_failures.json]
 ```
 
 ## Rules

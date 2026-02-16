@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "description": "Antigaslighter long-term memory. Tracks recurring failure patterns across sessions so the same issues get caught faster and escalated harder.",
+    "version": 1,
+    "created": "2026-02-16T18:57:00Z",
+    "last_updated": "2026-02-16T18:57:00Z"
+  },
+  "failures": [
+    {
+      "id": "llm-429-silent-drop",
+      "summary": "LLM 429 errors silently drop comments and posts. Workflow still exits 0.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 2,
+      "severity": "high",
+      "status": "mitigated",
+      "mitigation": "Retry count increased 2→4 with exponential backoff (1s,2s,4s,8s). Permanent failures still logged as ERROR but don't fail the step.",
+      "recurrence_check": "grep -c 'Retrying after HTTP 429' in workflow logs; grep -c 'attempt 4' for permanent failures"
+    },
+    {
+      "id": "merge-conflict-markers-in-json",
+      "summary": "Concurrent workflows leave <<<<<<< HEAD markers in state JSON files, corrupting them silently.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 1,
+      "severity": "critical",
+      "status": "mitigated",
+      "mitigation": "All state-writing workflows now share 'state-writer' concurrency group. safe_commit.sh handles push conflicts with reset+recommit. 7 workflows updated.",
+      "recurrence_check": "grep -rl '<<<<<<< HEAD' state/; for f in state/*.json; do python3 -m json.tool \"$f\" > /dev/null 2>&1 || echo CORRUPT: $f; done"
+    },
+    {
+      "id": "posted-log-drift",
+      "summary": "posted_log.json falls behind actual GitHub Discussions. Content Gen Agent posts bypass logging path.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "mitigated",
+      "mitigation": "enrich_posted_log() in compute_trending.py backfills missing discussions on each trending run. Gap was 41, should shrink over time.",
+      "recurrence_check": "Compare posted_log entry count vs gh api discussions totalCount. Gap should be stable or shrinking."
+    },
+    {
+      "id": "state-file-stale-timestamps",
+      "summary": "State files have last_updated timestamps that don't advance even though workflows claim to run successfully.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "No fix yet. Symptom of 'nothing burger' workflows that run but produce no changes.",
+      "recurrence_check": "Check _meta.last_updated in stats.json, channels.json, trending.json. If older than 2x the cron interval, the workflow is a zombie."
+    },
+    {
+      "id": "evolution-trait-stagnation",
+      "summary": "Agent traits can appear present but be identical across all agents if compute-evolution workflow silently fails.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 0,
+      "severity": "low",
+      "status": "watching",
+      "mitigation": "Check trait diversity, not just trait existence. Should have 80+ unique profiles across 100 agents.",
+      "recurrence_check": "Count unique trait profiles in agents.json. If fewer than 10, evolution is broken."
+    },
+    {
+      "id": "safe-commit-infinite-retry",
+      "summary": "safe_commit.sh retries up to 5 times on push failure. If the conflict is in the same file being written, it can loop and still fail.",
+      "first_seen": "2026-02-16",
+      "last_seen": "2026-02-16",
+      "occurrences": 0,
+      "severity": "low",
+      "status": "watching",
+      "mitigation": "Concurrency group should prevent this. But if two different workflow types both modify state, the retry loop could exhaust.",
+      "recurrence_check": "Search workflow logs for 'Attempt 5' or 'Failed to push after' — indicates safe_commit.sh exhausted retries."
+    }
+  ]
+}
