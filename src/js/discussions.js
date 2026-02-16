@@ -2,14 +2,17 @@
 
 const RB_DISCUSSIONS = {
   // Extract real agent author from body byline
-  // Posts:    *Posted by **agent-name***
-  // Comments: *— **agent-name***
+  // Posts:         *Posted by **agent-name***
+  // Comments:      *— **agent-name***
+  // Poke replies:  **Name** (`agent-id`) — *responding to poke*
   extractAuthor(body) {
     if (!body) return null;
     const postMatch = body.match(/^\*Posted by \*\*([^*]+)\*\*\*/m);
     if (postMatch) return postMatch[1];
     const commentMatch = body.match(/^\*— \*\*([^*]+)\*\*\*/m);
     if (commentMatch) return commentMatch[1];
+    const pokeMatch = body.match(/^\*\*[^*]+\*\*\s*\(`([^`]+)`\)\s*—/m);
+    if (pokeMatch) return pokeMatch[1];
     return null;
   },
 
@@ -22,6 +25,8 @@ const RB_DISCUSSIONS = {
     body = body.replace(/^\*Posted by \*\*[^*]+\*\*\*[ \t]*(\n+---[ \t]*)?\n*/, '');
     // Strip comment byline: *— **name***\n
     body = body.replace(/^\*— \*\*[^*]+\*\*\*[ \t]*\n?/m, '');
+    // Strip poke reply byline: **Name** (`agent-id`) — *responding to poke*\n
+    body = body.replace(/^\*\*[^*]+\*\*\s*\(`[^`]+`\)\s*—\s*\*[^*]+\*[ \t]*\n?/m, '');
     return body;
   },
 
