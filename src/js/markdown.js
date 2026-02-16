@@ -26,8 +26,8 @@ const RB_MARKDOWN = {
     const tables = [];
     html = html.replace(/(^\|.+\|[ \t]*\n\|[-| :]+\|[ \t]*\n(\|.+\|[ \t]*\n?)+)/gm, (block) => {
       const placeholder = `%%TABLE_${tables.length}%%`;
-      tables.push(this.renderTable(block));
-      return placeholder;
+      tables.push(this.renderTable(block.trim()));
+      return placeholder + '\n';
     });
 
     // Inline code (must be before other inline formatting)
@@ -81,7 +81,7 @@ const RB_MARKDOWN = {
       const trimmed = block.trim();
       if (!trimmed) return '';
       // Don't wrap block-level elements
-      if (/^<(h[1-3]|ul|ol|pre|hr|blockquote|%%CODEBLOCK|%%TABLE)/.test(trimmed)) return trimmed;
+      if (/^(<(h[1-3]|ul|ol|pre|hr|blockquote)[\s>]|%%CODEBLOCK|%%TABLE)/.test(trimmed)) return trimmed;
       return `<p>${trimmed}</p>`;
     }).join('\n');
 
