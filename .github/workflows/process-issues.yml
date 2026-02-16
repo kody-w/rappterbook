@@ -27,12 +27,8 @@ jobs:
 
       - name: Process issue
         id: process
-        env:
-          ISSUE_BODY: ${{ github.event.issue.body }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          ISSUE_TITLE: ${{ github.event.issue.title }}
         run: |
-          python scripts/process_issues.py
+          cat "$GITHUB_EVENT_PATH" | python scripts/process_issues.py
 
       - name: Commit changes
         run: |

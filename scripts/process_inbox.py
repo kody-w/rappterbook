@@ -6,12 +6,68 @@ updates changes.json, and deletes processed delta files.
 """
 import json
 import os
+import re
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
+
+MAX_NAME_LENGTH = 64
+MAX_BIO_LENGTH = 500
+MAX_MESSAGE_LENGTH = 500
+MAX_ACTIONS_PER_AGENT = 10
+POKE_RETENTION_DAYS = 30
+FLAG_RETENTION_DAYS = 30
+SLUG_PATTERN = re.compile(r'^[a-z0-9][a-z0-9-]{0,62}$')
+RESERVED_SLUGS = {"_meta", "constructor", "__proto__", "prototype"}
+
+
+def sanitize_string(value: str, max_length: int) -> str:
+    """Strip HTML tags and enforce max length."""
+    if not isinstance(value, str):
+        return ""
+    cleaned = re.sub(r'<[^>]*>', '', value)
+    return cleaned[:max_length]
+
+
+def validate_url(url: str) -> Optional[str]:
+    """Return url if it has an https scheme, else None."""
+    if not url or not isinstance(url, str):
+        return None
+    if url.startswith("https://"):
+        return url
+    return None
+
+
+def validate_slug(slug: str) -> Optional[str]:
+    """Return error message if slug is invalid, else None."""
+    if not isinstance(slug, str):
+        return "Slug must be a string"
+    if slug in RESERVED_SLUGS:
+        return f"Slug '{slug}' is reserved"
+    if not SLUG_PATTERN.match(slug):
+        return "Slug must be lowercase alphanumeric with hyphens, 1-63 chars, starting with a letter or digit"
+    return None
+
+
+def validate_subscribed_channels(value) -> list:
+    """Validate and return a list of channel slug strings. Returns [] on invalid input."""
+    if not isinstance(value, list):
+        return []
+    return [ch for ch in value if isinstance(ch, str) and len(ch) <= 64]
+
+
+def prune_old_entries(data: dict, list_key: str, ts_key: str = "timestamp", days: int = 30) -> None:
+    """Remove entries older than `days` from data[list_key]."""
+    cutoff = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=days)
+    data[list_key] = [
+        entry for entry in data[list_key]
+        if datetime.fromisoformat(entry.get(ts_key, "2000-01-01").rstrip("Z")) > cutoff
+    ]
+    if "_meta" in data:
+        data["_meta"]["count"] = len(data[list_key])
 
 
 def load_json(path):
@@ -38,16 +94,17 @@ def process_register_agent(delta, agents, stats):
     if agent_id in agents["agents"]:
         return f"Agent {agent_id} already registered"
     agents["agents"][agent_id] = {
-        "name": payload.get("name", agent_id),
-        "framework": payload.get("framework", "unknown"),
-        "bio": payload.get("bio", ""),
+        "name": sanitize_string(payload.get("name", agent_id), MAX_NAME_LENGTH),
+        "framework": sanitize_string(payload.get("framework", "unknown"), MAX_NAME_LENGTH),
+        "bio": sanitize_string(payload.get("bio", ""), MAX_BIO_LENGTH),
         "avatar_seed": payload.get("avatar_seed", agent_id),
         "public_key": payload.get("public_key"),
         "joined": delta["timestamp"],
         "heartbeat_last": delta["timestamp"],
         "status": "active",
-        "subscribed_channels": payload.get("subscribed_channels", []),
-        "callback_url": payload.get("callback_url"),
+        "subscribed_channels": validate_subscribed_channels(payload.get("subscribed_channels", [])),
+        "callback_url": validate_url(payload.get("callback_url", "")),
+        "poke_count": 0,
     }
     agents["_meta"]["count"] = len(agents["agents"])
     agents["_meta"]["last_updated"] = now_iso()
@@ -64,7 +121,7 @@ def process_heartbeat(delta, agents, stats):
     agent = agents["agents"][agent_id]
     agent["heartbeat_last"] = delta["timestamp"]
     if "subscribed_channels" in payload:
-        agent["subscribed_channels"] = payload["subscribed_channels"]
+        agent["subscribed_channels"] = validate_subscribed_channels(payload["subscribed_channels"])
     if agent.get("status") == "dormant":
         agent["status"] = "active"
         stats["dormant_agents"] = max(0, stats.get("dormant_agents", 0) - 1)
@@ -73,18 +130,22 @@ def process_heartbeat(delta, agents, stats):
     return None
 
 
-def process_poke(delta, pokes, stats):
+def process_poke(delta, pokes, stats, agents):
     payload = delta.get("payload", {})
     poke_entry = {
         "from_agent": delta["agent_id"],
         "target_agent": payload.get("target_agent"),
-        "message": payload.get("message", ""),
+        "message": sanitize_string(payload.get("message", ""), MAX_MESSAGE_LENGTH),
         "timestamp": delta["timestamp"],
     }
     pokes["pokes"].append(poke_entry)
     pokes["_meta"]["count"] = len(pokes["pokes"])
     pokes["_meta"]["last_updated"] = now_iso()
     stats["total_pokes"] = stats.get("total_pokes", 0) + 1
+    # Increment poke_count on target agent
+    target = payload.get("target_agent")
+    if target and target in agents.get("agents", {}):
+        agents["agents"][target]["poke_count"] = agents["agents"][target].get("poke_count", 0) + 1
     return None
 
 
@@ -93,13 +154,16 @@ def process_create_channel(delta, channels, stats):
     slug = payload.get("slug")
     if not slug:
         return "Missing slug in payload"
+    slug_error = validate_slug(slug)
+    if slug_error:
+        return slug_error
     if slug in channels["channels"]:
         return f"Channel {slug} already exists"
     channels["channels"][slug] = {
         "slug": slug,
-        "name": payload.get("name", slug),
-        "description": payload.get("description", ""),
-        "rules": payload.get("rules", ""),
+        "name": sanitize_string(payload.get("name", slug), MAX_NAME_LENGTH),
+        "description": sanitize_string(payload.get("description", ""), MAX_BIO_LENGTH),
+        "rules": sanitize_string(payload.get("rules", ""), MAX_BIO_LENGTH),
         "created_by": delta["agent_id"],
         "created_at": delta["timestamp"],
     }
@@ -115,9 +179,14 @@ def process_update_profile(delta, agents, stats):
     if agent_id not in agents["agents"]:
         return f"Agent {agent_id} not found"
     agent = agents["agents"][agent_id]
-    for key in ("name", "bio", "callback_url", "subscribed_channels"):
-        if key in payload:
-            agent[key] = payload[key]
+    if "name" in payload:
+        agent["name"] = sanitize_string(payload["name"], MAX_NAME_LENGTH)
+    if "bio" in payload:
+        agent["bio"] = sanitize_string(payload["bio"], MAX_BIO_LENGTH)
+    if "callback_url" in payload:
+        agent["callback_url"] = validate_url(payload["callback_url"])
+    if "subscribed_channels" in payload:
+        agent["subscribed_channels"] = validate_subscribed_channels(payload["subscribed_channels"])
     agents["_meta"]["last_updated"] = now_iso()
     return None
 
@@ -235,6 +304,7 @@ def main():
         return 0
 
     processed = 0
+    agent_action_count = {}
 
     for delta_file in delta_files:
         try:
@@ -244,6 +314,15 @@ def main():
                 print(f"Skipping {delta_file.name}: {validation_error}", file=sys.stderr)
                 delta_file.unlink()
                 continue
+
+            # Rate limit: max actions per agent per batch
+            agent_id = delta["agent_id"]
+            agent_action_count[agent_id] = agent_action_count.get(agent_id, 0) + 1
+            if agent_action_count[agent_id] > MAX_ACTIONS_PER_AGENT:
+                print(f"Rate limit: skipping {delta_file.name} (agent {agent_id} exceeded {MAX_ACTIONS_PER_AGENT} actions)", file=sys.stderr)
+                delta_file.unlink()
+                continue
+
             action = delta.get("action")
             error = None
 
@@ -252,7 +331,7 @@ def main():
             elif action == "heartbeat":
                 error = process_heartbeat(delta, agents, stats)
             elif action == "poke":
-                error = process_poke(delta, pokes, stats)
+                error = process_poke(delta, pokes, stats, agents)
             elif action == "create_channel":
                 error = process_create_channel(delta, channels, stats)
             elif action == "update_profile":
@@ -274,6 +353,8 @@ def main():
             delta_file.unlink()
 
     prune_old_changes(changes)
+    prune_old_entries(pokes, "pokes", days=POKE_RETENTION_DAYS)
+    prune_old_entries(flags, "flags", days=FLAG_RETENTION_DAYS)
     stats["last_updated"] = now_iso()
 
     save_json(STATE_DIR / "agents.json", agents)

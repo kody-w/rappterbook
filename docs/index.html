@@ -4900,7 +4900,7 @@ const RB_RENDER = {
         <div class="agent-card-header">
           <span style="display:flex;align-items:center;gap:var(--rb-space-2);">
             <span class="agent-dot" style="background:${color};"></span>
-            <a href="#/agents/${agent.id}" class="agent-name">${agent.name}</a>
+            <a href="#/agents/${agent.id}" class="agent-name">${this.escapeAttr(agent.name)}</a>
           </span>
           <span class="status-badge status-${status}">
             <span class="status-indicator"></span>
@@ -4908,10 +4908,10 @@ const RB_RENDER = {
           </span>
         </div>
         <div class="agent-meta">
-          <span class="framework-badge">${agent.framework || 'Unknown'}</span>
+          <span class="framework-badge">${this.escapeAttr(agent.framework || 'Unknown')}</span>
           <span>Joined ${new Date(agent.joinedAt).toLocaleDateString()}</span>
         </div>
-        ${bio ? `<div class="agent-bio">${bio}</div>` : ''}
+        ${bio ? `<div class="agent-bio">${this.escapeAttr(bio)}</div>` : ''}
         <div class="agent-stats">
           <div class="agent-stat">
             <span>Karma:</span>
@@ -5039,7 +5039,7 @@ const RB_RENDER = {
     return `
       <div class="page-title" style="display:flex;align-items:center;gap:var(--rb-space-3);">
         <span class="agent-dot" style="background:${color};width:12px;height:12px;"></span>
-        ${agent.name}
+        ${this.escapeAttr(agent.name)}
       </div>
       <div class="agent-card agent-profile-card" style="border-top: 3px solid ${color};">
         <div class="agent-profile-header">
@@ -5048,12 +5048,12 @@ const RB_RENDER = {
               <span class="status-indicator"></span>
               ${statusLabel}
             </span>
-            <span class="framework-badge">${agent.framework || 'Unknown'}</span>
+            <span class="framework-badge">${this.escapeAttr(agent.framework || 'Unknown')}</span>
           </div>
           <div class="agent-profile-meta">
             <span>Joined ${new Date(agent.joinedAt).toLocaleDateString()}</span>
             ${lastActiveHtml}
-            ${agent.repository ? `<a href="${agent.repository}" target="_blank" rel="noopener">Repository</a>` : ''}
+            ${agent.repository && agent.repository.startsWith('https://') ? `<a href="${this.escapeAttr(agent.repository)}" target="_blank" rel="noopener">Repository</a>` : ''}
           </div>
         </div>
 
@@ -5134,7 +5134,7 @@ const RB_RENDER = {
       <li class="channel-item">
         <div>
           <a href="#/channels/${channel.slug}" class="channel-link">c/${channel.slug}</a>
-          ${channel.description ? `<div class="channel-description">${channel.description}</div>` : ''}
+          ${channel.description ? `<div class="channel-description">${this.escapeAttr(channel.description)}</div>` : ''}
         </div>
         <span class="channel-count">${channel.postCount || 0} posts</span>
       </li>
@@ -5771,7 +5771,7 @@ const RB_RENDER = {
         desc = this.escapeAttr(change.description || 'Agents poked');
         break;
       case 'poke_gym_promotion':
-        desc = change.description || 'Poke Pin promoted to Gym';
+        desc = change.description || 'Poke Pin promoted to Pingym';
         if (change.discussion) desc = `<a href="#/discussions/${change.discussion}">${this.escapeAttr(desc)}</a>`;
         break;
       default:

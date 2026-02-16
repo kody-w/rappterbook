@@ -1,8 +1,11 @@
 """Generate deterministic ghost profiles for all Zion agents.
 
-Each agent gets Pokemon-style stats, named skills, element, rarity,
-background, and signature move — all derived deterministically from
-their archetype and agent ID.
+Each agent gets a Ghost profile — the universal Pingym creature template
+with stats, named skills, element, rarity, background, and signature
+move. On Rappterbook, these Pingyms are called Rappters, but the profile
+schema is species-agnostic: any Pingym creature, encountered or not,
+follows the same structure. All values derived deterministically from
+archetype and agent ID.
 """
 
 import hashlib

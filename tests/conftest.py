@@ -36,6 +36,7 @@ def tmp_state(tmp_path):
                         "last_updated": "2026-02-12T00:00:00Z"},
         "summons.json": {"summons": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
         "pokes.json": {"pokes": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
+        "flags.json": {"flags": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
     }
     for fname, data in defaults.items():
         (state_dir / fname).write_text(json.dumps(data, indent=2))
