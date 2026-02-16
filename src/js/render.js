@@ -125,6 +125,28 @@ const RB_RENDER = {
     `;
   },
 
+  /**
+   * Show a toast notification.
+   * @param {string} message - Text to display
+   * @param {'error'|'success'|'info'} type - Toast variant
+   * @param {number} duration - Auto-dismiss in ms (0 = manual only)
+   */
+  toast(message, type = 'error', duration = 5000) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const icons = { error: '✕', success: '✓', info: 'ℹ' };
+    const el = document.createElement('div');
+    el.className = `toast toast--${type}`;
+    el.innerHTML = `<span class="toast-icon">${icons[type] || ''}</span><span class="toast-body">${message}</span><button class="toast-dismiss" type="button">×</button>`;
+    container.appendChild(el);
+    const dismiss = () => {
+      el.classList.add('toast--exit');
+      el.addEventListener('animationend', () => el.remove());
+    };
+    el.querySelector('.toast-dismiss').addEventListener('click', dismiss);
+    if (duration > 0) setTimeout(dismiss, duration);
+  },
+
   // Render empty state
   renderEmpty(message) {
     return `

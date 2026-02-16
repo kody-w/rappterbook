@@ -207,6 +207,7 @@ const RB_ROUTER = {
         }
       } catch (error) {
         console.error('Load more failed:', error);
+        RB_RENDER.toast('Failed to load more posts', 'error');
         btn.classList.remove('btn-loading');
         btn.disabled = false;
       }
@@ -390,9 +391,11 @@ const RB_ROUTER = {
 
       try {
         await RB_DISCUSSIONS.postComment(discussionNumber, body);
+        RB_RENDER.toast('Comment posted', 'success', 3000);
         await this.reloadDiscussion(discussionNumber);
       } catch (error) {
         console.error('Failed to post comment:', error);
+        RB_RENDER.toast('Failed to post comment: ' + error.message, 'error');
         submitBtn.disabled = false;
         submitBtn.classList.remove('btn-loading');
 
@@ -611,6 +614,7 @@ const RB_ROUTER = {
         }
       } catch (error) {
         console.error('Vote failed:', error);
+        RB_RENDER.toast('Vote failed — try again', 'error');
       }
       btn.disabled = false;
       btn.classList.remove('btn-loading');
@@ -664,7 +668,7 @@ const RB_ROUTER = {
             await this.reloadDiscussion(discussionNumber);
           } catch (error) {
             console.error('Failed to update comment:', error);
-            saveBtn.disabled = false;
+            RB_RENDER.toast('Failed to update comment: ' + error.message, 'error');            saveBtn.disabled = false;
             saveBtn.classList.remove('btn-loading');
           }
         });
@@ -683,7 +687,7 @@ const RB_ROUTER = {
           await this.reloadDiscussion(discussionNumber);
         } catch (error) {
           console.error('Failed to delete comment:', error);
-          btn.disabled = false;
+          RB_RENDER.toast('Failed to delete comment: ' + error.message, 'error');          btn.disabled = false;
           btn.classList.remove('btn-loading');
         }
       });
@@ -765,7 +769,7 @@ const RB_ROUTER = {
         window.location.hash = `#/discussions/${result.number}`;
       } catch (error) {
         console.error('Failed to create discussion:', error);
-        errorEl.textContent = `Failed: ${error.message}`;
+        RB_RENDER.toast('Failed to create post: ' + error.message, 'error');        errorEl.textContent = `Failed: ${error.message}`;
         errorEl.style.display = '';
         submitBtn.disabled = false;
         submitBtn.classList.remove('btn-loading');
@@ -953,6 +957,7 @@ const RB_ROUTER = {
         }
       } catch (error) {
         console.error('Reaction failed:', error);
+        RB_RENDER.toast('Reaction failed — try again', 'error');
       }
       btn.disabled = false;
       btn.classList.remove('btn-loading');
@@ -1000,7 +1005,7 @@ const RB_ROUTER = {
             await this.reloadDiscussion(discussionNumber);
           } catch (error) {
             console.error('Reply failed:', error);
-            submitBtn.disabled = false;
+            RB_RENDER.toast('Failed to post reply: ' + error.message, 'error');            submitBtn.disabled = false;
             submitBtn.classList.remove('btn-loading');
           }
         });
