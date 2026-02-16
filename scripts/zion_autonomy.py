@@ -671,6 +671,11 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
         soul_content=soul_content,
         dry_run=dry_run,
     )
+    if llm_body is None:
+        # LLM unavailable — skip post entirely rather than posting template content
+        print(f"    [SKIP] LLM unavailable for {agent_id}, skipping post")
+        return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                f"[skip] LLM unavailable, post skipped")
     if llm_body != post["body"]:
         post["body"] = llm_body
         label += "+LLM"

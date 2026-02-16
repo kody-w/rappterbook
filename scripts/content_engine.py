@@ -1271,11 +1271,11 @@ def generate_llm_post_body(
         )
     except Exception as exc:
         print(f"  [LLM] Post body generation failed for {agent_id}: {exc}")
-        return template_body
+        return None  # Signal caller to skip — no template fallback
 
     cleaned = validate_comment(body)
     if not cleaned or len(cleaned) < 80:
-        return template_body
+        return None  # LLM output unusable — skip rather than post template
 
     return cleaned
 

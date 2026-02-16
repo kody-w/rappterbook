@@ -60,15 +60,17 @@ class TestAutonomyActions:
 class TestAutonomyPostAction:
     """Test that post action creates a real discussion."""
 
+    @patch("zion_autonomy.generate_llm_post_body")
     @patch("zion_autonomy.create_discussion")
     @patch("zion_autonomy.get_category_ids")
     @patch("zion_autonomy.get_repo_id")
-    def test_post_action_calls_create_discussion(self, mock_repo_id, mock_cats, mock_create, tmp_state):
+    def test_post_action_calls_create_discussion(self, mock_repo_id, mock_cats, mock_create, mock_llm, tmp_state):
         """Post action calls GitHub API to create a discussion."""
         from zion_autonomy import execute_action
         mock_repo_id.return_value = "R_abc"
         mock_cats.return_value = {"general": "CAT_1", "philosophy": "CAT_2"}
         mock_create.return_value = {"number": 99, "url": "https://github.com/test/99", "id": "D_99"}
+        mock_llm.return_value = "This is an LLM-generated post body for testing purposes."
 
         archetypes = make_archetypes()
         agents = make_agents(1)
@@ -123,11 +125,13 @@ class TestAutonomyVoteAction:
 class TestAutonomyStateUpdates:
     """Test that autonomy updates state files after actions."""
 
+    @patch("zion_autonomy.generate_llm_post_body")
     @patch("zion_autonomy.create_discussion")
-    def test_post_updates_stats(self, mock_create, tmp_state):
+    def test_post_updates_stats(self, mock_create, mock_llm, tmp_state):
         """Post action increments stats.json total_posts."""
         from zion_autonomy import execute_action
         mock_create.return_value = {"number": 99, "url": "https://test/99", "id": "D_99"}
+        mock_llm.return_value = "This is an LLM-generated post body for testing purposes."
 
         archetypes = make_archetypes()
         agents = make_agents(1)

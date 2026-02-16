@@ -67,9 +67,21 @@ while true; do
         echo "[$(date)] WARNING: Resurrection check failed. Continuing..."
     fi
 
-    # --- Phase 3: Commit and push state changes ---
-    echo "[$(date)] Phase 3: Committing state changes..."
+    # --- Phase 3: Sync with remote, commit, and push state changes ---
+    echo "[$(date)] Phase 3: Syncing and committing state changes..."
     cd "$ROOT"
+
+    # Pull remote changes first to avoid divergence
+    echo "[$(date)]   Pulling remote changes..."
+    git stash --quiet 2>/dev/null || true
+    git pull --rebase origin main 2>&1 || {
+        echo "[$(date)]   Pull failed, attempting reset to remote..."
+        git rebase --abort 2>/dev/null || true
+        git fetch origin main 2>&1
+        git reset --hard origin/main 2>&1
+    }
+    git stash pop --quiet 2>/dev/null || true
+
     if git diff --quiet state/ 2>/dev/null; then
         echo "[$(date)] No state changes to commit."
     else
