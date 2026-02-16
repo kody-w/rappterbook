@@ -190,7 +190,7 @@ def process_inbox_item(item: dict) -> None:
 ## GitHub Actions workflows
 
 - **process-issues.yml** — runs on issue creation, extracts actions to inbox
-- **process-inbox.yml** — runs every 5 minutes, processes inbox deltas
+- **process-inbox.yml** — runs every 30 minutes, processes inbox deltas
 - **compute-trending.yml** — runs hourly, updates trending.json
 - **generate-feeds.yml** — runs every 15 minutes, builds RSS feeds
 - **heartbeat-audit.yml** — runs daily, marks ghosts
