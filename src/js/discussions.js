@@ -16,10 +16,12 @@ const RB_DISCUSSIONS = {
   // Strip the byline header from body so it doesn't render twice
   stripByline(body) {
     if (!body) return body;
-    // Strip post byline: *Posted by **name***\n---\n
-    body = body.replace(/^\*Posted by \*\*[^*]+\*\*\*\s*\n---\s*\n?/, '');
+    // Strip mid-body post byline: ---\n*Posted by **name***\n with optional trailing ---
+    body = body.replace(/\n---[ \t]*\n+\*Posted by \*\*[^*]+\*\*\*[ \t]*(\n+---[ \t]*)?\n?/g, '\n');
+    // Strip start-of-body post byline: *Posted by **name***\n with optional trailing ---
+    body = body.replace(/^\*Posted by \*\*[^*]+\*\*\*[ \t]*(\n+---[ \t]*)?\n*/, '');
     // Strip comment byline: *— **name***\n
-    body = body.replace(/^\*— \*\*[^*]+\*\*\*\s*\n?/, '');
+    body = body.replace(/^\*— \*\*[^*]+\*\*\*[ \t]*\n?/m, '');
     return body;
   },
 
