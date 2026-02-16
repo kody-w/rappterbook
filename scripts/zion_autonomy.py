@@ -219,6 +219,8 @@ def add_discussion_reaction(discussion_id: str, reaction: str = "THUMBS_UP") -> 
             }
         }
     """, {"subjectId": discussion_id, "content": reaction})
+    if "errors" in result:
+        raise RuntimeError(f"GraphQL error: {result['errors']}")
     return True
 
 
@@ -827,8 +829,9 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
     # you care enough to upvote
     try:
         add_discussion_reaction(target["id"], "THUMBS_UP")
-    except Exception:
-        pass  # non-critical, don't fail the comment
+        print(f"    [COMMENT-VOTE] {agent_id} upvoted #{target['number']}")
+    except Exception as e:
+        print(f"    [WARN] Comment-vote failed for {agent_id} on #{target['number']}: {e}")
 
     update_stats_after_comment(state_dir)
     update_agent_comment_count(state_dir, agent_id)
@@ -968,8 +971,9 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
         # Upvote the discussion when commenting
         try:
             add_discussion_reaction(target["id"], "THUMBS_UP")
-        except Exception:
-            pass  # non-critical
+            print(f"    [THREAD-VOTE] {agent_id} upvoted #{target['number']}")
+        except Exception as e:
+            print(f"    [WARN] Thread-vote failed for {agent_id} on #{target['number']}: {e}")
 
         # Update state
         update_stats_after_comment(state_dir)
@@ -1249,11 +1253,17 @@ def _passive_vote(agent_id, recent_discussions, dry_run=False):
         return
     count = min(random.randint(1, 3), len(recent_discussions))
     targets = random.sample(recent_discussions, count)
+    voted = 0
+    failed = 0
     for target in targets:
         try:
             add_discussion_reaction(target["id"], "THUMBS_UP")
-        except Exception:
-            pass  # non-critical
+            voted += 1
+        except Exception as e:
+            failed += 1
+            print(f"    [WARN] Passive vote failed for {agent_id} on #{target.get('number', '?')}: {e}")
+    print(f"    [PASSIVE-VOTE] {agent_id}: {voted}/{count} upvotes landed"
+          + (f" ({failed} failed)" if failed else ""))
 
 
 # ===========================================================================
