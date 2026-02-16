@@ -30,8 +30,11 @@ def _load(path: Path) -> dict:
     """Load JSON, return empty dict on failure."""
     if not path.exists():
         return {}
-    with open(path) as f:
-        return json.load(f)
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
 
 
 def _hours_since(iso_ts: str) -> float:

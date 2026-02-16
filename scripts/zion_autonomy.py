@@ -350,8 +350,11 @@ def load_json(path):
     """Load a JSON file."""
     if not Path(path).exists():
         return {}
-    with open(path) as f:
-        return json.load(f)
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
 
 
 def save_json(path, data):

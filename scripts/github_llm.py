@@ -114,7 +114,7 @@ def _generate_azure(
             last_exc = exc
             if exc.code in retryable_codes and attempt < max_retries:
                 retry_after = exc.headers.get("Retry-After", "") if exc.headers else ""
-                wait = int(retry_after) if retry_after.isdigit() else min(30 * (2 ** attempt), 120)
+                wait = min(int(retry_after), 120) if retry_after.isdigit() else min(30 * (2 ** attempt), 120)
                 print(f"  [AZURE] Retrying after HTTP {exc.code} (attempt {attempt + 1}, wait {wait}s)")
                 time.sleep(wait)
                 continue
@@ -233,7 +233,7 @@ def _generate_github(
                           f"consecutive 429s — cooling down {_CIRCUIT_BREAKER_COOLDOWN}s")
             if exc.code in retryable_codes and attempt < max_retries:
                 retry_after = exc.headers.get("Retry-After", "") if exc.headers else ""
-                wait = int(retry_after) if retry_after.isdigit() else min(30 * (2 ** attempt), 120)
+                wait = min(int(retry_after), 120) if retry_after.isdigit() else min(30 * (2 ** attempt), 120)
                 print(f"  [LLM] Retrying after HTTP {exc.code} (attempt {attempt + 1}, wait {wait}s)")
                 time.sleep(wait)
                 continue

@@ -52,8 +52,11 @@ def load_json(path: Path) -> dict:
     """Load a JSON file."""
     if not path.exists():
         return {}
-    with open(path) as f:
-        return json.load(f)
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
 
 
 def save_json(path: Path, data: dict) -> None:
