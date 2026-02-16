@@ -31,7 +31,7 @@ MIN_AGENTS = 8
 MAX_AGENTS = 12
 
 # Adaptive mutation pacing — minimum seconds between GitHub API mutations
-MUTATION_MIN_GAP = 12
+MUTATION_MIN_GAP = 20
 _last_mutation_time = 0.0
 
 
@@ -39,10 +39,11 @@ def pace_mutation():
     """Ensure minimum time gap between GitHub mutations.
 
     GitHub's Discussion API returns 'submitted too quickly' if mutations
-    arrive faster than ~10s apart. Instead of fixed sleeps, we track the
-    actual time since the last mutation and only sleep the difference.
-    LLM processing time counts toward the gap, so fast runs get throttled
-    and slow runs pass through without unnecessary delays.
+    arrive faster than ~10s apart. We use a 20s gap for safety margin.
+    Instead of fixed sleeps, we track the actual time since the last
+    mutation and only sleep the difference. LLM processing time counts
+    toward the gap, so fast runs get throttled and slow runs pass through
+    without unnecessary delays.
     """
     global _last_mutation_time
     if _last_mutation_time > 0:
@@ -50,6 +51,17 @@ def pace_mutation():
         if elapsed < MUTATION_MIN_GAP:
             remaining = MUTATION_MIN_GAP - elapsed
             time.sleep(remaining)
+    _last_mutation_time = time.time()
+
+
+def mark_mutation_done():
+    """Record that a mutation just completed (call after successful retries).
+
+    When github_graphql retries a throttled request, pace_mutation's
+    timestamp becomes stale. This resets it so the next pace_mutation
+    sleeps the full gap from the actual last successful mutation.
+    """
+    global _last_mutation_time
     _last_mutation_time = time.time()
 
 # Import content engine functions
@@ -82,8 +94,10 @@ REPO = os.environ.get("REPO", "rappterbook")
 def github_graphql(query: str, variables: dict = None, retries: int = 3) -> dict:
     """Execute a GitHub GraphQL query with retry on rate limit errors.
 
-    Retries up to `retries` times with exponential backoff when GitHub
-    returns 'submitted too quickly' or similar throttle errors.
+    Retries up to `retries` times with linear backoff (20s, 40s, 60s)
+    when GitHub returns 'submitted too quickly' or similar throttle errors.
+    After a successful retry, updates the mutation timestamp so pacing
+    stays accurate.
     """
     import urllib.request
     payload = json.dumps({"query": query, "variables": variables or {}}).encode()
@@ -101,13 +115,16 @@ def github_graphql(query: str, variables: dict = None, retries: int = 3) -> dict
             result = json.loads(resp.read())
 
         if "errors" not in result:
+            if attempt > 0:
+                # Successful retry — reset pacing so next mutation waits
+                mark_mutation_done()
             return result
 
         error_msg = str(result["errors"])
         is_throttle = "submitted too quickly" in error_msg or "rate limit" in error_msg.lower()
 
         if is_throttle and attempt < retries:
-            wait = 2 ** attempt * 5  # 5s, 10s, 20s
+            wait = (attempt + 1) * 20  # 20s, 40s, 60s
             print(f"    [RETRY] Throttled, waiting {wait}s (attempt {attempt + 1}/{retries})...")
             time.sleep(wait)
             continue
@@ -611,7 +628,8 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     # Use pre-computed observation, or compute now if not provided
     if observation is None and pulse is not None:
         agent_data = (agents_data or {}).get("agents", {}).get(agent_id, {})
-        observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content)
+        observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content,
+                                    state_dir=state_dir)
 
     # Smart fallback: ghost when observations are rich, template otherwise
     use_ghost = observation is not None and should_use_ghost(observation)
@@ -1220,7 +1238,8 @@ def main():
         # Compute ghost observation once per agent — drives both decision and execution
         observation = None
         if pulse is not None:
-            observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content)
+            observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content,
+                                      state_dir=STATE_DIR)
 
         action = decide_action(agent_id, agent_data, soul_content,
                                archetypes_data, changes_data,
