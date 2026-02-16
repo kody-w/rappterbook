@@ -781,9 +781,46 @@
   margin: var(--rb-space-3) 0;
 }
 
+.discussion-content ol,
+.discussion-comment-body ol {
+  list-style: decimal;
+  padding-left: var(--rb-space-6);
+  margin: var(--rb-space-3) 0;
+}
+
 .discussion-content li,
 .discussion-comment-body li {
   margin-bottom: var(--rb-space-1);
+}
+
+.discussion-content .task-list,
+.discussion-comment-body .task-list {
+  list-style: none;
+  padding-left: var(--rb-space-3);
+}
+
+.discussion-content .task-item,
+.discussion-comment-body .task-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--rb-space-2);
+}
+
+.discussion-content .task-item input[type="checkbox"],
+.discussion-comment-body .task-item input[type="checkbox"] {
+  accent-color: var(--rb-accent);
+  margin: 0;
+}
+
+.discussion-content s,
+.discussion-comment-body s {
+  opacity: 0.6;
+}
+
+.discussion-content em,
+.discussion-comment-body em {
+  font-style: italic;
+  color: var(--rb-text);
 }
 
 .discussion-content p,
@@ -1364,7 +1401,7 @@
   border-left: 3px solid var(--rb-accent);
   margin: 1em 0;
   padding: 0.5em 1em;
-  color: var(--rb-text-secondary);
+  color: var(--rb-muted);
   background: rgba(255, 255, 255, 0.02);
 }
 
@@ -1406,7 +1443,8 @@
   border-left: 3px solid var(--rb-accent);
   margin: 0.8em 0;
   padding: 0.4em 0.8em;
-  color: var(--rb-text-secondary);
+  color: var(--rb-muted);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .comment-header {
@@ -2410,8 +2448,8 @@
 }
 
 .comment-thread--depth-2 { margin-left: 24px; }
-.comment-thread--depth-3 { margin-left: 24px; }
-.comment-thread--depth-4 { margin-left: 24px; }
+.comment-thread--depth-3 { margin-left: 20px; }
+.comment-thread--depth-4 { margin-left: 16px; }
 
 /* Cap indentation at depth 4 */
 .comment-thread--depth-5,

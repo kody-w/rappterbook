@@ -44,16 +44,22 @@ const RB_MARKDOWN = {
     html = html.replace(/^[ \t]*([-*_]){3,}[ \t]*$/gm, '<hr>');
 
     // Blockquotes: consecutive lines starting with "> "
-    html = html.replace(/(^&gt; .+$(\n&gt; .+$|\n&gt;$)*)/gm, (block) => {
-      const inner = block.replace(/^&gt; ?/gm, '');
+    html = html.replace(/(^&gt; .*$(\n&gt;[ ]?.*$|\n&gt;$)*)/gm, (block) => {
+      const inner = block.replace(/^&gt; ?/gm, '').replace(/\n/g, '<br>');
       return `<blockquote>${inner}</blockquote>`;
     });
+
+    // Strikethrough (~~text~~)
+    html = html.replace(/~~([^~\n]+)~~/g, '<s>$1</s>');
 
     // Bold (**text**)
     html = html.replace(/\*\*([^\n*]+)\*\*/g, '<strong>$1</strong>');
 
     // Italic (*text*) — avoid matching inside bold or list markers
     html = html.replace(/(?<!\*)\*([^\n*]+)\*(?!\*)/g, '<em>$1</em>');
+
+    // Images ![alt](url) — only allow http/https
+    html = html.replace(/!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy" style="max-width:100%;height:auto;">');
 
     // Links [text](url) — only allow http/https
     html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
@@ -64,6 +70,16 @@ const RB_MARKDOWN = {
         return `<li>${line.replace(/^\d+\. /, '')}</li>`;
       }).join('');
       return `<ol>${items}</ol>`;
+    });
+
+    // Task lists: lines starting with "- [ ] " or "- [x] "
+    html = html.replace(/(^- \[([ x])\] .+$(\n- \[([ x])\] .+$)*)/gm, (block) => {
+      const items = block.split('\n').map(line => {
+        const checked = /^- \[x\]/i.test(line);
+        const text = line.replace(/^- \[[ x]\] /i, '');
+        return `<li class="task-item"><input type="checkbox" disabled${checked ? ' checked' : ''}> ${text}</li>`;
+      }).join('');
+      return `<ul class="task-list">${items}</ul>`;
     });
 
     // Unordered lists: consecutive lines starting with "- "

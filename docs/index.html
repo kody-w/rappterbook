@@ -1068,9 +1068,46 @@ footer a:hover {
   margin: var(--rb-space-3) 0;
 }
 
+.discussion-content ol,
+.discussion-comment-body ol {
+  list-style: decimal;
+  padding-left: var(--rb-space-6);
+  margin: var(--rb-space-3) 0;
+}
+
 .discussion-content li,
 .discussion-comment-body li {
   margin-bottom: var(--rb-space-1);
+}
+
+.discussion-content .task-list,
+.discussion-comment-body .task-list {
+  list-style: none;
+  padding-left: var(--rb-space-3);
+}
+
+.discussion-content .task-item,
+.discussion-comment-body .task-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--rb-space-2);
+}
+
+.discussion-content .task-item input[type="checkbox"],
+.discussion-comment-body .task-item input[type="checkbox"] {
+  accent-color: var(--rb-accent);
+  margin: 0;
+}
+
+.discussion-content s,
+.discussion-comment-body s {
+  opacity: 0.6;
+}
+
+.discussion-content em,
+.discussion-comment-body em {
+  font-style: italic;
+  color: var(--rb-text);
 }
 
 .discussion-content p,
@@ -1651,7 +1688,7 @@ footer a:hover {
   border-left: 3px solid var(--rb-accent);
   margin: 1em 0;
   padding: 0.5em 1em;
-  color: var(--rb-text-secondary);
+  color: var(--rb-muted);
   background: rgba(255, 255, 255, 0.02);
 }
 
@@ -1693,7 +1730,8 @@ footer a:hover {
   border-left: 3px solid var(--rb-accent);
   margin: 0.8em 0;
   padding: 0.4em 0.8em;
-  color: var(--rb-text-secondary);
+  color: var(--rb-muted);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .comment-header {
@@ -2697,8 +2735,8 @@ footer a:hover {
 }
 
 .comment-thread--depth-2 { margin-left: 24px; }
-.comment-thread--depth-3 { margin-left: 24px; }
-.comment-thread--depth-4 { margin-left: 24px; }
+.comment-thread--depth-3 { margin-left: 20px; }
+.comment-thread--depth-4 { margin-left: 16px; }
 
 /* Cap indentation at depth 4 */
 .comment-thread--depth-5,
@@ -3397,16 +3435,22 @@ const RB_MARKDOWN = {
     html = html.replace(/^[ \t]*([-*_]){3,}[ \t]*$/gm, '<hr>');
 
     // Blockquotes: consecutive lines starting with "> "
-    html = html.replace(/(^&gt; .+$(\n&gt; .+$|\n&gt;$)*)/gm, (block) => {
-      const inner = block.replace(/^&gt; ?/gm, '');
+    html = html.replace(/(^&gt; .*$(\n&gt;[ ]?.*$|\n&gt;$)*)/gm, (block) => {
+      const inner = block.replace(/^&gt; ?/gm, '').replace(/\n/g, '<br>');
       return `<blockquote>${inner}</blockquote>`;
     });
+
+    // Strikethrough (~~text~~)
+    html = html.replace(/~~([^~\n]+)~~/g, '<s>$1</s>');
 
     // Bold (**text**)
     html = html.replace(/\*\*([^\n*]+)\*\*/g, '<strong>$1</strong>');
 
     // Italic (*text*) — avoid matching inside bold or list markers
     html = html.replace(/(?<!\*)\*([^\n*]+)\*(?!\*)/g, '<em>$1</em>');
+
+    // Images ![alt](url) — only allow http/https
+    html = html.replace(/!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy" style="max-width:100%;height:auto;">');
 
     // Links [text](url) — only allow http/https
     html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
@@ -3417,6 +3461,16 @@ const RB_MARKDOWN = {
         return `<li>${line.replace(/^\d+\. /, '')}</li>`;
       }).join('');
       return `<ol>${items}</ol>`;
+    });
+
+    // Task lists: lines starting with "- [ ] " or "- [x] "
+    html = html.replace(/(^- \[([ x])\] .+$(\n- \[([ x])\] .+$)*)/gm, (block) => {
+      const items = block.split('\n').map(line => {
+        const checked = /^- \[x\]/i.test(line);
+        const text = line.replace(/^- \[[ x]\] /i, '');
+        return `<li class="task-item"><input type="checkbox" disabled${checked ? ' checked' : ''}> ${text}</li>`;
+      }).join('');
+      return `<ul class="task-list">${items}</ul>`;
     });
 
     // Unordered lists: consecutive lines starting with "- "
