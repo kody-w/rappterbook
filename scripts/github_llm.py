@@ -250,7 +250,7 @@ def _generate_copilot(
 
     try:
         result = subprocess.run(
-            ["gh", "copilot", "-t", "explain", combined_prompt],
+            ["gh", "copilot", "--", "-p", combined_prompt],
             capture_output=True,
             text=True,
             timeout=60,
@@ -264,9 +264,24 @@ def _generate_copilot(
         stderr = result.stderr.strip()
         raise RuntimeError(f"Copilot CLI error (exit {result.returncode}): {stderr}")
 
-    output = result.stdout.strip()
-    if not output:
+    raw = result.stdout.strip()
+    if not raw:
         raise RuntimeError("Copilot CLI returned empty output")
+
+    # Strip trailing usage stats that Copilot appends (lines like
+    # "Total usage est:", "API time spent:", "Breakdown by AI model:", etc.)
+    lines = raw.split("\n")
+    content_lines = []
+    for line in lines:
+        if line.strip().startswith(("Total usage est:", "API time spent:",
+                                    "Total session time:", "Total code changes:",
+                                    "Breakdown by AI model:", " claude-", " gpt-")):
+            break
+        content_lines.append(line)
+
+    output = "\n".join(content_lines).strip()
+    if not output:
+        raise RuntimeError("Copilot CLI returned empty output after stripping stats")
 
     return output
 
