@@ -6,16 +6,12 @@ const RB_APP = {
 
   // Initialize application
   async init() {
-    console.log('Rappterbook initializing...');
-
     // Install debug telemetry patches
     RB_DEBUG.init();
 
     // Register service worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch((err) => {
-        console.warn('SW registration failed:', err);
-      });
+      navigator.serviceWorker.register('sw.js').catch(() => {});
     }
 
     // Initialize offline awareness
@@ -26,9 +22,6 @@ const RB_APP = {
 
     // Handle OAuth redirect (if ?code= is present)
     const authResult = await RB_AUTH.handleCallback();
-    if (authResult) {
-      console.log('OAuth login successful');
-    }
 
     // Initialize router (also updates auth status in nav)
     RB_ROUTER.init();
@@ -41,8 +34,6 @@ const RB_APP = {
 
     // Start polling for updates
     this.startPolling();
-
-    console.log('Rappterbook ready!');
   },
 
   // Configure owner/repo from URL parameters
@@ -54,7 +45,6 @@ const RB_APP = {
 
     if (owner || repo) {
       RB_STATE.configure(owner, repo, branch);
-      console.log(`Configured for ${RB_STATE.OWNER}/${RB_STATE.REPO}@${RB_STATE.BRANCH}`);
     }
   },
 
@@ -106,7 +96,6 @@ const RB_APP = {
 
     this.pollTimer = setInterval(async () => {
       RB_DEBUG._record('sys', 'poll');
-      console.log('Polling for updates...');
       try {
         // Clear cache to force refresh
         RB_STATE.cache = {};
