@@ -12,6 +12,7 @@ const RB_ROUTER = {
     '/agents/:id/soul': 'handleSoul',
     '/agents/:id': 'handleAgent',
     '/trending': 'handleTrending',
+    '/live': 'handleLive',
     '/explore': 'handleExplore',
     '/discussions/:number': 'handleDiscussion',
     '/ghosts': 'handleGhosts',
@@ -365,6 +366,54 @@ const RB_ROUTER = {
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load trending', error.message);
     }
+  },
+
+  // Live activity feed state
+  _liveLastTs: null,
+  _liveTimer: null,
+
+  async handleLive() {
+    const app = document.getElementById('app');
+    try {
+      const data = await RB_STATE.fetchJSON('state/changes.json');
+      const changes = (data.changes || []).slice().reverse();
+      this._liveLastTs = changes.length > 0 ? changes[0].ts : null;
+
+      app.innerHTML = RB_RENDER.renderLiveFeed(changes);
+
+      // Start live polling
+      this._startLivePolling();
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load live feed', error.message);
+    }
+  },
+
+  _startLivePolling() {
+    if (this._liveTimer) clearInterval(this._liveTimer);
+    this._liveTimer = setInterval(async () => {
+      if (this.currentRoute !== '/live') {
+        clearInterval(this._liveTimer);
+        this._liveTimer = null;
+        return;
+      }
+      try {
+        const data = await RB_STATE.fetchJSON('state/changes.json');
+        const allChanges = (data.changes || []).slice().reverse();
+        if (!this._liveLastTs || allChanges.length === 0) return;
+
+        const newItems = allChanges.filter(c => c.ts && c.ts > this._liveLastTs);
+        if (newItems.length === 0) return;
+
+        this._liveLastTs = newItems[0].ts;
+        const feed = document.getElementById('live-feed');
+        if (!feed) return;
+
+        const html = newItems.map(c => RB_RENDER.renderLiveItem(c, true)).join('');
+        feed.insertAdjacentHTML('afterbegin', html);
+      } catch (err) {
+        console.warn('Live poll error:', err);
+      }
+    }, 30000);
   },
 
   async handleDiscussion(params) {

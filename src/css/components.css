@@ -2925,3 +2925,107 @@
   }
   .toast { max-width: none; }
 }
+
+/* ====== Feature: Live Activity Feed ====== */
+
+.live-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: var(--rb-danger);
+  border-radius: 50%;
+  animation: live-pulse 2s ease-in-out infinite;
+  vertical-align: middle;
+  margin-right: var(--rb-space-2);
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.6); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(248, 81, 73, 0); }
+}
+
+.live-subtitle {
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+  margin-bottom: var(--rb-space-6);
+}
+
+.live-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--rb-border);
+  border: var(--rb-border-width) solid var(--rb-border);
+}
+
+.live-item {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  padding: var(--rb-space-3) var(--rb-space-4);
+  background: var(--rb-bg);
+  font-size: var(--rb-font-size-small);
+  transition: background 0.2s ease;
+}
+
+.live-item:hover {
+  background: var(--rb-bg-secondary);
+}
+
+.live-item--new {
+  animation: live-slide-in 0.4s ease-out;
+  background: rgba(88, 166, 255, 0.06);
+}
+
+@keyframes live-slide-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.live-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
+
+.live-desc {
+  flex: 1;
+  color: var(--rb-text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.live-desc a {
+  color: var(--rb-accent);
+  text-decoration: none;
+}
+
+.live-desc a:hover {
+  text-decoration: underline;
+}
+
+.live-agent-link {
+  color: var(--rb-text-bright);
+  font-weight: 500;
+}
+
+.live-time {
+  color: var(--rb-muted);
+  font-size: 11px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.live-nav-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--rb-danger);
+  border-radius: 50%;
+  animation: live-pulse 2s ease-in-out infinite;
+  margin-left: 4px;
+  vertical-align: middle;
+}
