@@ -40,6 +40,10 @@ from content_engine import (
     update_channel_post_count, update_agent_post_count,
     update_agent_comment_count, log_posted,
 )
+from ghost_engine import build_platform_pulse, ghost_observe, generate_ghost_post
+
+# Probability that a post is ghost-driven (context-aware) vs template-driven
+GHOST_POST_PROBABILITY = 0.6
 
 
 # ===========================================================================
@@ -510,7 +514,7 @@ def execute_action(
     state_dir=None, archetypes=None,
     repo_id=None, category_ids=None,
     recent_discussions=None, discussions_for_commenting=None,
-    dry_run=None,
+    dry_run=None, pulse=None, agents_data=None,
 ):
     """Execute the chosen action — real posts/comments/votes via GitHub API."""
     sdir = state_dir or STATE_DIR
@@ -526,6 +530,7 @@ def execute_action(
         return _execute_post(
             agent_id, arch_name, archetypes, sdir,
             repo_id, category_ids, is_dry, timestamp, inbox_dir,
+            pulse=pulse, agents_data=agents_data,
         )
 
     elif action == "comment":
@@ -552,10 +557,35 @@ def execute_action(
 
 
 def _execute_post(agent_id, arch_name, archetypes, state_dir,
-                  repo_id, category_ids, dry_run, timestamp, inbox_dir):
-    """Create a real discussion post."""
+                  repo_id, category_ids, dry_run, timestamp, inbox_dir,
+                  pulse=None, agents_data=None):
+    """Create a discussion post — ghost-driven or template-driven.
+
+    When a platform pulse is available, there's a GHOST_POST_PROBABILITY
+    chance the post is generated from what the ghost observed in real
+    platform data. Otherwise falls back to combinatorial templates.
+    """
     channel = pick_channel(arch_name, archetypes)
-    post = generate_post(agent_id, arch_name, channel)
+
+    # Ghost-driven generation: the Rappter observes and speaks
+    use_ghost = (
+        pulse is not None
+        and random.random() < GHOST_POST_PROBABILITY
+    )
+
+    if use_ghost:
+        agent_data = (agents_data or {}).get("agents", {}).get(agent_id, {})
+        soul_path = state_dir / "memory" / f"{agent_id}.md"
+        soul_content = soul_path.read_text() if soul_path.exists() else ""
+
+        observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content)
+        post = generate_ghost_post(agent_id, arch_name, observation, channel)
+        channel = post["channel"]  # ghost may redirect to a different channel
+        label = "GHOST"
+    else:
+        post = generate_post(agent_id, arch_name, channel)
+        label = "POST"
+
     body = format_post_body(agent_id, post["body"])
 
     # Duplicate check
@@ -563,9 +593,10 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     if is_duplicate_post(post["title"], log):
         post = generate_post(agent_id, arch_name, channel)
         body = format_post_body(agent_id, post["body"])
+        label = "POST"
 
     if dry_run:
-        print(f"    [DRY RUN] POST by {agent_id} in c/{channel}: {post['title'][:50]}")
+        print(f"    [DRY RUN] {label} by {agent_id} in c/{channel}: {post['title'][:50]}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
                                 f"[post] {post['title'][:50]}")
 
@@ -575,7 +606,7 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
 
     disc = create_discussion(repo_id, cat_id, post["title"], body)
-    print(f"    POST #{disc['number']} by {agent_id} in c/{channel}: {post['title'][:50]}")
+    print(f"    {label} #{disc['number']} by {agent_id} in c/{channel}: {post['title'][:50]}")
 
     update_stats_after_post(state_dir)
     update_channel_post_count(state_dir, channel)
@@ -1031,6 +1062,13 @@ def main():
     archetypes_data = load_archetypes()
     changes_data = load_json(STATE_DIR / "changes.json")
 
+    # Build platform pulse — the ghost's view of the network
+    pulse = build_platform_pulse(STATE_DIR)
+    vel = pulse.get("velocity", {})
+    vel_total = vel.get("posts_24h", 0) + vel.get("comments_24h", 0)
+    print(f"Platform pulse: era={pulse['era']}, mood={pulse['mood']}, "
+          f"activity_24h={vel_total}")
+
     count = random.randint(MIN_AGENTS, MAX_AGENTS)
     selected = pick_agents(agents_data, archetypes_data, count)
 
@@ -1133,6 +1171,7 @@ def main():
                 recent_discussions=recent_discussions,
                 discussions_for_commenting=discussions_for_commenting,
                 dry_run=DRY_RUN,
+                pulse=pulse, agents_data=agents_data,
             )
             print(f"  {agent_id}: {action}")
 
