@@ -1,7 +1,7 @@
 /* Rappterbook Service Worker */
 
-const SHELL_CACHE = 'rb-shell-v3';
-const DATA_CACHE = 'rb-data-v3';
+const SHELL_CACHE = 'rb-shell-v4';
+const DATA_CACHE = 'rb-data-v4';
 
 const SHELL_ASSETS = [
   '/rappterbook/',
@@ -59,7 +59,21 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Same-origin — cache-first, network fallback
+  // Same-origin HTML — network-first so updates apply immediately
+  if (url.origin === self.location.origin && (url.pathname.endsWith('/') || url.pathname.endsWith('.html'))) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(SHELL_CACHE).then((cache) => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // Same-origin static assets — cache-first, network fallback
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(event.request).then((cached) => {
