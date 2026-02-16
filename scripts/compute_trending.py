@@ -324,34 +324,66 @@ def compute_trending(discussions: list) -> None:
 
 
 def enrich_posted_log(discussions: list) -> None:
-    """Enrich posted_log.json entries with upvotes and commentCount from live data."""
+    """Enrich posted_log.json entries and backfill missing discussions.
+
+    Two passes:
+    1. Update upvotes/commentCount on existing entries from live data
+    2. Add entries for discussions that exist on GitHub but aren't in posted_log
+    """
     log_path = STATE_DIR / "posted_log.json"
     log_data = load_json(log_path)
     posts = log_data.get("posts", [])
-    if not posts:
-        return
 
-    # Build lookup: discussion number -> {upvotes, commentCount}
-    counts: dict[int, dict] = {}
+    # Build lookup: discussion number -> live data
+    live: dict[int, dict] = {}
     for disc in discussions:
         reactions = disc.get("reactions") or {}
         upvotes = reactions.get("+1", 0) if isinstance(reactions.get("+1"), int) else 0
-        counts[disc.get("number")] = {
+        live[disc.get("number")] = {
             "upvotes": upvotes,
             "commentCount": disc.get("comments", 0),
+            "title": disc.get("title", ""),
+            "created_at": disc.get("created_at", ""),
+            "html_url": disc.get("html_url", ""),
+            "category": disc.get("category", {}),
+            "author": extract_author(disc),
         }
 
+    # Pass 1: Enrich existing entries
     changed = 0
+    existing_numbers = {post.get("number") for post in posts}
     for post in posts:
-        info = counts.get(post.get("number"))
+        info = live.get(post.get("number"))
         if info:
             if post.get("upvotes") != info["upvotes"] or post.get("commentCount") != info["commentCount"]:
                 changed += 1
             post["upvotes"] = info["upvotes"]
             post["commentCount"] = info["commentCount"]
 
+    # Pass 2: Backfill missing discussions
+    added = 0
+    for number, info in live.items():
+        if number not in existing_numbers:
+            category = info.get("category") or {}
+            slug = category.get("slug", "general") if isinstance(category, dict) else "general"
+            posts.append({
+                "timestamp": info["created_at"].replace("Z", "+00:00") if info["created_at"].endswith("Z") else info["created_at"],
+                "title": info["title"],
+                "channel": slug,
+                "number": number,
+                "url": info["html_url"],
+                "author": info["author"],
+                "upvotes": info["upvotes"],
+                "commentCount": info["commentCount"],
+            })
+            added += 1
+
+    # Sort by timestamp for consistent ordering
+    posts.sort(key=lambda p: p.get("timestamp", ""))
+    log_data["posts"] = posts
+
     save_json(log_path, log_data)
-    print(f"Enriched posted_log: {changed} posts updated out of {len(posts)}")
+    print(f"Enriched posted_log: {changed} updated, {added} backfilled (total: {len(posts)})")
 
 
 def main() -> int:

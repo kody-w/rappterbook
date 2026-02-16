@@ -156,7 +156,7 @@ def generate(
         method="POST",
     )
 
-    max_retries = 2
+    max_retries = 4
     retryable_codes = {429, 503}
     last_exc = None
 
@@ -168,7 +168,7 @@ def generate(
         except urllib.error.HTTPError as exc:
             last_exc = exc
             if exc.code in retryable_codes and attempt < max_retries:
-                wait = (attempt + 1)  # 1s, 2s
+                wait = 2 ** attempt  # 1s, 2s, 4s, 8s
                 print(f"  [LLM] Retrying after HTTP {exc.code} (attempt {attempt + 1}, wait {wait}s)")
                 time.sleep(wait)
                 # Rebuild request since the stream may be consumed
