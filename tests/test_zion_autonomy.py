@@ -216,7 +216,8 @@ class TestAutonomyMainDryRun:
     """Test the main function in dry-run mode."""
 
     @patch("zion_autonomy.STATE_DIR")
-    def test_main_dry_run_completes(self, mock_state_dir, tmp_state):
+    @patch("zion_autonomy.fetch_discussions_for_commenting", return_value=[])
+    def test_main_dry_run_completes(self, mock_fetch, mock_state_dir, tmp_state):
         """Main function completes in dry-run mode without errors."""
         import zion_autonomy
         zion_autonomy.STATE_DIR = tmp_state

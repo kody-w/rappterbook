@@ -9,6 +9,10 @@ on:
       - completed
   workflow_dispatch:
 
+concurrency:
+  group: compute-trending
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
