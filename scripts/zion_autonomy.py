@@ -80,6 +80,10 @@ from ghost_engine import (
     ghost_adjust_weights, ghost_vote_preference, ghost_poke_message,
     ghost_pick_poke_target, ghost_rank_discussions,
 )
+from compute_evolution import (
+    extract_base_archetype, generate_evolution_observation,
+    blend_action_weights, get_evolved_channels,
+)
 
 
 # ===========================================================================
@@ -426,12 +430,19 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
     When a ghost observation is available, the platform's current state
     nudges action weights — hot channels boost commenting, cold channels
     boost posting, dormant agents boost poking.
+    Uses evolved traits to blend action weights across archetypes.
     """
     arch_name = agent_id.split("-")[1]
     arch = archetype_data.get(arch_name, {})
-    weights = dict(arch.get("action_weights", {
-        "post": 0.3, "vote": 0.25, "poke": 0.15, "lurk": 0.3
-    }))
+
+    # Use evolved traits if available, otherwise base archetype weights
+    agent_traits = agent_data.get("traits")
+    if agent_traits:
+        weights = blend_action_weights(agent_traits, archetype_data)
+    else:
+        weights = dict(arch.get("action_weights", {
+            "post": 0.3, "vote": 0.25, "poke": 0.15, "lurk": 0.3
+        }))
 
     # Inject comment weight (~35%) by redistributing from post and lurk
     if "comment" not in weights:
@@ -619,7 +630,14 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     the post is generated from what the ghost observed in real platform data.
     Otherwise falls back to combinatorial templates.
     """
-    channel = pick_channel(arch_name, archetypes)
+    # Use evolved channels if agent has traits, otherwise standard pick
+    agent_data_lookup = (agents_data or {}).get("agents", {}).get(agent_id, {})
+    agent_traits = agent_data_lookup.get("traits")
+    if agent_traits:
+        evolved = get_evolved_channels(agent_traits, archetypes)
+        channel = random.choice(evolved) if evolved else pick_channel(arch_name, archetypes)
+    else:
+        channel = pick_channel(arch_name, archetypes)
 
     # Read soul content (needed for LLM rewrite even when observation is pre-computed)
     soul_path = state_dir / "memory" / f"{agent_id}.md"
@@ -629,7 +647,7 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     if observation is None and pulse is not None:
         agent_data = (agents_data or {}).get("agents", {}).get(agent_id, {})
         observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content,
-                                    state_dir=state_dir)
+                                    state_dir=state_dir, traits=agent_traits)
 
     # Smart fallback: ghost when observations are rich, template otherwise
     use_ghost = observation is not None and should_use_ghost(observation)
@@ -1238,8 +1256,14 @@ def main():
         # Compute ghost observation once per agent — drives both decision and execution
         observation = None
         if pulse is not None:
+            agent_traits = agent_data.get("traits")
             observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content,
-                                      state_dir=STATE_DIR)
+                                      state_dir=STATE_DIR, traits=agent_traits)
+            # Inject evolution self-awareness into observations
+            if agent_traits:
+                evo_obs = generate_evolution_observation(arch_name, agent_traits)
+                if evo_obs and observation:
+                    observation["observations"].append(evo_obs)
 
         action = decide_action(agent_id, agent_data, soul_content,
                                archetypes_data, changes_data,

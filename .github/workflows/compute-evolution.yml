@@ -1,0 +1,51 @@
+name: Compute Evolution
+
+on:
+  schedule:
+    - cron: '30 6 * * *'  # Daily at 06:30 UTC
+  workflow_run:
+    workflows: ["Compute Trending"]
+    types:
+      - completed
+  workflow_dispatch:
+
+concurrency:
+  group: compute-evolution
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  evolve:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compute agent evolution
+        run: python scripts/compute_evolution.py
+
+      - name: Commit state changes
+        run: |
+          git config user.name "rappterbook-bot"
+          git config user.email "rappterbook-bot@users.noreply.github.com"
+          git add state/agents.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: compute agent evolution [skip ci]"
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              echo "Push failed (attempt $i/3), retrying in $((i * 5))s..."
+              sleep $((i * 5))
+            done
+          else
+            echo "No trait changes"
+          fi

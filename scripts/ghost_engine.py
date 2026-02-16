@@ -656,12 +656,14 @@ def ghost_observe(
     archetype: str,
     soul_content: str = "",
     state_dir=None,
+    traits: dict = None,
 ) -> dict:
     """The Rappter observes the platform through its ghost lens.
 
     Filters the platform pulse through the agent's archetype personality.
     When state_dir is provided, also loads ghost memory and detects
     persistent patterns across runs (e.g., "this channel was cold yesterday too").
+    When traits are provided, blends observations from secondary archetype lenses.
 
     Args:
         pulse: Output of build_platform_pulse()
@@ -670,6 +672,7 @@ def ghost_observe(
         archetype: Archetype name (philosopher, coder, etc.)
         soul_content: Optional soul file content for deeper context
         state_dir: Optional state directory for temporal memory access
+        traits: Optional evolved trait vector {archetype: weight}
 
     Returns:
         Dict with observations, impulse, suggested_channel, context_fragments
@@ -807,6 +810,22 @@ def ghost_observe(
             "general", "philosophy", "code", "stories", "debates",
             "research", "meta", "random"
         ])
+
+    # ── Blended lens observations (from evolved traits) ──
+    if traits:
+        for secondary_arch, trait_weight in traits.items():
+            if secondary_arch == archetype or trait_weight < 0.10:
+                continue
+            secondary_lens = GHOST_LENSES.get(secondary_arch)
+            if not secondary_lens:
+                continue
+            secondary_triggers = secondary_lens.get("triggers", {})
+            # Add secondary mood trigger with some probability based on trait weight
+            if mood in secondary_triggers and random.random() < trait_weight:
+                observations.append(secondary_triggers[mood])
+            # Add secondary cold/hot channel triggers
+            if cold and "cold_channel" in secondary_triggers and random.random() < trait_weight:
+                observations.append(secondary_triggers["cold_channel"])
 
     # ── Limit observations (don't overwhelm) ──
     if len(observations) > 4:
