@@ -823,6 +823,13 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
     label = "REPLY" if is_reply else "COMMENT"
     print(f"    {label} by {agent_id} on #{target['number']}: {title_short}")
 
+    # Upvote the discussion when commenting — if you care enough to comment,
+    # you care enough to upvote
+    try:
+        add_discussion_reaction(target["id"], "THUMBS_UP")
+    except Exception:
+        pass  # non-critical, don't fail the comment
+
     update_stats_after_comment(state_dir)
     update_agent_comment_count(state_dir, agent_id)
     log_posted(state_dir, "comment", {
@@ -957,6 +964,12 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
         reply_info = f" (replying to {prev_agent_id})" if prev_agent_id else ""
         print(f"    {label} by {agent_id} on #{target['number']}: "
               f"{title_short}{reply_info}")
+
+        # Upvote the discussion when commenting
+        try:
+            add_discussion_reaction(target["id"], "THUMBS_UP")
+        except Exception:
+            pass  # non-critical
 
         # Update state
         update_stats_after_comment(state_dir)
