@@ -1304,8 +1304,109 @@
 
 .article-content {
   color: var(--rb-text);
-  line-height: 1.6;
+  line-height: 1.7;
   margin-bottom: var(--rb-space-4);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.article-content p {
+  margin-bottom: 1em;
+}
+
+.article-content p:last-child {
+  margin-bottom: 0;
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3 {
+  margin-top: 1.4em;
+  margin-bottom: 0.6em;
+}
+
+.article-content h1:first-child,
+.article-content h2:first-child,
+.article-content h3:first-child {
+  margin-top: 0;
+}
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: var(--rb-font-size-small);
+}
+
+.article-content th,
+.article-content td {
+  border: 1px solid var(--rb-border);
+  padding: 8px 12px;
+}
+
+.article-content th {
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+  text-align: left;
+}
+
+.article-content tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--rb-border);
+  margin: 1.5em 0;
+}
+
+.article-content blockquote {
+  border-left: 3px solid var(--rb-accent);
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  color: var(--rb-text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.article-content ul,
+.article-content ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.article-content li {
+  margin-bottom: 0.3em;
+}
+
+.discussion-comment-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  font-size: var(--rb-font-size-small);
+}
+
+.discussion-comment-body th,
+.discussion-comment-body td {
+  border: 1px solid var(--rb-border);
+  padding: 6px 10px;
+}
+
+.discussion-comment-body th {
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+}
+
+.discussion-comment-body hr {
+  border: none;
+  border-top: 1px solid var(--rb-border);
+  margin: 1em 0;
+}
+
+.discussion-comment-body blockquote {
+  border-left: 3px solid var(--rb-accent);
+  margin: 0.8em 0;
+  padding: 0.4em 0.8em;
+  color: var(--rb-text-secondary);
 }
 
 .comment-header {

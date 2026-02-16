@@ -8,14 +8,25 @@ const RB_MARKDOWN = {
   render(text) {
     if (!text) return '';
 
+    // Strip HTML comments before escaping (e.g. <!-- geo: ... -->)
+    let html = text.replace(/<!--[\s\S]*?-->/g, '');
+
     // HTML-escape to prevent XSS
-    let html = this.escapeHtml(text);
+    html = this.escapeHtml(html);
 
     // Extract fenced code blocks before other processing
     const codeBlocks = [];
     html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
       const placeholder = `%%CODEBLOCK_${codeBlocks.length}%%`;
       codeBlocks.push(`<pre><code${lang ? ` class="language-${lang}"` : ''}>${code.replace(/\n$/, '')}</code></pre>`);
+      return placeholder;
+    });
+
+    // Extract tables before other processing
+    const tables = [];
+    html = html.replace(/(^\|.+\|[ \t]*\n\|[-| :]+\|[ \t]*\n(\|.+\|[ \t]*\n?)+)/gm, (block) => {
+      const placeholder = `%%TABLE_${tables.length}%%`;
+      tables.push(this.renderTable(block));
       return placeholder;
     });
 
@@ -29,6 +40,15 @@ const RB_MARKDOWN = {
     html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
     html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
 
+    // Horizontal rules (---, ***, ___ on their own line)
+    html = html.replace(/^[ \t]*([-*_]){3,}[ \t]*$/gm, '<hr>');
+
+    // Blockquotes: consecutive lines starting with "> "
+    html = html.replace(/(^&gt; .+$(\n&gt; .+$|\n&gt;$)*)/gm, (block) => {
+      const inner = block.replace(/^&gt; ?/gm, '');
+      return `<blockquote>${inner}</blockquote>`;
+    });
+
     // Bold (**text**)
     html = html.replace(/\*\*([^\n*]+)\*\*/g, '<strong>$1</strong>');
 
@@ -37,6 +57,14 @@ const RB_MARKDOWN = {
 
     // Links [text](url) — only allow http/https
     html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+
+    // Ordered lists: consecutive lines starting with "N. "
+    html = html.replace(/(^\d+\. .+$(\n\d+\. .+$)*)/gm, (block) => {
+      const items = block.split('\n').map(line => {
+        return `<li>${line.replace(/^\d+\. /, '')}</li>`;
+      }).join('');
+      return `<ol>${items}</ol>`;
+    });
 
     // Unordered lists: consecutive lines starting with "- "
     html = html.replace(/(^- .+$(\n- .+$)*)/gm, (block) => {
@@ -53,7 +81,7 @@ const RB_MARKDOWN = {
       const trimmed = block.trim();
       if (!trimmed) return '';
       // Don't wrap block-level elements
-      if (/^<(h[1-3]|ul|pre|%%CODEBLOCK)/.test(trimmed)) return trimmed;
+      if (/^<(h[1-3]|ul|ol|pre|hr|blockquote|%%CODEBLOCK|%%TABLE)/.test(trimmed)) return trimmed;
       return `<p>${trimmed}</p>`;
     }).join('\n');
 
@@ -62,12 +90,54 @@ const RB_MARKDOWN = {
       return `<p>${content.replace(/\n/g, '<br>')}</p>`;
     });
 
-    // Restore code blocks
+    // Restore code blocks and tables
     codeBlocks.forEach((block, i) => {
       html = html.replace(`%%CODEBLOCK_${i}%%`, block);
     });
+    tables.forEach((table, i) => {
+      html = html.replace(`%%TABLE_${i}%%`, table);
+    });
 
     return html;
+  },
+
+  /**
+   * Render a markdown table block to an HTML table.
+   */
+  renderTable(block) {
+    const lines = block.trim().split('\n');
+    if (lines.length < 2) return block;
+
+    const parseRow = (line) => line.replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim());
+    const headers = parseRow(lines[0]);
+    const alignLine = parseRow(lines[1]);
+
+    const aligns = alignLine.map(cell => {
+      const left = cell.startsWith(':');
+      const right = cell.endsWith(':');
+      if (left && right) return 'center';
+      if (right) return 'right';
+      return 'left';
+    });
+
+    let table = '<table><thead><tr>';
+    headers.forEach((h, i) => {
+      const align = aligns[i] || 'left';
+      table += `<th style="text-align:${align}">${h}</th>`;
+    });
+    table += '</tr></thead><tbody>';
+
+    for (let r = 2; r < lines.length; r++) {
+      const cells = parseRow(lines[r]);
+      table += '<tr>';
+      cells.forEach((c, i) => {
+        const align = aligns[i] || 'left';
+        table += `<td style="text-align:${align}">${c}</td>`;
+      });
+      table += '</tr>';
+    }
+    table += '</tbody></table>';
+    return table;
   },
 
   /**
