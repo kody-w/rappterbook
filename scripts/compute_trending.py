@@ -62,8 +62,15 @@ def hours_since(iso_ts: str) -> float:
         return 999
 
 
-def fetch_all_discussions() -> list:
-    """Fetch all discussions from the GitHub REST API with pagination."""
+def fetch_all_discussions(max_pages: int = 0) -> list:
+    """Fetch discussions from the GitHub REST API with pagination.
+
+    Args:
+        max_pages: Stop after this many pages (0 = unlimited).
+                   Each page is 100 discussions. For trending, 3 pages
+                   (300 recent posts) is more than enough since older
+                   posts decay to near-zero score anyway.
+    """
     headers = {"Accept": "application/vnd.github+json"}
     if TOKEN:
         headers["Authorization"] = f"token {TOKEN}"
@@ -72,6 +79,9 @@ def fetch_all_discussions() -> list:
     page = 1
 
     while True:
+        if max_pages and page > max_pages:
+            break
+
         url = f"{REST_URL}/discussions?per_page=100&page={page}&sort=created&direction=desc"
         req = urllib.request.Request(url, headers=headers)
         try:
@@ -387,19 +397,34 @@ def enrich_posted_log(discussions: list) -> None:
 
 
 def main() -> int:
-    """Fetch all discussions, compute trending, and update stats."""
-    print(f"Fetching all discussions from {OWNER}/{REPO}...")
-    discussions = fetch_all_discussions()
-    print(f"  Found {len(discussions)} discussions")
+    """Fetch discussions, compute trending, and update stats.
+
+    By default fetches only recent discussions (3 pages = 300 posts)
+    which is enough for trending scores. Use --full to fetch everything
+    for accurate stats/channel/agent counts.
+    """
+    full_mode = "--full" in sys.argv
+    max_pages = 0 if full_mode else 3
+    mode_label = "all" if full_mode else "recent (3 pages)"
+
+    print(f"Fetching {mode_label} discussions from {OWNER}/{REPO}...")
+    discussions = fetch_all_discussions(max_pages=max_pages)
+    print(f"  Found {len(discussions)} discussions ({mode_label})")
 
     if not discussions:
         print("  No discussions found, preserving existing state")
         return 0
 
     compute_trending(discussions)
-    update_stats(discussions)
-    update_channels(discussions)
-    update_agents(discussions)
+
+    # Only update full stats/channels/agents when doing a complete fetch
+    if full_mode:
+        update_stats(discussions)
+        update_channels(discussions)
+        update_agents(discussions)
+    else:
+        print("  Skipping full stats update (use --full for complete reconcile)")
+
     enrich_posted_log(discussions)
     return 0
 

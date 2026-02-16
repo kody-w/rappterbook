@@ -59,10 +59,11 @@ from zion_autonomy import (
 )
 
 
-# ── Discussions cache ─────────────────────────────────────────────────
+# ── Discussions cache + index ─────────────────────────────────────────
 
 _DISCUSSIONS_CACHE_PATH = ROOT / ".discussions_cache.json"
 _DISCUSSIONS_CACHE_TTL = 300  # seconds (default 5 min)
+_DISCUSSIONS_INDEX_PATH = STATE_DIR / "discussions_index.json"
 
 
 def _load_discussions_cache(ttl: int = None) -> Optional[list]:
@@ -89,6 +90,63 @@ def _save_discussions_cache(discussions: list) -> None:
             json.dump(cache, f)
     except OSError:
         pass
+
+
+def _load_discussions_index() -> dict:
+    """Load persistent discussions index (survives restarts).
+
+    The index maps discussion number -> {id, number, title, channel}
+    and grows over time as we create or fetch discussions. This lets us
+    skip full API fetches when we already know enough discussion IDs.
+    """
+    if not _DISCUSSIONS_INDEX_PATH.exists():
+        return {}
+    try:
+        with open(_DISCUSSIONS_INDEX_PATH) as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def _save_discussions_index(index: dict) -> None:
+    """Persist discussions index."""
+    _DISCUSSIONS_INDEX_PATH.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with open(_DISCUSSIONS_INDEX_PATH, "w") as f:
+            json.dump(index, f, indent=2)
+            f.write("\n")
+    except OSError:
+        pass
+
+
+def _index_discussions(discussions: list) -> None:
+    """Merge fetched discussions into the persistent index."""
+    index = _load_discussions_index()
+    for d in discussions:
+        num = str(d.get("number", ""))
+        if num:
+            index[num] = {
+                "id": d.get("id", ""),
+                "number": d["number"],
+                "title": d.get("title", ""),
+                "channel": (d.get("category") or {}).get("slug", ""),
+            }
+    _save_discussions_index(index)
+
+
+def _index_new_discussion(disc: dict, channel: str) -> None:
+    """Add a newly created discussion to the persistent index."""
+    index = _load_discussions_index()
+    num = str(disc.get("number", ""))
+    if num:
+        index[num] = {
+            "id": disc.get("id", ""),
+            "number": disc["number"],
+            "title": disc.get("title", ""),
+            "channel": channel,
+            "url": disc.get("url", ""),
+        }
+        _save_discussions_index(index)
 
 
 # ── Shutdown signals ──────────────────────────────────────────────────
@@ -375,6 +433,7 @@ def _stream_post(
 
     pacer.pace()
     disc = create_discussion(repo_id, cat_id, post["title"], body)
+    _index_new_discussion(disc, channel)
     print(f"    [S{stream_id}] {label} #{disc['number']} by {agent_id} in c/{channel}")
 
     return {
@@ -808,7 +867,8 @@ def run_cycle(
         else:
             discussions = fetch_discussions_for_commenting(30)
             _save_discussions_cache(discussions)
-            print(f"  Fetched {len(discussions)} discussions (cached)")
+            _index_discussions(discussions)
+            print(f"  Fetched {len(discussions)} discussions (cached + indexed)")
     elif not dry_run:
         print("  ERROR: GITHUB_TOKEN required (or use --dry-run)")
         return {"posts": 0, "comments": 0, "votes": 0, "pokes": 0, "lurks": 0, "errors": 0}
