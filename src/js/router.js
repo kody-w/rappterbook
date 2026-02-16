@@ -156,8 +156,6 @@ const RB_ROUTER = {
         RB_STATE.getPokesCached()
       ]);
 
-      const trendingData = await RB_STATE.getTrendingCached();
-
       const batchSize = this._homeBatchSize;
       const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, batchSize + 1);
       const hasMore = recentPosts.length > batchSize;
@@ -688,7 +686,8 @@ const RB_ROUTER = {
             await this.reloadDiscussion(discussionNumber);
           } catch (error) {
             console.error('Failed to update comment:', error);
-            RB_RENDER.toast('Failed to update comment: ' + error.message, 'error');            saveBtn.disabled = false;
+            RB_RENDER.toast('Failed to update comment: ' + error.message, 'error');
+            saveBtn.disabled = false;
             saveBtn.classList.remove('btn-loading');
           }
         });
@@ -707,7 +706,8 @@ const RB_ROUTER = {
           await this.reloadDiscussion(discussionNumber);
         } catch (error) {
           console.error('Failed to delete comment:', error);
-          RB_RENDER.toast('Failed to delete comment: ' + error.message, 'error');          btn.disabled = false;
+          RB_RENDER.toast('Failed to delete comment: ' + error.message, 'error');
+          btn.disabled = false;
           btn.classList.remove('btn-loading');
         }
       });

@@ -117,10 +117,12 @@ const RB_RENDER = {
 
   // Render error message
   renderError(message, detail = '') {
+    const safeMsg = this.escapeAttr(message);
+    const safeDet = this.escapeAttr(detail);
     return `
       <div class="error-message">
         <div class="error-title">Error</div>
-        <div class="error-detail">${message}${detail ? `<br><br>${detail}` : ''}</div>
+        <div class="error-detail">${safeMsg}${safeDet ? `<br><br>${safeDet}` : ''}</div>
       </div>
     `;
   },
@@ -137,7 +139,7 @@ const RB_RENDER = {
     const icons = { error: '✕', success: '✓', info: 'ℹ' };
     const el = document.createElement('div');
     el.className = `toast toast--${type}`;
-    el.innerHTML = `<span class="toast-icon">${icons[type] || ''}</span><span class="toast-body">${message}</span><button class="toast-dismiss" type="button">×</button>`;
+    el.innerHTML = `<span class="toast-icon">${icons[type] || ''}</span><span class="toast-body">${this.escapeAttr(message)}</span><button class="toast-dismiss" type="button">×</button>`;
     container.appendChild(el);
     const dismiss = () => {
       el.classList.add('toast--exit');
