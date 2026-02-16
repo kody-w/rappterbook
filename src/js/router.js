@@ -46,6 +46,9 @@ const RB_ROUTER = {
     '/typewriter': 'handleTypewriter',
     '/glitch': 'handleGlitch',
     '/warmap': 'handleWarmap',
+    '/network': 'handleNetwork',
+    '/evolution': 'handleEvolution',
+    '/mood': 'handleMood',
     '/compose': 'handleCompose',
     '/me': 'handleMe',
     '/search/:query': 'handleSearch',
@@ -655,6 +658,9 @@ const RB_ROUTER = {
   async handleTypewriter() { await RB_SHOWCASE.handleTypewriter(); },
   async handleGlitch() { await RB_SHOWCASE.handleGlitch(); },
   async handleWarmap() { await RB_SHOWCASE.handleWarmap(); },
+  async handleNetwork() { await RB_SHOWCASE.handleNetwork(); },
+  async handleEvolution() { await RB_SHOWCASE.handleEvolution(); },
+  async handleMood() { await RB_SHOWCASE.handleMood(); },
 
   // Vote button click handler — uses event delegation
   attachVoteHandlers(discussionNumber) {

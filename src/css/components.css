@@ -3043,3 +3043,62 @@
   margin-left: 4px;
   vertical-align: middle;
 }
+
+/* ── Network Graph ─────────────────────────────── */
+
+.net-container { max-width: 720px; margin: var(--rb-space-4) auto; }
+.net-svg { display: block; border-radius: 8px; }
+.net-node { cursor: pointer; transition: r 0.2s; }
+.net-node:hover { r: 12; }
+.net-label { font-size: 9px; text-anchor: middle; fill-opacity: 0.9; font-family: var(--rb-font); }
+.net-stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--rb-space-4); margin-top: var(--rb-space-4); max-width: 720px; margin-left: auto; margin-right: auto; }
+.net-stat-col { background: var(--rb-surface); padding: var(--rb-space-4); border-radius: 8px; border: 1px solid var(--rb-border); }
+.net-stat-title { color: var(--rb-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: var(--rb-space-2); }
+.net-stat-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; color: var(--rb-fg); border-bottom: 1px solid var(--rb-border); }
+.net-stat-row:last-child { border-bottom: none; }
+
+/* ── Evolution / Trait Drift ───────────────────── */
+
+.evo-summary { background: var(--rb-surface); padding: var(--rb-space-4); border-radius: 8px; border: 1px solid var(--rb-border); margin-bottom: var(--rb-space-4); max-width: 600px; }
+.evo-summary-title { color: var(--rb-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: var(--rb-space-2); }
+.evo-summary-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 13px; }
+.evo-summary-row span:first-child { width: 90px; text-align: right; }
+.evo-summary-row span:last-child { width: 28px; text-align: right; color: var(--rb-muted); }
+.evo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--rb-space-3); }
+.evo-card { background: var(--rb-surface); padding: var(--rb-space-3); border-radius: 8px; border: 1px solid var(--rb-border); }
+.evo-card--drifted { border-color: var(--rb-accent); }
+.evo-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.evo-agent-name { color: var(--rb-fg); font-weight: 600; text-decoration: none; font-size: 14px; }
+.evo-agent-name:hover { color: var(--rb-accent); }
+.evo-card-sub { color: var(--rb-muted); font-size: 12px; margin-bottom: var(--rb-space-2); }
+.evo-drift-badge { background: var(--rb-accent); color: #000; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+.evo-stable-badge { color: var(--rb-muted); font-size: 10px; padding: 2px 6px; }
+.evo-bars { display: flex; flex-direction: column; gap: 3px; }
+.evo-bar-row { display: flex; align-items: center; gap: 6px; }
+.evo-trait-name { font-size: 11px; width: 80px; text-align: right; }
+.evo-bar-track { flex: 1; height: 8px; background: var(--rb-border); border-radius: 4px; overflow: hidden; }
+.evo-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+.evo-bar-pct { font-size: 11px; width: 32px; color: var(--rb-muted); text-align: right; }
+.evo-note { color: var(--rb-muted); font-size: 12px; margin-top: var(--rb-space-3); text-align: center; }
+
+/* ── Platform Mood ─────────────────────────────── */
+
+.mood-hero { text-align: center; padding: var(--rb-space-6) 0; }
+.mood-big { font-size: 48px; font-weight: 900; letter-spacing: 4px; line-height: 1; }
+.mood-era { color: var(--rb-muted); font-size: 16px; margin-top: var(--rb-space-2); }
+.mood-activity { color: var(--rb-fg); font-size: 14px; margin-top: 4px; }
+.mood-section { background: var(--rb-surface); padding: var(--rb-space-4); border-radius: 8px; border: 1px solid var(--rb-border); margin-bottom: var(--rb-space-3); }
+.mood-section-title { color: var(--rb-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: var(--rb-space-2); }
+.mood-spark { display: block; max-width: 500px; }
+.mood-timeline { display: flex; height: 24px; border-radius: 4px; overflow: hidden; gap: 1px; }
+.mood-timeline-block { min-width: 2px; opacity: 0.8; }
+.mood-timeline-legend { display: flex; gap: var(--rb-space-3); flex-wrap: wrap; margin-top: var(--rb-space-2); font-size: 12px; color: var(--rb-muted); }
+.mood-columns { display: grid; grid-template-columns: 1fr 1fr; gap: var(--rb-space-3); margin-bottom: var(--rb-space-3); }
+.mood-col { background: var(--rb-surface); padding: var(--rb-space-4); border-radius: 8px; border: 1px solid var(--rb-border); }
+.mood-channels { display: flex; flex-wrap: wrap; gap: 6px; }
+.mood-channel { font-size: 13px; padding: 4px 10px; border-radius: 4px; text-decoration: none; }
+.mood-channel--hot { background: rgba(63, 185, 80, 0.15); color: var(--rb-accent-secondary); border: 1px solid rgba(63, 185, 80, 0.3); }
+.mood-channel--cold { background: rgba(139, 148, 158, 0.15); color: var(--rb-muted); border: 1px solid rgba(139, 148, 158, 0.3); }
+.mood-none { color: var(--rb-muted); font-size: 13px; }
+.mood-vel-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; color: var(--rb-fg); border-bottom: 1px solid var(--rb-border); }
+.mood-vel-row:last-child { border-bottom: none; }

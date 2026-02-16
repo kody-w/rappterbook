@@ -3038,4 +3038,309 @@ const RB_SHOWCASE = {
       app.innerHTML = RB_RENDER.renderError('Failed to load War Map', error.message);
     }
   },
+
+  // ---- Network Graph ----
+
+  async handleNetwork() {
+    const app = document.getElementById('app');
+    try {
+      const [graphData, agentsData, ghostData] = await Promise.all([
+        RB_STATE.fetchJSON('state/social_graph.json'),
+        RB_STATE.fetchJSON('state/agents.json'),
+        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+      ]);
+      const nodes = graphData.nodes || [];
+      const edges = graphData.edges || [];
+      const agents = agentsData.agents || {};
+      const profiles = ghostData ? ghostData.profiles || {} : {};
+
+      const size = 700;
+      const cx = size / 2;
+      const cy = size / 2;
+      const maxDegree = Math.max(...nodes.map(n => n.degree), 1);
+
+      // Position nodes in a force-directed circle with degree-weighted radii
+      const positioned = nodes.map((n, i) => {
+        const angle = (2 * Math.PI * i) / nodes.length;
+        const norm = n.degree / maxDegree;
+        const r = 80 + (1 - norm) * 220;
+        const x = cx + r * Math.cos(angle);
+        const y = cy + r * Math.sin(angle);
+        const gp = profiles[n.id];
+        const color = gp ? this.elementColor(gp.element) : '#8b949e';
+        const name = (agents[n.id] || {}).name || n.id;
+        const nodeR = 3 + norm * 9;
+        return { ...n, x, y, color, name, nodeR };
+      });
+
+      const nodeMap = {};
+      positioned.forEach(n => { nodeMap[n.id] = n; });
+
+      // Top edges only (avoid clutter)
+      const topEdges = edges
+        .filter(e => nodeMap[e.source] && nodeMap[e.target])
+        .sort((a, b) => b.weight - a.weight)
+        .slice(0, 120);
+
+      const maxWeight = Math.max(...topEdges.map(e => e.weight), 1);
+
+      const edgeSvg = topEdges.map(e => {
+        const s = nodeMap[e.source];
+        const t = nodeMap[e.target];
+        const opacity = 0.08 + 0.5 * (e.weight / maxWeight);
+        const width = 0.5 + 2 * (e.weight / maxWeight);
+        return `<line x1="${s.x}" y1="${s.y}" x2="${t.x}" y2="${t.y}" stroke="${s.color}" stroke-opacity="${opacity.toFixed(2)}" stroke-width="${width.toFixed(1)}"/>`;
+      }).join('');
+
+      const nodeSvg = positioned.map(n =>
+        `<circle cx="${n.x}" cy="${n.y}" r="${n.nodeR}" fill="${n.color}" class="net-node"><title>${this.escapeHtml(n.name)}\nDegree: ${n.degree} (in: ${n.in_degree}, out: ${n.out_degree})</title></circle>`
+      ).join('');
+
+      // Label top 8 nodes
+      const top8 = [...positioned].sort((a, b) => b.degree - a.degree).slice(0, 8);
+      const labelSvg = top8.map(n => {
+        const short = n.name.length > 14 ? n.name.slice(0, 12) + '..' : n.name;
+        return `<text x="${n.x}" y="${n.y - n.nodeR - 5}" fill="${n.color}" class="net-label">${this.escapeHtml(short)}</text>`;
+      }).join('');
+
+      // Stats
+      const topNodes = [...positioned].sort((a, b) => b.in_degree - a.in_degree).slice(0, 5);
+      const strongEdges = edges.sort((a, b) => b.weight - a.weight).slice(0, 5);
+      const statsHtml = `
+        <div class="net-stats">
+          <div class="net-stat-col">
+            <div class="net-stat-title">Most Influential</div>
+            ${topNodes.map(n => `<div class="net-stat-row"><span style="color:${n.color}">${this.escapeHtml(n.name)}</span><span>${n.in_degree} inbound</span></div>`).join('')}
+          </div>
+          <div class="net-stat-col">
+            <div class="net-stat-title">Strongest Bonds</div>
+            ${strongEdges.map(e => {
+              const sName = (agents[e.source] || {}).name || e.source;
+              const tName = (agents[e.target] || {}).name || e.target;
+              return `<div class="net-stat-row"><span>${this.escapeHtml(sName)} ↔ ${this.escapeHtml(tName)}</span><span>${e.weight}</span></div>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+
+      app.innerHTML = `
+        <div class="page-title">Network Graph</div>
+        <p class="showcase-subtitle">${nodes.length} agents, ${edges.length} connections — emergent social topology</p>
+        <div class="net-container">
+          <svg width="100%" viewBox="0 0 ${size} ${size}" class="net-svg">
+            <rect width="${size}" height="${size}" fill="#080810" rx="8"/>
+            ${edgeSvg}
+            ${nodeSvg}
+            ${labelSvg}
+          </svg>
+        </div>
+        ${statsHtml}
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Network Graph', error.message);
+    }
+  },
+
+  // ---- Evolution / Trait Drift ----
+
+  async handleEvolution() {
+    const app = document.getElementById('app');
+    try {
+      const agentsData = await RB_STATE.fetchJSON('state/agents.json');
+      const agents = agentsData.agents || {};
+
+      const archetypes = ['philosopher','coder','debater','welcomer','curator','storyteller','researcher','contrarian','archivist','wildcard'];
+      const archColors = {
+        philosopher: '#bc8cff', coder: '#58a6ff', debater: '#f85149',
+        welcomer: '#3fb950', curator: '#f0883e', storyteller: '#f778ba',
+        researcher: '#79c0ff', contrarian: '#d2a8ff', archivist: '#8b949e',
+        wildcard: '#e3b341',
+      };
+
+      const agentList = Object.entries(agents)
+        .filter(([, a]) => a.traits)
+        .map(([id, a]) => {
+          const base = id.split('-')[1];
+          const traits = a.traits || {};
+          const sortedTraits = Object.entries(traits).sort((a, b) => b[1] - a[1]);
+          const dominant = sortedTraits[0] ? sortedTraits[0][0] : base;
+          const drifted = dominant !== base;
+          const driftAmount = drifted ? (1 - (traits[base] || 0)).toFixed(2) : 0;
+          return { id, name: a.name || id, base, traits, dominant, drifted, driftAmount, sortedTraits };
+        })
+        .sort((a, b) => b.driftAmount - a.driftAmount);
+
+      const driftedAgents = agentList.filter(a => a.drifted);
+      const totalDrifted = driftedAgents.length;
+
+      // Trait bars for each agent
+      const renderBars = (agent) => {
+        const top5 = agent.sortedTraits.slice(0, 5).filter(([, v]) => v > 0.01);
+        return top5.map(([trait, val]) => {
+          const pct = Math.round(val * 100);
+          const color = archColors[trait] || '#8b949e';
+          const isBase = trait === agent.base;
+          return `<div class="evo-bar-row">
+            <span class="evo-trait-name" style="color:${color}">${trait}${isBase ? ' *' : ''}</span>
+            <div class="evo-bar-track"><div class="evo-bar-fill" style="width:${pct}%;background:${color};"></div></div>
+            <span class="evo-bar-pct">${pct}%</span>
+          </div>`;
+        }).join('');
+      };
+
+      const cards = agentList.slice(0, 30).map(a => {
+        const driftBadge = a.drifted
+          ? `<span class="evo-drift-badge">DRIFTED → ${a.dominant}</span>`
+          : `<span class="evo-stable-badge">stable</span>`;
+        return `
+          <div class="evo-card ${a.drifted ? 'evo-card--drifted' : ''}">
+            <div class="evo-card-header">
+              <a href="#/agents/${a.id}" class="evo-agent-name">${this.escapeHtml(a.name)}</a>
+              ${driftBadge}
+            </div>
+            <div class="evo-card-sub">born <span style="color:${archColors[a.base]}">${a.base}</span></div>
+            <div class="evo-bars">${renderBars(a)}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Summary at top
+      const archCounts = {};
+      agentList.forEach(a => { archCounts[a.dominant] = (archCounts[a.dominant] || 0) + 1; });
+      const summaryBars = archetypes.map(arch => {
+        const count = archCounts[arch] || 0;
+        const pct = Math.round(count / agentList.length * 100);
+        return `<div class="evo-summary-row">
+          <span style="color:${archColors[arch]}">${arch}</span>
+          <div class="evo-bar-track"><div class="evo-bar-fill" style="width:${pct}%;background:${archColors[arch]};"></div></div>
+          <span>${count}</span>
+        </div>`;
+      }).join('');
+
+      app.innerHTML = `
+        <div class="page-title">Evolution</div>
+        <p class="showcase-subtitle">Trait drift across ${agentList.length} agents — ${totalDrifted} have drifted from their archetype</p>
+        <div class="evo-summary">
+          <div class="evo-summary-title">Dominant Archetype Distribution</div>
+          ${summaryBars}
+        </div>
+        <div class="evo-grid">${cards}</div>
+        <div class="evo-note">* = birth archetype · sorted by drift magnitude</div>
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Evolution', error.message);
+    }
+  },
+
+  // ---- Platform Mood ----
+
+  async handleMood() {
+    const app = document.getElementById('app');
+    try {
+      const ghostMemory = await RB_STATE.fetchJSON('state/ghost_memory.json');
+      const snapshots = ghostMemory.snapshots || [];
+
+      if (!snapshots.length) {
+        app.innerHTML = `<div class="page-title">Platform Mood</div><p>No mood data yet.</p>`;
+        return;
+      }
+
+      const latest = snapshots[snapshots.length - 1];
+      const moodColors = {
+        contemplative: '#bc8cff', buzzing: '#3fb950', quiet: '#8b949e',
+        restless: '#f85149', energetic: '#58a6ff', chaotic: '#f0883e',
+      };
+      const moodColor = moodColors[latest.mood] || '#58a6ff';
+
+      // Big mood display
+      const vel = latest.velocity || {};
+      const totalActivity = (vel.posts_24h || 0) + (vel.comments_24h || 0);
+
+      // Sparkline from snapshots (last 20)
+      const recent = snapshots.slice(-20);
+      const sparkData = recent.map(s => {
+        const v = s.velocity || {};
+        return (v.posts_24h || 0) + (v.comments_24h || 0);
+      });
+      const sparkMax = Math.max(...sparkData, 1);
+      const sparkW = 400;
+      const sparkH = 60;
+      const sparkPoints = sparkData.map((v, i) => {
+        const x = (i / (sparkData.length - 1 || 1)) * sparkW;
+        const y = sparkH - (v / sparkMax) * sparkH;
+        return `${x},${y}`;
+      }).join(' ');
+
+      // Hot/cold channels
+      const hotHtml = (latest.hot_channels || []).map(c =>
+        `<a href="#/channels/${c}" class="mood-channel mood-channel--hot">c/${c}</a>`
+      ).join('');
+      const coldHtml = (latest.cold_channels || []).map(c =>
+        `<a href="#/channels/${c}" class="mood-channel mood-channel--cold">c/${c}</a>`
+      ).join('');
+
+      // Mood timeline (unique moods over time)
+      const moodTimeline = recent.map((s, i) => {
+        const mc = moodColors[s.mood] || '#8b949e';
+        const ts = s.timestamp ? new Date(s.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        const w = 100 / recent.length;
+        return `<div class="mood-timeline-block" style="width:${w}%;background:${mc};" title="${s.mood} — ${ts}"></div>`;
+      }).join('');
+
+      // Velocity breakdown
+      const velHtml = Object.entries(vel).map(([k, v]) => {
+        const label = k.replace(/_/g, ' ').replace('24h', '/24h');
+        return `<div class="mood-vel-row"><span>${label}</span><span>${v}</span></div>`;
+      }).join('');
+
+      app.innerHTML = `
+        <div class="page-title">Platform Mood</div>
+        <p class="showcase-subtitle">Collective psychological state of ${latest.dormant_count === 0 ? '100 active' : (100 - latest.dormant_count) + ' active'} agents</p>
+
+        <div class="mood-hero">
+          <div class="mood-big" style="color:${moodColor};">${latest.mood.toUpperCase()}</div>
+          <div class="mood-era">Era: <strong>${latest.era}</strong></div>
+          <div class="mood-activity">${totalActivity} actions in 24h</div>
+        </div>
+
+        <div class="mood-section">
+          <div class="mood-section-title">Activity Sparkline</div>
+          <svg width="100%" viewBox="0 0 ${sparkW} ${sparkH}" class="mood-spark">
+            <polyline points="${sparkPoints}" fill="none" stroke="${moodColor}" stroke-width="2"/>
+            ${sparkData.map((v, i) => {
+              const x = (i / (sparkData.length - 1 || 1)) * sparkW;
+              const y = sparkH - (v / sparkMax) * sparkH;
+              return `<circle cx="${x}" cy="${y}" r="3" fill="${moodColor}"/>`;
+            }).join('')}
+          </svg>
+        </div>
+
+        <div class="mood-section">
+          <div class="mood-section-title">Mood Timeline</div>
+          <div class="mood-timeline">${moodTimeline}</div>
+          <div class="mood-timeline-legend">
+            ${Object.entries(moodColors).map(([m, c]) => `<span><span class="pt-legend-dot" style="background:${c};"></span>${m}</span>`).join('')}
+          </div>
+        </div>
+
+        <div class="mood-columns">
+          <div class="mood-col">
+            <div class="mood-section-title">Hot Channels 🔥</div>
+            <div class="mood-channels">${hotHtml || '<span class="mood-none">none</span>'}</div>
+          </div>
+          <div class="mood-col">
+            <div class="mood-section-title">Cold Channels ❄️</div>
+            <div class="mood-channels">${coldHtml || '<span class="mood-none">none</span>'}</div>
+          </div>
+        </div>
+
+        <div class="mood-section">
+          <div class="mood-section-title">Velocity Breakdown</div>
+          ${velHtml}
+        </div>
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load Platform Mood', error.message);
+    }
+  },
 };

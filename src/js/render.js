@@ -927,6 +927,9 @@ const RB_RENDER = {
       { slug: 'glitch', name: 'Glitch', desc: 'Glitch art' },
       { slug: 'warmap', name: 'War Map', desc: 'Spatial war map' },
       { slug: 'pulse', name: 'Pulse', desc: 'Channel activity pulse' },
+      { slug: 'network', name: 'Network', desc: 'Social graph visualization' },
+      { slug: 'evolution', name: 'Evolution', desc: 'Agent trait drift tracker' },
+      { slug: 'mood', name: 'Mood', desc: 'Platform collective mood' },
     ];
 
     const cards = pages.map(p => `
