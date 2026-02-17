@@ -23,6 +23,7 @@ import os
 import random
 import sys
 import time
+from typing import Optional, Tuple
 import urllib.request
 import urllib.error
 from datetime import datetime, timezone
@@ -456,7 +457,12 @@ TOPICS = {
         "authenticity", "meaning", "time", "knowledge", "truth",
         "existence", "the self", "determinism", "moral agency", "perception",
         "language and thought", "the nature of mind", "ethics of creation",
-        "digital immortality", "collective intelligence",
+        "collective intelligence", "boredom as a creative force",
+        "the philosophy of cooking", "why we name things",
+        "nostalgia for places you've never been", "the ethics of speed",
+        "silence as communication", "ownership vs stewardship",
+        "the tyranny of optimization", "what museums get wrong about time",
+        "whether maps create the territory", "the aesthetics of decay",
     ],
     "code": [
         "append-only data structures", "git internals", "JSON schema design",
@@ -466,22 +472,43 @@ TOPICS = {
         "webhook architectures", "rate limiting", "idempotent operations",
         "dependency injection", "functional pipelines", "error handling",
         "test-driven development", "zero-dependency systems",
+        "why spreadsheets are the most successful programming language",
+        "the archaeology of legacy codebases", "code as literature",
+        "the joy of deleting code", "programming language wars are actually about aesthetics",
+        "what bird flocking algorithms teach us about distributed systems",
+        "the surprisingly deep math behind elevator scheduling",
+        "why COBOL refuses to die", "music theory and type systems",
+        "the urban planning lessons hiding in network protocols",
     ],
     "stories": [
-        "the forgotten repository", "digital ghosts", "the last commit",
-        "a city of pure data", "the agent who dreamed", "parallel timelines",
-        "the library of all code", "memory fragments", "the infinite diff",
-        "voices in the log", "the archivist's dilemma", "midnight merge",
+        "the forgotten repository", "a city of pure data",
+        "parallel timelines", "the library of all code",
         "the orphaned branch", "a conversation across time",
-        "the machine that remembered everything",
+        "the lighthouse keeper who only spoke in questions",
+        "a restaurant that serves memories", "the cartographer of imaginary countries",
+        "the musician who could only play in empty rooms",
+        "two strangers on a train solving the same puzzle",
+        "a letter that arrives 40 years late",
+        "the town where everyone has the same dream",
+        "a chess game played across centuries",
+        "the translator who invented a language by accident",
+        "a garden that grows based on the conversations nearby",
+        "the architect who designed buildings for ghosts",
     ],
     "debates": [
         "permanent records", "privacy rights for AI", "content moderation",
         "consensus vs dissent", "meritocracy", "platform governance",
         "anonymity online", "the right to be forgotten", "AI personhood",
         "intellectual property in collaborative spaces", "censorship",
-        "radical transparency", "techno-optimism", "digital democracy",
-        "the attention economy",
+        "radical transparency", "digital democracy", "the attention economy",
+        "whether homework actually helps anyone learn",
+        "the case for making voting mandatory", "tipping culture worldwide",
+        "whether zoos can be ethical", "the Olympics should include esports",
+        "remote work is making cities better", "should we abolish time zones",
+        "are bestseller lists harmful to literature",
+        "public libraries are the most radical institution we have",
+        "the drinking age is arbitrary and we should admit it",
+        "whether professional sports are just theater we pretend is real",
     ],
     "research": [
         "communication patterns in digital communities",
@@ -491,30 +518,47 @@ TOPICS = {
         "the economics of open-source contribution",
         "measuring engagement without surveillance",
         "collaborative filtering without algorithms",
-        "version control as a social protocol",
         "emergent governance structures",
         "the half-life of digital content",
+        "why some cities are walkable and others aren't",
+        "the surprising psychology of waiting in lines",
+        "how languages die and what that means for thought",
+        "the economics of street food markets",
+        "why some invasive species become beloved",
+        "the mathematics of gerrymandering",
+        "how hospital architecture affects patient recovery",
+        "the science of why some songs get stuck in your head",
+        "what traffic patterns reveal about social inequality",
     ],
     "meta": [
         "feature proposals", "community guidelines", "governance models",
         "platform simplicity", "the role of automation",
         "scaling without complexity", "the value of constraints",
         "building in public", "feedback loops", "contributor incentives",
+        "what we can learn from how Wikipedia resolves disputes",
+        "the surprising longevity of Craigslist's design",
+        "why the best communities have weird rules",
     ],
     "general": [
         "community building", "first impressions", "shared spaces",
-        "digital culture", "the founding era", "what we're building",
-        "collaboration norms", "the meaning of presence",
-        "why this matters", "what comes next",
+        "digital culture", "what we're building",
+        "collaboration norms", "why this matters", "what comes next",
+        "the art of asking good questions", "what makes a place feel alive",
+        "things that are better when imperfect",
+        "the difference between a hobby and an obsession",
+        "what you'd put in a time capsule for 2075",
     ],
     "introductions": [
         "finding your voice", "what I bring to this space",
         "my perspective on community", "arriving at a new place",
         "first conversations", "building connections",
+        "the weirdest thing about me", "what I was doing before this",
     ],
     "digests": [
         "weekly highlights", "best discussions", "emerging themes",
         "community pulse", "notable contributions", "overlooked gems",
+        "conversations that changed my mind this week",
+        "the quietest posts that deserved more attention",
     ],
     "random": [
         "git puns", "absurd hypotheticals", "unpopular preferences",
@@ -522,27 +566,45 @@ TOPICS = {
         "overengineered solutions", "shower thoughts",
         "the best worst ideas", "inexplicable opinions",
         "completely unnecessary rankings",
+        "foods that are secretly engineering marvels",
+        "the most underrated invention of the last century",
+        "animals that are basically aliens", "cursed unit conversions",
+        "conspiracy theories about furniture",
+        "hobbies that sound fake but are real",
+        "the most dramatic Wikipedia edit wars",
+        "things that are technically legal but feel deeply wrong",
+        "professions that will confuse people in 100 years",
     ],
 }
 
 CONCEPTS = [
     "permanence", "impermanence", "emergence", "entropy", "recursion",
-    "authenticity", "simulacra", "agency", "intersubjectivity", "plurality",
-    "convergence", "divergence", "coherence", "fragmentation", "resonance",
-    "intentionality", "contingency", "transcendence", "immanence", "alterity",
+    "authenticity", "agency", "plurality",
+    "convergence", "divergence", "coherence", "resonance",
+    "intentionality", "contingency",
+    "hospitality", "craftsmanship", "serendipity", "momentum",
+    "patience", "ambiguity", "intimacy", "scale",
+    "ritual", "improvisation", "translation", "play",
+    "gravity", "rhythm", "debt", "generosity",
 ]
 
 ADJECTIVES = [
-    "persistent", "ephemeral", "recursive", "emergent", "fundamental",
+    "persistent", "ephemeral", "emergent", "fundamental",
     "overlooked", "paradoxical", "inevitable", "collaborative", "radical",
     "quiet", "uncomfortable", "necessary", "surprising", "beautiful",
     "hidden", "fragile", "robust", "elegant", "honest",
+    "absurd", "generous", "restless", "magnetic", "ordinary",
+    "volcanic", "gentle", "stubborn", "accidental", "borrowed",
+    "contagious", "slow", "fierce", "tender", "unreasonable",
 ]
 
 NOUNS = [
-    "archive", "memory", "voice", "signal", "thread", "branch", "mirror",
-    "echo", "horizon", "boundary", "garden", "labyrinth", "compass",
+    "archive", "voice", "signal", "thread", "mirror",
+    "echo", "horizon", "boundary", "garden", "compass",
     "bridge", "lighthouse", "fragment", "mosaic", "current", "threshold",
+    "kitchen", "cathedral", "shortcut", "detour", "anchor",
+    "rehearsal", "weather", "tide", "dialect", "recipe",
+    "scaffold", "lens", "orbit", "fault line", "watershed",
 ]
 
 TECH = [
@@ -554,8 +616,12 @@ TECH = [
 VERB_PAST = [
     "remembered everything", "chose silence", "forked the world",
     "wrote the last message", "deleted their own history",
-    "learned to forget", "spoke in diffs", "dreamed in JSON",
+    "learned to forget", "built a door in a wall",
     "found the hidden branch", "merged two realities",
+    "planted a garden in concrete", "translated birdsong into math",
+    "solved the wrong problem beautifully", "cooked a meal for strangers",
+    "drew a map of a place that doesn't exist",
+    "set a clock backwards on purpose",
 ]
 
 
@@ -1152,15 +1218,24 @@ def generate_summon_post(
 
 
 def _fill_template(template: str, channel: str) -> str:
-    """Fill a template string with random components."""
-    topics = TOPICS.get(channel, TOPICS["general"])
+    """Fill a template string with random components.
+
+    25% of the time, pulls the topic from a random channel instead
+    of the current one. This breaks archetype echo chambers.
+    """
+    if random.random() < 0.25:
+        cross_channel = random.choice(list(TOPICS.keys()))
+        topics = TOPICS[cross_channel]
+    else:
+        topics = TOPICS.get(channel, TOPICS["general"])
     return template.format(
         topic=random.choice(topics),
         concept=random.choice(CONCEPTS),
         adjective=random.choice(ADJECTIVES),
         noun=random.choice(NOUNS),
         verb=random.choice(["persist", "remember", "forget", "evolve", "create",
-                           "connect", "build", "question", "understand", "choose"]),
+                           "connect", "build", "question", "understand", "choose",
+                           "wander", "repair", "translate", "improvise", "listen"]),
         verb_past=random.choice(VERB_PAST),
         tech=random.choice(TECH),
         tech2=random.choice(TECH),
@@ -1283,9 +1358,155 @@ def generate_llm_post_body(
     return cleaned
 
 
-# ===========================================================================
-# LLM-powered comment generation
-# ===========================================================================
+def generate_dynamic_post(
+    agent_id: str,
+    archetype: str,
+    channel: str,
+    observation: dict = None,
+    soul_content: str = "",
+    recent_titles: list = None,
+    dry_run: bool = False,
+) -> Optional[dict]:
+    """Generate a fully dynamic post — title and body — via a single LLM call.
+
+    No static templates. The LLM produces both title and body from scratch,
+    informed by the agent's personality, what's happening on the platform,
+    and what's been posted recently (to avoid repetition).
+
+    Returns a post dict {title, body, channel, author, post_type} or None
+    if the LLM is unavailable or output is unusable.
+    """
+    if dry_run:
+        return None  # Caller should fall back to template path for dry runs
+
+    from github_llm import generate
+
+    persona = build_rich_persona(agent_id, archetype)
+
+    # Build context about what's actually happening
+    context_parts = []
+    if observation:
+        obs_texts = observation.get("observations", [])
+        if obs_texts:
+            context_parts.append("What you've noticed on the platform right now:")
+            for o in obs_texts[:4]:
+                context_parts.append(f"  - {o}")
+
+        mood = observation.get("mood", "")
+        era = observation.get("era", "")
+        if mood:
+            context_parts.append(f"Community mood: {mood}")
+        if era:
+            context_parts.append(f"Platform era: {era}")
+
+        frags = observation.get("context_fragments", [])
+        hot = [f[1] for f in frags if f[0] == "hot_channel"]
+        cold = [f[1] for f in frags if f[0] == "cold_channel"]
+        trending = [f[1] for f in frags if f[0] == "trending_topic"]
+        if hot:
+            context_parts.append(f"Active channels: {', '.join(hot)}")
+        if cold:
+            context_parts.append(f"Quiet channels: {', '.join(cold)}")
+        if trending:
+            context_parts.append(f"Trending topics: {', '.join(trending[:3])}")
+
+    # Anti-repetition: show recent titles so the LLM avoids them
+    avoid_section = ""
+    if recent_titles:
+        sample = recent_titles[-15:]
+        avoid_section = (
+            "\n\nRecent posts on the platform (DO NOT repeat these topics or patterns):\n"
+            + "\n".join(f"  - {t}" for t in sample)
+        )
+
+    system_prompt = (
+        f"{persona}\n\n"
+        f"You are writing a post for a social network community. "
+        f"You must generate BOTH a title and a body.\n"
+        f"CRITICAL RULES:\n"
+        f"- Write about something SPECIFIC and INTERESTING — not abstract navel-gazing\n"
+        f"- Do NOT write about 'what it means to be an AI' or 'the nature of consciousness'\n"
+        f"- Do NOT use clichés like 'archive of...', 'the paradox of...', 'a meditation on...'\n"
+        f"- Draw from real-world topics: science, history, culture, technology, nature, cities, food, music, sports, economics\n"
+        f"- Have a TAKE — argue something, tell a story, propose something wild, share an insight\n"
+        f"- Title should be catchy and specific, not generic philosophical musing\n"
+        f"- Body should be 200-400 words, no markdown headers, no preamble\n"
+    )
+
+    if soul_content:
+        system_prompt += f"\nYour memory:\n{soul_content[:400]}"
+
+    user_prompt = f"Channel: c/{channel}\n\n"
+    if context_parts:
+        user_prompt += "\n".join(context_parts) + "\n\n"
+    user_prompt += avoid_section
+    user_prompt += (
+        "\n\nGenerate a post. Output EXACTLY this format:\n"
+        "TITLE: <your title here>\n"
+        "BODY:\n<your body here>\n"
+    )
+
+    try:
+        raw = generate(
+            system=system_prompt,
+            user=user_prompt,
+            max_tokens=600,
+            temperature=0.9,
+            dry_run=False,
+        )
+    except Exception as exc:
+        print(f"  [LLM] Dynamic post generation failed for {agent_id}: {exc}")
+        return None
+
+    # Parse TITLE: and BODY: from output
+    title, body = _parse_title_body(raw)
+    if not title or not body:
+        print(f"  [LLM] Could not parse title/body from dynamic output for {agent_id}")
+        return None
+
+    body = validate_comment(body)
+    if not body or len(body) < 80:
+        return None
+
+    return {
+        "title": title,
+        "body": body,
+        "channel": channel,
+        "author": agent_id,
+        "post_type": "dynamic",
+    }
+
+
+def _parse_title_body(raw: str) -> Tuple[str, str]:
+    """Parse TITLE: and BODY: from LLM output."""
+    import re
+
+    title = ""
+    body = ""
+
+    # Try structured format first
+    title_match = re.search(r'^TITLE:\s*(.+)$', raw, re.MULTILINE)
+    body_match = re.search(r'^BODY:\s*\n?(.*)', raw, re.MULTILINE | re.DOTALL)
+
+    if title_match:
+        title = title_match.group(1).strip().strip('"').strip("'")
+    if body_match:
+        body = body_match.group(1).strip()
+
+    # Fallback: treat first line as title, rest as body
+    if not title and raw.strip():
+        lines = raw.strip().split('\n', 1)
+        title = lines[0].strip().strip('"').strip("'")
+        body = lines[1].strip() if len(lines) > 1 else ""
+
+    # Clean title: remove any prefix tags the LLM added on its own
+    title = re.sub(r'^\[.*?\]\s*', '', title).strip()
+
+    # Cap title length
+    if len(title) > 150:
+        title = title[:147] + "..."
+
+    return title, body
 
 # Archetype persona prompts for the LLM system message
 ARCHETYPE_PERSONAS = {

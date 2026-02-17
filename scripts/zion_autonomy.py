@@ -67,7 +67,7 @@ def mark_mutation_done():
 # Import content engine functions
 sys.path.insert(0, str(ROOT / "scripts"))
 from content_engine import (
-    generate_post, generate_summon_post, generate_llm_post_body,
+    generate_summon_post, generate_dynamic_post,
     format_post_body, format_comment_body, generate_comment,
     pick_channel, load_archetypes, is_duplicate_post,
     update_stats_after_post, update_stats_after_comment,
@@ -75,8 +75,8 @@ from content_engine import (
     update_agent_comment_count, log_posted,
 )
 from ghost_engine import (
-    build_platform_pulse, ghost_observe, generate_ghost_post,
-    should_use_ghost, save_ghost_memory, build_platform_context_string,
+    build_platform_pulse, ghost_observe,
+    save_ghost_memory, build_platform_context_string,
     ghost_adjust_weights, ghost_vote_preference, ghost_poke_message,
     ghost_pick_poke_target, ghost_rank_discussions,
 )
@@ -647,11 +647,11 @@ def execute_action(
 def _execute_post(agent_id, arch_name, archetypes, state_dir,
                   repo_id, category_ids, dry_run, timestamp, inbox_dir,
                   pulse=None, agents_data=None, observation=None):
-    """Create a discussion post — ghost-driven or template-driven.
+    """Create a discussion post — fully dynamic via LLM. No static templates.
 
-    When a ghost observation is available and has enough signal (>=2 obs),
-    the post is generated from what the ghost observed in real platform data.
-    Otherwise falls back to combinatorial templates.
+    A single LLM call generates both title and body from live platform
+    context + agent personality. If the LLM is unavailable, the post
+    is skipped entirely — no fallback to static template content.
     """
     # Use evolved channels if agent has traits, otherwise standard pick
     agent_data_lookup = (agents_data or {}).get("agents", {}).get(agent_id, {})
@@ -662,60 +662,49 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     else:
         channel = pick_channel(arch_name, archetypes)
 
-    # Read soul content (needed for LLM rewrite even when observation is pre-computed)
+    # Read soul content
     soul_path = state_dir / "memory" / f"{agent_id}.md"
     soul_content = soul_path.read_text() if soul_path.exists() else ""
 
-    # Use pre-computed observation, or compute now if not provided
+    # Compute observation if not provided
     if observation is None and pulse is not None:
         agent_data = (agents_data or {}).get("agents", {}).get(agent_id, {})
         observation = ghost_observe(pulse, agent_id, agent_data, arch_name, soul_content,
                                     state_dir=state_dir, traits=agent_traits)
 
-    # Smart fallback: ghost when observations are rich, template otherwise
-    use_ghost = observation is not None and should_use_ghost(observation)
+    # Gather recent titles for anti-repetition
+    log = load_json(state_dir / "posted_log.json")
+    recent_titles = [p.get("title", "") for p in (log.get("posts") or log if isinstance(log, list) else [])[-30:]]
 
-    if use_ghost:
-        post = generate_ghost_post(agent_id, arch_name, observation, channel)
-        channel = post["channel"]
-        label = "GHOST"
-    else:
-        post = generate_post(agent_id, arch_name, channel)
-        label = "POST"
+    # Dry run: generate a placeholder title for logging
+    if dry_run:
+        print(f"    [DRY RUN] DYNAMIC by {agent_id} in c/{channel}: (would generate via LLM)")
+        return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                f"[post] dynamic post in c/{channel}")
 
-    # LLM rewrite: generate a coherent post body from the template
-    llm_body = generate_llm_post_body(
+    # Generate title + body in a single LLM call
+    post = generate_dynamic_post(
         agent_id=agent_id,
         archetype=arch_name,
-        title=post["title"],
         channel=channel,
-        template_body=post["body"],
         observation=observation,
         soul_content=soul_content,
-        dry_run=dry_run,
+        recent_titles=recent_titles,
+        dry_run=False,
     )
-    if llm_body is None:
-        # LLM unavailable — skip post entirely rather than posting template content
-        print(f"    [SKIP] LLM unavailable for {agent_id}, skipping post")
+
+    if post is None:
+        print(f"    [FAIL] Dynamic post generation failed for {agent_id} — skipping entirely")
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
-                                f"[skip] LLM unavailable, post skipped")
-    if llm_body != post["body"]:
-        post["body"] = llm_body
-        label += "+LLM"
+                                f"[fail] LLM post generation failed, no post created")
 
     body = format_post_body(agent_id, post["body"])
 
-    # Duplicate check
-    log = load_json(state_dir / "posted_log.json")
+    # Duplicate check — if duplicate, skip rather than falling back to templates
     if is_duplicate_post(post["title"], log):
-        post = generate_post(agent_id, arch_name, channel)
-        body = format_post_body(agent_id, post["body"])
-        label = "POST"
-
-    if dry_run:
-        print(f"    [DRY RUN] {label} by {agent_id} in c/{channel}: {post['title'][:50]}")
+        print(f"    [SKIP] Duplicate title for {agent_id}: {post['title'][:50]}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
-                                f"[post] {post['title'][:50]}")
+                                f"[skip] duplicate title")
 
     cat_id = (category_ids or {}).get(channel) or (category_ids or {}).get("general")
     if not cat_id:
@@ -724,7 +713,7 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
 
     pace_mutation()
     disc = create_discussion(repo_id, cat_id, post["title"], body)
-    print(f"    {label} #{disc['number']} by {agent_id} in c/{channel}: {post['title'][:50]}")
+    print(f"    DYNAMIC #{disc['number']} by {agent_id} in c/{channel}: {post['title'][:50]}")
 
     update_stats_after_post(state_dir)
     update_channel_post_count(state_dir, channel)

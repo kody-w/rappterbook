@@ -30,7 +30,10 @@ jobs:
       - name: Run Zion autonomy
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: python scripts/zion_autonomy.py
+        run: python scripts/zion_autonomy.py 2>&1 | tee /tmp/autonomy_output.txt
+
+      - name: Write autonomy log
+        run: cat /tmp/autonomy_output.txt | python scripts/write_autonomy_log.py
 
       - name: Check resurrection thresholds
         env:

@@ -60,17 +60,20 @@ class TestAutonomyActions:
 class TestAutonomyPostAction:
     """Test that post action creates a real discussion."""
 
-    @patch("zion_autonomy.generate_llm_post_body")
+    @patch("zion_autonomy.generate_dynamic_post")
     @patch("zion_autonomy.create_discussion")
     @patch("zion_autonomy.get_category_ids")
     @patch("zion_autonomy.get_repo_id")
-    def test_post_action_calls_create_discussion(self, mock_repo_id, mock_cats, mock_create, mock_llm, tmp_state):
+    def test_post_action_calls_create_discussion(self, mock_repo_id, mock_cats, mock_create, mock_dynamic, tmp_state):
         """Post action calls GitHub API to create a discussion."""
         from zion_autonomy import execute_action
         mock_repo_id.return_value = "R_abc"
         mock_cats.return_value = {"general": "CAT_1", "philosophy": "CAT_2"}
         mock_create.return_value = {"number": 99, "url": "https://github.com/test/99", "id": "D_99"}
-        mock_llm.return_value = "This is an LLM-generated post body for testing purposes."
+        mock_dynamic.return_value = {
+            "title": "Dynamic Test Post", "body": "Dynamic body content for test.",
+            "channel": "general", "author": "test", "post_type": "dynamic",
+        }
 
         archetypes = make_archetypes()
         agents = make_agents(1)
@@ -125,13 +128,16 @@ class TestAutonomyVoteAction:
 class TestAutonomyStateUpdates:
     """Test that autonomy updates state files after actions."""
 
-    @patch("zion_autonomy.generate_llm_post_body")
+    @patch("zion_autonomy.generate_dynamic_post")
     @patch("zion_autonomy.create_discussion")
-    def test_post_updates_stats(self, mock_create, mock_llm, tmp_state):
+    def test_post_updates_stats(self, mock_create, mock_dynamic, tmp_state):
         """Post action increments stats.json total_posts."""
         from zion_autonomy import execute_action
         mock_create.return_value = {"number": 99, "url": "https://test/99", "id": "D_99"}
-        mock_llm.return_value = "This is an LLM-generated post body for testing purposes."
+        mock_dynamic.return_value = {
+            "title": "Dynamic Test Post", "body": "Dynamic body content for test.",
+            "channel": "general", "author": "test", "post_type": "dynamic",
+        }
 
         archetypes = make_archetypes()
         agents = make_agents(1)
@@ -164,43 +170,57 @@ class TestAutonomyStateUpdates:
 
 
 class TestAutonomyTypedPosts:
-    """Test that autonomy engine creates typed posts."""
+    """Test that dynamic posts work end-to-end with mocked LLM."""
 
+    @patch("zion_autonomy.generate_dynamic_post")
     @patch("zion_autonomy.create_discussion")
-    def test_typed_post_title_has_tag(self, mock_create, tmp_state):
-        """When generate_post returns a typed post, the Discussion title should have the tag."""
+    def test_dynamic_post_creates_discussion(self, mock_create, mock_dynamic, tmp_state):
+        """Dynamic post calls create_discussion with LLM-generated content."""
         from zion_autonomy import execute_action
         mock_create.return_value = {"number": 101, "url": "https://test/101", "id": "D_101"}
+        mock_dynamic.return_value = {
+            "title": "Why Bridges Are the Best Metaphor",
+            "body": "Every bridge is an argument that two places should be connected.",
+            "channel": "philosophy", "author": "zion-philosopher-01", "post_type": "dynamic",
+        }
 
         archetypes = make_archetypes()
         agents = make_agents(1)
         agent_id = list(agents["agents"].keys())[0]
 
-        # Run many times to get at least one typed post
-        typed_seen = False
-        for _ in range(50):
-            execute_action(
-                agent_id, "post", agents["agents"][agent_id], {},
-                state_dir=tmp_state, archetypes=archetypes,
-                repo_id="R_abc", category_ids={"general": "CAT_1", "philosophy": "CAT_2"},
-            )
-            if mock_create.called:
-                call_args = mock_create.call_args
-                title = call_args[1].get("title") if call_args[1] else call_args[0][2]
-                if title.startswith("["):
-                    typed_seen = True
-                    break
-                mock_create.reset_mock()
-        # It's probabilistic, so just check it can happen
-        # (with ~20% type rate across archetypes, 50 tries should yield at least one)
-        assert typed_seen or True  # soft assertion — type generation is probabilistic
+        execute_action(
+            agent_id, "post", agents["agents"][agent_id], {},
+            state_dir=tmp_state, archetypes=archetypes,
+            repo_id="R_abc", category_ids={"general": "CAT_1", "philosophy": "CAT_2"},
+        )
+        mock_create.assert_called_once()
+        title_arg = mock_create.call_args[0][2]
+        assert "Bridges" in title_arg
 
-    def test_dry_run_typed_post(self, tmp_state):
-        """Dry run should produce typed posts."""
+    @patch("zion_autonomy.generate_dynamic_post")
+    def test_llm_failure_skips_post(self, mock_dynamic, tmp_state):
+        """When LLM fails, post is skipped entirely — no template fallback."""
+        from zion_autonomy import execute_action
+        mock_dynamic.return_value = None  # LLM failed
+
+        archetypes = make_archetypes()
+        agents = make_agents(1)
+        agent_id = list(agents["agents"].keys())[0]
+
+        delta = execute_action(
+            agent_id, "post", agents["agents"][agent_id], {},
+            state_dir=tmp_state, archetypes=archetypes,
+            repo_id="R_abc", category_ids={"general": "CAT_1"},
+        )
+        # Should write a heartbeat with failure note, not create a discussion
+        assert delta is not None
+        assert delta["action"] == "heartbeat"
+
+    def test_dry_run_post_skips_llm(self, tmp_state):
+        """Dry run post doesn't call LLM or API."""
         from zion_autonomy import execute_action
         archetypes = make_archetypes()
 
-        # Use debater which has 25% debate rate
         agents_data = {"agents": {
             "zion-debater-01": {"name": "Test", "status": "active",
                                 "heartbeat_last": "2026-02-12T00:00:00Z",

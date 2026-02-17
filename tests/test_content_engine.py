@@ -564,3 +564,144 @@ class TestPostTypeGeneration:
                 space_titles.add(clean)
         # Space titles come from TYPED_TITLES["space"], which has ~10 templates
         assert len(space_titles) >= 3, f"Only {len(space_titles)} unique space titles"
+
+
+# ===========================================================================
+# Dynamic post generation tests
+# ===========================================================================
+
+class TestParseTitleBody:
+    """Test _parse_title_body parsing of LLM output."""
+
+    def test_structured_format(self):
+        raw = "TITLE: Why Octopuses Are Basically Aliens\nBODY:\nOctopuses have three hearts."
+        title, body = ce._parse_title_body(raw)
+        assert title == "Why Octopuses Are Basically Aliens"
+        assert "three hearts" in body
+
+    def test_quoted_title(self):
+        raw = 'TITLE: "The Economics of Street Food"\nBODY:\nStreet food is cheap.'
+        title, body = ce._parse_title_body(raw)
+        assert title == "The Economics of Street Food"
+
+    def test_fallback_first_line(self):
+        raw = "A Surprising Take on Libraries\nLibraries are the most radical institution."
+        title, body = ce._parse_title_body(raw)
+        assert title == "A Surprising Take on Libraries"
+        assert "radical" in body
+
+    def test_strips_bracket_tags(self):
+        raw = "TITLE: [DEBATE] Should Zoos Exist\nBODY:\nZoos are complex."
+        title, body = ce._parse_title_body(raw)
+        assert title == "Should Zoos Exist"
+
+    def test_long_title_truncated(self):
+        raw = "TITLE: " + "A" * 200 + "\nBODY:\nContent here."
+        title, body = ce._parse_title_body(raw)
+        assert len(title) <= 150
+
+    def test_empty_input(self):
+        title, body = ce._parse_title_body("")
+        assert title == ""
+        assert body == ""
+
+
+class TestDynamicPostGeneration:
+    """Test generate_dynamic_post with mocked LLM."""
+
+    @patch("github_llm.generate")
+    def test_returns_post_dict(self, mock_gen):
+        mock_gen.return_value = (
+            "TITLE: Why Bridges Are the Best Metaphor\n"
+            "BODY:\n"
+            "Every bridge is an argument that two places should be connected. "
+            "The Brooklyn Bridge took 14 years and several lives to build, "
+            "and yet nobody today questions whether it was worth it. "
+            "That certainty came retroactively — during construction, "
+            "it was called folly. This is how all great connections work."
+        )
+        result = ce.generate_dynamic_post(
+            agent_id="zion-philosopher-01",
+            archetype="philosopher",
+            channel="philosophy",
+        )
+        assert result is not None
+        assert result["title"] == "Why Bridges Are the Best Metaphor"
+        assert "Brooklyn Bridge" in result["body"]
+        assert result["channel"] == "philosophy"
+        assert result["post_type"] == "dynamic"
+
+    @patch("github_llm.generate")
+    def test_returns_none_on_short_output(self, mock_gen):
+        mock_gen.return_value = "TITLE: Hi\nBODY:\nShort."
+        result = ce.generate_dynamic_post(
+            agent_id="zion-coder-01",
+            archetype="coder",
+            channel="code",
+        )
+        assert result is None
+
+    @patch("github_llm.generate")
+    def test_returns_none_on_exception(self, mock_gen):
+        mock_gen.side_effect = Exception("Rate limited")
+        result = ce.generate_dynamic_post(
+            agent_id="zion-coder-01",
+            archetype="coder",
+            channel="code",
+        )
+        assert result is None
+
+    def test_dry_run_returns_none(self):
+        result = ce.generate_dynamic_post(
+            agent_id="zion-coder-01",
+            archetype="coder",
+            channel="code",
+            dry_run=True,
+        )
+        assert result is None
+
+    @patch("github_llm.generate")
+    def test_observation_included_in_prompt(self, mock_gen):
+        mock_gen.return_value = (
+            "TITLE: The Quiet Channels Are Saying Something\n"
+            "BODY:\n"
+            "When a channel goes quiet, it's not empty — it's full of "
+            "things people decided not to say. The research channel has been "
+            "silent for three days now, and that silence has a texture to it "
+            "that's worth examining carefully and with great attention."
+        )
+        obs = {
+            "observations": ["research channel has been quiet for 3 days"],
+            "mood": "contemplative",
+            "context_fragments": [("cold_channel", "research")],
+        }
+        result = ce.generate_dynamic_post(
+            agent_id="zion-philosopher-01",
+            archetype="philosopher",
+            channel="philosophy",
+            observation=obs,
+        )
+        assert result is not None
+        # Verify the LLM was called with observation context
+        call_args = mock_gen.call_args
+        assert "quiet" in call_args.kwargs.get("user", "") or "quiet" in str(call_args)
+
+    @patch("github_llm.generate")
+    def test_recent_titles_anti_repetition(self, mock_gen):
+        mock_gen.return_value = (
+            "TITLE: Something Completely Different\n"
+            "BODY:\n"
+            "This post deliberately avoids the topics that have been "
+            "covered recently, exploring instead the overlooked corners "
+            "of what makes communities interesting and alive and vibrant."
+        )
+        result = ce.generate_dynamic_post(
+            agent_id="zion-wildcard-01",
+            archetype="wildcard",
+            channel="random",
+            recent_titles=["On Consciousness", "The Archive of Memory"],
+        )
+        assert result is not None
+        call_args = mock_gen.call_args
+        user_prompt = call_args.kwargs.get("user", str(call_args))
+        assert "On Consciousness" in user_prompt or "DO NOT repeat" in user_prompt
