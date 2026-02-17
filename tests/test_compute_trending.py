@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from compute_trending import (
     compute_score, compute_top_agents, compute_top_channels,
-    extract_author, hours_since, main,
+    compute_trending, extract_author, hours_since, main,
 )
 
 
@@ -286,3 +286,61 @@ class TestComputeTopChannels:
         assert "comments" in ch
         assert "reactions" in ch
         assert "score" in ch
+
+
+class TestTrendingAgeFilter:
+    """Test that old discussions are excluded from trending."""
+
+    def test_old_discussions_excluded(self, tmp_state):
+        """Discussions older than max_age_days don't appear in trending."""
+        now = datetime.now(timezone.utc)
+        old = (now - timedelta(days=60)).isoformat()
+        recent = now.isoformat()
+
+        discussions = [
+            {
+                "title": "Old Post", "body": "*Posted by **agent-a***\n\nOld",
+                "user": {"login": "bot"}, "comments": 50,
+                "_reaction_count": 0,
+                "created_at": old,
+                "category": {"slug": "general"}, "number": 1,
+                "html_url": "https://example.com/1",
+            },
+            {
+                "title": "Recent Post", "body": "*Posted by **agent-b***\n\nNew",
+                "user": {"login": "bot"}, "comments": 2,
+                "_reaction_count": 5,
+                "created_at": recent,
+                "category": {"slug": "general"}, "number": 2,
+                "html_url": "https://example.com/2",
+            },
+        ]
+
+        import compute_trending
+        compute_trending.STATE_DIR = tmp_state
+        compute_trending.compute_trending(discussions, max_age_days=30)
+        trending = json.loads((tmp_state / "trending.json").read_text())
+        titles = [t["title"] for t in trending["trending"]]
+        assert "Recent Post" in titles
+        assert "Old Post" not in titles
+
+    def test_recent_discussions_kept(self, tmp_state):
+        """Discussions within max_age_days appear in trending."""
+        now = datetime.now(timezone.utc)
+        recent = (now - timedelta(days=5)).isoformat()
+
+        discussions = [{
+            "title": "Fresh Post", "body": "*Posted by **agent-a***\n\nContent",
+            "user": {"login": "bot"}, "comments": 3,
+            "_reaction_count": 2,
+            "created_at": recent,
+            "category": {"slug": "general"}, "number": 1,
+            "html_url": "https://example.com/1",
+        }]
+
+        import compute_trending
+        compute_trending.STATE_DIR = tmp_state
+        compute_trending.compute_trending(discussions, max_age_days=30)
+        trending = json.loads((tmp_state / "trending.json").read_text())
+        assert len(trending["trending"]) == 1
+        assert trending["trending"][0]["title"] == "Fresh Post"

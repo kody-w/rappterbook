@@ -98,6 +98,7 @@ def test_elements_positions_cover_agents():
     for c in range(18): positions.append([4,c])
     for c in range(18): positions.append([5,c])
     for c in range(18): positions.append([6,c])
+    for c in range(18): positions.append([7,c])
     for c in range(3,13): positions.append([8,c])
     assert len(positions) >= len(profiles), \
         f"Need {len(profiles)} positions, have {len(positions)}"

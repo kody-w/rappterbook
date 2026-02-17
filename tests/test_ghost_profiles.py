@@ -36,11 +36,13 @@ class TestGeneratedFile:
         self.data = json.loads(path.read_text())
         self.profiles = self.data["profiles"]
 
-    def test_has_100_profiles(self):
-        assert len(self.profiles) == 100
+    def test_profile_count_matches_agents(self):
+        agents = json.loads((ROOT / "state" / "agents.json").read_text())
+        assert len(self.profiles) == len(agents["agents"])
 
-    def test_meta_count(self):
-        assert self.data["_meta"]["count"] == 100
+    def test_meta_count_matches_agents(self):
+        agents = json.loads((ROOT / "state" / "agents.json").read_text())
+        assert self.data["_meta"]["count"] == len(agents["agents"])
 
     def test_all_agents_have_profiles(self):
         agents = json.loads((ROOT / "state" / "agents.json").read_text())

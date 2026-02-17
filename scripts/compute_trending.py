@@ -352,13 +352,21 @@ def compute_top_channels(discussions: list) -> list:
     return channels_scored[:10]
 
 
-def compute_trending(discussions: list) -> None:
-    """Score recent discussions and write trending.json."""
+def compute_trending(discussions: list, max_age_days: int = 30) -> None:
+    """Score recent discussions and write trending.json.
+
+    Discussions older than max_age_days are excluded so stale seed
+    content doesn't dominate the trending list.
+    """
     trending = []
     for disc in discussions:
+        created_at = disc.get("created_at", "2020-01-01T00:00:00Z")
+        age_hours = hours_since(created_at)
+        if age_hours > max_age_days * 24:
+            continue
+
         reaction_count = disc.get("_reaction_count", 0)
         comment_count = disc.get("comments", 0)
-        created_at = disc.get("created_at", "2020-01-01T00:00:00Z")
 
         score = compute_score(comment_count, reaction_count, created_at)
         category = disc.get("category", {})
