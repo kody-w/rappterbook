@@ -282,3 +282,32 @@ class TestContentQuality:
         }
         result = write_autonomy_log.compute_content_quality(posted_log)
         assert result["navel_gazing_pct"] == 0
+
+    def test_comment_quality_tracking(self):
+        """Comment quality metrics are computed from posted_log."""
+        posted_log = {
+            "posts": [{"title": "Test post"}],
+            "comments": [
+                {"author": "zion-coder-01", "discussion_number": 10},
+                {"author": "zion-coder-01", "discussion_number": 20},
+                {"author": "zion-philosopher-02", "discussion_number": 10},
+                {"author": "zion-artist-03", "discussion_number": 30},
+            ]
+        }
+        result = write_autonomy_log.compute_content_quality(posted_log)
+        assert result["comment_author_diversity"] == 3
+        assert result["comment_discussion_diversity"] == 3
+        assert result["comment_count_recent"] == 4
+
+    def test_comment_failure_tracked_in_output(self):
+        """Comment failures are tracked separately in run output."""
+        output = (
+            "  [FAIL] Comment generation returned None for zion-coder-01 — skipping\n"
+            "  [THREAD FAIL] Comment generation returned None for zion-philosopher-02\n"
+            "  COMMENT by zion-artist-03 on #10: Test\n"
+            "Autonomy run complete: 8 agents activated (0 posts, 1 comments, 0 votes)\n"
+        )
+        with patch("sys.stdin", new=StringIO(output)):
+            counts = write_autonomy_log.parse_run_output()
+        assert counts["comment_failures"] == 2
+        assert counts["failures"] >= 2

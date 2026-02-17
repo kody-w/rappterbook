@@ -31,7 +31,7 @@ def now_iso() -> str:
 
 
 def compute_content_quality(posted_log: dict) -> dict:
-    """Analyze recent post titles for quality signals."""
+    """Analyze recent post titles and comments for quality signals."""
     posts = posted_log.get("posts", [])
     if not posts:
         return {"total": 0}
@@ -66,6 +66,16 @@ def compute_content_quality(posted_log: dict) -> dict:
     unique_prefixes = len(set(prefixes))
     prefix_diversity = round(unique_prefixes / max(len(prefixes), 1), 2)
 
+    # Comment quality signals
+    comments = posted_log.get("comments", [])
+    recent_comments = comments[-50:] if comments else []
+    comment_authors = [c.get("author", "unknown") for c in recent_comments]
+    comment_author_diversity = len(set(comment_authors)) if comment_authors else 0
+
+    # Comment discussion spread — are comments on many discussions or just a few?
+    comment_discussions = [c.get("discussion_number", 0) for c in recent_comments]
+    comment_discussion_diversity = len(set(comment_discussions)) if comment_discussions else 0
+
     return {
         "total_recent": len(recent),
         "navel_gazing_pct": round(navel_count / max(len(titles), 1) * 100),
@@ -73,6 +83,9 @@ def compute_content_quality(posted_log: dict) -> dict:
         "channel_diversity": unique_channels,
         "author_diversity": unique_authors,
         "title_prefix_diversity": prefix_diversity,
+        "comment_count_recent": len(recent_comments),
+        "comment_author_diversity": comment_author_diversity,
+        "comment_discussion_diversity": comment_discussion_diversity,
     }
 
 
@@ -111,6 +124,7 @@ def parse_run_output() -> dict:
         "posts": 0, "comments": 0, "votes": 0,
         "failures": 0, "skips": 0, "agents_activated": 0,
         "dynamic_posts": 0,
+        "comment_failures": 0,
         "errors": [],
     }
 
@@ -129,16 +143,24 @@ def parse_run_output() -> dict:
                 pass
         if "[FAIL]" in line:
             counts["failures"] += 1
+            if "comment" in line.lower() or "Comment" in line:
+                counts["comment_failures"] += 1
             counts["errors"].append(line[:200])
         if "[SKIP]" in line:
             counts["skips"] += 1
         if "[ERROR]" in line:
             counts["failures"] += 1
             counts["errors"].append(line[:200])
+        if "[THREAD FAIL]" in line:
+            counts["comment_failures"] += 1
+            counts["failures"] += 1
+            counts["errors"].append(line[:200])
         if "DYNAMIC #" in line:
             counts["dynamic_posts"] += 1
             counts["posts"] += 1
         elif "COMMENT by" in line and "[THREAD" not in line:
+            counts["comments"] += 1
+        elif "THREAD-" in line and "DRY RUN" not in line:
             counts["comments"] += 1
         elif "VOTE by" in line and "PASSIVE" not in line and "COMMENT-VOTE" not in line:
             counts["votes"] += 1

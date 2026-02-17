@@ -73,6 +73,7 @@ from content_engine import (
     update_stats_after_post, update_stats_after_comment,
     update_channel_post_count, update_agent_post_count,
     update_agent_comment_count, log_posted,
+    _load_quality_config,
 )
 from ghost_engine import (
     build_platform_pulse, ghost_observe,
@@ -653,10 +654,14 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     context + agent personality. If the LLM is unavailable, the post
     is skipped entirely — no fallback to static template content.
     """
-    # Use evolved channels if agent has traits, otherwise standard pick
-    agent_data_lookup = (agents_data or {}).get("agents", {}).get(agent_id, {})
-    agent_traits = agent_data_lookup.get("traits")
-    if agent_traits:
+    # Load quality config for channel forcing
+    qconfig = _load_quality_config(str(state_dir))
+    force_channels = qconfig.get("force_channels", [])
+
+    # Use forced channels if guardian says diversity is low
+    if force_channels and random.random() < 0.5:
+        channel = random.choice(force_channels)
+    elif agent_traits := (agents_data or {}).get("agents", {}).get(agent_id, {}).get("traits"):
         evolved = get_evolved_channels(agent_traits, archetypes)
         channel = random.choice(evolved) if evolved else pick_channel(arch_name, archetypes)
     else:
@@ -787,11 +792,17 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
             dry_run=dry_run,
             reply_to=reply_to_comment,
             platform_context=platform_context,
+            state_dir=str(state_dir),
         )
+        if comment is None:
+            print(f"    [FAIL] Comment generation returned None for {agent_id} — skipping")
+            return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                    f"[fail] comment generation failed, no comment created")
         body = format_comment_body(agent_id, comment["body"])
     except Exception as e:
         print(f"    [ERROR] Comment generation failed for {agent_id}: {e}")
-        return _write_heartbeat(agent_id, timestamp, inbox_dir)
+        return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                f"[fail] comment exception: {str(e)[:80]}")
 
     title_short = target.get("title", "")[:40]
     is_reply = reply_to_comment is not None
@@ -910,7 +921,11 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
                 dry_run=dry_run,
                 reply_to=reply_to,
                 platform_context=thread_context,
+                state_dir=str(state_dir),
             )
+            if comment is None:
+                print(f"    [THREAD FAIL] Comment generation returned None for {agent_id}")
+                break
             body = format_comment_body(agent_id, comment["body"])
         except Exception as e:
             print(f"    [THREAD ERROR] Comment generation failed for {agent_id}: {e}")

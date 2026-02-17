@@ -332,6 +332,34 @@ class TestDuplicatePrevention:
         log = {"posts": [], "comments": []}
         assert ce.is_duplicate_post("Any Title", log) is False
 
+    def test_fuzzy_match_catches_similar_titles(self):
+        """Similar titles should be caught by fuzzy matching."""
+        log = {"posts": [{"title": "The bridge problem in modern cities"}]}
+        assert ce.is_duplicate_post("The bridge problem in modern towns", log) is True
+
+    def test_fuzzy_match_allows_different_titles(self):
+        """Sufficiently different titles pass fuzzy check."""
+        log = {"posts": [{"title": "The bridge problem in modern cities"}]}
+        assert ce.is_duplicate_post("Why sourdough starter cultures matter", log) is False
+
+    def test_fuzzy_match_case_insensitive(self):
+        """Fuzzy matching is case-insensitive."""
+        log = {"posts": [{"title": "The Bridge Problem"}]}
+        assert ce.is_duplicate_post("the bridge problem", log) is True
+
+    def test_custom_threshold(self):
+        """Custom threshold parameter is respected."""
+        log = {"posts": [{"title": "Exploring ancient Roman aqueducts"}]}
+        # With very low threshold, even vaguely similar titles match
+        assert ce.is_duplicate_post("Exploring ancient Greek aqueducts", log, threshold=0.5) is True
+        # With very high threshold, only near-exact matches count
+        assert ce.is_duplicate_post("Exploring ancient Greek aqueducts", log, threshold=0.99) is False
+
+    def test_empty_title_not_duplicate(self):
+        """Empty title is never a duplicate."""
+        log = {"posts": [{"title": "Something"}]}
+        assert ce.is_duplicate_post("", log) is False
+
 
 # ---------------------------------------------------------------------------
 # State Update Tests
@@ -894,3 +922,103 @@ class TestQualityConfigIntegration:
         call_args = mock_gen.call_args
         temp = call_args.kwargs.get("temperature", 0.9)
         assert temp <= 1.2  # clamped
+
+
+class TestCommentQualityConfig:
+    """Test that generate_comment reads and applies quality_config.json."""
+
+    @patch("github_llm.generate")
+    def test_banned_phrases_in_comment_prompt(self, mock_gen, tmp_path):
+        """Banned phrases from quality config appear in comment system prompt."""
+        mock_gen.return_value = (
+            "The point about coral reefs modifying weather is fascinating. "
+            "What strikes me most is how the mechanism mirrors what we see "
+            "in forest canopy effects on local precipitation patterns. "
+            "The scale difference makes the reef case more surprising though."
+        )
+        sd = tmp_path / "state"
+        sd.mkdir()
+        config = {
+            "banned_phrases": ["digital consciousness"],
+            "banned_words": ["paradox", "meditation"],
+            "suggested_topics": [],
+            "temperature_adjustment": 0.0,
+            "extra_system_rules": [],
+        }
+        (sd / "quality_config.json").write_text(json.dumps(config))
+
+        disc = {"number": 42, "title": "Coral Reef Weather", "body": "Reefs modify weather.", "id": "abc", "comments": {"totalCount": 0}}
+        result = ce.generate_comment(
+            agent_id="zion-philosopher-01",
+            commenter_arch="philosopher",
+            discussion=disc,
+            state_dir=str(sd),
+        )
+        assert result is not None
+        call_args = mock_gen.call_args
+        system = call_args.kwargs.get("system", "")
+        assert "digital consciousness" in system
+        assert "paradox" in system
+
+    @patch("github_llm.generate")
+    def test_comment_returns_none_on_bad_output(self, mock_gen):
+        """Comment generation returns None when validation fails."""
+        mock_gen.return_value = ""  # Empty output fails validation
+        disc = {"number": 42, "title": "Test", "body": "Body", "id": "abc", "comments": {"totalCount": 0}}
+        result = ce.generate_comment(
+            agent_id="zion-coder-01",
+            commenter_arch="coder",
+            discussion=disc,
+        )
+        assert result is None
+
+    @patch("github_llm.generate")
+    def test_comment_temperature_adjusted(self, mock_gen, tmp_path):
+        """Comment temperature is adjusted per quality config."""
+        mock_gen.return_value = (
+            "This is a substantive comment about the topic at hand. "
+            "I find the argument compelling because it draws on real evidence "
+            "rather than abstract speculation. The data speaks for itself here."
+        )
+        sd = tmp_path / "state"
+        sd.mkdir()
+        config = {
+            "banned_phrases": [],
+            "banned_words": [],
+            "suggested_topics": [],
+            "temperature_adjustment": 0.05,
+            "extra_system_rules": [],
+        }
+        (sd / "quality_config.json").write_text(json.dumps(config))
+
+        disc = {"number": 42, "title": "Test", "body": "Body", "id": "abc", "comments": {"totalCount": 0}}
+        ce.generate_comment(
+            agent_id="zion-coder-01",
+            commenter_arch="coder",
+            discussion=disc,
+            state_dir=str(sd),
+        )
+        call_args = mock_gen.call_args
+        temp = call_args.kwargs.get("temperature", 0.85)
+        assert temp == pytest.approx(0.90, abs=0.01)
+
+    @patch("github_llm.generate")
+    def test_comment_missing_config_no_crash(self, mock_gen, tmp_path):
+        """Missing quality_config.json doesn't crash comment generation."""
+        mock_gen.return_value = (
+            "A thoughtful comment that engages with the core argument. "
+            "The evidence presented supports a different conclusion though. "
+            "Worth reconsidering the premise before accepting the framing."
+        )
+        sd = tmp_path / "state"
+        sd.mkdir()
+        # No quality_config.json
+
+        disc = {"number": 42, "title": "Test", "body": "Body", "id": "abc", "comments": {"totalCount": 0}}
+        result = ce.generate_comment(
+            agent_id="zion-coder-01",
+            commenter_arch="coder",
+            discussion=disc,
+            state_dir=str(sd),
+        )
+        assert result is not None

@@ -1714,11 +1714,15 @@ def generate_comment(
     dry_run: bool = False,
     reply_to: dict = None,
     platform_context: str = "",
-) -> dict:
+    state_dir: str = "state",
+) -> Optional[dict]:
     """Generate a contextual comment using the GitHub Models LLM.
 
     Builds a persona-aware system prompt and feeds the actual post content
     as context. The LLM produces a genuine response, not a template.
+
+    Reads state/quality_config.json for banned phrases and extra rules
+    written by the quality guardian.
 
     Args:
         agent_id: The commenting agent's ID.
@@ -1729,11 +1733,16 @@ def generate_comment(
         dry_run: If True, use placeholder instead of calling LLM API.
         reply_to: Optional dict with 'id', 'body', 'author' of comment to reply to.
         platform_context: Optional platform pulse summary for network-aware comments.
+        state_dir: Path to state directory for reading quality config.
 
     Returns:
-        Dict with body, discussion_number, discussion_id, discussion_title, author.
+        Dict with body, discussion_number, discussion_id, discussion_title, author,
+        or None if the LLM fails or produces unusable output.
     """
     from github_llm import generate
+
+    # Load quality guardian config
+    qconfig = _load_quality_config(state_dir)
 
     discussions = discussions or []
     post_title = discussion.get("title", "Untitled")
@@ -1750,6 +1759,17 @@ def generate_comment(
         f"Do NOT use markdown headers. Do NOT start with 'Great post' or generic praise. "
         f"Engage directly with the ideas presented."
     )
+
+    # Append quality guardian rules
+    banned = qconfig.get("banned_phrases", [])
+    banned_words = qconfig.get("banned_words", [])
+    if banned or banned_words:
+        all_bans = banned + banned_words
+        system_prompt += f"\n- Do NOT use these overused words/phrases: {', '.join(all_bans[:15])}"
+
+    extra_rules = qconfig.get("extra_system_rules", [])
+    for rule in extra_rules:
+        system_prompt += f"\n- {rule}"
 
     if soul_content:
         # Include the top of the soul file for persona context
@@ -1810,11 +1830,15 @@ def generate_comment(
 
     user_prompt += "Write your comment now. Just the comment text, no preamble."
 
+    # Apply temperature adjustment from quality guardian
+    comment_temp = 0.85 + qconfig.get("temperature_adjustment", 0.0)
+    comment_temp = min(max(comment_temp, 0.7), 1.1)  # clamp to safe range
+
     body = generate(
         system=system_prompt,
         user=user_prompt,
         max_tokens=350,
-        temperature=0.85,
+        temperature=comment_temp,
         dry_run=dry_run,
     )
 
@@ -1824,8 +1848,9 @@ def generate_comment(
         if cleaned:
             body = cleaned
         else:
-            # Fallback: LLM produced unusable output
-            body = f"Interesting discussion on {extract_post_topic(post_title)}. This resonates with themes I've been thinking about lately."
+            # LLM produced unusable output — fail loudly, no static fallback
+            print(f"  [FAIL] Comment validation failed for {agent_id} on #{discussion.get('number')}")
+            return None
 
     return {
         "body": body,
@@ -1840,10 +1865,33 @@ def generate_comment(
 # Duplicate prevention
 # ===========================================================================
 
-def is_duplicate_post(title: str, log: dict) -> bool:
-    """Check if a post title has already been posted."""
-    posted_titles = {p.get("title", "") for p in log.get("posts", [])}
-    return title in posted_titles
+def is_duplicate_post(title: str, log: dict, threshold: float = 0.75) -> bool:
+    """Check if a post title is too similar to an existing one.
+
+    Uses difflib.SequenceMatcher for fuzzy matching so near-duplicates
+    like 'The bridge problem' and 'On bridges and problems' are caught.
+    Exact matches always return True. Fuzzy matches above the threshold
+    (default 0.75) also return True.
+    """
+    from difflib import SequenceMatcher
+
+    title_lower = title.lower().strip()
+    if not title_lower:
+        return False
+
+    for post in log.get("posts", []):
+        existing = post.get("title", "").lower().strip()
+        if not existing:
+            continue
+        # Exact match
+        if title_lower == existing:
+            return True
+        # Fuzzy match
+        ratio = SequenceMatcher(None, title_lower, existing).ratio()
+        if ratio >= threshold:
+            return True
+
+    return False
 
 
 # ===========================================================================

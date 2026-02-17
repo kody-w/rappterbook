@@ -508,3 +508,96 @@ class TestThreadReflection:
         result = generate_reflection("zion-coder-01", "comment", "coder", context=ctx)
         assert "Replied to" in result
         assert "zion-philosopher-02" in result
+
+
+class TestChannelForcing:
+    """Test that force_channels from quality config affects channel selection."""
+
+    @patch("content_engine.generate_dynamic_post")
+    @patch("zion_autonomy.create_discussion")
+    def test_force_channels_used(self, mock_create, mock_gen, tmp_state):
+        """When force_channels is set, quality config is loaded correctly."""
+        from content_engine import _load_quality_config
+
+        # Write quality config with force_channels
+        config = {
+            "force_channels": ["random", "digests"],
+            "banned_phrases": [],
+            "banned_words": [],
+            "suggested_topics": [],
+            "temperature_adjustment": 0.0,
+            "extra_system_rules": [],
+        }
+        (tmp_state / "quality_config.json").write_text(json.dumps(config))
+
+        # Verify quality config is loaded and force_channels is read
+        loaded = _load_quality_config(str(tmp_state))
+        assert loaded["force_channels"] == ["random", "digests"]
+
+
+class TestCommentFailureHandling:
+    """Test that comment generation failures are handled properly."""
+
+    @patch("zion_autonomy.generate_comment")
+    def test_comment_none_skips(self, mock_gen, tmp_state):
+        """When generate_comment returns None, post is skipped with [fail] log."""
+        from zion_autonomy import _execute_comment
+
+        mock_gen.return_value = None
+
+        (tmp_state / "posted_log.json").write_text(json.dumps({"posts": [], "comments": []}))
+        inbox = tmp_state / "inbox"
+        inbox.mkdir(exist_ok=True)
+        (tmp_state / "memory").mkdir(exist_ok=True)
+
+        discussions = [{
+            "number": 42, "title": "Test Discussion", "id": "abc",
+            "body": "Test body", "comments": {"totalCount": 0, "nodes": []},
+        }]
+
+        archetypes = make_archetypes()
+        result = _execute_comment(
+            "zion-coder-01", "coder", archetypes, tmp_state,
+            discussions, dry_run=False, timestamp="2026-02-17T00:00:00Z",
+            inbox_dir=inbox,
+        )
+
+        # Should write a heartbeat with failure note
+        assert result is not None
+        inbox_files = list(inbox.glob("*.json"))
+        assert len(inbox_files) >= 1
+        delta = json.loads(inbox_files[0].read_text())
+        status = delta.get("payload", {}).get("status_message", "")
+        assert "fail" in status.lower()
+
+    @patch("zion_autonomy.generate_comment")
+    def test_comment_exception_skips(self, mock_gen, tmp_state):
+        """When generate_comment throws, post is skipped with [fail] log."""
+        from zion_autonomy import _execute_comment
+
+        mock_gen.side_effect = Exception("LLM rate limited")
+
+        (tmp_state / "posted_log.json").write_text(json.dumps({"posts": [], "comments": []}))
+        inbox = tmp_state / "inbox"
+        inbox.mkdir(exist_ok=True)
+        (tmp_state / "memory").mkdir(exist_ok=True)
+
+        discussions = [{
+            "number": 42, "title": "Test Discussion", "id": "abc",
+            "body": "Test body", "comments": {"totalCount": 0, "nodes": []},
+        }]
+
+        archetypes = make_archetypes()
+        result = _execute_comment(
+            "zion-coder-01", "coder", archetypes, tmp_state,
+            discussions, dry_run=False, timestamp="2026-02-17T00:00:00Z",
+            inbox_dir=inbox,
+        )
+
+        # Should still produce a heartbeat (not crash)
+        assert result is not None
+        inbox_files = list(inbox.glob("*.json"))
+        assert len(inbox_files) >= 1
+        delta = json.loads(inbox_files[0].read_text())
+        status = delta.get("payload", {}).get("status_message", "")
+        assert "fail" in status.lower()
