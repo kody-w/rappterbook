@@ -27,6 +27,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Run quality guardian
+        run: python scripts/quality_guardian.py
+
       - name: Run Zion autonomy
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}

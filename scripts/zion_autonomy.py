@@ -691,6 +691,7 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
         soul_content=soul_content,
         recent_titles=recent_titles,
         dry_run=False,
+        state_dir=str(state_dir),
     )
 
     if post is None:

@@ -113,6 +113,64 @@ def main() -> None:
     print(f"  Budget:             {latest_llm.get('budget', '?')}")
     print()
 
+    # Quality Guardian adjustments
+    qconfig = load_json(STATE_DIR / "quality_config.json")
+    if qconfig and qconfig.get("_meta", {}).get("based_on_entries", 0) > 0:
+        print("🛡️  Quality Guardian Adjustments")
+        qa = qconfig.get("analysis", {})
+        if qa:
+            print(f"  Navel-gazing trend: {qa.get('navel_gazing_trend', '?')}%")
+            print(f"  Title diversity:    {qa.get('title_diversity_avg', '?')}")
+            print(f"  Failure rate:       {qa.get('failure_rate', 0)*100:.0f}%")
+        if qconfig.get("banned_phrases"):
+            print(f"  Banned phrases:     {', '.join(qconfig['banned_phrases'][:5])}")
+        if qconfig.get("banned_words"):
+            print(f"  Overused words:     {', '.join(qconfig['banned_words'][:5])}")
+        if qconfig.get("force_channels"):
+            print(f"  Forcing channels:   {', '.join(qconfig['force_channels'])}")
+        if qconfig.get("temperature_adjustment"):
+            print(f"  Temperature boost:  +{qconfig['temperature_adjustment']}")
+        if qconfig.get("reduce_post_frequency"):
+            print(f"  ⚠️  Post frequency reduced (high failure rate)")
+        if qconfig.get("suggested_topics"):
+            print(f"  Topic suggestions:  {len(qconfig['suggested_topics'])} fresh seeds")
+        print()
+
+    # 7-day quality trend
+    if len(recent) >= 4:
+        print("📈 Quality Trend (first half → second half of window)")
+        first_half = recent[:len(recent)//2]
+        second_half = recent[len(recent)//2:]
+
+        def avg_metric(entries, key):
+            vals = [e.get("content_quality", {}).get(key) for e in entries]
+            vals = [v for v in vals if v is not None]
+            return sum(vals) / max(len(vals), 1) if vals else None
+
+        ng1, ng2 = avg_metric(first_half, "navel_gazing_pct"), avg_metric(second_half, "navel_gazing_pct")
+        td1, td2 = avg_metric(first_half, "title_prefix_diversity"), avg_metric(second_half, "title_prefix_diversity")
+        cd1, cd2 = avg_metric(first_half, "channel_diversity"), avg_metric(second_half, "channel_diversity")
+
+        def trend_arrow(v1, v2, lower_is_better=False):
+            if v1 is None or v2 is None:
+                return "?"
+            diff = v2 - v1
+            if lower_is_better:
+                diff = -diff
+            if diff > 0.5:
+                return "↑ improving"
+            elif diff < -0.5:
+                return "↓ declining"
+            return "→ stable"
+
+        if ng1 is not None:
+            print(f"  Navel-gazing:  {ng1:.0f}% → {ng2:.0f}%  {trend_arrow(ng1, ng2, lower_is_better=True)}")
+        if td1 is not None:
+            print(f"  Title diversity: {td1:.2f} → {td2:.2f}  {trend_arrow(td1, td2)}")
+        if cd1 is not None:
+            print(f"  Channel diversity: {cd1:.0f} → {cd2:.0f}  {trend_arrow(cd1, cd2)}")
+        print()
+
     # Trend: are failures increasing?
     if len(recent) >= 3:
         first_half = recent[:len(recent)//2]

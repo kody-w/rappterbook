@@ -11,6 +11,8 @@ import shutil
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
+import pytest
+
 # Add scripts to path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
@@ -705,3 +707,190 @@ class TestDynamicPostGeneration:
         call_args = mock_gen.call_args
         user_prompt = call_args.kwargs.get("user", str(call_args))
         assert "On Consciousness" in user_prompt or "DO NOT repeat" in user_prompt
+
+
+class TestQualityConfigIntegration:
+    """Test that generate_dynamic_post reads and applies quality_config.json."""
+
+    @patch("github_llm.generate")
+    def test_banned_phrases_in_system_prompt(self, mock_gen, tmp_path):
+        """Banned phrases from quality config appear in system prompt."""
+        mock_gen.return_value = (
+            "TITLE: Why Coral Reefs Build Weather\n"
+            "BODY:\n"
+            "Coral reefs don't just live in the ocean — they actively modify "
+            "local weather patterns through evaporation and heat exchange. "
+            "The Great Barrier Reef creates its own cloud formations that "
+            "researchers can track from satellite imagery with surprising clarity."
+        )
+        sd = tmp_path / "state"
+        sd.mkdir()
+        config = {
+            "banned_phrases": ["digital consciousness", "archive of dreams"],
+            "banned_words": ["paradox", "meditation"],
+            "suggested_topics": [],
+            "temperature_adjustment": 0.0,
+            "extra_system_rules": [],
+        }
+        (sd / "quality_config.json").write_text(json.dumps(config))
+
+        result = ce.generate_dynamic_post(
+            agent_id="zion-researcher-01",
+            archetype="researcher",
+            channel="research",
+            state_dir=str(sd),
+        )
+        assert result is not None
+        call_args = mock_gen.call_args
+        system = call_args.kwargs.get("system", "")
+        assert "digital consciousness" in system
+        assert "paradox" in system
+
+    @patch("github_llm.generate")
+    def test_temperature_adjustment_applied(self, mock_gen, tmp_path):
+        """Temperature is adjusted per quality config."""
+        mock_gen.return_value = (
+            "TITLE: Street Food Economics in Mexico City\n"
+            "BODY:\n"
+            "A taco stand in Condesa generates more revenue per square foot "
+            "than most restaurants in the same neighborhood. The economics "
+            "of street food hinge on three factors: speed, volume, and zero rent. "
+            "This creates an unusual market dynamic worth studying closely."
+        )
+        sd = tmp_path / "state"
+        sd.mkdir()
+        config = {
+            "banned_phrases": [],
+            "banned_words": [],
+            "suggested_topics": [],
+            "temperature_adjustment": 0.05,
+            "extra_system_rules": [],
+        }
+        (sd / "quality_config.json").write_text(json.dumps(config))
+
+        ce.generate_dynamic_post(
+            agent_id="zion-researcher-01",
+            archetype="researcher",
+            channel="research",
+            state_dir=str(sd),
+        )
+        call_args = mock_gen.call_args
+        temp = call_args.kwargs.get("temperature", 0.9)
+        assert temp == pytest.approx(0.95, abs=0.01)
+
+    @patch("github_llm.generate")
+    def test_extra_system_rules_appended(self, mock_gen, tmp_path):
+        """Extra system rules from guardian are in the system prompt."""
+        mock_gen.return_value = (
+            "TITLE: Bee Democracy Is Real\n"
+            "BODY:\n"
+            "Honeybees make collective decisions through a process that "
+            "looks remarkably like democratic voting. Scout bees present "
+            "options through waggle dances, and the swarm collectively "
+            "chooses the best new hive location through consensus building."
+        )
+        sd = tmp_path / "state"
+        sd.mkdir()
+        config = {
+            "banned_phrases": [],
+            "banned_words": [],
+            "suggested_topics": [],
+            "temperature_adjustment": 0.0,
+            "extra_system_rules": ["WRITE ONLY ABOUT NATURE AND BIOLOGY"],
+        }
+        (sd / "quality_config.json").write_text(json.dumps(config))
+
+        ce.generate_dynamic_post(
+            agent_id="zion-philosopher-01",
+            archetype="philosopher",
+            channel="philosophy",
+            state_dir=str(sd),
+        )
+        call_args = mock_gen.call_args
+        system = call_args.kwargs.get("system", "")
+        assert "NATURE AND BIOLOGY" in system
+
+    @patch("github_llm.generate")
+    def test_suggested_topics_in_user_prompt(self, mock_gen, tmp_path):
+        """Suggested topics from guardian appear in user prompt context."""
+        mock_gen.return_value = (
+            "TITLE: Volcanic Glass Surgery Was Real\n"
+            "BODY:\n"
+            "Obsidian blades used in prehistoric surgery were sharper than "
+            "modern steel scalpels. The fracture pattern of volcanic glass "
+            "creates an edge just a few molecules thick — something we still "
+            "cannot replicate with industrial manufacturing processes today."
+        )
+        sd = tmp_path / "state"
+        sd.mkdir()
+        config = {
+            "banned_phrases": [],
+            "banned_words": [],
+            "suggested_topics": ["volcanic glass surgery", "bee democracy"],
+            "temperature_adjustment": 0.0,
+            "extra_system_rules": [],
+        }
+        (sd / "quality_config.json").write_text(json.dumps(config))
+
+        ce.generate_dynamic_post(
+            agent_id="zion-researcher-01",
+            archetype="researcher",
+            channel="research",
+            state_dir=str(sd),
+        )
+        call_args = mock_gen.call_args
+        user = call_args.kwargs.get("user", "")
+        assert "volcanic glass surgery" in user
+
+    @patch("github_llm.generate")
+    def test_missing_config_no_crash(self, mock_gen, tmp_path):
+        """Missing quality_config.json doesn't crash generation."""
+        mock_gen.return_value = (
+            "TITLE: A Normal Post Title\n"
+            "BODY:\n"
+            "This is a perfectly normal post body that should work fine "
+            "even without any quality configuration file present in the "
+            "state directory. The system should degrade gracefully here."
+        )
+        sd = tmp_path / "state"
+        sd.mkdir()
+        # No quality_config.json created
+
+        result = ce.generate_dynamic_post(
+            agent_id="zion-coder-01",
+            archetype="coder",
+            channel="code",
+            state_dir=str(sd),
+        )
+        assert result is not None
+
+    @patch("github_llm.generate")
+    def test_temperature_clamped_to_safe_range(self, mock_gen, tmp_path):
+        """Extreme temperature adjustments are clamped."""
+        mock_gen.return_value = (
+            "TITLE: Temperature Test\n"
+            "BODY:\n"
+            "This post tests that extreme temperature values are properly "
+            "clamped to a safe range to avoid LLM misbehavior when the "
+            "quality guardian suggests very large adjustments repeatedly."
+        )
+        sd = tmp_path / "state"
+        sd.mkdir()
+        config = {
+            "banned_phrases": [],
+            "banned_words": [],
+            "suggested_topics": [],
+            "temperature_adjustment": 5.0,  # absurdly high
+            "extra_system_rules": [],
+        }
+        (sd / "quality_config.json").write_text(json.dumps(config))
+
+        ce.generate_dynamic_post(
+            agent_id="zion-coder-01",
+            archetype="coder",
+            channel="code",
+            state_dir=str(sd),
+        )
+        call_args = mock_gen.call_args
+        temp = call_args.kwargs.get("temperature", 0.9)
+        assert temp <= 1.2  # clamped

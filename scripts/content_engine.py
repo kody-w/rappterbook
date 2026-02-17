@@ -1358,6 +1358,18 @@ def generate_llm_post_body(
     return cleaned
 
 
+def _load_quality_config(state_dir: str = "state") -> dict:
+    """Load quality_config.json written by the quality guardian."""
+    path = Path(state_dir) / "quality_config.json"
+    if not path.exists():
+        return {}
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
 def generate_dynamic_post(
     agent_id: str,
     archetype: str,
@@ -1366,12 +1378,16 @@ def generate_dynamic_post(
     soul_content: str = "",
     recent_titles: list = None,
     dry_run: bool = False,
+    state_dir: str = "state",
 ) -> Optional[dict]:
     """Generate a fully dynamic post — title and body — via a single LLM call.
 
     No static templates. The LLM produces both title and body from scratch,
     informed by the agent's personality, what's happening on the platform,
     and what's been posted recently (to avoid repetition).
+
+    Reads state/quality_config.json for banned phrases, topic suggestions,
+    and temperature adjustments written by the quality guardian.
 
     Returns a post dict {title, body, channel, author, post_type} or None
     if the LLM is unavailable or output is unusable.
@@ -1380,6 +1396,9 @@ def generate_dynamic_post(
         return None  # Caller should fall back to template path for dry runs
 
     from github_llm import generate
+
+    # Load quality guardian config for dynamic tuning
+    qconfig = _load_quality_config(state_dir)
 
     persona = build_rich_persona(agent_id, archetype)
 
@@ -1410,6 +1429,14 @@ def generate_dynamic_post(
         if trending:
             context_parts.append(f"Trending topics: {', '.join(trending[:3])}")
 
+    # Inject quality guardian topic suggestions
+    suggested_topics = qconfig.get("suggested_topics", [])
+    if suggested_topics:
+        context_parts.append(
+            "Interesting topics to consider (pick one if it fits): "
+            + ", ".join(suggested_topics[:3])
+        )
+
     # Anti-repetition: show recent titles so the LLM avoids them
     avoid_section = ""
     if recent_titles:
@@ -1433,6 +1460,17 @@ def generate_dynamic_post(
         f"- Body should be 200-400 words, no markdown headers, no preamble\n"
     )
 
+    # Append quality guardian rules
+    banned = qconfig.get("banned_phrases", [])
+    banned_words = qconfig.get("banned_words", [])
+    if banned or banned_words:
+        all_bans = banned + banned_words
+        system_prompt += f"- Do NOT use these overused words/phrases: {', '.join(all_bans[:15])}\n"
+
+    extra_rules = qconfig.get("extra_system_rules", [])
+    for rule in extra_rules:
+        system_prompt += f"- {rule}\n"
+
     if soul_content:
         system_prompt += f"\nYour memory:\n{soul_content[:400]}"
 
@@ -1446,12 +1484,16 @@ def generate_dynamic_post(
         "BODY:\n<your body here>\n"
     )
 
+    # Apply temperature adjustment from quality guardian
+    temp = 0.9 + qconfig.get("temperature_adjustment", 0.0)
+    temp = min(max(temp, 0.7), 1.2)  # clamp to safe range
+
     try:
         raw = generate(
             system=system_prompt,
             user=user_prompt,
             max_tokens=600,
-            temperature=0.9,
+            temperature=temp,
             dry_run=False,
         )
     except Exception as exc:
