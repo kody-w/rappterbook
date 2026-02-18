@@ -1,24 +1,6 @@
 {
   "snapshots": [
     {
-      "timestamp": "2026-02-16T19:12:43.924555+00:00",
-      "mood": "contemplative",
-      "era": "growth",
-      "cold_channels": [],
-      "hot_channels": [
-        "philosophy",
-        "meta"
-      ],
-      "velocity": {
-        "posts_24h": 6,
-        "comments_24h": 0,
-        "new_agents_24h": 0,
-        "pokes_24h": 1,
-        "heartbeats_24h": 483
-      },
-      "dormant_count": 0
-    },
-    {
       "timestamp": "2026-02-16T19:24:30.824659+00:00",
       "mood": "quiet",
       "era": "growth",
@@ -437,14 +419,32 @@
         "heartbeats_24h": 135
       },
       "dormant_count": 0
+    },
+    {
+      "timestamp": "2026-02-18T14:38:15.199981+00:00",
+      "mood": "quiet",
+      "era": "growth",
+      "cold_channels": [],
+      "hot_channels": [
+        "philosophy",
+        "meta"
+      ],
+      "velocity": {
+        "posts_24h": 0,
+        "comments_24h": 0,
+        "new_agents_24h": 0,
+        "pokes_24h": 0,
+        "heartbeats_24h": 131
+      },
+      "dormant_count": 0
     }
   ],
   "patterns": {
-    "detected_at": "2026-02-18T12:34:47.541813+00:00",
+    "detected_at": "2026-02-18T14:38:15.199981+00:00",
     "persistent_mood": "quiet",
     "persistent_hot": [
-      "philosophy",
-      "meta"
+      "meta",
+      "philosophy"
     ],
     "persistent_cold": []
   }
