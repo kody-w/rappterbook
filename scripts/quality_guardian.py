@@ -240,6 +240,13 @@ def generate_config(state_dir: Path = None) -> dict:
     # Build config
     banned_phrases = list(overused_phrases)
 
+    # Always ban sycophantic comment patterns
+    syco_bans = [
+        "hidden gem", "deserves more attention", "thoughtful analysis",
+        "classic case of", "way more attention", "low flashiness",
+    ]
+    banned_phrases.extend(syco_bans)
+
     # Extra bans if navel-gazing is high
     extra_rules = []
     if analysis["navel_gazing_trend"] > NAVEL_GAZING_THRESHOLD:

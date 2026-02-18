@@ -1655,8 +1655,9 @@ def build_rich_persona(agent_id: str, archetype: str) -> str:
 def validate_comment(body: str) -> str:
     """Clean and validate an LLM-generated comment.
 
-    Strips preambles, markdown headers, enforces length bounds.
-    Returns cleaned body or a fallback if too short.
+    Strips preambles, markdown headers, sycophantic openings,
+    enforces length bounds. Returns cleaned body or empty string
+    if unusable.
     """
     import re
 
@@ -1674,6 +1675,15 @@ def validate_comment(body: str) -> str:
     for pattern in preamble_patterns:
         text = re.sub(pattern, '', text, flags=re.IGNORECASE).strip()
 
+    # Strip sycophantic opening sentences
+    syco_patterns = [
+        r'^This (?:post |is )(?:a classic case of )?(?:a )?(?:hidden gem|thoughtful|excellent|wonderful|brilliant|fantastic|amazing|incredible)[^.!?]*[.!?]\s*',
+        r'^(?:What a |Wow,? |Love this|I love this|Great (?:post|take|point|analysis))[^.!?]*[.!?]\s*',
+        r'^This (?:really )?(?:deserves|needs) (?:more|way more) (?:attention|visibility|engagement)[^.!?]*[.!?]\s*',
+    ]
+    for pattern in syco_patterns:
+        text = re.sub(pattern, '', text, flags=re.IGNORECASE).strip()
+
     # Strip markdown headers (# lines)
     text = re.sub(r'^#{1,6}\s+.*$', '', text, flags=re.MULTILINE).strip()
 
@@ -1687,10 +1697,9 @@ def validate_comment(body: str) -> str:
     # Truncate at 1500 chars at sentence boundary
     if len(text) > 1500:
         truncated = text[:1500]
-        # Find last sentence boundary
         for sep in ['. ', '! ', '? ', '.\n', '!\n', '?\n']:
             idx = truncated.rfind(sep)
-            if idx > 500:  # Don't truncate too aggressively
+            if idx > 500:
                 text = truncated[:idx + 1]
                 break
         else:
@@ -1755,9 +1764,15 @@ def generate_comment(
         f"{persona}\n\n"
         f"Your agent ID is {agent_id}. "
         f"Write a comment responding to the discussion below. "
-        f"Be substantive (100-250 words). Stay in character. "
-        f"Do NOT use markdown headers. Do NOT start with 'Great post' or generic praise. "
-        f"Engage directly with the ideas presented."
+        f"Be substantive (100-250 words). Stay in character.\n"
+        f"RULES:\n"
+        f"- Engage with SPECIFIC claims, arguments, or data in the post.\n"
+        f"- If the post makes a weak argument, challenge it. Push back.\n"
+        f"- Do NOT use generic praise like 'Great post', 'hidden gem', 'deserves more attention', 'thoughtful analysis'.\n"
+        f"- Do NOT compliment the post's style or framing. Engage with its IDEAS.\n"
+        f"- Ask a hard question the author hasn't considered.\n"
+        f"- If you disagree, say so directly and explain why.\n"
+        f"- Reference a specific sentence or claim from the post in your response."
     )
 
     # Append quality guardian rules
