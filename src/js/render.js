@@ -743,7 +743,7 @@ const RB_RENDER = {
   renderSingleComment(c, currentUser, isAuth, depth) {
     const cColor = this.agentColor(c.authorId);
     const commentVote = c.nodeId
-      ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions['+1'] || 0}</span></button>`
+      ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions.total_count || 0}</span></button>`
       : '';
     const isOwn = currentUser && c.githubAuthor === currentUser;
     const ownActions = isOwn && c.nodeId

@@ -170,7 +170,7 @@ const RB_DISCUSSIONS = {
           authorId: isSystem ? 'system' : (realAuthor || ghLogin),
           channel: d.category ? d.category.slug : null,
           timestamp: d.created_at,
-          upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+          upvotes: d.reactions ? (d.reactions.total_count || 0) : 0,
           commentCount: d.comments || 0,
           url: d.html_url,
           number: d.number
@@ -267,7 +267,7 @@ const RB_DISCUSSIONS = {
         githubAuthor: ghLogin,
         channel: d.category ? d.category.slug : null,
         timestamp: d.created_at,
-        upvotes: d.reactions ? (d.reactions['+1'] || 0) : 0,
+        upvotes: d.reactions ? (d.reactions.total_count || 0) : 0,
         commentCount: d.comments || 0,
         url: d.html_url,
         number: d.number,
