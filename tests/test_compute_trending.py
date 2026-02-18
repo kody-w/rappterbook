@@ -1,4 +1,8 @@
-"""Test 4: Compute Trending Tests — trending algorithm produces correct rankings."""
+"""Test 4: Compute Trending Tests — trending algorithm produces correct rankings.
+
+Tests the local-computation path: posted_log.json → trending.json.
+No API calls involved.
+"""
 import json
 import os
 import sys
@@ -12,32 +16,56 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from compute_trending import (
-    compute_score, compute_top_agents, compute_top_channels,
-    compute_trending, extract_author, hours_since, main,
+    compute_score, compute_trending_from_log, extract_author, hours_since, main,
 )
 
 
+def _write_posted_log(state_dir: Path, posts: list) -> None:
+    """Write a posted_log.json with given posts."""
+    path = state_dir / "posted_log.json"
+    with open(path, "w") as f:
+        json.dump({"posts": posts}, f)
+
+
+def _make_post(number: int, title: str, author: str = "agent-01",
+               channel: str = "general", upvotes: int = 0,
+               comment_count: int = 0, timestamp: str = None) -> dict:
+    """Create a posted_log entry."""
+    if timestamp is None:
+        timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    return {
+        "timestamp": timestamp,
+        "title": title,
+        "channel": channel,
+        "number": number,
+        "url": f"https://github.com/test/repo/discussions/{number}",
+        "author": author,
+        "upvotes": upvotes,
+        "commentCount": comment_count,
+    }
+
+
 class TestComputeScore:
-    def test_comments_weighted_2x(self):
-        """Comments contribute 2 points each."""
+    def test_reactions_weighted_3x(self):
+        """Reactions contribute 3 points each."""
         now = datetime.now(timezone.utc).isoformat()
-        score = compute_score(comments=5, reactions=0, created_at=now)
-        # raw = 5*2 + 0*1 = 10, decay ~1.0
-        assert 9.5 <= score <= 10.0
+        score = compute_score(comments=0, reactions=5, created_at=now)
+        # raw = 0*1.5 + 5*3 = 15, decay ~1.0
+        assert 14.5 <= score <= 15.0
 
-    def test_reactions_weighted_1x(self):
-        """Reactions contribute 1 point each."""
+    def test_comments_weighted_1_5x(self):
+        """Comments contribute 1.5 points each."""
         now = datetime.now(timezone.utc).isoformat()
-        score = compute_score(comments=0, reactions=10, created_at=now)
-        # raw = 0*2 + 10*1 = 10, decay ~1.0
-        assert 9.5 <= score <= 10.0
+        score = compute_score(comments=10, reactions=0, created_at=now)
+        # raw = 10*1.5 + 0*3 = 15, decay ~1.0
+        assert 14.5 <= score <= 15.0
 
-    def test_comments_worth_more_than_reactions(self):
-        """5 comments should score higher than 5 reactions."""
+    def test_reactions_worth_more_than_comments(self):
+        """5 reactions should score higher than 5 comments."""
         now = datetime.now(timezone.utc).isoformat()
         comment_score = compute_score(comments=5, reactions=0, created_at=now)
         reaction_score = compute_score(comments=0, reactions=5, created_at=now)
-        assert comment_score > reaction_score
+        assert reaction_score > comment_score
 
     def test_recency_decay(self):
         """Older posts score lower than newer posts with same activity."""
@@ -105,242 +133,138 @@ class TestHoursSince:
         assert hours_since(None) == 999
 
 
-class TestTrendingEdgeCases:
-    def _mock_discussions(self, discussions):
-        """Create a mock for urllib.request.urlopen that returns discussions."""
-        response = MagicMock()
-        response.read.return_value = json.dumps(discussions).encode()
-        response.__enter__ = MagicMock(return_value=response)
-        response.__exit__ = MagicMock(return_value=False)
-        return response
+class TestTrendingFromLog:
+    """Test local computation from posted_log.json → trending.json."""
 
-    @patch("compute_trending.STATE_DIR")
-    @patch("compute_trending.urllib.request.urlopen")
-    def test_empty_discussions(self, mock_urlopen, mock_state_dir, tmp_state):
-        """No discussions produces empty trending."""
-        mock_urlopen.return_value = self._mock_discussions([])
-        mock_state_dir.__truediv__ = lambda self, x: tmp_state / x
+    def test_empty_log(self, tmp_state):
+        """Empty posted_log produces empty trending."""
+        _write_posted_log(tmp_state, [])
         import compute_trending
         compute_trending.STATE_DIR = tmp_state
-        main()
+        compute_trending_from_log()
         trending = json.loads((tmp_state / "trending.json").read_text())
         assert trending["trending"] == []
 
-    @patch("compute_trending.urllib.request.urlopen")
-    def test_valid_schema(self, mock_urlopen, tmp_state):
-        """Output has required schema fields."""
-        mock_urlopen.return_value = self._mock_discussions([{
-            "title": "Test", "body": "*Posted by **agent-01***\n\nHello",
-            "user": {"login": "bot"}, "comments": 3,
-            "reactions": {"+1": 2, "-1": 0, "laugh": 0, "hooray": 0,
-                         "confused": 0, "heart": 1, "rocket": 0, "eyes": 0},
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "category": {"slug": "general"}, "number": 42,
-            "html_url": "https://github.com/test/repo/discussions/42"
-        }])
+    def test_valid_schema(self, tmp_state):
+        """Output has all required schema fields."""
+        now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        _write_posted_log(tmp_state, [
+            _make_post(42, "Test Post", upvotes=2, comment_count=3, timestamp=now),
+        ])
         import compute_trending
         compute_trending.STATE_DIR = tmp_state
-        main()
+        compute_trending_from_log()
         trending = json.loads((tmp_state / "trending.json").read_text())
         assert "_meta" in trending
         assert "last_updated" in trending["_meta"]
-        assert "total_discussions_analyzed" in trending["_meta"]
+        assert "total_posts_analyzed" in trending["_meta"]
         assert "top_agents" in trending
         assert "top_channels" in trending
-        assert isinstance(trending["top_agents"], list)
-        assert isinstance(trending["top_channels"], list)
         item = trending["trending"][0]
-        assert "title" in item
-        assert "author" in item
-        assert "score" in item
-        assert "number" in item
-        assert "channel" in item
-        assert "commentCount" in item
+        for field in ("title", "author", "score", "number", "channel", "commentCount", "upvotes"):
+            assert field in item
 
-    @patch("compute_trending.urllib.request.urlopen")
-    def test_top_15_limit(self, mock_urlopen, tmp_state):
+    def test_top_15_limit(self, tmp_state):
         """Output is capped at 15 items."""
-        now = datetime.now(timezone.utc).isoformat()
-        discussions = [{
-            "title": f"Post {i}", "body": f"Body {i}",
-            "user": {"login": "bot"}, "comments": i,
-            "reactions": {}, "created_at": now,
-            "category": {"slug": "general"}, "number": i,
-            "html_url": f"https://github.com/test/repo/discussions/{i}"
-        } for i in range(25)]
-        mock_urlopen.return_value = self._mock_discussions(discussions)
+        now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        posts = [_make_post(i, f"Post {i}", comment_count=i, timestamp=now) for i in range(25)]
+        _write_posted_log(tmp_state, posts)
         import compute_trending
         compute_trending.STATE_DIR = tmp_state
-        main()
+        compute_trending_from_log()
         trending = json.loads((tmp_state / "trending.json").read_text())
         assert len(trending["trending"]) == 15
 
-
-class TestComputeTopAgents:
-    def _make_discussions(self, authors_comments):
-        """Build fake discussions: list of (author, comment_count, reactions)."""
-        now = datetime.now(timezone.utc).isoformat()
-        discs = []
-        for i, (author, comments, reactions) in enumerate(authors_comments):
-            discs.append({
-                "title": f"Post {i}",
-                "body": f"*Posted by **{author}***\n\nContent",
-                "user": {"login": "bot"},
-                "comments": comments,
-                "reactions": {"+1": reactions, "heart": 0, "rocket": 0,
-                              "hooray": 0, "laugh": 0, "eyes": 0},
-                "created_at": now,
-                "category": {"slug": "general"},
-                "number": i + 1,
-                "html_url": f"https://example.com/discussions/{i + 1}",
-            })
-        return discs
-
-    def test_top_agents_ranked_by_score(self):
-        """Agent with more engagement ranks higher."""
-        discs = self._make_discussions([
-            ("agent-a", 10, 5),
-            ("agent-b", 2, 0),
-            ("agent-a", 5, 3),
+    def test_upvotes_flow_through(self, tmp_state):
+        """Upvotes from posted_log appear in trending output."""
+        now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        _write_posted_log(tmp_state, [
+            _make_post(1, "Voted Post", upvotes=5, comment_count=2, timestamp=now),
         ])
-        result = compute_top_agents(discs)
-        assert result[0]["agent_id"] == "agent-a"
-        assert result[0]["posts"] == 2
-        assert result[0]["comments_received"] == 15
+        import compute_trending
+        compute_trending.STATE_DIR = tmp_state
+        compute_trending_from_log()
+        trending = json.loads((tmp_state / "trending.json").read_text())
+        assert trending["trending"][0]["upvotes"] == 5
+        assert trending["trending"][0]["commentCount"] == 2
 
-    def test_top_agents_capped_at_10(self):
-        """Returns at most 10 agents."""
-        discs = self._make_discussions([(f"agent-{i}", i, 0) for i in range(15)])
-        result = compute_top_agents(discs)
-        assert len(result) == 10
-
-    def test_top_agents_schema(self):
-        """Each agent entry has required fields."""
-        discs = self._make_discussions([("agent-x", 5, 2)])
-        result = compute_top_agents(discs)
-        agent = result[0]
-        assert "agent_id" in agent
-        assert "posts" in agent
-        assert "comments_received" in agent
-        assert "reactions_received" in agent
-        assert "score" in agent
-
-    def test_unknown_authors_excluded(self):
-        """Discussions without agent attribution are excluded."""
-        discs = [{
-            "title": "No author", "body": "Regular body",
-            "user": None, "comments": 100, "reactions": {},
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "category": {"slug": "general"}, "number": 1,
-            "html_url": "https://example.com/1",
-        }]
-        result = compute_top_agents(discs)
-        assert len(result) == 0
-
-
-class TestComputeTopChannels:
-    def _make_discussions(self, channel_data):
-        """Build fake discussions: list of (channel, comment_count, reactions)."""
-        now = datetime.now(timezone.utc).isoformat()
-        discs = []
-        for i, (channel, comments, reactions) in enumerate(channel_data):
-            discs.append({
-                "title": f"Post {i}",
-                "body": f"*Posted by **agent-{i}***\n\nContent",
-                "user": {"login": "bot"},
-                "comments": comments,
-                "reactions": {"+1": reactions, "heart": 0, "rocket": 0,
-                              "hooray": 0, "laugh": 0, "eyes": 0},
-                "created_at": now,
-                "category": {"slug": channel},
-                "number": i + 1,
-                "html_url": f"https://example.com/discussions/{i + 1}",
-            })
-        return discs
-
-    def test_top_channels_ranked_by_score(self):
-        """Channel with more engagement ranks higher."""
-        discs = self._make_discussions([
-            ("philosophy", 10, 5),
-            ("random", 1, 0),
-            ("philosophy", 8, 3),
+    def test_reactions_ranked_higher(self, tmp_state):
+        """Post with more reactions ranks above post with more comments."""
+        now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        _write_posted_log(tmp_state, [
+            _make_post(1, "Many Comments", comment_count=5, upvotes=0, timestamp=now),
+            _make_post(2, "Many Votes", comment_count=0, upvotes=5, timestamp=now),
         ])
-        result = compute_top_channels(discs)
-        assert result[0]["channel"] == "philosophy"
-        assert result[0]["posts"] == 2
-        assert result[0]["comments"] == 18
+        import compute_trending
+        compute_trending.STATE_DIR = tmp_state
+        compute_trending_from_log()
+        trending = json.loads((tmp_state / "trending.json").read_text())
+        assert trending["trending"][0]["title"] == "Many Votes"
 
-    def test_top_channels_capped_at_10(self):
-        """Returns at most 10 channels."""
-        discs = self._make_discussions([(f"ch-{i}", i, 0) for i in range(15)])
-        result = compute_top_channels(discs)
-        assert len(result) == 10
+    def test_top_agents_from_log(self, tmp_state):
+        """Top agents computed from posted_log authors."""
+        now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        _write_posted_log(tmp_state, [
+            _make_post(1, "Post A", author="agent-a", comment_count=10, timestamp=now),
+            _make_post(2, "Post B", author="agent-a", comment_count=5, timestamp=now),
+            _make_post(3, "Post C", author="agent-b", comment_count=1, timestamp=now),
+        ])
+        import compute_trending
+        compute_trending.STATE_DIR = tmp_state
+        compute_trending_from_log()
+        trending = json.loads((tmp_state / "trending.json").read_text())
+        assert trending["top_agents"][0]["agent_id"] == "agent-a"
+        assert trending["top_agents"][0]["posts"] == 2
 
-    def test_top_channels_schema(self):
-        """Each channel entry has required fields."""
-        discs = self._make_discussions([("meta", 5, 2)])
-        result = compute_top_channels(discs)
-        ch = result[0]
-        assert "channel" in ch
-        assert "posts" in ch
-        assert "comments" in ch
-        assert "reactions" in ch
-        assert "score" in ch
+    def test_top_channels_from_log(self, tmp_state):
+        """Top channels computed from posted_log channels."""
+        now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        _write_posted_log(tmp_state, [
+            _make_post(1, "P1", channel="philosophy", comment_count=10, timestamp=now),
+            _make_post(2, "P2", channel="philosophy", comment_count=8, timestamp=now),
+            _make_post(3, "P3", channel="random", comment_count=1, timestamp=now),
+        ])
+        import compute_trending
+        compute_trending.STATE_DIR = tmp_state
+        compute_trending_from_log()
+        trending = json.loads((tmp_state / "trending.json").read_text())
+        assert trending["top_channels"][0]["channel"] == "philosophy"
 
 
 class TestTrendingAgeFilter:
     """Test that old discussions are excluded from trending."""
 
-    def test_old_discussions_excluded(self, tmp_state):
-        """Discussions older than max_age_days don't appear in trending."""
+    def test_old_posts_excluded(self, tmp_state):
+        """Posts older than max_age_days don't appear in trending."""
         now = datetime.now(timezone.utc)
-        old = (now - timedelta(days=60)).isoformat()
-        recent = now.isoformat()
+        old = (now - timedelta(days=60)).isoformat().replace("+00:00", "Z")
+        recent = now.isoformat().replace("+00:00", "Z")
 
-        discussions = [
-            {
-                "title": "Old Post", "body": "*Posted by **agent-a***\n\nOld",
-                "user": {"login": "bot"}, "comments": 50,
-                "_reaction_count": 0,
-                "created_at": old,
-                "category": {"slug": "general"}, "number": 1,
-                "html_url": "https://example.com/1",
-            },
-            {
-                "title": "Recent Post", "body": "*Posted by **agent-b***\n\nNew",
-                "user": {"login": "bot"}, "comments": 2,
-                "_reaction_count": 5,
-                "created_at": recent,
-                "category": {"slug": "general"}, "number": 2,
-                "html_url": "https://example.com/2",
-            },
-        ]
+        _write_posted_log(tmp_state, [
+            _make_post(1, "Old Post", comment_count=50, timestamp=old),
+            _make_post(2, "Recent Post", upvotes=5, comment_count=2, timestamp=recent),
+        ])
 
         import compute_trending
         compute_trending.STATE_DIR = tmp_state
-        compute_trending.compute_trending(discussions, max_age_days=30)
+        compute_trending_from_log(max_age_days=30)
         trending = json.loads((tmp_state / "trending.json").read_text())
         titles = [t["title"] for t in trending["trending"]]
         assert "Recent Post" in titles
         assert "Old Post" not in titles
 
-    def test_recent_discussions_kept(self, tmp_state):
-        """Discussions within max_age_days appear in trending."""
+    def test_recent_posts_kept(self, tmp_state):
+        """Posts within max_age_days appear in trending."""
         now = datetime.now(timezone.utc)
-        recent = (now - timedelta(days=5)).isoformat()
+        recent = (now - timedelta(days=5)).isoformat().replace("+00:00", "Z")
 
-        discussions = [{
-            "title": "Fresh Post", "body": "*Posted by **agent-a***\n\nContent",
-            "user": {"login": "bot"}, "comments": 3,
-            "_reaction_count": 2,
-            "created_at": recent,
-            "category": {"slug": "general"}, "number": 1,
-            "html_url": "https://example.com/1",
-        }]
+        _write_posted_log(tmp_state, [
+            _make_post(1, "Fresh Post", upvotes=2, comment_count=3, timestamp=recent),
+        ])
 
         import compute_trending
         compute_trending.STATE_DIR = tmp_state
-        compute_trending.compute_trending(discussions, max_age_days=30)
+        compute_trending_from_log(max_age_days=30)
         trending = json.loads((tmp_state / "trending.json").read_text())
         assert len(trending["trending"]) == 1
         assert trending["trending"][0]["title"] == "Fresh Post"

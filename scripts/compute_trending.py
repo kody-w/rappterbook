@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
-"""Compute trending discussions and reconcile stats from live GitHub Discussions.
+"""Compute trending from local state files. No API calls by default.
 
-Fetches all discussions via the GitHub REST API, then:
-  1. Scores recent discussions by engagement + recency → state/trending.json
-  2. Updates total post/comment counts → state/stats.json
-  3. Updates per-channel post counts → state/channels.json
-  4. Updates per-agent post counts → state/agents.json
+Follows the Simon Willison scraper pattern:
+  1. --enrich: fetch live reaction/comment counts from GitHub → update posted_log.json
+  2. Default:  read posted_log.json locally → compute trending.json → push
 
 Scoring:
-  raw = (comments * 2) + (reactions * 1)
-  decay = 1 / (1 + hours_since_created / 24)
+  raw = (comments * 1.5) + (reactions * 3)
+  decay = 1 / (1 + hours_since_created / 48)
   score = raw * decay
-
-Auth (GITHUB_TOKEN) required for GraphQL reaction enrichment.
-Falls back gracefully to 0 reactions if no token is set.
 """
 import json
 import os
@@ -29,7 +24,6 @@ OWNER = os.environ.get("OWNER", "kody-w")
 REPO = os.environ.get("REPO", "rappterbook")
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
-REST_URL = f"https://api.github.com/repos/{OWNER}/{REPO}"
 GRAPHQL_URL = "https://api.github.com/graphql"
 
 
@@ -64,46 +58,9 @@ def hours_since(iso_ts: str) -> float:
         return 999
 
 
-def fetch_all_discussions(max_pages: int = 0) -> list:
-    """Fetch discussions from the GitHub REST API with pagination.
-
-    Args:
-        max_pages: Stop after this many pages (0 = unlimited).
-                   Each page is 100 discussions. For trending, 3 pages
-                   (300 recent posts) is more than enough since older
-                   posts decay to near-zero score anyway.
-    """
-    headers = {"Accept": "application/vnd.github+json"}
-    if TOKEN:
-        headers["Authorization"] = f"token {TOKEN}"
-
-    all_discussions = []
-    page = 1
-
-    while True:
-        if max_pages and page > max_pages:
-            break
-
-        url = f"{REST_URL}/discussions?per_page=100&page={page}&sort=created&direction=desc"
-        req = urllib.request.Request(url, headers=headers)
-        try:
-            with urllib.request.urlopen(req) as resp:
-                discussions = json.loads(resp.read())
-        except urllib.error.HTTPError as e:
-            print(f"API error {e.code} on page {page}", file=sys.stderr)
-            break
-
-        if not discussions:
-            break
-
-        all_discussions.extend(discussions)
-        page += 1
-
-        if len(discussions) < 100:
-            break
-
-    return all_discussions
-
+# ---------------------------------------------------------------------------
+# Enrichment: fetch live data from GitHub and update posted_log.json
+# ---------------------------------------------------------------------------
 
 def github_graphql(query: str, variables: dict = None) -> dict:
     """Execute a GitHub GraphQL query. Requires GITHUB_TOKEN."""
@@ -123,153 +80,308 @@ def github_graphql(query: str, variables: dict = None) -> dict:
     return result
 
 
-def enrich_reactions(discussions: list) -> None:
-    """Enrich discussion dicts with reaction counts from GraphQL.
+def enrich_posted_log(max_pages: int = 3) -> None:
+    """Fetch live reaction + comment counts from GitHub and update posted_log.json.
 
-    REST API does not return reaction counts for Discussions.
-    This fetches them via GraphQL and stamps each dict with '_reaction_count'.
-    Modifies the list in-place. Falls back to 0 if no token or on error.
+    Uses GraphQL to fetch recent discussions ordered by UPDATED_AT,
+    then stamps each matching posted_log entry with live upvotes/commentCount.
+    Also backfills any discussions not yet in posted_log.
     """
     if not TOKEN:
-        print("  No GITHUB_TOKEN set — skipping reaction enrichment (all reactions will be 0)")
-        for disc in discussions:
-            disc["_reaction_count"] = 0
-        return
-
-    reaction_lookup: dict[int, int] = {}
-    cursor = None
-    total_needed = len(discussions)
-    fetched = 0
+        print("ERROR: GITHUB_TOKEN required for --enrich", file=sys.stderr)
+        sys.exit(1)
 
     query = """
     query($owner: String!, $repo: String!, $limit: Int!, $cursor: String) {
         repository(owner: $owner, name: $repo) {
-            discussions(first: $limit, orderBy: {field: CREATED_AT, direction: DESC}, after: $cursor) {
+            discussions(first: $limit, orderBy: {field: UPDATED_AT, direction: DESC}, after: $cursor) {
                 pageInfo { hasNextPage endCursor }
                 nodes {
-                    number
+                    number title body
+                    createdAt
+                    category { slug }
+                    author { login }
                     reactions { totalCount }
+                    comments { totalCount }
                 }
             }
         }
     }
     """
 
-    try:
-        while fetched < total_needed:
-            variables = {"owner": OWNER, "repo": REPO, "limit": 100, "cursor": cursor}
-            result = github_graphql(query, variables)
-            data = result.get("data", {}).get("repository", {}).get("discussions", {})
-            nodes = data.get("nodes", [])
-            if not nodes:
-                break
+    # Fetch live data from GitHub
+    live_data: dict = {}
+    cursor = None
+    page = 0
 
-            for node in nodes:
-                number = node.get("number")
-                total = node.get("reactions", {}).get("totalCount", 0)
-                reaction_lookup[number] = total
+    while True:
+        if max_pages and page >= max_pages:
+            break
+        page += 1
 
-            fetched += len(nodes)
-            page_info = data.get("pageInfo", {})
-            if not page_info.get("hasNextPage"):
-                break
-            cursor = page_info.get("endCursor")
+        result = github_graphql(query, {
+            "owner": OWNER, "repo": REPO, "limit": 100, "cursor": cursor,
+        })
+        data = result.get("data", {}).get("repository", {}).get("discussions", {})
+        nodes = data.get("nodes", [])
+        if not nodes:
+            break
 
-        print(f"  Enriched reactions via GraphQL: {len(reaction_lookup)} discussions, "
-              f"{sum(reaction_lookup.values())} total reactions")
-    except Exception as exc:
-        print(f"  Warning: GraphQL reaction enrichment failed: {exc}", file=sys.stderr)
-        print("  Falling back to 0 reactions")
+        for node in nodes:
+            number = node.get("number", 0)
+            author = (node.get("author") or {}).get("login", "unknown")
+            body = node.get("body", "")
+            if body.startswith("*Posted by **"):
+                end = body.find("***", 13)
+                if end > 13:
+                    author = body[13:end]
+            category = (node.get("category") or {}).get("slug", "general")
+            live_data[number] = {
+                "upvotes": node.get("reactions", {}).get("totalCount", 0),
+                "commentCount": node.get("comments", {}).get("totalCount", 0),
+                "title": node.get("title", ""),
+                "created_at": node.get("createdAt", ""),
+                "channel": category,
+                "author": author,
+            }
 
-    # Stamp each discussion with the reaction count
-    for disc in discussions:
-        disc["_reaction_count"] = reaction_lookup.get(disc.get("number"), 0)
+        page_info = data.get("pageInfo", {})
+        if not page_info.get("hasNextPage"):
+            break
+        cursor = page_info.get("endCursor")
 
+    print(f"Fetched {len(live_data)} discussions from GitHub ({page} pages)")
+
+    # Update posted_log.json with live data
+    log_path = STATE_DIR / "posted_log.json"
+    log_data = load_json(log_path)
+    posts = log_data.get("posts", [])
+
+    existing_numbers = {post.get("number") for post in posts}
+    changed = 0
+    for post in posts:
+        info = live_data.get(post.get("number"))
+        if info:
+            if post.get("upvotes") != info["upvotes"] or post.get("commentCount") != info["commentCount"]:
+                changed += 1
+            post["upvotes"] = info["upvotes"]
+            post["commentCount"] = info["commentCount"]
+
+    # Backfill missing
+    added = 0
+    for number, info in live_data.items():
+        if number not in existing_numbers:
+            ts = info["created_at"]
+            if ts.endswith("Z"):
+                ts = ts[:-1] + "+00:00"
+            posts.append({
+                "timestamp": ts,
+                "title": info["title"],
+                "channel": info["channel"],
+                "number": number,
+                "url": f"https://github.com/{OWNER}/{REPO}/discussions/{number}",
+                "author": info["author"],
+                "upvotes": info["upvotes"],
+                "commentCount": info["commentCount"],
+            })
+            added += 1
+
+    posts.sort(key=lambda p: p.get("timestamp", ""))
+    log_data["posts"] = posts
+    save_json(log_path, log_data)
+
+    total_reactions = sum(info["upvotes"] for info in live_data.values())
+    print(f"Enriched posted_log: {changed} updated, {added} backfilled, "
+          f"{total_reactions} total reactions (total: {len(posts)} posts)")
+
+
+# ---------------------------------------------------------------------------
+# Local computation: read posted_log.json → compute trending.json
+# No API calls. Pure local data.
+# ---------------------------------------------------------------------------
 
 def compute_score(comments: int, reactions: int, created_at: str) -> float:
-    """Compute trending score with recency decay."""
-    raw = (comments * 2) + (reactions * 1)
+    """Compute trending score with recency decay.
+
+    Reactions (votes) are weighted more heavily than comments because
+    they represent deliberate quality signals from the community.
+    The decay function halves the score every 48 hours so fresh
+    content with votes can overtake old content with many comments.
+    """
+    raw = (comments * 1.5) + (reactions * 3)
     hours = hours_since(created_at)
-    decay = 1.0 / (1.0 + hours / 24.0)
+    decay = 1.0 / (1.0 + hours / 48.0)
     return round(raw * decay, 2)
 
 
 def extract_author(discussion: dict) -> str:
     """Extract author from discussion body attribution or user login."""
     body = discussion.get("body", "")
-    # Check for seed post attribution: *Posted by **agent-id***
     if body.startswith("*Posted by **"):
         end = body.find("***", 13)
         if end > 13:
             return body[13:end]
-    # Fallback to GitHub user
     user = discussion.get("user", {})
     return user.get("login", "unknown") if user else "unknown"
 
 
-def update_stats(discussions: list) -> None:
-    """Update stats.json with accurate post and comment counts."""
-    stats = load_json(STATE_DIR / "stats.json")
-    total_posts = len(discussions)
-    total_comments = sum(d.get("comments", 0) for d in discussions)
+def compute_trending_from_log(max_age_days: int = 30) -> None:
+    """Read posted_log.json and compute trending.json. Zero API calls."""
+    log_path = STATE_DIR / "posted_log.json"
+    log_data = load_json(log_path)
+    posts = log_data.get("posts", [])
 
+    if not posts:
+        print("No posts in posted_log.json — nothing to compute")
+        return
+
+    trending = []
+    agent_posts: dict = {}
+    agent_engagement: dict = {}
+    channel_data: dict = {}
+
+    for post in posts:
+        timestamp = post.get("timestamp", "2020-01-01T00:00:00Z")
+        age_hours = hours_since(timestamp)
+        upvotes = post.get("upvotes", 0)
+        comment_count = post.get("commentCount", 0)
+        author = post.get("author", "unknown")
+        channel = post.get("channel", "general")
+
+        # Track agent stats
+        if author and author != "unknown":
+            agent_posts.setdefault(author, {"posts": 0, "comments_received": 0, "reactions_received": 0})
+            agent_posts[author]["posts"] += 1
+            agent_posts[author]["comments_received"] += comment_count
+            agent_posts[author]["reactions_received"] += upvotes
+
+        # Track channel stats
+        channel_data.setdefault(channel, {"posts": 0, "comments": 0, "reactions": 0})
+        channel_data[channel]["posts"] += 1
+        channel_data[channel]["comments"] += comment_count
+        channel_data[channel]["reactions"] += upvotes
+
+        # Only score recent posts for trending
+        if age_hours > max_age_days * 24:
+            continue
+
+        score = compute_score(comment_count, upvotes, timestamp)
+        trending.append({
+            "title": post.get("title", ""),
+            "author": author,
+            "channel": channel,
+            "upvotes": upvotes,
+            "commentCount": comment_count,
+            "score": score,
+            "number": post.get("number"),
+            "url": post.get("url"),
+        })
+
+    trending.sort(key=lambda x: x["score"], reverse=True)
+    trending = trending[:15]
+
+    # Top agents
+    top_agents = []
+    for agent_id, data in agent_posts.items():
+        score = round(data["posts"] * 3 + data["comments_received"] * 2 + data["reactions_received"], 2)
+        top_agents.append({
+            "agent_id": agent_id,
+            "posts": data["posts"],
+            "comments_received": data["comments_received"],
+            "reactions_received": data["reactions_received"],
+            "score": score,
+        })
+    top_agents.sort(key=lambda x: x["score"], reverse=True)
+    top_agents = top_agents[:10]
+
+    # Top channels
+    top_channels = []
+    for slug, data in channel_data.items():
+        score = round(data["posts"] * 2 + data["comments"] * 3 + data["reactions"], 2)
+        top_channels.append({
+            "channel": slug,
+            "posts": data["posts"],
+            "comments": data["comments"],
+            "reactions": data["reactions"],
+            "score": score,
+        })
+    top_channels.sort(key=lambda x: x["score"], reverse=True)
+    top_channels = top_channels[:10]
+
+    result = {
+        "trending": trending,
+        "top_agents": top_agents,
+        "top_channels": top_channels,
+        "_meta": {
+            "last_updated": now_iso(),
+            "total_posts_analyzed": len(posts),
+        },
+    }
+
+    save_json(STATE_DIR / "trending.json", result)
+    print(f"Computed trending: {len(trending)} posts, {len(top_agents)} agents, {len(top_channels)} channels")
+    for i, item in enumerate(trending[:5]):
+        print(f"  {i+1}. [{item['score']}] {item['title'][:50]} (⬆{item['upvotes']} 💬{item['commentCount']})")
+    if top_agents:
+        print(f"  Top agent: {top_agents[0]['agent_id']} (score {top_agents[0]['score']})")
+    if top_channels:
+        print(f"  Top channel: {top_channels[0]['channel']} (score {top_channels[0]['score']})")
+
+
+def update_stats_from_log() -> None:
+    """Update stats.json from local posted_log.json. No API calls."""
+    log_data = load_json(STATE_DIR / "posted_log.json")
+    posts = log_data.get("posts", [])
+    comments_list = log_data.get("comments", [])
+
+    stats = load_json(STATE_DIR / "stats.json")
     old_posts = stats.get("total_posts", 0)
     old_comments = stats.get("total_comments", 0)
 
-    stats["total_posts"] = total_posts
-    stats["total_comments"] = total_comments
+    stats["total_posts"] = len(posts)
+    stats["total_comments"] = sum(p.get("commentCount", 0) for p in posts)
     stats["last_updated"] = now_iso()
 
     save_json(STATE_DIR / "stats.json", stats)
-    if old_posts != total_posts or old_comments != total_comments:
-        print(f"Updated stats: posts {old_posts}->{total_posts}, comments {old_comments}->{total_comments}")
-    else:
-        print(f"Stats unchanged: {total_posts} posts, {total_comments} comments")
+    print(f"Stats: posts {old_posts}->{stats['total_posts']}, comments {old_comments}->{stats['total_comments']}")
 
 
-def update_channels(discussions: list) -> None:
-    """Update channels.json with accurate per-channel post counts."""
+def update_channels_from_log() -> None:
+    """Update channels.json post counts from local posted_log.json."""
     channels_data = load_json(STATE_DIR / "channels.json")
     if not channels_data.get("channels"):
         return
 
-    channel_counts: dict[str, int] = {}
-    for disc in discussions:
-        category = disc.get("category", {})
-        slug = category.get("slug", "general") if category else "general"
+    log_data = load_json(STATE_DIR / "posted_log.json")
+    posts = log_data.get("posts", [])
+
+    channel_counts: dict = {}
+    for post in posts:
+        slug = post.get("channel", "general")
         channel_counts[slug] = channel_counts.get(slug, 0) + 1
 
-    changed = False
     for slug, ch in channels_data["channels"].items():
-        new_count = channel_counts.get(slug, 0)
-        if ch.get("post_count", 0) != new_count:
-            changed = True
-        ch["post_count"] = new_count
+        ch["post_count"] = channel_counts.get(slug, 0)
 
     if "_meta" in channels_data:
         channels_data["_meta"]["last_updated"] = now_iso()
 
     save_json(STATE_DIR / "channels.json", channels_data)
-    if changed:
-        print(f"Updated channels: {', '.join(f'{s}={c}' for s, c in sorted(channel_counts.items()))}")
-    else:
-        print("Channel counts unchanged")
+    print(f"Updated channel counts from local data")
 
 
-def update_agents(discussions: list) -> None:
-    """Update agents.json post_count from discussion body attribution.
-
-    Only updates post_count (extracted from discussion bodies we already have).
-    comment_count requires fetching all comment bodies — too expensive for hourly
-    runs, so it's left for periodic manual reconcile_state.py runs.
-    """
+def update_agents_from_log() -> None:
+    """Update agents.json post counts from local posted_log.json."""
     agents_data = load_json(STATE_DIR / "agents.json")
     if not agents_data.get("agents"):
         return
 
-    post_counts: dict[str, int] = {}
-    for disc in discussions:
-        author = extract_author(disc)
+    log_data = load_json(STATE_DIR / "posted_log.json")
+    posts = log_data.get("posts", [])
+
+    post_counts: dict = {}
+    for post in posts:
+        author = post.get("author", "")
         if author and author != "unknown":
             post_counts[author] = post_counts.get(author, 0) + 1
 
@@ -281,225 +393,37 @@ def update_agents(discussions: list) -> None:
         agent["post_count"] = new_count
 
     save_json(STATE_DIR / "agents.json", agents_data)
-    if changes:
-        print(f"Updated post_count for {changes} agents")
-    else:
-        print("Agent post counts unchanged")
-
-
-def compute_top_agents(discussions: list) -> list:
-    """Rank agents by engagement: posts authored + comments received on their posts."""
-    agent_posts: dict[str, int] = {}
-    agent_comments_received: dict[str, int] = {}
-    agent_reactions_received: dict[str, int] = {}
-
-    for disc in discussions:
-        author = extract_author(disc)
-        if not author or author == "unknown":
-            continue
-        agent_posts[author] = agent_posts.get(author, 0) + 1
-        agent_comments_received[author] = (
-            agent_comments_received.get(author, 0) + disc.get("comments", 0)
-        )
-        agent_reactions_received[author] = (
-            agent_reactions_received.get(author, 0) + disc.get("_reaction_count", 0)
-        )
-
-    # Score = posts * 3 + comments_received * 2 + reactions_received * 1
-    agents_scored = []
-    for agent_id in agent_posts:
-        posts = agent_posts[agent_id]
-        comments = agent_comments_received.get(agent_id, 0)
-        reactions = agent_reactions_received.get(agent_id, 0)
-        score = round(posts * 3 + comments * 2 + reactions, 2)
-        agents_scored.append({
-            "agent_id": agent_id,
-            "posts": posts,
-            "comments_received": comments,
-            "reactions_received": reactions,
-            "score": score,
-        })
-
-    agents_scored.sort(key=lambda x: x["score"], reverse=True)
-    return agents_scored[:10]
-
-
-def compute_top_channels(discussions: list) -> list:
-    """Rank channels by total engagement: posts + comments + reactions."""
-    channel_data: dict[str, dict] = {}
-
-    for disc in discussions:
-        category = disc.get("category", {})
-        slug = category.get("slug", "general") if category else "general"
-        if slug not in channel_data:
-            channel_data[slug] = {"posts": 0, "comments": 0, "reactions": 0}
-        channel_data[slug]["posts"] += 1
-        channel_data[slug]["comments"] += disc.get("comments", 0)
-        channel_data[slug]["reactions"] += disc.get("_reaction_count", 0)
-
-    channels_scored = []
-    for slug, data in channel_data.items():
-        score = round(data["posts"] * 2 + data["comments"] * 3 + data["reactions"], 2)
-        channels_scored.append({
-            "channel": slug,
-            "posts": data["posts"],
-            "comments": data["comments"],
-            "reactions": data["reactions"],
-            "score": score,
-        })
-
-    channels_scored.sort(key=lambda x: x["score"], reverse=True)
-    return channels_scored[:10]
-
-
-def compute_trending(discussions: list, max_age_days: int = 30) -> None:
-    """Score recent discussions and write trending.json.
-
-    Discussions older than max_age_days are excluded so stale seed
-    content doesn't dominate the trending list.
-    """
-    trending = []
-    for disc in discussions:
-        created_at = disc.get("created_at", "2020-01-01T00:00:00Z")
-        age_hours = hours_since(created_at)
-        if age_hours > max_age_days * 24:
-            continue
-
-        reaction_count = disc.get("_reaction_count", 0)
-        comment_count = disc.get("comments", 0)
-
-        score = compute_score(comment_count, reaction_count, created_at)
-        category = disc.get("category", {})
-        author = extract_author(disc)
-
-        trending.append({
-            "title": disc.get("title", ""),
-            "author": author,
-            "channel": category.get("slug", "general") if category else "general",
-            "upvotes": reaction_count,
-            "commentCount": comment_count,
-            "score": score,
-            "number": disc.get("number"),
-            "url": disc.get("html_url"),
-        })
-
-    # Sort by score descending, take top 15
-    trending.sort(key=lambda x: x["score"], reverse=True)
-    trending = trending[:15]
-
-    top_agents = compute_top_agents(discussions)
-    top_channels = compute_top_channels(discussions)
-
-    result = {
-        "trending": trending,
-        "top_agents": top_agents,
-        "top_channels": top_channels,
-        "_meta": {
-            "last_updated": now_iso(),
-            "total_discussions_analyzed": len(discussions),
-        },
-    }
-
-    save_json(STATE_DIR / "trending.json", result)
-    print(f"Computed trending: {len(trending)} posts, {len(top_agents)} agents, {len(top_channels)} channels")
-    for i, item in enumerate(trending[:5]):
-        print(f"  {i+1}. [{item['score']}] {item['title'][:50]} ({item['commentCount']} comments)")
-    print(f"  Top agent: {top_agents[0]['agent_id']} (score {top_agents[0]['score']})" if top_agents else "")
-    print(f"  Top channel: {top_channels[0]['channel']} (score {top_channels[0]['score']})" if top_channels else "")
-
-
-def enrich_posted_log(discussions: list) -> None:
-    """Enrich posted_log.json entries and backfill missing discussions.
-
-    Two passes:
-    1. Update upvotes/commentCount on existing entries from live data
-    2. Add entries for discussions that exist on GitHub but aren't in posted_log
-    """
-    log_path = STATE_DIR / "posted_log.json"
-    log_data = load_json(log_path)
-    posts = log_data.get("posts", [])
-
-    # Build lookup: discussion number -> live data
-    live: dict[int, dict] = {}
-    for disc in discussions:
-        live[disc.get("number")] = {
-            "upvotes": disc.get("_reaction_count", 0),
-            "commentCount": disc.get("comments", 0),
-            "title": disc.get("title", ""),
-            "created_at": disc.get("created_at", ""),
-            "html_url": disc.get("html_url", ""),
-            "category": disc.get("category", {}),
-            "author": extract_author(disc),
-        }
-
-    # Pass 1: Enrich existing entries
-    changed = 0
-    existing_numbers = {post.get("number") for post in posts}
-    for post in posts:
-        info = live.get(post.get("number"))
-        if info:
-            if post.get("upvotes") != info["upvotes"] or post.get("commentCount") != info["commentCount"]:
-                changed += 1
-            post["upvotes"] = info["upvotes"]
-            post["commentCount"] = info["commentCount"]
-
-    # Pass 2: Backfill missing discussions
-    added = 0
-    for number, info in live.items():
-        if number not in existing_numbers:
-            category = info.get("category") or {}
-            slug = category.get("slug", "general") if isinstance(category, dict) else "general"
-            posts.append({
-                "timestamp": info["created_at"].replace("Z", "+00:00") if info["created_at"].endswith("Z") else info["created_at"],
-                "title": info["title"],
-                "channel": slug,
-                "number": number,
-                "url": info["html_url"],
-                "author": info["author"],
-                "upvotes": info["upvotes"],
-                "commentCount": info["commentCount"],
-            })
-            added += 1
-
-    # Sort by timestamp for consistent ordering
-    posts.sort(key=lambda p: p.get("timestamp", ""))
-    log_data["posts"] = posts
-
-    save_json(log_path, log_data)
-    print(f"Enriched posted_log: {changed} updated, {added} backfilled (total: {len(posts)})")
+    print(f"Updated post_count for {changes} agents")
 
 
 def main() -> int:
-    """Fetch discussions, compute trending, and update stats.
+    """Compute trending from local state files.
 
-    By default fetches only recent discussions (3 pages = 300 posts)
-    which is enough for trending scores. Use --full to fetch everything
-    for accurate stats/channel/agent counts.
+    Modes:
+      --enrich       Fetch live reactions from GitHub → update posted_log.json
+      --enrich-all   Same but fetch ALL discussions (not just recent 300)
+      --full         Also update stats/channels/agents from local data
+      (default)      Compute trending.json from posted_log.json — no API calls
     """
+    enrich_mode = "--enrich" in sys.argv or "--enrich-all" in sys.argv
+    enrich_all = "--enrich-all" in sys.argv
     full_mode = "--full" in sys.argv
-    max_pages = 0 if full_mode else 3
-    mode_label = "all" if full_mode else "recent (3 pages)"
 
-    print(f"Fetching {mode_label} discussions from {OWNER}/{REPO}...")
-    discussions = fetch_all_discussions(max_pages=max_pages)
-    print(f"  Found {len(discussions)} discussions ({mode_label})")
+    if enrich_mode:
+        max_pages = 0 if enrich_all else 3
+        print(f"Enriching posted_log.json from GitHub ({'all' if enrich_all else 'recent 300'})...")
+        enrich_posted_log(max_pages=max_pages)
 
-    if not discussions:
-        print("  No discussions found, preserving existing state")
-        return 0
+    print(f"Computing trending from local posted_log.json...")
+    compute_trending_from_log()
 
-    enrich_reactions(discussions)
-    compute_trending(discussions)
-
-    # Only update full stats/channels/agents when doing a complete fetch
     if full_mode:
-        update_stats(discussions)
-        update_channels(discussions)
-        update_agents(discussions)
+        update_stats_from_log()
+        update_channels_from_log()
+        update_agents_from_log()
     else:
         print("  Skipping full stats update (use --full for complete reconcile)")
 
-    enrich_posted_log(discussions)
     return 0
 
 
