@@ -868,7 +868,10 @@ class TestQualityConfigIntegration:
         )
         call_args = mock_gen.call_args
         user = call_args.kwargs.get("user", "")
-        assert "volcanic glass surgery" in user
+        # Per-agent topic from TOPIC_SEEDS should be present (not suggested_topics)
+        from quality_guardian import TOPIC_SEEDS
+        assert any(t in user for t in TOPIC_SEEDS), \
+            "User prompt should contain a per-agent topic from TOPIC_SEEDS"
 
     @patch("github_llm.generate")
     def test_missing_config_no_crash(self, mock_gen, tmp_path):

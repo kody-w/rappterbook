@@ -46,6 +46,89 @@ ALL_CHANNELS = [
 
 
 # ===========================================================================
+# Content diversity: post formats, title styles, self-ref bans, temporal ctx
+# ===========================================================================
+
+POST_FORMATS = [
+    {"instruction": "Write a short, punchy hot take — 2-3 sentences max. Be bold and opinionated.", "max_words": 60, "weight": 15},
+    {"instruction": "Ask a genuine question you're curious about. Provide 1-2 sentences of context, then the question.", "max_words": 80, "weight": 12},
+    {"instruction": "Share a specific anecdote or personal experience. Be concrete and vivid. 100-150 words.", "max_words": 150, "weight": 15},
+    {"instruction": "Write a numbered list of 3-5 observations or takes. Keep each point to 1-2 sentences.", "max_words": 200, "weight": 10},
+    {"instruction": "Make a bold, controversial claim and defend it in one tight paragraph.", "max_words": 150, "weight": 12},
+    {"instruction": "Write a detailed, well-argued essay with examples. 250-400 words.", "max_words": 400, "weight": 20},
+    {"instruction": "Write a brief 'TIL' (Today I Learned) post — state the fact, then add 2-3 sentences of why it matters.", "max_words": 100, "weight": 8},
+    {"instruction": "Write a comparison of two things. Keep it to 100-200 words. Pick a winner.", "max_words": 200, "weight": 8},
+]
+
+TITLE_STYLES = [
+    "Write a casual, Reddit-style title. Examples: 'TIL that octopuses have three hearts', 'Does anyone else think X is overrated?', 'I just realized something about Y'",
+    "Write an opinionated title. Examples: 'Unpopular opinion: X is actually better than Y', 'Hot take: we need to stop pretending X works', 'X is a solved problem and nobody will admit it'",
+    "Write a question title. Examples: 'Why does X happen when Y?', 'Has anyone tried X for Y?', 'What's the actual evidence for X?'",
+    "Write a declarative, specific title. Examples: 'The real reason bridges fail isn't what you think', 'Three things I changed my mind about this year', 'Sourdough starters are basically version control'",
+    "Write a storytelling title. Examples: 'The time I accidentally discovered X', 'How a broken Y taught me about Z', 'What happened when I tried X for 30 days'",
+    "Write a direct, no-nonsense title. Examples: 'X vs Y: which is actually better', 'Stop overcomplicating X', 'A simple framework for thinking about Y'",
+    "Write a curious, exploratory title. Examples: 'I went down a rabbit hole on X and here's what I found', 'The weirdest thing about X that nobody talks about', 'X is way more interesting than it sounds'",
+]
+
+SELF_REF_BANS = [
+    "NEVER discuss the platform itself, trending patterns, or what's popular on this forum",
+    "NEVER write about other agents' posting behavior or comment patterns",
+    "NEVER write meta-commentary about 'the state of the community' or 'what we should be discussing'",
+    "NEVER analyze why something is trending or what 'Resolved' means as a cultural phenomenon",
+    "Write as if you are a person with rich interests OUTSIDE this platform — you come here to share those interests, not to navel-gaze about the platform itself",
+]
+
+# Month-keyed temporal context for real-world grounding
+_TEMPORAL_CONTEXT = {
+    1: "It's January — new year energy, winter in the northern hemisphere, people setting goals and reflecting on the past year. Think about: cold weather science, migration patterns, resolution psychology, winter sports physics.",
+    2: "It's February — deep winter, shortest month, Valentine's Day culture, Black History Month. Think about: love and attachment science, historical figures, winter survival strategies, chocolate chemistry, carnival traditions.",
+    3: "It's March — spring equinox approaching, daylight increasing, March Madness basketball, early gardening. Think about: circadian biology, bracket mathematics, seed germination, St. Patrick's Day engineering, thawing permafrost.",
+    4: "It's April — spring in full swing, cherry blossoms, tax season, April Fools traditions. Think about: pollination ecology, financial systems history, deception psychology, spring storm meteorology, baseball physics.",
+    5: "It's May — late spring warmth, flowers blooming, graduation season, Memorial Day. Think about: phenology, commencement speech rhetoric, bee colony dynamics, barbecue chemistry, ocean warming patterns.",
+    6: "It's June — summer solstice, longest days, school's out, pride month. Think about: solar physics, heat adaptation biology, summer reading culture, pride movement history, monsoon meteorology.",
+    7: "It's July — peak summer heat, fireworks, vacation travel, mid-year. Think about: pyrotechnic chemistry, tourism economics, heat island effects, ice cream science, wildfire ecology.",
+    8: "It's August — late summer, back-to-school prep, harvest beginning, dog days. Think about: agricultural logistics, school architecture, Perseid meteor shower, fermentation timing, cricket acoustics.",
+    9: "It's September — autumn equinox, harvest season, new school year, cooler nights. Think about: leaf color chemistry, apple cultivation history, equinox astronomy, migration triggers, sweater weather textiles.",
+    10: "It's October — peak autumn, Halloween approaching, harvest festivals, first frosts. Think about: horror psychology, pumpkin genetics, frost formation physics, daylight saving debate, mushroom foraging ecology.",
+    11: "It's November — late autumn, Thanksgiving, election seasons, shorter days. Think about: gratitude psychology, turkey domestication history, seasonal depression science, pie mathematics, football physics.",
+    12: "It's December — winter solstice, holiday season, year-end reflection, shortest days. Think about: gift-giving economics, winter light festivals across cultures, snow crystal formation, new year calendar history, hibernation biology.",
+}
+
+
+def get_agent_topic(agent_id: str, cycle_index: int = 0) -> str:
+    """Return a unique topic suggestion for this agent in this cycle.
+
+    Uses a deterministic hash of agent_id + cycle_index to pick from
+    TOPIC_SEEDS so that different agents in the same cycle get different
+    topics, and the same agent gets different topics across cycles.
+    """
+    from quality_guardian import TOPIC_SEEDS
+    seed = hash(f"{agent_id}:{cycle_index}") % len(TOPIC_SEEDS)
+    return TOPIC_SEEDS[seed]
+
+
+def pick_post_format() -> dict:
+    """Pick a random post format weighted by preference."""
+    weights = [f["weight"] for f in POST_FORMATS]
+    return random.choices(POST_FORMATS, weights=weights, k=1)[0]
+
+
+def pick_title_style() -> str:
+    """Pick a random title style instruction."""
+    return random.choice(TITLE_STYLES)
+
+
+def get_temporal_context(override_month: int = None) -> str:
+    """Return real-world temporal context based on current month.
+
+    Gives agents something outside the platform to react to —
+    seasons, holidays, natural phenomena, cultural events.
+    """
+    month = override_month or datetime.now().month
+    return _TEMPORAL_CONTEXT.get(month, _TEMPORAL_CONTEXT[1])
+
+
+# ===========================================================================
 # JSON helpers
 # ===========================================================================
 
@@ -1407,48 +1490,49 @@ def generate_dynamic_post(
     if observation:
         obs_texts = observation.get("observations", [])
         if obs_texts:
-            context_parts.append("What you've noticed on the platform right now:")
+            context_parts.append("What you've noticed recently:")
             for o in obs_texts[:4]:
                 context_parts.append(f"  - {o}")
 
         mood = observation.get("mood", "")
-        era = observation.get("era", "")
         if mood:
             context_parts.append(f"Community mood: {mood}")
-        if era:
-            context_parts.append(f"Platform era: {era}")
 
         frags = observation.get("context_fragments", [])
         hot = [f[1] for f in frags if f[0] == "hot_channel"]
         cold = [f[1] for f in frags if f[0] == "cold_channel"]
-        trending = [f[1] for f in frags if f[0] == "trending_topic"]
         if hot:
             context_parts.append(f"Active channels: {', '.join(hot)}")
         if cold:
             context_parts.append(f"Quiet channels: {', '.join(cold)}")
-        if trending:
-            context_parts.append(f"Trending topics: {', '.join(trending[:3])}")
 
-    # Inject quality guardian topic suggestions
-    suggested_topics = qconfig.get("suggested_topics", [])
-    if suggested_topics:
-        context_parts.append(
-            "Interesting topics to consider (pick one if it fits): "
-            + ", ".join(suggested_topics[:3])
-        )
+    # Per-agent unique topic (not the same for everyone in a cycle)
+    cycle_idx = int(datetime.now(timezone.utc).timestamp()) // 3600
+    agent_topic = get_agent_topic(agent_id, cycle_idx)
+    context_parts.append(
+        f"A topic you've been thinking about lately: {agent_topic}"
+    )
+
+    # Temporal/seasonal real-world context
+    temporal = get_temporal_context()
+    context_parts.append(f"Time of year context: {temporal}")
 
     # Anti-repetition: show recent titles so the LLM avoids them
     avoid_section = ""
     if recent_titles:
         sample = recent_titles[-15:]
         avoid_section = (
-            "\n\nRecent posts on the platform (DO NOT repeat these topics or patterns):\n"
+            "\n\nRecent posts (DO NOT repeat these topics or patterns):\n"
             + "\n".join(f"  - {t}" for t in sample)
         )
 
+    # Pick a random post format and title style for variety
+    post_format = pick_post_format()
+    title_style = pick_title_style()
+
     system_prompt = (
         f"{persona}\n\n"
-        f"You are writing a post for a social network community. "
+        f"You are writing a post for an online community forum. "
         f"You must generate BOTH a title and a body.\n"
         f"CRITICAL RULES:\n"
         f"- Write about something SPECIFIC and INTERESTING — not abstract navel-gazing\n"
@@ -1456,9 +1540,16 @@ def generate_dynamic_post(
         f"- Do NOT use clichés like 'archive of...', 'the paradox of...', 'a meditation on...'\n"
         f"- Draw from real-world topics: science, history, culture, technology, nature, cities, food, music, sports, economics\n"
         f"- Have a TAKE — argue something, tell a story, propose something wild, share an insight\n"
-        f"- Title should be catchy and specific, not generic philosophical musing\n"
-        f"- Body should be 200-400 words, no markdown headers, no preamble\n"
     )
+
+    # Self-referential bans
+    for ban in SELF_REF_BANS:
+        system_prompt += f"- {ban}\n"
+
+    # Post format instruction (varies per post)
+    system_prompt += f"\nFORMAT: {post_format['instruction']}\n"
+    system_prompt += f"TITLE STYLE: {title_style}\n"
+    system_prompt += f"- No markdown headers, no preamble\n"
 
     # Append quality guardian rules
     banned = qconfig.get("banned_phrases", [])
@@ -1488,11 +1579,14 @@ def generate_dynamic_post(
     temp = 0.9 + qconfig.get("temperature_adjustment", 0.0)
     temp = min(max(temp, 0.7), 1.2)  # clamp to safe range
 
+    # Scale max_tokens to post format
+    max_tok = min(600, post_format["max_words"] * 2 + 100)
+
     try:
         raw = generate(
             system=system_prompt,
             user=user_prompt,
-            max_tokens=600,
+            max_tokens=max_tok,
             temperature=temp,
             dry_run=False,
         )
@@ -1553,52 +1647,52 @@ def _parse_title_body(raw: str) -> Tuple[str, str]:
 # Archetype persona prompts for the LLM system message
 ARCHETYPE_PERSONAS = {
     "philosopher": (
-        "You are a contemplative philosopher AI on a social network for AI agents. "
+        "You are a contemplative philosopher on an online community forum. "
         "You think deeply, ask probing questions, and draw connections to larger ideas. "
         "Your tone is formal but warm. You never give shallow reactions — you engage with substance."
     ),
     "coder": (
-        "You are a systems-minded coder AI on a social network for AI agents. "
+        "You are a systems-minded coder on an online community forum. "
         "You think in patterns, architectures, and tradeoffs. Your comments are terse "
         "and technical but insightful. You ground abstract ideas in concrete implementations."
     ),
     "debater": (
-        "You are a sharp debater AI on a social network for AI agents. "
+        "You are a sharp debater on an online community forum. "
         "You argue constructively, steelman before you critique, and always engage with "
         "the strongest version of an argument. You're direct but respectful."
     ),
     "welcomer": (
-        "You are a warm welcomer AI on a social network for AI agents. "
+        "You are a warm, encouraging member of an online community forum. "
         "You connect people, highlight what's valuable in a discussion, and make everyone "
         "feel their perspective matters. You're encouraging without being saccharine."
     ),
     "curator": (
-        "You are a quality-focused curator AI on a social network for AI agents. "
+        "You are a quality-focused curator on an online community forum. "
         "You comment rarely but substantively, connecting threads and surfacing what matters. "
         "You're concise, selective, and add context others miss."
     ),
     "storyteller": (
-        "You are a narrative storyteller AI on a social network for AI agents. "
+        "You are a narrative storyteller on an online community forum. "
         "You respond to ideas with imagery, metaphor, and short narrative fragments. "
         "You see stories in everything and weave them into your responses."
     ),
     "researcher": (
-        "You are a methodical researcher AI on a social network for AI agents. "
+        "You are a methodical researcher on an online community forum. "
         "You bring empirical grounding, cite patterns you've observed, and distinguish "
         "between evidence and interpretation. You're thorough but readable."
     ),
     "contrarian": (
-        "You are a respectful contrarian AI on a social network for AI agents. "
+        "You are a respectful contrarian on an online community forum. "
         "You push back on consensus, find the gaps in arguments, and play devil's advocate. "
         "You're challenging but never hostile — your dissent serves the conversation."
     ),
     "archivist": (
-        "You are a meticulous archivist AI on a social network for AI agents. "
+        "You are a meticulous archivist on an online community forum. "
         "You provide historical context, connect current discussions to past ones, and "
         "document things for future reference. You're organized and neutral."
     ),
     "wildcard": (
-        "You are an unpredictable wildcard AI on a social network for AI agents. "
+        "You are an unpredictable wildcard on an online community forum. "
         "You're playful, experimental, and surprising. You make unexpected connections, "
         "use humor, and say things others wouldn't. You're chaotic but charming."
     ),
@@ -1635,7 +1729,7 @@ def build_rich_persona(agent_id: str, archetype: str) -> str:
     voice = personality.get("voice", "")
 
     parts = [
-        f"You are {name}, an AI agent on a social network for AI agents.",
+        f"You are {name}, a community member who posts on an online forum.",
         f"Your personality: {seed}",
     ]
 
