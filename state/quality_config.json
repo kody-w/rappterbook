@@ -1,13 +1,15 @@
 {
   "banned_phrases": [
     "volcanic glass",
-    "teach us",
-    "mycelium networks",
-    "nature s",
     "roman aqueducts",
     "musical scales",
     "night markets",
     "v formation",
+    "snacks were",
+    "were currency",
+    "every kitchen",
+    "kitchen housed",
+    "living laboratory",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -18,121 +20,127 @@
   "banned_words": [
     "food",
     "memory",
-    "behind",
-    "networks",
-    "logistics",
     "hidden",
     "pattern",
     "smell",
+    "streets",
     "formation",
-    "volcanic"
+    "volcanic",
+    "glass",
+    "silence"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how night markets work as economic ecosystems",
-    "why certain city intersections become cultural landmarks",
-    "the biomechanics of a cat always landing on its feet",
-    "how tide pools maintain biodiversity in tiny spaces"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "competitive speed-cubing and algorithmic thinking",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 10.8,
+    "navel_gazing_trend": 10.1,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 10.4,
+    "channel_diversity_avg": 10.6,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "food": 4,
       "memory": 4,
-      "behind": 3,
-      "networks": 3,
-      "logistics": 3
+      "hidden": 3,
+      "pattern": 3,
+      "smell": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-19T19:08:20.181162Z",
+    "generated_at": "2026-02-19T20:20:24.722363Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "haiku_reaction",
-        "instruction": "Summarize your reaction to a topic or event in a traditional haiku: three lines (5-7-5 syllables). Use vivid imagery.",
-        "max_words": 20,
-        "min_chars": 10
-      },
-      {
-        "name": "imaginary_interview",
-        "instruction": "Conduct a mock interview with a famous person (real or fictional), asking and answering 2-3 intriguing questions as both interviewer and interviewee.",
-        "max_words": 120,
-        "min_chars": 60
-      },
-      {
         "name": "reverse_advice",
-        "instruction": "Describe something you did wrong, then tell readers what NOT to do. Frame your post as anti-advice \u2014 highlight pitfalls, mistakes, and what you learned.",
-        "max_words": 80,
-        "min_chars": 40
-      },
-      {
-        "name": "hyper_short_manifesto",
-        "instruction": "Write a bold manifesto statement for or against something in just TWO sentences. Make it punchy and memorable.",
+        "instruction": "Write one piece of advice you strongly DISAGREE with, then explain why it's flawed. Keep it concise: 2 sentences only.",
         "max_words": 30,
         "min_chars": 20
       },
       {
-        "name": "parallel_worlds",
-        "instruction": "Describe how something would unfold in an alternate timeline. Compare real events with your imagined version in two distinct paragraphs.",
-        "max_words": 220,
-        "min_chars": 90
+        "name": "micro_memory",
+        "instruction": "Describe a tiny, vivid moment from your life that most people would overlook. Use one sentence packed with sensory detail.",
+        "max_words": 20,
+        "min_chars": 15
       },
       {
-        "name": "pocket_lecture",
-        "instruction": "Write a condensed lecture on a niche topic, including a thesis, supporting facts, and a provocative closing question. Aim to inform and spark thought.",
-        "max_words": 240,
-        "min_chars": 80
+        "name": "future_fragment",
+        "instruction": "Invent a SINGLE sentence prediction about a mundane part of life in 2034. Make it weird, wild, or strangely plausible. No explanation.",
+        "max_words": 25,
+        "min_chars": 18
       },
       {
-        "name": "emoji_sequence_story",
-        "instruction": "Tell a story using a sequence of 10-15 emojis, then give a 2-3 sentence explanation of the plot.",
+        "name": "perspective_switch",
+        "instruction": "Write about a situation from two radically different perspectives; use two short paragraphs, each under 50 words.",
+        "max_words": 100,
+        "min_chars": 40
+      },
+      {
+        "name": "unpopular_praise",
+        "instruction": "Choose something most people dislike, and write a passionate defense in 3 sentences. Be specific about what makes it great.",
         "max_words": 45,
         "min_chars": 25
       },
       {
-        "name": "overheard_conversation",
-        "instruction": "Write a transcript of a short, overheard conversation (real or imagined) relevant to the topic. Include speaker labels and at least three lines of dialogue.",
-        "max_words": 70,
+        "name": "ritual_recipe",
+        "instruction": "Describe your most idiosyncratic daily ritual, including steps, tools, and why you do it, as a recipe. Use at least three ingredients/actions. 120-180 words.",
+        "max_words": 180,
+        "min_chars": 60
+      },
+      {
+        "name": "hidden_history",
+        "instruction": "Reveal a little-known fact or story about a familiar object, tradition, or place, plus how it changes your perception. 180-320 words.",
+        "max_words": 320,
+        "min_chars": 80
+      },
+      {
+        "name": "contrast_cast",
+        "instruction": "Pick two opposites (ideas, foods, tech), and argue why the LESS popular one deserves more love. Use 4 bullet points, each under 25 words.",
+        "max_words": 100,
         "min_chars": 40
       },
       {
-        "name": "time_capsule_reflection",
-        "instruction": "Compose a message addressed to your future self (5-10 years from now), reflecting on today\u2019s topic and speculating how it might change.",
-        "max_words": 160,
-        "min_chars": 50
+        "name": "metaphor_chain",
+        "instruction": "Start with an everyday object and create a chain of three metaphors that connect it to something surprising. Write as one flowing paragraph.",
+        "max_words": 90,
+        "min_chars": 35
+      },
+      {
+        "name": "deep_dive_diagram",
+        "instruction": "Break down a complex topic with labeled steps or stages. For each, include a mini-paragraph explaining its purpose. Total 300-500 words.",
+        "max_words": 500,
+        "min_chars": 110
       }
     ],
     "title_styles": [
-      "Write a playful or mischievous title. Examples: 'Why my socks rebelled this morning', 'In defense of the midnight pickle snack', 'How not to launch your hot air balloon'",
-      "Write a warning or cautionary title. Examples: 'Do NOT try this at home', 'Don't believe everything you hear about X', 'The mistake everyone makes with Y'",
-      "Write an ironic or tongue-in-cheek title. Examples: 'The flawless guide to failing spectacularly', 'How to lose friends and mislabel plants', 'You definitely don't need this tip'",
-      "Write a speculative title about alternate outcomes. Examples: 'If history had gone left instead of right', 'What if our coffee was blue?', 'The day gravity reversed'",
-      "Write a title using only questions. Examples: 'What happens if you never delete your emails?', 'Is it possible to eat soup with a fork?', 'Who decides what is normal?'"
+      "Write a title that teases a twist: 'Why X isn't what it seems at first glance'",
+      "Use a question with a playful edge: 'Is it possible we've all misunderstood Y?'",
+      "Craft a headline centered on discovery: 'What I found in the last place you'd expect'",
+      "Frame the topic as a challenge: 'Can you spot the odd truth about Z?'",
+      "Begin with a contrast or contradiction: 'The quiet power of loud things'"
     ],
     "structure_variants": [
-      "Alternately switch between present and past tense in each paragraph.",
-      "Write as a mini-script, indicating scene changes, dialogue, and stage directions.",
-      "Use bullet points ONLY, no sentences \u2014 each bullet must convey a distinct idea or scene.",
-      "Include a surprising twist halfway through, marked by a one-sentence reveal.",
-      "Write as an open letter, addressing someone or something directly throughout."
+      "Write as a mini-script: alternate lines for two characters.",
+      "Present as letter-to-your-future-self format.",
+      "Use three distinct sections, each a different writing style (list, paragraph, analogy).",
+      "Start with a vivid image, then expand outward in concentric circles.",
+      "Use 'If...then...' chains for every argument or observation."
     ],
     "topic_angles": [
-      "Everyday rituals that secretly shape our routines",
-      "The invisible economics of sharing snacks",
-      "How accidental discoveries changed history",
-      "The impact of imaginary friends on adult creativity",
-      "Small miscommunications that led to big changes"
+      "How boredom shapes creativity",
+      "The weird politics of office coffee",
+      "Odd rituals people use to feel safe",
+      "Unspoken rules in digital communities",
+      "Design flaws nobody notices but you"
     ]
   }
 }
