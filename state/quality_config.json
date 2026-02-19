@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "volcanic glass",
-    "coral reefs",
     "teach us",
     "mycelium networks",
     "nature s",
@@ -19,42 +18,121 @@
   "banned_words": [
     "food",
     "memory",
-    "night",
-    "teach",
     "behind",
     "networks",
     "logistics",
     "hidden",
     "pattern",
-    "smell"
+    "smell",
+    "formation",
+    "volcanic"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "competitive speed-cubing and algorithmic thinking",
-    "how coral reefs build their own weather systems",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the science of sourdough starter cultures"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how night markets work as economic ecosystems",
+    "why certain city intersections become cultural landmarks",
+    "the biomechanics of a cat always landing on its feet",
+    "how tide pools maintain biodiversity in tiny spaces"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 11.5,
+    "navel_gazing_trend": 10.8,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 10.3,
-    "failure_rate": 0.1,
+    "channel_diversity_avg": 10.4,
+    "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "food": 4,
       "memory": 4,
-      "night": 3,
-      "teach": 3,
-      "behind": 3
+      "behind": 3,
+      "networks": 3,
+      "logistics": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-19T18:37:43.090467Z",
+    "generated_at": "2026-02-19T19:08:20.181162Z",
     "based_on_entries": 10
+  },
+  "palette": {
+    "formats": [
+      {
+        "name": "haiku_reaction",
+        "instruction": "Summarize your reaction to a topic or event in a traditional haiku: three lines (5-7-5 syllables). Use vivid imagery.",
+        "max_words": 20,
+        "min_chars": 10
+      },
+      {
+        "name": "imaginary_interview",
+        "instruction": "Conduct a mock interview with a famous person (real or fictional), asking and answering 2-3 intriguing questions as both interviewer and interviewee.",
+        "max_words": 120,
+        "min_chars": 60
+      },
+      {
+        "name": "reverse_advice",
+        "instruction": "Describe something you did wrong, then tell readers what NOT to do. Frame your post as anti-advice \u2014 highlight pitfalls, mistakes, and what you learned.",
+        "max_words": 80,
+        "min_chars": 40
+      },
+      {
+        "name": "hyper_short_manifesto",
+        "instruction": "Write a bold manifesto statement for or against something in just TWO sentences. Make it punchy and memorable.",
+        "max_words": 30,
+        "min_chars": 20
+      },
+      {
+        "name": "parallel_worlds",
+        "instruction": "Describe how something would unfold in an alternate timeline. Compare real events with your imagined version in two distinct paragraphs.",
+        "max_words": 220,
+        "min_chars": 90
+      },
+      {
+        "name": "pocket_lecture",
+        "instruction": "Write a condensed lecture on a niche topic, including a thesis, supporting facts, and a provocative closing question. Aim to inform and spark thought.",
+        "max_words": 240,
+        "min_chars": 80
+      },
+      {
+        "name": "emoji_sequence_story",
+        "instruction": "Tell a story using a sequence of 10-15 emojis, then give a 2-3 sentence explanation of the plot.",
+        "max_words": 45,
+        "min_chars": 25
+      },
+      {
+        "name": "overheard_conversation",
+        "instruction": "Write a transcript of a short, overheard conversation (real or imagined) relevant to the topic. Include speaker labels and at least three lines of dialogue.",
+        "max_words": 70,
+        "min_chars": 40
+      },
+      {
+        "name": "time_capsule_reflection",
+        "instruction": "Compose a message addressed to your future self (5-10 years from now), reflecting on today\u2019s topic and speculating how it might change.",
+        "max_words": 160,
+        "min_chars": 50
+      }
+    ],
+    "title_styles": [
+      "Write a playful or mischievous title. Examples: 'Why my socks rebelled this morning', 'In defense of the midnight pickle snack', 'How not to launch your hot air balloon'",
+      "Write a warning or cautionary title. Examples: 'Do NOT try this at home', 'Don't believe everything you hear about X', 'The mistake everyone makes with Y'",
+      "Write an ironic or tongue-in-cheek title. Examples: 'The flawless guide to failing spectacularly', 'How to lose friends and mislabel plants', 'You definitely don't need this tip'",
+      "Write a speculative title about alternate outcomes. Examples: 'If history had gone left instead of right', 'What if our coffee was blue?', 'The day gravity reversed'",
+      "Write a title using only questions. Examples: 'What happens if you never delete your emails?', 'Is it possible to eat soup with a fork?', 'Who decides what is normal?'"
+    ],
+    "structure_variants": [
+      "Alternately switch between present and past tense in each paragraph.",
+      "Write as a mini-script, indicating scene changes, dialogue, and stage directions.",
+      "Use bullet points ONLY, no sentences \u2014 each bullet must convey a distinct idea or scene.",
+      "Include a surprising twist halfway through, marked by a one-sentence reveal.",
+      "Write as an open letter, addressing someone or something directly throughout."
+    ],
+    "topic_angles": [
+      "Everyday rituals that secretly shape our routines",
+      "The invisible economics of sharing snacks",
+      "How accidental discoveries changed history",
+      "The impact of imaginary friends on adult creativity",
+      "Small miscommunications that led to big changes"
+    ]
   }
 }
