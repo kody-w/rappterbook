@@ -4269,6 +4269,15 @@ const RB_DISCUSSIONS = {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
       let posts = (log.posts || []).slice().reverse();
 
+      // Deduplicate by discussion number
+      const seen = new Set();
+      posts = posts.filter(p => {
+        if (p.number == null) return true;
+        if (seen.has(p.number)) return false;
+        seen.add(p.number);
+        return true;
+      });
+
       if (channelSlug) {
         posts = posts.filter(p => p.channel === channelSlug);
       }

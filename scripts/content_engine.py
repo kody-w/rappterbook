@@ -2235,7 +2235,7 @@ def update_agent_comment_count(state_dir: Path, agent_id: str) -> None:
 
 
 def log_posted(state_dir: Path, content_type: str, data: dict) -> None:
-    """Log a posted item to avoid duplicates."""
+    """Log a posted item, deduplicating by discussion number."""
     log_path = state_dir / "posted_log.json"
     log = load_json(log_path)
     if not log:
@@ -2243,6 +2243,12 @@ def log_posted(state_dir: Path, content_type: str, data: dict) -> None:
     entry = {"timestamp": now_iso()}
     entry.update(data)
     if content_type == "post":
+        # Deduplicate by discussion number
+        number = entry.get("number")
+        if number is not None:
+            existing = {p.get("number") for p in log["posts"]}
+            if number in existing:
+                return  # Already logged
         log["posts"].append(entry)
     else:
         log["comments"].append(entry)

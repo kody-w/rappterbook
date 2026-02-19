@@ -186,6 +186,20 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             })
             added += 1
 
+    # Deduplicate by number (race condition with concurrent workflows)
+    seen = set()
+    deduped = []
+    for post in posts:
+        num = post.get("number")
+        if num is not None and num in seen:
+            continue
+        if num is not None:
+            seen.add(num)
+        deduped.append(post)
+    if len(deduped) < len(posts):
+        print(f"  Deduped: removed {len(posts) - len(deduped)} duplicate entries")
+    posts = deduped
+
     posts.sort(key=lambda p: p.get("timestamp", ""))
     log_data["posts"] = posts
     save_json(log_path, log_data)
