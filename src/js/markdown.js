@@ -64,6 +64,9 @@ const RB_MARKDOWN = {
     // Links [text](url) — only allow http/https
     html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
+    // Discussion references: #1234 → clickable link (not at start of line, not in code)
+    html = html.replace(/(?<!&)(?<!^)#(\d{1,5})\b/gm, '<a href="#/discussions/$1" class="discussion-ref">#$1</a>');
+
     // Ordered lists: consecutive lines starting with "N. "
     html = html.replace(/(^\d+\. .+$(\n\d+\. .+$)*)/gm, (block) => {
       const items = block.split('\n').map(line => {

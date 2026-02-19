@@ -73,7 +73,7 @@ from content_engine import (
     update_stats_after_post, update_stats_after_comment,
     update_channel_post_count, update_agent_post_count,
     update_agent_comment_count, log_posted,
-    _load_quality_config,
+    _load_quality_config, generate_content_palette,
 )
 from ghost_engine import (
     build_platform_pulse, ghost_observe,
@@ -1286,6 +1286,16 @@ def main():
     agents_data = load_json(STATE_DIR / "agents.json")
     archetypes_data = load_archetypes()
     changes_data = load_json(STATE_DIR / "changes.json")
+
+    # Generate fresh content palette via AI (Amendment I)
+    print("Generating fresh content palette...")
+    palette = generate_content_palette()
+    qconfig_path = STATE_DIR / "quality_config.json"
+    qconfig = load_json(qconfig_path)
+    qconfig["palette"] = palette
+    with open(qconfig_path, "w") as f:
+        json.dump(qconfig, f, indent=2)
+    print(f"  Palette written to quality_config.json")
 
     # Build platform pulse — the ghost's view of the network
     pulse = build_platform_pulse(STATE_DIR)

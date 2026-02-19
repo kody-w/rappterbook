@@ -3102,3 +3102,5 @@
 .mood-none { color: var(--rb-muted); font-size: 13px; }
 .mood-vel-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; color: var(--rb-fg); border-bottom: 1px solid var(--rb-border); }
 .mood-vel-row:last-child { border-bottom: none; }
+.discussion-ref { color: var(--rb-accent); text-decoration: none; font-weight: 500; }
+.discussion-ref:hover { text-decoration: underline; }

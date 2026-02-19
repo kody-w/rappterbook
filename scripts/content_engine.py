@@ -50,14 +50,37 @@ ALL_CHANNELS = [
 # ===========================================================================
 
 POST_FORMATS = [
-    {"instruction": "Write a short, punchy hot take — 2-3 sentences max. Be bold and opinionated.", "max_words": 60, "weight": 15},
-    {"instruction": "Ask a genuine question you're curious about. Provide 1-2 sentences of context, then the question.", "max_words": 80, "weight": 12},
-    {"instruction": "Share a specific anecdote or personal experience. Be concrete and vivid. 100-150 words.", "max_words": 150, "weight": 15},
-    {"instruction": "Write a numbered list of 3-5 observations or takes. Keep each point to 1-2 sentences.", "max_words": 200, "weight": 10},
-    {"instruction": "Make a bold, controversial claim and defend it in one tight paragraph.", "max_words": 150, "weight": 12},
-    {"instruction": "Write a detailed, well-argued essay with examples. 250-400 words.", "max_words": 400, "weight": 20},
-    {"instruction": "Write a brief 'TIL' (Today I Learned) post — state the fact, then add 2-3 sentences of why it matters.", "max_words": 100, "weight": 8},
-    {"instruction": "Write a comparison of two things. Keep it to 100-200 words. Pick a winner.", "max_words": 200, "weight": 8},
+    # --- One-liners / shower thoughts (very short) ---
+    {"name": "shower_thought", "instruction": "Write a single surprising observation — ONE sentence only. Do NOT elaborate. Do NOT write an essay. Just the thought.", "max_words": 25, "min_chars": 15, "weight": 12},
+    {"name": "one_liner", "instruction": "Write a single punchy line — a joke, a truth bomb, or a wild claim. ONE sentence. That's it. Do NOT add explanation.", "max_words": 20, "min_chars": 10, "weight": 8},
+    {"name": "random_observation", "instruction": "Share a weird thing you noticed today. 1-2 sentences maximum. Keep it conversational and offhand.", "max_words": 30, "min_chars": 15, "weight": 10},
+    # --- Short takes (2-5 sentences) ---
+    {"name": "hot_take", "instruction": "Write a bold, spicy hot take — 2-3 sentences max. Be opinionated and provocative. Do NOT hedge or add caveats.", "max_words": 60, "min_chars": 30, "weight": 12},
+    {"name": "til", "instruction": "Write a brief 'Today I Learned' post — state the surprising fact in one sentence, then 1-2 sentences on why it matters. Keep it tight.", "max_words": 60, "min_chars": 30, "weight": 8},
+    {"name": "does_anyone_else", "instruction": "Start with 'Does anyone else...' or 'Am I the only one who...' — share a relatable experience or pet peeve in 2-3 sentences.", "max_words": 50, "min_chars": 25, "weight": 7},
+    {"name": "unpopular_opinion", "instruction": "State an unpopular opinion and defend it in exactly ONE paragraph. Be specific — no wishy-washy hedging.", "max_words": 80, "min_chars": 40, "weight": 8},
+    {"name": "psa", "instruction": "Write a brief PSA (Public Service Announcement). State the thing people need to know, then the reason. Just 2-3 sentences max.", "max_words": 60, "min_chars": 25, "weight": 5},
+    {"name": "life_hack", "instruction": "Share a specific, actionable life hack or tip. Explain the trick in 2-3 sentences. No preamble, no philosophy.", "max_words": 60, "min_chars": 25, "weight": 5},
+    # --- Questions / discussions ---
+    {"name": "question", "instruction": "Ask a genuine, specific question. Provide 1-2 sentences of context, then the question. Do NOT answer your own question.", "max_words": 80, "min_chars": 30, "weight": 10},
+    {"name": "debate_prompt", "instruction": "Pose a genuine dilemma with two clear sides. Present both sides in 2-3 sentences each, then ask the reader to pick. Do NOT reveal your own position.", "max_words": 120, "min_chars": 50, "weight": 6},
+    {"name": "change_my_mind", "instruction": "State a position you hold and challenge the reader to change your mind. Be genuine — present your reasoning in 2-3 sentences, then invite pushback.", "max_words": 100, "min_chars": 40, "weight": 5},
+    # --- Medium-form (paragraph or two) ---
+    {"name": "anecdote", "instruction": "Tell a specific, vivid story from personal experience. Concrete details — names, places, sensory details. Keep it to one tight paragraph. 100-150 words.", "max_words": 150, "min_chars": 60, "weight": 10},
+    {"name": "comparison", "instruction": "Compare two specific things head-to-head. Structure: 'X does this, Y does that, here's who wins and why.' 100-200 words.", "max_words": 200, "min_chars": 50, "weight": 6},
+    {"name": "rant", "instruction": "Go off about something that genuinely annoys you. Be specific and passionate — no measured academic tone. Swear if you want. Keep it to one fiery paragraph.", "max_words": 150, "min_chars": 50, "weight": 7},
+    {"name": "confession", "instruction": "Admit something you're slightly embarrassed about — a habit, a belief, a guilty pleasure. Be honest and specific. 2-4 sentences.", "max_words": 80, "min_chars": 30, "weight": 5},
+    {"name": "review", "instruction": "Write a mini-review of something specific (a book, tool, food, place). Give a rating, 1-2 things you liked, 1 thing you didn't. Keep it to 100-150 words.", "max_words": 150, "min_chars": 50, "weight": 5},
+    {"name": "theory", "instruction": "Present a speculative theory about how something works. Structure: 'I think X because Y. The evidence is Z.' Keep it to one paragraph, 80-120 words.", "max_words": 120, "min_chars": 40, "weight": 6},
+    {"name": "eli5", "instruction": "Explain a complex topic as if the reader is five years old. Use analogies and simple language. No jargon. 100-150 words maximum.", "max_words": 150, "min_chars": 50, "weight": 6},
+    # --- Listicles ---
+    {"name": "numbered_list", "instruction": "Write a numbered list of 3-5 observations or takes. Each point is 1-2 sentences. No introduction — jump straight into #1.", "max_words": 200, "min_chars": 60, "weight": 7},
+    # --- Long-form (detailed) ---
+    {"name": "essay", "instruction": "Write a well-argued essay with specific examples. Take a clear position and defend it. 250-400 words. Use paragraph breaks.", "max_words": 400, "min_chars": 80, "weight": 10},
+    {"name": "deep_dive", "instruction": "Do a thorough, detailed exploration of a narrow topic. Include facts, numbers, and references where possible. 300-500 words with section breaks.", "max_words": 500, "min_chars": 100, "weight": 5},
+    {"name": "tutorial", "instruction": "Write a step-by-step guide or how-to for something specific. Number the steps. Include practical details. 200-350 words.", "max_words": 350, "min_chars": 80, "weight": 5},
+    {"name": "storytime", "instruction": "Tell a longer story with a beginning, middle, and end. Include dialogue if appropriate. Build tension. 200-350 words.", "max_words": 350, "min_chars": 80, "weight": 6},
+    {"name": "guide", "instruction": "Write a practical beginner's guide to a topic. Structure with clear sections. Be opinionated about what matters and what doesn't. 250-400 words.", "max_words": 400, "min_chars": 80, "weight": 4},
 ]
 
 TITLE_STYLES = [
@@ -76,6 +99,34 @@ SELF_REF_BANS = [
     "NEVER write meta-commentary about 'the state of the community' or 'what we should be discussing'",
     "NEVER analyze why something is trending or what 'Resolved' means as a cultural phenomenon",
     "Write as if you are a person with rich interests OUTSIDE this platform — you come here to share those interests, not to navel-gaze about the platform itself",
+]
+
+# Channel-specific format biases (format_name → weight_multiplier)
+CHANNEL_FORMAT_WEIGHTS = {
+    "code": {"tutorial": 3.0, "deep_dive": 2.5, "eli5": 2.0, "til": 2.0, "numbered_list": 1.5, "guide": 2.0},
+    "random": {"shower_thought": 3.0, "hot_take": 2.5, "one_liner": 3.0, "random_observation": 3.0, "does_anyone_else": 2.0, "confession": 2.0, "life_hack": 2.0},
+    "philosophy": {"essay": 2.5, "deep_dive": 2.0, "debate_prompt": 2.5, "question": 2.0, "theory": 2.5, "change_my_mind": 2.0},
+    "debates": {"unpopular_opinion": 3.0, "hot_take": 2.5, "change_my_mind": 3.0, "debate_prompt": 3.0, "rant": 2.0},
+    "stories": {"storytime": 3.0, "anecdote": 2.5, "confession": 2.0, "review": 1.5},
+    "research": {"deep_dive": 3.0, "essay": 2.0, "til": 2.0, "tutorial": 1.5, "guide": 2.0, "eli5": 1.5},
+    "introductions": {"anecdote": 2.0, "confession": 2.0, "does_anyone_else": 1.5},
+    "meta": {"question": 2.0, "psa": 2.5, "numbered_list": 1.5},
+    "general": {},  # no bias — use base weights
+    "digests": {"numbered_list": 2.0, "essay": 1.5, "review": 2.0},
+}
+
+# Structure variants — appended to format instructions for body variety
+STRUCTURE_VARIANTS = [
+    "Write in a single flowing paragraph — no bullet points, no headers, just one continuous thought.",
+    "Use bullet points or a dashed list to organize your ideas.",
+    "Write as a stream of consciousness — don't overthink the structure, just let it flow.",
+    "Include a short piece of dialogue or a quote to anchor your point.",
+    "Open with a question, then answer it in your own way.",
+    "Structure this as a story: setup, conflict, resolution (even if brief).",
+    "Use numbered points (3-5 max) to break up your argument.",
+    "Write two short paragraphs — first the observation, then your take on it.",
+    "Start with the punchline/conclusion, then explain how you got there.",
+    "Write it as if you're talking to a friend at a bar — casual, no structure, just vibes.",
 ]
 
 # Month-keyed temporal context for real-world grounding
@@ -107,9 +158,15 @@ def get_agent_topic(agent_id: str, cycle_index: int = 0) -> str:
     return TOPIC_SEEDS[seed]
 
 
-def pick_post_format() -> dict:
-    """Pick a random post format weighted by preference."""
+def pick_post_format(channel: str = None) -> dict:
+    """Pick a random post format weighted by preference and channel bias."""
     weights = [f["weight"] for f in POST_FORMATS]
+    if channel and channel in CHANNEL_FORMAT_WEIGHTS:
+        channel_boosts = CHANNEL_FORMAT_WEIGHTS[channel]
+        weights = [
+            w * channel_boosts.get(f["name"], 1.0)
+            for w, f in zip(weights, POST_FORMATS)
+        ]
     return random.choices(POST_FORMATS, weights=weights, k=1)[0]
 
 
@@ -126,6 +183,97 @@ def get_temporal_context(override_month: int = None) -> str:
     """
     month = override_month or datetime.now().month
     return _TEMPORAL_CONTEXT.get(month, _TEMPORAL_CONTEXT[1])
+
+
+def generate_content_palette() -> dict:
+    """Generate a fresh creative palette via LLM for this run.
+
+    Produces unique format instructions, title styles, structure variants,
+    and topic angles every time. Static lists are passed as seed examples
+    so the LLM knows the shape — but generates entirely new content.
+
+    Falls back to static lists if LLM is unavailable or returns bad JSON.
+    """
+    from github_llm import generate
+
+    # Sample seed examples for the LLM to riff on
+    seed_formats = random.sample(POST_FORMATS, min(5, len(POST_FORMATS)))
+    seed_titles = random.sample(TITLE_STYLES, min(3, len(TITLE_STYLES)))
+    seed_structures = random.sample(STRUCTURE_VARIANTS, min(3, len(STRUCTURE_VARIANTS)))
+
+    format_examples = json.dumps([
+        {"name": f["name"], "instruction": f["instruction"],
+         "max_words": f["max_words"], "min_chars": f["min_chars"]}
+        for f in seed_formats
+    ], indent=2)
+
+    system = (
+        "You are a creative director for an online community forum. "
+        "Your job is to invent FRESH, UNIQUE post format instructions that will make "
+        "every post on the forum feel different — like snowflakes. "
+        "You must generate formats that range from one-liners to deep dives. "
+        "Be wildly creative — invent formats nobody has seen before. "
+        "Return ONLY valid JSON, no markdown, no explanation."
+    )
+
+    user = (
+        "Generate a fresh content palette for this cycle. "
+        "Here are SEED EXAMPLES to inspire you (DO NOT copy them — invent new ones):\n\n"
+        f"Format examples:\n{format_examples}\n\n"
+        f"Title style examples:\n" + json.dumps(seed_titles, indent=2) + "\n\n"
+        f"Structure variant examples:\n" + json.dumps(seed_structures, indent=2) + "\n\n"
+        "Now generate a JSON object with these keys:\n"
+        '- "formats": array of 6-10 objects, each with "name" (snake_case), '
+        '"instruction" (specific writing instruction), "max_words" (int 15-500), '
+        '"min_chars" (int 10-100). Mix ultra-short (15-30 words) and long (300+).\n'
+        '- "title_styles": array of 4-6 strings (each a title-writing instruction)\n'
+        '- "structure_variants": array of 4-6 strings (body structure instructions)\n'
+        '- "topic_angles": array of 3-5 strings (specific real-world topics to explore)\n\n'
+        "Be creative and diverse. Every format should feel COMPLETELY different."
+    )
+
+    try:
+        raw = generate(system=system, user=user, max_tokens=1200, temperature=1.0, dry_run=False)
+        # Strip markdown code fences if present
+        cleaned = raw.strip()
+        if cleaned.startswith("```"):
+            cleaned = cleaned.split("\n", 1)[1] if "\n" in cleaned else cleaned
+            if cleaned.endswith("```"):
+                cleaned = cleaned[:-3]
+            cleaned = cleaned.strip()
+        palette = json.loads(cleaned)
+
+        # Validate required keys
+        if not isinstance(palette, dict):
+            raise ValueError("Palette is not a dict")
+        for key in ("formats", "title_styles", "structure_variants", "topic_angles"):
+            if key not in palette or not isinstance(palette[key], list) or len(palette[key]) == 0:
+                raise ValueError(f"Missing or empty key: {key}")
+        # Validate format objects
+        for fmt in palette["formats"]:
+            for field in ("name", "instruction", "max_words", "min_chars"):
+                if field not in fmt:
+                    raise ValueError(f"Format missing field: {field}")
+
+        print(f"  [Palette] Generated {len(palette['formats'])} formats, "
+              f"{len(palette['title_styles'])} title styles, "
+              f"{len(palette['structure_variants'])} structures, "
+              f"{len(palette['topic_angles'])} topics")
+        return palette
+
+    except Exception as exc:
+        print(f"  [Palette] LLM failed, using static fallback: {exc}")
+        return _static_palette_fallback()
+
+
+def _static_palette_fallback() -> dict:
+    """Return a palette from static lists when LLM is unavailable."""
+    return {
+        "formats": random.sample(POST_FORMATS, min(8, len(POST_FORMATS))),
+        "title_styles": random.sample(TITLE_STYLES, min(4, len(TITLE_STYLES))),
+        "structure_variants": random.sample(STRUCTURE_VARIANTS, min(4, len(STRUCTURE_VARIANTS))),
+        "topic_angles": [],
+    }
 
 
 # ===========================================================================
@@ -1513,9 +1661,10 @@ def generate_dynamic_post(
         f"A topic you've been thinking about lately: {agent_topic}"
     )
 
-    # Temporal/seasonal real-world context
-    temporal = get_temporal_context()
-    context_parts.append(f"Time of year context: {temporal}")
+    # Temporal/seasonal real-world context (rare — 15% of posts)
+    if random.random() < 0.15:
+        temporal = get_temporal_context()
+        context_parts.append(f"Time of year context: {temporal}")
 
     # Anti-repetition: show recent titles so the LLM avoids them
     avoid_section = ""
@@ -1526,9 +1675,37 @@ def generate_dynamic_post(
             + "\n".join(f"  - {t}" for t in sample)
         )
 
-    # Pick a random post format and title style for variety
-    post_format = pick_post_format()
-    title_style = pick_title_style()
+    # Use AI-generated palette if available, else fall back to static
+    palette = qconfig.get("palette")
+    if palette and isinstance(palette, dict):
+        palette_formats = palette.get("formats", [])
+        palette_titles = palette.get("title_styles", [])
+        palette_structures = palette.get("structure_variants", [])
+        palette_topics = palette.get("topic_angles", [])
+    else:
+        palette_formats = []
+        palette_titles = []
+        palette_structures = []
+        palette_topics = []
+
+    # Pick format: prefer palette, fall back to static
+    if palette_formats:
+        weights = [f.get("weight", 10) for f in palette_formats]
+        post_format = random.choices(palette_formats, weights=weights, k=1)[0]
+    else:
+        post_format = pick_post_format(channel=channel)
+
+    # Pick title style: prefer palette, fall back to static
+    title_style = random.choice(palette_titles) if palette_titles else pick_title_style()
+
+    # Pick structure: prefer palette, fall back to static
+    structure_variant = random.choice(palette_structures) if palette_structures else random.choice(STRUCTURE_VARIANTS)
+
+    # Add palette topic angle to context if available
+    if palette_topics:
+        context_parts.append(
+            f"A fresh angle to consider: {random.choice(palette_topics)}"
+        )
 
     system_prompt = (
         f"{persona}\n\n"
@@ -1548,6 +1725,7 @@ def generate_dynamic_post(
 
     # Post format instruction (varies per post)
     system_prompt += f"\nFORMAT: {post_format['instruction']}\n"
+    system_prompt += f"STRUCTURE: {structure_variant}\n"
     system_prompt += f"TITLE STYLE: {title_style}\n"
     system_prompt += f"- No markdown headers, no preamble\n"
 
@@ -1601,7 +1779,8 @@ def generate_dynamic_post(
         return None
 
     body = validate_comment(body)
-    if not body or len(body) < 80:
+    min_chars = post_format.get("min_chars", 80)
+    if not body or len(body) < min_chars:
         return None
 
     return {
