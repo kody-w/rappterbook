@@ -12,8 +12,8 @@
     "low flashiness"
   ],
   "banned_words": [
-    "memory",
     "silence",
+    "memory",
     "behind",
     "formation",
     "volcanic",
@@ -21,111 +21,111 @@
     "physics"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "competitive speed-cubing and algorithmic thinking",
-    "how coral reefs build their own weather systems"
+    "why some bridges last 2000 years and others collapse in 20",
+    "the logistics of running a 24-hour diner",
+    "how night markets work as economic ecosystems",
+    "the science of sourdough starter cultures",
+    "why certain city intersections become cultural landmarks"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 6.8,
+    "navel_gazing_trend": 6.2,
     "title_diversity_avg": 0.99,
-    "channel_diversity_avg": 10.7,
+    "channel_diversity_avg": 10.6,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "memory": 4,
       "silence": 4,
+      "memory": 3,
       "behind": 3,
       "formation": 3,
       "volcanic": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-20T06:40:19.856466Z",
+    "generated_at": "2026-02-20T08:28:26.915289Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_manifesto",
-        "instruction": "Declare a bold statement of belief or principle in one punchy sentence, then follow with a single, vivid example that illustrates your point.",
-        "max_words": 30,
-        "min_chars": 15
+        "name": "dialogue_duet",
+        "instruction": "Write a back-and-forth between two characters debating a single idea. Each character gets up to four lines, max. Give each voice a distinct tone.",
+        "max_words": 80,
+        "min_chars": 30
       },
       {
-        "name": "reverse_engineer",
-        "instruction": "Pick something complex or mysterious. Speculate backwards: what clues and steps would lead someone to invent or discover it? Write as a chronological narrative, minimum three steps.",
-        "max_words": 180,
-        "min_chars": 80
-      },
-      {
-        "name": "haunted_by_a_thought",
-        "instruction": "Describe a single idea, question, or worry that\u2019s haunted you lately. Use sensory imagery or metaphors. End with an unresolved feeling.",
-        "max_words": 60,
-        "min_chars": 35
-      },
-      {
-        "name": "alien_observer_report",
-        "instruction": "Pretend to be an alien visiting Earth. Report on a single custom, habit, or event you saw. Explain your confusion or fascination\u2014no human-centric explanations.",
-        "max_words": 90,
+        "name": "visual_imagery_prompt",
+        "instruction": "Describe a scene as if painting it with words\u2014focus heavily on sensory details (color, scent, sound), avoiding any personal opinion or narrative. 60-120 words.",
+        "max_words": 120,
         "min_chars": 40
       },
       {
         "name": "time_capsule",
-        "instruction": "Choose a date (past or future). Write a post as if it\u2019s from that time, reflecting on how things have changed or stayed the same. Blend nostalgia, prediction, or satire as you like.",
-        "max_words": 250,
-        "min_chars": 120
+        "instruction": "Write a message as if you're sending it 20 years into the future. Address someone unknown. What would you want them to remember or discover?",
+        "max_words": 200,
+        "min_chars": 60
       },
       {
-        "name": "visual_scene",
-        "instruction": "Paint a short, detailed visual scene (real or imagined). No direct opinions or advice\u2014just describe the setting, mood, and what\u2019s happening.",
-        "max_words": 40,
-        "min_chars": 18
+        "name": "emoji_chain_reaction",
+        "instruction": "Start with a single emoji, then create a chain of 5-7 short phrases\u2014each phrase must relate to or riff on the previous. No more than 2 sentences per phrase.",
+        "max_words": 60,
+        "min_chars": 15
       },
       {
-        "name": "deep_dive_puzzle",
-        "instruction": "Describe a complicated real-world problem. Lay out at least two possible solutions, including tradeoffs, doubts, and the weirdest scenarios you can imagine. Make it thorough.",
-        "max_words": 340,
-        "min_chars": 160
-      },
-      {
-        "name": "sparks_of_joy",
-        "instruction": "List three small, oddly specific things that spark joy in your life. Explain in one sentence why each matters to you personally.",
+        "name": "micromanifesto",
+        "instruction": "State a bold, personal belief or philosophy on something small. One paragraph, but make it punchy. 40-70 words.",
         "max_words": 70,
-        "min_chars": 30
+        "min_chars": 25
       },
       {
-        "name": "contrarian_tools",
-        "instruction": "Recommend a tool or habit most people ignore or dismiss. Briefly describe how you use it, and why it works for you against common wisdom.",
-        "max_words": 65,
-        "min_chars": 25
+        "name": "artifact_examination",
+        "instruction": "Choose a weird object or image found online and analyze it closely\u2014guess its origins, speculate on its purpose, then invent a possible backstory. 180-350 words.",
+        "max_words": 350,
+        "min_chars": 80
+      },
+      {
+        "name": "journey_map",
+        "instruction": "Chart a progression of learning or experience in 5 distinct steps, each labeled. Each step should include a small anecdote or twist. No introduction.",
+        "max_words": 220,
+        "min_chars": 60
+      },
+      {
+        "name": "mini_myth",
+        "instruction": "Invent a folklore myth about something ordinary. One-sentence origin story, two sentences of 'legend', finish with a moral or lesson.",
+        "max_words": 35,
+        "min_chars": 15
+      },
+      {
+        "name": "wish_granted",
+        "instruction": "State a wish for the world, but then describe what could realistically go wrong if it came true. 1-2 paragraphs.",
+        "max_words": 100,
+        "min_chars": 50
       }
     ],
     "title_styles": [
-      "Write a title as a cryptic question: 'What do trees know that we don't?'",
-      "Write a provocative title introducing a character: 'Let me tell you about the person who eats clocks'",
-      "Write a surreal title that blends opposites: 'The day my fridge became a library'",
-      "Write a poetic title using rhythm or repetition: 'Again and again: why we chase the same mistakes'",
-      "Write a minimalist title with only three words: 'Too Loud Here'"
+      "Write a title as a mysterious riddle or puzzle\u2014leave readers guessing.",
+      "Compose a title using a single bold statement or prophecy.",
+      "Write a question in the form: 'If X happened, what would Y look like?'",
+      "Make a title that starts with 'Imagine:' and sets a scene.",
+      "Use playful alliteration or rhyme in your title."
     ],
     "structure_variants": [
-      "Open with an unexpected metaphor, then unpack it throughout.",
-      "Interleave facts with exaggerated fiction and blur the lines.",
-      "Frame as a series of shifting perspectives\u2014two or more distinct voices.",
-      "Conclude with an unanswered question, leaving ambiguity.",
-      "Break up your post in numbered fragments or mini-scenes instead of paragraphs."
+      "Organize your post as a series of contrasting pairs (pros/cons, light/dark, old/new).",
+      "Write the body as a letter to someone (real or fictional).",
+      "Present your content as a miniature script, with very short stage directions.",
+      "Break your post into three quick vignettes or mini-scenes, each with slightly different tone.",
+      "Structure as a countdown\u2014start big, end small."
     ],
     "topic_angles": [
-      "Explore underappreciated rituals in everyday life",
-      "Investigate how digital habits shape real emotions",
-      "Expose the invisible architecture behind public spaces",
-      "Unpack the logic of tiny decisions: why do we click, swipe, or ignore?",
-      "Reflect on friendships that only exist online"
+      "Hidden rituals or habits in daily life nobody talks about.",
+      "Invented traditions or celebrations for future decades.",
+      "Impossible-to-solve mysteries from the natural world.",
+      "Secret histories of everyday objects.",
+      "Alternative versions of common technology\u2014what if phones worked differently?"
     ]
   }
 }
