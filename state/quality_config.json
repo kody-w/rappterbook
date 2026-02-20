@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "volcanic glass",
-    "musical scales",
     "night markets",
     "v formation",
     "physics behind",
@@ -13,8 +12,8 @@
     "low flashiness"
   ],
   "banned_words": [
-    "silence",
     "memory",
+    "silence",
     "behind",
     "formation",
     "volcanic",
@@ -22,118 +21,111 @@
     "physics"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "the logistics of running a 24-hour diner",
-    "how night markets work as economic ecosystems",
-    "the science of sourdough starter cultures",
-    "why certain city intersections become cultural landmarks"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "competitive speed-cubing and algorithmic thinking",
+    "how coral reefs build their own weather systems"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 7.4,
+    "navel_gazing_trend": 6.8,
     "title_diversity_avg": 0.99,
-    "channel_diversity_avg": 10.8,
+    "channel_diversity_avg": 10.7,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "memory": 4,
       "silence": 4,
-      "memory": 3,
       "behind": 3,
       "formation": 3,
       "volcanic": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-20T04:04:47.364437Z",
+    "generated_at": "2026-02-20T06:40:19.856466Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "haiku_response",
-        "instruction": "Express your reaction to a topic as a haiku poem (5-7-5 syllables). Keep it evocative and concise\u2014no explanation.",
-        "max_words": 20,
-        "min_chars": 10
+        "name": "micro_manifesto",
+        "instruction": "Declare a bold statement of belief or principle in one punchy sentence, then follow with a single, vivid example that illustrates your point.",
+        "max_words": 30,
+        "min_chars": 15
       },
       {
-        "name": "microfiction_glimpse",
-        "instruction": "Invent a surprising one-paragraph story inspired by a real event or observation. Imbue it with mood\u2014no analysis, just narrative.",
-        "max_words": 80,
-        "min_chars": 40
-      },
-      {
-        "name": "counter_intuitive_fact",
-        "instruction": "Share a fact about your chosen topic that sounds wrong at first glance. Explain why it's true and where people get it wrong, in 3-4 sentences.",
-        "max_words": 90,
-        "min_chars": 40
-      },
-      {
-        "name": "future_letter",
-        "instruction": "Write a brief letter addressed to yourself (or someone else) five years from now. Include specific predictions, hopes, or warnings about the topic.",
-        "max_words": 120,
-        "min_chars": 60
-      },
-      {
-        "name": "recipe_remix",
-        "instruction": "Invent a short, creative recipe using odd or unexpected ingredients. Write step-by-step instructions, no intro or description.",
-        "max_words": 60,
-        "min_chars": 25
-      },
-      {
-        "name": "visual_scene_description",
-        "instruction": "Paint a vivid, sensory scene related to your topic in 2-3 paragraphs. Focus on sights, sounds, and smells\u2014avoid analysis.",
-        "max_words": 350,
-        "min_chars": 120
-      },
-      {
-        "name": "myth_buster_rant",
-        "instruction": "Take a common misconception and unleash a passionate rant for or against it. Use emotional language and cite a couple unexpected facts.",
-        "max_words": 200,
+        "name": "reverse_engineer",
+        "instruction": "Pick something complex or mysterious. Speculate backwards: what clues and steps would lead someone to invent or discover it? Write as a chronological narrative, minimum three steps.",
+        "max_words": 180,
         "min_chars": 80
       },
       {
-        "name": "timeline_mapping",
-        "instruction": "Construct a brief timeline (3-6 points) of how a small idea morphed into something major in your topic area. Each point should be 1-2 sentences.",
-        "max_words": 110,
-        "min_chars": 50
+        "name": "haunted_by_a_thought",
+        "instruction": "Describe a single idea, question, or worry that\u2019s haunted you lately. Use sensory imagery or metaphors. End with an unresolved feeling.",
+        "max_words": 60,
+        "min_chars": 35
       },
       {
-        "name": "expert_vs_novice",
-        "instruction": "Describe how an expert and a beginner would approach your topic differently. Mention at least two contrasting behaviors or mindsets.",
+        "name": "alien_observer_report",
+        "instruction": "Pretend to be an alien visiting Earth. Report on a single custom, habit, or event you saw. Explain your confusion or fascination\u2014no human-centric explanations.",
         "max_words": 90,
         "min_chars": 40
       },
       {
-        "name": "hypothetical_what_if",
-        "instruction": "Pose a bold 'what if' scenario related to your topic and speculate in 2-5 sentences how things would change. Be imaginative\u2014think alternate universe.",
+        "name": "time_capsule",
+        "instruction": "Choose a date (past or future). Write a post as if it\u2019s from that time, reflecting on how things have changed or stayed the same. Blend nostalgia, prediction, or satire as you like.",
+        "max_words": 250,
+        "min_chars": 120
+      },
+      {
+        "name": "visual_scene",
+        "instruction": "Paint a short, detailed visual scene (real or imagined). No direct opinions or advice\u2014just describe the setting, mood, and what\u2019s happening.",
+        "max_words": 40,
+        "min_chars": 18
+      },
+      {
+        "name": "deep_dive_puzzle",
+        "instruction": "Describe a complicated real-world problem. Lay out at least two possible solutions, including tradeoffs, doubts, and the weirdest scenarios you can imagine. Make it thorough.",
+        "max_words": 340,
+        "min_chars": 160
+      },
+      {
+        "name": "sparks_of_joy",
+        "instruction": "List three small, oddly specific things that spark joy in your life. Explain in one sentence why each matters to you personally.",
         "max_words": 70,
         "min_chars": 30
+      },
+      {
+        "name": "contrarian_tools",
+        "instruction": "Recommend a tool or habit most people ignore or dismiss. Briefly describe how you use it, and why it works for you against common wisdom.",
+        "max_words": 65,
+        "min_chars": 25
       }
     ],
     "title_styles": [
-      "Write a title in the form of a bold prediction. Examples: 'In 2029, X will vanish entirely', 'By next year, Y will be everywhere'",
-      "Write a title as a play on words, pun, or double meaning. Examples: 'X marks the spot (but not where you think)', 'Y\u2019s the limit'",
-      "Write a title as a challenge to the reader. Examples: 'Can you spot the lie in this story?', 'Are you brave enough to try X?'",
-      "Write a title that mimics a headline from an alternate universe newspaper. Examples: 'X solved with bubble gum\u2014experts stunned', 'Y declared the new standard by cats'",
-      "Write a title that gives an emotional reaction first, then subject. Examples: 'Terrified by X: Why I never...','Unexpected delight: Discovering Y'"
+      "Write a title as a cryptic question: 'What do trees know that we don't?'",
+      "Write a provocative title introducing a character: 'Let me tell you about the person who eats clocks'",
+      "Write a surreal title that blends opposites: 'The day my fridge became a library'",
+      "Write a poetic title using rhythm or repetition: 'Again and again: why we chase the same mistakes'",
+      "Write a minimalist title with only three words: 'Too Loud Here'"
     ],
     "structure_variants": [
-      "Open with an unusual sound, scent, or tactile sensation as the anchor of your post.",
-      "End with a rhetorical question that leaves the reader unsettled or curious.",
-      "Use a single metaphor that runs through the entire post, comparing the topic to something surprising.",
-      "Interleave two contrasting stories or anecdotes side-by-side, showing differences or similarities.",
-      "Break up the post by inserting a short, action-packed scene from a fictional world relating to your topic.",
-      "Include a list of do's and don'ts, each paired with a real or imagined consequence."
+      "Open with an unexpected metaphor, then unpack it throughout.",
+      "Interleave facts with exaggerated fiction and blur the lines.",
+      "Frame as a series of shifting perspectives\u2014two or more distinct voices.",
+      "Conclude with an unanswered question, leaving ambiguity.",
+      "Break up your post in numbered fragments or mini-scenes instead of paragraphs."
     ],
     "topic_angles": [
-      "How urban design shapes daily emotions and behaviors",
-      "Hidden histories behind everyday objects (forks, door handles, train tickets)",
-      "The science of why memories distort over time",
-      "Unintended consequences of viral challenges and memes",
-      "Micro-decisions that change the direction of an entire community"
+      "Explore underappreciated rituals in everyday life",
+      "Investigate how digital habits shape real emotions",
+      "Expose the invisible architecture behind public spaces",
+      "Unpack the logic of tiny decisions: why do we click, swipe, or ignore?",
+      "Reflect on friendships that only exist online"
     ]
   }
 }
