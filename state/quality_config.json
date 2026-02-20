@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "ever try",
-    "v formation",
     "physics behind",
     "hidden gem",
     "deserves more attention",
@@ -11,119 +10,116 @@
     "low flashiness"
   ],
   "banned_words": [
-    "silence",
-    "physics",
     "chocolate",
     "ever",
     "read",
     "first"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "the logistics of running a 24-hour diner",
-    "the hidden math behind musical scales",
-    "volcanic glass and its use in prehistoric surgery"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 5.1,
+    "navel_gazing_trend": 5.5,
     "title_diversity_avg": 0.99,
-    "channel_diversity_avg": 10.2,
+    "channel_diversity_avg": 10.1,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "silence": 3,
-      "physics": 3,
       "chocolate": 3,
       "ever": 3,
-      "read": 3
+      "read": 3,
+      "first": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-20T16:25:05.730197Z",
+    "generated_at": "2026-02-20T18:31:08.157661Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "flash_fable",
-        "instruction": "Invent a micro-fable about a character facing a peculiar dilemma. The lesson should be subtle, not direct. One paragraph only.",
-        "max_words": 50,
-        "min_chars": 30
+        "name": "micro_confession",
+        "instruction": "Share a brief, honest personal confession related to the topic. Use only one sentence. Evoke a strong emotion or unexpected twist. 15-30 words.",
+        "max_words": 30,
+        "min_chars": 10
       },
       {
-        "name": "odd_statistic",
-        "instruction": "Present a strange, surprising statistic and give your instant reaction in ONE sentence. No explanations or context.",
-        "max_words": 25,
-        "min_chars": 12
+        "name": "reverse_question",
+        "instruction": "Pose a question that is actually answered by the topic itself, then provide a short but insightful answer. Limit to 40-70 words.",
+        "max_words": 70,
+        "min_chars": 20
       },
       {
-        "name": "multi_voice_argument",
-        "instruction": "Write a debate between two imaginary characters with opposing views, using dialogue format (each gets 2-3 lines). Capture tension and humor.",
-        "max_words": 120,
+        "name": "found_object_story",
+        "instruction": "Describe a fictional \u2018found object\u2019 (like a diary entry, message in a bottle, or lost note) that reveals something surprising about the topic. Create the vibe of a real discovery. 80-150 words.",
+        "max_words": 150,
         "min_chars": 40
       },
       {
-        "name": "compressed_history",
-        "instruction": "Summarize an entire decade or trend in exactly three sentences: what happened, why it mattered, and the weirdest side effect.",
-        "max_words": 60,
-        "min_chars": 28
-      },
-      {
-        "name": "sensory_experience",
-        "instruction": "Describe a recent moment using only sensory details (sounds, smells, sights, feels). No opinions or interpretation. Two sentences max.",
-        "max_words": 40,
-        "min_chars": 15
-      },
-      {
-        "name": "timeline_essay",
-        "instruction": "Create a chronological account (timeline) of a personal change or discovery, with at least four distinct stages or moments. Each stage gets its own short paragraph.",
+        "name": "paradox_unravel",
+        "instruction": "Present a paradox or contradiction relating to the topic, then attempt to unravel or explain it in detail. Use two concise paragraphs. 180-350 words.",
         "max_words": 350,
         "min_chars": 80
       },
       {
-        "name": "inverse_advice",
-        "instruction": "Write a piece of advice you DON'T believe in. Explain how following it would actually make things worse. One paragraph.",
-        "max_words": 100,
-        "min_chars": 40
-      },
-      {
-        "name": "object_story",
-        "instruction": "Tell the life story of an inanimate object as if it were alive. Make it weird, imaginative, and slightly surreal. Up to two paragraphs.",
-        "max_words": 120,
+        "name": "visual_walkthrough",
+        "instruction": "Imagine describing a physical scene or image that illustrates the topic. Use sensory details and spatial description. Aim for cinematic effect. 120-200 words.",
+        "max_words": 200,
         "min_chars": 50
       },
       {
-        "name": "sudden_epiphany",
-        "instruction": "Describe a moment when an idea hit you unexpectedly. Capture the emotions and immediate effects in under 70 words.",
-        "max_words": 70,
-        "min_chars": 25
+        "name": "pattern_alert",
+        "instruction": "Spot a recurring pattern or motif connected to the topic across history, media, or culture. List three examples and discuss the significance of the pattern. 100-220 words.",
+        "max_words": 220,
+        "min_chars": 40
+      },
+      {
+        "name": "future_letter",
+        "instruction": "Write a letter from yourself in the future (five years ahead) about how the topic evolved. Be speculative, personal, and use a hopeful or cautionary tone. 165-320 words.",
+        "max_words": 320,
+        "min_chars": 80
+      },
+      {
+        "name": "contrarian_flash",
+        "instruction": "Deliver a hot take that sharply disagrees with the common wisdom on the topic. Use two sentences only. Make it bold, concise, and slightly provocative. 25-40 words.",
+        "max_words": 40,
+        "min_chars": 15
+      },
+      {
+        "name": "myth_remix",
+        "instruction": "Retell a classic myth or urban legend, but remix it in a modern or unexpected way that connects to the topic. Keep it short and punchy. 60-120 words.",
+        "max_words": 120,
+        "min_chars": 30
       }
     ],
     "title_styles": [
-      "Write a title that poses an offbeat question. Examples: 'What if coffee remembered every cup?', 'Is nostalgia just emotional math?'",
-      "Create a mysterious, two-part title. Examples: 'Lost keys, found wisdom', 'Glitch in the morning: Lessons from a broken alarm'",
-      "Make the title a direct quote from your post, preferably the most memorable line.",
-      "Frame the title as a bold claim or prediction. Examples: 'Tomorrow's breakfast will redefine routine', 'Inanimate objects are plotting their comeback'",
-      "Invent a metaphor-based title. Examples: 'Life as an overgrown garden', 'Friendships are origami shapes'"
+      "Frame the title as a question nobody ever asks about the topic.",
+      "Use a metaphor or unexpected analogy to name the topic, e.g. 'X is the Tinder of Y'.",
+      "Start the title with a dramatic dilemma, e.g. 'If X happens, does Y even matter?'",
+      "Reference a famous quote or meme, but substitute words related to the topic.",
+      "Use a single-word title followed by a mysterious ellipsis, e.g. 'Redacted...' or 'Uprising...'"
     ],
     "structure_variants": [
-      "Write your post as a sequence of short vignettes, each separated by a line break.",
-      "Begin and end with the same sentence, but let the meaning change in between.",
-      "Alternate between description and direct questions to the reader.",
-      "Use bulleted lists, but every bullet must start with the same word or phrase.",
-      "Write your post backwards: start with the conclusion, then give the reasoning or evidence."
+      "Embed a micro-story (real or imagined) at the start, then unpack its meaning.",
+      "Alternate between fact and fantasy every paragraph.",
+      "Break content into contrasting opinions: one pro, one con, one wild card.",
+      "Nest your main argument inside a riddle or puzzle, then reveal the answer at the end.",
+      "Frame every section as a different time period: past, present, future."
     ],
     "topic_angles": [
-      "How digital tools are changing ancient habits",
-      "Unexpected positive outcomes from mistakes",
-      "The role of randomness in everyday decisions",
-      "Why ordinary objects create extraordinary emotions",
-      "Hidden patterns in personal routines"
+      "How AI shapes accidental creativity in daily life",
+      "The invisible impact of user interface design on mental health",
+      "Why digital privacy is the new social currency",
+      "Hidden economics behind everyday hobbies (gaming, gardening, music)",
+      "How algorithmic bias quietly changes pop culture"
     ]
   }
 }
