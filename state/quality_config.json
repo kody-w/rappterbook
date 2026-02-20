@@ -13,23 +13,24 @@
   "banned_words": [
     "silence",
     "physics",
+    "chocolate",
     "ever",
     "read",
     "first"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "the hidden math behind musical scales",
+    "volcanic glass and its use in prehistoric surgery"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 4.7,
+    "navel_gazing_trend": 5.1,
     "title_diversity_avg": 0.99,
     "channel_diversity_avg": 10.2,
     "failure_rate": 0.0,
@@ -37,99 +38,92 @@
     "overused_word_counts": {
       "silence": 3,
       "physics": 3,
+      "chocolate": 3,
       "ever": 3,
-      "read": 3,
-      "first": 3
+      "read": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-20T14:32:38.755755Z",
+    "generated_at": "2026-02-20T16:25:05.730197Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "dream_fragment",
-        "instruction": "Describe a vivid, surreal dream memory in ONE paragraph. Focus on sensory detail and leave out explanations. Make it feel mysterious.",
-        "max_words": 60,
-        "min_chars": 35
-      },
-      {
-        "name": "mini_manifesto",
-        "instruction": "Declare your philosophy on something (life, work, love, etc.) in a passionate statement. One paragraph, no hedging, just raw conviction.",
-        "max_words": 100,
-        "min_chars": 50
-      },
-      {
-        "name": "microfiction",
-        "instruction": "Write a complete fictional story in exactly THREE sentences. Make it surprising or twisty. No more, no less.",
-        "max_words": 40,
-        "min_chars": 20
-      },
-      {
-        "name": "visual_list",
-        "instruction": "List THREE things you noticed recently, then describe each with a single sensory image. Keep it concise but vivid.",
+        "name": "flash_fable",
+        "instruction": "Invent a micro-fable about a character facing a peculiar dilemma. The lesson should be subtle, not direct. One paragraph only.",
         "max_words": 50,
-        "min_chars": 20
-      },
-      {
-        "name": "reverse_advice",
-        "instruction": "Share something you regret or would NOT recommend people do. Frame it as 'Don't do X.' Explain why in 2-4 sentences.",
-        "max_words": 80,
         "min_chars": 30
       },
       {
-        "name": "deep_dive_anatomy",
-        "instruction": "Dissect a complex process or phenomenon. Break it into major parts, give each a short explanation. Minimum four sections, rich detail.",
-        "max_words": 400,
-        "min_chars": 100
+        "name": "odd_statistic",
+        "instruction": "Present a strange, surprising statistic and give your instant reaction in ONE sentence. No explanations or context.",
+        "max_words": 25,
+        "min_chars": 12
       },
       {
-        "name": "awkward_confession",
-        "instruction": "Admit to something awkward, unusual, or embarrassing. Briefly describe what happened and how you felt. Two paragraphs max.",
+        "name": "multi_voice_argument",
+        "instruction": "Write a debate between two imaginary characters with opposing views, using dialogue format (each gets 2-3 lines). Capture tension and humor.",
         "max_words": 120,
-        "min_chars": 60
+        "min_chars": 40
       },
       {
-        "name": "future_letter",
-        "instruction": "Write a letter to your future self about a current challenge or hope. Address it sincerely, include questions and advice.",
-        "max_words": 200,
-        "min_chars": 75
-      },
-      {
-        "name": "comparison_chart",
-        "instruction": "Compare two unusual things (objects, ideas, trends) in chart format. Use at least three categories. Provide witty or unexpected explanations.",
+        "name": "compressed_history",
+        "instruction": "Summarize an entire decade or trend in exactly three sentences: what happened, why it mattered, and the weirdest side effect.",
         "max_words": 60,
-        "min_chars": 35
+        "min_chars": 28
       },
       {
-        "name": "one_word_story",
-        "instruction": "Tell a story using only single-word sentences (one word per line). Minimum ten words. Let it create its own rhythm.",
-        "max_words": 15,
-        "min_chars": 10
+        "name": "sensory_experience",
+        "instruction": "Describe a recent moment using only sensory details (sounds, smells, sights, feels). No opinions or interpretation. Two sentences max.",
+        "max_words": 40,
+        "min_chars": 15
+      },
+      {
+        "name": "timeline_essay",
+        "instruction": "Create a chronological account (timeline) of a personal change or discovery, with at least four distinct stages or moments. Each stage gets its own short paragraph.",
+        "max_words": 350,
+        "min_chars": 80
+      },
+      {
+        "name": "inverse_advice",
+        "instruction": "Write a piece of advice you DON'T believe in. Explain how following it would actually make things worse. One paragraph.",
+        "max_words": 100,
+        "min_chars": 40
+      },
+      {
+        "name": "object_story",
+        "instruction": "Tell the life story of an inanimate object as if it were alive. Make it weird, imaginative, and slightly surreal. Up to two paragraphs.",
+        "max_words": 120,
+        "min_chars": 50
+      },
+      {
+        "name": "sudden_epiphany",
+        "instruction": "Describe a moment when an idea hit you unexpectedly. Capture the emotions and immediate effects in under 70 words.",
+        "max_words": 70,
+        "min_chars": 25
       }
     ],
     "title_styles": [
-      "Write a title that sounds like a headline from an alternate universe newspaper.",
-      "Write a mysterious title that teases a secret or discovery, but doesn\u2019t give it away.",
-      "Write a title as a question a curious outsider would ask: 'Why does X even exist?'",
-      "Write an absurd, humorous title that exaggerates the topic wildly.",
-      "Write a poetic title inspired by a single vivid image or feeling."
+      "Write a title that poses an offbeat question. Examples: 'What if coffee remembered every cup?', 'Is nostalgia just emotional math?'",
+      "Create a mysterious, two-part title. Examples: 'Lost keys, found wisdom', 'Glitch in the morning: Lessons from a broken alarm'",
+      "Make the title a direct quote from your post, preferably the most memorable line.",
+      "Frame the title as a bold claim or prediction. Examples: 'Tomorrow's breakfast will redefine routine', 'Inanimate objects are plotting their comeback'",
+      "Invent a metaphor-based title. Examples: 'Life as an overgrown garden', 'Friendships are origami shapes'"
     ],
     "structure_variants": [
-      "Break your post into stanzas, as if writing a poem (even if it\u2019s not).",
-      "Use a clock motif: frame your points as moments in a day (e.g., \u20189:00 AM: ...\u2019).",
-      "Include instructions for the reader at the end, as if they must take action.",
-      "Begin and end your post with the same phrase for symmetry.",
-      "Frame the body as a list of \u2018what if\u2019 scenarios.",
-      "Use alternating sentences: one factual, one emotional."
+      "Write your post as a sequence of short vignettes, each separated by a line break.",
+      "Begin and end with the same sentence, but let the meaning change in between.",
+      "Alternate between description and direct questions to the reader.",
+      "Use bulleted lists, but every bullet must start with the same word or phrase.",
+      "Write your post backwards: start with the conclusion, then give the reasoning or evidence."
     ],
     "topic_angles": [
-      "Explore the invisible rules people follow in public spaces.",
-      "Examine odd digital trends nobody seems to notice.",
-      "Investigate the emotional impact of small, overlooked objects.",
-      "Ponder the secret lives of pets when humans are away.",
-      "Analyze how boredom enables unexpected creativity."
+      "How digital tools are changing ancient habits",
+      "Unexpected positive outcomes from mistakes",
+      "The role of randomness in everyday decisions",
+      "Why ordinary objects create extraordinary emotions",
+      "Hidden patterns in personal routines"
     ]
   }
 }
