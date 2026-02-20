@@ -1,6 +1,6 @@
 {
   "banned_phrases": [
-    "volcanic glass",
+    "ever try",
     "night markets",
     "v formation",
     "physics behind",
@@ -13,121 +13,111 @@
   ],
   "banned_words": [
     "silence",
-    "volcanic",
-    "glass",
-    "physics"
+    "physics",
+    "ever",
+    "read",
+    "first"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "the hidden math behind musical scales",
+    "volcanic glass and its use in prehistoric surgery"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 5.6,
+    "navel_gazing_trend": 5.0,
     "title_diversity_avg": 0.99,
-    "channel_diversity_avg": 10.5,
+    "channel_diversity_avg": 10.3,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "silence": 4,
-      "volcanic": 3,
-      "glass": 3,
-      "physics": 3
+      "silence": 3,
+      "physics": 3,
+      "ever": 3,
+      "read": 3,
+      "first": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-20T10:26:32.206218Z",
+    "generated_at": "2026-02-20T12:31:42.109798Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_memoir",
-        "instruction": "Describe a single vivid memory in one sentence. Use sensory details and surprise. No context, just the moment.",
+        "name": "micro_mystery",
+        "instruction": "Invent a tiny mystery. Describe the setup and leave the question unresolved. Aim for suspense. 1-2 sentences.",
         "max_words": 25,
-        "min_chars": 12
+        "min_chars": 15
       },
       {
-        "name": "future_postcard",
-        "instruction": "Write a postcard from the future, as if you're sending it to the present. Imagine what changes and capture a mood. 2-3 sentences.",
-        "max_words": 60,
-        "min_chars": 25
-      },
-      {
-        "name": "hypothetical_lab",
-        "instruction": "Invent a scenario that could never happen, then reason through how it would play out step by step. Use playful logic. 150-220 words.",
-        "max_words": 220,
-        "min_chars": 65
-      },
-      {
-        "name": "soundtrack_suggestion",
-        "instruction": "Pair a song or music genre with a random everyday experience and explain why. 1 sentence about each, plus a quirky connection.",
-        "max_words": 40,
-        "min_chars": 18
-      },
-      {
-        "name": "comic_strip_script",
-        "instruction": "Write the script for a 3-panel comic on a real-life dilemma. Include dialogue and narration, plus punchline panel. 80-140 words.",
-        "max_words": 140,
+        "name": "reverse_recipe",
+        "instruction": "Describe the final result first, then unravel the steps backwards, as if time rewinds. Make it quirky. 80-120 words.",
+        "max_words": 120,
         "min_chars": 40
       },
       {
-        "name": "reverse_advice",
-        "instruction": "Share a piece of advice you wish someone had given you, but phrase it as 'What NOT to do.' 2-5 sentences, specific and honest.",
+        "name": "contrarian_manifesto",
+        "instruction": "Write a rebellious mini-manifesto against a common belief. Make it punchy, with a call to arms. 40-70 words.",
+        "max_words": 70,
+        "min_chars": 30
+      },
+      {
+        "name": "timed_monologue",
+        "instruction": "Imagine you have 60 seconds to explain an idea to someone. Write your thoughts, no edits, as if you\u2019re racing a clock. 80-110 words.",
         "max_words": 110,
-        "min_chars": 32
+        "min_chars": 40
       },
       {
-        "name": "object_interview",
-        "instruction": "Imagine you interview an inanimate object about its daily life. Write the Q&A in 3 exchanges, making it humorous or insightful.",
-        "max_words": 120,
-        "min_chars": 36
+        "name": "visual_scene",
+        "instruction": "Paint a vivid picture with words: describe a place, moment, or object so clearly that readers feel they\u2019re there. Avoid opinions. 60-90 words.",
+        "max_words": 90,
+        "min_chars": 30
       },
       {
-        "name": "deep_dive_expos\u00e9",
-        "instruction": "Reveal the hidden history or underbelly of something ordinary. Use investigative tone, surprising facts, and dramatic turns. 300-480 words.",
-        "max_words": 480,
+        "name": "parallel_worlds",
+        "instruction": "Imagine an alternate universe where a detail is different. Describe the impact in 2-4 paragraphs. Explore the butterfly effect. 300-500 words.",
+        "max_words": 500,
         "min_chars": 100
       },
       {
-        "name": "flash_theory",
-        "instruction": "Pitch your wildest theory about something mundane, as if it's a serious discovery. 60-95 words, logical or absurd, but convincing.",
-        "max_words": 95,
-        "min_chars": 28
+        "name": "postcard_wisdom",
+        "instruction": "Write advice as if you\u2019re sending a postcard to a stranger. Be brief, heartfelt, and concrete. 15-40 words.",
+        "max_words": 40,
+        "min_chars": 15
       },
       {
-        "name": "found_letter",
-        "instruction": "Write a letter you wish you\u2019d find in a library book \u2014 mysterious, motivational, or funny. 1 paragraph, tone is up to you.",
-        "max_words": 80,
-        "min_chars": 20
+        "name": "jigsaw_memory",
+        "instruction": "Recall a memory by describing fragments and how they fit together. Weave in sensory details. 150-230 words.",
+        "max_words": 230,
+        "min_chars": 60
       }
     ],
     "title_styles": [
-      "Write a title as a mysterious teaser: 'Something changed after I did X\u2026'",
-      "Write a title as an instruction: 'If you ever try X, read this first'",
-      "Write a title as an overheard quote: 'Apparently, X is what happens when Y'",
-      "Write a poetic, metaphorical title: 'The Day My Thoughts Became Paper Boats'",
-      "Write a title that hints at a secret: 'Hidden Misconceptions About X Revealed'"
+      "Make the title a riddle or mystery that invites curiosity, e.g.: 'What happened in the silent hallway?'",
+      "Write a title as if it's a headline from tomorrow\u2019s news, e.g.: 'Scientists accidentally invent teleportation'",
+      "Frame the title as a dare or challenge, e.g.: 'Prove me wrong about X'",
+      "Use an evocative, sensory phrase, e.g.: 'The sound of rain on forgotten places'",
+      "Title as an overheard quote, e.g.: 'There\u2019s no such thing as a boring Tuesday'"
     ],
     "structure_variants": [
-      "Structure as a three-part interview: question, response, twist.",
-      "Write as an annotated recipe \u2014 but for experiences, not food.",
-      "Frame as a series of diary entries over a week.",
-      "Write as if you\u2019re an impatient narrator, jumping between thoughts with abrupt transitions.",
-      "Use a timeline format to walk through events chronologically, minute-by-minute or year-by-year."
+      "Start with an unexpected fact or statistic, and build your post from there.",
+      "Write your post as a series of connected vignettes or snapshots.",
+      "Integrate lists or bullet points within the narrative for pacing.",
+      "Split your piece into contrasting halves: see both the good and the bad.",
+      "Frame your post as an open letter to someone real or imaginary."
     ],
     "topic_angles": [
-      "Explore an everyday technology from the perspective of a beginner and expert.",
-      "Reveal the bizarre rituals people invent for productivity.",
-      "Dissect the strangest advice you\u2019ve ever gotten (use stories or theory).",
-      "Trace the evolution of self-care from ancient times to today.",
-      "Investigate how color influences unexpected moments in daily life."
+      "Hidden rituals people practice every day",
+      "Odd jobs nobody talks about",
+      "Object lessons from forgotten technologies",
+      "Personal traditions in impossible places",
+      "What animals can teach us about unexpected resilience"
     ]
   }
 }
