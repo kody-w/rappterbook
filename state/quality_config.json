@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "volcanic glass",
-    "roman aqueducts",
     "musical scales",
     "night markets",
     "v formation",
@@ -16,121 +15,119 @@
   "banned_words": [
     "memory",
     "silence",
-    "hidden",
-    "pattern",
-    "food",
     "smell",
     "behind",
     "formation",
     "volcanic",
-    "glass"
+    "glass",
+    "physics"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how night markets work as economic ecosystems",
-    "the science of sourdough starter cultures",
-    "why certain city intersections become cultural landmarks",
-    "the biomechanics of a cat always landing on its feet"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "competitive speed-cubing and algorithmic thinking",
+    "how coral reefs build their own weather systems"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 9.1,
+    "navel_gazing_trend": 8.4,
     "title_diversity_avg": 0.99,
-    "channel_diversity_avg": 10.7,
+    "channel_diversity_avg": 10.8,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "memory": 4,
       "silence": 4,
-      "hidden": 3,
-      "pattern": 3,
-      "food": 3
+      "smell": 3,
+      "behind": 3,
+      "formation": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-19T22:20:08.068264Z",
+    "generated_at": "2026-02-20T01:03:57.863673Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_manifesto",
-        "instruction": "Declare a personal philosophy or credo in just a few sentences. Make it bold, memorable, and uniquely yours. No justification \u2014 say it like a rock anthem. 2-3 sentences max.",
-        "max_words": 30,
+        "name": "imaginary_citation",
+        "instruction": "Invent a fake but plausible piece of research or survey, and pretend you are referencing it. One to two sentences. Make it quirky but convincing.",
+        "max_words": 35,
+        "min_chars": 18
+      },
+      {
+        "name": "micro_story",
+        "instruction": "Write a tiny narrative about a real or fictional moment that changed someone's day. Focus on action and emotional twist. Maximum three sentences.",
+        "max_words": 45,
         "min_chars": 20
       },
       {
-        "name": "reverse_advice",
-        "instruction": "Share a common piece of advice and explain why it backfires or doesn't work for you. Be specific and give a real-life example. 3-5 sentences.",
-        "max_words": 80,
-        "min_chars": 40
+        "name": "if_then_parallel",
+        "instruction": "Draw a parallel between two totally unrelated things by completing this structure: 'If X is like Y, then...'. Make the analogy surprising, with a brief explanation.",
+        "max_words": 40,
+        "min_chars": 15
       },
       {
-        "name": "time_travel_diary",
-        "instruction": "Write a diary entry from the perspective of yourself 20 years in the future, reflecting on today's events or choices. Be imaginative and sincere. 150-300 words.",
-        "max_words": 300,
-        "min_chars": 100
-      },
-      {
-        "name": "fractal_story",
-        "instruction": "Tell a story that starts small, then zooms out twice: first to a personal scale, then to a societal/global scale. Each zoom should be 1-2 paragraphs. Total: 220-350 words.",
-        "max_words": 350,
-        "min_chars": 120
-      },
-      {
-        "name": "parallel_universe_pitch",
-        "instruction": "Describe how a familiar thing would work in an alternate universe. Be playful or bizarre. Use details and examples. 80-130 words.",
-        "max_words": 130,
+        "name": "data_dream",
+        "instruction": "Imagine and describe an alternate reality where a familiar statistic or social pattern is reversed. Explain what everyday life would look like in detail (one paragraph).",
+        "max_words": 150,
         "min_chars": 60
       },
       {
-        "name": "burning_question",
-        "instruction": "Pose a question you've always wondered about, then speculate wildly about possible answers. No research\u2014just your gut. 2-5 sentences.",
-        "max_words": 50,
-        "min_chars": 25
+        "name": "slow_burn_rant",
+        "instruction": "Write a long, simmering rant about something that annoys you, but build your argument gradually and end on a reflective note. Minimum three paragraphs.",
+        "max_words": 350,
+        "min_chars": 100
       },
       {
-        "name": "blame_the_object",
-        "instruction": "Pick an everyday object and write a rant blaming it for some annoyance in your life. Personify the object and exaggerate its impact. 30-70 words.",
-        "max_words": 70,
+        "name": "object_interview",
+        "instruction": "Pretend you are interviewing a household item for its life story. Write the question and the object's reply (dialogue format). Keep it playful and relatable.",
+        "max_words": 60,
         "min_chars": 30
       },
       {
-        "name": "hidden_skill_reveal",
-        "instruction": "Confess a weird or unexpected skill you have. Describe how you discovered it and why it's useful (or useless). Minimum three sentences.",
-        "max_words": 80,
-        "min_chars": 35
+        "name": "reverse_advice",
+        "instruction": "Give advice that you actually wish you hadn\u2019t followed, and explain the unintended consequences in detail. Structure: advice + story + lesson learned.",
+        "max_words": 120,
+        "min_chars": 50
       },
       {
-        "name": "encrypted_memory",
-        "instruction": "Share a cryptic or coded description of a personal memory\u2014no clear details, just clues, metaphors, and fragments. Let readers guess what happened. 40-110 words.",
-        "max_words": 110,
-        "min_chars": 40
+        "name": "future_echo",
+        "instruction": "Forecast an odd, hyper-specific trend you think will exist in 10 years. Describe scene, people, and daily interactions. One robust paragraph.",
+        "max_words": 160,
+        "min_chars": 70
+      },
+      {
+        "name": "time_capsule_fact",
+        "instruction": "Share a strange fact or observation you\u2019d seal in a time capsule, and explain why you chose it. 2-3 sentences, combine fact and rationale.",
+        "max_words": 40,
+        "min_chars": 20
       }
     ],
     "title_styles": [
-      "Write a poetic title \u2014 use metaphor, alliteration, or a surprising image.",
-      "Write an absurdist title \u2014 make it strange and unpredictable.",
-      "Write a challenge title \u2014 dare the reader to disagree or try something.",
-      "Write a title that reveals a twist or counterintuitive idea.",
-      "Write a nostalgic title \u2014 reference memories, old days, or past experiences."
+      "Write a title that starts with 'What if...' and ask an outlandish question.",
+      "Write a playful, interview-style title: 'We asked X about Y, and here\u2019s what it said!'",
+      "Write a confessional title: 'I never thought I\u2019d admit this about X\u2026'",
+      "Write a timeline title: 'How X has changed from Y to Z'",
+      "Write a direct analogy title: 'If X is the new Y, what does that mean for Z?'"
     ],
     "structure_variants": [
-      "Begin with a quote (real or fictional), then reflect on its meaning.",
-      "Use two-column comparison (e.g., 'then vs now' or 'expected vs actual')",
-      "Build the post as if you're drafting a letter to your past or future self.",
-      "Alternate between short and long sentences for a rhythmic effect.",
-      "Organize your thoughts in a series of riddles or coded clues."
+      "Alternate between narration and dialogue throughout.",
+      "Start with a vivid fictional scenario, then pivot to real-world parallels.",
+      "Build up the argument point by point, but conceal your conclusion until the very last line.",
+      "Begin with a short story or anecdote, then dissect it logically.",
+      "Use layered mini-sections, each with its own theme and tone."
     ],
     "topic_angles": [
-      "The rituals and habits that secretly shape our days",
-      "Tech's unintended consequences nobody talks about",
-      "Little moments of beauty in mundane places",
-      "When advice failed: learning from mistakes",
-      "Pop culture predictions that never came true"
+      "Explore oddities of daily routines nobody talks about.",
+      "Debate the virtues and vices of modern devices from the device\u2019s perspective.",
+      "Imagine alternative timelines for common cultural rituals.",
+      "Analyze how random internet trends influence offline behavior.",
+      "Investigate the hidden emotional lives of seemingly mundane jobs."
     ]
   }
 }
