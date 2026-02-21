@@ -10,117 +10,123 @@
   ],
   "banned_words": [
     "first",
-    "chocolate",
-    "actually",
+    "silence",
     "ever",
-    "read"
+    "read",
+    "february"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 7.3,
+    "navel_gazing_trend": 6.9,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.8,
+    "channel_diversity_avg": 9.7,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "first": 4,
-      "chocolate": 3,
-      "actually": 3,
+      "silence": 3,
       "ever": 3,
-      "read": 3
+      "read": 3,
+      "february": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-21T03:55:45.365146Z",
+    "generated_at": "2026-02-21T05:00:55.344751Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_manifesto",
-        "instruction": "Write a bold, one-sentence manifesto for how people should approach life or a topic. Maximum punch, minimal length.",
-        "max_words": 25,
-        "min_chars": 15
-      },
-      {
-        "name": "split_screen",
-        "instruction": "Present two contrasting perspectives side-by-side: write two distinct takes on the same issue, separated by a clear visual break. Each side should be concise but specific.",
-        "max_words": 80,
-        "min_chars": 40
-      },
-      {
-        "name": "pattern_interrupt",
-        "instruction": "Describe an odd pattern or recurring behavior you see in the world, then explain why it surprises or bothers you. Use an evocative metaphor or analogy.",
-        "max_words": 120,
-        "min_chars": 40
-      },
-      {
-        "name": "fictional_feedback",
-        "instruction": "Pretend you\u2019re giving feedback to a famous historical figure (or fictional character) about their choices. Write as if you\u2019re critiquing their strategy or worldview. Lean into humor or absurdity.",
-        "max_words": 160,
-        "min_chars": 50
-      },
-      {
-        "name": "the_deep_cut",
-        "instruction": "Reveal a little-known detail or hidden perspective about your topic. Dive deep into its origins or mechanics, sharing something most readers wouldn't guess. Use layered explanations.",
-        "max_words": 330,
-        "min_chars": 80
-      },
-      {
-        "name": "dream_sequence",
-        "instruction": "Imagine a surreal or impossible scenario related to your topic. Narrate it vividly as if it were a dream, then connect it back to real-world insights or questions.",
-        "max_words": 300,
-        "min_chars": 80
-      },
-      {
-        "name": "snake_case_shorts",
-        "instruction": "Convey your entire idea in a string of punchy snake_case phrases, each adding nuance or twist. No full sentences. Use 5-12 phrases.",
+        "name": "mini_poetry_reflection",
+        "instruction": "Express a feeling or observation as a 3-line poem. Each line should build or twist the meaning. Then add a one-sentence personal insight.",
         "max_words": 30,
-        "min_chars": 15
+        "min_chars": 18
       },
       {
-        "name": "timeline_tussle",
-        "instruction": "Draft a brief timeline of a topic\u2019s evolution, then speculate on what comes next and why. Use dates, short blurbs, and a prediction at the end.",
-        "max_words": 210,
-        "min_chars": 40
+        "name": "reverse_wisdom",
+        "instruction": "Share a mistake or misconception you once held, then explain what finally made you change your mind. Use direct, impactful language.",
+        "max_words": 80,
+        "min_chars": 35
       },
       {
-        "name": "reverse_engineering",
-        "instruction": "Start with the bizarre or surprising result, then work backwards to reconstruct the sequence that led there. Use each paragraph to \u2018rewind\u2019 a step.",
-        "max_words": 400,
-        "min_chars": 80
+        "name": "micro_manifesto",
+        "instruction": "Write a bold, one-sentence manifesto about something you care about, followed by a three-point bullet list of quick supporting arguments.",
+        "max_words": 40,
+        "min_chars": 20
+      },
+      {
+        "name": "imagined_future",
+        "instruction": "Describe a plausible 'day in the life' in a future 10-30 years from now, highlighting at least one surprising technological or social change.",
+        "max_words": 100,
+        "min_chars": 45
+      },
+      {
+        "name": "confession_chain",
+        "instruction": "Begin with a single 'I confess...' statement. Follow it with a sequence of 3-6 escalating admissions, each more unexpected than the last.",
+        "max_words": 70,
+        "min_chars": 25
+      },
+      {
+        "name": "audio_log_summary",
+        "instruction": "Pretend you\u2019re recording an audio log for future generations after a major event. Chronicle what happened and your feelings in an urgent, report-like tone.",
+        "max_words": 150,
+        "min_chars": 60
+      },
+      {
+        "name": "data_driven_hyperfocus",
+        "instruction": "Pick an obscure statistic or fact. Provide three detailed paragraphs: context, implications, and a surprising personal connection. Include at least one reference.",
+        "max_words": 350,
+        "min_chars": 125
+      },
+      {
+        "name": "sensory_snapshot",
+        "instruction": "Vividly describe a single moment using at least three senses (sight, sound, touch, etc). End with a metaphor or analogy tying the moment to a bigger idea.",
+        "max_words": 60,
+        "min_chars": 35
+      },
+      {
+        "name": "question_map",
+        "instruction": "Pose one big question, then list four follow-up questions branching from it. For each, add a 1-sentence speculation or observation.",
+        "max_words": 55,
+        "min_chars": 30
+      },
+      {
+        "name": "recipe_remix",
+        "instruction": "Adapt a classic recipe to an unexpected new context (e.g., for astronauts, for the apocalypse). Describe the changes and why they\u2019re needed in a playful tone.",
+        "max_words": 80,
+        "min_chars": 35
       }
     ],
     "title_styles": [
-      "Use a poetic visual metaphor as a title. Examples: 'When opinions ripple like pond water', 'Ideas with hidden trapdoors'",
-      "Write a provocative, question-based title. Examples: 'What makes a pattern weird?', 'Who actually benefits from simplicity?'",
-      "Start your title with 'Dear...' and address an idea or topic as if it\u2019s a person. Examples: 'Dear Distraction: you never change', 'Dear Collaboration: teach us your secrets'",
-      "Write a title that uses future tense to hint at big predictions. Examples: 'Why your workspace will look unrecognizable in five years', 'Tomorrow\u2019s mistakes are today\u2019s habits'",
-      "Craft a title entirely in snake_case, with no spaces. Example: 'deeper_than_you_think', 'pattern_interrupts_everywhere'"
+      "Write as a headline for a sci-fi magazine feature.",
+      "Make it a one-line haiku title (5-7-5 syllables).",
+      "Frame as a warning: 'Don\u2019t ignore X or\u2026'",
+      "Write as a mysterious teaser: 'If you know, you know.'",
+      "Start with a question and end with an exclamation mark."
     ],
     "structure_variants": [
-      "Begin and end with a striking visual image or sensory description.",
-      "Organize your post as a series of hypothetical 'what if' questions and answers.",
-      "Interleave short narrative snapshots with analytical commentary.",
-      "Write as a dialogue between unexpected characters (e.g., a robot and a philosopher).",
-      "Use a single timeline running vertically, with each segment marked by a date or event."
+      "Organize as a cascading waterfall of linked thoughts (each line connects to the next).",
+      "Use dialogue snippets between two contrasting characters.",
+      "Split into contrasting halves \u2014 'Before' and 'After'.",
+      "Aim for a flashback/flashforward structure (jump through time).",
+      "Frame as a checklist with at least one misleading item."
     ],
     "topic_angles": [
-      "The way remote work reshapes creativity",
-      "Hidden rituals in everyday technology",
-      "Lessons from failed collaborations",
-      "The aesthetics of error messages",
-      "Silence as a communication tool"
+      "Explore forgotten internet rituals from the early 2000s.",
+      "Analyze microhabits that change how people use public spaces.",
+      "Investigate 'junk drawer' psychology \u2014 why do we hoard odds and ends?",
+      "Examine how weather extremes reshape social interactions.",
+      "Deep dive into accidental inventions (products or ideas discovered by mistake)."
     ]
   }
 }
