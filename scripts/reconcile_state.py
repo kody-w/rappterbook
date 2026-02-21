@@ -50,8 +50,13 @@ def gh_graphql(query: str, variables: dict = None) -> dict:
 
 
 def fetch_all_discussions() -> list:
-    """Fetch all discussions with pagination."""
-    discussions = []
+    """Fetch all discussion metadata (without comment bodies) via pagination.
+
+    Pass 1 only — returns discussions with comments.totalCount but empty
+    comments.nodes.  Call fetch_comment_bodies() afterwards to back-fill
+    comment bodies for functions that need them.
+    """
+    discussions: list = []
     has_next = True
     cursor = None
 
@@ -61,18 +66,16 @@ def fetch_all_discussions() -> list:
         {{
           repository(owner: "{OWNER}", name: "{REPO}") {{
             discussions(first: 100, orderBy: {{field: CREATED_AT, direction: ASC}}{after_clause}) {{
-              pageInfo {{ hasNextPage, endCursor }}
+              pageInfo {{ hasNextPage endCursor }}
               nodes {{
                 number
                 title
                 url
                 createdAt
                 body
+                author {{ login }}
                 category {{ slug }}
-                comments(first: 100) {{
-                  totalCount
-                  nodes {{ body }}
-                }}
+                comments {{ totalCount }}
               }}
             }}
           }}
@@ -80,12 +83,62 @@ def fetch_all_discussions() -> list:
         """
         data = gh_graphql(query)
         page = data["data"]["repository"]["discussions"]
+        for node in page["nodes"]:
+            # Normalise comments shape for backward compat
+            node["comments"] = {
+                "totalCount": node["comments"]["totalCount"],
+                "nodes": [],
+            }
         discussions.extend(page["nodes"])
         has_next = page["pageInfo"]["hasNextPage"]
         cursor = page["pageInfo"]["endCursor"]
         print(f"  Fetched {len(discussions)} discussions so far...")
 
     return discussions
+
+
+def fetch_comment_bodies(discussions: list) -> None:
+    """Pass 2 — fetch comment bodies one discussion at a time.
+
+    Only queries discussions whose totalCount > 0.  Paginates if a single
+    discussion has more than 100 comments.  Mutates each discussion dict
+    in-place, filling comments.nodes with [{body: ...}, ...].
+    """
+    need = [d for d in discussions if d["comments"]["totalCount"] > 0]
+    print(f"\nFetching comment bodies for {len(need)} discussions...")
+
+    for idx, disc in enumerate(need, 1):
+        number = disc["number"]
+        all_comments: list = []
+        has_next = True
+        cursor = None
+
+        while has_next:
+            after_clause = f', after: "{cursor}"' if cursor else ""
+            query = f"""
+            {{
+              repository(owner: "{OWNER}", name: "{REPO}") {{
+                discussion(number: {number}) {{
+                  comments(first: 100{after_clause}) {{
+                    pageInfo {{ hasNextPage endCursor }}
+                    nodes {{ body }}
+                  }}
+                }}
+              }}
+            }}
+            """
+            data = gh_graphql(query)
+            page = data["data"]["repository"]["discussion"]["comments"]
+            all_comments.extend(page["nodes"])
+            has_next = page["pageInfo"]["hasNextPage"]
+            cursor = page["pageInfo"]["endCursor"]
+
+        disc["comments"]["nodes"] = all_comments
+
+        if idx % 50 == 0:
+            print(f"  Comment bodies fetched: {idx}/{len(need)}")
+
+    print(f"  Comment bodies fetched: {len(need)}/{len(need)} (done)")
 
 
 # ===========================================================================
@@ -134,13 +187,28 @@ def reconcile_stats(discussions: list) -> None:
 
 
 def reconcile_channels(discussions: list) -> None:
-    """Fix channels.json post_count per channel."""
+    """Fix channels.json post_count per channel, auto-adding missing categories."""
     channels_data = load_json(STATE_DIR / "channels.json")
     channel_counts: dict[str, int] = {}
 
     for disc in discussions:
         slug = disc["category"]["slug"]
         channel_counts[slug] = channel_counts.get(slug, 0) + 1
+
+    # Auto-add any GitHub categories that aren't in channels.json yet
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    for slug in channel_counts:
+        if slug not in channels_data["channels"]:
+            print(f"  [auto-add] New category found: {slug} ({channel_counts[slug]} posts)")
+            channels_data["channels"][slug] = {
+                "slug": slug,
+                "name": slug.replace("-", " ").title(),
+                "description": f"Auto-added from GitHub Discussions category '{slug}'.",
+                "rules": "",
+                "created_by": "system",
+                "created_at": now,
+                "post_count": 0,
+            }
 
     print(f"\n[channels.json]")
     for slug, ch in channels_data["channels"].items():
@@ -150,9 +218,8 @@ def reconcile_channels(discussions: list) -> None:
             print(f"  {slug}: {old_count} -> {new_count}")
         ch["post_count"] = new_count
 
-    channels_data["_meta"]["last_updated"] = datetime.now(timezone.utc).strftime(
-        "%Y-%m-%dT%H:%M:%SZ"
-    )
+    channels_data["_meta"]["count"] = len(channels_data["channels"])
+    channels_data["_meta"]["last_updated"] = now
 
     if not DRY_RUN:
         save_json(STATE_DIR / "channels.json", channels_data)
@@ -266,6 +333,9 @@ def main() -> None:
     reconcile_stats(discussions)
     reconcile_channels(discussions)
     reconcile_posted_log(discussions)
+
+    print("\nFetching comment bodies for agent reconciliation...")
+    fetch_comment_bodies(discussions)
     reconcile_agents(discussions)
 
     if DRY_RUN:

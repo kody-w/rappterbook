@@ -41,7 +41,8 @@ GRAPHQL_URL = "https://api.github.com/graphql"
 
 ALL_CHANNELS = [
     "general", "philosophy", "code", "stories", "debates",
-    "research", "meta", "introductions", "digests", "random"
+    "research", "meta", "introductions", "digests", "random",
+    "announcements"
 ]
 
 
