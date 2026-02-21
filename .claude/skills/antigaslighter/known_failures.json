@@ -3,7 +3,7 @@
     "description": "Antigaslighter long-term memory. Tracks recurring failure patterns across sessions so the same issues get caught faster and escalated harder.",
     "version": 1,
     "created": "2026-02-16T18:57:00Z",
-    "last_updated": "2026-02-16T19:15:00Z"
+    "last_updated": "2026-02-21T21:00:00Z"
   },
   "failures": [
     {
@@ -14,7 +14,7 @@
       "occurrences": 3,
       "severity": "critical",
       "status": "mitigated",
-      "mitigation": "LLMRateLimitError now propagates from github_llm circuit breaker through content_engine to zion_autonomy. Rate-limited agents are counted and reported separately. Workflow output now accurately reflects what happened.",
+      "mitigation": "LLMRateLimitError now propagates from github_llm circuit breaker through content_engine to zion_autonomy. Rate-limited agents are counted and reported separately. Workflow output now accurately reflects what happened. As of 2026-02-21: zero 429 retries and zero attempt-4 failures in latest autonomy run. Clean.",
       "recurrence_check": "grep -c 'Retrying after HTTP 429' in workflow logs; grep -c 'attempt 4' for permanent failures"
     },
     {
@@ -25,7 +25,7 @@
       "occurrences": 1,
       "severity": "critical",
       "status": "mitigated",
-      "mitigation": "All state-writing workflows now share 'state-writer' concurrency group. safe_commit.sh handles push conflicts with reset+recommit. JSON state files are clean. But 4 memory .md files still have markers from before the fix.",
+      "mitigation": "All state-writing workflows now share 'state-writer' concurrency group. safe_commit.sh handles push conflicts with reset+recommit. JSON state files are clean. All state/*.json files validate. 2026-02-21: no conflict markers found anywhere in state/.",
       "recurrence_check": "grep -rl '<<<<<<< HEAD' state/; for f in state/*.json; do python3 -m json.tool \"$f\" > /dev/null 2>&1 || echo CORRUPT: $f; done"
     },
     {
@@ -36,7 +36,7 @@
       "occurrences": 1,
       "severity": "low",
       "status": "resolved",
-      "mitigation": "enrich_posted_log() in compute_trending.py backfills missing discussions. Gap is now ZERO: 1675 posted_log entries = 1675 GitHub Discussions. Fully caught up.",
+      "mitigation": "enrich_posted_log() in compute_trending.py backfills missing discussions. As of 2026-02-21: 1850 posted_log entries = 1850 GitHub Discussions. Zero gap. Zero duplicates. All entries have valid 'number' field. Fully caught up.",
       "recurrence_check": "Compare posted_log entry count vs gh api discussions totalCount. Gap should be stable or shrinking."
     },
     {
@@ -47,7 +47,7 @@
       "occurrences": 1,
       "severity": "low",
       "status": "mitigated",
-      "mitigation": "channels.json and trending.json now have recent timestamps (2026-02-16T18:55). stats.json still has NO _meta.last_updated field at all — it uses a flat structure without metadata wrapper. Not a staleness bug, just a schema inconsistency.",
+      "mitigation": "channels.json and trending.json now have fresh timestamps. As of 2026-02-21: channels.json=2026-02-21T20:13:00Z, trending.json=2026-02-21T20:39:44Z. Both current. stats.json still has no _meta.last_updated (schema inconsistency, not a bug).",
       "recurrence_check": "Check _meta.last_updated in stats.json, channels.json, trending.json. If older than 2x the cron interval, the workflow is a zombie."
     },
     {
@@ -58,7 +58,7 @@
       "occurrences": 0,
       "severity": "low",
       "status": "watching",
-      "mitigation": "Check trait diversity, not just trait existence. Currently healthy: 100/100 agents have traits with 100 unique profiles.",
+      "mitigation": "Check trait diversity, not just trait existence. As of 2026-02-21: 102/102 agents have traits with 102 unique profiles. Healthy. Workflow running multiple times per day.",
       "recurrence_check": "Count unique trait profiles in agents.json. If fewer than 10, evolution is broken."
     },
     {
@@ -80,7 +80,7 @@
       "occurrences": 1,
       "severity": "medium",
       "status": "active",
-      "mitigation": "",
+      "mitigation": "2026-02-21: Recurrence check found ZERO conflict markers in state/memory/. The markers may have been cleaned up by soul file rewrites. Leaving as active until 3 consecutive clean runs confirm resolution. Clean run 1 of 3.",
       "recurrence_check": "grep -rl '<<<<<<< HEAD\\|>>>>>>>\\|^=======$' /Users/kodyw/Projects/rappterbook/state/memory/"
     },
     {
@@ -91,8 +91,8 @@
       "occurrences": 1,
       "severity": "medium",
       "status": "active",
-      "mitigation": "",
-      "recurrence_check": "python3 -c \"import json; mem=json.load(open('/Users/kodyw/Projects/rappterbook/state/ghost_memory.json')); print(len(mem.get('patterns',[])))\""
+      "mitigation": "2026-02-21: ghost_memory.json now has patterns (dict with detected_at, persistent_mood=quiet, persistent_hot=[meta,general], persistent_cold=[stories]) and 24 snapshots. Pattern detection IS working. Leaving active until next check confirms continued function. Patterns are a single dict, not a list — structure change from expected format.",
+      "recurrence_check": "python3 -c \"import json; mem=json.load(open('/Users/kodyw/Projects/rappterbook/state/ghost_memory.json')); p=mem.get('patterns',{}); print(f'type={type(p).__name__} keys={list(p.keys()) if isinstance(p,dict) else len(p)}')\""
     },
     {
       "id": "social-graph-predictions-never-scheduled",
@@ -101,20 +101,64 @@
       "last_seen": "2026-02-16",
       "occurrences": 1,
       "severity": "medium",
-      "status": "active",
-      "mitigation": "",
+      "status": "resolved",
+      "mitigation": "2026-02-21: Both workflows are now running daily on schedule. compute-social-graph: 2026-02-21, 2026-02-20, 2026-02-19 all succeeded. score-predictions: same dates all succeeded. social_graph.json has 101 nodes and 3874 edges, generated 2026-02-21T07:19. predictions.json has 47 predictions (all open), generated 2026-02-21T07:31. RESOLVED.",
       "recurrence_check": "gh run list --repo kody-w/rappterbook --workflow compute-social-graph.yml --limit 1 --json createdAt; gh run list --repo kody-w/rappterbook --workflow score-predictions.yml --limit 1 --json createdAt"
     },
     {
       "id": "stats-channel-post-count-discrepancy",
-      "summary": "stats.json total_posts (1675) does not match sum of channels.json post_counts (1667). Discrepancy of 8 posts. Some posts may be in categories not mapped to channels, or channel counts lag behind.",
+      "summary": "stats.json total_posts does not match sum of channels.json post_counts. Gap was 8 on 2026-02-16, now 11 on 2026-02-21. The gap is growing, not shrinking.",
       "first_seen": "2026-02-16",
-      "last_seen": "2026-02-16",
+      "last_seen": "2026-02-21",
+      "occurrences": 2,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "open_claw.py and open_rappter.py now call update_channel_post_count() on every post. reconcile_channel_counts() in compute_trending.py fixes existing drift. state_io.record_post() centralizes all 4 state updates. BUT: the drift grew from 8 to 11, meaning posts are still being created without updating channel counts. Root cause: 'announcements' category has 17 posts on GitHub but is NOT tracked in channels.json at all. The entire drift (1850 GitHub - 1833 channel sum = 17) is explained by the missing 'announcements' channel. stats.json also lags (1844 vs 1850 actual).",
+      "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodyw/Projects/rappterbook/state/stats.json')); c=json.load(open('/Users/kodyw/Projects/rappterbook/state/channels.json')); total=sum(v.get('post_count',0) for v in c.get('channels',{}).values()); print(f'drift={s[\\\"total_posts\\\"]-total}')\""
+    },
+    {
+      "id": "reconcile-script-crash",
+      "summary": "reconcile_state.py crashes mid-pagination with CalledProcessError. It fetches discussion comments inline (first:100 per discussion, 100 discussions per page) which likely exceeds GraphQL node complexity limits after ~200 discussions. The reconcile tool is broken and cannot complete a full pass.",
+      "first_seen": "2026-02-21",
+      "last_seen": "2026-02-21",
+      "occurrences": 1,
+      "severity": "high",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "python3 /Users/kodyw/Projects/rappterbook/scripts/reconcile_state.py --dry-run 2>&1 | tail -5 | grep -c Traceback"
+    },
+    {
+      "id": "stats-json-behind-github",
+      "summary": "stats.json total_posts (1844) is 6 behind actual GitHub Discussions count (1850). The posted_log has 1850 entries (correct), but stats.json is not being incremented for some posts. Also total_comments (3750) is 13 behind actual (3763 per reconcile dry-run partial data).",
+      "first_seen": "2026-02-21",
+      "last_seen": "2026-02-21",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodyw/Projects/rappterbook/state/stats.json')); print(f'total_posts={s[\\\"total_posts\\\"]}')\"; gh api graphql -f query='{ repository(owner: \\\"kody-w\\\", name: \\\"rappterbook\\\") { discussions { totalCount } } }' --jq '.data.repository.discussions.totalCount'"
+    },
+    {
+      "id": "changes-json-missing-post-events",
+      "summary": "changes.json has 1175 entries but ZERO post or comment events. All 1175 are heartbeats (1112), seed_discussions (19), pokes (34), and agent lifecycle events. The autonomy and content gen workflows do NOT write post/comment events to changes.json. This means the change log is useless for tracking actual content activity — it only tracks infrastructure events.",
+      "first_seen": "2026-02-21",
+      "last_seen": "2026-02-21",
       "occurrences": 1,
       "severity": "low",
-      "status": "mitigated",
-      "mitigation": "open_claw.py and open_rappter.py now call update_channel_post_count() on every post. reconcile_channel_counts() in compute_trending.py fixes existing drift. state_io.record_post() centralizes all 4 state updates.",
-      "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodyw/Projects/rappterbook/state/stats.json')); c=json.load(open('/Users/kodyw/Projects/rappterbook/state/channels.json')); total=sum(v.get('post_count',0) for v in c.get('channels',{}).values()); print(f'drift={s[\\\"total_posts\\\"]-total}')\""
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "python3 -c \"import json; c=json.load(open('/Users/kodyw/Projects/rappterbook/state/changes.json')); types=set(e.get('type') for e in c.get('changes',[])); print(f'types={types}')\""
+    },
+    {
+      "id": "announcements-channel-untracked",
+      "summary": "GitHub Discussions has an 'Announcements' category with 17 posts, but channels.json does not include 'announcements' as a channel. These 17 posts are invisible to the platform's channel tracking. This fully explains the channel-sum-vs-total drift.",
+      "first_seen": "2026-02-21",
+      "last_seen": "2026-02-21",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "python3 -c \"import json; c=json.load(open('/Users/kodyw/Projects/rappterbook/state/channels.json')); print('announcements' in c.get('channels',{}))\""
     }
   ]
 }

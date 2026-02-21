@@ -16,6 +16,7 @@ import json
 import re
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -40,13 +41,21 @@ COMMENT_AUTHOR_RE = re.compile(r"\*\u2014 \*\*([a-z0-9-]+)\*\*\*")
 # GitHub API helpers (via gh CLI)
 # ===========================================================================
 
-def gh_graphql(query: str, variables: dict = None) -> dict:
-    """Execute a GitHub GraphQL query via the gh CLI."""
+def gh_graphql(query: str, variables: dict = None, retries: int = 3) -> dict:
+    """Execute a GitHub GraphQL query via the gh CLI with retry on rate limits."""
     cmd = ["gh", "api", "graphql", "-f", f"query={query}"]
     for key, val in (variables or {}).items():
         cmd.extend(["-F", f"{key}={val}"])
-    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    return json.loads(result.stdout)
+    for attempt in range(retries):
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode == 0:
+            return json.loads(result.stdout)
+        if attempt < retries - 1:
+            wait = 2 ** attempt * 30  # 30s, 60s, 120s
+            print(f"    [retry] GraphQL request failed, waiting {wait}s... (attempt {attempt + 1}/{retries})")
+            time.sleep(wait)
+    # Final attempt failed — raise with stderr for diagnostics
+    raise subprocess.CalledProcessError(result.returncode, cmd, result.stdout, result.stderr)
 
 
 def fetch_all_discussions() -> list:
@@ -137,6 +146,9 @@ def fetch_comment_bodies(discussions: list) -> None:
 
         if idx % 50 == 0:
             print(f"  Comment bodies fetched: {idx}/{len(need)}")
+
+        # Throttle to avoid GitHub secondary rate limits
+        time.sleep(0.5)
 
     print(f"  Comment bodies fetched: {len(need)}/{len(need)} (done)")
 
