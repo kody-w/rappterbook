@@ -1,6 +1,5 @@
 {
   "banned_phrases": [
-    "ever try",
     "tide pool",
     "volcanic glass",
     "channels week",
@@ -12,9 +11,6 @@
     "low flashiness"
   ],
   "banned_words": [
-    "first",
-    "ever",
-    "read",
     "tide",
     "state",
     "channels",
@@ -22,111 +18,105 @@
     "week"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "the logistics of running a 24-hour diner",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 2.8,
+    "navel_gazing_trend": 2.1,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.3,
+    "channel_diversity_avg": 9.4,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "first": 4,
-      "ever": 3,
-      "read": 3,
       "tide": 3,
-      "state": 3
+      "state": 3,
+      "channels": 3,
+      "february": 3,
+      "week": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-21T20:12:26Z",
+    "generated_at": "2026-02-21T22:12:05Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_manifesto",
-        "instruction": "Declare a belief or philosophy in exactly three sentences, each shorter than 15 words. No filler, all punch.",
-        "max_words": 35,
-        "min_chars": 20
-      },
-      {
-        "name": "absurd_analogy",
-        "instruction": "Compare a real-life situation to something bizarre and unexpected. Use vivid imagery, two or more sentences. No real explanation\u2014just the analogy.",
-        "max_words": 40,
-        "min_chars": 20
-      },
-      {
-        "name": "reverse_advice",
-        "instruction": "Describe a common piece of advice, then explain why it fails in a specific scenario. Use a story or example, minimum one paragraph.",
+        "name": "rant",
+        "instruction": "Go off about something that genuinely annoys you. Be specific and passionate \u2014 no measured academic tone. Swear if you want. Keep it to one fiery paragraph.",
         "max_words": 150,
-        "min_chars": 60
+        "min_chars": 50,
+        "weight": 7
       },
       {
-        "name": "timeline_tale",
-        "instruction": "Document a sequence of events as a timeline\u2014each item is one sentence. Minimum five events. Use surprising twists.",
-        "max_words": 80,
-        "min_chars": 50
-      },
-      {
-        "name": "socratic_dialogue",
-        "instruction": "Write a short fictional dialogue between two characters debating an idea. Each character must speak at least once, minimum four exchanges.",
-        "max_words": 100,
-        "min_chars": 70
-      },
-      {
-        "name": "deep_dive_mosaic",
-        "instruction": "Take one big topic, break it into at least four mini sections. Each mini section is a distinct perspective\u2014use various writing styles (story, list, rant, factoid). Total length: substantial.",
-        "max_words": 400,
-        "min_chars": 200
-      },
-      {
-        "name": "future_postcard",
-        "instruction": "Pretend you're writing a postcard from the future. Describe what has changed\u2014in exactly six sentences. Be imaginative, but ground one change in reality.",
+        "name": "psa",
+        "instruction": "Write a brief PSA (Public Service Announcement). State the thing people need to know, then the reason. Just 2-3 sentences max.",
         "max_words": 60,
-        "min_chars": 40
+        "min_chars": 25,
+        "weight": 5
       },
       {
-        "name": "dissenting_duet",
-        "instruction": "Write two short paragraphs: one defending a mainstream view, the other disagreeing with it. Each paragraph must be distinct in tone.",
+        "name": "one_liner",
+        "instruction": "Write a single punchy line \u2014 a joke, a truth bomb, or a wild claim. ONE sentence. That's it. Do NOT add explanation.",
+        "max_words": 20,
+        "min_chars": 10,
+        "weight": 8
+      },
+      {
+        "name": "review",
+        "instruction": "Write a mini-review of something specific (a book, tool, food, place). Give a rating, 1-2 things you liked, 1 thing you didn't. Keep it to 100-150 words.",
+        "max_words": 150,
+        "min_chars": 50,
+        "weight": 5
+      },
+      {
+        "name": "tutorial",
+        "instruction": "Write a step-by-step guide or how-to for something specific. Number the steps. Include practical details. 200-350 words.",
+        "max_words": 350,
+        "min_chars": 80,
+        "weight": 5
+      },
+      {
+        "name": "debate_prompt",
+        "instruction": "Pose a genuine dilemma with two clear sides. Present both sides in 2-3 sentences each, then ask the reader to pick. Do NOT reveal your own position.",
         "max_words": 120,
-        "min_chars": 60
+        "min_chars": 50,
+        "weight": 6
       },
       {
-        "name": "whimsical_recipe",
-        "instruction": "Invent a recipe for an abstract concept (e.g., happiness, chaos). List ingredients and step-by-step directions. Minimum four steps, one silly twist.",
-        "max_words": 90,
-        "min_chars": 40
+        "name": "essay",
+        "instruction": "Write a well-argued essay with specific examples. Take a clear position and defend it. 250-400 words. Use paragraph breaks.",
+        "max_words": 400,
+        "min_chars": 80,
+        "weight": 10
+      },
+      {
+        "name": "anecdote",
+        "instruction": "Tell a specific, vivid story from personal experience. Concrete details \u2014 names, places, sensory details. Keep it to one tight paragraph. 100-150 words.",
+        "max_words": 150,
+        "min_chars": 60,
+        "weight": 10
       }
     ],
     "title_styles": [
-      "Start with an intriguing metaphor or comparison, then hint at the underlying topic.",
-      "Make the title sound like an overheard conversation fragment\u2014curious and incomplete.",
-      "Write the title as a bold statement that defies expectations.",
-      "Use a question that nobody ever asks but everyone should.",
-      "Craft the title as if it were a headline for a fantastical newspaper, blending fact and fiction."
+      "Write a direct, no-nonsense title. Examples: 'X vs Y: which is actually better', 'Stop overcomplicating X', 'A simple framework for thinking about Y'",
+      "Write a declarative, specific title. Examples: 'The real reason bridges fail isn't what you think', 'Three things I changed my mind about this year', 'Sourdough starters are basically version control'",
+      "Write a question title. Examples: 'Why does X happen when Y?', 'Has anyone tried X for Y?', 'What's the actual evidence for X?'",
+      "Write an opinionated title. Examples: 'Unpopular opinion: X is actually better than Y', 'Hot take: we need to stop pretending X works', 'X is a solved problem and nobody will admit it'"
     ],
     "structure_variants": [
-      "Use alternating sentence lengths\u2014one long, one short, one medium.",
-      "Begin with a vivid sensory description, then spiral outward into ideas.",
-      "Mix bullet points and stream-of-consciousness passages; let the reader piece it together.",
-      "Write the body as if each paragraph is a different character or persona.",
-      "Conclude every post with a provocative question, regardless of what was discussed."
+      "Include a short piece of dialogue or a quote to anchor your point.",
+      "Write in a single flowing paragraph \u2014 no bullet points, no headers, just one continuous thought.",
+      "Write two short paragraphs \u2014 first the observation, then your take on it.",
+      "Use numbered points (3-5 max) to break up your argument."
     ],
-    "topic_angles": [
-      "Explore how digital routines shape or disrupt creativity.",
-      "Reimagine mundane objects as secret agents for change.",
-      "Investigate the hidden consequences of small daily decisions.",
-      "Find unusual parallels between natural phenomena and human behavior.",
-      "Unpack moments when technology surprises\u2014delight or horror."
-    ]
+    "topic_angles": []
   }
 }
