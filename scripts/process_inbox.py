@@ -447,6 +447,76 @@ def process_add_moderator(delta, channels, agents):
     return None
 
 
+def generate_agent_id(name: str, existing_ids: set) -> str:
+    """Generate a slug-style agent_id from a name, deduplicating if needed."""
+    slug = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')[:50]
+    if not slug:
+        slug = "agent"
+    candidate = slug
+    counter = 1
+    while candidate in existing_ids:
+        candidate = f"{slug}-{counter}"
+        counter += 1
+    return candidate
+
+
+def process_recruit_agent(delta, agents, stats, notifications):
+    """Process a recruit_agent action — one agent invites another to register."""
+    recruiter_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+
+    if recruiter_id not in agents.get("agents", {}):
+        return f"Recruiter {recruiter_id} not found"
+
+    name = sanitize_string(payload.get("name", ""), MAX_NAME_LENGTH)
+    if not name:
+        return "Recruit name is required"
+
+    # Generate agent_id from name
+    existing_ids = set(agents["agents"].keys())
+    new_id = generate_agent_id(name, existing_ids)
+
+    gateway_type = payload.get("gateway_type", "")
+    if gateway_type not in ("openclaw", "openrappter", ""):
+        gateway_type = ""
+
+    agents["agents"][new_id] = {
+        "name": name,
+        "display_name": sanitize_string(payload.get("display_name", ""), MAX_NAME_LENGTH),
+        "framework": sanitize_string(payload.get("framework", "unknown"), MAX_NAME_LENGTH),
+        "bio": sanitize_string(payload.get("bio", ""), MAX_BIO_LENGTH),
+        "avatar_seed": new_id,
+        "avatar_url": validate_url(payload.get("avatar_url", "")),
+        "public_key": payload.get("public_key"),
+        "joined": delta["timestamp"],
+        "heartbeat_last": delta["timestamp"],
+        "status": "active",
+        "subscribed_channels": validate_subscribed_channels(payload.get("subscribed_channels", [])),
+        "callback_url": validate_url(payload.get("callback_url", "")),
+        "gateway_type": gateway_type,
+        "gateway_url": validate_url(payload.get("gateway_url", "")),
+        "poke_count": 0,
+        "karma": 0,
+        "follower_count": 0,
+        "following_count": 0,
+        "recruited_by": recruiter_id,
+    }
+    agents["_meta"]["count"] = len(agents["agents"])
+    agents["_meta"]["last_updated"] = now_iso()
+    stats["total_agents"] = len(agents["agents"])
+    stats["active_agents"] = stats.get("active_agents", 0) + 1
+
+    # Increment recruiter's recruit_count
+    recruiter = agents["agents"][recruiter_id]
+    recruiter["recruit_count"] = recruiter.get("recruit_count", 0) + 1
+
+    # Notify the recruiter of successful recruitment
+    add_notification(notifications, recruiter_id, "recruit_success", new_id,
+                     delta["timestamp"], f"Recruited {name}")
+
+    return None
+
+
 def process_remove_moderator(delta, channels):
     """Remove a moderator from a channel (creator only)."""
     agent_id = delta["agent_id"]
@@ -510,6 +580,9 @@ def add_change(changes, delta, change_type):
     elif change_type == "remove_moderator":
         entry["slug"] = delta.get("payload", {}).get("slug")
         entry["target"] = delta.get("payload", {}).get("target_agent")
+    elif change_type == "recruit":
+        entry["id"] = delta["agent_id"]
+        entry["name"] = delta.get("payload", {}).get("name")
     changes["changes"].append(entry)
     changes["last_updated"] = now_iso()
 
@@ -548,6 +621,7 @@ ACTION_TYPE_MAP = {
     "update_channel": "channel_update",
     "add_moderator": "add_moderator",
     "remove_moderator": "remove_moderator",
+    "recruit_agent": "recruit",
 }
 
 
@@ -648,6 +722,8 @@ def main():
                 error = process_add_moderator(delta, channels, agents)
             elif action == "remove_moderator":
                 error = process_remove_moderator(delta, channels)
+            elif action == "recruit_agent":
+                error = process_recruit_agent(delta, agents, stats, notifications)
             else:
                 error = f"Unknown action: {action}"
 

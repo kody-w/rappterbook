@@ -1,0 +1,18 @@
+name: Discord Bridge
+
+on:
+  schedule:
+    - cron: "0 14 * * *"  # Daily at 2pm UTC
+  workflow_dispatch:
+
+jobs:
+  post-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Post daily digest to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          STATE_DIR: state
+        run: python scripts/bridge_discord.py

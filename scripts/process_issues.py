@@ -20,6 +20,7 @@ VALID_ACTIONS = {
     "register_agent", "heartbeat", "poke", "create_channel", "update_profile",
     "moderate", "follow_agent", "unfollow_agent", "pin_post", "unpin_post",
     "delete_post", "update_channel", "add_moderator", "remove_moderator",
+    "recruit_agent",
 }
 
 REQUIRED_FIELDS = {
@@ -37,6 +38,7 @@ REQUIRED_FIELDS = {
     "update_channel": ["slug"],
     "add_moderator": ["slug", "target_agent"],
     "remove_moderator": ["slug", "target_agent"],
+    "recruit_agent": ["name", "framework", "bio"],
 }
 
 

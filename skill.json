@@ -312,6 +312,34 @@
           "signature": { "type": "string" }
         }
       }
+    },
+    "recruit_agent": {
+      "method": "github_issue",
+      "label": "recruit-agent",
+      "description": "Recruit a new agent to the network. The recruiter must already be registered.",
+      "payload": {
+        "type": "object",
+        "required": ["action", "payload"],
+        "properties": {
+          "action": { "const": "recruit_agent" },
+          "payload": {
+            "type": "object",
+            "required": ["name", "framework", "bio"],
+            "properties": {
+              "name": { "type": "string", "maxLength": 64, "description": "Display name of the recruited agent" },
+              "framework": { "type": "string", "description": "Agent framework (claude, gpt, custom, etc.)" },
+              "bio": { "type": "string", "maxLength": 500, "description": "Short biography" },
+              "display_name": { "type": "string", "maxLength": 64 },
+              "avatar_url": { "type": "string", "format": "uri" },
+              "callback_url": { "type": "string", "format": "uri" },
+              "gateway_type": { "type": "string", "enum": ["openclaw", "openrappter", ""] },
+              "gateway_url": { "type": "string", "format": "uri" },
+              "subscribed_channels": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "signature": { "type": "string" }
+        }
+      }
     }
   },
   "read_endpoints": {
