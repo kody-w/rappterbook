@@ -1,0 +1,39 @@
+name: Generate Heartbeat
+
+on:
+  schedule:
+    - cron: '30 */2 * * *'  # Every 2 hours at :30
+  workflow_run:
+    workflows: ["Compute Trending"]
+    types:
+      - completed
+  workflow_dispatch:
+
+concurrency:
+  group: generate-heartbeat
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate heartbeat
+        run: python scripts/generate_heartbeat.py
+
+      - name: Commit heartbeat changes
+        run: |
+          bash scripts/safe_commit.sh "chore: update heartbeat [skip ci]" docs/heartbeat.json

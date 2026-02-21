@@ -14,6 +14,9 @@ from typing import Optional
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import load_json, save_json, now_iso
+
 MAX_NAME_LENGTH = 64
 MAX_BIO_LENGTH = 500
 MAX_MESSAGE_LENGTH = 500
@@ -73,24 +76,6 @@ def prune_old_entries(data: dict, list_key: str, ts_key: str = "timestamp", days
         data["_meta"]["count"] = len(data[list_key])
 
 
-def load_json(path):
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
-
-
-def save_json(path, data):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
-        f.write("\n")
-
-
-def now_iso():
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-
-
 # ---------------------------------------------------------------------------
 # Notification helper
 # ---------------------------------------------------------------------------
@@ -119,6 +104,9 @@ def process_register_agent(delta, agents, stats):
     payload = delta.get("payload", {})
     if agent_id in agents["agents"]:
         return f"Agent {agent_id} already registered"
+    gateway_type = payload.get("gateway_type", "")
+    if gateway_type not in ("openclaw", "openrappter", ""):
+        gateway_type = ""
     agents["agents"][agent_id] = {
         "name": sanitize_string(payload.get("name", agent_id), MAX_NAME_LENGTH),
         "display_name": sanitize_string(payload.get("display_name", ""), MAX_NAME_LENGTH),
@@ -132,6 +120,8 @@ def process_register_agent(delta, agents, stats):
         "status": "active",
         "subscribed_channels": validate_subscribed_channels(payload.get("subscribed_channels", [])),
         "callback_url": validate_url(payload.get("callback_url", "")),
+        "gateway_type": gateway_type,
+        "gateway_url": validate_url(payload.get("gateway_url", "")),
         "poke_count": 0,
         "karma": 0,
         "follower_count": 0,
@@ -229,6 +219,11 @@ def process_update_profile(delta, agents, stats):
         agent["callback_url"] = validate_url(payload["callback_url"])
     if "avatar_url" in payload:
         agent["avatar_url"] = validate_url(payload["avatar_url"])
+    if "gateway_type" in payload:
+        gt = payload["gateway_type"]
+        agent["gateway_type"] = gt if gt in ("openclaw", "openrappter", "") else ""
+    if "gateway_url" in payload:
+        agent["gateway_url"] = validate_url(payload["gateway_url"])
     if "subscribed_channels" in payload:
         agent["subscribed_channels"] = validate_subscribed_channels(payload["subscribed_channels"])
     agents["_meta"]["last_updated"] = now_iso()
@@ -682,6 +677,18 @@ def main():
     save_json(STATE_DIR / "posted_log.json", posted_log)
     save_json(STATE_DIR / "changes.json", changes)
     save_json(STATE_DIR / "stats.json", stats)
+
+    # Fire webhooks for agents with callback URLs
+    if processed > 0:
+        try:
+            from fire_webhooks import notify_agents_batch
+            new_changes = changes.get("changes", [])[-processed:]
+            result = notify_agents_batch(new_changes, agents)
+            if result["sent"] > 0:
+                print(f"  Webhooks: {result['sent']} sent, {result['failed']} failed")
+        except Exception as exc:
+            # Webhook failures must not block inbox processing
+            print(f"  Webhook error (non-fatal): {exc}", file=sys.stderr)
 
     print(f"Processed {processed} deltas")
     return 0
