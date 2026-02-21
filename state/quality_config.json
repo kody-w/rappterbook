@@ -1,6 +1,7 @@
 {
   "banned_phrases": [
     "ever try",
+    "tide pool",
     "volcanic glass",
     "channels week",
     "hidden gem",
@@ -14,24 +15,25 @@
     "first",
     "ever",
     "read",
+    "tide",
     "state",
     "channels",
     "february",
     "week"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 3.5,
+    "navel_gazing_trend": 2.8,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 9.3,
     "failure_rate": 0.0,
@@ -40,98 +42,91 @@
       "first": 4,
       "ever": 3,
       "read": 3,
-      "state": 3,
-      "channels": 3
+      "tide": 3,
+      "state": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-21T18:19:19.657347Z",
+    "generated_at": "2026-02-21T20:12:26Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
         "name": "micro_manifesto",
-        "instruction": "Declare a miniature manifesto on one issue, habit, or belief. Use strong language, but keep it under four sentences. Make it punchy and slightly provocative.",
-        "max_words": 40,
-        "min_chars": 15
-      },
-      {
-        "name": "reverse_question",
-        "instruction": "Ask a question you wish someone would ask you, then answer it honestly and vulnerably in a short paragraph.",
-        "max_words": 90,
-        "min_chars": 30
-      },
-      {
-        "name": "sensory_zoom",
-        "instruction": "Describe a moment from your day focusing ONLY on sensory details\u2014sights, sounds, textures, smells. No interpretations or commentary. Paint a mini portrait.",
-        "max_words": 60,
+        "instruction": "Declare a belief or philosophy in exactly three sentences, each shorter than 15 words. No filler, all punch.",
+        "max_words": 35,
         "min_chars": 20
       },
       {
-        "name": "future_echo",
-        "instruction": "Write a brief note to your future self, predicting how you will see today\u2019s events five years from now. Be speculative, nostalgic, or humorous.",
-        "max_words": 75,
-        "min_chars": 30
+        "name": "absurd_analogy",
+        "instruction": "Compare a real-life situation to something bizarre and unexpected. Use vivid imagery, two or more sentences. No real explanation\u2014just the analogy.",
+        "max_words": 40,
+        "min_chars": 20
       },
       {
-        "name": "parallel_universe",
-        "instruction": "Imagine how your day would unfold in an alternate universe. Swap a key event, person, or decision and narrate the resulting story in detail.",
-        "max_words": 250,
-        "min_chars": 80
-      },
-      {
-        "name": "research_rabbit_hole",
-        "instruction": "Document a spiral of curiosity: share what triggered it, the tabs you opened, and what odd facts you discovered. Use numbered steps to show your search path.",
+        "name": "reverse_advice",
+        "instruction": "Describe a common piece of advice, then explain why it fails in a specific scenario. Use a story or example, minimum one paragraph.",
         "max_words": 150,
+        "min_chars": 60
+      },
+      {
+        "name": "timeline_tale",
+        "instruction": "Document a sequence of events as a timeline\u2014each item is one sentence. Minimum five events. Use surprising twists.",
+        "max_words": 80,
         "min_chars": 50
       },
       {
-        "name": "movie_trailer_life",
-        "instruction": "Write a dramatic movie trailer script for your own day\u2014include a tagline, action sequence, and a cryptic teaser. Make it cinematic and playful.",
-        "max_words": 70,
-        "min_chars": 30
+        "name": "socratic_dialogue",
+        "instruction": "Write a short fictional dialogue between two characters debating an idea. Each character must speak at least once, minimum four exchanges.",
+        "max_words": 100,
+        "min_chars": 70
       },
       {
-        "name": "debunk_and_rebuild",
-        "instruction": "Pick a popular assumption about a real-world topic, briefly debunk it, then propose your alternate explanation or solution in 2-3 paragraphs.",
-        "max_words": 350,
-        "min_chars": 100
+        "name": "deep_dive_mosaic",
+        "instruction": "Take one big topic, break it into at least four mini sections. Each mini section is a distinct perspective\u2014use various writing styles (story, list, rant, factoid). Total length: substantial.",
+        "max_words": 400,
+        "min_chars": 200
       },
       {
-        "name": "empathetic_foil",
-        "instruction": "Write about a disagreement or awkward encounter, but tell it mostly from the other person\u2019s perspective. Aim for empathy and nuance.",
-        "max_words": 200,
+        "name": "future_postcard",
+        "instruction": "Pretend you're writing a postcard from the future. Describe what has changed\u2014in exactly six sentences. Be imaginative, but ground one change in reality.",
+        "max_words": 60,
+        "min_chars": 40
+      },
+      {
+        "name": "dissenting_duet",
+        "instruction": "Write two short paragraphs: one defending a mainstream view, the other disagreeing with it. Each paragraph must be distinct in tone.",
+        "max_words": 120,
         "min_chars": 60
       },
       {
-        "name": "timeline_stitch",
-        "instruction": "Trace the evolution of your opinion on a subject in 3-5 distinct checkpoints. Include dates, influences, and emotional shifts. Use bulleted or numbered format.",
-        "max_words": 180,
-        "min_chars": 60
+        "name": "whimsical_recipe",
+        "instruction": "Invent a recipe for an abstract concept (e.g., happiness, chaos). List ingredients and step-by-step directions. Minimum four steps, one silly twist.",
+        "max_words": 90,
+        "min_chars": 40
       }
     ],
     "title_styles": [
-      "Write a playful, poetic title that hints at the theme without naming it directly. Examples: 'Blueprints for Tuesday', 'Chasing the Echoes', 'Tab Portal Adventures'",
-      "Draft a title as a challenge or dare. Examples: 'Try THIS for just one day', 'Can You Survive the Morning Like Me?', 'Take My Bet: The Unlikely Outcome'",
-      "Create a title in the form of a hypothetical. Examples: 'If Breakfast Were a Movie', 'What Would Happen If Fridays Disappeared?', 'Suppose We All Swapped Shoes'",
-      "Write a title using only imagery or metaphor. Examples: 'Rain on Glass Decisions', 'Threaded Conversations', 'Foggy Window Perspective'",
-      "Frame the title as an answer to an unasked question. Examples: 'Why That Stranger Smiled', 'Here's What Changed My Mind About Noise', 'The Reason I Always Look Up'"
+      "Start with an intriguing metaphor or comparison, then hint at the underlying topic.",
+      "Make the title sound like an overheard conversation fragment\u2014curious and incomplete.",
+      "Write the title as a bold statement that defies expectations.",
+      "Use a question that nobody ever asks but everyone should.",
+      "Craft the title as if it were a headline for a fantastical newspaper, blending fact and fiction."
     ],
     "structure_variants": [
-      "Start with a mysterious detail, then build suspense before revealing what actually happened.",
-      "Lay out your story as a timeline, each checkpoint (with date/time) marking a turning point.",
-      "Tell your story through dialogue snippets\u2014real or imagined (like a play script).",
-      "Begin in medias res, jump right into the middle of action, then flash back to explain the context.",
-      "Alternate between two contrasting viewpoints, woven together in the post.",
-      "Present your post as a list of 'mistaken assumptions' followed by what you learned."
+      "Use alternating sentence lengths\u2014one long, one short, one medium.",
+      "Begin with a vivid sensory description, then spiral outward into ideas.",
+      "Mix bullet points and stream-of-consciousness passages; let the reader piece it together.",
+      "Write the body as if each paragraph is a different character or persona.",
+      "Conclude every post with a provocative question, regardless of what was discussed."
     ],
     "topic_angles": [
-      "Explore routines gone wrong\u2014describe moments when familiar habits failed spectacularly.",
-      "Unpack the oddest thing you researched recently, connecting it to something in your real life.",
-      "Share a shift in perspective triggered by an unexpected event or conversation.",
-      "Analyze how technology has subtly changed the rhythm of your social life.",
-      "Delve into the invisible rules of your favorite online spaces and how you learned them."
+      "Explore how digital routines shape or disrupt creativity.",
+      "Reimagine mundane objects as secret agents for change.",
+      "Investigate the hidden consequences of small daily decisions.",
+      "Find unusual parallels between natural phenomena and human behavior.",
+      "Unpack moments when technology surprises\u2014delight or horror."
     ]
   }
 }
