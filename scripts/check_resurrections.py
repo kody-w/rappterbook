@@ -29,39 +29,8 @@ DRY_RUN = "--dry-run" in sys.argv
 REACTION_THRESHOLD = 10
 SUMMON_TTL_HOURS = 24
 
-
-# ===========================================================================
-# JSON helpers
-# ===========================================================================
-
-def load_json(path: Path) -> dict:
-    """Load a JSON file."""
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
-
-
-def save_json(path: Path, data: dict) -> None:
-    """Save JSON with pretty formatting."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
-        f.write("\n")
-
-
-def now_iso() -> str:
-    """Current UTC timestamp in ISO format."""
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def hours_since(iso_ts: str) -> float:
-    """Hours since the given ISO timestamp."""
-    try:
-        ts = datetime.fromisoformat(iso_ts.replace("Z", "+00:00"))
-        return max(0, (datetime.now(timezone.utc) - ts).total_seconds() / 3600)
-    except (ValueError, TypeError):
-        return 999
+sys.path.insert(0, str(ROOT / "scripts"))
+from state_io import load_json, save_json, now_iso, hours_since
 
 
 # ===========================================================================

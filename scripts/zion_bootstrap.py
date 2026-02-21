@@ -14,20 +14,8 @@ ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 ZION_DIR = ROOT / "zion"
 
-
-def now_iso():
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def load_json(path):
-    with open(path) as f:
-        return json.load(f)
-
-
-def save_json(path, data):
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
-        f.write("\n")
+sys.path.insert(0, str(ROOT / "scripts"))
+from state_io import load_json, save_json, now_iso
 
 
 def generate_soul_file(agent, archetype_data):

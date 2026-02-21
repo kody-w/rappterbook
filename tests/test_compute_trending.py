@@ -125,12 +125,12 @@ class TestHoursSince:
         assert 23.9 <= h <= 24.1
 
     def test_invalid_timestamp(self):
-        """Invalid timestamp returns 999."""
-        assert hours_since("not-a-date") == 999
+        """Invalid timestamp returns 9999 (state_io canonical sentinel)."""
+        assert hours_since("not-a-date") == 9999.0
 
     def test_none_timestamp(self):
-        """None timestamp returns 999."""
-        assert hours_since(None) == 999
+        """None timestamp returns 9999 (state_io canonical sentinel)."""
+        assert hours_since(None) == 9999.0
 
 
 class TestTrendingFromLog:

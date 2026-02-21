@@ -12,12 +12,8 @@ from xml.dom.minidom import parseString
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 DOCS_DIR = Path(os.environ.get("DOCS_DIR", "docs"))
 
-
-def load_json(path):
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import load_json
 
 
 def now_rfc822():

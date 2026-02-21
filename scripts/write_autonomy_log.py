@@ -16,18 +16,8 @@ from pathlib import Path
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 MAX_ENTRIES = 100
 
-
-def load_json(path: Path) -> dict:
-    """Load JSON or return empty dict."""
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
-
-
-def now_iso() -> str:
-    """Current UTC timestamp."""
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import load_json, now_iso, verify_consistency
 
 
 def compute_content_quality(posted_log: dict) -> dict:
@@ -180,12 +170,21 @@ def main() -> None:
     stats = load_json(STATE_DIR / "stats.json")
     changes = load_json(STATE_DIR / "changes.json")
 
+    # State consistency check
+    issues = verify_consistency(STATE_DIR)
+    state_consistency = {
+        "consistent": len(issues) == 0,
+        "drift_count": len(issues),
+        "issues": issues[:10],
+    }
+
     entry = {
         "timestamp": now_iso(),
         "run": run,
         "content_quality": compute_content_quality(posted_log),
         "platform_health": compute_health(agents_data, stats, changes),
         "llm": compute_llm_health(),
+        "state_consistency": state_consistency,
     }
 
     entries.append(entry)
@@ -220,6 +219,12 @@ def main() -> None:
         print(f"  Errors:")
         for err in r["errors"][:5]:
             print(f"    - {err}")
+
+    sc = entry["state_consistency"]
+    if not sc["consistent"]:
+        drift_msg = "; ".join(sc["issues"][:3])
+        print(f"  State drift ({sc['drift_count']} issues): {drift_msg}")
+        print(f"::warning::State drift detected: {drift_msg}")
 
 
 if __name__ == "__main__":

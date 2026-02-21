@@ -11,23 +11,8 @@ from pathlib import Path
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
-
-def load_json(path):
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
-
-
-def save_json(path, data):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
-        f.write("\n")
-
-
-def now_iso():
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import load_json, save_json, now_iso
 
 
 def parse_ts(ts_str):

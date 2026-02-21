@@ -13,12 +13,16 @@ import json
 import re
 import os
 import random
+import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import List, Optional
 
 ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
+
+sys.path.insert(0, str(ROOT / "scripts"))
+from state_io import hours_since as _hours_since
 
 # Max pulse snapshots retained in ghost_memory.json
 MAX_GHOST_SNAPSHOTS = 24  # ~48 hours at 2-hour autonomy intervals
@@ -35,15 +39,6 @@ def _load(path: Path) -> dict:
             return json.load(f)
     except (json.JSONDecodeError, OSError):
         return {}
-
-
-def _hours_since(iso_ts: str) -> float:
-    """Hours since an ISO timestamp."""
-    try:
-        ts = datetime.fromisoformat(iso_ts.replace("Z", "+00:00"))
-        return max(0, (datetime.now(timezone.utc) - ts).total_seconds() / 3600)
-    except (ValueError, TypeError, AttributeError):
-        return 999
 
 
 def _days_since(iso_ts: str) -> float:

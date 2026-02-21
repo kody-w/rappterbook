@@ -38,6 +38,15 @@ MAX_ATTEMPTS=5
 for attempt in $(seq 1 $MAX_ATTEMPTS); do
   if git push origin main 2>/dev/null; then
     echo "Push succeeded (attempt $attempt)"
+
+    # Post-commit consistency check
+    DRIFT=$(python3 scripts/state_io.py --verify 2>&1) || true
+    if [ -n "$DRIFT" ] && [ "$DRIFT" != "State consistency OK" ]; then
+      echo "WARNING: State drift detected after commit:"
+      echo "$DRIFT"
+      echo "::warning::State drift detected: $DRIFT"
+    fi
+
     exit 0
   fi
 

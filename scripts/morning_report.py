@@ -12,18 +12,14 @@ Usage:
 import argparse
 import json
 import os
+import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
-
-def load_json(path: Path) -> dict:
-    """Load JSON or return empty dict."""
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import load_json
 
 
 def parse_ts(ts_str: str) -> datetime:

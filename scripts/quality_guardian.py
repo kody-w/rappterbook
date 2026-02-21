@@ -14,12 +14,16 @@ Usage:
 import json
 import os
 import re
+import sys
 from collections import Counter
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import load_json, now_iso
 
 # How many log entries to analyze
 LOOKBACK_ENTRIES = 10
@@ -76,19 +80,6 @@ TOPIC_SEEDS = [
     "the architecture of termite mounds vs human skyscrapers",
     "why some rivers flow backward during storms",
 ]
-
-
-def load_json(path: Path) -> dict:
-    """Load JSON or return empty dict."""
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
-
-
-def now_iso() -> str:
-    """Current UTC timestamp."""
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def extract_title_words(posted_log: dict) -> Counter:

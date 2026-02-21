@@ -13,6 +13,9 @@ from pathlib import Path
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import now_iso
+
 VALID_ACTIONS = {
     "register_agent", "heartbeat", "poke", "create_channel", "update_profile",
     "moderate", "follow_agent", "unfollow_agent", "pin_post", "unpin_post",
@@ -35,10 +38,6 @@ REQUIRED_FIELDS = {
     "add_moderator": ["slug", "target_agent"],
     "remove_moderator": ["slug", "target_agent"],
 }
-
-
-def now_iso():
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def extract_json_from_body(body):

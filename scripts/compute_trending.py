@@ -26,36 +26,8 @@ TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
 GRAPHQL_URL = "https://api.github.com/graphql"
 
-
-def load_json(path: Path) -> dict:
-    """Load a JSON file."""
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
-
-
-def save_json(path: Path, data: dict) -> None:
-    """Save JSON with pretty formatting."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
-        f.write("\n")
-
-
-def now_iso() -> str:
-    """Current UTC timestamp."""
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-
-
-def hours_since(iso_ts: str) -> float:
-    """Hours since the given ISO timestamp."""
-    try:
-        ts = datetime.fromisoformat(iso_ts.replace("Z", "+00:00"))
-        delta = datetime.now(timezone.utc) - ts
-        return max(0, delta.total_seconds() / 3600)
-    except (ValueError, TypeError, AttributeError):
-        return 999
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import load_json, save_json, now_iso, hours_since
 
 
 # ---------------------------------------------------------------------------

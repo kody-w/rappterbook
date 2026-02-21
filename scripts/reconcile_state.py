@@ -23,6 +23,9 @@ ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = ROOT / "state"
 DRY_RUN = "--dry-run" in sys.argv
 
+sys.path.insert(0, str(ROOT / "scripts"))
+from state_io import load_json, save_json
+
 OWNER = "kody-w"
 REPO = "rappterbook"
 
@@ -103,23 +106,6 @@ def extract_comment_authors(comments: list) -> list:
         if match:
             authors.append(match.group(1))
     return authors
-
-
-# ===========================================================================
-# State file helpers
-# ===========================================================================
-
-def load_json(path: Path) -> dict:
-    """Load a JSON file."""
-    with open(path) as f:
-        return json.load(f)
-
-
-def save_json(path: Path, data: dict) -> None:
-    """Save JSON with pretty formatting."""
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
-        f.write("\n")
 
 
 # ===========================================================================

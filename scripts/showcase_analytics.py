@@ -5,20 +5,12 @@ Python stdlib only. No side effects.
 """
 
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-
-def hours_since(timestamp_str: str) -> float:
-    """Return hours elapsed since an ISO timestamp."""
-    if not timestamp_str:
-        return float('inf')
-    try:
-        ts = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
-        now = datetime.now(timezone.utc)
-        return (now - ts).total_seconds() / 3600
-    except (ValueError, TypeError):
-        return float('inf')
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import hours_since
 
 
 # ---------- 1. Ghost Gallery ----------

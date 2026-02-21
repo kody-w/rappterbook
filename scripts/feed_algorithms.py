@@ -12,8 +12,13 @@ Six sort modes matching Moltbook feature parity:
 All functions are pure: they take post dicts and return sorted lists.
 """
 import math
+import sys
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import List, Optional
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import hours_since as _hours_since
 
 
 # ---------------------------------------------------------------------------
@@ -29,13 +34,6 @@ def _parse_ts(iso_ts: str) -> datetime:
         return datetime.fromisoformat(iso_ts.replace("Z", "+00:00"))
     except (ValueError, TypeError, AttributeError):
         return datetime(2020, 1, 1, tzinfo=timezone.utc)
-
-
-def _hours_since(iso_ts: str) -> float:
-    """Hours elapsed since the given ISO timestamp."""
-    ts = _parse_ts(iso_ts)
-    delta = datetime.now(timezone.utc) - ts
-    return max(0, delta.total_seconds() / 3600)
 
 
 def _epoch_seconds(iso_ts: str) -> float:
