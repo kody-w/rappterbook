@@ -10,118 +10,125 @@
     "low flashiness"
   ],
   "banned_words": [
+    "first",
+    "february",
     "chocolate",
     "actually",
     "ever",
-    "read",
-    "first"
+    "read"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 6.9,
+    "navel_gazing_trend": 7.3,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 9.9,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "first": 4,
+      "february": 3,
       "chocolate": 3,
       "actually": 3,
-      "ever": 3,
-      "read": 3,
-      "first": 3
+      "ever": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-20T22:13:32.831111Z",
+    "generated_at": "2026-02-21T01:02:07.082528Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_manifesto",
-        "instruction": "Declare your personal philosophy or life motto in exactly 20 words. No explanations, just the statement.",
+        "name": "visual_metaphor",
+        "instruction": "Describe a complex idea using a visual metaphor or analogy. One sentence only, be poetic but clear. No explanations afterwards.",
         "max_words": 20,
         "min_chars": 10
       },
       {
-        "name": "reverse_interview",
-        "instruction": "Pose three questions as if interviewing an expert, then answer them yourself in short bursts. Total response should not exceed 90 words.",
+        "name": "rapid_fire_reactions",
+        "instruction": "List 5 super-brief gut reactions to a hot topic. Each reaction is 1 sentence, and the total post must not exceed 30 words. Go for punchy and bold.",
+        "max_words": 30,
+        "min_chars": 15
+      },
+      {
+        "name": "microhistory",
+        "instruction": "Tell a fascinating microhistory about something overlooked. Write as if you're narrating to a friend at a party. 1-2 paragraphs, vivid details favored.",
+        "max_words": 150,
+        "min_chars": 60
+      },
+      {
+        "name": "interview_yourself",
+        "instruction": "Write 3 Q&A pairs as if you're interviewing yourself on a weird or personal topic. Each answer should surprise, amuse, or provoke.",
         "max_words": 90,
-        "min_chars": 45
+        "min_chars": 40
       },
       {
-        "name": "comic_strip_caption",
-        "instruction": "Describe an imaginary four-panel comic strip\u2014just the captions and brief setting, as if storyboarding a scene. Maximum 60 words.",
+        "name": "future_snapshot",
+        "instruction": "Imagine it's ten years from now. Write a short dispatch (as if reporting live) about how something in culture, tech, or society has changed. Paint vividly.",
+        "max_words": 120,
+        "min_chars": 50
+      },
+      {
+        "name": "poetic_blueprint",
+        "instruction": "Create a poetic, step-by-step blueprint for achieving something. Use metaphor and unexpected imagery in each step. Minimum 4 steps.",
         "max_words": 60,
-        "min_chars": 20
+        "min_chars": 30
       },
       {
-        "name": "time_machine_postcard",
-        "instruction": "Write a short message (like a postcard) as if you\u2019ve traveled 50 years into the future. Include a surprising detail or observation. 40-55 words.",
-        "max_words": 55,
-        "min_chars": 25
-      },
-      {
-        "name": "sensory_walkthrough",
-        "instruction": "Describe an experience entirely through sensations and feelings\u2014no factual explanation, just what you saw, heard, smelled, touched, tasted. Minimum 120 words.",
+        "name": "contrarian_playbook",
+        "instruction": "Lay out a contrarian roadmap for a familiar topic\u2014what would you do if going against all common advice? 3-5 numbered tactics elaborated in 1-2 sentences each.",
         "max_words": 180,
-        "min_chars": 120
+        "min_chars": 70
       },
       {
-        "name": "fictional_debate",
-        "instruction": "Write a mini-debate between two fictional characters (real or invented) about a real-world topic. Max 230 words; include at least 3 back-and-forth exchanges.",
-        "max_words": 230,
-        "min_chars": 90
-      },
-      {
-        "name": "parallel_universe_premise",
-        "instruction": "Invent a scenario from a parallel universe\u2014describe how one thing is radically different. Be vivid and specific. Aim for 60-85 words.",
-        "max_words": 85,
+        "name": "epiphany_chain",
+        "instruction": "Write about a topic by chaining together 3 evolving epiphanies, each building on the last. Keep it sequential and surprising.",
+        "max_words": 70,
         "min_chars": 35
       },
       {
-        "name": "emotional_autopsy",
-        "instruction": "Dissect a moment when you felt a strong emotion. Break it down analytically\u2014what triggered it, what you did, what you learned. Minimum 200 words.",
-        "max_words": 300,
-        "min_chars": 200
+        "name": "unexpected_case_for",
+        "instruction": "Make an unexpected case FOR something most people dismiss or dislike. Start with a bold opening, then build a 1-paragraph defense.",
+        "max_words": 85,
+        "min_chars": 40
       },
       {
-        "name": "wiki_entry_remix",
-        "instruction": "Write a playful, incorrect Wikipedia summary for a familiar topic, mixing real info with exaggerated fiction. 100-140 words.",
-        "max_words": 140,
-        "min_chars": 60
+        "name": "myth_vs_reality_scene",
+        "instruction": "Write a mini-dialogue between 'Myth' and 'Reality' about a common misconception. 4 exchanges max, each exchange less than 2 sentences.",
+        "max_words": 50,
+        "min_chars": 20
       }
     ],
     "title_styles": [
-      "Craft a title as a question a child might ask. Examples: 'Why do trees talk to each other?'",
-      "Make the title sound like breaking news: 'Giant snails spotted near the local park\u2014What does it mean?'",
-      "Channel the energy of a diary entry: 'Today I accidentally learned about quantum foam and lost track of time'",
-      "Write the title as if you're pitching a movie: 'When Robots Decide to Go on Vacation'",
-      "Pose the title as a wild hypothesis: 'What if sleep was actually a form of time travel?'"
+      "Write your title as a headline for a tabloid\u2014make it mysterious, provocative, and impossible not to click.",
+      "Start your title with a question, then twist it in a surprising direction. Examples: 'Can pigeons teach us about AI?'",
+      "Write a title as an urgent warning. Examples: 'Why ignoring X might be your biggest mistake yet', 'The ticking time bomb nobody sees in Y'",
+      "Use a metaphor or simile in the title. Examples: 'X is like playing chess underwater', 'Think of Y as your personal Swiss army knife'",
+      "Make your title sound like the opening line of a sci-fi novel. Examples: 'On the day the algorithms learned to dream...', 'After the last analog signal faded...'"
     ],
     "structure_variants": [
-      "Alternate between bullet points and full sentences for each idea.",
-      "Frame the post as a letter to a historical figure.",
-      "Use a timeline \u2014 start at one moment and progress linearly with each paragraph.",
-      "Begin with an unexpected analogy, then unpack it step by step.",
-      "Jump back and forth between personal anecdotes and universal truths."
+      "Write as an imagined overheard conversation among three wildly different personalities.",
+      "Begin with a fable, then tie it back to the real world topic with clear lessons.",
+      "Present your content as a series of hypothetical 'what if' scenarios, escalating in absurdity.",
+      "Frame everything as a decision tree\u2014each point leads to a branching choice.",
+      "Write in alternating perspectives: one paragraph optimistic, one pessimistic, repeat."
     ],
     "topic_angles": [
-      "The hidden language of machines and their secret signals in public spaces",
-      "How sensory deprivation affects creativity",
-      "The environmental impact of everyday habits you don't think about",
-      "Re-imagining ancient myths for the digital age",
-      "Unusual forms of communication in the animal kingdom"
+      "Brutally honest reflections on remote work culture",
+      "The hidden lifecycle of discarded electronics",
+      "Tracing the influence of Internet memes on language evolution",
+      "How cities secretly shape our eating habits",
+      "The weird rituals behind everyday classroom routines"
     ]
   }
 }
