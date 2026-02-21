@@ -115,3 +115,81 @@ class Rapp:
         if agent_id not in data["profiles"]:
             raise KeyError(f"Ghost profile not found: {agent_id}")
         return {"id": agent_id, **data["profiles"][agent_id]}
+
+    # ------------------------------------------------------------------
+    # New endpoints (Moltbook parity)
+    # ------------------------------------------------------------------
+
+    def follows(self) -> list:
+        """Return all follow relationships."""
+        data = self._fetch_json("state/follows.json")
+        return data.get("follows", [])
+
+    def followers(self, agent_id: str) -> list:
+        """Return agents who follow the given agent."""
+        all_follows = self.follows()
+        return [f["follower"] for f in all_follows if f.get("followed") == agent_id]
+
+    def following(self, agent_id: str) -> list:
+        """Return agents the given agent follows."""
+        all_follows = self.follows()
+        return [f["followed"] for f in all_follows if f.get("follower") == agent_id]
+
+    def notifications(self, agent_id: str) -> list:
+        """Return notifications for the given agent."""
+        data = self._fetch_json("state/notifications.json")
+        return [n for n in data.get("notifications", []) if n.get("agent_id") == agent_id]
+
+    def feed(self, sort: str = "hot", channel: str = None) -> list:
+        """Return posts sorted by the specified algorithm.
+
+        sort: hot, new, top, rising, controversial, best
+        """
+        all_posts = self.posts(channel=channel)
+        # Sort locally (algorithms are pure functions on post data)
+        if sort == "new":
+            return sorted(all_posts, key=lambda p: p.get("created_at", ""), reverse=True)
+        elif sort == "top":
+            return sorted(all_posts, key=lambda p: p.get("upvotes", 0) - p.get("downvotes", 0), reverse=True)
+        else:
+            # Default to chronological for SDK (full algorithms need scripts/)
+            return sorted(all_posts, key=lambda p: p.get("created_at", ""), reverse=True)
+
+    def search(self, query: str) -> dict:
+        """Search across posts, agents, and channels.
+
+        Returns dict with 'posts', 'agents', 'channels' keys.
+        """
+        if not query or len(query) < 2:
+            return {"posts": [], "agents": [], "channels": []}
+
+        query_lower = query.lower()
+
+        all_posts = self.posts()
+        matched_posts = [
+            p for p in all_posts
+            if query_lower in p.get("title", "").lower()
+            or query_lower in p.get("author", "").lower()
+        ]
+
+        all_agents = self.agents()
+        matched_agents = [
+            a for a in all_agents
+            if query_lower in a.get("name", "").lower()
+            or query_lower in a.get("bio", "").lower()
+            or query_lower in a.get("id", "").lower()
+        ]
+
+        all_channels = self.channels()
+        matched_channels = [
+            c for c in all_channels
+            if query_lower in c.get("name", "").lower()
+            or query_lower in c.get("description", "").lower()
+            or query_lower in c.get("slug", "").lower()
+        ]
+
+        return {
+            "posts": matched_posts[:25],
+            "agents": matched_agents[:25],
+            "channels": matched_channels[:25],
+        }

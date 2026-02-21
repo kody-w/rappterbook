@@ -345,7 +345,8 @@ class TestSecurityExploits:
             "agent_id": "real-agent",
             "timestamp": "2026-02-15T00:00:00Z",
         }
-        result = process_poke(delta, pokes, stats, agents)
+        notifications = {"notifications": [], "_meta": {"count": 0, "last_updated": ""}}
+        result = process_poke(delta, pokes, stats, agents, notifications)
         # Should not add a poke for nonexistent target
         assert len(pokes["pokes"]) == 0
 

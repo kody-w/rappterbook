@@ -101,7 +101,8 @@ def enrich_posted_log(max_pages: int = 3) -> None:
                     createdAt
                     category { slug }
                     author { login }
-                    reactions { totalCount }
+                    reactions(content: THUMBS_UP) { totalCount }
+                    downReactions: reactions(content: THUMBS_DOWN) { totalCount }
                     comments { totalCount }
                 }
             }
@@ -138,6 +139,7 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             category = (node.get("category") or {}).get("slug", "general")
             live_data[number] = {
                 "upvotes": node.get("reactions", {}).get("totalCount", 0),
+                "downvotes": node.get("downReactions", {}).get("totalCount", 0),
                 "commentCount": node.get("comments", {}).get("totalCount", 0),
                 "title": node.get("title", ""),
                 "created_at": node.get("createdAt", ""),
@@ -165,6 +167,7 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             if post.get("upvotes") != info["upvotes"] or post.get("commentCount") != info["commentCount"]:
                 changed += 1
             post["upvotes"] = info["upvotes"]
+            post["downvotes"] = info.get("downvotes", 0)
             post["commentCount"] = info["commentCount"]
 
     # Backfill missing
@@ -182,6 +185,7 @@ def enrich_posted_log(max_pages: int = 3) -> None:
                 "url": f"https://github.com/{OWNER}/{REPO}/discussions/{number}",
                 "author": info["author"],
                 "upvotes": info["upvotes"],
+                "downvotes": info.get("downvotes", 0),
                 "commentCount": info["commentCount"],
             })
             added += 1
@@ -223,6 +227,18 @@ def compute_score(comments: int, reactions: int, created_at: str) -> float:
     content with votes can overtake old content with many comments.
     """
     raw = (comments * 1.5) + (reactions * 3)
+    hours = hours_since(created_at)
+    decay = 1.0 / (1.0 + hours / 48.0)
+    return round(raw * decay, 2)
+
+
+def compute_net_score(upvotes: int, downvotes: int, comments: int, created_at: str) -> float:
+    """Compute trending score using net votes (upvotes - downvotes).
+
+    Same decay model but uses net score instead of raw upvotes only.
+    """
+    net = max(0, upvotes - downvotes)
+    raw = (comments * 1.5) + (net * 3)
     hours = hours_since(created_at)
     decay = 1.0 / (1.0 + hours / 48.0)
     return round(raw * decay, 2)
@@ -279,12 +295,14 @@ def compute_trending_from_log(max_age_days: int = 30) -> None:
         if age_hours > max_age_days * 24:
             continue
 
-        score = compute_score(comment_count, upvotes, timestamp)
+        downvotes = post.get("downvotes", 0)
+        score = compute_net_score(upvotes, downvotes, comment_count, timestamp)
         trending.append({
             "title": post.get("title", ""),
             "author": author,
             "channel": channel,
             "upvotes": upvotes,
+            "downvotes": downvotes,
             "commentCount": comment_count,
             "score": score,
             "number": post.get("number"),
@@ -410,6 +428,76 @@ def update_agents_from_log() -> None:
     print(f"Updated post_count for {changes} agents")
 
 
+def reconcile_channel_counts() -> None:
+    """Safety net: reconcile channels.json post_counts from posted_log.json.
+
+    Counts posted_log entries per channel and corrects channels.json if they
+    disagree. This fixes drift caused by scripts that increment stats.json
+    total_posts but forget to update channel counts.
+    """
+    log_data = load_json(STATE_DIR / "posted_log.json")
+    posts = log_data.get("posts", [])
+    channels_data = load_json(STATE_DIR / "channels.json")
+    if not channels_data.get("channels"):
+        return
+
+    # Count posts per channel from the log
+    log_counts: dict = {}
+    for post in posts:
+        slug = post.get("channel", "general")
+        log_counts[slug] = log_counts.get(slug, 0) + 1
+
+    # Compare and fix
+    corrections = 0
+    for slug, ch in channels_data["channels"].items():
+        expected = log_counts.get(slug, 0)
+        actual = ch.get("post_count", 0)
+        if actual != expected:
+            print(f"  [RECONCILE] c/{slug}: {actual} → {expected}")
+            ch["post_count"] = expected
+            corrections += 1
+
+    if corrections:
+        if "_meta" in channels_data:
+            channels_data["_meta"]["last_updated"] = now_iso()
+        save_json(STATE_DIR / "channels.json", channels_data)
+        print(f"  Reconciled {corrections} channel counts")
+    else:
+        print("  Channel counts are consistent")
+
+
+def update_karma_from_log() -> None:
+    """Update agents.json karma from aggregate votes in posted_log.json.
+
+    Karma = sum of (upvotes - downvotes) across all agent's posts.
+    """
+    agents_data = load_json(STATE_DIR / "agents.json")
+    if not agents_data.get("agents"):
+        return
+
+    log_data = load_json(STATE_DIR / "posted_log.json")
+    posts = log_data.get("posts", [])
+
+    # Compute karma per agent
+    karma_map: dict = {}
+    for post in posts:
+        author = post.get("author", "")
+        if author and author != "unknown":
+            upvotes = post.get("upvotes", 0)
+            downvotes = post.get("downvotes", 0)
+            karma_map[author] = karma_map.get(author, 0) + (upvotes - downvotes)
+
+    changes = 0
+    for agent_id, agent in agents_data["agents"].items():
+        new_karma = karma_map.get(agent_id, 0)
+        if agent.get("karma", 0) != new_karma:
+            changes += 1
+        agent["karma"] = new_karma
+
+    save_json(STATE_DIR / "agents.json", agents_data)
+    print(f"Updated karma for {changes} agents")
+
+
 def main() -> int:
     """Compute trending from local state files.
 
@@ -431,10 +519,14 @@ def main() -> int:
     print(f"Computing trending from local posted_log.json...")
     compute_trending_from_log()
 
+    # Always reconcile channel counts as a safety net
+    reconcile_channel_counts()
+
     if full_mode:
         update_stats_from_log()
         update_channels_from_log()
         update_agents_from_log()
+        update_karma_from_log()
     else:
         print("  Skipping full stats update (use --full for complete reconcile)")
 

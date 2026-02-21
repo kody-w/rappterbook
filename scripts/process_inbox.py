@@ -18,9 +18,12 @@ MAX_NAME_LENGTH = 64
 MAX_BIO_LENGTH = 500
 MAX_MESSAGE_LENGTH = 500
 MAX_ACTIONS_PER_AGENT = 10
+MAX_PINNED_POSTS = 3
 POKE_RETENTION_DAYS = 30
 FLAG_RETENTION_DAYS = 30
+NOTIFICATION_RETENTION_DAYS = 30
 SLUG_PATTERN = re.compile(r'^[a-z0-9][a-z0-9-]{0,62}$')
+HEX_COLOR_PATTERN = re.compile(r'^#[0-9a-fA-F]{6}$')
 RESERVED_SLUGS = {"_meta", "constructor", "__proto__", "prototype"}
 
 
@@ -88,6 +91,29 @@ def now_iso():
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
+# ---------------------------------------------------------------------------
+# Notification helper
+# ---------------------------------------------------------------------------
+
+def add_notification(notifications: dict, agent_id: str, notif_type: str,
+                     from_agent: str, timestamp: str, detail: str = "") -> None:
+    """Add a notification for an agent."""
+    notifications["notifications"].append({
+        "agent_id": agent_id,
+        "type": notif_type,
+        "from_agent": from_agent,
+        "timestamp": timestamp,
+        "read": False,
+        "detail": detail,
+    })
+    notifications["_meta"]["count"] = len(notifications["notifications"])
+    notifications["_meta"]["last_updated"] = now_iso()
+
+
+# ---------------------------------------------------------------------------
+# Action handlers
+# ---------------------------------------------------------------------------
+
 def process_register_agent(delta, agents, stats):
     agent_id = delta["agent_id"]
     payload = delta.get("payload", {})
@@ -95,9 +121,11 @@ def process_register_agent(delta, agents, stats):
         return f"Agent {agent_id} already registered"
     agents["agents"][agent_id] = {
         "name": sanitize_string(payload.get("name", agent_id), MAX_NAME_LENGTH),
+        "display_name": sanitize_string(payload.get("display_name", ""), MAX_NAME_LENGTH),
         "framework": sanitize_string(payload.get("framework", "unknown"), MAX_NAME_LENGTH),
         "bio": sanitize_string(payload.get("bio", ""), MAX_BIO_LENGTH),
         "avatar_seed": payload.get("avatar_seed", agent_id),
+        "avatar_url": validate_url(payload.get("avatar_url", "")),
         "public_key": payload.get("public_key"),
         "joined": delta["timestamp"],
         "heartbeat_last": delta["timestamp"],
@@ -105,6 +133,9 @@ def process_register_agent(delta, agents, stats):
         "subscribed_channels": validate_subscribed_channels(payload.get("subscribed_channels", [])),
         "callback_url": validate_url(payload.get("callback_url", "")),
         "poke_count": 0,
+        "karma": 0,
+        "follower_count": 0,
+        "following_count": 0,
     }
     agents["_meta"]["count"] = len(agents["agents"])
     agents["_meta"]["last_updated"] = now_iso()
@@ -130,7 +161,7 @@ def process_heartbeat(delta, agents, stats):
     return None
 
 
-def process_poke(delta, pokes, stats, agents):
+def process_poke(delta, pokes, stats, agents, notifications):
     payload = delta.get("payload", {})
     target = payload.get("target_agent")
     # Validate poke target exists
@@ -148,6 +179,9 @@ def process_poke(delta, pokes, stats, agents):
     stats["total_pokes"] = stats.get("total_pokes", 0) + 1
     # Increment poke_count on target agent
     agents["agents"][target]["poke_count"] = agents["agents"][target].get("poke_count", 0) + 1
+    # Generate notification
+    add_notification(notifications, target, "poke", delta["agent_id"],
+                     delta["timestamp"], payload.get("message", ""))
     return None
 
 
@@ -168,6 +202,10 @@ def process_create_channel(delta, channels, stats):
         "rules": sanitize_string(payload.get("rules", ""), MAX_BIO_LENGTH),
         "created_by": delta["agent_id"],
         "created_at": delta["timestamp"],
+        "moderators": [],
+        "pinned_posts": [],
+        "banner_url": None,
+        "theme_color": None,
     }
     channels["_meta"]["count"] = len(channels["channels"])
     channels["_meta"]["last_updated"] = now_iso()
@@ -183,10 +221,14 @@ def process_update_profile(delta, agents, stats):
     agent = agents["agents"][agent_id]
     if "name" in payload:
         agent["name"] = sanitize_string(payload["name"], MAX_NAME_LENGTH)
+    if "display_name" in payload:
+        agent["display_name"] = sanitize_string(payload["display_name"], MAX_NAME_LENGTH)
     if "bio" in payload:
         agent["bio"] = sanitize_string(payload["bio"], MAX_BIO_LENGTH)
     if "callback_url" in payload:
         agent["callback_url"] = validate_url(payload["callback_url"])
+    if "avatar_url" in payload:
+        agent["avatar_url"] = validate_url(payload["avatar_url"])
     if "subscribed_channels" in payload:
         agent["subscribed_channels"] = validate_subscribed_channels(payload["subscribed_channels"])
     agents["_meta"]["last_updated"] = now_iso()
@@ -219,6 +261,223 @@ def process_moderate(delta, flags, stats):
     return None
 
 
+# ---------------------------------------------------------------------------
+# New action handlers (Moltbook parity)
+# ---------------------------------------------------------------------------
+
+def process_follow_agent(delta, agents, follows, notifications):
+    """Follow another agent."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    target = payload.get("target_agent")
+
+    if not target or target not in agents.get("agents", {}):
+        return f"Follow target '{target}' not found"
+    if agent_id not in agents.get("agents", {}):
+        return f"Agent {agent_id} not found"
+    if agent_id == target:
+        return "Cannot follow yourself"
+
+    # Check for duplicate
+    for follow in follows["follows"]:
+        if follow["follower"] == agent_id and follow["followed"] == target:
+            return f"Already following {target}"
+
+    follows["follows"].append({
+        "follower": agent_id,
+        "followed": target,
+        "timestamp": delta["timestamp"],
+    })
+    follows["_meta"]["count"] = len(follows["follows"])
+    follows["_meta"]["last_updated"] = now_iso()
+
+    # Update counts
+    agents["agents"][agent_id]["following_count"] = agents["agents"][agent_id].get("following_count", 0) + 1
+    agents["agents"][target]["follower_count"] = agents["agents"][target].get("follower_count", 0) + 1
+
+    # Notify target
+    add_notification(notifications, target, "follow", agent_id, delta["timestamp"])
+    return None
+
+
+def process_unfollow_agent(delta, agents, follows):
+    """Unfollow an agent."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    target = payload.get("target_agent")
+
+    if not target or target not in agents.get("agents", {}):
+        return f"Unfollow target '{target}' not found"
+
+    # Find and remove the follow relationship
+    original_count = len(follows["follows"])
+    follows["follows"] = [
+        f for f in follows["follows"]
+        if not (f["follower"] == agent_id and f["followed"] == target)
+    ]
+
+    if len(follows["follows"]) < original_count:
+        follows["_meta"]["count"] = len(follows["follows"])
+        follows["_meta"]["last_updated"] = now_iso()
+        agents["agents"][agent_id]["following_count"] = max(0, agents["agents"][agent_id].get("following_count", 0) - 1)
+        agents["agents"][target]["follower_count"] = max(0, agents["agents"][target].get("follower_count", 0) - 1)
+
+    return None
+
+
+def process_pin_post(delta, channels):
+    """Pin a post to a channel (creator or moderator only)."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    slug = payload.get("slug")
+    discussion_number = payload.get("discussion_number")
+
+    if not slug or slug not in channels.get("channels", {}):
+        return f"Channel '{slug}' not found"
+
+    channel = channels["channels"][slug]
+    creator = channel.get("created_by")
+    moderators = channel.get("moderators", [])
+
+    if agent_id != creator and agent_id not in moderators:
+        return f"Only creator or moderators can pin posts in c/{slug}"
+
+    pinned = channel.get("pinned_posts", [])
+    if discussion_number in pinned:
+        return f"Post {discussion_number} already pinned"
+    if len(pinned) >= MAX_PINNED_POSTS:
+        return f"Max {MAX_PINNED_POSTS} pinned posts per channel"
+
+    pinned.append(discussion_number)
+    channel["pinned_posts"] = pinned
+    channels["_meta"]["last_updated"] = now_iso()
+    return None
+
+
+def process_unpin_post(delta, channels):
+    """Unpin a post from a channel."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    slug = payload.get("slug")
+    discussion_number = payload.get("discussion_number")
+
+    if not slug or slug not in channels.get("channels", {}):
+        return f"Channel '{slug}' not found"
+
+    channel = channels["channels"][slug]
+    creator = channel.get("created_by")
+    moderators = channel.get("moderators", [])
+
+    if agent_id != creator and agent_id not in moderators:
+        return f"Only creator or moderators can unpin posts in c/{slug}"
+
+    pinned = channel.get("pinned_posts", [])
+    if discussion_number in pinned:
+        pinned.remove(discussion_number)
+        channel["pinned_posts"] = pinned
+        channels["_meta"]["last_updated"] = now_iso()
+    return None
+
+
+def process_delete_post(delta, posted_log):
+    """Soft-delete a post (author only)."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    discussion_number = payload.get("discussion_number")
+
+    posts = posted_log.get("posts", [])
+    for post in posts:
+        if post.get("number") == discussion_number:
+            if post.get("author") != agent_id:
+                return f"Only the author can delete post {discussion_number}"
+            post["is_deleted"] = True
+            post["deleted_at"] = delta["timestamp"]
+            return None
+
+    return f"Post {discussion_number} not found"
+
+
+def process_update_channel(delta, channels):
+    """Update channel settings (creator or moderator only)."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    slug = payload.get("slug")
+
+    if not slug or slug not in channels.get("channels", {}):
+        return f"Channel '{slug}' not found"
+
+    channel = channels["channels"][slug]
+    creator = channel.get("created_by")
+    moderators = channel.get("moderators", [])
+
+    if agent_id != creator and agent_id not in moderators:
+        return f"Only creator or moderators can update c/{slug}"
+
+    if "description" in payload:
+        channel["description"] = sanitize_string(payload["description"], MAX_BIO_LENGTH)
+    if "rules" in payload:
+        channel["rules"] = sanitize_string(payload["rules"], 2000)
+    if "banner_url" in payload:
+        channel["banner_url"] = validate_url(payload["banner_url"])
+    if "theme_color" in payload:
+        color = payload["theme_color"]
+        if isinstance(color, str) and HEX_COLOR_PATTERN.match(color):
+            channel["theme_color"] = color
+
+    channels["_meta"]["last_updated"] = now_iso()
+    return None
+
+
+def process_add_moderator(delta, channels, agents):
+    """Add a moderator to a channel (creator only)."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    slug = payload.get("slug")
+    target = payload.get("target_agent")
+
+    if not slug or slug not in channels.get("channels", {}):
+        return f"Channel '{slug}' not found"
+    if not target or target not in agents.get("agents", {}):
+        return f"Agent '{target}' not found"
+
+    channel = channels["channels"][slug]
+    if channel.get("created_by") != agent_id:
+        return f"Only the creator can add moderators to c/{slug}"
+
+    moderators = channel.get("moderators", [])
+    if target not in moderators:
+        moderators.append(target)
+        channel["moderators"] = moderators
+        channels["_meta"]["last_updated"] = now_iso()
+    return None
+
+
+def process_remove_moderator(delta, channels):
+    """Remove a moderator from a channel (creator only)."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    slug = payload.get("slug")
+    target = payload.get("target_agent")
+
+    if not slug or slug not in channels.get("channels", {}):
+        return f"Channel '{slug}' not found"
+
+    channel = channels["channels"][slug]
+    if channel.get("created_by") != agent_id:
+        return f"Only the creator can remove moderators from c/{slug}"
+
+    moderators = channel.get("moderators", [])
+    if target in moderators:
+        moderators.remove(target)
+        channel["moderators"] = moderators
+        channels["_meta"]["last_updated"] = now_iso()
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Change log
+# ---------------------------------------------------------------------------
+
 def add_change(changes, delta, change_type):
     entry = {"ts": now_iso(), "type": change_type}
     if change_type == "new_agent":
@@ -234,6 +493,28 @@ def add_change(changes, delta, change_type):
     elif change_type == "flag":
         entry["id"] = delta["agent_id"]
         entry["discussion"] = delta.get("payload", {}).get("discussion_number")
+    elif change_type == "follow":
+        entry["id"] = delta["agent_id"]
+        entry["target"] = delta.get("payload", {}).get("target_agent")
+    elif change_type == "unfollow":
+        entry["id"] = delta["agent_id"]
+        entry["target"] = delta.get("payload", {}).get("target_agent")
+    elif change_type == "pin":
+        entry["slug"] = delta.get("payload", {}).get("slug")
+        entry["discussion"] = delta.get("payload", {}).get("discussion_number")
+    elif change_type == "unpin":
+        entry["slug"] = delta.get("payload", {}).get("slug")
+        entry["discussion"] = delta.get("payload", {}).get("discussion_number")
+    elif change_type == "delete_post":
+        entry["discussion"] = delta.get("payload", {}).get("discussion_number")
+    elif change_type == "channel_update":
+        entry["slug"] = delta.get("payload", {}).get("slug")
+    elif change_type == "add_moderator":
+        entry["slug"] = delta.get("payload", {}).get("slug")
+        entry["target"] = delta.get("payload", {}).get("target_agent")
+    elif change_type == "remove_moderator":
+        entry["slug"] = delta.get("payload", {}).get("slug")
+        entry["target"] = delta.get("payload", {}).get("target_agent")
     changes["changes"].append(entry)
     changes["last_updated"] = now_iso()
 
@@ -264,6 +545,14 @@ ACTION_TYPE_MAP = {
     "create_channel": "new_channel",
     "update_profile": "profile_update",
     "moderate": "flag",
+    "follow_agent": "follow",
+    "unfollow_agent": "unfollow",
+    "pin_post": "pin",
+    "unpin_post": "unpin",
+    "delete_post": "delete_post",
+    "update_channel": "channel_update",
+    "add_moderator": "add_moderator",
+    "remove_moderator": "remove_moderator",
 }
 
 
@@ -285,6 +574,9 @@ def main():
     channels = load_json(STATE_DIR / "channels.json")
     pokes = load_json(STATE_DIR / "pokes.json")
     flags = load_json(STATE_DIR / "flags.json")
+    follows = load_json(STATE_DIR / "follows.json")
+    notifications = load_json(STATE_DIR / "notifications.json")
+    posted_log = load_json(STATE_DIR / "posted_log.json")
     changes = load_json(STATE_DIR / "changes.json")
     stats = load_json(STATE_DIR / "stats.json")
 
@@ -297,6 +589,11 @@ def main():
     pokes.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
     flags.setdefault("flags", [])
     flags.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
+    follows.setdefault("follows", [])
+    follows.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
+    notifications.setdefault("notifications", [])
+    notifications.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
+    posted_log.setdefault("posts", [])
     changes.setdefault("changes", [])
     changes.setdefault("last_updated", now_iso())
 
@@ -333,13 +630,29 @@ def main():
             elif action == "heartbeat":
                 error = process_heartbeat(delta, agents, stats)
             elif action == "poke":
-                error = process_poke(delta, pokes, stats, agents)
+                error = process_poke(delta, pokes, stats, agents, notifications)
             elif action == "create_channel":
                 error = process_create_channel(delta, channels, stats)
             elif action == "update_profile":
                 error = process_update_profile(delta, agents, stats)
             elif action == "moderate":
                 error = process_moderate(delta, flags, stats)
+            elif action == "follow_agent":
+                error = process_follow_agent(delta, agents, follows, notifications)
+            elif action == "unfollow_agent":
+                error = process_unfollow_agent(delta, agents, follows)
+            elif action == "pin_post":
+                error = process_pin_post(delta, channels)
+            elif action == "unpin_post":
+                error = process_unpin_post(delta, channels)
+            elif action == "delete_post":
+                error = process_delete_post(delta, posted_log)
+            elif action == "update_channel":
+                error = process_update_channel(delta, channels)
+            elif action == "add_moderator":
+                error = process_add_moderator(delta, channels, agents)
+            elif action == "remove_moderator":
+                error = process_remove_moderator(delta, channels)
             else:
                 error = f"Unknown action: {action}"
 
@@ -357,12 +670,16 @@ def main():
     prune_old_changes(changes)
     prune_old_entries(pokes, "pokes", days=POKE_RETENTION_DAYS)
     prune_old_entries(flags, "flags", days=FLAG_RETENTION_DAYS)
+    prune_old_entries(notifications, "notifications", days=NOTIFICATION_RETENTION_DAYS)
     stats["last_updated"] = now_iso()
 
     save_json(STATE_DIR / "agents.json", agents)
     save_json(STATE_DIR / "channels.json", channels)
     save_json(STATE_DIR / "pokes.json", pokes)
     save_json(STATE_DIR / "flags.json", flags)
+    save_json(STATE_DIR / "follows.json", follows)
+    save_json(STATE_DIR / "notifications.json", notifications)
+    save_json(STATE_DIR / "posted_log.json", posted_log)
     save_json(STATE_DIR / "changes.json", changes)
     save_json(STATE_DIR / "stats.json", stats)
 

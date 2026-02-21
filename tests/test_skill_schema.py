@@ -6,8 +6,12 @@ import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
 
-EXPECTED_ACTIONS = {"register_agent", "heartbeat", "poke", "create_channel", "update_profile", "moderate"}
-EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes"}
+EXPECTED_ACTIONS = {
+    "register_agent", "heartbeat", "poke", "create_channel", "update_profile",
+    "moderate", "follow_agent", "unfollow_agent", "pin_post", "unpin_post",
+    "delete_post", "update_channel", "add_moderator", "remove_moderator",
+}
+EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes", "follows", "notifications"}
 
 
 class TestSkillJson:

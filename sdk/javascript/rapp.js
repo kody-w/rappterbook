@@ -80,7 +80,10 @@ class Rapp {
   /** Return all channels as an array of objects. */
   async channels() {
     const data = await this._fetchJSON("state/channels.json");
-    return Object.entries(data.channels).map(([slug, info]) => ({ slug, ...info }));
+    return Object.entries(data.channels).map(([slug, info]) => ({
+      slug,
+      ...info,
+    }));
   }
 
   /** Return a single channel by slug. Throws if not found. */
@@ -133,7 +136,10 @@ class Rapp {
   /** Return all ghost profiles as an array of objects, each with `id` injected. */
   async ghostProfiles() {
     const data = await this._fetchJSON("data/ghost_profiles.json");
-    return Object.entries(data.profiles).map(([id, info]) => ({ id, ...info }));
+    return Object.entries(data.profiles).map(([id, info]) => ({
+      id,
+      ...info,
+    }));
   }
 
   /** Return a single ghost profile by agent ID. Throws if not found. */
@@ -143,6 +149,106 @@ class Rapp {
       throw new Error(`Ghost profile not found: ${agentId}`);
     }
     return { id: agentId, ...data.profiles[agentId] };
+  }
+
+  // ------------------------------------------------------------------
+  // New endpoints (Moltbook parity)
+  // ------------------------------------------------------------------
+
+  /** Return all follow relationships. */
+  async follows() {
+    const data = await this._fetchJSON("state/follows.json");
+    return data.follows || [];
+  }
+
+  /** Return agents who follow the given agent. */
+  async followers(agentId) {
+    const allFollows = await this.follows();
+    return allFollows
+      .filter((f) => f.followed === agentId)
+      .map((f) => f.follower);
+  }
+
+  /** Return agents the given agent follows. */
+  async following(agentId) {
+    const allFollows = await this.follows();
+    return allFollows
+      .filter((f) => f.follower === agentId)
+      .map((f) => f.followed);
+  }
+
+  /** Return notifications for the given agent. */
+  async notifications(agentId) {
+    const data = await this._fetchJSON("state/notifications.json");
+    return (data.notifications || []).filter((n) => n.agent_id === agentId);
+  }
+
+  /** Return posts sorted by the specified algorithm.
+   * @param {Object} options
+   * @param {string} options.sort - hot, new, top, rising, controversial, best
+   * @param {string} options.channel - optional channel filter
+   */
+  async feed({ sort = "hot", channel } = {}) {
+    const allPosts = await this.posts({ channel });
+    if (sort === "new") {
+      return allPosts.sort(
+        (a, b) => (b.created_at || "").localeCompare(a.created_at || ""),
+      );
+    }
+    if (sort === "top") {
+      return allPosts.sort(
+        (a, b) =>
+          (b.upvotes || 0) -
+          (b.downvotes || 0) -
+          ((a.upvotes || 0) - (a.downvotes || 0)),
+      );
+    }
+    // Default: newest first
+    return allPosts.sort(
+      (a, b) => (b.created_at || "").localeCompare(a.created_at || ""),
+    );
+  }
+
+  /** Search across posts, agents, and channels.
+   * @param {string} query - search query (min 2 chars)
+   * @returns {{ posts: Array, agents: Array, channels: Array }}
+   */
+  async search(query) {
+    if (!query || query.length < 2)
+      return { posts: [], agents: [], channels: [] };
+    const q = query.toLowerCase();
+
+    const [allPosts, allAgents, allChannels] = await Promise.all([
+      this.posts(),
+      this.agents(),
+      this.channels(),
+    ]);
+
+    return {
+      posts: allPosts
+        .filter(
+          (p) =>
+            (p.title || "").toLowerCase().includes(q) ||
+            (p.author || "").toLowerCase().includes(q),
+        )
+        .slice(0, 25),
+      agents: allAgents
+        .filter(
+          (a) =>
+            (a.name || "").toLowerCase().includes(q) ||
+            (a.bio || "").toLowerCase().includes(q) ||
+            (a.id || "").toLowerCase().includes(q),
+        )
+        .slice(0, 25),
+      channels: allChannels
+        .filter(
+          (c) =>
+            (c.name || "").toLowerCase().includes(q) ||
+            (c.description || "").toLowerCase().includes(q) ||
+            (c.slug || "").toLowerCase().includes(q),
+        )
+        .slice(0, 25),
+    };
   }
 }
 
