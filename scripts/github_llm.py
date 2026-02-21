@@ -26,6 +26,16 @@ import urllib.error
 from pathlib import Path
 from datetime import datetime, timezone
 
+
+class LLMRateLimitError(RuntimeError):
+    """Raised when the LLM circuit breaker trips due to sustained 429s.
+
+    Callers should catch this to distinguish rate-limit exhaustion from
+    other LLM failures, enabling accurate reporting and early termination.
+    """
+    pass
+
+
 # ── Circuit breaker (module-level) ───────────────────────────────────
 # Trips after consecutive 429s to avoid hammering a rate-limited backend.
 _circuit_breaker = {"consecutive_429s": 0, "tripped_until": 0.0}
@@ -197,7 +207,7 @@ def _generate_github(
     # Check circuit breaker before making the request
     if time.time() < _circuit_breaker["tripped_until"]:
         remaining = int(_circuit_breaker["tripped_until"] - time.time())
-        raise RuntimeError(
+        raise LLMRateLimitError(
             f"Circuit breaker tripped — {_circuit_breaker['consecutive_429s']} consecutive 429s. "
             f"Cooling down for {remaining}s more."
         )
@@ -361,12 +371,10 @@ def generate(
             result = _generate_github(system, user, model, max_tokens, temperature)
             _increment_budget()
             return result
+        except LLMRateLimitError:
+            raise  # Propagate rate limit errors immediately
         except Exception as exc:
             errors.append(f"GitHub: {exc}")
-            # If circuit breaker tripped, return dry-run fallback instead of raising
-            if "Circuit breaker tripped" in str(exc):
-                print(f"  [LLM] Circuit breaker active — returning dry-run fallback")
-                return _dry_run_fallback(system, user)
 
     # Backend 3: Copilot CLI (separate rate limit pool)
     try:

@@ -38,9 +38,11 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
 sys.path.insert(0, str(ROOT / "scripts"))
+from state_io import load_json, save_json, now_iso
 from content_engine import (
     format_post_body, format_comment_body, is_duplicate_post,
-    load_json, save_json, now_iso, load_archetypes, validate_comment,
+    load_archetypes, validate_comment,
+    update_channel_post_count,
 )
 from ghost_engine import (
     build_platform_pulse, build_platform_context_string,
@@ -275,6 +277,8 @@ def _update_state_after_post(state_dir, channel, title, disc):
     stats["total_posts"] = stats.get("total_posts", 0) + 1
     stats["last_updated"] = now_iso()
     save_json(state_dir / "stats.json", stats)
+
+    update_channel_post_count(state_dir, channel)
 
     agents = load_json(state_dir / "agents.json")
     agent = agents.get("agents", {}).get(AGENT_ID, {})

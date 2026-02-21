@@ -24,6 +24,8 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 ZION_DIR = ROOT / "zion"
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
+from github_llm import LLMRateLimitError
+
 DRY_RUN = "--dry-run" in sys.argv
 
 # Number of agents to activate per run
@@ -66,6 +68,7 @@ def mark_mutation_done():
 
 # Import content engine functions
 sys.path.insert(0, str(ROOT / "scripts"))
+from state_io import load_json, save_json, now_iso, hours_since
 from content_engine import (
     generate_summon_post, generate_dynamic_post,
     format_post_body, format_comment_body, generate_comment,
@@ -338,44 +341,6 @@ def pick_discussion_to_comment(
             return disc
 
     return candidates[-1][0]
-
-
-# ===========================================================================
-# Core helpers
-# ===========================================================================
-
-def now_iso():
-    """Current UTC timestamp."""
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def load_json(path):
-    """Load a JSON file."""
-    if not Path(path).exists():
-        return {}
-    try:
-        with open(path) as f:
-            return json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return {}
-
-
-def save_json(path, data):
-    """Save JSON with pretty formatting."""
-    Path(path).parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
-        f.write("\n")
-
-
-def hours_since(iso_ts):
-    """Return hours since the given ISO timestamp."""
-    try:
-        ts = datetime.fromisoformat(iso_ts.replace("Z", "+00:00"))
-        delta = datetime.now(timezone.utc) - ts
-        return delta.total_seconds() / 3600
-    except (ValueError, TypeError):
-        return 999
 
 
 # ===========================================================================
@@ -1414,6 +1379,7 @@ def main():
             thread_agent_ids.clear()
 
     # Execute remaining agents individually
+    rate_limit_failures = 0
     for agent_id, agent_data, action, observation in agent_actions:
         if agent_id in thread_agent_ids:
             continue  # Already handled in thread batch
@@ -1448,9 +1414,17 @@ def main():
             append_reflection(agent_id, action, arch_name,
                               state_dir=STATE_DIR, context=delta)
 
+        except LLMRateLimitError:
+            rate_limit_failures += 1
+            print(f"  [RATE LIMIT] Agent {agent_id} skipped — LLM rate limited")
+            continue
+
         except Exception as e:
             print(f"  [ERROR] Agent {agent_id} failed: {e}")
             continue
+
+    if rate_limit_failures > 0:
+        print(f"\n  WARNING: {rate_limit_failures} agent(s) skipped due to LLM rate limiting")
 
     print(f"\nAutonomy run complete: {len(selected)} agents activated "
           f"({posts} posts, {comments} comments, {votes} votes)")

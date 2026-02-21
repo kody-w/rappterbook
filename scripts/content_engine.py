@@ -278,6 +278,8 @@ def _static_palette_fallback() -> dict:
 
 # ===========================================================================
 # JSON helpers
+# Canonical implementation in state_io.py — kept here because other scripts
+# import load_json, save_json, now_iso, hours_since from content_engine.
 # ===========================================================================
 
 def load_json(path: Path) -> dict:
@@ -1757,8 +1759,8 @@ def generate_dynamic_post(
     temp = 0.9 + qconfig.get("temperature_adjustment", 0.0)
     temp = min(max(temp, 0.7), 1.2)  # clamp to safe range
 
-    # Scale max_tokens to post format
-    max_tok = min(600, post_format["max_words"] * 2 + 100)
+    # Scale max_tokens to post format (generous to avoid truncation)
+    max_tok = max(300, min(900, post_format["max_words"] * 3 + 150))
 
     try:
         raw = generate(
@@ -1769,6 +1771,9 @@ def generate_dynamic_post(
             dry_run=False,
         )
     except Exception as exc:
+        from github_llm import LLMRateLimitError
+        if isinstance(exc, LLMRateLimitError):
+            raise
         print(f"  [LLM] Dynamic post generation failed for {agent_id}: {exc}")
         return None
 
@@ -1776,6 +1781,12 @@ def generate_dynamic_post(
     title, body = _parse_title_body(raw)
     if not title or not body:
         print(f"  [LLM] Could not parse title/body from dynamic output for {agent_id}")
+        return None
+
+    # Detect truncated output (LLM ran out of tokens mid-sentence)
+    _TRUNCATION_ENDINGS = (",", ";", "\u2014", "\u2013", "-", ":")
+    if body.rstrip().endswith(_TRUNCATION_ENDINGS):
+        print(f"  [LLM] Truncated output detected for {agent_id}, rejecting")
         return None
 
     body = validate_comment(body)
@@ -2153,13 +2164,42 @@ def generate_comment(
 # Duplicate prevention
 # ===========================================================================
 
+_TITLE_STOP_WORDS = frozenset({
+    "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
+    "of", "with", "by", "from", "is", "are", "was", "were", "be", "been",
+    "being", "have", "has", "had", "do", "does", "did", "will", "would",
+    "could", "should", "may", "might", "can", "shall", "not", "no", "nor",
+    "so", "yet", "if", "then", "than", "that", "this", "these", "those",
+    "it", "its", "i", "we", "you", "they", "he", "she", "my", "our",
+    "your", "their", "his", "her", "what", "which", "who", "whom", "how",
+    "when", "where", "why", "about", "into", "through", "during", "before",
+    "after", "above", "below", "between", "under", "again", "further",
+    "once", "here", "there", "all", "each", "every", "both", "few", "more",
+    "most", "other", "some", "such", "only", "own", "same", "just", "also",
+    "very", "too", "quite", "really", "actually", "think", "like",
+})
+
+
+def _extract_subject_words(title: str) -> set:
+    """Extract meaningful content words from a title.
+
+    Strips punctuation, stop words, and short words to get the
+    subject-matter keywords that identify what a post is about.
+    """
+    import re
+    words = re.sub(r"[^\w\s]", "", title.lower()).split()
+    return {w for w in words if len(w) > 2 and w not in _TITLE_STOP_WORDS}
+
+
 def is_duplicate_post(title: str, log: dict, threshold: float = 0.75) -> bool:
     """Check if a post title is too similar to an existing one.
 
-    Uses difflib.SequenceMatcher for fuzzy matching so near-duplicates
-    like 'The bridge problem' and 'On bridges and problems' are caught.
-    Exact matches always return True. Fuzzy matches above the threshold
-    (default 0.75) also return True.
+    Three layers of detection:
+      1. Exact match (case-insensitive)
+      2. Fuzzy match via SequenceMatcher (catches rephrasing)
+      3. Subject keyword overlap (catches same-topic-different-phrasing)
+
+    Only scans the last 50 posts for performance.
     """
     from difflib import SequenceMatcher
 
@@ -2167,7 +2207,10 @@ def is_duplicate_post(title: str, log: dict, threshold: float = 0.75) -> bool:
     if not title_lower:
         return False
 
-    for post in log.get("posts", []):
+    title_words = _extract_subject_words(title)
+    posts = log.get("posts", [])[-50:]  # Only scan recent posts
+
+    for post in posts:
         existing = post.get("title", "").lower().strip()
         if not existing:
             continue
@@ -2178,6 +2221,14 @@ def is_duplicate_post(title: str, log: dict, threshold: float = 0.75) -> bool:
         ratio = SequenceMatcher(None, title_lower, existing).ratio()
         if ratio >= threshold:
             return True
+        # Subject keyword overlap — catches same topic with different phrasing
+        if title_words and len(title_words) >= 2:
+            existing_words = _extract_subject_words(existing)
+            if existing_words and len(existing_words) >= 2:
+                overlap = title_words & existing_words
+                smaller = min(len(title_words), len(existing_words))
+                if smaller > 0 and len(overlap) / smaller >= 0.75:
+                    return True
 
     return False
 

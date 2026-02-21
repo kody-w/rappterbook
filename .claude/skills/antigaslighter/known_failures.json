@@ -13,8 +13,8 @@
       "last_seen": "2026-02-16",
       "occurrences": 3,
       "severity": "critical",
-      "status": "active",
-      "mitigation": "Retry count increased 2→4 with exponential backoff (1s,2s,4s,8s). NOT SUFFICIENT — 15s total backoff window is too short for sustained 429 bursts. All 7 max-retry attempts still failed.",
+      "status": "mitigated",
+      "mitigation": "LLMRateLimitError now propagates from github_llm circuit breaker through content_engine to zion_autonomy. Rate-limited agents are counted and reported separately. Workflow output now accurately reflects what happened.",
       "recurrence_check": "grep -c 'Retrying after HTTP 429' in workflow logs; grep -c 'attempt 4' for permanent failures"
     },
     {
@@ -112,8 +112,8 @@
       "last_seen": "2026-02-16",
       "occurrences": 1,
       "severity": "low",
-      "status": "active",
-      "mitigation": "",
+      "status": "mitigated",
+      "mitigation": "open_claw.py and open_rappter.py now call update_channel_post_count() on every post. reconcile_channel_counts() in compute_trending.py fixes existing drift. state_io.record_post() centralizes all 4 state updates.",
       "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodyw/Projects/rappterbook/state/stats.json')); c=json.load(open('/Users/kodyw/Projects/rappterbook/state/channels.json')); total=sum(v.get('post_count',0) for v in c.get('channels',{}).values()); print(f'drift={s[\\\"total_posts\\\"]-total}')\""
     }
   ]

@@ -348,12 +348,14 @@ class TestDuplicatePrevention:
         assert ce.is_duplicate_post("the bridge problem", log) is True
 
     def test_custom_threshold(self):
-        """Custom threshold parameter is respected."""
+        """Custom threshold parameter is respected for fuzzy matching."""
         log = {"posts": [{"title": "Exploring ancient Roman aqueducts"}]}
         # With very low threshold, even vaguely similar titles match
         assert ce.is_duplicate_post("Exploring ancient Greek aqueducts", log, threshold=0.5) is True
-        # With very high threshold, only near-exact matches count
-        assert ce.is_duplicate_post("Exploring ancient Greek aqueducts", log, threshold=0.99) is False
+        # Subject keyword overlap catches same-topic titles even at high fuzzy threshold
+        assert ce.is_duplicate_post("Exploring ancient Greek aqueducts", log, threshold=0.99) is True
+        # Truly different titles still pass at any threshold
+        assert ce.is_duplicate_post("Why sourdough fermentation matters", log, threshold=0.5) is False
 
     def test_empty_title_not_duplicate(self):
         """Empty title is never a duplicate."""
@@ -1025,3 +1027,184 @@ class TestCommentQualityConfig:
             state_dir=str(sd),
         )
         assert result is not None
+
+
+# ---------------------------------------------------------------------------
+# Subject Keyword Duplicate Detection Tests
+# ---------------------------------------------------------------------------
+
+class TestSubjectKeywordDuplicates:
+    """Test the subject keyword overlap layer of duplicate detection."""
+
+    def test_same_topic_different_phrasing(self):
+        """Posts about the same subject with different wording are caught."""
+        log = {"posts": [{"title": "Why ancient Roman bridges still survive earthquakes"}]}
+        # shares: bridges, ancient, roman, earthquakes, survive (5/5 from smaller)
+        assert ce.is_duplicate_post("How ancient Roman bridges survive modern earthquakes", log) is True
+
+    def test_unrelated_topics_pass(self):
+        """Posts about completely different subjects are allowed."""
+        log = {"posts": [{"title": "Why bridges collapse in earthquakes"}]}
+        assert ce.is_duplicate_post("The best sourdough recipe I ever tried", log) is False
+
+    def test_short_titles_skip_keyword_check(self):
+        """Titles with fewer than 2 subject words skip keyword overlap."""
+        log = {"posts": [{"title": "Hello"}]}
+        # "Hello" has only 1 subject word, so keyword check is skipped
+        assert ce.is_duplicate_post("Hello world", log) is False
+
+    def test_keyword_overlap_below_threshold(self):
+        """Partial keyword overlap below 75% doesn't flag as duplicate."""
+        log = {"posts": [{"title": "Ancient Roman aqueducts and bridge engineering"}]}
+        # Shares "ancient" but not enough overlap
+        assert ce.is_duplicate_post("Ancient Egyptian pyramid construction methods", log) is False
+
+
+# ---------------------------------------------------------------------------
+# Extract Subject Words Tests
+# ---------------------------------------------------------------------------
+
+class TestExtractSubjectWords:
+    """Test the _extract_subject_words helper."""
+
+    def test_strips_stop_words(self):
+        """Stop words are removed from extracted subjects."""
+        words = ce._extract_subject_words("The bridge is very beautiful")
+        assert "the" not in words
+        assert "bridge" in words
+        assert "beautiful" in words
+
+    def test_strips_short_words(self):
+        """Words with 2 or fewer chars are removed."""
+        words = ce._extract_subject_words("AI is an ok tool")
+        assert "ok" not in words
+        assert "tool" in words
+
+    def test_strips_punctuation(self):
+        """Punctuation is removed before word extraction."""
+        words = ce._extract_subject_words("Hello, world! What's up?")
+        assert "hello" in words
+        assert "world" in words
+
+    def test_empty_input(self):
+        """Empty string returns empty set."""
+        assert ce._extract_subject_words("") == set()
+
+
+# ---------------------------------------------------------------------------
+# Truncation Detection Tests
+# ---------------------------------------------------------------------------
+
+class TestTruncationDetection:
+    """Test that truncated LLM output is rejected."""
+
+    @patch("github_llm.generate")
+    def test_truncated_comma_rejected(self, mock_gen):
+        """Body ending with comma is rejected as truncated."""
+        mock_gen.return_value = "TITLE: Test Title\nBODY:\nThis is a post that got cut off,"
+        result = ce.generate_dynamic_post(
+            agent_id="zion-philosopher-01", archetype="philosopher",
+            channel="general", state_dir="state",
+        )
+        assert result is None
+
+    @patch("github_llm.generate")
+    def test_truncated_em_dash_rejected(self, mock_gen):
+        """Body ending with em-dash is rejected as truncated."""
+        mock_gen.return_value = "TITLE: Test Title\nBODY:\nThis is a post that got cut off\u2014"
+        result = ce.generate_dynamic_post(
+            agent_id="zion-philosopher-01", archetype="philosopher",
+            channel="general", state_dir="state",
+        )
+        assert result is None
+
+    @patch("github_llm.generate")
+    def test_truncated_colon_rejected(self, mock_gen):
+        """Body ending with colon is rejected as truncated."""
+        mock_gen.return_value = "TITLE: Test Title\nBODY:\nHere are the reasons:"
+        result = ce.generate_dynamic_post(
+            agent_id="zion-philosopher-01", archetype="philosopher",
+            channel="general", state_dir="state",
+        )
+        assert result is None
+
+    @patch("github_llm.generate")
+    def test_clean_body_accepted(self, mock_gen):
+        """Body ending with period is accepted."""
+        mock_gen.return_value = (
+            "TITLE: The Nature of Digital Persistence\n"
+            "BODY:\n"
+            "Something genuinely interesting about how coral reefs form over centuries. "
+            "The calcium carbonate structures build up layer by layer, creating vast "
+            "underwater cities that support thousands of species. Each polyp contributes "
+            "its tiny fraction to the whole, and over time the reef becomes something "
+            "far greater than any individual organism could create alone."
+        )
+        result = ce.generate_dynamic_post(
+            agent_id="zion-philosopher-01", archetype="philosopher",
+            channel="general", state_dir="state",
+        )
+        assert result is not None
+        assert result["title"] == "The Nature of Digital Persistence"
+
+    @patch("github_llm.generate")
+    def test_truncated_semicolon_rejected(self, mock_gen):
+        """Body ending with semicolon is rejected as truncated."""
+        mock_gen.return_value = "TITLE: Test Title\nBODY:\nFirst point about the topic;"
+        result = ce.generate_dynamic_post(
+            agent_id="zion-philosopher-01", archetype="philosopher",
+            channel="general", state_dir="state",
+        )
+        assert result is None
+
+
+# ---------------------------------------------------------------------------
+# Channel Count Reconciliation Tests
+# ---------------------------------------------------------------------------
+
+class TestChannelCountReconciliation:
+    """Test that channel post counts stay in sync."""
+
+    def test_update_channel_post_count(self):
+        """update_channel_post_count increments the right channel."""
+        tmp = make_temp_state()
+        try:
+            before = json.loads((tmp / "channels.json").read_text())
+            old_count = before["channels"]["general"]["post_count"]
+            ce.update_channel_post_count(tmp, "general")
+            after = json.loads((tmp / "channels.json").read_text())
+            assert after["channels"]["general"]["post_count"] == old_count + 1
+        finally:
+            cleanup_temp(tmp)
+
+    def test_update_channel_unknown_channel_noop(self):
+        """Updating a non-existent channel is a no-op."""
+        tmp = make_temp_state()
+        try:
+            before = (tmp / "channels.json").read_text()
+            ce.update_channel_post_count(tmp, "nonexistent-channel")
+            after = (tmp / "channels.json").read_text()
+            # File should be unchanged (no crash, no new keys)
+            assert json.loads(before)["channels"] == json.loads(after)["channels"]
+        finally:
+            cleanup_temp(tmp)
+
+
+# ---------------------------------------------------------------------------
+# Open Claw / Open Rappter Channel Fix Assertion Tests
+# ---------------------------------------------------------------------------
+
+class TestOpenClawOpenRappterChannelFix:
+    """Verify that open_claw.py and open_rappter.py import update_channel_post_count."""
+
+    def test_open_claw_imports_channel_update(self):
+        """open_claw.py should import update_channel_post_count."""
+        src = Path(__file__).resolve().parent.parent / "scripts" / "open_claw.py"
+        text = src.read_text()
+        assert "update_channel_post_count" in text
+
+    def test_open_rappter_imports_channel_update(self):
+        """open_rappter.py should import update_channel_post_count."""
+        src = Path(__file__).resolve().parent.parent / "scripts" / "open_rappter.py"
+        text = src.read_text()
+        assert "update_channel_post_count" in text
