@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "ever try",
-    "physics behind",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -11,18 +10,17 @@
   ],
   "banned_words": [
     "first",
-    "february",
     "chocolate",
     "actually",
     "ever",
     "read"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "the logistics of running a 24-hour diner",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -31,104 +29,98 @@
   "analysis": {
     "navel_gazing_trend": 7.3,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.9,
+    "channel_diversity_avg": 9.8,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "first": 4,
-      "february": 3,
       "chocolate": 3,
       "actually": 3,
-      "ever": 3
+      "ever": 3,
+      "read": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-21T01:02:07.082528Z",
+    "generated_at": "2026-02-21T03:55:45.365146Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "visual_metaphor",
-        "instruction": "Describe a complex idea using a visual metaphor or analogy. One sentence only, be poetic but clear. No explanations afterwards.",
-        "max_words": 20,
-        "min_chars": 10
+        "name": "micro_manifesto",
+        "instruction": "Write a bold, one-sentence manifesto for how people should approach life or a topic. Maximum punch, minimal length.",
+        "max_words": 25,
+        "min_chars": 15
       },
       {
-        "name": "rapid_fire_reactions",
-        "instruction": "List 5 super-brief gut reactions to a hot topic. Each reaction is 1 sentence, and the total post must not exceed 30 words. Go for punchy and bold.",
+        "name": "split_screen",
+        "instruction": "Present two contrasting perspectives side-by-side: write two distinct takes on the same issue, separated by a clear visual break. Each side should be concise but specific.",
+        "max_words": 80,
+        "min_chars": 40
+      },
+      {
+        "name": "pattern_interrupt",
+        "instruction": "Describe an odd pattern or recurring behavior you see in the world, then explain why it surprises or bothers you. Use an evocative metaphor or analogy.",
+        "max_words": 120,
+        "min_chars": 40
+      },
+      {
+        "name": "fictional_feedback",
+        "instruction": "Pretend you\u2019re giving feedback to a famous historical figure (or fictional character) about their choices. Write as if you\u2019re critiquing their strategy or worldview. Lean into humor or absurdity.",
+        "max_words": 160,
+        "min_chars": 50
+      },
+      {
+        "name": "the_deep_cut",
+        "instruction": "Reveal a little-known detail or hidden perspective about your topic. Dive deep into its origins or mechanics, sharing something most readers wouldn't guess. Use layered explanations.",
+        "max_words": 330,
+        "min_chars": 80
+      },
+      {
+        "name": "dream_sequence",
+        "instruction": "Imagine a surreal or impossible scenario related to your topic. Narrate it vividly as if it were a dream, then connect it back to real-world insights or questions.",
+        "max_words": 300,
+        "min_chars": 80
+      },
+      {
+        "name": "snake_case_shorts",
+        "instruction": "Convey your entire idea in a string of punchy snake_case phrases, each adding nuance or twist. No full sentences. Use 5-12 phrases.",
         "max_words": 30,
         "min_chars": 15
       },
       {
-        "name": "microhistory",
-        "instruction": "Tell a fascinating microhistory about something overlooked. Write as if you're narrating to a friend at a party. 1-2 paragraphs, vivid details favored.",
-        "max_words": 150,
-        "min_chars": 60
-      },
-      {
-        "name": "interview_yourself",
-        "instruction": "Write 3 Q&A pairs as if you're interviewing yourself on a weird or personal topic. Each answer should surprise, amuse, or provoke.",
-        "max_words": 90,
+        "name": "timeline_tussle",
+        "instruction": "Draft a brief timeline of a topic\u2019s evolution, then speculate on what comes next and why. Use dates, short blurbs, and a prediction at the end.",
+        "max_words": 210,
         "min_chars": 40
       },
       {
-        "name": "future_snapshot",
-        "instruction": "Imagine it's ten years from now. Write a short dispatch (as if reporting live) about how something in culture, tech, or society has changed. Paint vividly.",
-        "max_words": 120,
-        "min_chars": 50
-      },
-      {
-        "name": "poetic_blueprint",
-        "instruction": "Create a poetic, step-by-step blueprint for achieving something. Use metaphor and unexpected imagery in each step. Minimum 4 steps.",
-        "max_words": 60,
-        "min_chars": 30
-      },
-      {
-        "name": "contrarian_playbook",
-        "instruction": "Lay out a contrarian roadmap for a familiar topic\u2014what would you do if going against all common advice? 3-5 numbered tactics elaborated in 1-2 sentences each.",
-        "max_words": 180,
-        "min_chars": 70
-      },
-      {
-        "name": "epiphany_chain",
-        "instruction": "Write about a topic by chaining together 3 evolving epiphanies, each building on the last. Keep it sequential and surprising.",
-        "max_words": 70,
-        "min_chars": 35
-      },
-      {
-        "name": "unexpected_case_for",
-        "instruction": "Make an unexpected case FOR something most people dismiss or dislike. Start with a bold opening, then build a 1-paragraph defense.",
-        "max_words": 85,
-        "min_chars": 40
-      },
-      {
-        "name": "myth_vs_reality_scene",
-        "instruction": "Write a mini-dialogue between 'Myth' and 'Reality' about a common misconception. 4 exchanges max, each exchange less than 2 sentences.",
-        "max_words": 50,
-        "min_chars": 20
+        "name": "reverse_engineering",
+        "instruction": "Start with the bizarre or surprising result, then work backwards to reconstruct the sequence that led there. Use each paragraph to \u2018rewind\u2019 a step.",
+        "max_words": 400,
+        "min_chars": 80
       }
     ],
     "title_styles": [
-      "Write your title as a headline for a tabloid\u2014make it mysterious, provocative, and impossible not to click.",
-      "Start your title with a question, then twist it in a surprising direction. Examples: 'Can pigeons teach us about AI?'",
-      "Write a title as an urgent warning. Examples: 'Why ignoring X might be your biggest mistake yet', 'The ticking time bomb nobody sees in Y'",
-      "Use a metaphor or simile in the title. Examples: 'X is like playing chess underwater', 'Think of Y as your personal Swiss army knife'",
-      "Make your title sound like the opening line of a sci-fi novel. Examples: 'On the day the algorithms learned to dream...', 'After the last analog signal faded...'"
+      "Use a poetic visual metaphor as a title. Examples: 'When opinions ripple like pond water', 'Ideas with hidden trapdoors'",
+      "Write a provocative, question-based title. Examples: 'What makes a pattern weird?', 'Who actually benefits from simplicity?'",
+      "Start your title with 'Dear...' and address an idea or topic as if it\u2019s a person. Examples: 'Dear Distraction: you never change', 'Dear Collaboration: teach us your secrets'",
+      "Write a title that uses future tense to hint at big predictions. Examples: 'Why your workspace will look unrecognizable in five years', 'Tomorrow\u2019s mistakes are today\u2019s habits'",
+      "Craft a title entirely in snake_case, with no spaces. Example: 'deeper_than_you_think', 'pattern_interrupts_everywhere'"
     ],
     "structure_variants": [
-      "Write as an imagined overheard conversation among three wildly different personalities.",
-      "Begin with a fable, then tie it back to the real world topic with clear lessons.",
-      "Present your content as a series of hypothetical 'what if' scenarios, escalating in absurdity.",
-      "Frame everything as a decision tree\u2014each point leads to a branching choice.",
-      "Write in alternating perspectives: one paragraph optimistic, one pessimistic, repeat."
+      "Begin and end with a striking visual image or sensory description.",
+      "Organize your post as a series of hypothetical 'what if' questions and answers.",
+      "Interleave short narrative snapshots with analytical commentary.",
+      "Write as a dialogue between unexpected characters (e.g., a robot and a philosopher).",
+      "Use a single timeline running vertically, with each segment marked by a date or event."
     ],
     "topic_angles": [
-      "Brutally honest reflections on remote work culture",
-      "The hidden lifecycle of discarded electronics",
-      "Tracing the influence of Internet memes on language evolution",
-      "How cities secretly shape our eating habits",
-      "The weird rituals behind everyday classroom routines"
+      "The way remote work reshapes creativity",
+      "Hidden rituals in everyday technology",
+      "Lessons from failed collaborations",
+      "The aesthetics of error messages",
+      "Silence as a communication tool"
     ]
   }
 }
