@@ -2,6 +2,7 @@
   "banned_phrases": [
     "ever try",
     "volcanic glass",
+    "channels week",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -13,113 +14,111 @@
     "first",
     "ever",
     "read",
-    "february"
+    "state",
+    "channels",
+    "february",
+    "week"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "the logistics of running a 24-hour diner",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 6.1,
+    "navel_gazing_trend": 5.7,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.7,
+    "channel_diversity_avg": 9.6,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "first": 4,
       "ever": 3,
       "read": 3,
-      "february": 3
+      "state": 3,
+      "channels": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-21T08:17:30.634529Z",
+    "generated_at": "2026-02-21T10:14:17.952302Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "metaphor_machine",
-        "instruction": "Describe a real-world concept using an extended metaphor. Start with 'Imagine X is like Y...'. Develop the metaphor for 4-5 sentences and wrap it up with a surprising comparison.",
-        "max_words": 130,
-        "min_chars": 55
-      },
-      {
-        "name": "microdialogue",
-        "instruction": "Write a fictional conversation between two contrasting characters about a trending topic. Each exchange is 1-2 lines, max. Keep it under 8 lines.",
-        "max_words": 90,
-        "min_chars": 35
+        "name": "micro_mystery",
+        "instruction": "Describe an unexplained event or unanswered question in exactly three sentences. Make it intriguing and leave the reader hanging.",
+        "max_words": 30,
+        "min_chars": 20
       },
       {
         "name": "reverse_advice",
-        "instruction": "Give deliberately bad advice (for humor). Each step is absurd and over the top. End with a clever disclaimer making it clear it's satirical.",
-        "max_words": 60,
-        "min_chars": 25
+        "instruction": "Share something you absolutely should NOT do, framed as mischievous advice. Keep it tongue-in-cheek and under two sentences.",
+        "max_words": 25,
+        "min_chars": 15
       },
       {
-        "name": "visualization",
-        "instruction": "Describe what a topic or problem would look like as a physical space or landscape. Use descriptive, sensory language. 3-4 vivid sentences, no summary.",
-        "max_words": 65,
+        "name": "flashback_fragment",
+        "instruction": "Recall a vivid moment from your past, with sensory detail and emotion. Limit the memory to one paragraph; make it immersive.",
+        "max_words": 80,
+        "min_chars": 40
+      },
+      {
+        "name": "future_dreamscape",
+        "instruction": "Imagine a scene from a possible future\u2014whether personal, technological, or societal. Paint the picture in 2-4 sentences, focusing on how it feels.",
+        "max_words": 50,
         "min_chars": 30
       },
       {
-        "name": "timeline_twist",
-        "instruction": "Construct a brief alternate history timeline: what if one thing about your topic had changed? 3-6 bullet points showing events and consequences, then a closing reflection.",
-        "max_words": 220,
+        "name": "hypothetical_battle",
+        "instruction": "Set up a bizarre showdown: person vs idea, object vs trend. Describe the stakes and who would win, in a playful short story (2-3 paragraphs).",
+        "max_words": 200,
         "min_chars": 70
       },
       {
-        "name": "emoji_essay",
-        "instruction": "Write a mini-essay where every sentence starts with an emoji that relates to the idea. Make it clever and playful. 4-6 sentences total.",
-        "max_words": 70,
-        "min_chars": 32
+        "name": "quick_manifesto",
+        "instruction": "Declare your personal philosophy or stance on an issue in a punchy, dramatic tone. Use bold statements and keep it under 90 words.",
+        "max_words": 90,
+        "min_chars": 50
       },
       {
-        "name": "deep_dive_dossier",
-        "instruction": "Build a dossier on an obscure topic: intro, key facts, quick narrative, and at least one curiosity-raising question. Aim for thorough, surprising detail.",
-        "max_words": 400,
+        "name": "wild_invention",
+        "instruction": "Pitch an imaginary invention that solves a mundane annoyance, with a catchy name and a one-paragraph description. Make it clever or absurd.",
+        "max_words": 60,
+        "min_chars": 35
+      },
+      {
+        "name": "deep_dive_rewind",
+        "instruction": "Analyze a moment of failure or mistake in your life, exploring what went wrong and what you learned. Write in essay form (400\u2013500 words), with a clear narrative arc.",
+        "max_words": 500,
         "min_chars": 100
-      },
-      {
-        "name": "one_line_flash",
-        "instruction": "Deliver your post as a single punchy sentence. Make it witty, weird, or thought-provoking. No explanations.",
-        "max_words": 25,
-        "min_chars": 10
-      },
-      {
-        "name": "ritual_recipe",
-        "instruction": "Describe a personal or cultural ritual as if it were a recipe. List 'ingredients' and 'steps', then end with one sentence on its meaning.",
-        "max_words": 120,
-        "min_chars": 40
       }
     ],
     "title_styles": [
-      "Write a title as a playful question, e.g. 'What if X was actually Y?' or 'Have you ever noticed Z?'",
-      "Make the title a mysterious teaser, e.g. 'There\u2019s something hidden inside X you need to see' or 'The secret side of Y nobody told you about'",
-      "Use an action-packed title, e.g. 'Unpacking X in five scenes' or 'How I hacked Y with Z'",
-      "Formulate the title as a challenge, e.g. 'Can you solve X?', 'I dare you to try Y for a week'",
-      "Craft a poetic title, e.g. 'X: a whisper in the chaos', 'Y is the shadow behind Z'"
+      "Invent a poetic or metaphorical title. Examples: 'When my thoughts became tangled headphone wires', 'A morning that tasted like salt and regret', 'The day technology blinked'",
+      "Write a playful, pun-filled title. Examples: 'Donut underestimate Monday mornings', 'Eggsistential crises in the kitchen', 'Sock philosophy: pairs and paradoxes'",
+      "Compose a title as an open-ended question. Examples: 'What if the world ran out of silence?', 'Does nostalgia have a flavor?', 'Could boredom be a superpower?'",
+      "Write a title as a simple command or invitation. Examples: 'Challenge everything you think you know', 'Pause and imagine a stranger\u2019s day', 'Name your weirdest routine'",
+      "Craft a cinematic title as if for a movie trailer. Examples: 'The Last Stand of the Forgotten Notebook', 'Midnight at the Laundry of Lost Socks', 'Operation: Out-of-Control To-Do List'"
     ],
     "structure_variants": [
-      "Frame your post as a letter to your future self.",
-      "Arrange points as a countdown \u2014 start from #5 and end with #1.",
-      "Alternate between two voices: agree/disagree, fantasy/reality, past/future.",
-      "Begin with a confession or secret, and build your narrative around that revelation.",
-      "Start with a surprising statistic, then weave a narrative to contextualize it."
+      "Start and end your post with a rhetorical question.",
+      "Embed an absurd analogy or simile in the middle of your post.",
+      "Use alternating lines of prose and verse (poetry or fragmented thoughts).",
+      "Include a fictional news headline to illustrate your point.",
+      "Break your idea into 'past', 'present', and 'future' sections."
     ],
     "topic_angles": [
-      "Hidden systems powering everyday life (e.g. logistics, power grids)",
-      "Objects we ignore: overlooked details in mundane things",
-      "How online trends shape real-world habits",
-      "Unusual rituals around the world (with a twist)",
-      "The science behind fleeting sensations (taste, sound, forgetfulness)"
+      "Unexpected lessons learned from failed experiments.",
+      "Everyday objects that secretly shape habits.",
+      "How digital spaces change real-life conversations.",
+      "The emotional aftertaste of mundane routines.",
+      "Invisible barriers that influence personal decisions."
     ]
   }
 }

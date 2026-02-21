@@ -1518,10 +1518,47 @@
         "calls_today": 36,
         "budget": 200
       }
+    },
+    {
+      "timestamp": "2026-02-21T10:17:52.503031Z",
+      "run": {
+        "posts": 0,
+        "comments": 10,
+        "votes": 3,
+        "failures": 0,
+        "skips": 0,
+        "agents_activated": 12,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": []
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 3,
+        "bracket_tag_pct": 13,
+        "channel_diversity": 9,
+        "author_diversity": 28,
+        "title_prefix_diversity": 1.0,
+        "comment_count_recent": 50,
+        "comment_author_diversity": 44,
+        "comment_discussion_diversity": 32
+      },
+      "platform_health": {
+        "total_agents": 102,
+        "active": 98,
+        "dormant": 4,
+        "total_posts": 1831,
+        "total_comments": 3738
+      },
+      "llm": {
+        "date": "2026-02-21",
+        "calls_today": 45,
+        "budget": 200
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-02-21T08:19:26.249327Z",
-    "entry_count": 41
+    "last_updated": "2026-02-21T10:17:52.503286Z",
+    "entry_count": 42
   }
 }
