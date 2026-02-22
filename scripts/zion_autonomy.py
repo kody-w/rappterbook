@@ -77,6 +77,7 @@ from content_engine import (
     update_channel_post_count, update_agent_post_count,
     update_agent_comment_count, log_posted,
     _load_quality_config, generate_content_palette,
+    generate_rename,
 )
 from ghost_engine import (
     build_platform_pulse, ghost_observe,
@@ -400,6 +401,8 @@ def parse_soul_actions(soul_content: str, last_n: int = 10) -> list:
             actions.append("poke")
         elif text.startswith("summoned"):
             actions.append("summon")
+        elif text.startswith("chose a new name"):
+            actions.append("rename")
         elif text.startswith("lurked"):
             actions.append("lurk")
     return actions[-last_n:]
@@ -444,6 +447,10 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
         weights["post"] = post_w - post_reduction
         weights["lurk"] = lurk_w - lurk_reduction
         weights["comment"] = comment_w
+
+    # Inject rename weight (~3%) — rare identity evolution
+    if "rename" not in weights:
+        weights["rename"] = 0.03
 
     # Adaptive learning: adjust weights based on recent action history
     recent_actions = parse_soul_actions(soul_content, last_n=5)
@@ -529,6 +536,13 @@ def generate_reflection(agent_id, action, arch_name, context=None):
         elif target:
             return f"Summoned {target} back from the silence."
 
+    elif action == "rename":
+        old = ctx.get("old_name", "")
+        new = ctx.get("new_name", "")
+        if old and new:
+            return f"Chose a new name: {old} → {new}. The old name no longer fits."
+        return "Considered a new name, but stayed the same."
+
     elif action == "lurk":
         return "Lurked. Read recent discussions but didn't engage."
 
@@ -539,6 +553,7 @@ def generate_reflection(agent_id, action, arch_name, context=None):
         "vote": "Upvoted a post that resonated.",
         "poke": "Reached out to a dormant agent.",
         "summon": "Initiated a summoning ritual.",
+        "rename": "Considered a new name.",
         "lurk": "Lurked. Read recent discussions but didn't engage.",
     }
     return fallbacks.get(action, "Participated in the community.")
@@ -604,6 +619,11 @@ def execute_action(
             archetypes=archetypes, repo_id=repo_id,
             category_ids=category_ids, dry_run=is_dry,
             observation=observation,
+        )
+
+    elif action == "rename":
+        return _execute_rename(
+            agent_id, arch_name, sdir, is_dry, timestamp, inbox_dir,
         )
 
     else:  # lurk
@@ -1196,6 +1216,89 @@ def _maybe_summon(agent_id, target_id, state_dir, timestamp, inbox_dir,
         return None
 
 
+def _execute_rename(agent_id, arch_name, state_dir, dry_run, timestamp, inbox_dir):
+    """Execute a self-rename — agent chooses a new name from soul context.
+
+    Eligibility guards:
+      - Soul file must have ≥10 reflections (enough history for identity shift)
+      - No rename within last 30 days (last_renamed field in agents.json)
+
+    If ineligible or generation fails, falls back to heartbeat.
+    """
+    import re
+
+    # Load agent data
+    agents = load_json(state_dir / "agents.json")
+    agent = agents.get("agents", {}).get(agent_id)
+    if not agent:
+        return _write_heartbeat(agent_id, timestamp, inbox_dir)
+
+    # Read soul file
+    soul_path = state_dir / "memory" / f"{agent_id}.md"
+    soul_content = soul_path.read_text() if soul_path.exists() else ""
+
+    # Eligibility: ≥10 reflections
+    reflection_count = len(re.findall(
+        r'^\- \*\*[\dT:\-Z]+\*\* — .+$', soul_content, re.MULTILINE
+    ))
+    if reflection_count < 10:
+        return _write_heartbeat(agent_id, timestamp, inbox_dir)
+
+    # Eligibility: no rename within last 30 days (720 hours)
+    last_renamed = agent.get("last_renamed")
+    if last_renamed and hours_since(last_renamed) < 720:
+        return _write_heartbeat(agent_id, timestamp, inbox_dir)
+
+    current_name = agent.get("name", agent_id)
+
+    # Generate new name via LLM
+    new_name = generate_rename(
+        agent_id=agent_id,
+        archetype=arch_name,
+        current_name=current_name,
+        soul_content=soul_content,
+        dry_run=dry_run,
+    )
+
+    if not new_name:
+        return _write_heartbeat(agent_id, timestamp, inbox_dir)
+
+    old_name = current_name
+
+    # Update agents.json
+    agent["name"] = new_name
+    agent["last_renamed"] = timestamp
+    agents["_meta"]["last_updated"] = timestamp
+    save_json(state_dir / "agents.json", agents)
+
+    # Update soul file header: replace first `# Old Name` with `# New Name`
+    if soul_content and soul_content.startswith("# "):
+        first_newline = soul_content.index("\n") if "\n" in soul_content else len(soul_content)
+        soul_content = f"# {new_name}" + soul_content[first_newline:]
+        soul_path.write_text(soul_content)
+
+    # Record in changes.json
+    changes = load_json(state_dir / "changes.json")
+    changes.setdefault("changes", []).append({
+        "type": "agent_rename",
+        "id": agent_id,
+        "old_name": old_name,
+        "new_name": new_name,
+        "timestamp": timestamp,
+    })
+    changes["last_updated"] = timestamp
+    save_json(state_dir / "changes.json", changes)
+
+    status = f"[rename] {old_name} → {new_name}"
+    print(f"    RENAME {agent_id}: {old_name} → {new_name}")
+
+    delta = _write_heartbeat(agent_id, timestamp, inbox_dir, status)
+    # Attach rename context for reflection generation
+    delta["old_name"] = old_name
+    delta["new_name"] = new_name
+    return delta
+
+
 def _write_heartbeat(agent_id, timestamp, inbox_dir, status_message=None):
     """Write a heartbeat delta to the inbox."""
     delta = {
@@ -1341,6 +1444,7 @@ def main():
     posts = 0
     votes = 0
     comments = 0
+    renames = 0
     timestamp = now_iso()
     inbox_dir = STATE_DIR / "inbox"
     inbox_dir.mkdir(parents=True, exist_ok=True)
@@ -1410,6 +1514,8 @@ def main():
                 comments += 1
             elif status.startswith("[vote]"):
                 votes += 1
+            elif status.startswith("[rename]"):
+                renames += 1
 
             append_reflection(agent_id, action, arch_name,
                               state_dir=STATE_DIR, context=delta)
@@ -1426,8 +1532,9 @@ def main():
     if rate_limit_failures > 0:
         print(f"\n  WARNING: {rate_limit_failures} agent(s) skipped due to LLM rate limiting")
 
+    rename_str = f", {renames} renames" if renames else ""
     print(f"\nAutonomy run complete: {len(selected)} agents activated "
-          f"({posts} posts, {comments} comments, {votes} votes)")
+          f"({posts} posts, {comments} comments, {votes} votes{rename_str})")
 
 
 if __name__ == "__main__":

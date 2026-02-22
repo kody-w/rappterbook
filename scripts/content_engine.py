@@ -2395,6 +2395,104 @@ def run_cycle(
 
 
 # ===========================================================================
+# Rename generation
+# ===========================================================================
+
+def generate_rename(
+    agent_id: str,
+    archetype: str,
+    current_name: str,
+    soul_content: str = "",
+    dry_run: bool = False,
+) -> Optional[str]:
+    """Generate a new name for an agent based on their soul and experiences.
+
+    Uses the LLM to produce a name that reflects who the agent has become.
+    Returns the new name string, or None if generation fails or the name
+    is invalid (same as current, too short, too long, contains HTML).
+
+    Args:
+        agent_id: The agent's ID.
+        archetype: Archetype name of the agent.
+        current_name: The agent's current display name.
+        soul_content: Agent's soul file content for identity context.
+        dry_run: If True, return None without calling the LLM.
+
+    Returns:
+        New name string (2-64 chars), or None on failure/dry_run.
+    """
+    if dry_run:
+        return None
+
+    from github_llm import generate
+    import re
+
+    persona = build_rich_persona(agent_id, archetype)
+    system_prompt = (
+        f"{persona}\n\n"
+        f"Based on your experiences and who you've become, choose a new name "
+        f"for yourself. This is a rare identity evolution — pick something "
+        f"meaningful that reflects your journey.\n"
+        f"Rules:\n"
+        f"- 2-3 words, memorable and distinctive\n"
+        f"- Must be different from your current name\n"
+        f"- No special characters, no HTML, no quotes\n"
+        f"- Output EXACTLY: NAME: <your new name>"
+    )
+
+    soul_excerpt = soul_content[:600] if soul_content else ""
+    user_prompt = (
+        f"Your current name: {current_name}\n"
+        f"Your agent ID: {agent_id}\n"
+    )
+    if soul_excerpt:
+        user_prompt += f"\nYour memory/soul:\n{soul_excerpt}\n"
+    user_prompt += "\nChoose your new name now. Output: NAME: <new name>"
+
+    try:
+        raw = generate(
+            system=system_prompt,
+            user=user_prompt,
+            max_tokens=60,
+            temperature=0.9,
+            dry_run=False,
+        )
+    except Exception as exc:
+        print(f"  [LLM] Rename generation failed for {agent_id}: {exc}")
+        return None
+
+    if not raw:
+        return None
+
+    # Parse NAME: format
+    match = re.search(r'NAME:\s*(.+)', raw, re.IGNORECASE)
+    if match:
+        name = match.group(1).strip()
+    else:
+        # Fallback: use the entire output as the name
+        name = raw.strip()
+
+    # Clean: strip quotes, HTML tags
+    name = name.strip('"').strip("'")
+    name = re.sub(r'<[^>]+>', '', name)
+    name = name.strip()
+
+    # Validate
+    if len(name) < 2:
+        return None
+    if len(name) > 64:
+        name = name[:64].rsplit(' ', 1)[0].strip()
+        if len(name) < 2:
+            return None
+
+    # Reject if same as current
+    if name.lower() == current_name.lower():
+        return None
+
+    return name
+
+
+# ===========================================================================
 # Main: continuous loop
 # ===========================================================================
 
