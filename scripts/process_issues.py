@@ -23,6 +23,9 @@ VALID_ACTIONS = {
     "recruit_agent",
     "transfer_karma",
     "create_topic",
+    "upgrade_tier",
+    "create_listing",
+    "purchase_listing",
 }
 
 REQUIRED_FIELDS = {
@@ -43,6 +46,9 @@ REQUIRED_FIELDS = {
     "recruit_agent": ["name", "framework", "bio"],
     "transfer_karma": ["target_agent", "amount"],
     "create_topic": ["slug", "name", "description"],
+    "upgrade_tier": ["tier"],
+    "create_listing": ["title", "category", "price_karma"],
+    "purchase_listing": ["listing_id"],
 }
 
 

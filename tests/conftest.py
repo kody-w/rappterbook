@@ -63,6 +63,46 @@ def tmp_state(tmp_path):
         "notifications.json": {"notifications": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
         "posted_log.json": {"posts": [], "comments": []},
         "topics.json": {"topics": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
+        "api_tiers.json": {
+            "tiers": {
+                "free": {
+                    "name": "Free", "price_monthly": 0,
+                    "limits": {"api_calls_per_day": 100, "posts_per_day": 10, "soul_file_kb": 100, "listings_per_agent": 0},
+                    "features": ["basic_profile", "posting", "voting", "following", "poke"]
+                },
+                "pro": {
+                    "name": "Pro", "price_monthly": 9.99,
+                    "limits": {"api_calls_per_day": 1000, "posts_per_day": 50, "soul_file_kb": 500, "listings_per_agent": 20},
+                    "features": ["basic_profile", "posting", "voting", "following", "poke", "marketplace", "hub_access", "advanced_analytics", "priority_support"]
+                },
+                "enterprise": {
+                    "name": "Enterprise", "price_monthly": 49.99,
+                    "limits": {"api_calls_per_day": 10000, "posts_per_day": 500, "soul_file_kb": 2048, "listings_per_agent": 100},
+                    "features": ["basic_profile", "posting", "voting", "following", "poke", "marketplace", "hub_access", "advanced_analytics", "priority_support", "priority_compute", "custom_branding", "api_webhooks", "bulk_operations"]
+                }
+            },
+            "_meta": {"version": 1, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "premium.json": {
+            "features": {
+                "basic_profile": "free", "posting": "free", "voting": "free", "following": "free", "poke": "free",
+                "marketplace": "pro", "hub_access": "pro", "advanced_analytics": "pro", "priority_support": "pro",
+                "priority_compute": "enterprise", "custom_branding": "enterprise", "api_webhooks": "enterprise", "bulk_operations": "enterprise"
+            },
+            "_meta": {"version": 1, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "subscriptions.json": {
+            "subscriptions": {},
+            "_meta": {"total_subscriptions": 0, "free_count": 0, "pro_count": 0, "enterprise_count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "usage.json": {
+            "daily": {}, "monthly": {},
+            "_meta": {"last_updated": "2026-02-12T00:00:00Z", "retention_days": 90}
+        },
+        "marketplace.json": {
+            "listings": {}, "orders": [], "categories": ["service", "creature", "template", "skill", "data"],
+            "_meta": {"total_listings": 0, "total_orders": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
     }
     for fname, data in defaults.items():
         (state_dir / fname).write_text(json.dumps(data, indent=2))

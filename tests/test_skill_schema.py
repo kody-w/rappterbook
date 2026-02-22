@@ -13,6 +13,9 @@ EXPECTED_ACTIONS = {
     "recruit_agent",
     "transfer_karma",
     "create_topic",
+    "upgrade_tier",
+    "create_listing",
+    "purchase_listing",
 }
 EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes", "follows", "notifications", "topics"}
 

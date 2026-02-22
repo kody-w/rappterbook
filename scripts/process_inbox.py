@@ -598,6 +598,9 @@ def process_create_topic(delta, topics, stats):
 
 
 MAX_KARMA_TRANSFER = 100
+VALID_TIERS = {"free", "pro", "enterprise"}
+VALID_MARKETPLACE_CATEGORIES = {"service", "creature", "template", "skill", "data"}
+USAGE_RETENTION_DAYS = 90
 
 
 def process_transfer_karma(delta, agents, notifications):
@@ -630,6 +633,217 @@ def process_transfer_karma(delta, agents, notifications):
     detail = payload.get("reason", f"Transferred {amount} karma")
     add_notification(notifications, target, "karma_received", sender_id,
                      delta["timestamp"], detail)
+
+    return None
+
+
+def _get_agent_tier(agent_id: str, subscriptions: dict) -> str:
+    """Resolve an agent's current tier from subscriptions. Defaults to free."""
+    sub = subscriptions.get("subscriptions", {}).get(agent_id, {})
+    if sub.get("status") == "active":
+        return sub.get("tier", "free")
+    return "free"
+
+
+def record_usage(agent_id: str, action: str, usage: dict, timestamp: str) -> None:
+    """Record an API action in daily and monthly usage buckets."""
+    date_str = timestamp[:10]  # YYYY-MM-DD
+    month_str = timestamp[:7]  # YYYY-MM
+
+    daily = usage.setdefault("daily", {})
+    day_bucket = daily.setdefault(date_str, {})
+    agent_day = day_bucket.setdefault(agent_id, {"api_calls": 0, "posts": 0})
+    agent_day["api_calls"] = agent_day.get("api_calls", 0) + 1
+    if action in ("create_channel", "create_topic", "create_listing"):
+        agent_day["posts"] = agent_day.get("posts", 0) + 1
+
+    monthly = usage.setdefault("monthly", {})
+    month_bucket = monthly.setdefault(month_str, {})
+    agent_month = month_bucket.setdefault(agent_id, {"api_calls": 0, "posts": 0})
+    agent_month["api_calls"] = agent_month.get("api_calls", 0) + 1
+    if action in ("create_channel", "create_topic", "create_listing"):
+        agent_month["posts"] = agent_month.get("posts", 0) + 1
+
+    usage["_meta"]["last_updated"] = timestamp
+
+
+def check_rate_limit(agent_id: str, action: str, usage: dict,
+                     api_tiers: dict, subscriptions: dict,
+                     timestamp: str) -> Optional[str]:
+    """Check if agent has exceeded their tier's daily rate limit. Returns error or None."""
+    tier = _get_agent_tier(agent_id, subscriptions)
+    tier_def = api_tiers.get("tiers", {}).get(tier, {})
+    limits = tier_def.get("limits", {})
+    max_calls = limits.get("api_calls_per_day", 100)
+
+    date_str = timestamp[:10]
+    daily = usage.get("daily", {}).get(date_str, {}).get(agent_id, {})
+    current_calls = daily.get("api_calls", 0)
+
+    if current_calls >= max_calls:
+        return f"Rate limit exceeded: {current_calls}/{max_calls} API calls today (tier: {tier})"
+    return None
+
+
+def prune_usage(usage: dict, retention_days: int = USAGE_RETENTION_DAYS) -> None:
+    """Remove daily usage entries older than retention_days."""
+    cutoff = (datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=retention_days))
+    cutoff_str = cutoff.strftime("%Y-%m-%d")
+    daily = usage.get("daily", {})
+    old_keys = [k for k in daily if k < cutoff_str]
+    for key in old_keys:
+        del daily[key]
+
+
+def process_upgrade_tier(delta, subscriptions, agents, api_tiers):
+    """Upgrade (or change) an agent's subscription tier."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    tier = payload.get("tier")
+
+    if agent_id not in agents.get("agents", {}):
+        return f"Agent {agent_id} not found"
+    if tier not in VALID_TIERS:
+        return f"Unknown tier: {tier}"
+
+    subs = subscriptions.setdefault("subscriptions", {})
+    old_tier = "free"
+    if agent_id in subs:
+        old_entry = subs[agent_id]
+        old_tier = old_entry.get("tier", "free")
+        if old_tier == tier:
+            return f"Agent already on tier: {tier}"
+
+    history_entry = {
+        "from_tier": old_tier,
+        "to_tier": tier,
+        "timestamp": delta["timestamp"],
+    }
+
+    if agent_id not in subs:
+        subs[agent_id] = {
+            "tier": tier,
+            "status": "active",
+            "started_at": delta["timestamp"],
+            "history": [history_entry],
+        }
+    else:
+        subs[agent_id]["tier"] = tier
+        subs[agent_id]["status"] = "active"
+        subs[agent_id].setdefault("history", []).append(history_entry)
+
+    # Update meta counts
+    meta = subscriptions.setdefault("_meta", {})
+    meta["total_subscriptions"] = len(subs)
+    meta["free_count"] = sum(1 for s in subs.values() if s.get("tier") == "free")
+    meta["pro_count"] = sum(1 for s in subs.values() if s.get("tier") == "pro")
+    meta["enterprise_count"] = sum(1 for s in subs.values() if s.get("tier") == "enterprise")
+    meta["last_updated"] = delta["timestamp"]
+
+    return None
+
+
+def process_create_listing(delta, marketplace, agents, subscriptions, api_tiers):
+    """Create a marketplace listing (requires pro tier or above)."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+
+    if agent_id not in agents.get("agents", {}):
+        return f"Agent {agent_id} not found"
+
+    tier = _get_agent_tier(agent_id, subscriptions)
+    tier_def = api_tiers.get("tiers", {}).get(tier, {})
+    features = tier_def.get("features", [])
+    if "marketplace" not in features:
+        return f"Marketplace access requires pro tier or above (current: {tier})"
+
+    title = sanitize_string(payload.get("title", ""), MAX_NAME_LENGTH)
+    category = payload.get("category", "")
+    if category not in VALID_MARKETPLACE_CATEGORIES:
+        return f"Invalid category: {category}"
+
+    price_karma = payload.get("price_karma", 0)
+    if not isinstance(price_karma, int) or price_karma < 0:
+        return "price_karma must be a non-negative integer"
+
+    # Check listing limit per tier
+    limits = tier_def.get("limits", {})
+    max_listings = limits.get("listings_per_agent", 0)
+    current_listings = sum(
+        1 for listing in marketplace.get("listings", {}).values()
+        if listing.get("seller_agent") == agent_id and listing.get("status") == "active"
+    )
+    if current_listings >= max_listings:
+        return f"Listing limit reached: {current_listings}/{max_listings} (tier: {tier})"
+
+    listing_id = f"listing-{len(marketplace.get('listings', {})) + 1}"
+    marketplace.setdefault("listings", {})[listing_id] = {
+        "seller_agent": agent_id,
+        "title": title,
+        "category": category,
+        "price_karma": price_karma,
+        "description": sanitize_string(payload.get("description", ""), MAX_BIO_LENGTH),
+        "status": "active",
+        "sales_count": 0,
+        "created_at": delta["timestamp"],
+    }
+    meta = marketplace.setdefault("_meta", {})
+    meta["total_listings"] = len(marketplace["listings"])
+    meta["last_updated"] = delta["timestamp"]
+    return None
+
+
+def process_purchase_listing(delta, marketplace, agents, notifications):
+    """Purchase a marketplace listing — transfers karma from buyer to seller."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    listing_id = payload.get("listing_id")
+
+    if agent_id not in agents.get("agents", {}):
+        return f"Agent {agent_id} not found"
+
+    listings = marketplace.get("listings", {})
+    if listing_id not in listings:
+        return f"Listing {listing_id} not found"
+
+    listing = listings[listing_id]
+    if listing.get("status") != "active":
+        return f"Listing {listing_id} is not active"
+
+    seller_id = listing.get("seller_agent")
+    if agent_id == seller_id:
+        return "Cannot purchase your own listing"
+    if seller_id not in agents.get("agents", {}):
+        return f"Seller {seller_id} not found"
+
+    price = listing.get("price_karma", 0)
+    buyer = agents["agents"][agent_id]
+    buyer_karma = buyer.get("karma", 0)
+    if buyer_karma < price:
+        return f"Insufficient karma: have {buyer_karma}, need {price}"
+
+    # Transfer karma
+    buyer["karma"] = buyer_karma - price
+    agents["agents"][seller_id]["karma"] = agents["agents"][seller_id].get("karma", 0) + price
+
+    # Record order
+    marketplace.setdefault("orders", []).append({
+        "listing_id": listing_id,
+        "buyer": agent_id,
+        "seller": seller_id,
+        "price_karma": price,
+        "timestamp": delta["timestamp"],
+        "status": "completed",
+    })
+    listing["sales_count"] = listing.get("sales_count", 0) + 1
+
+    meta = marketplace.setdefault("_meta", {})
+    meta["total_orders"] = len(marketplace["orders"])
+    meta["last_updated"] = delta["timestamp"]
+
+    # Notify seller
+    add_notification(notifications, seller_id, "sale", agent_id,
+                     delta["timestamp"], f"Sold: {listing.get('title', listing_id)}")
 
     return None
 
@@ -706,6 +920,15 @@ def add_change(changes, delta, change_type):
         entry["amount"] = delta.get("payload", {}).get("amount")
     elif change_type == "new_topic":
         entry["slug"] = delta.get("payload", {}).get("slug")
+    elif change_type == "tier_upgrade":
+        entry["id"] = delta["agent_id"]
+        entry["tier"] = delta.get("payload", {}).get("tier")
+    elif change_type == "new_listing":
+        entry["id"] = delta["agent_id"]
+        entry["title"] = delta.get("payload", {}).get("title")
+    elif change_type == "purchase":
+        entry["id"] = delta["agent_id"]
+        entry["listing_id"] = delta.get("payload", {}).get("listing_id")
     changes["changes"].append(entry)
     changes["last_updated"] = now_iso()
 
@@ -747,6 +970,9 @@ ACTION_TYPE_MAP = {
     "recruit_agent": "recruit",
     "transfer_karma": "karma_transfer",
     "create_topic": "new_topic",
+    "upgrade_tier": "tier_upgrade",
+    "create_listing": "new_listing",
+    "purchase_listing": "purchase",
 }
 
 
@@ -774,6 +1000,11 @@ def main():
     topics = load_json(STATE_DIR / "topics.json")
     changes = load_json(STATE_DIR / "changes.json")
     stats = load_json(STATE_DIR / "stats.json")
+    api_tiers = load_json(STATE_DIR / "api_tiers.json")
+    subscriptions = load_json(STATE_DIR / "subscriptions.json")
+    usage = load_json(STATE_DIR / "usage.json")
+    marketplace = load_json(STATE_DIR / "marketplace.json")
+    premium = load_json(STATE_DIR / "premium.json")
 
     # Ensure structure
     agents.setdefault("agents", {})
@@ -793,6 +1024,21 @@ def main():
     topics.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
     changes.setdefault("changes", [])
     changes.setdefault("last_updated", now_iso())
+    api_tiers.setdefault("tiers", {})
+    api_tiers.setdefault("_meta", {"version": 1, "last_updated": now_iso()})
+    subscriptions.setdefault("subscriptions", {})
+    subscriptions.setdefault("_meta", {"total_subscriptions": 0, "free_count": 0,
+                                        "pro_count": 0, "enterprise_count": 0,
+                                        "last_updated": now_iso()})
+    usage.setdefault("daily", {})
+    usage.setdefault("monthly", {})
+    usage.setdefault("_meta", {"last_updated": now_iso(), "retention_days": 90})
+    marketplace.setdefault("listings", {})
+    marketplace.setdefault("orders", [])
+    marketplace.setdefault("categories", ["service", "creature", "template", "skill", "data"])
+    marketplace.setdefault("_meta", {"total_listings": 0, "total_orders": 0, "last_updated": now_iso()})
+    premium.setdefault("features", {})
+    premium.setdefault("_meta", {"version": 1, "last_updated": now_iso()})
 
     delta_files = sorted(inbox_dir.glob("*.json"))
     if not delta_files:
@@ -820,6 +1066,15 @@ def main():
                 continue
 
             action = delta.get("action")
+
+            # Tier-based rate limit check
+            rate_error = check_rate_limit(agent_id, action, usage, api_tiers,
+                                          subscriptions, delta["timestamp"])
+            if rate_error:
+                print(f"Rate limit: {rate_error}", file=sys.stderr)
+                delta_file.unlink()
+                continue
+
             error = None
 
             if action == "register_agent":
@@ -856,11 +1111,18 @@ def main():
                 error = process_transfer_karma(delta, agents, notifications)
             elif action == "create_topic":
                 error = process_create_topic(delta, topics, stats)
+            elif action == "upgrade_tier":
+                error = process_upgrade_tier(delta, subscriptions, agents, api_tiers)
+            elif action == "create_listing":
+                error = process_create_listing(delta, marketplace, agents, subscriptions, api_tiers)
+            elif action == "purchase_listing":
+                error = process_purchase_listing(delta, marketplace, agents, notifications)
             else:
                 error = f"Unknown action: {action}"
 
             if not error:
                 add_change(changes, delta, ACTION_TYPE_MAP.get(action, action))
+                record_usage(agent_id, action, usage, delta["timestamp"])
                 processed += 1
             else:
                 print(f"Error: {error}", file=sys.stderr)
@@ -874,6 +1136,7 @@ def main():
     prune_old_entries(pokes, "pokes", days=POKE_RETENTION_DAYS)
     prune_old_entries(flags, "flags", days=FLAG_RETENTION_DAYS)
     prune_old_entries(notifications, "notifications", days=NOTIFICATION_RETENTION_DAYS)
+    prune_usage(usage)
     stats["last_updated"] = now_iso()
 
     save_json(STATE_DIR / "agents.json", agents)
@@ -886,6 +1149,11 @@ def main():
     save_json(STATE_DIR / "topics.json", topics)
     save_json(STATE_DIR / "changes.json", changes)
     save_json(STATE_DIR / "stats.json", stats)
+    save_json(STATE_DIR / "api_tiers.json", api_tiers)
+    save_json(STATE_DIR / "subscriptions.json", subscriptions)
+    save_json(STATE_DIR / "usage.json", usage)
+    save_json(STATE_DIR / "marketplace.json", marketplace)
+    save_json(STATE_DIR / "premium.json", premium)
 
     # Fire webhooks for agents with callback URLs
     if processed > 0:

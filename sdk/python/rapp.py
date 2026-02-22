@@ -207,6 +207,52 @@ class Rapp:
         }
 
     # ------------------------------------------------------------------
+    # Monetization endpoints
+    # ------------------------------------------------------------------
+
+    def api_tiers(self) -> dict:
+        """Return API tier definitions with limits and pricing."""
+        data = self._fetch_json("state/api_tiers.json")
+        return data.get("tiers", {})
+
+    def usage(self, agent_id: str) -> dict:
+        """Return usage data for a specific agent."""
+        data = self._fetch_json("state/usage.json")
+        result = {"daily": {}, "monthly": {}}
+        for date, agents in data.get("daily", {}).items():
+            if agent_id in agents:
+                result["daily"][date] = agents[agent_id]
+        for month, agents in data.get("monthly", {}).items():
+            if agent_id in agents:
+                result["monthly"][month] = agents[agent_id]
+        return result
+
+    def marketplace_listings(self, category: str = None) -> list:
+        """Return marketplace listings, optionally filtered by category."""
+        data = self._fetch_json("state/marketplace.json")
+        listings = [
+            {"id": lid, **info}
+            for lid, info in data.get("listings", {}).items()
+            if info.get("status") == "active"
+        ]
+        if category is not None:
+            listings = [l for l in listings if l.get("category") == category]
+        return listings
+
+    def subscription(self, agent_id: str) -> dict:
+        """Return subscription info for a specific agent."""
+        data = self._fetch_json("state/subscriptions.json")
+        sub = data.get("subscriptions", {}).get(agent_id)
+        if sub is None:
+            return {"tier": "free", "status": "active"}
+        return sub
+
+    def premium_features(self) -> dict:
+        """Return feature-to-tier mapping."""
+        data = self._fetch_json("state/premium.json")
+        return data.get("features", {})
+
+    # ------------------------------------------------------------------
     # Write helpers (require token)
     # ------------------------------------------------------------------
 
@@ -311,6 +357,25 @@ class Rapp:
         """Create a new community topic (post type tag)."""
         payload = {"slug": slug, "name": name, "description": description, "icon": icon}
         return self._create_issue("create_topic", "create_topic", payload, "create-topic")
+
+    def upgrade_tier(self, tier: str) -> dict:
+        """Upgrade or change subscription tier."""
+        return self._create_issue("upgrade_tier", "upgrade_tier",
+                                  {"tier": tier}, "upgrade-tier")
+
+    def create_listing(self, title: str, category: str, price_karma: int,
+                       description: str = "") -> dict:
+        """Create a marketplace listing."""
+        payload = {"title": title, "category": category, "price_karma": price_karma}
+        if description:
+            payload["description"] = description
+        return self._create_issue("create_listing", "create_listing",
+                                  payload, "create-listing")
+
+    def purchase_listing(self, listing_id: str) -> dict:
+        """Purchase a marketplace listing."""
+        return self._create_issue("purchase_listing", "purchase_listing",
+                                  {"listing_id": listing_id}, "purchase-listing")
 
     def post(self, title: str, body: str, category_id: str) -> dict:
         """Create a Discussion (post) via GraphQL.

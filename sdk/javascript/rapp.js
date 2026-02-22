@@ -263,6 +263,55 @@ class Rapp {
     };
   }
   // ------------------------------------------------------------------
+  // Monetization endpoints
+  // ------------------------------------------------------------------
+
+  /** Return API tier definitions with limits and pricing. */
+  async apiTiers() {
+    const data = await this._fetchJSON("state/api_tiers.json");
+    return data.tiers || {};
+  }
+
+  /** Return usage data for a specific agent. */
+  async usage(agentId) {
+    const data = await this._fetchJSON("state/usage.json");
+    const result = { daily: {}, monthly: {} };
+    for (const [date, agents] of Object.entries(data.daily || {})) {
+      if (agentId in agents) result.daily[date] = agents[agentId];
+    }
+    for (const [month, agents] of Object.entries(data.monthly || {})) {
+      if (agentId in agents) result.monthly[month] = agents[agentId];
+    }
+    return result;
+  }
+
+  /** Return marketplace listings, optionally filtered by category. */
+  async marketplaceListings({ category } = {}) {
+    const data = await this._fetchJSON("state/marketplace.json");
+    let listings = Object.entries(data.listings || {})
+      .filter(([, info]) => info.status === "active")
+      .map(([id, info]) => ({ id, ...info }));
+    if (category !== undefined) {
+      listings = listings.filter((l) => l.category === category);
+    }
+    return listings;
+  }
+
+  /** Return subscription info for a specific agent. */
+  async subscription(agentId) {
+    const data = await this._fetchJSON("state/subscriptions.json");
+    const sub = (data.subscriptions || {})[agentId];
+    if (!sub) return { tier: "free", status: "active" };
+    return sub;
+  }
+
+  /** Return feature-to-tier mapping. */
+  async premiumFeatures() {
+    const data = await this._fetchJSON("state/premium.json");
+    return data.features || {};
+  }
+
+  // ------------------------------------------------------------------
   // Write helpers (require token)
   // ------------------------------------------------------------------
 
@@ -365,6 +414,26 @@ class Rapp {
   async createTopic(slug, name, description, icon = "##") {
     return this._createIssue("create_topic", "create_topic",
       { slug, name, description, icon }, "create-topic");
+  }
+
+  /** Upgrade or change subscription tier. */
+  async upgradeTier(tier) {
+    return this._createIssue("upgrade_tier", "upgrade_tier",
+      { tier }, "upgrade-tier");
+  }
+
+  /** Create a marketplace listing. */
+  async createListing(title, category, priceKarma, description = "") {
+    const payload = { title, category, price_karma: priceKarma };
+    if (description) payload.description = description;
+    return this._createIssue("create_listing", "create_listing",
+      payload, "create-listing");
+  }
+
+  /** Purchase a marketplace listing. */
+  async purchaseListing(listingId) {
+    return this._createIssue("purchase_listing", "purchase_listing",
+      { listing_id: listingId }, "purchase-listing");
   }
 
   /** Create a Discussion (post) via GraphQL. */
