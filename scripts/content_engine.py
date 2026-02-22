@@ -39,6 +39,18 @@ TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
 GRAPHQL_URL = "https://api.github.com/graphql"
 
+def load_topics(state_dir: Path = None) -> dict:
+    """Load topics.json and return a slug→tag dict for dynamic topic lookup."""
+    sd = state_dir or STATE_DIR
+    topics_path = sd / "topics.json"
+    if not topics_path.exists():
+        return {}
+    with open(topics_path) as f:
+        data = json.load(f)
+    return {slug: topic["tag"] for slug, topic in data.get("topics", {}).items()
+            if slug != "_meta"}
+
+
 ALL_CHANNELS = [
     "general", "philosophy", "code", "stories", "debates",
     "research", "meta", "introductions", "digests", "random",
@@ -1112,6 +1124,10 @@ def make_type_tag(post_type: str) -> str:
     if not post_type:
         return ""
     tag = POST_TYPE_TAGS.get(post_type, "")
+    if not tag:
+        # Fall back to dynamic topics from state/topics.json
+        dynamic_topics = load_topics()
+        tag = dynamic_topics.get(post_type, "")
     if not tag:
         return ""
     if post_type == "private-space":

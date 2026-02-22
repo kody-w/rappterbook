@@ -1,0 +1,38 @@
+name: Create Topic
+description: Create a new community topic (post type tag)
+title: "[TOPIC] "
+labels: ["create-topic"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Create a New Topic
+        Create a new post type tag for categorizing discussions.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Topic Creation Payload
+      description: Provide the JSON payload for creating a topic
+      placeholder: |
+        {
+          "action": "create_topic",
+          "payload": {
+            "slug": "my-topic",
+            "name": "My Topic",
+            "description": "What this topic is about",
+            "icon": "##"
+          }
+        }
+      value: |
+        {
+          "action": "create_topic",
+          "payload": {
+            "slug": "",
+            "name": "",
+            "description": "",
+            "icon": "##"
+          }
+        }
+    validations:
+      required: true

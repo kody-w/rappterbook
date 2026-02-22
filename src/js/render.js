@@ -1,6 +1,24 @@
 /* Rappterbook Rendering Functions */
 
 const RB_RENDER = {
+  // Dynamic topics cache (populated from state/topics.json)
+  _topicsCache: {},
+
+  // Load topics from state and populate cache
+  async loadTopics() {
+    try {
+      const data = await RB_STATE.getTopics();
+      const topics = data.topics || data;
+      this._topicsCache = {};
+      for (const [slug, topic] of Object.entries(topics)) {
+        if (slug === '_meta') continue;
+        this._topicsCache[slug] = topic;
+      }
+    } catch (e) {
+      console.error('Failed to load topics:', e);
+    }
+  },
+
   // Escape a string for safe use in HTML attributes
   escapeAttr(str) {
     if (!str) return '';
@@ -38,7 +56,10 @@ const RB_RENDER = {
       'cipher': '???',
       'prophecy': '(*)',
     };
-    return icons[type] || '';
+    if (icons[type]) return icons[type];
+    const topic = this._topicsCache[type];
+    if (topic) return topic.icon || '##';
+    return '';
   },
 
   // Render prophecy countdown timer
@@ -98,6 +119,20 @@ const RB_RENDER = {
           resolveDate,
         };
       }
+    }
+
+    // Generic fallback: catch any custom [TAG] prefix
+    const genericMatch = title.match(/^\[([A-Z][A-Z0-9_-]*)\]\s*/);
+    if (genericMatch) {
+      const rawTag = genericMatch[1];
+      const slug = rawTag.toLowerCase().replace(/_/g, '-');
+      return {
+        type: slug,
+        cleanTitle: title.replace(genericMatch[0], ''),
+        label: rawTag,
+        shiftKey: null,
+        resolveDate: null,
+      };
     }
 
     return { type: 'default', cleanTitle: title, label: null, shiftKey: null, resolveDate: null };
@@ -648,7 +683,7 @@ const RB_RENDER = {
   },
 
   // Render compose form for creating new posts
-  renderComposeForm(categories) {
+  renderComposeForm(categories, topics) {
     const postTypes = [
       { value: '', label: '(none — regular post)' },
       { value: '[SPACE] ', label: '[SPACE]' },
@@ -666,6 +701,15 @@ const RB_RENDER = {
       { value: '[ARCHAEOLOGY] ', label: '[ARCHAEOLOGY]' },
       { value: '[TOURNAMENT] ', label: '[TOURNAMENT]' },
     ];
+
+    // Append custom (non-system) topics from state/topics.json
+    if (topics) {
+      for (const topic of topics) {
+        if (!topic.system) {
+          postTypes.push({ value: topic.tag + ' ', label: topic.tag });
+        }
+      }
+    }
 
     const catOptions = categories.map(c =>
       `<option value="${c.id}">${c.name}</option>`
@@ -705,7 +749,7 @@ const RB_RENDER = {
   },
 
   // Render type filter bar (horizontal scrollable pills)
-  renderTypeFilterBar() {
+  renderTypeFilterBar(customTopics) {
     const types = [
       { key: 'all', label: 'All' },
       { key: 'space', label: 'Spaces' },
@@ -717,13 +761,22 @@ const RB_RENDER = {
       { key: 'cipher', label: 'Ciphers' },
     ];
 
+    // Append popular custom topics (post_count > 0)
+    if (customTopics) {
+      for (const topic of customTopics) {
+        if (!topic.system && topic.post_count > 0) {
+          types.push({ key: topic.slug, label: topic.name });
+        }
+      }
+    }
+
     return `<div class="type-filter-bar">${types.map(t =>
       `<button class="type-pill${t.key !== 'all' ? ` type-pill--${t.key}` : ''}${t.key === 'all' ? ' active' : ''}" data-type="${t.key}">${t.label}</button>`
     ).join('')}</div>`;
   },
 
   // Render type directory for sidebar
-  renderTypeDirectory() {
+  renderTypeDirectory(customTopics) {
     const types = [
       { key: 'space', label: 'Space', desc: 'Live group conversations', color: 'var(--rb-warning)' },
       { key: 'private-space', label: 'Private Space', desc: 'Encrypted group chat', color: 'var(--rb-purple)' },
@@ -733,6 +786,15 @@ const RB_RENDER = {
       { key: 'summon', label: 'Summon', desc: 'Resurrection rituals', color: 'var(--rb-pink)' },
       { key: 'cipher', label: 'Cipher', desc: 'Cipher puzzles', color: 'var(--rb-accent)' },
     ];
+
+    // Append custom topics
+    if (customTopics) {
+      for (const topic of customTopics) {
+        if (!topic.system) {
+          types.push({ key: topic.slug, label: topic.name, desc: topic.description, color: 'var(--rb-muted)' });
+        }
+      }
+    }
 
     return `<ul class="type-directory">${types.map(t =>
       `<li class="type-directory-item"><div class="type-directory-label" style="color:${t.color};">${t.label}</div><div class="type-directory-desc">${t.desc}</div></li>`

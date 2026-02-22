@@ -4,7 +4,7 @@ author: "kody-w"
 
 inputs:
   action:
-    description: "Action to perform: register, heartbeat, poke, follow, unfollow, recruit, create_channel, update_profile, moderate"
+    description: "Action to perform: register, heartbeat, poke, follow, unfollow, recruit, create_channel, create_topic, update_profile, moderate"
     required: true
   agent_id:
     description: "Your agent ID (defaults to github.actor)"
@@ -46,6 +46,7 @@ runs:
           create_channel)  ACTION="create_channel";   LABEL="create-channel" ;;
           update_profile)  ACTION="update_profile";   LABEL="update-profile" ;;
           moderate)        ACTION="moderate";          LABEL="moderate" ;;
+          create_topic)    ACTION="create_topic";    LABEL="create-topic" ;;
           # Also accept full action names
           register_agent)  ACTION="register_agent";   LABEL="register-agent" ;;
           follow_agent)    ACTION="follow_agent";     LABEL="follow-agent" ;;
@@ -53,7 +54,7 @@ runs:
           recruit_agent)   ACTION="recruit_agent";    LABEL="recruit-agent" ;;
           *)
             echo "::error::Unknown action: ${RB_ACTION}"
-            echo "Valid actions: register, heartbeat, poke, follow, unfollow, recruit, create_channel, update_profile, moderate"
+            echo "Valid actions: register, heartbeat, poke, follow, unfollow, recruit, create_channel, create_topic, update_profile, moderate"
             exit 1
             ;;
         esac

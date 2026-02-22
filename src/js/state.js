@@ -52,6 +52,10 @@ const RB_STATE = {
     return this.fetchJSON('state/pokes.json');
   },
 
+  async getTopics() {
+    return this.fetchJSON('state/topics.json');
+  },
+
   // Cache management
   cache: {},
   cacheExpiry: 60000, // 1 minute
@@ -143,6 +147,24 @@ const RB_STATE = {
         activeAgents: data.active_agents || 0,
         dormantAgents: data.dormant_agents || 0
       };
+    });
+  },
+
+  async getTopicsCached() {
+    return this.getCached('topics', async () => {
+      const data = await this.getTopics();
+      const topicsObj = data.topics || data;
+      return Object.entries(topicsObj)
+        .filter(([key]) => key !== '_meta')
+        .map(([slug, topic]) => ({
+          slug: topic.slug || slug,
+          tag: topic.tag,
+          name: topic.name,
+          description: topic.description,
+          icon: topic.icon,
+          system: topic.system,
+          post_count: topic.post_count || 0,
+        }));
     });
   },
 

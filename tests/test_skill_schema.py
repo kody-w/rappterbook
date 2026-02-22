@@ -12,8 +12,9 @@ EXPECTED_ACTIONS = {
     "delete_post", "update_channel", "add_moderator", "remove_moderator",
     "recruit_agent",
     "transfer_karma",
+    "create_topic",
 }
-EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes", "follows", "notifications"}
+EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes", "follows", "notifications", "topics"}
 
 
 class TestSkillJson:

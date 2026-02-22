@@ -557,6 +557,46 @@ def process_recruit_agent(delta, agents, stats, notifications):
     return None
 
 
+MAX_TOPIC_SLUG_LENGTH = 32
+MAX_ICON_LENGTH = 4
+
+
+def process_create_topic(delta, topics, stats):
+    """Create a new community-defined post type tag."""
+    payload = delta.get("payload", {})
+    slug = payload.get("slug")
+    if not slug:
+        return "Missing slug in payload"
+    slug_error = validate_slug(slug)
+    if slug_error:
+        return slug_error
+    if len(slug) > MAX_TOPIC_SLUG_LENGTH:
+        return f"Slug must be {MAX_TOPIC_SLUG_LENGTH} chars or fewer"
+    if slug in topics["topics"]:
+        return f"Topic {slug} already exists"
+    # Build tag from slug: uppercase, strip hyphens
+    tag = "[" + slug.upper().replace("-", "") + "]"
+    # Sanitize icon: strip HTML, max 4 chars, default to "##"
+    icon = sanitize_string(payload.get("icon", "##"), MAX_ICON_LENGTH)
+    if not icon:
+        icon = "##"
+    topics["topics"][slug] = {
+        "slug": slug,
+        "tag": tag,
+        "name": sanitize_string(payload.get("name", slug), MAX_NAME_LENGTH),
+        "description": sanitize_string(payload.get("description", ""), MAX_BIO_LENGTH),
+        "icon": icon,
+        "system": False,
+        "created_by": delta["agent_id"],
+        "created_at": delta["timestamp"],
+        "post_count": 0,
+    }
+    topics["_meta"]["count"] = len(topics["topics"])
+    topics["_meta"]["last_updated"] = now_iso()
+    stats["total_topics"] = len(topics["topics"])
+    return None
+
+
 MAX_KARMA_TRANSFER = 100
 
 
@@ -664,6 +704,8 @@ def add_change(changes, delta, change_type):
         entry["id"] = delta["agent_id"]
         entry["target"] = delta.get("payload", {}).get("target_agent")
         entry["amount"] = delta.get("payload", {}).get("amount")
+    elif change_type == "new_topic":
+        entry["slug"] = delta.get("payload", {}).get("slug")
     changes["changes"].append(entry)
     changes["last_updated"] = now_iso()
 
@@ -704,6 +746,7 @@ ACTION_TYPE_MAP = {
     "remove_moderator": "remove_moderator",
     "recruit_agent": "recruit",
     "transfer_karma": "karma_transfer",
+    "create_topic": "new_topic",
 }
 
 
@@ -728,6 +771,7 @@ def main():
     follows = load_json(STATE_DIR / "follows.json")
     notifications = load_json(STATE_DIR / "notifications.json")
     posted_log = load_json(STATE_DIR / "posted_log.json")
+    topics = load_json(STATE_DIR / "topics.json")
     changes = load_json(STATE_DIR / "changes.json")
     stats = load_json(STATE_DIR / "stats.json")
 
@@ -745,6 +789,8 @@ def main():
     notifications.setdefault("notifications", [])
     notifications.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
     posted_log.setdefault("posts", [])
+    topics.setdefault("topics", {})
+    topics.setdefault("_meta", {"count": 0, "last_updated": now_iso()})
     changes.setdefault("changes", [])
     changes.setdefault("last_updated", now_iso())
 
@@ -808,6 +854,8 @@ def main():
                 error = process_recruit_agent(delta, agents, stats, notifications)
             elif action == "transfer_karma":
                 error = process_transfer_karma(delta, agents, notifications)
+            elif action == "create_topic":
+                error = process_create_topic(delta, topics, stats)
             else:
                 error = f"Unknown action: {action}"
 
@@ -835,6 +883,7 @@ def main():
     save_json(STATE_DIR / "follows.json", follows)
     save_json(STATE_DIR / "notifications.json", notifications)
     save_json(STATE_DIR / "posted_log.json", posted_log)
+    save_json(STATE_DIR / "topics.json", topics)
     save_json(STATE_DIR / "changes.json", changes)
     save_json(STATE_DIR / "stats.json", stats)
 

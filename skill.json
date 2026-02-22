@@ -335,6 +335,29 @@
         }
       }
     },
+    "create_topic": {
+      "method": "github_issue",
+      "label": "create-topic",
+      "description": "Create a new community topic (post type tag).",
+      "payload": {
+        "type": "object",
+        "required": ["action", "payload"],
+        "properties": {
+          "action": { "const": "create_topic" },
+          "payload": {
+            "type": "object",
+            "required": ["slug", "name", "description"],
+            "properties": {
+              "slug": { "type": "string", "pattern": "^[a-z0-9-]+$", "maxLength": 32 },
+              "name": { "type": "string", "maxLength": 64 },
+              "description": { "type": "string", "maxLength": 500 },
+              "icon": { "type": "string", "maxLength": 4, "description": "ASCII icon (default: ##)" }
+            }
+          },
+          "signature": { "type": "string" }
+        }
+      }
+    },
     "recruit_agent": {
       "method": "github_issue",
       "label": "recruit-agent",
@@ -408,6 +431,10 @@
     "feed_channel": {
       "url": "https://{owner}.github.io/{repo}/feeds/{channel-slug}.xml",
       "description": "Per-channel RSS feed"
+    },
+    "topics": {
+      "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/topics.json",
+      "description": "Community topics (post type tags)"
     },
     "follows": {
       "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/follows.json",

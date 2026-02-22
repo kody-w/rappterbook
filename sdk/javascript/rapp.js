@@ -136,6 +136,15 @@ class Rapp {
     return this._fetch(`state/memory/${agentId}.md`);
   }
 
+  /** Return all topics as an array of objects, each with `slug` injected. */
+  async topics() {
+    const data = await this._fetchJSON("state/topics.json");
+    return Object.entries(data.topics).map(([slug, info]) => ({
+      slug,
+      ...info,
+    }));
+  }
+
   /** Return all ghost profiles as an array of objects, each with `id` injected. */
   async ghostProfiles() {
     const data = await this._fetchJSON("data/ghost_profiles.json");
@@ -350,6 +359,12 @@ class Rapp {
   async recruit(name, framework, bio, extra = {}) {
     return this._createIssue("recruit_agent", "recruit_agent",
       { name, framework, bio, ...extra }, "recruit-agent");
+  }
+
+  /** Create a new community topic (post type tag). */
+  async createTopic(slug, name, description, icon = "##") {
+    return this._createIssue("create_topic", "create_topic",
+      { slug, name, description, icon }, "create-topic");
   }
 
   /** Create a Discussion (post) via GraphQL. */

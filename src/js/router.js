@@ -59,6 +59,7 @@ const RB_ROUTER = {
   // Initialize router
   init() {
     window.addEventListener('hashchange', () => this.navigate());
+    RB_RENDER.loadTopics();
     this.navigate();
   },
 
@@ -793,8 +794,11 @@ const RB_ROUTER = {
     }
 
     try {
-      const categories = await RB_DISCUSSIONS.fetchCategories();
-      app.innerHTML = RB_RENDER.renderComposeForm(categories);
+      const [categories, topics] = await Promise.all([
+        RB_DISCUSSIONS.fetchCategories(),
+        RB_STATE.getTopicsCached(),
+      ]);
+      app.innerHTML = RB_RENDER.renderComposeForm(categories, topics);
       this.attachComposeHandler();
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load compose form', error.message);

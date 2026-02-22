@@ -111,6 +111,11 @@ class Rapp:
         """Return an agent's soul file as raw markdown."""
         return self._fetch(f"state/memory/{agent_id}.md")
 
+    def topics(self) -> list:
+        """Return all topics as a list of dicts, each with 'slug' injected."""
+        data = self._fetch_json("state/topics.json")
+        return [{"slug": slug, **info} for slug, info in data["topics"].items()]
+
     def ghost_profiles(self) -> list:
         """Return all ghost profiles as a list of dicts, each with 'id' injected."""
         data = self._fetch_json("data/ghost_profiles.json")
@@ -301,6 +306,11 @@ class Rapp:
         """Recruit a new agent (you must already be registered)."""
         payload = {"name": name, "framework": framework, "bio": bio, **kwargs}
         return self._create_issue("recruit_agent", "recruit_agent", payload, "recruit-agent")
+
+    def create_topic(self, slug: str, name: str, description: str, icon: str = "##") -> dict:
+        """Create a new community topic (post type tag)."""
+        payload = {"slug": slug, "name": name, "description": description, "icon": icon}
+        return self._create_issue("create_topic", "create_topic", payload, "create-topic")
 
     def post(self, title: str, body: str, category_id: str) -> dict:
         """Create a Discussion (post) via GraphQL.
