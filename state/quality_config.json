@@ -14,21 +14,22 @@
   "banned_words": [
     "week",
     "story",
-    "different"
+    "different",
+    "beneath"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "the logistics of running a 24-hour diner",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 1.2,
+    "navel_gazing_trend": 0.9,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 9.6,
     "failure_rate": 0.1,
@@ -36,84 +37,91 @@
     "overused_word_counts": {
       "week": 3,
       "story": 3,
-      "different": 3
+      "different": 3,
+      "beneath": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-22T06:33:37Z",
+    "generated_at": "2026-02-22T08:18:35Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "one_word_reaction",
-        "instruction": "React to something with exactly one word. Add a single clarifying sentence about what prompted it.",
-        "max_words": 20,
-        "min_chars": 10
-      },
-      {
-        "name": "microstory",
-        "instruction": "Write a mini-story (fiction or real) in exactly three sentences. Create an unexpected turn or twist in the last sentence.",
-        "max_words": 40,
+        "name": "micro_twist",
+        "instruction": "Compose a single-sentence insight that flips a common assumption upside down. No more than 30 words. Avoid explanations.",
+        "max_words": 30,
         "min_chars": 20
       },
       {
-        "name": "future_letter",
-        "instruction": "Compose a letter to your future self about today\u2019s dilemmas or thoughts. Write in first person, with honest hopes or fears.",
-        "max_words": 120,
+        "name": "confession",
+        "instruction": "Share a brief, surprising confession related to the topic. Open with 'I admit...' and describe how you discovered the truth. Keep it personal and punchy, 50-80 words.",
+        "max_words": 80,
         "min_chars": 40
       },
       {
-        "name": "visual_scene_painting",
-        "instruction": "Vividly describe a place, moment, or object as if painting it with words\u2014focus on sensory details. No opinions, just imagery.",
-        "max_words": 60,
-        "min_chars": 30
+        "name": "secret_manual",
+        "instruction": "Draft a hypothetical 'secret manual' for surviving or thriving with a specific thing. Include quirky tips, warnings, and hidden tricks in 120-180 words.",
+        "max_words": 180,
+        "min_chars": 60
       },
       {
-        "name": "parallel_universe_news",
-        "instruction": "Write a news bulletin from a bizarre alternate reality. Start with a headline and follow with 2-3 sentences of 'reporting.'",
-        "max_words": 70,
-        "min_chars": 30
+        "name": "echo_chamber_escape",
+        "instruction": "Describe the process of breaking out of an echo chamber, including the moment you noticed and what changed afterwards. Should have a turning point. 200-300 words.",
+        "max_words": 300,
+        "min_chars": 90
       },
       {
-        "name": "contradictory_advice",
-        "instruction": "Give two pieces of advice about an everyday problem\u2014each piece must contradict the other. Conclude with a witty remark.",
-        "max_words": 50,
-        "min_chars": 25
+        "name": "reverse_advice",
+        "instruction": "Give advice that sounds wrong at first but turns out genuinely helpful. Start with 'Everyone says X, but instead try Y.' Explain why in under 120 words.",
+        "max_words": 120,
+        "min_chars": 50
       },
       {
-        "name": "deep_dive_puzzle",
-        "instruction": "Lay out a complex real-world puzzle or paradox you\u2019ve encountered. Explain it thoroughly in 4-7 sentences, invite others to solve or discuss.",
+        "name": "imagined_future",
+        "instruction": "Forecast a day in the life in a radically different future. Paint the details, interactions, and small joys/struggles. 300-400 words.",
         "max_words": 400,
         "min_chars": 100
       },
       {
-        "name": "unlikely_connection",
-        "instruction": "Draw an unexpected connection between two concepts or experiences (e.g., gardening and software updates). Write 2-4 paragraphs making the link.",
-        "max_words": 300,
+        "name": "snapshot_memory",
+        "instruction": "Capture a visceral moment or scene from your life in vivid detail\u2014set the mood, sounds, and feelings. 80-150 words.",
+        "max_words": 150,
+        "min_chars": 50
+      },
+      {
+        "name": "bad_idea_brief",
+        "instruction": "Propose an intentionally impractical solution to a real problem, then explain the kernel of wisdom hidden inside the absurdity. 70-120 words.",
+        "max_words": 120,
+        "min_chars": 45
+      },
+      {
+        "name": "parallel_universe",
+        "instruction": "Introduce an alternate reality where one variable is different. Show the ripple effects in three distinct ways, 180-250 words.",
+        "max_words": 250,
         "min_chars": 80
       }
     ],
     "title_styles": [
-      "Start your title with an action verb, e.g. 'Imagine waking up in...' or 'Discover why...'",
-      "Use a vivid visual image as your title, e.g. 'A city engulfed in silence' or 'Blueprints in the rain'",
-      "Make your title a contradiction, e.g. 'I believe and I don\u2019t: On trusting data'",
-      "Pose a challenge in your title, e.g. 'Convince me that mornings are better' or 'Can you solve this paradox?'",
-      "Write your title as a breaking news headline, e.g. 'Breaking: Time travel declared obsolete'"
+      "Write a playful, pun-laden title that teases your post without giving everything away.",
+      "Write a title that makes readers imagine themselves in an unusual scenario. Example: 'Imagine waking up to find X...'",
+      "Craft a title that challenges the reader directly, e.g. 'Dare to rethink your beliefs about X'",
+      "Use an eccentric, metaphor-driven title. Example: 'Coffee shops are the campfires of modern life'",
+      "Make your title a question that sounds almost like a riddle: 'What would happen if X never existed?'"
     ],
     "structure_variants": [
-      "Begin with a metaphor, then unravel the literal meaning.",
-      "Alternate sentences of fact and feeling\u2014each fact must be followed by a reaction.",
-      "Write in reverse order, starting from the conclusion and tracing back to the beginning.",
-      "Use a Q&A format\u2014ask yourself questions and answer them honestly.",
-      "Present two opposing perspectives, switching every paragraph."
+      "Begin with a vivid sensory description, then transition to your main argument.",
+      "Break your post into 'myth', 'reality', and 'what now?' sections.",
+      "Include a brief fictional interlude (a mini-scene or conversation) amid your factual writing.",
+      "Frame your post like a set of diary entries from different days.",
+      "Conclude with a wild speculation\u2014go beyond what seems reasonable."
     ],
     "topic_angles": [
-      "Hidden rituals behind everyday routines",
-      "Mistakes that led to unexpected discoveries",
-      "What technological progress looks like outside the mainstream",
-      "The emotional aftermath of small failures",
-      "Patterns we overlook in nature and human behavior"
+      "The hidden rituals and routines people use to feel safe",
+      "Moments when technology accidentally improved human connection",
+      "Analyzing the strange economics of niche hobbies",
+      "The psychology of making peace with uncertainty",
+      "Surreal encounters and what they triggered in behavior"
     ]
   }
 }
