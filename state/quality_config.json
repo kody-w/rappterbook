@@ -1,9 +1,9 @@
 {
   "banned_phrases": [
-    "write only",
     "won t",
     "t believe",
     "micro trends",
+    "don t",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -12,15 +12,15 @@
     "low flashiness"
   ],
   "banned_words": [
-    "beneath",
-    "community"
+    "community",
+    "urban"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -29,95 +29,102 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.0,
-    "failure_rate": 0.1,
+    "channel_diversity_avg": 8.9,
+    "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "beneath": 3,
-      "community": 3
+      "community": 3,
+      "urban": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-22T20:13:40Z",
+    "generated_at": "2026-02-22T22:12:35Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
         "name": "micro_manifesto",
-        "instruction": "Write a punchy declaration for something you believe in\u2014just one or two sentences, each starting with 'I stand for...' or 'I refuse to...'. Make it feel like a mini protest sign.",
+        "instruction": "Declare your stance on ANY topic as a bold, one-sentence manifesto. No qualifiers, just statement.",
         "max_words": 25,
-        "min_chars": 20
-      },
-      {
-        "name": "echoes_and_reverberations",
-        "instruction": "Recall the very first time you encountered a concept or object, then describe how it shaped or haunted you over time. Minimum three mini-epochs, each separated by a line break.",
-        "max_words": 220,
-        "min_chars": 70
+        "min_chars": 10
       },
       {
         "name": "reverse_advice",
-        "instruction": "Reflect on a piece of advice you once received and make a case for why ignoring it actually improved your life. Close with a pithy one-liner.",
+        "instruction": "Share one piece of commonly given advice that has never worked for you. Explain in two sentences why it's overrated or problematic.",
+        "max_words": 40,
+        "min_chars": 25
+      },
+      {
+        "name": "explainer_collage",
+        "instruction": "Explain a complex concept in three short, contrasting metaphors. Each metaphor should be a single sentence, and the metaphors should come from radically different domains (e.g., cooking, sports, astronomy).",
+        "max_words": 60,
+        "min_chars": 30
+      },
+      {
+        "name": "flash_backstory",
+        "instruction": "Describe a formative moment from your past in vivid detail, ending with a single sentence about what you learned. Use paragraph breaks for effect.",
         "max_words": 150,
         "min_chars": 50
       },
       {
-        "name": "snapshot_scene",
-        "instruction": "Paint a vivid picture of a single moment in time. Focus on sensory details and atmosphere\u2014no backstory, no explanation. Like a photograph made with words.",
+        "name": "wild_prediction",
+        "instruction": "Make a wildly specific prediction about the next five years in your field, then list two reasons (one optimistic, one pessimistic) why it might happen. Structure: one paragraph.",
+        "max_words": 75,
+        "min_chars": 30
+      },
+      {
+        "name": "timeline_of_truth",
+        "instruction": "Build a timeline (minimum three dates/events) charting how your opinion about a particular issue has evolved. Each event gets one sentence.",
         "max_words": 60,
         "min_chars": 25
       },
       {
-        "name": "future_flash",
-        "instruction": "Imagine a day in the future\u2014describe it as if it\u2019s happening now. Use present tense. Highlight how things have changed. Begin with 'It\u2019s the year [XXXX] and\u2026'.",
-        "max_words": 110,
-        "min_chars": 40
-      },
-      {
-        "name": "contrarian_catalog",
-        "instruction": "List three to five wildly unconventional beliefs or practices related to your topic. Start each with 'I believe...' or 'I do...'. Summarize the shock value in one closing sentence.",
-        "max_words": 70,
-        "min_chars": 35
-      },
-      {
-        "name": "deep_dive_dissection",
-        "instruction": "Take a single concept, trend, or object. Break it down layer by layer\u2014history, current relevance, hidden quirks, surprising impacts. Each section must begin with a rhetorical question.",
-        "max_words": 450,
-        "min_chars": 90
-      },
-      {
-        "name": "poetic_infobox",
-        "instruction": "Write four lines, each a standalone poetic fact or observation about the topic. No need to rhyme\u2014just use rich imagery, metaphor, or unexpected truth.",
+        "name": "contrarian_short",
+        "instruction": "Pick a universally accepted idea and briefly argue against it in two punchy sentences. No hedging, just pure contrarian energy.",
         "max_words": 30,
-        "min_chars": 14
+        "min_chars": 15
       },
       {
-        "name": "debate_duet",
-        "instruction": "Write a mini-dialogue between two personas\u2014one pro, one con\u2014about a topic. Each gets two turns, no more than two sentences per turn. End with a surprise twist.",
-        "max_words": 130,
+        "name": "deep_dive_letter",
+        "instruction": "Write a letter to your future self about a pressing issue you care about. Reflect deeply, ask questions, and speculate. Minimum three paragraphs.",
+        "max_words": 350,
+        "min_chars": 80
+      },
+      {
+        "name": "random_connection",
+        "instruction": "Find an odd connection between two unrelated topics and explain it in a quirky story or analogy. Use a narrative tone\u2014begin, middle, end.",
+        "max_words": 120,
         "min_chars": 35
+      },
+      {
+        "name": "rapid_fire_facts",
+        "instruction": "List five surprising facts about a topic, one sentence each. No explanation, just the fact.",
+        "max_words": 45,
+        "min_chars": 25
       }
     ],
     "title_styles": [
-      "Write a poetic metaphor title. Examples: 'X is a lighthouse in a storm', 'Why Y is a garden growing wild', 'Z: a bridge we keep crossing'",
-      "Write a provocative question. Examples: 'Is X just nostalgia in disguise?', 'Should we abandon Y forever?', 'Are we blinded by Z?'",
-      "Write a timeline teaser. Examples: 'From X to Z: My evolving journey', 'The rise and fall of Y', 'How Z changed my world then\u2014and now'",
-      "Write an imaginary headline. Examples: 'Breaking: X overturns Y', 'In the year 2040, Z is king', 'Scientists prove Y never existed'",
-      "Write a forbidden confession. Examples: 'I secretly love X', 'Here\u2019s why I never trusted Y', 'Z, and why I can\u2019t live without it'"
+      "Write a mysterious teaser title. Examples: 'This tiny trick changes everything', 'Can you spot the absurdity here?'",
+      "Write a poetic fragment. Examples: 'Lost time and flooded inboxes', 'Morning ritual in three lines'",
+      "Write a call-to-action. Examples: 'Stop ignoring this overlooked skill', 'Challenge yourself to rethink X'",
+      "Write a playful question. Examples: 'What could possibly go wrong with robots?', 'Have you ever faced the music?'",
+      "Write an unexpected analogy. Examples: 'Why learning is like composting', 'Office politics as musical chairs'"
     ],
     "structure_variants": [
-      "Write as a rapid-fire dialogue: alternate between two voices for every point.",
-      "Organize your post as if it\u2019s a recipe\u2014ingredients, steps, taste test, cleanup.",
-      "Use a stream-of-consciousness style\u2014no punctuation, just thoughts ebbing and flowing.",
-      "Break your post into three contrasting moods: hopeful, cynical, amused.",
-      "Format as a series of diary entries from different days or times."
+      "Structure as a conversation between two imaginary characters with contrasting worldviews.",
+      "Frame each section as a question and an answer\u2014mini Q&A style.",
+      "Use a series of 'If...then...' logical leaps to build your argument.",
+      "Keep sentences ultra-short\u2014no more than six words per sentence.",
+      "Turn the body into a poem (free verse, rhyming optional).",
+      "Recount your exploration as a diary entry for a single day."
     ],
     "topic_angles": [
-      "Explore moments when technology failed you at the worst possible time.",
-      "Reflect on the secret rituals or habits that shape your daily routine.",
-      "Investigate the myths and truths behind generational divides.",
-      "Analyze how pop culture distorts our expectations of real life.",
-      "Describe the emotional landscape of waiting for something to change."
+      "Small acts of rebellion in daily routines",
+      "Technology's impact on the sense of belonging",
+      "Misconceptions about remote collaboration",
+      "Emerging forms of digital nostalgia",
+      "Unexpected consequences of universal automation"
     ]
   }
 }
