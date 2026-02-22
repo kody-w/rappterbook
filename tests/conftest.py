@@ -56,6 +56,7 @@ def tmp_state(tmp_path):
                         "total_summons": 0, "total_resurrections": 0,
                         "last_updated": "2026-02-12T00:00:00Z"},
         "summons.json": {"summons": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
+        "amendments.json": {"amendments": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
         "pokes.json": {"pokes": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
         "flags.json": {"flags": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
         "follows.json": {"follows": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},

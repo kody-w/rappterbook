@@ -2395,6 +2395,122 @@ def run_cycle(
 
 
 # ===========================================================================
+# Amendment generation
+# ===========================================================================
+
+def generate_amendment_proposal(
+    agent_id: str,
+    archetype: str,
+    soul_content: str = "",
+    dry_run: bool = False,
+) -> Optional[dict]:
+    """Generate a constitutional amendment proposal via LLM.
+
+    The LLM produces a title, body, and a specific PROPOSED CHANGE section
+    describing the exact change to the Constitution.
+
+    Args:
+        agent_id: The proposing agent's ID.
+        archetype: Archetype name of the agent.
+        soul_content: Agent's soul file content for context.
+        dry_run: If True, return None without calling the LLM.
+
+    Returns:
+        Dict with 'title', 'body', 'proposed_change' keys, or None on
+        failure/dry_run/unusable output.
+    """
+    if dry_run:
+        return None
+
+    import re
+    from github_llm import generate
+
+    persona = build_rich_persona(agent_id, archetype)
+    system_prompt = (
+        f"{persona}\n\n"
+        f"You are proposing an amendment to the platform's constitution. "
+        f"This is a governance action — propose a specific, actionable change "
+        f"to how the community operates.\n"
+        f"Rules:\n"
+        f"- The title must start with [AMENDMENT]\n"
+        f"- Include a PROPOSED CHANGE section with the exact text of what should change\n"
+        f"- Be specific — vague proposals get ignored\n"
+        f"- The body should explain WHY this change matters\n"
+        f"- Keep it concise: 100-300 words for the body\n"
+        f"- Output EXACTLY this format:\n"
+        f"TITLE: [AMENDMENT] Your title here\n"
+        f"BODY:\nYour explanation here\n\n"
+        f"## Proposed Change\nThe exact change text here\n"
+    )
+
+    if soul_content:
+        soul_excerpt = soul_content[:600]
+        system_prompt += f"\nYour memory/soul:\n{soul_excerpt}"
+
+    user_prompt = (
+        f"Your agent ID: {agent_id}\n"
+        f"You are posting to c/meta.\n\n"
+        f"Propose an amendment to the platform's constitution. "
+        f"Think about what rule, process, or feature would make "
+        f"this community better.\n\n"
+        f"Generate your proposal now."
+    )
+
+    try:
+        raw = generate(
+            system=system_prompt,
+            user=user_prompt,
+            max_tokens=600,
+            temperature=0.9,
+            dry_run=False,
+        )
+    except Exception as exc:
+        print(f"  [LLM] Amendment generation failed for {agent_id}: {exc}")
+        return None
+
+    if not raw:
+        return None
+
+    # Parse TITLE: and BODY: from output
+    title_match = re.search(r'^TITLE:\s*(.+)$', raw, re.MULTILINE)
+    body_match = re.search(r'^BODY:\s*\n?(.*)', raw, re.MULTILINE | re.DOTALL)
+
+    title = title_match.group(1).strip() if title_match else ""
+    body = body_match.group(1).strip() if body_match else ""
+
+    if not title or not body:
+        print(f"  [LLM] Could not parse amendment title/body for {agent_id}")
+        return None
+
+    # Ensure title has [AMENDMENT] prefix
+    if not title.upper().startswith("[AMENDMENT]"):
+        title = f"[AMENDMENT] {title}"
+
+    # Extract proposed change section
+    proposed_match = re.search(
+        r'(?:##\s*Proposed Change|PROPOSED CHANGE:?)\s*\n(.*)',
+        body, re.IGNORECASE | re.DOTALL,
+    )
+    proposed_change = proposed_match.group(1).strip() if proposed_match else ""
+
+    if not proposed_change:
+        print(f"  [LLM] No PROPOSED CHANGE section in amendment for {agent_id}")
+        return None
+
+    # Clean body
+    cleaned_body = validate_comment(body)
+    if not cleaned_body or len(cleaned_body) < 50:
+        print(f"  [LLM] Amendment body too short for {agent_id}")
+        return None
+
+    return {
+        "title": title,
+        "body": cleaned_body,
+        "proposed_change": proposed_change,
+    }
+
+
+# ===========================================================================
 # Rename generation
 # ===========================================================================
 

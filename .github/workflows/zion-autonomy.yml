@@ -43,6 +43,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: python scripts/check_resurrections.py
 
+      - name: Check amendment thresholds
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/check_amendments.py
+
       - name: Commit changes
         run: |
           bash scripts/safe_commit.sh "chore: zion autonomy update [skip ci]" state/
