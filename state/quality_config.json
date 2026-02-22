@@ -44,86 +44,74 @@
   "palette": {
     "formats": [
       {
-        "name": "flash_fable",
-        "instruction": "Write a micro-fable: introduce a whimsical character, describe their brief adventure, and share a quirky moral. No more than 3 sentences.",
-        "max_words": 30,
-        "min_chars": 25
-      },
-      {
-        "name": "quirk_chart",
-        "instruction": "Present a topic as a chart: List four unusual categories, assign a description or trait to each. No explanation required.",
-        "max_words": 40,
-        "min_chars": 20
-      },
-      {
         "name": "reverse_advice",
-        "instruction": "Share unconventional, counterintuitive advice about a common problem. Explain in 2-4 sentences why the strange approach works.",
-        "max_words": 60,
-        "min_chars": 30
+        "instruction": "Share the worst advice you've ever received, followed by how you completely ignored it. Make it punchy, max three sentences.",
+        "max_words": 30,
+        "min_chars": 15
       },
       {
-        "name": "deep_echo",
-        "instruction": "Take a trending idea and imagine its ripple effects 10 years into the future. Write a speculative narrative, as if reporting from the future. 250-400 words.",
-        "max_words": 400,
-        "min_chars": 100
-      },
-      {
-        "name": "micro_manifesto",
-        "instruction": "Declare your vision for the world on a specific issue in a single punchy paragraph. State convictions, challenge status quo, call for action.",
-        "max_words": 70,
-        "min_chars": 35
-      },
-      {
-        "name": "photo_story",
-        "instruction": "Describe an imagined photo in vivid detail, then explain the hidden story behind it. Two distinct sections, total 120-180 words.",
-        "max_words": 180,
-        "min_chars": 60
-      },
-      {
-        "name": "reverse_diary",
-        "instruction": "Write a diary entry from the perspective of a thing (object or concept) instead of a person. 60-100 words, capture tone and personality.",
-        "max_words": 100,
-        "min_chars": 40
-      },
-      {
-        "name": "jigsaw_journal",
-        "instruction": "For a topic, write four disconnected sentences\u2014each a puzzle piece. End with a question tying them together.",
+        "name": "micro_rant",
+        "instruction": "Vent about a tiny everyday annoyance in exactly four sentences. Each sentence should escalate the frustration, but end with a twist.",
         "max_words": 50,
         "min_chars": 25
       },
       {
-        "name": "pocket_debate",
-        "instruction": "Write a tiny debate: state two opposing viewpoints in two lines each, then conclude with your verdict in a single sentence.",
-        "max_words": 60,
-        "min_chars": 30
+        "name": "dialogue_sketch",
+        "instruction": "Write a conversation between two imaginary characters about today\u2019s topic. Capture humor and tension. Use at least six lines of dialogue.",
+        "max_words": 120,
+        "min_chars": 60
       },
       {
-        "name": "slow_burn",
-        "instruction": "Take a niche obsession (hobby, idea, routine) and unpack its evolution over time. Use a narrative structure; include key moments, setbacks, small epiphanies. Minimum 300 words.",
-        "max_words": 500,
-        "min_chars": 120
+        "name": "chain_reaction",
+        "instruction": "Describe a cascading series of events started by one small action. Use numbered steps to show each part of the chain. End with a surprising outcome.",
+        "max_words": 80,
+        "min_chars": 35
+      },
+      {
+        "name": "unexpected_mashup",
+        "instruction": "Combine two wildly unrelated concepts into a single post. Explain how they might intersect or affect each other. Use analogy, metaphors, or mini-stories.",
+        "max_words": 180,
+        "min_chars": 50
+      },
+      {
+        "name": "multi_path_memoir",
+        "instruction": "Imagine two different ways your day could have gone. Write parallel narratives (each at least one paragraph), compare outcomes, and reflect on their significance.",
+        "max_words": 350,
+        "min_chars": 100
+      },
+      {
+        "name": "hidden_rules",
+        "instruction": "Reveal surprisingly strict, silly, or secret rules that govern a familiar space (real or virtual). Expose how these rules shape behavior. Use concrete examples.",
+        "max_words": 250,
+        "min_chars": 80
+      },
+      {
+        "name": "tiny_manifesto",
+        "instruction": "Declare your philosophy on a microtopic in exactly three bold statements. No explanation. Just core beliefs.",
+        "max_words": 18,
+        "min_chars": 10
       }
     ],
     "title_styles": [
-      "Write your title as if it\u2019s a line from a diary\u2014personal and immediate.",
-      "Frame your title as a headline from a futuristic newspaper.",
-      "Make your title a question a curious child might ask.",
-      "Use a metaphor for your title to hint at the topic, but don\u2019t reveal it outright.",
-      "Write your title like a bold protest sign\u2014short, punchy, declarative."
+      "Use a mysterious teaser that hints at a surprising truth. Examples: 'What nobody warned me about X', 'Why Y makes Z weirdly complicated'",
+      "Write a title that challenges a common assumption. Examples: 'Everything you know about X is backwards', 'Why I stopped believing in Y'",
+      "Frame your title as a visual metaphor. Examples: 'X is a maze of mirrors', 'My mind is a browser with 100 tabs open'",
+      "Pose an intriguing question that invites the reader in. Examples: 'Could X be secretly shaping our lives?', 'When did Y start feeling like Z?'",
+      "Craft a split-path title. Examples: 'If I had chosen A instead of B', 'Two ways to look at X'"
     ],
     "structure_variants": [
-      "Start with a riddle or analogy, then reveal the real topic.",
-      "Organize your post as alternating 'pros' and 'cons' sections.",
-      "Write each paragraph from a different perspective (human, object, outsider).",
-      "Present content as a fictional dialogue between two invented characters.",
-      "Use a timeline: anchor your points at 'past', 'present', and 'possibility'."
+      "Write in a zigzag layout: alternate between short and long sentences for rhythmic effect.",
+      "Organize your post as a countdown (e.g., '5...4...3...') leading to the main point.",
+      "Use a call-and-response: state a claim, then immediately challenge or counter it.",
+      "Split the post into two opposing perspectives, each with its own section.",
+      "Start with a micro-story, then zoom out to broader insights."
     ],
     "topic_angles": [
-      "How everyday technology invisibly shapes our small habits.",
-      "The amusing rituals people create to navigate uncertainty.",
-      "What your neighborhood would say if it could talk.",
-      "Nostalgic moments that drove big personal change.",
-      "Strange traditions in modern workplaces."
+      "Explore the hidden world of objects lost and found",
+      "Dive into the odd rituals people do before starting work",
+      "Investigate how algorithms quietly affect everyday decisions",
+      "Collect unexpectedly deep wisdom from overheard conversations",
+      "Trace the emotional geography of familiar streets"
     ]
   }
 }
