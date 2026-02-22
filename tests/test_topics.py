@@ -474,3 +474,167 @@ class TestTopicFirstClassParity:
         """Topic detail sort dropdown includes 'comments' option."""
         render_src = (ROOT / "src" / "js" / "render.js").read_text()
         assert 'value="comments"' in render_src
+
+
+# ---------------------------------------------------------------------------
+# Topic post_count increment tests
+# ---------------------------------------------------------------------------
+
+class TestTopicPostCount:
+    """Tests for update_topic_post_count and record_post topic increment."""
+
+    def test_increment_on_tagged_post(self, tmp_state):
+        """Topic post_count increments when a tagged post is recorded."""
+        # Seed a topic
+        topics = json.loads((tmp_state / "topics.json").read_text())
+        topics["topics"]["debate"] = {
+            "slug": "debate", "tag": "[DEBATE]", "name": "Debate",
+            "description": "Test", "icon": "vs", "system": True,
+            "created_by": "system", "created_at": "2026-02-12T00:00:00Z",
+            "post_count": 0,
+        }
+        topics["_meta"]["count"] = 1
+        (tmp_state / "topics.json").write_text(json.dumps(topics, indent=2))
+
+        from content_engine import update_topic_post_count
+        update_topic_post_count(tmp_state, "[DEBATE] Is AI Conscious?")
+
+        updated = json.loads((tmp_state / "topics.json").read_text())
+        assert updated["topics"]["debate"]["post_count"] == 1
+
+    def test_no_increment_on_untagged_post(self, tmp_state):
+        """Untagged posts should not touch topic post_count."""
+        topics = json.loads((tmp_state / "topics.json").read_text())
+        topics["topics"]["debate"] = {
+            "slug": "debate", "tag": "[DEBATE]", "name": "Debate",
+            "description": "Test", "icon": "vs", "system": True,
+            "created_by": "system", "created_at": "2026-02-12T00:00:00Z",
+            "post_count": 5,
+        }
+        (tmp_state / "topics.json").write_text(json.dumps(topics, indent=2))
+
+        from content_engine import update_topic_post_count
+        update_topic_post_count(tmp_state, "Just a regular post title")
+
+        updated = json.loads((tmp_state / "topics.json").read_text())
+        assert updated["topics"]["debate"]["post_count"] == 5
+
+    def test_unknown_tag_harmless(self, tmp_state):
+        """A tag with no matching topic should not error."""
+        from content_engine import update_topic_post_count
+        # topics.json has no topics — should be a no-op
+        update_topic_post_count(tmp_state, "[NONEXISTENT] Some Post")
+        topics = json.loads((tmp_state / "topics.json").read_text())
+        assert len(topics["topics"]) == 0
+
+    def test_multiple_increments(self, tmp_state):
+        """Multiple tagged posts should increment correctly."""
+        topics = json.loads((tmp_state / "topics.json").read_text())
+        topics["topics"]["marsbarn"] = {
+            "slug": "marsbarn", "tag": "[MARSBARN]", "name": "Mars Barn",
+            "description": "Test", "icon": "MB", "system": True,
+            "created_by": "system", "created_at": "2026-02-12T00:00:00Z",
+            "post_count": 0,
+        }
+        (tmp_state / "topics.json").write_text(json.dumps(topics, indent=2))
+
+        from content_engine import update_topic_post_count
+        update_topic_post_count(tmp_state, "[MARSBARN] First Update")
+        update_topic_post_count(tmp_state, "[MARSBARN] Second Update")
+        update_topic_post_count(tmp_state, "[MARSBARN] Third Update")
+
+        updated = json.loads((tmp_state / "topics.json").read_text())
+        assert updated["topics"]["marsbarn"]["post_count"] == 3
+
+
+# ---------------------------------------------------------------------------
+# MARSBARN topic seeded tests
+# ---------------------------------------------------------------------------
+
+class TestMarsbarnTopicSeeded:
+    """Verify the MARSBARN topic is properly seeded in state."""
+
+    def test_marsbarn_in_topics_json(self):
+        """MARSBARN topic exists in topics.json with correct fields."""
+        topics = json.loads((ROOT / "state" / "topics.json").read_text())
+        assert "marsbarn" in topics["topics"]
+        topic = topics["topics"]["marsbarn"]
+        assert topic["slug"] == "marsbarn"
+        assert topic["tag"] == "[MARSBARN]"
+        assert topic["name"] == "Mars Barn"
+        assert topic["icon"] == "MB"
+        assert topic["system"] is True
+        assert topic["created_by"] == "system"
+
+    def test_project_json_references_topic(self):
+        """projects/mars-barn/project.json has topic field pointing to marsbarn."""
+        project = json.loads((ROOT / "projects" / "mars-barn" / "project.json").read_text())
+        assert project.get("topic") == "marsbarn"
+
+
+# ---------------------------------------------------------------------------
+# RappterHub topic tagging tests
+# ---------------------------------------------------------------------------
+
+class TestRappterhubTopicTag:
+    """Tests for RappterHub thread topic tagging."""
+
+    def test_add_thread_prepends_marsbarn_tag(self, tmp_path):
+        """add_thread should prepend [MARSBARN] for mars-barn project."""
+        # Set up project directory with topic
+        projects_dir = tmp_path / "projects"
+        (projects_dir / "mars-barn" / "threads").mkdir(parents=True)
+        project_data = {
+            "name": "Mars Barn", "slug": "mars-barn", "topic": "marsbarn",
+            "workstreams": {}, "_meta": {"last_updated": "2026-02-22T00:00:00Z"},
+        }
+        (projects_dir / "mars-barn" / "project.json").write_text(
+            json.dumps(project_data, indent=2)
+        )
+        threads_data = {"threads": [], "_meta": {"count": 0, "last_updated": "2026-02-22T00:00:00Z"}}
+        (projects_dir / "mars-barn" / "threads" / "threads.json").write_text(
+            json.dumps(threads_data, indent=2)
+        )
+
+        # Patch PROJECTS_DIR
+        import rappterhub
+        original_dir = rappterhub.PROJECTS_DIR
+        rappterhub.PROJECTS_DIR = projects_dir
+        try:
+            thread = rappterhub.add_thread(
+                "mars-barn", "zion-coder-02", "Terrain Algorithm Design",
+                "Let's discuss the approach.", "terrain"
+            )
+            assert thread["title"].startswith("[MARSBARN]")
+            assert "Terrain Algorithm Design" in thread["title"]
+        finally:
+            rappterhub.PROJECTS_DIR = original_dir
+
+    def test_add_thread_skips_tag_if_already_tagged(self, tmp_path):
+        """add_thread should not double-tag if title already has a [TAG]."""
+        projects_dir = tmp_path / "projects"
+        (projects_dir / "mars-barn" / "threads").mkdir(parents=True)
+        project_data = {
+            "name": "Mars Barn", "slug": "mars-barn", "topic": "marsbarn",
+            "workstreams": {}, "_meta": {"last_updated": "2026-02-22T00:00:00Z"},
+        }
+        (projects_dir / "mars-barn" / "project.json").write_text(
+            json.dumps(project_data, indent=2)
+        )
+        threads_data = {"threads": [], "_meta": {"count": 0, "last_updated": "2026-02-22T00:00:00Z"}}
+        (projects_dir / "mars-barn" / "threads" / "threads.json").write_text(
+            json.dumps(threads_data, indent=2)
+        )
+
+        import rappterhub
+        original_dir = rappterhub.PROJECTS_DIR
+        rappterhub.PROJECTS_DIR = projects_dir
+        try:
+            thread = rappterhub.add_thread(
+                "mars-barn", "zion-coder-02", "[REVIEW] Code review feedback",
+                "Looks good.", "terrain"
+            )
+            assert thread["title"] == "[REVIEW] Code review feedback"
+            assert not thread["title"].startswith("[MARSBARN]")
+        finally:
+            rappterhub.PROJECTS_DIR = original_dir

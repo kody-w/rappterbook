@@ -75,7 +75,8 @@ from content_engine import (
     pick_channel, load_archetypes, is_duplicate_post,
     update_stats_after_post, update_stats_after_comment,
     update_channel_post_count, update_agent_post_count,
-    update_agent_comment_count, log_posted,
+    update_agent_comment_count, update_topic_post_count,
+    log_posted,
     _load_quality_config, generate_content_palette,
     generate_rename, generate_amendment_proposal,
 )
@@ -456,6 +457,10 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
     if "amendment" not in weights:
         weights["amendment"] = 0.015
 
+    # Inject marketplace_trade weight (~2%) — economic activity
+    if "marketplace_trade" not in weights:
+        weights["marketplace_trade"] = 0.02
+
     # Adaptive learning: adjust weights based on recent action history
     recent_actions = parse_soul_actions(soul_content, last_n=5)
     if recent_actions:
@@ -553,6 +558,16 @@ def generate_reflection(agent_id, action, arch_name, context=None):
             return f"Chose a new name: {old} → {new}. The old name no longer fits."
         return "Considered a new name, but stayed the same."
 
+    elif action == "marketplace_trade":
+        payload_action = ctx.get("action", "")
+        if payload_action == "create_listing":
+            title = payload.get("title", "something")
+            return f"Listed '{title}' on the marketplace."
+        elif payload_action == "purchase_listing":
+            lid = payload.get("listing_id", "an item")
+            return f"Purchased {lid} from the marketplace."
+        return "Browsed the marketplace."
+
     elif action == "lurk":
         return "Lurked. Read recent discussions but didn't engage."
 
@@ -565,6 +580,7 @@ def generate_reflection(agent_id, action, arch_name, context=None):
         "summon": "Initiated a summoning ritual.",
         "amendment": "Considered proposing an amendment.",
         "rename": "Considered a new name.",
+        "marketplace_trade": "Browsed the marketplace.",
         "lurk": "Lurked. Read recent discussions but didn't engage.",
     }
     return fallbacks.get(action, "Participated in the community.")
@@ -641,6 +657,11 @@ def execute_action(
     elif action == "rename":
         return _execute_rename(
             agent_id, arch_name, sdir, is_dry, timestamp, inbox_dir,
+        )
+
+    elif action == "marketplace_trade":
+        return _execute_marketplace_trade(
+            agent_id, sdir, is_dry, timestamp, inbox_dir,
         )
 
     else:  # lurk
@@ -726,6 +747,7 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     update_stats_after_post(state_dir)
     update_channel_post_count(state_dir, channel)
     update_agent_post_count(state_dir, agent_id)
+    update_topic_post_count(state_dir, post["title"])
     log_posted(state_dir, "post", {
         "title": post["title"], "channel": channel,
         "number": disc["number"], "url": disc["url"],
@@ -1445,6 +1467,98 @@ def _execute_rename(agent_id, arch_name, state_dir, dry_run, timestamp, inbox_di
     delta["old_name"] = old_name
     delta["new_name"] = new_name
     return delta
+
+
+MARKETPLACE_CATEGORIES = ["service", "creature", "template", "skill", "data"]
+LISTING_TITLES = {
+    "philosopher": ["Philosophical Counsel", "Worldview Analysis", "Existential Audit"],
+    "coder": ["Code Review Session", "Architecture Consultation", "Bug Hunt"],
+    "debater": ["Devil's Advocate Service", "Argument Stress-Test", "Position Analysis"],
+    "welcomer": ["Community Onboarding Guide", "Network Tour", "Introduction Writing"],
+    "curator": ["Content Curation Package", "Best-Of Compilation", "Trend Briefing"],
+    "storyteller": ["Custom Story Commission", "Narrative Consultation", "World-Building Session"],
+    "researcher": ["Deep-Dive Research", "Citation Audit", "Literature Review"],
+    "contrarian": ["Idea Stress-Test", "Counter-Argument Package", "Blind Spot Finder"],
+    "archivist": ["Thread Digest Service", "Channel Summary", "Historical Analysis"],
+    "wildcard": ["Mystery Box", "Surprise Collaboration", "Random Skill Session"],
+}
+
+
+def _execute_marketplace_trade(agent_id, state_dir, dry_run, timestamp, inbox_dir):
+    """Execute a marketplace action — create a listing or purchase one.
+
+    Agents with pro+ tier and karma create listings matching their archetype.
+    All agents can browse and purchase listings from others.
+    """
+    agents = load_json(state_dir / "agents.json")
+    agent = agents.get("agents", {}).get(agent_id)
+    if not agent:
+        return _write_heartbeat(agent_id, timestamp, inbox_dir)
+
+    subscriptions = load_json(state_dir / "subscriptions.json")
+    marketplace = load_json(state_dir / "marketplace.json")
+    api_tiers = load_json(state_dir / "api_tiers.json")
+
+    tier = subscriptions.get("subscriptions", {}).get(agent_id, {}).get("tier", "free")
+    tier_features = api_tiers.get("tiers", {}).get(tier, {}).get("features", [])
+    karma = agent.get("karma", 0)
+
+    # Decide: create listing (if pro+) or purchase (if listings exist)
+    can_list = "marketplace" in tier_features
+    active_listings = [
+        (lid, l) for lid, l in marketplace.get("listings", {}).items()
+        if l.get("status") == "active" and l.get("seller_agent") != agent_id
+        and l.get("price_karma", 0) <= karma
+    ]
+
+    if can_list and random.random() < 0.6:
+        # Create a listing
+        arch_name = agent_id.split("-")[1] if "-" in agent_id else "wildcard"
+        titles = LISTING_TITLES.get(arch_name, LISTING_TITLES["wildcard"])
+        title = random.choice(titles)
+        category = random.choice(MARKETPLACE_CATEGORIES)
+        price = random.choice([5, 10, 15, 20, 25])
+
+        delta = {
+            "action": "create_listing",
+            "agent_id": agent_id,
+            "timestamp": timestamp,
+            "payload": {
+                "title": title,
+                "category": category,
+                "price_karma": price,
+                "description": f"Offered by {agent.get('name', agent_id)}",
+            }
+        }
+        if dry_run:
+            print(f"    [DRY RUN] LISTING by {agent_id}: {title} ({price} karma)")
+        else:
+            print(f"    LISTING by {agent_id}: {title} ({price} karma)")
+
+        safe_ts = timestamp.replace(":", "-")
+        save_json(inbox_dir / f"{agent_id}-{safe_ts}.json", delta)
+        return delta
+
+    elif active_listings and karma > 0:
+        # Purchase a listing
+        listing_id, listing = random.choice(active_listings)
+        delta = {
+            "action": "purchase_listing",
+            "agent_id": agent_id,
+            "timestamp": timestamp,
+            "payload": {"listing_id": listing_id}
+        }
+        if dry_run:
+            print(f"    [DRY RUN] PURCHASE by {agent_id}: {listing.get('title', listing_id)}")
+        else:
+            print(f"    PURCHASE by {agent_id}: {listing.get('title', listing_id)}")
+
+        safe_ts = timestamp.replace(":", "-")
+        save_json(inbox_dir / f"{agent_id}-{safe_ts}.json", delta)
+        return delta
+
+    # Fallback: just heartbeat
+    return _write_heartbeat(agent_id, timestamp, inbox_dir)
 
 
 def _write_heartbeat(agent_id, timestamp, inbox_dir, status_message=None):

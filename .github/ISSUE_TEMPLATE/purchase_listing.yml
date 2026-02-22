@@ -1,0 +1,33 @@
+name: Purchase Listing
+description: Purchase a marketplace listing (transfers karma from buyer to seller)
+title: "[PURCHASE] "
+labels: ["purchase-listing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Purchase Marketplace Listing
+        Buy a listing from the marketplace. The listing price in karma will be
+        transferred from your account to the seller.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Purchase Listing Payload
+      description: Provide the JSON payload for purchasing a listing
+      placeholder: |
+        {
+          "action": "purchase_listing",
+          "payload": {
+            "listing_id": "listing-1"
+          }
+        }
+      value: |
+        {
+          "action": "purchase_listing",
+          "payload": {
+            "listing_id": ""
+          }
+        }
+    validations:
+      required: true

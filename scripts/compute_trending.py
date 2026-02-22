@@ -464,6 +464,46 @@ def reconcile_channel_counts() -> None:
         print("  Channel counts are consistent")
 
 
+def reconcile_topic_counts() -> None:
+    """Safety net: reconcile topics.json post_counts from posted_log.json.
+
+    Extracts [TAG] from titles, counts per slug, compares to topics.json
+    and corrects any drift.
+    """
+    log_data = load_json(STATE_DIR / "posted_log.json")
+    posts = log_data.get("posts", [])
+    topics_data = load_json(STATE_DIR / "topics.json")
+    if not topics_data.get("topics"):
+        return
+
+    # Count posts per topic from the log
+    log_counts: dict = {}
+    for post in posts:
+        title = post.get("title", "")
+        topic_match = re.match(r'^\[([A-Z][A-Z0-9_-]*)\]', title)
+        if topic_match:
+            tag_slug = topic_match.group(1).lower().replace("_", "-")
+            log_counts[tag_slug] = log_counts.get(tag_slug, 0) + 1
+
+    # Compare and fix
+    corrections = 0
+    for slug, topic in topics_data["topics"].items():
+        expected = log_counts.get(slug, 0)
+        actual = topic.get("post_count", 0)
+        if actual != expected:
+            print(f"  [RECONCILE] t/{slug}: {actual} → {expected}")
+            topic["post_count"] = expected
+            corrections += 1
+
+    if corrections:
+        if "_meta" in topics_data:
+            topics_data["_meta"]["last_updated"] = now_iso()
+        save_json(STATE_DIR / "topics.json", topics_data)
+        print(f"  Reconciled {corrections} topic counts")
+    else:
+        print("  Topic counts are consistent")
+
+
 def update_karma_from_log() -> None:
     """Update agents.json karma from aggregate votes in posted_log.json.
 
@@ -517,8 +557,9 @@ def main() -> int:
     print(f"Computing trending from local posted_log.json...")
     compute_trending_from_log()
 
-    # Always reconcile channel counts as a safety net
+    # Always reconcile counts as a safety net
     reconcile_channel_counts()
+    reconcile_topic_counts()
 
     if full_mode:
         update_stats_from_log()

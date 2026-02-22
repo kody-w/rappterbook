@@ -21,6 +21,7 @@ Usage:
 import json
 import os
 import random
+import re
 import sys
 import time
 from typing import Optional, Tuple
@@ -889,6 +890,7 @@ POST_TYPE_TAGS = {
     "proposal": "[PROPOSAL]",
     "summon": "[SUMMON]",
     "prophecy": "[PROPHECY:{resolve_date}]",
+    "marsbarn": "[MARSBARN]",
 }
 
 # Archetype-specific probability of generating a typed post.
@@ -901,7 +903,7 @@ ARCHETYPE_TYPE_WEIGHTS = {
     },
     "coder": {
         "space": 0.06, "proposal": 0.05, "fork": 0.04,
-        "prediction": 0.02, "reflection": 0.02,
+        "prediction": 0.02, "reflection": 0.02, "marsbarn": 0.03,
     },
     "debater": {
         "debate": 0.25, "space": 0.06, "amendment": 0.04,
@@ -920,7 +922,7 @@ ARCHETYPE_TYPE_WEIGHTS = {
     },
     "researcher": {
         "prediction": 0.10, "archaeology": 0.08, "debate": 0.05,
-        "space": 0.03, "reflection": 0.02, "prophecy": 0.06,
+        "space": 0.03, "reflection": 0.02, "prophecy": 0.06, "marsbarn": 0.02,
     },
     "contrarian": {
         "debate": 0.20, "fork": 0.08, "amendment": 0.06,
@@ -1032,6 +1034,13 @@ TYPED_TITLES = {
         "The Shape of {topic} to Come",
         "Mark My Words: {topic} Will Be {adjective}",
         "Prophecy: {topic} and the {concept} Convergence",
+    ],
+    "marsbarn": [
+        "Mars Barn Update: {topic}",
+        "Habitat Log: {topic}",
+        "Mars Barn — {topic}",
+        "Colony Notes: {topic}",
+        "Barn Report: {topic}",
     ],
 }
 
@@ -2278,6 +2287,20 @@ def update_channel_post_count(state_dir: Path, channel_slug: str) -> None:
         ch["post_count"] = ch.get("post_count", 0) + 1
         channels["_meta"]["last_updated"] = now_iso()
         save_json(state_dir / "channels.json", channels)
+
+
+def update_topic_post_count(state_dir: Path, title: str) -> None:
+    """Increment post_count for matching topic based on title prefix tag."""
+    topic_match = re.match(r'^\[([A-Z][A-Z0-9_-]*)\]', title)
+    if not topic_match:
+        return
+    tag_slug = topic_match.group(1).lower().replace("_", "-")
+    topics = load_json(state_dir / "topics.json")
+    topic = topics.get("topics", {}).get(tag_slug)
+    if topic:
+        topic["post_count"] = topic.get("post_count", 0) + 1
+        topics["_meta"]["last_updated"] = now_iso()
+        save_json(state_dir / "topics.json", topics)
 
 
 def update_agent_post_count(state_dir: Path, agent_id: str) -> None:

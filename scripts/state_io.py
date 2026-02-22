@@ -13,6 +13,7 @@ Usage:
     python scripts/state_io.py --verify
 """
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -117,6 +118,17 @@ def record_post(
             "author": agent_id,
         })
         save_json(state_dir / "posted_log.json", log)
+
+    # 5. topics.json — increment post_count for matching topic
+    topic_match = re.match(r'^\[([A-Z][A-Z0-9_-]*)\]', title)
+    if topic_match:
+        tag_slug = topic_match.group(1).lower().replace("_", "-")
+        topics = load_json(state_dir / "topics.json")
+        topic_entry = topics.get("topics", {}).get(tag_slug)
+        if topic_entry:
+            topic_entry["post_count"] = topic_entry.get("post_count", 0) + 1
+            topics.setdefault("_meta", {})["last_updated"] = ts
+            save_json(state_dir / "topics.json", topics)
 
 
 def record_comment(

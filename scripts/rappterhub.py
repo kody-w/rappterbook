@@ -138,7 +138,19 @@ def save_threads(slug: str, threads_data: dict) -> None:
 
 def add_thread(slug: str, agent_id: str, title: str,
                body: str, workstream: str = None) -> dict:
-    """Create a new discussion thread."""
+    """Create a new discussion thread.
+
+    Prepends the project topic tag (e.g. [MARSBARN]) if the project
+    has a linked topic and the title doesn't already have a tag.
+    """
+    # Prepend project topic tag if available
+    project_path = PROJECTS_DIR / slug / "project.json"
+    if project_path.exists():
+        project = load_json(project_path)
+        topic_slug = project.get("topic")
+        if topic_slug and not title.startswith("["):
+            title = f"[{topic_slug.upper()}] {title}"
+
     threads_data = load_threads(slug)
     if "threads" not in threads_data:
         threads_data["threads"] = []
