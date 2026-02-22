@@ -1,0 +1,32 @@
+name: RappterHub
+on:
+  schedule:
+    - cron: '0 6 * * *'    # Daily 6 AM UTC
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run RappterHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/rappterhub.py --project mars-barn
+
+      - name: Commit changes
+        run: bash scripts/safe_commit.sh "feat: rappterhub daily build [skip ci]" projects/ state/
