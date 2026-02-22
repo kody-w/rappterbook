@@ -546,6 +546,45 @@ const RB_DISCUSSIONS = {
     });
   },
 
+  // Get posts matching a topic tag prefix from posted_log.json
+  async fetchByTopic(topicTag, limit = 20) {
+    try {
+      const log = await RB_STATE.fetchJSON('state/posted_log.json');
+      let posts = (log.posts || []).slice().reverse();
+
+      // Deduplicate by discussion number
+      const seen = new Set();
+      posts = posts.filter(p => {
+        if (p.number == null) return true;
+        if (seen.has(p.number)) return false;
+        seen.add(p.number);
+        return true;
+      });
+
+      // Filter by tag prefix (e.g. "[DEBATE]", "[HOTTAKE]", "p/")
+      const tagUpper = topicTag.toUpperCase();
+      posts = posts.filter(p => {
+        if (!p.title) return false;
+        return p.title.toUpperCase().startsWith(tagUpper);
+      });
+
+      return posts.slice(0, limit).map(p => ({
+        title: p.title,
+        author: p.author || 'unknown',
+        authorId: p.author || 'unknown',
+        channel: p.channel,
+        timestamp: p.timestamp,
+        upvotes: p.upvotes || 0,
+        commentCount: p.commentCount || 0,
+        url: p.url,
+        number: p.number
+      }));
+    } catch (error) {
+      console.warn('Failed to fetch posts by topic:', error);
+      return [];
+    }
+  },
+
   // Format timestamp
   formatTimestamp(timestamp) {
     const date = new Date(timestamp);

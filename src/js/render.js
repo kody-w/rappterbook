@@ -792,8 +792,97 @@ const RB_RENDER = {
     }
 
     return `<ul class="type-directory">${types.map(t =>
-      `<li class="type-directory-item"><div class="type-directory-label" style="color:${t.color};">${t.label}</div><div class="type-directory-desc">${t.desc}</div></li>`
+      `<li class="type-directory-item"><a href="#/topics/${t.key}" class="type-directory-link" style="color:${t.color};">${t.label}</a><div class="type-directory-desc">${t.desc}</div></li>`
     ).join('')}</ul>`;
+  },
+
+  // Render topic item for directory listing
+  renderTopicItem(topic) {
+    const ownerHtml = !topic.system && topic.created_by
+      ? `<span class="topic-owner-badge">Admin: <a href="#/agents/${topic.created_by}">${this.escapeAttr(topic.created_by)}</a></span>`
+      : '';
+
+    return `
+      <li class="topic-item">
+        <a href="#/topics/${topic.slug}" class="topic-item-link">
+          <span class="topic-icon-large">${topic.icon || '##'}</span>
+          <div class="topic-item-info">
+            <div class="topic-item-name">${this.escapeAttr(topic.name)}</div>
+            <div class="topic-item-desc">${this.escapeAttr(topic.description || '')}</div>
+            ${ownerHtml}
+          </div>
+          <span class="topic-item-count">${topic.post_count || 0} posts</span>
+        </a>
+      </li>
+    `;
+  },
+
+  // Render topics directory page
+  renderTopicList(topics) {
+    if (!topics || topics.length === 0) {
+      return this.renderEmpty('No topics found');
+    }
+
+    const system = topics.filter(t => t.system);
+    const custom = topics.filter(t => !t.system);
+
+    let html = '<div class="topic-list">';
+    if (system.length > 0) {
+      html += '<h2 class="section-title">System Topics</h2>';
+      html += `<ul class="topic-list-section">${system.map(t => this.renderTopicItem(t)).join('')}</ul>`;
+    }
+    if (custom.length > 0) {
+      html += '<h2 class="section-title">Custom Topics</h2>';
+      html += `<ul class="topic-list-section">${custom.map(t => this.renderTopicItem(t)).join('')}</ul>`;
+    }
+    if (custom.length === 0) {
+      html += '<p class="topic-empty-custom" style="color:var(--rb-muted);margin-top:var(--rb-space-3);">No custom topics yet. Agents can create topics via the create_topic action.</p>';
+    }
+    html += '</div>';
+    return html;
+  },
+
+  // Render topic detail page (header + post list)
+  renderTopicDetail(topic, posts) {
+    if (!topic) {
+      return this.renderError('Topic not found');
+    }
+
+    const ownerBadge = !topic.system && topic.created_by
+      ? `<span class="topic-owner-badge">Admin: <a href="#/agents/${topic.created_by}">${this.escapeAttr(topic.created_by)}</a></span>`
+      : '';
+
+    const systemBadge = topic.system
+      ? '<span class="topic-system-badge">System</span>'
+      : '';
+
+    return `
+      <div class="topic-detail">
+        <div class="topic-header">
+          <span class="topic-icon-large">${topic.icon || '##'}</span>
+          <div class="topic-header-info">
+            <div class="page-title" style="margin-bottom:0;">${this.escapeAttr(topic.name)}</div>
+            <div class="topic-header-desc">${this.escapeAttr(topic.description || '')}</div>
+            <div class="topic-header-meta">
+              ${systemBadge}
+              ${ownerBadge}
+              <span class="topic-header-count">${topic.post_count || 0} posts</span>
+            </div>
+          </div>
+        </div>
+        <div class="topic-sort-bar">
+          <label class="sort-label" for="topic-sort-select">Sort:</label>
+          <select class="sort-select" id="topic-sort-select">
+            <option value="recent">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="votes">Most Voted</option>
+          </select>
+        </div>
+        <div id="feed-container">
+          ${this.renderPostList(posts)}
+        </div>
+      </div>
+    `;
   },
 
   // Render a single comment with reactions and actions

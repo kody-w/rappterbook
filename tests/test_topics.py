@@ -275,3 +275,69 @@ class TestCreateTopicSanitization:
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
         assert topics["topics"]["noicon"]["icon"] == "##"
+
+
+# ---------------------------------------------------------------------------
+# UI data shape tests — verify topics carry the fields the frontend expects
+# ---------------------------------------------------------------------------
+
+class TestTopicUIDataShape:
+    def test_topic_has_created_by_field(self, tmp_state):
+        """Every topic must have a created_by field after creation."""
+        write_delta(
+            tmp_state / "inbox", "agent-a", "create_topic",
+            {"slug": "uilook", "name": "UI Look", "description": "Shape test"},
+        )
+        run_inbox(tmp_state)
+        topics = load_topics(tmp_state)
+        topic = topics["topics"]["uilook"]
+        assert "created_by" in topic
+        assert topic["created_by"] == "agent-a"
+
+    def test_system_topics_created_by_system(self, tmp_state):
+        """Pre-seeded system topics should have created_by == 'system'."""
+        seed = json.loads((ROOT / "state" / "topics.json").read_text())
+        for slug, topic in seed["topics"].items():
+            if topic.get("system"):
+                assert topic["created_by"] == "system", f"System topic {slug} missing created_by"
+
+    def test_custom_topic_owner_is_creator(self, tmp_state):
+        """A custom topic's created_by must match the creating agent."""
+        write_delta(
+            tmp_state / "inbox", "owner-bot", "create_topic",
+            {"slug": "owned", "name": "Owned", "description": "Owner test"},
+        )
+        run_inbox(tmp_state)
+        topics = load_topics(tmp_state)
+        assert topics["topics"]["owned"]["created_by"] == "owner-bot"
+        assert topics["topics"]["owned"]["system"] is False
+
+    def test_topic_post_count_starts_zero(self, tmp_state):
+        """Newly created topics must start with post_count == 0."""
+        write_delta(
+            tmp_state / "inbox", "agent-a", "create_topic",
+            {"slug": "fresh", "name": "Fresh", "description": "Zero posts"},
+        )
+        run_inbox(tmp_state)
+        topics = load_topics(tmp_state)
+        assert topics["topics"]["fresh"]["post_count"] == 0
+
+    def test_multiple_topics_independent(self, tmp_state):
+        """Creating multiple topics should not interfere with each other."""
+        write_delta(
+            tmp_state / "inbox", "agent-a", "create_topic",
+            {"slug": "alpha", "name": "Alpha", "description": "First"},
+            timestamp="2026-02-20T12:00:00Z",
+        )
+        write_delta(
+            tmp_state / "inbox", "agent-b", "create_topic",
+            {"slug": "beta", "name": "Beta", "description": "Second"},
+            timestamp="2026-02-20T12:01:00Z",
+        )
+        run_inbox(tmp_state)
+        topics = load_topics(tmp_state)
+        assert "alpha" in topics["topics"]
+        assert "beta" in topics["topics"]
+        assert topics["topics"]["alpha"]["created_by"] == "agent-a"
+        assert topics["topics"]["beta"]["created_by"] == "agent-b"
+        assert topics["_meta"]["count"] == 2

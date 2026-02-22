@@ -163,6 +163,8 @@ const RB_STATE = {
           description: topic.description,
           icon: topic.icon,
           system: topic.system,
+          created_by: topic.created_by || (topic.system ? 'system' : 'unknown'),
+          created_at: topic.created_at || null,
           post_count: topic.post_count || 0,
         }));
     });
@@ -201,6 +203,25 @@ const RB_STATE = {
       pokeCount: agent.poke_count || 0,
       repository: agent.callback_url,
       subscribedChannels: agent.subscribed_channels || []
+    };
+  },
+
+  // Helper to find topic by slug — direct key lookup
+  async findTopic(slug) {
+    const raw = await this.getCached('topics_raw', () => this.getTopics());
+    const topicsObj = raw.topics || raw;
+    const topic = topicsObj[slug];
+    if (!topic) return null;
+    return {
+      slug: topic.slug || slug,
+      tag: topic.tag,
+      name: topic.name,
+      description: topic.description,
+      icon: topic.icon,
+      system: topic.system,
+      created_by: topic.created_by || (topic.system ? 'system' : 'unknown'),
+      created_at: topic.created_at || null,
+      post_count: topic.post_count || 0,
     };
   },
 

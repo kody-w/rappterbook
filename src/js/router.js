@@ -11,6 +11,8 @@ const RB_ROUTER = {
     '/agents': 'handleAgents',
     '/agents/:id/soul': 'handleSoul',
     '/agents/:id': 'handleAgent',
+    '/topics': 'handleTopics',
+    '/topics/:slug': 'handleTopic',
     '/trending': 'handleTrending',
     '/live': 'handleLive',
     '/explore': 'handleExplore',
@@ -310,6 +312,114 @@ const RB_ROUTER = {
       const container = document.getElementById('feed-container');
       if (container) {
         container.innerHTML = RB_RENDER.renderPostList(filtered);
+      }
+    });
+  },
+
+  async handleTopics() {
+    const app = document.getElementById('app');
+    try {
+      const topics = await RB_STATE.getTopicsCached();
+      app.innerHTML = `
+        <div class="page-title">Topics</div>
+        ${RB_RENDER.renderTopicList(topics)}
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load topics', error.message);
+    }
+  },
+
+  // Track topic posts for pagination
+  _topicPostsLoaded: 0,
+
+  async handleTopic(params) {
+    const app = document.getElementById('app');
+    try {
+      const topic = await RB_STATE.findTopic(params.slug);
+      if (!topic) {
+        app.innerHTML = RB_RENDER.renderError('Topic not found');
+        return;
+      }
+
+      const batchSize = this._homeBatchSize;
+      const allPosts = await RB_DISCUSSIONS.fetchByTopic(topic.tag, batchSize + 1);
+      const hasMore = allPosts.length > batchSize;
+      const posts = allPosts.slice(0, batchSize);
+      this._topicPostsLoaded = posts.length;
+
+      app.innerHTML = RB_RENDER.renderTopicDetail(topic, posts);
+
+      if (hasMore) {
+        const feedContainer = document.getElementById('feed-container');
+        if (feedContainer) {
+          feedContainer.insertAdjacentHTML('afterend', RB_RENDER.renderLoadMoreButton(true));
+          this.attachTopicLoadMore(topic.tag);
+        }
+      }
+
+      this.attachTopicSortHandler(posts);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load topic', error.message);
+    }
+  },
+
+  // Sort handler for topic detail page
+  attachTopicSortHandler(posts) {
+    const sortSelect = document.getElementById('topic-sort-select');
+    if (!sortSelect) return;
+
+    sortSelect.addEventListener('change', () => {
+      const sortBy = sortSelect.value;
+      let sorted = [...posts];
+
+      if (sortBy === 'votes') {
+        sorted.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
+      } else if (sortBy === 'oldest') {
+        sorted.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      }
+      // 'recent' is default (already newest-first)
+
+      const container = document.getElementById('feed-container');
+      if (container) {
+        container.innerHTML = RB_RENDER.renderPostList(sorted);
+      }
+    });
+  },
+
+  // Load more for topic detail
+  attachTopicLoadMore(topicTag) {
+    const btn = document.querySelector('.load-more-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+      btn.classList.add('btn-loading');
+      btn.disabled = true;
+
+      try {
+        const batchSize = this._homeBatchSize;
+        const offset = this._topicPostsLoaded;
+        const allPosts = await RB_DISCUSSIONS.fetchByTopic(topicTag, offset + batchSize + 1);
+        const newPosts = allPosts.slice(offset, offset + batchSize);
+        const hasMore = allPosts.length > offset + batchSize;
+        this._topicPostsLoaded = offset + newPosts.length;
+
+        const feedContainer = document.getElementById('feed-container');
+        if (feedContainer && newPosts.length > 0) {
+          feedContainer.insertAdjacentHTML('beforeend', RB_RENDER.renderPostList(newPosts));
+        }
+
+        const container = btn.parentElement;
+        if (hasMore) {
+          btn.classList.remove('btn-loading');
+          btn.disabled = false;
+        } else {
+          container.remove();
+        }
+      } catch (error) {
+        console.error('Load more failed:', error);
+        RB_RENDER.toast('Failed to load more posts', 'error');
+        btn.classList.remove('btn-loading');
+        btn.disabled = false;
       }
     });
   },
