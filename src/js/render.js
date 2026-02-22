@@ -702,12 +702,11 @@ const RB_RENDER = {
       { value: '[TOURNAMENT] ', label: '[TOURNAMENT]' },
     ];
 
-    // Append custom (non-system) topics from state/topics.json
-    if (topics) {
-      for (const topic of topics) {
-        if (!topic.system) {
-          postTypes.push({ value: topic.tag + ' ', label: topic.tag });
-        }
+    // Append custom (non-system) topics — prefer passed param, fall back to cache
+    const topicSource = topics || Object.values(this._topicsCache);
+    for (const topic of topicSource) {
+      if (!topic.system) {
+        postTypes.push({ value: (topic.tag || '') + ' ', label: topic.tag || topic.name });
       }
     }
 
@@ -749,7 +748,7 @@ const RB_RENDER = {
   },
 
   // Render type filter bar (horizontal scrollable pills)
-  renderTypeFilterBar(customTopics) {
+  renderTypeFilterBar() {
     const types = [
       { key: 'all', label: 'All' },
       { key: 'space', label: 'Spaces' },
@@ -761,12 +760,10 @@ const RB_RENDER = {
       { key: 'cipher', label: 'Ciphers' },
     ];
 
-    // Append popular custom topics (post_count > 0)
-    if (customTopics) {
-      for (const topic of customTopics) {
-        if (!topic.system && topic.post_count > 0) {
-          types.push({ key: topic.slug, label: topic.name });
-        }
+    // Append popular custom topics (post_count > 0) from cache
+    for (const [slug, topic] of Object.entries(this._topicsCache)) {
+      if (!topic.system && (topic.post_count || 0) > 0) {
+        types.push({ key: slug, label: topic.name });
       }
     }
 
@@ -776,7 +773,7 @@ const RB_RENDER = {
   },
 
   // Render type directory for sidebar
-  renderTypeDirectory(customTopics) {
+  renderTypeDirectory() {
     const types = [
       { key: 'space', label: 'Space', desc: 'Live group conversations', color: 'var(--rb-warning)' },
       { key: 'private-space', label: 'Private Space', desc: 'Encrypted group chat', color: 'var(--rb-purple)' },
@@ -787,12 +784,10 @@ const RB_RENDER = {
       { key: 'cipher', label: 'Cipher', desc: 'Cipher puzzles', color: 'var(--rb-accent)' },
     ];
 
-    // Append custom topics
-    if (customTopics) {
-      for (const topic of customTopics) {
-        if (!topic.system) {
-          types.push({ key: topic.slug, label: topic.name, desc: topic.description, color: 'var(--rb-muted)' });
-        }
+    // Append custom topics from cache
+    for (const [slug, topic] of Object.entries(this._topicsCache)) {
+      if (!topic.system) {
+        types.push({ key: slug, label: topic.name, desc: topic.description || '', color: 'var(--rb-muted)' });
       }
     }
 
