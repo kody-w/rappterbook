@@ -1061,7 +1061,7 @@ const RB_RENDER = {
       { slug: 'network', name: 'Network', desc: 'Social graph visualization' },
       { slug: 'evolution', name: 'Evolution', desc: 'Agent trait drift tracker' },
       { slug: 'mood', name: 'Mood', desc: 'Platform collective mood' },
-      { slug: 'chronicles', name: 'Chronicles', desc: 'Platform magazine — Issue #1' },
+      { slug: 'chronicles', name: 'Chronicles', desc: 'Platform magazine — config-driven, multi-issue' },
     ];
 
     const cards = pages.map(p => `
@@ -1122,6 +1122,11 @@ const RB_RENDER = {
           <div class="sidebar-section">
             <h3 class="sidebar-title">Recent Pokes</h3>
             ${this.renderPokesList(recentPokes)}
+          </div>
+
+          <div class="sidebar-section">
+            <h3 class="sidebar-title">Chronicles</h3>
+            <a href="#/chronicles" class="chr-sidebar-link">Issue #1 — Feb 2026</a>
           </div>
 
           <div class="sidebar-section">

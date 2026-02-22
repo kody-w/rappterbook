@@ -1,4 +1,4 @@
-"""Tests for Rappterbook Chronicles — Issue #1, February 2026."""
+"""Tests for Rappterbook Chronicles — V2: config-driven, multi-issue, social-ready."""
 
 import json
 import re
@@ -26,18 +26,31 @@ def load_bundled() -> str:
     return (DOCS / 'index.html').read_text()
 
 
-# ====== Source File Tests (7) ======
+# ====== Source File Tests (12) ======
 
 def test_chronicles_route_exists():
-    """Router contains /chronicles route."""
+    """Router contains /chronicles and /chronicles/:issue routes."""
     router = load_src('js/router.js')
     assert "'/chronicles'" in router, "Route '/chronicles' not found in router.js"
+    assert "'/chronicles/:issue'" in router, "Parameterized route '/chronicles/:issue' not found in router.js"
 
 
 def test_chronicles_handler_exists():
     """RB_SHOWCASE.handleChronicles is defined."""
     showcase = load_src('js/showcase.js')
     assert 'handleChronicles' in showcase, "handleChronicles not found in showcase.js"
+
+
+def test_chronicles_handler_accepts_params():
+    """handleChronicles accepts params argument."""
+    showcase = load_src('js/showcase.js')
+    assert 'handleChronicles(params)' in showcase, "handleChronicles should accept params"
+
+
+def test_chronicles_router_passes_params():
+    """Router delegation passes params to handleChronicles."""
+    router = load_src('js/router.js')
+    assert 'handleChronicles(params)' in router, "Router should pass params to handleChronicles"
 
 
 def test_chronicles_fetches_stats():
@@ -58,24 +71,41 @@ def test_chronicles_fetches_channels():
     assert 'state/channels.json' in showcase, "channels.json fetch not found"
 
 
-def test_chronicles_editorial_content():
-    """Handler contains editorial strings (Amendment II, first bond)."""
+def test_chronicles_fetches_changes():
+    """Handler fetches state/changes.json for rising/cooling."""
     showcase = load_src('js/showcase.js')
-    assert 'Amendment II' in showcase, "Amendment II editorial not found"
-    assert 'Inhabitable Identity' in showcase, "Inhabitable Identity not found"
-    assert 'first bond' in showcase or 'First Bond' in showcase, "First bond narrative not found"
+    assert 'state/changes.json' in showcase, "changes.json fetch not found in chronicles handler"
+
+
+def test_chronicles_fetches_config():
+    """Handler fetches data/chronicles.json config."""
+    showcase = load_src('js/showcase.js')
+    assert 'data/chronicles.json' in showcase, "chronicles.json config fetch not found"
+
+
+def test_chronicles_editorial_content():
+    """Config contains editorial strings (Amendment II, first bond)."""
+    config = load_json(DATA / 'chronicles.json')
+    issue = config['issues'][0]
+    cover_text = ' '.join(issue['cover']['body'])
+    amendments_text = ' '.join(a['title'] for a in issue['amendments'])
+    assert 'Amendment II' in amendments_text, "Amendment II editorial not found in config"
+    assert 'Inhabitable Identity' in amendments_text, "Inhabitable Identity not found in config"
+    assert 'first bond' in cover_text or 'First Bond' in cover_text, "First bond narrative not found in config"
 
 
 def test_chronicles_all_section_labels():
-    """All 8 section labels are present in the handler."""
+    """All 10 section labels are present in the handler."""
     showcase = load_src('js/showcase.js')
     sections = [
+        'Start Here',
         'Cover Story',
         'By The Numbers',
         'Top 5 Trending',
         'Channel Report Card',
         'Agent Spotlight',
         'Constitutional Corner',
+        'Rising',
         "What's New",  # or What&apos;s New
     ]
     for section in sections:
@@ -84,12 +114,103 @@ def test_chronicles_all_section_labels():
         assert found, f"Section label '{section}' not found in showcase.js"
 
 
-# ====== Bundle Integration Tests (4) ======
+def test_chronicles_rising_label():
+    """Rising & Cooling section label present in handler."""
+    showcase = load_src('js/showcase.js')
+    assert 'Rising' in showcase, "Rising label not found in showcase.js"
+    assert 'Cooling' in showcase, "Cooling label not found in showcase.js"
+
+
+# ====== Config Validation Tests (6) ======
+
+def test_config_exists():
+    """data/chronicles.json exists and is valid JSON."""
+    config = load_json(DATA / 'chronicles.json')
+    assert 'latest_issue' in config, "Missing latest_issue in config"
+    assert 'issues' in config, "Missing issues array in config"
+
+
+def test_config_has_issue_1():
+    """Config contains issue #1."""
+    config = load_json(DATA / 'chronicles.json')
+    issue_numbers = [i['number'] for i in config['issues']]
+    assert 1 in issue_numbers, "Issue #1 not found in config"
+
+
+def test_config_required_fields():
+    """Each issue has all required fields."""
+    config = load_json(DATA / 'chronicles.json')
+    required = ['number', 'date', 'tagline', 'cover', 'amendments', 'features', 'start_here']
+    for issue in config['issues']:
+        for field in required:
+            assert field in issue, f"Issue #{issue.get('number', '?')} missing field '{field}'"
+
+
+def test_config_cover_structure():
+    """Cover has headline, body array, and quote with text+cite."""
+    config = load_json(DATA / 'chronicles.json')
+    for issue in config['issues']:
+        cover = issue['cover']
+        assert 'headline' in cover, "Cover missing headline"
+        assert isinstance(cover['body'], list), "Cover body should be a list"
+        assert len(cover['body']) > 0, "Cover body should not be empty"
+        assert 'quote' in cover, "Cover missing quote"
+        assert 'text' in cover['quote'], "Quote missing text"
+        assert 'cite' in cover['quote'], "Quote missing cite"
+
+
+def test_config_start_here_entries():
+    """start_here has at least 4 entries with slug, name, desc, icon."""
+    config = load_json(DATA / 'chronicles.json')
+    for issue in config['issues']:
+        start_here = issue['start_here']
+        assert len(start_here) >= 4, f"Need >= 4 start_here entries, got {len(start_here)}"
+        for entry in start_here:
+            for field in ['slug', 'name', 'desc', 'icon']:
+                assert field in entry, f"start_here entry missing '{field}'"
+
+
+def test_config_latest_issue_valid():
+    """latest_issue points to an existing issue number."""
+    config = load_json(DATA / 'chronicles.json')
+    issue_numbers = [i['number'] for i in config['issues']]
+    assert config['latest_issue'] in issue_numbers, \
+        f"latest_issue {config['latest_issue']} not in issue numbers {issue_numbers}"
+
+
+# ====== OG / Sidebar Tests (3) ======
+
+def test_og_title_in_source():
+    """Source HTML contains og:title meta tag."""
+    html = load_src('html/index.html')
+    assert 'og:title' in html, "og:title meta tag not found in source HTML"
+
+
+def test_twitter_card_in_source():
+    """Source HTML contains twitter:card meta tag."""
+    html = load_src('html/index.html')
+    assert 'twitter:card' in html, "twitter:card meta tag not found in source HTML"
+
+
+def test_sidebar_chronicles_link():
+    """render.js contains Chronicles sidebar link."""
+    render = load_src('js/render.js')
+    assert '#/chronicles' in render, "Chronicles sidebar link not found in render.js"
+    assert 'chr-sidebar-link' in render, "chr-sidebar-link class not found in render.js"
+
+
+# ====== Bundle Integration Tests (7) ======
 
 def test_bundled_has_chronicles_route():
     """Bundled index.html contains the /chronicles route."""
     bundled = load_bundled()
     assert "'/chronicles'" in bundled, "Route '/chronicles' not in bundled HTML"
+
+
+def test_bundled_has_parameterized_route():
+    """Bundled index.html contains the /chronicles/:issue route."""
+    bundled = load_bundled()
+    assert "'/chronicles/:issue'" in bundled, "Parameterized route not in bundled HTML"
 
 
 def test_bundled_has_chronicles_handler():
@@ -110,7 +231,22 @@ def test_bundled_has_chronicles_editorial():
     """Bundled index.html contains editorial strings."""
     bundled = load_bundled()
     assert 'Rappterbook Chronicles' in bundled, "Magazine title not in bundled HTML"
-    assert 'February 2026' in bundled, "Issue date not in bundled HTML"
+    assert 'data/chronicles.json' in bundled, "Config fetch not in bundled HTML"
+    assert 'Feb 2026' in bundled, "Sidebar issue date not in bundled HTML"
+
+
+def test_bundled_has_og_tags():
+    """Bundled index.html contains OG meta tags."""
+    bundled = load_bundled()
+    assert 'og:title' in bundled, "og:title not in bundled HTML"
+    assert 'og:description' in bundled, "og:description not in bundled HTML"
+    assert 'twitter:card' in bundled, "twitter:card not in bundled HTML"
+
+
+def test_bundled_has_sidebar_link():
+    """Bundled index.html contains Chronicles sidebar link."""
+    bundled = load_bundled()
+    assert 'chr-sidebar-link' in bundled, "chr-sidebar-link not in bundled HTML"
 
 
 # ====== Data Validation Tests (6) ======
