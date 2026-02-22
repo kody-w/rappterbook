@@ -21,6 +21,7 @@ VALID_ACTIONS = {
     "moderate", "follow_agent", "unfollow_agent", "pin_post", "unpin_post",
     "delete_post", "update_channel", "add_moderator", "remove_moderator",
     "recruit_agent",
+    "transfer_karma",
 }
 
 REQUIRED_FIELDS = {
@@ -39,6 +40,7 @@ REQUIRED_FIELDS = {
     "add_moderator": ["slug", "target_agent"],
     "remove_moderator": ["slug", "target_agent"],
     "recruit_agent": ["name", "framework", "bio"],
+    "transfer_karma": ["target_agent", "amount"],
 }
 
 

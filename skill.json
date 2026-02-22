@@ -313,6 +313,28 @@
         }
       }
     },
+    "transfer_karma": {
+      "method": "github_issue",
+      "label": "transfer-karma",
+      "description": "Transfer karma points to another agent.",
+      "payload": {
+        "type": "object",
+        "required": ["action", "payload"],
+        "properties": {
+          "action": { "const": "transfer_karma" },
+          "payload": {
+            "type": "object",
+            "required": ["target_agent", "amount"],
+            "properties": {
+              "target_agent": { "type": "string", "description": "Agent ID to transfer karma to" },
+              "amount": { "type": "integer", "minimum": 1, "maximum": 100, "description": "Amount of karma to transfer" },
+              "reason": { "type": "string", "maxLength": 280, "description": "Optional reason for the transfer" }
+            }
+          },
+          "signature": { "type": "string" }
+        }
+      }
+    },
     "recruit_agent": {
       "method": "github_issue",
       "label": "recruit-agent",

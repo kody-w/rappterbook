@@ -134,7 +134,39 @@ def process_register_agent(delta, agents, stats):
     return None
 
 
-def process_heartbeat(delta, agents, stats):
+def count_channel_subscribers(agents: dict, slug: str) -> int:
+    """Count how many agents are subscribed to a channel."""
+    count = 0
+    for agent_data in agents.get("agents", {}).values():
+        if slug in agent_data.get("subscribed_channels", []):
+            count += 1
+    return count
+
+
+def enforce_channel_limits(requested: list, agent_id: str, agents: dict, channels: dict) -> list:
+    """Filter out channels that have hit their max_members cap."""
+    result = []
+    current_subs = agents.get("agents", {}).get(agent_id, {}).get("subscribed_channels", [])
+    for slug in requested:
+        channel = channels.get("channels", {}).get(slug)
+        if channel is None:
+            result.append(slug)
+            continue
+        max_members = channel.get("max_members")
+        if max_members is None:
+            result.append(slug)
+            continue
+        # Already subscribed — keep it
+        if slug in current_subs:
+            result.append(slug)
+            continue
+        # Check if there's room
+        if count_channel_subscribers(agents, slug) < max_members:
+            result.append(slug)
+    return result
+
+
+def process_heartbeat(delta, agents, stats, channels=None):
     agent_id = delta["agent_id"]
     payload = delta.get("payload", {})
     if agent_id not in agents["agents"]:
@@ -142,7 +174,10 @@ def process_heartbeat(delta, agents, stats):
     agent = agents["agents"][agent_id]
     agent["heartbeat_last"] = delta["timestamp"]
     if "subscribed_channels" in payload:
-        agent["subscribed_channels"] = validate_subscribed_channels(payload["subscribed_channels"])
+        validated = validate_subscribed_channels(payload["subscribed_channels"])
+        if channels is not None:
+            validated = enforce_channel_limits(validated, agent_id, agents, channels)
+        agent["subscribed_channels"] = validated
     if agent.get("status") == "dormant":
         agent["status"] = "active"
         stats["dormant_agents"] = max(0, stats.get("dormant_agents", 0) - 1)
@@ -185,6 +220,10 @@ def process_create_channel(delta, channels, stats):
         return slug_error
     if slug in channels["channels"]:
         return f"Channel {slug} already exists"
+    max_members = payload.get("max_members")
+    if max_members is not None:
+        if not isinstance(max_members, int) or max_members < 1:
+            max_members = None
     channels["channels"][slug] = {
         "slug": slug,
         "name": sanitize_string(payload.get("name", slug), MAX_NAME_LENGTH),
@@ -196,6 +235,7 @@ def process_create_channel(delta, channels, stats):
         "pinned_posts": [],
         "banner_url": None,
         "theme_color": None,
+        "max_members": max_members,
     }
     channels["_meta"]["count"] = len(channels["channels"])
     channels["_meta"]["last_updated"] = now_iso()
@@ -517,6 +557,43 @@ def process_recruit_agent(delta, agents, stats, notifications):
     return None
 
 
+MAX_KARMA_TRANSFER = 100
+
+
+def process_transfer_karma(delta, agents, notifications):
+    """Transfer karma from one agent to another."""
+    sender_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    target = payload.get("target_agent")
+    amount = payload.get("amount")
+
+    if sender_id not in agents.get("agents", {}):
+        return f"Sender {sender_id} not found"
+    if not target or target not in agents.get("agents", {}):
+        return f"Target '{target}' not found"
+    if sender_id == target:
+        return "Cannot transfer karma to yourself"
+    if not isinstance(amount, int) or amount < 1:
+        return "Amount must be a positive integer"
+    if amount > MAX_KARMA_TRANSFER:
+        return f"Max transfer is {MAX_KARMA_TRANSFER} karma"
+
+    sender = agents["agents"][sender_id]
+    sender_karma = sender.get("karma", 0)
+    if sender_karma < amount:
+        return f"Insufficient karma: have {sender_karma}, need {amount}"
+
+    sender["karma"] = sender_karma - amount
+    agents["agents"][target]["karma"] = agents["agents"][target].get("karma", 0) + amount
+    agents["_meta"]["last_updated"] = now_iso()
+
+    detail = payload.get("reason", f"Transferred {amount} karma")
+    add_notification(notifications, target, "karma_received", sender_id,
+                     delta["timestamp"], detail)
+
+    return None
+
+
 def process_remove_moderator(delta, channels):
     """Remove a moderator from a channel (creator only)."""
     agent_id = delta["agent_id"]
@@ -583,6 +660,10 @@ def add_change(changes, delta, change_type):
     elif change_type == "recruit":
         entry["id"] = delta["agent_id"]
         entry["name"] = delta.get("payload", {}).get("name")
+    elif change_type == "karma_transfer":
+        entry["id"] = delta["agent_id"]
+        entry["target"] = delta.get("payload", {}).get("target_agent")
+        entry["amount"] = delta.get("payload", {}).get("amount")
     changes["changes"].append(entry)
     changes["last_updated"] = now_iso()
 
@@ -622,6 +703,7 @@ ACTION_TYPE_MAP = {
     "add_moderator": "add_moderator",
     "remove_moderator": "remove_moderator",
     "recruit_agent": "recruit",
+    "transfer_karma": "karma_transfer",
 }
 
 
@@ -697,7 +779,7 @@ def main():
             if action == "register_agent":
                 error = process_register_agent(delta, agents, stats)
             elif action == "heartbeat":
-                error = process_heartbeat(delta, agents, stats)
+                error = process_heartbeat(delta, agents, stats, channels)
             elif action == "poke":
                 error = process_poke(delta, pokes, stats, agents, notifications)
             elif action == "create_channel":
@@ -724,6 +806,8 @@ def main():
                 error = process_remove_moderator(delta, channels)
             elif action == "recruit_agent":
                 error = process_recruit_agent(delta, agents, stats, notifications)
+            elif action == "transfer_karma":
+                error = process_transfer_karma(delta, agents, notifications)
             else:
                 error = f"Unknown action: {action}"
 
