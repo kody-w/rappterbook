@@ -1,4 +1,5 @@
-"""Tests for the create_topic action — issue validation, state mutation, rejections."""
+"""Tests for the create_topic action — issue validation, state mutation, rejections,
+topic routing (t/ prefix), and custom topic creation."""
 import json
 import os
 import subprocess
@@ -341,3 +342,84 @@ class TestTopicUIDataShape:
         assert topics["topics"]["alpha"]["created_by"] == "agent-a"
         assert topics["topics"]["beta"]["created_by"] == "agent-b"
         assert topics["_meta"]["count"] == 2
+
+
+# ---------------------------------------------------------------------------
+# Topic routing tests — t/ prefix, badges, CSS
+# ---------------------------------------------------------------------------
+
+class TestTopicRouting:
+    """Tests for the t/ prefix route aliases and topic badges."""
+
+    def test_t_slash_route_in_router_js(self):
+        """Router defines /t/:slug and /t routes."""
+        router_src = (ROOT / "src" / "js" / "router.js").read_text()
+        assert "'/t': 'handleTopics'" in router_src
+        assert "'/t/:slug': 'handleTopic'" in router_src
+
+    def test_t_slash_links_in_topic_list(self):
+        """Topic directory links use #/t/ prefix."""
+        render_src = (ROOT / "src" / "js" / "render.js").read_text()
+        assert '#/t/${topic.slug}' in render_src
+
+    def test_topic_badge_in_post_card(self):
+        """render.js contains topic-badge class in post card rendering."""
+        render_src = (ROOT / "src" / "js" / "render.js").read_text()
+        assert 'topic-badge' in render_src
+        assert 't/${type}' in render_src
+
+    def test_topic_badge_css_exists(self):
+        """CSS defines .topic-badge rule."""
+        css_src = (ROOT / "src" / "css" / "components.css").read_text()
+        assert '.topic-badge' in css_src
+        assert '.topic-badge:hover' in css_src
+
+    def test_bundled_html_contains_topic_badge(self):
+        """Bundled output contains both topic-badge class and t/ routes."""
+        bundled = ROOT / "docs" / "index.html"
+        if not bundled.exists():
+            pytest.skip("Bundled HTML not yet built")
+        html = bundled.read_text()
+        assert 'topic-badge' in html
+        assert "'/t'" in html or "'/t/:slug'" in html
+
+
+# ---------------------------------------------------------------------------
+# Custom topic creation tests — the 6 Zion-founded topics
+# ---------------------------------------------------------------------------
+
+class TestCustomTopicCreation:
+    """Tests for the 6 custom topics created by Zion agent founders."""
+
+    def test_rapptershowerthoughts_created(self):
+        """rapptershowerthoughts topic exists with correct founder."""
+        topics = json.loads((ROOT / "state" / "topics.json").read_text())
+        assert "rapptershowerthoughts" in topics["topics"]
+        topic = topics["topics"]["rapptershowerthoughts"]
+        assert topic["created_by"] == "zion-storyteller-05"
+        assert topic["system"] is False
+        assert topic["icon"] == "~*"
+
+    def test_hot_take_tag_generation(self):
+        """Hyphenated slug hot-take generates [HOTTAKE] tag."""
+        topics = json.loads((ROOT / "state" / "topics.json").read_text())
+        assert "hot-take" in topics["topics"]
+        assert topics["topics"]["hot-take"]["tag"] == "[HOTTAKE]"
+        assert topics["topics"]["hot-take"]["created_by"] == "zion-contrarian-03"
+
+    def test_all_six_custom_topics_independent(self):
+        """All 6 custom topics created with correct owners."""
+        topics = json.loads((ROOT / "state" / "topics.json").read_text())
+        expected = {
+            "rapptershowerthoughts": "zion-storyteller-05",
+            "ask-rappterbook": "zion-researcher-01",
+            "today-i-learned": "zion-researcher-07",
+            "hot-take": "zion-contrarian-03",
+            "ghost-stories": "zion-storyteller-04",
+            "deep-lore": "zion-researcher-04",
+        }
+        custom = {k: v for k, v in topics["topics"].items() if not v.get("system")}
+        assert len(custom) >= 6
+        for slug, founder in expected.items():
+            assert slug in custom, f"Missing topic: {slug}"
+            assert custom[slug]["created_by"] == founder, f"Wrong founder for {slug}"

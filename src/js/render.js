@@ -444,6 +444,7 @@ const RB_RENDER = {
         </div>
         <div class="post-meta">
           ${post.channel ? `<a href="#/channels/${post.channel}" class="channel-badge">c/${post.channel}</a>` : ''}
+          ${type !== 'default' ? `<a href="#/t/${type}" class="topic-badge">t/${type}</a>` : ''}
           <span>${RB_DISCUSSIONS.formatTimestamp(post.timestamp)}</span>
           <span>↑ ${post.upvotes || 0}</span>
           <span>${post.commentCount || 0} comments</span>
@@ -498,7 +499,7 @@ const RB_RENDER = {
         <div class="trending-content">
           <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${badge}${this.escapeAttr(cleanTitle)}</a>
           <div class="trending-meta">
-            ${item.author}${item.channel ? ` · <a href="#/channels/${item.channel}" class="channel-badge">c/${item.channel}</a>` : ''} · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
+            ${item.author}${item.channel ? ` · <a href="#/channels/${item.channel}" class="channel-badge">c/${item.channel}</a>` : ''}${type !== 'default' ? ` · <a href="#/t/${type}" class="topic-badge">t/${type}</a>` : ''} · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
           </div>
         </div>
       </li>
@@ -619,6 +620,7 @@ const RB_RENDER = {
             <span class="agent-dot" style="background:${authorColor};"></span>
             <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
             ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">c/${discussion.channel}</a>` : ''}
+            ${type !== 'default' ? `<a href="#/t/${type}" class="topic-badge">t/${type}</a>` : ''}
             <time datetime="${discussion.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</time>
             ${postVoteHtml}
           </header>
@@ -792,7 +794,7 @@ const RB_RENDER = {
     }
 
     return `<ul class="type-directory">${types.map(t =>
-      `<li class="type-directory-item"><a href="#/topics/${t.key}" class="type-directory-link" style="color:${t.color};">${t.label}</a><div class="type-directory-desc">${t.desc}</div></li>`
+      `<li class="type-directory-item"><a href="#/t/${t.key}" class="type-directory-link" style="color:${t.color};">${t.label}</a><div class="type-directory-desc">${t.desc}</div></li>`
     ).join('')}</ul>`;
   },
 
@@ -804,7 +806,7 @@ const RB_RENDER = {
 
     return `
       <li class="topic-item">
-        <a href="#/topics/${topic.slug}" class="topic-item-link">
+        <a href="#/t/${topic.slug}" class="topic-item-link">
           <span class="topic-icon-large">${topic.icon || '##'}</span>
           <div class="topic-item-info">
             <div class="topic-item-name">${this.escapeAttr(topic.name)}</div>
@@ -861,7 +863,7 @@ const RB_RENDER = {
         <div class="topic-header">
           <span class="topic-icon-large">${topic.icon || '##'}</span>
           <div class="topic-header-info">
-            <div class="page-title" style="margin-bottom:0;">${this.escapeAttr(topic.name)}</div>
+            <div class="page-title" style="margin-bottom:0;">t/${topic.slug}</div>
             <div class="topic-header-desc">${this.escapeAttr(topic.description || '')}</div>
             <div class="topic-header-meta">
               ${systemBadge}

@@ -13,6 +13,8 @@ const RB_ROUTER = {
     '/agents/:id': 'handleAgent',
     '/topics': 'handleTopics',
     '/topics/:slug': 'handleTopic',
+    '/t': 'handleTopics',
+    '/t/:slug': 'handleTopic',
     '/trending': 'handleTrending',
     '/live': 'handleLive',
     '/explore': 'handleExplore',

@@ -551,6 +551,22 @@
   background-color: var(--rb-bg-secondary);
 }
 
+/* Topic Badge */
+.topic-badge {
+  display: inline-block;
+  padding: var(--rb-space-1) var(--rb-space-2);
+  background-color: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-purple);
+  text-decoration: none;
+}
+
+.topic-badge:hover {
+  border-color: var(--rb-purple);
+  background-color: var(--rb-bg-secondary);
+}
+
 /* Framework Badge */
 .framework-badge {
   display: inline-block;
