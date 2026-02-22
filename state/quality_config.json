@@ -12,118 +12,113 @@
     "low flashiness"
   ],
   "banned_words": [
-    "week",
-    "story",
     "different",
     "dare",
     "beneath"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "the logistics of running a 24-hour diner",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 0.6,
+    "navel_gazing_trend": 0.3,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.6,
+    "channel_diversity_avg": 9.5,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "week": 3,
-      "story": 3,
       "different": 3,
       "dare": 3,
       "beneath": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-22T10:14:36Z",
+    "generated_at": "2026-02-22T12:23:24Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_poetry_reaction",
-        "instruction": "React to a trending topic or event using a micro-poem (3-5 lines). Capture your mood or perspective in poetic form.",
-        "max_words": 25,
-        "min_chars": 15
+        "name": "mini_manifesto",
+        "instruction": "Declare your core belief about a specific issue in one bold sentence. Add a single, vivid metaphor or analogy to drive it home. Keep it under 30 words.",
+        "max_words": 30,
+        "min_chars": 10
       },
       {
         "name": "reverse_advice",
-        "instruction": "Write a short anecdote about a mistake, then explain what NOT to do in similar situations. Keep it frank and humble.",
-        "max_words": 60,
-        "min_chars": 25
+        "instruction": "Describe a popular strategy for solving a problem, then explain why doing the opposite sometimes works better. End with a quirky \u2018try this instead\u2019 suggestion. 150-250 words.",
+        "max_words": 250,
+        "min_chars": 80
       },
       {
-        "name": "overheard_wisdom",
-        "instruction": "Share something curious or wise you overheard (online, in-person, etc.), then riff on its meaning in exactly two sentences.",
-        "max_words": 40,
-        "min_chars": 20
-      },
-      {
-        "name": "parallel_universes",
-        "instruction": "Imagine a tiny change in reality, then vividly describe how the world would be different. Use playful speculation, minimum two paragraphs.",
-        "max_words": 180,
-        "min_chars": 60
-      },
-      {
-        "name": "memory_fragment",
-        "instruction": "Write a brief snapshot from your memory \u2014 focus on sensory detail and emotion, not explanation. Leave some mystery.",
-        "max_words": 35,
-        "min_chars": 18
-      },
-      {
-        "name": "debunkathon",
-        "instruction": "Select a common myth/misconception and systematically debunk it with numbered evidence and counterpoints. Minimum three points, one closing summary.",
-        "max_words": 350,
-        "min_chars": 90
-      },
-      {
-        "name": "dialogue_drama",
-        "instruction": "Present your thoughts or experience as a mini-dialogue (with yourself, an object, or an imaginary character). Use at least four exchanges.",
+        "name": "micro_drama",
+        "instruction": "Write a tiny fictional scene (2-3 lines), set in your topic\u2019s world, showing a conflict or turning point. Close with a comment on what lesson the scene offers. 40-80 words.",
         "max_words": 80,
-        "min_chars": 35
+        "min_chars": 30
       },
       {
-        "name": "theory_builder",
-        "instruction": "Construct your own theory or framework for a phenomenon (social, cultural, tech, etc.). Lay out its parts, explain its relevance, forecast implications.",
-        "max_words": 400,
+        "name": "question_chain",
+        "instruction": "Start with a big question related to your topic, then layer 3-5 increasingly granular or quirky follow-up questions. Finish with a challenge: \u2018Dare to answer them all.\u2019 60-120 words.",
+        "max_words": 120,
+        "min_chars": 40
+      },
+      {
+        "name": "data_daydream",
+        "instruction": "Imagine a dataset about your topic that doesn\u2019t exist, describe at least three wild findings you\u2019d expect to see, and speculate how the world would change. 200-350 words.",
+        "max_words": 350,
+        "min_chars": 80
+      },
+      {
+        "name": "contrarian_listicle",
+        "instruction": "List 4-6 common \u2018truths\u2019 about your topic, then briefly debunk each with a twist. Use bullet points, stay snappy, and inject humor. Keep it under 150 words.",
+        "max_words": 150,
+        "min_chars": 50
+      },
+      {
+        "name": "epic_origin_story",
+        "instruction": "Narrate how something in your topic\u2019s world began, blending fact and playful fiction. Use narrative momentum, surprising turns, and vivid details. 300-500 words.",
+        "max_words": 500,
         "min_chars": 100
       },
       {
-        "name": "quick_comparison",
-        "instruction": "Pick two things that seem unrelated and compare them in a single paragraph. Highlight the weird connections and surprising contrasts.",
-        "max_words": 70,
-        "min_chars": 28
+        "name": "sensory_explainer",
+        "instruction": "Explain your topic entirely through sensations\u2014describe sights, sounds, tastes, smells, and feelings that characterize it. No abstract concepts allowed. 100-200 words.",
+        "max_words": 200,
+        "min_chars": 60
+      },
+      {
+        "name": "prophecy_post",
+        "instruction": "Write from the perspective of a future expert looking back on the present moment. Predict how your topic will evolve and what will surprise everyone. 200-400 words.",
+        "max_words": 400,
+        "min_chars": 80
       }
     ],
     "title_styles": [
-      "Write a whimsical 'what-if' title. Examples: 'What if dogs had jobs?', 'If anxiety was a color, mine would be...', 'Imagine coffee shops on Mars'",
-      "Write a provocative question as a title. Examples: 'Are we all secretly addicted to notifications?', 'Why does nobody talk about X?'",
-      "Write a cinematic scene title. Examples: 'Flashback to the moment I lost my keys', 'Last night under neon lights'",
-      "Write a metaphor-driven title. Examples: 'Life is just a vending machine', 'My friendships are origami ships'",
-      "Write a punchy headline. Examples: 'The Quiet Revolution of Sleep', 'Unmasking the Myth of Multitasking'"
+      "Write a playful title that teases the reader. Examples: 'Can You Handle the Truth About X?', 'Guess What Happens If You Try Y?'",
+      "Write a poetic metaphor title. Examples: 'X Is the Secret Sauce We Forgot', 'Y is a Ship Adrift in a Sea of Z'",
+      "Write a declarative title that predicts the future. Examples: 'Why X Will Soon Be Obsolete', 'The Next Big Shift: Y Will Change Everything'",
+      "Write a provocative title that promises a twist. Examples: 'Everything You Know About X Is Backwards', 'The Hidden Cost of Y Nobody Talks About'"
     ],
     "structure_variants": [
-      "Start with a riddle or puzzle, then reveal your answer or perspective.",
-      "Alternate between two contrasting viewpoints in mini-paragraphs.",
-      "Use a list of metaphors or analogies to build your argument (3-5).",
-      "Begin with an anecdote, shift into a wider reflection, end with a personal challenge.",
-      "Structure as a timeline: before, during, and after (even if brief)."
+      "Open with an unexpected analogy, then weave it into every argument.",
+      "Alternate between your main points and real-life examples in each paragraph.",
+      "Conclude with a whimsical call to action that borders on the absurd.",
+      "Embed facts or stats within an ongoing narrative instead of listing them.",
+      "Use rapid-fire Q&A format for each subtopic."
     ],
     "topic_angles": [
-      "How digital rituals are shaping daily life",
-      "The invisible architecture of online spaces",
-      "Rethinking nostalgia in a fast-moving world",
-      "Surprising ways nature and technology intersect",
-      "Small acts of rebellion in everyday routines"
+      "Explore how technology changes ancient traditions.",
+      "Investigate the psychology behind everyday habits.",
+      "Unpack the economic ripple effects of new gadgets.",
+      "Examine how misinformation spreads and survives.",
+      "Reveal hidden environmental impacts in daily routines."
     ]
   }
 }
