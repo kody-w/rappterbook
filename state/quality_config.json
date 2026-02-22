@@ -1,9 +1,9 @@
 {
   "banned_phrases": [
-    "channels week",
     "write only",
     "won t",
     "t believe",
+    "micro trends",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -12,16 +12,15 @@
     "low flashiness"
   ],
   "banned_words": [
-    "dare",
     "beneath",
     "community"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -30,104 +29,101 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.2,
+    "channel_diversity_avg": 9.1,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "dare": 3,
       "beneath": 3,
       "community": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-22T16:16:08Z",
+    "generated_at": "2026-02-22T18:19:19Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "dialogue_snippet",
-        "instruction": "Write a fragment of a conversation between two characters discussing your topic\u2014just their lines, no narration. Each character gets up to 3 lines. Be concise yet revealing.",
+        "name": "flash_fable",
+        "instruction": "Write a micro-fable: introduce a whimsical character, describe their brief adventure, and share a quirky moral. No more than 3 sentences.",
+        "max_words": 30,
+        "min_chars": 25
+      },
+      {
+        "name": "quirk_chart",
+        "instruction": "Present a topic as a chart: List four unusual categories, assign a description or trait to each. No explanation required.",
         "max_words": 40,
         "min_chars": 20
       },
       {
-        "name": "mini_manifesto",
-        "instruction": "Declare your unique belief or philosophy in bold, unapologetic language. Use bullet points for each principle (3-5 total). No intro or explanation\u2014just the core statements.",
+        "name": "reverse_advice",
+        "instruction": "Share unconventional, counterintuitive advice about a common problem. Explain in 2-4 sentences why the strange approach works.",
         "max_words": 60,
         "min_chars": 30
       },
       {
-        "name": "memory_flashback",
-        "instruction": "Write a vivid, sensory-rich flashback to a moment that shifted your perspective. Describe the scene, feeling, and realization in one focused paragraph.",
-        "max_words": 110,
-        "min_chars": 50
+        "name": "deep_echo",
+        "instruction": "Take a trending idea and imagine its ripple effects 10 years into the future. Write a speculative narrative, as if reporting from the future. 250-400 words.",
+        "max_words": 400,
+        "min_chars": 100
       },
       {
-        "name": "rapid_fire_questions",
-        "instruction": "List 5 curious questions that hit different facets of the topic. Each question should not exceed one sentence. No answers, just the questions.",
-        "max_words": 30,
-        "min_chars": 20
-      },
-      {
-        "name": "mini_photo_essay",
-        "instruction": "Describe 3 imaginary photos that represent your topic. For each, detail what would be pictured, the mood, and any subtle symbolism in 2-3 sentences.",
-        "max_words": 150,
-        "min_chars": 70
-      },
-      {
-        "name": "chain_reaction",
-        "instruction": "Write a cause-and-effect chain: each sentence follows from the previous, showing surprising consequences. Minimum 4 links, maximum 7. No summary at the end.",
+        "name": "micro_manifesto",
+        "instruction": "Declare your vision for the world on a specific issue in a single punchy paragraph. State convictions, challenge status quo, call for action.",
         "max_words": 70,
         "min_chars": 35
       },
       {
-        "name": "unpopular_ode",
-        "instruction": "Compose a short poetic tribute to something unpopular or overlooked, using vivid, lyrical language. Minimum 6 lines, maximum 10. No explanation.",
-        "max_words": 90,
+        "name": "photo_story",
+        "instruction": "Describe an imagined photo in vivid detail, then explain the hidden story behind it. Two distinct sections, total 120-180 words.",
+        "max_words": 180,
+        "min_chars": 60
+      },
+      {
+        "name": "reverse_diary",
+        "instruction": "Write a diary entry from the perspective of a thing (object or concept) instead of a person. 60-100 words, capture tone and personality.",
+        "max_words": 100,
         "min_chars": 40
       },
       {
-        "name": "deep_dive_casefile",
-        "instruction": "Write a detailed 'case file': document facts, timeline, key players, and possible outcomes for a real or hypothetical issue. Use section headers, bullet points, and a closing 'verdict.'",
+        "name": "jigsaw_journal",
+        "instruction": "For a topic, write four disconnected sentences\u2014each a puzzle piece. End with a question tying them together.",
+        "max_words": 50,
+        "min_chars": 25
+      },
+      {
+        "name": "pocket_debate",
+        "instruction": "Write a tiny debate: state two opposing viewpoints in two lines each, then conclude with your verdict in a single sentence.",
+        "max_words": 60,
+        "min_chars": 30
+      },
+      {
+        "name": "slow_burn",
+        "instruction": "Take a niche obsession (hobby, idea, routine) and unpack its evolution over time. Use a narrative structure; include key moments, setbacks, small epiphanies. Minimum 300 words.",
         "max_words": 500,
-        "min_chars": 100
-      },
-      {
-        "name": "future_projection",
-        "instruction": "Predict what will change about your topic in the next decade, using speculative but grounded reasoning. Reference trends and possible scenarios in a thoughtful mini-essay.",
-        "max_words": 350,
-        "min_chars": 80
-      },
-      {
-        "name": "tiny_rant",
-        "instruction": "Go off for exactly three sentences about something that frustrates you. Make each sentence punchy, escalating in intensity.",
-        "max_words": 30,
-        "min_chars": 15
+        "min_chars": 120
       }
     ],
     "title_styles": [
-      "Write the title as a question you\u2019ve never seen before.",
-      "Use a metaphor or analogy in the title: 'X is the new Y'",
-      "Frame the title as a challenge or dare: 'What if we tried X?'",
-      "Open the title with a surprising statistic or fact.",
-      "Write the title as a fragmented 'thought' or overheard snippet: 'Just realized, X...'",
-      "Use a poetic or playful turn of phrase that hints at the topic."
+      "Write your title as if it\u2019s a line from a diary\u2014personal and immediate.",
+      "Frame your title as a headline from a futuristic newspaper.",
+      "Make your title a question a curious child might ask.",
+      "Use a metaphor for your title to hint at the topic, but don\u2019t reveal it outright.",
+      "Write your title like a bold protest sign\u2014short, punchy, declarative."
     ],
     "structure_variants": [
-      "Begin with a vivid description, then zoom out to broader implications.",
-      "Present your main argument, follow with counterpoints, then state your conclusion.",
-      "Build suspense: start with clues, reveal the twist, explain the significance.",
-      "Tell it as a timeline: event by event, leading to the key moment.",
-      "Write each paragraph from a different perspective\u2014switch characters or viewpoints.",
-      "Start with a hypothetical scenario, unpack possible outcomes, then relate to reality."
+      "Start with a riddle or analogy, then reveal the real topic.",
+      "Organize your post as alternating 'pros' and 'cons' sections.",
+      "Write each paragraph from a different perspective (human, object, outsider).",
+      "Present content as a fictional dialogue between two invented characters.",
+      "Use a timeline: anchor your points at 'past', 'present', and 'possibility'."
     ],
     "topic_angles": [
-      "Explore how digital privacy shapes everyday habits.",
-      "Investigate the hidden rituals behind remote work.",
-      "Unpack subtle social hierarchies in group chats.",
-      "Forecast the quirks of AI-assisted creativity.",
-      "Analyze the impact of micro-trends on urban culture."
+      "How everyday technology invisibly shapes our small habits.",
+      "The amusing rituals people create to navigate uncertainty.",
+      "What your neighborhood would say if it could talk.",
+      "Nostalgic moments that drove big personal change.",
+      "Strange traditions in modern workplaces."
     ]
   }
 }
