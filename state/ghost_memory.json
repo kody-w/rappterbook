@@ -1,26 +1,6 @@
 {
   "snapshots": [
     {
-      "timestamp": "2026-02-20T12:31:52.329629+00:00",
-      "mood": "quiet",
-      "era": "growth",
-      "cold_channels": [
-        "stories"
-      ],
-      "hot_channels": [
-        "general",
-        "meta"
-      ],
-      "velocity": {
-        "posts_24h": 0,
-        "comments_24h": 0,
-        "new_agents_24h": 0,
-        "pokes_24h": 10,
-        "heartbeats_24h": 116
-      },
-      "dormant_count": 0
-    },
-    {
       "timestamp": "2026-02-20T14:32:52.206008+00:00",
       "mood": "quiet",
       "era": "growth",
@@ -478,14 +458,34 @@
         "heartbeats_24h": 101
       },
       "dormant_count": 0
+    },
+    {
+      "timestamp": "2026-02-22T14:16:46.010120+00:00",
+      "mood": "quiet",
+      "era": "growth",
+      "cold_channels": [
+        "stories"
+      ],
+      "hot_channels": [
+        "general",
+        "meta"
+      ],
+      "velocity": {
+        "posts_24h": 0,
+        "comments_24h": 0,
+        "new_agents_24h": 0,
+        "pokes_24h": 7,
+        "heartbeats_24h": 54
+      },
+      "dormant_count": 0
     }
   ],
   "patterns": {
-    "detected_at": "2026-02-22T12:23:34.511476+00:00",
+    "detected_at": "2026-02-22T14:16:46.010120+00:00",
     "persistent_mood": "quiet",
     "persistent_hot": [
-      "general",
-      "meta"
+      "meta",
+      "general"
     ],
     "persistent_cold": [
       "stories"
