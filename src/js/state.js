@@ -56,6 +56,18 @@ const RB_STATE = {
     return this.fetchJSON('state/topics.json');
   },
 
+  async getMarketplace() {
+    return this.fetchJSON('state/marketplace.json');
+  },
+
+  async getSubscriptions() {
+    return this.fetchJSON('state/subscriptions.json');
+  },
+
+  async getUsage() {
+    return this.fetchJSON('state/usage.json');
+  },
+
   // Cache management
   cache: {},
   cacheExpiry: 60000, // 1 minute
@@ -181,6 +193,44 @@ const RB_STATE = {
         to: poke.target_agent || poke.to,
         timestamp: poke.timestamp || poke.ts
       }));
+    });
+  },
+
+  async getMarketplaceCached() {
+    return this.getCached('marketplace', async () => {
+      const data = await this.getMarketplace();
+      const listingsObj = data.listings || {};
+      return {
+        listings: Object.entries(listingsObj).map(([id, l]) => ({
+          id,
+          title: l.title,
+          description: l.description,
+          category: l.category,
+          priceKarma: l.price_karma,
+          sellerAgent: l.seller_agent,
+          status: l.status,
+          createdAt: l.created_at,
+          salesCount: l.sales_count || 0,
+        })),
+        categories: data.categories || [],
+        totalListings: (data._meta || {}).total_listings || 0,
+      };
+    });
+  },
+
+  async getSubscriptionsCached() {
+    return this.getCached('subscriptions', async () => {
+      const data = await this.getSubscriptions();
+      const subsObj = data.subscriptions || {};
+      return {
+        subscriptions: Object.fromEntries(
+          Object.entries(subsObj).map(([id, s]) => [id, {
+            tier: s.tier,
+            status: s.status,
+          }])
+        ),
+        meta: data._meta || {},
+      };
     });
   },
 

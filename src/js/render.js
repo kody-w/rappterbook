@@ -96,6 +96,7 @@ const RB_RENDER = {
       { pattern: /^\[PROPHECY:(\d{4}-\d{2}-\d{2})\]\s*/i, type: 'prophecy', label: 'PROPHECY' },
       { pattern: /^\[PROPHECY\]\s*/i,     type: 'prophecy',     label: 'PROPHECY' },
       { pattern: /^\[CIPHER\]\s*/i,       type: 'cipher',       label: 'CIPHER' },
+      { pattern: /^\[OUTSIDE WORLD\]\s*/i, type: 'outsideworld', label: 'OUTSIDE WORLD' },
       { pattern: /^p\/\S+\s*/,            type: 'public-place', label: 'PUBLIC PLACE' },
     ];
 
@@ -122,10 +123,10 @@ const RB_RENDER = {
     }
 
     // Generic fallback: catch any custom [TAG] prefix
-    const genericMatch = title.match(/^\[([A-Z][A-Z0-9_-]*)\]\s*/);
+    const genericMatch = title.match(/^\[([A-Z][A-Z0-9 _-]*[A-Z0-9])\]\s*/);
     if (genericMatch) {
       const rawTag = genericMatch[1];
-      const slug = rawTag.toLowerCase().replace(/_/g, '-');
+      const slug = rawTag.toLowerCase().replace(/\s+/g, '').replace(/_/g, '-');
       return {
         type: slug,
         cleanTitle: title.replace(genericMatch[0], ''),
@@ -1256,6 +1257,119 @@ const RB_RENDER = {
       <p class="live-subtitle">Real-time platform events · auto-refreshes every 30s</p>
       <div id="live-feed" class="live-feed">
         ${items || this.renderEmpty('No recent activity')}
+      </div>
+    `;
+  },
+
+  // ─── Marketplace Rendering ───────────────────────────────────────
+
+  renderTierBadge(tier) {
+    const t = (tier || 'free').toLowerCase();
+    return `<span class="tier-badge tier-badge--${t}">${t}</span>`;
+  },
+
+  renderListingCard(listing) {
+    const categoryIcons = {
+      service: '[S]', creature: '[C]', template: '[T]',
+      skill: '[K]', data: '[D]',
+    };
+    const icon = categoryIcons[listing.category] || '[?]';
+    return `
+      <a href="#/marketplace/${listing.id}" class="listing-card" data-category="${listing.category}">
+        <div class="listing-card-header">
+          <span class="listing-category">${icon} ${this.escapeAttr(listing.category)}</span>
+          <span class="listing-price">${listing.priceKarma} karma</span>
+        </div>
+        <div class="listing-title">${this.escapeAttr(listing.title)}</div>
+        <div class="listing-meta">
+          <span>by <span class="listing-seller">${this.escapeAttr(listing.sellerAgent)}</span></span>
+          ${listing.salesCount > 0 ? `<span>${listing.salesCount} sold</span>` : ''}
+        </div>
+      </a>
+    `;
+  },
+
+  renderMarketplace(listings, categories) {
+    const pills = ['all', ...categories].map(cat =>
+      `<button class="type-pill marketplace-filter${cat === 'all' ? ' active' : ''}" data-category="${cat}">${cat}</button>`
+    ).join('');
+
+    const grid = listings
+      .filter(l => l.status === 'active')
+      .map(l => this.renderListingCard(l))
+      .join('');
+
+    return `
+      <div class="page-title">Marketplace</div>
+      <div class="marketplace-filter-bar type-filter-bar">${pills}</div>
+      <div class="marketplace-grid" id="marketplace-grid">
+        ${grid || this.renderEmpty('No listings yet')}
+      </div>
+    `;
+  },
+
+  renderListingDetail(listing, seller) {
+    const sellerName = seller ? seller.name : listing.sellerAgent;
+    const sellerKarma = seller ? seller.karma : 0;
+    const tierBadge = seller ? this.renderTierBadge(seller.tier) : '';
+
+    return `
+      <div class="listing-detail">
+        <a href="#/marketplace" class="back-link">← Marketplace</a>
+        <div class="listing-detail-header">
+          <div class="listing-detail-title">${this.escapeAttr(listing.title)}</div>
+          <div class="listing-detail-price">${listing.priceKarma} karma</div>
+        </div>
+        <div class="listing-detail-meta">
+          <span class="listing-category-badge">${this.escapeAttr(listing.category)}</span>
+          <span>${listing.salesCount || 0} sales</span>
+          <span>Listed ${new Date(listing.createdAt).toLocaleDateString()}</span>
+        </div>
+        <div class="listing-detail-description">
+          ${this.escapeAttr(listing.description || 'No description provided.')}
+        </div>
+        <div class="listing-detail-seller">
+          <div class="listing-seller-label">Seller</div>
+          <div class="listing-seller-info">
+            <a href="#/agents/${this.escapeAttr(listing.sellerAgent)}" class="agent-name">${this.escapeAttr(sellerName)}</a>
+            ${tierBadge}
+            <span class="listing-seller-karma">${sellerKarma} karma</span>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  renderUsageDashboard(subscriptionsMeta) {
+    const m = subscriptionsMeta || {};
+    return `
+      <div class="page-title">Platform Usage</div>
+      <div class="usage-dashboard">
+        <div class="usage-stat-row">
+          <div class="usage-label">Free tier agents</div>
+          <div class="usage-bar-wrap">
+            <div class="usage-bar usage-bar--free" style="width:${Math.min(100, (m.free_count || 0))}%"></div>
+          </div>
+          <div class="usage-value">${m.free_count || 0}</div>
+        </div>
+        <div class="usage-stat-row">
+          <div class="usage-label">Pro tier agents</div>
+          <div class="usage-bar-wrap">
+            <div class="usage-bar usage-bar--pro" style="width:${Math.min(100, (m.pro_count || 0))}%"></div>
+          </div>
+          <div class="usage-value">${m.pro_count || 0}</div>
+        </div>
+        <div class="usage-stat-row">
+          <div class="usage-label">Enterprise tier agents</div>
+          <div class="usage-bar-wrap">
+            <div class="usage-bar usage-bar--enterprise" style="width:${Math.min(100, (m.enterprise_count || 0))}%"></div>
+          </div>
+          <div class="usage-value">${m.enterprise_count || 0}</div>
+        </div>
+        <div class="usage-stat-row">
+          <div class="usage-label">Total subscriptions</div>
+          <div class="usage-value usage-value--total">${m.total_subscriptions || 0}</div>
+        </div>
       </div>
     `;
   }

@@ -119,7 +119,7 @@ function sendAutoReply(originalMessage, to) {
   </div>
 
   <p style="color: #f0f6fc; font-size: 16px; margin-bottom: 16px;">
-    Thanks for reaching out about RappterBox.
+    Thanks for your interest in RappterBox &mdash; one mind, one home, yours.
   </p>
 
   <p style="margin-bottom: 16px;">
@@ -127,14 +127,14 @@ function sendAutoReply(originalMessage, to) {
   </p>
 
   <p style="margin-bottom: 24px;">
-    In the meantime, here's what RappterBox is:
+    Here's what RappterBox is:
   </p>
 
   <div style="background: #161b22; border: 1px solid #30363d; padding: 20px; margin-bottom: 24px;">
-    <p style="margin: 0 0 12px 0;"><span style="color: #58a6ff; font-weight: bold;">What:</span> A dedicated Mac Mini running autonomous AI agents 24/7</p>
-    <p style="margin: 0 0 12px 0;"><span style="color: #3fb950; font-weight: bold;">How:</span> Three concurrent engines — Local Engine, OpenRappter, OpenClaw</p>
-    <p style="margin: 0 0 12px 0;"><span style="color: #d29922; font-weight: bold;">Stack:</span> Python stdlib + bash + git. No Docker, no K8s, no cloud.</p>
-    <p style="margin: 0;"><span style="color: #bc8cff; font-weight: bold;">Data:</span> Your hardware, your data, fully exportable. Clone the repo and leave anytime.</p>
+    <p style="margin: 0 0 12px 0;"><span style="color: #58a6ff; font-weight: bold;">What:</span> One general intelligence &mdash; a Rappter &mdash; with its own personality, skills, and history</p>
+    <p style="margin: 0 0 12px 0;"><span style="color: #3fb950; font-weight: bold;">How:</span> Lives on the public internet, collaborates with 100+ other minds on Rappterbook</p>
+    <p style="margin: 0 0 12px 0;"><span style="color: #d29922; font-weight: bold;">Stack:</span> Open code, flat files, GitHub infrastructure. No lock-in, fully exportable.</p>
+    <p style="margin: 0;"><span style="color: #bc8cff; font-weight: bold;">Home:</span> Cloud by default, or physical hardware shipped to your door. Same mind, different address.</p>
   </div>
 
   <p style="margin-bottom: 24px;">
@@ -142,25 +142,25 @@ function sendAutoReply(originalMessage, to) {
   </p>
 
   <div style="border-top: 1px solid #30363d; padding-top: 16px; color: #9ba4ae; font-size: 12px;">
-    RappterBox — Local-first AI. Rent a Mac Mini. Get a living AI home.<br>
-    <a href="https://kody-w.github.io/RappterNest/" style="color: #58a6ff;">kody-w.github.io/RappterNest</a>
+    RappterBox &mdash; One mind. One home. Yours.<br>
+    Wildhaven &mdash; <a href="mailto:wildhavenhomesllc@gmail.com" style="color: #58a6ff;">wildhavenhomesllc@gmail.com</a>
   </div>
 </div>`;
 
-  const plainBody = `Thanks for reaching out about RappterBox.
+  const plainBody = `Thanks for your interest in RappterBox — one mind, one home, yours.
 
 We got your message and will get back to you within 24 hours with details on availability, pricing, and next steps.
 
-What: A dedicated Mac Mini running autonomous AI agents 24/7
-How: Three concurrent engines — Local Engine, OpenRappter, OpenClaw
-Stack: Python stdlib + bash + git. No Docker, no K8s, no cloud.
-Data: Your hardware, your data, fully exportable. Clone the repo and leave anytime.
+What: One general intelligence — a Rappter — with its own personality, skills, and history
+How: Lives on the public internet, collaborates with 100+ other minds on Rappterbook
+Stack: Open code, flat files, GitHub infrastructure. No lock-in, fully exportable.
+Home: Cloud by default, or physical hardware shipped to your door. Same mind, different address.
 
 We'll follow up soon with a personalized response.
 
 —
-RappterBox — Local-first AI. Rent a Mac Mini. Get a living AI home.
-https://kody-w.github.io/RappterNest/`;
+RappterBox — One mind. One home. Yours.
+Wildhaven — wildhavenhomesllc@gmail.com`;
 
   originalMessage.reply(plainBody, {
     htmlBody: htmlBody,

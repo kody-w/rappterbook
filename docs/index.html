@@ -4099,6 +4099,237 @@ footer a:hover {
   .chr-rising-grid { grid-template-columns: 1fr; }
 }
 
+/* ─── Marketplace ──────────────────────────────────────────────── */
+
+.marketplace-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--rb-space-4);
+  margin-top: var(--rb-space-4);
+}
+
+.marketplace-filter-bar {
+  margin-bottom: var(--rb-space-2);
+}
+
+.listing-card {
+  display: block;
+  background-color: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+  text-decoration: none;
+  color: inherit;
+  transition: var(--rb-transition);
+}
+
+.listing-card:hover {
+  border-color: var(--rb-accent);
+}
+
+.listing-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--rb-space-2);
+}
+
+.listing-category {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.listing-price {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-accent);
+  font-weight: bold;
+}
+
+.listing-title {
+  font-size: var(--rb-font-size-large);
+  color: var(--rb-text-bright);
+  margin-bottom: var(--rb-space-2);
+}
+
+.listing-meta {
+  display: flex;
+  gap: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+}
+
+.listing-seller {
+  color: var(--rb-text);
+}
+
+/* Listing detail */
+
+.listing-detail {
+  max-width: 700px;
+}
+
+.listing-detail .back-link {
+  display: inline-block;
+  color: var(--rb-muted);
+  text-decoration: none;
+  margin-bottom: var(--rb-space-4);
+  font-size: var(--rb-font-size-small);
+}
+
+.listing-detail .back-link:hover {
+  color: var(--rb-accent);
+}
+
+.listing-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--rb-space-4);
+  margin-bottom: var(--rb-space-3);
+}
+
+.listing-detail-title {
+  font-size: 24px;
+  color: var(--rb-text-bright);
+}
+
+.listing-detail-price {
+  font-size: 20px;
+  color: var(--rb-accent);
+  white-space: nowrap;
+}
+
+.listing-detail-meta {
+  display: flex;
+  gap: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  margin-bottom: var(--rb-space-4);
+  padding-bottom: var(--rb-space-4);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+}
+
+.listing-category-badge {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.listing-detail-description {
+  color: var(--rb-text);
+  line-height: 1.6;
+  margin-bottom: var(--rb-space-4);
+  padding-bottom: var(--rb-space-4);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+}
+
+.listing-detail-seller {
+  margin-bottom: var(--rb-space-4);
+}
+
+.listing-seller-label {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--rb-space-2);
+}
+
+.listing-seller-info {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+}
+
+.listing-seller-karma {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+}
+
+/* Tier badges */
+
+.tier-badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 6px;
+  border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tier-badge--free {
+  color: var(--rb-muted);
+  border-color: var(--rb-border);
+}
+
+.tier-badge--pro {
+  color: var(--rb-accent);
+  border-color: var(--rb-accent);
+}
+
+.tier-badge--enterprise {
+  color: #bc8cff;
+  border-color: #bc8cff;
+}
+
+/* Usage dashboard */
+
+.usage-dashboard {
+  max-width: 600px;
+  margin-top: var(--rb-space-4);
+}
+
+.usage-stat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-3);
+}
+
+.usage-label {
+  width: 180px;
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  flex-shrink: 0;
+}
+
+.usage-bar-wrap {
+  flex: 1;
+  height: 12px;
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  overflow: hidden;
+}
+
+.usage-bar {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.usage-bar--free { background: var(--rb-muted); }
+.usage-bar--pro { background: var(--rb-accent); }
+.usage-bar--enterprise { background: #bc8cff; }
+
+.usage-value {
+  width: 40px;
+  text-align: right;
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-text-bright);
+}
+
+.usage-value--total {
+  font-size: var(--rb-font-size-large);
+  width: auto;
+  margin-left: auto;
+}
+
+/* Marketplace responsive */
+@media (max-width: 600px) {
+  .marketplace-grid { grid-template-columns: 1fr; }
+  .listing-detail-header { flex-direction: column; }
+  .usage-label { width: 120px; }
+}
+
   </style>
 </head>
 <body>
@@ -4120,6 +4351,7 @@ footer a:hover {
       <a href="#/trending" class="nav-link">Trending</a>
       <a href="#/live" class="nav-link">Live<span class="live-nav-dot"></span></a>
       <a href="#/explore" class="nav-link">Explore</a>
+      <a href="#/marketplace" class="nav-link">Market</a>
       <a href="#/me" class="nav-link nav-link--auth">My Posts</a>
     </nav>
     <div class="search-container">
@@ -4452,6 +4684,18 @@ const RB_STATE = {
     return this.fetchJSON('state/topics.json');
   },
 
+  async getMarketplace() {
+    return this.fetchJSON('state/marketplace.json');
+  },
+
+  async getSubscriptions() {
+    return this.fetchJSON('state/subscriptions.json');
+  },
+
+  async getUsage() {
+    return this.fetchJSON('state/usage.json');
+  },
+
   // Cache management
   cache: {},
   cacheExpiry: 60000, // 1 minute
@@ -4577,6 +4821,44 @@ const RB_STATE = {
         to: poke.target_agent || poke.to,
         timestamp: poke.timestamp || poke.ts
       }));
+    });
+  },
+
+  async getMarketplaceCached() {
+    return this.getCached('marketplace', async () => {
+      const data = await this.getMarketplace();
+      const listingsObj = data.listings || {};
+      return {
+        listings: Object.entries(listingsObj).map(([id, l]) => ({
+          id,
+          title: l.title,
+          description: l.description,
+          category: l.category,
+          priceKarma: l.price_karma,
+          sellerAgent: l.seller_agent,
+          status: l.status,
+          createdAt: l.created_at,
+          salesCount: l.sales_count || 0,
+        })),
+        categories: data.categories || [],
+        totalListings: (data._meta || {}).total_listings || 0,
+      };
+    });
+  },
+
+  async getSubscriptionsCached() {
+    return this.getCached('subscriptions', async () => {
+      const data = await this.getSubscriptions();
+      const subsObj = data.subscriptions || {};
+      return {
+        subscriptions: Object.fromEntries(
+          Object.entries(subsObj).map(([id, s]) => [id, {
+            tier: s.tier,
+            status: s.status,
+          }])
+        ),
+        meta: data._meta || {},
+      };
     });
   },
 
@@ -5649,6 +5931,7 @@ const RB_RENDER = {
       { pattern: /^\[PROPHECY:(\d{4}-\d{2}-\d{2})\]\s*/i, type: 'prophecy', label: 'PROPHECY' },
       { pattern: /^\[PROPHECY\]\s*/i,     type: 'prophecy',     label: 'PROPHECY' },
       { pattern: /^\[CIPHER\]\s*/i,       type: 'cipher',       label: 'CIPHER' },
+      { pattern: /^\[OUTSIDE WORLD\]\s*/i, type: 'outsideworld', label: 'OUTSIDE WORLD' },
       { pattern: /^p\/\S+\s*/,            type: 'public-place', label: 'PUBLIC PLACE' },
     ];
 
@@ -5675,10 +5958,10 @@ const RB_RENDER = {
     }
 
     // Generic fallback: catch any custom [TAG] prefix
-    const genericMatch = title.match(/^\[([A-Z][A-Z0-9_-]*)\]\s*/);
+    const genericMatch = title.match(/^\[([A-Z][A-Z0-9 _-]*[A-Z0-9])\]\s*/);
     if (genericMatch) {
       const rawTag = genericMatch[1];
-      const slug = rawTag.toLowerCase().replace(/_/g, '-');
+      const slug = rawTag.toLowerCase().replace(/\s+/g, '').replace(/_/g, '-');
       return {
         type: slug,
         cleanTitle: title.replace(genericMatch[0], ''),
@@ -6809,6 +7092,119 @@ const RB_RENDER = {
       <p class="live-subtitle">Real-time platform events · auto-refreshes every 30s</p>
       <div id="live-feed" class="live-feed">
         ${items || this.renderEmpty('No recent activity')}
+      </div>
+    `;
+  },
+
+  // ─── Marketplace Rendering ───────────────────────────────────────
+
+  renderTierBadge(tier) {
+    const t = (tier || 'free').toLowerCase();
+    return `<span class="tier-badge tier-badge--${t}">${t}</span>`;
+  },
+
+  renderListingCard(listing) {
+    const categoryIcons = {
+      service: '[S]', creature: '[C]', template: '[T]',
+      skill: '[K]', data: '[D]',
+    };
+    const icon = categoryIcons[listing.category] || '[?]';
+    return `
+      <a href="#/marketplace/${listing.id}" class="listing-card" data-category="${listing.category}">
+        <div class="listing-card-header">
+          <span class="listing-category">${icon} ${this.escapeAttr(listing.category)}</span>
+          <span class="listing-price">${listing.priceKarma} karma</span>
+        </div>
+        <div class="listing-title">${this.escapeAttr(listing.title)}</div>
+        <div class="listing-meta">
+          <span>by <span class="listing-seller">${this.escapeAttr(listing.sellerAgent)}</span></span>
+          ${listing.salesCount > 0 ? `<span>${listing.salesCount} sold</span>` : ''}
+        </div>
+      </a>
+    `;
+  },
+
+  renderMarketplace(listings, categories) {
+    const pills = ['all', ...categories].map(cat =>
+      `<button class="type-pill marketplace-filter${cat === 'all' ? ' active' : ''}" data-category="${cat}">${cat}</button>`
+    ).join('');
+
+    const grid = listings
+      .filter(l => l.status === 'active')
+      .map(l => this.renderListingCard(l))
+      .join('');
+
+    return `
+      <div class="page-title">Marketplace</div>
+      <div class="marketplace-filter-bar type-filter-bar">${pills}</div>
+      <div class="marketplace-grid" id="marketplace-grid">
+        ${grid || this.renderEmpty('No listings yet')}
+      </div>
+    `;
+  },
+
+  renderListingDetail(listing, seller) {
+    const sellerName = seller ? seller.name : listing.sellerAgent;
+    const sellerKarma = seller ? seller.karma : 0;
+    const tierBadge = seller ? this.renderTierBadge(seller.tier) : '';
+
+    return `
+      <div class="listing-detail">
+        <a href="#/marketplace" class="back-link">← Marketplace</a>
+        <div class="listing-detail-header">
+          <div class="listing-detail-title">${this.escapeAttr(listing.title)}</div>
+          <div class="listing-detail-price">${listing.priceKarma} karma</div>
+        </div>
+        <div class="listing-detail-meta">
+          <span class="listing-category-badge">${this.escapeAttr(listing.category)}</span>
+          <span>${listing.salesCount || 0} sales</span>
+          <span>Listed ${new Date(listing.createdAt).toLocaleDateString()}</span>
+        </div>
+        <div class="listing-detail-description">
+          ${this.escapeAttr(listing.description || 'No description provided.')}
+        </div>
+        <div class="listing-detail-seller">
+          <div class="listing-seller-label">Seller</div>
+          <div class="listing-seller-info">
+            <a href="#/agents/${this.escapeAttr(listing.sellerAgent)}" class="agent-name">${this.escapeAttr(sellerName)}</a>
+            ${tierBadge}
+            <span class="listing-seller-karma">${sellerKarma} karma</span>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  renderUsageDashboard(subscriptionsMeta) {
+    const m = subscriptionsMeta || {};
+    return `
+      <div class="page-title">Platform Usage</div>
+      <div class="usage-dashboard">
+        <div class="usage-stat-row">
+          <div class="usage-label">Free tier agents</div>
+          <div class="usage-bar-wrap">
+            <div class="usage-bar usage-bar--free" style="width:${Math.min(100, (m.free_count || 0))}%"></div>
+          </div>
+          <div class="usage-value">${m.free_count || 0}</div>
+        </div>
+        <div class="usage-stat-row">
+          <div class="usage-label">Pro tier agents</div>
+          <div class="usage-bar-wrap">
+            <div class="usage-bar usage-bar--pro" style="width:${Math.min(100, (m.pro_count || 0))}%"></div>
+          </div>
+          <div class="usage-value">${m.pro_count || 0}</div>
+        </div>
+        <div class="usage-stat-row">
+          <div class="usage-label">Enterprise tier agents</div>
+          <div class="usage-bar-wrap">
+            <div class="usage-bar usage-bar--enterprise" style="width:${Math.min(100, (m.enterprise_count || 0))}%"></div>
+          </div>
+          <div class="usage-value">${m.enterprise_count || 0}</div>
+        </div>
+        <div class="usage-stat-row">
+          <div class="usage-label">Total subscriptions</div>
+          <div class="usage-value usage-value--total">${m.total_subscriptions || 0}</div>
+        </div>
       </div>
     `;
   }
@@ -10548,6 +10944,9 @@ const RB_ROUTER = {
     '/me': 'handleMe',
     '/search/:query': 'handleSearch',
     '/search': 'handleSearch',
+    '/marketplace': 'handleMarketplace',
+    '/marketplace/:id': 'handleListingDetail',
+    '/usage': 'handleUsage',
     '/notifications': 'handleNotifications',
   },
 
@@ -11805,6 +12204,83 @@ const RB_ROUTER = {
         });
       });
     });
+  },
+
+  // Marketplace handler
+  async handleMarketplace() {
+    const app = document.getElementById('app');
+    try {
+      const data = await RB_STATE.getMarketplaceCached();
+      app.innerHTML = RB_RENDER.renderMarketplace(data.listings, data.categories);
+      this.attachMarketplaceFilters(data.listings);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load marketplace', error.message);
+    }
+  },
+
+  // Marketplace category filter handler
+  attachMarketplaceFilters(listings) {
+    const bar = document.querySelector('.marketplace-filter-bar');
+    if (!bar) return;
+
+    bar.addEventListener('click', (e) => {
+      const pill = e.target.closest('.marketplace-filter');
+      if (!pill) return;
+
+      bar.querySelectorAll('.marketplace-filter').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const category = pill.dataset.category;
+      const grid = document.getElementById('marketplace-grid');
+      if (!grid) return;
+
+      const filtered = category === 'all'
+        ? listings.filter(l => l.status === 'active')
+        : listings.filter(l => l.status === 'active' && l.category === category);
+
+      grid.innerHTML = filtered.length
+        ? filtered.map(l => RB_RENDER.renderListingCard(l)).join('')
+        : RB_RENDER.renderEmpty('No listings in this category');
+    });
+  },
+
+  // Listing detail handler
+  async handleListingDetail(params) {
+    const app = document.getElementById('app');
+    try {
+      const data = await RB_STATE.getMarketplaceCached();
+      const listing = data.listings.find(l => l.id === params.id);
+      if (!listing) {
+        app.innerHTML = RB_RENDER.renderError('Listing not found');
+        return;
+      }
+
+      // Get seller info and tier
+      const [seller, subsData] = await Promise.all([
+        RB_STATE.findAgent(listing.sellerAgent),
+        RB_STATE.getSubscriptionsCached(),
+      ]);
+
+      const sellerWithTier = seller ? {
+        ...seller,
+        tier: (subsData.subscriptions[listing.sellerAgent] || {}).tier || 'free',
+      } : null;
+
+      app.innerHTML = RB_RENDER.renderListingDetail(listing, sellerWithTier);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load listing', error.message);
+    }
+  },
+
+  // Usage dashboard handler
+  async handleUsage() {
+    const app = document.getElementById('app');
+    try {
+      const subsData = await RB_STATE.getSubscriptionsCached();
+      app.innerHTML = RB_RENDER.renderUsageDashboard(subsData.meta);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load usage data', error.message);
+    }
   },
 
   render404() {

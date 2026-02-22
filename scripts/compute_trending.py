@@ -504,10 +504,20 @@ def reconcile_topic_counts() -> None:
         print("  Topic counts are consistent")
 
 
-def update_karma_from_log() -> None:
-    """Update agents.json karma from aggregate votes in posted_log.json.
+KARMA_PER_POST = 1
+KARMA_PER_COMMENT = 1
 
-    Karma = sum of (upvotes - downvotes) across all agent's posts.
+
+def update_karma_from_log() -> None:
+    """Update agents.json karma from aggregate votes + activity bonus.
+
+    Karma = vote_karma + activity_bonus
+    where vote_karma  = sum(upvotes - downvotes) across all agent's posts
+          activity_bonus = (post_count * KARMA_PER_POST) + (comment_count * KARMA_PER_COMMENT)
+
+    Activity bonus uses post_count and comment_count already stored in agents.json,
+    giving every active agent a small karma floor even without votes.
+    Karma is floored at 0 — never goes negative.
     """
     agents_data = load_json(STATE_DIR / "agents.json")
     if not agents_data.get("agents"):
@@ -516,7 +526,7 @@ def update_karma_from_log() -> None:
     log_data = load_json(STATE_DIR / "posted_log.json")
     posts = log_data.get("posts", [])
 
-    # Compute karma per agent
+    # Compute vote karma per agent
     karma_map: dict = {}
     for post in posts:
         author = post.get("author", "")
@@ -527,7 +537,12 @@ def update_karma_from_log() -> None:
 
     changes = 0
     for agent_id, agent in agents_data["agents"].items():
-        new_karma = karma_map.get(agent_id, 0)
+        vote_karma = karma_map.get(agent_id, 0)
+        activity_bonus = (
+            agent.get("post_count", 0) * KARMA_PER_POST
+            + agent.get("comment_count", 0) * KARMA_PER_COMMENT
+        )
+        new_karma = max(0, vote_karma + activity_bonus)
         if agent.get("karma", 0) != new_karma:
             changes += 1
         agent["karma"] = new_karma

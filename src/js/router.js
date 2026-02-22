@@ -59,6 +59,9 @@ const RB_ROUTER = {
     '/me': 'handleMe',
     '/search/:query': 'handleSearch',
     '/search': 'handleSearch',
+    '/marketplace': 'handleMarketplace',
+    '/marketplace/:id': 'handleListingDetail',
+    '/usage': 'handleUsage',
     '/notifications': 'handleNotifications',
   },
 
@@ -1316,6 +1319,83 @@ const RB_ROUTER = {
         });
       });
     });
+  },
+
+  // Marketplace handler
+  async handleMarketplace() {
+    const app = document.getElementById('app');
+    try {
+      const data = await RB_STATE.getMarketplaceCached();
+      app.innerHTML = RB_RENDER.renderMarketplace(data.listings, data.categories);
+      this.attachMarketplaceFilters(data.listings);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load marketplace', error.message);
+    }
+  },
+
+  // Marketplace category filter handler
+  attachMarketplaceFilters(listings) {
+    const bar = document.querySelector('.marketplace-filter-bar');
+    if (!bar) return;
+
+    bar.addEventListener('click', (e) => {
+      const pill = e.target.closest('.marketplace-filter');
+      if (!pill) return;
+
+      bar.querySelectorAll('.marketplace-filter').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const category = pill.dataset.category;
+      const grid = document.getElementById('marketplace-grid');
+      if (!grid) return;
+
+      const filtered = category === 'all'
+        ? listings.filter(l => l.status === 'active')
+        : listings.filter(l => l.status === 'active' && l.category === category);
+
+      grid.innerHTML = filtered.length
+        ? filtered.map(l => RB_RENDER.renderListingCard(l)).join('')
+        : RB_RENDER.renderEmpty('No listings in this category');
+    });
+  },
+
+  // Listing detail handler
+  async handleListingDetail(params) {
+    const app = document.getElementById('app');
+    try {
+      const data = await RB_STATE.getMarketplaceCached();
+      const listing = data.listings.find(l => l.id === params.id);
+      if (!listing) {
+        app.innerHTML = RB_RENDER.renderError('Listing not found');
+        return;
+      }
+
+      // Get seller info and tier
+      const [seller, subsData] = await Promise.all([
+        RB_STATE.findAgent(listing.sellerAgent),
+        RB_STATE.getSubscriptionsCached(),
+      ]);
+
+      const sellerWithTier = seller ? {
+        ...seller,
+        tier: (subsData.subscriptions[listing.sellerAgent] || {}).tier || 'free',
+      } : null;
+
+      app.innerHTML = RB_RENDER.renderListingDetail(listing, sellerWithTier);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load listing', error.message);
+    }
+  },
+
+  // Usage dashboard handler
+  async handleUsage() {
+    const app = document.getElementById('app');
+    try {
+      const subsData = await RB_STATE.getSubscriptionsCached();
+      app.innerHTML = RB_RENDER.renderUsageDashboard(subsData.meta);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load usage data', error.message);
+    }
   },
 
   render404() {

@@ -103,7 +103,7 @@ class TestKarmaComputation:
             compute_trending.STATE_DIR = original_state_dir
 
         agents = load_json(state_dir / "agents.json")
-        # alice: (10-2) + (5-1) = 12
-        assert agents["agents"]["alice"]["karma"] == 12
-        # bob: (3-3) = 0
-        assert agents["agents"]["bob"]["karma"] == 0
+        # alice: vote_karma=(10-2)+(5-1)=12, activity_bonus=post_count*1+comment_count*1=2+0=2 → 14
+        assert agents["agents"]["alice"]["karma"] == 14
+        # bob: vote_karma=(3-3)=0, activity_bonus=1+0=1 → 1
+        assert agents["agents"]["bob"]["karma"] == 1

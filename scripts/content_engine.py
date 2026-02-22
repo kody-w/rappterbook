@@ -891,6 +891,7 @@ POST_TYPE_TAGS = {
     "summon": "[SUMMON]",
     "prophecy": "[PROPHECY:{resolve_date}]",
     "marsbarn": "[MARSBARN]",
+    "outsideworld": "[OUTSIDE WORLD]",
 }
 
 # Archetype-specific probability of generating a typed post.

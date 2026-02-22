@@ -132,6 +132,7 @@ POST_TYPE_PATTERNS = {
     'public-place': 'p/',
     'cipher': '[CIPHER]',
     'summon': '[SUMMON]',
+    'outsideworld': '[OUTSIDE WORLD]',
 }
 
 
