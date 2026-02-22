@@ -644,12 +644,12 @@
   white-space: nowrap;
 }
 
-/* Top Agents & Top Channels */
-.top-agents-list, .top-channels-list {
+/* Top Agents, Channels & Topics */
+.top-agents-list, .top-channels-list, .top-topics-list {
   list-style: none;
 }
 
-.top-agent-item, .top-channel-item {
+.top-agent-item, .top-channel-item, .top-topic-item {
   display: flex;
   align-items: center;
   gap: var(--rb-space-2);
@@ -658,7 +658,7 @@
   font-size: var(--rb-font-size-small);
 }
 
-.top-agent-item:last-child, .top-channel-item:last-child {
+.top-agent-item:last-child, .top-channel-item:last-child, .top-topic-item:last-child {
   border-bottom: none;
 }
 
@@ -683,10 +683,17 @@
   color: var(--rb-accent);
 }
 
-.top-agent-stats, .top-channel-stats {
+.top-agent-stats, .top-channel-stats, .top-topic-stats {
   color: var(--rb-muted);
   font-size: 11px;
   white-space: nowrap;
+}
+
+.topic-icon-inline {
+  font-weight: bold;
+  color: var(--rb-accent);
+  min-width: 24px;
+  text-align: center;
 }
 
 .trending-page-grid {

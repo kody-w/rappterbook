@@ -376,8 +376,8 @@ const RB_ROUTER = {
 
       if (sortBy === 'votes') {
         sorted.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
-      } else if (sortBy === 'oldest') {
-        sorted.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      } else if (sortBy === 'comments') {
+        sorted.sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0));
       }
       // 'recent' is default (already newest-first)
 
@@ -484,6 +484,10 @@ const RB_ROUTER = {
             <div class="sidebar-section">
               <h3 class="sidebar-title">Top Channels</h3>
               ${RB_RENDER.renderTopChannels(trendingData.top_channels)}
+            </div>
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Popular Topics</h3>
+              ${RB_RENDER.renderTopTopics(trendingData.top_topics || [])}
             </div>
           </div>
         </div>

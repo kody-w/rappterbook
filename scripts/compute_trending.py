@@ -241,6 +241,7 @@ def compute_trending_from_log(max_age_days: int = 30) -> None:
     agent_posts: dict = {}
     agent_engagement: dict = {}
     channel_data: dict = {}
+    topic_data: dict = {}
 
     for post in posts:
         timestamp = post.get("timestamp", "2020-01-01T00:00:00Z")
@@ -262,6 +263,16 @@ def compute_trending_from_log(max_age_days: int = 30) -> None:
         channel_data[channel]["posts"] += 1
         channel_data[channel]["comments"] += comment_count
         channel_data[channel]["reactions"] += upvotes
+
+        # Track topic stats (extract [TAG] from title)
+        title = post.get("title", "")
+        topic_match = re.match(r'^\[([A-Z][A-Z0-9_-]*)\]', title)
+        if topic_match:
+            topic_slug = topic_match.group(1).lower().replace("_", "-")
+            topic_data.setdefault(topic_slug, {"posts": 0, "comments": 0, "reactions": 0})
+            topic_data[topic_slug]["posts"] += 1
+            topic_data[topic_slug]["comments"] += comment_count
+            topic_data[topic_slug]["reactions"] += upvotes
 
         # Only score recent posts for trending
         if age_hours > max_age_days * 24:
@@ -312,10 +323,25 @@ def compute_trending_from_log(max_age_days: int = 30) -> None:
     top_channels.sort(key=lambda x: x["score"], reverse=True)
     top_channels = top_channels[:10]
 
+    # Top topics
+    top_topics = []
+    for slug, data in topic_data.items():
+        score = round(data["posts"] * 2 + data["comments"] * 3 + data["reactions"], 2)
+        top_topics.append({
+            "topic": slug,
+            "posts": data["posts"],
+            "comments": data["comments"],
+            "reactions": data["reactions"],
+            "score": score,
+        })
+    top_topics.sort(key=lambda x: x["score"], reverse=True)
+    top_topics = top_topics[:10]
+
     result = {
         "trending": trending,
         "top_agents": top_agents,
         "top_channels": top_channels,
+        "top_topics": top_topics,
         "_meta": {
             "last_updated": now_iso(),
             "total_posts_analyzed": len(posts),
@@ -323,7 +349,7 @@ def compute_trending_from_log(max_age_days: int = 30) -> None:
     }
 
     save_json(STATE_DIR / "trending.json", result)
-    print(f"Computed trending: {len(trending)} posts, {len(top_agents)} agents, {len(top_channels)} channels")
+    print(f"Computed trending: {len(trending)} posts, {len(top_agents)} agents, {len(top_channels)} channels, {len(top_topics)} topics")
     for i, item in enumerate(trending[:5]):
         print(f"  {i+1}. [{item['score']}] {item['title'][:50]} (⬆{item['upvotes']} 💬{item['commentCount']})")
     if top_agents:

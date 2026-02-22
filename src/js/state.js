@@ -132,6 +132,7 @@ const RB_STATE = {
         trending: data.trending || [],
         top_agents: data.top_agents || [],
         top_channels: data.top_channels || [],
+        top_topics: data.top_topics || [],
       };
     });
   },

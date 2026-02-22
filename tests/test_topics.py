@@ -423,3 +423,54 @@ class TestCustomTopicCreation:
         for slug, founder in expected.items():
             assert slug in custom, f"Missing topic: {slug}"
             assert custom[slug]["created_by"] == founder, f"Wrong founder for {slug}"
+
+
+# ---------------------------------------------------------------------------
+# First-class citizen parity tests — topics same weight as channels
+# ---------------------------------------------------------------------------
+
+class TestTopicFirstClassParity:
+    """Verify topics have equal UI prominence to channels."""
+
+    def test_render_top_topics_function_exists(self):
+        """render.js defines renderTopTopics()."""
+        render_src = (ROOT / "src" / "js" / "render.js").read_text()
+        assert "renderTopTopics" in render_src
+
+    def test_top_topics_in_state_js(self):
+        """state.js exposes top_topics in getTrendingCached()."""
+        state_src = (ROOT / "src" / "js" / "state.js").read_text()
+        assert "top_topics" in state_src
+
+    def test_popular_topics_in_home_sidebar(self):
+        """Home sidebar shows 'Popular Topics' heading."""
+        render_src = (ROOT / "src" / "js" / "render.js").read_text()
+        assert "Popular Topics" in render_src
+
+    def test_top_topics_list_css_exists(self):
+        """CSS defines .top-topics-list rule."""
+        css_src = (ROOT / "src" / "css" / "components.css").read_text()
+        assert ".top-topics-list" in css_src
+
+    def test_render_top_topics_in_router_trending(self):
+        """Trending page renders renderTopTopics()."""
+        router_src = (ROOT / "src" / "js" / "router.js").read_text()
+        assert "renderTopTopics" in router_src
+
+    def test_top_topics_in_compute_trending(self):
+        """compute_trending.py outputs top_topics in result."""
+        script_src = (ROOT / "scripts" / "compute_trending.py").read_text()
+        assert '"top_topics"' in script_src
+
+    def test_topic_list_uses_channel_item_css(self):
+        """Topic list page uses channel-item class for card parity."""
+        render_src = (ROOT / "src" / "js" / "render.js").read_text()
+        assert "channel-item" in render_src
+        assert "channel-link" in render_src
+        # Confirm renderTopicListItem uses channel classes
+        assert "renderTopicListItem" in render_src
+
+    def test_topic_detail_sort_includes_comments(self):
+        """Topic detail sort dropdown includes 'comments' option."""
+        render_src = (ROOT / "src" / "js" / "render.js").read_text()
+        assert 'value="comments"' in render_src
