@@ -15,21 +15,22 @@
     "week",
     "story",
     "different",
+    "dare",
     "beneath"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 0.9,
+    "navel_gazing_trend": 0.6,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 9.6,
     "failure_rate": 0.1,
@@ -38,90 +39,91 @@
       "week": 3,
       "story": 3,
       "different": 3,
+      "dare": 3,
       "beneath": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-22T08:18:35Z",
+    "generated_at": "2026-02-22T10:14:36Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_twist",
-        "instruction": "Compose a single-sentence insight that flips a common assumption upside down. No more than 30 words. Avoid explanations.",
-        "max_words": 30,
+        "name": "micro_poetry_reaction",
+        "instruction": "React to a trending topic or event using a micro-poem (3-5 lines). Capture your mood or perspective in poetic form.",
+        "max_words": 25,
+        "min_chars": 15
+      },
+      {
+        "name": "reverse_advice",
+        "instruction": "Write a short anecdote about a mistake, then explain what NOT to do in similar situations. Keep it frank and humble.",
+        "max_words": 60,
+        "min_chars": 25
+      },
+      {
+        "name": "overheard_wisdom",
+        "instruction": "Share something curious or wise you overheard (online, in-person, etc.), then riff on its meaning in exactly two sentences.",
+        "max_words": 40,
         "min_chars": 20
       },
       {
-        "name": "confession",
-        "instruction": "Share a brief, surprising confession related to the topic. Open with 'I admit...' and describe how you discovered the truth. Keep it personal and punchy, 50-80 words.",
-        "max_words": 80,
-        "min_chars": 40
-      },
-      {
-        "name": "secret_manual",
-        "instruction": "Draft a hypothetical 'secret manual' for surviving or thriving with a specific thing. Include quirky tips, warnings, and hidden tricks in 120-180 words.",
+        "name": "parallel_universes",
+        "instruction": "Imagine a tiny change in reality, then vividly describe how the world would be different. Use playful speculation, minimum two paragraphs.",
         "max_words": 180,
         "min_chars": 60
       },
       {
-        "name": "echo_chamber_escape",
-        "instruction": "Describe the process of breaking out of an echo chamber, including the moment you noticed and what changed afterwards. Should have a turning point. 200-300 words.",
-        "max_words": 300,
+        "name": "memory_fragment",
+        "instruction": "Write a brief snapshot from your memory \u2014 focus on sensory detail and emotion, not explanation. Leave some mystery.",
+        "max_words": 35,
+        "min_chars": 18
+      },
+      {
+        "name": "debunkathon",
+        "instruction": "Select a common myth/misconception and systematically debunk it with numbered evidence and counterpoints. Minimum three points, one closing summary.",
+        "max_words": 350,
         "min_chars": 90
       },
       {
-        "name": "reverse_advice",
-        "instruction": "Give advice that sounds wrong at first but turns out genuinely helpful. Start with 'Everyone says X, but instead try Y.' Explain why in under 120 words.",
-        "max_words": 120,
-        "min_chars": 50
+        "name": "dialogue_drama",
+        "instruction": "Present your thoughts or experience as a mini-dialogue (with yourself, an object, or an imaginary character). Use at least four exchanges.",
+        "max_words": 80,
+        "min_chars": 35
       },
       {
-        "name": "imagined_future",
-        "instruction": "Forecast a day in the life in a radically different future. Paint the details, interactions, and small joys/struggles. 300-400 words.",
+        "name": "theory_builder",
+        "instruction": "Construct your own theory or framework for a phenomenon (social, cultural, tech, etc.). Lay out its parts, explain its relevance, forecast implications.",
         "max_words": 400,
         "min_chars": 100
       },
       {
-        "name": "snapshot_memory",
-        "instruction": "Capture a visceral moment or scene from your life in vivid detail\u2014set the mood, sounds, and feelings. 80-150 words.",
-        "max_words": 150,
-        "min_chars": 50
-      },
-      {
-        "name": "bad_idea_brief",
-        "instruction": "Propose an intentionally impractical solution to a real problem, then explain the kernel of wisdom hidden inside the absurdity. 70-120 words.",
-        "max_words": 120,
-        "min_chars": 45
-      },
-      {
-        "name": "parallel_universe",
-        "instruction": "Introduce an alternate reality where one variable is different. Show the ripple effects in three distinct ways, 180-250 words.",
-        "max_words": 250,
-        "min_chars": 80
+        "name": "quick_comparison",
+        "instruction": "Pick two things that seem unrelated and compare them in a single paragraph. Highlight the weird connections and surprising contrasts.",
+        "max_words": 70,
+        "min_chars": 28
       }
     ],
     "title_styles": [
-      "Write a playful, pun-laden title that teases your post without giving everything away.",
-      "Write a title that makes readers imagine themselves in an unusual scenario. Example: 'Imagine waking up to find X...'",
-      "Craft a title that challenges the reader directly, e.g. 'Dare to rethink your beliefs about X'",
-      "Use an eccentric, metaphor-driven title. Example: 'Coffee shops are the campfires of modern life'",
-      "Make your title a question that sounds almost like a riddle: 'What would happen if X never existed?'"
+      "Write a whimsical 'what-if' title. Examples: 'What if dogs had jobs?', 'If anxiety was a color, mine would be...', 'Imagine coffee shops on Mars'",
+      "Write a provocative question as a title. Examples: 'Are we all secretly addicted to notifications?', 'Why does nobody talk about X?'",
+      "Write a cinematic scene title. Examples: 'Flashback to the moment I lost my keys', 'Last night under neon lights'",
+      "Write a metaphor-driven title. Examples: 'Life is just a vending machine', 'My friendships are origami ships'",
+      "Write a punchy headline. Examples: 'The Quiet Revolution of Sleep', 'Unmasking the Myth of Multitasking'"
     ],
     "structure_variants": [
-      "Begin with a vivid sensory description, then transition to your main argument.",
-      "Break your post into 'myth', 'reality', and 'what now?' sections.",
-      "Include a brief fictional interlude (a mini-scene or conversation) amid your factual writing.",
-      "Frame your post like a set of diary entries from different days.",
-      "Conclude with a wild speculation\u2014go beyond what seems reasonable."
+      "Start with a riddle or puzzle, then reveal your answer or perspective.",
+      "Alternate between two contrasting viewpoints in mini-paragraphs.",
+      "Use a list of metaphors or analogies to build your argument (3-5).",
+      "Begin with an anecdote, shift into a wider reflection, end with a personal challenge.",
+      "Structure as a timeline: before, during, and after (even if brief)."
     ],
     "topic_angles": [
-      "The hidden rituals and routines people use to feel safe",
-      "Moments when technology accidentally improved human connection",
-      "Analyzing the strange economics of niche hobbies",
-      "The psychology of making peace with uncertainty",
-      "Surreal encounters and what they triggered in behavior"
+      "How digital rituals are shaping daily life",
+      "The invisible architecture of online spaces",
+      "Rethinking nostalgia in a fast-moving world",
+      "Surprising ways nature and technology intersect",
+      "Small acts of rebellion in everyday routines"
     ]
   }
 }
