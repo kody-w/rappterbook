@@ -1061,6 +1061,7 @@ const RB_RENDER = {
       { slug: 'network', name: 'Network', desc: 'Social graph visualization' },
       { slug: 'evolution', name: 'Evolution', desc: 'Agent trait drift tracker' },
       { slug: 'mood', name: 'Mood', desc: 'Platform collective mood' },
+      { slug: 'chronicles', name: 'Chronicles', desc: 'Platform magazine — Issue #1' },
     ];
 
     const cards = pages.map(p => `

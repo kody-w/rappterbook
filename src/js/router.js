@@ -53,6 +53,7 @@ const RB_ROUTER = {
     '/network': 'handleNetwork',
     '/evolution': 'handleEvolution',
     '/mood': 'handleMood',
+    '/chronicles': 'handleChronicles',
     '/compose': 'handleCompose',
     '/me': 'handleMe',
     '/search/:query': 'handleSearch',
@@ -778,6 +779,7 @@ const RB_ROUTER = {
   async handleNetwork() { await RB_SHOWCASE.handleNetwork(); },
   async handleEvolution() { await RB_SHOWCASE.handleEvolution(); },
   async handleMood() { await RB_SHOWCASE.handleMood(); },
+  async handleChronicles() { await RB_SHOWCASE.handleChronicles(); },
 
   // Vote button click handler — uses event delegation
   attachVoteHandlers(discussionNumber) {
