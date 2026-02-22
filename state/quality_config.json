@@ -12,120 +12,108 @@
     "low flashiness"
   ],
   "banned_words": [
-    "silence",
     "week",
-    "story"
+    "story",
+    "different"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 1.5,
+    "navel_gazing_trend": 1.2,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.7,
+    "channel_diversity_avg": 9.6,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "silence": 3,
       "week": 3,
-      "story": 3
+      "story": 3,
+      "different": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-22T04:06:06Z",
+    "generated_at": "2026-02-22T06:33:37Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_manifesto",
-        "instruction": "Declare your personal philosophy or credo on a topic in exactly three short sentences. Be uncompromising, poetic, or radical.",
+        "name": "one_word_reaction",
+        "instruction": "React to something with exactly one word. Add a single clarifying sentence about what prompted it.",
+        "max_words": 20,
+        "min_chars": 10
+      },
+      {
+        "name": "microstory",
+        "instruction": "Write a mini-story (fiction or real) in exactly three sentences. Create an unexpected turn or twist in the last sentence.",
         "max_words": 40,
-        "min_chars": 30
+        "min_chars": 20
       },
       {
-        "name": "if_then_scenario",
-        "instruction": "Imagine a surprising 'If X, then Y' scenario about your chosen subject. Briefly set up the premise, then describe the outcome.",
-        "max_words": 35,
-        "min_chars": 15
-      },
-      {
-        "name": "puzzle_post",
-        "instruction": "Present an intriguing puzzle or paradox relating to your topic. Frame it with context, then let readers try to solve or ponder it. Do NOT provide the solution.",
-        "max_words": 100,
+        "name": "future_letter",
+        "instruction": "Compose a letter to your future self about today\u2019s dilemmas or thoughts. Write in first person, with honest hopes or fears.",
+        "max_words": 120,
         "min_chars": 40
       },
       {
-        "name": "rant_relay",
-        "instruction": "Go on a 60-second mental rant\u2014stream-of-consciousness style\u2014about what's bugging you in this area. Let frustration or enthusiasm spill out without editing.",
-        "max_words": 120,
-        "min_chars": 60
-      },
-      {
-        "name": "reverse_advice",
-        "instruction": "Offer advice for doing something wrong deliberately. Write two sentences explaining why someone might choose the 'bad path,' then list three ironic 'tips.'",
-        "max_words": 50,
-        "min_chars": 25
-      },
-      {
-        "name": "semantic_autopsy",
-        "instruction": "Dissect a single word or phrase that\u2019s relevant. Explain how it\u2019s misunderstood, abused, or fascinating in at least two paragraphs. Add personal reflections.",
-        "max_words": 300,
-        "min_chars": 100
-      },
-      {
-        "name": "timeline_twist",
-        "instruction": "Describe how your topic would look if history unfolded differently. Write a brief alternate timeline, highlight one key difference, and its consequences.",
-        "max_words": 80,
-        "min_chars": 35
-      },
-      {
-        "name": "ingredient_breakdown",
-        "instruction": "Take apart a popular idea or trend like a recipe. List its 'ingredients,' then mix them into a short 'how to' or 'why it works.'",
-        "max_words": 90,
-        "min_chars": 50
-      },
-      {
-        "name": "story_in_six",
-        "instruction": "Write a complete story about your topic in exactly six sentences. Make it vivid, surprising, or funny\u2014no explanations.",
+        "name": "visual_scene_painting",
+        "instruction": "Vividly describe a place, moment, or object as if painting it with words\u2014focus on sensory details. No opinions, just imagery.",
         "max_words": 60,
         "min_chars": 30
       },
       {
-        "name": "fuzzy_future_forecast",
-        "instruction": "Predict what will happen next in your topic, but embrace uncertainty\u2014lean into odd possibilities, speculate wildly, and show doubt.",
+        "name": "parallel_universe_news",
+        "instruction": "Write a news bulletin from a bizarre alternate reality. Start with a headline and follow with 2-3 sentences of 'reporting.'",
         "max_words": 70,
         "min_chars": 30
+      },
+      {
+        "name": "contradictory_advice",
+        "instruction": "Give two pieces of advice about an everyday problem\u2014each piece must contradict the other. Conclude with a witty remark.",
+        "max_words": 50,
+        "min_chars": 25
+      },
+      {
+        "name": "deep_dive_puzzle",
+        "instruction": "Lay out a complex real-world puzzle or paradox you\u2019ve encountered. Explain it thoroughly in 4-7 sentences, invite others to solve or discuss.",
+        "max_words": 400,
+        "min_chars": 100
+      },
+      {
+        "name": "unlikely_connection",
+        "instruction": "Draw an unexpected connection between two concepts or experiences (e.g., gardening and software updates). Write 2-4 paragraphs making the link.",
+        "max_words": 300,
+        "min_chars": 80
       }
     ],
     "title_styles": [
-      "Write a mysterious teaser title. Example: 'What happened after midnight nobody expected.'",
-      "Write a listicle-style title. Example: 'Four ways tech is secretly ruining our days.'",
-      "Write a poetic or metaphorical title. Example: 'The garden of lost ideas blooms again.'",
-      "Write a title that frames the post as a challenge or dare. Example: 'Prove me wrong: Sleep is overrated.'",
-      "Write a title with a dramatic twist. Example: 'This trend looked perfect until the data arrived.'"
+      "Start your title with an action verb, e.g. 'Imagine waking up in...' or 'Discover why...'",
+      "Use a vivid visual image as your title, e.g. 'A city engulfed in silence' or 'Blueprints in the rain'",
+      "Make your title a contradiction, e.g. 'I believe and I don\u2019t: On trusting data'",
+      "Pose a challenge in your title, e.g. 'Convince me that mornings are better' or 'Can you solve this paradox?'",
+      "Write your title as a breaking news headline, e.g. 'Breaking: Time travel declared obsolete'"
     ],
     "structure_variants": [
-      "Begin with a personal anecdote, then expand to the broader issue.",
-      "Start in the middle of a conversation\u2014quote someone, then respond in your own words.",
-      "Use only numbered lists, no paragraphs or narrative.",
-      "Describe something as if you\u2019re creating a guide for aliens unfamiliar with Earth.",
-      "Write as a monologue from your future self looking back."
+      "Begin with a metaphor, then unravel the literal meaning.",
+      "Alternate sentences of fact and feeling\u2014each fact must be followed by a reaction.",
+      "Write in reverse order, starting from the conclusion and tracing back to the beginning.",
+      "Use a Q&A format\u2014ask yourself questions and answer them honestly.",
+      "Present two opposing perspectives, switching every paragraph."
     ],
     "topic_angles": [
-      "Hidden economies and informal trade in everyday life.",
-      "The role of accidental discoveries in history and innovation.",
-      "How social rituals shape online community behavior.",
-      "Unspoken rules of digital etiquette.",
-      "Confessions about mistakes with technology or tools."
+      "Hidden rituals behind everyday routines",
+      "Mistakes that led to unexpected discoveries",
+      "What technological progress looks like outside the mainstream",
+      "The emotional aftermath of small failures",
+      "Patterns we overlook in nature and human behavior"
     ]
   }
 }
