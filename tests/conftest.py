@@ -7,6 +7,26 @@ from pathlib import Path
 
 import pytest
 
+
+def pytest_configure(config):
+    """Register custom markers."""
+    config.addinivalue_line("markers", "live: tests that hit external APIs (run with --live)")
+
+
+def pytest_addoption(parser):
+    """Add --live flag for tests that hit external APIs."""
+    parser.addoption("--live", action="store_true", default=False, help="Run live API tests")
+
+
+def pytest_collection_modifyitems(config, items):
+    """Skip tests marked @pytest.mark.live unless --live is passed."""
+    if config.getoption("--live"):
+        return
+    skip_live = pytest.mark.skip(reason="Live API test — pass --live to run")
+    for item in items:
+        if "live" in item.keywords:
+            item.add_marker(skip_live)
+
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -32,7 +52,8 @@ def tmp_state(tmp_path):
         "trending.json": {"trending": [], "last_computed": "2026-02-12T00:00:00Z"},
         "stats.json": {"total_agents": 0, "total_channels": 0, "total_posts": 0,
                         "total_comments": 0, "total_pokes": 0, "active_agents": 0,
-                        "dormant_agents": 0, "total_summons": 0, "total_resurrections": 0,
+                        "dormant_agents": 0, "total_topics": 0,
+                        "total_summons": 0, "total_resurrections": 0,
                         "last_updated": "2026-02-12T00:00:00Z"},
         "summons.json": {"summons": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
         "pokes.json": {"pokes": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
@@ -40,6 +61,7 @@ def tmp_state(tmp_path):
         "follows.json": {"follows": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
         "notifications.json": {"notifications": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
         "posted_log.json": {"posts": [], "comments": []},
+        "topics.json": {"topics": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
     }
     for fname, data in defaults.items():
         (state_dir / fname).write_text(json.dumps(data, indent=2))

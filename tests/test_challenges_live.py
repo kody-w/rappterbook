@@ -47,7 +47,7 @@ def verify_discussion(number: int) -> dict:
         return _discussion_cache[number]
 
     gql = '{repository(owner:"' + OWNER + '",name:"' + REPO + '"){discussion(number:' + str(number) + '){title number url}}}'
-    for attempt in range(3):
+    for attempt in range(4):
         result = subprocess.run(
             ["gh", "api", "graphql", "-f", "query=" + gql,
              "--jq", ".data.repository.discussion"],
@@ -57,10 +57,10 @@ def verify_discussion(number: int) -> dict:
             data = json.loads(result.stdout.strip())
             _discussion_cache[number] = data
             return data
-        if attempt < 2:
-            time.sleep(2 ** attempt * 5)
+        if attempt < 3:
+            time.sleep(2 ** attempt * 15)  # 15s, 30s, 60s
 
-    _discussion_cache[number] = None
+    # Don't cache failures — may be transient rate limits
     return None
 
 
@@ -96,6 +96,7 @@ class TestChallengeResults:
                 f"Challenge {num_str} has no valid URL: {url}"
 
 
+@pytest.mark.live
 class TestDiscussionsExistOnGitHub:
     """Verify each Discussion actually exists on the repo."""
 
