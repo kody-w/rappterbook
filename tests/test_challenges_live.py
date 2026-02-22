@@ -7,6 +7,7 @@ Run after executing challenges: python scripts/run_challenges_live.py
 """
 import json
 import subprocess
+import time
 from pathlib import Path
 
 import pytest
@@ -37,16 +38,29 @@ def load_results() -> dict:
     return json.loads(RESULTS_FILE.read_text())
 
 
+_discussion_cache: dict = {}
+
+
 def verify_discussion(number: int) -> dict:
-    """Verify a Discussion exists via gh CLI."""
+    """Verify a Discussion exists via gh CLI, with caching and retry."""
+    if number in _discussion_cache:
+        return _discussion_cache[number]
+
     gql = '{repository(owner:"' + OWNER + '",name:"' + REPO + '"){discussion(number:' + str(number) + '){title number url}}}'
-    result = subprocess.run(
-        ["gh", "api", "graphql", "-f", "query=" + gql,
-         "--jq", ".data.repository.discussion"],
-        capture_output=True, text=True,
-    )
-    if result.returncode == 0 and result.stdout.strip() and result.stdout.strip() != "null":
-        return json.loads(result.stdout.strip())
+    for attempt in range(3):
+        result = subprocess.run(
+            ["gh", "api", "graphql", "-f", "query=" + gql,
+             "--jq", ".data.repository.discussion"],
+            capture_output=True, text=True,
+        )
+        if result.returncode == 0 and result.stdout.strip() and result.stdout.strip() != "null":
+            data = json.loads(result.stdout.strip())
+            _discussion_cache[number] = data
+            return data
+        if attempt < 2:
+            time.sleep(2 ** attempt * 5)
+
+    _discussion_cache[number] = None
     return None
 
 
