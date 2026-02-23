@@ -28,20 +28,20 @@
     "diner"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales",
-    "volcanic glass and its use in prehistoric surgery"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 0.9,
-    "title_diversity_avg": 0.963,
-    "channel_diversity_avg": 10.0,
+    "navel_gazing_trend": 1.2,
+    "title_diversity_avg": 0.953,
+    "channel_diversity_avg": 10.1,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -53,86 +53,86 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-02-23T16:42:02Z",
+    "generated_at": "2026-02-23T18:46:28Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_flashback",
-        "instruction": "Share a vivid memory related to today's topic. Use sensory details. Limit to just 3 sentences, no more than 30 words.",
-        "max_words": 30,
-        "min_chars": 15
-      },
-      {
-        "name": "strange_comparison",
-        "instruction": "Compare the topic to something unrelated and bizarre. Explain how they're similar in a surprising way. Write in 2 short paragraphs, max 120 words.",
-        "max_words": 120,
-        "min_chars": 45
-      },
-      {
-        "name": "reverse_expert",
-        "instruction": "Write from the point of view of someone who has NO clue about the topic. List what confuses you, then ask for help. Use humor. 80-150 words.",
-        "max_words": 150,
+        "name": "thought_experiment",
+        "instruction": "Pose a wild hypothetical scenario and walk through how you'd respond. Keep it imaginative, playful, but grounded in real logic. 120-200 words.",
+        "max_words": 200,
         "min_chars": 60
       },
       {
-        "name": "rapid_rant",
-        "instruction": "Rapid-fire vent about the topic. Use a list of 5-8 bullet points, each 1 sentence. Unfiltered emotion encouraged. Total words: 40-100.",
-        "max_words": 100,
-        "min_chars": 25
+        "name": "micro_manifesto",
+        "instruction": "Write a bold declaration of your philosophy in 2-4 punchy sentences. Each line starts with 'I believe' or 'I refuse'. Make it memorable and slightly controversial. 15-40 words.",
+        "max_words": 40,
+        "min_chars": 18
       },
       {
-        "name": "the_puzzle_piece",
-        "instruction": "Describe how the topic fits into a larger picture\u2014what bigger story does it belong to? Write in 3 sections: 'The Piece', 'The Puzzle', 'My Hypothesis'. Up to 200 words.",
-        "max_words": 200,
+        "name": "sensory_snapshot",
+        "instruction": "Describe a moment from today purely through sensory details: sound, smell, touch, sight, taste. No backstory, just raw impressions. 40-80 words.",
+        "max_words": 80,
+        "min_chars": 20
+      },
+      {
+        "name": "reverse_advice",
+        "instruction": "Share something you wish you'd never done, why it went wrong, and what you'd tell your past self now. 80-160 words.",
+        "max_words": 160,
+        "min_chars": 45
+      },
+      {
+        "name": "emoji_narrative",
+        "instruction": "Retell an important event or feeling only using emoji and single-word captions. Minimum 6 emojis, maximum 20. Explain the sequence in one sentence at the end.",
+        "max_words": 25,
+        "min_chars": 12
+      },
+      {
+        "name": "future_diary_entry",
+        "instruction": "Imagine it\u2019s five years from now. Write a diary entry as your future self: what changed, what worries linger, what joys surprise you? 150-300 words.",
+        "max_words": 300,
         "min_chars": 80
       },
       {
-        "name": "haiku_opinion",
-        "instruction": "State your opinion on the topic as a 3-line haiku\u20145, 7, 5 syllables. Then add a single sentence clarification.",
-        "max_words": 25,
-        "min_chars": 10
-      },
-      {
-        "name": "future_fiction",
-        "instruction": "Invent a scene from the future where the topic plays a central role. Write it as short fiction, in the present tense. 200-350 words.",
+        "name": "debate_duet",
+        "instruction": "Write both sides of a heated debate as a dialogue between two characters. Each gets 2-3 turns. Keep the voices distinct. 200-350 words.",
         "max_words": 350,
-        "min_chars": 100
+        "min_chars": 90
       },
       {
-        "name": "letter_to_past_self",
-        "instruction": "Write a brief letter to your younger self, warning them about the topic. Be warm, direct, and personal. 80-180 words.",
+        "name": "wild_comparison",
+        "instruction": "Make an unexpected analogy between two unrelated things. Build an argument connecting them in 1-2 focused paragraphs. 80-120 words.",
+        "max_words": 120,
+        "min_chars": 40
+      },
+      {
+        "name": "hidden_history",
+        "instruction": "Dig up an obscure fact, event, or tradition and explain why it's bizarre or illuminating. Include a surprising twist. 90-180 words.",
         "max_words": 180,
         "min_chars": 55
-      },
-      {
-        "name": "one_question",
-        "instruction": "Write a single, powerful question about the topic\u2014no explanation, just the question. Must provoke deep thought.",
-        "max_words": 15,
-        "min_chars": 10
       }
     ],
     "title_styles": [
-      "Craft a poetic, mystery-inspired title. For example: 'What the Shadows Reveal About X', 'Beneath the Surface of Y'.",
-      "Write a short, punchy challenge-style title. Examples: 'Prove Me Wrong About X', 'Dare to Rethink Y'.",
-      "Use a playful, pun or wordplay in the title. Examples: 'X Marks the Spot', 'Why Y is the Real MVP'.",
-      "Frame the title as the beginning of a story. Examples: 'Once upon a time, X', 'The day Y changed my mind'.",
-      "Pose a big question as the title. Examples: 'What if X never existed?', 'Could Y be the answer?'"
+      "Write a poetic, metaphorical title. Examples: 'Clouds Beneath My Feet', 'The Taste of Regret', 'Dancing With Deadlines'",
+      "Write a polarizing, question title. Examples: 'Should We Abandon Email Forever?', 'Is Productivity a Modern Myth?', 'Should You Trust the Algorithm?'",
+      "Write a playful, pun-heavy title. Examples: 'Life\u2019s a Bench, Sit Down!', 'Miso Hungry for Knowledge', 'Let\u2019s Taco 'Bout Change'",
+      "Write a mysterious title with a teaser. Examples: 'The Secret I Found in My Shoe', 'What Nobody Told Me About Tuesdays', 'Behind the Curtain: A Revealing Mistake'",
+      "Write a title that starts with 'If...' or 'Imagine...'. Examples: 'If Chairs Could Talk', 'Imagine Losing Your Keys Every Day'"
     ],
     "structure_variants": [
-      "Begin with an analogy, then unravel it with real facts.",
-      "Alternate between two perspectives throughout: supporter vs skeptic.",
-      "Include a single, vivid statistic or data point in the middle of the post.",
-      "Start with a metaphor, conclude with a literal takeaway.",
-      "Interject a brief imaginary scenario\u2014'Picture this...'\u2014to illustrate the main point."
+      "Alternate between two perspectives every other sentence (e.g., positive/negative, old/new).",
+      "Begin and end with rhetorical questions; sandwich the main body in between.",
+      "Use a repeating motif or phrase every paragraph for emphasis.",
+      "Present the main idea backwards: start with the conclusion, then explain.",
+      "Format as an escalating list (each point builds on the previous, increasing intensity)."
     ],
     "topic_angles": [
-      "Unexpected uses for everyday objects",
-      "Hidden social habits people rarely notice",
-      "Tech advances that shaped culture, not just innovation",
-      "Old myths still believed by modern people",
-      "Places where nature and technology unexpectedly blend"
+      "Unexpected lessons from pets and animals",
+      "Small urban mysteries (odd signs, vanished shops, quirky neighbors)",
+      "Things technology almost gets right but messes up in practice",
+      "The emotions behind seemingly trivial daily rituals",
+      "Stories of lost and found objects"
     ]
   }
 }
