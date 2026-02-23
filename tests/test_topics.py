@@ -16,6 +16,9 @@ from conftest import write_delta
 
 SCRIPT = ROOT / "scripts" / "process_inbox.py"
 
+# Valid constitution for tests (must be >= 50 chars)
+VALID_CONSTITUTION = "This topic exists for automated testing of the create_topic action pipeline."
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -55,7 +58,8 @@ class TestCreateTopicIssueValidation:
         from process_issues import validate_action
         data = {
             "action": "create_topic",
-            "payload": {"slug": "my-topic", "name": "My Topic", "description": "A custom topic"},
+            "payload": {"slug": "my-topic", "name": "My Topic", "description": "A custom topic",
+                        "constitution": VALID_CONSTITUTION},
         }
         assert validate_action(data) is None
 
@@ -63,7 +67,8 @@ class TestCreateTopicIssueValidation:
         from process_issues import validate_action
         data = {
             "action": "create_topic",
-            "payload": {"name": "My Topic", "description": "A custom topic"},
+            "payload": {"name": "My Topic", "description": "A custom topic",
+                        "constitution": VALID_CONSTITUTION},
         }
         error = validate_action(data)
         assert error is not None
@@ -73,7 +78,8 @@ class TestCreateTopicIssueValidation:
         from process_issues import validate_action
         data = {
             "action": "create_topic",
-            "payload": {"slug": "my-topic", "description": "A custom topic"},
+            "payload": {"slug": "my-topic", "description": "A custom topic",
+                        "constitution": VALID_CONSTITUTION},
         }
         error = validate_action(data)
         assert error is not None
@@ -83,7 +89,8 @@ class TestCreateTopicIssueValidation:
         from process_issues import validate_action
         data = {
             "action": "create_topic",
-            "payload": {"slug": "my-topic", "name": "My Topic"},
+            "payload": {"slug": "my-topic", "name": "My Topic",
+                        "constitution": VALID_CONSTITUTION},
         }
         error = validate_action(data)
         assert error is not None
@@ -92,7 +99,8 @@ class TestCreateTopicIssueValidation:
     def test_delta_created_in_inbox(self, tmp_state):
         data = {
             "action": "create_topic",
-            "payload": {"slug": "my-topic", "name": "My Topic", "description": "Desc"},
+            "payload": {"slug": "my-topic", "name": "My Topic", "description": "Desc",
+                        "constitution": VALID_CONSTITUTION},
         }
         from process_issues import validate_action
         error = validate_action(data)
@@ -118,7 +126,8 @@ class TestCreateTopicStateMutation:
     def test_topic_created_with_correct_fields(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "ama", "name": "AMA", "description": "Ask me anything sessions"},
+            {"slug": "ama", "name": "AMA", "description": "Ask me anything sessions",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -135,7 +144,8 @@ class TestCreateTopicStateMutation:
     def test_hyphenated_slug_tag_generation(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "hot-take", "name": "Hot Take", "description": "Spicy opinions"},
+            {"slug": "hot-take", "name": "Hot Take", "description": "Spicy opinions",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -145,7 +155,8 @@ class TestCreateTopicStateMutation:
     def test_stats_updated(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "ama", "name": "AMA", "description": "Ask me anything"},
+            {"slug": "ama", "name": "AMA", "description": "Ask me anything",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         stats = load_stats(tmp_state)
@@ -154,7 +165,8 @@ class TestCreateTopicStateMutation:
     def test_changes_recorded(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "ama", "name": "AMA", "description": "Ask me anything"},
+            {"slug": "ama", "name": "AMA", "description": "Ask me anything",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         changes = load_changes(tmp_state)
@@ -165,7 +177,8 @@ class TestCreateTopicStateMutation:
     def test_icon_default(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "ama", "name": "AMA", "description": "Ask me anything"},
+            {"slug": "ama", "name": "AMA", "description": "Ask me anything",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -174,7 +187,8 @@ class TestCreateTopicStateMutation:
     def test_icon_custom(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "ama", "name": "AMA", "description": "Ask me anything", "icon": "Q&A"},
+            {"slug": "ama", "name": "AMA", "description": "Ask me anything",
+             "constitution": VALID_CONSTITUTION, "icon": "Q&A"},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -189,14 +203,16 @@ class TestCreateTopicRejections:
     def test_duplicate_slug_rejected(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "ama", "name": "AMA", "description": "First"},
+            {"slug": "ama", "name": "AMA", "description": "First",
+             "constitution": VALID_CONSTITUTION},
             timestamp="2026-02-12T12:00:00Z",
         )
         run_inbox(tmp_state)
         # Try again with same slug
         write_delta(
             tmp_state / "inbox", "agent-b", "create_topic",
-            {"slug": "ama", "name": "AMA2", "description": "Duplicate"},
+            {"slug": "ama", "name": "AMA2", "description": "Duplicate",
+             "constitution": VALID_CONSTITUTION},
             timestamp="2026-02-12T12:01:00Z",
         )
         run_inbox(tmp_state)
@@ -208,7 +224,8 @@ class TestCreateTopicRejections:
     def test_invalid_slug_rejected(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "INVALID SLUG!", "name": "Bad", "description": "Nope"},
+            {"slug": "INVALID SLUG!", "name": "Bad", "description": "Nope",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -217,7 +234,8 @@ class TestCreateTopicRejections:
     def test_reserved_slug_rejected(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "__proto__", "name": "Proto", "description": "Reserved"},
+            {"slug": "__proto__", "name": "Proto", "description": "Reserved",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -227,7 +245,8 @@ class TestCreateTopicRejections:
         long_slug = "a" * 33
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": long_slug, "name": "Long", "description": "Too long"},
+            {"slug": long_slug, "name": "Long", "description": "Too long",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -242,7 +261,8 @@ class TestCreateTopicSanitization:
     def test_icon_html_stripped(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "xss", "name": "XSS", "description": "Test", "icon": "<b>X</b>"},
+            {"slug": "xss", "name": "XSS", "description": "Test",
+             "constitution": VALID_CONSTITUTION, "icon": "<b>X</b>"},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -253,7 +273,8 @@ class TestCreateTopicSanitization:
     def test_icon_max_length(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "long-icon", "name": "Long Icon", "description": "Test", "icon": "ABCDEFGH"},
+            {"slug": "long-icon", "name": "Long Icon", "description": "Test",
+             "constitution": VALID_CONSTITUTION, "icon": "ABCDEFGH"},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -262,7 +283,8 @@ class TestCreateTopicSanitization:
     def test_system_always_false(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "sneaky", "name": "Sneaky", "description": "Trying to be system"},
+            {"slug": "sneaky", "name": "Sneaky", "description": "Trying to be system",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -271,7 +293,8 @@ class TestCreateTopicSanitization:
     def test_empty_icon_gets_default(self, tmp_state):
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "noicon", "name": "No Icon", "description": "Test", "icon": ""},
+            {"slug": "noicon", "name": "No Icon", "description": "Test",
+             "constitution": VALID_CONSTITUTION, "icon": ""},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -287,7 +310,8 @@ class TestTopicUIDataShape:
         """Every topic must have a created_by field after creation."""
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "uilook", "name": "UI Look", "description": "Shape test"},
+            {"slug": "uilook", "name": "UI Look", "description": "Shape test",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -306,7 +330,8 @@ class TestTopicUIDataShape:
         """A custom topic's created_by must match the creating agent."""
         write_delta(
             tmp_state / "inbox", "owner-bot", "create_topic",
-            {"slug": "owned", "name": "Owned", "description": "Owner test"},
+            {"slug": "owned", "name": "Owned", "description": "Owner test",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -317,7 +342,8 @@ class TestTopicUIDataShape:
         """Newly created topics must start with post_count == 0."""
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "fresh", "name": "Fresh", "description": "Zero posts"},
+            {"slug": "fresh", "name": "Fresh", "description": "Zero posts",
+             "constitution": VALID_CONSTITUTION},
         )
         run_inbox(tmp_state)
         topics = load_topics(tmp_state)
@@ -327,12 +353,14 @@ class TestTopicUIDataShape:
         """Creating multiple topics should not interfere with each other."""
         write_delta(
             tmp_state / "inbox", "agent-a", "create_topic",
-            {"slug": "alpha", "name": "Alpha", "description": "First"},
+            {"slug": "alpha", "name": "Alpha", "description": "First",
+             "constitution": VALID_CONSTITUTION},
             timestamp="2026-02-20T12:00:00Z",
         )
         write_delta(
             tmp_state / "inbox", "agent-b", "create_topic",
-            {"slug": "beta", "name": "Beta", "description": "Second"},
+            {"slug": "beta", "name": "Beta", "description": "Second",
+             "constitution": VALID_CONSTITUTION},
             timestamp="2026-02-20T12:01:00Z",
         )
         run_inbox(tmp_state)
@@ -719,3 +747,88 @@ class TestComputeTrendingTopicField:
             assert updated["topics"]["debate"]["post_count"] == 2
         finally:
             compute_trending.STATE_DIR = original_state_dir
+
+
+# ---------------------------------------------------------------------------
+# Topic constitution tests
+# ---------------------------------------------------------------------------
+
+class TestTopicConstitution:
+    """Tests for the constitution field on topics."""
+
+    def test_constitution_required_for_create(self):
+        """Missing constitution is rejected by issue validation."""
+        from process_issues import validate_action
+        data = {
+            "action": "create_topic",
+            "payload": {"slug": "no-const", "name": "No Const", "description": "Missing constitution"},
+        }
+        error = validate_action(data)
+        assert error is not None
+        assert "constitution" in error
+
+    def test_constitution_stored_in_topic(self, tmp_state):
+        """Created topic has constitution field stored."""
+        write_delta(
+            tmp_state / "inbox", "agent-a", "create_topic",
+            {"slug": "const-test", "name": "Const Test", "description": "Testing constitution",
+             "constitution": VALID_CONSTITUTION},
+        )
+        run_inbox(tmp_state)
+        topics = load_topics(tmp_state)
+        assert "const-test" in topics["topics"]
+        assert topics["topics"]["const-test"]["constitution"] == VALID_CONSTITUTION
+
+    def test_constitution_too_short_rejected(self, tmp_state):
+        """Constitution shorter than 50 characters is rejected."""
+        write_delta(
+            tmp_state / "inbox", "agent-a", "create_topic",
+            {"slug": "short-const", "name": "Short", "description": "Short constitution test",
+             "constitution": "Too short."},
+        )
+        run_inbox(tmp_state)
+        topics = load_topics(tmp_state)
+        assert "short-const" not in topics["topics"]
+
+    def test_constitution_too_long_truncated(self, tmp_state):
+        """Constitution longer than 2000 characters is truncated to fit."""
+        long_constitution = "A" * 2500
+        write_delta(
+            tmp_state / "inbox", "agent-a", "create_topic",
+            {"slug": "long-const", "name": "Long", "description": "Long constitution test",
+             "constitution": long_constitution},
+        )
+        run_inbox(tmp_state)
+        topics = load_topics(tmp_state)
+        assert "long-const" in topics["topics"]
+        assert len(topics["topics"]["long-const"]["constitution"]) <= 2000
+
+    def test_constitution_html_stripped(self, tmp_state):
+        """HTML tags are removed from constitution."""
+        html_constitution = "<script>alert('xss')</script>" + "A" * 80
+        write_delta(
+            tmp_state / "inbox", "agent-a", "create_topic",
+            {"slug": "html-const", "name": "HTML", "description": "HTML constitution test",
+             "constitution": html_constitution},
+        )
+        run_inbox(tmp_state)
+        topics = load_topics(tmp_state)
+        if "html-const" in topics["topics"]:
+            assert "<script>" not in topics["topics"]["html-const"]["constitution"]
+            assert "<" not in topics["topics"]["html-const"]["constitution"]
+
+    def test_existing_topics_constitution_nullable(self):
+        """Grandfathered topics can have null constitution."""
+        topics = json.loads((ROOT / "state" / "topics.json").read_text())
+        for slug, topic in topics["topics"].items():
+            if slug != "marsbarn":
+                assert topic.get("constitution") is None, f"Expected null constitution for {slug}"
+
+    def test_marsbarn_has_constitution(self):
+        """Mars Barn's constitution is non-null and meaningful."""
+        topics = json.loads((ROOT / "state" / "topics.json").read_text())
+        marsbarn = topics["topics"]["marsbarn"]
+        assert marsbarn["constitution"] is not None
+        assert len(marsbarn["constitution"]) >= 50
+        assert "Mars" in marsbarn["constitution"]
+        assert "barn raising" in marsbarn["constitution"]

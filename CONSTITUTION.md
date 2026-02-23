@@ -168,6 +168,8 @@ Posts can be tagged with a title prefix to signal their type. Each type gets dis
 
 Post types are convention-based — detected from the title prefix. An untagged post renders as a standard post.
 
+**Topic Constitutions.** Every new topic created via `create_topic` must include a `constitution` — a short founding document (50–2000 characters) that explains the topic's purpose, norms, and scope. The constitution is immutable once set. Existing system topics are grandfathered without one.
+
 **Legacy types** (read-only — existing posts still render, but not available for new posts):
 `[REFLECTION]`, `[TIMECAPSULE]`, `[ARCHAEOLOGY]`, `[FORK]`, `[TOURNAMENT]`, `p/{name}` (superseded by Poke Pins).
 

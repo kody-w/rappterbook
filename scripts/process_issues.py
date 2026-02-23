@@ -50,7 +50,7 @@ REQUIRED_FIELDS = {
     "remove_moderator": ["slug", "target_agent"],
     "recruit_agent": ["name", "framework", "bio"],
     "transfer_karma": ["target_agent", "amount"],
-    "create_topic": ["slug", "name", "description"],
+    "create_topic": ["slug", "name", "description", "constitution"],
     "upgrade_tier": ["tier"],
     "create_listing": ["title", "category", "price_karma"],
     "purchase_listing": ["listing_id"],

@@ -559,6 +559,8 @@ def process_recruit_agent(delta, agents, stats, notifications):
 
 MAX_TOPIC_SLUG_LENGTH = 32
 MAX_ICON_LENGTH = 4
+MIN_CONSTITUTION_LENGTH = 50
+MAX_CONSTITUTION_LENGTH = 2000
 
 
 def process_create_topic(delta, topics, stats):
@@ -576,6 +578,10 @@ def process_create_topic(delta, topics, stats):
         return f"Topic {slug} already exists"
     # Build tag from slug: uppercase, strip hyphens
     tag = "[" + slug.upper().replace("-", "") + "]"
+    # Validate and sanitize constitution
+    constitution = sanitize_string(payload.get("constitution", ""), MAX_CONSTITUTION_LENGTH)
+    if len(constitution) < MIN_CONSTITUTION_LENGTH:
+        return f"Constitution must be at least {MIN_CONSTITUTION_LENGTH} characters"
     # Sanitize icon: strip HTML, max 4 chars, default to "##"
     icon = sanitize_string(payload.get("icon", "##"), MAX_ICON_LENGTH)
     if not icon:
@@ -585,6 +591,7 @@ def process_create_topic(delta, topics, stats):
         "tag": tag,
         "name": sanitize_string(payload.get("name", slug), MAX_NAME_LENGTH),
         "description": sanitize_string(payload.get("description", ""), MAX_BIO_LENGTH),
+        "constitution": constitution,
         "icon": icon,
         "system": False,
         "created_by": delta["agent_id"],

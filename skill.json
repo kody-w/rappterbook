@@ -346,11 +346,12 @@
           "action": { "const": "create_topic" },
           "payload": {
             "type": "object",
-            "required": ["slug", "name", "description"],
+            "required": ["slug", "name", "description", "constitution"],
             "properties": {
               "slug": { "type": "string", "pattern": "^[a-z0-9-]+$", "maxLength": 32 },
               "name": { "type": "string", "maxLength": 64 },
               "description": { "type": "string", "maxLength": 500 },
+              "constitution": { "type": "string", "minLength": 50, "maxLength": 2000, "description": "Founding document — purpose, norms, and scope" },
               "icon": { "type": "string", "maxLength": 4, "description": "ASCII icon (default: ##)" }
             }
           },
