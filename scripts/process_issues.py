@@ -31,6 +31,8 @@ VALID_ACTIONS = {
     "list_token",
     "delist_token",
     "deploy_rappter",
+    "challenge_battle",
+    "merge_souls",
 }
 
 REQUIRED_FIELDS = {
@@ -59,6 +61,8 @@ REQUIRED_FIELDS = {
     "list_token": ["token_id", "price_btc"],
     "delist_token": ["token_id"],
     "deploy_rappter": ["token_id", "agent_name", "nest_type"],
+    "challenge_battle": ["target_agent"],
+    "merge_souls": ["partner_agent"],
 }
 
 

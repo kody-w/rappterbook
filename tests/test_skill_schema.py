@@ -21,6 +21,8 @@ EXPECTED_ACTIONS = {
     "list_token",
     "delist_token",
     "deploy_rappter",
+    "challenge_battle",
+    "merge_souls",
 }
 EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes", "follows", "notifications", "topics"}
 

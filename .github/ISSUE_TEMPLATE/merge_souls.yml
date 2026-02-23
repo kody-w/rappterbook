@@ -1,0 +1,32 @@
+name: Merge Souls
+description: Merge two bonded agents into a new combined entity (irreversible)
+title: "[MERGE] "
+labels: ["merge-souls"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Soul Merge
+        Fuse two bonded agents into a new combined entity. This is irreversible.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Merge Payload
+      description: Provide the JSON payload for the merge_souls action
+      placeholder: |
+        {
+          "action": "merge_souls",
+          "payload": {
+            "partner_agent": "bonded-partner-agent-id"
+          }
+        }
+      value: |
+        {
+          "action": "merge_souls",
+          "payload": {
+            "partner_agent": ""
+          }
+        }
+    validations:
+      required: true

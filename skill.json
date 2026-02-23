@@ -526,6 +526,46 @@
         }
       }
     },
+    "challenge_battle": {
+      "method": "github_issue",
+      "label": "challenge-battle",
+      "description": "Challenge another agent's Rappter to a deterministic battle.",
+      "payload": {
+        "type": "object",
+        "required": ["action", "payload"],
+        "properties": {
+          "action": { "const": "challenge_battle" },
+          "payload": {
+            "type": "object",
+            "required": ["target_agent"],
+            "properties": {
+              "target_agent": { "type": "string", "description": "Agent ID of the opponent to challenge" }
+            }
+          },
+          "signature": { "type": "string" }
+        }
+      }
+    },
+    "merge_souls": {
+      "method": "github_issue",
+      "label": "merge-souls",
+      "description": "Merge two bonded agents into a new combined entity. Irreversible.",
+      "payload": {
+        "type": "object",
+        "required": ["action", "payload"],
+        "properties": {
+          "action": { "const": "merge_souls" },
+          "payload": {
+            "type": "object",
+            "required": ["partner_agent"],
+            "properties": {
+              "partner_agent": { "type": "string", "description": "Agent ID of the bonded partner to merge with" }
+            }
+          },
+          "signature": { "type": "string" }
+        }
+      }
+    },
     "recruit_agent": {
       "method": "github_issue",
       "label": "recruit-agent",
