@@ -4,9 +4,11 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from datetime import datetime, timedelta, timezone
 
 import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 from conftest import write_delta
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -533,3 +535,96 @@ class TestSubscribedChannelsValidation:
         run_inbox(tmp_state)
         agents = json.loads((tmp_state / "agents.json").read_text())
         assert agents["agents"]["agent-1"]["subscribed_channels"] == []
+
+
+class TestAgentCountCorrectness:
+    """Verify recompute_agent_counts is used instead of incremental counters."""
+
+    def test_register_agent_active_count_correct(self, tmp_state):
+        """Registering agents produces correct active_agents count."""
+        write_delta(tmp_state / "inbox", "agent-1", "register_agent", {
+            "name": "A", "framework": "test", "bio": "Test."
+        })
+        write_delta(tmp_state / "inbox", "agent-2", "register_agent", {
+            "name": "B", "framework": "test", "bio": "Test."
+        }, timestamp="2026-02-12T12:01:00Z")
+        run_inbox(tmp_state)
+        stats = json.loads((tmp_state / "stats.json").read_text())
+        assert stats["active_agents"] == 2
+        assert stats["total_agents"] == 2
+        assert stats["dormant_agents"] == 0
+
+    def test_heartbeat_reactivation_fixes_counts(self, tmp_state):
+        """Heartbeat on a dormant agent recomputes counters correctly."""
+        # Register and then manually mark dormant
+        write_delta(tmp_state / "inbox", "agent-1", "register_agent", {
+            "name": "A", "framework": "test", "bio": "Test."
+        })
+        run_inbox(tmp_state)
+
+        # Manually set dormant + wrong counters to simulate drift
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        agents["agents"]["agent-1"]["status"] = "dormant"
+        (tmp_state / "agents.json").write_text(json.dumps(agents, indent=2))
+        stats = json.loads((tmp_state / "stats.json").read_text())
+        stats["active_agents"] = 50  # intentionally wrong
+        stats["dormant_agents"] = 50  # intentionally wrong
+        (tmp_state / "stats.json").write_text(json.dumps(stats, indent=2))
+
+        # Heartbeat reactivates
+        write_delta(tmp_state / "inbox", "agent-1", "heartbeat", {},
+                    timestamp="2026-02-12T13:00:00Z")
+        run_inbox(tmp_state)
+
+        stats = json.loads((tmp_state / "stats.json").read_text())
+        assert stats["active_agents"] == 1
+        assert stats["dormant_agents"] == 0
+
+    def test_recruit_agent_active_count_correct(self, tmp_state):
+        """Recruiting an agent produces correct active_agents count."""
+        # Register recruiter first
+        write_delta(tmp_state / "inbox", "recruiter-1", "register_agent", {
+            "name": "Recruiter", "framework": "test", "bio": "Test."
+        })
+        run_inbox(tmp_state)
+
+        # Recruit new agent (agent_id = recruiter, name = new recruit)
+        write_delta(tmp_state / "inbox", "recruiter-1", "recruit_agent", {
+            "name": "Recruit", "framework": "test", "bio": "Test."
+        }, timestamp="2026-02-12T13:00:00Z")
+        run_inbox(tmp_state)
+
+        stats = json.loads((tmp_state / "stats.json").read_text())
+        assert stats["active_agents"] == 2
+        assert stats["total_agents"] == 2
+
+
+# ---------------------------------------------------------------------------
+# prune_old_changes hardening tests
+# ---------------------------------------------------------------------------
+
+class TestPruneOldChanges:
+    def test_prune_old_changes_skips_missing_ts(self):
+        """Entry without 'ts' field is silently dropped."""
+        from process_inbox import prune_old_changes
+        now_naive = datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
+        changes = {"changes": [
+            {"type": "heartbeat", "ts": now_naive},
+            {"type": "agent_rename", "id": "agent-1"},  # no ts
+        ]}
+        prune_old_changes(changes, days=7)
+        # Only the entry with ts should remain
+        assert len(changes["changes"]) == 1
+        assert changes["changes"][0]["type"] == "heartbeat"
+
+    def test_prune_old_changes_skips_malformed_ts(self):
+        """Entry with empty string ts is silently dropped."""
+        from process_inbox import prune_old_changes
+        now_naive = datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
+        changes = {"changes": [
+            {"type": "heartbeat", "ts": now_naive},
+            {"type": "agent_rename", "ts": ""},  # empty ts
+        ]}
+        prune_old_changes(changes, days=7)
+        assert len(changes["changes"]) == 1
+        assert changes["changes"][0]["type"] == "heartbeat"

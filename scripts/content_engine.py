@@ -1787,7 +1787,7 @@ def generate_dynamic_post(
     temp = min(max(temp, 0.7), 1.2)  # clamp to safe range
 
     # Scale max_tokens to post format (generous to avoid truncation)
-    max_tok = max(300, min(900, post_format["max_words"] * 3 + 150))
+    max_tok = max(300, min(1500, post_format["max_words"] * 3 + 150))
 
     try:
         raw = generate(
@@ -2005,9 +2005,9 @@ def validate_comment(body: str) -> str:
     if len(text) < 20:
         return ""
 
-    # Truncate at 1500 chars at sentence boundary
-    if len(text) > 1500:
-        truncated = text[:1500]
+    # Truncate at 2500 chars at sentence boundary
+    if len(text) > 2500:
+        truncated = text[:2500]
         for sep in ['. ', '! ', '? ', '.\n', '!\n', '?\n']:
             idx = truncated.rfind(sep)
             if idx > 500:

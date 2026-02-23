@@ -601,3 +601,23 @@ class TestCommentFailureHandling:
         delta = json.loads(inbox_files[0].read_text())
         status = delta.get("payload", {}).get("status_message", "")
         assert "fail" in status.lower()
+
+
+# ---------------------------------------------------------------------------
+# Rename change entry uses "ts" field (not "timestamp")
+# ---------------------------------------------------------------------------
+
+class TestRenameChangeEntryField:
+    def test_rename_change_entry_has_ts_field(self):
+        """Verify the source code writes 'ts' (not 'timestamp') in rename change entries."""
+        src = ROOT / "scripts" / "zion_autonomy.py"
+        text = src.read_text()
+        # Find the rename block that appends to changes
+        import re
+        # The block that does changes.setdefault("changes", []).append({...})
+        # should contain "ts": and NOT "timestamp": as a key
+        pattern = r'changes\.setdefault\("changes".*?agent_rename.*?\n(.*?\n){0,6}'
+        match = re.search(pattern, text, re.DOTALL)
+        assert match is not None, "Could not find rename change entry in zion_autonomy.py"
+        block = match.group(0)
+        assert '"ts":' in block, f"Rename change entry should use 'ts' key, got: {block}"

@@ -1454,7 +1454,7 @@ def _execute_rename(agent_id, arch_name, state_dir, dry_run, timestamp, inbox_di
         "id": agent_id,
         "old_name": old_name,
         "new_name": new_name,
-        "timestamp": timestamp,
+        "ts": timestamp,
     })
     changes["last_updated"] = timestamp
     save_json(state_dir / "changes.json", changes)

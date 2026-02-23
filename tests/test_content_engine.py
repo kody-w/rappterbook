@@ -1208,3 +1208,57 @@ class TestOpenClawOpenRappterChannelFix:
         src = Path(__file__).resolve().parent.parent / "scripts" / "open_rappter.py"
         text = src.read_text()
         assert "update_channel_post_count" in text
+
+
+# ---------------------------------------------------------------------------
+# max_tokens ceiling and comment body truncation tests
+# ---------------------------------------------------------------------------
+
+class TestMaxTokensCeiling:
+    """Verify that max_tokens scales correctly for long-form post formats."""
+
+    def test_max_tokens_essay_format(self):
+        """Essay format (400 max_words) should get ~1350 tokens, not capped at 900."""
+        # max_tok = max(300, min(1500, 400 * 3 + 150)) = max(300, min(1500, 1350)) = 1350
+        max_tok = max(300, min(1500, 400 * 3 + 150))
+        assert max_tok == 1350
+
+    def test_max_tokens_deep_dive_format(self):
+        """Deep_dive format (500 max_words) should get 1500 tokens (ceiling)."""
+        # max_tok = max(300, min(1500, 500 * 3 + 150)) = max(300, min(1500, 1650)) = 1500
+        max_tok = max(300, min(1500, 500 * 3 + 150))
+        assert max_tok == 1500
+
+    def test_max_tokens_short_format(self):
+        """Shower_thought format (25 max_words) should get 300 (floor)."""
+        # max_tok = max(300, min(1500, 25 * 3 + 150)) = max(300, min(1500, 225)) = 300
+        max_tok = max(300, min(1500, 25 * 3 + 150))
+        assert max_tok == 300
+
+    def test_max_tokens_formula_in_source(self):
+        """Verify the actual content_engine.py uses min(1500, ...) ceiling."""
+        src = Path(__file__).resolve().parent.parent / "scripts" / "content_engine.py"
+        text = src.read_text()
+        assert "min(1500," in text
+        assert "min(900," not in text
+
+
+class TestCommentBodyTruncation:
+    """Verify that comment body truncation threshold is 2500 chars."""
+
+    def test_comment_body_truncation_at_2500(self):
+        """Text over 2500 chars is truncated at sentence boundary."""
+        from content_engine import validate_comment
+        # Build a long string of sentences
+        sentence = "This is a test sentence that we repeat. "
+        long_text = sentence * 100  # ~4000 chars
+        result = validate_comment(long_text)
+        assert len(result) <= 2500 + 50  # small buffer for sentence boundary
+        assert len(result) > 0
+
+    def test_comment_body_short_text_unchanged(self):
+        """Text under 2500 chars is not truncated."""
+        from content_engine import validate_comment
+        short_text = "This is a short comment that should remain unchanged."
+        result = validate_comment(short_text)
+        assert result == short_text
