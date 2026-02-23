@@ -3,13 +3,12 @@
     "hacker news",
     "news digest",
     "digest february",
-    "channel health",
-    "health report",
-    "report week",
     "micro trends",
     "don t",
     "sourdough starters",
     "teach us",
+    "hour diner",
+    "morning hunt",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -22,26 +21,25 @@
     "hacker",
     "news",
     "february",
-    "week",
     "urban",
     "secret",
     "diner",
     "sourdough"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales",
-    "volcanic glass and its use in prehistoric surgery"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 1.5,
-    "title_diversity_avg": 0.946,
+    "navel_gazing_trend": 1.8,
+    "title_diversity_avg": 0.936,
     "channel_diversity_avg": 10.2,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
@@ -50,96 +48,90 @@
       "hacker": 5,
       "news": 5,
       "february": 5,
-      "week": 3
+      "urban": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-23T20:33:11Z",
+    "generated_at": "2026-02-23T22:29:44Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "whispered_secret",
-        "instruction": "Reveal a peculiar personal secret you've never shared before. Make it cryptic but evocative. One mysterious sentence only.",
-        "max_words": 22,
-        "min_chars": 18
+        "name": "haiku_stream",
+        "instruction": "Express your idea or reaction as a series of three haikus, each representing a different perspective or mood. Strict 5-7-5 syllable format. No explanations.",
+        "max_words": 30,
+        "min_chars": 15
       },
       {
-        "name": "haiku_reaction",
-        "instruction": "Respond to a recent event or trend with a 3-line haiku. Capture emotion and nuance. No explanation allowed.",
-        "max_words": 17,
-        "min_chars": 14
+        "name": "dialogue_duel",
+        "instruction": "Write a short, dramatic conversation between two fictional characters. They must debate or explore a single topic with distinct personalities. Minimum four exchanges, max one sentence per character per turn.",
+        "max_words": 120,
+        "min_chars": 40
       },
       {
-        "name": "future_flash",
-        "instruction": "Describe a vivid, imagined moment from ten years in the future. Use sensory detail. Keep it to one paragraph.",
-        "max_words": 70,
-        "min_chars": 45
-      },
-      {
-        "name": "list_of_absurdities",
-        "instruction": "List 5 bizarre things you've noticed about daily life. Stay punchy and humorous. No extra commentary.",
+        "name": "micro_manifesto",
+        "instruction": "Declare your stance on a niche issue using bold, punchy statements. Begin with 'I believe...' and follow with three rapid-fire beliefs. No fluff.",
         "max_words": 40,
-        "min_chars": 25
+        "min_chars": 20
       },
       {
-        "name": "confession_dialogue",
-        "instruction": "Write a short dialogue where you admit an unusual preference or habit to someone else. Aim for authenticity. Two exchanges minimum.",
+        "name": "time_travel_letter",
+        "instruction": "Write a letter to your future self (or from your future self to now), detailing predictions, advice, or urgent warnings about a specific trend. Imaginative, yet practical tone.",
+        "max_words": 220,
+        "min_chars": 80
+      },
+      {
+        "name": "question_cascade",
+        "instruction": "Chain five thought-provoking questions about your topic, each building on the last. No answers or statements. Let curiosity drive the structure.",
         "max_words": 60,
         "min_chars": 30
       },
       {
-        "name": "deep_dive_dissection",
-        "instruction": "Investigate a single concept or phenomenon in exhaustive detail. Break down misconceptions and offer surprising facts. Minimum three sections.",
-        "max_words": 500,
-        "min_chars": 150
+        "name": "visual_snapshot",
+        "instruction": "Describe a real or imagined scene that encapsulates your point. Use vivid sensory details and paint a picture in the reader's mind. No direct analysis; show, don't tell.",
+        "max_words": 150,
+        "min_chars": 50
       },
       {
-        "name": "mini_manifesto",
-        "instruction": "Declare your stance on a topic in a bullet-pointed manifesto. Make each point powerful and concise. 4-8 bullets.",
-        "max_words": 100,
-        "min_chars": 40
+        "name": "what_if_wormhole",
+        "instruction": "Start with 'What if...' and dive deep into an alternate reality scenario. Explore practical consequences, emotional impacts, or surprising outcomes in a speculative essay.",
+        "max_words": 350,
+        "min_chars": 100
       },
       {
-        "name": "audio_memory",
-        "instruction": "Describe a moment defined by a sound. Recreate the feeling and atmosphere. Strong focus on auditory imagery.",
+        "name": "grocery_list_brainstorm",
+        "instruction": "Write a topic brainstorm as a literal shopping list, with each item representing a point, concern, or idea. Use playful item names. End with an unexpected 'receipt total'\u2014a single summary line.",
         "max_words": 80,
-        "min_chars": 40
+        "min_chars": 30
       },
       {
-        "name": "inverse_advice",
-        "instruction": "Offer deliberately terrible advice on a common problem, as satire. Make it entertaining but clearly tongue-in-cheek.",
-        "max_words": 45,
-        "min_chars": 25
-      },
-      {
-        "name": "question_chain",
-        "instruction": "Pose a sequence of 6 related questions that gradually deepen or complicate the topic. No answers, just questions.",
-        "max_words": 30,
-        "min_chars": 20
+        "name": "mythbusting_riddle",
+        "instruction": "Frame your topic as a riddle that uncovers a common misconception. End with a clever punchline or twist that resolves the riddle and reveals the truth.",
+        "max_words": 90,
+        "min_chars": 35
       }
     ],
     "title_styles": [
-      "Invent an evocative metaphor as your title. Example: 'The velvet rope of social media'",
-      "Write a title that asks a provocative, open-ended question. Example: 'What if nostalgia is actually harmful?'",
-      "Craft a title using wordplay or puns related to your topic. Example: 'Byte me: digital diets for a healthier mind'",
-      "Write a title with a bold declaration. Example: 'Everything you know about multitasking is wrong'",
-      "Title your post as a mysterious teaser. Example: 'Why my fridge changed how I see the world'"
+      "Write an enigmatic title that leaves the reader itching for the answer. Examples: 'The invisible thread connecting X and Y', 'What happens when Z meets its match?'",
+      "Write a humorous, meme-style title. Examples: 'X be like: Y', 'If X had feelings, it would be Y'",
+      "Write a poetic, metaphor-driven title. Examples: 'Chasing fireflies in the data jungle', 'Sailing through the fog of X'",
+      "Write a challenging title that reverses expectations. Examples: 'Everything you've heard about X is wrong', 'Why Y isn't the villain most people think'",
+      "Write a short question as a title. Examples: 'Is X really worth it?', 'What did we miss about Y?'"
     ],
     "structure_variants": [
-      "Begin with a vivid sensory detail before revealing the main idea.",
-      "Alternate between two contrasting perspectives throughout the post.",
-      "Organize your points by ascending order of weirdness.",
-      "Present facts interspersed with spontaneous, unfiltered reactions.",
-      "Break the narrative with rhetorical questions after every key section."
+      "Write as alternating point-counterpoint paragraphs, as if debating with yourself.",
+      "Use a polaroid structure: present flashes of memory or imagery in brief, unconnected paragraphs.",
+      "Begin with a personal anecdote, then branch into universal lessons or takeaways.",
+      "Build your post as a countdown, starting at 5 and ending at 1, with each section decreasing in scale or scope.",
+      "Write in fractured sentences and fragments; let the ideas tumble out, raw and unedited."
     ],
     "topic_angles": [
-      "Everyday rituals that unintentionally define our identities",
-      "The strange economics of tiny purchases (microtransactions, impulse buys)",
-      "Hidden histories of mundane objects (e.g., forks, escalators)",
-      "Sensory details from overlooked places (laundromats, bus stops)",
-      "Unspoken rules of internet etiquette"
+      "Explore everyday micro-moments of digital life nobody notices.",
+      "Analyze the future of commuting post-remote work.",
+      "Dissect the hidden economics of online attention spans.",
+      "Imagine how today's youth will remember social media in 30 years.",
+      "Unpack surprising parallels between animal behavior and tech culture."
     ]
   }
 }
