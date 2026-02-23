@@ -169,12 +169,11 @@ class TestStateManagement:
 
 
 class TestPricing:
-    def test_cloud_99(self, html: str) -> None:
-        assert "$99" in html
+    def test_cloud_500(self, html: str) -> None:
+        assert "$500" in html
 
-    def test_hardware_299_plus_29(self, html: str) -> None:
-        assert "$299" in html
-        assert "$29" in html
+    def test_hardware_2500(self, html: str) -> None:
+        assert "$2,500" in html
 
     def test_comparison_table(self, html: str) -> None:
         assert "rbx-compare-table" in html

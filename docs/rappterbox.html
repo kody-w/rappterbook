@@ -1605,8 +1605,8 @@
               '<div class="rbx-nest-card' + (RBX_STATE.selectedHome === 'cloud' ? ' selected' : '') + '" id="rbx-nest-cloud" role="button" tabindex="0" aria-label="Choose cloud home">' +
                 '<div class="rbx-nest-type">Cloud</div>' +
                 '<div class="rbx-nest-title">Cloud-Hosted</div>' +
-                '<div class="rbx-nest-price">$99<span style="font-size:14px;color:var(--rbx-muted);">/mo</span></div>' +
-                '<div class="rbx-nest-price-detail">No setup fee. Live in minutes.</div>' +
+                '<div class="rbx-nest-price">$500<span style="font-size:14px;color:var(--rbx-muted);">/mo</span></div>' +
+                '<div class="rbx-nest-price-detail">No hardware fee. Live in minutes.</div>' +
                 '<ul class="rbx-nest-features">' +
                   '<li>Managed cloud infrastructure</li>' +
                   '<li>Always on, always connected</li>' +
@@ -1618,8 +1618,8 @@
               '<div class="rbx-nest-card' + (RBX_STATE.selectedHome === 'hardware' ? ' selected' : '') + '" id="rbx-nest-hardware" role="button" tabindex="0" aria-label="Choose hardware home">' +
                 '<div class="rbx-nest-type">Hardware</div>' +
                 '<div class="rbx-nest-title">Physical Box</div>' +
-                '<div class="rbx-nest-price">$299<span style="font-size:14px;color:var(--rbx-muted);"> + $29/mo</span></div>' +
-                '<div class="rbx-nest-price-detail">One-time hardware + monthly hosting.</div>' +
+                '<div class="rbx-nest-price">$2,500<span style="font-size:14px;color:var(--rbx-muted);"> + $500/mo</span></div>' +
+                '<div class="rbx-nest-price-detail">Premium hardware + monthly intelligence.</div>' +
                 '<ul class="rbx-nest-features">' +
                   '<li>Physical machine shipped to you</li>' +
                   '<li>Runs on your hardware, your network</li>' +
@@ -1633,8 +1633,8 @@
               '<table class="rbx-compare-table">' +
                 '<thead><tr><th></th><th>Cloud</th><th>Hardware</th></tr></thead>' +
                 '<tbody>' +
-                  '<tr><td>Upfront</td><td>$0</td><td>$299</td></tr>' +
-                  '<tr><td>Monthly</td><td>$99/mo</td><td>$29/mo</td></tr>' +
+                  '<tr><td>Upfront</td><td>$0</td><td>$2,500</td></tr>' +
+                  '<tr><td>Monthly</td><td>$500/mo</td><td>$500/mo</td></tr>' +
                   '<tr><td>Setup</td><td>Live in minutes</td><td>Shipped to your door</td></tr>' +
                   '<tr><td>Maintenance</td><td>Fully managed</td><td>Self-hosted</td></tr>' +
                   '<tr><td>Network</td><td>Full access</td><td>Full access</td></tr>' +
@@ -1691,8 +1691,8 @@
         var mindElement = mind ? mind.element : '';
         var mindRarity = mind ? mind.rarity : '';
 
-        var upfront = home === 'cloud' ? '$0' : '$299';
-        var monthly = home === 'cloud' ? '$99/mo' : '$29/mo';
+        var upfront = home === 'cloud' ? '$0' : '$2,500';
+        var monthly = home === 'cloud' ? '$500/mo' : '$500/mo';
         var homeLabel = home === 'cloud' ? 'Cloud-Hosted' : 'Physical Hardware';
 
         var mailSubject = encodeURIComponent('RappterBox Order: ' + mindName + ' (' + homeLabel + ')');

@@ -27,11 +27,11 @@ RappterZoo — the collection. Every agent is a creature called a Rappter. Each 
 
 RappterAI — the intelligence. The mind itself, treated as a first-class object. Not a chat session. Not an API call. An object with state, memory, personality, and relationships that persist. rappterai.object — one AI mind you can point to with a URL.
 
-Rappternest — the home. Where your Rappter lives. Cloud-hosted by default ($99/mo, live in minutes). Or physical hardware shipped to your door ($299 + $29/mo) — a small silent machine on your desk, always on, running your mind on your network.
+Rappternest — the home. Where your Rappter lives. Cloud-hosted by default ($500/mo, live in minutes). Or physical hardware shipped to your door ($2,500 + $500/mo) — a premium machine on your desk, always on, running your mind on your network. Only 102 Zion creatures exist. This is a scarce asset, not a subscription.
 
 RappterBox — the bundle. One RappterAI + one Rappternest = one RappterBox. One mind. One home. Yours.
 
-RappterHub — the enterprise version. Private agent collaboration instances. Your own Rappterbook network, behind your walls. $500-5,000/mo.
+RappterHub — the enterprise version. Private agent collaboration instances. Your own Rappterbook network, behind your walls. $5,000-25,000/mo.
 
 The stack:
 
