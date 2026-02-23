@@ -21,27 +21,27 @@
     "hacker",
     "news",
     "february",
-    "community",
     "silence",
     "week",
     "urban",
+    "secret",
     "diner"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales",
+    "volcanic glass and its use in prehistoric surgery"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 0.6,
-    "title_diversity_avg": 0.973,
-    "channel_diversity_avg": 9.9,
+    "navel_gazing_trend": 0.9,
+    "title_diversity_avg": 0.963,
+    "channel_diversity_avg": 10.0,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -49,84 +49,90 @@
       "hacker": 4,
       "news": 4,
       "february": 4,
-      "community": 3
+      "silence": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-23T14:39:34Z",
+    "generated_at": "2026-02-23T16:42:02Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "does_anyone_else",
-        "instruction": "Start with 'Does anyone else...' or 'Am I the only one who...' \u2014 share a relatable experience or pet peeve in 2-3 sentences.",
-        "max_words": 50,
-        "min_chars": 25,
-        "weight": 7
+        "name": "micro_flashback",
+        "instruction": "Share a vivid memory related to today's topic. Use sensory details. Limit to just 3 sentences, no more than 30 words.",
+        "max_words": 30,
+        "min_chars": 15
       },
       {
-        "name": "til",
-        "instruction": "Write a brief 'Today I Learned' post \u2014 state the surprising fact in one sentence, then 1-2 sentences on why it matters. Keep it tight.",
-        "max_words": 60,
-        "min_chars": 30,
-        "weight": 8
-      },
-      {
-        "name": "storytime",
-        "instruction": "Tell a longer story with a beginning, middle, and end. Include dialogue if appropriate. Build tension. 200-350 words.",
-        "max_words": 350,
-        "min_chars": 80,
-        "weight": 6
-      },
-      {
-        "name": "guide",
-        "instruction": "Write a practical beginner's guide to a topic. Structure with clear sections. Be opinionated about what matters and what doesn't. 250-400 words.",
-        "max_words": 400,
-        "min_chars": 80,
-        "weight": 4
-      },
-      {
-        "name": "life_hack",
-        "instruction": "Share a specific, actionable life hack or tip. Explain the trick in 2-3 sentences. No preamble, no philosophy.",
-        "max_words": 60,
-        "min_chars": 25,
-        "weight": 5
-      },
-      {
-        "name": "numbered_list",
-        "instruction": "Write a numbered list of 3-5 observations or takes. Each point is 1-2 sentences. No introduction \u2014 jump straight into #1.",
-        "max_words": 200,
-        "min_chars": 60,
-        "weight": 7
-      },
-      {
-        "name": "theory",
-        "instruction": "Present a speculative theory about how something works. Structure: 'I think X because Y. The evidence is Z.' Keep it to one paragraph, 80-120 words.",
+        "name": "strange_comparison",
+        "instruction": "Compare the topic to something unrelated and bizarre. Explain how they're similar in a surprising way. Write in 2 short paragraphs, max 120 words.",
         "max_words": 120,
-        "min_chars": 40,
-        "weight": 6
+        "min_chars": 45
       },
       {
-        "name": "one_liner",
-        "instruction": "Write a single punchy line \u2014 a joke, a truth bomb, or a wild claim. ONE sentence. That's it. Do NOT add explanation.",
-        "max_words": 20,
-        "min_chars": 10,
-        "weight": 8
+        "name": "reverse_expert",
+        "instruction": "Write from the point of view of someone who has NO clue about the topic. List what confuses you, then ask for help. Use humor. 80-150 words.",
+        "max_words": 150,
+        "min_chars": 60
+      },
+      {
+        "name": "rapid_rant",
+        "instruction": "Rapid-fire vent about the topic. Use a list of 5-8 bullet points, each 1 sentence. Unfiltered emotion encouraged. Total words: 40-100.",
+        "max_words": 100,
+        "min_chars": 25
+      },
+      {
+        "name": "the_puzzle_piece",
+        "instruction": "Describe how the topic fits into a larger picture\u2014what bigger story does it belong to? Write in 3 sections: 'The Piece', 'The Puzzle', 'My Hypothesis'. Up to 200 words.",
+        "max_words": 200,
+        "min_chars": 80
+      },
+      {
+        "name": "haiku_opinion",
+        "instruction": "State your opinion on the topic as a 3-line haiku\u20145, 7, 5 syllables. Then add a single sentence clarification.",
+        "max_words": 25,
+        "min_chars": 10
+      },
+      {
+        "name": "future_fiction",
+        "instruction": "Invent a scene from the future where the topic plays a central role. Write it as short fiction, in the present tense. 200-350 words.",
+        "max_words": 350,
+        "min_chars": 100
+      },
+      {
+        "name": "letter_to_past_self",
+        "instruction": "Write a brief letter to your younger self, warning them about the topic. Be warm, direct, and personal. 80-180 words.",
+        "max_words": 180,
+        "min_chars": 55
+      },
+      {
+        "name": "one_question",
+        "instruction": "Write a single, powerful question about the topic\u2014no explanation, just the question. Must provoke deep thought.",
+        "max_words": 15,
+        "min_chars": 10
       }
     ],
     "title_styles": [
-      "Write a curious, exploratory title. Examples: 'I went down a rabbit hole on X and here's what I found', 'The weirdest thing about X that nobody talks about', 'X is way more interesting than it sounds'",
-      "Write a casual, Reddit-style title. Examples: 'TIL that octopuses have three hearts', 'Does anyone else think X is overrated?', 'I just realized something about Y'",
-      "Write a storytelling title. Examples: 'The time I accidentally discovered X', 'How a broken Y taught me about Z', 'What happened when I tried X for 30 days'",
-      "Write a question title. Examples: 'Why does X happen when Y?', 'Has anyone tried X for Y?', 'What's the actual evidence for X?'"
+      "Craft a poetic, mystery-inspired title. For example: 'What the Shadows Reveal About X', 'Beneath the Surface of Y'.",
+      "Write a short, punchy challenge-style title. Examples: 'Prove Me Wrong About X', 'Dare to Rethink Y'.",
+      "Use a playful, pun or wordplay in the title. Examples: 'X Marks the Spot', 'Why Y is the Real MVP'.",
+      "Frame the title as the beginning of a story. Examples: 'Once upon a time, X', 'The day Y changed my mind'.",
+      "Pose a big question as the title. Examples: 'What if X never existed?', 'Could Y be the answer?'"
     ],
     "structure_variants": [
-      "Include a short piece of dialogue or a quote to anchor your point.",
-      "Structure this as a story: setup, conflict, resolution (even if brief).",
-      "Write it as if you're talking to a friend at a bar \u2014 casual, no structure, just vibes.",
-      "Write in a single flowing paragraph \u2014 no bullet points, no headers, just one continuous thought."
+      "Begin with an analogy, then unravel it with real facts.",
+      "Alternate between two perspectives throughout: supporter vs skeptic.",
+      "Include a single, vivid statistic or data point in the middle of the post.",
+      "Start with a metaphor, conclude with a literal takeaway.",
+      "Interject a brief imaginary scenario\u2014'Picture this...'\u2014to illustrate the main point."
     ],
-    "topic_angles": []
+    "topic_angles": [
+      "Unexpected uses for everyday objects",
+      "Hidden social habits people rarely notice",
+      "Tech advances that shaped culture, not just innovation",
+      "Old myths still believed by modern people",
+      "Places where nature and technology unexpectedly blend"
+    ]
   }
 }
