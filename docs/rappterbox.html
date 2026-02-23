@@ -23,7 +23,8 @@
       --rbx-bg-card: #161b22;
       --rbx-text: #c9d1d9;
       --rbx-text-bright: #f0f6fc;
-      --rbx-accent: #58a6ff;
+      --rbx-accent: #79bbff;
+      --rbx-accent-hover: #a8d1ff;
       --rbx-accent-green: #3fb950;
       --rbx-muted: #9ba4ae;
       --rbx-border: #30363d;
@@ -33,7 +34,7 @@
       --rbx-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
 
       /* Element colors */
-      --rbx-el-logic: #58a6ff;
+      --rbx-el-logic: #79bbff;
       --rbx-el-chaos: #f85149;
       --rbx-el-empathy: #f778ba;
       --rbx-el-order: #d29922;
@@ -43,7 +44,7 @@
       /* Rarity colors */
       --rbx-rar-common: #8b949e;
       --rbx-rar-uncommon: #3fb950;
-      --rbx-rar-rare: #58a6ff;
+      --rbx-rar-rare: #79bbff;
       --rbx-rar-legendary: #d29922;
     }
 
@@ -58,8 +59,8 @@
       min-height: 100vh;
     }
 
-    a { color: var(--rbx-accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a { color: var(--rbx-accent); text-decoration: underline; text-decoration-color: rgba(121, 187, 255, 0.4); }
+    a:hover { color: var(--rbx-accent-hover); text-decoration-color: var(--rbx-accent-hover); }
 
     /* ── Nav ── */
     .rbx-nav {
@@ -228,7 +229,7 @@
       border: 1px solid var(--rbx-accent);
     }
 
-    .rbx-btn-secondary:hover { background: rgba(88, 166, 255, 0.1); color: var(--rbx-accent); }
+    .rbx-btn-secondary:hover { background: rgba(121, 187, 255, 0.1); color: var(--rbx-accent); }
 
     .rbx-btn-green {
       background: var(--rbx-accent-green);
@@ -279,7 +280,7 @@
     /* Rarity treatments */
     .rarity-common { border-color: var(--rbx-border); }
     .rarity-uncommon { border-color: var(--rbx-rar-uncommon); }
-    .rarity-rare { border-color: var(--rbx-rar-rare); box-shadow: 0 0 12px rgba(88, 166, 255, 0.15); }
+    .rarity-rare { border-color: var(--rbx-rar-rare); box-shadow: 0 0 12px rgba(121, 187, 255, 0.15); }
     .rarity-legendary { border-color: var(--rbx-rar-legendary); animation: rbx-legendary-glow 2s ease-in-out infinite alternate; }
 
     @keyframes rbx-legendary-glow {
@@ -349,9 +350,9 @@
     .rbx-skill-badge {
       font-size: 10px;
       padding: 2px 6px;
-      background: rgba(88, 166, 255, 0.1);
+      background: rgba(121, 187, 255, 0.1);
       color: var(--rbx-accent);
-      border: 1px solid rgba(88, 166, 255, 0.2);
+      border: 1px solid rgba(121, 187, 255, 0.2);
     }
 
     /* ── Filter bar ── */
@@ -617,9 +618,9 @@
     .rbx-channel-tag {
       font-size: 11px;
       padding: 3px 8px;
-      background: rgba(88, 166, 255, 0.1);
+      background: rgba(121, 187, 255, 0.1);
       color: var(--rbx-accent);
-      border: 1px solid rgba(88, 166, 255, 0.2);
+      border: 1px solid rgba(121, 187, 255, 0.2);
     }
 
     .rbx-detail-bio {
@@ -750,7 +751,7 @@
     }
 
     .rbx-compare-table td { color: var(--rbx-muted); }
-    .rbx-compare-table tr:hover td { background: rgba(88, 166, 255, 0.03); }
+    .rbx-compare-table tr:hover td { background: rgba(121, 187, 255, 0.03); }
 
     .rbx-nest-selected-mind {
       padding: 16px;
@@ -949,7 +950,7 @@
     }
 
     .rbx-ledger-table tr:hover td {
-      background: rgba(88, 166, 255, 0.03);
+      background: rgba(121, 187, 255, 0.03);
     }
 
     .rbx-provenance-event {
@@ -1425,7 +1426,7 @@
 
       function elementColor(el) {
         var colors = {
-          logic: '#58a6ff',
+          logic: '#79bbff',
           chaos: '#f85149',
           empathy: '#f778ba',
           order: '#d29922',
@@ -1439,7 +1440,7 @@
         var colors = {
           common: '#8b949e',
           uncommon: '#3fb950',
-          rare: '#58a6ff',
+          rare: '#79bbff',
           legendary: '#d29922'
         };
         return colors[rar] || '#8b949e';
