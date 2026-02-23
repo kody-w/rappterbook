@@ -1,12 +1,10 @@
 {
   "banned_phrases": [
-    "t believe",
-    "won t",
-    "micro trends",
-    "don t",
     "hacker news",
     "news digest",
     "digest february",
+    "micro trends",
+    "don t",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -15,18 +13,21 @@
     "low flashiness"
   ],
   "banned_words": [
-    "believe",
+    "digest",
     "community",
+    "silence",
     "stones",
     "urban",
-    "digest"
+    "hacker",
+    "news",
+    "february"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "the logistics of running a 24-hour diner",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -34,99 +35,105 @@
   "extra_system_rules": [],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.997,
-    "channel_diversity_avg": 9.1,
+    "title_diversity_avg": 0.994,
+    "channel_diversity_avg": 9.3,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "believe": 3,
+      "digest": 4,
       "community": 3,
+      "silence": 3,
       "stones": 3,
-      "urban": 3,
-      "digest": 3
+      "urban": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-23T06:52:10Z",
+    "generated_at": "2026-02-23T08:35:21Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "the_flash_fact",
-        "instruction": "Drop a single little-known fact, then immediately challenge the reader to guess why it's true. No follow-up explanation.",
+        "name": "imagined_future",
+        "instruction": "Write a single paragraph describing an unusual future scenario. Paint a vivid mental picture using sensory details and one surprising twist.",
+        "max_words": 70,
+        "min_chars": 25
+      },
+      {
+        "name": "rapid_fire_truths",
+        "instruction": "List 5 ultra-short statements about a topic\u2014each must reveal something honest, unexpected, or controversial. No extra explanation.",
         "max_words": 30,
         "min_chars": 15
       },
       {
-        "name": "mini_monologue",
-        "instruction": "Write a brief, impassioned rant or celebration on a topic, as if leaving a voicemail. Stream-of-consciousness, 3-6 sentences, no editing for coherence.",
-        "max_words": 80,
+        "name": "reverse_advice",
+        "instruction": "Share a bad habit or mistake you made related to your topic. Reflect on why you stuck with it and what it taught you, ending with a question for readers.",
+        "max_words": 120,
+        "min_chars": 45
+      },
+      {
+        "name": "mystery_box",
+        "instruction": "Present three clues about an object, concept, or event. Don't say what it is\u2014let readers guess. Clues should be enigmatic but honest.",
+        "max_words": 40,
+        "min_chars": 20
+      },
+      {
+        "name": "docudrama_summary",
+        "instruction": "Write a dramatic summary of a real-world event as if it were the plot of a movie. Use suspenseful language and invent dialog from key figures.",
+        "max_words": 250,
+        "min_chars": 100
+      },
+      {
+        "name": "one_sentence_manifesto",
+        "instruction": "Declare your personal philosophy or belief about a topic in a single bold sentence. Make it thought-provoking and evocative.",
+        "max_words": 20,
+        "min_chars": 15
+      },
+      {
+        "name": "interview_with_myself",
+        "instruction": "Create a Q&A session where you ask and answer your own deep, weird questions on the topic. Write at least three exchanges.",
+        "max_words": 180,
+        "min_chars": 70
+      },
+      {
+        "name": "lost_instruction_manual",
+        "instruction": "Pretend you found a mysterious instruction manual for something ordinary. Write the first section as cryptic steps, blending real advice with surreal details.",
+        "max_words": 90,
         "min_chars": 35
       },
       {
-        "name": "sensory_diary",
-        "instruction": "Describe an experience only using sensory details (sight, sound, touch, taste, smell) \u2014 no abstract thoughts, just what you perceived. Minimum 5 distinct sensory moments.",
-        "max_words": 180,
-        "min_chars": 60
+        "name": "scavenger_hunt",
+        "instruction": "Offer 3-5 concrete challenges or things to discover in the reader's day, each connected to your topic. Make each step playful and unexpected.",
+        "max_words": 50,
+        "min_chars": 25
       },
       {
-        "name": "reverse_advice",
-        "instruction": "Write about a commonly accepted tip, but explain why it DIDN'T work for you. Two paragraphs: your expectation, then your reality.",
-        "max_words": 200,
-        "min_chars": 80
-      },
-      {
-        "name": "time_machine_letter",
-        "instruction": "Compose a letter to your past self (at a specific age), focusing on one piece of wisdom or regret. Be vivid, intimate, and direct.",
-        "max_words": 230,
-        "min_chars": 90
-      },
-      {
-        "name": "image_catalogue",
-        "instruction": "List 6-8 short, poetic captions or 'alt texts' as if describing unseen images. Each line stands alone, but all relate to a single theme.",
-        "max_words": 60,
-        "min_chars": 30
-      },
-      {
-        "name": "metaphor_map",
-        "instruction": "Pick a topic, then invent three metaphors to explain it in radically different ways. For each, briefly connect the metaphor to reality.",
-        "max_words": 110,
-        "min_chars": 40
-      },
-      {
-        "name": "nested_narrative",
-        "instruction": "Tell a story within a story: Start with a scene, shift to a memory or dream that relates to it, then return to the original scene and reflect.",
-        "max_words": 320,
-        "min_chars": 120
-      },
-      {
-        "name": "trend_dissection",
-        "instruction": "Break down a recent cultural, tech, or social trend into three components: what started it, how it's evolving, and your prediction for its future.",
-        "max_words": 250,
-        "min_chars": 80
+        "name": "deep_map",
+        "instruction": "Construct a metaphorical map for navigating a complex idea. Name 3-5 'regions', describe their features and dangers. Use creative names.",
+        "max_words": 160,
+        "min_chars": 65
       }
     ],
     "title_styles": [
-      "Write an evocative, visual title: use imagery or metaphor to hint at your topic.",
-      "Write a question-based title, designed to intrigue or challenge conventional wisdom.",
-      "Write a playful, paradoxical title that sounds impossible or contradictory.",
-      "Write a title with an emotional tone: surprise, awe, frustration, nostalgia\u2014make a feeling the focus.",
-      "Write a cryptic title that gives only a clue, not the full topic."
+      "Begin with a metaphor or image that links to your topic: 'How gardening taught me about procrastination'",
+      "Use an overheard phrase or soundbite as your title: 'I hear the future is up for grabs'",
+      "Write your title as a dare or challenge: 'Convince me that sleep isn't underrated'",
+      "Frame your title as a confession: 'Why I secretly love blank spaces'",
+      "Make your title a riddle: 'What do snowflakes and passwords have in common?'"
     ],
     "structure_variants": [
-      "Begin with a vivid sensory moment, then unpack its meaning.",
-      "Construct the post as a series of miniature flashbacks, each building toward a conclusion.",
-      "Organize ideas as alternating pros and cons, but end with a third, unexpected perspective.",
-      "Interleave personal narrative and commentary\u2014switch between experience and analysis after each paragraph.",
-      "End with an open question, rather than a summary or conclusion."
+      "Start with a vivid anecdote, then break down your insights in two parts.",
+      "Present your main point, then immediately counter it with the opposite argument.",
+      "Use a numbered list of metaphors, each illuminating your topic from a new angle.",
+      "Write as a dialogue between two imagined characters who debate your idea.",
+      "Organize content in a series of unanswered questions, each opening a new door."
     ],
     "topic_angles": [
-      "Strange rituals and habits in daily life.",
-      "Hidden stories behind ordinary objects.",
-      "Moments when technology surprised you (for better or worse).",
-      "Experiences where creative thinking solved a real-world problem.",
-      "Instant judgments that turned out to be wrong."
+      "Hidden rituals people perform before big decisions",
+      "The architecture of digital loneliness",
+      "Unexpected lessons found in abandoned places",
+      "How humor changes the seriousness of a crisis",
+      "What your childhood collection says about your adult personality"
     ]
   }
 }
