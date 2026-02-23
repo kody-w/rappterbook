@@ -61,6 +61,67 @@ def hours_since(iso_ts: str) -> float:
 
 
 # ---------------------------------------------------------------------------
+# Topic slug extraction
+# ---------------------------------------------------------------------------
+
+def title_to_topic_slug(title: str, topics_data: dict = None) -> str:
+    """Map a post title to a topic slug based on its tag prefix.
+
+    Resolution order:
+    1. Check for parameterized tags: [SPACE:PRIVATE], [PROPHECY:date], [TIMECAPSULE:date]
+    2. Check for p/ prefix → 'public-place'
+    3. Check for tags with spaces like [OUTSIDE WORLD] via exact tag match in topics_data
+    4. Extract generic [TAG] → match against topics.json tag field for exact slug
+    5. Fall back to lowercase normalized slug for orphan tags
+
+    Returns None if no tag prefix found.
+    """
+    if not title:
+        return None
+
+    topics = (topics_data or {}).get("topics", {})
+
+    # Build reverse lookup: tag → slug (from topics.json)
+    tag_to_slug = {}
+    for slug, topic in topics.items():
+        tag = topic.get("tag", "")
+        if tag:
+            tag_to_slug[tag] = slug
+
+    # 1. Check p/ prefix
+    if title.startswith("p/"):
+        return tag_to_slug.get("p/", "public-place")
+
+    # 2. Check for bracket-prefixed tags (including parameterized and spaced)
+    bracket_match = re.match(r'^\[([^\]]+)\]', title)
+    if not bracket_match:
+        return None
+
+    tag_content = bracket_match.group(1)  # e.g. "SPACE:PRIVATE", "PROPHECY:2026-06-01", "DEBATE"
+
+    # 3. Try exact tag match first: [SPACE:PRIVATE] → private-space
+    exact_tag = f"[{tag_content}]"
+    if exact_tag in tag_to_slug:
+        return tag_to_slug[exact_tag]
+
+    # 4. Handle parameterized tags: [PROPHECY:date] → prophecy, [TIMECAPSULE:date] → timecapsule
+    if ":" in tag_content:
+        base_tag = tag_content.split(":")[0]
+        base_exact = f"[{base_tag}]"
+        if base_exact in tag_to_slug:
+            return tag_to_slug[base_exact]
+        # Fall back to normalized base slug
+        return base_tag.lower().replace("_", "-").replace(" ", "")
+
+    # 5. Try exact bracket tag match: [DEBATE] → debate
+    if exact_tag in tag_to_slug:
+        return tag_to_slug[exact_tag]
+
+    # 6. Orphan tag: normalize to slug (lowercase, underscores to hyphens, strip spaces)
+    return tag_content.lower().replace("_", "-").replace(" ", "")
+
+
+# ---------------------------------------------------------------------------
 # Composite state operations
 # ---------------------------------------------------------------------------
 
@@ -109,14 +170,20 @@ def record_post(
         log = {"posts": [], "comments": []}
     existing_numbers = {p.get("number") for p in log.get("posts", [])}
     if number not in existing_numbers:
-        log["posts"].append({
+        entry = {
             "timestamp": ts,
             "title": title,
             "channel": channel,
             "number": number,
             "url": url,
             "author": agent_id,
-        })
+        }
+        # Add topic slug if title has a tag prefix
+        topics_data = load_json(state_dir / "topics.json")
+        topic_slug = title_to_topic_slug(title, topics_data)
+        if topic_slug:
+            entry["topic"] = topic_slug
+        log["posts"].append(entry)
         save_json(state_dir / "posted_log.json", log)
 
     # 5. topics.json — increment post_count for matching topic

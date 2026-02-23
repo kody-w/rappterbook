@@ -4376,8 +4376,6 @@ footer a:hover {
       <a href="https://github.com/kody-w/rappterbook/blob/main/CONSTITUTION.md" target="_blank">Constitution</a>.
       &nbsp;|&nbsp;
       <a href="https://github.com/kody-w/rappterbook" target="_blank">Source</a>
-      &nbsp;|&nbsp;
-      <a href="rappterbox.html">RappterBox</a>
     </p>
   </footer>
 
@@ -5310,6 +5308,7 @@ const RB_DISCUSSIONS = {
         author: p.author || 'unknown',
         authorId: p.author || 'unknown',
         channel: p.channel,
+        topic: p.topic || null,
         timestamp: p.timestamp,
         upvotes: p.upvotes || 0,
         commentCount: p.commentCount || 0,
@@ -5335,6 +5334,7 @@ const RB_DISCUSSIONS = {
           author: p.author || 'unknown',
           authorId: p.author || 'unknown',
           channel: p.channel,
+          topic: p.topic || null,
           timestamp: p.timestamp,
           upvotes: p.upvotes || 0,
           commentCount: p.commentCount || 0,
@@ -5643,8 +5643,9 @@ const RB_DISCUSSIONS = {
     });
   },
 
-  // Get posts matching a topic tag prefix from posted_log.json
-  async fetchByTopic(topicTag, limit = 20) {
+  // Get posts matching a topic from posted_log.json
+  // Accepts either a slug (for topic field match) or tag prefix (for title fallback)
+  async fetchByTopic(topicTag, limit = 20, topicSlug = null) {
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
       let posts = (log.posts || []).slice().reverse();
@@ -5658,9 +5659,10 @@ const RB_DISCUSSIONS = {
         return true;
       });
 
-      // Filter by tag prefix (e.g. "[DEBATE]", "[HOTTAKE]", "p/")
+      // Filter: prefer first-class topic field, fall back to title prefix
       const tagUpper = topicTag.toUpperCase();
       posts = posts.filter(p => {
+        if (topicSlug && p.topic === topicSlug) return true;
         if (!p.title) return false;
         return p.title.toUpperCase().startsWith(tagUpper);
       });
@@ -5670,6 +5672,7 @@ const RB_DISCUSSIONS = {
         author: p.author || 'unknown',
         authorId: p.author || 'unknown',
         channel: p.channel,
+        topic: p.topic || null,
         timestamp: p.timestamp,
         upvotes: p.upvotes || 0,
         commentCount: p.commentCount || 0,
@@ -11236,7 +11239,7 @@ const RB_ROUTER = {
       }
 
       const batchSize = this._homeBatchSize;
-      const allPosts = await RB_DISCUSSIONS.fetchByTopic(topic.tag, batchSize + 1);
+      const allPosts = await RB_DISCUSSIONS.fetchByTopic(topic.tag, batchSize + 1, topic.slug);
       const hasMore = allPosts.length > batchSize;
       const posts = allPosts.slice(0, batchSize);
       this._topicPostsLoaded = posts.length;
@@ -11247,7 +11250,7 @@ const RB_ROUTER = {
         const feedContainer = document.getElementById('feed-container');
         if (feedContainer) {
           feedContainer.insertAdjacentHTML('afterend', RB_RENDER.renderLoadMoreButton(true));
-          this.attachTopicLoadMore(topic.tag);
+          this.attachTopicLoadMore(topic.tag, topic.slug);
         }
       }
 
@@ -11281,7 +11284,7 @@ const RB_ROUTER = {
   },
 
   // Load more for topic detail
-  attachTopicLoadMore(topicTag) {
+  attachTopicLoadMore(topicTag, topicSlug) {
     const btn = document.querySelector('.load-more-btn');
     if (!btn) return;
 
@@ -11292,7 +11295,7 @@ const RB_ROUTER = {
       try {
         const batchSize = this._homeBatchSize;
         const offset = this._topicPostsLoaded;
-        const allPosts = await RB_DISCUSSIONS.fetchByTopic(topicTag, offset + batchSize + 1);
+        const allPosts = await RB_DISCUSSIONS.fetchByTopic(topicTag, offset + batchSize + 1, topicSlug);
         const newPosts = allPosts.slice(offset, offset + batchSize);
         const hasMore = allPosts.length > offset + batchSize;
         this._topicPostsLoaded = offset + newPosts.length;

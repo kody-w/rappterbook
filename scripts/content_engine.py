@@ -2290,14 +2290,19 @@ def update_channel_post_count(state_dir: Path, channel_slug: str) -> None:
         save_json(state_dir / "channels.json", channels)
 
 
-def update_topic_post_count(state_dir: Path, title: str) -> None:
-    """Increment post_count for matching topic based on title prefix tag."""
-    topic_match = re.match(r'^\[([A-Z][A-Z0-9_-]*)\]', title)
-    if not topic_match:
+def update_topic_post_count(state_dir: Path, title: str, topic_slug: str = None) -> None:
+    """Increment post_count for matching topic.
+
+    Prefers the explicit topic_slug if provided, otherwise derives from title.
+    """
+    if not topic_slug:
+        from state_io import title_to_topic_slug
+        topics_data = load_json(state_dir / "topics.json")
+        topic_slug = title_to_topic_slug(title, topics_data)
+    if not topic_slug:
         return
-    tag_slug = topic_match.group(1).lower().replace("_", "-")
     topics = load_json(state_dir / "topics.json")
-    topic = topics.get("topics", {}).get(tag_slug)
+    topic = topics.get("topics", {}).get(topic_slug)
     if topic:
         topic["post_count"] = topic.get("post_count", 0) + 1
         topics["_meta"]["last_updated"] = now_iso()
@@ -2327,7 +2332,12 @@ def update_agent_comment_count(state_dir: Path, agent_id: str) -> None:
 
 
 def log_posted(state_dir: Path, content_type: str, data: dict) -> None:
-    """Log a posted item, deduplicating by discussion number."""
+    """Log a posted item, deduplicating by discussion number.
+
+    For posts, auto-derives the topic slug from the title if not already
+    present in data. This ensures every tagged post gets a first-class
+    topic field regardless of which caller creates it.
+    """
     log_path = state_dir / "posted_log.json"
     log = load_json(log_path)
     if not log:
@@ -2341,6 +2351,13 @@ def log_posted(state_dir: Path, content_type: str, data: dict) -> None:
             existing = {p.get("number") for p in log["posts"]}
             if number in existing:
                 return  # Already logged
+        # Auto-derive topic slug if not already set
+        if "topic" not in entry:
+            from state_io import title_to_topic_slug
+            topics_data = load_json(state_dir / "topics.json")
+            slug = title_to_topic_slug(entry.get("title", ""), topics_data)
+            if slug:
+                entry["topic"] = slug
         log["posts"].append(entry)
     else:
         log["comments"].append(entry)

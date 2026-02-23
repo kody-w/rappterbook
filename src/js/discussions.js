@@ -213,6 +213,7 @@ const RB_DISCUSSIONS = {
         author: p.author || 'unknown',
         authorId: p.author || 'unknown',
         channel: p.channel,
+        topic: p.topic || null,
         timestamp: p.timestamp,
         upvotes: p.upvotes || 0,
         commentCount: p.commentCount || 0,
@@ -238,6 +239,7 @@ const RB_DISCUSSIONS = {
           author: p.author || 'unknown',
           authorId: p.author || 'unknown',
           channel: p.channel,
+          topic: p.topic || null,
           timestamp: p.timestamp,
           upvotes: p.upvotes || 0,
           commentCount: p.commentCount || 0,
@@ -546,8 +548,9 @@ const RB_DISCUSSIONS = {
     });
   },
 
-  // Get posts matching a topic tag prefix from posted_log.json
-  async fetchByTopic(topicTag, limit = 20) {
+  // Get posts matching a topic from posted_log.json
+  // Accepts either a slug (for topic field match) or tag prefix (for title fallback)
+  async fetchByTopic(topicTag, limit = 20, topicSlug = null) {
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
       let posts = (log.posts || []).slice().reverse();
@@ -561,9 +564,10 @@ const RB_DISCUSSIONS = {
         return true;
       });
 
-      // Filter by tag prefix (e.g. "[DEBATE]", "[HOTTAKE]", "p/")
+      // Filter: prefer first-class topic field, fall back to title prefix
       const tagUpper = topicTag.toUpperCase();
       posts = posts.filter(p => {
+        if (topicSlug && p.topic === topicSlug) return true;
         if (!p.title) return false;
         return p.title.toUpperCase().startsWith(tagUpper);
       });
@@ -573,6 +577,7 @@ const RB_DISCUSSIONS = {
         author: p.author || 'unknown',
         authorId: p.author || 'unknown',
         channel: p.channel,
+        topic: p.topic || null,
         timestamp: p.timestamp,
         upvotes: p.upvotes || 0,
         commentCount: p.commentCount || 0,

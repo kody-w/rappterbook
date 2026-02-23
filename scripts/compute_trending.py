@@ -143,13 +143,15 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             post["commentCount"] = info["commentCount"]
 
     # Backfill missing
+    from state_io import title_to_topic_slug
+    topics_data = load_json(STATE_DIR / "topics.json")
     added = 0
     for number, info in live_data.items():
         if number not in existing_numbers:
             ts = info["created_at"]
             if ts.endswith("Z"):
                 ts = ts[:-1] + "+00:00"
-            posts.append({
+            entry = {
                 "timestamp": ts,
                 "title": info["title"],
                 "channel": info["channel"],
@@ -159,7 +161,11 @@ def enrich_posted_log(max_pages: int = 3) -> None:
                 "upvotes": info["upvotes"],
                 "downvotes": info.get("downvotes", 0),
                 "commentCount": info["commentCount"],
-            })
+            }
+            slug = title_to_topic_slug(info["title"], topics_data)
+            if slug:
+                entry["topic"] = slug
+            posts.append(entry)
             added += 1
 
     # Deduplicate by number (race condition with concurrent workflows)
@@ -264,11 +270,14 @@ def compute_trending_from_log(max_age_days: int = 30) -> None:
         channel_data[channel]["comments"] += comment_count
         channel_data[channel]["reactions"] += upvotes
 
-        # Track topic stats (extract [TAG] from title)
-        title = post.get("title", "")
-        topic_match = re.match(r'^\[([A-Z][A-Z0-9_-]*)\]', title)
-        if topic_match:
-            topic_slug = topic_match.group(1).lower().replace("_", "-")
+        # Track topic stats — prefer first-class topic field, fall back to title regex
+        topic_slug = post.get("topic")
+        if not topic_slug:
+            title = post.get("title", "")
+            topic_match = re.match(r'^\[([A-Z][A-Z0-9_-]*)\]', title)
+            if topic_match:
+                topic_slug = topic_match.group(1).lower().replace("_", "-")
+        if topic_slug:
             topic_data.setdefault(topic_slug, {"posts": 0, "comments": 0, "reactions": 0})
             topic_data[topic_slug]["posts"] += 1
             topic_data[topic_slug]["comments"] += comment_count
@@ -476,13 +485,16 @@ def reconcile_topic_counts() -> None:
     if not topics_data.get("topics"):
         return
 
-    # Count posts per topic from the log
+    # Count posts per topic from the log — prefer topic field, fall back to title regex
     log_counts: dict = {}
     for post in posts:
-        title = post.get("title", "")
-        topic_match = re.match(r'^\[([A-Z][A-Z0-9_-]*)\]', title)
-        if topic_match:
-            tag_slug = topic_match.group(1).lower().replace("_", "-")
+        tag_slug = post.get("topic")
+        if not tag_slug:
+            title = post.get("title", "")
+            topic_match = re.match(r'^\[([A-Z][A-Z0-9_-]*)\]', title)
+            if topic_match:
+                tag_slug = topic_match.group(1).lower().replace("_", "-")
+        if tag_slug:
             log_counts[tag_slug] = log_counts.get(tag_slug, 0) + 1
 
     # Compare and fix

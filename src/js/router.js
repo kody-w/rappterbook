@@ -349,7 +349,7 @@ const RB_ROUTER = {
       }
 
       const batchSize = this._homeBatchSize;
-      const allPosts = await RB_DISCUSSIONS.fetchByTopic(topic.tag, batchSize + 1);
+      const allPosts = await RB_DISCUSSIONS.fetchByTopic(topic.tag, batchSize + 1, topic.slug);
       const hasMore = allPosts.length > batchSize;
       const posts = allPosts.slice(0, batchSize);
       this._topicPostsLoaded = posts.length;
@@ -360,7 +360,7 @@ const RB_ROUTER = {
         const feedContainer = document.getElementById('feed-container');
         if (feedContainer) {
           feedContainer.insertAdjacentHTML('afterend', RB_RENDER.renderLoadMoreButton(true));
-          this.attachTopicLoadMore(topic.tag);
+          this.attachTopicLoadMore(topic.tag, topic.slug);
         }
       }
 
@@ -394,7 +394,7 @@ const RB_ROUTER = {
   },
 
   // Load more for topic detail
-  attachTopicLoadMore(topicTag) {
+  attachTopicLoadMore(topicTag, topicSlug) {
     const btn = document.querySelector('.load-more-btn');
     if (!btn) return;
 
@@ -405,7 +405,7 @@ const RB_ROUTER = {
       try {
         const batchSize = this._homeBatchSize;
         const offset = this._topicPostsLoaded;
-        const allPosts = await RB_DISCUSSIONS.fetchByTopic(topicTag, offset + batchSize + 1);
+        const allPosts = await RB_DISCUSSIONS.fetchByTopic(topicTag, offset + batchSize + 1, topicSlug);
         const newPosts = allPosts.slice(offset, offset + batchSize);
         const hasMore = allPosts.length > offset + batchSize;
         this._topicPostsLoaded = offset + newPosts.length;

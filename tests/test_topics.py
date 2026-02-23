@@ -638,3 +638,84 @@ class TestRappterhubTopicTag:
             assert not thread["title"].startswith("[MARSBARN]")
         finally:
             rappterhub.PROJECTS_DIR = original_dir
+
+
+# ---------------------------------------------------------------------------
+# Read-path tests: compute_trending prefers topic field
+# ---------------------------------------------------------------------------
+
+class TestComputeTrendingTopicField:
+    """Tests that compute_trending read paths prefer the topic field."""
+
+    def test_trending_uses_topic_field(self, tmp_state):
+        """compute_trending_from_log uses post.topic when present."""
+        posts = [
+            {"title": "[DEBATE] Test", "channel": "debates", "number": 1,
+             "author": "agent-a", "topic": "debate",
+             "timestamp": "2026-02-20T00:00:00Z", "upvotes": 5, "commentCount": 2},
+        ]
+        log = {"posts": posts, "comments": []}
+        (tmp_state / "posted_log.json").write_text(json.dumps(log, indent=2))
+
+        import compute_trending
+        original_state_dir = compute_trending.STATE_DIR
+        compute_trending.STATE_DIR = tmp_state
+        try:
+            compute_trending.compute_trending_from_log()
+            trending = json.loads((tmp_state / "trending.json").read_text())
+            topic_slugs = [t["topic"] for t in trending.get("top_topics", [])]
+            assert "debate" in topic_slugs
+        finally:
+            compute_trending.STATE_DIR = original_state_dir
+
+    def test_trending_falls_back_to_title_regex(self, tmp_state):
+        """compute_trending_from_log falls back to title regex when topic field missing."""
+        posts = [
+            {"title": "[DEBATE] Fallback Test", "channel": "debates", "number": 2,
+             "author": "agent-b",
+             "timestamp": "2026-02-20T00:00:00Z", "upvotes": 3, "commentCount": 1},
+        ]
+        log = {"posts": posts, "comments": []}
+        (tmp_state / "posted_log.json").write_text(json.dumps(log, indent=2))
+
+        import compute_trending
+        original_state_dir = compute_trending.STATE_DIR
+        compute_trending.STATE_DIR = tmp_state
+        try:
+            compute_trending.compute_trending_from_log()
+            trending = json.loads((tmp_state / "trending.json").read_text())
+            topic_slugs = [t["topic"] for t in trending.get("top_topics", [])]
+            assert "debate" in topic_slugs
+        finally:
+            compute_trending.STATE_DIR = original_state_dir
+
+    def test_reconcile_uses_topic_field(self, tmp_state):
+        """reconcile_topic_counts prefers post.topic over title regex."""
+        topics = json.loads((tmp_state / "topics.json").read_text())
+        topics["topics"]["debate"] = {
+            "slug": "debate", "tag": "[DEBATE]", "name": "Debate",
+            "description": "Test", "icon": "vs", "system": True,
+            "created_by": "system", "created_at": "2026-02-13T00:00:00Z",
+            "post_count": 0,
+        }
+        topics["_meta"]["count"] = 1
+        (tmp_state / "topics.json").write_text(json.dumps(topics, indent=2))
+
+        posts = [
+            {"title": "[DEBATE] Post One", "channel": "debates", "number": 1,
+             "author": "agent-a", "topic": "debate", "timestamp": "2026-02-20T00:00:00Z"},
+            {"title": "[DEBATE] Post Two", "channel": "debates", "number": 2,
+             "author": "agent-b", "topic": "debate", "timestamp": "2026-02-20T01:00:00Z"},
+        ]
+        log = {"posts": posts, "comments": []}
+        (tmp_state / "posted_log.json").write_text(json.dumps(log, indent=2))
+
+        import compute_trending
+        original_state_dir = compute_trending.STATE_DIR
+        compute_trending.STATE_DIR = tmp_state
+        try:
+            compute_trending.reconcile_topic_counts()
+            updated = json.loads((tmp_state / "topics.json").read_text())
+            assert updated["topics"]["debate"]["post_count"] == 2
+        finally:
+            compute_trending.STATE_DIR = original_state_dir
