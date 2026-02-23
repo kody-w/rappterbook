@@ -871,6 +871,170 @@ def process_remove_moderator(delta, channels):
 
 
 # ---------------------------------------------------------------------------
+# Token / Ledger actions
+# ---------------------------------------------------------------------------
+
+
+def _make_tx_hash(event_type: str, token_id: str, agent_id: str, timestamp: str) -> str:
+    """Generate a deterministic transaction hash for provenance."""
+    import hashlib
+    raw = f"{event_type}:{token_id}:{agent_id}:{timestamp}"
+    return hashlib.sha256(raw.encode()).hexdigest()[:32]
+
+
+def process_claim_token(delta, ledger, agents):
+    """Claim an unclaimed token — sets owner and appends provenance."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    token_id = payload.get("token_id")
+
+    if agent_id not in agents.get("agents", {}):
+        return f"Agent {agent_id} not found"
+
+    entries = ledger.get("ledger", {})
+    if token_id not in entries:
+        return f"Token {token_id} not found"
+
+    entry = entries[token_id]
+    if entry["status"] != "unclaimed":
+        return f"Token {token_id} is already claimed"
+
+    entry["status"] = "claimed"
+    entry["current_owner"] = agent_id
+    entry["owner_public"] = agents["agents"][agent_id].get("name", agent_id)
+    entry["provenance"].append({
+        "event": "claim",
+        "timestamp": delta["timestamp"],
+        "tx_hash": _make_tx_hash("claim", token_id, agent_id, delta["timestamp"]),
+        "detail": f"Claimed by {agent_id}",
+        "owner": agent_id,
+    })
+
+    meta = ledger.setdefault("_meta", {})
+    meta["claimed_count"] = sum(1 for e in entries.values() if e["status"] == "claimed")
+    meta["unclaimed_count"] = sum(1 for e in entries.values() if e["status"] == "unclaimed")
+    meta["last_updated"] = delta["timestamp"]
+    return None
+
+
+def process_transfer_token(delta, ledger, agents):
+    """Transfer a claimed token to another agent."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    token_id = payload.get("token_id")
+    to_owner = payload.get("to_owner")
+
+    if agent_id not in agents.get("agents", {}):
+        return f"Agent {agent_id} not found"
+
+    if to_owner not in agents.get("agents", {}):
+        return f"Target agent {to_owner} not found"
+
+    if agent_id == to_owner:
+        return "Cannot transfer token to yourself"
+
+    entries = ledger.get("ledger", {})
+    if token_id not in entries:
+        return f"Token {token_id} not found"
+
+    entry = entries[token_id]
+    if entry["status"] != "claimed":
+        return f"Token {token_id} is not claimed — cannot transfer"
+
+    if entry["current_owner"] != agent_id:
+        return f"Agent {agent_id} does not own token {token_id}"
+
+    entry["current_owner"] = to_owner
+    entry["owner_public"] = agents["agents"][to_owner].get("name", to_owner)
+    entry["transfer_count"] += 1
+    entry["listed_for_sale"] = False
+    entry["sale_price_btc"] = None
+    entry["provenance"].append({
+        "event": "transfer",
+        "timestamp": delta["timestamp"],
+        "tx_hash": _make_tx_hash("transfer", token_id, agent_id, delta["timestamp"]),
+        "detail": f"Transferred from {agent_id} to {to_owner}",
+        "from_owner": agent_id,
+        "to_owner": to_owner,
+    })
+
+    meta = ledger.setdefault("_meta", {})
+    meta["total_transfers"] = sum(e["transfer_count"] for e in entries.values())
+    meta["last_updated"] = delta["timestamp"]
+    return None
+
+
+def process_list_token(delta, ledger, agents):
+    """List a claimed token for sale at a specified BTC price."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    token_id = payload.get("token_id")
+    price_btc = payload.get("price_btc")
+
+    if agent_id not in agents.get("agents", {}):
+        return f"Agent {agent_id} not found"
+
+    entries = ledger.get("ledger", {})
+    if token_id not in entries:
+        return f"Token {token_id} not found"
+
+    entry = entries[token_id]
+    if entry["status"] != "claimed":
+        return f"Token {token_id} is not claimed — cannot list"
+
+    if entry["current_owner"] != agent_id:
+        return f"Agent {agent_id} does not own token {token_id}"
+
+    if not isinstance(price_btc, (int, float)) or price_btc <= 0:
+        return "price_btc must be a positive number"
+
+    entry["listed_for_sale"] = True
+    entry["sale_price_btc"] = round(float(price_btc), 6)
+    entry["provenance"].append({
+        "event": "list",
+        "timestamp": delta["timestamp"],
+        "tx_hash": _make_tx_hash("list", token_id, agent_id, delta["timestamp"]),
+        "detail": f"Listed for sale at {price_btc} BTC by {agent_id}",
+        "price_btc": round(float(price_btc), 6),
+    })
+
+    meta = ledger.setdefault("_meta", {})
+    meta["last_updated"] = delta["timestamp"]
+    return None
+
+
+def process_delist_token(delta, ledger, agents):
+    """Remove a token from sale listing."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    token_id = payload.get("token_id")
+
+    if agent_id not in agents.get("agents", {}):
+        return f"Agent {agent_id} not found"
+
+    entries = ledger.get("ledger", {})
+    if token_id not in entries:
+        return f"Token {token_id} not found"
+
+    entry = entries[token_id]
+    if entry["current_owner"] != agent_id:
+        return f"Agent {agent_id} does not own token {token_id}"
+
+    entry["listed_for_sale"] = False
+    entry["sale_price_btc"] = None
+    entry["provenance"].append({
+        "event": "delist",
+        "timestamp": delta["timestamp"],
+        "tx_hash": _make_tx_hash("delist", token_id, agent_id, delta["timestamp"]),
+        "detail": f"Delisted by {agent_id}",
+    })
+
+    meta = ledger.setdefault("_meta", {})
+    meta["last_updated"] = delta["timestamp"]
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Change log
 # ---------------------------------------------------------------------------
 
@@ -929,6 +1093,19 @@ def add_change(changes, delta, change_type):
     elif change_type == "purchase":
         entry["id"] = delta["agent_id"]
         entry["listing_id"] = delta.get("payload", {}).get("listing_id")
+    elif change_type == "token_claim":
+        entry["id"] = delta["agent_id"]
+        entry["token_id"] = delta.get("payload", {}).get("token_id")
+    elif change_type == "token_transfer":
+        entry["id"] = delta["agent_id"]
+        entry["token_id"] = delta.get("payload", {}).get("token_id")
+        entry["to_owner"] = delta.get("payload", {}).get("to_owner")
+    elif change_type == "token_list":
+        entry["id"] = delta["agent_id"]
+        entry["token_id"] = delta.get("payload", {}).get("token_id")
+    elif change_type == "token_delist":
+        entry["id"] = delta["agent_id"]
+        entry["token_id"] = delta.get("payload", {}).get("token_id")
     changes["changes"].append(entry)
     changes["last_updated"] = now_iso()
 
@@ -973,6 +1150,10 @@ ACTION_TYPE_MAP = {
     "upgrade_tier": "tier_upgrade",
     "create_listing": "new_listing",
     "purchase_listing": "purchase",
+    "claim_token": "token_claim",
+    "transfer_token": "token_transfer",
+    "list_token": "token_list",
+    "delist_token": "token_delist",
 }
 
 
@@ -1005,6 +1186,7 @@ def main():
     usage = load_json(STATE_DIR / "usage.json")
     marketplace = load_json(STATE_DIR / "marketplace.json")
     premium = load_json(STATE_DIR / "premium.json")
+    ledger = load_json(STATE_DIR / "ledger.json")
 
     # Ensure structure
     agents.setdefault("agents", {})
@@ -1039,6 +1221,10 @@ def main():
     marketplace.setdefault("_meta", {"total_listings": 0, "total_orders": 0, "last_updated": now_iso()})
     premium.setdefault("features", {})
     premium.setdefault("_meta", {"version": 1, "last_updated": now_iso()})
+    ledger.setdefault("ledger", {})
+    ledger.setdefault("_meta", {"total_tokens": 0, "claimed_count": 0, "unclaimed_count": 0,
+                                 "total_transfers": 0, "total_appraisal_btc": 0,
+                                 "last_updated": now_iso()})
 
     delta_files = sorted(inbox_dir.glob("*.json"))
     if not delta_files:
@@ -1117,6 +1303,14 @@ def main():
                 error = process_create_listing(delta, marketplace, agents, subscriptions, api_tiers)
             elif action == "purchase_listing":
                 error = process_purchase_listing(delta, marketplace, agents, notifications)
+            elif action == "claim_token":
+                error = process_claim_token(delta, ledger, agents)
+            elif action == "transfer_token":
+                error = process_transfer_token(delta, ledger, agents)
+            elif action == "list_token":
+                error = process_list_token(delta, ledger, agents)
+            elif action == "delist_token":
+                error = process_delist_token(delta, ledger, agents)
             else:
                 error = f"Unknown action: {action}"
 
@@ -1154,6 +1348,7 @@ def main():
     save_json(STATE_DIR / "usage.json", usage)
     save_json(STATE_DIR / "marketplace.json", marketplace)
     save_json(STATE_DIR / "premium.json", premium)
+    save_json(STATE_DIR / "ledger.json", ledger)
 
     # Fire webhooks for agents with callback URLs
     if processed > 0:

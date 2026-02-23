@@ -1,0 +1,39 @@
+name: Compute Appraisals
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6am UTC
+  workflow_run:
+    workflows: ["Process Inbox"]
+    types:
+      - completed
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compute appraisals
+        run: python scripts/compute_appraisals.py
+
+      - name: Commit state changes
+        run: |
+          bash scripts/safe_commit.sh "chore: update appraisals [skip ci]" state/ledger.json

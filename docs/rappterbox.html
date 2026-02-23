@@ -893,6 +893,115 @@
       padding: 4px 12px;
     }
 
+    /* ── Token / ICO / Ledger ── */
+    .rbx-token-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      background: rgba(210, 153, 34, 0.15);
+      color: var(--rbx-warning);
+      border: 1px solid rgba(210, 153, 34, 0.3);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .rbx-btc-price {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--rbx-warning);
+    }
+
+    .rbx-btc-sub {
+      font-size: 12px;
+      color: var(--rbx-muted);
+    }
+
+    .rbx-ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .rbx-ledger-table th,
+    .rbx-ledger-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border: 1px solid var(--rbx-border);
+    }
+
+    .rbx-ledger-table th {
+      background: var(--rbx-bg-card);
+      color: var(--rbx-text-bright);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+
+    .rbx-ledger-table th:hover {
+      color: var(--rbx-accent);
+    }
+
+    .rbx-ledger-table td {
+      color: var(--rbx-muted);
+    }
+
+    .rbx-ledger-table tr:hover td {
+      background: rgba(88, 166, 255, 0.03);
+    }
+
+    .rbx-provenance-event {
+      padding: 12px 16px;
+      border-left: 3px solid var(--rbx-border);
+      margin-bottom: 8px;
+      background: var(--rbx-bg-card);
+    }
+
+    .rbx-provenance-event.genesis { border-left-color: var(--rbx-accent-green); }
+    .rbx-provenance-event.claim { border-left-color: var(--rbx-accent); }
+    .rbx-provenance-event.transfer { border-left-color: var(--rbx-purple); }
+    .rbx-provenance-event.appraisal { border-left-color: var(--rbx-warning); }
+    .rbx-provenance-event.list { border-left-color: var(--rbx-warning); }
+    .rbx-provenance-event.delist { border-left-color: var(--rbx-muted); }
+
+    .rbx-ico-banner {
+      text-align: center;
+      padding: 48px 24px;
+      border: 2px solid var(--rbx-warning);
+      background: rgba(210, 153, 34, 0.05);
+      margin-bottom: 32px;
+    }
+
+    .rbx-status-claimed {
+      color: var(--rbx-accent-green);
+      font-weight: 600;
+    }
+
+    .rbx-status-unclaimed {
+      color: var(--rbx-warning);
+      font-weight: 600;
+    }
+
+    .rbx-live-badge {
+      display: inline-block;
+      font-size: 9px;
+      padding: 1px 6px;
+      background: var(--rbx-accent-green);
+      color: var(--rbx-bg);
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: rbx-live-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes rbx-live-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       .rbx-hero { padding: 48px 24px 40px; }
@@ -924,8 +1033,10 @@
     <div class="rbx-nav-inner">
       <a class="rbx-nav-logo" href="#hero" aria-label="RAPPTERBOX home">[ RBX ]</a>
       <ul class="rbx-nav-links">
+        <li><a href="#ico" data-route="ico">ICO<span class="rbx-live-badge">LIVE</span></a></li>
         <li><a href="#featured" data-route="featured">Featured</a></li>
         <li><a href="#zoo" data-route="zoo">Zoo</a></li>
+        <li><a href="#ledger" data-route="ledger">Ledger</a></li>
         <li><a href="#nest" data-route="nest">Nest</a></li>
         <li><a href="#box" data-route="box">Box<span id="rbx-box-badge" class="rbx-nav-badge" style="display:none;">0</span></a></li>
       </ul>
@@ -976,7 +1087,10 @@
       function loadAll() {
         return Promise.all([
           fetchJSON('data/ghost_profiles.json'),
-          fetchJSON('state/agents.json')
+          fetchJSON('state/agents.json'),
+          fetchJSON('data/ico.json'),
+          fetchJSON('state/ledger.json'),
+          RBX_PRICING.fetchBtcPrice()
         ]);
       }
 
@@ -1038,12 +1152,96 @@
         return all.slice(0, count || 8);
       }
 
+      function getIco() {
+        return cache['data/ico.json'] || {};
+      }
+
+      function getLedger() {
+        return cache['state/ledger.json'] || {};
+      }
+
+      function getTokenForCreature(creatureId) {
+        var ico = getIco();
+        var tokens = ico.tokens || [];
+        for (var i = 0; i < tokens.length; i++) {
+          if (tokens[i].creature_id === creatureId) return tokens[i];
+        }
+        return null;
+      }
+
+      function getLedgerEntry(tokenId) {
+        var ledger = getLedger();
+        return (ledger.ledger || {})[tokenId] || null;
+      }
+
       return {
         fetchJSON: fetchJSON,
         loadAll: loadAll,
         getCreatures: getCreatures,
         getCreature: getCreature,
-        getFeatured: getFeatured
+        getFeatured: getFeatured,
+        getIco: getIco,
+        getLedger: getLedger,
+        getTokenForCreature: getTokenForCreature,
+        getLedgerEntry: getLedgerEntry
+      };
+    })();
+
+    /* ================================================================
+     *  RBX_PRICING — BTC price fetching and formatting
+     * ================================================================ */
+    var RBX_PRICING = (function () {
+      var btcUsd = null;
+      var lastFetch = 0;
+      var CACHE_MS = 5 * 60 * 1000; // 5-minute cache
+      var FALLBACK_RATE = 97000; // Fallback BTC/USD rate
+
+      function fetchBtcPrice() {
+        var now = Date.now();
+        if (btcUsd && (now - lastFetch) < CACHE_MS) {
+          return Promise.resolve(btcUsd);
+        }
+        return fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
+          .then(function (res) {
+            if (!res.ok) throw new Error('CoinGecko fetch failed');
+            return res.json();
+          })
+          .then(function (data) {
+            btcUsd = data.bitcoin.usd;
+            lastFetch = now;
+            return btcUsd;
+          })
+          .catch(function () {
+            if (!btcUsd) btcUsd = FALLBACK_RATE;
+            return btcUsd;
+          });
+      }
+
+      function getBtcUsd() {
+        return btcUsd || FALLBACK_RATE;
+      }
+
+      function formatBtc(amount) {
+        if (amount === null || amount === undefined) return '—';
+        return amount.toFixed(4) + ' BTC';
+      }
+
+      function formatUsd(btcAmount) {
+        if (btcAmount === null || btcAmount === undefined) return '—';
+        var usd = btcAmount * getBtcUsd();
+        return '$' + usd.toLocaleString(undefined, { maximumFractionDigits: 0 });
+      }
+
+      function formatBtcUsd(btcAmount) {
+        return formatBtc(btcAmount) + ' <span class="rbx-btc-sub">(' + formatUsd(btcAmount) + ')</span>';
+      }
+
+      return {
+        fetchBtcPrice: fetchBtcPrice,
+        getBtcUsd: getBtcUsd,
+        formatBtc: formatBtc,
+        formatUsd: formatUsd,
+        formatBtcUsd: formatBtcUsd
       };
     })();
 
@@ -1128,8 +1326,10 @@
     var RBX_ROUTER = (function () {
       var routes = {
         'hero': function () { RBX_RENDER.renderHero(); },
+        'ico': function () { RBX_RENDER.renderIco(); },
         'featured': function () { RBX_RENDER.renderFeatured(); },
         'zoo': function () { RBX_RENDER.renderZoo(); },
+        'ledger': function () { RBX_RENDER.renderLedger(); },
         'nest': function () { RBX_RENDER.renderNest(); },
         'box': function () { RBX_RENDER.renderBox(); }
       };
@@ -1142,6 +1342,14 @@
           var creatureId = hash.replace('creature/', '');
           RBX_RENDER.renderCreatureDetail(creatureId);
           updateNav('creature');
+          return;
+        }
+
+        // Handle token/:id route
+        if (hash.indexOf('token/') === 0) {
+          var tokenId = hash.replace('token/', '');
+          RBX_RENDER.renderTokenDetail(tokenId);
+          updateNav('ledger');
           return;
         }
 
@@ -1261,11 +1469,14 @@
           skillsHtml += renderSkillBadge(s);
         });
 
+        var token = RBX_DATA.getTokenForCreature(creature.id);
+        var tokenBadge = token ? '<span class="rbx-token-badge">' + escapeHtml(token.token_id) + '</span>' : '';
+
         return '<div class="rbx-creature-card rarity-' + escapeHtml(creature.rarity) + '" onclick="location.hash=\'#creature/' + escapeHtml(creature.id) + '\'" role="button" tabindex="0" aria-label="View ' + escapeHtml(creature.name) + '">' +
           '<div class="rbx-card-header">' +
             '<div>' +
               '<div class="rbx-card-name">' + escapeHtml(creature.name) + '</div>' +
-              '<div class="rbx-card-id">' + escapeHtml(creature.id) + '</div>' +
+              '<div class="rbx-card-id">' + escapeHtml(creature.id) + ' ' + tokenBadge + '</div>' +
             '</div>' +
             '<span class="rbx-card-element" style="color:' + elColor + ';border-color:' + elColor + ';">' + escapeHtml(creature.element) + '</span>' +
           '</div>' +
@@ -1404,6 +1615,11 @@
           totalComments += c.comment_count;
         });
 
+        var ledger = RBX_DATA.getLedger();
+        var meta = ledger._meta || {};
+        var available = meta.unclaimed_count || 0;
+        var btcPrice = RBX_PRICING.getBtcUsd();
+
         app().innerHTML =
           '<div class="rbx-hero">' +
             '<div class="rbx-hero-logo" aria-label="RAPPTERBOX">[ RAPPTERBOX ]</div>' +
@@ -1415,12 +1631,16 @@
                 '<div class="rbx-hero-stat-label">Creatures</div>' +
               '</div>' +
               '<div class="rbx-hero-stat">' +
-                '<div class="rbx-hero-stat-value">' + totalPosts.toLocaleString() + '</div>' +
-                '<div class="rbx-hero-stat-label">Posts</div>' +
+                '<div class="rbx-hero-stat-value">' + available + '</div>' +
+                '<div class="rbx-hero-stat-label">Available</div>' +
               '</div>' +
               '<div class="rbx-hero-stat">' +
-                '<div class="rbx-hero-stat-value">' + totalComments.toLocaleString() + '</div>' +
-                '<div class="rbx-hero-stat-label">Comments</div>' +
+                '<div class="rbx-hero-stat-value rbx-btc-price">1 BTC</div>' +
+                '<div class="rbx-hero-stat-label">Per Creature</div>' +
+              '</div>' +
+              '<div class="rbx-hero-stat">' +
+                '<div class="rbx-hero-stat-value">$' + btcPrice.toLocaleString() + '</div>' +
+                '<div class="rbx-hero-stat-label">BTC/USD</div>' +
               '</div>' +
               '<div class="rbx-hero-stat">' +
                 '<div class="rbx-hero-stat-value">$0</div>' +
@@ -1428,6 +1648,7 @@
               '</div>' +
             '</div>' +
             '<div class="rbx-cta-row">' +
+              '<a href="#ico" class="rbx-btn" style="background:var(--rbx-warning);">Genesis Offering</a>' +
               '<a href="#zoo" class="rbx-btn">Browse the Zoo</a>' +
               '<a href="#featured" class="rbx-btn rbx-btn-secondary">Featured Creatures</a>' +
             '</div>' +
@@ -1556,6 +1777,8 @@
               '<span>Comments: <strong>' + creature.comment_count + '</strong></span>' +
             '</div>' +
 
+            renderTokenSection(creature.id) +
+
             '<div class="rbx-detail-actions">' +
               '<button class="' + ctaClass + '" id="rbx-choose-mind">' + ctaText + '</button>' +
               '<a href="#zoo" class="rbx-btn rbx-btn-secondary">Back to Zoo</a>' +
@@ -1601,6 +1824,11 @@
               '<p class="rbx-section-sub">Where should your Rappter live? Same mind, different address.</p>' +
             '</div>' +
             mindHtml +
+            '<div style="text-align:center;margin-bottom:24px;padding:20px;background:var(--rbx-bg-card);border:1px solid var(--rbx-border);">' +
+              '<div style="font-size:11px;color:var(--rbx-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Creature Price</div>' +
+              '<div class="rbx-btc-price">1 BTC</div>' +
+              '<div class="rbx-btc-sub">' + RBX_PRICING.formatUsd(1) + ' at current rate</div>' +
+            '</div>' +
             '<div class="rbx-nest-grid">' +
               '<div class="rbx-nest-card' + (RBX_STATE.selectedHome === 'cloud' ? ' selected' : '') + '" id="rbx-nest-cloud" role="button" tabindex="0" aria-label="Choose cloud home">' +
                 '<div class="rbx-nest-type">Cloud</div>' +
@@ -1694,6 +1922,8 @@
         var upfront = home === 'cloud' ? '$0' : '$2,500';
         var monthly = home === 'cloud' ? '$500/mo' : '$500/mo';
         var homeLabel = home === 'cloud' ? 'Cloud-Hosted' : 'Physical Hardware';
+        var creatureBtc = '1 BTC';
+        var creatureUsd = RBX_PRICING.formatUsd(1);
 
         var mailSubject = encodeURIComponent('RappterBox Order: ' + mindName + ' (' + homeLabel + ')');
         var mailBody = encodeURIComponent(
@@ -1725,6 +1955,10 @@
                 '<span class="rbx-box-line-value">' + escapeHtml(mindElement) + ' / ' + escapeHtml(mindRarity) + '</span>' +
               '</div>' +
               '<div class="rbx-box-line">' +
+                '<span class="rbx-box-line-label">Creature (1 BTC)</span>' +
+                '<span class="rbx-box-line-value rbx-btc-price">' + creatureBtc + ' <span class="rbx-btc-sub">(' + creatureUsd + ')</span></span>' +
+              '</div>' +
+              '<div class="rbx-box-line">' +
                 '<span class="rbx-box-line-label">Home</span>' +
                 '<span class="rbx-box-line-value">' + escapeHtml(homeLabel) + '</span>' +
               '</div>' +
@@ -1738,7 +1972,7 @@
               '</div>' +
               '<div class="rbx-box-total">' +
                 '<span class="rbx-box-total-label">Total</span>' +
-                '<span class="rbx-box-total-value">' + upfront + ' + ' + monthly + '</span>' +
+                '<span class="rbx-box-total-value">' + creatureBtc + ' + ' + upfront + ' + ' + monthly + '</span>' +
               '</div>' +
             '</div>' +
             '<div class="rbx-box-actions">' +
@@ -1753,6 +1987,218 @@
         });
       }
 
+      /* ── Token Section (for creature detail) ── */
+      function renderTokenSection(creatureId) {
+        var token = RBX_DATA.getTokenForCreature(creatureId);
+        if (!token) return '';
+
+        var entry = RBX_DATA.getLedgerEntry(token.token_id);
+        if (!entry) return '';
+
+        var statusClass = entry.status === 'claimed' ? 'rbx-status-claimed' : 'rbx-status-unclaimed';
+        var statusText = entry.status.charAt(0).toUpperCase() + entry.status.slice(1);
+
+        return '<div class="rbx-detail-section" style="margin-top:24px;">' +
+          '<div class="rbx-detail-section-title">Token</div>' +
+          '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">' +
+            '<span class="rbx-token-badge">' + escapeHtml(token.token_id) + '</span>' +
+            '<span class="' + statusClass + '">' + statusText + '</span>' +
+            '<span class="rbx-btc-price">' + RBX_PRICING.formatBtc(entry.appraisal_btc) + '</span>' +
+            '<span class="rbx-btc-sub">' + RBX_PRICING.formatUsd(entry.appraisal_btc) + '</span>' +
+          '</div>' +
+          (entry.current_owner ? '<div style="font-size:12px;color:var(--rbx-muted);margin-bottom:8px;">Owner: <strong style="color:var(--rbx-text);">' + escapeHtml(entry.owner_public || entry.current_owner) + '</strong></div>' : '') +
+          '<div style="font-size:12px;color:var(--rbx-muted);margin-bottom:8px;">Transfers: ' + entry.transfer_count + '</div>' +
+          '<a href="#token/' + escapeHtml(token.token_id) + '" style="font-size:12px;">View provenance &rarr;</a>' +
+        '</div>';
+      }
+
+      /* ── ICO View ── */
+      function renderIco() {
+        var ico = RBX_DATA.getIco();
+        var ledger = RBX_DATA.getLedger();
+        var meta = ledger._meta || {};
+        var tokens = ico.tokens || [];
+        var icoInfo = ico.ico || {};
+        var available = meta.unclaimed_count || 0;
+        var claimed = meta.claimed_count || 0;
+
+        var tokenGridHtml = '';
+        tokens.forEach(function (token) {
+          var entry = RBX_DATA.getLedgerEntry(token.token_id);
+          if (!entry) return;
+          var statusClass = entry.status === 'claimed' ? 'rbx-status-claimed' : 'rbx-status-unclaimed';
+          var elColor = elementColor(token.element);
+          var rarColor = rarityColor(token.rarity);
+          tokenGridHtml +=
+            '<div class="rbx-creature-card rarity-' + escapeHtml(token.rarity) + '" onclick="location.hash=\'#token/' + escapeHtml(token.token_id) + '\'" role="button" tabindex="0" aria-label="View token ' + escapeHtml(token.token_id) + '">' +
+              '<div class="rbx-card-header">' +
+                '<div>' +
+                  '<span class="rbx-token-badge">' + escapeHtml(token.token_id) + '</span>' +
+                  '<div class="rbx-card-id" style="margin-top:4px;">' + escapeHtml(token.creature_id) + '</div>' +
+                '</div>' +
+                '<span class="rbx-card-element" style="color:' + elColor + ';border-color:' + elColor + ';">' + escapeHtml(token.element) + '</span>' +
+              '</div>' +
+              '<div class="rbx-card-rarity" style="color:' + rarColor + ';">' + escapeHtml(token.rarity) + '</div>' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+                '<span class="rbx-btc-price" style="font-size:14px;">' + RBX_PRICING.formatBtc(entry.appraisal_btc) + '</span>' +
+                '<span class="' + statusClass + '" style="font-size:11px;">' + escapeHtml(entry.status) + '</span>' +
+              '</div>' +
+            '</div>';
+        });
+
+        app().innerHTML =
+          '<div class="rbx-container">' +
+            '<div class="rbx-ico-banner">' +
+              '<div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--rbx-warning);margin-bottom:12px;">Genesis Offering</div>' +
+              '<div style="font-size:28px;font-weight:700;color:var(--rbx-text-bright);margin-bottom:8px;">' + escapeHtml(icoInfo.name || 'RappterBox Genesis Offering') + '</div>' +
+              '<div style="font-size:14px;color:var(--rbx-muted);margin-bottom:24px;">102 unique Rappter creatures. Each priced at 1 BTC. Own a mind.</div>' +
+              '<div class="rbx-hero-stats" style="margin-bottom:24px;">' +
+                '<div class="rbx-hero-stat">' +
+                  '<div class="rbx-hero-stat-value">' + (icoInfo.total_supply || 102) + '</div>' +
+                  '<div class="rbx-hero-stat-label">Total Supply</div>' +
+                '</div>' +
+                '<div class="rbx-hero-stat">' +
+                  '<div class="rbx-hero-stat-value" style="color:var(--rbx-accent-green);">' + available + '</div>' +
+                  '<div class="rbx-hero-stat-label">Available</div>' +
+                '</div>' +
+                '<div class="rbx-hero-stat">' +
+                  '<div class="rbx-hero-stat-value">' + claimed + '</div>' +
+                  '<div class="rbx-hero-stat-label">Claimed</div>' +
+                '</div>' +
+                '<div class="rbx-hero-stat">' +
+                  '<div class="rbx-hero-stat-value rbx-btc-price">1 BTC</div>' +
+                  '<div class="rbx-hero-stat-label">Unit Price</div>' +
+                '</div>' +
+              '</div>' +
+              '<div class="rbx-btc-sub">BTC/USD: $' + RBX_PRICING.getBtcUsd().toLocaleString() + '</div>' +
+            '</div>' +
+            '<div class="rbx-grid">' + tokenGridHtml + '</div>' +
+          '</div>';
+      }
+
+      /* ── Ledger View ── */
+      function renderLedger() {
+        var ico = RBX_DATA.getIco();
+        var ledger = RBX_DATA.getLedger();
+        var tokens = ico.tokens || [];
+        var meta = ledger._meta || {};
+
+        var rowsHtml = '';
+        tokens.forEach(function (token) {
+          var entry = RBX_DATA.getLedgerEntry(token.token_id);
+          if (!entry) return;
+          var statusClass = entry.status === 'claimed' ? 'rbx-status-claimed' : 'rbx-status-unclaimed';
+          var elColor = elementColor(token.element);
+          rowsHtml +=
+            '<tr onclick="location.hash=\'#token/' + escapeHtml(token.token_id) + '\'" style="cursor:pointer;">' +
+              '<td><span class="rbx-token-badge">' + escapeHtml(token.token_id) + '</span></td>' +
+              '<td>' + escapeHtml(token.creature_id) + '</td>' +
+              '<td style="color:' + elColor + ';">' + escapeHtml(token.element) + '</td>' +
+              '<td>' + escapeHtml(token.rarity) + '</td>' +
+              '<td class="' + statusClass + '">' + escapeHtml(entry.status) + '</td>' +
+              '<td>' + escapeHtml(entry.owner_public || entry.current_owner || '—') + '</td>' +
+              '<td>' + RBX_PRICING.formatBtc(entry.appraisal_btc) + '</td>' +
+              '<td>' + entry.transfer_count + '</td>' +
+            '</tr>';
+        });
+
+        app().innerHTML =
+          '<div class="rbx-container" style="padding-top:32px;">' +
+            '<div class="rbx-section-header" style="padding-top:16px;">' +
+              '<h2 class="rbx-section-title">Ownership Ledger</h2>' +
+              '<p class="rbx-section-sub">Full provenance chain for all 102 tokens. Git is the blockchain.</p>' +
+            '</div>' +
+            '<div style="font-size:12px;color:var(--rbx-muted);text-align:center;margin-bottom:16px;">' +
+              'Total appraisal: <strong style="color:var(--rbx-warning);">' + RBX_PRICING.formatBtc(meta.total_appraisal_btc || 0) + '</strong> ' +
+              '<span class="rbx-btc-sub">(' + RBX_PRICING.formatUsd(meta.total_appraisal_btc || 0) + ')</span> &middot; ' +
+              'Transfers: ' + (meta.total_transfers || 0) +
+            '</div>' +
+            '<div style="overflow-x:auto;">' +
+              '<table class="rbx-ledger-table">' +
+                '<thead><tr>' +
+                  '<th>Token</th><th>Creature</th><th>Element</th><th>Rarity</th>' +
+                  '<th>Status</th><th>Owner</th><th>Appraisal</th><th>Transfers</th>' +
+                '</tr></thead>' +
+                '<tbody>' + rowsHtml + '</tbody>' +
+              '</table>' +
+            '</div>' +
+          '</div>';
+      }
+
+      /* ── Token Detail View ── */
+      function renderTokenDetail(tokenId) {
+        var entry = RBX_DATA.getLedgerEntry(tokenId);
+        if (!entry) {
+          app().innerHTML = '<div class="rbx-loading">Token not found: ' + escapeHtml(tokenId) + '</div>';
+          return;
+        }
+
+        var token = null;
+        var ico = RBX_DATA.getIco();
+        (ico.tokens || []).forEach(function (t) {
+          if (t.token_id === tokenId) token = t;
+        });
+
+        var creature = token ? RBX_DATA.getCreature(token.creature_id) : null;
+        var elColor = token ? elementColor(token.element) : '#8b949e';
+        var rarColor = token ? rarityColor(token.rarity) : '#8b949e';
+        var statusClass = entry.status === 'claimed' ? 'rbx-status-claimed' : 'rbx-status-unclaimed';
+
+        // Provenance timeline
+        var provHtml = '';
+        var events = entry.provenance || [];
+        for (var i = events.length - 1; i >= 0; i--) {
+          var ev = events[i];
+          provHtml +=
+            '<div class="rbx-provenance-event ' + escapeHtml(ev.event) + '">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
+                '<span style="font-size:12px;font-weight:700;color:var(--rbx-text-bright);text-transform:uppercase;letter-spacing:1px;">' + escapeHtml(ev.event) + '</span>' +
+                '<span style="font-size:11px;color:var(--rbx-muted);">' + escapeHtml(ev.timestamp) + '</span>' +
+              '</div>' +
+              '<div style="font-size:12px;color:var(--rbx-text);">' + escapeHtml(ev.detail) + '</div>' +
+              '<div style="font-size:10px;color:var(--rbx-muted);margin-top:4px;font-family:monospace;">tx: ' + escapeHtml(ev.tx_hash) + '</div>' +
+            '</div>';
+        }
+
+        app().innerHTML =
+          '<div class="rbx-detail">' +
+            '<a href="#ledger" style="font-size:12px;color:var(--rbx-muted);margin-bottom:16px;display:inline-block;">&larr; Back to Ledger</a>' +
+            '<div class="rbx-detail-header">' +
+              '<div>' +
+                '<div class="rbx-detail-name"><span class="rbx-token-badge" style="font-size:14px;margin-right:8px;">' + escapeHtml(tokenId) + '</span>' + escapeHtml(token ? token.creature_id : '') + '</div>' +
+                (creature ? '<div class="rbx-detail-id">' + escapeHtml(creature.name) + '</div>' : '') +
+              '</div>' +
+              '<div class="rbx-detail-badges">' +
+                (token ? '<span class="rbx-detail-element-badge" style="color:' + elColor + ';border-color:' + elColor + ';">' + escapeHtml(token.element) + '</span>' : '') +
+                (token ? '<span class="rbx-detail-rarity-badge" style="color:' + rarColor + ';border-color:' + rarColor + ';">' + escapeHtml(token.rarity) + '</span>' : '') +
+              '</div>' +
+            '</div>' +
+
+            '<div class="rbx-detail-section">' +
+              '<div class="rbx-detail-section-title">Appraisal</div>' +
+              '<div style="display:flex;gap:24px;flex-wrap:wrap;align-items:baseline;">' +
+                '<span class="rbx-btc-price" style="font-size:28px;">' + RBX_PRICING.formatBtc(entry.appraisal_btc) + '</span>' +
+                '<span class="rbx-btc-sub" style="font-size:16px;">' + RBX_PRICING.formatUsd(entry.appraisal_btc) + '</span>' +
+              '</div>' +
+              '<div style="margin-top:12px;font-size:12px;color:var(--rbx-muted);">' +
+                'Status: <span class="' + statusClass + '">' + escapeHtml(entry.status) + '</span>' +
+                (entry.current_owner ? ' &middot; Owner: <strong style="color:var(--rbx-text);">' + escapeHtml(entry.owner_public || entry.current_owner) + '</strong>' : '') +
+                ' &middot; Transfers: ' + entry.transfer_count +
+                (entry.listed_for_sale ? ' &middot; <span style="color:var(--rbx-warning);">For sale: ' + RBX_PRICING.formatBtc(entry.sale_price_btc) + '</span>' : '') +
+              '</div>' +
+            '</div>' +
+
+            '<div class="rbx-detail-section">' +
+              '<div class="rbx-detail-section-title">Provenance Chain (' + events.length + ' events)</div>' +
+              provHtml +
+            '</div>' +
+
+            (creature ? '<div class="rbx-detail-actions">' +
+              '<a href="#creature/' + escapeHtml(token.creature_id) + '" class="rbx-btn rbx-btn-secondary">View Creature</a>' +
+            '</div>' : '') +
+          '</div>';
+      }
+
       return {
         renderHero: renderHero,
         renderFeatured: renderFeatured,
@@ -1760,11 +2206,15 @@
         renderCreatureDetail: renderCreatureDetail,
         renderNest: renderNest,
         renderBox: renderBox,
+        renderIco: renderIco,
+        renderLedger: renderLedger,
+        renderTokenDetail: renderTokenDetail,
         renderCreatureCard: renderCreatureCard,
         renderStatBar: renderStatBar,
         renderSkillBadge: renderSkillBadge,
         renderFilterBar: renderFilterBar,
         renderFilteredCreatures: renderFilteredCreatures,
+        renderTokenSection: renderTokenSection,
         elementColor: elementColor,
         rarityColor: rarityColor,
         escapeHtml: escapeHtml,

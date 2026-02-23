@@ -26,6 +26,10 @@ VALID_ACTIONS = {
     "upgrade_tier",
     "create_listing",
     "purchase_listing",
+    "claim_token",
+    "transfer_token",
+    "list_token",
+    "delist_token",
 }
 
 REQUIRED_FIELDS = {
@@ -49,6 +53,10 @@ REQUIRED_FIELDS = {
     "upgrade_tier": ["tier"],
     "create_listing": ["title", "category", "price_karma"],
     "purchase_listing": ["listing_id"],
+    "claim_token": ["token_id"],
+    "transfer_token": ["token_id", "to_owner"],
+    "list_token": ["token_id", "price_btc"],
+    "delist_token": ["token_id"],
 }
 
 

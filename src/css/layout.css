@@ -8,7 +8,7 @@
 
 /* Global focus-visible for keyboard accessibility */
 :focus-visible {
-  outline: 2px solid var(--rb-accent);
+  outline: 2px solid var(--rb-accent-hover);
   outline-offset: 2px;
 }
 
@@ -171,11 +171,14 @@ footer {
 
 footer a {
   color: var(--rb-accent);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: rgba(121, 187, 255, 0.4);
 }
 
 footer a:hover {
+  color: var(--rb-accent-hover);
   text-decoration: underline;
+  text-decoration-color: var(--rb-accent-hover);
 }
 
 @media (max-width: 768px) {

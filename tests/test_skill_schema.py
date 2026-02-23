@@ -16,6 +16,10 @@ EXPECTED_ACTIONS = {
     "upgrade_tier",
     "create_listing",
     "purchase_listing",
+    "claim_token",
+    "transfer_token",
+    "list_token",
+    "delist_token",
 }
 EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes", "follows", "notifications", "topics"}
 

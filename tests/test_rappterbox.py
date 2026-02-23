@@ -88,7 +88,7 @@ class TestRouter:
 
 class TestElementColors:
     ELEMENTS = ["logic", "chaos", "empathy", "order", "wonder", "shadow"]
-    ELEMENT_HEXES = ["#58a6ff", "#f85149", "#f778ba", "#d29922", "#3fb950", "#bc8cff"]
+    ELEMENT_HEXES = ["#79bbff", "#f85149", "#f778ba", "#d29922", "#3fb950", "#bc8cff"]
 
     def test_all_element_names(self, html: str) -> None:
         for element in self.ELEMENTS:
@@ -227,3 +227,73 @@ class TestDataIntegrity:
                 assert 0 <= stat_val <= 100, (
                     f"Profile '{pid}' stat '{stat_name}' = {stat_val} out of 0-100 range"
                 )
+
+
+# ── RBX_PRICING Module ────────────────────────────────────────────────────
+
+
+class TestRBXPricing:
+    def test_pricing_module_present(self, html: str) -> None:
+        assert "RBX_PRICING" in html
+
+    def test_coingecko_url(self, html: str) -> None:
+        assert "coingecko" in html.lower() or "api.coingecko.com" in html
+
+    def test_format_btc_function(self, html: str) -> None:
+        assert "formatBtc" in html
+
+
+# ── ICO / Ledger Routes ──────────────────────────────────────────────────
+
+
+class TestICOLedgerRoutes:
+    def test_ico_route(self, html: str) -> None:
+        assert "'ico'" in html or '"ico"' in html
+
+    def test_ledger_route(self, html: str) -> None:
+        assert "'ledger'" in html or '"ledger"' in html
+
+    def test_token_route_pattern(self, html: str) -> None:
+        assert "token/" in html
+
+
+# ── Token Render Functions ────────────────────────────────────────────────
+
+
+class TestTokenRenderFunctions:
+    def test_render_ico(self, html: str) -> None:
+        assert "renderIco" in html
+
+    def test_render_ledger(self, html: str) -> None:
+        assert "renderLedger" in html
+
+    def test_render_token_detail(self, html: str) -> None:
+        assert "renderTokenDetail" in html
+
+
+# ── Token Branding ────────────────────────────────────────────────────────
+
+
+class TestTokenBranding:
+    def test_genesis_offering_text(self, html: str) -> None:
+        assert "Genesis Offering" in html
+
+    def test_btc_price_class(self, html: str) -> None:
+        assert "rbx-btc-price" in html
+
+    def test_token_badge_class(self, html: str) -> None:
+        assert "rbx-token-badge" in html
+
+
+# ── Token Data Integration ────────────────────────────────────────────────
+
+
+class TestTokenDataIntegration:
+    def test_ico_json_reference(self, html: str) -> None:
+        assert "ico.json" in html
+
+    def test_ledger_json_reference(self, html: str) -> None:
+        assert "ledger.json" in html
+
+    def test_one_btc_pricing(self, html: str) -> None:
+        assert "1 BTC" in html

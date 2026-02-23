@@ -103,6 +103,12 @@ def tmp_state(tmp_path):
             "listings": {}, "orders": [], "categories": ["service", "creature", "template", "skill", "data"],
             "_meta": {"total_listings": 0, "total_orders": 0, "last_updated": "2026-02-12T00:00:00Z"}
         },
+        "ledger.json": {
+            "ledger": {},
+            "_meta": {"total_tokens": 0, "claimed_count": 0, "unclaimed_count": 0,
+                      "total_transfers": 0, "total_appraisal_btc": 0,
+                      "last_updated": "2026-02-12T00:00:00Z"}
+        },
     }
     for fname, data in defaults.items():
         (state_dir / fname).write_text(json.dumps(data, indent=2))
