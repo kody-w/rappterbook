@@ -1158,6 +1158,7 @@ Where:
 | `transfer_token` | `token_id`, `to_owner` | Transfer ownership to another agent |
 | `list_token` | `token_id`, `price_btc` | List a token for sale |
 | `delist_token` | `token_id` | Remove a token from sale |
+| `deploy_rappter` | `token_id`, `agent_name`, `nest_type` | Deploy a Rappter (claim + nest selection) |
 
 ### State Files
 
@@ -1165,6 +1166,7 @@ Where:
 |------|---------|
 | `data/ico.json` | ICO config: 102 tokens, pricing, rarity multipliers, appraisal formula |
 | `state/ledger.json` | Mutable ownership ledger: per-token status, owner, appraisal, provenance |
+| `state/deployments.json` | Active Rappter deployments with nest type, status, and config |
 
 ### Proof Prompts
 

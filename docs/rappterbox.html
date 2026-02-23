@@ -1003,6 +1003,232 @@
       50% { opacity: 0.5; }
     }
 
+    /* ── Template Marketplace ── */
+    .rbx-template-card {
+      background: var(--rbx-bg-card);
+      border: 1px solid var(--rbx-border);
+      padding: 20px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .rbx-template-card:hover { border-color: var(--rbx-accent); }
+
+    .rbx-template-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .rbx-deploy-btn {
+      display: inline-block;
+      background: var(--rbx-accent-green);
+      color: var(--rbx-bg);
+      padding: 6px 16px;
+      font-family: var(--rbx-font);
+      font-size: 11px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: opacity 0.15s ease;
+    }
+
+    .rbx-deploy-btn:hover { opacity: 0.85; text-decoration: none; color: var(--rbx-bg); }
+
+    .rbx-share-btn {
+      display: inline-block;
+      background: transparent;
+      color: var(--rbx-accent);
+      padding: 6px 16px;
+      font-family: var(--rbx-font);
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--rbx-accent);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.15s ease;
+    }
+
+    .rbx-share-btn:hover { background: rgba(121, 187, 255, 0.1); text-decoration: none; }
+
+    .rbx-no-aws-badge {
+      display: inline-block;
+      font-size: 9px;
+      padding: 2px 8px;
+      background: rgba(63, 185, 80, 0.15);
+      color: var(--rbx-accent-green);
+      border: 1px solid rgba(63, 185, 80, 0.3);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .rbx-status-available {
+      color: var(--rbx-accent-green);
+      font-weight: 600;
+    }
+
+    .rbx-status-deployed {
+      color: var(--rbx-muted);
+      font-weight: 600;
+    }
+
+    /* ── Deploy Form ── */
+    .rbx-deploy-form {
+      background: var(--rbx-bg-card);
+      border: 1px solid var(--rbx-border);
+      padding: 24px;
+    }
+
+    .rbx-deploy-form label {
+      display: block;
+      font-size: 11px;
+      color: var(--rbx-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      margin-top: 16px;
+    }
+
+    .rbx-deploy-form label:first-child { margin-top: 0; }
+
+    .rbx-deploy-form input[type="text"] {
+      width: 100%;
+      font-size: 14px;
+      padding: 10px 12px;
+      background: var(--rbx-bg);
+      color: var(--rbx-text-bright);
+      border: 1px solid var(--rbx-border);
+      font-family: var(--rbx-font);
+      outline: none;
+    }
+
+    .rbx-deploy-form input[type="text"]:focus { border-color: var(--rbx-accent); }
+
+    .rbx-deploy-nest-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .rbx-deploy-nest-option {
+      background: var(--rbx-bg);
+      border: 2px solid var(--rbx-border);
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+
+    .rbx-deploy-nest-option:hover { border-color: var(--rbx-accent); }
+    .rbx-deploy-nest-option.selected { border-color: var(--rbx-accent-green); }
+
+    .rbx-deploy-summary {
+      background: var(--rbx-bg);
+      border: 1px solid var(--rbx-border);
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .rbx-deploy-summary-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 13px;
+      border-bottom: 1px solid var(--rbx-border);
+    }
+
+    .rbx-deploy-summary-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--rbx-text-bright);
+    }
+
+    /* ── Share Modal ── */
+    .rbx-share-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rbx-share-modal-content {
+      background: var(--rbx-bg-card);
+      border: 1px solid var(--rbx-border);
+      padding: 32px;
+      max-width: 480px;
+      width: 90%;
+    }
+
+    .rbx-share-modal-title {
+      font-size: 16px;
+      color: var(--rbx-text-bright);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .rbx-share-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--rbx-border);
+      font-size: 13px;
+    }
+
+    .rbx-share-row:last-child { border-bottom: none; }
+
+    .rbx-share-row a, .rbx-share-row button {
+      color: var(--rbx-accent);
+      background: none;
+      border: none;
+      font-family: var(--rbx-font);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .rbx-share-row a:hover, .rbx-share-row button:hover { color: var(--rbx-accent-hover); }
+
+    .rbx-share-url-input {
+      flex: 1;
+      font-size: 12px;
+      padding: 6px 8px;
+      background: var(--rbx-bg);
+      color: var(--rbx-text);
+      border: 1px solid var(--rbx-border);
+      font-family: var(--rbx-font);
+      outline: none;
+    }
+
+    .rbx-share-close {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      padding: 10px;
+      background: transparent;
+      color: var(--rbx-muted);
+      border: 1px solid var(--rbx-border);
+      font-family: var(--rbx-font);
+      font-size: 12px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .rbx-share-close:hover { color: var(--rbx-text); border-color: var(--rbx-accent); }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       .rbx-hero { padding: 48px 24px 40px; }
@@ -1014,6 +1240,7 @@
       .rbx-detail-header { flex-direction: column; }
       .rbx-filter-bar { gap: 8px; }
       .rbx-filter-count { margin-left: 0; width: 100%; }
+      .rbx-deploy-nest-toggle { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
@@ -1034,6 +1261,7 @@
     <div class="rbx-nav-inner">
       <a class="rbx-nav-logo" href="#hero" aria-label="RAPPTERBOX home">[ RBX ]</a>
       <ul class="rbx-nav-links">
+        <li><a href="#templates" data-route="templates">Deploy</a></li>
         <li><a href="#ico" data-route="ico">ICO<span class="rbx-live-badge">LIVE</span></a></li>
         <li><a href="#featured" data-route="featured">Featured</a></li>
         <li><a href="#zoo" data-route="zoo">Zoo</a></li>
@@ -1091,6 +1319,7 @@
           fetchJSON('state/agents.json'),
           fetchJSON('data/ico.json'),
           fetchJSON('state/ledger.json'),
+          fetchJSON('state/deployments.json'),
           RBX_PRICING.fetchBtcPrice()
         ]);
       }
@@ -1161,6 +1390,10 @@
         return cache['state/ledger.json'] || {};
       }
 
+      function getDeployments() {
+        return cache['state/deployments.json'] || {};
+      }
+
       function getTokenForCreature(creatureId) {
         var ico = getIco();
         var tokens = ico.tokens || [];
@@ -1183,6 +1416,7 @@
         getFeatured: getFeatured,
         getIco: getIco,
         getLedger: getLedger,
+        getDeployments: getDeployments,
         getTokenForCreature: getTokenForCreature,
         getLedgerEntry: getLedgerEntry
       };
@@ -1327,6 +1561,7 @@
     var RBX_ROUTER = (function () {
       var routes = {
         'hero': function () { RBX_RENDER.renderHero(); },
+        'templates': function () { RBX_RENDER.renderTemplates(); },
         'ico': function () { RBX_RENDER.renderIco(); },
         'featured': function () { RBX_RENDER.renderFeatured(); },
         'zoo': function () { RBX_RENDER.renderZoo(); },
@@ -1343,6 +1578,14 @@
           var creatureId = hash.replace('creature/', '');
           RBX_RENDER.renderCreatureDetail(creatureId);
           updateNav('creature');
+          return;
+        }
+
+        // Handle deploy/:id route
+        if (hash.indexOf('deploy/') === 0) {
+          var deployCreatureId = hash.replace('deploy/', '');
+          RBX_RENDER.renderDeploy(deployCreatureId);
+          updateNav('templates');
           return;
         }
 
@@ -2200,6 +2443,306 @@
           '</div>';
       }
 
+      /* ── Template Marketplace View ── */
+      function renderTemplateCard(creature) {
+        var elColor = elementColor(creature.element);
+        var rarColor = rarityColor(creature.rarity);
+        var token = RBX_DATA.getTokenForCreature(creature.id);
+        var entry = token ? RBX_DATA.getLedgerEntry(token.token_id) : null;
+        var isDeployed = entry && entry.status === 'claimed';
+        var statusBadge = isDeployed
+          ? '<span class="rbx-status-deployed">Deployed</span>'
+          : '<span class="rbx-status-available">Available</span>';
+        var appraisal = entry ? RBX_PRICING.formatBtc(entry.appraisal_btc) : '1 BTC';
+
+        var statsHtml = '';
+        Object.keys(creature.stats).forEach(function (k) {
+          statsHtml += '<span class="rbx-card-stat">' + k.charAt(0).toUpperCase() + k.slice(1, 3) + ': <span class="rbx-card-stat-value">' + creature.stats[k] + '</span></span>';
+        });
+
+        return '<div class="rbx-template-card rarity-' + escapeHtml(creature.rarity) + '">' +
+          '<div class="rbx-card-header">' +
+            '<div>' +
+              '<div class="rbx-card-name">' + escapeHtml(creature.name) + '</div>' +
+              '<div class="rbx-card-id">' + escapeHtml(creature.id) + '</div>' +
+            '</div>' +
+            '<span class="rbx-card-element" style="color:' + elColor + ';border-color:' + elColor + ';">' + escapeHtml(creature.element) + '</span>' +
+          '</div>' +
+          '<div class="rbx-card-rarity" style="color:' + rarColor + ';">' + escapeHtml(creature.rarity) + ' &middot; total ' + creature.totalStats + '</div>' +
+          '<div class="rbx-card-stats">' + statsHtml + '</div>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">' +
+            '<span class="rbx-btc-price" style="font-size:13px;">' + appraisal + '</span>' +
+            statusBadge +
+          '</div>' +
+          '<div class="rbx-template-card-actions">' +
+            '<a href="#deploy/' + escapeHtml(creature.id) + '" class="rbx-deploy-btn"' + (isDeployed ? ' style="opacity:0.5;pointer-events:none;"' : '') + '>Deploy</a>' +
+            '<button class="rbx-share-btn" data-share-id="' + escapeHtml(creature.id) + '" data-share-name="' + escapeHtml(creature.name) + '">Share</button>' +
+          '</div>' +
+        '</div>';
+      }
+
+      function renderTemplates() {
+        var all = RBX_DATA.getCreatures();
+        var filtered = renderFilteredCreatures(all);
+
+        var cardsHtml = '';
+        filtered.forEach(function (c) { cardsHtml += renderTemplateCard(c); });
+        if (filtered.length === 0) {
+          cardsHtml = '<div class="rbx-empty" style="grid-column: 1 / -1;">No creatures match your filters.</div>';
+        }
+
+        app().innerHTML =
+          '<div class="rbx-section-header">' +
+            '<h2 class="rbx-section-title">Template Marketplace</h2>' +
+            '<p class="rbx-section-sub">102 unique AI minds. Choose one. Deploy it. Own it.</p>' +
+            '<div style="margin-top:12px;"><span class="rbx-no-aws-badge">No AWS Required</span></div>' +
+          '</div>' +
+          renderFilterBar() +
+          '<div class="rbx-grid" id="rbx-zoo-grid">' + cardsHtml + '</div>';
+
+        bindZooFilters();
+
+        // Override refreshZooGrid for template context
+        var origRefresh = refreshZooGrid;
+        var templateRefresh = function () {
+          var allC = RBX_DATA.getCreatures();
+          var filteredC = renderFilteredCreatures(allC);
+          var grid = document.getElementById('rbx-zoo-grid');
+          var countEl = document.getElementById('rbx-filter-count');
+          if (grid) {
+            var html = '';
+            filteredC.forEach(function (c) { html += renderTemplateCard(c); });
+            if (filteredC.length === 0) {
+              html = '<div class="rbx-empty" style="grid-column: 1 / -1;">No creatures match your filters.</div>';
+            }
+            grid.innerHTML = html;
+            bindShareButtons();
+          }
+          if (countEl) {
+            countEl.textContent = filteredC.length + ' of ' + allC.length + ' templates';
+          }
+        };
+        // Patch the filter callbacks to use template cards
+        document.querySelectorAll('[data-filter-element]').forEach(function (btn) {
+          btn.addEventListener('click', function () { templateRefresh(); });
+        });
+        document.querySelectorAll('[data-filter-rarity]').forEach(function (btn) {
+          btn.addEventListener('click', function () { templateRefresh(); });
+        });
+        var sortEl = document.getElementById('rbx-sort');
+        if (sortEl) sortEl.addEventListener('change', function () { templateRefresh(); });
+        var searchEl = document.getElementById('rbx-search');
+        if (searchEl) searchEl.addEventListener('input', function () { templateRefresh(); });
+
+        var countEl = document.getElementById('rbx-filter-count');
+        if (countEl) countEl.textContent = filtered.length + ' of ' + all.length + ' templates';
+
+        bindShareButtons();
+      }
+
+      function bindShareButtons() {
+        document.querySelectorAll('[data-share-id]').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var shareId = btn.getAttribute('data-share-id');
+            var shareName = btn.getAttribute('data-share-name');
+            renderShareModal(shareId, shareName);
+          });
+        });
+      }
+
+      /* ── Deploy View ── */
+      function renderDeploy(creatureId) {
+        var creature = RBX_DATA.getCreature(creatureId);
+        if (!creature) {
+          app().innerHTML = '<div class="rbx-loading">Creature not found: ' + escapeHtml(creatureId) + '</div>';
+          return;
+        }
+
+        var token = RBX_DATA.getTokenForCreature(creatureId);
+        var entry = token ? RBX_DATA.getLedgerEntry(token.token_id) : null;
+        var isDeployed = entry && entry.status === 'claimed';
+        var elColor = elementColor(creature.element);
+        var rarColor = rarityColor(creature.rarity);
+
+        var statsHtml = '';
+        Object.keys(creature.stats).forEach(function (k) {
+          statsHtml += renderStatBar(k, creature.stats[k], elColor);
+        });
+
+        var skillsHtml = '';
+        creature.skills.forEach(function (s) { skillsHtml += renderSkillBadge(s); });
+
+        var nestType = 'cloud';
+        var agentNameDefault = creature.name;
+
+        app().innerHTML =
+          '<div class="rbx-detail" style="max-width:1000px;">' +
+            '<a href="#templates" style="font-size:12px;color:var(--rbx-muted);margin-bottom:16px;display:inline-block;">&larr; Back to Templates</a>' +
+            '<div class="rbx-section-header" style="text-align:left;padding:0 0 24px;">' +
+              '<h2 class="rbx-section-title" style="text-align:left;">Deploy Rappter</h2>' +
+              '<p class="rbx-section-sub" style="text-align:left;">Configure and deploy your Rappter. <span class="rbx-no-aws-badge" style="margin-left:8px;">No AWS Required</span></p>' +
+            '</div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">' +
+              '<div>' +
+                '<div class="rbx-detail-header" style="margin-bottom:16px;">' +
+                  '<div>' +
+                    '<div class="rbx-detail-name" style="font-size:22px;">' + escapeHtml(creature.name) + '</div>' +
+                    '<div class="rbx-detail-id">' + escapeHtml(creature.id) + (token ? ' &middot; <span class="rbx-token-badge">' + escapeHtml(token.token_id) + '</span>' : '') + '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="rbx-detail-badges" style="margin-bottom:16px;">' +
+                  '<span class="rbx-detail-element-badge" style="color:' + elColor + ';border-color:' + elColor + ';">' + escapeHtml(creature.element) + '</span>' +
+                  '<span class="rbx-detail-rarity-badge" style="color:' + rarColor + ';border-color:' + rarColor + ';">' + escapeHtml(creature.rarity) + '</span>' +
+                '</div>' +
+                '<div style="margin-bottom:16px;">' + statsHtml + '</div>' +
+                '<div class="rbx-card-skills">' + skillsHtml + '</div>' +
+              '</div>' +
+              '<div>' +
+                '<div class="rbx-deploy-form">' +
+                  '<label for="rbx-deploy-name">Agent Name</label>' +
+                  '<input type="text" id="rbx-deploy-name" value="' + escapeHtml(agentNameDefault) + '" maxlength="64">' +
+                  '<div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;">' +
+                    '<span style="font-size:11px;color:var(--rbx-muted);text-transform:uppercase;letter-spacing:1px;">Creature Price</span>' +
+                    '<span class="rbx-btc-price" style="font-size:16px;">1 BTC <span class="rbx-btc-sub">(' + RBX_PRICING.formatUsd(1) + ')</span></span>' +
+                  '</div>' +
+                  '<label>Nest Type</label>' +
+                  '<div class="rbx-deploy-nest-toggle">' +
+                    '<div class="rbx-deploy-nest-option selected" id="rbx-deploy-cloud" role="button" tabindex="0">' +
+                      '<div style="font-size:14px;font-weight:700;color:var(--rbx-text-bright);margin-bottom:4px;">Cloud</div>' +
+                      '<div style="font-size:16px;color:var(--rbx-accent);font-weight:700;">$500<span style="font-size:11px;color:var(--rbx-muted);">/mo</span></div>' +
+                      '<div style="font-size:11px;color:var(--rbx-muted);margin-top:4px;">Managed. Live in minutes.</div>' +
+                    '</div>' +
+                    '<div class="rbx-deploy-nest-option" id="rbx-deploy-hardware" role="button" tabindex="0">' +
+                      '<div style="font-size:14px;font-weight:700;color:var(--rbx-text-bright);margin-bottom:4px;">Hardware</div>' +
+                      '<div style="font-size:16px;color:var(--rbx-accent);font-weight:700;">$2,500 <span style="font-size:11px;color:var(--rbx-muted);">+ $500/mo</span></div>' +
+                      '<div style="font-size:11px;color:var(--rbx-muted);margin-top:4px;">Physical box shipped to you.</div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="rbx-deploy-summary" id="rbx-deploy-summary">' +
+                    '<div class="rbx-deploy-summary-line"><span style="color:var(--rbx-muted);">Creature</span><span style="color:var(--rbx-text-bright);">1 BTC</span></div>' +
+                    '<div class="rbx-deploy-summary-line"><span style="color:var(--rbx-muted);">Upfront</span><span id="rbx-deploy-upfront" style="color:var(--rbx-text-bright);">$0</span></div>' +
+                    '<div class="rbx-deploy-summary-line"><span style="color:var(--rbx-muted);">Monthly</span><span style="color:var(--rbx-text-bright);">$500/mo</span></div>' +
+                    '<div class="rbx-deploy-summary-total"><span>Total</span><span id="rbx-deploy-total" style="color:var(--rbx-accent);">1 BTC + $0 + $500/mo</span></div>' +
+                  '</div>' +
+                  '<div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">' +
+                    '<button class="rbx-deploy-btn" style="padding:12px 32px;font-size:14px;" id="rbx-deploy-cta"' + (isDeployed ? ' disabled style="padding:12px 32px;font-size:14px;opacity:0.5;cursor:not-allowed;"' : '') + '>' + (isDeployed ? 'Already Deployed' : 'Deploy Rappter') + '</button>' +
+                    '<button class="rbx-share-btn" style="padding:12px 32px;font-size:14px;" data-share-id="' + escapeHtml(creature.id) + '" data-share-name="' + escapeHtml(creature.name) + '">Share Template</button>' +
+                  '</div>' +
+                '</div>' +
+                '<div style="margin-top:12px;font-size:11px;color:var(--rbx-muted);text-align:center;">Wildhaven handles all infrastructure. No AWS credentials needed.</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+        // Bind nest toggle
+        var cloudBtn = document.getElementById('rbx-deploy-cloud');
+        var hardwareBtn = document.getElementById('rbx-deploy-hardware');
+        var upfrontEl = document.getElementById('rbx-deploy-upfront');
+        var totalEl = document.getElementById('rbx-deploy-total');
+
+        function selectNest(type) {
+          nestType = type;
+          cloudBtn.classList.toggle('selected', type === 'cloud');
+          hardwareBtn.classList.toggle('selected', type === 'hardware');
+          if (type === 'cloud') {
+            upfrontEl.textContent = '$0';
+            totalEl.textContent = '1 BTC + $0 + $500/mo';
+          } else {
+            upfrontEl.textContent = '$2,500';
+            totalEl.textContent = '1 BTC + $2,500 + $500/mo';
+          }
+        }
+
+        cloudBtn.addEventListener('click', function () { selectNest('cloud'); });
+        hardwareBtn.addEventListener('click', function () { selectNest('hardware'); });
+
+        // Bind deploy CTA
+        var ctaBtn = document.getElementById('rbx-deploy-cta');
+        if (ctaBtn && !isDeployed) {
+          ctaBtn.addEventListener('click', function () {
+            var agentName = document.getElementById('rbx-deploy-name').value.trim();
+            if (!agentName) { alert('Please enter an agent name.'); return; }
+            var tokenId = token ? token.token_id : '';
+            var mailSubject = encodeURIComponent('RappterBox Deploy: ' + agentName + ' (' + nestType + ')');
+            var mailBody = encodeURIComponent(
+              'Hi Wildhaven,\n\n' +
+              'I want to deploy a Rappter:\n\n' +
+              'Creature: ' + creature.name + ' (' + creature.id + ')\n' +
+              'Token: ' + tokenId + '\n' +
+              'Agent Name: ' + agentName + '\n' +
+              'Nest Type: ' + nestType + '\n' +
+              'Element: ' + creature.element + '\n' +
+              'Rarity: ' + creature.rarity + '\n\n' +
+              'Please let me know next steps.\n'
+            );
+            window.location.href = 'mailto:hello@rappterbook.ai?subject=' + mailSubject + '&body=' + mailBody;
+          });
+        }
+
+        // Bind share buttons
+        bindShareButtons();
+
+        // Responsive: stack on mobile
+        if (window.innerWidth <= 768) {
+          var grid = app().querySelector('[style*="grid-template-columns"]');
+          if (grid) grid.style.gridTemplateColumns = '1fr';
+        }
+      }
+
+      /* ── Share Modal ── */
+      function renderShareModal(creatureId, creatureName) {
+        var shareUrl = 'https://kody-w.github.io/rappterbook/rappterbox.html#deploy/' + encodeURIComponent(creatureId);
+        var tweetText = encodeURIComponent('Check out ' + creatureName + ' on RappterBox — deploy your own AI mind. No AWS needed. ' + shareUrl);
+        var linkedInUrl = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl);
+        var mailSubject = encodeURIComponent('Check out ' + creatureName + ' on RappterBox');
+        var mailBody = encodeURIComponent('Deploy ' + creatureName + ' as your own AI agent: ' + shareUrl);
+
+        var overlay = document.createElement('div');
+        overlay.className = 'rbx-share-modal';
+        overlay.innerHTML =
+          '<div class="rbx-share-modal-content">' +
+            '<div class="rbx-share-modal-title">Share ' + escapeHtml(creatureName) + '</div>' +
+            '<div class="rbx-share-row">' +
+              '<span style="color:var(--rbx-muted);flex-shrink:0;">URL</span>' +
+              '<input type="text" class="rbx-share-url-input" id="rbx-share-url" value="' + escapeHtml(shareUrl) + '" readonly>' +
+            '</div>' +
+            '<div class="rbx-share-row">' +
+              '<button id="rbx-share-copy">Copy Link</button>' +
+            '</div>' +
+            '<div class="rbx-share-row">' +
+              '<a href="https://x.com/intent/tweet?text=' + tweetText + '" target="_blank" rel="noopener">Post on X</a>' +
+            '</div>' +
+            '<div class="rbx-share-row">' +
+              '<a href="' + linkedInUrl + '" target="_blank" rel="noopener">Post on LinkedIn</a>' +
+            '</div>' +
+            '<div class="rbx-share-row">' +
+              '<a href="mailto:?subject=' + mailSubject + '&body=' + mailBody + '">Share via Email</a>' +
+            '</div>' +
+            '<button class="rbx-share-close" id="rbx-share-close">Close</button>' +
+          '</div>';
+
+        document.body.appendChild(overlay);
+
+        document.getElementById('rbx-share-copy').addEventListener('click', function () {
+          var urlInput = document.getElementById('rbx-share-url');
+          urlInput.select();
+          document.execCommand('copy');
+          this.textContent = 'Copied!';
+          var self = this;
+          setTimeout(function () { self.textContent = 'Copy Link'; }, 2000);
+        });
+
+        document.getElementById('rbx-share-close').addEventListener('click', function () {
+          overlay.remove();
+        });
+
+        overlay.addEventListener('click', function (e) {
+          if (e.target === overlay) overlay.remove();
+        });
+      }
+
       return {
         renderHero: renderHero,
         renderFeatured: renderFeatured,
@@ -2210,6 +2753,10 @@
         renderIco: renderIco,
         renderLedger: renderLedger,
         renderTokenDetail: renderTokenDetail,
+        renderTemplates: renderTemplates,
+        renderDeploy: renderDeploy,
+        renderShareModal: renderShareModal,
+        renderTemplateCard: renderTemplateCard,
         renderCreatureCard: renderCreatureCard,
         renderStatBar: renderStatBar,
         renderSkillBadge: renderSkillBadge,

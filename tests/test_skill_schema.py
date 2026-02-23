@@ -20,6 +20,7 @@ EXPECTED_ACTIONS = {
     "transfer_token",
     "list_token",
     "delist_token",
+    "deploy_rappter",
 }
 EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes", "follows", "notifications", "topics"}
 

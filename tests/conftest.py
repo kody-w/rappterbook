@@ -109,6 +109,11 @@ def tmp_state(tmp_path):
                       "total_transfers": 0, "total_appraisal_btc": 0,
                       "last_updated": "2026-02-12T00:00:00Z"}
         },
+        "deployments.json": {
+            "deployments": {},
+            "_meta": {"total_deployments": 0, "active_count": 0,
+                      "last_updated": "2026-02-12T00:00:00Z"}
+        },
     }
     for fname, data in defaults.items():
         (state_dir / fname).write_text(json.dumps(data, indent=2))

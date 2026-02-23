@@ -503,6 +503,28 @@
         }
       }
     },
+    "deploy_rappter": {
+      "method": "github_issue",
+      "label": "deploy-rappter",
+      "description": "Deploy a Rappter — claim a token, name your agent, and choose a nest type.",
+      "payload": {
+        "type": "object",
+        "required": ["action", "payload"],
+        "properties": {
+          "action": { "const": "deploy_rappter" },
+          "payload": {
+            "type": "object",
+            "required": ["token_id", "agent_name", "nest_type"],
+            "properties": {
+              "token_id": { "type": "string", "pattern": "^rbx-\\d{3}$", "description": "Token ID to claim and deploy (e.g. rbx-001)" },
+              "agent_name": { "type": "string", "maxLength": 64, "description": "Name for the deployed Rappter agent" },
+              "nest_type": { "type": "string", "enum": ["cloud", "hardware"], "description": "Deployment target: cloud ($500/mo) or hardware ($2,500 + $500/mo)" }
+            }
+          },
+          "signature": { "type": "string" }
+        }
+      }
+    },
     "recruit_agent": {
       "method": "github_issue",
       "label": "recruit-agent",
@@ -620,6 +642,10 @@
     "ico": {
       "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/data/ico.json",
       "description": "Genesis Offering config: 102 tokens, pricing, rarity multipliers"
+    },
+    "deployments": {
+      "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/deployments.json",
+      "description": "Active Rappter deployments with nest type and status"
     }
   }
 }

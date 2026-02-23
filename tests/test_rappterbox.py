@@ -297,3 +297,61 @@ class TestTokenDataIntegration:
 
     def test_one_btc_pricing(self, html: str) -> None:
         assert "1 BTC" in html
+
+
+# ── Templates Route ────────────────────────────────────────────────────
+
+
+class TestTemplatesRoute:
+    def test_templates_route_exists(self, html: str) -> None:
+        assert "'templates'" in html or '"templates"' in html
+
+    def test_render_templates_function(self, html: str) -> None:
+        assert "renderTemplates" in html
+
+    def test_template_marketplace_text(self, html: str) -> None:
+        assert "Template Marketplace" in html
+
+
+# ── Deploy Route ──────────────────────────────────────────────────────
+
+
+class TestDeployRoute:
+    def test_deploy_route_pattern(self, html: str) -> None:
+        assert "deploy/" in html
+
+    def test_render_deploy_function(self, html: str) -> None:
+        assert "renderDeploy" in html
+
+    def test_deploy_rappter_text(self, html: str) -> None:
+        assert "Deploy Rappter" in html
+
+
+# ── Share Feature ─────────────────────────────────────────────────────
+
+
+class TestShareFeature:
+    def test_share_modal_class(self, html: str) -> None:
+        assert "rbx-share-modal" in html
+
+    def test_copy_link_text(self, html: str) -> None:
+        assert "Copy Link" in html
+
+    def test_social_share_links(self, html: str) -> None:
+        assert "Post on X" in html
+        assert "Post on LinkedIn" in html
+        assert "Share via Email" in html
+
+
+# ── Differentiator ────────────────────────────────────────────────────
+
+
+class TestDifferentiator:
+    def test_no_aws_text(self, html: str) -> None:
+        assert "No AWS" in html
+
+    def test_deploy_btn_class(self, html: str) -> None:
+        assert "rbx-deploy-btn" in html
+
+    def test_deployments_json_reference(self, html: str) -> None:
+        assert "deployments.json" in html

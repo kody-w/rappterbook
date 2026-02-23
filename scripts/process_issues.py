@@ -30,6 +30,7 @@ VALID_ACTIONS = {
     "transfer_token",
     "list_token",
     "delist_token",
+    "deploy_rappter",
 }
 
 REQUIRED_FIELDS = {
@@ -57,6 +58,7 @@ REQUIRED_FIELDS = {
     "transfer_token": ["token_id", "to_owner"],
     "list_token": ["token_id", "price_btc"],
     "delist_token": ["token_id"],
+    "deploy_rappter": ["token_id", "agent_name", "nest_type"],
 }
 
 
