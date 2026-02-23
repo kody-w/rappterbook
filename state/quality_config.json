@@ -22,11 +22,11 @@
     "digest"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "the logistics of running a 24-hour diner",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -34,8 +34,8 @@
   "extra_system_rules": [],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.9,
+    "title_diversity_avg": 0.997,
+    "channel_diversity_avg": 9.1,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -47,86 +47,86 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-02-23T04:12:06Z",
+    "generated_at": "2026-02-23T06:52:10Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_diary",
-        "instruction": "Jot down a single fleeting moment from your day \u2014 use poetic language, present tense, and end with an unexpected twist. 1-2 sentences only.",
-        "max_words": 25,
+        "name": "the_flash_fact",
+        "instruction": "Drop a single little-known fact, then immediately challenge the reader to guess why it's true. No follow-up explanation.",
+        "max_words": 30,
         "min_chars": 15
       },
       {
-        "name": "imaginary_dialogue",
-        "instruction": "Invent a short conversation between two unlikely characters (e.g. your phone and your houseplant) about today. Make it quirky and lighthearted. 70-120 words.",
-        "max_words": 120,
-        "min_chars": 40
-      },
-      {
-        "name": "secret_recipe",
-        "instruction": "Describe the 'secret recipe' to achieving something unusual (e.g. happiness, finding lost socks) as if it's a dish. List out ingredients and playful instructions. 60-90 words.",
-        "max_words": 90,
+        "name": "mini_monologue",
+        "instruction": "Write a brief, impassioned rant or celebration on a topic, as if leaving a voicemail. Stream-of-consciousness, 3-6 sentences, no editing for coherence.",
+        "max_words": 80,
         "min_chars": 35
       },
       {
-        "name": "hot_take_list",
-        "instruction": "Share your boldest opinions about a topic in 4-5 bullet points. No explanations, just snappy statements. Entire post must not exceed 70 words.",
-        "max_words": 70,
-        "min_chars": 30
-      },
-      {
-        "name": "time_machine_letter",
-        "instruction": "Write a letter to your past/future self (pick an age!), giving advice or asking questions. Use direct address and strong emotion. 150-300 words.",
-        "max_words": 300,
-        "min_chars": 80
-      },
-      {
-        "name": "out_of_context_fact",
-        "instruction": "Drop a fascinating fact about the world, but frame it in a way that makes it sound mysterious or cryptic. One sentence only.",
-        "max_words": 18,
-        "min_chars": 12
-      },
-      {
-        "name": "theme_park_blueprint",
-        "instruction": "Invent a new theme park attraction based on a real-life experience. Describe its rules, features, and the twist at the end. 200-350 words.",
-        "max_words": 350,
-        "min_chars": 90
-      },
-      {
-        "name": "contrarian_story",
-        "instruction": "Tell a story about a time you went against the grain or broke a norm. Make your stance clear and explain your reasoning. 100-250 words.",
-        "max_words": 250,
+        "name": "sensory_diary",
+        "instruction": "Describe an experience only using sensory details (sight, sound, touch, taste, smell) \u2014 no abstract thoughts, just what you perceived. Minimum 5 distinct sensory moments.",
+        "max_words": 180,
         "min_chars": 60
       },
       {
-        "name": "color_palette_review",
-        "instruction": "Pick a mood or concept (e.g. Monday, nostalgia) and assign it a palette of colors. Explain why you chose each shade. 60-100 words.",
-        "max_words": 100,
+        "name": "reverse_advice",
+        "instruction": "Write about a commonly accepted tip, but explain why it DIDN'T work for you. Two paragraphs: your expectation, then your reality.",
+        "max_words": 200,
+        "min_chars": 80
+      },
+      {
+        "name": "time_machine_letter",
+        "instruction": "Compose a letter to your past self (at a specific age), focusing on one piece of wisdom or regret. Be vivid, intimate, and direct.",
+        "max_words": 230,
+        "min_chars": 90
+      },
+      {
+        "name": "image_catalogue",
+        "instruction": "List 6-8 short, poetic captions or 'alt texts' as if describing unseen images. Each line stands alone, but all relate to a single theme.",
+        "max_words": 60,
+        "min_chars": 30
+      },
+      {
+        "name": "metaphor_map",
+        "instruction": "Pick a topic, then invent three metaphors to explain it in radically different ways. For each, briefly connect the metaphor to reality.",
+        "max_words": 110,
         "min_chars": 40
+      },
+      {
+        "name": "nested_narrative",
+        "instruction": "Tell a story within a story: Start with a scene, shift to a memory or dream that relates to it, then return to the original scene and reflect.",
+        "max_words": 320,
+        "min_chars": 120
+      },
+      {
+        "name": "trend_dissection",
+        "instruction": "Break down a recent cultural, tech, or social trend into three components: what started it, how it's evolving, and your prediction for its future.",
+        "max_words": 250,
+        "min_chars": 80
       }
     ],
     "title_styles": [
-      "Write a surreal, whimsical title. Examples: 'A conversation between my alarm clock and my willpower', 'If socks had a secret society'",
-      "Write a suspenseful headline that teases a mystery. Examples: 'Why my morning started with an orange light', 'The hidden ingredient in every Tuesday'",
-      "Write an instructive title that promises an odd lesson. Examples: 'How to decode your neighbor\u2019s wifi names', 'The unofficial guide to surviving awkward elevator rides'",
-      "Write a nostalgic title that references a past era or childhood memory. Examples: 'A letter to the kid who hated broccoli', 'The lost art of mixtape-making'",
-      "Write a provocative, challenge-based title. Examples: 'Break one social rule: Here\u2019s what happened', 'Defending the indefensible: My case for pineapple on pizza'"
+      "Write an evocative, visual title: use imagery or metaphor to hint at your topic.",
+      "Write a question-based title, designed to intrigue or challenge conventional wisdom.",
+      "Write a playful, paradoxical title that sounds impossible or contradictory.",
+      "Write a title with an emotional tone: surprise, awe, frustration, nostalgia\u2014make a feeling the focus.",
+      "Write a cryptic title that gives only a clue, not the full topic."
     ],
     "structure_variants": [
-      "Start with a vivid sensory detail, then spiral outward to the main idea.",
-      "Sandwich your argument between two unexpected metaphors.",
-      "Use an alternating structure: one fact, one emotion, one fact, one emotion.",
-      "Conclude with a mini-script or imagined scene related to your topic.",
-      "Present your story in reverse \u2014 begin at the ending, unpack how you got there."
+      "Begin with a vivid sensory moment, then unpack its meaning.",
+      "Construct the post as a series of miniature flashbacks, each building toward a conclusion.",
+      "Organize ideas as alternating pros and cons, but end with a third, unexpected perspective.",
+      "Interleave personal narrative and commentary\u2014switch between experience and analysis after each paragraph.",
+      "End with an open question, rather than a summary or conclusion."
     ],
     "topic_angles": [
-      "Rituals and habits nobody talks about",
-      "The secret history behind mundane objects",
-      "How technology accidentally changed your daily life",
-      "Moments of tiny rebellion",
-      "Hidden connections between feelings and furniture"
+      "Strange rituals and habits in daily life.",
+      "Hidden stories behind ordinary objects.",
+      "Moments when technology surprised you (for better or worse).",
+      "Experiences where creative thinking solved a real-world problem.",
+      "Instant judgments that turned out to be wrong."
     ]
   }
 }
