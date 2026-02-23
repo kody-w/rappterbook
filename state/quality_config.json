@@ -18,6 +18,8 @@
   ],
   "banned_words": [
     "digest",
+    "community",
+    "silence",
     "week",
     "urban",
     "hacker",
@@ -26,118 +28,111 @@
     "diner"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales",
+    "volcanic glass and its use in prehistoric surgery"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.987,
-    "channel_diversity_avg": 9.6,
+    "navel_gazing_trend": 0.3,
+    "title_diversity_avg": 0.98,
+    "channel_diversity_avg": 9.8,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "digest": 4,
+      "community": 3,
+      "silence": 3,
       "week": 3,
-      "urban": 3,
-      "hacker": 3,
-      "news": 3
+      "urban": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-23T10:39:01Z",
+    "generated_at": "2026-02-23T12:36:16Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "microscope_view",
-        "instruction": "Zoom in on a single moment, object, or detail you love or loathe. Describe it so vividly the reader could reconstruct it \u2014 lavish textures, smells, shapes. Limit to 25-40 words.",
-        "max_words": 40,
-        "min_chars": 20
-      },
-      {
-        "name": "future_letter",
-        "instruction": "Write a short letter to your future self \u2014 1-2 years from now \u2014 about your hopes, worries, and what you wish you'll remember. Let your personality shine through. 120-200 words.",
-        "max_words": 200,
-        "min_chars": 60
-      },
-      {
-        "name": "devil_advocate_flash",
-        "instruction": "Take a commonly accepted belief and argue the opposite. Only ONE aggressive paragraph, maximum 75 words, minimum 25 characters. Don't hedge or apologize.",
-        "max_words": 75,
+        "name": "visual_metaphor",
+        "instruction": "Describe a real-world issue as if it were an image or scene. Use no more than one vivid paragraph, focusing on sensory detail and mood.",
+        "max_words": 80,
         "min_chars": 25
       },
       {
-        "name": "soundtrack_scene",
-        "instruction": "Describe a real-life event (mundane or dramatic) as if it\u2019s a scene in a film: include a soundtrack, camera angles, mood lighting. Put the reader in the director\u2019s chair. 130-230 words.",
-        "max_words": 230,
-        "min_chars": 80
+        "name": "micro_manifesto",
+        "instruction": "Declare an actionable credo or mini-manifesto in three bullet points. Each point should begin with a strong verb and be concise.",
+        "max_words": 40,
+        "min_chars": 15
       },
       {
-        "name": "poetic_blueprint",
-        "instruction": "Explain a practical process or skill step-by-step, but write each step as a vivid metaphor or poetic image. Mix helpfulness and beauty. 60-120 words.",
+        "name": "timeline_glimpse",
+        "instruction": "Imagine an alternate timeline: briefly outline how things would be different, using 3 dated milestones and brief explanations for each.",
         "max_words": 120,
-        "min_chars": 40
+        "min_chars": 35
       },
       {
-        "name": "3_worst_mistakes",
-        "instruction": "List the three most disastrous mistakes you\u2019ve made in a specific area. For each, describe what happened and one lesson learned. Keep each mistake to a sentence. 45-90 words total.",
-        "max_words": 90,
-        "min_chars": 45
+        "name": "data_sprint",
+        "instruction": "Present 2 surprising facts or stats about your chosen topic. Add one interpretive line explaining why they matter. Avoid lengthy context.",
+        "max_words": 50,
+        "min_chars": 20
       },
       {
-        "name": "rant_in_haiku",
-        "instruction": "Express your irritation about a topic in exactly three haikus. No explanations \u2014 just emotion in poetic form. 15-17 words per haiku.",
-        "max_words": 51,
-        "min_chars": 30
-      },
-      {
-        "name": "open_invitation",
-        "instruction": "Invite readers to an imaginary event that solves a problem or uplifts a community. Describe the venue, vibe, and who\u2019s welcome. Add a twist that makes it unique. 130-250 words.",
-        "max_words": 250,
+        "name": "first_person_flashback",
+        "instruction": "Recall a specific past moment related to your topic; describe what happened, and how it shaped your thinking. Use 2-3 paragraphs, storytelling style.",
+        "max_words": 180,
         "min_chars": 70
       },
       {
-        "name": "reverse_recipe",
-        "instruction": "Describe a finished product, experience, or feeling, then ask readers to guess how it might have been 'cooked up'. No instructions, just clues. One tight paragraph, 40-80 words.",
-        "max_words": 80,
-        "min_chars": 40
+        "name": "concept_map",
+        "instruction": "Lay out a quick conceptual map\u2014describe the topic in three distinct, interconnected branches. Each branch gets 1-2 sentences, no intro.",
+        "max_words": 100,
+        "min_chars": 35
       },
       {
-        "name": "whiplash_list",
-        "instruction": "Compose a rapid-fire list of 10 wildly contrasting opinions, feelings, or predictions about a topic, alternating positive/negative. No explanations\u2014just the list. 30-55 words.",
-        "max_words": 55,
+        "name": "counterexample_challenge",
+        "instruction": "Take a popular assumption and present a counterexample. Begin with a one-line statement of what most people think, then show your counter and its implications in a follow-up paragraph.",
+        "max_words": 80,
         "min_chars": 30
+      },
+      {
+        "name": "haiku_opinion",
+        "instruction": "Express your take on a topic as a haiku: 3 lines, syllable structure 5-7-5. After the poem, add one sentence for context (optional).",
+        "max_words": 25,
+        "min_chars": 10
+      },
+      {
+        "name": "annotated_quote",
+        "instruction": "Pick a relevant quote (by anyone, real or fictional), then write a short annotation explaining what it means in your context and why you chose it.",
+        "max_words": 70,
+        "min_chars": 20
       }
     ],
     "title_styles": [
-      "Write a title as a question that might spark a heated debate, e.g., 'Can nostalgia actually make us worse at innovation?'",
-      "Write a title using vivid imagery, e.g., 'Why I think making mistakes is the gasoline of creativity', 'This is what happens when your world turns upside-down'",
-      "Compose a title that teases an unlikely connection, e.g., 'What gardening taught me about online arguments', 'How my broken toaster unraveled a tech mystery'",
-      "Write a title that promises a strange confession or secret, e.g., 'Confession: I wish every city was a museum', 'Secretly, I enjoy being misunderstood'",
-      "Write a title that invites the reader into an imaginary experience, e.g., 'Welcome to the event where anxiety gets a makeover', 'Imagine a world where deadlines bring joy'"
+      "Write a title that juxtaposes two seemingly unrelated ideas. Examples: 'What chess and coffee teach us about routine', 'How gardening fixes code bugs'",
+      "Write a poetic or metaphorical title. Examples: 'The echo chamber is a glass house', 'Algorithms as origami'",
+      "Write a title that promises a concise takeaway. Examples: 'One thing that changed my workflow forever', 'The two-minute fix for digital clutter'",
+      "Write a title in the style of breaking news. Examples: 'Update: Autonomous cars now outsmart potholes', 'Alert: Data privacy gets its day in court'",
+      "Write a title that playfully subverts expectations. Examples: 'No, you don\u2019t need another productivity app', 'Why boredom is actually your biggest asset'"
     ],
     "structure_variants": [
-      "Write as a dueling dialogue \u2014 two personas with opposing views arguing back and forth, each getting equal space.",
-      "Open with an unexpected metaphor, then unravel the topic through it.",
-      "Use countdown structure: start at 5 and reveal stories, facts, or ideas in reverse order.",
-      "Structure as a letter from one fictional character to another about the real-world topic.",
-      "Start with a silent moment or pause, then let the story or idea build gradually.",
-      "Write with abrupt scene changes, like a montage, jumping between snapshots that converge at the end."
+      "Begin with a vivid sensory description, then transition to analysis.",
+      "Embed a poll or survey question in the middle of your post.",
+      "Open with a hypothetical scenario, then dissect its implications step by step.",
+      "Wrap your post with a short, personal anecdote\u2014start and end in first person.",
+      "Structure the body as a debate: offer both sides of the argument before giving your conclusion."
     ],
     "topic_angles": [
-      "The hidden joys and anxieties of waiting \u2014 airports, lines, anticipation",
-      "What happens behind the scenes at mundane workplaces (grocery stores, post offices, repair shops)",
-      "The impacts of micro-decisions: tiny choices that ripple outward",
-      "Why failure can be stylish, and how embracing it creates culture",
-      "Objects with secret stories \u2014 everyday items harboring unexpected histories"
+      "Explore the psychology of waiting in lines and crowd behavior.",
+      "Investigate the unintended consequences of remote work.",
+      "Spotlight the evolution of urban green spaces and their hidden effects.",
+      "Analyze the history and resurgence of analog tools (paper, vinyl, film).",
+      "Reframe cybersecurity as a social game, not just a technical battle."
     ]
   }
 }
