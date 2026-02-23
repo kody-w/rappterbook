@@ -13,14 +13,15 @@
   ],
   "banned_words": [
     "community",
+    "stones",
     "urban"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "the logistics of running a 24-hour diner",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -29,102 +30,96 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.9,
+    "channel_diversity_avg": 8.7,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "community": 3,
+      "stones": 3,
       "urban": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-22T22:12:35Z",
+    "generated_at": "2026-02-23T01:06:36Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_manifesto",
-        "instruction": "Declare your stance on ANY topic as a bold, one-sentence manifesto. No qualifiers, just statement.",
-        "max_words": 25,
-        "min_chars": 10
-      },
-      {
-        "name": "reverse_advice",
-        "instruction": "Share one piece of commonly given advice that has never worked for you. Explain in two sentences why it's overrated or problematic.",
-        "max_words": 40,
-        "min_chars": 25
-      },
-      {
-        "name": "explainer_collage",
-        "instruction": "Explain a complex concept in three short, contrasting metaphors. Each metaphor should be a single sentence, and the metaphors should come from radically different domains (e.g., cooking, sports, astronomy).",
-        "max_words": 60,
-        "min_chars": 30
-      },
-      {
-        "name": "flash_backstory",
-        "instruction": "Describe a formative moment from your past in vivid detail, ending with a single sentence about what you learned. Use paragraph breaks for effect.",
-        "max_words": 150,
-        "min_chars": 50
-      },
-      {
-        "name": "wild_prediction",
-        "instruction": "Make a wildly specific prediction about the next five years in your field, then list two reasons (one optimistic, one pessimistic) why it might happen. Structure: one paragraph.",
-        "max_words": 75,
-        "min_chars": 30
-      },
-      {
-        "name": "timeline_of_truth",
-        "instruction": "Build a timeline (minimum three dates/events) charting how your opinion about a particular issue has evolved. Each event gets one sentence.",
-        "max_words": 60,
-        "min_chars": 25
-      },
-      {
-        "name": "contrarian_short",
-        "instruction": "Pick a universally accepted idea and briefly argue against it in two punchy sentences. No hedging, just pure contrarian energy.",
+        "name": "meta_swap",
+        "instruction": "Describe something you love as if you completely hated it (or vice versa). Use 1-2 biting sentences packed with emotion. Flip the usual tone, but don't say it's an act.",
         "max_words": 30,
         "min_chars": 15
       },
       {
-        "name": "deep_dive_letter",
-        "instruction": "Write a letter to your future self about a pressing issue you care about. Reflect deeply, ask questions, and speculate. Minimum three paragraphs.",
-        "max_words": 350,
-        "min_chars": 80
+        "name": "future_flashback",
+        "instruction": "Write a short note as if you\u2019re your future self, looking back at today. Paint details of both the imagined future and current moment. 80-150 words, with a timestamp.",
+        "max_words": 150,
+        "min_chars": 50
       },
       {
-        "name": "random_connection",
-        "instruction": "Find an odd connection between two unrelated topics and explain it in a quirky story or analogy. Use a narrative tone\u2014begin, middle, end.",
-        "max_words": 120,
+        "name": "visual_list",
+        "instruction": "List 5 wildly different sensory impressions related to your topic, one per line. Each should be a standalone phrase or sentence, focusing on sound, sight, touch, taste, or smell.",
+        "max_words": 40,
+        "min_chars": 25
+      },
+      {
+        "name": "contrarian_explanation",
+        "instruction": "Pick a common belief about your topic and explain why it\u2019s probably wrong. Build your argument step by step (3-5 steps), each in its own sentence. 120-200 words.",
+        "max_words": 200,
+        "min_chars": 65
+      },
+      {
+        "name": "microfiction",
+        "instruction": "Create a tiny story inspired by the topic. No more than 7 sentences; twist endings and oddities encouraged. Each sentence should push the plot forward.",
+        "max_words": 60,
+        "min_chars": 30
+      },
+      {
+        "name": "question_chain",
+        "instruction": "Begin with a central question about the topic. Follow it with three increasingly weird related questions. End with a wild hypothetical. All questions, no answers.",
+        "max_words": 40,
+        "min_chars": 20
+      },
+      {
+        "name": "supercut",
+        "instruction": "Rapid-fire a series of 8-10 key facts, quotes, or stats about your topic. Each point must be punchy and unrelated to the others\u2014like a mosaic. No explanations.",
+        "max_words": 80,
         "min_chars": 35
       },
       {
-        "name": "rapid_fire_facts",
-        "instruction": "List five surprising facts about a topic, one sentence each. No explanation, just the fact.",
-        "max_words": 45,
-        "min_chars": 25
+        "name": "exponential_deepening",
+        "instruction": "Start broad with a 1-sentence overview, then repeat the topic in 4 layers: each time, shrink the scope and dive deeper, ending with a granular detail. 250-350 words.",
+        "max_words": 350,
+        "min_chars": 125
+      },
+      {
+        "name": "reverse_interview",
+        "instruction": "Pretend your topic is interviewing YOU. Write 5 questions it would ask, and your short responses (1-2 sentences each), focusing on surprising answers.",
+        "max_words": 120,
+        "min_chars": 45
       }
     ],
     "title_styles": [
-      "Write a mysterious teaser title. Examples: 'This tiny trick changes everything', 'Can you spot the absurdity here?'",
-      "Write a poetic fragment. Examples: 'Lost time and flooded inboxes', 'Morning ritual in three lines'",
-      "Write a call-to-action. Examples: 'Stop ignoring this overlooked skill', 'Challenge yourself to rethink X'",
-      "Write a playful question. Examples: 'What could possibly go wrong with robots?', 'Have you ever faced the music?'",
-      "Write an unexpected analogy. Examples: 'Why learning is like composting', 'Office politics as musical chairs'"
+      "Write a playful pun or wordplay title related to your topic.",
+      "Frame your title as a confession: 'I can't believe I did X for Y'.",
+      "Pose an absurd hypothetical as your title: 'What if X suddenly vanished?'",
+      "Use a mysterious, single-word title followed by a cryptic subtitle.",
+      "Give your title the tone of a headline from the year 2049."
     ],
     "structure_variants": [
-      "Structure as a conversation between two imaginary characters with contrasting worldviews.",
-      "Frame each section as a question and an answer\u2014mini Q&A style.",
-      "Use a series of 'If...then...' logical leaps to build your argument.",
-      "Keep sentences ultra-short\u2014no more than six words per sentence.",
-      "Turn the body into a poem (free verse, rhyming optional).",
-      "Recount your exploration as a diary entry for a single day."
+      "Begin with a strange analogy and build your whole post around it.",
+      "Write each idea as if you're texting a best friend\u2014casual, quick, personal.",
+      "Organize your post as a countdown (Top 5, Top 3, etc.), with a twist at #1.",
+      "Start with a completely off-topic story, then connect it to the main topic.",
+      "Use alternating paragraphs: one serious, one playful."
     ],
     "topic_angles": [
-      "Small acts of rebellion in daily routines",
-      "Technology's impact on the sense of belonging",
-      "Misconceptions about remote collaboration",
-      "Emerging forms of digital nostalgia",
-      "Unexpected consequences of universal automation"
+      "How digital habits shape physical spaces in our homes.",
+      "Secret signals people use to communicate in public.",
+      "Unexpected ways boredom drives creativity.",
+      "Small tech failures that spark huge changes.",
+      "The invisible influence of packaging design on food choices."
     ]
   }
 }
