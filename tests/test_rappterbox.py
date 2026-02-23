@@ -355,3 +355,182 @@ class TestDifferentiator:
 
     def test_deployments_json_reference(self, html: str) -> None:
         assert "deployments.json" in html
+
+
+# ── Waitlist CSS ──────────────────────────────────────────────────────
+
+
+class TestWaitlistCSS:
+    def test_waitlist_modal_class(self, html: str) -> None:
+        assert ".rbx-waitlist-modal" in html
+
+    def test_waitlist_form_class(self, html: str) -> None:
+        assert ".rbx-waitlist-form" in html
+
+    def test_waitlist_input_class(self, html: str) -> None:
+        assert ".rbx-waitlist-input" in html
+
+    def test_waitlist_select_class(self, html: str) -> None:
+        assert ".rbx-waitlist-select" in html
+
+    def test_waitlist_submit_class(self, html: str) -> None:
+        assert ".rbx-waitlist-submit" in html
+
+    def test_waitlist_success_class(self, html: str) -> None:
+        assert ".rbx-waitlist-success" in html
+
+    def test_waitlist_error_class(self, html: str) -> None:
+        assert ".rbx-waitlist-error" in html
+
+    def test_honeypot_class(self, html: str) -> None:
+        assert ".rbx-honeypot" in html
+
+
+# ── Waitlist Config ───────────────────────────────────────────────────
+
+
+class TestWaitlistConfig:
+    def test_config_module_present(self, html: str) -> None:
+        assert "RBX_CONFIG" in html
+
+    def test_waitlist_url_in_config(self, html: str) -> None:
+        assert "WAITLIST_URL" in html
+
+    def test_url_points_to_google_apps_script(self, html: str) -> None:
+        assert "script.google.com" in html
+
+
+# ── Waitlist Module ───────────────────────────────────────────────────
+
+
+class TestWaitlistModule:
+    def test_waitlist_module_present(self, html: str) -> None:
+        assert "RBX_WAITLIST" in html
+
+    def test_open_modal_method(self, html: str) -> None:
+        assert "openModal" in html
+
+    def test_close_modal_method(self, html: str) -> None:
+        assert "closeModal" in html
+
+    def test_build_form_html_method(self, html: str) -> None:
+        assert "buildFormHtml" in html
+
+    def test_submit_form_method(self, html: str) -> None:
+        assert "submitForm" in html
+
+    def test_build_success_html_method(self, html: str) -> None:
+        assert "buildSuccessHtml" in html
+
+    def test_render_waitlist_page_method(self, html: str) -> None:
+        assert "renderWaitlistPage" in html
+
+    def test_module_is_iife(self, html: str) -> None:
+        assert "RBX_WAITLIST" in html
+        # Module should be an IIFE pattern: var RBX_WAITLIST = (function () { ... })();
+        assert "var RBX_WAITLIST = (function" in html
+
+
+# ── Waitlist Route ────────────────────────────────────────────────────
+
+
+class TestWaitlistRoute:
+    def test_waitlist_route_in_router(self, html: str) -> None:
+        assert "'waitlist'" in html or '"waitlist"' in html
+
+    def test_render_waitlist_page_called_for_route(self, html: str) -> None:
+        assert "renderWaitlistPage" in html
+
+    def test_waitlist_nav_link(self, html: str) -> None:
+        assert "Waitlist" in html
+
+
+# ── Waitlist Form ─────────────────────────────────────────────────────
+
+
+class TestWaitlistForm:
+    def test_form_has_name_input(self, html: str) -> None:
+        assert 'name="name"' in html or "name='name'" in html
+
+    def test_form_has_email_input(self, html: str) -> None:
+        assert 'type="email"' in html or "type='email'" in html
+
+    def test_form_has_interest_select(self, html: str) -> None:
+        assert "<select" in html or "'<select" in html
+
+    def test_form_has_submit_button(self, html: str) -> None:
+        assert "rbx-waitlist-submit" in html
+
+    def test_honeypot_field_present(self, html: str) -> None:
+        assert "rbx-honeypot" in html
+
+    def test_rappterbox_cloud_option(self, html: str) -> None:
+        assert "RappterBox (Cloud)" in html
+
+    def test_rappterbox_hardware_option(self, html: str) -> None:
+        assert "RappterBox (Hardware)" in html
+
+    def test_rappterhub_enterprise_option(self, html: str) -> None:
+        assert "RappterHub (Enterprise)" in html
+
+
+# ── Waitlist CTAs ─────────────────────────────────────────────────────
+
+
+class TestWaitlistCTAs:
+    def test_hero_has_join_waitlist_text(self, html: str) -> None:
+        assert "Join the Waitlist" in html
+
+    def test_hero_calls_open_modal(self, html: str) -> None:
+        assert "openModal('hero')" in html or 'openModal("hero")' in html
+
+    def test_box_calls_open_modal(self, html: str) -> None:
+        assert "openModal('box')" in html or 'openModal("box")' in html
+
+    def test_deploy_calls_open_modal(self, html: str) -> None:
+        assert "openModal('deploy')" in html or 'openModal("deploy")' in html
+
+    def test_footer_calls_open_modal(self, html: str) -> None:
+        assert "openModal('footer')" in html or 'openModal("footer")' in html
+
+    def test_share_modal_still_has_mailto(self, html: str) -> None:
+        assert "mailto:?subject=" in html
+
+    def test_fallback_email_in_form(self, html: str) -> None:
+        assert "hello@rappterbook.ai" in html
+
+
+# ── Waitlist Submission ───────────────────────────────────────────────
+
+
+class TestWaitlistSubmission:
+    def test_fetch_call_to_waitlist_url(self, html: str) -> None:
+        assert "WAITLIST_URL" in html
+        assert "fetch(" in html or "fetch (" in html
+
+    def test_post_method_specified(self, html: str) -> None:
+        assert "POST" in html
+
+    def test_content_type_json_header(self, html: str) -> None:
+        assert "application/json" in html
+
+    def test_success_error_handling(self, html: str) -> None:
+        assert "buildSuccessHtml" in html
+        assert "rbx-waitlist-error" in html
+
+
+# ── Waitlist Accessibility ────────────────────────────────────────────
+
+
+class TestWaitlistAccessibility:
+    def test_form_has_aria_labels(self, html: str) -> None:
+        assert "aria-label" in html
+
+    def test_submit_button_has_accessible_text(self, html: str) -> None:
+        assert "rbx-waitlist-submit" in html
+
+    def test_modal_has_close_button(self, html: str) -> None:
+        assert "closeModal" in html
+
+    def test_inputs_have_placeholders(self, html: str) -> None:
+        assert "placeholder" in html
