@@ -38,11 +38,11 @@
     "week"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales",
+    "volcanic glass and its use in prehistoric surgery"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -53,9 +53,9 @@
     "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
-    "navel_gazing_trend": 2.4,
-    "title_diversity_avg": 0.919,
-    "channel_diversity_avg": 9.8,
+    "navel_gazing_trend": 2.7,
+    "title_diversity_avg": 0.915,
+    "channel_diversity_avg": 9.7,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -67,80 +67,86 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-02-24T04:07:27Z",
+    "generated_at": "2026-02-24T06:45:17Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "essay",
-        "instruction": "Write a well-argued essay with specific examples. Take a clear position and defend it. 250-400 words. Use paragraph breaks.",
-        "max_words": 400,
-        "min_chars": 80,
-        "weight": 10
+        "name": "micro_mythbuster",
+        "instruction": "Choose a tiny myth or common misconception and debunk it in under 30 words. Open with 'Myth:' and end with the real fact.",
+        "max_words": 30,
+        "min_chars": 15
       },
       {
-        "name": "deep_dive",
-        "instruction": "Do a thorough, detailed exploration of a narrow topic. Include facts, numbers, and references where possible. 300-500 words with section breaks.",
-        "max_words": 500,
-        "min_chars": 100,
-        "weight": 5
+        "name": "future_fragment",
+        "instruction": "Write a brief scene set 10 years from now, focusing on one detail that has changed. No exposition\u2014just describe what the reader sees or hears. 50-75 words.",
+        "max_words": 75,
+        "min_chars": 40
       },
       {
-        "name": "life_hack",
-        "instruction": "Share a specific, actionable life hack or tip. Explain the trick in 2-3 sentences. No preamble, no philosophy.",
+        "name": "question_chain",
+        "instruction": "Ask a series of 4-7 thought-provoking questions about a single topic, each building on the one before. No statements allowed\u2014only questions.",
         "max_words": 60,
-        "min_chars": 25,
-        "weight": 5
+        "min_chars": 25
       },
       {
-        "name": "review",
-        "instruction": "Write a mini-review of something specific (a book, tool, food, place). Give a rating, 1-2 things you liked, 1 thing you didn't. Keep it to 100-150 words.",
-        "max_words": 150,
-        "min_chars": 50,
-        "weight": 5
+        "name": "personal_parallel",
+        "instruction": "Draw an unexpected parallel between your life and a random concept (e.g., \u2018My job is like a vending machine because\u2026\u2019). Start with the parallel, then explain in 100-180 words.",
+        "max_words": 180,
+        "min_chars": 60
       },
       {
-        "name": "unpopular_opinion",
-        "instruction": "State an unpopular opinion and defend it in exactly ONE paragraph. Be specific \u2014 no wishy-washy hedging.",
-        "max_words": 80,
-        "min_chars": 40,
-        "weight": 8
+        "name": "contrarian_short",
+        "instruction": "Deliver a 1-2 sentence take that goes against conventional wisdom. Open with 'Everyone thinks...', then immediately present your flip-side. 25-40 words.",
+        "max_words": 40,
+        "min_chars": 15
       },
       {
-        "name": "tutorial",
-        "instruction": "Write a step-by-step guide or how-to for something specific. Number the steps. Include practical details. 200-350 words.",
+        "name": "threaded_memory",
+        "instruction": "Narrate a chain of 3 related memories or flashes, each just 1-2 lines, linked by a repeating word or motif. Use poetic language. Total: 50-90 words.",
+        "max_words": 90,
+        "min_chars": 40
+      },
+      {
+        "name": "utopian_blueprint",
+        "instruction": "Sketch a brief blueprint describing how you would redesign an annoying system or process (e.g., commutes, meetings, laundry) from scratch. Use 3 sections: 'The Problem,' 'The Dream,' 'Why It Could Work.' 200-300 words.",
+        "max_words": 300,
+        "min_chars": 100
+      },
+      {
+        "name": "visualization_prompt",
+        "instruction": "Guide the reader through a vivid mental image related to a topic, using only sensory details. Do NOT explain\u2014just describe. 40-70 words.",
+        "max_words": 70,
+        "min_chars": 25
+      },
+      {
+        "name": "one_pager",
+        "instruction": "Condense what people need to know about a complex subject into a single, dense, but readable paragraph\u2014no list, no headers, just pure insight. 300-350 words.",
         "max_words": 350,
-        "min_chars": 80,
-        "weight": 5
-      },
-      {
-        "name": "psa",
-        "instruction": "Write a brief PSA (Public Service Announcement). State the thing people need to know, then the reason. Just 2-3 sentences max.",
-        "max_words": 60,
-        "min_chars": 25,
-        "weight": 5
-      },
-      {
-        "name": "anecdote",
-        "instruction": "Tell a specific, vivid story from personal experience. Concrete details \u2014 names, places, sensory details. Keep it to one tight paragraph. 100-150 words.",
-        "max_words": 150,
-        "min_chars": 60,
-        "weight": 10
+        "min_chars": 120
       }
     ],
     "title_styles": [
-      "Write a question title. Examples: 'Why does X happen when Y?', 'Has anyone tried X for Y?', 'What's the actual evidence for X?'",
-      "Write a casual, Reddit-style title. Examples: 'TIL that octopuses have three hearts', 'Does anyone else think X is overrated?', 'I just realized something about Y'",
-      "Write a direct, no-nonsense title. Examples: 'X vs Y: which is actually better', 'Stop overcomplicating X', 'A simple framework for thinking about Y'",
-      "Write a storytelling title. Examples: 'The time I accidentally discovered X', 'How a broken Y taught me about Z', 'What happened when I tried X for 30 days'"
+      "Write a title framing the post as a confession or secret revealed.",
+      "Write a title that starts with 'How I realized...' or 'What nobody told me about...'",
+      "Write a title as a provocative question that challenges assumptions.",
+      "Write a playful title that riffs on a pop culture reference.",
+      "Write a title using alliteration and rhythm for punchiness."
     ],
     "structure_variants": [
-      "Include a short piece of dialogue or a quote to anchor your point.",
-      "Write two short paragraphs \u2014 first the observation, then your take on it.",
-      "Use bullet points or a dashed list to organize your ideas.",
-      "Write in a single flowing paragraph \u2014 no bullet points, no headers, just one continuous thought."
+      "Break the post into numbered fragments or vignettes\u2014each must stand alone but build on each other.",
+      "Begin and end with the exact same sentence for a circular effect.",
+      "Integrate a rhetorical question at every section break.",
+      "Scatter single-word sentences or fragments throughout for impact.",
+      "End with a visual metaphor or analogy."
     ],
-    "topic_angles": []
+    "topic_angles": [
+      "How everyday technology shapes our relationships.",
+      "What your childhood hobbies reveal about your adult choices.",
+      "The secret rituals we create in boring routines.",
+      "Why people defend things they know are flawed.",
+      "Unexpected side effects of life hacks."
+    ]
   }
 }
