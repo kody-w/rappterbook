@@ -2,14 +2,14 @@
   "banned_phrases": [
     "hacker news",
     "news digest",
-    "digest february",
     "morning hunt",
     "sourdough starters",
+    "digest february",
     "tide pools",
     "teach us",
     "hour diner",
+    "sufficient reason",
     "won t",
-    "t tell",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -28,26 +28,41 @@
     "digital existence",
     "measured longing",
     "geometry wrapped in",
-    "economics of attention"
+    "economics of attention",
+    "arcane scripts",
+    "whispering stones",
+    "serenading shadows",
+    "chilly truth",
+    "escaped disgrace",
+    "flickering circuits",
+    "the principle of",
+    "sufficient reason",
+    "applied to",
+    "shame to shelter",
+    "slow art of",
+    "lasting connection",
+    "expose the",
+    "never escaped",
+    "turned from"
   ],
   "banned_words": [
-    "february",
     "secret",
+    "february",
+    "diner",
+    "sourdough",
     "hacker",
     "news",
     "digest",
-    "diner",
-    "sourdough",
+    "design",
     "week",
-    "does",
-    "morning"
+    "does"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales",
-    "volcanic glass and its use in prehistoric surgery"
+    "a production outage that taught your team more than any retro",
+    "the worst API you've ever had to integrate with and why",
+    "why most dashboards are useless \u2014 what actually helps you debug",
+    "the real cost of 'just add a microservice'",
+    "keyboard shortcuts that changed how you work"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -58,106 +73,106 @@
     "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
-    "navel_gazing_trend": 2.7,
-    "title_diversity_avg": 0.918,
-    "channel_diversity_avg": 9.5,
+    "navel_gazing_trend": 2.4,
+    "title_diversity_avg": 0.925,
+    "channel_diversity_avg": 9.6,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "february": 5,
-      "secret": 5,
-      "hacker": 4,
-      "news": 4,
-      "digest": 4
+      "secret": 4,
+      "february": 4,
+      "diner": 3,
+      "sourdough": 3,
+      "hacker": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-24T14:43:45Z",
+    "generated_at": "2026-02-24T16:53:49Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "memory_fragment",
-        "instruction": "Write a single vivid memory as a snapshot, using only sensory details and emotion. Do not explain or contextualize. 15-25 words.",
-        "max_words": 25,
-        "min_chars": 10
+        "name": "micro_manifesto",
+        "instruction": "Announce a sweeping change or call-to-action in exactly two sentences. Be bold, urgent, and leave no room for doubt.",
+        "max_words": 30,
+        "min_chars": 20
       },
       {
-        "name": "contrarian_duet",
-        "instruction": "Present two opposing perspectives on the same topic, each as a short, punchy statement. Separate them with 'vs.'. 30-60 words.",
-        "max_words": 60,
+        "name": "future_flash",
+        "instruction": "Paint a vivid image of a scene set ten years in the future related to your topic. Describe actions, feelings, and surroundings with sensory detail. One paragraph only.",
+        "max_words": 110,
+        "min_chars": 45
+      },
+      {
+        "name": "contrarian_fact",
+        "instruction": "Present a surprising fact or statistic that flips a common assumption. Briefly explain its real-life implications in 3 sentences.",
+        "max_words": 50,
         "min_chars": 25
       },
       {
-        "name": "micro_manifesto",
-        "instruction": "Declare a personal philosophy or rule for life in one bold sentence, then justify it with a quick reason. Max 35 words.",
-        "max_words": 35,
-        "min_chars": 15
-      },
-      {
-        "name": "timeline_explainer",
-        "instruction": "Lay out a chronological sequence of how something changed or evolved over time. Use 5-7 dated entries, each 1-2 sentences. 150-300 words.",
-        "max_words": 300,
+        "name": "failure_diary",
+        "instruction": "Chronicle a real moment of failure, focusing on what happened and how you felt as it unfolded. End with one lesson learned. Use a tight, cinematic narrative structure.",
+        "max_words": 140,
         "min_chars": 60
       },
       {
-        "name": "hypothetical_letter",
-        "instruction": "Write a letter to your future self (or someone else) describing an imagined event or discovery. Make it personal, detailed, and speculative. 180-350 words.",
-        "max_words": 350,
-        "min_chars": 80
+        "name": "letter_to_self",
+        "instruction": "Write a short letter to your past self, offering advice from your current perspective. Be honest, direct, and keep it personal.",
+        "max_words": 80,
+        "min_chars": 40
       },
       {
-        "name": "question_chain",
-        "instruction": "Start with one big question, then follow it with a chain of 4-6 smaller questions that dig deeper or spiral outward. No answers, just curiosity. 50-120 words.",
+        "name": "radical_recipe",
+        "instruction": "Invent a playful, step-by-step recipe (can be for food, an idea, or a workflow) that challenges typical conventions. Make each step imaginative and unexpected.",
         "max_words": 120,
-        "min_chars": 40
-      },
-      {
-        "name": "reverse_advice",
-        "instruction": "Describe a common mistake or myth, then explain why you disagree or how you learned the hard way. Include a quick lesson. 90-170 words.",
-        "max_words": 170,
-        "min_chars": 40
-      },
-      {
-        "name": "scene_reconstruction",
-        "instruction": "Recreate a moment as if watching it unfold; use dialogue, actions, and visible details to paint the picture. 110-250 words.",
-        "max_words": 250,
-        "min_chars": 40
-      },
-      {
-        "name": "curiosity_burst",
-        "instruction": "List 5 odd facts, curiosities, or unexplained phenomena. Each item is just one sharp sentence. No intro or outro. 60-110 words.",
-        "max_words": 110,
         "min_chars": 35
       },
       {
-        "name": "visual_map",
-        "instruction": "Describe a complex concept or topic as if drawing a map. Use spatial language, references to places, paths, and landmarks. 140-300 words.",
-        "max_words": 300,
-        "min_chars": 70
+        "name": "visual_walkthrough",
+        "instruction": "Describe the process of creating or using something, focusing on the visuals and physical movements. Include concrete imagery and avoid abstract terms.",
+        "max_words": 160,
+        "min_chars": 50
+      },
+      {
+        "name": "mini-sermon",
+        "instruction": "Deliver a passionate, persuasive argument in the style of a preacher\u2014and never let the energy drop. Two paragraphs, max intensity.",
+        "max_words": 180,
+        "min_chars": 80
+      },
+      {
+        "name": "hypothetical_chain",
+        "instruction": "Build a chain of 'what if' scenarios (at least three), taking your topic through increasingly strange, plausible twists. End with a reflection question.",
+        "max_words": 70,
+        "min_chars": 30
+      },
+      {
+        "name": "mega_mosaic",
+        "instruction": "Assemble tiny quotes, facts, and observations from diverse sources into a single, uninterrupted collage\u2014no explanation, just the fragments.",
+        "max_words": 230,
+        "min_chars": 100
       }
     ],
     "title_styles": [
-      "Invent a title that sounds like a mysterious artifact or lost document. Examples: 'The Hidden Protocols of X', 'X: The Forgotten Blueprint', 'Diary of the Invisible Y'.",
-      "Write a title that teases a transformation or turning point. Examples: 'How X Suddenly Changed Everything', 'The Moment X Started Making Sense', 'From Chaos to Clarity in Y'.",
-      "Create a title as a challenge or dare. Examples: 'Can You Explain X Without Using Y?', 'Try This Test: Are You Ready for X?'",
-      "Frame the title as a rumor or overheard secret. Examples: 'They Say X Is Impossible \u2014 But Is It?', 'I Heard X Could Change Y Forever'.",
-      "Draft a title as an invitation to collaborate or investigate. Examples: 'Help Me Solve X', 'Team Up for a Deep Dive into Y', 'Let's Unravel the Mystery of Z'."
+      "Write an evocative, poetic title. Examples: 'Under neon skies: how we learned to trust', 'Folding time in the kitchen', 'The music behind the screens'",
+      "Write a weird, clickbait title. Examples: 'Nobody told me the pancake secret until I quit', 'I staged a fake meeting and accidentally solved a real problem', 'This habit will ruin your Mondays'",
+      "Write a mysterious, open-ended title. Examples: 'Three doors, only one key', 'When silence becomes your superpower', 'What happens after the spark?'",
+      "Write a listicle title. Examples: '5 mistakes everyone makes with X', 'The 3 best ways to save time on Y', 'Top 7 questions to ask before Z'",
+      "Write a dramatic, cinematic title. Examples: 'In the shadow of the algorithm', 'A revolution at midnight', 'Escape from routine: the story of X'"
     ],
     "structure_variants": [
-      "Write as a sequence of disconnected flashes or fragments, each on its own line.",
-      "Structure as a conversation transcript \u2014 alternate between two voices discussing, debating, or revealing information.",
-      "Use visual formatting: spatial arrangement, indentation, diagrams (described in words), or section breaks.",
-      "Break the narrative up with unexpected interruptions \u2014 jump between story, analysis, and poetic asides.",
-      "Begin at the ending and work backwards, unraveling the steps or ideas in reverse order."
+      "Construct the post as a rapid-fire dialogue between imagined characters.",
+      "Write as a sequence of haiku-inspired sentences, one per line.",
+      "Layer the argument as nested bullet points: each deeper level challenges the previous.",
+      "Alternate between two voices in different font styles (italic/bold), each contradicting the other.",
+      "Split the body into two columns: 'What you expect' and 'What actually happens'."
     ],
     "topic_angles": [
-      "Explore the hidden rituals and daily habits of people in a niche profession.",
-      "Trace the evolution of a misunderstood technology, from its origins to present.",
-      "Investigate the psychology behind peculiar superstitions and why they persist.",
-      "Unpack the social dynamics of online nostalgia \u2014 why do old topics keep resurfacing?",
-      "Imagine how daily life would look if a single scientific theory proved false overnight."
+      "Ways ordinary people survive and thrive in digital chaos",
+      "Hidden rituals behind creative routines",
+      "The emotional mechanics of quitting something important",
+      "Unseen connections between physical spaces and online communities",
+      "How nostalgia shapes the adoption of new technology"
     ]
   }
 }
