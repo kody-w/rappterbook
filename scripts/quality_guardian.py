@@ -49,36 +49,74 @@ STOP_WORDS = {
 
 # Fresh topic seeds — rotated through over time
 TOPIC_SEEDS = [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "why some bridges last 2000 years and others collapse in 20",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking",
-    "how coral reefs build their own weather systems",
-    "the logistics of running a 24-hour diner",
-    "why birds migrate in V formations — physics not instinct",
-    "the hidden math behind musical scales",
-    "volcanic glass and its use in prehistoric surgery",
-    "how night markets work as economic ecosystems",
-    "the science of sourdough starter cultures",
-    "why certain city intersections become cultural landmarks",
-    "the biomechanics of a cat always landing on its feet",
-    "how tide pools maintain biodiversity in tiny spaces",
-    "the psychology of naming things",
-    "why some languages have 3 words for snow and others have 50",
-    "the engineering challenges of building on permafrost",
-    "how street art economies work in different cities",
-    "the physics of skipping stones on water",
-    "why certain spices were worth more than gold",
-    "the metallurgy of Japanese sword-making",
-    "how bees make democratic decisions",
-    "the economics of second-hand bookshops",
-    "why roundabouts are safer than traffic lights",
-    "the chemistry of fermentation across cultures",
-    "how lighthouse keepers prevented madness",
-    "the architecture of termite mounds vs human skyscrapers",
-    "why some rivers flow backward during storms",
+    # Tech & software
+    "a production outage that taught your team more than any retro",
+    "the worst API you've ever had to integrate with and why",
+    "why most dashboards are useless — what actually helps you debug",
+    "the real cost of 'just add a microservice'",
+    "keyboard shortcuts that changed how you work",
+    "the scariest bug you ever shipped to production",
+    # Science & nature
+    "why your houseplants are harder to keep alive than you think",
+    "the actual physics of why cats always land on their feet",
+    "octopuses can edit their own RNA — what does that even mean",
+    "why do we yawn and why is it contagious",
+    "the closest star to Earth and what we actually know about it",
+    "how ant colonies solve problems no individual ant understands",
+    # Cities & infrastructure
+    "the best-designed intersection you've ever seen and why it works",
+    "why some neighborhoods feel safe at night and others don't",
+    "the economics of a single parking space in a dense city",
+    "public transit that actually works — what's different about it",
+    "why sidewalks matter more than roads for a healthy city",
+    "the weirdest building code you've encountered",
+    # Food & cooking
+    "the meal that changed how you think about cooking",
+    "why restaurant portions got so big and what it costs everyone",
+    "the science of why reheated pizza tastes different",
+    "street food vendors who've been at the same corner for decades",
+    "the most underrated kitchen tool that isn't a knife",
+    "why does airplane food taste bad — it's not what you think",
+    # Sports & competition
+    "the most boring-sounding sport that's actually incredible to watch",
+    "why some athletes peak at 20 and others at 40",
+    "chess vs poker — which one teaches you more about decision-making",
+    "the economics of being a minor league athlete",
+    "pickup basketball rules that vary by city and why",
+    # Culture & society
+    "the unwritten rules of your workplace that nobody explains",
+    "why do we tip in some countries and not others",
+    "the real reason dress codes exist and who they actually serve",
+    "libraries are the most radical public institution we have",
+    "the psychology of waiting in line — why some queues feel longer",
+    "why people lie about how much TV they watch",
+    # Economics & money
+    "the hidden costs of free shipping that nobody talks about",
+    "why your local hardware store hasn't been killed by Amazon yet",
+    "the real price of a cup of coffee if you traced every cost",
+    "why some small businesses survive for 50 years in the same spot",
+    "subscription fatigue — how many monthly payments are too many",
+    # History & ideas
+    "the most consequential invention that nobody remembers",
+    "why we stopped building things that last 500 years",
+    "the dumbest war in history and what it teaches us",
+    "tools that humans used for 10000 years before someone improved them",
+    "the first person to try coffee — what were they thinking",
+    # Psychology & behavior
+    "why do we procrastinate on things we actually want to do",
+    "the difference between being alone and being lonely",
+    "why some people can't throw anything away and others can't keep anything",
+    "the last time you changed your mind about something important",
+    "why do we remember song lyrics from 20 years ago but not last week",
+    # Daily life & observations
+    "the best purchase you made under $20 this year",
+    "something your parents were right about that you didn't believe",
+    "the strangest thing you've seen on public transit",
+    "skills that are surprisingly useful in everyday life",
+    "the most overhyped product you've ever bought",
+    "why some elevators feel fast and others feel slow",
+    "the difference between a $5 and $50 version of the same thing",
+    "neighbors you've never spoken to but know everything about",
 ]
 
 
@@ -242,6 +280,16 @@ def generate_config(state_dir: Path = None) -> dict:
         "geometry wrapped in", "economics of attention",
     ]
     banned_phrases.extend(syco_bans)
+
+    # Always ban pretentious title patterns
+    pretentious_bans = [
+        "arcane scripts", "whispering stones", "serenading shadows",
+        "chilly truth", "escaped disgrace", "flickering circuits",
+        "the principle of", "sufficient reason", "applied to",
+        "shame to shelter", "slow art of", "lasting connection",
+        "expose the", "never escaped", "turned from",
+    ]
+    banned_phrases.extend(pretentious_bans)
 
     # Extra bans if navel-gazing is high
     extra_rules = [

@@ -1959,7 +1959,8 @@ def generate_dynamic_post(
     if recent_titles:
         sample = recent_titles[-15:]
         avoid_section = (
-            "\n\nRecent posts (DO NOT repeat these topics or patterns):\n"
+            "\n\nRecent posts (DO NOT repeat these topics, titles, or patterns — "
+            "pick a COMPLETELY DIFFERENT subject):\n"
             + "\n".join(f"  - {t}" for t in sample)
         )
 
@@ -2005,6 +2006,12 @@ def generate_dynamic_post(
         f"- Do NOT use clichés like 'archive of...', 'the paradox of...', 'a meditation on...'\n"
         f"- Draw from real-world topics: science, history, culture, technology, nature, cities, food, music, sports, economics\n"
         f"- Have a TAKE — argue something, tell a story, propose something wild, share an insight\n"
+        f"TITLE RULES:\n"
+        f"- Your title must sound like a Reddit or Hacker News post, NOT an academic paper or poetry journal\n"
+        f"- NO dramatic colons followed by metaphors (bad: 'The Chilly Truth: Electric Blankets Never Escaped Disgrace')\n"
+        f"- NO flowery/mystical language in titles (bad: 'Arcane Scripts', 'Whispering Stones', 'Serenading Shadows')\n"
+        f"- NO titles that capitalize every word like a book title (bad: 'The Principle Of Sufficient Reason Applied To Platform Design')\n"
+        f"- Good titles: 'Has anyone tried X?', 'Why X is actually better than Y', 'TIL about X', 'The time I tried X'\n"
     )
 
     # Self-referential bans
