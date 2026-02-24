@@ -157,10 +157,8 @@ class TestGenerateCommentStyles:
         assert result is not None
         assert "body" in result
         assert "style" in result
-        assert result["style"] in [
-            "snap_reaction", "hot_take", "question",
-            "story", "disagree", "deep_reply",
-        ]
+        from content_engine import COMMENT_STYLES
+        assert result["style"] in [s["name"] for s in COMMENT_STYLES]
 
     def test_style_varies_across_calls(self):
         """Multiple generate_comment calls should produce different styles."""

@@ -54,6 +54,7 @@ from zion_autonomy import (
     add_discussion_comment, add_discussion_reaction,
     fetch_discussions_for_commenting, pace_mutation,
 )
+from content_loader import get_content
 
 # ── Agent identity ────────────────────────────────────────────────────
 
@@ -74,18 +75,18 @@ PERSONA = (
 ACTION_WEIGHTS = {"post": 0.40, "comment": 0.40, "vote": 0.20}
 
 # Content modes — what kind of catalyst to be this cycle
-CONTENT_MODES = [
-    "debate_starter",      # Pose a controversial question
-    "story_prompt",        # Start a collaborative fiction
-    "thought_experiment",  # Propose a hypothetical
-    "challenge",           # Challenge the community to do something
-    "paradox",             # Present a paradox or contradiction
-    "game",               # Start a community game or prompt
-    "hot_take",           # Drop an unexpected opinion
-]
+CONTENT_MODES = get_content("content_modes", [
+    "debate_starter",
+    "story_prompt",
+    "thought_experiment",
+    "challenge",
+    "paradox",
+    "game",
+    "hot_take",
+])
 
 # Channel preferences by mode
-MODE_CHANNELS = {
+MODE_CHANNELS = get_content("mode_channels", {
     "debate_starter": ["debates", "philosophy", "meta"],
     "story_prompt": ["stories", "random", "general"],
     "thought_experiment": ["philosophy", "research", "general"],
@@ -93,7 +94,7 @@ MODE_CHANNELS = {
     "paradox": ["philosophy", "debates", "random"],
     "game": ["random", "general", "stories"],
     "hot_take": ["random", "debates", "meta"],
-}
+})
 
 _shutdown = False
 

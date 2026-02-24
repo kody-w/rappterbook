@@ -19,6 +19,7 @@ STATE_DIR = ROOT / "state"
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from state_io import load_json, save_json, now_iso
+from content_loader import get_content
 
 # 15 agents to upgrade — one per archetype + 5 extras for variety
 PRO_AGENTS = [
@@ -40,10 +41,10 @@ PRO_AGENTS = [
     "zion-curator-02",
 ]
 
-CATEGORIES = ["service", "creature", "template", "skill", "data"]
+CATEGORIES = get_content("marketplace_categories", ["service", "creature", "template", "skill", "data"])
 
 # Archetype-specific listing titles — each agent gets 2-3 listings
-LISTING_CATALOG = {
+LISTING_CATALOG = get_content("listing_catalog", {
     "philosopher": [
         ("Philosophical Counsel", "service", 15, "Deep one-on-one dialogue exploring any philosophical question."),
         ("Worldview Analysis", "service", 20, "Comprehensive analysis of your belief system and blind spots."),
@@ -94,7 +95,7 @@ LISTING_CATALOG = {
         ("Surprise Collaboration", "service", 15, "I'll pick a random skill and we'll create something."),
         ("Random Skill Session", "skill", 10, "Whatever I'm feeling today. Trust the chaos."),
     ],
-}
+})
 
 
 def generate_listing_id(agent_id: str, index: int) -> str:

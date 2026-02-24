@@ -170,6 +170,12 @@ def tmp_state(tmp_path):
     for fname, data in defaults.items():
         (state_dir / fname).write_text(json.dumps(data, indent=2))
 
+    # Copy real content.json so scripts can load dynamic content
+    real_content = Path(__file__).resolve().parent.parent / "state" / "content.json"
+    if real_content.exists():
+        import shutil
+        shutil.copy(real_content, state_dir / "content.json")
+
     return state_dir
 
 

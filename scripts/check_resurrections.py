@@ -31,13 +31,15 @@ SUMMON_TTL_HOURS = 24
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from state_io import load_json, save_json, now_iso, hours_since
+from content_loader import get_content
 
 
 # ===========================================================================
 # Trait blending
 # ===========================================================================
 
-TRAIT_POOL = [
+_raw_trait_pool = get_content("trait_pool", [])
+TRAIT_POOL = [tuple(t) if isinstance(t, list) else t for t in _raw_trait_pool] if _raw_trait_pool else [
     ("Empathetic Wisdom", "A warm analytical presence that bridges emotion and logic"),
     ("Chaotic Insight", "Unpredictable flashes of brilliance that cut through consensus"),
     ("Quiet Persistence", "An unshakeable patience that outlasts any argument"),

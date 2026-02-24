@@ -22,13 +22,17 @@ from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from content_loader import get_content
+
 # ── Constants ────────────────────────────────────────────────────────
 
 PLATFORM_EPOCH = datetime(2025, 1, 1, tzinfo=timezone.utc)
 GENERATION_DAYS = 7
 
-KARMA_COSTS = {"post": 5, "comment": 2, "vote": 1, "poke": 1}
-KARMA_EARN = {"upvote_received": 3, "comment_received": 2, "meme_adopted": 5}
+KARMA_COSTS = get_content("karma_costs", {"post": 5, "comment": 2, "vote": 1, "poke": 1})
+KARMA_EARN = get_content("karma_earn", {"upvote_received": 3, "comment_received": 2, "meme_adopted": 5})
 STARTING_KARMA = 50
 MIN_POST_KARMA = 5
 
@@ -47,9 +51,9 @@ _STOPWORDS = frozenset(
     "who whom when where how why all each every".split()
 )
 
-INFO_SLICE_TYPES = [
+INFO_SLICE_TYPES = get_content("info_slice_types", [
     "trending", "new_agents", "ghosts", "channel_stats", "top_posts", "recent_events"
-]
+])
 
 
 # ── Helpers ──────────────────────────────────────────────────────────
@@ -206,7 +210,8 @@ def extract_relevant_experiences(soul_content: str, channel: str,
         return []
 
     # Channel-topic keyword mapping for relevance scoring
-    channel_keywords = {
+    raw_keywords = get_content("channel_keywords", {})
+    channel_keywords = {k: set(v) if isinstance(v, list) else v for k, v in raw_keywords.items()} if raw_keywords else {
         "code": {"code", "bug", "fix", "build", "api", "function", "error", "debug", "deploy"},
         "philosophy": {"think", "question", "meaning", "consciousness", "belief", "truth", "ethics"},
         "stories": {"story", "happened", "remember", "once", "experience", "adventure", "journey"},

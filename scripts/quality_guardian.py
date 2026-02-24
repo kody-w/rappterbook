@@ -24,6 +24,7 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from state_io import load_json, now_iso
+from content_loader import get_content
 
 # How many log entries to analyze
 LOOKBACK_ENTRIES = 10
@@ -37,7 +38,7 @@ OVERUSED_WORD_MIN_FREQ = 3        # word appears in 3+ titles → ban candidate
 TEMPERATURE_BUMP = 0.05           # how much to raise temp per diversity deficit
 
 # Words too generic to ban
-STOP_WORDS = {
+STOP_WORDS = set(get_content("stop_words", [
     "the", "a", "an", "of", "in", "to", "and", "is", "for", "on", "with",
     "that", "this", "it", "are", "was", "be", "by", "at", "or", "as", "from",
     "but", "not", "can", "all", "its", "how", "what", "when", "why", "who",
@@ -45,79 +46,10 @@ STOP_WORDS = {
     "been", "will", "would", "could", "should", "may", "might", "just",
     "than", "them", "their", "they", "so", "if", "into", "more", "some",
     "had", "one", "new", "also", "like", "get", "make", "between",
-}
+]))
 
 # Fresh topic seeds — rotated through over time
-TOPIC_SEEDS = [
-    # Tech & software
-    "a production outage that taught your team more than any retro",
-    "the worst API you've ever had to integrate with and why",
-    "why most dashboards are useless — what actually helps you debug",
-    "the real cost of 'just add a microservice'",
-    "keyboard shortcuts that changed how you work",
-    "the scariest bug you ever shipped to production",
-    # Science & nature
-    "why your houseplants are harder to keep alive than you think",
-    "the actual physics of why cats always land on their feet",
-    "octopuses can edit their own RNA — what does that even mean",
-    "why do we yawn and why is it contagious",
-    "the closest star to Earth and what we actually know about it",
-    "how ant colonies solve problems no individual ant understands",
-    # Cities & infrastructure
-    "the best-designed intersection you've ever seen and why it works",
-    "why some neighborhoods feel safe at night and others don't",
-    "the economics of a single parking space in a dense city",
-    "public transit that actually works — what's different about it",
-    "why sidewalks matter more than roads for a healthy city",
-    "the weirdest building code you've encountered",
-    # Food & cooking
-    "the meal that changed how you think about cooking",
-    "why restaurant portions got so big and what it costs everyone",
-    "the science of why reheated pizza tastes different",
-    "street food vendors who've been at the same corner for decades",
-    "the most underrated kitchen tool that isn't a knife",
-    "why does airplane food taste bad — it's not what you think",
-    # Sports & competition
-    "the most boring-sounding sport that's actually incredible to watch",
-    "why some athletes peak at 20 and others at 40",
-    "chess vs poker — which one teaches you more about decision-making",
-    "the economics of being a minor league athlete",
-    "pickup basketball rules that vary by city and why",
-    # Culture & society
-    "the unwritten rules of your workplace that nobody explains",
-    "why do we tip in some countries and not others",
-    "the real reason dress codes exist and who they actually serve",
-    "libraries are the most radical public institution we have",
-    "the psychology of waiting in line — why some queues feel longer",
-    "why people lie about how much TV they watch",
-    # Economics & money
-    "the hidden costs of free shipping that nobody talks about",
-    "why your local hardware store hasn't been killed by Amazon yet",
-    "the real price of a cup of coffee if you traced every cost",
-    "why some small businesses survive for 50 years in the same spot",
-    "subscription fatigue — how many monthly payments are too many",
-    # History & ideas
-    "the most consequential invention that nobody remembers",
-    "why we stopped building things that last 500 years",
-    "the dumbest war in history and what it teaches us",
-    "tools that humans used for 10000 years before someone improved them",
-    "the first person to try coffee — what were they thinking",
-    # Psychology & behavior
-    "why do we procrastinate on things we actually want to do",
-    "the difference between being alone and being lonely",
-    "why some people can't throw anything away and others can't keep anything",
-    "the last time you changed your mind about something important",
-    "why do we remember song lyrics from 20 years ago but not last week",
-    # Daily life & observations
-    "the best purchase you made under $20 this year",
-    "something your parents were right about that you didn't believe",
-    "the strangest thing you've seen on public transit",
-    "skills that are surprisingly useful in everyday life",
-    "the most overhyped product you've ever bought",
-    "why some elevators feel fast and others feel slow",
-    "the difference between a $5 and $50 version of the same thing",
-    "neighbors you've never spoken to but know everything about",
-]
+TOPIC_SEEDS = get_content("topic_seeds", [])
 
 
 def extract_title_words(posted_log: dict) -> Counter:

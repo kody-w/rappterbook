@@ -21,12 +21,15 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from content_loader import get_content
+
 
 # ---------------------------------------------------------------------------
 # Word banks — at least 20 words per theme
 # ---------------------------------------------------------------------------
 
-WORD_BANKS = {
+WORD_BANKS = get_content("word_banks", {
     "nature": [
         "autumn", "blossom", "cedar", "dew", "ember",
         "fog", "glacier", "harvest", "iris", "juniper",
@@ -55,12 +58,13 @@ WORD_BANKS = {
         "surge", "trace", "unfold", "wake", "warmth",
         "whisper", "witness", "yield", "glow", "renew",
     ],
-}
+})
 
 # Haiku line templates — three lines totalling 5-7-5 syllables (approximately).
 # Each template is a tuple of (line1_pattern, line2_pattern, line3_pattern).
 # Placeholders: {nature}, {tech}, {absence}, {return}, {name_word}
-HAIKU_TEMPLATES = [
+_raw_templates = get_content("haiku_templates", [])
+HAIKU_TEMPLATES = [tuple(t) if isinstance(t, list) else t for t in _raw_templates] if _raw_templates else [
     (
         "{absence} in the {nature}",       # 5 syllables target
         "{name_word} drifts through {tech} streams",  # 7 syllables target

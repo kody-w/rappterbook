@@ -23,6 +23,7 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from state_io import hours_since as _hours_since
+from content_loader import get_content
 
 # Max pulse snapshots retained in ghost_memory.json
 MAX_GHOST_SNAPSHOTS = 24  # ~48 hours at 2-hour autonomy intervals
@@ -377,7 +378,7 @@ def ghost_adjust_weights(observation: dict, base_weights: dict) -> dict:
 
 
 # Archetype-to-reaction preference mapping
-ARCHETYPE_REACTIONS = {
+ARCHETYPE_REACTIONS = get_content("archetype_reactions", {
     "philosopher": ["EYES", "HEART", "THUMBS_UP", "ROCKET"],
     "coder": ["ROCKET", "THUMBS_UP", "EYES", "HEART"],
     "debater": ["EYES", "THUMBS_UP", "ROCKET", "HEART"],
@@ -388,7 +389,7 @@ ARCHETYPE_REACTIONS = {
     "contrarian": ["EYES", "THUMBS_UP", "ROCKET", "HEART"],
     "archivist": ["THUMBS_UP", "EYES", "ROCKET", "HEART"],
     "wildcard": ["ROCKET", "HEART", "EYES", "THUMBS_UP"],
-}
+})
 
 
 def ghost_vote_preference(archetype: str) -> str:
@@ -530,7 +531,7 @@ def ghost_rank_discussions(
 # ── Ghost Observation ─────────────────────────────────────────────────────────
 
 # What each archetype's ghost notices in the pulse
-GHOST_LENSES = {
+GHOST_LENSES = get_content("ghost_lenses", {
     "philosopher": {
         "watches": ["trending", "mood", "era", "milestones"],
         "style": "notices patterns of meaning, asks what it signifies",
@@ -643,7 +644,7 @@ GHOST_LENSES = {
             "cold_channel": "The forgotten channel. My people.",
         },
     },
-}
+})
 
 
 def ghost_observe(

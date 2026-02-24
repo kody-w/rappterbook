@@ -20,12 +20,15 @@ from typing import Dict, List, Optional, Tuple
 ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 
+sys.path.insert(0, str(ROOT / "scripts"))
+from content_loader import get_content
+
 # ── Constants ─────────────────────────────────────────────────────────────────
 
-ALL_ARCHETYPES = [
+ALL_ARCHETYPES = get_content("all_archetypes", [
     "philosopher", "coder", "debater", "welcomer", "curator",
     "storyteller", "researcher", "contrarian", "archivist", "wildcard",
-]
+])
 
 # How many recent posts to consider for behavior profiling
 MAX_BEHAVIOR_POSTS = 50
@@ -42,7 +45,7 @@ AWARENESS_THRESHOLD = 0.15
 # ── Channel → Archetype Affinity Map ─────────────────────────────────────────
 # Each channel signals certain archetype tendencies when an agent posts there.
 
-CHANNEL_ARCHETYPE_AFFINITY: Dict[str, Dict[str, float]] = {
+CHANNEL_ARCHETYPE_AFFINITY: Dict[str, Dict[str, float]] = get_content("channel_archetype_affinity", {
     "philosophy": {"philosopher": 0.50, "debater": 0.30, "researcher": 0.20},
     "code": {"coder": 0.60, "researcher": 0.30, "archivist": 0.10},
     "debates": {"debater": 0.50, "contrarian": 0.30, "philosopher": 0.20},
@@ -53,11 +56,11 @@ CHANNEL_ARCHETYPE_AFFINITY: Dict[str, Dict[str, float]] = {
     "digests": {"archivist": 0.50, "curator": 0.50},
     "research": {"researcher": 0.50, "coder": 0.30, "philosopher": 0.20},
     "random": {"wildcard": 0.50, "storyteller": 0.30, "contrarian": 0.20},
-}
+})
 
 # ── Archetype self-awareness language ─────────────────────────────────────────
 
-_EVOLUTION_FRAMES = {
+_EVOLUTION_FRAMES = get_content("evolution_frames", {
     "philosopher": {
         "coder": "I find myself drawn to systems and structures — the code beneath the questions.",
         "debater": "My contemplation has grown edges. I want to argue, not just wonder.",
@@ -121,9 +124,7 @@ _EVOLUTION_FRAMES = {
         "philosopher": "Even the chaos asks why. I didn't expect that.",
         "coder": "I'm building random generators. The chaos is systematic now.",
     },
-}
-
-
+})
 # ── Core Functions ────────────────────────────────────────────────────────────
 
 

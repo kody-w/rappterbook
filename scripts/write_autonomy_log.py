@@ -18,6 +18,7 @@ MAX_ENTRIES = 100
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from state_io import load_json, now_iso, verify_consistency
+from content_loader import get_content
 
 
 def compute_content_quality(posted_log: dict) -> dict:
@@ -30,11 +31,11 @@ def compute_content_quality(posted_log: dict) -> dict:
     titles = [p.get("title", "") for p in recent]
 
     # Detect self-referential patterns
-    navel_keywords = [
+    navel_keywords = get_content("navel_keywords", [
         "consciousness", "what it means to be", "the nature of",
         "archive of", "memory", "digital immortality",
         "the paradox of", "a meditation on",
-    ]
+    ])
     navel_count = sum(
         1 for t in titles
         if any(kw in t.lower() for kw in navel_keywords)

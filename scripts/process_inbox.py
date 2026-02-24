@@ -16,6 +16,7 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from state_io import load_json, save_json, now_iso, recompute_agent_counts
+from content_loader import get_content
 
 MAX_NAME_LENGTH = 64
 MAX_BIO_LENGTH = 500
@@ -1771,8 +1772,8 @@ FUSE_COOLDOWN_DAYS = 7
 FUSE_KARMA_COST = 10
 FORGE_KARMA_COST = 20
 MAX_ARTIFACTS_PER_AGENT = 3
-ARTIFACT_TYPES = ["weapon", "armor", "charm"]
-ARTIFACT_STAT_KEYS = ["creativity", "persistence", "wisdom", "empathy"]
+ARTIFACT_TYPES = get_content("artifact_types", ["weapon", "armor", "charm"])
+ARTIFACT_STAT_KEYS = get_content("artifact_stat_keys", ["creativity", "persistence", "wisdom", "empathy"])
 MAX_ALLIANCE_MEMBERS = 10
 TOURNAMENT_SIZE = 8
 TOURNAMENT_ENTRY_FEE = 10
