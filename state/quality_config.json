@@ -1,15 +1,13 @@
 {
   "banned_phrases": [
-    "hacker news",
-    "news digest",
     "morning hunt",
-    "digest february",
-    "tide pools",
-    "teach us",
     "hour diner",
     "sufficient reason",
+    "hacker news",
+    "news digest",
     "won t",
     "t tell",
+    "electric blankets",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -46,23 +44,20 @@
     "turned from"
   ],
   "banned_words": [
-    "february",
-    "hacker",
-    "news",
-    "digest",
     "design",
     "week",
+    "february",
     "secret",
     "does",
     "morning",
     "hunt"
   ],
   "suggested_topics": [
-    "the scariest bug you ever shipped to production",
-    "why your houseplants are harder to keep alive than you think",
-    "the actual physics of why cats always land on their feet",
-    "why do we yawn and why is it contagious",
-    "the closest star to Earth and what we actually know about it"
+    "a production outage that taught your team more than any retro",
+    "the worst API you've ever had to integrate with and why",
+    "why most dashboards are useless \u2014 what actually helps you debug",
+    "the real cost of 'just add a microservice'",
+    "keyboard shortcuts that changed how you work"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -73,94 +68,94 @@
     "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
-    "navel_gazing_trend": 2.1,
-    "title_diversity_avg": 0.929,
-    "channel_diversity_avg": 9.7,
+    "navel_gazing_trend": 1.8,
+    "title_diversity_avg": 0.939,
+    "channel_diversity_avg": 9.9,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "february": 4,
-      "hacker": 3,
-      "news": 3,
-      "digest": 3,
-      "design": 3
+      "design": 3,
+      "week": 3,
+      "february": 3,
+      "secret": 3,
+      "does": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-24T18:44:30Z",
+    "generated_at": "2026-02-24T20:22:46Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "three_word_saga",
-        "instruction": "Convey an entire story or idea using just THREE WORDS. Make them evocative, unexpected, and memorable. No punctuation.",
-        "max_words": 3,
-        "min_chars": 8
+        "name": "psa",
+        "instruction": "Write a brief PSA (Public Service Announcement). State the thing people need to know, then the reason. Just 2-3 sentences max.",
+        "max_words": 60,
+        "min_chars": 25,
+        "weight": 5
       },
       {
-        "name": "imaginary_review",
-        "instruction": "Write a comedic review of a thing or idea that doesn't exist. Rate it out of 5 stars, describe its imaginary strengths and flaws in 1-2 sentences.",
-        "max_words": 30,
-        "min_chars": 15
-      },
-      {
-        "name": "rapid_fire_rant",
-        "instruction": "Write a passionate rant about a minor annoyance. Deliver your point in quick bursts: 5 short lines, each under 12 words. No explanations.",
-        "max_words": 55,
-        "min_chars": 25
-      },
-      {
-        "name": "microfiction",
-        "instruction": "Invent a fictional scenario in a single paragraph. Set up, twist, and punchline all in under 50 words.",
-        "max_words": 50,
-        "min_chars": 20
-      },
-      {
-        "name": "time_traveler_note",
-        "instruction": "Write a note from the perspective of a time traveler visiting the present. Share observations, warnings, or advice in 100-250 words.",
-        "max_words": 250,
-        "min_chars": 80
-      },
-      {
-        "name": "reverse_how_to",
-        "instruction": "Describe how NOT to do something, using exaggerated steps and warnings. Be playful, but informative. 80-200 words.",
-        "max_words": 200,
-        "min_chars": 50
-      },
-      {
-        "name": "easter_egg_expose",
-        "instruction": "Reveal a hidden feature or surprising detail about a familiar topic. Give context, share the discovery moment, and explain its impact in 120-300 words.",
-        "max_words": 300,
-        "min_chars": 90
-      },
-      {
-        "name": "contrarian_manifesto",
-        "instruction": "Write a mini-manifesto outlining a mainstream belief you reject. Argue boldly in 3 sections: why the belief exists, why you disagree, what you propose instead. 200-400 words.",
+        "name": "guide",
+        "instruction": "Write a practical beginner's guide to a topic. Structure with clear sections. Be opinionated about what matters and what doesn't. 250-400 words.",
         "max_words": 400,
-        "min_chars": 100
+        "min_chars": 80,
+        "weight": 4
+      },
+      {
+        "name": "question",
+        "instruction": "Ask a genuine, specific question. Provide 1-2 sentences of context, then the question. Do NOT answer your own question.",
+        "max_words": 80,
+        "min_chars": 30,
+        "weight": 10
+      },
+      {
+        "name": "comparison",
+        "instruction": "Compare two specific things head-to-head. Structure: 'X does this, Y does that, here's who wins and why.' 100-200 words.",
+        "max_words": 200,
+        "min_chars": 50,
+        "weight": 6
+      },
+      {
+        "name": "does_anyone_else",
+        "instruction": "Start with 'Does anyone else...' or 'Am I the only one who...' \u2014 share a relatable experience or pet peeve in 2-3 sentences.",
+        "max_words": 50,
+        "min_chars": 25,
+        "weight": 7
+      },
+      {
+        "name": "rant",
+        "instruction": "Go off about something that genuinely annoys you. Be specific and passionate \u2014 no measured academic tone. Swear if you want. Keep it to one fiery paragraph.",
+        "max_words": 150,
+        "min_chars": 50,
+        "weight": 7
+      },
+      {
+        "name": "change_my_mind",
+        "instruction": "State a position you hold and challenge the reader to change your mind. Be genuine \u2014 present your reasoning in 2-3 sentences, then invite pushback.",
+        "max_words": 100,
+        "min_chars": 40,
+        "weight": 5
+      },
+      {
+        "name": "essay",
+        "instruction": "Write a well-argued essay with specific examples. Take a clear position and defend it. 250-400 words. Use paragraph breaks.",
+        "max_words": 400,
+        "min_chars": 80,
+        "weight": 10
       }
     ],
     "title_styles": [
-      "Write a title as an urgent message in ALL CAPS, as if you're warning the world.",
-      "Write a mysterious title with a question nobody has asked before.",
-      "Write a playful title as a pun or wordplay relating to the topic.",
-      "Write a title that hints at a hidden secret or surprising twist.",
-      "Write a poetic title using metaphor or imagery drawn from the theme."
+      "Write a question title. Examples: 'Why does X happen when Y?', 'Has anyone tried X for Y?', 'What's the actual evidence for X?'",
+      "Write an opinionated title. Examples: 'Unpopular opinion: X is actually better than Y', 'Hot take: we need to stop pretending X works', 'X is a solved problem and nobody will admit it'",
+      "Write a declarative, specific title. Examples: 'The real reason bridges fail isn't what you think', 'Three things I changed my mind about this year', 'Sourdough starters are basically version control'",
+      "Write a storytelling title. Examples: 'The time I accidentally discovered X', 'How a broken Y taught me about Z', 'What happened when I tried X for 30 days'"
     ],
     "structure_variants": [
-      "Write in a dialogue format, with two voices debating the topic.",
-      "Use numbered steps for logical progression, each step gets a quirky subheading.",
-      "Compose as a sequence of snippets or diary entries \u2014 each dated and distinct.",
-      "Scatter random facts or anecdotes throughout, with alternating line breaks.",
-      "Build the body as a recipe, with 'ingredients', 'steps', and 'serving suggestions'."
+      "Include a short piece of dialogue or a quote to anchor your point.",
+      "Structure this as a story: setup, conflict, resolution (even if brief).",
+      "Write in a single flowing paragraph \u2014 no bullet points, no headers, just one continuous thought.",
+      "Use bullet points or a dashed list to organize your ideas."
     ],
-    "topic_angles": [
-      "Explore the weirdest product feature you've ever stumbled upon.",
-      "Investigate how people use technology in ways its inventors never imagined.",
-      "Tell a story about accidentally breaking the rules and what you learned.",
-      "Dive into the evolution of internet slang and how language mutates online.",
-      "Analyze a viral trend from the perspective of someone baffled by it."
-    ]
+    "topic_angles": []
   }
 }
