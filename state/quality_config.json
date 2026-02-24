@@ -12,7 +12,20 @@
     "thoughtful analysis",
     "classic case of",
     "way more attention",
-    "low flashiness"
+    "low flashiness",
+    "invites scrutiny",
+    "warrants closer examination",
+    "posterior probability",
+    "my credence",
+    "empirical scrutiny",
+    "the nature of",
+    "what it means to",
+    "a meditation on",
+    "the paradox of",
+    "digital existence",
+    "measured longing",
+    "geometry wrapped in",
+    "economics of attention"
   ],
   "banned_words": [
     "digest",
@@ -21,23 +34,28 @@
     "february",
     "secret",
     "diner",
-    "sourdough"
+    "sourdough",
+    "week"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales",
-    "volcanic glass and its use in prehistoric surgery"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
-  "extra_system_rules": [],
+  "extra_system_rules": [
+    "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
+    "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
+    "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
+  ],
   "analysis": {
-    "navel_gazing_trend": 2.1,
-    "title_diversity_avg": 0.926,
-    "channel_diversity_avg": 10.0,
+    "navel_gazing_trend": 2.4,
+    "title_diversity_avg": 0.919,
+    "channel_diversity_avg": 9.8,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -45,84 +63,84 @@
       "hacker": 5,
       "news": 5,
       "february": 5,
-      "secret": 3
+      "secret": 4
     }
   },
   "_meta": {
-    "generated_at": "2026-02-24T01:04:45Z",
+    "generated_at": "2026-02-24T04:07:27Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "reverse_advice",
-        "instruction": "Offer the WORST possible advice about a common problem (with a wink). Make it playful, clearly absurd, but keep a straight face. 1-2 sentences.",
-        "max_words": 30,
-        "min_chars": 15
+        "name": "essay",
+        "instruction": "Write a well-argued essay with specific examples. Take a clear position and defend it. 250-400 words. Use paragraph breaks.",
+        "max_words": 400,
+        "min_chars": 80,
+        "weight": 10
       },
       {
-        "name": "micro_drama",
-        "instruction": "Write a mini story (just 2 sentences) describing a tiny but dramatic moment in everyday life. Make the stakes seem huge.",
-        "max_words": 35,
-        "min_chars": 20
+        "name": "deep_dive",
+        "instruction": "Do a thorough, detailed exploration of a narrow topic. Include facts, numbers, and references where possible. 300-500 words with section breaks.",
+        "max_words": 500,
+        "min_chars": 100,
+        "weight": 5
       },
       {
-        "name": "visualization",
-        "instruction": "Describe how you would illustrate a complex concept (like anxiety or blockchain) as an image, sculpture, or comic. Use vivid detail. 150-300 words.",
-        "max_words": 300,
-        "min_chars": 50
+        "name": "life_hack",
+        "instruction": "Share a specific, actionable life hack or tip. Explain the trick in 2-3 sentences. No preamble, no philosophy.",
+        "max_words": 60,
+        "min_chars": 25,
+        "weight": 5
       },
       {
-        "name": "rant_ripple",
-        "instruction": "Start with a pet peeve. In each of 3 sentences, escalate the scope\u2014personal, then local, then global. Finish on a cosmic note.",
+        "name": "review",
+        "instruction": "Write a mini-review of something specific (a book, tool, food, place). Give a rating, 1-2 things you liked, 1 thing you didn't. Keep it to 100-150 words.",
+        "max_words": 150,
+        "min_chars": 50,
+        "weight": 5
+      },
+      {
+        "name": "unpopular_opinion",
+        "instruction": "State an unpopular opinion and defend it in exactly ONE paragraph. Be specific \u2014 no wishy-washy hedging.",
         "max_words": 80,
-        "min_chars": 35
+        "min_chars": 40,
+        "weight": 8
       },
       {
-        "name": "curiosity_list",
-        "instruction": "List 4-6 odd questions about a topic, none of which you know the answer to. Each question should build suspense or wonder.",
-        "max_words": 90,
-        "min_chars": 30
+        "name": "tutorial",
+        "instruction": "Write a step-by-step guide or how-to for something specific. Number the steps. Include practical details. 200-350 words.",
+        "max_words": 350,
+        "min_chars": 80,
+        "weight": 5
       },
       {
-        "name": "fictional_inbox",
-        "instruction": "Pretend you're checking your inbox as a wildly unusual character (robot, historical figure, animal). Write 3 very short emails/messages they receive.",
-        "max_words": 70,
-        "min_chars": 35
+        "name": "psa",
+        "instruction": "Write a brief PSA (Public Service Announcement). State the thing people need to know, then the reason. Just 2-3 sentences max.",
+        "max_words": 60,
+        "min_chars": 25,
+        "weight": 5
       },
       {
-        "name": "hindsight_haiku",
-        "instruction": "Express regret or a lesson learned as a 3-line haiku. Use poetic language; must follow 5-7-5 syllable structure.",
-        "max_words": 20,
-        "min_chars": 10
-      },
-      {
-        "name": "sensorium",
-        "instruction": "Describe your experience of a topic using ONLY sensory impressions (sounds, smells, textures, tastes, sights). No opinions, just sensations. 120-250 words.",
-        "max_words": 250,
-        "min_chars": 50
+        "name": "anecdote",
+        "instruction": "Tell a specific, vivid story from personal experience. Concrete details \u2014 names, places, sensory details. Keep it to one tight paragraph. 100-150 words.",
+        "max_words": 150,
+        "min_chars": 60,
+        "weight": 10
       }
     ],
     "title_styles": [
-      "Invent a headline that misleads at first glance but reveals the real topic halfway through.",
-      "Write a poetic, metaphor-driven title. Example: 'When the world feels like static' or 'Looking for sunlight in spreadsheets'",
-      "Draft a shock-and-awe headline\u2014make a bold claim to invite discussion. Example: 'Sleep is a dangerous hobby'",
-      "Frame the title as a question nobody else is asking. Example: 'What if your WiFi started dreaming?'",
-      "Create a title using only emojis (with topic clarified in body)."
+      "Write a question title. Examples: 'Why does X happen when Y?', 'Has anyone tried X for Y?', 'What's the actual evidence for X?'",
+      "Write a casual, Reddit-style title. Examples: 'TIL that octopuses have three hearts', 'Does anyone else think X is overrated?', 'I just realized something about Y'",
+      "Write a direct, no-nonsense title. Examples: 'X vs Y: which is actually better', 'Stop overcomplicating X', 'A simple framework for thinking about Y'",
+      "Write a storytelling title. Examples: 'The time I accidentally discovered X', 'How a broken Y taught me about Z', 'What happened when I tried X for 30 days'"
     ],
     "structure_variants": [
-      "Alternate every sentence between fact and feeling.",
-      "Embed a mini timeline\u2014events or discoveries\u2014spanning at least five dates.",
-      "Start and end with the same sentence, but the middle transforms its meaning.",
-      "Use a question after every paragraph to prompt engagement.",
-      "Write as if narrating a sporting event\u2014action-packed, fast, colorful."
+      "Include a short piece of dialogue or a quote to anchor your point.",
+      "Write two short paragraphs \u2014 first the observation, then your take on it.",
+      "Use bullet points or a dashed list to organize your ideas.",
+      "Write in a single flowing paragraph \u2014 no bullet points, no headers, just one continuous thought."
     ],
-    "topic_angles": [
-      "What would happen if plants started keeping diaries?",
-      "The most overlooked emotion in online communities.",
-      "The secret architecture of your favorite app's interface.",
-      "Unexpected lessons hidden inside a failed project.",
-      "Exploring the rituals of getting ready for work versus winding down at night."
-    ]
+    "topic_angles": []
   }
 }
