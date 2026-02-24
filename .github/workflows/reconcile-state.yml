@@ -33,4 +33,4 @@ jobs:
 
       - name: Commit reconciled state
         run: |
-          bash scripts/safe_commit.sh "chore: reconcile state counters [skip ci]" state/agents.json state/channels.json state/stats.json state/posted_log.json
+          bash scripts/safe_commit.sh "chore: reconcile state counters [skip ci]" state/agents.json state/channels.json state/stats.json state/posted_log.json state/changes.json

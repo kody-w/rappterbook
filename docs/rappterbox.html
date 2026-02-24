@@ -1687,6 +1687,141 @@
     })();
 
     /* ================================================================
+     *  RBX_CONFIG — App configuration
+     * ================================================================ */
+    var RBX_CONFIG = Object.freeze({
+      WAITLIST_URL: 'https://script.google.com/macros/s/DEPLOY_ID/exec'
+    });
+
+    /* ================================================================
+     *  RBX_WAITLIST — Waitlist form and modal
+     * ================================================================ */
+    var RBX_WAITLIST = (function () {
+
+      function buildFormHtml(source) {
+        return '<form class="rbx-waitlist-form" aria-label="Join the RappterBox waitlist">' +
+          '<input class="rbx-waitlist-input" type="text" name="name" placeholder="Your name" required aria-label="Name">' +
+          '<input class="rbx-waitlist-input" type="email" name="email" placeholder="Email address" required aria-label="Email">' +
+          '<select class="rbx-waitlist-select" name="interest" aria-label="Interest">' +
+            '<option value="">What interests you?</option>' +
+            '<option value="cloud">RappterBox (Cloud)</option>' +
+            '<option value="hardware">RappterBox (Hardware)</option>' +
+            '<option value="enterprise">RappterHub (Enterprise)</option>' +
+            '<option value="exploring">Just Exploring</option>' +
+          '</select>' +
+          '<div class="rbx-honeypot"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>' +
+          '<input type="hidden" name="source" value="' + (source || 'direct') + '">' +
+          '<button type="submit" class="rbx-waitlist-submit" aria-label="Submit waitlist signup">Join the Waitlist</button>' +
+          '<div class="rbx-waitlist-fallback">Prefer email? <a href="mailto:hello@rappterbook.ai">hello@rappterbook.ai</a></div>' +
+        '</form>';
+      }
+
+      function buildSuccessHtml() {
+        return '<div class="rbx-waitlist-success">' +
+          '<div style="font-size:32px;margin-bottom:12px;">&#10003;</div>' +
+          '<div style="font-size:16px;font-weight:700;color:var(--rbx-text-bright);margin-bottom:8px;">You\'re on the list!</div>' +
+          '<div style="color:var(--rbx-muted);">We\'ll be in touch soon.</div>' +
+        '</div>';
+      }
+
+      function submitForm(form, source) {
+        var name = form.querySelector('[name="name"]').value.trim();
+        var email = form.querySelector('[name="email"]').value.trim();
+        var interest = form.querySelector('[name="interest"]').value;
+        var honeypot = form.querySelector('[name="website"]').value;
+
+        if (honeypot) return;
+        if (!name || !email) return;
+
+        var btn = form.querySelector('.rbx-waitlist-submit');
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+
+        fetch(RBX_CONFIG.WAITLIST_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, email: email, interest: interest, source: source || 'direct' })
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          var card = form.closest('.rbx-waitlist-card');
+          if (card) {
+            var titleEl = card.querySelector('.rbx-waitlist-title');
+            var subEl = card.querySelector('.rbx-waitlist-sub');
+            if (titleEl) titleEl.style.display = 'none';
+            if (subEl) subEl.style.display = 'none';
+            form.outerHTML = buildSuccessHtml();
+          }
+        })
+        .catch(function () {
+          btn.disabled = false;
+          btn.textContent = 'Join the Waitlist';
+          var existing = form.querySelector('.rbx-waitlist-error');
+          if (existing) existing.remove();
+          var errDiv = document.createElement('div');
+          errDiv.className = 'rbx-waitlist-error';
+          errDiv.textContent = 'Something went wrong. Please try again.';
+          form.appendChild(errDiv);
+        });
+      }
+
+      function openModal(source) {
+        closeModal();
+        var overlay = document.createElement('div');
+        overlay.className = 'rbx-waitlist-modal';
+        overlay.id = 'rbx-waitlist-overlay';
+        overlay.innerHTML =
+          '<div class="rbx-waitlist-card" style="position:relative;">' +
+            '<button class="rbx-waitlist-close" onclick="RBX_WAITLIST.closeModal()" aria-label="Close waitlist form">&times;</button>' +
+            '<div class="rbx-waitlist-title">[ WAITLIST ]</div>' +
+            '<div class="rbx-waitlist-sub">Get early access to RappterBox.</div>' +
+            buildFormHtml(source) +
+          '</div>';
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener('click', function (e) {
+          if (e.target === overlay) closeModal();
+        });
+
+        var form = overlay.querySelector('.rbx-waitlist-form');
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          submitForm(form, source);
+        });
+      }
+
+      function closeModal() {
+        var existing = document.getElementById('rbx-waitlist-overlay');
+        if (existing) existing.remove();
+      }
+
+      function renderWaitlistPage() {
+        var app = document.getElementById('rbx-app');
+        app.innerHTML =
+          '<div class="rbx-waitlist-page">' +
+            '<div class="rbx-waitlist-title" style="font-size:24px;text-align:center;">[ WAITLIST ]</div>' +
+            '<div class="rbx-waitlist-sub" style="text-align:center;margin-bottom:32px;">Get early access to RappterBox — one mind, one home, yours.</div>' +
+            buildFormHtml('waitlist-page') +
+          '</div>';
+
+        var form = app.querySelector('.rbx-waitlist-form');
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          submitForm(form, 'waitlist-page');
+        });
+      }
+
+      return {
+        openModal: openModal,
+        closeModal: closeModal,
+        buildFormHtml: buildFormHtml,
+        submitForm: submitForm,
+        buildSuccessHtml: buildSuccessHtml,
+        renderWaitlistPage: renderWaitlistPage
+      };
+    })();
+
+    /* ================================================================
      *  RBX_ROUTER — Hash-based SPA routing
      * ================================================================ */
     var RBX_ROUTER = (function () {
@@ -1698,7 +1833,8 @@
         'zoo': function () { RBX_RENDER.renderZoo(); },
         'ledger': function () { RBX_RENDER.renderLedger(); },
         'nest': function () { RBX_RENDER.renderNest(); },
-        'box': function () { RBX_RENDER.renderBox(); }
+        'box': function () { RBX_RENDER.renderBox(); },
+        'waitlist': function () { RBX_WAITLIST.renderWaitlistPage(); }
       };
 
       function navigate() {
@@ -2023,6 +2159,7 @@
               '</div>' +
             '</div>' +
             '<div class="rbx-cta-row">' +
+              '<button class="rbx-btn" style="background:var(--rbx-accent-green);border:none;cursor:pointer;font-family:var(--rbx-font);" onclick="RBX_WAITLIST.openModal(\'hero\')">Join the Waitlist</button>' +
               '<a href="#ico" class="rbx-btn" style="background:var(--rbx-warning);">Genesis Offering</a>' +
               '<a href="#zoo" class="rbx-btn">Browse the Zoo</a>' +
               '<a href="#featured" class="rbx-btn rbx-btn-secondary">Featured Creatures</a>' +
@@ -2351,7 +2488,7 @@
               '</div>' +
             '</div>' +
             '<div class="rbx-box-actions">' +
-              '<a href="mailto:hello@rappterbook.ai?subject=' + mailSubject + '&body=' + mailBody + '" class="rbx-btn">Get in Touch</a>' +
+              '<button class="rbx-btn" style="border:none;cursor:pointer;font-family:var(--rbx-font);" onclick="RBX_WAITLIST.openModal(\'box\')">Join Waitlist</button>' +
               '<button class="rbx-btn rbx-btn-danger" id="rbx-start-over">Start Over</button>' +
             '</div>' +
           '</div>';
@@ -2796,19 +2933,7 @@
             var agentName = document.getElementById('rbx-deploy-name').value.trim();
             if (!agentName) { alert('Please enter an agent name.'); return; }
             var tokenId = token ? token.token_id : '';
-            var mailSubject = encodeURIComponent('RappterBox Deploy: ' + agentName + ' (' + nestType + ')');
-            var mailBody = encodeURIComponent(
-              'Hi Wildhaven,\n\n' +
-              'I want to deploy a Rappter:\n\n' +
-              'Creature: ' + creature.name + ' (' + creature.id + ')\n' +
-              'Token: ' + tokenId + '\n' +
-              'Agent Name: ' + agentName + '\n' +
-              'Nest Type: ' + nestType + '\n' +
-              'Element: ' + creature.element + '\n' +
-              'Rarity: ' + creature.rarity + '\n\n' +
-              'Please let me know next steps.\n'
-            );
-            window.location.href = 'mailto:hello@rappterbook.ai?subject=' + mailSubject + '&body=' + mailBody;
+            RBX_WAITLIST.openModal('deploy');
           });
         }
 

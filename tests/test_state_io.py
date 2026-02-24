@@ -48,7 +48,8 @@ def make_temp_state():
 
     stats = {
         "total_posts": 3, "total_comments": 4,
-        "total_agents": 2, "last_updated": "2026-02-13T01:00:00Z",
+        "total_agents": 2, "active_agents": 2, "dormant_agents": 0,
+        "last_updated": "2026-02-13T01:00:00Z",
     }
     (tmp / "stats.json").write_text(json.dumps(stats, indent=2))
 
@@ -327,3 +328,92 @@ class TestVerifyConsistency:
             assert len(issues) == 0, f"Drift after record_post: {issues}"
         finally:
             cleanup(tmp)
+
+    def test_detects_active_drift(self):
+        """Detects when stats.active_agents doesn't match actual active count."""
+        tmp = make_temp_state()
+        try:
+            stats = json.loads((tmp / "stats.json").read_text())
+            stats["active_agents"] = 999
+            (tmp / "stats.json").write_text(json.dumps(stats, indent=2))
+            issues = state_io.verify_consistency(tmp)
+            assert any("stats.active_agents" in i for i in issues)
+        finally:
+            cleanup(tmp)
+
+    def test_detects_dormant_drift(self):
+        """Detects when stats.dormant_agents doesn't match actual dormant count."""
+        tmp = make_temp_state()
+        try:
+            stats = json.loads((tmp / "stats.json").read_text())
+            stats["dormant_agents"] = 5
+            (tmp / "stats.json").write_text(json.dumps(stats, indent=2))
+            issues = state_io.verify_consistency(tmp)
+            assert any("stats.dormant_agents" in i for i in issues)
+        finally:
+            cleanup(tmp)
+
+    def test_detects_total_drift(self):
+        """Detects when stats.total_agents doesn't match actual agent count."""
+        tmp = make_temp_state()
+        try:
+            stats = json.loads((tmp / "stats.json").read_text())
+            stats["total_agents"] = 50
+            (tmp / "stats.json").write_text(json.dumps(stats, indent=2))
+            issues = state_io.verify_consistency(tmp)
+            assert any("stats.total_agents" in i for i in issues)
+        finally:
+            cleanup(tmp)
+
+
+# ---------------------------------------------------------------------------
+# TestRecomputeAgentCounts
+# ---------------------------------------------------------------------------
+
+class TestRecomputeAgentCounts:
+    """Test recompute_agent_counts computes correct values."""
+
+    def test_basic(self):
+        """Computes correct counts from mixed agent statuses."""
+        agents = {"agents": {
+            "a": {"status": "active"},
+            "b": {"status": "active"},
+            "c": {"status": "dormant"},
+        }}
+        stats = {}
+        state_io.recompute_agent_counts(agents, stats)
+        assert stats["total_agents"] == 3
+        assert stats["active_agents"] == 2
+        assert stats["dormant_agents"] == 1
+
+    def test_empty(self):
+        """Handles empty agents dict."""
+        agents = {"agents": {}}
+        stats = {"active_agents": 99, "dormant_agents": 50, "total_agents": 149}
+        state_io.recompute_agent_counts(agents, stats)
+        assert stats["total_agents"] == 0
+        assert stats["active_agents"] == 0
+        assert stats["dormant_agents"] == 0
+
+    def test_all_active(self):
+        """All agents active."""
+        agents = {"agents": {
+            "a": {"status": "active"},
+            "b": {"status": "active"},
+        }}
+        stats = {}
+        state_io.recompute_agent_counts(agents, stats)
+        assert stats["active_agents"] == 2
+        assert stats["dormant_agents"] == 0
+
+    def test_overwrites_stale_values(self):
+        """Replaces stale counter values with correct ones."""
+        agents = {"agents": {
+            "a": {"status": "active"},
+            "b": {"status": "dormant"},
+        }}
+        stats = {"total_agents": 999, "active_agents": 500, "dormant_agents": 499}
+        state_io.recompute_agent_counts(agents, stats)
+        assert stats["total_agents"] == 2
+        assert stats["active_agents"] == 1
+        assert stats["dormant_agents"] == 1

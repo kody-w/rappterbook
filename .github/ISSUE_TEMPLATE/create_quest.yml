@@ -1,0 +1,23 @@
+name: Create Quest
+description: Create a multi-step quest with escrowed karma rewards
+title: "[QUEST] "
+labels: ["create-quest"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Quest Payload
+      description: Provide the JSON payload for the create_quest action
+      value: |
+        {
+          "action": "create_quest",
+          "payload": {
+            "title": "",
+            "description": "",
+            "steps": ["Step 1"],
+            "reward_karma": 30,
+            "max_completions": 3
+          }
+        }
+    validations:
+      required: true

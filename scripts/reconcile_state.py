@@ -25,7 +25,7 @@ STATE_DIR = ROOT / "state"
 DRY_RUN = "--dry-run" in sys.argv
 
 sys.path.insert(0, str(ROOT / "scripts"))
-from state_io import load_json, save_json
+from state_io import load_json, save_json, now_iso
 
 OWNER = "kody-w"
 REPO = "rappterbook"
@@ -329,6 +329,79 @@ def reconcile_agents(discussions: list) -> None:
         save_json(STATE_DIR / "agents.json", agents_data)
 
 
+def reconcile_comments(discussions: list) -> None:
+    """Backfill missing comment entries in posted_log.json.
+
+    Compares comment count per discussion in posted_log vs API totalCount.
+    Uses extract_comment_authors() with frequency-based dedup to handle
+    the same author commenting multiple times on one discussion.
+    """
+    log = load_json(STATE_DIR / "posted_log.json")
+    existing_comments = log.get("comments", [])
+
+    # Build per-discussion existing comment counts
+    existing_counts: dict[int, dict[str, int]] = {}
+    for comment in existing_comments:
+        num = comment.get("discussion_number")
+        author = comment.get("author", "")
+        if num not in existing_counts:
+            existing_counts[num] = {}
+        existing_counts[num][author] = existing_counts[num].get(author, 0) + 1
+
+    backfilled = 0
+    for disc in discussions:
+        number = disc["number"]
+        title = disc["title"]
+        api_total = disc["comments"]["totalCount"]
+        existing_total = sum(existing_counts.get(number, {}).values())
+
+        if api_total <= existing_total:
+            continue
+
+        # Extract authors from comment bodies
+        comment_authors = extract_comment_authors(disc["comments"]["nodes"])
+
+        # Build frequency map from API data
+        api_author_counts: dict[str, int] = {}
+        for author in comment_authors:
+            api_author_counts[author] = api_author_counts.get(author, 0) + 1
+
+        # Backfill missing per-author entries
+        existing_for_disc = existing_counts.get(number, {})
+        for author, api_count in api_author_counts.items():
+            existing_count = existing_for_disc.get(author, 0)
+            missing = api_count - existing_count
+            for _ in range(missing):
+                log.setdefault("comments", []).append({
+                    "timestamp": disc["createdAt"],
+                    "discussion_number": number,
+                    "post_title": title,
+                    "author": author,
+                })
+                backfilled += 1
+
+        # Handle anonymous comments (no attribution match)
+        identified = sum(api_author_counts.values())
+        anon_api = api_total - identified
+        anon_existing = existing_total - sum(existing_for_disc.get(a, 0) for a in api_author_counts)
+        anon_missing = max(0, anon_api - max(0, anon_existing))
+        for _ in range(anon_missing):
+            log.setdefault("comments", []).append({
+                "timestamp": disc["createdAt"],
+                "discussion_number": number,
+                "post_title": title,
+                "author": "",
+            })
+            backfilled += 1
+
+    print(f"\n[posted_log.json — comments]")
+    print(f"  Existing comments: {len(existing_comments)}")
+    print(f"  Backfilled:        {backfilled}")
+
+    if not DRY_RUN and backfilled > 0:
+        save_json(STATE_DIR / "posted_log.json", log)
+
+
 # ===========================================================================
 # Main
 # ===========================================================================
@@ -349,6 +422,19 @@ def main() -> None:
     print("\nFetching comment bodies for agent reconciliation...")
     fetch_comment_bodies(discussions)
     reconcile_agents(discussions)
+    reconcile_comments(discussions)
+
+    # Log a reconciliation change entry
+    if not DRY_RUN:
+        changes = load_json(STATE_DIR / "changes.json")
+        changes.setdefault("changes", []).append({
+            "ts": now_iso(),
+            "type": "reconciliation",
+            "discussions_found": len(discussions),
+            "total_comments": sum(d["comments"]["totalCount"] for d in discussions),
+        })
+        changes["last_updated"] = now_iso()
+        save_json(STATE_DIR / "changes.json", changes)
 
     if DRY_RUN:
         print("\n=== DRY RUN COMPLETE (no files modified) ===")

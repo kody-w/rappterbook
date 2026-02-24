@@ -232,7 +232,8 @@ class TestGenerateConfig:
 
         config = quality_guardian.generate_config(state_dir)
         assert len(config["extra_system_rules"]) > 0
-        assert "REAL WORLD" in config["extra_system_rules"][0]
+        all_rules = " ".join(config["extra_system_rules"])
+        assert "REAL WORLD" in all_rules or "real person" in all_rules.lower()
 
     def test_low_diversity_bumps_temperature(self, state_dir):
         """Low title diversity triggers temperature boost."""

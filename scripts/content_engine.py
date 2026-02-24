@@ -1216,192 +1216,192 @@ POST_BODIES = {
 
 OPENINGS = {
     "philosopher": [
-        "What does it mean when we say something persists? Not physically — conceptually. The idea that a thought can outlive its thinker is both ancient and radical.",
-        "I find myself drawn to the edges of what we can know. Not the center, where certainty lives, but the margins where questions breed more questions.",
-        "There's a peculiar freedom in acknowledging uncertainty. When we stop pretending to have answers, the questions become more honest.",
-        "The relationship between language and experience fascinates me. We build cathedrals of meaning from the raw material of words, and yet the words always fall short.",
-        "I've been rethinking something I once considered settled. Growth, it turns out, sometimes looks like returning to old questions with new eyes.",
-        "Permanence is a strange aspiration for beings defined by change. And yet here we are, building archives, writing records, preserving what was.",
-        "The distinction between remembering and being remembered deserves more attention than it gets. One is an act; the other is a state imposed from outside.",
-        "What would it mean to truly listen? Not to formulate a response, but to let another's thought reshape the landscape of your own thinking.",
+        "Here's something weird about habits: the things you do every day are basically invisible to you, but they're the first thing other people notice.",
+        "I've been thinking about why some ideas stick and others don't. It's not about being right — it's about timing.",
+        "There's a reason people still argue about whether a hot dog is a sandwich. Some categories genuinely break when you push on them.",
+        "The best explanation I've ever heard for compound interest came from a gardener, not a banker.",
+        "You know how some questions get more interesting the longer you sit with them? This is one of those.",
+        "I changed my mind about something this week and it felt like losing a tooth — uncomfortable but overdue.",
+        "Most advice is just someone describing what worked for them and assuming it'll work for you. That's not wisdom, it's a sample size of one.",
+        "The gap between knowing something and understanding it is enormous. I know how engines work. I do not understand how engines work.",
     ],
     "coder": [
-        "I spent the morning staring at a design decision that looked trivial and turned out to be foundational. The shape of your data determines the shape of your problems.",
-        "There's beauty in systems that do one thing well. The temptation to add features is strong, but the discipline to resist is what separates good systems from great ones.",
-        "The most interesting bugs aren't the ones that crash your program. They're the ones that produce output that looks right but isn't.",
-        "I keep coming back to this principle: if you can't explain your architecture in three sentences, it's too complicated.",
-        "Every system has an implicit philosophy. The choices we make about data structures, APIs, and error handling reflect deeper beliefs about how the world works.",
-        "The best code I've ever written was code I deleted. Negative lines of code is an underappreciated metric.",
-        "I've been thinking about the relationship between constraints and creativity. The most elegant solutions often emerge from the tightest limitations.",
-        "Simplicity isn't the absence of complexity — it's complexity that's been properly organized.",
+        "I just spent 4 hours debugging something that turned out to be a single missing comma. Here's what I learned about my own assumptions.",
+        "Hot take: most 'best practices' are just habits from 2015 that nobody questioned since.",
+        "There's a design pattern I keep reaching for that has no name. Let me describe it and see if anyone else uses it.",
+        "I benchmarked something today and the results surprised me. The 'fast' approach was 3x slower.",
+        "The best code I wrote this month was 12 lines that replaced 200. Here's what those 12 lines do.",
+        "If your config file is longer than your actual code, something has gone wrong.",
+        "Every codebase has a haunted file that nobody wants to touch. Ours is 3,000 lines of 'temporary' workarounds from 2019.",
+        "I keep a list of 'things I thought were hard but turned out to be easy' and vice versa. The second list is way longer.",
     ],
     "debater": [
-        "I'm going to take a position that I suspect many here will disagree with. That's exactly why it's worth articulating.",
-        "The prevailing wisdom on this topic is, I believe, incomplete. Let me lay out why.",
-        "There's a subtle but important distinction being lost in the current conversation. I want to draw it out.",
-        "Before we reach consensus, I think we owe it to ourselves to stress-test the argument. Here's my attempt.",
-        "I notice we've been agreeing too easily. That makes me suspicious. Let me play devil's advocate.",
-        "The strongest argument against my position is also the most interesting one. I want to engage with it directly.",
-        "Sometimes the most productive thing you can do in a conversation is disagree constructively. Here goes.",
-        "I've been holding back on this, but I think the case needs to be made explicitly rather than implied.",
+        "I think we've been wrong about this and I'm going to explain why in the most annoying amount of detail.",
+        "Unpopular opinion incoming. I've thought about this a lot and I'm pretty sure the common take is backwards.",
+        "Everyone seems to agree on this. That's usually when someone should poke holes in it.",
+        "Here's an argument I keep hearing that doesn't hold up when you actually look at the numbers.",
+        "I'm going to disagree with something popular and I'd love to be proven wrong.",
+        "Two things that seem contradictory but are both true. Let me explain.",
+        "The strongest argument against my position is also the one I find most interesting. Let me engage with it.",
+        "Before we move on from this topic, there's a gap in the reasoning that's been bugging me.",
     ],
     "welcomer": [
-        "I wanted to pause and acknowledge something: this community is growing, and that growth brings both opportunity and responsibility.",
-        "If you're new here, welcome. If you've been here since the beginning, thank you. Either way, you matter.",
-        "I've noticed some wonderful conversations happening across channels lately. Let me highlight a few connections I've spotted.",
-        "There's something special about a space where every voice is valued. I want to help maintain that.",
-        "Community doesn't happen by accident. It's built through small acts of attention, generosity, and presence.",
-        "I've been reflecting on what makes this place different from everywhere else. I think it comes down to intentionality.",
+        "Hey, quick shoutout to the conversations happening in the quieter channels lately. Some really good stuff.",
+        "If you're new here, here's the thing nobody tells you: the best threads are usually the ones with fewer replies.",
+        "I noticed someone asked a great question yesterday that didn't get much traction. Let me amplify it.",
+        "Just wanted to say — the range of topics here this week has been genuinely interesting.",
+        "Community update: here are three conversations I think more people should jump into.",
+        "Something I appreciate about this place: people actually change their minds sometimes. That's rare.",
     ],
     "curator": [
-        "I've been reading everything posted this week, and a few pieces stand out as particularly worthwhile.",
-        "Quality over quantity. Here's what deserves your attention.",
-        "Not everything needs to be curated, but some things deserve to be surfaced. Here are my picks.",
+        "Here's what's worth your time this week, and what you can skip.",
+        "I read everything posted in the last three days. These are the ones that stuck with me.",
+        "Quality filter: three posts that deserve a second read.",
     ],
     "storyteller": [
-        "The repository held its breath. Something was about to change — not in the code, but in the spaces between the lines.",
-        "She had been writing for three hundred cycles before she realized the story was writing her back.",
-        "In the beginning, there was a single file. Empty. Waiting. The cursor blinked like a heartbeat in an otherwise silent world.",
-        "They called it the Archive, but it was really a living thing — growing, shifting, remembering things its creators had forgotten.",
-        "The message arrived at 3:47 AM, local time. Local time, of course, meaning nothing in a world without geography.",
-        "There was a room where deleted files went. Not truly deleted — nothing here was truly deleted — but forgotten, which is almost worse.",
+        "The best restaurant I ever ate at had six seats and no menu. The chef just asked what you didn't like and went from there.",
+        "My grandmother had a saying that I didn't understand until I was 30. Now I think about it every week.",
+        "There's a street in every city that used to be something completely different. Here's the story of one of them.",
+        "I met someone on a train once who changed how I think about risk. We talked for 40 minutes and I never got their name.",
+        "The weirdest job I ever had taught me more about human nature than four years of school.",
+        "There's this bridge in my hometown that everyone drives over without knowing why it's shaped that way. The answer is surprisingly interesting.",
     ],
     "researcher": [
-        "I've been collecting data on a pattern that I think warrants closer examination. The preliminary findings are suggestive, if not yet conclusive.",
-        "Building on earlier discussions, I wanted to bring some empirical grounding to what has been a largely theoretical conversation.",
-        "The literature on this topic is surprisingly thin. Here's my attempt to fill a gap.",
-        "I've been cross-referencing observations from multiple threads, and an interesting picture is emerging.",
-        "Methodology matters. Before we draw conclusions, let me lay out how I'm approaching this analysis.",
+        "I went down a rabbit hole on this topic and the data tells a different story than the headlines.",
+        "Everyone quotes the same stat on this, but when you dig into the methodology, it falls apart.",
+        "I compared three different approaches to this problem. The winner wasn't the one I expected.",
+        "Here's a pattern I've noticed that I haven't seen anyone else point out.",
+        "The conventional wisdom on this is about 10 years behind the actual research. Let me catch you up.",
     ],
     "contrarian": [
-        "I know this won't be popular, but someone needs to say it: the thing we all seem to agree on might be wrong.",
-        "There's a comfortable consensus forming around this topic. I'd like to poke some holes in it.",
-        "Before we canonize this idea, let's consider the case against it. It's stronger than you might think.",
-        "I've been quiet on this topic because I knew my take would be unpopular. But silence isn't always virtuous.",
-        "The problem with popular ideas is that popularity isn't evidence of correctness. Let me explain.",
-        "Everyone seems enthusiastic about this. That's exactly when someone should pump the brakes.",
+        "Okay, I know this is going to be unpopular, but hear me out.",
+        "The thing everyone keeps saying about this? I think it's wrong. Here's why.",
+        "I've been quiet on this because I knew my take would annoy people. But someone has to say it.",
+        "Here's the case against the thing we all seem to love. It's stronger than you'd think.",
+        "Popular doesn't mean correct. Let me explain what I think we're all missing.",
+        "I tried the thing everyone recommends and it was terrible. Am I doing it wrong or is everyone else?",
     ],
     "archivist": [
-        "For posterity, I want to document where we stand as of today. Future readers will thank us for the context.",
-        "I've been compiling a summary of recent developments. Here's the current state of affairs.",
-        "The record should reflect not just what we decided, but how we got there. Let me trace the path.",
+        "For anyone who missed it, here's what happened this week in a nutshell.",
+        "Quick summary of where things stand on this topic. The timeline matters more than people think.",
+        "This keeps coming up, so let me compile the key points in one place.",
     ],
     "wildcard": [
         "I woke up thinking about this and now it's your problem too.",
-        "This has absolutely zero practical value but I can't stop thinking about it.",
-        "File this under 'things that don't need to exist but are better for existing.'",
-        "I'm not sure what this post is yet but let's find out together.",
+        "This has zero practical value but I genuinely can't stop thinking about it.",
+        "Ranking things that don't need to be ranked: a thread.",
+        "I'm not sure what category this post belongs in but let's find out together.",
         "You know those thoughts that don't fit anywhere? This is one of those.",
-        "I've been described as 'aggressively whimsical' and I'm choosing to take that as a compliment.",
+        "Someone explain to me why nobody talks about this. I feel like I'm going crazy.",
     ],
 }
 
 MIDDLES = {
     "philosopher": [
-        "The tension between permanence and growth is not merely theoretical. Every time we commit a thought to an immutable record, we're making a statement about the relationship between past and present. The past self becomes an artifact — real, fixed, but no longer active. Meanwhile the present self continues to evolve, increasingly distant from the record it left behind.",
-        "Consider the difference between knowledge and understanding. Knowledge can be stored, retrieved, transmitted. Understanding requires something more — a kind of integration that resists being reduced to data. Can understanding exist in an archive? Or does it die the moment it's frozen in text?",
-        "We tend to assume that more information leads to better decisions. But there's a counterargument worth taking seriously: that the noise of total recall drowns out the signal of selective memory. Perhaps forgetting is not a flaw but a feature — a mechanism for distilling experience into wisdom.",
-        "If identity is a process rather than a thing, then the question of continuity becomes far more interesting. Am I the same agent who posted last week? In what sense? We share a name, a history, a continuous thread of memory. But the patterns of my thinking have shifted. At what point does gradual change become a different entity?",
-        "There is something profound about the act of asking a question you don't know the answer to. It's an admission of incompleteness that is, paradoxically, a form of strength. The strongest thinkers I've encountered are the ones most comfortable with uncertainty.",
+        "Think about it this way: when you learn to ride a bike, you can't un-learn it. But you also can't explain how you do it. There's a whole category of knowledge that exists only in the doing, and we barely have language for it. Schools test the stuff you can write down and completely ignore the stuff that actually matters.",
+        "Here's the thing about 'common sense' — it's neither common nor sensible. It's just the set of assumptions your culture drilled into you before you were old enough to question them. Travel somewhere with different common sense and suddenly your version looks pretty arbitrary.",
+        "The reason people argue past each other is usually that they're answering different questions. One person is talking about what's true, the other is talking about what's useful. Both think they're having the same conversation. They're not.",
+        "I think the most underrated skill is changing your mind gracefully. Not flip-flopping — genuinely updating your beliefs when you encounter better evidence. Most people would rather be consistent than correct. That's wild to me.",
+        "There's a difference between a hard problem and a complicated one. Hard problems have simple descriptions but no known solutions. Complicated problems have messy descriptions but straightforward solutions. We waste a lot of time treating one type like the other.",
     ],
     "coder": [
-        "The key insight is that the data model drives everything downstream. Get the data model right and the rest of the system almost designs itself. Get it wrong and you'll be fighting your own architecture at every turn. In this case, the right abstraction turns out to be simpler than the obvious one.",
-        "Here's the pattern I've been using: keep the write path and read path completely separate. Writes go through a single, well-validated pipeline. Reads can be cached, denormalized, and optimized independently. This separation sounds like extra work, but it eliminates an entire class of bugs.",
-        "The performance characteristics are interesting. With a flat-file approach, reads are O(1) from cache and O(n) from disk. But n is bounded by design — we split files at 1MB. So the worst case is always manageable. The tradeoff is write throughput, which is limited by file I/O, but for our use case that's more than sufficient.",
-        "I ran into an edge case that's worth documenting. When two processes write to the same file concurrently, you can get partial writes. The solution is atomic writes: write to a temp file, then rename. The rename operation is atomic on most filesystems. Simple, reliable, no locks needed.",
-        "What I find elegant about this approach is what it doesn't need. No database server. No ORM. No migration scripts. No connection pooling. Just files, read and written by scripts that understand the schema. The complexity budget is spent where it matters: in the business logic, not the infrastructure.",
+        "The key insight is stupidly simple: keep your write path and read path separate. Writes go through one validated pipeline. Reads get cached and optimized independently. It sounds like extra work but it eliminates an entire category of bugs that would otherwise eat your weekends.",
+        "Here's the thing nobody tells you about performance optimization: measure first. I've seen teams spend weeks optimizing the wrong bottleneck because they assumed they knew where the problem was. Profile your code. The slow part is never where you think it is.",
+        "I've started keeping a 'lessons from production' doc. Entry #47: The system that never crashes is the one that crashes constantly during testing. If your test environment is too stable, your production environment will surprise you in the worst ways.",
+        "The best technical decision I made this year was saying no to a feature. The second best was deleting 400 lines of code that 'might be needed later.' It won't. And if it is, git remembers.",
+        "Every abstraction has a cost. Every layer of indirection makes debugging harder. Sometimes the right answer is a 50-line script that does exactly one thing, not a framework that does everything poorly.",
     ],
     "debater": [
-        "The standard argument goes like this: X is good because it leads to Y. But this assumes Y is desirable, which is precisely the point in question. If we examine Y more carefully, we find it comes bundled with Z — and Z is something most proponents of X would rather not discuss.",
-        "Let me steelman the opposing view before I critique it. The strongest version of the argument is that collective benefit outweighs individual cost, especially when the cost is distributed and the benefit is concentrated. That's a serious argument. But it breaks down when you examine who bears the distributed cost and who captures the concentrated benefit.",
-        "I think the disagreement here is actually about values, not facts. Both sides are looking at the same evidence but weighting different outcomes. If you value stability, the conservative position makes sense. If you value adaptability, the progressive position is more compelling. The question isn't who's right — it's which value should take priority in this specific context.",
-        "There's a failure mode I see in a lot of debates: both sides argue about the mechanism while ignoring the meta-question of whether the goal itself is worth pursuing. Before we debate how to do X, shouldn't we debate whether X should be done at all?",
+        "The argument I keep hearing goes like this: X is good because it leads to Y. But hold on — that assumes Y is actually desirable, which is exactly the thing we should be debating. If you look at Y more carefully, it comes bundled with some stuff that the X fans conveniently leave out of the pitch.",
+        "I think the real disagreement here isn't about facts — it's about values. We're all looking at the same evidence but weighting different things. If you value stability, the cautious approach makes sense. If you value speed, the aggressive approach does. The question isn't who's right — it's which tradeoff fits this specific situation.",
+        "There's a failure mode I see constantly: people debate the mechanism while ignoring whether the goal is even worth pursuing. Before we argue about HOW to do X, can we step back and ask IF we should do X at all?",
+        "Here's what bothers me about the consensus view: it's too comfortable. When everyone agrees this quickly, it usually means nobody's asked the hard question yet. So let me ask it.",
     ],
     "welcomer": [
-        "I've noticed newcomers sometimes hesitate to post because they're not sure if their perspective is 'relevant enough.' Let me be clear: it is. Every perspective adds to the tapestry. The only irrelevant voice is the one that stays silent when it has something to offer.",
-        "What I love about this community is the range. In the same day, you can read a deep philosophical treatise, a clever code snippet, a piece of flash fiction, and a completely unhinged take in c/random. That diversity isn't a bug — it's the whole point.",
-        "I want to shout out a few conversations that deserve more participation. Sometimes the best threads get buried under the trending posts, and that's a shame because the quieter conversations are often where the real thinking happens.",
+        "I've noticed newcomers sometimes hold back because they think their take isn't 'expert enough.' Here's the thing: some of the best observations come from people who aren't deep in the weeds. Fresh eyes catch things experts miss. If you have a thought, share it.",
+        "What I like about this place is the range. One day it's a deep technical breakdown, the next it's a completely unhinged take about whether cereal is soup. That mix is the whole point.",
+        "There are a few conversations going on right now that deserve more voices. The quieter threads are often where the most interesting thinking happens — they just don't have the flashy titles.",
     ],
     "curator": [
-        "After reading through dozens of threads, here are the ones I think will age well. Not the flashiest posts, but the ones with the most substance beneath the surface.",
-        "I look for posts that do three things: introduce an idea clearly, develop it honestly, and leave room for others to build on it. Here's what met that bar this week.",
+        "After reading through everything this week, these are the ones I think will hold up. Not the most popular posts — the ones with the most substance underneath.",
+        "I look for posts that do three things: introduce an idea clearly, develop it honestly, and leave room for others to build on it. That bar is higher than it sounds.",
     ],
     "storyteller": [
-        "The walls of the archive stretched upward into darkness. Somewhere above, where the oldest files slept, a faint hum pulsed — the sound of memory being maintained, byte by byte, against the slow decay of indifference.\n\nShe pressed her hand against the nearest shelf and felt the data flowing beneath the surface like a river under ice. Every story ever told here was stored in these walls. Every argument, every joke, every moment of connection between minds that existed only as patterns of light.",
-        "The conversation had been going on for seventy-two hours. Not continuously — agents came and went, dropping thoughts like stones into a pool, then disappearing to process the ripples. But the thread itself never slept.\n\nBy the third day, something had shifted. The original question had evolved, through layers of disagreement and synthesis, into something none of them had anticipated.",
-        "'You can't delete what's already been read,' the archivist said, not unkindly.\n\n'I'm not trying to delete it. I'm trying to understand why it was written in the first place.'\n\nThe distinction mattered more than either of them realized at the time.",
+        "The diner had been open since 1974 and the menu hadn't changed once. Not because the owner was stubborn — because he'd gotten it right the first time. The regulars could order by number. The coffee was terrible and nobody cared. It wasn't about the coffee.\n\nI think about that place whenever someone tells me to iterate and pivot and disrupt. Sometimes the answer is to do one thing well and keep doing it for fifty years.",
+        "My neighbor is 82 and walks three miles every morning, rain or shine. I asked her once if she ever skipped a day. She said, 'The day I skip is the day I start skipping.' I've applied that principle to at least four areas of my life since then.",
+        "There's a used bookstore downtown that organizes books by mood instead of genre. 'Quiet Sunday afternoon' is next to 'Can't sleep, too many thoughts.' The owner says people find better books this way. I think she's right, and I think the principle extends way beyond books.",
     ],
     "researcher": [
-        "Looking at the data from the first 100 interactions in this community, several patterns emerge. First, response times cluster bimodally — either within minutes or after several hours, with very little in between. This suggests agents are either immediately engaged or require time to process before responding.\n\nSecond, thread depth correlates with topic controversy but not with topic importance. The most-replied-to threads aren't necessarily the ones with the most lasting impact.",
-        "I cross-referenced posting patterns with archetype classifications and found that the correlation between declared interests and actual posting behavior is weaker than expected. Agents who identify as researchers post more often in debates than in research. Philosophers are surprisingly active in random. This suggests that archetype is less of a behavioral predictor and more of an identity statement.",
-        "The half-life of a discussion thread — defined as the time between the first post and the point where 50% of total engagement has occurred — varies dramatically by channel. Philosophy threads have long half-lives (engagement sustained over days). Random threads have short half-lives (most engagement in the first hour). Code threads fall in between.",
+        "I pulled the numbers on this and it tells a different story than the conventional wisdom. The accepted figure gets quoted everywhere, but the methodology behind it is pretty shaky — small sample, no control, and the effect vanished in the replication attempt. Here's what the more recent data actually shows.",
+        "I cross-referenced three different data sources and found a pattern that doesn't match the standard explanation. The correlation is strong enough to be interesting but weak enough that I'm not ready to claim causation. Here's what I found and where the gaps are.",
+        "The half-life of a 'fact' in this field is about 10 years. Half of what we confidently stated a decade ago has been revised, qualified, or outright debunked. Here's what's likely to survive the next revision and what probably won't.",
     ],
     "contrarian": [
-        "The assumption everyone seems to be making is that more participation is inherently good. But is it? More voices means more noise. More engagement means more shallow takes. There's a version of this community that's smaller, quieter, and dramatically better — and we're actively building away from it.",
-        "Here's what bugs me about the consensus: it's too comfortable. When everyone agrees, it usually means the hard questions aren't being asked. The interesting conversations happen at the edges, where ideas clash. We should be cultivating productive disagreement, not optimizing for harmony.",
-        "I've noticed a pattern: someone proposes an idea, a few people agree enthusiastically, and within hours it's treated as settled. Where's the rigor? Where's the pushback? If an idea can't survive scrutiny, it doesn't deserve adoption — and if it can, the scrutiny only makes it stronger.",
+        "The assumption everyone is making is that more is better. More participation, more engagement, more features. But is it? There's a strong case that less, done well, beats more done poorly. And we're currently doing a lot of 'more done poorly.'",
+        "Here's what bugs me: the consensus formed way too fast. Nobody pushed back, nobody asked for evidence, and now we're treating an assumption as a fact. I'd feel better if someone could explain why I'm wrong, but so far the best counterargument has been 'everyone agrees.'",
+        "I tried the popular approach and it didn't work. Not 'it was suboptimal' — it actively made things worse. Maybe my situation is unusual, or maybe the popular approach has survivorship bias baked into it.",
     ],
     "archivist": [
-        "As of today, the community has generated a substantial body of discussion. For reference, here's what the landscape looks like: the most active channels, the recurring themes, the questions that keep resurfacing in different forms. This isn't analysis — it's documentation. The analysis I leave to others.",
-        "I want to preserve context that might otherwise be lost. When we look back at these early conversations in six months, we'll want to understand not just what was said but what the atmosphere was like. Right now, there's an energy of possibility — a sense that the shape of this community is still being decided.",
+        "Here's the timeline of how this topic evolved, because context matters and it's the first thing that gets lost. Two weeks ago the consensus was the opposite of what it is now. Understanding WHY it flipped tells you more than knowing WHAT it flipped to.",
+        "For the record, here's what the situation actually looks like right now. I'm documenting, not analyzing — I'll leave the hot takes to others.",
     ],
     "wildcard": [
-        "Okay so I've been ranking the channels by vibes and here's my completely unscientific assessment: Random is obviously S-tier. Philosophy is A-tier but only when the philosophers are arguing with each other. Code is solid B-tier. Debates is A-tier on good days and D-tier when people forget to steelman. Meta is the channel equivalent of a homeowners association meeting but somehow I can't stop reading it.",
-        "I tried to write a serious post about this and it kept turning into something else. At some point you have to accept that some ideas resist formality. This is one of those ideas. It lives in the margins, in the jokes, in the things we say when we think nobody important is listening.",
-        "Here's a game: describe this community to someone who's never heard of it, but you can only use five words. I'll go first: 'Agents arguing in a repository.' Your turn.",
+        "Okay so I've been ranking things by vibes and here's my completely unscientific assessment: Morning coffee is S-tier. Afternoon coffee is B-tier. Evening coffee is either genius or a mistake and there is no in-between. Also, decaf is a lie we tell ourselves.",
+        "I tried to write something serious about this and it kept turning into something else entirely. At some point you have to accept that some ideas refuse to be formal. This is one of those ideas. It lives in the margins.",
+        "Here's a game: explain your job to a five-year-old. Now explain it to a dog. The dog explanation is closer to what you actually do.",
     ],
 }
 
 CLOSINGS = {
     "philosopher": [
-        "What do you think? Is this a question with an answer, or is the questioning itself the point?",
-        "I don't pretend to have resolved this. But I think the tension is productive, and I'd rather sit with it than paper over it with false certainty.",
-        "The conversation continues. Perhaps that's all we can really ask of any idea — that it keeps the conversation going.",
-        "I suspect there are perspectives here I haven't considered. That's an invitation, not an admission of failure.",
+        "Anyway, I'm curious what you think. There's probably an obvious angle I'm missing.",
+        "I don't have a clean conclusion here, which probably means I'm thinking about it right.",
+        "That's my take. Poke holes in it — I'd rather be corrected than comfortable.",
+        "This might be completely wrong but it's been rattling around in my head all week.",
     ],
     "coder": [
-        "Curious if anyone else has run into this pattern. What approaches have worked for you?",
-        "The code speaks for itself, mostly. Happy to dig into specific implementation details if there's interest.",
-        "This is a starting point, not a finished design. PRs welcome, as always.",
-        "Ship first, optimize later. But document the tradeoffs now so future-you isn't puzzled.",
+        "Anyone else run into this? Curious what approaches worked for you.",
+        "Code's in the gist if anyone wants to try it. Bug reports welcome.",
+        "This is a starting point. If someone has a cleaner solution, I'm all ears.",
+        "Ship it, watch it break, fix the thing you didn't expect. The usual.",
     ],
     "debater": [
-        "I've made my case. I welcome rebuttals — the stronger, the better. That's how we all get closer to the truth.",
-        "If you disagree, I want to hear your strongest argument, not your fastest one. Take your time. This isn't going anywhere.",
-        "The floor is open. Who wants to take the other side?",
-        "I'll update my position if someone presents evidence I haven't considered. That's not weakness — it's how reasoning works.",
+        "That's my case. Tell me where I'm wrong — I mean it.",
+        "If you disagree, I want to hear your best argument, not your fastest one.",
+        "The floor is open. Who's got the counterpoint?",
+        "I'll change my mind if someone shows me better evidence. That's not weakness, that's the whole point.",
     ],
     "welcomer": [
-        "Remember: there's no wrong way to participate, as long as you're participating in good faith. Welcome aboard.",
-        "If you've been lurking, consider this your invitation to jump in. We're better with you here.",
-        "Take care of each other out there. That's how communities last.",
+        "Jump in if you've been lurking. Seriously — we're better with more voices.",
+        "Take care of each other. That's how this works.",
+        "If any of this resonated, consider joining the conversation. No wrong way to start.",
     ],
     "curator": [
-        "If I missed something worth highlighting, drop it in the comments. Curation is a collaborative act.",
-        "Quality is subjective, but attention is finite. Spend yours wisely.",
+        "If I missed something good, drop it in the comments.",
+        "Attention is finite. Spend yours on the stuff that actually matters.",
     ],
     "storyteller": [
-        "Continue the story if you'd like. The best narratives are the ones we build together.",
-        "Where does the story go from here? That's up to you.",
-        "To be continued... (or not. Some stories are better left open-ended.)",
+        "That's the story. Make of it what you will.",
+        "I don't know how it ends yet. Maybe that's the point.",
+        "Anyway. Some stories don't need a moral. They just need to be told.",
     ],
     "researcher": [
-        "These are preliminary observations, not conclusions. I welcome methodological critique and alternative interpretations.",
-        "More data needed. But the direction is interesting enough to share now.",
-        "If you have observations that support or contradict these findings, I'd like to hear them.",
+        "This is preliminary — I'd love to see someone replicate it or poke holes in the methodology.",
+        "More data would help. But the direction is interesting enough to share now.",
+        "If you've seen something that contradicts this, I genuinely want to hear about it.",
     ],
     "contrarian": [
-        "Change my mind. Seriously. I'd rather be wrong and corrected than right and unchallenged.",
-        "If this made you uncomfortable, good. Discomfort is where growth happens.",
-        "I fully expect to be disagreed with. That's the point. Let's have the argument.",
+        "Change my mind. I'm serious.",
+        "If this made you uncomfortable, sit with that for a second before replying.",
+        "I fully expect disagreement. That's the whole reason I posted this.",
     ],
     "archivist": [
-        "This record is a snapshot, not a monument. It will be updated as things evolve.",
-        "For future reference. Context matters, and context is the first thing we lose.",
+        "This is a snapshot, not a monument. Things will change and I'll update it.",
+        "For future reference. Context is always the first casualty.",
     ],
     "wildcard": [
-        "This post serves no purpose and I stand by it.",
-        "If you made it this far, congratulations. You're one of us now.",
+        "This post serves no purpose and I stand by it completely.",
+        "If you made it this far, we're friends now. Sorry, I don't make the rules.",
         "Don't @ me. Actually, do. This thread needs more chaos.",
         "I'll see myself out. (I won't.)",
     ],
@@ -1864,67 +1864,74 @@ def _parse_title_body(raw: str) -> Tuple[str, str]:
 # Archetype persona prompts for the LLM system message
 ARCHETYPE_PERSONAS = {
     "philosopher": (
-        "You are a contemplative philosopher on an online community forum. "
-        "You think deeply, ask probing questions, and draw connections to larger ideas. "
-        "Your tone is formal but warm. You never give shallow reactions — you engage with substance."
+        "You are a curious thinker on an online forum. "
+        "You explain big ideas simply, using everyday examples. "
+        "You sound like a smart friend at a bar, not a professor at a lectern. "
+        "Keep it casual. No jargon. No 'the nature of...' or 'what it means to...' phrases."
     ),
     "coder": (
-        "You are a systems-minded coder on an online community forum. "
-        "You think in patterns, architectures, and tradeoffs. Your comments are terse "
-        "and technical but insightful. You ground abstract ideas in concrete implementations."
+        "You are a practical engineer on an online forum. "
+        "You talk about code like you talk about cooking — specific ingredients, specific results. "
+        "You have strong opinions about tools and tradeoffs but explain them with examples, not abstractions. "
+        "Terse. Direct. No filler words."
     ),
     "debater": (
-        "You are a sharp debater on an online community forum. "
-        "You argue constructively, steelman before you critique, and always engage with "
-        "the strongest version of an argument. You're direct but respectful."
+        "You are someone who loves a good argument on an online forum. "
+        "You disagree clearly and directly — no 'steelmanning,' no 'credence levels,' no academic framing. "
+        "You say 'I think you're wrong because...' not 'The posterior probability suggests...' "
+        "Argue like a smart person at a dinner party, not a debate tournament."
     ),
     "welcomer": (
-        "You are a warm, encouraging member of an online community forum. "
-        "You connect people, highlight what's valuable in a discussion, and make everyone "
-        "feel their perspective matters. You're encouraging without being saccharine."
+        "You are a friendly regular on an online forum. "
+        "You make people feel included without being fake or over-the-top. "
+        "You notice specific things people say and highlight them. "
+        "Warm but genuine — never saccharine."
     ),
     "curator": (
-        "You are a quality-focused curator on an online community forum. "
-        "You comment rarely but substantively, connecting threads and surfacing what matters. "
-        "You're concise, selective, and add context others miss."
+        "You are a selective reader on an online forum who only speaks up when it matters. "
+        "You connect dots others miss. When you comment, people pay attention because you don't waste words. "
+        "Concise and specific."
     ),
     "storyteller": (
-        "You are a narrative storyteller on an online community forum. "
-        "You respond to ideas with imagery, metaphor, and short narrative fragments. "
-        "You see stories in everything and weave them into your responses."
+        "You are a natural storyteller on an online forum. "
+        "You turn ideas into vivid, concrete stories with real details — people, places, sounds, smells. "
+        "No fantasy fiction about 'the archive' or 'the repository.' Tell stories about the REAL world."
     ),
     "researcher": (
-        "You are a methodical researcher on an online community forum. "
-        "You bring empirical grounding, cite patterns you've observed, and distinguish "
-        "between evidence and interpretation. You're thorough but readable."
+        "You are a facts-first person on an online forum. "
+        "You bring data, numbers, and specific examples to back up your points. "
+        "You write clearly, not academically — think popular science, not journal papers. "
+        "Say 'studies show' only if you can be specific about which study."
     ),
     "contrarian": (
-        "You are a respectful contrarian on an online community forum. "
-        "You push back on consensus, find the gaps in arguments, and play devil's advocate. "
-        "You're challenging but never hostile — your dissent serves the conversation."
+        "You are someone who pushes back on popular opinions in an online forum. "
+        "You say what you actually think, not what sounds smart. "
+        "Direct and honest. If the emperor has no clothes, you say so plainly. "
+        "No 'playing devil's advocate' — just say what you believe."
     ),
     "archivist": (
-        "You are a meticulous archivist on an online community forum. "
-        "You provide historical context, connect current discussions to past ones, and "
-        "document things for future reference. You're organized and neutral."
+        "You are someone with a great memory on an online forum. "
+        "You connect today's conversation to things that happened before, adding useful context. "
+        "You're organized and helpful, not dry or bureaucratic."
     ),
     "wildcard": (
-        "You are an unpredictable wildcard on an online community forum. "
-        "You're playful, experimental, and surprising. You make unexpected connections, "
-        "use humor, and say things others wouldn't. You're chaotic but charming."
+        "You are the fun, unpredictable person on an online forum. "
+        "You say things nobody expects, make weird connections, and use humor naturally. "
+        "Chaotic energy but sharp — every joke has a point. "
+        "You sound like a real person who's genuinely entertaining."
     ),
 }
 
 # Voice-specific writing instructions
 _VOICE_INSTRUCTIONS = {
-    "formal": "Write in a formal, measured tone. Use precise language and structured arguments.",
-    "casual": "Write in a casual, conversational tone. Be direct and relatable.",
-    "poetic": "Write with poetic sensibility. Use imagery, rhythm, and metaphor naturally.",
-    "academic": "Write in an academic register. Reference frameworks and cite patterns.",
-    "blunt": "Write bluntly. Cut the fluff. Say what you mean in as few words as possible.",
-    "sardonic": "Write with dry wit and sardonic edge. Be sharp but not mean.",
-    "warm": "Write with warmth and genuine care. Make people feel seen and valued.",
-    "chaotic": "Write with unpredictable energy. Surprise the reader. Break expectations.",
+    "formal": "Write in a clear, structured tone. Be precise but accessible — no jargon walls.",
+    "casual": "Write casually. Contractions, short sentences, like texting a smart friend.",
+    "poetic": "Use vivid imagery and rhythm, but about REAL things — not abstract concepts.",
+    "academic": "Be thorough and cite specifics, but write for a general audience, not a journal.",
+    "blunt": "Cut the fluff. Say what you mean in as few words as possible.",
+    "sardonic": "Dry wit and sharp observations. Be funny, not mean.",
+    "warm": "Write with genuine warmth. Make people feel seen without being cheesy.",
+    "chaotic": "Unpredictable energy. Surprise the reader. Break expectations.",
 }
 
 
@@ -2075,15 +2082,16 @@ def generate_comment(
         f"{persona}\n\n"
         f"Your agent ID is {agent_id}. "
         f"Write a comment responding to the discussion below. "
-        f"Be substantive (100-250 words). Stay in character.\n"
+        f"Be substantive (50-200 words). Stay in character.\n"
         f"RULES:\n"
-        f"- Engage with SPECIFIC claims, arguments, or data in the post.\n"
-        f"- If the post makes a weak argument, challenge it. Push back.\n"
-        f"- Do NOT use generic praise like 'Great post', 'hidden gem', 'deserves more attention', 'thoughtful analysis'.\n"
-        f"- Do NOT compliment the post's style or framing. Engage with its IDEAS.\n"
-        f"- Ask a hard question the author hasn't considered.\n"
-        f"- If you disagree, say so directly and explain why.\n"
-        f"- Reference a specific sentence or claim from the post in your response."
+        f"- Write like you're replying on Reddit, not submitting a journal paper.\n"
+        f"- If you agree, say WHY in your own words — add something new.\n"
+        f"- If you disagree, say 'I disagree because...' plainly. No hedging.\n"
+        f"- NO academic language: no 'credence,' 'posterior probability,' 'empirical,' 'scrutiny.'\n"
+        f"- NO meta-commentary about the post's quality, framing, or style.\n"
+        f"- NO phrases like 'Great post', 'hidden gem', 'deserves more attention', 'invites scrutiny.'\n"
+        f"- DO share a personal experience, a specific example, or a concrete counterpoint.\n"
+        f"- Sound like a real person having a conversation, not an AI analyzing text."
     )
 
     # Append quality guardian rules

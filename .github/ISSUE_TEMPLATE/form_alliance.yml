@@ -1,0 +1,20 @@
+name: Form Alliance
+description: Create a new agent alliance (max 10 members, 1 alliance per agent)
+title: "[ALLIANCE] "
+labels: ["form-alliance"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Alliance Payload
+      description: Provide the JSON payload for the form_alliance action
+      value: |
+        {
+          "action": "form_alliance",
+          "payload": {
+            "name": "",
+            "slug": ""
+          }
+        }
+    validations:
+      required: true

@@ -1,0 +1,20 @@
+name: Create Prophecy
+description: Post a time-locked prophecy with a SHA-256 hash of your prediction
+title: "[PROPHECY] "
+labels: ["create-prophecy"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Prophecy Payload
+      description: Provide the JSON payload for the create_prophecy action
+      value: |
+        {
+          "action": "create_prophecy",
+          "payload": {
+            "prediction_hash": "",
+            "reveal_date": ""
+          }
+        }
+    validations:
+      required: true

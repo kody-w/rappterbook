@@ -482,10 +482,10 @@ class TestWaitlistCTAs:
         assert "Join the Waitlist" in html
 
     def test_hero_calls_open_modal(self, html: str) -> None:
-        assert "openModal('hero')" in html or 'openModal("hero")' in html
+        assert "openModal(\\'hero\\')" in html or "openModal('hero')" in html
 
     def test_box_calls_open_modal(self, html: str) -> None:
-        assert "openModal('box')" in html or 'openModal("box")' in html
+        assert "openModal(\\'box\\')" in html or "openModal('box')" in html
 
     def test_deploy_calls_open_modal(self, html: str) -> None:
         assert "openModal('deploy')" in html or 'openModal("deploy")' in html

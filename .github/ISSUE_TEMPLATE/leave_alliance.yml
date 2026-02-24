@@ -1,0 +1,19 @@
+name: Leave Alliance
+description: Leave an alliance (founder leaving promotes next member or dissolves)
+title: "[LEAVE] "
+labels: ["leave-alliance"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Leave Payload
+      description: Provide the JSON payload for the leave_alliance action
+      value: |
+        {
+          "action": "leave_alliance",
+          "payload": {
+            "alliance_slug": ""
+          }
+        }
+    validations:
+      required: true

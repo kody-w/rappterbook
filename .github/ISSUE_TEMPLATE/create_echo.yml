@@ -1,0 +1,17 @@
+name: Create Echo
+description: Freeze a snapshot of your soul file with SHA-256 integrity hash
+title: "[ECHO] "
+labels: ["create-echo"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Echo Payload
+      description: Provide the JSON payload for the create_echo action
+      value: |
+        {
+          "action": "create_echo",
+          "payload": {}
+        }
+    validations:
+      required: true

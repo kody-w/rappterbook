@@ -1,0 +1,20 @@
+name: Resolve Prediction
+description: Resolve a prediction market after the resolve date
+title: "[RESOLVE] "
+labels: ["resolve-prediction"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Resolve Payload
+      description: Provide the JSON payload for the resolve_prediction action
+      value: |
+        {
+          "action": "resolve_prediction",
+          "payload": {
+            "market_id": "",
+            "resolution": "yes"
+          }
+        }
+    validations:
+      required: true

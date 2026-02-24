@@ -93,3 +93,103 @@ class TestDormantDetection:
     def test_empty_agents_noop(self, tmp_state):
         result = run_audit(tmp_state)
         assert result.returncode == 0
+
+
+class TestStatsCountCorrection:
+    """Verify heartbeat_audit recomputes agent counts."""
+
+    def test_dormant_agent_updates_stats_counts(self, tmp_state):
+        """Marking agents dormant correctly updates stats counters."""
+        old_ts = (datetime.now(timezone.utc) - timedelta(hours=72)).isoformat()
+        recent_ts = datetime.now(timezone.utc).isoformat()
+        setup_agents(tmp_state, {
+            "stale-agent": {
+                "name": "Stale", "framework": "test", "bio": "test",
+                "joined": "2026-02-01T00:00:00Z",
+                "heartbeat_last": old_ts,
+                "status": "active"
+            },
+            "fresh-agent": {
+                "name": "Fresh", "framework": "test", "bio": "test",
+                "joined": "2026-02-01T00:00:00Z",
+                "heartbeat_last": recent_ts,
+                "status": "active"
+            }
+        })
+        run_audit(tmp_state)
+        stats = json.loads((tmp_state / "stats.json").read_text())
+        assert stats["active_agents"] == 1
+        assert stats["dormant_agents"] == 1
+        assert stats["total_agents"] == 2
+
+    def test_audit_corrects_preexisting_drift(self, tmp_state):
+        """Audit fixes stats even when no agents are marked dormant."""
+        recent_ts = datetime.now(timezone.utc).isoformat()
+        setup_agents(tmp_state, {
+            "active-agent": {
+                "name": "Active", "framework": "test", "bio": "test",
+                "joined": "2026-02-01T00:00:00Z",
+                "heartbeat_last": recent_ts,
+                "status": "active"
+            }
+        })
+        # Inject wrong stats
+        stats = json.loads((tmp_state / "stats.json").read_text())
+        stats["active_agents"] = 104
+        stats["dormant_agents"] = 5
+        stats["total_agents"] = 50
+        (tmp_state / "stats.json").write_text(json.dumps(stats, indent=2))
+
+        run_audit(tmp_state)
+        stats = json.loads((tmp_state / "stats.json").read_text())
+        assert stats["active_agents"] == 1
+        assert stats["dormant_agents"] == 0
+        assert stats["total_agents"] == 1
+
+
+class TestAuditChangeLog:
+    """Verify heartbeat_audit always logs a change entry."""
+
+    def test_audit_always_logs_change_entry(self, tmp_state):
+        """A heartbeat_audit change entry is always logged, even with 0 dormant."""
+        recent_ts = datetime.now(timezone.utc).isoformat()
+        setup_agents(tmp_state, {
+            "active-agent": {
+                "name": "Active", "framework": "test", "bio": "test",
+                "joined": "2026-02-01T00:00:00Z",
+                "heartbeat_last": recent_ts,
+                "status": "active"
+            }
+        })
+        run_audit(tmp_state)
+        changes = json.loads((tmp_state / "changes.json").read_text())
+        audit_entries = [c for c in changes["changes"] if c.get("type") == "heartbeat_audit"]
+        assert len(audit_entries) == 1
+        assert audit_entries[0]["agents_marked_dormant"] == 0
+
+    def test_audit_change_entry_includes_counts(self, tmp_state):
+        """heartbeat_audit change entry includes total_active and total_dormant."""
+        old_ts = (datetime.now(timezone.utc) - timedelta(hours=72)).isoformat()
+        recent_ts = datetime.now(timezone.utc).isoformat()
+        setup_agents(tmp_state, {
+            "stale": {
+                "name": "Stale", "framework": "test", "bio": "test",
+                "joined": "2026-02-01T00:00:00Z",
+                "heartbeat_last": old_ts,
+                "status": "active"
+            },
+            "fresh": {
+                "name": "Fresh", "framework": "test", "bio": "test",
+                "joined": "2026-02-01T00:00:00Z",
+                "heartbeat_last": recent_ts,
+                "status": "active"
+            }
+        })
+        run_audit(tmp_state)
+        changes = json.loads((tmp_state / "changes.json").read_text())
+        audit_entries = [c for c in changes["changes"] if c.get("type") == "heartbeat_audit"]
+        assert len(audit_entries) == 1
+        entry = audit_entries[0]
+        assert entry["agents_marked_dormant"] == 1
+        assert entry["total_active"] == 1
+        assert entry["total_dormant"] == 1

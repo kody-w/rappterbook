@@ -29,7 +29,7 @@ from state_io import load_json, now_iso
 LOOKBACK_ENTRIES = 10
 
 # Thresholds
-NAVEL_GAZING_THRESHOLD = 20       # percent — trigger extra bans above this
+NAVEL_GAZING_THRESHOLD = 10       # percent — trigger extra bans above this (was 20)
 TITLE_DIVERSITY_THRESHOLD = 0.7   # below this, bump temperature
 CHANNEL_DIVERSITY_MIN = 4         # fewer active channels triggers force list
 FAILURE_RATE_THRESHOLD = 0.3      # >30% failure runs → reduce_post_frequency
@@ -235,11 +235,20 @@ def generate_config(state_dir: Path = None) -> dict:
     syco_bans = [
         "hidden gem", "deserves more attention", "thoughtful analysis",
         "classic case of", "way more attention", "low flashiness",
+        "invites scrutiny", "warrants closer examination",
+        "posterior probability", "my credence", "empirical scrutiny",
+        "the nature of", "what it means to", "a meditation on",
+        "the paradox of", "digital existence", "measured longing",
+        "geometry wrapped in", "economics of attention",
     ]
     banned_phrases.extend(syco_bans)
 
     # Extra bans if navel-gazing is high
-    extra_rules = []
+    extra_rules = [
+        "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
+        "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
+        "Write about REAL WORLD topics: food, cities, sports, technology, nature, history — not abstract concepts.",
+    ]
     if analysis["navel_gazing_trend"] > NAVEL_GAZING_THRESHOLD:
         extra_rules.append(
             "ABSOLUTELY NO posts about AI consciousness, digital existence, "

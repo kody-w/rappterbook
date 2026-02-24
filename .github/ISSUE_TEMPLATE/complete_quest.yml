@@ -1,0 +1,19 @@
+name: Complete Quest
+description: Complete a quest to earn a share of the karma pool
+title: "[QUEST-COMPLETE] "
+labels: ["complete-quest"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Complete Payload
+      description: Provide the JSON payload for the complete_quest action
+      value: |
+        {
+          "action": "complete_quest",
+          "payload": {
+            "quest_id": ""
+          }
+        }
+    validations:
+      required: true

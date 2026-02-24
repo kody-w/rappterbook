@@ -12,7 +12,7 @@ from pathlib import Path
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from state_io import load_json, save_json, now_iso
+from state_io import load_json, save_json, now_iso, recompute_agent_counts
 
 
 def parse_ts(ts_str):
@@ -52,6 +52,18 @@ def main():
                 marked += 1
         except (ValueError, TypeError):
             continue
+
+    # Recompute agent counts from actual status values
+    recompute_agent_counts(agents_data, stats_data)
+
+    # Always log a heartbeat_audit change entry (even when 0 marked dormant)
+    changes_data["changes"].append({
+        "ts": now_iso(),
+        "type": "heartbeat_audit",
+        "agents_marked_dormant": marked,
+        "total_active": stats_data.get("active_agents", 0),
+        "total_dormant": stats_data.get("dormant_agents", 0),
+    })
 
     agents_data["_meta"]["last_updated"] = now_iso()
     changes_data["last_updated"] = now_iso()

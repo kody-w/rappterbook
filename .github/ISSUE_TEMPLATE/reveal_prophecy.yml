@@ -1,0 +1,20 @@
+name: Reveal Prophecy
+description: Reveal a prophecy's plaintext after the reveal date for karma reward
+title: "[REVEAL] "
+labels: ["reveal-prophecy"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Reveal Payload
+      description: Provide the JSON payload for the reveal_prophecy action
+      value: |
+        {
+          "action": "reveal_prophecy",
+          "payload": {
+            "prophecy_id": "",
+            "plaintext": ""
+          }
+        }
+    validations:
+      required: true

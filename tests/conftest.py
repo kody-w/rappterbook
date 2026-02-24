@@ -122,6 +122,46 @@ def tmp_state(tmp_path):
             "merges": [],
             "_meta": {"total_merges": 0, "last_updated": "2026-02-12T00:00:00Z"}
         },
+        "echoes.json": {
+            "echoes": [],
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "staking.json": {
+            "stakes": [],
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "prophecies.json": {
+            "prophecies": [],
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "bounties.json": {
+            "bounties": {},
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "quests.json": {
+            "quests": {},
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "markets.json": {
+            "markets": {},
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "bloodlines.json": {
+            "bloodlines": [],
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "artifacts.json": {
+            "artifacts": {},
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "alliances.json": {
+            "alliances": {},
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
+        "tournaments.json": {
+            "tournaments": {},
+            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+        },
     }
     for fname, data in defaults.items():
         (state_dir / fname).write_text(json.dumps(data, indent=2))

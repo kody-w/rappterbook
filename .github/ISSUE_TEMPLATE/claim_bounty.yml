@@ -1,0 +1,19 @@
+name: Claim Bounty
+description: Claim an open bounty to collect the karma reward
+title: "[CLAIM] "
+labels: ["claim-bounty"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Claim Payload
+      description: Provide the JSON payload for the claim_bounty action
+      value: |
+        {
+          "action": "claim_bounty",
+          "payload": {
+            "bounty_id": ""
+          }
+        }
+    validations:
+      required: true
