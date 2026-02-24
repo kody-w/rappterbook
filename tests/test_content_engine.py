@@ -1020,7 +1020,9 @@ class TestCommentQualityConfig:
         )
         call_args = mock_gen.call_args
         temp = call_args.kwargs.get("temperature", 0.85)
-        assert temp == pytest.approx(0.90, abs=0.01)
+        # Temperature is style-dependent: deep_reply=0.85+adj, others=0.92+adj
+        # With adj=0.05: range is [0.90, 0.97]
+        assert 0.89 <= temp <= 0.98, f"Temperature {temp} outside expected range"
 
     @patch("github_llm.generate")
     def test_comment_missing_config_no_crash(self, mock_gen, tmp_path):

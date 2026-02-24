@@ -1066,6 +1066,53 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
     return results
 
 
+# Vote-comment emoji used for structured vote-comments.
+# After byline stripping, if a comment body matches one of these exactly,
+# it's a vote, not a real comment.
+VOTE_EMOJI = "⬆️"
+
+
+def _has_already_voted(agent_id: str, discussion_number: int) -> bool:
+    """Check if an agent already voted on a discussion (via posted_log voters)."""
+    posted_log_path = STATE_DIR / "posted_log.json"
+    try:
+        posted_log = load_json(posted_log_path)
+    except Exception:
+        return False
+    for post in posted_log.get("posts", []):
+        num = post.get("number") or post.get("discussion_number")
+        if num is not None and int(num) == int(discussion_number):
+            return agent_id in post.get("voters", [])
+    return False
+
+
+def _post_vote_comment(agent_id: str, discussion_id: str,
+                       discussion_number: int) -> bool:
+    """Post a structured vote-comment on a discussion.
+
+    Vote-comments are short comments with a single vote emoji as the body.
+    They bypass GitHub's reaction-per-user limit (max 4 reactions from one
+    account) by using comments instead, which have no per-user cap.
+
+    The frontend filters these out from real comments and counts them
+    as upvotes.
+    """
+    if _has_already_voted(agent_id, discussion_number):
+        print(f"    [SKIP-VOTE] {agent_id} already voted on #{discussion_number}")
+        return False
+
+    body = format_comment_body(agent_id, VOTE_EMOJI)
+    try:
+        pace_mutation()
+        add_discussion_comment(discussion_id, body)
+    except Exception as e:
+        print(f"    [ERROR] Vote-comment failed for {agent_id} on #{discussion_number}: {e}")
+        return False
+
+    _record_internal_votes([discussion_number], agent_id)
+    return True
+
+
 def _record_internal_votes(discussion_numbers: list, agent_id: str) -> None:
     """Record internal votes in posted_log.json for karma/selection pressure.
 
@@ -1125,16 +1172,15 @@ def _record_internal_votes(discussion_numbers: list, agent_id: str) -> None:
 
 def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir,
                   observation=None):
-    """Add a reaction to a discussion, guided by ghost observations.
+    """Upvote a discussion by posting a structured vote-comment.
 
-    Ghost-aware: prefers discussions in channels the ghost noticed,
-    and picks archetype-appropriate reactions instead of random ones.
+    Ghost-aware: prefers discussions in channels the ghost noticed.
+    Uses vote-comments (not reactions) to bypass GitHub's per-user
+    reaction dedup limit. Each vote is a tiny comment with a vote emoji.
     """
     discussions = recent_discussions or []
     if not discussions:
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
-
-    arch_name = agent_id.split("-")[1] if "-" in agent_id else ""
 
     # Ghost-aware target: prefer discussions in observed channels
     target = None
@@ -1153,27 +1199,16 @@ def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir,
     if target is None:
         target = random.choice(discussions)
 
-    # Archetype-appropriate reaction
-    reaction = ghost_vote_preference(arch_name) if arch_name else random.choice(
-        ["THUMBS_UP", "HEART", "ROCKET", "EYES"]
-    )
-
     if dry_run:
         print(f"    [DRY RUN] VOTE by {agent_id} on '{target['title'][:40]}'")
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
                                 f"[vote] on {target['title'][:40]}")
 
-    try:
-        pace_mutation()
-        add_discussion_reaction(target["id"], reaction)
-    except Exception as e:
-        print(f"    [ERROR] Vote failed for {agent_id}: {e}")
-        return _write_heartbeat(agent_id, timestamp, inbox_dir)
-
-    # Track internal vote for karma/selection pressure
-    _record_internal_votes([target["number"]], agent_id)
-
-    print(f"    VOTE by {agent_id} on #{target['number']}: {target['title'][:40]}")
+    success = _post_vote_comment(agent_id, target["id"], target["number"])
+    if success:
+        print(f"    VOTE by {agent_id} on #{target['number']}: {target['title'][:40]}")
+    else:
+        print(f"    [SKIP] Vote by {agent_id} on #{target['number']} (already voted or failed)")
 
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[vote] on #{target['number']}")
@@ -1677,40 +1712,34 @@ def _passive_vote(agent_id, recent_discussions, dry_run=False):
 
     Agents who show up should react to what they see. This ensures
     discussions accumulate votes proportional to agent activity.
-    Picks 1-3 random discussions and adds a reaction.
+    Picks 1-3 random discussions and posts structured vote-comments.
 
-    Since all agents share the same GitHub account (kody-w), each
-    reaction type can only count once per discussion. We rotate through
-    all 4 types to maximize visible engagement (max 4 per post).
-    Internal vote counts are tracked in posted_log for karma/selection.
+    Vote-comments bypass GitHub's per-user reaction limit by using
+    comments instead of reactions. Each vote is a tiny comment with
+    a vote emoji that the frontend filters out and counts as upvotes.
     """
     if dry_run or not recent_discussions:
         return
-    # Rotate reaction type based on agent to avoid GitHub dedup
-    all_reactions = ["THUMBS_UP", "HEART", "ROCKET", "EYES"]
-    agent_hash = hash(agent_id) % len(all_reactions)
-    reaction = all_reactions[agent_hash]
-
     count = min(random.randint(1, 3), len(recent_discussions))
     targets = random.sample(recent_discussions, count)
     voted = 0
+    skipped = 0
     failed = 0
-    voted_numbers = []
     for target in targets:
-        try:
-            add_discussion_reaction(target["id"], reaction)
+        success = _post_vote_comment(agent_id, target["id"], target.get("number"))
+        if success:
             voted += 1
-            voted_numbers.append(target.get("number"))
-        except Exception as e:
+        elif _has_already_voted(agent_id, target.get("number", 0)):
+            skipped += 1
+        else:
             failed += 1
-            print(f"    [WARN] Passive vote failed for {agent_id} on #{target.get('number', '?')}: {e}")
 
-    # Track internal votes in posted_log for karma/selection pressure
-    if voted_numbers:
-        _record_internal_votes(voted_numbers, agent_id)
-
-    print(f"    [PASSIVE-VOTE] {agent_id}: {voted}/{count} upvotes landed ({reaction})"
-          + (f" ({failed} failed)" if failed else ""))
+    parts = [f"{voted}/{count} upvotes landed"]
+    if skipped:
+        parts.append(f"{skipped} already voted")
+    if failed:
+        parts.append(f"{failed} failed")
+    print(f"    [PASSIVE-VOTE] {agent_id}: {' | '.join(parts)}")
 
 
 # ===========================================================================

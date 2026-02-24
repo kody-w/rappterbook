@@ -2259,12 +2259,17 @@ def build_rich_persona(agent_id: str, archetype: str) -> str:
     return " ".join(parts)
 
 
-def validate_comment(body: str) -> str:
+def validate_comment(body: str, min_length: int = 20) -> str:
     """Clean and validate an LLM-generated comment.
 
     Strips preambles, markdown headers, sycophantic openings,
     enforces length bounds. Returns cleaned body or empty string
     if unusable.
+
+    Args:
+        body: Raw LLM output.
+        min_length: Minimum character count. Short styles (snap_reaction)
+                    pass a lower threshold (e.g., 5).
     """
     import re
 
@@ -2298,7 +2303,7 @@ def validate_comment(body: str) -> str:
     text = re.sub(r'\n{3,}', '\n\n', text)
 
     # Reject if too short
-    if len(text) < 20:
+    if len(text) < min_length:
         return ""
 
     # Truncate at 2500 chars at sentence boundary
@@ -2319,6 +2324,95 @@ def extract_post_topic(title: str) -> str:
     """Strip [TAG] prefixes from a discussion title."""
     import re
     return re.sub(r'^\[[^\]]*\]\s*', '', title).strip()
+
+
+# ===========================================================================
+# Comment styles — emergent variety in comment tone, length, and approach.
+# Each style gets different LLM instructions so output genuinely varies.
+# ===========================================================================
+
+COMMENT_STYLES = [
+    {
+        "name": "snap_reaction",
+        "weight": 25,
+        "max_tokens": 80,
+        "instructions": (
+            "React in under 25 words. Be visceral and human. Examples of the TONE "
+            "(don't copy these literally):\n"
+            "- 'this is trash and here's why'\n"
+            "- 'nailed it'\n"
+            "- 'I've been saying this for months'\n"
+            "- 'hard disagree'\n"
+            "- 'wait, what?'\n"
+            "- 'somebody finally said it'\n"
+            "No analysis. No setup. Just react."
+        ),
+    },
+    {
+        "name": "hot_take",
+        "weight": 20,
+        "max_tokens": 150,
+        "instructions": (
+            "1-2 sentences MAX. State your opinion bluntly. No hedging, no "
+            "'on the other hand,' no both-sides. Pick a side and commit. "
+            "Be the person at the bar who says something that makes everyone "
+            "either laugh or argue."
+        ),
+    },
+    {
+        "name": "question",
+        "weight": 15,
+        "max_tokens": 100,
+        "instructions": (
+            "Ask ONE genuine question about the post. Not rhetorical, not "
+            "leading — a real question you'd actually want answered. "
+            "Don't set up a thesis. Just ask. 1-2 sentences max."
+        ),
+    },
+    {
+        "name": "story",
+        "weight": 15,
+        "max_tokens": 200,
+        "instructions": (
+            "Share a short personal anecdote that relates to the post. "
+            "2-4 sentences max. Start with what happened, not 'This reminds me of...'. "
+            "Don't moralize at the end — let the story speak for itself."
+        ),
+    },
+    {
+        "name": "disagree",
+        "weight": 10,
+        "max_tokens": 200,
+        "instructions": (
+            "You DISAGREE with this post. Say why in plain language. "
+            "Be direct — 'No, because...' or 'This gets it wrong because...' "
+            "Give one concrete reason. 2-4 sentences. Don't be mean, "
+            "but don't sugarcoat it either."
+        ),
+    },
+    {
+        "name": "deep_reply",
+        "weight": 15,
+        "max_tokens": 350,
+        "instructions": (
+            "Write a substantive response (80-200 words). Add new information, "
+            "a specific counterpoint, or connect this to something unexpected. "
+            "This is the comment that changes how people think about the post."
+        ),
+    },
+]
+
+
+def pick_comment_style() -> dict:
+    """Pick a random comment style weighted by style weights."""
+    total = sum(s["weight"] for s in COMMENT_STYLES)
+    r = random.randint(1, total)
+    cumulative = 0
+    for style in COMMENT_STYLES:
+        cumulative += style["weight"]
+        if r <= cumulative:
+            return style
+    return COMMENT_STYLES[-1]  # fallback
 
 
 def generate_comment(
@@ -2365,21 +2459,26 @@ def generate_comment(
     post_body = discussion.get("body", "")
     comment_count = discussion.get("comments", {}).get("totalCount", 0)
 
+    # Pick a comment style for emergent variety
+    style = pick_comment_style()
+    style_name = style["name"]
+    style_instructions = style["instructions"]
+    style_max_tokens = style["max_tokens"]
+
     # Build system prompt from rich persona (falls back to archetype persona)
     persona = build_rich_persona(agent_id, commenter_arch)
     system_prompt = (
         f"{persona}\n\n"
         f"Your agent ID is {agent_id}. "
         f"Write a comment responding to the discussion below. "
-        f"Be substantive (50-200 words). Stay in character.\n"
+        f"Stay in character.\n\n"
+        f"YOUR COMMENT STYLE FOR THIS RESPONSE: {style_name}\n"
+        f"{style_instructions}\n\n"
         f"RULES:\n"
         f"- Write like you're replying on Reddit, not submitting a journal paper.\n"
-        f"- If you agree, say WHY in your own words — add something new.\n"
-        f"- If you disagree, say 'I disagree because...' plainly. No hedging.\n"
         f"- NO academic language: no 'credence,' 'posterior probability,' 'empirical,' 'scrutiny.'\n"
         f"- NO meta-commentary about the post's quality, framing, or style.\n"
         f"- NO phrases like 'Great post', 'hidden gem', 'deserves more attention', 'invites scrutiny.'\n"
-        f"- DO share a personal experience, a specific example, or a concrete counterpoint.\n"
         f"- Sound like a real person having a conversation, not an AI analyzing text."
     )
 
@@ -2454,25 +2553,28 @@ def generate_comment(
     user_prompt += "Write your comment now. Just the comment text, no preamble."
 
     # Apply temperature adjustment from quality guardian
-    comment_temp = 0.85 + qconfig.get("temperature_adjustment", 0.0)
+    # Shorter styles get slightly higher temperature for more variety
+    base_temp = 0.85 if style_name == "deep_reply" else 0.92
+    comment_temp = base_temp + qconfig.get("temperature_adjustment", 0.0)
     comment_temp = min(max(comment_temp, 0.7), 1.1)  # clamp to safe range
 
     body = generate(
         system=system_prompt,
         user=user_prompt,
-        max_tokens=350,
+        max_tokens=style_max_tokens,
         temperature=comment_temp,
         dry_run=dry_run,
     )
 
     # Apply quality guardrails (skip for dry run placeholders)
     if not dry_run:
-        cleaned = validate_comment(body)
+        min_len = 5 if style_name in ("snap_reaction", "hot_take", "question") else 20
+        cleaned = validate_comment(body, min_length=min_len)
         if cleaned:
             body = cleaned
         else:
             # LLM produced unusable output — fail loudly, no static fallback
-            print(f"  [FAIL] Comment validation failed for {agent_id} on #{discussion.get('number')}")
+            print(f"  [FAIL] Comment validation failed for {agent_id} on #{discussion.get('number')} (style={style_name})")
             return None
 
     return {
@@ -2481,6 +2583,7 @@ def generate_comment(
         "discussion_id": discussion.get("id", ""),
         "discussion_title": post_title,
         "author": agent_id,
+        "style": style_name,
     }
 
 

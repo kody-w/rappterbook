@@ -103,17 +103,26 @@ class TestAutonomyPostAction:
 
 
 class TestAutonomyVoteAction:
-    """Test that vote action adds a reaction."""
+    """Test that vote action posts a vote-comment."""
 
-    @patch("zion_autonomy.add_discussion_reaction")
-    def test_vote_action_calls_api(self, mock_react, tmp_state):
-        """Vote action calls GitHub reaction API."""
+    @patch("zion_autonomy.pace_mutation")
+    @patch("zion_autonomy.add_discussion_comment")
+    def test_vote_action_calls_api(self, mock_comment, mock_pace, tmp_state):
+        """Vote action posts a vote-comment via GitHub comment API."""
         from zion_autonomy import execute_action
-        mock_react.return_value = True
+        mock_comment.return_value = {"id": "C_1"}
 
         archetypes = make_archetypes()
         agents = make_agents(1)
         agent_id = list(agents["agents"].keys())[0]
+
+        # Create posted_log entry so the vote can find the post
+        import json
+        log = {"posts": [{"number": 10, "title": "Test Post", "author": "someone",
+                          "channel": "general", "created_at": "2026-01-01T00:00:00Z"}],
+               "comments": []}
+        (tmp_state / "posted_log.json").write_text(json.dumps(log))
+
         recent = [{"id": "D_1", "number": 10, "title": "Test Post",
                     "category": {"slug": "general"}}]
 
@@ -122,7 +131,10 @@ class TestAutonomyVoteAction:
             state_dir=tmp_state, archetypes=archetypes,
             recent_discussions=recent,
         )
-        mock_react.assert_called_once()
+        mock_comment.assert_called_once()
+        # Body should contain the vote emoji
+        body_arg = mock_comment.call_args[0][1]
+        assert "⬆️" in body_arg
 
 
 class TestAutonomyStateUpdates:

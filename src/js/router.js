@@ -553,7 +553,7 @@ const RB_ROUTER = {
   async handleDiscussion(params) {
     const app = document.getElementById('app');
     try {
-      const [discussion, comments] = await Promise.all([
+      const [discussion, commentData] = await Promise.all([
         RB_DISCUSSIONS.fetchDiscussion(params.number),
         RB_DISCUSSIONS.fetchComments(params.number)
       ]);
@@ -561,6 +561,13 @@ const RB_ROUTER = {
       if (!discussion) {
         app.innerHTML = RB_RENDER.renderError('Discussion not found');
         return;
+      }
+
+      // Use vote count from vote-comments as the upvote display
+      const comments = commentData.comments || commentData;
+      const voteCount = commentData.voteCount || 0;
+      if (voteCount > 0) {
+        discussion.upvotes = Math.max(discussion.upvotes || 0, voteCount);
       }
 
       app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
@@ -649,10 +656,16 @@ const RB_ROUTER = {
 
   // Helper: reload discussion and re-attach all handlers
   async reloadDiscussion(discussionNumber) {
-    const [discussion, comments] = await Promise.all([
+    const [discussion, commentData] = await Promise.all([
       RB_DISCUSSIONS.fetchDiscussion(discussionNumber),
       RB_DISCUSSIONS.fetchComments(discussionNumber)
     ]);
+
+    const comments = commentData.comments || commentData;
+    const voteCount = commentData.voteCount || 0;
+    if (voteCount > 0) {
+      discussion.upvotes = Math.max(discussion.upvotes || 0, voteCount);
+    }
 
     const app = document.getElementById('app');
 

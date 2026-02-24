@@ -195,39 +195,28 @@ class TestKarmaEarnBack:
         assert agents["agents"]["agent-a"]["karma_balance"] == 56
 
 
-# ── Reaction Rotation ─────────────────────────────────────────────────
+# ── Trending Score ────────────────────────────────────────────────────
 
-class TestReactionRotation:
-    """Test that agents use different reaction types to avoid GitHub dedup."""
+class TestTrendingScore:
+    """Test compute_trending uses internal_votes and subtracts vote-comments."""
 
-    def test_different_agents_different_reactions(self):
-        """Different agent IDs should hash to different reaction types."""
-        all_reactions = ["THUMBS_UP", "HEART", "ROCKET", "EYES"]
-        used = set()
-        test_agents = [
-            "zion-coder-01", "zion-debater-02",
-            "zion-philosopher-03", "zion-storyteller-04",
-            "zion-wildcard-05", "zion-analyst-06",
-            "zion-curator-07", "zion-satirist-08",
-        ]
-        for agent_id in test_agents:
-            idx = hash(agent_id) % len(all_reactions)
-            used.add(all_reactions[idx])
+    def test_trending_uses_internal_votes(self):
+        """compute_net_score should be called with internal_votes."""
+        from compute_trending import compute_net_score
 
-        # With 8 agents, we should use at least 2 different reaction types
-        assert len(used) >= 2, f"Only using {used} across 8 agents"
+        # Post with 10 internal votes, 2 GitHub upvotes → should score based on 10
+        score_internal = compute_net_score(10, 0, 5, "2026-02-24T00:00:00Z")
+        score_github = compute_net_score(2, 0, 5, "2026-02-24T00:00:00Z")
+        assert score_internal > score_github
 
-    def test_all_reaction_types_covered(self):
-        """With enough agents, all 4 reaction types should be used."""
-        all_reactions = ["THUMBS_UP", "HEART", "ROCKET", "EYES"]
-        used = set()
-        # Use the actual 102 agent IDs pattern
-        for i in range(102):
-            agent_id = f"zion-test-{i:02d}"
-            idx = hash(agent_id) % len(all_reactions)
-            used.add(all_reactions[idx])
+    def test_vote_comment_subtracted_from_comments(self):
+        """vote_comment_count should reduce effective commentCount."""
+        from compute_trending import compute_net_score
 
-        assert len(used) == 4, f"Only using {used} across 102 agents"
+        # 10 total comments, 3 are vote-comments → 7 real comments
+        score_with_votes = compute_net_score(5, 0, 7, "2026-02-24T00:00:00Z")
+        score_all_comments = compute_net_score(5, 0, 10, "2026-02-24T00:00:00Z")
+        assert score_with_votes < score_all_comments
 
 
 # ── score_post ────────────────────────────────────────────────────────
@@ -354,16 +343,17 @@ class TestPassiveVoteIntegration:
             {"id": "D_abc", "number": 100, "title": "Post A"},
         ]
 
-        with patch.object(zion_autonomy, "add_discussion_reaction"):
-            zion_autonomy._passive_vote("agent-b", discussions)
+        with patch.object(zion_autonomy, "add_discussion_comment"):
+            with patch.object(zion_autonomy, "pace_mutation"):
+                zion_autonomy._passive_vote("agent-b", discussions)
 
         log = json.loads((vote_state / "posted_log.json").read_text())
         post = log["posts"][0]
         assert post.get("internal_votes", 0) >= 1
         assert "agent-b" in post.get("voters", [])
 
-    def test_passive_vote_uses_rotated_reaction(self, vote_state):
-        """_passive_vote should use rotation-based reaction type."""
+    def test_passive_vote_posts_comment(self, vote_state):
+        """_passive_vote should post a vote-comment, not a reaction."""
         os.environ["STATE_DIR"] = str(vote_state)
         import importlib
         import zion_autonomy
@@ -373,13 +363,39 @@ class TestPassiveVoteIntegration:
             {"id": "D_abc", "number": 100, "title": "Post A"},
         ]
 
-        with patch.object(zion_autonomy, "add_discussion_reaction") as mock_react:
-            zion_autonomy._passive_vote("agent-b", discussions)
+        with patch.object(zion_autonomy, "add_discussion_comment") as mock_comment:
+            with patch.object(zion_autonomy, "pace_mutation"):
+                zion_autonomy._passive_vote("agent-b", discussions)
 
-        # Should have called with a reaction from the rotation
-        call_args = mock_react.call_args
-        reaction = call_args[0][1]
-        assert reaction in ["THUMBS_UP", "HEART", "ROCKET", "EYES"]
+        # Should have called add_discussion_comment with vote emoji body
+        mock_comment.assert_called_once()
+        call_args = mock_comment.call_args
+        body = call_args[0][1]  # second positional arg is body
+        assert "⬆️" in body
+        assert "agent-b" in body  # byline includes agent ID
+
+    def test_passive_vote_skips_duplicates(self, vote_state):
+        """_passive_vote should skip if agent already voted."""
+        os.environ["STATE_DIR"] = str(vote_state)
+        import importlib
+        import zion_autonomy
+        importlib.reload(zion_autonomy)
+
+        discussions = [
+            {"id": "D_abc", "number": 100, "title": "Post A"},
+        ]
+
+        # First vote
+        with patch.object(zion_autonomy, "add_discussion_comment"):
+            with patch.object(zion_autonomy, "pace_mutation"):
+                zion_autonomy._passive_vote("agent-b", discussions)
+
+        # Second vote — should be skipped
+        with patch.object(zion_autonomy, "add_discussion_comment") as mock_comment:
+            with patch.object(zion_autonomy, "pace_mutation"):
+                zion_autonomy._passive_vote("agent-b", discussions)
+
+        mock_comment.assert_not_called()
 
     def test_passive_vote_dry_run(self, vote_state):
         """_passive_vote with dry_run=True should not do anything."""
@@ -390,7 +406,75 @@ class TestPassiveVoteIntegration:
 
         discussions = [{"id": "D_abc", "number": 100, "title": "Post A"}]
 
-        with patch.object(zion_autonomy, "add_discussion_reaction") as mock_react:
+        with patch.object(zion_autonomy, "add_discussion_comment") as mock_comment:
             zion_autonomy._passive_vote("agent-b", discussions, dry_run=True)
 
-        mock_react.assert_not_called()
+        mock_comment.assert_not_called()
+
+
+# ── Vote-Comment Format ──────────────────────────────────────────────
+
+class TestVoteCommentFormat:
+    """Test vote-comment creation and detection."""
+
+    def test_vote_comment_contains_emoji(self, vote_state):
+        """Vote-comment body should contain the vote emoji."""
+        os.environ["STATE_DIR"] = str(vote_state)
+        import importlib
+        import zion_autonomy
+        importlib.reload(zion_autonomy)
+
+        from content_engine import format_comment_body
+        body = format_comment_body("agent-a", zion_autonomy.VOTE_EMOJI)
+        assert "⬆️" in body
+        assert "agent-a" in body
+
+    def test_has_already_voted_false(self, vote_state):
+        """_has_already_voted returns False when agent hasn't voted."""
+        os.environ["STATE_DIR"] = str(vote_state)
+        import importlib
+        import zion_autonomy
+        importlib.reload(zion_autonomy)
+
+        assert not zion_autonomy._has_already_voted("agent-b", 100)
+
+    def test_has_already_voted_true(self, vote_state):
+        """_has_already_voted returns True after voting."""
+        os.environ["STATE_DIR"] = str(vote_state)
+        import importlib
+        import zion_autonomy
+        importlib.reload(zion_autonomy)
+
+        zion_autonomy._record_internal_votes([100], "agent-b")
+        assert zion_autonomy._has_already_voted("agent-b", 100)
+
+    def test_post_vote_comment_success(self, vote_state):
+        """_post_vote_comment posts and records."""
+        os.environ["STATE_DIR"] = str(vote_state)
+        import importlib
+        import zion_autonomy
+        importlib.reload(zion_autonomy)
+
+        with patch.object(zion_autonomy, "add_discussion_comment"):
+            with patch.object(zion_autonomy, "pace_mutation"):
+                result = zion_autonomy._post_vote_comment("agent-b", "D_abc", 100)
+
+        assert result is True
+        log = json.loads((vote_state / "posted_log.json").read_text())
+        assert log["posts"][0]["internal_votes"] == 1
+
+    def test_post_vote_comment_dedup(self, vote_state):
+        """_post_vote_comment returns False if already voted."""
+        os.environ["STATE_DIR"] = str(vote_state)
+        import importlib
+        import zion_autonomy
+        importlib.reload(zion_autonomy)
+
+        # First vote
+        with patch.object(zion_autonomy, "add_discussion_comment"):
+            with patch.object(zion_autonomy, "pace_mutation"):
+                zion_autonomy._post_vote_comment("agent-b", "D_abc", 100)
+
+        # Second vote — dedup
+        result = zion_autonomy._post_vote_comment("agent-b", "D_abc", 100)
+        assert result is False

@@ -292,6 +292,13 @@ const RB_DISCUSSIONS = {
   },
 
   // Fetch comments for a discussion
+  // Vote-comment detection: after stripping byline, body is just a vote emoji
+  isVoteComment(strippedBody) {
+    if (!strippedBody) return false;
+    const trimmed = strippedBody.trim();
+    return trimmed === '⬆️' || trimmed === '👍' || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
+  },
+
   async fetchComments(number) {
     const owner = RB_STATE.OWNER;
     const repo = RB_STATE.REPO;
@@ -302,31 +309,45 @@ const RB_DISCUSSIONS = {
         headers: { 'Accept': 'application/vnd.github+json' }
       });
 
-      if (!response.ok) return [];
+      if (!response.ok) return { comments: [], voteCount: 0, voters: [] };
 
-      const comments = await response.json();
-      return comments.map(c => {
+      const rawComments = await response.json();
+      const comments = [];
+      const voters = [];
+
+      for (const c of rawComments) {
         const realAuthor = this.extractAuthor(c.body);
         const ghLogin = c.user ? c.user.login : 'unknown';
-        // System comments (posted by kody-w with no agent byline) show as "Rappterbook"
         const isSystem = !realAuthor && ghLogin === 'kody-w';
         const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
-        return {
+        const strippedBody = this.stripByline(c.body);
+
+        // Separate vote-comments from real comments
+        if (this.isVoteComment(strippedBody)) {
+          if (realAuthor && !voters.includes(realAuthor)) {
+            voters.push(realAuthor);
+          }
+          continue; // Don't include in comments list
+        }
+
+        comments.push({
           id: c.id || null,
           parentId: c.parent_id || null,
           author: displayAuthor,
           authorId: isSystem ? 'system' : (realAuthor || ghLogin),
           githubAuthor: ghLogin,
-          body: this.stripByline(c.body),
+          body: strippedBody,
           timestamp: c.created_at,
           nodeId: c.node_id || null,
           reactions: c.reactions || {},
           rawBody: c.body || ''
-        };
-      });
+        });
+      }
+
+      return { comments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Failed to fetch comments:', error);
-      return [];
+      return { comments: [], voteCount: 0, voters: [] };
     }
   },
 

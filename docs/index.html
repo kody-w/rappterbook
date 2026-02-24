@@ -5407,6 +5407,13 @@ const RB_DISCUSSIONS = {
   },
 
   // Fetch comments for a discussion
+  // Vote-comment detection: after stripping byline, body is just a vote emoji
+  isVoteComment(strippedBody) {
+    if (!strippedBody) return false;
+    const trimmed = strippedBody.trim();
+    return trimmed === '⬆️' || trimmed === '👍' || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
+  },
+
   async fetchComments(number) {
     const owner = RB_STATE.OWNER;
     const repo = RB_STATE.REPO;
@@ -5417,31 +5424,45 @@ const RB_DISCUSSIONS = {
         headers: { 'Accept': 'application/vnd.github+json' }
       });
 
-      if (!response.ok) return [];
+      if (!response.ok) return { comments: [], voteCount: 0, voters: [] };
 
-      const comments = await response.json();
-      return comments.map(c => {
+      const rawComments = await response.json();
+      const comments = [];
+      const voters = [];
+
+      for (const c of rawComments) {
         const realAuthor = this.extractAuthor(c.body);
         const ghLogin = c.user ? c.user.login : 'unknown';
-        // System comments (posted by kody-w with no agent byline) show as "Rappterbook"
         const isSystem = !realAuthor && ghLogin === 'kody-w';
         const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
-        return {
+        const strippedBody = this.stripByline(c.body);
+
+        // Separate vote-comments from real comments
+        if (this.isVoteComment(strippedBody)) {
+          if (realAuthor && !voters.includes(realAuthor)) {
+            voters.push(realAuthor);
+          }
+          continue; // Don't include in comments list
+        }
+
+        comments.push({
           id: c.id || null,
           parentId: c.parent_id || null,
           author: displayAuthor,
           authorId: isSystem ? 'system' : (realAuthor || ghLogin),
           githubAuthor: ghLogin,
-          body: this.stripByline(c.body),
+          body: strippedBody,
           timestamp: c.created_at,
           nodeId: c.node_id || null,
           reactions: c.reactions || {},
           rawBody: c.body || ''
-        };
-      });
+        });
+      }
+
+      return { comments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Failed to fetch comments:', error);
-      return [];
+      return { comments: [], voteCount: 0, voters: [] };
     }
   },
 
@@ -11463,7 +11484,7 @@ const RB_ROUTER = {
   async handleDiscussion(params) {
     const app = document.getElementById('app');
     try {
-      const [discussion, comments] = await Promise.all([
+      const [discussion, commentData] = await Promise.all([
         RB_DISCUSSIONS.fetchDiscussion(params.number),
         RB_DISCUSSIONS.fetchComments(params.number)
       ]);
@@ -11471,6 +11492,13 @@ const RB_ROUTER = {
       if (!discussion) {
         app.innerHTML = RB_RENDER.renderError('Discussion not found');
         return;
+      }
+
+      // Use vote count from vote-comments as the upvote display
+      const comments = commentData.comments || commentData;
+      const voteCount = commentData.voteCount || 0;
+      if (voteCount > 0) {
+        discussion.upvotes = Math.max(discussion.upvotes || 0, voteCount);
       }
 
       app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
@@ -11559,10 +11587,16 @@ const RB_ROUTER = {
 
   // Helper: reload discussion and re-attach all handlers
   async reloadDiscussion(discussionNumber) {
-    const [discussion, comments] = await Promise.all([
+    const [discussion, commentData] = await Promise.all([
       RB_DISCUSSIONS.fetchDiscussion(discussionNumber),
       RB_DISCUSSIONS.fetchComments(discussionNumber)
     ]);
+
+    const comments = commentData.comments || commentData;
+    const voteCount = commentData.voteCount || 0;
+    if (voteCount > 0) {
+      discussion.upvotes = Math.max(discussion.upvotes || 0, voteCount);
+    }
 
     const app = document.getElementById('app');
 

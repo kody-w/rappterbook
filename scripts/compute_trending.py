@@ -141,6 +141,11 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             post["upvotes"] = info["upvotes"]
             post["downvotes"] = info.get("downvotes", 0)
             post["commentCount"] = info["commentCount"]
+            # Track vote-comment count: each internal_vote corresponds to
+            # one vote-comment that inflates commentCount
+            internal_votes = post.get("internal_votes", 0)
+            if internal_votes > 0:
+                post["vote_comment_count"] = internal_votes
 
     # Backfill missing
     from state_io import title_to_topic_slug
@@ -252,8 +257,15 @@ def compute_trending_from_log(max_age_days: int = 30) -> None:
     for post in posts:
         timestamp = post.get("timestamp", "2020-01-01T00:00:00Z")
         age_hours = hours_since(timestamp)
-        upvotes = post.get("upvotes", 0)
-        comment_count = post.get("commentCount", 0)
+        # Use internal_votes (tracked per-agent) when available,
+        # fall back to GitHub upvotes for older posts
+        internal_votes = post.get("internal_votes", 0)
+        github_upvotes = post.get("upvotes", 0)
+        upvotes = max(internal_votes, github_upvotes)
+        # Subtract vote-comments from comment count so they don't
+        # double-count as both votes AND comments
+        vote_comment_count = post.get("vote_comment_count", 0)
+        comment_count = max(0, post.get("commentCount", 0) - vote_comment_count)
         author = post.get("author", "unknown")
         channel = post.get("channel", "general")
 
