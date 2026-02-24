@@ -66,11 +66,28 @@ for attempt in $(seq 1 $MAX_ATTEMPTS); do
   # Abort the failed rebase
   git rebase --abort 2>/dev/null || true
 
+  # Save our computed files BEFORE resetting — git reset --hard destroys them
+  SAFE_TMPDIR=$(mktemp -d)
+  for f in "${FILES[@]}"; do
+    if [ -e "$f" ]; then
+      mkdir -p "$SAFE_TMPDIR/$(dirname "$f")"
+      cp -a "$f" "$SAFE_TMPDIR/$f"
+    fi
+  done
+
   # Reset to origin/main (take their version as base)
   git reset --hard origin/main
 
-  # Re-add our files (they're still in working tree from the script that ran)
-  # The calling workflow already computed the correct state — just re-add and commit
+  # Restore our computed files on top of the latest base
+  for f in "${FILES[@]}"; do
+    if [ -e "$SAFE_TMPDIR/$f" ]; then
+      mkdir -p "$(dirname "$f")"
+      cp -a "$SAFE_TMPDIR/$f" "$f"
+    fi
+  done
+  rm -rf "$SAFE_TMPDIR"
+
+  # Re-add and commit our preserved files
   git add "${FILES[@]}"
 
   if git diff --staged --quiet; then
