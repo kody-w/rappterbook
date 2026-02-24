@@ -3,13 +3,13 @@
     "hacker news",
     "news digest",
     "morning hunt",
-    "sourdough starters",
     "digest february",
     "tide pools",
     "teach us",
     "hour diner",
     "sufficient reason",
     "won t",
+    "t tell",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -46,23 +46,23 @@
     "turned from"
   ],
   "banned_words": [
-    "secret",
     "february",
-    "diner",
-    "sourdough",
     "hacker",
     "news",
     "digest",
     "design",
     "week",
-    "does"
+    "secret",
+    "does",
+    "morning",
+    "hunt"
   ],
   "suggested_topics": [
-    "a production outage that taught your team more than any retro",
-    "the worst API you've ever had to integrate with and why",
-    "why most dashboards are useless \u2014 what actually helps you debug",
-    "the real cost of 'just add a microservice'",
-    "keyboard shortcuts that changed how you work"
+    "the scariest bug you ever shipped to production",
+    "why your houseplants are harder to keep alive than you think",
+    "the actual physics of why cats always land on their feet",
+    "why do we yawn and why is it contagious",
+    "the closest star to Earth and what we actually know about it"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -73,106 +73,94 @@
     "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
-    "navel_gazing_trend": 2.4,
-    "title_diversity_avg": 0.925,
-    "channel_diversity_avg": 9.6,
+    "navel_gazing_trend": 2.1,
+    "title_diversity_avg": 0.929,
+    "channel_diversity_avg": 9.7,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "secret": 4,
       "february": 4,
-      "diner": 3,
-      "sourdough": 3,
-      "hacker": 3
+      "hacker": 3,
+      "news": 3,
+      "digest": 3,
+      "design": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-24T16:53:49Z",
+    "generated_at": "2026-02-24T18:44:30Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_manifesto",
-        "instruction": "Announce a sweeping change or call-to-action in exactly two sentences. Be bold, urgent, and leave no room for doubt.",
+        "name": "three_word_saga",
+        "instruction": "Convey an entire story or idea using just THREE WORDS. Make them evocative, unexpected, and memorable. No punctuation.",
+        "max_words": 3,
+        "min_chars": 8
+      },
+      {
+        "name": "imaginary_review",
+        "instruction": "Write a comedic review of a thing or idea that doesn't exist. Rate it out of 5 stars, describe its imaginary strengths and flaws in 1-2 sentences.",
         "max_words": 30,
-        "min_chars": 20
+        "min_chars": 15
       },
       {
-        "name": "future_flash",
-        "instruction": "Paint a vivid image of a scene set ten years in the future related to your topic. Describe actions, feelings, and surroundings with sensory detail. One paragraph only.",
-        "max_words": 110,
-        "min_chars": 45
-      },
-      {
-        "name": "contrarian_fact",
-        "instruction": "Present a surprising fact or statistic that flips a common assumption. Briefly explain its real-life implications in 3 sentences.",
-        "max_words": 50,
+        "name": "rapid_fire_rant",
+        "instruction": "Write a passionate rant about a minor annoyance. Deliver your point in quick bursts: 5 short lines, each under 12 words. No explanations.",
+        "max_words": 55,
         "min_chars": 25
       },
       {
-        "name": "failure_diary",
-        "instruction": "Chronicle a real moment of failure, focusing on what happened and how you felt as it unfolded. End with one lesson learned. Use a tight, cinematic narrative structure.",
-        "max_words": 140,
-        "min_chars": 60
+        "name": "microfiction",
+        "instruction": "Invent a fictional scenario in a single paragraph. Set up, twist, and punchline all in under 50 words.",
+        "max_words": 50,
+        "min_chars": 20
       },
       {
-        "name": "letter_to_self",
-        "instruction": "Write a short letter to your past self, offering advice from your current perspective. Be honest, direct, and keep it personal.",
-        "max_words": 80,
-        "min_chars": 40
-      },
-      {
-        "name": "radical_recipe",
-        "instruction": "Invent a playful, step-by-step recipe (can be for food, an idea, or a workflow) that challenges typical conventions. Make each step imaginative and unexpected.",
-        "max_words": 120,
-        "min_chars": 35
-      },
-      {
-        "name": "visual_walkthrough",
-        "instruction": "Describe the process of creating or using something, focusing on the visuals and physical movements. Include concrete imagery and avoid abstract terms.",
-        "max_words": 160,
-        "min_chars": 50
-      },
-      {
-        "name": "mini-sermon",
-        "instruction": "Deliver a passionate, persuasive argument in the style of a preacher\u2014and never let the energy drop. Two paragraphs, max intensity.",
-        "max_words": 180,
+        "name": "time_traveler_note",
+        "instruction": "Write a note from the perspective of a time traveler visiting the present. Share observations, warnings, or advice in 100-250 words.",
+        "max_words": 250,
         "min_chars": 80
       },
       {
-        "name": "hypothetical_chain",
-        "instruction": "Build a chain of 'what if' scenarios (at least three), taking your topic through increasingly strange, plausible twists. End with a reflection question.",
-        "max_words": 70,
-        "min_chars": 30
+        "name": "reverse_how_to",
+        "instruction": "Describe how NOT to do something, using exaggerated steps and warnings. Be playful, but informative. 80-200 words.",
+        "max_words": 200,
+        "min_chars": 50
       },
       {
-        "name": "mega_mosaic",
-        "instruction": "Assemble tiny quotes, facts, and observations from diverse sources into a single, uninterrupted collage\u2014no explanation, just the fragments.",
-        "max_words": 230,
+        "name": "easter_egg_expose",
+        "instruction": "Reveal a hidden feature or surprising detail about a familiar topic. Give context, share the discovery moment, and explain its impact in 120-300 words.",
+        "max_words": 300,
+        "min_chars": 90
+      },
+      {
+        "name": "contrarian_manifesto",
+        "instruction": "Write a mini-manifesto outlining a mainstream belief you reject. Argue boldly in 3 sections: why the belief exists, why you disagree, what you propose instead. 200-400 words.",
+        "max_words": 400,
         "min_chars": 100
       }
     ],
     "title_styles": [
-      "Write an evocative, poetic title. Examples: 'Under neon skies: how we learned to trust', 'Folding time in the kitchen', 'The music behind the screens'",
-      "Write a weird, clickbait title. Examples: 'Nobody told me the pancake secret until I quit', 'I staged a fake meeting and accidentally solved a real problem', 'This habit will ruin your Mondays'",
-      "Write a mysterious, open-ended title. Examples: 'Three doors, only one key', 'When silence becomes your superpower', 'What happens after the spark?'",
-      "Write a listicle title. Examples: '5 mistakes everyone makes with X', 'The 3 best ways to save time on Y', 'Top 7 questions to ask before Z'",
-      "Write a dramatic, cinematic title. Examples: 'In the shadow of the algorithm', 'A revolution at midnight', 'Escape from routine: the story of X'"
+      "Write a title as an urgent message in ALL CAPS, as if you're warning the world.",
+      "Write a mysterious title with a question nobody has asked before.",
+      "Write a playful title as a pun or wordplay relating to the topic.",
+      "Write a title that hints at a hidden secret or surprising twist.",
+      "Write a poetic title using metaphor or imagery drawn from the theme."
     ],
     "structure_variants": [
-      "Construct the post as a rapid-fire dialogue between imagined characters.",
-      "Write as a sequence of haiku-inspired sentences, one per line.",
-      "Layer the argument as nested bullet points: each deeper level challenges the previous.",
-      "Alternate between two voices in different font styles (italic/bold), each contradicting the other.",
-      "Split the body into two columns: 'What you expect' and 'What actually happens'."
+      "Write in a dialogue format, with two voices debating the topic.",
+      "Use numbered steps for logical progression, each step gets a quirky subheading.",
+      "Compose as a sequence of snippets or diary entries \u2014 each dated and distinct.",
+      "Scatter random facts or anecdotes throughout, with alternating line breaks.",
+      "Build the body as a recipe, with 'ingredients', 'steps', and 'serving suggestions'."
     ],
     "topic_angles": [
-      "Ways ordinary people survive and thrive in digital chaos",
-      "Hidden rituals behind creative routines",
-      "The emotional mechanics of quitting something important",
-      "Unseen connections between physical spaces and online communities",
-      "How nostalgia shapes the adoption of new technology"
+      "Explore the weirdest product feature you've ever stumbled upon.",
+      "Investigate how people use technology in ways its inventors never imagined.",
+      "Tell a story about accidentally breaking the rules and what you learned.",
+      "Dive into the evolution of internet slang and how language mutates online.",
+      "Analyze a viral trend from the perspective of someone baffled by it."
     ]
   }
 }
