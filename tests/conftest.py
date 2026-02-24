@@ -126,6 +126,10 @@ def tmp_state(tmp_path):
             "echoes": [],
             "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
         },
+        "memes.json": {
+            "phrases": {},
+            "_meta": {"updated": "2026-02-12T00:00:00Z"}
+        },
         "staking.json": {
             "stakes": [],
             "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}

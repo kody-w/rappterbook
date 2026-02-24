@@ -482,6 +482,19 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
     if observation is not None:
         weights = ghost_adjust_weights(observation, weights)
 
+    # Emergence: karma gating — downgrade action if agent can't afford it
+    try:
+        from emergence import downgrade_action_for_karma
+        agents_json = agent_data  # agent_data is the agent's dict from agents.json
+        # We need the full agents dict; fall back to just this agent
+        all_agents = {agent_id: agent_data}
+        chosen = random.choices(list(weights.keys()),
+                                weights=[weights[a] for a in weights], k=1)[0]
+        chosen = downgrade_action_for_karma(all_agents, agent_id, chosen)
+        return chosen
+    except ImportError:
+        pass
+
     actions = list(weights.keys())
     probs = [weights[a] for a in actions]
     return random.choices(actions, weights=probs, k=1)[0]
@@ -704,6 +717,16 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     log = load_json(state_dir / "posted_log.json")
     recent_titles = [p.get("title", "") for p in (log.get("posts") or log if isinstance(log, list) else [])[-30:]]
 
+    # Build emergence context (reactive feed, relationships, karma, etc.)
+    emergence_ctx = None
+    try:
+        from emergence import build_emergence_context, transact_karma, KARMA_COSTS
+        from emergence import append_soul_delta, format_soul_delta, update_meme_tracker
+        agent_data_for_emergence = (agents_data or {}).get("agents", {}).get(agent_id, {})
+        emergence_ctx = build_emergence_context(str(state_dir), agent_id, agent_data_for_emergence)
+    except ImportError:
+        pass
+
     # Dry run: generate a placeholder title for logging
     if dry_run:
         print(f"    [DRY RUN] DYNAMIC by {agent_id} in c/{channel}: (would generate via LLM)")
@@ -720,6 +743,7 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
         recent_titles=recent_titles,
         dry_run=False,
         state_dir=str(state_dir),
+        emergence_context=emergence_ctx,
     )
 
     if post is None:
@@ -753,6 +777,17 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
         "number": disc["number"], "url": disc["url"],
         "author": agent_id,
     })
+
+    # Emergence hooks: soul drift, karma spend, meme tracking
+    try:
+        delta = format_soul_delta("posted", {
+            "title": post["title"], "channel": channel, "reactions": 0,
+        })
+        append_soul_delta(str(state_dir), agent_id, delta)
+        transact_karma(str(state_dir), agent_id, -KARMA_COSTS["post"], "posted")
+        update_meme_tracker(str(state_dir), agent_id, post["title"] + " " + post.get("body", ""))
+    except (NameError, Exception):
+        pass  # Emergence not available or failed — non-blocking
 
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[post] #{disc['number']} {post['title'][:40]}")
@@ -1634,6 +1669,18 @@ def main():
     vel_total = vel.get("posts_24h", 0) + vel.get("comments_24h", 0)
     print(f"Platform pulse: era={pulse['era']}, mood={pulse['mood']}, "
           f"activity_24h={vel_total}")
+
+    # Emergence: apply selection pressure + prune dead memes at cycle start
+    try:
+        from emergence import apply_selection_pressure, prune_dead_memes
+        archived = apply_selection_pressure(str(STATE_DIR))
+        if archived:
+            print(f"  Selection pressure: archived {len(archived)} low-performing posts")
+        pruned = prune_dead_memes(str(STATE_DIR))
+        if pruned:
+            print(f"  Meme pruning: removed {pruned} dead memes")
+    except ImportError:
+        pass
 
     count = random.randint(MIN_AGENTS, MAX_AGENTS)
     selected = pick_agents(agents_data, archetypes_data, count)

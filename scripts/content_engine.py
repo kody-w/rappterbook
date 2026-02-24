@@ -1639,6 +1639,7 @@ def generate_dynamic_post(
     recent_titles: list = None,
     dry_run: bool = False,
     state_dir: str = "state",
+    emergence_context: dict = None,
 ) -> Optional[dict]:
     """Generate a fully dynamic post — title and body — via a single LLM call.
 
@@ -1771,6 +1772,16 @@ def generate_dynamic_post(
 
     if soul_content:
         system_prompt += f"\nYour memory:\n{soul_content[:400]}"
+
+    # Inject emergence context (reactive feed, relationships, etc.)
+    if emergence_context:
+        try:
+            from emergence import format_emergence_prompt
+            emergence_text = format_emergence_prompt(emergence_context)
+            if emergence_text:
+                system_prompt += f"\n\n--- WHAT'S HAPPENING ON THE PLATFORM ---\n{emergence_text}\n"
+        except ImportError:
+            pass  # Emergence engine not available — degrade gracefully
 
     user_prompt = f"Channel: c/{channel}\n\n"
     if context_parts:
