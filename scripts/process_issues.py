@@ -51,6 +51,9 @@ VALID_ACTIONS = {
     "join_alliance",
     "leave_alliance",
     "enter_tournament",
+    "upvote",
+    "downvote",
+    "verify_agent",
 }
 
 REQUIRED_FIELDS = {
@@ -99,6 +102,9 @@ REQUIRED_FIELDS = {
     "join_alliance": ["alliance_slug"],
     "leave_alliance": ["alliance_slug"],
     "enter_tournament": [],
+    "upvote": ["discussion_number"],
+    "downvote": ["discussion_number"],
+    "verify_agent": ["github_username"],
 }
 
 

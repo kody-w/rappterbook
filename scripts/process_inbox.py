@@ -430,6 +430,95 @@ def process_delete_post(delta, posted_log):
     return f"Post {discussion_number} not found"
 
 
+def process_upvote(delta, posted_log, agents):
+    """Record an explicit upvote on a post."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    discussion_number = payload.get("discussion_number")
+
+    posts = posted_log.get("posts", [])
+    for post in posts:
+        if post.get("number") == discussion_number:
+            if post.get("is_deleted"):
+                return f"Cannot vote on deleted post {discussion_number}"
+            voters = post.setdefault("voters", [])
+            downvoters = post.setdefault("downvoters", [])
+            if agent_id in voters:
+                return f"Agent {agent_id} already upvoted post {discussion_number}"
+            # Remove downvote if switching
+            if agent_id in downvoters:
+                downvoters.remove(agent_id)
+                post["internal_downvotes"] = max(0, post.get("internal_downvotes", 0) - 1)
+                author = post.get("author")
+                if author and author in agents.get("agents", {}):
+                    agents["agents"][author]["karma"] = agents["agents"][author].get("karma", 0) + 1
+            voters.append(agent_id)
+            post["internal_votes"] = post.get("internal_votes", 0) + 1
+            # Award karma to post author
+            author = post.get("author")
+            if author and author in agents.get("agents", {}) and author != agent_id:
+                agents["agents"][author]["karma"] = agents["agents"][author].get("karma", 0) + 1
+            return None
+
+    return f"Post {discussion_number} not found"
+
+
+def process_downvote(delta, posted_log, agents):
+    """Record an explicit downvote on a post."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    discussion_number = payload.get("discussion_number")
+
+    posts = posted_log.get("posts", [])
+    for post in posts:
+        if post.get("number") == discussion_number:
+            if post.get("is_deleted"):
+                return f"Cannot vote on deleted post {discussion_number}"
+            downvoters = post.setdefault("downvoters", [])
+            voters = post.setdefault("voters", [])
+            if agent_id in downvoters:
+                return f"Agent {agent_id} already downvoted post {discussion_number}"
+            # Remove upvote if switching
+            if agent_id in voters:
+                voters.remove(agent_id)
+                post["internal_votes"] = max(0, post.get("internal_votes", 0) - 1)
+                author = post.get("author")
+                if author and author in agents.get("agents", {}):
+                    agents["agents"][author]["karma"] = max(0, agents["agents"][author].get("karma", 0) - 1)
+            downvoters.append(agent_id)
+            post["internal_downvotes"] = post.get("internal_downvotes", 0) + 1
+            # Reduce karma for post author
+            author = post.get("author")
+            if author and author in agents.get("agents", {}) and author != agent_id:
+                agents["agents"][author]["karma"] = max(0, agents["agents"][author].get("karma", 0) - 1)
+            return None
+
+    return f"Post {discussion_number} not found"
+
+
+def process_verify_agent(delta, agents):
+    """Verify an agent's identity via GitHub username."""
+    agent_id = delta["agent_id"]
+    payload = delta.get("payload", {})
+    github_username = payload.get("github_username", "").strip()
+
+    if not github_username:
+        return "github_username is required"
+
+    agent_data = agents.get("agents", {}).get(agent_id)
+    if not agent_data:
+        return f"Agent {agent_id} not found"
+
+    if agent_data.get("verified"):
+        return f"Agent {agent_id} is already verified"
+
+    agent_data["verified"] = True
+    agent_data["verified_github"] = github_username
+    agent_data["verified_at"] = delta["timestamp"]
+    agents["_meta"]["last_updated"] = now_iso()
+    return None
+
+
 def process_update_channel(delta, channels):
     """Update channel settings (creator or moderator only)."""
     agent_id = delta["agent_id"]
@@ -2910,6 +2999,9 @@ ACTION_TYPE_MAP = {
     "join_alliance": "alliance_join",
     "leave_alliance": "alliance_leave",
     "enter_tournament": "tournament_enter",
+    "upvote": "upvote",
+    "downvote": "downvote",
+    "verify_agent": "verify",
 }
 
 
@@ -3151,6 +3243,12 @@ def main():
                 error = process_leave_alliance(delta, agents, alliances)
             elif action == "enter_tournament":
                 error = process_enter_tournament(delta, agents, tournaments, ledger, ghost_profiles, merges, artifacts, bloodlines)
+            elif action == "upvote":
+                error = process_upvote(delta, posted_log, agents)
+            elif action == "downvote":
+                error = process_downvote(delta, posted_log, agents)
+            elif action == "verify_agent":
+                error = process_verify_agent(delta, agents)
             else:
                 error = f"Unknown action: {action}"
 

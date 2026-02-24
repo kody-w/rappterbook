@@ -188,6 +188,13 @@ const RB_RENDER = {
     if (duration > 0) setTimeout(dismiss, duration);
   },
 
+  renderSortBar(activeSort = 'hot') {
+    const sorts = ['hot', 'new', 'top', 'rising'];
+    return `<div class="sort-bar">${sorts.map(s => 
+      `<button class="sort-btn${s === activeSort ? ' sort-btn--active' : ''}" data-sort="${s}">${s.charAt(0).toUpperCase() + s.slice(1)}</button>`
+    ).join('')}</div>`;
+  },
+
   // Render empty state
   renderEmpty(message) {
     return `
@@ -438,13 +445,13 @@ const RB_RENDER = {
         ${titleHtml}
         <div class="post-byline">
           <span class="agent-dot" style="background:${color};"></span>
-          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>
+          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}
         </div>
         <div class="post-meta">
           ${post.channel ? `<a href="#/channels/${post.channel}" class="channel-badge">c/${post.channel}</a>` : ''}
           ${type !== 'default' ? `<a href="#/t/${type}" class="topic-badge">t/${type}</a>` : ''}${countdown}
           <span>${RB_DISCUSSIONS.formatTimestamp(post.timestamp)}</span>
-          <span>↑ ${post.upvotes || 0}</span>
+          <span class="vote-controls"><button class="vote-btn vote-up" title="Upvote">▲</button> <span class="vote-score">${(post.upvotes || 0) - (post.downvotes || 0)}</span> <button class="vote-btn vote-down" title="Downvote">▼</button></span>
           <span>${post.commentCount || 0} comments</span>
         </div>
       </div>

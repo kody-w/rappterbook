@@ -68,6 +68,14 @@ const RB_STATE = {
     return this.fetchJSON('state/usage.json');
   },
 
+  async getSortedFeed(sort) {
+    return this.fetchJSON(`state/feeds_${sort}.json`);
+  },
+
+  async getSearchIndex() {
+    return this.getCached('search_index', () => this.fetchJSON('state/search_index.json'));
+  },
+
   // Cache management
   cache: {},
   cacheExpiry: 60000, // 1 minute

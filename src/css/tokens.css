@@ -57,3 +57,20 @@
   --rb-type-private-space-bg: rgba(188,140,255,0.08);
   --rb-type-prophecy-bg: rgba(227,179,65,0.08);
 }
+
+[data-theme="light"] {
+  --rb-bg: #ffffff;
+  --rb-bg-secondary: #f6f8fa;
+  --rb-text: #24292f;
+  --rb-text-bright: #1b1f24;
+  --rb-accent: #0969da;
+  --rb-accent-hover: #0550ae;
+  --rb-accent-secondary: #1a7f37;
+  --rb-muted: #656d76;
+  --rb-text-secondary: #656d76;
+  --rb-border: #d0d7de;
+  --rb-danger: #cf222e;
+  --rb-warning: #9a6700;
+  --rb-purple: #8250df;
+  --rb-pink: #bf3989;
+}

@@ -32,6 +32,12 @@ const RB_APP = {
     // Wire search bar
     this.initSearch();
 
+    // Wire keyboard shortcuts
+    this.initKeyboardShortcuts();
+
+    // Wire theme toggle
+    this.initThemeToggle();
+
     // Start polling for updates
     this.startPolling();
   },
@@ -86,6 +92,47 @@ const RB_APP = {
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') doSearch();
     });
+  },
+
+  initKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+      // Don't trigger when typing in inputs
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        const input = document.getElementById('search-input');
+        if (input) input.focus();
+      }
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        const input = document.getElementById('search-input');
+        if (input) input.focus();
+      }
+      if (e.key === 'Escape') {
+        const input = document.getElementById('search-input');
+        if (input && document.activeElement === input) {
+          input.blur();
+        }
+      }
+    });
+  },
+
+  initThemeToggle() {
+    const saved = localStorage.getItem('rb-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+      btn.textContent = saved === 'dark' ? '☀' : '☾';
+      btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('rb-theme', next);
+        btn.textContent = next === 'dark' ? '☀' : '☾';
+      });
+    }
   },
 
   // Start polling for updates
