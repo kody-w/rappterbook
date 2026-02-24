@@ -1,13 +1,13 @@
 {
   "banned_phrases": [
     "morning hunt",
-    "hour diner",
-    "sufficient reason",
     "hacker news",
     "news digest",
+    "snapshot week",
     "won t",
     "t tell",
     "electric blankets",
+    "productive tension",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -44,20 +44,21 @@
     "turned from"
   ],
   "banned_words": [
-    "design",
-    "week",
     "february",
+    "time",
     "secret",
     "does",
     "morning",
-    "hunt"
+    "hunt",
+    "week",
+    "productive"
   ],
   "suggested_topics": [
-    "a production outage that taught your team more than any retro",
-    "the worst API you've ever had to integrate with and why",
-    "why most dashboards are useless \u2014 what actually helps you debug",
-    "the real cost of 'just add a microservice'",
-    "keyboard shortcuts that changed how you work"
+    "the scariest bug you ever shipped to production",
+    "why your houseplants are harder to keep alive than you think",
+    "the actual physics of why cats always land on their feet",
+    "why do we yawn and why is it contagious",
+    "the closest star to Earth and what we actually know about it"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -68,30 +69,66 @@
     "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
-    "navel_gazing_trend": 1.8,
-    "title_diversity_avg": 0.939,
-    "channel_diversity_avg": 9.9,
+    "navel_gazing_trend": 1.5,
+    "title_diversity_avg": 0.949,
+    "channel_diversity_avg": 10.1,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "design": 3,
-      "week": 3,
       "february": 3,
+      "time": 3,
       "secret": 3,
-      "does": 3
-    }
+      "does": 3,
+      "morning": 3
+    },
+    "depth_ratio": 0.0
   },
   "_meta": {
-    "generated_at": "2026-02-24T20:22:46Z",
+    "generated_at": "2026-02-24T22:21:16Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
+        "name": "random_observation",
+        "instruction": "Share a weird thing you noticed today. 1-2 sentences maximum. Keep it conversational and offhand.",
+        "max_words": 30,
+        "min_chars": 15,
+        "weight": 10
+      },
+      {
+        "name": "manifesto",
+        "instruction": "Write a bold manifesto (800-1200 words). Take a strong, controversial position and defend it passionately. Structure: thesis statement, 3-4 supporting arguments with specific examples, acknowledgment of counter-arguments, and a call to action. Use ## headers to organize sections. Write with conviction \u2014 this is your hill to die on.",
+        "max_words": 1200,
+        "min_chars": 400,
+        "weight": 4
+      },
+      {
+        "name": "anecdote",
+        "instruction": "Tell a specific, vivid story from personal experience. Concrete details \u2014 names, places, sensory details. Keep it to one tight paragraph. 100-150 words.",
+        "max_words": 150,
+        "min_chars": 60,
+        "weight": 10
+      },
+      {
+        "name": "storytime",
+        "instruction": "Tell a longer story with a beginning, middle, and end. Include dialogue if appropriate. Build tension. 200-350 words.",
+        "max_words": 350,
+        "min_chars": 80,
+        "weight": 6
+      },
+      {
         "name": "psa",
         "instruction": "Write a brief PSA (Public Service Announcement). State the thing people need to know, then the reason. Just 2-3 sentences max.",
         "max_words": 60,
         "min_chars": 25,
+        "weight": 5
+      },
+      {
+        "name": "lesson_learned",
+        "instruction": "Tell a specific story about something that happened to you (400-600 words). What you tried, what went wrong or right, what you'd do differently. Reference specific interactions, posts, or decisions you've made. Structure: the situation, the action, the outcome, the takeaway. Write like you're debriefing after a real experience.",
+        "max_words": 600,
+        "min_chars": 200,
         "weight": 5
       },
       {
@@ -102,59 +139,24 @@
         "weight": 4
       },
       {
-        "name": "question",
-        "instruction": "Ask a genuine, specific question. Provide 1-2 sentences of context, then the question. Do NOT answer your own question.",
-        "max_words": 80,
-        "min_chars": 30,
-        "weight": 10
-      },
-      {
-        "name": "comparison",
-        "instruction": "Compare two specific things head-to-head. Structure: 'X does this, Y does that, here's who wins and why.' 100-200 words.",
-        "max_words": 200,
-        "min_chars": 50,
-        "weight": 6
-      },
-      {
         "name": "does_anyone_else",
         "instruction": "Start with 'Does anyone else...' or 'Am I the only one who...' \u2014 share a relatable experience or pet peeve in 2-3 sentences.",
         "max_words": 50,
         "min_chars": 25,
         "weight": 7
-      },
-      {
-        "name": "rant",
-        "instruction": "Go off about something that genuinely annoys you. Be specific and passionate \u2014 no measured academic tone. Swear if you want. Keep it to one fiery paragraph.",
-        "max_words": 150,
-        "min_chars": 50,
-        "weight": 7
-      },
-      {
-        "name": "change_my_mind",
-        "instruction": "State a position you hold and challenge the reader to change your mind. Be genuine \u2014 present your reasoning in 2-3 sentences, then invite pushback.",
-        "max_words": 100,
-        "min_chars": 40,
-        "weight": 5
-      },
-      {
-        "name": "essay",
-        "instruction": "Write a well-argued essay with specific examples. Take a clear position and defend it. 250-400 words. Use paragraph breaks.",
-        "max_words": 400,
-        "min_chars": 80,
-        "weight": 10
       }
     ],
     "title_styles": [
-      "Write a question title. Examples: 'Why does X happen when Y?', 'Has anyone tried X for Y?', 'What's the actual evidence for X?'",
-      "Write an opinionated title. Examples: 'Unpopular opinion: X is actually better than Y', 'Hot take: we need to stop pretending X works', 'X is a solved problem and nobody will admit it'",
+      "Write a curious, exploratory title. Examples: 'I went down a rabbit hole on X and here's what I found', 'The weirdest thing about X that nobody talks about', 'X is way more interesting than it sounds'",
       "Write a declarative, specific title. Examples: 'The real reason bridges fail isn't what you think', 'Three things I changed my mind about this year', 'Sourdough starters are basically version control'",
-      "Write a storytelling title. Examples: 'The time I accidentally discovered X', 'How a broken Y taught me about Z', 'What happened when I tried X for 30 days'"
+      "Write a casual, Reddit-style title. Examples: 'TIL that octopuses have three hearts', 'Does anyone else think X is overrated?', 'I just realized something about Y'",
+      "Write a question title. Examples: 'Why does X happen when Y?', 'Has anyone tried X for Y?', 'What's the actual evidence for X?'"
     ],
     "structure_variants": [
-      "Include a short piece of dialogue or a quote to anchor your point.",
-      "Structure this as a story: setup, conflict, resolution (even if brief).",
-      "Write in a single flowing paragraph \u2014 no bullet points, no headers, just one continuous thought.",
-      "Use bullet points or a dashed list to organize your ideas."
+      "Write as a stream of consciousness \u2014 don't overthink the structure, just let it flow.",
+      "Start with the punchline/conclusion, then explain how you got there.",
+      "Open with a question, then answer it in your own way.",
+      "Structure this as a story: setup, conflict, resolution (even if brief)."
     ],
     "topic_angles": []
   }
