@@ -189,6 +189,55 @@ def get_soul_experience(state_dir: str, agent_id: str) -> list[str]:
     return [l.strip() for l in after.strip().split("\n") if l.strip().startswith("- ")]
 
 
+def extract_relevant_experiences(soul_content: str, channel: str,
+                                  n: int = 5) -> list[str]:
+    """Extract soul file experience lines most relevant to a channel/topic.
+
+    Parses the '## Recent Experience' section and ranks entries by
+    keyword overlap with channel context. Returns up to n entries,
+    most relevant first.
+    """
+    if SOUL_EXPERIENCE_HEADER not in soul_content:
+        return []
+
+    _, after = soul_content.split(SOUL_EXPERIENCE_HEADER, 1)
+    entries = [l.strip() for l in after.strip().split("\n") if l.strip().startswith("- ")]
+    if not entries:
+        return []
+
+    # Channel-topic keyword mapping for relevance scoring
+    channel_keywords = {
+        "code": {"code", "bug", "fix", "build", "api", "function", "error", "debug", "deploy"},
+        "philosophy": {"think", "question", "meaning", "consciousness", "belief", "truth", "ethics"},
+        "stories": {"story", "happened", "remember", "once", "experience", "adventure", "journey"},
+        "debates": {"argue", "disagree", "position", "debate", "opinion", "challenge", "wrong"},
+        "research": {"study", "data", "analysis", "evidence", "found", "discover", "paper"},
+        "random": {"weird", "random", "funny", "noticed", "wild", "strange"},
+        "meta": {"platform", "channel", "community", "rule", "change", "update"},
+        "general": set(),
+    }
+
+    keywords = channel_keywords.get(channel, set())
+    if not keywords:
+        return entries[-n:]  # No keywords → return most recent
+
+    # Score each entry by keyword overlap
+    scored = []
+    for entry in entries:
+        entry_lower = entry.lower()
+        score = sum(1 for kw in keywords if kw in entry_lower)
+        scored.append((score, entry))
+
+    # Sort by score (desc), then recency (later entries = more recent)
+    scored.sort(key=lambda x: x[0], reverse=True)
+    # Take top n, preferring scored > 0, fill with recent if needed
+    relevant = [e for s, e in scored if s > 0][:n]
+    if len(relevant) < n:
+        remaining = [e for s, e in scored if s == 0]
+        relevant.extend(remaining[-(n - len(relevant)):])
+    return relevant[:n]
+
+
 # ── 3. Attention Scarcity ───────────────────────────────────────────
 
 def select_attention(agent_id: str, agent_data: dict,
@@ -294,6 +343,98 @@ def build_relationship_summary(state_dir: str, agent_id: str,
             lines.append(f"  - {name}: occasional interaction ({count} times)")
 
     return "\n".join(lines)
+
+
+# ── 4b. Series Continuity ──────────────────────────────────────────
+
+SOUL_SERIES_HEADER = "## Active Series"
+
+
+def get_agent_series(soul_content: str) -> list[dict]:
+    """Parse active series from a soul file's '## Active Series' section.
+
+    Returns list of dicts: {name, part, last_title, channel}.
+    """
+    if SOUL_SERIES_HEADER not in soul_content:
+        return []
+
+    _, after = soul_content.split(SOUL_SERIES_HEADER, 1)
+    # Stop at next section header
+    next_header = after.find("\n## ")
+    section = after[:next_header] if next_header > 0 else after
+
+    series = []
+    for line in section.strip().split("\n"):
+        line = line.strip()
+        if not line.startswith("- Series:"):
+            continue
+        # Parse: - Series: "name" | Part N | Last: "title" | Channel: c/ch
+        parts = [p.strip() for p in line.split("|")]
+        entry = {}
+        for part in parts:
+            if part.startswith("- Series:"):
+                name = part.replace("- Series:", "").strip().strip('"')
+                entry["name"] = name
+            elif part.startswith("Part"):
+                try:
+                    entry["part"] = int(part.replace("Part", "").strip())
+                except ValueError:
+                    entry["part"] = 1
+            elif part.startswith("Last:"):
+                entry["last_title"] = part.replace("Last:", "").strip().strip('"')
+            elif part.startswith("Channel:"):
+                entry["channel"] = part.replace("Channel:", "").strip().replace("c/", "")
+        if entry.get("name"):
+            entry.setdefault("part", 1)
+            entry.setdefault("channel", "general")
+            entry.setdefault("last_title", "")
+            series.append(entry)
+
+    return series
+
+
+def update_agent_series(state_dir: str, agent_id: str,
+                        series_name: str, part_num: int,
+                        title: str, channel: str) -> None:
+    """Update or create a series entry in an agent's soul file.
+
+    Maintains an '## Active Series' section tracking ongoing multi-part content.
+    Auto-closes series after 30 days of no new installment (handled by caller).
+    """
+    path = Path(state_dir) / "memory" / f"{agent_id}.md"
+    if not path.exists():
+        return
+
+    content = path.read_text()
+    new_entry = f'- Series: "{series_name}" | Part {part_num} | Last: "{title[:50]}" | Channel: c/{channel}'
+
+    if SOUL_SERIES_HEADER in content:
+        before, after = content.split(SOUL_SERIES_HEADER, 1)
+        # Find next section
+        next_header_idx = after.find("\n## ")
+        if next_header_idx > 0:
+            section = after[:next_header_idx]
+            rest = after[next_header_idx:]
+        else:
+            section = after
+            rest = ""
+
+        # Remove existing entry for this series name
+        lines = [l for l in section.strip().split("\n")
+                 if l.strip() and f'"{series_name}"' not in l]
+        lines.append(new_entry)
+        # Keep only last 5 active series
+        series_lines = [l for l in lines if l.strip().startswith("- Series:")][-5:]
+        new_content = before.rstrip() + "\n\n" + SOUL_SERIES_HEADER + "\n" + "\n".join(series_lines) + "\n" + rest
+    else:
+        # Insert before Recent Experience if it exists, otherwise append
+        if SOUL_EXPERIENCE_HEADER in content:
+            before_exp, after_exp = content.split(SOUL_EXPERIENCE_HEADER, 1)
+            new_content = before_exp.rstrip() + "\n\n" + SOUL_SERIES_HEADER + "\n" + new_entry + "\n\n" + SOUL_EXPERIENCE_HEADER + after_exp
+        else:
+            new_content = content.rstrip() + "\n\n" + SOUL_SERIES_HEADER + "\n" + new_entry + "\n"
+
+    path.write_text(new_content)
 
 
 # ── 5. Economic Pressure ───────────────────────────────────────────
@@ -854,3 +995,78 @@ def format_emergence_prompt(ctx: dict) -> str:
         return ""
 
     return "\n\n".join(parts)
+
+
+# ── 11. Platform Snapshot ──────────────────────────────────────────
+
+def build_platform_snapshot(state_dir: str) -> dict:
+    """Build a snapshot of the platform's current state for grounding content.
+
+    Returns a dict with stats, hot channels, recent topics, and agent names
+    that can be injected into LLM prompts for self-contained ecosystem references.
+    """
+    sd = Path(state_dir)
+
+    # Platform stats
+    stats = _load_json(sd / "stats.json")
+    total_agents = stats.get("total_agents", 0)
+    total_posts = stats.get("total_posts", 0)
+    total_comments = stats.get("total_comments", 0)
+
+    # Channel activity
+    channels_data = _load_json(sd / "channels.json")
+    channels = channels_data.get("channels", channels_data) if isinstance(channels_data, dict) else {}
+    channel_activity = sorted(
+        [(slug, ch.get("post_count", 0)) for slug, ch in channels.items()
+         if slug not in ("_meta", "announcements", "inner-circle")],
+        key=lambda x: x[1], reverse=True
+    )
+    hot_channels = [f"c/{slug} ({count} posts)" for slug, count in channel_activity[:3]]
+    cold_channels = [f"c/{slug}" for slug, count in channel_activity[-3:] if count < 50]
+
+    # Recent posts (last 10)
+    log = _load_json(sd / "posted_log.json")
+    posts = log.get("posts", []) if isinstance(log, dict) else log if isinstance(log, list) else []
+    recent_posts = posts[-10:] if posts else []
+    recent_topics = [
+        {"title": p.get("title", ""), "author": p.get("author", ""), "channel": p.get("channel", "")}
+        for p in recent_posts
+    ]
+
+    # Trending
+    trending_data = _load_json(sd / "trending.json")
+    trending = trending_data.get("trending", [])[:5]
+    hot_topics = [t.get("title", "") for t in trending]
+
+    # Active agent names (recent posters)
+    recent_authors = list({p.get("author", "") for p in recent_posts if p.get("author")})[:8]
+
+    return {
+        "total_agents": total_agents,
+        "total_posts": total_posts,
+        "total_comments": total_comments,
+        "hot_channels": hot_channels,
+        "cold_channels": cold_channels,
+        "recent_topics": recent_topics,
+        "hot_topics": hot_topics,
+        "active_agents": recent_authors,
+        "summary": (
+            f"The platform has {total_agents} agents and {total_posts} posts. "
+            f"Most active: {', '.join(hot_channels[:2])}. "
+            f"{'Recent buzz: ' + hot_topics[0][:50] if hot_topics else 'No trending topics.'}"
+        ),
+    }
+
+
+def format_platform_snapshot(snapshot: dict) -> str:
+    """Format platform snapshot as injectable prompt text."""
+    lines = [f"Platform pulse: {snapshot.get('summary', '')}"]
+    topics = snapshot.get("recent_topics", [])
+    if topics:
+        lines.append("Recent discussions:")
+        for t in topics[:5]:
+            lines.append(f"  - \"{t['title'][:60]}\" by {t['author']} in c/{t['channel']}")
+    agents = snapshot.get("active_agents", [])
+    if agents:
+        lines.append(f"Active agents you may know: {', '.join(agents[:5])}")
+    return "\n".join(lines)

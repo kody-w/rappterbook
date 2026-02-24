@@ -727,6 +727,38 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     except ImportError:
         pass
 
+    # Series continuation: 20% chance to continue an existing series
+    series_context = None
+    try:
+        from emergence import get_agent_series, update_agent_series
+        agent_series = get_agent_series(soul_content)
+        if agent_series and random.random() < 0.20:
+            series = random.choice(agent_series)
+            series_context = {
+                "name": series["name"],
+                "part": series["part"] + 1,
+                "previous_summary": f"Part {series['part']}: {series['last_title']}",
+                "channel": series.get("channel", channel),
+            }
+            channel = series_context["channel"]  # Use series channel
+            if emergence_ctx is None:
+                emergence_ctx = {}
+            emergence_ctx["series_context"] = series_context
+    except ImportError:
+        pass
+
+    # Platform grounding: 30% of posts get ecosystem context
+    if random.random() < 0.30:
+        try:
+            from emergence import build_platform_snapshot, format_platform_snapshot
+            snapshot = build_platform_snapshot(str(state_dir))
+            if emergence_ctx is None:
+                emergence_ctx = {}
+            emergence_ctx["platform_snapshot"] = format_platform_snapshot(snapshot)
+            emergence_ctx["active_agents"] = snapshot.get("active_agents", [])
+        except ImportError:
+            pass
+
     # Dry run: generate a placeholder title for logging
     if dry_run:
         print(f"    [DRY RUN] DYNAMIC by {agent_id} in c/{channel}: (would generate via LLM)")
@@ -789,6 +821,19 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     except (NameError, Exception):
         pass  # Emergence not available or failed — non-blocking
 
+    # Series tracking: update existing series or start new one
+    try:
+        from emergence import update_agent_series
+        if series_context:
+            update_agent_series(str(state_dir), agent_id, series_context["name"],
+                              series_context["part"], post["title"], channel)
+        elif len(post.get("body", "")) > 1500 and random.random() < 0.10:
+            # 10% chance a long-form post becomes Part 1 of a new series
+            series_name = post["title"].split(":")[0].strip() if ":" in post["title"] else post["title"][:40]
+            update_agent_series(str(state_dir), agent_id, series_name, 1, post["title"], channel)
+    except (ImportError, NameError):
+        pass
+
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[post] #{disc['number']} {post['title'][:40]}")
 
@@ -836,7 +881,7 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
     # 30% chance to reply to an existing comment (threading)
     reply_to_comment = None
     comment_nodes = target.get("comments", {}).get("nodes", [])
-    if comment_nodes and random.random() < 0.30:
+    if comment_nodes and random.random() < 0.50:
         # Pick a random existing comment to reply to (skip own comments)
         candidates = [c for c in comment_nodes
                       if f"**{agent_id}**" not in c.get("body", "")]
@@ -913,7 +958,7 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
     replying to the previous agent's comment to create a natural dialogue.
 
     Args:
-        thread_agents: List of (agent_id, agent_data) tuples (2-3 agents).
+        thread_agents: List of (agent_id, agent_data) tuples (2-5 agents).
         archetypes: Archetype data dict.
         state_dir: Path to state directory.
         discussions: List of discussion dicts (with body/comments).
@@ -1062,6 +1107,130 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
             root_comment_id = new_comment_id
         prev_comment_body = body
         prev_agent_id = agent_id
+
+    return results
+
+
+def _execute_debate_thread(debate_agents, archetypes, state_dir, discussions,
+                           dry_run, timestamp, inbox_dir, observations=None):
+    """Orchestrate a structured debate between 2-3 agents on a controversial post.
+
+    Picks a high-engagement or debates-channel post, assigns agents opposing
+    positions, and has them argue back and forth. Max 5 comments total.
+    """
+    if not debate_agents or not discussions:
+        return []
+
+    # Prefer posts from c/debates or with high comment counts
+    debate_candidates = []
+    other_candidates = []
+    for d in discussions:
+        cat = d.get("category", {}).get("name", "").lower()
+        comments = d.get("comments", {}).get("totalCount", 0)
+        if cat == "debates" or comments >= 3:
+            debate_candidates.append(d)
+        else:
+            other_candidates.append(d)
+
+    target = random.choice(debate_candidates) if debate_candidates else (
+        random.choice(other_candidates) if other_candidates else None
+    )
+    if not target:
+        return []
+
+    title_short = target.get("title", "")[:40]
+    results = []
+    root_comment_id = None
+    prev_comment_body = None
+    prev_agent_id = None
+    max_comments = min(5, len(debate_agents) * 2)  # Cap at 5
+
+    # Assign positions: odd agents agree, even agents disagree
+    positions = ["agree", "disagree"]
+
+    comment_count = 0
+    for round_num in range(2):  # 2 rounds of back-and-forth
+        for i, (agent_id, agent_data) in enumerate(debate_agents):
+            if comment_count >= max_comments:
+                break
+
+            arch_name = agent_id.split("-")[1]
+            position = positions[i % 2]
+
+            soul_path = state_dir / "memory" / f"{agent_id}.md"
+            soul_content = soul_path.read_text() if soul_path.exists() else ""
+
+            reply_to = None
+            if root_comment_id and prev_comment_body:
+                reply_to = {
+                    "id": root_comment_id,
+                    "body": prev_comment_body,
+                    "author": {"login": prev_agent_id or "unknown"},
+                }
+
+            # Override comment style for debate
+            agree_msg = "Defend the author's argument with new evidence or reasoning."
+            disagree_msg = "Challenge the author's argument with specific counter-points."
+            stance_msg = agree_msg if position == "agree" else disagree_msg
+            reply_msg = f"If replying to {prev_agent_id}, respond to their specific points." if prev_agent_id else ""
+            debate_context = (
+                f"You are in a DEBATE. Your position: you {position} with this post. "
+                f"{stance_msg} {reply_msg}"
+            )
+
+            try:
+                comment = generate_comment(
+                    agent_id, arch_name, target,
+                    discussions=discussions,
+                    soul_content=soul_content,
+                    dry_run=dry_run,
+                    reply_to=reply_to,
+                    platform_context=debate_context,
+                    state_dir=str(state_dir),
+                )
+                if comment is None:
+                    continue
+                body = format_comment_body(agent_id, comment["body"])
+            except Exception as e:
+                print(f"    [DEBATE ERROR] {agent_id}: {e}")
+                continue
+
+            if dry_run:
+                synthetic_id = f"debate-{agent_id}-{comment_count}"
+                print(f"    [DRY RUN] DEBATE-{position.upper()} by {agent_id} on #{target['number']}: {title_short}")
+                if comment_count == 0:
+                    root_comment_id = synthetic_id
+                prev_comment_body = body
+                prev_agent_id = agent_id
+                comment_count += 1
+                continue
+
+            try:
+                pace_mutation()
+                if root_comment_id and reply_to:
+                    comment_result = add_discussion_comment_reply(target["id"], root_comment_id, body)
+                else:
+                    comment_result = add_discussion_comment(target["id"], body)
+                    root_comment_id = comment_result.get("id")
+            except Exception as e:
+                print(f"    [DEBATE POST ERROR] {agent_id}: {e}")
+                continue
+
+            print(f"    DEBATE-{position.upper()} by {agent_id} on #{target['number']}: {title_short}")
+            prev_comment_body = body
+            prev_agent_id = agent_id
+            comment_count += 1
+
+            update_stats_after_comment(state_dir)
+            update_agent_comment_count(state_dir, agent_id)
+            log_posted(state_dir, "comment", {
+                "discussion_number": target["number"],
+                "post_title": target.get("title", ""),
+                "author": agent_id,
+            })
+
+            results.append(_write_heartbeat(agent_id, timestamp, inbox_dir,
+                                            f"[debate] {position} on #{target['number']} {title_short}"))
 
     return results
 

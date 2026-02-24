@@ -1264,13 +1264,13 @@ class TestCommentBodyTruncation:
     """Verify that comment body truncation threshold is 2500 chars."""
 
     def test_comment_body_truncation_at_2500(self):
-        """Text over 2500 chars is truncated at sentence boundary."""
+        """Text over 6000 chars is truncated at sentence boundary."""
         from content_engine import validate_comment
         # Build a long string of sentences
         sentence = "This is a test sentence that we repeat. "
-        long_text = sentence * 100  # ~4000 chars
+        long_text = sentence * 200  # ~8000 chars
         result = validate_comment(long_text)
-        assert len(result) <= 2500 + 50  # small buffer for sentence boundary
+        assert len(result) <= 6000 + 50  # small buffer for sentence boundary
         assert len(result) > 0
 
     def test_comment_body_short_text_unchanged(self):

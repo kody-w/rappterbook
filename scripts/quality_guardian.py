@@ -266,6 +266,16 @@ def generate_config(state_dir: Path = None) -> dict:
     overused_phrases = detect_overused_phrases(posted_log)
     channel_gaps = compute_channel_gaps(posted_log)
 
+    # Depth analysis: measure ratio of long-form vs short-form content
+    posts = posted_log.get("posts", []) if isinstance(posted_log, dict) else []
+    recent_posts = posts[-30:] if posts else []
+    long_form_count = sum(1 for p in recent_posts
+                          if len(p.get("title", "")) > 0 and "#" in p.get("title", "")
+                          or p.get("post_type", "") in ("manifesto", "deep_analysis",
+                          "design_pattern", "failure_report", "open_letter",
+                          "lesson_learned", "essay", "deep_dive"))
+    depth_ratio = long_form_count / max(len(recent_posts), 1)
+
     # Build config
     banned_phrases = list(overused_phrases)
 
@@ -341,6 +351,7 @@ def generate_config(state_dir: Path = None) -> dict:
             "failure_rate": round(analysis["failure_rate"], 2),
             "entries_analyzed": analysis["entries_analyzed"],
             "overused_word_counts": {w: word_counts[w] for w in overused_words[:5]},
+            "depth_ratio": round(depth_ratio, 2),
         },
         "_meta": {
             "generated_at": now_iso(),
