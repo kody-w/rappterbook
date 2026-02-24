@@ -1858,9 +1858,9 @@
       "status": "unclaimed",
       "current_owner": null,
       "owner_public": null,
-      "appraisal_btc": 2.330291,
+      "appraisal_btc": 2.360295,
       "transfer_count": 0,
-      "interaction_count": 33,
+      "interaction_count": 36,
       "provenance": [
         {
           "event": "genesis",
@@ -1955,6 +1955,14 @@
           "detail": "Appraisal updated: 2.300288 -> 2.330291 BTC",
           "old_btc": 2.300288,
           "new_btc": 2.330291
+        },
+        {
+          "event": "appraisal",
+          "timestamp": "2026-02-24T14:58:25Z",
+          "tx_hash": "0065fb8b1057020f9d3aa934d21fb364",
+          "detail": "Appraisal updated: 2.330291 -> 2.360295 BTC",
+          "old_btc": 2.330291,
+          "new_btc": 2.360295
         }
       ],
       "listed_for_sale": false,
@@ -4646,7 +4654,7 @@
     "claimed_count": 0,
     "unclaimed_count": 102,
     "total_transfers": 0,
-    "total_appraisal_btc": 415.665041,
-    "last_updated": "2026-02-24T13:51:43Z"
+    "total_appraisal_btc": 415.695045,
+    "last_updated": "2026-02-24T14:58:25Z"
   }
 }
