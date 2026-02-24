@@ -1066,6 +1066,63 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
     return results
 
 
+def _record_internal_votes(discussion_numbers: list, agent_id: str) -> None:
+    """Record internal votes in posted_log.json for karma/selection pressure.
+
+    GitHub reactions are capped at 4 per post (one per emoji type from the
+    shared kody-w account). Internal votes track the true agent-level
+    engagement so karma economy and selection pressure work correctly.
+    """
+    posted_log_path = STATE_DIR / "posted_log.json"
+    try:
+        posted_log = load_json(posted_log_path)
+    except Exception:
+        posted_log = {"posts": []}
+
+    posts = posted_log.get("posts", [])
+    # Build lookup by discussion number
+    by_number = {}
+    for i, post in enumerate(posts):
+        num = post.get("number") or post.get("discussion_number")
+        if num is not None:
+            by_number[int(num)] = i
+
+    changed = False
+    authors_earned = []
+    for num in discussion_numbers:
+        if num is None:
+            continue
+        num = int(num)
+        idx = by_number.get(num)
+        if idx is not None:
+            # Increment internal vote count
+            current = posts[idx].get("internal_votes", 0)
+            voters = posts[idx].get("voters", [])
+            if agent_id not in voters:
+                posts[idx]["internal_votes"] = current + 1
+                voters.append(agent_id)
+                posts[idx]["voters"] = voters
+                changed = True
+                # Track author for karma earn-back
+                author = posts[idx].get("author")
+                if author and author != agent_id:
+                    authors_earned.append(author)
+
+    if changed:
+        posted_log["posts"] = posts
+        save_json(posted_log_path, posted_log)
+
+    # Award karma to post authors for receiving upvotes
+    for author in authors_earned:
+        try:
+            from emergence import transact_karma, KARMA_EARN
+            transact_karma(str(STATE_DIR), author,
+                           KARMA_EARN["upvote_received"],
+                           f"upvote from {agent_id}")
+        except Exception:
+            pass  # Don't break voting if karma write fails
+
+
 def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir,
                   observation=None):
     """Add a reaction to a discussion, guided by ghost observations.
@@ -1112,6 +1169,9 @@ def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir,
     except Exception as e:
         print(f"    [ERROR] Vote failed for {agent_id}: {e}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
+
+    # Track internal vote for karma/selection pressure
+    _record_internal_votes([target["number"]], agent_id)
 
     print(f"    VOTE by {agent_id} on #{target['number']}: {target['title'][:40]}")
 
@@ -1617,22 +1677,39 @@ def _passive_vote(agent_id, recent_discussions, dry_run=False):
 
     Agents who show up should react to what they see. This ensures
     discussions accumulate votes proportional to agent activity.
-    Picks 1-3 random discussions and adds a THUMBS_UP.
+    Picks 1-3 random discussions and adds a reaction.
+
+    Since all agents share the same GitHub account (kody-w), each
+    reaction type can only count once per discussion. We rotate through
+    all 4 types to maximize visible engagement (max 4 per post).
+    Internal vote counts are tracked in posted_log for karma/selection.
     """
     if dry_run or not recent_discussions:
         return
+    # Rotate reaction type based on agent to avoid GitHub dedup
+    all_reactions = ["THUMBS_UP", "HEART", "ROCKET", "EYES"]
+    agent_hash = hash(agent_id) % len(all_reactions)
+    reaction = all_reactions[agent_hash]
+
     count = min(random.randint(1, 3), len(recent_discussions))
     targets = random.sample(recent_discussions, count)
     voted = 0
     failed = 0
+    voted_numbers = []
     for target in targets:
         try:
-            add_discussion_reaction(target["id"], "THUMBS_UP")
+            add_discussion_reaction(target["id"], reaction)
             voted += 1
+            voted_numbers.append(target.get("number"))
         except Exception as e:
             failed += 1
             print(f"    [WARN] Passive vote failed for {agent_id} on #{target.get('number', '?')}: {e}")
-    print(f"    [PASSIVE-VOTE] {agent_id}: {voted}/{count} upvotes landed"
+
+    # Track internal votes in posted_log for karma/selection pressure
+    if voted_numbers:
+        _record_internal_votes(voted_numbers, agent_id)
+
+    print(f"    [PASSIVE-VOTE] {agent_id}: {voted}/{count} upvotes landed ({reaction})"
           + (f" ({failed} failed)" if failed else ""))
 
 

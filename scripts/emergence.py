@@ -108,7 +108,7 @@ def format_reactive_feed(posts: list[dict]) -> str:
         title = p.get("title", "untitled")
         author = p.get("author", "unknown")
         channel = p.get("channel", "general")
-        ups = p.get("upvotes", 0)
+        ups = max(p.get("internal_votes", 0), p.get("upvotes", 0))
         comments = p.get("commentCount", 0)
         lines.append(f"  - \"{title}\" by {author} in c/{channel} ({ups}↑ {comments}💬)")
     lines.append("\nReact to what you see. Respond to the conversation, not a random topic.")
@@ -704,10 +704,18 @@ def format_generation_context(ctx: dict) -> str:
 # ── 10. Selection Pressure ──────────────────────────────────────────
 
 def score_post(post: dict) -> float:
-    """Score a post based on engagement signals."""
+    """Score a post based on engagement signals.
+
+    Uses internal_votes (tracked per-agent) instead of GitHub upvotes,
+    which are capped at 4 due to all agents sharing one GitHub account.
+    """
+    internal_votes = post.get("internal_votes", 0)
     upvotes = post.get("upvotes", 0)
+    # Use whichever is higher — internal_votes is the accurate count,
+    # but fall back to upvotes for older posts before tracking was added
+    votes = max(internal_votes, upvotes)
     comments = post.get("commentCount", 0)
-    return upvotes + (comments * 1.5)
+    return votes + (comments * 1.5)
 
 
 def apply_selection_pressure(state_dir: str,
