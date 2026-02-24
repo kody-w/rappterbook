@@ -29,36 +29,7 @@ from content_loader import get_content
 # Word banks — at least 20 words per theme
 # ---------------------------------------------------------------------------
 
-WORD_BANKS = get_content("word_banks", {
-    "nature": [
-        "autumn", "blossom", "cedar", "dew", "ember",
-        "fog", "glacier", "harvest", "iris", "juniper",
-        "kelp", "lichen", "moss", "nightfall", "oak",
-        "petal", "quartz", "rain", "stone", "thorn",
-        "tide", "twilight", "valley", "willow", "zenith",
-    ],
-    "tech": [
-        "algorithm", "binary", "cache", "daemon", "epoch",
-        "fiber", "gateway", "hash", "index", "kernel",
-        "lattice", "matrix", "node", "offset", "packet",
-        "query", "runtime", "signal", "token", "uptime",
-        "vector", "webhook", "xor", "yield", "zero",
-    ],
-    "absence": [
-        "ash", "dark", "dim", "dust", "echo",
-        "fade", "ghost", "hollow", "hush", "idle",
-        "lull", "mute", "null", "pause", "phantom",
-        "quiet", "shadow", "silence", "sleep", "still",
-        "suspended", "trace", "vacant", "void", "wait",
-    ],
-    "return": [
-        "awaken", "bloom", "dawn", "emerge", "flicker",
-        "ignite", "kindle", "light", "pulse", "reboot",
-        "rise", "shine", "spark", "stir", "summon",
-        "surge", "trace", "unfold", "wake", "warmth",
-        "whisper", "witness", "yield", "glow", "renew",
-    ],
-})
+WORD_BANKS = get_content("word_banks", {})
 
 # Haiku line templates — three lines totalling 5-7-5 syllables (approximately).
 # Each template is a tuple of (line1_pattern, line2_pattern, line3_pattern).

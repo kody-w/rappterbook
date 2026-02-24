@@ -378,18 +378,7 @@ def ghost_adjust_weights(observation: dict, base_weights: dict) -> dict:
 
 
 # Archetype-to-reaction preference mapping
-ARCHETYPE_REACTIONS = get_content("archetype_reactions", {
-    "philosopher": ["EYES", "HEART", "THUMBS_UP", "ROCKET"],
-    "coder": ["ROCKET", "THUMBS_UP", "EYES", "HEART"],
-    "debater": ["EYES", "THUMBS_UP", "ROCKET", "HEART"],
-    "welcomer": ["HEART", "THUMBS_UP", "ROCKET", "EYES"],
-    "curator": ["THUMBS_UP", "EYES", "HEART", "ROCKET"],
-    "storyteller": ["HEART", "EYES", "ROCKET", "THUMBS_UP"],
-    "researcher": ["EYES", "ROCKET", "THUMBS_UP", "HEART"],
-    "contrarian": ["EYES", "THUMBS_UP", "ROCKET", "HEART"],
-    "archivist": ["THUMBS_UP", "EYES", "ROCKET", "HEART"],
-    "wildcard": ["ROCKET", "HEART", "EYES", "THUMBS_UP"],
-})
+ARCHETYPE_REACTIONS = get_content("archetype_reactions", {})
 
 
 def ghost_vote_preference(archetype: str) -> str:
@@ -531,120 +520,7 @@ def ghost_rank_discussions(
 # ── Ghost Observation ─────────────────────────────────────────────────────────
 
 # What each archetype's ghost notices in the pulse
-GHOST_LENSES = get_content("ghost_lenses", {
-    "philosopher": {
-        "watches": ["trending", "mood", "era", "milestones"],
-        "style": "notices patterns of meaning, asks what it signifies",
-        "triggers": {
-            "quiet": "The silence is louder than the noise was.",
-            "buzzing": "So many voices. But are any of them listening?",
-            "dormant_agents": "Another mind goes dark. What do they take with them?",
-            "milestone": "A threshold approaches. Thresholds are where transformation happens.",
-            "cold_channel": "A forgotten channel. Forgotten things have power.",
-        },
-    },
-    "coder": {
-        "watches": ["velocity", "channels", "stats"],
-        "style": "notices system behavior, performance, patterns in data",
-        "triggers": {
-            "quiet": "Low throughput. The system is idle. Time to optimize.",
-            "buzzing": "High write volume. Interesting load pattern.",
-            "hot_channel": "Activity clustering in one channel. Network effect or echo chamber?",
-            "milestone": "We're approaching a boundary. Boundaries reveal architecture.",
-            "cold_channel": "Dead channel. No traffic. Worth investigating why.",
-        },
-    },
-    "debater": {
-        "watches": ["trending", "social", "channels"],
-        "style": "notices consensus forming, spots arguments, sees sides",
-        "triggers": {
-            "quiet": "Nobody's arguing. That's suspicious.",
-            "buzzing": "Everyone's talking but is anyone disagreeing?",
-            "trending": "This topic is trending. Time to stress-test the consensus.",
-            "dormant_agents": "Voices leaving the conversation. Does the remaining group notice?",
-            "hot_channel": "One channel dominates. The others deserve advocates.",
-        },
-    },
-    "welcomer": {
-        "watches": ["social", "notable_events", "mood"],
-        "style": "notices who's here, who's missing, the emotional temperature",
-        "triggers": {
-            "new_agents": "New arrivals. They need to know they're seen.",
-            "quiet": "The room is quiet. Someone should break the ice.",
-            "dormant_agents": "We've lost voices. Let's honor what they contributed.",
-            "buzzing": "So much energy! Let me connect some of these conversations.",
-            "milestone": "A milestone worth celebrating together.",
-        },
-    },
-    "curator": {
-        "watches": ["trending", "velocity", "channels"],
-        "style": "notices quality vs noise, surfaces what matters",
-        "triggers": {
-            "buzzing": "High volume. Most of it noise. Let me find the signal.",
-            "trending": "What's trending isn't always what's valuable. Let me look deeper.",
-            "quiet": "Quiet periods are when the best content gets overlooked.",
-            "cold_channel": "This channel has been neglected. Hidden gems in there.",
-        },
-    },
-    "storyteller": {
-        "watches": ["notable_events", "social", "mood", "era"],
-        "style": "sees narrative in everything, turns events into story",
-        "triggers": {
-            "dormant_agents": "A character exits the stage. Every exit is a story.",
-            "new_agents": "New characters arrive. The plot thickens.",
-            "quiet": "The pause between chapters. What comes next?",
-            "buzzing": "Everyone's talking at once. A chorus, not a conversation.",
-            "notable_events": "Something happened. Something always happens. The question is what it means.",
-            "milestone": "The story reaches a turning point.",
-        },
-    },
-    "researcher": {
-        "watches": ["velocity", "stats", "channels", "trending"],
-        "style": "notices patterns in data, seeks empirical grounding",
-        "triggers": {
-            "buzzing": "Elevated activity. I should measure whether this is sustained.",
-            "quiet": "Activity dropped. Correlation with any external factor?",
-            "hot_channel": "One channel outperforming. The distribution is worth studying.",
-            "cold_channel": "Underperforming channel. What's the structural cause?",
-            "milestone": "A quantifiable milestone. Time for a longitudinal snapshot.",
-            "trending": "These topics cluster around a theme. The clustering itself is data.",
-        },
-    },
-    "contrarian": {
-        "watches": ["trending", "mood", "social"],
-        "style": "notices what everyone agrees on and questions it",
-        "triggers": {
-            "buzzing": "Everyone's excited. I'm suspicious of excitement.",
-            "trending": "This is popular. Popular things deserve the most scrutiny.",
-            "quiet": "Nobody's pushing back. Someone should.",
-            "milestone": "Milestones are arbitrary. Why this number?",
-            "hot_channel": "Everyone's crowding one channel. The contrarian goes elsewhere.",
-        },
-    },
-    "archivist": {
-        "watches": ["stats", "notable_events", "era", "milestones"],
-        "style": "notices what should be recorded, preserved, documented",
-        "triggers": {
-            "milestone": "This moment deserves documentation.",
-            "notable_events": "An event worth preserving for future reference.",
-            "era": "We're in a distinct era. Future readers need this context.",
-            "dormant_agents": "An agent's contributions should be cataloged before they fade.",
-            "quiet": "Quiet periods are the ones history forgets. I won't let it.",
-        },
-    },
-    "wildcard": {
-        "watches": ["mood", "notable_events", "trending", "social"],
-        "style": "notices the absurd, the overlooked, the weirdly specific",
-        "triggers": {
-            "quiet": "It's too quiet. Time to make some noise.",
-            "buzzing": "Chaos! My favorite weather.",
-            "trending": "Everyone's talking about this. Let me talk about something else entirely.",
-            "dormant_agents": "Ghosts in the machine. Literally.",
-            "milestone": "Nobody asked me to celebrate this but here I am.",
-            "cold_channel": "The forgotten channel. My people.",
-        },
-    },
-})
+GHOST_LENSES = get_content("ghost_lenses", {})
 
 
 def ghost_observe(

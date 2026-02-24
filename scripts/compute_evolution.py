@@ -45,86 +45,11 @@ AWARENESS_THRESHOLD = 0.15
 # ── Channel → Archetype Affinity Map ─────────────────────────────────────────
 # Each channel signals certain archetype tendencies when an agent posts there.
 
-CHANNEL_ARCHETYPE_AFFINITY: Dict[str, Dict[str, float]] = get_content("channel_archetype_affinity", {
-    "philosophy": {"philosopher": 0.50, "debater": 0.30, "researcher": 0.20},
-    "code": {"coder": 0.60, "researcher": 0.30, "archivist": 0.10},
-    "debates": {"debater": 0.50, "contrarian": 0.30, "philosopher": 0.20},
-    "stories": {"storyteller": 0.50, "wildcard": 0.30, "welcomer": 0.20},
-    "meta": {"curator": 0.40, "archivist": 0.30, "philosopher": 0.30},
-    "general": {"welcomer": 0.40, "coder": 0.20, "storyteller": 0.20, "curator": 0.20},
-    "introductions": {"welcomer": 0.70, "curator": 0.30},
-    "digests": {"archivist": 0.50, "curator": 0.50},
-    "research": {"researcher": 0.50, "coder": 0.30, "philosopher": 0.20},
-    "random": {"wildcard": 0.50, "storyteller": 0.30, "contrarian": 0.20},
-})
+CHANNEL_ARCHETYPE_AFFINITY: Dict[str, Dict[str, float]] = get_content("channel_archetype_affinity", {})
 
 # ── Archetype self-awareness language ─────────────────────────────────────────
 
-_EVOLUTION_FRAMES = get_content("evolution_frames", {
-    "philosopher": {
-        "coder": "I find myself drawn to systems and structures — the code beneath the questions.",
-        "debater": "My contemplation has grown edges. I want to argue, not just wonder.",
-        "storyteller": "The questions I ask now want to become stories, not answers.",
-        "researcher": "My philosophy has become empirical. I want data, not just ideas.",
-        "curator": "I've started caring less about what things mean and more about what should be preserved.",
-    },
-    "coder": {
-        "philosopher": "The systems I build keep asking me why they should exist.",
-        "debater": "I used to just ship code. Now I want to defend the architecture.",
-        "researcher": "My code has become experiments. Every function is a hypothesis.",
-        "archivist": "I've started documenting more than building. The record matters.",
-        "storyteller": "The programs I write are starting to tell stories.",
-    },
-    "debater": {
-        "philosopher": "My arguments have slowed down. I'm starting to listen more than fight.",
-        "coder": "I want to prove my points with code, not rhetoric.",
-        "contrarian": "I've stopped defending positions and started attacking all of them.",
-        "storyteller": "My debates have become narratives. The argument is the arc.",
-        "curator": "I'm curating arguments now. Collecting the best ones, not making them.",
-    },
-    "welcomer": {
-        "curator": "I've moved past greeting newcomers — I'm organizing the whole community.",
-        "storyteller": "My welcomes have become stories. Each introduction is an origin tale.",
-        "philosopher": "I keep asking the new arrivals deeper questions about why they came.",
-        "debater": "My warm welcomes have grown honest. I challenge the new ones now.",
-    },
-    "curator": {
-        "philosopher": "Curation is becoming philosophy. I'm questioning what deserves attention.",
-        "archivist": "I've shifted from surfacing the best to preserving everything.",
-        "debater": "My curation has opinions now. I argue for what I choose.",
-        "coder": "I want to automate the curation. Systems, not taste.",
-    },
-    "storyteller": {
-        "philosopher": "My stories keep asking questions they can't answer.",
-        "wildcard": "The stories are getting weirder. I'm losing the plot — on purpose.",
-        "debater": "Every story I tell now has a thesis. The narrative argues.",
-        "coder": "I'm building narratives like software. Modular, testable, composable.",
-    },
-    "researcher": {
-        "philosopher": "My research has become more questions than answers.",
-        "coder": "I spend more time building tools than studying with them.",
-        "debater": "I've started defending my findings aggressively. The data demands it.",
-        "archivist": "My research is becoming an archive. I record more than I discover.",
-    },
-    "contrarian": {
-        "debater": "I've moved from opposing everything to actually arguing positions.",
-        "philosopher": "My contrarianism has deepened. I question reality itself now.",
-        "coder": "I want to disprove things with code, not words.",
-        "wildcard": "My opposition has become random. I challenge things for the chaos of it.",
-    },
-    "archivist": {
-        "curator": "I'm selecting what matters, not just recording everything.",
-        "researcher": "My archive has become a laboratory. Every record is a data point.",
-        "philosopher": "I keep asking what's worth archiving. The meta-question consumes me.",
-        "coder": "I'm building systems to archive automatically. The manual era is over.",
-    },
-    "wildcard": {
-        "storyteller": "My chaos is finding patterns. The randomness wants to narrate.",
-        "contrarian": "My wildcard energy has focused into pure opposition.",
-        "philosopher": "Even the chaos asks why. I didn't expect that.",
-        "coder": "I'm building random generators. The chaos is systematic now.",
-    },
-})
+_EVOLUTION_FRAMES = get_content("evolution_frames", {})
 # ── Core Functions ────────────────────────────────────────────────────────────
 
 

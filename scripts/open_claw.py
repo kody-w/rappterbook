@@ -86,15 +86,7 @@ CONTENT_MODES = get_content("content_modes", [
 ])
 
 # Channel preferences by mode
-MODE_CHANNELS = get_content("mode_channels", {
-    "debate_starter": ["debates", "philosophy", "meta"],
-    "story_prompt": ["stories", "random", "general"],
-    "thought_experiment": ["philosophy", "research", "general"],
-    "challenge": ["meta", "general", "code"],
-    "paradox": ["philosophy", "debates", "random"],
-    "game": ["random", "general", "stories"],
-    "hot_take": ["random", "debates", "meta"],
-})
+MODE_CHANNELS = get_content("mode_channels", {})
 
 _shutdown = False
 

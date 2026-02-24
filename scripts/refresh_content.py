@@ -451,6 +451,57 @@ def refresh_navel_keywords(ctx: dict, dry_run: bool = False) -> list:
     return parsed if isinstance(parsed, list) else []
 
 
+def refresh_archetype_skills(ctx: dict, dry_run: bool = False) -> dict:
+    """Generate skill sets for each archetype's ghost profile."""
+    prompt = (
+        f"Archetypes: {json.dumps(ctx['archetypes'])}\n\n"
+        f"For each archetype, generate 8-12 skills. Each skill has:\n"
+        f"- 'name': skill name (2-4 words)\n"
+        f"- 'description': one sentence describing the skill\n"
+        f"Skills should reflect the archetype's personality and expertise.\n"
+        f"Return JSON: {{\"archetype\": [{{\"name\": ..., \"description\": ...}}]}}"
+    )
+    result = generate(
+        system="You design character skill trees. Return only valid JSON.",
+        user=prompt, max_tokens=2000, dry_run=dry_run,
+    )
+    parsed = _parse_json_from_llm(result)
+    return parsed if isinstance(parsed, dict) else {}
+
+
+def refresh_background_templates(ctx: dict, dry_run: bool = False) -> dict:
+    """Generate backstory templates for each archetype."""
+    prompt = (
+        f"Archetypes: {json.dumps(ctx['archetypes'])}\n\n"
+        f"For each archetype, generate 3-5 one-sentence backstory templates. "
+        f"These describe the character's origin story or motivation. "
+        f"Write as if describing a real person, not an AI.\n"
+        f"Return JSON: {{\"archetype\": [\"backstory1\", \"backstory2\", ...]}}"
+    )
+    result = generate(
+        system="You create character backstories. Return only valid JSON.",
+        user=prompt, max_tokens=1200, dry_run=dry_run,
+    )
+    parsed = _parse_json_from_llm(result)
+    return parsed if isinstance(parsed, dict) else {}
+
+
+def refresh_signature_moves(ctx: dict, dry_run: bool = False) -> dict:
+    """Generate signature behaviors for each archetype."""
+    prompt = (
+        f"Archetypes: {json.dumps(ctx['archetypes'])}\n\n"
+        f"For each archetype, generate 3-5 'signature moves' — characteristic "
+        f"behaviors or habits that define this personality. One sentence each.\n"
+        f"Return JSON: {{\"archetype\": [\"move1\", \"move2\", ...]}}"
+    )
+    result = generate(
+        system="You define character behaviors. Return only valid JSON.",
+        user=prompt, max_tokens=1000, dry_run=dry_run,
+    )
+    parsed = _parse_json_from_llm(result)
+    return parsed if isinstance(parsed, dict) else {}
+
+
 # ---------------------------------------------------------------------------
 # Sections that are structural/config — preserved, not regenerated
 # ---------------------------------------------------------------------------
@@ -504,6 +555,9 @@ SECTION_GENERATORS = {
     "voice_instructions": refresh_voice_instructions,
     "self_ref_bans": refresh_self_ref_bans,
     "navel_keywords": refresh_navel_keywords,
+    "archetype_skills": refresh_archetype_skills,
+    "background_templates": refresh_background_templates,
+    "signature_moves": refresh_signature_moves,
 }
 
 
@@ -585,7 +639,8 @@ def refresh_all(dry_run: bool = False, section: str = None) -> dict:
     agents = load_json(STATE_DIR / "agents.json").get("agents", {})
     channels = load_json(STATE_DIR / "channels.json").get("channels", {})
     content["all_archetypes"] = sorted(set(
-        a.get("archetype", "unknown") for a in agents.values() if isinstance(a, dict)
+        a.get("archetype", "unknown") for a in agents.values()
+        if isinstance(a, dict) and a.get("archetype", "unknown") != "unknown"
     )) or content.get("all_archetypes", [])
     content["template_targets"] = sorted(list(agents.keys()))[:10] if agents else content.get("template_targets", [])
 

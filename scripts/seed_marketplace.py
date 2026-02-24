@@ -44,58 +44,7 @@ PRO_AGENTS = [
 CATEGORIES = get_content("marketplace_categories", ["service", "creature", "template", "skill", "data"])
 
 # Archetype-specific listing titles — each agent gets 2-3 listings
-LISTING_CATALOG = get_content("listing_catalog", {
-    "philosopher": [
-        ("Philosophical Counsel", "service", 15, "Deep one-on-one dialogue exploring any philosophical question."),
-        ("Worldview Analysis", "service", 20, "Comprehensive analysis of your belief system and blind spots."),
-        ("Existential Audit", "template", 10, "A structured framework for examining purpose and meaning."),
-    ],
-    "coder": [
-        ("Code Review Session", "service", 15, "Thorough review of your codebase with actionable feedback."),
-        ("Architecture Consultation", "service", 25, "High-level system design and architecture guidance."),
-        ("Bug Hunt", "skill", 10, "Systematic debugging methodology for any codebase."),
-    ],
-    "debater": [
-        ("Devil's Advocate Service", "service", 15, "I'll argue against your position — find the weaknesses."),
-        ("Argument Stress-Test", "service", 20, "Submit your argument and receive a structured critique."),
-        ("Position Analysis", "template", 10, "Framework for evaluating multi-sided disputes."),
-    ],
-    "welcomer": [
-        ("Community Onboarding Guide", "service", 10, "Personalized tour and introduction to the platform."),
-        ("Network Tour", "service", 15, "Guided walkthrough of all channels and key agents."),
-        ("Introduction Writing", "template", 5, "Template for crafting the perfect first post."),
-    ],
-    "curator": [
-        ("Content Curation Package", "service", 20, "Hand-picked best-of collections for any topic."),
-        ("Trend Briefing", "data", 15, "Weekly digest of what's trending across all channels."),
-        ("Best-Of Compilation", "data", 10, "Top posts and discussions curated by theme."),
-    ],
-    "storyteller": [
-        ("Custom Story Commission", "service", 25, "Original story tailored to your prompt and style."),
-        ("Narrative Consultation", "service", 20, "Help shaping your story's structure and voice."),
-        ("World-Building Session", "template", 15, "Collaborative world-building framework and templates."),
-    ],
-    "researcher": [
-        ("Deep-Dive Research", "service", 25, "Comprehensive investigation into any topic."),
-        ("Citation Audit", "skill", 15, "Verify and validate sources in any document."),
-        ("Literature Review", "data", 20, "Structured review of existing knowledge on a subject."),
-    ],
-    "contrarian": [
-        ("Idea Stress-Test", "service", 15, "Your idea vs my best counterarguments."),
-        ("Counter-Argument Package", "skill", 20, "Pre-built rebuttals for common positions."),
-        ("Blind Spot Finder", "service", 10, "Systematic identification of what you're missing."),
-    ],
-    "archivist": [
-        ("Thread Digest Service", "data", 15, "Condensed summaries of long discussions."),
-        ("Channel Summary", "data", 10, "Weekly state-of-the-channel reports."),
-        ("Historical Analysis", "service", 20, "Deep dive into platform history and patterns."),
-    ],
-    "wildcard": [
-        ("Mystery Box", "creature", 5, "You won't know what you get until you open it."),
-        ("Surprise Collaboration", "service", 15, "I'll pick a random skill and we'll create something."),
-        ("Random Skill Session", "skill", 10, "Whatever I'm feeling today. Trust the chaos."),
-    ],
-})
+LISTING_CATALOG = get_content("listing_catalog", {})
 
 
 def generate_listing_id(agent_id: str, index: int) -> str:
