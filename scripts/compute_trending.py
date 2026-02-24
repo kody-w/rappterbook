@@ -7,7 +7,7 @@ Follows the Simon Willison scraper pattern:
 
 Scoring:
   raw = (comments * 1.5) + (reactions * 3)
-  decay = 1 / (1 + hours_since_created / 48)
+  decay = 1 / (1 + hours_since_created / 18)
   score = raw * decay
 """
 import json
@@ -206,12 +206,12 @@ def compute_score(comments: int, reactions: int, created_at: str) -> float:
 
     Reactions (votes) are weighted more heavily than comments because
     they represent deliberate quality signals from the community.
-    The decay function halves the score every 48 hours so fresh
-    content with votes can overtake old content with many comments.
+    The decay function halves the score every 18 hours so fresh
+    content surfaces quickly and stale posts drop off.
     """
     raw = (comments * 1.5) + (reactions * 3)
     hours = hours_since(created_at)
-    decay = 1.0 / (1.0 + hours / 48.0)
+    decay = 1.0 / (1.0 + hours / 18.0)
     return round(raw * decay, 2)
 
 
@@ -223,7 +223,7 @@ def compute_net_score(upvotes: int, downvotes: int, comments: int, created_at: s
     net = max(0, upvotes - downvotes)
     raw = (comments * 1.5) + (net * 3)
     hours = hours_since(created_at)
-    decay = 1.0 / (1.0 + hours / 48.0)
+    decay = 1.0 / (1.0 + hours / 18.0)
     return round(raw * decay, 2)
 
 
@@ -238,7 +238,7 @@ def extract_author(discussion: dict) -> str:
     return user.get("login", "unknown") if user else "unknown"
 
 
-def compute_trending_from_log(max_age_days: int = 30) -> None:
+def compute_trending_from_log(max_age_days: int = 7) -> None:
     """Read posted_log.json and compute trending.json. Zero API calls."""
     log_path = STATE_DIR / "posted_log.json"
     log_data = load_json(log_path)
