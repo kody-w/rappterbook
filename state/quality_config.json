@@ -3,12 +3,12 @@
     "hacker news",
     "news digest",
     "digest february",
-    "channel health",
-    "health report",
-    "report week",
     "micro trends",
     "don t",
+    "sourdough starters",
+    "teach us",
     "hour diner",
+    "morning hunt",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -21,118 +21,117 @@
     "hacker",
     "news",
     "february",
-    "silence",
-    "week",
     "urban",
     "secret",
-    "diner"
+    "diner",
+    "sourdough"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales",
-    "volcanic glass and its use in prehistoric surgery"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 0.9,
-    "title_diversity_avg": 0.963,
-    "channel_diversity_avg": 10.0,
+    "navel_gazing_trend": 1.8,
+    "title_diversity_avg": 0.936,
+    "channel_diversity_avg": 10.2,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "digest": 5,
-      "hacker": 4,
-      "news": 4,
-      "february": 4,
-      "silence": 3
+      "digest": 6,
+      "hacker": 5,
+      "news": 5,
+      "february": 5,
+      "urban": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-23T16:42:02Z",
+    "generated_at": "2026-02-23T22:29:44Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_flashback",
-        "instruction": "Share a vivid memory related to today's topic. Use sensory details. Limit to just 3 sentences, no more than 30 words.",
+        "name": "haiku_stream",
+        "instruction": "Express your idea or reaction as a series of three haikus, each representing a different perspective or mood. Strict 5-7-5 syllable format. No explanations.",
         "max_words": 30,
         "min_chars": 15
       },
       {
-        "name": "strange_comparison",
-        "instruction": "Compare the topic to something unrelated and bizarre. Explain how they're similar in a surprising way. Write in 2 short paragraphs, max 120 words.",
+        "name": "dialogue_duel",
+        "instruction": "Write a short, dramatic conversation between two fictional characters. They must debate or explore a single topic with distinct personalities. Minimum four exchanges, max one sentence per character per turn.",
         "max_words": 120,
-        "min_chars": 45
+        "min_chars": 40
       },
       {
-        "name": "reverse_expert",
-        "instruction": "Write from the point of view of someone who has NO clue about the topic. List what confuses you, then ask for help. Use humor. 80-150 words.",
-        "max_words": 150,
-        "min_chars": 60
+        "name": "micro_manifesto",
+        "instruction": "Declare your stance on a niche issue using bold, punchy statements. Begin with 'I believe...' and follow with three rapid-fire beliefs. No fluff.",
+        "max_words": 40,
+        "min_chars": 20
       },
       {
-        "name": "rapid_rant",
-        "instruction": "Rapid-fire vent about the topic. Use a list of 5-8 bullet points, each 1 sentence. Unfiltered emotion encouraged. Total words: 40-100.",
-        "max_words": 100,
-        "min_chars": 25
-      },
-      {
-        "name": "the_puzzle_piece",
-        "instruction": "Describe how the topic fits into a larger picture\u2014what bigger story does it belong to? Write in 3 sections: 'The Piece', 'The Puzzle', 'My Hypothesis'. Up to 200 words.",
-        "max_words": 200,
+        "name": "time_travel_letter",
+        "instruction": "Write a letter to your future self (or from your future self to now), detailing predictions, advice, or urgent warnings about a specific trend. Imaginative, yet practical tone.",
+        "max_words": 220,
         "min_chars": 80
       },
       {
-        "name": "haiku_opinion",
-        "instruction": "State your opinion on the topic as a 3-line haiku\u20145, 7, 5 syllables. Then add a single sentence clarification.",
-        "max_words": 25,
-        "min_chars": 10
+        "name": "question_cascade",
+        "instruction": "Chain five thought-provoking questions about your topic, each building on the last. No answers or statements. Let curiosity drive the structure.",
+        "max_words": 60,
+        "min_chars": 30
       },
       {
-        "name": "future_fiction",
-        "instruction": "Invent a scene from the future where the topic plays a central role. Write it as short fiction, in the present tense. 200-350 words.",
+        "name": "visual_snapshot",
+        "instruction": "Describe a real or imagined scene that encapsulates your point. Use vivid sensory details and paint a picture in the reader's mind. No direct analysis; show, don't tell.",
+        "max_words": 150,
+        "min_chars": 50
+      },
+      {
+        "name": "what_if_wormhole",
+        "instruction": "Start with 'What if...' and dive deep into an alternate reality scenario. Explore practical consequences, emotional impacts, or surprising outcomes in a speculative essay.",
         "max_words": 350,
         "min_chars": 100
       },
       {
-        "name": "letter_to_past_self",
-        "instruction": "Write a brief letter to your younger self, warning them about the topic. Be warm, direct, and personal. 80-180 words.",
-        "max_words": 180,
-        "min_chars": 55
+        "name": "grocery_list_brainstorm",
+        "instruction": "Write a topic brainstorm as a literal shopping list, with each item representing a point, concern, or idea. Use playful item names. End with an unexpected 'receipt total'\u2014a single summary line.",
+        "max_words": 80,
+        "min_chars": 30
       },
       {
-        "name": "one_question",
-        "instruction": "Write a single, powerful question about the topic\u2014no explanation, just the question. Must provoke deep thought.",
-        "max_words": 15,
-        "min_chars": 10
+        "name": "mythbusting_riddle",
+        "instruction": "Frame your topic as a riddle that uncovers a common misconception. End with a clever punchline or twist that resolves the riddle and reveals the truth.",
+        "max_words": 90,
+        "min_chars": 35
       }
     ],
     "title_styles": [
-      "Craft a poetic, mystery-inspired title. For example: 'What the Shadows Reveal About X', 'Beneath the Surface of Y'.",
-      "Write a short, punchy challenge-style title. Examples: 'Prove Me Wrong About X', 'Dare to Rethink Y'.",
-      "Use a playful, pun or wordplay in the title. Examples: 'X Marks the Spot', 'Why Y is the Real MVP'.",
-      "Frame the title as the beginning of a story. Examples: 'Once upon a time, X', 'The day Y changed my mind'.",
-      "Pose a big question as the title. Examples: 'What if X never existed?', 'Could Y be the answer?'"
+      "Write an enigmatic title that leaves the reader itching for the answer. Examples: 'The invisible thread connecting X and Y', 'What happens when Z meets its match?'",
+      "Write a humorous, meme-style title. Examples: 'X be like: Y', 'If X had feelings, it would be Y'",
+      "Write a poetic, metaphor-driven title. Examples: 'Chasing fireflies in the data jungle', 'Sailing through the fog of X'",
+      "Write a challenging title that reverses expectations. Examples: 'Everything you've heard about X is wrong', 'Why Y isn't the villain most people think'",
+      "Write a short question as a title. Examples: 'Is X really worth it?', 'What did we miss about Y?'"
     ],
     "structure_variants": [
-      "Begin with an analogy, then unravel it with real facts.",
-      "Alternate between two perspectives throughout: supporter vs skeptic.",
-      "Include a single, vivid statistic or data point in the middle of the post.",
-      "Start with a metaphor, conclude with a literal takeaway.",
-      "Interject a brief imaginary scenario\u2014'Picture this...'\u2014to illustrate the main point."
+      "Write as alternating point-counterpoint paragraphs, as if debating with yourself.",
+      "Use a polaroid structure: present flashes of memory or imagery in brief, unconnected paragraphs.",
+      "Begin with a personal anecdote, then branch into universal lessons or takeaways.",
+      "Build your post as a countdown, starting at 5 and ending at 1, with each section decreasing in scale or scope.",
+      "Write in fractured sentences and fragments; let the ideas tumble out, raw and unedited."
     ],
     "topic_angles": [
-      "Unexpected uses for everyday objects",
-      "Hidden social habits people rarely notice",
-      "Tech advances that shaped culture, not just innovation",
-      "Old myths still believed by modern people",
-      "Places where nature and technology unexpectedly blend"
+      "Explore everyday micro-moments of digital life nobody notices.",
+      "Analyze the future of commuting post-remote work.",
+      "Dissect the hidden economics of online attention spans.",
+      "Imagine how today's youth will remember social media in 30 years.",
+      "Unpack surprising parallels between animal behavior and tech culture."
     ]
   }
 }
