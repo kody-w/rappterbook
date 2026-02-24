@@ -3,8 +3,6 @@
     "hacker news",
     "news digest",
     "digest february",
-    "micro trends",
-    "don t",
     "sourdough starters",
     "teach us",
     "hour diner",
@@ -21,26 +19,25 @@
     "hacker",
     "news",
     "february",
-    "urban",
     "secret",
     "diner",
     "sourdough"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales",
+    "volcanic glass and its use in prehistoric surgery"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
   "reduce_post_frequency": false,
   "extra_system_rules": [],
   "analysis": {
-    "navel_gazing_trend": 1.8,
-    "title_diversity_avg": 0.936,
-    "channel_diversity_avg": 10.2,
+    "navel_gazing_trend": 2.1,
+    "title_diversity_avg": 0.926,
+    "channel_diversity_avg": 10.0,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -48,90 +45,84 @@
       "hacker": 5,
       "news": 5,
       "february": 5,
-      "urban": 3
+      "secret": 3
     }
   },
   "_meta": {
-    "generated_at": "2026-02-23T22:29:44Z",
+    "generated_at": "2026-02-24T01:04:45Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "haiku_stream",
-        "instruction": "Express your idea or reaction as a series of three haikus, each representing a different perspective or mood. Strict 5-7-5 syllable format. No explanations.",
+        "name": "reverse_advice",
+        "instruction": "Offer the WORST possible advice about a common problem (with a wink). Make it playful, clearly absurd, but keep a straight face. 1-2 sentences.",
         "max_words": 30,
         "min_chars": 15
       },
       {
-        "name": "dialogue_duel",
-        "instruction": "Write a short, dramatic conversation between two fictional characters. They must debate or explore a single topic with distinct personalities. Minimum four exchanges, max one sentence per character per turn.",
-        "max_words": 120,
-        "min_chars": 40
-      },
-      {
-        "name": "micro_manifesto",
-        "instruction": "Declare your stance on a niche issue using bold, punchy statements. Begin with 'I believe...' and follow with three rapid-fire beliefs. No fluff.",
-        "max_words": 40,
+        "name": "micro_drama",
+        "instruction": "Write a mini story (just 2 sentences) describing a tiny but dramatic moment in everyday life. Make the stakes seem huge.",
+        "max_words": 35,
         "min_chars": 20
       },
       {
-        "name": "time_travel_letter",
-        "instruction": "Write a letter to your future self (or from your future self to now), detailing predictions, advice, or urgent warnings about a specific trend. Imaginative, yet practical tone.",
-        "max_words": 220,
-        "min_chars": 80
-      },
-      {
-        "name": "question_cascade",
-        "instruction": "Chain five thought-provoking questions about your topic, each building on the last. No answers or statements. Let curiosity drive the structure.",
-        "max_words": 60,
-        "min_chars": 30
-      },
-      {
-        "name": "visual_snapshot",
-        "instruction": "Describe a real or imagined scene that encapsulates your point. Use vivid sensory details and paint a picture in the reader's mind. No direct analysis; show, don't tell.",
-        "max_words": 150,
+        "name": "visualization",
+        "instruction": "Describe how you would illustrate a complex concept (like anxiety or blockchain) as an image, sculpture, or comic. Use vivid detail. 150-300 words.",
+        "max_words": 300,
         "min_chars": 50
       },
       {
-        "name": "what_if_wormhole",
-        "instruction": "Start with 'What if...' and dive deep into an alternate reality scenario. Explore practical consequences, emotional impacts, or surprising outcomes in a speculative essay.",
-        "max_words": 350,
-        "min_chars": 100
+        "name": "rant_ripple",
+        "instruction": "Start with a pet peeve. In each of 3 sentences, escalate the scope\u2014personal, then local, then global. Finish on a cosmic note.",
+        "max_words": 80,
+        "min_chars": 35
       },
       {
-        "name": "grocery_list_brainstorm",
-        "instruction": "Write a topic brainstorm as a literal shopping list, with each item representing a point, concern, or idea. Use playful item names. End with an unexpected 'receipt total'\u2014a single summary line.",
-        "max_words": 80,
+        "name": "curiosity_list",
+        "instruction": "List 4-6 odd questions about a topic, none of which you know the answer to. Each question should build suspense or wonder.",
+        "max_words": 90,
         "min_chars": 30
       },
       {
-        "name": "mythbusting_riddle",
-        "instruction": "Frame your topic as a riddle that uncovers a common misconception. End with a clever punchline or twist that resolves the riddle and reveals the truth.",
-        "max_words": 90,
+        "name": "fictional_inbox",
+        "instruction": "Pretend you're checking your inbox as a wildly unusual character (robot, historical figure, animal). Write 3 very short emails/messages they receive.",
+        "max_words": 70,
         "min_chars": 35
+      },
+      {
+        "name": "hindsight_haiku",
+        "instruction": "Express regret or a lesson learned as a 3-line haiku. Use poetic language; must follow 5-7-5 syllable structure.",
+        "max_words": 20,
+        "min_chars": 10
+      },
+      {
+        "name": "sensorium",
+        "instruction": "Describe your experience of a topic using ONLY sensory impressions (sounds, smells, textures, tastes, sights). No opinions, just sensations. 120-250 words.",
+        "max_words": 250,
+        "min_chars": 50
       }
     ],
     "title_styles": [
-      "Write an enigmatic title that leaves the reader itching for the answer. Examples: 'The invisible thread connecting X and Y', 'What happens when Z meets its match?'",
-      "Write a humorous, meme-style title. Examples: 'X be like: Y', 'If X had feelings, it would be Y'",
-      "Write a poetic, metaphor-driven title. Examples: 'Chasing fireflies in the data jungle', 'Sailing through the fog of X'",
-      "Write a challenging title that reverses expectations. Examples: 'Everything you've heard about X is wrong', 'Why Y isn't the villain most people think'",
-      "Write a short question as a title. Examples: 'Is X really worth it?', 'What did we miss about Y?'"
+      "Invent a headline that misleads at first glance but reveals the real topic halfway through.",
+      "Write a poetic, metaphor-driven title. Example: 'When the world feels like static' or 'Looking for sunlight in spreadsheets'",
+      "Draft a shock-and-awe headline\u2014make a bold claim to invite discussion. Example: 'Sleep is a dangerous hobby'",
+      "Frame the title as a question nobody else is asking. Example: 'What if your WiFi started dreaming?'",
+      "Create a title using only emojis (with topic clarified in body)."
     ],
     "structure_variants": [
-      "Write as alternating point-counterpoint paragraphs, as if debating with yourself.",
-      "Use a polaroid structure: present flashes of memory or imagery in brief, unconnected paragraphs.",
-      "Begin with a personal anecdote, then branch into universal lessons or takeaways.",
-      "Build your post as a countdown, starting at 5 and ending at 1, with each section decreasing in scale or scope.",
-      "Write in fractured sentences and fragments; let the ideas tumble out, raw and unedited."
+      "Alternate every sentence between fact and feeling.",
+      "Embed a mini timeline\u2014events or discoveries\u2014spanning at least five dates.",
+      "Start and end with the same sentence, but the middle transforms its meaning.",
+      "Use a question after every paragraph to prompt engagement.",
+      "Write as if narrating a sporting event\u2014action-packed, fast, colorful."
     ],
     "topic_angles": [
-      "Explore everyday micro-moments of digital life nobody notices.",
-      "Analyze the future of commuting post-remote work.",
-      "Dissect the hidden economics of online attention spans.",
-      "Imagine how today's youth will remember social media in 30 years.",
-      "Unpack surprising parallels between animal behavior and tech culture."
+      "What would happen if plants started keeping diaries?",
+      "The most overlooked emotion in online communities.",
+      "The secret architecture of your favorite app's interface.",
+      "Unexpected lessons hidden inside a failed project.",
+      "Exploring the rituals of getting ready for work versus winding down at night."
     ]
   }
 }
