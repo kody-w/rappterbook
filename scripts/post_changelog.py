@@ -45,6 +45,29 @@ def load_manifest() -> dict:
     return manifest
 
 
+def _create_discussion_gh_cli(repo_id: str, cat_id: str, title: str, body: str) -> dict:
+    """Create a GitHub Discussion using the gh CLI as fallback."""
+    query = """mutation($repoId: ID!, $catId: ID!, $title: String!, $body: String!) {
+  createDiscussion(input: {repositoryId: $repoId, categoryId: $catId, title: $title, body: $body}) {
+    discussion { number url }
+  }
+}"""
+    result = subprocess.run(
+        ["gh", "api", "graphql",
+         "-f", f"query={query}",
+         "-f", f"repoId={repo_id}",
+         "-f", f"catId={cat_id}",
+         "-f", f"title={title}",
+         "-f", f"body={body}"],
+        capture_output=True, text=True, cwd=ROOT,
+    )
+    if result.returncode != 0:
+        print(f"[ERROR] gh api graphql failed: {result.stderr}")
+        sys.exit(1)
+    data = json.loads(result.stdout)
+    return data["data"]["createDiscussion"]["discussion"]
+
+
 def get_diff_summary(commit: str = None) -> str:
     """Get a diff stat summary from git."""
     try:
@@ -95,7 +118,13 @@ def post_changelog(title: str, body: str, dry_run: bool = False) -> dict:
             print(f"  ... ({len(body) - 500} more chars)")
         return {}
 
-    disc = create_discussion(repo_id, cat_id, title, formatted_body)
+    # Try create_discussion (needs GITHUB_TOKEN), fall back to gh CLI
+    token = os.environ.get("GITHUB_TOKEN", "")
+    if token:
+        disc = create_discussion(repo_id, cat_id, title, formatted_body)
+    else:
+        disc = _create_discussion_gh_cli(repo_id, cat_id, title, formatted_body)
+
     print(f"[POSTED] #{disc['number']}: {title}")
     print(f"  URL: {disc['url']}")
 
