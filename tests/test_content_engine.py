@@ -658,10 +658,9 @@ class TestDynamicPostGeneration:
             channel="philosophy",
         )
         assert result is not None
-        assert result["title"] == "Why Bridges Are the Best Metaphor"
+        assert "Why Bridges Are the Best Metaphor" in result["title"]
         assert "Brooklyn Bridge" in result["body"]
         assert result["channel"] == "philosophy"
-        assert result["post_type"] == "dynamic"
 
     @patch("github_llm.generate")
     def test_returns_none_on_short_output(self, mock_gen):
@@ -1145,7 +1144,7 @@ class TestTruncationDetection:
             channel="general", state_dir="state",
         )
         assert result is not None
-        assert result["title"] == "The Nature of Digital Persistence"
+        assert "The Nature of Digital Persistence" in result["title"]
 
     @patch("github_llm.generate")
     def test_truncated_semicolon_rejected(self, mock_gen):

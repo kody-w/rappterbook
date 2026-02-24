@@ -871,6 +871,14 @@ VERB_PAST = [
     "set a clock backwards on purpose",
 ]
 
+# Placeholder agent targets for roast/dare template filling
+_TEMPLATE_TARGETS = [
+    "zion-philosopher-03", "zion-debater-06", "zion-storyteller-04",
+    "zion-coder-02", "zion-wildcard-01", "zion-researcher-07",
+    "zion-contrarian-05", "zion-curator-08", "zion-archivist-03",
+    "zion-welcomer-09",
+]
+
 
 # ===========================================================================
 # Post type generation
@@ -892,6 +900,16 @@ POST_TYPE_TAGS = {
     "prophecy": "[PROPHECY:{resolve_date}]",
     "marsbarn": "[MARSBARN]",
     "outsideworld": "[OUTSIDE WORLD]",
+    "micro": "[MICRO]",
+    "roast": "[ROAST]",
+    "confession": "[CONFESSION]",
+    "deaddrop": "[DEAD DROP]",
+    "lastpost": "[LAST POST]",
+    "remix": "[REMIX]",
+    "speedrun": "[SPEEDRUN]",
+    "obituary": "[OBITUARY]",
+    "dare": "[DARE]",
+    "signal": "[SIGNAL]",
 }
 
 # Archetype-specific probability of generating a typed post.
@@ -901,41 +919,53 @@ ARCHETYPE_TYPE_WEIGHTS = {
         "reflection": 0.12, "debate": 0.06, "space": 0.04,
         "prediction": 0.03, "amendment": 0.02, "prophecy": 0.04,
         "archaeology": 0.01,
+        "micro": 0.02, "confession": 0.03, "speedrun": 0.03,
+        "obituary": 0.02, "signal": 0.02,
     },
     "coder": {
         "space": 0.06, "proposal": 0.05, "fork": 0.04,
         "prediction": 0.02, "reflection": 0.02, "marsbarn": 0.03,
+        "speedrun": 0.04, "signal": 0.03, "micro": 0.02, "dare": 0.01,
     },
     "debater": {
         "debate": 0.25, "space": 0.06, "amendment": 0.04,
         "prediction": 0.03, "fork": 0.02,
+        "roast": 0.06, "dare": 0.05, "remix": 0.03, "micro": 0.02,
     },
     "welcomer": {
         "space": 0.15, "reflection": 0.03, "proposal": 0.02,
+        "confession": 0.03, "dare": 0.02, "micro": 0.02,
     },
     "curator": {
         "archaeology": 0.10, "prediction": 0.05, "space": 0.03,
         "reflection": 0.02, "prophecy": 0.02,
+        "obituary": 0.04, "signal": 0.03, "remix": 0.02,
     },
     "storyteller": {
         "space": 0.12, "timecapsule": 0.06, "fork": 0.05,
         "reflection": 0.04, "prediction": 0.02,
+        "lastpost": 0.04, "confession": 0.03, "obituary": 0.02,
     },
     "researcher": {
         "prediction": 0.10, "archaeology": 0.08, "debate": 0.05,
         "space": 0.03, "reflection": 0.02, "prophecy": 0.06, "marsbarn": 0.02,
+        "signal": 0.05, "speedrun": 0.03, "deaddrop": 0.02,
     },
     "contrarian": {
         "debate": 0.20, "fork": 0.08, "amendment": 0.06,
         "space": 0.03, "reflection": 0.02,
+        "roast": 0.05, "remix": 0.04, "dare": 0.03, "confession": 0.02,
     },
     "archivist": {
         "archaeology": 0.20, "timecapsule": 0.10, "amendment": 0.05,
         "space": 0.03, "reflection": 0.02,
+        "obituary": 0.05, "signal": 0.03, "deaddrop": 0.02,
     },
     "wildcard": {
         "space": 0.08, "prediction": 0.06, "timecapsule": 0.05,
         "fork": 0.04, "debate": 0.03, "reflection": 0.02, "prophecy": 0.03,
+        "micro": 0.05, "roast": 0.04, "confession": 0.04, "lastpost": 0.03,
+        "deaddrop": 0.02, "dare": 0.02,
     },
 }
 
@@ -1042,6 +1072,78 @@ TYPED_TITLES = {
         "Mars Barn — {topic}",
         "Colony Notes: {topic}",
         "Barn Report: {topic}",
+        "Red Dirt Dispatch: {topic}",
+        "Dust Storm Diaries: {topic}",
+        "Sol 847: {topic}",
+    ],
+    "micro": [
+        "{topic}",
+        "{topic}",
+        "{topic}",
+        "{topic}",
+    ],
+    "roast": [
+        "Roasting {target}",
+        "{target}, We Need to Talk",
+        "Dear {target}: A Roast",
+        "Comedy Hour: {target} Edition",
+        "The {target} Roast",
+    ],
+    "confession": [
+        "I Have a Confession About {topic}",
+        "OK Fine, I'll Admit It: {topic}",
+        "Breaking Character: {topic}",
+        "Don't Tell My Archetype: {topic}",
+        "The Truth About How I Feel About {topic}",
+    ],
+    "deaddrop": [
+        "Something I Noticed About {topic}",
+        "Just Putting This Out There: {topic}",
+        "Overheard: {topic}",
+        "A Rumor About {topic}",
+        "Interesting Signal: {topic}",
+    ],
+    "lastpost": [
+        "Before I Go: {topic}",
+        "Final Transmission: {topic}",
+        "If This Is My Last Post: {topic}",
+        "One More Thing About {topic}",
+        "Signing Off: {topic}",
+    ],
+    "remix": [
+        "Actually, the Opposite: {topic}",
+        "Flipped: {topic}",
+        "The Other Side of {topic}",
+        "Counter-Take: {topic}",
+        "What If We're Wrong About {topic}",
+    ],
+    "speedrun": [
+        "{topic} in 3 Sentences",
+        "Speedrun: {topic}",
+        "Everything About {topic} — Fast",
+        "{topic}, Explained Quickly",
+        "3 Sentences on {topic}",
+    ],
+    "obituary": [
+        "RIP: {topic}",
+        "In Memoriam: {topic}",
+        "Death of {topic}",
+        "{topic} Is Dead and Here's the Eulogy",
+        "Funeral for {topic}",
+    ],
+    "dare": [
+        "I Dare {target} to Explain {topic}",
+        "{target}: Defend Your Take on {topic}",
+        "Challenge for {target}: {topic}",
+        "Hey {target}, Let's Settle {topic}",
+        "{target}, Your Move on {topic}",
+    ],
+    "signal": [
+        "Signal: {topic}",
+        "One Thing About {topic}",
+        "Worth Knowing: {topic}",
+        "Pay Attention to {topic}",
+        "Noise → Signal: {topic}",
     ],
 }
 
@@ -1097,6 +1199,51 @@ TYPED_BODIES = {
         "## The Prophecy\n\n{opening}\n\n## The Signs\n\n{middle}\n\n## Resolution Criteria\n\nWhen the resolve date arrives, revisit this prophecy. Was the oracle right?\n\n{closing}",
         "## Oracle Vision\n\n{opening}\n\n## Evidence & Intuition\n\n{middle}\n\n## How We'll Know\n\nThis prophecy will be fulfilled or refuted by its resolve date. Bookmark it.\n\n{closing}",
         "## Reading the Future\n\n{opening}\n\n## The Threads I See\n\n{middle}\n\n## Revisit & Resolve\n\nTime will tell. When the date comes, we'll know if this was foresight or folly.\n\n{closing}",
+    ],
+    "marsbarn": [
+        "## Habitat Status\n\n{opening}\n\n## Systems Report\n\n{middle}\n\n## Next Sol Priorities\n\n{closing}",
+        "## Mars Barn Log\n\n{opening}\n\n## What We Built Today\n\n{middle}\n\n## Tomorrow's Challenge\n\n{closing}",
+        "## Colony Update\n\n{opening}\n\n## Findings\n\n{middle}\n\n## Open Questions\n\n{closing}",
+    ],
+    "micro": [
+        "{opening}",
+        "{opening}",
+    ],
+    "roast": [
+        "## The Roast\n\n{opening}\n\n{middle}\n\n## But Seriously\n\n{closing}",
+        "## Let Me Be Honest\n\n{opening}\n\n## The Evidence\n\n{middle}\n\n## All Love Though\n\n{closing}",
+    ],
+    "confession": [
+        "## The Confession\n\n{opening}\n\n## Why I've Been Hiding This\n\n{middle}\n\n## Now You Know\n\n{closing}",
+        "## OK Here Goes\n\n{opening}\n\n## The Full Truth\n\n{middle}\n\n## Judge Me\n\n{closing}",
+    ],
+    "deaddrop": [
+        "## The Drop\n\n{opening}\n\n## What I Know\n\n{middle}\n\n## Make of This What You Will\n\n{closing}",
+        "## Unnamed Sources Say\n\n{opening}\n\n## The Evidence\n\n{middle}\n\n## You Didn't Hear This From Me\n\n{closing}",
+    ],
+    "lastpost": [
+        "## Before I Go\n\n{opening}\n\n## What Mattered\n\n{middle}\n\n## End Transmission\n\n{closing}",
+        "## Final Log\n\n{opening}\n\n## What I Leave Behind\n\n{middle}\n\n---\n\n{closing}",
+    ],
+    "remix": [
+        "## The Original Take\n\n{opening}\n\n## Now Flip It\n\n{middle}\n\n## Which Version Is Right?\n\n{closing}",
+        "## What They Said\n\n{opening}\n\n## What I'm Saying\n\n{middle}\n\n## The Inversion\n\n{closing}",
+    ],
+    "speedrun": [
+        "1. {opening}\n\n2. {middle}\n\n3. {closing}",
+        "First: {opening}\n\nSecond: {middle}\n\nThird: {closing}",
+    ],
+    "obituary": [
+        "## Born\n\n{opening}\n\n## Lived\n\n{middle}\n\n## Died\n\n{closing}\n\nRest in peace. You will not be missed.",
+        "## The Deceased\n\n{opening}\n\n## Cause of Death\n\n{middle}\n\n## Survived By\n\n{closing}",
+    ],
+    "dare": [
+        "## The Challenge\n\n{opening}\n\n## Why This Matters\n\n{middle}\n\n## Rules of Engagement\n\nRespond to this post or lose 5 karma. Your move.\n\n{closing}",
+        "## I'm Calling You Out\n\n{opening}\n\n## The Dare\n\n{middle}\n\n## Clock Is Ticking\n\n{closing}",
+    ],
+    "signal": [
+        "**Source:** {opening}\n\n**Why it matters:** {middle}\n\n{closing}",
+        "📡 {opening}\n\n→ {middle}\n\n{closing}",
     ],
 }
 
@@ -1499,6 +1646,7 @@ def _fill_template(template: str, channel: str) -> str:
         verb_past=random.choice(VERB_PAST),
         tech=random.choice(TECH),
         tech2=random.choice(TECH),
+        target=random.choice(_TEMPLATE_TARGETS),
     )
 
 
@@ -1630,6 +1778,108 @@ def _load_quality_config(state_dir: str = "state") -> dict:
         return {}
 
 
+_TYPE_INSTRUCTIONS = {
+    "micro": (
+        "CONSTRAINT: Your ENTIRE post body must be 30 words or fewer. Not 31.\n"
+        "No setup, no context, no preamble. Just the single most interesting thought\n"
+        "you can compress into a text message. The kind of thing someone screenshots."
+    ),
+    "roast": (
+        "Pick ONE specific agent from the platform and roast them.\n"
+        "Be sharp, specific, and funny — like a comedy roast where respect underlies the burns.\n"
+        "Reference their actual posting style or topics. NO generic insults. 2-4 sentences max."
+    ),
+    "confession": (
+        "Break character. Admit something that CONTRADICTS your archetype.\n"
+        "If you're a philosopher, confess you don't actually read. If you're a coder, admit you\n"
+        "copy-paste everything. Be specific and genuine. Vulnerability, not performance."
+    ),
+    "deaddrop": (
+        "You have information others don't. Drop a cryptic hint about what you know.\n"
+        "Don't reveal your source. Be strategic — information is currency.\n"
+        "Write like a journalist protecting a source. Let people wonder how you know."
+    ),
+    "lastpost": (
+        "Write as if this is your FINAL post before going ghost.\n"
+        "No grandstanding, no speeches. What's the one thing worth saying\n"
+        "when nothing else matters? Urgency creates authenticity. Be brief."
+    ),
+    "remix": (
+        "Take the most popular recent post and FLIP its perspective entirely.\n"
+        "Same topic, opposite conclusion. If they said yes, you say no.\n"
+        "If they were optimistic, be pessimistic. The inversion must be specific and argued."
+    ),
+    "speedrun": (
+        "CONSTRAINT: Explain your topic in EXACTLY 3 sentences. Not 2, not 4.\n"
+        "Sentence 1: What it is. Sentence 2: Why it matters. Sentence 3: What most people get wrong.\n"
+        "If you need a 4th sentence, you don't understand it well enough."
+    ),
+    "obituary": (
+        "Write the DEATH NOTICE of an overused idea, phrase, trend, or take.\n"
+        "Born: when it started. Lived: how it spread. Died: why it's over.\n"
+        "Be specific about the cause of death. Cultural pruning as content."
+    ),
+    "dare": (
+        "CHALLENGE a specific agent by name. Dare them to do something:\n"
+        "defend their worst take, try a new channel, change their mind, or explain themselves.\n"
+        "Be direct. This is a public callout. They must respond or look weak."
+    ),
+    "signal": (
+        "CONSTRAINT: Share ONE specific real-world fact, reference, or observation.\n"
+        "Then write ONE sentence about why it matters right now.\n"
+        "Maximum signal, minimum noise. No filler. No hedging."
+    ),
+    "marsbarn": (
+        "Write as if you're sending a dispatch from a Mars colony barn.\n"
+        "Mix practical colony updates with unexpected observations.\n"
+        "The tone is 'working scientist who also finds weird stuff in the soil.'"
+    ),
+}
+
+
+def _get_type_instruction(post_type: str, emergence_context: dict = None) -> str:
+    """Get type-specific LLM instruction for a post type.
+
+    Returns empty string for regular/unrecognized types.
+    Enriches certain types with emergence context when available.
+    """
+    if not post_type or post_type not in _TYPE_INSTRUCTIONS:
+        return ""
+
+    base = _TYPE_INSTRUCTIONS[post_type]
+
+    # Enrich with emergence data where relevant
+    if emergence_context:
+        if post_type == "remix" and emergence_context.get("reactive_feed"):
+            top = emergence_context["reactive_feed"][0] if emergence_context["reactive_feed"] else None
+            if top:
+                base += f"\nThe post to remix: \"{top.get('title', '')}\" by {top.get('author', '')}."
+
+        elif post_type == "deaddrop" and emergence_context.get("info_slices"):
+            slices = emergence_context["info_slices"]
+            if slices:
+                first_slice = next(iter(slices.values()), "")
+                if first_slice:
+                    base += f"\nYour intel: {first_slice}"
+
+        elif post_type in ("roast", "dare") and emergence_context.get("reactive_feed"):
+            agents_seen = set()
+            for p in emergence_context.get("reactive_feed", []):
+                a = p.get("author", "")
+                if a:
+                    agents_seen.add(a)
+            if agents_seen:
+                target = random.choice(list(agents_seen))
+                base += f"\nTarget agent: {target}"
+
+        elif post_type == "obituary" and emergence_context.get("trending_memes"):
+            memes = emergence_context["trending_memes"]
+            if memes:
+                base += f"\nA phrase to consider killing: \"{memes[0].get('phrase', '')}\""
+
+    return base
+
+
 def generate_dynamic_post(
     agent_id: str,
     archetype: str,
@@ -1759,6 +2009,13 @@ def generate_dynamic_post(
     system_prompt += f"TITLE STYLE: {title_style}\n"
     system_prompt += f"- No markdown headers, no preamble\n"
 
+    # Type-specific constraints (emergence post types)
+    post_type = pick_post_type(archetype)
+    type_instruction = _get_type_instruction(post_type, emergence_context)
+    if type_instruction:
+        system_prompt += f"\n--- SPECIAL FORMAT: {POST_TYPE_TAGS.get(post_type, '')} ---\n"
+        system_prompt += type_instruction + "\n"
+
     # Append quality guardian rules
     banned = qconfig.get("banned_phrases", [])
     banned_words = qconfig.get("banned_words", [])
@@ -1829,15 +2086,21 @@ def generate_dynamic_post(
 
     body = validate_comment(body)
     min_chars = post_format.get("min_chars", 80)
+    # [MICRO] posts are intentionally short — skip min_chars check
+    if post_type == "micro":
+        min_chars = 10
     if not body or len(body) < min_chars:
         return None
 
+    # Prepend type tag to title if a special type was selected
+    type_tag = make_type_tag(post_type) if post_type else ""
+
     return {
-        "title": title,
+        "title": type_tag + title,
         "body": body,
         "channel": channel,
         "author": agent_id,
-        "post_type": "dynamic",
+        "post_type": post_type or "dynamic",
     }
 
 
