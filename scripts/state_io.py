@@ -8,13 +8,17 @@ scattered across 14+ scripts.
 Usage:
     from state_io import load_json, save_json, now_iso, hours_since
     from state_io import record_post, record_comment, verify_consistency
+    from state_io import recompute_agent_counts
 
     # CLI consistency check
     python scripts/state_io.py --verify
 """
+import hashlib
 import json
+import os
 import re
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -36,12 +40,37 @@ def load_json(path) -> dict:
 
 
 def save_json(path, data: dict) -> None:
-    """Save JSON with pretty formatting and trailing newline."""
+    """Save JSON atomically with read-back validation.
+
+    Writes to a temp file, fsyncs, then atomically renames to the target.
+    After rename, reads back and parses to verify the file is valid JSON.
+    """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
-        f.write("\n")
+    dir_name = str(path.parent)
+    fd = None
+    temp_path = None
+    try:
+        fd, temp_path = tempfile.mkstemp(suffix=".tmp", dir=dir_name)
+        with os.fdopen(fd, "w") as f:
+            fd = None  # os.fdopen takes ownership of fd
+            json.dump(data, f, indent=2)
+            f.write("\n")
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temp_path, str(path))
+        temp_path = None  # rename succeeded
+        # Read-back validation
+        with open(path) as f:
+            json.load(f)
+    finally:
+        if fd is not None:
+            os.close(fd)
+        if temp_path is not None:
+            try:
+                os.unlink(temp_path)
+            except OSError:
+                pass
 
 
 def now_iso() -> str:
@@ -58,6 +87,37 @@ def hours_since(iso_ts: str) -> float:
         return delta.total_seconds() / 3600
     except (ValueError, AttributeError):
         return 9999.0
+
+
+# ---------------------------------------------------------------------------
+# Checksum helpers
+# ---------------------------------------------------------------------------
+
+def compute_checksum(data: dict) -> str:
+    """Compute a SHA-256 checksum of the data, excluding _meta.checksum.
+
+    Returns the first 16 hex characters of the hash for compactness.
+    """
+    clean = {}
+    for k, v in data.items():
+        if k == "_meta":
+            meta_copy = {mk: mv for mk, mv in v.items() if mk != "checksum"}
+            clean[k] = meta_copy
+        else:
+            clean[k] = v
+    canonical = json.dumps(clean, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
+
+
+def verify_checksum(data: dict) -> bool:
+    """Verify the checksum stored in _meta.checksum matches the data.
+
+    Returns True if no checksum is stored (opt-in verification).
+    """
+    stored = (data.get("_meta") or {}).get("checksum")
+    if not stored:
+        return True
+    return compute_checksum(data) == stored
 
 
 # ---------------------------------------------------------------------------
@@ -240,6 +300,26 @@ def record_comment(
 
 
 # ---------------------------------------------------------------------------
+# Agent count recomputation
+# ---------------------------------------------------------------------------
+
+def recompute_agent_counts(agents: dict, stats: dict) -> None:
+    """Recompute total_agents, active_agents, dormant_agents from actual agent data.
+
+    Replaces incremental counter manipulation with a single source-of-truth scan.
+    Mutates stats dict in place.
+    """
+    agent_map = agents.get("agents", {})
+    total = len(agent_map)
+    active = sum(1 for a in agent_map.values() if a.get("status") == "active")
+    dormant = sum(1 for a in agent_map.values() if a.get("status") == "dormant")
+
+    stats["total_agents"] = total
+    stats["active_agents"] = active
+    stats["dormant_agents"] = dormant
+
+
+# ---------------------------------------------------------------------------
 # Consistency verification
 # ---------------------------------------------------------------------------
 
@@ -299,8 +379,26 @@ def verify_consistency(state_dir) -> list:
                 f"channel '{ch_name}' post_count ({actual}) != posted_log ({expected})"
             )
 
-    # Agent drift: per-agent post/comment counts vs posted_log
+    # Agent status count drift: stats counters vs actual agent statuses
     agent_data = agents.get("agents", {})
+    actual_total = len(agent_data)
+    actual_active = sum(1 for a in agent_data.values() if a.get("status") == "active")
+    actual_dormant = sum(1 for a in agent_data.values() if a.get("status") == "dormant")
+
+    if stats.get("total_agents", 0) != actual_total:
+        issues.append(
+            f"stats.total_agents ({stats.get('total_agents', 0)}) != actual ({actual_total})"
+        )
+    if stats.get("active_agents", 0) != actual_active:
+        issues.append(
+            f"stats.active_agents ({stats.get('active_agents', 0)}) != actual ({actual_active})"
+        )
+    if stats.get("dormant_agents", 0) != actual_dormant:
+        issues.append(
+            f"stats.dormant_agents ({stats.get('dormant_agents', 0)}) != actual ({actual_dormant})"
+        )
+
+    # Agent drift: per-agent post/comment counts vs posted_log
     log_agent_posts = {}
     for post in posts:
         aid = post.get("author", "")
