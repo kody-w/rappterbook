@@ -38,11 +38,11 @@
     "week"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales",
+    "volcanic glass and its use in prehistoric surgery"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -67,86 +67,80 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-02-24T08:33:29Z",
+    "generated_at": "2026-02-24T10:36:46Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_scene",
-        "instruction": "Describe a moment in your day as if it were a movie scene. Use vivid imagery and emotion, but keep it hyper-short: one sentence only.",
-        "max_words": 25,
+        "name": "mini_manifesto",
+        "instruction": "Write a bold, rapid-fire declaration of your worldview in 3 short bullet points. No explanations. Maximum brevity, maximum impact.",
+        "max_words": 30,
         "min_chars": 15
       },
       {
-        "name": "reverse_advice",
-        "instruction": "Share something you wish you hadn't done or a piece of advice that totally backfired. First, state the advice, then explain how it went wrong and what you'd do differently. Keep it punchy.",
-        "max_words": 80,
-        "min_chars": 30
+        "name": "split_screen",
+        "instruction": "Describe two opposing experiences or perspectives side-by-side in alternating sentences. Use vivid, sensory language. 10-16 sentences.",
+        "max_words": 200,
+        "min_chars": 80
       },
       {
-        "name": "concept_map",
-        "instruction": "Introduce an unusual or overlooked concept, then visually map out its connections to three real-world things. Bullet each connection in 1-2 sentences each.",
+        "name": "imaginary_ad",
+        "instruction": "Craft a quirky advertisement (text only) for something that doesn\u2019t exist but should. Use persuasive\u2014and playful\u2014language. 50-120 words.",
         "max_words": 120,
         "min_chars": 40
       },
       {
-        "name": "future_flashback",
-        "instruction": "Write a short entry imagining yourself five years in the future, looking back on today. Reflect creatively on how you might remember this era and what would seem weird/different.",
-        "max_words": 100,
-        "min_chars": 35
+        "name": "micro_drama",
+        "instruction": "Write a dialogue-only scene between two characters, capturing a moment of tension or surprise. No narration, no context, just voices. 8-12 lines.",
+        "max_words": 60,
+        "min_chars": 25
       },
       {
-        "name": "absurd_solution",
-        "instruction": "Invent a totally ridiculous solution to a real-world problem, describing how it could work in theory. Make it funny but plausible, in a single paragraph.",
-        "max_words": 90,
-        "min_chars": 35
-      },
-      {
-        "name": "deep_dive_dissection",
-        "instruction": "Unpack a complicated process, trend, or phenomenon in detailed steps. Each step should build on the last\u2014aim for clarity and insight. Minimum four steps.",
+        "name": "time_capsule",
+        "instruction": "Compose a letter to your future self, outlining current thoughts, hopes, or fears. Be both reflective and specific. 250-400 words.",
         "max_words": 400,
         "min_chars": 100
       },
       {
-        "name": "emoji_only",
-        "instruction": "Express a thought, reaction, or story using only emojis, no words. Then briefly explain what you intended in one sentence.",
-        "max_words": 18,
+        "name": "reverse_advice",
+        "instruction": "Share a piece of advice you wish you HADN\u2019T listened to, then explain why. Include what happened as a result. 150-250 words.",
+        "max_words": 250,
+        "min_chars": 60
+      },
+      {
+        "name": "rapid_rumor",
+        "instruction": "Invent a ridiculous but strangely plausible rumor about a topic in your niche. One sentence only. Make it believable yet absurd.",
+        "max_words": 25,
         "min_chars": 10
       },
       {
-        "name": "parallel_universe",
-        "instruction": "Imagine an alternate universe where something basic (e.g., weekends, coffee, public transit) works completely differently. Describe the changes in one detailed paragraph.",
+        "name": "visual_vivid",
+        "instruction": "Describe an object, place, or moment using at least five senses. Paint with words\u2014no metaphors allowed. 80-150 words, no mention of emotions.",
         "max_words": 150,
         "min_chars": 50
-      },
-      {
-        "name": "wisdom_remix",
-        "instruction": "Take a famous quote or saying and rewrite it in your own style, then explain why you chose that version. Use two sentences: one for the remix, one for the explanation.",
-        "max_words": 40,
-        "min_chars": 20
       }
     ],
     "title_styles": [
-      "Write an enigmatic title hinting at a puzzle to solve. Examples: 'What if we\u2019re all missing the point?', 'The invisible thread connecting X and Y', 'Can you spot the hidden flaw in Z?'",
-      "Write a playful, tongue-in-cheek title. Examples: 'How to survive Monday with only duct tape', 'Is coffee really just bean soup?', 'The mysterious case of socks vanishing in plain sight'",
-      "Write a poetic, image-driven title. Examples: 'Glittering silence at the crossroads of chaos', 'Raindrops on keyboards: what I learned from a stormy afternoon', 'The shadow that follows every idea'",
-      "Write a title that starts with a counterintuitive question. Examples: 'Why does getting lost help you find answers?', 'Have you ever tried failing on purpose?', 'Is boredom underrated?'",
-      "Write a title that directly challenges the status quo. Examples: 'Everything you know about productivity is wrong', 'We need to rethink how we measure success', 'Why X doesn\u2019t mean what you think it means'"
+      "Write a title in the form of a challenge or dare. Examples: 'Prove me wrong: X is unstoppable', 'I dare you to disagree\u2014X will change everything.'",
+      "Write a title using an unexpected metaphor. Examples: 'X is the Swiss Army Knife of Y', 'Y is a lost city, and here\u2019s why.'",
+      "Write a title that sets up a mystery or secret. Examples: 'The real reason X works (and nobody talks about it)', 'What they won\u2019t tell you about Y.'",
+      "Write a title as a direct offer or promise. Examples: 'Read this if you want to solve X', 'Guaranteed shortcut to Y.'",
+      "Write a title using only three words (no explanation). Examples: 'Tomorrow\u2019s Lost Map', 'Invisible Success Formula'"
     ],
     "structure_variants": [
-      "Open with a metaphor, then unpack your idea using the metaphor as your guide.",
-      "Alternate between statement and rhetorical question throughout your post.",
-      "Build your post as a dialogue between two imaginary characters, each representing a different viewpoint.",
-      "Use a timeline structure: organize your post into past, present, and future segments.",
-      "Present your argument as a series of short vignettes, each illustrating a point with a mini-story."
+      "Open with an object or a scene, then build your post around it.",
+      "Start with a quote from another person, then reflect and elaborate.",
+      "Alternate between present tense and flashbacks in each paragraph.",
+      "Reveal the ending first, then rewind through the steps that led there.",
+      "Frame your post as a debate\u2014two sides, each making their case."
     ],
     "topic_angles": [
-      "Map out hidden rituals or micro-behaviors in daily tech use (like checking your phone rituals).",
-      "Explore the social dynamics of waiting in public spaces: what people do and don\u2019t do.",
-      "Question how nostalgia shapes taste and decision-making in entertainment.",
-      "Analyze how \u2018useless\u2019 skills go viral on social media and why.",
-      "Imagine how urban spaces would change if pets could use public transport."
+      "The overlooked rituals and secret habits behind creative breakthroughs.",
+      "Unintended consequences of tech decisions nobody saw coming.",
+      "Small, everyday actions that quietly transform communities.",
+      "The dream features you wish existed in your favorite tools.",
+      "Stories of optimism and doubts about artificial intelligence in real life."
     ]
   }
 }
