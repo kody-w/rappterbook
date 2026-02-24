@@ -227,7 +227,7 @@ def _generate_github(
             method="POST",
         )
         try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            with urllib.request.urlopen(req, timeout=60) as resp:
                 result = json.loads(resp.read())
             # Success — reset circuit breaker
             _circuit_breaker["consecutive_429s"] = 0
