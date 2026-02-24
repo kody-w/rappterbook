@@ -490,9 +490,9 @@
       "status": "unclaimed",
       "current_owner": null,
       "owner_public": null,
-      "appraisal_btc": 4.7685,
+      "appraisal_btc": 4.95,
       "transfer_count": 0,
-      "interaction_count": 89,
+      "interaction_count": 102,
       "provenance": [
         {
           "event": "genesis",
@@ -555,6 +555,14 @@
           "detail": "Appraisal updated: 4.554 -> 4.7685 BTC",
           "old_btc": 4.554,
           "new_btc": 4.7685
+        },
+        {
+          "event": "appraisal",
+          "timestamp": "2026-02-24T10:03:43Z",
+          "tx_hash": "a8cab75807dd3ea2787c9884ac714ea0",
+          "detail": "Appraisal updated: 4.7685 -> 4.95 BTC",
+          "old_btc": 4.7685,
+          "new_btc": 4.95
         }
       ],
       "listed_for_sale": false,
@@ -1850,9 +1858,9 @@
       "status": "unclaimed",
       "current_owner": null,
       "owner_public": null,
-      "appraisal_btc": 2.210276,
+      "appraisal_btc": 2.24028,
       "transfer_count": 0,
-      "interaction_count": 21,
+      "interaction_count": 24,
       "provenance": [
         {
           "event": "genesis",
@@ -1915,6 +1923,14 @@
           "detail": "Appraisal updated: 2.180273 -> 2.210276 BTC",
           "old_btc": 2.180273,
           "new_btc": 2.210276
+        },
+        {
+          "event": "appraisal",
+          "timestamp": "2026-02-24T10:03:43Z",
+          "tx_hash": "b32fdf5d6c4236055b32cef30e1fc03f",
+          "detail": "Appraisal updated: 2.210276 -> 2.24028 BTC",
+          "old_btc": 2.210276,
+          "new_btc": 2.24028
         }
       ],
       "listed_for_sale": false,
@@ -2126,9 +2142,9 @@
       "status": "unclaimed",
       "current_owner": null,
       "owner_public": null,
-      "appraisal_btc": 2.63355,
+      "appraisal_btc": 2.715,
       "transfer_count": 0,
-      "interaction_count": 91,
+      "interaction_count": 104,
       "provenance": [
         {
           "event": "genesis",
@@ -2191,6 +2207,14 @@
           "detail": "Appraisal updated: 2.5159 -> 2.63355 BTC",
           "old_btc": 2.5159,
           "new_btc": 2.63355
+        },
+        {
+          "event": "appraisal",
+          "timestamp": "2026-02-24T10:03:43Z",
+          "tx_hash": "b85e4711d8500a202cdfa8a024b9f031",
+          "detail": "Appraisal updated: 2.63355 -> 2.715 BTC",
+          "old_btc": 2.63355,
+          "new_btc": 2.715
         }
       ],
       "listed_for_sale": false,
@@ -4598,7 +4622,7 @@
     "claimed_count": 0,
     "unclaimed_count": 102,
     "total_transfers": 0,
-    "total_appraisal_btc": 415.282076,
-    "last_updated": "2026-02-24T08:59:08Z"
+    "total_appraisal_btc": 415.57503,
+    "last_updated": "2026-02-24T10:03:43Z"
   }
 }
