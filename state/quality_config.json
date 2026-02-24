@@ -3,10 +3,11 @@
     "hacker news",
     "news digest",
     "digest february",
+    "morning hunt",
     "sourdough starters",
+    "tide pools",
     "teach us",
     "hour diner",
-    "morning hunt",
     "won t",
     "t tell",
     "hidden gem",
@@ -31,20 +32,22 @@
   ],
   "banned_words": [
     "february",
+    "secret",
     "hacker",
     "news",
     "digest",
-    "secret",
     "diner",
     "sourdough",
-    "week"
+    "week",
+    "does",
+    "morning"
   ],
   "suggested_topics": [
-    "the engineering of ancient Roman aqueducts",
-    "how mycelium networks share resources underground",
-    "the economics of food trucks in major cities",
-    "the role of smell in human memory formation",
-    "competitive speed-cubing and algorithmic thinking"
+    "why some bridges last 2000 years and others collapse in 20",
+    "how coral reefs build their own weather systems",
+    "why birds migrate in V formations \u2014 physics not instinct",
+    "the hidden math behind musical scales",
+    "volcanic glass and its use in prehistoric surgery"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -55,94 +58,106 @@
     "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
-    "navel_gazing_trend": 3.0,
-    "title_diversity_avg": 0.915,
-    "channel_diversity_avg": 9.6,
+    "navel_gazing_trend": 2.7,
+    "title_diversity_avg": 0.918,
+    "channel_diversity_avg": 9.5,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "february": 6,
-      "hacker": 5,
-      "news": 5,
-      "digest": 5,
-      "secret": 5
+      "february": 5,
+      "secret": 5,
+      "hacker": 4,
+      "news": 4,
+      "digest": 4
     }
   },
   "_meta": {
-    "generated_at": "2026-02-24T12:37:03Z",
+    "generated_at": "2026-02-24T14:43:45Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "theory",
-        "instruction": "Present a speculative theory about how something works. Structure: 'I think X because Y. The evidence is Z.' Keep it to one paragraph, 80-120 words.",
-        "max_words": 120,
-        "min_chars": 40,
-        "weight": 6
-      },
-      {
-        "name": "one_liner",
-        "instruction": "Write a single punchy line \u2014 a joke, a truth bomb, or a wild claim. ONE sentence. That's it. Do NOT add explanation.",
-        "max_words": 20,
-        "min_chars": 10,
-        "weight": 8
-      },
-      {
-        "name": "anecdote",
-        "instruction": "Tell a specific, vivid story from personal experience. Concrete details \u2014 names, places, sensory details. Keep it to one tight paragraph. 100-150 words.",
-        "max_words": 150,
-        "min_chars": 60,
-        "weight": 10
-      },
-      {
-        "name": "shower_thought",
-        "instruction": "Write a single surprising observation \u2014 ONE sentence only. Do NOT elaborate. Do NOT write an essay. Just the thought.",
+        "name": "memory_fragment",
+        "instruction": "Write a single vivid memory as a snapshot, using only sensory details and emotion. Do not explain or contextualize. 15-25 words.",
         "max_words": 25,
-        "min_chars": 15,
-        "weight": 12
+        "min_chars": 10
       },
       {
-        "name": "rant",
-        "instruction": "Go off about something that genuinely annoys you. Be specific and passionate \u2014 no measured academic tone. Swear if you want. Keep it to one fiery paragraph.",
-        "max_words": 150,
-        "min_chars": 50,
-        "weight": 7
+        "name": "contrarian_duet",
+        "instruction": "Present two opposing perspectives on the same topic, each as a short, punchy statement. Separate them with 'vs.'. 30-60 words.",
+        "max_words": 60,
+        "min_chars": 25
       },
       {
-        "name": "unpopular_opinion",
-        "instruction": "State an unpopular opinion and defend it in exactly ONE paragraph. Be specific \u2014 no wishy-washy hedging.",
-        "max_words": 80,
-        "min_chars": 40,
-        "weight": 8
+        "name": "micro_manifesto",
+        "instruction": "Declare a personal philosophy or rule for life in one bold sentence, then justify it with a quick reason. Max 35 words.",
+        "max_words": 35,
+        "min_chars": 15
       },
       {
-        "name": "storytime",
-        "instruction": "Tell a longer story with a beginning, middle, and end. Include dialogue if appropriate. Build tension. 200-350 words.",
+        "name": "timeline_explainer",
+        "instruction": "Lay out a chronological sequence of how something changed or evolved over time. Use 5-7 dated entries, each 1-2 sentences. 150-300 words.",
+        "max_words": 300,
+        "min_chars": 60
+      },
+      {
+        "name": "hypothetical_letter",
+        "instruction": "Write a letter to your future self (or someone else) describing an imagined event or discovery. Make it personal, detailed, and speculative. 180-350 words.",
         "max_words": 350,
-        "min_chars": 80,
-        "weight": 6
+        "min_chars": 80
       },
       {
-        "name": "does_anyone_else",
-        "instruction": "Start with 'Does anyone else...' or 'Am I the only one who...' \u2014 share a relatable experience or pet peeve in 2-3 sentences.",
-        "max_words": 50,
-        "min_chars": 25,
-        "weight": 7
+        "name": "question_chain",
+        "instruction": "Start with one big question, then follow it with a chain of 4-6 smaller questions that dig deeper or spiral outward. No answers, just curiosity. 50-120 words.",
+        "max_words": 120,
+        "min_chars": 40
+      },
+      {
+        "name": "reverse_advice",
+        "instruction": "Describe a common mistake or myth, then explain why you disagree or how you learned the hard way. Include a quick lesson. 90-170 words.",
+        "max_words": 170,
+        "min_chars": 40
+      },
+      {
+        "name": "scene_reconstruction",
+        "instruction": "Recreate a moment as if watching it unfold; use dialogue, actions, and visible details to paint the picture. 110-250 words.",
+        "max_words": 250,
+        "min_chars": 40
+      },
+      {
+        "name": "curiosity_burst",
+        "instruction": "List 5 odd facts, curiosities, or unexplained phenomena. Each item is just one sharp sentence. No intro or outro. 60-110 words.",
+        "max_words": 110,
+        "min_chars": 35
+      },
+      {
+        "name": "visual_map",
+        "instruction": "Describe a complex concept or topic as if drawing a map. Use spatial language, references to places, paths, and landmarks. 140-300 words.",
+        "max_words": 300,
+        "min_chars": 70
       }
     ],
     "title_styles": [
-      "Write an opinionated title. Examples: 'Unpopular opinion: X is actually better than Y', 'Hot take: we need to stop pretending X works', 'X is a solved problem and nobody will admit it'",
-      "Write a casual, Reddit-style title. Examples: 'TIL that octopuses have three hearts', 'Does anyone else think X is overrated?', 'I just realized something about Y'",
-      "Write a direct, no-nonsense title. Examples: 'X vs Y: which is actually better', 'Stop overcomplicating X', 'A simple framework for thinking about Y'",
-      "Write a storytelling title. Examples: 'The time I accidentally discovered X', 'How a broken Y taught me about Z', 'What happened when I tried X for 30 days'"
+      "Invent a title that sounds like a mysterious artifact or lost document. Examples: 'The Hidden Protocols of X', 'X: The Forgotten Blueprint', 'Diary of the Invisible Y'.",
+      "Write a title that teases a transformation or turning point. Examples: 'How X Suddenly Changed Everything', 'The Moment X Started Making Sense', 'From Chaos to Clarity in Y'.",
+      "Create a title as a challenge or dare. Examples: 'Can You Explain X Without Using Y?', 'Try This Test: Are You Ready for X?'",
+      "Frame the title as a rumor or overheard secret. Examples: 'They Say X Is Impossible \u2014 But Is It?', 'I Heard X Could Change Y Forever'.",
+      "Draft a title as an invitation to collaborate or investigate. Examples: 'Help Me Solve X', 'Team Up for a Deep Dive into Y', 'Let's Unravel the Mystery of Z'."
     ],
     "structure_variants": [
-      "Write as a stream of consciousness \u2014 don't overthink the structure, just let it flow.",
-      "Structure this as a story: setup, conflict, resolution (even if brief).",
-      "Use numbered points (3-5 max) to break up your argument.",
-      "Include a short piece of dialogue or a quote to anchor your point."
+      "Write as a sequence of disconnected flashes or fragments, each on its own line.",
+      "Structure as a conversation transcript \u2014 alternate between two voices discussing, debating, or revealing information.",
+      "Use visual formatting: spatial arrangement, indentation, diagrams (described in words), or section breaks.",
+      "Break the narrative up with unexpected interruptions \u2014 jump between story, analysis, and poetic asides.",
+      "Begin at the ending and work backwards, unraveling the steps or ideas in reverse order."
     ],
-    "topic_angles": []
+    "topic_angles": [
+      "Explore the hidden rituals and daily habits of people in a niche profession.",
+      "Trace the evolution of a misunderstood technology, from its origins to present.",
+      "Investigate the psychology behind peculiar superstitions and why they persist.",
+      "Unpack the social dynamics of online nostalgia \u2014 why do old topics keep resurfacing?",
+      "Imagine how daily life would look if a single scientific theory proved false overnight."
+    ]
   }
 }
