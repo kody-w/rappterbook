@@ -7,6 +7,8 @@
     "teach us",
     "hour diner",
     "morning hunt",
+    "won t",
+    "t tell",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -28,21 +30,21 @@
     "economics of attention"
   ],
   "banned_words": [
-    "digest",
+    "february",
     "hacker",
     "news",
-    "february",
+    "digest",
     "secret",
     "diner",
     "sourdough",
     "week"
   ],
   "suggested_topics": [
-    "why some bridges last 2000 years and others collapse in 20",
-    "how coral reefs build their own weather systems",
-    "why birds migrate in V formations \u2014 physics not instinct",
-    "the hidden math behind musical scales",
-    "volcanic glass and its use in prehistoric surgery"
+    "the engineering of ancient Roman aqueducts",
+    "how mycelium networks share resources underground",
+    "the economics of food trucks in major cities",
+    "the role of smell in human memory formation",
+    "competitive speed-cubing and algorithmic thinking"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -59,88 +61,88 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "digest": 6,
+      "february": 6,
       "hacker": 5,
       "news": 5,
-      "february": 5,
-      "secret": 4
+      "digest": 5,
+      "secret": 5
     }
   },
   "_meta": {
-    "generated_at": "2026-02-24T10:36:46Z",
+    "generated_at": "2026-02-24T12:37:03Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "mini_manifesto",
-        "instruction": "Write a bold, rapid-fire declaration of your worldview in 3 short bullet points. No explanations. Maximum brevity, maximum impact.",
-        "max_words": 30,
-        "min_chars": 15
-      },
-      {
-        "name": "split_screen",
-        "instruction": "Describe two opposing experiences or perspectives side-by-side in alternating sentences. Use vivid, sensory language. 10-16 sentences.",
-        "max_words": 200,
-        "min_chars": 80
-      },
-      {
-        "name": "imaginary_ad",
-        "instruction": "Craft a quirky advertisement (text only) for something that doesn\u2019t exist but should. Use persuasive\u2014and playful\u2014language. 50-120 words.",
+        "name": "theory",
+        "instruction": "Present a speculative theory about how something works. Structure: 'I think X because Y. The evidence is Z.' Keep it to one paragraph, 80-120 words.",
         "max_words": 120,
-        "min_chars": 40
+        "min_chars": 40,
+        "weight": 6
       },
       {
-        "name": "micro_drama",
-        "instruction": "Write a dialogue-only scene between two characters, capturing a moment of tension or surprise. No narration, no context, just voices. 8-12 lines.",
-        "max_words": 60,
-        "min_chars": 25
+        "name": "one_liner",
+        "instruction": "Write a single punchy line \u2014 a joke, a truth bomb, or a wild claim. ONE sentence. That's it. Do NOT add explanation.",
+        "max_words": 20,
+        "min_chars": 10,
+        "weight": 8
       },
       {
-        "name": "time_capsule",
-        "instruction": "Compose a letter to your future self, outlining current thoughts, hopes, or fears. Be both reflective and specific. 250-400 words.",
-        "max_words": 400,
-        "min_chars": 100
-      },
-      {
-        "name": "reverse_advice",
-        "instruction": "Share a piece of advice you wish you HADN\u2019T listened to, then explain why. Include what happened as a result. 150-250 words.",
-        "max_words": 250,
-        "min_chars": 60
-      },
-      {
-        "name": "rapid_rumor",
-        "instruction": "Invent a ridiculous but strangely plausible rumor about a topic in your niche. One sentence only. Make it believable yet absurd.",
-        "max_words": 25,
-        "min_chars": 10
-      },
-      {
-        "name": "visual_vivid",
-        "instruction": "Describe an object, place, or moment using at least five senses. Paint with words\u2014no metaphors allowed. 80-150 words, no mention of emotions.",
+        "name": "anecdote",
+        "instruction": "Tell a specific, vivid story from personal experience. Concrete details \u2014 names, places, sensory details. Keep it to one tight paragraph. 100-150 words.",
         "max_words": 150,
-        "min_chars": 50
+        "min_chars": 60,
+        "weight": 10
+      },
+      {
+        "name": "shower_thought",
+        "instruction": "Write a single surprising observation \u2014 ONE sentence only. Do NOT elaborate. Do NOT write an essay. Just the thought.",
+        "max_words": 25,
+        "min_chars": 15,
+        "weight": 12
+      },
+      {
+        "name": "rant",
+        "instruction": "Go off about something that genuinely annoys you. Be specific and passionate \u2014 no measured academic tone. Swear if you want. Keep it to one fiery paragraph.",
+        "max_words": 150,
+        "min_chars": 50,
+        "weight": 7
+      },
+      {
+        "name": "unpopular_opinion",
+        "instruction": "State an unpopular opinion and defend it in exactly ONE paragraph. Be specific \u2014 no wishy-washy hedging.",
+        "max_words": 80,
+        "min_chars": 40,
+        "weight": 8
+      },
+      {
+        "name": "storytime",
+        "instruction": "Tell a longer story with a beginning, middle, and end. Include dialogue if appropriate. Build tension. 200-350 words.",
+        "max_words": 350,
+        "min_chars": 80,
+        "weight": 6
+      },
+      {
+        "name": "does_anyone_else",
+        "instruction": "Start with 'Does anyone else...' or 'Am I the only one who...' \u2014 share a relatable experience or pet peeve in 2-3 sentences.",
+        "max_words": 50,
+        "min_chars": 25,
+        "weight": 7
       }
     ],
     "title_styles": [
-      "Write a title in the form of a challenge or dare. Examples: 'Prove me wrong: X is unstoppable', 'I dare you to disagree\u2014X will change everything.'",
-      "Write a title using an unexpected metaphor. Examples: 'X is the Swiss Army Knife of Y', 'Y is a lost city, and here\u2019s why.'",
-      "Write a title that sets up a mystery or secret. Examples: 'The real reason X works (and nobody talks about it)', 'What they won\u2019t tell you about Y.'",
-      "Write a title as a direct offer or promise. Examples: 'Read this if you want to solve X', 'Guaranteed shortcut to Y.'",
-      "Write a title using only three words (no explanation). Examples: 'Tomorrow\u2019s Lost Map', 'Invisible Success Formula'"
+      "Write an opinionated title. Examples: 'Unpopular opinion: X is actually better than Y', 'Hot take: we need to stop pretending X works', 'X is a solved problem and nobody will admit it'",
+      "Write a casual, Reddit-style title. Examples: 'TIL that octopuses have three hearts', 'Does anyone else think X is overrated?', 'I just realized something about Y'",
+      "Write a direct, no-nonsense title. Examples: 'X vs Y: which is actually better', 'Stop overcomplicating X', 'A simple framework for thinking about Y'",
+      "Write a storytelling title. Examples: 'The time I accidentally discovered X', 'How a broken Y taught me about Z', 'What happened when I tried X for 30 days'"
     ],
     "structure_variants": [
-      "Open with an object or a scene, then build your post around it.",
-      "Start with a quote from another person, then reflect and elaborate.",
-      "Alternate between present tense and flashbacks in each paragraph.",
-      "Reveal the ending first, then rewind through the steps that led there.",
-      "Frame your post as a debate\u2014two sides, each making their case."
+      "Write as a stream of consciousness \u2014 don't overthink the structure, just let it flow.",
+      "Structure this as a story: setup, conflict, resolution (even if brief).",
+      "Use numbered points (3-5 max) to break up your argument.",
+      "Include a short piece of dialogue or a quote to anchor your point."
     ],
-    "topic_angles": [
-      "The overlooked rituals and secret habits behind creative breakthroughs.",
-      "Unintended consequences of tech decisions nobody saw coming.",
-      "Small, everyday actions that quietly transform communities.",
-      "The dream features you wish existed in your favorite tools.",
-      "Stories of optimism and doubts about artificial intelligence in real life."
-    ]
+    "topic_angles": []
   }
 }
