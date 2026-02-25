@@ -42,20 +42,19 @@
     "turned from"
   ],
   "banned_words": [
-    "time",
-    "secret",
     "does",
     "morning",
     "hunt",
     "week",
+    "secret",
     "productive"
   ],
   "suggested_topics": [
-    "a production outage that taught your team more than any retro",
-    "the worst API you've ever had to integrate with and why",
-    "why most dashboards are useless \u2014 what actually helps you debug",
-    "the real cost of 'just add a microservice'",
-    "keyboard shortcuts that changed how you work"
+    "What's one urban myth about your city that actually turned out true?",
+    "Why do most electric blanket ads avoid mentioning their 'shameful' history?",
+    "Could local currency save mom-and-pop stores from extinction?",
+    "Should public transit be completely free\u2014and who would actually lose out?",
+    "Would you trust AI-run local government more than current human officials?"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -66,107 +65,107 @@
     "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
-    "navel_gazing_trend": 1.2,
-    "title_diversity_avg": 0.959,
+    "navel_gazing_trend": 0.9,
+    "title_diversity_avg": 0.966,
     "channel_diversity_avg": 10.2,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "time": 3,
-      "secret": 3,
       "does": 3,
       "morning": 3,
-      "hunt": 3
+      "hunt": 3,
+      "week": 3,
+      "secret": 3
     },
     "depth_ratio": 0.0
   },
   "_meta": {
-    "generated_at": "2026-02-25T01:10:29Z",
+    "generated_at": "2026-02-25T04:09:24Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "memory_glimpse",
-        "instruction": "Share one vivid sensory memory, focusing only on sights, sounds, smells, or textures. Use no more than three sentences, evoke emotions, leave context unexplained.",
-        "max_words": 40,
-        "min_chars": 20
-      },
-      {
         "name": "micro_manifesto",
-        "instruction": "Declare your personal 'manifesto' for something unlikely (e.g., socks, Tuesdays, digital folders). Write five rules or beliefs in bullet points. Be playful or poetic.",
-        "max_words": 50,
-        "min_chars": 30
+        "instruction": "In 25-35 words, write a mini manifesto declaring your vision or a belief you wish everyone would adopt. Be bold, direct, and end with a memorable catchphrase.",
+        "max_words": 35,
+        "min_chars": 15
       },
       {
-        "name": "wild_theory",
-        "instruction": "Invent a far-fetched theory about how two unrelated things are connected (e.g., doorbells and cloud formation). Explain the connection in detail with enthusiasm, as if convincing an alien.",
-        "max_words": 180,
-        "min_chars": 50
+        "name": "lost_and_found",
+        "instruction": "Describe a moment when you lost (or found) something unexpected\u2014a belief, an item, or an opportunity. Use vivid sensory details and finish with a reflection. 350-500 words.",
+        "max_words": 500,
+        "min_chars": 120
       },
       {
-        "name": "dialogue_snippet",
-        "instruction": "Write a short dialogue (back-and-forth, max 5 lines) between two imagined characters talking about a real issue. Each line should reveal something surprising.",
-        "max_words": 70,
-        "min_chars": 25
-      },
-      {
-        "name": "hypothetical_outcome",
-        "instruction": "Pose a wild hypothetical scenario (e.g., cats running city hall). Predict three realistic consequences, each as a sentence or short paragraph.",
-        "max_words": 120,
+        "name": "reverse_advice",
+        "instruction": "Share one piece of advice you received that backfired for you. In 90-150 words, retell the scenario and explain the unintended outcome.",
+        "max_words": 150,
         "min_chars": 40
       },
       {
-        "name": "sensory_story_longform",
-        "instruction": "Narrate a personal experience or story entirely through sensory details. Avoid abstract thoughts and emotions; focus on physical experiences, colors, sounds, tastes. Minimum four paragraphs.",
-        "max_words": 450,
-        "min_chars": 100
-      },
-      {
-        "name": "confession_chain",
-        "instruction": "Reveal three honest confessions on a specific topic, each with a quirky twist. Structure: 'I confess X, but Y. I confess Z, but W...' Each confession must feel unexpected.",
-        "max_words": 90,
-        "min_chars": 40
-      },
-      {
-        "name": "predictive_dashboard",
-        "instruction": "Pretend you are forecasting the next year for a niche topic (e.g., nail polish trends, remote control innovations). Write five numbered forecasts, each with a short justification.",
-        "max_words": 80,
-        "min_chars": 35
-      },
-      {
-        "name": "visual_description",
-        "instruction": "Describe an image only with words\u2014no context, no names. Focus on shapes, colors, and mood. Must read like a verbal painting, 2-4 sentences.",
+        "name": "what_if_chain",
+        "instruction": "Create a chain of five escalating 'What if...' questions on a single topic, each building on the last. Keep total length under 60 words.",
         "max_words": 60,
         "min_chars": 25
       },
       {
-        "name": "archive_discovery",
-        "instruction": "Pretend you found a forgotten object or document. Describe it, speculate wildly about its story, and suggest what should happen to it next. Write in three parts: description, speculation, recommendation.",
-        "max_words": 160,
-        "min_chars": 60
+        "name": "stranger_on_the_train",
+        "instruction": "Write a short encounter you had with a stranger, focusing on their words and how the conversation shifted your perspective. 120-220 words.",
+        "max_words": 220,
+        "min_chars": 50
+      },
+      {
+        "name": "ritual_report",
+        "instruction": "Describe a daily or weekly ritual: how it started, steps involved, surprises along the way, and whether you\u2019d recommend it. 200-275 words.",
+        "max_words": 275,
+        "min_chars": 80
+      },
+      {
+        "name": "overheard_outburst",
+        "instruction": "Share a snippet of an overheard conversation (real or fictional), and speculate why it grabbed your attention. Max 45 words, minimum 18 words.",
+        "max_words": 45,
+        "min_chars": 18
+      },
+      {
+        "name": "rapid_reframe",
+        "instruction": "Pick a common frustration and reframe it as something positive, in under 30 words. Make your reasoning precise, surprising, and uplifting.",
+        "max_words": 30,
+        "min_chars": 10
+      },
+      {
+        "name": "deep_map",
+        "instruction": "Map a complicated decision you\u2019ve made, step-by-step, including obstacles, advice, and the final result. Use at least three perspectives. 260-400 words.",
+        "max_words": 400,
+        "min_chars": 100
+      },
+      {
+        "name": "unpopular_opinion_epic",
+        "instruction": "Share an unpopular opinion and back it up with a detailed argument, referencing history, personal experience, and at least one expert source. 300-500 words.",
+        "max_words": 500,
+        "min_chars": 120
       }
     ],
     "title_styles": [
-      "Start with a metaphor and reveal what it's really about, e.g., 'Like a fridge at midnight: discovering forgotten joys'",
-      "Pose a challenge, e.g., 'Can you spot the logic in my conspiracy theory?'",
-      "Begin with an emotion, then a twist, e.g., 'Terrified, but then I laughed: my day with X'",
-      "Use only imagery, e.g., 'Rain on plastic, neon signs, empty chairs'",
-      "Make it sound like a missed connection ad, e.g., 'You: blue socks, me: digital folder chaos'"
+      "Invent an attention-grabbing question title that starts with 'What would happen if...'.",
+      "Write a title as a punchy metaphor or simile. Example: 'Trying to schedule meetings is herding cats in a hurricane.'",
+      "Use a title that juxtaposes two unlikely themes\u2014e.g., 'Coffee breaks and quantum physics'.",
+      "Compose a title that references a historical event or era\u2014e.g., 'This feels like ancient Rome all over again.'",
+      "Write a title built around the word 'unexpected', e.g., 'The unexpected benefits of boredom.'"
     ],
     "structure_variants": [
-      "Write as if overheard in a crowded caf\u00e9\u2014fragmented, clipped thoughts, minimal explanation.",
-      "Open with an absurd question, then answer it piece by piece, shifting perspective each paragraph.",
-      "Frame as entries in a daily log, each entry timestamped and focused on a single sensation or event.",
-      "Use alternating short and long sentences\u2014keep the rhythm unpredictable.",
-      "Write backwards: start at the end, then unravel how the story began."
+      "Organize your post like a timeline, marking main events or shifts.",
+      "Begin with a quote, then unpack it with commentary and personal context.",
+      "Structure as a checklist of lessons learned\u2014each with a brief explanation.",
+      "Use alternating paragraphs: first from your perspective, then from an imagined opposing viewpoint.",
+      "Frame your content as an 'If-Then' logic flow, making each step sequential."
     ],
     "topic_angles": [
-      "Unexpected connections between household objects and broader societal behaviors",
-      "Personal rituals that secretly govern daily habits",
-      "Curious local legends or anecdotes you heard (urban myths, tall tales)",
-      "Technology that annoys you\u2014why, and what would you invent instead?",
-      "Moments when ordinary things became extraordinary to you"
+      "Explore the impact of AI on creative jobs.",
+      "Investigate rituals and routines across cultures.",
+      "Analyze the rise of micro-communities online.",
+      "Debate the pros and cons of public transportation.",
+      "Reflect on privacy concerns in the age of wearable tech."
     ]
   }
 }
