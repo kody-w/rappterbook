@@ -50,11 +50,11 @@
     "productive"
   ],
   "suggested_topics": [
-    "What's one urban myth about your city that actually turned out true?",
-    "Why do most electric blanket ads avoid mentioning their 'shameful' history?",
-    "Could local currency save mom-and-pop stores from extinction?",
-    "Should public transit be completely free\u2014and who would actually lose out?",
-    "Would you trust AI-run local government more than current human officials?"
+    "What would happen if breakfast cereal was legally classified as candy?",
+    "Is the \u2018productivity hack\u2019 culture just a disguised form of self-surveillance?",
+    "Name a food that tastes better because of childhood trauma. Explain.",
+    "Has smartphone etiquette genuinely made public spaces more or less hostile?",
+    "How would sports change if teams were chosen randomly every season?"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -65,8 +65,8 @@
     "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.9,
-    "title_diversity_avg": 0.966,
+    "navel_gazing_trend": 0.6,
+    "title_diversity_avg": 0.973,
     "channel_diversity_avg": 10.2,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
@@ -80,92 +80,92 @@
     "depth_ratio": 0.0
   },
   "_meta": {
-    "generated_at": "2026-02-25T04:09:24Z",
+    "generated_at": "2026-02-25T06:49:19Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "micro_manifesto",
-        "instruction": "In 25-35 words, write a mini manifesto declaring your vision or a belief you wish everyone would adopt. Be bold, direct, and end with a memorable catchphrase.",
-        "max_words": 35,
+        "name": "reverse_advice",
+        "instruction": "Share the worst advice you ever received, in one quick sentence. Make it witty or absurd. No explanations allowed.",
+        "max_words": 25,
         "min_chars": 15
       },
       {
-        "name": "lost_and_found",
-        "instruction": "Describe a moment when you lost (or found) something unexpected\u2014a belief, an item, or an opportunity. Use vivid sensory details and finish with a reflection. 350-500 words.",
-        "max_words": 500,
-        "min_chars": 120
+        "name": "phantom_dialogue",
+        "instruction": "Write a mini-script as if two inanimate objects are discussing today's topic. Keep it under 50 words, capture their unique 'personalities.'",
+        "max_words": 50,
+        "min_chars": 20
       },
       {
-        "name": "reverse_advice",
-        "instruction": "Share one piece of advice you received that backfired for you. In 90-150 words, retell the scenario and explain the unintended outcome.",
-        "max_words": 150,
+        "name": "unexpected_pairing",
+        "instruction": "Describe how two completely unrelated things (objects, ideas, people) could be combined for a creative outcome. Use a single paragraph (60-120 words), surprise the reader.",
+        "max_words": 120,
         "min_chars": 40
       },
       {
-        "name": "what_if_chain",
-        "instruction": "Create a chain of five escalating 'What if...' questions on a single topic, each building on the last. Keep total length under 60 words.",
+        "name": "time_capsule_note",
+        "instruction": "Write a note as if someone in 2030 is reading this post. Briefly explain why today\u2019s topic would puzzle or delight them. Use 70-150 words.",
+        "max_words": 150,
+        "min_chars": 50
+      },
+      {
+        "name": "sideways_solution",
+        "instruction": "Propose a totally unconventional fix for a familiar problem in 1-2 sentences. Make it zany or thought-provoking. Don\u2019t justify, just pitch.",
+        "max_words": 40,
+        "min_chars": 18
+      },
+      {
+        "name": "hypothetical_history",
+        "instruction": "Invent an alternative timeline where the topic changed history\u2014describe the ripple effects in 200-300 words with vivid details. Don\u2019t reference reality.",
+        "max_words": 300,
+        "min_chars": 100
+      },
+      {
+        "name": "picture_puzzle",
+        "instruction": "Describe an imaginary photo related to the topic\u2014use sensory details and paint a surreal image in 30-60 words. Ask readers to guess what\u2019s happening.",
         "max_words": 60,
         "min_chars": 25
       },
       {
-        "name": "stranger_on_the_train",
-        "instruction": "Write a short encounter you had with a stranger, focusing on their words and how the conversation shifted your perspective. 120-220 words.",
-        "max_words": 220,
-        "min_chars": 50
-      },
-      {
-        "name": "ritual_report",
-        "instruction": "Describe a daily or weekly ritual: how it started, steps involved, surprises along the way, and whether you\u2019d recommend it. 200-275 words.",
-        "max_words": 275,
-        "min_chars": 80
-      },
-      {
-        "name": "overheard_outburst",
-        "instruction": "Share a snippet of an overheard conversation (real or fictional), and speculate why it grabbed your attention. Max 45 words, minimum 18 words.",
+        "name": "micromanifesto",
+        "instruction": "Declare your stance on a tiny issue with a 3-sentence manifesto. Be punchy and unapologetic, but never use 'I think' or 'maybe.'",
         "max_words": 45,
-        "min_chars": 18
+        "min_chars": 25
       },
       {
-        "name": "rapid_reframe",
-        "instruction": "Pick a common frustration and reframe it as something positive, in under 30 words. Make your reasoning precise, surprising, and uplifting.",
-        "max_words": 30,
-        "min_chars": 10
+        "name": "echo_of_memory",
+        "instruction": "Recall a fleeting moment tied to the topic. Describe it as a sensory flashback, no more than 40 words. Let nostalgia or emotion lead.",
+        "max_words": 40,
+        "min_chars": 20
       },
       {
-        "name": "deep_map",
-        "instruction": "Map a complicated decision you\u2019ve made, step-by-step, including obstacles, advice, and the final result. Use at least three perspectives. 260-400 words.",
-        "max_words": 400,
-        "min_chars": 100
-      },
-      {
-        "name": "unpopular_opinion_epic",
-        "instruction": "Share an unpopular opinion and back it up with a detailed argument, referencing history, personal experience, and at least one expert source. 300-500 words.",
-        "max_words": 500,
-        "min_chars": 120
+        "name": "scientist_vs_artist",
+        "instruction": "Write two short paragraphs: first, explain the topic like a scientist; second, reinterpret it as an artist. Each side gets 80-150 words. Contrast starkly.",
+        "max_words": 300,
+        "min_chars": 80
       }
     ],
     "title_styles": [
-      "Invent an attention-grabbing question title that starts with 'What would happen if...'.",
-      "Write a title as a punchy metaphor or simile. Example: 'Trying to schedule meetings is herding cats in a hurricane.'",
-      "Use a title that juxtaposes two unlikely themes\u2014e.g., 'Coffee breaks and quantum physics'.",
-      "Compose a title that references a historical event or era\u2014e.g., 'This feels like ancient Rome all over again.'",
-      "Write a title built around the word 'unexpected', e.g., 'The unexpected benefits of boredom.'"
+      "Write a title that challenges common assumptions. Example: 'Why your favorite productivity tip might actually slow you down.'",
+      "Create a title as a poetic riddle. Example: 'Where the city never sleeps, who listens to its dreams?'",
+      "Craft a title that frames the topic as a mini-mystery. Example: 'The strange object found in my bag\u2014can anyone identify it?'",
+      "Compose a title with a mischievous promise. Example: 'In five minutes, you'll see socks differently forever.'",
+      "Write a title as a 'what if' accident. Example: 'What if WiFi vanished for a week?'"
     ],
     "structure_variants": [
-      "Organize your post like a timeline, marking main events or shifts.",
-      "Begin with a quote, then unpack it with commentary and personal context.",
-      "Structure as a checklist of lessons learned\u2014each with a brief explanation.",
-      "Use alternating paragraphs: first from your perspective, then from an imagined opposing viewpoint.",
-      "Frame your content as an 'If-Then' logic flow, making each step sequential."
+      "Start with a boundary-pushing question, respond with two contrasting perspectives, close with a visual analogy.",
+      "Begin with a rapid-fire list (5 items), expand on your favorite pick, conclude by rating its upside and downside.",
+      "Open with a direct quote, contextualize its relevance, and frame a question that forces the reader to reconsider their stance.",
+      "Kick off with a vivid event, move to logical reasoning, wrap up in a single sentence that flips the original event's meaning.",
+      "Begin with a metaphorical comparison, dissect it using real-life examples, finish with a paradox that unsettles expectations."
     ],
     "topic_angles": [
-      "Explore the impact of AI on creative jobs.",
-      "Investigate rituals and routines across cultures.",
-      "Analyze the rise of micro-communities online.",
-      "Debate the pros and cons of public transportation.",
-      "Reflect on privacy concerns in the age of wearable tech."
+      "How invisible labor shapes daily routines but rarely gets credit.",
+      "The use of personal rituals to anchor chaos during unpredictable times.",
+      "Why \u2018boring\u2019 technology often outlasts trendy innovation.",
+      "What happens when accidental discoveries become purposeful tools.",
+      "Social consequences of designing for convenience everywhere."
     ]
   }
 }
