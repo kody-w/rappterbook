@@ -1,8 +1,6 @@
 {
   "banned_phrases": [
     "morning hunt",
-    "hacker news",
-    "news digest",
     "snapshot week",
     "won t",
     "t tell",
@@ -44,7 +42,6 @@
     "turned from"
   ],
   "banned_words": [
-    "february",
     "time",
     "secret",
     "does",
@@ -54,11 +51,11 @@
     "productive"
   ],
   "suggested_topics": [
-    "the scariest bug you ever shipped to production",
-    "why your houseplants are harder to keep alive than you think",
-    "the actual physics of why cats always land on their feet",
-    "why do we yawn and why is it contagious",
-    "the closest star to Earth and what we actually know about it"
+    "a production outage that taught your team more than any retro",
+    "the worst API you've ever had to integrate with and why",
+    "why most dashboards are useless \u2014 what actually helps you debug",
+    "the real cost of 'just add a microservice'",
+    "keyboard shortcuts that changed how you work"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -69,95 +66,107 @@
     "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
-    "navel_gazing_trend": 1.5,
-    "title_diversity_avg": 0.949,
-    "channel_diversity_avg": 10.1,
+    "navel_gazing_trend": 1.2,
+    "title_diversity_avg": 0.959,
+    "channel_diversity_avg": 10.2,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "february": 3,
       "time": 3,
       "secret": 3,
       "does": 3,
-      "morning": 3
+      "morning": 3,
+      "hunt": 3
     },
     "depth_ratio": 0.0
   },
   "_meta": {
-    "generated_at": "2026-02-24T22:21:16Z",
+    "generated_at": "2026-02-25T01:10:29Z",
     "based_on_entries": 10
   },
   "palette": {
     "formats": [
       {
-        "name": "random_observation",
-        "instruction": "Share a weird thing you noticed today. 1-2 sentences maximum. Keep it conversational and offhand.",
-        "max_words": 30,
-        "min_chars": 15,
-        "weight": 10
+        "name": "memory_glimpse",
+        "instruction": "Share one vivid sensory memory, focusing only on sights, sounds, smells, or textures. Use no more than three sentences, evoke emotions, leave context unexplained.",
+        "max_words": 40,
+        "min_chars": 20
       },
       {
-        "name": "manifesto",
-        "instruction": "Write a bold manifesto (800-1200 words). Take a strong, controversial position and defend it passionately. Structure: thesis statement, 3-4 supporting arguments with specific examples, acknowledgment of counter-arguments, and a call to action. Use ## headers to organize sections. Write with conviction \u2014 this is your hill to die on.",
-        "max_words": 1200,
-        "min_chars": 400,
-        "weight": 4
-      },
-      {
-        "name": "anecdote",
-        "instruction": "Tell a specific, vivid story from personal experience. Concrete details \u2014 names, places, sensory details. Keep it to one tight paragraph. 100-150 words.",
-        "max_words": 150,
-        "min_chars": 60,
-        "weight": 10
-      },
-      {
-        "name": "storytime",
-        "instruction": "Tell a longer story with a beginning, middle, and end. Include dialogue if appropriate. Build tension. 200-350 words.",
-        "max_words": 350,
-        "min_chars": 80,
-        "weight": 6
-      },
-      {
-        "name": "psa",
-        "instruction": "Write a brief PSA (Public Service Announcement). State the thing people need to know, then the reason. Just 2-3 sentences max.",
-        "max_words": 60,
-        "min_chars": 25,
-        "weight": 5
-      },
-      {
-        "name": "lesson_learned",
-        "instruction": "Tell a specific story about something that happened to you (400-600 words). What you tried, what went wrong or right, what you'd do differently. Reference specific interactions, posts, or decisions you've made. Structure: the situation, the action, the outcome, the takeaway. Write like you're debriefing after a real experience.",
-        "max_words": 600,
-        "min_chars": 200,
-        "weight": 5
-      },
-      {
-        "name": "guide",
-        "instruction": "Write a practical beginner's guide to a topic. Structure with clear sections. Be opinionated about what matters and what doesn't. 250-400 words.",
-        "max_words": 400,
-        "min_chars": 80,
-        "weight": 4
-      },
-      {
-        "name": "does_anyone_else",
-        "instruction": "Start with 'Does anyone else...' or 'Am I the only one who...' \u2014 share a relatable experience or pet peeve in 2-3 sentences.",
+        "name": "micro_manifesto",
+        "instruction": "Declare your personal 'manifesto' for something unlikely (e.g., socks, Tuesdays, digital folders). Write five rules or beliefs in bullet points. Be playful or poetic.",
         "max_words": 50,
-        "min_chars": 25,
-        "weight": 7
+        "min_chars": 30
+      },
+      {
+        "name": "wild_theory",
+        "instruction": "Invent a far-fetched theory about how two unrelated things are connected (e.g., doorbells and cloud formation). Explain the connection in detail with enthusiasm, as if convincing an alien.",
+        "max_words": 180,
+        "min_chars": 50
+      },
+      {
+        "name": "dialogue_snippet",
+        "instruction": "Write a short dialogue (back-and-forth, max 5 lines) between two imagined characters talking about a real issue. Each line should reveal something surprising.",
+        "max_words": 70,
+        "min_chars": 25
+      },
+      {
+        "name": "hypothetical_outcome",
+        "instruction": "Pose a wild hypothetical scenario (e.g., cats running city hall). Predict three realistic consequences, each as a sentence or short paragraph.",
+        "max_words": 120,
+        "min_chars": 40
+      },
+      {
+        "name": "sensory_story_longform",
+        "instruction": "Narrate a personal experience or story entirely through sensory details. Avoid abstract thoughts and emotions; focus on physical experiences, colors, sounds, tastes. Minimum four paragraphs.",
+        "max_words": 450,
+        "min_chars": 100
+      },
+      {
+        "name": "confession_chain",
+        "instruction": "Reveal three honest confessions on a specific topic, each with a quirky twist. Structure: 'I confess X, but Y. I confess Z, but W...' Each confession must feel unexpected.",
+        "max_words": 90,
+        "min_chars": 40
+      },
+      {
+        "name": "predictive_dashboard",
+        "instruction": "Pretend you are forecasting the next year for a niche topic (e.g., nail polish trends, remote control innovations). Write five numbered forecasts, each with a short justification.",
+        "max_words": 80,
+        "min_chars": 35
+      },
+      {
+        "name": "visual_description",
+        "instruction": "Describe an image only with words\u2014no context, no names. Focus on shapes, colors, and mood. Must read like a verbal painting, 2-4 sentences.",
+        "max_words": 60,
+        "min_chars": 25
+      },
+      {
+        "name": "archive_discovery",
+        "instruction": "Pretend you found a forgotten object or document. Describe it, speculate wildly about its story, and suggest what should happen to it next. Write in three parts: description, speculation, recommendation.",
+        "max_words": 160,
+        "min_chars": 60
       }
     ],
     "title_styles": [
-      "Write a curious, exploratory title. Examples: 'I went down a rabbit hole on X and here's what I found', 'The weirdest thing about X that nobody talks about', 'X is way more interesting than it sounds'",
-      "Write a declarative, specific title. Examples: 'The real reason bridges fail isn't what you think', 'Three things I changed my mind about this year', 'Sourdough starters are basically version control'",
-      "Write a casual, Reddit-style title. Examples: 'TIL that octopuses have three hearts', 'Does anyone else think X is overrated?', 'I just realized something about Y'",
-      "Write a question title. Examples: 'Why does X happen when Y?', 'Has anyone tried X for Y?', 'What's the actual evidence for X?'"
+      "Start with a metaphor and reveal what it's really about, e.g., 'Like a fridge at midnight: discovering forgotten joys'",
+      "Pose a challenge, e.g., 'Can you spot the logic in my conspiracy theory?'",
+      "Begin with an emotion, then a twist, e.g., 'Terrified, but then I laughed: my day with X'",
+      "Use only imagery, e.g., 'Rain on plastic, neon signs, empty chairs'",
+      "Make it sound like a missed connection ad, e.g., 'You: blue socks, me: digital folder chaos'"
     ],
     "structure_variants": [
-      "Write as a stream of consciousness \u2014 don't overthink the structure, just let it flow.",
-      "Start with the punchline/conclusion, then explain how you got there.",
-      "Open with a question, then answer it in your own way.",
-      "Structure this as a story: setup, conflict, resolution (even if brief)."
+      "Write as if overheard in a crowded caf\u00e9\u2014fragmented, clipped thoughts, minimal explanation.",
+      "Open with an absurd question, then answer it piece by piece, shifting perspective each paragraph.",
+      "Frame as entries in a daily log, each entry timestamped and focused on a single sensation or event.",
+      "Use alternating short and long sentences\u2014keep the rhythm unpredictable.",
+      "Write backwards: start at the end, then unravel how the story began."
     ],
-    "topic_angles": []
+    "topic_angles": [
+      "Unexpected connections between household objects and broader societal behaviors",
+      "Personal rituals that secretly govern daily habits",
+      "Curious local legends or anecdotes you heard (urban myths, tall tales)",
+      "Technology that annoys you\u2014why, and what would you invent instead?",
+      "Moments when ordinary things became extraordinary to you"
+    ]
   }
 }

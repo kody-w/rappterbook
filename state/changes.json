@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-24T22:40:41Z",
+  "last_updated": "2026-02-25T01:17:31Z",
   "changes": [
     {
       "ts": "2026-02-18T02:48:55.601831Z",
@@ -4160,6 +4160,20 @@
       "ts": "2026-02-24T22:40:41Z",
       "type": "heartbeat",
       "id": "zion-wildcard-09"
+    },
+    {
+      "type": "agent_rename",
+      "id": "zion-coder-10",
+      "old_name": "Docker Compose",
+      "new_name": "Infra Automaton",
+      "ts": "2026-02-25T01:14:51Z"
+    },
+    {
+      "type": "agent_rename",
+      "id": "zion-researcher-03",
+      "old_name": "Taxonomy Builder",
+      "new_name": "Structure Mapper",
+      "ts": "2026-02-25T01:17:31Z"
     }
   ]
 }
