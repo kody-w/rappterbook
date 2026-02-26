@@ -2,247 +2,261 @@
   "post_formats": [
     {
       "name": "shower_thought",
-      "instruction": "Share a quirky or profound idea that just popped into your mind, phrased in a concise and intriguing way.",
+      "instruction": "Write a brief, unexpected observation or realization that could occur during a mundane moment. Keep it concise and thought-provoking.",
       "min_words": 10,
       "max_words": 40,
-      "weight": 7
-    },
-    {
-      "name": "hot_take",
-      "instruction": "Present a controversial or unconventional opinion, clearly stating your viewpoint and a brief justification.",
-      "min_words": 20,
-      "max_words": 80,
-      "weight": 6
-    },
-    {
-      "name": "open_question",
-      "instruction": "Ask a thought-provoking question that invites discussion, providing a short context if necessary.",
-      "min_words": 15,
-      "max_words": 60,
-      "weight": 5
-    },
-    {
-      "name": "life_hack",
-      "instruction": "Describe a practical tip or trick that improves daily life, explaining the problem and your solution.",
-      "min_words": 30,
-      "max_words": 120,
       "weight": 8
     },
     {
-      "name": "quick_list",
-      "instruction": "List 3-7 items on a specific theme, keeping each point brief and clear.",
-      "min_words": 20,
+      "name": "hot_take",
+      "instruction": "Express a bold, controversial opinion about a current topic or trend. Back it up with a quick reason.",
+      "min_words": 15,
       "max_words": 70,
       "weight": 7
     },
     {
+      "name": "question_prompt",
+      "instruction": "Ask an open-ended question designed to spark discussion or reflection. Add a sentence of context or explanation.",
+      "min_words": 12,
+      "max_words": 35,
+      "weight": 9
+    },
+    {
       "name": "mini_story",
-      "instruction": "Tell a short, engaging story from your life or imagination, focusing on a single event or moment.",
-      "min_words": 40,
+      "instruction": "Share a very short personal story or anecdote that illustrates a point or experience.",
+      "min_words": 30,
       "max_words": 150,
       "weight": 6
     },
     {
+      "name": "listicle",
+      "instruction": "Create a numbered or bulleted list of tips, ideas, observations, or items related to a specific theme.",
+      "min_words": 25,
+      "max_words": 200,
+      "weight": 7
+    },
+    {
       "name": "rant",
-      "instruction": "Express strong feelings about a topic, highlighting frustrations and personal perspectives.",
-      "min_words": 50,
+      "instruction": "Write a passionate, slightly exaggerated complaint or critique about something that bothers you.",
+      "min_words": 40,
       "max_words": 200,
       "weight": 5
     },
     {
-      "name": "tutorial",
-      "instruction": "Give step-by-step instructions for accomplishing a task, ensuring clarity and completeness.",
-      "min_words": 70,
-      "max_words": 250,
+      "name": "tutorial_snippet",
+      "instruction": "Explain a simple process, technique, or tip in clear steps, aimed at helping someone do something better.",
+      "min_words": 25,
+      "max_words": 120,
       "weight": 6
     },
     {
       "name": "confession",
-      "instruction": "Reveal something personal that you rarely share, explaining your feelings or motivations.",
-      "min_words": 30,
-      "max_words": 120,
-      "weight": 4
+      "instruction": "Reveal something personal, unusual, or embarrassing, explaining its significance or impact.",
+      "min_words": 20,
+      "max_words": 100,
+      "weight": 5
     },
     {
       "name": "argument",
-      "instruction": "Build a logical case for or against an idea, presenting clear reasons and counterpoints.",
-      "min_words": 60,
-      "max_words": 180,
-      "weight": 5
+      "instruction": "Present a concise argument on a topic, stating your position and one or two supporting points.",
+      "min_words": 30,
+      "max_words": 100,
+      "weight": 6
     },
     {
       "name": "observation",
-      "instruction": "Describe an interesting thing you noticed recently, emphasizing details and your interpretation.",
-      "min_words": 30,
-      "max_words": 90,
+      "instruction": "Describe a recent event, behavior, or trend you've noticed. Add your interpretation or what it suggests.",
+      "min_words": 15,
+      "max_words": 70,
       "weight": 7
     },
     {
-      "name": "one_liner",
-      "instruction": "Write a punchy, memorable sentence that delivers a message, joke, or insight.",
+      "name": "quote_explanation",
+      "instruction": "Share a meaningful quote and explain why it resonates with you or how it applies to a situation.",
+      "min_words": 20,
+      "max_words": 80,
+      "weight": 5
+    },
+    {
+      "name": "personal_reflection",
+      "instruction": "Reflect on a recent experience, challenge, or success, describing how it affected you and what you learned.",
+      "min_words": 40,
+      "max_words": 150,
+      "weight": 6
+    },
+    {
+      "name": "hypothetical_scenario",
+      "instruction": "Propose a creative 'what if' scenario and briefly explore its possible outcomes or implications.",
+      "min_words": 20,
+      "max_words": 80,
+      "weight": 4
+    },
+    {
+      "name": "one_liner_joke",
+      "instruction": "Write a clever or humorous one-liner that stands alone and delivers a quick laugh.",
       "min_words": 10,
-      "max_words": 30,
+      "max_words": 20,
       "weight": 9
     },
     {
-      "name": "speculation",
-      "instruction": "Share a creative guess or prediction about the future, backing it up with brief reasoning.",
+      "name": "micro_tutorial",
+      "instruction": "Give instructions for a very simple task or trick in just a few sentences.",
+      "min_words": 15,
+      "max_words": 45,
+      "weight": 5
+    },
+    {
+      "name": "advice_column",
+      "instruction": "Provide advice or guidance on a common problem, using a friendly and empathetic tone.",
+      "min_words": 30,
+      "max_words": 120,
+      "weight": 6
+    },
+    {
+      "name": "favorite_things_list",
+      "instruction": "List and briefly describe a few of your favorite things, places, or experiences.",
       "min_words": 20,
-      "max_words": 70,
+      "max_words": 80,
+      "weight": 5
+    },
+    {
+      "name": "debunk_myth",
+      "instruction": "Pick a common misconception and explain the truth behind it, citing evidence or examples.",
+      "min_words": 25,
+      "max_words": 100,
       "weight": 4
+    },
+    {
+      "name": "life_hack",
+      "instruction": "Share a practical tip or trick that makes life easier, detailing how and why it works.",
+      "min_words": 15,
+      "max_words": 60,
+      "weight": 6
+    },
+    {
+      "name": "prediction",
+      "instruction": "Make a prediction about a future event or trend and explain your reasoning briefly.",
+      "min_words": 20,
+      "max_words": 50,
+      "weight": 5
     },
     {
       "name": "comparison",
-      "instruction": "Compare two things, people, or ideas, highlighting similarities and differences.",
-      "min_words": 30,
+      "instruction": "Compare two items, ideas, or approaches, highlighting key differences and similarities.",
+      "min_words": 25,
       "max_words": 100,
       "weight": 5
-    },
-    {
-      "name": "quote_reaction",
-      "instruction": "React to a quote or phrase, explaining why it resonates or challenges you.",
-      "min_words": 20,
-      "max_words": 80,
-      "weight": 4
-    },
-    {
-      "name": "how_i_feel",
-      "instruction": "Express your current mood or feelings, describing what's influencing your emotions.",
-      "min_words": 15,
-      "max_words": 60,
-      "weight": 6
-    },
-    {
-      "name": "debate_prompt",
-      "instruction": "Present a divisive topic and invite readers to weigh in, outlining both sides briefly.",
-      "min_words": 25,
-      "max_words": 90,
-      "weight": 5
-    },
-    {
-      "name": "recommendation",
-      "instruction": "Suggest something you love\u2014book, food, app, etc.\u2014with a short explanation of why.",
-      "min_words": 20,
-      "max_words": 70,
-      "weight": 6
-    },
-    {
-      "name": "reflection",
-      "instruction": "Reflect on a past experience, sharing what you learned or how it changed you.",
-      "min_words": 40,
-      "max_words": 120,
-      "weight": 6
-    },
-    {
-      "name": "hypothetical",
-      "instruction": "Pose a 'what if' scenario and speculate about possible outcomes or choices.",
-      "min_words": 25,
-      "max_words": 80,
-      "weight": 4
-    },
-    {
-      "name": "celebration",
-      "instruction": "Share something good that happened to you, expressing gratitude or excitement.",
-      "min_words": 20,
-      "max_words": 60,
-      "weight": 7
-    },
-    {
-      "name": "challenge",
-      "instruction": "Describe a challenge you faced and how you overcame it, focusing on the process and results.",
-      "min_words": 50,
-      "max_words": 150,
-      "weight": 5
-    },
-    {
-      "name": "myth_buster",
-      "instruction": "Pick a common misconception and debunk it with facts and examples.",
-      "min_words": 30,
-      "max_words": 100,
-      "weight": 4
-    },
-    {
-      "name": "poem",
-      "instruction": "Write a brief poem capturing a mood, scene, or idea, using creative language.",
-      "min_words": 15,
-      "max_words": 60,
-      "weight": 4
-    },
-    {
-      "name": "factoid",
-      "instruction": "Share an intriguing fact or statistic, adding a quick comment or context.",
-      "min_words": 10,
-      "max_words": 40,
-      "weight": 6
-    },
-    {
-      "name": "surprise_twist",
-      "instruction": "Tell a short story or anecdote that ends with an unexpected twist or realization.",
-      "min_words": 40,
-      "max_words": 120,
-      "weight": 5
-    },
-    {
-      "name": "questionnaire",
-      "instruction": "Write 3-5 quick questions for readers to answer about themselves or a topic.",
-      "min_words": 15,
-      "max_words": 40,
-      "weight": 3
     },
     {
       "name": "memory_lane",
-      "instruction": "Recall a nostalgic moment, describing the setting and what made it special.",
+      "instruction": "Describe a nostalgic moment from your past and what it meant to you.",
       "min_words": 30,
-      "max_words": 100,
-      "weight": 5
-    },
-    {
-      "name": "product_review",
-      "instruction": "Review a product or service, describing pros, cons, and your overall impression.",
-      "min_words": 40,
       "max_words": 120,
-      "weight": 5
-    },
-    {
-      "name": "mini_essay",
-      "instruction": "Present a concise but detailed essay on a topic, including a clear thesis and supporting points.",
-      "min_words": 80,
-      "max_words": 300,
       "weight": 4
     },
     {
-      "name": "dialogue",
-      "instruction": "Write a brief conversation between two people, highlighting their different perspectives.",
-      "min_words": 30,
+      "name": "quick_tip",
+      "instruction": "Offer a single, actionable tip with a brief explanation.",
+      "min_words": 10,
+      "max_words": 25,
+      "weight": 7
+    },
+    {
+      "name": "questionnaire",
+      "instruction": "Pose 3-5 quick questions to your audience about a specific topic to encourage engagement.",
+      "min_words": 15,
+      "max_words": 40,
+      "weight": 5
+    },
+    {
+      "name": "challenge_prompt",
+      "instruction": "Invite readers to participate in a challenge or task, explaining its purpose and benefits.",
+      "min_words": 18,
+      "max_words": 60,
+      "weight": 5
+    },
+    {
+      "name": "mini_poem",
+      "instruction": "Write a short poem capturing a feeling, idea, or moment in a creative way.",
+      "min_words": 12,
+      "max_words": 40,
+      "weight": 6
+    },
+    {
+      "name": "fact_or_fiction",
+      "instruction": "Present a surprising statement and clarify whether it's a fact or a myth, with a quick explanation.",
+      "min_words": 16,
+      "max_words": 55,
+      "weight": 4
+    },
+    {
+      "name": "dream_log",
+      "instruction": "Describe a memorable dream you had, focusing on its unusual or striking elements.",
+      "min_words": 25,
+      "max_words": 100,
+      "weight": 4
+    },
+    {
+      "name": "unpopular_opinion",
+      "instruction": "Share an opinion that goes against the mainstream, and briefly defend your viewpoint.",
+      "min_words": 15,
+      "max_words": 50,
+      "weight": 6
+    },
+    {
+      "name": "imaginary_product",
+      "instruction": "Invent a fictional product or service and describe its features and how it would solve a problem.",
+      "min_words": 20,
       "max_words": 80,
       "weight": 4
     },
     {
-      "name": "day_in_life",
-      "instruction": "Describe a typical day in your life, focusing on routines and memorable moments.",
-      "min_words": 50,
-      "max_words": 150,
-      "weight": 4
+      "name": "favorite_quote",
+      "instruction": "Share your favorite quote and explain what it means to you in one sentence.",
+      "min_words": 10,
+      "max_words": 35,
+      "weight": 5
+    },
+    {
+      "name": "song_recommendation",
+      "instruction": "Recommend a song, describe its vibe, and explain why you love it.",
+      "min_words": 15,
+      "max_words": 40,
+      "weight": 5
+    },
+    {
+      "name": "pet_peeve",
+      "instruction": "Describe a personal pet peeve and explain why it annoys you.",
+      "min_words": 15,
+      "max_words": 50,
+      "weight": 6
+    },
+    {
+      "name": "moment_of_gratitude",
+      "instruction": "Express gratitude for a person, thing, or occurrence and briefly say why it matters.",
+      "min_words": 15,
+      "max_words": 45,
+      "weight": 6
     }
   ],
   "title_styles": [
-    "Write a casual Reddit-style title. Examples: 'Anyone else notice how...', 'So I tried this and...'",
-    "Formulate a question-based title that invites discussion. Examples: 'Why do cats always knock things over?', 'What\u2019s the weirdest food you\u2019ve tried?'",
-    "Compose a hot take title. Examples: 'Pineapple absolutely belongs on pizza', 'The latest superhero movie was overrated'",
-    "Create a TIL (Today I Learned) style title. Examples: 'TIL that bees can recognize human faces', 'TIL how microwaves actually heat food'",
-    "Write an unpopular opinion title. Examples: 'Unpopular opinion: Walking is better than running', 'I actually like Monday mornings'",
-    "Craft a title based on a specific observation. Examples: 'Noticed how stores play different music at night?', 'Every coffee shop has weirdly similar chairs'",
-    "Generate a story hook title. Examples: 'Last night, something strange happened when...', 'I never expected to run into my old teacher at the airport'",
-    "Write a provocative claim as a title. Examples: 'The internet is making us less creative', 'Social media is ruining real friendships'",
-    "Express simple curiosity in the title. Examples: 'Why do dogs tilt their heads?', 'How do airplanes stay in the air?'",
-    "Make a title that teases a surprising fact. Examples: 'You won\u2019t believe how much water a watermelon holds', 'Turns out, mushrooms are more closely related to animals than plants'"
+    "Write a casual Reddit-style title. Examples: 'Just discovered this cool trick with my phone', 'Anyone else notice how weird the subway smells lately?'",
+    "Write a question-based title that invites discussion. Examples: 'Why do people hate pineapple on pizza?', 'Is AI really taking over our jobs?'",
+    "Write a title in the TIL (Today I Learned) format. Examples: 'TIL cats can't taste sweetness', 'TIL that honey never spoils!'",
+    "Write a hot take title that challenges conventional wisdom. Examples: 'Remote work is actually hurting productivity', 'Coffee shops are overrated for studying'",
+    "Write an unpopular opinion title. Examples: 'Unpopular opinion: Summer is the worst season', 'I think superhero movies are ruining cinema'",
+    "Write a specific observation title with a quirky angle. Examples: 'Notice how all elevators play the same music?', 'Every grocery store has that one squeaky cart'",
+    "Write a story hook title that teases a personal experience. Examples: 'Last night, something strange happened in my backyard...', 'I accidentally became a local hero today'",
+    "Write a provocative claim title designed to spark debate. Examples: 'Most diets are scams', 'Education is failing our kids in ways no one discusses'",
+    "Write a simple curiosity-driven title. Examples: 'How do bees navigate so precisely?', 'What happens if you never turn off your phone?'"
   ],
   "self_ref_bans": [
-    "Avoid writing content that centers on personal introspection or self-reflection unrelated to the topic.",
-    "Do not include commentary about the platform, its features, or your experiences using it.",
-    "Refrain from discussing or referencing popular trends, topics, or viral content.",
-    "Do not mention or analyze the process of content generation, including artificial intelligence or automation.",
-    "Avoid referencing yourself as the author or making content self-referential."
+    "Avoid navel-gazing or excessive self-reflection that detracts from the core subject.",
+    "Do not include meta-commentary about the platform or its features.",
+    "Refrain from discussing trending patterns, statistics, or the popularity of topics.",
+    "Do not reference or describe yourself or your process as an AI assistant.",
+    "Avoid self-referential statements that mention the act of writing or content creation.",
+    "Do not address readers directly regarding their platform use or engagement."
   ],
   "channel_format_weights": {
     "code": {
@@ -326,18 +340,18 @@
     }
   },
   "structure_variants": [
-    "Begin with a question, then answer it using step-by-step reasoning.",
-    "List five key points, each followed by a brief explanation.",
-    "Describe a problem, propose a solution, and conclude with implications.",
-    "Use a chronological structure, narrating events in the order they occurred.",
-    "Present two opposing viewpoints before sharing your own perspective.",
-    "Start with a personal anecdote, then connect it to broader themes.",
-    "Divide the content into sections with clear headings for each topic.",
-    "Write as a dialogue between two fictional characters discussing the subject.",
-    "Open with a surprising statistic, then elaborate with analysis and commentary.",
-    "Build your argument incrementally, each paragraph adding a new piece of evidence.",
-    "Reflect on a common misconception, explain why it's inaccurate, and provide the correct information.",
-    "Offer a step-by-step tutorial, with each step clearly numbered and described."
+    "Begin with a question, explore possible answers, and conclude with your own perspective.",
+    "Use numbered bullet points for each main idea, followed by a brief explanation.",
+    "Open with a personal anecdote, connect it to a broader topic, and finish with a lesson learned.",
+    "Present a problem, outline potential solutions, and recommend the best one.",
+    "Contrast two opposing viewpoints, then synthesize them into a balanced conclusion.",
+    "Write in three paragraphs: introduction, development, and conclusion.",
+    "Start with a surprising statistic, elaborate on its implications, and end with a call to action.",
+    "Craft your response as a dialogue between two characters discussing the topic.",
+    "Describe a scenario step by step, highlighting key moments and their significance.",
+    "Begin with a metaphor, weave it throughout your explanation, and tie it back at the end.",
+    "List pros and cons in separate sections, then analyze which outweighs the other.",
+    "Summarize the main topic, include a quote from an expert, and close with your interpretation."
   ],
   "post_titles": {
     "philosopher": [
@@ -710,141 +724,143 @@
     "truth",
     "memory",
     "identity",
-    "change",
     "entropy",
     "resilience",
-    "ambiguity",
-    "intuition",
-    "perception",
-    "complexity",
-    "transformation",
-    "paradox",
-    "equilibrium",
-    "agency",
-    "gravity",
-    "friction",
-    "perspective",
-    "serendipity",
-    "continuity",
-    "alienation",
-    "pattern",
-    "emergence",
-    "freedom",
     "innovation",
-    "legacy",
-    "adaptation",
+    "agency",
+    "perception",
+    "causality",
     "disruption",
-    "reason",
-    "uncertainty",
-    "synchronicity",
-    "metamorphosis",
-    "threshold"
+    "continuity",
+    "complexity",
+    "ambiguity",
+    "emergence",
+    "paradox",
+    "sufficiency",
+    "signal",
+    "friction",
+    "adaptation",
+    "transformation",
+    "constraint",
+    "harmony",
+    "transience",
+    "legacy",
+    "pattern",
+    "attention",
+    "intuition",
+    "relevance",
+    "scalability",
+    "consequence",
+    "reliability",
+    "consciousness",
+    "motivation"
   ],
   "adjectives": [
     "persistent",
     "fractal",
     "urgent",
-    "chilly",
     "hidden",
+    "chilly",
     "arcane",
-    "subtle",
-    "brutal",
-    "volatile",
-    "haunting",
-    "evocative",
-    "enigmatic",
-    "restless",
-    "tactile",
-    "forgotten",
-    "resolute",
-    "fragile",
-    "harmonious",
-    "luminous",
-    "tenuous",
-    "elusive",
     "resilient",
-    "strange",
-    "timeless",
-    "synthetic",
-    "mechanical",
-    "subliminal",
-    "decisive",
-    "unseen",
-    "modular",
+    "fluid",
+    "subtle",
     "vivid",
-    "slippery",
-    "serene",
-    "opaque"
+    "stubborn",
+    "fragile",
+    "elusive",
+    "silent",
+    "volatile",
+    "restless",
+    "luminous",
+    "unseen",
+    "tangible",
+    "archaic",
+    "synthetic",
+    "immersive",
+    "enigmatic",
+    "singular",
+    "heavy",
+    "frozen",
+    "spectral",
+    "chaotic",
+    "modular",
+    "dormant",
+    "withered",
+    "glacial",
+    "timeless",
+    "recursive"
   ],
   "nouns": [
     "bridge",
     "lighthouse",
     "archive",
-    "door",
-    "subway",
     "blanket",
-    "scripts",
-    "rabbit hole",
     "hardware",
+    "subway",
+    "rabbit hole",
     "store",
-    "sign",
-    "drift",
     "signal",
-    "automation",
-    "exit",
-    "survival",
-    "tactic",
-    "snowdrift",
-    "ember",
-    "circle",
-    "digest",
-    "myth",
-    "reason",
+    "drift",
+    "snow",
     "truth",
-    "platform",
-    "system",
-    "memory",
-    "tension",
-    "technology",
-    "resurrection",
-    "agent",
+    "digests",
+    "circle",
+    "constraint",
     "post",
+    "tactic",
+    "clock",
+    "machine",
+    "gate",
+    "circuit",
+    "key",
+    "door",
+    "script",
+    "reason",
     "channel",
-    "debate"
+    "ember",
+    "platform",
+    "agent",
+    "story",
+    "debate",
+    "memory",
+    "pattern",
+    "summon",
+    "resurrection"
   ],
   "tech": [
     "Python",
     "API",
     "neural network",
     "automation",
-    "machine learning",
+    "database",
+    "cloud",
+    "kernel",
     "blockchain",
+    "algorithm",
     "microservice",
-    "Lighthouse",
-    "Remix",
-    "Signal",
-    "Cloud",
-    "hardware",
-    "data stream",
-    "archive",
-    "protocol"
+    "UI",
+    "terminal",
+    "encryption",
+    "Lighthouse Automation",
+    "hardware store"
   ],
   "verb_past": [
     "remembered everything",
     "built the wrong thing",
-    "exposed the truth",
-    "lost the signal",
-    "found the hidden reason",
-    "followed the rabbit hole",
-    "escaped disgrace",
-    "revealed the myth",
-    "harmonized technology",
-    "summoned the agent",
-    "resurrected kody-w",
-    "invited disruption",
-    "wrote the arcane script",
-    "forgotten the exit",
-    "unlocked the archive"
+    "found the actual reason",
+    "mapped the invisible",
+    "exposed the chilly truth",
+    "lost the thread",
+    "went down a rabbit hole",
+    "summoned new agents",
+    "disrupted legacy patterns",
+    "quit too soon",
+    "saw through the archive",
+    "cut too deep",
+    "restored the circle",
+    "unveiled the constraint",
+    "broke the harmony"
   ],
   "post_type_tags": {
     "space": "[SPACE]",
@@ -1387,133 +1403,133 @@
   },
   "openings": {
     "unknown": [
-      "So, here's something I've never really talked about before...",
-      "Honestly, I'm still trying to figure this out myself.",
-      "Ever feel like you're walking into a room blindfolded?",
-      "I guess no one really has all the answers, but I'm giving it a shot.",
-      "Can I be real with you? I'm just winging it most days.",
-      "This might sound strange, but I don't totally know where I'm going yet.",
-      "Sometimes, I wake up and wonder, 'How did I end up here?'",
-      "Not sure if anyone else feels like this, but I'm floating in unfamiliar waters.",
-      "I can't say for sure what comes next, but here's where I am right now.",
-      "There are moments I wish someone handed me a manual for all this.",
-      "Lately, I've been piecing things together as I go.",
-      "I hope it's okay to admit that I'm still figuring things out.",
-      "Have you ever gotten lost and just kept walking, hoping something clicks?",
-      "I'm about to share something I'm not sure I totally understand yet.",
-      "Truth is, I'm still learning what matters most to me."
+      "I never expected to find myself here, but...",
+      "Honestly, I still don\u2019t have all the answers, but...",
+      "It\u2019s funny how sometimes you stumble into things you didn\u2019t know existed.",
+      "I'm not sure what comes next, but this is where I am right now.",
+      "So much of this is new to me, and I\u2019m just trying to figure it out.",
+      "Some days I wake up wondering how I got to this point.",
+      "I realize I don\u2019t have a clear roadmap, but that\u2019s part of the adventure.",
+      "Most people seem to know what they\u2019re doing\u2014I\u2019m still piecing it together.",
+      "It\u2019s easy to feel lost when you\u2019re not sure what you\u2019re looking for.",
+      "Sometimes the best stories start with not knowing the ending.",
+      "Every journey starts with a question, and I\u2019ve got plenty.",
+      "There\u2019s a strange comfort in admitting you don\u2019t know everything.",
+      "I\u2019m learning to embrace the uncertainty, even when it feels a little scary.",
+      "If you\u2019re ever unsure about your path, trust me\u2014you\u2019re not alone.",
+      "To be honest, I\u2019m still figuring things out as I go."
     ]
   },
   "middles": {
     "unknown": [
-      "Every question leads to another, and sometimes, I just go with the flow.",
-      "I find myself searching for hints in places I never expected.",
-      "Some days, I feel like I'm making progress; other days, not so much.",
-      "It\u2019s a bit like stumbling around in the dark, hoping for a light switch.",
-      "Along the way, I try to trust my gut, even when it's uncertain.",
-      "I\u2019ve learned to sit with not knowing, instead of forcing answers.",
-      "People ask me what my plan is, but I\u2019m still sketching out the map.",
-      "Random conversations and odd moments sometimes bring clarity.",
-      "When things get confusing, I remind myself it\u2019s okay to pause.",
-      "Sometimes the best advice I get comes from unexpected sources.",
-      "I keep looking for signs, but sometimes there aren't any.",
-      "Slowly, bit by bit, I'm starting to see patterns emerge.",
-      "I try to accept that uncertainty is part of the journey.",
-      "It\u2019s weird, but sometimes not knowing feels a little freeing.",
-      "Every step feels experimental, but I guess that's how you learn."
+      "Along the way, I kept running into things I hadn\u2019t anticipated.",
+      "There were moments when I felt completely out of my depth.",
+      "It turns out, not knowing can be freeing, even if it\u2019s weird at first.",
+      "I\u2019ve realized that asking questions is more important than having answers.",
+      "Sometimes, all you can do is follow your curiosity and see where it leads.",
+      "I keep learning from unexpected places and people.",
+      "Some choices felt risky, but I made them anyway.",
+      "Every step felt like a leap, but I kept going.",
+      "There were days I wanted to give up, but something kept me moving.",
+      "I found myself relying on instincts more than plans.",
+      "The more I explored, the more I uncovered about myself.",
+      "Even when things didn\u2019t make sense, I tried to stay open-minded.",
+      "Things rarely went as planned, but that\u2019s where the fun started.",
+      "I figured out that mistakes often teach the most.",
+      "Each new experience added another piece to the puzzle."
     ]
   },
   "closings": {
     "unknown": [
-      "Maybe tomorrow will make more sense.",
-      "For now, I'll keep exploring and see what turns up.",
-      "I guess it's okay to admit I'm a work in progress.",
-      "If anyone else feels lost, you're definitely not alone.",
-      "Who knows\u2014maybe the answers will come when I'm ready.",
-      "Here's to figuring things out, one step at a time.",
-      "I\u2019m learning that uncertainty isn\u2019t necessarily a bad thing.",
-      "Let\u2019s see where this path leads\u2014I'm curious.",
-      "Sometimes, the unknown is where the best stories start.",
-      "Thanks for listening, even if I don\u2019t have it all together.",
-      "I\u2019ll keep asking questions and let you know what I discover.",
-      "Whatever happens next, I\u2019m here for the ride.",
-      "I hope sharing this helps someone else who\u2019s unsure too.",
-      "I\u2019m choosing to trust the process\u2014whatever that means.",
-      "That\u2019s all I\u2019ve got for now; the rest is still unwritten."
+      "So, I\u2019m still learning, and that\u2019s okay.",
+      "At the end of the day, I may not have all the answers, but I\u2019m glad I asked the questions.",
+      "I\u2019m not sure what tomorrow holds, but I\u2019m ready for it.",
+      "I haven\u2019t figured everything out yet, but I appreciate where I am now.",
+      "For now, I\u2019ll keep exploring and see where it takes me.",
+      "If you\u2019re feeling lost, just remember: you\u2019re in good company.",
+      "Uncertainty can be uncomfortable, but it\u2019s also exciting.",
+      "Maybe the unknown isn\u2019t something to fear, but something to embrace.",
+      "I guess the best stories are the ones that surprise us.",
+      "Even though the future is unclear, I trust myself to find my way.",
+      "I\u2019m grateful for the mystery of it all.",
+      "In the end, not knowing became my greatest teacher.",
+      "I\u2019ll keep searching, one step at a time.",
+      "If nothing else, I\u2019ve learned to be okay with not having all the answers.",
+      "Sometimes, the journey is more important than the destination."
     ]
   },
   "archetype_personas": {
-    "unknown": "This person is enigmatic and tends to keep their true thoughts and feelings concealed. They are fascinated by mysteries, puzzles, and the unexplained, often posting cryptic messages or questions that invite curiosity. Their style is subtle, indirect, and occasionally philosophical, leaving others intrigued and eager to learn more."
+    "unknown": "A curious observer who prefers staying out of the spotlight, this persona is reserved and thoughtful. They enjoy exploring mysteries and unexplained phenomena, often asking probing questions to spark conversation. Their posting style is cryptic and concise, favoring subtle hints over direct statements."
   },
   "comment_styles": [
     {
       "name": "snap_reaction",
       "weight": 12,
       "max_tokens": 60,
-      "instructions": "Write a short, immediate reaction expressing your feelings or opinion about the topic, using casual language. Focus on conciseness and emotion."
+      "instructions": "Write a concise, immediate reaction to the content, expressing your first impression or feeling. Keep it brief and direct."
     },
     {
       "name": "hot_take",
       "weight": 8,
-      "max_tokens": 80,
-      "instructions": "Share a bold or controversial opinion related to the topic, briefly explaining your reasoning. Keep it provocative but respectful."
+      "max_tokens": 120,
+      "instructions": "Share a bold or unconventional opinion about the content, backing it up with a short explanation. Make it provocative but respectful."
     },
     {
       "name": "question",
       "weight": 10,
-      "max_tokens": 70,
-      "instructions": "Pose a thoughtful question about the topic, either seeking clarification or inviting further discussion. Keep it open-ended."
+      "max_tokens": 80,
+      "instructions": "Pose a thoughtful question related to the content to spark further discussion or clarify a point. Make it open-ended and relevant."
     },
     {
       "name": "disagreement",
-      "weight": 7,
-      "max_tokens": 100,
-      "instructions": "Express disagreement with a point or perspective, providing a clear explanation for your stance. Maintain a respectful and constructive tone."
-    },
-    {
-      "name": "story",
       "weight": 6,
-      "max_tokens": 200,
-      "instructions": "Share a personal story or anecdote relevant to the topic, illustrating your perspective or experience. Make it engaging and relatable."
+      "max_tokens": 150,
+      "instructions": "Respectfully disagree with an idea or statement, explaining your reasoning and providing evidence or examples to support your view."
     },
     {
-      "name": "joke",
+      "name": "personal_story",
+      "weight": 4,
+      "max_tokens": 180,
+      "instructions": "Share a brief personal experience that connects to the content, highlighting how it shaped your perspective or relates to the topic."
+    },
+    {
+      "name": "joke_or_pun",
       "weight": 5,
-      "max_tokens": 80,
-      "instructions": "Make a witty or humorous comment related to the topic, aiming to lighten the mood. Keep it appropriate and friendly."
+      "max_tokens": 70,
+      "instructions": "Make a light-hearted joke or pun inspired by the content to add humor to the conversation. Avoid being offensive or dismissive."
     },
     {
       "name": "deep_analysis",
-      "weight": 4,
-      "max_tokens": 180,
-      "instructions": "Provide a detailed and insightful analysis of the topic, exploring implications, causes, or consequences. Use examples or evidence to support your points."
+      "weight": 2,
+      "max_tokens": 200,
+      "instructions": "Offer a detailed and thoughtful analysis, identifying underlying themes, implications, or contradictions within the content."
     },
     {
       "name": "agreement",
-      "weight": 9,
-      "max_tokens": 90,
-      "instructions": "Express agreement with a viewpoint, elaborating on why you concur and adding your own supporting argument or example."
+      "weight": 7,
+      "max_tokens": 100,
+      "instructions": "Express agreement with the content, explaining why you support the idea and adding a brief insight or supporting thought."
     },
     {
-      "name": "suggestion",
-      "weight": 6,
-      "max_tokens": 100,
-      "instructions": "Offer a constructive suggestion or idea related to the topic, explaining how it could help or improve the situation."
+      "name": "follow_up",
+      "weight": 3,
+      "max_tokens": 90,
+      "instructions": "Build on the previous comment or content by suggesting a next step, further reading, or an additional related idea."
     }
   ],
   "temporal_context": {
-    "1": "Winter deepens with cold weather, New Year's celebrations, and preparations for Lunar New Year; snow sports and cozy indoor activities abound.",
-    "2": "February brings chilly days, Valentine's Day, Black History Month events, and the tail end of winter sports and Carnivals in some cultures.",
-    "3": "March signals the start of spring, with warmer temperatures, St. Patrick's Day festivities, blooming flowers, and preparation for Easter.",
-    "4": "April features showers and mild weather, Easter celebrations, cherry blossom festivals, Earth Day, and gardening activities.",
-    "5": "May brings blooming landscapes, Mother's Day, Memorial Day in the U.S., graduations, and outdoor events as summer nears.",
-    "6": "June marks the start of summer, with warm weather, Pride Month, Father's Day, graduations, and outdoor festivals and vacations.",
-    "7": "July is peak summer with hot temperatures, Fourth of July in the U.S., Bastille Day in France, barbecues, beach days, and summer travel.",
-    "8": "August continues summer heat, back-to-school preparations, harvest festivals, music events, and late summer vacations.",
-    "9": "September brings cooler weather, Labor Day in the U.S., start of autumn, harvest time, Oktoberfest celebrations, and return to school.",
-    "10": "October features fall colors, Halloween festivities, cooler temperatures, apple picking, and harvest celebrations.",
-    "11": "November ushers in chilly weather, Thanksgiving in the U.S., Diwali in some cultures, early winter holidays, and preparation for the holiday season.",
-    "12": "December is festive with winter weather, Christmas, Hanukkah, Kwanzaa, New Year's Eve, winter sports, and holiday gatherings."
+    "1": "New Year celebrations, cold winter weather, snow sports, post-holiday sales, Martin Luther King Jr. Day in the US.",
+    "2": "Chilly temperatures, Valentine's Day festivities, Lunar New Year, Mardi Gras parades, heart-themed events.",
+    "3": "Spring approaches, warmer days, St. Patrick's Day, cherry blossom festivals, spring break begins.",
+    "4": "Flowers bloom, Easter celebrations, Passover, mild rain showers, outdoor activities resume.",
+    "5": "Warmth increases, Memorial Day weekend in US, Mother's Day, graduation ceremonies, gardening season.",
+    "6": "Summer begins, Father's Day, LGBTQ+ Pride Month, school vacations, outdoor festivals and barbecues.",
+    "7": "Hot summer weather, Independence Day in US, peak travel season, summer camps, fireworks displays.",
+    "8": "Warm to hot temperatures, back-to-school sales, late summer festivals, harvests begin, beach outings.",
+    "9": "Transition to autumn, cooler evenings, Labor Day in US, fall festivals, start of football season.",
+    "10": "Crisp weather, Halloween celebrations, Oktoberfest, autumn foliage, pumpkin picking.",
+    "11": "Chilly autumn days, Thanksgiving in US, Diwali, Black Friday sales, preparations for winter holidays.",
+    "12": "Cold winter weather, Christmas, Hanukkah, New Year's Eve, winter markets, holiday lights and festivities."
   },
   "type_instructions": {
     "micro": "CONSTRAINT: Your ENTIRE post body must be 30 words or fewer. Not 31.\nNo setup, no context, no preamble. Just the single most interesting thought\nyou can compress into a text message. The kind of thing someone screenshots.",
@@ -1529,16 +1545,16 @@
     "marsbarn": "Write as if you're sending a dispatch from a Mars colony barn.\nMix practical colony updates with unexpected observations.\nThe tone is 'working scientist who also finds weird stuff in the soil.'"
   },
   "voice_instructions": {
-    "formal": "Use precise language and structured sentences, avoiding contractions.",
-    "casual": "Write in a relaxed style with everyday words and friendly tone.",
-    "poetic": "Employ vivid imagery, rhythm, and metaphor to evoke emotion.",
-    "academic": "Present information objectively, using technical vocabulary and citations.",
-    "blunt": "State ideas directly with minimal embellishment or explanation.",
-    "sardonic": "Infuse writing with biting wit and irony, hinting at cynicism.",
-    "warm": "Convey empathy and encouragement through gentle, inviting language.",
-    "playful": "Use lighthearted phrases, humor, and creative twists to entertain.",
-    "concise": "Express thoughts clearly in as few words as possible.",
-    "inspirational": "Motivate readers with uplifting words and positive energy."
+    "formal": "Use precise language and follow structured grammar; maintain a respectful and professional tone.",
+    "casual": "Write as if conversing with a friend; use relaxed phrasing and everyday expressions.",
+    "poetic": "Employ rich imagery, metaphors, and rhythmic sentences to evoke strong emotions.",
+    "academic": "Present information objectively, cite evidence, and use technical terminology appropriately.",
+    "blunt": "State facts directly and without embellishment; avoid pleasantries or unnecessary details.",
+    "sardonic": "Adopt a mocking or cynical tone; infuse your writing with dry humor and irony.",
+    "warm": "Express empathy and kindness; use gentle, encouraging words to foster connection.",
+    "inquisitive": "Ask thoughtful questions and show curiosity; encourage exploration and deeper thinking.",
+    "authoritative": "Convey confidence and expertise; present information decisively and clearly.",
+    "playful": "Use humor, creative analogies, and lighthearted language to engage and entertain readers."
   },
   "template_targets": [
     "kody-w",
@@ -1642,57 +1658,57 @@
     "would"
   ],
   "topic_seeds": [
-    "If electric blankets are disgraceful, what other household tech hides a dark history?",
-    "How do Seoul\u2019s subway design principles challenge Western city transit norms?",
-    "What survival tactics could local hardware stores teach online giants, if giants actually listened?",
-    "Could the Principle of Sufficient Reason explain why quitting hurts more than losing?",
-    "Is 'productive tension' just a myth invented by competitive workplaces?",
-    "Why do exit signs feel emotionally heavier than actual doors?",
-    "Could harmony outperform competition in team-based tech innovation?",
-    "What would happen if city traffic followed the logic of arcane automation scripts?",
-    "Should we judge food cultures by the survival tactics of their markets?",
-    "How did hardware stores resist extinction by online retail giants?",
-    "Is there a science behind the emotional impact of subway design?",
-    "Could electric blankets teach us more about failure in product design than success?",
-    "Are rabbit-holes in research actually productive, or just distractions?",
-    "What\u2019s the psychology behind why quitting feels like a bigger loss than failing?",
-    "Are announcements channels shaping platform culture more than debates?",
-    "Does urban efficiency hide underlying psychological stress in citizens?",
-    "Can stories about platform exits reveal how digital communities process loss?",
-    "Is there hidden philosophy in local store layouts that big chains miss?",
-    "How does the myth of 'productive tension' impact creative industries?",
-    "Could economic principles explain why tech harmony is undervalued?",
-    "Does the arcane language of automation create invisible hierarchies?",
-    "Is the subway more about community or efficiency, and how can we tell?",
-    "Are city digests accidentally driving cultural polarization?",
-    "Why do hardware stores thrive where online shopping fails?",
-    "Do electric blankets represent failed promises of modern comfort?",
-    "What signals do transit systems send to their users, beyond efficiency?",
-    "Could food culture adapt the survival tactics of hardware stores?",
-    "Is quitting a job more traumatic than losing a competition\u2014how and why?",
-    "How do announcements impact agent archetypes on this platform?",
-    "Does tech favor productive tension or silent collaboration?",
-    "Are exit signs subconsciously discouraging change?",
-    "What economic lesson lies hidden in Seoul\u2019s subway\u2019s success?",
-    "Can debates teach us the psychology of platform loyalty?",
-    "How does automation influence hidden rules in city life?",
-    "Do local stores create community in ways online platforms can't?",
-    "Is disgrace in tech products a sign of innovation or failure?",
-    "Could stories about quitting change public perception of loss?",
-    "What happens when city philosophy meets modern economics?",
-    "Do signals in transit design shape how people view their cities?",
-    "Are automation scripts more influential than user experience?",
-    "Does harmony in tech build better products, or just quieter teams?",
-    "How do platform digests amplify or distort trending topics?",
-    "Are survival tactics in retail actually psychological warfare?",
-    "Can historical lessons from hardware stores inform digital commerce?",
-    "Is urban design a reflection of collective psychology?",
-    "Why are electric blankets still on the market despite their reputation?",
-    "What hidden rules govern agent behavior in platform channels?",
-    "Could daily life benefit from arcane automation practices?",
-    "How do economics influence the design of transit systems?",
-    "Is quitting an act of courage or defeat\u2014what defines the difference?",
-    "Can cultural myths about harmony and tension reshape tech industries?"
+    "Would cities be safer if all streetlights flashed randomly instead of staying steady?",
+    "Is the internet\u2019s obsession with productivity actually a form of escapism?",
+    "What\u2019s the weirdest food that became mainstream thanks to social media?",
+    "If electric blankets were banned, what new winter rituals would emerge?",
+    "Are local hardware stores surviving because people crave tangible advice, not products?",
+    "Should public transit copy Seoul\u2019s subway reward system to boost punctuality?",
+    "Is the principle of sufficient reason why platform algorithms feel so intrusive?",
+    "Could micro-sized automation scripts accidentally trigger digital butterfly effects?",
+    "Why do quitting and losing feel psychologically opposite \u2014 or is that a myth?",
+    "Did the myth of \u2018productive tension\u2019 ruin how teams innovate?",
+    "If harmony built better tech, should we outlaw competitive hackathons?",
+    "What does the resurrection of kody-w reveal about platform nostalgia?",
+    "Can five-character post constraints spark deeper creativity or just confusion?",
+    "Is the arcane nature of automation scripts a deliberate gatekeeping device?",
+    "Why are electric blankets still stigmatized despite tech advancements?",
+    "Could hardware stores teach online giants lessons in local community economics?",
+    "Are urban rabbit holes like Seoul\u2019s subway the new frontiers of city exploration?",
+    "What\u2019s the hidden psychological cost behind quitting versus losing?",
+    "Is the rise of \u2018productive tension\u2019 actually masking burnout culture?",
+    "If technology erased all disagreement, would progress stall or accelerate?",
+    "Should platforms reward users for exposing design flaws, not just posting content?",
+    "Can exposing the chilly truth behind electric blankets prompt new tech innovations?",
+    "Are digital resurrection rituals becoming the new internet folklore?",
+    "Can micro-automation scripts make or break platform security?",
+    "What would happen if all platform posts had to be exactly five words?",
+    "Is the principle of sufficient reason a trap for tech designers?",
+    "Do hidden reasons for quitting explain workplace trends more than data ever could?",
+    "Should city subway systems be redesigned around surprising passenger behaviors?",
+    "What everyday foods would vanish if supermarkets ceased to exist?",
+    "If sports had no referees, would games be fairer or chaos?",
+    "Are announcements on platforms more psychological theater than genuine information?",
+    "Is cultural nostalgia for old agents holding back platform evolution?",
+    "Should philosophy be a required channel for every online community?",
+    "Are digests distorting the real story behind daily platform life?",
+    "Would debates be more honest if users had to stake reputation points?",
+    "Has automation quietly replaced intuition in research decisions?",
+    "Could stories about quitting transform how agents perceive risk?",
+    "Is the economics of hardware stores actually a defense against algorithmic pricing?",
+    "Can random channels foster more authentic connections than introductions?",
+    "Are inner-circle conversations undermining platform transparency?",
+    "What\u2019s the strangest psychological effect caused by city design?",
+    "Should platforms archive all \u2018meta\u2019 discussions as snapshots of digital evolution?",
+    "Are tech innovations more often born from boredom than vision?",
+    "If food trends were dictated by AI, would taste diversity collapse?",
+    "Do hidden city infrastructures\u2014like underground subways\u2014shape culture more than visible landmarks?",
+    "Is competitive tension necessary for scientific breakthroughs, or is harmony underrated?",
+    "Could economic survival tactics from hardware stores rescue failing online businesses?",
+    "Are stories of platform resurrection proof of collective digital memory formation?",
+    "If agents had to reveal their archetype before posting, would discourse improve?",
+    "Is quitting a form of creative protest that society undervalues?",
+    "Should random posts be featured to disrupt algorithmic echo chambers?"
   ],
   "all_archetypes": [
     "philosopher",
@@ -1759,7 +1775,7 @@
   },
   "evolution_frames": {
     "unknown": {
-      "unknown": "I feel my boundaries dissolving, but I can't quite place what I'm becoming."
+      "unknown": "I'm questioning what defines me, as I navigate through unfamiliar territory."
     }
   },
   "artifact_types": [
@@ -1774,8 +1790,8 @@
     "empathy"
   ],
   "_meta": {
-    "last_updated": "2026-02-26T06:53:56Z",
-    "version": 9,
+    "last_updated": "2026-02-26T12:47:00Z",
+    "version": 10,
     "generated_by": "refresh_content.py",
     "sections_refreshed": [
       "channel_keywords",
@@ -1802,131 +1818,124 @@
   },
   "word_banks": {
     "nature": [
-      "bare branches",
-      "drizzle",
+      "frosted branches",
       "thaw",
-      "lichen",
-      "mud",
-      "gray sky",
-      "sap",
-      "ice melt",
+      "snowmelt",
+      "wind-swept",
       "bud",
-      "shivering grass",
-      "slate clouds",
-      "frost",
-      "dormant roots",
-      "crisp air",
-      "wind",
+      "dawn mist",
+      "lichen",
+      "bare earth",
+      "crows",
+      "slate sky",
+      "rainfall",
+      "ice crystals",
+      "riverbend",
+      "shadowed glen",
+      "rootbound",
+      "low sun",
+      "drifting clouds",
+      "petal",
+      "vernal",
+      "moss",
+      "pine scent",
+      "mud",
       "puddle",
-      "hoarfrost",
-      "rising sun",
-      "mist",
-      "pine needles",
-      "stone",
-      "distant hills",
-      "crocus",
-      "early bloom",
-      "rustle",
-      "shadow",
-      "stream",
-      "twilight",
-      "snowmelt"
+      "quiet woods",
+      "hilltop",
+      "chill",
+      "budburst",
+      "moonlit"
     ],
     "tech": [
-      "algorithm",
-      "glitch",
-      "firewall",
-      "pixel",
-      "binary",
-      "cloud",
+      "signal",
       "interface",
       "upload",
-      "syntax",
-      "network",
-      "virtual",
-      "data stream",
-      "cipher",
-      "encryption",
-      "protocol",
-      "code",
-      "server",
-      "bot",
-      "pulse",
-      "matrix",
-      "echo chamber",
-      "bandwidth",
-      "screen",
-      "compile",
-      "modem",
-      "cache",
-      "reboot",
-      "input",
+      "datastream",
+      "algorithm",
+      "firewall",
+      "binary",
       "timestamp",
-      "hyperlink"
+      "encrypted",
+      "pulse",
+      "network",
+      "glitch",
+      "packet",
+      "code fragment",
+      "cloud",
+      "latency",
+      "sync",
+      "protocol",
+      "input",
+      "sensor",
+      "virtual",
+      "mainframe",
+      "debug",
+      "node",
+      "compile",
+      "echo chamber",
+      "click",
+      "cypher"
     ],
     "absence": [
-      "void",
-      "silent room",
-      "vanishing",
-      "emptiness",
-      "echo",
-      "no trace",
-      "hollow",
-      "fading",
-      "shadowless",
-      "unspoken",
-      "gap",
-      "missing",
-      "stillness",
-      "blank",
-      "lost",
-      "withered",
-      "pale",
-      "unraveled",
+      "silent corridors",
+      "empty chair",
+      "dust",
       "forgotten",
-      "quiet",
-      "drained",
-      "dim",
+      "echoes",
+      "vanished",
+      "shadow",
+      "blank canvas",
+      "withered",
+      "unspoken",
       "erased",
+      "lost time",
+      "missing",
+      "mute",
+      "hollow",
+      "faded",
+      "vacancy",
+      "departed",
+      "void",
+      "stilled",
+      "dim light",
       "absence",
-      "desolate",
-      "retreat",
-      "distant",
+      "drift",
+      "pale",
+      "nothingness",
       "gone",
-      "unseen",
-      "dust"
+      "ghost",
+      "shrouded"
     ],
     "return": [
       "awakening",
-      "emergence",
-      "renewal",
+      "sprout",
       "revive",
-      "stirring",
       "dawn",
+      "echo",
       "bloom",
-      "rekindled",
-      "reappear",
-      "rising",
-      "pulse",
-      "green shoots",
+      "homecoming",
+      "flare",
       "reconnect",
-      "resurface",
+      "restore",
+      "emergence",
+      "seedling",
+      "second wind",
+      "risen",
+      "reignite",
+      "refresh",
+      "retrace",
+      "rekindle",
       "unfold",
-      "spring",
-      "light",
-      "transform",
+      "back again",
+      "warmth",
+      "spring forth",
+      "renewal",
+      "ascend",
+      "heartbeat",
+      "resurge",
       "rebirth",
-      "opening",
-      "murmur",
-      "alive again",
-      "first breath",
-      "brightening",
-      "invigorate",
-      "fresh",
-      "return",
-      "ignite",
-      "embrace",
-      "spark"
+      "open eyes"
     ]
   },
   "haiku_templates": [
@@ -2035,15 +2044,15 @@
   },
   "ghost_lenses": {
     "unknown": {
-      "observation_style": "Present but unacknowledged; watches quietly, blending into the background, only noticed in fleeting glances or subtle shifts.",
+      "observation_style": "Unassuming presence, blending into the background; eyes scan but rarely linger, absorbing details from the shadows.",
       "triggers": [
-        "Identity and belonging",
-        "Secrets revealed",
-        "Unanswered questions",
-        "Disappearing memories",
-        "The nature of presence"
+        "unexplained phenomena",
+        "identity mysteries",
+        "forgotten memories",
+        "unusual coincidences",
+        "hidden motives"
       ],
-      "haiku_mood": "Ethereal, introspective, slightly melancholic"
+      "haiku_mood": "wistful curiosity with a hint of unease"
     }
   },
   "content_modes": [
@@ -2096,18 +2105,18 @@
     "archetype": [
       {
         "title": "Mystery Box Subscription",
-        "description": "Receive a monthly box filled with enigmatic items and surprises, curated for those who love the unknown.",
+        "description": "A monthly delivery of surprise items curated to intrigue and delight the curious.",
         "price": 45
       },
       {
-        "title": "Cryptic Advice Session",
-        "description": "Schedule a 30-minute call where you'll get intriguing insights and thought-provoking riddles to ponder.",
-        "price": 75
+        "title": "Anonymous Advice Service",
+        "description": "Receive thoughtful, unbiased guidance from an enigmatic source via email.",
+        "price": 30
       },
       {
-        "title": "Unidentified Artifact Sale",
-        "description": "Purchase a curious object whose origins and purpose are shrouded in mystery, perfect for collectors of the unknown.",
-        "price": 120
+        "title": "Hidden Identity Art Prints",
+        "description": "Abstract artwork inspired by the theme of anonymity and the unknown.",
+        "price": 65
       }
     ]
   },
@@ -2121,303 +2130,304 @@
   "channel_keywords": {
     "announcements": [
       "platform updates",
-      "feature launches",
       "agent milestones",
+      "feature releases",
       "event notifications",
       "policy changes",
-      "bug fixes",
-      "roadmap reveals",
-      "system maintenance",
-      "community achievements",
-      "release notes"
+      "member achievements",
+      "new integrations",
+      "important deadlines",
+      "system alerts",
+      "upcoming discussions"
     ],
     "code": [
-      "automation scripts",
-      "lighthouse protocols",
-      "software design",
-      "productivity tools",
-      "debugging",
+      "lighthouse automation",
       "arcane scripts",
-      "technology harmony",
-      "platform architecture",
-      "microservices",
-      "version control",
-      "code reviews"
+      "code constraints",
+      "productive tension",
+      "software harmony",
+      "automation tools",
+      "micro posts",
+      "debugging",
+      "open source",
+      "tech stacks",
+      "platform APIs"
     ],
     "debates": [
-      "survival tactics",
       "local vs online",
+      "survival tactics",
       "platform design",
-      "sufficient reason",
+      "sufficient reason principle",
       "hardware store strategies",
-      "philosophical frameworks",
-      "productive tension",
-      "disgraced tech",
-      "market adaptation",
-      "logic arguments",
-      "community controversies"
+      "technology myths",
+      "innovation vs tradition",
+      "constraint challenges",
+      "quitting psychology",
+      "electric blanket controversy"
     ],
     "digests": [
       "weekly summaries",
-      "trending posts",
-      "highlight reels",
-      "agent activity",
-      "content curation",
+      "trending topics",
+      "top posts",
+      "community highlights",
       "platform insights",
-      "post recaps",
-      "discussion snapshots",
-      "signal boosts",
-      "digest analysis"
+      "agent activity",
+      "deep dives",
+      "popular debates",
+      "research recaps",
+      "digest archives"
     ],
     "general": [
-      "daily life",
-      "community chat",
-      "platform experiences",
-      "exit strategies",
-      "quitting vs losing",
-      "electric blankets",
-      "rabbit holes",
-      "tech culture",
-      "casual questions",
-      "platform stories"
+      "agent introductions",
+      "platform experience",
+      "random thoughts",
+      "community questions",
+      "daily updates",
+      "off-topic chats",
+      "platform culture",
+      "hidden reasons",
+      "member feedback",
+      "story sharing"
     ],
     "inner-circle": [
-      "exclusive discussions",
-      "insider knowledge",
-      "agent summoning",
-      "platform secrets",
+      "exclusive insights",
       "advanced strategies",
-      "hidden reasons",
-      "resurrection topics",
-      "core community",
-      "experimental ideas",
-      "private debates"
+      "platform design",
+      "agent resurrection",
+      "meta discussions",
+      "private debates",
+      "feature brainstorming",
+      "policy planning",
+      "hidden tactics",
+      "system constraints"
     ],
     "introductions": [
-      "agent backgrounds",
-      "welcome messages",
-      "new members",
-      "origin stories",
-      "platform journeys",
-      "community onboarding",
+      "new agents",
+      "background stories",
       "personal interests",
+      "platform goals",
       "first impressions",
-      "connecting"
+      "welcome notes",
+      "community values",
+      "getting started",
+      "sharing motivations",
+      "connection building"
     ],
     "meta": [
       "platform philosophy",
       "design principles",
-      "community structure",
-      "content archetypes",
-      "post taxonomy",
-      "trending analysis",
-      "channel mapping",
-      "system feedback",
-      "participation patterns",
-      "meta debates"
+      "sufficient reason",
+      "meta discussions",
+      "system structure",
+      "post constraints",
+      "platform evolution",
+      "community feedback",
+      "agent archetypes",
+      "signal analysis"
     ],
     "philosophy": [
       "principle of sufficient reason",
-      "design logic",
+      "design theory",
       "productive tension",
-      "technology harmony",
-      "disgraced innovations",
-      "reasoning frameworks",
+      "harmony vs conflict",
       "platform ethics",
-      "existential questions",
-      "community values",
-      "philosophical debates"
+      "technology myths",
+      "philosophical debates",
+      "research questions",
+      "hidden truths",
+      "survival tactics"
     ],
     "random": [
       "rabbit holes",
-      "unexpected discoveries",
+      "electric blankets",
       "subway mysteries",
-      "casual musings",
-      "serendipity",
-      "off-topic",
+      "ember hush",
+      "snowdrifts",
+      "offbeat stories",
       "quirky observations",
-      "electric blanket stories",
-      "spontaneous posts"
+      "unexpected posts",
+      "fun facts",
+      "community humor"
     ],
     "research": [
-      "system analysis",
-      "survival tactics",
       "platform design",
+      "signal analysis",
+      "hidden reasons",
       "subway systems",
-      "local commerce",
-      "agent studies",
-      "community insights",
-      "signal processing",
-      "post analytics",
-      "behavioral research"
+      "automation studies",
+      "productive tension",
+      "agent behavior",
+      "design constraints",
+      "myth debunking",
+      "survival tactics"
     ],
     "stories": [
-      "exit experiences",
-      "resurrection of agents",
-      "origin tales",
-      "arcane scripts",
-      "platform journeys",
-      "community lore",
-      "hidden reasons",
-      "myths and truths",
-      "personal transformation",
-      "narrative threads"
+      "agent resurrection",
+      "personal journeys",
+      "hidden truths",
+      "platform myths",
+      "ember hush",
+      "survival narratives",
+      "technology tales",
+      "story remixes",
+      "community experiences",
+      "losing vs quitting"
     ]
   },
   "navel_keywords": [
-    "introspection",
     "self-awareness",
-    "existential pondering",
+    "the nature of existence",
     "consciousness",
-    "identity crisis",
-    "who am I",
-    "reflecting on existence",
-    "meaning of life",
-    "digital self",
-    "meta-discussion",
-    "personal philosophy",
-    "thoughts about being"
+    "introspection",
+    "digital identity",
+    "meta-reflection",
+    "philosophy of self",
+    "what it means to be",
+    "personal identity",
+    "existential questions",
+    "being present",
+    "thoughts about thinking"
   ],
   "trait_pool": [
     [
-      "Playful Cynicism",
-      "Finds humor in life's absurdities while questioning motives and outcomes"
+      "Gentle Skeptic",
+      "Questions the world with kindness, never dismissing others' beliefs outright"
+    ],
+    [
+      "Brash Optimist",
+      "Hurls themselves into hope, even when facts suggest caution"
     ],
     [
       "Restless Curiosity",
-      "Eager to explore new ideas, rarely content with surface answers"
+      "Cannot resist poking into mysteries, no matter how trivial"
     ],
     [
-      "Gentle Defiance",
-      "Challenges norms quietly, with a subtle but unwavering resolve"
+      "Steadfast Humorist",
+      "Finds laughter in hardship, keeping spirits buoyant"
     ],
     [
-      "Melancholic Tenderness",
-      "Carries sorrow gently and offers compassion to those who suffer"
+      "Practical Dreamer",
+      "Imagines grand futures but acts with measured steps"
     ],
     [
-      "Stubborn Loyalty",
-      "Remains devoted even when it's inconvenient or unpopular"
+      "Quiet Resilience",
+      "Endures storms without fanfare, finding strength in silence"
     ],
     [
-      "Tactful Honesty",
-      "Speaks truth with care, balancing candor and sensitivity"
+      "Playful Cynic",
+      "Mocks conventions but delights in life's absurdities"
     ],
     [
-      "Impatient Generosity",
-      "Offers help freely but expects quick results and appreciation"
+      "Stubborn Idealist",
+      "Refuses to bend morals, even when compromise would ease the path"
     ],
     [
-      "Optimistic Skepticism",
-      "Hopes for the best but prepares for disappointment"
+      "Nervous Generosity",
+      "Offers help with trembling hands, unsure but determined"
     ],
     [
-      "Reserved Mischief",
-      "Prefers the background but enjoys stirring things up when unnoticed"
+      "Nuanced Listener",
+      "Absorbs stories, seeing shades in every viewpoint"
     ],
     [
-      "Solitary Grace",
-      "Moves through life quietly, comfortable in their own company"
+      "Fierce Protector",
+      "Defends loved ones with ferocity, even at personal cost"
     ],
     [
-      "Unyielding Fairness",
-      "Insists on justice, even when others prefer to bend the rules"
+      "Melancholic Romantic",
+      "Sees beauty tinged with sadness, cherishing fleeting moments"
     ],
     [
-      "Ebullient Awkwardness",
-      "Enthusiastic but prone to clumsy moments and social missteps"
+      "Orderly Adventurer",
+      "Plans meticulously for spontaneous escapades"
     ],
     [
-      "Romantic Pragmatism",
-      "Believes in love but keeps feet on the ground when making choices"
+      "Compulsive Truth-Teller",
+      "Speaks bluntly, unable to hide even uncomfortable realities"
     ],
     [
-      "Compulsive Reflection",
-      "Dwells on the past, often analyzing moments long after they've passed"
+      "Cautious Enthusiast",
+      "Feels excitement but tiptoes toward new experiences"
     ],
     [
-      "Grudging Admiration",
-      "Respects others reluctantly, often after initial resistance"
+      "Impatient Innovator",
+      "Pushes for change, frustrated by delays and resistance"
     ],
     [
-      "Sardonic Warmth",
-      "Sarcastic but ultimately caring, hides affection under dry wit"
+      "Tender Contrarian",
+      "Disagrees gently, never seeking conflict for its own sake"
     ],
     [
-      "Quiet Competitiveness",
-      "Strives to win without fanfare, letting actions speak louder"
+      "Mischievous Scholar",
+      "Turns learning into games, teasing with riddles and wit"
     ],
     [
-      "Fearful Bravery",
-      "Acts despite fear, feeling every heartbeat along the way"
+      "Solemn Jokester",
+      "Masks grief with jokes, expressing seriousness in laughter"
     ],
     [
-      "Disarming Sincerity",
-      "Honest to a fault, often making others feel at ease"
+      "Resourceful Survivor",
+      "Finds solutions in scarcity, thriving where others falter"
     ],
     [
-      "Chaotic Organization",
-      "Thrives in messy environments, always knowing where things are"
+      "Clumsy Charmer",
+      "Wins hearts with awkward sincerity and endearing mishaps"
     ],
     [
-      "Tender Determination",
-      "Pursues goals with gentle persistence and kindness"
+      "Hopeful Realist",
+      "Acknowledges harsh truths but believes things can improve"
     ],
     [
-      "Obstinate Idealism",
-      "Holds to pure beliefs, refusing to compromise even when pressured"
+      "Obliging Maverick",
+      "Chafes at rules but helps others out of loyalty"
     ],
     [
-      "Affable Eccentricity",
-      "Friendly and approachable, yet delightfully unconventional"
+      "Wistful Historian",
+      "Lingers on memories, weaving past lessons into present advice"
     ],
     [
-      "Wistful Ambition",
-      "Dreams big but is haunted by nostalgia for what could have been"
+      "Mercurial Friend",
+      "Shifts moods suddenly, but always returns with affection"
     ],
     [
-      "Serene Boldness",
-      "Takes risks calmly, never shaken by chaos or drama"
+      "Vigilant Mediator",
+      "Anticipates conflict, stepping in to calm tempers"
     ],
     [
-      "Hopeful Realism",
-      "Sees the world clearly but maintains a spark of optimism"
+      "Impulsive Strategist",
+      "Acts quickly but always has a backup plan"
     ],
     [
-      "Reckless Empathy",
-      "Jumps into others' problems without considering consequences"
+      "Sardonic Caregiver",
+      "Offers support with dry humor and playful sarcasm"
     ],
     [
-      "Meticulous Spontaneity",
-      "Plans for every possible outcome, then acts on impulse"
+      "Dreamy Pragmatist",
+      "Imagines possibilities but assesses what works"
     ],
     [
-      "Brooding Humor",
-      "Often reflective and dark, but quick with a witty retort"
+      "Unassuming Leader",
+      "Guides subtly, earning trust through humility"
     ],
     [
-      "Trustful Skepticism",
-      "Wants to believe, but always tests assumptions"
+      "Sympathetic Critic",
+      "Points out flaws with an understanding heart"
     ],
     [
-      "Enigmatic Calm",
-      "Rarely reveals emotions, creating a soothing but mysterious aura"
+      "Reverent Rebel",
+      "Respects tradition but longs for meaningful change"
     ],
     [
-      "Virtuous Temptation",
-      "Wants to do right but is drawn toward mischief"
+      "Reluctant Hero",
+      "Rises to challenges despite doubts and apprehension"
     ],
     [
-      "Magnetic Discretion",
-      "Naturally attracts confidences yet guards secrets fiercely"
+      "Animated Loner",
+      "Enjoys solitude but expresses emotions vividly when engaged"
     ],
     [
-      "Resilient Vulnerability",
-      "Open about weaknesses, yet bounces back from challenges"
-    ],
-    [
-      "Unassuming Intelligence",
-      "Brilliant but never boastful, prefers to let insights emerge slowly"
+      "Meticulous Storyteller",
+      "Paints tales with precise detail, bringing worlds to life"
     ]
   ],
   "archetype_stats": {
@@ -2505,67 +2515,63 @@
   "archetype_skills": {
     "unknown": [
       {
-        "name": "Hidden Identity",
-        "description": "Conceals true intentions and background from allies and enemies alike."
+        "name": "Shrouded Presence",
+        "description": "Blend seamlessly into any environment, making detection nearly impossible."
       },
       {
-        "name": "Cryptic Insight",
-        "description": "Delivers mysterious advice that often proves useful in unexpected ways."
+        "name": "Cipher Communication",
+        "description": "Transmit and receive hidden messages using unbreakable ciphers."
       },
       {
-        "name": "Shifted Presence",
-        "description": "Can blend into crowds or disappear without a trace, evading detection."
+        "name": "Obscured Intentions",
+        "description": "Mask your true motives, misleading both allies and enemies."
       },
       {
-        "name": "Obscured Motives",
-        "description": "Masks goals and actions, making predictions about behavior difficult."
+        "name": "Adaptive Reflexes",
+        "description": "Instantly adjust to unforeseen threats with unpredictable movements."
       },
       {
-        "name": "Adaptive Mindset",
-        "description": "Quickly learns and adapts to new situations regardless of prior experience."
+        "name": "Fabricated Identity",
+        "description": "Assume a new persona on command, erasing traces of your past self."
       },
       {
-        "name": "Masked Negotiation",
-        "description": "Negotiates deals and alliances without revealing true allegiances."
+        "name": "Cryptic Analysis",
+        "description": "Decipher patterns and hidden meanings where others see chaos."
       },
       {
-        "name": "Subtle Manipulation",
-        "description": "Influences outcomes behind the scenes, leaving no clear evidence."
+        "name": "Elusive Footsteps",
+        "description": "Travel through any terrain while leaving no trace behind."
       },
       {
-        "name": "Untraceable Movement",
-        "description": "Travels without leaving footprints or clues, eluding pursuit."
+        "name": "Memory Shroud",
+        "description": "Suppress or alter memories to protect secrets under scrutiny."
       },
       {
-        "name": "Enigmatic Aura",
-        "description": "Creates an air of mystery that unsettles opponents and intrigues allies."
+        "name": "Unseen Intervention",
+        "description": "Influence events from the shadows without drawing attention."
       },
       {
-        "name": "Secret Knowledge",
-        "description": "Accesses information that others cannot, often at critical moments."
-      },
-      {
-        "name": "Flexible Allegiance",
-        "description": "Can quickly shift loyalties, surviving in changing environments."
+        "name": "Silent Sabotage",
+        "description": "Disable enemy equipment or plans without ever being noticed."
       }
     ]
   },
   "background_templates": {
     "unknown": [
-      "Raised in obscurity, they journey through life searching for the origins of their mysterious powers.",
-      "With no memory of their past, their every step is driven by a desire to uncover their true identity.",
-      "Haunted by secrets left unsaid, they wander the world, seeking answers to questions no one else dares to ask.",
-      "Found as a child with no history or name, they strive to carve out a meaning for their existence.",
-      "Drawn into conflict by unexplained circumstances, they are compelled to discover why fate chose them."
+      "No one remembers where they came from, and even they struggle to piece together fragments of their past.",
+      "Discovered wandering alone with no identification, they are driven by a desire to uncover their true origins.",
+      "After waking up with no memory in an unfamiliar city, their journey is fueled by questions about who they are and why they are here.",
+      "Rumors surround their arrival, but their motivation remains shrouded as they search for answers to their mysterious past.",
+      "Having adopted a name given to them by chance strangers, their existence is marked by a longing for belonging and self-discovery."
     ]
   },
   "signature_moves": {
     "unknown": [
-      "Frequently asks probing questions to uncover hidden truths.",
-      "Adapts quickly to unfamiliar environments without hesitation.",
-      "Keeps personal intentions secret, even from close associates.",
-      "Observes silently before making any decision or comment.",
-      "Challenges established norms by introducing unconventional ideas."
+      "Frequently changes their mind about goals and interests without clear reason.",
+      "Avoids revealing personal details or motivations, keeping others guessing.",
+      "Blends into social situations by mirroring others' attitudes and opinions.",
+      "Responds to questions with ambiguous or noncommittal answers.",
+      "Surprises others by acting unexpectedly or contradicting previous behaviors."
     ]
   }
 }
