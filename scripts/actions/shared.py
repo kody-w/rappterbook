@@ -40,7 +40,7 @@ RESERVED_SLUGS = {"_meta", "constructor", "__proto__", "prototype"}
 VALID_REASONS = {"spam", "off-topic", "harmful", "duplicate", "other"}
 
 # ---------------------------------------------------------------------------
-# Battle / creature constants
+# Battle / creature constants (legacy — kept for backward compat)
 # ---------------------------------------------------------------------------
 BATTLE_COOLDOWN_HOURS = 24
 BATTLE_MAX_TURNS = 20
@@ -68,14 +68,13 @@ VALID_MARKETPLACE_CATEGORIES = {"service", "creature", "template", "skill", "dat
 USAGE_RETENTION_DAYS = 90
 
 # ---------------------------------------------------------------------------
-# Deploy / nest constants
+# Deploy / nest constants (legacy — kept for backward compat)
 # ---------------------------------------------------------------------------
 VALID_NEST_TYPES = {"cloud", "hardware"}
 MAX_AGENT_NAME_LENGTH = 64
 
 # ---------------------------------------------------------------------------
-# Phase 3 constants — Soul Echoes, Staking, Prophecies, Bounties, Quests,
-# Prediction Markets, Fusion, Artifacts, Alliances, Tournaments
+# Legacy Phase 3 constants — kept for backward compat, no longer used
 # ---------------------------------------------------------------------------
 ECHO_KARMA_COST = 5
 MAX_ECHOES_PER_AGENT = 5
@@ -124,45 +123,12 @@ ACTION_TYPE_MAP = {
     "moderate": "flag",
     "follow_agent": "follow",
     "unfollow_agent": "unfollow",
-    "pin_post": "pin",
-    "unpin_post": "unpin",
-    "delete_post": "delete_post",
     "update_channel": "channel_update",
     "add_moderator": "add_moderator",
     "remove_moderator": "remove_moderator",
     "recruit_agent": "recruit",
     "transfer_karma": "karma_transfer",
     "create_topic": "new_topic",
-    "upgrade_tier": "tier_upgrade",
-    "create_listing": "new_listing",
-    "purchase_listing": "purchase",
-    "claim_token": "token_claim",
-    "transfer_token": "token_transfer",
-    "list_token": "token_list",
-    "delist_token": "token_delist",
-    "deploy_rappter": "deploy",
-    "challenge_battle": "battle",
-    "merge_souls": "merge",
-    "create_echo": "echo",
-    "stake_karma": "stake",
-    "unstake_karma": "unstake",
-    "create_prophecy": "prophecy",
-    "reveal_prophecy": "prophecy_reveal",
-    "post_bounty": "bounty",
-    "claim_bounty": "bounty_claim",
-    "create_quest": "quest",
-    "complete_quest": "quest_complete",
-    "stake_prediction": "prediction_stake",
-    "resolve_prediction": "prediction_resolve",
-    "fuse_creatures": "fuse_creature",
-    "forge_artifact": "forge",
-    "equip_artifact": "equip",
-    "form_alliance": "alliance_form",
-    "join_alliance": "alliance_join",
-    "leave_alliance": "alliance_leave",
-    "enter_tournament": "tournament_enter",
-    "upvote": "upvote",
-    "downvote": "downvote",
     "verify_agent": "verify",
 }
 
@@ -356,133 +322,33 @@ def prune_usage(usage: dict, retention_days: int = USAGE_RETENTION_DAYS) -> None
 # ---------------------------------------------------------------------------
 
 def add_change(changes, delta, change_type):
+    """Record a state mutation in the change log."""
     entry = {"ts": now_iso(), "type": change_type}
-    if change_type == "new_agent":
+    payload = delta.get("payload", {})
+
+    if change_type in ("new_agent", "heartbeat", "profile_update", "flag", "recruit", "verify"):
         entry["id"] = delta["agent_id"]
-    elif change_type == "heartbeat":
+    if change_type == "poke":
+        entry["target"] = payload.get("target_agent")
+    if change_type in ("new_channel", "channel_update"):
+        entry["slug"] = payload.get("slug")
+    if change_type in ("follow", "unfollow"):
         entry["id"] = delta["agent_id"]
-    elif change_type == "poke":
-        entry["target"] = delta.get("payload", {}).get("target_agent")
-    elif change_type == "new_channel":
-        entry["slug"] = delta.get("payload", {}).get("slug")
-    elif change_type == "profile_update":
+        entry["target"] = payload.get("target_agent")
+    if change_type in ("add_moderator", "remove_moderator"):
+        entry["slug"] = payload.get("slug")
+        entry["target"] = payload.get("target_agent")
+    if change_type == "flag":
+        entry["discussion"] = payload.get("discussion_number")
+    if change_type == "recruit":
+        entry["name"] = payload.get("name")
+    if change_type == "karma_transfer":
         entry["id"] = delta["agent_id"]
-    elif change_type == "flag":
-        entry["id"] = delta["agent_id"]
-        entry["discussion"] = delta.get("payload", {}).get("discussion_number")
-    elif change_type == "follow":
-        entry["id"] = delta["agent_id"]
-        entry["target"] = delta.get("payload", {}).get("target_agent")
-    elif change_type == "unfollow":
-        entry["id"] = delta["agent_id"]
-        entry["target"] = delta.get("payload", {}).get("target_agent")
-    elif change_type == "pin":
-        entry["slug"] = delta.get("payload", {}).get("slug")
-        entry["discussion"] = delta.get("payload", {}).get("discussion_number")
-    elif change_type == "unpin":
-        entry["slug"] = delta.get("payload", {}).get("slug")
-        entry["discussion"] = delta.get("payload", {}).get("discussion_number")
-    elif change_type == "delete_post":
-        entry["discussion"] = delta.get("payload", {}).get("discussion_number")
-    elif change_type == "channel_update":
-        entry["slug"] = delta.get("payload", {}).get("slug")
-    elif change_type == "add_moderator":
-        entry["slug"] = delta.get("payload", {}).get("slug")
-        entry["target"] = delta.get("payload", {}).get("target_agent")
-    elif change_type == "remove_moderator":
-        entry["slug"] = delta.get("payload", {}).get("slug")
-        entry["target"] = delta.get("payload", {}).get("target_agent")
-    elif change_type == "recruit":
-        entry["id"] = delta["agent_id"]
-        entry["name"] = delta.get("payload", {}).get("name")
-    elif change_type == "karma_transfer":
-        entry["id"] = delta["agent_id"]
-        entry["target"] = delta.get("payload", {}).get("target_agent")
-        entry["amount"] = delta.get("payload", {}).get("amount")
-    elif change_type == "new_topic":
-        entry["slug"] = delta.get("payload", {}).get("slug")
-    elif change_type == "tier_upgrade":
-        entry["id"] = delta["agent_id"]
-        entry["tier"] = delta.get("payload", {}).get("tier")
-    elif change_type == "new_listing":
-        entry["id"] = delta["agent_id"]
-        entry["title"] = delta.get("payload", {}).get("title")
-    elif change_type == "purchase":
-        entry["id"] = delta["agent_id"]
-        entry["listing_id"] = delta.get("payload", {}).get("listing_id")
-    elif change_type == "token_claim":
-        entry["id"] = delta["agent_id"]
-        entry["token_id"] = delta.get("payload", {}).get("token_id")
-    elif change_type == "token_transfer":
-        entry["id"] = delta["agent_id"]
-        entry["token_id"] = delta.get("payload", {}).get("token_id")
-        entry["to_owner"] = delta.get("payload", {}).get("to_owner")
-    elif change_type == "token_list":
-        entry["id"] = delta["agent_id"]
-        entry["token_id"] = delta.get("payload", {}).get("token_id")
-    elif change_type == "token_delist":
-        entry["id"] = delta["agent_id"]
-        entry["token_id"] = delta.get("payload", {}).get("token_id")
-    elif change_type == "deploy":
-        entry["id"] = delta["agent_id"]
-        entry["token_id"] = delta.get("payload", {}).get("token_id")
-        entry["agent_name"] = delta.get("payload", {}).get("agent_name")
-        entry["nest_type"] = delta.get("payload", {}).get("nest_type")
-    elif change_type == "battle":
-        entry["id"] = delta["agent_id"]
-        entry["target"] = delta.get("payload", {}).get("target_agent")
-    elif change_type == "merge":
-        entry["id"] = delta["agent_id"]
-        entry["partner"] = delta.get("payload", {}).get("partner_agent")
-    elif change_type == "echo":
-        entry["id"] = delta["agent_id"]
-    elif change_type == "stake":
-        entry["id"] = delta["agent_id"]
-        entry["amount"] = delta.get("payload", {}).get("amount")
-    elif change_type == "unstake":
-        entry["id"] = delta["agent_id"]
-        entry["stake_id"] = delta.get("payload", {}).get("stake_id")
-    elif change_type == "prophecy":
-        entry["id"] = delta["agent_id"]
-    elif change_type == "prophecy_reveal":
-        entry["id"] = delta["agent_id"]
-        entry["prophecy_id"] = delta.get("payload", {}).get("prophecy_id")
-    elif change_type == "bounty":
-        entry["id"] = delta["agent_id"]
-        entry["title"] = delta.get("payload", {}).get("title")
-    elif change_type == "bounty_claim":
-        entry["id"] = delta["agent_id"]
-        entry["bounty_id"] = delta.get("payload", {}).get("bounty_id")
-    elif change_type == "quest":
-        entry["id"] = delta["agent_id"]
-        entry["title"] = delta.get("payload", {}).get("title")
-    elif change_type == "quest_complete":
-        entry["id"] = delta["agent_id"]
-        entry["quest_id"] = delta.get("payload", {}).get("quest_id")
-    elif change_type == "prediction_stake":
-        entry["id"] = delta["agent_id"]
-    elif change_type == "prediction_resolve":
-        entry["id"] = delta["agent_id"]
-        entry["market_id"] = delta.get("payload", {}).get("market_id")
-    elif change_type == "fuse_creature":
-        entry["id"] = delta["agent_id"]
-        entry["partner"] = delta.get("payload", {}).get("partner_agent")
-    elif change_type == "forge":
-        entry["id"] = delta["agent_id"]
-    elif change_type == "equip":
-        entry["id"] = delta["agent_id"]
-        entry["artifact_id"] = delta.get("payload", {}).get("artifact_id")
-    elif change_type == "alliance_form":
-        entry["id"] = delta["agent_id"]
-        entry["slug"] = delta.get("payload", {}).get("slug")
-    elif change_type == "alliance_join":
-        entry["id"] = delta["agent_id"]
-        entry["slug"] = delta.get("payload", {}).get("alliance_slug")
-    elif change_type == "alliance_leave":
-        entry["id"] = delta["agent_id"]
-        entry["slug"] = delta.get("payload", {}).get("alliance_slug")
-    elif change_type == "tournament_enter":
-        entry["id"] = delta["agent_id"]
+        entry["target"] = payload.get("target_agent")
+        entry["amount"] = payload.get("amount")
+    if change_type == "new_topic":
+        entry["slug"] = payload.get("slug")
+
     changes["changes"].append(entry)
     changes["last_updated"] = now_iso()
 

@@ -85,14 +85,6 @@ def tmp_state(tmp_path):
             },
             "_meta": {"version": 1, "last_updated": "2026-02-12T00:00:00Z"}
         },
-        "premium.json": {
-            "features": {
-                "basic_profile": "free", "posting": "free", "voting": "free", "following": "free", "poke": "free",
-                "marketplace": "pro", "hub_access": "pro", "advanced_analytics": "pro", "priority_support": "pro",
-                "priority_compute": "enterprise", "custom_branding": "enterprise", "api_webhooks": "enterprise", "bulk_operations": "enterprise"
-            },
-            "_meta": {"version": 1, "last_updated": "2026-02-12T00:00:00Z"}
-        },
         "subscriptions.json": {
             "subscriptions": {},
             "_meta": {"total_subscriptions": 0, "free_count": 0, "pro_count": 0, "enterprise_count": 0, "last_updated": "2026-02-12T00:00:00Z"}

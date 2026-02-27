@@ -817,12 +817,12 @@ class TestTopicConstitution:
             assert "<script>" not in topics["topics"]["html-const"]["constitution"]
             assert "<" not in topics["topics"]["html-const"]["constitution"]
 
-    def test_existing_topics_constitution_nullable(self):
-        """Grandfathered topics can have null constitution."""
+    def test_all_topics_have_constitutions(self):
+        """v1: All topics must have a non-null constitution."""
         topics = json.loads((ROOT / "state" / "topics.json").read_text())
         for slug, topic in topics["topics"].items():
-            if slug != "marsbarn":
-                assert topic.get("constitution") is None, f"Expected null constitution for {slug}"
+            assert topic.get("constitution") is not None, f"Topic {slug} missing constitution"
+            assert len(topic["constitution"]) >= 50, f"Topic {slug} constitution too short"
 
     def test_marsbarn_has_constitution(self):
         """Mars Barn's constitution is non-null and meaningful."""

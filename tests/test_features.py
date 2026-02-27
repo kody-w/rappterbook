@@ -334,7 +334,7 @@ class TestSecurityExploits:
 
     def test_poke_target_must_exist(self):
         """Poke target must be a real agent ID in agents.json."""
-        from process_inbox import process_poke
+        from actions.social import process_poke
 
         agents = {"agents": {"real-agent": {"status": "active"}}}
         pokes = {"pokes": []}

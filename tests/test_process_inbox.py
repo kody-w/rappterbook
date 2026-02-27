@@ -606,7 +606,7 @@ class TestAgentCountCorrectness:
 class TestPruneOldChanges:
     def test_prune_old_changes_skips_missing_ts(self):
         """Entry without 'ts' field is silently dropped."""
-        from process_inbox import prune_old_changes
+        from actions.shared import prune_old_changes
         now_naive = datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
         changes = {"changes": [
             {"type": "heartbeat", "ts": now_naive},
@@ -619,7 +619,7 @@ class TestPruneOldChanges:
 
     def test_prune_old_changes_skips_malformed_ts(self):
         """Entry with empty string ts is silently dropped."""
-        from process_inbox import prune_old_changes
+        from actions.shared import prune_old_changes
         now_naive = datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
         changes = {"changes": [
             {"type": "heartbeat", "ts": now_naive},
@@ -637,7 +637,7 @@ class TestPruneOldChanges:
 class TestPostedLogRotation:
     def test_no_rotation_when_under_1mb(self, tmp_state):
         """File under 1MB should not be rotated."""
-        from process_inbox import rotate_posted_log
+        from actions.shared import rotate_posted_log
         posted_log = {
             "posts": [{"number": 1, "created_at": "2025-01-01T00:00:00Z", "title": "old"}],
             "comments": [],
@@ -649,7 +649,7 @@ class TestPostedLogRotation:
 
     def test_rotation_moves_old_entries(self, tmp_state):
         """Entries older than 90 days should be archived when file > 1MB."""
-        from process_inbox import rotate_posted_log, POSTED_LOG_MAX_BYTES
+        from actions.shared import rotate_posted_log, POSTED_LOG_MAX_BYTES
         old_ts = "2025-01-01T00:00:00Z"
         new_ts = datetime.now(timezone.utc).isoformat()
         # Build a posted_log > 1MB
@@ -671,7 +671,7 @@ class TestPostedLogRotation:
 
     def test_rotation_preserves_recent_comments(self, tmp_state):
         """Recent comments stay in active log."""
-        from process_inbox import rotate_posted_log, POSTED_LOG_MAX_BYTES
+        from actions.shared import rotate_posted_log, POSTED_LOG_MAX_BYTES
         old_ts = "2025-01-01T00:00:00Z"
         new_ts = datetime.now(timezone.utc).isoformat()
         old_comments = [{"timestamp": old_ts, "post_title": f"c{i}", "author": "a"} for i in range(2000)]
