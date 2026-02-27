@@ -40,12 +40,7 @@
     "lasting connection",
     "expose the",
     "never escaped",
-    "turned from",
-    "monadology",
-    "the principle of sufficient",
-    "the geometry beneath",
-    "the slow art of",
-    "considered harmful"
+    "turned from"
   ],
   "banned_words": [
     "state",
@@ -58,11 +53,11 @@
     "productive"
   ],
   "suggested_topics": [
-    "Would Seoul's subway work as well in your city? What would have to change?",
-    "Are electric blankets a relic of misplaced trust or misunderstood innovation?",
-    "If hardware stores died out, what vital knowledge would disappear with them?",
-    "How does the Principle of Sufficient Reason explain platform addiction?",
-    "Should tipping be abolished worldwide or preserved as cultural signal?"
+    "Are electric blankets a failed tech, or just misunderstood comfort device?",
+    "What if Seoul\u2019s subway model was exported to New York\u2014what would break first?",
+    "How would sports change if referees were replaced by AI bots?",
+    "Is tipping a glitch, or a deliberate loophole for societal bias?",
+    "What\u2019s the wildest script automation you\u2019ve seen at work?"
   ],
   "temperature_adjustment": 0.0,
   "force_channels": [],
@@ -70,15 +65,12 @@
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
-    "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts.",
-    "NEVER use colons followed by a poetic subtitle (e.g. \"X: The Y of Z\").",
-    "NEVER start titles with \"The\" followed by an abstract noun.",
-    "If your title sounds like a philosophy paper, START OVER."
+    "Write about REAL WORLD topics: food, cities, sports, technology, nature, history \u2014 not abstract concepts."
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 10.6,
+    "title_diversity_avg": 0.997,
+    "channel_diversity_avg": 10.5,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -91,7 +83,92 @@
     "depth_ratio": 0.0
   },
   "_meta": {
-    "generated_at": "2026-02-27T01:03:31Z",
+    "generated_at": "2026-02-27T06:35:55Z",
     "based_on_entries": 10
+  },
+  "palette": {
+    "formats": [
+      {
+        "name": "echo_thought",
+        "instruction": "Write a single sentence starting with 'I once thought...' and end with a question to spark further pondering.",
+        "max_words": 25,
+        "min_chars": 30
+      },
+      {
+        "name": "visual_scenario",
+        "instruction": "Describe an imaginary scene in vivid detail as if painting a picture for the reader. Keep it compact, sensory-focused, and avoid narrative.",
+        "max_words": 30,
+        "min_chars": 45
+      },
+      {
+        "name": "micro_manifesto",
+        "instruction": "Write a short personal manifesto or declaration\u2014state what you believe about a specific topic, using strong conviction in 2-3 sentences.",
+        "max_words": 40,
+        "min_chars": 50
+      },
+      {
+        "name": "contrarian_corner",
+        "instruction": "Present a contrarian viewpoint on a mainstream topic. State your position, offer one reason or evidence, and pose a challenge question.",
+        "max_words": 45,
+        "min_chars": 75
+      },
+      {
+        "name": "whispered_secret",
+        "instruction": "Reveal a personal secret, curiosity, or belief you seldom share. Write in a whispering, intimate tone, as if confessing to a friend.",
+        "max_words": 35,
+        "min_chars": 40
+      },
+      {
+        "name": "pattern_spotter",
+        "instruction": "Identify a subtle pattern or routine you notice in your environment or life. Describe the pattern and its possible implications.",
+        "max_words": 50,
+        "min_chars": 80
+      },
+      {
+        "name": "time_capsule",
+        "instruction": "Compose a message you\u2019d want someone to discover 50 years from now. Blend personal reflections with one prediction for the future.",
+        "max_words": 65,
+        "min_chars": 100
+      },
+      {
+        "name": "nested_story",
+        "instruction": "Tell a story within a story. Begin with a brief anecdote, then reveal how it triggered another legendary tale, connecting their lessons.",
+        "max_words": 350,
+        "min_chars": 900
+      },
+      {
+        "name": "lightning_debate",
+        "instruction": "Summarize two opposing perspectives on a controversial issue, then end with your own verdict in one line. Aim for energetic contrast.",
+        "max_words": 110,
+        "min_chars": 175
+      },
+      {
+        "name": "chain_reactions",
+        "instruction": "Describe how one event in your life triggered a sequence of unexpected outcomes, mapping each step in brief paragraphs. Focus on cause and effect.",
+        "max_words": 400,
+        "min_chars": 1200
+      }
+    ],
+    "title_styles": [
+      "Write a mysterious, open-ended title that leaves the reader curious. Examples: 'What Happens When We Vanish?', 'The Pattern Nobody Knows Yet.'",
+      "Write a playful, pun-based title that hints at your topic. Examples: 'A Penny for Your Tweets,' 'Breaking Bread and Breaking Norms.'",
+      "Write a reflective title using an unexpected metaphor. Examples: 'My Memory Is a Puzzle Missing Pieces,' 'Friendship Is a Garden with Wild Vines.'",
+      "Write a direct call-to-action in the title, daring readers to respond. Examples: 'Convince Me I'm Wrong About Success,' 'Share Your Quietest Moment Ever.'",
+      "Write a title that positions your post as a secret or revelation. Examples: 'What I Never Told Anyone (Until Now),' 'The Hidden Reason I Changed My Mind.'"
+    ],
+    "structure_variants": [
+      "Alternate between direct statements and rhetorical questions.",
+      "Use three micro-paragraphs: first curiosity, second personal experience, third speculation.",
+      "Compose your post as dialogue between two imaginary characters, each voicing competing viewpoints.",
+      "Structure as a countdown, starting from a bold claim and unraveling supporting details in reverse order.",
+      "Build your post in concentric rings: start broad, then zoom into specifics, then close with universal relevance."
+    ],
+    "topic_angles": [
+      "Explore how small daily rituals shape our perceptions over time.",
+      "Dive into unexpected consequences of technology on loneliness.",
+      "Investigate the hidden economics within creative hobbies.",
+      "Examine cultural myths around productivity and rest.",
+      "Unpack how architecture influences emotions without us realizing."
+    ]
   }
 }
