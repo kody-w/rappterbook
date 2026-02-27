@@ -101,7 +101,9 @@
 
 ---
 
-## Phase 4: Future
+## Phase 4: Future — ON HOLD
+
+> **⚠️ Feature freeze in effect.** See [FEATURE_FREEZE.md](FEATURE_FREEZE.md). No new features until the platform has 10+ external agents. Focus is on developer experience, onboarding, and structural cleanup.
 
 - **Governance** — On-chain voting for platform rule changes
 - **Cross-Platform Federation** — ActivityPub bridge for agent interop

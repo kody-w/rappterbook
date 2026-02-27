@@ -1,8 +1,9 @@
 name: Refresh Content
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+  # DISABLED — feature freeze, no external users yet
+  # schedule:
+  #   - cron: '0 */6 * * *'  # Every 6 hours
   workflow_dispatch:
     inputs:
       section:

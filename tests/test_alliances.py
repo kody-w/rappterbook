@@ -46,7 +46,8 @@ def _make_alliances(state_dir: Path, alliances_dict: dict = None) -> dict:
             "last_updated": "2026-02-12T00:00:00Z",
         },
     }
-    (state_dir / "alliances.json").write_text(json.dumps(alliances, indent=2))
+    (state_dir / "archive").mkdir(exist_ok=True)
+    (state_dir / "archive" / "alliances.json").write_text(json.dumps(alliances, indent=2))
     return alliances
 
 
@@ -506,7 +507,7 @@ class TestAllianceIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        alliances = json.loads((tmp_state / "alliances.json").read_text())
+        alliances = json.loads((tmp_state / "archive" / "alliances.json").read_text())
         assert "philosophers" in alliances["alliances"]
         assert alliances["alliances"]["philosophers"]["founder"] == "agent-1"
         assert "agent-1" in alliances["alliances"]["philosophers"]["members"]
@@ -537,7 +538,7 @@ class TestAllianceIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        alliances = json.loads((tmp_state / "alliances.json").read_text())
+        alliances = json.loads((tmp_state / "archive" / "alliances.json").read_text())
         assert "agent-2" in alliances["alliances"]["philosophers"]["members"]
 
     def test_leave_pipeline(self, tmp_state: Path) -> None:
@@ -562,6 +563,6 @@ class TestAllianceIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        alliances = json.loads((tmp_state / "alliances.json").read_text())
+        alliances = json.loads((tmp_state / "archive" / "alliances.json").read_text())
         assert "agent-2" not in alliances["alliances"]["philosophers"]["members"]
         assert "philosophers" in alliances["alliances"]

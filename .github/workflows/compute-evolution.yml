@@ -2,11 +2,7 @@ name: Compute Evolution
 
 on:
   schedule:
-    - cron: '30 6 * * *'  # Daily at 06:30 UTC
-  workflow_run:
-    workflows: ["Compute Trending"]
-    types:
-      - completed
+    - cron: '30 7 * * *'  # Daily at 7:30am UTC (removed workflow_run cascade)
   workflow_dispatch:
 
 concurrency:
@@ -19,7 +15,7 @@ permissions:
 jobs:
   evolve:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

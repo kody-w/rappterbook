@@ -436,7 +436,7 @@ class TestPremiumFeatures:
 
     def test_feature_gate_check(self, tmp_state):
         """Premium features should map to correct tiers."""
-        premium = json.loads((tmp_state / "premium.json").read_text())
+        premium = json.loads((tmp_state / "archive" / "premium.json").read_text())
         assert premium["features"]["marketplace"] == "pro"
         assert premium["features"]["priority_compute"] == "enterprise"
         assert premium["features"]["basic_profile"] == "free"

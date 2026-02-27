@@ -115,7 +115,8 @@ def _make_tournaments(state_dir: Path, tournaments_dict: dict = None) -> dict:
         "tournaments": tournaments_dict,
         "_meta": {"count": len(tournaments_dict), "last_updated": "2026-02-12T00:00:00Z"},
     }
-    (state_dir / "tournaments.json").write_text(json.dumps(t, indent=2))
+    (state_dir / "archive").mkdir(exist_ok=True)
+    (state_dir / "archive" / "tournaments.json").write_text(json.dumps(t, indent=2))
     return t
 
 
@@ -125,7 +126,8 @@ def _make_merges(state_dir: Path) -> dict:
         "merges": [],
         "_meta": {"total_merges": 0, "last_updated": "2026-02-12T00:00:00Z"},
     }
-    (state_dir / "merges.json").write_text(json.dumps(merges, indent=2))
+    (state_dir / "archive").mkdir(exist_ok=True)
+    (state_dir / "archive" / "merges.json").write_text(json.dumps(merges, indent=2))
     return merges
 
 
@@ -194,7 +196,7 @@ class TestEnterTournamentUnit:
         tournaments = _make_tournaments(tmp_state)
         merges = _make_merges(tmp_state)
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
         return agents, ledger, ghost_profiles, tournaments, merges, artifacts, bloodlines
 
     def test_enter_succeeds(self, tmp_state: Path) -> None:
@@ -247,7 +249,7 @@ class TestEnterTournamentUnit:
         tournaments = _make_tournaments(tmp_state)
         merges = _make_merges(tmp_state)
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
         delta = {
             "agent_id": "agent-1",
             "timestamp": "2026-02-22T12:00:00Z",
@@ -273,7 +275,7 @@ class TestEnterTournamentUnit:
         tournaments = _make_tournaments(tmp_state)
         merges = _make_merges(tmp_state)
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
         delta = {
             "agent_id": "agent-1",
             "timestamp": "2026-02-22T12:00:00Z",
@@ -298,7 +300,7 @@ class TestEnterTournamentUnit:
         tournaments = _make_tournaments(tmp_state)
         merges = _make_merges(tmp_state)
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
         delta = {
             "agent_id": "agent-1",
             "timestamp": "2026-02-22T12:00:00Z",
@@ -380,7 +382,7 @@ class TestEnterTournamentUnit:
         tournaments = _make_tournaments(tmp_state)
         merges = _make_merges(tmp_state)
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
 
         for agent_id, ts in [("agent-1", "2026-02-22T12:00:01Z"), ("agent-2", "2026-02-22T12:00:02Z")]:
             delta = {"agent_id": agent_id, "timestamp": ts, "payload": {}}
@@ -400,7 +402,7 @@ class TestEnterTournamentUnit:
             tmp_state, data_dir
         )
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
 
         for i in range(1, 9):
             delta = {
@@ -423,7 +425,7 @@ class TestEnterTournamentUnit:
             tmp_state, data_dir
         )
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
 
         for i in range(1, 9):
             delta = {
@@ -446,7 +448,7 @@ class TestEnterTournamentUnit:
             tmp_state, data_dir
         )
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
 
         for i in range(1, 9):
             delta = {
@@ -472,7 +474,7 @@ class TestEnterTournamentUnit:
             tmp_state, data_dir
         )
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
 
         for i in range(1, 9):
             delta = {
@@ -498,7 +500,7 @@ class TestEnterTournamentUnit:
             tmp_state, data_dir
         )
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
 
         for i in range(1, 9):
             delta = {
@@ -536,9 +538,17 @@ class TestEnterTournamentUnit:
                     if f.is_file():
                         shutil.copy(f, fresh_state / f.name)
 
+                # Copy archive subdirectory
+                archive_src = tmp_state / "archive"
+                if archive_src.is_dir():
+                    (fresh_state / "archive").mkdir(exist_ok=True)
+                    for f in archive_src.iterdir():
+                        if f.is_file():
+                            shutil.copy(f, fresh_state / "archive" / f.name)
+
                 ag, ld, gp, t, m = _setup_8_agents(fresh_state, fresh_data)
                 art = json.loads((fresh_state / "artifacts.json").read_text())
-                bl = json.loads((fresh_state / "bloodlines.json").read_text())
+                bl = json.loads((fresh_state / "archive" / "bloodlines.json").read_text())
 
                 for i in range(1, 9):
                     delta = {
@@ -562,7 +572,7 @@ class TestEnterTournamentUnit:
             tmp_state, data_dir
         )
         artifacts = json.loads((tmp_state / "artifacts.json").read_text())
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
 
         for i in range(1, 9):
             delta = {
@@ -613,7 +623,7 @@ class TestTournamentWithArtifacts:
         }
         (tmp_state / "artifacts.json").write_text(json.dumps(artifacts_data, indent=2))
         artifacts = artifacts_data
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
 
         errors = []
         for i in range(1, 9):
@@ -655,7 +665,7 @@ class TestTournamentIntegration:
         result = run_inbox(tmp_state, data_dir)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        tournaments = json.loads((tmp_state / "tournaments.json").read_text())
+        tournaments = json.loads((tmp_state / "archive" / "tournaments.json").read_text())
         assert len(tournaments["tournaments"]) == 1
         t = list(tournaments["tournaments"].values())[0]
         assert t["status"] == "completed"
@@ -685,7 +695,7 @@ class TestTournamentIntegration:
         result = run_inbox(tmp_state, data_dir)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        tournaments = json.loads((tmp_state / "tournaments.json").read_text())
+        tournaments = json.loads((tmp_state / "archive" / "tournaments.json").read_text())
         assert len(tournaments["tournaments"]) == 1
         t = list(tournaments["tournaments"].values())[0]
         assert t["status"] == "open"

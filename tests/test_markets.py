@@ -501,7 +501,7 @@ class TestMarketIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        markets = json.loads((tmp_state / "markets.json").read_text())
+        markets = json.loads((tmp_state / "archive" / "markets.json").read_text())
         assert markets["_meta"]["count"] == 1
         market = list(markets["markets"].values())[0]
         assert market["created_by"] == "agent-a"
@@ -524,7 +524,7 @@ class TestMarketIntegration:
         _make_market(markets, "market-1", "agent-a",
                      resolve_date="2026-02-01T00:00:00Z",
                      stakes=[existing_stake])
-        (tmp_state / "markets.json").write_text(json.dumps(markets, indent=2))
+        (tmp_state / "archive" / "markets.json").write_text(json.dumps(markets, indent=2))
 
         # agent-a resolves with "yes" after resolve_date
         write_delta(
@@ -536,7 +536,7 @@ class TestMarketIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        markets_out = json.loads((tmp_state / "markets.json").read_text())
+        markets_out = json.loads((tmp_state / "archive" / "markets.json").read_text())
         assert markets_out["markets"]["market-1"]["status"] == "resolved"
         assert markets_out["markets"]["market-1"]["resolution"] == "yes"
 

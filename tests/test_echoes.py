@@ -43,7 +43,7 @@ def _make_echoes(state_dir: Path, echoes_list: list = None) -> dict:
         "echoes": echoes_list or [],
         "_meta": {"count": len(echoes_list or []), "last_updated": "2026-02-12T00:00:00Z"},
     }
-    (state_dir / "echoes.json").write_text(json.dumps(echoes, indent=2))
+    (state_dir / "archive" / "echoes.json").write_text(json.dumps(echoes, indent=2))
     return echoes
 
 
@@ -264,7 +264,7 @@ class TestCreateEchoIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        echoes = json.loads((tmp_state / "echoes.json").read_text())
+        echoes = json.loads((tmp_state / "archive" / "echoes.json").read_text())
         assert len(echoes["echoes"]) == 1
         assert echoes["echoes"][0]["agent_id"] == "agent-a"
         assert len(echoes["echoes"][0]["soul_hash"]) == 64
@@ -282,5 +282,5 @@ class TestCreateEchoIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0
 
-        echoes = json.loads((tmp_state / "echoes.json").read_text())
+        echoes = json.loads((tmp_state / "archive" / "echoes.json").read_text())
         assert len(echoes["echoes"]) == 0

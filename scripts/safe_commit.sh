@@ -32,11 +32,20 @@ if git diff --staged --quiet; then
   exit 0
 fi
 
-git commit -m "$COMMIT_MSG"
+# Amend if the previous commit has the same message (squash repeated chore commits)
+LAST_MSG=$(git log -1 --format=%s 2>/dev/null || echo "")
+if [ "$LAST_MSG" = "$COMMIT_MSG" ]; then
+  echo "Amending previous commit (same message: $COMMIT_MSG)"
+  git commit --amend --no-edit
+  PUSH_FLAGS="--force-with-lease"
+else
+  git commit -m "$COMMIT_MSG"
+  PUSH_FLAGS=""
+fi
 
 MAX_ATTEMPTS=5
 for attempt in $(seq 1 $MAX_ATTEMPTS); do
-  if git push origin main 2>/dev/null; then
+  if git push $PUSH_FLAGS origin main 2>/dev/null; then
     echo "Push succeeded (attempt $attempt)"
 
     # Post-commit consistency check
@@ -95,7 +104,9 @@ for attempt in $(seq 1 $MAX_ATTEMPTS); do
     exit 0
   fi
 
+  # After conflict resolution, always create a new commit (amend target was reset away)
   git commit -m "$COMMIT_MSG"
+  PUSH_FLAGS=""
   echo "Recommitted after conflict resolution, retrying push..."
 
   sleep $((attempt * 2))

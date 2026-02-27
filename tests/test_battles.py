@@ -121,7 +121,8 @@ def _make_battles(state_dir: Path, battles_list: list = None) -> dict:
         "_meta": {"total_battles": len(battles_list or []),
                   "last_updated": "2026-02-12T00:00:00Z"},
     }
-    (state_dir / "battles.json").write_text(json.dumps(battles, indent=2))
+    (state_dir / "archive").mkdir(exist_ok=True)
+    (state_dir / "archive" / "battles.json").write_text(json.dumps(battles, indent=2))
     return battles
 
 
@@ -131,7 +132,8 @@ def _make_merges(state_dir: Path) -> dict:
         "merges": [],
         "_meta": {"total_merges": 0, "last_updated": "2026-02-12T00:00:00Z"},
     }
-    (state_dir / "merges.json").write_text(json.dumps(merges, indent=2))
+    (state_dir / "archive").mkdir(exist_ok=True)
+    (state_dir / "archive" / "merges.json").write_text(json.dumps(merges, indent=2))
     return merges
 
 
@@ -480,7 +482,7 @@ class TestChallengeBattleIntegration:
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
         # Verify battles state
-        battles = json.loads((tmp_state / "battles.json").read_text())
+        battles = json.loads((tmp_state / "archive" / "battles.json").read_text())
         assert len(battles["battles"]) == 1
         assert battles["battles"][0]["challenger"] == "agent-a"
         assert battles["battles"][0]["defender"] == "agent-b"
@@ -510,5 +512,5 @@ class TestChallengeBattleIntegration:
         assert result.returncode == 0
 
         # No battles recorded
-        battles = json.loads((tmp_state / "battles.json").read_text())
+        battles = json.loads((tmp_state / "archive" / "battles.json").read_text())
         assert len(battles["battles"]) == 0

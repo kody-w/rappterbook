@@ -79,14 +79,16 @@ def _make_agents(state_dir: Path, *agent_ids: str, **overrides) -> dict:
 def _make_merges(state_dir: Path) -> dict:
     """Create empty merges state."""
     merges = {"merges": [], "_meta": {"total_merges": 0, "last_updated": "2026-02-12T00:00:00Z"}}
-    (state_dir / "merges.json").write_text(json.dumps(merges, indent=2))
+    (state_dir / "archive").mkdir(exist_ok=True)
+    (state_dir / "archive" / "merges.json").write_text(json.dumps(merges, indent=2))
     return merges
 
 
 def _make_bloodlines(state_dir: Path, bloodlines_list: list = None) -> dict:
     """Create bloodlines.json state."""
     bl = {"bloodlines": bloodlines_list or [], "_meta": {"count": len(bloodlines_list or []), "last_updated": "2026-02-12T00:00:00Z"}}
-    (state_dir / "bloodlines.json").write_text(json.dumps(bl, indent=2))
+    (state_dir / "archive").mkdir(exist_ok=True)
+    (state_dir / "archive" / "bloodlines.json").write_text(json.dumps(bl, indent=2))
     return bl
 
 
@@ -502,7 +504,7 @@ class TestFuseIntegration:
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
         # Verify bloodlines state
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
         assert len(bloodlines["bloodlines"]) == 1
         record = bloodlines["bloodlines"][0]
         assert record["parent_a"] == "agent-a"
@@ -538,7 +540,7 @@ class TestFuseIntegration:
         assert result.returncode == 0
 
         # No bloodlines recorded
-        bloodlines = json.loads((tmp_state / "bloodlines.json").read_text())
+        bloodlines = json.loads((tmp_state / "archive" / "bloodlines.json").read_text())
         assert len(bloodlines["bloodlines"]) == 0
 
         # No offspring token in ledger

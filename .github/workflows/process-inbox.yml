@@ -5,7 +5,7 @@ on:
     paths:
       - 'state/inbox/**'
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '0 */6 * * *'  # Every 6 hours (reduced from every 30 min)
   workflow_dispatch:
 
 concurrency:

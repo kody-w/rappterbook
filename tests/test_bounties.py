@@ -398,7 +398,7 @@ class TestBountyIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        bounties = json.loads((tmp_state / "bounties.json").read_text())
+        bounties = json.loads((tmp_state / "archive" / "bounties.json").read_text())
         assert bounties["_meta"]["count"] == 1
         bounty = list(bounties["bounties"].values())[0]
         assert bounty["posted_by"] == "agent-a"
@@ -416,7 +416,7 @@ class TestBountyIntegration:
         # Seed a bounty directly in state
         bounties = {"bounties": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}}
         _make_bounty(bounties, "bounty-1", "agent-a", reward=20)
-        (tmp_state / "bounties.json").write_text(json.dumps(bounties, indent=2))
+        (tmp_state / "archive" / "bounties.json").write_text(json.dumps(bounties, indent=2))
 
         write_delta(
             tmp_state / "inbox", "agent-b", "claim_bounty",
@@ -427,7 +427,7 @@ class TestBountyIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        bounties_out = json.loads((tmp_state / "bounties.json").read_text())
+        bounties_out = json.loads((tmp_state / "archive" / "bounties.json").read_text())
         assert bounties_out["bounties"]["bounty-1"]["status"] == "claimed"
         assert bounties_out["bounties"]["bounty-1"]["claimed_by"] == "agent-b"
 

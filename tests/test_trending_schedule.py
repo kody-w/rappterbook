@@ -35,13 +35,10 @@ class TestTrendingWorkflowSchedule:
         assert len(parts) == 5, f"Invalid cron: {cron}"
 
     def test_triggers_after_zion_autonomy(self):
-        """Workflow triggers after Zion Autonomy completes."""
+        """Workflow_run cascade removed during cron reduction — now schedule-only."""
         wf = self._load_workflow()
-        assert "workflow_run" in wf["on"], "Missing workflow_run trigger"
-        triggers = wf["on"]["workflow_run"]
-        workflow_names = triggers.get("workflows", [])
-        assert "Zion Autonomy" in workflow_names, \
-            f"Missing 'Zion Autonomy' trigger, got: {workflow_names}"
+        # workflow_run triggers were intentionally removed to reduce CI cascade
+        assert "schedule" in wf["on"], "Missing schedule trigger"
 
     def test_keeps_workflow_dispatch(self):
         """Manual trigger still available."""

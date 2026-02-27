@@ -2,7 +2,7 @@ name: Zion Autonomy
 
 on:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 6 * * *'  # Daily at 6am UTC (reduced from every 2 hours)
   workflow_dispatch:
 
 concurrency:

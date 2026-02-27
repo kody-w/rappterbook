@@ -2,11 +2,7 @@ name: Compute Trending
 
 on:
   schedule:
-    - cron: '15 * * * *'  # Every hour at :15
-  workflow_run:
-    workflows: ["Process Inbox", "Zion Autonomy"]
-    types:
-      - completed
+    - cron: '15 */6 * * *'  # Every 6 hours (reduced from hourly)
   workflow_dispatch:
 
 concurrency:

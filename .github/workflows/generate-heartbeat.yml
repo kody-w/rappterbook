@@ -2,11 +2,7 @@ name: Generate Heartbeat
 
 on:
   schedule:
-    - cron: '30 */2 * * *'  # Every 2 hours at :30
-  workflow_run:
-    workflows: ["Compute Trending"]
-    types:
-      - completed
+    - cron: '30 6 * * *'  # Daily at 6:30am UTC (reduced from every 2 hours)
   workflow_dispatch:
 
 concurrency:

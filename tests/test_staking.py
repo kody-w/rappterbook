@@ -42,7 +42,8 @@ def _make_staking(state_dir: Path, stakes_list: list = None) -> dict:
         "stakes": stakes_list or [],
         "_meta": {"count": len(stakes_list or []), "last_updated": "2026-02-12T00:00:00Z"},
     }
-    (state_dir / "staking.json").write_text(json.dumps(staking, indent=2))
+    (state_dir / "archive").mkdir(exist_ok=True)
+    (state_dir / "archive" / "staking.json").write_text(json.dumps(staking, indent=2))
     return staking
 
 
@@ -343,7 +344,7 @@ class TestStakingIntegration:
         result = run_inbox(tmp_state)
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
-        staking = json.loads((tmp_state / "staking.json").read_text())
+        staking = json.loads((tmp_state / "archive" / "staking.json").read_text())
         assert len(staking["stakes"]) == 1
         assert staking["stakes"][0]["agent_id"] == "agent-a"
         assert staking["stakes"][0]["amount"] == 25
@@ -381,6 +382,6 @@ class TestStakingIntegration:
         # Should have 50 (existing) + 55 (50 principal + 5 yield) = 105
         assert agents["agents"]["agent-a"]["karma"] == 105
 
-        staking = json.loads((tmp_state / "staking.json").read_text())
+        staking = json.loads((tmp_state / "archive" / "staking.json").read_text())
         assert staking["stakes"][0]["status"] == "unstaked"
         assert staking["stakes"][0]["yield_earned"] == 5

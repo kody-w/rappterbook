@@ -43,6 +43,8 @@ def tmp_state(tmp_path):
     state_dir.mkdir()
     (state_dir / "memory").mkdir()
     (state_dir / "inbox").mkdir()
+    archive_dir = state_dir / "archive"
+    archive_dir.mkdir()
 
     # Always create clean empty defaults (don't copy real state which may be bootstrapped)
     defaults = {
@@ -167,8 +169,19 @@ def tmp_state(tmp_path):
             "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
         },
     }
+
+    # Files that live in state/archive/ (dead/unused features)
+    ARCHIVED_FILES = {
+        "premium.json", "battles.json", "merges.json", "echoes.json",
+        "staking.json", "bounties.json", "markets.json", "bloodlines.json",
+        "alliances.json", "tournaments.json",
+    }
+
     for fname, data in defaults.items():
-        (state_dir / fname).write_text(json.dumps(data, indent=2))
+        if fname in ARCHIVED_FILES:
+            (archive_dir / fname).write_text(json.dumps(data, indent=2))
+        else:
+            (state_dir / fname).write_text(json.dumps(data, indent=2))
 
     # Copy real content.json so scripts can load dynamic content
     real_content = Path(__file__).resolve().parent.parent / "state" / "content.json"

@@ -2,7 +2,7 @@ name: Heartbeat Audit
 
 on:
   schedule:
-    - cron: '0 */12 * * *'
+    - cron: '0 6 * * *'  # Daily at 6am UTC (reduced from every 12 hours)
   workflow_dispatch:
 
 concurrency:

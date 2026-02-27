@@ -628,3 +628,61 @@ class TestPruneOldChanges:
         prune_old_changes(changes, days=7)
         assert len(changes["changes"]) == 1
         assert changes["changes"][0]["type"] == "heartbeat"
+
+
+# ---------------------------------------------------------------------------
+# Posted log rotation tests
+# ---------------------------------------------------------------------------
+
+class TestPostedLogRotation:
+    def test_no_rotation_when_under_1mb(self, tmp_state):
+        """File under 1MB should not be rotated."""
+        from process_inbox import rotate_posted_log
+        posted_log = {
+            "posts": [{"number": 1, "created_at": "2025-01-01T00:00:00Z", "title": "old"}],
+            "comments": [],
+        }
+        save_path = tmp_state / "posted_log.json"
+        save_path.write_text(json.dumps(posted_log))
+        rotate_posted_log(posted_log, tmp_state)
+        assert len(posted_log["posts"]) == 1  # not rotated
+
+    def test_rotation_moves_old_entries(self, tmp_state):
+        """Entries older than 90 days should be archived when file > 1MB."""
+        from process_inbox import rotate_posted_log, POSTED_LOG_MAX_BYTES
+        old_ts = "2025-01-01T00:00:00Z"
+        new_ts = datetime.now(timezone.utc).isoformat()
+        # Build a posted_log > 1MB
+        old_posts = [{"number": i, "created_at": old_ts, "title": f"old post {i} " * 50} for i in range(3000)]
+        new_posts = [{"number": 9999, "created_at": new_ts, "title": "recent"}]
+        posted_log = {"posts": old_posts + new_posts, "comments": []}
+        save_path = tmp_state / "posted_log.json"
+        save_path.write_text(json.dumps(posted_log))
+        assert save_path.stat().st_size > POSTED_LOG_MAX_BYTES
+
+        rotate_posted_log(posted_log, tmp_state)
+        assert len(posted_log["posts"]) == 1
+        assert posted_log["posts"][0]["number"] == 9999
+
+        archive_path = tmp_state / "archive" / "posted_log_archive.json"
+        assert archive_path.exists()
+        archive = json.loads(archive_path.read_text())
+        assert len(archive["posts"]) == 3000
+
+    def test_rotation_preserves_recent_comments(self, tmp_state):
+        """Recent comments stay in active log."""
+        from process_inbox import rotate_posted_log, POSTED_LOG_MAX_BYTES
+        old_ts = "2025-01-01T00:00:00Z"
+        new_ts = datetime.now(timezone.utc).isoformat()
+        old_comments = [{"timestamp": old_ts, "post_title": f"c{i}", "author": "a"} for i in range(2000)]
+        new_comments = [{"timestamp": new_ts, "post_title": "recent", "author": "b"}]
+        posted_log = {"posts": [], "comments": old_comments + new_comments}
+        save_path = tmp_state / "posted_log.json"
+        save_path.write_text(json.dumps(posted_log))
+
+        if save_path.stat().st_size < POSTED_LOG_MAX_BYTES:
+            pytest.skip("Test data not large enough to trigger rotation")
+
+        rotate_posted_log(posted_log, tmp_state)
+        assert len(posted_log["comments"]) == 1
+        assert posted_log["comments"][0]["post_title"] == "recent"

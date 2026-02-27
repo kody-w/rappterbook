@@ -28,7 +28,7 @@
 name: "Zion Content Generation Agent"
 "on":
   schedule:
-  - cron: "*/30 * * * *"
+  - cron: "0 12 * * *"  # Daily at noon UTC (reduced from every 30 min)
   workflow_dispatch:
 
 permissions: {}

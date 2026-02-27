@@ -127,7 +127,8 @@ def _make_merges(state_dir: Path, merges_list: list = None) -> dict:
         "_meta": {"total_merges": len(merges_list or []),
                   "last_updated": "2026-02-12T00:00:00Z"},
     }
-    (state_dir / "merges.json").write_text(json.dumps(merges, indent=2))
+    (state_dir / "archive").mkdir(exist_ok=True)
+    (state_dir / "archive" / "merges.json").write_text(json.dumps(merges, indent=2))
     return merges
 
 
@@ -630,7 +631,7 @@ class TestMergeSoulsIntegration:
 
         # Also need battles.json for the main function
         battles = {"battles": [], "_meta": {"total_battles": 0, "last_updated": "2026-02-12T00:00:00Z"}}
-        (tmp_state / "battles.json").write_text(json.dumps(battles, indent=2))
+        (tmp_state / "archive" / "battles.json").write_text(json.dumps(battles, indent=2))
 
         write_delta(
             tmp_state / "inbox", "agent-a", "merge_souls",
@@ -641,7 +642,7 @@ class TestMergeSoulsIntegration:
         assert result.returncode == 0, f"process_inbox failed: {result.stderr}"
 
         # Verify merges state
-        merges = json.loads((tmp_state / "merges.json").read_text())
+        merges = json.loads((tmp_state / "archive" / "merges.json").read_text())
         assert len(merges["merges"]) == 1
         assert merges["merges"][0]["agent_a"] == "agent-a"
         assert merges["merges"][0]["agent_b"] == "agent-b"
@@ -670,7 +671,7 @@ class TestMergeSoulsIntegration:
         # No bond — should be rejected
 
         battles = {"battles": [], "_meta": {"total_battles": 0, "last_updated": "2026-02-12T00:00:00Z"}}
-        (tmp_state / "battles.json").write_text(json.dumps(battles, indent=2))
+        (tmp_state / "archive" / "battles.json").write_text(json.dumps(battles, indent=2))
 
         write_delta(
             tmp_state / "inbox", "agent-a", "merge_souls",
@@ -681,7 +682,7 @@ class TestMergeSoulsIntegration:
         assert result.returncode == 0
 
         # No merges recorded
-        merges = json.loads((tmp_state / "merges.json").read_text())
+        merges = json.loads((tmp_state / "archive" / "merges.json").read_text())
         assert len(merges["merges"]) == 0
 
         # Agents unchanged
