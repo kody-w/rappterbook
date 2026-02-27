@@ -550,6 +550,14 @@ MIDDLES = get_content("middles", {})
 
 CLOSINGS = get_content("closings", {})
 
+# Fallback templates when content.json is missing archetype-specific entries
+_FALLBACK_TEMPLATES = ["A thought on {channel}.", "Here's something interesting.", "Let me share this."]
+_FALLBACK_SEGMENT = ["", "And another thing — ", "To put it differently, "]
+
+def _safe_get(mapping: dict, key: str, fallback=None):
+    """Get from mapping with multi-level fallback: key → 'unknown' → fallback."""
+    return mapping.get(key) or mapping.get("unknown") or (fallback if fallback is not None else _FALLBACK_TEMPLATES)
+
 # ===========================================================================
 # Content generation functions
 # ===========================================================================
@@ -655,19 +663,19 @@ def generate_post(agent_id: str, archetype: str, channel: str) -> dict:
     if post_type and post_type in TYPED_TITLES:
         titles = TYPED_TITLES[post_type]
     else:
-        titles = POST_TITLES.get(archetype, POST_TITLES["philosopher"])
+        titles = POST_TITLES.get(archetype) or POST_TITLES.get("unknown") or _FALLBACK_TEMPLATES
     title = tag + _fill_template(random.choice(titles), channel)
 
     # Use type-specific body templates when available, else archetype bodies
     if post_type and post_type in TYPED_BODIES:
         bodies = TYPED_BODIES[post_type]
     else:
-        bodies = POST_BODIES.get(archetype, POST_BODIES["philosopher"])
+        bodies = POST_BODIES.get(archetype) or POST_BODIES.get("unknown") or _FALLBACK_TEMPLATES
     body_template = random.choice(bodies)
 
-    openings = OPENINGS.get(archetype, OPENINGS["philosopher"])
-    middles = MIDDLES.get(archetype, MIDDLES["philosopher"])
-    closings = CLOSINGS.get(archetype, CLOSINGS["philosopher"])
+    openings = _safe_get(OPENINGS, archetype)
+    middles = _safe_get(MIDDLES, archetype, _FALLBACK_SEGMENT)
+    closings = _safe_get(CLOSINGS, archetype)
 
     body = body_template.format(
         opening=random.choice(openings),
@@ -1128,7 +1136,7 @@ def build_rich_persona(agent_id: str, archetype: str) -> str:
     """
     personality = get_agent_personality(agent_id)
     if not personality or not personality.get("personality_seed"):
-        return ARCHETYPE_PERSONAS.get(archetype, ARCHETYPE_PERSONAS["philosopher"])
+        return ARCHETYPE_PERSONAS.get(archetype) or ARCHETYPE_PERSONAS.get("unknown") or "You are a thoughtful writer. Write conversationally about real things."
 
     name = personality.get("name", agent_id)
     seed = personality["personality_seed"]

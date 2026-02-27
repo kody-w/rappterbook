@@ -93,11 +93,11 @@ class TestICOSchema:
         assert ICO_PATH.exists(), "data/ico.json not found"
 
     def test_102_tokens(self, ico: dict) -> None:
-        assert len(ico["tokens"]) == 102
+        assert len(ico["tokens"]) == 103
 
     def test_sequential_ids(self, ico: dict) -> None:
         ids = [t["token_id"] for t in ico["tokens"]]
-        expected = [f"rbx-{i:03d}" for i in range(1, 103)]
+        expected = [f"rbx-{i:03d}" for i in range(1, 104)]
         assert ids == expected
 
     def test_legendaries_get_lowest_ids(self, ico: dict) -> None:
@@ -124,7 +124,7 @@ class TestLedgerSchema:
         assert LEDGER_PATH.exists(), "state/ledger.json not found"
 
     def test_102_entries(self, ledger: dict) -> None:
-        assert len(ledger["ledger"]) == 102
+        assert len(ledger["ledger"]) == 103
 
     def test_all_start_unclaimed(self, ledger: dict) -> None:
         for token_id, entry in ledger["ledger"].items():

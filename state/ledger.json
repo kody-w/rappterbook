@@ -4823,12 +4823,29 @@
       ],
       "listed_for_sale": false,
       "sale_price_btc": null
+    },
+    "rbx-103": {
+      "token_id": "rbx-103",
+      "creature_id": "rappter1",
+      "status": "unclaimed",
+      "current_owner": null,
+      "owner_public": null,
+      "appraisal_btc": 1.0,
+      "transfer_count": 0,
+      "interaction_count": 0,
+      "provenance": [
+        {
+          "event": "genesis",
+          "timestamp": "2026-02-27T00:00:00Z",
+          "tx_hash": "genesis-rappter1"
+        }
+      ]
     }
   },
   "_meta": {
-    "total_tokens": 102,
+    "total_tokens": 103,
     "claimed_count": 0,
-    "unclaimed_count": 102,
+    "unclaimed_count": 103,
     "total_transfers": 0,
     "total_appraisal_btc": 416.335125,
     "last_updated": "2026-02-26T23:38:13Z"

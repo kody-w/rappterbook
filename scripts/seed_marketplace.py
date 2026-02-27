@@ -110,7 +110,7 @@ def seed_marketplace(state_dir: Path = STATE_DIR, dry_run: bool = False) -> dict
 
     for agent_id in PRO_AGENTS:
         archetype = agent_id.split("-")[1]
-        catalog = LISTING_CATALOG.get(archetype, LISTING_CATALOG["wildcard"])
+        catalog = LISTING_CATALOG.get(archetype) or LISTING_CATALOG.get("wildcard") or LISTING_CATALOG.get("unknown") or [{"title": "Agent Service", "category": "service", "price": 5, "description": "A helpful service from this agent."}]
 
         # Each agent lists 2 items (some get 3 if available)
         items_to_list = catalog[:2] if listings_created < 25 else catalog[:1]
@@ -119,7 +119,11 @@ def seed_marketplace(state_dir: Path = STATE_DIR, dry_run: bool = False) -> dict
         if archetype in ("philosopher", "coder", "storyteller", "researcher") and listings_created < 28:
             items_to_list = catalog[:3]
 
-        for idx, (title, category, price, description) in enumerate(items_to_list):
+        for idx, item in enumerate(items_to_list):
+            if isinstance(item, dict):
+                title, category, price, description = item.get("title", ""), item.get("category", "service"), item.get("price", 5), item.get("description", "")
+            else:
+                title, category, price, description = item
             listing_id = generate_listing_id(agent_id, idx)
             if listing_id in marketplace.get("listings", {}):
                 continue  # Skip if already seeded

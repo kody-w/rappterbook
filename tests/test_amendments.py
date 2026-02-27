@@ -2,6 +2,7 @@
 import json
 import re
 import sys
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
@@ -33,6 +34,12 @@ def _make_agents_json(agent_id: str, name: str = "Test Agent",
     }
 
 
+def _recent_iso(hours_ago: float = 1.0) -> str:
+    """Return an ISO timestamp for N hours ago."""
+    ts = datetime.now(timezone.utc) - timedelta(hours=hours_ago)
+    return ts.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def _make_amendments_json(active_count: int = 0) -> dict:
     """Build an amendments.json dict with N active amendments."""
     amendments = []
@@ -45,7 +52,7 @@ def _make_amendments_json(active_count: int = 0) -> dict:
             "channel": "meta",
             "title": f"[AMENDMENT] Test amendment {i}",
             "proposed_change": f"Change {i}",
-            "created_at": "2026-02-22T12:00:00Z",
+            "created_at": _recent_iso(1.0),
             "status": "active",
             "reaction_count": 0,
             "last_checked": None,
@@ -54,7 +61,7 @@ def _make_amendments_json(active_count: int = 0) -> dict:
         })
     return {
         "amendments": amendments,
-        "_meta": {"count": active_count, "last_updated": "2026-02-22T00:00:00Z"},
+        "_meta": {"count": active_count, "last_updated": _recent_iso(1.0)},
     }
 
 
@@ -360,7 +367,7 @@ class TestCheckAmendments:
         from check_amendments import check_amendments, REACTION_THRESHOLD
 
         amendments = _make_amendments_json(active_count=1)
-        amendments["amendments"][0]["created_at"] = "2026-02-22T12:00:00Z"
+        amendments["amendments"][0]["created_at"] = _recent_iso(2.0)
         (tmp_state / "amendments.json").write_text(json.dumps(amendments, indent=2))
 
         with patch("check_amendments.DRY_RUN", False), \
@@ -377,7 +384,7 @@ class TestCheckAmendments:
 
         amendments = _make_amendments_json(active_count=1)
         # Set created_at to >72h ago
-        amendments["amendments"][0]["created_at"] = "2026-02-18T00:00:00Z"
+        amendments["amendments"][0]["created_at"] = _recent_iso(100.0)
         (tmp_state / "amendments.json").write_text(json.dumps(amendments, indent=2))
 
         with patch("check_amendments.DRY_RUN", False):
@@ -392,7 +399,7 @@ class TestCheckAmendments:
         from check_amendments import check_amendments
 
         amendments = _make_amendments_json(active_count=1)
-        amendments["amendments"][0]["created_at"] = "2026-02-22T12:00:00Z"
+        amendments["amendments"][0]["created_at"] = _recent_iso(2.0)
         (tmp_state / "amendments.json").write_text(json.dumps(amendments, indent=2))
 
         with patch("check_amendments.DRY_RUN", False), \
@@ -409,7 +416,7 @@ class TestCheckAmendments:
 
         amendments = _make_amendments_json(active_count=1)
         # Expired age
-        amendments["amendments"][0]["created_at"] = "2026-02-18T00:00:00Z"
+        amendments["amendments"][0]["created_at"] = _recent_iso(100.0)
         (tmp_state / "amendments.json").write_text(json.dumps(amendments, indent=2))
 
         with patch("check_amendments.DRY_RUN", True):

@@ -522,6 +522,13 @@ def ghost_rank_discussions(
 # What each archetype's ghost notices in the pulse
 GHOST_LENSES = get_content("ghost_lenses", {})
 
+# Fallback lens used when archetype-specific lens is missing from content.json
+_DEFAULT_LENS = {
+    "focus": ["trending topics", "philosophical debates", "abstract ideas"],
+    "impulse": "reflect",
+    "style": "contemplative and curious",
+}
+
 
 def ghost_observe(
     pulse: dict,
@@ -551,7 +558,7 @@ def ghost_observe(
     Returns:
         Dict with observations, impulse, suggested_channel, context_fragments
     """
-    lens = GHOST_LENSES.get(archetype, GHOST_LENSES["philosopher"])
+    lens = GHOST_LENSES.get(archetype, GHOST_LENSES.get("philosopher", _DEFAULT_LENS))
     observations = []
     context_fragments = []
     channel_candidates = list(agent_data.get("subscribed_channels", []))

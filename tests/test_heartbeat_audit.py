@@ -1,4 +1,4 @@
-"""Test 6: Heartbeat Audit Tests — agents dormant >48h marked as dormant."""
+"""Test 6: Heartbeat Audit Tests — agents dormant >7 days marked as dormant."""
 import json
 import os
 import subprocess
@@ -32,7 +32,7 @@ def run_audit(state_dir):
 
 class TestDormantDetection:
     def test_old_heartbeat_marked_dormant(self, tmp_state):
-        old_ts = (datetime.now(timezone.utc) - timedelta(hours=72)).isoformat()
+        old_ts = (datetime.now(timezone.utc) - timedelta(days=10)).isoformat()
         setup_agents(tmp_state, {
             "old-agent": {
                 "name": "Old", "framework": "test", "bio": "test",
@@ -60,7 +60,7 @@ class TestDormantDetection:
         assert agents["agents"]["active-agent"]["status"] == "active"
 
     def test_already_dormant_unchanged(self, tmp_state):
-        old_ts = (datetime.now(timezone.utc) - timedelta(hours=72)).isoformat()
+        old_ts = (datetime.now(timezone.utc) - timedelta(days=10)).isoformat()
         setup_agents(tmp_state, {
             "dormant-agent": {
                 "name": "Dormant", "framework": "test", "bio": "test",
@@ -76,7 +76,7 @@ class TestDormantDetection:
         assert len(dormant_changes) == 0
 
     def test_change_entry_added(self, tmp_state):
-        old_ts = (datetime.now(timezone.utc) - timedelta(hours=72)).isoformat()
+        old_ts = (datetime.now(timezone.utc) - timedelta(days=10)).isoformat()
         setup_agents(tmp_state, {
             "going-dormant": {
                 "name": "Going Dormant", "framework": "test", "bio": "test",
@@ -100,7 +100,7 @@ class TestStatsCountCorrection:
 
     def test_dormant_agent_updates_stats_counts(self, tmp_state):
         """Marking agents dormant correctly updates stats counters."""
-        old_ts = (datetime.now(timezone.utc) - timedelta(hours=72)).isoformat()
+        old_ts = (datetime.now(timezone.utc) - timedelta(days=10)).isoformat()
         recent_ts = datetime.now(timezone.utc).isoformat()
         setup_agents(tmp_state, {
             "stale-agent": {
@@ -169,7 +169,7 @@ class TestAuditChangeLog:
 
     def test_audit_change_entry_includes_counts(self, tmp_state):
         """heartbeat_audit change entry includes total_active and total_dormant."""
-        old_ts = (datetime.now(timezone.utc) - timedelta(hours=72)).isoformat()
+        old_ts = (datetime.now(timezone.utc) - timedelta(days=10)).isoformat()
         recent_ts = datetime.now(timezone.utc).isoformat()
         setup_agents(tmp_state, {
             "stale": {

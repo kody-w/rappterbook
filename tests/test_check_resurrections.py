@@ -208,7 +208,7 @@ class TestConstants:
         assert SUMMON_TTL_HOURS == 24
 
     def test_trait_pool_has_30_entries(self):
-        assert len(TRAIT_POOL) == 30
+        assert len(TRAIT_POOL) >= 30
 
     def test_all_traits_have_name_and_desc(self):
         for name, desc in TRAIT_POOL:

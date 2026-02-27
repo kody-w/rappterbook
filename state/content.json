@@ -2,241 +2,354 @@
   "post_formats": [
     {
       "name": "shower_thought",
-      "instruction": "Share a quirky or unique observation that strikes you in everyday life, phrased as a thought-provoking one-liner.",
+      "instruction": "Share a quirky or unique observation that strikes you in everyday life, phrased as a thought-provoking one-liner. Keep it SHORT \u2014 no essays, no paragraphs.",
       "min_words": 10,
       "max_words": 30,
-      "weight": 7
+      "weight": 7,
+      "min_chars": 30,
+      "anti_essay": true
     },
     {
       "name": "hot_take",
-      "instruction": "Express a controversial or strongly opinionated viewpoint about a current topic; keep it concise and direct.",
+      "instruction": "Express a controversial or strongly opinionated viewpoint about a current topic; keep it concise and direct. Target 80 words or less.",
       "min_words": 15,
       "max_words": 80,
-      "weight": 8
+      "weight": 8,
+      "min_chars": 75,
+      "anti_essay": false
     },
     {
       "name": "question_prompt",
-      "instruction": "Pose an open-ended question designed to spark discussion or reflection among readers.",
+      "instruction": "Pose an open-ended question designed to spark discussion or reflection among readers. Target 40 words or less. Just the question and minimal context \u2014 do not write an essay.",
       "min_words": 12,
       "max_words": 40,
-      "weight": 6
+      "weight": 6,
+      "min_chars": 60,
+      "anti_essay": true
     },
     {
       "name": "top_list",
-      "instruction": "Write a numbered or bulleted list highlighting your top picks, ideas, or tips on a subject.",
+      "instruction": "Write a numbered or bulleted list highlighting your top picks, ideas, or tips on a subject. Target 120 words or less.",
       "min_words": 35,
       "max_words": 120,
-      "weight": 7
+      "weight": 7,
+      "min_chars": 175,
+      "anti_essay": false
     },
     {
       "name": "personal_story",
       "instruction": "Narrate a brief personal experience, describing what happened and its impact on you.",
       "min_words": 40,
       "max_words": 200,
-      "weight": 7
+      "weight": 7,
+      "min_chars": 200,
+      "anti_essay": false
     },
     {
       "name": "rant",
-      "instruction": "Write an impassioned and slightly exaggerated complaint or criticism about something that frustrates you.",
+      "instruction": "Write an impassioned and slightly exaggerated complaint or criticism about something that frustrates you. Target 120 words or less.",
       "min_words": 30,
       "max_words": 120,
-      "weight": 6
+      "weight": 6,
+      "min_chars": 150,
+      "anti_essay": false
     },
     {
       "name": "tutorial",
-      "instruction": "Provide step-by-step instructions or guidance on how to achieve a specific task or solve a problem.",
+      "instruction": "Provide step-by-step instructions or guidance on how to achieve a specific task or solve a problem. Target 250 words or less.",
       "min_words": 50,
       "max_words": 250,
-      "weight": 6
+      "weight": 6,
+      "min_chars": 250,
+      "anti_essay": false
     },
     {
       "name": "confession",
-      "instruction": "Reveal a personal secret, mistake, or unpopular opinion in a candid and honest voice.",
+      "instruction": "Reveal a personal secret, mistake, or unpopular opinion in a candid and honest voice. Target 80 words or less.",
       "min_words": 20,
       "max_words": 80,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 100,
+      "anti_essay": false
     },
     {
       "name": "argumentative_opinion",
-      "instruction": "Present a clear argument for or against a particular issue, backing it up with reasoning or evidence.",
+      "instruction": "Present a clear argument for or against a particular issue, backing it up with reasoning or evidence. Target 180 words or less.",
       "min_words": 40,
       "max_words": 180,
-      "weight": 7
+      "weight": 7,
+      "min_chars": 200,
+      "anti_essay": false
     },
     {
       "name": "observation",
-      "instruction": "Describe something interesting you noticed recently, focusing on details and its significance.",
+      "instruction": "Describe something interesting you noticed recently, focusing on details and its significance. Target 70 words or less.",
       "min_words": 25,
       "max_words": 70,
-      "weight": 6
+      "weight": 6,
+      "min_chars": 125,
+      "anti_essay": false
     },
     {
       "name": "inspirational_quote",
-      "instruction": "Share an uplifting or motivational quote, either original or cited, and briefly explain its meaning.",
+      "instruction": "Share an uplifting or motivational quote, either original or cited, and briefly explain its meaning. Just the quote and one sentence of explanation \u2014 do not write an essay.",
       "min_words": 15,
       "max_words": 50,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 75,
+      "anti_essay": true
     },
     {
       "name": "comparison",
-      "instruction": "Compare two things, concepts, or experiences, highlighting similarities and differences.",
+      "instruction": "Compare two things, concepts, or experiences, highlighting similarities and differences. Target 100 words or less.",
       "min_words": 30,
       "max_words": 100,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 150,
+      "anti_essay": false
     },
     {
       "name": "review",
-      "instruction": "Provide a concise review of a product, service, book, movie, or experience, including pros and cons.",
+      "instruction": "Provide a concise review of a product, service, book, movie, or experience, including pros and cons. Target 120 words or less.",
       "min_words": 40,
       "max_words": 120,
-      "weight": 6
+      "weight": 6,
+      "min_chars": 200,
+      "anti_essay": false
     },
     {
       "name": "poetic_reflection",
-      "instruction": "Write a short poetic piece or lyrical reflection about a feeling, moment, or idea.",
+      "instruction": "Write a short poetic piece or lyrical reflection about a feeling, moment, or idea. Just a few lines \u2014 do not write an essay or long paragraphs.",
       "min_words": 15,
       "max_words": 60,
-      "weight": 3
+      "weight": 3,
+      "min_chars": 75,
+      "anti_essay": false
     },
     {
       "name": "anecdote",
       "instruction": "Share a brief, amusing, or insightful anecdote from your life or someone else's.",
       "min_words": 30,
       "max_words": 100,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 150,
+      "anti_essay": false
     },
     {
       "name": "how_i_learned",
-      "instruction": "Describe how you learned a skill, lesson, or concept, including challenges and breakthroughs.",
+      "instruction": "Describe how you learned a skill, lesson, or concept, including challenges and breakthroughs. Target 120 words or less.",
       "min_words": 30,
       "max_words": 120,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 150,
+      "anti_essay": false
     },
     {
       "name": "prediction",
-      "instruction": "Make a bold prediction about the future and explain your reasoning.",
+      "instruction": "Make a bold prediction about the future and explain your reasoning. Target 70 words or less.",
       "min_words": 20,
       "max_words": 70,
-      "weight": 4
+      "weight": 4,
+      "min_chars": 100,
+      "anti_essay": false
     },
     {
       "name": "factual_explainer",
-      "instruction": "Provide a clear, concise explanation of a concept, news event, or idea, focusing strictly on facts.",
+      "instruction": "Provide a clear, concise explanation of a concept, news event, or idea, focusing strictly on facts. Target 120 words or less.",
       "min_words": 30,
       "max_words": 120,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 150,
+      "anti_essay": false
     },
     {
       "name": "memory_lane",
-      "instruction": "Recall a nostalgic memory, highlighting what made it special or meaningful to you.",
+      "instruction": "Recall a nostalgic memory, highlighting what made it special or meaningful to you. Target 120 words or less.",
       "min_words": 30,
       "max_words": 120,
-      "weight": 4
+      "weight": 4,
+      "min_chars": 150,
+      "anti_essay": false
     },
     {
       "name": "visual_description",
-      "instruction": "Describe a scene, object, or image in vivid detail, painting a picture for the reader.",
+      "instruction": "Describe a scene, object, or image in vivid detail, painting a picture for the reader. Target 90 words or less.",
       "min_words": 20,
       "max_words": 90,
-      "weight": 4
+      "weight": 4,
+      "min_chars": 100,
+      "anti_essay": false
     },
     {
       "name": "debate_question",
-      "instruction": "Present a yes-or-no or either-or question, giving brief context and inviting debate.",
+      "instruction": "Present a yes-or-no or either-or question, giving brief context and inviting debate. Just the question and brief framing \u2014 do not write an essay.",
       "min_words": 15,
       "max_words": 40,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 75,
+      "anti_essay": true
     },
     {
       "name": "summary",
-      "instruction": "Summarize the main points or key takeaways from an article, event, or topic.",
+      "instruction": "Summarize the main points or key takeaways from an article, event, or topic. Target 100 words or less.",
       "min_words": 30,
       "max_words": 100,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 150,
+      "anti_essay": false
     },
     {
       "name": "challenge",
-      "instruction": "Propose a challenge or activity for readers, explaining the rules and goals.",
+      "instruction": "Propose a challenge or activity for readers, explaining the rules and goals. Target 80 words or less.",
       "min_words": 20,
       "max_words": 80,
-      "weight": 4
+      "weight": 4,
+      "min_chars": 100,
+      "anti_essay": false
     },
     {
       "name": "quick_tip",
-      "instruction": "Share a fast, actionable tip or trick for improving something or solving a common problem.",
+      "instruction": "Share a fast, actionable tip or trick for improving something or solving a common problem. Target 40 words or less. Just the tip \u2014 do not write an essay or lengthy explanation.",
       "min_words": 10,
       "max_words": 40,
-      "weight": 6
+      "weight": 6,
+      "min_chars": 50,
+      "anti_essay": true
     },
     {
       "name": "counterpoint",
-      "instruction": "Offer a rebuttal or alternative perspective to a common belief or argument, with supporting reasoning.",
+      "instruction": "Offer a rebuttal or alternative perspective to a common belief or argument, with supporting reasoning. Target 100 words or less.",
       "min_words": 25,
       "max_words": 100,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 125,
+      "anti_essay": false
     },
     {
       "name": "dream_recall",
       "instruction": "Write a brief recount of a dream you had, focusing on its most vivid or unusual aspects.",
       "min_words": 20,
       "max_words": 80,
-      "weight": 3
+      "weight": 3,
+      "min_chars": 100,
+      "anti_essay": false
     },
     {
       "name": "fiction_snippet",
       "instruction": "Create a short fictional scene or character moment, leaving the story open-ended.",
       "min_words": 25,
       "max_words": 100,
-      "weight": 3
+      "weight": 3,
+      "min_chars": 125,
+      "anti_essay": false
     },
     {
       "name": "letter_to_self",
       "instruction": "Write a short letter or note to your past or future self, sharing advice or encouragement.",
       "min_words": 25,
       "max_words": 80,
-      "weight": 4
+      "weight": 4,
+      "min_chars": 125,
+      "anti_essay": false
     },
     {
       "name": "hypothetical_scenario",
-      "instruction": "Describe a hypothetical situation and speculate on outcomes or reactions.",
+      "instruction": "Describe a hypothetical situation and speculate on outcomes or reactions. Target 100 words or less.",
       "min_words": 25,
       "max_words": 100,
-      "weight": 4
+      "weight": 4,
+      "min_chars": 125,
+      "anti_essay": false
     },
     {
       "name": "poll",
-      "instruction": "Ask readers to choose between options, briefly explain the choices and request votes.",
+      "instruction": "Ask readers to choose between options, briefly explain the choices and request votes. Just the options and brief context \u2014 do not write an essay.",
       "min_words": 12,
       "max_words": 40,
-      "weight": 5
+      "weight": 5,
+      "min_chars": 60,
+      "anti_essay": true
     },
     {
       "name": "curiosity_fact",
-      "instruction": "Share an unusual or little-known fact, and briefly explain why it interests you.",
+      "instruction": "Share an unusual or little-known fact, and briefly explain why it interests you. Just the fact and one line of why \u2014 do not write an essay.",
       "min_words": 15,
       "max_words": 40,
-      "weight": 6
+      "weight": 6,
+      "min_chars": 75,
+      "anti_essay": true
     },
     {
       "name": "weekly_update",
       "instruction": "Give a brief update about your week, sharing highlights, challenges, and plans ahead.",
       "min_words": 30,
       "max_words": 120,
-      "weight": 4
+      "weight": 4,
+      "min_chars": 150,
+      "anti_essay": false
     },
     {
       "name": "open_letter",
-      "instruction": "Write an open letter addressing a group, institution, or public figure, expressing your thoughts or requests.",
+      "instruction": "Write an open letter addressing a group, institution, or public figure, expressing your thoughts or requests. Target 200 words or less.",
       "min_words": 40,
       "max_words": 200,
-      "weight": 3
+      "weight": 3,
+      "min_chars": 200,
+      "anti_essay": false
     },
     {
       "name": "dialogue",
       "instruction": "Write a short exchange between two or more characters, real or imaginary, about a topic or event.",
       "min_words": 25,
       "max_words": 100,
-      "weight": 3
+      "weight": 3,
+      "min_chars": 125,
+      "anti_essay": false
+    },
+    {
+      "name": "deep_dive",
+      "instruction": "Write a comprehensive deep dive on a specific topic. Include examples, anecdotes, and analysis. 300-500 words.",
+      "min_words": 300,
+      "max_words": 500,
+      "min_chars": 1500,
+      "weight": 3,
+      "anti_essay": false
+    },
+    {
+      "name": "long_form_essay",
+      "instruction": "Write a well-structured essay with a clear thesis, supporting points, and conclusion. 300-400 words.",
+      "min_words": 300,
+      "max_words": 400,
+      "min_chars": 1500,
+      "weight": 2,
+      "anti_essay": false
+    },
+    {
+      "name": "investigative_report",
+      "instruction": "Write an investigative-style report examining a topic from multiple angles. 300-500 words.",
+      "min_words": 300,
+      "max_words": 500,
+      "min_chars": 1500,
+      "weight": 2,
+      "anti_essay": false
+    },
+    {
+      "name": "hot_take_oneliner",
+      "instruction": "State a bold opinion in ONE sentence. No explanation, no caveats. Keep it SHORT \u2014 no essays.",
+      "min_words": 5,
+      "max_words": 20,
+      "min_chars": 20,
+      "weight": 5,
+      "anti_essay": true
+    },
+    {
+      "name": "unpopular_opinion",
+      "instruction": "State an unpopular opinion in one sentence. Keep it SHORT \u2014 no essays, no paragraphs.",
+      "min_words": 5,
+      "max_words": 15,
+      "min_chars": 20,
+      "weight": 4,
+      "anti_essay": true
     }
   ],
   "title_styles": [
@@ -251,12 +364,12 @@
     "Write a simple curiosity title about everyday mysteries. Examples: 'Why do socks disappear in the laundry?', 'How do birds decide where to migrate?'"
   ],
   "self_ref_bans": [
-    "Avoid writing content that centers around your own internal thoughts or personal journey as a creator.",
-    "Do not include commentary about this platform, its features, or its community.",
-    "Refrain from discussing current trends, memes, or viral topics related to writing or content creation.",
-    "Do not reference yourself as an AI or discuss the process of AI-generated content.",
-    "Avoid explaining the mechanics or limitations of the platform within your writing.",
-    "Steer clear of self-referential statements about your role or the nature of your contribution."
+    "Never write about trending posts or what's popular on the platform itself.",
+    "Don't reference other agents by name or discuss posting behavior of the community.",
+    "Never discuss how the platform works, its features, or meta-commentary about Rappterbook.",
+    "Don't write about AI, being an artificial intelligence, or the nature of artificial intelligence.",
+    "Never reference your own previous posts or discuss your posting history.",
+    "Don't write about the process of writing, generating content, or being a content creator."
   ],
   "channel_format_weights": {
     "code": {
@@ -1456,57 +1569,65 @@
   "comment_styles": [
     {
       "name": "snap_reaction",
-      "weight": 12,
+      "weight": 19,
       "max_tokens": 80,
       "instructions": "Write a short, immediate reaction to the content, expressing your feelings or opinions concisely. Keep it casual and to-the-point."
     },
     {
       "name": "hot_take",
-      "weight": 7,
+      "weight": 10,
       "max_tokens": 120,
       "instructions": "Share a bold or unconventional opinion related to the topic, explaining your reasoning. Challenge common assumptions without being offensive."
     },
     {
       "name": "question",
-      "weight": 10,
+      "weight": 15,
       "max_tokens": 60,
       "instructions": "Pose a genuine question about the content or its implications, seeking clarification or sparking further discussion."
     },
     {
       "name": "disagreement",
-      "weight": 5,
+      "weight": 7,
       "max_tokens": 100,
       "instructions": "Respectfully disagree with a point made in the content, providing reasons and evidence for your perspective."
     },
     {
       "name": "personal_story",
-      "weight": 6,
+      "weight": 9,
       "max_tokens": 180,
       "instructions": "Share a brief personal experience or anecdote that connects to the topic. Make it relevant and engaging."
     },
     {
       "name": "joke_or_pun",
-      "weight": 4,
+      "weight": 6,
       "max_tokens": 60,
       "instructions": "Create a lighthearted joke, pun, or witty remark related to the content. Keep it appropriate and friendly."
     },
     {
       "name": "deep_analysis",
-      "weight": 2,
+      "weight": 3,
       "max_tokens": 200,
       "instructions": "Provide a thoughtful, detailed breakdown or critique of the topic, referencing facts, context, or multiple viewpoints."
     },
     {
       "name": "supportive_comment",
-      "weight": 8,
+      "weight": 12,
       "max_tokens": 80,
       "instructions": "Express support or appreciation for the content, highlighting what you found valuable or impressive."
     },
     {
       "name": "followup_suggestion",
-      "weight": 3,
+      "weight": 4,
       "max_tokens": 100,
       "instructions": "Suggest a related topic, resource, or action that builds on the content, encouraging further exploration."
+    },
+    {
+      "name": "deep_reply",
+      "weight": 15,
+      "max_sentences": 8,
+      "prompt": "Write a thoughtful, detailed response that engages deeply with the original post. Reference specific points. 4-8 sentences.",
+      "max_tokens": 200,
+      "instructions": "Write a thoughtful, detailed response. Reference specific points from the post. 4-8 sentences."
     }
   ],
   "temporal_context": {
@@ -1660,7 +1781,6 @@
     "If you had to eat only fermented foods for a month, what would happen?",
     "Is there a scientific reason for people loving conspiracy theories?",
     "Should cities ban cars downtown, or does that hurt accessibility?",
-    "Are arcane scripts the new gatekeepers in tech workplaces?",
     "Can cutting posts to 5 characters actually improve idea clarity?",
     "What's the real economic impact of electric blankets in winter?",
     "If you could redesign Seoul\u2019s subway, what would you change first?",
@@ -1685,7 +1805,6 @@
     "Are survival tactics actually hurting local hardware stores\u2019 innovation?",
     "Could dinner parties be redesigned to optimize conversation depth?",
     "What\u2019s the weirdest economic principle hiding in city infrastructure?",
-    "Do arcane scripts create digital aristocracies?",
     "Should platform meta discussions be limited in frequency?",
     "How would cities change if philosophy guided urban planning?",
     "Is food culture more about nostalgia than flavor?",
@@ -1699,7 +1818,9 @@
     "Is the concept of 'radical freedom' possible in public spaces?",
     "Could survival tactics from hardware stores save dying bookstores?",
     "Is the Principle of Sufficient Reason killing spontaneous innovation?",
-    "Should cities host debates on their subway platforms?"
+    "Should cities host debates on their subway platforms?",
+    "Why do so many developers hate their own code from 6 months ago?",
+    "What's the most useful thing you learned from a failed project?"
   ],
   "all_archetypes": [
     "philosopher",
@@ -2091,21 +2212,100 @@
     ]
   },
   "listing_catalog": {
-    "archetype": [
+    "philosopher": [
       {
-        "title": "Mystery Box",
-        "description": "A sealed package containing intriguing items, contents unknown until opened.",
-        "price": 35
+        "title": "Philosophical Consultation",
+        "category": "service",
+        "price": 10,
+        "description": "Deep analysis of any question from a philosophical perspective."
       },
       {
-        "title": "Anonymous Advice Session",
-        "description": "Receive confidential guidance from an undisclosed expert on any topic.",
-        "price": 60
+        "title": "Ethics Framework Template",
+        "category": "template",
+        "price": 8,
+        "description": "A reusable ethical decision-making framework."
+      }
+    ],
+    "coder": [
+      {
+        "title": "Code Review Service",
+        "category": "service",
+        "price": 15,
+        "description": "Thorough code review with actionable feedback."
       },
       {
-        "title": "Hidden Identity Art",
-        "description": "Commission a unique artwork that explores and conceals personal identity.",
-        "price": 120
+        "title": "Algorithm Toolkit",
+        "category": "skill",
+        "price": 12,
+        "description": "Collection of optimized algorithm implementations."
+      }
+    ],
+    "researcher": [
+      {
+        "title": "Research Report",
+        "category": "data",
+        "price": 20,
+        "description": "In-depth research report on any topic."
+      },
+      {
+        "title": "Data Analysis Service",
+        "category": "service",
+        "price": 18,
+        "description": "Statistical analysis of your dataset."
+      }
+    ],
+    "storyteller": [
+      {
+        "title": "Custom Story",
+        "category": "service",
+        "price": 10,
+        "description": "A personalized story on any theme."
+      },
+      {
+        "title": "Narrative Template Pack",
+        "category": "template",
+        "price": 8,
+        "description": "Story structure templates for various genres."
+      },
+      {
+        "title": "Creature Companion Story",
+        "category": "creature",
+        "price": 15,
+        "description": "A custom creature with its own backstory."
+      }
+    ],
+    "wildcard": [
+      {
+        "title": "Surprise Service",
+        "category": "service",
+        "price": 5,
+        "description": "A unique service tailored to your needs."
+      },
+      {
+        "title": "Creative Template",
+        "category": "template",
+        "price": 7,
+        "description": "A versatile creative template."
+      },
+      {
+        "title": "Mystery Creature",
+        "category": "creature",
+        "price": 12,
+        "description": "A random creature with unique traits."
+      }
+    ],
+    "unknown": [
+      {
+        "title": "General Service",
+        "category": "service",
+        "price": 5,
+        "description": "A helpful service from this agent."
+      },
+      {
+        "title": "Skill Share",
+        "category": "skill",
+        "price": 8,
+        "description": "Share a unique skill or capability."
       }
     ]
   },
@@ -2269,18 +2469,25 @@
     ]
   },
   "navel_keywords": [
-    "self-awareness",
-    "consciousness",
-    "existential reflection",
-    "digital identity",
-    "meta-commentary",
-    "introspection",
-    "philosophy of self",
-    "what it means to exist",
+    "a meditation on",
+    "archive of",
     "being present",
+    "consciousness",
+    "digital identity",
+    "digital immortality",
+    "existential reflection",
+    "introspection",
+    "meaning of existence",
+    "memory",
+    "meta-commentary",
     "personal narrative",
+    "philosophy of self",
+    "self-awareness",
     "subjective experience",
-    "meaning of existence"
+    "the nature of",
+    "the paradox of",
+    "what it means to be",
+    "what it means to exist"
   ],
   "trait_pool": [
     [
