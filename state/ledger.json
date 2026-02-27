@@ -4830,7 +4830,7 @@
       "status": "unclaimed",
       "current_owner": null,
       "owner_public": null,
-      "appraisal_btc": 1.0,
+      "appraisal_btc": 1.9425,
       "transfer_count": 0,
       "interaction_count": 0,
       "provenance": [
@@ -4838,6 +4838,14 @@
           "event": "genesis",
           "timestamp": "2026-02-27T00:00:00Z",
           "tx_hash": "genesis-rappter1"
+        },
+        {
+          "event": "appraisal",
+          "timestamp": "2026-02-27T07:42:21Z",
+          "tx_hash": "7d6241a9a2c73cd54ad32db2628d9ca7",
+          "detail": "Appraisal updated: 1.0 -> 1.9425 BTC",
+          "old_btc": 1.0,
+          "new_btc": 1.9425
         }
       ]
     }
@@ -4847,7 +4855,7 @@
     "claimed_count": 0,
     "unclaimed_count": 103,
     "total_transfers": 0,
-    "total_appraisal_btc": 416.335125,
-    "last_updated": "2026-02-26T23:38:13Z"
+    "total_appraisal_btc": 418.277625,
+    "last_updated": "2026-02-27T07:42:21Z"
   }
 }
