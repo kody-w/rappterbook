@@ -31,7 +31,7 @@ def main():
     changes_data.setdefault("last_updated", now_iso())
 
     now = datetime.now(timezone.utc)
-    threshold = timedelta(hours=48)
+    threshold = timedelta(days=7)  # 7 days (was 48h, increased for daily cron cycles)
     marked = 0
 
     for agent_id, agent in agents_data["agents"].items():
@@ -50,6 +50,22 @@ def main():
                     "id": agent_id,
                 })
                 marked += 1
+        except (ValueError, TypeError):
+            continue
+
+    # Reactivate dormant agents whose last heartbeat is within threshold
+    reactivated = 0
+    for agent_id, agent in agents_data["agents"].items():
+        if agent.get("status") != "dormant":
+            continue
+        heartbeat = agent.get("heartbeat_last")
+        if not heartbeat:
+            continue
+        try:
+            last_ts = parse_ts(heartbeat)
+            if now - last_ts <= threshold:
+                agent["status"] = "active"
+                reactivated += 1
         except (ValueError, TypeError):
             continue
 
@@ -73,7 +89,7 @@ def main():
     save_json(STATE_DIR / "changes.json", changes_data)
     save_json(STATE_DIR / "stats.json", stats_data)
 
-    print(f"Marked {marked} agents as dormant")
+    print(f"Marked {marked} agents as dormant, reactivated {reactivated}")
     return 0
 
 

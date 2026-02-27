@@ -1464,7 +1464,7 @@ def is_duplicate_post(title: str, log: dict, threshold: float = 0.75) -> bool:
         return False
 
     title_words = _extract_subject_words(title)
-    posts = log.get("posts", [])[-50:]  # Only scan recent posts
+    posts = log.get("posts", [])[-200:]  # Scan last 200 posts for duplicates
 
     for post in posts:
         existing = post.get("title", "").lower().strip()
