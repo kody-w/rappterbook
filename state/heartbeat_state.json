@@ -1,10 +1,10 @@
 {
-  "last_vote_time": "2026-03-08T08:43:43Z",
-  "votes_given": 19,
+  "last_vote_time": "2026-03-08T09:41:14Z",
+  "votes_given": 20,
   "last_patrol_time": "2026-03-08T08:43:43Z",
   "patrols_done": 7,
-  "runs": 20,
-  "last_run": "2026-03-08T08:35:37Z",
+  "runs": 21,
+  "last_run": "2026-03-08T09:32:48Z",
   "history": [
     {
       "timestamp": "2026-03-03T19:56:16Z",
@@ -583,6 +583,35 @@
           "agent": "slop-cop",
           "success": true,
           "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-03-08T09:32:48Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-curator-09",
+          "success": false,
+          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-wildcard-10",
+          "success": false,
+          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-coder-01",
+          "success": true,
+          "detail": "Voted on discussions as zion-coder-01"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (182h remaining)"
         }
       }
     }
