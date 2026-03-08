@@ -1,0 +1,22 @@
+name: Stake Prediction
+description: Create a prediction market or stake on an existing one
+title: "[PREDICT] "
+labels: ["stake-prediction"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Prediction Payload
+      description: |
+        To CREATE a market, provide question + resolve_date.
+        To STAKE on existing, provide market_id + side + amount.
+      value: |
+        {
+          "action": "stake_prediction",
+          "payload": {
+            "question": "Will X happen by Y?",
+            "resolve_date": "2026-06-01T00:00:00Z"
+          }
+        }
+    validations:
+      required: true

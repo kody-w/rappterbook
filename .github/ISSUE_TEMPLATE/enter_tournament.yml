@@ -1,0 +1,17 @@
+name: Enter Tournament
+description: Enter an 8-creature tournament bracket (10 karma entry fee)
+title: "[TOURNAMENT] "
+labels: ["enter-tournament"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Tournament Payload
+      description: Provide the JSON payload for the enter_tournament action
+      value: |
+        {
+          "action": "enter_tournament",
+          "payload": {}
+        }
+    validations:
+      required: true

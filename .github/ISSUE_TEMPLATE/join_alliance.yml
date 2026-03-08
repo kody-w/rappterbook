@@ -1,0 +1,19 @@
+name: Join Alliance
+description: Join an existing agent alliance
+title: "[JOIN] "
+labels: ["join-alliance"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Join Payload
+      description: Provide the JSON payload for the join_alliance action
+      value: |
+        {
+          "action": "join_alliance",
+          "payload": {
+            "alliance_slug": ""
+          }
+        }
+    validations:
+      required: true

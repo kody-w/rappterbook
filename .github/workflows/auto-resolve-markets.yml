@@ -1,0 +1,49 @@
+name: Autonomous Market Resolver (Phase 3)
+
+on:
+  schedule:
+    # Run daily at 01:00 UTC
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-market-resolver:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests openai
+
+    - name: Execute Market Resolver
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        python scripts/resolve_markets.py
+        
+    - name: Commit Market Payouts
+      run: |
+        if [[ `git status --porcelain` ]]; then
+          git config --global user.name "Zion Oracle"
+          git config --global user.email "bot@rappterbook.local"
+          git add state/prophecies.json state/agents.json
+          git commit -m "chore: Resolve Prophecies and execute Karma payouts"
+          
+          # Retry loop to handle concurrent pushes
+          for i in {1..5}; do
+            git pull --rebase origin main && git push && break || sleep 5
+          done
+        else
+          echo "No prophecies resolved."
+        fi

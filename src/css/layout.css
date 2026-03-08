@@ -1,0 +1,226 @@
+/* Rappterbook Layout */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global focus-visible for keyboard accessibility */
+:focus-visible {
+  outline: 2px solid var(--rb-accent-hover);
+  outline-offset: 2px;
+}
+
+body {
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-base);
+  line-height: var(--rb-line-height);
+  color: var(--rb-text);
+  background-color: var(--rb-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+body.nav-open-no-scroll {
+  overflow: hidden;
+}
+
+header {
+  background-color: var(--rb-bg-secondary);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4) var(--rb-space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rb-space-3);
+}
+
+.logo {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-accent);
+  margin: 0;
+  line-height: 1.2;
+  white-space: pre;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Hamburger Button — hidden on desktop */
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text-bright);
+  font-size: 24px;
+  padding: var(--rb-space-1) var(--rb-space-3);
+  cursor: pointer;
+  font-family: var(--rb-font-family);
+  transition: var(--rb-transition);
+}
+
+.hamburger-btn:hover {
+  border-color: var(--rb-accent);
+  color: var(--rb-accent);
+}
+
+nav {
+  display: flex;
+  gap: var(--rb-space-2) var(--rb-space-4);
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Search Container */
+.search-container {
+  display: flex;
+  gap: var(--rb-space-2);
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-input {
+  flex: 1;
+  padding: var(--rb-space-2) var(--rb-space-3);
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  color: var(--rb-text);
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--rb-accent);
+}
+
+.search-btn {
+  padding: var(--rb-space-2) var(--rb-space-3);
+  background: var(--rb-accent);
+  color: var(--rb-bg);
+  border: none;
+  font-family: var(--rb-font-family);
+  font-size: var(--rb-font-size-small);
+  cursor: pointer;
+  transition: var(--rb-transition);
+}
+
+.search-btn:hover {
+  opacity: 0.85;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--rb-space-6);
+  min-width: 0;
+}
+
+.layout-with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--rb-space-6);
+  min-width: 0;
+}
+
+.layout-with-sidebar > * {
+  min-width: 0;
+}
+
+.sidebar {
+  background-color: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+  height: fit-content;
+  position: sticky;
+  top: var(--rb-space-6);
+  overflow: hidden;
+  max-height: calc(100vh - var(--rb-space-8));
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  margin-bottom: var(--rb-space-6);
+}
+
+.sidebar-section:last-child {
+  margin-bottom: 0;
+}
+
+.sidebar-title {
+  font-size: var(--rb-font-size-base);
+  color: var(--rb-text-bright);
+  margin-bottom: var(--rb-space-3);
+  padding-bottom: var(--rb-space-2);
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+}
+
+footer {
+  background-color: var(--rb-bg-secondary);
+  border-top: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4) var(--rb-space-6);
+  text-align: center;
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+}
+
+footer a {
+  color: var(--rb-accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(121, 187, 255, 0.4);
+}
+
+footer a:hover {
+  color: var(--rb-accent-hover);
+  text-decoration: underline;
+  text-decoration-color: var(--rb-accent-hover);
+}
+
+@media (max-width: 768px) {
+  .layout-with-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .hamburger-btn {
+    display: block;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    gap: 0;
+    width: 100%;
+  }
+
+  nav.nav-open {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  nav .nav-link {
+    width: 100%;
+    padding: var(--rb-space-2) var(--rb-space-3);
+    border-bottom: var(--rb-border-width) solid var(--rb-border);
+  }
+
+  .search-container {
+    max-width: 100%;
+  }
+
+  .logo {
+    font-size: 8px;
+  }
+}

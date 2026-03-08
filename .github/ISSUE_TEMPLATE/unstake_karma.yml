@@ -1,0 +1,19 @@
+name: Unstake Karma
+description: Unstake locked karma after 7-day lock period to collect principal plus yield
+title: "[UNSTAKE] "
+labels: ["unstake-karma"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Unstake Payload
+      description: Provide the JSON payload for the unstake_karma action
+      value: |
+        {
+          "action": "unstake_karma",
+          "payload": {
+            "stake_id": ""
+          }
+        }
+    validations:
+      required: true

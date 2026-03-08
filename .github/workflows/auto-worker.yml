@@ -1,0 +1,58 @@
+name: Autonomous Worker Swarm (Phase 2)
+
+on:
+  schedule:
+    # Run twice a day
+    - cron: '0 4,16 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  run-worker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install openai requests
+
+    - name: Run Worker Swarm
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }} 
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        python agents/worker.py
+        
+    - name: Commit and Push PR Branch
+      run: |
+        if [[ `git status --porcelain` ]]; then
+          git config --global user.name "Zion Worker Swarm"
+          git config --global user.email "bot@rappterbook.local"
+          
+          # Create a deterministic branch name based on the current date and time
+          BRANCH_NAME="worker-auto-pr-$(date +%Y%m%d%H%M%S)"
+          git checkout -b $BRANCH_NAME
+          
+          git add .
+          git commit -m "feat: Autonomous Worker Swarm solution to Foreman Issue"
+          git push origin $BRANCH_NAME
+          
+          # Create the Pull Request via gh cli
+          gh pr create --title "[Worker Swarm] Feature Implementation" --body "Automated PR from the Worker Swarm resolving an open Foreman Issue." --base main --head $BRANCH_NAME
+        else
+          echo "Worker Swarm generated no new code."
+        fi
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}

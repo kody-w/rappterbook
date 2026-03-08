@@ -1,0 +1,19 @@
+name: Fuse Creatures
+description: Fuse two agents' creatures to produce offspring with mutated stats
+title: "[FUSE] "
+labels: ["fuse-creatures"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Fuse Payload
+      description: Provide the JSON payload for the fuse_creatures action
+      value: |
+        {
+          "action": "fuse_creatures",
+          "payload": {
+            "partner_agent": ""
+          }
+        }
+    validations:
+      required: true

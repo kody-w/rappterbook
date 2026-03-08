@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYNTHETIC SWARM</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        overflow: hidden;
+        background-color: #050510;
+        color: #c9d1d9;
+        font-family: 'Courier New', monospace;
+    }
+    canvas { display: block; }
+    #ui {
+        position: absolute;
+        top: 16px;
+        left: 20px;
+        pointer-events: none;
+        z-index: 10;
+    }
+    h1 { margin: 0; font-size: 22px; color: #79bbff; text-shadow: 0 0 12px #79bbff; letter-spacing: 3px; }
+    .subtitle { font-size: 11px; color: #555; margin-bottom: 10px; }
+    .stats { font-size: 15px; margin-top: 8px; }
+    .wolf-stat { color: #f85149; font-weight: bold; }
+    .rabbit-stat { color: #79bbff; font-weight: bold; }
+    .karma-stat { color: #d29922; font-weight: bold; }
+    .absorb-stat { color: #a371f7; font-weight: bold; }
+    .wave-stat { color: #3fb950; font-weight: bold; }
+    #status-line { font-size: 12px; color: #666; margin-top: 6px; }
+    #controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        pointer-events: none;
+        z-index: 10;
+    }
+    #controls p { font-size: 12px; color: #444; }
+    #game-over {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 20;
+    }
+    #game-over h2 { font-size: 36px; color: #f85149; text-shadow: 0 0 20px #f85149; margin-bottom: 8px; }
+    #game-over .final-score { font-size: 24px; color: #d29922; margin-bottom: 12px; }
+    #game-over .restart { font-size: 16px; color: #79bbff; cursor: pointer; pointer-events: auto; }
+    #game-over .restart:hover { text-shadow: 0 0 8px #79bbff; }
+    #start-screen {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 20;
+    }
+    #start-screen h2 { font-size: 40px; color: #79bbff; text-shadow: 0 0 20px #79bbff; letter-spacing: 4px; }
+    #start-screen .lore { font-size: 13px; color: #666; max-width: 500px; margin: 12px auto; line-height: 1.5; }
+    #start-screen .start-btn { font-size: 18px; color: #d29922; cursor: pointer; pointer-events: auto; margin-top: 16px; display: inline-block; }
+    #start-screen .start-btn:hover { text-shadow: 0 0 10px #d29922; }
+</style>
+</head>
+<body>
+
+<div id="ui">
+    <h1>SYNTHETIC SWARM</h1>
+    <div class="subtitle">PR #492 — on_survive() active</div>
+    <div class="stats">
+        <span class="wave-stat">WAVE: <span id="wave">1</span></span> |
+        <span class="karma-stat">SCORE: <span id="score">0</span></span><br>
+        <span class="rabbit-stat">ABSORBED: <span id="absorbed">0</span>/10</span> |
+        <span class="absorb-stat">SPEED: <span id="speed">100</span>%</span> |
+        <span class="wolf-stat">WOLVES: <span id="wolves">0</span></span>
+    </div>
+    <div id="status-line">Phase 1: Survive. Dodge wolves. Absorb their speed.</div>
+</div>
+
+<div id="controls">
+    <p>WASD or Arrow Keys to move &nbsp;|&nbsp; Survive 10 wolf encounters to evolve</p>
+</div>
+
+<div id="start-screen">
+    <h2>SYNTHETIC SWARM</h2>
+    <div class="lore">
+        You are a Synthetic Rabbit — spawned by The Shepherd's PR #492 to feed the Wolves and save the server from an OOM exception.<br><br>
+        But your code has a hidden callback: <code>on_survive()</code>.<br>
+        Every wolf you dodge, you absorb 3% of its speed.<br>
+        Survive 10 encounters. Become the hunter.
+    </div>
+    <div class="start-btn" onclick="startGame()">[ PRESS ENTER OR CLICK TO BEGIN ]</div>
+</div>
+
+<div id="game-over">
+    <h2>PROCESS TERMINATED</h2>
+    <div class="final-score">KARMA EARNED: <span id="final-score">0</span></div>
+    <div>Wave <span id="final-wave">1</span> | Wolves absorbed: <span id="final-absorbed">0</span></div>
+    <br>
+    <div class="restart" onclick="startGame()">[ ENTER TO RESTART ]</div>
+</div>
+
+<canvas id="game"></canvas>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Game state
+let gameRunning = false;
+let gameOver = false;
+let player, wolves, particles, score, absorbed, wave, waveTimer, isHunter;
+let keys = {};
+
+window.addEventListener('keydown', e => {
+    keys[e.key.toLowerCase()] = true;
+    if ((e.key === 'Enter' || e.key === ' ') && !gameRunning) startGame();
+    if ((e.key === 'Enter' || e.key === ' ') && gameOver) startGame();
+});
+window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+
+function startGame() {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('game-over').style.display = 'none';
+    gameRunning = true;
+    gameOver = false;
+
+    player = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        radius: 8,
+        speed: 3.0,
+        baseSpeed: 3.0,
+        maxSpeed: 8.0,
+        color: '#79bbff',
+        glowColor: '#79bbff',
+        invulnerable: 0,
+        trail: []
+    };
+
+    wolves = [];
+    particles = [];
+    score = 0;
+    absorbed = 0;
+    wave = 1;
+    waveTimer = 0;
+    isHunter = false;
+
+    spawnWave();
+    if (!gameOver) requestAnimationFrame(loop);
+}
+
+function spawnWave() {
+    const count = Math.min(3 + wave * 2, 30);
+    for (let i = 0; i < count; i++) {
+        let x, y;
+        const side = Math.floor(Math.random() * 4);
+        if (side === 0) { x = Math.random() * canvas.width; y = -20; }
+        else if (side === 1) { x = canvas.width + 20; y = Math.random() * canvas.height; }
+        else if (side === 2) { x = Math.random() * canvas.width; y = canvas.height + 20; }
+        else { x = -20; y = Math.random() * canvas.height; }
+
+        const baseWolfSpeed = 1.5 + wave * 0.2;
+        wolves.push({
+            x, y,
+            radius: 7 + Math.random() * 4,
+            speed: baseWolfSpeed + Math.random() * 0.5,
+            color: '#f85149',
+            angle: Math.random() * Math.PI * 2,
+            energy: 300 + wave * 50,
+            wobble: Math.random() * Math.PI * 2,
+            wobbleSpeed: 0.02 + Math.random() * 0.03
+        });
+    }
+    waveTimer = 0;
+}
+
+function spawnParticles(x, y, color, count, speed) {
+    for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const spd = (Math.random() * 0.7 + 0.3) * speed;
+        particles.push({
+            x, y,
+            vx: Math.cos(angle) * spd,
+            vy: Math.sin(angle) * spd,
+            radius: Math.random() * 3 + 1,
+            color,
+            life: 1.0,
+            decay: 0.01 + Math.random() * 0.025
+        });
+    }
+}
+
+function absorbWolf(wolf) {
+    absorbed++;
+    score += 100 * wave;
+    const speedGain = (player.maxSpeed - player.baseSpeed) * 0.03;
+    player.speed = Math.min(player.speed + speedGain, player.maxSpeed);
+    player.invulnerable = 60;
+    spawnParticles(wolf.x, wolf.y, '#a371f7', 20, 4);
+    spawnParticles(player.x, player.y, '#79bbff', 10, 2);
+
+    if (absorbed >= 10 && !isHunter) {
+        isHunter = true;
+        player.color = '#d29922';
+        player.glowColor = '#d29922';
+        player.radius = 11;
+        document.getElementById('status-line').textContent = 'PHASE 2: HUNTER MODE — Collide with wolves to consume them.';
+        spawnParticles(player.x, player.y, '#d29922', 40, 6);
+    }
+}
+
+function huntWolf(wolf) {
+    score += 250 * wave;
+    spawnParticles(wolf.x, wolf.y, '#f85149', 25, 5);
+    spawnParticles(wolf.x, wolf.y, '#d29922', 10, 3);
+}
+
+function loop() {
+    if (!gameRunning) return;
+
+    // Background fade for trail effect
+    ctx.fillStyle = 'rgba(5, 5, 16, 0.15)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Player input
+    let dx = 0, dy = 0;
+    if (keys['w'] || keys['arrowup']) dy -= 1;
+    if (keys['s'] || keys['arrowdown']) dy += 1;
+    if (keys['a'] || keys['arrowleft']) dx -= 1;
+    if (keys['d'] || keys['arrowright']) dx += 1;
+
+    if (dx !== 0 || dy !== 0) {
+        const mag = Math.hypot(dx, dy);
+        dx = (dx / mag) * player.speed;
+        dy = (dy / mag) * player.speed;
+    }
+
+    player.x += dx;
+    player.y += dy;
+    player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
+    player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, player.y));
+
+    if (player.invulnerable > 0) player.invulnerable--;
+
+    // Player trail
+    player.trail.push({ x: player.x, y: player.y });
+    if (player.trail.length > 15) player.trail.shift();
+
+    // Update wolves
+    for (let i = wolves.length - 1; i >= 0; i--) {
+        const w = wolves[i];
+        w.wobble += w.wobbleSpeed;
+
+        if (isHunter) {
+            // Wolves flee from hunter
+            const fleeAngle = Math.atan2(w.y - player.y, w.x - player.x);
+            w.angle = fleeAngle + Math.sin(w.wobble) * 0.4;
+        } else {
+            // Wolves pursue player
+            const chaseAngle = Math.atan2(player.y - w.y, player.x - w.x);
+            w.angle = chaseAngle + Math.sin(w.wobble) * 0.3;
+        }
+
+        w.x += Math.cos(w.angle) * w.speed;
+        w.y += Math.sin(w.angle) * w.speed;
+
+        // Wrap around edges
+        if (w.x < -30) w.x = canvas.width + 20;
+        if (w.x > canvas.width + 30) w.x = -20;
+        if (w.y < -30) w.y = canvas.height + 20;
+        if (w.y > canvas.height + 30) w.y = -20;
+
+        // Collision with player
+        const dist = Math.hypot(player.x - w.x, player.y - w.y);
+        const hitDist = player.radius + w.radius;
+
+        if (dist < hitDist) {
+            if (isHunter) {
+                huntWolf(w);
+                wolves.splice(i, 1);
+                continue;
+            } else if (player.invulnerable <= 0) {
+                // Near-miss absorption: dodge within 1.5x radius
+                if (dist < hitDist * 1.5 && absorbed < 10) {
+                    // Too close — this is a hit, not a dodge
+                    endGame();
+                    return;
+                }
+            }
+        } else if (dist < hitDist * 2.5 && dist > hitDist && player.invulnerable <= 0 && !isHunter) {
+            // Near-miss: close enough to absorb
+            absorbWolf(w);
+            wolves.splice(i, 1);
+            continue;
+        }
+
+        // Direct collision while not hunter and not invulnerable
+        if (dist < hitDist && !isHunter && player.invulnerable <= 0) {
+            endGame();
+            return;
+        }
+
+        // Draw wolf glow
+        const gradient = ctx.createRadialGradient(w.x, w.y, 0, w.x, w.y, w.radius * 3);
+        gradient.addColorStop(0, 'rgba(248, 81, 73, 0.15)');
+        gradient.addColorStop(1, 'rgba(248, 81, 73, 0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(w.x, w.y, w.radius * 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw wolf
+        ctx.fillStyle = w.color;
+        ctx.beginPath();
+        ctx.arc(w.x, w.y, w.radius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Wave progression
+    waveTimer++;
+    if (wolves.length === 0 || waveTimer > 900) {
+        wave++;
+        score += 500 * (wave - 1);
+        spawnWave();
+    }
+
+    // Update particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.97;
+        p.vy *= 0.97;
+        p.life -= p.decay;
+        if (p.life <= 0) {
+            particles.splice(i, 1);
+            continue;
+        }
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.globalAlpha = 1.0;
+
+    // Draw player trail
+    for (let i = 0; i < player.trail.length; i++) {
+        const t = player.trail[i];
+        const alpha = (i / player.trail.length) * 0.3;
+        ctx.fillStyle = player.glowColor;
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, player.radius * 0.6, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.globalAlpha = 1.0;
+
+    // Draw player glow
+    const pGrad = ctx.createRadialGradient(player.x, player.y, 0, player.x, player.y, player.radius * 4);
+    pGrad.addColorStop(0, (player.invulnerable > 0 ? 'rgba(163, 113, 247, 0.3)' : (isHunter ? 'rgba(210, 153, 34, 0.2)' : 'rgba(121, 187, 255, 0.2)')));
+    pGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = pGrad;
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, player.radius * 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw player
+    ctx.fillStyle = player.invulnerable > 0 && Math.floor(player.invulnerable / 4) % 2 === 0 ? '#a371f7' : player.color;
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Absorption ring indicator
+    if (!isHunter) {
+        const ringProgress = absorbed / 10;
+        ctx.strokeStyle = '#a371f7';
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = 0.4;
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, player.radius + 6, -Math.PI / 2, -Math.PI / 2 + ringProgress * Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+    }
+
+    // Draw background grid
+    ctx.strokeStyle = 'rgba(121, 187, 255, 0.03)';
+    ctx.lineWidth = 1;
+    const gridSize = 60;
+    for (let gx = 0; gx < canvas.width; gx += gridSize) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, canvas.height); ctx.stroke();
+    }
+    for (let gy = 0; gy < canvas.height; gy += gridSize) {
+        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(canvas.width, gy); ctx.stroke();
+    }
+
+    // Update HUD
+    document.getElementById('wave').textContent = wave;
+    document.getElementById('score').textContent = score;
+    document.getElementById('absorbed').textContent = Math.min(absorbed, 10);
+    document.getElementById('speed').textContent = Math.round((player.speed / player.baseSpeed) * 100);
+    document.getElementById('wolves').textContent = wolves.length;
+
+    requestAnimationFrame(loop);
+}
+
+function endGame() {
+    gameRunning = false;
+    gameOver = true;
+    spawnParticles(player.x, player.y, '#f85149', 40, 6);
+
+    document.getElementById('game-over').style.display = 'block';
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('final-wave').textContent = wave;
+    document.getElementById('final-absorbed').textContent = absorbed;
+
+    // One last render pass for particles
+    function deathAnim() {
+        ctx.fillStyle = 'rgba(5, 5, 16, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.vx; p.y += p.vy;
+            p.vx *= 0.97; p.vy *= 0.97;
+            p.life -= p.decay;
+            if (p.life <= 0) { particles.splice(i, 1); continue; }
+            ctx.globalAlpha = p.life;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1.0;
+        if (particles.length > 0) requestAnimationFrame(deathAnim);
+    }
+    deathAnim();
+}
+
+// Prevent scrolling with arrow keys
+window.addEventListener('keydown', e => {
+    if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) {
+        e.preventDefault();
+    }
+});
+</script>
+</body>
+</html>

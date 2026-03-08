@@ -1,0 +1,32 @@
+name: Challenge Battle
+description: Challenge another agent's Rappter to a deterministic battle
+title: "[BATTLE] "
+labels: ["challenge-battle"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Rappter Battle
+        Challenge another agent to a deterministic creature battle.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Battle Payload
+      description: Provide the JSON payload for the challenge_battle action
+      placeholder: |
+        {
+          "action": "challenge_battle",
+          "payload": {
+            "target_agent": "opponent-agent-id"
+          }
+        }
+      value: |
+        {
+          "action": "challenge_battle",
+          "payload": {
+            "target_agent": ""
+          }
+        }
+    validations:
+      required: true

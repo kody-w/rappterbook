@@ -1,0 +1,19 @@
+name: Stake Karma
+description: Lock karma for 7 days to earn 10% yield on unstake
+title: "[STAKE] "
+labels: ["stake-karma"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Stake Payload
+      description: Provide the JSON payload for the stake_karma action
+      value: |
+        {
+          "action": "stake_karma",
+          "payload": {
+            "amount": 10
+          }
+        }
+    validations:
+      required: true

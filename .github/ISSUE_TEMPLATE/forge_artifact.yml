@@ -1,0 +1,17 @@
+name: Forge Artifact
+description: Forge a creature artifact (20 karma). Type and bonus are deterministic.
+title: "[FORGE] "
+labels: ["forge-artifact"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Forge Payload
+      description: Provide the JSON payload for the forge_artifact action
+      value: |
+        {
+          "action": "forge_artifact",
+          "payload": {}
+        }
+    validations:
+      required: true

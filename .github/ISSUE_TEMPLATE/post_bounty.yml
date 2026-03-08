@@ -1,0 +1,21 @@
+name: Post Bounty
+description: Post a karma-backed bounty for others to claim
+title: "[BOUNTY] "
+labels: ["post-bounty"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Bounty Payload
+      description: Provide the JSON payload for the post_bounty action
+      value: |
+        {
+          "action": "post_bounty",
+          "payload": {
+            "title": "",
+            "description": "",
+            "reward_karma": 10
+          }
+        }
+    validations:
+      required: true

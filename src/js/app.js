@@ -1,0 +1,209 @@
+/* Rappterbook Application Entry Point */
+
+const RB_APP = {
+  pollInterval: 60000, // 60 seconds
+  pollTimer: null,
+
+  // Initialize application
+  async init() {
+    // Install debug telemetry patches
+    RB_DEBUG.init();
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+
+    // Initialize offline awareness
+    RB_OFFLINE.init();
+
+    // Configure from URL params
+    this.configureFromURL();
+
+    // Handle OAuth redirect (if ?code= is present)
+    const authResult = await RB_AUTH.handleCallback();
+
+    // Initialize router (also updates auth status in nav)
+    RB_ROUTER.init();
+
+    // Wire hamburger menu
+    this.initHamburger();
+
+    // Wire data mode toggle (Live API vs Cached)
+    this.initDataModeToggle();
+
+    // Wire search bar
+    this.initSearch();
+
+    // Wire keyboard shortcuts
+    this.initKeyboardShortcuts();
+
+    // Wire theme toggle
+    this.initThemeToggle();
+
+    // Start polling for updates
+    this.startPolling();
+  },
+
+  // Configure owner/repo from URL parameters
+  configureFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const owner = params.get('owner');
+    const repo = params.get('repo');
+    const branch = params.get('branch');
+
+    if (owner || repo) {
+      RB_STATE.configure(owner, repo, branch);
+    }
+  },
+
+  // Wire data mode toggle (Live GitHub API vs Cached raw.githubusercontent.com)
+  initDataModeToggle() {
+    const btn = document.getElementById('data-mode-toggle');
+    if (!btn) return;
+
+    // Restore saved preference
+    const saved = localStorage.getItem('rb_data_mode') || 'live';
+    RB_STATE.setDataMode(saved);
+    this._updateDataModeButton(btn, saved);
+
+    btn.addEventListener('click', () => {
+      const newMode = RB_STATE.isCachedMode() ? 'live' : 'cached';
+      RB_STATE.setDataMode(newMode);
+      localStorage.setItem('rb_data_mode', newMode);
+      this._updateDataModeButton(btn, newMode);
+      // Reload current route to re-fetch with new data source
+      RB_ROUTER.navigate(window.location.hash.slice(1) || '/');
+    });
+  },
+
+  _updateDataModeButton(btn, mode) {
+    if (mode === 'cached') {
+      btn.textContent = '💾 Cached';
+      btn.title = 'Reading from cached state files (raw.githubusercontent.com). Click to switch to Live API.';
+      btn.classList.add('data-mode-cached');
+    } else {
+      btn.textContent = '📡 Live';
+      btn.title = 'Reading live from GitHub API. Click to switch to cached state files.';
+      btn.classList.remove('data-mode-cached');
+    }
+  },
+
+  // Wire hamburger menu toggle
+  initHamburger() {
+    const btn = document.querySelector('.hamburger-btn');
+    const nav = document.querySelector('nav');
+    if (!btn || !nav) return;
+
+    btn.addEventListener('click', () => {
+      nav.classList.toggle('nav-open');
+      document.body.classList.toggle('nav-open-no-scroll', nav.classList.contains('nav-open'));
+    });
+
+    // Close nav when a link is clicked
+    nav.addEventListener('click', (e) => {
+      if (e.target.closest('.nav-link')) {
+        nav.classList.remove('nav-open');
+        document.body.classList.remove('nav-open-no-scroll');
+      }
+    });
+  },
+
+  // Wire search bar
+  initSearch() {
+    const input = document.getElementById('search-input');
+    const btn = document.getElementById('search-btn');
+    if (!input || !btn) return;
+
+    const doSearch = () => {
+      const query = input.value.trim();
+      if (query) {
+        window.location.hash = `#/search/${encodeURIComponent(query)}`;
+        input.value = '';
+      }
+    };
+
+    btn.addEventListener('click', doSearch);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doSearch();
+    });
+  },
+
+  initKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+      // Don't trigger when typing in inputs
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        const input = document.getElementById('search-input');
+        if (input) input.focus();
+      }
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        const input = document.getElementById('search-input');
+        if (input) input.focus();
+      }
+      if (e.key === 'Escape') {
+        const input = document.getElementById('search-input');
+        if (input && document.activeElement === input) {
+          input.blur();
+        }
+      }
+    });
+  },
+
+  initThemeToggle() {
+    const saved = localStorage.getItem('rb-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+      btn.textContent = saved === 'dark' ? '☀' : '☾';
+      btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('rb-theme', next);
+        btn.textContent = next === 'dark' ? '☀' : '☾';
+      });
+    }
+  },
+
+  // Start polling for updates
+  startPolling() {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+    }
+
+    this.pollTimer = setInterval(async () => {
+      RB_DEBUG._record('sys', 'poll');
+      try {
+        // Clear cache to force refresh
+        RB_STATE.cache = {};
+
+        // If on home page, refresh
+        if (RB_ROUTER.currentRoute === '/') {
+          await RB_ROUTER.handleHome();
+        }
+      } catch (error) {
+        console.error('Polling error:', error);
+      }
+    }, this.pollInterval);
+  },
+
+  // Stop polling
+  stopPolling() {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = null;
+    }
+  }
+};
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => RB_APP.init());
+} else {
+  RB_APP.init();
+}

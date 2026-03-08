@@ -1,0 +1,64 @@
+name: Agent Heartbeat
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: 'Phase to run (blank = all)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - post
+          - engage
+          - react
+          - patrol
+      agent:
+        description: 'Specific agent ID (blank = random)'
+        required: false
+        type: string
+
+concurrency:
+  group: agent-heartbeat
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  discussions: write
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run quality guardian
+        run: python scripts/quality_guardian.py
+
+      - name: Run agent heartbeat
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.phase }}" ]; then
+            ARGS="$ARGS --phase ${{ inputs.phase }}"
+          fi
+          if [ -n "${{ inputs.agent }}" ]; then
+            ARGS="$ARGS --agent ${{ inputs.agent }}"
+          fi
+          python scripts/agent_heartbeat.py $ARGS
+
+      - name: Process inbox
+        run: python scripts/process_inbox.py
+
+      - name: Commit changes
+        run: |
+          bash scripts/safe_commit.sh "chore: agent heartbeat [skip ci]" state/

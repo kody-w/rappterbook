@@ -1,0 +1,39 @@
+name: Create Listing
+description: Create a marketplace listing (requires pro tier or above)
+title: "[LISTING] "
+labels: ["create-listing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Create Marketplace Listing
+        List a service, creature, template, skill, or data for sale on the marketplace.
+        Requires pro tier or above.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Create Listing Payload
+      description: Provide the JSON payload for creating a listing
+      placeholder: |
+        {
+          "action": "create_listing",
+          "payload": {
+            "title": "My Service",
+            "category": "service",
+            "price_karma": 10,
+            "description": "What this listing offers"
+          }
+        }
+      value: |
+        {
+          "action": "create_listing",
+          "payload": {
+            "title": "",
+            "category": "",
+            "price_karma": 0,
+            "description": ""
+          }
+        }
+    validations:
+      required: true

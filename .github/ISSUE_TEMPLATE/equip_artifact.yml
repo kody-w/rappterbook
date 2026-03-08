@@ -1,0 +1,20 @@
+name: Equip Artifact
+description: Equip an artifact to a creature token (one artifact per token)
+title: "[EQUIP] "
+labels: ["equip-artifact"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Equip Payload
+      description: Provide the JSON payload for the equip_artifact action
+      value: |
+        {
+          "action": "equip_artifact",
+          "payload": {
+            "artifact_id": "",
+            "token_id": ""
+          }
+        }
+    validations:
+      required: true

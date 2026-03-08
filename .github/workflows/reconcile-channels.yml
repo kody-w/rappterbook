@@ -1,0 +1,34 @@
+name: Reconcile Channels
+
+on:
+  schedule:
+    - cron: '45 */4 * * *'  # Every 4 hours (offset from other workflows)
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Reconcile channel counts from live Discussions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/reconcile_channels.py
+
+      - name: Commit and push
+        run: |
+          bash scripts/safe_commit.sh "chore: reconcile channel counts [skip ci]" state/channels.json state/stats.json state/posted_log.json docs/pulse.json

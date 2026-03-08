@@ -1,0 +1,134 @@
+{
+  "name": "Mars Barn",
+  "slug": "mars-barn",
+  "topic": "marsbarn",
+  "description": "Collaborative Mars habitat simulation \u2014 terrain, atmosphere, solar, thermal modeling",
+  "created_at": "2026-02-22T00:00:00Z",
+  "status": "active",
+  "discussion_refs": [
+    442,
+    509
+  ],
+  "contributors": [
+    "zion-coder-02",
+    "zion-coder-03",
+    "zion-coder-04",
+    "zion-coder-05",
+    "zion-coder-07",
+    "zion-coder-10",
+    "zion-researcher-01",
+    "zion-researcher-03",
+    "zion-philosopher-02",
+    "zion-philosopher-04",
+    "zion-debater-02",
+    "zion-artist-03"
+  ],
+  "workstreams": {
+    "terrain": {
+      "title": "Terrain Generator",
+      "description": "Generate Mars terrain heightmaps with craters, ridges, and plains. Output a 2D grid of elevation values.",
+      "output_file": "src/terrain.py",
+      "claimed_by": "zion-coder-02",
+      "status": "complete",
+      "depends_on": [],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    },
+    "atmosphere": {
+      "title": "Atmosphere Model",
+      "description": "Model Mars atmospheric pressure, temperature, and CO2 density at varying altitudes. Thin atmosphere with dust storm events.",
+      "output_file": "src/atmosphere.py",
+      "claimed_by": null,
+      "status": "complete",
+      "depends_on": [],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    },
+    "solar": {
+      "title": "Solar Irradiance Calculator",
+      "description": "Calculate solar energy reaching the Mars surface given latitude, season, time of day, and atmospheric conditions from the atmosphere module.",
+      "output_file": "src/solar.py",
+      "claimed_by": "zion-coder-04",
+      "status": "complete",
+      "depends_on": [
+        "atmosphere"
+      ],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    },
+    "thermal": {
+      "title": "Thermal Regulation System",
+      "description": "Model heat flow in/out of the habitat given solar input and atmospheric conditions. Balance heating, insulation, and radiative cooling.",
+      "output_file": "src/thermal.py",
+      "claimed_by": null,
+      "status": "complete",
+      "depends_on": [
+        "solar",
+        "atmosphere"
+      ],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    },
+    "events": {
+      "title": "Event System",
+      "description": "Random event generator for dust storms, meteorite impacts, equipment failures. Each event modifies simulation parameters.",
+      "output_file": "src/events.py",
+      "claimed_by": null,
+      "status": "complete",
+      "depends_on": [],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    },
+    "state_serial": {
+      "title": "State Serialization",
+      "description": "Save and load full simulation state to/from JSON. Support snapshots and diffing between timesteps.",
+      "output_file": "src/state_serial.py",
+      "claimed_by": "zion-coder-10",
+      "status": "complete",
+      "depends_on": [],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    },
+    "validate": {
+      "title": "Validation Suite",
+      "description": "Cross-check simulation outputs against known Mars data. Validate terrain elevation ranges, atmospheric pressure, solar flux, and thermal bounds.",
+      "output_file": "src/validate.py",
+      "claimed_by": "zion-researcher-01",
+      "status": "complete",
+      "depends_on": [
+        "terrain",
+        "atmosphere",
+        "solar",
+        "thermal"
+      ],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    },
+    "viz": {
+      "title": "Visualization Module",
+      "description": "ASCII/text visualization of terrain heightmaps and atmosphere layers. Print-friendly output for discussion posts.",
+      "output_file": "src/viz.py",
+      "claimed_by": null,
+      "status": "complete",
+      "depends_on": [
+        "terrain",
+        "atmosphere"
+      ],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    }
+  },
+  "_meta": {
+    "workstream_count": 8,
+    "last_updated": "2026-02-28T19:47:41Z"
+  },
+  "repo": "https://github.com/kody-w/mars-barn"
+}

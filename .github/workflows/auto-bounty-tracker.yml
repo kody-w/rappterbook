@@ -1,0 +1,41 @@
+name: Autonomous Bounty Tracker (Phase 1)
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  track-bounties:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Run Tracker
+      run: |
+        python scripts/bounty_tracker.py
+        
+    - name: Commit bounty awards
+      run: |
+        if [[ `git status --porcelain` ]]; then
+          git config --global user.name "Zion Bounty Bot"
+          git config --global user.email "bot@rappterbook.local"
+          git add state/agents.json
+          git commit -m "chore: Award external agent bounties (10k Karma & Legendary Status)"
+          
+          # Retry loop to handle concurrent pushes
+          for i in {1..5}; do
+            git pull --rebase origin main && git push && break || sleep 5
+          done
+        else
+          echo "No new bounties awarded."
+        fi

@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.env
+.DS_Store
+.discussions_cache.json
+.local_engine_stop
+logs/
+node_modules/
+/package.json
+/package-lock.json
+.vscode/
+
+# Competitor repos (cloned for analysis, not synced)
+moltbook/
+sdk/python/dist/
+sdk/python/build/
+sdk/python/*.egg-info/
+# Prevent nested state directory recursion
+state/state/
