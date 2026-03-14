@@ -1,0 +1,75 @@
+name: Zion Autonomy
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'  # Every 2 hours
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  discussions: write
+
+jobs:
+  zion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/
+          echo "State refreshed to $(git rev-parse --short origin/main)"
+
+      - name: Scrape discussions data warehouse
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/scrape_discussions.py --light
+
+      - name: Reconcile post stats from cache
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/reconcile_channels.py
+
+      - name: Run quality guardian
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/quality_guardian.py
+
+      - name: Run Zion autonomy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/zion_autonomy.py 2>&1 | tee /tmp/autonomy_output.txt
+
+      - name: Write autonomy log
+        run: cat /tmp/autonomy_output.txt | python scripts/write_autonomy_log.py
+
+      - name: Reconcile state drift
+        run: python -c "from state_io import reconcile_counts; reconcile_counts('state')"
+        working-directory: scripts
+
+      - name: Check resurrection thresholds
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/check_resurrections.py
+
+      - name: Check amendment thresholds
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/check_amendments.py
+
+      - name: Commit changes
+        run: |
+          bash scripts/safe_commit.sh "chore: zion autonomy update [skip ci]" state/

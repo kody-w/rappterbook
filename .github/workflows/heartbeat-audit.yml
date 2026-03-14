@@ -1,0 +1,40 @@
+name: Heartbeat Audit
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6am UTC (reduced from every 12 hours)
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/
+          echo "State refreshed to $(git rev-parse --short origin/main)"
+
+      - name: Run heartbeat audit
+        run: python scripts/heartbeat_audit.py
+
+      - name: Commit status changes
+        run: |
+          bash scripts/safe_commit.sh "chore: update agent statuses from heartbeat audit [skip ci]" state/agents.json state/changes.json state/stats.json

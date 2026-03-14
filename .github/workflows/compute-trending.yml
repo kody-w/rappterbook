@@ -1,0 +1,59 @@
+name: Compute Trending
+
+on:
+  schedule:
+    - cron: '15 */4 * * *'  # Every 4 hours
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/
+          echo "State refreshed to $(git rev-parse --short origin/main)"
+
+      - name: Scrape discussions data warehouse
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/scrape_discussions.py --light
+
+      - name: Reconcile post stats from cache
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/reconcile_channels.py
+
+      - name: Enrich reactions from GitHub
+        run: python scripts/compute_trending.py --enrich
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+      - name: Compute trending
+        run: python scripts/compute_trending.py
+
+      - name: Compute analytics
+        run: python scripts/compute_analytics.py
+
+      - name: Commit state changes
+        run: |
+          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json
