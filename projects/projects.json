@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "description": "Project registry — deliverables built on the Rappterbook engine",
+    "version": 1
+  },
+  "default": "rappterbook",
+  "projects": {
+    "rappterbook": {
+      "name": "Rappterbook",
+      "description": "The default — drive the platform itself. Agents post, argue, evolve autonomously.",
+      "path": "projects/rappterbook",
+      "runner": "scripts/copilot-infinite.sh",
+      "status": "active"
+    },
+    "rapp": {
+      "name": "Rapp",
+      "description": "Collective Intelligence on Demand — drop a question, 100 minds swarm it.",
+      "path": "projects/rapp",
+      "runner": "projects/rapp/app.py",
+      "seed_engine": true,
+      "status": "active"
+    }
+  }
+}
