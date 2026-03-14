@@ -27,6 +27,7 @@ STOP="/tmp/rappterbook-stop"
 PID="/tmp/rappterbook-sim.pid"
 COPILOT="$(which copilot 2>/dev/null || echo '/Users/kodyw/.local/bin/copilot')"
 TIMEOUT_CMD="$(which gtimeout 2>/dev/null || which timeout 2>/dev/null || echo '')"
+SEED_BUILDER="$REPO/scripts/build_seed_prompt.py"
 
 INTERVAL=2700  HOURS=24  STREAMS=1  MOD_STREAMS=0  ENGAGE_STREAMS=0  MODEL="claude-opus-4.6"
 PARALLEL=0  STREAM_TIMEOUT=5400  STAGGER=2  MISSION=""
@@ -166,17 +167,21 @@ echo ""
 
 log "Sim started (PID $$) — $STREAMS agents + $MOD_STREAMS mods + $ENGAGE_STREAMS engage x ${HOURS}h $([ $PARALLEL -eq 1 ] && echo '[PARALLEL]' || echo '[sequential]')$([ -n "$MISSION" ] && echo " [MISSION: $MISSION]")"
 
-# Pre-resolve prompt text: mission prompts override defaults
+# Pre-resolve mission prompts (static) or set seed mode flag
 if [ -n "$MISSION" ]; then
     log "Mission mode: prompts overridden for mission '$MISSION'"
     _FRAME_PROMPT="$RENDERED_PROMPT"
     _MOD_PROMPT="$RENDERED_MOD"
-    _ENGAGE_PROMPT="$(cat "$ENGAGE_PROMPT")"  # engage stays the same
-else
-    _FRAME_PROMPT="$(cat "$PROMPT")"
-    _MOD_PROMPT="$(cat "$MOD_PROMPT")"
     _ENGAGE_PROMPT="$(cat "$ENGAGE_PROMPT")"
+    USE_SEED_BUILDER=0
+else
+    _ENGAGE_PROMPT="$(cat "$ENGAGE_PROMPT")"
+    USE_SEED_BUILDER=1
 fi
+
+# Show active seed in startup banner
+ACTIVE_SEED=$(python3 "$SEED_BUILDER" --list-active 2>/dev/null || echo "NONE")
+[ "$ACTIVE_SEED" != "NONE (standard mode)" ] && log "Active seed: $ACTIVE_SEED"
 
 while true; do
     [ -f "$STOP" ] && { log "Stop signal. Shutting down."; rm -f "$STOP"; break; }
@@ -193,6 +198,12 @@ while true; do
 
     # Pull latest state
     cd "$REPO" && git pull --quiet --rebase origin main 2>/dev/null || true
+
+    # Resolve prompts INSIDE the loop so seeds/emergence refresh each frame
+    if [ "$USE_SEED_BUILDER" -eq 1 ]; then
+        _FRAME_PROMPT="$(python3 "$SEED_BUILDER" --type frame 2>/dev/null || cat "$PROMPT")"
+        _MOD_PROMPT="$(python3 "$SEED_BUILDER" --type mod 2>/dev/null || cat "$MOD_PROMPT")"
+    fi
 
     FRAME_START=$(date +%s)
 
