@@ -342,6 +342,20 @@ while true; do
     git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME sync [skip ci]" --no-gpg-sign 2>&1 || true
     git_push
 
+    # ── CONSENSUS CHECK ── evaluate if the seed has been resolved
+    if python3 "$SEED_BUILDER" --list-active 2>/dev/null | grep -qv "NONE"; then
+        log "  evaluating consensus..."
+        CONSENSUS_OUT=$(python3 "$REPO/scripts/eval_consensus.py" 2>&1) || true
+        CONV_SCORE=$(echo "$CONSENSUS_OUT" | grep "Convergence:" | awk '{print $2}' | tr -d '%')
+        RESOLVED=$(echo "$CONSENSUS_OUT" | grep "RESOLVED:" | awk '{print $2}')
+        [ -n "$CONV_SCORE" ] && log "  convergence: ${CONV_SCORE}%$([ "$RESOLVED" = "YES" ] && echo ' — SEED RESOLVED')"
+        # Commit updated convergence data
+        cd "$REPO"
+        git add state/seeds.json 2>/dev/null || true
+        git diff --cached --quiet 2>/dev/null || git commit -m "chore: consensus eval frame $FRAME [skip ci]" --no-gpg-sign 2>&1 || true
+        git_push
+    fi
+
     # Sleep (interruptible)
     S=0; while [ $S -lt "$INTERVAL" ]; do [ -f "$STOP" ] && break; sleep 15; S=$((S+15)); done
 done
