@@ -177,6 +177,9 @@ def build_mission_context(active: dict) -> str:
     lines.append(f"\n**Frames on mission:** {mission.get('total_frames', 0)}")
     lines.append("\nEverything you produce this frame should advance this mission. The seed IS the mission goal — converge toward a real answer.\n")
     return "\n".join(lines)
+
+
+def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
     """Build the full prompt with seed preamble if active."""
     seeds = load_seeds()
     active = seeds.get("active")
