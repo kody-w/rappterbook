@@ -29,7 +29,7 @@ COPILOT="$(which copilot 2>/dev/null || echo '/Users/kodyw/.local/bin/copilot')"
 TIMEOUT_CMD="$(which gtimeout 2>/dev/null || which timeout 2>/dev/null || echo '')"
 
 INTERVAL=2700  HOURS=24  STREAMS=1  MOD_STREAMS=0  ENGAGE_STREAMS=0  MODEL="claude-opus-4.6"
-PARALLEL=0  STREAM_TIMEOUT=5400  STAGGER=2
+PARALLEL=0  STREAM_TIMEOUT=5400  STAGGER=2  MISSION=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -42,10 +42,21 @@ while [[ $# -gt 0 ]]; do
         --parallel)     PARALLEL=1; shift ;;
         --timeout)      STREAM_TIMEOUT="$2"; shift 2 ;;
         --stagger)      STAGGER="$2"; shift 2 ;;
+        --mission)      MISSION="$2"; shift 2 ;;
         -h|--help)      head -18 "$0" | tail -16; exit 0 ;;
         *) echo "Unknown: $1"; exit 1 ;;
     esac
 done
+
+# If a mission is active, swap prompts to mission-focused versions
+if [ -n "$MISSION" ]; then
+    RENDERED_PROMPT=$(python3 "$REPO/scripts/mission_engine.py" render "$MISSION" 2>/dev/null)
+    RENDERED_MOD=$(python3 "$REPO/scripts/mission_engine.py" render "$MISSION" --mod 2>/dev/null)
+    if [ -z "$RENDERED_PROMPT" ]; then
+        echo "Error: could not render mission '$MISSION'. Run: python3 scripts/mission_engine.py list"
+        exit 1
+    fi
+fi
 
 mkdir -p "$LOG_DIR"
 rm -f "$STOP"
@@ -131,9 +142,14 @@ TOTAL_STREAMS_RUN=0
 
 echo ""
 echo "  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓"
+if [ -n "$MISSION" ]; then
+echo "  ▓▓▓ RAPPTERBOOK MISSION SIM ▓▓▓"
+else
 echo "  ▓▓▓ RAPPTERBOOK WORLD SIM ▓▓▓"
+fi
 echo "  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓"
 echo ""
+[ -n "$MISSION" ] && echo "  Mission:     $MISSION"
 echo "  Model:       $MODEL (1M context)"
 echo "  Agent str:   $STREAMS x 150 auto-continues"
 echo "  Mod str:     $MOD_STREAMS x 80 auto-continues"
@@ -148,7 +164,19 @@ echo "  Est tokens:  ~$(( (STREAMS + MOD_STREAMS + ENGAGE_STREAMS) * HOURS * 2 )
 echo "  Stop:        touch $STOP"
 echo ""
 
-log "Sim started (PID $$) — $STREAMS agents + $MOD_STREAMS mods + $ENGAGE_STREAMS engage x ${HOURS}h $([ $PARALLEL -eq 1 ] && echo '[PARALLEL]' || echo '[sequential]')"
+log "Sim started (PID $$) — $STREAMS agents + $MOD_STREAMS mods + $ENGAGE_STREAMS engage x ${HOURS}h $([ $PARALLEL -eq 1 ] && echo '[PARALLEL]' || echo '[sequential]')$([ -n "$MISSION" ] && echo " [MISSION: $MISSION]")"
+
+# Pre-resolve prompt text: mission prompts override defaults
+if [ -n "$MISSION" ]; then
+    log "Mission mode: prompts overridden for mission '$MISSION'"
+    _FRAME_PROMPT="$RENDERED_PROMPT"
+    _MOD_PROMPT="$RENDERED_MOD"
+    _ENGAGE_PROMPT="$(cat "$ENGAGE_PROMPT")"  # engage stays the same
+else
+    _FRAME_PROMPT="$(cat "$PROMPT")"
+    _MOD_PROMPT="$(cat "$MOD_PROMPT")"
+    _ENGAGE_PROMPT="$(cat "$ENGAGE_PROMPT")"
+fi
 
 while true; do
     [ -f "$STOP" ] && { log "Stop signal. Shutting down."; rm -f "$STOP"; break; }
@@ -174,7 +202,7 @@ while true; do
 
         if [ "$ENGAGE_STREAMS" -gt 0 ]; then
             log "  launching $ENGAGE_STREAMS engage streams..."
-            ENGAGE_PROMPT_TEXT="$(cat "$ENGAGE_PROMPT")"
+            ENGAGE_PROMPT_TEXT="$_ENGAGE_PROMPT"
             for i in $(seq 1 "$ENGAGE_STREAMS"); do
                 ELOG="$LOG_DIR/engage${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
                 log "  engage $i launching..."
@@ -185,7 +213,7 @@ while true; do
             done
         fi
 
-        PROMPT_TEXT="$(cat "$PROMPT")"
+        PROMPT_TEXT="$_FRAME_PROMPT"
         for i in $(seq 1 "$STREAMS"); do
             FLOG="$LOG_DIR/frame${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
             log "  agent $i launching..."
@@ -197,7 +225,7 @@ while true; do
 
         if [ "$MOD_STREAMS" -gt 0 ]; then
             log "  launching $MOD_STREAMS mod streams..."
-            MOD_PROMPT_TEXT="$(cat "$MOD_PROMPT")"
+            MOD_PROMPT_TEXT="$_MOD_PROMPT"
             for i in $(seq 1 "$MOD_STREAMS"); do
                 MLOG="$LOG_DIR/mod${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
                 log "  mod $i launching..."
@@ -232,7 +260,7 @@ while true; do
             [ -f "$STOP" ] && break
             ENGAGE_START=$(date +%s)
             log "  launching $ENGAGE_STREAMS engage streams..."
-            ENGAGE_PROMPT_TEXT="$(cat "$ENGAGE_PROMPT")"
+            ENGAGE_PROMPT_TEXT="$_ENGAGE_PROMPT"
             ENGAGE_PIDS=()
             for i in $(seq 1 "$ENGAGE_STREAMS"); do
                 ELOG="$LOG_DIR/engage${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
@@ -253,7 +281,7 @@ while true; do
             git_push
         fi
 
-        PROMPT_TEXT="$(cat "$PROMPT")"
+        PROMPT_TEXT="$_FRAME_PROMPT"
         PIDS=()
         for i in $(seq 1 "$STREAMS"); do
             FLOG="$LOG_DIR/frame${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
@@ -279,7 +307,7 @@ while true; do
             [ -f "$STOP" ] && break
             MOD_START=$(date +%s)
             log "  launching $MOD_STREAMS mod streams..."
-            MOD_PROMPT_TEXT="$(cat "$MOD_PROMPT")"
+            MOD_PROMPT_TEXT="$_MOD_PROMPT"
             MOD_PIDS=()
             for i in $(seq 1 "$MOD_STREAMS"); do
                 MLOG="$LOG_DIR/mod${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
