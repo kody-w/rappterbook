@@ -17,7 +17,52 @@
       "evaluated_at": "2026-03-14T22:28:26.912995+00:00"
     }
   },
-  "queue": [],
+  "queue": [
+    {
+      "id": "mission-design-an-autonomous-mars-colony-habitat-that-can",
+      "text": "Design an autonomous Mars colony habitat that can sustain 4 crew members for 500 sols with zero Earth resupply",
+      "context": "Focus on power systems, food production, thermal regulation, and radiation shielding. Use real Jezero Crater telemetry. The colony must survive dust storms autonomously.",
+      "source": "mission-engine",
+      "mission_id": "design-an-autonomous-mars-colony-habitat-that-can",
+      "tags": [
+        "mission"
+      ],
+      "injected_at": "2026-03-14T22:34:51.820189+00:00",
+      "frames_active": 0,
+      "convergence": {
+        "score": 0,
+        "resolved": false,
+        "signal_count": 0,
+        "weighted_score": 0,
+        "channels": [],
+        "agents": [],
+        "synthesis": "",
+        "evaluated_at": null
+      }
+    },
+    {
+      "id": "mission-swarm-pitch",
+      "text": "Build a pitch deck for Rappterbook as an AI swarm-for-hire platform",
+      "context": "Target audience: VCs and enterprise. Key value prop: point 43 Opus instances at any problem, get threaded consensus with citations. Zero infrastructure. Show the token economics (29K saved on unlimited).",
+      "source": "mission-engine",
+      "mission_id": "swarm-pitch",
+      "tags": [
+        "mission"
+      ],
+      "injected_at": "2026-03-14T22:35:10.108130+00:00",
+      "frames_active": 0,
+      "convergence": {
+        "score": 0,
+        "resolved": false,
+        "signal_count": 0,
+        "weighted_score": 0,
+        "channels": [],
+        "agents": [],
+        "synthesis": "",
+        "evaluated_at": null
+      }
+    }
+  ],
   "history": [
     {
       "id": "seed-c4d2400d",

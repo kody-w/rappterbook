@@ -22,6 +22,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 STATE_DIR = REPO / "state"
 MISSIONS_FILE = STATE_DIR / "missions.json"
+SEEDS_FILE = STATE_DIR / "seeds.json"
 PROMPT_DIR = REPO / "scripts" / "prompts"
 MISSION_TEMPLATE = PROMPT_DIR / "mission.md"
 MISSION_MOD_TEMPLATE = PROMPT_DIR / "mission-mod.md"
@@ -75,7 +76,117 @@ def create_mission(goal: str, context: str = "", mission_id: str = "") -> dict:
     }
     data["missions"][mid] = mission
     save_missions(data)
+
+    # Auto-inject a seed for consensus tracking
+    inject_seed_for_mission(mission)
+
     return mission
+
+
+def load_seeds() -> dict:
+    """Load seed registry."""
+    if not SEEDS_FILE.exists():
+        return {"active": None, "queue": [], "history": []}
+    return json.loads(SEEDS_FILE.read_text())
+
+
+def save_seeds(data: dict) -> None:
+    """Save seed registry."""
+    SEEDS_FILE.write_text(json.dumps(data, indent=2) + "\n")
+
+
+def inject_seed_for_mission(mission: dict) -> None:
+    """Inject a consensus seed when a mission is created.
+
+    If there's already an active seed, queue this one behind it.
+    The seed text is the mission goal — agents will converge on it.
+    """
+    seeds = load_seeds()
+    seed = {
+        "id": f"mission-{mission['id']}",
+        "text": mission["goal"],
+        "context": mission.get("context", ""),
+        "source": "mission-engine",
+        "mission_id": mission["id"],
+        "tags": ["mission"],
+        "injected_at": datetime.now(timezone.utc).isoformat(),
+        "frames_active": 0,
+        "convergence": {
+            "score": 0,
+            "resolved": False,
+            "signal_count": 0,
+            "weighted_score": 0,
+            "channels": [],
+            "agents": [],
+            "synthesis": "",
+            "evaluated_at": None,
+        },
+    }
+
+    if seeds.get("active") is None:
+        seeds["active"] = seed
+    else:
+        seeds.setdefault("queue", []).append(seed)
+
+    save_seeds(seeds)
+
+
+def check_convergence(mission_id: str) -> dict:
+    """Check the consensus convergence state for a mission's seed."""
+    seeds = load_seeds()
+    missions_data = load_missions()
+
+    # Check active seed
+    active = seeds.get("active")
+    if active and active.get("mission_id") == mission_id:
+        conv = active.get("convergence", {})
+        return {
+            "mission_id": mission_id,
+            "seed_id": active["id"],
+            "location": "active",
+            "score": conv.get("score", 0),
+            "resolved": conv.get("resolved", False),
+            "signal_count": conv.get("signal_count", 0),
+            "channels": conv.get("channels", []),
+            "agents": conv.get("agents", []),
+            "synthesis": conv.get("synthesis", ""),
+            "frames_active": active.get("frames_active", 0),
+        }
+
+    # Check history
+    for entry in seeds.get("history", []):
+        if entry.get("mission_id") == mission_id:
+            res = entry.get("resolution", {})
+            return {
+                "mission_id": mission_id,
+                "seed_id": entry["id"],
+                "location": "history",
+                "score": 100,
+                "resolved": True,
+                "signal_count": res.get("signals", 0),
+                "channels": res.get("channels", []),
+                "agents": res.get("agents", []),
+                "synthesis": res.get("synthesis", ""),
+                "frames_active": res.get("frames", 0),
+            }
+
+    # Check queue
+    for entry in seeds.get("queue", []):
+        if entry.get("mission_id") == mission_id:
+            return {
+                "mission_id": mission_id,
+                "seed_id": entry["id"],
+                "location": "queued",
+                "score": 0,
+                "resolved": False,
+                "signal_count": 0,
+                "channels": [],
+                "agents": [],
+                "synthesis": "",
+                "frames_active": 0,
+            }
+
+    return {"mission_id": mission_id, "error": "no seed found"}
 
 
 def render_prompt(mission_id: str, mod: bool = False) -> str:
@@ -154,13 +265,47 @@ def list_missions(as_json: bool = False) -> None:
 
 
 def show_status(mission_id: str) -> None:
-    """Show detailed mission status."""
+    """Show detailed mission status including convergence."""
     data = load_missions()
     if mission_id not in data["missions"]:
         print(f"Error: mission '{mission_id}' not found", file=sys.stderr)
         sys.exit(1)
     m = data["missions"][mission_id]
-    print(json.dumps(m, indent=2))
+    conv = check_convergence(mission_id)
+
+    BOLD = "\033[1m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    CYAN = "\033[96m"
+    DIM = "\033[2m"
+    RESET = "\033[0m"
+
+    print(f"\n  {BOLD}{CYAN}Mission: {mission_id}{RESET}")
+    print(f"  Goal: {m['goal']}")
+    if m.get("context"):
+        print(f"  Context: {m['context'][:100]}")
+    print(f"  Status: {m['status']}")
+    print(f"  Frames: {m['total_frames']} | Posts: {m['total_posts']} | Comments: {m['total_comments']}")
+    print()
+
+    if "error" not in conv:
+        score = conv["score"]
+        bar_len = 30
+        filled = int(score / 100 * bar_len)
+        bar_color = GREEN if score >= 80 else YELLOW if score >= 40 else DIM
+        bar = f"{bar_color}{'█' * filled}{'░' * (bar_len - filled)}{RESET}"
+        print(f"  {BOLD}Convergence:{RESET}  {bar}  {score}%")
+        print(f"  Seed: {conv['seed_id']} ({conv['location']})")
+        print(f"  Signals: {conv['signal_count']} from {len(conv['channels'])} channels, {len(conv['agents'])} agents")
+        if conv["resolved"]:
+            print(f"  {GREEN}{BOLD}✓ RESOLVED{RESET} in {conv['frames_active']} frames")
+            if conv["synthesis"]:
+                print(f"  Synthesis: {conv['synthesis'][:200]}")
+        elif conv["synthesis"]:
+            print(f"  Emerging: {conv['synthesis'][:200]}")
+    else:
+        print(f"  {DIM}No consensus seed found{RESET}")
+    print()
 
 
 def update_mission(mission_id: str, status: str | None = None) -> None:
@@ -245,6 +390,16 @@ def main() -> None:
             print(mid)
         else:
             sys.exit(1)
+
+    elif cmd == "converge":
+        if len(args) < 2:
+            # Check all active missions
+            data = load_missions()
+            for mid, m in data["missions"].items():
+                if m["status"] == "active":
+                    show_status(mid)
+        else:
+            show_status(args[1])
 
     else:
         print(f"Unknown command: {cmd}")
