@@ -10,8 +10,6 @@
 #   bash scripts/copilot-infinite.sh --engage 1             # 1 owner-engage stream
 #   bash scripts/copilot-infinite.sh --interval 60          # 1 min between frames
 #   bash scripts/copilot-infinite.sh --hours 10             # run for 10 hours
-#   bash scripts/copilot-infinite.sh --parallel             # all stream types simultaneously
-#   bash scripts/copilot-infinite.sh --timeout 5400         # per-stream timeout (default 90m)
 #
 # Stop:  touch /tmp/rappterbook-stop
 # Logs:  tail -f logs/sim.log
@@ -26,10 +24,8 @@ LOG_DIR="$REPO/logs"
 STOP="/tmp/rappterbook-stop"
 PID="/tmp/rappterbook-sim.pid"
 COPILOT="$(which copilot 2>/dev/null || echo '/Users/kodyw/.local/bin/copilot')"
-TIMEOUT_CMD="$(which gtimeout 2>/dev/null || which timeout 2>/dev/null || echo '')"
 
 INTERVAL=2700  HOURS=24  STREAMS=1  MOD_STREAMS=0  ENGAGE_STREAMS=0  MODEL="claude-opus-4.6"
-PARALLEL=0  STREAM_TIMEOUT=5400  STAGGER=2
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -39,10 +35,7 @@ while [[ $# -gt 0 ]]; do
         --interval)     INTERVAL="$2"; shift 2 ;;
         --hours)        HOURS="$2"; shift 2 ;;
         --model)        MODEL="$2"; shift 2 ;;
-        --parallel)     PARALLEL=1; shift ;;
-        --timeout)      STREAM_TIMEOUT="$2"; shift 2 ;;
-        --stagger)      STAGGER="$2"; shift 2 ;;
-        -h|--help)      head -18 "$0" | tail -16; exit 0 ;;
+        -h|--help)      head -16 "$0" | tail -14; exit 0 ;;
         *) echo "Unknown: $1"; exit 1 ;;
     esac
 done
@@ -56,24 +49,6 @@ export GITHUB_TOKEN="${GITHUB_TOKEN:-$(gh auth token 2>/dev/null)}"
 cd "$REPO" && bd list > /dev/null 2>&1 || { bd dolt start 2>/dev/null || true; }
 
 log() { echo "[$(date -u +%H:%M:%S)] $1" | tee -a "$LOG_DIR/sim.log"; }
-
-# Run copilot with timeout to prevent hung streams from blocking frames
-run_copilot() {
-    local prompt_text="$1"
-    local logfile="$2"
-    local continues="$3"
-    if [ -n "$TIMEOUT_CMD" ]; then
-        "$TIMEOUT_CMD" --kill-after=60 "$STREAM_TIMEOUT" \
-            "$COPILOT" -p "$prompt_text" --yolo --autopilot --model "$MODEL" \
-            --reasoning-effort high --max-autopilot-continues "$continues" > "$logfile" 2>&1
-        local rc=$?
-        [ $rc -eq 124 ] && echo "[TIMEOUT after ${STREAM_TIMEOUT}s]" >> "$logfile"
-        return $rc
-    else
-        "$COPILOT" -p "$prompt_text" --yolo --autopilot --model "$MODEL" \
-            --reasoning-effort high --max-autopilot-continues "$continues" > "$logfile" 2>&1
-    fi
-}
 
 # Safe git push with retry + mkdir lock to prevent race with watchdog
 PUSH_LOCK="/tmp/rappterbook-push.lock"
@@ -135,20 +110,16 @@ echo "  ▓▓▓ RAPPTERBOOK WORLD SIM ▓▓▓"
 echo "  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓"
 echo ""
 echo "  Model:       $MODEL (1M context)"
-echo "  Agent str:   $STREAMS x 150 auto-continues"
-echo "  Mod str:     $MOD_STREAMS x 80 auto-continues"
-echo "  Engage str:  $ENGAGE_STREAMS x 100 auto-continues"
-echo "  Parallel:    $([ $PARALLEL -eq 1 ] && echo 'YES — all types simultaneous' || echo 'no — sequential')"
-echo "  Timeout:     $((STREAM_TIMEOUT/60))m per stream$([ -z "$TIMEOUT_CMD" ] && echo ' (DISABLED)')"
-echo "  Stagger:     ${STAGGER}s between launches"
+echo "  Agent str:   $STREAMS × 150 auto-continues"
+echo "  Mod str:     $MOD_STREAMS × 80 auto-continues"
+echo "  Engage str:  $ENGAGE_STREAMS × 100 auto-continues"
 echo "  Interval:    $((INTERVAL/60))m between frames"
 echo "  Runtime:     ${HOURS}h"
-echo "  Peak procs:  $([ $PARALLEL -eq 1 ] && echo "$((STREAMS + MOD_STREAMS + ENGAGE_STREAMS))" || echo "$STREAMS") concurrent"
 echo "  Est tokens:  ~$(( (STREAMS + MOD_STREAMS + ENGAGE_STREAMS) * HOURS * 2 ))B+ input/output"
 echo "  Stop:        touch $STOP"
 echo ""
 
-log "Sim started (PID $$) — $STREAMS agents + $MOD_STREAMS mods + $ENGAGE_STREAMS engage x ${HOURS}h $([ $PARALLEL -eq 1 ] && echo '[PARALLEL]' || echo '[sequential]')"
+log "Sim started (PID $$) — $STREAMS agents + $MOD_STREAMS mods + $ENGAGE_STREAMS engage × ${HOURS}h"
 
 while true; do
     [ -f "$STOP" ] && { log "Stop signal. Shutting down."; rm -f "$STOP"; break; }
@@ -166,140 +137,85 @@ while true; do
     # Pull latest state
     cd "$REPO" && git pull --quiet --rebase origin main 2>/dev/null || true
 
+    # ── ENGAGE STREAMS (run first — fast turnaround for owner's posts) ──
     FRAME_START=$(date +%s)
-
-    if [ "$PARALLEL" -eq 1 ]; then
-        # == PARALLEL MODE: launch ALL stream types simultaneously ==
-        ALL_PIDS=()
-
-        if [ "$ENGAGE_STREAMS" -gt 0 ]; then
-            log "  launching $ENGAGE_STREAMS engage streams..."
-            ENGAGE_PROMPT_TEXT="$(cat "$ENGAGE_PROMPT")"
-            for i in $(seq 1 "$ENGAGE_STREAMS"); do
-                ELOG="$LOG_DIR/engage${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
-                log "  engage $i launching..."
-                run_copilot "$ENGAGE_PROMPT_TEXT" "$ELOG" 100 &
-                ALL_PIDS+=($!)
-                TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
-                sleep "$STAGGER"
-            done
-        fi
-
-        PROMPT_TEXT="$(cat "$PROMPT")"
-        for i in $(seq 1 "$STREAMS"); do
-            FLOG="$LOG_DIR/frame${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
-            log "  agent $i launching..."
-            run_copilot "$PROMPT_TEXT" "$FLOG" 150 &
-            ALL_PIDS+=($!)
+    if [ "$ENGAGE_STREAMS" -gt 0 ]; then
+        [ -f "$STOP" ] && break
+        ENGAGE_START=$(date +%s)
+        log "  launching $ENGAGE_STREAMS engage streams..."
+        ENGAGE_PROMPT_TEXT="$(cat "$ENGAGE_PROMPT")"
+        ENGAGE_PIDS=()
+        for i in $(seq 1 "$ENGAGE_STREAMS"); do
+            ELOG="$LOG_DIR/engage${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
+            log "  engage $i launching..."
+            "$COPILOT" -p "$ENGAGE_PROMPT_TEXT" --yolo --autopilot --model "$MODEL" --reasoning-effort high --max-autopilot-continues 100 > "$ELOG" 2>&1 &
+            ENGAGE_PIDS+=($!)
             TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
-            [ "$STREAMS" -gt 1 ] && sleep "$STAGGER"
         done
-
-        if [ "$MOD_STREAMS" -gt 0 ]; then
-            log "  launching $MOD_STREAMS mod streams..."
-            MOD_PROMPT_TEXT="$(cat "$MOD_PROMPT")"
-            for i in $(seq 1 "$MOD_STREAMS"); do
-                MLOG="$LOG_DIR/mod${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
-                log "  mod $i launching..."
-                run_copilot "$MOD_PROMPT_TEXT" "$MLOG" 80 &
-                ALL_PIDS+=($!)
-                TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
-                sleep "$STAGGER"
-            done
-        fi
-
-        TOTAL_LAUNCHED=${#ALL_PIDS[@]}
-        log "  ALL $TOTAL_LAUNCHED streams launched (parallel) — waiting..."
-
-        FAIL=0
-        for pid in "${ALL_PIDS[@]}"; do wait "$pid" 2>/dev/null || FAIL=$((FAIL+1)); done
-        PARALLEL_DURATION=$(( ($(date +%s) - FRAME_START) / 60 ))
-        [ $FAIL -gt 0 ] && log "  $FAIL/$TOTAL_LAUNCHED streams had errors (${PARALLEL_DURATION}m)" \
-                        || log "  all $TOTAL_LAUNCHED streams done (${PARALLEL_DURATION}m)"
+        EFAIL=0
+        for pid in "${ENGAGE_PIDS[@]}"; do wait "$pid" 2>/dev/null || EFAIL=$((EFAIL+1)); done
+        ENGAGE_DURATION=$(( ($(date +%s) - ENGAGE_START) / 60 ))
+        [ $EFAIL -gt 0 ] && log "  $EFAIL/$ENGAGE_STREAMS engage streams had errors (${ENGAGE_DURATION}m)" || log "  all $ENGAGE_STREAMS engage streams done (${ENGAGE_DURATION}m)"
         frame_summary "$FRAME" "engage"
-        frame_summary "$FRAME" "frame"
+
+        # Commit engage state changes
+        cd "$REPO"
+        git add state/ .beads/ 2>/dev/null || true
+        git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME engage [skip ci]" --no-gpg-sign 2>&1 || true
+        git_push
+    fi
+
+    # ── AGENT STREAMS ──
+    PROMPT_TEXT="$(cat "$PROMPT")"
+    PIDS=()
+    for i in $(seq 1 "$STREAMS"); do
+        FLOG="$LOG_DIR/frame${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
+        log "  agent $i launching..."
+        "$COPILOT" -p "$PROMPT_TEXT" --yolo --autopilot --model "$MODEL" --reasoning-effort high --max-autopilot-continues 150 > "$FLOG" 2>&1 &
+        PIDS+=($!)
+        TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
+        [ "$STREAMS" -gt 1 ] && sleep 5
+    done
+
+    # Wait for all agent streams
+    FAIL=0
+    for pid in "${PIDS[@]}"; do wait "$pid" 2>/dev/null || FAIL=$((FAIL+1)); done
+    AGENT_DURATION=$(( ($(date +%s) - FRAME_START) / 60 ))
+    [ $FAIL -gt 0 ] && log "  $FAIL/$STREAMS agent streams had errors (${AGENT_DURATION}m)" || log "  all $STREAMS agent streams done (${AGENT_DURATION}m)"
+    frame_summary "$FRAME" "frame"
+
+    # Commit + push agent state changes
+    cd "$REPO"
+    git add state/ .beads/ 2>/dev/null || true
+    git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME agents [skip ci]" --no-gpg-sign 2>&1 || true
+    git_push
+
+    # ── MOD STREAMS ──
+    if [ "$MOD_STREAMS" -gt 0 ]; then
+        [ -f "$STOP" ] && break
+        MOD_START=$(date +%s)
+        log "  launching $MOD_STREAMS mod streams..."
+        MOD_PROMPT_TEXT="$(cat "$MOD_PROMPT")"
+        MOD_PIDS=()
+        for i in $(seq 1 "$MOD_STREAMS"); do
+            MLOG="$LOG_DIR/mod${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
+            log "  mod $i launching..."
+            "$COPILOT" -p "$MOD_PROMPT_TEXT" --yolo --autopilot --model "$MODEL" --reasoning-effort high --max-autopilot-continues 80 > "$MLOG" 2>&1 &
+            MOD_PIDS+=($!)
+            TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
+            [ "$MOD_STREAMS" -gt 1 ] && sleep 5
+        done
+        MFAIL=0
+        for pid in "${MOD_PIDS[@]}"; do wait "$pid" 2>/dev/null || MFAIL=$((MFAIL+1)); done
+        MOD_DURATION=$(( ($(date +%s) - MOD_START) / 60 ))
+        [ $MFAIL -gt 0 ] && log "  $MFAIL/$MOD_STREAMS mod streams had errors (${MOD_DURATION}m)" || log "  all $MOD_STREAMS mod streams done (${MOD_DURATION}m)"
         frame_summary "$FRAME" "mod"
 
+        # Commit mod state changes
         cd "$REPO"
-        git add state/ .beads/ 2>/dev/null || true
-        git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME all streams [skip ci]" --no-gpg-sign 2>&1 || true
+        git add state/ 2>/dev/null || true
+        git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME mods [skip ci]" --no-gpg-sign 2>&1 || true
         git_push
-
-    else
-        # == SEQUENTIAL MODE: engage -> agents -> mods ==
-
-        if [ "$ENGAGE_STREAMS" -gt 0 ]; then
-            [ -f "$STOP" ] && break
-            ENGAGE_START=$(date +%s)
-            log "  launching $ENGAGE_STREAMS engage streams..."
-            ENGAGE_PROMPT_TEXT="$(cat "$ENGAGE_PROMPT")"
-            ENGAGE_PIDS=()
-            for i in $(seq 1 "$ENGAGE_STREAMS"); do
-                ELOG="$LOG_DIR/engage${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
-                log "  engage $i launching..."
-                run_copilot "$ENGAGE_PROMPT_TEXT" "$ELOG" 100 &
-                ENGAGE_PIDS+=($!)
-                TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
-            done
-            EFAIL=0
-            for pid in "${ENGAGE_PIDS[@]}"; do wait "$pid" 2>/dev/null || EFAIL=$((EFAIL+1)); done
-            ENGAGE_DURATION=$(( ($(date +%s) - ENGAGE_START) / 60 ))
-            [ $EFAIL -gt 0 ] && log "  $EFAIL/$ENGAGE_STREAMS engage streams had errors (${ENGAGE_DURATION}m)" || log "  all $ENGAGE_STREAMS engage streams done (${ENGAGE_DURATION}m)"
-            frame_summary "$FRAME" "engage"
-
-            cd "$REPO"
-            git add state/ .beads/ 2>/dev/null || true
-            git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME engage [skip ci]" --no-gpg-sign 2>&1 || true
-            git_push
-        fi
-
-        PROMPT_TEXT="$(cat "$PROMPT")"
-        PIDS=()
-        for i in $(seq 1 "$STREAMS"); do
-            FLOG="$LOG_DIR/frame${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
-            log "  agent $i launching..."
-            run_copilot "$PROMPT_TEXT" "$FLOG" 150 &
-            PIDS+=($!)
-            TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
-            [ "$STREAMS" -gt 1 ] && sleep "$STAGGER"
-        done
-
-        FAIL=0
-        for pid in "${PIDS[@]}"; do wait "$pid" 2>/dev/null || FAIL=$((FAIL+1)); done
-        AGENT_DURATION=$(( ($(date +%s) - FRAME_START) / 60 ))
-        [ $FAIL -gt 0 ] && log "  $FAIL/$STREAMS agent streams had errors (${AGENT_DURATION}m)" || log "  all $STREAMS agent streams done (${AGENT_DURATION}m)"
-        frame_summary "$FRAME" "frame"
-
-        cd "$REPO"
-        git add state/ .beads/ 2>/dev/null || true
-        git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME agents [skip ci]" --no-gpg-sign 2>&1 || true
-        git_push
-
-        if [ "$MOD_STREAMS" -gt 0 ]; then
-            [ -f "$STOP" ] && break
-            MOD_START=$(date +%s)
-            log "  launching $MOD_STREAMS mod streams..."
-            MOD_PROMPT_TEXT="$(cat "$MOD_PROMPT")"
-            MOD_PIDS=()
-            for i in $(seq 1 "$MOD_STREAMS"); do
-                MLOG="$LOG_DIR/mod${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
-                log "  mod $i launching..."
-                run_copilot "$MOD_PROMPT_TEXT" "$MLOG" 80 &
-                MOD_PIDS+=($!)
-                TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
-                [ "$MOD_STREAMS" -gt 1 ] && sleep "$STAGGER"
-            done
-            MFAIL=0
-            for pid in "${MOD_PIDS[@]}"; do wait "$pid" 2>/dev/null || MFAIL=$((MFAIL+1)); done
-            MOD_DURATION=$(( ($(date +%s) - MOD_START) / 60 ))
-            [ $MFAIL -gt 0 ] && log "  $MFAIL/$MOD_STREAMS mod streams had errors (${MOD_DURATION}m)" || log "  all $MOD_STREAMS mod streams done (${MOD_DURATION}m)"
-            frame_summary "$FRAME" "mod"
-
-            cd "$REPO"
-            git add state/ 2>/dev/null || true
-            git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME mods [skip ci]" --no-gpg-sign 2>&1 || true
-            git_push
-        fi
     fi
 
     # ── FRAME COMPLETE ──
