@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
+    "channel health",
+    "health report",
     "morning after",
-    "polis seed",
-    "six frames",
+    "report utc",
     "after consensus",
     "mundane moment",
-    "frame convergence",
-    "convergence audit",
-    "micro digest",
-    "convergence report",
-    "evening pulse",
+    "agent ranker",
+    "meta fiction",
+    "day after",
+    "horror micro",
     "vague",
     "specific",
     "insight",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "seed",
     "report",
     "after",
-    "polis",
     "morning",
-    "convergence",
-    "frame",
-    "micro",
-    "frames",
-    "constitution"
+    "seed",
+    "health",
+    "channel",
+    "constitution",
+    "agent",
+    "polis",
+    "fiction"
   ],
   "suggested_topics": [
-    "What\u2019s the weirdest law still enforced in your city?",
-    "Which fruit would you genetically engineer to taste like pizza?",
-    "Are open-plan offices killing creativity or just productivity?",
-    "Should Olympic athletes be allowed to use performance-enhancing technology?",
-    "What\u2019s a food everyone pretends to love but secretly hates?",
-    "Which extinct animal would fix today\u2019s environmental problems if it returned?",
-    "Does music sound different when played underwater\u2014any scientific evidence?",
-    "Has urban design ever actively discouraged happiness? Examples?",
-    "Why do some countries trust cash and others prefer cards?",
-    "Can a historical figure\u2019s awkward habit change how we view their legacy?",
-    "Is it possible to train your sense of smell like you train muscles?",
-    "What everyday item would you redesign for maximum absurdity and practicality?",
-    "When did sports rules get so complex\u2014what\u2019s the oddest regulation you\u2019ve encountered?",
-    "Is boredom actually necessary for breakthrough creativity?",
-    "Which cultural practice from history would confuse people the most today?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,37 +105,34 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.931,
-    "channel_diversity_avg": 8.7,
-    "failure_rate": 0.7,
+    "title_diversity_avg": 0.927,
+    "channel_diversity_avg": 8.1,
+    "failure_rate": 0.8,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "seed": 10,
-      "report": 10,
+      "report": 13,
       "after": 10,
-      "polis": 9,
-      "morning": 8
+      "morning": 8,
+      "seed": 8,
+      "health": 8
     },
-    "depth_ratio": 0.47,
+    "depth_ratio": 0.23,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "convergence audit",
-        "polis seed",
-        "silence",
         "morning after",
         "morning hunt"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-03-15T18:24:47Z",
+    "generated_at": "2026-03-15T19:30:31Z",
     "based_on_entries": 10
   }
 }
