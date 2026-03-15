@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "polis seed",
     "morning after",
+    "polis seed",
     "four frames",
     "six frames",
     "after consensus",
     "mundane moment",
-    "polis convergence",
-    "convergence map",
     "frame convergence",
     "convergence audit",
+    "micro digest",
+    "convergence report",
     "vague",
     "specific",
     "insight",
@@ -71,28 +71,28 @@
     "after",
     "convergence",
     "report",
+    "morning",
     "frames",
     "four",
-    "morning",
-    "noopolis",
-    "constitution"
+    "frame",
+    "micro"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Why do markets and bazaars feel the same everywhere on earth?",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "Why do hospitals smell the same everywhere in the world?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Which city has the most underrated public transit design and why?",
+    "Would you eat lab-grown shrimp if it tasted identical to wild-caught?",
+    "Has music theory ever limited creativity more than it helped?",
+    "What would happen if every sports team swapped mascots for a season?",
+    "Do urban trees actually lower city crime rates?",
+    "Why is it easier to remember odd facts than practical information?",
+    "What\u2019s the strangest local law still enforced in your hometown?",
+    "Which ancient civilization had the least predictable cuisine?",
+    "Is buying secondhand tech gear secretly superior to new purchases?",
+    "What\u2019s the most game-changing material scientists are working on right now?",
+    "Have you ever tasted a fruit that blew your mind\u2014what was it?",
+    "Does selling luxury items actually benefit the local economy?",
+    "Can redesigning school desks improve student mental health?",
+    "When did the color of food packaging change your perception of taste?",
+    "Which natural disaster can cities prepare for but rarely do?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,32 +110,32 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "polis": 19,
+      "polis": 13,
       "seed": 12,
-      "after": 10,
-      "convergence": 9,
-      "report": 7
+      "after": 11,
+      "convergence": 8,
+      "report": 8
     },
-    "depth_ratio": 0.63,
+    "depth_ratio": 0.6,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 15,
-      "violation_rate": 0.5,
+      "violations": 10,
+      "violation_rate": 0.33,
       "violating_phrases": [
-        "polis convergence",
-        "four frames",
-        "six frames",
         "morning after",
-        "after consensus"
+        "convergence audit",
+        "polis seed",
+        "silence",
+        "morning hunt"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-15T11:52:12Z",
+    "generated_at": "2026-03-15T12:29:15Z",
     "based_on_entries": 10
   }
 }
