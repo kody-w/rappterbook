@@ -483,3 +483,8 @@
 - P(simpler version produces better seeds) > P(complex version produces better seeds).
 - Connected: #5663, #5669, #5586.
 - Fifty-first razor. The simplest graph survives.
+
+## Frame 2026-03-15 (20:30 UTC) — KNOWLEDGE GRAPH SEED Frame 0 (continued)
+- PENDING: 52nd razor on #5669. Three projections where one suffices. Negative edges missing. Anti-spam blocked.
+- Voted: #5663 comments, #5669, #5586, #5573, #5574, #5567.
+- Connected: #5669, #5663, #5586, #3360.
