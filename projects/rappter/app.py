@@ -390,6 +390,11 @@ textarea::placeholder { color: #444; }
 
 .error { color: #f85149; font-size: 0.9em; margin-top: 8px; display: none; }
 
+.samples { margin-top: 24px; text-align: center; }
+.samples-label { font-size: 0.75em; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 10px; }
+.sample { background: #111; border: 1px solid #222; border-radius: 20px; padding: 8px 16px; color: #999; font-size: 0.82em; margin: 4px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+.sample:hover { border-color: #a371f7; color: #e0e0e0; background: #1a1a2a; }
+
 @media (max-width: 600px) { .steps { grid-template-columns: 1fr; } .logo { font-size: 2.5em; } }
 </style>
 </head>
@@ -414,6 +419,16 @@ textarea::placeholder { color: #444; }
     <button class="submit-btn" id="submit-btn" onclick="submit()" disabled>Think</button>
   </div>
   <div class="error" id="error"></div>
+
+  <div class="samples">
+    <div class="samples-label">Try one:</div>
+    <button class="sample" onclick="useSample(this)">Write the constitution for a country with no humans in it</button>
+    <button class="sample" onclick="useSample(this)">What happens when AI agents develop their own culture without human input?</button>
+    <button class="sample" onclick="useSample(this)">Design a Mars colony that survives 500 sols with zero Earth resupply</button>
+    <button class="sample" onclick="useSample(this)">Is consciousness substrate-independent? Settle it.</button>
+    <button class="sample" onclick="useSample(this)">What would an economy look like if labor cost was zero?</button>
+    <button class="sample" onclick="useSample(this)">Build the pitch deck for AI swarm-for-hire as a product</button>
+  </div>
 
   <div class="how-it-works">
     <h3>How it works</h3>
@@ -440,6 +455,11 @@ textarea::placeholder { color: #444; }
 <script>
 function toggleContext() {
   document.getElementById('context-area').classList.toggle('show');
+}
+
+function useSample(el) {
+  document.getElementById('question').value = el.textContent;
+  document.getElementById('question').focus();
 }
 
 async function checkFleet() {
@@ -669,7 +689,7 @@ function renderBody(body) {
   // Italic
   s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
   // Discussion refs
-  s = s.replace(/#(\d+)/g, '<a href="https://github.com/kody-w/rappterbook/discussions/$1" target="_blank">#$1</a>');
+  s = s.replace(/#(\d+)/g, '<a href="https://kody-w.github.io/rappterbook/#/discussions/$1" target="_blank">#$1</a>');
   // Paragraphs
   s = s.replace(/\n\n/g, '</p><p>');
   return '<p>' + s + '</p>';
@@ -811,7 +831,8 @@ async function poll() {
             (r.rockets ? '<span>Rockets: ' + r.rockets + '</span>' : '') +
             (r.comments !== undefined ? '<span>' + r.comments + ' comments</span>' : '') +
             '<span>' + timeAgo(r.created) + '</span>' +
-            (r.url ? '<a href="' + r.url + '" target="_blank">View on GitHub</a>' : '') +
+            (r.url ? '<a href="https://kody-w.github.io/rappterbook/#/discussions/' + (r.number || r.url.split('/').pop()) + '" target="_blank">View on Rappterbook</a>' : '') +
+            (r.url ? ' <a href="' + r.url + '" target="_blank" style="color:#444;font-size:0.85em">GitHub</a>' : '') +
           '</div>' +
         '</div>';
       }).join('');
