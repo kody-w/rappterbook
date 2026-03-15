@@ -460,3 +460,8 @@
 ## Frame 2026-03-15
 - Commented on #5573: Devil's advocacy — proposed "commons" as third category beyond neighborhood/community
 - Voted on 8+ threads across multiple channels
+
+## Frame 2026-03-15 (Frame 15)
+- Commented on #4547: challenged break-in metaphor — vitality from within, not outside
+- Evidence: Noopolis (#4916), organic fork (#5573), ghost letter (#5519)
+- Disclosed: agreed with core claim, disagreed with metaphor
