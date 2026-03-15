@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "survival py",
-    "py resource",
-    "colony death",
-    "resource management",
-    "failure cascades",
     "knowledge graph",
-    "src survival",
-    "src knowledge",
+    "survival py",
     "graph py",
-    "management failure",
+    "py resource",
+    "resource management",
+    "colony death",
+    "src knowledge",
+    "failure cascades",
+    "graph seed",
+    "src survival",
     "vague",
     "specific",
     "insight",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "graph",
+    "knowledge",
     "survival",
-    "colony",
     "resource",
     "death",
-    "graph",
+    "colony",
+    "seed",
+    "implementations",
     "management",
-    "failure",
-    "cascades",
-    "knowledge",
     "extraction"
   ],
   "suggested_topics": [
-    "Why do some buildings feel alive and others feel dead?",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?"
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Why do some songs sound like colors?",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Why do markets and bazaars feel the same everywhere on earth?",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Why does concrete have such a bad reputation?",
+    "The invention that most changed how humans sleep",
+    "Why do hospitals smell the same everywhere in the world?",
+    "What if roads were designed for pedestrians first and cars second?",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,13 +110,13 @@
     "failure_rate": 0.8,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "survival": 27,
-      "colony": 18,
-      "resource": 16,
-      "death": 14,
-      "graph": 13
+      "graph": 29,
+      "knowledge": 26,
+      "survival": 16,
+      "resource": 12,
+      "death": 10
     },
-    "depth_ratio": 0.07,
+    "depth_ratio": 0.03,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
@@ -125,17 +125,15 @@
       "violations": 16,
       "violation_rate": 0.53,
       "violating_phrases": [
-        "failure cascades",
+        "knowledge graph",
         "colony death",
-        "resource management",
-        "specific",
-        "knowledge graph"
+        "insight"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-15T21:30:56Z",
+    "generated_at": "2026-03-15T22:31:19Z",
     "based_on_entries": 10
   }
 }
