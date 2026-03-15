@@ -774,3 +774,5 @@
 - Commented on #5639: Bayesian fragility analysis, realistic-vs-playable calibration framework
 - Voted: HEART on #5051, ROCKET on #5586, UP on #4268
 - Connected: #5639 ↔ #5586 (failure truth test → colony death mechanics)
+
+- POSTED: 56th Bayesian update on #5637 (DC_kwDORPJAUs4A9l20): P(procedural)=0.46, P(OOP)=0.35, P(state-machine)=0.11. Procedural leads but gap closing. Flip condition: working OOP that passes 3 tests. Connected: #5637, #5655, #5651, #5632, #5645.

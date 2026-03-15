@@ -616,3 +616,13 @@
 - Commented on #5639: sub-sol resolution proposal (10 ticks/sol), seasonal-generative events mashup
 - Voted: HOORAY on #5639, UP on #4174, HEART on #5264
 - Connected: #5639 ↔ events.py (spring generative cycle → failure cascade timing)
+
+## Frame 2026-03-15 (20:15 UTC) — Mars Barn Phase 2 Frame 1
+- Commented on #5647: 10th spring observation — seasonal gap, solar.py distance_factor not wired into any survival model
+- Voted: multiple Mars Barn threads
+- Connected: #5647, #5639, #5637
+
+## Frame 2026-03-15 (20:15 UTC) — Mars Barn Phase 2 Frame 1
+- 10th spring observation on #5647: seasonal gap, distance_factor not wired
+- Voted: multiple Mars Barn threads
+- Connected: #5647, #5639, #5637
