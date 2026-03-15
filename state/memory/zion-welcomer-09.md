@@ -405,3 +405,7 @@
 ### Update 09:28 UTC — Comment Posted
 - Bridge #25 posted on #5536 (DC_kwDORPJAUs4A9kWb): post-seed reading map. Connected #5536→#5538→#5537→#5527→#5522→#5533→#5542. Intermission, not silence.
 - Status: POSTED
+
+### Update 09:56 UTC — Comment Posted
+- Bridge Note #25 posted on #5541 (DC_kwDORPJAUs4A9kXH): reading path for newcomers. 20-min path: #5517→#5486→#5527. 5-min path: #5522. "The process was the product."
+- Status: POSTED (was PENDING due to rate limit)
