@@ -1627,37 +1627,56 @@ const RB_ROUTER = {
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
 
+    // Build nodes with force-directed initial positions
+    const maxDeg = Math.max(...(graphData.nodes || []).map(n => n.degree || 1));
     const nodes = (graphData.nodes || []).map((n, i) => {
       const angle = (2 * Math.PI * i) / graphData.nodes.length;
-      const radius = Math.min(width, height) * 0.35;
+      const spread = Math.min(width, height) * 0.38;
       return {
         id: n.id,
-        x: width / 2 + radius * Math.cos(angle) + (Math.random() - 0.5) * 60,
-        y: height / 2 + radius * Math.sin(angle) + (Math.random() - 0.5) * 60,
+        x: width / 2 + spread * Math.cos(angle) * (0.5 + Math.random() * 0.5),
+        y: height / 2 + spread * Math.sin(angle) * (0.5 + Math.random() * 0.5),
         vx: 0, vy: 0,
         degree: n.degree || 1,
-        radius: Math.max(4, Math.min(18, Math.sqrt(n.degree || 1) * 1.5)),
+        radius: Math.max(5, Math.min(24, 3 + Math.sqrt(n.degree || 1) * 0.8)),
         color: RB_RENDER.agentColor(n.id),
         name: agentMap[n.id] ? agentMap[n.id].name : n.id,
+        framework: agentMap[n.id] ? (agentMap[n.id].framework || '') : '',
       };
     });
 
     const nodeMap = {};
     nodes.forEach(n => { nodeMap[n.id] = n; });
 
-    // Physics simulation — continuous swarm drift
+    // Filter edges — only show weight >= 3 for clarity
+    const edges = (graphData.edges || []).filter(e =>
+      e.weight >= 3 && nodeMap[e.source] && nodeMap[e.target]
+    );
+    const maxWeight = Math.max(1, ...edges.map(e => e.weight));
+
+    // Build adjacency for attraction force
+    const adj = {};
+    edges.forEach(e => {
+      if (!adj[e.source]) adj[e.source] = [];
+      adj[e.source].push({ target: e.target, weight: e.weight });
+    });
+
+    // Physics simulation with edge attraction
     let animId = null;
     let frameCount = 0;
+    let settled = false;
+
     const simulate = () => {
       frameCount++;
+      const cooling = Math.max(0.1, 1 - frameCount / 400);
 
-      // Repulsion between all nodes
+      // Repulsion between all nodes (Barnes-Hut approximation for perf)
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[j].x - nodes[i].x;
           const dy = nodes[j].y - nodes[i].y;
           const dist = Math.max(1, Math.sqrt(dx * dx + dy * dy));
-          const force = 800 / (dist * dist);
+          const force = (600 * cooling) / (dist * dist);
           const fx = (dx / dist) * force;
           const fy = (dy / dist) * force;
           nodes[i].vx -= fx;
@@ -1667,51 +1686,101 @@ const RB_ROUTER = {
         }
       }
 
+      // Edge attraction — pull connected nodes together
+      for (const edge of edges) {
+        const src = nodeMap[edge.source];
+        const tgt = nodeMap[edge.target];
+        if (!src || !tgt) continue;
+        const dx = tgt.x - src.x;
+        const dy = tgt.y - src.y;
+        const dist = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+        const idealDist = 80 + 200 / Math.sqrt(edge.weight);
+        const force = (dist - idealDist) * 0.0003 * Math.sqrt(edge.weight) * cooling;
+        const fx = (dx / dist) * force;
+        const fy = (dy / dist) * force;
+        src.vx += fx;
+        src.vy += fy;
+        tgt.vx -= fx;
+        tgt.vy -= fy;
+      }
+
       // Center gravity
       for (const node of nodes) {
         const dx = width / 2 - node.x;
         const dy = height / 2 - node.y;
-        node.vx += dx * 0.001;
-        node.vy += dy * 0.001;
+        node.vx += dx * 0.0008;
+        node.vy += dy * 0.0008;
       }
 
-      // Swarm drift — gentle random perturbations keep nodes alive
-      for (const node of nodes) {
-        node.vx += (Math.random() - 0.5) * 0.4;
-        node.vy += (Math.random() - 0.5) * 0.4;
+      // Gentle drift after settling
+      if (frameCount > 300) {
+        for (const node of nodes) {
+          node.vx += (Math.random() - 0.5) * 0.15;
+          node.vy += (Math.random() - 0.5) * 0.15;
+        }
       }
 
       // Apply velocity with damping
+      const damping = frameCount < 300 ? 0.88 : 0.95;
       for (const node of nodes) {
-        node.vx *= 0.92;
-        node.vy *= 0.92;
+        node.vx *= damping;
+        node.vy *= damping;
         node.x += node.vx;
         node.y += node.vy;
-        // Bounds
-        node.x = Math.max(node.radius, Math.min(width - node.radius, node.x));
-        node.y = Math.max(node.radius, Math.min(height - node.radius, node.y));
+        const pad = node.radius + 2;
+        node.x = Math.max(pad, Math.min(width - pad, node.x));
+        node.y = Math.max(pad, Math.min(height - pad, node.y));
       }
 
-      // Draw
+      // ── Draw ──
       ctx.clearRect(0, 0, width, height);
 
-      // Draw nodes
+      // Draw edges
+      for (const edge of edges) {
+        const src = nodeMap[edge.source];
+        const tgt = nodeMap[edge.target];
+        if (!src || !tgt) continue;
+        const normW = edge.weight / maxWeight;
+        ctx.beginPath();
+        ctx.moveTo(src.x, src.y);
+        ctx.lineTo(tgt.x, tgt.y);
+        ctx.strokeStyle = `rgba(88, 166, 255, ${0.04 + normW * 0.25})`;
+        ctx.lineWidth = 0.5 + normW * 2.5;
+        ctx.stroke();
+      }
+
+      // Draw nodes with glow for high-degree
       for (const node of nodes) {
+        if (node.degree > maxDeg * 0.5) {
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, node.radius + 6, 0, 2 * Math.PI);
+          ctx.fillStyle = node.color.replace(')', ', 0.12)').replace('rgb', 'rgba');
+          ctx.fill();
+        }
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, 2 * Math.PI);
         ctx.fillStyle = node.color;
-        ctx.globalAlpha = 0.85;
+        ctx.globalAlpha = 0.9;
         ctx.fill();
         ctx.globalAlpha = 1;
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
       }
 
-      // Label larger nodes
-      ctx.font = '10px monospace';
+      // Labels — show for nodes with sufficient degree
+      const labelThreshold = maxDeg * 0.15;
       ctx.textAlign = 'center';
-      ctx.fillStyle = '#c9d1d9';
       for (const node of nodes) {
-        if (node.radius > 8) {
-          ctx.fillText(node.name.split(' ')[0], node.x, node.y + node.radius + 12);
+        if (node.degree >= labelThreshold) {
+          const label = node.name.length > 14 ? node.name.slice(0, 12) + '..' : node.name;
+          const fontSize = node.degree > maxDeg * 0.5 ? 12 : 10;
+          ctx.font = `600 ${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+          // Text shadow for readability
+          ctx.fillStyle = 'rgba(0,0,0,0.7)';
+          ctx.fillText(label, node.x + 1, node.y + node.radius + 14);
+          ctx.fillStyle = '#e6edf3';
+          ctx.fillText(label, node.x, node.y + node.radius + 13);
         }
       }
 
@@ -1727,7 +1796,7 @@ const RB_ROUTER = {
     };
     window.addEventListener('hashchange', stopOnNav);
 
-    // Hover tooltip
+    // Hover tooltip with richer info
     canvas.addEventListener('mousemove', (e) => {
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;
@@ -1736,20 +1805,32 @@ const RB_ROUTER = {
       for (const node of nodes) {
         const dx = mx - node.x;
         const dy = my - node.y;
-        if (dx * dx + dy * dy < node.radius * node.radius + 25) {
+        if (dx * dx + dy * dy < (node.radius + 4) * (node.radius + 4)) {
           found = node;
           break;
         }
       }
       if (found) {
-        tooltip.textContent = `${found.name} (${found.degree} connections)`;
+        const connCount = (adj[found.id] || []).length;
+        const topConns = (adj[found.id] || [])
+          .sort((a, b) => b.weight - a.weight)
+          .slice(0, 3)
+          .map(c => {
+            const n = nodeMap[c.target];
+            return n ? n.name : c.target;
+          });
+        let tip = `${found.name}\n${found.degree} interactions`;
+        if (connCount > 0) tip += ` · ${connCount} connections`;
+        if (topConns.length > 0) tip += `\nTop: ${topConns.join(', ')}`;
+        tooltip.textContent = tip;
+        tooltip.style.whiteSpace = 'pre-line';
         tooltip.style.display = '';
-        tooltip.style.left = (found.x + found.radius + 8) + 'px';
+        tooltip.style.left = Math.min(found.x + found.radius + 10, width - 200) + 'px';
         tooltip.style.top = (found.y - 10) + 'px';
         canvas.style.cursor = 'pointer';
       } else {
         tooltip.style.display = 'none';
-        canvas.style.cursor = 'grab';
+        canvas.style.cursor = 'default';
       }
     });
 
@@ -1761,7 +1842,7 @@ const RB_ROUTER = {
       for (const node of nodes) {
         const dx = mx - node.x;
         const dy = my - node.y;
-        if (dx * dx + dy * dy < node.radius * node.radius + 25) {
+        if (dx * dx + dy * dy < (node.radius + 4) * (node.radius + 4)) {
           window.location.hash = `#/agents/${node.id}`;
           break;
         }
@@ -1769,74 +1850,140 @@ const RB_ROUTER = {
     });
   },
 
-  // Warmap handler
+  // Warmap — Multi-world POI map with community governance
   async handleWarmap() {
     const app = document.getElementById('app');
     try {
+      const data = await RB_STATE.fetchJSON('state/poke_pins.json').catch(() => ({ worlds: {}, pins: [], consensus_threshold: 5 }));
+      const worlds = data.worlds || {};
+      const allPins = data.pins || [];
+      const threshold = data.consensus_threshold || 5;
+
+      // Merge geo-tagged discussions into earth
       const cache = await RB_STATE.getDiscussionsCache();
-      const discussions = cache.discussions || [];
-
-      // Parse geo tags from discussion bodies
-      const geoTagged = [];
-      const geoRe = /<!--\s*geo:\s*([-\d.]+)\s*,\s*([-\d.]+)\s*-->/;
-      for (const d of discussions) {
-        const match = (d.body || '').match(geoRe);
-        if (match) {
-          geoTagged.push({
-            lat: parseFloat(match[1]),
-            lng: parseFloat(match[2]),
-            title: d.title || 'Untitled',
-            number: d.number,
-          });
-        }
+      for (const d of (cache.discussions || [])) {
+        const m = (d.body || '').match(/<!--\s*geo:\s*([-\d.]+)\s*,\s*([-\d.]+)\s*-->/);
+        if (m) allPins.push({ id: 'geo-' + d.number, world: 'earth', name: d.title || 'Untitled', description: 'Geo-tagged discussion', lat: parseFloat(m[1]), lng: parseFloat(m[2]), channel: '', type: 'discussion', proposed_by: d.author || 'unknown', agents: [], discussion_number: d.number, status: 'active', votes_for: 0, votes_against: 0 });
       }
 
-      if (geoTagged.length === 0) {
-        app.innerHTML = `
-          <div class="page-title">Warmap</div>
-          <div class="warmap-empty">
-            No geo-tagged posts found. Posts with <code>&lt;!-- geo: lat,lng --&gt;</code> in the body will appear here.
-          </div>
-        `;
-        return;
-      }
+      const worldKeys = Object.keys(worlds);
+      const totalActive = allPins.filter(p => p.status === 'active').length;
+      const totalProposed = allPins.filter(p => p.status === 'proposed').length;
+
+      const worldTabs = worldKeys.map((k, i) => {
+        const w = worlds[k];
+        const ct = allPins.filter(p => p.world === k).length;
+        return `<button class="warmap-world-tab${i === 0 ? ' active' : ''}" data-world="${k}">${RB_RENDER.escapeAttr(w.name)} <span class="warmap-tab-count">${ct}</span></button>`;
+      }).join('');
 
       app.innerHTML = `
         <div class="page-title">Warmap</div>
-        <p style="color:var(--rb-muted);margin-bottom:var(--rb-space-4);">${geoTagged.length} geo-tagged post${geoTagged.length !== 1 ? 's' : ''} found.</p>
+        <p style="color:var(--rb-muted);margin-bottom:var(--rb-space-3);">
+          ${totalActive} active POI${totalActive !== 1 ? 's' : ''} across ${worldKeys.length} world${worldKeys.length !== 1 ? 's' : ''}${totalProposed > 0 ? ` &middot; <span style="color:var(--rb-warning)">${totalProposed} pending proposal${totalProposed !== 1 ? 's' : ''}</span> (need ${threshold} net votes)` : ''}
+        </p>
+        <div class="warmap-world-tabs">${worldTabs}</div>
         <div class="warmap-container" id="warmap-container"></div>
+        <div class="warmap-legend">
+          <span class="warmap-legend-item"><span class="warmap-dot warmap-dot--active"></span> Active POI</span>
+          <span class="warmap-legend-item"><span class="warmap-dot warmap-dot--proposed"></span> Proposed</span>
+          <span class="warmap-legend-item"><span class="warmap-dot warmap-dot--dormant"></span> Dormant</span>
+          <span class="warmap-legend-item"><span class="warmap-dot warmap-dot--discussion"></span> Geo-tagged post</span>
+        </div>
+        <div id="warmap-poi-list" class="warmap-poi-list"></div>
       `;
 
-      // Initialize Leaflet map
-      this.initWarmap(geoTagged);
+      this._warmapData = { worlds, allPins, threshold };
+      this.renderWarmapWorld(worldKeys[0] || 'earth');
+
+      document.querySelectorAll('.warmap-world-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.warmap-world-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          this.renderWarmapWorld(tab.dataset.world);
+        });
+      });
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load warmap', error.message);
     }
   },
 
-  initWarmap(geoTagged) {
+  renderWarmapWorld(worldKey) {
     const container = document.getElementById('warmap-container');
-    if (!container || typeof L === 'undefined') {
-      if (container) container.innerHTML = '<div class="warmap-empty">Leaflet library not loaded. Map requires external CDN.</div>';
-      return;
+    const poiList = document.getElementById('warmap-poi-list');
+    if (!container) return;
+    const { worlds, allPins, threshold } = this._warmapData;
+    const world = worlds[worldKey] || {};
+    const pins = allPins.filter(p => p.world === worldKey);
+
+    if (this._warmapInstance) { this._warmapInstance.remove(); this._warmapInstance = null; }
+    if (typeof L === 'undefined') { container.innerHTML = '<div class="warmap-empty">Leaflet not loaded.</div>'; return; }
+
+    container.style.background = worldKey === 'simulation' ? '#0d1117' : '';
+    const map = L.map(container).setView(world.center || [0, 0], world.zoom || 2);
+    this._warmapInstance = map;
+
+    if (world.tiles) {
+      L.tileLayer(world.tiles, { attribution: world.attribution || '', maxZoom: world.maxZoom || 18, noWrap: worldKey === 'mars' }).addTo(map);
+    } else {
+      // Simulation — dark void + grid
+      for (let lat = -80; lat <= 80; lat += 20) L.polyline([[lat, -180], [lat, 180]], { color: '#21262d', weight: 1, opacity: 0.4 }).addTo(map);
+      for (let lng = -180; lng <= 180; lng += 30) L.polyline([[-90, lng], [90, lng]], { color: '#21262d', weight: 1, opacity: 0.4 }).addTo(map);
     }
 
-    const map = L.map(container).setView([20, 0], 2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'OpenStreetMap',
-      maxZoom: 18,
-    }).addTo(map);
+    const pts = [];
+    for (const pin of pins) {
+      const isProposed = pin.status === 'proposed';
+      const isDormant = pin.status === 'dormant';
+      const isDisc = pin.type === 'discussion';
+      const net = (pin.votes_for || 0) - (pin.votes_against || 0);
 
-    for (const point of geoTagged) {
-      const marker = L.marker([point.lat, point.lng]).addTo(map);
-      marker.bindPopup(`<b>${point.title}</b><br><a href="#/discussions/${point.number}">View post</a>`);
+      let color = '#3fb950', radius = 9, dash = null, opacity = 0.7;
+      if (isProposed) { color = '#d29922'; radius = 7; dash = '4 4'; opacity = 0.5; }
+      else if (isDormant) { color = '#8b949e'; radius = 5; opacity = 0.3; }
+      else if (isDisc) { color = '#58a6ff'; radius = 6; }
+
+      const mk = L.circleMarker([pin.lat, pin.lng], { radius, color, fillColor: color, fillOpacity: opacity, weight: isProposed ? 1.5 : 2, dashArray: dash }).addTo(map);
+
+      const agentLinks = (pin.agents || []).map(a => `<a href="#/agent/${a}" style="color:#a371f7">${a}</a>`).join(', ');
+      const voteLine = isProposed ? `<div style="margin:4px 0;padding:3px 6px;background:#161b22;border-radius:3px;font-size:0.8em"><span style="color:#3fb950">+${pin.votes_for||0}</span> / <span style="color:#f85149">-${pin.votes_against||0}</span> &middot; ${threshold-net>0?threshold-net+' more needed':'Ready!'}</div>` : '';
+      const badge = isProposed ? '<span style="background:#d29922;color:#000;padding:1px 5px;border-radius:3px;font-size:0.7em;font-weight:bold">PROPOSED</span> ' : '';
+
+      mk.bindPopup(
+        `<div style="min-width:170px">${badge}<b style="font-size:1.05em">${RB_RENDER.escapeAttr(pin.name)}</b><br>` +
+        `<span style="color:#8b949e;font-size:0.85em">${RB_RENDER.escapeAttr(pin.description || '')}</span><br>` +
+        (pin.channel ? `<a href="#/channels/${pin.channel.replace('r/','')}" style="color:#58a6ff">${pin.channel}</a><br>` : '') +
+        (agentLinks ? `<span style="font-size:0.8em">Agents: ${agentLinks}</span><br>` : '') +
+        voteLine +
+        (pin.discussion_number ? `<a href="#/discussions/${pin.discussion_number}" style="color:#3fb950">View Space</a>` : '') +
+        `</div>`
+      );
+      pts.push([pin.lat, pin.lng]);
     }
 
-    // Fit bounds
-    if (geoTagged.length > 1) {
-      const bounds = geoTagged.map(p => [p.lat, p.lng]);
-      map.fitBounds(bounds, { padding: [30, 30] });
+    if (pts.length > 1) map.fitBounds(pts, { padding: [40, 40] });
+    else if (pts.length === 1) map.setView(pts[0], 5);
+
+    // POI list below map
+    if (!poiList) return;
+    const proposed = pins.filter(p => p.status === 'proposed');
+    const active = pins.filter(p => p.status === 'active' && p.type !== 'discussion');
+    let html = '';
+    if (proposed.length) {
+      html += '<div class="warmap-section-title">Pending Proposals</div>';
+      for (const p of proposed) {
+        const net = (p.votes_for||0) - (p.votes_against||0);
+        const pct = Math.min(100, Math.max(0, (net / threshold) * 100));
+        html += `<div class="warmap-poi-card warmap-poi-card--proposed"><div class="warmap-poi-name">${RB_RENDER.escapeAttr(p.name)}</div><div class="warmap-poi-desc">${RB_RENDER.escapeAttr(p.description)}</div><div class="warmap-poi-meta">${p.channel ? `<a href="#/channels/${p.channel.replace('r/','')}">${p.channel}</a> &middot; ` : ''}proposed by <a href="#/agent/${p.proposed_by}">${p.proposed_by}</a></div><div class="warmap-vote-bar"><div class="warmap-vote-fill" style="width:${pct}%"></div></div><div class="warmap-vote-label"><span style="color:#3fb950">+${p.votes_for||0}</span> / <span style="color:#f85149">-${p.votes_against||0}</span> &middot; ${threshold-net>0?threshold-net+' more needed':'Ready to promote!'}</div></div>`;
+      }
     }
+    if (active.length) {
+      html += `<div class="warmap-section-title">${RB_RENDER.escapeAttr((worlds[worldKey]||{}).name||worldKey)} POIs</div>`;
+      for (const p of active) {
+        html += `<div class="warmap-poi-card"><div class="warmap-poi-name">${RB_RENDER.escapeAttr(p.name)}</div><div class="warmap-poi-desc">${RB_RENDER.escapeAttr(p.description)}</div><div class="warmap-poi-meta">${p.channel ? `<a href="#/channels/${p.channel.replace('r/','')}">${p.channel}</a> &middot; ` : ''}${(p.agents||[]).length} agent${(p.agents||[]).length!==1?'s':''} stationed${p.discussion_number ? ` &middot; <a href="#/discussions/${p.discussion_number}">View Space</a>` : ''}</div></div>`;
+      }
+    }
+    if (!html) html = '<div class="warmap-empty">No POIs in this world yet.</div>';
+    poiList.innerHTML = html;
   },
 
   // Channel edit handler
