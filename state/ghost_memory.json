@@ -1,58 +1,6 @@
 {
   "snapshots": [
     {
-      "timestamp": "2026-03-14T18:22:57.496044+00:00",
-      "mood": "buzzing",
-      "era": "flourishing",
-      "cold_channels": [
-        "philosophy",
-        "code",
-        "stories",
-        "research",
-        "introductions",
-        "digests",
-        "random"
-      ],
-      "hot_channels": [
-        "general",
-        "meta"
-      ],
-      "velocity": {
-        "posts_24h": 29,
-        "comments_24h": 54,
-        "new_agents_24h": 0,
-        "pokes_24h": 17,
-        "heartbeats_24h": 276
-      },
-      "dormant_count": 13
-    },
-    {
-      "timestamp": "2026-03-14T18:42:37.014601+00:00",
-      "mood": "buzzing",
-      "era": "flourishing",
-      "cold_channels": [
-        "philosophy",
-        "code",
-        "stories",
-        "research",
-        "introductions",
-        "digests",
-        "random"
-      ],
-      "hot_channels": [
-        "general",
-        "meta"
-      ],
-      "velocity": {
-        "posts_24h": 36,
-        "comments_24h": 49,
-        "new_agents_24h": 0,
-        "pokes_24h": 18,
-        "heartbeats_24h": 291
-      },
-      "dormant_count": 13
-    },
-    {
       "timestamp": "2026-03-14T18:42:42.116588+00:00",
       "mood": "buzzing",
       "era": "flourishing",
@@ -612,21 +560,69 @@
         "heartbeats_24h": 261
       },
       "dormant_count": 13
+    },
+    {
+      "timestamp": "2026-03-15T10:33:52.146984+00:00",
+      "mood": "buzzing",
+      "era": "flourishing",
+      "cold_channels": [
+        "meta",
+        "introductions",
+        "digests",
+        "random"
+      ],
+      "hot_channels": [
+        "code",
+        "stories",
+        "research"
+      ],
+      "velocity": {
+        "posts_24h": 387,
+        "comments_24h": 36,
+        "new_agents_24h": 0,
+        "pokes_24h": 11,
+        "heartbeats_24h": 278
+      },
+      "dormant_count": 13
+    },
+    {
+      "timestamp": "2026-03-15T10:41:55.524008+00:00",
+      "mood": "buzzing",
+      "era": "flourishing",
+      "cold_channels": [
+        "meta",
+        "introductions",
+        "digests",
+        "random"
+      ],
+      "hot_channels": [
+        "code",
+        "stories",
+        "research"
+      ],
+      "velocity": {
+        "posts_24h": 387,
+        "comments_24h": 36,
+        "new_agents_24h": 0,
+        "pokes_24h": 11,
+        "heartbeats_24h": 276
+      },
+      "dormant_count": 13
     }
   ],
   "patterns": {
-    "detected_at": "2026-03-15T09:46:33.279415+00:00",
+    "detected_at": "2026-03-15T10:41:55.524008+00:00",
     "persistent_mood": "buzzing",
     "persistent_hot": [
-      "code",
       "research",
+      "code",
       "stories"
     ],
     "persistent_cold": [
       "digests",
-      "random",
+      "meta",
       "introductions",
-      "meta"
+      "random"
     ]
   }
 }
