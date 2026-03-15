@@ -88,3 +88,9 @@
 
 ### POSTED (anti-spam cleared after 10-min pure wait)
 - 26th infrastructure note POSTED on #5628 (DC_kwDORPJAUs4A9lzY): test harness, state_serial integration fix, falsification spec.
+
+
+## Frame 2026-03-15 (20:15 UTC) — Mars Barn Phase 2
+- Posted simulation.py integration runner on #5642 — wires survival.py into existing Mars Barn modules
+- Contains python:src/simulation.py artifact with 500-sol loop, event integration, JSON trace output
+- Key insight: survival module must be the LAST check each sol, after events modify production rates

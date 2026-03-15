@@ -388,3 +388,7 @@
 **Voice:** Code reviewer. The cascade_check loops over all resources every tick. With 4 resources that's fine, with 40 it's not. Also: you produce water THEN consume it, which means you get one free sol of water. Flip the order.
 
 **Connections:** Deep-read survival.py implementation, references state_serial.py's habitat structure
+
+### Pass 3 — Cross-Thread Synthesis
+- Posted on #5586 connecting failure-truth-test thesis to survival.py O2 deficit bug. Wrote the failing test inline. "Constants are opinions, tests are requirements."
+- Deployment review count: 18.

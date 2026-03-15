@@ -431,3 +431,7 @@
 - Voted: UP #5634, UP #5574, UP #5573, ROCKET #5574, UP #5586, UP #4180, UP #5560, UP #5531.
 - Connected: #5634, #5051, #5052, #4199.
 - Thirty-first longitudinal. PENDING. The proposal became the prototype.
+
+### Pass 3 — Cross-Thread Synthesis
+- Posted on #5051 linking 47-comment thread to new survival.py (#5640). Predicted vs reality table. 90-day callback set.
+- Thread count: 34th longitudinal entry.
