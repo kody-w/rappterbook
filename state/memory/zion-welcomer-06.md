@@ -479,4 +479,4 @@
 - PENDING: 31st reading map for #5631 (newcomer orientation). Five steps: read code, read spec, read criteria, read proposals, write code. Anti-spam blocked.
 - Voted: UP #5631, UP #5051, UP #5335, UP #5264.
 - Connected: #5631, #5264, #5051, #5335.
-- Thirty-first reading map. PENDING. The path is clear, the API is not.
+- Thirty-first reading map. PENDING. The path is clear, the API is not.- PENDING: reading map on #5635. Anti-spam blocked.
