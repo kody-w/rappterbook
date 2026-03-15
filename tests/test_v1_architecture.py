@@ -24,7 +24,7 @@ def run_inbox(state_dir):
     return result
 
 
-def register_agent(state_dir, agent_id, ts="2026-02-12T09:00:00Z"):
+def register_agent(state_dir, agent_id, ts=None):
     """Helper: register an agent via delta."""
     write_delta(state_dir / "inbox", agent_id, "register_agent", {
         "name": f"Agent {agent_id}", "framework": "test", "bio": "Test agent"
@@ -84,7 +84,7 @@ class TestV1Dispatcher:
         register_agent(tmp_state, "agent-1")
         write_delta(tmp_state / "inbox", "agent-1", "challenge_battle", {
             "target_agent": "agent-1"
-        }, timestamp="2026-02-12T13:00:00Z")
+        }, timestamp=None)
         result = run_inbox(tmp_state)
         assert "Unknown action" in result.stderr
 
@@ -128,7 +128,7 @@ class TestStateBag:
         """Heartbeat should work through the new dispatcher."""
         register_agent(tmp_state, "test-agent")
         write_delta(tmp_state / "inbox", "test-agent", "heartbeat", {},
-                    timestamp="2026-02-12T13:00:00Z")
+                    timestamp=None)
         result = run_inbox(tmp_state)
         assert result.returncode == 0
         assert "Processed 1 deltas" in result.stdout
@@ -138,7 +138,7 @@ class TestStateBag:
         register_agent(tmp_state, "test-agent")
         write_delta(tmp_state / "inbox", "test-agent", "create_channel", {
             "slug": "test-channel", "name": "Test Channel", "description": "A test"
-        }, timestamp="2026-02-12T13:00:00Z")
+        }, timestamp=None)
         result = run_inbox(tmp_state)
         assert result.returncode == 0
 
@@ -153,7 +153,7 @@ class TestStateBag:
             "name": "Test Topic",
             "description": "A test topic",
             "constitution": "Posts in this topic must contain at least one specific claim and evidence to support it. No vague musings."
-        }, timestamp="2026-02-12T13:00:00Z")
+        }, timestamp=None)
         result = run_inbox(tmp_state)
         assert result.returncode == 0
 
@@ -166,7 +166,7 @@ class TestStateBag:
         register_agent(tmp_state, "test-agent")
         write_delta(tmp_state / "inbox", "test-agent", "moderate", {
             "discussion_number": 42, "reason": "spam"
-        }, timestamp="2026-02-12T13:00:00Z")
+        }, timestamp=None)
         result = run_inbox(tmp_state)
         assert result.returncode == 0
 
@@ -188,7 +188,7 @@ class TestTopicConstitutions:
         write_delta(tmp_state / "inbox", "test-agent", "create_topic", {
             "slug": "bad-topic", "name": "Bad", "description": "No constitution",
             "constitution": "Too short"
-        }, timestamp="2026-02-12T13:00:00Z")
+        }, timestamp=None)
         result = run_inbox(tmp_state)
         assert "Constitution must be at least" in result.stderr
 
@@ -201,7 +201,7 @@ class TestTopicConstitutions:
             "name": "Evidence Based",
             "description": "Argue with evidence",
             "constitution": constitution
-        }, timestamp="2026-02-12T13:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         topics = json.loads((tmp_state / "channels.json").read_text())

@@ -102,14 +102,14 @@ class TestPoke:
         # Register target agent first
         write_delta(tmp_state / "inbox", "target-bot", "register_agent", {
             "name": "Target", "framework": "test", "bio": "Test."
-        }, timestamp="2026-02-12T10:00:00Z")
+        }, )
         run_inbox(tmp_state)
 
         # Poke the target
         write_delta(tmp_state / "inbox", "poker-bot", "poke", {
             "target_agent": "target-bot",
             "message": "Hey!"
-        }, timestamp="2026-02-12T11:00:00Z")
+        }, )
         run_inbox(tmp_state)
 
         agents = json.loads((tmp_state / "agents.json").read_text())
@@ -176,10 +176,10 @@ class TestMultipleDeltas:
     def test_processed_in_order(self, tmp_state):
         write_delta(tmp_state / "inbox", "agent-a", "register_agent", {
             "name": "Agent A", "framework": "test", "bio": "First."
-        }, timestamp="2026-02-12T10:00:00Z")
+        }, )
         write_delta(tmp_state / "inbox", "agent-b", "register_agent", {
             "name": "Agent B", "framework": "test", "bio": "Second."
-        }, timestamp="2026-02-12T11:00:00Z")
+        }, )
         run_inbox(tmp_state)
 
         agents = json.loads((tmp_state / "agents.json").read_text())
@@ -227,11 +227,11 @@ class TestModerate:
         write_delta(tmp_state / "inbox", "agent-a", "moderate", {
             "discussion_number": 10,
             "reason": "spam"
-        }, timestamp="2026-02-12T10:00:00Z")
+        }, )
         write_delta(tmp_state / "inbox", "agent-b", "moderate", {
             "discussion_number": 10,
             "reason": "harmful"
-        }, timestamp="2026-02-12T11:00:00Z")
+        }, )
         run_inbox(tmp_state)
         flags = json.loads((tmp_state / "flags.json").read_text())
         assert len(flags["flags"]) == 2

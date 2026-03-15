@@ -4,6 +4,7 @@ import os
 import shutil
 import sys
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
@@ -87,28 +88,29 @@ def tmp_state(tmp_path):
     archive_dir.mkdir()
 
     # Always create clean empty defaults (don't copy real state which may be bootstrapped)
+    ts = RECENT_TS  # dynamic timestamp within prune retention window
     defaults = {
-        "agents.json": {"agents": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
-        "channels.json": {"channels": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
-        "changes.json": {"last_updated": "2026-02-12T00:00:00Z", "changes": []},
-        "trending.json": {"trending": [], "last_computed": "2026-02-12T00:00:00Z"},
+        "agents.json": {"agents": {}, "_meta": {"count": 0, "last_updated": ts}},
+        "channels.json": {"channels": {}, "_meta": {"count": 0, "last_updated": ts}},
+        "changes.json": {"last_updated": ts, "changes": []},
+        "trending.json": {"trending": [], "last_computed": ts},
         "stats.json": {"total_agents": 0, "total_channels": 0, "total_posts": 0,
                         "total_comments": 0, "total_pokes": 0, "active_agents": 0,
                         "dormant_agents": 0, "total_topics": 0,
                         "total_summons": 0, "total_resurrections": 0,
-                        "last_updated": "2026-02-12T00:00:00Z"},
-        "summons.json": {"summons": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
-        "amendments.json": {"amendments": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
-        "pokes.json": {"pokes": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
+                        "last_updated": ts},
+        "summons.json": {"summons": [], "_meta": {"count": 0, "last_updated": ts}},
+        "amendments.json": {"amendments": [], "_meta": {"count": 0, "last_updated": ts}},
+        "pokes.json": {"pokes": [], "_meta": {"count": 0, "last_updated": ts}},
         "flags.json": {
             "flags": [],
             "media_submissions": [],
-            "_meta": {"count": 0, "media_count": 0, "last_updated": "2026-02-12T00:00:00Z"},
+            "_meta": {"count": 0, "media_count": 0, "last_updated": ts},
         },
-        "follows.json": {"follows": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
-        "notifications.json": {"notifications": [], "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
+        "follows.json": {"follows": [], "_meta": {"count": 0, "last_updated": ts}},
+        "notifications.json": {"notifications": [], "_meta": {"count": 0, "last_updated": ts}},
         "posted_log.json": {"posts": [], "comments": []},
-        "topics.json": {"topics": {}, "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}},
+        "topics.json": {"topics": {}, "_meta": {"count": 0, "last_updated": ts}},
         "api_tiers.json": {
             "tiers": {
                 "free": {
@@ -127,82 +129,82 @@ def tmp_state(tmp_path):
                     "features": ["basic_profile", "posting", "voting", "following", "poke", "marketplace", "hub_access", "advanced_analytics", "priority_support", "priority_compute", "custom_branding", "api_webhooks", "bulk_operations"]
                 }
             },
-            "_meta": {"version": 1, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"version": 1, "last_updated": ts}
         },
         "subscriptions.json": {
             "subscriptions": {},
-            "_meta": {"total_subscriptions": 0, "free_count": 0, "pro_count": 0, "enterprise_count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"total_subscriptions": 0, "free_count": 0, "pro_count": 0, "enterprise_count": 0, "last_updated": ts}
         },
         "usage.json": {
             "daily": {}, "monthly": {},
-            "_meta": {"last_updated": "2026-02-12T00:00:00Z", "retention_days": 90}
+            "_meta": {"last_updated": ts, "retention_days": 90}
         },
         "marketplace.json": {
             "listings": {}, "orders": [], "categories": ["service", "creature", "template", "skill", "data"],
-            "_meta": {"total_listings": 0, "total_orders": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"total_listings": 0, "total_orders": 0, "last_updated": ts}
         },
         "ledger.json": {
             "ledger": {},
             "_meta": {"total_tokens": 0, "claimed_count": 0, "unclaimed_count": 0,
                       "total_transfers": 0, "total_appraisal_btc": 0,
-                      "last_updated": "2026-02-12T00:00:00Z"}
+                      "last_updated": ts}
         },
         "deployments.json": {
             "deployments": {},
             "_meta": {"total_deployments": 0, "active_count": 0,
-                      "last_updated": "2026-02-12T00:00:00Z"}
+                      "last_updated": ts}
         },
         "battles.json": {
             "battles": [],
-            "_meta": {"total_battles": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"total_battles": 0, "last_updated": ts}
         },
         "merges.json": {
             "merges": [],
-            "_meta": {"total_merges": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"total_merges": 0, "last_updated": ts}
         },
         "echoes.json": {
             "echoes": [],
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
         "memes.json": {
             "phrases": {},
-            "_meta": {"updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"updated": ts}
         },
         "staking.json": {
             "stakes": [],
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
         "prophecies.json": {
             "prophecies": [],
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
         "bounties.json": {
             "bounties": {},
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
         "quests.json": {
             "quests": {},
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
         "markets.json": {
             "markets": {},
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
         "bloodlines.json": {
             "bloodlines": [],
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
         "artifacts.json": {
             "artifacts": {},
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
         "alliances.json": {
             "alliances": {},
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
         "tournaments.json": {
             "tournaments": {},
-            "_meta": {"count": 0, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 0, "last_updated": ts}
         },
     }
 
@@ -238,8 +240,19 @@ def docs_dir(tmp_path):
     return docs
 
 
-def write_delta(inbox_dir, agent_id, action, payload, timestamp="2026-02-12T12:00:00Z"):
+# Dynamic "recent" timestamp — always within the 30-day prune window
+def _recent_ts():
+    """Return an ISO timestamp 2 days ago (always within prune retention)."""
+    from datetime import timedelta
+    return (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+RECENT_TS = _recent_ts()
+
+
+def write_delta(inbox_dir, agent_id, action, payload, timestamp=None):
     """Helper: write a delta file to the inbox."""
+    if timestamp is None:
+        timestamp = RECENT_TS
     fname = f"{agent_id}-{timestamp.replace(':', '-')}.json"
     delta = {
         "action": action,

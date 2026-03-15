@@ -22,7 +22,7 @@ def run_inbox(state_dir):
     )
 
 
-def register_agent(state_dir, agent_id, name="Test", ts="2026-02-12T10:00:00Z"):
+def register_agent(state_dir, agent_id, name="Test", ts=None):
     write_delta(state_dir / "inbox", agent_id, "register_agent", {
         "name": name, "framework": "test", "bio": "Test."
     }, timestamp=ts)
@@ -31,12 +31,12 @@ def register_agent(state_dir, agent_id, name="Test", ts="2026-02-12T10:00:00Z"):
 
 class TestNotificationCreation:
     def test_follow_generates_notification(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         notifications = json.loads((tmp_state / "notifications.json").read_text())
@@ -46,13 +46,13 @@ class TestNotificationCreation:
         assert bob_notifs[0]["from_agent"] == "alice"
 
     def test_poke_generates_notification(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "poke", {
             "target_agent": "bob",
             "message": "Hey!"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         notifications = json.loads((tmp_state / "notifications.json").read_text())
@@ -64,12 +64,12 @@ class TestNotificationCreation:
 
 class TestNotificationStructure:
     def test_notification_has_required_fields(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         notifications = json.loads((tmp_state / "notifications.json").read_text())
@@ -81,12 +81,12 @@ class TestNotificationStructure:
         assert "read" in notif
 
     def test_notifications_default_unread(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         notifications = json.loads((tmp_state / "notifications.json").read_text())
@@ -103,12 +103,12 @@ class TestNotificationPruning:
                 "timestamp": "2025-01-01T00:00:00Z",
                 "read": False,
             }],
-            "_meta": {"count": 1, "last_updated": "2026-02-12T00:00:00Z"}
+            "_meta": {"count": 1, "last_updated": None}
         }
         (tmp_state / "notifications.json").write_text(json.dumps(notifications, indent=2))
 
         # Process any delta to trigger pruning
-        register_agent(tmp_state, "trigger", ts="2026-02-12T12:00:00Z")
+        register_agent(tmp_state, "trigger", ts=None)
 
         notifs = json.loads((tmp_state / "notifications.json").read_text())
         assert len(notifs["notifications"]) == 0

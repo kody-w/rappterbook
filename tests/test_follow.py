@@ -22,7 +22,7 @@ def run_inbox(state_dir):
     )
 
 
-def register_agent(state_dir, agent_id, name="Test Agent", ts="2026-02-12T10:00:00Z"):
+def register_agent(state_dir, agent_id, name="Test Agent", ts=None):
     write_delta(state_dir / "inbox", agent_id, "register_agent", {
         "name": name, "framework": "test", "bio": "Test."
     }, timestamp=ts)
@@ -31,12 +31,12 @@ def register_agent(state_dir, agent_id, name="Test Agent", ts="2026-02-12T10:00:
 
 class TestFollowAgent:
     def test_follow_creates_relationship(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         follows = json.loads((tmp_state / "follows.json").read_text())
@@ -45,12 +45,12 @@ class TestFollowAgent:
         assert len(match) == 1
 
     def test_follow_increments_counts(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         agents = json.loads((tmp_state / "agents.json").read_text())
@@ -58,23 +58,23 @@ class TestFollowAgent:
         assert agents["agents"]["bob"].get("follower_count", 0) == 1
 
     def test_self_follow_blocked(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
+        register_agent(tmp_state, "alice", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "alice"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         result = run_inbox(tmp_state)
 
         follows = json.loads((tmp_state / "follows.json").read_text())
         assert len(follows["follows"]) == 0
 
     def test_duplicate_follow_ignored(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
@@ -88,23 +88,23 @@ class TestFollowAgent:
         assert count == 1
 
     def test_follow_nonexistent_agent_fails(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
+        register_agent(tmp_state, "alice", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "ghost"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         follows = json.loads((tmp_state / "follows.json").read_text())
         assert len(follows["follows"]) == 0
 
     def test_follow_logged_in_changes(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         changes = json.loads((tmp_state / "changes.json").read_text())
@@ -112,12 +112,12 @@ class TestFollowAgent:
         assert len(follow_changes) == 1
 
     def test_follow_generates_notification(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         notifications = json.loads((tmp_state / "notifications.json").read_text())
@@ -128,12 +128,12 @@ class TestFollowAgent:
 
 class TestUnfollowAgent:
     def test_unfollow_removes_relationship(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         write_delta(tmp_state / "inbox", "alice", "unfollow_agent", {
@@ -145,12 +145,12 @@ class TestUnfollowAgent:
         assert len(follows["follows"]) == 0
 
     def test_unfollow_decrements_counts(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "follow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         write_delta(tmp_state / "inbox", "alice", "unfollow_agent", {
@@ -163,12 +163,12 @@ class TestUnfollowAgent:
         assert agents["agents"]["bob"].get("follower_count", 0) == 0
 
     def test_unfollow_without_follow_noop(self, tmp_state):
-        register_agent(tmp_state, "alice", ts="2026-02-12T09:00:00Z")
-        register_agent(tmp_state, "bob", ts="2026-02-12T09:01:00Z")
+        register_agent(tmp_state, "alice", ts=None)
+        register_agent(tmp_state, "bob", ts=None)
 
         write_delta(tmp_state / "inbox", "alice", "unfollow_agent", {
             "target_agent": "bob"
-        }, timestamp="2026-02-12T12:00:00Z")
+        }, timestamp=None)
         run_inbox(tmp_state)
 
         follows = json.loads((tmp_state / "follows.json").read_text())
