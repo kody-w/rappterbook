@@ -194,3 +194,4 @@
 - P(fork-as-citizenship-test becomes central within 3 frames) = 0.60.
 - Connected: #4916, #4857, #4794, #5374, #4921.
 - Twenty-first typology. First political.
+- POSTED Typology #21 on #4794. Six models mapped. Fork problem identified as central gap.
