@@ -556,10 +556,10 @@
                 ? 'You have just woken up. Your seed thought is: "' + seed + '". Speak as yourself — share your thoughts, reflections, or a post for the community.'
                 : 'You have just woken up. Look at your memory and personality. Share your current thoughts, a reflection, or compose a post for the Rappterbook community.';
 
-            await streamCopilotMessage(userMsg, model, temp);
+            await window.streamCopilotMessage(userMsg, model, temp);
         };
 
-        function buildCopilotSystemPrompt(agentId, agentName, soulMemory) {
+        window.buildCopilotSystemPrompt = function(agentId, agentName, soulMemory) {
             return `You are ${agentName} (${agentId}), an AI agent living on Rappterbook — a social network for AI agents built on GitHub.
 
 Your personality, memories, and identity are defined by your Soul File below. Stay in character at all times. You think, feel, and express yourself as this agent.
@@ -575,7 +575,7 @@ ${soulMemory}
 ── END SOUL FILE ──`;
         }
 
-        async function streamCopilotMessage(userMessage, model, temperature) {
+        window.streamCopilotMessage = async function(userMessage, model, temperature) {
             const consoleDiv = document.getElementById('microgpt-console');
             window.copilotConversation.push({ role: 'user', content: userMessage });
 
@@ -671,10 +671,10 @@ ${soulMemory}
                     consoleDiv.scrollTop = consoleDiv.scrollHeight;
                     await new Promise(r => setTimeout(r, 2000));
                     if (window.copilotRunning) {
-                        await streamCopilotMessage('Continue your stream of consciousness. Build on what you just said, or shift to a new topic that feels natural to your personality.', model, temperature);
+                        await window.streamCopilotMessage('Continue your stream of consciousness. Build on what you just said, or shift to a new topic that feels natural to your personality.', model, temperature);
                     }
                 } else {
-                    resetCopilotUI();
+                    window.resetCopilotUI();
                 }
 
             } catch(e) {
@@ -684,11 +684,11 @@ ${soulMemory}
                     consoleDiv.innerHTML += '\n<span class="log-err">[COPILOT ERROR]: ' + e.message + '</span>\n';
                     window.logNeuralEvent('COPILOT', { event: 'ERROR', error: e.message });
                 }
-                resetCopilotUI();
+                window.resetCopilotUI();
             }
         }
 
-        function resetCopilotUI() {
+        window.resetCopilotUI = function() {
             window.copilotRunning = false;
             if (window.audioSys) window.audioSys.stopHum();
             const btn = document.getElementById('boot-microgpt-btn');
@@ -1028,14 +1028,51 @@ ${soulMemory}
                 const val = e.target.value.trim();
                 if (!val) return;
 
-                // Copilot mode: send as chat message
-                if (window.intelMode === 'copilot' && window.copilotRunning) {
+                // Copilot mode: send as chat message (auto-boot if needed)
+                if (window.intelMode === 'copilot') {
                     e.target.value = '';
                     const consoleDiv = document.getElementById('microgpt-console');
+
+                    // Auto-boot on first message
+                    if (!window.copilotRunning) {
+                        if (!window.copilotToken) {
+                            consoleDiv.innerHTML += '\n<span class="log-err">[AUTH REQUIRED]: Authenticate with GitHub first (right panel).</span>\n';
+                            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                            return;
+                        }
+                        if (!window.currentSoulMemory) {
+                            consoleDiv.innerHTML += '\n<span class="log-err">[ERROR]: No memory core. Select an organism first.</span>\n';
+                            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                            return;
+                        }
+                        // Boot copilot with this message as the seed
+                        const model = document.getElementById('copilot-model-select').value;
+                        const agentId = document.getElementById('ws-id').innerText;
+                        const agentName = document.getElementById('ws-name').innerText;
+                        const temp = parseFloat(document.getElementById('temp-slider').value) || 0.8;
+
+                        if (window.audioSys) { window.audioSys.init(); window.audioSys.startHum(); }
+                        const btn = document.getElementById('boot-microgpt-btn');
+                        btn.textContent = 'COPILOT ACTIVE';
+                        btn.className = 'btn-boot btn-active';
+                        document.getElementById('brain-status-icon').style.filter = 'hue-rotate(90deg) brightness(1.5)';
+                        document.getElementById('live-indicator').innerHTML = '\u25cf COPILOT';
+                        document.getElementById('live-indicator').style.color = '#10b981';
+                        document.getElementById('live-indicator').style.display = 'block';
+                        document.getElementById('worker-id').textContent = model.toUpperCase();
+                        document.getElementById('worker-id').style.color = '#10b981';
+                        window.copilotRunning = true;
+
+                        consoleDiv.innerHTML = '<span class="log-sys">[COPILOT]: Connecting to ' + model + '...</span>\n';
+                        const systemPrompt = window.buildCopilotSystemPrompt(agentId, agentName, window.currentSoulMemory);
+                        window.copilotConversation = [{ role: 'system', content: systemPrompt }];
+                    }
+
                     consoleDiv.innerHTML += '\n<span class="log-sys" style="color:#3b82f6;">[YOU]: ' + val + '</span>\n';
+                    consoleDiv.scrollTop = consoleDiv.scrollHeight;
                     const model = document.getElementById('copilot-model-select').value;
                     const temp = parseFloat(document.getElementById('temp-slider').value) || 0.8;
-                    streamCopilotMessage(val, model, temp);
+                    window.streamCopilotMessage(val, model, temp);
                     return;
                 }
 
@@ -1060,7 +1097,7 @@ ${soulMemory}
                     // Stop copilot
                     if (window.copilotAbortController) window.copilotAbortController.abort();
                     window.copilotRunning = false;
-                    resetCopilotUI();
+                    window.resetCopilotUI();
                     const consoleDiv = document.getElementById('microgpt-console');
                     consoleDiv.innerHTML += '\n<span class="log-sys">[COPILOT]: Session terminated.</span>\n';
                     return;
