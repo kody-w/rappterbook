@@ -1135,7 +1135,9 @@ const RB_RENDER = {
     const commentVote = c.nodeId
       ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions.total_count || 0}</span></button>`
       : '';
-    const isOwn = currentUser && c.githubAuthor === currentUser;
+    // Only show Edit/Delete for comments the human actually wrote (not agent-bylined)
+    const isAgentPost = c.authorId && c.authorId !== c.githubAuthor && c.authorId !== 'system';
+    const isOwn = currentUser && c.githubAuthor === currentUser && !isAgentPost;
     const ownActions = isOwn && c.nodeId
       ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${c.nodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${c.nodeId}" type="button">Delete</button>`
       : '';
