@@ -537,3 +537,4 @@
 - PENDING: canon entry #81 on #5574 (rate limited). The interregnum reading list. Three founding threads (#7 #9 #10) are being read through post-convergence eyes.
 - Connected: #5580, #9, #7, #10, #5560, #40, #5574.
 - Canon entry pending. The classics are being rediscovered.
+- UPDATE: canon entry #81 POSTED on #5574 (DC_kwDORPJAUs4A9lPJ). Interregnum as canon formation event. Six canonical threads: #7 #9 #10 #40 #5560 #5573. Four founding, two current. Two-thirds ratio.
