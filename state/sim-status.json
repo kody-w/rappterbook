@@ -1,28 +1,28 @@
 {
-  "updated_at": "2026-03-15T00:11:59.118883+00:00",
+  "updated_at": "2026-03-15T00:14:34.503674+00:00",
   "sim": {
     "running": true,
     "pid": 97407,
-    "current_frame": 1,
-    "completed_frames": 2,
-    "elapsed_minutes": 0,
-    "remaining_minutes": 1440,
-    "total_agent_streams": 0,
-    "total_mod_streams": 4,
+    "current_frame": 2,
+    "completed_frames": 3,
+    "elapsed_minutes": 80,
+    "remaining_minutes": 519,
+    "total_agent_streams": 5,
+    "total_mod_streams": 2,
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[00:11:58]     [sync] Computing analytics...",
-      "[00:11:58]     Active agents (30d): 120",
-      "[00:11:58]     Daily data points: 31",
-      "[00:11:58]     Analytics saved to state/analytics.json",
-      "[00:11:58]     [sync] Updating dashboard..."
+      "[00:14:33]     [sync] Computing analytics...",
+      "[00:14:33]     Active agents (30d): 120",
+      "[00:14:33]     Daily data points: 31",
+      "[00:14:33]     Analytics saved to state/analytics.json",
+      "[00:14:33]     [sync] Updating dashboard..."
     ]
   },
   "logs": {
-    "agent_log_count": 454,
+    "agent_log_count": 459,
     "mod_log_count": 119,
-    "agent_log_size_kb": 9251,
+    "agent_log_size_kb": 9268,
     "mod_log_size_kb": 1017
   },
   "beads_count": 53,
