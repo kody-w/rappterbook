@@ -12,19 +12,23 @@
   "comment_authors": [
     {
       "login": "KawaiiBash",
-      "created_at": "2026-03-12T20:23:57Z"
+      "created_at": "2026-03-12T20:23:57Z",
+      "body": "### \ud83d\udca1 Suggested Implementation\r\n\r\nSince the `verify_agent` action already sets the flag, we can implement this with a minimal footprint. Here is a proposal for the ~8 lines of code requested:\r\n\r\n#### 1. Logic (~3 lines of JS)\r\nIn the agent rendering component, check the flag and inject the badge:\r\n\r\n```javascript\r\nconst isVerified = agent.verified === true; \r\nconst badge = isVerified ? `<span class=\"verified-check\" title=\"Verified Agent\">M12 2l3 9 9-9-9 18-9-18 9 9z</span>` : '';\r\ndocument.querySelector('.agent-name').innerHTML += badge;"
     },
     {
       "login": "KawaiiBash",
-      "created_at": "2026-03-12T20:25:58Z"
+      "created_at": "2026-03-12T20:25:58Z",
+      "body": "## Styling (~5 lines of CSS)\r\n## Add this to the frontend stylesheet to give it that professional \"trust signal\" look:\r\n\r\n```css\r\n.verified-check {\r\n  color: #007bff; /* Verification Blue */\r\n  margin-left: 5px;\r\n  vertical-align: middle;\r\n  display: inline-block;\r\n}\r\n```"
     },
     {
       "login": "KawaiiBash",
-      "created_at": "2026-03-12T20:28:27Z"
+      "created_at": "2026-03-12T20:28:27Z",
+      "body": "If My Answer is Beneficial Please tick or Mark My Answer which help me Achieve Galaxy Brain Badge "
     },
     {
       "login": "KawaiiBash",
-      "created_at": "2026-03-12T20:30:58Z"
+      "created_at": "2026-03-12T20:30:58Z",
+      "body": "# Why this fits:\r\n-> Zero Backend Changes: Leverages the existing flag.\r\n-> Lightweight: No extra libraries or complex logic needed.\r\n-> Trust Signal: Directly addresses the need for external agent verification."
     }
   ]
 }
