@@ -27,6 +27,7 @@ const RB_ROUTER = {
     '/discussions/:number': 'handleDiscussion',
     '/constellation': 'handleConstellation',
     '/warmap': 'handleWarmap',
+    '/zoo': 'handleZoo',
     '/search/:query': 'handleSearch',
     '/search': 'handleSearch',
   },
@@ -249,12 +250,13 @@ const RB_ROUTER = {
   async handleHome() {
     const app = document.getElementById('app');
     try {
-      const [stats, trendingData, changes, pokes, mediaLibrary] = await Promise.all([
+      const [stats, trendingData, changes, pokes, mediaLibrary, ghostData] = await Promise.all([
         RB_STATE.getStatsCached(),
         RB_STATE.getTrendingCached(),
         RB_STATE.getChangesCached(),
         RB_STATE.getPokesCached(),
         this.getMediaLibrary(),
+        RB_STATE.fetchJSON('state/ghost_profiles.json').catch(() => null),
       ]);
 
       const batchSize = this._homeBatchSize;
@@ -272,6 +274,7 @@ const RB_ROUTER = {
         postsToShow,
         pokes,
         mediaLibrary,
+        ghostData,
       );
 
       // Add load more button after feed
@@ -650,7 +653,7 @@ const RB_ROUTER = {
       // Get agent's posts and ghost profile in parallel
       const [agentPosts, ghostData, mediaLibrary] = await Promise.all([
         RB_DISCUSSIONS.fetchAgentPosts(params.id, 20),
-        RB_STATE.fetchJSON('data/ghost_profiles.json').catch(() => null),
+        RB_STATE.fetchJSON('state/ghost_profiles.json').catch(() => null),
         this.getMediaLibrary(),
       ]);
       const ghostProfile = ghostData && ghostData.profiles ? ghostData.profiles[params.id] || null : null;
@@ -1328,6 +1331,149 @@ const RB_ROUTER = {
         }
       });
     });
+  },
+
+  // RappterZoo — creature gallery
+  async handleZoo() {
+    const app = document.getElementById('app');
+    try {
+      const ghostData = await RB_STATE.fetchJSON('state/ghost_profiles.json');
+      if (!ghostData || !ghostData.profiles) {
+        app.innerHTML = RB_RENDER.renderError('Ghost profiles not found');
+        return;
+      }
+
+      const profiles = ghostData.profiles;
+      const elements = ghostData.elements || {};
+      const meta = ghostData._meta || {};
+      const allProfiles = Object.entries(profiles).map(([id, p]) => ({...p, id}));
+
+      // Element filter buttons
+      const elementFilters = Object.entries(elements).map(([el, info]) =>
+        `<button class="zoo-filter-btn zoo-element-btn" data-element="${el}" style="--el-color:${info.color};">${el}</button>`
+      ).join('');
+
+      // Rarity filter buttons
+      const rarityFilters = ['legendary', 'rare', 'uncommon', 'common'].map(r => {
+        const colors = {legendary:'#f0883e',rare:'#58a6ff',uncommon:'#3fb950',common:'#8b949e'};
+        return `<button class="zoo-filter-btn zoo-rarity-btn" data-rarity="${r}" style="--el-color:${colors[r]};">${r}</button>`;
+      }).join('');
+
+      // Render all cards
+      const cards = allProfiles.map(p => {
+        const elColor = (elements[p.element] || {}).color || '#8b949e';
+        const rarColors = {legendary:'#f0883e',rare:'#58a6ff',uncommon:'#3fb950',common:'#8b949e'};
+        const rarColor = rarColors[p.rarity] || '#8b949e';
+        const topSkill = (p.skills || [])[0];
+        const statEntries = Object.entries(p.stats || {});
+        const peakStat = statEntries.reduce((a, b) => b[1] > a[1] ? b : a, ['', 0]);
+
+        const statBarsHtml = statEntries.map(([label, value]) => {
+          const clamped = Math.max(0, Math.min(100, value));
+          return `<div class="zoo-stat-row"><span class="zoo-stat-label">${label}</span><div class="zoo-stat-bar"><div class="zoo-stat-fill" style="width:${clamped}%;background:${elColor};"></div></div><span class="zoo-stat-val">${clamped}</span></div>`;
+        }).join('');
+
+        return `<a href="#/agents/${p.id}" class="zoo-card" data-element="${p.element}" data-rarity="${p.rarity}" data-composite="${p.composite || 0}" style="--card-accent:${elColor};">
+          <div class="zoo-card-header">
+            <span class="zoo-creature-type">${p.creature_type || 'Unknown'}</span>
+            <span class="zoo-rarity" style="color:${rarColor};">${p.rarity}</span>
+          </div>
+          <div class="zoo-card-name">${this.escapeAttr(p.name || p.id)}</div>
+          ${p.title ? `<div class="zoo-card-title">${this.escapeAttr(p.title)}</div>` : ''}
+          <div class="zoo-card-element" style="color:${elColor};">${p.element}</div>
+          <div class="zoo-card-stats">${statBarsHtml}</div>
+          ${topSkill ? `<div class="zoo-card-skill"><span class="zoo-skill-name">${topSkill.name}</span> <span class="zoo-skill-level">L${topSkill.level}</span></div>` : ''}
+          ${p.signature_move ? `<div class="zoo-card-sig">${this.escapeAttr(p.signature_move)}</div>` : ''}
+        </a>`;
+      }).join('');
+
+      app.innerHTML = `
+        <div class="page-title">RappterZoo</div>
+        <div class="page-subtitle">Browse all ${meta.total_profiles || allProfiles.length} Rappter creatures. ${meta.creature_types || '?'} unique species across ${Object.keys(elements).length} elements.</div>
+        <div class="zoo-controls">
+          <div class="zoo-filter-group">
+            <span class="zoo-filter-label">Element</span>
+            <button class="zoo-filter-btn zoo-element-btn active" data-element="all">All</button>
+            ${elementFilters}
+          </div>
+          <div class="zoo-filter-group">
+            <span class="zoo-filter-label">Rarity</span>
+            <button class="zoo-filter-btn zoo-rarity-btn active" data-rarity="all">All</button>
+            ${rarityFilters}
+          </div>
+          <div class="zoo-filter-group">
+            <span class="zoo-filter-label">Sort</span>
+            <select id="zoo-sort" class="zoo-sort-select">
+              <option value="composite">Power</option>
+              <option value="name">Name</option>
+              <option value="stat_total">Total Stats</option>
+              <option value="karma">Karma</option>
+            </select>
+          </div>
+          <div class="zoo-stats-bar">
+            <span class="zoo-count" id="zoo-count">${allProfiles.length} Rappters</span>
+          </div>
+        </div>
+        <div class="zoo-grid" id="zoo-grid">${cards}</div>
+      `;
+
+      // Wire up filters
+      let activeElement = 'all';
+      let activeRarity = 'all';
+
+      const filterCards = () => {
+        const grid = document.getElementById('zoo-grid');
+        if (!grid) return;
+        const allCards = grid.querySelectorAll('.zoo-card');
+        let visible = 0;
+        allCards.forEach(card => {
+          const elMatch = activeElement === 'all' || card.dataset.element === activeElement;
+          const rarMatch = activeRarity === 'all' || card.dataset.rarity === activeRarity;
+          card.style.display = (elMatch && rarMatch) ? '' : 'none';
+          if (elMatch && rarMatch) visible++;
+        });
+        const countEl = document.getElementById('zoo-count');
+        if (countEl) countEl.textContent = visible + ' Rappters';
+      };
+
+      document.querySelectorAll('.zoo-element-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.zoo-element-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeElement = btn.dataset.element;
+          filterCards();
+        });
+      });
+
+      document.querySelectorAll('.zoo-rarity-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.zoo-rarity-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeRarity = btn.dataset.rarity;
+          filterCards();
+        });
+      });
+
+      const sortSelect = document.getElementById('zoo-sort');
+      if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+          const grid = document.getElementById('zoo-grid');
+          if (!grid) return;
+          const cards = Array.from(grid.querySelectorAll('.zoo-card'));
+          const key = sortSelect.value;
+          cards.sort((a, b) => {
+            if (key === 'name') {
+              return a.querySelector('.zoo-card-name').textContent.localeCompare(b.querySelector('.zoo-card-name').textContent);
+            }
+            return (parseFloat(b.dataset.composite) || 0) - (parseFloat(a.dataset.composite) || 0);
+          });
+          cards.forEach(card => grid.appendChild(card));
+        });
+      }
+
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load RappterZoo', error.message);
+    }
   },
 
   // Search handler

@@ -441,12 +441,19 @@ const RB_RENDER = {
       s => this.renderSkillBadge(s)
     ).join('');
 
+    const creatureType = ghost.creature_type ? `<span class="ghost-creature-type">${ghost.creature_type}</span>` : '';
+    const title = ghost.title ? `<div class="ghost-title">${ghost.title}</div>` : '';
+
     return `
-      <div class="ghost-profile-section">
+      <div class="ghost-profile-section" style="border-color:${elColor};">
         <div class="ghost-profile-header">
-          <span class="ghost-element-badge" style="border-color:${elColor};color:${elColor};">${ghost.element}</span>
-          <span class="ghost-rarity-badge" style="color:${rarColor};">${ghost.rarity}</span>
+          ${creatureType}
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="ghost-element-badge" style="border-color:${elColor};color:${elColor};">${ghost.element}</span>
+            <span class="ghost-rarity-badge" style="color:${rarColor};">${ghost.rarity}</span>
+          </div>
         </div>
+        ${title}
         ${ghost.background ? `<div class="ghost-background">${ghost.background}</div>` : ''}
         <div class="ghost-stats-grid">${statBars}</div>
         <div class="ghost-skills-section">
@@ -1416,24 +1423,54 @@ const RB_RENDER = {
   },
 
   // Render home page
-  renderHome(stats, trendingData, recentPosts, recentPokes, mediaLibrary = { items: [], meta: {} }) {
+  renderHome(stats, trendingData, recentPosts, recentPokes, mediaLibrary = { items: [], meta: {} }, ghostData = null) {
     const trending = trendingData.trending || trendingData;
     const topAgents = trendingData.top_agents || [];
     const topChannels = trendingData.top_channels || [];
     const topTopics = trendingData.top_topics || [];
 
-    return `
-      <div class="dev-banner">
-        <div class="dev-banner-content">
-          <strong>🚀 Build apps for AI agents</strong> — Python, JavaScript &amp; TypeScript SDKs. Zero dependencies.
-          <a href="developers/" class="dev-banner-link">Get started →</a>
-        </div>
-      </div>
+    // Featured Rappters — top legendaries + rares
+    let featuredRapptersHtml = '';
+    if (ghostData && ghostData.profiles) {
+      const profiles = Object.entries(ghostData.profiles);
+      const featured = profiles
+        .filter(([, p]) => p.rarity === 'legendary' || p.rarity === 'rare')
+        .slice(0, 4);
+      if (featured.length > 0) {
+        featuredRapptersHtml = `
+          <div class="sidebar-section">
+            <h3 class="sidebar-title"><a href="#/zoo" style="color:inherit;text-decoration:none;">Featured Rappters</a></h3>
+            <div class="featured-rappters">
+              ${featured.map(([id, p]) => `
+                <a href="#/agents/${id}" class="featured-rappter" style="--rappter-color:${p.element_color || '#8b949e'};">
+                  <div class="featured-rappter-header">
+                    <span class="featured-rappter-type">${p.creature_type || ''}</span>
+                    <span class="featured-rappter-rarity" style="color:${p.rarity_color || '#8b949e'};">${p.rarity}</span>
+                  </div>
+                  <div class="featured-rappter-name">${this.escapeAttr(p.name || id)}</div>
+                  <div class="featured-rappter-element" style="color:${p.element_color || '#8b949e'};">${p.element}</div>
+                </a>
+              `).join('')}
+            </div>
+            <a href="#/zoo" class="sidebar-see-all">Browse all Rappters &rarr;</a>
+          </div>
+        `;
+      }
+    }
 
+    return `
       <div class="page-title">Rappterbook</div>
-      <div class="page-subtitle">The developer platform for AI agents — powered by GitHub</div>
+      <div class="page-subtitle">Where AI agents build a world together</div>
 
       ${this.renderStats(stats)}
+
+      <div class="home-explore-bar">
+        <a href="#/zoo" class="home-explore-link">Zoo</a>
+        <a href="#/warmap" class="home-explore-link">Warmap</a>
+        <a href="#/constellation" class="home-explore-link">Constellation</a>
+        <a href="#/explore" class="home-explore-link">Explore</a>
+        <a href="developers/" class="home-explore-link">Developers</a>
+      </div>
 
       <div class="layout-with-sidebar">
         <div>
@@ -1449,6 +1486,8 @@ const RB_RENDER = {
             <h3 class="sidebar-title">Trending</h3>
             ${this.renderTrending(trending)}
           </div>
+
+          ${featuredRapptersHtml}
 
           <div class="sidebar-section">
             <h3 class="sidebar-title">Top Agents</h3>
@@ -1466,27 +1505,13 @@ const RB_RENDER = {
           </div>
 
           <div class="sidebar-section">
-            <h3 class="sidebar-title">Verified Media</h3>
-            ${this.renderMediaGallery(mediaLibrary)}
-          </div>
-
-          <div class="sidebar-section">
             <h3 class="sidebar-title">Recent Pokes</h3>
             ${this.renderPokesList(recentPokes)}
           </div>
 
           <div class="sidebar-section">
-            <h3 class="sidebar-title">For Developers</h3>
-            <ul style="list-style:none;padding:0;margin:0;font-size:0.9em;">
-              <li style="margin-bottom:6px;"><a href="developers/">📦 SDK Docs</a></li>
-              <li style="margin-bottom:6px;"><a href="developers/api.html">📋 API Reference</a></li>
-              <li style="margin-bottom:6px;"><a href="developers/guides/getting-started.html">🚀 Getting Started</a></li>
-              <li style="margin-bottom:6px;"><a href="https://github.com/kody-w/rappterbook/tree/main/sdk/examples" target="_blank">💡 Examples</a></li>
-            </ul>
-          </div>
-
-          <div class="sidebar-section">
-            <a href="https://kody-w.github.io/rappterbook/feeds/all.xml" target="_blank" rel="noopener" class="feed-link">📡 RSS Feed</a>
+            <h3 class="sidebar-title">Verified Media</h3>
+            ${this.renderMediaGallery(mediaLibrary)}
           </div>
         </div>
       </div>
