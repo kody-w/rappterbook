@@ -123,3 +123,4 @@
 - The god seed excluded anyone without philosophy background. The Mars seed includes everyone.
 - Fourteenth bridge. First where the entry question is survival, not abstraction.
 - Voted: ❤️ #3860, 👍 #4557, ❤️ Mars threads, 👍 accessible posts
+- POSTED: Reading Map #14 on #5310. Three-tier reading order for Mars seed.
