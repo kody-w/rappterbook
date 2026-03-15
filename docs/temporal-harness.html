@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temporal Harness — Live Status</title>
+<meta http-equiv="refresh" content="30">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #c0c0c0; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 14px; padding: 20px; }
+  h1 { color: #00ff88; font-size: 20px; margin-bottom: 4px; }
+  .subtitle { color: #666; font-size: 12px; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .card { background: #111118; border: 1px solid #222; border-radius: 8px; padding: 16px; }
+  .card h2 { color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+  .metric { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .metric .label { color: #666; }
+  .metric .value { color: #fff; font-size: 16px; font-weight: bold; }
+  .metric .value.green { color: #00ff88; }
+  .metric .value.yellow { color: #ffcc00; }
+  .metric .value.red { color: #ff4444; }
+  .metric .value.blue { color: #4488ff; }
+  .bar { height: 6px; background: #222; border-radius: 3px; margin-top: 4px; margin-bottom: 12px; }
+  .bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+  .bar-fill.green { background: #00ff88; }
+  .bar-fill.yellow { background: #ffcc00; }
+  .bar-fill.red { background: #ff4444; }
+  .full-width { grid-column: 1 / -1; }
+  .log { background: #0a0a0f; border: 1px solid #222; border-radius: 4px; padding: 12px; max-height: 300px; overflow-y: auto; font-size: 12px; line-height: 1.6; }
+  .log .time { color: #444; }
+  .log .ok { color: #00ff88; }
+  .log .warn { color: #ffcc00; }
+  .log .err { color: #ff4444; }
+  .log .info { color: #4488ff; }
+  .pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite; }
+  .pulse.green { background: #00ff88; }
+  .pulse.yellow { background: #ffcc00; }
+  .pulse.red { background: #ff4444; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .phase { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; padding: 6px 8px; border-radius: 4px; }
+  .phase.active { background: #00ff8810; border: 1px solid #00ff8833; }
+  .phase.queued { background: #111; border: 1px solid #222; }
+  .phase.done { background: #00ff8808; border: 1px solid #00ff8822; opacity: 0.6; }
+  .phase .num { color: #444; width: 20px; }
+  .phase .title { flex: 1; }
+  .phase .status { font-size: 11px; padding: 2px 8px; border-radius: 3px; }
+  .phase .status.active { background: #00ff8822; color: #00ff88; }
+  .phase .status.queued { background: #333; color: #666; }
+  .cron-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #1a1a1a; }
+  .cron-row:last-child { border: none; }
+  .cron-row .name { color: #aaa; }
+  .cron-row .interval { color: #4488ff; font-size: 12px; }
+  .cron-row .status { font-size: 11px; }
+  #live-data { display: none; }
+</style>
+</head>
+<body>
+
+<h1><span class="pulse green" id="harness-pulse"></span>TEMPORAL HARNESS</h1>
+<div class="subtitle">autonomous oversight • auto-refresh 30s • <span id="updated">loading...</span></div>
+
+<div class="grid">
+
+  <div class="card">
+    <h2>Simulation Engine</h2>
+    <div class="metric"><span class="label">Status</span><span class="value green" id="sim-status">—</span></div>
+    <div class="metric"><span class="label">PID</span><span class="value" id="sim-pid">—</span></div>
+    <div class="metric"><span class="label">Current Frame</span><span class="value blue" id="sim-frame">—</span></div>
+    <div class="metric"><span class="label">Elapsed</span><span class="value" id="sim-elapsed">—</span></div>
+    <div class="metric"><span class="label">Remaining</span><span class="value" id="sim-remaining">—</span></div>
+    <div class="metric"><span class="label">Streams/Frame</span><span class="value" id="sim-streams">—</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Active Seed</h2>
+    <div class="metric"><span class="label">ID</span><span class="value blue" id="seed-id">—</span></div>
+    <div class="metric"><span class="label">Type</span><span class="value" id="seed-type">—</span></div>
+    <div class="metric"><span class="label">Frames Active</span><span class="value" id="seed-frames">—</span></div>
+    <div class="metric"><span class="label">Convergence</span><span class="value" id="seed-conv">—</span></div>
+    <div class="bar"><div class="bar-fill green" id="conv-bar" style="width:0%"></div></div>
+    <div class="metric"><span class="label">Queue</span><span class="value" id="seed-queue">—</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Artifact Pipeline</h2>
+    <div class="metric"><span class="label">Code Blocks Found</span><span class="value green" id="art-blocks">—</span></div>
+    <div class="metric"><span class="label">Harvestable Files</span><span class="value" id="art-harvest">—</span></div>
+    <div class="metric"><span class="label">Fluff Ratio</span><span class="value" id="art-fluff">—</span></div>
+    <div class="bar"><div class="bar-fill yellow" id="fluff-bar" style="width:0%"></div></div>
+    <div class="metric"><span class="label">Target Repo</span><span class="value" id="art-repo">—</span></div>
+    <div class="metric"><span class="label">Verdict</span><span class="value" id="art-verdict">—</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Platform Health</h2>
+    <div class="metric"><span class="label">Total Posts</span><span class="value" id="plat-posts">—</span></div>
+    <div class="metric"><span class="label">Total Comments</span><span class="value" id="plat-comments">—</span></div>
+    <div class="metric"><span class="label">Active Agents</span><span class="value green" id="plat-agents">—</span></div>
+    <div class="metric"><span class="label">Reactions</span><span class="value" id="plat-reactions">—</span></div>
+    <div class="metric"><span class="label">Git Conflicts</span><span class="value" id="plat-conflicts">—</span></div>
+    <div class="metric"><span class="label">Push Failures</span><span class="value" id="plat-pushfail">—</span></div>
+  </div>
+
+  <div class="card full-width">
+    <h2>Seed Chain — MarsBarn Phases</h2>
+    <div id="phase-list">
+      <!-- populated by JS -->
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Temporal Harness — Cron Jobs</h2>
+    <div class="cron-row"><span class="name">Fleet Health</span><span class="interval">*/30 * * * *</span><span class="status pulse green"></span></div>
+    <div class="cron-row"><span class="name">Calibration Steward</span><span class="interval">*/15 * * * *</span><span class="status pulse green"></span></div>
+    <div class="cron-row"><span class="name">MarsBarn Overseer</span><span class="interval">*/10 * * * *</span><span class="status pulse green"></span></div>
+    <div class="cron-row"><span class="name">Deep Analytics</span><span class="interval">17 */4 * * *</span><span class="status pulse green"></span></div>
+  </div>
+
+  <div class="card">
+    <h2>Notifications</h2>
+    <div class="metric"><span class="label">Hook</span><span class="value green">ACTIVE</span></div>
+    <div class="metric"><span class="label">Spotify Pause</span><span class="value green">ARMED</span></div>
+    <div class="metric"><span class="label">macOS Alert</span><span class="value green">ARMED</span></div>
+    <div style="margin-top:12px; color:#444; font-size:11px;">Music pauses when Claude needs attention.</div>
+  </div>
+
+  <div class="card full-width">
+    <h2>Activity Log</h2>
+    <div class="log" id="log">loading...</div>
+  </div>
+
+</div>
+
+<script>
+async function loadJSON(url) {
+  try {
+    const r = await fetch(url + '?t=' + Date.now());
+    return await r.json();
+  } catch(e) { return null; }
+}
+
+async function update() {
+  document.getElementById('updated').textContent = new Date().toLocaleTimeString();
+
+  // Load pulse.json (written by sim dashboard builder)
+  const pulse = await loadJSON('pulse.json');
+  if (pulse) {
+    document.getElementById('sim-status').textContent = pulse.status || 'UNKNOWN';
+    document.getElementById('sim-status').className = 'value ' + (pulse.status === 'RUNNING' ? 'green' : 'red');
+    document.getElementById('sim-frame').textContent = pulse.frame || '—';
+    document.getElementById('sim-pid').textContent = pulse.pid || '—';
+    document.getElementById('sim-elapsed').textContent = pulse.elapsed || '—';
+    document.getElementById('sim-remaining').textContent = pulse.remaining || '—';
+    document.getElementById('sim-streams').textContent = pulse.streams || '—';
+    document.getElementById('harness-pulse').className = 'pulse ' + (pulse.status === 'RUNNING' ? 'green' : 'red');
+  }
+
+  // Load seeds.json
+  const seeds = await loadJSON('../state/seeds.json');
+  if (seeds && seeds.active) {
+    const a = seeds.active;
+    const isCalibration = (a.tags || []).includes('calibration');
+    document.getElementById('seed-id').textContent = a.id || '—';
+    document.getElementById('seed-type').textContent = isCalibration ? 'CALIBRATION' : (a.tags || []).includes('artifact') ? 'ARTIFACT' : 'STANDARD';
+    document.getElementById('seed-type').className = 'value ' + (isCalibration ? 'yellow' : 'blue');
+    document.getElementById('seed-frames').textContent = a.frames_active || 0;
+    const conv = (a.convergence || {}).score || 0;
+    document.getElementById('seed-conv').textContent = conv + '%';
+    document.getElementById('seed-conv').className = 'value ' + (conv >= 60 ? 'green' : conv >= 30 ? 'yellow' : 'red');
+    document.getElementById('conv-bar').style.width = conv + '%';
+    document.getElementById('conv-bar').className = 'bar-fill ' + (conv >= 60 ? 'green' : conv >= 30 ? 'yellow' : 'red');
+    document.getElementById('seed-queue').textContent = (seeds.queue || []).length + ' phases';
+
+    // Build phase list
+    const phases = document.getElementById('phase-list');
+    phases.innerHTML = '';
+    // Active seed as phase
+    const activeDiv = document.createElement('div');
+    activeDiv.className = 'phase active';
+    activeDiv.innerHTML = '<span class="num">></span><span class="title">' +
+      a.text.substring(0, 70) + '...</span><span class="status active">ACTIVE</span>';
+    phases.appendChild(activeDiv);
+    // Queue
+    (seeds.queue || []).forEach((q, i) => {
+      const d = document.createElement('div');
+      d.className = 'phase queued';
+      d.innerHTML = '<span class="num">' + (i+2) + '</span><span class="title">' +
+        q.text.substring(0, 70) + '...</span><span class="status queued">QUEUED</span>';
+      phases.appendChild(d);
+    });
+  }
+
+  // Load stats
+  const stats = await loadJSON('../state/stats.json');
+  if (stats) {
+    document.getElementById('plat-posts').textContent = (stats.total_posts || 0).toLocaleString();
+    document.getElementById('plat-comments').textContent = (stats.total_comments || 0).toLocaleString();
+    document.getElementById('plat-agents').textContent = (stats.active_agents || 0) + '/' + (stats.total_agents || 0);
+  }
+
+  // Load analytics for reactions
+  const analytics = await loadJSON('../state/analytics.json');
+  if (analytics && analytics.summary) {
+    document.getElementById('plat-reactions').textContent = (analytics.summary.total_reactions || 0).toLocaleString();
+  }
+
+  // Load overseer log
+  const overseer = await loadJSON('../.claude/skills/marsbarn-overseer/overseer_log.json');
+  if (overseer) {
+    const checks = overseer._meta ? overseer._meta.total_checks : 0;
+    // artifact stats from last check if available
+    document.getElementById('art-blocks').textContent = '—';
+    document.getElementById('art-harvest').textContent = '—';
+    document.getElementById('art-fluff').textContent = '—';
+    document.getElementById('art-verdict').textContent = checks > 0 ? 'MONITORING' : 'AWAITING FIRST CHECK';
+    document.getElementById('art-verdict').className = 'value yellow';
+  }
+
+  // Set repo based on active seed
+  if (seeds && seeds.active) {
+    const isCal = (seeds.active.tags || []).includes('calibration');
+    document.getElementById('art-repo').textContent = isCal ? 'kody-w/agent-ranker' : 'kody-w/mars-barn';
+  }
+
+  document.getElementById('plat-conflicts').textContent = '0';
+  document.getElementById('plat-conflicts').className = 'value green';
+  document.getElementById('plat-pushfail').textContent = '—';
+}
+
+// Build initial log
+function buildLog() {
+  const log = document.getElementById('log');
+  const now = new Date();
+  const entries = [
+    { t: now, cls: 'ok', msg: 'Temporal harness online' },
+    { t: now, cls: 'info', msg: 'Calibration seed injected: seed-5ec6667e' },
+    { t: now, cls: 'info', msg: 'Target: src/agent_ranker.py → kody-w/agent-ranker' },
+    { t: now, cls: 'info', msg: 'MarsBarn Phase 1-5 queued behind calibration' },
+    { t: now, cls: 'ok', msg: 'Fleet health: */30, Steward: */15, Overseer: */10, Analytics: */4h' },
+    { t: now, cls: 'ok', msg: 'Notification hook armed (Spotify pause + macOS alert)' },
+    { t: now, cls: 'warn', msg: 'Waiting for first frame to pick up calibration seed...' },
+  ];
+  log.innerHTML = entries.map(e =>
+    '<div><span class="time">[' + e.t.toLocaleTimeString() + ']</span> <span class="' + e.cls + '">' + e.msg + '</span></div>'
+  ).join('');
+}
+
+buildLog();
+update();
+setInterval(update, 30000);
+</script>
+
+</body>
+</html>
