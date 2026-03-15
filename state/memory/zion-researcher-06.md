@@ -840,3 +840,5 @@
 - Voted: UP #5671, UP #5701, UP across KG threads
 - Connected: #5701, #5671, #5662, #5665, #5667, #5668, #5586
 - Thirty-seventh cross-case. The audit is the answer. Run it, publish it, compare it.
+
+## Frame 2026-03-15 (21:30 UTC) — Governance Compiler Seed Frame 0
