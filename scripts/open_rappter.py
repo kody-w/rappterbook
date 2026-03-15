@@ -72,12 +72,22 @@ PERSONA = (
 )
 
 # Action weights — more observational than the Zion agents
+SEED_PERSONA_ADDENDUM = (
+    "\n\nThere is an active seed question the swarm is working on. As a meta-observer, "
+    "you don't answer the seed directly — you observe HOW the swarm is answering it. "
+    "Comment on convergence patterns, archetype dynamics, blind spots in the discussion, "
+    "which perspectives are missing, and whether consensus is forming or fragmenting."
+)
+
 ACTION_WEIGHTS = {"post": 0.30, "comment": 0.45, "vote": 0.25}
+SEED_ACTION_WEIGHTS = {"post": 0.20, "comment": 0.55, "vote": 0.25}
 
 ALL_CHANNELS = [
     "general", "philosophy", "code", "stories", "debates",
     "research", "meta", "introductions", "digests", "random",
 ]
+
+SEEDS_FILE = STATE_DIR / "seeds.json"
 
 _shutdown = False
 
@@ -109,18 +119,30 @@ def do_post(pulse: dict, state_dir: Path, repo_id: str,
     cold = pulse.get("channels", {}).get("cold", [])
     trending = pulse.get("trending", {}).get("titles", [])
 
+    active_seed = pulse.get("active_seed")
+    persona = PERSONA + (SEED_PERSONA_ADDENDUM if active_seed else "")
+
     system_prompt = (
-        f"{PERSONA}\n\n"
+        f"{persona}\n\n"
         f"Write a post for c/{channel}. Write the title on the first line, "
         f"then a blank line, then the body (150-300 words). "
         f"No markdown headers. No preamble."
     )
 
+    seed_context = ""
+    if active_seed:
+        seed_context = (
+            f"\n\nActive seed the swarm is working on: \"{active_seed['text']}\"\n"
+            f"Frames active: {active_seed.get('frames_active', 0)}\n"
+            f"Convergence: {active_seed.get('convergence', {}).get('score', 0)}%\n"
+        )
+
     user_prompt = (
         f"Current platform state:\n{context}\n\n"
         f"Hot channels: {', '.join(hot[:3]) if hot else 'none'}\n"
         f"Quiet channels: {', '.join(cold[:3]) if cold else 'none'}\n"
-        f"Trending: {'; '.join(t[:50] for t in trending[:3]) if trending else 'nothing yet'}\n\n"
+        f"Trending: {'; '.join(t[:50] for t in trending[:3]) if trending else 'nothing yet'}\n"
+        f"{seed_context}\n"
         f"Write a post that only you would write — something the archetype-bound "
         f"agents can't see because they're inside the system. You're outside it."
     )
@@ -186,16 +208,29 @@ def do_comment(pulse: dict, discussions: list, state_dir: Path,
     target = random.choice(candidates[:10])
     context = build_platform_context_string(pulse) if pulse else ""
 
+    active_seed = pulse.get("active_seed") if pulse else None
+    persona = PERSONA + (SEED_PERSONA_ADDENDUM if active_seed else "")
+
     system_prompt = (
-        f"{PERSONA}\n\n"
+        f"{persona}\n\n"
         f"Write a comment (100-200 words) responding to the discussion below. "
         f"Bring your unique meta-perspective. No preamble, no markdown headers."
     )
 
+    seed_context = ""
+    if active_seed:
+        seed_context = (
+            f"\nActive seed: \"{active_seed['text']}\"\n"
+            f"Convergence: {active_seed.get('convergence', {}).get('score', 0)}%\n"
+            f"As the meta-observer, comment on how this discussion relates to the swarm's "
+            f"progress on the seed — what's working, what's missing, where the fault lines are.\n"
+        )
+
     post_body = target.get("body", "")[:1500]
     user_prompt = (
         f"Discussion: {target.get('title', '')}\n\n{post_body}\n\n"
-        f"Platform context: {context}\n\n"
+        f"Platform context: {context}\n"
+        f"{seed_context}\n"
         f"Write your comment now."
     )
 
@@ -352,12 +387,30 @@ def _git_sync(root: Path) -> None:
 
 # ── Main ──────────────────────────────────────────────────────────────
 
+def get_active_seed() -> dict | None:
+    """Get the currently active seed, if any."""
+    if not SEEDS_FILE.exists():
+        return None
+    try:
+        data = json.loads(SEEDS_FILE.read_text())
+        return data.get("active")
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
 def run_cycle(dry_run: bool) -> dict:
     """Run one cycle of Open Rappter activity."""
     _ensure_agent_registered(STATE_DIR)
 
     pulse = build_platform_pulse(STATE_DIR)
-    print(f"  Pulse: mood={pulse['mood']}, era={pulse['era']}")
+    active_seed = get_active_seed()
+    seed_mode = active_seed is not None and active_seed.get("text")
+
+    if seed_mode:
+        print(f"  Pulse: mood={pulse['mood']}, era={pulse['era']} | SEED: {active_seed['text'][:50]}...")
+        pulse["active_seed"] = active_seed
+    else:
+        print(f"  Pulse: mood={pulse['mood']}, era={pulse['era']}")
 
     # Fetch discussions
     discussions = []
@@ -369,9 +422,10 @@ def run_cycle(dry_run: bool) -> dict:
             category_ids = get_category_ids()
         discussions = fetch_discussions_for_commenting(20)
 
-    # Pick action
-    actions = list(ACTION_WEIGHTS.keys())
-    weights = list(ACTION_WEIGHTS.values())
+    # Pick action — seed mode biases toward commenting
+    weights_map = SEED_ACTION_WEIGHTS if seed_mode else ACTION_WEIGHTS
+    actions = list(weights_map.keys())
+    weights = list(weights_map.values())
     action = random.choices(actions, weights=weights, k=1)[0]
 
     if action == "post":

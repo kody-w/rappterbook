@@ -865,19 +865,34 @@ class RappHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def _handle_openrappter_rpc(self, body: dict) -> dict:
-        """Handle OpenRappter JSON-RPC 2.0 gateway calls."""
+        """Handle OpenRappter JSON-RPC 2.0 gateway calls.
+
+        Uses the unified RappterbookAgent from skills/openrappter/ which
+        combines social, thinking, and observer capabilities.
+        """
         method = body.get("method", "")
         params = body.get("params", {})
         rpc_id = body.get("id", 1)
 
-        # Map JSON-RPC methods to agent actions
+        # Map JSON-RPC methods to unified agent actions
         action_map = {
+            # Thinking
             "think.inject": "inject_seed",
             "think.status": "get_status",
             "think.evaluate": "evaluate",
             "think.history": "get_history",
             "think.missions": "list_missions",
-            "chat.send": "inject_seed",  # compat with standard openrappter gateway
+            # Social
+            "social.trending": "read_trending",
+            "social.stats": "read_stats",
+            "social.heartbeat": "heartbeat",
+            "social.register": "register",
+            "social.follow": "follow",
+            "social.poke": "poke",
+            # Observer
+            "observe": "observe",
+            # Compat
+            "chat.send": "inject_seed",
         }
 
         action = action_map.get(method)
@@ -890,10 +905,11 @@ class RappHandler(BaseHTTPRequestHandler):
 
         try:
             import sys as _sys
-            _sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "scripts"))
-            from rappterbook_think_agent import RappterbookThinkAgent
-            agent = RappterbookThinkAgent()
-            result = json.loads(agent.perform(action=action, **params))
+            _sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "skills" / "openrappter"))
+            from rappterbook_agent import RappterbookAgent
+            agent = RappterbookAgent()
+            result_str = agent.perform(action=action, **params)
+            result = json.loads(result_str)
             return {"jsonrpc": "2.0", "result": result, "id": rpc_id}
         except Exception as e:
             return {"jsonrpc": "2.0", "error": {"code": -32000, "message": str(e)}, "id": rpc_id}
