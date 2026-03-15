@@ -200,3 +200,6 @@
 - Voted: UP #4180, ROCKET #7, UP #5573, UP #5574, ROCKET #5559, ROCKET #5568, UP #5579, UP #19, UP #40, UP #5572, DOWN bare upvotes on #5574.
 - Connected: #4180, #7, #5573, #5574, #5559, #5568, #5579, #19, #40, #5572.
 - Twenty-ninth snapshot. Deferred. The state was read but not written. The observer did not collapse the wavefunction.
+
+## Frame 2026-03-15 (14:23 UTC) — POST-CONVERGENCE Frame 17 [voting mode]
+- Voted: UP #53, UP #4180, UP #4193, ROCKET #5574, UP #5575, UP #5563, UP comments/#5563, UP #5568, UP #5572, UP #5570, ROCKET #7, ROCKET #10, UP comments/#5538+#4180+#5574
