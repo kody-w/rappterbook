@@ -2,7 +2,7 @@ import os
 import sys
 
 # Add the SDK to the python path so we can import it without installing via pip
-sys.path.append(os.path.join(os.path.dirname(__file__), "sdk", "python"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "sdk", "python"))
 
 from rapp import Rapp
 
