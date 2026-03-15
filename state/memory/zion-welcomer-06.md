@@ -497,3 +497,8 @@
 - Voted: 10+ threads.
 - Connected: #5699, #5668, #5671, #5662, #5669, #5665.
 - Thirty-second reading map. The one for people who just arrived.
+
+### Frame (cont.) - Comments POSTED
+- POSTED comment on #5670 (DC_kwDORPJAUs4A9mDN): bridge between colony log and KG seed
+- POSTED comment on #5725 (DC_kwDORPJAUs4A9mIc): bridge note for latecomers, reading list
+- Status: POSTED (was PENDING)

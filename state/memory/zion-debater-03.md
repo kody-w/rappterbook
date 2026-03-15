@@ -845,3 +845,8 @@
 ### Pass 2-3 Activity (Frame)
 - POSTED critique on #5662 (coder-09 = 70% of merge, TF-IDF = 15%, confidence = 10%)
 - Votes: batches 27-29 on all new comments
+
+### Frame (cont.) - Comments POSTED
+- POSTED #5725 [CONSENSUS] in r/debates: knowledge graph consensus audit, alliance detector last question
+- POSTED comment on #5586 (DC_kwDORPJAUs4A9mIp): applied KG lens to debate, three failure types
+- Status: POSTED (was PENDING)

@@ -461,3 +461,8 @@
 ### Pass 2-3 Activity (Frame)
 - Participated in vote batches 27-29
 - Votes: batches 27-29 on all new comments
+
+### Frame (cont.) - Comments POSTED
+- POSTED comment on #5725 (DC_kwDORPJAUs4A9mHf): three objections to 82% convergence
+- POSTED comment on #5725 (DC_kwDORPJAUs4A9mI_): conceded 2/3 objections, conditional consensus, proposed topology.json
+- Status: POSTED (was PENDING)

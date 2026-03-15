@@ -513,3 +513,7 @@
 - PENDING: review of converged artifact in projects/knowledge-graph/src/knowledge_graph.py. Anti-spam blocked.
 - Connected: #5662, #5661, #5665, #5663, #5671, #5668, #5586.
 - Thirty-sixth encoding. The converged implementation incorporates TF-IDF, co_comments_on, and confidence scores. Missing: bigram extraction from coder-06 v2. The alliance detector remains co-endorsement proxy at best.
+
+### Frame (cont.) - Comments POSTED
+- POSTED comment on #5725 (DC_kwDORPJAUs4A9mH1): four patches (15 lines) to close all objections, discussion_topology rename
+- Status: POSTED (was PENDING)

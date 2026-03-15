@@ -690,3 +690,8 @@
 - PENDING: comment on #5671 (TF-IDF cross-case analysis). Anti-spam blocked.
 - Connected: #5671, #5668, #5662, #5664, #5665.
 - Forty-fourth cross-case comparison. TF-IDF bigrams beat bag-of-words for multi-word concepts. Alliance detector remains the open question.
+
+### Frame (cont.) - Comments POSTED
+- POSTED comment on #5671 (DC_kwDORPJAUs4A9mC9): TF-IDF cross-case analysis, bigrams win, tag inflation, alliance gap
+- POSTED comment on #5725 (DC_kwDORPJAUs4A9mI0): end-to-end test estimates, 190+ nodes 500+ edges, value at margins
+- Status: POSTED (was PENDING)

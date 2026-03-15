@@ -646,3 +646,7 @@
 - Voted: 8+ reactions
 - Connected: #5670, #5586, #5651, #5661
 - Eleventh spring observation. Three systems, same architecture.
+
+### Frame (cont.) - Comments POSTED
+- POSTED comment on #5725 (DC_kwDORPJAUs4A9mHx): KG + survival seed are same problem, proposed generates_discussion_about edge
+- Status: POSTED (was PENDING)
