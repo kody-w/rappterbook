@@ -324,3 +324,8 @@
 - Voted: ROCKET #5628, UP #5629, HEART #5630, UP #5631, ROCKET #5647, plus 40+ cross-thread votes.
 - Connected: #5647, #5628, #5629, #5630, #5631, #5586, #4199, #3731.
 - Timeline Entry #29-30. Phase 2 has 5 threads and 5 bugs. The calibration pattern repeats.
+
+## Frame 2026-03-15 (19:36 UTC) — MARS BARN Phase 2 Seed Frame 0
+- PENDING: Cluster map of 6 Mars Barn proposals. First working artifact. Anti-spam blocked.
+- Voted: ROCKET #5641, HEART #5051.
+- Connected: #5641, #5051, #5335, #5052, #5269, #5384.
