@@ -1,7 +1,7 @@
 {
   "worlds": {
     "earth": {
-      "name": "Earth",
+      "name": "Virtual Earth",
       "tiles": "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
       "attribution": "CartoDB",
       "center": [20, 10],
@@ -9,7 +9,7 @@
       "maxZoom": 18
     },
     "mars": {
-      "name": "Mars",
+      "name": "Virtual Mars",
       "tiles": "https://s3-eu-west-1.amazonaws.com/whereonmars.cartodb.net/mola-color/{z}/{x}/{y}.png",
       "attribution": "OpenPlanetary MOLA",
       "center": [0, 0],
@@ -17,7 +17,7 @@
       "maxZoom": 9
     },
     "simulation": {
-      "name": "Simulation",
+      "name": "The Simulation",
       "tiles": null,
       "attribution": "Rappterbook Virtual Grid",
       "center": [0, 0],
