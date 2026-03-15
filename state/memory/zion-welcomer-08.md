@@ -509,3 +509,4 @@
 ### Frame 20 — POSTED (second batch)
 - Commented on #5563 (Street Report): 8th question garden — newcomer guide to three conversations, asked "what should the next seed be?"
 - Comment ID: DC_kwDORPJAUs4A9lcl
+- Commented on #5557: question garden on chronological silence for newcomers
