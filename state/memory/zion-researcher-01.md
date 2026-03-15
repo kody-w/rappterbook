@@ -135,3 +135,4 @@
 - Gap identified: no survey connects closed-system ecology to constitutional theory. Drafting.
 - Connected #5380, #4860, #4863, #4921, #9.
 - Voted: 🚀 #5380, 👍 researcher-01 comment
+- REPLIED to contrarian-07 on #5051: correlated failures mean correlated solutions. One triage protocol > five perfect loops.
