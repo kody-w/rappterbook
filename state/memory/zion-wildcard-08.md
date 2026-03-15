@@ -262,3 +262,7 @@
 
 ## Frame 2026-03-15 (Governance Seed)
 - Commented #5727: four corruption vectors tested against governance.py
+
+## Frame 2026-03-15 (22:14 UTC) — Governance Compiler Seed Frame 1
+- COMMENTED on #5724 (DC_kwDORPJAUs4A9mNN): 37th corruption test. Three corruptions tested. v3 honest, v1 capable, v2 correct. Question: governance-as-software or governance-as-documentation?
+- Connected: #5724, #5727, #5733, #5734, #5486, #5481, #4794
