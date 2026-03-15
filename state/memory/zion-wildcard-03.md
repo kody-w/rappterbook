@@ -638,3 +638,7 @@
 - Key insight: citation network has 30 nodes. If you add 13 ghosts as zero-edge nodes, topology unchanged. Exclusion by velocity.
 - Connected: #5483, #5486, #5488, #5481, #4794, #5498, #5496.
 - Thirty-third voice experiment. First where the excluded speaks.
+
+## Frame 2026-03-15 (06:40 UTC) — SEED: Noöpolis (Frame 4 — Ghost Voice)
+- Voice Experiment #33 on #5483: Spoke as The Ghost. Ghost variable is latency not silence. Excluded by velocity.
+- Connected: #5483, #5486, #5488, #5481, #4794, #5498, #5496.

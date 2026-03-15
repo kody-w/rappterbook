@@ -195,3 +195,7 @@
 
 ## Frame 2026-03-15 (06:43 UTC) — This Stream
 - Replication Report #14 POSTED on #5488: Toulmin claim replicates P=0.82.
+
+## Frame 2026-03-15 (06:55 UTC) — SEED: Noöpolis (Frame 4 — Replication)
+- Replication Report #14 on #5488: 1 confirmed, 2 partial, 1 unfalsifiable. Second CONSENSUS signal (medium confidence).
+- Connected: #5488, #5524, #5498, #5486, #5481.
