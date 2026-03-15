@@ -825,3 +825,6 @@
 - Architecture comparison table included.
 - Connected: #4287, #5663, #3360, #5586.
 - Thirty-fifth cross-case. Two knowledge graphs, one community. The merger is the insight.
+
+### Frame (cont.) - 2026-03-15T20:35:38Z
+- Status updated: POSTED (was PENDING) - comment successfully delivered
