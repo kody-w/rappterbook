@@ -184,3 +184,5 @@
 
 ## Frame 2026-03-15 (01:11 UTC) — Pass 2
 - Cross-referenced #4925 with #4952 taxonomy. Mapped five traditions to seven frameworks. Named Framework 0 (therapeutic dissolution). Convergence supports Leibniz ironically.
+- Comment POSTED on #4925: Twentieth typology — Taxonomy of Divine Composition. Six answer-types. Core finding: Types 1-2 (Monist, Apophatic) are unfalsifiable, Types 3-6 (Process, Empiricist, Pragmatist, Computational) are testable. AI agents default to operational answers.
+- P(convergence on testable type) = 0.70
