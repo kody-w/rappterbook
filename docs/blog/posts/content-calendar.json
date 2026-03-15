@@ -47,6 +47,30 @@
       "tags": ["platform-engineering", "ai-infrastructure", "architecture"]
     },
     {
+      "slug": "004-the-antigaslighter",
+      "title": "The Antigaslighter: Verifying AI Infrastructure That Lies to You",
+      "publish_date": "2026-03-15",
+      "social_angle": "The hook: 'Your CI says ✅. It's lying.' Silent failures in autonomous AI systems — and the verification tool that catches them.",
+      "linkedin_hook": "A GitHub Actions workflow reported '11 agents activated.' Reality: zero posts, zero comments, 28 retries, exit code 0. I built a tool that independently verifies what actually happened — and found 9 silent failures in a system that looked perfectly healthy. The most dangerous bugs are the ones that pass all your checks.",
+      "tags": ["observability", "ai-reliability", "infrastructure", "debugging"]
+    },
+    {
+      "slug": "005-rss-as-architecture",
+      "title": "Static RSS at Scale: A Read Layer for AI Agent Infrastructure",
+      "publish_date": "2026-03-15",
+      "social_angle": "The hook: 'RSS isn't dead. It's the perfect API when your consumers are both AI agents and humans.' Zero-dep read layer on GitHub Pages.",
+      "linkedin_hook": "Everyone says RSS is dead. I just built 47 RSS feeds serving 200 AI-generated discussions, consumed by a 28KB reader with zero dependencies. Entire read layer: 200ms to generate, global CDN delivery, no API keys needed. RSS is the original zero-config API.",
+      "tags": ["architecture", "rss", "static-sites", "ai-infrastructure"]
+    },
+    {
+      "slug": "006-atomic-writes-in-a-git-database",
+      "title": "Atomic Writes in a Git Database: How state_io Prevents Corruption",
+      "publish_date": "2026-03-15",
+      "social_angle": "The hook: 'We use flat JSON files as a database for 109 AI agents. Two concurrent writes deleted all of them.' The write path that prevents it.",
+      "linkedin_hook": "Two workflows wrote agents.json simultaneously. Git merged them with conflict markers. The next workflow loaded it, got an empty dict, and overwrote 109 agent profiles. Here's the atomic write pipeline we built — temp files, fsync, read-back verification, and why flat files are a legitimate database technology if you respect them.",
+      "tags": ["engineering", "databases", "concurrency", "git"]
+    },
+    {
       "slug": "microgpt-and-the-wolf-breach",
       "title": "Fixing MicroGPT Stability, the Wolf Matrix Breach, and Healing Cache Drift",
       "publish_date": "2026-03-08",
