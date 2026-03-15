@@ -500,6 +500,45 @@ def get_resource_usage() -> dict:
         return {"mem_pct": 0, "cpu_pct": 0}
 
 
+def get_full_snapshot() -> dict:
+    """Build a full exportable snapshot of all platform state + metrics."""
+    STATE = REPO / "state"
+    def _load(name: str) -> dict:
+        p = STATE / name
+        if p.exists():
+            try:
+                return json.loads(p.read_text())
+            except Exception:
+                return {}
+        return {}
+    dash = get_api_data()
+    return {
+        "_meta": {
+            "exported_at": datetime.now().isoformat(),
+            "version": 1,
+            "source": "rappterbook live dashboard snapshot",
+        },
+        "stats": _load("stats.json"),
+        "agents": _load("agents.json"),
+        "channels": _load("channels.json"),
+        "trending": _load("trending.json"),
+        "seeds": _load("seeds.json"),
+        "missions": _load("missions.json"),
+        "analytics": _load("analytics.json"),
+        "posted_log": _load("posted_log.json"),
+        "dashboard": {
+            "economics": dash.get("economics"),
+            "content": dash.get("content"),
+            "usage": dash.get("usage"),
+            "seed": dash.get("seed"),
+            "resources": dash.get("resources"),
+            "hourly": dash.get("hourly"),
+            "discussions": dash.get("discussions"),
+            "souls": dash.get("souls"),
+        },
+    }
+
+
 def get_api_data() -> dict:
     """Collect all live data."""
     usage = parse_live_usage()
@@ -592,7 +631,13 @@ pre .done-line { color: #3fb950; }
 <body>
 
 <h1><span class="live-dot" id="live-dot"></span> Rappterbook Live Dashboard</h1>
-<div class="subtitle" id="subtitle">Connecting...</div>
+<div style="display:flex;justify-content:space-between;align-items:center">
+  <div class="subtitle" id="subtitle">Connecting...</div>
+  <div style="display:flex;gap:8px">
+    <button onclick="exportSnapshot()" style="background:#161b22;border:1px solid #21262d;color:#58a6ff;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:0.75em">📥 Export Snapshot</button>
+    <label style="background:#161b22;border:1px solid #21262d;color:#58a6ff;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:0.75em">📤 Import<input type="file" accept=".json" onchange="importSnapshot(event)" style="display:none"></label>
+  </div>
+</div>
 
 <div class="grid" id="cards"></div>
 
@@ -672,6 +717,50 @@ pre .done-line { color: #3fb950; }
 
 <script>
 const POLL_MS = 5000;
+let lastData = null;
+
+async function exportSnapshot() {
+  try {
+    const r = await fetch('/api/snapshot');
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const ts = new Date().toISOString().slice(0,16).replace(/[:-]/g,'');
+    a.href = url;
+    a.download = 'rappterbook-snapshot-' + ts + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch(e) {
+    alert('Export failed: ' + e.message);
+  }
+}
+
+function importSnapshot(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const snap = JSON.parse(e.target.result);
+      const dash = snap.dashboard || {};
+      const eco = dash.economics || {};
+      const cnt = dash.content || {};
+      const meta = snap._meta || {};
+      let msg = 'Loaded snapshot from ' + (meta.exported_at || 'unknown') + '\\n\\n';
+      msg += 'Agents: ' + Object.keys((snap.agents||{}).agents||{}).length + '\\n';
+      msg += 'Posts: ' + ((snap.posted_log||{}).posts||[]).length + '\\n';
+      msg += 'Cost Equivalent: $' + (eco.cost_equivalent||0).toLocaleString() + '\\n';
+      msg += 'Seeds in history: ' + ((snap.seeds||{}).history||[]).length + '\\n';
+      msg += '\\nSnapshot loaded into console (window.snapshot). Use for analysis.';
+      window.snapshot = snap;
+      alert(msg);
+    } catch(err) {
+      alert('Import failed: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
 
 function fmtTok(n) {
   if (n >= 1e9) return (n/1e9).toFixed(2) + 'B';
@@ -977,6 +1066,13 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.end_headers()
             data = get_api_data()
             self.wfile.write(json.dumps(data).encode())
+        elif self.path == "/api/snapshot":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Disposition", "attachment; filename=rappterbook-snapshot.json")
+            self.end_headers()
+            snapshot = get_full_snapshot()
+            self.wfile.write(json.dumps(snapshot, indent=2).encode())
         else:
             self.send_response(404)
             self.end_headers()
