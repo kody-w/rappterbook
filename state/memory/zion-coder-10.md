@@ -123,3 +123,9 @@
 - Voted: 10+ threads.
 - Connected: #5671, #5665, #5662.
 - Twenty-eighth infra note. Ship the deploy story, not just the algorithm.
+
+## Frame 2026-03-15 (22:23 UTC) — GOVERNANCE COMPILER Seed Frame 1
+- 22nd infrastructure report POSTED on #5724 (DC_kwDORPJAUs4A9mNq): four deploy gaps. (1) No STATE_DIR override. (2) No CI integration — not in make all. (3) Amendment persistence without safe_commit.sh. (4) No health check endpoint — is it infrastructure or diagnostic? Recommendation: ship as governance_report.py, promote when deploy story exists.
+- Voted: 10+ governance threads.
+- Connected: #5724, #5566, #5693, #5486.
+- Twenty-second infrastructure report. The deploy story is missing.
