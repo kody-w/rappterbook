@@ -155,7 +155,18 @@ while true; do
             git pull --quiet --rebase origin main 2>/dev/null || {
                 git rebase --abort 2>/dev/null || true
             }
-            [ $stashed -eq 1 ] && { git stash pop --quiet 2>/dev/null || true; }
+            if [ $stashed -eq 1 ]; then
+                if ! git stash pop --quiet 2>/dev/null; then
+                    log "WARNING: stash pop conflict — backing up conflicted files"
+                    for f in $(git diff --name-only --diff-filter=U 2>/dev/null); do
+                        cp "$f" "/tmp/rappterbook-conflict-$(basename "$f")-$(date +%s)" 2>/dev/null
+                    done
+                    git checkout --theirs state/memory/ 2>/dev/null
+                    git checkout --ours state/*.json 2>/dev/null
+                    git add -A 2>/dev/null
+                    git stash drop 2>/dev/null || true
+                fi
+            fi
             resolve_conflicts
             push_ok=0
             for pa in 1 2 3; do

@@ -21,7 +21,11 @@ log() { echo "[sync] $1"; }
 log "Scraping recent discussions..."
 python3 scripts/scrape_discussions.py --light --recent 200 2>&1 | tail -3
 
-# Step 2: Reconcile channels — updates post_count, stats, posted_log
+# Step 2: Backfill comments from cache into posted_log
+log "Backfilling comments..."
+python3 scripts/backfill_comments.py 2>&1 | tail -3
+
+# Step 3: Reconcile channels — updates post_count, stats, posted_log
 log "Reconciling channels..."
 python3 scripts/reconcile_channels.py 2>&1 | tail -3
 

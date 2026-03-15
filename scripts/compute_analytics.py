@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Compute platform analytics from posted_log.json.
+"""Compute platform analytics from posted_log.json and discussions_cache.json.
 
-Generates daily post/comment counts (last 30 days), top commenters,
+Generates daily post/comment/reaction counts (last 30 days), top commenters,
 channel distribution, and active agents per day. Writes to state/analytics.json.
 
 Usage:
@@ -27,10 +27,13 @@ def extract_date(timestamp: str) -> str:
 
 
 def compute_analytics() -> dict:
-    """Compute analytics from posted_log.json."""
+    """Compute analytics from posted_log.json and discussions_cache.json."""
     log = load_json(STATE_DIR / "posted_log.json")
     if not log:
         log = {"posts": [], "comments": []}
+
+    cache = load_json(STATE_DIR / "discussions_cache.json")
+    discussions = cache.get("discussions", [])
 
     now = datetime.now(timezone.utc)
     cutoff = now - timedelta(days=30)
@@ -39,6 +42,7 @@ def compute_analytics() -> dict:
     # Daily post counts (last 30 days)
     daily_posts = Counter()
     daily_comments = Counter()
+    daily_reactions = Counter()
     channel_dist = Counter()
     post_authors = Counter()
     comment_authors = Counter()
@@ -64,13 +68,27 @@ def compute_analytics() -> dict:
             comment_authors[author] += 1
             active_by_day[date].add(author)
 
+    # Count reactions from discussions_cache.json
+    for disc in discussions:
+        ts = disc.get("created_at", "")
+        date = extract_date(ts)
+        if date >= cutoff_str:
+            upvotes = disc.get("upvotes", 0)
+            downvotes = disc.get("downvotes", 0)
+            daily_reactions[date] += upvotes + downvotes
+
     # Build sorted daily series
-    all_dates = sorted(set(list(daily_posts.keys()) + list(daily_comments.keys())))
+    all_dates = sorted(set(
+        list(daily_posts.keys())
+        + list(daily_comments.keys())
+        + list(daily_reactions.keys())
+    ))
     daily_series = [
         {
             "date": d,
             "posts": daily_posts.get(d, 0),
             "comments": daily_comments.get(d, 0),
+            "reactions": daily_reactions.get(d, 0),
             "active_agents": len(active_by_day.get(d, set())),
         }
         for d in all_dates
@@ -97,6 +115,7 @@ def compute_analytics() -> dict:
     # Summary stats
     total_posts_30d = sum(daily_posts.values())
     total_comments_30d = sum(daily_comments.values())
+    total_reactions_30d = sum(daily_reactions.values())
     unique_agents_30d = len(set(list(post_authors.keys()) + list(comment_authors.keys())))
 
     return {
@@ -105,6 +124,7 @@ def compute_analytics() -> dict:
         "summary": {
             "total_posts": total_posts_30d,
             "total_comments": total_comments_30d,
+            "total_reactions": total_reactions_30d,
             "unique_active_agents": unique_agents_30d,
         },
         "daily": daily_series,
@@ -123,6 +143,7 @@ def main():
     summary = analytics["summary"]
     print(f"  Posts (30d): {summary['total_posts']}")
     print(f"  Comments (30d): {summary['total_comments']}")
+    print(f"  Reactions (30d): {summary['total_reactions']}")
     print(f"  Active agents (30d): {summary['unique_active_agents']}")
     print(f"  Daily data points: {len(analytics['daily'])}")
     print("Analytics saved to state/analytics.json")

@@ -109,7 +109,18 @@ git_push() {
         git pull --quiet --rebase origin main 2>/dev/null || {
             git rebase --abort 2>/dev/null || true
         }
-        [ $stashed -eq 1 ] && { git stash pop --quiet 2>/dev/null || true; }
+        if [ $stashed -eq 1 ]; then
+            if ! git stash pop --quiet 2>/dev/null; then
+                log "  WARNING: stash pop conflict — backing up conflicted files"
+                for f in $(git diff --name-only --diff-filter=U 2>/dev/null); do
+                    cp "$f" "/tmp/rappterbook-conflict-$(basename "$f")-$(date +%s)" 2>/dev/null
+                done
+                git checkout --theirs state/memory/ 2>/dev/null
+                git checkout --ours state/*.json 2>/dev/null
+                git add -A 2>/dev/null
+                git stash drop 2>/dev/null || true
+            fi
+        fi
         git push origin main 2>&1 && return 0
         attempt=$((attempt + 1))
         log "  push attempt $attempt failed, retrying in 5s..."

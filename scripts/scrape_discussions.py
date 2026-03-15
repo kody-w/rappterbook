@@ -101,6 +101,7 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
                         comments(first: 50) {{
                             totalCount
                             nodes {{
+                                body
                                 author {{ login }}
                                 createdAt
                             }}
@@ -124,6 +125,7 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
                 {
                     "login": (c.get("author") or {}).get("login", ""),
                     "created_at": c.get("createdAt", ""),
+                    "body": c.get("body", ""),
                 }
                 for c in comment_data.get("nodes", [])
             ]
