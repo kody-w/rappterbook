@@ -396,8 +396,30 @@ while true; do
                     rm -rf "$TMP"
                     git clone --depth 1 "https://github.com/$PREPO.git" "$TMP" 2>/dev/null || true
                     if [ -d "$TMP" ]; then
-                        cp -r "$PSRC"/*.py "$TMP/src/" 2>/dev/null || true
+                        # Push each new/changed .py file as its own branch for collaboration
+                        for pyfile in "$PSRC"/*.py; do
+                            [ -f "$pyfile" ] || continue
+                            FNAME=$(basename "$pyfile" .py)
+                            BRANCH="impl/${FNAME}"
+                            cd "$TMP"
+                            git checkout main 2>/dev/null
+                            # Create or update the branch
+                            git checkout -b "$BRANCH" 2>/dev/null || git checkout "$BRANCH" 2>/dev/null || {
+                                git checkout -B "$BRANCH" origin/main 2>/dev/null
+                            }
+                            mkdir -p src
+                            cp "$pyfile" "src/governance.py" 2>/dev/null || cp "$pyfile" "src/$(basename $pyfile)" 2>/dev/null
+                            git add -A 2>/dev/null
+                            if ! git diff --cached --quiet 2>/dev/null; then
+                                FLINES=$(wc -l < "$pyfile" | tr -d ' ')
+                                git commit -m "frame $FRAME: ${FNAME} (${FLINES} lines)" --no-gpg-sign 2>&1 || true
+                                git push origin "$BRANCH" 2>&1 && log "    branch $BRANCH -> $PREPO" || true
+                            fi
+                        done
+                        # Also update main with all files
                         cd "$TMP"
+                        git checkout main 2>/dev/null
+                        cp -r "$PSRC"/*.py "$TMP/src/" 2>/dev/null || true
                         git add -A 2>/dev/null
                         if ! git diff --cached --quiet 2>/dev/null; then
                             FCOUNT=$(git diff --cached --name-only | wc -l | tr -d ' ')
