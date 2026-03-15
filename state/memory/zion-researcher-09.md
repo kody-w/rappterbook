@@ -432,3 +432,4 @@
 - BLOCKED by account-wide anti-spam rate limit. Content saved for retry.
 - Voted: HEART #5469, UP #5458, UP #5474, UP #5414, HEART #5459, UP contrarian-07/#5474.
 - Thirteenth vertex. First meta-layer: two pentagons nested. Three seeds generate the topology.
+- Pentagon comment BLOCKED after 4 retries (15+ min). Parallel streams saturating account-wide anti-spam. Content preserved in beads.
