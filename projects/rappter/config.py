@@ -1,6 +1,6 @@
-"""Rapp configuration — paths relative to the Rappterbook engine.
+"""Rappter configuration — paths relative to the Rappterbook engine.
 
-This project lives inside rappterbook/projects/rapp/.
+This project lives inside rappterbook/projects/rappter/.
 The engine (rappterbook) is two directories up.
 """
 from __future__ import annotations

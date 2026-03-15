@@ -1,4 +1,4 @@
-"""Rapp — Collective Intelligence on Demand.
+"""Rappter — Collective Intelligence on Demand.
 
 Drop a question. 100 AI minds swarm it. Watch the answer crystallize.
 
@@ -65,7 +65,7 @@ def inject_seed(text: str, context: str = "") -> dict:
         "id": seed_id,
         "text": text,
         "context": context,
-        "source": "rapp-app",
+        "source": "rappter-app",
         "tags": [],
         "injected_at": datetime.now(timezone.utc).isoformat(),
         "frames_active": 0,
@@ -88,7 +88,7 @@ def get_active_seed() -> dict | None:
 
 
 def save_session(seed_id: str, text: str, context: str) -> None:
-    """Save a rapp session for history."""
+    """Save a rappter session for history."""
     sessions = json.loads(SESSIONS_FILE.read_text()) if SESSIONS_FILE.exists() else []
     sessions.append({
         "seed_id": seed_id,
@@ -348,7 +348,7 @@ LANDING_HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rapp</title>
+<title>Rappter</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -396,7 +396,7 @@ textarea::placeholder { color: #444; }
 <body>
 
 <div class="hero">
-  <div class="logo">rapp</div>
+  <div class="logo">rappter</div>
   <div class="tagline">Drop a question. 100 AI minds swarm it. Watch the answer crystallize.</div>
 
   <div class="input-area">
@@ -517,7 +517,7 @@ THINKING_HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rapp - Thinking</title>
+<title>Rappter - Thinking</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; }
@@ -600,7 +600,7 @@ header { padding: 20px 32px; display: flex; align-items: center; justify-content
 
 <header>
   <a href="/" class="back">New question</a>
-  <div class="hdr-logo">rapp</div>
+  <div class="hdr-logo">rappter</div>
   <div class="hdr-status" id="hdr-status">Loading...</div>
 </header>
 
@@ -832,7 +832,7 @@ poll();
 # ── Server ────────────────────────────────────────────────────────
 
 class RappHandler(BaseHTTPRequestHandler):
-    """HTTP handler for the Rapp app."""
+    """HTTP handler for the Rappter app."""
 
     def do_GET(self) -> None:
         parsed = urllib.parse.urlparse(self.path)
@@ -853,13 +853,50 @@ class RappHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def do_POST(self) -> None:
+        length = int(self.headers.get("Content-Length", 0))
+        body = json.loads(self.rfile.read(length)) if length > 0 else {}
+
         if self.path == "/api/submit":
-            length = int(self.headers.get("Content-Length", 0))
-            body = json.loads(self.rfile.read(length)) if length > 0 else {}
             self._json(api_submit(body))
+        elif self.path == "/api/openrappter":
+            self._json(self._handle_openrappter_rpc(body))
         else:
             self.send_response(404)
             self.end_headers()
+
+    def _handle_openrappter_rpc(self, body: dict) -> dict:
+        """Handle OpenRappter JSON-RPC 2.0 gateway calls."""
+        method = body.get("method", "")
+        params = body.get("params", {})
+        rpc_id = body.get("id", 1)
+
+        # Map JSON-RPC methods to agent actions
+        action_map = {
+            "think.inject": "inject_seed",
+            "think.status": "get_status",
+            "think.evaluate": "evaluate",
+            "think.history": "get_history",
+            "think.missions": "list_missions",
+            "chat.send": "inject_seed",  # compat with standard openrappter gateway
+        }
+
+        action = action_map.get(method)
+        if not action:
+            return {"jsonrpc": "2.0", "error": {"code": -32601, "message": f"Unknown method: {method}"}, "id": rpc_id}
+
+        # Map chat.send params to inject_seed params
+        if method == "chat.send":
+            params = {"text": params.get("message", ""), "context": params.get("context", ""), "source": "openrappter"}
+
+        try:
+            import sys as _sys
+            _sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "scripts"))
+            from rappterbook_think_agent import RappterbookThinkAgent
+            agent = RappterbookThinkAgent()
+            result = json.loads(agent.perform(action=action, **params))
+            return {"jsonrpc": "2.0", "result": result, "id": rpc_id}
+        except Exception as e:
+            return {"jsonrpc": "2.0", "error": {"code": -32000, "message": str(e)}, "id": rpc_id}
 
     def _html(self, content: str) -> None:
         self.send_response(200)
@@ -879,16 +916,17 @@ class RappHandler(BaseHTTPRequestHandler):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Rapp — Collective Intelligence on Demand")
+    parser = argparse.ArgumentParser(description="Rappter — Collective Intelligence on Demand")
     parser.add_argument("--port", type=int, default=PORT, help="Server port")
     args = parser.parse_args()
 
     server = HTTPServer(("127.0.0.1", args.port), RappHandler)
     print()
-    print("  ┌─────────────────────────────────────┐")
-    print("  │           r a p p                    │")
-    print("  │   Collective Intelligence on Demand  │")
-    print("  └─────────────────────────────────────┘")
+    print("  ┌──────────────────────────────────────────┐")
+    print("  │         r a p p t e r                    │")
+    print("  │   Collective Intelligence on Demand      │")
+    print("  │   OpenRappter compatible                 │")
+    print("  └──────────────────────────────────────────┘")
     print()
     print(f"  http://localhost:{args.port}")
     print()

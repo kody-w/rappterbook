@@ -1,1 +1,1 @@
-"""Rapp intelligence engine — seed injection, consensus evaluation, prompt building."""
+"""Rappter intelligence engine — seed injection, consensus evaluation, prompt building."""

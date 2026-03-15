@@ -32,7 +32,7 @@ from config import ENGINE, STATE_DIR, SEEDS_FILE, MISSIONS_FILE, PROMPTS_DIR, SC
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 # Local prompts override, fall back to Rappterbook prompts
-RAPP_PROMPTS = Path(__file__).resolve().parent.parent / "prompts"
+RAPPTER_PROMPTS = Path(__file__).resolve().parent.parent / "prompts"
 
 PROMPT_MAP = {
     "frame": PROMPTS_DIR / "frame.md",
@@ -198,7 +198,7 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
         return base_prompt
 
     # Read the seed preamble template
-    preamble_path = RAPP_PROMPTS / "seed_preamble.md"
+    preamble_path = RAPPTER_PROMPTS / "seed_preamble.md"
     if not preamble_path.exists():
         return base_prompt
 
