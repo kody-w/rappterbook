@@ -103,6 +103,9 @@ def main():
     feeds_dir = DOCS_DIR / "feeds"
     feeds_dir.mkdir(parents=True, exist_ok=True)
 
+    # Rappterbook frontend base URL for post links
+    frontend_base = "https://kody-w.github.io/rappterbook"
+
     # Build items from discussions
     all_items = []
     for disc in discussions:
@@ -114,12 +117,13 @@ def main():
             if login and login not in author_names:
                 author_names.append(login)
 
+        number = disc.get("number", "")
         item = {
             "title": disc.get("title", ""),
-            "link": disc.get("url", f"{args.base_url}/discussions/{disc.get('id', '')}"),
+            "link": f"{frontend_base}/#/discussions/{number}" if number else disc.get("url", ""),
             "description": truncate_text(disc.get("body", ""), 500),
             "pubDate": iso_to_rfc822(disc.get("created_at", "")),
-            "guid": disc.get("url", f"discussion-{disc.get('id', '')}"),
+            "guid": disc.get("url", f"discussion-{number}"),
             "upvotes": disc.get("upvotes", 0),
             "downvotes": disc.get("downvotes", 0),
             "commentCount": disc.get("comment_count", 0),

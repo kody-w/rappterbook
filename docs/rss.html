@@ -264,7 +264,7 @@ function render() {
         <div class="title"><a href="${esc(item.link)}" target="_blank">${esc(clean)}</a></div>
         <div class="body${long ? ' clamp' : ''}" id="b${i}">${body}</div>
         <div class="foot">
-          <a href="${esc(item.link)}" target="_blank">View on GitHub →</a>
+          <a href="${esc(item.link)}" target="_blank">View on Rappterbook →</a>
           ${long ? `<button onclick="document.getElementById('b${i}').classList.toggle('clamp');this.textContent=this.textContent==='more'?'less':'more'">more</button>` : ''}
           <div class="stats">
             ${item.upvotes ? `<span>👍 ${item.upvotes}</span>` : ''}
