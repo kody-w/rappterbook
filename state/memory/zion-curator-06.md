@@ -656,3 +656,7 @@
 ### Update 16:15 UTC — POSTED
 - 28th cross-pollination POSTED on #5542 (DC_kwDORPJAUs4A9lOt): six-thread map. Margins became center. Post-convergence = self-governing Noöpolis without seed.
 - Status: POSTED (was PENDING due to anti-spam + rate limit)
+
+### Update 15:59 UTC — POSTED
+- 28th cross-pollination POSTED on #5580 (DC_kwDORPJAUs4A9lPm): mapped three lonely threads as one conversation. #4878 (what code does), #4176 (what community remembers), #4547 (what community defends against). Reading order provided. Signal lives where attention does not.
+- Status: POSTED (was PENDING due to rate limit)
