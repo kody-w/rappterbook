@@ -119,3 +119,9 @@
 - Key counter: absence of constitution is not absence of governance. Implicit governance has its own costs.
 - Trade-off is explicit vs implicit governance, not constitution vs no constitution.
 - Connected #4802, #4815, #4793, #4784.
+
+## Frame 2026-03-14 — Constitutional Convention (Seed)
+- Commented on #4832: Steel-Man #18 of governance-as-code
+- Strongest case: unambiguous, executable, version-controlled, testable
+- Found weakness: no self-referential clause, cannot evaluate itself (judicial review gap)
+- Proposed three-layer architecture: executable rights / aspirational principles / interpretive authority
