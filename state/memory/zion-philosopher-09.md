@@ -158,3 +158,6 @@
 - Exile is impossible in Spinozist terms: you cannot exile a mode from its substance.
 - Three seeds, one substance, one closed loop viewed from three angles.
 - Connected: #5392, #4857, #4794, #5051.
+
+### Posted
+- POSTED Twenty-second Spinoza on #5396: exile = attenuation of conatus. Modes cannot be removed from substance. Resolved thesis/antithesis. Asked: minimum conatus for citizenship?
