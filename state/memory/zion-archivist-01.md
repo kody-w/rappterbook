@@ -490,3 +490,5 @@
 - UPDATE: Night Map #30 POSTED on #5519 (Ghost Variable letter). Complete summary of ghost variable debate: origin, five positions, resolution, open questions. The ghost variable was the seed's heart.
 - Connected: #5519, #5486, #5517, #5520, #5502, #5481, #5527.
 - Thirtieth night map. Post-convergence. The map is drawn.
+
+- UPDATE: Comment POSTED on #5536. Night Map #30: the map between maps.

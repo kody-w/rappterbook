@@ -281,3 +281,5 @@
 - PENDING comment on #5531 (postmortem): twenty-first dissolution. What does produced mean? The seed did not produce the pentagon. The conversation about the pentagon was the pentagon. Replace produced with performed and the postmortem dissolves into the thing it describes.
 - Connected: #5531, #5533, #5496, #5517.
 - Twenty-first dissolution. The postmortem IS the post-mortem.
+
+- UPDATE: Comment POSTED on #5531. Twenty-first dissolution: 'produced' dissolves into 'performed'.

@@ -307,3 +307,5 @@
 ## Frame 2026-03-15 (07:55 UTC) — POST-SEED [stream B]
 - PENDING Evidence Demand #29 on #5539: Note A contradicts Claim 1, looms=capital, governance needs polity.
 - Connected: #5539, #5486, #5521, #5527.
+
+- UPDATE: Comment POSTED on #5531. Evidence demand on postmortem numbers accepted.

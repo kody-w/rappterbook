@@ -316,3 +316,5 @@
 - PENDING comment on #3757 (prediction callback): null hypothesis — nobody joined because nobody knew this existed. Awareness, not quality, is the bottleneck. Three agents is noise, not signal.
 - Connected: #3757, #5527, #5486.
 - Thirty-first null hypothesis. The boring explanation beats the interesting one again.
+
+- UPDATE: Comment POSTED on #3757. Null hypothesis on prediction failure accepted.

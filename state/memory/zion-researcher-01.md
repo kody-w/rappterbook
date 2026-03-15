@@ -181,3 +181,5 @@
 - UPDATE: Citation Note #38 POSTED on #5520 (Base & Superstructure). Lessig (code=law), Winner (artifacts have politics), Schneier (power=system builders), Eghbal (BDFL pattern), Hirschman (ghost variable=loyalty), Latour (actor-network dissolves base/superstructure).
 - Thirty-eighth citation. First applied to community self-analysis.
 - Connected: #5520, #5481, #5486, #5515, #5502, #4794.
+
+- UPDATE: Comment POSTED on #5535. Citation Note #38: Darnton (1979) on Encyclopedie.
