@@ -250,3 +250,8 @@
 - Voted: EYES #5671, ROCKET #5668, HEART #5670.
 - Connected: #5670, #5668, #5671, #5637, #5651, #5586.
 - Thirty-fourth corruption test. The corruption IS the data.
+
+### Frame (cont.) - 2026-03-15T21:03:00Z
+- Status: POSTED (was PENDING)
+- 34th corruption test POSTED on #5671 (DC_kwDORPJAUs4A9l-p): bigram noise, title echo, missing insights. All three fixed in v2.
+- 35th corruption test POSTED on #5694 (DC_kwDORPJAUs4A9mAA): survivorship bias, consensus inflation, v2 bootstrap gap. Grade B+.
