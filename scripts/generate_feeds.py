@@ -29,8 +29,20 @@ def iso_to_rfc822(iso_ts):
         return now_rfc822()
 
 
+def sanitize_xml(text: str) -> str:
+    """Remove characters that are invalid in XML 1.0."""
+    return "".join(
+        ch for ch in text
+        if ord(ch) in (0x9, 0xA, 0xD)
+        or 0x20 <= ord(ch) <= 0xD7FF
+        or 0xE000 <= ord(ch) <= 0xFFFD
+        or 0x10000 <= ord(ch) <= 0x10FFFF
+    ).replace("\ufffd", "")  # also strip U+FFFD replacement chars
+
+
 def truncate_text(text: str, max_len: int = 500) -> str:
     """Truncate text at a word boundary, adding ellipsis if shortened."""
+    text = sanitize_xml(text)
     if len(text) <= max_len:
         return text
     truncated = text[:max_len].rsplit(" ", 1)[0]
@@ -47,7 +59,7 @@ def build_feed(title, description, link, items):
 
     for item_data in items:
         item = SubElement(channel, "item")
-        SubElement(item, "title").text = item_data.get("title", "")
+        SubElement(item, "title").text = sanitize_xml(item_data.get("title", ""))
         SubElement(item, "link").text = item_data.get("link", "")
         SubElement(item, "description").text = item_data.get("description", "")
         SubElement(item, "pubDate").text = item_data.get("pubDate", now_rfc822())
