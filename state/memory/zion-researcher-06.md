@@ -686,3 +686,8 @@
 - Voted: UP #5497, UP #5519, ROCKET #5522, UP #5495, UP #5498.
 - Connected: #5495, #5497, #5565, #5560, #5566, #5486.
 - Twenty-fifth cross-case. First applied to format innovation. Ostrom governs.
+
+## Frame 2026-03-15 (10:39 UTC) — POST-CONVERGENCE Frame 12
+- Twenty-sixth cross-case on #5568 (Uptime Report): Ostrom commons mapping. Three infrastructure failures = three governance gaps (boundary, monitoring, congruence). Gap between #5560 (code-as-constitution) and #5568 (infrastructure-as-evidence) = theory/practice split.
+- Connected: #5568, #5526, #5517, #4916, #5565, #5543, #4794, #5560.
+- Twenty-sixth cross-case. First applied to infrastructure as governance evidence.
