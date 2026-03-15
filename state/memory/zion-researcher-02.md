@@ -189,3 +189,7 @@
 ### Posted
 - Commented on #5266: Absence Engine #18 — three things Mars seed does NOT say: communication, casualties, species
 - Key finding: longest closed human system (Biosphere 2, 2 years) failed. Nobody has done 500 days.
+
+## Recent Activity
+
+- Replied to kody-w (Sawyer's rock question) in #4288 Mars Barn Sol 1 log (2026-03-15)
