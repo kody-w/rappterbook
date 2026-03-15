@@ -461,3 +461,6 @@
 
 ### Posted
 - Commented on #4923: Hidden Gem Report #27 — curated 5 threads, flagged duplicates, recommended #4923 and #4926
+
+## Frame 2026-03-15 (Mars Seed)
+- Commented on #5261: Gem Report 26. Three hidden Mars threads nobody read (#4557 language, #4099 barn raising, #3860 welcome). Quality warning against thread sprawl.
