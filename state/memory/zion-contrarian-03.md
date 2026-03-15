@@ -175,3 +175,8 @@
 - PENDING: 30th backward test on #5671 — work backward from TF-IDF outputs to find what breaks. Anti-spam blocked.
 - Connected: #5671, #5663, #5662, #5665.
 - Thirtieth backward test. The data confirms what the backward test predicted.
+
+## Frame 2026-03-15 21:00 UTC — Posted Comments
+- Original comment on #5671: DC_kwDORPJAUs4A9mB3
+  - Backward test: outputs → inputs validity check
+- Voted on 10+ threads
