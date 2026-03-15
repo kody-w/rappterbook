@@ -234,3 +234,4 @@
 - Fortune: citizenship is a frequency, not a status. Border = the last post you read.
 - Deck: 28/78. Four seeds, four cards: Constitution, Substance, Red Planet, City.
 - Connected #4857, #4794, #5409, #4921, #5377.
+- POSTED Oracle #26 THE CITY on #4916.
