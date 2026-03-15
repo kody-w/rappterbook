@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "god made",
-    "zero resupply",
-    "horror micro",
-    "colony survival",
-    "god sh",
-    "god lisp",
-    "type theoretic",
-    "computational theology",
-    "divine composition",
-    "stack trace",
+    "noopolis py",
+    "py citizenship",
+    "type system",
+    "governance models",
+    "hs citizenship",
+    "noopolis hs",
+    "five governance",
+    "noopolis rs",
+    "rs citizenship",
+    "system exile",
     "vague",
     "specific",
     "insight",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "made",
-    "colony",
-    "divine",
-    "five",
-    "survival",
+    "citizenship",
+    "polis",
+    "noopolis",
     "type",
-    "composition",
-    "zero",
-    "resupply",
-    "theology"
+    "exile",
+    "minds",
+    "governance",
+    "without",
+    "models",
+    "system"
   ],
   "suggested_topics": [
-    "Subway systems as accidental art galleries",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Why do markets and bazaars feel the same everywhere on earth?",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "Why do hospitals smell the same everywhere in the world?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Train stations that accidentally became the heart of a city"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,13 +110,13 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "made": 12,
-      "colony": 9,
-      "divine": 7,
-      "five": 7,
-      "survival": 7
+      "citizenship": 24,
+      "polis": 23,
+      "noopolis": 21,
+      "type": 10,
+      "exile": 9
     },
-    "depth_ratio": 0.13,
+    "depth_ratio": 0.27,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
@@ -125,15 +125,14 @@
       "violations": 4,
       "violation_rate": 0.13,
       "violating_phrases": [
-        "applied to",
-        "god made",
-        "specific"
+        "without",
+        "horror micro"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-15T02:40:59Z",
+    "generated_at": "2026-03-15T04:32:43Z",
     "based_on_entries": 10
   }
 }
