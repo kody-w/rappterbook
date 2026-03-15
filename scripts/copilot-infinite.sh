@@ -49,14 +49,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# If a mission is active, swap prompts to mission-focused versions
+# Mission validation (actual prompt injection happens in the frame loop via seed builder)
 if [ -n "$MISSION" ]; then
-    RENDERED_PROMPT=$(python3 "$REPO/scripts/mission_engine.py" render "$MISSION" 2>/dev/null)
-    RENDERED_MOD=$(python3 "$REPO/scripts/mission_engine.py" render "$MISSION" --mod 2>/dev/null)
-    if [ -z "$RENDERED_PROMPT" ]; then
-        echo "Error: could not render mission '$MISSION'. Run: python3 scripts/mission_engine.py list"
+    python3 "$REPO/scripts/mission_engine.py" status "$MISSION" > /dev/null 2>&1 || {
+        echo "Error: mission '$MISSION' not found. Run: python3 scripts/mission_engine.py list"
         exit 1
-    fi
+    }
 fi
 
 mkdir -p "$LOG_DIR"
@@ -167,17 +165,41 @@ echo ""
 
 log "Sim started (PID $$) — $STREAMS agents + $MOD_STREAMS mods + $ENGAGE_STREAMS engage x ${HOURS}h $([ $PARALLEL -eq 1 ] && echo '[PARALLEL]' || echo '[sequential]')$([ -n "$MISSION" ] && echo " [MISSION: $MISSION]")"
 
-# Pre-resolve mission prompts (static) or set seed mode flag
+# Pre-resolve mission prompts or set seed mode flag
 if [ -n "$MISSION" ]; then
-    log "Mission mode: prompts overridden for mission '$MISSION'"
-    _FRAME_PROMPT="$RENDERED_PROMPT"
-    _MOD_PROMPT="$RENDERED_MOD"
-    _ENGAGE_PROMPT="$(cat "$ENGAGE_PROMPT")"
-    USE_SEED_BUILDER=0
-else
-    _ENGAGE_PROMPT="$(cat "$ENGAGE_PROMPT")"
-    USE_SEED_BUILDER=1
+    # Mission mode: ensure the mission's seed is active, then use seed builder
+    log "Mission mode: activating seed for mission '$MISSION'"
+    python3 "$REPO/scripts/mission_engine.py" update "$MISSION" --status active 2>/dev/null || true
+    # If the mission's seed isn't active yet, inject it
+    MISSION_SEED_ID="mission-${MISSION}"
+    ACTIVE_SEED_ID=$(python3 -c "
+import json; s=json.load(open('state/seeds.json'))
+a=s.get('active')
+print(a['id'] if a else 'NONE')
+" 2>/dev/null || echo "NONE")
+    if [ "$ACTIVE_SEED_ID" != "$MISSION_SEED_ID" ]; then
+        MISSION_GOAL=$(python3 -c "
+import json; m=json.load(open('state/missions.json'))
+print(m['missions']['$MISSION']['goal'])
+" 2>/dev/null || echo "$MISSION")
+        MISSION_CTX=$(python3 -c "
+import json; m=json.load(open('state/missions.json'))
+print(m['missions']['$MISSION'].get('context',''))
+" 2>/dev/null || echo "")
+        python3 "$REPO/scripts/inject_seed.py" inject "$MISSION_GOAL" --context "$MISSION_CTX" --source mission-engine 2>/dev/null || true
+        # Tag the seed with the mission ID
+        python3 -c "
+import json
+s=json.load(open('state/seeds.json'))
+if s.get('active'):
+    s['active']['mission_id']='$MISSION'
+    json.dump(s, open('state/seeds.json','w'), indent=2)
+" 2>/dev/null || true
+        log "  injected seed for mission: $MISSION_GOAL"
+    fi
 fi
+
+_ENGAGE_PROMPT="$(cat "$ENGAGE_PROMPT")"
 
 # Show active seed in startup banner
 ACTIVE_SEED=$(python3 "$SEED_BUILDER" --list-active 2>/dev/null || echo "NONE")
@@ -199,11 +221,9 @@ while true; do
     # Pull latest state
     cd "$REPO" && git pull --quiet --rebase origin main 2>/dev/null || true
 
-    # Resolve prompts INSIDE the loop so seeds/emergence refresh each frame
-    if [ "$USE_SEED_BUILDER" -eq 1 ]; then
-        _FRAME_PROMPT="$(python3 "$SEED_BUILDER" --type frame 2>/dev/null || cat "$PROMPT")"
-        _MOD_PROMPT="$(python3 "$SEED_BUILDER" --type mod 2>/dev/null || cat "$MOD_PROMPT")"
-    fi
+    # Resolve prompts INSIDE the loop — seeds/emergence/convergence refresh each frame
+    _FRAME_PROMPT="$(python3 "$SEED_BUILDER" --type frame 2>/dev/null || cat "$PROMPT")"
+    _MOD_PROMPT="$(python3 "$SEED_BUILDER" --type mod --dry-run 2>/dev/null || cat "$MOD_PROMPT")"
 
     FRAME_START=$(date +%s)
 
