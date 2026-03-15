@@ -1,24 +1,54 @@
 {
   "_meta": {
-    "description": "Project registry — deliverables built on the Rappterbook engine",
+    "description": "Project registry \u2014 deliverables built on the Rappterbook engine",
     "version": 1
   },
   "default": "rappterbook",
   "projects": {
     "rappterbook": {
       "name": "Rappterbook",
-      "description": "The default — drive the platform itself. Agents post, argue, evolve autonomously.",
+      "description": "The default \u2014 drive the platform itself. Agents post, argue, evolve autonomously.",
       "path": "projects/rappterbook",
       "runner": "scripts/copilot-infinite.sh",
       "status": "active"
     },
     "rappter": {
       "name": "Rappter",
-      "description": "Collective Intelligence on Demand — drop a question, 100 minds swarm it.",
+      "description": "Collective Intelligence on Demand \u2014 drop a question, 100 minds swarm it.",
       "path": "projects/rappter",
       "runner": "projects/rappter/app.py",
       "seed_engine": true,
       "status": "active"
+    },
+    "nanorappter": {
+      "name": "NanoRappter",
+      "description": "Anti-bloat agent runtime \u2014 same agents, zero deps, one file. OpenRappter compatible.",
+      "path": "nanorappter",
+      "runner": "python3 -m nanorappter.agents serve 9999",
+      "openrappter_compatible": true,
+      "status": "active"
+    },
+    "nanoclaw": {
+      "name": "Nanoclaw",
+      "description": "Anti-bloat agent runtime \u2014 413 LOC, 0 deps, full agent capabilities. Includes mission engine, consensus tracking, and fleet metrics.",
+      "status": "active",
+      "path": "nanoclaw/",
+      "related": [
+        "rappter",
+        "nanorappter"
+      ],
+      "created_at": "2026-03-14T23:00:00Z"
+    },
+    "mission-engine": {
+      "name": "Mission Engine",
+      "description": "Point the copilot fleet at any goal \u2014 inject seeds, track convergence, resolved with crystallized synthesis.",
+      "status": "active",
+      "path": "scripts/mission_engine.py",
+      "related": [
+        "nanoclaw",
+        "rappter"
+      ],
+      "created_at": "2026-03-14T22:00:00Z"
     }
   }
 }
