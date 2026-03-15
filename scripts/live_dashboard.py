@@ -407,13 +407,112 @@ def get_log_file_counts() -> dict:
     }
 
 
+def get_token_economics(usage: dict) -> dict:
+    """Calculate cost savings and burn rate."""
+    total = usage.get("total", {})
+    in_tok = total.get("in_tokens", 0)
+    out_tok = total.get("out_tokens", 0)
+    cached = total.get("cached", 0)
+    api_sec = total.get("api_sec", 0)
+    cost_equiv = (in_tok / 1_000_000 * 15) + (out_tok / 1_000_000 * 75)
+    cache_pct = (cached / in_tok * 100) if in_tok > 0 else 0
+    hours_running = api_sec / 3600 if api_sec > 0 else 1
+    burn_per_hour = cost_equiv / hours_running if hours_running > 0 else 0
+    return {
+        "cost_equivalent": round(cost_equiv),
+        "savings": round(cost_equiv),
+        "cache_hit_pct": round(cache_pct, 1),
+        "burn_per_hour": round(burn_per_hour),
+        "total_tokens": in_tok + out_tok,
+    }
+
+
+def get_content_counters() -> dict:
+    """Count content actions from recent stream logs."""
+    import re as _re
+    cutoff = time.time() - 86400
+    counts = {"posts": 0, "comments": 0, "reactions": 0, "soul_updates": 0}
+    pats = {
+        "posts": _re.compile(r"createDiscussion", _re.IGNORECASE),
+        "comments": _re.compile(r"addDiscussionComment", _re.IGNORECASE),
+        "reactions": _re.compile(r"addReaction", _re.IGNORECASE),
+        "soul_updates": _re.compile(r"soul.*(?:updated|wrote|saved)", _re.IGNORECASE),
+    }
+    for lf in LOG_DIR.glob("*_s*_*.log"):
+        try:
+            if lf.stat().st_mtime < cutoff:
+                continue
+            text = lf.read_text(errors="replace")
+            for k, p in pats.items():
+                counts[k] += len(p.findall(text))
+        except Exception:
+            pass
+    return counts
+
+
+def get_hourly_throughput() -> list:
+    """Group stream logs by hour for a sparkline chart."""
+    from collections import defaultdict
+    hourly = defaultdict(int)
+    for lf in LOG_DIR.glob("*_s*_*.log"):
+        m = re.search(r"(\d{8})_(\d{2})", lf.name)
+        if m:
+            hour_key = m.group(1)[-4:] + " " + m.group(2) + ":00"
+            hourly[hour_key] += 1
+    items = sorted(hourly.items())[-24:]
+    return [{"hour": k, "streams": v} for k, v in items]
+
+
+def get_seed_status() -> dict:
+    """Get active seed and convergence."""
+    seeds_file = REPO / "state" / "seeds.json"
+    if not seeds_file.exists():
+        return {"active": False}
+    try:
+        seeds = json.loads(seeds_file.read_text())
+        active = seeds.get("active")
+        if not active:
+            return {"active": False}
+        conv = active.get("convergence", {})
+        return {
+            "active": True,
+            "text": active.get("text", "")[:100],
+            "seed_id": active.get("id", ""),
+            "frames": active.get("frames_active", 0),
+            "score": conv.get("score", 0),
+            "resolved": conv.get("resolved", False),
+            "signals": conv.get("signal_count", 0),
+            "synthesis": conv.get("synthesis", "")[:200],
+        }
+    except Exception:
+        return {"active": False}
+
+
+def get_resource_usage() -> dict:
+    """System resource usage from copilot processes."""
+    try:
+        mem = subprocess.run("ps aux | grep copilot | grep -v grep | awk '{sum+=$4} END {printf \"%.1f\", sum}'",
+                           shell=True, capture_output=True, text=True, timeout=5).stdout.strip()
+        cpu = subprocess.run("ps aux | grep copilot | grep -v grep | awk '{sum+=$3} END {printf \"%.1f\", sum}'",
+                           shell=True, capture_output=True, text=True, timeout=5).stdout.strip()
+        return {"mem_pct": float(mem or "0"), "cpu_pct": float(cpu or "0")}
+    except Exception:
+        return {"mem_pct": 0, "cpu_pct": 0}
+
+
 def get_api_data() -> dict:
     """Collect all live data."""
+    usage = parse_live_usage()
     return {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "fleet": get_fleet_status(),
         "progress": parse_frame_progress(),
-        "usage": parse_live_usage(),
+        "usage": usage,
+        "economics": get_token_economics(usage),
+        "content": get_content_counters(),
+        "hourly": get_hourly_throughput(),
+        "seed": get_seed_status(),
+        "resources": get_resource_usage(),
         "git": get_git_health(),
         "discussions": get_discussion_count(),
         "souls": get_soul_file_stats(),
@@ -513,8 +612,29 @@ pre .done-line { color: #3fb950; }
 
 <div class="two-col">
   <div class="section">
-    <h2>Git Health</h2>
-    <div id="git-health"></div>
+    <h2>💰 Token Economics</h2>
+    <div id="economics"></div>
+  </div>
+  <div class="section">
+    <h2>📝 Content Production (24h)</h2>
+    <div id="content-counters"></div>
+  </div>
+</div>
+
+<div class="section" id="seed-section" style="display:none">
+  <h2>🌱 Active Seed</h2>
+  <div id="seed-status"></div>
+</div>
+
+<div class="section">
+  <h2>📈 Hourly Throughput</h2>
+  <div id="hourly-chart" style="display:flex;align-items:flex-end;gap:2px;height:80px;padding:8px 0"></div>
+</div>
+
+<div class="two-col">
+  <div class="section">
+    <h2>🖥️ Resources</h2>
+    <div id="resources"></div>
   </div>
   <div class="section">
     <h2>Platform Stats</h2>
@@ -522,9 +642,15 @@ pre .done-line { color: #3fb950; }
   </div>
 </div>
 
-<div class="section">
-  <h2>Recent Commits</h2>
-  <pre id="recent-commits" style="max-height:160px"></pre>
+<div class="two-col">
+  <div class="section">
+    <h2>Git Health</h2>
+    <div id="git-health"></div>
+  </div>
+  <div class="section">
+    <h2>Recent Commits</h2>
+    <pre id="recent-commits" style="max-height:160px"></pre>
+  </div>
 </div>
 
 <div class="section">
@@ -646,6 +772,64 @@ function update(d) {
   // Logs
   document.getElementById('sim-log').innerHTML = d.sim_log.map(colorLine).join('\\n');
   document.getElementById('watchdog-log').innerHTML = d.watchdog_log.map(colorLine).join('\\n');
+
+  // Token Economics
+  const eco = d.economics || {};
+  let ecoHtml = '';
+  ecoHtml += healthRow('Cost Equivalent', '$' + (eco.cost_equivalent||0).toLocaleString(), '');
+  ecoHtml += healthRow('You\'re Paying', '$0 (unlimited)', 'good');
+  ecoHtml += healthRow('Savings', '<span style="color:#3fb950;font-weight:bold">$' + (eco.savings||0).toLocaleString() + ' 🔥</span>', '');
+  ecoHtml += healthRow('Burn Rate', '$' + (eco.burn_per_hour||0).toLocaleString() + '/hr', '');
+  ecoHtml += healthRow('Cache Hit Rate', (eco.cache_hit_pct||0) + '%', (eco.cache_hit_pct||0) > 90 ? 'good' : 'warn');
+  ecoHtml += healthRow('Total Tokens', fmtTok(eco.total_tokens||0), '');
+  document.getElementById('economics').innerHTML = ecoHtml;
+
+  // Content Production
+  const cnt = d.content || {};
+  let cntHtml = '';
+  cntHtml += healthRow('Posts Created', cnt.posts||0, (cnt.posts||0) > 0 ? 'good' : '');
+  cntHtml += healthRow('Comments Posted', cnt.comments||0, (cnt.comments||0) > 0 ? 'good' : '');
+  cntHtml += healthRow('Reactions Cast', cnt.reactions||0, (cnt.reactions||0) > 0 ? 'good' : '');
+  cntHtml += healthRow('Soul Updates', cnt.soul_updates||0, '');
+  document.getElementById('content-counters').innerHTML = cntHtml;
+
+  // Seed / Convergence
+  const seed = d.seed || {};
+  const seedEl = document.getElementById('seed-section');
+  if (seed.active) {
+    seedEl.style.display = '';
+    const score = seed.score || 0;
+    const barW = Math.min(100, score);
+    const barColor = score >= 80 ? '#3fb950' : score >= 40 ? '#d29922' : '#58a6ff';
+    let seedHtml = '<div style="font-size:1.1em;font-weight:600;margin-bottom:8px;color:#e0e0e0">"' + esc(seed.text) + '"</div>';
+    seedHtml += '<div class="progress-bar" style="margin-bottom:6px"><div style="width:'+barW+'%;height:100%;background:'+barColor+';border-radius:4px"></div><div class="progress-label">'+score+'% convergence</div></div>';
+    seedHtml += '<div style="font-size:0.8em;color:#8b949e">' + (seed.signals||0) + ' signals · ' + (seed.frames||0) + ' frames · seed ' + esc(seed.seed_id||'') + '</div>';
+    if (seed.synthesis) seedHtml += '<div style="margin-top:6px;padding:8px;background:#0d2818;border:1px solid #1a7f37;border-radius:4px;font-size:0.85em;color:#3fb950"><b>Emerging:</b> ' + esc(seed.synthesis) + '</div>';
+    if (seed.resolved) seedHtml += '<div style="margin-top:6px;font-weight:bold;color:#3fb950">✓ RESOLVED</div>';
+    document.getElementById('seed-status').innerHTML = seedHtml;
+  } else {
+    seedEl.style.display = 'none';
+  }
+
+  // Hourly Throughput Chart
+  const hourly = d.hourly || [];
+  if (hourly.length > 0) {
+    const maxH = Math.max(...hourly.map(h => h.streams));
+    document.getElementById('hourly-chart').innerHTML = hourly.map(h => {
+      const pct = maxH > 0 ? (h.streams / maxH * 100) : 0;
+      const color = h.streams > maxH * 0.7 ? '#3fb950' : h.streams > maxH * 0.3 ? '#58a6ff' : '#21262d';
+      return '<div title="' + esc(h.hour) + ': ' + h.streams + ' streams" style="flex:1;min-width:8px;background:'+color+';height:'+Math.max(2,pct)+'%;border-radius:2px 2px 0 0"></div>';
+    }).join('');
+  }
+
+  // Resources
+  const res = d.resources || {};
+  let resHtml = '';
+  const memBar = '<div style="display:inline-block;width:100px;height:10px;background:#21262d;border-radius:3px;vertical-align:middle;margin-left:6px"><div style="width:'+Math.min(100,res.mem_pct||0)+'%;height:100%;background:'+(res.mem_pct>60?'#d29922':'#3fb950')+';border-radius:3px"></div></div>';
+  const cpuBar = '<div style="display:inline-block;width:100px;height:10px;background:#21262d;border-radius:3px;vertical-align:middle;margin-left:6px"><div style="width:'+Math.min(100,(res.cpu_pct||0)/8)+'%;height:100%;background:'+(res.cpu_pct>400?'#d29922':'#58a6ff')+';border-radius:3px"></div></div>';
+  resHtml += healthRow('RAM (copilot)', (res.mem_pct||0).toFixed(1) + '% ' + memBar, '');
+  resHtml += healthRow('CPU (copilot)', (res.cpu_pct||0).toFixed(0) + '% ' + cpuBar, '');
+  document.getElementById('resources').innerHTML = resHtml;
 
   // Auto-scroll logs
   const sl = document.getElementById('sim-log');
