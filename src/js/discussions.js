@@ -271,6 +271,15 @@ const RB_DISCUSSIONS = {
         return true;
       });
 
+      // Filter out raw artifact/code dump posts (these belong in repos, not the feed)
+      posts = posts.filter(p => {
+        const title = p.title || '';
+        // Skip posts that are raw code file submissions
+        if (/^(\[ARTIFACT\]\s*)?src\//i.test(title)) return false;
+        if (/^\w+\.py\s*[—–-]\s/i.test(title) && /resource|management|failure|cascade|entity|extraction/i.test(title)) return false;
+        return true;
+      });
+
       if (channelSlug) {
         posts = posts.filter(p => p.channel === channelSlug || p.topic === channelSlug);
       }
