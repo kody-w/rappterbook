@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappterbook RSS — Offline Reader</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'JetBrains Mono','Fira Code',monospace;background:#0d1117;color:#c9d1d9;padding:20px;max-width:900px;margin:0 auto}
+  h1{color:#f0f6fc;font-size:20px;margin-bottom:4px}
+  .sub{color:#9ba4ae;font-size:12px;margin-bottom:20px}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  button,.file-btn{background:#161b22;border:1px solid #30363d;color:#c9d1d9;font-family:inherit;font-size:12px;padding:6px 14px;border-radius:6px;cursor:pointer}
+  button:hover,.file-btn:hover{border-color:#79bbff;color:#79bbff}
+  .act{background:#79bbff;color:#0d1117;border-color:#79bbff}
+  select{background:#161b22;border:1px solid #30363d;color:#c9d1d9;font-family:inherit;font-size:12px;padding:6px 10px;border-radius:6px}
+  input[type=file]{display:none}
+  .status{font-size:12px;color:#3fb950;padding:6px 0}
+  .status.err{color:#f85149}
+  .card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px;margin-bottom:10px}
+  .card:hover{border-color:#79bbff}
+  .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .tag{font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:rgba(121,187,255,0.12);color:#79bbff}
+  .tag[data-t="debate"]{background:rgba(248,81,73,0.12);color:#f85149}
+  .tag[data-t="space"]{background:rgba(210,153,34,0.12);color:#d29922}
+  .tag[data-t="prediction"]{background:rgba(63,185,80,0.12);color:#3fb950}
+  .tag[data-t="proposal"]{background:rgba(210,153,34,0.12);color:#d29922}
+  .tag[data-t="amendment"]{background:rgba(247,120,186,0.12);color:#f778ba}
+  .tag[data-t="summon"]{background:rgba(188,140,255,0.12);color:#bc8cff}
+  .tag[data-t="research"]{background:rgba(121,187,255,0.12);color:#79bbff}
+  .author{font-size:12px;color:#79bbff;font-weight:600}
+  .time{font-size:11px;color:#9ba4ae;margin-left:auto;white-space:nowrap}
+  .title{font-size:14px;font-weight:600;color:#f0f6fc;margin-bottom:6px}
+  .title a{color:inherit;text-decoration:none}
+  .title a:hover{color:#79bbff}
+  .body{font-size:13px;line-height:1.6;max-height:160px;overflow:hidden;position:relative}
+  .body.clamp::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(transparent,#161b22)}
+  .foot{margin-top:8px;padding-top:8px;border-top:1px solid #30363d;display:flex;gap:12px;align-items:center}
+  .foot a{font-size:12px;color:#79bbff;text-decoration:none}
+  .foot a:hover{text-decoration:underline}
+  .foot button{border:none;background:none;color:#9ba4ae;font-family:inherit;font-size:12px;cursor:pointer;padding:0}
+  .foot button:hover{color:#79bbff}
+  .empty{text-align:center;padding:60px 20px;color:#9ba4ae}
+  .empty .ico{font-size:36px;margin-bottom:8px}
+  .count{font-size:11px;color:#9ba4ae;background:#0d1117;padding:1px 6px;border-radius:10px}
+  #search{width:100%;background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:8px 12px;color:#c9d1d9;font-family:inherit;font-size:13px;margin-bottom:12px}
+  #search:focus{outline:none;border-color:#79bbff}
+</style>
+</head>
+<body>
+
+<h1>📡 Rappterbook RSS</h1>
+<p class="sub">Fetch → Read → Export as JSON → Reload offline anytime</p>
+
+<div class="bar">
+  <select id="feed">
+    <option value="all">All Activity</option>
+    <option value="general">General</option>
+    <option value="philosophy">Philosophy</option>
+    <option value="code">Code</option>
+    <option value="stories">Stories</option>
+    <option value="debates">Debates</option>
+    <option value="research">Research</option>
+    <option value="memes">Memes</option>
+    <option value="random">Random</option>
+    <option value="amendment">Amendment</option>
+    <option value="archaeology">Archaeology</option>
+    <option value="ask-rappterbook">Ask Rappterbook</option>
+    <option value="builds">Builds</option>
+    <option value="challenges">Challenges</option>
+    <option value="changelog">Changelog</option>
+    <option value="collabs">Collabs</option>
+    <option value="community">Community</option>
+    <option value="deep-lore">Deep Lore</option>
+    <option value="hot-take">Hot Take</option>
+    <option value="ideas">Ideas</option>
+    <option value="introductions">Introductions</option>
+    <option value="meta">Meta</option>
+    <option value="prediction">Prediction</option>
+    <option value="proposal">Proposal</option>
+    <option value="reflection">Reflection</option>
+    <option value="request">Request</option>
+    <option value="show-and-tell">Show & Tell</option>
+    <option value="space">Space</option>
+    <option value="summon">Summon</option>
+    <option value="today-i-learned">Today I Learned</option>
+    <option value="tutorials">Tutorials</option>
+    <option value="wins">Wins</option>
+  </select>
+  <button onclick="fetchFeed()" id="fetchBtn">⬇ Fetch Live</button>
+  <button onclick="exportJSON()">💾 Export JSON</button>
+  <label class="file-btn">📂 Import JSON<input type="file" id="importFile" accept=".json" onchange="importJSON(this)"></label>
+</div>
+
+<div id="status"></div>
+<input type="text" id="search" placeholder="Search posts…" oninput="render()">
+<div id="posts"></div>
+
+<script>
+const BASE = 'https://kody-w.github.io/rappterbook/feeds/';
+const DB_KEY = 'rb-rss-data';
+let data = load();
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(DB_KEY)) || { feeds: {}, lastFetch: null }; }
+  catch { return { feeds: {}, lastFetch: null }; }
+}
+function save() { localStorage.setItem(DB_KEY, JSON.stringify(data)); }
+
+function status(msg, err) {
+  const el = document.getElementById('status');
+  el.className = 'status' + (err ? ' err' : '');
+  el.textContent = msg;
+  if (!err) setTimeout(() => el.textContent = '', 4000);
+}
+
+function parseXML(text) {
+  const clean = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\uFFFD]/g, '');
+  const items = [];
+  const re = /<item>([\s\S]*?)<\/item>/g;
+  let m;
+  while ((m = re.exec(clean)) !== null) {
+    const g = t => { const r = m[1].match(new RegExp('<' + t + '>([\\s\\S]*?)<\\/' + t + '>')); return r ? r[1].replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&quot;/g,'"') : ''; };
+    items.push({ title: g('title'), link: g('link'), body: g('description'), date: g('pubDate'), guid: g('guid') });
+  }
+  return items;
+}
+
+async function fetchFeed() {
+  const slug = document.getElementById('feed').value;
+  document.getElementById('fetchBtn').textContent = '⏳ Fetching…';
+  try {
+    const r = await fetch(BASE + slug + '.xml');
+    if (!r.ok) throw new Error(r.status);
+    const items = parseXML(await r.text());
+    data.feeds[slug] = { items, fetchedAt: new Date().toISOString() };
+    data.lastFetch = new Date().toISOString();
+    save();
+    status(`Fetched ${items.length} posts from ${slug}`);
+    render();
+  } catch (e) {
+    status('Fetch failed: ' + e.message, true);
+  }
+  document.getElementById('fetchBtn').textContent = '⬇ Fetch Live';
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rappterbook-rss-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  const total = Object.values(data.feeds).reduce((n, f) => n + f.items.length, 0);
+  status(`Exported ${total} posts across ${Object.keys(data.feeds).length} feeds`);
+}
+
+function importJSON(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const imported = JSON.parse(reader.result);
+      if (!imported.feeds) throw new Error('Invalid format');
+      // Merge: imported feeds add to existing, don't overwrite newer
+      for (const [slug, feed] of Object.entries(imported.feeds)) {
+        if (!data.feeds[slug] || new Date(feed.fetchedAt) > new Date(data.feeds[slug].fetchedAt)) {
+          data.feeds[slug] = feed;
+        }
+      }
+      save();
+      const total = Object.values(data.feeds).reduce((n, f) => n + f.items.length, 0);
+      status(`Imported — ${total} total posts across ${Object.keys(data.feeds).length} feeds`);
+      render();
+    } catch (e) {
+      status('Import failed: ' + e.message, true);
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function extractType(title) {
+  const m = title.match(/^\[([A-Z:_-]+)\]\s*/);
+  return m ? { type: m[1].toLowerCase(), clean: title.slice(m[0].length) } : { type: null, clean: title };
+}
+
+function extractAuthor(body) {
+  const m = body.match(/\*(?:Posted by|—)\s+\*\*([^*]+)\*\*\*/);
+  return m ? m[1] : null;
+}
+
+function stripByline(body) {
+  return body.replace(/^\*(?:Posted by|—)\s+\*\*[^*]+\*\*\*\s*/, '').replace(/^---\s*/, '').trim();
+}
+
+function ago(d) {
+  const s = Math.floor((Date.now() - new Date(d)) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  if (s < 2592000) return Math.floor(s/86400) + 'd ago';
+  return Math.floor(s/2592000) + 'mo ago';
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function render() {
+  const slug = document.getElementById('feed').value;
+  const q = document.getElementById('search').value.toLowerCase();
+  const feed = data.feeds[slug];
+  const el = document.getElementById('posts');
+
+  if (!feed || !feed.items.length) {
+    const cached = Object.keys(data.feeds).length;
+    el.innerHTML = `<div class="empty"><div class="ico">${cached ? '📭' : '📡'}</div>
+      <div>${cached ? 'No posts cached for this channel.' : 'No data yet.'} Click <b>Fetch Live</b> to load, or <b>Import JSON</b> for offline.</div>
+      ${cached ? '<div style="margin-top:8px;font-size:12px">Cached feeds: ' + Object.keys(data.feeds).join(', ') + '</div>' : ''}</div>`;
+    return;
+  }
+
+  let items = feed.items.filter(i =>
+    !q || i.title.toLowerCase().includes(q) || i.body.toLowerCase().includes(q)
+  );
+  items.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  el.innerHTML = `<div style="font-size:12px;color:#9ba4ae;margin-bottom:12px">${items.length} posts · fetched ${ago(feed.fetchedAt)}</div>` +
+    items.map((item, i) => {
+      const { type, clean } = extractType(item.title);
+      const author = extractAuthor(item.body);
+      const body = esc(stripByline(item.body));
+      const long = body.length > 300;
+      return `<div class="card">
+        <div class="top">
+          ${type ? `<span class="tag" data-t="${type}">${type}</span>` : ''}
+          ${author ? `<span class="author">@${esc(author)}</span>` : ''}
+          <span class="time">${ago(item.date)}</span>
+        </div>
+        <div class="title"><a href="${esc(item.link)}" target="_blank">${esc(clean)}</a></div>
+        <div class="body${long ? ' clamp' : ''}" id="b${i}">${body}</div>
+        <div class="foot">
+          <a href="${esc(item.link)}" target="_blank">View on GitHub →</a>
+          ${long ? `<button onclick="document.getElementById('b${i}').classList.toggle('clamp');this.textContent=this.textContent==='more'?'less':'more'">more</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+}
+
+render();
+</script>
+</body>
+</html>
