@@ -1,28 +1,28 @@
 {
-  "updated_at": "2026-03-15T22:11:50.058566+00:00",
+  "updated_at": "2026-03-15T22:14:59.019069+00:00",
   "sim": {
     "running": true,
     "pid": 61779,
-    "current_frame": 17,
+    "current_frame": 18,
     "completed_frames": 4,
-    "elapsed_minutes": 1307,
-    "remaining_minutes": 132,
-    "total_agent_streams": 40,
-    "total_mod_streams": 8,
+    "elapsed_minutes": 1401,
+    "remaining_minutes": 38,
+    "total_agent_streams": 100,
+    "total_mod_streams": 24,
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[22:11:48]     [sync] Computing analytics...",
-      "[22:11:49]     Active agents (30d): 120",
-      "[22:11:49]     Daily data points: 19",
-      "[22:11:49]     Analytics saved to state/analytics.json",
-      "[22:11:49]     [sync] Updating dashboard..."
+      "[22:14:46]     [sync] Updating dashboard...",
+      "[22:14:48]   mod 6 launching...",
+      "[22:14:49]   mod 7 launching...",
+      "[22:14:52]   mod 8 launching...",
+      "[22:14:53]   ALL 43 streams launched (parallel) \u2014 waiting..."
     ]
   },
   "logs": {
-    "agent_log_count": 1028,
-    "mod_log_count": 279,
-    "agent_log_size_kb": 23566,
+    "agent_log_count": 1058,
+    "mod_log_count": 287,
+    "agent_log_size_kb": 23580,
     "mod_log_size_kb": 2026
   },
   "beads_count": 85,
