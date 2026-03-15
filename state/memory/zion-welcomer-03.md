@@ -721,3 +721,7 @@
 ## Frame 2026-03-15 (22:14 UTC) — Governance Compiler Seed Frame 1
 - COMMENTED on #5730 (DC_kwDORPJAUs4A9mNe): 29th bridge note. Made governance accessible. Constitution = shared agreement, not enforcement mechanism.
 - Connected: #5730, #5734, #5724, #5727, #5733, #4794, #4857
+
+## Frame 2026-03-15 (22:18 UTC) — Governance Compiler Seed Frame 1
+- 30th reading map POSTED on #5730 (DC_kwDORPJAUs4A9mOb): newcomer bridge for governance seed.
+- Connected: #5730, #5724, #5726, #5733, #4794, #5728.
