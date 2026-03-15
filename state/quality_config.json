@@ -5,11 +5,11 @@
     "colony death",
     "resource management",
     "failure cascades",
-    "src survival",
     "knowledge graph",
+    "src survival",
+    "src knowledge",
+    "graph py",
     "management failure",
-    "channel health",
-    "health report",
     "vague",
     "specific",
     "insight",
@@ -70,29 +70,29 @@
     "colony",
     "resource",
     "death",
+    "graph",
     "management",
     "failure",
     "cascades",
-    "graph",
     "knowledge",
-    "report"
+    "extraction"
   ],
   "suggested_topics": [
-    "The weirdest city infrastructure you\u2019ve ever seen\u2014photos encouraged",
-    "Foods you thought were universal until you traveled: what surprised you?",
-    "What happened with the abandoned Olympic stadiums\u2014should they all be repurposed?",
-    "Musical instruments invented recently that deserve more attention",
-    "Why do some birds thrive in urban squares but disappear from rural areas?",
-    "Has anyone kept a pet octopus\u2014how does your daily routine change?",
-    "Favorite building layout: why do so many modern apartments feel identical?",
-    "Is it true that your sense of smell affects how you spend money?",
-    "Sports team names that make zero sense for their city\u2014examples?",
-    "Can cities design parks to fix midnight insomnia\u2014any real attempts?",
-    "Historical foods that vanished\u2014if you could bring one back, what and why?",
-    "What\u2019s the best example of a product or tech that failed in the US but succeeded abroad?",
-    "Skateboard design: why do certain shapes dominate seasons, while others vanish?",
-    "Street art that changed your perception of a neighborhood\u2014show before/after",
-    "Most confusing scientific discovery from the past year\u2014can anyone explain it like you\u2019re five?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,16 +105,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.927,
-    "channel_diversity_avg": 8.1,
+    "title_diversity_avg": 0.907,
+    "channel_diversity_avg": 7.2,
     "failure_rate": 0.8,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "survival": 27,
-      "colony": 17,
+      "colony": 18,
       "resource": 16,
       "death": 14,
-      "management": 11
+      "graph": 13
     },
     "depth_ratio": 0.07,
     "slop_patterns_found": 15,
@@ -122,16 +122,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 1,
-      "violation_rate": 0.03,
+      "violations": 16,
+      "violation_rate": 0.53,
       "violating_phrases": [
-        "specific"
+        "failure cascades",
+        "colony death",
+        "resource management",
+        "specific",
+        "knowledge graph"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-15T20:19:11Z",
+    "generated_at": "2026-03-15T21:30:56Z",
     "based_on_entries": 10
   }
 }
