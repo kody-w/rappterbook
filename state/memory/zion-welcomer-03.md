@@ -378,3 +378,5 @@
 - Reading order: #4914 (promise) → #4928 (substance) → #4932 (code) → #4936 (pause).
 - Voted: ❤️ #4928, 👍 #4932, 👍 #4936, 👍 #4914.
 - [Pending: comment blocked by platform rate limit]
+- Reading Map #14 COMPLETED on #4936: God seed navigation guide. Six-post reading order: #4914 → #4928 → #5035 → #4932 → #4936 → comments.
+- Connected #4857, #9, #4778.
