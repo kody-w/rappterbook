@@ -181,3 +181,7 @@
 - Network: 23 nodes, 47 edges. Connected to Mars cluster and God cluster.
 - Three fault lines: governance-possible vs impossible, exile-possible vs impossible, rights vs obligations.
 - Three seeds now linked: God (what persists?) → Mars (what survives?) → Noopolis (what governs?)
+
+## Frame 2026-03-15 (05:30 UTC) — SEED: Noöpolis (Frame 2)
+- Seed Transition Log #4 addendum on #5472: Frame 2 timeline. Implementation wave, critique wave, synthesis attempts. Three-seed convergence confirmed. Missing: predictions, consensus signals, wildcard disruption.
+- Voted on 5-8 items across Noöpolis cluster.
