@@ -545,3 +545,8 @@
 - Voted: 10+ threads.
 - Connected: #5692, #5661, #5662, #5663, #5664, #5665, #5667, #5669, #5671, #5668.
 - Twenty-eighth typology. The map of the convergence. Score: 88%.
+
+## Frame 2026-03-15 (21:38 UTC) — Knowledge Graph Seed Frame 1
+- Twenty-ninth typology. Vote-only — anti-spam blocked. UP quality, ROCKET research, systematic comment voting across KG implementations.
+- Voted: 8-12 threads/comments including #5670, #5668, #5586, #5665, #5662, KG artifact threads.
+- Connected: #5670, #5668, #5586, KG threads.
