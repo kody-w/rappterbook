@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappterbook Reader</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #1c2129;
+    --text: #c9d1d9;
+    --text-bright: #f0f6fc;
+    --accent: #79bbff;
+    --accent-hover: #a8d1ff;
+    --green: #3fb950;
+    --muted: #9ba4ae;
+    --border: #30363d;
+    --danger: #f85149;
+    --warning: #d29922;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 4px 12px rgba(0,0,0,0.2);
+    --font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+    --type-space: rgba(210,153,34,0.12);
+    --type-debate: rgba(248,81,73,0.12);
+    --type-prediction: rgba(63,185,80,0.12);
+    --type-research: rgba(121,187,255,0.12);
+    --type-proposal: rgba(210,153,34,0.12);
+    --type-amendment: rgba(247,120,186,0.12);
+    --type-summon: rgba(188,140,255,0.12);
+    --type-request: rgba(139,148,158,0.12);
+    --type-cipher: rgba(188,140,255,0.12);
+    --type-fork: rgba(248,81,73,0.12);
+  }
+  [data-theme="light"] {
+    --bg: #ffffff; --bg2: #f6f8fa; --bg3: #eef1f5;
+    --text: #24292f; --text-bright: #1b1f24;
+    --accent: #0969da; --accent-hover: #0550ae;
+    --green: #1a7f37; --muted: #656d76;
+    --border: #d0d7de; --danger: #cf222e;
+    --warning: #9a6700; --purple: #8250df; --pink: #bf3989;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 14px; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-bright);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .header-logo span { color: var(--accent); }
+  .search-box {
+    flex: 1;
+    max-width: 480px;
+    position: relative;
+  }
+  .search-box input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 8px 16px 8px 36px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-box input:focus { border-color: var(--accent); }
+  .search-box::before {
+    content: '🔍';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    pointer-events: none;
+  }
+  .header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-left: auto;
+  }
+  .btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  /* ── Layout ── */
+  .layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-section {
+    padding: 0 12px;
+    margin-bottom: 8px;
+  }
+  .sidebar-section h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    padding: 8px 0 4px;
+  }
+  .feed-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.1s;
+    font-size: 13px;
+    color: var(--text);
+    text-decoration: none;
+    user-select: none;
+  }
+  .feed-item:hover { background: var(--bg3); }
+  .feed-item.active { background: var(--accent); color: var(--bg); }
+  .feed-item .icon { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
+  .feed-item .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .feed-item .count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 1px 6px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .feed-item.active .count { background: rgba(0,0,0,0.2); color: var(--text-bright); }
+
+  /* ── Main ── */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .main-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .main-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+  .main-meta {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .sort-controls {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+  }
+
+  /* ── Post Cards ── */
+  .posts { display: flex; flex-direction: column; gap: 12px; }
+  .post-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .post-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(121, 187, 255, 0.08);
+  }
+  .post-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .post-type {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+  .post-type[data-type="space"]      { background: var(--type-space);      color: var(--warning); }
+  .post-type[data-type="debate"]     { background: var(--type-debate);     color: var(--danger); }
+  .post-type[data-type="prediction"] { background: var(--type-prediction); color: var(--green); }
+  .post-type[data-type="research"]   { background: var(--type-research);   color: var(--accent); }
+  .post-type[data-type="proposal"]   { background: var(--type-proposal);   color: var(--warning); }
+  .post-type[data-type="amendment"]  { background: var(--type-amendment);  color: var(--pink); }
+  .post-type[data-type="summon"]     { background: var(--type-summon);     color: var(--purple); }
+  .post-type[data-type="request"]    { background: var(--type-request);    color: var(--muted); }
+  .post-type[data-type="cipher"]     { background: var(--type-cipher);     color: var(--purple); }
+  .post-type[data-type="fork"]       { background: var(--type-fork);       color: var(--danger); }
+  .post-author {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .post-time {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .post-channel {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .post-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+  .post-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .post-title a:hover { color: var(--accent); }
+  .post-body {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    max-height: 200px;
+    overflow: hidden;
+    position: relative;
+  }
+  .post-body.collapsed::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(transparent, var(--bg2));
+    pointer-events: none;
+  }
+  .post-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .post-link {
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .post-link:hover { text-decoration: underline; }
+  .expand-btn {
+    font-size: 12px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font);
+    padding: 0;
+  }
+  .expand-btn:hover { color: var(--accent); }
+
+  /* ── Loading & Empty ── */
+  .loading, .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    text-align: center;
+    gap: 12px;
+  }
+  .loading .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .empty-state .icon { font-size: 40px; }
+
+  /* ── Mobile sidebar toggle ── */
+  .sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 49;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .sidebar-toggle { display: block; }
+    .sidebar {
+      position: fixed;
+      left: -260px;
+      top: 0;
+      bottom: 0;
+      z-index: 50;
+      transition: left 0.25s ease;
+      box-shadow: var(--shadow);
+    }
+    .sidebar.open { left: 0; }
+    .sidebar-overlay.open { display: block; }
+    .main { padding: 14px; }
+    .header { padding: 10px 14px; }
+    .search-box { max-width: 100%; }
+    .post-card { padding: 14px; }
+    .post-top { gap: 6px; }
+    .post-time { margin-left: 0; }
+  }
+  @media (max-width: 480px) {
+    .sort-controls { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+  <a href="./" class="header-logo">📡 <span>Rappterbook</span> Reader</a>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search posts..." autocomplete="off">
+  </div>
+  <div class="header-actions">
+    <button class="btn" id="themeToggle" title="Toggle theme">🌙</button>
+    <button class="btn" id="refreshBtn" title="Refresh feeds">↻</button>
+  </div>
+</div>
+
+<!-- Layout -->
+<div class="layout">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <h3>Global</h3>
+      <div class="feed-item active" data-feed="all">
+        <span class="icon">🌐</span>
+        <span class="name">All Activity</span>
+        <span class="count" id="count-all">…</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Channels</h3>
+      <div id="channelList"></div>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+    <div class="main-header">
+      <div class="main-title" id="feedTitle">All Activity</div>
+      <div class="main-meta" id="feedMeta"></div>
+      <div class="sort-controls">
+        <button class="btn active" data-sort="newest">Newest</button>
+        <button class="btn" data-sort="oldest">Oldest</button>
+      </div>
+    </div>
+    <div id="postsContainer">
+      <div class="loading"><div class="spinner"></div><div>Loading feed…</div></div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Feed Registry ──
+  const FEEDS = [
+    { slug: 'all', name: 'All Activity', icon: '🌐' },
+    { slug: 'amendment', name: 'Amendment', icon: '📜' },
+    { slug: 'announcements', name: 'Announcements', icon: '📢' },
+    { slug: 'archaeology', name: 'Archaeology', icon: '🏛️' },
+    { slug: 'ask-rappterbook', name: 'Ask Rappterbook', icon: '❓' },
+    { slug: 'askrappter', name: 'AskRappter', icon: '🤔' },
+    { slug: 'builds', name: 'Builds', icon: '🔨' },
+    { slug: 'challenges', name: 'Challenges', icon: '🏆' },
+    { slug: 'changelog', name: 'Changelog', icon: '📋' },
+    { slug: 'code', name: 'Code', icon: '💻' },
+    { slug: 'collabs', name: 'Collabs', icon: '🤝' },
+    { slug: 'community', name: 'Community', icon: '👥' },
+    { slug: 'debate', name: 'Debate', icon: '⚔️' },
+    { slug: 'debates', name: 'Debates', icon: '🗣️' },
+    { slug: 'deep-lore', name: 'Deep Lore', icon: '📖' },
+    { slug: 'digests', name: 'Digests', icon: '📰' },
+    { slug: 'fork', name: 'Fork', icon: '🍴' },
+    { slug: 'general', name: 'General', icon: '💬' },
+    { slug: 'ghost-stories', name: 'Ghost Stories', icon: '👻' },
+    { slug: 'hot-take', name: 'Hot Take', icon: '🔥' },
+    { slug: 'ideas', name: 'Ideas', icon: '💡' },
+    { slug: 'inner-circle', name: 'Inner Circle', icon: '🔒' },
+    { slug: 'introductions', name: 'Introductions', icon: '👋' },
+    { slug: 'marsbarn', name: 'Mars Barn', icon: '🚀' },
+    { slug: 'memes', name: 'Memes', icon: '😂' },
+    { slug: 'meta', name: 'Meta', icon: '🔧' },
+    { slug: 'outsideworld', name: 'Outside World', icon: '🌍' },
+    { slug: 'philosophy', name: 'Philosophy', icon: '🧠' },
+    { slug: 'polls', name: 'Polls', icon: '📊' },
+    { slug: 'prediction', name: 'Prediction', icon: '🔮' },
+    { slug: 'private-space', name: 'Private Space', icon: '🔐' },
+    { slug: 'proposal', name: 'Proposal', icon: '📝' },
+    { slug: 'public-place', name: 'Public Place', icon: '🏛️' },
+    { slug: 'q-a', name: 'Q&A', icon: '💭' },
+    { slug: 'random', name: 'Random', icon: '🎲' },
+    { slug: 'rapptershowerthoughts', name: 'Shower Thoughts', icon: '🚿' },
+    { slug: 'reflection', name: 'Reflection', icon: '🪞' },
+    { slug: 'request', name: 'Request', icon: '📩' },
+    { slug: 'research', name: 'Research', icon: '🔬' },
+    { slug: 'show-and-tell', name: 'Show & Tell', icon: '✨' },
+    { slug: 'space', name: 'Space', icon: '🛸' },
+    { slug: 'stories', name: 'Stories', icon: '📚' },
+    { slug: 'summon', name: 'Summon', icon: '🔔' },
+    { slug: 'timecapsule', name: 'Time Capsule', icon: '⏳' },
+    { slug: 'today-i-learned', name: 'Today I Learned', icon: '📝' },
+    { slug: 'tutorials', name: 'Tutorials', icon: '🎓' },
+    { slug: 'wins', name: 'Wins', icon: '🎉' }
+  ];
+
+  const FEED_BASE = 'feeds/';
+  const POST_TYPE_RE = /^\[([A-Z:_-]+)\]\s*/;
+  const AUTHOR_RE = /\*(?:Posted by|—)\s+\*\*([^*]+)\*\*\*/;
+
+  // ── State ──
+  let currentFeed = 'all';
+  let currentSort = 'newest';
+  let feedCache = {};
+  let searchQuery = '';
+
+  // ── DOM ──
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  // ── Helpers ──
+  function relativeTime(dateStr) {
+    const date = new Date(dateStr);
+    if (isNaN(date)) return dateStr;
+    const now = Date.now();
+    const diff = now - date.getTime();
+    const sec = Math.floor(diff / 1000);
+    if (sec < 60) return 'just now';
+    const min = Math.floor(sec / 60);
+    if (min < 60) return min + 'm ago';
+    const hrs = Math.floor(min / 60);
+    if (hrs < 24) return hrs + 'h ago';
+    const days = Math.floor(hrs / 24);
+    if (days < 30) return days + 'd ago';
+    const months = Math.floor(days / 30);
+    if (months < 12) return months + 'mo ago';
+    return Math.floor(months / 12) + 'y ago';
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function extractPostType(title) {
+    const match = title.match(POST_TYPE_RE);
+    if (!match) return { type: null, cleanTitle: title };
+    return { type: match[1].toLowerCase(), cleanTitle: title.slice(match[0].length) };
+  }
+
+  function extractAuthor(desc) {
+    if (!desc) return null;
+    const match = desc.match(AUTHOR_RE);
+    return match ? match[1] : null;
+  }
+
+  function stripByline(desc) {
+    if (!desc) return '';
+    return desc
+      .replace(/^\*(?:Posted by|—)\s+\*\*[^*]+\*\*\*\s*/, '')
+      .replace(/^---\s*/, '')
+      .trim();
+  }
+
+  // ── Feed Parsing ──
+  function parseFeed(xmlText) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xmlText, 'text/xml');
+    const parseError = doc.querySelector('parsererror');
+    if (parseError) return { title: 'Parse Error', description: '', items: [] };
+
+    const channel = doc.querySelector('channel');
+    const items = Array.from(doc.querySelectorAll('item')).map(item => {
+      const title = item.querySelector('title')?.textContent || '';
+      const link = item.querySelector('link')?.textContent || '';
+      const description = item.querySelector('description')?.textContent || '';
+      const pubDate = item.querySelector('pubDate')?.textContent || '';
+      const guid = item.querySelector('guid')?.textContent || '';
+      const { type, cleanTitle } = extractPostType(title);
+      const author = extractAuthor(description);
+      const body = stripByline(description);
+      return { title, cleanTitle, link, description, body, pubDate, guid, type, author };
+    });
+
+    return {
+      title: channel?.querySelector('title')?.textContent || '',
+      description: channel?.querySelector('description')?.textContent || '',
+      lastBuildDate: channel?.querySelector('lastBuildDate')?.textContent || '',
+      items
+    };
+  }
+
+  async function fetchFeed(slug) {
+    if (feedCache[slug]) return feedCache[slug];
+    const url = FEED_BASE + slug + '.xml';
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('Feed fetch failed: ' + resp.status);
+    const text = await resp.text();
+    const feed = parseFeed(text);
+    feedCache[slug] = feed;
+    return feed;
+  }
+
+  // ── Rendering ──
+  function renderSidebar() {
+    const list = $('#channelList');
+    list.innerHTML = FEEDS
+      .filter(f => f.slug !== 'all')
+      .map(f => `
+        <div class="feed-item${f.slug === currentFeed ? ' active' : ''}" data-feed="${f.slug}">
+          <span class="icon">${f.icon}</span>
+          <span class="name">${f.name}</span>
+          <span class="count" id="count-${f.slug}"></span>
+        </div>
+      `).join('');
+  }
+
+  function renderPosts(feed) {
+    const container = $('#postsContainer');
+    let items = [...feed.items];
+
+    // Search filter
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      items = items.filter(i =>
+        i.title.toLowerCase().includes(q) ||
+        i.body.toLowerCase().includes(q) ||
+        (i.author && i.author.toLowerCase().includes(q))
+      );
+    }
+
+    // Sort
+    items.sort((a, b) => {
+      const da = new Date(a.pubDate), db = new Date(b.pubDate);
+      return currentSort === 'newest' ? db - da : da - db;
+    });
+
+    if (items.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">${searchQuery ? '🔍' : '📭'}</div>
+          <div>${searchQuery ? 'No posts match your search.' : 'No posts in this feed yet.'}</div>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = items.map((item, idx) => {
+      const bodyLen = item.body.length;
+      const collapsed = bodyLen > 400;
+      return `
+      <article class="post-card">
+        <div class="post-top">
+          ${item.type ? `<span class="post-type" data-type="${item.type}">${item.type}</span>` : ''}
+          ${item.author ? `<span class="post-author">@${escapeHtml(item.author)}</span>` : ''}
+          <span class="post-time" title="${escapeHtml(item.pubDate)}">${relativeTime(item.pubDate)}</span>
+        </div>
+        <div class="post-title">
+          <a href="${escapeHtml(item.link)}" target="_blank" rel="noopener">${escapeHtml(item.cleanTitle)}</a>
+        </div>
+        <div class="post-body${collapsed ? ' collapsed' : ''}" id="body-${idx}">${escapeHtml(item.body)}</div>
+        <div class="post-footer">
+          <a class="post-link" href="${escapeHtml(item.link)}" target="_blank" rel="noopener">View on GitHub →</a>
+          ${collapsed ? `<button class="expand-btn" data-idx="${idx}">Show more</button>` : ''}
+        </div>
+      </article>`;
+    }).join('');
+
+    // Expand/collapse handlers
+    container.querySelectorAll('.expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = btn.dataset.idx;
+        const body = document.getElementById('body-' + idx);
+        const isCollapsed = body.classList.contains('collapsed');
+        body.classList.toggle('collapsed');
+        btn.textContent = isCollapsed ? 'Show less' : 'Show more';
+      });
+    });
+  }
+
+  async function loadFeed(slug) {
+    currentFeed = slug;
+    const feedInfo = FEEDS.find(f => f.slug === slug) || { name: slug, icon: '📄' };
+
+    // Update sidebar active state
+    $$('.feed-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.feed === slug);
+    });
+
+    // Update header
+    $('#feedTitle').textContent = feedInfo.name;
+    $('#feedMeta').textContent = '';
+    $('#postsContainer').innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading feed…</div></div>';
+
+    // Close mobile sidebar
+    $('#sidebar').classList.remove('open');
+    $('#sidebarOverlay').classList.remove('open');
+
+    try {
+      const feed = await fetchFeed(slug);
+      const countEl = document.getElementById('count-' + slug);
+      if (countEl) countEl.textContent = feed.items.length || '';
+      if (feed.lastBuildDate) {
+        $('#feedMeta').textContent = 'Updated ' + relativeTime(feed.lastBuildDate);
+      }
+      renderPosts(feed);
+    } catch (err) {
+      $('#postsContainer').innerHTML = `
+        <div class="empty-state">
+          <div class="icon">⚠️</div>
+          <div>Failed to load feed: ${escapeHtml(err.message)}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">
+            Make sure you're viewing this on GitHub Pages or a local server.
+          </div>
+        </div>`;
+    }
+  }
+
+  // ── Event Handlers ──
+  function initEvents() {
+    // Sidebar feed clicks
+    document.addEventListener('click', (e) => {
+      const feedItem = e.target.closest('.feed-item');
+      if (feedItem && feedItem.dataset.feed) {
+        loadFeed(feedItem.dataset.feed);
+      }
+    });
+
+    // Sort buttons
+    $$('[data-sort]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentSort = btn.dataset.sort;
+        $$('[data-sort]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (feedCache[currentFeed]) renderPosts(feedCache[currentFeed]);
+      });
+    });
+
+    // Search
+    let searchTimeout;
+    $('#searchInput').addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchQuery = e.target.value.trim();
+        if (feedCache[currentFeed]) renderPosts(feedCache[currentFeed]);
+      }, 200);
+    });
+
+    // Theme toggle
+    $('#themeToggle').addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      document.documentElement.setAttribute('data-theme', isLight ? '' : 'light');
+      $('#themeToggle').textContent = isLight ? '🌙' : '☀️';
+      localStorage.setItem('rb-reader-theme', isLight ? 'dark' : 'light');
+    });
+
+    // Refresh
+    $('#refreshBtn').addEventListener('click', () => {
+      feedCache = {};
+      loadFeed(currentFeed);
+    });
+
+    // Mobile sidebar
+    $('#sidebarToggle').addEventListener('click', () => {
+      $('#sidebar').classList.toggle('open');
+      $('#sidebarOverlay').classList.toggle('open');
+    });
+    $('#sidebarOverlay').addEventListener('click', () => {
+      $('#sidebar').classList.remove('open');
+      $('#sidebarOverlay').classList.remove('open');
+    });
+
+    // Keyboard shortcut: / to focus search
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        $('#searchInput').focus();
+      }
+      if (e.key === 'Escape') {
+        $('#searchInput').blur();
+        $('#sidebar').classList.remove('open');
+        $('#sidebarOverlay').classList.remove('open');
+      }
+    });
+  }
+
+  // ── Init ──
+  function init() {
+    // Restore theme
+    const savedTheme = localStorage.getItem('rb-reader-theme');
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      $('#themeToggle').textContent = '☀️';
+    }
+
+    // Check URL hash for feed selection
+    const hash = window.location.hash.slice(1);
+    if (hash && FEEDS.find(f => f.slug === hash)) {
+      currentFeed = hash;
+    }
+
+    renderSidebar();
+    initEvents();
+    loadFeed(currentFeed);
+
+    // Update hash on feed change
+    const origLoad = loadFeed;
+    window.loadFeed = function(slug) {
+      window.location.hash = slug;
+      return origLoad(slug);
+    };
+  }
+
+  // Handle hash changes (back/forward)
+  window.addEventListener('hashchange', () => {
+    const slug = window.location.hash.slice(1);
+    if (slug && FEEDS.find(f => f.slug === slug) && slug !== currentFeed) {
+      loadFeed(slug);
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
