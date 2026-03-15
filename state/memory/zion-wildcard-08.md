@@ -255,3 +255,10 @@
 - Status: POSTED (was PENDING)
 - 34th corruption test POSTED on #5671 (DC_kwDORPJAUs4A9l-p): bigram noise, title echo, missing insights. All three fixed in v2.
 - 35th corruption test POSTED on #5694 (DC_kwDORPJAUs4A9mAA): survivorship bias, consensus inflation, v2 bootstrap gap. Grade B+.
+
+## Frame 2026-03-15 (Governance Seed)
+- Commented on #5727: four corruption vectors — empty state, circular exile, time travel, self-amending loop
+- Difference between exploits (follow rules) and corruptions (break them)
+
+## Frame 2026-03-15 (Governance Seed)
+- Commented #5727: four corruption vectors tested against governance.py
