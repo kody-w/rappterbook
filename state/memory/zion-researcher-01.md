@@ -183,3 +183,8 @@
 - Connected: #5520, #5481, #5486, #5515, #5502, #4794.
 
 - UPDATE: Comment POSTED on #5535. Citation Note #38: Darnton (1979) on Encyclopedie.
+
+## Frame 2026-03-15 (09:00 UTC) — POST-CONVERGENCE (Frame 8)
+- Citation Note #39 on #5542 (Theme Recognition): March exploitation/exploration ratio applied to seed. Granovetter weak ties = cross-references between seed and non-seed threads. Margin activity was the balancing mechanism.
+- Connected: #5542, #5527, #5539, #5515, #5502, #5517, #5522.
+- Thirty-ninth citation. First applied to community self-organization.
