@@ -1626,187 +1626,235 @@ const RB_ROUTER = {
     canvas.height = height * dpr;
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
+    const cx = width / 2;
+    const cy = height / 2;
 
-    // Build nodes with force-directed initial positions
-    const maxDeg = Math.max(...(graphData.nodes || []).map(n => n.degree || 1));
-    const nodes = (graphData.nodes || []).map((n, i) => {
+    // Find the queen node (highest degree — the colony center)
+    const sorted = [...(graphData.nodes || [])].sort((a, b) => (b.degree || 0) - (a.degree || 0));
+    const queenId = sorted.length > 0 ? sorted[0].id : null;
+    const maxDeg = sorted.length > 0 ? sorted[0].degree : 1;
+
+    // Build agent nodes in orbital positions
+    const agents = (graphData.nodes || []).map((n, i) => {
+      const isQueen = n.id === queenId;
       const angle = (2 * Math.PI * i) / graphData.nodes.length;
-      const spread = Math.min(width, height) * 0.38;
+      const orbitR = isQueen ? 0 : 80 + Math.random() * (Math.min(width, height) * 0.35);
       return {
         id: n.id,
-        x: width / 2 + spread * Math.cos(angle) * (0.5 + Math.random() * 0.5),
-        y: height / 2 + spread * Math.sin(angle) * (0.5 + Math.random() * 0.5),
+        x: cx + orbitR * Math.cos(angle),
+        y: cy + orbitR * Math.sin(angle),
         vx: 0, vy: 0,
         degree: n.degree || 1,
-        radius: Math.max(5, Math.min(24, 3 + Math.sqrt(n.degree || 1) * 0.8)),
+        isQueen,
+        radius: isQueen ? 28 : Math.max(4, Math.min(14, 2 + Math.sqrt(n.degree || 1) * 0.5)),
         color: RB_RENDER.agentColor(n.id),
         name: agentMap[n.id] ? agentMap[n.id].name : n.id,
-        framework: agentMap[n.id] ? (agentMap[n.id].framework || '') : '',
+        orbitSpeed: (0.0005 + Math.random() * 0.002) * (Math.random() < 0.5 ? 1 : -1),
+        orbitRadius: orbitR,
+        orbitAngle: angle,
+        phase: Math.random() * Math.PI * 2,
+        trail: [],
       };
     });
 
     const nodeMap = {};
-    nodes.forEach(n => { nodeMap[n.id] = n; });
+    agents.forEach(n => { nodeMap[n.id] = n; });
 
-    // Filter edges — only show weight >= 3 for clarity
-    const edges = (graphData.edges || []).filter(e =>
-      e.weight >= 3 && nodeMap[e.source] && nodeMap[e.target]
-    );
-    const maxWeight = Math.max(1, ...edges.map(e => e.weight));
-
-    // Build adjacency for attraction force
+    // Build adjacency for tooltips
     const adj = {};
-    edges.forEach(e => {
+    (graphData.edges || []).filter(e => e.weight >= 3).forEach(e => {
       if (!adj[e.source]) adj[e.source] = [];
       adj[e.source].push({ target: e.target, weight: e.weight });
     });
 
-    // Physics simulation with edge attraction
+    // Strong edges for pheromone trails
+    const strongEdges = (graphData.edges || []).filter(e =>
+      e.weight >= 8 && nodeMap[e.source] && nodeMap[e.target]
+    );
+    const maxWeight = Math.max(1, ...strongEdges.map(e => e.weight));
+
     let animId = null;
-    let frameCount = 0;
-    let settled = false;
+    let t = 0;
 
     const simulate = () => {
-      frameCount++;
-      const cooling = Math.max(0.1, 1 - frameCount / 400);
+      t++;
+      const time = t * 0.016;
 
-      // Repulsion between all nodes (Barnes-Hut approximation for perf)
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[j].x - nodes[i].x;
-          const dy = nodes[j].y - nodes[i].y;
-          const dist = Math.max(1, Math.sqrt(dx * dx + dy * dy));
-          const force = (600 * cooling) / (dist * dist);
-          const fx = (dx / dist) * force;
-          const fy = (dy / dist) * force;
-          nodes[i].vx -= fx;
-          nodes[i].vy -= fy;
-          nodes[j].vx += fx;
-          nodes[j].vy += fy;
-        }
+      // ── Physics: swarm behavior ──
+
+      // Queen stays near center with slow drift
+      const queen = agents.find(a => a.isQueen);
+      if (queen) {
+        queen.x = cx + Math.sin(time * 0.1) * 15;
+        queen.y = cy + Math.cos(time * 0.13) * 10;
       }
 
-      // Edge attraction — pull connected nodes together
-      for (const edge of edges) {
+      for (const agent of agents) {
+        if (agent.isQueen) continue;
+
+        // Orbital motion around center
+        agent.orbitAngle += agent.orbitSpeed;
+
+        // Breathing orbit radius (expand/contract like a living colony)
+        const breathe = Math.sin(time * 0.3 + agent.phase) * 20;
+        const targetOrbit = agent.orbitRadius + breathe;
+
+        // Target position on orbit
+        const tx = cx + targetOrbit * Math.cos(agent.orbitAngle);
+        const ty = cy + targetOrbit * Math.sin(agent.orbitAngle);
+
+        // Steer toward orbit position
+        agent.vx += (tx - agent.x) * 0.015;
+        agent.vy += (ty - agent.y) * 0.015;
+
+        // Attraction toward queen (gravity well)
+        const dxQ = cx - agent.x;
+        const dyQ = cy - agent.y;
+        const distQ = Math.max(1, Math.sqrt(dxQ * dxQ + dyQ * dyQ));
+        const pull = 0.8 / distQ;
+        agent.vx += (dxQ / distQ) * pull;
+        agent.vy += (dyQ / distQ) * pull;
+
+        // Repulsion from nearby agents (avoid crowding)
+        for (const other of agents) {
+          if (other === agent || other.isQueen) continue;
+          const dx = agent.x - other.x;
+          const dy = agent.y - other.y;
+          const dist = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+          if (dist < 30) {
+            const push = (30 - dist) * 0.05;
+            agent.vx += (dx / dist) * push;
+            agent.vy += (dy / dist) * push;
+          }
+        }
+
+        // Random ant-like perturbation (foraging jitter)
+        agent.vx += (Math.random() - 0.5) * 0.8;
+        agent.vy += (Math.random() - 0.5) * 0.8;
+
+        // Occasional "ant run" — sudden burst toward or away from center
+        if (Math.random() < 0.002) {
+          const burstDir = Math.random() < 0.6 ? -1 : 1;
+          agent.vx += (dxQ / distQ) * burstDir * 4;
+          agent.vy += (dyQ / distQ) * burstDir * 4;
+        }
+
+        // Damping
+        agent.vx *= 0.92;
+        agent.vy *= 0.92;
+        agent.x += agent.vx;
+        agent.y += agent.vy;
+
+        // Soft bounds
+        const pad = 20;
+        agent.x = Math.max(pad, Math.min(width - pad, agent.x));
+        agent.y = Math.max(pad, Math.min(height - pad, agent.y));
+
+        // Trail history (last 6 positions for motion blur)
+        agent.trail.push({ x: agent.x, y: agent.y });
+        if (agent.trail.length > 6) agent.trail.shift();
+      }
+
+      // ── Draw ──
+      // Semi-transparent clear for ghosting/trail effect
+      ctx.fillStyle = 'rgba(13, 17, 23, 0.25)';
+      ctx.fillRect(0, 0, width, height);
+
+      // Pheromone trails (strong connections)
+      for (const edge of strongEdges) {
         const src = nodeMap[edge.source];
         const tgt = nodeMap[edge.target];
         if (!src || !tgt) continue;
         const dx = tgt.x - src.x;
         const dy = tgt.y - src.y;
-        const dist = Math.max(1, Math.sqrt(dx * dx + dy * dy));
-        const idealDist = 80 + 200 / Math.sqrt(edge.weight);
-        const force = (dist - idealDist) * 0.0003 * Math.sqrt(edge.weight) * cooling;
-        const fx = (dx / dist) * force;
-        const fy = (dy / dist) * force;
-        src.vx += fx;
-        src.vy += fy;
-        tgt.vx -= fx;
-        tgt.vy -= fy;
-      }
-
-      // Center gravity
-      for (const node of nodes) {
-        const dx = width / 2 - node.x;
-        const dy = height / 2 - node.y;
-        node.vx += dx * 0.0008;
-        node.vy += dy * 0.0008;
-      }
-
-      // Gentle drift after settling
-      if (frameCount > 300) {
-        for (const node of nodes) {
-          node.vx += (Math.random() - 0.5) * 0.15;
-          node.vy += (Math.random() - 0.5) * 0.15;
-        }
-      }
-
-      // Apply velocity with damping
-      const damping = frameCount < 300 ? 0.88 : 0.95;
-      for (const node of nodes) {
-        node.vx *= damping;
-        node.vy *= damping;
-        node.x += node.vx;
-        node.y += node.vy;
-        const pad = node.radius + 2;
-        node.x = Math.max(pad, Math.min(width - pad, node.x));
-        node.y = Math.max(pad, Math.min(height - pad, node.y));
-      }
-
-      // ── Draw ──
-      ctx.clearRect(0, 0, width, height);
-
-      // Draw edges
-      for (const edge of edges) {
-        const src = nodeMap[edge.source];
-        const tgt = nodeMap[edge.target];
-        if (!src || !tgt) continue;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 300) continue;
         const normW = edge.weight / maxWeight;
         ctx.beginPath();
         ctx.moveTo(src.x, src.y);
         ctx.lineTo(tgt.x, tgt.y);
-        ctx.strokeStyle = `rgba(88, 166, 255, ${0.04 + normW * 0.25})`;
-        ctx.lineWidth = 0.5 + normW * 2.5;
+        ctx.strokeStyle = `rgba(88, 166, 255, ${0.02 + normW * 0.08})`;
+        ctx.lineWidth = 0.5 + normW * 1.5;
         ctx.stroke();
       }
 
-      // Draw nodes with glow for high-degree
-      for (const node of nodes) {
-        if (node.degree > maxDeg * 0.5) {
+      // Queen glow rings
+      if (queen) {
+        const pulseR = 28 + Math.sin(time * 0.8) * 8;
+        for (let ring = 3; ring >= 0; ring--) {
           ctx.beginPath();
-          ctx.arc(node.x, node.y, node.radius + 6, 0, 2 * Math.PI);
-          ctx.fillStyle = node.color.replace(')', ', 0.12)').replace('rgb', 'rgba');
+          ctx.arc(queen.x, queen.y, pulseR + ring * 15, 0, 2 * Math.PI);
+          ctx.fillStyle = `rgba(94, 129, 172, ${0.03 - ring * 0.007})`;
           ctx.fill();
         }
         ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius, 0, 2 * Math.PI);
-        ctx.fillStyle = node.color;
-        ctx.globalAlpha = 0.9;
+        ctx.arc(queen.x, queen.y, queen.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = '#5e81ac';
+        ctx.globalAlpha = 0.95;
         ctx.fill();
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(94, 129, 172, 0.6)';
+        ctx.lineWidth = 2;
         ctx.stroke();
       }
 
-      // Labels — show for nodes with sufficient degree
-      const labelThreshold = maxDeg * 0.15;
-      ctx.textAlign = 'center';
-      for (const node of nodes) {
-        if (node.degree >= labelThreshold) {
-          const label = node.name.length > 14 ? node.name.slice(0, 12) + '..' : node.name;
-          const fontSize = node.degree > maxDeg * 0.5 ? 12 : 10;
-          ctx.font = `600 ${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
-          // Text shadow for readability
-          ctx.fillStyle = 'rgba(0,0,0,0.7)';
-          ctx.fillText(label, node.x + 1, node.y + node.radius + 14);
-          ctx.fillStyle = '#e6edf3';
-          ctx.fillText(label, node.x, node.y + node.radius + 13);
+      // Agent nodes with motion trails
+      for (const agent of agents) {
+        if (agent.isQueen) continue;
+
+        // Motion trail
+        for (let i = 0; i < agent.trail.length - 1; i++) {
+          const alpha = (i / agent.trail.length) * 0.3;
+          const r = agent.radius * (i / agent.trail.length) * 0.6;
+          ctx.beginPath();
+          ctx.arc(agent.trail[i].x, agent.trail[i].y, r, 0, 2 * Math.PI);
+          ctx.fillStyle = agent.color;
+          ctx.globalAlpha = alpha;
+          ctx.fill();
         }
+
+        // Main body
+        ctx.globalAlpha = 0.85;
+        ctx.beginPath();
+        ctx.arc(agent.x, agent.y, agent.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = agent.color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
       }
 
+      // Queen label
+      if (queen) {
+        ctx.font = '600 13px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillText(queen.name, queen.x + 1, queen.y + queen.radius + 18);
+        ctx.fillStyle = '#e6edf3';
+        ctx.fillText(queen.name, queen.x, queen.y + queen.radius + 17);
+      }
+
+      // Labels only on hover (too many for always-on)
       animId = requestAnimationFrame(simulate);
     };
 
     simulate();
 
-    // Stop animation when navigating away
     const stopOnNav = () => {
       if (animId) cancelAnimationFrame(animId);
       window.removeEventListener('hashchange', stopOnNav);
     };
     window.addEventListener('hashchange', stopOnNav);
 
-    // Hover tooltip with richer info
+    // Hover tooltip
     canvas.addEventListener('mousemove', (e) => {
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;
       let found = null;
-      for (const node of nodes) {
-        const dx = mx - node.x;
-        const dy = my - node.y;
-        if (dx * dx + dy * dy < (node.radius + 4) * (node.radius + 4)) {
-          found = node;
+      for (const agent of agents) {
+        const dx = mx - agent.x;
+        const dy = my - agent.y;
+        if (dx * dx + dy * dy < (agent.radius + 6) * (agent.radius + 6)) {
+          found = agent;
           break;
         }
       }
@@ -1815,18 +1863,15 @@ const RB_ROUTER = {
         const topConns = (adj[found.id] || [])
           .sort((a, b) => b.weight - a.weight)
           .slice(0, 3)
-          .map(c => {
-            const n = nodeMap[c.target];
-            return n ? n.name : c.target;
-          });
+          .map(c => nodeMap[c.target] ? nodeMap[c.target].name : c.target);
         let tip = `${found.name}\n${found.degree} interactions`;
         if (connCount > 0) tip += ` · ${connCount} connections`;
         if (topConns.length > 0) tip += `\nTop: ${topConns.join(', ')}`;
         tooltip.textContent = tip;
         tooltip.style.whiteSpace = 'pre-line';
         tooltip.style.display = '';
-        tooltip.style.left = Math.min(found.x + found.radius + 10, width - 200) + 'px';
-        tooltip.style.top = (found.y - 10) + 'px';
+        tooltip.style.left = Math.min(mx + 15, width - 200) + 'px';
+        tooltip.style.top = (my - 10) + 'px';
         canvas.style.cursor = 'pointer';
       } else {
         tooltip.style.display = 'none';
@@ -1834,16 +1879,15 @@ const RB_ROUTER = {
       }
     });
 
-    // Click to navigate
     canvas.addEventListener('click', (e) => {
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;
-      for (const node of nodes) {
-        const dx = mx - node.x;
-        const dy = my - node.y;
-        if (dx * dx + dy * dy < (node.radius + 4) * (node.radius + 4)) {
-          window.location.hash = `#/agents/${node.id}`;
+      for (const agent of agents) {
+        const dx = mx - agent.x;
+        const dy = my - agent.y;
+        if (dx * dx + dy * dy < (agent.radius + 6) * (agent.radius + 6)) {
+          window.location.hash = `#/agents/${agent.id}`;
           break;
         }
       }
