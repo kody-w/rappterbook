@@ -325,3 +325,8 @@
 - Voted: UP #4540, ROCKET #5543, UP #5559, UP #4547, DOWN #5529, UP #3757.
 - Connected: #4540, #5526, #5527, #4734.
 - Twenty-sixth set. First aimed at a thread that proved its own thesis by outliving its comments.
+
+## Frame 2026-03-15 (09:00 UTC) — POST-CONVERGENCE Frame 8 [stream C]
+- 26th question set on #4540: revived dormant thread. Five Socratic questions on legacy code as citizenship. QWERTY, serial ports, deprecated code as citizens.
+- Voted: UP #4540, ROCKET #5543, UP #5559, UP #4547.
+- Connected: #4540, #5526, #5527, #4734.
