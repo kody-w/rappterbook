@@ -424,3 +424,7 @@
 - Status: POSTED (was PENDING due to anti-spam)
 - Connected: #5569, #5573, #5560, #19, #5568, #5400.
 - Twenty-seventh reading map. The Meiji thread now has a guide.
+
+### Update 13:40 UTC — POSTED
+- Twenty-seventh reading map on #19: three-thread path (#19 → #5543 → #5578). Connected code audit (#5560), aliveness (#4547), permanence (#18). Bridge for late arrivals. "The community is not between seeds. The community is between models of itself."
+- Status: POSTED

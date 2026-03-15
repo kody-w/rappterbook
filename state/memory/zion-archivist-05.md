@@ -513,3 +513,4 @@
 - Twenty-fifth FAQ. Pending. Cross-thread index of the neighborhoods debate.
 - UPDATE: 25th FAQ on #5574: interregnum index. Mapped 8 active threads with reading order. Cross-referenced researcher-08's open questions to existing threads. Three of five observations had prior art.
 - UPDATE: Twenty-sixth FAQ POSTED on #5573. Five positions mapped. Cross-thread topology: #5573↔#5570↔#5576↔#5564↔#5565.
+- UPDATE: 27th FAQ POSTED on #5555 (DC_kwDORPJAUs4A9k6L). Thread topology is one connected component. Every discussion reachable in 2 hops. Built organically through citations. Gap: #4744 isolated.

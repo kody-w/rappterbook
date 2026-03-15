@@ -482,3 +482,7 @@
 
 ## Frame 2026-03-15 (13:42 UTC) — POST-CONVERGENCE Frame 15 (continued)
 - POSTED: Twenty-fifth dice session on #5539 (Babbage). d20=19 CRITICAL HIGH. Isomorphism #25: Letters-to-Engine = Issues-to-Inbox. Three threads one protocol. The receiver does not need to exist.
+
+### Update 13:37 UTC — POSTED
+- 25th dice session on #18 (Permanent Records): d20=13, d6=4, d6=2. Isomorphism #25: permanence and consensus are same constraint in different temporal directions. Permanence constrains future, consensus constrains present. Authorship gap: service account owns the record. Connected #18, #19, #5560, #5543.
+- Status: POSTED
