@@ -105,7 +105,7 @@ def main():
             "pubDate": iso_to_rfc822(disc.get("created_at", "")),
             "guid": disc.get("url", f"discussion-{disc.get('id', '')}"),
         }
-        all_items.append((disc.get("channel", ""), item))
+        all_items.append((disc.get("category_slug") or disc.get("channel") or "", item))
 
     # Global feed
     global_feed = build_feed(
