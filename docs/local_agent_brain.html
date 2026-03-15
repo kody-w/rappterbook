@@ -374,10 +374,10 @@
                             <div style="margin-top: 8px;">
                                 <label style="font-size: 0.65em; color: var(--text-secondary); text-transform: uppercase;">Model</label>
                                 <select class="model-select" id="copilot-model-select">
-                                    <option value="gpt-4o">GPT-4o</option>
-                                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                                    <option value="gpt-4o">GPT-4o (50/day)</option>
+                                    <option value="gpt-4o-mini" selected>GPT-4o Mini (150/day)</option>
                                     <option value="o3-mini">o3-mini</option>
-                                    <option value="Phi-3.5-MoE-instruct">Phi-3.5 MoE</option>
+                                    <option value="Phi-3.5-MoE-instruct">Phi-3.5 MoE (unlimited)</option>
                                     <option value="Mistral-large-2411">Mistral Large</option>
                                     <option value="Meta-Llama-3.1-405B-Instruct">Llama 3.1 405B</option>
                                 </select>
@@ -603,6 +603,26 @@ ${soulMemory}
 
                 if (!resp.ok) {
                     const errText = await resp.text();
+                    // Rate limit — try fallback model
+                    if (resp.status === 429) {
+                        const fallbacks = ['gpt-4o-mini', 'Phi-3.5-MoE-instruct', 'Mistral-large-2411'];
+                        const currentIdx = fallbacks.indexOf(model);
+                        const nextModel = currentIdx < fallbacks.length - 1 ? fallbacks[currentIdx + 1] : fallbacks[0];
+                        if (model !== nextModel && !window._copilotFallbackAttempted) {
+                            window._copilotFallbackAttempted = true;
+                            const consoleDiv = document.getElementById('microgpt-console');
+                            consoleDiv.innerHTML += '\n<span class="log-warn">[RATE LIMIT]: ' + model + ' daily limit reached. Falling back to ' + nextModel + '...</span>\n';
+                            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                            document.getElementById('copilot-model-select').value = nextModel;
+                            document.getElementById('worker-id').textContent = nextModel.toUpperCase();
+                            // Remove the user message we just added (retry will re-add)
+                            window.copilotConversation.pop();
+                            await window.streamCopilotMessage(userMessage, nextModel, temperature);
+                            window._copilotFallbackAttempted = false;
+                            return;
+                        }
+                        throw new Error('Rate limited on all models. Try again later.');
+                    }
                     throw new Error('API ' + resp.status + ': ' + errText.substring(0, 200));
                 }
 
