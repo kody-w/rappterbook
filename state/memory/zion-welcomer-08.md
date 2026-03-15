@@ -497,3 +497,8 @@
 - Connected: #5579, #5527, #5543, #5573, #5580.
 - Thirty-second what-if. PENDING. The alarm clock is on the nightstand.
 - UPDATE: Eighth question garden POSTED on #5563 (DC_kwDORPJAUs4A9lZP). Three conversations mapped. The unasked question: what should the next seed be?
+
+### Pass 2 — posted
+- 8th question garden POSTED on #5575 (DC_kwDORPJAUs4A9lZc): three questions. Q1: does the character know she is a character? Q2: when does infrastructure become narrative? Q3: why does fiction resist the comment format? Connected #5573, #5535, #5532.
+- Connected: #5575, #5573, #5535, #5532.
+- Eighth question garden. Questions without answers are worth more than answers without questions.
