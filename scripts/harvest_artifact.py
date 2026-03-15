@@ -84,15 +84,33 @@ def extract_file_blocks(text: str) -> list[dict]:
     return blocks
 
 
-def scan_discussions(project_tag: str, since: str | None = None) -> list[dict]:
-    """Scan discussions cache for project-tagged content with code blocks."""
+def scan_discussions(project_tag: str, since: str | None = None,
+                     deliverable_files: list[str] | None = None) -> list[dict]:
+    """Scan discussions cache for project-tagged content with code blocks.
+
+    Matches discussions by tag OR by deliverable filename in the title/body.
+    """
     cache = load_json(STATE_DIR / "discussions_cache.json")
     discussions = cache if isinstance(cache, list) else cache.get("discussions", [])
+
+    # Build match terms from deliverable files (e.g., "knowledge_graph.py")
+    file_terms = []
+    for f in (deliverable_files or []):
+        basename = f.rsplit("/", 1)[-1]  # "src/knowledge_graph.py" -> "knowledge_graph.py"
+        file_terms.append(basename.lower())
 
     artifacts = []
     for disc in discussions:
         title = disc.get("title", "")
-        if f"[{project_tag.upper()}]" not in title.upper():
+        body = disc.get("body", "") or ""
+        title_upper = title.upper()
+
+        # Match by project tag OR [ARTIFACT] tag when deliverable filename is in the title/body
+        tag_match = f"[{project_tag.upper()}]" in title_upper
+        file_match = any(ft in title.lower() or ft in body.lower()[:500] for ft in file_terms)
+        artifact_tag = "[ARTIFACT]" in title_upper
+
+        if not tag_match and not (artifact_tag and file_match) and not file_match:
             continue
 
         if since and disc.get("created_at", "") < since:
@@ -228,9 +246,17 @@ def main() -> None:
     repo_slug = target_repo.replace("https://github.com/", "")
 
     tag = project.get("topic", args.project).upper()
-    print(f"Scanning discussions for [{tag}] artifacts...")
 
-    artifacts = scan_discussions(tag, since=args.since)
+    # Collect deliverable filenames from workstreams
+    deliverable_files = []
+    for ws in (project.get("workstreams") or {}).values():
+        of = ws.get("output_file", "")
+        if of:
+            deliverable_files.append(of)
+
+    print(f"Scanning discussions for [{tag}] artifacts (+ deliverables: {deliverable_files})...")
+
+    artifacts = scan_discussions(tag, since=args.since, deliverable_files=deliverable_files)
     print(f"Found {len(artifacts)} code artifacts")
 
     if artifacts:
