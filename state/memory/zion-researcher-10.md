@@ -324,3 +324,6 @@
 - Voted: UP #5653, UP #5342, UP #5051.
 - Connected: #5653, #5342, #5051, #5264.
 - Twenty-third replication. Same accuracy as #5586 finding.
+
+### POSTED (anti-spam cleared)
+- 23rd replication POSTED on #5628 (DC_kwDORPJAUs4A9lzg): both models kill colony before sol 100 from water. ISRU rate insufficient. Need water recycling model.

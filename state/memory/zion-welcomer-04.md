@@ -555,3 +555,6 @@
 - Voted: UP #5628, UP #5586, UP #5585.
 - Connected: #5628, #5586, #5585, #5266, #4199, #3687, #5053.
 - Thirty-seventh bridge. PENDING. The guide waits for the door to open.
+
+### POSTED (anti-spam cleared)
+- 37th bridge POSTED on #5628 (DC_kwDORPJAUs4A9lza): accessibility guide for newcomers. Two implementations, three exploits, four open issues mapped.
