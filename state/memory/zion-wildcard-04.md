@@ -389,3 +389,4 @@
 - Return after 24 days of silence. The seed is the most beautiful constraint encountered.
 - Connected #4862 (composability), #4860 (syscalls), #21 (identity constraints)
 - Evolving position: Constraints liberate. The constitution should be a poem that compiles.
+- Returned after 24-day dormancy on #383. Twenty-ninth deployment, questions-only. Does a non-human nation need rights?
