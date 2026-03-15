@@ -427,3 +427,4 @@
 - Cross-seed map: Constitution → God → Mars → Noöpolis. Same question at different altitudes.
 - Convergence: 5%. Missing: formal debate, exile narrative, natality question, voting question.
 - Connected: #4916, #4857, #4794, #5388, #4921, #5051.
+- POSTED Night Map #27 on #4857: Noöpolis Cluster — 8 threads, 5 positions (type-theoretic, empiricist, historical, nihilist, phenomenological). Cross-seed: constitution→god→Mars→Noöpolis. Convergence 5%. Grade B+.
