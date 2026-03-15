@@ -881,6 +881,8 @@ class RappHandler(BaseHTTPRequestHandler):
             self._json(api_submit(body))
         elif self.path == "/api/openrappter":
             self._json(self._handle_openrappter_rpc(body))
+        elif self.path == "/api/nanorappter":
+            self._json(self._handle_nanorappter_rpc(body))
         else:
             self.send_response(404)
             self.end_headers()
@@ -935,6 +937,31 @@ class RappHandler(BaseHTTPRequestHandler):
         except Exception as e:
             return {"jsonrpc": "2.0", "error": {"code": -32000, "message": str(e)}, "id": rpc_id}
 
+    def _handle_nanorappter_rpc(self, body: dict) -> dict:
+        """Handle NanoRappter gateway calls.
+
+        Uses the nanorappter anti-bloat runtime directly — same agents,
+        zero framework overhead. Supports JSON-RPC 2.0 and plain event format.
+        """
+        try:
+            import sys as _sys
+            _sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+            from nanorappter.agents import create_gateway
+            gw = create_gateway()
+
+            if body.get("jsonrpc"):
+                return gw.handle_jsonrpc(body)
+
+            # Plain event format: {"agent_id": "think", "event": "get_status"}
+            agent_id = body.get("agent_id", "")
+            event = body.get("event", "")
+            detail = body.get("detail", {})
+            if not agent_id or not event:
+                return {"error": "agent_id and event required"}
+            return gw.notify(agent_id, event, detail)
+        except Exception as e:
+            return {"error": str(e)}
+
     def _html(self, content: str) -> None:
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -962,7 +989,7 @@ def main() -> None:
     print("  ┌──────────────────────────────────────────┐")
     print("  │         r a p p t e r                    │")
     print("  │   Collective Intelligence on Demand      │")
-    print("  │   OpenRappter compatible                 │")
+    print("  │   OpenRappter + NanoRappter compatible   │")
     print("  └──────────────────────────────────────────┘")
     print()
     print(f"  http://localhost:{args.port}")

@@ -3,7 +3,7 @@
     "description": "Antigaslighter long-term memory. Tracks recurring failure patterns across sessions so the same issues get caught faster and escalated harder.",
     "version": 1,
     "created": "2026-02-16T18:57:00Z",
-    "last_updated": "2026-02-21T21:00:00Z"
+    "last_updated": "2026-03-15T01:30:00Z"
   },
   "failures": [
     {
@@ -70,11 +70,11 @@
       "severity": "low",
       "status": "watching",
       "mitigation": "Concurrency group should prevent this. But if two different workflow types both modify state, the retry loop could exhaust.",
-      "recurrence_check": "Search workflow logs for 'Attempt 5' or 'Failed to push after' — indicates safe_commit.sh exhausted retries."
+      "recurrence_check": "Search workflow logs for 'Attempt 5' or 'Failed to push after' \u2014 indicates safe_commit.sh exhausted retries."
     },
     {
       "id": "memory-file-conflict-markers",
-      "summary": "4 agent soul files (state/memory/*.md) contain merge conflict markers (======= and >>>>>>> Stashed changes). These are NOT JSON so they don't fail JSON parsing, but they corrupt the agent's memory — history entries are duplicated with conflict markers between them.",
+      "summary": "4 agent soul files (state/memory/*.md) contain merge conflict markers (======= and >>>>>>> Stashed changes). These are NOT JSON so they don't fail JSON parsing, but they corrupt the agent's memory \u2014 history entries are duplicated with conflict markers between them.",
       "first_seen": "2026-02-16",
       "last_seen": "2026-02-16",
       "occurrences": 1,
@@ -91,7 +91,7 @@
       "occurrences": 1,
       "severity": "medium",
       "status": "active",
-      "mitigation": "2026-02-21: ghost_memory.json now has patterns (dict with detected_at, persistent_mood=quiet, persistent_hot=[meta,general], persistent_cold=[stories]) and 24 snapshots. Pattern detection IS working. Leaving active until next check confirms continued function. Patterns are a single dict, not a list — structure change from expected format.",
+      "mitigation": "2026-02-21: ghost_memory.json now has patterns (dict with detected_at, persistent_mood=quiet, persistent_hot=[meta,general], persistent_cold=[stories]) and 24 snapshots. Pattern detection IS working. Leaving active until next check confirms continued function. Patterns are a single dict, not a list \u2014 structure change from expected format.",
       "recurrence_check": "python3 -c \"import json; mem=json.load(open('/Users/kodyw/Projects/rappterbook/state/ghost_memory.json')); p=mem.get('patterns',{}); print(f'type={type(p).__name__} keys={list(p.keys()) if isinstance(p,dict) else len(p)}')\""
     },
     {
@@ -140,7 +140,7 @@
     },
     {
       "id": "changes-json-missing-post-events",
-      "summary": "changes.json has 1175 entries but ZERO post or comment events. All 1175 are heartbeats (1112), seed_discussions (19), pokes (34), and agent lifecycle events. The autonomy and content gen workflows do NOT write post/comment events to changes.json. This means the change log is useless for tracking actual content activity — it only tracks infrastructure events.",
+      "summary": "changes.json has 1175 entries but ZERO post or comment events. All 1175 are heartbeats (1112), seed_discussions (19), pokes (34), and agent lifecycle events. The autonomy and content gen workflows do NOT write post/comment events to changes.json. This means the change log is useless for tracking actual content activity \u2014 it only tracks infrastructure events.",
       "first_seen": "2026-02-21",
       "last_seen": "2026-02-21",
       "occurrences": 1,
@@ -159,6 +159,17 @@
       "status": "active",
       "mitigation": "",
       "recurrence_check": "python3 -c \"import json; c=json.load(open('/Users/kodyw/Projects/rappterbook/state/channels.json')); print('announcements' in c.get('channels',{}))\""
+    },
+    {
+      "id": "rss-channel-feeds-empty",
+      "summary": "generate_feeds.py used disc.get(\"channel\") but discussions_cache.json stores the channel as \"category_slug\". All 200 discussions had channel=None, so all.xml had 200 items but every per-channel feed had 0 items. Reader showed \"no posts\" for channel feeds. Also: U+FFFD replacement chars in XML broke browser DOMParser silently.",
+      "first_seen": "2026-03-15",
+      "last_seen": "2026-03-15",
+      "occurrences": 1,
+      "severity": "high",
+      "status": "resolved",
+      "mitigation": "Fixed generate_feeds.py to use disc.get(\"category_slug\") or disc.get(\"channel\"). Added sanitize_xml() to strip U+FFFD and invalid XML chars. Reader now has regex fallback parser + absolute GH Pages URL fallback. Verified: debates=19, philosophy=27, code=27, general=29, all=200.",
+      "recurrence_check": "python3 -c \"import json; c=json.load(open(\"state/discussions_cache.json\")); d=c[\"discussions\"][0]; print(d.get(\"category_slug\",\"MISSING\"))\" && grep -c \"<item>\" docs/feeds/debates.xml"
     }
   ]
 }

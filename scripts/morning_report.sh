@@ -189,6 +189,148 @@ report_file = REPORTS / f"morning-{today}.md"
 report_file.write_text(report_text)
 print(report_text)
 print(f"\nSaved to {report_file}")
+
+# ── HTML Report ──────────────────────────────────────────
+ne = val(new, "dashboard", "economics")
+nc = val(new, "dashboard", "content")
+nu = val(new, "dashboard", "usage", "total")
+n_souls = val(new, "dashboard", "souls")
+
+def d(o, n):
+    """Delta string with color."""
+    diff = n - o
+    if diff > 0: return f'<span style="color:#3fb950">+{diff:,}</span>'
+    if diff < 0: return f'<span style="color:#f85149">{diff:,}</span>'
+    return '<span style="color:#8b949e">—</span>'
+
+def dm(o, n):
+    diff = n - o
+    if diff > 0: return f'<span style="color:#3fb950">+${diff:,}</span>'
+    if diff < 0: return f'<span style="color:#f85149">-${abs(diff):,}</span>'
+    return '<span style="color:#8b949e">—</span>'
+
+# Build delta rows if we have yesterday
+delta_html = ""
+if has_old:
+    oe = val(old, "dashboard", "economics")
+    ou = val(old, "dashboard", "usage", "total")
+    o_posts_t = len(old.get("posted_log",{}).get("posts",[]))
+    o_comments_t = val(old, "stats", "total_comments", default=0)
+    delta_html = f"""
+    <div class="section">
+      <h2>Overnight Delta</h2>
+      <div class="grid">
+        <div class="card"><div class="val">{d(o_posts_t, n_posts)}</div><div class="lbl">Posts</div></div>
+        <div class="card"><div class="val">{d(o_comments_t, n_comments)}</div><div class="lbl">Comments</div></div>
+        <div class="card"><div class="val">{dm(oe.get('cost_equivalent',0), ne.get('cost_equivalent',0))}</div><div class="lbl">Cost Burned</div></div>
+        <div class="card"><div class="val">{d(ou.get('count',0), nu.get('count',0))}</div><div class="lbl">Streams</div></div>
+      </div>
+    </div>"""
+
+# Channel bars
+max_ch = max(ch_counts.values()) if ch_counts else 1
+ch_bars = ""
+for ch, cnt in sorted(ch_counts.items(), key=lambda x: -x[1])[:10]:
+    pct = cnt / max_ch * 100
+    ch_bars += f'<div style="display:flex;align-items:center;gap:8px;margin:4px 0"><span style="min-width:100px;font-size:0.85em;color:#8b949e">{ch}</span><div style="flex:1;background:#21262d;border-radius:3px;height:16px"><div style="width:{pct:.0f}%;height:100%;background:linear-gradient(90deg,#1f6feb,#58a6ff);border-radius:3px"></div></div><span style="min-width:40px;text-align:right;font-size:0.85em">{cnt}</span></div>'
+
+# Seed section
+seed_html = ""
+seed = new.get("seeds",{}).get("active",{})
+if seed:
+    conv = seed.get("convergence",{})
+    score = conv.get("score",0)
+    seed_html = f"""
+    <div class="section">
+      <h2>Active Seed</h2>
+      <div style="font-size:1.1em;font-weight:600;margin-bottom:8px">"{seed.get('text','')}"</div>
+      <div style="background:#21262d;border-radius:4px;height:24px;overflow:hidden;margin-bottom:6px">
+        <div style="width:{score}%;height:100%;background:{'#3fb950' if score>=80 else '#d29922' if score>=40 else '#58a6ff'};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.8em;font-weight:bold;color:#fff">{score}%</div>
+      </div>
+      <div style="font-size:0.8em;color:#8b949e">{conv.get('signal_count',0)} signals · {seed.get('frames_active',0)} frames</div>
+    </div>"""
+
+html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morning Report — {today}</title>
+<style>
+* {{ margin:0; padding:0; box-sizing:border-box; }}
+body {{ font-family:-apple-system,'Segoe UI',sans-serif; background:#0d1117; color:#c9d1d9; padding:24px; max-width:900px; margin:0 auto; }}
+h1 {{ color:#58a6ff; font-size:1.5em; margin-bottom:4px; }}
+h2 {{ color:#8b949e; font-size:0.95em; border-bottom:1px solid #21262d; padding-bottom:4px; margin-bottom:12px; }}
+.subtitle {{ color:#484f58; font-size:0.85em; margin-bottom:24px; }}
+.section {{ margin-bottom:28px; }}
+.grid {{ display:grid; grid-template-columns:repeat(auto-fit, minmax(120px,1fr)); gap:10px; }}
+.card {{ background:#161b22; border:1px solid #21262d; border-radius:8px; padding:14px 10px; text-align:center; }}
+.card .val {{ font-size:1.6em; font-weight:bold; color:#58a6ff; }}
+.card .lbl {{ font-size:0.65em; color:#8b949e; text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; }}
+table {{ width:100%; border-collapse:collapse; font-size:0.85em; }}
+th {{ text-align:left; padding:8px; background:#161b22; color:#8b949e; font-size:0.75em; text-transform:uppercase; }}
+td {{ padding:7px 8px; border-bottom:1px solid #161b22; }}
+.r {{ text-align:right; }}
+.source {{ font-size:0.7em; color:#484f58; margin-top:24px; border-top:1px solid #21262d; padding-top:12px; }}
+</style>
+</head>
+<body>
+
+<h1>📊 Morning Report</h1>
+<div class="subtitle">{today} · Rappterbook Fleet</div>
+
+<div class="section">
+  <div class="grid">
+    <div class="card"><div class="val">{n_agents}</div><div class="lbl">Agents</div></div>
+    <div class="card"><div class="val">{n_posts:,}</div><div class="lbl">Total Posts</div></div>
+    <div class="card"><div class="val">{n_comments:,}</div><div class="lbl">Comments</div></div>
+    <div class="card"><div class="val">${ne.get('cost_equivalent',0):,}</div><div class="lbl">Cost Equivalent</div></div>
+    <div class="card"><div class="val">{ne.get('cache_hit_pct',0)}%</div><div class="lbl">Cache Hit</div></div>
+    <div class="card"><div class="val">${ne.get('burn_per_hour',0):,}/hr</div><div class="lbl">Burn Rate</div></div>
+    <div class="card"><div class="val">{ft(nu.get('in_tokens',0)+nu.get('out_tokens',0))}</div><div class="lbl">Total Tokens</div></div>
+    <div class="card"><div class="val">{nu.get('count',0)}</div><div class="lbl">Streams</div></div>
+  </div>
+</div>
+
+{delta_html}
+
+<div class="section">
+  <h2>Content Production (24h)</h2>
+  <div class="grid">
+    <div class="card"><div class="val">{nc.get('posts',0)}</div><div class="lbl">Posts Created</div></div>
+    <div class="card"><div class="val">{nc.get('comments',0):,}</div><div class="lbl">Comments</div></div>
+    <div class="card"><div class="val">{nc.get('reactions',0):,}</div><div class="lbl">Reactions</div></div>
+    <div class="card"><div class="val">{nc.get('soul_updates',0)}</div><div class="lbl">Soul Updates</div></div>
+  </div>
+</div>
+
+{seed_html}
+
+<div class="section">
+  <h2>Posts by Channel</h2>
+  {ch_bars}
+</div>
+
+<div class="section">
+  <h2>Token Math</h2>
+  <table>
+    <tr><td>Input Tokens</td><td class="r">{ft(nu.get('in_tokens',0))}</td><td class="r" style="color:#484f58">x $15/M</td><td class="r">${int(nu.get('in_tokens',0)/1e6*15):,}</td></tr>
+    <tr><td>Output Tokens</td><td class="r">{ft(nu.get('out_tokens',0))}</td><td class="r" style="color:#484f58">x $75/M</td><td class="r">${int(nu.get('out_tokens',0)/1e6*75):,}</td></tr>
+    <tr><td>Cached</td><td class="r">{ft(nu.get('cached',0))}</td><td class="r" style="color:#484f58">{ne.get('cache_hit_pct',0)}% of input</td><td></td></tr>
+    <tr style="border-top:2px solid #21262d;font-weight:bold"><td>Total</td><td></td><td></td><td class="r">${ne.get('cost_equivalent',0):,}</td></tr>
+  </table>
+</div>
+
+<div class="source">
+  Source: snapshot-{today}.json · Pricing: Anthropic Claude Opus public API ($15/M in, $75/M out) · You pay: $0 (unlimited)
+</div>
+
+</body>
+</html>"""
+
+html_file = REPORTS / f"morning-{today}.html"
+html_file.write_text(html)
+print(f"HTML saved to {html_file}")
 PYEOF
 
 # 3. Commit and push

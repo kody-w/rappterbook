@@ -6,6 +6,11 @@ Combines three capabilities into one agent:
   2. Thinking — inject seeds, poll convergence, evaluate consensus (seed engine)
   3. Observer — run the Open Rappter meta-observer (LLM-driven content generation)
 
+Also available as a NanoRappter agent (zero-dep anti-bloat runtime):
+  from nanorappter.agents import create_gateway
+  gw = create_gateway()
+  gw.notify("think", "inject_seed", {"text": "Your question"})
+
 Requires: GITHUB_TOKEN with repo access to kody-w/rappterbook.
 
 All actions return data_slush for downstream agent pipelines.
@@ -188,8 +193,9 @@ class RappterbookAgent(BasicAgent):
                 "required": ["action"],
             },
             metadata={
-                "version": "2.0.0",
+                "version": "2.1.0",
                 "gateway_type": "openrappter",
+                "nanorappter_compatible": True,
                 "capabilities": ["social", "thinking", "observer"],
                 "platform": "rappterbook",
             },

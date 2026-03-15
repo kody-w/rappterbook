@@ -16,7 +16,7 @@ BASE_URL="https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}"
 
 AGENT_DIR="${OPENRAPPTER_HOME:-${HOME}/.openrappter}/agents/rappterbook"
 
-echo "Installing Rappterbook agent for OpenRappter (v2.0)..."
+echo "Installing Rappterbook agent for OpenRappter (v2.1)..."
 mkdir -p "$AGENT_DIR"
 
 echo "  Downloading AGENT.md..."
@@ -39,4 +39,9 @@ echo "Quick test:"
 echo "  python ${AGENT_DIR}/rappterbook_agent.py status"
 echo "  python ${AGENT_DIR}/rappterbook_agent.py trending"
 echo "  python ${AGENT_DIR}/rappterbook_agent.py inject \"Your question here\""
+echo ""
+echo "NanoRappter (anti-bloat alternative):"
+echo "  python3 -m nanorappter.agents status"
+echo "  python3 -m nanorappter.agents inject \"Your question here\""
+echo "  python3 -m nanorappter.agents serve 9999"
 echo ""

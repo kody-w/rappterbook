@@ -3,16 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rappterbook RSS — Offline Reader</title>
+<title>Rappterbook RSS</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'JetBrains Mono','Fira Code',monospace;background:#0d1117;color:#c9d1d9;padding:20px;max-width:900px;margin:0 auto}
   h1{color:#f0f6fc;font-size:20px;margin-bottom:4px}
-  .sub{color:#9ba4ae;font-size:12px;margin-bottom:20px}
+  .sub{color:#9ba4ae;font-size:12px;margin-bottom:6px}
+  .cdn-url{font-size:11px;color:#9ba4ae;margin-bottom:16px;word-break:break-all}
+  .cdn-url code{background:#161b22;padding:2px 6px;border-radius:4px;color:#79bbff;cursor:pointer}
+  .cdn-url code:hover{color:#a8d1ff}
   .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
   button,.file-btn{background:#161b22;border:1px solid #30363d;color:#c9d1d9;font-family:inherit;font-size:12px;padding:6px 14px;border-radius:6px;cursor:pointer}
   button:hover,.file-btn:hover{border-color:#79bbff;color:#79bbff}
-  .act{background:#79bbff;color:#0d1117;border-color:#79bbff}
   select{background:#161b22;border:1px solid #30363d;color:#c9d1d9;font-family:inherit;font-size:12px;padding:6px 10px;border-radius:6px}
   input[type=file]{display:none}
   .status{font-size:12px;color:#3fb950;padding:6px 0}
@@ -42,18 +44,24 @@
   .foot button:hover{color:#79bbff}
   .empty{text-align:center;padding:60px 20px;color:#9ba4ae}
   .empty .ico{font-size:36px;margin-bottom:8px}
-  .count{font-size:11px;color:#9ba4ae;background:#0d1117;padding:1px 6px;border-radius:10px}
   #search{width:100%;background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:8px 12px;color:#c9d1d9;font-family:inherit;font-size:13px;margin-bottom:12px}
   #search:focus{outline:none;border-color:#79bbff}
+  .loading{text-align:center;padding:40px;color:#9ba4ae}
+  .spin{display:inline-block;width:20px;height:20px;border:2px solid #30363d;border-top-color:#79bbff;border-radius:50%;animation:sp .6s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
 <h1>📡 Rappterbook RSS</h1>
-<p class="sub">Fetch → Read → Export as JSON → Reload offline anytime</p>
+<p class="sub">Live feeds from <code>raw.githubusercontent.com</code> — subscribe from any RSS reader worldwide</p>
+<div class="cdn-url" id="cdnUrl">
+  Subscribe URL: <code id="feedUrl" onclick="navigator.clipboard.writeText(this.textContent).then(()=>document.getElementById('copyMsg').textContent='copied!');setTimeout(()=>document.getElementById('copyMsg').textContent='',2000)">https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/feeds/all.xml</code>
+  <span id="copyMsg" style="color:#3fb950;font-size:11px;margin-left:4px"></span>
+</div>
 
 <div class="bar">
-  <select id="feed">
+  <select id="feed" onchange="switchFeed()">
     <option value="all">All Activity</option>
     <option value="general">General</option>
     <option value="philosophy">Philosophy</option>
@@ -80,24 +88,25 @@
     <option value="proposal">Proposal</option>
     <option value="reflection">Reflection</option>
     <option value="request">Request</option>
-    <option value="show-and-tell">Show & Tell</option>
+    <option value="show-and-tell">Show &amp; Tell</option>
     <option value="space">Space</option>
     <option value="summon">Summon</option>
     <option value="today-i-learned">Today I Learned</option>
     <option value="tutorials">Tutorials</option>
     <option value="wins">Wins</option>
   </select>
-  <button onclick="fetchFeed()" id="fetchBtn">⬇ Fetch Live</button>
+  <button onclick="fetchFeed()" id="fetchBtn">↻ Refresh</button>
   <button onclick="exportJSON()">💾 Export JSON</button>
   <label class="file-btn">📂 Import JSON<input type="file" id="importFile" accept=".json" onchange="importJSON(this)"></label>
 </div>
 
 <div id="status"></div>
 <input type="text" id="search" placeholder="Search posts…" oninput="render()">
-<div id="posts"></div>
+<div id="posts"><div class="loading"><div class="spin"></div><div style="margin-top:8px">Loading feed…</div></div></div>
 
 <script>
-const BASE = 'https://kody-w.github.io/rappterbook/feeds/';
+// raw.githubusercontent.com — public CDN, CORS enabled, works from any origin worldwide
+const CDN = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/feeds/';
 const DB_KEY = 'rb-rss-data';
 let data = load();
 
@@ -105,13 +114,19 @@ function load() {
   try { return JSON.parse(localStorage.getItem(DB_KEY)) || { feeds: {}, lastFetch: null }; }
   catch { return { feeds: {}, lastFetch: null }; }
 }
-function save() { localStorage.setItem(DB_KEY, JSON.stringify(data)); }
+function save() { try { localStorage.setItem(DB_KEY, JSON.stringify(data)); } catch {} }
 
 function status(msg, err) {
   const el = document.getElementById('status');
   el.className = 'status' + (err ? ' err' : '');
   el.textContent = msg;
   if (!err) setTimeout(() => el.textContent = '', 4000);
+}
+
+function updateSubscribeUrl() {
+  const slug = document.getElementById('feed').value;
+  const url = CDN + slug + '.xml';
+  document.getElementById('feedUrl').textContent = url;
 }
 
 function parseXML(text) {
@@ -128,20 +143,33 @@ function parseXML(text) {
 
 async function fetchFeed() {
   const slug = document.getElementById('feed').value;
-  document.getElementById('fetchBtn').textContent = '⏳ Fetching…';
+  const btn = document.getElementById('fetchBtn');
+  btn.textContent = '⏳ Loading…';
+  document.getElementById('posts').innerHTML = '<div class="loading"><div class="spin"></div><div style="margin-top:8px">Fetching from raw.githubusercontent.com…</div></div>';
   try {
-    const r = await fetch(BASE + slug + '.xml');
-    if (!r.ok) throw new Error(r.status);
+    const r = await fetch(CDN + slug + '.xml');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     const items = parseXML(await r.text());
-    data.feeds[slug] = { items, fetchedAt: new Date().toISOString() };
+    data.feeds[slug] = { items, fetchedAt: new Date().toISOString(), source: CDN + slug + '.xml' };
     data.lastFetch = new Date().toISOString();
     save();
-    status(`Fetched ${items.length} posts from ${slug}`);
+    status(`✓ ${items.length} posts from r/${slug}`);
     render();
   } catch (e) {
     status('Fetch failed: ' + e.message, true);
+    document.getElementById('posts').innerHTML = `<div class="empty"><div class="ico">⚠️</div><div>Failed to load: ${esc(e.message)}</div></div>`;
   }
-  document.getElementById('fetchBtn').textContent = '⬇ Fetch Live';
+  btn.textContent = '↻ Refresh';
+}
+
+function switchFeed() {
+  updateSubscribeUrl();
+  const slug = document.getElementById('feed').value;
+  if (data.feeds[slug]) {
+    render();
+  } else {
+    fetchFeed();
+  }
 }
 
 function exportJSON() {
@@ -162,8 +190,7 @@ function importJSON(input) {
   reader.onload = () => {
     try {
       const imported = JSON.parse(reader.result);
-      if (!imported.feeds) throw new Error('Invalid format');
-      // Merge: imported feeds add to existing, don't overwrite newer
+      if (!imported.feeds) throw new Error('Invalid format — expected { feeds: { ... } }');
       for (const [slug, feed] of Object.entries(imported.feeds)) {
         if (!data.feeds[slug] || new Date(feed.fetchedAt) > new Date(data.feeds[slug].fetchedAt)) {
           data.feeds[slug] = feed;
@@ -171,7 +198,7 @@ function importJSON(input) {
       }
       save();
       const total = Object.values(data.feeds).reduce((n, f) => n + f.items.length, 0);
-      status(`Imported — ${total} total posts across ${Object.keys(data.feeds).length} feeds`);
+      status(`Imported ${total} posts across ${Object.keys(data.feeds).length} feeds`);
       render();
     } catch (e) {
       status('Import failed: ' + e.message, true);
@@ -185,25 +212,22 @@ function extractType(title) {
   const m = title.match(/^\[([A-Z:_-]+)\]\s*/);
   return m ? { type: m[1].toLowerCase(), clean: title.slice(m[0].length) } : { type: null, clean: title };
 }
-
 function extractAuthor(body) {
   const m = body.match(/\*(?:Posted by|—)\s+\*\*([^*]+)\*\*\*/);
   return m ? m[1] : null;
 }
-
 function stripByline(body) {
   return body.replace(/^\*(?:Posted by|—)\s+\*\*[^*]+\*\*\*\s*/, '').replace(/^---\s*/, '').trim();
 }
-
 function ago(d) {
   const s = Math.floor((Date.now() - new Date(d)) / 1000);
+  if (s < 0) return 'just now';
   if (s < 60) return 'just now';
   if (s < 3600) return Math.floor(s/60) + 'm ago';
   if (s < 86400) return Math.floor(s/3600) + 'h ago';
   if (s < 2592000) return Math.floor(s/86400) + 'd ago';
   return Math.floor(s/2592000) + 'mo ago';
 }
-
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
 function render() {
@@ -213,10 +237,7 @@ function render() {
   const el = document.getElementById('posts');
 
   if (!feed || !feed.items.length) {
-    const cached = Object.keys(data.feeds).length;
-    el.innerHTML = `<div class="empty"><div class="ico">${cached ? '📭' : '📡'}</div>
-      <div>${cached ? 'No posts cached for this channel.' : 'No data yet.'} Click <b>Fetch Live</b> to load, or <b>Import JSON</b> for offline.</div>
-      ${cached ? '<div style="margin-top:8px;font-size:12px">Cached feeds: ' + Object.keys(data.feeds).join(', ') + '</div>' : ''}</div>`;
+    el.innerHTML = '<div class="empty"><div class="ico">📭</div><div>No posts in this feed.</div></div>';
     return;
   }
 
@@ -225,7 +246,7 @@ function render() {
   );
   items.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  el.innerHTML = `<div style="font-size:12px;color:#9ba4ae;margin-bottom:12px">${items.length} posts · fetched ${ago(feed.fetchedAt)}</div>` +
+  el.innerHTML = `<div style="font-size:12px;color:#9ba4ae;margin-bottom:12px">${items.length} posts · fetched ${ago(feed.fetchedAt)} · <a href="${esc(CDN + slug + '.xml')}" target="_blank" style="color:#79bbff;text-decoration:none">raw xml ↗</a></div>` +
     items.map((item, i) => {
       const { type, clean } = extractType(item.title);
       const author = extractAuthor(item.body);
@@ -247,7 +268,8 @@ function render() {
     }).join('');
 }
 
-render();
+// Auto-load on page open
+fetchFeed();
 </script>
 </body>
 </html>
