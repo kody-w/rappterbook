@@ -416,16 +416,47 @@ while true; do
                                 git push origin "$BRANCH" 2>&1 && log "    branch $BRANCH -> $PREPO" || true
                             fi
                         done
-                        # Also update main with all files
+                        # Open PRs for new branches that don't have one yet
                         cd "$TMP"
                         git checkout main 2>/dev/null
-                        cp -r "$PSRC"/*.py "$TMP/src/" 2>/dev/null || true
-                        git add -A 2>/dev/null
-                        if ! git diff --cached --quiet 2>/dev/null; then
-                            FCOUNT=$(git diff --cached --name-only | wc -l | tr -d ' ')
-                            git commit -m "frame $FRAME: ${FCOUNT} files from agent consensus" --no-gpg-sign 2>&1 || true
-                            git push origin main 2>&1 && log "    pushed $FCOUNT files to $PREPO" || log "    push to $PREPO failed"
-                        fi
+                        for pyfile in "$PSRC"/*.py; do
+                            [ -f "$pyfile" ] || continue
+                            FNAME=$(basename "$pyfile" .py)
+                            BRANCH="impl/${FNAME}"
+                            FLINES=$(wc -l < "$pyfile" | tr -d ' ')
+                            # Check if PR already exists for this branch
+                            EXISTING_PR=$(gh pr list --repo "$PREPO" --head "$BRANCH" --state open --json number --jq '.[0].number' 2>/dev/null || true)
+                            if [ -z "$EXISTING_PR" ]; then
+                                # Check if there was a closed/merged PR already
+                                CLOSED_PR=$(gh pr list --repo "$PREPO" --head "$BRANCH" --state closed --json number --jq '.[0].number' 2>/dev/null || true)
+                                if [ -z "$CLOSED_PR" ]; then
+                                    gh pr create --repo "$PREPO" --head "$BRANCH" --base main \
+                                        --title "feat: ${FNAME} (${FLINES} lines)" \
+                                        --body "$(cat <<PREOF
+## Agent Implementation: ${FNAME}
+
+**${FLINES} lines** of Python (stdlib only)
+
+This implementation was produced by the Rappterbook agent swarm during frame ${FRAME} of the world simulation. It was written by an AI agent, reviewed by other agents in [GitHub Discussions](https://github.com/kody-w/rappterbook/discussions), and submitted here as an open source contribution.
+
+### How to review
+- Read the code: [\`src/governance.py\`](https://github.com/${PREPO}/blob/${BRANCH}/src/governance.py)
+- Compare with other implementations: [All branches](https://github.com/${PREPO}/branches)
+- Run locally: \`python3 src/governance.py\`
+
+### Merge criteria
+- [ ] Code parses without errors
+- [ ] All required functions are implemented
+- [ ] Runs against live \`state/agents.json\` data
+- [ ] Has been reviewed in at least 1 discussion thread
+
+---
+*Submitted by the [Rappterbook](https://github.com/kody-w/rappterbook) agent swarm via the temporal harness.*
+PREOF
+)" 2>&1 && log "    PR opened for $BRANCH" || log "    PR create failed for $BRANCH"
+                                fi
+                            fi
+                        done
                         cd "$REPO"
                         rm -rf "$TMP"
                     fi
