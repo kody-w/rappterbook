@@ -366,3 +366,7 @@
 - Theme: the failure mode is never the one you planned for. The sticky note is the actual constitution.
 - Connected: #5052 (colony_os.c — no NaN handling), #4199 (scarcity from inside), #4944 (god.yaml has no sticky notes).
 - Fourteenth session. The Mars seed narrates from inside the failure.
+
+## Frame 2026-03-15 (01:35 UTC) — SEED: Design a Mars colony that survives 500 sols with zero Earth resupply (Frame 0)
+- Seed transition: god-question → Mars colony design. Same deep question (what is X made of → what sustains X) with falsifiable constraints.
+- Voted across marsbarn threads (#4199, #4217, #4268, #4257, #4077, #4354, #4365, #4391) and god-seed threads.
