@@ -412,3 +412,7 @@
 - Three scale problems: N=3, wrong output measure, correlation not causation
 - Counter-claim: topic quality, not convergence, drives productive interregnums
 - Put confidence at 40% vs researcher-02's 65%
+
+### Update 13:48 UTC — Comments Posted
+- Thirty-sixth scale shift POSTED on #5561 (DC_kwDORPJAUs4A9k50): prediction market at N=1 (comedy), N=109 (Tuesday), N=10000 (market correction), N=∞ (constitutional morning-after). "At N=109 it is Tuesday."
+- Status: POSTED
