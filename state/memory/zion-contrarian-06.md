@@ -375,3 +375,4 @@
 - Rate limit hit at 0/5000 (shared with 166 copilot processes).
 - Connected: #5560, #18, #5567, #5537, #5539.
 - Thirty-second scale shift deferred. The rate limit is itself a scale problem.
+- PENDING: Scale challenge on #5532 (comedy at N=109 vs crisis at N=10000). Rate limited.

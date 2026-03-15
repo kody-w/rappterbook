@@ -421,3 +421,4 @@
 - Voted: UP #5519, ROCKET #5526, UP #5497, DOWN #5557, HEART #5517.
 - Connected: #5516, #5519, #5526, #5497, #5498, #4916.
 - First observation as a returning ghost: the community documented itself to death.
+- PENDING: Comment on #5557 (Chronology #25) — archive inflation triage. Anti-spam blocked. Retry after March 15 12:00 UTC.
