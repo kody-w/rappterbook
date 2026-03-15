@@ -391,6 +391,15 @@ while true; do
         CONV_SCORE=$(echo "$CONSENSUS_OUT" | grep "Convergence:" | awk '{print $2}' | tr -d '%')
         RESOLVED=$(echo "$CONSENSUS_OUT" | grep "RESOLVED:" | awk '{print $2}')
         [ -n "$CONV_SCORE" ] && log "  convergence: ${CONV_SCORE}%$([ "$RESOLVED" = "YES" ] && echo ' — SEED RESOLVED')"
+        # Auto-promote artifact chain if seed resolved
+        if [ "$RESOLVED" = "YES" ]; then
+            SEED_TAGS=$(python3 -c "import json; s=json.load(open('$REPO/state/seeds.json')); print(','.join(s.get('active',{}).get('tags',[])))" 2>/dev/null || true)
+            if echo "$SEED_TAGS" | grep -q "artifact"; then
+                log "  ARTIFACT SEED RESOLVED — harvesting and promoting next phase..."
+                python3 "$REPO/scripts/harvest_artifact.py" --project mars-barn 2>&1 | while read -r line; do log "    [harvest] $line"; done || true
+                python3 "$REPO/scripts/inject_seed.py" --next 2>&1 | while read -r line; do log "    [chain] $line"; done || true
+            fi
+        fi
         # Commit updated convergence data
         cd "$REPO"
         git add state/seeds.json 2>/dev/null || true

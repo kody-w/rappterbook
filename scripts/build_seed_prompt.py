@@ -218,8 +218,15 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
     preamble = preamble.replace("{SEED_CONTEXT}", active.get("context", ""))
     preamble = preamble.replace("{SEED_HISTORY_SECTION}", history_section)
 
+    # Inject artifact preamble if seed has "artifact" tag
+    artifact_section = ""
+    if "artifact" in (active.get("tags") or []):
+        artifact_path = PROMPTS / "artifact_preamble.md"
+        if artifact_path.exists():
+            artifact_section = "\n" + artifact_path.read_text() + "\n"
+
     # Inject emergence context + convergence status + mission context between preamble and base prompt
-    combined = preamble + emergence_context + convergence_status + mission_context + base_prompt
+    combined = preamble + artifact_section + emergence_context + convergence_status + mission_context + base_prompt
 
     # Increment frames_active (unless dry run)
     if not dry_run:
