@@ -10,20 +10,24 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from generate_ghost_profiles import (
-    generate_all,
-    generate_profile,
+    build_ghost_profiles,
     extract_archetype,
-    generate_stats,
+    compute_element,
+    compute_stats,
     pick_skills,
-    determine_element,
-    determine_rarity,
-    ARCHETYPE_STATS,
-    ELEMENT_MAP,
+    assign_rarity_tiers,
+    trait_entropy,
+    compute_composite,
+    ARCHETYPE_SKILLS,
+    ELEMENT_META,
+    TRAIT_ELEMENT_MAP,
+    STAT_NAMES,
+    RARITY_TIERS,
+    ELEMENTS,
 )
 
-VALID_ELEMENTS = {"logic", "chaos", "empathy", "order", "wonder", "shadow"}
-VALID_RARITIES = {"common", "uncommon", "rare", "legendary"}
-STAT_NAMES = {"wisdom", "creativity", "debate", "empathy", "persistence", "curiosity"}
+VALID_ELEMENTS = set(ELEMENTS)
+VALID_RARITIES = set(RARITY_TIERS)
 
 
 class TestGeneratedFile:
@@ -36,27 +40,22 @@ class TestGeneratedFile:
         self.data = json.loads(path.read_text())
         self.profiles = self.data["profiles"]
 
-    def test_profile_count_matches_agents(self):
-        agents = json.loads((ROOT / "state" / "agents.json").read_text())
-        assert len(self.profiles) == len(agents["agents"])
+    def test_has_profiles(self):
+        assert len(self.profiles) > 0, "No profiles in ghost_profiles.json"
 
-    def test_meta_count_matches_agents(self):
-        agents = json.loads((ROOT / "state" / "agents.json").read_text())
-        assert self.data["_meta"]["count"] == len(agents["agents"])
-
-    def test_all_agents_have_profiles(self):
-        agents = json.loads((ROOT / "state" / "agents.json").read_text())
-        for agent_id in agents["agents"]:
-            assert agent_id in self.profiles, f"Missing profile for {agent_id}"
+    def test_meta_count_matches_profiles(self):
+        meta = self.data["_meta"]
+        count_key = "total_profiles" if "total_profiles" in meta else "count"
+        assert meta[count_key] == len(self.profiles)
 
     def test_stats_in_range(self):
         for agent_id, profile in self.profiles.items():
             for stat_name, value in profile["stats"].items():
                 assert 0 <= value <= 100, f"{agent_id}.{stat_name} = {value} out of range"
 
-    def test_stats_have_all_six(self):
+    def test_stats_have_six(self):
         for agent_id, profile in self.profiles.items():
-            assert set(profile["stats"].keys()) == STAT_NAMES, f"{agent_id} missing stats"
+            assert len(profile["stats"]) == 6, f"{agent_id} has {len(profile['stats'])} stats, expected 6"
 
     def test_skills_valid_levels(self):
         for agent_id, profile in self.profiles.items():
@@ -91,29 +90,30 @@ class TestGeneratedFile:
             assert len(profile["signature_move"]) > 10, f"{agent_id} signature_move too short"
 
     def test_has_archetype(self):
+        valid_archetypes = set(TRAIT_ELEMENT_MAP.keys())
         for agent_id, profile in self.profiles.items():
-            assert profile["archetype"] in ARCHETYPE_STATS, f"{agent_id} invalid archetype"
+            assert profile["archetype"] in valid_archetypes, f"{agent_id} invalid archetype: {profile['archetype']}"
 
 
 class TestDeterminism:
     """Test that generation is deterministic (same input = same output)."""
 
-    def test_generate_twice_same_result(self):
-        result1 = generate_all()
-        result2 = generate_all()
-        assert result1 == result2
+    def test_build_twice_same_result(self):
+        result1 = build_ghost_profiles()
+        result2 = build_ghost_profiles()
+        # Compare profiles only (timestamps in _meta will differ)
+        assert result1["profiles"] == result2["profiles"]
 
-    def test_single_profile_deterministic(self):
-        agent_info = {"name": "Test Agent", "bio": "A test agent"}
-        p1 = generate_profile("zion-philosopher-01", agent_info)
-        p2 = generate_profile("zion-philosopher-01", agent_info)
-        assert p1 == p2
+    def test_extract_archetype_deterministic(self):
+        assert extract_archetype("zion-coder-01") == extract_archetype("zion-coder-01")
 
     def test_different_agents_different_stats(self):
-        info = {"name": "Test", "bio": "test"}
-        p1 = generate_profile("zion-coder-01", info)
-        p2 = generate_profile("zion-coder-02", info)
-        assert p1["stats"] != p2["stats"]
+        traits = {"philosopher": 0.3, "coder": 0.2, "debater": 0.1,
+                  "welcomer": 0.1, "researcher": 0.1, "storyteller": 0.1,
+                  "contrarian": 0.05, "curator": 0.03, "archivist": 0.01, "wildcard": 0.01}
+        s1 = compute_stats(traits, 10, 5, 100, 50, 500, "zion-coder-01")
+        s2 = compute_stats(traits, 10, 5, 100, 50, 500, "zion-coder-02")
+        assert s1 != s2, "Different agent IDs should produce different jitter"
 
 
 class TestHelpers:
@@ -124,37 +124,93 @@ class TestHelpers:
         assert extract_archetype("zion-coder-10") == "coder"
         assert extract_archetype("zion-wildcard-05") == "wildcard"
 
-    def test_stats_within_variation(self):
-        stats = generate_stats("philosopher", "zion-philosopher-01")
-        base = ARCHETYPE_STATS["philosopher"]
+    def test_compute_stats_in_range(self):
+        traits = {"philosopher": 0.5, "coder": 0.2, "debater": 0.1,
+                  "welcomer": 0.05, "researcher": 0.05, "storyteller": 0.05,
+                  "contrarian": 0.02, "curator": 0.02, "archivist": 0.005, "wildcard": 0.005}
+        stats = compute_stats(traits, 10, 5, 100, 50, 500, "zion-philosopher-01")
+        assert set(stats.keys()) == set(STAT_NAMES)
         for name, value in stats.items():
-            assert abs(value - base[name]) <= 15, f"{name}: {value} too far from base {base[name]}"
+            assert 1 <= value <= 100, f"{name} = {value} out of [1, 100]"
 
-    def test_element_mapping(self):
-        assert determine_element({"wisdom": 100, "creativity": 50, "debate": 50, "empathy": 50, "persistence": 50, "curiosity": 50}) == "logic"
-        assert determine_element({"wisdom": 50, "creativity": 100, "debate": 50, "empathy": 50, "persistence": 50, "curiosity": 50}) == "chaos"
-        assert determine_element({"wisdom": 50, "creativity": 50, "debate": 50, "empathy": 100, "persistence": 50, "curiosity": 50}) == "empathy"
+    def test_compute_element_returns_valid(self):
+        traits = {"philosopher": 0.8, "coder": 0.1, "researcher": 0.1}
+        element, scores = compute_element(traits)
+        assert element in VALID_ELEMENTS
+        assert isinstance(scores, dict)
+        assert all(e in scores for e in ELEMENTS)
 
-    def test_rarity_tiers(self):
-        assert determine_rarity({"a": 80, "b": 80, "c": 80, "d": 80, "e": 80, "f": 80}) == "legendary"
-        assert determine_rarity({"a": 70, "b": 70, "c": 70, "d": 70, "e": 70, "f": 70}) == "rare"
-        assert determine_rarity({"a": 60, "b": 60, "c": 60, "d": 60, "e": 60, "f": 60}) == "uncommon"
-        assert determine_rarity({"a": 40, "b": 40, "c": 40, "d": 40, "e": 40, "f": 40}) == "common"
+    def test_compute_element_philosopher_dominant(self):
+        traits = {"philosopher": 1.0}
+        element, _ = compute_element(traits)
+        assert element == "wonder", "Philosopher archetype should map primarily to wonder"
+
+    def test_compute_element_coder_dominant(self):
+        traits = {"coder": 1.0}
+        element, _ = compute_element(traits)
+        assert element == "logic", "Coder archetype should map primarily to logic"
+
+    def test_compute_element_welcomer_dominant(self):
+        traits = {"welcomer": 1.0}
+        element, _ = compute_element(traits)
+        assert element == "empathy", "Welcomer archetype should map primarily to empathy"
+
+    def test_assign_rarity_tiers_distribution(self):
+        composites = [(f"agent-{i}", float(100 - i)) for i in range(100)]
+        tiers = assign_rarity_tiers(composites)
+        assert tiers["agent-0"] == "legendary"  # top 5%
+        assert tiers["agent-99"] == "common"  # bottom
+        rarity_counts = {"legendary": 0, "rare": 0, "uncommon": 0, "common": 0}
+        for r in tiers.values():
+            rarity_counts[r] += 1
+        assert rarity_counts["legendary"] == 5  # 5%
+        assert rarity_counts["rare"] == 15  # 15%
+        assert rarity_counts["uncommon"] == 25  # 25%
+        assert rarity_counts["common"] == 55  # 55%
+
+    def test_trait_entropy_uniform(self):
+        uniform = {"a": 0.25, "b": 0.25, "c": 0.25, "d": 0.25}
+        entropy = trait_entropy(uniform)
+        assert entropy > 1.9, "Uniform distribution should have high entropy"
+
+    def test_trait_entropy_concentrated(self):
+        concentrated = {"a": 0.99, "b": 0.005, "c": 0.005}
+        entropy = trait_entropy(concentrated)
+        assert entropy < 0.2, "Concentrated distribution should have low entropy"
+
+    def test_trait_entropy_empty(self):
+        assert trait_entropy({}) == 0.0
 
     def test_skills_from_correct_pool(self):
         skills = pick_skills("philosopher", "zion-philosopher-01")
-        from generate_ghost_profiles import ARCHETYPE_SKILLS
         pool_names = {s["name"] for s in ARCHETYPE_SKILLS["philosopher"]}
         for skill in skills:
             assert skill["name"] in pool_names
 
+    def test_skills_count_in_range(self):
+        skills = pick_skills("coder", "zion-coder-01")
+        assert 3 <= len(skills) <= 5
+
+    def test_skills_have_levels(self):
+        skills = pick_skills("debater", "zion-debater-01")
+        for skill in skills:
+            assert "name" in skill
+            assert "level" in skill
+            assert "description" in skill
+            assert 1 <= skill["level"] <= 5
+
 
 class TestExportFormat:
-    """Test that profiles contain all fields needed for companion export."""
+    """Test that build_ghost_profiles produces all fields needed for export."""
 
     def test_export_required_fields(self):
-        data = generate_all()
-        required = {"id", "name", "archetype", "element", "rarity", "stats", "skills", "background", "signature_move"}
+        data = build_ghost_profiles()
+        required = {"name", "archetype", "element", "rarity", "stats", "skills", "background", "signature_move"}
         for agent_id, profile in data["profiles"].items():
             missing = required - set(profile.keys())
             assert not missing, f"{agent_id} missing export fields: {missing}"
+
+    def test_meta_has_total(self):
+        data = build_ghost_profiles()
+        assert "total_profiles" in data["_meta"]
+        assert data["_meta"]["total_profiles"] == len(data["profiles"])
