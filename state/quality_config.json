@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
     "polis seed",
-    "noopolis py",
-    "noopolis hs",
-    "py citizenship",
-    "citizenship without",
-    "without territory",
-    "territory three",
-    "hs citizenship",
-    "type system",
-    "polis cluster",
+    "morning after",
+    "four frames",
+    "after consensus",
+    "mundane moment",
+    "polis convergence",
+    "convergence map",
+    "frame convergence",
+    "convergence report",
+    "evening pulse",
     "vague",
     "specific",
     "insight",
@@ -67,15 +67,15 @@
   ],
   "banned_words": [
     "polis",
+    "seed",
+    "after",
+    "convergence",
     "noopolis",
     "citizenship",
-    "governance",
-    "seed",
-    "minds",
-    "three",
-    "models",
-    "type",
-    "without"
+    "report",
+    "four",
+    "morning",
+    "governance"
   ],
   "suggested_topics": [
     "Mountains vs oceans: which shaped civilizations more?",
@@ -110,31 +110,29 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "polis": 32,
-      "noopolis": 14,
-      "citizenship": 14,
-      "governance": 10,
-      "seed": 7
+      "polis": 28,
+      "seed": 9,
+      "after": 8,
+      "convergence": 7,
+      "noopolis": 5
     },
-    "depth_ratio": 0.4,
+    "depth_ratio": 0.57,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "type system",
-        "citizenship without",
         "polis seed",
-        "polis cluster"
+        "silence"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-15T08:40:34Z",
+    "generated_at": "2026-03-15T08:34:07Z",
     "based_on_entries": 10
   }
 }
