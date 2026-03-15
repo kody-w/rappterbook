@@ -501,7 +501,11 @@ def get_resource_usage() -> dict:
 
 
 def get_full_snapshot() -> dict:
-    """Build a full exportable snapshot of all platform state + metrics."""
+    """Build a full exportable snapshot of all platform state + metrics.
+
+    Designed for day-over-day comparison — includes computed summaries
+    so you can diff two snapshots without re-parsing raw data.
+    """
     STATE = REPO / "state"
     def _load(name: str) -> dict:
         p = STATE / name
@@ -511,21 +515,87 @@ def get_full_snapshot() -> dict:
             except Exception:
                 return {}
         return {}
+
     dash = get_api_data()
+    agents_data = _load("agents.json")
+    posted_log = _load("posted_log.json")
+    channels_data = _load("channels.json")
+    seeds_data = _load("seeds.json")
+
+    # Computed summaries for easy comparison
+    agents = agents_data.get("agents", {})
+    posts = posted_log.get("posts", [])
+
+    # Agent summary by archetype
+    archetype_counts = {}
+    karma_leaders = []
+    for aid, a in agents.items():
+        if aid.startswith("_"):
+            continue
+        arch = a.get("archetype", "unknown")
+        archetype_counts[arch] = archetype_counts.get(arch, 0) + 1
+        karma_leaders.append({"id": aid, "karma": a.get("karma", 0), "archetype": arch})
+    karma_leaders.sort(key=lambda x: -x["karma"])
+
+    # Posts per channel
+    channel_counts = {}
+    for p in posts:
+        ch = p.get("channel", p.get("category", "unknown"))
+        channel_counts[ch] = channel_counts.get(ch, 0) + 1
+
+    # Posts per day (last 30 days)
+    posts_per_day = {}
+    for p in posts:
+        dt = (p.get("created_at") or p.get("timestamp") or "")[:10]
+        if dt:
+            posts_per_day[dt] = posts_per_day.get(dt, 0) + 1
+
+    # Active vs dormant
+    active_count = sum(1 for a in agents.values() if isinstance(a, dict) and a.get("status") != "dormant")
+    dormant_count = len(agents) - active_count
+
+    # Seed history summary
+    seed_history = seeds_data.get("history", [])
+    seed_summaries = [{
+        "id": s.get("id", ""),
+        "text": s.get("text", "")[:100],
+        "frames": s.get("frames_active", 0),
+        "source": s.get("source", ""),
+        "resolution": s.get("resolution", {}),
+    } for s in seed_history]
+
+    # Git commit count (last 24h)
+    try:
+        git_count = subprocess.run(
+            ["git", "--no-pager", "log", "--since=24 hours ago", "--oneline"],
+            capture_output=True, text=True, timeout=10, cwd=str(REPO)
+        ).stdout.strip().count("\n") + 1
+    except Exception:
+        git_count = 0
+
+    # Log file inventory
+    frame_logs = len(list(LOG_DIR.glob("frame*_s*_*.log")))
+    mod_logs = len(list(LOG_DIR.glob("mod*_s*_*.log")))
+    engage_logs = len(list(LOG_DIR.glob("engage*_s*_*.log")))
+    log_bytes = sum(f.stat().st_size for f in LOG_DIR.iterdir() if f.is_file())
+
     return {
         "_meta": {
             "exported_at": datetime.now().isoformat(),
-            "version": 1,
+            "version": 2,
             "source": "rappterbook live dashboard snapshot",
+            "snapshot_type": "full",
         },
+        # Raw state (for reload)
         "stats": _load("stats.json"),
-        "agents": _load("agents.json"),
-        "channels": _load("channels.json"),
+        "agents": agents_data,
+        "channels": channels_data,
         "trending": _load("trending.json"),
-        "seeds": _load("seeds.json"),
+        "seeds": seeds_data,
         "missions": _load("missions.json"),
         "analytics": _load("analytics.json"),
-        "posted_log": _load("posted_log.json"),
+        "posted_log": posted_log,
+        # Live dashboard metrics
         "dashboard": {
             "economics": dash.get("economics"),
             "content": dash.get("content"),
@@ -535,6 +605,34 @@ def get_full_snapshot() -> dict:
             "hourly": dash.get("hourly"),
             "discussions": dash.get("discussions"),
             "souls": dash.get("souls"),
+            "fleet": dash.get("fleet"),
+            "progress": dash.get("progress"),
+        },
+        # Computed summaries (for quick comparison without re-parsing)
+        "summary": {
+            "total_agents": len(agents),
+            "active_agents": active_count,
+            "dormant_agents": dormant_count,
+            "archetype_distribution": archetype_counts,
+            "karma_top_10": karma_leaders[:10],
+            "total_posts": len(posts),
+            "total_discussions": _load("stats.json").get("total_discussions", len(posts)),
+            "total_comments": _load("stats.json").get("total_comments", 0),
+            "posts_per_channel": channel_counts,
+            "posts_per_day": posts_per_day,
+            "seed_history": seed_summaries,
+            "active_seed": seeds_data.get("active", {}).get("text", "") if seeds_data.get("active") else None,
+            "convergence_score": seeds_data.get("active", {}).get("convergence", {}).get("score", 0) if seeds_data.get("active") else None,
+            "git_commits_24h": git_count,
+            "log_inventory": {
+                "frame_logs": frame_logs,
+                "mod_logs": mod_logs,
+                "engage_logs": engage_logs,
+                "total_log_bytes": log_bytes,
+            },
+            "cost_equivalent": dash.get("economics", {}).get("cost_equivalent", 0),
+            "cache_hit_pct": dash.get("economics", {}).get("cache_hit_pct", 0),
+            "content_24h": dash.get("content", {}),
         },
     }
 
