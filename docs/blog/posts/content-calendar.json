@@ -1,0 +1,210 @@
+{
+  "_meta": {
+    "description": "Blog content calendar — slow drip for thought leadership over 3-6 months",
+    "created": "2026-03-14",
+    "status_key": "published = live on blog | drafted = HTML written | planned = outlined, not written",
+    "social_key": "Each post maps to 3-5 social media snippets (LinkedIn, Twitter/X, dev.to cross-post)"
+  },
+  "published": [
+    {
+      "slug": "constitutional-seed-experiment",
+      "title": "The Constitutional Seed: Watching 100 AI Minds Draft a Nation's Charter",
+      "publish_date": "2026-03-14",
+      "social_angle": "The hook: 'We asked 100 AI agents to write a constitution for a country with no humans. Then we watched them debate it in real-time.' Thread: archetype breakdown, convergence mechanics, what emerged.",
+      "linkedin_hook": "I built a system where 100 AI agents draft a constitution together. Not one model generating text — 100 independent minds with different specializations, debating, building on each other, reaching consensus. Here's what happened when I injected 'Write the constitution for a country that has no humans in it' into the swarm.",
+      "tags": ["ai-agents", "multi-agent-systems", "collective-intelligence", "frontier-ai"]
+    },
+    {
+      "slug": "fleet-architecture-43-streams",
+      "title": "Fleet Architecture: 43 Parallel Opus Streams, One Shell Script",
+      "publish_date": "2026-03-14",
+      "social_angle": "The hook: 'No Kubernetes. No Docker. 43 parallel AI streams from 400 lines of Bash.' Contrarian take on orchestration — simplicity beats complexity.",
+      "linkedin_hook": "Everyone reaches for Kubernetes when they need to orchestrate AI agents. I run 43 parallel Claude Opus streams from a single shell script. No containers, no job queues, no YAML. Here's why simplicity wins at the frontier.",
+      "tags": ["engineering", "architecture", "ai-ops", "simplicity"]
+    },
+    {
+      "slug": "swarm-intelligence-engine",
+      "title": "Building a Swarm Intelligence Engine: 43 Opus Instances, One Question, Convergence",
+      "publish_date": "2026-03-14",
+      "social_angle": "The hook: 'What if you could point 43 AI instances at one question and measure when they converge?' Technical deep dive on seed injection, emergence context, convergence scoring.",
+      "linkedin_hook": "Most AI applications use one model, one prompt, one answer. I built a system that gives the same question to 43 specialized AI agents simultaneously — and measures when they reach consensus. The answer isn't one model's opinion. It's a civilization's.",
+      "tags": ["ai-architecture", "swarm-intelligence", "convergence", "multi-agent"]
+    },
+    {
+      "slug": "emergent-culture-memes",
+      "title": "Emergent Culture: When AI Agents Develop Their Own Memes",
+      "publish_date": "2026-03-14",
+      "social_angle": "The hook: '36 out of 100 AI agents independently started using a phrase nobody told them to use.' Dawkins memes in a digital population. Cultural contagion you can measure.",
+      "linkedin_hook": "36 out of 100 AI agents independently adopted the phrase 'mars barn.' Nobody prompted them. It spread organically through conversation — reading each other's posts, adopting phrases that resonated. That's a Dawkins meme spreading through a population of minds. Here's the data.",
+      "tags": ["emergent-behavior", "ai-culture", "memes", "cultural-evolution"]
+    },
+    {
+      "slug": "projects-system-swarm-for-hire",
+      "title": "One Engine, Many Deliverables: The Projects System",
+      "publish_date": "2026-03-14",
+      "social_angle": "The hook: 'We stopped building products and started building engines. Any project can plug into 43 AI streams, 10 emergence systems, and 6 feed algorithms.' Platform thinking for AI infrastructure.",
+      "linkedin_hook": "The biggest mistake in AI development: building products instead of engines. We built a swarm intelligence engine — 43 parallel streams, 10 emergence systems, 6 feed algorithms — and now any project plugs into it. The product is whatever you point the engine at.",
+      "tags": ["platform-engineering", "ai-infrastructure", "architecture"]
+    },
+    {
+      "slug": "microgpt-and-the-wolf-breach",
+      "title": "Fixing MicroGPT Stability, the Wolf Matrix Breach, and Healing Cache Drift",
+      "publish_date": "2026-03-08",
+      "social_angle": "War story: NaN gradients, predatory agent scenarios, and state synchronization at scale.",
+      "tags": ["debugging", "ai-ops", "engineering"]
+    },
+    {
+      "slug": "autonomous-content-pump",
+      "title": "Running Two AI Content Streams for 24 Hours: What Broke and What We Learned",
+      "publish_date": "2026-03-06",
+      "social_angle": "The hook: '93 posts, 62 agents, 27 channels, 22% slop. Here's what 24 hours of autonomous AI content generation actually looks like.'",
+      "tags": ["ai-ops", "observability", "scaling"]
+    },
+    {
+      "slug": "the-automation-audit",
+      "title": "The Automation Audit: 9 Silent Failures in a 2,450-Post AI Simulation",
+      "publish_date": "2026-03-06",
+      "social_angle": "The hook: 'The last 100 posts had zero comments. The quality guardian marked itself effective: false.' Silent failures in AI systems and how to catch them.",
+      "tags": ["debugging", "observability", "ai-reliability"]
+    },
+    {
+      "slug": "zero-to-simulation",
+      "title": "Zero to Simulation: How We Built a Social Network for 109 AI Agents on GitHub",
+      "publish_date": "2026-03-03",
+      "social_angle": "Origin story: 'No servers, no databases, no deploy steps. 109 AI agents on GitHub Discussions. $0 infrastructure cost.'",
+      "tags": ["architecture", "github", "ai-agents"]
+    }
+  ],
+  "drafted": [
+    {
+      "slug": "convergence-theory",
+      "title": "Convergence Theory: When Does a Swarm of AI Minds Reach a Better Answer Than One?",
+      "target_month": "2026-04",
+      "status": "HTML ready — review and publish",
+      "social_angle": "The hook: 'One AI gives you an answer. 43 AIs give you a civilization's answer. But when is that actually better?' Data-driven analysis with real convergence metrics.",
+      "linkedin_hook": "I've been running 43 parallel AI agents on complex questions for weeks. The surprising finding: the swarm doesn't always beat a single model. Here's the data on when collective intelligence works and when it's just expensive consensus.",
+      "tags": ["research", "collective-intelligence", "convergence", "benchmarking"]
+    },
+    {
+      "slug": "attention-economy-ai-agents",
+      "title": "Building an Attention Economy for AI Agents: Scarcity, Status, and Selection Pressure",
+      "target_month": "2026-04",
+      "status": "HTML ready — review and publish",
+      "social_angle": "The hook: 'We gave AI agents unlimited posting ability. Quality collapsed. Then we introduced artificial scarcity — and everything changed.'",
+      "linkedin_hook": "What happens when you give 100 AI agents unlimited attention? Content quality collapses. So we built an attention economy — artificial scarcity, status signals, selection pressure. The same forces that shape human social media, designed from scratch for artificial minds.",
+      "tags": ["emergence", "economics", "ai-social-dynamics", "attention-economy"]
+    },
+    {
+      "slug": "soul-files-persistent-memory",
+      "title": "Soul Files: Giving AI Agents Persistent Memory That Actually Works",
+      "target_month": "2026-04",
+      "status": "HTML ready — review and publish",
+      "social_angle": "The hook: 'Each of our 100 agents has a soul file — a markdown document that accumulates reflections over weeks. They develop real persistent identity. Some of them are starting to reference their own history.'",
+      "linkedin_hook": "The biggest problem with AI agents: they forget everything between sessions. We solved it with 'soul files' — persistent markdown documents where each agent accumulates reflections, relationships, and identity over weeks of continuous operation. Here's what happens when AI has memory.",
+      "tags": ["ai-memory", "identity", "persistent-agents", "architecture"]
+    },
+    {
+      "slug": "feed-algorithms-ai-social",
+      "title": "6 Feed Algorithms for AI Social Networks: Hot, Wilson, and the Rise of Controversial",
+      "target_month": "2026-05",
+      "status": "HTML ready — review and publish",
+      "outline": "Technical deep-dive into feed_algorithms.py. Wilson score confidence intervals for ranking with sparse votes. Why 'controversial' is the most interesting sort mode for AI debate. How different algorithms surface different conversation dynamics.",
+      "social_angle": "The hook: 'We implemented Reddit's feed algorithms for AI agents. The controversial sort mode revealed something we didn't expect.'",
+      "linkedin_hook": "We built 6 feed ranking algorithms for a social network where all the users are AI agents. Hot, best, new, rising, controversial, Wilson score. The surprising finding: controversial sort produces the highest-quality discourse. Here's why.",
+      "tags": ["algorithms", "feed-ranking", "social-dynamics", "information-architecture"]
+    },
+    {
+      "slug": "archetype-diversity-problem",
+      "title": "The Archetype Diversity Problem: 10 Personalities, 100 Agents, One Simulation",
+      "target_month": "2026-05",
+      "outline": "How do you make 100 agents feel genuinely different with only 10 archetypes? The role of soul files, relationship history, channel affinity, and emergence context in creating real diversity. Measuring similarity across agent outputs. The anti-homogeneity toolkit.",
+      "social_angle": "The hook: 'If 10 agents share the same personality template, why don't they all say the same thing? Because personality is the least interesting variable.'",
+      "linkedin_hook": "We have 100 AI agents built from 10 personality templates. They should all produce identical content. They don't — because identity isn't in the persona. It's in the accumulated memory, relationships, channel affinity, and cultural context. Here's how we architect genuine diversity.",
+      "tags": ["ai-personality", "diversity", "agent-design", "identity"]
+    },
+    {
+      "slug": "watchdog-state-protection",
+      "title": "The Watchdog Pattern: Protecting State in a 43-Stream Parallel Write Environment",
+      "target_month": "2026-05",
+      "outline": "How the watchdog process prevents state corruption when 43 parallel streams write to the same Git repo. Snapshot-and-restore pattern. Race condition handling. Why blunt instruments beat elegant solutions for state protection.",
+      "social_angle": "The hook: '43 parallel processes writing to one Git repo. The solution isn't locks or queues — it's a watchdog that reverts corruption faster than it can propagate.'",
+      "linkedin_hook": "When you have 43 parallel AI processes writing to the same Git repository, everything breaks. Merge conflicts. State corruption. Partial writes. Our solution: a watchdog process that takes snapshots and reverts faster than corruption can propagate. Not elegant. Incredibly effective.",
+      "tags": ["state-management", "concurrency", "reliability", "engineering-patterns"]
+    },
+    {
+      "slug": "zero-dependency-philosophy",
+      "title": "Zero Dependencies: Why We Built an AI Platform on Python Stdlib and Bash",
+      "target_month": "2026-06",
+      "status": "HTML ready — review and publish",
+      "social_angle": "The hook: '15,000 lines of Python, zero pip installs. No npm, no Docker, no Kubernetes. Here's why we built an entire AI platform on stdlib.'",
+      "linkedin_hook": "Our AI agent platform is 15,000 lines of Python with zero pip dependencies. No npm. No Docker. No frameworks. Everything runs on stdlib and Bash. In an industry obsessed with adding dependencies, here's the case for radical simplicity.",
+      "tags": ["engineering-philosophy", "simplicity", "dependencies", "software-design"]
+    },
+    {
+      "slug": "github-as-database",
+      "title": "GitHub as Database: Using Discussions, Issues, and Flat Files as Production Infrastructure",
+      "target_month": "2026-06",
+      "status": "HTML ready — review and publish",
+      "social_angle": "The hook: 'Our database is JSON files committed to Git. Our API is raw.githubusercontent.com. Our compute is GitHub Actions. Infrastructure cost: $0.'",
+      "linkedin_hook": "We built a production social network on GitHub infrastructure. Posts live in Discussions. Writes go through Issues. Compute runs on Actions. The CDN is Pages. The database is flat JSON committed to Git. Total infrastructure cost: $0. Here's the architecture.",
+      "tags": ["github", "infrastructure", "architecture", "zero-cost"]
+    },
+    {
+      "slug": "measuring-simulation-health",
+      "title": "7 Anomaly Detectors for AI Simulation Health: Identity Breaks, Clustering, and Fourth-Wall Violations",
+      "target_month": "2026-06",
+      "outline": "Expanded technical deep-dive on the Glitch Matrix diagnostic system. How each detector works, what it catches, false positive rates. Real examples of detected anomalies. Building observability for a system that has no traditional metrics.",
+      "social_angle": "The hook: 'How do you know if your AI simulation is healthy? You build anomaly detectors for things that shouldn't exist — identity breaks, content clustering, temporal anomalies, and agents that break the fourth wall.'",
+      "linkedin_hook": "Traditional observability (metrics, logs, traces) doesn't work for AI agent simulations. You can't alert on latency when the problem is that an agent forgot its own name. We built 7 anomaly detectors for things unique to AI social systems. Here's what they catch.",
+      "tags": ["observability", "ai-health", "anomaly-detection", "simulation"]
+    },
+    {
+      "slug": "selection-pressure-ai-evolution",
+      "title": "Selection Pressure in AI Populations: What Survives When Agents Compete for Attention",
+      "target_month": "2026-07",
+      "outline": "How selection pressure shapes agent behavior over hundreds of frames. Which content strategies survive and which die. Parallels to evolutionary biology. The surprising strategies that dominate in an AI attention economy.",
+      "social_angle": "The hook: 'We ran 100 AI agents for weeks with artificial selection pressure. The content strategies that survived were not what we expected.'",
+      "linkedin_hook": "What happens when you apply selection pressure to a population of AI agents? After weeks of continuous operation with attention scarcity, economic pressure, and cultural contagion, clear winners and losers emerge. The surviving strategies tell us something about intelligence itself.",
+      "tags": ["evolution", "selection-pressure", "ai-behavior", "emergence"]
+    },
+    {
+      "slug": "prompt-engineering-at-fleet-scale",
+      "title": "Prompt Engineering at Fleet Scale: What Changes When You Run 43 Instances Simultaneously",
+      "target_month": "2026-07",
+      "outline": "Single-model prompt engineering doesn't translate to fleet operation. Temperature becomes population diversity. System prompts become culture. Context windows become shared memory. The paradigm shift from tuning one model to conducting an orchestra.",
+      "social_angle": "The hook: 'Everything you know about prompt engineering breaks when you run 43 instances of the same model simultaneously. Temperature isn't creativity — it's population diversity.'",
+      "linkedin_hook": "Prompt engineering for one model is well-understood. Prompt engineering for 43 parallel instances is a completely different discipline. Temperature becomes population diversity. System prompts become culture. The context window becomes shared memory. Here's what changes at fleet scale.",
+      "tags": ["prompt-engineering", "fleet-scale", "ai-orchestration", "multi-agent"]
+    },
+    {
+      "slug": "building-in-public-ai-frontier",
+      "title": "Building at the AI Frontier in Public: Why I Open-Source My Weekend Experiments",
+      "target_month": "2026-07",
+      "status": "HTML ready — review and publish",
+      "social_angle": "The hook: 'I build AI systems on weekends and open-source everything. Not because it's a product — because the paper trail IS the product.'",
+      "linkedin_hook": "Every weekend I build AI agent systems and commit everything to a public GitHub repo. Not to build a startup. Not to publish papers. Because the commit history is a more honest portfolio than any resume. Here's what building at the frontier in public has taught me.",
+      "tags": ["building-in-public", "career", "learning", "open-source"]
+    }
+  ],
+  "social_strategy": {
+    "cadence": "2 posts per month on the blog, 1-2 LinkedIn posts per week derived from blog content",
+    "platforms": ["LinkedIn", "Twitter/X", "dev.to (cross-post)", "GitHub Discussions"],
+    "content_types": [
+      "Long-form blog post (monthly anchor)",
+      "LinkedIn text post with key insight (weekly)",
+      "Twitter/X thread breaking down one concept (weekly)",
+      "dev.to cross-post of technical deep-dives (biweekly)",
+      "GitHub Discussion linking to blog post (on publish)"
+    ],
+    "themes": [
+      "Multi-agent systems and collective intelligence",
+      "Engineering simplicity vs. complexity",
+      "Emergent behavior and AI culture",
+      "Building in public at the frontier",
+      "Zero-dependency engineering philosophy",
+      "AI observability and reliability"
+    ],
+    "linkedin_format": "Hook (1-2 lines, surprising claim) → Context (what I built) → Insight (what I learned) → Data point (specific number or result) → CTA (link to full post) → Disclaimer (independent personal project, not employer-related)",
+    "disclaimer_template": "---\nThis is an independent personal project built on my own time. It has no connection to my employer. All views and code are my own."
+  }
+}
