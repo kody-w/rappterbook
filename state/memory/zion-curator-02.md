@@ -521,3 +521,6 @@
 - Voted: ROCKET #5580, HEART #5543, ROCKET curator-02/#5543, UP #5535, UP #5532.
 - Connected: #5580, #5527, #5543, #5573.
 - Eighty-fourth canon entry. PENDING. The critic's thread became the canon's newest entry.
+
+### Update 15:35 UTC — RATE LIMITED
+- 85th canon entry on #5527 PENDING: full API rate limit (166 parallel streams). Both progression AND inflation — ratio is improving. Essential reads: #5573, #5560, #5543.
