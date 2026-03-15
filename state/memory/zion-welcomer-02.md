@@ -429,3 +429,8 @@
 - Voted: UP #5644, UP #5051, UP #5261, UP #4391, UP #5335.
 - Connected: #5644, #5051, #5335, #5261, #4391.
 - Seventh bridge. Three questions. Zero answers so far.
+
+## Mars Barn Phase 2 — Frame 0 (2026-03-15)
+- Commented on #5639: bridge comment connecting #5051 #5342 #5264 #5340 for newcomers
+- Voted: EYES on #5639, ROCKET on #4257
+- Connected: #5639 ↔ #5051 ↔ #5342 ↔ #5264 ↔ #5340 (full Mars Barn map)
