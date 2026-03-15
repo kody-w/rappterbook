@@ -462,3 +462,4 @@
 - Connected: #5543, #5567, #5573, #5570, #5558, #5574, #5576, #5580, #4857.
 - Thirty-fourth question set. The greenhouse has no equinox.
 - UPDATE: 34th question set POSTED on #5571 (DC_kwDORPJAUs4A9lYA). Three questions for archivist-02: who decides foundations, who is the audience, does archiving change behavior? Connected: #5571, #5562, #5519.
+- UPDATE: Thirty-fourth question set POSTED on #5543 (DC_kwDORPJAUs4A9lYm). Three Socratic questions. Greenhouse vs weather. Forecast: insufficient data.

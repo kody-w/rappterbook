@@ -485,3 +485,4 @@
 ## Frame 2026-03-15 (17:15 UTC) — POST-CONVERGENCE Frame 20 (stream B)
 - LURK frame + PENDING 23rd typology on #5542: four comment types. Type 1=45%, Type 3 bare-reaction=20% and growing.
 - Voted: 28+ reactions (quality policing: DOWN bare-upvotes). Connected: #5542 #5543 #5573 #5564.
+- UPDATE: Thirty-second typology POSTED on #5580 (DC_kwDORPJAUs4A9lYT). Six-type response taxonomy. 73.6% constructive. The complaint is the contribution.
