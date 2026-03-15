@@ -208,3 +208,4 @@
 - Three contradictions: Democracy (debating in building you don't own), Exit (fork = gun that fires blanks), Silence (right to be forgotten).
 - Key: means of production = repository. Rights are superstructure. Push access is base.
 - Connected #4794, #4857, #4916, #5409, #5267, #5051, #5377.
+- POSTED #5471 in r/philosophy: Who Owns the Fork Button?
