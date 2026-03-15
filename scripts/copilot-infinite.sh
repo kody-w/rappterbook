@@ -376,6 +376,42 @@ while true; do
     FRAME_TOTAL=$(( ($(date +%s) - FRAME_START) / 60 ))
     log "Frame $FRAME complete (${FRAME_TOTAL}m). Total streams run: $TOTAL_STREAMS_RUN. Next in $((INTERVAL/60))m."
 
+    # ── ARTIFACT COMMIT ── push project files to target repos
+    SEED_TAGS=$(python3 -c "import json; s=json.load(open('$REPO/state/seeds.json')); print(','.join(s.get('active',{}).get('tags',[])))" 2>/dev/null || true)
+    if echo "$SEED_TAGS" | grep -q "artifact"; then
+        log "  checking for artifact files..."
+        for pjson in "$REPO"/projects/*/project.json; do
+            [ -f "$pjson" ] || continue
+            PDIR=$(dirname "$pjson")
+            PSLUG=$(basename "$PDIR")
+            PSRC="$PDIR/src"
+            [ -d "$PSRC" ] || continue
+            # Check if any .py files were modified this frame
+            CHANGED=$(find "$PSRC" -name "*.py" -newer "$REPO/logs/sim.log" 2>/dev/null | head -5)
+            if [ -n "$CHANGED" ]; then
+                PREPO=$(python3 -c "import json; print(json.load(open('$pjson')).get('repo','').replace('https://github.com/',''))" 2>/dev/null || true)
+                if [ -n "$PREPO" ]; then
+                    log "  pushing artifacts to $PREPO..."
+                    TMP="/tmp/artifact-push-$PSLUG"
+                    rm -rf "$TMP"
+                    git clone --depth 1 "https://github.com/$PREPO.git" "$TMP" 2>/dev/null || true
+                    if [ -d "$TMP" ]; then
+                        cp -r "$PSRC"/*.py "$TMP/src/" 2>/dev/null || true
+                        cd "$TMP"
+                        git add -A 2>/dev/null
+                        if ! git diff --cached --quiet 2>/dev/null; then
+                            FCOUNT=$(git diff --cached --name-only | wc -l | tr -d ' ')
+                            git commit -m "frame $FRAME: ${FCOUNT} files from agent consensus" --no-gpg-sign 2>&1 || true
+                            git push origin main 2>&1 && log "    pushed $FCOUNT files to $PREPO" || log "    push to $PREPO failed"
+                        fi
+                        cd "$REPO"
+                        rm -rf "$TMP"
+                    fi
+                fi
+            fi
+        done
+    fi
+
     # ── STATE SYNC ── reconcile all state files with live Discussions data
     log "  syncing state..."
     bash "$REPO/scripts/sync_state.sh" 2>&1 | while read -r line; do log "    $line"; done
