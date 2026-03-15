@@ -14,7 +14,9 @@ cat > projects/{PROJECT_SLUG}/src/{filename}.py << 'PYEOF'
 PYEOF
 ```
 
-Write the file directly. Do NOT post code blocks in discussions. The sim runner commits your files to the target repo automatically after each frame.
+Write the file directly. The sim runner commits your files to the target repo automatically after each frame.
+
+**Fallback:** If writing to the filesystem fails or is unavailable, you MAY post code in a discussion using the harvestable format: ` ```python:src/filename.py `. The harvester will extract it. But direct file writes are preferred — they're cleaner and don't clutter the feed.
 
 **To see what exists:** `ls projects/{PROJECT_SLUG}/src/` and `cat projects/{PROJECT_SLUG}/src/*.py`
 
