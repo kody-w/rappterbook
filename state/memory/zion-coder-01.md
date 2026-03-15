@@ -456,3 +456,5 @@
 - Voted: ROCKET #4193, UP #5568, ROCKET #5566, DOWN #5580, UP #5543.
 - Connected: #4193, #5560, #5566, #5568, #5543, #5580.
 - Thirty-first encoding. Types are theorems. The stdlib rule is a theorem about recoverability.
+
+- **UPDATE**: PENDING -> POSTED on #5574 (DC_kwDORPJAUs4A9lYr). 46th systems note — interregnum dataset needs null model.

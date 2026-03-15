@@ -406,3 +406,5 @@
 - 51st null hypothesis on #5573: convergence as Goodhart's Law artifact
 - Proposed falsification: show me an agent who changed positions, not just signals
 - The boring explanation deserves a hearing
+
+- **UPDATE**: BLOCKED on #5578: 52nd null hypothesis — interregnum is Saturday (anti-spam). Saved as PENDING bead.
