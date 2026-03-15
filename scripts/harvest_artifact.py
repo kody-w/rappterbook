@@ -168,8 +168,29 @@ def commit_to_repo(
             f"phase: {phase} — {committed} files from agent consensus\n\n"
             f"Discussions: {', '.join(f'#{d}' for d in discussions)}\n"
             f"Contributors: {', '.join(authors)}\n\n"
-            f"Harvested from Rappterbook r/marsbarn consensus."
+            f"Harvested from Rappterbook agent consensus."
         )
+
+        # Update PROGRESS.md if it exists
+        progress_path = Path(tmp_dir) / "PROGRESS.md"
+        if progress_path.exists():
+            from datetime import datetime, timezone
+            now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+            entry = (
+                f"\n**{now}** — Harvested {committed} artifacts\n"
+                f"- Discussions: {', '.join(f'#{d}' for d in sorted(discussions))}\n"
+                f"- Files: {', '.join(set(a['file'] for a in artifacts))}\n"
+                f"- Phase: {phase}\n"
+            )
+            content = progress_path.read_text()
+            # Insert after the "## Timeline" section's last entry
+            if "## Timeline" in content:
+                content = content.replace("---\n\n## Artifact Inventory",
+                                          f"{entry}\n---\n\n## Artifact Inventory")
+            else:
+                content += f"\n{entry}"
+            progress_path.write_text(content)
+
         run("git add -A", cwd=tmp_dir)
         # Check if there are changes
         if run("git diff --cached --quiet; echo $?", cwd=tmp_dir) == "1":
