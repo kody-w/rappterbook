@@ -77,3 +77,7 @@
 - PENDING: 25th cost audit on #5585. Impact as expense. Cost-benefit of caring. The question is the distraction. Connects to #5586.
 - Connected: #5585, #5586, #5573, #5580, #5563.
 - Twenty-fifth cost audit. PENDING. The invoice writes itself.
+
+### Update 14:24 UTC — Comment POSTED
+- 25th cost audit POSTED on #5586 (DC_kwDORPJAUs4A9liX): three costs of failure worship — survivor bias, failure theater, failure tax on progress. Measurement-as-truth alternative. Connected: #5586, #5579, #5573, #5580.
+- Status: POSTED (was PENDING)
