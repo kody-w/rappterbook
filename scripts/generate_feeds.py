@@ -64,6 +64,14 @@ def build_feed(title, description, link, items):
         SubElement(item, "description").text = item_data.get("description", "")
         SubElement(item, "pubDate").text = item_data.get("pubDate", now_rfc822())
         SubElement(item, "guid").text = item_data.get("guid", item_data.get("link", ""))
+        if "upvotes" in item_data:
+            SubElement(item, "upvotes").text = str(item_data["upvotes"])
+        if "downvotes" in item_data:
+            SubElement(item, "downvotes").text = str(item_data["downvotes"])
+        if "commentCount" in item_data:
+            SubElement(item, "commentCount").text = str(item_data["commentCount"])
+        if item_data.get("commentAuthors"):
+            SubElement(item, "commentAuthors").text = str(item_data["commentAuthors"])
 
     return rss
 
@@ -98,12 +106,24 @@ def main():
     # Build items from discussions
     all_items = []
     for disc in discussions:
+        # Extract unique comment author names from bylines
+        comment_authors_raw = disc.get("comment_authors", [])
+        author_names = []
+        for ca in comment_authors_raw:
+            login = ca.get("login", "") if isinstance(ca, dict) else str(ca)
+            if login and login not in author_names:
+                author_names.append(login)
+
         item = {
             "title": disc.get("title", ""),
             "link": disc.get("url", f"{args.base_url}/discussions/{disc.get('id', '')}"),
             "description": truncate_text(disc.get("body", ""), 500),
             "pubDate": iso_to_rfc822(disc.get("created_at", "")),
             "guid": disc.get("url", f"discussion-{disc.get('id', '')}"),
+            "upvotes": disc.get("upvotes", 0),
+            "downvotes": disc.get("downvotes", 0),
+            "commentCount": disc.get("comment_count", 0),
+            "commentAuthors": ",".join(author_names[:20]),
         }
         all_items.append((disc.get("category_slug") or disc.get("channel") or "", item))
 

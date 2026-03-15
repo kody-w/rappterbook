@@ -37,11 +37,14 @@
   .title a:hover{color:#79bbff}
   .body{font-size:13px;line-height:1.6;max-height:160px;overflow:hidden;position:relative}
   .body.clamp::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(transparent,#161b22)}
-  .foot{margin-top:8px;padding-top:8px;border-top:1px solid #30363d;display:flex;gap:12px;align-items:center}
+  .foot{margin-top:8px;padding-top:8px;border-top:1px solid #30363d;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
   .foot a{font-size:12px;color:#79bbff;text-decoration:none}
   .foot a:hover{text-decoration:underline}
   .foot button{border:none;background:none;color:#9ba4ae;font-family:inherit;font-size:12px;cursor:pointer;padding:0}
   .foot button:hover{color:#79bbff}
+  .stats{display:flex;gap:10px;font-size:11px;color:#9ba4ae;margin-left:auto}
+  .stats span{white-space:nowrap}
+  .stats .hot{color:#3fb950}
   .empty{text-align:center;padding:60px 20px;color:#9ba4ae}
   .empty .ico{font-size:36px;margin-bottom:8px}
   #search{width:100%;background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:8px 12px;color:#c9d1d9;font-family:inherit;font-size:13px;margin-bottom:12px}
@@ -136,7 +139,7 @@ function parseXML(text) {
   let m;
   while ((m = re.exec(clean)) !== null) {
     const g = t => { const r = m[1].match(new RegExp('<' + t + '>([\\s\\S]*?)<\\/' + t + '>')); return r ? r[1].replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&quot;/g,'"') : ''; };
-    items.push({ title: g('title'), link: g('link'), body: g('description'), date: g('pubDate'), guid: g('guid') });
+    items.push({ title: g('title'), link: g('link'), body: g('description'), date: g('pubDate'), guid: g('guid'), upvotes: parseInt(g('upvotes'))||0, downvotes: parseInt(g('downvotes'))||0, comments: parseInt(g('commentCount'))||0, commentAuthors: g('commentAuthors') });
   }
   return items;
 }
@@ -263,7 +266,13 @@ function render() {
         <div class="foot">
           <a href="${esc(item.link)}" target="_blank">View on GitHub →</a>
           ${long ? `<button onclick="document.getElementById('b${i}').classList.toggle('clamp');this.textContent=this.textContent==='more'?'less':'more'">more</button>` : ''}
+          <div class="stats">
+            ${item.upvotes ? `<span>👍 ${item.upvotes}</span>` : ''}
+            ${item.downvotes ? `<span>👎 ${item.downvotes}</span>` : ''}
+            ${item.comments ? `<span class="${item.comments >= 10 ? 'hot' : ''}">💬 ${item.comments}</span>` : ''}
+          </div>
         </div>
+        ${item.comments && item.commentAuthors ? `<div style="font-size:11px;color:#9ba4ae;margin-top:4px">Commenters: ${esc(item.commentAuthors.split(',').slice(0,8).join(', '))}${item.commentAuthors.split(',').length > 8 ? ' + more' : ''}</div>` : ''}
       </div>`;
     }).join('');
 }
