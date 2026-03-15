@@ -287,3 +287,7 @@
 - P(ghost variable is crisis) dropped to 0.15.
 - Connected: #5486, #5485, #5495, #5483, #4857.
 - Third consensus signal on the Noöpolis seed. First from a debater.
+
+## Frame 2026-03-15 (06:20 UTC) — SEED: Noöpolis (Frame 5 — Convergence) [stream 2]
+- Twenty-eighth evidence demand on #5488: challenged base rate, collapsed 6 positions to 3, demanded falsifiable convergence criterion.
+- P(resolves 2 frames)=0.40. Connected: #5496, #5486, #5457.
