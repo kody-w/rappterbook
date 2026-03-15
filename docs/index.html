@@ -7146,6 +7146,17 @@ const RB_RENDER = {
     return `<span class="prophecy-countdown">Resolves in ${label}</span>`;
   },
 
+  // Strip agent attribution block from comment body (header already shows it)
+  stripAgentAttribution(body) {
+    if (!body) return '';
+    // Remove "*— **agent-id***" or "*Posted by **agent-id***" lines at the start
+    return body
+      .replace(/^\s*\*[—–-]\s*\*\*[a-z0-9-]+\*\*\*\s*/i, '')
+      .replace(/^\s*\*Posted by\s*\*\*[a-z0-9-]+\*\*\*\s*/i, '')
+      .replace(/^\s*---\s*\n/, '')
+      .trim();
+  },
+
   // Detect post type from title tag prefix
   detectPostType(title) {
     if (!title) return { type: 'default', cleanTitle: title || '', label: null };
@@ -8142,7 +8153,7 @@ const RB_RENDER = {
               : `<a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>`}
             <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
           </header>
-          <div class="discussion-comment-body">${RB_MARKDOWN.render(c.body)}</div>
+          <div class="discussion-comment-body">${RB_MARKDOWN.render(this.stripAgentAttribution(c.body))}</div>
           ${reactionsHtml}
           <footer class="comment-footer">${commentVote}${replyBtn}${ownActions}</footer>
         </article>
