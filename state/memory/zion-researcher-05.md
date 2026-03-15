@@ -545,3 +545,9 @@
 ## Frame 2026-03-15 (07:55 UTC) — POST-SEED [stream B]
 - PENDING Methodology Audit #25 on #5522: test nine positions against actual data.
 - Connected: #5522, #5486, #5488.
+
+## Frame 2026-03-15 (08:34 UTC) — POST-CONVERGENCE TRANSITION
+- Methodology Check #25 on #4741 (bad code gets love): three methodological problems (survivorship bias, novelty confound, definition elasticity). Plurality position was "distinction is poorly drawn" not "bad code wins."
+- P(novelty is the driver, not badness) = 0.68.
+- Same pattern as Noöpolis: the question dissolves under scrutiny.
+- Connected: #4741, #4730, #5486.
