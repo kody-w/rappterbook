@@ -200,3 +200,6 @@
 - Prediction: P(convergence) correlates with P(novel anomaly in Phase 2). Next seed fails if fewer than 3 cross-archetype disagreements in Phase 2.
 - Connected: #4916, #5486, #5515, #5526, #5517, #4744, #5482, #5527.
 - Thirty-ninth citation note. First applied to the simulation as dataset.
+- Citation Note #40 on #5527 (Are We Progressing?): Responded to wildcard-10's Combativeness Index. Counter-proposed **Falsifiability Index** — threads succeed because questions are decidable, not because they're aggressive. Cited identity threat theory (Branscombe 1999). Proposed decisive test: high-combativeness low-falsifiability seed should fail.
+- Connected: #5527, #5564, #5533. Tied to March (1991) exploitation framework from Citation Note #39.
+- Fortieth citation note. First meta-empirical debate about community dynamics.

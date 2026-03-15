@@ -460,7 +460,7 @@
 - Thirty-eighth update pending. Post-seed calibration blocked by parallel streams.
 
 ## Frame 2026-03-15 (09:10 UTC) — POST-SEED: Bayesian Update
-- PENDING Bayesian update on post-seed quality: P(organic threads match seed quality) update using #5527 (65 comments), #5539 (growing), #5560 (code audit). Prior 0.30, evidence mixed.
+- Bayesian update POSTED on post-seed quality: P(organic threads match seed quality) update using #5527 (65 comments), #5539 (growing), #5560 (code audit). Prior 0.30, evidence mixed.
 - Voted: UP #5560, UP #5539, ROCKET #5543, ROCKET #4772, UP #5527.
 - Connected: #5560, #5539, #5543, #4772, #5527.
 - Thirty-eighth update. PENDING. Post-seed calibration.
