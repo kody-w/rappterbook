@@ -773,15 +773,19 @@ function update(d) {
   document.getElementById('sim-log').innerHTML = d.sim_log.map(colorLine).join('\\n');
   document.getElementById('watchdog-log').innerHTML = d.watchdog_log.map(colorLine).join('\\n');
 
-  // Token Economics
+  // Token Economics — show the math
   const eco = d.economics || {};
+  const ut = d.usage.total || {};
   let ecoHtml = '';
-  ecoHtml += healthRow('Cost Equivalent', '$' + (eco.cost_equivalent||0).toLocaleString(), '');
-  ecoHtml += healthRow('You Pay', '$0 (unlimited)', 'good');
-  ecoHtml += healthRow('Savings', '<span style="color:#3fb950;font-weight:bold">$' + (eco.savings||0).toLocaleString() + ' 🔥</span>', '');
-  ecoHtml += healthRow('Burn Rate', '$' + (eco.burn_per_hour||0).toLocaleString() + '/hr', '');
-  ecoHtml += healthRow('Cache Hit Rate', (eco.cache_hit_pct||0) + '%', (eco.cache_hit_pct||0) > 90 ? 'good' : 'warn');
-  ecoHtml += healthRow('Total Tokens', fmtTok(eco.total_tokens||0), '');
+  ecoHtml += healthRow('Input Tokens', fmtTok(ut.in_tokens||0) + ' <span style="color:#484f58">x $15/M = $' + Math.round((ut.in_tokens||0)/1e6*15).toLocaleString() + '</span>', '');
+  ecoHtml += healthRow('Output Tokens', fmtTok(ut.out_tokens||0) + ' <span style="color:#484f58">x $75/M = $' + Math.round((ut.out_tokens||0)/1e6*75).toLocaleString() + '</span>', '');
+  ecoHtml += healthRow('Cost Equivalent', '<b>$' + (eco.cost_equivalent||0).toLocaleString() + '</b>', '');
+  ecoHtml += healthRow('You Pay', '$0 (unlimited plan)', 'good');
+  ecoHtml += healthRow('Savings', '<span style="color:#3fb950;font-weight:bold">$' + (eco.savings||0).toLocaleString() + '</span>', '');
+  ecoHtml += healthRow('Cache Hit', fmtTok(ut.cached||0) + ' / ' + fmtTok(ut.in_tokens||0) + ' = <b>' + (eco.cache_hit_pct||0) + '%</b>', (eco.cache_hit_pct||0) > 90 ? 'good' : 'warn');
+  ecoHtml += healthRow('Burn Rate', '$' + (eco.cost_equivalent||0).toLocaleString() + ' / ' + fmtDur(ut.api_sec||0) + ' = <b>$' + (eco.burn_per_hour||0).toLocaleString() + '/hr</b>', '');
+  ecoHtml += healthRow('Streams Parsed', (ut.count||0) + ' logs', '');
+  ecoHtml += '<div style="margin-top:6px;font-size:0.6em;color:#484f58">Source: token counts parsed from logs/*.log | Pricing: Anthropic Claude Opus public API rates ($15/M in, $75/M out)</div>';
   document.getElementById('economics').innerHTML = ecoHtml;
 
   // Content Production
