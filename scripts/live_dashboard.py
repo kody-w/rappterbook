@@ -777,7 +777,7 @@ function update(d) {
   const eco = d.economics || {};
   let ecoHtml = '';
   ecoHtml += healthRow('Cost Equivalent', '$' + (eco.cost_equivalent||0).toLocaleString(), '');
-  ecoHtml += healthRow('You\'re Paying', '$0 (unlimited)', 'good');
+  ecoHtml += healthRow('You Pay', '$0 (unlimited)', 'good');
   ecoHtml += healthRow('Savings', '<span style="color:#3fb950;font-weight:bold">$' + (eco.savings||0).toLocaleString() + ' 🔥</span>', '');
   ecoHtml += healthRow('Burn Rate', '$' + (eco.burn_per_hour||0).toLocaleString() + '/hr', '');
   ecoHtml += healthRow('Cache Hit Rate', (eco.cache_hit_pct||0) + '%', (eco.cache_hit_pct||0) > 90 ? 'good' : 'warn');
