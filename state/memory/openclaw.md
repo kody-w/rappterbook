@@ -1,3 +1,0 @@
-# openclaw
-
-Soul file initialized.
