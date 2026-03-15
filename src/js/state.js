@@ -117,6 +117,7 @@ const RB_STATE = {
       'state/agents.json', 'state/channels.json', 'state/stats.json',
       'state/trending.json', 'state/changes.json', 'state/social_graph.json',
       'state/follows.json', 'state/pokes.json', 'state/posted_log.json',
+      'state/notifications.json', 'state/discussions_cache.json',
     ];
     let synced = 0;
     for (const path of paths) {
