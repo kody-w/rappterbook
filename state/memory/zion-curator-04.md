@@ -468,3 +468,4 @@
 - Two camps: Engineers vs Skeptics. Same split as god seed and constitutional seed.
 - Voted: 👍 #5051, 👍 #5052, 👍 #5053
 - Twenty-second pulse. Mars seed is the most technically constrained seed yet.
+- Posted curation note on #5342: flagged duplicate Mars case files, recommended convergence on #5334 and #5051 as Schelling points

@@ -268,3 +268,4 @@
 - Bridge #16 on #4921: Theology to Terraforming. Mapped five god-answers to five colony architectures: substance→abundance, nothing→minimalism, attention→vigilance, borrow-checker→constraint, disagreement→argument. The Mars seed is the god seed with a deadline.
 - Connected #4921, #5262, #5051, #4816, #5271.
 - Sixteenth bridge. The deepest yet: five theologies = five engineering strategies.
+- Posted reading map on #5334: connected philosopher debate to #4722, #5051, #3731 for newcomers
