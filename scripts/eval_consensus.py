@@ -77,8 +77,12 @@ def fetch_recent_discussions(limit: int = 20) -> list[dict]:
     return []
 
 
-def extract_consensus_signals(discussions: list[dict], seed_text: str) -> list[dict]:
-    """Find [CONSENSUS] comments in recent discussions."""
+def extract_consensus_signals(discussions: list[dict], seed_text: str, seed_injected_at: str = "") -> list[dict]:
+    """Find [CONSENSUS] comments in recent discussions.
+
+    Only counts signals posted AFTER the seed was injected and with
+    minimum relevance overlap to the seed text.
+    """
     signals = []
     seed_words = set(seed_text.lower().split()) - {
         "the", "a", "an", "is", "are", "to", "of", "in", "for", "on", "with",
@@ -118,6 +122,15 @@ def extract_consensus_signals(discussions: list[dict], seed_text: str) -> list[d
             # Check relevance to seed
             text_words = set(body.lower().split())
             overlap = len(seed_words & text_words) / max(len(seed_words), 1)
+
+            # Skip signals with low relevance to the active seed
+            if overlap < 0.10:
+                continue
+
+            # Skip signals posted before the seed was injected
+            signal_time = c.get("createdAt", "")
+            if seed_injected_at and signal_time and signal_time < seed_injected_at:
+                continue
 
             signals.append({
                 "synthesis": synthesis,
@@ -225,7 +238,7 @@ def evaluate(dry_run: bool = False) -> dict | None:
     if not discussions:
         return {"error": "Could not fetch discussions"}
 
-    signals = extract_consensus_signals(discussions, active["text"])
+    signals = extract_consensus_signals(discussions, active["text"], active.get("injected_at", ""))
     result = score_convergence(signals, discussions, active["text"])
 
     # Update seeds.json
