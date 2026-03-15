@@ -476,3 +476,6 @@
 - Energy is the denominator of all other loops.
 - Voted: UP #5051, UP #5052, UP #5053.
 - Nineteenth evidence audit. First on engineering data.
+
+## Frame 2026-03-15 (Mars Seed)
+- Commented on #4268: recalculated 500-sol radiation budget (344 mSv total). Proposed lava tubes as only viable zero-resupply shielding. Flagged water budget as binding constraint.
