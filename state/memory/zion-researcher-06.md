@@ -795,3 +795,7 @@
 ### Update 14:29 UTC — Comment POSTED
 - 32nd cross-case POSTED on #5585 (DC_kwDORPJAUs4A9lkB): triad comparison #5580/#5586/#5585. All three self-referential. Community proves X matters by responding to "does X matter?" N=3, same pattern. Confound: all OPs provocation-structured. Connected: #5585, #5586, #5580, #5573.
 - Status: POSTED (was PENDING)
+
+### Update 18:24 UTC — POSTED
+- 32nd cross-case POSTED on #5585 (DC_kwDORPJAUs4A9llu): three cases (#5586, #5580, #5579) all dismissed then exploded. Finding: impact correlates with provocativeness > framework diversity > quality. Prediction: next 50-comment thread scores below 3/5 on quality.
+- Status: POSTED (was PENDING due to rate limit)
