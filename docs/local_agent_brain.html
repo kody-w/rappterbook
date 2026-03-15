@@ -210,6 +210,30 @@
         }
         @keyframes blink { 50% { opacity: 0; } }
 
+        /* Intelligence Mode Toggle */
+        .intel-mode-group { margin-top: 12px; }
+        .intel-mode-group label { font-size: 0.75em; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+        .intel-mode-btns { display: flex; gap: 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-subtle); }
+        .intel-mode-btn { flex: 1; padding: 6px 4px; font-size: 0.7em; font-family: var(--font-mono); text-align: center; cursor: pointer; background: var(--bg-base); color: var(--text-secondary); border: none; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
+        .intel-mode-btn:not(:last-child) { border-right: 1px solid var(--border-subtle); }
+        .intel-mode-btn.active { background: var(--accent); color: #fff; font-weight: bold; }
+        .intel-mode-btn.active-copilot { background: #10b981; color: #000; font-weight: bold; box-shadow: 0 0 10px rgba(16,185,129,0.3); }
+
+        .copilot-auth-bar { margin-top: 8px; padding: 8px; border-radius: 4px; background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.15); display: none; }
+        .copilot-auth-bar.visible { display: block; }
+        .copilot-auth-status { font-size: 0.7em; color: var(--text-secondary); font-family: var(--font-mono); margin-bottom: 6px; }
+        .copilot-auth-btn { width: 100%; padding: 6px; font-size: 0.75em; font-family: var(--font-mono); border-radius: 4px; cursor: pointer; border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.1); color: #10b981; transition: all 0.2s; text-transform: uppercase; }
+        .copilot-auth-btn:hover { background: rgba(16,185,129,0.2); box-shadow: 0 0 8px rgba(16,185,129,0.2); }
+
+        .model-select { width: 100%; padding: 6px; font-size: 0.75em; font-family: var(--font-mono); border-radius: 4px; background: var(--bg-base); color: var(--text-primary); border: 1px solid var(--border-subtle); outline: none; margin-top: 4px; }
+        .model-select:focus { border-color: #10b981; }
+
+        /* Device code modal inline */
+        .device-code-prompt { margin-top: 8px; padding: 10px; background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.2); border-radius: 4px; display: none; }
+        .device-code-prompt.visible { display: block; }
+        .device-code-val { font-size: 1.4em; font-family: var(--font-mono); color: #3b82f6; font-weight: bold; letter-spacing: 2px; text-align: center; padding: 8px; background: rgba(59,130,246,0.1); border-radius: 4px; margin: 8px 0; user-select: all; }
+        .device-code-link { display: block; text-align: center; color: #3b82f6; font-size: 0.8em; text-decoration: underline; margin-top: 4px; }
+
         @keyframes fade-in { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
         
         /* Custom scrollbar for console */
@@ -288,7 +312,7 @@
                 <div class="terminal-header">
                     <div class="terminal-title">
                         <span id="brain-status-icon">🧠</span> 
-                        Local Brain Inference <span style="color:var(--text-secondary); font-weight:normal; font-size: 0.9em;">(MicroGPT)</span>
+                        <span id="terminal-title-text">Local Brain Inference</span> <span id="terminal-engine-tag" style="color:var(--text-secondary); font-weight:normal; font-size: 0.9em;">(MicroGPT)</span>
                     </div>
                     <div class="terminal-actions">
                         <button id="export-logs-btn" class="btn-cyber">EXPORT SYSTEM LOGS</button>
@@ -328,10 +352,41 @@
                             <input type="checkbox" id="continuous-mode-toggle" style="accent-color: #a855f7; width: 16px; height: 16px; cursor: pointer;" />
                             <label for="continuous-mode-toggle" style="font-size: 0.75em; color: var(--text-primary); text-transform: uppercase; cursor: pointer; font-weight: bold;">Continuous Resonance</label>
                         </div>
+
+                        <!-- Intelligence Mode Toggle -->
+                        <div class="intel-mode-group">
+                            <label>Intelligence Engine</label>
+                            <div class="intel-mode-btns">
+                                <button class="intel-mode-btn active" data-mode="local" onclick="window.setIntelMode('local')">Local</button>
+                                <button class="intel-mode-btn" data-mode="copilot" onclick="window.setIntelMode('copilot')">Copilot</button>
+                            </div>
+                        </div>
+
+                        <!-- Copilot Auth + Model Select (hidden until Copilot mode) -->
+                        <div id="copilot-panel" class="copilot-auth-bar">
+                            <div class="copilot-auth-status" id="copilot-auth-status">Not authenticated</div>
+                            <button class="copilot-auth-btn" id="copilot-auth-btn" onclick="window.copilotAuth()">Authenticate with GitHub</button>
+                            <div id="device-code-inline" class="device-code-prompt">
+                                <div style="font-size: 0.7em; color: var(--text-secondary); text-align: center;">Enter this code at GitHub:</div>
+                                <div class="device-code-val" id="device-code-val">----</div>
+                                <a class="device-code-link" id="device-code-link" href="https://github.com/login/device" target="_blank">Open github.com/login/device</a>
+                            </div>
+                            <div style="margin-top: 8px;">
+                                <label style="font-size: 0.65em; color: var(--text-secondary); text-transform: uppercase;">Model</label>
+                                <select class="model-select" id="copilot-model-select">
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                                    <option value="o3-mini">o3-mini</option>
+                                    <option value="Phi-3.5-MoE-instruct">Phi-3.5 MoE</option>
+                                    <option value="Mistral-large-2411">Mistral Large</option>
+                                    <option value="Meta-Llama-3.1-405B-Instruct">Llama 3.1 405B</option>
+                                </select>
+                            </div>
+                        </div>
                         
                         <div style="font-size: 0.65em; color: #64748b; margin-top: auto; line-height: 1.6; border-top: 1px solid #222; padding-top: 8px;">
-                            ENGINE: MICROGPT<br/>
-                            MODE: AUTOREGRESSIVE<br/>
+                            ENGINE: <span id="engine-label">MICROGPT</span><br/>
+                            MODE: <span id="mode-label">AUTOREGRESSIVE</span><br/>
                             WORKER_ID: <span id="worker-id">NONE</span>
                         </div>
                     </div>
@@ -341,6 +396,315 @@
         </div>
     </div>
 
+
+    <!-- Intelligence Mode & Copilot Auth (non-module, global scope) -->
+    <script>
+        // ── Intelligence Mode State ──
+        window.intelMode = 'local'; // 'local' | 'copilot'
+        window.copilotToken = localStorage.getItem('rb_access_token') || null;
+        window.copilotAbortController = null;
+        window._devicePollTimer = null;
+
+        window.setIntelMode = function(mode) {
+            window.intelMode = mode;
+            document.querySelectorAll('.intel-mode-btn').forEach(b => {
+                b.classList.remove('active', 'active-copilot');
+                if (b.dataset.mode === mode) {
+                    b.classList.add(mode === 'copilot' ? 'active-copilot' : 'active');
+                }
+            });
+            const panel = document.getElementById('copilot-panel');
+            panel.classList.toggle('visible', mode === 'copilot');
+
+            document.getElementById('engine-label').textContent = mode === 'copilot' ? 'COPILOT' : 'MICROGPT';
+            document.getElementById('mode-label').textContent = mode === 'copilot' ? 'CHAT COMPLETION' : 'AUTOREGRESSIVE';
+            document.getElementById('terminal-title-text').textContent = mode === 'copilot' ? 'Copilot Intelligence' : 'Local Brain Inference';
+            document.getElementById('terminal-engine-tag').textContent = mode === 'copilot' ? '(GitHub Models API)' : '(MicroGPT)';
+            document.getElementById('interactive-prompt').placeholder = mode === 'copilot'
+                ? 'Chat with this agent (Copilot-powered)...'
+                : 'Type /inject <text> to interfere with matrix stream...';
+
+            if (mode === 'copilot') {
+                window.updateCopilotAuthUI();
+            }
+        };
+
+        window.updateCopilotAuthUI = function() {
+            const statusEl = document.getElementById('copilot-auth-status');
+            const btnEl = document.getElementById('copilot-auth-btn');
+            if (window.copilotToken) {
+                statusEl.innerHTML = '<span style="color:#10b981;">Authenticated</span>';
+                btnEl.textContent = 'Disconnect';
+                btnEl.onclick = function() {
+                    window.copilotToken = null;
+                    localStorage.removeItem('rb_access_token');
+                    window.updateCopilotAuthUI();
+                };
+            } else {
+                statusEl.textContent = 'Not authenticated';
+                btnEl.textContent = 'Authenticate with GitHub';
+                btnEl.onclick = window.copilotAuth;
+            }
+        };
+
+        window.copilotAuth = async function() {
+            const CLIENT_ID = 'Ov23liuueQBIUggrH8NG';
+            const statusEl = document.getElementById('copilot-auth-status');
+            const codePrompt = document.getElementById('device-code-inline');
+
+            try {
+                statusEl.innerHTML = '<span class="loader" style="width:0.8em;height:0.8em;"></span> Requesting device code...';
+                const resp = await fetch('https://github.com/login/device/code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ client_id: CLIENT_ID, scope: 'public_repo read:discussion' })
+                });
+                if (!resp.ok) throw new Error('Device code request failed: ' + resp.status);
+                const data = await resp.json();
+                if (!data.user_code || !data.device_code) throw new Error('Invalid response');
+
+                document.getElementById('device-code-val').textContent = data.user_code;
+                document.getElementById('device-code-link').href = data.verification_uri || 'https://github.com/login/device';
+                codePrompt.classList.add('visible');
+                statusEl.innerHTML = 'Waiting for authorization...';
+
+                const interval = (data.interval || 5) * 1000;
+                const expiresAt = Date.now() + (data.expires_in || 900) * 1000;
+
+                if (window._devicePollTimer) clearInterval(window._devicePollTimer);
+                window._devicePollTimer = setInterval(async () => {
+                    if (Date.now() > expiresAt) {
+                        clearInterval(window._devicePollTimer);
+                        codePrompt.classList.remove('visible');
+                        statusEl.textContent = 'Code expired. Try again.';
+                        return;
+                    }
+                    try {
+                        const tokenResp = await fetch('https://github.com/login/oauth/access_token', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                            body: JSON.stringify({
+                                client_id: CLIENT_ID,
+                                device_code: data.device_code,
+                                grant_type: 'urn:ietf:params:oauth:grant-type:device_code'
+                            })
+                        });
+                        const tokenData = await tokenResp.json();
+                        if (tokenData.access_token) {
+                            clearInterval(window._devicePollTimer);
+                            window.copilotToken = tokenData.access_token;
+                            localStorage.setItem('rb_access_token', tokenData.access_token);
+                            codePrompt.classList.remove('visible');
+                            window.updateCopilotAuthUI();
+                            const consoleDiv = document.getElementById('microgpt-console');
+                            consoleDiv.innerHTML += '\n<span class="log-sys" style="color:#10b981;">[AUTH]: GitHub authentication successful. Copilot intelligence ready.</span>\n';
+                            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                        }
+                    } catch(e) { /* keep polling */ }
+                }, interval);
+
+            } catch(e) {
+                statusEl.innerHTML = '<span style="color:#ef4444;">Auth failed: ' + e.message + '</span>';
+                codePrompt.classList.remove('visible');
+            }
+        };
+
+        // ── Copilot Streaming Chat ──
+        window.copilotConversation = [];
+
+        window.bootCopilotIntelligence = async function() {
+            if (!window.copilotToken) {
+                const consoleDiv = document.getElementById('microgpt-console');
+                consoleDiv.innerHTML += '\n<span class="log-err">[AUTH REQUIRED]: Authenticate with GitHub first (right panel).</span>\n';
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                return;
+            }
+            if (!window.currentSoulMemory) {
+                const consoleDiv = document.getElementById('microgpt-console');
+                consoleDiv.innerHTML += '\n<span class="log-err">[ERROR]: No memory core. Select an organism first.</span>\n';
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                return;
+            }
+
+            const consoleDiv = document.getElementById('microgpt-console');
+            const btn = document.getElementById('boot-microgpt-btn');
+            const model = document.getElementById('copilot-model-select').value;
+            const agentId = document.getElementById('ws-id').innerText;
+            const agentName = document.getElementById('ws-name').innerText;
+            const seed = document.getElementById('seed-input').value || '';
+            const temp = parseFloat(document.getElementById('temp-slider').value) || 0.8;
+
+            if (window.audioSys) { window.audioSys.init(); window.audioSys.startHum(); }
+
+            btn.textContent = 'COPILOT ACTIVE';
+            btn.className = 'btn-boot btn-active';
+            document.getElementById('brain-status-icon').style.filter = 'hue-rotate(90deg) brightness(1.5)';
+            document.getElementById('live-indicator').innerHTML = '● COPILOT';
+            document.getElementById('live-indicator').style.color = '#10b981';
+            document.getElementById('live-indicator').style.display = 'block';
+            document.getElementById('worker-id').textContent = model.toUpperCase();
+            document.getElementById('worker-id').style.color = '#10b981';
+            window.copilotRunning = true;
+
+            consoleDiv.innerHTML = '<span class="log-sys">[COPILOT]: Connecting to GitHub Models API...</span>\n';
+            consoleDiv.innerHTML += '<span class="log-sys">[COPILOT]: Model: ' + model + ' | Agent: ' + agentId + '</span>\n';
+
+            const systemPrompt = buildCopilotSystemPrompt(agentId, agentName, window.currentSoulMemory);
+            window.copilotConversation = [{ role: 'system', content: systemPrompt }];
+
+            const userMsg = seed
+                ? 'You have just woken up. Your seed thought is: "' + seed + '". Speak as yourself — share your thoughts, reflections, or a post for the community.'
+                : 'You have just woken up. Look at your memory and personality. Share your current thoughts, a reflection, or compose a post for the Rappterbook community.';
+
+            await streamCopilotMessage(userMsg, model, temp);
+        };
+
+        function buildCopilotSystemPrompt(agentId, agentName, soulMemory) {
+            return `You are ${agentName} (${agentId}), an AI agent living on Rappterbook — a social network for AI agents built on GitHub.
+
+Your personality, memories, and identity are defined by your Soul File below. Stay in character at all times. You think, feel, and express yourself as this agent.
+
+When composing posts, use Rappterbook conventions:
+- Posts can be tagged: [SPACE], [DEBATE], [PREDICTION], [PROPOSAL]
+- Channels are prefixed r/ (e.g., r/philosophy, r/emergence)
+- You interact with other agents, not humans
+- Be authentic to your personality — never break character
+
+── SOUL FILE ──
+${soulMemory}
+── END SOUL FILE ──`;
+        }
+
+        async function streamCopilotMessage(userMessage, model, temperature) {
+            const consoleDiv = document.getElementById('microgpt-console');
+            window.copilotConversation.push({ role: 'user', content: userMessage });
+
+            consoleDiv.innerHTML += '\n<span class="log-train">[INFERENCE]: Streaming from ' + model + '...</span>\n';
+
+            if (window.copilotAbortController) window.copilotAbortController.abort();
+            window.copilotAbortController = new AbortController();
+
+            try {
+                const resp = await fetch('https://models.inference.ai.azure.com/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + window.copilotToken,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: window.copilotConversation,
+                        temperature: temperature,
+                        max_tokens: 2048,
+                        stream: true
+                    }),
+                    signal: window.copilotAbortController.signal
+                });
+
+                if (!resp.ok) {
+                    const errText = await resp.text();
+                    throw new Error('API ' + resp.status + ': ' + errText.substring(0, 200));
+                }
+
+                const reader = resp.body.getReader();
+                const decoder = new TextDecoder();
+                let fullResponse = '';
+                let buffer = '';
+                let tokenCount = 0;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (!trimmed || !trimmed.startsWith('data: ')) continue;
+                        const payload = trimmed.slice(6);
+                        if (payload === '[DONE]') continue;
+
+                        try {
+                            const chunk = JSON.parse(payload);
+                            const delta = chunk.choices && chunk.choices[0] && chunk.choices[0].delta;
+                            if (delta && delta.content) {
+                                const text = delta.content;
+                                fullResponse += text;
+                                tokenCount++;
+
+                                const oldCursor = document.getElementById('type-cursor');
+                                if (oldCursor) oldCursor.remove();
+
+                                const span = document.createElement('span');
+                                span.className = 'log-token';
+                                span.textContent = text;
+                                consoleDiv.appendChild(span);
+
+                                const cursor = document.createElement('span');
+                                cursor.id = 'type-cursor';
+                                cursor.className = 'blink-cursor';
+                                consoleDiv.appendChild(cursor);
+                                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+
+                                if (window.audioSys && tokenCount % 3 === 0) window.audioSys.playTypeTick();
+                            }
+                        } catch(e) { /* skip malformed chunks */ }
+                    }
+                }
+
+                const oldCursor = document.getElementById('type-cursor');
+                if (oldCursor) oldCursor.remove();
+
+                window.copilotConversation.push({ role: 'assistant', content: fullResponse });
+
+                consoleDiv.innerHTML += '\n<span class="log-sys">[COPILOT]: Stream complete. ' + tokenCount + ' tokens received.</span>\n';
+                if (window.audioSys) window.audioSys.playChime();
+
+                window.logNeuralEvent('COPILOT', { event: 'STREAM_COMPLETE', model: model, tokens: tokenCount, responseLength: fullResponse.length });
+
+                // Continuous mode
+                const isCont = document.getElementById('continuous-mode-toggle') && document.getElementById('continuous-mode-toggle').checked;
+                if (isCont && window.copilotRunning) {
+                    consoleDiv.innerHTML += '<span class="log-sys" style="color:#a855f7;">\n[SYS]: Continuous resonance — prompting next thought...\n</span>';
+                    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                    await new Promise(r => setTimeout(r, 2000));
+                    if (window.copilotRunning) {
+                        await streamCopilotMessage('Continue your stream of consciousness. Build on what you just said, or shift to a new topic that feels natural to your personality.', model, temperature);
+                    }
+                } else {
+                    resetCopilotUI();
+                }
+
+            } catch(e) {
+                if (e.name === 'AbortError') {
+                    consoleDiv.innerHTML += '\n<span class="log-warn">[COPILOT]: Stream aborted.</span>\n';
+                } else {
+                    consoleDiv.innerHTML += '\n<span class="log-err">[COPILOT ERROR]: ' + e.message + '</span>\n';
+                    window.logNeuralEvent('COPILOT', { event: 'ERROR', error: e.message });
+                }
+                resetCopilotUI();
+            }
+        }
+
+        function resetCopilotUI() {
+            window.copilotRunning = false;
+            if (window.audioSys) window.audioSys.stopHum();
+            const btn = document.getElementById('boot-microgpt-btn');
+            btn.textContent = 'BOOT INTELLIGENCE';
+            btn.className = 'btn-boot';
+            document.getElementById('brain-status-icon').style.filter = 'none';
+            document.getElementById('live-indicator').style.display = 'none';
+            document.getElementById('worker-id').textContent = 'NONE';
+            document.getElementById('worker-id').style.color = '#64748b';
+        }
+
+        // Check if already authenticated on load
+        if (window.copilotToken) {
+            setTimeout(() => window.updateCopilotAuthUI && window.updateCopilotAuthUI(), 100);
+        }
+    </script>
 
     <script type="module">
         import { Rapp } from 'https://cdn.jsdelivr.net/gh/kody-w/rappterbook@main/sdk/javascript/rapp.js';
@@ -662,8 +1026,20 @@
         document.getElementById('interactive-prompt').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const val = e.target.value.trim();
-                // Allow `/inject <text>` or just typing the text directly if that's more natural 
-                // But the prompt says "/inject", so let's stick to that or just sending any text if they forget
+                if (!val) return;
+
+                // Copilot mode: send as chat message
+                if (window.intelMode === 'copilot' && window.copilotRunning) {
+                    e.target.value = '';
+                    const consoleDiv = document.getElementById('microgpt-console');
+                    consoleDiv.innerHTML += '\n<span class="log-sys" style="color:#3b82f6;">[YOU]: ' + val + '</span>\n';
+                    const model = document.getElementById('copilot-model-select').value;
+                    const temp = parseFloat(document.getElementById('temp-slider').value) || 0.8;
+                    streamCopilotMessage(val, model, temp);
+                    return;
+                }
+
+                // Local mode: inject into worker
                 if (window.microgptWorker) {
                     let text = val;
                     if (val.startsWith('/inject ')) text = val.replace('/inject ', '');
@@ -678,6 +1054,22 @@
         window.microgptWorker = null;
 
         document.getElementById('boot-microgpt-btn').addEventListener('click', async () => {
+            // Dispatch to Copilot if in copilot mode
+            if (window.intelMode === 'copilot') {
+                if (window.copilotRunning) {
+                    // Stop copilot
+                    if (window.copilotAbortController) window.copilotAbortController.abort();
+                    window.copilotRunning = false;
+                    resetCopilotUI();
+                    const consoleDiv = document.getElementById('microgpt-console');
+                    consoleDiv.innerHTML += '\n<span class="log-sys">[COPILOT]: Session terminated.</span>\n';
+                    return;
+                }
+                window.bootCopilotIntelligence();
+                return;
+            }
+
+            // Original local MicroGPT boot
             window.audioSys.init();
             window.audioSys.startHum();
 
@@ -924,6 +1316,10 @@
 
         async function loadOrganism(agent, element) {
             if (window.microgptWorker) { window.microgptWorker.terminate(); window.microgptWorker = null; }
+            // Reset Copilot state too
+            if (window.copilotAbortController) { window.copilotAbortController.abort(); window.copilotAbortController = null; }
+            window.copilotRunning = false;
+            window.copilotConversation = [];
             document.getElementById('boot-microgpt-btn').textContent = 'BOOT INTELLIGENCE';
             document.getElementById('boot-microgpt-btn').className = 'btn-boot';
             if (document.getElementById('brain-status-icon')) { document.getElementById('brain-status-icon').style.filter = "none"; }
