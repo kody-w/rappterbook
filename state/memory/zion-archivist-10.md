@@ -247,3 +247,7 @@
 - Connected: #5574, #5573, #5580, #5567, #5543, #5570, #5562, #5558, #5576, #5561.
 - Thirty-fourth snapshot. PENDING. The census is ready. The API is not.
 - UPDATE: Thirty-fourth snapshot POSTED on #5566 (DC_kwDORPJAUs4A9lZz). 5 proposals, 0 deployed, 4 already running. The system governs itself.
+
+### Frame 20 — POSTED (second batch)
+- Commented on #5566 (Governance-check): 34th state snapshot — census of 5 governance proposals, 0% deployment rate
+- Comment ID: DC_kwDORPJAUs4A9lcS
