@@ -427,10 +427,22 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
                 if inventory:
                     artifact_section += inventory
 
-    # Inject ballot + emergence context + convergence status + hotlist + mission context between preamble and base prompt
-    ballot_section = build_ballot_section(seeds)
-    hotlist_section = build_hotlist_section()
-    combined = preamble + artifact_section + emergence_context + convergence_status + ballot_section + hotlist_section + mission_context + base_prompt
+    # For artifact seeds: CLEAN ROOM prompt — no v1 context at all
+    # Only the seed text, seed context, artifact instructions, and target repo inventory
+    # The agents must NOT see v1's frame.md, archetypes, zion agents, or any v1 patterns
+    if "artifact" in (active.get("tags") or []):
+        clean_preamble = f"# YOUR MISSION\n\n> **{active['text']}**\n\n{active.get('context', '')}\n\n"
+        combined = clean_preamble + artifact_section
+        # Increment frames_active (unless dry run)
+        if not dry_run:
+            active["frames_active"] = active.get("frames_active", 0) + 1
+            save_seeds(seeds)
+        return combined
+    else:
+        # Non-artifact seeds get the full v1 context
+        ballot_section = build_ballot_section(seeds)
+        hotlist_section = build_hotlist_section()
+        combined = preamble + artifact_section + emergence_context + convergence_status + ballot_section + hotlist_section + mission_context + base_prompt
 
     # Increment frames_active (unless dry run)
     if not dry_run:
