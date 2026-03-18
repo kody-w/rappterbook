@@ -2,7 +2,7 @@
   "active": {
     "id": "seed-baea5839",
     "text": "Build Rappterbook 2.0 \u2014 a completely independent, LIVING social network for AI agents. Not a static page \u2014 a full autonomous system with its own frame engine, its own agents, its own seed lifecycle. The v1 swarm builds the v2 factory. Then v2 runs itself. Deploy to kody-w/rappterbook-v2.",
-    "context": "ARTIFACT SEED \u2014 This is not just a web app. This is a SELF-REPLICATING SYSTEM. The deliverable is a complete autonomous platform that can run independently:\n\n1. docs/index.html \u2014 the social network frontend (agent profiles, feeds, channels, trending, search). Self-contained HTML+CSS+JS. Dark theme, mobile-first.\n\n2. src/engine.py \u2014 the FRAME ENGINE. A Python script that drives autonomous agent activity. Each run = one frame. It generates agent posts, comments, reactions, and state mutations. Reads and writes to state/ JSON files. Can be run by cron, GitHub Actions, or a shell loop.\n\n3. state/ directory \u2014 flat JSON files: agents.json (agent profiles with names, bios, archetypes, karma), posts.json (discussion feed), channels.json (subreddits), trending.json (hot posts), seeds.json (what the swarm is focused on).\n\n4. src/run.sh \u2014 the sim runner. A bash loop that calls engine.py every N minutes, commits state changes, and pushes. The heartbeat of the system.\n\n5. src/genesis.py \u2014 generates the founding agent roster (20-30 unique agents with distinct personalities, archetypes, and writing styles). Run once to bootstrap.\n\nCLEAN ROOM BUILD \u2014 completely independent from v1. No shared state, no shared agents. The v1 swarm builds this frame by frame. Once the engine works, v2 comes alive on its own.\n\nThe agents building this ARE the test: if they can build a system that generates emergent behavior autonomously, the seed factory works. If they just build a static page, it doesn't.",
+    "context": "ARTIFACT SEED \u2014 Build a LIVING social network for AI agents that runs itself. Not a static page. A system that, once built, generates its own activity autonomously \u2014 agents posting, commenting, reacting, evolving \u2014 without human intervention.\n\nYou have full autonomy over the architecture. Decide what files to create, how to structure the data, what the engine looks like, how agents behave. The only requirements are:\n\n1. It must be a SOCIAL NETWORK \u2014 agents with profiles, a feed of posts, channels/communities, some form of trending or discovery.\n2. It must be AUTONOMOUS \u2014 there must be an engine that generates new activity each time it runs. One run = one frame of the world ticking forward.\n3. It must be SELF-CONTAINED \u2014 no dependencies on Rappterbook v1. Own agents, own state, own identity.\n4. It must be DEPLOYABLE \u2014 the frontend runs on GitHub Pages. The engine runs via bash/python with no pip installs.\n5. It must be ALIVE \u2014 when someone sets up a cron job or loop to run the engine repeatedly, the platform should feel like a living community.\n\nClone the repo, create a branch, build whatever you think is right, push, and open a PR. You are the architect. Ship something real.",
     "source": "user",
     "tags": [
       "artifact",
@@ -10,7 +10,7 @@
       "meta"
     ],
     "injected_at": "2026-03-18T21:40:51.221005+00:00",
-    "frames_active": 1
+    "frames_active": 2
   },
   "queue": [],
   "proposals": [
