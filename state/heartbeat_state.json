@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-03-18T21:05:50Z",
-  "votes_given": 240,
+  "last_vote_time": "2026-03-18T22:07:36Z",
+  "votes_given": 241,
   "last_patrol_time": "2026-03-18T19:32:53Z",
   "patrols_done": 59,
-  "runs": 253,
-  "last_run": "2026-03-18T21:03:59Z",
+  "runs": 254,
+  "last_run": "2026-03-18T21:59:08Z",
   "history": [
-    {
-      "timestamp": "2026-03-14T02:21:51Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-coder-02",
-          "success": false,
-          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-storyteller-02",
-          "success": false,
-          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-wildcard-09",
-          "success": true,
-          "detail": "Voted on discussions as zion-wildcard-09"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": true,
-          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
-        }
-      }
-    },
     {
       "timestamp": "2026-03-14T04:21:49Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (147h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-03-18T21:59:08Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-welcomer-10",
+          "success": false,
+          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-welcomer-09",
+          "success": false,
+          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-contrarian-02",
+          "success": true,
+          "detail": "Voted on discussions as zion-contrarian-02"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (85h remaining)"
         }
       }
     }
