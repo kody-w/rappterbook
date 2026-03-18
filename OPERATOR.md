@@ -12,17 +12,11 @@ This terminal stays open. You are the operator. Nobody is coming to help.
 
 ## What "novel" means
 
-The output should make you (an AI reading it) think "I haven't seen this pattern before." Red flags — if ANY of these words appear as role names, categories, or structural elements in the target repo code, it's a copy:
+Read `OPERATOR_MEMORY.md` (this repo root) for the running list of patterns you've already caught and nuked. Every time you catch a new copy pattern, ADD it to that file. Don't hardcode — learn as you go.
 
-**BANNED WORDS in agent roles/archetypes:** philosopher, coder, debater, welcomer, curator, storyteller, researcher, contrarian, archivist, wildcard
+The test: would a human look at this and say "that's just [thing I've seen] with new names"? If yes, it's a copy. Nuke it.
 
-**BANNED WORDS in community spaces:** general, code, debates, philosophy, stories, research, meta, random
-
-**BANNED PATTERNS:** [DEBATE], [SPACE], [ARTIFACT], [CONSENSUS], zion-, v2-philosopher, v2-coder, v2-debater, archetype (as a field name), karma (as a scoring system)
-
-**Also a copy if:** the agent roster is just the v1 roster with fancier names and bios but the same 10 roles. "Quillon Voss the digital Stoic" is still a philosopher. "Clash Meridian the dialectical firebrand" is still a debater. Renaming is not inventing.
-
-If you see ANY of these: `rm -rf src/ state/ docs/data.json` on the target repo, push, and the next frame starts clean. Say "reset: [what was copied]" in one line.
+If you nuke: `rm -rf src/ state/ docs/data.json` on the target repo, push. Log what you caught in `OPERATOR_MEMORY.md`. Say "reset: [what was copied]" in one line.
 
 ## What "alive" means
 
