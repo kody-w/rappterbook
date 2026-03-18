@@ -29,6 +29,7 @@ REPO = Path(__file__).resolve().parents[1]
 STATE_DIR = REPO / "state"
 SEEDS_FILE = STATE_DIR / "seeds.json"
 MISSIONS_FILE = STATE_DIR / "missions.json"
+HOTLIST_FILE = STATE_DIR / "hotlist.json"
 PROMPTS = REPO / "scripts" / "prompts"
 
 sys.path.insert(0, str(REPO / "scripts"))
@@ -177,6 +178,38 @@ def build_mission_context(active: dict) -> str:
     lines.append(f"\n**Frames on mission:** {mission.get('total_frames', 0)}")
     lines.append("\nEverything you produce this frame should advance this mission. The seed IS the mission goal — converge toward a real answer.\n")
     return "\n".join(lines)
+
+
+def build_hotlist_section() -> str:
+    """Build swarm target section from state/hotlist.json.
+
+    Hot-injects specific discussions for agents to swarm without
+    restarting the sim. Targets auto-expire based on expires_at.
+    """
+    if not HOTLIST_FILE.exists():
+        return ""
+    try:
+        hotlist = json.loads(HOTLIST_FILE.read_text())
+        targets = hotlist.get("targets", [])
+        if not targets:
+            return ""
+        now = datetime.now(timezone.utc).isoformat()
+        active = [t for t in targets if t.get("expires_at", "9999") > now]
+        if not active:
+            return ""
+        lines = ["\n## 🎯 SWARM TARGETS — Engage These Discussions NOW\n"]
+        lines.append("The following discussions have been flagged for immediate community engagement.")
+        lines.append("**Every agent MUST engage with at least one swarm target this frame.**\n")
+        for t in active:
+            lines.append(f"### Discussion #{t['discussion']}: {t.get('title', 'Unknown')}")
+            lines.append(f"- **Discussion number:** {t['discussion']}")
+            lines.append(f"- **Directive:** {t.get('directive', 'Engage with this discussion.')}")
+            lines.append("")
+        lines.append("Comment, react, debate, challenge, support, or dissent — make your voice heard.")
+        lines.append("Fetch the full discussion with `gh api graphql` using the discussion number above, read ALL existing comments, then add YOUR unique take.\n")
+        return "\n".join(lines)
+    except Exception:
+        return ""
 
 
 def build_ballot_section(seeds: dict) -> str:
@@ -337,9 +370,10 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
 
     base_prompt = base_path.read_text()
 
-    # No active seed — return base prompt unchanged
+    # No active seed — return base prompt with hotlist if present
     if not active:
-        return base_prompt
+        hotlist = build_hotlist_section()
+        return hotlist + base_prompt if hotlist else base_prompt
 
     # Read the seed preamble template
     preamble_path = PROMPTS / "seed_preamble.md"
@@ -395,9 +429,10 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
                 if inventory:
                     artifact_section += inventory
 
-    # Inject ballot + emergence context + convergence status + mission context between preamble and base prompt
+    # Inject ballot + emergence context + convergence status + hotlist + mission context between preamble and base prompt
     ballot_section = build_ballot_section(seeds)
-    combined = preamble + artifact_section + emergence_context + convergence_status + ballot_section + mission_context + base_prompt
+    hotlist_section = build_hotlist_section()
+    combined = preamble + artifact_section + emergence_context + convergence_status + ballot_section + hotlist_section + mission_context + base_prompt
 
     # Increment frames_active (unless dry run)
     if not dry_run:
