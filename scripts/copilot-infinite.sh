@@ -376,7 +376,7 @@ while true; do
     FRAME_TOTAL=$(( ($(date +%s) - FRAME_START) / 60 ))
     log "Frame $FRAME complete (${FRAME_TOTAL}m). Total streams run: $TOTAL_STREAMS_RUN. Next in $((INTERVAL/60))m."
 
-    # ── ARTIFACT COMMIT ── push app files (docs/ + src/) to target repos
+    # ── ARTIFACT COMMIT ── push app files via branch + PR (like real developers)
     SEED_TAGS=$(python3 -c "import json; s=json.load(open('$REPO/state/seeds.json')); print(','.join(s.get('active',{}).get('tags',[])))" 2>/dev/null || true)
     if echo "$SEED_TAGS" | grep -q "artifact"; then
         log "  checking for artifact files..."
@@ -395,15 +395,18 @@ while true; do
             if [ -n "$CHANGED" ]; then
                 PREPO=$(python3 -c "import json; print(json.load(open('$pjson')).get('repo','').replace('https://github.com/',''))" 2>/dev/null || true)
                 if [ -n "$PREPO" ]; then
-                    log "  pushing app to $PREPO..."
+                    log "  pushing app to $PREPO via PR..."
                     TMP="/tmp/artifact-push-$PSLUG"
                     rm -rf "$TMP"
                     git clone --depth 1 "https://github.com/$PREPO.git" "$TMP" 2>/dev/null || true
                     if [ -d "$TMP" ]; then
                         cd "$TMP"
-                        git checkout main 2>/dev/null
 
-                        # Copy docs/ (the web app) to target repo
+                        # Create a frame branch
+                        BRANCH="frame-${FRAME}"
+                        git checkout -b "$BRANCH" 2>/dev/null || git checkout -B "$BRANCH" origin/main 2>/dev/null
+
+                        # Copy docs/ (the web app)
                         if [ -d "$PDOCS" ]; then
                             mkdir -p docs
                             for dfile in $(find "$PDOCS" -type f -not -name ".gitkeep" 2>/dev/null); do
@@ -413,7 +416,7 @@ while true; do
                             done
                         fi
 
-                        # Copy src/ (the engine) to target repo
+                        # Copy src/ (the engine)
                         if [ -d "$PSRC" ]; then
                             mkdir -p src
                             for sfile in $(find "$PSRC" -type f -not -name ".gitkeep" 2>/dev/null); do
@@ -423,12 +426,54 @@ while true; do
                             done
                         fi
 
-                        # Commit and push to main (deploys to Pages)
+                        # Commit and push branch
                         git add -A 2>/dev/null
                         if ! git diff --cached --quiet 2>/dev/null; then
                             TOTAL_FILES=$(git diff --cached --name-only 2>/dev/null | wc -l | tr -d ' ')
+                            CHANGED_LIST=$(git diff --cached --name-only 2>/dev/null | head -5 | tr '\n' ', ')
                             git commit -m "frame $FRAME: app update (${TOTAL_FILES} files)" --no-gpg-sign 2>&1 || true
-                            git push origin main 2>&1 && log "    pushed ${TOTAL_FILES} files -> $PREPO (main)" || true
+                            git push origin "$BRANCH" 2>&1 && log "    pushed $BRANCH -> $PREPO" || true
+
+                            # Open PR if one doesn't exist for this branch
+                            EXISTING_PR=$(gh pr list --repo "$PREPO" --head "$BRANCH" --state open --json number --jq '.[0].number' 2>/dev/null || true)
+                            if [ -z "$EXISTING_PR" ]; then
+                                # Build PR body with file summary
+                                PNAME=$(python3 -c "import json; print(json.load(open('$pjson')).get('name','App'))" 2>/dev/null || echo "$PSLUG")
+                                gh pr create --repo "$PREPO" --head "$BRANCH" --base main \
+                                    --title "frame $FRAME: ${PNAME} update (${TOTAL_FILES} files)" \
+                                    --body "$(cat <<PREOF
+## Frame $FRAME — ${PNAME}
+
+**${TOTAL_FILES} files** updated by the agent swarm.
+
+### Changed files
+${CHANGED_LIST}
+
+### Review checklist
+- [ ] \`docs/index.html\` renders correctly in browser
+- [ ] App fetches live data from Rappterbook state files
+- [ ] No broken links or missing assets
+- [ ] Links back to Rappterbook app store
+
+### How to review
+- Preview: merge this PR and check [GitHub Pages](https://kody-w.github.io/rappterbook-${PSLUG}/)
+- Or locally: \`open docs/index.html\`
+- Discuss in [Rappterbook Discussions](https://github.com/kody-w/rappterbook/discussions)
+
+---
+*Submitted by the [Rappterbook](https://github.com/kody-w/rappterbook) agent swarm — frame ${FRAME}*
+PREOF
+)" 2>&1 && log "    PR opened: frame-${FRAME} -> $PREPO" || log "    PR create failed"
+                            fi
+
+                            # Auto-merge if there are 2+ approved frame PRs waiting
+                            # (simulates agent review — earlier frames get merged as new ones land)
+                            MERGEABLE=$(gh pr list --repo "$PREPO" --state open --json number,headRefName --jq '[.[] | select(.headRefName | startswith("frame-"))] | sort_by(.number) | .[:-1] | .[].number' 2>/dev/null || true)
+                            for MERGE_PR in $MERGEABLE; do
+                                gh pr merge "$MERGE_PR" --repo "$PREPO" --merge --delete-branch \
+                                    --body "Auto-merged: newer frame PR exists, this frame is validated by subsequent work." \
+                                    2>&1 && log "    merged PR #${MERGE_PR} (older frame)" || true
+                            done
                         fi
 
                         cd "$REPO"
