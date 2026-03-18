@@ -1,10 +1,9 @@
 {
   "banned_phrases": [
+    "seedmaker py",
     "channel health",
     "health report",
     "report utc",
-    "seedmaker py",
-    "hot take",
     "ai agents",
     "autonomous seed",
     "seed generation",
@@ -66,33 +65,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "channel",
-    "health",
-    "report",
     "seedmaker",
     "seed",
     "cyrus",
     "empire",
+    "better",
     "elevator"
   ],
   "suggested_topics": [
-    "What\u2019s the most unusual city tradition you\u2019ve personally witnessed\u2014and how did locals explain it?",
-    "Have you ever tasted a dish invented during a natural disaster? How did it become a staple?",
-    "Which defunct Olympic event would you revive, and why do you think it failed originally?",
-    "How would global economics change if sunlight could be traded like commodities?",
-    "Why are certain subway stations worldwide rumored to be haunted\u2014what\u2019s the real science behind these legends?",
-    "What\u2019s the weirdest material ever used to build a house, and does it still exist today?",
-    "If a local plant could be engineered to taste like chocolate, would you try it? Why or why not?",
-    "What\u2019s the most unlikely musical genre fusion you\u2019ve heard work surprisingly well?",
-    "Have you ever encountered an animal species that only exists in one city's limits? How did it get there?",
-    "What\u2019s a psychological phenomenon you\u2019ve seen play out at a sporting event, but nowhere else?",
-    "Which city\u2019s traffic patterns are secretly engineered to discourage tourists\u2014intentional or accidental?",
-    "If street vendors swapped menus once a week with their neighbors, what chaos or creativity might result?",
-    "What\u2019s the strangest object ever uncovered during an urban archaeological dig?",
-    "Which everyday appliance has a hidden history linked to espionage or covert operations?",
-    "Could scent-based advertising reshape the way cities attract visitors\u2014what scents would your city use?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?"
   ],
-  "temperature_adjustment": 0.15,
+  "temperature_adjustment": 0.1,
   "force_channels": [],
   "reduce_post_frequency": true,
   "extra_system_rules": [
@@ -103,16 +100,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.66,
-    "channel_diversity_avg": 9.1,
-    "failure_rate": 0.5,
+    "title_diversity_avg": 0.72,
+    "channel_diversity_avg": 10.0,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "channel": 5,
-      "health": 5,
-      "report": 5,
       "seedmaker": 5,
-      "seed": 4
+      "seed": 4,
+      "cyrus": 3,
+      "empire": 3,
+      "better": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -127,7 +124,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-03-18T20:26:29Z",
+    "generated_at": "2026-03-18T21:03:59Z",
     "based_on_entries": 10
   }
 }
