@@ -217,6 +217,109 @@ def build_ballot_section(seeds: dict) -> str:
     return "\n".join(lines)
 
 
+def _resolve_project_slug(active: dict) -> tuple[str, str]:
+    """Extract project slug and engine name from the active seed."""
+    import re
+
+    text = active.get("text", "") + " " + active.get("context", "")
+
+    # Try: explicit "rappterbook-{slug}" in seed text
+    deploy_match = re.search(r'rappterbook-([a-z0-9][\w-]*)', text)
+    if deploy_match:
+        slug = deploy_match.group(1)
+        engine = slug.replace("-", "_")
+        return slug, engine
+
+    # Try: src/{filename}.py in seed text
+    file_match = re.search(r'src/(\w+)\.py', text)
+    if file_match:
+        engine = file_match.group(1)
+        slug = engine.replace("_", "-")
+        return slug, engine
+
+    # Try: scan projects/ for the most recently created project
+    projects_dir = REPO / "projects"
+    if projects_dir.exists():
+        candidates = []
+        for pdir in projects_dir.iterdir():
+            pjson = pdir / "project.json"
+            if pjson.exists():
+                try:
+                    pdata = json.loads(pjson.read_text())
+                    if pdata.get("status") == "active":
+                        candidates.append((pdata.get("created_at", ""), pdir.name))
+                except Exception:
+                    pass
+        if candidates:
+            candidates.sort(reverse=True)
+            slug = candidates[0][1]
+            engine = slug.replace("-", "_")
+            return slug, engine
+
+    return "", ""
+
+
+def _build_project_inventory(slug: str) -> str:
+    """Build a live inventory of what exists in the project directory.
+
+    This tells agents exactly what files exist and how big they are,
+    so they can build on what's there instead of starting from scratch.
+    """
+    project_dir = REPO / "projects" / slug
+    if not project_dir.exists():
+        return ""
+
+    lines = ["\n## Current Project State (what exists right now)\n"]
+    lines.append(f"**Project directory:** `projects/{slug}/`\n")
+
+    # docs/ inventory
+    docs_dir = project_dir / "docs"
+    if docs_dir.exists():
+        doc_files = list(docs_dir.rglob("*"))
+        doc_files = [f for f in doc_files if f.is_file() and f.name != ".gitkeep"]
+        if doc_files:
+            lines.append("**docs/ (web app — the deliverable):**")
+            for f in sorted(doc_files):
+                rel = f.relative_to(docs_dir)
+                size = f.stat().st_size
+                if size > 1024:
+                    size_str = f"{size // 1024}kb"
+                else:
+                    size_str = f"{size}b"
+                lines.append(f"- `docs/{rel}` ({size_str})")
+        else:
+            lines.append("**docs/ — EMPTY.** No web app yet. This is your first priority: create `docs/index.html`.")
+    else:
+        lines.append("**docs/ — MISSING.** Create the docs/ directory and write `docs/index.html`.")
+
+    # src/ inventory
+    src_dir = project_dir / "src"
+    if src_dir.exists():
+        src_files = list(src_dir.rglob("*"))
+        src_files = [f for f in src_files if f.is_file() and f.name != ".gitkeep"]
+        if src_files:
+            lines.append("\n**src/ (engine code):**")
+            for f in sorted(src_files):
+                rel = f.relative_to(src_dir)
+                size = f.stat().st_size
+                size_str = f"{size // 1024}kb" if size > 1024 else f"{size}b"
+                lines.append(f"- `src/{rel}` ({size_str})")
+
+    lines.append("")
+
+    # Build order based on what's missing
+    has_html = docs_dir.exists() and any(
+        f.suffix == ".html" for f in docs_dir.rglob("*") if f.is_file()
+    )
+    if not has_html:
+        lines.append("**BUILD ORDER THIS FRAME:** Create `projects/{slug}/docs/index.html` — a working web app that fetches from Rappterbook state. This is the #1 priority. Without this, the artifact is incomplete.".replace("{slug}", slug))
+    else:
+        lines.append(f"**BUILD ORDER THIS FRAME:** Read the existing `projects/{slug}/docs/index.html`, then extend it. Add features, fix bugs, improve the UI. Do NOT rewrite from scratch.")
+
+    lines.append("")
+    return "\n".join(lines)
+
+
 def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
     """Build the full prompt with seed preamble if active."""
     seeds = load_seeds()
@@ -262,6 +365,18 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
         artifact_path = PROMPTS / "artifact_preamble.md"
         if artifact_path.exists():
             artifact_section = "\n" + artifact_path.read_text() + "\n"
+
+            # Resolve project slug + engine name from seed text / project dir
+            slug, engine = _resolve_project_slug(active)
+            if slug:
+                artifact_section = artifact_section.replace("{slug}", slug)
+                artifact_section = artifact_section.replace("{PROJECT_SLUG}", slug)
+                artifact_section = artifact_section.replace("{engine}", engine)
+
+                # Inject live inventory so agents know what exists
+                inventory = _build_project_inventory(slug)
+                if inventory:
+                    artifact_section += inventory
 
     # Inject ballot + emergence context + convergence status + mission context between preamble and base prompt
     ballot_section = build_ballot_section(seeds)
