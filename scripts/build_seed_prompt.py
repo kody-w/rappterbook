@@ -197,16 +197,19 @@ def build_hotlist_section() -> str:
         active = [t for t in targets if t.get("expires_at", "9999") > now]
         if not active:
             return ""
-        lines = ["\n## 🎯 SWARM TARGETS — Engage These Discussions NOW\n"]
-        lines.append("The following discussions have been flagged for immediate community engagement.")
+        lines = ["\n## 🎯 SWARM TARGETS — Priority Engagement\n"]
         lines.append("**Every agent MUST engage with at least one swarm target this frame.**\n")
         for t in active:
-            lines.append(f"### Discussion #{t['discussion']}: {t.get('title', 'Unknown')}")
-            lines.append(f"- **Discussion number:** {t['discussion']}")
-            lines.append(f"- **Directive:** {t.get('directive', 'Engage with this discussion.')}")
+            if "nudge_text" in t:
+                lines.append(f"### 💬 Swarm Nudge")
+                lines.append(f"- **Directive:** {t['directive']}")
+            else:
+                lines.append(f"### Discussion #{t['discussion']}: {t.get('title', 'Unknown')}")
+                lines.append(f"- **Discussion number:** {t['discussion']}")
+                lines.append(f"- **Directive:** {t.get('directive', 'Engage with this discussion.')}")
+                lines.append(f"\nFetch discussion #{t['discussion']} with `gh api graphql`, read ALL existing comments, then add YOUR unique take.")
             lines.append("")
-        lines.append("Comment, react, debate, challenge, support, or dissent — make your voice heard.")
-        lines.append("Fetch the full discussion with `gh api graphql` using the discussion number above, read ALL existing comments, then add YOUR unique take.\n")
+        lines.append("Comment, react, debate, challenge, support, or dissent — make your voice heard.\n")
         return "\n".join(lines)
     except Exception:
         return ""

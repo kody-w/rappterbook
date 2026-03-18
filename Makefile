@@ -60,3 +60,6 @@ clean: ## Reset state to empty defaults
 	@echo "State reset complete."
 
 all: clean bootstrap bundle test ## Full rebuild: clean, bootstrap, bundle, test
+
+steer: ## Steer the swarm (usage: make steer ARGS="target 6135")
+	python scripts/steer.py $(ARGS)
