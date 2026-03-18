@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Control</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#c8c8c8;font-family:'SF Mono','Menlo',monospace;font-size:13px;padding:12px;padding-top:env(safe-area-inset-top,12px);min-height:100dvh}
+header{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid #111;margin-bottom:12px}
+header h1{color:#00ff88;font-size:16px}
+.pulse{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
+.pulse.g{background:#00ff88;box-shadow:0 0 8px #00ff88;animation:p 2s infinite}
+.pulse.r{background:#ff4444;box-shadow:0 0 8px #ff4444;animation:p 1s infinite}
+.pulse.y{background:#ffcc00;box-shadow:0 0 8px #ffcc00;animation:p 1.5s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.time{color:#333;font-size:10px}
+
+.hero{text-align:center;padding:20px 0;margin-bottom:12px}
+.hero .status{font-size:32px;font-weight:bold;color:#00ff88}
+.hero .sub{color:#444;font-size:11px;margin-top:4px}
+
+.row{display:flex;gap:8px;margin-bottom:8px}
+.cell{flex:1;background:#0a0a10;border:1px solid #181820;border-radius:8px;padding:10px;text-align:center}
+.cell .n{font-size:20px;font-weight:bold;color:#fff}
+.cell .l{font-size:8px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.cell.ok .n{color:#00ff88}
+.cell.warn .n{color:#ffcc00}
+.cell.bad .n{color:#ff4444}
+
+.card{background:#0a0a10;border:1px solid #181820;border-radius:8px;padding:12px;margin-bottom:10px}
+.card h2{font-size:9px;color:#444;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
+
+/* Nudge button */
+.nudge-btn{display:block;width:100%;padding:14px;background:#1a0a0a;border:2px solid #ff4444;border-radius:10px;color:#ff4444;font-family:inherit;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;transition:.2s}
+.nudge-btn:active{background:#ff4444;color:#000;transform:scale(.97)}
+.nudge-btn.sending{opacity:.5;pointer-events:none}
+.nudge-btn.sent{background:#0a1a0a;border-color:#00ff88;color:#00ff88}
+
+/* Message input */
+.msg-box{display:flex;gap:6px;margin-bottom:10px}
+.msg-box input{flex:1;background:#0a0a10;border:1px solid #222;border-radius:6px;padding:10px;color:#fff;font-family:inherit;font-size:13px}
+.msg-box input::placeholder{color:#333}
+.msg-box button{background:#181830;border:1px solid #333;border-radius:6px;padding:10px 16px;color:#4488ff;font-family:inherit;font-size:12px;font-weight:bold;cursor:pointer}
+.msg-box button:active{background:#4488ff;color:#000}
+
+.issue{padding:6px 0;border-bottom:1px solid #080810;font-size:11px}
+.issue .title{color:#fff}
+.issue .meta{color:#333;font-size:10px;margin-top:2px}
+.issue a{color:#4488ff;text-decoration:none}
+.issue .label{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:bold;margin-left:4px}
+.issue .label.nudge{background:#ff444422;color:#ff4444}
+.issue .label.directive{background:#4488ff22;color:#4488ff}
+
+.empty{color:#222;font-size:10px;font-style:italic}
+.toast{position:fixed;bottom:20px;left:12px;right:12px;background:#0a1a0a;border:1px solid #00ff88;border-radius:8px;padding:10px;color:#00ff88;font-size:12px;text-align:center;display:none;z-index:99}
+footer{text-align:center;color:#1a1a1a;font-size:9px;margin-top:16px;padding-bottom:env(safe-area-inset-bottom,12px)}
+footer a{color:#222}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="pulse g" id="pulse"></span>Control</h1>
+  <div class="time" id="time">...</div>
+</header>
+
+<div class="hero">
+  <div class="status" id="status">...</div>
+  <div class="sub" id="status-sub">loading</div>
+</div>
+
+<div class="row">
+  <div class="cell" id="c-sim"><div class="n">-</div><div class="l">Sim</div></div>
+  <div class="cell" id="c-frame"><div class="n">-</div><div class="l">Frame</div></div>
+  <div class="cell" id="c-prs"><div class="n">-</div><div class="l">PRs</div></div>
+  <div class="cell" id="c-files"><div class="n">-</div><div class="l">Files</div></div>
+</div>
+
+<button class="nudge-btn" id="nudge" onclick="sendNudge()">NUDGE OPERATOR</button>
+
+<div class="msg-box">
+  <input type="text" id="msg" placeholder="Directive to operator..." />
+  <button onclick="sendDirective()">SEND</button>
+</div>
+
+<div class="card">
+  <h2>Active Directives</h2>
+  <div id="directives" class="empty">Loading...</div>
+</div>
+
+<div class="card">
+  <h2>Target Repo (rappterbook-2)</h2>
+  <div id="repo-status" class="empty">Loading...</div>
+</div>
+
+<div class="card">
+  <h2>Recent PRs</h2>
+  <div id="prs" class="empty">Loading...</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <a href="overseer.html">Overseer</a> &bull;
+  <a href="factory.html">Factory</a> &bull;
+  <a href="seed-lifecycle.html">Lifecycle</a>
+</footer>
+
+<script>
+const REPO = 'kody-w/rappterbook';
+const TARGET = 'kody-w/rappterbook-rappterbook-2';
+const STATE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+const R = 15000;
+
+// GitHub auth — uses the token from the authenticated gh CLI session via OAuth
+// For phone: we create issues on the repo which the operator cron picks up
+let GH_TOKEN = null;
+
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function ago(iso){
+  if(!iso)return'?';const m=Math.floor((Date.now()-new Date(iso).getTime())/60000);
+  if(m<1)return'now';if(m<60)return m+'m';const h=Math.floor(m/60);
+  if(h<24)return h+'h';return Math.floor(h/24)+'d';
+}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
+
+async function ghAPI(endpoint, opts={}){
+  const headers = {'Accept':'application/vnd.github.v3+json'};
+  if(GH_TOKEN) headers['Authorization'] = 'token '+GH_TOKEN;
+  try{
+    const r = await fetch('https://api.github.com/'+endpoint, {...opts, headers});
+    if(r.ok) return r.json();
+    if(r.status===401) return null;
+  }catch(e){}
+  return null;
+}
+
+async function createIssue(title, body, labels){
+  const data = {title, body, labels};
+  const r = await fetch('https://api.github.com/repos/'+REPO+'/issues', {
+    method:'POST',
+    headers:{'Accept':'application/vnd.github.v3+json','Authorization':'token '+GH_TOKEN,'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  if(r.ok) return r.json();
+  throw new Error('Failed: '+r.status);
+}
+
+async function sendNudge(){
+  const btn = document.getElementById('nudge');
+  if(!GH_TOKEN){toast('Not authenticated — enter GitHub token first');promptToken();return}
+  btn.classList.add('sending');btn.textContent='SENDING...';
+  try{
+    await createIssue(
+      '[OPERATOR] Nudge — check quality and intervene',
+      'The owner is watching. Check the target repo quality NOW. Review open PRs. Report status. Fix anything wrong.\n\nSent from Control page.',
+      ['operator-nudge']
+    );
+    btn.classList.remove('sending');btn.classList.add('sent');btn.textContent='NUDGE SENT';
+    toast('Nudge sent — operator will pick it up next cycle');
+    setTimeout(()=>{btn.classList.remove('sent');btn.textContent='NUDGE OPERATOR'},5000);
+  }catch(e){
+    btn.classList.remove('sending');btn.textContent='NUDGE OPERATOR';
+    toast('Failed: '+e.message);
+  }
+}
+
+async function sendDirective(){
+  const input = document.getElementById('msg');
+  const text = input.value.trim();
+  if(!text){toast('Type a directive first');return}
+  if(!GH_TOKEN){toast('Not authenticated');promptToken();return}
+  try{
+    await createIssue(
+      '[OPERATOR] Directive: '+text.slice(0,60),
+      'Owner directive:\n\n> '+text+'\n\nExecute this immediately. Sent from Control page.',
+      ['operator-directive']
+    );
+    input.value='';
+    toast('Directive sent');
+    setTimeout(refresh, 2000);
+  }catch(e){toast('Failed: '+e.message)}
+}
+
+function promptToken(){
+  const t = prompt('GitHub personal access token (needs repo scope):');
+  if(t){GH_TOKEN=t;localStorage.setItem('gh_token',t);toast('Token saved');refresh()}
+}
+
+async function refresh(){
+  document.getElementById('time').textContent = new Date().toLocaleTimeString();
+
+  // Seeds
+  let seeds={};
+  try{const r=await fetch(STATE+'/seeds.json?t='+Date.now());seeds=await r.json()}catch(e){}
+  const active = seeds.active||{};
+  const frame = active.frames_active||0;
+
+  // Target repo files
+  let files=[];
+  try{
+    const tree = await ghAPI('repos/'+TARGET+'/git/trees/main?recursive=1');
+    if(tree&&tree.tree) files=tree.tree.filter(f=>f.type==='blob');
+  }catch(e){}
+
+  // PRs
+  let prs=[];
+  try{prs = await ghAPI('repos/'+TARGET+'/pulls?state=all&per_page=10')||[]}catch(e){}
+
+  // Operator issues (nudges + directives)
+  let issues=[];
+  if(GH_TOKEN){
+    try{issues = await ghAPI('repos/'+REPO+'/issues?labels=operator-nudge,operator-directive&state=all&per_page=10')||[]}catch(e){}
+  }
+
+  // Status
+  const hasFiles = files.filter(f=>!f.path.includes('project.json')&&f.path!=='docs/index.html').length > 0;
+  const openPRs = prs.filter(p=>p.state==='open').length;
+  const mergedPRs = prs.filter(p=>p.merged_at).length;
+  const statusEl = document.getElementById('status');
+  const subEl = document.getElementById('status-sub');
+  const pulse = document.getElementById('pulse');
+
+  if(hasFiles && mergedPRs > 0){
+    statusEl.textContent='PRODUCING';statusEl.style.color='#00ff88';
+    subEl.textContent='factory has shipped code';pulse.className='pulse g';
+  }else if(frame > 0){
+    statusEl.textContent='BUILDING';statusEl.style.color='#ffcc00';
+    subEl.textContent='frame '+frame+' — agents working';pulse.className='pulse y';
+  }else{
+    statusEl.textContent='STARTING';statusEl.style.color='#555';
+    subEl.textContent='waiting for first frame';pulse.className='pulse y';
+  }
+
+  // Cells
+  const simEl=document.getElementById('c-sim');
+  simEl.innerHTML=`<div class="n">${frame>0?'ON':'?'}</div><div class="l">Sim</div>`;
+  simEl.className='cell'+(frame>0?' ok':'');
+
+  document.getElementById('c-frame').innerHTML=`<div class="n">${frame}</div><div class="l">Frame</div>`;
+
+  const prEl=document.getElementById('c-prs');
+  prEl.innerHTML=`<div class="n">${openPRs}/${mergedPRs}</div><div class="l">Open/Mrgd</div>`;
+  prEl.className='cell'+(mergedPRs>0?' ok':(openPRs>0?' warn':''));
+
+  const codeFiles = files.filter(f=>f.path.startsWith('src/')||f.path.startsWith('docs/'));
+  document.getElementById('c-files').innerHTML=`<div class="n">${codeFiles.length}</div><div class="l">Files</div>`;
+
+  // Repo status
+  const repoEl=document.getElementById('repo-status');
+  if(!files.length){
+    repoEl.innerHTML='<div class="empty">Repo empty — waiting for agents</div>';
+  }else{
+    repoEl.innerHTML=files.slice(0,10).map(f=>{
+      const s=f.size>1024?Math.round(f.size/1024)+'kb':f.size+'b';
+      return `<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px"><span style="color:#e8c87a">${esc(f.path)}</span><span style="color:#333">${s}</span></div>`;
+    }).join('');
+  }
+
+  // PRs
+  const prsList=document.getElementById('prs');
+  if(!prs.length){
+    prsList.innerHTML='<div class="empty">No PRs yet</div>';
+  }else{
+    prsList.innerHTML=prs.slice(0,6).map(p=>{
+      const st=p.merged_at?'MERGED':p.state.toUpperCase();
+      const c=p.merged_at?'#00ff88':(p.state==='open'?'#4488ff':'#ff4444');
+      return `<div class="issue"><span class="title"><a href="${esc(p.html_url)}">#${p.number}</a> ${esc((p.title||'').slice(0,45))}</span><span style="color:${c};font-size:9px;float:right;font-weight:bold">${st}</span><div class="meta">${ago(p.created_at)}</div></div>`;
+    }).join('');
+  }
+
+  // Directives
+  const dirEl=document.getElementById('directives');
+  if(!issues.length){
+    dirEl.innerHTML=GH_TOKEN?'<div class="empty">No active directives</div>':'<div class="empty">Tap NUDGE to authenticate</div>';
+  }else{
+    dirEl.innerHTML=issues.slice(0,5).map(i=>{
+      const isNudge=i.labels?.some(l=>l.name==='operator-nudge');
+      const label=isNudge?'<span class="label nudge">NUDGE</span>':'<span class="label directive">DIRECTIVE</span>';
+      return `<div class="issue"><span class="title">${esc((i.title||'').replace('[OPERATOR] ',''))}${label}</span><div class="meta">${ago(i.created_at)} &bull; ${i.state}</div></div>`;
+    }).join('');
+  }
+}
+
+// Init
+GH_TOKEN = localStorage.getItem('gh_token');
+refresh();
+setInterval(refresh, R);
+</script>
+</body>
+</html>
