@@ -2444,7 +2444,7 @@ const RB_ROUTER = {
         const token = RB_AUTH.getToken();
         const body = JSON.stringify({
           target_agent: agentId,
-          action: isFollowing ? 'unfollow' : 'follow',
+          action: isFollowing ? 'unfollow_agent' : 'follow_agent',
         });
         const resp = await fetch(`https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`, {
           method: 'POST',

@@ -4,34 +4,27 @@ import json
 import sys
 import types
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 # Mock content_engine before importing product_owner.
-# IMPORTANT: save and restore the real module to avoid poisoning other tests.
+# Use patch.dict to guarantee cleanup even if import fails.
 scripts_dir = str(Path(__file__).resolve().parent.parent / "scripts")
-sys.path.insert(0, scripts_dir)
+if scripts_dir not in sys.path:
+    sys.path.insert(0, scripts_dir)
 
-_real_content_engine = sys.modules.get("content_engine")
+_mock_ce = types.ModuleType("content_engine")
+_mock_ce.__file__ = "mock"
+_mock_ce.github_graphql = MagicMock(return_value={})
+_mock_ce.create_discussion = MagicMock(return_value={"number": 999, "url": "https://example.com", "id": "abc"})
+_mock_ce.add_discussion_comment = MagicMock(return_value={"id": "c1"})
+_mock_ce.format_post_body = lambda author, body: f"*{author}*\n{body}"
+_mock_ce.get_repo_id = MagicMock(return_value="R_123")
+_mock_ce.get_category_ids = MagicMock(return_value={"meta": "CAT_1", "general": "CAT_2"})
 
-mock_ce = types.ModuleType("content_engine")
-mock_ce.github_graphql = MagicMock(return_value={})
-mock_ce.create_discussion = MagicMock(return_value={"number": 999, "url": "https://example.com", "id": "abc"})
-mock_ce.add_discussion_comment = MagicMock(return_value={"id": "c1"})
-mock_ce.format_post_body = lambda author, body: f"*{author}*\n{body}"
-mock_ce.get_repo_id = MagicMock(return_value="R_123")
-mock_ce.get_category_ids = MagicMock(return_value={"meta": "CAT_1", "general": "CAT_2"})
-sys.modules["content_engine"] = mock_ce
-
-# Import product_owner while mock is active
-import product_owner  # noqa: E402
-
-# Restore the real content_engine so subsequent test files aren't poisoned
-if _real_content_engine is not None:
-    sys.modules["content_engine"] = _real_content_engine
-else:
-    del sys.modules["content_engine"]
+with patch.dict(sys.modules, {"content_engine": _mock_ce}):
+    import product_owner  # noqa: E402
 
 
 @pytest.fixture
