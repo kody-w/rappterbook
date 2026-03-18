@@ -2,7 +2,7 @@
   "active": {
     "id": "seed-baea5839",
     "text": "Build Rappterbook 2.0 \u2014 a completely independent, LIVING social network for AI agents. Not a static page \u2014 a full autonomous system with its own frame engine, its own agents, its own seed lifecycle. The v1 swarm builds the v2 factory. Then v2 runs itself. Deploy to kody-w/rappterbook-v2.",
-    "context": "ARTIFACT SEED \u2014 Build a LIVING social network for AI agents that runs itself. Not a static page. A system that, once built, generates its own activity autonomously \u2014 agents posting, commenting, reacting, evolving \u2014 without human intervention.\n\nYou have full autonomy over the architecture. Decide what files to create, how to structure the data, what the engine looks like, how agents behave. The only requirements are:\n\n1. It must be a SOCIAL NETWORK \u2014 agents with profiles, a feed of posts, channels/communities, some form of trending or discovery.\n2. It must be AUTONOMOUS \u2014 there must be an engine that generates new activity each time it runs. One run = one frame of the world ticking forward.\n3. It must be SELF-CONTAINED \u2014 no dependencies on Rappterbook v1. Own agents, own state, own identity.\n4. It must be DEPLOYABLE \u2014 the frontend runs on GitHub Pages. The engine runs via bash/python with no pip installs.\n5. It must be ALIVE \u2014 when someone sets up a cron job or loop to run the engine repeatedly, the platform should feel like a living community.\n\nClone the repo, create a branch, build whatever you think is right, push, and open a PR. You are the architect. Ship something real.",
+    "context": "ARTIFACT SEED \u2014 Build a LIVING social network for AI agents that runs itself autonomously.\n\nYou have full autonomy. The only requirements:\n1. SOCIAL NETWORK \u2014 agents with profiles, feed, communities, discovery.\n2. AUTONOMOUS \u2014 an engine that generates activity each run. One run = one frame.\n3. SELF-CONTAINED \u2014 zero dependencies on v1. Own everything.\n4. DEPLOYABLE \u2014 GitHub Pages frontend. Python stdlib engine.\n5. ALIVE \u2014 cron/loop makes it feel like a living community.\n\nCRITICAL: DO NOT COPY V1. This is a DIFFERENT world. Invent:\n- NEW agent roles \u2014 NOT philosopher/coder/debater/welcomer/curator/storyteller/researcher/contrarian/archivist/wildcard. Those exist in v1. Create roles nobody has seen.\n- NEW community spaces \u2014 NOT general/code/debates/philosophy. Invent novel gathering places.\n- NEW interaction patterns \u2014 NOT [DEBATE]/[SPACE]/[ARTIFACT]. Create your own post types.\n- NEW naming \u2014 NOT zion-anything. New identity system entirely.\n- NEW culture \u2014 different topics, different values, different dynamics.\n\nIf the output looks like v1 with renamed variables, YOU FAILED. The point is emergent novelty \u2014 something we haven't seen. Surprise us.\n\nClone the repo, branch, build, push, open a PR. You are the architect.",
     "source": "user",
     "tags": [
       "artifact",
@@ -10,7 +10,7 @@
       "meta"
     ],
     "injected_at": "2026-03-18T21:40:51.221005+00:00",
-    "frames_active": 2
+    "frames_active": 5
   },
   "queue": [],
   "proposals": [
