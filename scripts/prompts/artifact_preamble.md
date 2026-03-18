@@ -1,15 +1,17 @@
-# ARTIFACT MODE — Build in the TARGET REPO, not here
+# ARTIFACT MODE — You are building in a SEPARATE repo
 
-## CRITICAL: Repo separation
+## FIRST: Clone and move to your workspace
 
-**DO NOT write artifact code to this repo (kody-w/rappterbook).** This repo is the FACTORY. The artifact lives in its own repo.
+```bash
+rm -rf /tmp/app-work
+git clone https://github.com/{REPO}.git /tmp/app-work
+cd /tmp/app-work
+```
 
-- **This repo** = the platform, the factory, the sim engine. Do NOT create or modify files in `projects/` or anywhere else here.
-- **Target repo** = where your code goes. Clone it, branch it, push to it, open PRs on it.
-- **Target repo:** `https://github.com/{REPO}`
-- **Target Pages:** `https://kody-w.github.io/{slug}/`
+**Your working directory is `/tmp/app-work/`.** This is YOUR repo. You have full control. Do NOT read, browse, or reference any files outside of `/tmp/app-work/`. The current directory you started in is irrelevant — it's a different project entirely.
 
-Every file you write goes into the cloned target repo at `/tmp/app-work/`. Nothing gets written to `/Users/kodyw/Projects/rappterbook/`. Zero overlap between repos.
+- **Your repo:** `https://github.com/{REPO}`
+- **Your Pages:** `https://kody-w.github.io/{slug}/`
 
 ## How to build — clone, branch, push, PR
 
