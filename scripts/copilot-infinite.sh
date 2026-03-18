@@ -431,20 +431,51 @@ while true; do
             [ -f "$pjson" ] || continue
             PREPO=$(python3 -c "import json; print(json.load(open('$pjson')).get('repo','').replace('https://github.com/',''))" 2>/dev/null || true)
             [ -z "$PREPO" ] && continue
-            ALL_PRS=$(gh pr list --repo "$PREPO" --state open --json number,title --jq '.[].number' 2>/dev/null || true)
+            ALL_PRS=$(gh pr list --repo "$PREPO" --state open --json number,headRefName --jq '.[] | "\(.number) \(.headRefName)"' 2>/dev/null || true)
             [ -z "$ALL_PRS" ] && continue
             MERGED_COUNT=0
             CONFLICT_COUNT=0
-            for PR_NUM in $ALL_PRS; do
-                if gh pr merge "$PR_NUM" --repo "$PREPO" --merge --delete-branch 2>&1; then
+            while IFS=' ' read -r PR_NUM PR_BRANCH; do
+                [ -z "$PR_NUM" ] && continue
+                # Try clean merge first
+                if gh pr merge "$PR_NUM" --repo "$PREPO" --merge --delete-branch 2>/dev/null; then
                     MERGED_COUNT=$((MERGED_COUNT + 1))
                     log "    merged PR #${PR_NUM} on $PREPO"
                 else
-                    CONFLICT_COUNT=$((CONFLICT_COUNT + 1))
-                    log "    PR #${PR_NUM} conflict — next frame's agents will resolve"
+                    # Conflict — resolve by cloning, merging with --theirs, pushing
+                    log "    PR #${PR_NUM} conflict — auto-resolving..."
+                    MTMP="/tmp/merge-resolve-$$"
+                    rm -rf "$MTMP"
+                    if git clone --depth 10 "https://github.com/$PREPO.git" "$MTMP" 2>/dev/null; then
+                        cd "$MTMP"
+                        git fetch origin "$PR_BRANCH" 2>/dev/null
+                        if git merge "origin/$PR_BRANCH" --no-edit --no-gpg-sign 2>/dev/null; then
+                            git push origin main 2>/dev/null && MERGED_COUNT=$((MERGED_COUNT + 1)) && log "    resolved PR #${PR_NUM}"
+                        else
+                            # Accept incoming changes on conflict (agent's work wins)
+                            git checkout --theirs . 2>/dev/null
+                            git add -A 2>/dev/null
+                            git commit --no-edit --no-gpg-sign -m "merge: resolve PR #${PR_NUM} (accept theirs)" 2>/dev/null
+                            git push origin main 2>/dev/null && MERGED_COUNT=$((MERGED_COUNT + 1)) && log "    force-resolved PR #${PR_NUM}"
+                        fi
+                        # Close the PR since we merged manually
+                        gh pr close "$PR_NUM" --repo "$PREPO" --delete-branch 2>/dev/null
+                        cd "$REPO"
+                    fi
+                    rm -rf "$MTMP"
                 fi
-            done
-            [ $MERGED_COUNT -gt 0 ] && log "  integrated $MERGED_COUNT PRs into main ($CONFLICT_COUNT conflicts deferred)"
+            done <<< "$ALL_PRS"
+            [ $MERGED_COUNT -gt 0 ] && log "  integrated $MERGED_COUNT PRs into main"
+        done
+
+        # Clean leaked artifact files from this repo
+        for pdir in "$REPO"/projects/*/src "$REPO"/projects/*/docs; do
+            [ -d "$pdir" ] || continue
+            LEAKED=$(find "$pdir" -type f -not -name ".gitkeep" -not -name "project.json" 2>/dev/null | head -1)
+            if [ -n "$LEAKED" ]; then
+                find "$pdir" -type f -not -name ".gitkeep" -not -name "project.json" -delete 2>/dev/null
+                log "  cleaned leaked artifact files from $(basename $(dirname $pdir))"
+            fi
         done
     fi
 
