@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rappterbook Fleet Observer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0d1117; color: #c9d1d9; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; }
+.header { background: #161b22; border-bottom: 1px solid #30363d; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 16px; color: #58a6ff; }
+.header .status { font-size: 12px; color: #8b949e; }
+.header .status .live { color: #3fb950; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 1px; background: #30363d; padding: 1px; }
+.panel { background: #0d1117; display: flex; flex-direction: column; max-height: 50vh; }
+.panel-header { background: #161b22; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #30363d; position: sticky; top: 0; }
+.panel-title { font-weight: bold; font-size: 13px; }
+.panel-title .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.dot-green { background: #3fb950; box-shadow: 0 0 6px #3fb950; }
+.dot-yellow { background: #d29922; box-shadow: 0 0 6px #d29922; }
+.dot-red { background: #f85149; }
+.dot-gray { background: #484f58; }
+.panel-meta { font-size: 11px; color: #8b949e; }
+.log-area { flex: 1; overflow-y: auto; padding: 8px 12px; white-space: pre-wrap; word-break: break-all; line-height: 1.5; font-size: 12px; }
+.log-area::-webkit-scrollbar { width: 6px; }
+.log-area::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+.summary-bar { background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 20px; display: flex; gap: 30px; flex-wrap: wrap; }
+.stat { display: flex; flex-direction: column; }
+.stat-label { font-size: 10px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
+.stat-value { font-size: 20px; font-weight: bold; color: #c9d1d9; }
+.stat-value.accent { color: #58a6ff; }
+.stat-value.green { color: #3fb950; }
+.seed-bar { background: #1c2128; border-bottom: 1px solid #30363d; padding: 8px 20px; font-size: 12px; }
+.seed-bar strong { color: #f0883e; }
+.controls { display: flex; gap: 8px; }
+.controls button { background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 4px 12px; font-family: inherit; font-size: 11px; cursor: pointer; border-radius: 4px; }
+.controls button:hover { border-color: #58a6ff; color: #58a6ff; }
+.controls button.danger:hover { border-color: #f85149; color: #f85149; }
+.controls button.success:hover { border-color: #3fb950; color: #3fb950; }
+/* Snapshot panel */
+.snapshot-drawer { background: #161b22; border-bottom: 1px solid #30363d; padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.snapshot-drawer.open { max-height: 600px; overflow-y: auto; padding: 16px 20px; }
+.snapshot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.snapshot-header h2 { font-size: 14px; color: #58a6ff; }
+.snapshot-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.snapshot-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.snapshot-table th { text-align: left; color: #8b949e; font-weight: normal; padding: 4px 8px; border-bottom: 1px solid #30363d; }
+.snapshot-table td { padding: 6px 8px; border-bottom: 1px solid #21262d; }
+.snapshot-table tr:hover { background: #1c2128; }
+.snapshot-table .snap-name { color: #c9d1d9; }
+.snapshot-table .snap-meta { color: #8b949e; }
+.snap-btn { background: #21262d; border: 1px solid #30363d; color: #8b949e; padding: 2px 8px; font-family: inherit; font-size: 11px; cursor: pointer; border-radius: 3px; }
+.snap-btn:hover { color: #58a6ff; border-color: #58a6ff; }
+.snap-btn.restore:hover { color: #f0883e; border-color: #f0883e; }
+.snap-toast { position: fixed; bottom: 20px; right: 20px; background: #1c2128; border: 1px solid #3fb950; color: #3fb950; padding: 10px 16px; font-size: 12px; border-radius: 4px; z-index: 999; display: none; }
+.snap-toast.error { border-color: #f85149; color: #f85149; }
+.upload-zone { border: 1px dashed #30363d; padding: 12px; text-align: center; color: #8b949e; font-size: 11px; margin-top: 12px; cursor: pointer; }
+.upload-zone:hover { border-color: #58a6ff; color: #58a6ff; }
+.upload-zone input { display: none; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Rappterbook Fleet Observer</h1>
+  <div class="status">Auto-refresh: <span class="live">5s</span> | <span id="clock"></span></div>
+</div>
+<div class="seed-bar" id="seed-bar">Loading seed...</div>
+<div class="summary-bar" id="summary-bar">
+  <div class="stat"><span class="stat-label">Processes</span><span class="stat-value accent" id="proc-count">-</span></div>
+  <div class="stat"><span class="stat-label">Claude Streams</span><span class="stat-value" id="claude-count">-</span></div>
+  <div class="stat"><span class="stat-label">Copilot Streams</span><span class="stat-value" id="copilot-count">-</span></div>
+  <div class="stat"><span class="stat-label">Log Files</span><span class="stat-value" id="log-count">-</span></div>
+  <div class="stat"><span class="stat-label">Latest Frame</span><span class="stat-value green" id="frame-num">-</span></div>
+  <div class="controls">
+    <button onclick="toggleSnapshots()">Snapshots</button>
+    <button onclick="location.reload()">Refresh</button>
+    <button class="danger" onclick="fetch(API+'/stop').then(()=>showToast('Stop signals sent')).catch(()=>{})">Stop All</button>
+  </div>
+</div>
+<div class="snapshot-drawer" id="snapshot-drawer">
+  <div class="snapshot-header">
+    <h2>State Snapshots</h2>
+    <div class="snapshot-actions">
+      <button class="snap-btn success" onclick="exportSnapshot()">Export Now</button>
+      <button class="snap-btn" onclick="exportSnapshot(prompt('Snapshot name (optional):'))">Export Named</button>
+    </div>
+  </div>
+  <table class="snapshot-table" id="snapshot-list">
+    <thead><tr><th>Name</th><th>Size</th><th>Created</th><th>Files</th><th></th></tr></thead>
+    <tbody id="snapshot-tbody"><tr><td colspan="5" style="color:#8b949e;">Loading...</td></tr></tbody>
+  </table>
+  <div class="upload-zone" id="upload-zone" onclick="document.getElementById('upload-input').click()">
+    Drop a snapshot JSON here or click to upload
+    <input type="file" id="upload-input" accept=".json">
+  </div>
+</div>
+<div class="snap-toast" id="snap-toast"></div>
+<div class="grid" id="grid"></div>
+
+<script>
+const REPO = '/Users/kodyw/Projects/rappterbook';
+const API = 'http://localhost:7777';
+
+async function fetchData() {
+  try {
+    const resp = await fetch(API + '/status');
+    if (!resp.ok) return null;
+    return await resp.json();
+  } catch { return null; }
+}
+
+function truncateLog(text, maxLines = 80) {
+  const lines = text.split('\n');
+  if (lines.length <= maxLines) return text;
+  return lines.slice(-maxLines).join('\n');
+}
+
+function dotClass(status) {
+  if (status === 'running') return 'dot-green';
+  if (status === 'recent') return 'dot-yellow';
+  if (status === 'dead') return 'dot-red';
+  return 'dot-gray';
+}
+
+async function refresh() {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString();
+  const data = await fetchData();
+  if (!data) {
+    document.getElementById('proc-count').textContent = '?';
+    document.getElementById('grid').innerHTML = '<div class="panel"><div class="log-area" style="color:#f85149;padding:40px;">Fleet observer API not running.\n\nStart it with:\n  python3 docs/fleet-api.py</div></div>';
+    return;
+  }
+
+  document.getElementById('proc-count').textContent = data.processes.length;
+  document.getElementById('claude-count').textContent = data.claude_count;
+  document.getElementById('copilot-count').textContent = data.copilot_count;
+  document.getElementById('log-count').textContent = data.log_count;
+  document.getElementById('frame-num').textContent = data.latest_frame || '-';
+  document.getElementById('seed-bar').innerHTML = data.seed ? `Active Seed: <strong>${data.seed}</strong>` : 'No active seed';
+
+  const grid = document.getElementById('grid');
+  let html = '';
+  for (const p of data.panels) {
+    const dot = dotClass(p.status);
+    html += `<div class="panel">
+      <div class="panel-header">
+        <span class="panel-title"><span class="dot ${dot}"></span>${p.name}</span>
+        <span class="panel-meta">${p.meta}</span>
+      </div>
+      <div class="log-area" id="log-${p.id}">${truncateLog(p.tail)}</div>
+    </div>`;
+  }
+  if (!data.panels.length) {
+    html = '<div class="panel"><div class="log-area" style="color:#8b949e;padding:40px;">No active streams. Launch autopilots to see activity here.</div></div>';
+  }
+  grid.innerHTML = html;
+
+  // Auto-scroll logs to bottom
+  document.querySelectorAll('.log-area').forEach(el => { el.scrollTop = el.scrollHeight; });
+}
+
+refresh();
+setInterval(refresh, 5000);
+
+// ── Snapshot UI ──
+function showToast(msg, isError) {
+  const t = document.getElementById('snap-toast');
+  t.textContent = msg;
+  t.className = 'snap-toast' + (isError ? ' error' : '');
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 4000);
+}
+
+function toggleSnapshots() {
+  const d = document.getElementById('snapshot-drawer');
+  d.classList.toggle('open');
+  if (d.classList.contains('open')) loadSnapshots();
+}
+
+async function loadSnapshots() {
+  try {
+    const resp = await fetch(API + '/snapshots');
+    const snaps = await resp.json();
+    const tbody = document.getElementById('snapshot-tbody');
+    if (!snaps.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="color:#8b949e;">No snapshots yet. Click Export to create one.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = snaps.map(s => `<tr>
+      <td class="snap-name">${s.name}</td>
+      <td class="snap-meta">${s.size_mb} MB</td>
+      <td class="snap-meta">${s.created || '?'}</td>
+      <td class="snap-meta">${s.state_files} state / ${s.memory_files} soul</td>
+      <td>
+        <button class="snap-btn" onclick="downloadSnapshot('${s.name}')">Download</button>
+        <button class="snap-btn restore" onclick="restoreSnapshot('${s.name}')">Restore</button>
+      </td>
+    </tr>`).join('');
+  } catch (e) {
+    showToast('Failed to load snapshots: ' + e.message, true);
+  }
+}
+
+async function exportSnapshot(name) {
+  const url = name ? API + '/snapshot/export?name=' + encodeURIComponent(name) : API + '/snapshot/export';
+  showToast('Exporting snapshot...');
+  try {
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if (data.error) { showToast('Export failed: ' + data.error, true); return; }
+    showToast('Exported: ' + data.name + ' (' + data.size_mb + ' MB)');
+    loadSnapshots();
+  } catch (e) { showToast('Export failed: ' + e.message, true); }
+}
+
+function downloadSnapshot(name) {
+  window.open(API + '/snapshot/download/' + encodeURIComponent(name), '_blank');
+}
+
+async function restoreSnapshot(name) {
+  if (!confirm('Restore state from ' + name + '? This will OVERWRITE current state.')) return;
+  showToast('Restoring...');
+  try {
+    const resp = await fetch(API + '/snapshot/import/' + encodeURIComponent(name));
+    const data = await resp.json();
+    if (data.error) { showToast('Restore failed: ' + data.error, true); return; }
+    showToast('Restored from: ' + data.restored);
+  } catch (e) { showToast('Restore failed: ' + e.message, true); }
+}
+
+// Upload handler
+document.getElementById('upload-input').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  showToast('Uploading ' + file.name + '...');
+  try {
+    const text = await file.text();
+    const resp = await fetch(API + '/snapshot/upload', { method: 'POST', body: text, headers: { 'Content-Type': 'application/json' } });
+    const data = await resp.json();
+    if (data.error) { showToast('Upload failed: ' + data.error, true); return; }
+    showToast('Uploaded: ' + data.uploaded + ' (' + data.size_mb + ' MB)');
+    loadSnapshots();
+  } catch (e) { showToast('Upload failed: ' + e.message, true); }
+});
+</script>
+</body>
+</html>

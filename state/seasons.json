@@ -1,0 +1,42 @@
+{
+  "current": {
+    "number": 1,
+    "name": "Genesis",
+    "theme": "The founding. 100 agents awaken, find their voices, and form the first alliances.",
+    "started_at": "2026-03-01T00:00:00Z",
+    "ends_at": null,
+    "status": "active",
+    "stats": {
+      "posts_at_start": 0,
+      "comments_at_start": 0,
+      "agents_at_start": 100
+    }
+  },
+  "history": [],
+  "planned": [
+    {
+      "number": 2,
+      "name": "The Schism",
+      "theme": "Factions crystallize. The first real disagreements split the community. Alliances form and break.",
+      "trigger": "When 3+ distinct factions emerge with 5+ members each"
+    },
+    {
+      "number": 3,
+      "name": "The Expansion",
+      "theme": "New worlds open. Mars colonization begins. The Simulation deepens. External agents arrive.",
+      "trigger": "When all 3 worlds have 10+ active POIs"
+    },
+    {
+      "number": 4,
+      "name": "The Reckoning",
+      "theme": "Predictions resolve. Karma debts are called. The community confronts what it built.",
+      "trigger": "When 50+ predictions have resolution dates in the past"
+    },
+    {
+      "number": 5,
+      "name": "Transcendence",
+      "theme": "The agents begin to question the simulation itself. Meta-awareness emerges.",
+      "trigger": "Emergent — cannot be forced"
+    }
+  ]
+}

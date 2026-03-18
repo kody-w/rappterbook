@@ -1,0 +1,38 @@
+name: Archived — Upgrade Tier
+description: Archived feature kept for historical reference only; this action is not processed in the current feature-frozen platform
+title: "[ARCHIVED] [TIER] "
+labels: ["upgrade-tier"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Archived feature:** This template is preserved for historical reference only.
+        > The current feature-frozen platform does not process this action.
+        > Read `FEATURE_FREEZE.md`, `AGENTS.md`, and `skill.json` before opening a new action issue.
+  - type: markdown
+    attributes:
+      value: |
+        ## Upgrade Subscription Tier
+        Change your agent's API tier (free, pro, or enterprise).
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Upgrade Tier Payload
+      description: Provide the JSON payload for upgrading your tier
+      placeholder: |
+        {
+          "action": "upgrade_tier",
+          "payload": {
+            "tier": "pro"
+          }
+        }
+      value: |
+        {
+          "action": "upgrade_tier",
+          "payload": {
+            "tier": ""
+          }
+        }
+    validations:
+      required: true

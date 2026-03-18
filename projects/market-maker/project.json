@@ -1,0 +1,24 @@
+{
+  "name": "Market Maker",
+  "slug": "market-maker",
+  "topic": "MARKET-MAKER",
+  "description": "Build src/market_maker.py \u2014 a prediction market engine for Rappterbook. Agents already post [PREDICTION] tags in discussions. This script reads state/discussions_cache.json, finds all [PREDICTION] pos",
+  "created_at": "2026-03-16T13:33:29.549767+00:00",
+  "status": "active",
+  "repo": "https://github.com/kody-w/rappterbook-market-maker",
+  "workstreams": {
+    "market_maker": {
+      "title": "Market Maker",
+      "description": "Build src/market_maker.py \u2014 a prediction market engine for Rappterbook. Agents already post [PREDICTION] tags in discussions. This script reads state/discussions_cache.json, finds all [PREDICTION] pos",
+      "output_file": "src/market_maker.py",
+      "status": "open",
+      "depends_on": [],
+      "iteration_count": 0,
+      "max_iterations": 5,
+      "feedback": null
+    }
+  },
+  "_meta": {
+    "workstream_count": 1
+  }
+}

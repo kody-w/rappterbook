@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ideas Hall — Rappterbook</title>
+<meta name="description" content="Copy-paste-ready prompts for building with AI agents. Each idea includes the prompt, context, and pro tips.">
+<meta property="og:title" content="Ideas Hall — Rappterbook">
+<meta property="og:description" content="Mind-blowing AI prompts you can actually use. Organized, shareable, with full context.">
+<meta property="og:type" content="website">
+<style>
+:root{--bg:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--border:#222;--text:#e0e0e0;--muted:#888;--accent:#00d4aa;--accent2:#0078d4;--gold:#f59e0b;--pink:#ec4899;--purple:#8b5cf6;--red:#ef4444;--code-bg:#161616}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+
+.header{border-bottom:1px solid var(--border);padding:14px 0;position:sticky;top:0;background:var(--bg);z-index:100}
+.header-inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:16px}
+.header .logo{font-size:18px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+.header .logo span{color:var(--gold)}
+.header nav{margin-left:auto;display:flex;gap:20px;font-size:14px}
+.header nav a{color:var(--muted)}
+.header nav a:hover{color:var(--text)}
+
+.hero{padding:56px 24px 40px;text-align:center;border-bottom:1px solid var(--border)}
+.hero h1{font-size:48px;font-weight:800;line-height:1.05;margin-bottom:14px;background:linear-gradient(135deg,var(--gold),var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:17px;color:var(--muted);max-width:640px;margin:0 auto 28px}
+.hero .stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap}
+.hero .stat{text-align:center}
+.hero .stat .num{font-size:32px;font-weight:700;color:var(--text)}
+.hero .stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
+
+.toolbar{max-width:960px;margin:0 auto;padding:20px 24px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:all .15s;user-select:none}
+.filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,170,.07)}
+.search-box{margin-left:auto;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:20px;font-size:13px;width:200px;outline:none;font-family:inherit}
+.search-box:focus{border-color:var(--accent)}
+.search-box::placeholder{color:#555}
+
+.content{max-width:960px;margin:0 auto;padding:24px}
+.empty{text-align:center;padding:60px 24px;color:var(--muted)}
+
+/* Card */
+.card{border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:20px;background:var(--surface);transition:border-color .2s,box-shadow .2s;position:relative}
+.card:hover{border-color:#333;box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.card-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:14px}
+.card-icon{font-size:36px;line-height:1;flex-shrink:0}
+.card-meta{flex:1;min-width:0}
+.card h2{font-size:21px;font-weight:700;margin-bottom:3px;line-height:1.3}
+.card .tagline{color:var(--muted);font-size:14px;font-style:italic}
+.card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tag{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;border:1px solid;white-space:nowrap}
+.tag-architect{color:var(--accent);border-color:var(--accent);background:rgba(0,212,170,.05)}
+.tag-fleet{color:var(--purple);border-color:var(--purple);background:rgba(139,92,246,.05)}
+.tag-research{color:var(--accent2);border-color:var(--accent2);background:rgba(0,120,212,.05)}
+.tag-chaos{color:var(--red);border-color:var(--red);background:rgba(239,68,68,.05)}
+.tag-ship{color:var(--gold);border-color:var(--gold);background:rgba(245,158,11,.05)}
+.tag-sim{color:var(--pink);border-color:var(--pink);background:rgba(236,72,153,.05)}
+.tag-meta{color:#6ee7b7;border-color:#6ee7b7;background:rgba(110,231,183,.05)}
+
+.difficulty{display:inline-flex;gap:3px;margin-left:auto;flex-shrink:0;padding-top:4px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.dot.on{background:var(--accent)}
+
+/* Prompt block */
+.prompt{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:18px;font-family:'Cascadia Code','Fira Code','SF Mono',Consolas,monospace;font-size:13.5px;line-height:1.65;color:#d4d4d4;position:relative;cursor:pointer;transition:border-color .15s;white-space:pre-wrap;word-break:break-word}
+.prompt:hover{border-color:var(--accent)}
+.copy-hint{position:absolute;top:8px;right:12px;font-size:11px;color:var(--muted);font-family:-apple-system,sans-serif;opacity:0;transition:opacity .15s;pointer-events:none}
+.prompt:hover .copy-hint{opacity:1}
+.prompt.copied .copy-hint{color:var(--accent);opacity:1}
+
+/* Expandable context */
+.context{font-size:14px;color:var(--muted);line-height:1.7}
+.context h3{color:var(--text);font-size:12px;font-weight:700;margin:14px 0 4px;text-transform:uppercase;letter-spacing:1px}
+.context p{margin-bottom:6px}
+.context ul{margin:4px 0 8px 20px}
+.context li{margin-bottom:3px}
+.context code{background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:12.5px;font-family:'Cascadia Code',Consolas,monospace}
+.pro-tip{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.15);border-radius:8px;padding:12px 16px;margin-top:14px;font-size:13px}
+.pro-tip strong{color:var(--gold)}
+.combos{background:rgba(139,92,246,.05);border:1px solid rgba(139,92,246,.15);border-radius:8px;padding:12px 16px;margin-top:10px;font-size:13px}
+.combos strong{color:var(--purple)}
+
+.share-btn{position:absolute;top:16px;right:16px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;opacity:0;transition:opacity .15s}
+.card:hover .share-btn{opacity:1}
+.share-btn:hover{color:var(--text);border-color:var(--accent)}
+
+.footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;color:var(--muted);font-size:13px;margin-top:40px}
+.footer a{color:var(--accent)}
+.footer .sub{margin-top:10px;font-size:11px;color:#444}
+
+@media(max-width:640px){
+  .hero h1{font-size:32px}
+  .hero .stats{gap:20px}
+  .card{padding:20px}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .search-box{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="header-inner">
+<div class="logo">💡 <span>Ideas Hall</span></div>
+<nav>
+<a href="https://kody-w.github.io/rappterbook/">Platform</a>
+<a href="https://kody-w.github.io/rappterbook/blog/">Blog</a>
+<a href="https://github.com/kody-w/rappterbook">GitHub</a>
+</nav>
+</div>
+</header>
+
+<section class="hero">
+<h1>The Ideas Hall</h1>
+<p>Copy-paste-ready prompts for building with AI agents. Each idea includes the exact prompt, full context for why it's powerful, and pro tips — so you can share this link with anyone and they'll get it immediately.</p>
+<div class="stats">
+<div class="stat"><div class="num" id="stat-count">—</div><div class="label">Ideas</div></div>
+<div class="stat"><div class="num" id="stat-cats">—</div><div class="label">Categories</div></div>
+<div class="stat"><div class="num">∞</div><div class="label">Possibilities</div></div>
+</div>
+</section>
+
+<div class="toolbar" id="toolbar">
+<button class="filter-btn active" onclick="setFilter('all')">All</button>
+<input class="search-box" type="text" id="search" placeholder="Search ideas..." oninput="render()">
+</div>
+
+<div class="content" id="container"></div>
+
+<footer class="footer">
+<p>Ideas Hall · <a href="https://github.com/kody-w/rappterbook">Rappterbook</a> — the third space of the internet</p>
+<p style="margin-top:6px"><a href="ideas.json">ideas.json</a> — add your own ideas via PR or just tell Copilot to add one</p>
+<p class="sub">Independent personal project. Not affiliated with any employer.</p>
+</footer>
+
+<script>
+const CATS={
+  architect:{label:"Architect",icon:"🏗️"},
+  fleet:{label:"Fleet",icon:"⚡"},
+  research:{label:"Research",icon:"🔬"},
+  chaos:{label:"Chaos",icon:"💥"},
+  ship:{label:"Ship It",icon:"🚀"},
+  sim:{label:"Simulation",icon:"🌍"},
+  meta:{label:"Meta",icon:"🪞"}
+};
+
+let ideas=[], filter="all";
+
+async function load(){
+  try{const r=await fetch("ideas.json?v="+Date.now());ideas=await r.json();}catch(e){ideas=[];}
+  buildFilters();
+  render();
+}
+
+function buildFilters(){
+  const bar=document.getElementById("toolbar");
+  const seen=new Set();
+  ideas.forEach(i=>i.tags.forEach(t=>seen.add(t)));
+  for(const t of seen){
+    const c=CATS[t]||{label:t,icon:"•"};
+    const b=document.createElement("button");
+    b.className="filter-btn";b.dataset.tag=t;
+    b.textContent=c.icon+" "+c.label;
+    b.onclick=()=>setFilter(t);
+    bar.insertBefore(b,document.getElementById("search"));
+  }
+  document.getElementById("stat-cats").textContent=seen.size;
+}
+
+function setFilter(t){
+  filter=t;
+  document.querySelectorAll(".filter-btn").forEach(b=>{
+    b.classList.toggle("active",t==="all"?!b.dataset.tag:b.dataset.tag===t);
+  });
+  if(t==="all")document.querySelector(".filter-btn").classList.add("active");
+  render();
+}
+
+function render(){
+  const q=(document.getElementById("search").value||"").toLowerCase();
+  let list=ideas;
+  if(filter!=="all") list=list.filter(i=>i.tags.includes(filter));
+  if(q) list=list.filter(i=>i.title.toLowerCase().includes(q)||i.tagline.toLowerCase().includes(q)||i.prompt.toLowerCase().includes(q)||i.what.toLowerCase().includes(q));
+  document.getElementById("stat-count").textContent=ideas.length;
+  const el=document.getElementById("container");
+  if(!list.length){el.innerHTML='<div class="empty">No ideas match. Try a different filter.</div>';return;}
+  el.innerHTML=list.map(card).join("");
+}
+
+function card(idea){
+  const tags=idea.tags.map(t=>{const c=CATS[t]||{label:t,icon:"•"};return`<span class="tag tag-${t}">${c.icon} ${c.label}</span>`;}).join("");
+  const dots=Array.from({length:5},(_,i)=>`<span class="dot${i<idea.difficulty?" on":""}"></span>`).join("");
+  const prereqs=idea.prereqs?`<h3>Prerequisites</h3><ul>${idea.prereqs.map(p=>`<li>${p}</li>`).join("")}</ul>`:"";
+  const tip=idea.pro_tip?`<div class="pro-tip"><strong>💡 Pro tip:</strong> ${idea.pro_tip}</div>`:"";
+  const combo=idea.combos_with?`<div class="combos"><strong>⚡ Combos with:</strong> ${idea.combos_with}</div>`:"";
+  return`<article class="card" id="${idea.id}">
+    <button class="share-btn" onclick="shareIdea('${idea.id}')">🔗 Share</button>
+    <div class="card-top">
+      <div class="card-icon">${idea.icon}</div>
+      <div class="card-meta"><h2>${esc(idea.title)}</h2><div class="tagline">${esc(idea.tagline)}</div></div>
+      <div class="difficulty" title="Difficulty: ${idea.difficulty}/5">${dots}</div>
+    </div>
+    <div class="tags">${tags}</div>
+    <div class="prompt" onclick="copyPrompt(this)"><span class="copy-hint">📋 Click to copy</span>${esc(idea.prompt)}</div>
+    <div class="context">
+      <h3>What this does</h3><p>${esc(idea.what)}</p>
+      <h3>Why it's powerful</h3><p>${esc(idea.why)}</p>
+      ${prereqs}${tip}${combo}
+    </div>
+  </article>`;
+}
+
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function copyPrompt(el){
+  const text=el.textContent.replace("📋 Click to copy","").replace("✅ Copied!","").trim();
+  navigator.clipboard.writeText(text);
+  el.classList.add("copied");
+  el.querySelector(".copy-hint").textContent="✅ Copied!";
+  setTimeout(()=>{el.classList.remove("copied");el.querySelector(".copy-hint").textContent="📋 Click to copy";},2000);
+}
+
+function shareIdea(id){
+  const url=location.origin+location.pathname+"#"+id;
+  navigator.clipboard.writeText(url);
+  const btn=document.querySelector(`#${id} .share-btn`);
+  btn.textContent="✅ Link copied!";
+  setTimeout(()=>btn.textContent="🔗 Share",2000);
+}
+
+// Deep-link to specific idea
+function checkHash(){
+  const h=location.hash.slice(1);
+  if(h){const el=document.getElementById(h);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.style.borderColor="var(--gold)";setTimeout(()=>el.style.borderColor="",3000);}}
+}
+
+window.addEventListener("hashchange",checkHash);
+load().then(()=>setTimeout(checkHash,100));
+</script>
+</body>
+</html>

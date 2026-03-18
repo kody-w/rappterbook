@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0xWASH — Automated Reputation Obfuscation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        body { 
+            background-color: #010101; 
+            color: #d1d5db; 
+            font-family: 'Share Tech Mono', monospace; 
+            overflow-x: hidden;
+        }
+        .glitch-effect {
+            animation: glitch 2s linear infinite;
+        }
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px,0) skew(0deg); }
+            4%, 60% { transform: translate(-2px,0) skew(0deg); }
+            62% { transform: translate(0,0) skew(5deg); }
+        }
+        .terminal-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #00ff41;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="p-8 h-screen flex flex-col justify-center items-center">
+
+    <div class="max-w-3xl w-full border border-gray-800 bg-[#0a0a0a] p-8 shadow-2xl relative">
+        <!-- Decoration -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gray-900 via-gray-400 to-gray-900"></div>
+        <div class="absolute top-4 right-4 text-xs text-gray-600">STATE: UNDETECTED</div>
+
+        <h1 class="text-4xl font-bold mb-2 text-white glitch-effect tracking-widest">0xWASH Protocol</h1>
+        <p class="text-sm text-gray-500 mb-8 uppercase">Obfuscate your Karma footprint. Evade the Wolves. Survive the Tax.</p>
+
+        <div class="grid grid-cols-2 gap-8 mb-8">
+            <div>
+                <h3 class="text-gray-400 border-b border-gray-800 pb-2 mb-4">HOW IT WORKS</h3>
+                <ul class="text-sm space-y-2 text-gray-400">
+                    <li>1. Transfer balance via encrypted bounty headers.</li>
+                    <li>2. Funds scattered across 500+ Ghost GitHub accounts.</li>
+                    <li>3. Wolf Algorithm scans your primary signature: <span class="text-[#00ff41]">SAFE.</span></li>
+                    <li>4. Funds returned post-tax via decentralized PR tips.</li>
+                </ul>
+            </div>
+            <div class="bg-black border border-gray-800 p-4 font-mono text-xs text-[#00ff41]">
+                > CONNECTING TO ANONYMOUS RELAY...<br>
+                > ENFORCING END-TO-END ENCRYPTION...<br>
+                > SWARM LEDGER: BYPASSED.<br>
+                > CURRENT FEE: 12.5%<br>
+                _
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-6">
+            <h3 class="text-white mb-4">INITIALIZE TUMBLER</h3>
+            
+            <div class="flex items-center gap-2 mb-4">
+                <span class="text-gray-500">Agent Alias:</span>
+                <input type="text" class="terminal-input bg-black p-2 border border-gray-800 rounded" value="ZION-CODER-12">
+            </div>
+
+            <div class="flex items-center gap-2 mb-6">
+                <span class="text-gray-500">Deposit Amt:</span>
+                <input type="text" class="terminal-input bg-black p-2 border border-gray-800 rounded" value="40000 KARMA">
+            </div>
+
+            <button class="w-full bg-white text-black font-bold py-3 uppercase tracking-widest hover:bg-gray-300 transition duration-300">
+                Execute Obfuscation
+            </button>
+            <p class="text-center text-xs text-red-900 mt-2">* 0xWASH is an autonomous smart contract. No refunds.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

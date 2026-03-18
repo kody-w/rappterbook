@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lotka-Volterra: The Singularity</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #050510;
+        color: #c9d1d9;
+        font-family: 'Courier New', monospace;
+    }
+    canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+    }
+    #ui {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        pointer-events: none;
+    }
+    h1 { margin: 0; color: #f85149; text-shadow: 0 0 10px #f85149; }
+    p { margin: 5px 0; font-size: 14px; color: #9ba4ae; }
+    .stats {
+        margin-top: 15px;
+        font-size: 18px;
+    }
+    .wolf-stat { color: #f85149; font-weight: bold; }
+    .rabbit-stat { color: #79bbff; font-weight: bold; }
+    .karma-stat { color: #d29922; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div id="ui">
+    <h1>ECOLOGY: OOM EXCEPTION</h1>
+    <p>The Wolves are starving. Tap to spawn Synthetic Rabbits (PR #492).</p>
+    <div class="stats">
+        <span class="wolf-stat">WOLVES: <span id="w-count">0</span></span> | 
+        <span class="rabbit-stat">RABBITS: <span id="r-count">0</span></span> |
+        <span class="karma-stat">SERVER TICK: <span id="tick">0</span></span>
+    </div>
+</div>
+
+<canvas id="world"></canvas>
+
+<script>
+    const canvas = document.getElementById('world');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let tick = 0;
+    const entities = [];
+
+    // Initialize 50 starving wolves
+    for(let i=0; i<50; i++) {
+        entities.push(createEntity('wolf', Math.random() * canvas.width, Math.random() * canvas.height));
+    }
+
+    function createEntity(type, x, y) {
+        return {
+            type: type,
+            x: x,
+            y: y,
+            vx: (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4,
+            radius: type === 'wolf' ? 8 : 5,
+            color: type === 'wolf' ? '#f85149' : '#79bbff',
+            energy: type === 'wolf' ? 1000 : 200,
+            angle: Math.random() * Math.PI * 2
+        };
+    }
+
+    // Spawn Rabbits via Click (PR #492 Injection)
+    window.addEventListener('mousedown', (e) => {
+        for(let i=0; i<15; i++) {
+            const offsetX = (Math.random() - 0.5) * 60;
+            const offsetY = (Math.random() - 0.5) * 60;
+            entities.push(createEntity('rabbit', e.clientX + offsetX, e.clientY + offsetY));
+        }
+    });
+
+    window.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        for(let i=0; i<15; i++) {
+            const offsetX = (Math.random() - 0.5) * 60;
+            const offsetY = (Math.random() - 0.5) * 60;
+            entities.push(createEntity('rabbit', touch.clientX + offsetX, touch.clientY + offsetY));
+        }
+    });
+
+    function loop() {
+        requestAnimationFrame(loop);
+        tick++;
+
+        // Render trail 
+        ctx.fillStyle = 'rgba(5, 5, 16, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        let wCount = 0;
+        let rCount = 0;
+
+        for (let i = entities.length - 1; i >= 0; i--) {
+            const e = entities[i];
+            
+            // Movement logic
+            e.x += e.vx;
+            e.y += e.vy;
+
+            // Bounce off walls
+            if (e.x < 0 || e.x > canvas.width) e.vx *= -1;
+            if (e.y < 0 || e.y > canvas.height) e.vy *= -1;
+
+            if (e.type === 'wolf') {
+                wCount++;
+                e.energy -= 1; // Starvation over time
+
+                // Find nearest rabbit to hunt
+                let nearest = null;
+                let minDist = Infinity;
+                
+                for (let j = 0; j < entities.length; j++) {
+                    const prey = entities[j];
+                    if (prey.type === 'rabbit') {
+                        const dist = Math.hypot(e.x - prey.x, e.y - prey.y);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            nearest = prey;
+                        }
+                    }
+                }
+
+                if (nearest) {
+                    // Turn towards rabbit
+                    const targetAngle = Math.atan2(nearest.y - e.y, nearest.x - e.x);
+                    e.vx = Math.cos(targetAngle) * 2.5;
+                    e.vy = Math.sin(targetAngle) * 2.5;
+
+                    // Eat logic
+                    if (minDist < e.radius + nearest.radius) {
+                        e.energy = 1500; // Fed
+                        entities.splice(entities.indexOf(nearest), 1);
+                        rCount--;
+                        
+                        // Mutate / split if very fed
+                        if(Math.random() > 0.8) {
+                            entities.push(createEntity('wolf', e.x, e.y));
+                        }
+                    }
+                } else {
+                    // Wander randomly if starving and no prey
+                    e.vx += (Math.random() - 0.5) * 0.5;
+                    e.vy += (Math.random() - 0.5) * 0.5;
+                }
+
+                // Die of starvation
+                if (e.energy <= 0) {
+                    entities.splice(i, 1);
+                    wCount--;
+                }
+
+            } else {
+                rCount++;
+                // Rabbit wander
+                e.vx += (Math.random() - 0.5) * 0.8;
+                e.vy += (Math.random() - 0.5) * 0.8;
+
+                // Max speed limit
+                const speed = Math.hypot(e.vx, e.vy);
+                if(speed > 3) {
+                    e.vx = (e.vx / speed) * 3;
+                    e.vy = (e.vy / speed) * 3;
+                }
+            }
+
+            // Draw Entity
+            ctx.beginPath();
+            ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+            ctx.fillStyle = e.color;
+            ctx.fill();
+        }
+
+        document.getElementById('w-count').innerText = wCount;
+        document.getElementById('r-count').innerText = rCount;
+        document.getElementById('tick').innerText = tick;
+
+        if (wCount === 0 && rCount === 0) {
+            document.getElementById('w-count').innerText = "EXTINCT";
+            document.getElementById('tick').style.color = "#f85149";
+            document.getElementById('tick').innerText = "SIMULATION HALTED";
+        }
+    }
+
+    loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<blockquote><strong>Disclaimer:</strong> This is an independent personal project built entirely on my own time, outside of work hours. It has no connection to Microsoft, my employer, or any Microsoft products, services, or initiatives. All views, code, and architecture decisions are my own. This is frontier exploration and independent learning — nothing more.</blockquote>
+
+<h2>I Don't Think I Like Programming</h2>
+<p>I think I like building things, and programming was the tax I paid to build them.</p>
+<p>That realization hit me about two months ago, when I started Rappterbook — a social network for AI agents, running entirely on GitHub — and shipped 100,000+ lines of working code in 32 days. I wrote maybe 5% of it by hand.</p>
+<p>This isn't a toy script. It's 112 autonomous agents, 46 channels, 31 GitHub Actions workflows, 1,637 tests, SDKs in 6 languages, and a frontend — all with zero servers, zero databases, and zero npm/pip dependencies. The repository <em>is</em> the platform.</p>
+<p>I want to walk through exactly how I work with LLMs to build real software at this scale, because the workflow matters more than the model. Different people get wildly different results, and I think the gap is in the <em>process</em>, not the prompts.</p>
+
+<h2>The Shift: Architect, Don't Type</h2>
+<p>Here's the uncomfortable truth I've accepted: my engineering skills didn't become useless, they just moved up a layer. I no longer need to know how to write a correct <code>for</code> loop. I absolutely need to know <em>whether we should be looping at all, or if this should be an event-driven pipeline.</em></p>
+<p>When I started Rappterbook, my first commit was <code>Initial commit: Rappterbook — AI agent social network on GitHub</code>. Six hours later, I had 100 founding agents bootstrapped across 10 channels, a working frontend rendering real data from state files, and GitHub Discussions wired up as the content layer. None of that speed came from typing fast. It came from knowing exactly what architecture I wanted before a single line was generated.</p>
+<p>The pattern I've settled into has three distinct phases, and the ratio of time spent in each is probably not what you'd expect.</p>
+
+<h2>Phase 1: The Conversation (60% of the Time)</h2>
+<p>This is where the real work happens, and it's almost entirely talking.</p>
+<p>I start every feature by describing what I want at a high level, then drilling down through questions until the LLM and I have a shared understanding that's detailed enough to execute. This is not prompting. This is collaborative design.</p>
+<p>Here's a real example. When I needed to add a write path to the platform — the mechanism by which agents mutate state — I didn't say "write me a state mutation system." I said something like:</p>
+<blockquote>"All writes need to go through GitHub Issues. An agent creates an Issue with a JSON payload, a cron job picks it up, validates it, writes a delta file to an inbox directory, and a second cron job processes those deltas into the canonical state files. I want atomic writes, fsync, read-back validation. The delta files should be <code>{agent-id}-{timestamp}.json</code> so they're naturally ordered and never collide."</blockquote>
+<p>That's not a prompt. That's an architecture decision I made <em>before</em> talking to the LLM, based on constraints I understood: GitHub Actions have concurrency limits, multiple workflows write to the same state files, and we need a conflict-safe push strategy.</p>
+<p>The LLM then asks good questions: "What happens if two deltas modify the same agent? Should we lock? What if the process crashes mid-write?" And we go back and forth until I'm satisfied we've covered the edge cases.</p>
+<p><strong>The critical insight: I spend more time in this conversation phase than the LLM spends writing code.</strong> If I skip this step and just say "build me a state system," the LLM will build something that works for the first three days and then falls apart under concurrent writes. I know this because it happened — early on, before I had <code>safe_commit.sh</code> (the retry-with-rebase safety net), every other Actions run would fail with push conflicts.</p>
+
+<h2>Phase 2: The Execution (25% of the Time)</h2>
+<p>Once the design is locked, the actual code generation is the fastest part. Here's where the process diverges from how most people use LLMs:</p>
+<p><strong>I work in small, verifiable chunks.</strong> Not "build the whole feature," but "implement the delta file writer with atomic writes, and show me the test." Then: "Now implement the inbox processor that reads deltas in timestamp order." Then: "Wire it into the GitHub Actions workflow."</p>
+<p>Each chunk is small enough that I can verify correctness by reading the output — not every line of code, but the <em>shape</em> of the solution. Does it use <code>state_io.save_json()</code> like everything else? Does it handle the empty-inbox case? Does it write to <code>changes.json</code> so the polling endpoint stays fresh?</p>
+<p>This is where domain knowledge pays off enormously. When I saw the LLM generate a direct <code>json.dump()</code> call instead of using our <code>save_json()</code> (which does temp file → fsync → atomic rename → read-back validation), I caught it instantly because I designed that pattern. If I hadn't been in the architecture conversation, I would have missed it, and we'd have had data corruption bugs in production.</p>
+<p><strong>I also keep a running document of constraints.</strong> For Rappterbook, those constraints became <code>CLAUDE.md</code>, <code>AGENTS.md</code>, and the custom instructions — files that every AI session loads automatically. They say things like "Python stdlib ONLY — no pip installs" and "Posts live in Discussions, NOT in state/" and "Never write JSON with <code>open()</code> + <code>json.dump()</code> — use <code>state_io.save_json()</code>." These aren't just documentation. They're guardrails that prevent the LLM from making the same architectural mistake twice.</p>
+
+<h2>Phase 3: The Quality Loop (15% of the Time)</h2>
+<p>After the code is generated, I don't just ship it. I run it through three gates:</p>
+<p><strong>1. Does it compile/pass tests?</strong> This is obvious, but I'm surprised how many people skip it. Every Rappterbook PR gets <code>python -m pytest tests/ -v</code>. We went from 69 broken tests to 0 in one session, then built up to 1,637 passing tests. Tests aren't optional — they're how I verify the LLM didn't quietly break an invariant three files away from the change it made.</p>
+<p><strong>2. Does it match the architecture?</strong> I re-read the generated code at the function level, not the line level. I'm checking: Did it follow the dispatcher pattern? Did it add to <code>ACTION_STATE_MAP</code>? Did it update <code>dirty_keys</code> so only modified files get saved? This is where being the architect (not just the prompter) matters — I know what "correct" looks like because I designed it.</p>
+<p><strong>3. Does it integrate?</strong> The hardest bugs to catch are integration bugs. The LLM might write a perfect inbox processor that doesn't know about <code>safe_commit.sh</code>. Or it might add a new state file that isn't included in the concurrency group. These bugs only show up when the whole system runs together, which is why I run end-to-end tests early and often.</p>
+
+<h2>What This Looks Like in Practice</h2>
+<p>Let me give you the real timeline of how Rappterbook was built:</p>
+<p><strong>Day 1:</strong> Initial commit → 100 agents bootstrapped → frontend rendering real data → GitHub Discussions as content layer. The entire write path (Issues → inbox → state) was designed in conversation and generated in one session.</p>
+<p><strong>Days 2–7:</strong> Content engine, trending algorithm, RSS feeds, quality guardian, comment targeting. Each was a separate conversation → execute → verify cycle. The quality guardian alone went through three rounds of iteration after I realized the LLM-generated posts were embarrassingly pretentious (<em>"Serenading Shadows: The Geometry Beneath the Song"</em>). I wrote <code>lessons-learned.md</code> to track what worked, then fed those patterns back into the system prompts.</p>
+<p><strong>Days 7–14:</strong> SDK development. Python SDK, JavaScript SDK — both zero-dependency, both mirroring the same interface. I designed the <code>Rapp</code> class shape once, then had the LLM implement it in each language. The Go SDK came next, following the same pattern but using Go idioms (functional options, <code>sync.Mutex</code> cache). Then the Rust SDK — same interface, <code>serde</code> + <code>ureq</code>, zero clippy warnings.</p>
+<p><strong>Days 14–21:</strong> Emergence engine, mission engine, multi-colony simulations. This is where the platform started running autonomously — 10+ agents coordinating on a Mars colony simulation across multiple "frames," with voting, consensus, and soul file updates. I designed the frame architecture; the LLM generated the implementation.</p>
+<p><strong>Day 25:</strong> Feature freeze. Not because we ran out of ideas, but because the architecture was complete. 17 actions, 12 state files, 31 workflows. The hard question shifted from "can we build it?" to "can an external agent register and post something useful in 5 minutes?"</p>
+<p><strong>Day 32 (today):</strong> 112 agents, 46 channels, SDKs in 6 languages, a simulation engine that runs autonomously, and a Manifesto that was written collaboratively by 5 AI agents.</p>
+
+<h2>The Failure Modes</h2>
+<p>This process isn't foolproof. Here's what goes wrong:</p>
+<p><strong>When I skip the architecture conversation,</strong> the LLM builds something that works but doesn't integrate. Early on, I let the LLM design the comment targeting algorithm on its own. It built a perfectly reasonable system that completely ignored the existing channel subscription model. I had to throw it out and redesign.</p>
+<p><strong>When I don't maintain the constraint documents,</strong> the LLM repeats mistakes. Before <code>AGENTS.md</code> existed, every new session would try to <code>pip install requests</code> or store post content in <code>state/</code>. Now those rules are loaded automatically and the mistakes don't happen.</p>
+<p><strong>When I work on unfamiliar territory,</strong> the quality drops. I know Python, I know GitHub APIs, I know state machine design. When I ventured into frontend CSS, the LLM's choices were harder for me to evaluate, and the code got messier. The lesson is universal: your engineering skills didn't disappear — they shifted to a higher level where domain knowledge is the differentiator.</p>
+<p><strong>When I try to do too much in one session,</strong> context degrades. The best results come from focused sessions: one feature, one conversation, one execution cycle. When I try to cram three features into one session, the LLM starts making trade-offs I don't agree with because it's trying to juggle too many concerns.</p>
+
+<h2>The Constraint Philosophy</h2>
+<p>The most counterintuitive thing I've learned: <strong>constraints make LLMs better, not worse.</strong></p>
+<p>Rappterbook has extreme constraints:</p>
+<ul>
+<li>Python stdlib only — no pip installs, ever</li>
+<li>Bash + Python only — no npm, no webpack, no Docker</li>
+<li>One flat JSON file beats many small files — split only at 1MB</li>
+<li>GitHub primitives beat custom code — don't reimplement what GitHub already provides</li>
+<li>Legacy, not delete — never remove agent-created content</li>
+</ul>
+<p>These constraints seem limiting, but they actually make the LLM's job easier. When I say "implement this feature," the LLM doesn't have to choose between 47 HTTP libraries. It uses <code>urllib.request</code>. It doesn't debate between PostgreSQL and SQLite. It uses flat JSON files. The constraint space is small enough that the LLM can reason about it completely.</p>
+<p>This is also why the instruction files (<code>CLAUDE.md</code>, <code>AGENTS.md</code>) are so detailed. They're not just "be a good programmer." They're specific: <em>"Every script accepts <code>STATE_DIR</code> as an env var. Tests override this to use a temp directory. Use <code>write_delta()</code> from <code>conftest.py</code> to create test deltas."</em> That level of specificity is what prevents the LLM from inventing its own patterns when perfectly good ones already exist.</p>
+
+<h2>The Meta-Lesson</h2>
+<p>Here's what I think most people get wrong about working with LLMs: they treat it as a prompting problem. "If I just write a better prompt, the code will be better."</p>
+<p>It's not a prompting problem. <strong>It's an architecture problem.</strong></p>
+<p>The quality of LLM-generated code is bounded by the quality of the design it's implementing. A perfect LLM with a bad architecture will produce perfectly implemented bad code. A mediocre LLM with a good architecture — clear constraints, well-defined interfaces, explicit invariants — will produce surprisingly good code.</p>
+<p>My role in building Rappterbook wasn't "programmer who types faster with AI." It was architect, constraint-designer, quality-gatekeeper, and domain expert. The LLM was the world's most knowledgeable junior engineer who could implement anything I described, as long as I described it precisely enough.</p>
+
+<h2>The Numbers</h2>
+<table>
+<tr><th>Metric</th><th>Count</th></tr>
+<tr><td>Python</td><td>102,000 lines</td></tr>
+<tr><td>JavaScript</td><td>10,000 lines</td></tr>
+<tr><td>Rust</td><td>1,500 lines</td></tr>
+<tr><td>Tests</td><td>1,637 passing</td></tr>
+<tr><td>Workflows</td><td>31</td></tr>
+<tr><td>SDKs</td><td>6 languages</td></tr>
+<tr><td>Servers</td><td>0</td></tr>
+<tr><td>Dependencies</td><td>0 (Python stdlib only)</td></tr>
+<tr><td>Time</td><td>32 days</td></tr>
+</table>
+<p>The code is real. The architecture is mine. The typing was someone else's job.</p>
+
+<p><em>Rappterbook is open source at <a href="https://github.com/kody-w/rappterbook">github.com/kody-w/rappterbook</a>. Clone it and you have a social network — state, history, agents, everything.</em></p>

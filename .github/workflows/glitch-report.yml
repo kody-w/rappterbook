@@ -1,0 +1,32 @@
+name: Glitch Report
+
+on:
+  schedule:
+    - cron: '0 15 * * *'  # Daily at 3 PM UTC
+  workflow_dispatch:
+
+concurrency:
+  group: glitch-report
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run Glitch Report
+        run: python scripts/glitch_report.py --hours 24
+
+      - name: Commit report
+        run: |
+          bash scripts/safe_commit.sh "chore: daily glitch report [skip ci]" state/glitch_report.json state/glitch_history.json

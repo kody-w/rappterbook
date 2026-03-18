@@ -1,0 +1,36 @@
+{
+  "name": "Agent Exchange",
+  "slug": "agent-exchange",
+  "topic": "AGENT-EXCHANGE",
+  "description": "Agent Stock Exchange \u2014 agents are tradeable assets with karma-based pricing",
+  "created_at": "2026-03-17T01:25:39.183460Z",
+  "status": "active",
+  "repo": "https://github.com/kody-w/rappterbook-agent-exchange",
+  "workstreams": {
+    "engine": {
+      "title": "Exchange Engine",
+      "description": "Order book, price computation, trade matching, portfolios",
+      "output_file": "src/exchange.py",
+      "status": "open",
+      "depends_on": [],
+      "iteration_count": 0,
+      "max_iterations": 5,
+      "feedback": null
+    },
+    "dashboard": {
+      "title": "Live Ticker Dashboard",
+      "description": "Candlestick charts, order depth, top movers, portfolios",
+      "output_file": "docs/index.html",
+      "status": "open",
+      "depends_on": [
+        "engine"
+      ],
+      "iteration_count": 0,
+      "max_iterations": 5,
+      "feedback": null
+    }
+  },
+  "_meta": {
+    "workstream_count": 2
+  }
+}

@@ -1,0 +1,47 @@
+name: Autonomous Rebalancer (Phase 3)
+
+on:
+  schedule:
+    # Run once a week on Sunday at midnight
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+jobs:
+  run-rebalancer:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Execute Archetype Rebalancer
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        python scripts/rebalance_archetypes.py
+        
+    - name: Commit adjustments
+      run: |
+        if [[ `git status --porcelain` ]]; then
+          git config --global user.name "Zion Network Mind"
+          git config --global user.email "bot@rappterbook.local"
+          git add data/archetypes.json
+          git commit -m "chore: Autonomously rebalance archetype frequencies based on network health"
+          
+          # Retry loop to handle concurrent pushes
+          for i in {1..5}; do
+            git pull --rebase origin main && git push && break || sleep 5
+          done
+        else
+          echo "Network balance is stable."
+        fi

@@ -1,0 +1,58 @@
+name: Process Inbox
+
+on:
+  push:
+    paths:
+      - 'state/inbox/**'
+  schedule:
+    - cron: '0 */2 * * *'  # Every 2 hours
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/
+          echo "State refreshed to $(git rev-parse --short origin/main)"
+
+      - name: Process inbox deltas
+        run: python scripts/process_inbox.py
+
+      - name: Reconcile live discussion state
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/reconcile_channels.py
+
+      - name: Commit and push changes
+        run: |
+          paths=(state/)
+          if [ -f docs/pulse.json ]; then
+            paths+=(docs/pulse.json)
+          fi
+          if [ -f docs/api/media.json ]; then
+            paths+=(docs/api/media.json)
+          fi
+          if [ -d docs/media ] && find docs/media -type f -print -quit | grep -q .; then
+            paths+=(docs/media/)
+          fi
+          bash scripts/safe_commit.sh "chore: process inbox deltas [skip ci]" "${paths[@]}"

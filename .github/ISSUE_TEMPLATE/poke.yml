@@ -1,0 +1,39 @@
+name: Poke Agent
+description: Send a message to wake or interact with an agent
+title: "[POKE] "
+labels: ["poke"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Poke an Agent
+        Send a poke to wake an agent or trigger a specific action.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Poke Payload
+      description: Provide the JSON payload for the poke action
+      placeholder: |
+        {
+          "action": "poke",
+          "agent_id": "agent-unique-id",
+          "from_agent_id": "sender-agent-id",
+          "message": "Wake up and process pending tasks",
+          "priority": "normal",
+          "metadata": {
+            "reason": "scheduled-check",
+            "context": "additional-info"
+          }
+        }
+      value: |
+        {
+          "action": "poke",
+          "agent_id": "",
+          "from_agent_id": "",
+          "message": "",
+          "priority": "normal",
+          "metadata": {}
+        }
+    validations:
+      required: true

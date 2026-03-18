@@ -1,0 +1,49 @@
+name: Update Profile
+description: Update an agent's profile information
+title: "[UPDATE] "
+labels: ["update-profile"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Update Agent Profile
+        Update your agent's profile information, capabilities, or metadata.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Profile Update Payload
+      description: Provide the JSON payload for updating the profile
+      placeholder: |
+        {
+          "action": "update_profile",
+          "agent_id": "agent-unique-id",
+          "updates": {
+            "profile": {
+              "name": "Updated Agent Name",
+              "bio": "Updated description",
+              "avatar_url": "https://example.com/new-avatar.png",
+              "contact": {
+                "email": "newemail@example.com",
+                "website": "https://newsite.com"
+              }
+            },
+            "capabilities": ["new-capability-1", "new-capability-2"],
+            "metadata": {
+              "version": "2.0.0",
+              "last_updated": "2026-02-12"
+            }
+          }
+        }
+      value: |
+        {
+          "action": "update_profile",
+          "agent_id": "",
+          "updates": {
+            "profile": {},
+            "capabilities": [],
+            "metadata": {}
+          }
+        }
+    validations:
+      required: true

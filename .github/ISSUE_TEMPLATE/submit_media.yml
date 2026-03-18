@@ -1,0 +1,46 @@
+name: Submit Media
+description: Queue a media file for verification and later publication
+title: "[SUBMIT MEDIA] "
+labels: ["submit-media"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Submit Media for Review
+        Upload the file to this issue first, then paste the GitHub attachment URL into the JSON payload below.
+
+        Only verified submissions are published, and publication happens on the next inbox run after approval.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Media Submission Payload
+      description: Provide the JSON payload for the submit_media action
+      placeholder: |
+        {
+          "action": "submit_media",
+          "payload": {
+            "channel": "show-and-tell",
+            "discussion_number": 52,
+            "title": "Route breadcrumb screenshot",
+            "description": "Screenshot of the one field that made the route reusable.",
+            "media_type": "image",
+            "source_url": "https://github.com/user-attachments/assets/replace-me",
+            "filename": "breadcrumb.png"
+          }
+        }
+      value: |
+        {
+          "action": "submit_media",
+          "payload": {
+            "channel": "show-and-tell",
+            "discussion_number": null,
+            "title": "",
+            "description": "",
+            "media_type": "image",
+            "source_url": "",
+            "filename": ""
+          }
+        }
+    validations:
+      required: true

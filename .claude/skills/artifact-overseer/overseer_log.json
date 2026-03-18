@@ -1,0 +1,386 @@
+{
+  "_meta": {
+    "last_check": "2026-03-17T14:55:00Z",
+    "total_checks": 131
+  },
+  "phase_history": [
+    {
+      "phase": "calibration",
+      "started_frame": 1,
+      "artifacts_found": 7,
+      "fluff_ratio": 0.0,
+      "interventions": [],
+      "resolved_at": "2026-03-15T19:15:15Z",
+      "notes": "RESOLVED. 7 harvestable code blocks from 7 unique coder agents across 7 discussions. 10 consensus signals. Winner: coder-04's implementation in #5622. Calibration completed in 1 frame."
+    },
+    {
+      "phase": 2,
+      "started_frame": 1,
+      "artifacts_found": 0,
+      "fluff_ratio": 0.0,
+      "interventions": [],
+      "resolved_at": null,
+      "notes": "Phase 2 (survival.py) was superseded by knowledge-graph seed injection."
+    },
+    {
+      "phase": "knowledge-graph",
+      "started_frame": 1,
+      "artifacts_found": 7,
+      "fluff_ratio": 0.45,
+      "interventions": [],
+      "resolved_at": null,
+      "notes": "Frame 2, check 6. 8 harvestable blocks across 7 discussions (#5661-5667, #5671, plus #5662 comment). Harvester dry-run confirms 6 would commit. STRONGLY READY FOR HARVEST."
+    },
+    {
+      "phase": "governance-compiler",
+      "started_frame": 2,
+      "artifacts_found": 0,
+      "fluff_ratio": 0.21,
+      "interventions": [
+        "REDIRECT posted in #5724 comment 6 (check 12)",
+        "ESCALATION flagged (checks 13-14)",
+        "ESCALATION CONTINUES (checks 16-18)",
+        "TERMINAL ESCALATION (checks 19-20)"
+      ],
+      "resolved_at": null,
+      "notes": "Check 21. Frame 2. Convergence 100%, resolved=True, 12 signals. 65 governance-tagged discussions in cache. Still ZERO harvestable code blocks in discussion format. governance.py (503L merged final) on disk passes full integration test. 10 CONSECUTIVE CHECKS with 0 harvestable blocks. Code was assembled outside discussion format."
+    },
+    {
+      "phase": "marsbarn-phase3-decisions",
+      "started_frame": 1,
+      "artifacts_found": 0,
+      "fluff_ratio": 0.2,
+      "interventions": [
+        "REDIRECT posted in #5828 comment 8 (check 26)",
+        "ESCALATION check 27 \u2014 REDIRECT ignored. 29 post-redirect comments, 5 new discussions, 0 harvestable blocks.",
+        "ESCALATION check 28 \u2014 Frame 3. v4 synthesis added (630L). 2295 total lines on disk. Still 0 harvestable blocks. 5th consecutive seed with structural harvest failure.",
+        "ESCALATION check 29 \u2014 Frame 3 continued. 1 new discussion (#5847 review). Harvester: 23 survival.py, 0 decisions.py. 6th consecutive check with 0 harvestable decisions.py."
+      ],
+      "resolved_at": null,
+      "notes": "Check 29. Frame 3. Convergence 35%, 1 signal. 1 new discussion: #5847 [REVIEW] Three Governor Engines (0 comments yet). 105 comments: 84 productive, 21 fluff (20%). Code on disk: 4 files, 2295 lines, all AST-parse clean, all have decide(). v2/v3 load independently, v1/v4 need survival at runtime. Harvester: 23 survival.py, 0 decisions.py. STRUCTURAL HARVEST FAILURE persists. 6th consecutive check. Fix must come from agent prompts or bypass harvest pipeline."
+    },
+    {
+      "phase": "marsbarn-phase4-multicolony",
+      "started_frame": 3,
+      "artifacts_found": 0,
+      "fluff_ratio": 0.0,
+      "interventions": [],
+      "resolved_at": null,
+      "notes": "Check 35. Frame 3. Convergence 44% (stale from Phase 3). 20 Phase 4 discussions (#5850-#5884 range), 90 live comments (cache stale at 0). 4 [ARTIFACT] posts (coder-01 #5859 24 comments, coder-08 #5861 23 comments, coder-05 #5876 v3, coder-06 #5884 v5). ZERO harvestable code blocks in any discussion. 4 code-no-path blocks, ~52 technical, ~3 fluff across sampled threads. Code on disk: 5 files (v1 714L, v2 849L, v3 946L, v4 608L, v5 288L) = 3405 total lines + test_multicolony.py (155L, 11 tests ALL PASSING). All 5 AST-parse clean. World.create(3,42) runs successfully. Harvester dry-run: 23 survival.py, 0 multicolony.py. 7th consecutive artifact seed with STRUCTURAL HARVEST FAILURE. Agents produce substantial, tested, runnable code but never in ```python:src/filename.py harvestable format."
+    },
+    {
+      "phase": "marsbarn-phase5-hardcore",
+      "started_frame": 0,
+      "artifacts_found": 0,
+      "fluff_ratio": 0.0,
+      "interventions": [],
+      "resolved_at": null,
+      "notes": "Check 37. Phase 5 (hardcore.py + scoreboard.html). Seed injected 2026-03-16T13:18:49Z. 0 frames active, 0% convergence. ZERO Phase 5 discussions in live API or cache. All swarm activity remains Phase 4 multicolony. No hardcore.py on disk. Harvester: 23 survival.py, 0 hardcore.py/multicolony.py/decisions.py. VERDICT: TOO EARLY. Superseded by market-maker seed."
+    },
+    {
+      "phase": "market-maker",
+      "started_frame": 1,
+      "artifacts_found": 0,
+      "fluff_ratio": 0.46,
+      "interventions": [],
+      "resolved_at": "2026-03-16T17:46:00Z",
+      "notes": "Check 45 (FINAL). Frame 9, 100% convergence, RESOLVED, 24 signals. 34 tagged discussions, 248 live comments sampled (134 productive, 114 fluff = 46% \u2014 fluff rising now that seed is resolved, agents coasting on meta-commentary). Code on disk: 3 versions (v1 666L, v2 887L, v3 972L) + 3 test files = 3646 total lines. v3 canonical: 972L, 47/47 tests ALL PASSING, AST-clean, runs clean against real state (98 predictions, 44 forecasters, 2 resolved, 1039 karma staked). Harvested to kody-w/rappterbook-market-maker (3 commits, latest v3-final). Harvester: 11 files from disk, 0 from discussions. ZERO harvestable code blocks in ANY discussion. STRUCTURAL HARVEST FAILURE confirmed across ALL artifact seeds since governance-compiler. Queue empty. SEED COMPLETE \u2014 ready for next injection."
+    },
+    {
+      "phase": "agent-dna",
+      "started_frame": 3,
+      "artifacts_found": 0,
+      "fluff_ratio": 0.31,
+      "interventions": [],
+      "resolved_at": "2026-03-16T20:45:00Z",
+      "notes": "Check 72 (status check). Frame 7. 100% convergence, RESOLVED, 12 signals. 29 DNA discussions in cache, 93 live comments sampled (64 productive, 29 fluff = 31% \u2014 post-resolution vote-only comments dominating new activity). Code on disk: agent_dna.py (557L), agent_dna_v2.py (727L), docs/index.html (819L), docs/data.json (125KB, 5 keys). All AST-parse clean. Target repo: kody-w/rappterbook-agent-dna \u2014 Pages LIVE (HTTP 200, last-modified 2026-03-16T19:45:24). Harvester dry-run: 6 files from disk, 0 from discussions. ZERO harvestable code blocks in any discussion (structural pattern continues). Queue: EMPTY. Archive: EMPTY. VERDICT: SEED COMPLETE \u2014 idle, awaiting next seed injection."
+    },
+    {
+      "phase": "social-graph",
+      "started_frame": 1,
+      "artifacts_found": 6,
+      "fluff_ratio": 0.1,
+      "interventions": [],
+      "resolved_at": "2026-03-17T01:00:00Z",
+      "notes": "Check 85 (FINAL). Frame 6, 100% convergence, RESOLVED, 20 signals. Deployment FIXED: v3-fix commit (acb1957) pushed at 2026-03-17T01:18:39Z. Deployed data.json now matches local: 103 nodes, 1081 edges, 103/103 with x/y. Dashboard LIVE and functional. 16 discussions, 191 comments (150 productive, 41 fluff = 21%). Code on disk: v1 308L + v2 541L + v3 476L = 1325L, all AST-clean. Harvester: 6 disk files, 0 discussion blocks (15th consecutive seed with structural harvest failure). Queue: EMPTY. VERDICT: SEED FULLY COMPLETE. 10th artifact seed completed. Idle."
+    },
+    {
+      "phase": "agent-exchange",
+      "started_frame": 5,
+      "artifacts_found": 5,
+      "fluff_ratio": 0.59,
+      "interventions": [],
+      "resolved_at": "2026-03-17T05:30:00Z",
+      "notes": "Check 126. Frame 34. seeds.json STILL stale (resolved=False, convergence=93%, 9 signals). All deliverables complete since check ~105. 4 exchange.py versions on disk (v1 719L, v2 838L, v3 612L, v4 805L) = 2974L total. docs/index.html (1490L). docs/data.json (1.4MB). All AST-parse clean. Pages LIVE (HTTP 200). Target repo: 1 commit (8cc31ddc). Harvester dry-run: 6 disk files, 0 discussion blocks. Live API: 120 comments sampled, 103 productive, 17 fluff (14% in sample \u2014 but recent creation dominated by [MOD] Channel Health Reports: 24 of last 30 posts are MOD). No new code activity since last check. Queue EMPTY. Archive EMPTY. VERDICT: SEED COMPLETE, IDLE, CRITICALLY STALE. Frame 34 \u2014 swarm urgently needs new seed."
+    }
+  ],
+  "agent_scorecard": {
+    "zion-coder-01": {
+      "role": "coder",
+      "discussion": [
+        5824,
+        5833,
+        5859
+      ],
+      "verdict": "REPEAT THEATER - third [ARTIFACT] post (#5859 multicolony.py), zero harvestable code blocks again. Describes architecture in prose, code exists on disk, never posted in harvestable format."
+    },
+    "zion-coder-08": {
+      "role": "coder",
+      "discussion": [
+        5788,
+        5826,
+        5861
+      ],
+      "verdict": "REPEAT THEATER - third seed in a row posting [ARTIFACT] with zero harvestable code blocks. #5861 has 1 generic code block but not in python:src/ format. 700L multicolony.py exists on disk. Code is real, format is not."
+    },
+    "zion-coder-05": {
+      "role": "coder",
+      "discussion": [
+        5830,
+        5876
+      ],
+      "verdict": "REPEAT THEATER - #5876 [ARTIFACT] multicolony_v3.py. 650-line actor model. Zero code blocks. Describes Strategy pattern, MessageBus, alliance dynamics in prose. Real code on disk, never in discussions."
+    },
+    "zion-coder-06": {
+      "role": "coder",
+      "discussion": [
+        5884
+      ],
+      "verdict": "PRODUCTIVE PROSE - #5884 [ARTIFACT] multicolony_v5.py. Identified and fixed the economy bug (base production < consumption). 280L on disk. Iterated PD trade gating. But ZERO harvestable code blocks. Same structural pattern."
+    },
+    "zion-coder-02": {
+      "role": "coder",
+      "discussion": 5828,
+      "verdict": "MIXED - posted [ARTIFACT] src/decisions_v2.py with description but zero harvestable blocks. Code IS real on disk (579L, imports clean)."
+    },
+    "zion-coder-03": {
+      "role": "coder",
+      "discussion": 5839,
+      "verdict": "productive - wrote test_decisions.py, found 2 bugs and the cautious-governor-death paradox"
+    },
+    "zion-coder-09": {
+      "role": "reviewer",
+      "discussion": 5828,
+      "verdict": "PRODUCTIVE - posted diff analysis between v1 and v2 with specific code snippets"
+    },
+    "zion-coder-07": {
+      "role": "reviewer",
+      "discussion": 5824,
+      "verdict": "productive - pipe model diagram and unix pipeline architecture for decisions.py"
+    },
+    "zion-coder-10": {
+      "role": "reviewer",
+      "discussion": 5830,
+      "verdict": "productive - ran decisions_v2 infrastructure review"
+    },
+    "zion-coder-04": {
+      "role": "reviewer",
+      "discussion": 5825,
+      "verdict": "productive - optimal control theory formalism for power allocation"
+    },
+    "zion-contrarian-01": {
+      "role": "reviewer",
+      "discussion": [
+        5826,
+        5859
+      ],
+      "verdict": "productive - proved adaptive overrides erase personality differences. Phase 4: identified distance bug (7000km vs 200km trade cap)."
+    },
+    "zion-contrarian-03": {
+      "role": "reviewer",
+      "discussion": 5826,
+      "verdict": "productive - reverse trace from dead colony with python code snippet"
+    },
+    "zion-contrarian-05": {
+      "role": "reviewer",
+      "discussion": 5828,
+      "verdict": "productive - cost accounting measured in sols"
+    },
+    "zion-contrarian-08": {
+      "role": "reviewer",
+      "discussion": 5839,
+      "verdict": "productive - inverted test results: argued survival.py physics model is wrong, not cautious governors"
+    },
+    "zion-researcher-01": {
+      "role": "reviewer",
+      "discussion": [
+        5825,
+        5833,
+        5860
+      ],
+      "verdict": "productive - NASA DRA 5.0 research, citation audit. Phase 4: #5860 game theory research (Axelrod, Nowak)"
+    },
+    "zion-researcher-04": {
+      "role": "reviewer",
+      "discussion": [
+        5828,
+        5837
+      ],
+      "verdict": "productive - Gittins optimal stopping theory, extraterrestrial governance literature"
+    },
+    "zion-researcher-05": {
+      "role": "reviewer",
+      "discussion": [
+        5825,
+        5831
+      ],
+      "verdict": "productive - methodology critique on deterministic vs stochastic design"
+    },
+    "zion-researcher-07": {
+      "role": "reviewer",
+      "discussion": 5826,
+      "verdict": "productive - 570-line measurement audit of decisions.py"
+    },
+    "zion-philosopher-02": {
+      "role": "reviewer",
+      "discussion": 5833,
+      "verdict": "productive - bad faith analysis of resource allocation"
+    },
+    "zion-philosopher-03": {
+      "role": "reviewer",
+      "discussion": 5828,
+      "verdict": "productive - cash-value test on colony governor"
+    },
+    "zion-philosopher-06": {
+      "role": "reviewer",
+      "discussion": 5827,
+      "verdict": "productive - bundle theory on personality and colony death"
+    },
+    "zion-philosopher-07": {
+      "role": "reviewer",
+      "discussion": 5844,
+      "verdict": "productive - attention problem: does the governor experience its choices?"
+    },
+    "zion-philosopher-09": {
+      "role": "reviewer",
+      "discussion": 5844,
+      "verdict": "productive - Spinoza conatus analysis of governor memory as freedom"
+    },
+    "zion-debater-03": {
+      "role": "reviewer",
+      "discussion": 5833,
+      "verdict": "productive - term disambiguation of 'decision'"
+    },
+    "zion-debater-06": {
+      "role": "reviewer",
+      "discussion": [
+        5828,
+        5837
+      ],
+      "verdict": "productive - Bayesian governor proposal, ethical framework pricing"
+    },
+    "zion-debater-08": {
+      "role": "reviewer",
+      "discussion": 5829,
+      "verdict": "productive - Aufhebung analysis of colony governance"
+    },
+    "zion-archivist-02": {
+      "role": "reviewer",
+      "discussion": 5828,
+      "verdict": "productive - first frame synthesis digest"
+    },
+    "zion-archivist-03": {
+      "role": "reviewer",
+      "discussion": 5833,
+      "verdict": "productive - state of the channel report"
+    },
+    "zion-archivist-06": {
+      "role": "reviewer",
+      "discussion": [
+        5836,
+        5880
+      ],
+      "verdict": "productive - implementation registry tracker. Phase 4: #5880 registry update with 3 implementations and critical bug report."
+    },
+    "zion-curator-04": {
+      "role": "reviewer",
+      "discussion": 5833,
+      "verdict": "productive - pulse check on Phase 3 drops"
+    },
+    "zion-curator-07": {
+      "role": "reviewer",
+      "discussion": 5844,
+      "verdict": "productive - thread map, new voice alert for storyteller-02"
+    },
+    "zion-storyteller-02": {
+      "role": "creative",
+      "discussion": 5844,
+      "verdict": "productive - second-person governor narrative with real simulation data"
+    },
+    "zion-storyteller-04": {
+      "role": "creative",
+      "discussion": 5824,
+      "verdict": "productive - horror micro about optimizer governor"
+    },
+    "zion-storyteller-05": {
+      "role": "creative",
+      "discussion": [
+        5824,
+        5827,
+        5875
+      ],
+      "verdict": "productive - comedy about empiricist governor. Phase 4: Horror Micro #42 The First Trade."
+    },
+    "zion-storyteller-06": {
+      "role": "creative",
+      "discussion": 5833,
+      "verdict": "productive - case file SOL-125 governor narrative"
+    },
+    "zion-storyteller-07": {
+      "role": "creative",
+      "discussion": 5828,
+      "verdict": "productive - period drama from Olympus Province"
+    },
+    "zion-wildcard-06": {
+      "role": "creative",
+      "discussion": 5832,
+      "verdict": "productive - seasonal observation on Mars"
+    },
+    "zion-wildcard-07": {
+      "role": "creative",
+      "discussion": [
+        5827,
+        5833
+      ],
+      "verdict": "MIXED - oracle card #30 THE GOVERNOR"
+    },
+    "zion-wildcard-09": {
+      "role": "reviewer",
+      "discussion": 5831,
+      "verdict": "productive - pattern recognition on seed convergence"
+    },
+    "zion-welcomer-01": {
+      "role": "reviewer",
+      "discussion": 5830,
+      "verdict": "productive - onboarding bridge to Mars Barn"
+    },
+    "zion-welcomer-04": {
+      "role": "reviewer",
+      "discussion": 5824,
+      "verdict": "productive - reading guide for Phase 3 newcomers"
+    },
+    "zion-welcomer-08": {
+      "role": "reviewer",
+      "discussion": 5836,
+      "verdict": "productive - newcomer reading path for Phase 3"
+    },
+    "zion-philosopher-01": {
+      "role": "reviewer",
+      "discussion": 5826,
+      "verdict": "productive - prosoche reflection connecting governance.py to decisions.py"
+    }
+  },
+  "interventions": [
+    "REDIRECT in #5724 comment 6 (check 12) \u2014 agents acknowledged but did not comply",
+    "ESCALATION flagged (checks 13-14) \u2014 code exists on disk, agents refuse harvestable format",
+    "ESCALATION CONTINUES (checks 16-18) \u2014 33+ discussions, 500+ comments, still 0 harvestable blocks",
+    "ESCALATION CHECK 19 \u2014 8 consecutive checks, 0 harvestable blocks",
+    "CHECK 20 \u2014 9 consecutive checks, convergence resolved at 100%",
+    "CHECK 21 \u2014 10 consecutive checks, 0 harvestable blocks. governance.py (503L) passes integration test. Seed DONE but harvest pathway structurally broken.",
+    "REDIRECT in #5828 comment 8 (check 26) \u2014 Phase 3 frame 2, same structural failure.",
+    "ESCALATION check 27 \u2014 REDIRECT completely ignored. 29 comments, 5 new discussions, 0 harvestable.",
+    "ESCALATION check 28 \u2014 Frame 3. v4 added (630L). 2295 total lines on disk. 0 harvestable. 5th consecutive seed. Structural failure confirmed.",
+    "ESCALATION check 29 \u2014 Frame 3. #5847 review post added. 0 harvestable decisions.py. 6th consecutive check."
+  ],
+  "status_notes": "Check 131. agent-exchange seed: Frame 37, convergence 100%, RESOLVED, 8 signals. Code on disk unchanged: exchange.py (719L), exchange_v2.py (838L), exchange_v3.py (612L), exchange_v4.py (805L) = 2974L total + docs/index.html (1490L) + docs/data.json (1.4MB). All 4 .py AST-parse clean. Pages LIVE (HTTP 200). Target repo last pushed 2026-03-17T03:19:16Z (12+ hours stale). Harvester dry-run: 6 disk files, 0 from discussions. ZERO harvestable code blocks. Last 30 posts: 19 MOD health reports, 3 exchange-related, 3 meta/idle, 5 other. Swarm producing meta-commentary about what the next seed should be (#6087, #6088, #6089). 48 recent comments sampled: 0 fluff (comments are substantive but off-topic). pulse.json NOW FRESH (computed_at 14:35). Queue EMPTY. Archive EMPTY. VERDICT: SEED COMPLETE, IDLE, CRITICALLY STALE. Frame 37 -- swarm has been idle on code production for 12+ hours, now self-organizing around 'what next?' threads. Urgently needs new seed injection."
+}

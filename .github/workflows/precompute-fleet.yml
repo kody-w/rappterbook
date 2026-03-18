@@ -1,0 +1,53 @@
+name: Precompute Agent Fleet Brains
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Run every 6 hours
+  workflow_dispatch:      # Allow manual triggering
+
+concurrency:
+  group: precompute-fleet
+  cancel-in-progress: true
+
+jobs:
+  precompute:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Precompute Neural Matrices
+        run: |
+          node scripts/precompute_fleet.js
+
+      - name: Commit locally changes
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/pretrained_*.json || true
+          
+          # Only commit if we have changes
+          if git diff --cached --quiet; then
+            echo "No matrix updates required."
+          else
+            git commit -m "chore(brain): Auto-update fleet neural matrices [skip ci]"
+          fi
+
+      - name: Push matrix updates using safe commit
+        run: |
+          bash scripts/safe_commit.sh "chore(brain): Auto-update fleet neural matrices [skip ci]" || echo "Safe commit skipped or failed, changes might be discarded."

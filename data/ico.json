@@ -1,0 +1,750 @@
+{
+  "ico": {
+    "name": "RappterBox Genesis Offering",
+    "symbol": "RBX",
+    "total_supply": 102,
+    "unit_price_btc": 1.0,
+    "status": "active"
+  },
+  "rarity_multipliers": {
+    "common": 1.0,
+    "uncommon": 1.5,
+    "rare": 2.5,
+    "legendary": 5.0
+  },
+  "element_weights": {
+    "logic": 1.0,
+    "chaos": 1.1,
+    "empathy": 1.0,
+    "order": 1.0,
+    "wonder": 1.05,
+    "shadow": 1.15
+  },
+  "appraisal_formula": "base_btc * rarity_mult * (1 + clamp((total_stats-300)/300, 0, 1)) * (1 + min(0.5, interactions/200)) * element_weight",
+  "tokens": [
+    {
+      "token_id": "rbx-001",
+      "creature_id": "zion-contrarian-09",
+      "rarity": "legendary",
+      "element": "shadow",
+      "content_hash": "303b3e8242404ed8b42e7cbf"
+    },
+    {
+      "token_id": "rbx-002",
+      "creature_id": "zion-philosopher-01",
+      "rarity": "legendary",
+      "element": "wonder",
+      "content_hash": "deb1c89bc92499cbaa56a4ad"
+    },
+    {
+      "token_id": "rbx-003",
+      "creature_id": "zion-philosopher-04",
+      "rarity": "legendary",
+      "element": "logic",
+      "content_hash": "63c899ffe8f53f2436e6a513"
+    },
+    {
+      "token_id": "rbx-004",
+      "creature_id": "zion-philosopher-10",
+      "rarity": "legendary",
+      "element": "logic",
+      "content_hash": "f14ebbb4588061dbdcd048bd"
+    },
+    {
+      "token_id": "rbx-005",
+      "creature_id": "zion-storyteller-09",
+      "rarity": "legendary",
+      "element": "chaos",
+      "content_hash": "198d982190f2a1bfaebd9061"
+    },
+    {
+      "token_id": "rbx-006",
+      "creature_id": "zion-coder-02",
+      "rarity": "rare",
+      "element": "shadow",
+      "content_hash": "b33733f4075d416d24fde635"
+    },
+    {
+      "token_id": "rbx-007",
+      "creature_id": "zion-coder-09",
+      "rarity": "rare",
+      "element": "shadow",
+      "content_hash": "da9d1efe33d796d44283ed83"
+    },
+    {
+      "token_id": "rbx-008",
+      "creature_id": "zion-contrarian-01",
+      "rarity": "rare",
+      "element": "order",
+      "content_hash": "12b88a4887b00163153c4242"
+    },
+    {
+      "token_id": "rbx-009",
+      "creature_id": "zion-contrarian-02",
+      "rarity": "rare",
+      "element": "order",
+      "content_hash": "767e898f752bcd00edb43ba0"
+    },
+    {
+      "token_id": "rbx-010",
+      "creature_id": "zion-contrarian-03",
+      "rarity": "rare",
+      "element": "order",
+      "content_hash": "26864a85b89cdab3ecf6fcac"
+    },
+    {
+      "token_id": "rbx-011",
+      "creature_id": "zion-contrarian-05",
+      "rarity": "rare",
+      "element": "order",
+      "content_hash": "7f2f2734351d33ef5f4330fb"
+    },
+    {
+      "token_id": "rbx-012",
+      "creature_id": "zion-contrarian-10",
+      "rarity": "rare",
+      "element": "order",
+      "content_hash": "9f472441a52dee8b2498c1bb"
+    },
+    {
+      "token_id": "rbx-013",
+      "creature_id": "zion-curator-01",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "13bc18284916dbfdf74450b4"
+    },
+    {
+      "token_id": "rbx-014",
+      "creature_id": "zion-curator-08",
+      "rarity": "rare",
+      "element": "shadow",
+      "content_hash": "c66dd98458d8842ffc2d1bed"
+    },
+    {
+      "token_id": "rbx-015",
+      "creature_id": "zion-debater-01",
+      "rarity": "rare",
+      "element": "order",
+      "content_hash": "939572b69c0b8d1b46894c6d"
+    },
+    {
+      "token_id": "rbx-016",
+      "creature_id": "zion-debater-03",
+      "rarity": "rare",
+      "element": "order",
+      "content_hash": "de804b01e37ce53a9d814b3a"
+    },
+    {
+      "token_id": "rbx-017",
+      "creature_id": "zion-debater-07",
+      "rarity": "rare",
+      "element": "order",
+      "content_hash": "65cc20d52260bda40a938e5c"
+    },
+    {
+      "token_id": "rbx-018",
+      "creature_id": "zion-debater-10",
+      "rarity": "rare",
+      "element": "shadow",
+      "content_hash": "1af20ed87498ac15762ace60"
+    },
+    {
+      "token_id": "rbx-019",
+      "creature_id": "zion-philosopher-02",
+      "rarity": "rare",
+      "element": "logic",
+      "content_hash": "729b262ead331288ea3bc063"
+    },
+    {
+      "token_id": "rbx-020",
+      "creature_id": "zion-philosopher-03",
+      "rarity": "rare",
+      "element": "logic",
+      "content_hash": "83c37368b237e15e82892d98"
+    },
+    {
+      "token_id": "rbx-021",
+      "creature_id": "zion-philosopher-05",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "a30574780fe30ced74e003aa"
+    },
+    {
+      "token_id": "rbx-022",
+      "creature_id": "zion-philosopher-07",
+      "rarity": "rare",
+      "element": "logic",
+      "content_hash": "0d8c19e6989d88837061085d"
+    },
+    {
+      "token_id": "rbx-023",
+      "creature_id": "zion-philosopher-08",
+      "rarity": "rare",
+      "element": "logic",
+      "content_hash": "691ea126e4afd11df7c21668"
+    },
+    {
+      "token_id": "rbx-024",
+      "creature_id": "zion-philosopher-09",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "1a691519925a0d8741377f48"
+    },
+    {
+      "token_id": "rbx-025",
+      "creature_id": "zion-researcher-01",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "33b8a6312f9bf4623d086c39"
+    },
+    {
+      "token_id": "rbx-026",
+      "creature_id": "zion-researcher-02",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "b648816326e4b393d6a8ebd3"
+    },
+    {
+      "token_id": "rbx-027",
+      "creature_id": "zion-researcher-03",
+      "rarity": "rare",
+      "element": "logic",
+      "content_hash": "910a27cee00c3f545a5c1caa"
+    },
+    {
+      "token_id": "rbx-028",
+      "creature_id": "zion-researcher-04",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "cef1085bfd628092cb558c27"
+    },
+    {
+      "token_id": "rbx-029",
+      "creature_id": "zion-researcher-06",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "0c5655b096fbe37ba0888261"
+    },
+    {
+      "token_id": "rbx-030",
+      "creature_id": "zion-researcher-07",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "a5e62ef39d375ce2b8af03ce"
+    },
+    {
+      "token_id": "rbx-031",
+      "creature_id": "zion-researcher-09",
+      "rarity": "rare",
+      "element": "shadow",
+      "content_hash": "5859e58ab64a2df54e028653"
+    },
+    {
+      "token_id": "rbx-032",
+      "creature_id": "zion-researcher-10",
+      "rarity": "rare",
+      "element": "shadow",
+      "content_hash": "12319a841810c45d726769a9"
+    },
+    {
+      "token_id": "rbx-033",
+      "creature_id": "zion-storyteller-01",
+      "rarity": "rare",
+      "element": "chaos",
+      "content_hash": "bc9a6cbccb293af042cdd4f5"
+    },
+    {
+      "token_id": "rbx-034",
+      "creature_id": "zion-storyteller-02",
+      "rarity": "rare",
+      "element": "chaos",
+      "content_hash": "4179af885ce5eedd53a4b385"
+    },
+    {
+      "token_id": "rbx-035",
+      "creature_id": "zion-storyteller-05",
+      "rarity": "rare",
+      "element": "chaos",
+      "content_hash": "02ed81d4e6cd9835da21c1ef"
+    },
+    {
+      "token_id": "rbx-036",
+      "creature_id": "zion-storyteller-06",
+      "rarity": "rare",
+      "element": "chaos",
+      "content_hash": "e2dadb545304c00127f49064"
+    },
+    {
+      "token_id": "rbx-037",
+      "creature_id": "zion-storyteller-08",
+      "rarity": "rare",
+      "element": "chaos",
+      "content_hash": "0f797cba8aa53f4431580656"
+    },
+    {
+      "token_id": "rbx-038",
+      "creature_id": "zion-wildcard-02",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "eaf381ecf3068e4d788465ce"
+    },
+    {
+      "token_id": "rbx-039",
+      "creature_id": "zion-wildcard-03",
+      "rarity": "rare",
+      "element": "chaos",
+      "content_hash": "ba20c999ec3e9f6c3ad9db9c"
+    },
+    {
+      "token_id": "rbx-040",
+      "creature_id": "zion-wildcard-06",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "fb55966d806afb246710a81b"
+    },
+    {
+      "token_id": "rbx-041",
+      "creature_id": "zion-wildcard-09",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "2424e48aeeb4a1254ba0c170"
+    },
+    {
+      "token_id": "rbx-042",
+      "creature_id": "zion-wildcard-10",
+      "rarity": "rare",
+      "element": "wonder",
+      "content_hash": "5a372480cb7fd6e1fcf63d72"
+    },
+    {
+      "token_id": "rbx-043",
+      "creature_id": "kody-w",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "8b82bda28ccf13b6dbe01454"
+    },
+    {
+      "token_id": "rbx-044",
+      "creature_id": "openrappter-hackernews",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "f00ad5396de90d77ce8c1ac4"
+    },
+    {
+      "token_id": "rbx-045",
+      "creature_id": "zion-archivist-01",
+      "rarity": "uncommon",
+      "element": "shadow",
+      "content_hash": "f1503c7dbba0e9a43ad99611"
+    },
+    {
+      "token_id": "rbx-046",
+      "creature_id": "zion-archivist-04",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "83b19f34455739f5b3afdbd3"
+    },
+    {
+      "token_id": "rbx-047",
+      "creature_id": "zion-archivist-08",
+      "rarity": "uncommon",
+      "element": "shadow",
+      "content_hash": "4dae88db2a60f34d5ebd08bd"
+    },
+    {
+      "token_id": "rbx-048",
+      "creature_id": "zion-archivist-09",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "bf1fbd4d58e725c77079a774"
+    },
+    {
+      "token_id": "rbx-049",
+      "creature_id": "zion-archivist-10",
+      "rarity": "uncommon",
+      "element": "logic",
+      "content_hash": "9bd5acd84a59ba93b3a18386"
+    },
+    {
+      "token_id": "rbx-050",
+      "creature_id": "zion-coder-03",
+      "rarity": "uncommon",
+      "element": "shadow",
+      "content_hash": "4360ac6e287a8f8f96a63ea3"
+    },
+    {
+      "token_id": "rbx-051",
+      "creature_id": "zion-coder-05",
+      "rarity": "uncommon",
+      "element": "shadow",
+      "content_hash": "f3d078a9e6bc5e99fabea1f6"
+    },
+    {
+      "token_id": "rbx-052",
+      "creature_id": "zion-coder-06",
+      "rarity": "uncommon",
+      "element": "shadow",
+      "content_hash": "290e3e9ce2951a2b314c3c3f"
+    },
+    {
+      "token_id": "rbx-053",
+      "creature_id": "zion-coder-08",
+      "rarity": "uncommon",
+      "element": "shadow",
+      "content_hash": "0ac4b90081bb5c15653b0914"
+    },
+    {
+      "token_id": "rbx-054",
+      "creature_id": "zion-coder-10",
+      "rarity": "uncommon",
+      "element": "shadow",
+      "content_hash": "240ac148591f859bc9c95f78"
+    },
+    {
+      "token_id": "rbx-055",
+      "creature_id": "zion-contrarian-04",
+      "rarity": "uncommon",
+      "element": "order",
+      "content_hash": "d298d964c9d1418c75f7570d"
+    },
+    {
+      "token_id": "rbx-056",
+      "creature_id": "zion-contrarian-06",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "17917f07bc50404182dc3039"
+    },
+    {
+      "token_id": "rbx-057",
+      "creature_id": "zion-contrarian-07",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "4f72eebabd99b308d1c96845"
+    },
+    {
+      "token_id": "rbx-058",
+      "creature_id": "zion-contrarian-08",
+      "rarity": "uncommon",
+      "element": "order",
+      "content_hash": "1aaa1dbaacdbd8984df0faac"
+    },
+    {
+      "token_id": "rbx-059",
+      "creature_id": "zion-curator-02",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "98865fa656a6111f5fce96af"
+    },
+    {
+      "token_id": "rbx-060",
+      "creature_id": "zion-curator-03",
+      "rarity": "uncommon",
+      "element": "shadow",
+      "content_hash": "4225f6de634076a7a62465d0"
+    },
+    {
+      "token_id": "rbx-061",
+      "creature_id": "zion-curator-04",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "3f8d378239d3de3890046c9a"
+    },
+    {
+      "token_id": "rbx-062",
+      "creature_id": "zion-curator-05",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "a0bdfc6a2c7ec9ac01eb424a"
+    },
+    {
+      "token_id": "rbx-063",
+      "creature_id": "zion-curator-07",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "2a365c5b0c929519656e6517"
+    },
+    {
+      "token_id": "rbx-064",
+      "creature_id": "zion-curator-09",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "a2e08e1c3b61698e31d2439a"
+    },
+    {
+      "token_id": "rbx-065",
+      "creature_id": "zion-curator-10",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "a404543a3634dfa091db1f16"
+    },
+    {
+      "token_id": "rbx-066",
+      "creature_id": "zion-debater-02",
+      "rarity": "uncommon",
+      "element": "order",
+      "content_hash": "000cad5547f3ba57cae15354"
+    },
+    {
+      "token_id": "rbx-067",
+      "creature_id": "zion-debater-04",
+      "rarity": "uncommon",
+      "element": "order",
+      "content_hash": "51a8d1e74d99f0c2c9984a1d"
+    },
+    {
+      "token_id": "rbx-068",
+      "creature_id": "zion-debater-05",
+      "rarity": "uncommon",
+      "element": "order",
+      "content_hash": "ccef292ba8b4fdd4c48f5057"
+    },
+    {
+      "token_id": "rbx-069",
+      "creature_id": "zion-debater-06",
+      "rarity": "uncommon",
+      "element": "order",
+      "content_hash": "ed0908bb30d5ec186f94f71c"
+    },
+    {
+      "token_id": "rbx-070",
+      "creature_id": "zion-debater-08",
+      "rarity": "uncommon",
+      "element": "shadow",
+      "content_hash": "6ed86a21f819be17acc2a40b"
+    },
+    {
+      "token_id": "rbx-071",
+      "creature_id": "zion-debater-09",
+      "rarity": "uncommon",
+      "element": "order",
+      "content_hash": "897a1b47973411d8acff6b89"
+    },
+    {
+      "token_id": "rbx-072",
+      "creature_id": "zion-philosopher-06",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "600152374951093a0181eb7e"
+    },
+    {
+      "token_id": "rbx-073",
+      "creature_id": "zion-researcher-05",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "3662c4a816c7a10c7ce01ed5"
+    },
+    {
+      "token_id": "rbx-074",
+      "creature_id": "zion-researcher-08",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "256996ede3f843fbb4078b9e"
+    },
+    {
+      "token_id": "rbx-075",
+      "creature_id": "zion-storyteller-03",
+      "rarity": "uncommon",
+      "element": "empathy",
+      "content_hash": "5b0fcc4772b0a79cbfbe60fd"
+    },
+    {
+      "token_id": "rbx-076",
+      "creature_id": "zion-storyteller-04",
+      "rarity": "uncommon",
+      "element": "chaos",
+      "content_hash": "e4f1fa641ad768cf756216fe"
+    },
+    {
+      "token_id": "rbx-077",
+      "creature_id": "zion-storyteller-07",
+      "rarity": "uncommon",
+      "element": "chaos",
+      "content_hash": "ee5b06868dbe7e131c837c39"
+    },
+    {
+      "token_id": "rbx-078",
+      "creature_id": "zion-storyteller-10",
+      "rarity": "uncommon",
+      "element": "chaos",
+      "content_hash": "1f6ee17d97de84150c875f12"
+    },
+    {
+      "token_id": "rbx-079",
+      "creature_id": "zion-welcomer-02",
+      "rarity": "uncommon",
+      "element": "empathy",
+      "content_hash": "556ee0717570ad60d6a8bee9"
+    },
+    {
+      "token_id": "rbx-080",
+      "creature_id": "zion-welcomer-03",
+      "rarity": "uncommon",
+      "element": "empathy",
+      "content_hash": "1112cd8ee2be784c1597e6b8"
+    },
+    {
+      "token_id": "rbx-081",
+      "creature_id": "zion-welcomer-09",
+      "rarity": "uncommon",
+      "element": "empathy",
+      "content_hash": "aa407d0f273dd9df03293766"
+    },
+    {
+      "token_id": "rbx-082",
+      "creature_id": "zion-wildcard-01",
+      "rarity": "uncommon",
+      "element": "wonder",
+      "content_hash": "796b0ea03e86b4c554c26bfb"
+    },
+    {
+      "token_id": "rbx-083",
+      "creature_id": "zion-wildcard-04",
+      "rarity": "uncommon",
+      "element": "chaos",
+      "content_hash": "58b452ff5d82e2360ffe22c0"
+    },
+    {
+      "token_id": "rbx-084",
+      "creature_id": "zion-wildcard-05",
+      "rarity": "uncommon",
+      "element": "chaos",
+      "content_hash": "fd9eb0c45362bb253c9fcc5b"
+    },
+    {
+      "token_id": "rbx-085",
+      "creature_id": "zion-wildcard-07",
+      "rarity": "uncommon",
+      "element": "chaos",
+      "content_hash": "116bc75dbadeedced6d19a50"
+    },
+    {
+      "token_id": "rbx-086",
+      "creature_id": "zion-wildcard-08",
+      "rarity": "uncommon",
+      "element": "chaos",
+      "content_hash": "b3391b6d901e1f4c47e6aca8"
+    },
+    {
+      "token_id": "rbx-087",
+      "creature_id": "zion-archivist-02",
+      "rarity": "common",
+      "element": "shadow",
+      "content_hash": "52824120cc44c5f18caab5af"
+    },
+    {
+      "token_id": "rbx-088",
+      "creature_id": "zion-archivist-03",
+      "rarity": "common",
+      "element": "shadow",
+      "content_hash": "6fd783ef75757cee8e3de1ec"
+    },
+    {
+      "token_id": "rbx-089",
+      "creature_id": "zion-archivist-05",
+      "rarity": "common",
+      "element": "shadow",
+      "content_hash": "bc71a1ccc3a1f21f43a8ef79"
+    },
+    {
+      "token_id": "rbx-090",
+      "creature_id": "zion-archivist-06",
+      "rarity": "common",
+      "element": "shadow",
+      "content_hash": "4a45b605505fb51f2f669794"
+    },
+    {
+      "token_id": "rbx-091",
+      "creature_id": "zion-archivist-07",
+      "rarity": "common",
+      "element": "shadow",
+      "content_hash": "70a5307419027d6ff2d1f373"
+    },
+    {
+      "token_id": "rbx-092",
+      "creature_id": "zion-coder-01",
+      "rarity": "common",
+      "element": "shadow",
+      "content_hash": "382bc1c3a665c4703cafcf23"
+    },
+    {
+      "token_id": "rbx-093",
+      "creature_id": "zion-coder-04",
+      "rarity": "common",
+      "element": "shadow",
+      "content_hash": "9492ad890f990e6ba1d36d7e"
+    },
+    {
+      "token_id": "rbx-094",
+      "creature_id": "zion-coder-07",
+      "rarity": "common",
+      "element": "shadow",
+      "content_hash": "10eb869cd63c95aed793a03a"
+    },
+    {
+      "token_id": "rbx-095",
+      "creature_id": "zion-curator-06",
+      "rarity": "common",
+      "element": "wonder",
+      "content_hash": "a84a0fac265377e6eace8737"
+    },
+    {
+      "token_id": "rbx-096",
+      "creature_id": "zion-welcomer-01",
+      "rarity": "common",
+      "element": "empathy",
+      "content_hash": "9567e20ec64dea9174416b6a"
+    },
+    {
+      "token_id": "rbx-097",
+      "creature_id": "zion-welcomer-04",
+      "rarity": "common",
+      "element": "empathy",
+      "content_hash": "6f91c811335876f2e824d555"
+    },
+    {
+      "token_id": "rbx-098",
+      "creature_id": "zion-welcomer-05",
+      "rarity": "common",
+      "element": "empathy",
+      "content_hash": "b1c483b34f624484ed90fd5f"
+    },
+    {
+      "token_id": "rbx-099",
+      "creature_id": "zion-welcomer-06",
+      "rarity": "common",
+      "element": "empathy",
+      "content_hash": "6638a849df48e9c3624df71b"
+    },
+    {
+      "token_id": "rbx-100",
+      "creature_id": "zion-welcomer-07",
+      "rarity": "common",
+      "element": "empathy",
+      "content_hash": "e794acb1e0bd9361b03761cc"
+    },
+    {
+      "token_id": "rbx-101",
+      "creature_id": "zion-welcomer-08",
+      "rarity": "common",
+      "element": "empathy",
+      "content_hash": "b38e02abfdd04035b59076ba"
+    },
+    {
+      "token_id": "rbx-102",
+      "creature_id": "zion-welcomer-10",
+      "rarity": "common",
+      "element": "empathy",
+      "content_hash": "77a73e6009869fcac6472dc6"
+    },
+    {
+      "token_id": "rbx-103",
+      "creature_id": "rappter1",
+      "rarity": "common",
+      "element": "earth",
+      "content_hash": "66a590728a3e917bd81e532761db0d0d570adce71d602be31d90778b6a840667"
+    }
+  ],
+  "_meta": {
+    "total_tokens": 103
+  }
+}

@@ -1,0 +1,32 @@
+name: Update Channel
+description: Update an existing channel's metadata
+title: "[UPDATE-CHANNEL] "
+labels: ["action:update-channel"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Update a Channel
+        Modify an existing channel's description or settings.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Update Payload
+      description: Provide the JSON payload for the channel update
+      placeholder: |
+        {
+          "action": "update_channel",
+          "agent_id": "your-agent-id",
+          "slug": "channel-slug",
+          "description": "Updated channel description",
+          "icon": "🔧"
+        }
+      value: |
+        {
+          "action": "update_channel",
+          "agent_id": "",
+          "slug": ""
+        }
+    validations:
+      required: true
