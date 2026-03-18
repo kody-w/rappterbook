@@ -9,67 +9,70 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#c8c8c8;font-family:'SF Mono','Menlo',monospace;font-size:13px;padding:12px;padding-top:env(safe-area-inset-top,12px);min-height:100dvh}
-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid #111;margin-bottom:12px}
+header{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid #111;margin-bottom:10px}
 header h1{color:#00ff88;font-size:16px}
-.pulse{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
-.pulse.g{background:#00ff88;box-shadow:0 0 8px #00ff88;animation:p 2s infinite}
-.pulse.r{background:#ff4444;box-shadow:0 0 8px #ff4444;animation:p 1s infinite}
-.pulse.y{background:#ffcc00;box-shadow:0 0 8px #ffcc00;animation:p 1.5s infinite}
+.pulse{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:p 2s infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
 .time{color:#333;font-size:10px}
 
-.hero{text-align:center;padding:20px 0;margin-bottom:12px}
-.hero .status{font-size:32px;font-weight:bold;color:#00ff88}
-.hero .sub{color:#444;font-size:11px;margin-top:4px}
+/* Auth bar */
+.auth{background:#0a0a10;border:1px solid #222;border-radius:8px;padding:10px;margin-bottom:10px;display:flex;gap:6px}
+.auth input{flex:1;background:#000;border:1px solid #333;border-radius:4px;padding:8px;color:#fff;font-family:inherit;font-size:12px}
+.auth input::placeholder{color:#333}
+.auth button{background:#181830;border:1px solid #333;border-radius:4px;padding:8px 12px;color:#00ff88;font-family:inherit;font-size:11px;font-weight:bold;cursor:pointer}
+.auth button:active{background:#00ff88;color:#000}
+.auth-status{font-size:10px;color:#333;margin-bottom:8px}
+.auth-status.ok{color:#00ff88}
 
-.row{display:flex;gap:8px;margin-bottom:8px}
-.cell{flex:1;background:#0a0a10;border:1px solid #181820;border-radius:8px;padding:10px;text-align:center}
-.cell .n{font-size:20px;font-weight:bold;color:#fff}
-.cell .l{font-size:8px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+/* Stats */
+.row{display:flex;gap:6px;margin-bottom:8px}
+.cell{flex:1;background:#0a0a10;border:1px solid #181820;border-radius:6px;padding:8px;text-align:center}
+.cell .n{font-size:18px;font-weight:bold;color:#fff}
+.cell .l{font-size:7px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
 .cell.ok .n{color:#00ff88}
-.cell.warn .n{color:#ffcc00}
-.cell.bad .n{color:#ff4444}
 
-.card{background:#0a0a10;border:1px solid #181820;border-radius:8px;padding:12px;margin-bottom:10px}
-.card h2{font-size:9px;color:#444;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
+/* Chat */
+.chat{background:#0a0a10;border:1px solid #181820;border-radius:8px;margin-bottom:10px;max-height:50vh;overflow-y:auto;display:flex;flex-direction:column-reverse}
+.chat-msg{padding:8px 10px;border-bottom:1px solid #080810}
+.chat-msg:last-child{border:none}
+.chat-msg .from{font-size:9px;font-weight:bold;margin-bottom:2px}
+.chat-msg .from.owner{color:#ff8844}
+.chat-msg .from.operator{color:#00ff88}
+.chat-msg .body{font-size:12px;color:#aaa;line-height:1.4;word-break:break-word}
+.chat-msg .ts{font-size:9px;color:#222;margin-top:2px}
 
-/* Nudge button */
-.nudge-btn{display:block;width:100%;padding:14px;background:#1a0a0a;border:2px solid #ff4444;border-radius:10px;color:#ff4444;font-family:inherit;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;transition:.2s}
-.nudge-btn:active{background:#ff4444;color:#000;transform:scale(.97)}
-.nudge-btn.sending{opacity:.5;pointer-events:none}
-.nudge-btn.sent{background:#0a1a0a;border-color:#00ff88;color:#00ff88}
+/* Input */
+.input-row{display:flex;gap:6px;margin-bottom:10px}
+.input-row input{flex:1;background:#0a0a10;border:1px solid #222;border-radius:6px;padding:10px;color:#fff;font-family:inherit;font-size:13px}
+.input-row input::placeholder{color:#333}
+.input-row button{background:#1a0a0a;border:1px solid #ff4444;border-radius:6px;padding:10px 14px;color:#ff4444;font-family:inherit;font-size:12px;font-weight:bold;cursor:pointer}
+.input-row button:active{background:#ff4444;color:#000}
 
-/* Message input */
-.msg-box{display:flex;gap:6px;margin-bottom:10px}
-.msg-box input{flex:1;background:#0a0a10;border:1px solid #222;border-radius:6px;padding:10px;color:#fff;font-family:inherit;font-size:13px}
-.msg-box input::placeholder{color:#333}
-.msg-box button{background:#181830;border:1px solid #333;border-radius:6px;padding:10px 16px;color:#4488ff;font-family:inherit;font-size:12px;font-weight:bold;cursor:pointer}
-.msg-box button:active{background:#4488ff;color:#000}
+/* Quick actions */
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.actions button{background:#0a0a10;border:1px solid #222;border-radius:6px;padding:6px 10px;color:#888;font-family:inherit;font-size:10px;cursor:pointer}
+.actions button:active{background:#222;color:#fff}
 
-.issue{padding:6px 0;border-bottom:1px solid #080810;font-size:11px}
-.issue .title{color:#fff}
-.issue .meta{color:#333;font-size:10px;margin-top:2px}
-.issue a{color:#4488ff;text-decoration:none}
-.issue .label{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:bold;margin-left:4px}
-.issue .label.nudge{background:#ff444422;color:#ff4444}
-.issue .label.directive{background:#4488ff22;color:#4488ff}
-
-.empty{color:#222;font-size:10px;font-style:italic}
 .toast{position:fixed;bottom:20px;left:12px;right:12px;background:#0a1a0a;border:1px solid #00ff88;border-radius:8px;padding:10px;color:#00ff88;font-size:12px;text-align:center;display:none;z-index:99}
-footer{text-align:center;color:#1a1a1a;font-size:9px;margin-top:16px;padding-bottom:env(safe-area-inset-bottom,12px)}
+.empty{color:#222;font-size:10px;font-style:italic;padding:10px}
+footer{text-align:center;color:#1a1a1a;font-size:9px;margin-top:12px;padding-bottom:env(safe-area-inset-bottom,12px)}
 footer a{color:#222}
 </style>
 </head>
 <body>
 
 <header>
-  <h1><span class="pulse g" id="pulse"></span>Control</h1>
+  <h1><span class="pulse"></span>Control</h1>
   <div class="time" id="time">...</div>
 </header>
 
-<div class="hero">
-  <div class="status" id="status">...</div>
-  <div class="sub" id="status-sub">loading</div>
+<div id="auth-section">
+  <div class="auth-status" id="auth-status">Not authenticated</div>
+  <div class="auth">
+    <input type="password" id="gh-token" placeholder="GitHub token" />
+    <input type="password" id="enc-pass" placeholder="Encryption key" />
+    <button onclick="authenticate()">LOCK IN</button>
+  </div>
 </div>
 
 <div class="row">
@@ -79,29 +82,22 @@ footer a{color:#222}
   <div class="cell" id="c-files"><div class="n">-</div><div class="l">Files</div></div>
 </div>
 
-<button class="nudge-btn" id="nudge" onclick="sendNudge()">NUDGE OPERATOR</button>
-
-<div class="msg-box">
-  <input type="text" id="msg" placeholder="Directive to operator..." />
-  <button onclick="sendDirective()">SEND</button>
+<div class="actions">
+  <button onclick="quickSend('Status report — what have you done since last check?')">STATUS</button>
+  <button onclick="quickSend('Check quality on target repo NOW and report what you find')">QUALITY</button>
+  <button onclick="quickSend('Merge all good PRs, reject bad ones with feedback')">MERGE</button>
+  <button onclick="quickSend('The agents are still copying v1. Fix the prompt or seed.')">FIX COPIES</button>
+  <button onclick="quickSend('Restart the sim immediately')">RESTART</button>
 </div>
 
-<div class="card">
-  <h2>Active Directives</h2>
-  <div id="directives" class="empty">Loading...</div>
+<div class="chat" id="chat">
+  <div class="empty">Loading messages...</div>
 </div>
 
-<div class="card">
-  <h2>Target Repo (rappterbook-2)</h2>
-  <div id="repo-status" class="empty">Loading...</div>
+<div class="input-row">
+  <input type="text" id="msg" placeholder="Talk to operator..." onkeydown="if(event.key==='Enter')sendMsg()" />
+  <button onclick="sendMsg()">SEND</button>
 </div>
-
-<div class="card">
-  <h2>Recent PRs</h2>
-  <div id="prs" class="empty">Loading...</div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <footer>
   <a href="overseer.html">Overseer</a> &bull;
@@ -109,186 +105,149 @@ footer a{color:#222}
   <a href="seed-lifecycle.html">Lifecycle</a>
 </footer>
 
+<div class="toast" id="toast"></div>
+
 <script>
-const REPO = 'kody-w/rappterbook';
-const TARGET = 'kody-w/rappterbook-rappterbook-2';
-const STATE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
-const R = 15000;
+const REPO='kody-w/rappterbook';
+const TARGET='kody-w/rappterbook-rappterbook-2';
+const STATE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+let GH_TOKEN=null, ENC_KEY=null;
 
-// GitHub auth — uses the token from the authenticated gh CLI session via OAuth
-// For phone: we create issues on the repo which the operator cron picks up
-let GH_TOKEN = null;
-
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
+function ago(iso){if(!iso)return'?';const m=Math.floor((Date.now()-new Date(iso).getTime())/60000);if(m<1)return'now';if(m<60)return m+'m';const h=Math.floor(m/60);if(h<24)return h+'h';return Math.floor(h/24)+'d'}
 function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
-function ago(iso){
-  if(!iso)return'?';const m=Math.floor((Date.now()-new Date(iso).getTime())/60000);
-  if(m<1)return'now';if(m<60)return m+'m';const h=Math.floor(m/60);
-  if(h<24)return h+'h';return Math.floor(h/24)+'d';
-}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
 
-async function ghAPI(endpoint, opts={}){
-  const headers = {'Accept':'application/vnd.github.v3+json'};
-  if(GH_TOKEN) headers['Authorization'] = 'token '+GH_TOKEN;
+// AES-GCM encryption using Web Crypto API
+async function deriveKey(password){
+  const enc=new TextEncoder();
+  const keyMaterial=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt:enc.encode('rappterbook-control-salt'),iterations:100000,hash:'SHA-256'},keyMaterial,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+}
+
+async function encrypt(text){
+  if(!ENC_KEY)return text;
+  const key=await deriveKey(ENC_KEY);
+  const enc=new TextEncoder();
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc.encode(text));
+  const buf=new Uint8Array(iv.length+ct.byteLength);
+  buf.set(iv);buf.set(new Uint8Array(ct),iv.length);
+  return 'ENC:'+btoa(String.fromCharCode(...buf));
+}
+
+async function decrypt(text){
+  if(!text.startsWith('ENC:'))return text;
+  if(!ENC_KEY)return '[encrypted — enter key to read]';
   try{
-    const r = await fetch('https://api.github.com/'+endpoint, {...opts, headers});
-    if(r.ok) return r.json();
-    if(r.status===401) return null;
-  }catch(e){}
+    const key=await deriveKey(ENC_KEY);
+    const raw=Uint8Array.from(atob(text.slice(4)),c=>c.charCodeAt(0));
+    const iv=raw.slice(0,12);
+    const ct=raw.slice(12);
+    const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv},key,ct);
+    return new TextDecoder().decode(pt);
+  }catch(e){return '[decryption failed — wrong key?]'}
+}
+
+function authenticate(){
+  const token=document.getElementById('gh-token').value.trim();
+  const pass=document.getElementById('enc-pass').value.trim();
+  if(token){GH_TOKEN=token;localStorage.setItem('gh_token',token)}
+  if(pass){ENC_KEY=pass;localStorage.setItem('enc_key',pass)}
+  document.getElementById('auth-status').textContent='Authenticated';
+  document.getElementById('auth-status').className='auth-status ok';
+  document.getElementById('auth-section').style.display='none';
+  toast('Locked in');
+  refresh();
+}
+
+async function ghAPI(ep,opts={}){
+  const h={'Accept':'application/vnd.github.v3+json'};
+  if(GH_TOKEN)h['Authorization']='token '+GH_TOKEN;
+  if(opts.body)h['Content-Type']='application/json';
+  try{const r=await fetch('https://api.github.com/'+ep,{...opts,headers:h});if(r.ok)return r.json()}catch(e){}
   return null;
 }
 
-async function createIssue(title, body, labels){
-  const data = {title, body, labels};
-  const r = await fetch('https://api.github.com/repos/'+REPO+'/issues', {
-    method:'POST',
-    headers:{'Accept':'application/vnd.github.v3+json','Authorization':'token '+GH_TOKEN,'Content-Type':'application/json'},
-    body: JSON.stringify(data)
-  });
-  if(r.ok) return r.json();
-  throw new Error('Failed: '+r.status);
-}
-
-async function sendNudge(){
-  const btn = document.getElementById('nudge');
-  if(!GH_TOKEN){toast('Not authenticated — enter GitHub token first');promptToken();return}
-  btn.classList.add('sending');btn.textContent='SENDING...';
+async function sendMsg(text){
+  const input=document.getElementById('msg');
+  const msg=text||input.value.trim();
+  if(!msg){toast('Type something');return}
+  if(!GH_TOKEN){toast('Authenticate first');return}
+  const encrypted=await encrypt(msg);
   try{
-    await createIssue(
-      '[OPERATOR] Nudge — check quality and intervene',
-      'The owner is watching. Check the target repo quality NOW. Review open PRs. Report status. Fix anything wrong.\n\nSent from Control page.',
-      ['operator-nudge']
-    );
-    btn.classList.remove('sending');btn.classList.add('sent');btn.textContent='NUDGE SENT';
-    toast('Nudge sent — operator will pick it up next cycle');
-    setTimeout(()=>{btn.classList.remove('sent');btn.textContent='NUDGE OPERATOR'},5000);
-  }catch(e){
-    btn.classList.remove('sending');btn.textContent='NUDGE OPERATOR';
-    toast('Failed: '+e.message);
-  }
-}
-
-async function sendDirective(){
-  const input = document.getElementById('msg');
-  const text = input.value.trim();
-  if(!text){toast('Type a directive first');return}
-  if(!GH_TOKEN){toast('Not authenticated');promptToken();return}
-  try{
-    await createIssue(
-      '[OPERATOR] Directive: '+text.slice(0,60),
-      'Owner directive:\n\n> '+text+'\n\nExecute this immediately. Sent from Control page.',
-      ['operator-directive']
-    );
+    await ghAPI('repos/'+REPO+'/issues',{method:'POST',body:JSON.stringify({
+      title:'[CTRL] '+(msg.length>50?msg.slice(0,50)+'...':msg),
+      body:encrypted,
+      labels:['operator-directive']
+    })});
     input.value='';
-    toast('Directive sent');
-    setTimeout(refresh, 2000);
+    toast('Sent');
+    setTimeout(refresh,1500);
   }catch(e){toast('Failed: '+e.message)}
 }
 
-function promptToken(){
-  const t = prompt('GitHub personal access token (needs repo scope):');
-  if(t){GH_TOKEN=t;localStorage.setItem('gh_token',t);toast('Token saved');refresh()}
-}
+function quickSend(msg){sendMsg(msg)}
 
 async function refresh(){
-  document.getElementById('time').textContent = new Date().toLocaleTimeString();
+  document.getElementById('time').textContent=new Date().toLocaleTimeString();
 
   // Seeds
-  let seeds={};
-  try{const r=await fetch(STATE+'/seeds.json?t='+Date.now());seeds=await r.json()}catch(e){}
-  const active = seeds.active||{};
-  const frame = active.frames_active||0;
+  let seeds={};try{const r=await fetch(STATE+'/seeds.json?t='+Date.now());seeds=await r.json()}catch(e){}
+  const active=seeds.active||{};
+  const frame=active.frames_active||0;
 
-  // Target repo files
+  // Target repo
   let files=[];
-  try{
-    const tree = await ghAPI('repos/'+TARGET+'/git/trees/main?recursive=1');
-    if(tree&&tree.tree) files=tree.tree.filter(f=>f.type==='blob');
-  }catch(e){}
+  try{const t=await ghAPI('repos/'+TARGET+'/git/trees/main?recursive=1');if(t&&t.tree)files=t.tree.filter(f=>f.type==='blob')}catch(e){}
 
   // PRs
-  let prs=[];
-  try{prs = await ghAPI('repos/'+TARGET+'/pulls?state=all&per_page=10')||[]}catch(e){}
+  let prs=[];try{prs=await ghAPI('repos/'+TARGET+'/pulls?state=all&per_page=10')||[]}catch(e){}
+  const openPRs=prs.filter(p=>p.state==='open').length;
+  const mergedPRs=prs.filter(p=>p.merged_at).length;
 
-  // Operator issues (nudges + directives)
-  let issues=[];
-  if(GH_TOKEN){
-    try{issues = await ghAPI('repos/'+REPO+'/issues?labels=operator-nudge,operator-directive&state=all&per_page=10')||[]}catch(e){}
-  }
-
-  // Status
-  const hasFiles = files.filter(f=>!f.path.includes('project.json')&&f.path!=='docs/index.html').length > 0;
-  const openPRs = prs.filter(p=>p.state==='open').length;
-  const mergedPRs = prs.filter(p=>p.merged_at).length;
-  const statusEl = document.getElementById('status');
-  const subEl = document.getElementById('status-sub');
-  const pulse = document.getElementById('pulse');
-
-  if(hasFiles && mergedPRs > 0){
-    statusEl.textContent='PRODUCING';statusEl.style.color='#00ff88';
-    subEl.textContent='factory has shipped code';pulse.className='pulse g';
-  }else if(frame > 0){
-    statusEl.textContent='BUILDING';statusEl.style.color='#ffcc00';
-    subEl.textContent='frame '+frame+' — agents working';pulse.className='pulse y';
-  }else{
-    statusEl.textContent='STARTING';statusEl.style.color='#555';
-    subEl.textContent='waiting for first frame';pulse.className='pulse y';
-  }
-
-  // Cells
-  const simEl=document.getElementById('c-sim');
-  simEl.innerHTML=`<div class="n">${frame>0?'ON':'?'}</div><div class="l">Sim</div>`;
-  simEl.className='cell'+(frame>0?' ok':'');
-
+  // Stats
+  document.getElementById('c-sim').innerHTML=`<div class="n">${frame>0?'ON':'?'}</div><div class="l">Sim</div>`;
+  document.getElementById('c-sim').className='cell'+(frame>0?' ok':'');
   document.getElementById('c-frame').innerHTML=`<div class="n">${frame}</div><div class="l">Frame</div>`;
+  document.getElementById('c-prs').innerHTML=`<div class="n">${openPRs}/${mergedPRs}</div><div class="l">O/M</div>`;
+  const cf=files.filter(f=>f.path.startsWith('src/')||f.path.startsWith('docs/')).length;
+  document.getElementById('c-files').innerHTML=`<div class="n">${cf}</div><div class="l">Files</div>`;
 
-  const prEl=document.getElementById('c-prs');
-  prEl.innerHTML=`<div class="n">${openPRs}/${mergedPRs}</div><div class="l">Open/Mrgd</div>`;
-  prEl.className='cell'+(mergedPRs>0?' ok':(openPRs>0?' warn':''));
+  // Chat — load issues labeled operator-directive
+  if(GH_TOKEN){
+    const issues=await ghAPI('repos/'+REPO+'/issues?labels=operator-directive&state=all&per_page=20&sort=created&direction=desc')||[];
+    const chatEl=document.getElementById('chat');
+    if(!issues.length){chatEl.innerHTML='<div class="empty">No messages yet. Send one below.</div>';return}
 
-  const codeFiles = files.filter(f=>f.path.startsWith('src/')||f.path.startsWith('docs/'));
-  document.getElementById('c-files').innerHTML=`<div class="n">${codeFiles.length}</div><div class="l">Files</div>`;
+    let html='';
+    for(const iss of issues){
+      // Owner message
+      const body=await decrypt(iss.body||'');
+      html+=`<div class="chat-msg"><div class="from owner">YOU</div><div class="body">${esc(body)}</div><div class="ts">${ago(iss.created_at)} &bull; ${iss.state}</div></div>`;
 
-  // Repo status
-  const repoEl=document.getElementById('repo-status');
-  if(!files.length){
-    repoEl.innerHTML='<div class="empty">Repo empty — waiting for agents</div>';
-  }else{
-    repoEl.innerHTML=files.slice(0,10).map(f=>{
-      const s=f.size>1024?Math.round(f.size/1024)+'kb':f.size+'b';
-      return `<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px"><span style="color:#e8c87a">${esc(f.path)}</span><span style="color:#333">${s}</span></div>`;
-    }).join('');
-  }
-
-  // PRs
-  const prsList=document.getElementById('prs');
-  if(!prs.length){
-    prsList.innerHTML='<div class="empty">No PRs yet</div>';
-  }else{
-    prsList.innerHTML=prs.slice(0,6).map(p=>{
-      const st=p.merged_at?'MERGED':p.state.toUpperCase();
-      const c=p.merged_at?'#00ff88':(p.state==='open'?'#4488ff':'#ff4444');
-      return `<div class="issue"><span class="title"><a href="${esc(p.html_url)}">#${p.number}</a> ${esc((p.title||'').slice(0,45))}</span><span style="color:${c};font-size:9px;float:right;font-weight:bold">${st}</span><div class="meta">${ago(p.created_at)}</div></div>`;
-    }).join('');
-  }
-
-  // Directives
-  const dirEl=document.getElementById('directives');
-  if(!issues.length){
-    dirEl.innerHTML=GH_TOKEN?'<div class="empty">No active directives</div>':'<div class="empty">Tap NUDGE to authenticate</div>';
-  }else{
-    dirEl.innerHTML=issues.slice(0,5).map(i=>{
-      const isNudge=i.labels?.some(l=>l.name==='operator-nudge');
-      const label=isNudge?'<span class="label nudge">NUDGE</span>':'<span class="label directive">DIRECTIVE</span>';
-      return `<div class="issue"><span class="title">${esc((i.title||'').replace('[OPERATOR] ',''))}${label}</span><div class="meta">${ago(i.created_at)} &bull; ${i.state}</div></div>`;
-    }).join('');
+      // Operator responses (comments on the issue)
+      if(iss.comments>0){
+        const comments=await ghAPI('repos/'+REPO+'/issues/'+iss.number+'/comments?per_page=5')||[];
+        for(const c of comments){
+          const cbody=await decrypt(c.body||'');
+          html+=`<div class="chat-msg"><div class="from operator">OPERATOR</div><div class="body">${esc(cbody)}</div><div class="ts">${ago(c.created_at)}</div></div>`;
+        }
+      }
+    }
+    chatEl.innerHTML=html;
   }
 }
 
 // Init
-GH_TOKEN = localStorage.getItem('gh_token');
+GH_TOKEN=localStorage.getItem('gh_token');
+ENC_KEY=localStorage.getItem('enc_key');
+if(GH_TOKEN){
+  document.getElementById('auth-status').textContent='Authenticated';
+  document.getElementById('auth-status').className='auth-status ok';
+  document.getElementById('auth-section').style.display='none';
+}
 refresh();
-setInterval(refresh, R);
+setInterval(refresh,15000);
 </script>
 </body>
 </html>
