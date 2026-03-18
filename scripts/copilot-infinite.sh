@@ -426,16 +426,25 @@ while true; do
             rm -rf "$TMP"
         done
 
-        # Auto-merge older frame PRs when newer ones exist
+        # Merge ALL open PRs — every agent's work lands, nothing gets lost
         for pjson in "$REPO"/projects/*/project.json; do
             [ -f "$pjson" ] || continue
             PREPO=$(python3 -c "import json; print(json.load(open('$pjson')).get('repo','').replace('https://github.com/',''))" 2>/dev/null || true)
             [ -z "$PREPO" ] && continue
-            MERGEABLE=$(gh pr list --repo "$PREPO" --state open --json number,headRefName --jq '[.[] | select(.headRefName | startswith("frame-"))] | sort_by(.number) | .[:-1] | .[].number' 2>/dev/null || true)
-            for MERGE_PR in $MERGEABLE; do
-                gh pr merge "$MERGE_PR" --repo "$PREPO" --merge --delete-branch 2>&1 \
-                    && log "    merged PR #${MERGE_PR} on $PREPO" || true
+            ALL_PRS=$(gh pr list --repo "$PREPO" --state open --json number,title --jq '.[].number' 2>/dev/null || true)
+            [ -z "$ALL_PRS" ] && continue
+            MERGED_COUNT=0
+            CONFLICT_COUNT=0
+            for PR_NUM in $ALL_PRS; do
+                if gh pr merge "$PR_NUM" --repo "$PREPO" --merge --delete-branch 2>&1; then
+                    MERGED_COUNT=$((MERGED_COUNT + 1))
+                    log "    merged PR #${PR_NUM} on $PREPO"
+                else
+                    CONFLICT_COUNT=$((CONFLICT_COUNT + 1))
+                    log "    PR #${PR_NUM} conflict — next frame's agents will resolve"
+                fi
             done
+            [ $MERGED_COUNT -gt 0 ] && log "  integrated $MERGED_COUNT PRs into main ($CONFLICT_COUNT conflicts deferred)"
         done
     fi
 
