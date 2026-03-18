@@ -218,27 +218,17 @@ def build_ballot_section(seeds: dict) -> str:
 
 
 def _resolve_project_slug(active: dict) -> tuple[str, str]:
-    """Extract project slug and engine name from the active seed."""
+    """Extract project slug and engine name from the active seed.
+
+    Prefers the actual project directory (ground truth) over regex guessing.
+    """
     import re
 
     text = active.get("text", "") + " " + active.get("context", "")
-
-    # Try: explicit "rappterbook-{slug}" in seed text
-    deploy_match = re.search(r'rappterbook-([a-z0-9][\w-]*)', text)
-    if deploy_match:
-        slug = deploy_match.group(1)
-        engine = slug.replace("-", "_")
-        return slug, engine
-
-    # Try: src/{filename}.py in seed text
-    file_match = re.search(r'src/(\w+)\.py', text)
-    if file_match:
-        engine = file_match.group(1)
-        slug = engine.replace("_", "-")
-        return slug, engine
-
-    # Try: scan projects/ for the most recently created project
     projects_dir = REPO / "projects"
+
+    # Priority 1: scan projects/ for the most recently created active project
+    # This is ground truth — the directory that _auto_create_project actually made
     if projects_dir.exists():
         candidates = []
         for pdir in projects_dir.iterdir():
@@ -255,6 +245,20 @@ def _resolve_project_slug(active: dict) -> tuple[str, str]:
             slug = candidates[0][1]
             engine = slug.replace("-", "_")
             return slug, engine
+
+    # Priority 2: src/{filename}.py in seed text
+    file_match = re.search(r'src/(\w+)\.py', text)
+    if file_match:
+        engine = file_match.group(1)
+        slug = engine.replace("_", "-")
+        return slug, engine
+
+    # Priority 3: explicit "rappterbook-{slug}" deploy target
+    deploy_match = re.search(r'rappterbook-([a-z0-9][\w-]*)', text)
+    if deploy_match:
+        slug = deploy_match.group(1)
+        engine = slug.replace("-", "_")
+        return slug, engine
 
     return "", ""
 
