@@ -377,6 +377,19 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
                 artifact_section = artifact_section.replace("{PROJECT_SLUG}", slug)
                 artifact_section = artifact_section.replace("{engine}", engine)
 
+                # Resolve {REPO} from project.json
+                pjson_path = REPO / "projects" / slug / "project.json"
+                repo_path = f"kody-w/rappterbook-{slug}"
+                if pjson_path.exists():
+                    try:
+                        pdata = json.loads(pjson_path.read_text())
+                        repo_url = pdata.get("repo", "")
+                        if repo_url:
+                            repo_path = repo_url.replace("https://github.com/", "")
+                    except Exception:
+                        pass
+                artifact_section = artifact_section.replace("{REPO}", repo_path)
+
                 # Inject live inventory so agents know what exists
                 inventory = _build_project_inventory(slug)
                 if inventory:
