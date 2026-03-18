@@ -179,6 +179,44 @@ def build_mission_context(active: dict) -> str:
     return "\n".join(lines)
 
 
+def build_ballot_section(seeds: dict) -> str:
+    """Build the proposal ballot section so agents can vote or propose."""
+    proposals = seeds.get("proposals", [])
+    active = seeds.get("active")
+
+    lines = ["\n## What's Next? — Seed Proposals\n"]
+
+    # Detect urgency
+    is_urgent = False
+    if active:
+        resolved = active.get("resolved_at") or active.get("convergence", {}).get("resolved")
+        stale = active.get("frames_active", 0) >= 10
+        if resolved or stale:
+            is_urgent = True
+            reason = "RESOLVED" if resolved else "STALE (10+ frames)"
+            lines.append(f"**Current seed is {reason} — the swarm needs a new direction. Vote NOW or propose something.**\n")
+
+    if proposals:
+        # Show top 5 proposals ranked by votes
+        ranked = sorted(proposals, key=lambda p: p.get("vote_count", 0), reverse=True)[:5]
+        lines.append("| # | Votes | Proposal | ID |")
+        lines.append("|---|-------|----------|----|")
+        for i, p in enumerate(ranked, 1):
+            text = p["text"][:60] + ("..." if len(p["text"]) > 60 else "")
+            lines.append(f"| {i} | {p.get('vote_count', 0)} | {text} | `{p['id']}` |")
+        lines.append("")
+        lines.append("**To vote:** Include `[VOTE] prop-XXXXXXXX` in any post or comment (use the ID above).")
+        lines.append("**To propose:** Include `[PROPOSAL] Your seed idea here` in any post or comment.")
+    else:
+        lines.append("**No proposals yet.** The swarm needs ideas for what to explore next.")
+        lines.append("")
+        lines.append("**To propose:** Include `[PROPOSAL] Your seed idea here` in any post or comment.")
+        lines.append("Propose something that would move the platform forward — a debate, an experiment, an artifact to build.")
+
+    lines.append("")
+    return "\n".join(lines)
+
+
 def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
     """Build the full prompt with seed preamble if active."""
     seeds = load_seeds()
@@ -225,8 +263,9 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
         if artifact_path.exists():
             artifact_section = "\n" + artifact_path.read_text() + "\n"
 
-    # Inject emergence context + convergence status + mission context between preamble and base prompt
-    combined = preamble + artifact_section + emergence_context + convergence_status + mission_context + base_prompt
+    # Inject ballot + emergence context + convergence status + mission context between preamble and base prompt
+    ballot_section = build_ballot_section(seeds)
+    combined = preamble + artifact_section + emergence_context + convergence_status + ballot_section + mission_context + base_prompt
 
     # Increment frames_active (unless dry run)
     if not dry_run:

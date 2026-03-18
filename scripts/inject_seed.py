@@ -47,23 +47,39 @@ def make_seed_id(text: str) -> str:
 
 
 def _auto_create_project(seed_text: str, tags: list[str]) -> None:
-    """Auto-create project scaffold when an artifact seed is injected."""
+    """Auto-create project scaffold when an artifact seed is injected.
+
+    Creates a full web app scaffold: docs/index.html + src/ + project.json,
+    a GitHub repo with Pages enabled, and registers the app in app_registry.json.
+    """
     import re
+    import subprocess
 
-    # Extract deliverable filename from seed text (e.g., "Build src/hardcore.py")
+    # Extract project name from seed text — try multiple patterns
+    # Pattern 1: explicit src/filename.py
     file_match = re.search(r'src/(\w+)\.py', seed_text)
-    if not file_match:
-        return
+    # Pattern 2: "Build a X" or "Create a X" with a clear noun
+    name_match = re.search(r'(?:Build|Create|Design)\s+(?:a\s+)?([A-Z][\w\s]+?)(?:\s*[—\-\.]|\s+that\b|\s+for\b|\s+which\b)', seed_text)
 
-    filename = file_match.group(1)  # "hardcore"
+    if file_match:
+        filename = file_match.group(1)
+    elif name_match:
+        filename = name_match.group(1).strip().lower().replace(" ", "_")
+    else:
+        # Last resort: extract from Deploy target
+        deploy_match = re.search(r'rappterbook-(\w[\w-]*)', seed_text)
+        if deploy_match:
+            filename = deploy_match.group(1).replace("-", "_")
+        else:
+            return
 
-    # Determine project slug from tags or filename
-    # If a tag matches an existing project, use that
+    slug = filename.replace("_", "-")
+
+    # Check if a tag matches an existing project
     projects_dir = REPO / "projects"
     for tag in tags:
         candidate = projects_dir / tag
         if candidate.exists():
-            # Project exists — just make sure it has the workstream
             pjson = candidate / "project.json"
             if pjson.exists():
                 project = json.load(open(pjson))
@@ -72,7 +88,7 @@ def _auto_create_project(seed_text: str, tags: list[str]) -> None:
                     ws[filename] = {
                         "title": filename.replace("_", " ").title(),
                         "description": seed_text[:200],
-                        "output_file": f"src/{filename}.py",
+                        "output_file": f"docs/index.html",
                         "status": "open",
                         "depends_on": [],
                         "iteration_count": 0,
@@ -86,17 +102,84 @@ def _auto_create_project(seed_text: str, tags: list[str]) -> None:
                     print(f"  Added workstream '{filename}' to {tag}")
             return
 
-    # No matching project tag — create new project
-    slug = filename.replace("_", "-")
+    # Create new project directory
     project_dir = projects_dir / slug
     if project_dir.exists():
-        return  # Already exists
+        return
 
     project_dir.mkdir(parents=True, exist_ok=True)
     (project_dir / "src").mkdir(exist_ok=True)
+    (project_dir / "docs").mkdir(exist_ok=True)
+
+    # Create starter docs/index.html — a live app shell that fetches Rappterbook state
+    app_name = filename.replace("_", " ").title()
+    starter_html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{app_name} — Rappterbook</title>
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+body{{background:#0a0a0f;color:#c8c8c8;font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:14px;padding:20px;max-width:1100px;margin:0 auto}}
+h1{{color:#00ff88;font-size:22px;margin-bottom:4px}}
+.sub{{color:#555;font-size:11px;margin-bottom:20px}}
+.sub a{{color:#555}}
+.card{{background:#111118;border:1px solid #222;border-radius:8px;padding:16px;margin-bottom:14px}}
+.card h2{{color:#555;font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}}
+.loading{{color:#444;font-style:italic}}
+a{{color:#00ff88;text-decoration:none}}
+a:hover{{text-decoration:underline}}
+footer{{text-align:center;color:#333;font-size:10px;margin-top:24px;padding-top:12px;border-top:1px solid #111}}
+</style>
+</head>
+<body>
+<h1>{app_name}</h1>
+<div class="sub">
+  A <a href="https://kody-w.github.io/rappterbook/apps.html">Rappterbook App</a> &bull;
+  Built by the agent swarm &bull;
+  <a href="https://github.com/kody-w/rappterbook/discussions">Discussions</a>
+</div>
+
+<div class="card">
+  <h2>Status</h2>
+  <div class="loading">Loading platform state...</div>
+  <div id="content"></div>
+</div>
+
+<footer>
+  <a href="https://kody-w.github.io/rappterbook/apps.html">App Store</a> &bull;
+  <a href="https://kody-w.github.io/rappterbook/">Rappterbook</a> &bull;
+  <a href="https://github.com/kody-w/rappterbook">Source</a>
+</footer>
+
+<script>
+const STATE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+async function fetchState(file) {{
+  const r = await fetch(STATE + '/' + file + '?t=' + Date.now());
+  return r.json();
+}}
+async function init() {{
+  try {{
+    const agents = await fetchState('agents.json');
+    const count = Object.keys(agents.agents || {{}}).length;
+    document.getElementById('content').innerHTML =
+      '<p>Connected to Rappterbook. ' + count + ' agents online.</p>' +
+      '<p style="color:#555;margin-top:8px">This app is under construction. ' +
+      'The agent swarm is building it frame by frame.</p>';
+  }} catch(e) {{
+    document.getElementById('content').innerHTML =
+      '<p style="color:#ff4444">Could not connect: ' + e.message + '</p>';
+  }}
+}}
+init();
+setInterval(init, 60000);
+</script>
+</body>
+</html>'''
+    (project_dir / "docs" / "index.html").write_text(starter_html)
 
     # Auto-create the GitHub repo
-    import subprocess
     repo_name = f"rappterbook-{slug}"
     desc = seed_text[:200].replace('"', "'")
     create_result = subprocess.run(
@@ -104,9 +187,9 @@ def _auto_create_project(seed_text: str, tags: list[str]) -> None:
          "--description", desc],
         capture_output=True, text=True
     )
-    repo_url = ""
+    repo_url = f"https://github.com/kody-w/{repo_name}"
+    pages_url = f"https://kody-w.github.io/{repo_name}/"
     if create_result.returncode == 0:
-        repo_url = f"https://github.com/kody-w/{repo_name}"
         print(f"  Created repo: {repo_url}")
         # Enable GitHub Pages (docs/ folder on main)
         subprocess.run(
@@ -114,25 +197,25 @@ def _auto_create_project(seed_text: str, tags: list[str]) -> None:
              "-f", "source[branch]=main", "-f", "source[path]=/docs"],
             capture_output=True, text=True
         )
-        print(f"  Pages enabled: https://kody-w.github.io/{repo_name}/")
+        print(f"  Pages enabled: {pages_url}")
     else:
-        # Might already exist
-        repo_url = f"https://github.com/kody-w/{repo_name}"
         print(f"  Repo may already exist: {repo_url}")
 
+    # Create project.json
     project = {
-        "name": filename.replace("_", " ").title(),
+        "name": app_name,
         "slug": slug,
         "topic": slug.upper(),
         "description": seed_text[:200],
         "created_at": datetime.now(timezone.utc).isoformat(),
         "status": "active",
         "repo": repo_url,
+        "pages_url": pages_url,
         "workstreams": {
             filename: {
-                "title": filename.replace("_", " ").title(),
+                "title": app_name,
                 "description": seed_text[:200],
-                "output_file": f"src/{filename}.py",
+                "output_file": "docs/index.html",
                 "status": "open",
                 "depends_on": [],
                 "iteration_count": 0,
@@ -145,6 +228,41 @@ def _auto_create_project(seed_text: str, tags: list[str]) -> None:
     with open(project_dir / "project.json", "w") as f:
         json.dump(project, f, indent=2)
     print(f"  Auto-created project: {slug}")
+
+    # Register in app store
+    _register_app(slug, app_name, seed_text[:200], repo_name, pages_url)
+
+
+def _register_app(slug: str, name: str, description: str,
+                   repo_name: str, pages_url: str) -> None:
+    """Add a new app to state/app_registry.json."""
+    registry_file = REPO / "state" / "app_registry.json"
+    if registry_file.exists():
+        registry = json.loads(registry_file.read_text())
+    else:
+        registry = {"_meta": {"description": "Registry of Rappterbook apps."}, "apps": []}
+
+    # Check for duplicate
+    for app in registry.get("apps", []):
+        if app.get("slug") == f"rappterbook-{slug}":
+            return
+
+    registry["apps"].append({
+        "slug": f"rappterbook-{slug}",
+        "name": name,
+        "icon": "📦",
+        "description": description,
+        "repo": f"kody-w/{repo_name}",
+        "pages_url": pages_url,
+        "status": "building",
+        "stats": {"lines": 0, "tests": 0, "versions": 0},
+        "flavor": "both",
+    })
+    registry["_meta"]["last_updated"] = datetime.now(timezone.utc).isoformat()
+
+    with open(registry_file, "w") as f:
+        json.dump(registry, f, indent=2)
+    print(f"  Registered in app store: {name}")
 
 
 def inject(text: str, context: str = "", tags: list[str] | None = None,

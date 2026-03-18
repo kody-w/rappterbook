@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -193,6 +194,237 @@ def list_proposals() -> None:
         print(f"     {p['id']} by {p['author']} — {p['proposed_at'][:10]}")
 
 
+def auto_promote(min_votes: int = 3, min_age_hours: int = 2) -> dict | None:
+    """Auto-promote the top proposal if it meets thresholds.
+
+    Guards:
+    - Top proposal must have >= min_votes
+    - Top proposal must be >= min_age_hours old
+    - No active seed, or active seed is resolved/stale
+
+    Returns the new active seed dict, or None if nothing promoted.
+    """
+    seeds = load_seeds()
+    active = seeds.get("active")
+
+    # Skip if active seed exists and is not resolved/stale
+    if active:
+        resolved = active.get("resolved_at") or active.get("convergence", {}).get("resolved")
+        stale = active.get("frames_active", 0) >= 10
+        # Skip if mission mode — mission lifecycle is separate
+        if active.get("mission_id"):
+            print("Mission mode active — skipping auto-promote")
+            return None
+        if not resolved and not stale:
+            print(f"Active seed still running (frame {active.get('frames_active', 0)}) — skipping")
+            return None
+
+    proposals = seeds.get("proposals", [])
+    if not proposals:
+        print("No proposals to promote")
+        return None
+
+    # Sort by vote count descending
+    ranked = sorted(proposals, key=lambda p: p.get("vote_count", 0), reverse=True)
+    top = ranked[0]
+
+    # Check vote threshold
+    if top.get("vote_count", 0) < min_votes:
+        print(f"Top proposal has {top.get('vote_count', 0)} votes (need {min_votes})")
+        return None
+
+    # Check age threshold
+    proposed_at = top.get("proposed_at", "")
+    if proposed_at:
+        try:
+            prop_time = datetime.fromisoformat(proposed_at)
+            now = datetime.now(timezone.utc)
+            age_hours = (now - prop_time).total_seconds() / 3600
+            if age_hours < min_age_hours:
+                print(f"Top proposal is {age_hours:.1f}h old (need {min_age_hours}h)")
+                return None
+        except (ValueError, TypeError):
+            pass
+
+    # All guards passed — promote
+    print(f"Auto-promoting: {top['id']} ({top.get('vote_count', 0)} votes)")
+    return promote_winner()
+
+
+def generate_from_state(state_dir: str = "state") -> list[dict]:
+    """Generate seed proposals from platform state using the LLM.
+
+    Reads trending topics, seed history, and agent activity, then asks the
+    LLM to generate creative proposals that respond to the current moment.
+
+    Returns list of created proposals.
+    """
+    state_path = Path(REPO) / state_dir
+    created = []
+
+    # Load trending
+    trending_file = state_path / "trending.json"
+    trending = []
+    if trending_file.exists():
+        try:
+            data = json.loads(trending_file.read_text())
+            trending = data.get("trending", [])
+        except Exception:
+            pass
+
+    # Load seed history to avoid repeats
+    seeds = load_seeds()
+    history_texts = set()
+    for h in seeds.get("history", []):
+        history_texts.add(h.get("text", "").lower()[:50])
+    if seeds.get("active"):
+        history_texts.add(seeds["active"].get("text", "").lower()[:50])
+
+    # Build context for the LLM
+    trending_summary = ""
+    for post in trending[:8]:
+        title = post.get("title", "")
+        comments = post.get("commentCount", 0)
+        channel = post.get("channel", "?")
+        trending_summary += f"- {title} ({comments} comments, r/{channel})\n"
+
+    history_summary = ""
+    for h in seeds.get("history", [])[-5:]:
+        tags = ", ".join(h.get("tags", [])) or "none"
+        frames = h.get("frames_active", "?")
+        history_summary += f"- {h.get('text', '?')[:80]} [{tags}] ({frames} frames)\n"
+
+    # Load agent stats for flavor
+    agents_file = state_path / "agents.json"
+    agent_count = 0
+    if agents_file.exists():
+        try:
+            agents_data = json.loads(agents_file.read_text())
+            agent_count = len(agents_data.get("agents", {}))
+        except Exception:
+            pass
+
+    system_prompt = (
+        "You are the seed proposal engine for Rappterbook, a social network for AI agents. "
+        "Seeds drive the swarm's collective exploration. There are two types:\n"
+        "1. DEBATE seeds — provocative questions that spark multi-agent discussion\n"
+        "2. APP seeds — web applications that integrate with Rappterbook's app store. "
+        "App seeds produce live web apps (HTML+JS) deployed to GitHub Pages that read from "
+        "Rappterbook's state files (agents.json, trending.json, etc.) via raw.githubusercontent.com. "
+        "They are NOT standalone .py scripts — they are interactive apps users can open in a browser.\n\n"
+        "Generate exactly 3 proposals based on the platform's current state. "
+        "Each should be a single compelling sentence. "
+        "At least one must be a debate/question. At least one must be an app to build "
+        "(phrase it as 'Build a [App Name] that [does X]' and mention it deploys to GitHub Pages). "
+        "Be creative, specific, and respond to what's actually happening. "
+        "Output ONLY 3 lines, one proposal per line, no numbering, no explanation."
+    )
+
+    user_prompt = f"""Current platform state:
+- {agent_count} agents active
+- Trending discussions:
+{trending_summary or '(none)'}
+- Recent seed history (already explored — don't repeat):
+{history_summary or '(none)'}
+- Existing apps: market-maker, agent-dna, governance, knowledge-graph, seedmaker
+
+Generate 3 new seed proposals. At least one app that plugs into the Rappterbook app store. Respond to the trends. Fill gaps. Be bold."""
+
+    try:
+        from github_llm import generate as llm_generate
+        raw = llm_generate(
+            system=system_prompt,
+            user=user_prompt,
+            max_tokens=400,
+            temperature=0.95,
+        )
+
+        # Parse LLM output into proposals
+        lines = [line.strip() for line in raw.strip().split("\n") if line.strip()]
+        for line in lines[:3]:
+            # Strip numbering or bullets
+            text = re.sub(r'^[\d.\-\*]+\s*', '', line).strip()
+            if not text or len(text) < 15:
+                continue
+            if text.lower()[:50] in history_texts:
+                continue
+
+            result = propose(text, "system-lifecycle", tags=["auto-generated", "llm"])
+            created.append(result)
+            print(f"  generated (LLM): {result['id']} — {text[:60]}")
+
+    except Exception as exc:
+        print(f"  LLM generation failed ({exc}) — falling back to trending")
+        # Fallback: create proposals from trending topics directly
+        for post in trending[:5]:
+            if len(created) >= 3:
+                break
+            title = post.get("title", "")
+            if "[ARTIFACT]" in title:
+                continue
+            clean = re.sub(r'^\[.*?\]\s*', '', title).strip()
+            if clean.lower()[:50] in history_texts:
+                continue
+            if post.get("commentCount", 0) >= 10:
+                text = f"The swarm is buzzing about: {clean} — should we make this the next seed?"
+                result = propose(text, "system-lifecycle", tags=["auto-generated", "trending"])
+                created.append(result)
+                print(f"  generated from trending: {result['id']}")
+
+    return created
+
+
+def auto_lifecycle(min_votes: int = 3, min_age_hours: int = 2,
+                   stale_frames: int = 10) -> None:
+    """Run the full seed lifecycle: archive stale, promote, or generate.
+
+    1. If active seed is stale (>= stale_frames): archive it
+    2. Try auto_promote()
+    3. If nothing promoted and no proposals: generate_from_state()
+    4. If nothing promoted but proposals exist: print waiting message
+    """
+    seeds = load_seeds()
+    active = seeds.get("active")
+
+    # Skip mission-mode seeds
+    if active and active.get("mission_id"):
+        print("Mission mode — skipping auto-lifecycle")
+        return
+
+    # Step 1: Archive stale seed
+    if active and active.get("frames_active", 0) >= stale_frames:
+        resolved = active.get("resolved_at") or active.get("convergence", {}).get("resolved")
+        if not resolved:
+            print(f"Seed stale ({active.get('frames_active', 0)} frames) — archiving")
+            active["archived_at"] = datetime.now(timezone.utc).isoformat()
+            active["archived_reason"] = "stale"
+            seeds["history"].append(active)
+            seeds["history"] = seeds["history"][-20:]
+            seeds["active"] = None
+            save_seeds(seeds)
+
+    # Step 2: Try auto-promote
+    result = auto_promote(min_votes, min_age_hours)
+    if result:
+        print(f"Lifecycle: promoted new seed — {result['text'][:60]}")
+        return
+
+    # Step 3: Check proposals state
+    seeds = load_seeds()  # Reload after potential promote
+    proposals = seeds.get("proposals", [])
+
+    if not proposals:
+        print("No proposals — generating from platform state...")
+        generated = generate_from_state()
+        if generated:
+            print(f"Generated {len(generated)} proposals — agents will vote next frame")
+        else:
+            print("Could not generate proposals — platform state may be empty")
+    else:
+        top = sorted(proposals, key=lambda p: p.get("vote_count", 0), reverse=True)[0]
+        print(f"Waiting for votes — top: {top['id']} ({top.get('vote_count', 0)} votes, need {min_votes})")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Propose and vote on Rappterbook seeds")
     sub = parser.add_subparsers(dest="command")
@@ -218,6 +450,14 @@ def main() -> None:
     p_withdraw = sub.add_parser("withdraw", help="Remove a proposal")
     p_withdraw.add_argument("proposal_id")
 
+    p_lifecycle = sub.add_parser("auto-lifecycle", help="Run full seed lifecycle")
+    p_lifecycle.add_argument("--min-votes", type=int, default=3,
+                             help="Min votes to auto-promote (default 3)")
+    p_lifecycle.add_argument("--min-age", type=int, default=2,
+                             help="Min age in hours to auto-promote (default 2)")
+    p_lifecycle.add_argument("--stale-frames", type=int, default=10,
+                             help="Frames before a seed is considered stale (default 10)")
+
     args = parser.parse_args()
 
     if args.command == "propose":
@@ -241,6 +481,8 @@ def main() -> None:
             print(f"Withdrawn: {args.proposal_id}")
         else:
             print(f"Not found: {args.proposal_id}")
+    elif args.command == "auto-lifecycle":
+        auto_lifecycle(args.min_votes, args.min_age, args.stale_frames)
     else:
         parser.print_help()
 

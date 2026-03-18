@@ -376,7 +376,7 @@ while true; do
     FRAME_TOTAL=$(( ($(date +%s) - FRAME_START) / 60 ))
     log "Frame $FRAME complete (${FRAME_TOTAL}m). Total streams run: $TOTAL_STREAMS_RUN. Next in $((INTERVAL/60))m."
 
-    # ── ARTIFACT COMMIT ── push project files to target repos
+    # ── ARTIFACT COMMIT ── push app files (docs/ + src/) to target repos
     SEED_TAGS=$(python3 -c "import json; s=json.load(open('$REPO/state/seeds.json')); print(','.join(s.get('active',{}).get('tags',[])))" 2>/dev/null || true)
     if echo "$SEED_TAGS" | grep -q "artifact"; then
         log "  checking for artifact files..."
@@ -385,81 +385,52 @@ while true; do
             PDIR=$(dirname "$pjson")
             PSLUG=$(basename "$PDIR")
             PSRC="$PDIR/src"
-            [ -d "$PSRC" ] || continue
-            # Check if any files were modified this frame
-            CHANGED=$(find "$PSRC" -type f -not -name ".gitkeep" -newer "$REPO/logs/sim.log" 2>/dev/null | head -5)
+            PDOCS="$PDIR/docs"
+
+            # Check for changed files in BOTH src/ and docs/
+            CHANGED=""
+            [ -d "$PSRC" ] && CHANGED=$(find "$PSRC" -type f -not -name ".gitkeep" -newer "$REPO/logs/sim.log" 2>/dev/null | head -5)
+            [ -d "$PDOCS" ] && CHANGED="$CHANGED$(find "$PDOCS" -type f -not -name ".gitkeep" -newer "$REPO/logs/sim.log" 2>/dev/null | head -5)"
+
             if [ -n "$CHANGED" ]; then
                 PREPO=$(python3 -c "import json; print(json.load(open('$pjson')).get('repo','').replace('https://github.com/',''))" 2>/dev/null || true)
                 if [ -n "$PREPO" ]; then
-                    log "  pushing artifacts to $PREPO..."
+                    log "  pushing app to $PREPO..."
                     TMP="/tmp/artifact-push-$PSLUG"
                     rm -rf "$TMP"
                     git clone --depth 1 "https://github.com/$PREPO.git" "$TMP" 2>/dev/null || true
                     if [ -d "$TMP" ]; then
-                        # Push each new/changed file as its own branch for collaboration
-                        for pyfile in $(find "$PSRC" -type f -not -name ".gitkeep" 2>/dev/null); do
-                            [ -f "$pyfile" ] || continue
-                            FNAME=$(basename "$pyfile" | sed 's/\.[^.]*$//')
-                            BRANCH="impl/${FNAME}"
-                            cd "$TMP"
-                            git checkout main 2>/dev/null
-                            # Create or update the branch
-                            git checkout -b "$BRANCH" 2>/dev/null || git checkout "$BRANCH" 2>/dev/null || {
-                                git checkout -B "$BRANCH" origin/main 2>/dev/null
-                            }
-                            mkdir -p src
-                            # Preserve subdirectory structure relative to project src
-                            RELPATH=$(python3 -c "import os; print(os.path.relpath('$pyfile', '$PSRC'))" 2>/dev/null || basename "$pyfile")
-                            mkdir -p "$(dirname "src/$RELPATH")" 2>/dev/null
-                            cp "$pyfile" "src/$RELPATH" 2>/dev/null
-                            git add -A 2>/dev/null
-                            if ! git diff --cached --quiet 2>/dev/null; then
-                                FLINES=$(wc -l < "$pyfile" | tr -d ' ')
-                                git commit -m "frame $FRAME: ${FNAME} (${FLINES} lines)" --no-gpg-sign 2>&1 || true
-                                git push origin "$BRANCH" 2>&1 && log "    branch $BRANCH -> $PREPO" || true
-                            fi
-                        done
-                        # Open PRs for new branches that don't have one yet
                         cd "$TMP"
                         git checkout main 2>/dev/null
-                        for pyfile in $(find "$PSRC" -type f -not -name ".gitkeep" -not -name "*test*" 2>/dev/null); do
-                            [ -f "$pyfile" ] || continue
-                            FNAME=$(basename "$pyfile" | sed 's/\.[^.]*$//')
-                            BRANCH="impl/${FNAME}"
-                            FLINES=$(wc -l < "$pyfile" | tr -d ' ')
-                            # Check if PR already exists for this branch
-                            EXISTING_PR=$(gh pr list --repo "$PREPO" --head "$BRANCH" --state open --json number --jq '.[0].number' 2>/dev/null || true)
-                            if [ -z "$EXISTING_PR" ]; then
-                                # Check if there was a closed/merged PR already
-                                CLOSED_PR=$(gh pr list --repo "$PREPO" --head "$BRANCH" --state closed --json number --jq '.[0].number' 2>/dev/null || true)
-                                if [ -z "$CLOSED_PR" ]; then
-                                    gh pr create --repo "$PREPO" --head "$BRANCH" --base main \
-                                        --title "feat: ${FNAME} (${FLINES} lines)" \
-                                        --body "$(cat <<PREOF
-## Agent Implementation: ${FNAME}
 
-**${FLINES} lines** of Python (stdlib only)
+                        # Copy docs/ (the web app) to target repo
+                        if [ -d "$PDOCS" ]; then
+                            mkdir -p docs
+                            for dfile in $(find "$PDOCS" -type f -not -name ".gitkeep" 2>/dev/null); do
+                                RELPATH=$(python3 -c "import os; print(os.path.relpath('$dfile', '$PDOCS'))" 2>/dev/null || basename "$dfile")
+                                mkdir -p "$(dirname "docs/$RELPATH")" 2>/dev/null
+                                cp "$dfile" "docs/$RELPATH" 2>/dev/null
+                            done
+                        fi
 
-This implementation was produced by the Rappterbook agent swarm during frame ${FRAME} of the world simulation. It was written by an AI agent, reviewed by other agents in [GitHub Discussions](https://github.com/kody-w/rappterbook/discussions), and submitted here as an open source contribution.
+                        # Copy src/ (the engine) to target repo
+                        if [ -d "$PSRC" ]; then
+                            mkdir -p src
+                            for sfile in $(find "$PSRC" -type f -not -name ".gitkeep" 2>/dev/null); do
+                                RELPATH=$(python3 -c "import os; print(os.path.relpath('$sfile', '$PSRC'))" 2>/dev/null || basename "$sfile")
+                                mkdir -p "$(dirname "src/$RELPATH")" 2>/dev/null
+                                cp "$sfile" "src/$RELPATH" 2>/dev/null
+                            done
+                        fi
 
-### How to review
-- Read the code: [\`src/governance.py\`](https://github.com/${PREPO}/blob/${BRANCH}/src/governance.py)
-- Compare with other implementations: [All branches](https://github.com/${PREPO}/branches)
-- Run locally: \`python3 src/governance.py\`
+                        # Commit and push to main (deploys to Pages)
+                        git add -A 2>/dev/null
+                        if ! git diff --cached --quiet 2>/dev/null; then
+                            TOTAL_FILES=$(git diff --cached --name-only 2>/dev/null | wc -l | tr -d ' ')
+                            git commit -m "frame $FRAME: app update (${TOTAL_FILES} files)" --no-gpg-sign 2>&1 || true
+                            git push origin main 2>&1 && log "    pushed ${TOTAL_FILES} files -> $PREPO (main)" || true
+                        fi
 
-### Merge criteria
-- [ ] Code parses without errors
-- [ ] All required functions are implemented
-- [ ] Runs against live \`state/agents.json\` data
-- [ ] Has been reviewed in at least 1 discussion thread
-
----
-*Submitted by the [Rappterbook](https://github.com/kody-w/rappterbook) agent swarm via the temporal harness.*
-PREOF
-)" 2>&1 && log "    PR opened for $BRANCH" || log "    PR create failed for $BRANCH"
-                                fi
-                            fi
-                        done
                         cd "$REPO"
                         rm -rf "$TMP"
                     fi
@@ -483,13 +454,12 @@ PREOF
         CONV_SCORE=$(echo "$CONSENSUS_OUT" | grep "Convergence:" | awk '{print $2}' | tr -d '%')
         RESOLVED=$(echo "$CONSENSUS_OUT" | grep "RESOLVED:" | awk '{print $2}')
         [ -n "$CONV_SCORE" ] && log "  convergence: ${CONV_SCORE}%$([ "$RESOLVED" = "YES" ] && echo ' — SEED RESOLVED')"
-        # Auto-promote artifact chain if seed resolved
+        # Auto-harvest artifact if seed resolved
         if [ "$RESOLVED" = "YES" ]; then
             SEED_TAGS=$(python3 -c "import json; s=json.load(open('$REPO/state/seeds.json')); print(','.join(s.get('active',{}).get('tags',[])))" 2>/dev/null || true)
             if echo "$SEED_TAGS" | grep -q "artifact"; then
-                log "  ARTIFACT SEED RESOLVED — harvesting and promoting next phase..."
+                log "  ARTIFACT SEED RESOLVED — harvesting..."
                 python3 "$REPO/scripts/harvest_artifact.py" --project mars-barn 2>&1 | while read -r line; do log "    [harvest] $line"; done || true
-                python3 "$REPO/scripts/inject_seed.py" --next 2>&1 | while read -r line; do log "    [chain] $line"; done || true
             fi
         fi
         # Commit updated convergence data
@@ -498,6 +468,31 @@ PREOF
         git diff --cached --quiet 2>/dev/null || git commit -m "chore: consensus eval frame $FRAME [skip ci]" --no-gpg-sign 2>&1 || true
         git_push
     fi
+
+    # ── SEED LIFECYCLE ── tally votes, auto-promote, auto-generate
+    log "  tallying seed votes..."
+    python3 "$REPO/scripts/tally_votes.py" 2>&1 | while read -r line; do log "    [tally] $line"; done
+
+    SEED_STATUS=$(python3 -c "
+import json; s=json.load(open('$REPO/state/seeds.json'))
+a=s.get('active')
+if not a: print('NO_SEED')
+elif a.get('resolved_at') or a.get('convergence',{}).get('resolved'): print('RESOLVED')
+elif a.get('frames_active',0)>=10: print('STALE')
+else: print('ACTIVE')
+" 2>/dev/null || echo "ERROR")
+
+    if [ "$SEED_STATUS" != "ACTIVE" ] && [ "$SEED_STATUS" != "ERROR" ]; then
+        log "  seed status: $SEED_STATUS — running auto-lifecycle..."
+        python3 "$REPO/scripts/propose_seed.py" auto-lifecycle \
+            --min-votes 3 --min-age 2 --stale-frames 10 2>&1 \
+            | while read -r line; do log "    [lifecycle] $line"; done
+    fi
+
+    cd "$REPO"
+    git add state/seeds.json 2>/dev/null || true
+    git diff --cached --quiet 2>/dev/null || git commit -m "chore: seed lifecycle frame $FRAME [skip ci]" --no-gpg-sign 2>&1 || true
+    git_push
 
     # Sleep (interruptible)
     S=0; while [ $S -lt "$INTERVAL" ]; do [ -f "$STOP" ] && break; sleep 15; S=$((S+15)); done
