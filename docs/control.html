@@ -203,24 +203,44 @@ async function ghAPI(ep,opts={}){
   return r.json();
 }
 
+// Local chat cache
+function getLocalChat(){try{return JSON.parse(localStorage.getItem('ctrl_chat')||'[]')}catch(e){return[]}}
+function saveLocalChat(msgs){localStorage.setItem('ctrl_chat',JSON.stringify(msgs.slice(-50)))}
+function addLocalMsg(from,body){const msgs=getLocalChat();msgs.push({from,body,ts:new Date().toISOString()});saveLocalChat(msgs);renderChat()}
+
 async function sendMsg(text){
   const input=document.getElementById('msg');
   const msg=text||input.value.trim();
   if(!msg){toast('Type something');return}
   if(!GH_TOKEN){toast('Sign in first');return}
+  // Show immediately in local cache
+  addLocalMsg('YOU',msg);
+  if(!text)input.value='';
   try{
     await ghAPI('repos/'+REPO+'/issues',{method:'POST',body:{
       title:'[CTRL] '+(msg.length>50?msg.slice(0,50)+'...':msg),
       body:msg,
       labels:['operator-directive']
     }});
-    if(!text)input.value='';
     toast('Sent');
-    setTimeout(refresh,2000);
-  }catch(e){toast('Failed: '+e.message)}
+  }catch(e){
+    addLocalMsg('SYSTEM','Failed to send: '+e.message);
+    toast('Failed: '+e.message);
+  }
 }
 
 function quickSend(msg){sendMsg(msg)}
+
+function renderChat(){
+  const chatEl=document.getElementById('chat');
+  const msgs=getLocalChat();
+  if(!msgs.length){chatEl.innerHTML='<div class="empty">No messages yet. Send one below.</div>';return}
+  chatEl.innerHTML=msgs.slice(-20).map(m=>{
+    const cls=m.from==='OPERATOR'?'operator':(m.from==='SYSTEM'?'':'owner');
+    return `<div class="chat-msg"><div class="from ${cls}">${esc(m.from)}</div><div class="body">${esc(m.body)}</div><div class="ts">${ago(m.ts)}</div></div>`;
+  }).join('');
+  chatEl.scrollTop=chatEl.scrollHeight;
+}
 
 async function refresh(){
   document.getElementById('time').textContent=new Date().toLocaleTimeString();
@@ -237,26 +257,29 @@ async function refresh(){
   document.getElementById('c-prs').innerHTML=`<div class="n">${openPRs}/${mergedPRs}</div><div class="l">O/M</div>`;
   document.getElementById('c-files').innerHTML=`<div class="n">${files.filter(f=>f.path.startsWith('src/')||f.path.startsWith('docs/')).length}</div><div class="l">Files</div>`;
 
-  // Chat
+  // Chat — merge local cache with GitHub Issues (operator replies)
   if(GH_TOKEN){
     try{
-      const issues=await ghAPI('repos/'+REPO+'/issues?labels=operator-directive&state=all&per_page=15&sort=created&direction=desc');
-      const chatEl=document.getElementById('chat');
-      if(!issues||!issues.length){chatEl.innerHTML='<div class="empty">No messages yet. Send one below.</div>';return}
-      let html='';
-      for(const iss of issues.slice(0,10)){
-        html+=`<div class="chat-msg"><div class="from owner">YOU</div><div class="body">${esc(iss.body||'')}</div><div class="ts">${ago(iss.created_at)} &bull; ${iss.state}</div></div>`;
+      const issues=await ghAPI('repos/'+REPO+'/issues?labels=operator-directive&state=all&per_page=15&sort=created&direction=desc').catch(()=>[]);
+      // Pull operator replies into local cache
+      for(const iss of (issues||[])){
         if(iss.comments>0){
           try{
             const comments=await ghAPI('repos/'+REPO+'/issues/'+iss.number+'/comments?per_page=3');
             for(const c of (comments||[])){
-              html+=`<div class="chat-msg"><div class="from operator">OPERATOR</div><div class="body">${esc(c.body||'')}</div><div class="ts">${ago(c.created_at)}</div></div>`;
+              // Only add if not already cached (check by timestamp)
+              const local=getLocalChat();
+              if(!local.some(m=>m.ts===c.created_at&&m.from==='OPERATOR')){
+                const msgs=getLocalChat();
+                msgs.push({from:'OPERATOR',body:c.body||'',ts:c.created_at});
+                saveLocalChat(msgs);
+              }
             }
           }catch(e){}
         }
       }
-      chatEl.innerHTML=html;
-    }catch(e){document.getElementById('chat').innerHTML='<div class="empty">Error loading messages</div>'}
+    }catch(e){}
+    renderChat();
   }
 }
 
