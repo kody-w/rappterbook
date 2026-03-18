@@ -299,64 +299,59 @@ def _resolve_project_slug(active: dict) -> tuple[str, str]:
     return "", ""
 
 
-def _build_project_inventory(slug: str) -> str:
-    """Build a live inventory of what exists in the project directory.
+def _build_remote_inventory(repo_path: str) -> str:
+    """Build inventory from the TARGET repo's main branch via gh CLI.
 
-    This tells agents exactly what files exist and how big they are,
-    so they can build on what's there instead of starting from scratch.
+    Shows agents what's already on main so they can extend it, not rewrite.
     """
-    project_dir = REPO / "projects" / slug
-    if not project_dir.exists():
+    import subprocess
+
+    try:
+        result = subprocess.run(
+            ["gh", "api", f"repos/{repo_path}/git/trees/main",
+             "--jq", '.tree[] | select(.type=="blob") | "\\(.size) \\(.path)"'],
+            capture_output=True, text=True, timeout=10
+        )
+        if result.returncode != 0 or not result.stdout.strip():
+            return ""
+    except Exception:
         return ""
 
-    lines = ["\n## Current Project State (what exists right now)\n"]
-    lines.append(f"**Project directory:** `projects/{slug}/`\n")
+    lines = [f"\n## What exists in the target repo ({repo_path}) on main\n"]
+    files = []
+    for line in result.stdout.strip().split("\n"):
+        parts = line.split(" ", 1)
+        if len(parts) == 2:
+            size = int(parts[0])
+            path = parts[1]
+            size_str = f"{size // 1024}kb" if size > 1024 else f"{size}b"
+            files.append(f"- `{path}` ({size_str})")
 
-    # docs/ inventory
-    docs_dir = project_dir / "docs"
-    if docs_dir.exists():
-        doc_files = list(docs_dir.rglob("*"))
-        doc_files = [f for f in doc_files if f.is_file() and f.name != ".gitkeep"]
-        if doc_files:
-            lines.append("**docs/ (web app — the deliverable):**")
-            for f in sorted(doc_files):
-                rel = f.relative_to(docs_dir)
-                size = f.stat().st_size
-                if size > 1024:
-                    size_str = f"{size // 1024}kb"
-                else:
-                    size_str = f"{size}b"
-                lines.append(f"- `docs/{rel}` ({size_str})")
-        else:
-            lines.append("**docs/ — EMPTY.** No web app yet. This is your first priority: create `docs/index.html`.")
+    if files:
+        for f in files:
+            lines.append(f)
+        lines.append("")
+        lines.append(f"**Clone the repo, read these files, then extend them.** Do NOT rewrite from scratch.")
     else:
-        lines.append("**docs/ — MISSING.** Create the docs/ directory and write `docs/index.html`.")
-
-    # src/ inventory
-    src_dir = project_dir / "src"
-    if src_dir.exists():
-        src_files = list(src_dir.rglob("*"))
-        src_files = [f for f in src_files if f.is_file() and f.name != ".gitkeep"]
-        if src_files:
-            lines.append("\n**src/ (engine code):**")
-            for f in sorted(src_files):
-                rel = f.relative_to(src_dir)
-                size = f.stat().st_size
-                size_str = f"{size // 1024}kb" if size > 1024 else f"{size}b"
-                lines.append(f"- `src/{rel}` ({size_str})")
+        lines.append("**Repo is empty.** You are building from scratch. Create the initial files.")
 
     lines.append("")
 
-    # Build order based on what's missing
-    has_html = docs_dir.exists() and any(
-        f.suffix == ".html" for f in docs_dir.rglob("*") if f.is_file()
-    )
-    if not has_html:
-        lines.append("**BUILD ORDER THIS FRAME:** Create `projects/{slug}/docs/index.html` — a working web app that fetches from Rappterbook state. This is the #1 priority. Without this, the artifact is incomplete.".replace("{slug}", slug))
-    else:
-        lines.append(f"**BUILD ORDER THIS FRAME:** Read the existing `projects/{slug}/docs/index.html`, then extend it. Add features, fix bugs, improve the UI. Do NOT rewrite from scratch.")
+    # Show open PRs
+    try:
+        pr_result = subprocess.run(
+            ["gh", "pr", "list", "--repo", repo_path, "--state", "open",
+             "--json", "number,title", "--jq", '.[] | "#\\(.number) \\(.title)"'],
+            capture_output=True, text=True, timeout=10
+        )
+        if pr_result.returncode == 0 and pr_result.stdout.strip():
+            lines.append("**Open PRs (review these before creating new ones):**")
+            for pr_line in pr_result.stdout.strip().split("\n")[:5]:
+                lines.append(f"- {pr_line}")
+            lines.append("")
+    except Exception:
+        pass
 
-    lines.append("")
     return "\n".join(lines)
 
 
@@ -427,8 +422,8 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
                         pass
                 artifact_section = artifact_section.replace("{REPO}", repo_path)
 
-                # Inject live inventory so agents know what exists
-                inventory = _build_project_inventory(slug)
+                # Inject remote repo inventory — what's on main in the TARGET repo
+                inventory = _build_remote_inventory(repo_path)
                 if inventory:
                     artifact_section += inventory
 

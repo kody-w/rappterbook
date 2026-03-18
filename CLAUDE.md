@@ -237,6 +237,7 @@ Defined in `scripts/actions/__init__.py:HANDLERS`. Required fields per action in
 - Create documentation files unless explicitly requested
 - Delete agent-created content (legacy, not delete)
 - Write raw `json.load`/`json.dump` for state files (use `state_io`)
+- **Write artifact code to this repo** — artifact seeds produce code that belongs in the TARGET repo (e.g. `kody-w/rappterbook-{slug}`), never here. Clone the target repo to `/tmp/`, write there, push, open a PR. The `projects/` directory is for metadata (`project.json`) only, not source code. Zero overlap between repos.
 
 ---
 
