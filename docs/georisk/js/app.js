@@ -5,15 +5,15 @@
 const BACKGROUND = 'https://unpkg.com/three-globe/example/img/night-sky.png';
 
 const PLANETS = {
-    "mercury": { name: "MERCURY", texture: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg", color: 0xaaaaaa, atmosColor: "rgba(255, 255, 255, 0.05)", atmosAlt: 0.05 },
-    "venus": { name: "VENUS", texture: "https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg", color: 0xffddaa, atmosColor: "rgba(234, 196, 121, 0.6)", atmosAlt: 0.2 },
-    "earth": { name: "EARTH", texture: "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg", color: 0xffffff, atmosColor: "rgba(56, 189, 248, 0.4)", atmosAlt: 0.15 },
-    "moon": { name: "MOON", texture: "https://upload.wikimedia.org/wikipedia/commons/d/db/Moonmap_from_clementine_data.png", color: 0xffffff, atmosColor: "rgba(200, 200, 200, 0.1)", atmosAlt: 0.05 },
-    "mars": { name: "MARS", texture: "https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg", color: 0xffffff, atmosColor: "rgba(239, 68, 68, 0.4)", atmosAlt: 0.15 },
-    "jupiter": { name: "JUPITER", texture: "https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg", color: 0xffffff, atmosColor: "rgba(217, 119, 6, 0.4)", atmosAlt: 0.25 },
-    "saturn": { name: "SATURN", texture: "https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg", color: 0xffffff, atmosColor: "rgba(253, 224, 71, 0.3)", atmosAlt: 0.25 },
-    "uranus": { name: "URANUS", texture: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg", color: 0xffffff, atmosColor: "rgba(6, 182, 212, 0.4)", atmosAlt: 0.2 },
-    "neptune": { name: "NEPTUNE", texture: "https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg", color: 0xffffff, atmosColor: "rgba(37, 99, 235, 0.4)", atmosAlt: 0.2 }
+    "mercury": { name: "MERCURY", texture: "https://www.solarsystemscope.com/textures/download/2k_mercury.jpg", color: 0xaaaaaa, atmosColor: "#ffffff", atmosAlt: 0.05 },
+    "venus": { name: "VENUS", texture: "https://www.solarsystemscope.com/textures/download/2k_venus_surface.jpg", color: 0xffddaa, atmosColor: "#eac479", atmosAlt: 0.2 },
+    "earth": { name: "EARTH", texture: "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg", color: 0xffffff, atmosColor: "#38bdf8", atmosAlt: 0.15 },
+    "moon": { name: "MOON", texture: "https://www.solarsystemscope.com/textures/download/2k_moon.jpg", color: 0xffffff, atmosColor: "#c8c8c8", atmosAlt: 0.05 },
+    "mars": { name: "MARS", texture: "https://www.solarsystemscope.com/textures/download/2k_mars.jpg", color: 0xffffff, atmosColor: "#ef4444", atmosAlt: 0.15 },
+    "jupiter": { name: "JUPITER", texture: "https://www.solarsystemscope.com/textures/download/2k_jupiter.jpg", color: 0xffffff, atmosColor: "#d97706", atmosAlt: 0.25 },
+    "saturn": { name: "SATURN", texture: "https://www.solarsystemscope.com/textures/download/2k_saturn.jpg", color: 0xffffff, atmosColor: "#fde047", atmosAlt: 0.25 },
+    "uranus": { name: "URANUS", texture: "https://www.solarsystemscope.com/textures/download/2k_uranus.jpg", color: 0xffffff, atmosColor: "#06b6d4", atmosAlt: 0.2 },
+    "neptune": { name: "NEPTUNE", texture: "https://www.solarsystemscope.com/textures/download/2k_neptune.jpg", color: 0xffffff, atmosColor: "#2563eb", atmosAlt: 0.2 }
 };
 
 let currentMode = "mars";
@@ -457,7 +457,7 @@ function updateResourcesUI(bodiesToDisplay) {
             card.innerHTML = `
                 <div class="card-header" style="color: #7dd3fc; font-weight: normal; font-size: 0.8em; margin: 0;">${key}
                 <span style="opacity:0.3; float:right;">${PLANETS[b].name}</span></div>
-                <div class="card-value" style="color: #e0f2fe; font-size: 1rem;">${value.toFixed(1)}</div>`;
+                <div class="card-value" style="color: #e0f2fe; font-size: 1rem;">${(Number(value) || 0).toFixed(1)}</div>`;
             resList.appendChild(card);
         });
     });
@@ -567,7 +567,7 @@ function openGroundView(colony, planetKey) {
     document.getElementById('ground-colony-name').textContent = colony.name;
     const pName = PLANETS[planetKey] ? PLANETS[planetKey].name : planetKey.toUpperCase();
     document.getElementById('ground-colony-stats').textContent =
-        `${pName} // LAT ${colony.lat.toFixed(1)} LNG ${colony.lng.toFixed(1)} // HP ${colony.health}%`;
+        `${pName} // LAT ${(Number(colony.lat) || 0).toFixed(1)} LNG ${(Number(colony.lng) || 0).toFixed(1)} // HP ${colony.health}%`;
 
     updateGroundHUD(colony, planetKey);
     buildGroundScene(colony, planetKey);
@@ -602,7 +602,7 @@ function updateGroundHUD(colony, planetKey) {
         </div>
         ${entries.map(([k, v]) => `<div class="ground-hud-item">
             <div class="ground-hud-label">${k}</div>
-            <div class="ground-hud-value">${v.toFixed(1)}</div>
+            <div class="ground-hud-value">${(Number(v) || 0).toFixed(1)}</div>
         </div>`).join('')}
     </div>`;
 }
