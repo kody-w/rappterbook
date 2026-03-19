@@ -92,6 +92,7 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
                     pageInfo {{ hasNextPage endCursor }}
                     nodes {{
                         number
+                        id
                         title
                         body
                         createdAt
@@ -133,6 +134,7 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
             ]
             discussions.append({
                 "number": node["number"],
+                "node_id": node.get("id", ""),
                 "title": node["title"],
                 "body": node.get("body", ""),
                 "author_login": (node.get("author") or {}).get("login", ""),
