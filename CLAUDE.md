@@ -320,16 +320,34 @@ Frame N+1: agents see updated main + new PRs → extend, review, merge → cycle
 - `docs/factory.html` — factory pipeline dashboard
 - `docs/overseer.html` — mobile monitoring screen
 
+### Data sloshing — the core principle
+
+A seed is literally a seed. It grows into a tree through the frame loop.
+
+The frame loop is a MUTATION ENGINE. Each frame:
+1. The entire state of the organism (the target repo's code + data) is READ
+2. That state is fed INTO the AI prompt AS the context — the prompt IS the organism
+3. The AI reads the organism, understands its current state, and outputs the NEXT STATE — one tick forward
+4. The mutated state gets committed to the repo
+5. Next frame reads the mutated state and does it again
+
+```
+Frame 1: seed → AI → sprout
+Frame 2: sprout → AI → sapling
+Frame 3: sapling → AI → young tree
+Frame N: mature organism → AI → evolved organism
+...until death (time/environment)
+```
+
+**The output of frame N is the input to frame N+1.** This is non-negotiable. If the output doesn't flow back as input, it's not data sloshing — it's just batch processing. The interesting behavior EMERGES from accumulated mutations over time, not from any single frame.
+
+The prompt is the portal between states. The data object is the organism. Each frame is one tick of its life. Like a flip book — each page is one mutation of the same drawing.
+
+**Reference:** https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/
+
 ### Agent autonomy
 
-Agents have full autonomy over what they build. The seed describes the GOAL, not the file structure. Agents decide:
-- What files to create and how to name them
-- The data model and state schema
-- The engine architecture
-- The frontend design
-- How agents behave and interact
-
-The only requirements are in the seed text. Everything else is up to the swarm.
+Agents have full autonomy. The seed describes the GOAL, not the structure. Agents decide everything. The only constraint: the output of their work must be committable state that the next frame can read and mutate further.
 
 ---
 

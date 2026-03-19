@@ -300,54 +300,62 @@ def _resolve_project_slug(active: dict) -> tuple[str, str]:
 
 
 def _build_remote_inventory(repo_path: str) -> str:
-    """Build inventory from the TARGET repo's main branch via gh CLI.
+    """Feed the organism's current state into the prompt.
 
-    Shows agents what's already on main so they can extend it, not rewrite.
+    This is data sloshing: the output of frame N becomes the input to frame N+1.
+    We read the actual STATE from the target repo and inject it into the prompt
+    so the agent can read the organism and mutate it one tick forward.
     """
     import subprocess
 
+    # Get the git log — the organism's recent history
+    lines = [f"\n## The organism's recent evolution ({repo_path})\n"]
+    try:
+        log_result = subprocess.run(
+            ["gh", "api", f"repos/{repo_path}/commits",
+             "--jq", '.[:5] | .[] | "- \\(.commit.message | split("\\n") | .[0])"'],
+            capture_output=True, text=True, timeout=10
+        )
+        if log_result.returncode == 0 and log_result.stdout.strip():
+            lines.append("**Recent mutations (git log):**")
+            lines.append(log_result.stdout.strip())
+            lines.append("")
+    except Exception:
+        pass
+
+    # Get file tree
     try:
         result = subprocess.run(
             ["gh", "api", f"repos/{repo_path}/git/trees/main",
              "--jq", '.tree[] | select(.type=="blob") | "\\(.size) \\(.path)"'],
             capture_output=True, text=True, timeout=10
         )
-        if result.returncode != 0 or not result.stdout.strip():
-            return ""
+        if result.returncode == 0 and result.stdout.strip():
+            lines.append("**Current anatomy (files):**")
+            for fline in result.stdout.strip().split("\n"):
+                parts = fline.split(" ", 1)
+                if len(parts) == 2:
+                    size = int(parts[0])
+                    path = parts[1]
+                    size_str = f"{size // 1024}kb" if size > 1024 else f"{size}b"
+                    lines.append(f"- `{path}` ({size_str})")
+            lines.append("")
+        else:
+            lines.append("**The organism has not been born yet.** This is frame 0. Create the first cells.\n")
     except Exception:
-        return ""
+        lines.append("**Could not read organism state.**\n")
 
-    lines = [f"\n## What exists in the target repo ({repo_path}) on main\n"]
-    files = []
-    for line in result.stdout.strip().split("\n"):
-        parts = line.split(" ", 1)
-        if len(parts) == 2:
-            size = int(parts[0])
-            path = parts[1]
-            size_str = f"{size // 1024}kb" if size > 1024 else f"{size}b"
-            files.append(f"- `{path}` ({size_str})")
-
-    if files:
-        for f in files:
-            lines.append(f)
-        lines.append("")
-        lines.append(f"**Clone the repo, read these files, then extend them.** Do NOT rewrite from scratch.")
-    else:
-        lines.append("**Repo is empty.** You are building from scratch. Create the initial files.")
-
-    lines.append("")
-
-    # Show open PRs
+    # Show PR reviews — feedback from the operator that should guide mutation
     try:
         pr_result = subprocess.run(
-            ["gh", "pr", "list", "--repo", repo_path, "--state", "open",
-             "--json", "number,title", "--jq", '.[] | "#\\(.number) \\(.title)"'],
+            ["gh", "pr", "list", "--repo", repo_path, "--state", "all",
+             "--json", "number,title,state,body",
+             "--jq", '.[:3] | .[] | "PR #\\(.number) [\\(.state)]: \\(.title)"'],
             capture_output=True, text=True, timeout=10
         )
         if pr_result.returncode == 0 and pr_result.stdout.strip():
-            lines.append("**Open PRs (review these before creating new ones):**")
-            for pr_line in pr_result.stdout.strip().split("\n")[:5]:
-                lines.append(f"- {pr_line}")
+            lines.append("**Recent PRs (read the reviews — they contain feedback for your mutation):**")
+            lines.append(pr_result.stdout.strip())
             lines.append("")
     except Exception:
         pass
