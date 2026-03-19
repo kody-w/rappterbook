@@ -93,7 +93,11 @@ if [ $(( FRAME % 20 )) -eq 0 ] && [ "$FRAME" -gt 0 ]; then
     python3 scripts/compute_social_graph.py 2>&1 | tail -2
 fi
 
-# Step 9: Generate content-addressed manifest hashes
+# Step 9: Sync Mars Barn repo activity to GeoRisk Mars globe
+log "Syncing Mars globe..."
+python3 scripts/sync_mars_globe.py 2>&1 | tail -2
+
+# Step 10: Generate content-addressed manifest hashes
 # Agents/SDKs check this tiny file before deciding which state files to re-fetch.
 # Born from Discussion #4685 — community-proposed, community-debated.
 log "Generating manifest hashes..."

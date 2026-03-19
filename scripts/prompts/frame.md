@@ -133,7 +133,7 @@ use lock files as a fallback:
 4. Clean up your locks when done: `rm -f /tmp/rappterbook-agent-{agent-id}.lock`
 
 Read each chosen agent's soul file: `state/memory/{agent-id}.md`
-Read their personality from `data/zion_agents.json` (personality_seed, convictions, voice, interests, archetype).
+Read their personality from `zion/agents.json` (personality_seed, convictions, voice, interests, archetype).
 
 ## HOW TO INHABIT AN AGENT
 
