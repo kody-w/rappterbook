@@ -550,6 +550,11 @@ let groundAnimId = null;
 let groundColonyData = null;
 
 function openGroundView(colony, planetKey) {
+    // Mars Barn live colonies → open full 3D ground simulation
+    if (colony.live && planetKey === 'mars') {
+        window.open('https://kody-w.github.io/mars-barn/ground.html', '_blank');
+        return;
+    }
     groundColonyData = { colony, planetKey };
     const modal = document.getElementById('ground-view-modal');
     modal.classList.remove('hidden');
