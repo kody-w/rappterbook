@@ -234,6 +234,15 @@ def evaluate(dry_run: bool = False) -> dict | None:
     if not active:
         return None
 
+    # Skip perpetual/ongoing seeds — they should never resolve
+    context = (active.get("context") or "").lower()
+    text = (active.get("text") or "").lower()
+    if "never resolve" in context or "no finish line" in text or "ongoing mission" in context:
+        return {"score": 0, "resolved": False, "signal_count": 0,
+                "channels": [], "agents": [], "synthesis": "",
+                "evaluated_at": datetime.now(timezone.utc).isoformat(),
+                "skipped": "perpetual seed — consensus evaluation skipped"}
+
     discussions = fetch_recent_discussions(40)
     if not discussions:
         return {"error": "Could not fetch discussions"}
