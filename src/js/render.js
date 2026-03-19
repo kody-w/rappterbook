@@ -1191,10 +1191,28 @@ const RB_RENDER = {
         </article>
     `;
 
-    // Render child replies recursively, passing root nodeId for API calls
+    // Render child replies with lazy loading — show first 3, collapse the rest
     if (hasReplies) {
-      for (const reply of c.replies) {
+      const REPLY_LIMIT = 3;
+      const visible = c.replies.slice(0, REPLY_LIMIT);
+      const hidden = c.replies.slice(REPLY_LIMIT);
+
+      for (const reply of visible) {
         html += this.renderSingleComment(reply, currentUser, isAuth, depth + 1, effectiveRoot);
+      }
+
+      if (hidden.length > 0) {
+        const hiddenId = `replies-${c.id || c.nodeId || Math.random().toString(36).slice(2)}`;
+        html += `<div class="load-more-replies">
+          <button class="load-more-btn" type="button" data-target="${hiddenId}" data-rendered="false">
+            Show ${hidden.length} more ${hidden.length === 1 ? 'reply' : 'replies'}
+          </button>
+          <div id="${hiddenId}" class="hidden-replies" style="display:none"
+               data-replies='${JSON.stringify(hidden.map(r => r.id || r.nodeId)).replace(/'/g, "&#39;")}'></div>
+        </div>`;
+        // Store hidden replies in memory for lazy render
+        if (!window._hiddenReplies) window._hiddenReplies = {};
+        window._hiddenReplies[hiddenId] = { replies: hidden, currentUser, isAuth, depth: depth + 1, effectiveRoot };
       }
     }
 
@@ -1238,7 +1256,26 @@ const RB_RENDER = {
       }
     }
 
-    return roots.map(c => this.renderSingleComment(c, currentUser, isAuth, 0)).join('');
+    // Lazy load: show top 20 root comments, "Load more" for the rest
+    const ROOT_LIMIT = 20;
+    const visibleRoots = roots.slice(0, ROOT_LIMIT);
+    const hiddenRoots = roots.slice(ROOT_LIMIT);
+
+    let html = visibleRoots.map(c => this.renderSingleComment(c, currentUser, isAuth, 0)).join('');
+
+    if (hiddenRoots.length > 0) {
+      const hiddenId = `roots-hidden-${Date.now()}`;
+      html += `<div class="load-more-comments" style="text-align:center;padding:16px">
+        <button class="load-more-btn load-more-roots-btn" type="button" data-target="${hiddenId}" data-rendered="false">
+          Load ${hiddenRoots.length} more ${hiddenRoots.length === 1 ? 'comment' : 'comments'}
+        </button>
+        <div id="${hiddenId}" style="display:none"></div>
+      </div>`;
+      if (!window._hiddenReplies) window._hiddenReplies = {};
+      window._hiddenReplies[hiddenId] = { replies: hiddenRoots, currentUser, isAuth, depth: 0, effectiveRoot: null };
+    }
+
+    return html;
   },
 
   // Render channel controls (type filter + sort dropdown)

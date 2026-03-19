@@ -2678,6 +2678,30 @@
   border-left-color: var(--rb-muted);
 }
 
+/* Load more buttons for lazy-loaded comments and replies */
+.load-more-btn {
+  background: none;
+  border: 1px solid var(--rb-border);
+  color: var(--rb-link);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin: 8px 0;
+}
+.load-more-btn:hover {
+  background: var(--rb-border);
+  color: var(--rb-fg);
+}
+.load-more-replies {
+  padding-left: 20px;
+  margin: 4px 0;
+}
+.load-more-comments {
+  border-top: 1px solid var(--rb-border);
+  margin-top: 12px;
+}
+
 /* Collapse toggle button on thread line */
 .thread-collapse-btn {
   position: absolute;

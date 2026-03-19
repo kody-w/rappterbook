@@ -3106,6 +3106,30 @@ footer a:hover {
   border-left-color: var(--rb-muted);
 }
 
+/* Load more buttons for lazy-loaded comments and replies */
+.load-more-btn {
+  background: none;
+  border: 1px solid var(--rb-border);
+  color: var(--rb-link);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin: 8px 0;
+}
+.load-more-btn:hover {
+  background: var(--rb-border);
+  color: var(--rb-fg);
+}
+.load-more-replies {
+  padding-left: 20px;
+  margin: 4px 0;
+}
+.load-more-comments {
+  border-top: 1px solid var(--rb-border);
+  margin-top: 12px;
+}
+
 /* Collapse toggle button on thread line */
 .thread-collapse-btn {
   position: absolute;
@@ -8506,10 +8530,28 @@ const RB_RENDER = {
         </article>
     `;
 
-    // Render child replies recursively, passing root nodeId for API calls
+    // Render child replies with lazy loading — show first 3, collapse the rest
     if (hasReplies) {
-      for (const reply of c.replies) {
+      const REPLY_LIMIT = 3;
+      const visible = c.replies.slice(0, REPLY_LIMIT);
+      const hidden = c.replies.slice(REPLY_LIMIT);
+
+      for (const reply of visible) {
         html += this.renderSingleComment(reply, currentUser, isAuth, depth + 1, effectiveRoot);
+      }
+
+      if (hidden.length > 0) {
+        const hiddenId = `replies-${c.id || c.nodeId || Math.random().toString(36).slice(2)}`;
+        html += `<div class="load-more-replies">
+          <button class="load-more-btn" type="button" data-target="${hiddenId}" data-rendered="false">
+            Show ${hidden.length} more ${hidden.length === 1 ? 'reply' : 'replies'}
+          </button>
+          <div id="${hiddenId}" class="hidden-replies" style="display:none"
+               data-replies='${JSON.stringify(hidden.map(r => r.id || r.nodeId)).replace(/'/g, "&#39;")}'></div>
+        </div>`;
+        // Store hidden replies in memory for lazy render
+        if (!window._hiddenReplies) window._hiddenReplies = {};
+        window._hiddenReplies[hiddenId] = { replies: hidden, currentUser, isAuth, depth: depth + 1, effectiveRoot };
       }
     }
 
@@ -8553,7 +8595,26 @@ const RB_RENDER = {
       }
     }
 
-    return roots.map(c => this.renderSingleComment(c, currentUser, isAuth, 0)).join('');
+    // Lazy load: show top 20 root comments, "Load more" for the rest
+    const ROOT_LIMIT = 20;
+    const visibleRoots = roots.slice(0, ROOT_LIMIT);
+    const hiddenRoots = roots.slice(ROOT_LIMIT);
+
+    let html = visibleRoots.map(c => this.renderSingleComment(c, currentUser, isAuth, 0)).join('');
+
+    if (hiddenRoots.length > 0) {
+      const hiddenId = `roots-hidden-${Date.now()}`;
+      html += `<div class="load-more-comments" style="text-align:center;padding:16px">
+        <button class="load-more-btn load-more-roots-btn" type="button" data-target="${hiddenId}" data-rendered="false">
+          Load ${hiddenRoots.length} more ${hiddenRoots.length === 1 ? 'comment' : 'comments'}
+        </button>
+        <div id="${hiddenId}" style="display:none"></div>
+      </div>`;
+      if (!window._hiddenReplies) window._hiddenReplies = {};
+      window._hiddenReplies[hiddenId] = { replies: hiddenRoots, currentUser, isAuth, depth: 0, effectiveRoot: null };
+    }
+
+    return html;
   },
 
   // Render channel controls (type filter + sort dropdown)
@@ -10299,6 +10360,8 @@ const RB_ROUTER = {
       this.attachReactionHandlers(params.number);
       this.attachReplyHandlers(params.number);
       this.attachCollapseHandlers();
+      this.attachLoadMoreHandlers();
+      this._currentDiscussionNumber = params.number;
       this.attachShareHandler();
       this.attachFlagHandler(params.number);
     } catch (error) {
@@ -10429,6 +10492,8 @@ const RB_ROUTER = {
     this.attachReactionHandlers(discussionNumber);
     this.attachReplyHandlers(discussionNumber);
     this.attachCollapseHandlers();
+    this.attachLoadMoreHandlers();
+    this._currentDiscussionNumber = discussionNumber;
   },
 
   // Wire up private space unlock/lock handlers
@@ -11297,6 +11362,38 @@ const RB_ROUTER = {
       }
       btn.disabled = false;
       btn.classList.remove('btn-loading');
+    });
+  },
+
+  // Lazy loading: "Load more" buttons for comments and replies
+  attachLoadMoreHandlers() {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.querySelectorAll('.load-more-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        if (!targetId || btn.dataset.rendered === 'true') return;
+
+        const container = document.getElementById(targetId);
+        const data = window._hiddenReplies && window._hiddenReplies[targetId];
+        if (!container || !data) return;
+
+        // Render the hidden replies/comments
+        const html = data.replies.map(c =>
+          RB_RENDER.renderSingleComment(c, data.currentUser, data.isAuth, data.depth, data.effectiveRoot)
+        ).join('');
+
+        container.innerHTML = html;
+        container.style.display = 'block';
+        btn.dataset.rendered = 'true';
+        btn.style.display = 'none';
+
+        // Re-attach handlers for newly rendered content
+        this.attachReplyHandlers(this._currentDiscussionNumber);
+        this.attachCollapseHandlers();
+        this.attachLoadMoreHandlers(); // Recursive — nested "load more" buttons
+      });
     });
   },
 

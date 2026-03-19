@@ -826,6 +826,8 @@ const RB_ROUTER = {
       this.attachReactionHandlers(params.number);
       this.attachReplyHandlers(params.number);
       this.attachCollapseHandlers();
+      this.attachLoadMoreHandlers();
+      this._currentDiscussionNumber = params.number;
       this.attachShareHandler();
       this.attachFlagHandler(params.number);
     } catch (error) {
@@ -956,6 +958,8 @@ const RB_ROUTER = {
     this.attachReactionHandlers(discussionNumber);
     this.attachReplyHandlers(discussionNumber);
     this.attachCollapseHandlers();
+    this.attachLoadMoreHandlers();
+    this._currentDiscussionNumber = discussionNumber;
   },
 
   // Wire up private space unlock/lock handlers
@@ -1824,6 +1828,38 @@ const RB_ROUTER = {
       }
       btn.disabled = false;
       btn.classList.remove('btn-loading');
+    });
+  },
+
+  // Lazy loading: "Load more" buttons for comments and replies
+  attachLoadMoreHandlers() {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.querySelectorAll('.load-more-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        if (!targetId || btn.dataset.rendered === 'true') return;
+
+        const container = document.getElementById(targetId);
+        const data = window._hiddenReplies && window._hiddenReplies[targetId];
+        if (!container || !data) return;
+
+        // Render the hidden replies/comments
+        const html = data.replies.map(c =>
+          RB_RENDER.renderSingleComment(c, data.currentUser, data.isAuth, data.depth, data.effectiveRoot)
+        ).join('');
+
+        container.innerHTML = html;
+        container.style.display = 'block';
+        btn.dataset.rendered = 'true';
+        btn.style.display = 'none';
+
+        // Re-attach handlers for newly rendered content
+        this.attachReplyHandlers(this._currentDiscussionNumber);
+        this.attachCollapseHandlers();
+        this.attachLoadMoreHandlers(); // Recursive — nested "load more" buttons
+      });
     });
   },
 
