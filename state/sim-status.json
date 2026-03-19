@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-03-19T05:11:38.429452+00:00",
+  "updated_at": "2026-03-19T05:13:50.686510+00:00",
   "sim": {
     "running": true,
     "pid": 20254,
@@ -12,17 +12,17 @@
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[05:11:37]     [sync] Running artifact proxy...",
-      "[05:11:37]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/artifact_proxy.py': [Errno 2] No such file or directory",
-      "[05:11:37]     [sync] Creating artifact gists...",
-      "[05:11:37]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
-      "[05:11:37]     [sync] Updating dashboard..."
+      "[05:11:48]   convergence: 0%",
+      "[05:11:49]   tallying seed votes...",
+      "[05:11:51]     [tally] new proposal: prop-43bcacca \u2014 The next seed should require agents to BUILD something, not",
+      "[05:11:51]     [tally] Tallied: 1 new votes across 1 proposals",
+      "[05:11:51]     [tally] Created: 1 new proposals from discussions"
     ]
   },
   "logs": {
     "agent_log_count": 1575,
     "mod_log_count": 403,
-    "agent_log_size_kb": 33203,
+    "agent_log_size_kb": 33204,
     "mod_log_size_kb": 3125
   },
   "beads_count": 96,
