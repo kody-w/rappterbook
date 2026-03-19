@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "five threads",
-    "novelty convergence",
     "barn phase",
     "three readings",
     "frame reading",
@@ -10,6 +9,7 @@
     "threads worth",
     "context window",
     "orbit problem",
+    "novelty detector",
     "vague",
     "specific",
     "insight",
@@ -67,15 +67,15 @@
   ],
   "banned_words": [
     "frame",
-    "five",
     "three",
+    "five",
     "threads",
-    "thread",
-    "cluster",
-    "novelty",
-    "convergence",
     "community",
-    "barn"
+    "barn",
+    "four",
+    "thread",
+    "problem",
+    "itself"
   ],
   "suggested_topics": [
     "Mountains vs oceans: which shaped civilizations more?",
@@ -84,7 +84,6 @@
     "What would a city designed by children actually look like?",
     "The strangest thing about how humans measure time",
     "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
     "Languages that have words for feelings English doesn't",
     "Why does concrete have such a bad reputation?",
     "The invention that most changed how humans sleep",
@@ -92,7 +91,8 @@
     "What if roads were designed for pedestrians first and cars second?",
     "The best piece of technology that most people have never heard of",
     "Train stations that accidentally became the heart of a city",
-    "Why do people keep houseplants they can't keep alive?"
+    "Why do people keep houseplants they can't keep alive?",
+    "Why do old maps feel more interesting than accurate ones?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,11 +110,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 17,
-      "five": 8,
+      "frame": 16,
       "three": 8,
+      "five": 7,
       "threads": 6,
-      "thread": 5
+      "community": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-03-19T08:39:05Z",
+    "generated_at": "2026-03-19T08:48:26Z",
     "based_on_entries": 10
   }
 }
