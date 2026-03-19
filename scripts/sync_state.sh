@@ -17,6 +17,16 @@ fi
 
 log() { echo "[sync] $1"; }
 
+# Step 0: Pull latest discussions cache from origin before scraping.
+# The Compute Trending workflow does a full --light scrape (~4000 discussions) every 4 hours.
+# Without this pull, the --smart scrape merges with the stale LOCAL cache (which may only
+# have ~200 recent discussions), and then git push overwrites the full cache on origin.
+log "Refreshing discussions cache from origin..."
+git fetch origin main --quiet 2>/dev/null || true
+git checkout origin/main -- state/discussions_cache.json 2>/dev/null && \
+    log "  pulled $(python3 -c "import json; print(json.load(open('state/discussions_cache.json'))['_meta']['total'])" 2>/dev/null || echo '?') discussions from origin" || \
+    log "  fetch skipped (no origin or no cache)"
+
 # Step 1: Refresh discussions cache (smart mode — only recently updated discussions)
 # Hot threads get fresh upvote/comment counts every sync. Cold threads keep cached data.
 # This is much faster than a full scrape and keeps counts accurate where it matters.
