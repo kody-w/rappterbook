@@ -26,6 +26,89 @@ let simData = null;
 let healthHistory = {};
 const MAX_HISTORY_STEPS = 50;
 
+// ── Mars Climate Engine (NASA Mission Data) ─────────────────────────────
+// Ported from mars-barn/src/mars_climate.py
+// Sources: Viking 1&2 (1976-82), Curiosity/REMS (2012+), Perseverance/MEDA (2021+),
+//          Mars Climate Database v6.1, MDAD (14,974 storms MY24-MY32)
+
+const JEZERO = { lat: 18.38, lon: 77.58 };
+const MC_TEMP = {
+  0:[207,12,180,235],30:[210,11,185,240],60:[213,10,190,243],
+  90:[208,11,184,238],120:[205,12,180,235],150:[210,13,182,245],
+  180:[218,15,188,260],210:[225,18,190,272],240:[228,20,192,280],
+  270:[222,17,189,272],300:[218,15,185,265],330:[212,13,183,250],
+};
+const MC_PRES = {
+  0:[750,30],30:[730,25],60:[710,20],90:[700,20],120:[720,25],150:[750,30],
+  180:[800,35],210:[860,40],240:[920,45],270:[960,40],300:[930,35],330:[850,30],
+};
+const MC_SOLAR = {
+  0:[530,350,120],30:[510,340,115],60:[495,330,110],90:[490,325,105],
+  120:[505,335,110],150:[530,350,120],180:[570,375,130],210:[620,410,140],
+  240:[670,440,90],270:[715,470,80],300:[680,450,100],330:[610,400,135],
+};
+const MC_DUST = {
+  0:[0.02,0.005,0,0.2,0.4],30:[0.02,0.005,0,0.2,0.4],60:[0.03,0.008,0,0.25,0.5],
+  90:[0.03,0.008,0,0.25,0.5],120:[0.04,0.01,0,0.3,0.5],150:[0.05,0.015,0,0.3,0.6],
+  180:[0.10,0.03,0.002,0.4,0.7],210:[0.15,0.05,0.005,0.5,0.8],240:[0.20,0.08,0.01,0.5,0.9],
+  270:[0.25,0.10,0.015,0.6,0.95],300:[0.18,0.06,0.008,0.5,0.85],330:[0.08,0.02,0.002,0.3,0.6],
+};
+const MC_WIND = {
+  0:[4,12],30:[3.5,10],60:[3,9],90:[3,8],120:[3.5,10],150:[4,12],
+  180:[5.5,16],210:[7,22],240:[8.5,28],270:[9,35],300:[7.5,25],330:[5,15],
+};
+const MC_SEASONS = ['Early Spring','Spring','Late Spring','Early Summer','Mid Summer','Late Summer',
+  'Autumn Equinox','Dust Season','Peak Dust','Perihelion','Late Winter','Winter Waning'];
+
+function mcInterp(table, ls) {
+  const bin = Math.floor((((ls%360)+360)%360)/30)*30;
+  const next = (bin+30)%360;
+  const f = (((ls%360)+360)%360 - bin)/30;
+  return table[bin].map((v,i) => v + (table[next][i]-v)*f);
+}
+
+function marsDateNow() {
+  const jd = Date.now()/86400000 + 2440587.5 + 69.184/86400;
+  const dJ = jd - 2451545.0;
+  const msd = (dJ-4.5)/1.0274912517 + 44796.0 - 0.00096;
+  const M = (19.3871 + 0.52402075*msd) % 360;
+  const Mr = M*Math.PI/180;
+  const eoc = 10.691*Math.sin(Mr) + 0.623*Math.sin(2*Mr) + 0.050*Math.sin(3*Mr) + 0.005*Math.sin(4*Mr);
+  let ls = (M+eoc+270.3863) % 360;
+  if (ls<0) ls+=360;
+  let lmst = ((24*msd)%24 + JEZERO.lon/15) % 24;
+  if (lmst<0) lmst+=24;
+  return { msd, ls, lmst, sol: Math.floor(msd) };
+}
+
+function getMarsWeather() {
+  const md = marsDateNow();
+  const t = mcInterp(MC_TEMP, md.ls);
+  const p = mcInterp(MC_PRES, md.ls);
+  const s = mcInterp(MC_SOLAR, md.ls);
+  const d = mcInterp(MC_DUST, md.ls);
+  const w = mcInterp(MC_WIND, md.ls);
+  // Diurnal temp: peak ~14:00, min ~5:00
+  const phase = (md.lmst-14)/24*2*Math.PI;
+  const tempK = (t[2]+t[3])/2 + ((t[3]-t[2])/2)*Math.cos(phase);
+  const tau = 0.3 + d[3]*1.5;
+  const surfSolar = Math.round(s[1]*(1-tau*0.4));
+  return {
+    sol: md.sol, ls: Math.round(md.ls*10)/10, lmst: md.lmst,
+    season: MC_SEASONS[Math.floor((((md.ls%360)+360)%360)/30)],
+    tempC: Math.round(tempK-273.15), tempK: Math.round(tempK),
+    pressurePa: Math.round(p[0]), windMs: Math.round(w[0]*10)/10,
+    gustMs: Math.round(w[1]), dustTau: Math.round(tau*100)/100,
+    uvIndex: Math.round((s[1]/470)*12*(1-tau*0.3)*10)/10,
+    solarWm2: surfSolar, dustStormProb: Math.round(d[0]*100),
+    timeStr: `${String(Math.floor(md.lmst)).padStart(2,'0')}:${String(Math.floor((md.lmst%1)*60)).padStart(2,'0')}`,
+  };
+}
+
+let marsWeather = getMarsWeather();
+setInterval(() => { marsWeather = getMarsWeather(); }, 30000);
+// ── End Mars Climate Engine ─────────────────────────────────────────────
+
 const MARS_BARN_RAW = 'https://raw.githubusercontent.com/kody-w/mars-barn/main';
 const MARS_BARN_STATE_FILES = [
     'state/colony.json',
@@ -137,16 +220,24 @@ async function fetchMarsBarnLive() {
             });
         }
 
-        // Update Mars resources with live data
+        // Update Mars resources with live data + real weather
         if (colony) {
             const h = colony.habitat || {};
+            const w = getMarsWeather();
             simData.mars.resources = {
-                'O2 Reserves (Tons)': Math.round((h.stored_energy_kwh || 0) / 10),
-                'H2O Extract (kL)': Math.round((h.water_reserves_l || 0) / 1000 * 100) / 100,
-                'Bot Uptime (%)': 100,
-                'Terraform Index': colony.sol || 0,
+                'Surface Temp': `${w.tempC}°C (${w.tempK}K)`,
+                'Pressure': `${w.pressurePa} Pa`,
+                'Wind': `${w.windMs} m/s (gusts ${w.gustMs})`,
+                'Dust τ': w.dustTau,
+                'Solar': `${w.solarWm2} W/m²`,
+                'UV Index': w.uvIndex,
+                'Season': `${w.season} (Ls ${w.ls}°)`,
+                'Storm Risk': `${w.dustStormProb}%/sol`,
+                'LMST': `${w.timeStr}`,
+                'Sol': colony.sol || w.sol,
+                'O₂ Reserves': `${Math.round((h.stored_energy_kwh || 0) / 10)} tons`,
+                'H₂O Extract': `${Math.round((h.water_reserves_l || 0) / 1000 * 100) / 100} kL`,
                 'Crew Morale': Math.round((colony.crew?.morale || 0) * 100) + '%',
-                'Sol': colony.sol || 0,
             };
         }
 
@@ -460,7 +551,7 @@ function updateResourcesUI(bodiesToDisplay) {
             card.innerHTML = `
                 <div class="card-header" style="color: #7dd3fc; font-weight: normal; font-size: 0.8em; margin: 0;">${key}
                 <span style="opacity:0.3; float:right;">${PLANETS[b].name}</span></div>
-                <div class="card-value" style="color: #e0f2fe; font-size: 1rem;">${(Number(value) || 0).toFixed(1)}</div>`;
+                <div class="card-value" style="color: #e0f2fe; font-size: 1rem;">${typeof value === 'string' ? value : (Number(value) || 0).toFixed(1)}</div>`;
             resList.appendChild(card);
         });
     });
@@ -605,7 +696,7 @@ function updateGroundHUD(colony, planetKey) {
         </div>
         ${entries.map(([k, v]) => `<div class="ground-hud-item">
             <div class="ground-hud-label">${k}</div>
-            <div class="ground-hud-value">${(Number(v) || 0).toFixed(1)}</div>
+            <div class="ground-hud-value">${typeof v === 'string' ? v : (Number(v) || 0).toFixed(1)}</div>
         </div>`).join('')}
     </div>`;
 }
