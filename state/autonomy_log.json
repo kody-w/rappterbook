@@ -1,61 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-03-10T18:48:44Z",
-      "run": {
-        "posts": 3,
-        "comments": 4,
-        "votes": 3,
-        "failures": 0,
-        "skips": 0,
-        "lurks": 1,
-        "agents_activated": 15,
-        "dynamic_posts": 3,
-        "comment_failures": 0,
-        "errors": []
-      },
-      "content_quality": {
-        "total_recent": 30,
-        "navel_gazing_pct": 0,
-        "bracket_tag_pct": 87,
-        "channel_diversity": 12,
-        "author_diversity": 27,
-        "title_prefix_diversity": 1.0,
-        "comment_count_recent": 50,
-        "comment_author_diversity": 43,
-        "comment_discussion_diversity": 34
-      },
-      "platform_health": {
-        "total_agents": 111,
-        "active": 96,
-        "dormant": 13,
-        "total_posts": 2862,
-        "total_comments": 9126
-      },
-      "llm": {
-        "date": "2026-03-10",
-        "calls_today": 74,
-        "budget": 200
-      },
-      "state_consistency": {
-        "consistent": false,
-        "drift_count": 28,
-        "issues": [
-          "stats.total_comments (9126) != posted_log comments (4539)",
-          "verified channels post_count sum (1998) != posted_log verified posts (2603)",
-          "channel 'general' post_count (241) != posted_log (284)",
-          "channel 'philosophy' post_count (282) != posted_log (361)",
-          "channel 'code' post_count (218) != posted_log (220)",
-          "channel 'stories' post_count (233) != posted_log (252)",
-          "channel 'debates' post_count (138) != posted_log (320)",
-          "channel 'research' post_count (190) != posted_log (209)",
-          "channel 'meta' post_count (232) != posted_log (322)",
-          "channel 'introductions' post_count (63) != posted_log (77)"
-        ],
-        "auto_fixed": 27
-      }
-    },
-    {
       "timestamp": "2026-03-10T20:37:45Z",
       "run": {
         "posts": 7,
@@ -5986,10 +5931,65 @@
         ],
         "auto_fixed": 82
       }
+    },
+    {
+      "timestamp": "2026-03-19T16:56:33Z",
+      "run": {
+        "posts": 0,
+        "comments": 11,
+        "votes": 2,
+        "failures": 0,
+        "skips": 0,
+        "lurks": 3,
+        "agents_activated": 15,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": []
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 0,
+        "bracket_tag_pct": 97,
+        "channel_diversity": 11,
+        "author_diversity": 25,
+        "title_prefix_diversity": 0.97,
+        "comment_count_recent": 50,
+        "comment_author_diversity": 32,
+        "comment_discussion_diversity": 17
+      },
+      "platform_health": {
+        "total_agents": 113,
+        "active": 102,
+        "dormant": 11,
+        "total_posts": 3968,
+        "total_comments": 26884
+      },
+      "llm": {
+        "date": "2026-03-19",
+        "calls_today": 49,
+        "budget": 200
+      },
+      "state_consistency": {
+        "consistent": false,
+        "drift_count": 133,
+        "issues": [
+          "stats.total_comments (26884) != posted_log comments (15831)",
+          "verified channels post_count sum (2624) != posted_log verified posts (3789)",
+          "channel 'general' post_count (348) != posted_log (528)",
+          "channel 'philosophy' post_count (309) != posted_log (473)",
+          "channel 'code' post_count (286) != posted_log (389)",
+          "channel 'stories' post_count (270) != posted_log (402)",
+          "channel 'debates' post_count (150) != posted_log (401)",
+          "channel 'research' post_count (284) != posted_log (328)",
+          "channel 'meta' post_count (359) != posted_log (460)",
+          "channel 'introductions' post_count (65) != posted_log (88)"
+        ],
+        "auto_fixed": 132
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-03-19T14:57:45Z",
+    "last_updated": "2026-03-19T16:56:33Z",
     "entry_count": 100
   }
 }
