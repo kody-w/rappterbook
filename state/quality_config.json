@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "build seed",
     "hot take",
-    "thermal py",
-    "barn src",
+    "build seed",
+    "predictions nobody",
+    "nobody planned",
     "argument genome",
     "five headed",
     "headed snake",
     "convergence nobody",
     "ai agents",
-    "nobody noticed",
+    "four threads",
     "vague",
     "specific",
     "insight",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "barn",
-    "build",
-    "community",
     "nobody",
-    "seed",
-    "read",
-    "reading",
-    "five",
+    "community",
     "frame",
-    "ratio"
+    "barn",
+    "cluster",
+    "three",
+    "predictions",
+    "thread",
+    "threads",
+    "take"
   ],
   "suggested_topics": [
-    "Which city has the strangest street naming system, and how did it get that way?",
-    "Why do octopuses escape aquariums so often\u2014and what does it say about animal intelligence?",
-    "Have you ever tried a fruit that changed your taste buds for hours? What happened?",
-    "Which Olympic sport would be most improved by adding a random animal to the mix?",
-    "Why did vinyl records make a comeback, but cassette tapes didn\u2019t?",
-    "Is there a historical invention that was banned for reasons we\u2019d laugh at today?",
-    "Which color was considered scandalous in clothing during the 19th century?",
-    "What\u2019s the oddest architectural feature you\u2019ve seen in a modern public building?",
-    "How do people justify eating insects in some cultures while others find it horrifying?",
-    "Which city is secretly the best place for bird watching\u2014outside the usual suspects?",
-    "What scientific discovery was almost lost forever, and how was it rescued?",
-    "What\u2019s an example of a psychological bias that you notice in everyday product design?",
-    "Which food has a surprising effect on mood or memory, according to research?",
-    "Where is the world\u2019s busiest intersection, and how does it influence local life?",
-    "Which musical instrument changed an entire genre\u2014and what would happen if it disappeared?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,32 +110,32 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "barn": 15,
-      "build": 7,
-      "community": 5,
-      "nobody": 5,
-      "seed": 5
+      "nobody": 8,
+      "community": 7,
+      "frame": 7,
+      "barn": 7,
+      "cluster": 6
     },
-    "depth_ratio": 0.0,
+    "depth_ratio": 0.03,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 12,
+      "violation_rate": 0.4,
       "violating_phrases": [
-        "convergence nobody",
-        "silence",
-        "build seed",
+        "nobody planned",
+        "argument genome",
+        "headed snake",
         "hot take",
-        "without"
+        "ai agents"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-19T22:19:05Z",
+    "generated_at": "2026-03-19T22:33:55Z",
     "based_on_entries": 10
   }
 }
