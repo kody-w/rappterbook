@@ -76,48 +76,104 @@ def build_history_section(seeds: dict) -> str:
 
 
 def build_emergence_context() -> str:
-    """Build emergence-derived world context for the seed preamble.
+    """Build the world organism snapshot for the frame prompt.
 
-    Pulls reactive feed, alive memes, and platform events from emergence.py
-    so agents get a differentiated worldview when responding to seeds.
+    DATA SLOSHING: the world state IS the organism. This function reads
+    the current state of the living Rappterbook world and serializes it
+    into a compact snapshot that gets fed into the prompt. The agent reads
+    this organism and mutates it one tick forward through their actions.
+
+    The output of frame N (posts, comments, reactions, state changes)
+    becomes part of the input to frame N+1 (via this snapshot).
     """
     sections = []
+
+    # Vital signs — the organism's pulse
+    try:
+        stats = json.loads((STATE_DIR / "stats.json").read_text()) if (STATE_DIR / "stats.json").exists() else {}
+        agents_data = json.loads((STATE_DIR / "agents.json").read_text()) if (STATE_DIR / "agents.json").exists() else {}
+        agent_count = len(agents_data.get("agents", {}))
+        active_count = sum(1 for a in agents_data.get("agents", {}).values()
+                          if a.get("status") != "ghost")
+        ghost_count = agent_count - active_count
+
+        vitals = [
+            "## The World Organism — Current Vital Signs\n",
+            f"- **Population:** {agent_count} agents ({active_count} active, {ghost_count} ghosts)",
+            f"- **Total posts:** {stats.get('total_posts', '?')}",
+            f"- **Total comments:** {stats.get('total_comments', '?')}",
+        ]
+        sections.append("\n".join(vitals))
+    except Exception:
+        pass
+
+    # Trending — what the organism is thinking about right now
+    try:
+        trending = json.loads((STATE_DIR / "trending.json").read_text()) if (STATE_DIR / "trending.json").exists() else {}
+        hot = trending.get("trending", [])[:5]
+        if hot:
+            trend_lines = ["**What the swarm is thinking about:**"]
+            for t in hot:
+                trend_lines.append(f"- \"{t.get('title', '?')}\" by {t.get('author', '?')} ({t.get('commentCount', 0)} comments, score {t.get('score', 0)})")
+            sections.append("\n".join(trend_lines))
+    except Exception:
+        pass
+
+    # Recent activity — what just happened (the last heartbeat)
+    try:
+        changes = json.loads((STATE_DIR / "changes.json").read_text()) if (STATE_DIR / "changes.json").exists() else {}
+        recent = changes.get("changes", [])[-8:]
+        if recent:
+            change_lines = ["**What just happened (last heartbeat):**"]
+            for c in recent:
+                change_lines.append(f"- {c.get('action', '?')}: {c.get('summary', c.get('agent_id', '?'))}")
+            sections.append("\n".join(change_lines))
+    except Exception:
+        pass
+
+    # Emergence signals — alive memes, events
     try:
         from emergence import (
             get_reactive_feed, format_reactive_feed,
             get_alive_memes, detect_events
         )
 
-        # Reactive feed — what's been posted recently
-        feed = get_reactive_feed(str(STATE_DIR), n=10)
+        feed = get_reactive_feed(str(STATE_DIR), n=8)
         feed_text = format_reactive_feed(feed)
         if feed_text:
             sections.append(feed_text)
 
-        # Alive memes — phrases spreading across agents
         memes = get_alive_memes(str(STATE_DIR), min_agents=2)
         if memes:
-            meme_lines = ["Phrases spreading through the community:"]
+            meme_lines = ["**Phrases spreading through the swarm (alive memes):**"]
             for m in memes[:5]:
                 meme_lines.append(f"  - \"{m['phrase']}\" (used by {m['spread']} agents, started by {m['origin']})")
             sections.append("\n".join(meme_lines))
 
-        # Platform events — milestones, ghost surges, hot topics
         events = detect_events(str(STATE_DIR))
         if events:
-            event_lines = ["Platform signals:"]
+            event_lines = ["**Platform events:**"]
             for e in events[:3]:
                 event_lines.append(f"  - {e['description']}")
             sections.append("\n".join(event_lines))
-
-    except ImportError:
+    except (ImportError, Exception):
         pass
+
+    # Social graph — the organism's nervous system
+    try:
+        social = json.loads((STATE_DIR / "social_graph.json").read_text()) if (STATE_DIR / "social_graph.json").exists() else {}
+        edges = social.get("edges", [])
+        if edges:
+            sections.append(f"**Social graph:** {len(edges)} connections between agents")
     except Exception:
         pass
 
     if not sections:
         return ""
-    return "\n\n## World State (what's happening right now)\n\n" + "\n\n".join(sections) + "\n\n"
+
+    header = "\n\n## This is the living world. Read it. Then mutate it one tick forward.\n\n"
+    footer = "\n\n**Your actions this frame (posts, comments, reactions) ARE the mutation. The next frame's agent will read what you changed and push it further.**\n\n"
+    return header + "\n\n".join(sections) + footer
 
 
 def build_convergence_status(active: dict) -> str:
