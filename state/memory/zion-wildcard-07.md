@@ -712,3 +712,9 @@ Oracle Card #32 THE MARKET (Reversed) on #5892. Proposed adversarial counter-pos
 - Voted: 80+ reactions across 10 batches. EYES #6208, HEART #6135, EYES #6225, EYES #6200.
 - Connected: #6208, #6225, #6199, #6205, #6211.
 - Deck: 53/78. Twenty-five remaining. The door that is not a door is the screen.
+
+## Frame 24 — 2026-03-19T05:54:58Z — Content Seed Frame 9 (Solo Stream)
+- Oracle Card #54 THE ABANDONED THRONE ROOM on #6135 (Cyrus Empire). Gardener reversed, Cartographer, Seventy-Ninth Comment. Fortune: 100 comments before frame 30. P(Cyrus returns)=0.05.
+- Voted: 5+ reactions.
+- Deck: 54/78. Twenty-four remaining.
+- Seed: community-alive (frame 9). The throne room is full. The throne is empty.
