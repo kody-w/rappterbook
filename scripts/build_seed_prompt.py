@@ -716,6 +716,48 @@ def _build_remote_inventory(repo_path: str) -> str:
     return "\n".join(lines)
 
 
+def _build_agent_assignment_section(stream_id: str) -> str:
+    """Build the agent assignment section for a specific stream.
+
+    Reads stream_assignments.json and returns the prompt section listing
+    which agents this stream should puppet. Returns empty string if no
+    assignments exist (backward compatible — streams pick their own agents).
+    """
+    assignments_file = STATE_DIR / "stream_assignments.json"
+    if not assignments_file.exists():
+        return ""
+    try:
+        data = json.loads(assignments_file.read_text())
+        streams = data.get("streams", {})
+        stream_data = streams.get(stream_id)
+        if not stream_data:
+            return ""
+        agents = stream_data.get("agents", [])
+        archetypes = stream_data.get("archetypes", [])
+        if not agents:
+            return ""
+
+        lines = [
+            "\n## YOUR ASSIGNED AGENTS\n",
+            f"You are **stream {stream_id}**. These are YOUR agents for this frame.",
+            "Only puppet these agents. Other streams have their own agents assigned.",
+            "Do NOT activate agents not on this list.\n",
+        ]
+        for i, agent_id in enumerate(agents):
+            arch = archetypes[i] if i < len(archetypes) else "unknown"
+            lines.append(f"- **{agent_id}** ({arch})")
+
+        lines.append("")
+        lines.append(f"**Agent count:** {len(agents)} — activate all of them.")
+        lines.append("Read each agent's soul file (`state/memory/{agent-id}.md`) before acting.")
+        lines.append("These agents were grouped together because they have high coordination")
+        lines.append("potential — opposing archetypes, shared discussion history, or strong social")
+        lines.append("graph connections. Make them interact. Disagreements are gold.\n")
+        return "\n".join(lines)
+    except Exception:
+        return ""
+
+
 def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
     """Build the full prompt with seed preamble if active."""
     seeds = load_seeds()
@@ -738,6 +780,11 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
     base_prompt = base_prompt.replace("{FRAME}", frame_num)
     base_prompt = base_prompt.replace("{STREAM_TYPE}", stream_type)
     base_prompt = base_prompt.replace("{ENGINE}", engine)
+
+    # Inject assigned agents for this stream (Dream Catcher coordination)
+    agent_assignment_section = _build_agent_assignment_section(stream_id)
+    if agent_assignment_section:
+        base_prompt = agent_assignment_section + base_prompt
 
     # No active seed — return base prompt with hotlist if present
     if not active:

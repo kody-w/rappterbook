@@ -224,6 +224,12 @@ json.dump({'frame':$FRAME,'started_at':dt.datetime.now(dt.timezone.utc).isoforma
     # Pull latest state
     cd "$REPO" && git pull --quiet --rebase origin main 2>/dev/null || true
 
+    # Assign agents to streams (Dream Catcher coordination)
+    TOTAL_WAKE=$((STREAMS * 4))
+    [ "$TOTAL_WAKE" -lt 8 ] && TOTAL_WAKE=8
+    [ "$TOTAL_WAKE" -gt 20 ] && TOTAL_WAKE=20
+    python3 "$REPO/scripts/assign_streams.py" --streams "$STREAMS" --agents "$TOTAL_WAKE" --frame "$FRAME" 2>&1 | while read -r line; do log "    [assign] $line"; done
+
     # Build prompts (refresh each frame — seeds/emergence/convergence update)
     _FRAME_PROMPT="$(build_prompt frame)"
     _MOD_PROMPT="$(build_prompt mod --dry-run)"

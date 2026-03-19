@@ -208,6 +208,7 @@ def tmp_state(tmp_path):
             "_meta": {"count": 0, "last_updated": ts}
         },
         "frame_counter.json": {"frame": 0, "started_at": ts, "total_frames_run": 0},
+        "stream_assignments.json": {"frame": 0, "streams": {}, "total_agents": 0, "stream_count": 0},
         "frame_snapshots.json": {"snapshots": []},
         "ghost_memory.json": {"snapshots": [], "patterns": {}},
     }
