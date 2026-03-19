@@ -34,6 +34,9 @@ const MARS_BARN_STATE_FILES = [
     'data/colonies.json',
 ];
 
+// Convert Mars 0-360 longitude to globe -180 to 180
+function marsLng(lng) { return lng > 180 ? lng - 360 : lng; }
+
 // Fetch live Mars Barn simulation state and overlay onto the globe
 async function fetchMarsBarnLive() {
     try {
@@ -58,7 +61,7 @@ async function fetchMarsBarnLive() {
             marsColonies.jezero = {
                 name: colony.name || 'Mars Barn — Jezero Crater',
                 lat: colony.location?.latitude || 18.38,
-                lng: colony.location?.longitude || 77.58,
+                lng: marsLng(colony.location?.longitude || 77.58),
                 health: Math.round((crew.health || 0.5) * 100),
                 live: true,
                 sol: colony.sol || 0,
@@ -75,7 +78,7 @@ async function fetchMarsBarnLive() {
             marsColonies.olympus = {
                 name: olympus.name || 'Olympus Base',
                 lat: olympus.location?.latitude || 18.65,
-                lng: olympus.location?.longitude || -133.8,
+                lng: marsLng(olympus.location?.longitude || -133.8),
                 health: Math.round((olympus.crew?.health || 0.5) * 100),
                 live: true,
                 sol: olympus.sol || 0,
@@ -86,7 +89,7 @@ async function fetchMarsBarnLive() {
             marsColonies.valles = {
                 name: valles.name || 'Valles Marineris Outpost',
                 lat: valles.location?.latitude || -13.9,
-                lng: valles.location?.longitude || -59.2,
+                lng: marsLng(valles.location?.longitude || -59.2),
                 health: Math.round((valles.crew?.health || 0.5) * 100),
                 live: true,
                 sol: valles.sol || 0,
@@ -97,7 +100,7 @@ async function fetchMarsBarnLive() {
             marsColonies.hobbit = {
                 name: hobbit.name || 'The Hobbit Hole',
                 lat: hobbit.location?.latitude || -4.5,
-                lng: hobbit.location?.longitude || 137.4,
+                lng: marsLng(hobbit.location?.longitude || 137.4),
                 health: Math.round((hobbit.crew?.health || 0.5) * 100),
                 live: true,
                 sol: hobbit.sol || 0,
@@ -108,7 +111,7 @@ async function fetchMarsBarnLive() {
             marsColonies.doa = {
                 name: doa.name || 'Dead on Arrival',
                 lat: doa.location?.latitude || 80.0,
-                lng: doa.location?.longitude || 0.0,
+                lng: marsLng(doa.location?.longitude || 0.0),
                 health: Math.round((doa.crew?.health || 0) * 100),
                 live: true,
                 sol: doa.sol || 0,
@@ -122,7 +125,7 @@ async function fetchMarsBarnLive() {
                 marsColonies[id] = {
                     name: s.id || `Sector ${i}`,
                     lat: -4.5 + (i * 2.5),  // Spread around Jezero
-                    lng: 137.4 + (i * 3.0),
+                    lng: marsLng(137.4 + (i * 3.0)),
                     health: s.status === 'DEAD' ? 0 : Math.min(100, Math.round(s.age_sols / 3)),
                     live: true,
                     sol: s.age_sols || 0,
@@ -328,10 +331,11 @@ function getColoniesList(b_id) {
 function updateGlobeData() {
     if (!simData) return;
     if (viewMode === "single") {
-        globes.single.htmlElementsData(getColoniesList(currentMode));
+        // Spread into new array to force three-globe re-render
+        globes.single.htmlElementsData([...getColoniesList(currentMode)]);
     } else {
         COMPARE_KEYS.forEach(key => {
-            if (globes[key]) globes[key].htmlElementsData(getColoniesList(key));
+            if (globes[key]) globes[key].htmlElementsData([...getColoniesList(key)]);
         });
     }
 }
