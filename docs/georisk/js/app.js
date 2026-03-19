@@ -156,6 +156,11 @@ async function fetchMarsBarnLive() {
         });
 
         updateUI();
+        // Force globe re-render with explicit new data array
+        if (currentMode === 'mars' && globes.single) {
+            const pts = Object.keys(marsColonies).map(k => ({ ...marsColonies[k], id: k }));
+            globes.single.htmlElementsData(pts);
+        }
         updateGlobeData();
         console.log(`[Mars Barn] Live data loaded: ${Object.keys(marsColonies).length} colonies, Sol ${colony?.sol || '?'}`);
     } catch (err) {
