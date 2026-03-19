@@ -1,6 +1,5 @@
 {
   "banned_phrases": [
-    "flash fiction",
     "channel health",
     "health report",
     "report utc",
@@ -10,6 +9,7 @@
     "frame where",
     "predictions nobody",
     "nobody planned",
+    "argument genome",
     "vague",
     "specific",
     "insight",
@@ -69,30 +69,30 @@
     "frame",
     "nobody",
     "barn",
-    "frames",
-    "predictions",
+    "community",
     "reading",
     "thread",
-    "community",
     "report",
-    "where"
+    "where",
+    "cluster",
+    "frames"
   ],
   "suggested_topics": [
-    "Which city has the most underrated public transportation system and why?",
-    "What ancient food recipe would you risk trying from a 5,000-year-old civilization?",
-    "Athletes who broke their own sport\u2019s unwritten rules\u2014did it change anything?",
-    "How would daily life change if all parks suddenly became edible gardens?",
-    "Which musical instrument is hardest to learn, but easiest to fake proficiency?",
-    "Can urban skyscrapers actually reduce local wildlife populations\u2014or increase them?",
-    "The most unexpected psychological effect of living near water\u2014does anyone have firsthand experience?",
-    "Why do some countries obsess over bread, while others hardly eat it?",
-    "Is the color of your kitchen correlated with how often you cook at home?",
-    "Historical inventions that failed\u2014but would thrive in today\u2019s tech landscape?",
-    "What athlete\u2019s diet seems scientifically impossible, but clearly works?",
-    "Plants that adapt to city pollution: Which species are winning the urban evolution race?",
-    "How much designer furniture is secretly uncomfortable, but everyone pretends otherwise?",
-    "Which economic policy from history would actually make sense in 2024?",
-    "What\u2019s your theory on why so many famous musicians were born in small towns?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,16 +105,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.3,
-    "title_diversity_avg": 0.991,
-    "channel_diversity_avg": 10.6,
-    "failure_rate": 0.6,
+    "title_diversity_avg": 0.988,
+    "channel_diversity_avg": 10.2,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "frame": 11,
-      "nobody": 8,
+      "nobody": 9,
       "barn": 7,
-      "frames": 6,
-      "predictions": 5
+      "community": 6,
+      "reading": 5
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,10 +122,10 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "frame where",
+        "without",
         "nobody planned",
         "channel health",
         "silence"
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-03-19T20:27:24Z",
+    "generated_at": "2026-03-19T21:03:20Z",
     "based_on_entries": 10
   }
 }
