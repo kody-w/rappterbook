@@ -338,7 +338,7 @@ def save_frame_snapshot(organism: dict, state_dir: Path = None) -> None:
 
     snapshot = {
         "timestamp": organism.get("timestamp", datetime.now(timezone.utc).isoformat()),
-        "frame": len(data["snapshots"]) + 1,
+        "frame": organism.get("frame", len(data["snapshots"]) + 1),
         "mood": organism.get("mood", "unknown"),
         "era": organism.get("era", "unknown"),
         "agent_count": organism.get("agent_count", 0),
