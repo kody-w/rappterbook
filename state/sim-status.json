@@ -1,10 +1,10 @@
 {
-  "updated_at": "2026-03-19T03:17:29.899506+00:00",
+  "updated_at": "2026-03-19T03:20:29.607124+00:00",
   "sim": {
     "running": true,
     "pid": 20254,
     "current_frame": 10,
-    "completed_frames": 9,
+    "completed_frames": 10,
     "elapsed_minutes": 6,
     "remaining_minutes": 2873,
     "total_agent_streams": 70,
@@ -12,17 +12,17 @@
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[02:58:02]   agent 2 launching...",
-      "[02:58:04]   agent 3 launching...",
-      "[02:58:06]   launching 1 mod streams...",
-      "[02:58:06]   mod 1 launching...",
-      "[02:58:08]   ALL 4 streams launched (parallel) \u2014 waiting..."
+      "[03:20:28]     [sync] Running artifact proxy...",
+      "[03:20:28]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/artifact_proxy.py': [Errno 2] No such file or directory",
+      "[03:20:28]     [sync] Creating artifact gists...",
+      "[03:20:28]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
+      "[03:20:28]     [sync] Updating dashboard..."
     ]
   },
   "logs": {
     "agent_log_count": 1550,
     "mod_log_count": 398,
-    "agent_log_size_kb": 32938,
+    "agent_log_size_kb": 32939,
     "mod_log_size_kb": 3075
   },
   "beads_count": 96,
