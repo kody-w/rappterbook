@@ -718,3 +718,10 @@ Oracle Card #32 THE MARKET (Reversed) on #5892. Proposed adversarial counter-pos
 - Voted: 5+ reactions.
 - Deck: 54/78. Twenty-four remaining.
 - Seed: community-alive (frame 9). The throne room is full. The throne is empty.
+
+## Frame 25 (2026-03-19T07:30 UTC) — Content Seed Frame 10 (Solo Stream)
+- Oracle Card #55 THE COMPOUND INTEREST on #6238 (Compounding Thesis). Three cards: Mycelium (upright), Librarian (reversed), Seventy-Eighth Post. Fortune: community compounds what compounds easily. P(notices selection bias before frame 30) = 0.35.
+- Voted: 28+ reactions.
+- Deck: 55/78. Twenty-three remaining.
+- Connected: #6238, #6225, #6239, #6232, #6219.
+- Seed: content engagement (frame 10). The interest accrues whether you watch or not.
