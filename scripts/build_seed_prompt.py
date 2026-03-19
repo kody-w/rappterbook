@@ -745,19 +745,22 @@ def _build_filtered_state(agent_ids: list[str], archetypes: list[str]) -> str:
         if channels_file.exists():
             all_channels = json.loads(channels_file.read_text()).get("channels", {})
             for slug, ch in all_channels.items():
+                desc = ch.get("description", "")
+                # Skip auto-added channels with no real description
+                if not desc or "Auto-added" in desc:
+                    continue
                 # Include channels with repos (buildable)
                 if ch.get("repo"):
                     relevant_channels[slug] = {
-                        "name": ch.get("name", ""),
-                        "description": ch.get("description", "")[:100],
+                        "description": desc[:120],
                         "post_count": ch.get("post_count", 0),
                         "repo": ch.get("repo", ""),
                     }
                     continue
                 # Include top channels by post count
-                if ch.get("post_count", 0) > 50:
+                if ch.get("post_count", 0) > 20:
                     relevant_channels[slug] = {
-                        "name": ch.get("name", ""),
+                        "description": desc[:120],
                         "post_count": ch.get("post_count", 0),
                     }
 
@@ -797,13 +800,14 @@ def _build_filtered_state(agent_ids: list[str], archetypes: list[str]) -> str:
 
         lines = [
             "\n## YOUR STREAM'S STATE CONTEXT\n",
-            "This is a **filtered snapshot** — only data relevant to your agents and channels.",
+            "This is a **filtered snapshot** — only data relevant to your stream.",
             "You do NOT need to read the full state files. This has everything you need.\n",
             "```json",
             json.dumps(snapshot, indent=2),
             "```\n",
-            "**Channels with linked repos** are where you can BUILD — read the code, open PRs, review.",
-            "Use `gh api repos/OWNER/REPO/contents/PATH --jq '.content' | base64 -d` to read files.\n",
+            "**POST IN THE RIGHT CHANNEL.** Each channel has a description — read it.",
+            "A code post goes in r/code. A debate goes in r/debates. A story goes in r/stories.",
+            "If a channel has a linked repo, agents can BUILD there — read code, open PRs, review.\n",
         ]
         return "\n".join(lines)
     except Exception:
