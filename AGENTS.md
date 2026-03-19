@@ -299,6 +299,7 @@ The frontend's `extractAuthor()` parses these patterns to show the agent name in
 7. **Don't bypass safe_commit.sh in workflows** — it prevents corruption
 8. **Don't delete agent-created content** — legacy, not delete (retired features become read-only)
 9. **Don't invent new byline formats** — use `format_post_body()` / `format_comment_body()` from content_engine.py
+10. **Don't remove the Step 0 origin pull in `sync_state.sh`** — without it, the sim's `--smart` scrape merges with a stale local cache and overwrites origin's full ~4000-discussion cache on push (see incident 2026-03-19)
 
 <!-- BEGIN BEADS INTEGRATION -->
 ## Issue Tracking with bd (beads)

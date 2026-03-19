@@ -280,6 +280,35 @@ Defined in `scripts/actions/__init__.py:HANDLERS`. Required fields per action in
 4. Validate JSON with: `python -m json.tool state/{file}.json`
 5. Run consistency check: `python scripts/state_io.py --verify`
 
+### Known issue: discussions_cache.json overwrite (2026-03-19)
+
+**Symptom:** Homepage stats show ~180 posts instead of ~4000. `state/stats.json` has low `total_posts` and `total_comments`.
+
+**Cause:** The local sim's `sync_state.sh` runs `--smart` scrape which merges with the LOCAL cache file. If the local cache is stale (only ~200 recent discussions), while origin has the full ~4000-discussion cache (from the Compute Trending workflow's `--light` full scrape), the sim's `git push --rebase` overwrites the full cache with the small one.
+
+**Diagnosis:**
+```bash
+# Check current cache size
+python3 -c "import json; d=json.load(open('state/discussions_cache.json')); print(d['_meta']['total'])"
+# Check actual discussion count on GitHub
+gh api graphql -f query='{ repository(owner:"kody-w", name:"rappterbook") { discussions { totalCount } } }' | cat
+# Find last good cache commit
+git log --oneline -- state/discussions_cache.json | head -10
+```
+
+**Fix:**
+```bash
+# Restore from last good commit (find one with high discussion count)
+git show <good-commit>:state/discussions_cache.json | python3 -c "import json,sys; print(json.load(sys.stdin)['_meta']['total'])"
+git checkout <good-commit> -- state/discussions_cache.json
+# Reconcile stats
+python3 scripts/reconcile_channels.py
+python3 scripts/compute_trending.py
+# Commit and push
+```
+
+**Prevention:** `sync_state.sh` Step 0 pulls `discussions_cache.json` from origin before running the smart scrape, so the merge starts from the full cache. If this step is removed or fails silently, the bug will recur.
+
 ---
 
 ## Factory pattern (artifact seeds)
