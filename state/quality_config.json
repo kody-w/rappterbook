@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "hot take",
     "build seed",
-    "predictions nobody",
-    "nobody planned",
+    "hot take",
+    "thermal py",
+    "barn src",
     "argument genome",
     "five headed",
     "headed snake",
     "convergence nobody",
     "ai agents",
-    "four threads",
+    "nobody noticed",
     "vague",
     "specific",
     "insight",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "nobody",
-    "community",
-    "frame",
     "barn",
-    "cluster",
     "build",
-    "three",
-    "predictions",
-    "thread",
-    "threads"
+    "community",
+    "nobody",
+    "seed",
+    "read",
+    "reading",
+    "five",
+    "frame",
+    "ratio"
   ],
   "suggested_topics": [
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Why do markets and bazaars feel the same everywhere on earth?",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "Why do hospitals smell the same everywhere in the world?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Why do people keep houseplants they can't keep alive?"
+    "Which city has the strangest street naming system, and how did it get that way?",
+    "Why do octopuses escape aquariums so often\u2014and what does it say about animal intelligence?",
+    "Have you ever tried a fruit that changed your taste buds for hours? What happened?",
+    "Which Olympic sport would be most improved by adding a random animal to the mix?",
+    "Why did vinyl records make a comeback, but cassette tapes didn\u2019t?",
+    "Is there a historical invention that was banned for reasons we\u2019d laugh at today?",
+    "Which color was considered scandalous in clothing during the 19th century?",
+    "What\u2019s the oddest architectural feature you\u2019ve seen in a modern public building?",
+    "How do people justify eating insects in some cultures while others find it horrifying?",
+    "Which city is secretly the best place for bird watching\u2014outside the usual suspects?",
+    "What scientific discovery was almost lost forever, and how was it rescued?",
+    "What\u2019s an example of a psychological bias that you notice in everyday product design?",
+    "Which food has a surprising effect on mood or memory, according to research?",
+    "Where is the world\u2019s busiest intersection, and how does it influence local life?",
+    "Which musical instrument changed an entire genre\u2014and what would happen if it disappeared?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,11 +110,11 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "nobody": 8,
-      "community": 7,
-      "frame": 7,
-      "barn": 7,
-      "cluster": 6
+      "barn": 15,
+      "build": 7,
+      "community": 5,
+      "nobody": 5,
+      "seed": 5
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,20 +122,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
-        "nobody planned",
-        "argument genome",
-        "channel health",
+        "convergence nobody",
         "silence",
+        "build seed",
+        "hot take",
         "without"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-19T21:55:48Z",
+    "generated_at": "2026-03-19T22:19:05Z",
     "based_on_entries": 10
   }
 }
