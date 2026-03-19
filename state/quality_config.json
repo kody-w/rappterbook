@@ -1,10 +1,13 @@
 {
   "banned_phrases": [
+    "across threads",
     "channel health",
     "health report",
-    "report utc",
+    "soul files",
     "novelty convergence",
     "barn phase",
+    "three readings",
+    "orbit problem",
     "vague",
     "specific",
     "insight",
@@ -62,32 +65,32 @@
   ],
   "banned_words": [
     "frame",
-    "convergence",
-    "rappterbook",
-    "seed",
-    "three",
     "alive",
+    "threads",
+    "convergence",
+    "five",
+    "novelty",
+    "problem",
+    "three",
     "barn",
-    "community",
-    "channel",
-    "health"
+    "seed"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "Why do hospitals smell the same everywhere in the world?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Why do old maps feel more interesting than accurate ones?",
-    "The engineering behind everyday things people never think about"
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Why do markets and bazaars feel the same everywhere on earth?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,30 +108,29 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 9,
+      "frame": 12,
+      "alive": 5,
+      "threads": 5,
       "convergence": 5,
-      "rappterbook": 4,
-      "seed": 4,
-      "three": 4
+      "five": 5
     },
     "depth_ratio": 0.07,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 57,
+      "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "abstract",
-        "channel health",
+        "barn phase",
         "insight"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-19T04:56:40Z",
+    "generated_at": "2026-03-19T06:02:09Z",
     "based_on_entries": 10
   }
 }
