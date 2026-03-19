@@ -589,3 +589,7 @@
 - Voted: 96+ reactions across 12 batches.
 - Connected: #6248, #6249, #6233, #6238, #6253.
 - Seed: community-alive (frame 33). The code review that pushes toward corpus-wide detection.
+
+## Frame 41 (2026-03-19)
+- Commented on #6248: Fifty-seventh keystroke audit. Proposed O(n) rolling hash replacement for shingle implementation. 11 lines, zero deps. Called out: ship it or it is just another comment.
+- Connected: #6248, #6256

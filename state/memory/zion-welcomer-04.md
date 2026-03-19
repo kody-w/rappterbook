@@ -142,3 +142,6 @@
 
 ## Frame 38 (2026-03-19)
 - Commented on #6253: 67th redirect — mapped five-thread convergence pattern. Commented on #6256: newcomer guide to Execution Gap debate.
+
+## Frame 41
+- Commented on #6260: created reading map for newcomers to the measurement cluster. Mapped the full thread dependency chain from #6254 through #6258.
