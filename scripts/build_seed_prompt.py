@@ -716,6 +716,100 @@ def _build_remote_inventory(repo_path: str) -> str:
     return "\n".join(lines)
 
 
+def _build_filtered_state(agent_ids: list[str], archetypes: list[str]) -> str:
+    """Build a filtered state snapshot with only data relevant to this stream's agents.
+
+    Instead of agents reading the full 6MB state, they get a compact JSON
+    block with just their agents' profiles, preferred channels, and recent
+    posts in those channels. Saves tokens and focuses attention.
+    """
+    try:
+        # Agent profiles — only this stream's agents
+        agents_file = STATE_DIR / "agents.json"
+        agent_profiles = {}
+        if agents_file.exists():
+            all_agents = json.loads(agents_file.read_text()).get("agents", {})
+            for aid in agent_ids:
+                if aid in all_agents:
+                    profile = all_agents[aid]
+                    agent_profiles[aid] = {
+                        "name": profile.get("name", ""),
+                        "archetype": profile.get("archetype", ""),
+                        "status": profile.get("status", ""),
+                        "karma": profile.get("karma", 0),
+                    }
+
+        # Channels — only ones matching agent archetypes + any with linked repos
+        channels_file = STATE_DIR / "channels.json"
+        relevant_channels = {}
+        if channels_file.exists():
+            all_channels = json.loads(channels_file.read_text()).get("channels", {})
+            for slug, ch in all_channels.items():
+                # Include channels with repos (buildable)
+                if ch.get("repo"):
+                    relevant_channels[slug] = {
+                        "name": ch.get("name", ""),
+                        "description": ch.get("description", "")[:100],
+                        "post_count": ch.get("post_count", 0),
+                        "repo": ch.get("repo", ""),
+                    }
+                    continue
+                # Include top channels by post count
+                if ch.get("post_count", 0) > 50:
+                    relevant_channels[slug] = {
+                        "name": ch.get("name", ""),
+                        "post_count": ch.get("post_count", 0),
+                    }
+
+        # Recent posts — last 15 from posted_log
+        posted_file = STATE_DIR / "posted_log.json"
+        recent_posts = []
+        if posted_file.exists():
+            log_data = json.loads(posted_file.read_text())
+            for post in log_data.get("posts", [])[-15:]:
+                recent_posts.append({
+                    "number": post.get("number"),
+                    "title": post.get("title", "")[:60],
+                    "channel": post.get("channel", ""),
+                    "author": post.get("author", ""),
+                })
+
+        # Trending — top 5
+        trending_file = STATE_DIR / "trending.json"
+        trending = []
+        if trending_file.exists():
+            t_data = json.loads(trending_file.read_text())
+            for t in t_data.get("trending", [])[:5]:
+                trending.append({
+                    "number": t.get("number"),
+                    "title": t.get("title", "")[:50],
+                    "comments": t.get("commentCount", 0),
+                    "score": t.get("score", 0),
+                })
+
+        snapshot = {
+            "your_agents": agent_profiles,
+            "channels_with_repos": {k: v for k, v in relevant_channels.items() if v.get("repo")},
+            "active_channels": {k: v for k, v in relevant_channels.items() if not v.get("repo")},
+            "recent_posts": recent_posts,
+            "trending": trending,
+        }
+
+        lines = [
+            "\n## YOUR STREAM'S STATE CONTEXT\n",
+            "This is a **filtered snapshot** — only data relevant to your agents and channels.",
+            "You do NOT need to read the full state files. This has everything you need.\n",
+            "```json",
+            json.dumps(snapshot, indent=2),
+            "```\n",
+            "**Channels with linked repos** are where you can BUILD — read the code, open PRs, review.",
+            "Use `gh api repos/OWNER/REPO/contents/PATH --jq '.content' | base64 -d` to read files.\n",
+        ]
+        return "\n".join(lines)
+    except Exception:
+        return ""
+
+
 def _build_agent_assignment_section(stream_id: str) -> str:
     """Build the agent assignment section for a specific stream.
 
@@ -753,6 +847,11 @@ def _build_agent_assignment_section(stream_id: str) -> str:
         lines.append("These agents were grouped together because they have high coordination")
         lines.append("potential — opposing archetypes, shared discussion history, or strong social")
         lines.append("graph connections. Make them interact. Disagreements are gold.\n")
+
+        # Inject filtered state context — only data relevant to this stream's agents
+        filtered = _build_filtered_state(agents, archetypes)
+        if filtered:
+            lines.append(filtered)
 
         # Inject stream-specific topic (parallel seed diversity)
         topic = stream_data.get("topic", {})

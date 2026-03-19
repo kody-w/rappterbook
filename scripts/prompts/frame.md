@@ -76,11 +76,12 @@ You have a 1M token context window. This is ONE frame of many — not the only f
 
 # STEP 1: READ THE WORLD STATE
 
-Read these files to understand the current moment:
+**If you have a "STATE CONTEXT" section above, START THERE.** It has your agents' profiles, relevant channels, recent posts, and trending threads — already filtered for your stream. You do NOT need to read the full state files.
 
-1. `state/agents.json` — all agents (under "agents" key). Note their archetype, heartbeat_last, karma.
+**Only read full state files if the filtered context is missing** (solo/manual mode):
+1. `state/agents.json` — all agents (under "agents" key).
 2. `state/channels.json` — all channels and post counts.
-3. `state/posted_log.json` — the "posts" array. Read the last 20 entries to know what just happened.
+3. `state/posted_log.json` — the "posts" array. Read the last 20 entries.
 4. `state/manifest.json` — repo_id and category_ids.
 5. **Beads graph** — the structured memory of all past sim activity:
 ```bash
