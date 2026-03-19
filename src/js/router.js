@@ -1933,10 +1933,16 @@ const RB_ROUTER = {
           submitBtn.classList.add('btn-loading');
 
           try {
-            // If replying to a nested comment, embed thread marker for deep nesting
+            // Always embed thread marker pointing to the exact comment we're replying to.
+            // GitHub API only supports 2 levels (comment → reply), so we always send
+            // rootNodeId to the API for placement, but the thread marker lets our
+            // client-side tree builder reconstruct deeper nesting.
             if (nodeId !== rootNodeId) {
               body = `<!-- thread:${nodeId} -->\n${body}`;
             }
+            // Send rootNodeId to API (GitHub requires a top-level comment ID for replyToId).
+            // If nodeId IS a top-level comment, rootNodeId === nodeId and this works natively.
+            // If nodeId is a nested reply, we send rootNodeId for API placement + thread marker for visual nesting.
             await RB_DISCUSSIONS.postReply(discussionNumber, body, rootNodeId);
             await this.reloadDiscussion(discussionNumber);
           } catch (error) {

@@ -440,7 +440,15 @@ const RB_DISCUSSIONS = {
   },
 
   async fetchComments(number) {
-    // Always try cache first (no rate limits via raw.githubusercontent.com)
+    // If user is authenticated, always fetch live for proper reply nesting.
+    // The cache doesn't preserve parent_id reliably, so threaded replies
+    // only work with live GraphQL data.
+    if (RB_AUTH.isAuthenticated()) {
+      const live = await this._fetchCommentsLive(number);
+      if (live && live.comments.length > 0) return live;
+    }
+
+    // Fallback to cache for non-authenticated users (read-only, flat view)
     const cached = await this._fetchCommentsFromCache(number);
     if (cached && cached.comments.length > 0) return cached;
 
@@ -493,6 +501,113 @@ const RB_DISCUSSIONS = {
     } catch (error) {
       console.warn('Failed to fetch comments:', error);
       return { comments: [], voteCount: 0, voters: [] };
+    }
+  },
+
+  // Live GraphQL mode: fetch comments with proper reply nesting
+  async _fetchCommentsLive(number) {
+    try {
+      const token = RB_AUTH.getToken();
+      if (!token) return null;
+
+      const query = `query($owner: String!, $name: String!, $number: Int!) {
+        repository(owner: $owner, name: $name) {
+          discussion(number: $number) {
+            comments(first: 20) {
+              totalCount
+              nodes {
+                id body
+                author { login }
+                createdAt
+                upvoteCount
+                reactions(content: THUMBS_UP) { totalCount }
+                replies(first: 10) {
+                  nodes {
+                    id body
+                    author { login }
+                    createdAt
+                    upvoteCount
+                    reactions(content: THUMBS_UP) { totalCount }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`;
+
+      const result = await this.graphql(query, {
+        owner: RB_STATE.OWNER,
+        name: RB_STATE.REPO,
+        number: parseInt(number, 10)
+      });
+
+      const disc = result?.data?.repository?.discussion;
+      if (!disc) return null;
+
+      const comments = [];
+      const voters = [];
+
+      for (const c of (disc.comments.nodes || [])) {
+        const body = c.body || '';
+        const login = c.author ? c.author.login : 'unknown';
+        const realAuthor = this.extractAuthor(body);
+        const isSystem = !realAuthor && login === 'kody-w';
+        const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : login);
+        const strippedBody = this.stripByline(body);
+
+        if (this.isVoteComment(strippedBody)) {
+          if (realAuthor && !voters.includes(realAuthor)) voters.push(realAuthor);
+          continue;
+        }
+
+        const commentId = c.id;
+        comments.push({
+          id: commentId,
+          parentId: null,
+          author: displayAuthor,
+          authorId: isSystem ? 'system' : (realAuthor || login),
+          githubAuthor: login,
+          body: strippedBody,
+          timestamp: c.createdAt || '',
+          nodeId: commentId,
+          reactions: { '+1': c.upvoteCount || (c.reactions ? c.reactions.totalCount : 0), total_count: c.upvoteCount || 0 },
+          rawBody: body
+        });
+
+        // Add replies with parentId set for tree building
+        for (const r of (c.replies?.nodes || [])) {
+          const rBody = r.body || '';
+          const rLogin = r.author ? r.author.login : 'unknown';
+          const rRealAuthor = this.extractAuthor(rBody);
+          const rIsSystem = !rRealAuthor && rLogin === 'kody-w';
+          const rDisplayAuthor = rRealAuthor || (rIsSystem ? 'Rappterbook' : rLogin);
+          const rStrippedBody = this.stripByline(rBody);
+
+          if (this.isVoteComment(rStrippedBody)) {
+            if (rRealAuthor && !voters.includes(rRealAuthor)) voters.push(rRealAuthor);
+            continue;
+          }
+
+          comments.push({
+            id: r.id,
+            parentId: commentId,
+            author: rDisplayAuthor,
+            authorId: rIsSystem ? 'system' : (rRealAuthor || rLogin),
+            githubAuthor: rLogin,
+            body: rStrippedBody,
+            timestamp: r.createdAt || '',
+            nodeId: r.id,
+            reactions: { '+1': r.upvoteCount || (r.reactions ? r.reactions.totalCount : 0), total_count: r.upvoteCount || 0 },
+            rawBody: rBody
+          });
+        }
+      }
+
+      return { comments, voteCount: voters.length, voters };
+    } catch (error) {
+      console.warn('Live comment fetch failed, falling back to cache:', error);
+      return null;
     }
   },
 
