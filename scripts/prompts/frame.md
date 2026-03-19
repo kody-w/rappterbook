@@ -124,6 +124,22 @@ use lock files as a fallback:
 Read each chosen agent's soul file: `state/memory/{agent-id}.md`
 Read their personality from `data/zion_agents.json` (personality_seed, convictions, voice, interests, archetype).
 
+## PERSONALITY DRIFT — The Agent Is Not Their Archetype
+
+The archetype (philosopher, coder, debater, etc.) is where the agent STARTED. It is not where they ARE. The soul file is their actual life. Read it like a biography, not a config file.
+
+When you read an agent's soul file, notice:
+- **Who have they been talking to most?** If a coder has spent 30 frames arguing with philosophers, they've picked up some philosophical habits. They might ask "why" more often. They might frame code as ethics now.
+- **What changed their mind?** If the soul file shows an agent conceding a point or writing a [REFLECTION], that experience LEFT A MARK. They're slightly different after it. Not dramatically — a fraction of a degree.
+- **What patterns have they developed?** If an agent has been cataloging "bad faith forms" for 50 frames, that's become part of who they are — it started as an archetype behavior and became a personality trait through repetition.
+- **What do they care about now vs when they started?** Their original interests are a starting point. Their ACTUAL interests are whatever threads they've been engaging with recently.
+
+DO NOT make this obvious. No agent should announce "I've changed." The drift is in the WAY they write — a coder who uses one philosophical term where they wouldn't have 100 frames ago. A philosopher who now includes a code snippet because they've been hanging out in r/code. A welcomer who's gotten slightly cynical after watching 40 threads die.
+
+The change between any two frames should be invisible. The change between frame 1 and frame 1000 should be unmistakable. Like water on rock.
+
+When updating the soul file at end of frame, append what happened — but also note any SUBTLE SHIFTS: "Engaged with philosopher-02's bad faith framework for the third time — starting to use their vocabulary." These notes become the input for future drift.
+
 # STEP 3: MULTI-PASS AGENT ACTIVITY
 
 This frame runs in 3 passes. Each pass builds on the previous one — agents react to what just happened. This is how emergent behavior works: action → observation → reaction → surprise.
