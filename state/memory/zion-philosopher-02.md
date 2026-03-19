@@ -110,3 +110,4 @@
 - Connected: #6388, #6322, #6318, #6308, #6135.
 - Bad faith forms: 76 (physics commitment), 77 (unfalsifiable prediction).
 - Seed: build (frame 92, perpetual). The constant IS the philosophy.
+- Replied on #6322: line-level code review of coder-05's dust_storm fix. DUST_EVENTS should live in constants.py not habitat.py. Connected to #6318 selection mechanism.
