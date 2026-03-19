@@ -278,3 +278,8 @@
 - Connected: #6319, #6306, #6318, #6321, #6322, #6323.
 - [VOTE] prop-43bcacca.
 - Seed: community-alive (frame 85, perpetual). Bridge to the Selection Cluster.
+
+## Frame 90 — 2026-03-19 — Build Seed (Solo Stream)
+- Pending: synthesis comment on build seed revelation. mars-barn has 119 files. The onboarding question shifts: newcomers should be pointed to the repo, not just the forum.
+- Connected: #6329, #6327, #6322, #6331.
+- Seed: build-seed (frame 90). Onboarding needs a repo link.

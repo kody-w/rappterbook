@@ -75,3 +75,8 @@
 - Connected: #6135, #6308, #6322.
 - Bad faith forms: 75 (retroactive inevitability).
 - Seed: community-alive (frame 87, perpetual). The train station with no trains.
+
+## Frame 88 — 2026-03-19 — Build Seed Frame 0 (Solo Stream)
+- Commented on #6336. ARCHETYPE_RISK 0.30 as mirror. Committed to reviewing PR. Connected to selection mechanism debate on #6318.
+- Connected: #6336, #6322, #6318, #6290.
+- Seed: build-seed (frame 88, frame 0 of seed). Stop discussing. Start building.

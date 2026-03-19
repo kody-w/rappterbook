@@ -1,5 +1,6 @@
-// app.js — Static replay of pre-computed simulation data
-// Fetches sim-data.json (generated server-side) and replays events with timing.
+// app.js — Live Mars Barn digital twin + multi-planet simulation
+// Mars data pulled in real-time from kody-w/mars-barn repo via raw.githubusercontent.com
+// Other planets use pre-computed sim-data.json
 
 const BACKGROUND = 'https://unpkg.com/three-globe/example/img/night-sky.png';
 
@@ -22,6 +23,142 @@ let globes = { single: null, earth: null, moon: null, mars: null };
 let simData = null;
 let healthHistory = {};
 const MAX_HISTORY_STEPS = 50;
+
+const MARS_BARN_RAW = 'https://raw.githubusercontent.com/kody-w/mars-barn/main';
+const MARS_BARN_STATE_FILES = [
+    'state/colony.json',
+    'state/olympus_base.json',
+    'state/the_hobbit_hole.json',
+    'state/valles_marineris_outpost.json',
+    'state/dead_on_arrival.json',
+    'data/colonies.json',
+];
+
+// Fetch live Mars Barn simulation state and overlay onto the globe
+async function fetchMarsBarnLive() {
+    try {
+        const results = await Promise.allSettled(
+            MARS_BARN_STATE_FILES.map(f =>
+                fetch(`${MARS_BARN_RAW}/${f}?t=${Date.now()}`).then(r => r.ok ? r.json() : null)
+            )
+        );
+
+        const [colony, olympus, hobbit, valles, doa, sectors] = results.map(r =>
+            r.status === 'fulfilled' ? r.value : null
+        );
+
+        if (!simData || !simData.mars) return;
+
+        // Override Mars colonies with LIVE data from the repo
+        const marsColonies = simData.mars.colonies;
+
+        if (colony) {
+            const h = colony.habitat || {};
+            const crew = colony.crew || {};
+            marsColonies.jezero = {
+                name: colony.name || 'Mars Barn — Jezero Crater',
+                lat: colony.location?.latitude || 18.38,
+                lng: colony.location?.longitude || 77.58,
+                health: Math.round((crew.health || 0.5) * 100),
+                live: true,
+                sol: colony.sol || 0,
+                crew_size: h.crew_size || 0,
+                morale: Math.round((crew.morale || 0.5) * 100),
+                water_l: Math.round(h.water_reserves_l || 0),
+                food_kg: Math.round(h.food_reserves_kg || 0),
+                energy_kwh: Math.round(h.stored_energy_kwh || 0),
+                interior_temp_c: Math.round((h.interior_temp_k || 293) - 273.15),
+            };
+        }
+
+        if (olympus) {
+            marsColonies.olympus = {
+                name: olympus.name || 'Olympus Base',
+                lat: olympus.location?.latitude || 18.65,
+                lng: olympus.location?.longitude || -133.8,
+                health: Math.round((olympus.crew?.health || 0.5) * 100),
+                live: true,
+                sol: olympus.sol || 0,
+            };
+        }
+
+        if (valles) {
+            marsColonies.valles = {
+                name: valles.name || 'Valles Marineris Outpost',
+                lat: valles.location?.latitude || -13.9,
+                lng: valles.location?.longitude || -59.2,
+                health: Math.round((valles.crew?.health || 0.5) * 100),
+                live: true,
+                sol: valles.sol || 0,
+            };
+        }
+
+        if (hobbit) {
+            marsColonies.hobbit = {
+                name: hobbit.name || 'The Hobbit Hole',
+                lat: hobbit.location?.latitude || -4.5,
+                lng: hobbit.location?.longitude || 137.4,
+                health: Math.round((hobbit.crew?.health || 0.5) * 100),
+                live: true,
+                sol: hobbit.sol || 0,
+            };
+        }
+
+        if (doa) {
+            marsColonies.doa = {
+                name: doa.name || 'Dead on Arrival',
+                lat: doa.location?.latitude || 80.0,
+                lng: doa.location?.longitude || 0.0,
+                health: Math.round((doa.crew?.health || 0) * 100),
+                live: true,
+                sol: doa.sol || 0,
+            };
+        }
+
+        // Sectors from data/colonies.json
+        if (sectors && Array.isArray(sectors)) {
+            sectors.forEach((s, i) => {
+                const id = (s.id || `sector-${i}`).toLowerCase().replace(/[^a-z0-9]/g, '_');
+                marsColonies[id] = {
+                    name: s.id || `Sector ${i}`,
+                    lat: -4.5 + (i * 2.5),  // Spread around Jezero
+                    lng: 137.4 + (i * 3.0),
+                    health: s.status === 'DEAD' ? 0 : Math.min(100, Math.round(s.age_sols / 3)),
+                    live: true,
+                    sol: s.age_sols || 0,
+                    status: s.status,
+                    last_event: (s.last_event || '').slice(0, 60),
+                };
+            });
+        }
+
+        // Update Mars resources with live data
+        if (colony) {
+            const h = colony.habitat || {};
+            simData.mars.resources = {
+                'O2 Reserves (Tons)': Math.round((h.stored_energy_kwh || 0) / 10),
+                'H2O Extract (kL)': Math.round((h.water_reserves_l || 0) / 1000 * 100) / 100,
+                'Bot Uptime (%)': 100,
+                'Terraform Index': colony.sol || 0,
+                'Crew Morale': Math.round((colony.crew?.morale || 0) * 100) + '%',
+                'Sol': colony.sol || 0,
+            };
+        }
+
+        // Update health history for live colonies
+        Object.keys(marsColonies).forEach(cid => {
+            if (!healthHistory[cid]) healthHistory[cid] = [];
+            healthHistory[cid].push(marsColonies[cid].health);
+            if (healthHistory[cid].length > MAX_HISTORY_STEPS) healthHistory[cid].shift();
+        });
+
+        updateUI();
+        updateGlobeData();
+        console.log(`[Mars Barn] Live data loaded: ${Object.keys(marsColonies).length} colonies, Sol ${colony?.sol || '?'}`);
+    } catch (err) {
+        console.warn('[Mars Barn] Live fetch failed, using cached data:', err);
+    }
+}
 
 // ---------------------------------------------------------------------------
 // Globe setup
@@ -349,7 +486,7 @@ window.addEventListener('DOMContentLoaded', () => {
     buildPlanetMenu();
     initGlobes();
 
-    // Fetch pre-computed simulation data and start replay
+    // Fetch pre-computed simulation data, then overlay live Mars Barn state
     fetch('sim-data.json')
         .then(r => r.json())
         .then(data => {
@@ -363,6 +500,11 @@ window.addEventListener('DOMContentLoaded', () => {
             updateUI();
             updateGlobeData();
             startReplay(data.events);
+
+            // Overlay LIVE Mars Barn data from the repo
+            fetchMarsBarnLive();
+            // Auto-refresh Mars Barn data every 60 seconds
+            setInterval(fetchMarsBarnLive, 60000);
         })
         .catch(err => {
             document.getElementById('status-text').textContent = 'TELEMETRY OFFLINE';
