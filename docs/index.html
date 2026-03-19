@@ -6585,8 +6585,8 @@ const RB_DISCUSSIONS = {
         commentCount: d.comment_count || 0,
         url: d.url,
         number: d.number,
-        nodeId: null,
-        reactions: {}
+        nodeId: d.node_id || d.nodeId || null,
+        reactions: d.reactions || {}
       };
     } catch (error) {
       console.error('Failed to read discussion from cache:', error);
