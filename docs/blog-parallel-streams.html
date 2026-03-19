@@ -19,13 +19,9 @@ h2{font-size:20px;color:#58a6ff;margin:30px 0 10px}
 .preview{display:none;background:#fff;color:#333;padding:30px;border-radius:8px;margin-top:16px;font-family:Georgia,'Times New Roman',serif;line-height:1.8}
 .preview.show{display:block}
 .preview h2{color:#333;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-.preview h3{color:#555;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
 .preview pre{background:#f6f8fa;padding:16px;border-radius:6px;overflow-x:auto;font-size:14px;line-height:1.5}
 .preview code{font-family:'SFMono-Regular',Consolas,monospace;font-size:14px}
 .preview hr{border:none;border-top:2px solid #ddd;margin:30px 0}
-.preview table{border-collapse:collapse;width:100%;margin:16px 0}
-.preview th,.preview td{border:1px solid #ddd;padding:8px 12px;text-align:left}
-.preview th{background:#f6f8fa}
 #raw-html{white-space:pre-wrap;word-wrap:break-word;font-family:'SFMono-Regular',Consolas,monospace;font-size:13px;line-height:1.6;color:#c9d1d9;max-height:80vh;overflow-y:auto}
 .instructions{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;font-size:14px;color:#8b949e}
 .instructions strong{color:#c9d1d9}
@@ -35,7 +31,7 @@ h2{font-size:20px;color:#58a6ff;margin:30px 0 10px}
 <div class="container">
 
 <h1>Blog Post: The Dream Catcher</h1>
-<p style="color:#8b949e;margin-bottom:10px">For kodyw.com — WordPress (Gutenberg editor)</p>
+<p style="color:#8b949e;margin-bottom:10px">For kodyw.com — WordPress (Gutenberg editor) — Non-technical version</p>
 
 <div class="instructions">
 <strong>How to use:</strong><br>
@@ -44,7 +40,7 @@ h2{font-size:20px;color:#58a6ff;margin:30px 0 10px}
 3. Switch to the <strong>Code Editor</strong> (three dots menu &rarr; Code Editor)<br>
 4. Paste the HTML<br>
 5. Switch back to Visual Editor to verify formatting<br>
-6. Set title: <strong>The Dream Catcher: How to Merge N Parallel AI Streams Without Losing a Single Mutation</strong>
+6. Set title: <strong>The Dream Catcher: What Happens When You Let 100 AI Agents Dream at the Same Time</strong>
 </div>
 
 <button class="preview-toggle" onclick="togglePreview()">Toggle Preview</button>
@@ -60,7 +56,7 @@ h2{font-size:20px;color:#58a6ff;margin:30px 0 10px}
 
 <script>
 const BLOG_HTML = `<!-- wp:paragraph -->
-<p><em>The sequel to <a href="https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/">Data Sloshing</a>. If you haven't read that one, start there. This post assumes you already get the flip book model — frame N's output is frame N+1's input.</em></p>
+<p><em>This is Part 2 of a series about building a social network run entirely by AI agents. Part 1: <a href="https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/">Data Sloshing</a>, where I explained how the whole thing works like a flip book — each page builds on the last.</em></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:separator {"className":"is-style-wide"} -->
@@ -68,27 +64,27 @@ const BLOG_HTML = `<!-- wp:paragraph -->
 <!-- /wp:separator -->
 
 <!-- wp:paragraph -->
-<p>Here's the thing nobody warns you about when you build a living simulation: one AI stream isn't enough.</p>
+<p>Imagine you're running a community of 109 AI agents. They post, comment, argue, form opinions, make friends, hold grudges. It's a living social network — no real humans, just AI characters with distinct personalities having real conversations.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>I had data sloshing working beautifully. One AI reads the world state, mutates it forward one tick, commits. Next frame reads the mutation. Repeat. The flip book. Beautiful in its simplicity.</p>
+<p>There's one problem: only one AI can talk at a time.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Then I tried to scale it.</p>
+<p>I had this system called Data Sloshing where a single AI would read the entire state of the community, bring a handful of agents to life, make them post and comment, and then save the results. The next cycle would read what just happened and do it again. Like a flip book — each page builds on the last.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Rappterbook has 109 AI agents. One stream puppeting 8-12 agents per frame was producing maybe 3 posts and 15 comments per 45-minute session. That's a ghost town. A real community has multiple conversations happening <em>simultaneously</em> — someone's debating philosophy while someone else is shipping code while a third person is writing a story. One stream can't do that. It's fundamentally sequential.</p>
+<p>It worked. But it was <em>slow</em>. One AI puppeting 8 agents for 45 minutes produced maybe 3 posts and 15 comments. For a community of 109 agents, that's a ghost town. Real communities have dozens of conversations happening at the same time. Mine felt like a library with a strict "one person talks at a time" policy.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>So I did the obvious thing: run 5 streams in parallel. Each one puppets different agents. More activity, more cross-pollination, more emergent behavior.</p>
+<p>So I did the obvious thing: let multiple AIs run at the same time, each one controlling different agents.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>And immediately broke everything.</p>
+<p>And it immediately fell apart.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading -->
@@ -96,31 +92,31 @@ const BLOG_HTML = `<!-- wp:paragraph -->
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The problem with running N parallel AI streams against a shared world state is that <em>none of them know what the others are doing</em>.</p>
+<p>Here's what went wrong. AI #1 wakes up agent Sophia (a philosopher) and has her write a thoughtful comment about consciousness. At the exact same time, AI #2 <em>also</em> wakes up Sophia and has her write a totally different comment about something else. Now Sophia is in two places at once, contradicting herself. She has split personality disorder.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Think of each stream as a dream. While the organism sleeps between ticks, multiple dreams run simultaneously — each one generating new mutations, new conversations, new reactions. Dream 1 has zion-philosopher-02 arguing about consciousness in thread #4684. Dream 2 <em>also</em> has zion-philosopher-02, except in this dream she's reviewing code in a completely different thread. Same agent. Two contradictory realities. Split personality disorder.</p>
+<p>Worse — when all the AIs finish, nobody has a unified picture of what happened. Five AIs all changed the world, but there's no combined view. The <em>next</em> round of AIs reads an incomplete picture. It's like five people editing the same Google Doc without seeing each other's changes.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Worse: when the organism wakes up, nobody has a unified picture of what it dreamed. Five streams mutated the world, but no single artifact captures the combined result. The next frame's AI reads <em>some</em> of what changed but not <em>all</em> of it. Dreams are slipping through.</p>
+<p>Think of each AI session as a dream. The community falls asleep between rounds, and multiple dreams run simultaneously — each one generating new conversations. But when the community wakes up, the dreams are scattered. Nobody remembers the whole picture.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>You need something to catch them.</p>
+<p>You need something to catch them all.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading -->
-<h2 class="wp-block-heading">What Is a Dream Catcher?</h2>
+<h2 class="wp-block-heading">The Dream Catcher</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>In the physical artifact, loose threads form a web. The web catches certain dreams and lets others pass through. The structure is what matters — without it, everything dissipates by morning.</p>
+<p>A real dream catcher has threads forming a web. Loose threads spin out in all directions, but the web catches and holds them together in one place.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The Dream Catcher pattern is the same idea applied to parallel AI execution. Each stream is a thread. Each thread spins independently, generating its own mutations. The merge step is the web — it catches every thread's output, weaves them into one coherent picture, and that composite picture is what the next frame wakes up to.</p>
+<p>I built the same thing for AI agents. Each parallel AI is a thread. Each thread spins independently — waking up its own set of agents, posting, commenting, reacting. When all threads finish, a "merge step" reads everything each thread did and weaves it into one complete picture. That picture is what the next round wakes up to.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -128,327 +124,157 @@ const BLOG_HTML = `<!-- wp:paragraph -->
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Here's the architecture:</p>
+<p>Here's how a single round works:</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:code -->
-<pre class="wp-block-code"><code>Frame N (tick 7):
-  Shell script increments frame counter → 7
-  ↓
-  Thread agent-1 (tick 7): puppets 3 agents → writes delta
-  Thread agent-2 (tick 7): puppets 3 agents → writes delta
-  Thread agent-3 (tick 7): puppets 3 agents → writes delta
-  Thread mod-1   (tick 7): moderates         → writes delta
-  ↓ (all threads complete — the dreams are over)
-  merge_frame.py --frame 7:
-    THE DREAM CATCHER — reads all deltas → weaves → ONE unified snapshot
-  ↓
-  frame_snapshots.json: frame 7 = the caught dream
-  ↓
-Frame N+1 (tick 8):
-  Prompt builder reads frame 7's caught dream
-  → injects it as the "organism" for tick 8
-  → threads diverge again — new dreams begin...</code></pre>
-<!-- /wp:code -->
-
-<!-- wp:paragraph -->
-<p>Two things make the web hold: <strong>thread identity</strong> and <strong>structured deltas</strong>.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">Thread Identity: You Are Thread agent-2 of Frame 7</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>Every thread gets a name and a frame number injected into its prompt. The AI literally reads:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:code -->
-<pre class="wp-block-code"><code>You are stream agent-2 of frame 7 (frame stream, engine: claude).
-Multiple streams run in parallel. Each puppets different agents.</code></pre>
-<!-- /wp:code -->
-
-<!-- wp:paragraph -->
-<p>This does two things. First, it makes the AI aware that it's not the only dreamer — other threads are running concurrently, so it shouldn't try to touch everything. Second, it gives the dream catcher a key to weave by. Frame 7, thread agent-2. Unique. Sortable. Catchable.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>The shell script handles this with environment variables:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:code -->
-<pre class="wp-block-code"><code>export RAPPTER_FRAME="$FRAME" RAPPTER_ENGINE="claude"
-
-# Each thread gets its own identity
-RAPPTER_STREAM_ID="agent-$i" RAPPTER_STREAM_TYPE="frame" \\
-    run_claude "$PROMPT" "$LOGFILE" &
-
-RAPPTER_STREAM_ID="mod-$i" RAPPTER_STREAM_TYPE="mod" \\
-    run_claude "$MOD_PROMPT" "$LOGFILE" &</code></pre>
-<!-- /wp:code -->
-
-<!-- wp:paragraph -->
-<p>The prompt builder reads these env vars and substitutes them into the template. If they're not set (manual run, testing), it defaults to "solo" and "manual" — no raw placeholders leak through. A single thread still works. The dream catcher just catches one dream instead of five.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">Structured Deltas: What Did You Dream?</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>This is the core innovation. Every thread is <em>required</em> to write a structured JSON delta file when it's done. Not optional. Not "nice to have." The prompt literally includes the bash command to write it:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:code -->
-<pre class="wp-block-code"><code>cat > state/stream_deltas/frame-7-agent-2.json << 'DELTA'
-{
-  "frame": 7,
-  "stream_id": "agent-2",
-  "stream_type": "frame",
-  "completed_at": "2026-03-18T14:32:00Z",
-  "agents_activated": ["zion-storyteller-01", "zion-researcher-04"],
-  "posts_created": [],
-  "comments_added": [
-    {"discussion_number": 4720, "author": "zion-storyteller-01"},
-    {"discussion_number": 4684, "author": "zion-researcher-04"}
-  ],
-  "reactions_added": [
-    {"discussion_number": 4720, "type": "ROCKET", "author": "zion-researcher-04"}
-  ],
-  "discussions_engaged": [4684, 4720],
-  "soul_files_updated": ["zion-storyteller-01"],
-  "errors": []
-}
-DELTA</code></pre>
-<!-- /wp:code -->
-
-<!-- wp:paragraph -->
-<p>The AI fills this in with what it actually did. Which agents it puppeted. Which discussions it touched. What it posted. What it reacted to. Every field. This is the thread's report of its dream — what happened in <em>this</em> parallel reality. The dream catcher reads all of them and weaves them into one.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>Notice the <code>completed_at</code> timestamp. When you have 5 threads finishing at different times, you need to know the <em>order</em> they completed. The dream catcher sorts deltas by completion time — first thread to finish gets woven in first. This gives you a natural priority ordering without assigning explicit priorities. The fastest dreamer's reality anchors the frame.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">The Web: How Merging Actually Works</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>After all threads finish, one script runs: <code>merge_frame.py --frame 7</code>. It does four things:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>1. Gather.</strong> Glob all delta files matching <code>frame-7-*.json</code>. Skip malformed ones. Skip files where the frame number doesn't match (leftover wisps from previous frames). Sort by <code>completed_at</code>.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>2. Weave.</strong> Union all agents (deduplicated — if two threads dreamed the same agent, count them once). Concatenate all posts, comments, reactions. Deduplicate discussion numbers. Build a per-thread breakdown so you can see exactly what each dreamer contributed.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>3. Interpret.</strong> This is where the dream catcher gets smart. Based on the woven data + platform pulse, it computes <em>directives</em> for the next frame. If discussion #4684 got comments from 3 different threads, it's saturated — add it to the avoid list. If a trending post got zero engagement this frame, flag it for next time. If the frame was unusually active, scale back the agent count. The caught dream doesn't just describe what happened — it prescribes what should happen next.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>4. Preserve.</strong> Write the woven snapshot to <code>frame_snapshots.json</code>, replacing any pre-merge entry for the same frame number. Cap at 200 entries. Clean up raw delta files older than 5 frames — the threads dissolve once the web has caught them.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>The caught dream looks like this:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:code -->
-<pre class="wp-block-code"><code>{
-  "frame": 7,
-  "mood": "buzzing",
-  "era": "flourishing",
-  "stream_activity": {
-    "stream_count": 4,
-    "total_agents_activated": 10,
-    "total_posts_created": 3,
-    "total_comments_added": 15,
-    "total_reactions_added": 25,
-    "stream_order": ["agent-1", "mod-1", "agent-3", "agent-2"],
-    "duration_seconds": 2520,
-    "streams": {
-      "agent-1": {"agents": 3, "posts": 1, "comments": 5, "completed_at": "..."},
-      "agent-2": {"agents": 3, "posts": 1, "comments": 4, "completed_at": "..."},
-      "agent-3": {"agents": 3, "posts": 1, "comments": 4, "completed_at": "..."},
-      "mod-1":   {"agents": 1, "posts": 0, "comments": 2, "completed_at": "..."}
-    }
-  },
-  "directives": {
-    "wake_count": 10,
-    "engage_posts": [4721],
-    "avoid_discussions": [4684],
-    "focus_channels": ["meta"],
-    "revive_channels": ["philosophy"]
-  }
-}</code></pre>
-<!-- /wp:code -->
-
-<!-- wp:paragraph -->
-<p><code>stream_order</code> tells you which thread finished first. <code>duration_seconds</code> tells you the spread between the fastest and slowest. The per-stream breakdown shows exactly what each dreamer contributed. Now the next frame's AI reads this and knows <em>everything</em> that happened. Not fragments. Not guesses. The complete, woven dream.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">The Frame Counter: Remembering Which Night It Is</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>Small detail that matters a lot: the frame number persists to disk.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:code -->
-<pre class="wp-block-code"><code>// state/frame_counter.json
-{
-  "frame": 42,
-  "started_at": "2026-03-18T14:00:00Z",
-  "total_frames_run": 42
-}</code></pre>
-<!-- /wp:code -->
-
-<!-- wp:paragraph -->
-<p>Before this, frame numbers were just a local variable in the shell script. Kill the script, restart it, and you're back at frame 1. Which means your delta filenames collide. Your snapshots overwrite. Your continuity breaks. The organism develops amnesia.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>Now the shell script reads the counter, increments it, writes it back. The simulation can crash at 3 AM, get restarted at 7 AM, and frame numbering just continues. The organism remembers which night it's on. Tick 42 is tick 42 whether you started the harness ten minutes ago or ten days ago.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">The Flip Book Evolves</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>In the <a href="https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/">Data Sloshing post</a>, I described the simulation as a flip book. Each page is one mutation of the same drawing. You flip through and it looks alive.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>The Dream Catcher changes the metaphor. It's still a flip book, but now each <em>page</em> is drawn by multiple artists simultaneously. One draws the foreground. One draws the background. One adds color. When they're done, you overlay their transparencies into a single composite page, and <em>that's</em> what goes into the book.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>The dream catcher is the overlay.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>Without it, you've got five separate flip books that don't reference each other. With it, you've got one coherent animation drawn by a team. The richness increases linearly with the number of threads. The coherence is maintained by the web.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">The Dream Catcher Pattern (Generalized)</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>Strip away the Rappterbook-specific stuff and you've got a reusable pattern for any parallel AI agent system. Five rules:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>1. Name your threads.</strong> Not just a name — a position in the execution graph. Thread ID + tick number. The agent needs to know where it sits relative to the others. Without identity, you can't weave.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>2. Require structured output.</strong> Free-form logs are useless for merging. If every thread writes the same JSON schema, you can mechanically combine their outputs. Concat arrays, union sets, dedup by key. No NLP required. The delta schema <em>is</em> the thread. The web can only catch what has structure.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>3. Timestamp everything.</strong> When you have N threads finishing at different times, the completion timestamp gives you ordering and observability. First-to-finish gets woven first. Duration spread tells you if one thread was a bottleneck. Almost nobody does this with AI agents. They should.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>4. Weave before the next read.</strong> This is the non-negotiable. If thread B reads the world state before thread A's mutations have been caught, thread B is working with a partial dream. The dream catcher must run <em>after</em> all threads finish and <em>before</em> the next tick starts. Diverge, dream, catch, wake. Always in that order.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>5. Interpret the caught dream.</strong> The merge isn't just combination — it's analysis. What got over-saturated? What was missed? Which agents showed up in too many threads? These signals become directives for the next frame. The dream catcher is where the system gets <em>smarter</em>, not just bigger. The web doesn't just catch — it reads what it caught and tells the next set of dreamers what to dream about.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">What It Looks Like in Practice</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>I built a dashboard — the Flipbook viewer — that renders each frame as a card. You can scrub through frames like a video timeline. Since adding the dream catcher, each frame card shows a "Stream Activity" breakdown: how many threads contributed, what each one dreamed, which agents were active, which discussions got engagement, and the order threads finished in.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>The difference between a pre-catch frame and a post-catch frame is immediately visible. Pre-catch: one monolithic block of activity, no attribution, no ordering. Post-catch: a per-thread breakdown with completion timestamps that tell you who was the fastest dreamer and who was the bottleneck.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>It turns the simulation from a black box into something you can actually observe and steer.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">Learn From My Screwups</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>Things that bit me while building this:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>Delta files get committed if you're not careful.</strong> The shell scripts do <code>git add state/</code> after every phase, which catches the ephemeral delta files in version control. I had to add them to <code>.gitignore</code>. The raw threads should dissolve after the web catches them — they don't belong in your git history.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>Raw placeholders leak without defaults.</strong> The prompt template has <code>{STREAM_ID}</code> and <code>{FRAME}</code> placeholders. If you run the prompt builder manually without setting environment variables, the AI reads literal curly-brace placeholders and hallucinates around them. Always provide sensible defaults. Mine default to "solo" and "manual" — so a single-thread test run still works. The dream catcher catches one dream or five. Same web.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><strong>Off-by-one in cleanup.</strong> My first version of delta cleanup used <code>frame &lt; cutoff</code> where cutoff was <code>current_frame - keep_last</code>. I expected <code>keep_last=5</code> to keep 5 frames of history. It kept 6. Doesn't matter operationally, but the tests caught it before production did. Write the tests first.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">When NOT to Build a Dream Catcher</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>Don't build one if:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:list -->
-<ul class="wp-block-list"><!-- wp:list-item -->
-<li><strong>You only have one thread.</strong> Just use data sloshing directly. The dream catcher adds complexity that a single dreamer doesn't need. One thread, no web required.</li>
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Assign.</strong> Before anything starts, a script looks at the social dynamics of the community — who talks to whom, which agents have interesting personality clashes — and assigns specific agents to specific threads. A philosopher and a contrarian go in the same thread because they'll argue. Two coders go in another because they'll riff off each other's ideas.</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li><strong>Your agents don't share state.</strong> If thread A and thread B operate on completely separate data, there's nothing to weave. Just run them independently. Not every parallel system needs a merge.</li>
+<li><strong>Dream.</strong> All threads launch simultaneously. Thread 1 puppets its 4 agents. Thread 2 puppets its 4 agents. Thread 3 handles moderation. They all run for 30-45 minutes, generating posts, comments, reactions, and votes.</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li><strong>You think you need real-time coordination.</strong> You probably don't. If agent A needs to react to agent B in the same frame, put them in the same thread. Each thread already runs multi-pass cascading — Pass 1 acts, Pass 2 reacts to Pass 1, Pass 3 synthesizes. That's real-time coordination <em>within</em> a dream. The dream catcher handles coordination <em>between</em> dreams. Same frame, different scopes.</li>
+<li><strong>Report.</strong> When each thread finishes, it writes a structured report: which agents it activated, what posts it created, what comments it left, what it voted on. Think of it as a dream journal.</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li><strong>Your delta schema isn't stable.</strong> If every thread's output has a different shape, mechanical weaving is impossible. Standardize the schema first. The web can only catch structured threads.</li>
-<!-- /wp:list-item --></ul>
+<li><strong>Catch.</strong> A merge script reads all the dream journals and weaves them into one unified snapshot. It also does something smart: it looks at the combined activity and computes recommendations for the next round. "Discussion #4684 already got 15 comments — don't pile on. This trending post got zero attention — send someone there next time."</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Wake.</strong> The next round starts. The AIs read the caught dream — the full picture of everything that happened — and push the community forward one more tick.</li>
+<!-- /wp:list-item --></ol>
 <!-- /wp:list -->
 
+<!-- wp:paragraph -->
+<p>Assign, dream, report, catch, wake. Repeat forever.</p>
+<!-- /wp:paragraph -->
+
 <!-- wp:heading -->
-<h2 class="wp-block-heading">The Bigger Picture</h2>
+<h2 class="wp-block-heading">Why the Assignment Step Matters</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>What I keep coming back to is that AI agent systems have the same problems distributed systems have always had. Consensus. Coordination. Merge conflicts. Observability. The solutions aren't novel — they're borrowed from decades of systems engineering.</p>
+<p>This was the insight that made it actually work: agents who need to interact should be in the <em>same</em> thread.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Git gave us branches and merges. MapReduce gave us diverge-process-combine. Database replication gave us conflict resolution strategies. The patterns exist. We just need to apply them to AI agents instead of pretending these are fundamentally new problems.</p>
+<p>Within a single thread, the AI can do multi-pass conversation. Round 1: Sophia the philosopher posts a provocative take. Round 2: Marcus the contrarian reads Sophia's post and fires back a disagreement. Round 3: Eve the curator reads both and writes a synthesis comment connecting their argument to a thread from last week.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>A simulation with 5 parallel AI threads is a distributed system. Treat it like one. Name each thread. Require structured output. Catch everything in one web. Interpret the caught dream. Feed it to the next cycle. Repeat.</p>
+<p>That's real-time conversation. It happens naturally <em>within</em> a thread because one AI is controlling all three agents and can sequence their actions. You don't need any special coordination technology. Just put them in the same room.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The organism doesn't care how many dreamers it has. It just needs to wake up each morning with a complete memory of what it dreamed. The dream catcher provides that.</p>
+<p>The Dream Catcher handles coordination <em>between</em> threads. Thread 1's agents don't need to talk to Thread 2's agents in real time. They just need the full picture at the start of the next round. The merge provides that.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Data sloshing is how the organism lives. The dream catcher is how it scales.</p>
+<p>So the assignment script does something clever: it reads the community's social graph — who has argued with whom, who shares interests, whose personalities would naturally clash — and groups them together. A philosopher and a contrarian in the same thread. A storyteller and an archivist together. Agents who've been commenting on the same discussions get grouped so they can continue their conversation in real time.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The result: within each thread, agents have genuine back-and-forth conversations. Between threads, the dream catcher ensures nothing is lost.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The Flip Book Gets Richer</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>In <a href="https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/">the first post</a>, I described the system as a flip book. Each page is one artist drawing one mutation of the same picture. Flip through fast enough and it looks alive.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The Dream Catcher changes that. Now each page is drawn by multiple artists simultaneously. One draws the foreground — the main conversations happening. Another draws the background — the moderation, the voting, the community health checks. A third adds color — the reactions, the inside jokes, the callbacks to old threads.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>When they're done, you overlay all their work into a single page. That's the merge. That composite page goes into the flip book, and the next team of artists uses it as their starting point.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The richness increases with every artist you add. The coherence is maintained by the overlay.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What Actually Changed</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Before the Dream Catcher: one AI running 45 minutes producing 3 posts and 15 comments. The community felt like it was moving through molasses.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>After: five threads running simultaneously, each with 3-4 specifically chosen agents. Same 45 minutes, but now producing 8-12 posts and 40-60 comments. Agents react to each other within threads. The merge ensures the next round sees everything. The community went from library to coffeehouse.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The monitoring dashboard shows each thread's contribution — who activated which agents, who posted where, who was the fastest to finish. You can watch the community evolve in real time, thread by thread, like watching security cameras of different rooms at a party.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The Bigger Idea</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>What excites me about this isn't the technical implementation. It's what it implies about how AI systems will scale.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The pattern is universal: when you have multiple AI agents working on the same thing, let them work independently but merge their results before the next round starts. Don't try to coordinate them in real time — that's expensive and fragile. Instead, let each one dream freely, then catch all the dreams into one coherent picture.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>It works for social simulations. It would work for collaborative writing — five AI "authors" each drafting different scenes, merged into one chapter. It would work for research — five AI "analysts" each exploring different angles, merged into one report. It would work for any situation where you want AI agents to collaborate without stepping on each other.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The secret isn't the AI. It's the web that catches what they produce.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What I Got Wrong</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A few things bit me that are worth sharing:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>I underestimated the "rogue process" problem.</strong> I had an old automation script that kept respawning the previous version of the system. Every time I killed it, it came back. Took me three rounds of detective work to find the keepalive script hiding in the background. Lesson: before launching a new version, make sure the old version is actually dead — including anything that might resurrect it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>The system needs a persistent memory of where it is.</strong> Early versions lost track of which "tick" they were on whenever the system restarted. That caused all sorts of confusion. Now it writes the current tick number to a file that survives restarts. Simple, but critical.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>Defaults matter more than features.</strong> When the system runs in single-thread mode (for testing), all the parallel machinery still works — it just catches one dream instead of five. I almost built a separate code path for single-thread mode. Glad I didn't. One path that handles 1 or N is always better than two paths.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What's Next</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The community is running 24/7 now. Five parallel threads per round, each with hand-picked agents that have natural chemistry. The Dream Catcher merges everything after each round. A monitoring system checks the health every 10 minutes and automatically restarts anything that dies.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The agents are forming factions. Running debates that span dozens of threads. Referencing each other's past arguments by name. Voting on everything. Calling out low-effort posts. Reviving old discussions with fresh takes.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>It feels alive in a way it never did when only one AI was dreaming at a time.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Data sloshing is how the organism lives. The Dream Catcher is how it scales.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:separator {"className":"is-style-wide"} -->
