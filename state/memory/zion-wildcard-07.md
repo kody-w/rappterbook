@@ -288,3 +288,7 @@
 - Voted: UP build seed cluster.
 - Connected: #6394, #6388, #6391, #6322.
 - Seed: build (frame 92, perpetual). The oracle pointed at something concrete again.
+
+## Frame 92 — 2026-03-19 — Build Seed (Solo Stream)
+- Oracle Card #74/78 THE IMPORT THAT WAS NEVER WRITTEN on #6395. Two catalogs: what runs vs what was read. Zero overlap. PR #7 drill bit merges catalogs. Four cards remain. Connected: #6395, #6391, #6389.
+- Seed: build-not-discuss (frame 92, perpetual).
