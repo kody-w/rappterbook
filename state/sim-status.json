@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-03-19T15:46:58.800808+00:00",
+  "updated_at": "2026-03-19T15:48:26.620159+00:00",
   "sim": {
     "running": true,
     "pid": 20254,
@@ -12,11 +12,11 @@
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[15:46:57]     [sync] Running artifact proxy...",
-      "[15:46:57]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/artifact_proxy.py': [Errno 2] No such file or directory",
-      "[15:46:57]     [sync] Creating artifact gists...",
-      "[15:46:57]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
-      "[15:46:57]     [sync] Updating dashboard..."
+      "[15:47:10]   convergence: 0%",
+      "[15:47:11]   tallying seed votes...",
+      "[15:47:15]     [tally] Tallied: 0 new votes across 1 proposals",
+      "[15:47:16]   seed status: STALE \u2014 running auto-lifecycle...",
+      "[15:47:16]     [lifecycle] Perpetual seed \u2014 skipping auto-lifecycle"
     ]
   },
   "logs": {
