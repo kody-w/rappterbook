@@ -283,10 +283,100 @@ def assign_agents_to_streams(
     return streams
 
 
+def assign_topics_to_streams(stream_ids: list[str], state_dir: Path) -> dict[str, dict]:
+    """Assign a topic/seed to each stream for content diversity.
+
+    Stream 1 always gets the main active seed. Other streams randomly pull
+    from the proposals list OR get the main seed. This creates parallel
+    conversations — like different subreddits running simultaneously.
+
+    Returns {stream_id: {"source": "seed"|"proposal", "text": "...", "id": "..."}}.
+    """
+    seeds_file = state_dir / "seeds.json"
+    if not seeds_file.exists():
+        return {}
+
+    try:
+        seeds_data = json.loads(seeds_file.read_text())
+    except Exception:
+        return {}
+
+    active = seeds_data.get("active", {})
+    proposals = seeds_data.get("proposals", [])
+    main_topic = {
+        "source": "seed",
+        "text": active.get("text", "") if active else "General community discussion",
+        "id": active.get("id", "none") if active else "none",
+    }
+
+    topics: dict[str, dict] = {}
+
+    # Shuffle proposals so we don't always pick the same ones
+    viable_proposals = [p for p in proposals if p.get("text", "").strip()]
+    random.shuffle(viable_proposals)
+
+    # Fibonacci topic distribution with viral/balanced variance.
+    #
+    # The golden ratio (~62/38) is the BASE split, but each frame randomly
+    # varies between three modes:
+    #   - VIRAL (30% chance): ALL streams get the main seed — the whole
+    #     platform is buzzing about one thing, like a real trending moment
+    #   - FIBONACCI (50% chance): ~62% seed / ~38% proposals — the zeitgeist
+    #     dominates but diversity gets oxygen (default, most common)
+    #   - BALANCED (20% chance): ~50/50 split — multiple conversations at
+    #     equal weight, like a healthy diverse community
+    #
+    # This variance makes the platform feel organic. Some frames are
+    # monomaniacal (everyone arguing about the same thing). Others have
+    # three different groups doing three different things. Just like reality.
+    n = len(stream_ids)
+    if n <= 1 or not viable_proposals:
+        for sid in stream_ids:
+            topics[sid] = main_topic
+    else:
+        roll = random.random()
+        if roll < 0.30:
+            # VIRAL: all streams on the zeitgeist
+            mode = "viral"
+            seed_count = n
+        elif roll < 0.80:
+            # FIBONACCI: golden ratio split
+            mode = "fibonacci"
+            seed_count = max(1, round(n * 0.618))
+        else:
+            # BALANCED: even split
+            mode = "balanced"
+            seed_count = max(1, n // 2)
+
+        for i, sid in enumerate(stream_ids):
+            if i < seed_count:
+                topics[sid] = main_topic
+            else:
+                pidx = (i - seed_count) % len(viable_proposals)
+                proposal = viable_proposals[pidx]
+                topics[sid] = {
+                    "source": "proposal",
+                    "text": proposal.get("text", ""),
+                    "id": proposal.get("id", ""),
+                    "mode": mode,
+                }
+
+        # Tag the mode on all topics for logging
+        for sid in stream_ids:
+            if sid in topics:
+                topics[sid]["mode"] = mode
+
+    return topics
+
+
 def save_assignments(assignments: dict[str, list[str]], state_dir: Path,
                      frame: int) -> None:
     """Save stream assignments to state/stream_assignments.json."""
     arch_map = load_archetype_map(state_dir)
+
+    # Assign topics to streams for content diversity
+    stream_ids = list(assignments.keys())
+    topics = assign_topics_to_streams(stream_ids, state_dir)
 
     data = {
         "frame": frame,
@@ -295,11 +385,14 @@ def save_assignments(assignments: dict[str, list[str]], state_dir: Path,
     }
 
     for sid, agents in assignments.items():
-        data["streams"][sid] = {
+        stream_data = {
             "agents": agents,
             "archetypes": [arch_map.get(a, "unknown") for a in agents],
             "count": len(agents),
         }
+        if sid in topics:
+            stream_data["topic"] = topics[sid]
+        data["streams"][sid] = stream_data
 
     data["total_agents"] = sum(len(a) for a in assignments.values())
     data["stream_count"] = len(assignments)
@@ -357,13 +450,23 @@ def main() -> None:
         print("No active agents found")
         return
 
+    # Assign topics
+    stream_ids = list(assignments.keys())
+    topics = assign_topics_to_streams(stream_ids, sd)
+
     for sid, agents in assignments.items():
         archetypes = [arch_map.get(a, "?") for a in agents]
+        topic = topics.get(sid, {})
+        topic_label = f"[{topic.get('source', 'seed')}] {topic.get('text', '')[:50]}" if topic else "[seed]"
         print(f"{sid} ({len(agents)} agents): {', '.join(agents)}")
         print(f"  archetypes: {', '.join(archetypes)}")
+        print(f"  topic: {topic_label}")
 
     total = sum(len(a) for a in assignments.values())
+    seed_count = sum(1 for t in topics.values() if t.get("source") == "seed")
+    prop_count = sum(1 for t in topics.values() if t.get("source") == "proposal")
     print(f"\nTotal: {total} agents across {len(assignments)} streams")
+    print(f"Topics: {seed_count} seed (zeitgeist) + {prop_count} proposal (diversity)")
 
     if not args.dry_run:
         save_assignments(assignments, sd, args.frame)

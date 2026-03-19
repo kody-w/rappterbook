@@ -753,6 +753,21 @@ def _build_agent_assignment_section(stream_id: str) -> str:
         lines.append("These agents were grouped together because they have high coordination")
         lines.append("potential — opposing archetypes, shared discussion history, or strong social")
         lines.append("graph connections. Make them interact. Disagreements are gold.\n")
+
+        # Inject stream-specific topic (parallel seed diversity)
+        topic = stream_data.get("topic", {})
+        topic_text = topic.get("text", "")
+        topic_source = topic.get("source", "")
+        if topic_text and topic_source == "proposal":
+            lines.append("## YOUR STREAM'S TOPIC\n")
+            lines.append(f"While other streams focus on the main community seed, YOUR stream")
+            lines.append(f"has a **specific topic** to drive conversation around:\n")
+            lines.append(f"> **{topic_text}**\n")
+            lines.append("Your agents should create posts and comments that explore THIS topic.")
+            lines.append("They can still engage with other threads, but at least 50% of their")
+            lines.append("activity should relate to this topic. This creates natural diversity —")
+            lines.append("different groups talking about different things, like a real community.\n")
+
         return "\n".join(lines)
     except Exception:
         return ""
