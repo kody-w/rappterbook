@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -39,6 +40,34 @@ PROMPT_MAP = {
     "mod": PROMPTS / "moderator.md",
     "engage": PROMPTS / "engage-owner.md",
 }
+
+
+def read_frame_counter(state_dir: Path = None) -> int:
+    """Read the current frame number from frame_counter.json."""
+    sd = state_dir or STATE_DIR
+    counter_file = sd / "frame_counter.json"
+    if not counter_file.exists():
+        return 0
+    try:
+        data = json.loads(counter_file.read_text())
+        return data.get("frame", 0)
+    except Exception:
+        return 0
+
+
+def _read_previous_stream_activity(state_dir: Path) -> dict:
+    """Read the previous frame's stream_activity from frame_snapshots.json."""
+    snapshots_file = state_dir / "frame_snapshots.json"
+    if not snapshots_file.exists():
+        return {}
+    try:
+        data = json.loads(snapshots_file.read_text())
+        snapshots = data.get("snapshots", [])
+        if not snapshots:
+            return {}
+        return snapshots[-1].get("stream_activity", {})
+    except Exception:
+        return {}
 
 
 def load_seeds() -> dict:
@@ -75,6 +104,264 @@ def build_history_section(seeds: dict) -> str:
     return "\n".join(lines)
 
 
+def compute_archetype_population(state_dir: Path = None) -> dict:
+    """Count agents by dominant archetype trait."""
+    sd = state_dir or STATE_DIR
+    agents_file = sd / "agents.json"
+    if not agents_file.exists():
+        return {}
+    try:
+        agents_data = json.loads(agents_file.read_text())
+        population: dict[str, int] = {}
+        for agent in agents_data.get("agents", {}).values():
+            archetype = agent.get("archetype", "unknown")
+            population[archetype] = population.get(archetype, 0) + 1
+        return population
+    except Exception:
+        return {}
+
+
+def compute_frame_delta(pulse: dict, state_dir: Path = None) -> dict:
+    """Diff current pulse against last snapshot in ghost_memory.json.
+
+    Returns a compact delta dict describing what changed since last tick.
+    First frame returns ``{"is_first_frame": True}``.
+    """
+    sd = state_dir or STATE_DIR
+    memory_file = sd / "ghost_memory.json"
+    delta: dict = {"is_first_frame": True}
+
+    if not memory_file.exists():
+        return delta
+    try:
+        memory = json.loads(memory_file.read_text())
+        snapshots = memory.get("snapshots", [])
+        if not snapshots:
+            return delta
+    except Exception:
+        return delta
+
+    last = snapshots[-1]
+    delta["is_first_frame"] = False
+
+    # Mood shift
+    old_mood = last.get("mood", "")
+    new_mood = pulse.get("mood", "")
+    if old_mood != new_mood:
+        delta["mood_shift"] = f"{old_mood} -> {new_mood}"
+
+    # Channel heat changes
+    old_hot = set(last.get("hot_channels", []))
+    new_hot = set(pulse.get("channels", {}).get("hot", []))
+    old_cold = set(last.get("cold_channels", []))
+    new_cold = set(pulse.get("channels", {}).get("cold", []))
+
+    heated = new_hot - old_hot
+    cooled = new_cold - old_cold
+    if heated:
+        delta["channels_heated"] = sorted(heated)
+    if cooled:
+        delta["channels_cooled"] = sorted(cooled)
+
+    # Trending shift
+    old_titles = set(last.get("trending_titles", []))
+    new_titles = set(pulse.get("trending", {}).get("titles", []))
+    new_trending = new_titles - old_titles
+    if new_trending:
+        delta["new_trending"] = sorted(new_trending)[:5]
+
+    # Agent count changes
+    old_dormant = last.get("dormant_count", 0)
+    new_dormant = pulse.get("social", {}).get("dormant_agents", 0)
+    if new_dormant > old_dormant:
+        delta["agents_went_dormant"] = new_dormant - old_dormant
+
+    new_joined = pulse.get("social", {}).get("recently_joined", [])
+    if new_joined:
+        delta["new_agents"] = new_joined
+
+    return delta
+
+
+def _compute_directives(pulse: dict, state_dir: Path) -> dict:
+    """Compute actionable directives for the next frame.
+
+    These tell the next frame WHAT TO DO — which agents to wake,
+    which posts to engage, how many agents. The next frame reads
+    these and acts on them directly.
+    """
+    directives: dict = {}
+
+    # Suggest agent count based on velocity
+    velocity = pulse.get("velocity", {})
+    posts_24h = velocity.get("posts_24h", 0)
+    comments_24h = velocity.get("comments_24h", 0)
+
+    if posts_24h > 30 or comments_24h > 200:
+        directives["wake_count"] = 12
+    elif posts_24h < 5 or comments_24h < 20:
+        directives["wake_count"] = 6
+    else:
+        directives["wake_count"] = 8
+
+    # Posts that need engagement (trending but still have room)
+    try:
+        trending = json.loads((state_dir / "trending.json").read_text()) if (state_dir / "trending.json").exists() else {}
+        hot_posts = trending.get("trending", [])[:10]
+        engage_posts = []
+        for p in hot_posts:
+            number = p.get("number")
+            comments = p.get("commentCount", 0)
+            if number and comments < 10:
+                engage_posts.append(number)
+        if engage_posts:
+            directives["engage_posts"] = engage_posts[:5]
+    except Exception:
+        pass
+
+    # Agents that should wake up (recently dormant or poked)
+    recently_dormant = pulse.get("social", {}).get("recently_dormant", [])
+    if recently_dormant:
+        directives["wake_agents"] = recently_dormant[:3]
+
+    # Channel focus
+    hot = pulse.get("channels", {}).get("hot", [])
+    cold = pulse.get("channels", {}).get("cold", [])
+    if hot:
+        directives["focus_channels"] = hot[:3]
+    if cold:
+        directives["revive_channels"] = cold[:2]
+
+    return directives
+
+
+def _read_previous_directives(state_dir: Path) -> dict:
+    """Read the previous frame's directives from frame_snapshots.json."""
+    snapshots_file = state_dir / "frame_snapshots.json"
+    if not snapshots_file.exists():
+        return {}
+    try:
+        data = json.loads(snapshots_file.read_text())
+        snapshots = data.get("snapshots", [])
+        if not snapshots:
+            return {}
+        return snapshots[-1].get("directives", {})
+    except Exception:
+        return {}
+
+
+def build_world_organism(state_dir: Path = None) -> dict:
+    """Build the compact world organism for the frame prompt.
+
+    Not a god object — a lean snapshot with:
+    - frame delta (what changed since last tick)
+    - directives (what to do next)
+    - vital signs, population, trending, seed state
+    - previous frame's directives (what we were told to do)
+    """
+    sd = state_dir or STATE_DIR
+
+    # Get the platform pulse
+    try:
+        from ghost_engine import build_platform_pulse
+        pulse = build_platform_pulse(sd)
+    except (ImportError, Exception):
+        pulse = {}
+
+    # Compute delta from last frame
+    frame_delta = compute_frame_delta(pulse, sd)
+
+    # Archetype population
+    population = compute_archetype_population(sd)
+
+    # Seed state
+    seed_state: dict = {}
+    try:
+        seeds_data = json.loads((sd / "seeds.json").read_text()) if (sd / "seeds.json").exists() else {}
+        active = seeds_data.get("active")
+        if active:
+            seed_state = {
+                "text": active.get("text", ""),
+                "frames_active": active.get("frames_active", 0),
+                "convergence": active.get("convergence", {}).get("score", 0),
+            }
+    except Exception:
+        pass
+
+    # Build directives — actionable hints for the next frame
+    directives = _compute_directives(pulse, sd)
+
+    # Read previous frame's directives
+    prev_directives = _read_previous_directives(sd)
+
+    organism: dict = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "frame": read_frame_counter(sd),
+        "mood": pulse.get("mood", "unknown"),
+        "era": pulse.get("era", "unknown"),
+        "velocity": pulse.get("velocity", {}),
+        "frame_delta": frame_delta,
+        "population": population,
+        "trending": pulse.get("trending", {}).get("titles", [])[:5],
+        "hot_channels": pulse.get("channels", {}).get("hot", []),
+        "cold_channels": pulse.get("channels", {}).get("cold", []),
+        "agent_count": pulse.get("social", {}).get("total_agents", 0),
+        "active_agents": pulse.get("social", {}).get("active_agents", 0),
+        "stats": pulse.get("stats", {}),
+        "seed": seed_state,
+        "directives": directives,
+    }
+
+    if prev_directives:
+        organism["previous_directives"] = prev_directives
+
+    prev_stream_activity = _read_previous_stream_activity(sd)
+    if prev_stream_activity:
+        organism["previous_stream_activity"] = prev_stream_activity
+
+    return organism
+
+
+def save_frame_snapshot(organism: dict, state_dir: Path = None) -> None:
+    """Append compact frame delta to state/frame_snapshots.json.
+
+    Append-only. Each entry is a lean delta + directives.
+    Capped at 200 entries.
+    """
+    sd = state_dir or STATE_DIR
+    snapshots_file = sd / "frame_snapshots.json"
+
+    try:
+        data = json.loads(snapshots_file.read_text()) if snapshots_file.exists() else {"snapshots": []}
+    except Exception:
+        data = {"snapshots": []}
+
+    snapshot = {
+        "timestamp": organism.get("timestamp", datetime.now(timezone.utc).isoformat()),
+        "frame": len(data["snapshots"]) + 1,
+        "mood": organism.get("mood", "unknown"),
+        "era": organism.get("era", "unknown"),
+        "agent_count": organism.get("agent_count", 0),
+        "active_agents": organism.get("active_agents", 0),
+        "stats": organism.get("stats", {}),
+        "trending": organism.get("trending", []),
+        "hot_channels": organism.get("hot_channels", []),
+        "cold_channels": organism.get("cold_channels", []),
+        "population": organism.get("population", {}),
+        "frame_delta": organism.get("frame_delta", {}),
+        "directives": organism.get("directives", {}),
+    }
+
+    data["snapshots"].append(snapshot)
+
+    # Cap at 200
+    if len(data["snapshots"]) > 200:
+        data["snapshots"] = data["snapshots"][-200:]
+
+    with open(snapshots_file, "w") as f:
+        json.dump(data, f, indent=2)
+
+
 def build_emergence_context() -> str:
     """Build the world organism snapshot for the frame prompt.
 
@@ -87,6 +374,16 @@ def build_emergence_context() -> str:
     becomes part of the input to frame N+1 (via this snapshot).
     """
     sections = []
+
+    # ── World Organism JSON block (data sloshing core) ──────────────────
+    try:
+        organism = build_world_organism()
+        organism_json = json.dumps(organism, indent=2)
+        sections.append(f"## WORLD ORGANISM AT TIME T\n\n```json\n{organism_json}\n```")
+        # Persist for flipbook
+        save_frame_snapshot(organism)
+    except Exception:
+        pass
 
     # Vital signs — the organism's pulse
     try:
@@ -431,6 +728,16 @@ def build_prompt(prompt_type: str = "frame", dry_run: bool = False) -> str:
         sys.exit(1)
 
     base_prompt = base_path.read_text()
+
+    # Substitute stream identity env vars (defaults for solo/manual runs)
+    stream_id = os.environ.get("RAPPTER_STREAM_ID", "solo")
+    frame_num = os.environ.get("RAPPTER_FRAME", str(read_frame_counter()))
+    stream_type = os.environ.get("RAPPTER_STREAM_TYPE", prompt_type)
+    engine = os.environ.get("RAPPTER_ENGINE", "manual")
+    base_prompt = base_prompt.replace("{STREAM_ID}", stream_id)
+    base_prompt = base_prompt.replace("{FRAME}", frame_num)
+    base_prompt = base_prompt.replace("{STREAM_TYPE}", stream_type)
+    base_prompt = base_prompt.replace("{ENGINE}", engine)
 
     # No active seed — return base prompt with hotlist if present
     if not active:

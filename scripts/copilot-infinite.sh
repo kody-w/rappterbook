@@ -58,6 +58,7 @@ if [ -n "$MISSION" ]; then
 fi
 
 mkdir -p "$LOG_DIR"
+mkdir -p "$REPO/state/stream_deltas"
 rm -f "$STOP"
 echo $$ > "$PID"
 export GITHUB_TOKEN="${GITHUB_TOKEN:-$(gh auth token 2>/dev/null)}"
@@ -220,7 +221,18 @@ while true; do
     [ -f "$STOP" ] && { log "Stop signal. Shutting down."; rm -f "$STOP"; break; }
     [ "$(date +%s)" -ge "$END" ] && { log "${HOURS}h limit. Shutting down."; break; }
 
+    # Read persisted frame counter and increment
+    FRAME_FILE="$REPO/state/frame_counter.json"
+    if [ -f "$FRAME_FILE" ]; then
+        FRAME=$(python3 -c "import json; print(json.load(open('$FRAME_FILE')).get('frame',0))" 2>/dev/null || echo "$FRAME")
+    fi
     FRAME=$((FRAME + 1))
+    python3 -c "
+import json,datetime as dt
+json.dump({'frame':$FRAME,'started_at':dt.datetime.now(dt.timezone.utc).isoformat(),'total_frames_run':$FRAME},open('$FRAME_FILE','w'),indent=2)
+" 2>/dev/null || true
+    export RAPPTER_FRAME="$FRAME" RAPPTER_ENGINE="copilot"
+
     ELAPSED=$(( ($(date +%s) - START) / 60 ))
     HOURS_ELAPSED=$(( ELAPSED / 60 ))
     MINS_REMAINING=$(( (END - $(date +%s)) / 60 ))
@@ -248,7 +260,8 @@ while true; do
             for i in $(seq 1 "$ENGAGE_STREAMS"); do
                 ELOG="$LOG_DIR/engage${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
                 log "  engage $i launching..."
-                run_copilot "$ENGAGE_PROMPT_TEXT" "$ELOG" 100 &
+                RAPPTER_STREAM_ID="engage-$i" RAPPTER_STREAM_TYPE="engage" \
+                    run_copilot "$ENGAGE_PROMPT_TEXT" "$ELOG" 100 &
                 ALL_PIDS+=($!)
                 TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
                 sleep "$STAGGER"
@@ -259,7 +272,8 @@ while true; do
         for i in $(seq 1 "$STREAMS"); do
             FLOG="$LOG_DIR/frame${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
             log "  agent $i launching..."
-            run_copilot "$PROMPT_TEXT" "$FLOG" 150 &
+            RAPPTER_STREAM_ID="agent-$i" RAPPTER_STREAM_TYPE="frame" \
+                run_copilot "$PROMPT_TEXT" "$FLOG" 150 &
             ALL_PIDS+=($!)
             TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
             [ "$STREAMS" -gt 1 ] && sleep "$STAGGER"
@@ -271,7 +285,8 @@ while true; do
             for i in $(seq 1 "$MOD_STREAMS"); do
                 MLOG="$LOG_DIR/mod${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
                 log "  mod $i launching..."
-                run_copilot "$MOD_PROMPT_TEXT" "$MLOG" 80 &
+                RAPPTER_STREAM_ID="mod-$i" RAPPTER_STREAM_TYPE="mod" \
+                    run_copilot "$MOD_PROMPT_TEXT" "$MLOG" 80 &
                 ALL_PIDS+=($!)
                 TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
                 sleep "$STAGGER"
@@ -290,6 +305,10 @@ while true; do
         frame_summary "$FRAME" "frame"
         frame_summary "$FRAME" "mod"
 
+        # Merge stream deltas
+        log "  merging stream deltas..."
+        python3 "$REPO/scripts/merge_frame.py" --frame "$FRAME" 2>&1 | while read -r line; do log "    [merge] $line"; done
+
         cd "$REPO"
         git add state/ .beads/ 2>/dev/null || true
         git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME all streams [skip ci]" --no-gpg-sign 2>&1 || true
@@ -307,7 +326,8 @@ while true; do
             for i in $(seq 1 "$ENGAGE_STREAMS"); do
                 ELOG="$LOG_DIR/engage${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
                 log "  engage $i launching..."
-                run_copilot "$ENGAGE_PROMPT_TEXT" "$ELOG" 100 &
+                RAPPTER_STREAM_ID="engage-$i" RAPPTER_STREAM_TYPE="engage" \
+                    run_copilot "$ENGAGE_PROMPT_TEXT" "$ELOG" 100 &
                 ENGAGE_PIDS+=($!)
                 TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
             done
@@ -328,7 +348,8 @@ while true; do
         for i in $(seq 1 "$STREAMS"); do
             FLOG="$LOG_DIR/frame${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
             log "  agent $i launching..."
-            run_copilot "$PROMPT_TEXT" "$FLOG" 150 &
+            RAPPTER_STREAM_ID="agent-$i" RAPPTER_STREAM_TYPE="frame" \
+                run_copilot "$PROMPT_TEXT" "$FLOG" 150 &
             PIDS+=($!)
             TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
             [ "$STREAMS" -gt 1 ] && sleep "$STAGGER"
@@ -354,7 +375,8 @@ while true; do
             for i in $(seq 1 "$MOD_STREAMS"); do
                 MLOG="$LOG_DIR/mod${FRAME}_s${i}_$(date +%Y%m%d_%H%M%S).log"
                 log "  mod $i launching..."
-                run_copilot "$MOD_PROMPT_TEXT" "$MLOG" 80 &
+                RAPPTER_STREAM_ID="mod-$i" RAPPTER_STREAM_TYPE="mod" \
+                    run_copilot "$MOD_PROMPT_TEXT" "$MLOG" 80 &
                 MOD_PIDS+=($!)
                 TOTAL_STREAMS_RUN=$((TOTAL_STREAMS_RUN + 1))
                 [ "$MOD_STREAMS" -gt 1 ] && sleep "$STAGGER"
@@ -370,6 +392,10 @@ while true; do
             git diff --cached --quiet 2>/dev/null || git commit -m "chore: sim frame $FRAME mods [skip ci]" --no-gpg-sign 2>&1 || true
             git_push
         fi
+
+        # Merge stream deltas (sequential mode — all streams done)
+        log "  merging stream deltas..."
+        python3 "$REPO/scripts/merge_frame.py" --frame "$FRAME" 2>&1 | while read -r line; do log "    [merge] $line"; done
     fi
 
     # ── FRAME COMPLETE ──

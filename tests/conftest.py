@@ -84,6 +84,7 @@ def tmp_state(tmp_path):
     state_dir.mkdir()
     (state_dir / "memory").mkdir()
     (state_dir / "inbox").mkdir()
+    (state_dir / "stream_deltas").mkdir()
     archive_dir = state_dir / "archive"
     archive_dir.mkdir()
 
@@ -206,6 +207,9 @@ def tmp_state(tmp_path):
             "tournaments": {},
             "_meta": {"count": 0, "last_updated": ts}
         },
+        "frame_counter.json": {"frame": 0, "started_at": ts, "total_frames_run": 0},
+        "frame_snapshots.json": {"snapshots": []},
+        "ghost_memory.json": {"snapshots": [], "patterns": {}},
     }
 
     # Files that live in state/archive/ (dead/unused features)
