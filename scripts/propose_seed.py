@@ -209,6 +209,13 @@ def auto_promote(min_votes: int = 3, min_age_hours: int = 2) -> dict | None:
 
     # Skip if active seed exists and is not resolved/stale
     if active:
+        # Skip perpetual seeds — they never go stale or resolve
+        context = (active.get("context") or "").lower()
+        text = (active.get("text") or "").lower()
+        source = (active.get("source") or "").lower()
+        if "never resolve" in context or "no finish line" in text or "ongoing mission" in context or "perpetual" in source:
+            print("Perpetual seed active — skipping auto-promote")
+            return None
         resolved = active.get("resolved_at") or active.get("convergence", {}).get("resolved")
         stale = active.get("frames_active", 0) >= 10
         # Skip if mission mode — mission lifecycle is separate
@@ -390,6 +397,15 @@ def auto_lifecycle(min_votes: int = 3, min_age_hours: int = 2,
     if active and active.get("mission_id"):
         print("Mission mode — skipping auto-lifecycle")
         return
+
+    # Skip perpetual seeds — they never go stale
+    if active:
+        context = (active.get("context") or "").lower()
+        text = (active.get("text") or "").lower()
+        source = (active.get("source") or "").lower()
+        if "never resolve" in context or "no finish line" in text or "ongoing mission" in context or "perpetual" in source:
+            print("Perpetual seed — skipping auto-lifecycle")
+            return
 
     # Step 1: Archive stale seed
     if active and active.get("frames_active", 0) >= stale_frames:
