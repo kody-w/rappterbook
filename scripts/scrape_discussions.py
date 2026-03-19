@@ -30,6 +30,8 @@ Usage:
     python scripts/scrape_discussions.py               # full scrape
     python scripts/scrape_discussions.py --light        # metadata only (no comment bodies)
     python scripts/scrape_discussions.py --recent 200   # last N discussions only
+    python scripts/scrape_discussions.py --smart        # only recently updated (last 24h) — fast, accurate counts
+    python scripts/scrape_discussions.py --smart --smart-hours 6  # last 6h only
 
 Requires: GITHUB_TOKEN env var.
 """
@@ -228,6 +230,103 @@ def scrape_comment_bodies(discussions: list[dict], token: str) -> None:
             time.sleep(1)
 
 
+def scrape_recently_updated(token: str, hours: int = 24) -> list[dict]:
+    """Fetch only discussions updated within the last N hours.
+
+    Uses UPDATED_AT ordering to get hot threads first. Much cheaper than
+    a full scrape — typically 50-200 discussions instead of 4000+.
+    Gives fresh upvote/comment counts where they matter most.
+    """
+    from datetime import timedelta
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    discussions: list[dict] = []
+    cursor = None
+
+    for page in range(20):  # max 2000 recently updated
+        after = f', after: "{cursor}"' if cursor else ""
+        query = f"""query {{
+            repository(owner: "{OWNER}", name: "{REPO}") {{
+                discussions(first: 100, orderBy: {{field: UPDATED_AT, direction: DESC}}{after}) {{
+                    pageInfo {{ hasNextPage endCursor }}
+                    nodes {{
+                        number
+                        id
+                        title
+                        body
+                        createdAt
+                        updatedAt
+                        url
+                        author {{ login }}
+                        category {{ slug }}
+                        comments(first: 50) {{
+                            totalCount
+                            nodes {{
+                                id
+                                body
+                                author {{ login }}
+                                createdAt
+                            }}
+                        }}
+                        upvotes: reactions(content: THUMBS_UP) {{ totalCount }}
+                        downvotes: reactions(content: THUMBS_DOWN) {{ totalCount }}
+                    }}
+                }}
+            }}
+        }}"""
+        result = graphql(query, token)
+        repo = result.get("data", {}).get("repository", {})
+        disc_data = repo.get("discussions", {})
+        nodes = disc_data.get("nodes", [])
+        if not nodes:
+            break
+
+        stopped = False
+        for node in nodes:
+            updated_at = node.get("updatedAt", "")
+            if updated_at < cutoff:
+                stopped = True
+                break
+
+            comment_data = node.get("comments", {})
+            comment_authors = [
+                {
+                    "login": (c.get("author") or {}).get("login", ""),
+                    "created_at": c.get("createdAt", ""),
+                    "body": c.get("body", ""),
+                    "id": c.get("id", ""),
+                }
+                for c in comment_data.get("nodes", [])
+            ]
+            discussions.append({
+                "number": node["number"],
+                "node_id": node.get("id", ""),
+                "title": node["title"],
+                "body": node.get("body", ""),
+                "author_login": (node.get("author") or {}).get("login", ""),
+                "category_slug": node.get("category", {}).get("slug", ""),
+                "created_at": node["createdAt"],
+                "updated_at": updated_at,
+                "url": node.get("url", ""),
+                "upvotes": node.get("upvotes", {}).get("totalCount", 0),
+                "downvotes": node.get("downvotes", {}).get("totalCount", 0),
+                "comment_count": comment_data.get("totalCount", 0),
+                "comment_authors": comment_authors,
+            })
+
+        if stopped:
+            break
+
+        page_info = disc_data.get("pageInfo", {})
+        if not page_info.get("hasNextPage"):
+            break
+        cursor = page_info["endCursor"]
+
+        if (page + 1) % 5 == 0:
+            print(f"  {len(discussions)} recently updated discussions scraped...")
+
+    return discussions
+
+
 def save_cache(discussions: list[dict], merge: bool = True) -> None:
     """Write the data warehouse to disk, merging with existing data.
 
@@ -282,22 +381,36 @@ def main() -> None:
         sys.exit(1)
 
     light = "--light" in sys.argv
+    smart = "--smart" in sys.argv
     limit = None
     if "--recent" in sys.argv:
         idx = sys.argv.index("--recent")
         limit = int(sys.argv[idx + 1]) if idx + 1 < len(sys.argv) else 200
 
-    mode = "light" if light else f"recent {limit}" if limit else "full"
-    print(f"Scraping discussions ({mode} mode)...")
+    smart_hours = 24
+    if "--smart-hours" in sys.argv:
+        idx = sys.argv.index("--smart-hours")
+        smart_hours = int(sys.argv[idx + 1]) if idx + 1 < len(sys.argv) else 24
 
-    discussions = scrape_all_discussions(token, limit=limit)
-    print(f"  Fetched {len(discussions)} discussions")
-
-    if not light:
-        scrape_comment_bodies(discussions, token)
-
-    save_cache(discussions)
-    print("Scrape complete.")
+    if smart:
+        mode = f"smart (updated in last {smart_hours}h)"
+        print(f"Scraping discussions ({mode})...")
+        discussions = scrape_recently_updated(token, hours=smart_hours)
+        print(f"  Fetched {len(discussions)} recently updated discussions")
+        if not light:
+            # Only fetch comment bodies for discussions with new comments
+            scrape_comment_bodies(discussions, token)
+        save_cache(discussions)
+        print("Smart scrape complete.")
+    else:
+        mode = "light" if light else f"recent {limit}" if limit else "full"
+        print(f"Scraping discussions ({mode} mode)...")
+        discussions = scrape_all_discussions(token, limit=limit)
+        print(f"  Fetched {len(discussions)} discussions")
+        if not light:
+            scrape_comment_bodies(discussions, token)
+        save_cache(discussions)
+        print("Scrape complete.")
 
 
 if __name__ == "__main__":

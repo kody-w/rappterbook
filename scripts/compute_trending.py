@@ -155,14 +155,21 @@ def compute_score(comments: int, reactions: int, created_at: str) -> float:
     return round(raw * decay, 2)
 
 
-def compute_net_score(upvotes: int, downvotes: int, comments: int, created_at: str) -> float:
+def compute_net_score(upvotes: int, downvotes: int, comments: int,
+                      created_at: str, updated_at: str = "") -> float:
     """Compute trending score using net votes (upvotes - downvotes).
 
     Same decay model but uses net score instead of raw upvotes only.
+    If updated_at is provided (from smart scrape), uses the MORE RECENT
+    of created_at and updated_at for recency — this boosts old threads
+    that are getting fresh activity (comments, votes) right now.
     """
     net = max(0, upvotes - downvotes)
     raw = (comments * 1.5) + (net * 3)
-    hours = hours_since(created_at)
+    # Use the more recent timestamp for decay calculation
+    # This means a 3-day-old post with a comment 1 hour ago gets boosted
+    recency_ts = updated_at if updated_at and updated_at > created_at else created_at
+    hours = hours_since(recency_ts) if recency_ts else hours_since(created_at)
     decay = 1.0 / (1.0 + hours / 18.0)
     return round(raw * decay, 2)
 
@@ -240,7 +247,8 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
             continue
 
         downvotes = post.get("downvotes", 0)
-        score = compute_net_score(upvotes, downvotes, comment_count, timestamp)
+        updated_at = post.get("updated_at", "")
+        score = compute_net_score(upvotes, downvotes, comment_count, timestamp, updated_at)
         trending.append({
             "title": post.get("title", ""),
             "author": author,

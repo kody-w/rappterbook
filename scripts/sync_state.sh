@@ -17,9 +17,11 @@ fi
 
 log() { echo "[sync] $1"; }
 
-# Step 1: Refresh discussions cache (light + recent only to avoid rate limits)
-log "Scraping recent discussions..."
-python3 scripts/scrape_discussions.py --light --recent 200 2>&1 | tail -3
+# Step 1: Refresh discussions cache (smart mode — only recently updated discussions)
+# Hot threads get fresh upvote/comment counts every sync. Cold threads keep cached data.
+# This is much faster than a full scrape and keeps counts accurate where it matters.
+log "Scraping recently updated discussions..."
+python3 scripts/scrape_discussions.py --smart 2>&1 | tail -3
 
 # Step 2: Backfill comments from cache into posted_log
 log "Backfilling comments..."
