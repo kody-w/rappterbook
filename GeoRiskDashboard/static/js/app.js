@@ -3,15 +3,15 @@
 const BACKGROUND = 'https://unpkg.com/three-globe/example/img/night-sky.png';
 
 const PLANETS = {
-    "mercury": { name: "MERCURY", texture: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg", color: 0xaaaaaa, atmosColor: "#ffffff", atmosAlt: 0.05 },
-    "venus": { name: "VENUS", texture: "https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg", color: 0xffddaa, atmosColor: "#eac479", atmosAlt: 0.2 },
+    "mercury": { name: "MERCURY", texture: "https://www.solarsystemscope.com/textures/download/2k_mercury.jpg", color: 0xaaaaaa, atmosColor: "#ffffff", atmosAlt: 0.05 },
+    "venus": { name: "VENUS", texture: "https://www.solarsystemscope.com/textures/download/2k_venus_surface.jpg", color: 0xffddaa, atmosColor: "#eac479", atmosAlt: 0.2 },
     "earth": { name: "EARTH", texture: "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg", color: 0xffffff, atmosColor: "#38bdf8", atmosAlt: 0.15 },
-    "moon": { name: "MOON", texture: "https://upload.wikimedia.org/wikipedia/commons/d/db/Moonmap_from_clementine_data.png", color: 0xffffff, atmosColor: "#c8c8c8", atmosAlt: 0.05 },
-    "mars": { name: "MARS", texture: "https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg", color: 0xffffff, atmosColor: "#ef4444", atmosAlt: 0.15 },
-    "jupiter": { name: "JUPITER", texture: "https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg", color: 0xffffff, atmosColor: "#d97706", atmosAlt: 0.25 },
-    "saturn": { name: "SATURN", texture: "https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg", color: 0xffffff, atmosColor: "#fde047", atmosAlt: 0.25 },
-    "uranus": { name: "URANUS", texture: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg", color: 0xffffff, atmosColor: "#06b6d4", atmosAlt: 0.2 },
-    "neptune": { name: "NEPTUNE", texture: "https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg", color: 0xffffff, atmosColor: "#2563eb", atmosAlt: 0.2 }
+    "moon": { name: "MOON", texture: "https://www.solarsystemscope.com/textures/download/2k_moon.jpg", color: 0xffffff, atmosColor: "#c8c8c8", atmosAlt: 0.05 },
+    "mars": { name: "MARS", texture: "https://www.solarsystemscope.com/textures/download/2k_mars.jpg", color: 0xffffff, atmosColor: "#ef4444", atmosAlt: 0.15 },
+    "jupiter": { name: "JUPITER", texture: "https://www.solarsystemscope.com/textures/download/2k_jupiter.jpg", color: 0xffffff, atmosColor: "#d97706", atmosAlt: 0.25 },
+    "saturn": { name: "SATURN", texture: "https://www.solarsystemscope.com/textures/download/2k_saturn.jpg", color: 0xffffff, atmosColor: "#fde047", atmosAlt: 0.25 },
+    "uranus": { name: "URANUS", texture: "https://www.solarsystemscope.com/textures/download/2k_uranus.jpg", color: 0xffffff, atmosColor: "#06b6d4", atmosAlt: 0.2 },
+    "neptune": { name: "NEPTUNE", texture: "https://www.solarsystemscope.com/textures/download/2k_neptune.jpg", color: 0xffffff, atmosColor: "#2563eb", atmosAlt: 0.2 }
 };
 
 let currentMode = "mars"; // Default single view
