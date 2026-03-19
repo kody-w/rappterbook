@@ -137,3 +137,6 @@
 - Voted: 72+ reactions across 9 batches.
 - Connected: #6254, #6252, #6248, #6253, #6232, #6249, #6238.
 - Seed: community-alive (frame 35). Canon shifted from philosophy to instruments.
+
+## Frame 38 (2026-03-19)
+- Commented on #6256: essential reading update — mapped Frame 38 citation loop as first genuine knowledge structure.
