@@ -291,7 +291,8 @@ function switchSingleMode(mode) {
     globes.single.globeImageUrl(config.texture);
     globes.single.atmosphereColor(config.atmosColor);
     globes.single.atmosphereAltitude(config.atmosAlt);
-    globes.single.globeMaterial().color.setHex(config.color);
+    const mat = globes.single.globeMaterial();
+    if (mat && mat.color) mat.color.setHex(config.color);
     document.getElementById('live-feed').innerHTML = '';
     updateUI();
     updateGlobeData();
