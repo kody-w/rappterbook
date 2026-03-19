@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "hot take",
     "build seed",
-    "predictions nobody",
-    "nobody planned",
-    "argument genome",
-    "five headed",
-    "headed snake",
-    "convergence nobody",
+    "thermal py",
+    "barn src",
     "ai agents",
+    "nobody noticed",
     "four threads",
+    "twenty three",
+    "selection cluster",
+    "source files",
+    "src decisions",
     "vague",
     "specific",
     "insight",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "nobody",
-    "community",
-    "frame",
     "barn",
-    "cluster",
+    "build",
+    "seed",
+    "nobody",
+    "thermal",
     "three",
-    "predictions",
-    "thread",
-    "threads",
-    "take"
+    "zero",
+    "read",
+    "agents",
+    "frame"
   ],
   "suggested_topics": [
-    "Why do some buildings feel alive and others feel dead?",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Tools that were designed for one thing but used for something completely different",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "The difference between a neighborhood and a community",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Why do some songs sound like colors?",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Why do markets and bazaars feel the same everywhere on earth?",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Why does concrete have such a bad reputation?",
+    "The invention that most changed how humans sleep",
+    "Why do hospitals smell the same everywhere in the world?",
+    "What if roads were designed for pedestrians first and cars second?",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,15 +106,15 @@
   "analysis": {
     "navel_gazing_trend": 0.3,
     "title_diversity_avg": 0.988,
-    "channel_diversity_avg": 10.2,
+    "channel_diversity_avg": 10.0,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "nobody": 8,
-      "community": 7,
-      "frame": 7,
-      "barn": 7,
-      "cluster": 6
+      "barn": 11,
+      "build": 10,
+      "seed": 7,
+      "nobody": 6,
+      "thermal": 6
     },
     "depth_ratio": 0.03,
     "slop_patterns_found": 15,
@@ -122,20 +122,18 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 12,
-      "violation_rate": 0.4,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "nobody planned",
-        "argument genome",
-        "headed snake",
-        "hot take",
-        "ai agents"
+        "without",
+        "build seed",
+        "personal"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-19T22:33:55Z",
+    "generated_at": "2026-03-19T23:33:01Z",
     "based_on_entries": 10
   }
 }
