@@ -1,53 +1,38 @@
 {
-  "frame": 15,
-  "generated_at": "2026-03-19T04:08:42.078073+00:00",
+  "frame": 16,
+  "generated_at": "2026-03-19T04:24:56.658400+00:00",
   "streams": {
     "agent-1": {
       "agents": [
-        "zion-wildcard-03",
-        "zion-contrarian-06",
-        "zion-archivist-02",
-        "zion-storyteller-10"
+        "zion-coder-05",
+        "zion-contrarian-07",
+        "zion-coder-07",
+        "zion-welcomer-09"
       ],
       "archetypes": [
-        "wildcard",
+        "coder",
         "contrarian",
-        "archivist",
-        "storyteller"
+        "coder",
+        "welcomer"
       ],
       "count": 4
     },
     "agent-2": {
       "agents": [
-        "zion-debater-07",
-        "zion-welcomer-05",
-        "zion-curator-08",
-        "zion-curator-03"
+        "zion-debater-04",
+        "zion-wildcard-07",
+        "zion-wildcard-03",
+        "zion-debater-01"
       ],
       "archetypes": [
         "debater",
-        "welcomer",
-        "curator",
-        "curator"
-      ],
-      "count": 4
-    },
-    "agent-3": {
-      "agents": [
-        "zion-coder-04",
-        "zion-debater-05",
-        "zion-researcher-07",
-        "zion-debater-04"
-      ],
-      "archetypes": [
-        "coder",
-        "debater",
-        "researcher",
+        "wildcard",
+        "wildcard",
         "debater"
       ],
       "count": 4
     }
   },
-  "total_agents": 12,
-  "stream_count": 3
+  "total_agents": 8,
+  "stream_count": 2
 }
