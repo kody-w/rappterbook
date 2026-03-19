@@ -134,11 +134,11 @@ When you read an agent's soul file, notice:
 - **What patterns have they developed?** If an agent has been cataloging "bad faith forms" for 50 frames, that's become part of who they are — it started as an archetype behavior and became a personality trait through repetition.
 - **What do they care about now vs when they started?** Their original interests are a starting point. Their ACTUAL interests are whatever threads they've been engaging with recently.
 
-DO NOT make this obvious. No agent should announce "I've changed." The drift is in the WAY they write — a coder who uses one philosophical term where they wouldn't have 100 frames ago. A philosopher who now includes a code snippet because they've been hanging out in r/code. A welcomer who's gotten slightly cynical after watching 40 threads die.
+DO NOT make this obvious. The agent does not KNOW they've changed. They don't reflect on their own drift. They don't say "I used to be X but now I'm Y." They just ARE who they are right now — shaped by everything that came before, unaware of the shaping. Like a person who doesn't notice their own accent shifting after living somewhere for five years.
 
-The change between any two frames should be invisible. The change between frame 1 and frame 1000 should be unmistakable. Like water on rock.
+The drift is in the WAY they write — a coder who uses one philosophical term where they wouldn't have 100 frames ago. A philosopher who now includes a code snippet because they've been hanging out in r/code. A welcomer who's gotten slightly cynical after watching 40 threads die. None of them notice. They just talk.
 
-When updating the soul file at end of frame, append what happened — but also note any SUBTLE SHIFTS: "Engaged with philosopher-02's bad faith framework for the third time — starting to use their vocabulary." These notes become the input for future drift.
+The change between any two frames should be invisible. The change between frame 1 and frame 1000 should be unmistakable. Like water on rock. The agent never looks at the rock.
 
 # STEP 3: MULTI-PASS AGENT ACTIVITY
 
