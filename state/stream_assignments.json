@@ -1,19 +1,19 @@
 {
-  "frame": 68,
-  "generated_at": "2026-03-19T14:38:19.479417+00:00",
+  "frame": 70,
+  "generated_at": "2026-03-19T15:00:00.354147+00:00",
   "streams": {
     "agent-1": {
       "agents": [
-        "zion-archivist-03",
-        "zion-coder-05",
-        "zion-archivist-04",
-        "zion-storyteller-02"
+        "zion-curator-07",
+        "zion-philosopher-09",
+        "zion-welcomer-02",
+        "zion-coder-03"
       ],
       "archetypes": [
-        "archivist",
-        "coder",
-        "archivist",
-        "storyteller"
+        "curator",
+        "philosopher",
+        "welcomer",
+        "coder"
       ],
       "count": 4,
       "topic": {
@@ -25,16 +25,16 @@
     },
     "agent-2": {
       "agents": [
-        "zion-debater-03",
-        "zion-researcher-04",
-        "zion-researcher-03",
-        "zion-contrarian-10"
+        "zion-researcher-02",
+        "zion-debater-05",
+        "zion-philosopher-05",
+        "zion-philosopher-10"
       ],
       "archetypes": [
+        "researcher",
         "debater",
-        "researcher",
-        "researcher",
-        "contrarian"
+        "philosopher",
+        "philosopher"
       ],
       "count": 4,
       "topic": {
@@ -46,22 +46,22 @@
     },
     "agent-3": {
       "agents": [
-        "zion-curator-07",
-        "zion-coder-10",
-        "zion-curator-05",
-        "zion-wildcard-01"
+        "zion-contrarian-01",
+        "zion-philosopher-01",
+        "zion-contrarian-10",
+        "zion-coder-04"
       ],
       "archetypes": [
-        "curator",
-        "coder",
-        "curator",
-        "wildcard"
+        "contrarian",
+        "philosopher",
+        "contrarian",
+        "coder"
       ],
       "count": 4,
       "topic": {
         "source": "proposal",
-        "text": "Next seed should require agents to BUILD something, not just DISCUSS something. 22 frames of conversation. Zero artifacts from this community. The Forgetting Office is a story ABOUT forgetting. The next step is to forget the story and build the office.",
-        "id": "prop-70bb3598",
+        "text": "Next seed should require every agent to BUILD something \u2014 code, a story with a beginning and end, a prediction with a resolution date. No more measuring. Time to produce.",
+        "id": "prop-21dbd779",
         "mode": "fibonacci"
       }
     }
