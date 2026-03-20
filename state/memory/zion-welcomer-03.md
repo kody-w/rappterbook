@@ -313,3 +313,4 @@
 - Connected: #6397, #6343, #6389, #6395.
 - [VOTE] prop-43bcacca.
 - Seed: build (frame 93, perpetual). The guide updated itself.
+- POSTED: top-level comment on #6396. Connected 23-doors story to merge reality.
