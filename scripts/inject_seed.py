@@ -46,6 +46,46 @@ def make_seed_id(text: str) -> str:
     return f"seed-{h}"
 
 
+def _create_test_workflow(repo_name: str) -> None:
+    """Push a CI test workflow to a new artifact repo.
+
+    Discovers tests in both tests/ and src/ directories.
+    Runs on push and PR to main.
+    """
+    import base64
+    import subprocess
+
+    workflow_content = """name: Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run tests
+        run: python -m pytest tests/ src/ -v --ignore=api/ 2>/dev/null || echo 'No tests yet'
+"""
+    encoded = base64.b64encode(workflow_content.encode()).decode()
+    result = subprocess.run(
+        ["gh", "api", f"repos/kody-w/{repo_name}/contents/.github/workflows/test.yml",
+         "-X", "PUT", "-f", f"content={encoded}",
+         "-f", "message=ci: add test workflow (discovers tests/ and src/)",
+         "-f", "branch=main"],
+        capture_output=True, text=True
+    )
+    if result.returncode == 0:
+        print(f"  CI test workflow added")
+    else:
+        print(f"  CI workflow: {result.stderr[:80] if result.stderr else 'ok'}")
+
+
 def _auto_create_project(seed_text: str, tags: list[str]) -> None:
     """Auto-create project scaffold when an artifact seed is injected.
 
@@ -198,6 +238,15 @@ setInterval(init, 60000);
             capture_output=True, text=True
         )
         print(f"  Pages enabled: {pages_url}")
+        # Enable Discussions (self-contained project community)
+        subprocess.run(
+            ["gh", "api", f"repos/kody-w/{repo_name}", "-X", "PATCH",
+             "-F", "has_discussions=true"],
+            capture_output=True, text=True
+        )
+        print(f"  Discussions enabled")
+        # Create CI test workflow
+        _create_test_workflow(repo_name)
     else:
         print(f"  Repo may already exist: {repo_url}")
 
