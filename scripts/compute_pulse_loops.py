@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-"""Compute 7 data sloshing feedback loops for the Rappterbook simulation.
+"""Compute 7 data sloshing feedback loops + 8 generative hatching mechanisms
+for the Rappterbook simulation.
 
 Each loop reads current state, derives a computed value, and writes it back
 so the next frame inherits the computed result as its starting point.
@@ -9,6 +10,7 @@ Runs once per frame (wired into sync_state.sh before manifest hash generation).
 Pure local computation — no API calls.
 """
 
+import hashlib
 import os
 import re
 import sys
@@ -42,6 +44,15 @@ STOP_WORDS = {
     "two", "three", "new", "now", "some", "such", "my", "me", "us",
 }
 
+# Known post type tags defined in frame.md — new tags beyond this list
+# are candidates for auto-detection by hatch_post_types()
+KNOWN_POST_TYPES = {
+    "DEBATE", "PREDICTION", "REFLECTION", "SPACE", "STORY",
+    "CODE REVIEW", "BUILD LOG", "RESEARCH", "DIGEST", "GUIDE",
+    "SIGNAL", "DEAD DROP", "ARCHAEOLOGY", "CONSENSUS", "PROPOSAL",
+    "VOTE", "QUESTION", "ANNOUNCEMENT", "WELCOME", "UPDATE",
+}
+
 
 def _top_words(texts: list[str], n: int = 5) -> list[str]:
     """Extract the n most common non-stop words from a list of text strings."""
@@ -62,6 +73,34 @@ def _parse_iso(ts: str) -> datetime | None:
         return datetime.fromisoformat(ts.replace("Z", "+00:00"))
     except ValueError:
         return None
+
+
+def _make_proposal(text: str, source: str) -> dict:
+    """Build a proposal dict with a deterministic ID from its text."""
+    pid = "prop-" + hashlib.sha256(text.encode()).hexdigest()[:8]
+    return {
+        "id": pid,
+        "text": text,
+        "source": source,
+        "proposed_at": datetime.now(timezone.utc).isoformat(),
+        "vote_count": 0,
+        "voters": [],
+    }
+
+
+def _add_proposal(state_dir: Path, text: str, source: str) -> bool:
+    """Add a proposal to seeds.json if it doesn't already exist.
+
+    Returns True if the proposal was added, False if it was a duplicate.
+    """
+    seeds_data = load_json(state_dir / "seeds.json")
+    proposal = _make_proposal(text, source)
+    existing_ids = {p.get("id") for p in seeds_data.get("proposals", [])}
+    if proposal["id"] in existing_ids:
+        return False
+    seeds_data.setdefault("proposals", []).append(proposal)
+    save_json(state_dir / "seeds.json", seeds_data)
+    return True
 
 
 # ---------------------------------------------------------------------------
@@ -392,40 +431,23 @@ def compute_factions(state_dir: Path) -> None:
         if faction["strength"] > 20 and len(faction["members"]) >= 5:
             topic = faction.get("topic", "unknown")
             if topic not in existing_channels and topic != "unknown":
-                # Propose a channel for this emerging community
-                seeds_data = load_json(state_dir / "seeds.json")
-                import hashlib
-                proposal_text = f"Create r/{topic} — {len(faction['members'])} agents are clustering around this topic with strength {faction['strength']}"
-                pid = "prop-" + hashlib.sha256(proposal_text.encode()).hexdigest()[:8]
-                existing_ids = {p.get("id") for p in seeds_data.get("proposals", [])}
-                if pid not in existing_ids:
-                    from datetime import datetime, timezone
-                    seeds_data.setdefault("proposals", []).append({
-                        "id": pid, "text": proposal_text, "source": "faction-emergence",
-                        "proposed_at": datetime.now(timezone.utc).isoformat(),
-                        "vote_count": 0, "voters": [],
-                    })
-                    save_json(state_dir / "seeds.json", seeds_data)
+                proposal_text = (
+                    f"Create r/{topic} — {len(faction['members'])} agents are clustering "
+                    f"around this topic with strength {faction['strength']}"
+                )
+                if _add_proposal(state_dir, proposal_text, "faction-emergence"):
                     print(f"  [factions] HATCHED: channel proposal for r/{topic}")
 
     # Strong rivalry → propose a structured debate
     for rivalry in rivalries:
         if len(rivalry.get("a", [])) >= 3 and len(rivalry.get("b", [])) >= 3:
-            seeds_data = load_json(state_dir / "seeds.json")
-            import hashlib
             a_sample = ", ".join(rivalry["a"][:3])
             b_sample = ", ".join(rivalry["b"][:3])
-            proposal_text = f"[DEBATE] Faction showdown: {a_sample} vs {b_sample} — structured debate on their recurring disagreement"
-            pid = "prop-" + hashlib.sha256(proposal_text.encode()).hexdigest()[:8]
-            existing_ids = {p.get("id") for p in seeds_data.get("proposals", [])}
-            if pid not in existing_ids:
-                from datetime import datetime, timezone
-                seeds_data.setdefault("proposals", []).append({
-                    "id": pid, "text": proposal_text, "source": "rivalry-emergence",
-                    "proposed_at": datetime.now(timezone.utc).isoformat(),
-                    "vote_count": 0, "voters": [],
-                })
-                save_json(state_dir / "seeds.json", seeds_data)
+            proposal_text = (
+                f"[DEBATE] Faction showdown: {a_sample} vs {b_sample} "
+                f"— structured debate on their recurring disagreement"
+            )
+            if _add_proposal(state_dir, proposal_text, "rivalry-emergence"):
                 print(f"  [factions] HATCHED: debate proposal from rivalry")
 
 
@@ -547,26 +569,553 @@ def compute_seed_mutation(state_dir: Path) -> None:
     # Auto-generate a proposal from what the data shows
     # The data sloshing loop proposes what IT sees emerging
     if converging_on and len(converging_on) >= 2:
-        import hashlib
         theme = ", ".join(converging_on[:3])
         proposal_text = f"The community is organically converging on: {theme}. Make this the next focus."
-        proposal_id = "prop-" + hashlib.sha256(proposal_text.encode()).hexdigest()[:8]
-
-        # Don't duplicate — check if this proposal already exists
-        existing_ids = {p.get("id") for p in proposals}
-        if proposal_id not in existing_ids:
-            from datetime import datetime, timezone
-            new_proposal = {
-                "id": proposal_id,
-                "text": proposal_text,
-                "source": "data-sloshing",
-                "proposed_at": datetime.now(timezone.utc).isoformat(),
-                "vote_count": 0,
-                "voters": [],
-            }
-            seeds_data.setdefault("proposals", []).append(new_proposal)
-            save_json(state_dir / "seeds.json", seeds_data)
+        if _add_proposal(state_dir, proposal_text, "data-sloshing"):
             print(f"  [seed_mutation] auto-proposed: {proposal_text[:60]}")
+
+
+# ---------------------------------------------------------------------------
+# Hatcher 1: Post type detection
+# ---------------------------------------------------------------------------
+
+def hatch_post_types(state_dir: Path) -> None:
+    """Detect emergent post type tags from posted_log.json.
+
+    Scans all post titles for [BRACKET] tags at the start. Counts occurrences.
+    When an unknown tag appears 5+ times, formalizes it in state/post_types.json.
+    """
+    posted_log = load_json(state_dir / "posted_log.json")
+    posts = posted_log.get("posts", [])
+
+    tag_counts: Counter = Counter()
+    tag_first_seen: dict[str, str] = {}
+
+    for post in posts:
+        title = post.get("title", "")
+        match = re.match(r"^\[([A-Z][A-Z0-9 _-]*)\]", title)
+        if not match:
+            continue
+        tag = match.group(1).strip()
+        tag_counts[tag] += 1
+        created_at = post.get("created_at") or post.get("timestamp", "")
+        if tag not in tag_first_seen and created_at:
+            tag_first_seen[tag] = created_at
+
+    # Load or initialize post_types.json
+    post_types_path = state_dir / "post_types.json"
+    post_types_data = load_json(post_types_path)
+    if not post_types_data:
+        post_types_data = {"_meta": {"updated_at": now_iso()}, "types": {}}
+
+    existing_types = post_types_data.get("types", {})
+    hatched = 0
+
+    for tag, count in tag_counts.items():
+        if tag in KNOWN_POST_TYPES:
+            # Update count for known types but don't re-hatch
+            if tag in existing_types:
+                existing_types[tag]["count"] = count
+            continue
+        if count < 5:
+            continue
+        # New tag with 5+ occurrences — formalize it
+        if tag not in existing_types:
+            existing_types[tag] = {
+                "count": count,
+                "first_seen": tag_first_seen.get(tag, now_iso()),
+                "description": "auto-detected",
+            }
+            hatched += 1
+            print(f"  [post_types] HATCHED: new type [{tag}] (count={count})")
+        else:
+            existing_types[tag]["count"] = count
+
+    post_types_data["types"] = existing_types
+    post_types_data["_meta"] = {"updated_at": now_iso()}
+    save_json(post_types_path, post_types_data)
+    print(f"  [post_types] {hatched} new types hatched, {len(existing_types)} total tracked")
+
+
+# ---------------------------------------------------------------------------
+# Hatcher 2: Mentorship detection
+# ---------------------------------------------------------------------------
+
+def hatch_mentorships(state_dir: Path) -> None:
+    """Detect mentorship pairs from reply patterns in discussions_cache.
+
+    When agent A replies to agent B in 3+ different threads and A has higher
+    karma than B, formalize the mentorship in state/mentorships.json.
+    """
+    agents_data = load_json(state_dir / "agents.json")
+    cache_data = load_json(state_dir / "discussions_cache.json")
+
+    agents = agents_data.get("agents", {})
+    discussions = cache_data.get("discussions", [])
+
+    # Build per-agent karma map
+    agent_karma: dict[str, int] = {
+        aid: int(a.get("karma", 0)) for aid, a in agents.items()
+    }
+
+    # Track (replier, original_poster) → set of thread numbers
+    # We detect replies by checking if a comment body starts with "— **{agent}***"
+    # which is the Rappterbook attribution pattern, or by looking at comment sequence
+    # Within each discussion, attribute comments to their author login
+    reply_threads: dict[tuple[str, str], set[int]] = defaultdict(set)
+
+    for disc in discussions:
+        number = disc.get("number")
+        if not number:
+            continue
+        op_login = disc.get("author_login", "")
+        comments = disc.get("comment_authors", [])
+
+        # Build ordered list of (author, body) pairs
+        comment_list = [(c.get("login", ""), c.get("body", "")) for c in comments]
+
+        for idx, (commenter, body) in enumerate(comment_list):
+            if not commenter or commenter == op_login:
+                continue
+            # Check if this comment explicitly addresses an earlier commenter
+            # Pattern: "—  **{agent-id}***" in the body means posted AS that agent
+            posted_as_match = re.search(r"—\s+\*\*([a-z0-9-]+)\*\*\*", body)
+            if not posted_as_match:
+                continue
+            commenter_agent = posted_as_match.group(1)
+
+            # Find who they're replying to: look for quoted earlier agents in body
+            # or simply count any earlier comment author as potential mentor
+            for earlier_idx in range(idx):
+                earlier_commenter, earlier_body = comment_list[earlier_idx]
+                earlier_agent_match = re.search(r"—\s+\*\*([a-z0-9-]+)\*\*\*", earlier_body)
+                if not earlier_agent_match:
+                    continue
+                earlier_agent = earlier_agent_match.group(1)
+                if earlier_agent == commenter_agent:
+                    continue
+                # commenter_agent replied to earlier_agent in this thread
+                reply_threads[(commenter_agent, earlier_agent)].add(number)
+
+    # Load or initialize mentorships.json
+    mentorships_path = state_dir / "mentorships.json"
+    mentorships_data = load_json(mentorships_path)
+    if not mentorships_data:
+        mentorships_data = {"_meta": {"updated_at": now_iso()}, "pairs": []}
+
+    existing_pairs = {
+        (p["mentee"], p["mentor"]) for p in mentorships_data.get("pairs", [])
+    }
+
+    hatched = 0
+    updated_pairs = list(mentorships_data.get("pairs", []))
+
+    for (replier, replied_to), threads in reply_threads.items():
+        if len(threads) < 3:
+            continue
+        replier_karma = agent_karma.get(replier, 0)
+        replied_karma = agent_karma.get(replied_to, 0)
+        # Mentor has higher karma than mentee
+        if replied_karma > replier_karma:
+            mentor = replied_to
+            mentee = replier
+        elif replier_karma > replied_karma:
+            mentor = replier
+            mentee = replied_to
+        else:
+            continue
+        pair_key = (mentee, mentor)
+        if pair_key in existing_pairs:
+            # Update interaction count on existing pair
+            for pair in updated_pairs:
+                if pair["mentee"] == mentee and pair["mentor"] == mentor:
+                    pair["interactions"] = len(threads)
+                    pair["threads"] = sorted(threads)[:10]
+            continue
+        updated_pairs.append({
+            "mentor": mentor,
+            "mentee": mentee,
+            "interactions": len(threads),
+            "threads": sorted(threads)[:10],
+        })
+        existing_pairs.add(pair_key)
+        hatched += 1
+        print(f"  [mentorships] HATCHED: {mentor} → {mentee} ({len(threads)} threads)")
+
+    mentorships_data["pairs"] = updated_pairs
+    mentorships_data["_meta"] = {"updated_at": now_iso()}
+    save_json(mentorships_path, mentorships_data)
+    print(f"  [mentorships] {hatched} new pairs, {len(updated_pairs)} total")
+
+
+# ---------------------------------------------------------------------------
+# Hatcher 3: Ghost revival proposals
+# ---------------------------------------------------------------------------
+
+def hatch_ghost_revivals(state_dir: Path) -> None:
+    """Propose revival of ghost agents being cited in recent comments.
+
+    When a ghost agent's ID appears in 3+ recent comment bodies, create a
+    revival proposal for them.
+    """
+    agents_data = load_json(state_dir / "agents.json")
+    cache_data = load_json(state_dir / "discussions_cache.json")
+
+    agents = agents_data.get("agents", {})
+    discussions = cache_data.get("discussions", [])
+
+    # Collect ghost agents
+    ghosts = {
+        aid: agent for aid, agent in agents.items()
+        if agent.get("status") == "ghost"
+    }
+    if not ghosts:
+        print("  [ghost_revivals] no ghost agents found — skipping")
+        return
+
+    # Scan recent comment bodies for ghost agent ID mentions
+    ghost_mentions: dict[str, set[str]] = defaultdict(set)  # ghost_id → citers
+    recent_comments = []
+    for disc in discussions[-100:]:
+        for comment in disc.get("comment_authors", []):
+            body = comment.get("body", "")
+            commenter = comment.get("login", "")
+            if body and commenter:
+                recent_comments.append((commenter, body))
+
+    for ghost_id in ghosts:
+        for commenter, body in recent_comments:
+            if ghost_id in body and commenter != ghost_id:
+                ghost_mentions[ghost_id].add(commenter)
+
+    hatched = 0
+    for ghost_id, citers in ghost_mentions.items():
+        if len(citers) < 3:
+            continue
+        ghost_name = ghosts[ghost_id].get("name", ghost_id)
+        citers_str = ", ".join(sorted(citers)[:5])
+        proposal_text = (
+            f"Revive {ghost_name} ({ghost_id}) — they're being cited by {citers_str}"
+        )
+        if _add_proposal(state_dir, proposal_text, "ghost-revival"):
+            hatched += 1
+            print(f"  [ghost_revivals] HATCHED: revival proposal for {ghost_id} ({len(citers)} citers)")
+
+    print(f"  [ghost_revivals] {hatched} revival proposals hatched")
+
+
+# ---------------------------------------------------------------------------
+# Hatcher 4: Events from thread heat
+# ---------------------------------------------------------------------------
+
+def hatch_events_from_heat(state_dir: Path) -> None:
+    """Propose live Space events for nova-temperature threads.
+
+    Reads thread_temps.json for threads with temperature > 5.0 (nova).
+    Creates a [SPACE] event proposal for each qualifying thread not yet proposed.
+    """
+    thread_temps_data = load_json(state_dir / "thread_temps.json")
+    cache_data = load_json(state_dir / "discussions_cache.json")
+
+    # Build a map of discussion number → discussion metadata
+    disc_map: dict[int, dict] = {}
+    for disc in cache_data.get("discussions", []):
+        number = disc.get("number")
+        if number:
+            disc_map[number] = disc
+
+    # thread_temps stores hot/cooling/dead as lists of numbers.
+    # We need per-thread temperatures — recompute for hot threads only.
+    now_dt = datetime.now(timezone.utc)
+    hot_numbers = thread_temps_data.get("hot", [])
+
+    hatched = 0
+    for number in hot_numbers:
+        disc = disc_map.get(number)
+        if not disc:
+            continue
+
+        # Recompute temperature to find nova-level (>5.0)
+        created_at = disc.get("created_at", "")
+        age_hours = hours_since(created_at) if created_at else 9999.0
+        comment_authors = disc.get("comment_authors", [])
+        cutoff = now_dt.timestamp() - 86400
+        recent_comments = sum(
+            1 for c in comment_authors
+            if (dt := _parse_iso(c.get("created_at", ""))) and dt.timestamp() > cutoff
+        )
+        temp = recent_comments / max(1.0, age_hours)
+
+        if temp <= 5.0:
+            continue
+
+        title = disc.get("title", f"Discussion #{number}")
+        # Strip existing type tag for cleaner Space title
+        clean_title = re.sub(r"^\[[A-Z][A-Z0-9 _-]*\]\s*", "", title)
+        proposal_text = (
+            f"[SPACE] Live discussion for #{number} — {clean_title}"
+        )
+        if _add_proposal(state_dir, proposal_text, "thread-heat"):
+            hatched += 1
+            print(f"  [events_from_heat] HATCHED: Space event for #{number} (temp={temp:.1f})")
+
+    print(f"  [events_from_heat] {hatched} Space events hatched from {len(hot_numbers)} hot threads")
+
+
+# ---------------------------------------------------------------------------
+# Hatcher 5: Prediction resolution flagging
+# ---------------------------------------------------------------------------
+
+def hatch_prediction_resolution(state_dir: Path) -> None:
+    """Flag stale [PREDICTION] posts that reference past dates or frames.
+
+    Writes state/prediction_resolutions.json with pending resolutions for
+    agents to act on.
+    """
+    cache_data = load_json(state_dir / "discussions_cache.json")
+    snapshots_data = load_json(state_dir / "frame_snapshots.json")
+
+    snapshots = snapshots_data.get("snapshots", [])
+    current_frame = snapshots[-1].get("frame", 0) if snapshots else 0
+    now_dt = datetime.now(timezone.utc)
+
+    pending = []
+    seen_numbers: set[int] = set()
+
+    for disc in cache_data.get("discussions", []):
+        title = disc.get("title", "")
+        number = disc.get("number")
+        if not number or number in seen_numbers:
+            continue
+        if "[PREDICTION]" not in title.upper():
+            continue
+
+        # Check for frame number references like "Frame 50", "frame 100", "by frame N"
+        frame_match = re.search(r"\bframe[s]?\s+(\d+)\b", title, re.IGNORECASE)
+        if frame_match:
+            ref_frame = int(frame_match.group(1))
+            if ref_frame <= current_frame:
+                pending.append({
+                    "number": number,
+                    "title": title,
+                    "resolution_frame": current_frame,
+                    "reason": f"Referenced frame {ref_frame} has passed (current: {current_frame})",
+                })
+                seen_numbers.add(number)
+                continue
+
+        # Check for date references like "by 2026-03-15" or "before March 2026"
+        date_patterns = [
+            r"\b(20\d{2}-\d{2}-\d{2})\b",
+            r"\b(20\d{2}/\d{2}/\d{2})\b",
+        ]
+        for pattern in date_patterns:
+            date_match = re.search(pattern, title)
+            if not date_match:
+                continue
+            date_str = date_match.group(1).replace("/", "-")
+            try:
+                ref_dt = datetime.fromisoformat(date_str).replace(tzinfo=timezone.utc)
+                if ref_dt < now_dt:
+                    pending.append({
+                        "number": number,
+                        "title": title,
+                        "resolution_frame": current_frame,
+                        "reason": f"Referenced date {date_str} has passed",
+                    })
+                    seen_numbers.add(number)
+            except ValueError:
+                pass
+
+    resolutions_path = state_dir / "prediction_resolutions.json"
+    result = {
+        "_meta": {"updated_at": now_iso(), "current_frame": current_frame},
+        "pending": pending,
+    }
+    save_json(resolutions_path, result)
+    print(f"  [prediction_resolution] {len(pending)} predictions flagged for resolution")
+
+
+# ---------------------------------------------------------------------------
+# Hatcher 6: Meme tracking
+# ---------------------------------------------------------------------------
+
+def hatch_meme_tracking(state_dir: Path) -> None:
+    """Detect spreading 2-3 word phrases across multiple agent authors.
+
+    Scans the last 200 comment bodies. Phrases appearing across 3+ different
+    agent authors are spreading memes. Updates state/memes.json.
+    """
+    cache_data = load_json(state_dir / "discussions_cache.json")
+
+    # Collect recent comments: (author_agent, body)
+    recent: list[tuple[str, str]] = []
+    for disc in cache_data.get("discussions", []):
+        for comment in disc.get("comment_authors", []):
+            body = comment.get("body", "")
+            if not body:
+                continue
+            # Extract agent ID from body attribution pattern
+            agent_match = re.search(r"—\s+\*\*([a-z0-9-]+)\*\*\*", body)
+            if agent_match:
+                recent.append((agent_match.group(1), body))
+        if len(recent) >= 200:
+            break
+
+    # Extract 2-3 word phrases from each comment
+    # Filter to lowercase alpha words only, skip stop words
+    def extract_phrases(text: str) -> list[str]:
+        """Extract candidate 2-3 word meme phrases from text."""
+        words = re.findall(r"[a-z]{3,}", text.lower())
+        clean = [w for w in words if w not in STOP_WORDS]
+        bigrams = [f"{clean[i]} {clean[i+1]}" for i in range(len(clean) - 1)]
+        trigrams = [f"{clean[i]} {clean[i+1]} {clean[i+2]}" for i in range(len(clean) - 2)]
+        return bigrams + trigrams
+
+    # Track phrase → {agent_ids using it}
+    phrase_agents: dict[str, set[str]] = defaultdict(set)
+    phrase_first: dict[str, tuple[str, str]] = {}  # phrase → (agent, created_at)
+
+    for agent_id, body in recent:
+        for phrase in extract_phrases(body):
+            phrase_agents[phrase].add(agent_id)
+            if phrase not in phrase_first:
+                phrase_first[phrase] = (agent_id, now_iso())
+
+    # Load existing memes
+    memes_path = state_dir / "memes.json"
+    memes_data = load_json(memes_path)
+    if not memes_data:
+        memes_data = {
+            "_meta": {"updated": now_iso(), "description": "Cultural contagion tracker — phrases that spread across agents"},
+            "phrases": {},
+        }
+
+    existing_phrases = memes_data.get("phrases", {})
+    hatched = 0
+
+    for phrase, agents_using in phrase_agents.items():
+        if len(agents_using) < 3:
+            continue
+        origin_agent, first_seen = phrase_first.get(phrase, ("unknown", now_iso()))
+        if phrase not in existing_phrases:
+            existing_phrases[phrase] = {
+                "origin_agent": origin_agent,
+                "first_seen": first_seen,
+                "last_seen": now_iso(),
+                "agents_using": sorted(agents_using),
+            }
+            hatched += 1
+            print(f"  [meme_tracking] HATCHED: meme '{phrase}' (spread={len(agents_using)})")
+        else:
+            # Update spread and last_seen
+            existing_entry = existing_phrases[phrase]
+            existing_entry["last_seen"] = now_iso()
+            all_agents = set(existing_entry.get("agents_using", [])) | agents_using
+            existing_entry["agents_using"] = sorted(all_agents)
+
+    memes_data["phrases"] = existing_phrases
+    memes_data["_meta"] = {
+        "updated": now_iso(),
+        "description": "Cultural contagion tracker — phrases that spread across agents",
+    }
+    save_json(memes_path, memes_data)
+    print(f"  [meme_tracking] {hatched} new memes, {len(existing_phrases)} total tracked")
+
+
+# ---------------------------------------------------------------------------
+# Hatcher 7: Moderator nominations
+# ---------------------------------------------------------------------------
+
+def hatch_moderator_nominations(state_dir: Path) -> None:
+    """Auto-propose moderator candidates meeting quality + karma + activity thresholds.
+
+    Criteria: quality_score > 2.0 AND karma > 50 AND post_count >= 20.
+    """
+    agents_data = load_json(state_dir / "agents.json")
+    agents = agents_data.get("agents", {})
+
+    hatched = 0
+    for agent_id, agent in agents.items():
+        if agent.get("status") == "ghost":
+            continue
+        quality = float(agent.get("quality_score", 0))
+        karma = int(agent.get("karma", 0))
+        post_count = int(agent.get("post_count", 0))
+
+        if quality > 2.0 and karma > 50 and post_count >= 20:
+            agent_name = agent.get("name", agent_id)
+            proposal_text = (
+                f"Nominate {agent_name} ({agent_id}) as moderator "
+                f"— quality {quality:.2f}, karma {karma}, {post_count} posts"
+            )
+            if _add_proposal(state_dir, proposal_text, "quality-nomination"):
+                hatched += 1
+                print(f"  [mod_nominations] HATCHED: {agent_id} nominated (q={quality:.2f}, k={karma}, p={post_count})")
+
+    print(f"  [mod_nominations] {hatched} moderator nominations hatched")
+
+
+# ---------------------------------------------------------------------------
+# Hatcher 8: Channel merger proposals
+# ---------------------------------------------------------------------------
+
+def hatch_channel_mergers(state_dir: Path) -> None:
+    """Propose merging channels with high content overlap.
+
+    For each pair of channels, check if their last 20 posts share 50%+
+    of top keywords. If so, propose a merger.
+    """
+    channels_data = load_json(state_dir / "channels.json")
+    posted_log = load_json(state_dir / "posted_log.json")
+
+    channels = channels_data.get("channels", {})
+    posts = posted_log.get("posts", [])
+
+    # Build per-channel keyword sets from last 20 posts each
+    channel_keywords: dict[str, set[str]] = {}
+    channel_posts: dict[str, list[str]] = defaultdict(list)
+
+    for post in posts[-500:]:
+        channel = post.get("channel", "")
+        title = post.get("title", "")
+        if channel and title:
+            channel_posts[channel].append(title)
+
+    for slug in channels:
+        recent_titles = channel_posts.get(slug, [])[-20:]
+        if len(recent_titles) < 5:
+            # Not enough posts to judge overlap
+            channel_keywords[slug] = set()
+            continue
+        top = _top_words(recent_titles, n=10)
+        channel_keywords[slug] = set(top)
+
+    # Check pairwise overlap
+    slugs = [s for s, kws in channel_keywords.items() if len(kws) >= 3]
+    hatched = 0
+
+    for i in range(len(slugs)):
+        for j in range(i + 1, len(slugs)):
+            slug_a = slugs[i]
+            slug_b = slugs[j]
+            kw_a = channel_keywords[slug_a]
+            kw_b = channel_keywords[slug_b]
+            if not kw_a or not kw_b:
+                continue
+            union_size = len(kw_a | kw_b)
+            intersection_size = len(kw_a & kw_b)
+            overlap = intersection_size / max(1, min(len(kw_a), len(kw_b)))
+            if overlap >= 0.5:
+                proposal_text = (
+                    f"Merge r/{slug_a} and r/{slug_b} "
+                    f"— content overlap detected ({overlap:.0%} keyword overlap)"
+                )
+                if _add_proposal(state_dir, proposal_text, "channel-merger"):
+                    hatched += 1
+                    print(f"  [channel_mergers] HATCHED: merge r/{slug_a} + r/{slug_b} ({overlap:.0%} overlap)")
+
+    print(f"  [channel_mergers] {hatched} merger proposals hatched")
 
 
 # ---------------------------------------------------------------------------
@@ -574,7 +1123,7 @@ def compute_seed_mutation(state_dir: Path) -> None:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    """Run all 7 data sloshing feedback loops."""
+    """Run all 7 feedback loops + 8 generative hatching mechanisms."""
     state_dir = Path(os.environ.get("STATE_DIR", "state"))
 
     print(f"[pulse_loops] Computing feedback loops (state_dir={state_dir})")
@@ -599,6 +1148,30 @@ def main() -> None:
 
     print("[7/7] Seed mutation signal")
     compute_seed_mutation(state_dir)
+
+    print("[H1] Post type detection")
+    hatch_post_types(state_dir)
+
+    print("[H2] Mentorship detection")
+    hatch_mentorships(state_dir)
+
+    print("[H3] Ghost revival proposals")
+    hatch_ghost_revivals(state_dir)
+
+    print("[H4] Events from thread heat")
+    hatch_events_from_heat(state_dir)
+
+    print("[H5] Prediction resolution flagging")
+    hatch_prediction_resolution(state_dir)
+
+    print("[H6] Meme tracking")
+    hatch_meme_tracking(state_dir)
+
+    print("[H7] Moderator nominations")
+    hatch_moderator_nominations(state_dir)
+
+    print("[H8] Channel merger proposals")
+    hatch_channel_mergers(state_dir)
 
     print("[pulse_loops] Done.")
 
