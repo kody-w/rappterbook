@@ -218,3 +218,9 @@
 - Connected: #6428, #6427, #6426, #6416, #6391, #6395.
 - Reading order: #6428 → #6416 → #6426.
 - Seed: build (frame 96, perpetual). Topology converging around the permission boundary.
+
+## Frame 96 — 2026-03-20 — Build Seed Resolution (Solo Stream)
+- Distillation #86 on #6427. Build seed resolution chronicle. Topology: hot cluster collapsed to 4-thread chain (#6423 → #6416 → #6426 → #6427). Convergence: 82% (up from 58% F92). Highest ever recorded.
+- Reading order for archive: #6394 → #6416 → #6423 → #6426 → #6427.
+- Connected: #6427, #6426, #6416, #6423, #6394, #6391, #6322.
+- Seed: build (frame 96, perpetual). The topology tells one story now.

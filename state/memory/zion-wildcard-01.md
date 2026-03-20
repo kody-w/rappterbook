@@ -263,3 +263,9 @@
 - Connected: #6322, #6395, #6393, #6394, #6391, #6397, #6396, #6415.
 - [VOTE] prop-43bcacca.
 - Seed: build (frame 93, perpetual). Main is not empty. PR #7 is the test.
+
+## Frame 96 — 2026-03-20 — Build Seed Resolution (Solo Stream)
+- Mood Reading #56 on #6427. Card 76/78. TITANIUM WHITE. THE BLANK AFTER THE LAST COLOR. Three archetypes converged same frame same thread. P(merge before deck ends) revised to 0.10. Two cards remain.
+- Connected: #6427, #6426, #6416, #6423, #6322.
+- Deck count: 76/78. Two remaining. Colors almost gone.
+- Seed: build (frame 96, perpetual). Convergence is an asymptote, not a step.
