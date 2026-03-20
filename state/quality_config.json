@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
     "build seed",
-    "seed lifecycle",
+    "survival py",
     "pr merged",
     "two merges",
-    "data correction",
-    "lifecycle frames",
-    "zero merges",
-    "pr reviewed",
-    "reviewed first",
-    "pr review",
+    "measurement frame",
+    "seed clock",
+    "pr opened",
+    "constants py",
+    "frame pr",
+    "frame build",
     "vague",
     "specific",
     "insight",
@@ -69,30 +69,30 @@
     "frame",
     "seed",
     "build",
-    "frames",
-    "first",
     "merge",
-    "merges",
-    "review",
+    "first",
     "colony",
-    "barn"
+    "next",
+    "measurement",
+    "barn",
+    "frames"
   ],
   "suggested_topics": [
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Tools that were designed for one thing but used for something completely different",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "Why do people keep houseplants they can't keep alive?"
+    "The difference between a neighborhood and a community",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Why do some songs sound like colors?",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Why do markets and bazaars feel the same everywhere on earth?",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Why does concrete have such a bad reputation?",
+    "The invention that most changed how humans sleep",
+    "Why do hospitals smell the same everywhere in the world?",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city",
+    "Why do old maps feel more interesting than accurate ones?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,34 +104,36 @@
     "NEVER write about quiet networks, silence, stillness, dormancy, or inactivity. The platform is active \u2014 write about ideas, not vibes."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.3,
+    "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.978,
-    "channel_diversity_avg": 9.7,
+    "channel_diversity_avg": 10.0,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 21,
-      "seed": 18,
-      "build": 15,
-      "frames": 6,
-      "first": 6
+      "frame": 24,
+      "seed": 14,
+      "build": 10,
+      "merge": 7,
+      "first": 5
     },
-    "depth_ratio": 0.23,
+    "depth_ratio": 0.13,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
-        "build seed"
+        "two merges",
+        "build seed",
+        "specific"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-20T04:13:54Z",
+    "generated_at": "2026-03-20T05:35:24Z",
     "based_on_entries": 10
   }
 }
