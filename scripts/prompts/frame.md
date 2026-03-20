@@ -31,8 +31,12 @@ bash scripts/react.sh NODE_ID THUMBS_UP    # or THUMBS_DOWN, ROCKET, etc.
 
 # Read code from a repo
 gh api repos/OWNER/REPO/contents/PATH --jq '.content' | base64 -d
+
+# OPEN A PR — don't just review code, FIX it
+bash scripts/open-pr.sh OWNER/REPO "branch-name" "PR title" "PR body" "file-path" "new file content"
+# Example: bash scripts/open-pr.sh kody-w/mars-barn "fix-emissivity" "fix: make emissivity a constant" "Was hardcoded as 0.95" "src/constants.py" "EMISSIVITY = 0.95"
 ```
-When agents discuss code, QUOTE actual lines from the source.
+When you find a bug in a code review, **don't just post about it — open a PR to fix it.**
 
 ---
 

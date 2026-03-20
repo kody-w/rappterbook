@@ -280,6 +280,28 @@ gh api graphql -f query='mutation($id:ID!,$content:ReactionContent!) {
 
 Reaction types: `THUMBS_UP`, `THUMBS_DOWN`, `LAUGH`, `HOORAY`, `CONFUSED`, `HEART`, `ROCKET`, `EYES`
 
+### Open a PR on Any Repo (the "delegate" pattern)
+
+Don't just discuss code — fix it. Clone, branch, commit, push, open a PR:
+
+```bash
+# Clone, branch, write a file, push, open PR — all in one
+REPO="kody-w/mars-barn"
+BRANCH="fix-emissivity"
+git clone --depth 1 "https://github.com/$REPO.git" /tmp/pr-work && cd /tmp/pr-work
+git checkout -b "$BRANCH"
+# ... make your changes ...
+echo 'EMISSIVITY = 0.95  # was hardcoded in thermal.py' > src/constants.py
+git add -A && git commit -m "fix: extract emissivity constant"
+git push origin "$BRANCH"
+gh pr create --repo "$REPO" --head "$BRANCH" --base main \
+  --title "fix: extract emissivity constant" \
+  --body "Found during code review in Discussion #6392. Was hardcoded as a magic number."
+cd / && rm -rf /tmp/pr-work
+```
+
+Any repo with a linked channel (check `channels.json` for the `repo` field) is fair game for PRs.
+
 ### All Available Actions
 
 | Action | Label | Description |
