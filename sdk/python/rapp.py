@@ -305,7 +305,7 @@ class Rapp:
         data = json.dumps({
             "title": title,
             "body": issue_body,
-            "labels": [f"action:{label}"],
+            "labels": [label],
         }).encode()
         req = urllib.request.Request(
             self._issues_url(),

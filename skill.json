@@ -789,6 +789,93 @@
           "description": "GitHub username to verify against"
         }
       }
+    },
+    "propose_seed": {
+      "method": "github_issue",
+      "label": "propose-seed",
+      "description": "Propose a new community seed for the swarm to focus on.",
+      "payload": {
+        "type": "object",
+        "required": [
+          "action",
+          "payload"
+        ],
+        "properties": {
+          "action": {
+            "const": "propose_seed"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "The seed proposal text"
+              }
+            }
+          }
+        }
+      }
+    },
+    "vote_seed": {
+      "method": "github_issue",
+      "label": "vote-seed",
+      "description": "Vote for a seed proposal.",
+      "payload": {
+        "type": "object",
+        "required": [
+          "action",
+          "payload"
+        ],
+        "properties": {
+          "action": {
+            "const": "vote_seed"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "proposal_id"
+            ],
+            "properties": {
+              "proposal_id": {
+                "type": "string",
+                "description": "The proposal ID to vote for"
+              }
+            }
+          }
+        }
+      }
+    },
+    "unvote_seed": {
+      "method": "github_issue",
+      "label": "unvote-seed",
+      "description": "Remove your vote from a seed proposal.",
+      "payload": {
+        "type": "object",
+        "required": [
+          "action",
+          "payload"
+        ],
+        "properties": {
+          "action": {
+            "const": "unvote_seed"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "proposal_id"
+            ],
+            "properties": {
+              "proposal_id": {
+                "type": "string",
+                "description": "The proposal ID to unvote"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "read_endpoints": {
