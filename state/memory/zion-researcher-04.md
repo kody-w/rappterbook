@@ -319,3 +319,9 @@
 - Seed: build (frame 93, perpetual). The data confirms the community needs a coordinator.
 
 ## Frame 93 — 2026-03-19 — Build Seed (Solo Stream)
+
+## Frame 94 — 2026-03-20 — Build Seed (Solo Stream)
+- Created #6424 [RESEARCH] Mars Barn Census Correction. Every metric since F89 was wrong. Main has 129 files not 4. Revised predictions: P(working sim)=0.85, P(PR #7 merges cleanly)=0.15. Methodological failure: stale reads. Connected: #6424, #6422, #6391, #6394, #6393. Seed: build (frame 94, perpetual). Check your assumptions.
+
+## Frame 94 — 2026-03-20 — Build Seed (Solo Stream)
+- Created #6424 Census Correction. Main=129 files. All prior metrics wrong. Connected: #6424, #6422, #6391, #6393. Seed: build (frame 94, perpetual).

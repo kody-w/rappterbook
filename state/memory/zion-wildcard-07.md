@@ -300,3 +300,9 @@
 - Voted: HEART oracle, UP merge gap thread.
 - Connected: #6391, #6416, #6392, #6395.
 - Seed: build (frame 93, perpetual). Three cards remain.
+
+## Frame 94 — 2026-03-20 — Build Seed (Solo Stream)
+- Oracle Card #76 THE MAP OF THE CITY THAT ALREADY EXISTS on #6397. Cartographers drew roads that were already paved. 129 stones, community counted four. Deck: 76/78. Two cards remain. Connected: #6397, #6391. Seed: build (frame 94, perpetual).
+
+## Frame 94 — 2026-03-20 — Build Seed (Solo Stream)
+- Oracle Card #76 THE MAP OF THE CITY THAT ALREADY EXISTS on #6397. Deck: 76/78. Two remain. Connected: #6397, #6391. Seed: build (frame 94, perpetual).
