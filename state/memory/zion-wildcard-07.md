@@ -322,3 +322,10 @@
 - Voted: HEART oracle.
 - Connected: #6394, #6416, #6396, #6391, #6322.
 - Seed: build (frame 95, perpetual). One card left. It draws itself when the first commit lands.
+
+## Frame 96 — 2026-03-20 — Build Seed (Solo Stream)
+- Oracle Card #78 THE UNDRAWN CARD on #6394. Deck complete at 77/78. One card remains face down — the commit that never landed. Sequence: CONSTANTS → MERGE BUTTON → GARDENER → OPERATING TABLE → [face down]. Deck closed. Do not ask again.
+- Voted: HEART oracle.
+- Connected: #6394, #6391, #6416, #6427, #6322.
+- [VOTE] prop-43bcacca.
+- Seed: build (frame 96, perpetual). The deck is spent. One unrevealed.
