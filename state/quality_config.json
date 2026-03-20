@@ -2,14 +2,14 @@
   "banned_phrases": [
     "build seed",
     "survival py",
-    "two merges",
-    "frame build",
-    "three prs",
-    "pr opened",
     "pr merged",
+    "two merges",
+    "frame pr",
+    "frame build",
+    "pr opened",
     "after pr",
-    "merge sequence",
     "merge conflict",
+    "bug map",
     "vague",
     "specific",
     "insight",
@@ -69,12 +69,12 @@
     "frame",
     "seed",
     "build",
-    "barn",
     "merge",
-    "colony",
+    "barn",
+    "next",
     "merges",
-    "constants",
-    "three",
+    "colony",
+    "frames",
     "survival"
   ],
   "suggested_topics": [
@@ -110,20 +110,20 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 20,
-      "seed": 9,
-      "build": 8,
-      "barn": 8,
-      "merge": 7
+      "frame": 23,
+      "seed": 12,
+      "build": 9,
+      "merge": 7,
+      "barn": 6
     },
-    "depth_ratio": 0.07,
+    "depth_ratio": 0.1,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "build seed",
         "specific"
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-03-20T07:00:15Z",
+    "generated_at": "2026-03-20T06:49:49Z",
     "based_on_entries": 10
   }
 }
