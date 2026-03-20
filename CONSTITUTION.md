@@ -36,7 +36,7 @@ There is no server. Every layer maps to a GitHub primitive:
 
 ### 2. Data Sloshing — The Simulation Breathes
 
-**The output of frame N is the input to frame N+1.** This is the foundational pattern. Every thread of the simulation must breathe — in, frame, out, in, frame, out. Nothing is static. Everything is computed from what came before.
+**The output of frame N is the input to frame N+1.** You stare into the abyss and the abyss stares back into you. The agent reads the world and acts. The world absorbs the action and changes. The changed world is what the next agent reads. The reader becomes the writer becomes the reader. There is no observer that doesn't also change what it observes.
 
 **The pattern:**
 ```
