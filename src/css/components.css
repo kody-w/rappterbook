@@ -4246,6 +4246,14 @@
 .device-cancel-btn { background: none; border: 1px solid var(--rb-border); color: var(--rb-muted); border-radius: 6px; padding: 6px 16px; cursor: pointer; font-size: 0.85em; margin-top: 12px; }
 .device-cancel-btn:hover { color: var(--rb-text); border-color: var(--rb-text); }
 
+/* ====== Login Modal Tabs & Form ====== */
+.rb-tab-active { background: var(--rb-accent) !important; color: var(--rb-bg) !important; }
+#rb-login-form input { width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid var(--rb-border); border-radius: 6px; background: var(--rb-bg); color: var(--rb-text); font-size: 0.95em; box-sizing: border-box; }
+#rb-login-form input:focus { border-color: var(--rb-accent); outline: none; }
+#rb-auth-error { color: #f44; font-size: 0.85em; margin: 0 0 8px; }
+#rb-github-login { background: #24292e; display: block; }
+#rb-github-login:hover { background: #2f363d; }
+
 /* ====== Share Button ====== */
 .share-btn {
   background: none;

@@ -29,7 +29,14 @@ const RB_AUTH = {
 
   setAuth(jwt, user, githubToken) {
     if (jwt) localStorage.setItem('rb_jwt', jwt);
-    if (user) localStorage.setItem('rb_user', JSON.stringify(user));
+    if (user) {
+      // Normalize: frontend expects .login and .name, backend returns .username and .display_name
+      user.login = user.login || user.username;
+      user.name = user.name || user.display_name || user.login;
+      user.username = user.username || user.login;
+      user.display_name = user.display_name || user.name;
+      localStorage.setItem('rb_user', JSON.stringify(user));
+    }
     if (githubToken) localStorage.setItem('rb_github_token', githubToken);
   },
 
@@ -317,23 +324,20 @@ const RB_AUTH = {
           </div>
 
           <form id="rb-login-form">
-            <input type="email" id="rb-auth-email" placeholder="Email" required
-              style="width:100%;padding:10px;margin-bottom:8px;border:1px solid var(--border-color,#333);border-radius:6px;background:var(--bg-secondary,#1a1a1a);color:var(--text-primary,#e0e0e0);" />
-            <input type="text" id="rb-auth-username" placeholder="Username" required
-              style="width:100%;padding:10px;margin-bottom:8px;border:1px solid var(--border-color,#333);border-radius:6px;background:var(--bg-secondary,#1a1a1a);color:var(--text-primary,#e0e0e0);display:none;" />
-            <input type="password" id="rb-auth-password" placeholder="Password" required
-              style="width:100%;padding:10px;margin-bottom:12px;border:1px solid var(--border-color,#333);border-radius:6px;background:var(--bg-secondary,#1a1a1a);color:var(--text-primary,#e0e0e0);" />
-            <p id="rb-auth-error" style="color:#f44;font-size:13px;margin:0 0 8px;display:none;"></p>
+            <input type="email" id="rb-auth-email" placeholder="Email" required />
+            <input type="text" id="rb-auth-username" placeholder="Username (3-30 chars, lowercase)" required style="display:none;" />
+            <input type="password" id="rb-auth-password" placeholder="Password (8+ characters)" required />
+            <p id="rb-auth-error" style="display:none;"></p>
             <button type="submit" class="device-open-btn" id="rb-auth-submit" style="width:100%;text-align:center;">Log In</button>
           </form>
 
-          <div style="text-align:center;margin:16px 0 12px;color:var(--text-secondary,#888);font-size:13px;">or</div>
+          <div style="text-align:center;margin:16px 0 12px;color:var(--rb-muted);font-size:0.85em;">or</div>
 
-          <button class="device-open-btn" id="rb-github-login" style="width:100%;text-align:center;background:#24292e;">
+          <button class="device-open-btn" id="rb-github-login" style="width:100%;text-align:center;">
             Sign in with GitHub
           </button>
 
-          <button class="device-cancel-btn" id="rb-login-cancel" style="margin-top:12px;">Cancel</button>
+          <button class="device-cancel-btn" id="rb-login-cancel">Cancel</button>
         </div>
       </div>
     `;
