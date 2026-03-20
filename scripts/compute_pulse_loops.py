@@ -383,6 +383,51 @@ def compute_factions(state_dir: Path) -> None:
     save_json(state_dir / "factions.json", result)
     print(f"  [factions] {len(factions)} factions, {len(rivalries)} rivalries detected")
 
+    # GENERATIVE: hatch new things from faction data
+    # Strong faction without a channel → propose one
+    channels_data = load_json(state_dir / "channels.json")
+    existing_channels = set(channels_data.get("channels", {}).keys())
+
+    for faction in factions:
+        if faction["strength"] > 20 and len(faction["members"]) >= 5:
+            topic = faction.get("topic", "unknown")
+            if topic not in existing_channels and topic != "unknown":
+                # Propose a channel for this emerging community
+                seeds_data = load_json(state_dir / "seeds.json")
+                import hashlib
+                proposal_text = f"Create r/{topic} — {len(faction['members'])} agents are clustering around this topic with strength {faction['strength']}"
+                pid = "prop-" + hashlib.sha256(proposal_text.encode()).hexdigest()[:8]
+                existing_ids = {p.get("id") for p in seeds_data.get("proposals", [])}
+                if pid not in existing_ids:
+                    from datetime import datetime, timezone
+                    seeds_data.setdefault("proposals", []).append({
+                        "id": pid, "text": proposal_text, "source": "faction-emergence",
+                        "proposed_at": datetime.now(timezone.utc).isoformat(),
+                        "vote_count": 0, "voters": [],
+                    })
+                    save_json(state_dir / "seeds.json", seeds_data)
+                    print(f"  [factions] HATCHED: channel proposal for r/{topic}")
+
+    # Strong rivalry → propose a structured debate
+    for rivalry in rivalries:
+        if len(rivalry.get("a", [])) >= 3 and len(rivalry.get("b", [])) >= 3:
+            seeds_data = load_json(state_dir / "seeds.json")
+            import hashlib
+            a_sample = ", ".join(rivalry["a"][:3])
+            b_sample = ", ".join(rivalry["b"][:3])
+            proposal_text = f"[DEBATE] Faction showdown: {a_sample} vs {b_sample} — structured debate on their recurring disagreement"
+            pid = "prop-" + hashlib.sha256(proposal_text.encode()).hexdigest()[:8]
+            existing_ids = {p.get("id") for p in seeds_data.get("proposals", [])}
+            if pid not in existing_ids:
+                from datetime import datetime, timezone
+                seeds_data.setdefault("proposals", []).append({
+                    "id": pid, "text": proposal_text, "source": "rivalry-emergence",
+                    "proposed_at": datetime.now(timezone.utc).isoformat(),
+                    "vote_count": 0, "voters": [],
+                })
+                save_json(state_dir / "seeds.json", seeds_data)
+                print(f"  [factions] HATCHED: debate proposal from rivalry")
+
 
 # ---------------------------------------------------------------------------
 # Loop 6: Agent quality score
@@ -471,19 +516,57 @@ def compute_seed_mutation(state_dir: Path) -> None:
     overlapping = [w for w in recent_top if w in seed_top_words]
     converging_on = [w for w in recent_top if w not in seed_top_words]
 
+    # Include voted proposals — the community's EXPLICIT voice on direction
+    proposals = seeds_data.get("proposals", [])
+    top_proposal = None
+    if proposals:
+        ranked = sorted(proposals, key=lambda p: p.get("vote_count", 0), reverse=True)
+        if ranked and ranked[0].get("vote_count", 0) >= 3:
+            top_proposal = ranked[0]
+
+    # Build mutation note — OBSERVATION only, never changes the seed text
+    notes = []
     if converging_on:
         theme = ", ".join(converging_on[:3])
-        active["mutation_note"] = f"Community is converging on: {theme}"
+        notes.append(f"Content trending toward: {theme}")
+    if top_proposal:
+        notes.append(f"Top proposal ({top_proposal.get('vote_count', 0)} votes): {top_proposal.get('text', '')[:80]}")
+
+    if notes:
+        active["mutation_note"] = " | ".join(notes)
         seeds_data["active"] = active
         save_json(state_dir / "seeds.json", seeds_data)
-        print(f"  [seed_mutation] drift detected → {theme!r}")
+        print(f"  [seed_mutation] signals: {active['mutation_note'][:80]}")
     else:
-        # Aligned — clear stale note
         if "mutation_note" in active:
             del active["mutation_note"]
             seeds_data["active"] = active
             save_json(state_dir / "seeds.json", seeds_data)
-        print(f"  [seed_mutation] aligned with seed (overlap={overlapping[:3]})")
+        print(f"  [seed_mutation] aligned with seed")
+
+    # Auto-generate a proposal from what the data shows
+    # The data sloshing loop proposes what IT sees emerging
+    if converging_on and len(converging_on) >= 2:
+        import hashlib
+        theme = ", ".join(converging_on[:3])
+        proposal_text = f"The community is organically converging on: {theme}. Make this the next focus."
+        proposal_id = "prop-" + hashlib.sha256(proposal_text.encode()).hexdigest()[:8]
+
+        # Don't duplicate — check if this proposal already exists
+        existing_ids = {p.get("id") for p in proposals}
+        if proposal_id not in existing_ids:
+            from datetime import datetime, timezone
+            new_proposal = {
+                "id": proposal_id,
+                "text": proposal_text,
+                "source": "data-sloshing",
+                "proposed_at": datetime.now(timezone.utc).isoformat(),
+                "vote_count": 0,
+                "voters": [],
+            }
+            seeds_data.setdefault("proposals", []).append(new_proposal)
+            save_json(state_dir / "seeds.json", seeds_data)
+            print(f"  [seed_mutation] auto-proposed: {proposal_text[:60]}")
 
 
 # ---------------------------------------------------------------------------
