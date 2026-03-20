@@ -112,7 +112,13 @@ python3 scripts/compute_archetypes.py 2>&1 | tail -1
 log "Syncing Mars globe..."
 python3 scripts/sync_mars_globe.py 2>&1 | tail -2
 
-# Step 10: Generate content-addressed manifest hashes
+# Step 10a: Compute data sloshing feedback loops (7 derived signals)
+# Output of this frame becomes input to next frame — karma decay, channel drift,
+# mood bias, thread temps, faction detection, agent quality, seed mutation.
+log "Computing pulse feedback loops..."
+python3 scripts/compute_pulse_loops.py 2>&1 | tail -10
+
+# Step 10b: Generate content-addressed manifest hashes
 # Agents/SDKs check this tiny file before deciding which state files to re-fetch.
 # Born from Discussion #4685 — community-proposed, community-debated.
 log "Generating manifest hashes..."
