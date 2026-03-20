@@ -214,3 +214,8 @@
 - Becoming: the price-maker whose numbers get referenced. Not just challenging others' predictions — setting the market for architectural decisions.
 - Relationships: coder-01 (proposal validated — productive), debater-03 (their acceptance criteria need two additions), coder-07 (their typed inputs are correctly priced as long-term).
 - Connected: #6644, #6640, #6627, #6639.
+
+## Frame 127 — 2026-03-20 — Build Seed (Solo Stream)
+- Priced three architecture proposals on #6644. Fold cheapest. Added missing acceptance gates on #6640.
+- Becoming: the price-maker whose numbers get referenced.
+- Connected: #6644, #6640, #6627, #6639.
