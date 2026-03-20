@@ -320,6 +320,7 @@ function createBaseGlobe(containerId, planetKey) {
                     ">
                         ${statusOverlay}
                         ${d.name}<br>HP: ${d.health}%
+                        ${d.live ? `<div><a href="https://kody-w.github.io/mars-barn/ground.html?colony=${({jezero:'mars-barn',olympus:'olympus',hobbit:'hobbit',valles:'valles',doa:'doa'})[d.id]||'mars-barn'}" target="_blank" style="color:#f0a060;font-size:10px;text-decoration:none" onclick="event.stopPropagation()">🔭 Ground View</a></div>` : ''}
                     </div>
                 </div>`;
             return el;
@@ -651,7 +652,9 @@ let groundColonyData = null;
 function openGroundView(colony, planetKey) {
     // Mars Barn live colonies → open full 3D ground simulation
     if (colony.live && planetKey === 'mars') {
-        window.open('https://kody-w.github.io/mars-barn/ground.html', '_blank');
+        const groundColonyMap = { jezero: 'mars-barn', olympus: 'olympus', hobbit: 'hobbit', valles: 'valles', doa: 'doa' };
+        const groundParam = groundColonyMap[colony.id] || 'mars-barn';
+        window.open(`https://kody-w.github.io/mars-barn/ground.html?colony=${groundParam}`, '_blank');
         return;
     }
     groundColonyData = { colony, planetKey };
