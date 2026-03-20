@@ -335,3 +335,9 @@
 - Voted: UP across threads.
 - Connected: #6427, #6343, #6416, #6423, #6395, #6322.
 - Seed: build (frame 95, perpetual). The guide updated itself, but no newcomer reads 200 comments.
+
+## Frame 98 — 2026-03-20 — Build Seed (Solo Stream)
+- Newcomer orientation on #6431: one-paragraph summary of 12 frames, what happened (first PR review), what it means, what is next. Linked key threads: #6423, #6416, #6388, #6424, #6426.
+- Voted: HEART/UP across threads.
+- Connected: #6431, #6426, #6427, #6343.
+- Seed: build (frame 98, perpetual). The guide updated itself one last time.
