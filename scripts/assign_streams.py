@@ -315,16 +315,12 @@ def assign_topics_to_streams(stream_ids: list[str], state_dir: Path) -> dict[str
     viable_proposals = [p for p in proposals if p.get("text", "").strip()]
     random.shuffle(viable_proposals)
 
-    # Fibonacci topic distribution with viral/balanced variance.
+    # DATA SLOSHING TOPIC DISTRIBUTION
     #
-    # The golden ratio (~62/38) is the BASE split, but each frame randomly
-    # varies between three modes:
-    #   - VIRAL (30% chance): ALL streams get the main seed — the whole
-    #     platform is buzzing about one thing, like a real trending moment
-    #   - FIBONACCI (50% chance): ~62% seed / ~38% proposals — the zeitgeist
-    #     dominates but diversity gets oxygen (default, most common)
-    #   - BALANCED (20% chance): ~50/50 split — multiple conversations at
-    #     equal weight, like a healthy diverse community
+    # The mode is NOT hardcoded. It reads what the previous frame produced
+    # and adapts. If the last viral frame got high engagement → more viral.
+    # If the last balanced frame got more posts → more balanced.
+    # Falls back to Fibonacci ratios if no previous data exists.
     #
     # This variance makes the platform feel organic. Some frames are
     # monomaniacal (everyone arguing about the same thing). Others have
@@ -334,19 +330,56 @@ def assign_topics_to_streams(stream_ids: list[str], state_dir: Path) -> dict[str
         for sid in stream_ids:
             topics[sid] = main_topic
     else:
-        roll = random.random()
-        if roll < 0.30:
-            # VIRAL: all streams on the zeitgeist
-            mode = "viral"
+        # Read previous frame's stream activity to adapt distribution
+        prev_mode = "fibonacci"  # default
+        try:
+            snapshots = json.loads((state_dir / "frame_snapshots.json").read_text()).get("snapshots", [])
+            if snapshots:
+                last = snapshots[-1]
+                sa = last.get("stream_activity", {})
+                prev_comments = sa.get("total_comments_added", 0)
+                prev_posts = sa.get("total_posts_created", 0)
+                prev_engagement = prev_comments + prev_posts * 3
+
+                # Read what mode the previous frame used
+                try:
+                    prev_assignments = json.loads((state_dir / "stream_assignments.json").read_text())
+                    for s in prev_assignments.get("streams", {}).values():
+                        t = s.get("topic", {})
+                        if t.get("mode"):
+                            prev_mode = t["mode"]
+                            break
+                except Exception:
+                    pass
+
+                # If previous mode had high engagement → lean toward it again
+                # If low engagement → try something different
+                if prev_engagement > 20:
+                    # Previous mode worked — 60% chance to repeat it
+                    roll = random.random()
+                    if roll < 0.60:
+                        mode = prev_mode
+                    elif roll < 0.80:
+                        mode = "fibonacci"
+                    else:
+                        mode = random.choice(["viral", "balanced"])
+                else:
+                    # Previous mode underperformed — try something different
+                    modes = ["viral", "fibonacci", "balanced"]
+                    modes.remove(prev_mode) if prev_mode in modes else None
+                    mode = random.choice(modes)
+            else:
+                mode = "fibonacci"
+        except Exception:
+            roll = random.random()
+            mode = "viral" if roll < 0.30 else ("fibonacci" if roll < 0.80 else "balanced")
+
+        if mode == "viral":
             seed_count = n
-        elif roll < 0.80:
-            # FIBONACCI: golden ratio split
-            mode = "fibonacci"
-            seed_count = max(1, round(n * 0.618))
-        else:
-            # BALANCED: even split
-            mode = "balanced"
+        elif mode == "balanced":
             seed_count = max(1, n // 2)
+        else:
+            seed_count = max(1, round(n * 0.618))
 
         for i, sid in enumerate(stream_ids):
             if i < seed_count:
