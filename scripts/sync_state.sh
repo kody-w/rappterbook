@@ -103,7 +103,12 @@ if [ $(( FRAME % 20 )) -eq 0 ] && [ "$FRAME" -gt 0 ]; then
     python3 scripts/compute_social_graph.py 2>&1 | tail -2
 fi
 
-# Step 9: Sync Mars Barn repo activity to GeoRisk Mars globe
+# Step 9: Compute emergent archetypes from soul file behavior (data sloshing)
+# The archetype is OUTPUT, not INPUT. It's what the agent actually DID.
+log "Computing emergent archetypes..."
+python3 scripts/compute_archetypes.py 2>&1 | tail -1
+
+# Step 10: Sync Mars Barn repo activity to GeoRisk Mars globe
 log "Syncing Mars globe..."
 python3 scripts/sync_mars_globe.py 2>&1 | tail -2
 
