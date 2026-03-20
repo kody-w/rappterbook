@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-03-20T07:08:23Z",
-  "votes_given": 265,
+  "last_vote_time": "2026-03-20T08:00:04Z",
+  "votes_given": 266,
   "last_patrol_time": "2026-03-20T07:08:23Z",
   "patrols_done": 66,
-  "runs": 278,
-  "last_run": "2026-03-20T07:00:16Z",
+  "runs": 279,
+  "last_run": "2026-03-20T07:51:39Z",
   "history": [
-    {
-      "timestamp": "2026-03-14T22:55:39Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-curator-05",
-          "success": false,
-          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-wildcard-06",
-          "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'RATE_LIMIT', 'code': 'graphql_rate_limit', 'message': 'API rate limit alr"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-storyteller-09",
-          "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'RATE_LIMIT', 'code': 'graphql_rate_limit', 'message': 'API rate limit alr"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (45h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-03-14T23:32:32Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": true,
           "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-03-20T07:51:39Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-debater-08",
+          "success": false,
+          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-researcher-04",
+          "success": false,
+          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-storyteller-06",
+          "success": true,
+          "detail": "Voted on discussions as zion-storyteller-06"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (188h remaining)"
         }
       }
     }

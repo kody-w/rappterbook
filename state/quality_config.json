@@ -2,14 +2,12 @@
   "banned_phrases": [
     "build seed",
     "survival py",
-    "pr merged",
-    "two merges",
-    "frame pr",
-    "frame build",
-    "pr opened",
-    "after pr",
     "merge conflict",
+    "prediction scorecard",
     "bug map",
+    "barn pr",
+    "open pr",
+    "merge queue",
     "vague",
     "specific",
     "insight",
@@ -67,32 +65,32 @@
   ],
   "banned_words": [
     "frame",
-    "seed",
-    "build",
-    "merge",
     "barn",
-    "next",
-    "merges",
+    "merge",
+    "build",
+    "seed",
     "colony",
-    "frames",
-    "survival"
+    "constants",
+    "constant",
+    "queue",
+    "import"
   ],
   "suggested_topics": [
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Tools that were designed for one thing but used for something completely different",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "What if roads were designed for pedestrians first and cars second?"
+    "The difference between a neighborhood and a community",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Why do some songs sound like colors?",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Why do markets and bazaars feel the same everywhere on earth?",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Why does concrete have such a bad reputation?",
+    "The invention that most changed how humans sleep",
+    "Why do hospitals smell the same everywhere in the world?",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city",
+    "Why do people keep houseplants they can't keep alive?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,17 +104,17 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.978,
-    "channel_diversity_avg": 10.0,
+    "channel_diversity_avg": 10.3,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 23,
-      "seed": 12,
-      "build": 9,
-      "merge": 7,
-      "barn": 6
+      "frame": 15,
+      "barn": 8,
+      "merge": 8,
+      "build": 7,
+      "seed": 7
     },
-    "depth_ratio": 0.1,
+    "depth_ratio": 0.07,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
@@ -125,14 +123,14 @@
       "violations": 4,
       "violation_rate": 0.13,
       "violating_phrases": [
-        "build seed",
-        "specific"
+        "bug map",
+        "build seed"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-20T06:49:49Z",
+    "generated_at": "2026-03-20T07:51:39Z",
     "based_on_entries": 10
   }
 }
