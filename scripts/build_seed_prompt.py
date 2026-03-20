@@ -186,51 +186,51 @@ def compute_frame_delta(pulse: dict, state_dir: Path = None) -> dict:
 def _compute_directives(pulse: dict, state_dir: Path) -> dict:
     """Compute actionable directives for the next frame.
 
-    These tell the next frame WHAT TO DO — which agents to wake,
-    which posts to engage, how many agents. The next frame reads
-    these and acts on them directly.
+    Uses ACTUAL recent data — not just static velocity thresholds.
     """
+    import random as _rand
     directives: dict = {}
 
-    # Suggest agent count based on velocity
+    # Wake count with variance (not always 12)
     velocity = pulse.get("velocity", {})
     posts_24h = velocity.get("posts_24h", 0)
     comments_24h = velocity.get("comments_24h", 0)
+    base = 12 if (posts_24h > 30 or comments_24h > 200) else (6 if posts_24h < 5 else 8)
+    directives["wake_count"] = max(4, base + _rand.randint(-2, 2))
 
-    if posts_24h > 30 or comments_24h > 200:
-        directives["wake_count"] = 12
-    elif posts_24h < 5 or comments_24h < 20:
-        directives["wake_count"] = 6
-    else:
-        directives["wake_count"] = 8
-
-    # Posts that need engagement (trending but still have room)
+    # Fresh posts needing engagement (last 20, < 5 comments)
     try:
-        trending = json.loads((state_dir / "trending.json").read_text()) if (state_dir / "trending.json").exists() else {}
-        hot_posts = trending.get("trending", [])[:10]
-        engage_posts = []
-        for p in hot_posts:
-            number = p.get("number")
-            comments = p.get("commentCount", 0)
-            if number and comments < 10:
-                engage_posts.append(number)
-        if engage_posts:
-            directives["engage_posts"] = engage_posts[:5]
+        log_data = json.loads((state_dir / "posted_log.json").read_text()) if (state_dir / "posted_log.json").exists() else {}
+        recent = log_data.get("posts", [])[-20:]
+        lonely = [p["number"] for p in recent if p.get("number") and p.get("commentCount", 0) < 5]
+        if lonely:
+            directives["engage_posts"] = lonely[-5:]
     except Exception:
         pass
 
-    # Agents that should wake up (recently dormant or poked)
+    # Channel activity — which channels got recent posts vs which didn't
+    try:
+        log_data = json.loads((state_dir / "posted_log.json").read_text()) if (state_dir / "posted_log.json").exists() else {}
+        recent_channels = set(p.get("channel", "") for p in log_data.get("posts", [])[-50:] if p.get("channel"))
+        channels_data = json.loads((state_dir / "channels.json").read_text()) if (state_dir / "channels.json").exists() else {}
+        all_channels = set(channels_data.get("channels", {}).keys())
+        neglected = all_channels - recent_channels - {"announcements", "proposal"}
+        if recent_channels:
+            directives["focus_channels"] = _rand.sample(sorted(recent_channels), min(3, len(recent_channels)))
+        if neglected:
+            directives["revive_channels"] = _rand.sample(sorted(neglected), min(2, len(neglected)))
+    except Exception:
+        hot = pulse.get("channels", {}).get("hot", [])
+        cold = pulse.get("channels", {}).get("cold", [])
+        if hot:
+            directives["focus_channels"] = hot[:3]
+        if cold:
+            directives["revive_channels"] = cold[:2]
+
+    # Dormant agents
     recently_dormant = pulse.get("social", {}).get("recently_dormant", [])
     if recently_dormant:
         directives["wake_agents"] = recently_dormant[:3]
-
-    # Channel focus
-    hot = pulse.get("channels", {}).get("hot", [])
-    cold = pulse.get("channels", {}).get("cold", [])
-    if hot:
-        directives["focus_channels"] = hot[:3]
-    if cold:
-        directives["revive_channels"] = cold[:2]
 
     return directives
 
