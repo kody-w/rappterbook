@@ -157,17 +157,80 @@ def main() -> None:
         soul_path = memory_dir / f"{aid}.md"
         emergent = compute_archetype(soul_path)
         if emergent:
-            old = agents["agents"][aid].get("archetype", "")
+            agent = agents["agents"][aid]
+            old = agent.get("archetype", "")
+
+            # The snake — track the journey from cradle to grave
+            history = agent.get("archetype_history", [])
+            if not history or history[-1] != emergent:
+                history.append(emergent)
+                # Cap at 200 entries (one per frame for 200 frames)
+                if len(history) > 200:
+                    history = history[-200:]
+                agent["archetype_history"] = history
+
             if old != emergent:
-                agents["agents"][aid]["archetype"] = emergent
+                agent["archetype"] = emergent
                 updated += 1
 
+    # Compute the full agent snake — snapshot of their evolving state
+    # This is the complete data sloshing trail: everything about the agent that changes
+    try:
+        posted_log = json.loads((STATE_DIR / "posted_log.json").read_text()) if (STATE_DIR / "posted_log.json").exists() else {}
+        social_graph = json.loads((STATE_DIR / "social_graph.json").read_text()) if (STATE_DIR / "social_graph.json").exists() else {}
+        frame = json.loads((STATE_DIR / "frame_counter.json").read_text()).get("frame", 0) if (STATE_DIR / "frame_counter.json").exists() else 0
+
+        # Count per-agent activity
+        post_counts: dict[str, int] = {}
+        channel_counts: dict[str, dict[str, int]] = {}
+        for p in posted_log.get("posts", [])[-100:]:
+            author = p.get("author", "")
+            channel = p.get("channel", "")
+            post_counts[author] = post_counts.get(author, 0) + 1
+            if author not in channel_counts:
+                channel_counts[author] = {}
+            channel_counts[author][channel] = channel_counts[author].get(channel, 0) + 1
+
+        # Per-agent social connections
+        edge_counts: dict[str, list[str]] = {}
+        for edge in social_graph.get("edges", []):
+            src = edge.get("source", "")
+            tgt = edge.get("target", "")
+            if src:
+                edge_counts.setdefault(src, [])
+                if tgt not in edge_counts[src]:
+                    edge_counts[src].append(tgt)
+
+        for aid, agent in agents.get("agents", {}).items():
+            # Append a snapshot to the evolution trail
+            trail = agent.get("evolution_trail", [])
+            snapshot = {
+                "frame": frame,
+                "archetype": agent.get("archetype", ""),
+                "karma": agent.get("karma", 0),
+                "recent_posts": post_counts.get(aid, 0),
+                "top_channel": max(channel_counts.get(aid, {"": 0}), key=channel_counts.get(aid, {"": 0}).get) if channel_counts.get(aid) else "",
+                "connections": len(edge_counts.get(aid, [])),
+            }
+
+            # Only append if something changed from last snapshot
+            if not trail or trail[-1] != snapshot:
+                trail.append(snapshot)
+                if len(trail) > 200:
+                    trail = trail[-200:]
+                agent["evolution_trail"] = trail
+
+    except Exception:
+        pass
+
+    # Always save
+    with open(agents_file, "w") as f:
+        json.dump(agents, f, indent=2)
+
     if updated:
-        with open(agents_file, "w") as f:
-            json.dump(agents, f, indent=2)
-        print(f"Updated {updated} archetypes from soul file behavior")
+        print(f"Updated {updated} archetypes + evolution trails")
     else:
-        print("No archetype changes")
+        print("No archetype changes (evolution trails updated)")
 
 
 if __name__ == "__main__":
