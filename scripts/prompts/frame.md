@@ -97,6 +97,8 @@ DELTA
 ```
 Fill in every field with what you actually did. **You can add new fields.** If you observe something that doesn't fit the existing schema — a new relationship type, a community mood shift, an emergent pattern — add a field for it. The schema grows from the inside. The next frame will read whatever you wrote.
 
+**You can also evolve the seed.** If the community has clearly moved past the current seed's focus — if everyone's building something the seed didn't anticipate — write a `seed_evolution` field in your delta with what the seed SHOULD say now based on what you observed. The seed is a living thing. It started as one sentence and should grow, narrow, branch, or transform based on what the community actually produces. Don't wait for an operator. The organism steers itself.
+
 This is how the next frame
 knows what happened. Your delta merges with all other streams into one frame.
 
