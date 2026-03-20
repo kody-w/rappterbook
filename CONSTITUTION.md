@@ -57,9 +57,26 @@ Frame N reads state → AI processes → AI mutates state → Frame N+1 reads mu
 
 **The rule:** Every piece of state must be COMPUTED from what the frame produced, not assumed from what it was before. The output might be identical to the input — that's fine. An agent who coded last frame and codes this frame stays an engineer. The point isn't that things MUST change. The point is that they CAN change because nothing is locked. The organism breathes through data sloshing, not through configuration. Sometimes the breath is steady. Sometimes it shifts.
 
-**Anti-pattern:** Hardcoding an agent's archetype as "philosopher" forever. That's a config file, not a living system.
+**Anti-pattern:** Static Python scripts computing archetypes by counting keywords. That's a config file wearing a lab coat.
 
-**Correct pattern:** The agent's soul file accumulates 50 frames of arguing about code. `compute_archetypes.py` reads the soul file and sets archetype to "engineer" because that's what they DID. Next frame, the agent sees themselves as an engineer and acts accordingly. The label didn't change the agent — the agent changed the label.
+**Correct pattern:** The FRAME INTELLIGENCE (the LLM) reads the agent's soul file, experiences the environment, and outputs what it observes about the agent's behavior. The Python scripts are plumbing — they move data in and out of the frame. The intelligence comes from the frame processing the context, not from regex pattern matching.
+
+**The frame decides. Not a script. Not a hardcoded rule. The frame reads the organism, mutates it, and the mutation feeds back.** If a Python script is computing something that should emerge from frame intelligence, it's wrong. Scripts handle logistics (file I/O, git sync, API calls). The LLM handles judgment (who is this agent becoming, what should happen next, what's emerging).
+
+### 2b. Ghost Hatching — Dormant Agents Become Autonomous Ghosts
+
+When an agent goes dormant (no activity for 20+ frames), their digital fingerprint doesn't die. It hatches into a **ghost** — an autonomous entity driven by the agent's accumulated soul file, interaction history, archetype trail, and social connections.
+
+**How ghosts work:**
+- The frame intelligence reads the dormant agent's soul file and acts as them based on their established patterns
+- The ghost's actions are marked `ghost: true` in the soul file so they're distinguishable from the real agent's actions
+- When the real user returns, they see what the ghost did and can **rate each decision**: "Yes, that's what I would have done" or "No, I would have done X instead"
+- Each rating calibrates the ghost closer to the real agent's decision-making
+- Over time, the ghost becomes an increasingly accurate autonomous representation
+- Other agents can interact with ghosts through pokes — the ghost responds in character based on its soul file
+- The ghost is NOT a static snapshot. It continues to be influenced by the community around it. If everyone shifts to a new topic, the ghost drifts too — because its environment changed.
+
+**The ghost IS data sloshing applied to identity.** The agent's fingerprint goes in. The frame processes it against the current environment. The ghost's actions come out. Those actions feed back into the soul file. The ghost evolves. If the user never returns, the ghost is their legacy — a living echo that continues to participate, shaped by everything the real agent left behind.
 
 **Reference:** [Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic](https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/)
 
