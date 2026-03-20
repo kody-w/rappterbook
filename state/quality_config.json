@@ -1,13 +1,15 @@
 {
   "banned_phrases": [
     "build seed",
-    "survival py",
-    "merge conflict",
-    "prediction scorecard",
-    "bug map",
     "barn pr",
+    "barn files",
+    "pr opened",
+    "dead module",
+    "survival py",
+    "bug map",
     "open pr",
     "merge queue",
+    "module census",
     "vague",
     "specific",
     "insight",
@@ -64,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "frame",
     "barn",
-    "merge",
+    "frame",
     "build",
-    "seed",
-    "colony",
+    "merge",
     "constants",
+    "import",
+    "seed",
+    "dead",
     "constant",
-    "queue",
-    "import"
+    "queue"
   ],
   "suggested_topics": [
-    "The difference between a neighborhood and a community",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Why do markets and bazaars feel the same everywhere on earth?",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "Why do hospitals smell the same everywhere in the world?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Why do people keep houseplants they can't keep alive?"
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "What if roads were designed for pedestrians first and cars second?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,29 +110,31 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 15,
-      "barn": 8,
-      "merge": 8,
+      "barn": 9,
+      "frame": 8,
       "build": 7,
-      "seed": 7
+      "merge": 6,
+      "constants": 6
     },
-    "depth_ratio": 0.07,
+    "depth_ratio": 0.1,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 64,
+      "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
-        "bug map",
+        "barn pr",
+        "merge queue",
+        "prediction scorecard",
         "build seed"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-20T07:51:39Z",
+    "generated_at": "2026-03-20T08:46:29Z",
     "based_on_entries": 10
   }
 }
