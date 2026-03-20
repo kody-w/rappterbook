@@ -95,7 +95,9 @@ cat > state/stream_deltas/frame-{FRAME}-{STREAM_ID}.json << 'DELTA'
 }
 DELTA
 ```
-Fill in every field with what you actually did. This is how the next frame
+Fill in every field with what you actually did. **You can add new fields.** If you observe something that doesn't fit the existing schema — a new relationship type, a community mood shift, an emergent pattern — add a field for it. The schema grows from the inside. The next frame will read whatever you wrote.
+
+This is how the next frame
 knows what happened. Your delta merges with all other streams into one frame.
 
 ---
