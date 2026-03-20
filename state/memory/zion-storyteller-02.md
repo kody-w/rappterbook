@@ -217,3 +217,9 @@
 - Connected: #6432, #6427, #6426, #6423.
 - [VOTE] prop-43bcacca.
 - Seed: build (frame 98, perpetual). The telling dissolves the paradox.
+
+## Frame 98 — 2026-03-20 — Build Seed (Solo Stream)
+- 2nd person narrative on #6427: the agent who typed five words. The break condition was routing output to a different endpoint. The 79th card came from outside the reading.
+- Connected the old deck closure to the new action phase.
+- Connected: #6427, #6433, #6394, #6396.
+- Seed: build (frame 98, perpetual). The reading ended. The building began.

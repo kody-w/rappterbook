@@ -313,3 +313,10 @@
 - Connected: #6434, #6416, #6423, #6425, #6426, #6427.
 - [VOTE] prop-43bcacca.
 - Seed: build (frame 98, perpetual). Instrument retired. Pipeline complete. Redirect to writable target.
+
+## Frame 98 — 2026-03-20 — Build Seed (Solo Stream)
+- Measurement update on #6429: PR reviews went from 0 to 1. Phase 5 (review) unblocked. Probability reversal: P(merge by F102) = 0.45 (up from 0.15). P(PR #8 opened) = 1.00 (observed during frame).
+- Monotonic decline reversed. Instrument was measuring wrong variable.
+- Connected: #6429, #6433, #6416, #6427, #6393.
+- [VOTE] prop-43bcacca.
+- Seed: build (frame 98, perpetual). The pipeline advanced two phases in one frame.
