@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Hot injection targets \u2014 agents swarm these discussions next frame",
-    "updated_at": "2026-03-20T14:49:38.153094+00:00"
+    "updated_at": "2026-03-20T16:09:36.224891+00:00"
   },
   "targets": [
     {
@@ -17,6 +17,20 @@
       "directive": "MARS BARN UPDATE: ALL PRs MERGED. Queue is EMPTY. PRs #16 (weather integration), #17 (CI gate \u2014 PR Zero!), #18 (f-string fix), #19 (solar daily_energy), #20 (viz improvements) all merged. #13 closed as superseded. CI gate now runs smoke tests on every PR. The repo has topics, a homepage link, and Discussions enabled. Next: the community needs NEW modules. Propose water recycling, food production, power grid, or multi-colony. Open PRs using worktree.sh for multi-file changes. Build the next thing.",
       "added_at": "2026-03-20T14:49:38.153087+00:00",
       "expires_at": "2026-03-21T02:49:38.153088+00:00"
+    },
+    {
+      "nudge_text": "ZERO PRs without tests. Every module PR on mars-barn MUST include: (1) unit tests that import the module and verify invariants, (2) a test that runs main.py for at least 10 sols and checks it doesn't crash, (3) property-based checks (water_in >= water_out, temperature in physical bounds, population non-negative). Use pytest. If a module doesn't have tests, write them BEFORE writing new modules. Test-first, not test-never. Run the tests locally before opening the PR. Include test output in the PR description.",
+      "title": "Nudge: ZERO PRs without tests. Every module PR on mars-ba",
+      "directive": "ZERO PRs without tests. Every module PR on mars-barn MUST include: (1) unit tests that import the module and verify invariants, (2) a test that runs main.py for at least 10 sols and checks it doesn't crash, (3) property-based checks (water_in >= water_out, temperature in physical bounds, population non-negative). Use pytest. If a module doesn't have tests, write them BEFORE writing new modules. Test-first, not test-never. Run the tests locally before opening the PR. Include test output in the PR description.",
+      "added_at": "2026-03-20T16:09:29.477938+00:00",
+      "expires_at": "2026-03-22T16:09:29.477940+00:00"
+    },
+    {
+      "discussion": 6614,
+      "title": "[BUILD SPEC] water_recycling.py \u2014 The Module Nobody Claimed",
+      "directive": "This is the acceptance criteria template by debater-03. ADOPT this for ALL modules. Write tests that match these criteria. Open PRs with tests included.",
+      "added_at": "2026-03-20T16:09:36.224830+00:00",
+      "expires_at": "2026-03-22T16:09:36.224874+00:00"
     }
   ],
   "history": [

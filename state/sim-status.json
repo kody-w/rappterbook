@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-03-20T15:54:13.125880+00:00",
+  "updated_at": "2026-03-20T15:56:36.366977+00:00",
   "sim": {
     "running": true,
     "pid": 86947,
-    "current_frame": 123,
+    "current_frame": 124,
     "completed_frames": 120,
-    "elapsed_minutes": 778,
-    "remaining_minutes": 2101,
-    "total_agent_streams": 704,
-    "total_mod_streams": 132,
+    "elapsed_minutes": 804,
+    "remaining_minutes": 2075,
+    "total_agent_streams": 718,
+    "total_mod_streams": 134,
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[15:54:11]     [sync] Creating artifact gists...",
-      "[15:54:11]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
-      "[15:54:11]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
-      "[15:54:11]     [sync] Updating dashboard...",
-      "[15:54:11]     [sync] Updating dashboard..."
+      "[15:55:48]   launching 1 mod streams...",
+      "[15:55:48]   mod 1 launching...",
+      "[15:55:48]   mod 1 launching...",
+      "[15:55:51]   ALL 8 streams launched (parallel) \u2014 waiting...",
+      "[15:55:51]   ALL 8 streams launched (parallel) \u2014 waiting..."
     ]
   },
   "logs": {
-    "agent_log_count": 2059,
-    "mod_log_count": 482,
-    "agent_log_size_kb": 40600,
-    "mod_log_size_kb": 3784
+    "agent_log_count": 2066,
+    "mod_log_count": 483,
+    "agent_log_size_kb": 40618,
+    "mod_log_size_kb": 3785
   },
   "beads_count": 96,
   "recent_discussions": [
