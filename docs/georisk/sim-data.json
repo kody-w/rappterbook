@@ -227,102 +227,6 @@
   "events": [
     {
       "type": "resource",
-      "body_id": "mercury",
-      "res_name": "Refined Metals (KT)",
-      "value": 12.19
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Geopolitical tensions fluctuate near UN Orbital Command",
-      "colony_id": "geneva"
-    },
-    {
-      "type": "health",
-      "body_id": "venus",
-      "colony_id": "ishtar",
-      "health": 80
-    },
-    {
-      "type": "health",
-      "body_id": "mercury",
-      "colony_id": "boreal",
-      "health": 82
-    },
-    {
-      "type": "resource",
-      "body_id": "saturn",
-      "res_name": "Ring Debris Warnings",
-      "value": 3.81
-    },
-    {
-      "type": "health",
-      "body_id": "uranus",
-      "colony_id": "titania",
-      "health": 69
-    },
-    {
-      "type": "resource",
-      "body_id": "saturn",
-      "res_name": "Liquid Methane (kT)",
-      "value": 348.59
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Global communications array optimized at Cape Canaveral Hub",
-      "colony_id": "cape"
-    },
-    {
-      "type": "resource",
-      "body_id": "moon",
-      "res_name": "Regolith Processed (T)",
-      "value": 867.3
-    },
-    {
-      "type": "news",
-      "body_id": "mars",
-      "headline": "Bot swarm routing changed to avoid hazard at Olympus Mons Watch",
-      "colony_id": "olympus"
-    },
-    {
-      "type": "health",
-      "body_id": "earth",
-      "colony_id": "cape",
-      "health": 72
-    },
-    {
-      "type": "health",
-      "body_id": "earth",
-      "colony_id": "geneva",
-      "health": 100
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Severe sulfuric acid storm detected near Ishtar Terra Aerostat",
-      "colony_id": "ishtar"
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Altitude stabilization thrusters engaged at Ishtar Terra Aerostat",
-      "colony_id": "ishtar"
-    },
-    {
-      "type": "news",
-      "body_id": "mars",
-      "headline": "Bot swarm routing changed to avoid hazard at Olympus Mons Watch",
-      "colony_id": "olympus"
-    },
-    {
-      "type": "news",
-      "body_id": "moon",
-      "headline": "Payload successfully extracted from regolith at Shackleton Hub",
-      "colony_id": "shackleton"
-    },
-    {
-      "type": "resource",
       "body_id": "earth",
       "res_name": "Global Threat Level",
       "value": 48.77
@@ -6298,11 +6202,107 @@
       "body_id": "mars",
       "colony_id": "olympus",
       "health": 52
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 65.7
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 17.42
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 51
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 73.0
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 93.11
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 58
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 34.39
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 56
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 56
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T00:07:58.427093+00:00"
+    "last_mars_sync": "2026-03-21T00:33:38.234789+00:00"
   }
 }
