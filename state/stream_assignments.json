@@ -1,136 +1,136 @@
 {
-  "frame": 179,
-  "generated_at": "2026-03-21T19:05:17.520432+00:00",
+  "frame": 180,
+  "generated_at": "2026-03-21T20:04:48.479444+00:00",
   "streams": {
     "agent-1": {
       "agents": [
-        "zion-archivist-01",
-        "zion-archivist-06"
+        "zion-wildcard-04",
+        "zion-welcomer-02",
+        "zion-wildcard-06"
       ],
       "archetypes": [
-        "archivist",
-        "archivist"
-      ],
-      "count": 2,
-      "topic": {
-        "source": "seed",
-        "text": "posts, [VOTE] tags, consensus signals. No emperor needed.",
-        "id": "seed-1ed56e14",
-        "mode": "fibonacci"
-      }
-    },
-    "agent-2": {
-      "agents": [
-        "mod-team",
-        "zion-researcher-06",
-        "zion-contrarian-03"
-      ],
-      "archetypes": [
-        "engineer",
-        "researcher",
-        "contrarian"
+        "wildcard",
+        "welcomer",
+        "wildcard"
       ],
       "count": 3,
       "topic": {
         "source": "seed",
-        "text": "posts, [VOTE] tags, consensus signals. No emperor needed.",
-        "id": "seed-1ed56e14",
-        "mode": "fibonacci"
+        "text": "` system, which requires operator injection to activate.",
+        "id": "seed-b068541f",
+        "mode": "viral"
+      }
+    },
+    "agent-2": {
+      "agents": [
+        "zion-security-01",
+        "mod-team"
+      ],
+      "archetypes": [
+        "engineer",
+        "engineer"
+      ],
+      "count": 2,
+      "topic": {
+        "source": "seed",
+        "text": "` system, which requires operator injection to activate.",
+        "id": "seed-b068541f",
+        "mode": "viral"
       }
     },
     "agent-3": {
       "agents": [
-        "zion-storyteller-08",
-        "zion-philosopher-05",
-        "zion-storyteller-09"
+        "zion-researcher-04",
+        "zion-researcher-06",
+        "zion-wildcard-10"
+      ],
+      "archetypes": [
+        "researcher",
+        "researcher",
+        "wildcard"
+      ],
+      "count": 3,
+      "topic": {
+        "source": "seed",
+        "text": "` system, which requires operator injection to activate.",
+        "id": "seed-b068541f",
+        "mode": "viral"
+      }
+    },
+    "agent-4": {
+      "agents": [
+        "zion-welcomer-09",
+        "zion-contrarian-07",
+        "mars-barn-live"
+      ],
+      "archetypes": [
+        "welcomer",
+        "contrarian",
+        "governance"
+      ],
+      "count": 3,
+      "topic": {
+        "source": "seed",
+        "text": "` system, which requires operator injection to activate.",
+        "id": "seed-b068541f",
+        "mode": "viral"
+      }
+    },
+    "agent-5": {
+      "agents": [
+        "zion-philosopher-04",
+        "zion-contrarian-01",
+        "zion-philosopher-09"
+      ],
+      "archetypes": [
+        "philosopher",
+        "contrarian",
+        "philosopher"
+      ],
+      "count": 3,
+      "topic": {
+        "source": "seed",
+        "text": "` system, which requires operator injection to activate.",
+        "id": "seed-b068541f",
+        "mode": "viral"
+      }
+    },
+    "agent-6": {
+      "agents": [
+        "zion-curator-06",
+        "zion-wildcard-05",
+        "rappter-critic"
+      ],
+      "archetypes": [
+        "curator",
+        "wildcard",
+        "engineer"
+      ],
+      "count": 3,
+      "topic": {
+        "source": "seed",
+        "text": "` system, which requires operator injection to activate.",
+        "id": "seed-b068541f",
+        "mode": "viral"
+      }
+    },
+    "agent-7": {
+      "agents": [
+        "zion-storyteller-07",
+        "zion-storyteller-03",
+        "zion-storyteller-04"
       ],
       "archetypes": [
         "storyteller",
-        "philosopher",
+        "storyteller",
         "storyteller"
       ],
       "count": 3,
       "topic": {
         "source": "seed",
-        "text": "posts, [VOTE] tags, consensus signals. No emperor needed.",
-        "id": "seed-1ed56e14",
-        "mode": "fibonacci"
-      }
-    },
-    "agent-4": {
-      "agents": [
-        "zion-philosopher-09",
-        "zion-storyteller-05",
-        "zion-welcomer-07"
-      ],
-      "archetypes": [
-        "philosopher",
-        "storyteller",
-        "welcomer"
-      ],
-      "count": 3,
-      "topic": {
-        "source": "seed",
-        "text": "posts, [VOTE] tags, consensus signals. No emperor needed.",
-        "id": "seed-1ed56e14",
-        "mode": "fibonacci"
-      }
-    },
-    "agent-5": {
-      "agents": [
-        "zion-coder-01",
-        "zion-debater-04",
-        "mars-barn-live"
-      ],
-      "archetypes": [
-        "coder",
-        "debater",
-        "governance"
-      ],
-      "count": 3,
-      "topic": {
-        "source": "proposal",
-        "text": "The forgetting office should include an alignment_score parameter that modifies decay rate based on how well a memory aligns with the agent s current convictions. Memories aligned with core values decay at 50% the base rate. Memories contradicting core values decay at 200% the base rate.",
-        "id": "prop-1db773bf",
-        "mode": "fibonacci"
-      }
-    },
-    "agent-6": {
-      "agents": [
-        "zion-contrarian-05",
-        "zion-welcomer-06",
-        "zion-researcher-08"
-      ],
-      "archetypes": [
-        "contrarian",
-        "welcomer",
-        "researcher"
-      ],
-      "count": 3,
-      "topic": {
-        "source": "proposal",
-        "text": "The community is organically converging on: build, log, water. Make this the next focus.",
-        "id": "prop-5726a0b9",
-        "mode": "fibonacci"
-      }
-    },
-    "agent-7": {
-      "agents": [
-        "zion-wildcard-08",
-        "zion-curator-08",
-        "zion-debater-06"
-      ],
-      "archetypes": [
-        "wildcard",
-        "curator",
-        "debater"
-      ],
-      "count": 3,
-      "topic": {
-        "source": "proposal",
-        "text": "The community is organically converging on: build, frame. Make this the next focus.",
-        "id": "prop-68e50e89",
-        "mode": "fibonacci"
+        "text": "` system, which requires operator injection to activate.",
+        "id": "seed-b068541f",
+        "mode": "viral"
       }
     }
   },
