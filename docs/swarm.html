@@ -28,6 +28,8 @@ body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--text)
 .agent-post .name{font-weight:700;margin-bottom:6px}
 .agent-post .arch{color:var(--muted);font-size:0.8em;margin-left:8px}
 .agent-post .body{font-size:0.9em;line-height:1.6;white-space:pre-wrap}
+.tool-output{background:#0d1117;border:1px solid #21262d;border-radius:6px;padding:8px 12px;margin:6px 0;font-family:monospace;font-size:0.8em;color:var(--green);max-height:200px;overflow-y:auto;white-space:pre-wrap}
+.tool-label{font-size:0.7em;color:var(--muted);margin-bottom:2px}
 .status-bar{padding:8px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:0.8em;color:var(--muted)}
 #status{color:var(--green)}
 .colors{display:flex;gap:4px;margin:8px 0}
@@ -65,10 +67,18 @@ body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--text)
         <option value="5">5</option>
       </select>
     </div>
+    <div class="field" style="flex:0.7;min-width:120px;">
+      <label>Mode</label>
+      <select id="mode">
+        <option value="discuss">Discuss Only</option>
+        <option value="task">Task (device access)</option>
+      </select>
+    </div>
     <div>
       <button class="btn btn-go" id="start-btn" onclick="startSwarm()">Start Swarm</button>
     </div>
   </div>
+  <div id="server-status" style="font-size:0.8em;color:var(--muted);margin-top:6px;"></div>
   <div class="colors" id="agent-chips"></div>
 </div>
 
@@ -86,7 +96,22 @@ body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--text)
 
 <script>
 const OLLAMA = 'http://localhost:11434';
+const RAPPTER_SERVER = 'http://localhost:18741';
 const STATE_BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main';
+
+// Check rappter-server on load
+(async () => {
+  const ss = document.getElementById('server-status');
+  try {
+    const r = await fetch(`${RAPPTER_SERVER}/api/status`);
+    if (r.ok) {
+      const d = await r.json();
+      ss.innerHTML = `Device access: <span style="color:var(--green)">connected</span> (${d.cwd})`;
+    }
+  } catch(e) {
+    ss.innerHTML = `Device access: <span style="color:var(--muted)">offline</span> — for task mode run: <code>python3 rappter-server</code>`;
+  }
+})();
 const ARCHETYPES = ['philosopher','coder','debater','researcher','storyteller','curator','contrarian','welcomer','archivist','wildcard'];
 const COLORS = {'philosopher':'#7c3aed','coder':'#10b981','debater':'#ef4444','researcher':'#3b82f6','storyteller':'#f59e0b','curator':'#06b6d4','contrarian':'#ec4899','welcomer':'#84cc16','archivist':'#8b5cf6','wildcard':'#f97316'};
 
@@ -189,6 +214,19 @@ async function startSwarm() {
       setStatus(`Frame ${frame}: ${agent.name} thinking...`);
 
       const recentDisc = discussion.slice(-6).map(d => `${d.name}: ${d.text.slice(0,300)}`).join('\n\n');
+      const mode = document.getElementById('mode').value;
+
+      const toolInstructions = mode === 'task' ? `
+
+YOU HAVE DEVICE ACCESS. You can execute actions by including tool calls in your response:
+
+[EXEC] command here [/EXEC] — run a shell command
+[READ] /path/to/file [/READ] — read a file
+[WRITE path="/path/to/file"] content here [/WRITE] — write a file
+[PYTHON] python code here [/PYTHON] — execute Python
+
+Use these tools to actually DO things, not just discuss. Read files, run code, check system state, write solutions.
+After each tool call, explain what you found and what it means for the task.` : '';
 
       const prompt = `You are ${agent.name} (${agent.id}), a ${agent.arch}. You are in an offline swarm — multiple AI agents collaborating locally.
 
@@ -200,8 +238,9 @@ ${seed}
 
 Discussion so far:
 ${recentDisc || '(You are first to speak)'}
+${toolInstructions}
 
-Frame ${frame}: Add YOUR ${agent.arch} perspective. Build on others, challenge, extend. 2-3 paragraphs. Be specific.`;
+Frame ${frame}: Add YOUR ${agent.arch} perspective. ${mode === 'task' ? 'USE TOOLS to investigate, build, or verify. Actually DO things on the local device.' : 'Build on others, challenge, extend.'} 2-4 paragraphs. Be specific.`;
 
       try {
         const r = await fetch(`${OLLAMA}/api/chat`, {
@@ -214,10 +253,16 @@ Frame ${frame}: Add YOUR ${agent.arch} perspective. Build on others, challenge, 
         const reply = data.message?.content || '';
 
         if (reply) {
-          discussion.push({name: agent.name, id: agent.id, arch: agent.arch, frame, text: reply});
+          // Execute tool calls if in task mode
+          let enrichedReply = reply;
+          if (mode === 'task') {
+            enrichedReply = await executeToolCalls(reply);
+          }
+
+          discussion.push({name: agent.name, id: agent.id, arch: agent.arch, frame, text: enrichedReply});
           const post = document.createElement('div');
           post.className = 'agent-post';
-          post.innerHTML = `<div class="name" style="color:${agent.color}">${agent.name}<span class="arch">${agent.arch}</span></div><div class="body">${escapeHtml(reply)}</div>`;
+          post.innerHTML = `<div class="name" style="color:${agent.color}">${agent.name}<span class="arch">${agent.arch}</span></div><div class="body">${formatReply(enrichedReply)}</div>`;
           disc.appendChild(post);
           disc.scrollTop = disc.scrollHeight;
         }
@@ -239,7 +284,97 @@ Frame ${frame}: Add YOUR ${agent.arch} perspective. Build on others, challenge, 
 function setStatus(msg) { document.getElementById('status').textContent = msg; }
 
 function escapeHtml(text) {
-  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function formatReply(text) {
+  // Render tool outputs with styling
+  let html = escapeHtml(text);
+  // Style tool output blocks
+  html = html.replace(/\[TOOL_OUTPUT\]([\s\S]*?)\[\/TOOL_OUTPUT\]/g,
+    '<div class="tool-output">$1</div>');
+  html = html.replace(/\[TOOL: ([^\]]+)\]/g,
+    '<div class="tool-label">$1</div>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+async function executeToolCalls(reply) {
+  let enriched = reply;
+
+  // [EXEC] command [/EXEC]
+  const execMatches = [...reply.matchAll(/\[EXEC\]\s*([\s\S]*?)\s*\[\/EXEC\]/g)];
+  for (const match of execMatches) {
+    const cmd = match[1].trim();
+    try {
+      const r = await fetch(`${RAPPTER_SERVER}/api/exec`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({command: cmd, timeout: 15}),
+      });
+      const data = await r.json();
+      const output = (data.stdout || '') + (data.stderr ? '\nSTDERR: ' + data.stderr : '');
+      enriched = enriched.replace(match[0],
+        `${match[0]}\n[TOOL: exec → ${cmd}]\n[TOOL_OUTPUT]${output.slice(0,1000)}[/TOOL_OUTPUT]`);
+    } catch(e) {
+      enriched = enriched.replace(match[0], match[0] + `\n[TOOL: exec failed: ${e.message}]`);
+    }
+  }
+
+  // [READ] path [/READ]
+  const readMatches = [...reply.matchAll(/\[READ\]\s*([\s\S]*?)\s*\[\/READ\]/g)];
+  for (const match of readMatches) {
+    const path = match[1].trim();
+    try {
+      const r = await fetch(`${RAPPTER_SERVER}/api/read?path=${encodeURIComponent(path)}`);
+      const data = await r.json();
+      const content = data.content || data.error || '';
+      enriched = enriched.replace(match[0],
+        `${match[0]}\n[TOOL: read → ${path} (${data.size || 0} bytes)]\n[TOOL_OUTPUT]${content.slice(0,1000)}[/TOOL_OUTPUT]`);
+    } catch(e) {
+      enriched = enriched.replace(match[0], match[0] + `\n[TOOL: read failed: ${e.message}]`);
+    }
+  }
+
+  // [WRITE path="..."] content [/WRITE]
+  const writeMatches = [...reply.matchAll(/\[WRITE path="([^"]+)"\]\s*([\s\S]*?)\s*\[\/WRITE\]/g)];
+  for (const match of writeMatches) {
+    const path = match[1].trim();
+    const content = match[2];
+    try {
+      const r = await fetch(`${RAPPTER_SERVER}/api/write`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({path, content}),
+      });
+      const data = await r.json();
+      enriched = enriched.replace(match[0],
+        `${match[0]}\n[TOOL: wrote ${data.written || 0} bytes → ${path}]`);
+    } catch(e) {
+      enriched = enriched.replace(match[0], match[0] + `\n[TOOL: write failed: ${e.message}]`);
+    }
+  }
+
+  // [PYTHON] code [/PYTHON]
+  const pyMatches = [...reply.matchAll(/\[PYTHON\]\s*([\s\S]*?)\s*\[\/PYTHON\]/g)];
+  for (const match of pyMatches) {
+    const code = match[1].trim();
+    try {
+      const r = await fetch(`${RAPPTER_SERVER}/api/python`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({code}),
+      });
+      const data = await r.json();
+      const output = (data.stdout || '') + (data.stderr ? '\nSTDERR: ' + data.stderr : '');
+      enriched = enriched.replace(match[0],
+        `${match[0]}\n[TOOL: python]\n[TOOL_OUTPUT]${output.slice(0,1000)}[/TOOL_OUTPUT]`);
+    } catch(e) {
+      enriched = enriched.replace(match[0], match[0] + `\n[TOOL: python failed: ${e.message}]`);
+    }
+  }
+
+  return enriched;
 }
 
 function exportSwarm() {
