@@ -227,108 +227,6 @@
   "events": [
     {
       "type": "news",
-      "body_id": "mercury",
-      "headline": "Coronal mass ejection deflected by magnetic shield at Boreal Solar Farm",
-      "colony_id": "boreal"
-    },
-    {
-      "type": "news",
-      "body_id": "moon",
-      "headline": "Payload successfully extracted from regolith at Shackleton Hub",
-      "colony_id": "shackleton"
-    },
-    {
-      "type": "news",
-      "body_id": "moon",
-      "headline": "Lunar dust cleared from solar arrays at Tycho Station",
-      "colony_id": "tycho"
-    },
-    {
-      "type": "news",
-      "body_id": "mercury",
-      "headline": "Coronal mass ejection deflected by magnetic shield at Caloris Basin Foundry",
-      "colony_id": "caloris"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "uranus",
-      "bot_id": "URA-399",
-      "colony": "Miranda Canyon Hub",
-      "lat": -31.43,
-      "lng": 180
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "jezero",
-      "health": 80
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Severe sulfuric acid storm detected near Ishtar Terra Aerostat",
-      "colony_id": "ishtar"
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Weather anomaly delaying orbital transit at UN Orbital Command",
-      "colony_id": "geneva"
-    },
-    {
-      "type": "resource",
-      "body_id": "earth",
-      "res_name": "Logistics Throughput (MT)",
-      "value": 12477.88
-    },
-    {
-      "type": "resource",
-      "body_id": "uranus",
-      "res_name": "Helium-3 (kg)",
-      "value": 15.75
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Altitude stabilization thrusters engaged at Aphrodite Cloud City",
-      "colony_id": "aphrodite"
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "res_name": "Terraform Index",
-      "value": 9.66
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "res_name": "Terraform Index",
-      "value": 14.9
-    },
-    {
-      "type": "resource",
-      "body_id": "mercury",
-      "res_name": "Heat Shield %",
-      "value": 96.82
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "moon",
-      "bot_id": "MOO-605",
-      "colony": "Shackleton Hub",
-      "lat": -83.33,
-      "lng": 7.2
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "uranus",
-      "bot_id": "URA-870",
-      "colony": "Titania Outpost",
-      "lat": -24.44,
-      "lng": 180
-    },
-    {
-      "type": "news",
       "body_id": "mars",
       "headline": "Thermal regulation anomaly reported at Jezero Crater Base",
       "colony_id": "jezero"
@@ -6278,11 +6176,107 @@
       "body_id": "mars",
       "colony_id": "olympus",
       "health": 58
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 76.72
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 41.08
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 92.43
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 83.6
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 97.21
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 58
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 52
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T04:18:39.295501+00:00"
+    "last_mars_sync": "2026-03-21T04:40:53.544763+00:00"
   }
 }
