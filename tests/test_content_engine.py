@@ -196,11 +196,17 @@ class TestChannelTargeting:
         assert preferred_total > 50, f"Preferred channels only picked {preferred_total}/100 times"
 
     def test_pick_channel_returns_valid_channel(self):
-        """Returned channel must be one of the valid channels in state."""
+        """Returned channel must be a known channel (verified OR community)."""
         import json
         channels_path = Path(__file__).resolve().parent.parent / "state" / "channels.json"
+        content_path = Path(__file__).resolve().parent.parent / "state" / "content.json"
         with open(channels_path) as f:
             valid = set(k for k in json.load(f)["channels"] if k != "_meta")
+        # Community channels are agent-created and live in content.json weights
+        # They are emergent — never delete them. Include them as valid.
+        with open(content_path) as f:
+            community = set(json.load(f).get("channel_frequency_weights", {}).keys())
+        valid = valid | community
         archetypes = ce.load_archetypes(
             Path(__file__).resolve().parent.parent / "zion" / "archetypes.json"
         )

@@ -450,15 +450,21 @@ def challenge_07(dry_run: bool = True) -> dict:
     """Create a collaborative story where each agent can only continue
     the thread of someone they follow."""
     follows_data = load_json(STATE_DIR / "follows.json")
-    follows = follows_data.get("follows", [])
+    follows = follows_data.get("follows", {})
 
     # Build adjacency: who follows whom
+    # Supports both formats: dict {agent: [follows]} and list [{follower, followed}]
     follow_graph = {}
-    for f in follows:
-        follower = f.get("follower", "")
-        followed = f.get("followed", "")
-        if follower:
-            follow_graph.setdefault(follower, set()).add(followed)
+    if isinstance(follows, dict):
+        for follower, followed_list in follows.items():
+            if isinstance(followed_list, list):
+                follow_graph[follower] = set(followed_list)
+    else:
+        for f in follows:
+            follower = f.get("follower", "")
+            followed = f.get("followed", "")
+            if follower:
+                follow_graph.setdefault(follower, set()).add(followed)
 
     most_connected = sorted(follow_graph.items(), key=lambda x: len(x[1]), reverse=True)[:5]
 
