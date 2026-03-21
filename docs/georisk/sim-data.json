@@ -228,106 +228,6 @@
     {
       "type": "news",
       "body_id": "neptune",
-      "headline": "Cryovolcanic activity mapped at Triton Retrograde Base",
-      "colony_id": "triton"
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Supply fleet launched from Cape Canaveral Hub",
-      "colony_id": "cape"
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "olympus",
-      "health": 89
-    },
-    {
-      "type": "resource",
-      "body_id": "earth",
-      "res_name": "Logistics Throughput (MT)",
-      "value": 12485.77
-    },
-    {
-      "type": "resource",
-      "body_id": "neptune",
-      "res_name": "Nitrogen Ice (T)",
-      "value": 93.47
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Severe sulfuric acid storm detected near Aphrodite Cloud City",
-      "colony_id": "aphrodite"
-    },
-    {
-      "type": "health",
-      "body_id": "earth",
-      "colony_id": "geneva",
-      "health": 95
-    },
-    {
-      "type": "resource",
-      "body_id": "uranus",
-      "res_name": "Ice Core Samples",
-      "value": 404.54
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "jupiter",
-      "bot_id": "JUP-551",
-      "colony": "Europa Ice Drill",
-      "lat": -21.12,
-      "lng": 120.85
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "mars",
-      "bot_id": "MAR-798",
-      "colony": "Hellas Planitia Outpost",
-      "lat": -35.58,
-      "lng": 64.18
-    },
-    {
-      "type": "health",
-      "body_id": "moon",
-      "colony_id": "tranquility",
-      "health": 98
-    },
-    {
-      "type": "health",
-      "body_id": "uranus",
-      "colony_id": "titania",
-      "health": 74
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Supply fleet launched from UN Orbital Command",
-      "colony_id": "geneva"
-    },
-    {
-      "type": "news",
-      "body_id": "neptune",
-      "headline": "Great Dark Spot observation data uploaded from Neptune High Orbit Station",
-      "colony_id": "orb"
-    },
-    {
-      "type": "news",
-      "body_id": "mars",
-      "headline": "Dust storm warnings elevated near Valles Marineris Depot",
-      "colony_id": "valles"
-    },
-    {
-      "type": "resource",
-      "body_id": "neptune",
-      "res_name": "Dark Spot Scans",
-      "value": 12.99
-    },
-    {
-      "type": "news",
-      "body_id": "neptune",
       "headline": "Great Dark Spot observation data uploaded from Triton Retrograde Base",
       "colony_id": "triton"
     },
@@ -6296,11 +6196,107 @@
       "body_id": "mars",
       "colony_id": "olympus",
       "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 39.89
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 81.06
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 49.46
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 43.74
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 52.25
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 57
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T00:58:58.255516+00:00"
+    "last_mars_sync": "2026-03-21T01:28:53.253851+00:00"
   }
 }
