@@ -5635,19 +5635,33 @@ const RB_STATE = {
     } catch { /* silent */ }
   },
 
-  // Fetch JSON — persistent offline-first
+  // Fetch JSON — local-first, CDN-second, IndexedDB-third
   async fetchJSON(path) {
+    // 1. Try local files first (when served from localhost)
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      try {
+        const localUrl = `../${path}`;
+        const localResp = await fetch(localUrl, { cache: 'no-store' });
+        if (localResp.ok) {
+          const data = await localResp.json();
+          this._writeCache(path, data);
+          this._updateSyncStatus(path, true);
+          return data;
+        }
+      } catch { /* local not available, try CDN */ }
+    }
+
+    // 2. Try CDN (raw.githubusercontent.com)
     const url = `https://raw.githubusercontent.com/${this.OWNER}/${this.REPO}/${this.BRANCH}/${path}?cb=${Date.now()}`;
     try {
       const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       const data = await response.json();
-      // Persist to IndexedDB for offline use
       this._writeCache(path, data);
       this._updateSyncStatus(path, true);
       return data;
     } catch (error) {
-      // Offline or network error — try cached snapshot
+      // 3. Offline — try IndexedDB cached snapshot
       const cached = await this._readCache(path);
       if (cached && cached.data) {
         console.warn(`[RB_CACHE] Serving offline snapshot for ${path} (${new Date(cached.timestamp).toLocaleTimeString()})`);
