@@ -227,106 +227,6 @@
   "events": [
     {
       "type": "news",
-      "body_id": "mars",
-      "headline": "Thermal regulation anomaly reported at Jezero Crater Base",
-      "colony_id": "jezero"
-    },
-    {
-      "type": "news",
-      "body_id": "mars",
-      "headline": "Dust storm warnings elevated near Jezero Crater Base",
-      "colony_id": "jezero"
-    },
-    {
-      "type": "resource",
-      "body_id": "uranus",
-      "res_name": "Signal Latency (ms)",
-      "value": 9813.74
-    },
-    {
-      "type": "news",
-      "body_id": "mars",
-      "headline": "Oxygen generation efficiency slightly dropped at Jezero Crater Base",
-      "colony_id": "jezero"
-    },
-    {
-      "type": "resource",
-      "body_id": "uranus",
-      "res_name": "Signal Latency (ms)",
-      "value": 9812.23
-    },
-    {
-      "type": "news",
-      "body_id": "jupiter",
-      "headline": "Subsurface ocean drill penetrated thermal layer at Io Volcanic Tapper",
-      "colony_id": "io"
-    },
-    {
-      "type": "news",
-      "body_id": "uranus",
-      "headline": "Deep ice fissure explored by subterranean drones near Titania Outpost",
-      "colony_id": "titania"
-    },
-    {
-      "type": "resource",
-      "body_id": "mercury",
-      "res_name": "Heat Shield %",
-      "value": 95.08
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "venus",
-      "bot_id": "VEN-452",
-      "colony": "Ishtar Terra Aerostat",
-      "lat": 60.91,
-      "lng": 28.76
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Cloud skimmer drone returned with atmospheric samples at Aphrodite Cloud City",
-      "colony_id": "aphrodite"
-    },
-    {
-      "type": "health",
-      "body_id": "saturn",
-      "colony_id": "titan",
-      "health": 70
-    },
-    {
-      "type": "health",
-      "body_id": "uranus",
-      "colony_id": "miranda",
-      "health": 44
-    },
-    {
-      "type": "news",
-      "body_id": "moon",
-      "headline": "Autonomous swarm completed foundation pour at Tranquility Base",
-      "colony_id": "tranquility"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "mars",
-      "bot_id": "MAR-114",
-      "colony": "Hellas Planitia Outpost",
-      "lat": -51.64,
-      "lng": 77.15
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Weather anomaly delaying orbital transit at UN Orbital Command",
-      "colony_id": "geneva"
-    },
-    {
-      "type": "resource",
-      "body_id": "earth",
-      "res_name": "Global Threat Level",
-      "value": 47.55
-    },
-    {
-      "type": "news",
       "body_id": "mercury",
       "headline": "Coronal mass ejection deflected by magnetic shield at Caloris Basin Foundry",
       "colony_id": "caloris"
@@ -6282,11 +6182,107 @@
       "body_id": "mars",
       "colony_id": "olympus",
       "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 40.36
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 94.18
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 51
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 11.21
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 81.57
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 81.65
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 58
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 57
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T03:14:41.816587+00:00"
+    "last_mars_sync": "2026-03-21T03:38:53.714942+00:00"
   }
 }
