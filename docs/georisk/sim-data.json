@@ -226,100 +226,6 @@
   },
   "events": [
     {
-      "type": "health",
-      "body_id": "mercury",
-      "colony_id": "caloris",
-      "health": 59
-    },
-    {
-      "type": "news",
-      "body_id": "mercury",
-      "headline": "Coronal mass ejection deflected by magnetic shield at Boreal Solar Farm",
-      "colony_id": "boreal"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "venus",
-      "bot_id": "VEN-525",
-      "colony": "Aphrodite Cloud City",
-      "lat": -12.85,
-      "lng": 110.68
-    },
-    {
-      "type": "resource",
-      "body_id": "saturn",
-      "res_name": "Cryo-Stability %",
-      "value": 97.25
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Altitude stabilization thrusters engaged at Aphrodite Cloud City",
-      "colony_id": "aphrodite"
-    },
-    {
-      "type": "news",
-      "body_id": "jupiter",
-      "headline": "Extreme radiation surge detected at Ganymede Fleet Anchorage",
-      "colony_id": "ganymede"
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Altitude stabilization thrusters engaged at Ishtar Terra Aerostat",
-      "colony_id": "ishtar"
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Weather anomaly delaying orbital transit at Cape Canaveral Hub",
-      "colony_id": "cape"
-    },
-    {
-      "type": "news",
-      "body_id": "jupiter",
-      "headline": "Extreme radiation surge detected at Io Volcanic Tapper",
-      "colony_id": "io"
-    },
-    {
-      "type": "resource",
-      "body_id": "moon",
-      "res_name": "Regolith Processed (T)",
-      "value": 874.98
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "moon",
-      "bot_id": "MOO-325",
-      "colony": "Tranquility Base",
-      "lat": -0.41,
-      "lng": 23.68
-    },
-    {
-      "type": "news",
-      "body_id": "uranus",
-      "headline": "Comms relay buffeting through interference at Miranda Canyon Hub",
-      "colony_id": "miranda"
-    },
-    {
-      "type": "resource",
-      "body_id": "moon",
-      "res_name": "Bot Uptime (%)",
-      "value": 99.0
-    },
-    {
-      "type": "resource",
-      "body_id": "moon",
-      "res_name": "Regolith Processed (T)",
-      "value": 880.03
-    },
-    {
-      "type": "news",
-      "body_id": "jupiter",
-      "headline": "Gas giant atmospheric scoop completed run near Io Volcanic Tapper",
-      "colony_id": "io"
-    },
-    {
       "type": "resource",
       "body_id": "jupiter",
       "res_name": "Radiation Shielding %",
@@ -6236,11 +6142,101 @@
       "body_id": "mars",
       "colony_id": "hellas",
       "health": 58
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 90.73
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 32.4
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 37.27
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 91.37
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 57
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 88.02
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 56
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T08:36:57.487842+00:00"
+    "last_mars_sync": "2026-03-21T09:02:45.535921+00:00"
   }
 }
