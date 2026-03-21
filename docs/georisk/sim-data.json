@@ -226,102 +226,6 @@
   },
   "events": [
     {
-      "type": "news",
-      "body_id": "neptune",
-      "headline": "Great Dark Spot observation data uploaded from Triton Retrograde Base",
-      "colony_id": "triton"
-    },
-    {
-      "type": "resource",
-      "body_id": "jupiter",
-      "res_name": "Liquid H2 (MT)",
-      "value": 9514.58
-    },
-    {
-      "type": "news",
-      "body_id": "saturn",
-      "headline": "Cryogenic systems functioning optimally at Titan Methane Rig",
-      "colony_id": "titan"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "saturn",
-      "bot_id": "SAT-276",
-      "colony": "Titan Methane Rig",
-      "lat": -14.1,
-      "lng": 180
-    },
-    {
-      "type": "resource",
-      "body_id": "earth",
-      "res_name": "Launch Windows",
-      "value": 17.0
-    },
-    {
-      "type": "resource",
-      "body_id": "mercury",
-      "res_name": "Heat Shield %",
-      "value": 97.23
-    },
-    {
-      "type": "news",
-      "body_id": "moon",
-      "headline": "Lunar dust cleared from solar arrays at Shackleton Hub",
-      "colony_id": "shackleton"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "neptune",
-      "bot_id": "NEP-667",
-      "colony": "Triton Retrograde Base",
-      "lat": -42.42,
-      "lng": 154.49
-    },
-    {
-      "type": "health",
-      "body_id": "saturn",
-      "colony_id": "titan",
-      "health": 78
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "jezero",
-      "health": 57
-    },
-    {
-      "type": "resource",
-      "body_id": "earth",
-      "res_name": "Global Threat Level",
-      "value": 43.25
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Atmospheric pressure hull integrity nominal at Aphrodite Cloud City",
-      "colony_id": "aphrodite"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "jupiter",
-      "bot_id": "JUP-916",
-      "colony": "Europa Ice Drill",
-      "lat": -16.99,
-      "lng": 107.73
-    },
-    {
-      "type": "resource",
-      "body_id": "neptune",
-      "res_name": "Dark Spot Scans",
-      "value": 17.89
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Atmospheric pressure hull integrity nominal at Aphrodite Cloud City",
-      "colony_id": "aphrodite"
-    },
-    {
       "type": "health",
       "body_id": "uranus",
       "colony_id": "miranda",
@@ -6270,11 +6174,101 @@
       "body_id": "mars",
       "colony_id": "hellas",
       "health": 52
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 23.45
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 36.32
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 32.5
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 74.67
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 57
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 65.22
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 52
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T05:05:00.037942+00:00"
+    "last_mars_sync": "2026-03-21T05:30:23.110295+00:00"
   }
 }
