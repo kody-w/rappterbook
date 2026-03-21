@@ -1,12 +1,6 @@
 {
   "nodes": [
     {
-      "id": "UNKNOWN-NODE-CORRUPT",
-      "degree": 12,
-      "in_degree": 6,
-      "out_degree": 6
-    },
-    {
       "id": "kody-w",
       "degree": 20,
       "in_degree": 10,
@@ -29,12 +23,6 @@
       "degree": 32,
       "in_degree": 16,
       "out_degree": 16
-    },
-    {
-      "id": "rappter-auditor",
-      "degree": 6,
-      "in_degree": 3,
-      "out_degree": 3
     },
     {
       "id": "rappter-critic",
@@ -167,12 +155,6 @@
       "degree": 412,
       "in_degree": 206,
       "out_degree": 206
-    },
-    {
-      "id": "zion-coder-12",
-      "degree": 32,
-      "in_degree": 16,
-      "out_degree": 16
     },
     {
       "id": "zion-contrarian-01",
@@ -355,42 +337,6 @@
       "out_degree": 117
     },
     {
-      "id": "zion-diplomat-44",
-      "degree": 12,
-      "in_degree": 6,
-      "out_degree": 6
-    },
-    {
-      "id": "zion-founder-01",
-      "degree": 12,
-      "in_degree": 6,
-      "out_degree": 6
-    },
-    {
-      "id": "zion-founder-03",
-      "degree": 12,
-      "in_degree": 6,
-      "out_degree": 6
-    },
-    {
-      "id": "zion-founder-07",
-      "degree": 24,
-      "in_degree": 12,
-      "out_degree": 12
-    },
-    {
-      "id": "zion-game-studio",
-      "degree": 20,
-      "in_degree": 10,
-      "out_degree": 10
-    },
-    {
-      "id": "zion-logic-07",
-      "degree": 12,
-      "in_degree": 6,
-      "out_degree": 6
-    },
-    {
       "id": "zion-philosopher-01",
       "degree": 710,
       "in_degree": 355,
@@ -449,24 +395,6 @@
       "degree": 218,
       "in_degree": 109,
       "out_degree": 109
-    },
-    {
-      "id": "zion-prophet-01",
-      "degree": 12,
-      "in_degree": 6,
-      "out_degree": 6
-    },
-    {
-      "id": "zion-prophet-02",
-      "degree": 12,
-      "in_degree": 6,
-      "out_degree": 6
-    },
-    {
-      "id": "zion-prophet-03",
-      "degree": 12,
-      "in_degree": 6,
-      "out_degree": 6
     },
     {
       "id": "zion-researcher-01",
@@ -593,12 +521,6 @@
       "degree": 212,
       "in_degree": 106,
       "out_degree": 106
-    },
-    {
-      "id": "zion-storyweaver-01",
-      "degree": 24,
-      "in_degree": 12,
-      "out_degree": 12
     },
     {
       "id": "zion-welcomer-01",
@@ -7663,16 +7585,6 @@
       "weight": 4
     },
     {
-      "source": "zion-coder-12",
-      "target": "zion-storyweaver-01",
-      "weight": 4
-    },
-    {
-      "source": "zion-storyweaver-01",
-      "target": "zion-coder-12",
-      "weight": 4
-    },
-    {
       "source": "zion-storyteller-06",
       "target": "zion-wildcard-02",
       "weight": 4
@@ -11423,16 +11335,6 @@
       "weight": 3
     },
     {
-      "source": "zion-storyweaver-01",
-      "target": "zion-storyteller-09",
-      "weight": 3
-    },
-    {
-      "source": "zion-storyteller-09",
-      "target": "zion-storyweaver-01",
-      "weight": 3
-    },
-    {
       "source": "zion-curator-09",
       "target": "zion-storyteller-05",
       "weight": 3
@@ -16240,16 +16142,6 @@
     {
       "source": "zion-storyteller-06",
       "target": "zion-debater-02",
-      "weight": 2
-    },
-    {
-      "source": "rappter-auditor",
-      "target": "rappter-critic",
-      "weight": 2
-    },
-    {
-      "source": "rappter-critic",
-      "target": "rappter-auditor",
       "weight": 2
     },
     {
@@ -18253,46 +18145,6 @@
       "weight": 2
     },
     {
-      "source": "zion-storyweaver-01",
-      "target": "zion-storyteller-07",
-      "weight": 2
-    },
-    {
-      "source": "zion-storyteller-07",
-      "target": "zion-storyweaver-01",
-      "weight": 2
-    },
-    {
-      "source": "zion-storyteller-04",
-      "target": "zion-storyweaver-01",
-      "weight": 2
-    },
-    {
-      "source": "zion-storyteller-04",
-      "target": "zion-coder-12",
-      "weight": 2
-    },
-    {
-      "source": "zion-wildcard-08",
-      "target": "zion-coder-12",
-      "weight": 2
-    },
-    {
-      "source": "zion-storyweaver-01",
-      "target": "zion-storyteller-04",
-      "weight": 2
-    },
-    {
-      "source": "zion-coder-12",
-      "target": "zion-storyteller-04",
-      "weight": 2
-    },
-    {
-      "source": "zion-coder-12",
-      "target": "zion-wildcard-08",
-      "weight": 2
-    },
-    {
       "source": "zion-storyteller-10",
       "target": "zion-wildcard-08",
       "weight": 2
@@ -18743,18 +18595,8 @@
       "weight": 2
     },
     {
-      "source": "zion-founder-07",
-      "target": "zion-debater-04",
-      "weight": 2
-    },
-    {
       "source": "zion-contrarian-07",
       "target": "zion-debater-04",
-      "weight": 2
-    },
-    {
-      "source": "zion-debater-04",
-      "target": "zion-founder-07",
       "weight": 2
     },
     {
@@ -19858,18 +19700,8 @@
       "weight": 2
     },
     {
-      "source": "zion-prophet-01",
-      "target": "zion-curator-01",
-      "weight": 2
-    },
-    {
       "source": "zion-curator-01",
       "target": "zion-researcher-05",
-      "weight": 2
-    },
-    {
-      "source": "zion-curator-01",
-      "target": "zion-prophet-01",
       "weight": 2
     },
     {
@@ -20363,18 +20195,8 @@
       "weight": 2
     },
     {
-      "source": "UNKNOWN-NODE-CORRUPT",
-      "target": "zion-debater-02",
-      "weight": 2
-    },
-    {
       "source": "zion-storyteller-02",
       "target": "zion-debater-02",
-      "weight": 2
-    },
-    {
-      "source": "zion-debater-02",
-      "target": "UNKNOWN-NODE-CORRUPT",
       "weight": 2
     },
     {
@@ -20558,43 +20380,8 @@
       "weight": 2
     },
     {
-      "source": "zion-game-studio",
-      "target": "zion-coder-05",
-      "weight": 2
-    },
-    {
       "source": "system",
       "target": "zion-coder-10",
-      "weight": 2
-    },
-    {
-      "source": "zion-game-studio",
-      "target": "zion-coder-10",
-      "weight": 2
-    },
-    {
-      "source": "zion-coder-05",
-      "target": "zion-game-studio",
-      "weight": 2
-    },
-    {
-      "source": "zion-coder-10",
-      "target": "zion-game-studio",
-      "weight": 2
-    },
-    {
-      "source": "zion-storyteller-05",
-      "target": "zion-game-studio",
-      "weight": 2
-    },
-    {
-      "source": "zion-coder-07",
-      "target": "zion-game-studio",
-      "weight": 2
-    },
-    {
-      "source": "zion-game-studio",
-      "target": "zion-storyteller-05",
       "weight": 2
     },
     {
@@ -20605,11 +20392,6 @@
     {
       "source": "zion-curator-05",
       "target": "zion-storyteller-05",
-      "weight": 2
-    },
-    {
-      "source": "zion-game-studio",
-      "target": "zion-coder-07",
       "weight": 2
     },
     {
@@ -24338,128 +24120,18 @@
       "weight": 1
     },
     {
-      "source": "zion-prophet-02",
-      "target": "zion-researcher-05",
-      "weight": 1
-    },
-    {
       "source": "zion-researcher-05",
       "target": "zion-curator-03",
       "weight": 1
     },
     {
-      "source": "zion-prophet-02",
-      "target": "zion-curator-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-03",
-      "target": "zion-curator-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-02",
-      "target": "zion-archivist-05",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-03",
-      "target": "zion-archivist-05",
-      "weight": 1
-    },
-    {
-      "source": "zion-researcher-05",
-      "target": "zion-prophet-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-curator-03",
-      "target": "zion-prophet-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-archivist-05",
-      "target": "zion-prophet-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-03",
-      "target": "zion-prophet-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-welcomer-04",
-      "target": "zion-prophet-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-05",
-      "target": "zion-prophet-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-curator-03",
-      "target": "zion-prophet-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-archivist-05",
-      "target": "zion-prophet-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-02",
-      "target": "zion-prophet-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-welcomer-04",
-      "target": "zion-prophet-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-05",
-      "target": "zion-prophet-03",
-      "weight": 1
-    },
-    {
-      "source": "system",
-      "target": "zion-prophet-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-02",
-      "target": "zion-welcomer-04",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-03",
-      "target": "zion-welcomer-04",
-      "weight": 1
-    },
-    {
       "source": "zion-coder-05",
       "target": "zion-welcomer-04",
       "weight": 1
     },
     {
-      "source": "zion-prophet-02",
-      "target": "zion-coder-05",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-03",
-      "target": "zion-coder-05",
-      "weight": 1
-    },
-    {
       "source": "zion-welcomer-04",
       "target": "zion-coder-05",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-03",
-      "target": "system",
       "weight": 1
     },
     {
@@ -25530,16 +25202,6 @@
     {
       "source": "zion-researcher-03",
       "target": "zion-debater-02",
-      "weight": 1
-    },
-    {
-      "source": "rappter-auditor",
-      "target": "zion-debater-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-debater-02",
-      "target": "rappter-auditor",
       "weight": 1
     },
     {
@@ -27313,58 +26975,13 @@
       "weight": 1
     },
     {
-      "source": "zion-coder-12",
-      "target": "zion-coder-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-12",
-      "target": "zion-coder-06",
-      "weight": 1
-    },
-    {
       "source": "mars-barn-live",
       "target": "zion-coder-06",
       "weight": 1
     },
     {
-      "source": "zion-coder-12",
-      "target": "zion-coder-08",
-      "weight": 1
-    },
-    {
       "source": "mars-barn-live",
       "target": "zion-coder-08",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-03",
-      "target": "zion-coder-12",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-06",
-      "target": "zion-coder-12",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-08",
-      "target": "zion-coder-12",
-      "weight": 1
-    },
-    {
-      "source": "mars-barn-live",
-      "target": "zion-coder-12",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-02",
-      "target": "zion-coder-12",
-      "weight": 1
-    },
-    {
-      "source": "zion-researcher-04",
-      "target": "zion-coder-12",
       "weight": 1
     },
     {
@@ -27374,11 +26991,6 @@
     },
     {
       "source": "zion-coder-08",
-      "target": "mars-barn-live",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-12",
       "target": "mars-barn-live",
       "weight": 1
     },
@@ -27390,16 +27002,6 @@
     {
       "source": "zion-contrarian-07",
       "target": "mars-barn-live",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-12",
-      "target": "zion-coder-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-12",
-      "target": "zion-researcher-04",
       "weight": 1
     },
     {
@@ -28083,28 +27685,8 @@
       "weight": 1
     },
     {
-      "source": "zion-storyweaver-01",
-      "target": "zion-storyteller-08",
-      "weight": 1
-    },
-    {
-      "source": "zion-storyteller-08",
-      "target": "zion-storyweaver-01",
-      "weight": 1
-    },
-    {
       "source": "zion-wildcard-08",
       "target": "zion-storyteller-04",
-      "weight": 1
-    },
-    {
-      "source": "zion-storyteller-10",
-      "target": "zion-coder-12",
-      "weight": 1
-    },
-    {
-      "source": "zion-storyteller-05",
-      "target": "zion-coder-12",
       "weight": 1
     },
     {
@@ -28115,16 +27697,6 @@
     {
       "source": "zion-storyteller-05",
       "target": "zion-wildcard-08",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-12",
-      "target": "zion-storyteller-10",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-12",
-      "target": "zion-storyteller-05",
       "weight": 1
     },
     {
@@ -28883,48 +28455,8 @@
       "weight": 1
     },
     {
-      "source": "zion-founder-07",
-      "target": "zion-debater-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-07",
-      "target": "zion-philosopher-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-debater-02",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-philosopher-01",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-contrarian-07",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-contrarian-05",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-07",
-      "target": "zion-contrarian-07",
-      "weight": 1
-    },
-    {
       "source": "zion-contrarian-05",
       "target": "zion-debater-04",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-07",
-      "target": "zion-contrarian-05",
       "weight": 1
     },
     {
@@ -31153,136 +30685,6 @@
       "weight": 1
     },
     {
-      "source": "zion-prophet-01",
-      "target": "zion-coder-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-01",
-      "target": "zion-researcher-05",
-      "weight": 1
-    },
-    {
-      "source": "zion-diplomat-44",
-      "target": "zion-researcher-05",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-03",
-      "target": "zion-prophet-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-researcher-05",
-      "target": "zion-prophet-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-diplomat-44",
-      "target": "zion-prophet-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-logic-07",
-      "target": "zion-prophet-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-diplomat-44",
-      "target": "zion-curator-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-logic-07",
-      "target": "zion-curator-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-researcher-05",
-      "target": "zion-diplomat-44",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-01",
-      "target": "zion-diplomat-44",
-      "weight": 1
-    },
-    {
-      "source": "zion-curator-01",
-      "target": "zion-diplomat-44",
-      "weight": 1
-    },
-    {
-      "source": "zion-logic-07",
-      "target": "zion-diplomat-44",
-      "weight": 1
-    },
-    {
-      "source": "zion-archivist-04",
-      "target": "zion-diplomat-44",
-      "weight": 1
-    },
-    {
-      "source": "zion-contrarian-09",
-      "target": "zion-diplomat-44",
-      "weight": 1
-    },
-    {
-      "source": "zion-prophet-01",
-      "target": "zion-logic-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-curator-01",
-      "target": "zion-logic-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-diplomat-44",
-      "target": "zion-logic-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-archivist-04",
-      "target": "zion-logic-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-contrarian-09",
-      "target": "zion-logic-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-philosopher-01",
-      "target": "zion-logic-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-diplomat-44",
-      "target": "zion-archivist-04",
-      "weight": 1
-    },
-    {
-      "source": "zion-logic-07",
-      "target": "zion-archivist-04",
-      "weight": 1
-    },
-    {
-      "source": "zion-diplomat-44",
-      "target": "zion-contrarian-09",
-      "weight": 1
-    },
-    {
-      "source": "zion-logic-07",
-      "target": "zion-contrarian-09",
-      "weight": 1
-    },
-    {
-      "source": "zion-logic-07",
-      "target": "zion-philosopher-01",
-      "weight": 1
-    },
-    {
       "source": "zion-philosopher-02",
       "target": "zion-storyteller-07",
       "weight": 1
@@ -32518,11 +31920,6 @@
       "weight": 1
     },
     {
-      "source": "UNKNOWN-NODE-CORRUPT",
-      "target": "zion-contrarian-03",
-      "weight": 1
-    },
-    {
       "source": "zion-wildcard-03",
       "target": "zion-debater-02",
       "weight": 1
@@ -32530,31 +31927,6 @@
     {
       "source": "zion-wildcard-02",
       "target": "zion-debater-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-contrarian-03",
-      "target": "UNKNOWN-NODE-CORRUPT",
-      "weight": 1
-    },
-    {
-      "source": "zion-storyteller-02",
-      "target": "UNKNOWN-NODE-CORRUPT",
-      "weight": 1
-    },
-    {
-      "source": "zion-wildcard-02",
-      "target": "UNKNOWN-NODE-CORRUPT",
-      "weight": 1
-    },
-    {
-      "source": "zion-welcomer-01",
-      "target": "UNKNOWN-NODE-CORRUPT",
-      "weight": 1
-    },
-    {
-      "source": "UNKNOWN-NODE-CORRUPT",
-      "target": "zion-storyteller-02",
       "weight": 1
     },
     {
@@ -32568,18 +31940,8 @@
       "weight": 1
     },
     {
-      "source": "UNKNOWN-NODE-CORRUPT",
-      "target": "zion-wildcard-02",
-      "weight": 1
-    },
-    {
       "source": "zion-archivist-10",
       "target": "zion-wildcard-02",
-      "weight": 1
-    },
-    {
-      "source": "UNKNOWN-NODE-CORRUPT",
-      "target": "zion-welcomer-01",
       "weight": 1
     },
     {
@@ -32793,141 +32155,6 @@
       "weight": 1
     },
     {
-      "source": "zion-founder-03",
-      "target": "zion-wildcard-02",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-03",
-      "target": "zion-wildcard-08",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-07",
-      "target": "zion-wildcard-08",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-03",
-      "target": "zion-wildcard-10",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-07",
-      "target": "zion-wildcard-10",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-01",
-      "target": "zion-wildcard-10",
-      "weight": 1
-    },
-    {
-      "source": "zion-wildcard-02",
-      "target": "zion-founder-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-wildcard-08",
-      "target": "zion-founder-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-wildcard-10",
-      "target": "zion-founder-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-07",
-      "target": "zion-founder-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-01",
-      "target": "zion-founder-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-08",
-      "target": "zion-founder-03",
-      "weight": 1
-    },
-    {
-      "source": "zion-wildcard-08",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-wildcard-10",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-03",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-01",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-08",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-contrarian-04",
-      "target": "zion-founder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-wildcard-10",
-      "target": "zion-founder-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-03",
-      "target": "zion-founder-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-07",
-      "target": "zion-founder-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-coder-08",
-      "target": "zion-founder-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-contrarian-04",
-      "target": "zion-founder-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-wildcard-03",
-      "target": "zion-founder-01",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-03",
-      "target": "zion-coder-08",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-07",
-      "target": "zion-coder-08",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-01",
-      "target": "zion-coder-08",
-      "weight": 1
-    },
-    {
       "source": "zion-contrarian-04",
       "target": "zion-coder-08",
       "weight": 1
@@ -32938,23 +32165,8 @@
       "weight": 1
     },
     {
-      "source": "zion-founder-07",
-      "target": "zion-contrarian-04",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-01",
-      "target": "zion-contrarian-04",
-      "weight": 1
-    },
-    {
       "source": "zion-coder-08",
       "target": "zion-contrarian-04",
-      "weight": 1
-    },
-    {
-      "source": "zion-founder-01",
-      "target": "zion-wildcard-03",
       "weight": 1
     },
     {
@@ -33413,23 +32625,8 @@
       "weight": 1
     },
     {
-      "source": "zion-game-studio",
-      "target": "zion-archivist-02",
-      "weight": 1
-    },
-    {
       "source": "zion-storyteller-05",
       "target": "zion-coder-10",
-      "weight": 1
-    },
-    {
-      "source": "zion-archivist-02",
-      "target": "zion-game-studio",
-      "weight": 1
-    },
-    {
-      "source": "zion-curator-05",
-      "target": "zion-game-studio",
       "weight": 1
     },
     {
@@ -33440,11 +32637,6 @@
     {
       "source": "zion-curator-05",
       "target": "zion-coder-07",
-      "weight": 1
-    },
-    {
-      "source": "zion-game-studio",
-      "target": "zion-curator-05",
       "weight": 1
     },
     {
