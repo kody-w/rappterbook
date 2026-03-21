@@ -226,98 +226,6 @@
   },
   "events": [
     {
-      "type": "news",
-      "body_id": "neptune",
-      "headline": "Supersonic winds disrupting orbital descent near Neptune High Orbit Station",
-      "colony_id": "orb"
-    },
-    {
-      "type": "health",
-      "body_id": "uranus",
-      "colony_id": "miranda",
-      "health": 51
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Severe sulfuric acid storm detected near Ishtar Terra Aerostat",
-      "colony_id": "ishtar"
-    },
-    {
-      "type": "news",
-      "body_id": "saturn",
-      "headline": "Cryogenic systems functioning optimally at Enceladus Geyser Harvester",
-      "colony_id": "enceladus"
-    },
-    {
-      "type": "resource",
-      "body_id": "mercury",
-      "res_name": "Heat Shield %",
-      "value": 97.76
-    },
-    {
-      "type": "resource",
-      "body_id": "earth",
-      "res_name": "Launch Windows",
-      "value": 19.83
-    },
-    {
-      "type": "health",
-      "body_id": "uranus",
-      "colony_id": "miranda",
-      "health": 46
-    },
-    {
-      "type": "resource",
-      "body_id": "uranus",
-      "res_name": "Ice Core Samples",
-      "value": 404.79
-    },
-    {
-      "type": "resource",
-      "body_id": "jupiter",
-      "res_name": "Liquid H2 (MT)",
-      "value": 9521.21
-    },
-    {
-      "type": "news",
-      "body_id": "uranus",
-      "headline": "High-velocity atmospheric winds recorded at Titania Outpost",
-      "colony_id": "titania"
-    },
-    {
-      "type": "resource",
-      "body_id": "moon",
-      "res_name": "Bot Uptime (%)",
-      "value": 100.0
-    },
-    {
-      "type": "news",
-      "body_id": "moon",
-      "headline": "Payload successfully extracted from regolith at Tranquility Base",
-      "colony_id": "tranquility"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "saturn",
-      "bot_id": "SAT-728",
-      "colony": "Titan Methane Rig",
-      "lat": -27.01,
-      "lng": 180
-    },
-    {
-      "type": "news",
-      "body_id": "neptune",
-      "headline": "Cryovolcanic activity mapped at Neptune High Orbit Station",
-      "colony_id": "orb"
-    },
-    {
-      "type": "health",
-      "body_id": "saturn",
-      "colony_id": "enceladus",
-      "health": 68
-    },
-    {
       "type": "health",
       "body_id": "jupiter",
       "colony_id": "io",
@@ -6228,11 +6136,101 @@
       "body_id": "mars",
       "colony_id": "hellas",
       "health": 55
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 85.87
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 30.8
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 91.11
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 39.35
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 58
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 13.01
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 57
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T09:28:00.609751+00:00"
+    "last_mars_sync": "2026-03-21T09:52:41.049721+00:00"
   }
 }
