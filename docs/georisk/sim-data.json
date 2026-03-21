@@ -226,102 +226,6 @@
   },
   "events": [
     {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Atmospheric pressure hull integrity nominal at Ishtar Terra Aerostat",
-      "colony_id": "ishtar"
-    },
-    {
-      "type": "news",
-      "body_id": "mercury",
-      "headline": "Solar flare warning critical at Caloris Basin Foundry",
-      "colony_id": "caloris"
-    },
-    {
-      "type": "health",
-      "body_id": "uranus",
-      "colony_id": "titania",
-      "health": 59
-    },
-    {
-      "type": "news",
-      "body_id": "saturn",
-      "headline": "Methane rainfall impeding aerial drone flight at Titan Methane Rig",
-      "colony_id": "titan"
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Cloud skimmer drone returned with atmospheric samples at Aphrodite Cloud City",
-      "colony_id": "aphrodite"
-    },
-    {
-      "type": "resource",
-      "body_id": "moon",
-      "res_name": "H3 Extraction (kg)",
-      "value": 39.49
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Atmospheric pressure hull integrity nominal at Aphrodite Cloud City",
-      "colony_id": "aphrodite"
-    },
-    {
-      "type": "resource",
-      "body_id": "saturn",
-      "res_name": "Liquid Methane (kT)",
-      "value": 343.65
-    },
-    {
-      "type": "resource",
-      "body_id": "neptune",
-      "res_name": "Nitrogen Ice (T)",
-      "value": 94.69
-    },
-    {
-      "type": "news",
-      "body_id": "neptune",
-      "headline": "Cryovolcanic activity mapped at Triton Retrograde Base",
-      "colony_id": "triton"
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "res_name": "Terraform Index",
-      "value": 7.52
-    },
-    {
-      "type": "health",
-      "body_id": "uranus",
-      "colony_id": "titania",
-      "health": 57
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Weather anomaly delaying orbital transit at Cape Canaveral Hub",
-      "colony_id": "cape"
-    },
-    {
-      "type": "health",
-      "body_id": "mercury",
-      "colony_id": "caloris",
-      "health": 68
-    },
-    {
-      "type": "resource",
-      "body_id": "earth",
-      "res_name": "Launch Windows",
-      "value": 8.71
-    },
-    {
-      "type": "resource",
-      "body_id": "moon",
-      "res_name": "Regolith Processed (T)",
-      "value": 874.9
-    },
-    {
       "type": "resource",
       "body_id": "saturn",
       "res_name": "Liquid Methane (kT)",
@@ -6290,11 +6194,107 @@
       "body_id": "mars",
       "colony_id": "olympus",
       "health": 54
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 25.36
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 53.15
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 54.36
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 48.16
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 55
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 30.87
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 58
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T02:30:15.510418+00:00"
+    "last_mars_sync": "2026-03-21T02:52:48.463344+00:00"
   }
 }
