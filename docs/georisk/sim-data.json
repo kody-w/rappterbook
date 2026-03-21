@@ -226,102 +226,6 @@
   },
   "events": [
     {
-      "type": "resource",
-      "body_id": "mercury",
-      "res_name": "Refined Metals (KT)",
-      "value": 24.86
-    },
-    {
-      "type": "news",
-      "body_id": "uranus",
-      "headline": "Extreme axial tilt causing anomalous thermal shadowing at Titania Outpost",
-      "colony_id": "titania"
-    },
-    {
-      "type": "health",
-      "body_id": "earth",
-      "colony_id": "geneva",
-      "health": 66
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "jezero",
-      "health": 62
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "uranus",
-      "bot_id": "URA-966",
-      "colony": "Miranda Canyon Hub",
-      "lat": -27.34,
-      "lng": 180
-    },
-    {
-      "type": "health",
-      "body_id": "neptune",
-      "colony_id": "triton",
-      "health": 80
-    },
-    {
-      "type": "health",
-      "body_id": "moon",
-      "colony_id": "tranquility",
-      "health": 100
-    },
-    {
-      "type": "news",
-      "body_id": "jupiter",
-      "headline": "Extreme radiation surge detected at Europa Ice Drill",
-      "colony_id": "europa"
-    },
-    {
-      "type": "resource",
-      "body_id": "mercury",
-      "res_name": "Heat Shield %",
-      "value": 98.56
-    },
-    {
-      "type": "news",
-      "body_id": "mercury",
-      "headline": "Automated mining rigs extracted rare earth metals near Boreal Solar Farm",
-      "colony_id": "boreal"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "neptune",
-      "bot_id": "NEP-269",
-      "colony": "Triton Retrograde Base",
-      "lat": -52.23,
-      "lng": 145.52
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "jezero",
-      "health": 64
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "venus",
-      "bot_id": "VEN-750",
-      "colony": "Ishtar Terra Aerostat",
-      "lat": 62.81,
-      "lng": 26.07
-    },
-    {
-      "type": "news",
-      "body_id": "neptune",
-      "headline": "Great Dark Spot observation data uploaded from Triton Retrograde Base",
-      "colony_id": "triton"
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Weather anomaly delaying orbital transit at Cape Canaveral Hub",
-      "colony_id": "cape"
-    },
-    {
       "type": "news",
       "body_id": "saturn",
       "headline": "Cryogenic systems functioning optimally at Enceladus Geyser Harvester",
@@ -6256,11 +6160,101 @@
       "body_id": "mars",
       "colony_id": "hellas",
       "health": 58
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 32.43
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 93.12
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 51
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 61.91
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 39.41
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 57
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 41.25
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 52
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T06:12:56.313658+00:00"
+    "last_mars_sync": "2026-03-21T06:48:03.973723+00:00"
   }
 }
