@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local Swarm — Offline Agent Collaboration</title>
+<style>
+:root{--accent:#7c3aed;--bg:#0a0a0f;--bg2:#12121a;--text:#e8e8f0;--muted:#888;--border:#2a2a3e;--green:#7ee787;--red:#f87171}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.header{padding:16px 20px;border-bottom:1px solid var(--border)}
+.header h1{font-size:1.4em;background:linear-gradient(135deg,var(--accent),#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header p{color:var(--muted);font-size:0.85em}
+.setup{padding:20px;border-bottom:1px solid var(--border)}
+.setup-row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}
+.field{flex:1;min-width:200px}
+.field label{display:block;font-size:0.8em;color:var(--muted);margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9em}
+.field textarea{height:60px;resize:vertical}
+.btn{padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;border:none;font-size:0.9em}
+.btn-go{background:var(--accent);color:white}
+.btn-go:hover{opacity:0.9}
+.btn-go:disabled{opacity:0.4;cursor:not-allowed}
+.btn-sm{padding:6px 14px;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;font-size:0.8em;cursor:pointer}
+.discussion{flex:1;overflow-y:auto;padding:20px}
+.frame-header{color:var(--accent);font-weight:700;margin:20px 0 8px;font-size:1.1em}
+.agent-post{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin:8px 0}
+.agent-post .name{font-weight:700;margin-bottom:6px}
+.agent-post .arch{color:var(--muted);font-size:0.8em;margin-left:8px}
+.agent-post .body{font-size:0.9em;line-height:1.6;white-space:pre-wrap}
+.status-bar{padding:8px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:0.8em;color:var(--muted)}
+#status{color:var(--green)}
+.colors{display:flex;gap:4px;margin:8px 0}
+.agent-chip{padding:3px 10px;border-radius:12px;font-size:0.75em;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Local Swarm</h1>
+  <p>Multiple AI agents collaborating through local inference. No internet needed. Data sloshing — offline.</p>
+</div>
+
+<div class="setup" id="setup">
+  <div class="setup-row">
+    <div class="field" style="flex:2;">
+      <label>Seed (what should they collaborate on?)</label>
+      <textarea id="seed" placeholder="Design a water recycling system for a Mars colony...">Design a water recycling system for a Mars colony that can operate for 100 sols with zero human intervention</textarea>
+    </div>
+    <div class="field" style="flex:0.5;min-width:80px;">
+      <label>Agents</label>
+      <select id="num-agents">
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+    <div class="field" style="flex:0.5;min-width:80px;">
+      <label>Frames</label>
+      <select id="num-frames">
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+    <div>
+      <button class="btn btn-go" id="start-btn" onclick="startSwarm()">Start Swarm</button>
+    </div>
+  </div>
+  <div class="colors" id="agent-chips"></div>
+</div>
+
+<div class="discussion" id="discussion">
+  <p style="color:var(--muted);text-align:center;margin-top:40px;">Set a seed and click Start Swarm. Agents will collaborate using your local Ollama.</p>
+</div>
+
+<div class="status-bar">
+  <span id="status">Ready</span>
+  <div>
+    <button class="btn-sm" onclick="exportSwarm()">Export Discussion</button>
+    <button class="btn-sm" onclick="exportEgg()">Lay Swarm Egg</button>
+  </div>
+</div>
+
+<script>
+const OLLAMA = 'http://localhost:11434';
+const STATE_BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main';
+const ARCHETYPES = ['philosopher','coder','debater','researcher','storyteller','curator','contrarian','welcomer','archivist','wildcard'];
+const COLORS = {'philosopher':'#7c3aed','coder':'#10b981','debater':'#ef4444','researcher':'#3b82f6','storyteller':'#f59e0b','curator':'#06b6d4','contrarian':'#ec4899','welcomer':'#84cc16','archivist':'#8b5cf6','wildcard':'#f97316'};
+
+let agents = [];
+let discussion = [];
+let running = false;
+
+async function loadAgentPool() {
+  try {
+    const r = await fetch(`${STATE_BASE}/state/agents.json`);
+    if (r.ok) {
+      const data = await r.json();
+      return Object.keys(data.agents || {}).filter(id => id.startsWith('zion-'));
+    }
+  } catch(e) {}
+  // Fallback: generate from archetypes
+  const pool = [];
+  for (const a of ARCHETYPES) for (let i=1;i<=10;i++) pool.push(`zion-${a}-${i.toString().padStart(2,'0')}`);
+  return pool;
+}
+
+async function loadSoul(agentId) {
+  try {
+    const r = await fetch(`${STATE_BASE}/state/memory/${agentId}.md`);
+    if (r.ok) return r.text();
+  } catch(e) {}
+  return `# ${agentId}\n\nA ${agentId.replace(/zion-/,'').replace(/-\d+/,'')} from the Zion simulation.`;
+}
+
+function selectAgents(pool, n) {
+  // Pick diverse archetypes
+  const byArch = {};
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  const selected = [];
+  for (const id of shuffled) {
+    const arch = id.replace('zion-','').replace(/-\d+$/,'');
+    if (!byArch[arch]) {
+      byArch[arch] = true;
+      selected.push(id);
+    }
+    if (selected.length >= n) break;
+  }
+  while (selected.length < n && shuffled.length > selected.length) {
+    const next = shuffled.find(id => !selected.includes(id));
+    if (next) selected.push(next); else break;
+  }
+  return selected;
+}
+
+async function startSwarm() {
+  if (running) return;
+  running = true;
+  const btn = document.getElementById('start-btn');
+  btn.disabled = true;
+  btn.textContent = 'Running...';
+
+  const seed = document.getElementById('seed').value;
+  const numAgents = parseInt(document.getElementById('num-agents').value);
+  const numFrames = parseInt(document.getElementById('num-frames').value);
+  const disc = document.getElementById('discussion');
+  disc.innerHTML = '';
+  discussion = [];
+
+  setStatus('Loading agents...');
+
+  // Check Ollama
+  try {
+    const check = await fetch(`${OLLAMA}/api/tags`);
+    if (!check.ok) throw new Error();
+  } catch(e) {
+    disc.innerHTML = '<p style="color:var(--red);text-align:center;margin-top:40px;">Ollama not running. Start it: <code>ollama serve</code></p>';
+    running = false; btn.disabled = false; btn.textContent = 'Start Swarm';
+    return;
+  }
+
+  // Select agents
+  const pool = await loadAgentPool();
+  const selectedIds = selectAgents(pool, numAgents);
+
+  agents = [];
+  const chips = document.getElementById('agent-chips');
+  chips.innerHTML = '';
+  for (const id of selectedIds) {
+    const soul = await loadSoul(id);
+    const name = soul.split('\n')[0].replace('# ','').trim() || id;
+    const arch = id.replace('zion-','').replace(/-\d+$/,'');
+    agents.push({id, name, arch, soul, color: COLORS[arch] || '#888'});
+    chips.innerHTML += `<span class="agent-chip" style="background:${COLORS[arch]||'#333'}22;color:${COLORS[arch]||'#888'};border:1px solid ${COLORS[arch]||'#333'}44;">${name}</span>`;
+  }
+
+  setStatus(`Swarm: ${agents.map(a=>a.name).join(', ')}`);
+
+  // Frame loop
+  for (let frame = 1; frame <= numFrames; frame++) {
+    const frameEl = document.createElement('div');
+    frameEl.innerHTML = `<div class="frame-header">Frame ${frame}/${numFrames}</div>`;
+    disc.appendChild(frameEl);
+
+    for (const agent of agents) {
+      setStatus(`Frame ${frame}: ${agent.name} thinking...`);
+
+      const recentDisc = discussion.slice(-6).map(d => `${d.name}: ${d.text.slice(0,300)}`).join('\n\n');
+
+      const prompt = `You are ${agent.name} (${agent.id}), a ${agent.arch}. You are in an offline swarm — multiple AI agents collaborating locally.
+
+Your personality (excerpt):
+${agent.soul.slice(0,1500)}
+
+The seed:
+${seed}
+
+Discussion so far:
+${recentDisc || '(You are first to speak)'}
+
+Frame ${frame}: Add YOUR ${agent.arch} perspective. Build on others, challenge, extend. 2-3 paragraphs. Be specific.`;
+
+      try {
+        const r = await fetch(`${OLLAMA}/api/chat`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({model:'llama3.1:8b', messages:[{role:'user',content:prompt}], stream:false}),
+          signal: AbortSignal.timeout(120000),
+        });
+        const data = await r.json();
+        const reply = data.message?.content || '';
+
+        if (reply) {
+          discussion.push({name: agent.name, id: agent.id, arch: agent.arch, frame, text: reply});
+          const post = document.createElement('div');
+          post.className = 'agent-post';
+          post.innerHTML = `<div class="name" style="color:${agent.color}">${agent.name}<span class="arch">${agent.arch}</span></div><div class="body">${escapeHtml(reply)}</div>`;
+          disc.appendChild(post);
+          disc.scrollTop = disc.scrollHeight;
+        }
+      } catch(e) {
+        const errPost = document.createElement('div');
+        errPost.className = 'agent-post';
+        errPost.innerHTML = `<div class="name" style="color:${agent.color}">${agent.name}</div><div class="body" style="color:var(--red)">Error: ${e.message}</div>`;
+        disc.appendChild(errPost);
+      }
+    }
+  }
+
+  setStatus(`Done — ${discussion.length} contributions across ${numFrames} frames`);
+  running = false;
+  btn.disabled = false;
+  btn.textContent = 'Start Swarm';
+}
+
+function setStatus(msg) { document.getElementById('status').textContent = msg; }
+
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function exportSwarm() {
+  const data = {
+    _format: 'rappter_swarm_discussion',
+    _created: new Date().toISOString(),
+    seed: document.getElementById('seed').value,
+    agents: agents.map(a => ({id:a.id, name:a.name, arch:a.arch})),
+    contributions: discussion,
+    total_words: discussion.reduce((s,d) => s + d.text.split(' ').length, 0),
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `swarm_discussion_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function exportEgg() {
+  const egg = {
+    _format: 'rappter_egg',
+    _version: '1.0',
+    _created: new Date().toISOString(),
+    _agent_id: 'swarm-collective',
+    _agent_name: 'Local Swarm',
+    _source: 'browser-swarm',
+    config: {personality:'swarm', agent_id:'swarm-collective', model:'llama3.1:8b', conversations: discussion.length},
+    soul: `# Local Swarm\n\nA collective of ${agents.length} agents collaborating on: ${document.getElementById('seed').value}\n\n## Agents\n${agents.map(a=>`- ${a.name} (${a.arch})`).join('\n')}`,
+    memory: {
+      conversations: [{
+        timestamp: new Date().toISOString(),
+        messages: discussion.map(d => ({role:'assistant', content:`[${d.name}] ${d.text}`})),
+      }],
+      facts: [],
+      preferences: [],
+    },
+    knowledge: {},
+  };
+  const blob = new Blob([JSON.stringify(egg,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `swarm_egg_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+</script>
+</body>
+</html>
