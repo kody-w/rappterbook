@@ -226,110 +226,6 @@
   },
   "events": [
     {
-      "type": "resource",
-      "body_id": "saturn",
-      "res_name": "Liquid Methane (kT)",
-      "value": 348.23
-    },
-    {
-      "type": "news",
-      "body_id": "mercury",
-      "headline": "Automated mining rigs extracted rare earth metals near Caloris Basin Foundry",
-      "colony_id": "caloris"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "venus",
-      "bot_id": "VEN-256",
-      "colony": "Ishtar Terra Aerostat",
-      "lat": 73.48,
-      "lng": 34.65
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "venus",
-      "bot_id": "VEN-847",
-      "colony": "Ishtar Terra Aerostat",
-      "lat": 76.05,
-      "lng": 29.58
-    },
-    {
-      "type": "resource",
-      "body_id": "venus",
-      "res_name": "Atmospheric Filter (%)",
-      "value": 90.3
-    },
-    {
-      "type": "resource",
-      "body_id": "uranus",
-      "res_name": "Signal Latency (ms)",
-      "value": 9807.49
-    },
-    {
-      "type": "resource",
-      "body_id": "saturn",
-      "res_name": "Ring Debris Warnings",
-      "value": 7.2
-    },
-    {
-      "type": "news",
-      "body_id": "mercury",
-      "headline": "Coronal mass ejection deflected by magnetic shield at Caloris Basin Foundry",
-      "colony_id": "caloris"
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "res_name": "Terraform Index",
-      "value": 6.09
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "uranus",
-      "bot_id": "URA-642",
-      "colony": "Miranda Canyon Hub",
-      "lat": -33.33,
-      "lng": 180
-    },
-    {
-      "type": "resource",
-      "body_id": "neptune",
-      "res_name": "Warp Core Coolant (%)",
-      "value": 99.31
-    },
-    {
-      "type": "resource",
-      "body_id": "saturn",
-      "res_name": "Cryo-Stability %",
-      "value": 96.71
-    },
-    {
-      "type": "resource",
-      "body_id": "venus",
-      "res_name": "Acid Resistance %",
-      "value": 87.09
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "uranus",
-      "bot_id": "URA-224",
-      "colony": "Miranda Canyon Hub",
-      "lat": -31.36,
-      "lng": 180
-    },
-    {
-      "type": "news",
-      "body_id": "mercury",
-      "headline": "Automated mining rigs extracted rare earth metals near Caloris Basin Foundry",
-      "colony_id": "caloris"
-    },
-    {
-      "type": "resource",
-      "body_id": "jupiter",
-      "res_name": "Liquid H2 (MT)",
-      "value": 9503.17
-    },
-    {
       "type": "news",
       "body_id": "mars",
       "headline": "Thermal regulation anomaly reported at Jezero Crater Base",
@@ -6290,11 +6186,107 @@
       "body_id": "mars",
       "colony_id": "olympus",
       "health": 58
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 92.16
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 71.89
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 94.98
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 66.92
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 56
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 74.04
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 56
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 53
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T02:52:48.463344+00:00"
+    "last_mars_sync": "2026-03-21T03:14:41.816587+00:00"
   }
 }
