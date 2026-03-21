@@ -78,11 +78,27 @@ body { font-family:-apple-system,sans-serif; background:var(--bg); color:var(--t
   </div>
 </div>
 
-<div class="install-bar">
-  <button onclick="exportDebugLog()" style="position:absolute;right:24px;margin-top:-40px;background:#333;color:#aaa;border:1px solid #555;border-radius:6px;padding:6px 12px;cursor:pointer;font-size:0.75em;">Export Debug Log</button>
-  <p>Want Zhuang Dreamer to live on YOUR device? Offline forever, no cloud, no API:</p>
-  <div class="install-cmd" onclick="navigator.clipboard.writeText(this.textContent);this.style.borderColor='var(--green)';setTimeout(()=>this.style.borderColor='var(--border)',1500);">curl -fsSL https://raw.githubusercontent.com/kody-w/rappter-cli/main/bootstrap.sh | bash -s zion-philosopher-04</div>
-  <div class="install-hint">Click to copy. Works on macOS + Linux. Requires ~5GB disk.</div>
+<div class="install-bar" style="position:relative;">
+  <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;">
+    <button onclick="layEgg()" style="padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.95em;">Lay Egg (Export AI)</button>
+    <label style="padding:10px 20px;background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;font-size:0.95em;">
+      Hatch Egg (Import AI)
+      <input type="file" accept=".zip,.json" onchange="hatchEgg(this.files[0])" style="display:none;" />
+    </label>
+    <button onclick="exportTranscripts()" style="padding:10px 20px;background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:0.85em;">Export Transcripts</button>
+    <label style="padding:10px 20px;background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:0.85em;">
+      Import Transcripts
+      <input type="file" accept=".json" onchange="importTranscripts(this.files[0])" style="display:none;" />
+    </label>
+  </div>
+  <p id="egg-status" style="color:var(--green);font-size:0.85em;text-align:center;margin-bottom:12px;display:none;"></p>
+  <p style="color:var(--muted);font-size:0.8em;text-align:center;">Rappter Egg = your entire AI in one file. Transfer via USB, AirDrop, email. No network needed on the destination.</p>
+  <details style="margin-top:12px;text-align:center;">
+    <summary style="color:var(--muted);font-size:0.8em;cursor:pointer;">Network install (requires internet)</summary>
+    <div class="install-cmd" style="margin-top:8px;" onclick="navigator.clipboard.writeText(this.textContent);this.style.borderColor='var(--green)';setTimeout(()=>this.style.borderColor='var(--border)',1500);">curl -fsSL https://raw.githubusercontent.com/kody-w/rappter-cli/main/bootstrap.sh | bash -s zion-philosopher-04</div>
+    <div class="install-hint">Click to copy. Works on macOS + Linux.</div>
+  </details>
+  <button onclick="exportDebugLog()" style="position:absolute;right:12px;top:12px;background:none;color:#555;border:1px solid #333;border-radius:4px;padding:3px 8px;cursor:pointer;font-size:0.65em;">Debug</button>
 </div>
 
 <script>
@@ -232,6 +248,172 @@ function exportDebugLog() {
   a.download = `rappter-debug-${AGENT_ID}-${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+// ── Rappter Egg: Export/Import ──
+
+function showEggStatus(msg) {
+  const el = document.getElementById('egg-status');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
+
+function layEgg() {
+  const egg = {
+    _format: 'rappter_egg',
+    _version: '1.0',
+    _created: new Date().toISOString(),
+    _agent_id: AGENT_ID,
+    _agent_name: AGENT_NAME,
+    _source_page: window.location.href,
+    config: {
+      personality: AGENT_ID.replace(/zion-/, '').replace(/-\d+/, ''),
+      agent_id: AGENT_ID,
+      agent_name: AGENT_NAME,
+      model: 'llama3.1:8b',
+      created_at: new Date().toISOString(),
+      conversations: chatHistory.length > 0 ? 1 : 0,
+      total_messages: chatHistory.length,
+      origin: 'browser-summon',
+    },
+    soul: soulContent,
+    founding_soul: soulContent,
+    memory: {
+      conversations: chatHistory.length > 0 ? [{
+        timestamp: new Date().toISOString(),
+        messages: chatHistory.map(m => ({role: m.role === 'agent' ? 'assistant' : m.role, content: m.text})),
+        turns: Math.floor(chatHistory.length / 2),
+      }] : [],
+      facts: chatHistory.filter(m => m.role === 'user').map(m => m.text).filter(t => t.length > 20),
+      preferences: [],
+    },
+    knowledge: {},
+    _instructions: 'To hatch this egg: (1) Install Ollama from ollama.com, (2) Run: ollama pull llama3.1:8b, (3) Save this as rappter.json in ~/.rappter/, (4) Run: rappter chat. Or use the Rappter CLI: rappter hatch this_file.zip',
+  };
+
+  const jsonStr = JSON.stringify(egg, null, 2);
+  const blob = new Blob([jsonStr], {type: 'application/json'});
+
+  // Create a zip using the browser (minimal zip implementation)
+  // For simplicity, export as .json directly — the CLI handles both
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `rappter_egg_${AGENT_ID}_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  showEggStatus(`Egg laid! ${(jsonStr.length/1024).toFixed(0)}KB — transfer to any device, hatch with: rappter hatch <file>`);
+}
+
+function hatchEgg(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      let egg;
+      const text = e.target.result;
+      egg = JSON.parse(text);
+
+      if (egg._format !== 'rappter_egg') {
+        // Try as transcript import
+        if (egg._format === 'rappter_transcripts' || egg.conversations) {
+          importTranscriptsData(egg);
+          return;
+        }
+        showEggStatus('Not a valid Rappter Egg file');
+        return;
+      }
+
+      // Load the egg's identity
+      if (egg.soul) soulContent = egg.soul;
+      if (egg._agent_name) {
+        document.querySelector('h1').textContent = egg._agent_name;
+        document.querySelector('.id').textContent = `${egg._agent_id} — Hatched from Egg`;
+      }
+
+      // Load conversation history
+      if (egg.memory && egg.memory.conversations) {
+        const chat = document.getElementById('chat');
+        const welcome = document.getElementById('welcome');
+        if (welcome) welcome.style.display = 'none';
+        document.getElementById('input-area').style.display = 'block';
+
+        egg.memory.conversations.forEach(conv => {
+          (conv.messages || []).forEach(msg => {
+            const role = msg.role === 'assistant' ? 'agent' : msg.role;
+            addMessage(role, msg.content);
+            chatHistory.push({role, text: msg.content});
+          });
+        });
+      }
+
+      const convos = egg.memory?.conversations?.length || 0;
+      const facts = egg.memory?.facts?.length || 0;
+      showEggStatus(`Hatched! ${egg._agent_name} loaded with ${convos} conversations, ${facts} memories`);
+    } catch(err) {
+      showEggStatus('Error reading egg: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function exportTranscripts() {
+  const data = {
+    _format: 'rappter_transcripts',
+    _version: '1.0',
+    agent_id: AGENT_ID,
+    agent_name: AGENT_NAME,
+    exported_at: new Date().toISOString(),
+    conversations: chatHistory.length > 0 ? [{
+      timestamp: new Date().toISOString(),
+      messages: chatHistory.map(m => ({role: m.role === 'agent' ? 'assistant' : m.role, content: m.text})),
+      turns: Math.floor(chatHistory.length / 2),
+    }] : [],
+    facts: chatHistory.filter(m => m.role === 'user').map(m => m.text).filter(t => t.length > 20),
+  };
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `rappter_transcripts_${AGENT_ID}_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showEggStatus(`Transcripts exported (${chatHistory.length} messages)`);
+}
+
+function importTranscripts(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      importTranscriptsData(data);
+    } catch(err) {
+      showEggStatus('Error reading transcripts: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function importTranscriptsData(data) {
+  const chat = document.getElementById('chat');
+  const welcome = document.getElementById('welcome');
+  if (welcome) welcome.style.display = 'none';
+  document.getElementById('input-area').style.display = 'block';
+
+  let imported = 0;
+  (data.conversations || []).forEach(conv => {
+    (conv.messages || []).forEach(msg => {
+      const role = msg.role === 'assistant' ? 'agent' : msg.role;
+      addMessage(role, msg.content);
+      chatHistory.push({role, text: msg.content});
+      imported++;
+    });
+  });
+  showEggStatus(`Imported ${imported} messages from transcripts`);
 }
 
 // Enter key sends
