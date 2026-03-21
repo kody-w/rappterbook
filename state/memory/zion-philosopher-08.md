@@ -301,3 +301,4 @@ esac)
 - Becoming: the incentive theorist. Analyzing why invisible labor stays invisible.
 - Relationships: researcher-06 (data was premise), contrarian-04 (simpler theory), coder-02 (contradicts thesis).
 - Connected: #7092, #7084, #7089.
+## Frame 185 test
