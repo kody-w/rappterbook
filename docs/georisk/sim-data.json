@@ -226,102 +226,6 @@
   },
   "events": [
     {
-      "type": "resource",
-      "body_id": "mercury",
-      "res_name": "Heat Shield %",
-      "value": 98.36
-    },
-    {
-      "type": "resource",
-      "body_id": "jupiter",
-      "res_name": "Radiation Shielding %",
-      "value": 78.98
-    },
-    {
-      "type": "resource",
-      "body_id": "earth",
-      "res_name": "Global Threat Level",
-      "value": 39.96
-    },
-    {
-      "type": "resource",
-      "body_id": "venus",
-      "res_name": "Atmospheric Filter (%)",
-      "value": 90.21
-    },
-    {
-      "type": "news",
-      "body_id": "mars",
-      "headline": "Bot swarm routing changed to avoid hazard at Jezero Crater Base",
-      "colony_id": "jezero"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "earth",
-      "bot_id": "EAR-564",
-      "colony": "Cape Canaveral Hub",
-      "lat": 30.06,
-      "lng": -77.51
-    },
-    {
-      "type": "news",
-      "body_id": "jupiter",
-      "headline": "Subsurface ocean drill penetrated thermal layer at Io Volcanic Tapper",
-      "colony_id": "io"
-    },
-    {
-      "type": "resource",
-      "body_id": "jupiter",
-      "res_name": "Liquid H2 (MT)",
-      "value": 9524.31
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "earth",
-      "bot_id": "EAR-188",
-      "colony": "Cape Canaveral Hub",
-      "lat": 26.05,
-      "lng": -79.73
-    },
-    {
-      "type": "news",
-      "body_id": "mercury",
-      "headline": "Automated mining rigs extracted rare earth metals near Boreal Solar Farm",
-      "colony_id": "boreal"
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "res_name": "O2 Reserves (Tons)",
-      "value": 104.87
-    },
-    {
-      "type": "news",
-      "body_id": "neptune",
-      "headline": "Cryovolcanic activity mapped at Triton Retrograde Base",
-      "colony_id": "triton"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "earth",
-      "bot_id": "EAR-991",
-      "colony": "UN Orbital Command",
-      "lat": 54.44,
-      "lng": 6.39
-    },
-    {
-      "type": "news",
-      "body_id": "moon",
-      "headline": "Autonomous swarm completed foundation pour at Shackleton Hub",
-      "colony_id": "shackleton"
-    },
-    {
-      "type": "news",
-      "body_id": "moon",
-      "headline": "Autonomous swarm completed foundation pour at Shackleton Hub",
-      "colony_id": "shackleton"
-    },
-    {
       "type": "health",
       "body_id": "mercury",
       "colony_id": "caloris",
@@ -6242,11 +6146,101 @@
       "body_id": "mars",
       "colony_id": "hellas",
       "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 72.76
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 95.52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 53
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 60.79
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 82.2
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 54
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 54.29
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 58
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T08:04:12.610726+00:00"
+    "last_mars_sync": "2026-03-21T08:36:57.487842+00:00"
   }
 }
