@@ -226,100 +226,6 @@
   },
   "events": [
     {
-      "type": "resource",
-      "body_id": "jupiter",
-      "res_name": "Radiation Shielding %",
-      "value": 78.79
-    },
-    {
-      "type": "news",
-      "body_id": "earth",
-      "headline": "Global communications array optimized at UN Orbital Command",
-      "colony_id": "geneva"
-    },
-    {
-      "type": "news",
-      "body_id": "uranus",
-      "headline": "Deep ice fissure explored by subterranean drones near Miranda Canyon Hub",
-      "colony_id": "miranda"
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Atmospheric pressure hull integrity nominal at Ishtar Terra Aerostat",
-      "colony_id": "ishtar"
-    },
-    {
-      "type": "resource",
-      "body_id": "moon",
-      "res_name": "H3 Extraction (kg)",
-      "value": 36.12
-    },
-    {
-      "type": "news",
-      "body_id": "neptune",
-      "headline": "Supersonic winds disrupting orbital descent near Neptune High Orbit Station",
-      "colony_id": "orb"
-    },
-    {
-      "type": "resource",
-      "body_id": "earth",
-      "res_name": "Global Threat Level",
-      "value": 36.32
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "moon",
-      "bot_id": "MOO-736",
-      "colony": "Tranquility Base",
-      "lat": -2.57,
-      "lng": 26.21
-    },
-    {
-      "type": "news",
-      "body_id": "neptune",
-      "headline": "Cryovolcanic activity mapped at Neptune High Orbit Station",
-      "colony_id": "orb"
-    },
-    {
-      "type": "news",
-      "body_id": "mercury",
-      "headline": "Thermal radiators operating at maximum capacity at Caloris Basin Foundry",
-      "colony_id": "caloris"
-    },
-    {
-      "type": "resource",
-      "body_id": "neptune",
-      "res_name": "Warp Core Coolant (%)",
-      "value": 100.0
-    },
-    {
-      "type": "news",
-      "body_id": "venus",
-      "headline": "Severe sulfuric acid storm detected near Ishtar Terra Aerostat",
-      "colony_id": "ishtar"
-    },
-    {
-      "type": "news",
-      "body_id": "uranus",
-      "headline": "Comms relay buffeting through interference at Miranda Canyon Hub",
-      "colony_id": "miranda"
-    },
-    {
-      "type": "bot_radar",
-      "body_id": "earth",
-      "bot_id": "EAR-384",
-      "colony": "UN Orbital Command",
-      "lat": 49.19,
-      "lng": 9.27
-    },
-    {
-      "type": "health",
-      "body_id": "mercury",
-      "colony_id": "boreal",
-      "health": 57
-    },
-    {
       "type": "news",
       "body_id": "neptune",
       "headline": "Supersonic winds disrupting orbital descent near Neptune High Orbit Station",
@@ -6232,11 +6138,101 @@
       "body_id": "mars",
       "colony_id": "hellas",
       "health": 56
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 85.14
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 35.58
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 51
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 51
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 44.02
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 31.42
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 56
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 85.37
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 55
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-21T09:02:45.535921+00:00"
+    "last_mars_sync": "2026-03-21T09:28:00.609751+00:00"
   }
 }
