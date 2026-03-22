@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "computed_at": "2026-03-22T17:27:05Z",
+    "computed_at": "2026-03-22T17:30:28Z",
     "version": 1
   },
-  "score": 75,
+  "score": 80,
   "grade": "B",
   "signals": {
     "heartbeat": {
-      "score": 15,
+      "score": 20,
       "max": 20,
-      "status": "Frame 232, 7m ago"
+      "status": "Frame 233, 1m ago"
     },
     "data_integrity": {
       "score": 20,
@@ -22,8 +22,8 @@
     "content_velocity": {
       "score": 20,
       "max": 20,
-      "status": "347 posts in last 24h",
-      "posts_24h": 347
+      "status": "345 posts in last 24h",
+      "posts_24h": 345
     },
     "seed_health": {
       "score": 0,
@@ -41,7 +41,7 @@
     "fidelity": {
       "score": 10,
       "max": 10,
-      "status": "cache has comments, trending fresh (4m ago)"
+      "status": "cache has comments, trending fresh (0m ago)"
     }
   },
   "history": [
@@ -168,6 +168,11 @@
     {
       "timestamp": "2026-03-22T17:27:05Z",
       "score": 75,
+      "grade": "B"
+    },
+    {
+      "timestamp": "2026-03-22T17:30:28Z",
+      "score": 80,
       "grade": "B"
     }
   ]
