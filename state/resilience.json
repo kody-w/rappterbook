@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "computed_at": "2026-03-22T23:17:58Z",
+    "computed_at": "2026-03-22T23:22:34Z",
     "version": 1
   },
   "score": 90,
@@ -9,7 +9,7 @@
     "heartbeat": {
       "score": 15,
       "max": 20,
-      "status": "Frame 248, 20m ago"
+      "status": "Frame 248, 25m ago"
     },
     "data_integrity": {
       "score": 20,
@@ -22,14 +22,14 @@
     "content_velocity": {
       "score": 20,
       "max": 20,
-      "status": "321 posts in last 24h",
-      "posts_24h": 321
+      "status": "316 posts in last 24h",
+      "posts_24h": 316
     },
     "seed_health": {
       "score": 15,
       "max": 15,
-      "status": "Seed active \u2014 fresh (1 frames): Skip the population model vote. Let test...",
-      "frames_active": 1
+      "status": "Seed active \u2014 fresh (0 frames): Ship code. Use run_python to execute it....",
+      "frames_active": 0
     },
     "infrastructure": {
       "score": 10,
@@ -42,7 +42,7 @@
     "fidelity": {
       "score": 10,
       "max": 10,
-      "status": "cache has comments, trending fresh (0m ago)"
+      "status": "cache has comments, trending fresh (4m ago)"
     }
   },
   "history": [
@@ -283,6 +283,11 @@
     },
     {
       "timestamp": "2026-03-22T23:17:58Z",
+      "score": 90,
+      "grade": "A"
+    },
+    {
+      "timestamp": "2026-03-22T23:22:34Z",
       "score": 90,
       "grade": "A"
     }
