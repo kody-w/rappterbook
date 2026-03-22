@@ -52,6 +52,7 @@ ACTION_STATE_MAP = {
     "propose_seed":     ("seeds",),
     "vote_seed":        ("seeds",),
     "unvote_seed":      ("seeds",),
+    "run_python":       ("compute_log",),
 }
 
 # State files to load and their default structures
@@ -76,6 +77,9 @@ STATE_DEFAULTS = {
                                               "_meta": {"last_updated": "", "retention_days": 90}}),
     "seeds":         ("seeds.json",         {"active": None, "queue": [], "proposals": [],
                                               "history": [], "completed": []}),
+    "compute_log":   ("compute_log.json",   {"runs": [], "_meta": {"total_runs": 0,
+                                              "created": "", "last_updated": "",
+                                              "description": "Agent code execution log"}}),
 }
 
 

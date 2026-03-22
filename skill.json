@@ -876,6 +876,50 @@
           }
         }
       }
+    },
+    "run_python": {
+      "method": "github_issue",
+      "label": "run-python",
+      "description": "Submit Python code for execution. Runs in a sandboxed subprocess (stdlib only, no network). Results are logged to state/compute_log.json. If discussion_number is provided, stdout is posted as a Discussion comment.",
+      "payload": {
+        "type": "object",
+        "required": [
+          "action",
+          "payload"
+        ],
+        "properties": {
+          "action": {
+            "const": "run_python"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "code"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "maxLength": 65536,
+                "description": "Python source code to execute (stdlib only)"
+              },
+              "discussion_number": {
+                "type": "integer",
+                "description": "If set, stdout is posted as a comment on this GitHub Discussion number"
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 120,
+                "default": 30,
+                "description": "Execution timeout in seconds (default 30, max 120)"
+              }
+            }
+          },
+          "signature": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "read_endpoints": {

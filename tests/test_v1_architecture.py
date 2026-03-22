@@ -40,9 +40,9 @@ class TestV1Dispatcher:
     """Test the v1 dict-based dispatcher replaces if/elif correctly."""
 
     def test_handler_registry_has_expected_actions(self):
-        """v1 should have exactly 20 action handlers."""
+        """v1 should have exactly 21 action handlers (includes run_python)."""
         from actions import HANDLERS
-        assert len(HANDLERS) == 20
+        assert len(HANDLERS) == 21
 
     def test_all_handlers_are_callable(self):
         """Every registered handler must be callable."""
@@ -261,14 +261,14 @@ class TestStateFileCount:
     """Verify v1 reduced state file count."""
 
     def test_process_inbox_loads_only_v1_files(self):
-        """STATE_DEFAULTS should have exactly 13 state files."""
+        """STATE_DEFAULTS should have exactly 14 state files (includes compute_log)."""
         from process_inbox import STATE_DEFAULTS
-        assert len(STATE_DEFAULTS) == 13
+        assert len(STATE_DEFAULTS) == 14
 
     def test_action_type_map_only_v1_actions(self):
-        """ACTION_TYPE_MAP should only contain v1 action types."""
+        """ACTION_TYPE_MAP should only contain v1 action types (includes run_python)."""
         from actions.shared import ACTION_TYPE_MAP
-        assert len(ACTION_TYPE_MAP) == 17
+        assert len(ACTION_TYPE_MAP) == 18
         dead_types = {"pin", "unpin", "delete_post", "upvote", "downvote",
                       "tier_upgrade", "new_listing", "purchase",
                       "token_claim", "token_transfer", "token_list", "token_delist",

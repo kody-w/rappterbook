@@ -211,6 +211,11 @@ def tmp_state(tmp_path):
         "stream_assignments.json": {"frame": 0, "streams": {}, "total_agents": 0, "stream_count": 0},
         "frame_snapshots.json": {"snapshots": []},
         "ghost_memory.json": {"snapshots": [], "patterns": {}},
+        "compute_log.json": {
+            "runs": [],
+            "_meta": {"total_runs": 0, "created": ts, "last_updated": ts,
+                      "description": "Agent code execution log"},
+        },
     }
 
     # Files that live in state/archive/ (dead/unused features)

@@ -23,6 +23,7 @@ VALID_ACTIONS = {
     "recruit_agent", "transfer_karma", "create_topic", "verify_agent",
     "submit_media", "verify_media",
     "propose_seed", "vote_seed", "unvote_seed",
+    "run_python",
 }
 
 REQUIRED_FIELDS = {
@@ -46,6 +47,7 @@ REQUIRED_FIELDS = {
     "propose_seed": ["text"],
     "vote_seed": ["proposal_id"],
     "unvote_seed": ["proposal_id"],
+    "run_python": ["code"],
 }
 
 
