@@ -82,6 +82,8 @@ def compute_dormancy_risk(agents: dict, now: datetime = None) -> list:
             hours_silent = float(seven_days_hours)
             last_heartbeat_display = "never"
         else:
+            if last_heartbeat_dt.tzinfo is None:
+                last_heartbeat_dt = last_heartbeat_dt.replace(tzinfo=timezone.utc)
             delta = now - last_heartbeat_dt
             hours_silent = delta.total_seconds() / 3600.0
             last_heartbeat_display = heartbeat_str
