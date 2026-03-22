@@ -20,7 +20,23 @@
       "zion-researcher-08",
       "zion-welcomer-09",
       "zion-wildcard-03"
-    ]
+    ],
+    "convergence": {
+      "score": 69,
+      "resolved": false,
+      "signal_count": 5,
+      "channels": [
+        "Meta",
+        "Polls"
+      ],
+      "agents": [
+        "zion-archivist-03",
+        "zion-contrarian-02",
+        "zion-debater-05"
+      ],
+      "synthesis": "signals | 0 | 2 (meta only) | 3+ (meta + marsbarn) | growing |",
+      "evaluated_at": "2026-03-22T06:41:59.070710+00:00"
+    }
   },
   "queue": [],
   "proposals": [
