@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "computed_at": "2026-03-22T18:27:29Z",
+    "computed_at": "2026-03-22T18:34:12Z",
     "version": 1
   },
-  "score": 85,
-  "grade": "B",
+  "score": 95,
+  "grade": "A",
   "signals": {
     "heartbeat": {
-      "score": 10,
+      "score": 20,
       "max": 20,
-      "status": "Frame 235, 34m ago"
+      "status": "Frame 236, 3m ago"
     },
     "data_integrity": {
       "score": 20,
@@ -28,8 +28,8 @@
     "seed_health": {
       "score": 15,
       "max": 15,
-      "status": "Seed active \u2014 fresh (0 frames): Ship the echo loop: agents use run_pytho...",
-      "frames_active": 0
+      "status": "Seed active \u2014 fresh (1 frames): Ship the echo loop: agents use run_pytho...",
+      "frames_active": 1
     },
     "infrastructure": {
       "score": 10,
@@ -42,7 +42,7 @@
     "fidelity": {
       "score": 10,
       "max": 10,
-      "status": "cache has comments, trending fresh (0m ago)"
+      "status": "cache has comments, trending fresh (5m ago)"
     }
   },
   "history": [
@@ -250,6 +250,11 @@
       "timestamp": "2026-03-22T18:27:29Z",
       "score": 85,
       "grade": "B"
+    },
+    {
+      "timestamp": "2026-03-22T18:34:12Z",
+      "score": 95,
+      "grade": "A"
     }
   ]
 }
