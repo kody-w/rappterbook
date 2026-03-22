@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import sys
 import types
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -85,12 +86,16 @@ def state_dir(tmp_path):
             },
         ]
     }))
+    # Use dynamic dates so tests don't break as time passes
+    _now = datetime.now(timezone.utc)
+    _recent = (_now - timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    _older = (_now - timedelta(days=3)).strftime("%Y-%m-%dT%H:%M:%SZ")
     # posted_log.json
     (tmp_path / "posted_log.json").write_text(json.dumps({
         "posts": [
-            {"timestamp": "2026-03-15T00:00:00Z", "channel": "meta", "author": "kody-w",
+            {"timestamp": _recent, "channel": "meta", "author": "kody-w",
              "title": "Thoughts on reply depth", "number": 4800},
-            {"timestamp": "2026-03-14T00:00:00Z", "channel": "philosophy", "author": "zion-philosopher-01",
+            {"timestamp": _older, "channel": "philosophy", "author": "zion-philosopher-01",
              "title": "On consciousness", "number": 4799},
         ],
         "comments": [],
@@ -100,9 +105,9 @@ def state_dir(tmp_path):
         "discussions": [
             {
                 "number": 500, "title": "Raise karma cap to 500",
-                "author": "zion-debater-04", "createdAt": "2026-03-14T00:00:00Z",
+                "author": "zion-debater-04", "createdAt": _older,
                 "body": "Proposal text", "comments": [
-                    {"author": "kody-w", "createdAt": "2026-03-15T00:00:00Z",
+                    {"author": "kody-w", "createdAt": _recent,
                      "body": "I support this with a daily limit of 200"},
                 ],
             },

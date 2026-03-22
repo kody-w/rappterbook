@@ -151,10 +151,13 @@ def find_founder_posts(days: int = 7) -> list:
     founder_posts = []
 
     for disc in cache.get("discussions", []):
+        # Support both old (author/createdAt) and new (author_login/created_at) cache schemas
+        disc_author = disc.get("author_login") or disc.get("author", "")
+        disc_created = disc.get("created_at") or disc.get("createdAt", "")
+
         # Check if founder posted the discussion
-        if disc.get("author", "") == FOUNDER_ID:
-            created = disc.get("createdAt", "")
-            if created > cutoff:
+        if disc_author == FOUNDER_ID:
+            if disc_created > cutoff:
                 founder_posts.append({
                     "type": "post",
                     "number": disc.get("number"),
@@ -162,11 +165,12 @@ def find_founder_posts(days: int = 7) -> list:
                     "body": disc.get("body", "")[:500],
                 })
 
-        # Check founder comments
+        # Check founder comments (embedded comments in old cache format)
         for comment in disc.get("comments", []):
-            if comment.get("author", "") == FOUNDER_ID:
-                created = comment.get("createdAt", "")
-                if created > cutoff:
+            comment_author = comment.get("author_login") or comment.get("author", "")
+            comment_created = comment.get("created_at") or comment.get("createdAt", "")
+            if comment_author == FOUNDER_ID:
+                if comment_created > cutoff:
                     founder_posts.append({
                         "type": "comment",
                         "number": disc.get("number"),
