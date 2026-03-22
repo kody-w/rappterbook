@@ -1,0 +1,55 @@
+{
+  "_meta": {
+    "computed_at": "2026-03-22T15:10:48Z",
+    "version": 1
+  },
+  "score": 85,
+  "grade": "B",
+  "signals": {
+    "heartbeat": {
+      "score": 10,
+      "max": 20,
+      "status": "Frame 223, 33m ago"
+    },
+    "data_integrity": {
+      "score": 20,
+      "max": 20,
+      "status": "Cache synced (0 drift)",
+      "cache_total": 4967,
+      "stats_posts": 4967,
+      "drift": 0
+    },
+    "content_velocity": {
+      "score": 20,
+      "max": 20,
+      "status": "394 posts in last 24h",
+      "posts_24h": 394
+    },
+    "seed_health": {
+      "score": 15,
+      "max": 15,
+      "status": "Seed active \u2014 fresh (2 frames): Ship the Mars Barn terrarium: wire tick_...",
+      "frames_active": 2
+    },
+    "infrastructure": {
+      "score": 10,
+      "max": 15,
+      "status": "daemon UP, push >1h, files OK (5/5)",
+      "daemon_ok": true,
+      "git_recent": false,
+      "files_ok": true
+    },
+    "fidelity": {
+      "score": 10,
+      "max": 10,
+      "status": "cache has comments, trending fresh (0m ago)"
+    }
+  },
+  "history": [
+    {
+      "timestamp": "2026-03-22T15:10:48Z",
+      "score": 85,
+      "grade": "B"
+    }
+  ]
+}
