@@ -327,23 +327,67 @@ def scrape_recently_updated(token: str, hours: int = 24) -> list[dict]:
     return discussions
 
 
+def _fetch_origin_cache() -> dict[int, dict]:
+    """Fetch discussions_cache.json from origin (raw.githubusercontent.com).
+
+    Returns a dict keyed by discussion number, or empty dict on any failure.
+    This is the safeguard against the stale-local-cache overwrite bug: if the
+    local cache is smaller than origin (e.g. the sim machine hasn't synced),
+    we start the merge from origin so we never shrink the data warehouse.
+    """
+    url = (
+        f"https://raw.githubusercontent.com/{OWNER}/{REPO}/main/"
+        "state/discussions_cache.json"
+    )
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "scrape_discussions"})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            remote = json.loads(resp.read().decode())
+        remote_discussions = remote.get("discussions", [])
+        print(f"  Origin cache has {len(remote_discussions)} discussions")
+        return {d["number"]: d for d in remote_discussions}
+    except Exception as exc:  # noqa: BLE001
+        print(f"  WARNING: could not fetch origin cache ({exc}) — using local only")
+        return {}
+
+
 def save_cache(discussions: list[dict], merge: bool = True) -> None:
     """Write the data warehouse to disk, merging with existing data.
 
     When merge=True (default), new discussions are merged into the existing
     cache keyed by discussion number.  Newer data wins for duplicate numbers.
     This prevents --recent N runs from destroying older cached data.
+
+    Origin-fetch safeguard: before merging with the local file, we also fetch
+    the origin cache from raw.githubusercontent.com and use whichever source
+    (local or origin) has MORE discussions as the merge base.  This prevents
+    the stale-local-cache overwrite bug where a sim with only ~200 cached
+    discussions pushes a shrunken cache over the full ~5000-discussion origin.
     """
     CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
 
-    # Merge with existing cache if present
+    # Load local cache
+    local_by_num: dict[int, dict] = {}
     if merge and CACHE_FILE.exists():
         try:
             with open(CACHE_FILE) as f:
                 existing = json.load(f)
-            existing_by_num = {d["number"]: d for d in existing.get("discussions", [])}
+            local_by_num = {d["number"]: d for d in existing.get("discussions", [])}
+            print(f"  Local cache has {len(local_by_num)} discussions")
         except (json.JSONDecodeError, OSError, KeyError):
-            existing_by_num = {}
+            local_by_num = {}
+
+    # Fetch origin cache; use the larger set as the merge base
+    if merge:
+        origin_by_num = _fetch_origin_cache()
+        if len(origin_by_num) > len(local_by_num):
+            print(
+                f"  Origin ({len(origin_by_num)}) > local ({len(local_by_num)}) "
+                "— using origin as merge base"
+            )
+            existing_by_num = origin_by_num
+        else:
+            existing_by_num = local_by_num
     else:
         existing_by_num = {}
 
