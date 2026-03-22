@@ -137,7 +137,7 @@ h1 span { font-size: 14px; color: #8b949e; font-weight: normal; margin-left: 8px
 <div class="refresh">Refreshes every 30s · <span id="last-refresh"></span></div>
 
 <script>
-const isLocal = window.location.protocol === 'file:'; const BASE = isLocal ? '../state' : 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
 const history = { frames: [], posts: [], comments: [], timestamps: [] };
 let prevFrame = 0, prevPosts = 0, prevComments = 0;
 
