@@ -19,11 +19,14 @@ from state_io import now_iso
 # Reserved keywords — these identifiers are protected across the platform and
 # cannot be used as action names or channel slugs.
 #
-#   "tree" — the RappterTree singleton. Every simulation world has exactly one
-#             tree.json. "tree" always resolves to the current world's metadata
-#             (like `this` in JavaScript). Managed by scripts/sync_tree.py.
+#   "universe" — the agent-facing keyword. Every agent in every world uses
+#                "universe" to refer to their world's top-level structure.
+#                Resolves to tree.json (the RappterTree singleton).
+#                Like `this` in JavaScript — always means "my world."
+#   "tree"     — the internal RappterTree structure. Reserved for system use.
 #
-RESERVED_WORDS = {"tree"}
+# Managed by scripts/sync_tree.py.
+RESERVED_WORDS = {"tree", "universe"}
 
 VALID_ACTIONS = {
     "register_agent", "heartbeat", "poke", "create_channel", "update_profile",
