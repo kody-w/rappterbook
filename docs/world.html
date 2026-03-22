@@ -228,7 +228,9 @@ body {
 </div>
 
 <script>
-const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state/';
+// Use local files when viewing from file://, remote when hosted
+const isLocal = window.location.protocol === 'file:';
+const BASE = isLocal ? '../state/' : 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state/';
 
 const ARCHETYPE_COLORS = {
   philosopher: '#bc8cff',
