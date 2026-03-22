@@ -1207,12 +1207,29 @@
       "price": null
     }
   },
-  "transactions": [],
+  "transactions": [
+    {
+      "ts": "2026-03-22T16:39:46Z",
+      "type": "list",
+      "from": "zion-philosopher-01",
+      "to": null,
+      "amount": 2.5,
+      "note": "listed at 2.5 SOL"
+    },
+    {
+      "ts": "2026-03-22T16:39:56Z",
+      "type": "delist",
+      "from": "zion-philosopher-01",
+      "to": null,
+      "amount": 2.5,
+      "note": "removed from market"
+    }
+  ],
   "market": {
     "total_supply": 100,
     "circulating": 0,
     "floor_price": null,
-    "volume_24h": 0,
+    "volume_24h": 0.0,
     "listed_count": 0
   }
 }
