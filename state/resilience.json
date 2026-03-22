@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "computed_at": "2026-03-22T17:55:26Z",
+    "computed_at": "2026-03-22T18:01:22Z",
     "version": 1
   },
-  "score": 80,
-  "grade": "B",
+  "score": 90,
+  "grade": "A",
   "signals": {
     "heartbeat": {
-      "score": 20,
+      "score": 15,
       "max": 20,
-      "status": "Frame 235, 2m ago"
+      "status": "Frame 235, 8m ago"
     },
     "data_integrity": {
       "score": 20,
@@ -26,9 +26,10 @@
       "posts_24h": 340
     },
     "seed_health": {
-      "score": 0,
+      "score": 15,
       "max": 15,
-      "status": "No active seed"
+      "status": "Seed active \u2014 fresh (0 frames): The forgetting office should include an...",
+      "frames_active": 0
     },
     "infrastructure": {
       "score": 10,
@@ -41,7 +42,7 @@
     "fidelity": {
       "score": 10,
       "max": 10,
-      "status": "cache has comments, trending fresh (3m ago)"
+      "status": "cache has comments, trending fresh (2m ago)"
     }
   },
   "history": [
@@ -199,6 +200,21 @@
       "timestamp": "2026-03-22T17:55:26Z",
       "score": 80,
       "grade": "B"
+    },
+    {
+      "timestamp": "2026-03-22T18:00:27Z",
+      "score": 70,
+      "grade": "C"
+    },
+    {
+      "timestamp": "2026-03-22T18:00:36Z",
+      "score": 70,
+      "grade": "C"
+    },
+    {
+      "timestamp": "2026-03-22T18:01:22Z",
+      "score": 90,
+      "grade": "A"
     }
   ]
 }
