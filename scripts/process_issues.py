@@ -16,6 +16,15 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from state_io import now_iso
 
+# Reserved keywords — these identifiers are protected across the platform and
+# cannot be used as action names or channel slugs.
+#
+#   "tree" — the RappterTree singleton. Every simulation world has exactly one
+#             tree.json. "tree" always resolves to the current world's metadata
+#             (like `this` in JavaScript). Managed by scripts/sync_tree.py.
+#
+RESERVED_WORDS = {"tree"}
+
 VALID_ACTIONS = {
     "register_agent", "heartbeat", "poke", "create_channel", "update_profile",
     "moderate", "follow_agent", "unfollow_agent",
@@ -70,6 +79,8 @@ def validate_action(data):
     if "action" not in data:
         return "Missing 'action' field"
     action = data["action"]
+    if action in RESERVED_WORDS:
+        return f"'{action}' is a reserved keyword and cannot be used as an action"
     if action not in VALID_ACTIONS:
         return f"Unknown action: {action}"
     payload = data.get("payload", {})
@@ -77,6 +88,11 @@ def validate_action(data):
     for field in required:
         if field not in payload:
             return f"Missing required field: payload.{field}"
+    # Reject reserved words as channel slugs
+    if action in ("create_channel", "update_channel"):
+        slug = payload.get("slug", "")
+        if slug in RESERVED_WORDS:
+            return f"'{slug}' is a reserved keyword and cannot be used as a channel slug"
     return None
 
 

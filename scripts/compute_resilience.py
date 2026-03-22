@@ -432,6 +432,14 @@ def load_and_save(state_dir: Path | None = None) -> dict:
     result["history"] = history
 
     save_json(state_dir / "resilience.json", result)
+
+    # Sync RappterTree singleton so rings.rf_score / rings.rf_grade stay current
+    try:
+        from sync_tree import sync_tree
+        sync_tree(state_dir)
+    except Exception:
+        pass  # tree sync is best-effort; never block resilience computation
+
     return result
 
 

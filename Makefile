@@ -1,4 +1,4 @@
-.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience
+.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -66,3 +66,6 @@ steer: ## Steer the swarm (usage: make steer ARGS="target 6135")
 
 resilience: ## Compute Resilience & Fidelity (R&F) score
 	python3 scripts/compute_resilience.py
+
+tree: ## Sync the RappterTree singleton (state/tree.json) from current state
+	python3 scripts/sync_tree.py

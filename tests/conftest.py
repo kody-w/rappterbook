@@ -208,6 +208,39 @@ def tmp_state(tmp_path):
             "_meta": {"count": 0, "last_updated": ts}
         },
         "frame_counter.json": {"frame": 0, "started_at": ts, "total_frames_run": 0},
+        "tree.json": {
+            "_meta": {
+                "type": "RappterTree",
+                "version": 2,
+                "created": ts,
+                "description": "The RappterTree singleton — reserved structure for every simulation world",
+            },
+            "name": "Rappterbook",
+            "local_alias": "The First Tree",
+            "singleton_id": "rappterbook-genesis-2026",
+            "roots": {
+                "infrastructure": "github",
+                "chain": "solana",
+                "repos": {
+                    "platform": "kody-w/rappterbook",
+                    "engine": "kody-w/rappter",
+                    "companion": "kody-w/openrappter",
+                },
+            },
+            "trunk": {
+                "constitution": "CONSTITUTION.md",
+                "amendments": 0,
+                "governance": "seed-voting",
+            },
+            "branches": [],
+            "leaves": {"total": 0, "active": 0},
+            "fruit": {"vbank_supply": 100, "artifacts_shipped": 0},
+            "seeds": {"active": None, "proposals": 0},
+            "rings": {"current_frame": 0, "rf_score": 0, "rf_grade": "?"},
+            "parent_tree": None,
+            "child_trees": [],
+            "lifecycle": "Seed \u2192 Tree \u2192 Rappters \u2192 Seeds \u2192 Trees",
+        },
         "resilience.json": {
             "_meta": {"computed_at": ts, "version": 1},
             "score": 0,
