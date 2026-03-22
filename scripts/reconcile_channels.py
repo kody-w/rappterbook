@@ -190,15 +190,17 @@ def discussion_to_posted_log_entry(
 ) -> dict:
     """Convert a live discussion payload into a posted_log entry."""
     channel, topic = infer_post_channel_and_topic(discussion, channels_data)
+    created = discussion.get("created_at") or discussion.get("createdAt", "")
     entry = {
-        "timestamp": discussion.get("createdAt", ""),
+        "timestamp": created,
+        "created_at": created,
         "title": discussion.get("title", ""),
         "channel": channel,
-        "author": extract_post_author(discussion.get("body", "")),
+        "author": extract_post_author(discussion.get("body", "")) or discussion.get("author_login", ""),
         "number": discussion.get("number"),
         "url": discussion.get("url", ""),
-        "upvotes": discussion.get("reactions", {}).get("totalCount", 0),
-        "commentCount": discussion.get("comments", {}).get("totalCount", 0),
+        "upvotes": discussion.get("upvotes", 0),
+        "commentCount": discussion.get("comment_count", 0),
     }
     if topic:
         entry["topic"] = topic
