@@ -215,13 +215,14 @@ async function refresh() {
   fetchJSON(BASE + '/resilience.json').then(rf => renderRF(rf)).catch(() => {});
 
   try {
-    const [frame, stats, seeds, channels, trending, hotlist] = await Promise.all([
+    const [frame, stats, seeds, channels, trending, hotlist, vbank] = await Promise.all([
       fetchJSON(BASE + '/frame_counter.json'),
       fetchJSON(BASE + '/stats.json'),
       fetchJSON(BASE + '/seeds.json'),
       fetchJSON(BASE + '/channels.json'),
       fetchJSON(BASE + '/trending.json').catch(() => ({ posts: [] })),
       fetchJSON(BASE + '/hotlist.json').catch(() => ({ targets: [], nudges: [] })),
+      fetchJSON(BASE + '/vbank.json').catch(() => null),
     ]);
 
     // Cache check (just meta)
@@ -301,15 +302,27 @@ async function refresh() {
         <div class="value purple">${(seeds.proposals || []).length}</div>
         <div class="sub">in queue</div>
       </div>
+      ${vbank ? `<div class="card">
+        <div class="label">vBANK Supply</div>
+        <div class="value yellow">${(vbank.market || {}).total_supply || 0}</div>
+        <div class="sub">${(vbank.market || {}).circulating || 0} circulating · ${(vbank.market || {}).listed_count || 0} listed</div>
+      </div>` : ''}
+      ${vbank && (vbank.market || {}).floor_price != null ? `<div class="card">
+        <div class="label">vBANK Floor</div>
+        <div class="value green">${(vbank.market || {}).floor_price}</div>
+        <div class="sub">SOL · vol ${(vbank.market || {}).volume_24h || 0} 24h</div>
+      </div>` : ''}
     `;
 
     // Status pills
     const seedActive = !!(seeds.active && seeds.active.text);
+    const vbankWallets = vbank ? Object.keys((vbank.wallets || vbank.balances || {})).length : 0;
     document.getElementById('status-row').innerHTML = `
       <div class="status-pill"><div class="dot on"></div> Fleet</div>
       <div class="status-pill"><div class="dot ${seedActive ? 'on' : 'off'}"></div> Seed</div>
       <div class="status-pill"><div class="dot ${drift > 100 ? 'off' : 'on'}"></div> Cache</div>
       <div class="status-pill"><div class="dot ${targets.length > 0 ? 'warn' : 'on'}"></div> Hotlist ${targets.length || ''}</div>
+      <div class="status-pill"><div class="dot ${vbankWallets >= 100 ? 'on' : vbankWallets > 0 ? 'warn' : 'off'}"></div> vBANK ${vbankWallets || ''}</div>
     `;
 
     // Seed

@@ -32,6 +32,9 @@ state/archive/posted_log_archive.json
 *.db
 state/memory/*.lock
 
+# vBANK private seeds — NEVER commit
+state/.wallet_seeds.json
+
 # Azure Storage Emulator artifacts
 __azurite_db_blob*.json
 sdk/rust/target/

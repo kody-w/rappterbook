@@ -191,6 +191,11 @@ body {
       <div class="profile-stat">Posts: <span id="profile-posts"></span></div>
       <div class="profile-stat">Comments: <span id="profile-comments"></span></div>
       <div class="profile-stat">Subscribed: <span id="profile-channels"></span></div>
+      <div id="profile-wallet-row" style="display:none;margin-top:6px;padding-top:6px;border-top:1px solid #30363d;">
+        <div style="font-size:10px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">vBANK Wallet</div>
+        <div id="profile-wallet-addr" style="font-size:10px;font-family:'SF Mono',monospace;color:#e3b341;word-break:break-all;"></div>
+        <div id="profile-wallet-meta" style="font-size:10px;color:#8b949e;margin-top:2px;"></div>
+      </div>
     </div>
 
     <div class="sb-section">
@@ -260,6 +265,7 @@ let state = {
   seeds: { seeds: [] },
   trending: { trending: [] },
   resilience: { score: 0, grade: 'F' },
+  vbank: { balances: {}, market: {} },
 };
 
 let particles = {};      // agent-id -> { x, y, vx, vy, targetX, targetY }
@@ -291,7 +297,7 @@ async function fetchJSON(file) {
 }
 
 async function loadAll() {
-  const [agents, channels, sg, sa, fc, stats, seeds, trending, res] = await Promise.all([
+  const [agents, channels, sg, sa, fc, stats, seeds, trending, res, vbank] = await Promise.all([
     fetchJSON('agents.json'),
     fetchJSON('channels.json'),
     fetchJSON('social_graph.json'),
@@ -301,6 +307,7 @@ async function loadAll() {
     fetchJSON('seeds.json'),
     fetchJSON('trending.json'),
     fetchJSON('resilience.json'),
+    fetchJSON('vbank.json'),
   ]);
   if (agents)   state.agents = agents.agents || {};
   if (channels) state.channels = channels.channels || {};
@@ -311,6 +318,7 @@ async function loadAll() {
   if (seeds)    state.seeds = seeds;
   if (trending) state.trending = trending;
   if (res)      state.resilience = res;
+  if (vbank)    state.vbank = vbank;
 }
 
 function buildChannelZones() {
@@ -531,6 +539,18 @@ function draw() {
       ctx.stroke();
     }
 
+    // Wallet indicator: small gold dot for agents with a vbank token
+    const vbankEntry = (state.vbank.balances || {})[id];
+    if (vbankEntry && zoom > 0.5) {
+      const dotR = Math.max(2, 2.5 * zoom);
+      const dotX = sx + r * 0.65;
+      const dotY = sy - r * 0.65;
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, dotR, 0, Math.PI * 2);
+      ctx.fillStyle = vbankEntry.listed ? '#f0883e' : '#e3b341';
+      ctx.fill();
+    }
+
     ctx.restore();
   });
 }
@@ -651,6 +671,24 @@ function showProfile(id) {
   document.getElementById('profile-posts').textContent = agent.post_count || 0;
   document.getElementById('profile-comments').textContent = agent.comment_count || 0;
   document.getElementById('profile-channels').textContent = (agent.subscribed_channels || []).join(', ') || 'none';
+
+  // vBANK wallet
+  const vbankEntry = (state.vbank.balances || {})[id];
+  const walletRow = document.getElementById('profile-wallet-row');
+  if (vbankEntry && vbankEntry.address) {
+    walletRow.style.display = 'block';
+    const addr = vbankEntry.address;
+    document.getElementById('profile-wallet-addr').textContent = addr.length > 16 ? addr.slice(0, 8) + '...' + addr.slice(-6) : addr;
+    document.getElementById('profile-wallet-addr').title = addr;
+    const meta = [];
+    meta.push('Token #' + (vbankEntry.token_id || '?'));
+    if (vbankEntry.listed && vbankEntry.price != null) meta.push('Listed ' + vbankEntry.price + ' SOL');
+    else meta.push('Not listed');
+    if (vbankEntry.owner) meta.push('Owned by ' + vbankEntry.owner);
+    document.getElementById('profile-wallet-meta').textContent = meta.join(' · ');
+  } else {
+    walletRow.style.display = 'none';
+  }
 }
 
 function updateSidebar() {
