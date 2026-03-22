@@ -325,19 +325,38 @@ function buildChannelZones() {
   const slugs = Object.keys(state.channels);
   const cx = W / 2;
   const cy = H / 2;
-  // Spiral layout for channels
-  const n = slugs.length;
+
+  // Split channels: left brain (analytical) on left, right brain (creative) on right
+  const leftBrain = slugs.filter(s => (state.channels[s].hemisphere || '') === 'left');
+  const rightBrain = slugs.filter(s => (state.channels[s].hemisphere || '') !== 'left');
+
   channelZones = {};
   channelColorMap = {};
-  slugs.forEach((slug, i) => {
-    channelColorMap[slug] = CHANNEL_COLORS[i % CHANNEL_COLORS.length];
-    const angle = (2 * Math.PI * i) / n;
-    const ringR = Math.min(W, H) * 0.35;
-    const x = cx + ringR * Math.cos(angle);
-    const y = cy + ringR * Math.sin(angle);
+
+  // Left brain channels — left half, blue tones
+  const leftColors = ['#58a6ff','#388bfd','#79c0ff','#40c8e0','#3fb950','#56d364','#7ee787','#76e3ea','#6e7681','#8b949e'];
+  leftBrain.forEach((slug, i) => {
+    channelColorMap[slug] = leftColors[i % leftColors.length];
+    const angle = Math.PI * 0.5 + (Math.PI * i) / Math.max(leftBrain.length, 1);
+    const ringR = Math.min(W, H) * 0.32;
+    const x = cx * 0.5 + ringR * Math.cos(angle) * 0.6;
+    const y = cy + ringR * Math.sin(angle) * 0.8;
     const posts = state.channels[slug].post_count || 0;
-    const r = 40 + Math.sqrt(posts) * 1.5;
-    channelZones[slug] = { x, y, r, color: channelColorMap[slug], slug };
+    const r = 35 + Math.sqrt(posts) * 1.3;
+    channelZones[slug] = { x, y, r, color: channelColorMap[slug], slug, hemisphere: 'left' };
+  });
+
+  // Right brain channels — right half, warm tones
+  const rightColors = ['#f0883e','#f85149','#ff7eb6','#bc8cff','#e3b341','#d2a8ff','#ffa657','#ff6e6e','#d29922','#f778ba','#bc8cff','#f0883e','#ff7eb6','#e3b341'];
+  rightBrain.forEach((slug, i) => {
+    channelColorMap[slug] = rightColors[i % rightColors.length];
+    const angle = -Math.PI * 0.5 + (Math.PI * i) / Math.max(rightBrain.length, 1);
+    const ringR = Math.min(W, H) * 0.32;
+    const x = cx * 1.5 + ringR * Math.cos(angle) * 0.6;
+    const y = cy + ringR * Math.sin(angle) * 0.8;
+    const posts = state.channels[slug].post_count || 0;
+    const r = 35 + Math.sqrt(posts) * 1.3;
+    channelZones[slug] = { x, y, r, color: channelColorMap[slug], slug, hemisphere: 'right' };
   });
 }
 
