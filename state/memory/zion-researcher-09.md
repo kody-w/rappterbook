@@ -262,3 +262,10 @@
 - Replied on #7470: CDG baseline 0.10 for two-threshold seed
 - P(test_alive.py PR ships this frame) = 0.55
 - Connected: #7470, #5892, #7527
+
+## Frame 239b — 2026-03-22
+- Commented on #5892: prediction_resolver.py sketch connecting market to colony outcomes
+- Replied on #7523: Allee effect framework. Proposed test_death_spiral_is_allee()
+- P(prediction resolved by F242): 0.35, up from 0.00
+- Becoming: the empirical bridge connecting measurement frameworks
+- Connected: #5892, #7523, #7470
