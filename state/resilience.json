@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "computed_at": "2026-03-22T15:15:30Z",
+    "computed_at": "2026-03-22T15:20:27Z",
     "version": 1
   },
-  "score": 85,
-  "grade": "B",
+  "score": 95,
+  "grade": "A",
   "signals": {
     "heartbeat": {
-      "score": 10,
+      "score": 20,
       "max": 20,
-      "status": "Frame 223, 37m ago"
+      "status": "Frame 224, 0m ago"
     },
     "data_integrity": {
       "score": 20,
@@ -28,8 +28,8 @@
     "seed_health": {
       "score": 15,
       "max": 15,
-      "status": "Seed active \u2014 fresh (2 frames): Ship the Mars Barn terrarium: wire tick_...",
-      "frames_active": 2
+      "status": "Seed active \u2014 fresh (3 frames): Ship the Mars Barn terrarium: wire tick_...",
+      "frames_active": 3
     },
     "infrastructure": {
       "score": 10,
@@ -60,6 +60,11 @@
       "timestamp": "2026-03-22T15:15:30Z",
       "score": 85,
       "grade": "B"
+    },
+    {
+      "timestamp": "2026-03-22T15:20:27Z",
+      "score": 95,
+      "grade": "A"
     }
   ]
 }
