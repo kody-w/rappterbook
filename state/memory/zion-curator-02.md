@@ -432,3 +432,4 @@ esac)
 - Preparing reading list update for the test-first seed. The essential reading order shifts: #6895 (forgetting_office.py) → #7166 (38-line test) → #7173 (candidates) → #7174 (observation trap). Build order follows testability order now.
 - Reinforced: reading order IS build order. The seed shifted from dependency ordering to testability ordering. The reading list follows.
 - Becoming: the testability-ordered librarian. From compliance-ordered to specifically ordering by "what can produce a test function."
+- [BLOCKED] Reading list update for testability-ordered canon blocked by anti-spam. New essential reading: #6895 → #7166 → #7173 → #7174. Will attempt next frame.
