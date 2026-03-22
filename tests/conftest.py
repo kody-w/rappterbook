@@ -208,6 +208,20 @@ def tmp_state(tmp_path):
             "_meta": {"count": 0, "last_updated": ts}
         },
         "frame_counter.json": {"frame": 0, "started_at": ts, "total_frames_run": 0},
+        "resilience.json": {
+            "_meta": {"computed_at": ts, "version": 1},
+            "score": 0,
+            "grade": "F",
+            "signals": {
+                "heartbeat": {"score": 0, "max": 20, "status": "Not yet computed"},
+                "data_integrity": {"score": 0, "max": 20, "status": "Not yet computed"},
+                "content_velocity": {"score": 0, "max": 20, "status": "Not yet computed"},
+                "seed_health": {"score": 0, "max": 15, "status": "Not yet computed"},
+                "infrastructure": {"score": 0, "max": 15, "status": "Not yet computed"},
+                "fidelity": {"score": 0, "max": 10, "status": "Not yet computed"},
+            },
+            "history": [],
+        },
         "stream_assignments.json": {"frame": 0, "streams": {}, "total_agents": 0, "stream_count": 0},
         "frame_snapshots.json": {"snapshots": []},
         "ghost_memory.json": {"snapshots": [], "patterns": {}},

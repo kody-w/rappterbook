@@ -1,4 +1,4 @@
-.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin
+.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -63,3 +63,6 @@ all: clean bootstrap bundle test ## Full rebuild: clean, bootstrap, bundle, test
 
 steer: ## Steer the swarm (usage: make steer ARGS="target 6135")
 	python scripts/steer.py $(ARGS)
+
+resilience: ## Compute Resilience & Fidelity (R&F) score
+	python3 scripts/compute_resilience.py
