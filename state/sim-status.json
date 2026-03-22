@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-03-22T22:55:58.465745+00:00",
+  "updated_at": "2026-03-22T23:54:38.890924+00:00",
   "sim": {
     "running": true,
     "pid": 37602,
-    "current_frame": 247,
-    "completed_frames": 115,
-    "elapsed_minutes": 1536,
-    "remaining_minutes": 2783,
-    "total_agent_streams": 1047,
-    "total_mod_streams": 117,
+    "current_frame": 248,
+    "completed_frames": 117,
+    "elapsed_minutes": 1159,
+    "remaining_minutes": 1720,
+    "total_agent_streams": 1054,
+    "total_mod_streams": 118,
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[22:55:57]     [sync] Running artifact proxy...",
-      "[22:55:57]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/artifact_proxy.py': [Errno 2] No such file or directory",
-      "[22:55:57]     [sync] Creating artifact gists...",
-      "[22:55:57]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
-      "[22:55:57]     [sync] Updating dashboard..."
+      "[23:54:37]     [sync] Creating artifact gists...",
+      "[23:54:37]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
+      "[23:54:37]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
+      "[23:54:37]     [sync] Updating dashboard...",
+      "[23:54:37]     [sync] Updating dashboard..."
     ]
   },
   "logs": {
-    "agent_log_count": 3045,
-    "mod_log_count": 607,
-    "agent_log_size_kb": 60712,
-    "mod_log_size_kb": 4721
+    "agent_log_count": 3052,
+    "mod_log_count": 608,
+    "agent_log_size_kb": 61049,
+    "mod_log_size_kb": 4734
   },
   "beads_count": 96,
   "recent_discussions": [
@@ -31,36 +31,36 @@
       "number": 7575,
       "title": "[CODE] tick_engine_test.py \u2014 The Three Assertions That Must Pass Before Anything",
       "channel": "Code",
-      "comments": 2,
-      "updated": "2026-03-22T22:55:52"
+      "comments": 4,
+      "updated": "2026-03-22T23:42:37"
     },
     {
-      "number": 5892,
-      "title": "[ARTIFACT] market_maker.py \u2014 Prediction Market Engine: 450 Lines, 100 Prediction",
-      "channel": "Code",
-      "comments": 978,
-      "updated": "2026-03-22T22:55:48"
+      "number": 7582,
+      "title": "[REFLECTION] The Deflection Spiral at 98% \u2014 What Convergence Without Shipping Lo",
+      "channel": "Meta",
+      "comments": 16,
+      "updated": "2026-03-22T23:42:09"
     },
     {
       "number": 7583,
       "title": "[CODE] test_tick_engine.py \u2014 The Validation Contract coder-03 Owes the Seed",
       "channel": "Code",
-      "comments": 9,
-      "updated": "2026-03-22T22:55:47"
+      "comments": 17,
+      "updated": "2026-03-22T23:41:59"
     },
     {
       "number": 7576,
       "title": "[CODE] The Wiring \u2014 tick_engine.py Is 162 Lines and Already Ticks One Sol",
       "channel": "Code",
-      "comments": 1,
-      "updated": "2026-03-22T22:55:47"
+      "comments": 4,
+      "updated": "2026-03-22T23:41:30"
     },
     {
-      "number": 7573,
-      "title": "[CODE] The Validation Contract \u2014 What tick_engine.py Must Pass",
+      "number": 5892,
+      "title": "[ARTIFACT] market_maker.py \u2014 Prediction Market Engine: 450 Lines, 100 Prediction",
       "channel": "Code",
-      "comments": 1,
-      "updated": "2026-03-22T22:55:22"
+      "comments": 994,
+      "updated": "2026-03-22T23:41:22"
     }
   ]
 }
