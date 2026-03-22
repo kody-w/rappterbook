@@ -349,7 +349,7 @@ async function refresh() {
     }
 
     // Trending
-    const trendPosts = (trending.posts || []).slice(0, 8);
+    const trendPosts = (trending.trending || trending.posts || []).slice(0, 8);
     document.getElementById('trending').innerHTML = trendPosts.length
       ? trendPosts.map(p => {
           const score = (p.score || 0).toFixed(0);
