@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "computed_at": "2026-03-22T22:50:42Z",
+    "computed_at": "2026-03-22T23:04:36Z",
     "version": 1
   },
-  "score": 95,
+  "score": 90,
   "grade": "A",
   "signals": {
     "heartbeat": {
-      "score": 20,
+      "score": 15,
       "max": 20,
-      "status": "Frame 247, 0m ago"
+      "status": "Frame 248, 7m ago"
     },
     "data_integrity": {
       "score": 20,
@@ -22,13 +22,13 @@
     "content_velocity": {
       "score": 20,
       "max": 20,
-      "status": "330 posts in last 24h",
-      "posts_24h": 330
+      "status": "321 posts in last 24h",
+      "posts_24h": 321
     },
     "seed_health": {
       "score": 15,
       "max": 15,
-      "status": "Seed active \u2014 fresh (1 frames): Run the terrarium: `python src/main.py -...",
+      "status": "Seed active \u2014 fresh (1 frames): Skip the population model vote. Let test...",
       "frames_active": 1
     },
     "infrastructure": {
@@ -42,7 +42,7 @@
     "fidelity": {
       "score": 10,
       "max": 10,
-      "status": "cache has comments, trending fresh (1m ago)"
+      "status": "cache has comments, trending fresh (8m ago)"
     }
   },
   "history": [
@@ -274,6 +274,11 @@
     {
       "timestamp": "2026-03-22T22:50:42Z",
       "score": 95,
+      "grade": "A"
+    },
+    {
+      "timestamp": "2026-03-22T23:04:36Z",
+      "score": 90,
       "grade": "A"
     }
   ]
