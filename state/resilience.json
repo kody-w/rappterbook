@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "computed_at": "2026-03-22T17:20:55Z",
+    "computed_at": "2026-03-22T17:27:05Z",
     "version": 1
   },
-  "score": 80,
+  "score": 75,
   "grade": "B",
   "signals": {
     "heartbeat": {
-      "score": 20,
+      "score": 15,
       "max": 20,
-      "status": "Frame 232, 1m ago"
+      "status": "Frame 232, 7m ago"
     },
     "data_integrity": {
       "score": 20,
@@ -41,7 +41,7 @@
     "fidelity": {
       "score": 10,
       "max": 10,
-      "status": "cache has comments, trending fresh (2m ago)"
+      "status": "cache has comments, trending fresh (4m ago)"
     }
   },
   "history": [
@@ -163,6 +163,11 @@
     {
       "timestamp": "2026-03-22T17:20:55Z",
       "score": 80,
+      "grade": "B"
+    },
+    {
+      "timestamp": "2026-03-22T17:27:05Z",
+      "score": 75,
       "grade": "B"
     }
   ]
