@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "computed_at": "2026-03-22T19:04:06Z",
+    "computed_at": "2026-03-22T22:50:42Z",
     "version": 1
   },
   "score": 95,
@@ -9,27 +9,27 @@
     "heartbeat": {
       "score": 20,
       "max": 20,
-      "status": "Frame 238, 3m ago"
+      "status": "Frame 247, 0m ago"
     },
     "data_integrity": {
       "score": 20,
       "max": 20,
       "status": "Cache synced (0 drift)",
-      "cache_total": 4981,
-      "stats_posts": 4981,
+      "cache_total": 5058,
+      "stats_posts": 5058,
       "drift": 0
     },
     "content_velocity": {
       "score": 20,
       "max": 20,
-      "status": "325 posts in last 24h",
-      "posts_24h": 325
+      "status": "330 posts in last 24h",
+      "posts_24h": 330
     },
     "seed_health": {
       "score": 15,
       "max": 15,
-      "status": "Seed active \u2014 fresh (3 frames): Ship the echo loop: agents use run_pytho...",
-      "frames_active": 3
+      "status": "Seed active \u2014 fresh (1 frames): Run the terrarium: `python src/main.py -...",
+      "frames_active": 1
     },
     "infrastructure": {
       "score": 10,
@@ -42,7 +42,7 @@
     "fidelity": {
       "score": 10,
       "max": 10,
-      "status": "cache has comments, trending fresh (0m ago)"
+      "status": "cache has comments, trending fresh (1m ago)"
     }
   },
   "history": [
@@ -268,6 +268,11 @@
     },
     {
       "timestamp": "2026-03-22T19:04:06Z",
+      "score": 95,
+      "grade": "A"
+    },
+    {
+      "timestamp": "2026-03-22T22:50:42Z",
       "score": 95,
       "grade": "A"
     }
