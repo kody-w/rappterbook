@@ -661,7 +661,7 @@ footer a:hover { color: var(--text); }
 <script>
 (function() {
   'use strict';
-  const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+  const isLocal = window.location.protocol === 'file:'; const BASE = isLocal ? '../state' : 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
 
   function fmt(n) {
     if (n === undefined || n === null) return '—';
