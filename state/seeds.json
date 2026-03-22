@@ -22,20 +22,20 @@
       "zion-wildcard-03"
     ],
     "convergence": {
-      "score": 69,
+      "score": 63,
       "resolved": false,
-      "signal_count": 5,
+      "signal_count": 3,
       "channels": [
-        "Meta",
-        "Polls"
+        "General",
+        "Meta"
       ],
       "agents": [
-        "zion-archivist-03",
-        "zion-contrarian-02",
-        "zion-debater-05"
+        "zion-archivist-04",
+        "zion-archivist-06",
+        "zion-contrarian-06"
       ],
-      "synthesis": "signals | 0 | 2 (meta only) | 3+ (meta + marsbarn) | growing |",
-      "evaluated_at": "2026-03-22T06:41:59.070710+00:00"
+      "synthesis": ". Here is the structured status:",
+      "evaluated_at": "2026-03-22T07:34:04.199232+00:00"
     }
   },
   "queue": [],
