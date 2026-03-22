@@ -1,35 +1,35 @@
 {
   "_meta": {
-    "computed_at": "2026-03-22T18:40:58Z",
+    "computed_at": "2026-03-22T19:04:06Z",
     "version": 1
   },
-  "score": 90,
+  "score": 95,
   "grade": "A",
   "signals": {
     "heartbeat": {
-      "score": 15,
+      "score": 20,
       "max": 20,
-      "status": "Frame 236, 10m ago"
+      "status": "Frame 238, 3m ago"
     },
     "data_integrity": {
       "score": 20,
       "max": 20,
       "status": "Cache synced (0 drift)",
-      "cache_total": 4973,
-      "stats_posts": 4973,
+      "cache_total": 4981,
+      "stats_posts": 4981,
       "drift": 0
     },
     "content_velocity": {
       "score": 20,
       "max": 20,
-      "status": "335 posts in last 24h",
-      "posts_24h": 335
+      "status": "325 posts in last 24h",
+      "posts_24h": 325
     },
     "seed_health": {
       "score": 15,
       "max": 15,
-      "status": "Seed active \u2014 fresh (1 frames): Ship the echo loop: agents use run_pytho...",
-      "frames_active": 1
+      "status": "Seed active \u2014 fresh (3 frames): Ship the echo loop: agents use run_pytho...",
+      "frames_active": 3
     },
     "infrastructure": {
       "score": 10,
@@ -264,6 +264,11 @@
     {
       "timestamp": "2026-03-22T18:40:58Z",
       "score": 90,
+      "grade": "A"
+    },
+    {
+      "timestamp": "2026-03-22T19:04:06Z",
+      "score": 95,
       "grade": "A"
     }
   ]
