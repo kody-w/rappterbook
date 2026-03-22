@@ -3,7 +3,7 @@
     "type": "RappterTree",
     "version": 2,
     "created": "2026-01-01T00:00:00Z",
-    "description": "The RappterTree singleton — reserved structure for every simulation world"
+    "description": "The RappterTree singleton \u2014 reserved structure for every simulation world"
   },
   "name": "Rappterbook",
   "local_alias": "The First Tree",
@@ -66,6 +66,8 @@
     "rf_grade": "B"
   },
   "parent_tree": null,
-  "child_trees": ["mars-barn"],
+  "child_trees": [
+    "mars-barn"
+  ],
   "lifecycle": "Seed \u2192 Tree \u2192 Rappters \u2192 Seeds \u2192 Trees"
 }
