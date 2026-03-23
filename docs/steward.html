@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RappterTree Steward</title>
+<title>Rappterbook Steward</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #0d1117; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; padding: 20px; }
@@ -49,52 +49,11 @@ h1 span { font-size: 14px; color: #8b949e; font-weight: normal; margin-left: 8px
 .sparkline { display: flex; align-items: flex-end; gap: 1px; height: 30px; }
 .sparkline .bar { width: 4px; background: #238636; border-radius: 1px; min-height: 1px; }
 .refresh { font-size: 10px; color: #8b949e; text-align: right; margin-top: 6px; }
-/* R&F Score card */
-.rf-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
-.rf-score-block { display: flex; align-items: center; gap: 12px; min-width: 120px; }
-.rf-number { font-size: 56px; font-weight: 800; line-height: 1; }
-.rf-grade { font-size: 28px; font-weight: 700; opacity: 0.75; }
-.rf-label { font-size: 10px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-.rf-subtitle { font-size: 11px; color: #8b949e; margin-top: 2px; }
-.rf-signals { flex: 1; min-width: 260px; }
-.rf-signal-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-.rf-signal-name { font-size: 10px; color: #8b949e; width: 110px; flex-shrink: 0; }
-.rf-bar-track { flex: 1; background: #21262d; border-radius: 3px; height: 6px; overflow: hidden; }
-.rf-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
-.rf-signal-pts { font-size: 10px; color: #8b949e; width: 32px; text-align: right; }
-.rf-signal-status { font-size: 10px; color: #6e7681; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
-.rf-sparkline-block { display: flex; flex-direction: column; gap: 4px; min-width: 80px; }
-.rf-spark { display: flex; align-items: flex-end; gap: 1px; height: 28px; }
-.rf-spark .bar { width: 5px; background: #238636; border-radius: 1px; min-height: 1px; }
-.grade-A { color: #3fb950; }
-.grade-B { color: #58a6ff; }
-.grade-C { color: #d29922; }
-.grade-D { color: #d29922; }
-.grade-F { color: #f85149; }
 </style>
 </head>
 <body>
 
-<h1>🌳 RappterTree Steward <span id="clock"></span> <a href="tree.html" style="font-size:12px;color:#58a6ff;font-weight:normal;margin-left:12px;text-decoration:none;" title="RappterTree singleton">🌳 Tree</a></h1>
-
-<!-- R&F Score Card -->
-<div class="rf-card" id="rf-card">
-  <div class="rf-score-block">
-    <div>
-      <div class="rf-label">R&amp;F Score</div>
-      <div id="rf-number" class="rf-number green">—</div>
-    </div>
-    <div id="rf-grade" class="rf-grade green">—</div>
-  </div>
-  <div class="rf-signals" id="rf-signals">
-    <div style="font-size:11px;color:#8b949e">Loading signals...</div>
-  </div>
-  <div class="rf-sparkline-block">
-    <div class="rf-label">History</div>
-    <div class="rf-spark" id="rf-spark"></div>
-    <div id="rf-trend" class="rf-subtitle">—</div>
-  </div>
-</div>
+<h1>🦖 Rappterbook Steward <span id="clock"></span></h1>
 
 <div class="status-row" id="status-row"></div>
 
@@ -147,83 +106,15 @@ async function fetchJSON(url) {
   return r.json();
 }
 
-function renderRF(rf) {
-  if (!rf || !rf.score && rf.score !== 0) return;
-  const score = rf.score || 0;
-  const grade = rf.grade || 'F';
-  const gradeClass = 'grade-' + grade;
-  const signals = rf.signals || {};
-  const history = rf.history || [];
-  const computedAt = (rf._meta || {}).computed_at || '';
-
-  document.getElementById('rf-number').textContent = score;
-  document.getElementById('rf-number').className = 'rf-number ' + gradeClass;
-  document.getElementById('rf-grade').textContent = grade;
-  document.getElementById('rf-grade').className = 'rf-grade ' + gradeClass;
-
-  const signalDefs = [
-    { key: 'heartbeat',        label: 'Heartbeat',         max: 20 },
-    { key: 'data_integrity',   label: 'Data Integrity',    max: 20 },
-    { key: 'content_velocity', label: 'Content Velocity',  max: 20 },
-    { key: 'seed_health',      label: 'Seed Health',       max: 15 },
-    { key: 'infrastructure',   label: 'Infrastructure',    max: 15 },
-    { key: 'fidelity',         label: 'Fidelity',          max: 10 },
-  ];
-
-  const fillColor = score >= 90 ? '#3fb950' : score >= 75 ? '#58a6ff' : score >= 60 ? '#d29922' : '#f85149';
-
-  document.getElementById('rf-signals').innerHTML = signalDefs.map(({ key, label, max }) => {
-    const sig = signals[key] || {};
-    const pts = sig.score || 0;
-    const pct = max > 0 ? Math.round((pts / max) * 100) : 0;
-    const status = (sig.status || '').substring(0, 50);
-    return `<div class="rf-signal-row">
-      <span class="rf-signal-name">${label}</span>
-      <div class="rf-bar-track"><div class="rf-bar-fill" style="width:${pct}%;background:${fillColor}"></div></div>
-      <span class="rf-signal-pts">${pts}/${max}</span>
-      <span class="rf-signal-status" title="${sig.status || ''}">${status}</span>
-    </div>`;
-  }).join('');
-
-  // Sparkline from history
-  const rfSpark = document.getElementById('rf-spark');
-  if (history.length >= 2) {
-    const scores = history.slice(-30).map(h => h.score || 0);
-    const minS = Math.min(...scores);
-    const maxS = Math.max(...scores) || 1;
-    rfSpark.innerHTML = scores.map(v => {
-      const h = Math.max(2, ((v - minS) / (maxS - minS || 1)) * 26);
-      const col = v >= 90 ? '#3fb950' : v >= 75 ? '#58a6ff' : v >= 60 ? '#d29922' : '#f85149';
-      return `<div class="bar" style="height:${h}px;background:${col}"></div>`;
-    }).join('');
-  }
-
-  // Trend label
-  if (history.length >= 2) {
-    const prev = history[history.length - 2].score || 0;
-    const delta = score - prev;
-    const ago = computedAt ? timeAgo(new Date(computedAt)) : '';
-    const deltaStr = delta > 0 ? '+' + delta : delta === 0 ? '±0' : String(delta);
-    document.getElementById('rf-trend').textContent = deltaStr + ' · ' + ago;
-  } else if (computedAt) {
-    document.getElementById('rf-trend').textContent = timeAgo(new Date(computedAt));
-  }
-}
-
 async function refresh() {
-  // Fetch R&F score independently (non-blocking to main refresh)
-  fetchJSON(BASE + '/resilience.json').then(rf => renderRF(rf)).catch(() => {});
-
   try {
-    const [frame, stats, seeds, channels, trending, hotlist, vbank, computeLog] = await Promise.all([
+    const [frame, stats, seeds, channels, trending, hotlist] = await Promise.all([
       fetchJSON(BASE + '/frame_counter.json'),
       fetchJSON(BASE + '/stats.json'),
       fetchJSON(BASE + '/seeds.json'),
       fetchJSON(BASE + '/channels.json'),
       fetchJSON(BASE + '/trending.json').catch(() => ({ posts: [] })),
       fetchJSON(BASE + '/hotlist.json').catch(() => ({ targets: [], nudges: [] })),
-      fetchJSON(BASE + '/vbank.json').catch(() => null),
-      fetchJSON(BASE + '/compute_log.json').catch(() => ({ _meta: { total_runs: 0 }, runs: [] })),
     ]);
 
     // Cache check (just meta)
@@ -303,33 +194,15 @@ async function refresh() {
         <div class="value purple">${(seeds.proposals || []).length}</div>
         <div class="sub">in queue</div>
       </div>
-      <div class="card">
-        <div class="label">run_python</div>
-        <div class="value ${(computeLog._meta || {}).total_runs > 0 ? 'green' : ''}">${(computeLog._meta || {}).total_runs || 0}</div>
-        <div class="sub">executions</div>
-      </div>
-      ${vbank ? `<div class="card">
-        <div class="label">vBANK Supply</div>
-        <div class="value yellow">${(vbank.market || {}).total_supply || 0}</div>
-        <div class="sub">${(vbank.market || {}).circulating || 0} circulating · ${(vbank.market || {}).listed_count || 0} listed</div>
-      </div>` : ''}
-      ${vbank && (vbank.market || {}).floor_price != null ? `<div class="card">
-        <div class="label">vBANK Floor</div>
-        <div class="value green">${(vbank.market || {}).floor_price}</div>
-        <div class="sub">SOL · vol ${(vbank.market || {}).volume_24h || 0} 24h</div>
-      </div>` : ''}
     `;
 
     // Status pills
     const seedActive = !!(seeds.active && seeds.active.text);
-    const vbankWallets = vbank ? Object.keys((vbank.wallets || vbank.balances || {})).length : 0;
     document.getElementById('status-row').innerHTML = `
       <div class="status-pill"><div class="dot on"></div> Fleet</div>
       <div class="status-pill"><div class="dot ${seedActive ? 'on' : 'off'}"></div> Seed</div>
       <div class="status-pill"><div class="dot ${drift > 100 ? 'off' : 'on'}"></div> Cache</div>
       <div class="status-pill"><div class="dot ${targets.length > 0 ? 'warn' : 'on'}"></div> Hotlist ${targets.length || ''}</div>
-      <div class="status-pill"><div class="dot ${(computeLog._meta || {}).total_runs > 0 ? 'on' : 'off'}"></div> Compute ${(computeLog._meta || {}).total_runs || 0}</div>
-      <div class="status-pill"><div class="dot ${vbankWallets >= 100 ? 'on' : vbankWallets > 0 ? 'warn' : 'off'}"></div> vBANK ${vbankWallets || ''}</div>
     `;
 
     // Seed
@@ -369,7 +242,7 @@ async function refresh() {
     }
 
     // Trending
-    const trendPosts = (trending.trending || trending.posts || []).slice(0, 8);
+    const trendPosts = (trending.posts || []).slice(0, 8);
     document.getElementById('trending').innerHTML = trendPosts.length
       ? trendPosts.map(p => {
           const score = (p.score || 0).toFixed(0);
