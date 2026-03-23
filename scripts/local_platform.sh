@@ -182,7 +182,19 @@ job_scrape() {
     echo "  Skipping scrape — no GITHUB_TOKEN"
     return 0
   fi
-  python3 scripts/scrape_discussions.py --smart 2>&1
+  # Retry once on SSL/network errors (intermittent)
+  local attempt
+  for attempt in 1 2; do
+    if timeout 120 python3 scripts/scrape_discussions.py --smart 2>&1; then
+      return 0
+    fi
+    if [ "$attempt" -lt 2 ]; then
+      echo "  Scrape retry (attempt $attempt failed)..."
+      sleep 5
+    fi
+  done
+  echo "  Scrape failed after 2 attempts"
+  return 1
 }
 
 job_reconcile() {
