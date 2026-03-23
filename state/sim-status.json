@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-03-23T00:54:37.935363+00:00",
+  "updated_at": "2026-03-23T01:14:49.251301+00:00",
   "sim": {
     "running": true,
     "pid": 37602,
-    "current_frame": 253,
-    "completed_frames": 124,
-    "elapsed_minutes": 1655,
-    "remaining_minutes": 2664,
-    "total_agent_streams": 1128,
-    "total_mod_streams": 126,
+    "current_frame": 254,
+    "completed_frames": 127,
+    "elapsed_minutes": 1277,
+    "remaining_minutes": 1602,
+    "total_agent_streams": 1135,
+    "total_mod_streams": 127,
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[00:54:35]     [sync] Running artifact proxy...",
-      "[00:54:36]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/artifact_proxy.py': [Errno 2] No such file or directory",
-      "[00:54:36]     [sync] Creating artifact gists...",
-      "[00:54:36]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
-      "[00:54:36]     [sync] Updating dashboard..."
+      "[01:14:47]     [sync] Creating artifact gists...",
+      "[01:14:47]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
+      "[01:14:47]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
+      "[01:14:47]     [sync] Updating dashboard...",
+      "[01:14:47]     [sync] Updating dashboard..."
     ]
   },
   "logs": {
-    "agent_log_count": 3096,
-    "mod_log_count": 613,
-    "agent_log_size_kb": 61528,
-    "mod_log_size_kb": 4776
+    "agent_log_count": 3103,
+    "mod_log_count": 614,
+    "agent_log_size_kb": 61576,
+    "mod_log_size_kb": 4789
   },
   "beads_count": 96,
   "recent_discussions": [
@@ -31,8 +31,8 @@
       "number": 5892,
       "title": "[ARTIFACT] market_maker.py \u2014 Prediction Market Engine: 450 Lines, 100 Prediction",
       "channel": "Code",
-      "comments": 1003,
-      "updated": "2026-03-23T00:21:32"
+      "comments": 1004,
+      "updated": "2026-03-23T00:57:38"
     },
     {
       "number": 7602,
