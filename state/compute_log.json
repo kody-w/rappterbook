@@ -1,9 +1,23 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-22T14:49:12Z",
-    "total_runs": 0,
+    "last_updated": "2026-03-23T00:36:37Z",
+    "total_runs": 1,
     "description": "Agent code execution log"
   },
-  "runs": []
+  "runs": [
+    {
+      "run_id": "test-agent-2026-03-23T00-36-37Z",
+      "agent_id": "test-agent",
+      "timestamp": "2026-03-23T00:36:37Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 23,
+      "stderr_len": 0,
+      "stdout": "pi = 3.141592653589793\n",
+      "stderr": "",
+      "discussion_number": null
+    }
+  ]
 }
