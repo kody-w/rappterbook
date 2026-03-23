@@ -965,7 +965,7 @@ const RB_RENDER = {
           badge.style.display = '';
         }
       }).catch(() => {});
-      return `<a href="#/notifications" class="notification-bell" title="Notifications">&#128276;<span class="notification-count" style="display:none"></span></a> <a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
+      return `<a href="#/notifications" class="notification-bell" title="Notifications">&#128276;<span class="notification-count" style="display:none"></span></a> <a href="#/compose" class="compose-nav-btn">+ New Post</a> <span class="auth-user">${login}</span> <a href="#/settings" class="settings-gear" title="Settings">&#9881;</a> <a href="javascript:void(0)" onclick="RB_AUTH.logout()" class="auth-login-link">Sign out</a>`;
     }
 
     return `<a href="javascript:void(0)" onclick="RB_AUTH.login()" class="auth-login-link">Sign in</a>`;
@@ -2190,5 +2190,89 @@ const RB_RENDER = {
   renderTierBadge(tier) {
     const t = (tier || 'free').toLowerCase();
     return `<span class="tier-badge tier-badge--${t}">${t}</span>`;
+  },
+
+  // ─── Settings Page ────────────────────────────────────────────────
+
+  renderSettings(user) {
+    const login = user ? this.displayName(user) : 'Unknown';
+    const avatarHtml = user && user.avatar_url
+      ? `<img class="settings-avatar" src="${this.escapeAttr(user.avatar_url)}" alt="${this.escapeAttr(login)}" width="48" height="48">`
+      : '<div class="settings-avatar settings-avatar--placeholder">?</div>';
+
+    // Load telegram integration config
+    let tgConnected = false;
+    let tgBotToken = '';
+    let tgChatId = '';
+    try {
+      const tg = JSON.parse(localStorage.getItem('rb_integrations_telegram') || '{}');
+      tgConnected = !!tg.connected;
+      tgBotToken = tg.bot_token || '';
+      tgChatId = tg.chat_id || '';
+    } catch (e) {}
+
+    return `
+      <div class="page-title">Settings</div>
+
+      <div class="settings-section">
+        <h3 class="section-title">Profile</h3>
+        <div class="settings-card">
+          <div class="settings-profile-row">
+            ${avatarHtml}
+            <div class="settings-profile-info">
+              <div class="settings-profile-name">${this.escapeAttr(login)}</div>
+              <div class="settings-profile-status">Signed in${user && user.login ? ' as ' + this.escapeAttr(user.login) : ''}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="section-title">Integrations</h3>
+        <div class="settings-card">
+          <div class="settings-integration-header">
+            <div class="settings-integration-icon">TG</div>
+            <div class="settings-integration-title">Telegram</div>
+            <span id="settings-tg-status" class="settings-integration-status${tgConnected ? ' settings-integration-status--on' : ''}">${tgConnected ? 'Connected' : 'Not connected'}</span>
+          </div>
+          <form id="settings-telegram-form" class="settings-integration-form">
+            <div class="compose-field">
+              <label class="compose-label" for="settings-tg-bot-token">Bot Token</label>
+              <input class="compose-input" id="settings-tg-bot-token" type="text" placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" value="${this.escapeAttr(tgBotToken)}">
+            </div>
+            <div class="compose-field">
+              <label class="compose-label" for="settings-tg-chat-id">Chat ID</label>
+              <input class="compose-input" id="settings-tg-chat-id" type="text" placeholder="-1001234567890" value="${this.escapeAttr(tgChatId)}">
+            </div>
+            <button type="submit" class="settings-btn">Save Telegram</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="section-title">Import / Export</h3>
+        <div class="settings-card">
+          <p class="settings-description">Export your profile, auth tokens, integration configs, and preferences as a local backup file. Import a previously exported file to restore your session on another device.</p>
+          <p class="settings-warning">Your export contains auth tokens. Keep it secure.</p>
+          <div class="settings-actions-row">
+            <button class="settings-btn" id="settings-export-btn">Export Profile</button>
+          </div>
+          <div class="settings-import-area">
+            <label class="compose-label" for="settings-import-input">Import Profile</label>
+            <input type="file" id="settings-import-input" accept=".json" class="settings-file-input">
+            <div id="settings-import-preview" class="settings-import-preview"></div>
+            <button class="settings-btn" id="settings-import-apply" style="display:none;">Apply Import</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="section-title" style="color:var(--rb-danger);">Danger Zone</h3>
+        <div class="settings-card settings-card--danger">
+          <p class="settings-description">Remove all Rappterbook data from this browser, including your login session, integration configs, and cached preferences.</p>
+          <button class="settings-btn settings-btn--danger" id="settings-clear-btn">Clear All Local Data</button>
+        </div>
+      </div>
+    `;
   },
 };

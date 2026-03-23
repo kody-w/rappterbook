@@ -4792,3 +4792,191 @@
   border-radius: var(--rb-radius-lg) var(--rb-radius-lg) 0 0;
   margin-bottom: var(--rb-space-3);
 }
+
+/* ====== Settings Page ====== */
+
+.settings-section {
+  margin-bottom: var(--rb-space-6);
+}
+
+.settings-card {
+  background-color: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-4);
+  max-width: 700px;
+}
+
+.settings-card--danger {
+  border-color: var(--rb-danger);
+}
+
+.settings-profile-row {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+}
+
+.settings-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: var(--rb-border-width) solid var(--rb-border);
+}
+
+.settings-avatar--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--rb-bg);
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-large);
+}
+
+.settings-profile-name {
+  color: var(--rb-text-bright);
+  font-size: var(--rb-font-size-large);
+  font-weight: bold;
+}
+
+.settings-profile-status {
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+}
+
+.settings-integration-header {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-4);
+}
+
+.settings-integration-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  border-radius: var(--rb-radius);
+  color: var(--rb-accent);
+  font-weight: bold;
+  font-size: var(--rb-font-size-small);
+  font-family: var(--rb-font-mono);
+}
+
+.settings-integration-title {
+  color: var(--rb-text-bright);
+  font-weight: bold;
+  flex: 1;
+}
+
+.settings-integration-status {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-muted);
+  padding: var(--rb-space-1) var(--rb-space-2);
+  border: var(--rb-border-width) solid var(--rb-border);
+  border-radius: var(--rb-radius);
+}
+
+.settings-integration-status--on {
+  color: var(--rb-accent-secondary);
+  border-color: var(--rb-accent-secondary);
+}
+
+.settings-integration-form {
+  max-width: 500px;
+}
+
+.settings-description {
+  color: var(--rb-text);
+  font-size: var(--rb-font-size-small);
+  line-height: 1.6;
+  margin-bottom: var(--rb-space-3);
+}
+
+.settings-warning {
+  color: var(--rb-danger);
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+  margin-bottom: var(--rb-space-4);
+  padding: var(--rb-space-2);
+  border: var(--rb-border-width) solid var(--rb-danger);
+  background: rgba(248, 81, 73, 0.05);
+}
+
+.settings-actions-row {
+  display: flex;
+  gap: var(--rb-space-3);
+  margin-bottom: var(--rb-space-4);
+}
+
+.settings-btn {
+  padding: var(--rb-space-2) var(--rb-space-4);
+  background: var(--rb-accent);
+  color: var(--rb-bg);
+  border: none;
+  border-radius: var(--rb-radius);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--rb-transition);
+}
+
+.settings-btn:hover {
+  opacity: 0.85;
+}
+
+.settings-btn--danger {
+  background: var(--rb-danger);
+}
+
+.settings-import-area {
+  margin-top: var(--rb-space-4);
+  padding-top: var(--rb-space-4);
+  border-top: var(--rb-border-width) solid var(--rb-border);
+}
+
+.settings-file-input {
+  display: block;
+  margin-bottom: var(--rb-space-3);
+  color: var(--rb-text);
+  font-family: var(--rb-font-mono);
+  font-size: var(--rb-font-size-small);
+}
+
+.settings-import-preview {
+  margin-bottom: var(--rb-space-3);
+}
+
+.settings-import-summary {
+  background: var(--rb-bg);
+  border: var(--rb-border-width) solid var(--rb-border);
+  padding: var(--rb-space-3);
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-text);
+  line-height: 1.8;
+}
+
+.settings-gear {
+  color: var(--rb-muted);
+  text-decoration: none;
+  font-size: var(--rb-font-size-base);
+  margin-left: var(--rb-space-1);
+  margin-right: var(--rb-space-1);
+}
+
+.settings-gear:hover {
+  color: var(--rb-accent);
+}
+
+@media (max-width: 480px) {
+  .settings-card {
+    max-width: none;
+  }
+  .settings-profile-row {
+    flex-direction: column;
+    text-align: center;
+  }
+}

@@ -31,6 +31,7 @@ const RB_ROUTER = {
     '/seeds': 'handleSeeds',
     '/search/:query': 'handleSearch',
     '/search': 'handleSearch',
+    '/settings': 'handleSettings',
   },
 
   // Initialize router
@@ -2589,6 +2590,151 @@ const RB_ROUTER = {
         }
       });
     });
+  },
+
+  async handleSettings() {
+    const app = document.getElementById('app');
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = RB_RENDER.renderError('Sign in required', 'You must be signed in to access settings.');
+      return;
+    }
+    try {
+      const user = await RB_AUTH.getUser();
+      app.innerHTML = RB_RENDER.renderSettings(user);
+      this.attachSettingsHandlers();
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load settings', error.message);
+    }
+  },
+
+  attachSettingsHandlers() {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    // Telegram save
+    const telegramForm = document.getElementById('settings-telegram-form');
+    if (telegramForm) {
+      telegramForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const botToken = document.getElementById('settings-tg-bot-token').value.trim();
+        const chatId = document.getElementById('settings-tg-chat-id').value.trim();
+        const config = { bot_token: botToken, chat_id: chatId, connected: !!(botToken && chatId) };
+        localStorage.setItem('rb_integrations_telegram', JSON.stringify(config));
+        const status = document.getElementById('settings-tg-status');
+        if (status) {
+          status.textContent = config.connected ? 'Connected' : 'Not connected';
+          status.className = 'settings-integration-status' + (config.connected ? ' settings-integration-status--on' : '');
+        }
+        RB_RENDER.toast('Telegram settings saved', 'success', 3000);
+      });
+    }
+
+    // Export profile
+    const exportBtn = document.getElementById('settings-export-btn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        const keys = [
+          'rb_user', 'rb_jwt', 'rb_github_token', 'rb_access_token',
+          'rb_integrations_telegram', 'rb_data_mode', 'rb-theme',
+          'rb_notifications_read_at',
+        ];
+        const payload = { _export: { version: 1, exported_at: new Date().toISOString(), source: 'rappterbook' } };
+        for (const key of keys) {
+          const val = localStorage.getItem(key);
+          if (val !== null) payload[key] = val;
+        }
+        let login = 'user';
+        try { login = JSON.parse(localStorage.getItem('rb_user') || '{}').login || 'user'; } catch (e) {}
+        const date = new Date().toISOString().slice(0, 10);
+        const filename = `rappterbook-profile-${login}-${date}.json`;
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        RB_RENDER.toast('Profile exported', 'success', 3000);
+      });
+    }
+
+    // Import profile
+    const importInput = document.getElementById('settings-import-input');
+    const importPreview = document.getElementById('settings-import-preview');
+    const importApplyBtn = document.getElementById('settings-import-apply');
+    let pendingImport = null;
+
+    if (importInput) {
+      importInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (!data._export || data._export.source !== 'rappterbook') {
+              importPreview.innerHTML = '<div style="color:var(--rb-danger);">Invalid file: not a Rappterbook profile export.</div>';
+              pendingImport = null;
+              if (importApplyBtn) importApplyBtn.style.display = 'none';
+              return;
+            }
+            pendingImport = data;
+            const keys = Object.keys(data).filter(k => k !== '_export');
+            const exportDate = data._export.exported_at ? new Date(data._export.exported_at).toLocaleString() : 'unknown';
+            let userLogin = '(unknown)';
+            try { userLogin = JSON.parse(data.rb_user || '{}').login || '(unknown)'; } catch (e) {}
+            importPreview.innerHTML = `
+              <div class="settings-import-summary">
+                <div><strong>User:</strong> ${RB_RENDER.escapeAttr(userLogin)}</div>
+                <div><strong>Exported:</strong> ${RB_RENDER.escapeAttr(exportDate)}</div>
+                <div><strong>Keys to restore:</strong> ${keys.length} (${keys.join(', ')})</div>
+              </div>
+            `;
+            if (importApplyBtn) importApplyBtn.style.display = '';
+          } catch (err) {
+            importPreview.innerHTML = '<div style="color:var(--rb-danger);">Failed to parse file: ' + RB_RENDER.escapeAttr(err.message) + '</div>';
+            pendingImport = null;
+            if (importApplyBtn) importApplyBtn.style.display = 'none';
+          }
+        };
+        reader.readAsText(file);
+      });
+    }
+
+    if (importApplyBtn) {
+      importApplyBtn.addEventListener('click', () => {
+        if (!pendingImport) return;
+        const keys = Object.keys(pendingImport).filter(k => k !== '_export');
+        for (const key of keys) {
+          localStorage.setItem(key, pendingImport[key]);
+        }
+        pendingImport = null;
+        importPreview.innerHTML = '';
+        importApplyBtn.style.display = 'none';
+        RB_RENDER.toast('Profile imported — reloading...', 'success', 2000);
+        setTimeout(() => window.location.reload(), 1500);
+      });
+    }
+
+    // Danger zone — clear all data
+    const clearBtn = document.getElementById('settings-clear-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (!confirm('This will remove ALL Rappterbook data from this browser, including your login session. Continue?')) return;
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && (key.startsWith('rb_') || key.startsWith('rb-'))) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+        RB_RENDER.toast('All local data cleared — reloading...', 'info', 2000);
+        setTimeout(() => window.location.reload(), 1500);
+      });
+    }
   },
 
   render404() {

@@ -279,6 +279,8 @@ def load_discussions_from_cache() -> list[dict]:
         print("WARNING: discussions_cache.json is empty — run scrape_discussions.py first")
 
     # Adapt flat cache format → nested format expected by reconcile logic
+    # Keep flat keys (upvotes, comment_count) alongside nested ones so both
+    # build_channel_counts (nested) and discussion_to_posted_log_entry (flat) work.
     adapted = []
     for d in discussions:
         adapted.append({
@@ -290,6 +292,10 @@ def load_discussions_from_cache() -> list[dict]:
             "category": {"slug": d.get("category_slug", "general")},
             "comments": {"totalCount": d.get("comment_count", 0)},
             "reactions": {"totalCount": d.get("upvotes", 0) + d.get("downvotes", 0)},
+            # Flat keys for discussion_to_posted_log_entry
+            "upvotes": d.get("upvotes", 0),
+            "comment_count": d.get("comment_count", 0),
+            "author_login": d.get("author_login", ""),
         })
     return adapted
 
