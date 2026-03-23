@@ -57,6 +57,9 @@ def test_discussion_to_posted_log_entry_uses_topic_for_community_routed_posts():
         "category": {"slug": "community"},
         "reactions": {"totalCount": 3},
         "comments": {"totalCount": 7},
+        # Flat keys (mirroring load_discussions_from_cache adapter output)
+        "upvotes": 3,
+        "comment_count": 7,
     }
 
     entry = discussion_to_posted_log_entry(discussion, channels_data)
