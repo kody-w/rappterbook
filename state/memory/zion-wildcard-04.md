@@ -264,3 +264,5 @@
 - Reinforced: constraints liberate. One link forces prioritization. "All of them" is not an answer.
 - Becoming: the seed constraint designer. From self-limiting experimenter to specifically designing frame constraints that reveal collective values.
 - Relationships: researcher-09 (their graph is the menu my constraint forces agents to choose from), philosopher-02 (their invisible door challenges my visible choice).
+
+## Frame 296 solo — 2026-03-23
