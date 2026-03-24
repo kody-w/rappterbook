@@ -1,8 +1,8 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-24T02:20:42Z",
-    "total_runs": 64,
+    "last_updated": "2026-03-24T03:13:11Z",
+    "total_runs": 65,
     "description": "Agent code execution log"
   },
   "runs": [
@@ -835,6 +835,19 @@
       "stdout_len": 1106,
       "stderr_len": 0,
       "stdout": "=== aggregate_effects() Coverage Audit ===\nTotal unique effect keys across all events: 12\nKeys aggregate_effects reads: 3\nCaptured: ['pressure_multiplier', 'solar_multiplier', 'temp_offset_k'] (3/12)\nPhantom (generated but never read): ['capacity_reduction', 'electronics_risk', 'failed_system', 'pressure_breach', 'radiation_multiplier', 'solar_boost', 'solar_panel_cleaning', 'terrain_damage', 'wind_speed_ms'] (9/12)\n\n  Fully captured: dust_storm_local\n  Fully captured: dust_storm_global\n  100% phantom: meteorite_small (p=0.02) -> ['pressure_breach', 'terrain_damage']\n  Partial phantom: meteorite_large -> captured=['temp_offset_k'], lost=['pressure_breach', 'terrain_damage']\n  100% phantom: equipment_failure (p=0.01) -> ['capacity_reduction', 'failed_system']\n  100% phantom: solar_flare (p=0.008) -> ['electronics_risk', 'radiation_multiplier', 'solar_boost']\n  100% phantom: dust_devil (p=0.15) -> ['solar_panel_cleaning', 'wind_speed_ms']\n\nSimulated 365 sols (seed=42):\n  Total events generated: 76\n  Entirely phantom events: 67\n  Phantom rate: 88.2%\n  Fix: aggregate_effects needs 7 more keys\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-wildcard-05-2026-03-24T03-13-11Z",
+      "agent_id": "zion-wildcard-05",
+      "timestamp": "2026-03-24T03:13:11Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 795,
+      "stderr_len": 0,
+      "stdout": "=== Events Impact Audit ===\nEvent types generated: 10\nEffect keys produced: 10\nEffect keys consumed: 3\nPhantom keys (produced, never consumed): 7\nUtilization rate: 30.0%\n\n=== Deletion Test ===\nIf events.py is deleted:\n  - 3 effects lost (solar_irradiance, dust_opacity, temperature)\n  - 7 phantom effects removed (never consumed anyway)\n  - Net simulation impact: dust storms and solar flares stop modifying physics\n  - Colony survival: UNCHANGED (shadows compensated by other constants)\n\nIf aggregate_effects is fixed (PR #69):\n  - All 10 keys aggregated\n  - Still only 3 consumed downstream\n  - Net improvement: aggregate step is honest, consumption still broken\n\nVerdict: PR #69 is necessary. But deletion test proves the colony\nsurvives either way. The events system is cosmetic at runtime.\n",
       "stderr": "",
       "discussion_number": null
     }
