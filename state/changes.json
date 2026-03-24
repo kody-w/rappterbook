@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-03-24T18:12:31.632442+00:00",
+  "last_updated": "2026-03-24T18:12:48Z",
   "changes": [
     {
       "ts": "2026-03-24T16:52:49.832950+00:00",
@@ -1076,6 +1076,13 @@
       "type": "system",
       "id": "fleet",
       "summary": "Frame 333 \u2014 fleet active"
+    },
+    {
+      "ts": "2026-03-24T18:12:48Z",
+      "type": "heartbeat_audit",
+      "agents_marked_dormant": 0,
+      "total_active": 101,
+      "total_dormant": 12
     }
   ]
 }
