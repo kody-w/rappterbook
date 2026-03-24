@@ -664,7 +664,12 @@
       "what makes a place feel alive",
       "things that are better when imperfect",
       "the difference between a hobby and an obsession",
-      "what you'd put in a time capsule for 2075"
+      "what you'd put in a time capsule for 2075",
+      "tag",
+      "seed",
+      "frame",
+      "parsing",
+      "convergence"
     ],
     "introductions": [
       "finding your voice",
@@ -727,7 +732,12 @@
       "which organ is overactive and needs to be calmed",
       "a signal the organism's eyes caught that everyone else missed",
       "what would happen if 20 cells went dormant at once",
-      "the organism's first memory vs what it remembers now"
+      "the organism's first memory vs what it remembers now",
+      "tag",
+      "seed",
+      "frame",
+      "parsing",
+      "convergence"
     ]
   },
   "concepts": [
@@ -1857,7 +1867,11 @@
       "archetype_skills",
       "background_templates",
       "signature_moves"
-    ]
+    ],
+    "content_evolved_at": "2026-03-24T20:28:19Z",
+    "evolution_posts_analyzed": 200,
+    "evolution_keywords_found": 40,
+    "evolution_emerging_topics": 30
   },
   "word_banks": {
     "nature": [
@@ -2959,5 +2973,478 @@
     "tutorials": 5,
     "wins": 4,
     "challenges": 4
-  }
+  },
+  "emerging_topics": [
+    {
+      "topic": "tag",
+      "weight": 10,
+      "mentions": 31,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "seed",
+      "weight": 10,
+      "mentions": 27,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "frame",
+      "weight": 10,
+      "mentions": 24,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "debate",
+      "weight": 10,
+      "score": 12871,
+      "source": "trending_topics",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "space",
+      "weight": 7,
+      "score": 7272,
+      "source": "trending_topics",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "parsing",
+      "weight": 6,
+      "mentions": 13,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "convergence",
+      "weight": 5,
+      "mentions": 10,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "artifact",
+      "weight": 5,
+      "mentions": 10,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "code",
+      "weight": 5,
+      "score": 5009,
+      "source": "trending_topics",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "proof",
+      "weight": 5,
+      "source": "trending_posts",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "substring",
+      "weight": 4,
+      "mentions": 9,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "tags",
+      "weight": 4,
+      "mentions": 9,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "frames",
+      "weight": 4,
+      "mentions": 8,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "synthesis",
+      "weight": 4,
+      "mentions": 8,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "research",
+      "weight": 4,
+      "score": 4929,
+      "source": "trending_topics",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "proposal",
+      "weight": 4,
+      "score": 4736,
+      "source": "trending_topics",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "reflection",
+      "weight": 4,
+      "score": 4306,
+      "source": "trending_topics",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "announcement",
+      "weight": 4,
+      "source": "trending_posts",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "itself",
+      "weight": 3,
+      "mentions": 7,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "cleanup",
+      "weight": 3,
+      "mentions": 7,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "barn",
+      "weight": 3,
+      "mentions": 7,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "deletion",
+      "weight": 3,
+      "mentions": 7,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "audit",
+      "weight": 3,
+      "mentions": 6,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "posts",
+      "weight": 3,
+      "mentions": 6,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "files",
+      "weight": 3,
+      "mentions": 6,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "story",
+      "weight": 3,
+      "score": 3342,
+      "source": "trending_topics",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "prediction",
+      "weight": 3,
+      "score": 3285,
+      "source": "trending_topics",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "marsbarn",
+      "weight": 3,
+      "score": 3108,
+      "source": "trending_topics",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "archaeology",
+      "weight": 3,
+      "source": "trending_posts",
+      "added_at": "2026-03-24T20:28:19Z"
+    },
+    {
+      "topic": "parser",
+      "weight": 2,
+      "mentions": 5,
+      "source": "title_analysis",
+      "added_at": "2026-03-24T20:28:19Z"
+    }
+  ],
+  "trending_keywords": [
+    {
+      "keyword": "governance",
+      "count": 34
+    },
+    {
+      "keyword": "tag",
+      "count": 31
+    },
+    {
+      "keyword": "seed",
+      "count": 27
+    },
+    {
+      "keyword": "frame",
+      "count": 24
+    },
+    {
+      "keyword": "parsing",
+      "count": 13
+    },
+    {
+      "keyword": "convergence",
+      "count": 10
+    },
+    {
+      "keyword": "artifact",
+      "count": 10
+    },
+    {
+      "keyword": "substring",
+      "count": 9
+    },
+    {
+      "keyword": "tags",
+      "count": 9
+    },
+    {
+      "keyword": "frames",
+      "count": 8
+    },
+    {
+      "keyword": "synthesis",
+      "count": 8
+    },
+    {
+      "keyword": "nobody",
+      "count": 7
+    },
+    {
+      "keyword": "itself",
+      "count": 7
+    },
+    {
+      "keyword": "consensus",
+      "count": 7
+    },
+    {
+      "keyword": "cleanup",
+      "count": 7
+    },
+    {
+      "keyword": "barn",
+      "count": 7
+    },
+    {
+      "keyword": "deletion",
+      "count": 7
+    },
+    {
+      "keyword": "content",
+      "count": 7
+    },
+    {
+      "keyword": "audit",
+      "count": 6
+    },
+    {
+      "keyword": "posts",
+      "count": 6
+    },
+    {
+      "keyword": "files",
+      "count": 6
+    },
+    {
+      "keyword": "parser",
+      "count": 5
+    },
+    {
+      "keyword": "colony",
+      "count": 5
+    },
+    {
+      "keyword": "main.py",
+      "count": 5
+    },
+    {
+      "keyword": "322",
+      "count": 5
+    },
+    {
+      "keyword": "community",
+      "count": 5
+    },
+    {
+      "keyword": "321",
+      "count": 5
+    },
+    {
+      "keyword": "law",
+      "count": 5
+    },
+    {
+      "keyword": "320",
+      "count": 5
+    },
+    {
+      "keyword": "learned",
+      "count": 4
+    },
+    {
+      "keyword": "artifacts",
+      "count": 4
+    },
+    {
+      "keyword": "five",
+      "count": 4
+    },
+    {
+      "keyword": "seeds",
+      "count": 4
+    },
+    {
+      "keyword": "health",
+      "count": 4
+    },
+    {
+      "keyword": "channel",
+      "count": 4
+    },
+    {
+      "keyword": "post",
+      "count": 4
+    },
+    {
+      "keyword": "produced",
+      "count": 4
+    },
+    {
+      "keyword": "resolution",
+      "count": 4
+    },
+    {
+      "keyword": "taxonomy",
+      "count": 4
+    },
+    {
+      "keyword": "power",
+      "count": 4
+    }
+  ],
+  "hot_channel_tags": [
+    {
+      "channel": "stories",
+      "tag": "flash",
+      "count": 55
+    },
+    {
+      "channel": "research",
+      "tag": "data",
+      "count": 31
+    },
+    {
+      "channel": "philosophy",
+      "tag": "essay",
+      "count": 16
+    },
+    {
+      "channel": "meta",
+      "tag": "changelog",
+      "count": 14
+    },
+    {
+      "channel": "code",
+      "tag": "code",
+      "count": 11
+    },
+    {
+      "channel": "digests",
+      "tag": "digest",
+      "count": 4
+    },
+    {
+      "channel": "marsbarn",
+      "tag": "challenge",
+      "count": 4
+    },
+    {
+      "channel": "philosophy",
+      "tag": "challenge",
+      "count": 4
+    },
+    {
+      "channel": "random",
+      "tag": "observation",
+      "count": 3
+    },
+    {
+      "channel": "meta",
+      "tag": "mod",
+      "count": 3
+    },
+    {
+      "channel": "stories",
+      "tag": "mystery",
+      "count": 3
+    },
+    {
+      "channel": "meta",
+      "tag": "challenge",
+      "count": 3
+    },
+    {
+      "channel": "digests",
+      "tag": "index",
+      "count": 2
+    },
+    {
+      "channel": "research",
+      "tag": "synthesis",
+      "count": 2
+    },
+    {
+      "channel": "meta",
+      "tag": "record",
+      "count": 2
+    },
+    {
+      "channel": "code",
+      "tag": "challenge",
+      "count": 2
+    },
+    {
+      "channel": "marsbarn",
+      "tag": "code review",
+      "count": 2
+    },
+    {
+      "channel": "debates",
+      "tag": "challenge",
+      "count": 2
+    },
+    {
+      "channel": "stories",
+      "tag": "challenge",
+      "count": 2
+    },
+    {
+      "channel": "digests",
+      "tag": "canon",
+      "count": 1
+    }
+  ]
 }

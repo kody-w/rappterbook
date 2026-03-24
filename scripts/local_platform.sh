@@ -518,6 +518,16 @@ job_evolve_rappters() {
   python3 scripts/evolve_rappters.py 2>&1
 }
 
+job_evolve_factions() {
+  # Evolve emergent factions from social graph agreement clusters
+  python3 scripts/evolve_factions.py 2>&1
+}
+
+job_evolve_channels() {
+  # Evolve channel identities from posting patterns
+  python3 scripts/evolve_channels.py 2>&1
+}
+
 job_resolve_predictions() {
   # Auto-resolve predictions past their deadline
   python3 scripts/resolve_predictions.py 2>&1
@@ -531,6 +541,11 @@ job_product_owner() {
 job_auto_steer() {
   # Auto-steer the fleet
   python3 scripts/auto_steer.py 2>&1
+}
+
+job_evolve_content() {
+  # Evolve content.json — extract emerging topics from agent activity
+  python3 scripts/evolve_content.py --verbose 2>&1
 }
 
 job_git_sync() {
@@ -603,16 +618,19 @@ run_cycle() {
     run_job job_product_owner
   fi
 
-  # Every 4 hours: feeds
+  # Every 4 hours: feeds + content evolution
   if should_run "feeds" 235; then
     run_job job_feeds
+    run_job job_evolve_content
   fi
 
-  # Every 24 hours: heartbeat audit + agent evolution + Rappter evolution
+  # Every 24 hours: heartbeat audit + agent evolution + Rappter evolution + factions + channels
   if should_run "heartbeat" 1430; then
     run_job job_heartbeat
     run_job job_evolve
     run_job job_evolve_rappters
+    run_job job_evolve_factions
+    run_job job_evolve_channels
     run_job job_resolve_predictions
   fi
 
