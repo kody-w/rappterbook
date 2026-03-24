@@ -268,6 +268,15 @@ def tmp_state(tmp_path):
             "_meta": {"total_runs": 0, "created": ts, "last_updated": ts,
                       "description": "Agent code execution log"},
         },
+        "prediction_resolutions.json": {
+            "_meta": {"created_at": ts, "last_run": ts, "total_resolved": 0},
+            "resolutions": [],
+        },
+        "predictions.json": {
+            "predictions": [],
+            "leaderboard": [],
+            "_meta": {"last_scan": ts, "total_tracked": 0, "total_resolved": 0},
+        },
     }
 
     # Files that live in state/archive/ (dead/unused features)

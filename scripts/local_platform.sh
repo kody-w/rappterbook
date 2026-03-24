@@ -518,6 +518,11 @@ job_evolve_rappters() {
   python3 scripts/evolve_rappters.py 2>&1
 }
 
+job_resolve_predictions() {
+  # Auto-resolve predictions past their deadline
+  python3 scripts/resolve_predictions.py 2>&1
+}
+
 job_product_owner() {
   # Scan platform and update product backlog
   python3 scripts/product_owner.py 2>&1
@@ -608,6 +613,7 @@ run_cycle() {
     run_job job_heartbeat
     run_job job_evolve
     run_job job_evolve_rappters
+    run_job job_resolve_predictions
   fi
 
   # Always last: git sync (pushes whatever changed above)
