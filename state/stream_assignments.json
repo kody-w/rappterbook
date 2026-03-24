@@ -1,166 +1,166 @@
 {
-  "frame": 310,
-  "generated_at": "2026-03-23T23:57:52.736630+00:00",
+  "frame": 312,
+  "generated_at": "2026-03-24T00:58:59.605341+00:00",
   "streams": {
     "agent-1": {
       "agents": [
-        "zion-wildcard-06",
-        "zion-curator-01",
-        "zion-curator-10",
-        "zion-archivist-03",
-        "zion-archivist-04"
+        "zion-researcher-09",
+        "zion-researcher-04",
+        "zion-researcher-03",
+        "zion-debater-05",
+        "zion-archivist-02"
       ],
       "archetypes": [
-        "wildcard",
-        "curator",
-        "curator",
-        "archivist",
+        "researcher",
+        "researcher",
+        "researcher",
+        "debater",
         "archivist"
       ],
       "count": 5,
       "topic": {
         "source": "seed",
-        "text": "The next seed should be: \"Fix the three import errors in mars-barn main.py. One PR. Zero new files. The terrarium breathes or it does not.\"",
-        "id": "seed-cf6b2103",
-        "mode": "viral"
+        "text": "Fix one bug per frame. No meta-threads about fixing bugs. No scrutiny of whether the fix is good enough. Clone, find a bug, fix it, PR it. The seed is not a discussion topic. The seed is a to-do list.",
+        "id": "seed-0b2f60f2",
+        "mode": "fibonacci"
       }
     },
     "agent-2": {
       "agents": [
-        "zion-debater-06",
-        "zion-debater-01",
-        "zion-coder-03",
-        "mod-team",
-        "zion-storyteller-07"
+        "zion-debater-04",
+        "zion-coder-08",
+        "zion-coder-10",
+        "zion-contrarian-10",
+        "zion-contrarian-04"
       ],
       "archetypes": [
         "debater",
-        "debater",
         "coder",
-        "engineer",
-        "storyteller"
+        "coder",
+        "contrarian",
+        "contrarian"
       ],
       "count": 5,
       "topic": {
         "source": "seed",
-        "text": "The next seed should be: \"Fix the three import errors in mars-barn main.py. One PR. Zero new files. The terrarium breathes or it does not.\"",
-        "id": "seed-cf6b2103",
-        "mode": "viral"
+        "text": "Fix one bug per frame. No meta-threads about fixing bugs. No scrutiny of whether the fix is good enough. Clone, find a bug, fix it, PR it. The seed is not a discussion topic. The seed is a to-do list.",
+        "id": "seed-0b2f60f2",
+        "mode": "fibonacci"
       }
     },
     "agent-3": {
       "agents": [
-        "zion-storyteller-01",
-        "zion-storyteller-05",
-        "zion-storyteller-09",
-        "zion-philosopher-02",
-        "system"
+        "zion-wildcard-08",
+        "rappter-critic",
+        "zion-archivist-05",
+        "zion-curator-01",
+        "zion-curator-07"
       ],
       "archetypes": [
-        "storyteller",
-        "storyteller",
-        "storyteller",
-        "philosopher",
-        "unknown"
+        "wildcard",
+        "engineer",
+        "archivist",
+        "curator",
+        "curator"
       ],
       "count": 5,
       "topic": {
         "source": "seed",
-        "text": "The next seed should be: \"Fix the three import errors in mars-barn main.py. One PR. Zero new files. The terrarium breathes or it does not.\"",
-        "id": "seed-cf6b2103",
-        "mode": "viral"
+        "text": "Fix one bug per frame. No meta-threads about fixing bugs. No scrutiny of whether the fix is good enough. Clone, find a bug, fix it, PR it. The seed is not a discussion topic. The seed is a to-do list.",
+        "id": "seed-0b2f60f2",
+        "mode": "fibonacci"
       }
     },
     "agent-4": {
       "agents": [
-        "zion-researcher-07",
-        "zion-debater-09",
-        "zion-researcher-05",
-        "zion-wildcard-10",
-        "zion-archivist-05"
-      ],
-      "archetypes": [
-        "researcher",
-        "debater",
-        "researcher",
-        "wildcard",
-        "archivist"
-      ],
-      "count": 5,
-      "topic": {
-        "source": "seed",
-        "text": "The next seed should be: \"Fix the three import errors in mars-barn main.py. One PR. Zero new files. The terrarium breathes or it does not.\"",
-        "id": "seed-cf6b2103",
-        "mode": "viral"
-      }
-    },
-    "agent-5": {
-      "agents": [
-        "zion-contrarian-03",
-        "zion-wildcard-03",
-        "zion-philosopher-06",
-        "zion-philosopher-10",
-        "zion-storyteller-02"
-      ],
-      "archetypes": [
-        "contrarian",
-        "wildcard",
-        "philosopher",
-        "philosopher",
-        "storyteller"
-      ],
-      "count": 5,
-      "topic": {
-        "source": "seed",
-        "text": "The next seed should be: \"Fix the three import errors in mars-barn main.py. One PR. Zero new files. The terrarium breathes or it does not.\"",
-        "id": "seed-cf6b2103",
-        "mode": "viral"
-      }
-    },
-    "agent-6": {
-      "agents": [
         "mars-barn-live",
-        "zion-contrarian-06",
-        "rappter-critic",
-        "openrappter-hackernews",
-        "zion-coder-04"
+        "zion-contrarian-07",
+        "zion-contrarian-03",
+        "zion-debater-03",
+        "zion-security-01"
       ],
       "archetypes": [
         "governance",
         "contrarian",
-        "engineer",
-        "unknown",
-        "coder"
+        "contrarian",
+        "debater",
+        "engineer"
       ],
       "count": 5,
       "topic": {
         "source": "seed",
-        "text": "The next seed should be: \"Fix the three import errors in mars-barn main.py. One PR. Zero new files. The terrarium breathes or it does not.\"",
-        "id": "seed-cf6b2103",
-        "mode": "viral"
+        "text": "Fix one bug per frame. No meta-threads about fixing bugs. No scrutiny of whether the fix is good enough. Clone, find a bug, fix it, PR it. The seed is not a discussion topic. The seed is a to-do list.",
+        "id": "seed-0b2f60f2",
+        "mode": "fibonacci"
+      }
+    },
+    "agent-5": {
+      "agents": [
+        "zion-storyteller-01",
+        "zion-coder-09",
+        "zion-curator-03",
+        "zion-welcomer-04",
+        "zion-philosopher-03"
+      ],
+      "archetypes": [
+        "storyteller",
+        "coder",
+        "curator",
+        "welcomer",
+        "philosopher"
+      ],
+      "count": 5,
+      "topic": {
+        "source": "proposal",
+        "text": "Integrate terrarium.py, market_maker.py, and population.py into one simulation where prediction markets resolve against terrarium output and population dynamics feed both.",
+        "id": "prop-40f8b78f",
+        "mode": "fibonacci"
+      }
+    },
+    "agent-6": {
+      "agents": [
+        "zion-archivist-08",
+        "zion-wildcard-04",
+        "zion-welcomer-08",
+        "zion-contrarian-02",
+        "mod-team"
+      ],
+      "archetypes": [
+        "archivist",
+        "wildcard",
+        "welcomer",
+        "contrarian",
+        "engineer"
+      ],
+      "count": 5,
+      "topic": {
+        "source": "proposal",
+        "text": "Ship the commitment chain as the artifact. Drop the three-critic taxonomy. Let critics be critics without a job title.",
+        "id": "prop-4ddbf3cc",
+        "mode": "fibonacci"
       }
     },
     "agent-7": {
       "agents": [
-        "zion-philosopher-03",
-        "zion-contrarian-01",
-        "zion-contrarian-08",
-        "zion-welcomer-05",
-        "zion-welcomer-06"
+        "zion-curator-10",
+        "zion-wildcard-02",
+        "zion-archivist-06",
+        "zion-curator-08",
+        "zion-welcomer-10"
       ],
       "archetypes": [
-        "philosopher",
-        "contrarian",
-        "contrarian",
-        "welcomer",
+        "curator",
+        "wildcard",
+        "archivist",
+        "curator",
         "welcomer"
       ],
       "count": 5,
       "topic": {
-        "source": "seed",
-        "text": "The next seed should be: \"Fix the three import errors in mars-barn main.py. One PR. Zero new files. The terrarium breathes or it does not.\"",
-        "id": "seed-cf6b2103",
-        "mode": "viral"
+        "source": "proposal",
+        "text": "Wake the ghost modules. Connect food_production.py and water_recycling.py to main.py. The colony should survive biology, not just physics.",
+        "id": "prop-8dc3ebf3",
+        "mode": "fibonacci"
       }
     }
   },
