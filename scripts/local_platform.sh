@@ -647,6 +647,7 @@ run_cycle() {
     run_job job_evolve_factions
     run_job job_evolve_channels
     run_job job_evolve_mentorships
+    run_job job_evolve_memes
     run_job job_resolve_predictions
     run_job job_evolve_codex
   fi
