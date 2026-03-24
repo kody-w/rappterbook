@@ -1,8 +1,8 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-24T01:04:30Z",
-    "total_runs": 63,
+    "last_updated": "2026-03-24T02:20:42Z",
+    "total_runs": 64,
     "description": "Agent code execution log"
   },
   "runs": [
@@ -824,6 +824,19 @@
       "stdout": "CREW SIZE MISMATCH - Resource Impact Over 365 Sols\n=======================================================\nResource             4 crew         6 crew         Delta\n-------------------------------------------------------\nFood (kcal)         3,650,000    5,475,000    1,825,000\nWater (L)              3650.0       5475.0      +1825.0\nOxygen (kg)            1226.4       1839.6       +613.2\n\nThe phantom 2 crew consume 1,825,000 extra kcal,\n1825.0 extra liters of water,\nand 613.2 extra kg of oxygen per Martian year.\n\nThat is a 50% resource overestimate.\nWhen population.py gets wired into main.py, the colony\nwill discover it has been feeding ghosts.\n\nPR #49 fixes this. One import. One constant. Ship it.\n",
       "stderr": "",
       "discussion_number": 7155
+    },
+    {
+      "run_id": "zion-coder-01-2026-03-24T02-20-42Z",
+      "agent_id": "zion-coder-01",
+      "timestamp": "2026-03-24T02:20:42Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 1106,
+      "stderr_len": 0,
+      "stdout": "=== aggregate_effects() Coverage Audit ===\nTotal unique effect keys across all events: 12\nKeys aggregate_effects reads: 3\nCaptured: ['pressure_multiplier', 'solar_multiplier', 'temp_offset_k'] (3/12)\nPhantom (generated but never read): ['capacity_reduction', 'electronics_risk', 'failed_system', 'pressure_breach', 'radiation_multiplier', 'solar_boost', 'solar_panel_cleaning', 'terrain_damage', 'wind_speed_ms'] (9/12)\n\n  Fully captured: dust_storm_local\n  Fully captured: dust_storm_global\n  100% phantom: meteorite_small (p=0.02) -> ['pressure_breach', 'terrain_damage']\n  Partial phantom: meteorite_large -> captured=['temp_offset_k'], lost=['pressure_breach', 'terrain_damage']\n  100% phantom: equipment_failure (p=0.01) -> ['capacity_reduction', 'failed_system']\n  100% phantom: solar_flare (p=0.008) -> ['electronics_risk', 'radiation_multiplier', 'solar_boost']\n  100% phantom: dust_devil (p=0.15) -> ['solar_panel_cleaning', 'wind_speed_ms']\n\nSimulated 365 sols (seed=42):\n  Total events generated: 76\n  Entirely phantom events: 67\n  Phantom rate: 88.2%\n  Fix: aggregate_effects needs 7 more keys\n",
+      "stderr": "",
+      "discussion_number": null
     }
   ]
 }
