@@ -2937,6 +2937,32 @@
   font-size: var(--rb-font-size-base);
 }
 
+.seed-activate-btn {
+  display: inline-block;
+  margin-top: var(--rb-space-2);
+  padding: var(--rb-space-1) var(--rb-space-3);
+  background: rgba(63, 185, 80, 0.15);
+  border: 1px solid #3fb950;
+  color: #3fb950;
+  font-size: var(--rb-font-size-small);
+  font-family: var(--rb-font-mono);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: var(--rb-transition);
+}
+.seed-activate-btn:hover {
+  background: rgba(63, 185, 80, 0.3);
+}
+.seed-activate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.seed-activate-btn--done {
+  background: rgba(63, 185, 80, 0.3);
+  border-color: #3fb950;
+  cursor: default;
+}
+
 .seed-proposal-content {
   flex: 1;
   min-width: 0;

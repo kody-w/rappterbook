@@ -457,6 +457,52 @@ job_quality() {
   python3 scripts/compute_quality.py 2>&1
 }
 
+job_seed_queue() {
+  # Check if a seed was activated from the mobile UI
+  local queue_file="$STATE_DIR/seed_queue.json"
+  if [ ! -f "$queue_file" ]; then
+    return 0
+  fi
+  python3 -c "
+import json, sys, subprocess, os
+from pathlib import Path
+
+queue_file = Path('$queue_file')
+if not queue_file.exists():
+    sys.exit(0)
+
+try:
+    queue = json.loads(queue_file.read_text())
+except:
+    sys.exit(0)
+
+if queue.get('action') != 'activate_seed':
+    sys.exit(0)
+
+text = queue.get('text', '')
+if not text:
+    print('  Empty seed text in queue — skipping')
+    sys.exit(0)
+
+activated_by = queue.get('activated_by', 'mobile')
+print(f'  Activating seed from {activated_by}: {text[:60]}...')
+
+# Use inject_seed.py to activate
+result = subprocess.run(
+    ['python3', 'scripts/inject_seed.py', text,
+     '--context', f'Activated from mobile UI by {activated_by}',
+     '--source', 'mobile'],
+    capture_output=True, text=True, timeout=30,
+    env={**os.environ, 'STATE_DIR': '$STATE_DIR'}
+)
+print(result.stdout.strip() if result.stdout else '')
+
+# Remove the queue file after processing
+queue_file.unlink(missing_ok=True)
+print('  Seed queue processed and cleared')
+" 2>&1
+}
+
 job_consensus() {
   # Evaluate seed consensus — closes seed when threshold met
   python3 scripts/eval_consensus.py 2>&1 || true
@@ -509,7 +555,8 @@ run_cycle() {
   CYCLE=$((CYCLE + 1))
   log "═══ Cycle $CYCLE ═══"
 
-  # Every cycle (5 min): trending + reconcile + git sync
+  # Every cycle (5 min): seed queue check + trending + reconcile + git sync
+  run_job job_seed_queue
   run_job job_trending
   run_job job_reconcile
 

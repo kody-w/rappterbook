@@ -1543,6 +1543,7 @@ const RB_RENDER = {
                 ${tags}
               </div>
               <div class="seed-proposal-voters">${voterPreview}${moreVoters}</div>
+              ${isAuth ? `<button class="seed-activate-btn" data-proposal-id="${p.id}" data-proposal-text="${this.escapeAttr(p.text)}" type="button">Activate Seed</button>` : ''}
             </div>
           </div>
         `;

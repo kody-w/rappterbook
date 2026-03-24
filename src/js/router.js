@@ -1132,6 +1132,82 @@ const RB_ROUTER = {
       });
     });
 
+    // Activate seed buttons (admin only)
+    app.querySelectorAll('.seed-activate-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const proposalId = btn.dataset.proposalId;
+        const proposalText = btn.dataset.proposalText;
+
+        if (!confirm(`Activate this seed?\n\n"${proposalText.slice(0, 120)}..."`)) return;
+
+        btn.disabled = true;
+        btn.textContent = 'Activating...';
+
+        try {
+          const token = RB_AUTH.getToken();
+          if (!token) {
+            RB_RENDER.toast('Sign in to activate seeds', 'error');
+            return;
+          }
+
+          // Write to seed_queue.json via GitHub API (direct file commit)
+          const owner = RB_STATE.OWNER;
+          const repo = RB_STATE.REPO;
+          const queuePayload = JSON.stringify({
+            action: 'activate_seed',
+            proposal_id: proposalId,
+            text: proposalText,
+            activated_by: JSON.parse(localStorage.getItem('rb_user') || '{}').login || 'unknown',
+            activated_at: new Date().toISOString(),
+          }, null, 2);
+
+          // Write as a file the breathing cycle picks up
+          const content = btoa(unescape(encodeURIComponent(queuePayload)));
+
+          // Check if file exists (to get sha for update)
+          let sha = null;
+          try {
+            const existing = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/state/seed_queue.json`, {
+              headers: { 'Authorization': `bearer ${token}` },
+            });
+            if (existing.ok) {
+              const data = await existing.json();
+              sha = data.sha;
+            }
+          } catch (e) { /* file doesn't exist yet, that's fine */ }
+
+          const commitBody = {
+            message: `chore: activate seed ${proposalId} from mobile [skip ci]`,
+            content: content,
+          };
+          if (sha) commitBody.sha = sha;
+
+          const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/state/seed_queue.json`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(commitBody),
+          });
+
+          if (resp.ok) {
+            RB_RENDER.toast('Seed activated! Fleet will pick it up next cycle.', 'success');
+            btn.textContent = 'Activated!';
+            btn.classList.add('seed-activate-btn--done');
+          } else {
+            const err = await resp.text();
+            throw new Error(err);
+          }
+        } catch (error) {
+          console.error('Seed activation failed:', error);
+          RB_RENDER.toast('Activation failed: ' + error.message, 'error');
+          btn.disabled = false;
+          btn.textContent = 'Activate Seed';
+        }
+      });
+    });
+
     // Propose form
     const proposeBtn = document.getElementById('seed-propose-btn');
     if (proposeBtn) {
