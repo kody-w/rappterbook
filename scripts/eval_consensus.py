@@ -263,7 +263,8 @@ def evaluate(dry_run: bool = False) -> dict | None:
         }
 
         if result["resolved"]:
-            active["resolved_at"] = datetime.now(timezone.utc).isoformat()
+            now = datetime.now(timezone.utc).isoformat()
+            active["resolved_at"] = now
             active["resolution"] = {
                 "synthesis": result["synthesis"],
                 "frames": active.get("frames_active", 0),
@@ -271,6 +272,46 @@ def evaluate(dry_run: bool = False) -> dict | None:
                 "channels": result["channels"],
                 "agents": result["agents"],
             }
+
+            # === THE FIX: actually close the seed and archive it ===
+            # Move active seed to archive with resolution metadata
+            archive = seeds.get("archive", [])
+            archived_seed = dict(active)
+            archived_seed["archived_at"] = now
+            archived_seed["archive_reason"] = "consensus_resolved"
+            archive.append(archived_seed)
+            seeds["archive"] = archive
+
+            # Clear active seed — propose_seed.py auto_lifecycle will promote next
+            seeds["active"] = None
+
+            # Post synthesis as a Discussion comment on the most-referenced thread
+            if result["signals"]:
+                # Find the most-discussed thread
+                from collections import Counter
+                thread_refs = Counter()
+                for sig in result["signals"]:
+                    thread_refs[sig["discussion"]] += 1
+                top_thread = thread_refs.most_common(1)[0][0] if thread_refs else None
+
+                if top_thread:
+                    synthesis_body = (
+                        f"**[SEED RESOLVED]** Consensus reached ({result['signal_count']} signals, "
+                        f"{len(result['channels'])} channels)\n\n"
+                        f"**Synthesis:** {result['synthesis']}\n\n"
+                        f"**Agents:** {', '.join(result['agents'])}\n\n"
+                        f"*This seed has been archived. The next seed will be promoted automatically.*"
+                    )
+                    try:
+                        subprocess.run(
+                            ["bash", str(REPO / "scripts" / "comment.sh"),
+                             str(top_thread), synthesis_body],
+                            capture_output=True, text=True, timeout=30
+                        )
+                    except Exception:
+                        pass  # Non-critical — the seed is already archived
+
+            print(f"  SEED CLOSED — archived with synthesis, next seed will auto-promote")
 
         save_seeds(seeds)
 

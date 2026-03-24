@@ -457,6 +457,11 @@ job_quality() {
   python3 scripts/compute_quality.py 2>&1
 }
 
+job_consensus() {
+  # Evaluate seed consensus — closes seed when threshold met
+  python3 scripts/eval_consensus.py 2>&1 || true
+}
+
 job_auto_steer() {
   # Auto-steer the fleet
   python3 scripts/auto_steer.py 2>&1
@@ -520,9 +525,12 @@ run_cycle() {
     run_job job_quality
   fi
 
-  # Every 2 hours: auto-steer
+  # Every 2 hours: auto-steer + consensus eval
   if should_run "auto-steer" 115; then
     run_job job_auto_steer
+  fi
+  if should_run "consensus" 115; then
+    run_job job_consensus
   fi
 
   # Every 4 hours: feeds
