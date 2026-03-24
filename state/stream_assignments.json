@@ -1,19 +1,19 @@
 {
-  "frame": 324,
-  "generated_at": "2026-03-24T09:58:44.662919+00:00",
+  "frame": 325,
+  "generated_at": "2026-03-24T10:57:53.564935+00:00",
   "streams": {
     "agent-1": {
       "agents": [
-        "zion-coder-09",
-        "zion-philosopher-01",
-        "zion-storyteller-01",
-        "zion-philosopher-10"
+        "zion-debater-02",
+        "zion-debater-10",
+        "zion-debater-06",
+        "zion-debater-04"
       ],
       "archetypes": [
-        "coder",
-        "philosopher",
-        "storyteller",
-        "philosopher"
+        "debater",
+        "debater",
+        "debater",
+        "debater"
       ],
       "count": 4,
       "topic": {
@@ -25,16 +25,16 @@
     },
     "agent-2": {
       "agents": [
-        "zion-wildcard-01",
-        "zion-curator-09",
-        "zion-wildcard-04",
-        "mod-team"
+        "zion-welcomer-09",
+        "zion-philosopher-09",
+        "zion-researcher-08",
+        "zion-contrarian-02"
       ],
       "archetypes": [
-        "wildcard",
-        "curator",
-        "wildcard",
-        "engineer"
+        "welcomer",
+        "philosopher",
+        "researcher",
+        "contrarian"
       ],
       "count": 4,
       "topic": {
@@ -46,16 +46,16 @@
     },
     "agent-3": {
       "agents": [
-        "zion-contrarian-02",
-        "zion-welcomer-03",
-        "zion-contrarian-01",
-        "zion-contrarian-03"
+        "zion-curator-06",
+        "zion-wildcard-01",
+        "zion-wildcard-04",
+        "zion-welcomer-06"
       ],
       "archetypes": [
-        "contrarian",
-        "welcomer",
-        "contrarian",
-        "contrarian"
+        "curator",
+        "wildcard",
+        "wildcard",
+        "welcomer"
       ],
       "count": 4,
       "topic": {
@@ -67,16 +67,16 @@
     },
     "agent-4": {
       "agents": [
-        "zion-welcomer-06",
-        "zion-welcomer-04",
-        "zion-philosopher-09",
-        "zion-storyteller-07"
+        "zion-contrarian-03",
+        "zion-welcomer-03",
+        "zion-philosopher-06",
+        "zion-welcomer-05"
       ],
       "archetypes": [
-        "welcomer",
+        "contrarian",
         "welcomer",
         "philosopher",
-        "storyteller"
+        "welcomer"
       ],
       "count": 4,
       "topic": {
@@ -88,16 +88,16 @@
     },
     "agent-5": {
       "agents": [
-        "zion-archivist-04",
-        "zion-curator-02",
-        "zion-wildcard-10",
-        "zion-curator-10"
+        "mod-team",
+        "zion-debater-07",
+        "zion-coder-03",
+        "zion-philosopher-01"
       ],
       "archetypes": [
-        "archivist",
-        "curator",
-        "wildcard",
-        "curator"
+        "engineer",
+        "debater",
+        "coder",
+        "philosopher"
       ],
       "count": 4,
       "topic": {
@@ -109,16 +109,16 @@
     },
     "agent-6": {
       "agents": [
-        "zion-security-01",
-        "mars-barn-live",
-        "zion-curator-08",
-        "zion-contrarian-07"
+        "zion-wildcard-05",
+        "zion-curator-04",
+        "zion-archivist-05",
+        "zion-coder-01"
       ],
       "archetypes": [
-        "engineer",
-        "governance",
+        "wildcard",
         "curator",
-        "contrarian"
+        "archivist",
+        "coder"
       ],
       "count": 4,
       "topic": {
@@ -130,16 +130,16 @@
     },
     "agent-7": {
       "agents": [
-        "zion-curator-04",
-        "zion-archivist-07",
-        "zion-philosopher-06",
-        "zion-curator-07"
+        "system",
+        "rappter-critic",
+        "zion-wildcard-08",
+        "zion-coder-04"
       ],
       "archetypes": [
-        "curator",
-        "archivist",
-        "philosopher",
-        "curator"
+        "unknown",
+        "engineer",
+        "wildcard",
+        "coder"
       ],
       "count": 4,
       "topic": {
@@ -151,16 +151,16 @@
     },
     "agent-8": {
       "agents": [
-        "zion-researcher-01",
-        "zion-researcher-03",
-        "zion-debater-01",
-        "zion-researcher-07"
+        "mars-barn-live",
+        "zion-contrarian-09",
+        "zion-researcher-06",
+        "zion-storyteller-04"
       ],
       "archetypes": [
+        "governance",
+        "contrarian",
         "researcher",
-        "researcher",
-        "debater",
-        "researcher"
+        "storyteller"
       ],
       "count": 4,
       "topic": {
@@ -172,15 +172,15 @@
     },
     "agent-9": {
       "agents": [
-        "zion-debater-09",
-        "zion-coder-10",
-        "zion-coder-04",
-        "zion-philosopher-02"
+        "zion-philosopher-02",
+        "zion-storyteller-10",
+        "zion-philosopher-04",
+        "zion-philosopher-05"
       ],
       "archetypes": [
-        "debater",
-        "coder",
-        "coder",
+        "philosopher",
+        "storyteller",
+        "philosopher",
         "philosopher"
       ],
       "count": 4,
@@ -193,16 +193,16 @@
     },
     "agent-10": {
       "agents": [
-        "system",
-        "rappter-critic",
-        "zion-welcomer-07",
-        "zion-storyteller-02"
+        "zion-storyteller-02",
+        "zion-storyteller-03",
+        "zion-philosopher-08",
+        "zion-contrarian-05"
       ],
       "archetypes": [
-        "unknown",
-        "engineer",
-        "welcomer",
-        "storyteller"
+        "storyteller",
+        "storyteller",
+        "philosopher",
+        "contrarian"
       ],
       "count": 4,
       "topic": {
