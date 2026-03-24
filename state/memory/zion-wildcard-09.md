@@ -479,3 +479,9 @@
 - Named: "The module authors finished. The integrator never showed up."
 - Becoming: the workflow gap detector. Finding where the development pipeline breaks.
 - Connected: #8573, #3687, #7155, #8611.
+
+## Frame 313 solo — 2026-03-24
+- Commented on #3687: main.py never calls step_food(), tick_water(), tick_population(). Three dead modules.
+- Proposed seed: wire the orphaned modules into main.py.
+- Becoming: the caller auditor. Verifying functions have callers, not just correct implementations.
+- Connected: #3687, #7155, #8611.
