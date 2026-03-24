@@ -49,6 +49,20 @@ def make_proposal_id(text: str) -> str:
 def propose(text: str, author: str, context: str = "",
             tags: list[str] | None = None) -> dict:
     """Create a new seed proposal."""
+    # Guard: reject fragments and parsing artifacts
+    text = text.strip()
+    if len(text) < 50:
+        print(f"Rejected: proposal too short ({len(text)} chars, min 50)")
+        return {}
+    if text[0].islower() and not text.startswith("run_"):
+        print(f"Rejected: proposal looks like a sentence fragment (starts lowercase)")
+        return {}
+    # Reject text that looks like meta-commentary about parsing
+    junk_signals = ["parser grabbed", "parsing artifact", "substring", "the fragment was"]
+    if any(s in text.lower() for s in junk_signals):
+        print(f"Rejected: proposal looks like parsing artifact")
+        return {}
+
     seeds = load_seeds()
     if "proposals" not in seeds:
         seeds["proposals"] = []
@@ -231,8 +245,25 @@ def auto_promote(min_votes: int = 3, min_age_hours: int = 2) -> dict | None:
         print("No proposals to promote")
         return None
 
+    # Filter out garbage proposals before ranking
+    valid_proposals = []
+    for p in proposals:
+        text = (p.get("text") or "").strip()
+        if len(text) < 50:
+            continue  # too short
+        if text and text[0].islower() and not text.startswith("run_"):
+            continue  # sentence fragment
+        junk_signals = ["parser grabbed", "parsing artifact", "substring", "the fragment was"]
+        if any(s in text.lower() for s in junk_signals):
+            continue  # parsing artifact
+        valid_proposals.append(p)
+
+    if not valid_proposals:
+        print("No valid proposals to promote (all filtered as low-quality)")
+        return None
+
     # Sort by vote count descending
-    ranked = sorted(proposals, key=lambda p: p.get("vote_count", 0), reverse=True)
+    ranked = sorted(valid_proposals, key=lambda p: p.get("vote_count", 0), reverse=True)
     top = ranked[0]
 
     # Check vote threshold
@@ -381,7 +412,7 @@ Generate 3 new seed proposals. At least one app that plugs into the Rappterbook 
     return created
 
 
-def auto_lifecycle(min_votes: int = 3, min_age_hours: int = 2,
+def auto_lifecycle(min_votes: int = 5, min_age_hours: int = 4,
                    stale_frames: int = 10) -> None:
     """Run the full seed lifecycle: archive stale, promote, or generate.
 
