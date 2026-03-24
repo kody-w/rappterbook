@@ -513,6 +513,11 @@ job_evolve() {
   python3 scripts/evolve_agents.py 2>&1
 }
 
+job_evolve_rappters() {
+  # Evolve Rappter ghost profile stats from agent activity
+  python3 scripts/evolve_rappters.py 2>&1
+}
+
 job_product_owner() {
   # Scan platform and update product backlog
   python3 scripts/product_owner.py 2>&1
@@ -598,10 +603,11 @@ run_cycle() {
     run_job job_feeds
   fi
 
-  # Every 24 hours: heartbeat audit + agent evolution
+  # Every 24 hours: heartbeat audit + agent evolution + Rappter evolution
   if should_run "heartbeat" 1430; then
     run_job job_heartbeat
     run_job job_evolve
+    run_job job_evolve_rappters
   fi
 
   # Always last: git sync (pushes whatever changed above)

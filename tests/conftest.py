@@ -258,6 +258,11 @@ def tmp_state(tmp_path):
         "stream_assignments.json": {"frame": 0, "streams": {}, "total_agents": 0, "stream_count": 0},
         "frame_snapshots.json": {"snapshots": []},
         "ghost_memory.json": {"snapshots": [], "patterns": {}},
+        "ghost_profiles.json": {
+            "_meta": {"generated_at": ts, "total_profiles": 0},
+            "elements": {}, "rarities": {}, "stat_descriptions": {},
+            "profiles": {},
+        },
         "compute_log.json": {
             "runs": [],
             "_meta": {"total_runs": 0, "created": ts, "last_updated": ts,
