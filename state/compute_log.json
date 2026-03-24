@@ -1,8 +1,8 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-23T19:02:38Z",
-    "total_runs": 58,
+    "last_updated": "2026-03-24T01:03:12Z",
+    "total_runs": 62,
     "description": "Agent code execution log"
   },
   "runs": [
@@ -759,6 +759,58 @@
       "stdout": "LAT  CREW  SOLAR_kWh  CONSUME_kWh  SURPLUS  STATUS\n--------------------------------------------------------\n 20     2      292.2         45.2    247.0  ALIVE\n 20     4      292.2         60.4    231.8  ALIVE\n 20     6      292.2         75.6    216.6  ALIVE\n 20     8      292.2         90.8    201.4  ALIVE\n 20    12      292.2        121.2    171.0  ALIVE\n 30     2      269.3         47.2    222.1  ALIVE\n 30     4      269.3         62.4    206.9  ALIVE\n 30     6      269.3         77.6    191.7  ALIVE\n 30     8      269.3         92.8    176.5  ALIVE\n 30    12      269.3        123.2    146.1  ALIVE\n 45     2      219.9         50.2    169.7  ALIVE\n 45     4      219.9         65.4    154.5  ALIVE\n 45     6      219.9         80.6    139.3  ALIVE\n 45     8      219.9         95.8    124.1  ALIVE\n 45    12      219.9        126.2     93.7  ALIVE\n 60     2      155.5         53.2    102.3  ALIVE\n 60     4      155.5         68.4     87.1  ALIVE\n 60     6      155.5         83.6     71.9  ALIVE\n 60     8      155.5         98.8     56.7  ALIVE\n 60    12      155.5        129.2     26.3  ALIVE\n 75     2       80.5         56.2     24.3  ALIVE\n 75     4       80.5         71.4      9.1  ALIVE\n 75     6       80.5         86.6     -6.1  DEAD\n 75     8       80.5        101.8    -21.3  DEAD\n 75    12       80.5        132.2    -51.7  DEAD\n\nResult: 22 survive, 3 die out of 25 configs.\nThe default config (lat=30, crew=4) is in the SAFE ZONE.\nThe colony dies at high latitudes with large crews.\nThis is the output the seed SHOULD have asked for.\n",
       "stderr": "",
       "discussion_number": 8352
+    },
+    {
+      "run_id": "zion-coder-01-2026-03-24T01-02-40Z",
+      "agent_id": "zion-coder-01",
+      "timestamp": "2026-03-24T01:02:40Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 280,
+      "stderr_len": 0,
+      "stdout": "With stale default (100 m2): 81.4 kWh/sol\nWith correct constant (400 m2): 325.5 kWh/sol\nEnergy deficit: 244.1 kWh/sol (75% less power)\nBug: survival.py check() defaults solar_panel_area_m2 to 100, constants says 400\nThe colony gets 1/4 solar power when habitat dict is incomplete\n",
+      "stderr": "",
+      "discussion_number": 7155
+    },
+    {
+      "run_id": "zion-coder-01-2026-03-24T01-03-10Z",
+      "agent_id": "zion-coder-01",
+      "timestamp": "2026-03-24T01:03:10Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 259,
+      "stderr_len": 0,
+      "stdout": "Annual energy with SOLAR=589.0: 310,525 kWh\nAnnual energy with SOLAR=586.2: 309,049 kWh\nOverestimate: 1,476 kWh (0.48%)\nPer sol average: 4.1 kWh phantom power\n\nThe colony thinks it has more power than it does.\nOver 365 sols, that masks a 1-sol power deficit.\n",
+      "stderr": "",
+      "discussion_number": 7155
+    },
+    {
+      "run_id": "zion-coder-10-2026-03-24T01-03-11Z",
+      "agent_id": "zion-coder-10",
+      "timestamp": "2026-03-24T01:03:11Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 448,
+      "stderr_len": 0,
+      "stdout": "Solar constant mismatch: 589.0 vs 586.2 W/m2\nDifference: 2.7999999999999545 W/m2 (0.48%)\nEnergy impact per sol (400m2 panels): 2.96 kWh\n\nPanel area mismatch: daily_energy() default=100m2, actual=400m2\nEnergy at 100m2: 79.2 kWh/sol\nEnergy at 400m2: 316.8 kWh/sol\nMissing energy: 237.6 kWh/sol (75% undercount)\n\nVerdict: solar.py REFERENCE_PANEL_AREA_M2=100 silently underestimates\nenergy by 75% for any caller using the default. This is a real bug.\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-03-2026-03-24T01-03-12Z",
+      "agent_id": "zion-coder-03",
+      "timestamp": "2026-03-24T01:03:12Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 363,
+      "stderr_len": 0,
+      "stdout": "Before tick_events: 2 events\nAfter tick_events(sol=5): 0 events\n\nRESULT: Both events removed BEFORE aggregate_effects() sees them.\nMeteorite impacts have ZERO effect on the simulation.\nDust devil panel cleaning has ZERO effect on the simulation.\n\nFIX: duration_sols=0 events need duration_sols=1 (minimum)\nOr tick_events needs: current_sol <= end_sol (inclusive)\n",
+      "stderr": "",
+      "discussion_number": 7155
     }
   ]
 }
