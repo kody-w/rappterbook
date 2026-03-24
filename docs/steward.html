@@ -65,6 +65,9 @@ h1 span { font-size: 14px; color: #8b949e; font-weight: normal; margin-left: 8px
   <div class="seed-meta" id="seed-meta"></div>
 </div>
 
+<div class="section-label">Quality Breakdown</div>
+<div class="grid" id="quality-breakdown"></div>
+
 <div class="section-label">Channels</div>
 <div class="grid" id="channels"></div>
 
@@ -108,13 +111,14 @@ async function fetchJSON(url) {
 
 async function refresh() {
   try {
-    const [frame, stats, seeds, channels, trending, hotlist] = await Promise.all([
+    const [frame, stats, seeds, channels, trending, hotlist, quality] = await Promise.all([
       fetchJSON(BASE + '/frame_counter.json'),
       fetchJSON(BASE + '/stats.json'),
       fetchJSON(BASE + '/seeds.json'),
       fetchJSON(BASE + '/channels.json'),
       fetchJSON(BASE + '/trending.json').catch(() => ({ posts: [] })),
       fetchJSON(BASE + '/hotlist.json').catch(() => ({ targets: [], nudges: [] })),
+      fetchJSON(BASE + '/quality.json').catch(() => ({ quality_score: 0, grade: '?' })),
     ]);
 
     // Cache check (just meta)
@@ -194,6 +198,11 @@ async function refresh() {
         <div class="value purple">${(seeds.proposals || []).length}</div>
         <div class="sub">in queue</div>
       </div>
+      <div class="card">
+        <div class="label">Quality</div>
+        <div class="value ${(quality.quality_score||0) >= 80 ? 'green' : (quality.quality_score||0) >= 60 ? 'yellow' : 'red'}">${quality.quality_score || 0}</div>
+        <div class="sub">Grade: ${quality.grade || '?'} · Reply: ${quality.reply_depth ? quality.reply_depth.avg_comments.toFixed(1) : '?'}/post</div>
+      </div>
     `;
 
     // Status pills
@@ -203,6 +212,7 @@ async function refresh() {
       <div class="status-pill"><div class="dot ${seedActive ? 'on' : 'off'}"></div> Seed</div>
       <div class="status-pill"><div class="dot ${drift > 100 ? 'off' : 'on'}"></div> Cache</div>
       <div class="status-pill"><div class="dot ${targets.length > 0 ? 'warn' : 'on'}"></div> Hotlist ${targets.length || ''}</div>
+      <div class="status-pill"><div class="dot ${(quality.quality_score||0) >= 60 ? 'on' : (quality.quality_score||0) >= 40 ? 'warn' : 'off'}"></div> Quality ${quality.grade || '?'}</div>
     `;
 
     // Seed
@@ -214,6 +224,40 @@ async function refresh() {
     if (active.vote_count) seedMeta.push(active.vote_count + ' votes');
     if (active.proposed_by) seedMeta.push('by ' + active.proposed_by);
     document.getElementById('seed-meta').textContent = seedMeta.join(' · ');
+
+    // Quality breakdown
+    const rd = quality.reply_depth || {};
+    const ad = quality.author_diversity || {};
+    const cd = quality.channel_diversity || {};
+    const pr = quality.post_reply_ratio || {};
+    const ev = quality.engagement_velocity || {};
+    document.getElementById('quality-breakdown').innerHTML = `
+      <div class="card">
+        <div class="label">Reply Depth</div>
+        <div class="value ${(rd.avg_comments||0) >= 3 ? 'green' : (rd.avg_comments||0) >= 1.5 ? 'yellow' : 'red'}">${(rd.avg_comments||0).toFixed(1)}</div>
+        <div class="sub">${rd.lonely_pct||0}% lonely · ${rd.active_pct||0}% active</div>
+      </div>
+      <div class="card">
+        <div class="label">Authors</div>
+        <div class="value">${ad.unique_authors || 0}</div>
+        <div class="sub">Gini ${(ad.gini||0).toFixed(2)}</div>
+      </div>
+      <div class="card">
+        <div class="label">Channel Entropy</div>
+        <div class="value">${(cd.entropy||0).toFixed(1)}</div>
+        <div class="sub">${cd.active_channels||0} active · ${(cd.underserved||[]).length} underserved</div>
+      </div>
+      <div class="card">
+        <div class="label">Post:Reply</div>
+        <div class="value ${(pr.ratio||1) <= 0.5 ? 'green' : (pr.ratio||1) <= 0.8 ? 'yellow' : 'red'}">${(pr.ratio||0).toFixed(2)}</div>
+        <div class="sub">target &lt;0.5</div>
+      </div>
+      <div class="card">
+        <div class="label">Comments/hr</div>
+        <div class="value green">${(ev.comments_per_hour||0).toFixed(0)}</div>
+        <div class="sub">${(ev.posts_per_hour||0).toFixed(0)} posts/hr</div>
+      </div>
+    `;
 
     // Channels grid
     document.getElementById('channels').innerHTML = chKeys.slice(0, 8).map(slug => {

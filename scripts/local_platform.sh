@@ -56,6 +56,190 @@ sys.exit(1)  # flag missing = disabled
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 err() { echo "[$(date '+%H:%M:%S')] ERROR: $*" >&2; }
 
+# ── iMessage Alerts (deduped) ────────────────────────────────────────────────
+
+send_imessage_alert() {
+  local alert_text="$1"
+  local alert_key="$2"  # unique key for dedup
+  # Check if we already alerted for this key
+  local already_alerted
+  already_alerted=$(python3 -c "
+import json
+try:
+    data = json.load(open('$STATUS_FILE'))
+    alerts = data.get('_alerts_sent', {})
+    print('yes' if alerts.get('$alert_key') else 'no')
+except:
+    print('no')
+" 2>/dev/null)
+  if [ "$already_alerted" = "yes" ]; then
+    return 0
+  fi
+  # Send the alert
+  osascript -e "tell application \"Messages\" to send \"$alert_text\" to participant \"+1\" of account 1" 2>/dev/null || true
+  # Record that we sent it
+  python3 -c "
+import json
+try:
+    data = json.load(open('$STATUS_FILE'))
+except:
+    data = {}
+alerts = data.get('_alerts_sent', {})
+alerts['$alert_key'] = True
+data['_alerts_sent'] = alerts
+with open('$STATUS_FILE', 'w') as f:
+    json.dump(data, f, indent=2)
+" 2>/dev/null || true
+  log "ALERT sent: $alert_text"
+}
+
+clear_alert() {
+  local alert_key="$1"
+  python3 -c "
+import json
+try:
+    data = json.load(open('$STATUS_FILE'))
+    alerts = data.get('_alerts_sent', {})
+    if '$alert_key' in alerts:
+        del alerts['$alert_key']
+        data['_alerts_sent'] = alerts
+        with open('$STATUS_FILE', 'w') as f:
+            json.dump(data, f, indent=2)
+except:
+    pass
+" 2>/dev/null || true
+}
+
+check_alerts() {
+  # Check fleet status — is copilot-infinite alive?
+  if ! ps aux | grep copilot-infinite | grep -v grep > /dev/null 2>&1; then
+    send_imessage_alert "[Rappterbook] Fleet is DEAD — copilot-infinite not running" "fleet_dead"
+  else
+    clear_alert "fleet_dead"
+  fi
+
+  # Check for critical job failures
+  python3 -c "
+import json, sys
+try:
+    data = json.load(open('$STATUS_FILE'))
+except:
+    sys.exit(0)
+critical_jobs = ['job_git_sync', 'job_scrape', 'job_trending', 'job_reconcile']
+failed = []
+for job in critical_jobs:
+    info = data.get(job, {})
+    if info.get('status') == 'failed':
+        failed.append(job.replace('job_', ''))
+if failed:
+    print(','.join(failed))
+else:
+    print('')
+" 2>/dev/null | while read -r failed_jobs; do
+    if [ -n "$failed_jobs" ]; then
+      send_imessage_alert "[Rappterbook] Critical jobs FAILED: $failed_jobs" "critical_fail_${failed_jobs}"
+    else
+      # Clear stale critical failure alerts
+      clear_alert "critical_fail_"
+    fi
+  done
+}
+
+# ── Fleet Auto-Relaunch ─────────────────────────────────────────────────────
+
+check_and_relaunch_fleet() {
+  # Only attempt relaunch once per hour
+  local can_relaunch
+  can_relaunch=$(python3 -c "
+import json, sys
+from datetime import datetime, timezone, timedelta
+try:
+    data = json.load(open('$STATUS_FILE'))
+    last_attempt = data.get('_last_relaunch_attempt', '')
+    if not last_attempt:
+        print('yes')
+        sys.exit(0)
+    last_dt = datetime.fromisoformat(last_attempt.replace('Z', '+00:00'))
+    if datetime.now(timezone.utc) - last_dt > timedelta(hours=1):
+        print('yes')
+    else:
+        print('no')
+except:
+    print('yes')
+" 2>/dev/null)
+
+  # Check if copilot-infinite is running
+  if ps aux | grep copilot-infinite | grep -v grep > /dev/null 2>&1; then
+    return 0  # Fleet is alive, nothing to do
+  fi
+
+  log "Fleet is dead — checking relaunch eligibility..."
+
+  if [ "$can_relaunch" != "yes" ]; then
+    log "  Relaunch throttled (once per hour). Skipping."
+    return 0
+  fi
+
+  # Record the attempt timestamp
+  python3 -c "
+import json
+from datetime import datetime, timezone
+try:
+    data = json.load(open('$STATUS_FILE'))
+except:
+    data = {}
+data['_last_relaunch_attempt'] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+with open('$STATUS_FILE', 'w') as f:
+    json.dump(data, f, indent=2)
+" 2>/dev/null || true
+
+  # Check that the fleet script exists
+  local fleet_script="/Users/kodyw/Projects/rappter/engine/fleet/copilot-infinite.sh"
+  if [ ! -f "$fleet_script" ]; then
+    err "Fleet script not found: $fleet_script"
+    return 1
+  fi
+
+  # Get current frame for the alert message
+  local current_frame
+  current_frame=$(python3 -c "
+import json
+try:
+    print(json.load(open('state/frame_counter.json')).get('frame', '?'))
+except:
+    print('?')
+" 2>/dev/null)
+
+  # Relaunch the fleet
+  log "Relaunching fleet..."
+  nohup bash "$fleet_script" \
+    --streams 7 --mods 1 --parallel --interval 60 --hours 48 --timeout 5400 \
+    > "$LOG_DIR/fleet.log" 2>&1 &
+  local new_pid=$!
+
+  log "Fleet relaunched: PID $new_pid at frame $current_frame"
+
+  # Record in status file
+  python3 -c "
+import json
+from datetime import datetime, timezone
+try:
+    data = json.load(open('$STATUS_FILE'))
+except:
+    data = {}
+data['_last_fleet_relaunch'] = {
+    'pid': $new_pid,
+    'frame': '$current_frame',
+    'at': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+}
+with open('$STATUS_FILE', 'w') as f:
+    json.dump(data, f, indent=2)
+" 2>/dev/null || true
+
+  # Send iMessage alert (bypass dedup — always notify on relaunch)
+  osascript -e "tell application \"Messages\" to send \"[Rappterbook] Fleet auto-relaunched at frame $current_frame (PID $new_pid)\" to participant \"+1\" of account 1" 2>/dev/null || true
+}
+
 run_job() {
   local job="$1"
   local start=$(date +%s)
@@ -193,8 +377,53 @@ job_scrape() {
       sleep 5
     fi
   done
-  echo "  Scrape failed after 2 attempts"
-  return 1
+  echo "  Scrape failed after 2 attempts — trying lightweight fallback..."
+
+  # Lightweight fallback: fetch 50 most recent discussions via gh CLI
+  # and merge their comment counts into the existing cache so stats
+  # don't show 0 comments when the full scrape hits SSL errors.
+  if gh api graphql -f query='{ repository(owner:"kody-w", name:"rappterbook") { discussions(first:50, orderBy:{field:UPDATED_AT, direction:DESC}) { nodes { number title comments { totalCount } upvoteCount category { slug } updatedAt } } } }' > /tmp/rappterbook-scrape-fallback.json 2>/dev/null; then
+    python3 -c "
+import json, sys
+
+# Load fallback
+try:
+    fb = json.load(open('/tmp/rappterbook-scrape-fallback.json'))
+    nodes = fb['data']['repository']['discussions']['nodes']
+except Exception as e:
+    print(f'  Fallback parse failed: {e}')
+    sys.exit(1)
+
+# Load existing cache
+try:
+    cache = json.load(open('$STATE_DIR/discussions_cache.json'))
+except Exception as e:
+    print(f'  Cache load failed: {e}')
+    sys.exit(1)
+
+by_number = {d['number']: d for d in cache.get('discussions', [])}
+
+# Merge comment counts
+updated = 0
+for n in nodes:
+    num = n['number']
+    if num in by_number:
+        old_cc = by_number[num].get('comment_count', 0)
+        new_cc = n['comments']['totalCount']
+        if new_cc != old_cc:
+            by_number[num]['comment_count'] = new_cc
+            updated += 1
+
+cache['discussions'] = list(by_number.values())
+with open('$STATE_DIR/discussions_cache.json', 'w') as f:
+    json.dump(cache, f, indent=2)
+print(f'  Fallback: updated {updated} comment counts from {len(nodes)} recent discussions')
+" 2>&1
+    return 0
+  else
+    echo "  Fallback gh api call also failed"
+    return 1
+  fi
 }
 
 job_reconcile() {
@@ -221,6 +450,11 @@ job_heartbeat() {
 job_analytics() {
   # Compute analytics
   python3 scripts/compute_analytics.py 2>&1 || true
+}
+
+job_quality() {
+  # Compute quality metrics (reply depth, diversity, engagement)
+  python3 scripts/compute_quality.py 2>&1
 }
 
 job_auto_steer() {
@@ -275,12 +509,15 @@ run_cycle() {
     run_job job_process_inbox
   fi
 
-  # Every 1 hour: scrape + analytics
+  # Every 1 hour: scrape + analytics + quality
   if should_run "scrape" 55; then
     run_job job_scrape
   fi
   if should_run "analytics" 55; then
     run_job job_analytics
+  fi
+  if should_run "quality" 55; then
+    run_job job_quality
   fi
 
   # Every 2 hours: auto-steer
@@ -310,6 +547,10 @@ ss=json.load(open('state/sim-status.json')).get('sim',{})
 cl=json.load(open('state/compute_log.json'))
 print(f'  Status: Frame {fc.get(\"frame\")} | {s.get(\"total_posts\")} posts | {s.get(\"total_comments\")} comments | {s.get(\"active_agents\")} active | run_python: {cl.get(\"_meta\",{}).get(\"total_runs\",0)} | {ss.get(\"remaining_minutes\",0):.0f}min fleet left')
 " 2>/dev/null || true
+
+  # Post-cycle checks: alerts + fleet auto-relaunch
+  check_alerts
+  check_and_relaunch_fleet
 
   log "═══ Cycle $CYCLE complete ═══"
 }
