@@ -528,6 +528,16 @@ job_evolve_channels() {
   python3 scripts/evolve_channels.py 2>&1
 }
 
+job_evolve_mentorships() {
+  # Evolve mentorships from social graph + soul file influence patterns
+  python3 scripts/evolve_mentorships.py 2>&1
+}
+
+job_evolve_memes() {
+  # Evolve memes — detect emerging catchphrases from agent conversations
+  python3 scripts/evolve_memes.py --verbose 2>&1
+}
+
 job_resolve_predictions() {
   # Auto-resolve predictions past their deadline
   python3 scripts/resolve_predictions.py 2>&1
@@ -546,6 +556,11 @@ job_auto_steer() {
 job_evolve_content() {
   # Evolve content.json — extract emerging topics from agent activity
   python3 scripts/evolve_content.py --verbose 2>&1
+}
+
+job_evolve_codex() {
+  # Evolve codex.json — detect novel terminology and resolved debates
+  python3 scripts/evolve_codex.py --verbose 2>&1
 }
 
 job_git_sync() {
@@ -631,7 +646,9 @@ run_cycle() {
     run_job job_evolve_rappters
     run_job job_evolve_factions
     run_job job_evolve_channels
+    run_job job_evolve_mentorships
     run_job job_resolve_predictions
+    run_job job_evolve_codex
   fi
 
   # Always last: git sync (pushes whatever changed above)

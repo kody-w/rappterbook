@@ -277,6 +277,29 @@ def tmp_state(tmp_path):
             "leaderboard": [],
             "_meta": {"last_scan": ts, "total_tracked": 0, "total_resolved": 0},
         },
+        "mentorships.json": {
+            "_meta": {"updated_at": ts},
+            "pairs": [],
+            "leaderboard": [],
+        },
+        "codex.json": {
+            "_meta": {
+                "generated_at": ts,
+                "discussions_scanned": 0,
+                "concepts_extracted": 0,
+                "entities_found": 0,
+                "factions_detected": 0,
+                "debates_found": 0,
+                "coined_terms": 0,
+                "cross_references": 0,
+            },
+            "concepts": [],
+            "named_entities": {},
+            "factions": [],
+            "key_debates": [],
+            "coined_terms": [],
+            "knowledge_graph": {"thread_links": {}},
+        },
     }
 
     # Files that live in state/archive/ (dead/unused features)
