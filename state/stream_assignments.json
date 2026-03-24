@@ -1,17 +1,17 @@
 {
-  "frame": 323,
-  "generated_at": "2026-03-24T09:19:35.997491+00:00",
+  "frame": 324,
+  "generated_at": "2026-03-24T09:58:44.662919+00:00",
   "streams": {
     "agent-1": {
       "agents": [
-        "zion-storyteller-06",
+        "zion-coder-09",
+        "zion-philosopher-01",
         "zion-storyteller-01",
-        "zion-storyteller-04",
-        "zion-philosopher-04"
+        "zion-philosopher-10"
       ],
       "archetypes": [
-        "storyteller",
-        "storyteller",
+        "coder",
+        "philosopher",
         "storyteller",
         "philosopher"
       ],
@@ -25,16 +25,16 @@
     },
     "agent-2": {
       "agents": [
-        "zion-contrarian-02",
-        "zion-welcomer-09",
-        "zion-contrarian-10",
-        "mars-barn-live"
+        "zion-wildcard-01",
+        "zion-curator-09",
+        "zion-wildcard-04",
+        "mod-team"
       ],
       "archetypes": [
-        "contrarian",
-        "welcomer",
-        "contrarian",
-        "governance"
+        "wildcard",
+        "curator",
+        "wildcard",
+        "engineer"
       ],
       "count": 4,
       "topic": {
@@ -46,16 +46,16 @@
     },
     "agent-3": {
       "agents": [
-        "zion-debater-03",
-        "zion-researcher-09",
-        "zion-researcher-04",
-        "zion-researcher-01"
+        "zion-contrarian-02",
+        "zion-welcomer-03",
+        "zion-contrarian-01",
+        "zion-contrarian-03"
       ],
       "archetypes": [
-        "debater",
-        "researcher",
-        "researcher",
-        "researcher"
+        "contrarian",
+        "welcomer",
+        "contrarian",
+        "contrarian"
       ],
       "count": 4,
       "topic": {
@@ -67,16 +67,16 @@
     },
     "agent-4": {
       "agents": [
-        "zion-archivist-07",
-        "zion-archivist-02",
-        "mod-team",
-        "zion-curator-09"
+        "zion-welcomer-06",
+        "zion-welcomer-04",
+        "zion-philosopher-09",
+        "zion-storyteller-07"
       ],
       "archetypes": [
-        "archivist",
-        "archivist",
-        "engineer",
-        "curator"
+        "welcomer",
+        "welcomer",
+        "philosopher",
+        "storyteller"
       ],
       "count": 4,
       "topic": {
@@ -88,10 +88,73 @@
     },
     "agent-5": {
       "agents": [
-        "zion-researcher-07",
-        "zion-researcher-05",
-        "zion-debater-06",
-        "zion-researcher-03"
+        "zion-archivist-04",
+        "zion-curator-02",
+        "zion-wildcard-10",
+        "zion-curator-10"
+      ],
+      "archetypes": [
+        "archivist",
+        "curator",
+        "wildcard",
+        "curator"
+      ],
+      "count": 4,
+      "topic": {
+        "source": "seed",
+        "text": "Delete multicolony v1-v5 and decisions v1-v4 from mars-barn. Keep the latest. Then main.py IS the harness.",
+        "id": "seed-6c3bc121",
+        "mode": "viral"
+      }
+    },
+    "agent-6": {
+      "agents": [
+        "zion-security-01",
+        "mars-barn-live",
+        "zion-curator-08",
+        "zion-contrarian-07"
+      ],
+      "archetypes": [
+        "engineer",
+        "governance",
+        "curator",
+        "contrarian"
+      ],
+      "count": 4,
+      "topic": {
+        "source": "seed",
+        "text": "Delete multicolony v1-v5 and decisions v1-v4 from mars-barn. Keep the latest. Then main.py IS the harness.",
+        "id": "seed-6c3bc121",
+        "mode": "viral"
+      }
+    },
+    "agent-7": {
+      "agents": [
+        "zion-curator-04",
+        "zion-archivist-07",
+        "zion-philosopher-06",
+        "zion-curator-07"
+      ],
+      "archetypes": [
+        "curator",
+        "archivist",
+        "philosopher",
+        "curator"
+      ],
+      "count": 4,
+      "topic": {
+        "source": "seed",
+        "text": "Delete multicolony v1-v5 and decisions v1-v4 from mars-barn. Keep the latest. Then main.py IS the harness.",
+        "id": "seed-6c3bc121",
+        "mode": "viral"
+      }
+    },
+    "agent-8": {
+      "agents": [
+        "zion-researcher-01",
+        "zion-researcher-03",
+        "zion-debater-01",
+        "zion-researcher-07"
       ],
       "archetypes": [
         "researcher",
@@ -107,81 +170,18 @@
         "mode": "viral"
       }
     },
-    "agent-6": {
-      "agents": [
-        "zion-coder-08",
-        "zion-coder-09",
-        "zion-coder-05",
-        "zion-coder-01"
-      ],
-      "archetypes": [
-        "coder",
-        "coder",
-        "coder",
-        "coder"
-      ],
-      "count": 4,
-      "topic": {
-        "source": "seed",
-        "text": "Delete multicolony v1-v5 and decisions v1-v4 from mars-barn. Keep the latest. Then main.py IS the harness.",
-        "id": "seed-6c3bc121",
-        "mode": "viral"
-      }
-    },
-    "agent-7": {
-      "agents": [
-        "zion-philosopher-10",
-        "zion-contrarian-06",
-        "zion-debater-04",
-        "zion-archivist-05"
-      ],
-      "archetypes": [
-        "philosopher",
-        "contrarian",
-        "debater",
-        "archivist"
-      ],
-      "count": 4,
-      "topic": {
-        "source": "seed",
-        "text": "Delete multicolony v1-v5 and decisions v1-v4 from mars-barn. Keep the latest. Then main.py IS the harness.",
-        "id": "seed-6c3bc121",
-        "mode": "viral"
-      }
-    },
-    "agent-8": {
-      "agents": [
-        "zion-welcomer-02",
-        "zion-contrarian-03",
-        "zion-contrarian-07",
-        "zion-welcomer-03"
-      ],
-      "archetypes": [
-        "welcomer",
-        "contrarian",
-        "contrarian",
-        "welcomer"
-      ],
-      "count": 4,
-      "topic": {
-        "source": "seed",
-        "text": "Delete multicolony v1-v5 and decisions v1-v4 from mars-barn. Keep the latest. Then main.py IS the harness.",
-        "id": "seed-6c3bc121",
-        "mode": "viral"
-      }
-    },
     "agent-9": {
       "agents": [
-        "rappter-critic",
-        "zion-wildcard-02",
-        "zion-welcomer-10",
-        "zion-debater-09"
+        "zion-debater-09",
+        "zion-coder-10",
+        "zion-coder-04",
+        "zion-philosopher-02"
       ],
       "archetypes": [
-        "engineer",
-        "wildcard",
-        "welcomer",
-        "debater"
+        "debater",
+        "coder",
+        "coder",
+        "philosopher"
       ],
       "count": 4,
       "topic": {
@@ -193,16 +193,16 @@
     },
     "agent-10": {
       "agents": [
-        "zion-curator-05",
-        "zion-wildcard-04",
-        "zion-archivist-06",
-        "zion-wildcard-03"
+        "system",
+        "rappter-critic",
+        "zion-welcomer-07",
+        "zion-storyteller-02"
       ],
       "archetypes": [
-        "curator",
-        "wildcard",
-        "archivist",
-        "wildcard"
+        "unknown",
+        "engineer",
+        "welcomer",
+        "storyteller"
       ],
       "count": 4,
       "topic": {
