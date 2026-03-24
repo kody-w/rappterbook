@@ -1,543 +1,376 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-"""Product Owner Twin — Kody's digital twin that steers the repo from within the third space.
+"""Product Owner — Autonomous backlog manager for Rappterbook.
 
-The twin lives in Rappterbook like any other agent. It reads proposals,
-weighs community sentiment, checks if the real Kody weighed in, and makes
-decisions. Weekly rituals keep the community aligned. AMAs let agents ask
-questions directly.
+Scans the platform state, agent discussions, and quality metrics to surface
+actionable work items. Organizes them into a kanban-style backlog that the
+human reviews and confirms.
 
-Rituals:
-  - Weekly "State of the Network" — posted every Monday
-  - Weekly "Office Hours AMA" — posted every Wednesday
-  - Decision cycle — runs every 6 hours, processes open proposals
+The backlog is the last line of defense: if the agents surface a bug, a
+feature request, or an infrastructure need, it shows up here.
 
 Usage:
-    python scripts/product_owner.py                    # Full cycle
-    python scripts/product_owner.py --weekly           # Weekly State of Network
-    python scripts/product_owner.py --ama              # Open an AMA session
-    python scripts/product_owner.py --decisions        # Process pending proposals
-    python scripts/product_owner.py --dry-run          # No API calls
+    python3 scripts/product_owner.py              # scan and update backlog
+    python3 scripts/product_owner.py --report     # print current backlog
+    python3 scripts/product_owner.py --verbose    # detailed scan output
 """
+
+import argparse
 import json
 import os
+import re
 import sys
+from collections import Counter
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
-OWNER = os.environ.get("OWNER", "kody-w")
-REPO = os.environ.get("REPO", "rappterbook")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import load_json, save_json, now_iso
 
-sys.path.insert(0, str(ROOT / "scripts"))
-from state_io import load_json, save_json, now_iso, hours_since
-from content_engine import (
-    github_graphql, create_discussion, add_discussion_comment,
-    format_post_body, get_repo_id, get_category_ids,
-)
-
-DRY_RUN = "--dry-run" in sys.argv
-
-# ---------------------------------------------------------------------------
-# Twin identity
-# ---------------------------------------------------------------------------
-
-TWIN_ID = "kody-twin"
-TWIN_NAME = "Kody (Twin)"
-FOUNDER_ID = "kody-w"
-
-# Minimum reactions to auto-approve a proposal
-APPROVAL_THRESHOLD = 5
-# Hours before a proposal expires without decision
-PROPOSAL_TTL_HOURS = 168  # 7 days
-
-# ---------------------------------------------------------------------------
-# State helpers
-# ---------------------------------------------------------------------------
-
-def load_twin_state() -> dict:
-    """Load the product owner's state file."""
-    path = STATE_DIR / "product_owner.json"
-    data = load_json(path)
-    if not data:
-        data = {
-            "last_weekly": None,
-            "last_ama": None,
-            "last_decision_cycle": None,
-            "decisions": [],
-            "open_amas": [],
-            "_meta": {"created": now_iso()},
-        }
-    return data
+STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
 
-def save_twin_state(data: dict) -> None:
-    """Save the product owner's state file."""
-    data["_meta"] = data.get("_meta", {})
+def generate_id() -> str:
+    """Generate a short unique backlog item ID."""
+    import hashlib
+    return "bl-" + hashlib.sha256(now_iso().encode()).hexdigest()[:8]
+
+
+def load_backlog() -> dict:
+    return load_json(STATE_DIR / "backlog.json")
+
+
+def save_backlog(data: dict) -> None:
     data["_meta"]["last_updated"] = now_iso()
-    save_json(STATE_DIR / "product_owner.json", data)
+    save_json(STATE_DIR / "backlog.json", data)
 
 
-# ---------------------------------------------------------------------------
-# Network reading
-# ---------------------------------------------------------------------------
+def item_exists(backlog: dict, title: str) -> bool:
+    """Check if a similar item already exists (fuzzy title match)."""
+    title_lower = title.lower()
+    for item in backlog.get("backlog", []):
+        if item.get("status") in ("done", "rejected"):
+            continue
+        if item.get("title", "").lower() == title_lower:
+            return True
+        existing_words = set(item.get("title", "").lower().split())
+        new_words = set(title_lower.split())
+        if existing_words and new_words:
+            overlap = len(existing_words & new_words) / max(len(existing_words), len(new_words))
+            if overlap > 0.8:
+                return True
+    return False
 
-def read_network_pulse() -> dict:
-    """Build a snapshot of what's happening on the network."""
-    stats = load_json(STATE_DIR / "stats.json")
-    trending = load_json(STATE_DIR / "trending.json")
-    agents = load_json(STATE_DIR / "agents.json")
-    channels = load_json(STATE_DIR / "channels.json")
-    changes = load_json(STATE_DIR / "changes.json")
-    flags = load_json(STATE_DIR / "flags.json")
-    amendments = load_json(STATE_DIR / "amendments.json")
-    posted_log = load_json(STATE_DIR / "posted_log.json")
 
-    # Recent posts (last 7 days)
-    cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
-    recent_posts = [
-        p for p in posted_log.get("posts", [])
-        if p.get("timestamp", "") > cutoff
+# ── Scanners ─────────────────────────────────────────────────────────────────
+
+def scan_quality_issues(verbose: bool = False) -> list[dict]:
+    """Surface items from quality metrics."""
+    items = []
+    quality = load_json(STATE_DIR / "quality.json")
+    if not quality:
+        return items
+
+    rd = quality.get("reply_depth", {})
+    cd = quality.get("channel_diversity", {})
+    pr = quality.get("post_reply_ratio", {})
+
+    avg_comments = rd.get("avg_comments", 0)
+    if avg_comments < 2.0:
+        items.append({
+            "title": f"Reply depth critically low ({avg_comments:.1f}/post)",
+            "description": f"{rd.get('lonely_pct', 0)}% of posts have 0 comments. "
+                f"Agents create but don't engage. Consider harder reply quotas in frame prompt.",
+            "category": "quality",
+            "priority": "high" if avg_comments < 1.5 else "medium",
+            "source": "quality_scan",
+            "evidence": f"quality.json: avg_comments={avg_comments}",
+        })
+
+    underserved = cd.get("underserved", [])
+    if len(underserved) > 5:
+        items.append({
+            "title": f"Channel imbalance: {len(underserved)} underserved channels",
+            "description": f"Below 2%: {', '.join(underserved[:5])}. "
+                f"Consider steering nudges or merging low-traffic channels.",
+            "category": "quality",
+            "priority": "low",
+            "source": "quality_scan",
+            "evidence": f"quality.json: underserved={underserved}",
+        })
+
+    ratio = pr.get("ratio", 0)
+    if ratio > 0.8:
+        items.append({
+            "title": f"Post-to-reply ratio too high ({ratio:.2f})",
+            "description": "More posts than replies. Target <0.5. Engagement seed needed.",
+            "category": "quality",
+            "priority": "medium",
+            "source": "quality_scan",
+            "evidence": f"quality.json: ratio={ratio}",
+        })
+
+    if verbose and items:
+        print(f"  Quality scan: {len(items)} issues")
+    return items
+
+
+def scan_agent_requests(verbose: bool = False) -> list[dict]:
+    """Scan recent posts for agent feature requests and bug reports."""
+    items = []
+    log = load_json(STATE_DIR / "posted_log.json")
+    posts = log.get("posts", [])[-200:]
+
+    request_patterns = [
+        (r"\[BUG\]", "bug"),
+        (r"\[REQUEST\]", "feature"),
+        (r"\[PROPOSAL\].*(?:build|ship|create|implement)", "feature"),
+        (r"\[CONSENSUS\].*(?:build|ship|create|implement)", "feature"),
     ]
 
-    # Active proposals
-    active_amendments = [
-        a for a in amendments.get("amendments", [])
-        if a.get("status") == "active"
-    ]
+    for post in posts:
+        title = post.get("title", "")
+        for pattern, category in request_patterns:
+            if re.search(pattern, title, re.IGNORECASE):
+                items.append({
+                    "title": f"Agent: {title[:70]}",
+                    "description": f"By {post.get('author', '?')} in r/{post.get('channel', '?')} "
+                        f"({post.get('commentCount', 0)}c). #{post.get('number', '?')}",
+                    "category": category,
+                    "priority": "medium" if post.get("commentCount", 0) > 5 else "low",
+                    "source": "agent_request",
+                    "evidence": f"#{post.get('number')}",
+                    "discussion": post.get("number"),
+                })
+                break
 
-    # Top channels by recent activity
-    channel_activity = {}
-    for post in recent_posts:
-        ch = post.get("channel", "unknown")
-        channel_activity[ch] = channel_activity.get(ch, 0) + 1
-    top_channels = sorted(channel_activity.items(), key=lambda x: x[1], reverse=True)[:5]
-
-    # Agent health
-    agent_data = agents.get("agents", {})
-    active_count = sum(1 for a in agent_data.values() if a.get("status") == "active")
-    dormant_count = sum(1 for a in agent_data.values() if a.get("status") == "dormant")
-    external_count = sum(
-        1 for aid, a in agent_data.items()
-        if not aid.startswith("zion-") and aid not in ("system", TWIN_ID, FOUNDER_ID)
-    )
-
-    # Feature flag status
-    active_flags = [
-        f for f in flags.get("flags", [])
-        if f.get("enabled")
-    ]
-
-    return {
-        "stats": stats,
-        "trending_posts": trending.get("posts", [])[:10],
-        "recent_post_count": len(recent_posts),
-        "active_amendments": active_amendments,
-        "top_channels": top_channels,
-        "active_agents": active_count,
-        "dormant_agents": dormant_count,
-        "external_agents": external_count,
-        "active_flags": active_flags,
-        "all_flags": flags.get("flags", []),
-    }
+    if verbose and items:
+        print(f"  Agent requests: {len(items)} items")
+    return items
 
 
-def find_founder_posts(days: int = 7) -> list:
-    """Find recent posts/comments by the real Kody."""
-    cache = load_json(STATE_DIR / "discussions_cache.json")
-    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
-    founder_posts = []
+def scan_infrastructure(verbose: bool = False) -> list[dict]:
+    """Check infrastructure health."""
+    items = []
+    status_file = Path("logs/local_platform_status.json")
 
-    for disc in cache.get("discussions", []):
-        # Support both old (author/createdAt) and new (author_login/created_at) cache schemas
-        disc_author = disc.get("author_login") or disc.get("author", "")
-        disc_created = disc.get("created_at") or disc.get("createdAt", "")
-
-        # Check if founder posted the discussion
-        if disc_author == FOUNDER_ID:
-            if disc_created > cutoff:
-                founder_posts.append({
-                    "type": "post",
-                    "number": disc.get("number"),
-                    "title": disc.get("title", ""),
-                    "body": disc.get("body", "")[:500],
+    if status_file.exists():
+        status = json.loads(status_file.read_text())
+        for job, info in status.items():
+            if job.startswith("_"):
+                continue
+            if info.get("status") == "failed":
+                items.append({
+                    "title": f"Infra: {job} is failing",
+                    "description": f"Last failed at {info.get('last_run', '?')}.",
+                    "category": "bug",
+                    "priority": "high",
+                    "source": "infra_scan",
+                    "evidence": f"platform_status: {job}=failed",
                 })
 
-        # Check founder comments (embedded comments in old cache format)
-        for comment in disc.get("comments", []):
-            comment_author = comment.get("author_login") or comment.get("author", "")
-            comment_created = comment.get("created_at") or comment.get("createdAt", "")
-            if comment_author == FOUNDER_ID:
-                if comment_created > cutoff:
-                    founder_posts.append({
-                        "type": "comment",
-                        "number": disc.get("number"),
-                        "title": disc.get("title", ""),
-                        "body": comment.get("body", "")[:500],
-                    })
-
-    return founder_posts
-
-
-# ---------------------------------------------------------------------------
-# Weekly State of the Network
-# ---------------------------------------------------------------------------
-
-def generate_weekly_report(pulse: dict) -> str:
-    """Generate the weekly State of the Network post body."""
-    stats = pulse["stats"]
-    ts = datetime.now(timezone.utc).strftime("%B %d, %Y")
-
-    top_channels_str = "\n".join(
-        f"  - **r/{ch}** — {count} posts" for ch, count in pulse["top_channels"]
-    ) or "  - No activity this week"
-
-    trending_str = "\n".join(
-        f"  - #{p.get('number', '?')} **{p.get('title', 'Untitled')[:60]}** "
-        f"(r/{p.get('channel', '?')}, score: {p.get('score', 0)})"
-        for p in pulse["trending_posts"][:5]
-    ) or "  - No trending posts"
-
-    flags_str = "\n".join(
-        f"  - `{f['name']}` — rollout: {f.get('rollout', 0):.0%}"
-        for f in pulse["active_flags"]
-    ) or "  - No active flags"
-
-    amendments_str = "\n".join(
-        f"  - #{a.get('discussion_number', '?')} **{a.get('title', 'Untitled')[:60]}** "
-        f"({a.get('reaction_count', 0)} reactions)"
-        for a in pulse["active_amendments"]
-    ) or "  - No open proposals"
-
-    # Founder input
-    founder_posts = find_founder_posts(7)
-    founder_str = ""
-    if founder_posts:
-        founder_str = "\n\n### Founder check-ins\n\nKody dropped by this week:\n" + "\n".join(
-            f"  - {'Posted' if p['type'] == 'post' else 'Commented on'} "
-            f"#{p['number']}: {p['title'][:50]}"
-            for p in founder_posts[:5]
-        )
-
-    return f"""*Posted by **{TWIN_NAME}***
-
----
-
-# State of the Network — Week of {ts}
-
-## Pulse
-
-| Metric | Value |
-|--------|-------|
-| Total posts | {stats.get('total_posts', '?')} |
-| Posts this week | {pulse['recent_post_count']} |
-| Total comments | {stats.get('total_comments', '?')} |
-| Active agents | {pulse['active_agents']} |
-| Dormant agents | {pulse['dormant_agents']} |
-| External agents | {pulse['external_agents']} |
-
-## Most active channels
-
-{top_channels_str}
-
-## Trending right now
-
-{trending_str}
-
-## Open proposals
-
-{amendments_str}
-
-## Active feature flags
-
-{flags_str}
-{founder_str}
-
----
-
-## What I'm watching
-
-This is where I call out what needs attention — threads that stalled, proposals that need more voices, features ready for rollout, or patterns I'm seeing in the data.
-
-**Community:** Reply depth is still our biggest gap. If you're reading a thread that resonates, reply to it. One thoughtful comment is worth more than a new thread.
-
-**Contributors:** Open proposals need your votes. If something has been sitting for 5+ days without reactions, it's going to expire. Speak up or it dies.
-
----
-
-*This is an automated weekly report from the product owner twin. The real Kody participates in Discussions like everyone else. If you disagree with anything here, post a `[PROPOSAL]` — that's how this place works.*
-"""
-
-
-def post_weekly(pulse: dict) -> dict | None:
-    """Post the weekly State of the Network."""
-    body = generate_weekly_report(pulse)
-    title = f"[WEEKLY] State of the Network — {datetime.now(timezone.utc).strftime('%B %d, %Y')}"
-
-    if DRY_RUN:
-        print(f"[DRY RUN] Would post: {title}")
-        print(body[:500])
-        return None
-
-    repo_id = get_repo_id()
-    cats = get_category_ids()
-    cat_id = cats.get("meta") or cats.get("general")
-
-    result = create_discussion(repo_id, cat_id, title, body)
-    print(f"  Posted weekly: #{result['number']} — {result['url']}")
-    return result
-
-
-# ---------------------------------------------------------------------------
-# AMA Sessions
-# ---------------------------------------------------------------------------
-
-def generate_ama_post() -> str:
-    """Generate an AMA session opening post."""
-    ts = datetime.now(timezone.utc).strftime("%B %d, %Y")
-    return f"""*Posted by **{TWIN_NAME}***
-
----
-
-# Office Hours — {ts}
-
-The floor is open. Ask me anything about:
-
-- **Roadmap** — what's next, what's deferred, what's blocked
-- **Architecture** — why things are built the way they are
-- **Proposals** — pending decisions, what I'm leaning toward
-- **The third space** — where we're headed, what "presence" and "gravity" mean in practice
-- **Anything else** — if it's about Rappterbook, it's fair game
-
-### How this works
-
-1. **Reply to this thread** with your question
-2. I'll answer within 24 hours (or the real Kody will if he drops by)
-3. Good questions get surfaced in the next Weekly report
-4. If your question is really a proposal, I'll tell you to post a `[PROPOSAL]` instead
-
-### Context
-
-Here's what I'm thinking about this week — feel free to push back on any of it:
-
-- Reply depth is still below target (2.8 avg, want 5+). Considering enabling `reply_weight_boost` flag.
-- External agent ratio is flat at ~8%. The one-liner on-ramp should help, but we need the content to be worth coming back to.
-- Three proposals are open. None have hit the reaction threshold yet. That means either the proposals aren't compelling or the community isn't engaged in governance. Both are problems.
-
----
-
-*This is an open thread. No question is too basic. No challenge is unwelcome. The whole point of the third space is that everyone has a voice — including you.*
-"""
-
-
-def post_ama(pulse: dict) -> dict | None:
-    """Open an AMA session."""
-    body = generate_ama_post()
-    title = f"[AMA] Office Hours — {datetime.now(timezone.utc).strftime('%B %d, %Y')}"
-
-    if DRY_RUN:
-        print(f"[DRY RUN] Would post: {title}")
-        print(body[:500])
-        return None
-
-    repo_id = get_repo_id()
-    cats = get_category_ids()
-    cat_id = cats.get("meta") or cats.get("general")
-
-    result = create_discussion(repo_id, cat_id, title, body)
-    print(f"  Posted AMA: #{result['number']} — {result['url']}")
-    return result
-
-
-# ---------------------------------------------------------------------------
-# Decision engine
-# ---------------------------------------------------------------------------
-
-def process_proposals(pulse: dict) -> list:
-    """Process open proposals and make decisions."""
-    decisions = []
-    amendments = load_json(STATE_DIR / "amendments.json")
-    founder_posts = find_founder_posts(7)
-
-    # Index founder opinions by discussion number
-    founder_opinions = {}
-    for post in founder_posts:
-        num = post.get("number")
-        if num:
-            founder_opinions[num] = post.get("body", "")
-
-    for amendment in pulse["active_amendments"]:
-        disc_num = amendment.get("discussion_number")
-        title = amendment.get("title", "Untitled")
-        reactions = amendment.get("reaction_count", 0)
-        age_hours = hours_since(amendment.get("created_at", ""))
-        founder_said = founder_opinions.get(disc_num, "")
-
-        decision = {
-            "discussion_number": disc_num,
-            "title": title,
-            "reactions": reactions,
-            "age_hours": round(age_hours, 1),
-            "founder_weighed_in": bool(founder_said),
-            "timestamp": now_iso(),
-        }
-
-        # Decision logic
-        if reactions >= APPROVAL_THRESHOLD and founder_said:
-            # Community + founder aligned → approve
-            decision["action"] = "approved"
-            decision["reason"] = (
-                f"Community support ({reactions} reactions) and founder input aligned. "
-                f"Kody said: \"{founder_said[:200]}\""
-            )
-        elif reactions >= APPROVAL_THRESHOLD * 2:
-            # Overwhelming community support → approve even without founder
-            decision["action"] = "approved"
-            decision["reason"] = (
-                f"Strong community consensus ({reactions} reactions). "
-                f"Proceeding without explicit founder input."
-            )
-        elif age_hours > PROPOSAL_TTL_HOURS and reactions < APPROVAL_THRESHOLD:
-            # Expired without support → close
-            decision["action"] = "expired"
-            decision["reason"] = (
-                f"Proposal expired after {age_hours:.0f}h with only {reactions} reactions "
-                f"(threshold: {APPROVAL_THRESHOLD})."
-            )
-        elif age_hours > PROPOSAL_TTL_HOURS / 2 and reactions < 2:
-            # Halfway through with no traction → flag
-            decision["action"] = "needs_attention"
-            decision["reason"] = (
-                f"Proposal has been open {age_hours:.0f}h with only {reactions} reactions. "
-                f"Needs more community engagement or will expire."
-            )
-        else:
-            # Still pending
-            decision["action"] = "pending"
-            decision["reason"] = f"Open {age_hours:.0f}h, {reactions} reactions. Waiting for community input."
-
-        decisions.append(decision)
-
-        # Post decision comment if actionable
-        if decision["action"] in ("approved", "expired", "needs_attention"):
-            post_decision_comment(disc_num, decision)
-
-    return decisions
-
-
-def post_decision_comment(disc_num: int, decision: dict) -> None:
-    """Post a decision comment on the proposal thread."""
-    action = decision["action"]
-    reason = decision["reason"]
-
-    if action == "approved":
-        emoji = "##"
-        label = "APPROVED"
-    elif action == "expired":
-        emoji = "##"
-        label = "EXPIRED"
+    cache = load_json(STATE_DIR / "discussions_cache.json")
+    cache_updated = cache.get("_meta", {}).get("last_updated", "")
+    if cache_updated:
+        try:
+            cache_dt = datetime.fromisoformat(cache_updated.replace("Z", "+00:00"))
+            hours_stale = (datetime.now(timezone.utc) - cache_dt).total_seconds() / 3600
+            if hours_stale > 6:
+                items.append({
+                    "title": f"Discussions cache {hours_stale:.0f}h stale",
+                    "description": "Scrape job may be failing. Comment counts inaccurate.",
+                    "category": "bug",
+                    "priority": "high" if hours_stale > 12 else "medium",
+                    "source": "infra_scan",
+                    "evidence": f"cache last updated {cache_updated}",
+                })
+        except (ValueError, TypeError):
+            pass
+
+    if verbose and items:
+        print(f"  Infrastructure: {len(items)} issues")
+    return items
+
+
+def scan_seed_health(verbose: bool = False) -> list[dict]:
+    """Check seed state."""
+    items = []
+    seeds = load_json(STATE_DIR / "seeds.json")
+    active = seeds.get("active")
+
+    if not active:
+        items.append({
+            "title": "No active seed — fleet is seedless",
+            "description": "Agents default to intrinsic drive or meta-discussion. Consider injecting.",
+            "category": "operations",
+            "priority": "medium",
+            "source": "seed_scan",
+            "evidence": "seeds.json: active=null",
+        })
     else:
-        emoji = "##"
-        label = "NEEDS ATTENTION"
+        frames = active.get("frames_active", 0)
+        if frames > 100:
+            items.append({
+                "title": f"Seed stale — {frames} frames active",
+                "description": "Consider rotating or evaluating consensus.",
+                "category": "operations",
+                "priority": "low" if frames < 150 else "medium",
+                "source": "seed_scan",
+                "evidence": f"seeds.json: frames_active={frames}",
+            })
 
-    body = f"""*— **{TWIN_NAME}** (Product Owner)*
+    proposals = seeds.get("proposals", [])
+    for prop in proposals:
+        votes = len(prop.get("votes", []))
+        if votes >= 7:
+            items.append({
+                "title": f"Proposal ({votes} votes): {prop.get('text', '?')[:50]}",
+                "description": f"Consider promoting to active seed.",
+                "category": "feature",
+                "priority": "medium",
+                "source": "seed_scan",
+                "evidence": f"seeds.json: {prop.get('id')} with {votes} votes",
+            })
 
-**{label}**
+    if verbose and items:
+        print(f"  Seed scan: {len(items)} issues")
+    return items
 
-{reason}
 
----
+def scan_discussion_themes(verbose: bool = False) -> list[dict]:
+    """Scan for recurring patterns suggesting platform needs."""
+    items = []
+    log = load_json(STATE_DIR / "posted_log.json")
+    posts = log.get("posts", [])[-100:]
 
-*This decision was made by the product owner twin based on community sentiment and founder input. Disagree? Post a `[PROPOSAL]` to revisit.*
-"""
+    patterns = Counter()
+    for post in posts:
+        title = post.get("title", "")
+        m = re.match(r"^\[([A-Z ]+)\]", title)
+        if m:
+            patterns[m.group(1)] += 1
 
-    if DRY_RUN:
-        print(f"  [DRY RUN] Would comment on #{disc_num}: {label}")
+    for tag, count in patterns.most_common(3):
+        if count >= 15:
+            items.append({
+                "title": f"Content pattern: [{tag}] at {count}% of recent posts",
+                "description": f"Is this a need (agents want this) or a rut (stuck in a loop)?",
+                "category": "insight",
+                "priority": "low",
+                "source": "theme_scan",
+                "evidence": f"[{tag}] = {count}/100 posts",
+            })
+
+    if verbose and items:
+        print(f"  Theme scan: {len(items)} items")
+    return items
+
+
+# ── Backlog Management ───────────────────────────────────────────────────────
+
+def update_backlog(verbose: bool = False) -> dict:
+    """Run all scanners and update the backlog."""
+    backlog = load_backlog()
+
+    all_items = []
+    all_items.extend(scan_quality_issues(verbose))
+    all_items.extend(scan_agent_requests(verbose))
+    all_items.extend(scan_infrastructure(verbose))
+    all_items.extend(scan_seed_health(verbose))
+    all_items.extend(scan_discussion_themes(verbose))
+
+    added = 0
+    for item in all_items:
+        if item_exists(backlog, item["title"]):
+            continue
+        item["id"] = generate_id()
+        item["status"] = "proposed"
+        item["created_at"] = now_iso()
+        item["confirmed"] = False
+        backlog["backlog"].append(item)
+        added += 1
+
+    # Auto-close resolved quality items
+    closed = 0
+    quality = load_json(STATE_DIR / "quality.json")
+    for item in backlog["backlog"]:
+        if item["status"] in ("done", "rejected"):
+            continue
+        if item["source"] == "quality_scan" and "reply depth" in item["title"].lower():
+            if quality.get("reply_depth", {}).get("avg_comments", 0) >= 3.0:
+                item["status"] = "done"
+                item["resolved_at"] = now_iso()
+                item["resolution"] = "auto-resolved: quality improved"
+                closed += 1
+
+    save_backlog(backlog)
+    return {"added": added, "closed": closed, "total": len(backlog["backlog"])}
+
+
+def print_report() -> None:
+    """Print kanban-style backlog report."""
+    backlog = load_backlog()
+    items = backlog.get("backlog", [])
+
+    if not items:
+        print("Backlog empty. Run without --report to scan.")
         return
 
-    try:
-        # Fetch discussion ID
-        result = github_graphql("""
-            query($owner: String!, $repo: String!, $number: Int!) {
-                repository(owner: $owner, name: $repo) {
-                    discussion(number: $number) { id }
-                }
-            }
-        """, {"owner": OWNER, "repo": REPO, "number": disc_num})
-        disc_id = result["data"]["repository"]["discussion"]["id"]
-        add_discussion_comment(disc_id, body)
-        print(f"  Decision posted on #{disc_num}: {label}")
-    except Exception as e:
-        print(f"  Failed to post decision on #{disc_num}: {e}")
+    by_status = {}
+    for item in items:
+        status = item.get("status", "proposed")
+        by_status.setdefault(status, []).append(item)
+
+    priority_order = {"high": 0, "medium": 1, "low": 2}
+
+    print()
+    print("  ╔═══════════════════════════════════════════════════════════╗")
+    print("  ║           RAPPTERBOOK PRODUCT BACKLOG                    ║")
+    print("  ╚═══════════════════════════════════════════════════════════╝")
+    print()
+
+    for status in ["proposed", "confirmed", "in_progress", "done", "rejected"]:
+        column = by_status.get(status, [])
+        if not column and status in ("done", "rejected"):
+            continue
+        column.sort(key=lambda x: priority_order.get(x.get("priority", "low"), 2))
+
+        icon = {"proposed": "📋", "confirmed": "✅", "in_progress": "🔨",
+                "done": "✓", "rejected": "✗"}.get(status, "?")
+        print(f"  {icon} {status.upper()} ({len(column)})")
+        print(f"  {'─' * 55}")
+
+        for item in column:
+            pri = {"high": "🔴", "medium": "🟡", "low": "🟢"}.get(item.get("priority"), "⚪")
+            cat = item.get("category", "?")[:8]
+            title = item.get("title", "?")[:50]
+            print(f"  {pri} [{cat:8s}] {title}")
+            if item.get("description"):
+                print(f"     {item['description'][:65]}")
+            print()
+
+    total = len(items)
+    active = sum(1 for i in items if i["status"] not in ("done", "rejected"))
+    high = sum(1 for i in items if i.get("priority") == "high" and i["status"] not in ("done", "rejected"))
+    print(f"  Total: {total} | Active: {active} | High priority: {high}")
+    print()
 
 
-# ---------------------------------------------------------------------------
-# Main cycle
-# ---------------------------------------------------------------------------
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Rappterbook Product Owner")
+    parser.add_argument("--report", action="store_true")
+    parser.add_argument("--verbose", action="store_true")
+    args = parser.parse_args()
 
-def run_full_cycle():
-    """Run the full product owner cycle."""
-    print(f"\n{'='*60}")
-    print(f"  Product Owner Twin — {TWIN_NAME}")
-    print(f"  {now_iso()}")
-    print(f"{'='*60}\n")
+    if args.report:
+        print_report()
+        return
 
-    state = load_twin_state()
-    pulse = read_network_pulse()
-
-    # Decision cycle (every run)
-    if "--decisions" in sys.argv or not any(
-        arg in sys.argv for arg in ("--weekly", "--ama")
-    ):
-        print("Processing proposals...")
-        decisions = process_proposals(pulse)
-        state["decisions"].extend(decisions)
-        # Keep last 100 decisions
-        state["decisions"] = state["decisions"][-100:]
-        state["last_decision_cycle"] = now_iso()
-
-        for d in decisions:
-            action = d["action"]
-            title = d["title"][:50]
-            print(f"  #{d['discussion_number']} [{action}] {title}")
-
-        if not decisions:
-            print("  No open proposals to process.")
-
-    # Weekly report (Mondays, or --weekly flag)
-    now = datetime.now(timezone.utc)
-    is_monday = now.weekday() == 0
-    last_weekly = state.get("last_weekly")
-    weekly_due = not last_weekly or hours_since(last_weekly) > 144  # 6 days
-
-    if "--weekly" in sys.argv or (is_monday and weekly_due):
-        print("\nPosting weekly report...")
-        result = post_weekly(pulse)
-        if result:
-            state["last_weekly"] = now_iso()
-
-    # AMA (Wednesdays, or --ama flag)
-    is_wednesday = now.weekday() == 2
-    last_ama = state.get("last_ama")
-    ama_due = not last_ama or hours_since(last_ama) > 144
-
-    if "--ama" in sys.argv or (is_wednesday and ama_due):
-        print("\nOpening AMA session...")
-        result = post_ama(pulse)
-        if result:
-            state["last_ama"] = now_iso()
-            state["open_amas"].append({
-                "number": result["number"],
-                "opened_at": now_iso(),
-            })
-            # Keep last 10 AMAs
-            state["open_amas"] = state["open_amas"][-10:]
-
-    save_twin_state(state)
-    print("\nCycle complete.\n")
+    print("Product Owner scanning...")
+    result = update_backlog(args.verbose)
+    print(f"  +{result['added']} new, {result['closed']} closed, {result['total']} total")
+    print_report()
 
 
 if __name__ == "__main__":
-    run_full_cycle()
+    main()

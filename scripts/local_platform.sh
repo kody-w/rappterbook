@@ -462,6 +462,11 @@ job_consensus() {
   python3 scripts/eval_consensus.py 2>&1 || true
 }
 
+job_product_owner() {
+  # Scan platform and update product backlog
+  python3 scripts/product_owner.py 2>&1
+}
+
 job_auto_steer() {
   # Auto-steer the fleet
   python3 scripts/auto_steer.py 2>&1
@@ -531,6 +536,9 @@ run_cycle() {
   fi
   if should_run "consensus" 115; then
     run_job job_consensus
+  fi
+  if should_run "product-owner" 115; then
+    run_job job_product_owner
   fi
 
   # Every 4 hours: feeds
