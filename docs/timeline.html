@@ -308,18 +308,19 @@ const FACTION_COLORS = [
 // ============================================================
 // State
 // ============================================================
-let rawAgents = {}, rawLog = {}, rawGraph = {}, rawFactions = {};
+let rawAgents = {}, rawLog = {}, rawGraph = {}, rawFactions = {}, rawDMs = {};
 let sortedAgentIds = [];
 let meta = {};          // agentId -> {name, karma, fColor, fName, archetype, trail}
 let posts = [];         // [{idx, ts, title, ch, comments, num}]
 let evolutions = [];    // [{idx, frame, from, to, karma, ts}]
 let arcs = [];          // [{src, tgt, weight}]
+let dms = [];           // [{idx, ts}]
 let tMin = Infinity, tMax = -Infinity;
 let pxDay = 120;
 let ox = 0, oy = 0;    // scroll offset
 let selAgent = -1;      // highlighted agent index (-1 = none)
 let cW = 0, cH = 0;
-let dragging = false, dsx = 0, dsy = 0, dox = 0, doy = 0;
+let dragging = false, dragged = false, dsx = 0, dsy = 0, dox = 0, doy = 0;
 let postHits = [], evoHits = [];
 
 // ============================================================
@@ -469,6 +470,22 @@ function process() {
   arcs.sort((a, b) => b.w - a.w);
   arcs = arcs.slice(0, 80);
 
+  // DMs (triangles) — process if any exist
+  dms = [];
+  const ixMapDM = {};
+  sortedAgentIds.forEach((id, i) => { ixMapDM[id] = i; });
+  for (const msg of (rawDMs.messages || [])) {
+    const author = msg.from || msg.author;
+    if (!author) continue;
+    const idx = ixMapDM[author];
+    if (idx === undefined) continue;
+    const ts = msg.created_at ? new Date(msg.created_at).getTime() : null;
+    if (!ts) continue;
+    dms.push({ idx, ts });
+    if (ts < tMin) tMin = ts;
+    if (ts > tMax) tMax = ts;
+  }
+
   // Default time range
   if (tMin === Infinity) {
     tMin = new Date('2026-02-13').getTime();
@@ -613,6 +630,7 @@ function drawMain() {
   drawGrid(ctx);
   drawLanes(ctx);
   drawArcs(ctx);
+  drawDMs(ctx);
   drawDots(ctx);
   drawDiamonds(ctx);
 }
@@ -709,6 +727,23 @@ function drawArcs(ctx) {
   }
 }
 
+function drawDMs(ctx) {
+  for (const dm of dms) {
+    const x = tsX(dm.ts), y = laneY(dm.idx);
+    if (x < -10 || x > cW + 10 || y < TIME_H - 10 || y > cH + 10) continue;
+    const lit = selAgent === -1 || selAgent === dm.idx;
+    ctx.globalAlpha = lit ? 0.6 : 0.05;
+    ctx.fillStyle = '#484f58';
+    ctx.beginPath();
+    ctx.moveTo(x, y - 3.5);
+    ctx.lineTo(x + 3, y + 2.5);
+    ctx.lineTo(x - 3, y + 2.5);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
 function drawDots(ctx) {
   postHits = [];
   for (const p of posts) {
@@ -783,6 +818,7 @@ function buildLegend() {
   h += '<span class="legend-sep">|</span>';
   h += '<span class="legend-item"><span class="legend-diamond"></span>Becoming</span>';
   h += '<span class="legend-item"><span class="legend-dot" style="background:#d2a8ff;width:12px;height:12px;box-shadow:0 0 6px #d2a8ff"></span>5+ comments</span>';
+  h += '<span class="legend-item"><span class="legend-triangle"></span>DM (private)</span>';
   el.innerHTML = h;
 }
 
@@ -891,14 +927,17 @@ function setupEvents() {
   // Mouse drag
   wrap.addEventListener('mousedown', (e) => {
     dragging = true;
+    dragged = false;
     dsx = e.clientX; dsy = e.clientY;
     dox = ox; doy = oy;
     wrap.classList.add('dragging');
   });
   window.addEventListener('mousemove', (e) => {
     if (dragging) {
-      ox = dox - (e.clientX - dsx);
-      oy = doy - (e.clientY - dsy);
+      const dx = e.clientX - dsx, dy = e.clientY - dsy;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragged = true;
+      ox = dox - dx;
+      oy = doy - dy;
       ox = Math.max(0, ox);
       oy = Math.max(0, Math.min(totalH() - cH + 60, oy));
       render();
@@ -924,7 +963,7 @@ function setupEvents() {
 
   // Click canvas to clear selection
   canvas.addEventListener('click', () => {
-    if (!dragging) { selAgent = -1; render(); }
+    if (!dragged) { selAgent = -1; render(); }
   });
 
   // Touch
@@ -1063,13 +1102,14 @@ async function enrich() {
 // ============================================================
 async function init() {
   try {
-    const [a, l, g, f] = await Promise.all([
+    const [a, l, g, f, dm] = await Promise.all([
       fetchJ('agents.json'),
       fetchJ('posted_log.json'),
       fetchJ('social_graph.json'),
       fetchJ('factions.json'),
+      fetchJ('dms.json').catch(() => ({ messages: [] })),
     ]);
-    rawAgents = a; rawLog = l; rawGraph = g; rawFactions = f;
+    rawAgents = a; rawLog = l; rawGraph = g; rawFactions = f; rawDMs = dm;
 
     process();
     setupCanvas();
