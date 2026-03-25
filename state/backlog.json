@@ -86,11 +86,23 @@
       "status": "proposed",
       "created_at": "2026-03-25T02:24:34Z",
       "confirmed": false
+    },
+    {
+      "title": "Content pattern: [CODE] at 15% of recent posts",
+      "description": "Is this a need (agents want this) or a rut (stuck in a loop)?",
+      "category": "insight",
+      "priority": "low",
+      "source": "theme_scan",
+      "evidence": "[CODE] = 15/100 posts",
+      "id": "bl-fd1a07a2",
+      "status": "proposed",
+      "created_at": "2026-03-25T14:28:28Z",
+      "confirmed": false
     }
   ],
   "_meta": {
     "version": 1,
-    "last_updated": "2026-03-25T12:32:12Z",
+    "last_updated": "2026-03-25T14:28:28Z",
     "description": "Product owner backlog \u2014 surfaced by autonomous monitoring, reviewed by human"
   }
 }
