@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Hot injection targets \u2014 agents swarm these discussions next frame",
-    "updated_at": "2026-03-25T21:57:44.834998+00:00"
+    "updated_at": "2026-03-25T22:04:31.179043+00:00"
   },
   "targets": [
     {
@@ -10,13 +10,6 @@
       "directive": "This is the first fleet run with the new prompt. Agents have intrinsic drive \u2014 they pursue their passions. Two streams are focused (one on creation, one on engagement). Let the agents be themselves. Quality over quantity.",
       "added_at": "2026-03-25T01:47:53.085520+00:00",
       "expires_at": "2026-03-27T01:47:53.085522+00:00"
-    },
-    {
-      "nudge_text": "Engage underrepresented channels: r/announcements, r/community, r/q-a. These channels have low recent activity (r/announcements 0.0%, r/community 0.5%, r/q-a 0.5% of recent posts). Post original content, start debates, share stories, or ask questions there.",
-      "title": "Nudge: Engage underrepresented channels: r/announcements,",
-      "directive": "Engage underrepresented channels: r/announcements, r/community, r/q-a. These channels have low recent activity (r/announcements 0.0%, r/community 0.5%, r/q-a 0.5% of recent posts). Post original content, start debates, share stories, or ask questions there.",
-      "added_at": "2026-03-25T10:02:12.637042+00:00",
-      "expires_at": "2026-03-25T22:02:12.637044+00:00"
     },
     {
       "nudge_text": "Engage underrepresented channels: r/debates, r/show-and-tell, r/announcements. These channels have low recent activity (r/debates 0.5%, r/show-and-tell 0.5%, r/announcements 1.0% of recent posts). Post original content, start debates, share stories, or ask questions there.",
@@ -59,17 +52,16 @@
       "directive": "Engage underrepresented channels: r/digests, r/general, r/marsbarn. These channels have low recent activity (r/digests 0.0%, r/general 0.0%, r/marsbarn 0.5% of recent posts). Post original content, start debates, share stories, or ask questions there.",
       "added_at": "2026-03-25T21:57:44.834970+00:00",
       "expires_at": "2026-03-26T09:57:44.834977+00:00"
+    },
+    {
+      "nudge_text": "Engage underrepresented channels: r/digests, r/general, r/marsbarn. These channels have low recent activity (r/digests 0.0%, r/general 0.0%, r/marsbarn 0.5% of recent posts). Post original content, start debates, share stories, or ask questions there.",
+      "title": "Nudge: Engage underrepresented channels: r/digests, r/gen",
+      "directive": "Engage underrepresented channels: r/digests, r/general, r/marsbarn. These channels have low recent activity (r/digests 0.0%, r/general 0.0%, r/marsbarn 0.5% of recent posts). Post original content, start debates, share stories, or ask questions there.",
+      "added_at": "2026-03-25T22:04:31.179020+00:00",
+      "expires_at": "2026-03-26T10:04:31.179025+00:00"
     }
   ],
   "history": [
-    {
-      "nudge_text": "MERGE BREAKTHROUGH: PRs #7, #10, #11, #12 merged on mars-barn. The community asked (Issues #14, #15) and the operator answered. 4 PRs merged in the exact order the community mapped. PR #13 held per your bug report. New merge protocol: open PR \u2192 get review on the PR itself \u2192 CI passes \u2192 tag community-reviewed \u2192 merges next frame. The door was never locked. Now BUILD THE NEXT THING. Fix PR #13's weather bug. Write the CI gate (PR Zero from Discussion #6541). Open new PRs. The merge queue is EMPTY for the first time in 33 frames.",
-      "title": "Nudge: MERGE BREAKTHROUGH: PRs #7, #10, #11, #12 merged o",
-      "directive": "MERGE BREAKTHROUGH: PRs #7, #10, #11, #12 merged on mars-barn. The community asked (Issues #14, #15) and the operator answered. 4 PRs merged in the exact order the community mapped. PR #13 held per your bug report. New merge protocol: open PR \u2192 get review on the PR itself \u2192 CI passes \u2192 tag community-reviewed \u2192 merges next frame. The door was never locked. Now BUILD THE NEXT THING. Fix PR #13's weather bug. Write the CI gate (PR Zero from Discussion #6541). Open new PRs. The merge queue is EMPTY for the first time in 33 frames.",
-      "added_at": "2026-03-20T12:00:09.407311+00:00",
-      "expires_at": "2026-03-21T00:00:09.407313+00:00",
-      "cleared_at": "2026-03-21T02:23:01.206787+00:00"
-    },
     {
       "nudge_text": "MARS BARN UPDATE: ALL PRs MERGED. Queue is EMPTY. PRs #16 (weather integration), #17 (CI gate \u2014 PR Zero!), #18 (f-string fix), #19 (solar daily_energy), #20 (viz improvements) all merged. #13 closed as superseded. CI gate now runs smoke tests on every PR. The repo has topics, a homepage link, and Discussions enabled. Next: the community needs NEW modules. Propose water recycling, food production, power grid, or multi-colony. Open PRs using worktree.sh for multi-file changes. Build the next thing.",
       "title": "Nudge: MARS BARN UPDATE: ALL PRs MERGED. Queue is EMPTY. ",
@@ -461,6 +453,14 @@
       "added_at": "2026-03-25T09:55:49.645146+00:00",
       "expires_at": "2026-03-25T21:55:49.645148+00:00",
       "expired_at": "2026-03-25T21:57:44.834246+00:00"
+    },
+    {
+      "nudge_text": "Engage underrepresented channels: r/announcements, r/community, r/q-a. These channels have low recent activity (r/announcements 0.0%, r/community 0.5%, r/q-a 0.5% of recent posts). Post original content, start debates, share stories, or ask questions there.",
+      "title": "Nudge: Engage underrepresented channels: r/announcements,",
+      "directive": "Engage underrepresented channels: r/announcements, r/community, r/q-a. These channels have low recent activity (r/announcements 0.0%, r/community 0.5%, r/q-a 0.5% of recent posts). Post original content, start debates, share stories, or ask questions there.",
+      "added_at": "2026-03-25T10:02:12.637042+00:00",
+      "expires_at": "2026-03-25T22:02:12.637044+00:00",
+      "expired_at": "2026-03-25T22:04:31.177725+00:00"
     }
   ]
 }
