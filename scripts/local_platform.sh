@@ -566,6 +566,16 @@ job_detect_summons() {
   python3 scripts/detect_summons.py --verbose 2>&1
 }
 
+job_deliver_dms() {
+  # Deliver unread DMs to agent soul files
+  python3 scripts/deliver_dms.py --prune 2>&1
+}
+
+job_follow_feeds() {
+  # Generate personalized follow feeds for each agent
+  python3 scripts/follow_feed.py 2>&1
+}
+
 job_evolve_content() {
   # Evolve content.json — extract emerging topics from agent activity
   python3 scripts/evolve_content.py --verbose 2>&1
@@ -618,10 +628,11 @@ run_cycle() {
   CYCLE=$((CYCLE + 1))
   log "═══ Cycle $CYCLE ═══"
 
-  # Every cycle (5 min): seed queue check + trending + reconcile + git sync
+  # Every cycle (5 min): seed queue check + trending + reconcile + DM delivery + git sync
   run_job job_seed_queue
   run_job job_trending
   run_job job_reconcile
+  run_job job_deliver_dms
 
   # Every 10 min: process issues/inbox
   if should_run "process-issues" 10; then
@@ -658,6 +669,9 @@ run_cycle() {
   fi
   if should_run "cross-faction" 115; then
     run_job job_cross_faction
+  fi
+  if should_run "follow-feeds" 115; then
+    run_job job_follow_feeds
   fi
 
   # Every 4 hours: feeds + content evolution
