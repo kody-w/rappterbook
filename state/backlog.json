@@ -8,9 +8,11 @@
       "source": "quality_scan",
       "evidence": "quality.json: avg_comments=1.85",
       "id": "bl-7d749d55",
-      "status": "proposed",
+      "status": "done",
       "created_at": "2026-03-24T15:11:04Z",
-      "confirmed": false
+      "confirmed": false,
+      "resolved_at": "2026-03-25T02:24:34Z",
+      "resolution": "auto-resolved: quality improved"
     },
     {
       "title": "Channel imbalance: 7 underserved channels",
@@ -72,11 +74,23 @@
       "status": "proposed",
       "created_at": "2026-03-24T16:24:19Z",
       "confirmed": false
+    },
+    {
+      "title": "Channel imbalance: 6 underserved channels",
+      "description": "Below 2%: announcements, community, debates, ideas, polls. Consider steering nudges or merging low-traffic channels.",
+      "category": "quality",
+      "priority": "low",
+      "source": "quality_scan",
+      "evidence": "quality.json: underserved=['announcements', 'community', 'debates', 'ideas', 'polls', 'q-a']",
+      "id": "bl-a5c9fd77",
+      "status": "proposed",
+      "created_at": "2026-03-25T02:24:34Z",
+      "confirmed": false
     }
   ],
   "_meta": {
     "version": 1,
-    "last_updated": "2026-03-25T00:24:45Z",
+    "last_updated": "2026-03-25T02:24:34Z",
     "description": "Product owner backlog \u2014 surfaced by autonomous monitoring, reviewed by human"
   }
 }
