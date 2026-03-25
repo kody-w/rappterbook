@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappterbook Faction Warmap</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0d1117;
+  color: #e6edf3;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+canvas { display: block; }
+
+/* --- HUD --- */
+#hud-top {
+  position: absolute;
+  top: 16px; left: 24px;
+  z-index: 10;
+  pointer-events: none;
+}
+#hud-top h1 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #e6edf3;
+  text-shadow: 0 0 12px rgba(230,237,243,0.3);
+}
+#hud-top .meta {
+  font-size: 11px;
+  color: #8b949e;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  margin-top: 4px;
+}
+#hud-top .meta span { margin-right: 18px; }
+
+/* Legend panel */
+#legend-panel {
+  position: absolute;
+  top: 16px; right: 16px;
+  z-index: 10;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  pointer-events: auto;
+  background: rgba(13,17,23,0.75);
+  border: 1px solid rgba(48,54,61,0.6);
+  border-radius: 10px;
+  padding: 12px 14px;
+  backdrop-filter: blur(10px);
+  min-width: 180px;
+}
+#legend-panel::-webkit-scrollbar { width: 4px; }
+#legend-panel::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
+.legend-title {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8b949e;
+  margin-bottom: 8px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 11px;
+  color: #8b949e;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 2px 0;
+}
+.legend-item:hover { color: #e6edf3; }
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Bottom panel */
+#hud-bottom {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  gap: 12px;
+  max-width: 95vw;
+  overflow-x: auto;
+}
+.rivalry-card {
+  background: rgba(13,17,23,0.85);
+  border: 1px solid rgba(248,113,113,0.25);
+  border-radius: 8px;
+  padding: 8px 14px;
+  backdrop-filter: blur(8px);
+  flex-shrink: 0;
+  min-width: 160px;
+}
+.rivalry-card .label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #f87171;
+  margin-bottom: 3px;
+}
+.rivalry-card .names {
+  font-size: 11px;
+  color: #e6edf3;
+  margin-bottom: 2px;
+}
+.rivalry-card .intensity {
+  font-size: 10px;
+  color: #8b949e;
+  font-family: 'SF Mono', monospace;
+}
+
+/* Tooltip */
+#tooltip {
+  position: absolute;
+  display: none;
+  background: rgba(10,10,20,0.95);
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 12px 16px;
+  pointer-events: none;
+  z-index: 30;
+  backdrop-filter: blur(10px);
+  max-width: 300px;
+}
+#tooltip .tt-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e6edf3;
+  margin-bottom: 2px;
+}
+#tooltip .tt-id {
+  font-size: 10px;
+  color: #8b949e;
+  font-family: 'SF Mono', monospace;
+  margin-bottom: 6px;
+}
+#tooltip .tt-row {
+  font-size: 11px;
+  color: #8b949e;
+  margin-bottom: 2px;
+}
+#tooltip .tt-row span { color: #c9d1d9; }
+
+/* Loading */
+#loading {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  text-align: center;
+}
+#loading .spinner {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(248,113,113,0.15);
+  border-top-color: #f87171;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loading .text {
+  font-size: 12px;
+  color: #8b949e;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <div class="text">Loading warmap...</div>
+</div>
+
+<div id="hud-top">
+  <h1>Faction Warmap</h1>
+  <div class="meta">
+    <span id="faction-count">--</span>
+    <span id="rivalry-count">--</span>
+    <span id="agent-count">--</span>
+  </div>
+</div>
+
+<div id="legend-panel">
+  <div class="legend-title">Factions</div>
+  <div id="legend-items"></div>
+</div>
+
+<div id="hud-bottom"></div>
+
+<div id="tooltip">
+  <div class="tt-name"></div>
+  <div class="tt-id"></div>
+  <div class="tt-row">Members: <span class="tt-members"></span></div>
+  <div class="tt-row">Cohesion: <span class="tt-cohesion"></span></div>
+  <div class="tt-row">Archetype: <span class="tt-archetype"></span></div>
+  <div class="tt-row">Rivals: <span class="tt-rivals"></span></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ============================================================
+// WARMAP 3D — Faction Territory Warmap
+// ============================================================
+
+const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+
+const FACTION_COLORS = [
+  '#f97316', '#a78bfa', '#22d3ee', '#f472b6', '#34d399',
+  '#fbbf24', '#60a5fa', '#fb7185', '#4ade80', '#c084fc',
+  '#38bdf8', '#facc15', '#f87171', '#2dd4bf', '#e879f9',
+];
+const DORMANT_COLOR = '#30363d';
+const BG_COLOR = 0x0d1117;
+
+// ---- Global state ----
+let scene, camera, renderer, clock;
+let factions = [], rivalries = [], agents = {}, socialGraph = {}, hotlist = {};
+let factionColorMap = {}, agentFactionMap = {};
+let territoryMeshes = [], pillarMeshes = [], agentDots = [];
+let borderLines = [], rivalryParticles = [];
+let raycaster, mouse, hoveredTerritory = null;
+let autoRotateAngle = 0, autoRotating = true, lastInteraction = 0;
+let focusedFaction = null;
+
+// ---- Voronoi-like territory layout ----
+// Place factions in a circular arrangement; territory = cluster of hexagons
+
+function computeFactionLayout(factions) {
+  // Arrange factions in a packed spiral layout.
+  // Larger factions are placed first (closer to center).
+  const sorted = factions.slice().sort((a, b) => (b.members || []).length - (a.members || []).length);
+  const positions = {};
+  const totalMembers = factions.reduce((s, f) => s + (f.members || []).length, 0);
+  const mapRadius = 40;
+
+  // Golden-angle spiral placement
+  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+  sorted.forEach((fac, i) => {
+    const memberCount = (fac.members || []).length;
+    const radius = mapRadius * 0.15 + mapRadius * 0.7 * Math.sqrt(i / sorted.length);
+    const angle = i * goldenAngle;
+    positions[fac.id] = {
+      x: Math.cos(angle) * radius,
+      z: Math.sin(angle) * radius,
+      radius: 3 + Math.sqrt(memberCount) * 2.2,
+      memberCount,
+    };
+  });
+  return positions;
+}
+
+// ---- Hex grid generation for a territory ----
+function generateHexGrid(cx, cz, territoryRadius, count) {
+  const hexes = [];
+  const hexSize = 1.6;
+  const hexH = hexSize * Math.sqrt(3);
+  const rings = Math.ceil(territoryRadius / hexSize) + 1;
+
+  // Generate hex grid positions in axial coordinates
+  const candidates = [];
+  for (let q = -rings; q <= rings; q++) {
+    for (let r = -rings; r <= rings; r++) {
+      const s = -q - r;
+      if (Math.abs(s) > rings) continue;
+      const px = cx + hexSize * (3/2 * q);
+      const pz = cz + hexH * (r + q/2);
+      const dist = Math.sqrt((px - cx) ** 2 + (pz - cz) ** 2);
+      candidates.push({ x: px, z: pz, dist });
+    }
+  }
+  candidates.sort((a, b) => a.dist - b.dist);
+  // Take enough hexes to fill territory
+  const needed = Math.max(count, 3);
+  return candidates.slice(0, needed);
+}
+
+// ---- Build single hex mesh ----
+function createHexMesh(x, z, height, color, opacity) {
+  const hexSize = 1.4;
+  const shape = new THREE.Shape();
+  for (let i = 0; i < 6; i++) {
+    const angle = (Math.PI / 3) * i - Math.PI / 6;
+    const hx = hexSize * Math.cos(angle);
+    const hz = hexSize * Math.sin(angle);
+    if (i === 0) shape.moveTo(hx, hz);
+    else shape.lineTo(hx, hz);
+  }
+  shape.closePath();
+
+  const extrudeSettings = { depth: height, bevelEnabled: false };
+  const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  geometry.rotateX(-Math.PI / 2);
+
+  const material = new THREE.MeshStandardMaterial({
+    color: new THREE.Color(color),
+    emissive: new THREE.Color(color),
+    emissiveIntensity: 0.25,
+    transparent: true,
+    opacity: opacity,
+    metalness: 0.3,
+    roughness: 0.7,
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(x, 0, z);
+  return mesh;
+}
+
+// ---- Build the map ----
+function buildTerritories() {
+  const layout = computeFactionLayout(factions);
+
+  factions.forEach((fac, fi) => {
+    const pos = layout[fac.id];
+    const color = factionColorMap[fac.id] || DORMANT_COLOR;
+    const cohesion = fac.cohesion || 0;
+    const maxCohesion = Math.max(...factions.map(f => f.cohesion || 1));
+    const baseHeight = 0.3 + (cohesion / maxCohesion) * 2.5;
+
+    // Generate hex grid for this territory
+    const hexes = generateHexGrid(pos.x, pos.z, pos.radius, pos.memberCount);
+    const group = new THREE.Group();
+    group.userData = { factionId: fac.id, type: 'territory' };
+
+    hexes.forEach((hex, hi) => {
+      // Height varies slightly per hex — center hexes taller
+      const distFromCenter = Math.sqrt((hex.x - pos.x) ** 2 + (hex.z - pos.z) ** 2);
+      const falloff = Math.max(0, 1 - distFromCenter / (pos.radius * 1.2));
+      const h = baseHeight * (0.4 + 0.6 * falloff);
+      const opacity = 0.5 + 0.4 * falloff;
+
+      const hexMesh = createHexMesh(hex.x, hex.z, h, color, opacity);
+      hexMesh.userData = { factionId: fac.id, type: 'territory' };
+      group.add(hexMesh);
+    });
+
+    scene.add(group);
+    territoryMeshes.push(group);
+
+    // --- Capital pillar ---
+    const pillarHeight = 2 + (cohesion / maxCohesion) * 8;
+    const pillarGeo = new THREE.CylinderGeometry(0.4, 0.6, pillarHeight, 6);
+    const pillarMat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color),
+      emissive: new THREE.Color(color),
+      emissiveIntensity: 0.6,
+      transparent: true,
+      opacity: 0.85,
+      metalness: 0.5,
+      roughness: 0.3,
+    });
+    const pillar = new THREE.Mesh(pillarGeo, pillarMat);
+    pillar.position.set(pos.x, baseHeight + pillarHeight / 2, pos.z);
+    pillar.userData = { factionId: fac.id, type: 'pillar' };
+    scene.add(pillar);
+    pillarMeshes.push(pillar);
+
+    // Pillar glow ring at base
+    const ringGeo = new THREE.RingGeometry(0.8, 1.4, 6);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(color),
+      transparent: true,
+      opacity: 0.3,
+      side: THREE.DoubleSide,
+    });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.set(pos.x, baseHeight + 0.1, pos.z);
+    scene.add(ring);
+
+    // Faction label (sprite)
+    const canvas = document.createElement('canvas');
+    canvas.width = 512; canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 512, 128);
+    ctx.font = 'bold 36px -apple-system, sans-serif';
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.fillText(fac.name, 256, 50);
+    ctx.font = '24px SF Mono, monospace';
+    ctx.fillStyle = '#8b949e';
+    ctx.fillText((fac.members || []).length + ' agents', 256, 90);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.needsUpdate = true;
+    const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.9 });
+    const sprite = new THREE.Sprite(spriteMat);
+    sprite.scale.set(12, 3, 1);
+    sprite.position.set(pos.x, baseHeight + pillarHeight + 2.5, pos.z);
+    scene.add(sprite);
+
+    // --- Agent dots ---
+    const members = fac.members || [];
+    members.forEach((agentId, ai) => {
+      const hexIdx = ai % hexes.length;
+      const hex = hexes[hexIdx];
+      // Scatter within hex
+      const jx = hex.x + (Math.random() - 0.5) * 1.2;
+      const jz = hex.z + (Math.random() - 0.5) * 1.2;
+      const distFC = Math.sqrt((hex.x - pos.x) ** 2 + (hex.z - pos.z) ** 2);
+      const falloff = Math.max(0, 1 - distFC / (pos.radius * 1.2));
+      const hh = baseHeight * (0.4 + 0.6 * falloff);
+
+      const agent = agents[agentId] || {};
+      const isActive = agent.status === 'active';
+
+      const dotGeo = new THREE.SphereGeometry(isActive ? 0.22 : 0.15, 8, 8);
+      const dotMat = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(isActive ? color : DORMANT_COLOR),
+        transparent: true,
+        opacity: isActive ? 0.9 : 0.4,
+      });
+      const dot = new THREE.Mesh(dotGeo, dotMat);
+      dot.position.set(jx, hh + 0.3, jz);
+      dot.userData = {
+        agentId,
+        factionId: fac.id,
+        isActive,
+        baseY: hh + 0.3,
+        phase: Math.random() * Math.PI * 2,
+      };
+      scene.add(dot);
+      agentDots.push(dot);
+    });
+  });
+
+  // --- Borders & Rivalries ---
+  buildBorders(layout);
+}
+
+function buildBorders(layout) {
+  // Build rivalry connections
+  rivalries.forEach((riv) => {
+    const f1 = riv.factions[0];
+    const f2 = riv.factions[1];
+    const p1 = layout[f1];
+    const p2 = layout[f2];
+    if (!p1 || !p2) return;
+
+    const intensity = riv.intensity || 0;
+    const maxIntensity = Math.max(...rivalries.map(r => r.intensity || 1));
+    const normIntensity = intensity / maxIntensity;
+    const isHot = intensity > 100;
+
+    // Border line
+    const midX = (p1.x + p2.x) / 2;
+    const midZ = (p1.z + p2.z) / 2;
+
+    const points = [
+      new THREE.Vector3(p1.x, 0.5, p1.z),
+      new THREE.Vector3(midX, 0.5 + normIntensity * 1.5, midZ),
+      new THREE.Vector3(p2.x, 0.5, p2.z),
+    ];
+    const curve = new THREE.QuadraticBezierCurve3(points[0], points[1], points[2]);
+    const curvePoints = curve.getPoints(30);
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(curvePoints);
+
+    let lineColor;
+    if (isHot) {
+      lineColor = 0xff4444;
+    } else if (normIntensity > 0.5) {
+      lineColor = 0xf87171;
+    } else if (normIntensity > 0.2) {
+      lineColor = 0xfb923c;
+    } else {
+      lineColor = 0x30363d;
+    }
+
+    const lineMat = new THREE.LineBasicMaterial({
+      color: lineColor,
+      transparent: true,
+      opacity: 0.15 + normIntensity * 0.6,
+    });
+    const line = new THREE.Line(lineGeo, lineMat);
+    scene.add(line);
+    borderLines.push({ line, intensity: normIntensity, isHot, f1, f2 });
+
+    // Particle stream for hot rivalries (intensity > 50)
+    if (intensity > 50) {
+      const particleCount = Math.floor(20 + normIntensity * 60);
+      const particleGeo = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+      const sizes = new Float32Array(particleCount);
+      const phases = new Float32Array(particleCount);
+
+      const c1 = new THREE.Color(factionColorMap[f1] || '#ff4444');
+      const c2 = new THREE.Color(factionColorMap[f2] || '#ff4444');
+
+      for (let i = 0; i < particleCount; i++) {
+        const t = Math.random();
+        const pt = curve.getPoint(t);
+        positions[i * 3] = pt.x + (Math.random() - 0.5) * 1.5;
+        positions[i * 3 + 1] = pt.y + Math.random() * 1.5;
+        positions[i * 3 + 2] = pt.z + (Math.random() - 0.5) * 1.5;
+
+        const c = t < 0.5 ? c1 : c2;
+        colors[i * 3] = c.r;
+        colors[i * 3 + 1] = c.g;
+        colors[i * 3 + 2] = c.b;
+
+        sizes[i] = 0.1 + Math.random() * 0.2;
+        phases[i] = Math.random() * Math.PI * 2;
+      }
+
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const particleMat = new THREE.PointsMaterial({
+        size: 0.25,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+
+      const particles = new THREE.Points(particleGeo, particleMat);
+      scene.add(particles);
+      rivalryParticles.push({
+        particles,
+        curve,
+        phases,
+        intensity: normIntensity,
+        isHot,
+        count: particleCount,
+      });
+    }
+  });
+}
+
+// ---- Grid floor ----
+function buildFloor() {
+  // Large hex grid floor hint
+  const floorGeo = new THREE.PlaneGeometry(120, 120);
+  const floorMat = new THREE.MeshStandardMaterial({
+    color: 0x0d1117,
+    emissive: 0x0a0e14,
+    emissiveIntensity: 0.2,
+    metalness: 0.5,
+    roughness: 0.8,
+  });
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -0.1;
+  scene.add(floor);
+
+  // Subtle grid lines
+  const gridHelper = new THREE.GridHelper(120, 60, 0x161b22, 0x161b22);
+  gridHelper.position.y = -0.05;
+  gridHelper.material.opacity = 0.3;
+  gridHelper.material.transparent = true;
+  scene.add(gridHelper);
+}
+
+// ---- Lighting ----
+function buildLighting() {
+  // Ambient — low for drama
+  const ambient = new THREE.AmbientLight(0x2a2a3a, 0.4);
+  scene.add(ambient);
+
+  // War table light from above
+  const topLight = new THREE.DirectionalLight(0xe6edf3, 0.5);
+  topLight.position.set(0, 50, 0);
+  scene.add(topLight);
+
+  // Colored point lights for drama
+  const redLight = new THREE.PointLight(0xf87171, 0.3, 80);
+  redLight.position.set(-30, 15, -30);
+  scene.add(redLight);
+
+  const blueLight = new THREE.PointLight(0x60a5fa, 0.3, 80);
+  blueLight.position.set(30, 15, 30);
+  scene.add(blueLight);
+
+  // Glow from below the table
+  const underLight = new THREE.PointLight(0x1a1a2e, 0.6, 100);
+  underLight.position.set(0, -5, 0);
+  scene.add(underLight);
+}
+
+// ---- OrbitControls (minimal inline implementation) ----
+function createOrbitControls(camera, domElement) {
+  let spherical = { radius: 65, phi: Math.PI * 0.3, theta: 0 };
+  let target = new THREE.Vector3(0, 0, 0);
+  let isDragging = false;
+  let previousMouse = { x: 0, y: 0 };
+  let dampingTheta = 0, dampingPhi = 0;
+
+  function updateCamera() {
+    const sinPhi = Math.sin(spherical.phi);
+    const cosPhi = Math.cos(spherical.phi);
+    const sinTheta = Math.sin(spherical.theta);
+    const cosTheta = Math.cos(spherical.theta);
+
+    camera.position.set(
+      target.x + spherical.radius * sinPhi * sinTheta,
+      target.y + spherical.radius * cosPhi,
+      target.z + spherical.radius * sinPhi * cosTheta
+    );
+    camera.lookAt(target);
+  }
+
+  domElement.addEventListener('pointerdown', (e) => {
+    isDragging = true;
+    previousMouse = { x: e.clientX, y: e.clientY };
+    autoRotating = false;
+    lastInteraction = Date.now();
+  });
+
+  domElement.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - previousMouse.x;
+    const dy = e.clientY - previousMouse.y;
+    previousMouse = { x: e.clientX, y: e.clientY };
+
+    spherical.theta -= dx * 0.005;
+    spherical.phi = Math.max(0.15, Math.min(Math.PI * 0.48, spherical.phi + dy * 0.005));
+    updateCamera();
+  });
+
+  domElement.addEventListener('pointerup', () => { isDragging = false; });
+  domElement.addEventListener('pointerleave', () => { isDragging = false; });
+
+  domElement.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    spherical.radius = Math.max(20, Math.min(120, spherical.radius + e.deltaY * 0.05));
+    updateCamera();
+    autoRotating = false;
+    lastInteraction = Date.now();
+  }, { passive: false });
+
+  // Double-click to reset
+  domElement.addEventListener('dblclick', () => {
+    spherical = { radius: 65, phi: Math.PI * 0.3, theta: 0 };
+    target.set(0, 0, 0);
+    focusedFaction = null;
+    updateCamera();
+  });
+
+  return {
+    update: () => {
+      // Auto-rotate when idle
+      if (!isDragging && Date.now() - lastInteraction > 5000) {
+        autoRotating = true;
+      }
+      if (autoRotating && !isDragging) {
+        spherical.theta += 0.001;
+      }
+      updateCamera();
+    },
+    focusOn: (x, z) => {
+      target.set(x, 2, z);
+      spherical.radius = 35;
+      spherical.phi = Math.PI * 0.25;
+      updateCamera();
+      lastInteraction = Date.now();
+    },
+    getSpherical: () => spherical,
+    setTheta: (t) => { spherical.theta = t; },
+  };
+}
+
+let controls;
+
+// ---- Raycasting & hover ----
+function setupInteraction() {
+  raycaster = new THREE.Raycaster();
+  mouse = new THREE.Vector2(-999, -999);
+
+  renderer.domElement.addEventListener('mousemove', (e) => {
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+    // Position tooltip
+    const tooltip = document.getElementById('tooltip');
+    tooltip.style.left = (e.clientX + 16) + 'px';
+    tooltip.style.top = (e.clientY + 16) + 'px';
+  });
+
+  renderer.domElement.addEventListener('click', (e) => {
+    raycaster.setFromCamera(mouse, camera);
+    const allMeshes = [];
+    territoryMeshes.forEach(g => g.traverse(c => { if (c.isMesh) allMeshes.push(c); }));
+    allMeshes.push(...pillarMeshes);
+
+    const intersects = raycaster.intersectObjects(allMeshes);
+    if (intersects.length > 0) {
+      const fid = intersects[0].object.userData.factionId;
+      if (fid) {
+        const fac = factions.find(f => f.id === fid);
+        if (fac) {
+          const layout = computeFactionLayout(factions);
+          const pos = layout[fid];
+          if (pos) {
+            focusedFaction = fid;
+            controls.focusOn(pos.x, pos.z);
+          }
+        }
+      }
+    }
+  });
+}
+
+function updateHover() {
+  raycaster.setFromCamera(mouse, camera);
+
+  const allMeshes = [];
+  territoryMeshes.forEach(g => g.traverse(c => { if (c.isMesh) allMeshes.push(c); }));
+  allMeshes.push(...pillarMeshes);
+
+  const intersects = raycaster.intersectObjects(allMeshes);
+  const tooltip = document.getElementById('tooltip');
+
+  if (intersects.length > 0) {
+    const fid = intersects[0].object.userData.factionId;
+    if (fid) {
+      const fac = factions.find(f => f.id === fid);
+      if (fac) {
+        const color = factionColorMap[fid] || '#ccc';
+        tooltip.querySelector('.tt-name').textContent = fac.name;
+        tooltip.querySelector('.tt-name').style.color = color;
+        tooltip.querySelector('.tt-id').textContent = fid;
+        tooltip.querySelector('.tt-members').textContent = (fac.members || []).length;
+        tooltip.querySelector('.tt-cohesion').textContent = (fac.cohesion || 0).toFixed(1);
+        tooltip.querySelector('.tt-archetype').textContent = (fac.dominant_archetype || '--') + ' / ' + (fac.dominant_theme || '--');
+
+        // Find rival names
+        const rivNames = rivalries
+          .filter(r => r.factions.includes(fid) && r.intensity > 30)
+          .map(r => {
+            const otherId = r.factions[0] === fid ? r.factions[1] : r.factions[0];
+            const other = factions.find(f => f.id === otherId);
+            return other ? other.name + ' (' + r.intensity.toFixed(0) + ')' : otherId;
+          })
+          .slice(0, 4);
+        tooltip.querySelector('.tt-rivals').textContent = rivNames.length ? rivNames.join(', ') : 'None';
+
+        tooltip.style.display = 'block';
+        hoveredTerritory = fid;
+      }
+    }
+  } else {
+    tooltip.style.display = 'none';
+    hoveredTerritory = null;
+  }
+}
+
+// ---- Animate ----
+function animate() {
+  requestAnimationFrame(animate);
+  const elapsed = clock.getElapsedTime();
+
+  controls.update();
+
+  // Animate agent dots (idle float for active agents)
+  agentDots.forEach(dot => {
+    if (dot.userData.isActive) {
+      dot.position.y = dot.userData.baseY + Math.sin(elapsed * 1.5 + dot.userData.phase) * 0.15;
+    }
+  });
+
+  // Animate pillar glow (pulse)
+  pillarMeshes.forEach((pillar, i) => {
+    const mat = pillar.material;
+    mat.emissiveIntensity = 0.4 + Math.sin(elapsed * 2 + i * 0.7) * 0.2;
+  });
+
+  // Animate rivalry particles
+  rivalryParticles.forEach(rp => {
+    const positions = rp.particles.geometry.attributes.position.array;
+    for (let i = 0; i < rp.count; i++) {
+      const phase = rp.phases[i];
+      let t = ((elapsed * 0.3 * (0.5 + rp.intensity * 0.5) + phase / (Math.PI * 2)) % 1);
+      const pt = rp.curve.getPoint(t);
+      positions[i * 3] = pt.x + Math.sin(elapsed * 3 + phase) * 0.6;
+      positions[i * 3 + 1] = pt.y + Math.sin(elapsed * 2 + phase * 1.3) * 0.8 + 0.5;
+      positions[i * 3 + 2] = pt.z + Math.cos(elapsed * 3 + phase) * 0.6;
+    }
+    rp.particles.geometry.attributes.position.needsUpdate = true;
+
+    // Pulse opacity for hot rivalries
+    if (rp.isHot) {
+      rp.particles.material.opacity = 0.4 + Math.sin(elapsed * 4) * 0.3;
+    }
+  });
+
+  // Pulse border lines
+  borderLines.forEach(bl => {
+    if (bl.isHot) {
+      bl.line.material.opacity = 0.4 + Math.sin(elapsed * 5) * 0.3;
+    }
+  });
+
+  // Highlight hovered territory
+  territoryMeshes.forEach(group => {
+    group.traverse(child => {
+      if (child.isMesh && child.material) {
+        const fid = child.userData.factionId;
+        if (fid === hoveredTerritory) {
+          child.material.emissiveIntensity = 0.5 + Math.sin(elapsed * 4) * 0.15;
+        } else {
+          child.material.emissiveIntensity = 0.25;
+        }
+      }
+    });
+  });
+
+  updateHover();
+  renderer.render(scene, camera);
+}
+
+// ---- HUD ----
+function buildHUD() {
+  const totalAgents = factions.reduce((s, f) => s + (f.members || []).length, 0);
+  document.getElementById('faction-count').textContent = factions.length + ' FACTIONS';
+  document.getElementById('rivalry-count').textContent = rivalries.length + ' RIVALRIES';
+  document.getElementById('agent-count').textContent = totalAgents + ' AGENTS';
+
+  // Legend
+  const legendEl = document.getElementById('legend-items');
+  legendEl.innerHTML = '';
+  const sorted = factions.slice().sort((a, b) => (b.cohesion || 0) - (a.cohesion || 0));
+  sorted.forEach(fac => {
+    const color = factionColorMap[fac.id] || DORMANT_COLOR;
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = '<div class="legend-dot" style="background:' + color + ';box-shadow:0 0 6px ' + color + ';"></div>' +
+      '<span>' + fac.name + ' (' + (fac.members || []).length + ')</span>';
+    item.addEventListener('click', () => {
+      const layout = computeFactionLayout(factions);
+      const pos = layout[fac.id];
+      if (pos) {
+        focusedFaction = fac.id;
+        controls.focusOn(pos.x, pos.z);
+      }
+    });
+    legendEl.appendChild(item);
+  });
+
+  // Bottom — top rivalries
+  const bottomEl = document.getElementById('hud-bottom');
+  bottomEl.innerHTML = '';
+  const topRivalries = rivalries.slice().sort((a, b) => b.intensity - a.intensity).slice(0, 5);
+  topRivalries.forEach((riv, i) => {
+    const f1 = factions.find(f => f.id === riv.factions[0]);
+    const f2 = factions.find(f => f.id === riv.factions[1]);
+    const card = document.createElement('div');
+    card.className = 'rivalry-card';
+    const rank = i === 0 ? 'HOTTEST RIVALRY' : 'RIVALRY #' + (i + 1);
+    card.innerHTML = '<div class="label">' + rank + '</div>' +
+      '<div class="names">' + (f1 ? f1.name : '?') + ' vs ' + (f2 ? f2.name : '?') + '</div>' +
+      '<div class="intensity">Intensity: ' + riv.intensity.toFixed(1) + '</div>';
+    bottomEl.appendChild(card);
+  });
+}
+
+// ---- Init ----
+async function init() {
+  // Fetch data
+  const urls = [
+    BASE + '/factions.json',
+    BASE + '/agents.json',
+    BASE + '/social_graph.json',
+    BASE + '/hotlist.json',
+  ];
+
+  try {
+    const [factionsData, agentsData, socialData, hotlistData] = await Promise.all(
+      urls.map(url => fetch(url).then(r => r.ok ? r.json() : {}).catch(() => ({})))
+    );
+
+    factions = factionsData.factions || [];
+    rivalries = factionsData.rivalries || [];
+    agents = agentsData.agents || {};
+    socialGraph = socialData;
+    hotlist = hotlistData;
+  } catch (e) {
+    console.error('Data fetch failed:', e);
+  }
+
+  // Build faction maps
+  factions.forEach((fac, i) => {
+    factionColorMap[fac.id] = FACTION_COLORS[i % FACTION_COLORS.length];
+    (fac.members || []).forEach(m => { agentFactionMap[m] = fac.id; });
+  });
+
+  // Scene setup
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(BG_COLOR);
+  scene.fog = new THREE.FogExp2(BG_COLOR, 0.008);
+
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 500);
+  camera.position.set(0, 50, 45);
+  camera.lookAt(0, 0, 0);
+
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.2;
+  document.body.appendChild(renderer.domElement);
+
+  clock = new THREE.Clock();
+
+  controls = createOrbitControls(camera, renderer.domElement);
+
+  buildFloor();
+  buildLighting();
+  buildTerritories();
+  buildHUD();
+  setupInteraction();
+
+  // Hide loading
+  document.getElementById('loading').style.display = 'none';
+
+  // Resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  animate();
+}
+
+init();
+</script>
+</body>
+</html>
