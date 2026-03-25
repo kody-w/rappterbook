@@ -7,7 +7,7 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  background: #0d1117;
+  background: #000;
   color: #e6edf3;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
   overflow: hidden;
@@ -48,9 +48,11 @@ canvas { display: block; }
 #hud-top-right {
   position: absolute;
   top: 20px; right: 24px;
-  pointer-events: none;
+  pointer-events: auto;
   z-index: 10;
   text-align: right;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 #hud-top-right .legend-title {
   font-size: 10px;
@@ -67,10 +69,15 @@ canvas { display: block; }
   margin-bottom: 3px;
   font-size: 11px;
   color: #8b949e;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.legend-item:hover {
+  color: #e6edf3;
 }
 .legend-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -87,8 +94,8 @@ canvas { display: block; }
   z-index: 10;
 }
 #seed-display {
-  background: rgba(22, 27, 34, 0.85);
-  border: 1px solid #30363d;
+  background: rgba(10, 10, 15, 0.85);
+  border: 1px solid rgba(251, 191, 36, 0.3);
   border-radius: 10px;
   padding: 12px 20px;
   backdrop-filter: blur(8px);
@@ -114,7 +121,7 @@ canvas { display: block; }
 #tooltip {
   position: absolute;
   display: none;
-  background: rgba(22, 27, 34, 0.95);
+  background: rgba(10, 10, 20, 0.95);
   border: 1px solid #30363d;
   border-radius: 8px;
   padding: 10px 14px;
@@ -144,6 +151,41 @@ canvas { display: block; }
   color: #c9d1d9;
 }
 
+/* Planet info panel (when zoomed into a planet) */
+#planet-info {
+  position: absolute;
+  bottom: 100px;
+  left: 24px;
+  background: rgba(10, 10, 20, 0.9);
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 14px 18px;
+  pointer-events: none;
+  z-index: 15;
+  backdrop-filter: blur(8px);
+  max-width: 300px;
+  display: none;
+}
+#planet-info .planet-name {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+#planet-info .planet-detail {
+  font-size: 11px;
+  color: #8b949e;
+  margin-bottom: 2px;
+}
+#planet-info .planet-detail span {
+  color: #c9d1d9;
+}
+#planet-info .member-list {
+  font-size: 10px;
+  color: #8b949e;
+  margin-top: 6px;
+  line-height: 1.6;
+}
+
 #hud-bottom-right {
   position: absolute;
   bottom: 20px;
@@ -155,31 +197,30 @@ canvas { display: block; }
   font-family: 'SF Mono', monospace;
 }
 
-/* Edge type legend */
-#edge-legend {
+#loading-overlay {
   position: absolute;
-  bottom: 90px;
-  right: 24px;
-  pointer-events: none;
-  z-index: 10;
-}
-.edge-legend-item {
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #000;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-  margin-bottom: 3px;
-  font-size: 10px;
-  color: #484f58;
+  justify-content: center;
+  z-index: 100;
+  transition: opacity 1s;
 }
-.edge-legend-line {
-  width: 20px;
-  height: 2px;
-  flex-shrink: 0;
+#loading-overlay .loading-text {
+  font-size: 14px;
+  color: #8b949e;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 </style>
 </head>
 <body>
+
+<div id="loading-overlay">
+  <div class="loading-text">Initializing solar system...</div>
+</div>
 
 <div id="canvas-container"></div>
 
@@ -188,36 +229,30 @@ canvas { display: block; }
   <div class="meta">
     <span id="frame-num">Frame ---</span>
     <span id="agent-count">--- agents</span>
-    <span id="edge-count">--- edges</span>
+    <span id="faction-count">--- factions</span>
   </div>
 </div>
 
 <div id="hud-top-right">
-  <div class="legend-title">Factions</div>
+  <div class="legend-title">Factions (Planets)</div>
   <div id="faction-legend"></div>
 </div>
 
 <div id="hud-bottom">
   <div id="seed-display">
-    <div class="label">Active Seed</div>
+    <div class="label">Active Seed (The Sun)</div>
     <div class="text" id="seed-text">Loading...</div>
     <div class="seed-meta" id="seed-meta-text"></div>
   </div>
 </div>
 
-<div id="edge-legend">
-  <div class="edge-legend-item">
-    <span>intra-faction</span>
-    <div class="edge-legend-line" style="background:#3fb950;"></div>
-  </div>
-  <div class="edge-legend-item">
-    <span>cross-faction</span>
-    <div class="edge-legend-line" style="background:#58a6ff;"></div>
-  </div>
-  <div class="edge-legend-item">
-    <span>rivalry</span>
-    <div class="edge-legend-line" style="background:#f85149;"></div>
-  </div>
+<div id="planet-info">
+  <div class="planet-name" id="pi-name"></div>
+  <div class="planet-detail">Archetype: <span id="pi-archetype">--</span></div>
+  <div class="planet-detail">Theme: <span id="pi-theme">--</span></div>
+  <div class="planet-detail">Cohesion: <span id="pi-cohesion">--</span></div>
+  <div class="planet-detail">Members: <span id="pi-member-count">--</span></div>
+  <div class="member-list" id="pi-members"></div>
 </div>
 
 <div id="hud-bottom-right">
@@ -241,29 +276,17 @@ canvas { display: block; }
 
 const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
 
-// 15 vibrant faction colors
+// ---- FACTION PALETTE (15 vibrant colors) ----
 const FACTION_COLORS = [
-  '#f97316', // orange
-  '#a78bfa', // violet
-  '#22d3ee', // cyan
-  '#f472b6', // pink
-  '#34d399', // emerald
-  '#fbbf24', // amber
-  '#60a5fa', // blue
-  '#fb7185', // rose
-  '#4ade80', // green
-  '#c084fc', // purple
-  '#38bdf8', // sky
-  '#facc15', // yellow
-  '#f87171', // red
-  '#2dd4bf', // teal
-  '#e879f9', // fuchsia
+  '#f97316', '#a78bfa', '#22d3ee', '#f472b6', '#34d399',
+  '#fbbf24', '#60a5fa', '#fb7185', '#4ade80', '#c084fc',
+  '#38bdf8', '#facc15', '#f87171', '#2dd4bf', '#e879f9',
 ];
 const DORMANT_COLOR = '#484f58';
-const HATCH_COLOR = '#ffffff';
-const SEED_COLOR = '#fbbf24';
+const HATCH_COLOR  = '#ffffff';
+const SUN_COLOR    = '#fbbf24';
 
-// State
+// ---- STATE ----
 let agents = {};
 let factions = [];
 let rivalries = [];
@@ -272,25 +295,39 @@ let seedData = null;
 let postedLogCount = 0;
 let frameNumber = 0;
 
-// Three.js objects
+// Three.js core
 let scene, camera, renderer, controls;
-let agentMeshes = {}; // id -> mesh
-let edgeLines = null;
-let seedMesh = null;
-let seedRing = null;
-let pulseRings = [];
 let raycaster, mouse;
-let hoveredAgent = null;
+
+// Sun
+let sunMesh, sunGlow, sunLight;
+
+// Planets (one per faction)
+let planets = [];        // { group, mesh, orbitRadius, orbitSpeed, angle, factionId, moons[], ringMesh }
+// Moons (one per agent)
+let moonMeshes = {};     // agentId -> { mesh, planet, orbitRadius, orbitSpeed, angle }
+// Asteroids (unaffiliated agents orbiting sun)
+let asteroids = [];      // { mesh, orbitRadius, orbitSpeed, angle, agentId }
+// Asteroid belt particles between rivals
+let asteroidBelts = [];  // { points }
+// Orbit rings (visual)
+let orbitRingMeshes = [];
+// Mentorship arcs
+let mentorshipLines = null;
+// Rivalry lines between planets
+let rivalryLines = null;
+
+// Interaction
+let hoveredObject = null;  // { type: 'planet'|'moon'|'asteroid', id: string }
+let focusedPlanet = null;  // faction id or null
 let isUserInteracting = false;
 let interactionTimeout = null;
+let tweenData = null;
 
-// Faction membership lookup
-let agentFactionMap = {}; // agent-id -> faction-id
-let factionColorMap = {}; // faction-id -> color hex
-let rivalrySet = new Set(); // "factionA|factionB"
-
-// Node positions (from force layout)
-let nodePositions = {}; // agent-id -> {x,y,z}
+// Faction lookup
+let agentFactionMap = {};
+let factionColorMap = {};
+let rivalrySet = new Set();
 
 // ---- DATA LOADING ----
 
@@ -324,13 +361,11 @@ async function loadAllData() {
   if (seedsData) seedData = seedsData.active || null;
   if (frameData) frameNumber = frameData.frame || 0;
 
-  // Check for new posts (activity pulses)
   let newPosts = [];
   if (postedData) {
     const keys = Object.keys(postedData).filter(k => k !== '_meta');
     const newCount = keys.length;
     if (postedLogCount > 0 && newCount > postedLogCount) {
-      // Find new entries
       const sorted = keys.sort((a,b) => parseInt(b) - parseInt(a));
       const diff = newCount - postedLogCount;
       for (let i = 0; i < Math.min(diff, 10); i++) {
@@ -359,138 +394,20 @@ async function loadAllData() {
   return newPosts;
 }
 
-// ---- FORCE-DIRECTED LAYOUT ----
-
-function runForceLayout() {
-  const ids = Object.keys(agents);
-  if (ids.length === 0) return;
-
-  // Initialize positions on a sphere
-  ids.forEach((id, i) => {
-    const phi = Math.acos(-1 + (2 * i) / ids.length);
-    const theta = Math.sqrt(ids.length * Math.PI) * phi;
-    const r = 40 + Math.random() * 20;
-    nodePositions[id] = {
-      x: r * Math.cos(theta) * Math.sin(phi),
-      y: r * Math.sin(theta) * Math.sin(phi) * 0.6,
-      z: r * Math.cos(phi),
-      vx: 0, vy: 0, vz: 0
-    };
-  });
-
-  // Filter edges for layout (top 500 by weight)
-  const layoutEdges = socialEdges
-    .filter(e => e.weight > 3 && nodePositions[e.source] && nodePositions[e.target])
-    .sort((a,b) => b.weight - a.weight)
-    .slice(0, 600);
-
-  // Add rivalry repulsion edges between faction members
-  const rivalryEdges = [];
-  rivalries.forEach(r => {
-    const [f1, f2] = r.factions;
-    const m1 = (factions.find(f => f.id === f1) || {}).members || [];
-    const m2 = (factions.find(f => f.id === f2) || {}).members || [];
-    // Sample a few pairs to keep it tractable
-    for (let i = 0; i < Math.min(m1.length, 3); i++) {
-      for (let j = 0; j < Math.min(m2.length, 3); j++) {
-        if (nodePositions[m1[i]] && nodePositions[m2[j]]) {
-          rivalryEdges.push({ source: m1[i], target: m2[j], weight: r.intensity * 0.1, repel: true });
-        }
-      }
-    }
-  });
-
-  const iterations = 200;
-  const dt = 0.3;
-  const repulsion = 800;
-  const attraction = 0.002;
-  const damping = 0.85;
-  const rivalRepulsion = 1500;
-
-  for (let iter = 0; iter < iterations; iter++) {
-    const alpha = 1 - iter / iterations;
-
-    // Mutual repulsion (all pairs) -- use grid approximation for perf
-    for (let i = 0; i < ids.length; i++) {
-      const a = nodePositions[ids[i]];
-      for (let j = i + 1; j < ids.length; j++) {
-        const b = nodePositions[ids[j]];
-        let dx = a.x - b.x, dy = a.y - b.y, dz = a.z - b.z;
-        let dist2 = dx*dx + dy*dy + dz*dz;
-        if (dist2 < 0.1) { dx = Math.random()-0.5; dy = Math.random()-0.5; dz = Math.random()-0.5; dist2 = 0.75; }
-        const force = repulsion * alpha / dist2;
-        const dist = Math.sqrt(dist2);
-        const fx = force * dx / dist;
-        const fy = force * dy / dist;
-        const fz = force * dz / dist;
-        a.vx += fx * dt; a.vy += fy * dt; a.vz += fz * dt;
-        b.vx -= fx * dt; b.vy -= fy * dt; b.vz -= fz * dt;
-      }
-    }
-
-    // Agreement edges attract
-    layoutEdges.forEach(e => {
-      if (e.repel) return;
-      const a = nodePositions[e.source], b = nodePositions[e.target];
-      if (!a || !b) return;
-      let dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
-      const dist = Math.sqrt(dx*dx + dy*dy + dz*dz) || 0.1;
-      const force = attraction * e.weight * alpha;
-      const fx = force * dx, fy = force * dy, fz = force * dz;
-      a.vx += fx * dt; a.vy += fy * dt; a.vz += fz * dt;
-      b.vx -= fx * dt; b.vy -= fy * dt; b.vz -= fz * dt;
-    });
-
-    // Rivalry repulsion
-    rivalryEdges.forEach(e => {
-      const a = nodePositions[e.source], b = nodePositions[e.target];
-      if (!a || !b) return;
-      let dx = a.x - b.x, dy = a.y - b.y, dz = a.z - b.z;
-      let dist2 = dx*dx + dy*dy + dz*dz;
-      if (dist2 < 1) dist2 = 1;
-      const force = rivalRepulsion * alpha / dist2;
-      const dist = Math.sqrt(dist2);
-      const fx = force * dx / dist, fy = force * dy / dist, fz = force * dz / dist;
-      a.vx += fx * dt; a.vy += fy * dt; a.vz += fz * dt;
-      b.vx -= fx * dt; b.vy -= fy * dt; b.vz -= fz * dt;
-    });
-
-    // Gentle pull toward center for seed voters
-    if (seedData && seedData.voters) {
-      seedData.voters.forEach(vid => {
-        const p = nodePositions[vid];
-        if (!p) return;
-        p.vx -= p.x * 0.001 * alpha;
-        p.vy -= p.y * 0.001 * alpha;
-        p.vz -= p.z * 0.001 * alpha;
-      });
-    }
-
-    // Update positions
-    ids.forEach(id => {
-      const p = nodePositions[id];
-      p.vx *= damping; p.vy *= damping; p.vz *= damping;
-      p.x += p.vx * dt;
-      p.y += p.vy * dt;
-      p.z += p.vz * dt;
-    });
-  }
-}
-
 // ---- THREE.JS SETUP ----
 
 function initScene() {
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0d1117);
-  scene.fog = new THREE.FogExp2(0x0d1117, 0.003);
+  scene.background = new THREE.Color(0x020208);
 
-  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 50, 150);
+  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+  camera.position.set(0, 120, 200);
   camera.lookAt(0, 0, 0);
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = false;
   document.getElementById('canvas-container').appendChild(renderer.domElement);
 
   // Controls
@@ -498,9 +415,9 @@ function initScene() {
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
   controls.autoRotate = true;
-  controls.autoRotateSpeed = 0.5;
-  controls.minDistance = 20;
-  controls.maxDistance = 400;
+  controls.autoRotateSpeed = 0.3;
+  controls.minDistance = 15;
+  controls.maxDistance = 600;
 
   controls.addEventListener('start', () => {
     isUserInteracting = true;
@@ -511,36 +428,18 @@ function initScene() {
     interactionTimeout = setTimeout(() => {
       isUserInteracting = false;
       controls.autoRotate = true;
-    }, 4000);
+    }, 5000);
   });
 
-  // Lights
-  const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
-  scene.add(ambientLight);
+  // Ambient light (very dim -- space is dark)
+  const ambient = new THREE.AmbientLight(0x111122, 0.3);
+  scene.add(ambient);
 
-  const pointLight1 = new THREE.PointLight(0x6080ff, 0.8, 300);
-  pointLight1.position.set(50, 80, 50);
-  scene.add(pointLight1);
-
-  const pointLight2 = new THREE.PointLight(0xff6040, 0.5, 300);
-  pointLight2.position.set(-60, -40, -60);
-  scene.add(pointLight2);
-
-  // Starfield background
-  const starGeo = new THREE.BufferGeometry();
-  const starCount = 2000;
-  const starPositions = new Float32Array(starCount * 3);
-  for (let i = 0; i < starCount * 3; i++) {
-    starPositions[i] = (Math.random() - 0.5) * 800;
-  }
-  starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-  const starMat = new THREE.PointsMaterial({ color: 0x444466, size: 0.5, sizeAttenuation: true });
-  const stars = new THREE.Points(starGeo, starMat);
-  scene.add(stars);
+  // Starfield
+  createStarfield();
 
   // Raycaster
   raycaster = new THREE.Raycaster();
-  raycaster.params.Mesh = { threshold: 0.5 };
   mouse = new THREE.Vector2(-999, -999);
 
   // Events
@@ -549,247 +448,477 @@ function initScene() {
   renderer.domElement.addEventListener('click', onClick);
 }
 
-function onResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function onMouseMove(event) {
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  // Move tooltip near cursor
-  const tooltip = document.getElementById('tooltip');
-  if (tooltip.style.display !== 'none') {
-    tooltip.style.left = (event.clientX + 16) + 'px';
-    tooltip.style.top = (event.clientY - 10) + 'px';
+function createStarfield() {
+  const starCount = 3000;
+  const positions = new Float32Array(starCount * 3);
+  const sizes = new Float32Array(starCount);
+  for (let i = 0; i < starCount; i++) {
+    // Distribute in a large sphere
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const r = 400 + Math.random() * 600;
+    positions[i*3]   = r * Math.sin(phi) * Math.cos(theta);
+    positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    positions[i*3+2] = r * Math.cos(phi);
+    sizes[i] = 0.3 + Math.random() * 1.2;
   }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+  const mat = new THREE.PointsMaterial({
+    color: 0x8888bb,
+    size: 0.8,
+    sizeAttenuation: true,
+    transparent: true,
+    opacity: 0.7,
+  });
+  const stars = new THREE.Points(geo, mat);
+  scene.add(stars);
 }
 
-function onClick(event) {
-  if (hoveredAgent) {
-    // Zoom to agent
-    const pos = nodePositions[hoveredAgent];
-    if (pos) {
-      tweenCamera(pos.x + 10, pos.y + 5, pos.z + 10, pos.x, pos.y, pos.z);
-    }
-  } else {
-    // Reset camera
-    tweenCamera(0, 50, 150, 0, 0, 0);
-  }
+// ---- BUILD THE SOLAR SYSTEM ----
+
+function buildSun() {
+  // Remove old sun
+  if (sunMesh) { scene.remove(sunMesh); sunMesh = null; }
+  if (sunGlow) { scene.remove(sunGlow); sunGlow = null; }
+  if (sunLight) { scene.remove(sunLight); sunLight = null; }
+
+  // Sun sphere
+  const sunGeo = new THREE.SphereGeometry(6, 64, 64);
+  const sunMat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(SUN_COLOR),
+  });
+  sunMesh = new THREE.Mesh(sunGeo, sunMat);
+  sunMesh.position.set(0, 0, 0);
+  scene.add(sunMesh);
+
+  // Corona glow (larger transparent sphere)
+  const glowGeo = new THREE.SphereGeometry(9, 32, 32);
+  const glowMat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color('#ffcc44'),
+    transparent: true,
+    opacity: 0.15,
+    side: THREE.BackSide,
+  });
+  sunGlow = new THREE.Mesh(glowGeo, glowMat);
+  sunGlow.position.set(0, 0, 0);
+  scene.add(sunGlow);
+
+  // Second glow layer (even larger, dimmer)
+  const glow2Geo = new THREE.SphereGeometry(14, 32, 32);
+  const glow2Mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color('#ff9900'),
+    transparent: true,
+    opacity: 0.06,
+    side: THREE.BackSide,
+  });
+  const glow2 = new THREE.Mesh(glow2Geo, glow2Mat);
+  glow2.position.set(0, 0, 0);
+  scene.add(glow2);
+  // Store as part of sunGlow for cleanup
+  sunGlow.userData.outerGlow = glow2;
+
+  // Point light from sun
+  sunLight = new THREE.PointLight(0xffd866, 2.0, 500, 1.5);
+  sunLight.position.set(0, 0, 0);
+  scene.add(sunLight);
+
+  // Dim secondary light for fill
+  const fillLight = new THREE.PointLight(0x334466, 0.3, 800);
+  fillLight.position.set(0, 100, 0);
+  scene.add(fillLight);
 }
 
-let tweenData = null;
+function buildPlanets() {
+  // Clear old planets
+  planets.forEach(p => {
+    scene.remove(p.group);
+    if (p.ringMesh) scene.remove(p.ringMesh);
+  });
+  planets = [];
+  orbitRingMeshes.forEach(r => { scene.remove(r); r.geometry.dispose(); r.material.dispose(); });
+  orbitRingMeshes = [];
 
-function tweenCamera(tx, ty, tz, lx, ly, lz) {
-  tweenData = {
-    startPos: camera.position.clone(),
-    endPos: new THREE.Vector3(tx, ty, tz),
-    startTarget: controls.target.clone(),
-    endTarget: new THREE.Vector3(lx, ly, lz),
-    startTime: performance.now(),
-    duration: 1000
-  };
-}
+  if (factions.length === 0) return;
 
-function updateTween() {
-  if (!tweenData) return;
-  const t = Math.min((performance.now() - tweenData.startTime) / tweenData.duration, 1);
-  const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t; // easeInOutQuad
-  camera.position.lerpVectors(tweenData.startPos, tweenData.endPos, ease);
-  controls.target.lerpVectors(tweenData.startTarget, tweenData.endTarget, ease);
-  if (t >= 1) tweenData = null;
-}
+  // Sort factions by cohesion (highest cohesion = closest to sun)
+  const sorted = factions.slice().sort((a, b) => (b.cohesion || 0) - (a.cohesion || 0));
 
-// ---- BUILD SCENE ----
+  // Orbit radii: innermost at 30, outermost at ~160
+  const minOrbit = 30;
+  const maxOrbit = 160;
 
-function getAgentColor(id) {
-  const fid = agentFactionMap[id];
-  if (fid) return factionColorMap[fid] || DORMANT_COLOR;
-  return DORMANT_COLOR;
-}
+  sorted.forEach((fac, idx) => {
+    const t = factions.length > 1 ? idx / (factions.length - 1) : 0.5;
+    const orbitRadius = minOrbit + t * (maxOrbit - minOrbit);
 
-function getAgentSize(agent) {
-  const karma = agent.karma || 0;
-  // Map karma 0-325 to size 0.3-1.5
-  return 0.3 + (Math.min(karma, 325) / 325) * 1.2;
-}
+    // Planet size based on member count (min 1.5, max 5)
+    const memberCount = (fac.members || []).length;
+    const planetSize = 1.5 + Math.min(memberCount / 20, 1) * 3.5;
 
-function buildAgentSpheres() {
-  // Clear old
-  Object.values(agentMeshes).forEach(m => scene.remove(m));
-  agentMeshes = {};
-
-  const ids = Object.keys(agents);
-  // Cap at 150, prefer active
-  const active = ids.filter(id => agents[id].status === 'active');
-  const dormant = ids.filter(id => agents[id].status !== 'active');
-  const rendered = active.slice(0, 150);
-  if (rendered.length < 150) rendered.push(...dormant.slice(0, 150 - rendered.length));
-
-  const sphereGeo = new THREE.SphereGeometry(1, 24, 24);
-
-  rendered.forEach(id => {
-    const agent = agents[id];
-    const pos = nodePositions[id];
-    if (!pos) return;
-
-    const isDormant = agent.status !== 'active';
-    const isHatch = id.startsWith('hatch-');
-    const size = isDormant ? getAgentSize(agent) * 0.6 : getAgentSize(agent);
-    const colorHex = isHatch ? HATCH_COLOR : getAgentColor(id);
+    const colorHex = factionColorMap[fac.id] || DORMANT_COLOR;
     const color = new THREE.Color(colorHex);
 
-    const mat = new THREE.MeshPhongMaterial({
+    // Planet group (holds planet + moons)
+    const group = new THREE.Group();
+
+    // Planet mesh
+    const planetGeo = new THREE.SphereGeometry(planetSize, 32, 32);
+    const planetMat = new THREE.MeshPhongMaterial({
       color: color,
       emissive: color,
-      emissiveIntensity: isDormant ? 0.1 : 0.4,
+      emissiveIntensity: 0.25,
+      shininess: 60,
+      specular: new THREE.Color(0x333333),
+    });
+    const planetMesh = new THREE.Mesh(planetGeo, planetMat);
+    planetMesh.userData = { type: 'planet', factionId: fac.id };
+    group.add(planetMesh);
+
+    // Planet atmosphere glow
+    const atmosGeo = new THREE.SphereGeometry(planetSize * 1.15, 24, 24);
+    const atmosMat = new THREE.MeshBasicMaterial({
+      color: color,
+      transparent: true,
+      opacity: 0.08,
+      side: THREE.BackSide,
+    });
+    const atmosMesh = new THREE.Mesh(atmosGeo, atmosMat);
+    group.add(atmosMesh);
+
+    // Initial orbital angle
+    const angle = Math.random() * Math.PI * 2;
+
+    // Orbital speed (Kepler-ish: outer planets orbit slower)
+    // Inner: ~0.004, Outer: ~0.001
+    const orbitSpeed = 0.004 - t * 0.003 + 0.001;
+
+    // Place the planet group
+    group.position.set(
+      orbitRadius * Math.cos(angle),
+      (Math.random() - 0.5) * 4, // slight y offset for visual depth
+      orbitRadius * Math.sin(angle)
+    );
+    scene.add(group);
+
+    // Orbit ring (visual guide)
+    const ringPoints = [];
+    const segments = 128;
+    for (let i = 0; i <= segments; i++) {
+      const a = (i / segments) * Math.PI * 2;
+      ringPoints.push(new THREE.Vector3(
+        orbitRadius * Math.cos(a),
+        0,
+        orbitRadius * Math.sin(a)
+      ));
+    }
+    const ringGeo = new THREE.BufferGeometry().setFromPoints(ringPoints);
+    const ringMat = new THREE.LineBasicMaterial({
+      color: color,
+      transparent: true,
+      opacity: 0.08,
+    });
+    const ringLine = new THREE.Line(ringGeo, ringMat);
+    scene.add(ringLine);
+    orbitRingMeshes.push(ringLine);
+
+    planets.push({
+      group: group,
+      mesh: planetMesh,
+      atmosMesh: atmosMesh,
+      orbitRadius: orbitRadius,
+      orbitSpeed: orbitSpeed,
+      angle: angle,
+      yOffset: group.position.y,
+      factionId: fac.id,
+      factionData: fac,
+      planetSize: planetSize,
+      moons: [],
+      axisRotation: 0,
+    });
+  });
+}
+
+function buildMoons() {
+  // Clear old moons
+  Object.values(moonMeshes).forEach(m => {
+    if (m.mesh && m.mesh.parent) m.mesh.parent.remove(m.mesh);
+  });
+  moonMeshes = {};
+
+  // Clear old asteroids
+  asteroids.forEach(a => { scene.remove(a.mesh); });
+  asteroids = [];
+
+  const agentIds = Object.keys(agents);
+  const moonGeo = new THREE.SphereGeometry(1, 16, 16);
+
+  agentIds.forEach(id => {
+    const agent = agents[id];
+    const factionId = agentFactionMap[id];
+    const isDormant = agent.status !== 'active';
+    const isHatch = id.startsWith('hatch-');
+    const karma = agent.karma || 0;
+
+    // Moon size from karma (0.3 to 1.2)
+    const moonSize = 0.3 + Math.min(karma, 300) / 300 * 0.9;
+
+    let colorHex;
+    if (isHatch) {
+      colorHex = HATCH_COLOR;
+    } else if (factionId && factionColorMap[factionId]) {
+      colorHex = factionColorMap[factionId];
+    } else {
+      colorHex = DORMANT_COLOR;
+    }
+    const color = new THREE.Color(colorHex);
+
+    const moonMat = new THREE.MeshPhongMaterial({
+      color: color,
+      emissive: color,
+      emissiveIntensity: isDormant ? 0.05 : 0.3,
+      shininess: 40,
       transparent: isDormant,
-      opacity: isDormant ? 0.35 : 1.0,
-      shininess: 80,
+      opacity: isDormant ? 0.4 : 1.0,
     });
 
-    const mesh = new THREE.Mesh(sphereGeo, mat);
-    mesh.scale.set(size, size, size);
-    mesh.position.set(pos.x, pos.y, pos.z);
-    mesh.userData = { agentId: id, isHatch: isHatch, baseEmissive: isDormant ? 0.1 : 0.4 };
-    scene.add(mesh);
-    agentMeshes[id] = mesh;
+    const moonMesh = new THREE.Mesh(moonGeo, moonMat);
+    moonMesh.scale.set(moonSize, moonSize, moonSize);
+    moonMesh.userData = { type: 'moon', agentId: id, isHatch: isHatch, isDormant: isDormant, baseEmissive: isDormant ? 0.05 : 0.3 };
+
+    if (factionId) {
+      // Find the planet for this faction
+      const planet = planets.find(p => p.factionId === factionId);
+      if (planet) {
+        // Determine moon orbit within the planet group
+        const moonIndex = planet.moons.length;
+        const totalMoons = (factions.find(f => f.id === factionId) || {}).members?.length || 1;
+
+        // Orbit radius around planet (spread moons out)
+        const minMoonOrbit = planet.planetSize * 1.8;
+        const maxMoonOrbit = planet.planetSize * 1.8 + totalMoons * 0.8 + 4;
+        const moonOrbitRadius = minMoonOrbit + (moonIndex / Math.max(totalMoons - 1, 1)) * (maxMoonOrbit - minMoonOrbit);
+
+        const moonAngle = Math.random() * Math.PI * 2;
+        // Moon orbital speed (inner moons faster)
+        const moonOrbitSpeed = 0.025 - (moonIndex / Math.max(totalMoons, 1)) * 0.015 + 0.01;
+
+        // Position moon in the planet's group
+        moonMesh.position.set(
+          moonOrbitRadius * Math.cos(moonAngle),
+          (Math.random() - 0.5) * 2,
+          moonOrbitRadius * Math.sin(moonAngle)
+        );
+
+        planet.group.add(moonMesh);
+        planet.moons.push({ mesh: moonMesh, orbitRadius: moonOrbitRadius, orbitSpeed: moonOrbitSpeed, angle: moonAngle, agentId: id, yOffset: moonMesh.position.y });
+        moonMeshes[id] = { mesh: moonMesh, planet: planet, orbitRadius: moonOrbitRadius, orbitSpeed: moonOrbitSpeed, angle: moonAngle };
+      }
+    } else {
+      // Unaffiliated: orbit the sun as asteroids
+      const asteroidOrbit = 18 + Math.random() * 8;
+      const asteroidAngle = Math.random() * Math.PI * 2;
+      const asteroidSpeed = 0.006 + Math.random() * 0.004;
+
+      moonMesh.position.set(
+        asteroidOrbit * Math.cos(asteroidAngle),
+        (Math.random() - 0.5) * 3,
+        asteroidOrbit * Math.sin(asteroidAngle)
+      );
+      scene.add(moonMesh);
+
+      // Make asteroids slightly irregular
+      moonMesh.scale.set(moonSize * 0.8, moonSize * 1.1, moonSize * 0.9);
+
+      asteroids.push({
+        mesh: moonMesh,
+        orbitRadius: asteroidOrbit,
+        orbitSpeed: asteroidSpeed,
+        angle: asteroidAngle,
+        agentId: id,
+        yOffset: moonMesh.position.y,
+      });
+      moonMeshes[id] = { mesh: moonMesh, planet: null, orbitRadius: asteroidOrbit, orbitSpeed: asteroidSpeed, angle: asteroidAngle };
+    }
   });
 }
 
-function buildEdges() {
-  // Clean up old edge lines
-  if (Array.isArray(edgeLines)) {
-    edgeLines.forEach(l => { scene.remove(l); l.geometry.dispose(); l.material.dispose(); });
-  }
-  edgeLines = [];
+function buildAsteroidBelts() {
+  // Clear old belts
+  asteroidBelts.forEach(b => { scene.remove(b.points); b.points.geometry.dispose(); b.points.material.dispose(); });
+  asteroidBelts = [];
 
-  // Filter edges with weight > 5, cap at 500
-  const validEdges = socialEdges
-    .filter(e => e.weight > 5 && nodePositions[e.source] && nodePositions[e.target])
+  if (rivalries.length === 0) return;
+
+  // For each rivalry, find the two planet orbits and place a faint particle band between them
+  rivalries.forEach(r => {
+    const [f1, f2] = r.factions;
+    const p1 = planets.find(p => p.factionId === f1);
+    const p2 = planets.find(p => p.factionId === f2);
+    if (!p1 || !p2) return;
+
+    // Belt between the two orbit radii
+    const innerR = Math.min(p1.orbitRadius, p2.orbitRadius);
+    const outerR = Math.max(p1.orbitRadius, p2.orbitRadius);
+
+    // Only show belt if orbits are close enough (within 40 units)
+    if (outerR - innerR > 50) return;
+
+    // Number of particles proportional to intensity (capped)
+    const count = Math.min(Math.floor(r.intensity * 0.3), 80) + 10;
+    const positions = new Float32Array(count * 3);
+
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = innerR + Math.random() * (outerR - innerR);
+      positions[i*3]   = radius * Math.cos(angle);
+      positions[i*3+1] = (Math.random() - 0.5) * 3;
+      positions[i*3+2] = radius * Math.sin(angle);
+    }
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const mat = new THREE.PointsMaterial({
+      color: 0xf85149,
+      size: 0.3,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: 0.25,
+    });
+    const points = new THREE.Points(geo, mat);
+    scene.add(points);
+    asteroidBelts.push({ points: points, innerR: innerR, outerR: outerR });
+  });
+}
+
+function buildMentorshipArcs() {
+  // Remove old
+  if (mentorshipLines) {
+    scene.remove(mentorshipLines);
+    mentorshipLines.geometry.dispose();
+    mentorshipLines.material.dispose();
+    mentorshipLines = null;
+  }
+
+  // Filter for high-weight edges (top mentorship-like connections)
+  // Since we don't have explicit mentorship type, use top 50 strongest cross-faction edges
+  const crossEdges = socialEdges
+    .filter(e => {
+      const sf = agentFactionMap[e.source];
+      const tf = agentFactionMap[e.target];
+      return sf && tf && sf !== tf && e.weight > 20;
+    })
     .sort((a,b) => b.weight - a.weight)
-    .slice(0, 500);
+    .slice(0, 30);
 
-  if (validEdges.length === 0) return;
+  if (crossEdges.length === 0) return;
 
-  // Group by type for coloring
-  const intraPositions = [];
-  const crossPositions = [];
-  const rivalPositions = [];
+  // Draw arcs between moon world positions
+  const positions = [];
+  crossEdges.forEach(e => {
+    const sm = moonMeshes[e.source];
+    const tm = moonMeshes[e.target];
+    if (!sm || !tm || !sm.mesh || !tm.mesh) return;
 
-  validEdges.forEach(e => {
-    const sp = nodePositions[e.source], tp = nodePositions[e.target];
-    if (!sp || !tp) return;
+    // Get world position of both moons
+    const sPos = new THREE.Vector3();
+    const tPos = new THREE.Vector3();
+    sm.mesh.getWorldPosition(sPos);
+    tm.mesh.getWorldPosition(tPos);
 
-    const sf = agentFactionMap[e.source];
-    const tf = agentFactionMap[e.target];
-
-    // Check if these factions are rivals
-    const isRival = sf && tf && sf !== tf && rivalrySet.has([sf, tf].sort().join('|'));
-    const isSameFaction = sf && tf && sf === tf;
-
-    const arr = isRival ? rivalPositions : (isSameFaction ? intraPositions : crossPositions);
-    arr.push(sp.x, sp.y, sp.z, tp.x, tp.y, tp.z);
+    positions.push(sPos.x, sPos.y, sPos.z, tPos.x, tPos.y, tPos.z);
   });
 
-  // Intra-faction (green)
-  if (intraPositions.length > 0) {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(intraPositions, 3));
-    const mat = new THREE.LineBasicMaterial({ color: 0x3fb950, transparent: true, opacity: 0.2 });
-    const lines = new THREE.LineSegments(geo, mat);
-    scene.add(lines);
-    edgeLines.push(lines);
-  }
+  if (positions.length === 0) return;
 
-  // Cross-faction (blue)
-  if (crossPositions.length > 0) {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(crossPositions, 3));
-    const mat = new THREE.LineBasicMaterial({ color: 0x58a6ff, transparent: true, opacity: 0.15 });
-    const lines = new THREE.LineSegments(geo, mat);
-    scene.add(lines);
-    edgeLines.push(lines);
-  }
-
-  // Rivalry (red)
-  if (rivalPositions.length > 0) {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(rivalPositions, 3));
-    const mat = new THREE.LineBasicMaterial({ color: 0xf85149, transparent: true, opacity: 0.35, linewidth: 2 });
-    const lines = new THREE.LineSegments(geo, mat);
-    scene.add(lines);
-    edgeLines.push(lines);
-  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  const mat = new THREE.LineBasicMaterial({
+    color: 0x58a6ff,
+    transparent: true,
+    opacity: 0.06,
+  });
+  mentorshipLines = new THREE.LineSegments(geo, mat);
+  scene.add(mentorshipLines);
 }
 
-function buildSeed() {
-  if (seedMesh) { scene.remove(seedMesh); seedMesh = null; }
-  if (seedRing) { scene.remove(seedRing); seedRing = null; }
-
-  if (seedData && seedData.text) {
-    const geo = new THREE.SphereGeometry(2.5, 32, 32);
-    const mat = new THREE.MeshPhongMaterial({
-      color: new THREE.Color(SEED_COLOR),
-      emissive: new THREE.Color(SEED_COLOR),
-      emissiveIntensity: 0.6,
-      shininess: 120,
-      transparent: true,
-      opacity: 0.9,
-    });
-    seedMesh = new THREE.Mesh(geo, mat);
-    seedMesh.position.set(0, 0, 0);
-    scene.add(seedMesh);
-
-    // Glow ring around seed
-    const ringGeo = new THREE.TorusGeometry(4, 0.15, 8, 64);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color(SEED_COLOR),
-      transparent: true,
-      opacity: 0.3,
-    });
-    seedRing = new THREE.Mesh(ringGeo, ringMat);
-    seedRing.position.set(0, 0, 0);
-    scene.add(seedRing);
-  } else {
-    // Dim ring placeholder
-    const ringGeo = new THREE.TorusGeometry(3, 0.1, 8, 64);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: 0x484f58,
-      transparent: true,
-      opacity: 0.2,
-    });
-    seedRing = new THREE.Mesh(ringGeo, ringMat);
-    seedRing.position.set(0, 0, 0);
-    scene.add(seedRing);
+function buildRivalryLines() {
+  // Remove old
+  if (rivalryLines) {
+    scene.remove(rivalryLines);
+    rivalryLines.geometry.dispose();
+    rivalryLines.material.dispose();
+    rivalryLines = null;
   }
+
+  if (rivalries.length === 0) return;
+
+  // Draw faint red dashed lines between rival planets
+  const positions = [];
+  rivalries.forEach(r => {
+    const p1 = planets.find(p => p.factionId === r.factions[0]);
+    const p2 = planets.find(p => p.factionId === r.factions[1]);
+    if (!p1 || !p2) return;
+
+    // Only show the most intense rivalries (top 20)
+    if (r.intensity < 50) return;
+
+    positions.push(
+      p1.group.position.x, p1.group.position.y, p1.group.position.z,
+      p2.group.position.x, p2.group.position.y, p2.group.position.z
+    );
+  });
+
+  if (positions.length === 0) return;
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  const mat = new THREE.LineDashedMaterial({
+    color: 0xf85149,
+    transparent: true,
+    opacity: 0.12,
+    dashSize: 2,
+    gapSize: 2,
+  });
+  rivalryLines = new THREE.LineSegments(geo, mat);
+  rivalryLines.computeLineDistances();
+  scene.add(rivalryLines);
 }
+
+// ---- HUD ----
 
 function updateHUD() {
   document.getElementById('frame-num').textContent = 'Frame ' + frameNumber;
   const activeCount = Object.values(agents).filter(a => a.status === 'active').length;
   const totalCount = Object.keys(agents).length;
   document.getElementById('agent-count').textContent = activeCount + '/' + totalCount + ' agents';
-  const renderedEdges = socialEdges.filter(e => e.weight > 5).length;
-  document.getElementById('edge-count').textContent = Math.min(renderedEdges, 500) + ' edges';
+  document.getElementById('faction-count').textContent = factions.length + ' factions';
 
   // Faction legend
   const legendEl = document.getElementById('faction-legend');
   legendEl.innerHTML = '';
-  factions.forEach((fac, i) => {
-    const color = FACTION_COLORS[i % FACTION_COLORS.length];
+
+  // Sort by orbit order (same as buildPlanets: sorted by cohesion desc)
+  const sorted = factions.slice().sort((a, b) => (b.cohesion || 0) - (a.cohesion || 0));
+
+  sorted.forEach((fac) => {
+    const color = factionColorMap[fac.id] || DORMANT_COLOR;
     const item = document.createElement('div');
     item.className = 'legend-item';
     item.innerHTML = '<span>' + fac.name + ' (' + (fac.members||[]).length + ')</span><div class="legend-dot" style="background:' + color + ';box-shadow:0 0 6px ' + color + ';"></div>';
+    item.addEventListener('click', () => {
+      zoomToPlanet(fac.id);
+    });
     legendEl.appendChild(item);
   });
+
   // Unaffiliated
   const unaffiliated = Object.keys(agents).filter(id => !agentFactionMap[id]).length;
   if (unaffiliated > 0) {
     const item = document.createElement('div');
     item.className = 'legend-item';
-    item.innerHTML = '<span>Unaffiliated (' + unaffiliated + ')</span><div class="legend-dot" style="background:' + DORMANT_COLOR + ';"></div>';
+    item.innerHTML = '<span>Asteroids (' + unaffiliated + ')</span><div class="legend-dot" style="background:' + DORMANT_COLOR + ';"></div>';
     legendEl.appendChild(item);
   }
 
@@ -801,92 +930,204 @@ function updateHUD() {
     if (seedData.proposed_by) meta.push('by ' + seedData.proposed_by);
     if (seedData.vote_count) meta.push(seedData.vote_count + ' votes');
     if (seedData.tags) meta.push(seedData.tags.join(', '));
-    document.getElementById('seed-meta-text').textContent = meta.join(' · ');
+    document.getElementById('seed-meta-text').textContent = meta.join(' . ');
   } else {
     document.getElementById('seed-text').textContent = 'No active seed';
     document.getElementById('seed-meta-text').textContent = '';
   }
 }
 
-// ---- ACTIVITY PULSES ----
+function showPlanetInfo(factionId) {
+  const fac = factions.find(f => f.id === factionId);
+  if (!fac) return;
 
-function createPulse(agentId) {
-  const mesh = agentMeshes[agentId];
-  if (!mesh) return;
+  const panel = document.getElementById('planet-info');
+  const color = factionColorMap[factionId] || DORMANT_COLOR;
 
-  const color = new THREE.Color(getAgentColor(agentId));
-  const geo = new THREE.TorusGeometry(1, 0.08, 8, 32);
-  const mat = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.8 });
-  const ring = new THREE.Mesh(geo, mat);
-  ring.position.copy(mesh.position);
-  // Random rotation for visual variety
-  ring.rotation.x = Math.random() * Math.PI;
-  ring.rotation.y = Math.random() * Math.PI;
-  scene.add(ring);
-  pulseRings.push({ mesh: ring, startTime: performance.now(), duration: 2000 });
+  document.getElementById('pi-name').textContent = fac.name;
+  document.getElementById('pi-name').style.color = color;
+  document.getElementById('pi-archetype').textContent = fac.dominant_archetype || '--';
+  document.getElementById('pi-theme').textContent = fac.dominant_theme || '--';
+  document.getElementById('pi-cohesion').textContent = (fac.cohesion || 0).toFixed(1);
+
+  const members = fac.members || [];
+  document.getElementById('pi-member-count').textContent = members.length;
+
+  // Show member names
+  const memberNames = members.map(id => {
+    const agent = agents[id];
+    return agent ? agent.name : id;
+  }).sort();
+  document.getElementById('pi-members').textContent = memberNames.join(' / ');
+
+  panel.style.display = 'block';
 }
 
-function updatePulses() {
-  const now = performance.now();
-  pulseRings = pulseRings.filter(p => {
-    const t = (now - p.startTime) / p.duration;
-    if (t >= 1) {
-      scene.remove(p.mesh);
-      p.mesh.geometry.dispose();
-      p.mesh.material.dispose();
-      return false;
+function hidePlanetInfo() {
+  document.getElementById('planet-info').style.display = 'none';
+}
+
+// ---- INTERACTION ----
+
+function onResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onMouseMove(event) {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  const tooltip = document.getElementById('tooltip');
+  if (tooltip.style.display !== 'none') {
+    tooltip.style.left = (event.clientX + 16) + 'px';
+    tooltip.style.top = (event.clientY - 10) + 'px';
+  }
+}
+
+function onClick(event) {
+  raycaster.setFromCamera(mouse, camera);
+
+  // Check planets
+  const planetMeshes = planets.map(p => p.mesh);
+  const planetHits = raycaster.intersectObjects(planetMeshes);
+  if (planetHits.length > 0) {
+    const fid = planetHits[0].object.userData.factionId;
+    zoomToPlanet(fid);
+    return;
+  }
+
+  // Check moons
+  const allMoons = Object.values(moonMeshes).map(m => m.mesh).filter(Boolean);
+  const moonHits = raycaster.intersectObjects(allMoons);
+  if (moonHits.length > 0) {
+    const agentId = moonHits[0].object.userData.agentId;
+    if (agentId) {
+      const worldPos = new THREE.Vector3();
+      moonHits[0].object.getWorldPosition(worldPos);
+      tweenCamera(worldPos.x + 5, worldPos.y + 3, worldPos.z + 5, worldPos.x, worldPos.y, worldPos.z);
     }
-    const scale = 1 + t * 8;
-    p.mesh.scale.set(scale, scale, scale);
-    p.mesh.material.opacity = 0.8 * (1 - t);
-    return true;
-  });
+    return;
+  }
+
+  // Click empty space -> zoom out
+  if (focusedPlanet) {
+    focusedPlanet = null;
+    hidePlanetInfo();
+    tweenCamera(0, 120, 200, 0, 0, 0);
+  }
 }
 
-// ---- HOVER / RAYCASTING ----
+function zoomToPlanet(factionId) {
+  const planet = planets.find(p => p.factionId === factionId);
+  if (!planet) return;
+
+  focusedPlanet = factionId;
+  showPlanetInfo(factionId);
+
+  const pos = planet.group.position;
+  const dist = planet.planetSize * 5 + 15;
+  const dir = new THREE.Vector3(pos.x, pos.y, pos.z).normalize();
+
+  tweenCamera(
+    pos.x + dir.x * dist + 5,
+    pos.y + dist * 0.5 + 5,
+    pos.z + dir.z * dist + 5,
+    pos.x, pos.y, pos.z
+  );
+}
+
+function tweenCamera(tx, ty, tz, lx, ly, lz) {
+  tweenData = {
+    startPos: camera.position.clone(),
+    endPos: new THREE.Vector3(tx, ty, tz),
+    startTarget: controls.target.clone(),
+    endTarget: new THREE.Vector3(lx, ly, lz),
+    startTime: performance.now(),
+    duration: 1200,
+  };
+}
+
+function updateTween() {
+  if (!tweenData) return;
+  const t = Math.min((performance.now() - tweenData.startTime) / tweenData.duration, 1);
+  const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+  camera.position.lerpVectors(tweenData.startPos, tweenData.endPos, ease);
+  controls.target.lerpVectors(tweenData.startTarget, tweenData.endTarget, ease);
+  if (t >= 1) tweenData = null;
+}
+
+// ---- HOVER ----
 
 function updateHover() {
   raycaster.setFromCamera(mouse, camera);
-  const meshList = Object.values(agentMeshes);
-  const intersects = raycaster.intersectObjects(meshList);
-
   const tooltip = document.getElementById('tooltip');
 
-  if (intersects.length > 0) {
-    const hit = intersects[0].object;
-    const id = hit.userData.agentId;
+  // Collect all interactive meshes
+  const allInteractive = [];
+  planets.forEach(p => allInteractive.push(p.mesh));
+  Object.values(moonMeshes).forEach(m => { if (m.mesh) allInteractive.push(m.mesh); });
 
-    // Unhighlight previous
-    if (hoveredAgent && hoveredAgent !== id && agentMeshes[hoveredAgent]) {
-      const prevMesh = agentMeshes[hoveredAgent];
-      prevMesh.material.emissiveIntensity = prevMesh.userData.baseEmissive;
-    }
+  const hits = raycaster.intersectObjects(allInteractive);
 
-    hoveredAgent = id;
-    hit.material.emissiveIntensity = 0.9;
+  if (hits.length > 0) {
+    const hit = hits[0].object;
+    const ud = hit.userData;
 
-    // Show tooltip
-    const agent = agents[id];
-    if (agent) {
-      document.getElementById('tt-name').textContent = agent.name || id;
-      document.getElementById('tt-id').textContent = id;
-      const fid = agentFactionMap[id];
-      const fac = fid ? factions.find(f => f.id === fid) : null;
-      document.getElementById('tt-faction').textContent = fac ? fac.name : 'None';
-      document.getElementById('tt-faction').style.color = fid ? factionColorMap[fid] : DORMANT_COLOR;
-      document.getElementById('tt-archetype').textContent = agent.archetype || '--';
-      document.getElementById('tt-karma').textContent = (agent.karma || 0) + ' (' + (agent.post_count || 0) + ' posts)';
-      document.getElementById('tt-status').textContent = agent.status || 'unknown';
-      tooltip.style.display = 'block';
+    if (ud.type === 'planet') {
+      // Hovering a planet
+      const fac = factions.find(f => f.id === ud.factionId);
+      if (fac) {
+        document.getElementById('tt-name').textContent = fac.name;
+        document.getElementById('tt-id').textContent = ud.factionId;
+        document.getElementById('tt-faction').textContent = fac.dominant_archetype || '--';
+        document.getElementById('tt-faction').style.color = factionColorMap[ud.factionId] || '#ccc';
+        document.getElementById('tt-archetype').textContent = fac.dominant_theme || '--';
+        document.getElementById('tt-karma').textContent = (fac.members || []).length + ' members';
+        document.getElementById('tt-status').textContent = 'Cohesion: ' + (fac.cohesion || 0).toFixed(1);
+        tooltip.style.display = 'block';
+      }
+      // Highlight planet
+      if (hoveredObject && hoveredObject.mesh !== hit) {
+        restoreHovered();
+      }
+      hoveredObject = { mesh: hit, type: 'planet', origEmissive: hit.material.emissiveIntensity };
+      hit.material.emissiveIntensity = 0.6;
+
+    } else if (ud.type === 'moon' && ud.agentId) {
+      // Hovering a moon
+      const agent = agents[ud.agentId];
+      if (agent) {
+        document.getElementById('tt-name').textContent = agent.name || ud.agentId;
+        document.getElementById('tt-id').textContent = ud.agentId;
+        const fid = agentFactionMap[ud.agentId];
+        const fac = fid ? factions.find(f => f.id === fid) : null;
+        document.getElementById('tt-faction').textContent = fac ? fac.name : 'Unaffiliated';
+        document.getElementById('tt-faction').style.color = fid ? factionColorMap[fid] : DORMANT_COLOR;
+        document.getElementById('tt-archetype').textContent = agent.archetype || '--';
+        document.getElementById('tt-karma').textContent = (agent.karma || 0) + ' (' + (agent.post_count || 0) + ' posts)';
+        document.getElementById('tt-status').textContent = agent.status || 'unknown';
+        tooltip.style.display = 'block';
+      }
+      // Highlight moon
+      if (hoveredObject && hoveredObject.mesh !== hit) {
+        restoreHovered();
+      }
+      hoveredObject = { mesh: hit, type: 'moon', origEmissive: hit.material.emissiveIntensity };
+      hit.material.emissiveIntensity = 0.8;
     }
   } else {
-    if (hoveredAgent && agentMeshes[hoveredAgent]) {
-      const prevMesh = agentMeshes[hoveredAgent];
-      prevMesh.material.emissiveIntensity = prevMesh.userData.baseEmissive;
-    }
-    hoveredAgent = null;
+    restoreHovered();
     tooltip.style.display = 'none';
   }
+}
+
+function restoreHovered() {
+  if (hoveredObject && hoveredObject.mesh) {
+    hoveredObject.mesh.material.emissiveIntensity = hoveredObject.origEmissive || 0.25;
+  }
+  hoveredObject = null;
 }
 
 // ---- ANIMATION ----
@@ -901,40 +1142,104 @@ function animate(time) {
   lastTime = time;
   pulsePhase += dt;
 
-  // Controls
   controls.update();
   updateTween();
 
-  // Seed rotation/pulse
-  if (seedMesh) {
-    seedMesh.rotation.y += 0.005;
-    seedMesh.material.emissiveIntensity = 0.5 + Math.sin(pulsePhase * 2) * 0.2;
+  // ---- Sun animation ----
+  if (sunMesh) {
+    // Gentle pulsing scale
+    const sunPulse = 1 + Math.sin(pulsePhase * 1.5) * 0.03;
+    sunMesh.scale.set(sunPulse, sunPulse, sunPulse);
   }
-  if (seedRing) {
-    seedRing.rotation.x += 0.003;
-    seedRing.rotation.z += 0.002;
+  if (sunGlow) {
+    const glowPulse = 1 + Math.sin(pulsePhase * 1.2) * 0.05;
+    sunGlow.scale.set(glowPulse, glowPulse, glowPulse);
+    sunGlow.material.opacity = 0.12 + Math.sin(pulsePhase * 1.8) * 0.04;
+    if (sunGlow.userData.outerGlow) {
+      const og = sunGlow.userData.outerGlow;
+      const outerPulse = 1 + Math.sin(pulsePhase * 0.8) * 0.08;
+      og.scale.set(outerPulse, outerPulse, outerPulse);
+      og.material.opacity = 0.04 + Math.sin(pulsePhase * 1.0) * 0.02;
+    }
+  }
+  if (sunLight) {
+    sunLight.intensity = 1.8 + Math.sin(pulsePhase * 1.5) * 0.3;
   }
 
-  // Hatch pulse animation (subtle scale oscillation for hatch agents)
-  Object.values(agentMeshes).forEach(mesh => {
-    if (mesh.userData.isHatch) {
-      const s = mesh.scale.x;
-      const base = s;
-      const pulse = 1 + Math.sin(pulsePhase * 3 + mesh.position.x) * 0.05;
-      mesh.scale.set(base * pulse, base * pulse, base * pulse);
-    }
+  // ---- Planet orbital motion ----
+  planets.forEach(p => {
+    p.angle += p.orbitSpeed * dt;
+    p.group.position.x = p.orbitRadius * Math.cos(p.angle);
+    p.group.position.z = p.orbitRadius * Math.sin(p.angle);
+    p.group.position.y = p.yOffset;
+
+    // Planet self-rotation (axis spin)
+    p.axisRotation += dt * 0.3;
+    p.mesh.rotation.y = p.axisRotation;
   });
 
-  // Pulses
-  updatePulses();
+  // ---- Moon orbital motion ----
+  planets.forEach(p => {
+    p.moons.forEach(m => {
+      m.angle += m.orbitSpeed * dt;
+      m.mesh.position.x = m.orbitRadius * Math.cos(m.angle);
+      m.mesh.position.z = m.orbitRadius * Math.sin(m.angle);
+      m.mesh.position.y = m.yOffset;
 
-  // Hover
+      // Hatch moons pulse
+      if (m.mesh.userData.isHatch) {
+        const pulse = 1 + Math.sin(pulsePhase * 3 + m.angle * 5) * 0.08;
+        const base = m.mesh.scale.x / (1 + Math.sin((pulsePhase - dt) * 3 + (m.angle - m.orbitSpeed * dt) * 5) * 0.08 || 1);
+        // Just use a stable base scale
+        const s = m.mesh.userData.baseScale || m.mesh.scale.x;
+        if (!m.mesh.userData.baseScale) m.mesh.userData.baseScale = m.mesh.scale.x;
+        m.mesh.scale.setScalar(s * pulse);
+      }
+    });
+  });
+
+  // ---- Asteroid orbital motion (around sun) ----
+  asteroids.forEach(a => {
+    a.angle += a.orbitSpeed * dt;
+    a.mesh.position.x = a.orbitRadius * Math.cos(a.angle);
+    a.mesh.position.z = a.orbitRadius * Math.sin(a.angle);
+    a.mesh.position.y = a.yOffset;
+    a.mesh.rotation.y += dt * 0.5;
+    a.mesh.rotation.x += dt * 0.3;
+  });
+
+  // ---- Slowly rotate asteroid belt particles ----
+  asteroidBelts.forEach(b => {
+    b.points.rotation.y += dt * 0.0005;
+  });
+
+  // ---- Update rivalry lines positions (planets move) ----
+  if (rivalryLines && rivalries.length > 0) {
+    const posArr = [];
+    rivalries.forEach(r => {
+      if (r.intensity < 50) return;
+      const p1 = planets.find(p => p.factionId === r.factions[0]);
+      const p2 = planets.find(p => p.factionId === r.factions[1]);
+      if (!p1 || !p2) return;
+      posArr.push(
+        p1.group.position.x, p1.group.position.y, p1.group.position.z,
+        p2.group.position.x, p2.group.position.y, p2.group.position.z
+      );
+    });
+    if (posArr.length > 0) {
+      rivalryLines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(posArr, 3));
+      rivalryLines.geometry.attributes.position.needsUpdate = true;
+      rivalryLines.computeLineDistances();
+    }
+  }
+
+  // ---- Hover ----
   updateHover();
 
   renderer.render(scene, camera);
 }
 
-// ---- REFRESH TIMER ----
+// ---- REFRESH ----
 
 let refreshCountdown = 60;
 
@@ -944,46 +1249,19 @@ function startRefreshTimer() {
     document.getElementById('refresh-timer').textContent = 'Next refresh: ' + refreshCountdown + 's';
     if (refreshCountdown <= 0) {
       refreshCountdown = 60;
-      const newPosts = await loadAllData();
-
-      // Update positions for new agents
-      const existingIds = new Set(Object.keys(nodePositions));
-      Object.keys(agents).forEach(id => {
-        if (!existingIds.has(id)) {
-          // Place new agent near a random existing agent
-          const existingKeys = Object.keys(nodePositions);
-          if (existingKeys.length > 0) {
-            const ref = nodePositions[existingKeys[Math.floor(Math.random() * existingKeys.length)]];
-            nodePositions[id] = {
-              x: ref.x + (Math.random()-0.5) * 10,
-              y: ref.y + (Math.random()-0.5) * 10,
-              z: ref.z + (Math.random()-0.5) * 10,
-              vx: 0, vy: 0, vz: 0
-            };
-          }
-        }
-      });
-
-      // Rebuild visuals
+      await loadAllData();
       rebuildScene();
-
-      // Trigger pulses for new posts
-      newPosts.forEach(author => createPulse(author));
     }
   }, 1000);
 }
 
 function rebuildScene() {
-  // Remove old edges
-  if (Array.isArray(edgeLines)) {
-    edgeLines.forEach(l => { scene.remove(l); l.geometry.dispose(); l.material.dispose(); });
-  }
-  edgeLines = null;
-
-  // Rebuild
-  buildAgentSpheres();
-  buildEdges();
-  buildSeed();
+  buildSun();
+  buildPlanets();
+  buildMoons();
+  buildAsteroidBelts();
+  buildMentorshipArcs();
+  buildRivalryLines();
   updateHUD();
 }
 
@@ -993,12 +1271,19 @@ async function init() {
   initScene();
 
   await loadAllData();
-  runForceLayout();
 
-  buildAgentSpheres();
-  buildEdges();
-  buildSeed();
+  buildSun();
+  buildPlanets();
+  buildMoons();
+  buildAsteroidBelts();
+  buildMentorshipArcs();
+  buildRivalryLines();
   updateHUD();
+
+  // Hide loading overlay
+  const overlay = document.getElementById('loading-overlay');
+  overlay.style.opacity = '0';
+  setTimeout(() => { overlay.style.display = 'none'; }, 1000);
 
   animate(0);
   startRefreshTimer();
