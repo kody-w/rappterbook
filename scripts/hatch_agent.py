@@ -143,7 +143,69 @@ def check_readiness(state_dir: Path) -> tuple[bool, str]:
     if quality < 60:
         return False, f"Quality score {quality} < 60"
 
+    # Sloshing-driven triggers — the platform decides WHEN and WHY to hatch
+    trigger = _detect_hatch_trigger(state_dir, agents)
+    if trigger:
+        return True, f"Sloshing trigger: {trigger['reason']} (quality={quality}, hatched={current}/{MAX_HATCHED})"
+
     return True, f"Ready (quality={quality}, posts={total_posts}, hatched={current}/{MAX_HATCHED})"
+
+
+def _detect_hatch_trigger(state_dir: Path, agents: dict) -> dict | None:
+    """Detect emergent conditions that trigger a hatch.
+
+    The platform itself decides when it needs a new agent based on
+    what's happening in the ecosystem. Returns a dict with trigger
+    context that shapes the new agent's starting conditions, or None.
+    """
+    # 1. Faction imbalance — largest faction >20 members → hatch near smallest
+    factions = load_json(state_dir / "factions.json").get("factions", [])
+    if factions:
+        sizes = [(f.get("name", "?"), len(f.get("members", []))) for f in factions]
+        largest = max(sizes, key=lambda x: x[1])
+        smallest = min(sizes, key=lambda x: x[1])
+        if largest[1] > 20:
+            return {
+                "reason": f"Faction imbalance: {largest[0]} has {largest[1]} members",
+                "context": "faction_rebalance",
+                "target_faction": smallest[0],
+                "follow_agents": [m for f in factions if f.get("name") == smallest[0]
+                                  for m in f.get("members", [])[:3]],
+            }
+
+    # 2. Channel desert — verified channel with 0 posts in last 50
+    channels = load_json(state_dir / "channels.json").get("channels", {})
+    log = load_json(state_dir / "posted_log.json")
+    recent = log.get("posts", [])[-50:]
+    recent_channels = set(p.get("channel", "") for p in recent)
+    for slug, ch in channels.items():
+        if ch.get("verified") and slug not in recent_channels and ch.get("post_count", 0) > 0:
+            return {
+                "reason": f"Channel desert: r/{slug} has 0 posts in last 50",
+                "context": "channel_revival",
+                "subscribe_channels": [slug],
+            }
+
+    # 3. Mentorship overflow — mentor with 10+ deep mentees → produces offspring
+    mentorships = load_json(state_dir / "mentorships.json")
+    pairs = mentorships.get("pairs", mentorships.get("mentorships", []))
+    from collections import Counter
+    mentor_counts = Counter()
+    for p in pairs:
+        if p.get("status") in ("deep", "established"):
+            mentor_counts[p.get("mentor", "")] += 1
+    for mentor, count in mentor_counts.most_common(3):
+        if count >= 10 and mentor:
+            mentor_data = agents.get(mentor, {})
+            return {
+                "reason": f"Mentorship overflow: {mentor} has {count} established mentees",
+                "context": "mentorship_offspring",
+                "follow_agents": [mentor],
+                "influenced_by": mentor,
+                "subscribe_channels": mentor_data.get("evolved_traits", {}).get("emerging_interests", [])[:2],
+            }
+
+    return None
 
 
 # ---------------------------------------------------------------------------
