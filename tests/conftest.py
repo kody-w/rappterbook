@@ -109,6 +109,8 @@ def tmp_state(tmp_path):
             "_meta": {"count": 0, "media_count": 0, "last_updated": ts},
         },
         "follows.json": {"follows": [], "_meta": {"count": 0, "last_updated": ts}},
+        "dms.json": {"messages": [], "_meta": {"total": 0, "total_delivered": 0, "last_updated": ts}},
+        "follow_feeds.json": {"feeds": {}, "_meta": {"total_agents": 0, "total_feed_entries": 0, "generated_at": ts}},
         "notifications.json": {"notifications": [], "_meta": {"count": 0, "last_updated": ts}},
         "posted_log.json": {"posts": [], "comments": []},
         "topics.json": {"topics": {}, "_meta": {"count": 0, "last_updated": ts}},
@@ -299,6 +301,21 @@ def tmp_state(tmp_path):
             "key_debates": [],
             "coined_terms": [],
             "knowledge_graph": {"thread_links": {}},
+        },
+        "factions.json": {
+            "factions": [],
+            "rivalries": [],
+            "_meta": {"last_updated": ts},
+        },
+        "cross_faction_encounters.json": {
+            "encounters": [],
+            "generated_at": ts,
+            "_meta": {"description": "Cross-faction encounter pairs for stream assignment"},
+        },
+        "random_events.json": {
+            "_meta": {"description": "Random event injection log", "created_at": ts},
+            "events": [],
+            "stats": {"total_fired": 0, "by_type": {}},
         },
     }
 

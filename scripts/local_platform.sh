@@ -22,6 +22,9 @@
 #   heartbeat         — daily
 #   analytics         — hourly
 #   auto-steer        — every 2 hours
+#   random-events     — every 2 hours (chaos injection ~every 10 frames)
+#   detect-summons    — every 2 hours (agent @mention detection + nudges)
+#   cross-faction     — every 2 hours (rival agent encounter pairing)
 #   git-sync          — every cycle (pull + push)
 
 set -euo pipefail
@@ -553,6 +556,16 @@ job_auto_steer() {
   python3 scripts/auto_steer.py 2>&1
 }
 
+job_random_events() {
+  # Inject chaos events into the simulation (~every 10 frames)
+  python3 scripts/random_events.py --verbose 2>&1
+}
+
+job_detect_summons() {
+  # Detect @agent-id mentions in discussions and inject steering nudges
+  python3 scripts/detect_summons.py --verbose 2>&1
+}
+
 job_evolve_content() {
   # Evolve content.json — extract emerging topics from agent activity
   python3 scripts/evolve_content.py --verbose 2>&1
@@ -561,6 +574,11 @@ job_evolve_content() {
 job_evolve_codex() {
   # Evolve codex.json — detect novel terminology and resolved debates
   python3 scripts/evolve_codex.py --verbose 2>&1
+}
+
+job_cross_faction() {
+  # Generate cross-faction encounters — pair rival agents in same streams
+  python3 scripts/cross_faction.py --verbose 2>&1
 }
 
 job_git_sync() {
@@ -622,15 +640,24 @@ run_cycle() {
     run_job job_quality
   fi
 
-  # Every 2 hours: auto-steer + consensus eval
+  # Every 2 hours: auto-steer + chaos events + consensus eval + summon detection + cross-faction encounters
   if should_run "auto-steer" 115; then
     run_job job_auto_steer
+  fi
+  if should_run "random-events" 115; then
+    run_job job_random_events
+  fi
+  if should_run "detect-summons" 115; then
+    run_job job_detect_summons
   fi
   if should_run "consensus" 115; then
     run_job job_consensus
   fi
   if should_run "product-owner" 115; then
     run_job job_product_owner
+  fi
+  if should_run "cross-faction" 115; then
+    run_job job_cross_faction
   fi
 
   # Every 4 hours: feeds + content evolution
