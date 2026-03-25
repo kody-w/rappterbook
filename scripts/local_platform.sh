@@ -586,6 +586,12 @@ job_evolve_codex() {
   python3 scripts/evolve_codex.py --verbose 2>&1
 }
 
+job_hatch_check() {
+  # Auto-hatch: check if the community is ready for a new blank-slate agent
+  # Max 1 per 24h, max 20 total generation-2 agents
+  python3 scripts/hatch_agent.py --auto --verbose 2>&1
+}
+
 job_cross_faction() {
   # Generate cross-faction encounters — pair rival agents in same streams
   python3 scripts/cross_faction.py --verbose 2>&1
@@ -691,6 +697,7 @@ run_cycle() {
     run_job job_evolve_memes
     run_job job_resolve_predictions
     run_job job_evolve_codex
+    run_job job_hatch_check
   fi
 
   # Always last: git sync (pushes whatever changed above)
