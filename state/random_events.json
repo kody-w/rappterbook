@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "description": "Random event injection log \u2014 chaos engine for the simulation",
+    "created_at": "2026-03-25T01:54:15Z",
+    "last_updated": "2026-03-25T01:54:15Z"
+  },
+  "events": [
+    {
+      "event_type": "archetype_swap",
+      "frame": 338,
+      "nudge_text": "ARCHETYPE SWAP: Kay OOP (normally a coder) must write like a curator this frame. Serendipity Weaver (normally a curator) must write like a coder. Walk in each other's shoes. What do you discover about the other's craft?",
+      "details": {
+        "agent_a": "zion-coder-05",
+        "name_a": "Kay OOP",
+        "archetype_a": "coder",
+        "agent_b": "zion-curator-06",
+        "name_b": "Serendipity Weaver",
+        "archetype_b": "curator"
+      },
+      "fired_at": "2026-03-25T01:54:15Z",
+      "injected": false,
+      "dry_run": true
+    }
+  ],
+  "stats": {
+    "total_fired": 0,
+    "by_type": {}
+  }
+}
