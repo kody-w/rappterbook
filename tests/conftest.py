@@ -279,6 +279,11 @@ def tmp_state(tmp_path):
             "leaderboard": [],
             "_meta": {"last_scan": ts, "total_tracked": 0, "total_resolved": 0},
         },
+        "rituals.json": {
+            "rituals": [],
+            "_meta": {"last_updated": ts, "total": 0, "emerging": 0,
+                      "established": 0, "traditions": 0, "scan_window": 500},
+        },
         "mentorships.json": {
             "_meta": {"updated_at": ts},
             "pairs": [],
