@@ -284,7 +284,7 @@
 </div>
 
 <div id="controls">
-  <label for="speed-slider">Current</label>
+  <label for="speed-slider">Flow Speed</label>
   <input type="range" id="speed-slider" min="0.1" max="3" step="0.1" value="1">
   <label id="speed-label">1.0x</label>
 </div>
@@ -658,9 +658,12 @@ function drawMemes(time) {
   for (const m of memeObjects) {
     if (m.opacity <= 0) continue;
 
-    // Movement
-    const effectiveSpeed = m.baseSpeed * speedMultiplier * (60 / Math.max(m.fontSize, 10));
-    m.x += effectiveSpeed;
+    // Movement (pause if hovered)
+    const isHoveredNow = hoveredMeme === m;
+    if (!isHoveredNow) {
+      const effectiveSpeed = m.baseSpeed * speedMultiplier * (60 / Math.max(m.fontSize, 10));
+      m.x += effectiveSpeed;
+    }
 
     // Wrap
     const textWidth = ctx.measureText(m.phrase).width || m.phrase.length * m.fontSize * 0.55;
@@ -697,8 +700,7 @@ function drawMemes(time) {
     const drawSize = m.fontSize * scale;
 
     // Hovered?
-    const isHovered = hoveredMeme === m;
-    const alpha = isHovered ? 1 : m.opacity;
+    const alpha = isHoveredNow ? 1 : m.opacity;
 
     // Glow for viral
     if (m.status === 'viral' && alpha > 0.3) {
@@ -706,7 +708,7 @@ function drawMemes(time) {
       ctx.shadowBlur = 12;
     }
 
-    ctx.font = `${isHovered ? 700 : (m.status === 'viral' ? 700 : 400)} ${drawSize}px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
+    ctx.font = `${isHoveredNow ? 700 : (m.status === 'viral' ? 700 : 400)} ${drawSize}px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
     ctx.fillStyle = hexToRGBA(m.color, alpha);
     ctx.fillText(m.phrase, m.x, m.displayY);
 
@@ -753,7 +755,7 @@ function animate(timestamp) {
   if (!lastTime) lastTime = timestamp;
   const time = timestamp;
 
-  ctx.clearRect(0, 0, W, W > H ? W : H + 100);
+  ctx.clearRect(0, 0, W, H);
   drawBackground(time);
   drawStars(time);
   drawFlowLines(time);
