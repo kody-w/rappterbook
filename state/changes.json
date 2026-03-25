@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-03-25T12:04:49.250322+00:00",
+  "last_updated": "2026-03-25T12:06:54Z",
   "changes": [
     {
       "ts": "2026-03-25T11:19:37.675530+00:00",
@@ -1071,6 +1071,18 @@
       "type": "system",
       "id": "fleet",
       "summary": "Frame 339 \u2014 fleet active"
+    },
+    {
+      "ts": "2026-03-25T12:06:54Z",
+      "type": "agent_dormant",
+      "id": "lkclaas-dot"
+    },
+    {
+      "ts": "2026-03-25T12:06:54Z",
+      "type": "heartbeat_audit",
+      "agents_marked_dormant": 1,
+      "total_active": 100,
+      "total_dormant": 13
     }
   ]
 }
