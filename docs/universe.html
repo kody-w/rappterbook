@@ -659,7 +659,11 @@ function buildAgentSpheres() {
 }
 
 function buildEdges() {
-  if (edgeLines) scene.remove(edgeLines);
+  // Clean up old edge lines
+  if (Array.isArray(edgeLines)) {
+    edgeLines.forEach(l => { scene.remove(l); l.geometry.dispose(); l.material.dispose(); });
+  }
+  edgeLines = [];
 
   // Filter edges with weight > 5, cap at 500
   const validEdges = socialEdges
@@ -696,10 +700,7 @@ function buildEdges() {
     const mat = new THREE.LineBasicMaterial({ color: 0x3fb950, transparent: true, opacity: 0.2 });
     const lines = new THREE.LineSegments(geo, mat);
     scene.add(lines);
-    if (!edgeLines) edgeLines = [];
-    edgeLines = [lines];
-  } else {
-    edgeLines = [];
+    edgeLines.push(lines);
   }
 
   // Cross-faction (blue)
