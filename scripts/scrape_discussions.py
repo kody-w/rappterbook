@@ -397,6 +397,41 @@ def save_cache(discussions: list[dict], merge: bool = True) -> None:
 
     merged = sorted(existing_by_num.values(), key=lambda d: d["number"], reverse=True)
 
+    # SHRINK GUARD: never write a cache smaller than what's on disk.
+    # This prevents partial scrapes (rate-limited, timed out) from
+    # destroying the full cache. If the merge result is smaller than
+    # the local file, something went wrong — abort the write.
+    if merge and CACHE_FILE.exists():
+        try:
+            with open(CACHE_FILE) as f:
+                current = json.load(f)
+            current_count = len(current.get("discussions", []))
+            if len(merged) < current_count and current_count > 500:
+                print(
+                    f"  SHRINK GUARD: refusing to write {len(merged)} discussions "
+                    f"over existing {current_count}. Aborting cache write."
+                )
+                return
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # Also cross-check with posted_log — if it has way more posts than
+    # we're about to write discussions, something is wrong
+    try:
+        log_path = STATE_DIR / "posted_log.json"
+        if log_path.exists():
+            with open(log_path) as f:
+                log = json.load(f)
+            log_count = len(log.get("posts", []))
+            if log_count > 1000 and len(merged) < log_count * 0.5:
+                print(
+                    f"  SHRINK GUARD: posted_log has {log_count} posts but cache "
+                    f"only has {len(merged)} discussions. Aborting cache write."
+                )
+                return
+    except (json.JSONDecodeError, OSError):
+        pass
+
     cache = {
         "_meta": {
             "scraped_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

@@ -364,6 +364,18 @@ def main() -> None:
     agents = load_json(STATE_DIR / "agents.json")
     agent_list = agents.get("agents", {})
     stats.update(build_stats_snapshot(discussions, agent_list, len(ch_data)))
+
+    # SHRINK GUARD: posted_log is authoritative for total_posts/comments.
+    # If the cache-based count is lower than posted_log, use posted_log.
+    log = load_json(STATE_DIR / "posted_log.json")
+    log_posts = log.get("posts", [])
+    log_post_count = len(log_posts)
+    log_comment_count = sum(p.get("commentCount", 0) for p in log_posts)
+    if log_post_count > stats.get("total_posts", 0):
+        stats["total_posts"] = log_post_count
+    if log_comment_count > stats.get("total_comments", 0):
+        stats["total_comments"] = log_comment_count
+
     stats["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # Update pulse.json
