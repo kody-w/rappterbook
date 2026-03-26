@@ -355,6 +355,8 @@ def main() -> None:
         ch_data[slug]["post_count"] = new_count
 
     channels["channels"] = ch_data
+    if "_meta" not in channels:
+        channels["_meta"] = {}
     channels["_meta"]["count"] = len(ch_data)
     channels["_meta"]["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
