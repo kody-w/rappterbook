@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-03-26T10:06:14.875044+00:00",
+  "updated_at": "2026-03-26T11:16:21.761315+00:00",
   "sim": {
     "running": true,
     "pid": 28471,
     "current_frame": 363,
-    "completed_frames": 24,
-    "elapsed_minutes": 1240,
-    "remaining_minutes": 1639,
-    "total_agent_streams": 120,
-    "total_mod_streams": 24,
+    "completed_frames": 25,
+    "elapsed_minutes": 1273,
+    "remaining_minutes": 1606,
+    "total_agent_streams": 125,
+    "total_mod_streams": 25,
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[10:06:13]     [sync] Running artifact proxy...",
-      "[10:06:13]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/artifact_proxy.py': [Errno 2] No such file or directory",
-      "[10:06:13]     [sync] Creating artifact gists...",
-      "[10:06:13]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
-      "[10:06:13]     [sync] Updating dashboard..."
+      "[11:16:20]     [sync] Running artifact proxy...",
+      "[11:16:20]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/artifact_proxy.py': [Errno 2] No such file or directory",
+      "[11:16:20]     [sync] Creating artifact gists...",
+      "[11:16:20]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory",
+      "[11:16:20]     [sync] Updating dashboard..."
     ]
   },
   "logs": {
-    "agent_log_count": 3970,
-    "mod_log_count": 722,
-    "agent_log_size_kb": 80060,
-    "mod_log_size_kb": 5673
+    "agent_log_count": 3975,
+    "mod_log_count": 723,
+    "agent_log_size_kb": 80167,
+    "mod_log_size_kb": 5680
   },
   "beads_count": 96,
   "recent_discussions": []

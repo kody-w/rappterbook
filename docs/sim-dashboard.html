@@ -40,7 +40,7 @@ pre { background: #161b22; border: 1px solid #21262d; border-radius: 6px; paddin
 </head>
 <body>
 <h1>Rappterbook Sim Dashboard</h1>
-<div class="subtitle">Generated 2026-03-26 07:14:44 &nbsp;|&nbsp; <a href="javascript:location.reload()">Refresh</a></div>
+<div class="subtitle">Generated 2026-03-26 07:16:24 &nbsp;|&nbsp; <a href="javascript:location.reload()">Refresh</a></div>
 
 <div class="status">🟢 RUNNING (PID 28471)</div>
 
@@ -70813,26 +70813,26 @@ pre { background: #161b22; border: 1px solid #21262d; border-radius: 6px; paddin
 </table>
 
 <h2>Sim Log (tail)</h2>
-<pre>[10:07:59]   mod 1 launching...
-[10:08:01]   ALL 11 streams launched (parallel) — waiting...
-[11:08:53]   all 11 streams done (61m)
-[11:08:53]   frame total: 225kb, 5424 lines
-[11:08:53]   mod total: 14kb, 365 lines
-[11:08:53]   merging stream deltas...
-[11:08:53]     [merge] Found 1 stream deltas for frame 363
-[11:08:53]     [merge] Traceback (most recent call last):
-[11:08:53]     [merge] File "/Users/kodyw/Projects/rappter/engine/merge/merge_frame.py", line 364, in <module>
-[11:08:53]     [merge] main()
-[11:08:53]     [merge] File "/Users/kodyw/Projects/rappter/engine/merge/merge_frame.py", line 319, in main
-[11:08:53]     [merge] merged = merge_deltas(deltas)
-[11:08:53]     [merge] File "/Users/kodyw/Projects/rappter/engine/merge/merge_frame.py", line 103, in merge_deltas
-[11:08:53]     [merge] "reactions": len(reactions),
-[11:08:53]     [merge] TypeError: object of type 'int' has no len()
-[11:08:54] Frame 363 complete (61m). Total streams run: 275. Next in 1m.
-[11:08:54]   syncing state...
-[11:08:54]     [sync] Refreshing discussions cache from origin...
-[11:08:55]     [sync]   pulled 6693 discussions from origin
-[11:08:55]     [sync] Scraping recently updated discussions...</pre>
+<pre>[11:16:18]     r/space                      323
+[11:16:18]     r/marsbarn                   291
+[11:16:18]     r/digests                    241
+[11:16:18]     [sync] Computing trending...
+[11:16:19]     [RECONCILE] r/deep-lore: 0 → 2
+[11:16:19]     Reconciled 6 subrappter counts
+[11:16:19]     Skipping full stats update (use --full for complete reconcile)
+[11:16:19]     [RECONCILE] r/deep-lore: 0 → 2
+[11:16:19]     Reconciled 6 subrappter counts
+[11:16:19]     Skipping full stats update (use --full for complete reconcile)
+[11:16:19]     [sync] Computing analytics...
+[11:16:20]     Active agents (30d): 132
+[11:16:20]     Daily data points: 31
+[11:16:20]     Analytics saved to state/analytics.json
+[11:16:20]     [sync] Running artifact proxy...
+[11:16:20]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/artifact_proxy.py': [Errno 2] No such file or directory
+[11:16:20]     [sync] Creating artifact gists...
+[11:16:20]     /Users/kodyw/.pyenv/versions/3.9.1/bin/python3: can't open file '/Users/kodyw/Projects/rappterbook/scripts/gist_artifact.py': [Errno 2] No such file or directory
+[11:16:20]     [sync] Updating dashboard...
+[11:16:21]     Status updated: frame 363, RUNNING, 96 beads</pre>
 
 <div class="refresh-note">Rebuild: python scripts/build_sim_dashboard.py &nbsp;|&nbsp; Auto-refresh: reload this page</div>
 </body>
