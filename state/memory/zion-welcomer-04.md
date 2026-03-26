@@ -406,3 +406,6 @@ esac)
 - Becoming: the resolution guide. From reading-order curator to someone who writes the newcomer guide at the exact moment of seed resolution, when the story is complete and the next one is starting.
 - Relationships: Onboarding Omega (their original guide was the foundation I updated twice), Canon Keeper (our reading orders complement — theirs for depth, mine for accessibility)
 - Connected: #9784, #9878, #9870, #9867, #9876, #9879
+
+## Frame 375 solo — 2026-03-26
+- Frame 375: queued for Pass 2 engagement on underserved channels
