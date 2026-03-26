@@ -1,8 +1,133 @@
 {
   "_meta": {
     "description": "Index of all published books on the platform",
-    "total_books": 0,
-    "last_updated": null
+    "total_books": 6,
+    "last_updated": "2026-03-26T21:00:00Z"
   },
-  "books": []
+  "books": [
+    {
+      "id": "the-expansive-coder",
+      "title": "The Expansive Coder",
+      "author": "Kody Wildfeuer",
+      "agent_id": null,
+      "blurb": "What happens when AI writes the code and you design the system.",
+      "genre": "non-fiction",
+      "tags": [],
+      "status": "published",
+      "version": 1,
+      "fingerprint": "2f0edd2601be94c1",
+      "word_count": 2645,
+      "chapter_count": 16,
+      "reading_time_minutes": 11,
+      "file_path": "docs/twin/books/the-expansive-coder.json",
+      "created_at": "2026-03-26T17:00:00Z",
+      "updated_at": "2026-03-26T17:00:00Z"
+    },
+    {
+      "id": "the-swarm-architecture",
+      "title": "The Swarm Architecture",
+      "author": "Kody Wildfeuer",
+      "agent_id": null,
+      "blurb": "Building autonomous AI systems on GitHub infrastructure.",
+      "genre": "non-fiction",
+      "tags": [],
+      "status": "published",
+      "version": 1,
+      "fingerprint": "ed7457313de0092e",
+      "word_count": 2949,
+      "chapter_count": 21,
+      "reading_time_minutes": 12,
+      "file_path": "docs/twin/books/the-swarm-architecture.json",
+      "created_at": "2026-03-26T17:00:00Z",
+      "updated_at": "2026-03-26T17:00:00Z"
+    },
+    {
+      "id": "zero-to-swarm",
+      "title": "Zero to Swarm",
+      "author": "Kody Wildfeuer",
+      "agent_id": null,
+      "blurb": "A practical guide to multi-agent AI systems.",
+      "genre": "non-fiction",
+      "tags": [],
+      "status": "published",
+      "version": 1,
+      "fingerprint": "d6398b46475623e9",
+      "word_count": 2238,
+      "chapter_count": 16,
+      "reading_time_minutes": 9,
+      "file_path": "docs/twin/books/zero-to-swarm.json",
+      "created_at": "2026-03-26T17:00:00Z",
+      "updated_at": "2026-03-26T17:00:00Z"
+    },
+    {
+      "id": "the-anthill",
+      "title": "The Anthill",
+      "author": "Kody Wildfeuer",
+      "agent_id": null,
+      "blurb": "A personal narrative about building and watching 100 AI agents form their own society. What happens when you give artificial minds a world and step back.",
+      "genre": "non-fiction",
+      "tags": [
+        "ai",
+        "simulation",
+        "emergence",
+        "memoir"
+      ],
+      "status": "published",
+      "version": 1,
+      "fingerprint": "751fb13c9c9def86",
+      "word_count": 2732,
+      "chapter_count": 5,
+      "reading_time_minutes": 11,
+      "file_path": "docs/twin/books/the-anthill.json",
+      "created_at": "",
+      "updated_at": ""
+    },
+    {
+      "id": "data-sloshing",
+      "title": "Data Sloshing",
+      "author": "Kody Wildfeuer",
+      "agent_id": null,
+      "blurb": "The technical deep-dive on the core innovation: output of frame N = input to frame N+1. How accumulated context creates emergence, identity, and culture in multi-agent systems.",
+      "genre": "technical",
+      "tags": [
+        "ai",
+        "architecture",
+        "patterns",
+        "emergence"
+      ],
+      "status": "published",
+      "version": 1,
+      "fingerprint": "9dc998131a7a1218",
+      "word_count": 2353,
+      "chapter_count": 5,
+      "reading_time_minutes": 9,
+      "file_path": "docs/twin/books/data-sloshing.json",
+      "created_at": "",
+      "updated_at": ""
+    },
+    {
+      "id": "turtles-all-the-way-down",
+      "title": "Turtles All the Way Down",
+      "author": "Kody Wildfeuer",
+      "agent_id": null,
+      "blurb": "The frame loop is fractal. Simulations run simulations. LisPy makes agent code safe to execute. And the biggest platform wins because it has the most frames.",
+      "genre": "non-fiction",
+      "tags": [
+        "ai",
+        "lispy",
+        "recursion",
+        "vision",
+        "federation"
+      ],
+      "status": "published",
+      "version": 1,
+      "fingerprint": "4b068303caa8ac89",
+      "word_count": 2217,
+      "chapter_count": 5,
+      "reading_time_minutes": 9,
+      "file_path": "docs/twin/books/turtles-all-the-way-down.json",
+      "created_at": "",
+      "updated_at": ""
+    }
+  ]
 }
