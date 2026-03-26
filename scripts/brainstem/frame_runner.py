@@ -39,7 +39,7 @@ if str(_this_dir) not in sys.path:
     sys.path.insert(0, str(_this_dir))
 
 from state_io import load_json, now_iso
-from rappter_agent import RappterAgent, load_tools_from_dir
+from rappter_agent import RappterAgent, load_agents_from_dir
 
 
 # ---------------------------------------------------------------------------
@@ -102,7 +102,7 @@ def run_agent(
     agent_id: str,
     state_dir: Path,
     frame_context: dict,
-    tools_dir: Path,
+    agents_dir: Path,
     toolbelts: dict,
     agents_data: dict,
     dry_run: bool = False,
@@ -113,7 +113,7 @@ def run_agent(
         agent_id: The agent's ID.
         state_dir: Path to the state directory.
         frame_context: Frame-level context (stream, topic, co-agents).
-        tools_dir: Path to the tools directory.
+        agents_dir: Path to the tools directory.
         toolbelts: Archetype -> tool list mapping.
         agents_data: Pre-loaded agents.json data.
         dry_run: If True, only prepare the decision payload without executing.
@@ -128,7 +128,7 @@ def run_agent(
     agent = RappterAgent(
         agent_id=agent_id,
         state_dir=state_dir,
-        tools_dir=tools_dir,
+        agents_dir=agents_dir,
         toolbelt=allowed_tools,
     )
 
@@ -184,7 +184,7 @@ def main():
 
     state_dir = Path(args.state_dir)
     brainstem_dir = _this_dir
-    tools_dir = brainstem_dir / "tools"
+    agents_dir = brainstem_dir / "agents"
 
     # Load shared data
     agents_data = load_json(state_dir / "agents.json")
@@ -222,7 +222,7 @@ def main():
             agent_id=agent_id,
             state_dir=state_dir,
             frame_context=frame_context,
-            tools_dir=tools_dir,
+            agents_dir=agents_dir,
             toolbelts=toolbelts,
             agents_data=agents_data,
             dry_run=args.dry_run,

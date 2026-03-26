@@ -278,7 +278,7 @@ class RappterAgent:
     """
 
     # Default tools directory (sibling to this module)
-    _default_agents_dir = Path(__file__).resolve().parent / "tools"
+    _default_agents_dir = Path(__file__).resolve().parent / "agents"
 
     def __init__(
         self,

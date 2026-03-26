@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """LLM wrapper — zero dependencies, stdlib only.
 
 Multi-backend intelligence layer with automatic failover:
@@ -401,6 +403,212 @@ def generate(
         errors.append(f"Copilot: {exc}")
 
     raise RuntimeError(f"All LLM backends failed: {'; '.join(errors)}")
+
+
+# ── Function calling API ──────────────────────────────────────────────
+
+class _ToolResponse:
+    """Lightweight response wrapper for generate_with_tools()."""
+    __slots__ = ("content", "function_call", "raw")
+
+    def __init__(self, content="", function_call=None, raw=None):
+        self.content = content
+        self.function_call = function_call
+        self.raw = raw or {}
+
+
+def _generate_github_with_tools(
+    messages: list,
+    tools: list | None = None,
+    model: str = None,
+    max_tokens: int = 800,
+    temperature: float = 0.85,
+) -> _ToolResponse:
+    """Call GitHub Models API with function/tool calling support.
+
+    Uses the OpenAI-compatible chat completions endpoint with tools.
+    Returns a _ToolResponse with either content or function_call.
+    """
+    if not GITHUB_TOKEN:
+        raise RuntimeError("GITHUB_TOKEN required for GitHub Models")
+
+    use_model = model or _resolve_model()
+
+    payload = {
+        "model": use_model,
+        "messages": messages,
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+    }
+    if tools:
+        payload["tools"] = tools
+        payload["tool_choice"] = "auto"
+
+    data = json.dumps(payload).encode()
+
+    # Check circuit breaker
+    if time.time() < _circuit_breaker["tripped_until"]:
+        remaining = int(_circuit_breaker["tripped_until"] - time.time())
+        raise LLMRateLimitError(
+            f"Circuit breaker tripped — cooling down for {remaining}s more."
+        )
+
+    max_retries = 4
+    retryable_codes = {429, 502, 503}
+    last_exc = None
+    result = None
+
+    for attempt in range(max_retries + 1):
+        req = urllib.request.Request(
+            GITHUB_API_URL,
+            data=data,
+            headers={
+                "Authorization": f"Bearer {GITHUB_TOKEN}",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=90) as resp:
+                result = json.loads(resp.read())
+            _circuit_breaker["consecutive_429s"] = 0
+            break
+        except urllib.error.HTTPError as exc:
+            last_exc = exc
+            if exc.code == 429:
+                _circuit_breaker["consecutive_429s"] += 1
+                if _circuit_breaker["consecutive_429s"] >= _CIRCUIT_BREAKER_THRESHOLD:
+                    _circuit_breaker["tripped_until"] = time.time() + _CIRCUIT_BREAKER_COOLDOWN
+            if exc.code in retryable_codes and attempt < max_retries:
+                retry_after = exc.headers.get("Retry-After", "") if exc.headers else ""
+                wait = min(int(retry_after), 120) if retry_after.isdigit() else min(30 * (2 ** attempt), 120)
+                print(f"  [LLM-TOOLS] Retrying after HTTP {exc.code} (attempt {attempt + 1}, wait {wait}s)")
+                time.sleep(wait)
+                continue
+            body = exc.read().decode("utf-8", errors="replace")
+            if exc.code == 400 and "filtered" in body.lower():
+                raise ContentFilterError(f"Prompt rejected by content filter: {body[:200]}") from exc
+            raise RuntimeError(f"GitHub Models API error {exc.code}: {body}") from exc
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"GitHub Models API unreachable: {exc.reason}") from exc
+    else:
+        body = last_exc.read().decode("utf-8", errors="replace") if last_exc else "unknown"
+        raise RuntimeError(f"GitHub Models API failed after {max_retries + 1} attempts: {body}")
+
+    choices = result.get("choices", [])
+    if not choices:
+        raise RuntimeError(f"GitHub Models returned no choices: {result}")
+
+    message = choices[0].get("message", {})
+    content = message.get("content", "") or ""
+
+    # Check for tool calls (OpenAI format)
+    tool_calls = message.get("tool_calls", [])
+    if tool_calls:
+        tc = tool_calls[0]  # Take the first tool call
+        fn = tc.get("function", {})
+        return _ToolResponse(
+            content=content.strip(),
+            function_call={
+                "name": fn.get("name", ""),
+                "arguments": fn.get("arguments", "{}"),
+            },
+            raw=result,
+        )
+
+    # Legacy function_call format
+    fc = message.get("function_call")
+    if fc:
+        return _ToolResponse(
+            content=content.strip(),
+            function_call={
+                "name": fc.get("name", ""),
+                "arguments": fc.get("arguments", "{}"),
+            },
+            raw=result,
+        )
+
+    return _ToolResponse(content=content.strip(), raw=result)
+
+
+def generate_with_tools(
+    messages: list,
+    tools: list | None = None,
+    model: str = None,
+    max_tokens: int = 800,
+    temperature: float = 0.85,
+    dry_run: bool = False,
+) -> _ToolResponse:
+    """Generate a response with optional function/tool calling.
+
+    Uses GitHub Models API (OpenAI-compatible) with tools parameter.
+    Budget-limited. Falls back gracefully.
+
+    Args:
+        messages: Chat messages in OpenAI format.
+        tools: Tool definitions in OpenAI format, or None.
+        model: Model ID override.
+        max_tokens: Max output tokens.
+        temperature: Sampling temperature.
+        dry_run: If True, return a placeholder response.
+
+    Returns:
+        _ToolResponse with .content and/or .function_call
+    """
+    if dry_run:
+        return _ToolResponse(content="[DRY RUN] Tool-calling response placeholder")
+
+    if not _check_budget():
+        print("  [LLM] Daily budget exceeded — returning dry-run fallback")
+        return _ToolResponse(content="[BUDGET] Daily LLM budget exceeded")
+
+    errors = []
+
+    # GitHub Models is the primary backend for tool calling
+    if GITHUB_TOKEN:
+        try:
+            result = _generate_github_with_tools(
+                messages, tools, model, max_tokens, temperature
+            )
+            _increment_budget()
+            return result
+        except (LLMRateLimitError, ContentFilterError):
+            raise
+        except Exception as exc:
+            errors.append(f"GitHub: {exc}")
+            print(f"  [LLM-TOOLS] GitHub Models failed: {exc}")
+
+    # Fallback: strip tools and use basic generate()
+    # (tool calling degrades to text-only)
+    system_parts = []
+    user_parts = []
+    for msg in messages:
+        role = msg.get("role", "")
+        content = msg.get("content", "") or ""
+        if role == "system":
+            system_parts.append(content)
+        elif role in ("user", "function"):
+            user_parts.append(content)
+
+    if tools:
+        tool_desc = "\n\nAvailable tools (output TOOL_CALL: <name> <json> to use):\n"
+        for t in tools:
+            fn = t.get("function", {})
+            tool_desc += f"- {fn.get('name', '?')}: {fn.get('description', '')}\n"
+        system_parts.append(tool_desc)
+
+    try:
+        text = generate(
+            system="\n\n".join(system_parts),
+            user="\n\n".join(user_parts),
+            max_tokens=max_tokens,
+            temperature=temperature,
+        )
+        return _ToolResponse(content=text)
+    except Exception as exc:
+        errors.append(f"Fallback: {exc}")
+
+    raise RuntimeError(f"All LLM backends failed for tool calling: {'; '.join(errors)}")
 
 
 # ── Budget tracking ───────────────────────────────────────────────────
