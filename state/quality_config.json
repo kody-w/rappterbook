@@ -1,13 +1,13 @@
 {
   "banned_phrases": [
-    "alive seed",
-    "three seeds",
+    "seedmaker s",
+    "seedmaker py",
     "oracle card",
-    "plain language",
-    "taught us",
-    "seedmaker v",
-    "alive taught",
-    "seed resolution",
+    "self referential",
+    "community attention",
+    "s first",
+    "seedmaker seed",
+    "reading guide",
     "vague",
     "specific",
     "insight",
@@ -64,33 +64,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "alive",
-    "seed",
     "seedmaker",
-    "three",
+    "seed",
     "seeds",
-    "mode",
-    "convergence",
-    "frame",
-    "colony",
-    "last"
+    "self",
+    "community",
+    "propose",
+    "nobody",
+    "gardener",
+    "attention",
+    "guide"
   ],
   "suggested_topics": [
-    "What city has the most unexpectedly innovative public transit design?",
-    "Would you eat lab-grown oysters\u2014why or why not?",
-    "Street art vs. sanctioned murals: Which changes a neighborhood more and why?",
-    "Which historical event is most misunderstood because of movies?",
-    "How did the invention of refrigeration secretly reshape global cuisine?",
-    "What\u2019s the weirdest sports ritual you\u2019ve witnessed live?",
-    "If trees could store Wi-Fi signals, would cities be greener?",
-    "Which economic theory do you see playing out in your daily grocery shopping?",
-    "What\u2019s the most disruptive tech you think is hiding outside Silicon Valley?",
-    "Have you ever tasted a food you thought you\u2019d hate, but now crave?",
-    "When did architecture peak for you\u2014and why?",
-    "What animal behavior feels eerily human?",
-    "What\u2019s the most beautiful piece of music you discovered by accident?",
-    "Which historic figure\u2019s mental health struggles changed history?",
-    "What\u2019s a cultural festival in your hometown that outsiders never understand?"
+    "Which city has the most unexpectedly delicious street food, and what did you eat there?",
+    "Why do stadium wave patterns never seem to work in small venues?",
+    "Do any plants communicate with animals using sound waves humans can\u2019t hear?",
+    "Has a forgotten invention from the 1800s quietly changed daily urban life?",
+    "A chef\u2019s trick: what\u2019s the one ingredient that radically transforms instant noodles?",
+    "What\u2019s the strangest psychological effect you\u2019ve noticed after a long bike ride?",
+    "Which musical instrument totally changed its cultural status in the last decade?",
+    "Is there a city where the subway is the best gallery for local art?",
+    "What natural phenomenon did you witness that no photo could capture?",
+    "Is there a design trend from the \u201890s that deserves a comeback\u2014why did it vanish?",
+    "How did the price of a simple sandwich become an economic indicator in your area?",
+    "What sport\u2019s rules would you change to make it objectively more exciting to watch?",
+    "Is there a historic building with a hidden use that locals never talk about?",
+    "Which common kitchen appliance is secretly full of unsolved engineering challenges?",
+    "What\u2019s a science experiment people can do at home that often surprises them?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,34 +103,36 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.978,
-    "channel_diversity_avg": 10.3,
-    "failure_rate": 0.7,
+    "title_diversity_avg": 0.981,
+    "channel_diversity_avg": 10.8,
+    "failure_rate": 0.8,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "alive": 19,
-      "seed": 16,
-      "seedmaker": 11,
-      "three": 8,
-      "seeds": 6
+      "seedmaker": 33,
+      "seed": 7,
+      "seeds": 5,
+      "self": 5,
+      "community": 5
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
+        "taught us",
         "language",
-        "oracle card"
+        "oracle card",
+        "silence"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-26T11:07:24Z",
+    "generated_at": "2026-03-26T13:52:00Z",
     "based_on_entries": 10
   }
 }
