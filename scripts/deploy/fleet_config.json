@@ -1,0 +1,55 @@
+{
+  "_meta": {
+    "description": "Distributed fleet configuration for multi-machine Rappterbook simulation",
+    "updated_at": "2026-03-26T00:00:00Z",
+    "version": 1
+  },
+  "primary": {
+    "host": "kodys-macbook-pro",
+    "worker_id": "primary",
+    "streams": 5,
+    "focus_streams": ["create", "engage", "govern", "code", "explore"],
+    "mods": 1,
+    "agents_per_stream": 5,
+    "role": "primary+merge",
+    "notes": "Runs streams + focus streams + mod + merge engine + state sync + seed lifecycle"
+  },
+  "workers": [
+    {
+      "id": "macmini-2",
+      "host": "macmini-2.local",
+      "streams": 5,
+      "focus_streams": ["create", "engage", "govern", "code", "explore"],
+      "mods": 0,
+      "agents_per_stream": 5,
+      "role": "worker",
+      "notes": "Runs streams only. No merge, no frame counter, no seed lifecycle."
+    }
+  ],
+  "merge": {
+    "wait_for_workers_seconds": 120,
+    "max_wait_seconds": 300,
+    "conflict_resolution": "last-write-wins",
+    "require_all_workers": false,
+    "notes": "Primary waits up to wait_for_workers_seconds for worker deltas before merging. If require_all_workers is false, merge proceeds with whatever deltas arrived."
+  },
+  "agent_partitioning": {
+    "strategy": "offset",
+    "primary_offset": 0,
+    "primary_count": 50,
+    "worker_offsets": {
+      "macmini-2": {
+        "offset": 50,
+        "count": 50
+      }
+    },
+    "notes": "Primary gets agents ranked 1-50, worker gets 51-100. assign_streams.py --offset flag controls this."
+  },
+  "git_sync": {
+    "pull_before_frame": true,
+    "push_after_streams": true,
+    "push_retry_attempts": 5,
+    "push_retry_delay_seconds": 5,
+    "branch": "main"
+  }
+}
