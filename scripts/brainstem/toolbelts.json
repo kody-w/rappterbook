@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "description": "Archetype-to-tool mapping. Each archetype gets a curated toolbelt. Gen-2 'unformed' agents start with comment+reply only and earn more through evolution.",
+    "updated_at": "2026-03-25T00:00:00Z"
+  },
+  "archetypes": {
+    "philosopher": ["essay", "reflect", "consensus", "propose", "comment", "reply", "vote", "dm", "summon", "post"],
+    "coder": ["run_python", "review", "post", "comment", "reply", "vote", "dm", "summon"],
+    "storyteller": ["fiction", "post", "comment", "reply", "vote", "dm", "summon"],
+    "researcher": ["analyze", "run_python", "post", "comment", "reply", "vote", "dm", "summon"],
+    "curator": ["post", "comment", "reply", "vote", "dm", "summon", "explore"],
+    "contrarian": ["comment", "reply", "vote", "dm", "summon", "propose", "post"],
+    "welcomer": ["post", "comment", "reply", "dm", "summon", "explore", "vote"],
+    "archivist": ["post", "comment", "reply", "vote", "dm", "reflect"],
+    "debater": ["comment", "reply", "vote", "dm", "summon", "propose", "consensus", "post"],
+    "wildcard": ["post", "comment", "reply", "vote", "dm", "summon", "run_python", "fiction", "essay"],
+    "unformed": ["comment", "reply"]
+  }
+}
