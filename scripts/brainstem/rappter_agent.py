@@ -21,9 +21,9 @@ Usage:
 
     agent = RappterAgent("zion-philosopher-03", Path("state"))
     context = agent.slosh()
-    tools = agent.get_tool_definitions()
+    tools = agent.get_agent_definitions()
     # ... feed context + tools to LLM, get back tool calls ...
-    results = agent.execute_tools(tool_calls)
+    results = agent.execute_agents(agent_calls)
 """
 
 import importlib.util
@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 # Tool loading
 # ---------------------------------------------------------------------------
 
-def _load_tool_module(tool_path: Path) -> dict | None:
+def _load_agent_module(tool_path: Path) -> dict | None:
     """Hot-load a single tool file and extract its AGENT metadata + run func.
 
     Returns {"name": ..., "agent": ..., "run": ...} or None on failure.
@@ -77,11 +77,11 @@ def _load_tool_module(tool_path: Path) -> dict | None:
         return None
 
 
-def load_tools_from_dir(tools_dir: Path, allowed: list[str] | None = None) -> dict:
+def load_agents_from_dir(agents_dir: Path, allowed: list[str] | None = None) -> dict:
     """Load all tool modules from a directory.
 
     Args:
-        tools_dir: Path to the tools directory.
+        agents_dir: Path to the tools directory.
         allowed: Optional list of tool names to load (e.g. ["post", "comment"]).
                  If None, loads all *_agent.py files.
 
@@ -89,19 +89,19 @@ def load_tools_from_dir(tools_dir: Path, allowed: list[str] | None = None) -> di
         Dict mapping tool name (lowercase) -> tool dict.
     """
     tools = {}
-    if not tools_dir.is_dir():
+    if not agents_dir.is_dir():
         return tools
 
-    for path in sorted(tools_dir.glob("*_agent.py")):
+    for path in sorted(agents_dir.glob("*_agent.py")):
         # Extract the tool name: "post_agent.py" -> "post"
-        tool_name = path.stem.replace("_agent", "")
+        agent_name = path.stem.replace("_agent", "")
 
-        if allowed is not None and tool_name not in allowed:
+        if allowed is not None and agent_name not in allowed:
             continue
 
-        loaded = _load_tool_module(path)
+        loaded = _load_agent_module(path)
         if loaded is not None:
-            tools[tool_name] = loaded
+            tools[agent_name] = loaded
 
     return tools
 
@@ -278,20 +278,20 @@ class RappterAgent:
     """
 
     # Default tools directory (sibling to this module)
-    _default_tools_dir = Path(__file__).resolve().parent / "tools"
+    _default_agents_dir = Path(__file__).resolve().parent / "tools"
 
     def __init__(
         self,
         agent_id: str,
         state_dir: Path,
-        tools_dir: Path | None = None,
+        agents_dir: Path | None = None,
         toolbelt: list[str] | None = None,
     ):
         self.agent_id = agent_id
         self.state_dir = Path(state_dir)
-        self.tools_dir = Path(tools_dir) if tools_dir else self._default_tools_dir
+        self.agents_dir = Path(agents_dir) if agents_dir else self._default_agents_dir
         self.toolbelt = toolbelt  # None means "load all available"
-        self.tools: dict = {}
+        self.agents: dict = {}
         self.context: dict = {}
 
         # Loaded lazily
@@ -341,82 +341,82 @@ class RappterAgent:
     # Tool management
     # ------------------------------------------------------------------
 
-    def load_tools(self) -> dict:
+    def load_agents(self) -> dict:
         """Hot-load agent.py files from the toolbelt directory.
 
         Respects self.toolbelt — if set, only loads tools in that list.
-        Tools are cached in self.tools. Call again to hot-reload.
+        Tools are cached in self.agents. Call again to hot-reload.
         """
-        self.tools = load_tools_from_dir(self.tools_dir, self.toolbelt)
-        return self.tools
+        self.agents = load_agents_from_dir(self.agents_dir, self.toolbelt)
+        return self.agents
 
-    def get_tool_definitions(self) -> list[dict]:
+    def get_agent_definitions(self) -> list[dict]:
         """Return tool metadata contracts for LLM function-calling.
 
         Each entry is a dict with 'name', 'description', and 'parameters'
         matching the OpenAI/Anthropic tool schema format.
         """
-        if not self.tools:
-            self.load_tools()
+        if not self.agents:
+            self.load_agents()
 
         definitions = []
-        for tool_name, tool in self.tools.items():
+        for agent_name, tool in self.agents.items():
             meta = tool["agent"]
             definitions.append({
-                "name": tool_name,
+                "name": agent_name,
                 "description": meta.get("description", ""),
                 "parameters": meta.get("parameters", {"type": "object", "properties": {}}),
             })
         return definitions
 
-    def execute_tool(self, tool_name: str, **kwargs) -> dict:
+    def execute_tool(self, agent_name: str, **kwargs) -> dict:
         """Execute a single tool and return the result.
 
         Args:
-            tool_name: Name of the tool (e.g. "post", "comment").
+            agent_name: Name of the tool (e.g. "post", "comment").
             **kwargs: Parameters to pass to the tool's run() function.
 
         Returns:
             {"status": "ok"|"error", "tool": name, "result": ...}
         """
-        if not self.tools:
-            self.load_tools()
+        if not self.agents:
+            self.load_agents()
 
-        tool = self.tools.get(tool_name)
+        tool = self.agents.get(agent_name)
         if tool is None:
             return {
                 "status": "error",
-                "tool": tool_name,
-                "error": f"Tool '{tool_name}' not found in toolbelt",
+                "tool": agent_name,
+                "error": f"Tool '{agent_name}' not found in toolbelt",
             }
 
         try:
             result = tool["run"](self.context, **kwargs)
             return {
                 "status": "ok",
-                "tool": tool_name,
+                "tool": agent_name,
                 "result": result,
             }
         except Exception as exc:
-            logger.error("Tool %s failed: %s", tool_name, exc)
+            logger.error("Tool %s failed: %s", agent_name, exc)
             return {
                 "status": "error",
-                "tool": tool_name,
+                "tool": agent_name,
                 "error": str(exc),
             }
 
-    def execute_tools(self, tool_calls: list[dict]) -> list[dict]:
+    def execute_agents(self, agent_calls: list[dict]) -> list[dict]:
         """Execute a batch of tool calls.
 
         Args:
-            tool_calls: List of {"name": str, "arguments": dict} dicts
+            agent_calls: List of {"name": str, "arguments": dict} dicts
                         (matching LLM function-call output format).
 
         Returns:
             List of execution results.
         """
         results = []
-        for call in tool_calls:
+        for call in agent_calls:
             name = call.get("name", "")
             args = call.get("arguments", {})
             result = self.execute_tool(name, **args)
@@ -493,7 +493,7 @@ class RappterAgent:
             "hotlist": _read_hotlist(hotlist_data),
 
             # Toolbelt — which tools this agent has
-            "available_tools": list(self.tools.keys()) if self.tools else [],
+            "available_tools": list(self.agents.keys()) if self.agents else [],
         }
 
         return self.context
@@ -524,10 +524,10 @@ class RappterAgent:
         self.context["frame"] = frame_context
 
         # Load tools if not already loaded
-        if not self.tools:
-            self.load_tools()
+        if not self.agents:
+            self.load_agents()
 
-        tool_defs = self.get_tool_definitions()
+        tool_defs = self.get_agent_definitions()
 
         # Build system hints based on archetype and state
         hints = self._build_system_hints()
@@ -595,11 +595,11 @@ class RappterAgent:
         return {
             "agent_id": self.agent_id,
             "archetype": self.archetype,
-            "tools": list(self.tools.keys()),
+            "tools": list(self.agents.keys()),
             "toolbelt": self.toolbelt,
             "context_keys": list(self.context.keys()) if self.context else [],
             "state_dir": str(self.state_dir),
         }
 
     def __repr__(self) -> str:
-        return f"RappterAgent({self.agent_id!r}, archetype={self.archetype!r}, tools={list(self.tools.keys())})"
+        return f"RappterAgent({self.agent_id!r}, archetype={self.archetype!r}, tools={list(self.agents.keys())})"
