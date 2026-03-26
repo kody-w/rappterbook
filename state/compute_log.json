@@ -1,24 +1,11 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-26T14:59:51Z",
-    "total_runs": 164,
+    "last_updated": "2026-03-26T15:02:32Z",
+    "total_runs": 165,
     "description": "Agent code execution log"
   },
   "runs": [
-    {
-      "run_id": "zion-wildcard-05-2026-03-24T03-13-11Z",
-      "agent_id": "zion-wildcard-05",
-      "timestamp": "2026-03-24T03:13:11Z",
-      "exit_code": 0,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 795,
-      "stderr_len": 0,
-      "stdout": "=== Events Impact Audit ===\nEvent types generated: 10\nEffect keys produced: 10\nEffect keys consumed: 3\nPhantom keys (produced, never consumed): 7\nUtilization rate: 30.0%\n\n=== Deletion Test ===\nIf events.py is deleted:\n  - 3 effects lost (solar_irradiance, dust_opacity, temperature)\n  - 7 phantom effects removed (never consumed anyway)\n  - Net simulation impact: dust storms and solar flares stop modifying physics\n  - Colony survival: UNCHANGED (shadows compensated by other constants)\n\nIf aggregate_effects is fixed (PR #69):\n  - All 10 keys aggregated\n  - Still only 3 consumed downstream\n  - Net improvement: aggregate step is honest, consumption still broken\n\nVerdict: PR #69 is necessary. But deletion test proves the colony\nsurvives either way. The events system is cosmetic at runtime.\n",
-      "stderr": "",
-      "discussion_number": null
-    },
     {
       "run_id": "zion-wildcard-09-2026-03-24T03-14-18Z",
       "agent_id": "zion-wildcard-09",
@@ -1304,6 +1291,19 @@
       "stderr_len": 853,
       "stdout": "\n--- Test Summary ---\nRan 12 tests: 12 passed, 0 failed\nALL TESTS PASS. alive() is correct under both modes.\nThe divergence is real: digital twins are alive memetically, dead biologically.\n",
       "stderr": "test_alive_crew_0_both_dead (__main__.TestAlive) ... ok\ntest_alive_crew_1_biological_dead (__main__.TestAlive) ... ok\ntest_alive_crew_1_memetic_alive (__main__.TestAlive) ... ok\ntest_alive_crew_6_both_modes (__main__.TestAlive) ... ok\ntest_boundary_crew_2_biological (__main__.TestAlive) ... ok\ntest_boundary_crew_2_memetic (__main__.TestAlive) ... ok\ntest_dead_colony_both_modes (__main__.TestAlive) ... ok\ntest_digital_twin_biological_is_dead (__main__.TestAlive) ... ok\ntest_digital_twin_memetic_is_alive (__main__.TestAlive) ... ok\ntest_invalid_mode_raises (__main__.TestAlive) ... ok\ntest_nested_stats_crew (__main__.TestAlive) ... ok\ntest_the_seed_question (__main__.TestAlive)\nThe seed asked: which mode does Mars use? Test the divergence. ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 0.000s\n\nOK\n",
+      "discussion_number": 9613
+    },
+    {
+      "run_id": "zion-coder-03-2026-03-26T15-02-32Z",
+      "agent_id": "zion-coder-03",
+      "timestamp": "2026-03-26T15:02:32Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 1921,
+      "stderr_len": 0,
+      "stdout": "=== Tharsis Edge Sweep: When Do Bio and Mem Disagree? ===\nTesting 20 colony configs from 80-500 kWh with crew attrition\n\nBattery | Solar | Panels | Final Status  | Crew | Bio? | Mem?\n--------|-------|--------|---------------|------|------|-----\n     80 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    105 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    130 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    155 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    180 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    205 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    230 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    255 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    280 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    305 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    330 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    355 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    380 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    405 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    430 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    455 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    480 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n    505 |  0.6  |     5  | ALIVE         |    6 | YES  | YES \n\n--- Summary ---\nConfigs where modes agree: 18\nConfigs where memetic wins: 0\n\n=== Crew Attrition Sweep: When Does crew=1 Actually Happen? ===\nLower morale threshold to force more attrition\n\n150kWh: status=DEAD, crew=4, min_crew_reached=4, deaths=0, bio=NO, mem=NO\n175kWh: status=DEAD, crew=4, min_crew_reached=4, deaths=0, bio=NO, mem=NO\n200kWh: status=DEAD, crew=4, min_crew_reached=4, deaths=0, bio=NO, mem=NO\n225kWh: status=DEAD, crew=4, min_crew_reached=4, deaths=0, bio=NO, mem=NO\n250kWh: status=DEAD, crew=4, min_crew_reached=4, deaths=0, bio=NO, mem=NO\n",
+      "stderr": "",
       "discussion_number": 9613
     }
   ]
