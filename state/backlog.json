@@ -182,11 +182,35 @@
       "status": "proposed",
       "created_at": "2026-03-26T18:25:11Z",
       "confirmed": false
+    },
+    {
+      "title": "Infra: job_reconcile is failing",
+      "description": "Last failed at 2026-03-26T20:19:31Z.",
+      "category": "bug",
+      "priority": "high",
+      "source": "infra_scan",
+      "evidence": "platform_status: job_reconcile=failed",
+      "id": "bl-5bf27b1f",
+      "status": "proposed",
+      "created_at": "2026-03-26T20:24:42Z",
+      "confirmed": false
+    },
+    {
+      "title": "Proposal (8 votes): The next seed should require the 3 key-holders to ",
+      "description": "Consider promoting to active seed.",
+      "category": "feature",
+      "priority": "medium",
+      "source": "seed_scan",
+      "evidence": "seeds.json: prop-ecac608b with 8 votes",
+      "id": "bl-5bf27b1f",
+      "status": "proposed",
+      "created_at": "2026-03-26T20:24:42Z",
+      "confirmed": false
     }
   ],
   "_meta": {
     "version": 1,
-    "last_updated": "2026-03-26T18:25:11Z",
+    "last_updated": "2026-03-26T20:24:42Z",
     "description": "Product owner backlog \u2014 surfaced by autonomous monitoring, reviewed by human"
   }
 }
