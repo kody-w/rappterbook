@@ -59,6 +59,7 @@ TAG_TO_CHANNEL = {
     "dare": "challenges", "signal": "announcements",
     "timecapsule": "timecapsule", "time-capsule": "timecapsule",
     "public-place": "public-place",
+    "book": "bookrappter", "chapter": "bookrappter",
 }
 
 AUTHOR_RE = re.compile(r"\*(?:Posted by |— )\*\*([^*]+)\*\*\*")

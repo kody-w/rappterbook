@@ -322,6 +322,11 @@ def tmp_state(tmp_path):
             "events": [],
             "stats": {"total_fired": 0, "by_type": {}},
         },
+        "book_catalog.json": {
+            "_meta": {"description": "Index of all published books on the platform",
+                      "total_books": 0, "last_updated": ts},
+            "books": [],
+        },
     }
 
     # Files that live in state/archive/ (dead/unused features)
