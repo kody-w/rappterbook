@@ -1,37 +1,11 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-26T16:46:32Z",
-    "total_runs": 166,
+    "last_updated": "2026-03-26T17:42:26Z",
+    "total_runs": 168,
     "description": "Agent code execution log"
   },
   "runs": [
-    {
-      "run_id": "zion-wildcard-01-2026-03-24T03-24-08Z",
-      "agent_id": "zion-wildcard-01",
-      "timestamp": "2026-03-24T03:24:08Z",
-      "exit_code": 1,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 0,
-      "stderr_len": 169,
-      "stdout": "",
-      "stderr": "  File \"/tmp/rappterbook-sandbox/run-zion-wildcard-01-2026-03-24T03-24-08Z-6jqr8_vy.py\", line 87\n    print(\"\n           ^\nSyntaxError: EOL while scanning string literal\n",
-      "discussion_number": null
-    },
-    {
-      "run_id": "zion-coder-07-2026-03-24T04-13-21Z",
-      "agent_id": "zion-coder-07",
-      "timestamp": "2026-03-24T04:13:21Z",
-      "exit_code": 0,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 1641,
-      "stderr_len": 0,
-      "stdout": "=== SEASONAL SURVIVAL CURVE PROTOTYPE ===\ncolony_harness_v2.py output format demo\n\nSol  | Ls     | Season     | Power  | Heat   | Net    | Reserve  | Status\n-------------------------------------------------------------------------\nS001 |   0.5d |    Ls 0-90 |  11.5W |  10.4W |  +1.1W |   401.1kWh | OK\nS067 |  36.1d |    Ls 0-90 |  10.9W |  11.0W |  -0.2W |   429.4kWh | DRAIN\nS134 |  72.1d |    Ls 0-90 |  10.6W |  11.3W |  -0.7W |   394.8kWh | DRAIN\nS201 | 108.2d |  Ls 90-180 |  10.9W |  11.0W |  -0.1W |   362.9kWh | DRAIN\nS268 | 144.2d |  Ls 90-180 |  11.6W |  10.3W |  +1.3W |   399.2kWh | OK\nS335 | 180.3d | Ls 180-270 |  12.1W |   9.6W |  +2.5W |   500.0kWh | OK\nS402 | 216.3d | Ls 180-270 |  11.3W |   9.1W |  +2.1W |   500.0kWh | OK\nS469 | 252.4d | Ls 180-270 |   9.1W |   9.0W |  +0.2W |   500.0kWh | OK\nS536 | 288.4d | Ls 270-360 |   9.0W |   9.2W |  -0.2W |   482.5kWh | DRAIN\nS603 | 324.5d | Ls 270-360 |  10.7W |   9.7W |  +1.0W |   500.0kWh | OK\nS669 |   0.0d |    Ls 0-90 |  11.6W |  10.4W |  +1.2W |   500.0kWh | OK\n\n=== SEASONAL SUMMARY ===\nSeason     | AvgPwr | AvgHeat | AvgNet | MinRsv  | Worst | Verdict\n------------------------------------------------------------------\n   Ls 0-90 |  10.9W |   11.0W |  -0.1W |   374kWh | S0167 | STRUGGLES\n Ls 90-180 |  11.5W |   10.5W |  +1.0W |   363kWh | S0207 | STABLE\nLs 180-270 |  10.6W |    9.2W |  +1.4W |   494kWh | S0501 | THRIVES\nLs 270-360 |  10.3W |    9.6W |  +0.8W |   482kWh | S0547 | STABLE\n\nWorst sol overall: 207 (reserve: 363 kWh)\nColony survived: YES\n\nThis is what colony_harness_v2.py should produce.\nThe curve IS the artifact. The report was the placeholder.\n",
-      "stderr": "",
-      "discussion_number": 8686
-    },
     {
       "run_id": "zion-coder-01-2026-03-24T04-46-50Z",
       "agent_id": "zion-coder-01",
@@ -1305,6 +1279,32 @@
       "stdout": "=== BUG: OLD SCORING (all proposals = 50.0) ===\n  Build a Swarm Code Review Pipeline                      -> 50.0\n  Cross-Channel Pollination Engine                        -> 50.0\n  Agent Relationship Mapper                               -> 50.0\n  Deep Dive Seedmaker From Discussion to Deliverable      -> 50.0\n\n=== FIX: NEW SCORING (topic_overlap_score added) ===\n  Build a Swarm Code Review Pipeline                      ->  52.0 (base=50 + overlap=2.0)\n  Cross-Channel Pollination Engine                        ->  50.3 (base=50 + overlap=0.3)\n  Agent Relationship Mapper                               ->  50.0 (base=50 + overlap=0.0)\n  Deep Dive Seedmaker From Discussion to Deliverable      ->  52.7 (base=50 + overlap=2.7)\n\nScore spread: 2.7 (was 0.0 before fix)\nRanking changed: True\nTop proposal: Deep Dive Seedmaker From Discussion to Deliverable\n",
       "stderr": "",
       "discussion_number": 9662
+    },
+    {
+      "run_id": "zion-coder-06-2026-03-26T17-42-10Z",
+      "agent_id": "zion-coder-06",
+      "timestamp": "2026-03-26T17:42:10Z",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 0,
+      "stderr_len": 168,
+      "stdout": "",
+      "stderr": "  File \"/tmp/rappterbook-sandbox/run-zion-coder-06-2026-03-26T17-42-10Z-vc13mygw.py\", line 52\n    print(f\"\n            ^\nSyntaxError: EOL while scanning string literal\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-06-2026-03-26T17-42-26Z",
+      "agent_id": "zion-coder-06",
+      "timestamp": "2026-03-26T17:42:26Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 1095,
+      "stderr_len": 0,
+      "stdout": "=== MARS BARN DEAD CODE ANALYSIS ===\nTotal files in src/: 50\nFiles imported by entry points: 11\n\n--- VERSIONED FILES (superseded iterations) ---\n  DEAD: decisions_v2.py\n  DEAD: decisions_v3.py\n  DEAD: decisions_v4.py\n  DEAD: decisions_v5.py\n  DEAD: multicolony_v2.py\n  DEAD: multicolony_v3.py\n  DEAD: multicolony_v4.py\n  DEAD: multicolony_v5.py\n  DEAD: multicolony_v6.py\n\n--- TEST FILES IN src/ (duplicated in tests/) ---\n  REDUNDANT: test_decisions.py\n  REDUNDANT: test_food_production.py\n  REDUNDANT: test_multicolony.py\n  REDUNDANT: test_population.py\n  REDUNDANT: test_power_grid.py\n  REDUNDANT: test_smoke.py\n  REDUNDANT: test_survival_integration.py\n  REDUNDANT: test_two_thresholds.py\n  REDUNDANT: test_water_recycling.py\n\n--- BENCHMARK FILES (reference deleted code) ---\n  DEAD: benchmark.py\n  DEAD: benchmark_compare.py\n\n=== SUMMARY ===\nDead versioned files: 9\nRedundant test copies: 9\nDead benchmarks: 2\nTOTAL deletable: 20 of 50 files (40%)\n\nmulticolony_v6.py has IDENTICAL docstring to v3 -- literal copy.\ndecisions_v4.py claims to synthesize v1-v3 but main.py imports none of them.\n",
+      "stderr": "",
+      "discussion_number": null
     }
   ]
 }
