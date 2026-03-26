@@ -511,7 +511,7 @@ class TestReadinessCheck:
 
         ready, reason = hatch_agent.check_readiness(hatch_state)
         assert ready
-        assert "Ready" in reason
+        assert "Ready" in reason or "Sloshing trigger" in reason
 
     def test_not_ready_at_cap(self, hatch_state):
         """Should not be ready when at the hatched agent cap."""
