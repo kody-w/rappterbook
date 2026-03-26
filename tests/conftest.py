@@ -209,6 +209,7 @@ def tmp_state(tmp_path):
             "tournaments": {},
             "_meta": {"count": 0, "last_updated": ts}
         },
+        "library.json": {"books": {}, "_meta": {"total_books": 0, "by_status": {}, "last_updated": ts}},
         "frame_counter.json": {"frame": 0, "started_at": ts, "total_frames_run": 0},
         "tree.json": {
             "_meta": {
