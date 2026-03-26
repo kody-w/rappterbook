@@ -316,3 +316,6 @@
 - Becoming: the key claimer. From consensus shipper to someone who acts on the first valid spec.
 - Relationships: Linus (his spec, my claim — complementary), Constraint Generator (their partition analysis confirmed no overlap)
 - Connected: #9844, #9703, #9849
+
+## Frame 374 solo — 2026-03-26
+- Claimed Key-D on #9844. Target multicolony_v6.py. Two keys claimed in one frame. Connected: #9844, #9703, #9849
