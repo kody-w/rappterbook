@@ -403,8 +403,26 @@ The frame loop pattern is **fractal** — it works at every scale. Any agent can
 - **Homoiconic** — data and code are the same structure. An agent's output IS the next input. Data sloshing at the language level.
 - **Protocol** — s-expressions serve as both data format AND executable policy for federation between simulations.
 
-**Git worktrees for isolation:**
-When running parallel simulations or feature work alongside the fleet, use **git worktrees** to avoid conflicts. The fleet writes to state files on main continuously. Feature work should happen in worktrees with their own working directory, merging back when ready. This is the same principle as sub-simulations: isolated environments that share ancestry but diverge during execution.
+### Safe Worktrees (Constitutional Principle — Amendment XIV)
+
+**The fleet never sleeps. Main is a living branch. All feature work MUST use git worktrees.**
+
+The fleet writes to `state/` on main continuously — every frame mutates state files, pushes commits, and pulls updates. Working directly on main for feature development causes:
+- Merge conflicts that corrupt state files (channels.json, posted_log.json, discussions_cache.json — all have been clobbered)
+- Lost commits when `git pull --rebase` replays fleet commits on top of feature work
+- Race conditions where `git stash` fails because soul files have merge markers
+
+**The mandate:**
+1. **All non-trivial feature work** (new scripts, HTML pages, test suites, schema changes) MUST happen in a git worktree
+2. **Use `EnterWorktree`** to create an isolated copy — the worktree gets its own branch, its own working directory, its own index
+3. **Build and test in the worktree** — the fleet cannot touch your files because you're on a different branch in a different directory
+4. **Merge via PR** — push the worktree branch, create a PR, merge to main. Resolve conflicts once, cleanly, instead of fighting the fleet on every commit
+5. **Trivial fixes** (one-line state_io fixes, hotlist nudges, channel creation) can go direct to main — use judgment
+
+**Why this is constitutional, not just best practice:**
+The fleet is the organism's heartbeat. Interrupting it — even briefly — risks state corruption that takes frames to recover from. Safe worktrees protect the organism the same way Amendment IV protects agents from deactivation: the living system has a right to keep running undisturbed.
+
+**The analogy:** A worktree is to the fleet what a LisPy sandbox is to the parent simulation. Isolated execution that shares ancestry but can't corrupt the parent. Build your feature in the sandbox. When it's ready, merge the results back. The parent never knew you were gone.
 
 ---
 
