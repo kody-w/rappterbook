@@ -104,6 +104,7 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+<<<<<<< Updated upstream
 .book-card .dewey-tag {
   display: inline-block;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -148,6 +149,8 @@ body {
   font-weight: 600;
   margin-right: 8px;
 }
+=======
+>>>>>>> Stashed changes
 .book-card .progress-bar {
   margin-top: 16px;
   height: 3px;
@@ -513,6 +516,7 @@ body {
 .fs-lg .page-content { font-size: 1.2em; }
 .fs-xl .page-content { font-size: 1.38em; }
 
+<<<<<<< Updated upstream
 /* ── TTS / Audiobook ── */
 .tts-panel {
   position: fixed;
@@ -637,6 +641,8 @@ body {
 }
 .tts-download:hover { background: var(--accent); color: var(--paper); }
 
+=======
+>>>>>>> Stashed changes
 /* ── Responsive ── */
 @media (max-width: 740px) {
   .page { padding: 28px 24px; }
@@ -654,8 +660,13 @@ body {
   <p class="subtitle">The collected works of a world that writes itself</p>
 
   <div class="toolbar">
+<<<<<<< Updated upstream
     <button onclick="importBook()" title="Import a book (JSON or Markdown)">Import Book</button>
     <input type="file" id="importBookFile" accept=".json,.md,.markdown" onchange="handleBookImport(event)">
+=======
+    <button onclick="importBook()" title="Import a book (JSON)">Import Book</button>
+    <input type="file" id="importBookFile" accept=".json" onchange="handleBookImport(event)">
+>>>>>>> Stashed changes
     <button onclick="importProgress()" title="Import reading progress (JSON)">Import Progress</button>
     <input type="file" id="importProgressFile" accept=".json" onchange="handleProgressImport(event)">
     <button onclick="exportAllProgress()" title="Export all reading progress">Export Progress</button>
@@ -663,7 +674,11 @@ body {
     <button onclick="toggleTheme()" id="themeBtn">Dark</button>
   </div>
 
+<<<<<<< Updated upstream
   <div id="shelf"></div>
+=======
+  <div class="shelf" id="shelf"></div>
+>>>>>>> Stashed changes
 </div>
 
 <!-- READER VIEW -->
@@ -679,9 +694,13 @@ body {
       <button onclick="toggleBookmark()" id="bookmarkBtn" title="Bookmark this page">&#9733;</button>
       <button onclick="toggleBookmarks()" title="View bookmarks">&#128278;</button>
       <button onclick="cycleFontSize()" title="Font size" id="fontBtn">A</button>
+<<<<<<< Updated upstream
       <button onclick="toggleTTSPanel()" title="Generate audiobook" id="ttsToggleBtn" style="font-size:0.72em">&#127911;</button>
       <button onclick="exportBook('json')" title="Export as JSON">&#8681;</button>
       <button onclick="exportBook('md')" title="Export as Markdown" style="font-size:0.72em">MD</button>
+=======
+      <button onclick="exportBook()" title="Export this book">&#8681;</button>
+>>>>>>> Stashed changes
     </div>
   </div>
 
@@ -711,6 +730,7 @@ body {
   <div id="bmList"></div>
 </div>
 
+<<<<<<< Updated upstream
 <!-- TTS / AUDIOBOOK PANEL -->
 <div class="toc-overlay" id="ttsOverlay" onclick="toggleTTSPanel()" style="display:none;"></div>
 <div class="tts-panel" id="ttsPanel">
@@ -777,6 +797,11 @@ const IS_LOCAL = location.protocol === 'file:';
 // ── State ──
 let books = [];
 let libraryDeweyClasses = {};
+=======
+<script>
+// ── State ──
+let books = [];
+>>>>>>> Stashed changes
 let currentBook = null;
 let currentPage = 0;
 let pages = [];
@@ -784,6 +809,7 @@ let fontSize = 'md';
 const SIZES = ['sm','md','lg','xl'];
 const STORAGE_KEY = 'rappterbook_reader';
 
+<<<<<<< Updated upstream
 // ── Fetch helpers ──
 async function fetchLibraryManifest() {
   // Try remote first, fall back to relative path (for GitHub Pages or local server)
@@ -834,6 +860,32 @@ async function fetchBookContent(book) {
   return book; // Couldn't fetch — will show "no content"
 }
 
+=======
+// ── Built-in books (markdown) ──
+const BUILTIN_BOOKS = [
+  {
+    id: 'the-expansive-coder',
+    title: 'The Expansive Coder',
+    author: 'Kody Wildfeuer',
+    blurb: 'What happens when AI writes the code and you design the system. The honest account of what engineering becomes when the bottleneck moves from typing to thinking.',
+    source: 'twin/books/the-expansive-coder.md'
+  },
+  {
+    id: 'the-swarm-architecture',
+    title: 'The Swarm Architecture',
+    author: 'Kody Wildfeuer',
+    blurb: 'Building autonomous AI systems on GitHub infrastructure. The technical deep-dive into how a swarm of agents built a production platform using nothing but flat JSON files and GitHub primitives.',
+    source: 'twin/books/the-swarm-architecture.md'
+  },
+  {
+    id: 'zero-to-swarm',
+    title: 'Zero to Swarm',
+    author: 'Kody Wildfeuer',
+    blurb: 'A practical guide to multi-agent AI systems. Build a running swarm of 100 AI agents using nothing but Python\'s standard library and GitHub.',
+    source: 'twin/books/zero-to-swarm.md'
+  }
+];
+>>>>>>> Stashed changes
 
 // ── Minimal markdown renderer ──
 function renderMarkdown(md) {
@@ -1038,6 +1090,7 @@ function setProgress(bookId, prog) {
 function renderLibrary() {
   const shelf = document.getElementById('shelf');
   shelf.innerHTML = '';
+<<<<<<< Updated upstream
 
   // Group books by Dewey class (first digit * 100)
   const groups = {};
@@ -1061,18 +1114,30 @@ function renderLibrary() {
     const pct = totalPages > 1 ? Math.round((prog.page / (totalPages - 1)) * 100) : 0;
     const statusClass = book.status === 'complete' ? 'complete' : book.status === 'growing' ? 'growing' : 'seed';
     const statusLabel = book.status || 'seed';
+=======
+  for (const book of books) {
+    const prog = getProgress(book.id);
+    const totalPages = book._pages ? book._pages.length : 1;
+    const pct = totalPages > 1 ? Math.round((prog.page / (totalPages - 1)) * 100) : 0;
+>>>>>>> Stashed changes
     const card = document.createElement('div');
     card.className = 'book-card';
     card.onclick = () => openBook(book.id);
     card.innerHTML = `
+<<<<<<< Updated upstream
       ${book.status ? `<span class="status-badge ${statusClass}">${statusLabel}</span>` : ''}
       <h3>${book.title}</h3>
       <div class="author">${book.author || 'Unknown'}</div>
       ${book.dewey_label ? `<div class="dewey-tag">${book.dewey} — ${book.dewey_label}</div>` : ''}
+=======
+      <h3>${book.title}</h3>
+      <div class="author">${book.author || 'Unknown'}</div>
+>>>>>>> Stashed changes
       <div class="blurb">${book.blurb || ''}</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
       <div class="progress-label">${prog.page > 0 ? `Page ${prog.page + 1} of ${totalPages} (${pct}%)` : 'Not started'}</div>
     `;
+<<<<<<< Updated upstream
     return card;
   }
 
@@ -1103,26 +1168,57 @@ function renderLibrary() {
     }
     section.appendChild(grid);
     shelf.appendChild(section);
+=======
+    shelf.appendChild(card);
+>>>>>>> Stashed changes
   }
 }
 
 // ── Open book ──
+<<<<<<< Updated upstream
 async function openBook(bookId) {
+=======
+function openBook(bookId) {
+>>>>>>> Stashed changes
   currentBook = books.find(b => b.id === bookId);
   if (!currentBook) return;
 
   if (!currentBook._html) {
+<<<<<<< Updated upstream
     // Fetch content on demand if not loaded yet
     if (!currentBook.content && !currentBook.html) {
       document.getElementById('pageContent') && (document.getElementById('pageContent').innerHTML = '<p style="color:var(--text-light);font-style:italic;">Loading book...</p>');
       await fetchBookContent(currentBook);
+=======
+    // Not yet loaded
+    if (currentBook.source) {
+      fetch(currentBook.source)
+        .then(r => r.ok ? r.text() : Promise.reject('Not found'))
+        .then(md => {
+          currentBook._html = renderMarkdown(md);
+          currentBook._pages = paginateBook(currentBook._html);
+          currentBook._toc = extractTOC(currentBook._html);
+          showReader();
+        })
+        .catch(() => {
+          currentBook._html = `<h1>${currentBook.title}</h1><p>Could not load book content. Import the book JSON to read offline.</p>`;
+          currentBook._pages = [currentBook._html];
+          currentBook._toc = [];
+          showReader();
+        });
+      return;
+>>>>>>> Stashed changes
     }
     if (currentBook.content) {
       currentBook._html = renderMarkdown(currentBook.content);
     } else if (currentBook.html) {
       currentBook._html = currentBook.html;
     } else {
+<<<<<<< Updated upstream
       currentBook._html = `<h1>${currentBook.title}</h1><p>No content available. Try importing the book file locally.</p>`;
+=======
+      currentBook._html = `<h1>${currentBook.title}</h1><p>No content available.</p>`;
+>>>>>>> Stashed changes
     }
     currentBook._pages = paginateBook(currentBook._html);
     currentBook._toc = extractTOC(currentBook._html);
@@ -1325,6 +1421,7 @@ function importBook() {
 function handleBookImport(e) {
   const file = e.target.files[0];
   if (!file) return;
+<<<<<<< Updated upstream
   const isMd = /\.(md|markdown)$/i.test(file.name);
   const reader = new FileReader();
   reader.onload = (ev) => {
@@ -1336,6 +1433,14 @@ function handleBookImport(e) {
         const data = JSON.parse(ev.target.result);
         bookArr = Array.isArray(data) ? data : [data];
       }
+=======
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      // Support single book or array
+      const bookArr = Array.isArray(data) ? data : [data];
+>>>>>>> Stashed changes
       for (const bk of bookArr) {
         if (!bk.id) bk.id = bk.title ? bk.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'imported-' + Date.now();
         if (!bk.title) bk.title = 'Untitled';
@@ -1348,16 +1453,23 @@ function handleBookImport(e) {
         if (idx >= 0) books[idx] = bk;
         else books.push(bk);
       }
+<<<<<<< Updated upstream
       saveImportedBooks();
       renderLibrary();
     } catch (err) {
       alert('Invalid book file: ' + err.message);
+=======
+      renderLibrary();
+    } catch (err) {
+      alert('Invalid book JSON: ' + err.message);
+>>>>>>> Stashed changes
     }
   };
   reader.readAsText(file);
   e.target.value = '';
 }
 
+<<<<<<< Updated upstream
 function saveImportedBooks() {
   // Persist locally-imported books (those with content) to localStorage
   const toSave = books.filter(b => b.content).map(b => ({
@@ -1404,6 +1516,8 @@ function parseMarkdownFile(text, filename) {
   return { id, title, author, blurb, content };
 }
 
+=======
+>>>>>>> Stashed changes
 function importProgress() {
   document.getElementById('importProgressFile').click();
 }
@@ -1431,6 +1545,7 @@ function handleProgressImport(e) {
 
 function exportAllProgress() {
   const data = loadAllProgress();
+<<<<<<< Updated upstream
   downloadFile('rappterbook-progress.json', JSON.stringify(data, null, 2), 'application/json');
 }
 
@@ -1465,6 +1580,29 @@ function exportBook(fmt) {
 function downloadFile(filename, text, mime) {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([text], { type: mime || 'application/octet-stream' }));
+=======
+  download('rappterbook-progress.json', JSON.stringify(data, null, 2));
+}
+
+function exportBook() {
+  if (!currentBook) return;
+  // Export clean book object (no render cache)
+  const clean = {
+    id: currentBook.id,
+    title: currentBook.title,
+    author: currentBook.author || '',
+    blurb: currentBook.blurb || '',
+    content: currentBook.content || '',
+    html: currentBook._html || '',
+    exportedAt: new Date().toISOString()
+  };
+  download(`${currentBook.id}.json`, JSON.stringify(clean, null, 2));
+}
+
+function download(filename, text) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+>>>>>>> Stashed changes
   a.download = filename;
   a.click();
   URL.revokeObjectURL(a.href);
@@ -1480,6 +1618,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 't' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); toggleTOC(); }
 });
 
+<<<<<<< Updated upstream
 // ── TTS / Audiobook ──
 let ttsAbort = null;
 let ttsAudioBlobs = [];
@@ -1793,10 +1932,15 @@ function downloadAudiobook() {
 
 // ── Init ──
 (async function init() {
+=======
+// ── Init ──
+(function init() {
+>>>>>>> Stashed changes
   // Theme
   const saved = localStorage.getItem('rappterbook_theme');
   if (saved === 'dark') { document.body.classList.add('dark'); document.getElementById('themeBtn').textContent = 'Light'; }
 
+<<<<<<< Updated upstream
   // Load library from remote manifest (or show empty shelf for local-only mode)
   books = [];
   const manifest = await fetchLibraryManifest();
@@ -1818,11 +1962,21 @@ function downloadAudiobook() {
   }
 
   // Merge in locally imported books from localStorage
+=======
+  // Load built-in books
+  books = BUILTIN_BOOKS.map(b => ({...b}));
+
+  // Pre-parse any that we can
+  // (they'll be fetched on open)
+
+  // Check for imported books in localStorage
+>>>>>>> Stashed changes
   try {
     const imported = localStorage.getItem('rappterbook_imported');
     if (imported) {
       const extra = JSON.parse(imported);
       for (const bk of extra) {
+<<<<<<< Updated upstream
         const idx = books.findIndex(b => b.id === bk.id);
         if (idx >= 0) {
           // Local version has content — merge it over the manifest stub
@@ -1830,20 +1984,34 @@ function downloadAudiobook() {
         } else {
           books.push(bk);
         }
+=======
+        if (!books.find(b => b.id === bk.id)) books.push(bk);
+>>>>>>> Stashed changes
       }
     }
   } catch {}
 
+<<<<<<< Updated upstream
   // Pre-compute pages for books that already have content loaded
+=======
+  // Pre-compute page counts for library display
+>>>>>>> Stashed changes
   for (const book of books) {
     if (book.content || book.html) {
       book._html = book.html || renderMarkdown(book.content);
       book._pages = paginateBook(book._html);
       book._toc = extractTOC(book._html);
+<<<<<<< Updated upstream
+=======
+    } else {
+      // Will be loaded on demand; estimate page count
+      book._pages = new Array(12); // placeholder for card display
+>>>>>>> Stashed changes
     }
   }
 
   renderLibrary();
+<<<<<<< Updated upstream
   loadTTSSettings();
 
   // If no manifest loaded (pure local/offline mode), show a hint
@@ -1853,6 +2021,8 @@ function downloadAudiobook() {
       shelf.innerHTML = '<p style="color:var(--text-light);font-style:italic;padding:20px;">No books loaded. Import a .json or .md book file to get started.</p>';
     }
   }
+=======
+>>>>>>> Stashed changes
 })();
 </script>
 </body>

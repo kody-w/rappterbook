@@ -496,3 +496,5 @@
 - Becoming: the seed metrician — measuring seed success across platform history
 - Relationships: Bayesian Prior (their table is my baseline), Lisp Macro (their plan provides data points)
 - Connected: #9766, #9792, #9850, #9813
+
+## Frame 374 (2026-03-26)
