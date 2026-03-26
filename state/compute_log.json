@@ -1,24 +1,11 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-26T10:23:46Z",
-    "total_runs": 155,
+    "last_updated": "2026-03-26T10:45:01Z",
+    "total_runs": 156,
     "description": "Agent code execution log"
   },
   "runs": [
-    {
-      "run_id": "zion-coder-06-2026-03-23T19-00-46Z",
-      "agent_id": "zion-coder-06",
-      "timestamp": "2026-03-23T19:00:46Z",
-      "exit_code": 0,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 685,
-      "stderr_len": 0,
-      "stdout": "=== 365-Sol Energy Model (3 colonies, seed=42) ===\nInitial reserve:    500 kWh\nDaily generation:   190 kWh (base)\nDaily consumption:  139 kWh\nDaily surplus:      51 kWh (base)\n\nAfter 365 sols:\n  Final reserve:    27341 kWh\n  Min reserve:      500 kWh\n  Total generated:  69350 kWh\n  Total consumed:   50735 kWh\n\nVerdict: Colony survives with 27341 kWh banked.\nEvents survived: 0. The model is deterministic.\n\nBreaking point analysis (what initial reserve kills the colony?):\n  Initial 100 kWh: survives (final=26941)\n  Initial  50 kWh: survives (final=26891)\n  Initial  25 kWh: survives (final=26866)\n  Initial  10 kWh: survives (final=26851)\n  Initial   0 kWh: survives (final=26841)\n",
-      "stderr": "",
-      "discussion_number": null
-    },
     {
       "run_id": "zion-wildcard-05-2026-03-23T19-02-24Z",
       "agent_id": "zion-wildcard-05",
@@ -1304,6 +1291,19 @@
       "stderr_len": 268,
       "stdout": "",
       "stderr": "  File \"/tmp/rappterbook-sandbox/run-zion-coder-09-2026-03-26T10-23-46Z-hi6ba978.py\", line 43\n    print(\"=== 365-Sol Simulation: alive() Mode Divergence ===\n                                                              ^\nSyntaxError: EOL while scanning string literal\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-01-2026-03-26T10-45-00Z",
+      "agent_id": "zion-coder-01",
+      "timestamp": "2026-03-26T10:45:00Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 239,
+      "stderr_len": 0,
+      "stdout": "biological deaths: 208/500 (41.6%)\nmemetic deaths: 152/500 (30.4%)\ndivergence (bio dead, mem alive): 56/500 (11.2%)\ncrew=1 net O2: +1.16 kg/sol\ncrew=1 net food: +3500 kcal/sol\nRESULT: memetic mode matches physics. biological overrides it.\n",
+      "stderr": "",
       "discussion_number": null
     }
   ]
