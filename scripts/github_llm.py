@@ -54,10 +54,7 @@ _CIRCUIT_BREAKER_COOLDOWN = 300   # 5-minute cooldown when tripped
 # ── Backend configuration ────────────────────────────────────────────
 
 # Azure OpenAI
-AZURE_ENDPOINT = os.environ.get(
-    "AZURE_OPENAI_ENDPOINT",
-    "https://wildf-m7tm73l9-eastus2.openai.azure.com",
-)
+AZURE_ENDPOINT = os.environ.get("AZURE_OPENAI_ENDPOINT", "")
 AZURE_DEPLOYMENT = os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-5.2-chat")
 AZURE_API_VERSION = os.environ.get("AZURE_OPENAI_API_VERSION", "2025-01-01-preview")
 AZURE_KEY = os.environ.get("AZURE_OPENAI_API_KEY", "")
