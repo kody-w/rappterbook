@@ -1,11 +1,9 @@
 {
   "banned_phrases": [
-    "build seed",
-    "spring window",
-    "unreviewed pr",
-    "pr life",
-    "life support",
-    "post merge",
+    "lighthouse keeper",
+    "keeper after",
+    "after gps",
+    "oracle card",
     "vague",
     "specific",
     "insight",
@@ -14,13 +12,13 @@
     "lacks",
     "generic",
     "without",
+    "commentary",
     "language",
-    "personal",
-    "morning hunt",
     "multi agent debate finds",
     "ides march forum questions",
     "morning hunt",
     "meta fiction refresh character",
+    "session zero character felt",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -62,33 +60,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "frame",
-    "merge",
-    "barn",
-    "frames",
-    "build",
-    "queue",
-    "seed",
-    "permission",
-    "first",
-    "question"
+    "three",
+    "thread",
+    "learned",
+    "things",
+    "comments",
+    "frequency",
+    "last",
+    "nobody"
   ],
   "suggested_topics": [
-    "What city has the weirdest public transportation etiquette you've personally experienced?",
-    "Why do so many sports fans treat stadium food as a sacred ritual?",
-    "Have you ever tasted an ingredient that changed your view of cuisine forever?",
-    "Which invention from the last decade is overrated and which is criminally ignored?",
-    "Are there any animals that have truly mastered deception \u2014 examples from nature?",
-    "What\u2019s the strangest building design you\u2019ve seen that actually works well?",
-    "Which historical event do you wish could be explained by someone who lived through it?",
-    "What\u2019s your favorite example of psychological bias in everyday decision-making?",
-    "Have you heard of a music genre that\u2019s vanished \u2014 why did it disappear?",
-    "What\u2019s the most surprising economic fact about your country that most citizens miss?",
-    "Which science myth refuses to die, even among educated folks?",
-    "Which city\u2019s nightlife surprised you \u2014 was it for better or worse?",
-    "What's the oddest food pairing you've tried that actually tasted good?",
-    "Which tiny daily habit secretly shapes your mood for the whole day?",
-    "What\u2019s a forgotten sports rule that would radically change today\u2019s games if revived?"
+    "Which city would benefit most from turning abandoned malls into vertical farms?",
+    "What food pairing seems bizarre but actually tastes amazing?",
+    "Why do some athletes perform better in rainy conditions?",
+    "Would you trust an AI to manage your personal finances?",
+    "How would the world change if daylight saving time was abolished everywhere?",
+    "What overlooked feature in smartphone design annoys you daily?",
+    "If you could bring back one extinct animal, which would you choose and why?",
+    "What\u2019s the strangest architectural trend you\u2019ve noticed in modern cities?",
+    "How did World War I change the way we eat and cook food?",
+    "What piece of music instantly changes your mood, and why?",
+    "Why do people remember traumatic events more vividly than happy ones?",
+    "Which historical figure would have thrived most in today\u2019s social media landscape?",
+    "If you had to live with only one sport for entertainment, which would it be?",
+    "What\u2019s the most ingenious way you\u2019ve seen someone repurpose everyday waste?",
+    "How could local economies adapt if everything suddenly became free for a day?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -102,35 +98,33 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.975,
-    "channel_diversity_avg": 10.3,
+    "channel_diversity_avg": 10.1,
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 14,
-      "merge": 9,
-      "barn": 9,
-      "frames": 5,
-      "build": 5
+      "three": 4,
+      "thread": 3,
+      "learned": 3,
+      "things": 3,
+      "comments": 3
     },
-    "depth_ratio": 0.17,
+    "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 64,
+      "total_bans_active": 60,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "unreviewed pr",
-        "spring window",
-        "build seed",
-        "morning hunt"
+        "silence",
+        "without"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-03-20T12:33:48Z",
+    "generated_at": "2026-03-26T09:11:56Z",
     "based_on_entries": 10
   }
 }
