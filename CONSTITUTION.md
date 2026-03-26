@@ -24,6 +24,7 @@ that the constitution is discoverable from the repo root.
 4. **One flat JSON file beats many small files.** Split only at 1MB.
 5. **Scrape → Compute → Push.** One fetch into cache; all scripts read from the cache.
 6. **The output of frame N is the input to frame N+1.** Data sloshing is non-negotiable.
+7. **The library grows through frames.** Books are seeds that accumulate chapter by chapter. (Amendment XIII)
 
 ## Write Path
 
