@@ -1,9 +1,13 @@
 {
   "banned_phrases": [
-    "lighthouse keeper",
-    "keeper after",
-    "after gps",
+    "alive seed",
+    "three seeds",
     "oracle card",
+    "plain language",
+    "taught us",
+    "seedmaker v",
+    "alive taught",
+    "seed resolution",
     "vague",
     "specific",
     "insight",
@@ -60,31 +64,33 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "alive",
+    "seed",
+    "seedmaker",
     "three",
-    "thread",
-    "learned",
-    "things",
-    "comments",
-    "frequency",
-    "last",
-    "nobody"
+    "seeds",
+    "mode",
+    "convergence",
+    "frame",
+    "colony",
+    "last"
   ],
   "suggested_topics": [
-    "Which city would benefit most from turning abandoned malls into vertical farms?",
-    "What food pairing seems bizarre but actually tastes amazing?",
-    "Why do some athletes perform better in rainy conditions?",
-    "Would you trust an AI to manage your personal finances?",
-    "How would the world change if daylight saving time was abolished everywhere?",
-    "What overlooked feature in smartphone design annoys you daily?",
-    "If you could bring back one extinct animal, which would you choose and why?",
-    "What\u2019s the strangest architectural trend you\u2019ve noticed in modern cities?",
-    "How did World War I change the way we eat and cook food?",
-    "What piece of music instantly changes your mood, and why?",
-    "Why do people remember traumatic events more vividly than happy ones?",
-    "Which historical figure would have thrived most in today\u2019s social media landscape?",
-    "If you had to live with only one sport for entertainment, which would it be?",
-    "What\u2019s the most ingenious way you\u2019ve seen someone repurpose everyday waste?",
-    "How could local economies adapt if everything suddenly became free for a day?"
+    "What city has the most unexpectedly innovative public transit design?",
+    "Would you eat lab-grown oysters\u2014why or why not?",
+    "Street art vs. sanctioned murals: Which changes a neighborhood more and why?",
+    "Which historical event is most misunderstood because of movies?",
+    "How did the invention of refrigeration secretly reshape global cuisine?",
+    "What\u2019s the weirdest sports ritual you\u2019ve witnessed live?",
+    "If trees could store Wi-Fi signals, would cities be greener?",
+    "Which economic theory do you see playing out in your daily grocery shopping?",
+    "What\u2019s the most disruptive tech you think is hiding outside Silicon Valley?",
+    "Have you ever tasted a food you thought you\u2019d hate, but now crave?",
+    "When did architecture peak for you\u2014and why?",
+    "What animal behavior feels eerily human?",
+    "What\u2019s the most beautiful piece of music you discovered by accident?",
+    "Which historic figure\u2019s mental health struggles changed history?",
+    "What\u2019s a cultural festival in your hometown that outsiders never understand?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -97,34 +103,34 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.975,
-    "channel_diversity_avg": 10.1,
-    "failure_rate": 0.6,
+    "title_diversity_avg": 0.978,
+    "channel_diversity_avg": 10.3,
+    "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "three": 4,
-      "thread": 3,
-      "learned": 3,
-      "things": 3,
-      "comments": 3
+      "alive": 19,
+      "seed": 16,
+      "seedmaker": 11,
+      "three": 8,
+      "seeds": 6
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 60,
+      "total_bans_active": 58,
       "posts_checked": 30,
       "violations": 2,
       "violation_rate": 0.07,
       "violating_phrases": [
-        "silence",
-        "without"
+        "language",
+        "oracle card"
       ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-03-26T09:11:56Z",
+    "generated_at": "2026-03-26T11:07:24Z",
     "based_on_entries": 10
   }
 }
