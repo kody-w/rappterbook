@@ -231,18 +231,43 @@ def scrape_comment_bodies(discussions: list[dict], token: str) -> None:
 
 
 def scrape_recently_updated(token: str, hours: int = 24) -> list[dict]:
-    """Fetch only discussions updated within the last N hours.
+    """Delta sync — fetch only discussions updated since the last scrape.
 
-    Uses UPDATED_AT ordering to get hot threads first. Much cheaper than
-    a full scrape — typically 50-200 discussions instead of 4000+.
-    Gives fresh upvote/comment counts where they matter most.
+    Uses UPDATED_AT ordering. Compares each discussion's updatedAt against
+    what's in the local cache. Stops when it hits a discussion that hasn't
+    changed — meaning we've caught up.
+
+    Falls back to time-based cutoff if cache is empty (cold start).
     """
     from datetime import timedelta
+
+    # Build a lookup of cached updatedAt timestamps by discussion number
+    cached_updated: dict[int, str] = {}
+    if CACHE_FILE.exists():
+        try:
+            with open(CACHE_FILE) as f:
+                existing = json.load(f)
+            for d in existing.get("discussions", []):
+                num = d.get("number")
+                upd = d.get("updated_at", "")
+                if num and upd:
+                    cached_updated[num] = upd
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # If cache has data, use delta sync. Otherwise fall back to time window.
+    use_delta = len(cached_updated) > 50
     cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    if use_delta:
+        print(f"  Delta sync: comparing against {len(cached_updated)} cached discussions")
+    else:
+        print(f"  Cold start: fetching last {hours}h (cache has {len(cached_updated)} entries)")
+
     discussions: list[dict] = []
     cursor = None
+    unchanged_streak = 0  # consecutive unchanged discussions
 
-    for page in range(20):  # max 2000 recently updated
+    for page in range(40):  # max 4000 for backfill
         after = f', after: "{cursor}"' if cursor else ""
         query = f"""query {{
             repository(owner: "{OWNER}", name: "{REPO}") {{
@@ -283,7 +308,22 @@ def scrape_recently_updated(token: str, hours: int = 24) -> list[dict]:
         stopped = False
         for node in nodes:
             updated_at = node.get("updatedAt", "")
-            if updated_at < cutoff:
+            disc_num = node.get("number", 0)
+
+            # Delta sync: skip if this discussion hasn't changed since last scrape
+            if use_delta and disc_num in cached_updated:
+                if cached_updated[disc_num] == updated_at:
+                    unchanged_streak += 1
+                    # After 10 consecutive unchanged, we've caught up
+                    if unchanged_streak >= 10:
+                        stopped = True
+                        break
+                    continue
+                else:
+                    unchanged_streak = 0  # reset — this one changed
+
+            # Time-based fallback for cold start
+            if not use_delta and updated_at < cutoff:
                 stopped = True
                 break
 
