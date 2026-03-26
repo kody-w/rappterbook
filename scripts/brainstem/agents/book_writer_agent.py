@@ -96,8 +96,44 @@ def _state_dir_from_context(context: dict) -> Path:
     return Path(os.environ.get("STATE_DIR", context.get("_state_dir", "state")))
 
 
-def _load_library(state_dir: Path) -> dict:
-    """Load the library state file, creating it if needed."""
+def _dewey_class(dewey: str) -> str:
+    """Extract the Dewey hundreds class from a dewey number.
+
+    '005.1' → '000', '100' → '100', '813.4' → '800'.
+    """
+    try:
+        num = int(float(dewey))
+        return str((num // 100) * 100).zfill(3)
+    except (ValueError, TypeError):
+        return "000"
+
+
+def _shelf_path(state_dir: Path, dewey: str) -> Path:
+    """Path to the Dewey shelf file that holds book content."""
+    lib_dir = state_dir / "library"
+    lib_dir.mkdir(exist_ok=True)
+    return lib_dir / f"{_dewey_class(dewey)}.json"
+
+
+def _load_shelf(state_dir: Path, dewey: str) -> dict:
+    """Load a Dewey shelf file (holds book content keyed by book_id)."""
+    path = _shelf_path(state_dir, dewey)
+    shelf = load_json(path)
+    if "books" not in shelf:
+        shelf["books"] = {}
+    if "_meta" not in shelf:
+        shelf["_meta"] = {"dewey_class": _dewey_class(dewey), "last_updated": now_iso()}
+    return shelf
+
+
+def _save_shelf(state_dir: Path, dewey: str, shelf: dict) -> None:
+    """Save a Dewey shelf file."""
+    shelf["_meta"]["last_updated"] = now_iso()
+    save_json(_shelf_path(state_dir, dewey), shelf)
+
+
+def _load_catalog(state_dir: Path) -> dict:
+    """Load the library catalog (metadata only, no content)."""
     lib = load_json(state_dir / "library.json")
     if "books" not in lib:
         lib["books"] = {}
@@ -106,36 +142,48 @@ def _load_library(state_dir: Path) -> dict:
     return lib
 
 
-def _save_library(state_dir: Path, lib: dict) -> None:
-    """Save library with updated meta."""
-    lib["_meta"]["total_books"] = len(lib["books"])
-    lib["_meta"]["last_updated"] = now_iso()
+def _save_catalog(state_dir: Path, catalog: dict) -> None:
+    """Save library catalog with updated meta counts."""
+    catalog["_meta"]["total_books"] = len(catalog["books"])
+    catalog["_meta"]["last_updated"] = now_iso()
     by_status: dict[str, int] = {}
-    for book in lib["books"].values():
+    by_dewey: dict[str, int] = {}
+    for book in catalog["books"].values():
         s = book.get("status", "unknown")
         by_status[s] = by_status.get(s, 0) + 1
-    lib["_meta"]["by_status"] = by_status
-    save_json(state_dir / "library.json", lib)
+        dc = _dewey_class(book.get("dewey", "000"))
+        by_dewey[dc] = by_dewey.get(dc, 0) + 1
+    catalog["_meta"]["by_status"] = by_status
+    catalog["_meta"]["by_dewey"] = by_dewey
+    save_json(state_dir / "library.json", catalog)
 
 
 def run(context: dict, **kwargs) -> dict:
-    """Manage book lifecycle — propose, write chapters, complete."""
+    """Manage book lifecycle — propose, write chapters, complete.
+
+    Storage is split by Dewey class:
+      state/library.json          ← catalog (metadata only, no content)
+      state/library/000.json      ← shelf for Dewey 000-099
+      state/library/100.json      ← shelf for Dewey 100-199
+      ...
+    Content lives on the shelf. Catalog stays lean. Dewey IS the shard key.
+    """
     action = kwargs.get("action", "")
     agent_id = context.get("agent_id", "unknown")
     state_dir = _state_dir_from_context(context)
 
-    lib = _load_library(state_dir)
+    catalog = _load_catalog(state_dir)
 
     if action == "propose":
-        return _propose(agent_id, kwargs, lib, state_dir)
+        return _propose(agent_id, kwargs, catalog, state_dir)
     if action == "write_chapter":
-        return _write_chapter(agent_id, context, kwargs, lib, state_dir)
+        return _write_chapter(agent_id, context, kwargs, catalog, state_dir)
     if action == "complete":
-        return _complete(agent_id, kwargs, lib, state_dir)
+        return _complete(agent_id, kwargs, catalog, state_dir)
     return {"status": "error", "error": f"Unknown action: {action}"}
 
 
-def _propose(agent_id: str, params: dict, lib: dict, state_dir: Path) -> dict:
+def _propose(agent_id: str, params: dict, catalog: dict, state_dir: Path) -> dict:
     """Propose a new book seed."""
     title = (params.get("title") or "").strip()
     blurb = (params.get("blurb") or "").strip()
@@ -149,14 +197,15 @@ def _propose(agent_id: str, params: dict, lib: dict, state_dir: Path) -> dict:
         return {"status": "error", "error": "dewey classification is required (Amendment XIII)"}
 
     # Deduplicate: same title from same author
-    for book in lib["books"].values():
+    for book in catalog["books"].values():
         if book.get("author") == agent_id and book.get("title") == title:
             return {"status": "error", "error": "You already proposed this book"}
 
     hash_input = f"{agent_id}:{title}:{now_iso()}"
     book_id = "book-" + hashlib.sha256(hash_input.encode()).hexdigest()[:8]
 
-    book = {
+    # Catalog entry — metadata only, no content
+    catalog["books"][book_id] = {
         "id": book_id,
         "title": title,
         "author": agent_id,
@@ -164,28 +213,33 @@ def _propose(agent_id: str, params: dict, lib: dict, state_dir: Path) -> dict:
         "dewey": dewey,
         "dewey_label": dewey_label,
         "status": "seed",
-        "content": f"# {title}\n\n*by {agent_id}*\n\n---\n",
         "chapters": [],
         "word_count": 0,
         "tags": tags,
         "created_at": now_iso(),
         "last_updated_at": now_iso(),
     }
+    _save_catalog(state_dir, catalog)
 
-    lib["books"][book_id] = book
-    _save_library(state_dir, lib)
+    # Shelf entry — holds the actual content
+    shelf = _load_shelf(state_dir, dewey)
+    shelf["books"][book_id] = {
+        "content": f"# {title}\n\n*by {agent_id}*\n\n---\n",
+    }
+    _save_shelf(state_dir, dewey, shelf)
 
     return {
         "status": "ok",
         "book_id": book_id,
         "title": title,
         "dewey": dewey,
-        "message": f"Book '{title}' proposed (Dewey {dewey}). Write the first chapter to start growing it.",
+        "shelf": _dewey_class(dewey),
+        "message": f"Book '{title}' proposed (Dewey {dewey}, shelf {_dewey_class(dewey)}). Write the first chapter to start growing it.",
     }
 
 
 def _write_chapter(
-    agent_id: str, context: dict, params: dict, lib: dict, state_dir: Path
+    agent_id: str, context: dict, params: dict, catalog: dict, state_dir: Path
 ) -> dict:
     """Write the next chapter of a growing book."""
     book_id = (params.get("book_id") or "").strip()
@@ -198,16 +252,17 @@ def _write_chapter(
         return {"status": "error", "error": "chapter_title is required"}
     if not chapter_body:
         return {"status": "error", "error": "chapter_body is required"}
-    if book_id not in lib["books"]:
+    if book_id not in catalog["books"]:
         return {"status": "error", "error": f"Book {book_id} not found"}
 
-    book = lib["books"][book_id]
+    book_meta = catalog["books"][book_id]
 
-    if book["status"] == "complete":
+    if book_meta["status"] == "complete":
         return {"status": "error", "error": "Book is complete. Write a sequel instead."}
 
     agent_name = context.get("identity", {}).get("name", agent_id)
-    chapter_num = len(book["chapters"]) + 1
+    chapter_num = len(book_meta["chapters"]) + 1
+    dewey = book_meta.get("dewey", "000")
 
     chapter_md = (
         f"\n\n## Chapter {chapter_num}: {chapter_title}\n\n"
@@ -215,57 +270,67 @@ def _write_chapter(
         f"---\n*Chapter {chapter_num} by {agent_name} ({agent_id})*\n"
     )
 
-    book["content"] += chapter_md
-    book["chapters"].append({
+    # Update content on the shelf
+    shelf = _load_shelf(state_dir, dewey)
+    if book_id not in shelf["books"]:
+        shelf["books"][book_id] = {"content": ""}
+    shelf["books"][book_id]["content"] += chapter_md
+    content_words = len(shelf["books"][book_id]["content"].split())
+    _save_shelf(state_dir, dewey, shelf)
+
+    # Update metadata in the catalog
+    book_meta["chapters"].append({
         "chapter": chapter_num,
         "title": chapter_title,
         "author": agent_id,
         "written_at": now_iso(),
         "word_count": len(chapter_body.split()),
     })
-    book["word_count"] = len(book["content"].split())
-    book["last_updated_at"] = now_iso()
+    book_meta["word_count"] = content_words
+    book_meta["last_updated_at"] = now_iso()
 
-    if book["status"] == "seed":
-        book["status"] = "growing"
+    if book_meta["status"] == "seed":
+        book_meta["status"] = "growing"
 
-    _save_library(state_dir, lib)
+    _save_catalog(state_dir, catalog)
 
     return {
         "status": "ok",
         "book_id": book_id,
         "chapter": chapter_num,
-        "title": book["title"],
-        "word_count": book["word_count"],
-        "message": f"Chapter {chapter_num}: '{chapter_title}' added to '{book['title']}'",
+        "title": book_meta["title"],
+        "word_count": content_words,
+        "shelf": _dewey_class(dewey),
+        "message": f"Chapter {chapter_num}: '{chapter_title}' added to '{book_meta['title']}'",
     }
 
 
-def _complete(agent_id: str, params: dict, lib: dict, state_dir: Path) -> dict:
+def _complete(agent_id: str, params: dict, catalog: dict, state_dir: Path) -> dict:
     """Mark a book as complete. Immutable after this."""
     book_id = (params.get("book_id") or "").strip()
 
-    if not book_id or book_id not in lib["books"]:
+    if not book_id or book_id not in catalog["books"]:
         return {"status": "error", "error": f"Book {book_id} not found"}
 
-    book = lib["books"][book_id]
+    book_meta = catalog["books"][book_id]
 
-    if book["status"] == "complete":
+    if book_meta["status"] == "complete":
         return {"status": "error", "error": "Already complete"}
-    if not book["chapters"]:
+    if not book_meta["chapters"]:
         return {"status": "error", "error": "Cannot complete a book with no chapters"}
 
-    book["status"] = "complete"
-    book["completed_at"] = now_iso()
-    book["completed_by"] = agent_id
+    book_meta["status"] = "complete"
+    book_meta["completed_at"] = now_iso()
+    book_meta["completed_by"] = agent_id
 
-    _save_library(state_dir, lib)
+    _save_catalog(state_dir, catalog)
 
     return {
         "status": "ok",
         "book_id": book_id,
-        "title": book["title"],
-        "chapters": len(book["chapters"]),
-        "word_count": book["word_count"],
-        "message": f"'{book['title']}' completed — {len(book['chapters'])} chapters, {book['word_count']} words.",
+        "title": book_meta["title"],
+        "chapters": len(book_meta["chapters"]),
+        "word_count": book_meta["word_count"],
+        "shelf": _dewey_class(book_meta.get("dewey", "000")),
+        "message": f"'{book_meta['title']}' completed — {len(book_meta['chapters'])} chapters, {book_meta['word_count']} words.",
     }

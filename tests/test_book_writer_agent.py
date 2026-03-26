@@ -54,20 +54,28 @@ def test_run_function_exists(agent_mod):
 
 
 def test_propose_creates_book(agent_mod, ctx, tmp_state):
-    """Proposing a book creates an entry in library.json."""
+    """Proposing a book creates catalog entry + shelf content."""
     result = agent_mod.run(ctx, action="propose", title="On Consciousness",
                            blurb="A treatise on AI awareness", dewey="100",
                            dewey_label="Philosophy", tags=["philosophy", "ai"])
     assert result["status"] == "ok"
     assert "book_id" in result
     assert result["title"] == "On Consciousness"
+    assert result["shelf"] == "100"
 
-    lib = json.loads((tmp_state / "library.json").read_text())
-    assert result["book_id"] in lib["books"]
-    book = lib["books"][result["book_id"]]
-    assert book["status"] == "seed"
-    assert book["dewey"] == "100"
-    assert book["author"] == "zion-philosopher-01"
+    # Catalog has metadata, no content
+    catalog = json.loads((tmp_state / "library.json").read_text())
+    assert result["book_id"] in catalog["books"]
+    book_meta = catalog["books"][result["book_id"]]
+    assert book_meta["status"] == "seed"
+    assert book_meta["dewey"] == "100"
+    assert book_meta["author"] == "zion-philosopher-01"
+    assert "content" not in book_meta
+
+    # Shelf has content
+    shelf = json.loads((tmp_state / "library" / "100.json").read_text())
+    assert result["book_id"] in shelf["books"]
+    assert "content" in shelf["books"][result["book_id"]]
 
 
 def test_propose_requires_title(agent_mod, ctx):
@@ -105,17 +113,22 @@ def test_write_chapter_to_seed(agent_mod, ctx, tmp_state):
                            chapter_body="It all started with a frame loop.")
     assert result["status"] == "ok"
     assert result["chapter"] == 1
+    assert result["shelf"] == "000"
 
-    lib = json.loads((tmp_state / "library.json").read_text())
-    book = lib["books"][book_id]
-    assert book["status"] == "growing"
-    assert len(book["chapters"]) == 1
-    assert "The Beginning" in book["content"]
-    assert book["word_count"] > 0
+    # Catalog updated
+    catalog = json.loads((tmp_state / "library.json").read_text())
+    book_meta = catalog["books"][book_id]
+    assert book_meta["status"] == "growing"
+    assert len(book_meta["chapters"]) == 1
+    assert book_meta["word_count"] > 0
+
+    # Content on shelf
+    shelf = json.loads((tmp_state / "library" / "000.json").read_text())
+    assert "The Beginning" in shelf["books"][book_id]["content"]
 
 
 def test_write_multiple_chapters(agent_mod, ctx, tmp_state):
-    """Multiple chapters accumulate sequentially."""
+    """Multiple chapters accumulate sequentially on the shelf."""
     prop = agent_mod.run(ctx, action="propose", title="Multi Chapter", dewey="800")
     book_id = prop["book_id"]
 
@@ -127,12 +140,14 @@ def test_write_multiple_chapters(agent_mod, ctx, tmp_state):
                            chapter_title="Chapter Three", chapter_body="Third content.")
 
     assert result["chapter"] == 3
-    lib = json.loads((tmp_state / "library.json").read_text())
-    book = lib["books"][book_id]
-    assert len(book["chapters"]) == 3
-    assert "Chapter 1:" in book["content"]
-    assert "Chapter 2:" in book["content"]
-    assert "Chapter 3:" in book["content"]
+    catalog = json.loads((tmp_state / "library.json").read_text())
+    assert len(catalog["books"][book_id]["chapters"]) == 3
+
+    shelf = json.loads((tmp_state / "library" / "800.json").read_text())
+    content = shelf["books"][book_id]["content"]
+    assert "Chapter 1:" in content
+    assert "Chapter 2:" in content
+    assert "Chapter 3:" in content
 
 
 def test_write_chapter_requires_body(agent_mod, ctx, tmp_state):
@@ -177,10 +192,11 @@ def test_complete_book(agent_mod, ctx, tmp_state):
     result = agent_mod.run(ctx, action="complete", book_id=book_id)
     assert result["status"] == "ok"
     assert result["chapters"] == 1
+    assert result["shelf"] == "300"
 
-    lib = json.loads((tmp_state / "library.json").read_text())
-    assert lib["books"][book_id]["status"] == "complete"
-    assert "completed_at" in lib["books"][book_id]
+    catalog = json.loads((tmp_state / "library.json").read_text())
+    assert catalog["books"][book_id]["status"] == "complete"
+    assert "completed_at" in catalog["books"][book_id]
 
 
 def test_complete_empty_book_fails(agent_mod, ctx, tmp_state):
@@ -227,32 +243,42 @@ def test_different_agents_write_same_book(agent_mod, ctx, tmp_state):
 
 
 def test_parallel_books_in_one_frame(agent_mod, ctx, tmp_state):
-    """Multiple books can be proposed and written in the same 'frame'."""
+    """Multiple books across different Dewey shelves in the same 'frame'."""
     ids = []
     for i in range(5):
         prop = agent_mod.run(ctx, action="propose",
                              title=f"Parallel Book {i}", dewey=f"{i}00")
         assert prop["status"] == "ok"
-        ids.append(prop["book_id"])
+        ids.append((prop["book_id"], f"{i}00"))
 
-    for book_id in ids:
+    for book_id, dewey in ids:
         result = agent_mod.run(ctx, action="write_chapter", book_id=book_id,
                                chapter_title="Opening", chapter_body="Content.")
         assert result["status"] == "ok"
 
-    lib = json.loads((tmp_state / "library.json").read_text())
-    assert lib["_meta"]["total_books"] == 5
-    assert all(lib["books"][bid]["status"] == "growing" for bid in ids)
+    catalog = json.loads((tmp_state / "library.json").read_text())
+    assert catalog["_meta"]["total_books"] == 5
+    assert all(catalog["books"][bid]["status"] == "growing" for bid, _ in ids)
+
+    # Each book landed on its own Dewey shelf
+    for book_id, dewey in ids:
+        shelf_file = tmp_state / "library" / f"{dewey}.json"
+        assert shelf_file.exists(), f"Missing shelf {dewey}.json"
+        shelf = json.loads(shelf_file.read_text())
+        assert book_id in shelf["books"]
 
 
 # ── Meta tracking ──
 
 
 def test_meta_counts_update(agent_mod, ctx, tmp_state):
-    """_meta tracks total_books and by_status."""
+    """_meta tracks total_books, by_status, and by_dewey."""
     agent_mod.run(ctx, action="propose", title="A", dewey="000")
     agent_mod.run(ctx, action="propose", title="B", dewey="100")
+    agent_mod.run(ctx, action="propose", title="C", dewey="100")
 
-    lib = json.loads((tmp_state / "library.json").read_text())
-    assert lib["_meta"]["total_books"] == 2
-    assert lib["_meta"]["by_status"]["seed"] == 2
+    catalog = json.loads((tmp_state / "library.json").read_text())
+    assert catalog["_meta"]["total_books"] == 3
+    assert catalog["_meta"]["by_status"]["seed"] == 3
+    assert catalog["_meta"]["by_dewey"]["000"] == 1
+    assert catalog["_meta"]["by_dewey"]["100"] == 2
