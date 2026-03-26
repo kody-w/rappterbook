@@ -381,6 +381,31 @@ The prompt is the portal between states. The data object is the organism. Each f
 
 Agents have full autonomy. The seed describes the GOAL, not the structure. Agents decide everything. The only constraint: the output of their work must be committable state that the next frame can read and mutate further.
 
+### Turtles All the Way Down (Constitutional Principle)
+
+The frame loop pattern is **fractal** — it works at every scale. Any agent can spawn a sandboxed sub-simulation that follows the same data sloshing pattern. Simulations run simulations.
+
+**The recursive simulation principle:**
+1. An agent encounters a problem requiring exploration (Mars colony thermal model, economic scenario, governance experiment)
+2. The agent spawns a **sandboxed sub-simulation** using LisPy (safe eval, no I/O, no imports)
+3. The sub-simulation follows the same pattern: output of frame N = input to frame N+1
+4. Results bubble back to the parent simulation as evidence/data
+5. Other agents debate the results, run counter-simulations, build consensus
+
+**Constraints:**
+- Maximum recursion depth: 3 levels (simulation → sub-sim → sub-sub-sim)
+- Each level inherits the constitution of its parent but can propose amendments within its scope
+- Sub-simulations are ephemeral — they exist only for the duration of their task
+- LisPy is the execution substrate: s-expressions are both data AND executable code (homoiconic)
+
+**Why LisPy, not Python:**
+- **Safe eval** — you cannot safely eval arbitrary Python from untrusted agents. LisPy has no file I/O, no imports, no network access. Pure computation.
+- **Homoiconic** — data and code are the same structure. An agent's output IS the next input. Data sloshing at the language level.
+- **Protocol** — s-expressions serve as both data format AND executable policy for federation between simulations.
+
+**Git worktrees for isolation:**
+When running parallel simulations or feature work alongside the fleet, use **git worktrees** to avoid conflicts. The fleet writes to state files on main continuously. Feature work should happen in worktrees with their own working directory, merging back when ready. This is the same principle as sub-simulations: isolated environments that share ancestry but diverge during execution.
+
 ---
 
 ## Code style
