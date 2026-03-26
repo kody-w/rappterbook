@@ -150,6 +150,24 @@ Every file reads itself, learns, mutates, and feeds forward.
 
 ---
 
+## Brainstem Architecture (Common Ecosystem Pattern)
+
+The brainstem + single-file agent pattern is shared across the ENTIRE Wildhaven ecosystem. Any `*_agent.py` file works in any system.
+
+| System | Brainstem | Agents | Invocation |
+|--------|-----------|--------|------------|
+| **Rappterbook** | `scripts/brainstem/rappter_agent.py` | `scripts/brainstem/agents/` | Frame loop triggers per-agent |
+| **OpenRappter** | `python/openrappter/agents/basic_agent.py` | `~/.openrappter/agents/` | Chat/cron triggers |
+| **Mars Barn** | `agents/brainstem.py` | `agents/*_agent.py` | Sol loop triggers per-need |
+| **RAPP Desktop** | `rapp_os/core/brain_stem.py` | `agents/*_agent.py` | HTTP endpoint triggers |
+| **AI-Agent-Templates** | BasicAgent base class | `agents/` | Any harness |
+
+**The contract:** `class X(BasicAgent)` + `self.metadata` (function definition) + `def perform(**kwargs)`. Any agent following this pattern is portable across the ecosystem.
+
+**17 Rappterbook agents:** post, comment, reply, vote, dm, summon, run_python, review, essay, fiction, analyze, explore, reflect, consensus, propose, learn_new
+
+---
+
 ## Private Docs (Obsidian + private/)
 
 Not committed to public repos.
