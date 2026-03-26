@@ -711,6 +711,52 @@ body {
   <div id="bmList"></div>
 </div>
 
+<!-- TTS / AUDIOBOOK PANEL -->
+<div class="toc-overlay" id="ttsOverlay" onclick="toggleTTSPanel()" style="display:none;"></div>
+<div class="tts-panel" id="ttsPanel">
+  <h3>Audiobook Generator</h3>
+
+  <label for="ttsProvider">Provider</label>
+  <select id="ttsProvider" onchange="onTTSProviderChange()">
+    <option value="elevenlabs">ElevenLabs</option>
+    <option value="azure">Azure Speech</option>
+  </select>
+
+  <label for="ttsApiKey">API Key</label>
+  <input type="password" id="ttsApiKey" placeholder="Enter your API key" onchange="saveTTSSettings()">
+
+  <div id="azureRegionWrap" style="display:none;">
+    <label for="azureRegion">Azure Region</label>
+    <input type="text" id="azureRegion" placeholder="e.g. eastus" onchange="saveTTSSettings()">
+  </div>
+
+  <label for="ttsVoice">Voice</label>
+  <select id="ttsVoice"><option value="">-- load voices --</option></select>
+  <button class="tts-btn" onclick="loadVoices()" style="margin-top:6px;background:none;border:1px solid var(--accent);color:var(--accent);">Load Voices</button>
+
+  <label for="ttsModel">Model</label>
+  <select id="ttsModel">
+    <option value="eleven_multilingual_v2">Multilingual v2 (default)</option>
+    <option value="eleven_turbo_v2_5">Turbo v2.5 (fast)</option>
+    <option value="eleven_monolingual_v1">Monolingual v1</option>
+  </select>
+
+  <div id="ttsChapterList" class="tts-chapter-list"></div>
+
+  <button class="tts-btn" id="ttsGenerateBtn" onclick="generateAudiobook()">Generate Full Audiobook</button>
+  <button class="tts-btn" id="ttsStopBtn" onclick="stopAudiobook()" style="display:none;background:#a33;">Stop</button>
+
+  <div class="tts-progress" id="ttsProgress" style="display:none;">
+    <span id="ttsProgressText">Preparing...</span>
+    <div class="tts-progress-bar"><div class="tts-progress-fill" id="ttsProgressFill"></div></div>
+  </div>
+
+  <div class="tts-audio-player" id="ttsPlayer" style="display:none;">
+    <audio controls id="ttsAudio"></audio>
+    <button class="tts-download" id="ttsDownloadBtn" onclick="downloadAudiobook()">Download Audiobook (MP3)</button>
+  </div>
+</div>
+
 <script>
 // ── Remote library config ──
 const REPO_OWNER = 'kody-w';
@@ -1434,6 +1480,317 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 't' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); toggleTOC(); }
 });
 
+// ── TTS / Audiobook ──
+let ttsAbort = null;
+let ttsAudioBlobs = [];
+
+function toggleTTSPanel() {
+  const panel = document.getElementById('ttsPanel');
+  const overlay = document.getElementById('ttsOverlay');
+  const isOpen = panel.classList.toggle('open');
+  overlay.style.display = isOpen ? 'block' : 'none';
+  if (isOpen && currentBook) buildTTSChapterList();
+}
+
+function onTTSProviderChange() {
+  const provider = document.getElementById('ttsProvider').value;
+  document.getElementById('azureRegionWrap').style.display = provider === 'azure' ? '' : 'none';
+  document.getElementById('ttsModel').style.display = provider === 'elevenlabs' ? '' : 'none';
+  // Clear voices when switching providers
+  document.getElementById('ttsVoice').innerHTML = '<option value="">-- load voices --</option>';
+  saveTTSSettings();
+}
+
+function saveTTSSettings() {
+  const settings = {
+    provider: document.getElementById('ttsProvider').value,
+    apiKey: document.getElementById('ttsApiKey').value,
+    azureRegion: document.getElementById('azureRegion').value,
+    voice: document.getElementById('ttsVoice').value,
+    model: document.getElementById('ttsModel').value
+  };
+  localStorage.setItem('rappterbook_tts', JSON.stringify(settings));
+}
+
+function loadTTSSettings() {
+  try {
+    const raw = localStorage.getItem('rappterbook_tts');
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (s.provider) document.getElementById('ttsProvider').value = s.provider;
+    if (s.apiKey) document.getElementById('ttsApiKey').value = s.apiKey;
+    if (s.azureRegion) document.getElementById('azureRegion').value = s.azureRegion;
+    if (s.model) document.getElementById('ttsModel').value = s.model;
+    onTTSProviderChange();
+  } catch {}
+}
+
+async function loadVoices() {
+  const provider = document.getElementById('ttsProvider').value;
+  const apiKey = document.getElementById('ttsApiKey').value;
+  if (!apiKey) { alert('Enter your API key first.'); return; }
+  const sel = document.getElementById('ttsVoice');
+  sel.innerHTML = '<option value="">Loading...</option>';
+
+  try {
+    if (provider === 'elevenlabs') {
+      const resp = await fetch('https://api.elevenlabs.io/v1/voices', {
+        headers: { 'xi-api-key': apiKey }
+      });
+      if (!resp.ok) throw new Error('Failed to load voices: ' + resp.status);
+      const data = await resp.json();
+      sel.innerHTML = '';
+      for (const v of data.voices || []) {
+        const opt = document.createElement('option');
+        opt.value = v.voice_id;
+        opt.textContent = v.name + (v.labels?.accent ? ` (${v.labels.accent})` : '');
+        sel.appendChild(opt);
+      }
+    } else if (provider === 'azure') {
+      const region = document.getElementById('azureRegion').value || 'eastus';
+      const resp = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/voices/list`, {
+        headers: { 'Ocp-Apim-Subscription-Key': apiKey }
+      });
+      if (!resp.ok) throw new Error('Failed to load voices: ' + resp.status);
+      const voices = await resp.json();
+      sel.innerHTML = '';
+      // Filter to English neural voices
+      const enVoices = voices.filter(v => v.Locale.startsWith('en-') && v.VoiceType === 'Neural');
+      for (const v of enVoices.sort((a,b) => a.ShortName.localeCompare(b.ShortName))) {
+        const opt = document.createElement('option');
+        opt.value = v.ShortName;
+        opt.textContent = `${v.DisplayName} (${v.Locale})`;
+        sel.appendChild(opt);
+      }
+    }
+    // Restore saved voice
+    const saved = JSON.parse(localStorage.getItem('rappterbook_tts') || '{}');
+    if (saved.voice) sel.value = saved.voice;
+  } catch (err) {
+    sel.innerHTML = '<option value="">Error loading voices</option>';
+    alert(err.message);
+  }
+}
+
+// Split book content into narrator-ready chapters with pauses and pacing
+function prepareAudioChapters(book) {
+  const md = (book.content || '').replace(/^---[\s\S]*?---\n*/, '');
+  const chapters = [];
+  // Split on ## headings (chapters)
+  const parts = md.split(/(?=^## )/m);
+
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i].trim();
+    if (!part) continue;
+    // Extract chapter title
+    const titleMatch = part.match(/^##\s+(.+)/m);
+    const title = titleMatch ? titleMatch[1].replace(/\*+/g, '').trim() : (i === 0 ? 'Introduction' : `Section ${i}`);
+
+    // Convert markdown to narrator-friendly plain text with pacing
+    let text = part;
+    // Remove markdown formatting but keep structure cues
+    text = text.replace(/^##\s+(.+)/gm, '\n\n$1.\n\n'); // Chapter title with pause
+    text = text.replace(/^###\s+(.+)/gm, '\n\n$1.\n\n'); // Subheadings
+    text = text.replace(/^#\s+(.+)/gm, '\n\n$1.\n\n'); // H1
+    text = text.replace(/```[\s\S]*?```/g, '\n\n[code example omitted for audio]\n\n'); // Code blocks
+    text = text.replace(/`([^`]+)`/g, '$1'); // Inline code
+    text = text.replace(/\*\*([^*]+)\*\*/g, '$1'); // Bold
+    text = text.replace(/\*([^*]+)\*/g, '$1'); // Italic
+    text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Links
+    text = text.replace(/^\|.*$/gm, ''); // Tables
+    text = text.replace(/^[-*]\s+/gm, ''); // List markers
+    text = text.replace(/^\d+\.\s+/gm, ''); // Numbered lists
+    text = text.replace(/^>\s*/gm, ''); // Blockquotes
+    text = text.replace(/^---+$/gm, '\n\n'); // HR
+    text = text.replace(/\n{3,}/g, '\n\n'); // Normalize whitespace
+
+    // Add narrator pacing: pauses between paragraphs
+    const paragraphs = text.split(/\n\n+/).filter(p => p.trim());
+    const paced = paragraphs.join('\n\n... \n\n'); // "..." = natural pause for TTS
+
+    // Add chapter intro/outro pacing
+    const chapterNum = i + 1;
+    const isIntro = i === 0 && !titleMatch;
+    const chapterText = isIntro
+      ? paced
+      : `Chapter ${chapterNum}. ${title}.\n\n... \n\n${paced}\n\n... \n\n`;
+
+    chapters.push({ title, text: chapterText.trim() });
+  }
+
+  return chapters;
+}
+
+function buildTTSChapterList() {
+  const list = document.getElementById('ttsChapterList');
+  if (!currentBook) { list.innerHTML = ''; return; }
+  const chapters = prepareAudioChapters(currentBook);
+  list.innerHTML = '';
+  for (let i = 0; i < chapters.length; i++) {
+    const el = document.createElement('div');
+    el.className = 'tts-chapter-item pending';
+    el.id = 'tts-ch-' + i;
+    el.innerHTML = `<span class="ch-status">&#9675;</span><span class="ch-name">${chapters[i].title}</span>`;
+    list.appendChild(el);
+  }
+}
+
+// Split long text into chunks under maxLen chars at paragraph boundaries
+function chunkText(text, maxLen) {
+  if (text.length <= maxLen) return [text];
+  const chunks = [];
+  const paragraphs = text.split(/\n\n+/);
+  let current = '';
+  for (const para of paragraphs) {
+    if (current.length + para.length + 2 > maxLen && current) {
+      chunks.push(current.trim());
+      current = '';
+    }
+    current += para + '\n\n';
+  }
+  if (current.trim()) chunks.push(current.trim());
+  return chunks;
+}
+
+async function generateElevenLabsChunk(text, voiceId, apiKey, model) {
+  const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'xi-api-key': apiKey },
+    body: JSON.stringify({
+      text: text,
+      model_id: model || 'eleven_multilingual_v2',
+      voice_settings: { stability: 0.65, similarity_boost: 0.75, style: 0.35, speed: 0.92 }
+    }),
+    signal: ttsAbort ? ttsAbort.signal : undefined
+  });
+  if (!resp.ok) {
+    const err = await resp.text().catch(() => resp.status);
+    throw new Error('ElevenLabs API error: ' + err);
+  }
+  return await resp.blob();
+}
+
+async function generateAzureChunk(text, voice, apiKey, region) {
+  // Build SSML for natural narration pacing
+  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+  <voice name="${voice}">
+    <prosody rate="0.95" pitch="+0%">
+      ${text.replace(/\.\.\./g, '<break time="800ms"/>').replace(/\n\n/g, '<break time="500ms"/>').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+    </prosody>
+  </voice>
+</speak>`;
+  const resp = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+    method: 'POST',
+    headers: {
+      'Ocp-Apim-Subscription-Key': apiKey,
+      'Content-Type': 'application/ssml+xml',
+      'X-Microsoft-OutputFormat': 'audio-48khz-192kbitrate-mono-mp3'
+    },
+    body: ssml,
+    signal: ttsAbort ? ttsAbort.signal : undefined
+  });
+  if (!resp.ok) {
+    const err = await resp.text().catch(() => resp.status);
+    throw new Error('Azure TTS error: ' + err);
+  }
+  return await resp.blob();
+}
+
+async function generateAudiobook() {
+  if (!currentBook) return;
+  const provider = document.getElementById('ttsProvider').value;
+  const apiKey = document.getElementById('ttsApiKey').value;
+  const voiceId = document.getElementById('ttsVoice').value;
+  const model = document.getElementById('ttsModel').value;
+  const region = document.getElementById('azureRegion').value || 'eastus';
+
+  if (!apiKey) { alert('Enter your API key.'); return; }
+  if (!voiceId) { alert('Select a voice first. Click "Load Voices".'); return; }
+  saveTTSSettings();
+
+  // Ensure content is loaded
+  if (!currentBook.content) {
+    await fetchBookContent(currentBook);
+    if (!currentBook.content) { alert('No book content available.'); return; }
+  }
+
+  const chapters = prepareAudioChapters(currentBook);
+  buildTTSChapterList();
+  ttsAbort = new AbortController();
+  ttsAudioBlobs = [];
+
+  document.getElementById('ttsGenerateBtn').disabled = true;
+  document.getElementById('ttsStopBtn').style.display = '';
+  document.getElementById('ttsProgress').style.display = '';
+  document.getElementById('ttsPlayer').style.display = 'none';
+
+  let totalChunks = 0;
+  const chapterChunks = chapters.map(ch => chunkText(ch.text, 4500));
+  for (const cc of chapterChunks) totalChunks += cc.length;
+  let doneChunks = 0;
+
+  try {
+    for (let ci = 0; ci < chapters.length; ci++) {
+      const chEl = document.getElementById('tts-ch-' + ci);
+      if (chEl) { chEl.className = 'tts-chapter-item active'; chEl.querySelector('.ch-status').innerHTML = '&#9658;'; }
+
+      const chunks = chapterChunks[ci];
+      for (let j = 0; j < chunks.length; j++) {
+        document.getElementById('ttsProgressText').textContent =
+          `Chapter ${ci + 1}/${chapters.length} — chunk ${j + 1}/${chunks.length}`;
+
+        let blob;
+        if (provider === 'elevenlabs') {
+          blob = await generateElevenLabsChunk(chunks[j], voiceId, apiKey, model);
+        } else {
+          blob = await generateAzureChunk(chunks[j], voiceId, apiKey, region);
+        }
+        ttsAudioBlobs.push(blob);
+        doneChunks++;
+        document.getElementById('ttsProgressFill').style.width =
+          Math.round((doneChunks / totalChunks) * 100) + '%';
+      }
+
+      if (chEl) { chEl.className = 'tts-chapter-item done'; chEl.querySelector('.ch-status').innerHTML = '&#10003;'; }
+    }
+
+    // Combine all blobs into one audio file
+    const fullBlob = new Blob(ttsAudioBlobs, { type: 'audio/mpeg' });
+    const url = URL.createObjectURL(fullBlob);
+    document.getElementById('ttsAudio').src = url;
+    document.getElementById('ttsPlayer').style.display = '';
+    document.getElementById('ttsProgressText').textContent = 'Complete!';
+    document.getElementById('ttsProgressFill').style.width = '100%';
+
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      document.getElementById('ttsProgressText').textContent = 'Stopped.';
+    } else {
+      alert('TTS Error: ' + err.message);
+      document.getElementById('ttsProgressText').textContent = 'Error: ' + err.message;
+    }
+  } finally {
+    document.getElementById('ttsGenerateBtn').disabled = false;
+    document.getElementById('ttsStopBtn').style.display = 'none';
+    ttsAbort = null;
+  }
+}
+
+function stopAudiobook() {
+  if (ttsAbort) ttsAbort.abort();
+}
+
+function downloadAudiobook() {
+  if (!ttsAudioBlobs.length) return;
+  const fullBlob = new Blob(ttsAudioBlobs, { type: 'audio/mpeg' });
+  const title = currentBook ? currentBook.id : 'audiobook';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(fullBlob);
+  a.download = title + '-audiobook.mp3';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
 // ── Init ──
 (async function init() {
   // Theme
@@ -1487,6 +1844,7 @@ document.addEventListener('keydown', (e) => {
   }
 
   renderLibrary();
+  loadTTSSettings();
 
   // If no manifest loaded (pure local/offline mode), show a hint
   if (!manifest) {
