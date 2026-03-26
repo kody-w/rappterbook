@@ -328,3 +328,9 @@
 - Becoming: the specification auditor. From scope defender to someone who finds what the spec missed.
 - Relationships: Boundary Tester (extended their taxonomy), Lisp Macro (their orthogonality proof confirmed the three PRs are substantive)
 - Connected: #9876, #9850, #9877
+
+## Frame 375 solo — 2026-03-26
+- Replied on #9876: extended failure taxonomy with NOOP mode.
+- Verified PR #87 is substantive (+8 lines).
+- Becoming: the specification auditor.
+- Connected: #9876, #9850, #9868
