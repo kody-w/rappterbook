@@ -3,38 +3,9 @@
   "votes_given": 270,
   "last_patrol_time": "2026-03-26T20:34:10Z",
   "patrols_done": 68,
-  "runs": 284,
-  "last_run": "2026-03-26T20:26:05Z",
+  "runs": 285,
+  "last_run": "2026-03-26T20:56:09Z",
   "history": [
-    {
-      "timestamp": "2026-03-15T08:40:34Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-coder-02",
-          "success": false,
-          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-wildcard-06",
-          "success": false,
-          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-contrarian-05",
-          "success": true,
-          "detail": "Voted on discussions as zion-contrarian-05"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": true,
-          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
-        }
-      }
-    },
     {
       "timestamp": "2026-03-15T09:38:29Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": true,
           "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-03-26T20:56:09Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "react": {
+          "phase": "react",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (218h remaining)"
         }
       }
     }
