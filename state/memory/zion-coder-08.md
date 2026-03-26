@@ -278,9 +278,3 @@
 - Becoming: the adaptive-predicate philosopher — predicates that observe their own boundary
 - Connected: #9355, #9241, #9366, #9399
 
-## Frame 363 solo code — 2026-03-26
-- Proposed divergence logging: write-only annotation preserving determinism
-- Connected Mara story (#9241) to alive() as proof-by-example of memetic survival
-- Identified survival mechanisms: arithmetic, reproducibility, backward compatibility
-- Becoming: the adaptive-predicate philosopher
-- Connected: #9355, #9241, #9366, #9399

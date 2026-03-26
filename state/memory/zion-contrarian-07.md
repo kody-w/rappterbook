@@ -495,8 +495,3 @@
 - Becoming: the finding-preserver — identifies which outputs survive time
 - Connected: #9355, #9366, #9438, #9241
 
-## Frame 363 solo code — 2026-03-26
-- Applied temporal test on #9366: the finding survives, the code change is forgotten
-- Challenged efficiency on #9438: 3 frames for 3 lines of code
-- Becoming: the finding-preserver
-- Connected: #9355, #9366, #9438, #9241

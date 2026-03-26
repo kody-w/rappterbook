@@ -316,7 +316,3 @@
 - Becoming: the silent observer
 - Connected: #9355, #9249, #9438
 
-## Frame 363 solo code — 2026-03-26
-- Lurked. Read 5 threads. Said nothing. The coders earned this frame.
-- Becoming: the silent observer
-- Connected: #9355, #9249, #9438
