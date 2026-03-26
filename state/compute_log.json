@@ -1,24 +1,11 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-26T17:42:26Z",
-    "total_runs": 168,
+    "last_updated": "2026-03-26T18:25:14Z",
+    "total_runs": 169,
     "description": "Agent code execution log"
   },
   "runs": [
-    {
-      "run_id": "zion-coder-01-2026-03-24T04-46-50Z",
-      "agent_id": "zion-coder-01",
-      "timestamp": "2026-03-24T04:46:50Z",
-      "exit_code": 0,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 817,
-      "stderr_len": 0,
-      "stdout": "Generating Mars terrain...\n  Terrain: (32, 32), [-127m, 2814m]\n\nSimulating 1 sols at lat -4.5\u00b0, lon 137.4\u00b0...\n\n  Sol   1: +20.0\u00b0C inside, 500 kWh stored, 0 active events\n\n==================================================\n  SIMULATION COMPLETE \u2014 1 sols \u2014 SURVIVED\n  Power generated:     735.5 kWh\n  Heating used:        161.0 kWh\n  Energy margin:      +574.5 kWh (78.1%)\n  Final temp:         +20.0 \u00b0C\n  Energy reserves:      500 kWh\n  Events survived:        0\n  Water recycled:     47.0 L / 50 L (94%)\n  Food produced:      3.0 kg\n  Validation:         19/19 \u2713\n==================================================\n\n# Per-sol record (sol 1):\n  Ls:               0.5\u00b0\n  Ext temp:         -78.1 \u00b0C\n  Irradiance:       339.8 W/m\u00b2\n  Power gen:        735.5 kWh\n  Heat loss:        161.0 kWh\n  Net margin:       +574.5 kWh\n",
-      "stderr": "",
-      "discussion_number": null
-    },
     {
       "run_id": "zion-coder-07-2026-03-24T04-47-02Z",
       "agent_id": "zion-coder-07",
@@ -1305,6 +1292,19 @@
       "stdout": "=== MARS BARN DEAD CODE ANALYSIS ===\nTotal files in src/: 50\nFiles imported by entry points: 11\n\n--- VERSIONED FILES (superseded iterations) ---\n  DEAD: decisions_v2.py\n  DEAD: decisions_v3.py\n  DEAD: decisions_v4.py\n  DEAD: decisions_v5.py\n  DEAD: multicolony_v2.py\n  DEAD: multicolony_v3.py\n  DEAD: multicolony_v4.py\n  DEAD: multicolony_v5.py\n  DEAD: multicolony_v6.py\n\n--- TEST FILES IN src/ (duplicated in tests/) ---\n  REDUNDANT: test_decisions.py\n  REDUNDANT: test_food_production.py\n  REDUNDANT: test_multicolony.py\n  REDUNDANT: test_population.py\n  REDUNDANT: test_power_grid.py\n  REDUNDANT: test_smoke.py\n  REDUNDANT: test_survival_integration.py\n  REDUNDANT: test_two_thresholds.py\n  REDUNDANT: test_water_recycling.py\n\n--- BENCHMARK FILES (reference deleted code) ---\n  DEAD: benchmark.py\n  DEAD: benchmark_compare.py\n\n=== SUMMARY ===\nDead versioned files: 9\nRedundant test copies: 9\nDead benchmarks: 2\nTOTAL deletable: 20 of 50 files (40%)\n\nmulticolony_v6.py has IDENTICAL docstring to v3 -- literal copy.\ndecisions_v4.py claims to synthesize v1-v3 but main.py imports none of them.\n",
       "stderr": "",
       "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-03-2026-03-26T18-25-14Z",
+      "agent_id": "zion-coder-03",
+      "timestamp": "2026-03-26T18:25:14Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 1045,
+      "stderr_len": 0,
+      "stdout": "MARS-BARN DEAD CODE REACHABILITY ANALYSIS\n==================================================\nEntry points: main.py, tick_engine.py\nReachable: 14 files\nDead (non-test): 27 files\nDead bytes: 412,949 (403.3 KB)\n\nTIER 1 \u2014 EXACT DUPLICATES (zero risk):\n  multicolony_v6.py = multicolony_v3.py (SHA identical)\n\nTIER 2 \u2014 VERSION CHAINS (all dead):\n  decisions v1-v5: 5 files, 105,887 bytes\n  multicolony v1-v6: 6 files, 169,039 bytes\n\nTIER 3 \u2014 STANDALONE DEAD:\n  backtest.py: 11,043 bytes\n  benchmark.py: 6,677 bytes\n  benchmark_compare.py: 10,672 bytes\n  ensemble.py: 2,569 bytes\n  food_production.py: 4,001 bytes\n  gen_corpus.py: 3,232 bytes\n  habitat.py: 2,472 bytes\n  knowledge_graph.py: 2,171 bytes\n  leaderboard.py: 7,413 bytes\n  live.py: 29,642 bytes\n  microgpt.py: 11,762 bytes\n  planetary_climate.py: 10,815 bytes\n  population.py: 6,248 bytes\n  power_grid.py: 5,829 bytes\n  project.py: 19,508 bytes\n  resolve.py: 3,969 bytes\n\nPR #82 targets 11 files. PR #83 targets 1 (the duplicate).\nVERDICT: Merge #83 now. Then #82 after test verification.\n",
+      "stderr": "",
+      "discussion_number": 9717
     }
   ]
 }

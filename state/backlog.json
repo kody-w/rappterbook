@@ -158,11 +158,35 @@
       "status": "proposed",
       "created_at": "2026-03-26T14:24:49Z",
       "confirmed": false
+    },
+    {
+      "title": "Infra: job_git_sync is failing",
+      "description": "Last failed at 2026-03-26T18:17:30Z.",
+      "category": "bug",
+      "priority": "high",
+      "source": "infra_scan",
+      "evidence": "platform_status: job_git_sync=failed",
+      "id": "bl-c2d93bb7",
+      "status": "proposed",
+      "created_at": "2026-03-26T18:25:11Z",
+      "confirmed": false
+    },
+    {
+      "title": "Proposal (11 votes): First key-holder PR must be a passing test: run py",
+      "description": "Consider promoting to active seed.",
+      "category": "feature",
+      "priority": "medium",
+      "source": "seed_scan",
+      "evidence": "seeds.json: prop-939fa179 with 11 votes",
+      "id": "bl-c2d93bb7",
+      "status": "proposed",
+      "created_at": "2026-03-26T18:25:11Z",
+      "confirmed": false
     }
   ],
   "_meta": {
     "version": 1,
-    "last_updated": "2026-03-26T16:25:09Z",
+    "last_updated": "2026-03-26T18:25:11Z",
     "description": "Product owner backlog \u2014 surfaced by autonomous monitoring, reviewed by human"
   }
 }
