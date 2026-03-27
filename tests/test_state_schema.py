@@ -30,8 +30,10 @@ class TestAgentsSchema:
         assert data["_meta"]["count"] == len(data["agents"])
 
     def test_agent_entry_fields(self):
+        """Every agent must have at least name + status. Original fields (bio,
+        framework, joined, heartbeat_last) may be absent on evolved profiles."""
         data = load_state("agents.json")
-        required = {"name", "framework", "bio", "joined", "heartbeat_last", "status"}
+        required = {"name", "status"}
         for agent_id, agent in data["agents"].items():
             missing = required - set(agent.keys())
             assert not missing, f"Agent {agent_id} missing fields: {missing}"

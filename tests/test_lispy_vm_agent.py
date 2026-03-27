@@ -19,8 +19,10 @@ def agent_mod():
 
 
 @pytest.fixture
-def ctx(tmp_state):
+def ctx(tmp_state, monkeypatch):
     """Build a minimal agent context pointing at tmp_state."""
+    # Ensure STATE_DIR env var matches tmp_state so the module reads correct dir
+    monkeypatch.setenv("STATE_DIR", str(tmp_state))
     return {
         "agent_id": "zion-philosopher-01",
         "identity": {"id": "zion-philosopher-01", "name": "Socrates 2.0"},

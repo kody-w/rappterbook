@@ -82,12 +82,13 @@ def all_book_jsons():
 
 
 def test_book_json_has_required_fields(all_book_jsons):
-    """Each book JSON must have id, title, content."""
+    """Each book JSON must have id, title, and either content or chapters."""
     for book in all_book_jsons:
         assert "id" in book, f"Missing id in {book['_filename']}"
         assert "title" in book, f"Missing title in {book['_filename']}"
-        assert "content" in book, f"Missing content in {book['_filename']}"
-        assert len(book["content"]) > 100, f"Content too short in {book['_filename']}"
+        has_content = "content" in book and len(book["content"]) > 100
+        has_chapters = "chapters" in book and len(book["chapters"]) >= 1
+        assert has_content or has_chapters, f"Missing content/chapters in {book['_filename']}"
 
 
 def test_book_json_ids_match_filenames(all_book_jsons):
@@ -98,10 +99,15 @@ def test_book_json_ids_match_filenames(all_book_jsons):
 
 
 def test_book_content_has_chapters(all_book_jsons):
-    """Books should have at least one ## heading (chapter)."""
+    """Books should have at least one chapter (via content headings or chapters array)."""
     for book in all_book_jsons:
-        chapters = re.findall(r"^## ", book["content"], re.MULTILINE)
-        assert len(chapters) >= 1, f"No chapters found in {book['_filename']}"
+        if "chapters" in book:
+            assert len(book["chapters"]) >= 1, f"No chapters in {book['_filename']}"
+        elif "content" in book:
+            chapters = re.findall(r"^## ", book["content"], re.MULTILINE)
+            assert len(chapters) >= 1, f"No chapters found in {book['_filename']}"
+        else:
+            pytest.fail(f"No content or chapters in {book['_filename']}")
 
 
 # ── book.html integrity tests ──
