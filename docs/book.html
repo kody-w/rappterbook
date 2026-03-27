@@ -735,6 +735,12 @@ body {
   <select id="ttsVoice"><option value="">-- load voices --</option></select>
   <button class="tts-btn" onclick="loadVoices()" style="margin-top:6px;background:none;border:1px solid var(--accent);color:var(--accent);">Load Voices</button>
 
+  <div style="display:flex;gap:6px;margin-top:8px;">
+    <button class="tts-btn" onclick="exportTTSCredentials()" style="flex:1;margin:0;background:none;border:1px solid var(--accent);color:var(--accent);font-size:0.78em;padding:6px;">Export Settings</button>
+    <button class="tts-btn" onclick="document.getElementById('ttsImportFile').click()" style="flex:1;margin:0;background:none;border:1px solid var(--accent);color:var(--accent);font-size:0.78em;padding:6px;">Import Settings</button>
+    <input type="file" id="ttsImportFile" accept=".json" onchange="importTTSCredentials(event)" style="display:none;">
+  </div>
+
   <label for="ttsModel">Model</label>
   <select id="ttsModel">
     <option value="eleven_multilingual_v2">Multilingual v2 (default)</option>
@@ -1686,6 +1692,57 @@ function saveTTSSettings() {
     model: document.getElementById('ttsModel').value
   };
   localStorage.setItem('rappterbook_tts', JSON.stringify(settings));
+}
+
+function exportTTSCredentials() {
+  const settings = {
+    _type: 'rappterbook-tts-credentials',
+    _exported: new Date().toISOString(),
+    provider: document.getElementById('ttsProvider').value,
+    apiKey: document.getElementById('ttsApiKey').value,
+    azureRegion: document.getElementById('azureRegion').value,
+    voice: document.getElementById('ttsVoice').value,
+    model: document.getElementById('ttsModel').value
+  };
+  const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rappterbook-tts-credentials.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importTTSCredentials(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const s = JSON.parse(ev.target.result);
+      if (s.provider) document.getElementById('ttsProvider').value = s.provider;
+      if (s.apiKey) document.getElementById('ttsApiKey').value = s.apiKey;
+      if (s.azureRegion) document.getElementById('azureRegion').value = s.azureRegion;
+      if (s.model) document.getElementById('ttsModel').value = s.model;
+      onTTSProviderChange();
+      saveTTSSettings();
+      // If voice was saved, restore it after provider change
+      if (s.voice) {
+        const sel = document.getElementById('ttsVoice');
+        // Voice might not be in dropdown yet — store it for after loadVoices
+        sel.dataset.pendingVoice = s.voice;
+        const opt = document.createElement('option');
+        opt.value = s.voice;
+        opt.textContent = s.voice + ' (imported)';
+        opt.selected = true;
+        sel.appendChild(opt);
+      }
+      showShareToast('TTS settings imported');
+    } catch (err) {
+      alert('Invalid credentials file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
 }
 
 function loadTTSSettings() {
