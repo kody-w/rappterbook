@@ -750,7 +750,10 @@ body {
 
   <div id="ttsChapterList" class="tts-chapter-list"></div>
 
-  <button class="tts-btn" id="ttsGenerateBtn" onclick="generateAudiobook()">Generate Full Audiobook</button>
+  <div style="display:flex;gap:6px;margin-top:12px;">
+    <button class="tts-btn" id="ttsGenerateBtn" onclick="generateAudiobook()" style="flex:2;margin:0;">Generate Full Audiobook</button>
+    <button class="tts-btn" id="ttsResumeBtn" onclick="resumeAudiobook()" style="flex:1;margin:0;background:none;border:1px solid var(--accent);color:var(--accent);display:none;">Resume</button>
+  </div>
   <button class="tts-btn" id="ttsStopBtn" onclick="stopAudiobook()" style="display:none;background:#a33;">Stop</button>
 
   <div class="tts-progress" id="ttsProgress" style="display:none;">
@@ -761,6 +764,12 @@ body {
   <div class="tts-audio-player" id="ttsPlayer" style="display:none;">
     <audio controls id="ttsAudio"></audio>
     <button class="tts-download" id="ttsDownloadBtn" onclick="downloadAudiobook()">Download Audiobook (MP3)</button>
+  </div>
+
+  <div style="display:flex;gap:6px;margin-top:12px;">
+    <button class="tts-btn" onclick="exportTTSProgress()" style="flex:1;margin:0;background:none;border:1px solid var(--border);color:var(--text-light);font-size:0.75em;padding:5px;">Export Progress</button>
+    <button class="tts-btn" onclick="document.getElementById('ttsProgressImport').click()" style="flex:1;margin:0;background:none;border:1px solid var(--border);color:var(--text-light);font-size:0.75em;padding:5px;">Import Progress</button>
+    <input type="file" id="ttsProgressImport" accept=".json" onchange="importTTSProgress(event)" style="display:none;">
   </div>
 </div>
 
@@ -1665,13 +1674,32 @@ document.addEventListener('keydown', (e) => {
 // ── TTS / Audiobook ──
 let ttsAbort = null;
 let ttsAudioBlobs = [];
+let ttsProgressState = null; // { bookId, completedChapters: [0,1,...], totalChapters, blobs: [...base64...] }
 
 function toggleTTSPanel() {
   const panel = document.getElementById('ttsPanel');
   const overlay = document.getElementById('ttsOverlay');
   const isOpen = panel.classList.toggle('open');
   overlay.style.display = isOpen ? 'block' : 'none';
-  if (isOpen && currentBook) buildTTSChapterList();
+  if (isOpen && currentBook) {
+    buildTTSChapterList();
+    // Restore saved progress for this book
+    const saved = loadTTSProgressLocal(currentBook.id);
+    if (saved && !saved.completed && saved.completedChapters && saved.completedChapters.length > 0) {
+      ttsProgressState = saved;
+      ttsAudioBlobs = [];
+      for (const ci of saved.completedChapters) {
+        const chEl = document.getElementById('tts-ch-' + ci);
+        if (chEl) { chEl.className = 'tts-chapter-item done'; chEl.querySelector('.ch-status').innerHTML = '&#10003;'; }
+      }
+      document.getElementById('ttsProgress').style.display = '';
+      document.getElementById('ttsProgressText').textContent =
+        `${saved.completedChapters.length}/${saved.totalChapters} chapters done. Click Resume to continue.`;
+      document.getElementById('ttsProgressFill').style.width =
+        Math.round((saved.completedChapters.length / saved.totalChapters) * 100) + '%';
+      document.getElementById('ttsResumeBtn').style.display = '';
+    }
+  }
 }
 
 function onTTSProviderChange() {
@@ -1929,7 +1957,7 @@ async function generateAzureChunk(text, voice, apiKey, region) {
   return await resp.blob();
 }
 
-async function generateAudiobook() {
+async function generateAudiobook(startFromChapter) {
   if (!currentBook) return;
   const provider = document.getElementById('ttsProvider').value;
   const apiKey = document.getElementById('ttsApiKey').value;
@@ -1941,7 +1969,6 @@ async function generateAudiobook() {
   if (!voiceId) { alert('Select a voice first. Click "Load Voices".'); return; }
   saveTTSSettings();
 
-  // Ensure content is loaded
   if (!currentBook.content) {
     await fetchBookContent(currentBook);
     if (!currentBook.content) { alert('No book content available.'); return; }
@@ -1950,9 +1977,31 @@ async function generateAudiobook() {
   const chapters = prepareAudioChapters(currentBook);
   buildTTSChapterList();
   ttsAbort = new AbortController();
-  ttsAudioBlobs = [];
+
+  // Resume from saved progress or start fresh
+  const startCh = startFromChapter || 0;
+  if (startCh === 0) {
+    ttsAudioBlobs = [];
+    ttsProgressState = {
+      bookId: currentBook.id,
+      bookTitle: currentBook.title,
+      completedChapters: [],
+      totalChapters: chapters.length,
+      chapterTitles: chapters.map(c => c.title),
+      startedAt: new Date().toISOString(),
+      provider: provider,
+      voice: voiceId,
+    };
+  }
+
+  // Mark already-completed chapters in the UI
+  for (let i = 0; i < startCh; i++) {
+    const chEl = document.getElementById('tts-ch-' + i);
+    if (chEl) { chEl.className = 'tts-chapter-item done'; chEl.querySelector('.ch-status').innerHTML = '&#10003;'; }
+  }
 
   document.getElementById('ttsGenerateBtn').disabled = true;
+  document.getElementById('ttsResumeBtn').style.display = 'none';
   document.getElementById('ttsStopBtn').style.display = '';
   document.getElementById('ttsProgress').style.display = '';
   document.getElementById('ttsPlayer').style.display = 'none';
@@ -1961,13 +2010,16 @@ async function generateAudiobook() {
   const chapterChunks = chapters.map(ch => chunkText(ch.text, 4500));
   for (const cc of chapterChunks) totalChunks += cc.length;
   let doneChunks = 0;
+  // Count chunks from already-completed chapters
+  for (let i = 0; i < startCh; i++) doneChunks += chapterChunks[i].length;
 
   try {
-    for (let ci = 0; ci < chapters.length; ci++) {
+    for (let ci = startCh; ci < chapters.length; ci++) {
       const chEl = document.getElementById('tts-ch-' + ci);
       if (chEl) { chEl.className = 'tts-chapter-item active'; chEl.querySelector('.ch-status').innerHTML = '&#9658;'; }
 
       const chunks = chapterChunks[ci];
+      const chapterBlobs = [];
       for (let j = 0; j < chunks.length; j++) {
         document.getElementById('ttsProgressText').textContent =
           `Chapter ${ci + 1}/${chapters.length} — chunk ${j + 1}/${chunks.length}`;
@@ -1978,13 +2030,18 @@ async function generateAudiobook() {
         } else {
           blob = await generateAzureChunk(chunks[j], voiceId, apiKey, region);
         }
+        chapterBlobs.push(blob);
         ttsAudioBlobs.push(blob);
         doneChunks++;
         document.getElementById('ttsProgressFill').style.width =
           Math.round((doneChunks / totalChunks) * 100) + '%';
       }
 
+      // Mark chapter complete + save progress
       if (chEl) { chEl.className = 'tts-chapter-item done'; chEl.querySelector('.ch-status').innerHTML = '&#10003;'; }
+      ttsProgressState.completedChapters.push(ci);
+      ttsProgressState.lastUpdated = new Date().toISOString();
+      saveTTSProgressLocal();
     }
 
     // Combine all blobs into one audio file
@@ -1994,19 +2051,109 @@ async function generateAudiobook() {
     document.getElementById('ttsPlayer').style.display = '';
     document.getElementById('ttsProgressText').textContent = 'Complete!';
     document.getElementById('ttsProgressFill').style.width = '100%';
+    ttsProgressState.completed = true;
+    saveTTSProgressLocal();
 
   } catch (err) {
     if (err.name === 'AbortError') {
-      document.getElementById('ttsProgressText').textContent = 'Stopped.';
+      document.getElementById('ttsProgressText').textContent =
+        `Paused at chapter ${ttsProgressState.completedChapters.length}/${chapters.length}. Resume anytime.`;
     } else {
       alert('TTS Error: ' + err.message);
       document.getElementById('ttsProgressText').textContent = 'Error: ' + err.message;
     }
+    // Save progress so user can resume
+    ttsProgressState.lastUpdated = new Date().toISOString();
+    saveTTSProgressLocal();
   } finally {
     document.getElementById('ttsGenerateBtn').disabled = false;
     document.getElementById('ttsStopBtn').style.display = 'none';
+    // Show resume button if not complete
+    if (ttsProgressState && !ttsProgressState.completed && ttsProgressState.completedChapters.length > 0) {
+      document.getElementById('ttsResumeBtn').style.display = '';
+    }
     ttsAbort = null;
   }
+}
+
+function resumeAudiobook() {
+  if (!ttsProgressState || !currentBook) return;
+  const nextChapter = ttsProgressState.completedChapters.length;
+  generateAudiobook(nextChapter);
+}
+
+function saveTTSProgressLocal() {
+  if (!ttsProgressState) return;
+  try {
+    localStorage.setItem('rappterbook_tts_progress_' + ttsProgressState.bookId,
+      JSON.stringify(ttsProgressState));
+  } catch {}
+}
+
+function loadTTSProgressLocal(bookId) {
+  try {
+    const raw = localStorage.getItem('rappterbook_tts_progress_' + bookId);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return null;
+}
+
+function exportTTSProgress() {
+  if (!ttsProgressState && currentBook) {
+    ttsProgressState = loadTTSProgressLocal(currentBook.id);
+  }
+  if (!ttsProgressState) { alert('No audiobook progress to export.'); return; }
+
+  // Convert audio blobs to base64 for portable export
+  const exportData = { ...ttsProgressState, _type: 'rappterbook-tts-progress' };
+
+  // If we have blobs in memory, include their count (blobs can't be serialized to JSON)
+  exportData.audioBlobCount = ttsAudioBlobs.length;
+  exportData.note = 'Audio data is not included in export (too large). Resume generation to rebuild from the last completed chapter.';
+
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `tts-progress-${ttsProgressState.bookId}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importTTSProgress(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data.bookId) throw new Error('Missing bookId');
+      ttsProgressState = data;
+      ttsAudioBlobs = []; // Blobs can't be imported — will resume from last chapter
+      localStorage.setItem('rappterbook_tts_progress_' + data.bookId, JSON.stringify(data));
+
+      // If we're viewing this book, update UI
+      if (currentBook && currentBook.id === data.bookId) {
+        buildTTSChapterList();
+        for (const ci of (data.completedChapters || [])) {
+          const chEl = document.getElementById('tts-ch-' + ci);
+          if (chEl) { chEl.className = 'tts-chapter-item done'; chEl.querySelector('.ch-status').innerHTML = '&#10003;'; }
+        }
+        document.getElementById('ttsProgress').style.display = '';
+        document.getElementById('ttsProgressText').textContent =
+          `${data.completedChapters.length}/${data.totalChapters} chapters done. Click Resume to continue.`;
+        document.getElementById('ttsProgressFill').style.width =
+          Math.round((data.completedChapters.length / data.totalChapters) * 100) + '%';
+        if (!data.completed && data.completedChapters.length > 0) {
+          document.getElementById('ttsResumeBtn').style.display = '';
+        }
+      }
+      showShareToast('TTS progress imported');
+    } catch (err) {
+      alert('Invalid progress file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
 }
 
 function stopAudiobook() {
