@@ -637,6 +637,29 @@ body {
 }
 .tts-download:hover { background: var(--accent); color: var(--paper); }
 
+/* ── Narrate mode ── */
+.narrating .page-content p,
+.narrating .page-content blockquote,
+.narrating .page-content li {
+  transition: opacity 0.3s, background 0.3s;
+  opacity: 0.4;
+  border-radius: 3px;
+}
+.narrating .page-content .narrate-active {
+  opacity: 1;
+  background: rgba(139,105,20,0.06);
+}
+.narrating .page-content .narrate-done {
+  opacity: 0.7;
+}
+.narrating .page-content h1,
+.narrating .page-content h2,
+.narrating .page-content h3,
+.narrating .page-content hr,
+.narrating .page-content pre {
+  opacity: 1;
+}
+
 /* ── Responsive ── */
 @media (max-width: 740px) {
   .page { padding: 28px 24px; }
@@ -679,6 +702,7 @@ body {
       <button onclick="toggleBookmark()" id="bookmarkBtn" title="Bookmark this page">&#9733;</button>
       <button onclick="toggleBookmarks()" title="View bookmarks">&#128278;</button>
       <button onclick="cycleFontSize()" title="Font size" id="fontBtn">A</button>
+      <button onclick="toggleNarrate()" id="narrateBtn" title="Read aloud (follow-along)" style="font-size:0.82em">&#9654;</button>
       <button onclick="shareBook()" title="Share this book" style="font-size:0.78em">&#8599;</button>
       <button onclick="toggleTTSPanel()" title="Generate audiobook" id="ttsToggleBtn" style="font-size:0.72em">&#127911;</button>
       <button onclick="exportBook('json')" title="Export as JSON">&#8681;</button>
@@ -696,6 +720,19 @@ body {
     <button id="nextBtn" onclick="nextPage()">Next &rarr;</button>
   </div>
   <div class="page-progress"><div class="page-progress-fill" id="progressBar"></div></div>
+
+  <!-- NARRATE BAR -->
+  <div id="narrateBar" style="display:none;margin-top:12px;padding:10px 16px;background:var(--paper);border:1px solid var(--border);border-radius:4px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.82em;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button onclick="toggleNarrate()" id="narratePlayBtn" style="background:var(--accent);color:var(--paper);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1em;display:flex;align-items:center;justify-content:center;">&#9654;</button>
+      <div style="flex:1;">
+        <div id="narrateStatus" style="color:var(--text);font-size:0.9em;">Ready</div>
+        <div id="narrateCache" style="color:var(--text-light);font-size:0.78em;margin-top:2px;"></div>
+      </div>
+      <button onclick="stopNarrate()" style="background:none;border:1px solid var(--border);color:var(--text-light);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8em;">Stop</button>
+    </div>
+    <audio id="narrateAudio" style="display:none;"></audio>
+  </div>
 </div>
 
 <!-- TOC PANEL -->
@@ -1498,6 +1535,7 @@ function toggleTheme() {
 
 // ── Back to library ──
 function backToLibrary() {
+  if (narrateActive) stopNarrate();
   document.getElementById('readerView').className = 'reader';
   document.getElementById('libraryView').style.display = 'block';
   // Close panels
@@ -2234,6 +2272,249 @@ function downloadAudiobook() {
   a.download = title + '-audiobook.mp3';
   a.click();
   URL.revokeObjectURL(a.href);
+}
+
+// ── Narrate Mode (read-along with pre-cached audio stream) ──
+const narrateCache = {}; // pageIndex → { blob, url, ready }
+let narrateActive = false;
+let narrateAbort = null;
+let narratePrefetchCount = 3; // Cache this many pages ahead
+
+function pageToNarratorText(pageIndex) {
+  // Convert a rendered HTML page to clean narrator text
+  if (!pages[pageIndex]) return '';
+  const div = document.createElement('div');
+  div.innerHTML = pages[pageIndex];
+  // Walk the DOM, extract text in reading order
+  const parts = [];
+  for (const el of div.querySelectorAll('h1,h2,h3,h4,p,li,blockquote')) {
+    let t = el.textContent.trim();
+    if (!t) continue;
+    // Ensure sentence-ending punctuation
+    if (!/[.!?:;"\u2019\u201D]$/.test(t)) t += '.';
+    parts.push(t);
+  }
+  return parts.join('\n\n');
+}
+
+async function generatePageAudio(pageIndex) {
+  if (narrateCache[pageIndex]?.ready) return narrateCache[pageIndex];
+  const provider = document.getElementById('ttsProvider').value;
+  const apiKey = document.getElementById('ttsApiKey').value;
+  const voiceId = document.getElementById('ttsVoice').value;
+  const model = document.getElementById('ttsModel').value;
+  const region = document.getElementById('azureRegion').value || 'eastus';
+  if (!apiKey || !voiceId) return null;
+
+  const text = pageToNarratorText(pageIndex);
+  if (!text.trim()) return null;
+
+  // Split into chunks if needed (keep under 4500 chars)
+  const chunks = chunkText(text, 4500);
+  const blobs = [];
+  for (const chunk of chunks) {
+    let blob;
+    if (provider === 'elevenlabs') {
+      blob = await generateElevenLabsChunk(chunk, voiceId, apiKey, model);
+    } else {
+      blob = await generateAzureChunk(chunk, voiceId, apiKey, region);
+    }
+    blobs.push(blob);
+  }
+  const fullBlob = new Blob(blobs, { type: 'audio/mpeg' });
+  const url = URL.createObjectURL(fullBlob);
+  narrateCache[pageIndex] = { blob: fullBlob, url, ready: true };
+  return narrateCache[pageIndex];
+}
+
+async function prefetchPages(startPage) {
+  // Pre-cache audio for pages ahead of current reading position
+  const end = Math.min(startPage + narratePrefetchCount, pages.length);
+  const statusEl = document.getElementById('narrateCache');
+  for (let i = startPage; i < end; i++) {
+    if (narrateCache[i]?.ready) continue;
+    if (!narrateActive) break; // Stopped while prefetching
+    statusEl.textContent = `Caching page ${i + 1}...`;
+    try {
+      await generatePageAudio(i);
+    } catch (err) {
+      console.warn('Prefetch failed for page', i, err.message);
+    }
+  }
+  const cached = Object.keys(narrateCache).filter(k => narrateCache[k]?.ready).length;
+  statusEl.textContent = `${cached} pages cached`;
+}
+
+function highlightParagraphs(pageEl, audioDuration) {
+  // Estimate paragraph timing based on text length
+  const paras = pageEl.querySelectorAll('p, li, blockquote');
+  if (!paras.length) return;
+  const totalChars = Array.from(paras).reduce((sum, p) => sum + p.textContent.length, 0);
+  if (!totalChars) return;
+
+  let elapsed = 0;
+  for (const p of paras) {
+    const charLen = p.textContent.length;
+    const paraDuration = (charLen / totalChars) * audioDuration * 1000;
+    const startTime = elapsed;
+    elapsed += paraDuration;
+
+    setTimeout(() => {
+      // Remove active from previous
+      pageEl.querySelectorAll('.narrate-active').forEach(el => {
+        el.classList.remove('narrate-active');
+        el.classList.add('narrate-done');
+      });
+      p.classList.add('narrate-active');
+      p.classList.remove('narrate-done');
+      // Scroll paragraph into view
+      p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, startTime);
+  }
+}
+
+async function toggleNarrate() {
+  if (narrateActive) {
+    pauseNarrate();
+    return;
+  }
+  startNarrate();
+}
+
+async function startNarrate() {
+  if (!currentBook) return;
+  const apiKey = document.getElementById('ttsApiKey').value;
+  const voiceId = document.getElementById('ttsVoice').value;
+  if (!apiKey) { alert('Enter your API key in the Audiobook panel first.'); return; }
+  if (!voiceId) { alert('Select a voice in the Audiobook panel first.'); return; }
+
+  narrateActive = true;
+  document.getElementById('narrateBar').style.display = '';
+  document.getElementById('narrateBtn').innerHTML = '&#9646;&#9646;'; // Pause icon
+  document.getElementById('narrateBtn').classList.add('active');
+  document.getElementById('narratePlayBtn').innerHTML = '&#9646;&#9646;';
+  document.getElementById('page').classList.add('narrating');
+  document.getElementById('narrateStatus').textContent = 'Generating audio...';
+
+  // Start prefetching from current page
+  prefetchPages(currentPage);
+
+  // Play current page
+  await playPage(currentPage);
+}
+
+async function playPage(pageIndex) {
+  if (!narrateActive) return;
+  if (pageIndex >= pages.length) {
+    stopNarrate();
+    document.getElementById('narrateStatus').textContent = 'Finished.';
+    return;
+  }
+
+  // Navigate to this page if not already there
+  if (currentPage !== pageIndex) {
+    currentPage = pageIndex;
+    renderPage();
+  }
+
+  document.getElementById('narrateStatus').textContent = `Playing page ${pageIndex + 1} of ${pages.length}`;
+
+  // Get or generate audio for this page
+  let cached = narrateCache[pageIndex];
+  if (!cached?.ready) {
+    document.getElementById('narrateStatus').textContent = `Generating audio for page ${pageIndex + 1}...`;
+    try {
+      cached = await generatePageAudio(pageIndex);
+    } catch (err) {
+      document.getElementById('narrateStatus').textContent = `Error: ${err.message}`;
+      stopNarrate();
+      return;
+    }
+  }
+
+  if (!cached) {
+    // Empty page — skip to next
+    await playPage(pageIndex + 1);
+    return;
+  }
+
+  // Start prefetching next pages while this one plays
+  prefetchPages(pageIndex + 1);
+
+  // Play the audio
+  const audio = document.getElementById('narrateAudio');
+  audio.src = cached.url;
+  audio.playbackRate = 1.0;
+
+  const playPromise = new Promise((resolve) => {
+    audio.onended = () => resolve('ended');
+    audio.onerror = () => resolve('error');
+  });
+
+  try {
+    await audio.play();
+  } catch (err) {
+    document.getElementById('narrateStatus').textContent = 'Playback blocked — click play.';
+    return;
+  }
+
+  // Highlight paragraphs as audio plays
+  const pageEl = document.getElementById('pageContent');
+  if (audio.duration && !isNaN(audio.duration)) {
+    highlightParagraphs(pageEl, audio.duration);
+  } else {
+    audio.onloadedmetadata = () => {
+      if (audio.duration && !isNaN(audio.duration)) {
+        highlightParagraphs(pageEl, audio.duration);
+      }
+    };
+  }
+
+  document.getElementById('narrateStatus').textContent = `Reading page ${pageIndex + 1} of ${pages.length}`;
+
+  // Wait for audio to finish
+  const result = await playPromise;
+  if (!narrateActive) return;
+
+  // Clear highlights
+  pageEl.querySelectorAll('.narrate-active,.narrate-done').forEach(el => {
+    el.classList.remove('narrate-active', 'narrate-done');
+  });
+
+  // Auto-advance to next page
+  if (result === 'ended') {
+    await playPage(pageIndex + 1);
+  }
+}
+
+function pauseNarrate() {
+  const audio = document.getElementById('narrateAudio');
+  if (audio.paused) {
+    audio.play();
+    document.getElementById('narrateBtn').innerHTML = '&#9646;&#9646;';
+    document.getElementById('narratePlayBtn').innerHTML = '&#9646;&#9646;';
+    document.getElementById('narrateStatus').textContent = `Reading page ${currentPage + 1} of ${pages.length}`;
+  } else {
+    audio.pause();
+    document.getElementById('narrateBtn').innerHTML = '&#9654;';
+    document.getElementById('narratePlayBtn').innerHTML = '&#9654;';
+    document.getElementById('narrateStatus').textContent = 'Paused';
+  }
+}
+
+function stopNarrate() {
+  narrateActive = false;
+  const audio = document.getElementById('narrateAudio');
+  audio.pause();
+  audio.src = '';
+  document.getElementById('narrateBtn').innerHTML = '&#9654;';
+  document.getElementById('narrateBtn').classList.remove('active');
+  document.getElementById('narrateBar').style.display = 'none';
+  document.getElementById('page').classList.remove('narrating');
+  // Clear highlights
+  document.getElementById('pageContent').querySelectorAll('.narrate-active,.narrate-done').forEach(el => {
+    el.classList.remove('narrate-active', 'narrate-done');
+  });
 }
 
 // ── Init ──
