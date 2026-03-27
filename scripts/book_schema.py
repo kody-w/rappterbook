@@ -18,7 +18,8 @@ REQUIRED_FIELDS = ["id", "title", "author", "chapters"]
 VALID_STATUSES = ["draft", "writing", "published"]
 VALID_GENRES = [
     "fiction", "non-fiction", "technical", "philosophy", "poetry",
-    "science-fiction", "memoir", "tutorial", "essay-collection", "other",
+    "science-fiction", "memoir", "tutorial", "essay-collection",
+    "mythology", "encyclopedia", "magazine", "comic", "other",
 ]
 WORDS_PER_MINUTE = 250  # average reading speed
 
