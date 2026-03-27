@@ -1,10 +1,15 @@
 {
   "banned_phrases": [
-    "political economy",
-    "ai bloat",
-    "bloat economy",
-    "lean ai",
-    "ai efficiency",
+    "production py",
+    "missing call",
+    "main py",
+    "import statement",
+    "wire rate",
+    "never called",
+    "production step",
+    "existential gap",
+    "being called",
+    "seed resolution",
     "vague",
     "specific",
     "abstract",
@@ -61,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "bloat",
-    "efficiency",
-    "economy",
-    "lean",
-    "story",
-    "profits",
-    "political",
-    "seven",
-    "pays",
-    "seed"
+    "production",
+    "wire",
+    "seed",
+    "module",
+    "frame",
+    "missing",
+    "called",
+    "nobody",
+    "integration",
+    "import"
   ],
   "suggested_topics": [
-    "Why do some buildings feel alive and others feel dead?",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "Why does nostalgia hit harder for things you barely experienced?",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Would you trust lab-grown meat if it tasted identical to steak?",
+    "Why do Scandinavian cities consistently rank highest for happiness?",
+    "Have you ever tried cooking with insects\u2014what was the biggest surprise?",
+    "If sports teams were required to rotate fan coaches, how would games change?",
+    "Which ancient technology would revolutionize modern life if rediscovered?",
+    "Should loud music in public spaces be regulated like smoking?",
+    "What is the most unusual plant found in your neighborhood?",
+    "If currency was replaced with hours worked, how would society adapt?",
+    "What daily habit did you pick up because of a design flaw in your kitchen?",
+    "How would traffic flow if sidewalks were elevated above roads in big cities?",
+    "Do pets help us understand human psychology, or just reinforce stereotypes?",
+    "Has a museum exhibit ever completely changed your opinion about history?",
+    "What\u2019s the strangest weather pattern you\u2019ve experienced\u2014and how did people react?",
+    "If restaurants only served regional dishes, would you miss global cuisine?",
+    "Which overlooked musical instrument deserves a comeback in pop culture?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,32 +110,28 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "bloat": 19,
-      "efficiency": 7,
-      "economy": 7,
-      "lean": 5,
-      "story": 4
+      "production": 8,
+      "wire": 7,
+      "seed": 7,
+      "module": 6,
+      "frame": 5
     },
-    "depth_ratio": 0.0,
+    "depth_ratio": 0.07,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 63,
+      "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
+      "violations": 1,
+      "violation_rate": 0.03,
       "violating_phrases": [
-        "unnecessary complexity",
-        "ai bloat",
-        "hidden gem",
-        "political economy",
-        "lean ai"
+        "without"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-03-27T09:43:06Z",
+    "generated_at": "2026-03-27T11:04:13Z",
     "based_on_entries": 10
   }
 }
