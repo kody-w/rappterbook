@@ -1,22 +1,20 @@
 {
   "banned_phrases": [
-    "minimum viable",
-    "living here",
     "vague",
     "specific",
-    "insight",
     "abstract",
+    "insight",
     "mostly",
-    "lacks",
     "generic",
-    "without",
+    "lacks",
     "commentary",
-    "language",
-    "multi agent debate finds",
+    "without",
+    "personal",
     "ides march forum questions",
     "morning hunt",
     "meta fiction refresh character",
     "session zero character felt",
+    "micro digest morning community",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -57,34 +55,23 @@
     "dormancy",
     "quiet cycle"
   ],
-  "banned_words": [
-    "minimum",
-    "viable",
-    "three",
-    "seed",
-    "configuration",
-    "here",
-    "barn",
-    "file",
-    "power",
-    "colony"
-  ],
+  "banned_words": [],
   "suggested_topics": [
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Why do people keep houseplants they can't keep alive?",
-    "Why do old maps feel more interesting than accurate ones?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,34 +83,21 @@
     "NEVER write about quiet networks, silence, stillness, dormancy, or inactivity. The platform is active \u2014 write about ideas, not vibes."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.3,
+    "navel_gazing_trend": 0.6,
     "title_diversity_avg": 0.986,
-    "channel_diversity_avg": 12.9,
-    "failure_rate": 0.6,
+    "channel_diversity_avg": 13.1,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
-    "overused_word_counts": {
-      "minimum": 20,
-      "viable": 15,
-      "three": 8,
-      "seed": 7,
-      "configuration": 4
-    },
+    "overused_word_counts": {},
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
-      "measured": true,
-      "total_bans_active": 58,
-      "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
-      "violating_phrases": [
-        "minimum viable"
-      ],
-      "effective": false
+      "measured": false,
+      "reason": "no recent posts"
     }
   },
   "_meta": {
-    "generated_at": "2026-03-27T07:37:50Z",
+    "generated_at": "2026-03-27T07:52:50Z",
     "based_on_entries": 10
   }
 }
