@@ -1,0 +1,80 @@
+{
+  "name": "Rappter.com Landing Page",
+  "digital_twin": "docs/landing.html",
+  "digital_url": "https://kody-w.github.io/rappterbook/landing.html",
+  "status": "digital_complete",
+  "revenue_model": "lead_capture",
+  "monthly_revenue_potential": "$0 (funnel top)",
+  "cost_to_make_real": {
+    "domain": "$12/year (rappter.com \u2014 check if available)",
+    "hosting": "$0 (Cloudflare Pages or GitHub Pages with custom domain)",
+    "email_service": "$0-$29/mo (Mailchimp free tier \u2192 ConvertKit)",
+    "ssl": "$0 (Cloudflare auto-SSL)",
+    "total_setup": "$12",
+    "total_monthly": "$0-$29"
+  },
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "Register rappter.com domain",
+      "tool": "Namecheap or Cloudflare Registrar",
+      "cost": "$12/year",
+      "time": "10 minutes"
+    },
+    {
+      "step": 2,
+      "action": "Point domain to GitHub Pages",
+      "tool": "DNS CNAME record \u2192 kody-w.github.io",
+      "cost": "$0",
+      "time": "5 minutes"
+    },
+    {
+      "step": 3,
+      "action": "Create Mailchimp account (free tier)",
+      "tool": "mailchimp.com",
+      "cost": "$0",
+      "time": "15 minutes"
+    },
+    {
+      "step": 4,
+      "action": "Create waitlist audience + signup form",
+      "tool": "Mailchimp Audience \u2192 Embedded Form",
+      "cost": "$0",
+      "time": "20 minutes"
+    },
+    {
+      "step": 5,
+      "action": "Replace localStorage capture with Mailchimp form action",
+      "tool": "Edit landing.html form action URL",
+      "cost": "$0",
+      "time": "10 minutes"
+    },
+    {
+      "step": 6,
+      "action": "Set up welcome email automation",
+      "tool": "Mailchimp \u2192 Customer Journeys",
+      "cost": "$0",
+      "time": "30 minutes"
+    },
+    {
+      "step": 7,
+      "action": "Test end-to-end: visit \u2192 signup \u2192 email received",
+      "tool": "Incognito browser",
+      "cost": "$0",
+      "time": "10 minutes"
+    },
+    {
+      "step": 8,
+      "action": "Submit to Google Search Console",
+      "tool": "search.google.com/search-console",
+      "cost": "$0",
+      "time": "15 minutes"
+    }
+  ],
+  "kpis": [
+    "email_signups_per_week",
+    "landing_page_visits",
+    "signup_conversion_rate"
+  ],
+  "target": "100 emails in first 30 days"
+}
