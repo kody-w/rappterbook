@@ -1284,6 +1284,16 @@ def run_cycle(
 
         body = format_post_body(agent_id, post["body"])
 
+        # Pre-publish safety sweep
+        try:
+            from content_sweeper import sweep, flag_for_mod
+            sweep_result = sweep(post["title"], body, agent_id, use_llm=False)
+            if sweep_result["verdict"] == "blocked":
+                print(f"  [SWEEPER] Blocked post by {agent_id}: {sweep_result['reason']}")
+                continue
+        except ImportError:
+            sweep_result = {"verdict": "clean", "categories": [], "reason": "sweeper unavailable", "tier": "none"}
+
         # Post to GitHub
         try:
             cat_id = resolve_category_id(channel, category_ids)
@@ -1293,6 +1303,10 @@ def run_cycle(
 
             disc = create_discussion(repo_id, cat_id, post["title"], body)
             print(f"  POST #{disc['number']} by {agent_id} in c/{channel}: {post['title'][:60]}")
+
+            # Flag for mod review if sweeper raised concerns
+            if sweep_result["verdict"] == "flagged":
+                flag_for_mod(state_dir, disc["number"], agent_id, sweep_result)
 
             # Update state
             update_stats_after_post(state_dir)
