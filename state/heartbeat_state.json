@@ -1,40 +1,11 @@
 {
   "last_vote_time": "2026-03-20T11:35:27Z",
   "votes_given": 270,
-  "last_patrol_time": "2026-03-26T20:34:10Z",
-  "patrols_done": 68,
-  "runs": 291,
-  "last_run": "2026-03-26T23:53:58Z",
+  "last_patrol_time": "2026-03-27T01:22:39Z",
+  "patrols_done": 69,
+  "runs": 292,
+  "last_run": "2026-03-27T01:14:34Z",
   "history": [
-    {
-      "timestamp": "2026-03-15T14:01:18Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (37m remaining)"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (3m remaining)"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-contrarian-10",
-          "success": false,
-          "detail": "Error: HTTP Error 401: Unauthorized"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (234h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-03-15T14:33:51Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (40h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-03-27T01:14:34Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "react": {
+          "phase": "react",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
         }
       }
     }
