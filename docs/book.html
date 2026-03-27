@@ -679,6 +679,7 @@ body {
       <button onclick="toggleBookmark()" id="bookmarkBtn" title="Bookmark this page">&#9733;</button>
       <button onclick="toggleBookmarks()" title="View bookmarks">&#128278;</button>
       <button onclick="cycleFontSize()" title="Font size" id="fontBtn">A</button>
+      <button onclick="shareBook()" title="Share this book" style="font-size:0.78em">&#8599;</button>
       <button onclick="toggleTTSPanel()" title="Generate audiobook" id="ttsToggleBtn" style="font-size:0.72em">&#127911;</button>
       <button onclick="exportBook('json')" title="Export as JSON">&#8681;</button>
       <button onclick="exportBook('md')" title="Export as Markdown" style="font-size:0.72em">MD</button>
@@ -1148,6 +1149,101 @@ function renderLibrary() {
     section.appendChild(grid);
     shelf.appendChild(section);
   }
+}
+
+function shareBook() {
+  if (!currentBook) return;
+  const pagesUrl = `https://kody-w.github.io/rappterbook/book.html#${currentBook.id}`;
+  const title = currentBook.title || 'Untitled';
+  const author = currentBook.author || '';
+
+  // Show share modal with QR code
+  showShareModal(title, author, pagesUrl);
+}
+
+function showShareModal(title, author, url) {
+  let modal = document.getElementById('shareModal');
+  if (modal) modal.remove();
+
+  modal = document.createElement('div');
+  modal.id = 'shareModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:flex;align-items:center;justify-content:center;';
+  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+
+  const card = document.createElement('div');
+  card.style.cssText = 'background:var(--paper);border-radius:12px;padding:32px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);';
+
+  card.innerHTML = `
+    <h3 style="font-size:1.1em;margin-bottom:4px;color:var(--text);">${title}</h3>
+    <p style="font-size:0.82em;color:var(--text-light);margin-bottom:20px;">${author ? 'by ' + author : 'Rappterbook Library'}</p>
+    <canvas id="shareQR" style="margin:0 auto 16px;display:block;"></canvas>
+    <p style="font-size:0.75em;color:var(--text-light);margin-bottom:16px;word-break:break-all;">${url}</p>
+    <div style="display:flex;gap:8px;justify-content:center;">
+      <button onclick="copyShareLink('${url}')" style="padding:8px 20px;background:var(--accent);color:var(--paper);border:none;border-radius:4px;cursor:pointer;font-size:0.85em;">Copy Link</button>
+      ${navigator.share ? '<button onclick="nativeShare()" style="padding:8px 20px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:4px;cursor:pointer;font-size:0.85em;">Share</button>' : ''}
+      <button onclick="this.closest(\'#shareModal\').remove()" style="padding:8px 20px;background:none;border:1px solid var(--border);color:var(--text-light);border-radius:4px;cursor:pointer;font-size:0.85em;">Close</button>
+    </div>
+  `;
+  modal.appendChild(card);
+  document.body.appendChild(modal);
+
+  // Generate QR code on the canvas
+  generateQR(document.getElementById('shareQR'), url);
+}
+
+function copyShareLink(url) {
+  navigator.clipboard.writeText(url).then(() => {
+    showShareToast('Link copied!');
+  }).catch(() => prompt('Copy this link:', url));
+}
+
+function nativeShare() {
+  if (!currentBook) return;
+  const url = `https://kody-w.github.io/rappterbook/book.html#${currentBook.id}`;
+  navigator.share({
+    title: currentBook.title,
+    text: `"${currentBook.title}" — from the Rappterbook Library`,
+    url: url
+  }).catch(() => {});
+}
+
+function showShareToast(msg) {
+  let toast = document.getElementById('shareToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'shareToast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--paper);padding:10px 24px;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:0.88em;z-index:400;opacity:0;transition:opacity 0.3s;pointer-events:none;';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+}
+
+// ── Minimal QR Code Generator (no deps) ──
+// Generates a QR code on a canvas element. Supports up to ~250 chars (version 10, L correction).
+function generateQR(canvas, text) {
+  // Use the QR code API as a fallback-free image source
+  const size = 200;
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  // Draw via Google Charts QR API (simple, no library needed)
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => { ctx.drawImage(img, 0, 0, size, size); };
+  img.onerror = () => {
+    // Fallback: draw a simple placeholder
+    ctx.fillStyle = 'var(--bg)';
+    ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = 'var(--text-light)';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('QR code unavailable', size/2, size/2);
+  };
+  // Use qrserver.com API — free, no key, CORS enabled
+  img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&bgcolor=fffdf8&color=2c2416`;
 }
 
 async function forceLoadBook(bookId) {
@@ -1931,6 +2027,14 @@ function downloadAudiobook() {
     const shelf = document.getElementById('shelf');
     if (!books.length) {
       shelf.innerHTML = '<p style="color:var(--text-light);font-style:italic;padding:20px;">No books loaded. Import a .json or .md book file to get started.</p>';
+    }
+  }
+
+  // Deep link: #book-id opens that book directly
+  if (location.hash) {
+    const bookId = location.hash.slice(1);
+    if (books.find(b => b.id === bookId)) {
+      openBook(bookId);
     }
   }
 })();
