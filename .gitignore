@@ -39,3 +39,7 @@ state/.wallet_seeds.json
 __azurite_db_blob*.json
 sdk/rust/target/
 state/discussions_cache.json
+
+# Library snapshots (large, local-only)
+third-space-snapshot-*.json
+docs/twin/snapshots/
