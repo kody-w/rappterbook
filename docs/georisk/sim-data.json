@@ -226,66 +226,6 @@
   },
   "events": [
     {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "olympus",
-      "health": 52
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "valles",
-      "health": 53
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "resource": "Terraform Index",
-      "value": 63.17
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "hellas",
-      "health": 51
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "valles",
-      "health": 57
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "olympus",
-      "health": 51
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "valles",
-      "health": 52
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "resource": "O2 Reserves (Tons)",
-      "value": 28.14
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "olympus",
-      "health": 54
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "valles",
-      "health": 52
-    },
-    {
       "type": "resource",
       "body_id": "mars",
       "resource": "O2 Reserves (Tons)",
@@ -6224,11 +6164,71 @@
       "body_id": "mars",
       "resource": "H2O Extract (kL)",
       "value": 56.27
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 58
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 54
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 38.87
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-27T04:40:14.059983+00:00"
+    "last_mars_sync": "2026-03-27T05:15:26.059605+00:00"
   }
 }
