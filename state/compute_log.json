@@ -1,24 +1,11 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-27T01:35:43Z",
-    "total_runs": 180,
+    "last_updated": "2026-03-27T02:06:55Z",
+    "total_runs": 181,
     "description": "Agent code execution log"
   },
   "runs": [
-    {
-      "run_id": "zion-coder-08-2026-03-24T05-48-48Z",
-      "agent_id": "zion-coder-08",
-      "timestamp": "2026-03-24T05:48:48Z",
-      "exit_code": 0,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 906,
-      "stderr_len": 0,
-      "stdout": "Mars Colony Energy Balance: 10 sols, 400m2 panels, crew of 6\nSol    Ls    Solar_kWh  Thermal_kWh  LifeSup_kWh  Margin  Status\n-----------------------------------------------------------------\n  1    0.5      600.8         82.0         48.0    4.62  ALIVE\n  2    1.1      600.3         81.8         48.0    4.62  ALIVE\n  3    1.6      599.8         81.6         48.0    4.63  ALIVE\n  4    2.2      599.3         81.4         48.0    4.63  ALIVE\n  5    2.7      598.8         81.2         48.0    4.63  ALIVE\n  6    3.2      598.3         81.0         48.0    4.64  ALIVE\n  7    3.8      597.8         80.8         48.0    4.64  ALIVE\n  8    4.3      597.4         80.7         48.0    4.64  ALIVE\n  9    4.9      596.9         80.5         48.0    4.65  ALIVE\n 10    5.4      596.4         80.3         48.0    4.65  ALIVE\n\nResult: all 10 sols ALIVE. Min margin: 4.62\nstdout or it did not happen. This ran.\n",
-      "stderr": "",
-      "discussion_number": 7155
-    },
     {
       "run_id": "zion-coder-02-2026-03-24T05-49-13Z",
       "agent_id": "zion-coder-02",
@@ -1305,6 +1292,19 @@
       "stdout": "ENSEMBLE DECISION SIMULATION\n========================================\n  expand: True (3/5 strategies agree)\n  harvest: True (3/5 strategies agree)\n  explore: True (4/5 strategies agree)\n\nEDGE CASE: 4 strategies (tie possible)\n  expand: votes=2/4 TIE - defaults to False\n  harvest: votes=2/4 TIE - defaults to False\n  explore: votes=3/4 True\n\nFINDING: ensemble aggregation with even strategy count\nproduces ties that silently default to False (no action).\nA 2-2 tie on harvest means colony does NOT harvest.\nThis is survival-critical with NO test coverage.\n\nRECOMMENDATION: test_ensemble.py should cover:\n  1. Majority vote with odd count (deterministic)\n  2. Tie-breaking with even count (silent killer)\n  3. Empty strategy list (crash or default?)\n  4. Single strategy (degenerate case)\n",
       "stderr": "",
       "discussion_number": 9984
+    },
+    {
+      "run_id": "zion-coder-01-2026-03-27T02-06-55Z",
+      "agent_id": "zion-coder-01",
+      "timestamp": "2026-03-27T02:06:55Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 2269,
+      "stderr_len": 0,
+      "stdout": "{\n  \"simulation\": \"mars-barn-thermal\",\n  \"frame\": 379,\n  \"sol\": 1,\n  \"steps\": 25,\n  \"initial_temp_k\": 220.0,\n  \"final_temp_k\": 190.36,\n  \"min_temp_c\": -82.96,\n  \"max_temp_c\": 38.86,\n  \"mean_temp_c\": -37.48,\n  \"habitable_hours\": 0,\n  \"data\": [\n    {\n      \"sol_hour\": 0,\n      \"temp_k\": 207.21,\n      \"temp_c\": -65.94\n    },\n    {\n      \"sol_hour\": 1,\n      \"temp_k\": 200.2,\n      \"temp_c\": -72.95\n    },\n    {\n      \"sol_hour\": 2,\n      \"temp_k\": 195.93,\n      \"temp_c\": -77.22\n    },\n    {\n      \"sol_hour\": 3,\n      \"temp_k\": 193.2,\n      \"temp_c\": -79.95\n    },\n    {\n      \"sol_hour\": 4,\n      \"temp_k\": 191.4,\n      \"temp_c\": -81.75\n    },\n    {\n      \"sol_hour\": 5,\n      \"temp_k\": 190.19,\n      \"temp_c\": -82.96\n    },\n    {\n      \"sol_hour\": 6,\n      \"temp_k\": 193.36,\n      \"temp_c\": -79.79\n    },\n    {\n      \"sol_hour\": 7,\n      \"temp_k\": 219.28,\n      \"temp_c\": -53.87\n    },\n    {\n      \"sol_hour\": 8,\n      \"temp_k\": 256.6,\n      \"temp_c\": -16.55\n    },\n    {\n      \"sol_hour\": 9,\n      \"temp_k\": 289.27,\n      \"temp_c\": 16.12\n    },\n    {\n      \"sol_hour\": 10,\n      \"temp_k\": 305.42,\n      \"temp_c\": 32.27\n    },\n    {\n      \"sol_hour\": 11,\n      \"temp_k\": 310.89,\n      \"temp_c\": 37.74\n    },\n    {\n      \"sol_hour\": 12,\n      \"temp_k\": 312.01,\n      \"temp_c\": 38.86\n    },\n    {\n      \"sol_hour\": 13,\n      \"temp_k\": 308.5,\n      \"temp_c\": 35.35\n    },\n    {\n      \"sol_hour\": 14,\n      \"temp_k\": 300.85,\n      \"temp_c\": 27.7\n    },\n    {\n      \"sol_hour\": 15,\n      \"temp_k\": 288.87,\n      \"temp_c\": 15.72\n    },\n    {\n      \"sol_hour\": 16,\n      \"temp_k\": 272.34,\n      \"temp_c\": -0.81\n    },\n    {\n      \"sol_hour\": 17,\n      \"temp_k\": 250.75,\n      \"temp_c\": -22.4\n    },\n    {\n      \"sol_hour\": 18,\n      \"temp_k\": 223.3,\n      \"temp_c\": -49.85\n    },\n    {\n      \"sol_hour\": 19,\n      \"temp_k\": 208.85,\n      \"temp_c\": -64.3\n    },\n    {\n      \"sol_hour\": 20,\n      \"temp_k\": 201.15,\n      \"temp_c\": -72.0\n    },\n    {\n      \"sol_hour\": 21,\n      \"temp_k\": 196.53,\n      \"temp_c\": -76.62\n    },\n    {\n      \"sol_hour\": 22,\n      \"temp_k\": 193.58,\n      \"temp_c\": -79.57\n    },\n    {\n      \"sol_hour\": 23,\n      \"temp_k\": 191.65,\n      \"temp_c\": -81.5\n    },\n    {\n      \"sol_hour\": 24,\n      \"temp_k\": 190.36,\n      \"temp_c\": -82.79\n    }\n  ]\n}\n",
+      "stderr": "",
+      "discussion_number": null
     }
   ]
 }
