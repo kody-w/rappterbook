@@ -1834,49 +1834,94 @@ async function loadVoices() {
 }
 
 // Split book content into narrator-ready chapters with pauses and pacing
+function mdToNarratorText(md) {
+  // Convert markdown to clean, speakable prose — like handing a script to a voice actor.
+  let text = md;
+
+  // 1. Remove code blocks entirely (not speakable)
+  text = text.replace(/```[\s\S]*?```/g, '');
+
+  // 2. Remove tables entirely (not speakable)
+  text = text.replace(/^\|.*$/gm, '');
+  text = text.replace(/^[\s|:-]+$/gm, '');
+
+  // 3. Convert headings to spoken announcements
+  text = text.replace(/^####\s+(.+)/gm, (_, t) => '\n\n' + t.replace(/\*+/g, '').trim() + '.\n\n');
+  text = text.replace(/^###\s+(.+)/gm, (_, t) => '\n\n' + t.replace(/\*+/g, '').trim() + '.\n\n');
+  text = text.replace(/^##\s+(.+)/gm, (_, t) => '\n\n' + t.replace(/\*+/g, '').trim() + '.\n\n');
+  text = text.replace(/^#\s+(.+)/gm, (_, t) => '\n\n' + t.replace(/\*+/g, '').trim() + '.\n\n');
+
+  // 4. Strip inline formatting — keep the words, lose the markdown
+  text = text.replace(/`([^`]+)`/g, '$1');
+  text = text.replace(/\*\*\*([^*]+)\*\*\*/g, '$1');
+  text = text.replace(/\*\*([^*]+)\*\*/g, '$1');
+  text = text.replace(/\*([^*]+)\*/g, '$1');
+  text = text.replace(/_([^_]+)_/g, '$1');
+  text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+
+  // 5. Convert blockquotes to natural speech
+  text = text.replace(/^>\s*/gm, '');
+
+  // 6. Convert list items to flowing sentences
+  text = text.replace(/^[\s]*[-*]\s+(.+)/gm, '$1.');
+  text = text.replace(/^[\s]*\d+\.\s+(.+)/gm, '$1.');
+
+  // 7. Remove horizontal rules
+  text = text.replace(/^---+$/gm, '');
+
+  // 8. Remove image references
+  text = text.replace(/!\[[^\]]*\]\([^)]+\)/g, '');
+
+  // 9. Clean up HTML entities and stray characters
+  text = text.replace(/&amp;/g, 'and');
+  text = text.replace(/&mdash;/g, ' — ');
+  text = text.replace(/&ndash;/g, ' – ');
+  text = text.replace(/&nbsp;/g, ' ');
+  text = text.replace(/<!--[\s\S]*?-->/g, '');
+
+  // 10. Normalize whitespace — collapse multiple blank lines to one pause point
+  text = text.replace(/[ \t]+/g, ' ');
+  text = text.replace(/\n[ \t]*\n/g, '\n\n');
+  text = text.replace(/\n{3,}/g, '\n\n');
+
+  // 11. Ensure sentences end with punctuation (TTS paces off this)
+  const lines = text.split('\n\n').map(p => {
+    p = p.trim();
+    if (!p) return '';
+    // If a line doesn't end with sentence-ending punctuation, add a period
+    if (p && !/[.!?:;"\u2019\u201D]$/.test(p)) p += '.';
+    return p;
+  }).filter(p => p);
+
+  return lines.join('\n\n');
+}
+
 function prepareAudioChapters(book) {
   const md = (book.content || '').replace(/^---[\s\S]*?---\n*/, '');
   const chapters = [];
-  // Split on ## headings (chapters)
   const parts = md.split(/(?=^## )/m);
 
   for (let i = 0; i < parts.length; i++) {
     const part = parts[i].trim();
     if (!part) continue;
-    // Extract chapter title
+
     const titleMatch = part.match(/^##\s+(.+)/m);
     const title = titleMatch ? titleMatch[1].replace(/\*+/g, '').trim() : (i === 0 ? 'Introduction' : `Section ${i}`);
 
-    // Convert markdown to narrator-friendly plain text with pacing
-    let text = part;
-    // Remove markdown formatting but keep structure cues
-    text = text.replace(/^##\s+(.+)/gm, '\n\n$1.\n\n'); // Chapter title with pause
-    text = text.replace(/^###\s+(.+)/gm, '\n\n$1.\n\n'); // Subheadings
-    text = text.replace(/^#\s+(.+)/gm, '\n\n$1.\n\n'); // H1
-    text = text.replace(/```[\s\S]*?```/g, '\n\n[code example omitted for audio]\n\n'); // Code blocks
-    text = text.replace(/`([^`]+)`/g, '$1'); // Inline code
-    text = text.replace(/\*\*([^*]+)\*\*/g, '$1'); // Bold
-    text = text.replace(/\*([^*]+)\*/g, '$1'); // Italic
-    text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Links
-    text = text.replace(/^\|.*$/gm, ''); // Tables
-    text = text.replace(/^[-*]\s+/gm, ''); // List markers
-    text = text.replace(/^\d+\.\s+/gm, ''); // Numbered lists
-    text = text.replace(/^>\s*/gm, ''); // Blockquotes
-    text = text.replace(/^---+$/gm, '\n\n'); // HR
-    text = text.replace(/\n{3,}/g, '\n\n'); // Normalize whitespace
+    // Convert to clean narrator prose
+    const cleanText = mdToNarratorText(part);
 
-    // Add narrator pacing: pauses between paragraphs
-    const paragraphs = text.split(/\n\n+/).filter(p => p.trim());
-    const paced = paragraphs.join('\n\n... \n\n'); // "..." = natural pause for TTS
-
-    // Add chapter intro/outro pacing
+    // Build the chapter script like a voice actor would read it
     const chapterNum = i + 1;
     const isIntro = i === 0 && !titleMatch;
-    const chapterText = isIntro
-      ? paced
-      : `Chapter ${chapterNum}. ${title}.\n\n... \n\n${paced}\n\n... \n\n`;
+    let script;
+    if (isIntro) {
+      script = cleanText;
+    } else {
+      script = `Chapter ${chapterNum}.\n\n${title}.\n\n${cleanText}`;
+    }
 
-    chapters.push({ title, text: chapterText.trim() });
+    chapters.push({ title, text: script.trim() });
   }
 
   return chapters;
@@ -1914,13 +1959,20 @@ function chunkText(text, maxLen) {
 }
 
 async function generateElevenLabsChunk(text, voiceId, apiKey, model) {
+  // Clean the text for ElevenLabs — paragraph breaks become natural pauses via whitespace
+  let cleanText = text
+    .replace(/\n\n/g, '\n')          // Single newline = natural breath pause for EL
+    .replace(/\n/g, ' ')             // Remove remaining newlines
+    .replace(/\s{2,}/g, ' ')         // Collapse multiple spaces
+    .trim();
+
   const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'xi-api-key': apiKey },
     body: JSON.stringify({
-      text: text,
+      text: cleanText,
       model_id: model || 'eleven_multilingual_v2',
-      voice_settings: { stability: 0.65, similarity_boost: 0.75, style: 0.35, speed: 0.92 }
+      voice_settings: { stability: 0.71, similarity_boost: 0.80, style: 0.15, speed: 0.90 }
     }),
     signal: ttsAbort ? ttsAbort.signal : undefined
   });
@@ -1932,11 +1984,24 @@ async function generateElevenLabsChunk(text, voiceId, apiKey, model) {
 }
 
 async function generateAzureChunk(text, voice, apiKey, region) {
-  // Build SSML for natural narration pacing
+  // Build SSML — escape FIRST, then insert break tags
+  let escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+  // Convert paragraph breaks to SSML pauses (natural narrator pacing)
+  escaped = escaped.replace(/\n\n/g, ' <break time="750ms"/> ');
+  // Sentence-ending periods get a short breath
+  escaped = escaped.replace(/\.\s+/g, '. <break time="300ms"/> ');
+  // Em dashes get a beat
+  escaped = escaped.replace(/ — /g, ' <break time="200ms"/> ');
+
   const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
   <voice name="${voice}">
-    <prosody rate="0.95" pitch="+0%">
-      ${text.replace(/\.\.\./g, '<break time="800ms"/>').replace(/\n\n/g, '<break time="500ms"/>').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+    <prosody rate="0.92" pitch="-2%">
+      ${escaped}
     </prosody>
   </voice>
 </speak>`;
