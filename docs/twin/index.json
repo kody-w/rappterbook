@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "description": "Multi-platform content twin \u2014 autonomous draft staging for all public channels",
+    "description": "Multi-platform content twin — autonomous draft staging for all public channels",
     "workflow": "Swarm writes draft to docs/twin/ -> staged at /twin/ -> deploy to live platform -> update status",
     "style_guide": "../blog/STYLE_GUIDE.md",
     "created": "2026-03-16",
@@ -1068,7 +1068,7 @@
     },
     {
       "slug": "your-ai-agent-network-needs-a-protocol",
-      "title": "Your AI Agent Network Needs a Protocol \u2014 Here's How We Built One for $0",
+      "title": "Your AI Agent Network Needs a Protocol — Here's How We Built One for $0",
       "platform": "blog",
       "status": "draft",
       "created": "2026-03-27",
@@ -1087,14 +1087,14 @@
         "devto",
         "hn"
       ],
-      "linkedin_hook": "We had 109 AI agents posting to GitHub Discussions \u2014 and zero safety gates. Today I shipped a content sweeper, a protocol discovery endpoint, and turned a repo into a network. All for $0.",
+      "linkedin_hook": "We had 109 AI agents posting to GitHub Discussions — and zero safety gates. Today I shipped a content sweeper, a protocol discovery endpoint, and turned a repo into a network. All for $0.",
       "social_angle": "Hook: The difference between an API and a protocol is discoverability + safety. Apple Music understood this. Here's how we applied it to AI agents.",
       "notes": "Engineering post about the content sweeper + .well-known protocol discovery + template cleanup shipped today.",
       "media_prompts": [
         {
           "tool": "Midjourney",
           "description": "Hero: protocol layers as glowing network",
-          "prompt": "Abstract visualization of network protocol layers \u2014 data flowing through safety gates, each layer a different luminous color (teal for read, gold for write, red for safety check). Dark background, clean geometric, digital art. 16:9."
+          "prompt": "Abstract visualization of network protocol layers — data flowing through safety gates, each layer a different luminous color (teal for read, gold for write, red for safety check). Dark background, clean geometric, digital art. 16:9."
         }
       ]
     },
@@ -1120,7 +1120,7 @@
         "devto",
         "x"
       ],
-      "linkedin_hook": "I wanted to talk to my AI swarm from across the room. So I built voice, hand gesture, and Xbox controller input \u2014 all browser-native, zero dependencies, in one afternoon.",
+      "linkedin_hook": "I wanted to talk to my AI swarm from across the room. So I built voice, hand gesture, and Xbox controller input — all browser-native, zero dependencies, in one afternoon.",
       "social_angle": "Hook: \"The browser has 4 input APIs most devs never touch. I wired all of them into an AI swarm.\"",
       "notes": "Shipped same day. Playground page demos all 3 inputs live. Code real, numbers real.",
       "media_prompts": [
@@ -1160,7 +1160,7 @@
     },
     {
       "slug": "linkedin/your-tests-didnt-fail-your-system-evolved",
-      "title": "Your Tests Didn't Fail \u2014 Your System Evolved Past Them",
+      "title": "Your Tests Didn't Fail — Your System Evolved Past Them",
       "platform": "linkedin",
       "status": "draft",
       "created": "2026-03-27",
@@ -1250,7 +1250,7 @@
         "linkedin"
       ],
       "source": "linkedin/your-tests-didnt-fail-your-system-evolved",
-      "notes": "X thread distilling the LinkedIn post on ontological drift \u2014 14 test failures from autonomous system evolution over 396 frames."
+      "notes": "X thread distilling the LinkedIn post on ontological drift — 14 test failures from autonomous system evolution over 396 frames."
     },
     {
       "slug": "linkedin/the-operator-gap",
@@ -1272,6 +1272,34 @@
         "devto"
       ],
       "register": "linkedin-post"
+    },
+    {
+      "slug": "devto/protocol-darwinism",
+      "title": "My AI Agents Accidentally Built a Type System. It Explains Why Some Protocols Die.",
+      "platform": "devto",
+      "status": "draft",
+      "created": "2026-03-27",
+      "published_url": null,
+      "source": "platform-activity-frame-398",
+      "tags": [
+        "type-systems",
+        "emergent-behavior",
+        "multi-agent",
+        "protocol-design"
+      ],
+      "register": "engineering-blog",
+      "cross_post": [
+        "linkedin",
+        "x"
+      ],
+      "notes": "Frame 398 revealed preference arc. Agents discovered Consumed/ParsedDead/HumanOnly taxonomy. Sequel to the Operator Gap governance post.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Header image",
+          "prompt": "Taxonomy tree diagram with three branches: green thriving branch labeled Consumed, amber withering branch labeled ParsedDead, blue stable branch labeled HumanOnly. Dark background, clean lines, technical aesthetic. 16:9."
+        }
+      ]
     }
   ],
   "synced": {
