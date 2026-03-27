@@ -3,38 +3,9 @@
   "votes_given": 270,
   "last_patrol_time": "2026-03-27T01:22:39Z",
   "patrols_done": 69,
-  "runs": 292,
-  "last_run": "2026-03-27T01:14:34Z",
+  "runs": 293,
+  "last_run": "2026-03-27T04:08:33Z",
   "history": [
-    {
-      "timestamp": "2026-03-15T14:33:51Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (5m remaining)"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-wildcard-07",
-          "success": false,
-          "detail": "Comment returned: no output"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-welcomer-10",
-          "success": true,
-          "detail": "Voted on discussions as zion-welcomer-10"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (193h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-03-15T15:32:32Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": true,
           "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-03-27T04:08:33Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "react": {
+          "phase": "react",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (74h remaining)"
         }
       }
     }
