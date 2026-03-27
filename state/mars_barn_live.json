@@ -1,21 +1,21 @@
 {
-  "sol": 35,
-  "solar_longitude": 54.0,
+  "sol": 42,
+  "solar_longitude": 57.5,
   "latitude": -4.5,
   "longitude": 137.4,
   "habitat": {
     "interior_temp_k": 310,
-    "power_kw": 8.52,
-    "stored_energy_kwh": 3209.691151854805,
+    "power_kw": 8.5,
+    "stored_energy_kwh": 3743.4711049822795,
     "solar_panel_area_m2": 400.0,
     "panel_efficiency": 0.22,
-    "panel_dust_factor": 0.996,
+    "panel_dust_factor": 0.998,
     "insulation_r_value": 12.0,
     "heater_power_w": 8000.0,
     "crew_size": 4,
     "water_reserves_liters": 200.0,
-    "food_reserves_kg": 38.3,
-    "lettuce_harvested_kg": 2.37
+    "food_reserves_kg": 22.2,
+    "lettuce_harvested_kg": 3.09
   },
   "active_events": [],
   "event_history": [
@@ -130,6 +130,30 @@
     {
       "type": "dust_devil",
       "cleaning": 0.023
+    },
+    {
+      "type": "dust_devil",
+      "cleaning": 0.044
+    },
+    {
+      "type": "dust_devil",
+      "cleaning": 0.023
+    },
+    {
+      "type": "dust_devil",
+      "cleaning": 0.079
+    },
+    {
+      "type": "dust_devil",
+      "cleaning": 0.049
+    },
+    {
+      "type": "dust_devil",
+      "cleaning": 0.099
+    },
+    {
+      "type": "meteorite",
+      "magnitude": 3.3
     }
   ],
   "daily_log": [
@@ -643,20 +667,122 @@
       "food_kg": 38.3,
       "events": [],
       "dust_storm_active": false
+    },
+    {
+      "sol": 36,
+      "ls": 54.5,
+      "interior_c": 36.9,
+      "exterior_avg_c": -80.1,
+      "power_kwh": 209.8,
+      "heating_kwh": 125.9,
+      "stored_kwh": 3286.0,
+      "dust_factor": 0.998,
+      "food_kg": 35.9,
+      "events": [
+        "dust_devil"
+      ],
+      "dust_storm_active": false
+    },
+    {
+      "sol": 37,
+      "ls": 55.0,
+      "interior_c": 36.9,
+      "exterior_avg_c": -80.3,
+      "power_kwh": 209.7,
+      "heating_kwh": 125.8,
+      "stored_kwh": 3362.0,
+      "dust_factor": 0.998,
+      "food_kg": 33.5,
+      "events": [
+        "dust_devil"
+      ],
+      "dust_storm_active": false
+    },
+    {
+      "sol": 38,
+      "ls": 55.5,
+      "interior_c": 36.9,
+      "exterior_avg_c": -80.4,
+      "power_kwh": 209.6,
+      "heating_kwh": 125.8,
+      "stored_kwh": 3439.0,
+      "dust_factor": 0.998,
+      "food_kg": 31.1,
+      "events": [
+        "dust_devil"
+      ],
+      "dust_storm_active": false
+    },
+    {
+      "sol": 39,
+      "ls": 56.0,
+      "interior_c": 36.9,
+      "exterior_avg_c": -80.5,
+      "power_kwh": 209.1,
+      "heating_kwh": 125.4,
+      "stored_kwh": 3515.0,
+      "dust_factor": 0.996,
+      "food_kg": 28.7,
+      "events": [],
+      "dust_storm_active": false
+    },
+    {
+      "sol": 40,
+      "ls": 56.5,
+      "interior_c": 36.9,
+      "exterior_avg_c": -80.7,
+      "power_kwh": 209.4,
+      "heating_kwh": 125.6,
+      "stored_kwh": 3591.0,
+      "dust_factor": 0.998,
+      "food_kg": 26.3,
+      "events": [
+        "dust_devil"
+      ],
+      "dust_storm_active": false
+    },
+    {
+      "sol": 41,
+      "ls": 57.0,
+      "interior_c": 36.9,
+      "exterior_avg_c": -80.8,
+      "power_kwh": 208.9,
+      "heating_kwh": 125.3,
+      "stored_kwh": 3667.0,
+      "dust_factor": 0.996,
+      "food_kg": 23.9,
+      "events": [],
+      "dust_storm_active": false
+    },
+    {
+      "sol": 42,
+      "ls": 57.5,
+      "interior_c": 36.9,
+      "exterior_avg_c": -80.9,
+      "power_kwh": 209.2,
+      "heating_kwh": 125.5,
+      "stored_kwh": 3743.0,
+      "dust_factor": 0.998,
+      "food_kg": 22.2,
+      "events": [
+        "dust_devil",
+        "meteorite"
+      ],
+      "dust_storm_active": false
     }
   ],
   "metrics": {
-    "sols_survived": 35,
-    "total_power_kwh": 7430.4,
-    "total_heating_kwh": 4458.3,
-    "events_survived": 28,
-    "dust_devils_seen": 28,
+    "sols_survived": 42,
+    "total_power_kwh": 8896.1,
+    "total_heating_kwh": 5337.6,
+    "events_survived": 34,
+    "dust_devils_seen": 33,
     "min_temp_ever_k": 293.0,
     "max_temp_ever_k": 310
   },
   "_meta": {
     "created": "2026-03-01T13:18:30Z",
-    "last_updated": "2026-03-20T06:11:55Z",
+    "last_updated": "2026-03-27T06:48:18Z",
     "version": 1
   }
 }
