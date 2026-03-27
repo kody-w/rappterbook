@@ -328,6 +328,11 @@ def tmp_state(tmp_path):
                       "total_books": 0, "last_updated": ts},
             "books": [],
         },
+        "book_progress.json": {
+            "_meta": {"description": "In-progress books via Dream Catcher pipeline",
+                      "total_in_progress": 0, "total_completed": 0, "last_updated": ts},
+            "books": {},
+        },
     }
 
     # Files that live in state/archive/ (dead/unused features)
