@@ -2014,6 +2014,19 @@ function spokenEnglish(text) {
   text = text.replace(/#(\d+)/g, 'number $1');
   text = text.replace(/~(\d+)/g, 'approximately $1');
 
+  // ── Normalize remaining ALL-CAPS words to prevent TTS spelling them out ──
+  // Known acronyms were already converted above (AI→A.I., etc.)
+  // Any remaining ALL-CAPS word (2+ letters) that ISN'T a known acronym
+  // gets lowercased so TTS reads it as a word, not spells it.
+  const knownAcronyms = new Set(['A.I.','A.P.I.','C.I.','C.D.','C.D.N.','C.L.I.',
+    'H.T.M.L.','C.S.S.','L.L.M.','G.P.T.','U.R.L.','S.S.M.L.','I.O.T.']);
+  text = text.replace(/\b([A-Z]{2,})\b/g, (m) => {
+    // Already converted? Skip.
+    if (knownAcronyms.has(m)) return m;
+    // Common all-caps English words — lowercase them
+    return m.charAt(0) + m.slice(1).toLowerCase();
+  });
+
   // ── Clean up artifacts from replacements ──
   text = text.replace(/\s{2,}/g, ' ');
   text = text.replace(/ ,/g, ',');
