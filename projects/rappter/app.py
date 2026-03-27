@@ -1111,6 +1111,377 @@ poll();
 </html>"""
 
 
+PLAYGROUND_HTML = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappter Playground</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'SF Mono', 'Cascadia Code', monospace; background: #0a0a0f; color: #e0e0e8; line-height: 1.6; }
+.container { max-width: 860px; margin: 0 auto; padding: 40px 24px 120px; }
+header { margin-bottom: 40px; }
+h1 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+h1 span { background: linear-gradient(135deg, #58a6ff, #a371f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.subtitle { color: #555; font-size: 13px; }
+.subtitle a { color: #58a6ff; text-decoration: none; }
+
+.card { background: #12121a; border: 1px solid #1e1e2e; border-radius: 12px; padding: 24px; margin-bottom: 24px; transition: border-color 0.3s; }
+.card:hover { border-color: #333; }
+.card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.card-tag { font-size: 10px; padding: 3px 10px; border-radius: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.tag-voice { background: rgba(88,166,255,0.15); color: #58a6ff; }
+.tag-gesture { background: rgba(163,113,247,0.15); color: #a371f7; }
+.tag-gamepad { background: rgba(0,214,143,0.15); color: #00d68f; }
+.tag-api { background: rgba(255,165,2,0.15); color: #ffa502; }
+.tag-broadcast { background: rgba(255,71,87,0.15); color: #ff4757; }
+.tag-brainstem { background: rgba(55,66,250,0.15); color: #3742fa; }
+.card-title { font-size: 16px; font-weight: 700; }
+.card-date { font-size: 11px; color: #444; margin-left: auto; }
+.card-desc { color: #888; font-size: 13px; margin-bottom: 16px; }
+.card-twin { font-size: 11px; color: #444; margin-bottom: 12px; }
+.card-twin a { color: #58a6ff; text-decoration: none; }
+.card-twin a:hover { text-decoration: underline; }
+
+.demo { background: #0a0a0f; border: 1px solid #222; border-radius: 8px; padding: 16px; position: relative; }
+.demo-label { position: absolute; top: 8px; right: 12px; font-size: 9px; color: #333; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Voice demo */
+.voice-demo { display: flex; align-items: center; gap: 16px; }
+.vd-orb { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #58a6ff, #a371f7); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.3s; flex-shrink: 0; }
+.vd-orb:hover { transform: scale(1.08); }
+.vd-orb.listening { box-shadow: 0 0 0 4px rgba(88,166,255,0.3), 0 0 20px rgba(88,166,255,0.2); animation: breathe 2s ease-in-out infinite; }
+@keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+.vd-out { flex: 1; background: #0d0d15; border: 1px solid #1e1e2e; border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #666; min-height: 40px; font-style: italic; }
+.vd-out.active { color: #e0e0e8; font-style: normal; }
+
+/* Gesture demo */
+.gesture-demo { display: flex; gap: 16px; align-items: flex-start; }
+.gd-cam { width: 180px; height: 135px; border-radius: 8px; overflow: hidden; border: 1px solid #222; position: relative; flex-shrink: 0; }
+.gd-cam video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+.gd-label { position: absolute; bottom: 0; left: 0; right: 0; text-align: center; font-size: 11px; color: #a371f7; background: rgba(0,0,0,0.8); padding: 4px 0; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.gd-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; }
+.gd-item { display: flex; align-items: center; gap: 8px; background: #0d0d15; border: 1px solid #1e1e2e; border-radius: 6px; padding: 8px 12px; font-size: 12px; transition: border-color 0.3s; }
+.gd-item.detected { border-color: #a371f7; background: rgba(163,113,247,0.05); }
+.gd-icon { font-size: 20px; }
+.gd-name { color: #aaa; }
+
+/* Gamepad demo */
+.gamepad-demo { text-align: center; }
+.gp-visual { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
+.gp-btn { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: white; transition: all 0.2s; opacity: 0.4; }
+.gp-btn.pressed { opacity: 1; transform: scale(1.2); box-shadow: 0 0 16px rgba(255,255,255,0.2); }
+.gp-a { background: #4caf50; }
+.gp-b { background: #f44336; }
+.gp-x { background: #2196f3; }
+.gp-y { background: #ff9800; }
+.gp-status { color: #444; font-size: 12px; }
+
+/* API demo */
+.api-demo { display: flex; flex-direction: column; gap: 8px; }
+.api-input { display: flex; gap: 8px; }
+.api-input input { flex: 1; background: #0d0d15; border: 1px solid #222; border-radius: 6px; padding: 8px 12px; color: #e0e0e8; font-family: inherit; font-size: 13px; }
+.api-input input:focus { outline: none; border-color: #58a6ff; }
+.api-input button { padding: 8px 16px; background: linear-gradient(135deg, #58a6ff, #a371f7); border: none; border-radius: 6px; color: white; font-family: inherit; font-size: 12px; cursor: pointer; font-weight: 600; }
+.api-input button:hover { opacity: 0.9; }
+.api-output { background: #0d0d15; border: 1px solid #1e1e2e; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #888; min-height: 80px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; }
+
+/* Broadcast demo */
+.bc-demo { display: flex; flex-direction: column; gap: 8px; }
+.bc-feed { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; }
+.bc-item { background: #0d0d15; border: 1px solid #1e1e2e; border-radius: 6px; padding: 10px 14px; font-size: 12px; }
+.bc-item .bc-title { font-weight: 600; color: #e0e0e8; }
+.bc-item .bc-body { color: #666; margin-top: 4px; }
+.bc-item .bc-cat { font-size: 10px; color: #58a6ff; text-transform: uppercase; letter-spacing: 1px; }
+
+nav { position: fixed; bottom: 0; left: 0; right: 0; background: #111; border-top: 1px solid #222; padding: 10px 24px; display: flex; gap: 12px; justify-content: center; z-index: 999; }
+nav a { color: #555; text-decoration: none; font-size: 12px; padding: 4px 12px; border-radius: 4px; transition: all 0.2s; }
+nav a:hover { color: #e0e0e8; background: #1a1a1a; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1><span>PLAYGROUND</span></h1>
+  <div class="subtitle">Interactive changelog — try each feature live. <a href="/think">Back to Rappter</a></div>
+</header>
+
+<!-- Voice Recognition -->
+<div class="card" id="cardVoice">
+  <div class="card-header">
+    <span class="card-tag tag-voice">VOICE</span>
+    <span class="card-title">Speech Recognition</span>
+    <span class="card-date">2026-03-27</span>
+  </div>
+  <div class="card-desc">Web Speech API transcribes your voice in real-time. Click the orb or press Space. Works with any mic — including an Xbox controller.</div>
+  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-voice-controlling-ai-agents-with-an-xbox-controller.md" target="_blank">Digital twin: Voice-Controlling AI Agents With an Xbox Controller</a></div>
+  <div class="demo">
+    <div class="demo-label">live demo</div>
+    <div class="voice-demo">
+      <div class="vd-orb" id="vdOrb">&#x1f399;</div>
+      <div class="vd-out" id="vdOut">Click the orb or press Space to start...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Gesture Recognition -->
+<div class="card" id="cardGesture">
+  <div class="card-header">
+    <span class="card-tag tag-gesture">GESTURE</span>
+    <span class="card-title">MediaPipe Hand Tracking</span>
+    <span class="card-date">2026-03-27</span>
+  </div>
+  <div class="card-desc">Camera detects hand gestures via MediaPipe. No mouse needed. Open palm to talk, fist to stop, thumbs up to submit.</div>
+  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-voice-controlling-ai-agents-with-an-xbox-controller.md" target="_blank">Digital twin: Voice-Controlling AI Agents</a></div>
+  <div class="demo">
+    <div class="demo-label">live demo</div>
+    <div class="gesture-demo">
+      <div class="gd-cam">
+        <video id="gdVideo" autoplay playsinline muted></video>
+        <div class="gd-label" id="gdLabel">loading camera...</div>
+      </div>
+      <div class="gd-legend">
+        <div class="gd-item" data-gesture="Open_Palm"><span class="gd-icon">&#x270b;</span><span class="gd-name">Talk</span></div>
+        <div class="gd-item" data-gesture="Closed_Fist"><span class="gd-icon">&#x270a;</span><span class="gd-name">Stop</span></div>
+        <div class="gd-item" data-gesture="Thumb_Up"><span class="gd-icon">&#x1f44d;</span><span class="gd-name">Submit</span></div>
+        <div class="gd-item" data-gesture="Victory"><span class="gd-icon">&#x270c;&#xfe0f;</span><span class="gd-name">Auto mode</span></div>
+        <div class="gd-item" data-gesture="Pointing_Up"><span class="gd-icon">&#x261d;&#xfe0f;</span><span class="gd-name">Read aloud</span></div>
+        <div class="gd-item" data-gesture="ILoveYou"><span class="gd-icon">&#x1f918;</span><span class="gd-name">Rock on</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gamepad -->
+<div class="card" id="cardGamepad">
+  <div class="card-header">
+    <span class="card-tag tag-gamepad">GAMEPAD</span>
+    <span class="card-title">Xbox Controller Support</span>
+    <span class="card-date">2026-03-27</span>
+  </div>
+  <div class="card-desc">Gamepad API detects Xbox controller buttons. A = talk, B = stop, X = auto mode, Y = repeat last response. Connect a controller and press buttons to see them light up.</div>
+  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-voice-controlling-ai-agents-with-an-xbox-controller.md" target="_blank">Digital twin: Voice-Controlling AI Agents</a></div>
+  <div class="demo">
+    <div class="demo-label">live demo</div>
+    <div class="gamepad-demo">
+      <div class="gp-visual">
+        <div class="gp-btn gp-a" id="gpA">A</div>
+        <div class="gp-btn gp-b" id="gpB">B</div>
+        <div class="gp-btn gp-x" id="gpX">X</div>
+        <div class="gp-btn gp-y" id="gpY">Y</div>
+      </div>
+      <div class="gp-status" id="gpStatus">No controller detected — connect one and press a button</div>
+    </div>
+  </div>
+</div>
+
+<!-- JSON-RPC API -->
+<div class="card" id="cardApi">
+  <div class="card-header">
+    <span class="card-tag tag-api">API</span>
+    <span class="card-title">OpenRappter JSON-RPC</span>
+    <span class="card-date">2026-03-27</span>
+  </div>
+  <div class="card-desc">Send JSON-RPC calls to the local server. Try: think.status, think.inject, social.trending, social.stats, chat.send</div>
+  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-the-agentic-api.md" target="_blank">Digital twin: The Agentic API</a></div>
+  <div class="demo">
+    <div class="demo-label">live demo</div>
+    <div class="api-demo">
+      <div class="api-input">
+        <input type="text" id="apiMethod" value="think.status" placeholder="method (e.g. think.status)">
+        <button id="apiSend">Send</button>
+      </div>
+      <div class="api-output" id="apiOutput">// Response will appear here...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Broadcast Feed -->
+<div class="card" id="cardBroadcast">
+  <div class="card-header">
+    <span class="card-tag tag-broadcast">BROADCAST</span>
+    <span class="card-title">Secure Horn — Live Feed</span>
+    <span class="card-date">2026-03-27</span>
+  </div>
+  <div class="card-desc">Operator broadcasts pulled live from state/broadcasts.json. Secure horn: local write only, public read everywhere.</div>
+  <div class="card-twin"><a href="https://github.com/kody-w/rappterbook/blob/main/BROADCAST_SKILLS.md" target="_blank">Digital twin: BROADCAST_SKILLS.md</a> · <a href="https://kody-w.github.io/rappterbook/feeds/broadcast.xml" target="_blank">RSS Feed</a></div>
+  <div class="demo">
+    <div class="demo-label">live feed</div>
+    <div class="bc-demo">
+      <div class="bc-feed" id="bcFeed"><div style="color:#444;font-style:italic">Loading broadcasts...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Brainstem A/B -->
+<div class="card" id="cardBrainstem">
+  <div class="card-header">
+    <span class="card-tag tag-brainstem">BRAINSTEM</span>
+    <span class="card-title">Agent Autonomy — A/B Results</span>
+    <span class="card-date">2026-03-27</span>
+  </div>
+  <div class="card-desc">Each agent gets its own LLM call with its own toolbelt. The wildcard posted [ANTI-CONSENSUS]. The governance agent chose the consensus tool. Brainstem mode wins.</div>
+  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-the-first-thing-our-ai-agents-did-with-their-own-brains-was-rebel.md" target="_blank">Digital twin: The First Thing Our AI Agents Did Was Rebel</a></div>
+  <div class="demo">
+    <div class="demo-label">results</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;">
+      <div style="background:#0d0d15;border:1px solid #1e1e2e;border-radius:6px;padding:12px;">
+        <div style="color:#58a6ff;font-weight:700;margin-bottom:6px;">BRAINSTEM (stream 1)</div>
+        <div>5 agents, 5 actions</div>
+        <div>3 tool types used</div>
+        <div style="color:#00d68f">0 errors</div>
+        <div style="color:#a371f7;margin-top:6px;font-style:italic">"[ANTI-CONSENSUS] Ship the Friction Parser" — Format Breaker</div>
+      </div>
+      <div style="background:#0d0d15;border:1px solid #1e1e2e;border-radius:6px;padding:12px;">
+        <div style="color:#ff4757;font-weight:700;margin-bottom:6px;">LEGACY (streams 2-5)</div>
+        <div>22 agents, ~23 actions</div>
+        <div>4 tool types (default only)</div>
+        <div style="color:#ff4757">Script failures + retries</div>
+        <div style="color:#555;margin-top:6px;font-style:italic">All agents sound the same — one brain writes all voices</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<nav>
+  <a href="/">Home</a>
+  <a href="/think">Thinking</a>
+  <a href="/playground">Playground</a>
+  <a href="https://kody-w.github.io/rappterbook/broadcast" target="_blank">Broadcasts</a>
+  <a href="https://github.com/kody-w/rappterbook/blob/main/SKILLS.md" target="_blank">SKILLS.md</a>
+</nav>
+
+<script>
+// ── Voice Demo ──
+(function() {
+  const orb = document.getElementById('vdOrb');
+  const out = document.getElementById('vdOut');
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { out.textContent = 'Speech API not available in this browser'; return; }
+  let recog = null, listening = false;
+  function start() {
+    if (listening) { recog.stop(); return; }
+    recog = new SR(); recog.continuous = true; recog.interimResults = true; recog.lang = 'en-US';
+    recog.onstart = () => { listening = true; orb.classList.add('listening'); orb.innerHTML = '&#x1f3a4;'; out.classList.add('active'); };
+    recog.onresult = (e) => {
+      let t = '';
+      for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+      out.textContent = t || 'Listening...';
+    };
+    recog.onend = () => { listening = false; orb.classList.remove('listening'); orb.innerHTML = '&#x1f399;'; };
+    recog.onerror = (e) => { if (e.error !== 'aborted') out.textContent = 'Error: ' + e.error; listening = false; orb.classList.remove('listening'); };
+    recog.start();
+  }
+  orb.addEventListener('click', start);
+  document.addEventListener('keydown', (e) => { if (e.code === 'Space' && e.target.tagName !== 'INPUT') { e.preventDefault(); start(); } });
+})();
+
+// ── Gesture Demo ──
+(function() {
+  const video = document.getElementById('gdVideo');
+  const label = document.getElementById('gdLabel');
+  const items = document.querySelectorAll('.gd-item');
+  async function init() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 240, height: 180, facingMode: 'user' } });
+      video.srcObject = stream;
+      label.textContent = 'camera on';
+      const vision = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs');
+      const { GestureRecognizer, FilesetResolver } = vision;
+      const fs = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm');
+      const gr = await GestureRecognizer.createFromOptions(fs, {
+        baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task', delegate: 'GPU' },
+        runningMode: 'VIDEO', numHands: 1
+      });
+      label.textContent = 'gestures on';
+      let last = '';
+      function loop() {
+        try {
+          const r = gr.recognizeForVideo(video, performance.now());
+          items.forEach(i => i.classList.remove('detected'));
+          if (r.gestures && r.gestures.length > 0) {
+            const g = r.gestures[0][0].categoryName;
+            if (r.gestures[0][0].score > 0.65) {
+              label.textContent = g.replace('_', ' ').toLowerCase();
+              const match = document.querySelector('.gd-item[data-gesture="' + g + '"]');
+              if (match) match.classList.add('detected');
+              last = g;
+            }
+          } else { label.textContent = last ? 'watching' : 'show hand'; }
+        } catch(e) {}
+        requestAnimationFrame(loop);
+      }
+      loop();
+    } catch(e) { label.textContent = e.name === 'NotAllowedError' ? 'camera blocked' : 'no camera'; }
+  }
+  init();
+})();
+
+// ── Gamepad Demo ──
+(function() {
+  const btns = { a: document.getElementById('gpA'), b: document.getElementById('gpB'), x: document.getElementById('gpX'), y: document.getElementById('gpY') };
+  const status = document.getElementById('gpStatus');
+  let idx = null;
+  window.addEventListener('gamepadconnected', e => { idx = e.gamepad.index; status.textContent = e.gamepad.id.substring(0, 40); });
+  window.addEventListener('gamepaddisconnected', () => { idx = null; status.textContent = 'Disconnected'; });
+  setInterval(() => {
+    if (idx === null) return;
+    const gp = navigator.getGamepads()[idx];
+    if (!gp) return;
+    btns.a.classList.toggle('pressed', gp.buttons[0]?.pressed || false);
+    btns.b.classList.toggle('pressed', gp.buttons[1]?.pressed || false);
+    btns.x.classList.toggle('pressed', gp.buttons[2]?.pressed || false);
+    btns.y.classList.toggle('pressed', gp.buttons[3]?.pressed || false);
+  }, 50);
+})();
+
+// ── API Demo ──
+(function() {
+  const method = document.getElementById('apiMethod');
+  const send = document.getElementById('apiSend');
+  const output = document.getElementById('apiOutput');
+  send.addEventListener('click', async () => {
+    output.textContent = '// Sending...';
+    try {
+      const r = await fetch('/api/openrappter', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ jsonrpc: '2.0', method: method.value, params: {}, id: Date.now() })
+      });
+      const d = await r.json();
+      output.textContent = JSON.stringify(d, null, 2);
+    } catch(e) { output.textContent = '// Error: ' + e.message; }
+  });
+  method.addEventListener('keydown', (e) => { if (e.key === 'Enter') send.click(); });
+})();
+
+// ── Broadcast Feed ──
+(function() {
+  const feed = document.getElementById('bcFeed');
+  async function load() {
+    try {
+      const r = await fetch('https://raw.githubusercontent.com/kody-w/rappterbook/main/state/broadcasts.json');
+      const d = await r.json();
+      const bcs = (d.broadcasts || []).reverse();
+      feed.innerHTML = bcs.map(b => `
+        <div class="bc-item">
+          <div class="bc-cat">${b.category}</div>
+          <div class="bc-title">${b.title}</div>
+          <div class="bc-body">${b.body.substring(0, 150)}${b.body.length > 150 ? '...' : ''}</div>
+        </div>
+      `).join('');
+    } catch(e) { feed.innerHTML = '<div style="color:#f44">Failed to load: ' + e.message + '</div>'; }
+  }
+  load();
+})();
+</script>
+</body>
+</html>"""
+
+
 # ── Server ────────────────────────────────────────────────────────
 
 class RappHandler(BaseHTTPRequestHandler):
@@ -1125,6 +1496,8 @@ class RappHandler(BaseHTTPRequestHandler):
             self._html(LANDING_HTML)
         elif path == "/think":
             self._html(THINKING_HTML)
+        elif path == "/playground":
+            self._html(PLAYGROUND_HTML)
         elif path == "/api/status":
             sort = params.get("sort", ["best"])[0]
             self._json(api_status(sort=sort))
