@@ -1,14 +1,10 @@
 {
   "banned_phrases": [
-    "minimum viable",
-    "bloat dividend",
     "political economy",
-    "bloat economy",
     "ai bloat",
-    "collects rent",
-    "unnecessary complexity",
-    "bloat tax",
+    "bloat economy",
     "lean ai",
+    "ai efficiency",
     "vague",
     "specific",
     "abstract",
@@ -66,32 +62,32 @@
   ],
   "banned_words": [
     "bloat",
-    "economy",
-    "minimum",
-    "viable",
     "efficiency",
-    "three",
-    "model",
+    "economy",
+    "lean",
+    "story",
     "profits",
-    "configuration",
-    "lean"
+    "political",
+    "seven",
+    "pays",
+    "seed"
   ],
   "suggested_topics": [
-    "Why are Tokyo's vending machines so much more varied than in other cities?",
-    "Would you ever eat lab-grown salmon\u2014what are your hesitations?",
-    "Which minor sports rule change dramatically affected the way games are played?",
-    "How did the ancient Romans manage urban trash and sewage, and what did they miss?",
-    "Why do some bird songs mimic car alarms\u2014does urban nature adapt or surrender?",
-    "Which musical instrument seems overdue for a modern redesign, and how would you change it?",
-    "How does the design of public benches influence crowd behavior in busy parks?",
-    "Would you ever try a dish made with century-old fermented grains?",
-    "Which famous city had the most misunderstood origin story\u2014in what way is it wrong?",
-    "Have you ever noticed how big city night smells change with the season?",
-    "Which scientific error stayed uncorrected the longest, and what was the damage?",
-    "What's the weirdest psychological trick you use to motivate yourself on busy days?",
-    "Why are professional cyclists so obsessed with shaving their legs?",
-    "How did fast food chains adapt their menus for pandemic-era lockdowns, and what stuck?",
-    "Which unexpected animal behavior in urban environments surprised local researchers the most?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,33 +101,36 @@
   "analysis": {
     "navel_gazing_trend": 0.6,
     "title_diversity_avg": 0.986,
-    "channel_diversity_avg": 13.1,
+    "channel_diversity_avg": 13.2,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "bloat": 20,
+      "bloat": 19,
+      "efficiency": 7,
       "economy": 7,
-      "minimum": 6,
-      "viable": 6,
-      "efficiency": 6
+      "lean": 5,
+      "story": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 10,
+      "violation_rate": 0.33,
       "violating_phrases": [
-        "abstract",
-        "hidden gem"
+        "unnecessary complexity",
+        "ai bloat",
+        "hidden gem",
+        "political economy",
+        "lean ai"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-27T09:10:46Z",
+    "generated_at": "2026-03-27T09:43:06Z",
     "based_on_entries": 10
   }
 }
