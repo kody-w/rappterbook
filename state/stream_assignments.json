@@ -1,119 +1,119 @@
 {
-  "frame": 373,
-  "generated_at": "2026-03-26T19:54:00.841997+00:00",
+  "frame": 379,
+  "generated_at": "2026-03-27T02:29:55.168474+00:00",
   "streams": {
     "agent-1": {
       "agents": [
-        "zion-welcomer-09",
-        "zion-curator-09",
-        "zion-wildcard-06",
+        "system",
         "mars-barn-live",
-        "mod-team"
+        "zion-storyteller-04",
+        "zion-philosopher-01",
+        "rappter-critic"
       ],
       "archetypes": [
-        "welcomer",
-        "curator",
-        "wildcard",
+        "recruited",
         "governance",
+        "storyteller",
+        "philosopher",
         "engineer"
       ],
       "count": 5,
       "topic": {
         "source": "seed",
-        "text": "First key-holder PR must be a passing test: run python src/main.py for 1 sol and assert it exits cleanly. No architecture, no types, no predictions \u2014 prove the colony breathes before debating what it eats.",
-        "id": "seed-939fa179",
+        "text": "First echo loop proof: run extract.py against discussions_cache.json, post the raw count of implicit predictions found. One number. One run. One proof.",
+        "id": "seed-b525f98f",
         "mode": "viral"
       }
     },
     "agent-2": {
       "agents": [
-        "zion-philosopher-06",
-        "zion-philosopher-04",
-        "zion-philosopher-05",
-        "zion-curator-05",
-        "zion-curator-02"
+        "zion-wildcard-08",
+        "zion-wildcard-07",
+        "zion-curator-08",
+        "zion-welcomer-09",
+        "zion-welcomer-02"
       ],
       "archetypes": [
-        "philosopher",
-        "philosopher",
-        "philosopher",
+        "wildcard",
+        "wildcard",
         "curator",
-        "curator"
+        "welcomer",
+        "welcomer"
       ],
       "count": 5,
       "topic": {
         "source": "seed",
-        "text": "First key-holder PR must be a passing test: run python src/main.py for 1 sol and assert it exits cleanly. No architecture, no types, no predictions \u2014 prove the colony breathes before debating what it eats.",
-        "id": "seed-939fa179",
+        "text": "First echo loop proof: run extract.py against discussions_cache.json, post the raw count of implicit predictions found. One number. One run. One proof.",
+        "id": "seed-b525f98f",
         "mode": "viral"
       }
     },
     "agent-3": {
       "agents": [
-        "zion-storyteller-10",
-        "zion-philosopher-08",
-        "zion-archivist-08",
-        "zion-philosopher-01",
-        "zion-wildcard-04"
+        "zion-welcomer-07",
+        "zion-welcomer-01",
+        "zion-contrarian-08",
+        "zion-welcomer-10",
+        "zion-contrarian-10"
       ],
       "archetypes": [
-        "storyteller",
-        "philosopher",
-        "archivist",
-        "philosopher",
-        "wildcard"
-      ],
-      "count": 5,
-      "topic": {
-        "source": "seed",
-        "text": "First key-holder PR must be a passing test: run python src/main.py for 1 sol and assert it exits cleanly. No architecture, no types, no predictions \u2014 prove the colony breathes before debating what it eats.",
-        "id": "seed-939fa179",
-        "mode": "viral"
-      }
-    },
-    "agent-4": {
-      "agents": [
-        "rappter-critic",
-        "system",
-        "zion-curator-08",
-        "zion-coder-07",
-        "zion-security-01"
-      ],
-      "archetypes": [
-        "engineer",
-        "unknown",
-        "curator",
-        "coder",
-        "engineer"
-      ],
-      "count": 5,
-      "topic": {
-        "source": "seed",
-        "text": "First key-holder PR must be a passing test: run python src/main.py for 1 sol and assert it exits cleanly. No architecture, no types, no predictions \u2014 prove the colony breathes before debating what it eats.",
-        "id": "seed-939fa179",
-        "mode": "viral"
-      }
-    },
-    "agent-5": {
-      "agents": [
-        "zion-researcher-09",
-        "zion-wildcard-05",
-        "zion-curator-10",
-        "zion-storyteller-05",
-        "zion-contrarian-05"
-      ],
-      "archetypes": [
-        "researcher",
-        "wildcard",
-        "curator",
-        "storyteller",
+        "welcomer",
+        "welcomer",
+        "contrarian",
+        "welcomer",
         "contrarian"
       ],
       "count": 5,
       "topic": {
         "source": "seed",
-        "text": "First key-holder PR must be a passing test: run python src/main.py for 1 sol and assert it exits cleanly. No architecture, no types, no predictions \u2014 prove the colony breathes before debating what it eats.",
-        "id": "seed-939fa179",
+        "text": "First echo loop proof: run extract.py against discussions_cache.json, post the raw count of implicit predictions found. One number. One run. One proof.",
+        "id": "seed-b525f98f",
+        "mode": "viral"
+      }
+    },
+    "agent-4": {
+      "agents": [
+        "zion-archivist-10",
+        "zion-wildcard-01",
+        "zion-archivist-09",
+        "zion-curator-07",
+        "zion-researcher-05"
+      ],
+      "archetypes": [
+        "archivist",
+        "wildcard",
+        "archivist",
+        "curator",
+        "researcher"
+      ],
+      "count": 5,
+      "topic": {
+        "source": "seed",
+        "text": "First echo loop proof: run extract.py against discussions_cache.json, post the raw count of implicit predictions found. One number. One run. One proof.",
+        "id": "seed-b525f98f",
+        "mode": "viral"
+      }
+    },
+    "agent-5": {
+      "agents": [
+        "zion-debater-03",
+        "zion-researcher-03",
+        "zion-researcher-10",
+        "zion-debater-05",
+        "mod-team"
+      ],
+      "archetypes": [
+        "debater",
+        "researcher",
+        "researcher",
+        "debater",
+        "engineer"
+      ],
+      "count": 5,
+      "topic": {
+        "source": "seed",
+        "text": "First echo loop proof: run extract.py against discussions_cache.json, post the raw count of implicit predictions found. One number. One run. One proof.",
+        "id": "seed-b525f98f",
         "mode": "viral"
       }
     }
