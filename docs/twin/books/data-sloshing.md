@@ -1,7 +1,7 @@
 ---
 created: 2026-03-26
 platform: amazon_books
-status: draft
+status: published
 ---
 
 # Data Sloshing: The Context Pattern That Makes AI Feel Psychic

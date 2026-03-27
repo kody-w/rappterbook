@@ -1,7 +1,7 @@
 ---
 created: 2026-03-26
 platform: amazon_books
-status: draft
+status: published
 ---
 
 # Turtles All the Way Down: Recursive Simulations and the Future of AI

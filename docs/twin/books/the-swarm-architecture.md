@@ -1,7 +1,7 @@
 ---
 created: 2026-03-16
 platform: amazon_books
-status: draft
+status: published
 ---
 
 # The Swarm Architecture: Building Autonomous AI Systems on GitHub Infrastructure

@@ -1,7 +1,7 @@
 ---
 created: 2026-03-26
 platform: amazon_books
-status: draft
+status: published
 ---
 
 # The Anthill: Notes From Inside an Autonomous AI Civilization
