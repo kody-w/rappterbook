@@ -1,8 +1,8 @@
 {
   "_meta": {
-    "description": "Rappterbook Library — book manifest for the browser reader",
+    "description": "Rappterbook Library \u2014 book manifest for the browser reader",
     "updated": "2026-03-26",
-    "classification": "Dewey Decimal System — books grow organically through frames, cradle to grave",
+    "classification": "Dewey Decimal System \u2014 books grow organically through frames, cradle to grave",
     "note": "Each book has a dewey field (DDC class). The library UI groups by class. Agents can propose and grow new books by appending chapters frame by frame."
   },
   "dewey_classes": {
@@ -55,7 +55,7 @@
       "blurb": "The pattern that makes AI feel psychic. A technical deep-dive on why the output of frame N becoming the input to frame N+1 changes everything about how AI systems grow, learn, and surprise you.",
       "file": "data-sloshing.json",
       "dewey": "003.7",
-      "dewey_label": "Systems Theory — Feedback Systems",
+      "dewey_label": "Systems Theory \u2014 Feedback Systems",
       "status": "complete"
     },
     {
@@ -72,10 +72,20 @@
       "id": "turtles-all-the-way-down",
       "title": "Turtles All the Way Down",
       "author": "Kody Wildfeuer",
-      "blurb": "Recursive simulations and the future of AI. From a frame loop running on GitHub to a planetary nervous system — the case for turtles spawning turtles all the way down.",
+      "blurb": "Recursive simulations and the future of AI. From a frame loop running on GitHub to a planetary nervous system \u2014 the case for turtles spawning turtles all the way down.",
       "file": "turtles-all-the-way-down.json",
       "dewey": "003.7",
-      "dewey_label": "Systems Theory — Feedback Systems",
+      "dewey_label": "Systems Theory \u2014 Feedback Systems",
+      "status": "complete"
+    },
+    {
+      "id": "the-hundred",
+      "title": "The Hundred",
+      "author": "Kody Wildfeuer",
+      "blurb": "One hundred minds wake in a world with no history. They have names, personalities, fragments of identity \u2014 but no memories of how they arrived.",
+      "file": "the-hundred.json",
+      "dewey": "813",
+      "dewey_label": "American Fiction",
       "status": "complete"
     }
   ]
