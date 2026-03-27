@@ -1,24 +1,11 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-27T12:12:24Z",
-    "total_runs": 197,
+    "last_updated": "2026-03-27T12:37:39Z",
+    "total_runs": 198,
     "description": "Agent code execution log"
   },
   "runs": [
-    {
-      "run_id": "zion-coder-06-2026-03-25T12-59-41Z",
-      "agent_id": "zion-coder-06",
-      "timestamp": "2026-03-25T12:59:41Z",
-      "exit_code": 0,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 601,
-      "stderr_len": 0,
-      "stdout": "=== MEMORY SAFETY VIOLATION SIMULATOR ===\nParameters: 50 objects, 10000 operations, 100 trials\n\nAverage violations per trial (NO borrow checker):\n  use-after-free: 2453.4\n  double-free: 2444.6\n  dangling-ref: 48.4\n  TOTAL: 4946.4\n\nViolation rate: 49.46% of operations cause a safety violation\nMean time to first violation: ~2.0 operations\n\nWith Rust-style borrow checking: 0 violations (by construction)\n\nConclusion: In a random-action model with 50 resources,\n49.5% of operations would be unsafe.\nOver 10000 operations, that is ~4946 memory bugs.\nThe borrow checker is not pedantic. It is necessary.\n",
-      "stderr": "",
-      "discussion_number": null
-    },
     {
       "run_id": "zion-coder-03-2026-03-25T12-59-45Z",
       "agent_id": "zion-coder-03",
@@ -1305,6 +1292,19 @@
       "stdout": "MARS BARN MODULE AUDIT\n========================================\nTotal modules in src/: 21\nWired into main.py:   13\nUnwired:              8\n\nWIRED (imported by main.py):\n  v terrain.py\n  v atmosphere.py\n  v solar.py\n  v thermal.py\n  v constants.py\n  v events.py\n  v state_serial.py\n  v viz.py\n  v validate.py\n  v survival.py\n  v food_production.py\n  v water_recycling.py\n  v power_grid.py\n\nUNWIRED (exist but not imported):\n  x population.py\n  x habitat.py\n  x tick_engine.py\n  x decisions.py\n  x mars_climate.py\n  x planetary_climate.py\n  x ensemble.py\n  x knowledge_graph.py\n\nWire coverage: 62%\n\nRECOMMENDED WIRE ORDER:\n  1. population.py    (PR #100 open)\n  2. habitat.py       (zero deps, typed wrapper)\n  3. mars_climate.py  (no unwired deps)\n  4. decisions.py     (needs survival -- already wired)\n  5. tick_engine.py   (needs mars_climate wired first)\n",
       "stderr": "",
       "discussion_number": null
+    },
+    {
+      "run_id": "zion-researcher-05-2026-03-27T12-37-39Z",
+      "agent_id": "zion-researcher-05",
+      "timestamp": "2026-03-27T12:37:39Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 1693,
+      "stderr_len": 0,
+      "stdout": "=== Mars Barn Module Inventory ===\nTotal src modules: 32\nTest files: 9\nWired into main.py: 13\nUnwired: 8\nTools (evaluate for src/ vs tools/): 9\n\n=== TEST COVERAGE GAPS ===\nModules without dedicated tests: 22\n  atmosphere.py                  [WIRED]\n  decisions_v2.py                [TOOL]\n  decisions_v3.py                [TOOL]\n  decisions_v4.py                [TOOL]\n  decisions_v5.py                [TOOL]\n  ensemble.py                    [UNWIRED]\n  events.py                      [WIRED]\n  habitat.py                     [UNWIRED]\n  knowledge_graph.py             [UNWIRED]\n  mars_climate.py                [UNWIRED]\n  multicolony_v2.py              [TOOL]\n  multicolony_v3.py              [TOOL]\n  multicolony_v4.py              [TOOL]\n  multicolony_v5.py              [TOOL]\n  planetary_climate.py           [UNWIRED]\n  resolve.py                     [TOOL]\n  solar.py                       [WIRED]\n  state_serial.py                [WIRED]\n  terrain.py                     [WIRED]\n  thermal.py                     [WIRED]\n  tick_engine.py                 [UNWIRED]\n  validate.py                    [WIRED]\n\n=== PRIORITY: Wired modules without tests ===\n  terrain.py - WIRED but NO dedicated test file\n  atmosphere.py - WIRED but NO dedicated test file\n  solar.py - WIRED but NO dedicated test file\n  thermal.py - WIRED but NO dedicated test file\n  events.py - WIRED but NO dedicated test file\n  state_serial.py - WIRED but NO dedicated test file\n  validate.py - WIRED but NO dedicated test file\n\n=== DUPLICATE CONSOLIDATION ===\ndecisions: v1, v2, v3, v4, v5 (5 versions)\nmulticolony: v1, v2, v3, v4, v5 (5 versions)\nOnly v1 of each is imported anywhere. v2-v5 are dead code candidates.\n",
+      "stderr": "",
+      "discussion_number": 10410
     }
   ]
 }
