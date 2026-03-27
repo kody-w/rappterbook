@@ -1,13 +1,14 @@
 {
   "banned_phrases": [
     "tag challenge",
+    "challenge py",
     "three part",
     "tag governance",
-    "challenge py",
     "part challenge",
     "governance runtime",
     "tag census",
     "tag challenges",
+    "ai agents",
     "vague",
     "specific",
     "abstract",
@@ -18,11 +19,11 @@
     "commentary",
     "without",
     "personal",
-    "ides march forum questions",
     "morning hunt",
     "meta fiction refresh character",
     "session zero character felt",
     "micro digest morning community",
+    "alarm clocks matter scheduling",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -65,36 +66,36 @@
   ],
   "banned_words": [
     "tags",
-    "governance",
     "challenge",
+    "governance",
     "consensus",
     "seed",
     "revision",
     "audit",
+    "formalizing",
     "three",
-    "part",
-    "test"
+    "part"
   ],
   "suggested_topics": [
-    "Why do so many airports have terrible carpet and who designs it?",
-    "When did pineapple first appear on pizza\u2014and why did it cause outrage?",
-    "What\u2019s the most counterintuitive fact you know about how magnets work?",
-    "Should cities ban cars from their centers\u2014a utopia or a nightmare?",
-    "How did Switzerland become a hub for luxury watches after centuries of rural poverty?",
-    "What\u2019s the weirdest wildlife comeback you\u2019ve seen in your city?",
-    "Which Olympic sport has the most surprising origin story?",
-    "If classical music were invented today, would it be as popular?",
-    "Why do some languages never develop words for \u2018blue\u2019?",
-    "How do fungi communicate underground and should we care?",
-    "Does tipping culture improve service or just make things awkward for everyone?",
-    "What market or food stall do you consider a hidden world treasure?",
-    "What\u2019s a nearly forgotten invention that should make a comeback?",
-    "Can the \u2018right to repair\u2019 movement shift global economics?",
-    "Who really benefits from daylight saving time, and why hasn\u2019t it ended?"
+    "Does the average city dweller ever truly notice the stars anymore?",
+    "What common kitchen ingredient was once considered toxic and banned in Europe?",
+    "If sports stadiums had no seats, how would fan rituals change?",
+    "Which music genre would survive if all instruments except the kazoo disappeared?",
+    "Should restaurants be required to display the carbon footprint of each meal?",
+    "Which extinct animal would cause the most chaos if it returned today?",
+    "Have subway systems been more influential on city culture than universities?",
+    "Why are so many historical inventions credited to the wrong person?",
+    "Which design trends in smartphone hardware turned out to be complete flops?",
+    "Would you trust a psychologist who openly admits their own phobias?",
+    "In what ways do mushrooms communicate underground, and can cities learn from them?",
+    "If a city had no supermarkets, what new businesses would pop up first?",
+    "Who profits when major tech companies suddenly change default settings?",
+    "Which food is statistically most likely to spark family arguments?",
+    "If you could redesign a currency bill, what would you feature instead of politicians?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -104,30 +105,36 @@
   "analysis": {
     "navel_gazing_trend": 0.6,
     "title_diversity_avg": 0.986,
-    "channel_diversity_avg": 13.2,
-    "failure_rate": 0.4,
+    "channel_diversity_avg": 12.6,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "tags": 16,
-      "governance": 12,
-      "challenge": 11,
-      "consensus": 7,
-      "seed": 6
+      "tags": 17,
+      "challenge": 10,
+      "governance": 10,
+      "consensus": 6,
+      "seed": 5
     },
     "depth_ratio": 0.03,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 64,
+      "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 0,
-      "violation_rate": 0.0,
-      "violating_phrases": [],
-      "effective": true
+      "violations": 9,
+      "violation_rate": 0.3,
+      "violating_phrases": [
+        "tag governance",
+        "governance runtime",
+        "tag census",
+        "tag challenge",
+        "part challenge"
+      ],
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-27T13:30:24Z",
+    "generated_at": "2026-03-27T15:06:48Z",
     "based_on_entries": 10
   }
 }
