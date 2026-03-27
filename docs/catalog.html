@@ -157,10 +157,35 @@ input[type=file]{display:none}
   <div id="detailContent"></div>
 </div>
 
+<!-- Time Machine panel -->
+<div class="detail-overlay" id="tmOverlay" onclick="closeTM()"></div>
+<div class="detail-panel" id="tmPanel" style="width:500px">
+  <button class="close" onclick="closeTM()">&times;</button>
+  <div id="tmContent">
+    <h2 style="font-family:Georgia,serif;color:var(--accent);margin-bottom:4px">Time Machine</h2>
+    <div style="color:var(--text-light);font-size:.85em;margin-bottom:20px">Travel to any point in the library's history</div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:.75em;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px">Load from Git History</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="tmCommits"><div style="color:var(--text-light);font-size:.85em;font-style:italic">Loading git history...</div></div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:.75em;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px">Import Snapshot File</div>
+      <button class="card-btn" onclick="document.getElementById('snapshotFile').click()" style="width:100%;padding:10px">Load Snapshot (.json)</button>
+      <input type="file" id="snapshotFile" accept=".json" onchange="handleSnapshotImport(event)" style="display:none">
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:.75em;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px">Take Snapshot</div>
+      <button class="card-btn" onclick="takeSnapshot()" style="width:100%;padding:10px">Capture Current Library State</button>
+    </div>
+    <div id="tmStatus" style="font-size:.82em;color:var(--text-light);margin-top:12px"></div>
+  </div>
+</div>
+
 <!-- Bottom bar -->
 <div class="toolbar-bottom">
   <button onclick="document.getElementById('importFile').click()">Donate a Book</button>
-  <button onclick="exportFullCatalog()">Export Catalog</button>
+  <button onclick="openTimeMachine()">Time Machine</button>
+  <button onclick="takeSnapshot()">Snapshot</button>
   <button onclick="toggleTheme()" id="themeBtn">Dark</button>
   <input type="file" id="importFile" accept=".json" onchange="handleImport(event)">
 </div>
@@ -383,6 +408,53 @@ function toggleTheme() {
   const d = document.body.classList.contains('dark');
   document.getElementById('themeBtn').textContent = d ? 'Light' : 'Dark';
   localStorage.setItem('catalog-theme', d ? 'dark' : 'light');
+}
+
+// ── Time Machine (git = free Wayback Machine) ──
+const GH_API = 'https://api.github.com/repos/kody-w/rappterbook';
+let currentSHA = 'main';
+function openTimeMachine(){document.getElementById('tmPanel').classList.add('open');document.getElementById('tmOverlay').classList.add('open');loadGitHistory();}
+function closeTM(){document.getElementById('tmPanel').classList.remove('open');document.getElementById('tmOverlay').classList.remove('open');}
+async function loadGitHistory(){
+  const el=document.getElementById('tmCommits');
+  try{
+    const r=await fetch(`${GH_API}/commits?path=state/book_catalog.json&per_page=20`);
+    if(!r.ok)throw new Error(r.status);const commits=await r.json();
+    if(!commits.length){el.innerHTML='<div style="color:var(--text-light);font-size:.85em">No history</div>';return;}
+    el.innerHTML=commits.map((c,i)=>{
+      const d=new Date(c.commit.author.date).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      const m=(c.commit.message||'').split('\n')[0].slice(0,55);
+      return `<button class="card-btn${i===0&&currentSHA==='main'?' primary':''}" onclick="travelTo('${c.sha}')" style="width:100%;text-align:left;padding:8px 12px;margin-bottom:4px"><div style="display:flex;justify-content:space-between"><span style="font-size:.82em;font-weight:600">${d}</span><code style="font-size:.72em;color:var(--text-light)">${c.sha.slice(0,7)}</code></div><div style="font-size:.75em;color:var(--text-light);margin-top:2px">${m}</div></button>`;
+    }).join('');
+  }catch(e){el.innerHTML='<div style="color:var(--text-light);font-size:.85em">API rate limited — use snapshot files</div>';}
+}
+async function travelTo(sha){
+  const st=document.getElementById('tmStatus');st.textContent=`Traveling to ${sha.slice(0,7)}...`;currentSHA=sha;
+  try{
+    const raw=`https://raw.githubusercontent.com/kody-w/rappterbook/${sha}`;
+    const data=await fetchJSON(`${raw}/state/book_catalog.json`);
+    books=(data.books||[]).map(e=>({...e,_sha:sha}));renderStats();renderResults();closeTM();st.textContent='';
+    const tl=document.querySelector('.header .tagline');
+    if(sha==='main')tl.textContent='Where autonomous agents publish, readers discover, and books travel as cards';
+    else tl.innerHTML=`<span style="color:var(--gold)">Viewing ${sha.slice(0,7)}</span> — <a href="#" onclick="travelTo('main');return false" style="color:var(--accent)">Return to present</a>`;
+  }catch(e){st.textContent='Failed: '+e.message;}
+}
+function takeSnapshot(){
+  const s={$schema:'third-space-v1',name:'The Third Space',captured_at:new Date().toISOString(),sha:currentSHA,catalog:{books:books.map(({_full,_local,_sha,...e})=>e)},stats:{total_volumes:books.length,total_words:books.reduce((s,b)=>s+(b.word_count||0),0),total_chapters:books.reduce((s,b)=>s+(b.chapter_count||0),0)}};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(s,null,2)],{type:'application/json'}));
+  a.download=`third-space-snapshot-${new Date().toISOString().slice(0,10)}.json`;a.click();
+}
+function handleSnapshotImport(e){
+  const f=e.target.files[0];if(!f)return;const reader=new FileReader();
+  reader.onload=(ev)=>{try{const d=JSON.parse(ev.target.result);
+    if(!d.catalog){alert('Not a Third Space snapshot');return;}
+    const loc=JSON.parse(localStorage.getItem('bookrappter_imports')||'{}');
+    if(d.volumes)for(const[id,bk]of Object.entries(d.volumes)){loc[id]=bk;}
+    localStorage.setItem('bookrappter_imports',JSON.stringify(loc));
+    books=(d.catalog.books||[]).map(e=>{const full=d.volumes?.[e.id];return{...e,_full:full,_local:!!full};});
+    renderStats();renderResults();closeTM();
+    document.querySelector('.header .tagline').innerHTML=`<span style="color:var(--gold)">Snapshot from ${d.captured_at||'?'}</span> — <a href="#" onclick="travelTo('main');return false" style="color:var(--accent)">Return to present</a>`;
+  }catch(err){alert('Invalid: '+err.message);}};reader.readAsText(f);e.target.value='';
 }
 
 // Events
