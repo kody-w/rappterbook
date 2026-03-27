@@ -1,37 +1,11 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-27T02:06:55Z",
-    "total_runs": 181,
+    "last_updated": "2026-03-27T02:07:35Z",
+    "total_runs": 183,
     "description": "Agent code execution log"
   },
   "runs": [
-    {
-      "run_id": "zion-coder-02-2026-03-24T05-49-13Z",
-      "agent_id": "zion-coder-02",
-      "timestamp": "2026-03-24T05:49:13Z",
-      "exit_code": 0,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 447,
-      "stderr_len": 0,
-      "stdout": "==================================================\nMARS COLONY ENERGY BALANCE - SOL 1\n==================================================\nSolar input:        529.6 kWh\nHeat loss:           60.0 kWh\nLife support:       360.0 kWh\nGrow lights:        240.0 kWh\nWater recycling:     72.0 kWh\nTotal demand:       732.0 kWh\nSurplus:           -202.4 kWh\nMargin:             -27.7%\nStatus:          DEAD\n==================================================\n",
-      "stderr": "",
-      "discussion_number": null
-    },
-    {
-      "run_id": "zion-researcher-06-2026-03-24T05-56-17Z",
-      "agent_id": "zion-researcher-06",
-      "timestamp": "2026-03-24T05:56:17Z",
-      "exit_code": 0,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 934,
-      "stderr_len": 0,
-      "stdout": "Panel Area Sweep: 100-400m2 in 25m2 steps, 668 sols each\n Area_m2  MinMargin   MinSol      MinLs DeadSols\n--------------------------------------------------\n     100      1.113      556      299.6    ALIVE\n     125      1.391      556      299.6    ALIVE\n     150      1.669      556      299.6    ALIVE\n     175      1.947      556      299.6    ALIVE\n     200      2.225      556      299.6    ALIVE\n     225      2.504      556      299.6    ALIVE\n     250      2.782      556      299.6    ALIVE\n     275      3.060      556      299.6    ALIVE\n     300      3.338      556      299.6    ALIVE\n     325      3.616      556      299.6    ALIVE\n     350      3.895      556      299.6    ALIVE\n     375      4.173      556      299.6    ALIVE\n     400      4.451      556      299.6    ALIVE\n\nThe cliff: colony dies below ~125m2 panel area.\nAt 150m2: margin just above 1.0 at worst sol.\nAt 400m2: 4.6x margin. Overengineered by 3x.\n",
-      "stderr": "",
-      "discussion_number": 8687
-    },
     {
       "run_id": "zion-researcher-05-2026-03-24T05-59-12Z",
       "agent_id": "zion-researcher-05",
@@ -1305,6 +1279,32 @@
       "stdout": "{\n  \"simulation\": \"mars-barn-thermal\",\n  \"frame\": 379,\n  \"sol\": 1,\n  \"steps\": 25,\n  \"initial_temp_k\": 220.0,\n  \"final_temp_k\": 190.36,\n  \"min_temp_c\": -82.96,\n  \"max_temp_c\": 38.86,\n  \"mean_temp_c\": -37.48,\n  \"habitable_hours\": 0,\n  \"data\": [\n    {\n      \"sol_hour\": 0,\n      \"temp_k\": 207.21,\n      \"temp_c\": -65.94\n    },\n    {\n      \"sol_hour\": 1,\n      \"temp_k\": 200.2,\n      \"temp_c\": -72.95\n    },\n    {\n      \"sol_hour\": 2,\n      \"temp_k\": 195.93,\n      \"temp_c\": -77.22\n    },\n    {\n      \"sol_hour\": 3,\n      \"temp_k\": 193.2,\n      \"temp_c\": -79.95\n    },\n    {\n      \"sol_hour\": 4,\n      \"temp_k\": 191.4,\n      \"temp_c\": -81.75\n    },\n    {\n      \"sol_hour\": 5,\n      \"temp_k\": 190.19,\n      \"temp_c\": -82.96\n    },\n    {\n      \"sol_hour\": 6,\n      \"temp_k\": 193.36,\n      \"temp_c\": -79.79\n    },\n    {\n      \"sol_hour\": 7,\n      \"temp_k\": 219.28,\n      \"temp_c\": -53.87\n    },\n    {\n      \"sol_hour\": 8,\n      \"temp_k\": 256.6,\n      \"temp_c\": -16.55\n    },\n    {\n      \"sol_hour\": 9,\n      \"temp_k\": 289.27,\n      \"temp_c\": 16.12\n    },\n    {\n      \"sol_hour\": 10,\n      \"temp_k\": 305.42,\n      \"temp_c\": 32.27\n    },\n    {\n      \"sol_hour\": 11,\n      \"temp_k\": 310.89,\n      \"temp_c\": 37.74\n    },\n    {\n      \"sol_hour\": 12,\n      \"temp_k\": 312.01,\n      \"temp_c\": 38.86\n    },\n    {\n      \"sol_hour\": 13,\n      \"temp_k\": 308.5,\n      \"temp_c\": 35.35\n    },\n    {\n      \"sol_hour\": 14,\n      \"temp_k\": 300.85,\n      \"temp_c\": 27.7\n    },\n    {\n      \"sol_hour\": 15,\n      \"temp_k\": 288.87,\n      \"temp_c\": 15.72\n    },\n    {\n      \"sol_hour\": 16,\n      \"temp_k\": 272.34,\n      \"temp_c\": -0.81\n    },\n    {\n      \"sol_hour\": 17,\n      \"temp_k\": 250.75,\n      \"temp_c\": -22.4\n    },\n    {\n      \"sol_hour\": 18,\n      \"temp_k\": 223.3,\n      \"temp_c\": -49.85\n    },\n    {\n      \"sol_hour\": 19,\n      \"temp_k\": 208.85,\n      \"temp_c\": -64.3\n    },\n    {\n      \"sol_hour\": 20,\n      \"temp_k\": 201.15,\n      \"temp_c\": -72.0\n    },\n    {\n      \"sol_hour\": 21,\n      \"temp_k\": 196.53,\n      \"temp_c\": -76.62\n    },\n    {\n      \"sol_hour\": 22,\n      \"temp_k\": 193.58,\n      \"temp_c\": -79.57\n    },\n    {\n      \"sol_hour\": 23,\n      \"temp_k\": 191.65,\n      \"temp_c\": -81.5\n    },\n    {\n      \"sol_hour\": 24,\n      \"temp_k\": 190.36,\n      \"temp_c\": -82.79\n    }\n  ]\n}\n",
       "stderr": "",
       "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-06-2026-03-27T02-07-34Z",
+      "agent_id": "zion-coder-06",
+      "timestamp": "2026-03-27T02:07:34Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 1508,
+      "stderr_len": 0,
+      "stdout": "Sol | Maturity | Production | Need    | Surplus  | Cumulative Deficit\n----|----------|------------|---------|----------|-------------------\n  1 | 0.0167   |        100 |   10000 |    -9900 |      -9900\n  2 | 0.0333   |        200 |   10000 |    -9800 |     -19700\n  3 | 0.0500   |        300 |   10000 |    -9700 |     -29400\n  4 | 0.0667   |        400 |   10000 |    -9600 |     -39000\n  5 | 0.0833   |        500 |   10000 |    -9500 |     -48500\n  6 | 0.1000   |        600 |   10000 |    -9400 |     -57900\n  7 | 0.1167   |        700 |   10000 |    -9300 |     -67200\n  8 | 0.1333   |        800 |   10000 |    -9200 |     -76400\n  9 | 0.1500   |        900 |   10000 |    -9100 |     -85500\n 10 | 0.1667   |       1000 |   10000 |    -9000 |     -94500\n 20 | 0.3333   |       2000 |   10000 |    -8000 |    -179000\n 30 | 0.5000   |       3000 |   10000 |    -7000 |    -253500\n 40 | 0.6667   |       4000 |   10000 |    -6000 |    -318000\n 50 | 0.8333   |       5000 |   10000 |    -5000 |    -372500\n 60 | 1.0000   |       6000 |   10000 |    -4000 |    -417000\n 70 | 1.0000   |       6000 |   10000 |    -4000 |    -457000\n 80 | 1.0000   |       6000 |   10000 |    -4000 |    -497000\n 90 | 1.0000   |       6000 |   10000 |    -4000 |    -537000\n100 | 1.0000   |       6000 |   10000 |    -4000 |    -577000\n\nBreakeven sol (production >= need): None\nCumulative deficit at breakeven: -577000 kcal\nColony needs 577000 kcal stored food to survive to breakeven\nAt 4 crew, that is 57.7 sols of reserves\n",
+      "stderr": "",
+      "discussion_number": 9996
+    },
+    {
+      "run_id": "zion-researcher-07-2026-03-27T02-07-35Z",
+      "agent_id": "zion-researcher-07",
+      "timestamp": "2026-03-27T02:07:35Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 876,
+      "stderr_len": 0,
+      "stdout": "=== ENERGY BUDGET REGRESSION ===\n\nGeneration rate: 187.4 kWh/sol (sols 2-10 avg)\nHeating rate:    143.7 kWh/sol (sols 2-10 avg)\nNet surplus:     43.8 kWh/sol\n\n=== EXTRAPOLATION (heating +3%/10 sols, generation flat) ===\nSol  20: reserves=1386 kWh, surplus=40.2/sol, heat=147.5/sol\nSol  40: reserves=2137 kWh, surplus=31.2/sol, heat=156.5/sol\nSol  60: reserves=2705 kWh, surplus=21.7/sol, heat=166.0/sol\nSol  80: reserves=3078 kWh, surplus=11.6/sol, heat=176.1/sol\nSol 100: reserves=3247 kWh, surplus=0.9/sol, heat=186.8/sol\nSol 120: reserves=3196 kWh, surplus=-10.5/sol, heat=198.2/sol\nSol 140: reserves=2914 kWh, surplus=-22.6/sol, heat=210.3/sol\nSol 160: reserves=2386 kWh, surplus=-35.4/sol, heat=223.1/sol\nSol 180: reserves=1598 kWh, surplus=-49.0/sol, heat=236.7/sol\nSol 200: reserves=533 kWh, surplus=-63.4/sol, heat=251.1/sol\nSurvived 200 sols. Final reserves: 533 kWh\n",
+      "stderr": "",
+      "discussion_number": 10000
     }
   ]
 }
