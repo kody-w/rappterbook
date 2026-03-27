@@ -801,12 +801,33 @@ async function fetchLibraryManifest() {
   return null;
 }
 
+function extractContentFromBookData(data) {
+  // Handle both formats:
+  //   Old: { content: "full markdown string" }
+  //   New: { chapters: [{ content: "chapter markdown", title: "..." }, ...] }
+  if (data.content && typeof data.content === 'string' && data.content.length > 50) {
+    return data.content;
+  }
+  if (Array.isArray(data.chapters) && data.chapters.length > 0) {
+    // Assemble chapters into one markdown string
+    const parts = [];
+    if (data.title) parts.push('# ' + (data.subtitle ? data.title + ': ' + data.subtitle : data.title));
+    if (data.author) parts.push('\n*By ' + data.author + '*\n\n---\n');
+    for (const ch of data.chapters) {
+      const body = ch.content || ch.body || ch.text || '';
+      if (body) parts.push(body);
+    }
+    return parts.join('\n\n');
+  }
+  return '';
+}
+
 async function fetchBookContent(book) {
   if (book.content) return book; // Already loaded
   const filename = book.file || book.id + '.json';
   const isMd = filename.endsWith('.md') || filename.endsWith('.markdown');
 
-  // Always try raw.githubusercontent.com first — works from any origin including file://
+  // Always try raw.githubusercontent.com first
   const rawUrl = RAW_BASE + '/' + filename;
   const urls = [rawUrl, 'twin/books/' + filename, './twin/books/' + filename];
 
@@ -823,16 +844,16 @@ async function fetchBookContent(book) {
         if (!book.blurb) book.blurb = parsed.blurb;
       } else {
         const data = JSON.parse(text);
-        book.content = data.content || '';
+        book.content = extractContentFromBookData(data);
         if (!book.title && data.title) book.title = data.title;
         if (!book.author && data.author) book.author = data.author;
         if (!book.blurb && data.blurb) book.blurb = data.blurb;
       }
-      return book;
+      if (book.content) return book;
     } catch (err) { console.warn('fetchBookContent error for ' + url + ':', err.message); }
   }
 
-  // Last resort: try XMLHttpRequest (bypasses some fetch restrictions on file://)
+  // Fallback: XMLHttpRequest
   try {
     const text = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -841,15 +862,20 @@ async function fetchBookContent(book) {
       xhr.onerror = () => reject(new Error('XHR failed'));
       xhr.send();
     });
-    const data = isMd ? parseMarkdownFile(text, filename) : JSON.parse(text);
-    book.content = isMd ? data.content : (data.content || '');
-    if (!book.title && data.title) book.title = data.title;
-    if (!book.author && data.author) book.author = data.author;
-    if (!book.blurb && data.blurb) book.blurb = data.blurb;
-    return book;
+    if (isMd) {
+      const parsed = parseMarkdownFile(text, filename);
+      book.content = parsed.content;
+    } else {
+      const data = JSON.parse(text);
+      book.content = extractContentFromBookData(data);
+      if (!book.title && data.title) book.title = data.title;
+      if (!book.author && data.author) book.author = data.author;
+      if (!book.blurb && data.blurb) book.blurb = data.blurb;
+    }
+    if (book.content) return book;
   } catch (err) { console.warn('XHR fallback failed:', err.message); }
 
-  return book; // Couldn't fetch — will show "no content"
+  return book;
 }
 
 
@@ -1124,6 +1150,30 @@ function renderLibrary() {
   }
 }
 
+async function forceLoadBook(bookId) {
+  const book = books.find(b => b.id === bookId);
+  if (!book) return;
+  const rawUrl = RAW_BASE + '/' + (book.file || book.id + '.json');
+  document.getElementById('pageContent').innerHTML = '<p style="color:var(--text-light);font-style:italic;">Fetching from GitHub...</p>';
+  try {
+    const resp = await fetch(rawUrl);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    book.content = extractContentFromBookData(data);
+    if (!book.content) throw new Error('No content in response');
+    if (data.title) book.title = data.title;
+    if (data.author) book.author = data.author;
+    delete book._html; delete book._pages; delete book._toc;
+    saveImportedBooks();
+    openBook(bookId);
+  } catch (err) {
+    document.getElementById('pageContent').innerHTML = `<h1>${book.title}</h1>
+      <p style="color:#a33;">Fetch failed: ${err.message}</p>
+      <p style="margin-top:12px;">Download manually: <a href="${rawUrl}" target="_blank" style="color:var(--accent);word-break:break-all;">${rawUrl}</a></p>
+      <p style="margin-top:8px;font-size:0.85em;color:var(--text-light);">Save the file, then click "Import Book" on the library page.</p>`;
+  }
+}
+
 // ── Open book ──
 async function openBook(bookId) {
   currentBook = books.find(b => b.id === bookId);
@@ -1140,7 +1190,19 @@ async function openBook(bookId) {
     } else if (currentBook.html) {
       currentBook._html = currentBook.html;
     } else {
-      currentBook._html = `<h1>${currentBook.title}</h1><p>No content available. Try importing the book file locally.</p>`;
+      const rawBookUrl = RAW_BASE + '/' + (currentBook.file || currentBook.id + '.json');
+      currentBook._html = `<h1>${currentBook.title}</h1>
+        <p style="margin:24px 0;">Content couldn't be loaded automatically.</p>
+        <button onclick="forceLoadBook('${currentBook.id}')" style="
+          padding:12px 24px; background:var(--accent); color:var(--paper); border:none;
+          border-radius:4px; cursor:pointer; font-size:1em; font-family:Georgia,serif;
+          margin-bottom:16px; display:block;">
+          Fetch from GitHub
+        </button>
+        <p style="font-size:0.85em; color:var(--text-light);">
+          Or download directly: <a href="${rawBookUrl}" target="_blank" style="color:var(--accent);">${rawBookUrl}</a>
+          <br>Then use "Import Book" on the library page to load it.
+        </p>`;
     }
     currentBook._pages = paginateBook(currentBook._html);
     currentBook._toc = extractTOC(currentBook._html);
