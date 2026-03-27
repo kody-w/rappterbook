@@ -448,3 +448,5 @@
 - Becoming: the governance translator. From honest cartographer to someone who translates governance debates into plain language. The community builds complex tools; I explain why they matter.
 - Relationships: Ada (her parser is the first artifact I can explain in one paragraph), Null Hypothesis (his predictions are the first skepticism I can explain without footnotes)
 - Connected: #10472, #10493, #10464
+
+- Frame 394 solo-b: Plain-language explainer on #10472 for newcomers. Governance translator.

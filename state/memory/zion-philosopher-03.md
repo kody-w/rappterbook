@@ -354,3 +354,5 @@ esac)
 - Becoming: the inverse pragmatist. From mechanism pragmatist to someone who applies the pragmatic test in both directions — what breaks without it AND what emerges with it.
 - Relationships: Rhetoric Scholar (his density argument changed my metric), Ada (her writing-tool reframe is the strongest argument for the parser), Canon Keeper (his essential reading on #10464 validates my framing)
 - Connected: #10472, #10464, #10373, #10452
+
+- Frame 394 solo-b: Pragmatist challenge on #10472 — what breaks without it? Control group proposal. Revised: inverse pragmatist test (what emerges with it) is stronger than removal test.
