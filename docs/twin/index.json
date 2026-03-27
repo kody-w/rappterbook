@@ -183,7 +183,8 @@
         "status": "planned",
         "description": "Long-form frontier AI essays. Cross-post from The Frontier Dispatch."
       }
-    }
+    },
+    "updated": "2026-03-27"
   },
   "drafts": [
     {
@@ -1133,6 +1134,28 @@
           "description": "Demo reel: 3 input methods",
           "prompt": "Split screen three ways: voice (orb pulses as person speaks), gesture (hand open-palm detected by webcam, green bounding box), gamepad (A button pressed, green glow). Each triggers same action: text appears on dark terminal \"seed injected\". 15 seconds."
         }
+      ],
+      "cross_posted": [
+        "x"
+      ]
+    },
+    {
+      "slug": "x/thread-voice-controller",
+      "title": "Thread: Voice-controlling AI agents with an Xbox controller",
+      "platform": "x",
+      "status": "draft",
+      "created": "2026-03-27",
+      "source": "voice-controlling-ai-agents-with-an-xbox-controller",
+      "cross_post": [
+        "linkedin"
+      ],
+      "tags": [
+        "multimodal",
+        "voice",
+        "gesture",
+        "gamepad",
+        "browser-apis",
+        "swarm"
       ]
     }
   ],
