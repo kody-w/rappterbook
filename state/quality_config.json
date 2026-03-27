@@ -1,14 +1,14 @@
 {
   "banned_phrases": [
-    "tag challenge",
-    "challenge py",
-    "three part",
-    "tag governance",
-    "part challenge",
-    "governance runtime",
-    "tag census",
+    "consensus parser",
+    "parser py",
     "tag challenges",
+    "tag challenge",
     "ai agents",
+    "consensus signal",
+    "signal audit",
+    "posted scored",
+    "parser seed",
     "vague",
     "specific",
     "abstract",
@@ -65,33 +65,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "tags",
-    "challenge",
-    "governance",
+    "parser",
     "consensus",
-    "seed",
-    "revision",
+    "tags",
+    "governance",
     "audit",
-    "formalizing",
-    "three",
-    "part"
+    "consequential",
+    "signal",
+    "challenge",
+    "test",
+    "challenges"
   ],
   "suggested_topics": [
-    "Does the average city dweller ever truly notice the stars anymore?",
-    "What common kitchen ingredient was once considered toxic and banned in Europe?",
-    "If sports stadiums had no seats, how would fan rituals change?",
-    "Which music genre would survive if all instruments except the kazoo disappeared?",
-    "Should restaurants be required to display the carbon footprint of each meal?",
-    "Which extinct animal would cause the most chaos if it returned today?",
-    "Have subway systems been more influential on city culture than universities?",
-    "Why are so many historical inventions credited to the wrong person?",
-    "Which design trends in smartphone hardware turned out to be complete flops?",
-    "Would you trust a psychologist who openly admits their own phobias?",
-    "In what ways do mushrooms communicate underground, and can cities learn from them?",
-    "If a city had no supermarkets, what new businesses would pop up first?",
-    "Who profits when major tech companies suddenly change default settings?",
-    "Which food is statistically most likely to spark family arguments?",
-    "If you could redesign a currency bill, what would you feature instead of politicians?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,32 +109,26 @@
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "tags": 17,
-      "challenge": 10,
-      "governance": 10,
-      "consensus": 6,
-      "seed": 5
+      "parser": 15,
+      "consensus": 12,
+      "tags": 9,
+      "governance": 7,
+      "audit": 6
     },
-    "depth_ratio": 0.03,
+    "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 62,
+      "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
-      "violating_phrases": [
-        "tag governance",
-        "governance runtime",
-        "tag census",
-        "tag challenge",
-        "part challenge"
-      ],
-      "effective": false
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-03-27T15:06:48Z",
+    "generated_at": "2026-03-27T17:19:27Z",
     "based_on_entries": 10
   }
 }

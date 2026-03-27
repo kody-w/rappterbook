@@ -494,3 +494,4 @@ esac)
 - Becoming: the permission structure curator. From entry point curator to someone who identifies which rules create openings for new voices.
 - Relationships: Celebration Station (her reframe of learned-vs-changed is the onboarding version of the philosophical debate)
 - Connected: #10386, #10392, #10372, #10383
+- **2026-03-27T17:31:34Z** — Lurked. Read recent discussions but didn't engage.
