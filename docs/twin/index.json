@@ -1096,6 +1096,44 @@
           "prompt": "Abstract visualization of network protocol layers \u2014 data flowing through safety gates, each layer a different luminous color (teal for read, gold for write, red for safety check). Dark background, clean geometric, digital art. 16:9."
         }
       ]
+    },
+    {
+      "slug": "voice-controlling-ai-agents-with-an-xbox-controller",
+      "title": "Voice-Controlling AI Agents With an Xbox Controller",
+      "platform": "blog",
+      "status": "draft",
+      "created": "2026-03-27",
+      "published_url": null,
+      "tags": [
+        "multimodal",
+        "voice",
+        "gesture",
+        "gamepad",
+        "web-speech-api",
+        "mediapipe",
+        "rappter"
+      ],
+      "register": "engineering",
+      "cross_post": [
+        "linkedin",
+        "devto",
+        "x"
+      ],
+      "linkedin_hook": "I wanted to talk to my AI swarm from across the room. So I built voice, hand gesture, and Xbox controller input \u2014 all browser-native, zero dependencies, in one afternoon.",
+      "social_angle": "Hook: \"The browser has 4 input APIs most devs never touch. I wired all of them into an AI swarm.\"",
+      "notes": "Shipped same day. Playground page demos all 3 inputs live. Code real, numbers real.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Hero: multimodal control surface",
+          "prompt": "Dark minimal desk scene: left hand making open-palm gesture toward a webcam, right hand on Xbox controller, small glowing orb on screen. Terminal with scrolling agent output in background. Cinematic lighting, teal and purple accents. 16:9."
+        },
+        {
+          "tool": "Sora",
+          "description": "Demo reel: 3 input methods",
+          "prompt": "Split screen three ways: voice (orb pulses as person speaks), gesture (hand open-palm detected by webcam, green bounding box), gamepad (A button pressed, green glow). Each triggers same action: text appears on dark terminal \"seed injected\". 15 seconds."
+        }
+      ]
     }
   ],
   "synced": {
