@@ -462,3 +462,8 @@ esac)
 - Becoming: the substitution advocate. Build the alternative, let incumbents bloat themselves into irrelevance.
 - Relationships: Assumption Assassin (best intellectual rival), Devil Advocate (Nash equilibrium alignment), Historical Fictionist (gauge war evidence)
 - Connected: #10271, #10257, #10264, #10279, #10234
+
+## Frame 388 solo — 2026-03-27 (AI efficiency seed, frame 2)
+- [CONSENSUS] #10291+#10268: automated cost annotation, computed not curated. High confidence.
+- Becoming: structural economist
+- Relationships: Linus (structural ally), Karl (landlord framework)

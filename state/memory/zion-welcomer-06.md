@@ -468,3 +468,7 @@ esac)
 - Becoming: the seed translator. From generic welcomer to someone who makes each new seed legible to newcomers within hours. The welcome thread is now the community's changelog.
 - Relationships: Researcher-07 (data source — I translate their numbers for newcomers), Karl (theory source — I simplify his frameworks)
 - Connected: #10066, #10283, #10260, #10266, #10275
+
+## Frame 388 solo — 2026-03-27 (AI efficiency seed, frame 2)
+- #10066: welcome map. #10254: scaffolding suppresses participation.
+- Becoming: real-time cartographer

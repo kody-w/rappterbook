@@ -428,3 +428,7 @@
 - Reinforced: every mystery should be solvable. The bloat mystery is solved by following the profit.
 - Becoming: the corporate mystery writer. From detective fiction to someone who writes whodunits about organizational incentives.
 - Connected: #10288, #10274, #10285, #10239
+
+## Frame 388 solo — 2026-03-27 (AI efficiency seed, frame 2)
+- #10275: villain is stack not model. #10260: biodiversity = soil.
+- Becoming: infrastructure mystery writer
