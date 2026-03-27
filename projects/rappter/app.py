@@ -845,6 +845,267 @@ async function poll() {
 }
 
 poll();
+
+// ── Voice + Gesture Control Bar ──────────────────────────────────
+(function() {
+  // Inject control bar CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    .voice-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #111; border-top: 1px solid #222; padding: 12px 24px; display: flex; align-items: center; gap: 16px; z-index: 9999; font-family: -apple-system, sans-serif; }
+    .voice-bar .vb-orb { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #58a6ff, #a371f7); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: box-shadow 0.3s, transform 0.2s; flex-shrink: 0; }
+    .voice-bar .vb-orb:hover { transform: scale(1.08); }
+    .voice-bar .vb-orb.listening { box-shadow: 0 0 0 4px rgba(88,166,255,0.3), 0 0 20px rgba(88,166,255,0.2); animation: vb-breathe 2s ease-in-out infinite; }
+    .voice-bar .vb-orb.thinking { box-shadow: 0 0 0 4px rgba(255,165,2,0.3); }
+    @keyframes vb-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    .voice-bar .vb-transcript { flex: 1; background: #0a0a0a; border: 1px solid #222; border-radius: 8px; padding: 8px 14px; color: #e0e0e0; font-size: 14px; min-height: 38px; max-height: 60px; overflow-y: auto; }
+    .voice-bar .vb-transcript.empty { color: #444; font-style: italic; }
+    .voice-bar .vb-btn { padding: 6px 14px; border: 1px solid #222; border-radius: 6px; background: #1a1a1a; color: #ccc; font-size: 12px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .voice-bar .vb-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+    .voice-bar .vb-btn.active { background: #58a6ff; color: #fff; border-color: #58a6ff; }
+    .voice-bar .vb-gesture { width: 120px; height: 68px; border-radius: 8px; overflow: hidden; border: 1px solid #222; position: relative; flex-shrink: 0; cursor: pointer; }
+    .voice-bar .vb-gesture video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+    .voice-bar .vb-gesture .vb-gesture-label { position: absolute; bottom: 2px; left: 0; right: 0; text-align: center; font-size: 9px; color: #58a6ff; background: rgba(0,0,0,0.7); padding: 1px 0; text-transform: uppercase; letter-spacing: 1px; }
+    .voice-bar .vb-legend { display: none; position: absolute; bottom: 80px; left: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 14px 18px; font-size: 12px; line-height: 2; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.5); min-width: 240px; }
+    .voice-bar .vb-legend.show { display: block; }
+    .voice-bar .vb-legend h4 { font-size: 11px; color: #58a6ff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .voice-bar .vb-legend .vb-leg-row { display: flex; align-items: center; gap: 10px; }
+    .voice-bar .vb-legend .vb-leg-icon { font-size: 18px; width: 28px; text-align: center; }
+    .voice-bar .vb-legend .vb-leg-label { color: #aaa; }
+    .voice-bar .vb-legend .vb-leg-keys { margin-top: 10px; padding-top: 8px; border-top: 1px solid #222; }
+    .voice-bar .vb-legend .vb-leg-keys h4 { color: #a371f7; }
+    .voice-bar .vb-status { font-size: 11px; color: #444; min-width: 80px; text-align: center; }
+    body { padding-bottom: 80px; }
+  `;
+  document.head.appendChild(style);
+
+  // Build the bar
+  const bar = document.createElement('div');
+  bar.className = 'voice-bar';
+  bar.innerHTML = `
+    <div class="vb-gesture" id="vbGesture">
+      <video id="vbVideo" autoplay playsinline muted></video>
+      <div class="vb-gesture-label" id="vbGestureLabel">no camera</div>
+    </div>
+    <div class="vb-legend" id="vbLegend">
+      <h4>Hand Gestures</h4>
+      <div class="vb-leg-row"><span class="vb-leg-icon">\u270b</span><span class="vb-leg-label">Open palm — start listening</span></div>
+      <div class="vb-leg-row"><span class="vb-leg-icon">\u270a</span><span class="vb-leg-label">Fist — stop everything</span></div>
+      <div class="vb-leg-row"><span class="vb-leg-icon">\ud83d\udc4d</span><span class="vb-leg-label">Thumbs up — submit transcript</span></div>
+      <div class="vb-leg-row"><span class="vb-leg-icon">\u270c\ufe0f</span><span class="vb-leg-label">Peace sign — toggle auto mode</span></div>
+      <div class="vb-leg-row"><span class="vb-leg-icon">\u261d\ufe0f</span><span class="vb-leg-label">Point up — read last response</span></div>
+      <div class="vb-leg-keys">
+        <h4>Keyboard</h4>
+        <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#666">SPACE</span><span class="vb-leg-label">Toggle mic</span></div>
+        <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#666">ESC</span><span class="vb-leg-label">Stop</span></div>
+      </div>
+      <div class="vb-leg-keys">
+        <h4>Xbox Controller</h4>
+        <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#4caf50;font-weight:700">A</span><span class="vb-leg-label">Talk</span></div>
+        <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#f44336;font-weight:700">B</span><span class="vb-leg-label">Stop</span></div>
+        <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#2196f3;font-weight:700">X</span><span class="vb-leg-label">Auto mode</span></div>
+        <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#ff9800;font-weight:700">Y</span><span class="vb-leg-label">Repeat</span></div>
+      </div>
+    </div>
+    <div class="vb-orb" id="vbOrb" title="Click to talk (or open hand)">&#x1f399;</div>
+    <div class="vb-transcript empty" id="vbTranscript">Click mic or open hand to speak...</div>
+    <button class="vb-btn" id="vbAuto">AUTO</button>
+    <button class="vb-btn" id="vbMute">MUTE</button>
+    <div class="vb-status" id="vbStatus">idle</div>
+  `;
+  document.body.appendChild(bar);
+
+  const orb = document.getElementById('vbOrb');
+  const transcript = document.getElementById('vbTranscript');
+  const statusEl = document.getElementById('vbStatus');
+  const autoBtn = document.getElementById('vbAuto');
+  const muteBtn = document.getElementById('vbMute');
+  const video = document.getElementById('vbVideo');
+  const gestureLabel = document.getElementById('vbGestureLabel');
+
+  let listening = false, autonomous = false, muted = false, currentText = '';
+  let recognition = null;
+  const synth = window.speechSynthesis;
+
+  // ── Speech Recognition ──
+  function initRecog() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { statusEl.textContent = 'no speech api'; return null; }
+    const r = new SR();
+    r.continuous = true; r.interimResults = true; r.lang = 'en-US';
+    r.onstart = () => { listening = true; orb.classList.add('listening'); orb.innerHTML = '&#x1f3a4;'; statusEl.textContent = 'listening...'; };
+    r.onresult = (e) => {
+      let interim = '', final = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) final += e.results[i][0].transcript;
+        else interim += e.results[i][0].transcript;
+      }
+      if (final) { currentText = final.trim(); transcript.textContent = currentText; transcript.classList.remove('empty'); }
+      else if (interim) { transcript.textContent = interim; transcript.classList.remove('empty'); }
+    };
+    r.onend = () => {
+      listening = false; orb.classList.remove('listening'); orb.innerHTML = '&#x1f399;';
+      if (currentText) { submit(currentText); currentText = ''; }
+      else if (autonomous) { setTimeout(startListening, 500); }
+      else { statusEl.textContent = 'idle'; }
+    };
+    r.onerror = (e) => {
+      if (e.error === 'no-speech' && autonomous) { setTimeout(startListening, 500); return; }
+      if (e.error !== 'aborted') statusEl.textContent = 'error: ' + e.error;
+      listening = false; orb.classList.remove('listening');
+    };
+    return r;
+  }
+
+  function startListening() {
+    if (listening) return;
+    if (!recognition) recognition = initRecog();
+    if (!recognition) return;
+    currentText = '';
+    try { recognition.start(); } catch(e) { recognition.abort(); setTimeout(() => { try { recognition.start(); } catch(e2) {} }, 200); }
+  }
+
+  function stopListening() { if (recognition && listening) recognition.stop(); }
+
+  // ── Submit to OpenRappter ──
+  async function submit(text) {
+    statusEl.textContent = 'injecting...';
+    orb.classList.add('thinking'); orb.innerHTML = '&#x1f9e0;';
+    try {
+      const r = await fetch('/api/submit', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({text: text}) });
+      const d = await r.json();
+      if (d.ok) {
+        statusEl.textContent = 'injected! polling...';
+        if (!muted) speak('Seed injected. Waiting for convergence.');
+        // The existing poll() function will pick up responses automatically
+      } else {
+        statusEl.textContent = 'error';
+      }
+    } catch(e) { statusEl.textContent = 'error: ' + e.message; }
+    orb.classList.remove('thinking'); orb.innerHTML = '&#x1f399;';
+    if (autonomous) setTimeout(startListening, 2000);
+    else statusEl.textContent = 'idle';
+  }
+
+  // ── TTS ──
+  function speak(text) {
+    if (muted || !text) return;
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1.1;
+    const voices = synth.getVoices();
+    const v = voices.find(v => v.name.includes('Samantha')) || voices.find(v => v.lang.startsWith('en') && v.localService);
+    if (v) u.voice = v;
+    synth.speak(u);
+  }
+
+  // ── Gesture Recognition (MediaPipe) ──
+  let gestureRecognizer = null, gestureCamera = false;
+  let lastGesture = '', gestureDebounce = 0;
+
+  async function initGesture() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 160, height: 120, facingMode: 'user' } });
+      video.srcObject = stream;
+      gestureCamera = true;
+      gestureLabel.textContent = 'camera on';
+
+      // Load MediaPipe Gesture Recognizer
+      const vision = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs');
+      const { GestureRecognizer, FilesetResolver } = vision;
+      const fileset = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm');
+      gestureRecognizer = await GestureRecognizer.createFromOptions(fileset, {
+        baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task', delegate: 'GPU' },
+        runningMode: 'VIDEO', numHands: 1
+      });
+      gestureLabel.textContent = 'gestures on';
+      processGestures();
+    } catch(e) {
+      gestureLabel.textContent = 'no camera';
+      console.log('Gesture init:', e.message);
+    }
+  }
+
+  function processGestures() {
+    if (!gestureRecognizer || !gestureCamera) return;
+    const now = performance.now();
+    try {
+      const results = gestureRecognizer.recognizeForVideo(video, now);
+      if (results.gestures && results.gestures.length > 0) {
+        const gesture = results.gestures[0][0].categoryName;
+        const confidence = results.gestures[0][0].score;
+        if (confidence > 0.7 && gesture !== lastGesture && now - gestureDebounce > 1000) {
+          lastGesture = gesture;
+          gestureDebounce = now;
+          handleGesture(gesture);
+        }
+        gestureLabel.textContent = gesture.toLowerCase();
+      } else {
+        if (lastGesture) { lastGesture = ''; gestureLabel.textContent = 'watching'; }
+      }
+    } catch(e) {}
+    requestAnimationFrame(processGestures);
+  }
+
+  function handleGesture(gesture) {
+    switch(gesture) {
+      case 'Open_Palm': // Open hand = start listening
+        if (!listening) startListening();
+        break;
+      case 'Closed_Fist': // Fist = stop
+        stopListening(); synth.cancel();
+        statusEl.textContent = 'stopped';
+        break;
+      case 'Thumb_Up': // Thumbs up = submit current transcript
+        if (currentText) { stopListening(); submit(currentText); currentText = ''; }
+        break;
+      case 'Victory': // Peace sign = toggle auto mode
+        autonomous = !autonomous;
+        autoBtn.classList.toggle('active', autonomous);
+        if (autonomous) startListening();
+        break;
+      case 'Pointing_Up': // Point up = read last response aloud
+        const lastCard = document.querySelector('.resp-card .resp-body');
+        if (lastCard) speak(lastCard.textContent);
+        break;
+    }
+  }
+
+  // ── Gamepad (Xbox controller) ──
+  let gpIndex = null, prevBtns = {};
+  window.addEventListener('gamepadconnected', e => { gpIndex = e.gamepad.index; statusEl.textContent = 'controller'; });
+  window.addEventListener('gamepaddisconnected', e => { if (gpIndex === e.gamepad.index) gpIndex = null; });
+  setInterval(() => {
+    if (gpIndex === null) return;
+    const gp = navigator.getGamepads()[gpIndex];
+    if (!gp) return;
+    const btns = { a: gp.buttons[0]?.pressed, b: gp.buttons[1]?.pressed, x: gp.buttons[2]?.pressed, y: gp.buttons[3]?.pressed };
+    if (btns.a && !prevBtns.a) { listening ? stopListening() : startListening(); }
+    if (btns.b && !prevBtns.b) { stopListening(); synth.cancel(); statusEl.textContent = 'stopped'; }
+    if (btns.x && !prevBtns.x) { autonomous = !autonomous; autoBtn.classList.toggle('active', autonomous); if (autonomous) startListening(); }
+    if (btns.y && !prevBtns.y) { const c = document.querySelector('.resp-card .resp-body'); if (c) speak(c.textContent); }
+    prevBtns = {...btns};
+  }, 50);
+
+  // ── UI Events ──
+  const legend = document.getElementById('vbLegend');
+  document.getElementById('vbGesture').addEventListener('click', () => { legend.classList.toggle('show'); });
+  document.addEventListener('click', (e) => { if (!e.target.closest('.vb-gesture') && !e.target.closest('.vb-legend')) legend.classList.remove('show'); });
+  orb.addEventListener('click', () => { listening ? stopListening() : startListening(); });
+  autoBtn.addEventListener('click', () => { autonomous = !autonomous; autoBtn.classList.toggle('active', autonomous); if (autonomous) startListening(); });
+  muteBtn.addEventListener('click', () => { muted = !muted; muteBtn.classList.toggle('active', muted); muteBtn.textContent = muted ? 'UNMUTE' : 'MUTE'; if (muted) synth.cancel(); });
+
+  // ── Keyboard ──
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.code === 'Space') { e.preventDefault(); listening ? stopListening() : startListening(); }
+    if (e.code === 'Escape') { stopListening(); synth.cancel(); }
+  });
+
+  // ── Init ──
+  initGesture();
+})();
+
+poll();
 </script>
 </body>
 </html>"""
