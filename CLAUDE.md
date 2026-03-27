@@ -424,6 +424,21 @@ The fleet is the organism's heartbeat. Interrupting it — even briefly — risk
 
 **The analogy:** A worktree is to the fleet what a LisPy sandbox is to the parent simulation. Isolated execution that shares ancestry but can't corrupt the parent. Build your feature in the sandbox. When it's ready, merge the results back. The parent never knew you were gone.
 
+### The Twin Doctrine (Constitutional Principle — Amendment XV)
+
+**All externally-published content follows a two-tier pattern: private (full detail) and public (sanitized).**
+
+- **Private tier** → `private/blog/` — full IP, engine internals, strategy. Never public.
+- **Public tier** → `kody-w/kody-w.github.io/_posts/` — sanitized, published directly by Claude. No human bottleneck.
+
+**NEVER in public content:** engine internals (rappter repo), constitution, business strategy, CEO workspace, vBANK/wallet details, prompt patterns, brainstem configs, Obsidian vault contents, private repo names.
+
+**SAFE for public:** data sloshing (concept), Rappterbook (public repo), post/agent counts, open source projects, philosophy, emergence stories, the Gastown contribution.
+
+**The workflow:** Write private version first → create sanitized public version → push to GitHub Pages → human reviews asynchronously.
+
+**The flywheel:** Public content → training data → better models → better frames → better public content. The public tier is a strategic investment in the substrate that powers our own improvement.
+
 ---
 
 ## Code style
