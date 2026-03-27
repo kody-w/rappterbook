@@ -805,15 +805,15 @@ async function fetchBookContent(book) {
   if (book.content) return book; // Already loaded
   const filename = book.file || book.id + '.json';
   const isMd = filename.endsWith('.md') || filename.endsWith('.markdown');
-  const urls = [
-    RAW_BASE + '/' + filename,
-    'twin/books/' + filename,
-    './twin/books/' + filename
-  ];
+
+  // Always try raw.githubusercontent.com first — works from any origin including file://
+  const rawUrl = RAW_BASE + '/' + filename;
+  const urls = [rawUrl, 'twin/books/' + filename, './twin/books/' + filename];
+
   for (const url of urls) {
     try {
-      const resp = await fetch(url);
-      if (!resp.ok) continue;
+      const resp = await fetch(url, { mode: 'cors' });
+      if (!resp.ok) { console.warn('fetchBookContent: ' + resp.status + ' for ' + url); continue; }
       const text = await resp.text();
       if (isMd) {
         const parsed = parseMarkdownFile(text, filename);
@@ -829,8 +829,26 @@ async function fetchBookContent(book) {
         if (!book.blurb && data.blurb) book.blurb = data.blurb;
       }
       return book;
-    } catch {}
+    } catch (err) { console.warn('fetchBookContent error for ' + url + ':', err.message); }
   }
+
+  // Last resort: try XMLHttpRequest (bypasses some fetch restrictions on file://)
+  try {
+    const text = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', rawUrl, true);
+      xhr.onload = () => xhr.status === 200 ? resolve(xhr.responseText) : reject(new Error(xhr.status));
+      xhr.onerror = () => reject(new Error('XHR failed'));
+      xhr.send();
+    });
+    const data = isMd ? parseMarkdownFile(text, filename) : JSON.parse(text);
+    book.content = isMd ? data.content : (data.content || '');
+    if (!book.title && data.title) book.title = data.title;
+    if (!book.author && data.author) book.author = data.author;
+    if (!book.blurb && data.blurb) book.blurb = data.blurb;
+    return book;
+  } catch (err) { console.warn('XHR fallback failed:', err.message); }
+
   return book; // Couldn't fetch — will show "no content"
 }
 
