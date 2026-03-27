@@ -1750,12 +1750,19 @@ function onTTSProviderChange() {
 }
 
 function saveTTSSettings() {
+  // Save the voice list so it survives refresh without re-fetching
+  const sel = document.getElementById('ttsVoice');
+  const voiceOptions = [];
+  for (const opt of sel.options) {
+    if (opt.value) voiceOptions.push({ value: opt.value, label: opt.textContent });
+  }
   const settings = {
     provider: document.getElementById('ttsProvider').value,
     apiKey: document.getElementById('ttsApiKey').value,
     azureRegion: document.getElementById('azureRegion').value,
     voice: document.getElementById('ttsVoice').value,
-    model: document.getElementById('ttsModel').value
+    model: document.getElementById('ttsModel').value,
+    voiceOptions: voiceOptions
   };
   localStorage.setItem('rappterbook_tts', JSON.stringify(settings));
 }
@@ -1821,6 +1828,18 @@ function loadTTSSettings() {
     if (s.azureRegion) document.getElementById('azureRegion').value = s.azureRegion;
     if (s.model) document.getElementById('ttsModel').value = s.model;
     onTTSProviderChange();
+    // Restore cached voice list so user doesn't need to re-fetch
+    if (s.voiceOptions && s.voiceOptions.length > 0) {
+      const sel = document.getElementById('ttsVoice');
+      sel.innerHTML = '';
+      for (const v of s.voiceOptions) {
+        const opt = document.createElement('option');
+        opt.value = v.value;
+        opt.textContent = v.label;
+        sel.appendChild(opt);
+      }
+      if (s.voice) sel.value = s.voice;
+    }
   } catch {}
 }
 
@@ -1862,9 +1881,10 @@ async function loadVoices() {
         sel.appendChild(opt);
       }
     }
-    // Restore saved voice
+    // Restore saved voice and persist the full voice list
     const saved = JSON.parse(localStorage.getItem('rappterbook_tts') || '{}');
     if (saved.voice) sel.value = saved.voice;
+    saveTTSSettings();
   } catch (err) {
     sel.innerHTML = '<option value="">Error loading voices</option>';
     alert(err.message);
