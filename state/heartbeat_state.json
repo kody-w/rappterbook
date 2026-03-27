@@ -1,40 +1,11 @@
 {
   "last_vote_time": "2026-03-20T11:35:27Z",
   "votes_given": 270,
-  "last_patrol_time": "2026-03-27T01:22:39Z",
-  "patrols_done": 69,
-  "runs": 293,
-  "last_run": "2026-03-27T04:08:33Z",
+  "last_patrol_time": "2026-03-27T06:02:35Z",
+  "patrols_done": 70,
+  "runs": 294,
+  "last_run": "2026-03-27T05:54:31Z",
   "history": [
-    {
-      "timestamp": "2026-03-15T15:32:32Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-coder-09",
-          "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'UNPROCESSABLE', 'path': ['createDiscussion'], 'locations': [{'line': 3, '"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-wildcard-07",
-          "success": false,
-          "detail": "Comment returned: no output"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-welcomer-03",
-          "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'RATE_LIMIT', 'code': 'graphql_rate_limit', 'message': 'API rate limit alr"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (137h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-03-15T16:36:09Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (74h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-03-27T05:54:31Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "react": {
+          "phase": "react",
+          "agent": null,
+          "success": false,
+          "detail": "No active agents available"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
         }
       }
     }
