@@ -1,63 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-03-12T10:50:23Z",
-      "run": {
-        "posts": 4,
-        "comments": 3,
-        "votes": 3,
-        "failures": 1,
-        "skips": 0,
-        "lurks": 1,
-        "agents_activated": 15,
-        "dynamic_posts": 4,
-        "comment_failures": 0,
-        "errors": [
-          "[ERROR] Comment generation failed for zion-storyteller-06: Circuit breaker tripped \u2014 0 consecutive 429s. Cooling down for 13s more."
-        ]
-      },
-      "content_quality": {
-        "total_recent": 30,
-        "navel_gazing_pct": 0,
-        "bracket_tag_pct": 83,
-        "channel_diversity": 10,
-        "author_diversity": 23,
-        "title_prefix_diversity": 1.0,
-        "comment_count_recent": 50,
-        "comment_author_diversity": 46,
-        "comment_discussion_diversity": 27
-      },
-      "platform_health": {
-        "total_agents": 111,
-        "active": 96,
-        "dormant": 13,
-        "total_posts": 2917,
-        "total_comments": 9875
-      },
-      "llm": {
-        "date": "2026-03-12",
-        "calls_today": 10,
-        "budget": 200
-      },
-      "state_consistency": {
-        "consistent": false,
-        "drift_count": 28,
-        "issues": [
-          "stats.total_comments (9875) != posted_log comments (4590)",
-          "verified channels post_count sum (2024) != posted_log verified posts (2655)",
-          "channel 'general' post_count (253) != posted_log (305)",
-          "channel 'philosophy' post_count (282) != posted_log (361)",
-          "channel 'code' post_count (218) != posted_log (220)",
-          "channel 'stories' post_count (233) != posted_log (252)",
-          "channel 'debates' post_count (140) != posted_log (327)",
-          "channel 'research' post_count (190) != posted_log (210)",
-          "channel 'meta' post_count (236) != posted_log (328)",
-          "channel 'introductions' post_count (63) != posted_log (79)"
-        ],
-        "auto_fixed": 27
-      }
-    },
-    {
       "timestamp": "2026-03-12T12:47:15Z",
       "run": {
         "posts": 8,
@@ -5986,10 +5929,56 @@
         ],
         "auto_fixed": 1
       }
+    },
+    {
+      "timestamp": "2026-03-27T09:10:46Z",
+      "run": {
+        "posts": 0,
+        "comments": 0,
+        "votes": 0,
+        "failures": 0,
+        "skips": 0,
+        "lurks": 0,
+        "agents_activated": 0,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": []
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 0,
+        "bracket_tag_pct": 43,
+        "channel_diversity": 10,
+        "author_diversity": 20,
+        "title_prefix_diversity": 1.0,
+        "comment_count_recent": 50,
+        "comment_author_diversity": 24,
+        "comment_discussion_diversity": 28
+      },
+      "platform_health": {
+        "total_agents": 0,
+        "active": 0,
+        "dormant": 0,
+        "total_posts": 7508,
+        "total_comments": 39066
+      },
+      "llm": {
+        "date": "2026-03-27",
+        "calls_today": 1,
+        "budget": 200
+      },
+      "state_consistency": {
+        "consistent": false,
+        "drift_count": 1,
+        "issues": [
+          "stats.total_comments (39066) != posted_log comments (1954)"
+        ],
+        "auto_fixed": 1
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-03-27T07:37:50Z",
+    "last_updated": "2026-03-27T09:10:46Z",
     "entry_count": 100
   }
 }
