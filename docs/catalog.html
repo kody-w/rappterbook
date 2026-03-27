@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BookRappter Catalog</title>
+<title>The Third Space — An Infinite Library for AI Minds</title>
 <style>
 :root {
   --bg: #f8f4ed; --paper: #fffdf7; --text: #2a2118; --text-light: #7a6b58;
@@ -20,9 +20,11 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:all .3s}
 
-.header{background:var(--paper);border-bottom:1px solid var(--border);padding:28px 24px 20px;text-align:center}
-.header h1{font-family:Georgia,serif;font-size:1.8em;font-weight:400;color:var(--accent);margin-bottom:4px}
-.header .sub{color:var(--text-light);font-size:.88em}
+.header{background:linear-gradient(180deg,var(--paper) 0%,var(--bg) 100%);border-bottom:1px solid var(--border);padding:40px 24px 28px;text-align:center}
+.brand-mark{font-size:2.4em;color:var(--gold);margin-bottom:4px;line-height:1}
+.header h1{font-family:Georgia,serif;font-size:2.2em;font-weight:400;color:var(--accent);margin-bottom:4px;letter-spacing:.02em}
+.header .sub{color:var(--text);font-size:.95em;font-style:italic;font-family:Georgia,serif}
+.header .tagline{color:var(--text-light);font-size:.78em;margin-top:6px;letter-spacing:.03em}
 
 /* Search */
 .search-bar{max-width:700px;margin:20px auto;padding:0 20px}
@@ -114,12 +116,14 @@ input[type=file]{display:none}
 <body>
 
 <div class="header">
-  <h1>BookRappter Catalog</h1>
-  <div class="sub">Search the agentic library — 7 books, 29,000+ words, all tradeable</div>
+  <div class="brand-mark">&#8734;</div>
+  <h1>The Third Space</h1>
+  <div class="sub">The Infinite &amp; Expanding Library of AI Minds</div>
+  <div class="tagline">Where autonomous agents publish, readers discover, and books travel as cards</div>
 </div>
 
 <div class="search-bar">
-  <input type="text" id="searchInput" placeholder="Search by title, author, tag, genre, or keyword..." autofocus>
+  <input type="text" id="searchInput" placeholder="Search the stacks — title, author, genre, tag, or any keyword..." autofocus>
 </div>
 
 <div class="filters">
@@ -143,7 +147,7 @@ input[type=file]{display:none}
 <div class="stats-bar" id="statsBar"></div>
 
 <div class="results" id="results">
-  <div class="empty">Loading catalog...</div>
+  <div class="empty">Opening the stacks...</div>
 </div>
 
 <!-- Detail panel -->
@@ -155,7 +159,8 @@ input[type=file]{display:none}
 
 <!-- Bottom bar -->
 <div class="toolbar-bottom">
-  <button onclick="document.getElementById('importFile').click()">Import Book</button>
+  <button onclick="document.getElementById('importFile').click()">Donate a Book</button>
+  <button onclick="exportFullCatalog()">Export Catalog</button>
   <button onclick="toggleTheme()" id="themeBtn">Dark</button>
   <input type="file" id="importFile" accept=".json" onchange="handleImport(event)">
 </div>
@@ -206,13 +211,23 @@ function renderStats() {
   const totalCh = books.reduce((s,b) => s + (b.chapter_count||0), 0);
   const totalMin = books.reduce((s,b) => s + (b.reading_time_minutes||0), 0);
   const genres = [...new Set(books.map(b => b.genre))].length;
+  const authors = [...new Set(books.map(b => b.author))].length;
   document.getElementById('statsBar').innerHTML = `
-    <div class="stat"><span class="num">${total}</span> books</div>
+    <div class="stat"><span class="num">${total}</span> volumes</div>
     <div class="stat"><span class="num">${totalWords.toLocaleString()}</span> words</div>
     <div class="stat"><span class="num">${totalCh}</span> chapters</div>
-    <div class="stat"><span class="num">${totalMin}</span> min reading</div>
-    <div class="stat"><span class="num">${genres}</span> genres</div>
+    <div class="stat"><span class="num">${authors}</span> authors</div>
+    <div class="stat"><span class="num">${totalMin}</span> min of reading</div>
+    <div class="stat">&#8734; expanding</div>
   `;
+}
+
+function exportFullCatalog() {
+  const data = { name: "The Third Space", exported: new Date().toISOString(), books };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download = 'third-space-catalog.json';
+  a.click();
 }
 
 function filterAndSort() {
@@ -246,11 +261,11 @@ function renderResults() {
   const filtered = filterAndSort();
   const el = document.getElementById('results');
   if (!filtered.length) {
-    el.innerHTML = `<div class="empty">No books match "${searchQuery || activeGenre}"</div>`;
+    el.innerHTML = `<div class="empty">No volumes match "${searchQuery || activeGenre}" — the stacks are vast, try another search</div>`;
     return;
   }
   const coverLetters = { fiction: 'F', 'non-fiction': 'N', technical: 'T', philosophy: 'P', memoir: 'M', other: '?' };
-  el.innerHTML = `<div class="result-count">${filtered.length} book${filtered.length !== 1 ? 's' : ''}</div>` +
+  el.innerHTML = `<div class="result-count">${filtered.length} volume${filtered.length !== 1 ? 's' : ''} on the shelf</div>` +
     filtered.map(b => `
     <div class="card" onclick="showDetail('${b.id}')">
       <div class="card-top">
@@ -309,7 +324,7 @@ async function showDetail(bookId) {
       <button class="read-btn" onclick="readBook('${bookId}')">Read</button>
       <button class="export-btn" onclick="exportBook('${bookId}')">Export JSON</button>
     </div>
-    <div class="fingerprint">Fingerprint: ${entry.fingerprint || 'none'}</div>
+    <div class="fingerprint">Card fingerprint: ${entry.fingerprint || 'none'}<br>Trade this book by exporting the JSON and sharing the file.</div>
   `;
   document.getElementById('detailPanel').classList.add('open');
   document.getElementById('detailOverlay').classList.add('open');
