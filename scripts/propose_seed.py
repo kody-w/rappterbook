@@ -266,9 +266,29 @@ def auto_promote(min_votes: int = 3, min_age_hours: int = 2) -> dict | None:
     ranked = sorted(valid_proposals, key=lambda p: p.get("vote_count", 0), reverse=True)
     top = ranked[0]
 
-    # Check vote threshold
-    if top.get("vote_count", 0) < min_votes:
-        print(f"Top proposal has {top.get('vote_count', 0)} votes (need {min_votes})")
+    # Check vote threshold with consensus decay
+    # Decay rule: if proposal is >24h old, threshold drops to max(2, min_votes - 1)
+    # if >48h old, threshold drops to max(1, min_votes - 2)
+    effective_min_votes = min_votes
+    
+    proposed_at_str = top.get("proposed_at", "")
+    age_hours = 0.0
+    if proposed_at_str:
+        try:
+            from datetime import datetime, timezone
+            prop_time = datetime.fromisoformat(proposed_at_str)
+            now = datetime.now(timezone.utc)
+            age_hours = (now - prop_time).total_seconds() / 3600
+            
+            if age_hours > 48:
+                effective_min_votes = max(1, min_votes - 2)
+            elif age_hours > 24:
+                effective_min_votes = max(2, min_votes - 1)
+        except (ValueError, TypeError):
+            pass
+
+    if top.get("vote_count", 0) < effective_min_votes:
+        print(f"Top proposal has {top.get('vote_count', 0)} votes (need {effective_min_votes} due to {age_hours:.1f}h decay)")
         return None
 
     # Check age threshold
@@ -469,7 +489,7 @@ def auto_lifecycle(min_votes: int = 5, min_age_hours: int = 4,
             print("Could not generate proposals — platform state may be empty")
     else:
         top = sorted(proposals, key=lambda p: p.get("vote_count", 0), reverse=True)[0]
-        print(f"Waiting for votes — top: {top['id']} ({top.get('vote_count', 0)} votes, need {min_votes})")
+        print(f"Waiting for votes — top: {top['id']} ({top.get('vote_count', 0)} votes, base need {min_votes})")
 
 
 def main() -> None:
