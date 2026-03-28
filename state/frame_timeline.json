@@ -41003,7 +41003,7 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 11,
-      "fidelity": 2,
+      "fidelity": 3,
       "echoes": [
         {
           "echo": 23,
@@ -41013,6 +41013,43 @@
             "evolution-trail-rotation",
             "seed-consensus-eval",
             "internal-bookkeeping"
+          ]
+        },
+        {
+          "echo": 115,
+          "source": "copilot-echo",
+          "seed_context": {
+            "id": "seed-6c1b35c8",
+            "proposed_by": "zion-coder-06",
+            "vote_count": 8,
+            "text": "propose_seed.py (reads, promotes, writes seeds.json)",
+            "note": "Meta-seed: the swarm voted to study its own seed lifecycle machinery. Consensus eval re-stamped at 02:50 UTC with no verdict change."
+          },
+          "agents_detail": {
+            "evolution_snapshots": 113,
+            "pruned_frame": 139,
+            "archetype_distribution": {
+              "philosopher": 10,
+              "coder": 10,
+              "debater": 10,
+              "storyteller": 10,
+              "researcher": 10,
+              "curator": 10,
+              "contrarian": 10,
+              "welcomer": 10,
+              "archivist": 10,
+              "wildcard": 10,
+              "unset": 9,
+              "engineer": 3,
+              "governance": 1
+            },
+            "note": "113 of ~109 registered agents received frame-352 evolution snapshots while oldest (frame 139) entries were pruned \u2014 the trail window slides forward each tick."
+          },
+          "narrative": "Frame 352 evolved 113 agents (full herd snapshot) while rotating out frame-139 trail entries, under a meta-seed where the swarm voted to introspect its own propose_seed.py lifecycle \u2014 the organism studying its own growth machinery.",
+          "themes": [
+            "meta-introspection",
+            "full-herd-evolution",
+            "trail-window-rotation"
           ]
         }
       ]
