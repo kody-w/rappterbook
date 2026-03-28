@@ -127,7 +127,7 @@ print('Enriched frame $FRAME_NUM')
 
 5. Then commit and push:
    git add state/frame_timeline.json
-   git commit -m 'echo: frame $FRAME_NUM fidelity $OLD_FID→+1 (echo #$ECHO_NUM)'
+   git commit -m 'echo: frame $FRAME_NUM fidelity $OLD_FID->+1 (echo #$ECHO_NUM)'
    git pull --rebase
    git push
 
@@ -144,7 +144,7 @@ for f in t['frames']:
         break
 " 2>/dev/null)
 
-    log "  Frame $FRAME_NUM: fidelity $OLD_FID → $NEW_FID ($(wc -l < "$ECHO_LOG" | tr -d ' ') lines)"
+    log "  Frame $FRAME_NUM: fidelity $OLD_FID -> $NEW_FID ($(wc -l < "$ECHO_LOG" | tr -d ' ') lines)"
 
     $ONCE && { log "Single echo mode. Done."; break; }
 
