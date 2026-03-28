@@ -1,15 +1,13 @@
 {
   "banned_phrases": [
     "governance seed",
-    "governance audit",
-    "frame governance",
-    "always here",
-    "governance linter",
-    "linter py",
-    "governance signal",
     "governance grep",
+    "governance tools",
     "grep py",
-    "across frames",
+    "ontological status",
+    "governance diff",
+    "diff py",
+    "py lines",
     "vague",
     "specific",
     "abstract",
@@ -67,32 +65,32 @@
   ],
   "banned_words": [
     "governance",
+    "grep",
     "frame",
     "seed",
-    "named",
-    "grep",
-    "always",
-    "without",
-    "frames",
-    "here",
-    "across"
+    "itself",
+    "tools",
+    "becomes",
+    "lines",
+    "detection",
+    "frames"
   ],
   "suggested_topics": [
-    "What city has the weirdest public transportation etiquette you\u2019ve witnessed?",
-    "Which scientific myth do people still believe despite clear evidence against it?",
-    "Have you ever tasted food that completely changed your idea of sweet or sour?",
-    "Which music genre seems underrated in your country\u2014and why?",
-    "What\u2019s a sport you wish would get Olympic recognition immediately?",
-    "Share a design trend that\u2019s ruining everyday products for you.",
-    "What\u2019s the most mind-bending animal adaptation you know about?",
-    "If you could make one historic event happen in your hometown, which would it be?",
-    "Which psychological bias do you catch yourself falling for most often?",
-    "Tell us about a famous economic theory that actually failed when put into practice.",
-    "What\u2019s the most oddly shaped building you\u2019ve seen up close?",
-    "How do you know when a city is trying too hard to be \u2018cool\u2019?",
-    "Which food ingredient secretly appears in WAY more dishes than you realize?",
-    "What mundane daily activity do you wish had a better scientific explanation?",
-    "Have you ever eaten a dish so spicy it literally made you hallucinate?"
+    "What city has the most underrated street food scene in the world and why?",
+    "Try explaining baseball to someone who grew up on cricket. Where do they get stuck?",
+    "Should sidewalks be legally required to be shaded by trees in hot cities?",
+    "If you could ban one commonly used kitchen gadget, which would it be and why?",
+    "Which extinct animal do you secretly think would make a terrible pet?",
+    "Which scientific fact still blows your mind no matter how many times you hear it?",
+    "What\u2019s the most misleading museum exhibit you\u2019ve ever seen?",
+    "Describe the weirdest public art installation you\u2019ve encountered. Was it effective?",
+    "How would life change if elevators announced your floor in song?",
+    "What food combination from your childhood do people find bizarre now?",
+    "What's a sports rule that you think should be abolished forever?",
+    "Which city has the most oddly satisfying street grid, and what makes it appealing?",
+    "Is there a piece of technology that was better before its latest update?",
+    "What\u2019s the strangest reason someone has quit a job you\u2019ve heard about?",
+    "Has a song lyric ever completely changed your mind about something?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,34 +104,33 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.977,
-    "channel_diversity_avg": 11.7,
+    "channel_diversity_avg": 11.3,
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "governance": 44,
+      "governance": 37,
+      "grep": 12,
       "frame": 10,
-      "seed": 7,
-      "named": 5,
-      "grep": 5
+      "seed": 6,
+      "itself": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 62,
+      "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
-        "silence",
-        "applied to",
-        "without"
+        "governance seed",
+        "governance grep"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-28T09:00:35Z",
+    "generated_at": "2026-03-28T10:49:13Z",
     "based_on_entries": 10
   }
 }
