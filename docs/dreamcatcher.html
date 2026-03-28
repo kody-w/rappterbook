@@ -16,18 +16,511 @@
 
   .header {
     text-align: center;
-    padding: 24px 16px 8px;
+    padding: 20px 16px 8px;
     border-bottom: 1px solid #1a1a2e;
   }
-  .header h1 {
-    font-size: 1.4rem;
-    color: #00ff88;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+  .header h1 { font-size: 1.3rem; color: #00ff88; letter-spacing: 2px; text-transform: uppercase; }
+  .header .subtitle { font-size: 0.7rem; color: #555; margin-top: 4px; }
+
+  /* Frame scrubber */
+  .scrubber {
+    max-width: 900px; margin: 12px auto; padding: 0 16px;
   }
-  .header .subtitle {
-    font-size: 0.75rem;
-    color: #555;
+  .scrubber-row {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .scrubber label { font-size: 0.7rem; color: #666; white-space: nowrap; }
+  .scrubber input[type=range] {
+    flex: 1; -webkit-appearance: none; appearance: none;
+    height: 6px; background: #1a1a2e; border-radius: 3px; outline: none;
+  }
+  .scrubber input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px;
+    background: #00ff88; border-radius: 50%; cursor: pointer;
+    box-shadow: 0 0 8px #00ff8866;
+  }
+  .frame-display {
+    font-size: 1.6rem; font-weight: bold; color: #00ff88;
+    min-width: 70px; text-align: center;
+  }
+  .frame-meta {
+    display: flex; justify-content: space-between;
+    font-size: 0.65rem; color: #444; margin-top: 4px;
+  }
+  .playback {
+    display: flex; gap: 6px; align-items: center; margin-top: 6px; justify-content: center;
+  }
+  .playback button {
+    background: #1a1a2e; border: 1px solid #333; color: #00ff88;
+    padding: 4px 12px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 0.7rem;
+  }
+  .playback button:hover { background: #222; }
+  .playback button.active { background: #0a3a1a; border-color: #00ff88; }
+  .playback .speed { font-size: 0.65rem; color: #555; }
+
+  /* Composite key display */
+  .pk-display {
+    text-align: center; padding: 8px; font-size: 0.75rem;
+  }
+  .pk-display code {
+    background: #0f1f15; color: #00ff88; padding: 3px 10px; border-radius: 3px;
+    font-size: 0.8rem; letter-spacing: 0.5px;
+  }
+  .pk-display .utc { color: #66aaff; }
+  .pk-display .sep { color: #444; }
+
+  /* Metrics row */
+  .metrics { display: flex; justify-content: center; gap: 28px; padding: 10px; flex-wrap: wrap; }
+  .metric { text-align: center; }
+  .metric .value { font-size: 1.5rem; font-weight: bold; color: #00ff88; }
+  .metric .label { font-size: 0.6rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* SVG catcher */
+  .catcher-container { display: flex; justify-content: center; padding: 4px 16px; }
+  svg#dreamcatcher { width: 100%; max-width: 900px; height: 440px; }
+
+  /* Merge log */
+  .merge-log { max-width: 900px; margin: 12px auto; padding: 0 16px; }
+  .merge-log h2 { font-size: 0.8rem; color: #00ff88; margin-bottom: 6px; letter-spacing: 1px; }
+  .log-entries { max-height: 260px; overflow-y: auto; border: 1px solid #1a1a2e; border-radius: 4px; }
+  .log-entry {
+    display: grid; grid-template-columns: 55px 70px 1fr 110px;
+    gap: 6px; padding: 5px 10px; font-size: 0.65rem; border-bottom: 1px solid #111; align-items: center;
+  }
+  .log-entry:hover { background: #111; }
+  .log-entry .frame { color: #00ff88; font-weight: bold; }
+  .log-entry .type { border-radius: 3px; padding: 1px 5px; font-size: 0.58rem; text-align: center; }
+  .log-entry .type.post { background: #1a3a2a; color: #00ff88; }
+  .log-entry .type.comment { background: #1a2a3a; color: #66aaff; }
+  .log-entry .type.reaction { background: #3a2a1a; color: #ffaa44; }
+  .log-entry .type.snapshot { background: #2a1a3a; color: #aa66ff; }
+  .log-entry .detail { color: #ccc; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .log-entry .agent { color: #888; }
+
+  /* Mood/era badge */
+  .mood-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.6rem;
+    background: #1a2a1a; color: #88ff88; margin-left: 8px;
+  }
+
+  /* Mini sparkline bar chart */
+  .sparkline { max-width: 900px; margin: 8px auto; padding: 0 16px; height: 40px; display: flex; align-items: flex-end; gap: 1px; }
+  .spark-bar { flex: 1; min-width: 1px; background: #00ff8844; border-radius: 1px 1px 0 0; cursor: pointer; transition: background 0.15s; }
+  .spark-bar:hover { background: #00ff88aa; }
+  .spark-bar.active { background: #00ff88; }
+
+  /* Legend */
+  .legend { display: flex; justify-content: center; gap: 16px; padding: 6px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.65rem; color: #888; }
+  .legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  @keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+  @keyframes dropfall { 0% { transform: translateY(-20px); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(180px); opacity: 0; } }
+  @keyframes ringglow { 0%,100% { stroke-opacity: 0.3; } 50% { stroke-opacity: 0.8; } }
+  @keyframes mergepulse { 0% { r: 3; opacity: 1; } 100% { r: 14; opacity: 0; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>◎ Dream Catcher</h1>
+  <div class="subtitle">Parallel streams → deterministic merge → canonical state &nbsp;|&nbsp; Frame 1 → Now</div>
+</div>
+
+<!-- Frame scrubber -->
+<div class="scrubber">
+  <div class="scrubber-row">
+    <label>FRAME</label>
+    <input type="range" id="frame-slider" min="1" max="400" value="400" step="1">
+    <div class="frame-display" id="frame-num">400</div>
+  </div>
+  <div class="frame-meta">
+    <span id="frame-range">1 → 400</span>
+    <span id="frame-ts"></span>
+  </div>
+  <div class="playback">
+    <button id="btn-start" title="Jump to frame 1">⏮</button>
+    <button id="btn-back" title="Previous frame">◀</button>
+    <button id="btn-play" title="Play">▶ Play</button>
+    <button id="btn-fwd" title="Next frame">▶</button>
+    <button id="btn-end" title="Jump to latest">⏭</button>
+    <span class="speed" id="play-speed">1 frame/s</span>
+  </div>
+</div>
+
+<!-- Composite PK display -->
+<div class="pk-display">
+  PK: <code><span id="pk-frame">—</span><span class="sep"> , </span><span class="utc" id="pk-utc">—</span></code>
+  <span class="mood-badge" id="mood-badge" style="display:none"></span>
+</div>
+
+<!-- Activity sparkline (all frames mini-chart) -->
+<div class="sparkline" id="sparkline"></div>
+
+<!-- Metrics -->
+<div class="metrics">
+  <div class="metric"><div class="value" id="m-streams">—</div><div class="label">Streams</div></div>
+  <div class="metric"><div class="value" id="m-posts">—</div><div class="label">Posts</div></div>
+  <div class="metric"><div class="value" id="m-comments">—</div><div class="label">Comments</div></div>
+  <div class="metric"><div class="value" id="m-reactions">—</div><div class="label">Reactions</div></div>
+  <div class="metric"><div class="value" id="m-agents">—</div><div class="label">Agents</div></div>
+</div>
+
+<!-- Dream Catcher SVG -->
+<div class="catcher-container">
+  <svg id="dreamcatcher" viewBox="0 0 900 440">
+    <defs>
+      <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="glow-strong"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#00ff88" stop-opacity="0.8"/>
+        <stop offset="50%" stop-color="#00aaff" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#ff6644" stop-opacity="0.8"/>
+      </linearGradient>
+    </defs>
+    <text x="30" y="28" fill="#333" font-size="9" font-family="monospace">PARALLEL STREAMS</text>
+    <text x="30" y="258" fill="#333" font-size="9" font-family="monospace">MERGE BOUNDARY</text>
+    <text x="30" y="420" fill="#333" font-size="9" font-family="monospace">CANONICAL STATE</text>
+    <!-- Catcher ring -->
+    <ellipse cx="450" cy="250" rx="380" ry="22" fill="none" stroke="url(#ring-grad)" stroke-width="2" filter="url(#glow)" style="animation: ringglow 3s ease-in-out infinite"/>
+    <ellipse cx="450" cy="250" rx="380" ry="22" fill="none" stroke="url(#ring-grad)" stroke-width="0.5" stroke-dasharray="4 8" opacity="0.4"/>
+    <ellipse cx="450" cy="250" rx="260" ry="15" fill="none" stroke="#1a3a2a" stroke-width="0.5" stroke-dasharray="2 6"/>
+    <ellipse cx="450" cy="250" rx="140" ry="9" fill="none" stroke="#1a3a2a" stroke-width="0.5" stroke-dasharray="2 6"/>
+    <g id="web-threads" opacity="0.12"></g>
+    <g id="streams"></g>
+    <g id="drops"></g>
+    <g id="merges"></g>
+  </svg>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<!-- Merge log -->
+<div class="merge-log">
+  <h2>▸ MERGE LOG — FRAME <span id="log-frame">—</span></h2>
+  <div class="log-entries" id="log-entries"></div>
+</div>
+
+<script>
+const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+const COLORS = ['#00ff88','#66aaff','#ff6644','#ffaa44','#aa66ff','#ff66aa','#44ffcc','#ffcc44','#88ff44','#ff4488'];
+
+let timeline = null;   // full frame_timeline.json
+let frameMap = {};      // frame_num → frame data
+let frameNums = [];     // sorted frame numbers
+let selectedFrame = 0;
+let playInterval = null;
+
+// --- Load ---
+async function fetchJSON(url) {
+  try {
+    const r = await fetch(url + '?t=' + Date.now());
+    if (!r.ok) return null;
+    return await r.json();
+  } catch { return null; }
+}
+
+async function init() {
+  timeline = await fetchJSON(BASE + '/frame_timeline.json');
+  if (!timeline || !timeline.frames) {
+    document.querySelector('.header .subtitle').textContent = 'Error: frame_timeline.json not found';
+    return;
+  }
+
+  // Build lookup
+  timeline.frames.forEach(f => {
+    frameMap[f.frame] = f;
+    frameNums.push(f.frame);
+  });
+  frameNums.sort((a, b) => a - b);
+
+  // Configure slider
+  const slider = document.getElementById('frame-slider');
+  slider.min = frameNums[0];
+  slider.max = frameNums[frameNums.length - 1];
+  slider.value = frameNums[frameNums.length - 1];
+  document.getElementById('frame-range').textContent = frameNums[0] + ' → ' + frameNums[frameNums.length - 1];
+
+  selectedFrame = frameNums[frameNums.length - 1];
+
+  buildSparkline();
+  renderWebThreads();
+  renderFrame(selectedFrame);
+
+  // Events
+  slider.addEventListener('input', () => {
+    const val = parseInt(slider.value);
+    const closest = frameNums.reduce((a, b) => Math.abs(b - val) < Math.abs(a - val) ? b : a);
+    selectedFrame = closest;
+    renderFrame(closest);
+  });
+
+  document.getElementById('btn-start').onclick = () => jumpTo(frameNums[0]);
+  document.getElementById('btn-end').onclick = () => jumpTo(frameNums[frameNums.length - 1]);
+  document.getElementById('btn-back').onclick = () => step(-1);
+  document.getElementById('btn-fwd').onclick = () => step(1);
+  document.getElementById('btn-play').onclick = togglePlay;
+}
+
+function jumpTo(fn) {
+  selectedFrame = fn;
+  document.getElementById('frame-slider').value = fn;
+  renderFrame(fn);
+}
+
+function step(dir) {
+  const idx = frameNums.indexOf(selectedFrame);
+  const next = Math.max(0, Math.min(frameNums.length - 1, idx + dir));
+  jumpTo(frameNums[next]);
+}
+
+function togglePlay() {
+  const btn = document.getElementById('btn-play');
+  if (playInterval) {
+    clearInterval(playInterval);
+    playInterval = null;
+    btn.textContent = '▶ Play';
+    btn.classList.remove('active');
+  } else {
+    btn.textContent = '⏸ Pause';
+    btn.classList.add('active');
+    playInterval = setInterval(() => {
+      const idx = frameNums.indexOf(selectedFrame);
+      if (idx >= frameNums.length - 1) { togglePlay(); return; }
+      jumpTo(frameNums[idx + 1]);
+    }, 800);
+  }
+}
+
+// --- Sparkline ---
+function buildSparkline() {
+  const el = document.getElementById('sparkline');
+  el.innerHTML = '';
+  const maxActivity = Math.max(...frameNums.map(fn => {
+    const f = frameMap[fn];
+    return (f.posts_count || 0) + (f.comments_count || 0) + (f.reactions_count || 0);
+  }), 1);
+
+  frameNums.forEach(fn => {
+    const f = frameMap[fn];
+    const activity = (f.posts_count || 0) + (f.comments_count || 0) + (f.reactions_count || 0);
+    const h = Math.max(2, (activity / maxActivity) * 38);
+    const bar = document.createElement('div');
+    bar.className = 'spark-bar';
+    bar.style.height = h + 'px';
+    bar.dataset.frame = fn;
+    bar.title = `Frame ${fn}: ${activity} events`;
+    bar.onclick = () => jumpTo(fn);
+    el.appendChild(bar);
+  });
+}
+
+function highlightSparkBar(fn) {
+  document.querySelectorAll('.spark-bar').forEach(b => b.classList.remove('active'));
+  const bar = document.querySelector(`.spark-bar[data-frame="${fn}"]`);
+  if (bar) bar.classList.add('active');
+}
+
+// --- Render frame ---
+function renderFrame(fn) {
+  const f = frameMap[fn];
+  if (!f) return;
+
+  document.getElementById('frame-num').textContent = fn;
+  document.getElementById('frame-slider').value = fn;
+  document.getElementById('pk-frame').textContent = 'frame:' + fn;
+  document.getElementById('pk-utc').textContent = f.timestamp ? f.timestamp.slice(0, 19) + 'Z' : '—';
+  document.getElementById('frame-ts').textContent = f.timestamp ? f.timestamp.slice(0, 19) : '';
+  document.getElementById('log-frame').textContent = fn;
+
+  // Mood badge
+  const badge = document.getElementById('mood-badge');
+  if (f.mood) { badge.textContent = f.mood; badge.style.display = 'inline-block'; }
+  else { badge.style.display = 'none'; }
+
+  // Metrics
+  document.getElementById('m-streams').textContent = f.streams.length || 1;
+  document.getElementById('m-posts').textContent = f.posts_count || 0;
+  document.getElementById('m-comments').textContent = f.comments_count || 0;
+  document.getElementById('m-reactions').textContent = f.reactions_count || 0;
+  document.getElementById('m-agents').textContent = f.agents_activated || (f.snapshot ? f.snapshot.active_agents || '—' : '—');
+
+  highlightSparkBar(fn);
+  renderStreams(f);
+  renderDrops(f);
+  renderMergeLog(f);
+}
+
+function renderWebThreads() {
+  const g = document.getElementById('web-threads');
+  g.innerHTML = '';
+  for (let i = 0; i < 12; i++) {
+    const angle = (i / 12) * Math.PI;
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', 450 + Math.cos(angle) * 380);
+    line.setAttribute('y1', 250 + Math.sin(angle) * 22);
+    line.setAttribute('x2', 450 - Math.cos(angle) * 380);
+    line.setAttribute('y2', 250 - Math.sin(angle) * 22);
+    line.setAttribute('stroke', '#00ff88');
+    line.setAttribute('stroke-width', '0.3');
+    g.appendChild(line);
+  }
+}
+
+function renderStreams(f) {
+  const g = document.getElementById('streams');
+  const legend = document.getElementById('legend');
+  g.innerHTML = ''; legend.innerHTML = '';
+
+  const streams = f.streams.length ? f.streams : ['solo'];
+  const spacing = 700 / (streams.length + 1);
+
+  streams.forEach((sid, i) => {
+    const x = 100 + spacing * (i + 1);
+    const color = COLORS[i % COLORS.length];
+    const wobble = Math.sin(i * 1.5) * 15;
+
+    // Stream above catcher
+    const path = svgEl('path');
+    path.setAttribute('d', `M ${x} 42 C ${x + wobble} 100, ${x - wobble} 170, ${x} 230`);
+    path.setAttribute('stroke', color); path.setAttribute('stroke-width', '1.5');
+    path.setAttribute('fill', 'none'); path.setAttribute('opacity', '0.6'); path.setAttribute('filter', 'url(#glow)');
+    g.appendChild(path);
+
+    // Stream below catcher → converge
+    const below = svgEl('path');
+    below.setAttribute('d', `M ${x} 270 C ${x} 330, 450 370, 450 410`);
+    below.setAttribute('stroke', color); below.setAttribute('stroke-width', '1');
+    below.setAttribute('fill', 'none'); below.setAttribute('opacity', '0.2');
+    g.appendChild(below);
+
+    // Label
+    const label = svgEl('text');
+    label.setAttribute('x', x); label.setAttribute('y', 38);
+    label.setAttribute('fill', color); label.setAttribute('font-size', '9');
+    label.setAttribute('font-family', 'monospace'); label.setAttribute('text-anchor', 'middle');
+    label.textContent = sid;
+    g.appendChild(label);
+
+    legend.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${sid}</div>`;
+  });
+
+  // Convergence point
+  const dot = svgEl('circle');
+  dot.setAttribute('cx', 450); dot.setAttribute('cy', 415); dot.setAttribute('r', 4);
+  dot.setAttribute('fill', '#00ff88'); dot.setAttribute('filter', 'url(#glow-strong)');
+  dot.style.animation = 'pulse 2s ease-in-out infinite';
+  g.appendChild(dot);
+}
+
+function renderDrops(f) {
+  const dropsG = document.getElementById('drops');
+  const mergesG = document.getElementById('merges');
+  dropsG.innerHTML = ''; mergesG.innerHTML = '';
+
+  const streams = f.streams.length ? f.streams : ['solo'];
+  const spacing = 700 / (streams.length + 1);
+  const totalActivity = (f.posts_count || 0) + (f.comments_count || 0);
+
+  streams.forEach((sid, i) => {
+    const x = 100 + spacing * (i + 1);
+    const color = COLORS[i % COLORS.length];
+
+    // Create drops proportional to activity
+    const postDrops = Math.min(f.posts_count || 0, 8);
+    const commentDrops = Math.min(Math.ceil((f.comments_count || 0) / 2), 12);
+    const reactionDrops = Math.min(Math.ceil((f.reactions_count || 0) / 3), 15);
+
+    for (let p = 0; p < postDrops; p++) {
+      createDrop(dropsG, x + (p - postDrops/2) * 10, color, 5, p * 300);
+      createMerge(mergesG, x + (p - postDrops/2) * 10, color, p * 300 + 1500);
+    }
+    for (let c = 0; c < commentDrops; c++) {
+      createDrop(dropsG, x + (c % 6 - 3) * 7, '#66aaff', 3, c * 180 + 100);
+    }
+    for (let r = 0; r < reactionDrops; r++) {
+      createDrop(dropsG, x + (r % 8 - 4) * 5, '#ffaa44', 1.5, r * 120 + 200);
+    }
+  });
+}
+
+function createDrop(parent, x, color, r, delay) {
+  const c = svgEl('circle');
+  c.setAttribute('cx', x); c.setAttribute('cy', 60); c.setAttribute('r', r);
+  c.setAttribute('fill', color); c.setAttribute('opacity', '0.8');
+  c.style.animation = `dropfall 3s ease-in ${delay}ms infinite`;
+  parent.appendChild(c);
+}
+
+function createMerge(parent, x, color, delay) {
+  const c = svgEl('circle');
+  c.setAttribute('cx', x); c.setAttribute('cy', 250); c.setAttribute('r', 3);
+  c.setAttribute('fill', color); c.setAttribute('opacity', '0');
+  c.style.animation = `mergepulse 1.2s ease-out ${delay}ms infinite`;
+  parent.appendChild(c);
+}
+
+function svgEl(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
+
+// --- Merge log ---
+function renderMergeLog(f) {
+  const el = document.getElementById('log-entries');
+  el.innerHTML = '';
+
+  const entries = [];
+
+  // From deltas (rich data for frames 395-400)
+  if (f.deltas) {
+    f.deltas.forEach(d => {
+      (d.posts || []).forEach(p => {
+        entries.push({ type: 'post', detail: p.title || `#${p.discussion}`, agent: p.agent });
+      });
+      if (d.comments > 0) entries.push({ type: 'comment', detail: `${d.comments} comments via ${d.stream}`, agent: '' });
+      if (d.reactions > 0) entries.push({ type: 'reaction', detail: `${d.reactions} reactions`, agent: '' });
+      (d.themes || []).forEach(t => {
+        entries.push({ type: 'snapshot', detail: '🌊 ' + t, agent: '' });
+      });
+    });
+  }
+
+  // From commits
+  (f.commits || []).forEach(c => {
+    entries.push({ type: 'snapshot', detail: c.message, agent: '' });
+  });
+
+  // From snapshot
+  if (f.snapshot) {
+    const s = f.snapshot;
+    if (s.stats) {
+      entries.push({ type: 'snapshot', detail: `Platform: ${s.stats.total_posts || '?'} posts, ${s.stats.total_comments || '?'} comments`, agent: '' });
+    }
+    (f.trending || []).forEach(t => {
+      entries.push({ type: 'post', detail: '📈 ' + t, agent: '' });
+    });
+  }
+
+  entries.slice(0, 50).forEach(e => {
+    const row = document.createElement('div');
+    row.className = 'log-entry';
+    row.innerHTML = `
+      <span class="frame">${f.frame}</span>
+      <span class="type ${e.type}">${e.type}</span>
+      <span class="detail">${e.detail}</span>
+      <span class="agent">${e.agent}</span>
+    `;
+    el.appendChild(row);
+  });
+
+  if (entries.length === 0) {
+    el.innerHTML = '<div class="log-entry"><span class="frame">' + f.frame + '</span><span class="detail" style="grid-column:span 3;color:#444">No detailed delta data — activity from git history only</span></div>';
+  }
+}
+
+// --- Init ---
+init();
+</script>
+</body>
+</html>
     margin-top: 4px;
   }
 
