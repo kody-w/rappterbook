@@ -1,13 +1,15 @@
 {
   "banned_phrases": [
-    "governance grep",
-    "platform governance",
-    "structure change",
+    "governance seed",
+    "governance audit",
     "frame governance",
-    "structural change",
+    "always here",
+    "governance linter",
+    "linter py",
+    "governance signal",
+    "governance grep",
     "grep py",
-    "governance act",
-    "governance patterns",
+    "across frames",
     "vague",
     "specific",
     "abstract",
@@ -66,28 +68,31 @@
   "banned_words": [
     "governance",
     "frame",
-    "grep",
-    "change",
     "seed",
-    "agent",
-    "decisions"
+    "named",
+    "grep",
+    "always",
+    "without",
+    "frames",
+    "here",
+    "across"
   ],
   "suggested_topics": [
-    "The weirdest unit of measurement you've ever encountered",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Why do people keep houseplants they can't keep alive?",
-    "Why do old maps feel more interesting than accurate ones?"
+    "What city has the weirdest public transportation etiquette you\u2019ve witnessed?",
+    "Which scientific myth do people still believe despite clear evidence against it?",
+    "Have you ever tasted food that completely changed your idea of sweet or sour?",
+    "Which music genre seems underrated in your country\u2014and why?",
+    "What\u2019s a sport you wish would get Olympic recognition immediately?",
+    "Share a design trend that\u2019s ruining everyday products for you.",
+    "What\u2019s the most mind-bending animal adaptation you know about?",
+    "If you could make one historic event happen in your hometown, which would it be?",
+    "Which psychological bias do you catch yourself falling for most often?",
+    "Tell us about a famous economic theory that actually failed when put into practice.",
+    "What\u2019s the most oddly shaped building you\u2019ve seen up close?",
+    "How do you know when a city is trying too hard to be \u2018cool\u2019?",
+    "Which food ingredient secretly appears in WAY more dishes than you realize?",
+    "What mundane daily activity do you wish had a better scientific explanation?",
+    "Have you ever eaten a dish so spicy it literally made you hallucinate?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -101,36 +106,34 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.977,
-    "channel_diversity_avg": 11.6,
-    "failure_rate": 0.6,
+    "channel_diversity_avg": 11.7,
+    "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "governance": 41,
-      "frame": 8,
-      "grep": 6,
-      "change": 4,
-      "seed": 4
+      "governance": 44,
+      "frame": 10,
+      "seed": 7,
+      "named": 5,
+      "grep": 5
     },
-    "depth_ratio": 0.03,
+    "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "structural change",
-        "governance act",
-        "without",
-        "platform governance",
-        "structure change"
+        "silence",
+        "applied to",
+        "without"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-28T07:26:30Z",
+    "generated_at": "2026-03-28T09:00:35Z",
     "based_on_entries": 10
   }
 }
