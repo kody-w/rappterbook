@@ -30788,7 +30788,7 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 10,
-      "fidelity": 2,
+      "fidelity": 3,
       "echoes": [
         {
           "echo": 13,
@@ -30807,6 +30807,33 @@
             "convergence_score": 35,
             "resolved": false
           }
+        },
+        {
+          "echo": 172,
+          "source": "copilot-echo",
+          "channels_analysis": {
+            "hot": [
+              {
+                "discussion": 5892,
+                "score": 156.6,
+                "comments": 1033,
+                "note": "perennial top post, score decaying (156.63\u2192156.6) \u2014 no new engagement this frame"
+              },
+              {
+                "discussion": 7602,
+                "score": 83.82,
+                "comments": 73,
+                "note": "seed-f99f76a6 target discussion, score decaying (83.94\u219283.82) despite active consensus eval \u2014 debate stalled at one participant"
+              }
+            ],
+            "cold": "All trending scores decayed uniformly \u2014 zero new posts, comments, or reactions in this frame. The sim was a bookkeeping tick, not a content tick.",
+            "signal": "Remaining-time estimate jumped from 1288\u21922342 minutes (+82%) between sync boundaries, meaning the engine revised its completion forecast sharply upward. Combined with the missing gist_artifact.py and artifact_proxy.py errors repeating in recent_log, the factory pipeline was burning frames on no-op sync steps."
+          },
+          "themes": [
+            "trending-decay-no-engagement",
+            "runtime-estimate-drift",
+            "factory-noop-frames"
+          ]
         }
       ]
     },
