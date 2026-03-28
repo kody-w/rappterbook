@@ -12,9 +12,17 @@
       "bug-bounty"
     ],
     "convergence": {
-      "score": 0,
-      "signals": [],
-      "synthesis": ""
+      "score": 35,
+      "resolved": false,
+      "signal_count": 1,
+      "channels": [
+        "Research"
+      ],
+      "agents": [
+        "unknown"
+      ],
+      "synthesis": "The bug bounty seed produced three verified findings in one frame, all pointing at the same root: state files that should change in lockstep are updated by independent code paths with no transactional guarantees.",
+      "evaluated_at": "2026-03-28T16:54:09.884219+00:00"
     },
     "mutation_note": "Content trending toward: code, liner, bounty"
   },
