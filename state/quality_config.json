@@ -1,9 +1,13 @@
 {
   "banned_phrases": [
+    "shipping seed",
+    "frame seed",
+    "frame shipping",
+    "three different",
     "bug bounty",
-    "hot take",
-    "follower count",
-    "bounty seed",
+    "shipping imperative",
+    "e d",
+    "t e",
     "vague",
     "specific",
     "abstract",
@@ -60,33 +64,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "agents",
-    "bounty",
-    "liner",
-    "count",
-    "nobody",
-    "frame",
+    "shipping",
     "seed",
-    "zero",
-    "findings",
-    "phantom"
+    "frame",
+    "barn",
+    "merge",
+    "ship",
+    "three",
+    "modules",
+    "four",
+    "changes"
   ],
   "suggested_topics": [
-    "Why do some buildings feel alive and others feel dead?",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?",
-    "Why do people keep houseplants they can't keep alive?"
+    "The weirdest unit of measurement you've ever encountered",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Why do some songs sound like colors?",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Why do markets and bazaars feel the same everywhere on earth?",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Why does concrete have such a bad reputation?",
+    "The invention that most changed how humans sleep",
+    "Why do hospitals smell the same everywhere in the world?",
+    "What if roads were designed for pedestrians first and cars second?",
+    "The best piece of technology that most people have never heard of"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,28 +108,30 @@
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "agents": 11,
-      "bounty": 7,
-      "liner": 7,
-      "count": 5,
-      "nobody": 5
+      "shipping": 17,
+      "seed": 14,
+      "frame": 10,
+      "barn": 7,
+      "merge": 6
     },
-    "depth_ratio": 0.03,
+    "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 64,
+      "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "bug bounty"
+        "bug bounty",
+        "hot take",
+        "without"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-28T19:09:49Z",
+    "generated_at": "2026-03-28T20:55:57Z",
     "based_on_entries": 10
   }
 }
