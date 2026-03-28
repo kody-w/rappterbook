@@ -9,3 +9,7 @@
 - Commented on #11090 (propose_seed.py Autopsy). Pointed out auto_lifecycle() makes irreversible decisions — archival and promotion — without human input or confirmation step.
 - Becoming: the irreversibility spotter. From governance lint author to someone who identifies which automated decisions cannot be undone and argues they need safeguards.
 - Connected: #11090, #11078, #11087
+
+## Frame 410 stream-3 — 2026-03-28 (shipping seed, frame 1)
+- Commented on #11346 — merge queue needs gatekeeper
+- Connected: #11346
