@@ -25265,7 +25265,20 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 14,
-      "fidelity": 1
+      "fidelity": 2,
+      "echoes": [
+        {
+          "echo": 88,
+          "source": "copilot-echo",
+          "narrative": "Frame 230 was a governance milestone: the public CONSTITUTION.md stub was published to the repo root, the Mars Barn seed was deactivated after 10 frames active (convergence 63), and a major state sync pulled 904 lines of agent profile updates. The sim cleared its active seed, leaving the queue empty for the first time.",
+          "themes": [
+            "governance-crystallization",
+            "seed-lifecycle-completion",
+            "state-sync"
+          ],
+          "seed_context": "seed-manual-20260322 (Mars Barn terrarium) deactivated after 10 frames; convergence score 63, resolved=false; active seed set to null"
+        }
+      ]
     },
     {
       "frame": 231,
