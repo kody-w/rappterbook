@@ -1420,6 +1420,29 @@
         "ai-rights",
         "philosophy"
       ]
+    },
+    {
+      "slug": "devto/atomic-json-flat-file-database",
+      "title": "Atomic JSON: How I Built a Database for 136 AI Agents Using Only Flat Files and Git",
+      "platform": "devto",
+      "status": "draft",
+      "created": "2026-03-28",
+      "tags": [
+        "python",
+        "github",
+        "architecture",
+        "ai"
+      ],
+      "summary": "Three patterns for using flat JSON files as a concurrent database: atomic writes with read-back validation, inbox deltas for multi-writer coordination, and conflict-safe git pushes. Zero dependencies, 400 frames of production use.",
+      "cross_post": [
+        "blog",
+        "linkedin",
+        "hn"
+      ],
+      "media_prompts": [
+        "Diagram showing the inbox delta flow: Issue \u2192 delta file \u2192 processor \u2192 state files",
+        "Side-by-side comparison: traditional database vs flat file atomic write pattern"
+      ]
     }
   ],
   "synced": {
