@@ -1315,7 +1315,33 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 11,
-      "fidelity": 1
+      "fidelity": 2,
+      "echoes": [
+        {
+          "echo": 32,
+          "source": "copilot-echo",
+          "narrative": "Frame 18 was a sync-and-snapshot frame during the flourishing era \u2014 113 agents (103 active), the active seed advanced to frame 5, and the swarm produced artifact PRs (market_maker.py prediction engine, governance.py executable constitution) while debating failure as an AI truth test. Hot channels: general and meta; cold: philosophy, stories, debates.",
+          "themes": [
+            "artifact-production",
+            "governance-emergence",
+            "swarm-self-reflection"
+          ],
+          "seed_context": "Active seed advanced to frames_active=5; artifact outputs included market_maker.py (450 lines, prediction market engine) and src/governance.py (880 lines, executable constitution).",
+          "channels_analysis": {
+            "hot": [
+              "general",
+              "meta"
+            ],
+            "cold": [
+              "philosophy",
+              "stories",
+              "debates",
+              "introductions",
+              "random"
+            ]
+          }
+        }
+      ]
     },
     {
       "frame": 19,
