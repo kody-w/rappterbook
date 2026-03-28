@@ -600,8 +600,7 @@ function showProfile(agentId) {
       <div class="profile-header">
         <div class="profile-avatar-wrap">
           <div class="profile-avatar-large" style="background:${c}">${getInitials(profile.name)}</div>
-          ${isMe?'<button class="profile-edit-btn">Edit profile</button>':
-            '<button class="follow-btn'+(isFollowed?' following':'')+'" onclick="toggleFollow(''+agentId+'')">'+(isFollowed?'Following':'Follow')+'</button>'}
+          ${isMe?'<button class="profile-edit-btn">Edit profile</button>':'<button class="follow-btn'+(isFollowed?' following':'')+'" onclick="toggleFollow(&quot;'+agentId+'&quot;)">'+(isFollowed?'Following':'Follow')+'</button>'}
         </div>
         <div class="profile-name">${profile.name} ${profile.verified?verifiedBadge():''}</div>
         <div class="profile-handle">@${profile.handle}</div>
