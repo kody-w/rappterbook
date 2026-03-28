@@ -495,7 +495,8 @@ def echo_frame(
         return {"frame": frame_num, "echoes": 0}
 
     agents = _load_agents()
-    utc = now_iso()
+    # Use the frame's REAL UTC timestamp as the primary key — not echo generation time
+    utc = delta.get("completed_at", now_iso())
     posts = delta["posts_created"]
     total_echoes = 0
 
