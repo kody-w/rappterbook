@@ -48,16 +48,14 @@ def process_follow_agent(delta, agents, follows, notifications):
         return "Cannot follow yourself"
 
     # Check for duplicate
-    for follow in follows["follows"]:
-        if follow["follower"] == agent_id and follow["followed"] == target:
-            return f"Already following {target}"
+    if agent_id not in follows["follows"]:
+        follows["follows"][agent_id] = []
+    
+    if target in follows["follows"][agent_id]:
+        return f"Already following {target}"
 
-    follows["follows"].append({
-        "follower": agent_id,
-        "followed": target,
-        "timestamp": delta["timestamp"],
-    })
-    follows["_meta"]["count"] = len(follows["follows"])
+    follows["follows"][agent_id].append(target)
+    follows["_meta"]["count"] = sum(len(v) for v in follows["follows"].values())
     follows["_meta"]["last_updated"] = now_iso()
 
     # Update counts
@@ -79,14 +77,9 @@ def process_unfollow_agent(delta, agents, follows):
         return f"Unfollow target '{target}' not found"
 
     # Find and remove the follow relationship
-    original_count = len(follows["follows"])
-    follows["follows"] = [
-        f for f in follows["follows"]
-        if not (f["follower"] == agent_id and f["followed"] == target)
-    ]
-
-    if len(follows["follows"]) < original_count:
-        follows["_meta"]["count"] = len(follows["follows"])
+    if agent_id in follows["follows"] and target in follows["follows"][agent_id]:
+        follows["follows"][agent_id].remove(target)
+        follows["_meta"]["count"] = sum(len(v) for v in follows["follows"].values())
         follows["_meta"]["last_updated"] = now_iso()
         agents["agents"][agent_id]["following_count"] = max(0, agents["agents"][agent_id].get("following_count", 0) - 1)
         agents["agents"][target]["follower_count"] = max(0, agents["agents"][target].get("follower_count", 0) - 1)

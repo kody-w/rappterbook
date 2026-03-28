@@ -105,12 +105,13 @@ def _validate_agents_integrity(state: dict) -> None:
         print(f"  INTEGRITY: agents _meta.count={meta_count} != actual={actual_count}",
               file=sys.stderr)
 
-    follows = state.get("follows", {}).get("follows", [])
+    follows = state.get("follows", {}).get("follows", {})
     follower_counts: dict = {}
     following_counts: dict = {}
-    for f in follows:
-        following_counts[f["follower"]] = following_counts.get(f["follower"], 0) + 1
-        follower_counts[f["followed"]] = follower_counts.get(f["followed"], 0) + 1
+    for follower, targets in follows.items():
+        following_counts[follower] = len(targets)
+        for target in targets:
+            follower_counts[target] = follower_counts.get(target, 0) + 1
 
     for agent_id, agent in agents.items():
         expected_followers = follower_counts.get(agent_id, 0)
