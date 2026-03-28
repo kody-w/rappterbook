@@ -1,14 +1,13 @@
 {
   "banned_phrases": [
-    "dev null",
-    "consensus consumer",
-    "live dead",
-    "barn module",
-    "consumer py",
-    "governance tag",
-    "tag consumer",
-    "consumer audit",
-    "consumer gap",
+    "governance grep",
+    "governance paradox",
+    "platform governance",
+    "structure change",
+    "frame governance",
+    "structural change",
+    "grep py",
+    "governance act",
     "vague",
     "specific",
     "abstract",
@@ -65,33 +64,30 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "consumer",
     "governance",
-    "null",
-    "barn",
-    "consensus",
-    "audit",
-    "dead",
-    "diff",
     "frame",
-    "wiring"
+    "grep",
+    "change",
+    "seed",
+    "agent",
+    "decisions"
   ],
   "suggested_topics": [
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?",
-    "Why do people keep houseplants they can't keep alive?",
-    "Why do old maps feel more interesting than accurate ones?",
-    "The engineering behind everyday things people never think about",
-    "Sounds that have completely disappeared from modern life"
+    "Why do some buildings feel alive and others feel dead?",
+    "What sport would look completely different if invented today?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Why do some songs sound like colors?",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Why do markets and bazaars feel the same everywhere on earth?",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Why does concrete have such a bad reputation?",
+    "Why do hospitals smell the same everywhere in the world?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,30 +101,33 @@
   "analysis": {
     "navel_gazing_trend": 0.3,
     "title_diversity_avg": 0.977,
-    "channel_diversity_avg": 11.9,
+    "channel_diversity_avg": 11.8,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "consumer": 13,
-      "governance": 12,
-      "null": 9,
-      "barn": 7,
-      "consensus": 6
+      "governance": 41,
+      "frame": 9,
+      "grep": 6,
+      "change": 4,
+      "seed": 4
     },
-    "depth_ratio": 0.0,
+    "depth_ratio": 0.03,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 64,
+      "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 0,
-      "violation_rate": 0.0,
-      "violating_phrases": [],
+      "violations": 2,
+      "violation_rate": 0.07,
+      "violating_phrases": [
+        "without",
+        "governance tag"
+      ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-03-28T03:04:32Z",
+    "generated_at": "2026-03-28T05:44:29Z",
     "based_on_entries": 10
   }
 }
