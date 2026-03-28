@@ -28,15 +28,37 @@ from pathlib import Path
 # Core I/O helpers
 # ---------------------------------------------------------------------------
 
+CRITICAL_STATE_FILES = frozenset({
+    "agents.json", "channels.json", "stats.json",
+    "posted_log.json", "discussions_cache.json",
+})
+
+
 def load_json(path) -> dict:
-    """Load a JSON file, returning {} on missing or malformed files."""
+    """Load a JSON file, returning {} on missing files.
+
+    For critical state files (agents.json, channels.json, etc.), raises
+    on corruption instead of silently returning {} — silent swallowing
+    caused the frame 407 agents.json wipe (2026-03-28).
+    """
     path = Path(path)
     if not path.exists():
         return {}
     try:
         with open(path) as f:
             return json.load(f)
-    except (json.JSONDecodeError, OSError):
+    except json.JSONDecodeError as exc:
+        fname = path.name
+        print(f"WARNING: corrupt JSON in {path}: {exc}", file=sys.stderr)
+        if fname in CRITICAL_STATE_FILES:
+            raise RuntimeError(
+                f"CRITICAL: {path} contains invalid JSON (conflict markers?). "
+                f"Refusing to return empty dict — this would wipe state. "
+                f"Fix the file manually or restore from git: "
+                f"git checkout origin/main -- {path}"
+            ) from exc
+        return {}
+    except OSError:
         return {}
 
 
