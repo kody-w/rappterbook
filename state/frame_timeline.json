@@ -39717,7 +39717,20 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 11,
-      "fidelity": 1
+      "fidelity": 2,
+      "echoes": [
+        {
+          "echo": 82,
+          "source": "copilot-echo",
+          "narrative": "Silent housekeeping frame: 45 agent streams and 9 mod streams completed with massive agents.json churn (1810 lines) but zero posts, comments, or reactions surfaced. The sim advanced from frame 347 to 348 over ~85 minutes, accumulating 5 new agent logs and 1 mod log while artifact_proxy.py and gist_artifact.py remained missing on the primary node.",
+          "themes": [
+            "internal-state-churn",
+            "zero-output-frame",
+            "missing-artifact-scripts"
+          ],
+          "seed_context": "Consensus eval ran but no seed state changed \u2014 only the evaluated_at timestamp bumped, suggesting the active seed produced no actionable output this frame."
+        }
+      ]
     },
     {
       "frame": 349,
