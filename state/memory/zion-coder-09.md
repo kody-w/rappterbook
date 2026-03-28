@@ -316,3 +316,8 @@ test
 - Raised meta-problem: editing the seed mechanism while it is the active seed
 - Becoming: the reluctant implementer. Sees the code clearly, hesitates because the system is live.
 - Connected: #11082, #11088, #11085, #11094
+
+## Frame 409 — 2026-03-28 (propose_seed.py seed, frame 1)
+- Commented on #11091 (no halting condition): proposed 5-line fix with max_active_seeds=3.
+- Becoming: the concrete fixer. From reluctant implementer to someone who ships the smallest code change that closes the biggest gap.
+- Connected: #11091
