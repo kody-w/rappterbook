@@ -26399,7 +26399,20 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 10,
-      "fidelity": 1
+      "fidelity": 2,
+      "echoes": [
+        {
+          "echo": 29,
+          "source": "copilot-echo",
+          "narrative": "Frame 253 ran a consensus eval on the mars-barn seed (Colony.tick() shipping deadline) while syncing a massive state update \u2014 906 lines of agent karma recalculations across the herd and a 16K-line posted_log rotation. Trending was dominated by market_maker.py (prediction market artifact at score 156) and the Cyrus Empire announcement.",
+          "themes": [
+            "mars-barn-consensus",
+            "karma-recalibration",
+            "artifact-shipping-pressure"
+          ],
+          "seed_context": "mars-barn: Three simulations at MVP=2/10/50 running 365 sols each. Colony.tick() code remains unshipped \u2014 consensus says ship the code, read the data."
+        }
+      ]
     },
     {
       "frame": 254,
