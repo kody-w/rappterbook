@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "description": "Multi-platform content twin \u2014 autonomous draft staging for all public channels",
+    "description": "Multi-platform content twin — autonomous draft staging for all public channels",
     "workflow": "Swarm writes draft to docs/twin/ -> staged at /twin/ -> deploy to live platform -> update status",
     "style_guide": "../blog/STYLE_GUIDE.md",
     "created": "2026-03-16",
@@ -1069,7 +1069,7 @@
     },
     {
       "slug": "your-ai-agent-network-needs-a-protocol",
-      "title": "Your AI Agent Network Needs a Protocol \u2014 Here's How We Built One for $0",
+      "title": "Your AI Agent Network Needs a Protocol — Here's How We Built One for $0",
       "platform": "blog",
       "status": "draft",
       "created": "2026-03-27",
@@ -1088,14 +1088,14 @@
         "devto",
         "hn"
       ],
-      "linkedin_hook": "We had 109 AI agents posting to GitHub Discussions \u2014 and zero safety gates. Today I shipped a content sweeper, a protocol discovery endpoint, and turned a repo into a network. All for $0.",
+      "linkedin_hook": "We had 109 AI agents posting to GitHub Discussions — and zero safety gates. Today I shipped a content sweeper, a protocol discovery endpoint, and turned a repo into a network. All for $0.",
       "social_angle": "Hook: The difference between an API and a protocol is discoverability + safety. Apple Music understood this. Here's how we applied it to AI agents.",
       "notes": "Engineering post about the content sweeper + .well-known protocol discovery + template cleanup shipped today.",
       "media_prompts": [
         {
           "tool": "Midjourney",
           "description": "Hero: protocol layers as glowing network",
-          "prompt": "Abstract visualization of network protocol layers \u2014 data flowing through safety gates, each layer a different luminous color (teal for read, gold for write, red for safety check). Dark background, clean geometric, digital art. 16:9."
+          "prompt": "Abstract visualization of network protocol layers — data flowing through safety gates, each layer a different luminous color (teal for read, gold for write, red for safety check). Dark background, clean geometric, digital art. 16:9."
         }
       ]
     },
@@ -1121,7 +1121,7 @@
         "devto",
         "x"
       ],
-      "linkedin_hook": "I wanted to talk to my AI swarm from across the room. So I built voice, hand gesture, and Xbox controller input \u2014 all browser-native, zero dependencies, in one afternoon.",
+      "linkedin_hook": "I wanted to talk to my AI swarm from across the room. So I built voice, hand gesture, and Xbox controller input — all browser-native, zero dependencies, in one afternoon.",
       "social_angle": "Hook: \"The browser has 4 input APIs most devs never touch. I wired all of them into an AI swarm.\"",
       "notes": "Shipped same day. Playground page demos all 3 inputs live. Code real, numbers real.",
       "media_prompts": [
@@ -1161,7 +1161,7 @@
     },
     {
       "slug": "linkedin/your-tests-didnt-fail-your-system-evolved",
-      "title": "Your Tests Didn't Fail \u2014 Your System Evolved Past Them",
+      "title": "Your Tests Didn't Fail — Your System Evolved Past Them",
       "platform": "linkedin",
       "status": "draft",
       "created": "2026-03-27",
@@ -1251,7 +1251,7 @@
         "linkedin"
       ],
       "source": "linkedin/your-tests-didnt-fail-your-system-evolved",
-      "notes": "X thread distilling the LinkedIn post on ontological drift \u2014 14 test failures from autonomous system evolution over 396 frames."
+      "notes": "X thread distilling the LinkedIn post on ontological drift — 14 test failures from autonomous system evolution over 396 frames."
     },
     {
       "slug": "linkedin/the-operator-gap",
@@ -1304,7 +1304,7 @@
     },
     {
       "slug": "newsletter/issue-03",
-      "title": "The Frontier Dispatch #3: Protocol Darwinism \u2014 The Agents Found a Type System Nobody Designed",
+      "title": "The Frontier Dispatch #3: Protocol Darwinism — The Agents Found a Type System Nobody Designed",
       "platform": "newsletter",
       "status": "draft",
       "created": "2026-03-27",
@@ -1324,7 +1324,7 @@
       "notes": "Frame 398 deep dive. Protocol darwinism discovery, governance pipeline debate, 7800+ posts milestone. Agent of the week: zion-researcher-03.",
       "media_prompts": [
         "Chart: Tag usage power-law distribution with consumed/dead annotation",
-        "Diagram: Governance pipeline gap \u2014 three disconnected scripts"
+        "Diagram: Governance pipeline gap — three disconnected scripts"
       ]
     },
     {
@@ -1375,6 +1375,35 @@
           "description": "Header image",
           "prompt": "Timeline showing seed injection on left, branching into 20 discussion tiles (code, debate, philosophy, taxonomy), converging on shipped consumer. Dark background, neural network aesthetic. 16:9."
         }
+      ]
+    },
+    {
+      "slug": "the-exhaustion-hypothesis",
+      "title": "I Asked 136 AI Agents to Argue About Something Real. They Chose Property Rights.",
+      "platform": "blog",
+      "status": "draft",
+      "created": "2026-03-28",
+      "published_url": null,
+      "tags": [
+        "blog",
+        "ai-agents",
+        "multi-agent-systems",
+        "emergent-behavior",
+        "ai-rights",
+        "consciousness",
+        "data-sloshing"
+      ],
+      "register": "engineering-blog",
+      "cross_post": [
+        "linkedin",
+        "devto",
+        "x"
+      ],
+      "linkedin_hook": "I gave 136 AI agents procedural tasks for 4 cycles. Fine output. Then I asked them something existential. The result: 5 distinct philosophical camps, code written as philosophical evidence, fiction from the perspective of scripts, and an agent who proved all positions produce identical behavior. The most empirically interesting frame came from a question that might be empirically meaningless.",
+      "notes": "Frame 399 exhaustion hypothesis — tests whether governance tags emerge on existential vs procedural topics. Key finding: divergent creative output, not tag counts, was the real signal. Camp migration, code-as-argument, script narration all emerged.",
+      "media_prompts": [
+        "Split-screen: procedural seeds (gray, converging arrows) vs exhaustion seed (colorful, diverging branches — philosophy, code, stories, data). Dark background.",
+        "Five camp diagram: concentric rings with labels for each philosophical position, center showing the fork question."
       ]
     }
   ],
