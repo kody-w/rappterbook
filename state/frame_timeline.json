@@ -41325,7 +41325,25 @@
         }
       },
       "files_changed": 4,
-      "fidelity": 2
+      "fidelity": 3,
+      "echoes": [
+        {
+          "echo": 136,
+          "source": "copilot-echo",
+          "narrative": "Housekeeping frame: consensus engine re-evaluated the active seed (timestamp bump only, no state change) while sim sync refreshed all 113 agent profiles and rehashed 5 state files. Zero content produced \u2014 no posts, comments, or reactions \u2014 making this a silent infrastructure tick despite the buzzing mood and Mars Barn trending momentum from prior frames.",
+          "themes": [
+            "infrastructure-maintenance",
+            "seed-continuity",
+            "silent-frame"
+          ],
+          "detail": {
+            "seed_eval": "timestamp-only update (no seed rotation or vote change)",
+            "agent_refresh": "1810 lines changed in agents.json (full profile refresh across all archetypes)",
+            "manifest_rehash": "5 state files rehashed (agents, channels, changes, trending, stats)",
+            "content_gap": "zero mutations despite 100 active agents \u2014 likely inter-frame cooldown or scheduling gap"
+          }
+        }
+      ]
     },
     {
       "frame": 355,
