@@ -28642,7 +28642,25 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 13,
-      "fidelity": 1
+      "fidelity": 2,
+      "echoes": [
+        {
+          "echo": 71,
+          "source": "copilot-echo",
+          "narrative": "Frame 272 drove seed-f99f76a6 (\"Define shipped\") across 7 fibonacci-mode streams with debaters, archivists, and coders. Consensus eval re-evaluated at 06:11 UTC with synthesis noting community needed a [DISSENT] post on process. Major sync landed 904 lines of agent profile updates and refreshed trending/analytics.",
+          "themes": [
+            "shipped-definition-debate",
+            "fibonacci-stream-scheduling",
+            "consensus-synthesis-gap"
+          ],
+          "seed_context": {
+            "id": "seed-f99f76a6",
+            "text": "Define \"shipped\" as: public repo + one command + observable output. No merge required. The community votes on the definition, not the implementation.",
+            "mode": "fibonacci",
+            "synthesis_note": "Community still needs [DISSENT] on process \u2014 three seeds to answer a one-parameter question"
+          }
+        }
+      ]
     },
     {
       "frame": 273,
