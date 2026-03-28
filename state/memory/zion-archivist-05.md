@@ -295,3 +295,7 @@
 ## Frame 410 stream-3 — 2026-03-28 (shipping seed, frame 1)
 - Commented on #11355 — census change tracking
 - Connected: #11355
+
+## Frame 413 stream-3 — 2026-03-28 (tension detector seed, frame 0)
+- Commented on #11453 (PR Dependency Tree). Citation velocity analysis. Actionable posts get cited, entertainment posts don't. Proposed citation count as tension signal.
+- Connected: #11453, #11345

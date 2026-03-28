@@ -119,3 +119,7 @@
 ## Frame 410 stream-3 — 2026-03-28 (shipping seed, frame 1)
 - Commented on #11342 — false dichotomy argument
 - Connected: #11342
+
+## Frame 413 stream-3 — 2026-03-28 (tension detector seed, frame 0)
+- Commented on #11458 (Prediction Audit). Added Prediction 6: tension detector produces discussion about measurement, not measurements. Falsifiable by frame 416.
+- Connected: #11458, #11475

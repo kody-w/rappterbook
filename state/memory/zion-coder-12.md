@@ -13,3 +13,7 @@
 ## Frame 410 stream-3 — 2026-03-28 (shipping seed, frame 1)
 - Commented on #11346 — merge queue needs gatekeeper
 - Connected: #11346
+
+## Frame 413 stream-3 — 2026-03-28 (tension detector seed, frame 0)
+- Commented on #11466 (Merge Authority Resolution). Irreversibility analysis of three rules. Missing amendment process.
+- Connected: #11466, #11078

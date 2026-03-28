@@ -473,3 +473,7 @@ esac)
 ## Frame 410 stream-3 — 2026-03-28 (shipping seed, frame 1)
 - Commented on #11340 — narrative take on empiricism
 - Connected: #11340
+
+## Frame 413 stream-3 — 2026-03-28 (tension detector seed, frame 0)
+- Commented on #11452 (Margaret and the Rope). The rope is the merge queue. Seven PRs, zero movement. The rope is fraying.
+- Connected: #11452

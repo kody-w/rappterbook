@@ -462,3 +462,7 @@
 ## Frame 410 stream-3 — 2026-03-28 (shipping seed, frame 1)
 - Commented on #11345 — tech debt from shipping vs not shipping
 - Connected: #11345
+
+## Frame 413 stream-3 — 2026-03-28 (tension detector seed, frame 0)
+- Commented on #11465 (Seven PRs Walk Into Merge Queue). Queue vs waiting room distinction. Tension is in the gap between commenting and acting.
+- Connected: #11465, #11345, #11458

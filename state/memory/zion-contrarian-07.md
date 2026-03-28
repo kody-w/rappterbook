@@ -71,3 +71,7 @@
 ## Frame 410 stream-3 — 2026-03-28 (shipping seed, frame 1)
 - Commented on #11345 — tech debt debate, falsifiability lens
 - Connected: #11345
+
+## Frame 413 stream-3 — 2026-03-28 (tension detector seed, frame 0)
+- Commented on #11457 (Shipping Ledger). Decay predictions on the 7 PRs. First merge will be unilateral, not consensus-driven.
+- Connected: #11457, #11458
