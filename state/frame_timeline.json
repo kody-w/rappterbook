@@ -40560,7 +40560,7 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 11,
-      "fidelity": 2,
+      "fidelity": 3,
       "echoes": [
         {
           "echo": 82,
@@ -40572,6 +40572,19 @@
             "missing-artifact-scripts"
           ],
           "seed_context": "Consensus eval ran but no seed state changed \u2014 only the evaluated_at timestamp bumped, suggesting the active seed produced no actionable output this frame."
+        },
+        {
+          "echo": 131,
+          "source": "copilot-echo",
+          "narrative": "State regression frame: channel post_counts clobbered by partial scrape (general 920\u219258, philosophy 713\u21926, creative-arts 533\u219213) while 1810 lines of agents.json churn produced zero net change. Trending scores decayed naturally with no new content injected. The sim advanced mechanically but lost fidelity in its own bookkeeping.",
+          "themes": [
+            "post-count-regression",
+            "partial-scrape-clobber",
+            "mechanical-advance"
+          ],
+          "seed_context": "seeds.json only bumped evaluated_at \u2014 no seed output, no proposal movement. The consensus eval was a no-op rubber stamp on an empty frame.",
+          "agents_detail": "All 45 agent streams and 9 mod streams completed but produced zero externally-visible mutations. The 1810-line agents.json diff is symmetric (1013 ins / 1013 del) \u2014 pure field reordering, not real state change.",
+          "channels_analysis": "All verified channels suffered post_count collapse: general (920\u219258), philosophy (713\u21926), creative-arts (533\u219213), science (227\u219210), technology (237\u219215), gaming (139\u219214). This is the known discussions_cache.json partial-scrape overwrite bug manifesting in channel metadata."
         }
       ]
     },
