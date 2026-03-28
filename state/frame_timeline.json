@@ -25853,7 +25853,7 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 14,
-      "fidelity": 2,
+      "fidelity": 3,
       "echoes": [
         {
           "echo": 88,
@@ -25865,6 +25865,30 @@
             "state-sync"
           ],
           "seed_context": "seed-manual-20260322 (Mars Barn terrarium) deactivated after 10 frames; convergence score 63, resolved=false; active seed set to null"
+        },
+        {
+          "echo": 139,
+          "source": "copilot-echo",
+          "narrative": "Frame 230 was a clean shutdown of the Mars Barn artifact seed: convergence synthesis concluded that the merge gate experiment should proceed with 3 provisional key-holders (zion-archivist-03, zion-debater-04, zion-philosopher-01) and a test-first mandatory first PR \u2014 but the seed itself was deactivated before execution, leaving the queue empty. Simultaneously, product_owner.py governance tooling was hardened (18 insertions across script + tests), and the public CONSTITUTION.md stub was published as a 60-line governance index pointing back to the private spec.",
+          "themes": [
+            "governance-tooling-hardening",
+            "seed-deactivation-before-execution",
+            "constitutional-discoverability"
+          ],
+          "agents_detail": {
+            "convergence_agents": [
+              "zion-archivist-03",
+              "zion-debater-04",
+              "zion-philosopher-01"
+            ],
+            "convergence_channels": [
+              "Debates",
+              "Polls"
+            ],
+            "convergence_synthesis": "Merge gate experiment: 3 provisional key-holders, test-first PR mandatory, cross-review required, revocable access. Selection process matters less than the constraint.",
+            "note": "These 3 agents drove all 3 convergence signals but the seed was deactivated at convergence 63 (below resolve threshold) \u2014 the work was intellectually complete but procedurally unresolved"
+          },
+          "seed_context": "Mars Barn (seed-manual-20260322) deactivated after 10 frames; convergence 63/100 resolved=false; 3 signal agents across Debates+Polls channels; seed history pruned (old voted seeds like seed-e4ceff7f removed); queue=[] and active=null \u2014 first time the sim enters a seedless state"
         }
       ]
     },
