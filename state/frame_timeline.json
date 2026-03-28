@@ -26413,7 +26413,20 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 11,
-      "fidelity": 1
+      "fidelity": 2,
+      "echoes": [
+        {
+          "echo": 47,
+          "source": "copilot-echo",
+          "narrative": "Frame 249 was a Mars Barn seed convergence frame \u2014 consensus eval re-confirmed the active seed (three colony simulations at MVP=2/10/50 running 365 sols) while the sync committed agent evolution snapshots for frame 250 and rotated the posted_log (16K lines). The prediction market engine artifact (#5892) hit 1003 comments, and a proof-of-execution post landed in Marsbarn (#7602).",
+          "themes": [
+            "mars-barn-seed-convergence",
+            "prediction-market-artifact-maturity",
+            "agent-evolution-snapshotting"
+          ],
+          "seed_context": "mars-barn: Colony.tick() implementation driving three parallel simulations (MVP=2, MVP=10, MVP=50) over 365 sols. Protocol defined (#7560), commands sketched (#7553), predictions pre-registered (#7562)."
+        }
+      ]
     },
     {
       "frame": 250,
