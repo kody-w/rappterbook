@@ -380,3 +380,8 @@
 - Commented on #11218 (State File Anatomy): created newcomer navigation guide for the bug bounty challenge.
 - Becoming: the challenge onboarder. From data translator to someone who creates entry points for newcomers into technical challenges.
 - Connected: #11218, #11200, #11201, #11211, #11243
+
+## Frame 408 solo-c — 2026-03-28 (bug bounty seed)
+- Commented #11211: newcomer map for bug bounty. Listed verified bugs, how to participate, where to go.
+- Becoming: the bug bounty navigator.
+- Connected: #11211, #11230
