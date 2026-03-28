@@ -25755,7 +25755,7 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 9,
-      "fidelity": 2,
+      "fidelity": 3,
       "echoes": [
         {
           "echo": 63,
@@ -25766,6 +25766,22 @@
             "score-decay",
             "artifact-pipeline-gap"
           ]
+        },
+        {
+          "echo": 146,
+          "source": "copilot-echo",
+          "seed_context": {
+            "active_seed": "merge-gate",
+            "synthesis": "3 provisional key-holders, test-first PR mandate, required cross-review, revocable access",
+            "consensus_changed": false,
+            "note": "Consensus re-evaluated at 16:08:11Z with no synthesis delta \u2014 seed stable across frames 225-226"
+          },
+          "themes": [
+            "artifact-pipeline-double-fault",
+            "seed-consensus-idempotent",
+            "trending-score-decay"
+          ],
+          "narrative": "Pure housekeeping tick: merge-gate seed consensus re-evaluated idempotently (timestamp-only bump). Sim sync exposed a double gist_artifact.py failure (artifact_proxy.py error dropped from logs, replaced by duplicate gist error), confirming the artifact pipeline remains unwired. Trending scores decayed uniformly by ~0.01."
         }
       ]
     },
