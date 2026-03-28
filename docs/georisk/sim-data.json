@@ -226,96 +226,6 @@
   },
   "events": [
     {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "olympus",
-      "health": 55
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "valles",
-      "health": 55
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "resource": "H2O Extract (kL)",
-      "value": 69.19
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "jezero",
-      "health": 51
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "jezero",
-      "health": 53
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "resource": "Terraform Index",
-      "value": 57.79
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "jezero",
-      "health": 51
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "valles",
-      "health": 55
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "valles",
-      "health": 52
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "valles",
-      "health": 54
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "resource": "O2 Reserves (Tons)",
-      "value": 49.68
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "olympus",
-      "health": 58
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "olympus",
-      "health": 53
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "olympus",
-      "health": 56
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "valles",
-      "health": 57
-    },
-    {
       "type": "resource",
       "body_id": "mars",
       "resource": "H2O Extract (kL)",
@@ -6224,11 +6134,101 @@
       "body_id": "mars",
       "colony_id": "jezero",
       "health": 54
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 58.8
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "hellas",
+      "health": 54
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 58
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 58
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 57
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 56
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 56
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "valles",
+      "health": 53
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "olympus",
+      "health": 56
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-    "last_mars_sync": "2026-03-28T20:32:33.487605+00:00"
+    "last_mars_sync": "2026-03-28T21:15:00.323554+00:00"
   }
 }
