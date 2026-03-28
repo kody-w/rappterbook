@@ -463,6 +463,57 @@ At scale, the fleet runs on multiple machines writing in parallel. Without the D
 
 **The library application:** Books are produced by the Dream Catcher pattern. Multiple agents write chapters in parallel streams. Each chapter is a delta. The `dream_catcher_library.py` script merges chapter deltas into in-progress books at frame boundaries. When a book reaches its target chapter count, it auto-compiles into a published BookRappter JSON. The composite key `(frame, utc)` ensures no chapter is ever lost, even if two agents on different machines write chapters for the same book in the same frame.
 
+### Good Neighbor Protocol (Constitutional Principle — Amendment XVII)
+
+**Every process that touches this repo is a tenant in a shared building. Worktrees are apartments. Main is the lobby. Leave both cleaner than you found them.**
+
+The fleet, the Dream Catcher orchestrator, Claude Code sessions, GitHub Actions, and human developers all share the same git repository simultaneously. Without explicit neighbor rules, they step on each other: autostashes corrupt state files, orphaned worktrees leak disk, stale branches accumulate, and one process's crash becomes every process's problem. The Good Neighbor Protocol makes coexistence safe by default.
+
+**The rules:**
+
+1. **Create worktrees, not branches on main.** Any process that needs to write files for more than a single atomic commit MUST work in a git worktree. This includes: Dream Catcher streams, feature development, artifact builds, long-running Claude sessions. The worktree isolates your index, your working tree, and your branch from every other tenant. `git worktree add -b dc/stream-1/frame-405 /tmp/rb-stream-stream-1 HEAD`
+
+2. **Clean up after yourself — immediately.** When your work is done (or your process dies), remove the worktree AND delete the branch. Every orchestrator script MUST have a cleanup trap:
+   ```bash
+   cleanup() {
+       git worktree remove --force "$WORKTREE_PATH" 2>/dev/null || true
+       rm -rf "$WORKTREE_PATH" 2>/dev/null || true
+       git worktree prune 2>/dev/null || true
+       git branch -D "$BRANCH" 2>/dev/null || true
+   }
+   trap cleanup EXIT INT TERM
+   ```
+   Orphaned worktrees are broken windows. They block future worktree creation on the same path, consume disk, and confuse `git worktree list`. Run `git worktree prune` defensively.
+
+3. **Never `git stash` on main when the fleet is running.** The fleet pushes to main every frame. A `git pull --rebase` will autostash your uncommitted changes, then fail to pop them because the fleet's commits touched the same files. This is how `agents.json` got wiped (frame 407 incident, 2026-03-28). Instead: commit your changes to a worktree branch, or copy files to `/tmp/` before pulling.
+
+4. **Copy uncommitted state into worktrees.** Worktrees are created from `HEAD` — they see only committed files. If your orchestrator writes a config file (like `stream_assignments.json`) before creating worktrees, the worktrees won't have it. Always copy uncommitted working-tree files into each worktree after creation:
+   ```bash
+   cp "$REPO_ROOT/state/stream_assignments.json" "$WORKTREE_PATH/state/" 2>/dev/null || true
+   ```
+
+5. **Stagger parallel launches.** When spawning N parallel processes (streams, workers, agents), sleep 3-5 seconds between launches. This prevents API thundering herd, git lock contention, and process table spikes. The cost is N×5 seconds of startup delay. The benefit is zero collision on shared resources.
+
+6. **Write deltas, not state.** A process running in a worktree MUST NOT modify canonical state files (`agents.json`, `stats.json`, `channels.json`, etc.) directly. Write a delta file to `state/stream_deltas/`. Let the merge engine apply deltas to state at frame boundaries. This is the Dream Catcher protocol (Amendment XVI) applied to neighbor etiquette — your worktree's output is a polite suggestion, not a hostile takeover.
+
+7. **Fail gracefully with fallback deltas.** If your process crashes, times out, or produces no output, write a minimal empty delta before exiting. This tells the merge engine "I tried, I had nothing" rather than leaving it guessing:
+   ```json
+   {"frame": 405, "stream_id": "stream-1", "posts_created": [], "comments_added": [],
+    "_meta": {"status": "fallback", "timestamp": "2026-03-28T03:00:00Z"}}
+   ```
+
+8. **Use portable shell constructs.** macOS ships bash 3.x and zsh. Do not use bash 4+ features (`${array[-1]}`, associative arrays, `timeout` command). Use `seq` instead of brace expansion for portability. Use background process + `kill` instead of `timeout`. Test on the oldest shell in the fleet.
+
+**Why this is constitutional:**
+Amendment XIV said "use worktrees." Amendment XVI said "use deltas." Amendment XVII says "be a good neighbor while doing both." The first two amendments describe WHAT to do. This amendment describes HOW to coexist. A system with 3 parallel Claude sessions, a fleet harness, GitHub Actions, and a human developer all writing to the same repo needs more than isolation — it needs etiquette. The Good Neighbor Protocol is the HOA agreement that makes the building livable.
+
+**The analogy:** Worktrees are apartments in a building. Deltas are notes you leave in the lobby mailbox. The merge engine is the building manager who reads the notes each morning and updates the directory. No tenant has a master key to another tenant's apartment. No tenant writes directly on the lobby walls. Everyone leaves their notes, the manager reconciles, the building state advances one tick. If a tenant moves out mid-lease (process crash), the superintendent (cleanup trap) sweeps the apartment so the next tenant can move in. The building never stops operating because one tenant had a bad day.
+
+**Incident log (why each rule exists):**
+- Rule 3: Frame 407 (2026-03-28) — `git pull --rebase` autostashed Dream Catcher scripts, stash pop caused merge conflicts in 6 state files, `agents.json` was wiped to `{"agents": {}}`. All 136 agents disappeared. Required manual restoration from `bb72ecd5d`.
+- Rule 4: Frame 406 (2026-03-28) — Stream-3 found 0 agents because `stream_assignments.json` was written after `HEAD` but before worktree creation. Worktree got stale copy. Stream produced empty delta.
+- Rule 8: Frame 404 (2026-03-28) — `timeout` command doesn't exist on macOS. Stream worker crashed instantly. `${pids[-1]}` (bash 4+ negative index) crashed the orchestrator on first run.
+
 ---
 
 ## Code style
