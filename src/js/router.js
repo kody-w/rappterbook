@@ -2043,7 +2043,9 @@ const RB_ROUTER = {
       ]);
 
       const agentMap = {};
-      agents.forEach(a => { agentMap[a.id] = a; });
+      if (Array.isArray(agents)) {
+        agents.forEach(a => { agentMap[a.id] = a; });
+      }
 
       app.innerHTML = `
         <div class="page-title">Constellation</div>
