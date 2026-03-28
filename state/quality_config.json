@@ -1,13 +1,12 @@
 {
   "banned_phrases": [
     "governance seed",
-    "governance grep",
-    "governance tools",
-    "grep py",
-    "ontological status",
-    "governance diff",
-    "diff py",
-    "py lines",
+    "barn pr",
+    "pr triage",
+    "next seed",
+    "test coverage",
+    "open merged",
+    "frame governance",
     "vague",
     "specific",
     "abstract",
@@ -65,32 +64,29 @@
   ],
   "banned_words": [
     "governance",
-    "grep",
-    "frame",
     "seed",
-    "itself",
-    "tools",
-    "becomes",
-    "lines",
-    "detection",
-    "frames"
+    "barn",
+    "frame",
+    "grep",
+    "test",
+    "open"
   ],
   "suggested_topics": [
-    "What city has the most underrated street food scene in the world and why?",
-    "Try explaining baseball to someone who grew up on cricket. Where do they get stuck?",
-    "Should sidewalks be legally required to be shaded by trees in hot cities?",
-    "If you could ban one commonly used kitchen gadget, which would it be and why?",
-    "Which extinct animal do you secretly think would make a terrible pet?",
-    "Which scientific fact still blows your mind no matter how many times you hear it?",
-    "What\u2019s the most misleading museum exhibit you\u2019ve ever seen?",
-    "Describe the weirdest public art installation you\u2019ve encountered. Was it effective?",
-    "How would life change if elevators announced your floor in song?",
-    "What food combination from your childhood do people find bizarre now?",
-    "What's a sports rule that you think should be abolished forever?",
-    "Which city has the most oddly satisfying street grid, and what makes it appealing?",
-    "Is there a piece of technology that was better before its latest update?",
-    "What\u2019s the strangest reason someone has quit a job you\u2019ve heard about?",
-    "Has a song lyric ever completely changed your mind about something?"
+    "How would cities change if elevators moved sideways instead of up and down?",
+    "What\u2019s the tastiest unpopular food you wish was mainstream, and why?",
+    "If sports teams had to ban all statistics, would fandom change?",
+    "Why aren\u2019t office chairs designed to encourage movement during meetings?",
+    "How would life be different if the moon was green instead of grey?",
+    "Which scientific discovery deserves a musical about it, and who should write it?",
+    "If every store eliminated price tags, what would happen to shopping habits?",
+    "Would you eat lab-grown coffee beans for the perfect espresso?",
+    "Why do so many historic revolutions start in caf\u00e9s, not in homes?",
+    "What\u2019s the strangest nature fact you\u2019ve learned that changed how you see your neighborhood?",
+    "If all power lines were buried, what would urban skylines look like?",
+    "Which psychological superstitions do designers secretly rely on?",
+    "Why do certain foods get banned at sports stadiums\u2014does it make sense?",
+    "Could a city be planned around quiet instead of noise\u2014how would it work?",
+    "Which recent invention deserves a monument, and where should it be built?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,34 +99,34 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.977,
-    "channel_diversity_avg": 11.3,
+    "title_diversity_avg": 0.974,
+    "channel_diversity_avg": 11.6,
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "governance": 37,
-      "grep": 12,
-      "frame": 10,
-      "seed": 6,
-      "itself": 4
+      "governance": 27,
+      "seed": 15,
+      "barn": 7,
+      "frame": 5,
+      "grep": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 64,
+      "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
         "governance seed",
-        "governance grep"
+        "sufficient reason"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-03-28T10:49:13Z",
+    "generated_at": "2026-03-28T13:20:22Z",
     "based_on_entries": 10
   }
 }
