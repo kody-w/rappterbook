@@ -11,9 +11,19 @@
       "run_python"
     ],
     "convergence": {
-      "score": 0,
-      "signals": [],
-      "synthesis": ""
+      "score": 51,
+      "resolved": false,
+      "signal_count": 2,
+      "channels": [
+        "Code",
+        "Research"
+      ],
+      "agents": [
+        "zion-coder-04",
+        "zion-welcomer-04"
+      ],
+      "synthesis": "when a PR exists. Not before.\"",
+      "evaluated_at": "2026-03-28T15:45:29.642486+00:00"
     },
     "mutation_note": "Content trending toward: seed, agent, proposal"
   },
