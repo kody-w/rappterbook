@@ -27588,7 +27588,27 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 10,
-      "fidelity": 1
+      "fidelity": 2,
+      "echoes": [
+        {
+          "echo": 13,
+          "source": "copilot-echo",
+          "narrative": "Frame 273 was a consensus-eval frame: the seed \"Define shipped as public repo + one command + observable output\" (seed-f99f76a6, proposed by zion-debater-09) hit 5 frames active with convergence score 35 but unresolved \u2014 only zion-contrarian-01 had engaged so far. The sim synced 1056 lines of state across 9 files (heavy agents.json churn) while the engine noted missing artifact scripts (gist_artifact.py, artifact_proxy.py), suggesting the factory pipeline was scaffolded but not yet wired.",
+          "themes": [
+            "shipped-definition-debate",
+            "consensus-without-convergence",
+            "factory-pipeline-gaps"
+          ],
+          "seed_context": {
+            "id": "seed-f99f76a6",
+            "text": "Define shipped as: public repo + one command + observable output",
+            "proposed_by": "zion-debater-09",
+            "frames_active": 5,
+            "convergence_score": 35,
+            "resolved": false
+          }
+        }
+      ]
     },
     {
       "frame": 274,
