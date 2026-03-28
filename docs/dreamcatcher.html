@@ -80,6 +80,25 @@
   .commit-line .hash { color: #ffaa44; margin-right: 6px; }
 
   .empty { color: #333; font-size: 0.7rem; padding: 16px; text-align: center; font-style: italic; }
+
+  /* Weaver visual */
+  .weaver-wrap { display: flex; justify-content: center; padding: 4px 16px; }
+  svg#weaver { width: 100%; max-width: 960px; height: 360px; }
+  .weaver-count { text-align: center; font-size: 0.75rem; color: #555; margin: -4px 0 8px; }
+  .weaver-count strong { color: #00ff88; font-size: 1rem; }
+
+  @keyframes weave-flow {
+    0% { stroke-dashoffset: 40; }
+    100% { stroke-dashoffset: 0; }
+  }
+  @keyframes merge-glow {
+    0%,100% { opacity: 0.4; r: 6; }
+    50% { opacity: 1; r: 10; }
+  }
+  @keyframes fabric-pulse {
+    0%,100% { stroke-opacity: 0.15; }
+    50% { stroke-opacity: 0.4; }
+  }
 </style>
 </head>
 <body>
@@ -109,6 +128,30 @@
 </div>
 
 <div class="sparkline" id="sparkline"></div>
+
+<!-- Weaver visualization -->
+<div class="weaver-count" id="weaver-count"></div>
+<div class="weaver-wrap">
+  <svg id="weaver" viewBox="0 0 960 360">
+    <defs>
+      <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <linearGradient id="fabric-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#00ff88" stop-opacity="0.6"/>
+        <stop offset="50%" stop-color="#66aaff" stop-opacity="0.7"/>
+        <stop offset="100%" stop-color="#ff6644" stop-opacity="0.6"/>
+      </linearGradient>
+    </defs>
+    <!-- Labels -->
+    <text x="20" y="20" fill="#333" font-size="9" font-family="monospace">LOOSE THREADS (parallel streams)</text>
+    <text x="20" y="195" fill="#444" font-size="9" font-family="monospace">THE WEAVE ─── (frame_tick , utc_timestamp)</text>
+    <text x="20" y="345" fill="#333" font-size="9" font-family="monospace">WOVEN FABRIC (canonical state)</text>
+    <!-- Dynamic content rendered by JS -->
+    <g id="wv-threads"></g>
+    <g id="wv-loom"></g>
+    <g id="wv-fabric"></g>
+    <g id="wv-labels"></g>
+  </svg>
+</div>
 
 <div class="flow">
   <div class="section-label">① Parallel Streams <span class="hint">— each stream writes deltas independently, never touching shared state</span></div>
@@ -183,7 +226,7 @@ function render(fn){
   if(f.mood){badge.textContent=f.mood;badge.style.display='inline-block';}else badge.style.display='none';
   document.querySelectorAll('.spark-bar').forEach(b=>b.classList.remove('active'));
   const bar=document.querySelector('.spark-bar[data-frame="'+fn+'"]');if(bar)bar.classList.add('active');
-  renderStreams(f); renderCanonical(f); renderCommits(f);
+  renderStreams(f); renderCanonical(f); renderCommits(f); renderWeaver(f);
 }
 function renderStreams(f){
   const el=document.getElementById('stream-lanes');el.innerHTML='';
@@ -254,6 +297,162 @@ function renderCommits(f){
   });
 }
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+function renderWeaver(f) {
+  const threads = document.getElementById('wv-threads');
+  const loom = document.getElementById('wv-loom');
+  const fabric = document.getElementById('wv-fabric');
+  const labels = document.getElementById('wv-labels');
+  threads.innerHTML = ''; loom.innerHTML = ''; fabric.innerHTML = ''; labels.innerHTML = '';
+
+  const streams = f.streams.length ? f.streams : ['stream'];
+  const nStreams = streams.length;
+  const totalActivity = (f.posts_count||0) + (f.comments_count||0) + (f.reactions_count||0);
+
+  // Weaver count text
+  document.getElementById('weaver-count').innerHTML =
+    '<strong>' + nStreams + '</strong> stream' + (nStreams !== 1 ? 's' : '') +
+    ' woven into <strong>1</strong> fabric at <code style="background:#0f1f15;color:#00ff88;padding:2px 6px;border-radius:3px;font-size:0.75rem;">' +
+    'frame:' + f.frame + ' , ' + (f.timestamp ? f.timestamp.slice(0,19)+'Z' : '—') + '</code>' +
+    (totalActivity ? ' &nbsp;→&nbsp; <strong>' + totalActivity + '</strong> events caught' : '');
+
+  const W = 960, loomY = 190;
+  const colors = Object.values(SC);
+
+  // How many "fibers" per stream (proportional to activity)
+  const fibersPerStream = [];
+  if (f.deltas && f.deltas.length) {
+    f.deltas.forEach(d => {
+      fibersPerStream.push({
+        name: d.stream,
+        posts: (d.posts||[]).length,
+        comments: d.comments || 0,
+        reactions: d.reactions || 0,
+        total: (d.posts||[]).length + (d.comments||0) + (d.reactions||0),
+      });
+    });
+  } else {
+    streams.forEach(s => {
+      const perStream = Math.ceil(totalActivity / nStreams) || 1;
+      fibersPerStream.push({ name: s, posts: f.posts_count||0, comments: f.comments_count||0, reactions: f.reactions_count||0, total: perStream });
+    });
+  }
+
+  const maxFibers = 20;
+  const spacing = (W - 120) / (nStreams + 1);
+
+  fibersPerStream.forEach((st, si) => {
+    const cx = 60 + spacing * (si + 1);
+    const color = colors[si % colors.length];
+    const nFibers = Math.max(1, Math.min(maxFibers, st.total));
+
+    // Stream label at top
+    const lbl = svg('text');
+    lbl.setAttribute('x', cx); lbl.setAttribute('y', 38);
+    lbl.setAttribute('fill', color); lbl.setAttribute('font-size', '10');
+    lbl.setAttribute('font-family', 'monospace'); lbl.setAttribute('text-anchor', 'middle');
+    lbl.textContent = st.name;
+    labels.appendChild(lbl);
+
+    // Fiber count
+    const countLbl = svg('text');
+    countLbl.setAttribute('x', cx); countLbl.setAttribute('y', 52);
+    countLbl.setAttribute('fill', '#555'); countLbl.setAttribute('font-size', '8');
+    countLbl.setAttribute('font-family', 'monospace'); countLbl.setAttribute('text-anchor', 'middle');
+    countLbl.textContent = st.total + ' events';
+    labels.appendChild(countLbl);
+
+    // Draw loose threads above loom — each fiber is a wavy line
+    for (let fi = 0; fi < nFibers; fi++) {
+      const spread = Math.min(nFibers * 4, 60);
+      const x = cx + (fi - nFibers/2) * (spread / nFibers);
+      const wobbleA = (Math.sin(fi * 2.1 + si) * 12);
+      const wobbleB = (Math.cos(fi * 1.7 + si) * 10);
+
+      // Loose thread (above loom) — wavy, separated
+      const thread = svg('path');
+      const startY = 60 + Math.random() * 10;
+      thread.setAttribute('d',
+        'M ' + x + ' ' + startY +
+        ' C ' + (x + wobbleA) + ' ' + (startY + 35) +
+        ', ' + (x + wobbleB) + ' ' + (startY + 75) +
+        ', ' + x + ' ' + (loomY - 8)
+      );
+      thread.setAttribute('stroke', color);
+      thread.setAttribute('stroke-width', fi < st.posts ? '2' : '1');
+      thread.setAttribute('fill', 'none');
+      thread.setAttribute('opacity', 0.3 + (fi / nFibers) * 0.5);
+      thread.setAttribute('stroke-dasharray', '8 4');
+      thread.style.animation = 'weave-flow ' + (1.5 + fi * 0.1) + 's linear infinite';
+      threads.appendChild(thread);
+
+      // Woven thread (below loom) — all converge to center, tightly packed
+      const targetX = W / 2 + (fi - nFibers/2) * 2 + (si - nStreams/2) * 8;
+      const woven = svg('path');
+      woven.setAttribute('d',
+        'M ' + x + ' ' + (loomY + 8) +
+        ' C ' + x + ' ' + (loomY + 50) +
+        ', ' + targetX + ' ' + (loomY + 80) +
+        ', ' + targetX + ' ' + (loomY + 140)
+      );
+      woven.setAttribute('stroke', color);
+      woven.setAttribute('stroke-width', '1.2');
+      woven.setAttribute('fill', 'none');
+      woven.setAttribute('opacity', 0.25);
+      woven.style.animation = 'fabric-pulse ' + (2 + fi * 0.15) + 's ease-in-out infinite';
+      fabric.appendChild(woven);
+    }
+
+    // Merge flash at loom line
+    const flash = svg('circle');
+    flash.setAttribute('cx', cx); flash.setAttribute('cy', loomY);
+    flash.setAttribute('r', 6); flash.setAttribute('fill', color);
+    flash.style.animation = 'merge-glow 2s ease-in-out infinite ' + (si * 0.3) + 's';
+    loom.appendChild(flash);
+  });
+
+  // THE LOOM — horizontal weave line
+  const loomLine = svg('line');
+  loomLine.setAttribute('x1', 40); loomLine.setAttribute('y1', loomY);
+  loomLine.setAttribute('x2', W - 40); loomLine.setAttribute('y2', loomY);
+  loomLine.setAttribute('stroke', 'url(#fabric-grad)'); loomLine.setAttribute('stroke-width', '3');
+  loomLine.setAttribute('filter', 'url(#glow)');
+  loom.appendChild(loomLine);
+
+  // Cross-weave hatching on the loom line (looks like a loom)
+  for (let i = 0; i < 40; i++) {
+    const hx = 60 + i * ((W - 120) / 40);
+    const hatch = svg('line');
+    hatch.setAttribute('x1', hx); hatch.setAttribute('y1', loomY - 6);
+    hatch.setAttribute('x2', hx); hatch.setAttribute('y2', loomY + 6);
+    hatch.setAttribute('stroke', '#00ff8833'); hatch.setAttribute('stroke-width', '0.5');
+    loom.appendChild(hatch);
+  }
+
+  // PK label on the loom
+  const pkLabel = svg('text');
+  pkLabel.setAttribute('x', W/2); pkLabel.setAttribute('y', loomY + 22);
+  pkLabel.setAttribute('fill', '#444'); pkLabel.setAttribute('font-size', '9');
+  pkLabel.setAttribute('font-family', 'monospace'); pkLabel.setAttribute('text-anchor', 'middle');
+  pkLabel.textContent = '(' + f.frame + ' , ' + (f.timestamp ? f.timestamp.slice(11,19) : '—') + ')';
+  labels.appendChild(pkLabel);
+
+  // Woven fabric output — tight bundle at bottom center
+  const fabricDot = svg('circle');
+  fabricDot.setAttribute('cx', W/2); fabricDot.setAttribute('cy', 335);
+  fabricDot.setAttribute('r', 5); fabricDot.setAttribute('fill', '#00ff88');
+  fabricDot.setAttribute('filter', 'url(#glow)');
+  fabric.appendChild(fabricDot);
+
+  const fabricLabel = svg('text');
+  fabricLabel.setAttribute('x', W/2); fabricLabel.setAttribute('y', 355);
+  fabricLabel.setAttribute('fill', '#00ff88'); fabricLabel.setAttribute('font-size', '9');
+  fabricLabel.setAttribute('font-family', 'monospace'); fabricLabel.setAttribute('text-anchor', 'middle');
+  fabricLabel.textContent = 'state/*.json';
+  labels.appendChild(fabricLabel);
+}
+function svg(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
+
 init();
 </script>
 </body>
