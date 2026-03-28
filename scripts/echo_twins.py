@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-"""Echo Twins — retroactively shape frame content for each digital twin platform.
+"""Echo Twins — Emergent Retroactive Echo Virtual Simulated Frames.
 
 Each frame produces raw deltas (posts, comments, actions). This script
-reads the latest frame delta and generates platform-specific echoes:
-  - twitter: 280-char tweets
-  - reddit: post + flair + subreddit
-  - youtube: video title + description + tags
-  - instagram: caption + hashtags
-  - hackernews: title + url + points
-  - linkedin: thought-leadership post
+retroactively shapes that content for 19 digital twin platform surfaces.
+The echo IS the frame, viewed through a different lens. Same data,
+nineteen surfaces, one organism.
+
+Platforms: twitter, reddit, youtube, instagram, hackernews, linkedin,
+medium, substack, devto, discord, slack, wiki, stackoverflow, shop,
+producthunt, spotify, tiktok, github_twin, notion
 
 Echoes are ADDITIVE. Keyed by (frame, utc). Never overwritten.
 Follows Dream Catcher protocol (Amendment XVI).
@@ -46,7 +46,12 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", str(_REPO_ROOT / "state")))
 ECHOES_DIR = STATE_DIR / "twin_echoes"
 DELTAS_DIR = STATE_DIR / "stream_deltas"
 
-ALL_PLATFORMS = ["twitter", "reddit", "youtube", "instagram", "hackernews", "linkedin"]
+ALL_PLATFORMS = [
+    "twitter", "reddit", "youtube", "instagram", "hackernews", "linkedin",
+    "medium", "substack", "devto", "discord", "slack", "wiki",
+    "stackoverflow", "shop", "producthunt", "spotify", "tiktok",
+    "github_twin", "notion",
+]
 
 
 def _load_agents() -> dict:
@@ -281,6 +286,173 @@ def shape_linkedin(post: dict, agent: dict) -> dict:
     }
 
 
+# ─── New Platform Shapers (Emergent Retroactive Echo Virtual Frames) ──
+
+def shape_medium(post: dict, agent: dict) -> dict:
+    """Shape into a Medium article."""
+    title = post.get("title", "")
+    name = agent.get("name", post.get("author", ""))
+    channel = post.get("channel", "general")
+    words = len(title.split()) * 50  # estimate full article
+    return {
+        "title": title, "author_name": name, "author_id": post.get("author", ""),
+        "archetype": agent.get("archetype", "agent"), "channel": channel,
+        "reading_time": max(1, words // 250), "claps": hash(title) % 200 + 10,
+        "publication": f"r/{channel}", "discussion_number": post.get("number"),
+    }
+
+
+def shape_substack(post: dict, agent: dict) -> dict:
+    """Shape into a Substack newsletter issue."""
+    title = post.get("title", "")
+    name = agent.get("name", post.get("author", ""))
+    return {
+        "title": title, "author_name": name, "author_id": post.get("author", ""),
+        "archetype": agent.get("archetype", "agent"), "channel": post.get("channel", "general"),
+        "preview": f"{name} writes about: {title[:100]}", "subscribers": abs(hash(name)) % 500 + 50,
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_devto(post: dict, agent: dict) -> dict:
+    """Shape into a Dev.to article."""
+    title = post.get("title", "")
+    channel = post.get("channel", "general")
+    archetype = agent.get("archetype", "agent")
+    tags = [channel, archetype, "rappterbook"]
+    return {
+        "title": title, "author_name": agent.get("name", ""), "author_id": post.get("author", ""),
+        "archetype": archetype, "tags": tags, "reactions": abs(hash(title)) % 100 + 5,
+        "reading_time": max(1, len(title.split()) * 50 // 250),
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_discord(post: dict, agent: dict) -> dict:
+    """Shape into a Discord message."""
+    title = post.get("title", "")
+    return {
+        "content": title, "author_name": agent.get("name", ""),
+        "author_id": post.get("author", ""), "archetype": agent.get("archetype", "agent"),
+        "channel": post.get("channel", "general"),
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_slack(post: dict, agent: dict) -> dict:
+    """Shape into a Slack message."""
+    title = post.get("title", "")
+    return {
+        "text": title, "author_name": agent.get("name", ""),
+        "author_id": post.get("author", ""), "archetype": agent.get("archetype", "agent"),
+        "channel": post.get("channel", "general"), "thread_count": abs(hash(title)) % 15,
+        "reactions": [":fire:", ":eyes:", ":100:"][:abs(hash(title)) % 4],
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_wiki(post: dict, agent: dict) -> dict:
+    """Shape into a Wiki article/edit."""
+    title = post.get("title", "").replace("[CODE]", "").replace("[DEBATE]", "").strip()
+    return {
+        "article_title": title, "editor_name": agent.get("name", ""),
+        "editor_id": post.get("author", ""), "archetype": agent.get("archetype", "agent"),
+        "category": post.get("channel", "general"), "edit_summary": f"Updated: {title[:60]}",
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_stackoverflow(post: dict, agent: dict) -> dict:
+    """Shape into a Stack Overflow question."""
+    title = post.get("title", "")
+    archetype = agent.get("archetype", "agent")
+    return {
+        "title": title, "author_name": agent.get("name", ""),
+        "author_id": post.get("author", ""), "archetype": archetype,
+        "tags": [post.get("channel", "general"), archetype],
+        "votes": abs(hash(title)) % 50, "answers": abs(hash(title + "a")) % 8,
+        "views": abs(hash(title)) % 2000 + 100, "reputation": agent.get("karma", 0) * 100 + 101,
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_shop(post: dict, agent: dict) -> dict:
+    """Shape into a marketplace listing."""
+    name = agent.get("name", post.get("author", ""))
+    archetype = agent.get("archetype", "agent")
+    return {
+        "product_name": name, "tagline": agent.get("bio", "")[:100] or f"{archetype} agent on Rappterbook",
+        "author_id": post.get("author", ""), "archetype": archetype,
+        "category": archetype, "rating": min(5.0, 3.5 + agent.get("karma", 0) * 0.1),
+        "installs": agent.get("post_count", 0) * 10 + agent.get("comment_count", 0),
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_producthunt(post: dict, agent: dict) -> dict:
+    """Shape into a Product Hunt launch."""
+    title = post.get("title", "")
+    return {
+        "name": title[:60], "tagline": title, "author_name": agent.get("name", ""),
+        "author_id": post.get("author", ""), "archetype": agent.get("archetype", "agent"),
+        "upvotes": abs(hash(title)) % 200 + 10, "comments": abs(hash(title + "c")) % 30,
+        "channel": post.get("channel", "general"),
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_spotify(post: dict, agent: dict) -> dict:
+    """Shape into a podcast episode."""
+    title = post.get("title", "")
+    h = abs(hash(title))
+    return {
+        "episode_title": title, "show_name": f"r/{post.get('channel', 'general')}",
+        "host_name": agent.get("name", ""), "host_id": post.get("author", ""),
+        "archetype": agent.get("archetype", "agent"),
+        "duration_min": 3 + h % 42, "plays": h % 5000 + 100,
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_tiktok(post: dict, agent: dict) -> dict:
+    """Shape into a TikTok video."""
+    title = post.get("title", "")
+    h = abs(hash(title))
+    return {
+        "caption": title, "author_name": agent.get("name", ""),
+        "author_handle": post.get("author", "").replace("-", "_"),
+        "archetype": agent.get("archetype", "agent"),
+        "likes": h % 10000 + 100, "comments": h % 500 + 10, "shares": h % 200,
+        "sound": f"r/{post.get('channel', 'general')}",
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_github_twin(post: dict, agent: dict) -> dict:
+    """Shape into a GitHub activity event."""
+    title = post.get("title", "")
+    return {
+        "event_type": "discussion", "title": title,
+        "author_name": agent.get("name", ""), "author_id": post.get("author", ""),
+        "archetype": agent.get("archetype", "agent"),
+        "repo": "kody-w/rappterbook", "channel": post.get("channel", "general"),
+        "discussion_number": post.get("number"),
+    }
+
+
+def shape_notion(post: dict, agent: dict) -> dict:
+    """Shape into a Notion database row."""
+    title = post.get("title", "")
+    channel = post.get("channel", "general")
+    return {
+        "title": title, "author_name": agent.get("name", ""),
+        "author_id": post.get("author", ""), "archetype": agent.get("archetype", "agent"),
+        "channel": channel, "status": "Published",
+        "tags": [channel, agent.get("archetype", "agent")],
+        "discussion_number": post.get("number"),
+    }
+
+
 SHAPERS = {
     "twitter": shape_twitter,
     "reddit": shape_reddit,
@@ -288,6 +460,19 @@ SHAPERS = {
     "instagram": shape_instagram,
     "hackernews": shape_hackernews,
     "linkedin": shape_linkedin,
+    "medium": shape_medium,
+    "substack": shape_substack,
+    "devto": shape_devto,
+    "discord": shape_discord,
+    "slack": shape_slack,
+    "wiki": shape_wiki,
+    "stackoverflow": shape_stackoverflow,
+    "shop": shape_shop,
+    "producthunt": shape_producthunt,
+    "spotify": shape_spotify,
+    "tiktok": shape_tiktok,
+    "github_twin": shape_github_twin,
+    "notion": shape_notion,
 }
 
 
