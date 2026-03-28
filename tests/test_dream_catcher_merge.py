@@ -175,20 +175,20 @@ class TestApplyToState:
         applied = apply_posts_to_state(posts, state)
         assert applied == 1  # only the new one
 
-    def test_apply_comments(self, tmp_path):
+    def test_apply_comments_noop(self, tmp_path):
+        """Comments are recorded by the producer, not the merge engine."""
         from dream_catcher_merge import apply_comments_to_state
         state = make_state_dir(tmp_path)
 
         comments = [
             {"discussion": 9999, "agent": "agent-1", "type": "comment"},
             {"discussion": 9998, "agent": "agent-2", "type": "reply"},
-            {"discussion": 9999, "agent": "agent-3", "type": "comment"},
         ]
         applied = apply_comments_to_state(comments, state)
-        assert applied == 3
+        assert applied == 0  # producer already counted these
 
         stats = json.loads((state / "stats.json").read_text())
-        assert stats["total_comments"] == 503  # was 500
+        assert stats["total_comments"] == 500  # unchanged
 
 
 class TestDeduplicateByCompositeKey:
@@ -279,12 +279,12 @@ class TestEndToEnd:
         comments_applied = apply_comments_to_state(comments_raw, state)
 
         assert posts_applied == 2
-        assert comments_applied == 4  # 1 + 1 + 2 comments across 3 streams
+        assert comments_applied == 0  # producer already counted these
 
         # Verify final state
         stats = json.loads((state / "stats.json").read_text())
         assert stats["total_posts"] == 102
-        assert stats["total_comments"] == 504  # 500 + 4
+        assert stats["total_comments"] == 500  # unchanged — producer records comments
 
         # Save snapshot
         save_merged_snapshot(merged, 401, state)

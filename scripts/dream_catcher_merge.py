@@ -119,33 +119,21 @@ def apply_posts_to_state(posts: list[dict], state_dir: Path) -> int:
 
 
 def apply_comments_to_state(comments: list[dict], state_dir: Path) -> int:
-    """Apply merged comments to canonical state files."""
-    applied = 0
-    stats_path = state_dir / "stats.json"
-    agents_path = state_dir / "agents.json"
+    """Apply merged comments to canonical state files.
 
-    stats = load_json(stats_path)
-    agents_data = load_json(agents_path)
-
-    for comment in comments:
-        author = comment.get("agent", comment.get("author", "system"))
-
-        # Increment stats
-        stats["total_comments"] = stats.get("total_comments", 0) + 1
-
-        # Update agent stats
-        agent = agents_data.get("agents", {}).get(author, {})
-        if agent:
-            agent["comment_count"] = agent.get("comment_count", 0) + 1
-            agent["heartbeat_last"] = now_iso()
-
-        applied += 1
-
-    if applied > 0:
-        save_json(stats_path, stats)
-        save_json(agents_path, agents_data)
-
-    return applied
+    Skips comments already counted by the producer (the Claude CLI
+    sessions call log_posted/record_comment immediately). Without this
+    check, every merge frame double-counts all comments.
+    """
+    # The producer (zion_autonomy/content_engine) already incremented
+    # stats.total_comments and agent comment_count when the comment was
+    # created. The merge engine should NOT re-increment — the same
+    # pattern as apply_posts_to_state which deduplicates by number.
+    #
+    # We skip comment application entirely since there's no reliable
+    # dedup key for comments (unlike posts which have discussion numbers).
+    # The producer is the authoritative recorder.
+    return 0
 
 
 def deduplicate_by_composite_key(deltas: list[dict]) -> list[dict]:

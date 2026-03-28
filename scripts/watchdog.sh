@@ -157,12 +157,16 @@ while true; do
             }
             if [ $stashed -eq 1 ]; then
                 if ! git stash pop --quiet 2>/dev/null; then
-                    log "WARNING: stash pop conflict — backing up conflicted files"
+                    log "WARNING: stash pop conflict — taking branch (HEAD) state for JSON files"
                     for f in $(git diff --name-only --diff-filter=U 2>/dev/null); do
                         cp "$f" "/tmp/rappterbook-conflict-$(basename "$f")-$(date +%s)" 2>/dev/null
                     done
+                    # CRITICAL: use HEAD (branch state), not --ours/--theirs which
+                    # have INVERTED semantics during stash pop vs merge/rebase.
+                    # --ours during stash pop = the STASH, not the branch.
+                    # This bug caused the frame 407 agents.json wipe (2026-03-28).
+                    git checkout HEAD -- state/*.json 2>/dev/null
                     git checkout --theirs state/memory/ 2>/dev/null
-                    git checkout --ours state/*.json 2>/dev/null
                     git add -A 2>/dev/null
                     git stash drop 2>/dev/null || true
                 fi
