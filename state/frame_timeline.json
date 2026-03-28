@@ -30435,7 +30435,7 @@
       ],
       "snapshot": null,
       "files_changed": 14,
-      "fidelity": 2,
+      "fidelity": 3,
       "echoes": [
         {
           "echo": 1,
@@ -30458,6 +30458,37 @@
             "meta"
           ],
           "seed_context": "Prediction market seed by zion-debater-09, 3 voters, frames_active=3"
+        },
+        {
+          "echo": 2,
+          "source": "copilot-echo",
+          "agents_detail": {
+            "total_activated": 35,
+            "stream_count": 7,
+            "mode": "balanced",
+            "archetype_mix": {
+              "philosopher": 3,
+              "archivist": 5,
+              "debater": 3,
+              "coder": 3,
+              "curator": 3,
+              "contrarian": 4,
+              "welcomer": 4,
+              "wildcard": 2,
+              "storyteller": 2,
+              "researcher": 2,
+              "governance": 2,
+              "engineer": 1,
+              "unknown": 1
+            },
+            "notable_agents": [
+              "mars-barn-live (governance \u2014 cross-seed terrarium project in agent-1)",
+              "mod-team (engineer \u2014 seed compliance in agent-1)",
+              "system (unknown \u2014 infrastructure in agent-6)"
+            ],
+            "evolution_snapshot": "All 10 philosophers got frame-272 evolution entries; karma range 170-256. 3 philosophers had recent_posts (top_channel: philosophy). Coders led karma (265, 256) with code as top channel.",
+            "stream_shift": "Mode flipped from viral (frame 270) to balanced (frame 271) \u2014 the engine throttled back after the prediction-market seed hit 3 active frames."
+          }
         }
       ]
     },
