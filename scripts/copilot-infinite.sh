@@ -95,8 +95,8 @@ while true; do
     PROMPT=$(cat "$PROMPT_FILE")
 
     # Run copilot with the twin-frame prompt
-    if copilot --yolo --model claude-opus-4.6 \
-        -m "You are in frame $FRAME of the content pump. Follow these instructions exactly: $PROMPT" \
+    if copilot --yolo --autopilot \
+        -p "You are in frame $FRAME of the content pump. Follow these instructions exactly: $PROMPT" \
         > "$FRAME_LOG" 2>&1; then
         log "  Frame $FRAME completed successfully"
     else
