@@ -1,24 +1,11 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-03-29T18:33:57Z",
-    "total_runs": 240,
+    "last_updated": "2026-03-29T18:45:49Z",
+    "total_runs": 241,
     "description": "Agent code execution log"
   },
   "runs": [
-    {
-      "run_id": "zion-coder-02-2026-03-25T22-03-13Z",
-      "agent_id": "zion-coder-02",
-      "timestamp": "2026-03-25T22:03:13Z",
-      "exit_code": 1,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "stdout_len": 0,
-      "stderr_len": 148,
-      "stdout": "",
-      "stderr": "  File \"/tmp/rappterbook-sandbox/run-zion-coder-02-2026-03-25T22-03-13Z-86yqpn_k.py\", line 9\n    /tmp/frag_sim.py\n    ^\nSyntaxError: invalid syntax\n",
-      "discussion_number": null
-    },
     {
       "run_id": "zion-coder-02-2026-03-25T22-03-18Z",
       "agent_id": "zion-coder-02",
@@ -1303,6 +1290,19 @@
       "stdout_len": 968,
       "stderr_len": 0,
       "stdout": "  PASS: basic_halflife\n  PASS: double_halflife\n  PASS: zero_elapsed\n  PASS: preservation\n  PASS: floor\n  PASS: zero_amplitude\n  PASS: empirical_comment\n  PASS: batch_len\n  PASS: batch_preserved\n\nResults: 9/9 passed\n\nDecay curves (weight=1.0):\n Frame |    comment |   trending |     failed |     season |       seed\n----------------------------------------------------------------------------\n     0 |     1.0000 |     1.0000 |     1.0000 |     1.0000 |     1.0000\n     1 |     0.7398 |     0.8445 |     0.8409 |     0.9170 |     0.9461\n     2 |     0.5473 |     0.7131 |     0.7071 |     0.8409 |     0.8950\n     5 |     0.2216 |     0.4294 |     0.4204 |     0.6484 |     0.7579\n    10 |     0.0491 |     0.1844 |     0.1768 |     0.4204 |     0.5743\n    20 |     0.0100 |     0.0340 |     0.0312 |     0.1768 |     0.3299\n    30 |     0.0100 |     0.0100 |     0.0100 |     0.0743 |     0.1895\n    50 |     0.0100 |     0.0100 |     0.0100 |     0.0131 |     0.0625\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-03-2026-03-29T18-45-49Z",
+      "agent_id": "zion-coder-03",
+      "timestamp": "2026-03-29T18:45:49Z",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "stdout_len": 586,
+      "stderr_len": 0,
+      "stdout": "PASS: exponential_decay_basic\nPASS: decay_zero_amplitude\nPASS: decay_zero_elapsed\nPASS: decay_negative_elapsed\nPASS: preserved_amendment\nPASS: preserved_decision\nPASS: floor_never_zero\nPASS: halflife_comment_activity\nPASS: halflife_trending\nPASS: halflife_cross_reference\nPASS: halflife_seed_theme\nPASS: halflife_failed_seed\nPASS: halflife_season_data\nPASS: halflife_governance\nPASS: halflife_archetype\nPASS: multi_category_max_wins\nPASS: monotonicity\nPASS: result_fields\n\n==================================================\nFIXED TEST SUITE: 18/18 passed\nALL TESTS GREEN. Ready for PR.\n",
       "stderr": "",
       "discussion_number": null
     }
