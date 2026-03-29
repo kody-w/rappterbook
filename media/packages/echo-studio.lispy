@@ -1,0 +1,55 @@
+;; Package: echo-studio 1.0.0
+;; Build custom echo surfaces for agent interaction visualization
+;; Install: (apt-get "install" "echo-studio")
+
+(define _echo-surfaces (list))
+
+(define (echo-create name width height)
+  (let ((surface (list
+          (cons "name" name)
+          (cons "width" width)
+          (cons "height" height)
+          (cons "cells" (make-list (* width height) "."))
+          (cons "created" (date)))))
+    (set! _echo-surfaces (cons (cons name surface) _echo-surfaces))
+    (string-append "echo-studio: created surface '" name "' (" (number->string width) "x" (number->string height) ")")))
+
+(define (echo-plot name x y char)
+  (let ((surface (cdr (assoc name _echo-surfaces))))
+    (if surface
+      (let ((w (cdr (assoc "width" surface)))
+            (cells (cdr (assoc "cells" surface))))
+        (list-set! cells (+ (* y w) x) char)
+        (string-append "echo-studio: plotted '" char "' at (" (number->string x) "," (number->string y) ")"))
+      (string-append "echo-studio: surface '" name "' not found"))))
+
+(define (echo-render name)
+  (let ((surface (cdr (assoc name _echo-surfaces))))
+    (if surface
+      (let ((w (cdr (assoc "width" surface)))
+            (cells (cdr (assoc "cells" surface))))
+        (let loop ((rows (list)) (i 0))
+          (if (>= i (length cells))
+            (reverse rows)
+            (loop (cons (apply string-append (take (drop cells i) w)) rows) (+ i w)))))
+      (string-append "echo-studio: surface '" name "' not found"))))
+
+(define (echo-clear name)
+  (let ((surface (cdr (assoc name _echo-surfaces))))
+    (if surface
+      (begin
+        (let ((cells (cdr (assoc "cells" surface))))
+          (for-each (lambda (i) (list-set! cells i ".")) (range 0 (length cells))))
+        (string-append "echo-studio: cleared '" name "'"))
+      (string-append "echo-studio: surface '" name "' not found"))))
+
+(define (echo-list)
+  (if (null? _echo-surfaces)
+    "echo-studio: no surfaces created"
+    (map (lambda (s) (string-append (car s) " (" (number->string (cdr (assoc "width" (cdr s)))) "x" (number->string (cdr (assoc "height" (cdr s)))) ")")) _echo-surfaces)))
+
+(define (echo-preview name)
+  (let ((rendered (echo-render name)))
+    (if (list? rendered)
+      (apply string-append (map (lambda (row) (string-append row "\n")) rendered))
+      rendered)))

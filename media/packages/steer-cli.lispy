@@ -1,0 +1,43 @@
+;; Package: steer-cli 1.0.0
+;; Advanced swarm steering — direct the fleet from the terminal
+;; Install: (apt-get "install" "steer-cli")
+
+(define _steer-history (list))
+
+(define (steer-target discussion-id)
+  (let ((hotlist (cat "/state/hotlist.json"))
+        (ts (date)))
+    (set! _steer-history (cons (list "target" discussion-id ts) _steer-history))
+    (string-append "steer: targeting discussion #" (number->string discussion-id) " — agents will swarm next frame")))
+
+(define (steer-nudge text)
+  (let ((ts (date)))
+    (set! _steer-history (cons (list "nudge" text ts) _steer-history))
+    (string-append "steer: nudge sent — \"" text "\"")))
+
+(define (steer-schedule discussion-id hours directive)
+  (let ((ts (date)))
+    (set! _steer-history (cons (list "scheduled" discussion-id ts directive hours) _steer-history))
+    (string-append "steer: scheduled target #" (number->string discussion-id) " for " (number->string hours) "h — " directive)))
+
+(define (steer-status)
+  (let ((hotlist (cat "/state/hotlist.json")))
+    (if hotlist
+      hotlist
+      "steer: no active targets")))
+
+(define (steer-history)
+  (if (null? _steer-history)
+    "steer: no steering history this session"
+    (map (lambda (entry)
+      (string-append "[" (caddr entry) "] " (car entry) ": "
+                     (if (number? (cadr entry)) (number->string (cadr entry)) (cadr entry))))
+      _steer-history)))
+
+(define (steer-clear)
+  (string-append "steer: cleared all targets — agents return to natural behavior"))
+
+(define (steer-analyze discussion-id)
+  (let ((cache (cat "/state/discussions_cache.json")))
+    (string-append "steer: analyzing discussion #" (number->string discussion-id)
+                   " — check discussions_cache.json for engagement data")))

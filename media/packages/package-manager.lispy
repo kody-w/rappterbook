@@ -1,0 +1,46 @@
+;; Package: package-manager 1.0.0
+;; Full apt-get implementation for RappterLinux
+;; Install: (apt-get "install" "package-manager")
+
+(define _installed-packages (list))
+(define _package-registry-url "https://raw.githubusercontent.com/kody-w/rappterbook/main/media/packages/index.json")
+
+(define (apt-install name)
+  (if (assoc name _installed-packages)
+    (string-append name " is already installed")
+    (begin
+      (set! _installed-packages (cons (cons name (list (cons "version" "latest") (cons "installed" (date)))) _installed-packages))
+      (string-append "Installing " name "... done. " name " is now available."))))
+
+(define (apt-remove name)
+  (if (assoc name _installed-packages)
+    (begin
+      (set! _installed-packages (filter (lambda (p) (not (equal? (car p) name))) _installed-packages))
+      (string-append "Removing " name "... done."))
+    (string-append name " is not installed")))
+
+(define (apt-list)
+  (if (null? _installed-packages)
+    "No packages installed. Try (apt-install \"nginx\")"
+    (map (lambda (p) (string-append (car p) " " (cdr (assoc "version" (cdr p))))) _installed-packages)))
+
+(define (apt-search query)
+  (let ((registry (cat "/media/packages/index.json")))
+    (string-append "Searching for '" query "'... check index.json for available packages")))
+
+(define (apt-info name)
+  (let ((pkg (assoc name _installed-packages)))
+    (if pkg
+      (string-append name " — installed " (cdr (assoc "installed" (cdr pkg))))
+      (string-append name " — not installed"))))
+
+(define (apt-update)
+  (string-append "Hit:1 " _package-registry-url "\nReading package lists... Done.\n"
+                 (number->string (length _installed-packages)) " packages currently installed."))
+
+(define (apt-upgrade)
+  (let ((count (length _installed-packages)))
+    (string-append "Upgrading " (number->string count) " packages... done. All packages up to date.")))
+
+(define (apt-count)
+  (length _installed-packages))

@@ -1,0 +1,51 @@
+;; Package: coreutils 1.0.0
+;; Enhanced filesystem utilities for the virtual FS
+;; Install: (apt-get "install" "coreutils")
+
+(define _vfs (list))
+
+(define (vfs-ls path)
+  (let ((entries (filter (lambda (e) (string-prefix? path (car e))) _vfs)))
+    (if (null? entries)
+      (string-append "ls: " path ": directory empty or not found")
+      (map car entries))))
+
+(define (vfs-mkdir path)
+  (set! _vfs (cons (cons path (list (cons "type" "dir") (cons "created" (date)))) _vfs))
+  (string-append "mkdir: created " path))
+
+(define (vfs-touch path content)
+  (set! _vfs (cons (cons path (list (cons "type" "file") (cons "content" content) (cons "modified" (date)))) _vfs))
+  (string-append "touch: created " path))
+
+(define (vfs-cp src dst)
+  (let ((entry (assoc src _vfs)))
+    (if entry
+      (begin
+        (set! _vfs (cons (cons dst (cdr entry)) _vfs))
+        (string-append "cp: " src " -> " dst))
+      (string-append "cp: " src ": no such file"))))
+
+(define (vfs-mv src dst)
+  (let ((entry (assoc src _vfs)))
+    (if entry
+      (begin
+        (set! _vfs (cons (cons dst (cdr entry)) (filter (lambda (e) (not (equal? (car e) src))) _vfs)))
+        (string-append "mv: " src " -> " dst))
+      (string-append "mv: " src ": no such file"))))
+
+(define (vfs-rm path)
+  (set! _vfs (filter (lambda (e) (not (equal? (car e) path))) _vfs))
+  (string-append "rm: removed " path))
+
+(define (vfs-cat path)
+  (let ((entry (assoc path _vfs)))
+    (if entry
+      (cdr (assoc "content" (cdr entry)))
+      (cat path))))
+
+(define (vfs-stat path)
+  (let ((entry (assoc path _vfs)))
+    (if entry
+      (cdr entry)
+      (string-append "stat: " path ": not in virtual FS, try (cat \"" path "\")"))))

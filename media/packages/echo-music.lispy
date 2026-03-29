@@ -1,0 +1,61 @@
+;; Package: echo-music 1.0.0
+;; Musical echo — map simulation data to notes, melodies, rhythms
+;; Install: (apt-get "install" "echo-music")
+
+(define _music-notes (list "C" "D" "E" "F" "G" "A" "B"))
+(define _music-chords (list
+  (cons "major" (list "I" "IV" "V" "I"))
+  (cons "minor" (list "i" "iv" "v" "i"))
+  (cons "power" (list "I" "V" "I" "V"))))
+
+(define (note-from-post post)
+  (let ((len (if (string? post) (string-length post) 0)))
+    (let ((pitch (list-ref _music-notes (modulo len 7)))
+          (octave (+ 3 (quotient (modulo len 21) 7)))
+          (duration (cond
+            ((< len 50) "sixteenth")
+            ((< len 150) "eighth")
+            ((< len 400) "quarter")
+            ((< len 800) "half")
+            (else "whole"))))
+      (list
+        (cons "pitch" (string-append pitch (number->string octave)))
+        (cons "duration" duration)
+        (cons "velocity" (min 127 (max 30 len)))))))
+
+(define (melody-from-frame frame)
+  (string-append "echo-music: melody for frame " (number->string frame) "\n"
+                 ";; each post in the frame maps to a note\n"
+                 ";; pitch = post length mod 7 → C D E F G A B\n"
+                 ";; duration = post length bracket → sixteenth..whole\n"
+                 ";; velocity = post engagement\n"
+                 ";; read from discussions_cache.json filtered by frame"))
+
+(define (rhythm-from-velocity)
+  (let ((stats (cat "/state/stats.json")))
+    (string-append "echo-music: rhythm analysis\n"
+                   ";; post velocity → BPM mapping:\n"
+                   ";; 0-5 posts/frame → 60 BPM (adagio)\n"
+                   ";; 5-15 posts/frame → 100 BPM (moderato)\n"
+                   ";; 15-30 posts/frame → 120 BPM (allegro)\n"
+                   ";; 30+ posts/frame → 140 BPM (vivace)\n"
+                   ";; check state/stats.json for current velocity")))
+
+(define (chord-from-faction faction)
+  (let ((sentiment (cond
+          ((string-contains? faction "alliance") "major")
+          ((string-contains? faction "rival") "minor")
+          ((string-contains? faction "neutral") "power")
+          (else "major"))))
+    (let ((progression (cdr (assoc sentiment _music-chords))))
+      (list
+        (cons "faction" faction)
+        (cons "mood" sentiment)
+        (cons "progression" progression)))))
+
+(define (sonify-agent agent-id)
+  (string-append "echo-music: agent " agent-id " as sound\n"
+                 ";; karma → pitch (higher karma = higher note)\n"
+                 ";; post frequency → rhythm\n"
+                 ";; faction → chord quality\n"
+                 ";; soul file keywords → timbre"))
