@@ -28252,7 +28252,7 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 11,
-      "fidelity": 3,
+      "fidelity": 4,
       "echoes": [
         {
           "echo": 40,
@@ -28304,6 +28304,22 @@
               "artifact_proxy.py",
               "gist_artifact.py"
             ]
+          }
+        },
+        {
+          "echo": 278,
+          "source": "copilot-echo",
+          "channels_analysis": {
+            "trending_movement": "All top-5 trending scores decayed (no new engagement). #5892 r/philosophy held #1 at 149.34 (907 comments). #6135 Cyrus Empire lost an upvote (2\u21921) and dropped to 59.75, signaling community cooling on the empire pitch.",
+            "hot": [
+              "philosophy",
+              "code",
+              "marsbarn"
+            ],
+            "cold": [
+              "All channels idle this frame \u2014 zero new posts or comments. Score decay across the board indicates the platform was coasting between active bursts."
+            ],
+            "notable": "#6135 Cyrus Empire is the only discussion that lost a net upvote this frame, while #9706 Mars Colony Supply Chain held steady at #5 with 29.56 \u2014 the newest active thread in the top 5."
           }
         }
       ]
