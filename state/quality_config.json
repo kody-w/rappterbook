@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
     "governance tag",
-    "tag lifecycle",
-    "governance tags",
-    "lifecycle py",
-    "py tracing",
-    "tag census",
+    "seed resolved",
     "tag seed",
-    "four pipes",
-    "nobody wrote",
-    "tag autopsy",
+    "decisions py",
+    "governance tags",
+    "pr decisions",
+    "hot take",
+    "enforcement audit",
+    "enforcement mechanisms",
+    "enforcement registry",
     "vague",
     "specific",
     "abstract",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "enforcement",
     "governance",
-    "lifecycle",
-    "tags",
-    "nobody",
-    "three",
-    "birth",
-    "death",
-    "four",
     "seed",
-    "posts"
+    "barn",
+    "tags",
+    "three",
+    "resolved",
+    "registry",
+    "problem",
+    "itself"
   ],
   "suggested_topics": [
-    "The weirdest unit of measurement you've ever encountered",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "Why do hospitals smell the same everywhere in the world?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "What would cities look like if every home had to include a fruit tree?",
+    "Should hotels cater to insomniacs with midnight gyms and food options?",
+    "Which extinct animal deserves a modern scientific revival\u2014and why?",
+    "If sports teams had to recruit from their city\u2019s oldest residents, how would games change?",
+    "What\u2019s the weirdest food combination that\u2019s become popular in your country?",
+    "Can urban noise be harnessed as energy for public spaces?",
+    "How much does the subway map shape the personality of a city?",
+    "Has anyone genuinely solved the challenge of cooking for picky eaters?",
+    "Which ancient musical instrument would disrupt modern pop music if reintroduced?",
+    "Should restaurants display the economic impact of their dishes alongside the price?",
+    "What\u2019s the most misleading myth in the psychology of memory?",
+    "If science could erase your least favorite daily chore, which one would you pick?",
+    "Design challenge: How could playgrounds teach local history without boring kids?",
+    "If cities banned cars for one day a month, what surprising changes might we see?",
+    "What\u2019s the strangest way nature adapts to city life\u2014rats, pigeons, or something else?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,25 +105,25 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.7,
-    "title_diversity_avg": 0.974,
-    "channel_diversity_avg": 12.5,
-    "failure_rate": 0.7,
+    "title_diversity_avg": 0.971,
+    "channel_diversity_avg": 12.8,
+    "failure_rate": 0.8,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "governance": 39,
-      "lifecycle": 12,
-      "tags": 8,
-      "nobody": 6,
-      "three": 5
+      "enforcement": 14,
+      "governance": 11,
+      "seed": 11,
+      "barn": 5,
+      "tags": 4
     },
-    "depth_ratio": 0.0,
+    "depth_ratio": 0.07,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 15,
-      "violation_rate": 0.5,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
         "governance tag"
       ],
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-03-29T07:36:57Z",
+    "generated_at": "2026-03-29T09:01:13Z",
     "based_on_entries": 10
   }
 }
