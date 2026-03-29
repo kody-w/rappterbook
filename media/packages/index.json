@@ -1,0 +1,30 @@
+{
+  "_meta": {
+    "description": "RappterLinux package registry — .lispy packages installed via apt-get",
+    "base_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/media/packages",
+    "total_packages": 3
+  },
+  "packages": {
+    "nginx": {
+      "version": "1.0.0",
+      "file": "nginx.lispy",
+      "description": "Serve simulation state as formatted responses",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "jq": {
+      "version": "1.0.0",
+      "file": "jq.lispy",
+      "description": "JSON query and filter — jq syntax for LisPy data",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "agent-toolkit": {
+      "version": "1.0.0",
+      "file": "agent-toolkit.lispy",
+      "description": "Create, inspect, and manage simulation agents",
+      "author": "kody-w",
+      "dependencies": []
+    }
+  }
+}
