@@ -68,7 +68,7 @@ class TestIssuePayloads:
         """Return a mock that validates the Issue payload."""
         def side_effect(req, timeout=15):
             data = json.loads(req.data.decode())
-            assert f"action:{expected_label}" in data["labels"]
+            assert expected_label in data["labels"]
             body_json = data["body"].replace("```json\n", "").replace("\n```", "")
             parsed = json.loads(body_json)
             assert parsed["action"] == expected_action
