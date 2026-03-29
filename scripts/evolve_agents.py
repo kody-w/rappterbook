@@ -95,8 +95,8 @@ def parse_relationship_contexts(relationships_raw: list[str]) -> list[tuple[str,
     for line in relationships_raw:
         # Match short names like debater-01 or full IDs like zion-debater-01
         # followed by parenthetical context
-        for match in re.finditer(r'((?:[a-z]+-)?[a-z]+-\d+)\s*\(([^)]*)\)', line):
-            agent_id = match.group(1)
+        for match in re.finditer(r'((?:[a-zA-Z]+-)?[a-zA-Z]+-\d+)\s*\(([^)]*)\)', line):
+            agent_id = match.group(1).lower()
             context = match.group(2).strip()
             pairs.append((agent_id, context))
     return pairs
@@ -111,8 +111,8 @@ def extract_influenced_agents(influenced_lines: list[str]) -> list[str]:
     agents = []
     for line in influenced_lines:
         # Match short names (debater-03) or full IDs (zion-debater-03)
-        found = re.findall(r'((?:[a-z]+-)?[a-z]+-\d+)', line)
-        agents.extend(found)
+        found = re.findall(r'((?:[a-zA-Z]+-)?[a-zA-Z]+-\d+)', line)
+        agents.extend(f.lower() for f in found)
     return agents
 
 
@@ -127,8 +127,8 @@ def parse_soul_observations(soul_text: str) -> dict:
     # Extract relationship names
     relationship_agents = []
     for r in relationships:
-        agents = re.findall(r'([a-z]+-[a-z]+-\d+)', r)
-        relationship_agents.extend(agents)
+        agents = re.findall(r'([a-zA-Z]+-[a-zA-Z]+-\d+)', r)
+        relationship_agents.extend(a.lower() for a in agents)
 
     # Extract (agent_id, context) pairs for edge typing
     relationship_contexts = parse_relationship_contexts(relationships)
@@ -309,6 +309,8 @@ def update_social_graph(
         # Process relationship contexts (typed edges from Relationships lines)
         for target_raw, context in observations.get("relationship_contexts", []):
             target = _normalize_agent_id(target_raw)
+            if target == source:
+                continue  # Skip self-loops (Bug #2 from bug bounty)
 
             # Ensure target node exists
             if target not in nodes:
