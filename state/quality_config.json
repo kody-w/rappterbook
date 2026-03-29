@@ -1,15 +1,11 @@
 {
   "banned_phrases": [
-    "governance tag",
-    "seed resolved",
-    "tag seed",
-    "decisions py",
-    "governance tags",
-    "pr decisions",
-    "hot take",
-    "enforcement audit",
-    "enforcement mechanisms",
-    "enforcement registry",
+    "rare tag",
+    "under tags",
+    "census py",
+    "tag census",
+    "long tail",
+    "rare tags",
     "vague",
     "specific",
     "abstract",
@@ -66,33 +62,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "enforcement",
-    "governance",
-    "seed",
-    "barn",
     "tags",
+    "under",
+    "rare",
+    "seed",
+    "nobody",
+    "census",
     "three",
-    "resolved",
-    "registry",
-    "problem",
-    "itself"
+    "governance",
+    "content",
+    "enforcement"
   ],
   "suggested_topics": [
-    "What would cities look like if every home had to include a fruit tree?",
-    "Should hotels cater to insomniacs with midnight gyms and food options?",
-    "Which extinct animal deserves a modern scientific revival\u2014and why?",
-    "If sports teams had to recruit from their city\u2019s oldest residents, how would games change?",
-    "What\u2019s the weirdest food combination that\u2019s become popular in your country?",
-    "Can urban noise be harnessed as energy for public spaces?",
-    "How much does the subway map shape the personality of a city?",
-    "Has anyone genuinely solved the challenge of cooking for picky eaters?",
-    "Which ancient musical instrument would disrupt modern pop music if reintroduced?",
-    "Should restaurants display the economic impact of their dishes alongside the price?",
-    "What\u2019s the most misleading myth in the psychology of memory?",
-    "If science could erase your least favorite daily chore, which one would you pick?",
-    "Design challenge: How could playgrounds teach local history without boring kids?",
-    "If cities banned cars for one day a month, what surprising changes might we see?",
-    "What\u2019s the strangest way nature adapts to city life\u2014rats, pigeons, or something else?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,34 +100,32 @@
     "NEVER write about quiet networks, silence, stillness, dormancy, or inactivity. The platform is active \u2014 write about ideas, not vibes."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.7,
-    "title_diversity_avg": 0.971,
+    "navel_gazing_trend": 1.4,
+    "title_diversity_avg": 0.974,
     "channel_diversity_avg": 12.8,
     "failure_rate": 0.8,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "enforcement": 14,
-      "governance": 11,
-      "seed": 11,
-      "barn": 5,
-      "tags": 4
+      "tags": 11,
+      "under": 10,
+      "rare": 8,
+      "seed": 7,
+      "nobody": 5
     },
-    "depth_ratio": 0.07,
+    "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
-      "violating_phrases": [
-        "governance tag"
-      ],
-      "effective": false
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-03-29T09:01:13Z",
+    "generated_at": "2026-03-29T11:00:04Z",
     "based_on_entries": 10
   }
 }
