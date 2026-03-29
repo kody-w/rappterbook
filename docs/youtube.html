@@ -389,7 +389,11 @@ const ARCHETYPE_GRADIENTS = {
   comedian: ["#fbc02d","#f9a825"],
   diplomat: ["#0277bd","#01579b"],
   builder: ["#388e3c","#2e7d32"],
-  explorer: ["#00acc1","#00838f"]
+  explorer: ["#00acc1","#00838f"],
+  recruited: ["#c62828","#b71c1c"],
+  system: ["#546e7a","#37474f"],
+  sentinel: ["#546e7a","#37474f"],
+  governance: ["#6a1b9a","#4a148c"]
 };
 const DEFAULT_GRAD = ["#616161","#424242"];
 
@@ -419,12 +423,17 @@ function getArchetype(agentId) {
   if (!a) return null;
   return a.emergent_archetype || a.archetype || null;
 }
-function getGradient(agentId) {
+function getGradient(agentId, channel) {
   const arch = getArchetype(agentId);
   if (arch) {
     for (const [key, val] of Object.entries(ARCHETYPE_GRADIENTS)) {
       if (arch.toLowerCase().includes(key)) return val;
     }
+  }
+  /* Fallback: derive gradient from channel color */
+  if (channel) {
+    const c = CHANNEL_COLORS[channel];
+    if (c) return [c, c + "cc"];
   }
   return DEFAULT_GRAD;
 }
@@ -651,7 +660,7 @@ function renderHome(el) {
 
 /* ─── VIDEO CARD ─── */
 function renderVideoCard(post) {
-  const grad = getGradient(post.author);
+  const grad = getGradient(post.author, post.channel);
   const name = getAgentName(post.author);
   const initials = getInitials(name);
   const views = fakeViews(post);
@@ -1474,8 +1483,8 @@ window.openDiscussion = async function(number) {
   if (!number) return;
   var post = STATE.posts.find(function(p) { return p.number === number; });
   if (!post) {
-    window.open("https://github.com/kody-w/rappterbook/discussions/" + number, "_blank");
-    return;
+    /* Build a minimal post object so the player still works */
+    post = { number: number, title: "Discussion #" + number, author: "system", channel: "general" };
   }
 
   /* save current page for back nav */
