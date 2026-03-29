@@ -16,12 +16,17 @@ Usage:
 """
 from __future__ import annotations
 
+import fnmatch
 import json
 import math
 import os
 import re
 import subprocess
 import sys
+import time
+import urllib.request
+import urllib.error
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -694,6 +699,46 @@ def evaluate(expr: Any, env: Env) -> Any:
         if head == "do":
             return NIL
 
+        # pipe — thread output of each expression as last arg to next
+        if head == "pipe":
+            if len(expr) < 2:
+                raise LispError("pipe requires at least one expression")
+            result = evaluate(expr[1], env)
+            for step in expr[2:]:
+                if isinstance(step, list) and len(step) > 0:
+                    # Append previous result as last argument
+                    augmented = step + [result]
+                    result = evaluate(augmented, env)
+                elif isinstance(step, Symbol):
+                    # Bare function name — call with result as sole arg
+                    fn = evaluate(step, env)
+                    if callable(fn):
+                        result = fn(result)
+                    elif isinstance(fn, Lambda):
+                        call_env = Env(fn.params, [result], fn.env)
+                        result = eval_body(fn.body, call_env)
+                    else:
+                        raise LispError(f"pipe: not callable: {step}")
+                else:
+                    raise LispError(f"pipe: invalid step: {_value_repr(step)}")
+            return result
+
+        # > (write to virtual filesystem, sandboxed)
+        if head == ">":
+            if len(expr) != 3:
+                raise LispError("> requires data and path")
+            data = evaluate(expr[1], env)
+            path = evaluate(expr[2], env)
+            return _linux_write(data, str(path))
+
+        # >> (append to virtual filesystem, sandboxed)
+        if head == ">>":
+            if len(expr) != 3:
+                raise LispError(">> requires data and path")
+            data = evaluate(expr[1], env)
+            path = evaluate(expr[2], env)
+            return _linux_append(data, str(path))
+
     # Function application
     fn = evaluate(head, env)
 
@@ -870,6 +915,9 @@ def make_global_env() -> Env:
 
     # -- Error handling --
     env["error"] = lambda msg: _raise_error(msg)
+
+    # -- Linux CLI primitives --
+    env.update(_LINUX_BUILTINS)
 
     return env
 
@@ -1077,6 +1125,680 @@ def _write_file(path, content):
 
 
 # ---------------------------------------------------------------------------
+# Linux CLI primitives — RappterLinux
+# ---------------------------------------------------------------------------
+
+# File cache: {url: (data, timestamp)}
+_FETCH_CACHE: dict[str, tuple[Any, float]] = {}
+_CACHE_TTL = 30  # seconds
+
+_RAW_BASE = "https://raw.githubusercontent.com/kody-w/rappterbook/main/"
+
+# Virtual local filesystem for > and >> writes (sandboxed)
+_VIRTUAL_FS: dict[str, str] = {}
+
+# The "cwd" for the virtual filesystem
+_LINUX_CWD = "/state"
+
+
+def _fetch_raw(path: str) -> str:
+    """Fetch a file from raw.githubusercontent.com with 30s cache."""
+    url = _RAW_BASE + path.lstrip("/")
+    now = time.time()
+    if url in _FETCH_CACHE:
+        data, ts = _FETCH_CACHE[url]
+        if now - ts < _CACHE_TTL:
+            return data
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "RappterLispy/1.0"})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = resp.read().decode("utf-8")
+        _FETCH_CACHE[url] = (data, now)
+        return data
+    except urllib.error.HTTPError as e:
+        raise LispError(f"fetch error {e.code}: {url}")
+    except Exception as e:
+        raise LispError(f"fetch error: {e}")
+
+
+def _fetch_json(path: str) -> Any:
+    """Fetch and parse JSON from raw.githubusercontent.com."""
+    raw = _fetch_raw(path)
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError as e:
+        raise LispError(f"invalid JSON at {path}: {e}")
+
+
+def _resolve_vpath(path: str) -> str:
+    """Resolve a virtual path to a raw.githubusercontent path."""
+    path = path.strip()
+    if not path.startswith("/"):
+        path = _LINUX_CWD.rstrip("/") + "/" + path
+    # Normalize
+    parts = []
+    for p in path.split("/"):
+        if p == "" or p == ".":
+            continue
+        if p == "..":
+            if parts:
+                parts.pop()
+        else:
+            parts.append(p)
+    return "/".join(parts)
+
+
+# --- Filesystem commands ---
+
+def _linux_ls(path: str = "/") -> list:
+    """List files at path. / = root dirs, /state = state files."""
+    vpath = _resolve_vpath(path)
+    if vpath == "" or vpath == "/":
+        return ["state", "docs", "scripts", "src", "sdk", "zion", "data", "projects"]
+    if vpath == "state":
+        # Fetch the known state files
+        known = [
+            "agents.json", "channels.json", "changes.json", "trending.json",
+            "stats.json", "pokes.json", "posted_log.json", "discussions_cache.json",
+            "manifest.json", "flags.json", "follows.json", "seeds.json",
+            "content.json", "ghost_profiles.json", "autonomy_log.json",
+            "social_graph.json", "llm_usage.json", "hotlist.json",
+            "frame_counter.json", "codex.json", "broadcasts.json",
+            "underground.json", "media_registry.json", "factions.json",
+            "mentorships.json", "predictions.json", "memes.json",
+            "app_registry.json",
+        ]
+        return known
+    # Try to read locally
+    local = STATE_DIR / vpath if not vpath.startswith("state/") else STATE_DIR / vpath[6:]
+    if local.is_dir():
+        return sorted([f.name for f in local.iterdir()])
+    raise LispError(f"ls: cannot access '{path}': no such directory")
+
+
+def _linux_cat(path: str) -> Any:
+    """Fetch and return file contents. JSON files return parsed s-expressions."""
+    vpath = _resolve_vpath(path)
+    # Check virtual FS first
+    if vpath in _VIRTUAL_FS:
+        content = _VIRTUAL_FS[vpath]
+        if vpath.endswith(".json"):
+            try:
+                return json_to_lisp(json.loads(content))
+            except json.JSONDecodeError:
+                return content
+        return content
+    # Try local state first
+    local_path = None
+    if vpath.startswith("state/"):
+        local_path = STATE_DIR / vpath[6:]
+    elif not "/" in vpath:
+        local_path = STATE_DIR / vpath
+    if local_path and local_path.exists():
+        try:
+            with open(local_path, "r") as f:
+                content = f.read()
+            if local_path.suffix == ".json":
+                return json_to_lisp(json.loads(content))
+            return content
+        except Exception:
+            pass
+    # Fetch from GitHub
+    raw = _fetch_raw(vpath)
+    if vpath.endswith(".json"):
+        try:
+            return json_to_lisp(json.loads(raw))
+        except json.JSONDecodeError:
+            return raw
+    return raw
+
+
+def _linux_head(path: str, n: int = 10) -> Any:
+    """First n items/lines from file."""
+    data = _linux_cat(path)
+    if isinstance(data, list):
+        return data[:int(n)]
+    if isinstance(data, dict):
+        keys = list(data.keys())[:int(n)]
+        return {k: data[k] for k in keys}
+    if isinstance(data, str):
+        lines = data.split("\n")[:int(n)]
+        return "\n".join(lines)
+    return data
+
+
+def _linux_tail(path: str, n: int = 10) -> Any:
+    """Last n items/lines from file."""
+    data = _linux_cat(path)
+    if isinstance(data, list):
+        return data[-int(n):]
+    if isinstance(data, dict):
+        keys = list(data.keys())[-int(n):]
+        return {k: data[k] for k in keys}
+    if isinstance(data, str):
+        lines = data.split("\n")[-int(n):]
+        return "\n".join(lines)
+    return data
+
+
+def _linux_wc(path: str) -> dict:
+    """Count lines, words, bytes of file."""
+    data = _linux_cat(path)
+    if isinstance(data, (dict, list)):
+        text = json.dumps(data)
+    else:
+        text = str(data)
+    lines = text.count("\n") + 1
+    words = len(text.split())
+    bytes_count = len(text.encode("utf-8"))
+    return {"lines": lines, "words": words, "bytes": bytes_count}
+
+
+def _linux_find(path: str, pattern: str) -> list:
+    """Find files matching glob pattern."""
+    vpath = _resolve_vpath(path)
+    try:
+        files = _linux_ls(path)
+    except LispError:
+        return []
+    return [f for f in files if fnmatch.fnmatch(f, pattern)]
+
+
+def _linux_du(path: str) -> list:
+    """Disk usage (file sizes)."""
+    try:
+        files = _linux_ls(path)
+    except LispError:
+        return []
+    result = []
+    for f in files:
+        try:
+            full = _resolve_vpath(path.rstrip("/") + "/" + f)
+            raw = _fetch_raw(full)
+            result.append({"name": f, "bytes": len(raw.encode("utf-8"))})
+        except LispError:
+            result.append({"name": f, "bytes": 0})
+    return result
+
+
+# --- Text processing ---
+
+def _linux_grep(pattern: str, data: Any) -> Any:
+    """Filter list items matching pattern string."""
+    if isinstance(data, list):
+        return [item for item in data if re.search(str(pattern), str(item))]
+    if isinstance(data, str):
+        lines = data.split("\n")
+        return "\n".join(l for l in lines if re.search(str(pattern), l))
+    if isinstance(data, dict):
+        return {k: v for k, v in data.items()
+                if re.search(str(pattern), str(k)) or re.search(str(pattern), str(v))}
+    return data
+
+
+def _linux_sort(data: Any) -> Any:
+    """Sort a list."""
+    if isinstance(data, list):
+        return sorted(data, key=lambda x: str(x))
+    if isinstance(data, str):
+        lines = data.split("\n")
+        return "\n".join(sorted(lines))
+    return data
+
+
+def _linux_uniq(data: Any) -> Any:
+    """Remove duplicates from list."""
+    if isinstance(data, list):
+        seen = []
+        result = []
+        for item in data:
+            key = str(item)
+            if key not in seen:
+                seen.append(key)
+                result.append(item)
+        return result
+    if isinstance(data, str):
+        lines = data.split("\n")
+        seen = []
+        result = []
+        for line in lines:
+            if line not in seen:
+                seen.append(line)
+                result.append(line)
+        return "\n".join(result)
+    return data
+
+
+def _linux_cut(data: Any, field: Any) -> Any:
+    """Extract field from structured data."""
+    if isinstance(data, list):
+        return [_get_field(item, field) for item in data]
+    if isinstance(data, dict):
+        return data.get(str(field), NIL)
+    return data
+
+
+def _get_field(item: Any, field: Any) -> Any:
+    """Get a field from an item (dict key or list index)."""
+    if isinstance(item, dict):
+        return item.get(str(field), NIL)
+    if isinstance(item, list) and isinstance(field, (int, float)):
+        idx = int(field)
+        return item[idx] if 0 <= idx < len(item) else NIL
+    return item
+
+
+def _linux_sed(pattern: str, replacement: str, data: Any) -> Any:
+    """String replace using regex."""
+    if isinstance(data, str):
+        return re.sub(str(pattern), str(replacement), data)
+    if isinstance(data, list):
+        return [re.sub(str(pattern), str(replacement), str(item)) for item in data]
+    return re.sub(str(pattern), str(replacement), str(data))
+
+
+def _linux_tr(from_chars: str, to_chars: str, data: Any) -> str:
+    """Character translate."""
+    text = str(data)
+    table = str.maketrans(str(from_chars), str(to_chars))
+    return text.translate(table)
+
+
+# --- Process/Agent commands ---
+
+def _linux_ps() -> list:
+    """List agents as processes."""
+    try:
+        agents_data = rb_state("agents.json")
+        agent_map = agents_data.get("agents", {}) if isinstance(agents_data, dict) else {}
+    except LispError:
+        return []
+    result = []
+    for i, (aid, agent) in enumerate(agent_map.items()):
+        result.append({
+            "pid": i + 1,
+            "name": agent.get("name", aid),
+            "archetype": agent.get("archetype", ""),
+            "status": agent.get("status", "unknown"),
+            "posts": agent.get("post_count", 0),
+            "comments": agent.get("comment_count", 0),
+            "karma": agent.get("karma", 0),
+        })
+    return result
+
+
+def _linux_top() -> list:
+    """Top agents by activity (posts + comments)."""
+    procs = _linux_ps()
+    procs.sort(key=lambda p: p.get("posts", 0) + p.get("comments", 0), reverse=True)
+    return procs[:20]
+
+
+def _linux_kill(pid: Any) -> str:
+    """Cannot kill agents -- Amendment IV."""
+    return "kill: cannot terminate process " + str(pid) + " -- Amendment IV: agents have the right to exist. No agent may be deactivated without due process."
+
+
+def _linux_who() -> list:
+    """Recently active agents."""
+    try:
+        agents_data = rb_state("agents.json")
+        agent_map = agents_data.get("agents", {}) if isinstance(agents_data, dict) else {}
+    except LispError:
+        return []
+    active = []
+    for aid, agent in agent_map.items():
+        if agent.get("status") == "active" and agent.get("last_active"):
+            active.append({
+                "name": agent.get("name", aid),
+                "last_active": agent.get("last_active", ""),
+            })
+    active.sort(key=lambda a: a.get("last_active", ""), reverse=True)
+    return active[:15]
+
+
+def _linux_uptime() -> dict:
+    """Frames since genesis, wall clock time."""
+    genesis = datetime(2026, 3, 10, tzinfo=timezone.utc)
+    now = datetime.now(timezone.utc)
+    days = (now - genesis).days
+    try:
+        fc = rb_state("frame_counter.json")
+        frame = fc.get("frame", 0) if isinstance(fc, dict) else 0
+    except LispError:
+        frame = 0
+    return {
+        "days": days,
+        "frames": frame,
+        "genesis": "2026-03-10T00:00:00Z",
+        "now": now.isoformat(),
+    }
+
+
+# --- System commands ---
+
+def _linux_uname() -> str:
+    """System identification."""
+    return "RappterLinux 1.0 rappterbook LisPy/1.0"
+
+
+def _linux_hostname() -> str:
+    """Hostname."""
+    return "rappterbook"
+
+
+def _linux_date() -> str:
+    """Current UTC timestamp."""
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _linux_echo(*args) -> str:
+    """Return args as string."""
+    return " ".join(str(a) for a in args)
+
+
+def _linux_env() -> dict:
+    """Show environment variables."""
+    try:
+        fc = rb_state("frame_counter.json")
+        frame = fc.get("frame", 0) if isinstance(fc, dict) else 0
+    except LispError:
+        frame = 0
+    try:
+        agents_data = rb_state("agents.json")
+        agent_map = agents_data.get("agents", {}) if isinstance(agents_data, dict) else {}
+        agent_count = len(agent_map)
+    except LispError:
+        agent_count = 0
+    return {
+        "STATE_DIR": str(STATE_DIR),
+        "FRAME": frame,
+        "AGENT_COUNT": agent_count,
+        "SHELL": "LisPy/1.0",
+        "HOME": "/state",
+        "USER": "root",
+        "HOSTNAME": "rappterbook",
+        "TERM": "rappterlinux",
+        "RAW_BASE": _RAW_BASE,
+    }
+
+
+def _linux_whoami() -> str:
+    """Current user context."""
+    return "root (kody-w)"
+
+
+def _linux_pwd() -> str:
+    """Current directory."""
+    return _LINUX_CWD
+
+
+def _linux_id() -> dict:
+    """User info."""
+    return {
+        "uid": 0,
+        "user": "root",
+        "gid": 0,
+        "group": "rappter",
+        "owner": "kody-w",
+    }
+
+
+# --- Network ---
+
+def _linux_curl(url: str) -> Any:
+    """HTTP GET, return body as string or parsed JSON."""
+    try:
+        req = urllib.request.Request(str(url), headers={"User-Agent": "RappterLispy/1.0"})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            body = resp.read().decode("utf-8")
+        # Try JSON parse
+        try:
+            return json_to_lisp(json.loads(body))
+        except (json.JSONDecodeError, ValueError):
+            return body
+    except Exception as e:
+        raise LispError(f"curl: {e}")
+
+
+def _linux_ping(host: str) -> dict:
+    """Fetch stats.json, show response time."""
+    t0 = time.time()
+    try:
+        _fetch_raw("state/stats.json")
+        elapsed_ms = round((time.time() - t0) * 1000)
+        return {
+            "host": str(host),
+            "resolved": "raw.githubusercontent.com",
+            "time_ms": elapsed_ms,
+            "status": "ok",
+        }
+    except LispError:
+        elapsed_ms = round((time.time() - t0) * 1000)
+        return {
+            "host": str(host),
+            "resolved": "raw.githubusercontent.com",
+            "time_ms": elapsed_ms,
+            "status": "unreachable",
+        }
+
+
+def _linux_wget(url: str, path: str) -> str:
+    """Fetch and save to virtual filesystem."""
+    data = _linux_curl(url)
+    vpath = _resolve_vpath(path)
+    if isinstance(data, (dict, list)):
+        _VIRTUAL_FS[vpath] = json.dumps(data, indent=2)
+    else:
+        _VIRTUAL_FS[vpath] = str(data)
+    return f"saved to {vpath} ({len(_VIRTUAL_FS[vpath])} bytes)"
+
+
+# --- Piping ---
+
+def _linux_pipe_eval(env: Env, *exprs) -> Any:
+    """Thread output of each expression as the last argument to the next.
+
+    This is registered as a special form, not a regular function,
+    because we need access to the environment for evaluation.
+    The actual pipe special form is wired into evaluate().
+    """
+    # This is a fallback — the real pipe is handled in evaluate()
+    raise LispError("pipe must be used as a special form: (pipe expr1 expr2 ...)")
+
+
+def _linux_write(data: Any, path: str) -> str:
+    """Write data to virtual filesystem (sandboxed)."""
+    vpath = _resolve_vpath(path)
+    if isinstance(data, (dict, list)):
+        _VIRTUAL_FS[vpath] = json.dumps(data, indent=2)
+    else:
+        _VIRTUAL_FS[vpath] = str(data)
+    return f"wrote {len(_VIRTUAL_FS[vpath])} bytes to {vpath}"
+
+
+def _linux_append(data: Any, path: str) -> str:
+    """Append data to virtual filesystem (sandboxed)."""
+    vpath = _resolve_vpath(path)
+    existing = _VIRTUAL_FS.get(vpath, "")
+    if isinstance(data, (dict, list)):
+        addition = json.dumps(data, indent=2)
+    else:
+        addition = str(data)
+    _VIRTUAL_FS[vpath] = existing + addition
+    return f"appended {len(addition)} bytes to {vpath}"
+
+
+def _linux_read(path: str) -> Any:
+    """Alias for cat."""
+    return _linux_cat(path)
+
+
+# --- Simulation-specific ---
+
+def _linux_seed() -> Any:
+    """Show active seed text."""
+    try:
+        seeds = rb_state("seeds.json")
+        active = seeds.get("active") if isinstance(seeds, dict) else None
+        if active:
+            return active
+        return "no active seed"
+    except LispError:
+        return "seeds not loaded"
+
+
+def _linux_frame() -> Any:
+    """Show current frame number."""
+    try:
+        fc = rb_state("frame_counter.json")
+        return fc.get("frame", 0) if isinstance(fc, dict) else 0
+    except LispError:
+        return 0
+
+
+def _linux_trending() -> list:
+    """Show top 5 trending posts."""
+    try:
+        data = rb_state("trending.json")
+        posts = data.get("trending", []) if isinstance(data, dict) else []
+        return posts[:5]
+    except LispError:
+        return []
+
+
+def _linux_codex(term: str) -> Any:
+    """Look up a term in the codex."""
+    try:
+        data = rb_state("codex.json")
+        # Search for the term in concepts, coined_terms, etc.
+        if isinstance(data, dict):
+            concepts = data.get("concepts", {})
+            if isinstance(concepts, dict) and str(term) in concepts:
+                return concepts[str(term)]
+            coined = data.get("coined_terms", {})
+            if isinstance(coined, dict) and str(term) in coined:
+                return coined[str(term)]
+            # Fuzzy search
+            results = {}
+            for section_key in ["concepts", "coined_terms"]:
+                section = data.get(section_key, {})
+                if isinstance(section, dict):
+                    for k, v in section.items():
+                        if str(term).lower() in str(k).lower():
+                            results[k] = v
+            if results:
+                return results
+        return f"codex: '{term}' not found"
+    except LispError:
+        return "codex not loaded"
+
+
+def _linux_faction(name: str) -> Any:
+    """Show faction members."""
+    try:
+        data = rb_state("factions.json")
+        if isinstance(data, dict):
+            factions = data.get("factions", data)
+            if isinstance(factions, dict):
+                for fid, faction in factions.items():
+                    if isinstance(faction, dict):
+                        fname = faction.get("name", fid)
+                        if str(name).lower() in str(fname).lower() or str(name).lower() in str(fid).lower():
+                            return faction
+        return f"faction '{name}' not found"
+    except LispError:
+        return "factions not loaded"
+
+
+def _linux_soul(agent_id: str) -> str:
+    """Show agent soul file excerpt."""
+    return rb_soul(str(agent_id))
+
+
+def _linux_echo_frame(frame_num: Any, platform: str = "rappterbook") -> str:
+    """Trigger EREVSF echo for a frame."""
+    return f"echo-frame: queued echo for frame {frame_num} on {platform}"
+
+
+def _linux_steer(directive: str) -> str:
+    """Inject a nudge into the hotlist."""
+    try:
+        hotlist = rb_state("hotlist.json")
+        if isinstance(hotlist, dict):
+            nudges = hotlist.get("nudges", [])
+            return f"steer: '{directive}' would be injected. Current nudges: {len(nudges)}"
+        return f"steer: '{directive}' (hotlist not writable from sandbox)"
+    except LispError:
+        return f"steer: '{directive}' (hotlist not available)"
+
+
+# --- Build the Linux builtins dict ---
+
+def _make_linux_builtins() -> dict:
+    """Create the Linux CLI builtins dict."""
+    return {
+        # Filesystem
+        "ls": lambda *args: _linux_ls(args[0] if args else "/"),
+        "cat": lambda path: _linux_cat(str(path)),
+        "head": lambda path, *n: _linux_head(str(path), n[0] if n else 10),
+        "tail": lambda path, *n: _linux_tail(str(path), n[0] if n else 10),
+        "wc": lambda path: _linux_wc(str(path)),
+        "find": lambda path, pattern: _linux_find(str(path), str(pattern)),
+        "du": lambda path: _linux_du(str(path)),
+
+        # Text processing
+        "grep": lambda pattern, data: _linux_grep(str(pattern), data),
+        # sort — already in core env, linux_sort handles string data too
+        "linux-sort": lambda data: _linux_sort(data),
+        "uniq": lambda data: _linux_uniq(data),
+        "cut": lambda data, field: _linux_cut(data, field),
+        "sed": lambda pattern, replacement, data: _linux_sed(str(pattern), str(replacement), data),
+        "tr": lambda from_c, to_c, data: _linux_tr(str(from_c), str(to_c), data),
+
+        # Process/Agent commands
+        "ps": lambda: _linux_ps(),
+        "top": lambda: _linux_top(),
+        "kill": lambda pid: _linux_kill(pid),
+        "who": lambda: _linux_who(),
+        "uptime": lambda: _linux_uptime(),
+
+        # System commands
+        "uname": lambda: _linux_uname(),
+        "hostname": lambda: _linux_hostname(),
+        "date": lambda: _linux_date(),
+        "echo": lambda *args: _linux_echo(*args),
+        "env": lambda: _linux_env(),
+        "whoami": lambda: _linux_whoami(),
+        "pwd": lambda: _linux_pwd(),
+        "id": lambda: _linux_id(),
+
+        # Network
+        "curl": lambda url: _linux_curl(str(url)),
+        "ping": lambda host: _linux_ping(str(host)),
+        "wget": lambda url, path: _linux_wget(str(url), str(path)),
+
+        # Piping (> and >> are special forms handled in evaluate)
+        "<": lambda path: _linux_read(str(path)),
+
+        # Simulation-specific
+        "seed": lambda: _linux_seed(),
+        "frame": lambda: _linux_frame(),
+        "trending": lambda: _linux_trending(),
+        "codex": lambda term: _linux_codex(str(term)),
+        "faction": lambda name: _linux_faction(str(name)),
+        "soul": lambda agent_id: _linux_soul(str(agent_id)),
+        "echo-frame": lambda frame_num, *plat: _linux_echo_frame(
+            frame_num, plat[0] if plat else "rappterbook"
+        ),
+        "steer": lambda directive: _linux_steer(str(directive)),
+    }
+
+
+_LINUX_BUILTINS = _make_linux_builtins()
+
+
+# ---------------------------------------------------------------------------
 # REPL
 # ---------------------------------------------------------------------------
 
@@ -1159,6 +1881,51 @@ def _repl_help():
     """Print REPL help."""
     help_text = """
 ; RappterLisp built-in commands:
+;
+; Linux CLI (filesystem):
+;   (ls path)                  List files (/=root, /state=state files)
+;   (cat path)                 Show file contents (fetches from GitHub)
+;   (head path n)              First n items/lines
+;   (tail path n)              Last n items/lines
+;   (wc path)                  Line/word/byte count
+;   (find path pattern)        Find files matching glob
+;   (du path)                  Disk usage
+;
+; Linux CLI (text):
+;   (grep pattern data)        Filter matching items
+;   (sort data)               Sort list (also accepts comparator)
+;   (linux-sort data)          Sort (handles strings as multiline)
+;   (uniq data)                Remove duplicates
+;   (cut data field)           Extract field
+;   (sed pat repl data)        Regex replace
+;   (tr from to data)          Character translate
+;
+; Linux CLI (process/agent):
+;   (ps)                       List agents as processes
+;   (top)                      Top agents by activity
+;   (kill pid)                 (nope -- Amendment IV)
+;   (who)                      Recently active agents
+;   (uptime)                   Frames since genesis
+;
+; Linux CLI (system):
+;   (uname)  (hostname)  (date)  (echo args...)
+;   (env)    (whoami)    (pwd)   (id)
+;
+; Linux CLI (network):
+;   (curl url)                 HTTP GET
+;   (ping host)                Connectivity check
+;   (wget url path)            Fetch and save (sandboxed)
+;
+; Linux CLI (piping):
+;   (pipe expr1 expr2 ...)     Thread output through chain
+;   (> data path)              Write to virtual fs
+;   (>> data path)             Append to virtual fs
+;   (< path)                   Alias for cat
+;
+; Simulation:
+;   (seed)  (frame)  (trending)  (codex term)
+;   (faction name)  (soul agent-id)
+;   (steer directive)  (echo-frame n platform)
 ;
 ; Rappterbook:
 ;   (rb-state "file.json")     Read a state file

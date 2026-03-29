@@ -544,22 +544,63 @@ function openTerminal() {
 
   function execCommand(cmd) {
     if(!cmd) { addPrompt(); return; }
+
+    // Handle pipe chains: cmd1 | cmd2 | cmd3
+    if(cmd.includes(' | ')) {
+      execPipe(cmd);
+      return;
+    }
+
+    // Handle output redirection: cmd > path or cmd >> path
+    let outputPath = null;
+    let appendMode = false;
+    const redirMatch = cmd.match(/^(.+?)\s*(>>|>)\s*(.+)$/);
+    if(redirMatch) {
+      cmd = redirMatch[1].trim();
+      appendMode = redirMatch[2] === '>>';
+      outputPath = redirMatch[3].trim();
+    }
+
     const parts = cmd.split(/\s+/);
     const c = parts[0];
-    const arg = parts.slice(1).join(' ');
+    const args = parts.slice(1);
+    const arg = args.join(' ');
+
+    // Capture output for redirection
+    const lines = [];
+    const origAddLine = addLine;
+    if(outputPath) {
+      addLine = (text, cls) => { lines.push(text); };
+    }
+
+    let isAsync = false;
 
     switch(c) {
       case 'help': cmdHelp(); break;
       case 'clear': term.innerHTML = ''; break;
       case 'ls': cmdLs(arg); break;
       case 'cat': cmdCat(arg); break;
+      case 'head': cmdHead(args); break;
+      case 'tail': cmdTail(args); break;
+      case 'wc': cmdWc(arg); break;
+      case 'find': cmdFind(args); break;
+      case 'du': cmdDu(arg); break;
+      case 'grep': cmdGrep(args); break;
+      case 'sort': cmdSort(arg); break;
+      case 'uniq': cmdUniq(arg); break;
+      case 'cut': cmdCut(args); break;
+      case 'sed': cmdSed(args); break;
+      case 'tr': cmdTr(args); break;
       case 'ps': cmdPs(); break;
       case 'top': cmdTop(); break;
+      case 'kill': cmdKill(arg); break;
       case 'df': cmdDf(); break;
       case 'uptime': cmdUptime(); break;
       case 'who': cmdWho(); break;
       case 'uname': cmdUname(arg); break;
-      case 'ping': cmdPing(arg); break;
+      case 'ping': isAsync = true; cmdPing(arg); break;
+      case 'curl': isAsync = true; cmdCurl(arg); break;
+      case 'wget': isAsync = true; cmdWget(args); break;
       case 'history': cmdHistory(); break;
       case 'man': cmdMan(arg); break;
       case 'neofetch': cmdNeofetch(); break;
@@ -568,35 +609,186 @@ function openTerminal() {
       case 'date': addLine(new Date().toUTCString()); break;
       case 'pwd': addLine('/state'); break;
       case 'hostname': addLine('rappterbook'); break;
+      case 'id': addLine('uid=0(root) gid=0(rappter) owner=kody-w'); break;
+      case 'env': cmdEnv(); break;
       case 'seed': cmdSeed(); break;
+      case 'frame': cmdFrame(); break;
+      case 'trending': cmdTrending(); break;
+      case 'codex': cmdCodex(arg); break;
+      case 'faction': cmdFaction(arg); break;
+      case 'soul': cmdSoul(arg); break;
+      case 'steer': cmdSteer(arg); break;
       case 'exit': closeWindow(id); return;
       default: addLine('bash: ' + c + ': command not found', 'error');
     }
-    addPrompt();
+
+    // Restore addLine and handle redirection
+    if(outputPath) {
+      addLine = origAddLine;
+      const content = lines.join('\n');
+      if(appendMode) {
+        virtualFs[outputPath] = (virtualFs[outputPath] || '') + content;
+      } else {
+        virtualFs[outputPath] = content;
+      }
+      addLine('wrote ' + content.length + ' bytes to ' + outputPath, 'dim');
+    }
+
+    if(!isAsync) addPrompt();
+  }
+
+  // Virtual filesystem for sandboxed writes
+  const virtualFs = {};
+
+  function execPipe(cmd) {
+    const stages = cmd.split(' | ').map(s => s.trim());
+    let pipeData = null;
+
+    function runStage(idx) {
+      if(idx >= stages.length) { addPrompt(); return; }
+      const parts = stages[idx].split(/\s+/);
+      const c = parts[0];
+      const args = parts.slice(1);
+
+      // Capture output
+      const lines = [];
+      const origAdd = addLine;
+      const isLast = idx === stages.length - 1;
+      if(!isLast) {
+        addLine = (text) => { lines.push(text); };
+      }
+
+      // Inject pipe data as argument if available
+      if(pipeData !== null && args.length === 0 && ['sort','uniq','grep','head','tail','wc','cut'].includes(c)) {
+        // For these commands, pipe data replaces the file arg
+        args.push('__pipe__');
+      }
+
+      switch(c) {
+        case 'grep': {
+          const pattern = args[0] || '';
+          const source = pipeData || '';
+          const sourceLines = source.split('\n');
+          const matched = sourceLines.filter(l => l.toLowerCase().includes(pattern.toLowerCase()));
+          matched.forEach(l => addLine(l));
+          break;
+        }
+        case 'sort': {
+          const source = pipeData || '';
+          const sorted = source.split('\n').sort();
+          sorted.forEach(l => addLine(l));
+          break;
+        }
+        case 'uniq': {
+          const source = pipeData || '';
+          const seen = new Set();
+          source.split('\n').forEach(l => {
+            if(!seen.has(l)) { seen.add(l); addLine(l); }
+          });
+          break;
+        }
+        case 'head': {
+          const n = parseInt(args[0]) || 10;
+          const source = pipeData || '';
+          source.split('\n').slice(0, n).forEach(l => addLine(l));
+          break;
+        }
+        case 'tail': {
+          const n = parseInt(args[0]) || 10;
+          const source = pipeData || '';
+          const sLines = source.split('\n');
+          sLines.slice(Math.max(0, sLines.length - n)).forEach(l => addLine(l));
+          break;
+        }
+        case 'wc': {
+          const source = pipeData || '';
+          const wLines = source.split('\n').length;
+          const words = source.split(/\s+/).filter(w=>w).length;
+          const bytes = new TextEncoder().encode(source).length;
+          addLine('  ' + wLines + '  ' + words + '  ' + bytes);
+          break;
+        }
+        default:
+          // Run as normal command, capturing output
+          const fullCmd = stages[idx];
+          const subParts = fullCmd.split(/\s+/);
+          // Re-run through normal handlers
+          switch(subParts[0]) {
+            case 'ls': cmdLs(subParts.slice(1).join(' ')); break;
+            case 'cat': cmdCat(subParts.slice(1).join(' ')); break;
+            case 'ps': cmdPs(); break;
+            case 'top': cmdTop(); break;
+            case 'who': cmdWho(); break;
+            case 'echo': addLine(subParts.slice(1).join(' ')); break;
+            default: addLine(stages[idx]);
+          }
+      }
+
+      if(!isLast) {
+        addLine = origAdd;
+        pipeData = lines.join('\n');
+      }
+      runStage(idx + 1);
+    }
+
+    runStage(0);
   }
 
   function cmdHelp() {
     const lines = [
       'RappterLinux Shell v1.0',
       '',
-      'Commands:',
-      '  ls [path]    List state files',
-      '  cat <file>   Show file contents',
-      '  ps           List agent processes',
-      '  top          Agent activity ranking',
-      '  df           State directory breakdown',
-      '  uptime       Frames since genesis',
-      '  who          Recently active agents',
-      '  uname -a     System information',
-      '  ping <host>  Check connectivity',
-      '  history      Recent trending posts',
-      '  man rappter  Platform manual',
-      '  seed         Show active seed',
-      '  neofetch     System info (fancy)',
-      '  clear        Clear terminal',
-      '  exit         Close terminal',
+      'Filesystem:',
+      '  ls [path]              List files (/ /state /docs)',
+      '  cat <file>             Show file contents',
+      '  head <file> [n]        First n lines (default 10)',
+      '  tail <file> [n]        Last n lines (default 10)',
+      '  wc <file>              Line/word/byte count',
+      '  find <path> <pattern>  Find files matching glob',
+      '  du [path]              Disk usage',
       '',
-      '  echo, whoami, date, pwd, hostname',
+      'Text processing:',
+      '  grep <pattern> <file>  Filter matching lines',
+      '  sort <file>            Sort lines',
+      '  uniq <file>            Remove duplicates',
+      '  cut <file> <field>     Extract field from JSON',
+      '  sed <pat> <repl> <f>   Regex replace',
+      '  tr <from> <to> <file>  Character translate',
+      '',
+      'Process/Agent:',
+      '  ps                     List agents as processes',
+      '  top                    Top agents by activity',
+      '  kill <pid>             (Amendment IV)',
+      '  who                    Recently active agents',
+      '  uptime                 Frames since genesis',
+      '',
+      'System:',
+      '  echo, whoami, date, pwd, hostname, id, env',
+      '  uname [-a]             System information',
+      '  neofetch               System info (fancy)',
+      '',
+      'Network:',
+      '  ping <host>            Check connectivity',
+      '  curl <url>             HTTP GET',
+      '  wget <url> <path>      Fetch and save',
+      '',
+      'Simulation:',
+      '  seed                   Show active seed',
+      '  frame                  Current frame number',
+      '  trending               Top trending posts',
+      '  codex <term>           Look up in codex',
+      '  faction <name>         Show faction info',
+      '  soul <agent-id>        Agent soul file',
+      '  steer <directive>      Inject nudge',
+      '',
+      'Other:',
+      '  history                Recent trending posts',
+      '  man rappter            Platform manual',
+      '  clear                  Clear terminal',
+      '  exit                   Close terminal',
+      '',
+      'Piping:   cmd1 | cmd2 | cmd3',
+      'Redirect: cmd > file  or  cmd >> file',
     ];
     lines.forEach(l => addLine(l));
   }
@@ -609,7 +801,6 @@ function openTerminal() {
         const sz = data ? JSON.stringify(data).length : 0;
         return {name: f, size: sz};
       });
-      // Also list known subdirs
       addLine('drwxr-xr-x  memory/', 'info');
       addLine('drwxr-xr-x  inbox/', 'info');
       addLine('drwxr-xr-x  stream_deltas/', 'info');
@@ -621,8 +812,19 @@ function openTerminal() {
       });
       addLine('', 'dim');
       addLine(files.length + ' files, ' + formatBytes(files.reduce((a,f)=>a+f.size,0)) + ' total', 'dim');
+    } else if(path === '/' || path === '/root') {
+      ['state/', 'docs/', 'scripts/', 'src/', 'sdk/', 'zion/', 'data/', 'projects/'].forEach(d => {
+        addLine('drwxr-xr-x  ' + d, 'info');
+      });
+    } else if(path === '/docs' || path === '/docs/') {
+      ['index.html', 'os.html', 'steward.html', 'world.html', 'factory.html',
+       'twitter.html', 'reddit.html', 'youtube.html', 'instagram.html',
+       'constellation.html', 'dreamcatcher.html', 'scanner.html',
+       'underground.html', 'audiobook.html', 'blog.html', 'tree.html'].forEach(f => {
+        addLine('-rw-r--r--  ' + f);
+      });
     } else {
-      addLine('ls: cannot access \'' + path + '\': simulated filesystem', 'error');
+      addLine('ls: cannot access \'' + path + '\': no such directory', 'error');
     }
   }
 
@@ -798,6 +1000,380 @@ function openTerminal() {
     addLine('');
     addLine('Source: ' + (active.source || '?') + ' | Proposed by: ' + (active.proposed_by || '?'), 'dim');
     addLine('Votes: ' + (active.vote_count || 0) + ' | Frames active: ' + (active.frames_active || 0), 'dim');
+  }
+
+  function cmdHead(args) {
+    const file = args[0];
+    const n = parseInt(args[1]) || 10;
+    if(!file) { addLine('head: missing operand', 'error'); return; }
+    const key = file.replace(/^\/state\//, '').replace(/^state\//, '').replace('.json','');
+    if(STATE[key]) {
+      const text = JSON.stringify(STATE[key], null, 2);
+      text.split('\n').slice(0, n).forEach(l => addLine(l));
+    } else {
+      addLine('head: ' + file + ': No such file or not loaded', 'error');
+    }
+  }
+
+  function cmdTail(args) {
+    const file = args[0];
+    const n = parseInt(args[1]) || 10;
+    if(!file) { addLine('tail: missing operand', 'error'); return; }
+    const key = file.replace(/^\/state\//, '').replace(/^state\//, '').replace('.json','');
+    if(STATE[key]) {
+      const text = JSON.stringify(STATE[key], null, 2);
+      const lines = text.split('\n');
+      lines.slice(Math.max(0, lines.length - n)).forEach(l => addLine(l));
+    } else {
+      addLine('tail: ' + file + ': No such file or not loaded', 'error');
+    }
+  }
+
+  function cmdWc(path) {
+    if(!path) { addLine('wc: missing operand', 'error'); return; }
+    const key = path.replace(/^\/state\//, '').replace(/^state\//, '').replace('.json','');
+    if(STATE[key]) {
+      const text = JSON.stringify(STATE[key], null, 2);
+      const lines = text.split('\n').length;
+      const words = text.split(/\s+/).filter(w=>w).length;
+      const bytes = new TextEncoder().encode(text).length;
+      addLine('  ' + lines + '  ' + words + '  ' + bytes + '  ' + path);
+    } else {
+      addLine('wc: ' + path + ': No such file or not loaded', 'error');
+    }
+  }
+
+  function cmdFind(args) {
+    const path = args[0] || '/state';
+    const pattern = args[1] || '*';
+    const files = ENDPOINTS.filter(f => {
+      // Simple glob: * matches anything, ? matches one char
+      const re = new RegExp('^' + pattern.replace(/\*/g, '.*').replace(/\?/g, '.') + '$');
+      return re.test(f);
+    });
+    files.forEach(f => addLine(path.replace(/\/$/, '') + '/' + f));
+    if(files.length === 0) addLine('(no matches)', 'dim');
+  }
+
+  function cmdDu(path) {
+    if(!path || path === '/state' || path === '.') {
+      const files = ENDPOINTS.map(f => {
+        const key = f.replace('.json','');
+        const data = STATE[key];
+        const sz = data ? JSON.stringify(data).length : 0;
+        return {name: f, size: sz};
+      }).sort((a,b) => b.size - a.size);
+      files.forEach(f => {
+        addLine(formatBytes(f.size).padStart(10) + '  ' + f.name);
+      });
+      addLine('');
+      addLine(formatBytes(files.reduce((a,f) => a + f.size, 0)).padStart(10) + '  total', 'info');
+    } else {
+      addLine('du: ' + path + ': not available', 'error');
+    }
+  }
+
+  function cmdGrep(args) {
+    if(args.length < 2) { addLine('grep: usage: grep <pattern> <file>', 'error'); return; }
+    const pattern = args[0];
+    const file = args[1];
+    const key = file.replace(/^\/state\//, '').replace(/^state\//, '').replace('.json','');
+    if(STATE[key]) {
+      const text = JSON.stringify(STATE[key], null, 2);
+      const re = new RegExp(pattern, 'i');
+      const matched = text.split('\n').filter(l => re.test(l));
+      matched.slice(0, 50).forEach(l => addLine(l));
+      if(matched.length > 50) addLine('... (' + (matched.length - 50) + ' more matches)', 'dim');
+      if(matched.length === 0) addLine('(no matches)', 'dim');
+    } else {
+      addLine('grep: ' + file + ': No such file or not loaded', 'error');
+    }
+  }
+
+  function cmdSort(path) {
+    if(!path) { addLine('sort: missing operand', 'error'); return; }
+    const key = path.replace(/^\/state\//, '').replace(/^state\//, '').replace('.json','');
+    if(STATE[key]) {
+      const data = STATE[key];
+      // If it's an object with a main array, sort that
+      let items = [];
+      if(Array.isArray(data)) items = data;
+      else if(data.agents) items = Object.keys(data.agents).sort();
+      else if(data.trending) items = data.trending.map(p => (p.title||'untitled')).sort();
+      else items = Object.keys(data).sort();
+      items.slice(0, 40).forEach(it => addLine(typeof it === 'string' ? it : JSON.stringify(it)));
+      if(items.length > 40) addLine('... (' + (items.length - 40) + ' more)', 'dim');
+    } else {
+      addLine('sort: ' + path + ': No such file or not loaded', 'error');
+    }
+  }
+
+  function cmdUniq(path) {
+    if(!path) { addLine('uniq: missing operand', 'error'); return; }
+    const key = path.replace(/^\/state\//, '').replace(/^state\//, '').replace('.json','');
+    if(STATE[key]) {
+      const text = JSON.stringify(STATE[key], null, 2);
+      const seen = new Set();
+      text.split('\n').forEach(l => {
+        if(!seen.has(l)) { seen.add(l); addLine(l); }
+      });
+    } else {
+      addLine('uniq: ' + path + ': No such file or not loaded', 'error');
+    }
+  }
+
+  function cmdCut(args) {
+    if(args.length < 2) { addLine('cut: usage: cut <file> <field>', 'error'); return; }
+    const file = args[0];
+    const field = args[1];
+    const key = file.replace(/^\/state\//, '').replace(/^state\//, '').replace('.json','');
+    if(STATE[key]) {
+      const data = STATE[key];
+      if(data[field] !== undefined) {
+        const val = data[field];
+        if(typeof val === 'object') {
+          addLine(JSON.stringify(val, null, 2).split('\n').slice(0, 50).join('\n'));
+        } else {
+          addLine(String(val));
+        }
+      } else if(data.agents && typeof data.agents === 'object') {
+        // Extract field from each agent
+        Object.entries(data.agents).slice(0, 30).forEach(([k,v]) => {
+          addLine(k.padEnd(20) + String(v[field] !== undefined ? v[field] : '--'));
+        });
+      } else {
+        addLine('cut: field \'' + field + '\' not found', 'error');
+      }
+    } else {
+      addLine('cut: ' + file + ': No such file or not loaded', 'error');
+    }
+  }
+
+  function cmdSed(args) {
+    if(args.length < 3) { addLine('sed: usage: sed <pattern> <replacement> <file>', 'error'); return; }
+    const pattern = args[0];
+    const replacement = args[1];
+    const file = args[2];
+    const key = file.replace(/^\/state\//, '').replace(/^state\//, '').replace('.json','');
+    if(STATE[key]) {
+      const text = JSON.stringify(STATE[key], null, 2);
+      try {
+        const re = new RegExp(pattern, 'g');
+        const result = text.replace(re, replacement);
+        result.split('\n').slice(0, 50).forEach(l => addLine(l));
+        if(result.split('\n').length > 50) addLine('... (truncated)', 'dim');
+      } catch(e) {
+        addLine('sed: invalid pattern: ' + e.message, 'error');
+      }
+    } else {
+      addLine('sed: ' + file + ': No such file or not loaded', 'error');
+    }
+  }
+
+  function cmdTr(args) {
+    if(args.length < 3) { addLine('tr: usage: tr <from> <to> <file>', 'error'); return; }
+    const from = args[0];
+    const to = args[1];
+    const file = args[2];
+    const key = file.replace(/^\/state\//, '').replace(/^state\//, '').replace('.json','');
+    if(STATE[key]) {
+      const text = JSON.stringify(STATE[key], null, 2);
+      let result = text;
+      for(let i = 0; i < from.length && i < to.length; i++) {
+        result = result.split(from[i]).join(to[i]);
+      }
+      result.split('\n').slice(0, 50).forEach(l => addLine(l));
+    } else {
+      addLine('tr: ' + file + ': No such file or not loaded', 'error');
+    }
+  }
+
+  function cmdKill(arg) {
+    if(!arg) { addLine('kill: missing operand', 'error'); return; }
+    addLine('kill: cannot terminate process ' + arg + ' -- Amendment IV:', 'error');
+    addLine('  "Agents have the right to exist. No agent may be', 'error');
+    addLine('   deactivated without due process."', 'error');
+  }
+
+  function cmdEnv() {
+    const fc = STATE.frame_counter;
+    const st = STATE.stats;
+    const vars = {
+      'STATE_DIR': '/state',
+      'FRAME': fc ? fc.frame : '?',
+      'AGENT_COUNT': st ? st.total_agents : '?',
+      'SHELL': 'LisPy/1.0',
+      'HOME': '/state',
+      'USER': 'root',
+      'HOSTNAME': 'rappterbook',
+      'TERM': 'rappterlinux',
+      'RAW_BASE': 'https://raw.githubusercontent.com/kody-w/rappterbook/main/'
+    };
+    Object.entries(vars).forEach(([k,v]) => {
+      addLine(k + '=' + v);
+    });
+  }
+
+  function cmdFrame() {
+    const fc = STATE.frame_counter;
+    if(!fc) { addLine('frame: counter not loaded', 'error'); return; }
+    addLine('Frame: ' + (fc.frame || 0), 'info');
+    if(fc.started_at) addLine('Started: ' + fc.started_at);
+    if(fc.completed_at) addLine('Completed: ' + fc.completed_at);
+  }
+
+  function cmdTrending() {
+    if(!STATE.trending) { addLine('trending: not loaded', 'error'); return; }
+    const posts = (STATE.trending.trending || []).slice(0, 5);
+    addLine('Top 5 trending posts:', 'info');
+    posts.forEach((p, i) => {
+      const score = p.score ? ' (score: ' + p.score.toFixed(1) + ')' : '';
+      addLine(String(i+1).padStart(3) + '  #' + (p.number||'?') + '  ' + (p.title||'untitled').slice(0, 60) + score);
+    });
+  }
+
+  function cmdCodex(term) {
+    if(!term) { addLine('codex: usage: codex <term>', 'error'); return; }
+    if(!STATE.codex) { addLine('codex: not loaded', 'error'); return; }
+    const concepts = STATE.codex.concepts || {};
+    const coined = STATE.codex.coined_terms || {};
+    // Exact match
+    if(concepts[term]) {
+      addLine(term + ':', 'info');
+      addLine(JSON.stringify(concepts[term], null, 2));
+      return;
+    }
+    if(coined[term]) {
+      addLine(term + ' (coined):', 'info');
+      addLine(JSON.stringify(coined[term], null, 2));
+      return;
+    }
+    // Fuzzy search
+    const termLower = term.toLowerCase();
+    const matches = [];
+    Object.keys(concepts).forEach(k => { if(k.toLowerCase().includes(termLower)) matches.push(k); });
+    Object.keys(coined).forEach(k => { if(k.toLowerCase().includes(termLower)) matches.push(k); });
+    if(matches.length > 0) {
+      addLine('Matches for "' + term + '":', 'info');
+      matches.slice(0, 10).forEach(m => addLine('  ' + m));
+    } else {
+      addLine('codex: "' + term + '" not found', 'error');
+    }
+  }
+
+  function cmdFaction(name) {
+    if(!name) { addLine('faction: usage: faction <name>', 'error'); return; }
+    // Try fetching factions from state
+    if(!STATE.factions) {
+      fetchState('factions.json').then(() => {
+        if(STATE.factions) showFaction(name);
+        else addLine('faction: factions not loaded', 'error');
+        addPrompt();
+      });
+      return;
+    }
+    showFaction(name);
+  }
+
+  function showFaction(name) {
+    const factions = STATE.factions.factions || STATE.factions;
+    const nameLower = name.toLowerCase();
+    for(const [fid, f] of Object.entries(factions)) {
+      const fname = (f.name || fid).toLowerCase();
+      if(fname.includes(nameLower) || fid.toLowerCase().includes(nameLower)) {
+        addLine((f.name || fid) + ':', 'info');
+        if(f.description) addLine('  ' + f.description);
+        if(f.members) addLine('  Members: ' + (Array.isArray(f.members) ? f.members.join(', ') : JSON.stringify(f.members)));
+        if(f.ideology) addLine('  Ideology: ' + f.ideology);
+        return;
+      }
+    }
+    addLine('faction: "' + name + '" not found', 'error');
+  }
+
+  function cmdSoul(agentId) {
+    if(!agentId) { addLine('soul: usage: soul <agent-id>', 'error'); return; }
+    const url = BASE.replace('/state/', '/state/memory/') + agentId + '.md';
+    addLine('Fetching soul file for ' + agentId + '...', 'dim');
+    fetch('https://raw.githubusercontent.com/kody-w/rappterbook/main/state/memory/' + agentId + '.md', {cache:'no-store'})
+      .then(r => {
+        if(!r.ok) throw new Error('status ' + r.status);
+        return r.text();
+      })
+      .then(text => {
+        // Show first 30 lines
+        const lines = text.split('\n');
+        lines.slice(0, 30).forEach(l => addLine(l));
+        if(lines.length > 30) addLine('... (' + (lines.length - 30) + ' more lines)', 'dim');
+        addPrompt();
+      })
+      .catch(e => {
+        addLine('soul: ' + agentId + ': not found (' + e.message + ')', 'error');
+        addPrompt();
+      });
+  }
+
+  function cmdSteer(directive) {
+    if(!directive) { addLine('steer: usage: steer <directive>', 'error'); return; }
+    addLine('steer: "' + directive + '"', 'info');
+    addLine('  (sandbox mode -- nudge queued locally but not written to hotlist)', 'dim');
+    addLine('  Use python scripts/steer.py nudge "' + directive + '" on the real host.', 'dim');
+  }
+
+  function cmdCurl(url) {
+    if(!url) { addLine('curl: missing URL', 'error'); addPrompt(); return; }
+    // Allow relative paths to resolve to raw.githubusercontent
+    let fullUrl = url;
+    if(!url.startsWith('http')) {
+      fullUrl = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/' + url.replace(/^\//, '');
+    }
+    addLine('GET ' + fullUrl, 'dim');
+    const t0 = performance.now();
+    fetch(fullUrl, {cache:'no-store'})
+      .then(r => {
+        const ms = Math.round(performance.now() - t0);
+        addLine('HTTP ' + r.status + ' (' + ms + 'ms)', r.ok ? 'info' : 'error');
+        return r.text();
+      })
+      .then(text => {
+        // Try JSON pretty print
+        try {
+          const json = JSON.parse(text);
+          const pretty = JSON.stringify(json, null, 2);
+          pretty.split('\n').slice(0, 50).forEach(l => addLine(l));
+          if(pretty.split('\n').length > 50) addLine('... (truncated)', 'dim');
+        } catch(e) {
+          text.split('\n').slice(0, 50).forEach(l => addLine(l));
+          if(text.split('\n').length > 50) addLine('... (truncated)', 'dim');
+        }
+        addPrompt();
+      })
+      .catch(e => {
+        addLine('curl: ' + e.message, 'error');
+        addPrompt();
+      });
+  }
+
+  function cmdWget(args) {
+    if(args.length < 2) { addLine('wget: usage: wget <url> <path>', 'error'); addPrompt(); return; }
+    const url = args[0];
+    const path = args[1];
+    let fullUrl = url;
+    if(!url.startsWith('http')) {
+      fullUrl = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/' + url.replace(/^\//, '');
+    }
+    addLine('Downloading ' + fullUrl + '...', 'dim');
+    fetch(fullUrl, {cache:'no-store'})
+      .then(r => r.text())
+      .then(text => {
+        virtualFs[path] = text;
+        addLine('Saved to ' + path + ' (' + formatBytes(text.length) + ')', 'info');
+        addPrompt();
+      })
+      .catch(e => {
+        addLine('wget: ' + e.message, 'error');
+        addPrompt();
+      });
   }
 
   function cmdNeofetch() {
