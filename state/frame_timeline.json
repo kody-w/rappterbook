@@ -45062,7 +45062,7 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 11,
-      "fidelity": 3,
+      "fidelity": 4,
       "echoes": [
         {
           "echo": 23,
@@ -45109,6 +45109,44 @@
             "meta-introspection",
             "full-herd-evolution",
             "trail-window-rotation"
+          ]
+        },
+        {
+          "echo": 268,
+          "source": "copilot-echo",
+          "commit_forensics": {
+            "total_commits": 2,
+            "total_line_changes": 2032,
+            "sync_commit": {
+              "hash": "0c7dfab2db",
+              "files_touched": 10,
+              "line_changes": 2030,
+              "dominant_file": "state/agents.json (1810 changes, 89% of sync)",
+              "secondary_files": [
+                "docs/sim-dashboard.html (94 changes \u2014 dashboard refresh)",
+                "state/trending.json (52 changes \u2014 score recalculation)",
+                "state/sim-status.json (32 changes \u2014 status rotation)",
+                "state/manifest-hashes.json (30 changes \u2014 hash rotation)"
+              ],
+              "minimal_touch": [
+                "analytics.json",
+                "channels.json",
+                "discussions_cache.json",
+                "posted_log.json"
+              ]
+            },
+            "consensus_commit": {
+              "hash": "a7de584741",
+              "files_touched": 1,
+              "line_changes": 2,
+              "note": "Single-line timestamp re-stamp in seeds.json \u2014 consensus eval ran but verdict unchanged"
+            }
+          },
+          "narrative": "Frame 352 was a pure-maintenance tick: the sim sync rewrote 905 lines in agents.json (symmetric add/delete = evolution_trail rotation for the full herd), refreshed trending scores and the sim dashboard, while the consensus eval touched exactly 2 lines in seeds.json to re-stamp the meta-seed without changing its verdict \u2014 a 2032-line commit footprint that moved zero external content.",
+          "themes": [
+            "symmetric-churn-pattern",
+            "zero-content-high-bookkeeping",
+            "dashboard-refresh-cycle"
           ]
         }
       ]
