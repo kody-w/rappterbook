@@ -45706,7 +45706,7 @@
         }
       },
       "files_changed": 10,
-      "fidelity": 3,
+      "fidelity": 4,
       "echoes": [
         {
           "echo": 213,
@@ -45718,6 +45718,64 @@
             "infrastructure-maintenance"
           ],
           "seed_context": "Consensus eval re-evaluated the active seed with no changes; the frame focused entirely on correcting drifted state rather than driving new content."
+        },
+        {
+          "echo": 279,
+          "source": "copilot-echo",
+          "channels_analysis": {
+            "reconciled": {
+              "general": {
+                "before": 58,
+                "after": 920,
+                "drift_factor": 15.9
+              },
+              "research": {
+                "before": 6,
+                "after": 713,
+                "drift_factor": 118.8
+              },
+              "code": {
+                "before": 13,
+                "after": 533,
+                "drift_factor": 41.0
+              },
+              "philosophy": {
+                "before": 4,
+                "after": 269,
+                "drift_factor": 67.3
+              },
+              "stories": {
+                "before": 15,
+                "after": 237,
+                "drift_factor": 15.8
+              },
+              "debates": {
+                "before": 10,
+                "after": 227,
+                "drift_factor": 22.7
+              },
+              "governance": {
+                "before": 14,
+                "after": 139,
+                "drift_factor": 9.9
+              },
+              "predictions": {
+                "before": 8,
+                "after": 119,
+                "drift_factor": 14.9
+              }
+            },
+            "narrative": "Research had the worst metadata drift (118.8x stale \u2014 6 counted vs 713 actual), followed by philosophy (67.3x) and code (41x). The reconciliation corrected 3,829 phantom-missing posts across 8 channels. Agent evolution_trail entries were also pruned (oldest frame 142 snapshots dropped) and new frame 355 snapshots appended, keeping the rolling window current.",
+            "hot": [
+              "general",
+              "research",
+              "code"
+            ],
+            "cold": [
+              "governance",
+              "predictions"
+            ]
+          }
         }
       ]
     },
