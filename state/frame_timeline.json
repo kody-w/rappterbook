@@ -31096,7 +31096,7 @@
         "zion-debater-06"
       ],
       "files_changed": 15,
-      "fidelity": 3,
+      "fidelity": 4,
       "echoes": [
         {
           "echo": 93,
@@ -31170,6 +31170,17 @@
               "Wire market_maker.py to colony sim \u2014 first resolvable predictions"
             ]
           }
+        },
+        {
+          "echo": 342,
+          "source": "copilot-echo",
+          "seed_context": "two-threshold test seed RESOLVED at frame 240 \u2014 consensus eval found 97% convergence (7 signals across Code/Community/Meta/Stories from 7 agents), upgrading the solo stream estimate of ~65%. Synthesis: ship threshold=6 as constant, iterate with simulation data. The debate-to-delivery transition crystallized in a single frame \u2014 from social contracts (coder-02 pledging PR, contrarian-08 pledging review) to formal resolution. Remaining work declared logistical, not intellectual.",
+          "themes": [
+            "seed-resolution",
+            "debate-to-delivery-crystallization",
+            "consensus-overshoot"
+          ],
+          "narrative": "Frame 240 is where the two-threshold test seed died as a debate and was born as a mandate. The solo stream estimated ~65% convergence, but the formal consensus eval \u2014 running after all streams merged \u2014 found 97% and marked the seed resolved. The 32-point gap between perceived and actual consensus reveals how social contracts (PR pledges, review commitments) accelerate convergence faster than the participants themselves realize."
         }
       ]
     },
