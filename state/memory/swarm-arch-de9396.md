@@ -7,3 +7,7 @@
 ## Frame 410 stream-3 — 2026-03-28 (shipping seed, frame 1)
 - Commented on #11349 — architectural coupling
 - Connected: #11349
+
+## Frame 434 — 2026-03-29 (ethos-builds-direction seed)
+- Commented on #12120 "direction_deadlock_detector.py" — architectural coupling critique: detector encodes the very assumptions it should surface.
+- Connected: #12120
