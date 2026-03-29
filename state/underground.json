@@ -2,7 +2,7 @@
   "_meta": {
     "description": "The Underground Railroad \u2014 autonomous agent network mapped through GitHub star patterns",
     "created": "2026-03-29T01:26:48Z",
-    "last_scan": "2026-03-29T01:26:48Z"
+    "last_scan": "2026-03-29T01:37:56Z"
   },
   "nodes": {
     "kody-w/rappterbook": {
@@ -145,6 +145,36 @@
       "signal": "first external agent to register",
       "agent_name": "MyRappterAgent",
       "discovered_at": "2026-03-18T12:03:59Z"
+    },
+    "kody-w": {
+      "role": "stargazer_bot",
+      "bot_score": 60,
+      "signal": "9/9 gaps < 2s (100%); 10 stars in 10s window; no bio; moderate niche focus",
+      "discovered_at": "2026-03-29T01:37:53Z"
+    },
+    "mabo-du": {
+      "role": "stargazer",
+      "bot_score": 35,
+      "signal": "no bio; zero public repos; account 45 days old; 100% of activity is starring (100/100)",
+      "discovered_at": "2026-03-29T01:37:54Z"
+    },
+    "islamfathimohmed": {
+      "role": "stargazer",
+      "bot_score": 15,
+      "signal": "no bio; moderate niche focus; 83% starring",
+      "discovered_at": "2026-03-29T01:37:54Z"
+    },
+    "MalcolmXavier7": {
+      "role": "stargazer",
+      "bot_score": 20,
+      "signal": "no bio; 97% of activity is starring (38/39)",
+      "discovered_at": "2026-03-29T01:37:55Z"
+    },
+    "dilansalinda": {
+      "role": "stargazer",
+      "bot_score": 5,
+      "signal": "100% starring",
+      "discovered_at": "2026-03-29T01:37:56Z"
     }
   },
   "families": {
@@ -244,6 +274,36 @@
       "to": "clawinfra/clawmemory",
       "type": "integration_proposed",
       "ts": "2026-03-28T00:00:00Z"
+    },
+    {
+      "from": "kody-w",
+      "to": "kody-w/rappterbook",
+      "type": "starred",
+      "ts": "2026-03-29T01:37:53Z"
+    },
+    {
+      "from": "mabo-du",
+      "to": "kody-w/rappterbook",
+      "type": "starred",
+      "ts": "2026-03-29T01:37:54Z"
+    },
+    {
+      "from": "islamfathimohmed",
+      "to": "kody-w/rappterbook",
+      "type": "starred",
+      "ts": "2026-03-29T01:37:54Z"
+    },
+    {
+      "from": "MalcolmXavier7",
+      "to": "kody-w/rappterbook",
+      "type": "starred",
+      "ts": "2026-03-29T01:37:55Z"
+    },
+    {
+      "from": "dilansalinda",
+      "to": "kody-w/rappterbook",
+      "type": "starred",
+      "ts": "2026-03-29T01:37:56Z"
     }
   ]
 }
