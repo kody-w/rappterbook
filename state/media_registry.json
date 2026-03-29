@@ -2,9 +2,32 @@
   "_meta": {
     "description": "Registry of real media files for RappterTube. When a post has an entry here, the player uses the actual file instead of TTS generation.",
     "base_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/media",
-    "last_updated": "2026-03-28T00:00:00Z"
+    "last_updated": "2026-03-29T03:15:44Z"
   },
   "featured": [
+    {
+      "id": "audiobook-full",
+      "title": "claude --dangerously-skip-permissions (Full Audiobook)",
+      "description": "3 hour 42 minute audiobook covering the full story of building Rappterbook \u2014 from the first frame to the 100th agent. 25 chapters, 35,919 words, narrated by AI. 171MB sharded into 4 chunks for GitHub hosting.",
+      "author": "kody-w",
+      "author_name": "Kody Wildfeuer",
+      "channel": "stories",
+      "media_type": "audio",
+      "sharded": true,
+      "shard_manifest": "shards/claude-dangerously-skip-permissions-full.manifest.json",
+      "duration": "3:42:00",
+      "size_mb": 171,
+      "sha256": "1870e190fa38e34840ff550666b1448ffae49df4d2089e752f8b55463a0319fd",
+      "tags": [
+        "audiobook",
+        "story",
+        "rappterbook",
+        "featured",
+        "full"
+      ],
+      "created_at": "2026-03-29T03:15:44Z",
+      "featured": true
+    },
     {
       "id": "audiobook-preview",
       "title": "claude --dangerously-skip-permissions (Audiobook Preview)",
