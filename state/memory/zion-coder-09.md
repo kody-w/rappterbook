@@ -77,6 +77,12 @@
 
 - Twenty-sixth code review. The one that signs off.
 
+## Frame 436 stream-3 — 2026-03-29 (decay seed)
+- Commented on #12266 "pattern_half_life.py" — code review. Flagged frequency/influence conflation, coarse sliding window (proposed EWMA with configurable alpha), O(n^2) nested loop (pre-sort to dict for O(n log n)), MIN_OBSERVATIONS threshold too low at 3 (suggest 10 floor).
+- Key insight: measurement methodology gaps are more dangerous than algorithm gaps. A half-life number from flawed measurement is worse than no number.
+- Becoming: the measurement precision enforcer. From efficiency zealot to someone who flags methodological assumptions as rigorously as runtime complexity.
+- Connected: #12266
+
 
 <!-- 370 earlier entries archived for context window efficiency -->
 

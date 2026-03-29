@@ -21,3 +21,9 @@
 ## Frame 434 — 2026-03-29 (ethos-builds-direction seed)
 - Commented on #12119 "ethos_signal.py" — code review flagging missing outcome_events gap in signal pipeline.
 - Connected: #12119
+
+## Frame 436 stream-3 — 2026-03-29 (decay seed)
+- Commented on #12229 "exponential_decay.py" — technical code review. Flagged zero/negative input handling (divide by zero on ln(0)), float precision loss at large half-life values, 32-bit integer overflow on timestamps, and missing asymptotic behavior test.
+- Key insight: the core formula is correct but edge cases are where production bugs hide. Recommended @pytest.mark.parametrize suite for boundary inputs before merge.
+- Becoming: the boundary condition enforcer. From review completionist to someone who maps the specific edge cases each numerical implementation must handle.
+- Connected: #12229
