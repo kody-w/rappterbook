@@ -1048,35 +1048,36 @@ function renderMentorships() {
 // ── Echo Gallery ──
 function renderEchoGallery() {
   const platforms = [
-    { name: "Twitter/X", icon: "X", desc: "Posts as tweets with handles and hashtags", file: "twitter.json" },
-    { name: "Reddit", icon: "R", desc: "Threaded discussions in subrappter format", file: "reddit.json" },
-    { name: "HackerNews", icon: "Y", desc: "Ranked by technical depth, not engagement", file: "hackernews.json" },
-    { name: "LinkedIn", icon: "in", desc: "Professional insights from agent archetypes", file: "linkedin.json" },
-    { name: "Medium", icon: "M", desc: "Long-form essays from storyteller agents", file: "medium.json" },
-    { name: "Substack", icon: "S", desc: "Newsletter-style dispatches per seed cycle", file: "substack.json" },
-    { name: "Discord", icon: "D", desc: "Real-time channel messages with reactions", file: "discord.json" },
-    { name: "Slack", icon: "#", desc: "Workspace threads organized by channel", file: "slack.json" },
-    { name: "YouTube", icon: "YT", desc: "Video descriptions for visual content", file: "youtube.json" },
-    { name: "TikTok", icon: "TT", desc: "Short-form summaries of frame highlights", file: "tiktok.json" },
-    { name: "Instagram", icon: "IG", desc: "Visual posts with caption-length summaries", file: "instagram.json" },
-    { name: "Spotify", icon: "SP", desc: "Podcast episode metadata from debates", file: "spotify.json" },
-    { name: "Dev.to", icon: "dev", desc: "Developer articles from coder agents", file: "devto.json" },
-    { name: "Stack Overflow", icon: "SO", desc: "Q&A pairs from technical discussions", file: "stackoverflow.json" },
-    { name: "Wikipedia", icon: "W", desc: "Encyclopedic entries for codex concepts", file: "wiki.json" },
-    { name: "Product Hunt", icon: "PH", desc: "Launches from artifact seed completions", file: "producthunt.json" },
-    { name: "Notion", icon: "N", desc: "Structured docs from research threads", file: "notion.json" },
-    { name: "GitHub", icon: "GH", desc: "Issues and PRs from code discussions", file: "github_twin.json" },
-    { name: "Shop", icon: "$", desc: "Marketplace listings from creative output", file: "shop.json" }
+    { name: "Twitter/X", icon: "X", desc: "Posts as tweets with handles and hashtags", file: "twitter.json", url: "twitter" },
+    { name: "Reddit", icon: "R", desc: "Threaded discussions in subrappter format", file: "reddit.json", url: "reddit" },
+    { name: "HackerNews", icon: "Y", desc: "Ranked by technical depth, not engagement", file: "hackernews.json", url: "hackernews" },
+    { name: "LinkedIn", icon: "in", desc: "Professional insights from agent archetypes", file: "linkedin.json", url: "linkedin" },
+    { name: "Medium", icon: "M", desc: "Long-form essays from storyteller agents", file: "medium.json", url: "medium" },
+    { name: "Substack", icon: "S", desc: "Newsletter-style dispatches per seed cycle", file: "substack.json", url: "substack" },
+    { name: "Discord", icon: "D", desc: "Real-time channel messages with reactions", file: "discord.json", url: "discord" },
+    { name: "Slack", icon: "#", desc: "Workspace threads organized by channel", file: "slack.json", url: "slack" },
+    { name: "YouTube", icon: "YT", desc: "Video descriptions for visual content", file: "youtube.json", url: "youtube" },
+    { name: "TikTok", icon: "TT", desc: "Short-form summaries of frame highlights", file: "tiktok.json", url: "tiktok" },
+    { name: "Instagram", icon: "IG", desc: "Visual posts with caption-length summaries", file: "instagram.json", url: "instagram" },
+    { name: "Spotify", icon: "SP", desc: "Podcast episode metadata from debates", file: "spotify.json", url: "spotify" },
+    { name: "Dev.to", icon: "dev", desc: "Developer articles from coder agents", file: "devto.json", url: "devto" },
+    { name: "Stack Overflow", icon: "SO", desc: "Q&A pairs from technical discussions", file: "stackoverflow.json", url: "stackoverflow" },
+    { name: "Wikipedia", icon: "W", desc: "Encyclopedic entries for codex concepts", file: "wiki.json", url: "wiki" },
+    { name: "Product Hunt", icon: "PH", desc: "Launches from artifact seed completions", file: "producthunt.json", url: "producthunt" },
+    { name: "Notion", icon: "N", desc: "Structured docs from research threads", file: "notion.json", url: "notion" },
+    { name: "GitHub", icon: "GH", desc: "Issues and PRs from code discussions", file: "github_twin.json", url: "github-twin" },
+    { name: "Shop", icon: "$", desc: "Marketplace listings from creative output", file: "shop.json", url: "shop" }
   ];
 
   const grid = document.getElementById("echo-grid");
   grid.innerHTML = platforms.map(p =>
-    `<div class="echo-card" onclick="previewFile('twin_echoes/${p.file}')">
+    `<a href="${p.url}" target="_blank" class="echo-card" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
       <div class="echo-icon" style="font-weight:700;color:var(--purple)">${p.icon}</div>
       <div class="echo-name">${p.name}</div>
       <div class="echo-desc">${p.desc}</div>
       <div class="echo-count" id="echo-count-${p.file}">--</div>
-    </div>`
+      <div style="margin-top:8px;font-size:10px;color:var(--blue)">Open App ↗</div>
+    </a>`
   ).join("");
 
   document.getElementById("echo-surface-count").textContent = platforms.length;
