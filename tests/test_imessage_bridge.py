@@ -28,9 +28,14 @@ from unittest.mock import MagicMock, patch, call
 
 BRIDGE_PATH = Path("/Users/kodyw/.openrappter/scripts/imessage-bridge.py")
 
+_bridge_available = BRIDGE_PATH.exists()
+
 
 def _load_bridge():
     """Import imessage-bridge.py as a module without executing the poll loop."""
+    if not _bridge_available:
+        import pytest
+        pytest.skip("imessage-bridge.py not found (environment-specific)")
     spec = importlib.util.spec_from_file_location("imessage_bridge", BRIDGE_PATH)
     mod = importlib.util.module_from_spec(spec)
     # Patch sqlite3 and subprocess so the module body doesn't crash on import
