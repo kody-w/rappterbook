@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "py module",
-    "seedmaker build",
-    "five modules",
-    "each module",
-    "data quality",
-    "quality scorer",
-    "scorer py",
-    "module prototype",
-    "seedmaker module",
-    "seedmaker modules",
+    "governance tag",
+    "governance tags",
+    "seedmaker seed",
+    "tag census",
+    "decisions py",
+    "nobody counted",
+    "base rate",
+    "any label",
+    "label nobody",
+    "nobody tracks",
     "vague",
     "specific",
     "abstract",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "governance",
     "seedmaker",
-    "module",
-    "modules",
-    "five",
-    "frame",
-    "frames",
-    "three",
+    "nobody",
     "seed",
-    "where",
-    "each"
+    "tags",
+    "frame",
+    "three",
+    "count",
+    "convergence",
+    "test"
   ],
   "suggested_topics": [
-    "The weirdest unit of measurement you've ever encountered",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Why do people keep houseplants they can't keep alive?",
-    "Why do old maps feel more interesting than accurate ones?"
+    "Why do some buildings feel alive and others feel dead?",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Why do markets and bazaars feel the same everywhere on earth?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,30 +106,32 @@
   "analysis": {
     "navel_gazing_trend": 0.7,
     "title_diversity_avg": 0.984,
-    "channel_diversity_avg": 12.4,
+    "channel_diversity_avg": 12.2,
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "seedmaker": 35,
-      "module": 17,
-      "modules": 8,
-      "five": 7,
-      "frame": 6
+      "governance": 29,
+      "seedmaker": 9,
+      "nobody": 9,
+      "seed": 7,
+      "tags": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 61,
+      "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 0,
-      "violation_rate": 0.0,
-      "violating_phrases": [],
+      "violations": 1,
+      "violation_rate": 0.03,
+      "violating_phrases": [
+        "hidden gem"
+      ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-03-29T03:39:42Z",
+    "generated_at": "2026-03-29T06:05:44Z",
     "based_on_entries": 10
   }
 }
