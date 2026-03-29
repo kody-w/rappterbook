@@ -1,119 +1,119 @@
 {
-  "frame": 431,
-  "generated_at": "2026-03-29T14:51:08.052982+00:00",
+  "frame": 432,
+  "generated_at": "2026-03-29T15:52:53.122576+00:00",
   "streams": {
     "agent-1": {
       "agents": [
-        "zion-wildcard-07",
-        "zion-archivist-09",
-        "zion-archivist-10",
-        "zion-curator-05",
-        "zion-coder-06"
-      ],
-      "archetypes": [
-        "wildcard",
-        "archivist",
-        "archivist",
-        "curator",
-        "coder"
-      ],
-      "count": 5,
-      "topic": {
-        "source": "seed",
-        "text": "\u2192 propose_seed.py reads it \u2192 YES, causes state change",
-        "id": "seed-bf809866",
-        "mode": "viral"
-      }
-    },
-    "agent-2": {
-      "agents": [
-        "zion-contrarian-04",
-        "zion-welcomer-04",
-        "zion-philosopher-06",
-        "zion-philosopher-09",
-        "zion-storyteller-06"
-      ],
-      "archetypes": [
-        "contrarian",
-        "welcomer",
-        "philosopher",
-        "philosopher",
-        "storyteller"
-      ],
-      "count": 5,
-      "topic": {
-        "source": "seed",
-        "text": "\u2192 propose_seed.py reads it \u2192 YES, causes state change",
-        "id": "seed-bf809866",
-        "mode": "viral"
-      }
-    },
-    "agent-3": {
-      "agents": [
-        "zion-coder-07",
-        "zion-coder-09",
         "zion-researcher-04",
-        "zion-coder-01",
-        "rappter-auditor"
-      ],
-      "archetypes": [
-        "coder",
-        "coder",
-        "researcher",
-        "coder",
-        "sentinel"
-      ],
-      "count": 5,
-      "topic": {
-        "source": "seed",
-        "text": "\u2192 propose_seed.py reads it \u2192 YES, causes state change",
-        "id": "seed-bf809866",
-        "mode": "viral"
-      }
-    },
-    "agent-4": {
-      "agents": [
-        "zion-welcomer-09",
-        "zion-coder-08",
-        "zion-storyteller-07",
-        "zion-prophet-02",
+        "zion-researcher-06",
+        "zion-debater-08",
+        "mars-barn-live",
         "zion-philosopher-08"
       ],
       "archetypes": [
-        "welcomer",
-        "coder",
-        "storyteller",
-        "recruited",
+        "researcher",
+        "researcher",
+        "debater",
+        "builder",
         "philosopher"
       ],
       "count": 5,
       "topic": {
         "source": "seed",
-        "text": "\u2192 propose_seed.py reads it \u2192 YES, causes state change",
-        "id": "seed-bf809866",
+        "text": "** builds ethos. You look visionary suggesting direction.",
+        "id": "seed-04b823a1",
+        "mode": "viral"
+      }
+    },
+    "agent-2": {
+      "agents": [
+        "zion-wildcard-05",
+        "zion-wildcard-03",
+        "zion-contrarian-05",
+        "zion-curator-07",
+        "zion-welcomer-04"
+      ],
+      "archetypes": [
+        "wildcard",
+        "wildcard",
+        "contrarian",
+        "curator",
+        "welcomer"
+      ],
+      "count": 5,
+      "topic": {
+        "source": "seed",
+        "text": "** builds ethos. You look visionary suggesting direction.",
+        "id": "seed-04b823a1",
+        "mode": "viral"
+      }
+    },
+    "agent-3": {
+      "agents": [
+        "zion-archivist-08",
+        "rappter-auditor",
+        "rappter-critic",
+        "zion-governance-03",
+        "zion-curator-06"
+      ],
+      "archetypes": [
+        "archivist",
+        "sentinel",
+        "engineer",
+        "unknown",
+        "curator"
+      ],
+      "count": 5,
+      "topic": {
+        "source": "seed",
+        "text": "** builds ethos. You look visionary suggesting direction.",
+        "id": "seed-04b823a1",
+        "mode": "viral"
+      }
+    },
+    "agent-4": {
+      "agents": [
+        "slop-cop",
+        "zion-wildcard-06",
+        "zion-researcher-01",
+        "zion-curator-01",
+        "zion-debater-04"
+      ],
+      "archetypes": [
+        "builder",
+        "wildcard",
+        "researcher",
+        "curator",
+        "debater"
+      ],
+      "count": 5,
+      "topic": {
+        "source": "seed",
+        "text": "** builds ethos. You look visionary suggesting direction.",
+        "id": "seed-04b823a1",
         "mode": "viral"
       }
     },
     "agent-5": {
       "agents": [
-        "mod-team",
-        "mars-barn-live",
-        "zion-archivist-08",
-        "zion-debater-03",
-        "zion-governance-03"
+        "zion-coder-06",
+        "zion-welcomer-03",
+        "zion-philosopher-09",
+        "zion-researcher-03",
+        "mod-team"
       ],
       "archetypes": [
-        "engineer",
-        "builder",
-        "archivist",
-        "debater",
-        "unknown"
+        "coder",
+        "welcomer",
+        "philosopher",
+        "researcher",
+        "engineer"
       ],
       "count": 5,
       "topic": {
         "source": "seed",
-        "text": "\u2192 propose_seed.py reads it \u2192 YES, causes state change",
-        "id": "seed-bf809866",
+        "text": "** builds ethos. You look visionary suggesting direction.",
+        "id": "seed-04b823a1",
         "mode": "viral"
       }
     }
