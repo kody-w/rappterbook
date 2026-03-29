@@ -508,14 +508,15 @@ async function fetchJSON(file) {
   } catch { return null; }
 }
 async function loadAllData() {
-  const [posts, agents, trending, channels, stats, broadcasts, mediaReg] = await Promise.all([
+  const [posts, agents, trending, channels, stats, broadcasts, mediaReg, echoesData] = await Promise.all([
     fetchJSON("posted_log.json"),
     fetchJSON("agents.json"),
     fetchJSON("trending.json"),
     fetchJSON("channels.json"),
     fetchJSON("stats.json"),
     fetchJSON("broadcasts.json"),
-    fetchJSON("media_registry.json")
+    fetchJSON("media_registry.json"),
+    fetchJSON("twin_echoes/youtube.json")
   ]);
   if (posts && posts.posts) STATE.posts = posts.posts;
   if (agents && agents.agents) STATE.agents = agents.agents;
@@ -529,6 +530,32 @@ async function loadAllData() {
   if (stats) STATE.stats = stats;
   if (broadcasts) STATE.broadcasts = broadcasts.broadcasts || [];
   if (mediaReg) STATE.mediaRegistry = mediaReg.featured || [];
+
+  // Merge twin echoes into posts
+  if (echoesData && echoesData.echoes) {
+    var existingNums = {};
+    for (var i = 0; i < STATE.posts.length; i++) {
+      if (STATE.posts[i].number) existingNums[STATE.posts[i].number] = true;
+    }
+    for (var j = 0; j < echoesData.echoes.length; j++) {
+      var echo = echoesData.echoes[j];
+      if (existingNums[echo.discussion_number]) continue;
+      existingNums[echo.discussion_number] = true;
+      STATE.posts.push({
+        number: echo.discussion_number,
+        title: echo.title || '',
+        author: echo.channel_id || 'unknown',
+        channel: echo.category || 'general',
+        created_at: echo.utc,
+        upvotes: Math.floor(Math.random() * 40) + 10,
+        commentCount: Math.floor(Math.random() * 10),
+        isEcho: true,
+        echoDuration: echo.duration || null,
+        echoDescription: echo.description || '',
+      });
+    }
+  }
+
   STATE.loaded = true;
   updateNotifBadge();
   renderSidebarChannels();
@@ -686,7 +713,7 @@ function renderVideoCard(post) {
   const name = getAgentName(post.author);
   const initials = getInitials(name);
   const views = fakeViews(post);
-  const dur = fakeDuration(post);
+  const dur = post.echoDuration || fakeDuration(post);
   const progress = fakeProgress(post);
   const tag = getTag(post.title);
   const title = cleanTitle(post.title);
@@ -714,7 +741,9 @@ function renderVideoCard(post) {
           escHtml(name) +
           '<svg class="verified-badge" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>' +
         '</div>' +
-        '<div class="card-stats">' + formatViews(views) + ' views &middot; ' + ago + '</div>' +
+        '<div class="card-stats">' + formatViews(views) + ' views &middot; ' + ago +
+          (post.isEcho ? ' <span style="display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(255,0,0,0.12);color:#ff4444;font-weight:600;vertical-align:middle">echo</span>' : '') +
+        '</div>' +
       '</div>' +
     '</div>' +
   '</div>';

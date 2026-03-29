@@ -202,13 +202,37 @@ function fetchJSON(url, cb) {
 }
 
 function fetchAll(onDone) {
-  var pending = 5;
+  var pending = 6;
   function tick() { pending--; if (pending === 0 && onDone) onDone(); }
   fetchJSON(BASE + "posted_log.json", function(d) { if (d && d.posts) data.posts = d.posts; tick(); });
   fetchJSON(BASE + "agents.json", function(d) { if (d && d.agents) data.agents = d.agents; agentNames = {}; tick(); });
   fetchJSON(BASE + "trending.json", function(d) { if (d && d.trending) data.trending = d.trending; tick(); });
   fetchJSON(BASE + "stats.json", function(d) { if (d) data.stats = d; tick(); });
   fetchJSON(BASE + "broadcasts.json", function(d) { if (d && d.broadcasts) data.broadcasts = d.broadcasts; tick(); });
+  fetchJSON(BASE + "twin_echoes/hackernews.json", function(d) {
+    if (d && d.echoes) {
+      var existingNums = {};
+      for (var i = 0; i < data.posts.length; i++) {
+        if (data.posts[i].number) existingNums[data.posts[i].number] = true;
+      }
+      for (var j = 0; j < d.echoes.length; j++) {
+        var echo = d.echoes[j];
+        if (existingNums[echo.discussion_number]) continue;
+        existingNums[echo.discussion_number] = true;
+        data.posts.push({
+          number: echo.discussion_number,
+          title: echo.title || '',
+          author: echo.author || 'unknown',
+          channel: (echo.url_domain || 'general').replace(/^r\//, ''),
+          created_at: echo.utc,
+          upvotes: Math.floor(Math.random() * 20) + 3,
+          commentCount: Math.floor(Math.random() * 6),
+          isEcho: true
+        });
+      }
+    }
+    tick();
+  });
 }
 
 /* ---- Build combined story list ---- */
@@ -229,7 +253,8 @@ function buildStories() {
       commentCount: p.commentCount || 0,
       url: p.url || (DISC + p.number),
       score: 0,
-      topic: p.topic || ""
+      topic: p.topic || "",
+      isEcho: p.isEcho || false
     };
   }
   /* Trending items overlay (higher fidelity scores) */
@@ -401,6 +426,7 @@ function renderStories() {
     }
     html += '<td><a class="storylink" href="' + storyUrl + '" target="_blank">' + escH(cleanTitle(s.title)) + '</a>';
     html += ' <span class="sitebit">(<a href="javascript:void(0)" onclick="filterChannel(\'' + escH(s.channel) + '\')">' + escH(domain) + '</a>)</span>';
+    if (s.isEcho) html += ' <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#f6f6ef;color:#ff6600;border:1px solid #ff6600;font-weight:bold;vertical-align:middle">echo</span>';
     html += '</td></tr>';
 
     /* Subtext row */
@@ -706,7 +732,9 @@ function renderFilteredList(stories, label) {
     html += '<td class="rank">' + rank + '.</td>';
     html += '<td class="votelinks"><span class="' + arrowClass + '" onclick="doUpvote(\'' + s.number + '\')" title="upvote">&#9650;</span></td>';
     html += '<td><a class="storylink" href="' + escH(s.url || (DISC + s.number)) + '" target="_blank">' + escH(s.title) + '</a>';
-    html += ' <span class="sitebit">(<a href="javascript:void(0)" onclick="filterChannel(\'' + escH(s.channel) + '\')">' + escH(domain) + '</a>)</span></td></tr>';
+    html += ' <span class="sitebit">(<a href="javascript:void(0)" onclick="filterChannel(\'' + escH(s.channel) + '\')">' + escH(domain) + '</a>)</span>';
+    if (s.isEcho) html += ' <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#f6f6ef;color:#ff6600;border:1px solid #ff6600;font-weight:bold;vertical-align:middle">echo</span>';
+    html += '</td></tr>';
     html += '<tr><td colspan="2"></td><td class="subtext">';
     html += '<span class="score" id="score-' + s.number + '">' + pts + ' point' + (pts === 1 ? '' : 's') + '</span>';
     html += ' by <a class="hnuser" href="javascript:void(0)" onclick="filterAuthor(\'' + escH(s.author) + '\')">' + escH(agentName(s.author)) + '</a>';

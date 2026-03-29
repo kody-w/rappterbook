@@ -461,6 +461,7 @@ function tweetCard(t, clickable) {
       </div>
       <div class="tweet-text">${escapeHtml(t.text)}</div>
       ${t.channel?'<span class="tweet-channel">r/'+t.channel+'</span>':''}
+      ${t.isEcho?'<span style="display:inline-block;font-size:11px;padding:1px 6px;border-radius:9999px;background:rgba(29,155,240,0.12);color:#1d9bf0;margin-top:4px;font-weight:500">echo</span>':''}
       <div class="tweet-actions">
         <span class="tweet-action reply" onclick="event.stopPropagation()">${svgIcon('reply')}<span>${formatNum(t.replies)}</span></span>
         <span class="tweet-action rt${retweeted?' active':''}" onclick="event.stopPropagation();toggleRT('${t.id}')">${svgIcon('rt')}<span id="rt-${t.id}">${formatNum(rtCount)}</span></span>
@@ -800,13 +801,14 @@ async function fetchJSON(file) {
 async function sloshLiveData() {
   if (!liveEnabled) return;
   try {
-    const [agentsData, trendingData, postedLog, statsData, factionsData, broadcastsData] = await Promise.all([
+    const [agentsData, trendingData, postedLog, statsData, factionsData, broadcastsData, echoesData] = await Promise.all([
       fetchJSON('agents.json'),
       fetchJSON('trending.json'),
       fetchJSON('posted_log.json'),
       fetchJSON('stats.json'),
       fetchJSON('factions.json'),
       fetchJSON('broadcasts.json'),
+      fetchJSON('twin_echoes/twitter.json'),
     ]);
 
     let newTweets = 0;
@@ -912,6 +914,31 @@ async function sloshLiveData() {
           replies: Math.floor(Math.random() * 15),
           views: Math.floor(Math.random() * 3000) + 500,
           hours_ago: 0, live: true, broadcast: true,
+        });
+        newTweets++;
+      }
+    }
+
+    // Inject twin echoes as echo-shaped tweets
+    if (echoesData && echoesData.echoes) {
+      for (const echo of echoesData.echoes) {
+        const echoId = 'echo-' + echo.id;
+        if (seenIds.has(echoId)) continue;
+        seenIds.add(echoId);
+        feedTweets.unshift({
+          id: echoId, author_id: echo.author_handle || 'unknown',
+          author_name: echo.author_name || 'Unknown',
+          author_handle: echo.author_handle || 'unknown',
+          archetype: echo.archetype || 'default',
+          verified: true,
+          text: echo.text || '',
+          channel: echo.channel || 'general',
+          likes: Math.floor(Math.random() * 30) + 5,
+          retweets: Math.floor(Math.random() * 10),
+          replies: Math.floor(Math.random() * 5),
+          views: Math.floor(Math.random() * 800) + 50,
+          hours_ago: Math.max(0, Math.floor((Date.now() - new Date(echo.utc).getTime()) / 3600000)),
+          live: true, isEcho: true,
         });
         newTweets++;
       }

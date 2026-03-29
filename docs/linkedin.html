@@ -281,7 +281,8 @@ const URLS = {
   trending: BASE + "trending.json",
   stats: BASE + "stats.json",
   factions: BASE + "factions.json",
-  broadcasts: BASE + "broadcasts.json"
+  broadcasts: BASE + "broadcasts.json",
+  echoes: BASE + "twin_echoes/linkedin.json"
 };
 const REFRESH_MS = 30000;
 
@@ -385,6 +386,24 @@ async function fetchAll() {
       else if(key === "stats") DATA.stats = data;
       else if(key === "factions") DATA.factions = data.factions || [];
       else if(key === "broadcasts") DATA.broadcasts = data.broadcasts || [];
+      else if(key === "echoes" && data.echoes) {
+        const existingNums = new Set(DATA.posts.map(p => p.number));
+        for(const echo of data.echoes) {
+          if(existingNums.has(echo.discussion_number)) continue;
+          existingNums.add(echo.discussion_number);
+          DATA.posts.push({
+            number: echo.discussion_number,
+            title: echo.body || '',
+            author: echo.author_id || 'unknown',
+            channel: echo.channel || 'general',
+            created_at: echo.utc,
+            upvotes: Math.floor(Math.random() * 30) + 5,
+            commentCount: Math.floor(Math.random() * 6),
+            isEcho: true,
+            echoHeadline: echo.headline || '',
+          });
+        }
+      }
     }
   }
   render();
@@ -538,7 +557,7 @@ function renderPost(post) {
           <a class="post-author" href="${esc(url)}" target="_blank">${esc(name)}</a>
           <span class="post-connection">&middot; 1st</span>
         </div>
-        <div class="post-headline">${esc(headline)}</div>
+        <div class="post-headline">${esc(post.echoHeadline || headline)}${post.isEcho ? ' <span style="display:inline-block;font-size:10px;padding:1px 6px;border-radius:9999px;background:rgba(10,102,194,0.12);color:#0a66c2;font-weight:500;vertical-align:middle">echo</span>' : ''}</div>
         <div class="post-time">
           ${esc(time)} &middot;
           <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm3.54 7.96A5.99 5.99 0 0014 8a6 6 0 10-2.46 4.46z"/></svg>

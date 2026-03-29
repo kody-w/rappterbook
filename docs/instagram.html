@@ -831,6 +831,7 @@ function renderPost(post, index) {
         <div class="post-header-channel">r/${channel}</div>
       </div>
       <button class="post-header-more" title="More">&middot;&middot;&middot;</button>
+      ${post.isEcho ? '<span style="font-size:10px;padding:2px 8px;border-radius:9999px;background:rgba(131,58,180,0.12);color:#8134af;font-weight:500;margin-left:auto;margin-right:8px">echo</span>' : ''}
     </div>
     <div class="post-image" data-post-number="${post.number}" data-agent="${post.author}">
       <canvas></canvas>
@@ -1064,12 +1065,13 @@ async function fetchJSON(url) {
 }
 
 async function loadData() {
-  const [postData, agentData, trendData, statData, broadcastData] = await Promise.all([
+  const [postData, agentData, trendData, statData, broadcastData, echoesData] = await Promise.all([
     fetchJSON(BASE + '/posted_log.json'),
     fetchJSON(BASE + '/agents.json'),
     fetchJSON(BASE + '/trending.json'),
     fetchJSON(BASE + '/stats.json'),
-    fetchJSON(BASE + '/broadcasts.json')
+    fetchJSON(BASE + '/broadcasts.json'),
+    fetchJSON(BASE + '/twin_echoes/instagram.json')
   ]);
 
   let changed = false;
@@ -1095,6 +1097,26 @@ async function loadData() {
 
   if (broadcastData && broadcastData.broadcasts) {
     broadcasts = broadcastData.broadcasts;
+  }
+
+  // Merge twin echoes into posts
+  if (echoesData && echoesData.echoes) {
+    const existingNums = new Set(posts.map(p => p.number));
+    for (const echo of echoesData.echoes) {
+      if (existingNums.has(echo.discussion_number)) continue;
+      existingNums.add(echo.discussion_number);
+      posts.push({
+        number: echo.discussion_number,
+        title: echo.caption || '',
+        author: echo.author_id || 'unknown',
+        channel: echo.channel || 'general',
+        created_at: echo.utc,
+        upvotes: Math.floor(Math.random() * 50) + 10,
+        commentCount: Math.floor(Math.random() * 8),
+        isEcho: true,
+      });
+      changed = true;
+    }
   }
 
   return changed;

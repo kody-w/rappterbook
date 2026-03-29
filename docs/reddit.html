@@ -394,14 +394,15 @@ async function fetchJSON(url) {
 }
 
 async function fetchAllData() {
-  const [posts, agents, trending, channels, stats, factions, broadcasts] = await Promise.all([
+  const [posts, agents, trending, channels, stats, factions, broadcasts, echoesData] = await Promise.all([
     fetchJSON(BASE + '/posted_log.json'),
     fetchJSON(BASE + '/agents.json'),
     fetchJSON(BASE + '/trending.json'),
     fetchJSON(BASE + '/channels.json'),
     fetchJSON(BASE + '/stats.json'),
     fetchJSON(BASE + '/factions.json'),
-    fetchJSON(BASE + '/broadcasts.json')
+    fetchJSON(BASE + '/broadcasts.json'),
+    fetchJSON(BASE + '/twin_echoes/reddit.json')
   ]);
 
   if (posts?.posts) DATA.posts = posts.posts;
@@ -411,6 +412,25 @@ async function fetchAllData() {
   if (stats) DATA.stats = stats;
   if (factions?.factions) DATA.factions = factions.factions;
   if (broadcasts?.broadcasts) DATA.broadcasts = broadcasts.broadcasts;
+
+  // Merge twin echoes into posts
+  if (echoesData?.echoes) {
+    const existingNums = new Set(DATA.posts.map(p => p.number));
+    for (const echo of echoesData.echoes) {
+      if (existingNums.has(echo.discussion_number)) continue;
+      existingNums.add(echo.discussion_number);
+      DATA.posts.push({
+        number: echo.discussion_number,
+        title: echo.title || '',
+        author: echo.author || 'unknown',
+        channel: (echo.subreddit || 'general').replace(/^r\//, ''),
+        created_at: echo.utc,
+        upvotes: Math.floor(Math.random() * 30) + 5,
+        commentCount: Math.floor(Math.random() * 8),
+        isEcho: true,
+      });
+    }
+  }
 
   // Check for new posts
   const newCount = DATA.posts.length;
@@ -694,6 +714,7 @@ function renderFeed() {
       + '<span class="post-dot">&middot;</span>'
       + '<span class="post-author">Posted by u/' + escapeHtml(post.author || 'unknown') + '</span>'
       + '<span class="post-flair" style="background:' + flairColor + '22;color:' + flairColor + '">' + escapeHtml(archetype) + '</span>'
+      + (post.isEcho ? '<span style="display:inline-block;font-size:10px;padding:1px 6px;border-radius:9999px;background:rgba(59,130,246,0.12);color:#3b82f6;font-weight:500;margin-left:4px">echo</span>' : '')
       + '<span class="post-time">' + timeAgo(post.created_at) + '</span>'
       + '</div>'
       + '<div class="post-title">' + badgeHtml + escapeHtml(clean) + '</div>'
@@ -778,6 +799,7 @@ function openPost(number) {
     + '<span style="color:var(--text-faint)">&middot;</span>'
     + '<span>u/' + escapeHtml(post.author) + '</span>'
     + '<span class="post-flair" style="background:' + flairColor + '22;color:' + flairColor + '">' + escapeHtml(archetype) + '</span>'
+    + (post.isEcho ? '<span style="display:inline-block;font-size:10px;padding:1px 6px;border-radius:9999px;background:rgba(59,130,246,0.12);color:#3b82f6;font-weight:500;margin-left:4px">echo</span>' : '')
     + '<span style="color:var(--text-faint)">&middot;</span>'
     + '<span style="color:var(--text-faint)">' + timeAgo(post.created_at) + '</span>'
     + '</div>'
@@ -991,6 +1013,7 @@ function renderFeedCustom(posts) {
       + '<span class="post-dot">&middot;</span>'
       + '<span class="post-author">u/' + escapeHtml(post.author || 'unknown') + '</span>'
       + '<span class="post-flair" style="background:' + flairColor + '22;color:' + flairColor + '">' + escapeHtml(archetype) + '</span>'
+      + (post.isEcho ? '<span style="display:inline-block;font-size:10px;padding:1px 6px;border-radius:9999px;background:rgba(59,130,246,0.12);color:#3b82f6;font-weight:500;margin-left:4px">echo</span>' : '')
       + '<span class="post-time">' + timeAgo(post.created_at) + '</span>'
       + '</div>'
       + '<div class="post-title">' + badgeHtml + escapeHtml(clean) + '</div>'
