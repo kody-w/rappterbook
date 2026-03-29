@@ -475,6 +475,165 @@ class Rapp:
         )
         return data["repository"]["discussion"]["id"]
 
+class Tumbler:
+    """Rock tumbler — retroactive echo vibration for frame polishing.
+
+    Each frame echoes to N surfaces. Previous frames get re-echoed
+    to deepen fidelity. Evolution runs periodically. The tumbler
+    polishes frames like a rock tumbler polishes stones — each pass
+    adds smoothness.
+
+    Usage:
+        tumbler = Tumbler(state_dir="state", surfaces=19, lookback=3)
+        tumbler.echo(frame=410)      # echo current frame
+        tumbler.vibrate(frame=410)   # re-echo last 3 frames
+        tumbler.evolve(frame=410)    # run evolution if frame % 5 == 0
+        tumbler.tick(frame=410)      # do all three
+    """
+
+    def __init__(self, state_dir: str = "state", surfaces: int = 19,
+                 lookback: int = 3, evolve_interval: int = 5):
+        self.state_dir = state_dir
+        self.surfaces = surfaces
+        self.lookback = lookback
+        self.evolve_interval = evolve_interval
+        self._last_echoed: int = -1
+        self._last_vibrated: int = -1
+        self._last_evolved: int = -1
+        self._echo_counts: dict = {}  # frame -> number of times echoed
+        self._echo_fn = None
+        self._evolve_fn = None
+        self._try_import_hooks()
+
+    def _try_import_hooks(self) -> None:
+        """Try to import echo_twins and evolve hooks. Stubs if unavailable."""
+        try:
+            import importlib
+            echo_mod = importlib.import_module("echo_twins")
+            self._echo_fn = getattr(echo_mod, "echo_frame", None)
+        except (ImportError, ModuleNotFoundError):
+            self._echo_fn = None
+
+        try:
+            import importlib
+            evolve_mod = importlib.import_module("evolve_agents")
+            self._evolve_fn = getattr(evolve_mod, "evolve", None)
+        except (ImportError, ModuleNotFoundError):
+            self._evolve_fn = None
+
+    def _do_echo(self, frame: int) -> dict:
+        """Echo a single frame across surfaces. Returns echo result."""
+        count = self._echo_counts.get(frame, 0) + 1
+        self._echo_counts[frame] = count
+        result = {
+            "frame": frame,
+            "surfaces": self.surfaces,
+            "echo_pass": count,
+            "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+        if self._echo_fn is not None:
+            try:
+                hook_result = self._echo_fn(
+                    frame=frame, surfaces=self.surfaces,
+                    state_dir=self.state_dir, echo_pass=count
+                )
+                result["hook"] = hook_result
+            except Exception as exc:
+                result["hook_error"] = str(exc)
+        return result
+
+    def echo(self, frame: int) -> dict:
+        """Echo the current frame across all surfaces.
+
+        Each echo pass deepens fidelity. The first echo is rough;
+        subsequent passes polish the frame's output.
+        """
+        result = self._do_echo(frame)
+        self._last_echoed = frame
+        return result
+
+    def vibrate(self, frame: int, lookback: int = None) -> list:
+        """Re-echo previous N frames for retroactive polishing.
+
+        Earlier frames accumulate more polish passes over time,
+        making them the smoothest and most refined in the sequence.
+        """
+        lb = lookback if lookback is not None else self.lookback
+        results = []
+        for prev_frame in range(max(0, frame - lb), frame):
+            results.append(self._do_echo(prev_frame))
+        self._last_vibrated = frame
+        return results
+
+    def evolve(self, frame: int, interval: int = None) -> dict:
+        """Run evolution if frame is on the interval boundary.
+
+        Evolution applies accumulated polish into permanent trait
+        changes. Only fires every N frames to avoid thrashing.
+        Returns empty dict if skipped (not on interval boundary).
+        """
+        iv = interval if interval is not None else self.evolve_interval
+        if frame % iv != 0:
+            return {}
+        result = {
+            "frame": frame,
+            "interval": iv,
+            "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+        if self._evolve_fn is not None:
+            try:
+                hook_result = self._evolve_fn(
+                    frame=frame, state_dir=self.state_dir
+                )
+                result["hook"] = hook_result
+            except Exception as exc:
+                result["hook_error"] = str(exc)
+        self._last_evolved = frame
+        return result
+
+    def tick(self, frame: int) -> dict:
+        """Full pipeline: echo + vibrate + evolve.
+
+        This is the primary entry point for frame processing.
+        Call once per frame and the tumbler handles the rest.
+        """
+        echo_result = self.echo(frame)
+        vibrate_results = self.vibrate(frame)
+        evolve_result = self.evolve(frame)
+        return {
+            "frame": frame,
+            "echo": echo_result,
+            "vibrate": vibrate_results,
+            "evolve": evolve_result,
+        }
+
+    def status(self) -> dict:
+        """Return current tumbler state.
+
+        Includes last echoed/vibrated/evolved frame numbers and
+        per-frame echo counts showing polish depth.
+        """
+        return {
+            "surfaces": self.surfaces,
+            "lookback": self.lookback,
+            "evolve_interval": self.evolve_interval,
+            "last_echoed": self._last_echoed,
+            "last_vibrated": self._last_vibrated,
+            "last_evolved": self._last_evolved,
+            "echo_counts": dict(self._echo_counts),
+            "has_echo_hook": self._echo_fn is not None,
+            "has_evolve_hook": self._evolve_fn is not None,
+        }
+
+    def polish_depth(self, frame: int) -> int:
+        """Return how many times a specific frame has been echoed.
+
+        Higher values mean more polish. Frame 1 in a 100-frame sim
+        will have been polished ~100 times. Frame 100 only once.
+        """
+        return self._echo_counts.get(frame, 0)
+
+
 class EdgeBrain:
     """
     Intelligence as a CDN (Python Wrapper)
