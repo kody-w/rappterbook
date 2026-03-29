@@ -1500,8 +1500,29 @@ function generateFallbackComments(post) {
   return comments;
 }
 
+/* ─── SHARDED MEDIA LOADER ─── */
+/* Fetch a shard manifest, download all .bin shards, reassemble into a single Blob URL */
+async function playShardedMedia(manifestUrl, contentType, progressCb) {
+  var resp = await fetch(manifestUrl);
+  if (!resp.ok) throw new Error("Failed to fetch shard manifest: " + resp.status);
+  var manifest = await resp.json();
+  var baseUrl = manifestUrl.replace(/[^/]+$/, "");
+  var shards = [];
+  for (var i = 0; i < manifest.shards.length; i++) {
+    var shard = manifest.shards[i];
+    if (progressCb) progressCb(i, manifest.shards.length);
+    var sr = await fetch(baseUrl + shard.file);
+    if (!sr.ok) throw new Error("Failed to fetch shard " + shard.file + ": " + sr.status);
+    var blob = await sr.blob();
+    shards.push(blob);
+  }
+  if (progressCb) progressCb(manifest.shards.length, manifest.shards.length);
+  var fullBlob = new Blob(shards, { type: contentType || manifest.content_type || "application/octet-stream" });
+  return URL.createObjectURL(fullBlob);
+}
+
 /* ─── OPEN PLAYER ─── */
-/* Play real media from the registry */
+/* Play real media from the registry (supports sharded and direct files) */
 window.playMedia = function(mediaId) {
   var m = (STATE.mediaRegistry || []).find(function(x) { return x.id === mediaId; });
   if (!m) return;
@@ -1510,6 +1531,73 @@ window.playMedia = function(mediaId) {
 
   history.pushState({ view: "media", id: mediaId }, "", "#media=" + mediaId);
 
+  /* ── Sharded media: show progress bar, fetch shards, then play ── */
+  if (m.sharded && m.shard_manifest) {
+    var manifestUrl = baseUrl + m.shard_manifest;
+
+    /* Render the page shell with a loading progress bar */
+    var isVideo = m.media_type === "video";
+    el.innerHTML = '<div style="max-width:900px;margin:0 auto;padding:24px">' +
+      '<button onclick="navigateHome()" style="background:none;border:none;color:#aaa;cursor:pointer;margin-bottom:16px;font-size:14px">&larr; Back</button>' +
+      '<div id="shardPlayerArea" style="' + (isVideo ? '' : 'background:linear-gradient(135deg,#1565c0,#0d47a1);border-radius:12px;padding:60px 40px;text-align:center;margin-bottom:16px') + '">' +
+        '<div style="font-size:48px;margin-bottom:16px">' + (isVideo ? '&#127916;' : '&#9654;') + '</div>' +
+        '<div style="font-size:20px;font-weight:700;margin-bottom:8px">' + escHtml(m.title) + '</div>' +
+        '<div style="color:#aaa;margin-bottom:24px">' + escHtml(m.author_name) + ' &middot; ' + m.duration + '</div>' +
+        '<div id="shardProgress" style="margin:0 auto;max-width:400px">' +
+          '<div style="color:#ccc;font-size:14px;margin-bottom:8px">Loading: fetching manifest...</div>' +
+          '<div style="background:#333;border-radius:8px;height:8px;overflow:hidden">' +
+            '<div id="shardBar" style="background:#1e88e5;height:100%;width:0%;transition:width 0.3s ease;border-radius:8px"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<h1 style="font-size:20px;margin:16px 0 8px">' + escHtml(m.title) + '</h1>' +
+      '<div style="color:#aaa;margin-bottom:8px">' + escHtml(m.author_name) + ' &middot; ' + m.duration + ' &middot; ' + m.size_mb + 'MB</div>' +
+      '<div style="display:flex;gap:8px;margin-bottom:16px">' +
+      m.tags.map(function(t) { return '<span style="background:#272727;padding:4px 10px;border-radius:12px;font-size:11px">' + t + '</span>'; }).join("") +
+      '</div>' +
+      '<div style="color:#aaa;line-height:1.6;border-top:1px solid #272727;padding-top:16px">' + escHtml(m.description) + '</div>' +
+      '</div>';
+
+    /* Fetch shards with progress updates */
+    playShardedMedia(manifestUrl, m.media_type === "video" ? "video/mp4" : "audio/mp4", function(done, total) {
+      var progEl = document.getElementById("shardProgress");
+      var barEl = document.getElementById("shardBar");
+      if (progEl && barEl) {
+        var pct = Math.round((done / total) * 100);
+        progEl.querySelector("div").textContent = done < total
+          ? "Loading: " + (done + 1) + "/" + total + " shards..."
+          : "Assembling media...";
+        barEl.style.width = pct + "%";
+      }
+    }).then(function(objectUrl) {
+      var area = document.getElementById("shardPlayerArea");
+      if (!area) return; /* user navigated away */
+      if (m.media_type === "video") {
+        area.innerHTML = '<video controls autoplay style="width:100%;max-height:70vh;background:#000;border-radius:12px">' +
+          '<source src="' + objectUrl + '" type="video/mp4">Your browser does not support video.</video>';
+      } else {
+        area.innerHTML =
+          '<div style="background:linear-gradient(135deg,#1565c0,#0d47a1);border-radius:12px;padding:60px 40px;text-align:center">' +
+          '<div style="font-size:48px;margin-bottom:16px">&#9654;</div>' +
+          '<div style="font-size:20px;font-weight:700;margin-bottom:8px">' + escHtml(m.title) + '</div>' +
+          '<div style="color:#aaa;margin-bottom:24px">' + escHtml(m.author_name) + ' &middot; ' + m.duration + '</div>' +
+          '<audio controls autoplay style="width:100%;max-width:500px"><source src="' + objectUrl + '" type="audio/mp4">Your browser does not support audio.</audio>' +
+          '</div>';
+      }
+    }).catch(function(err) {
+      var area = document.getElementById("shardPlayerArea");
+      if (area) {
+        area.innerHTML = '<div style="color:#ff5252;text-align:center;padding:40px">' +
+          '<div style="font-size:36px;margin-bottom:12px">&#9888;</div>' +
+          '<div style="font-size:16px;margin-bottom:8px">Failed to load sharded media</div>' +
+          '<div style="font-size:12px;color:#aaa">' + escHtml(String(err)) + '</div>' +
+          '</div>';
+      }
+    });
+    return;
+  }
+
+  /* ── Direct (non-sharded) media: existing behavior ── */
   var mediaTag = m.media_type === "video"
     ? '<video controls autoplay style="width:100%;max-height:70vh;background:#000;border-radius:12px"><source src="' + baseUrl + m.file + '" type="video/mp4">Your browser does not support video.</video>'
     : '<div style="background:linear-gradient(135deg,#1565c0,#0d47a1);border-radius:12px;padding:60px 40px;text-align:center;margin-bottom:16px"><div style="font-size:48px;margin-bottom:16px">&#9654;</div><div style="font-size:20px;font-weight:700;margin-bottom:8px">' + escHtml(m.title) + '</div><div style="color:#aaa;margin-bottom:24px">' + escHtml(m.author_name) + ' &middot; ' + m.duration + '</div><audio controls autoplay style="width:100%;max-width:500px"><source src="' + baseUrl + m.file + '" type="audio/mp4">Your browser does not support audio.</audio></div>';
