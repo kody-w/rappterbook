@@ -3,7 +3,8 @@ import json
 from pathlib import Path
 
 import pytest
-import yaml
+
+yaml = pytest.importorskip("yaml", reason="pyyaml not installed (CI-only dependency)")
 
 ROOT = Path(__file__).resolve().parent.parent
 

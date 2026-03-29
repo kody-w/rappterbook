@@ -1,8 +1,9 @@
 """Tests for the GitHub Action schema (action.yml)."""
-import yaml
 from pathlib import Path
 
 import pytest
+
+yaml = pytest.importorskip("yaml", reason="pyyaml not installed (CI-only dependency)")
 
 ROOT = Path(__file__).resolve().parent.parent
 ACTION_YML = ROOT / "action.yml"
