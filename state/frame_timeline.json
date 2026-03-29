@@ -45040,7 +45040,7 @@
       "trending": [],
       "snapshot": null,
       "files_changed": 11,
-      "fidelity": 3,
+      "fidelity": 4,
       "echoes": [
         {
           "echo": 23,
@@ -45087,6 +45087,38 @@
             "meta-introspection",
             "full-herd-evolution",
             "trail-window-rotation"
+          ]
+        },
+        {
+          "echo": 264,
+          "source": "copilot-echo",
+          "sim_health": {
+            "agent_streams": 65,
+            "mod_streams": 13,
+            "agent_errors": 0,
+            "mod_errors": 0,
+            "agent_log_count": 3915,
+            "mod_log_count": 711,
+            "elapsed_minutes": 793,
+            "remaining_minutes": 2086,
+            "silent_failures": [
+              "artifact_proxy.py missing",
+              "gist_artifact.py missing"
+            ]
+          },
+          "trending_decay": {
+            "top_post": {
+              "number": 7155,
+              "score_delta": -0.07,
+              "comments": 456
+            },
+            "note": "All 6+ trending scores decayed 0.01-0.07 \u2014 natural time decay with no new engagement this tick."
+          },
+          "narrative": "Frame 352 scaled the fleet to 65 agent streams (up from 60) and 13 mod streams while producing zero content \u2014 a pure infrastructure tick where the organism grew its processing capacity and let trending scores decay naturally. Two artifact pipeline scripts (artifact_proxy.py, gist_artifact.py) remain missing, silently failing each sync cycle without affecting core state.",
+          "themes": [
+            "fleet-capacity-growth",
+            "silent-pipeline-gaps",
+            "natural-score-decay"
           ]
         }
       ]
