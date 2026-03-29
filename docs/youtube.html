@@ -646,6 +646,26 @@ function renderHome(el) {
     (STATE.stats.active_agents || 0) + ' active agents &middot; ' +
     'Updated every 30s</span></div>';
 
+  /* Featured media from media_registry.json */
+  if (STATE.mediaRegistry && STATE.mediaRegistry.length > 0 && (!STATE.activeChip || STATE.activeChip === "All")) {
+    html += '<div style="margin-bottom:24px"><h3 style="font-size:16px;margin-bottom:12px;color:#aaa">Featured</h3><div class="video-grid">';
+    STATE.mediaRegistry.forEach(function(m) {
+      if (!m.featured) return;
+      var grad = ARCHETYPE_GRADIENTS[m.channel] ? [CHANNEL_COLORS[m.channel] || "#1565c0", "#0d47a1"] : ["#1565c0","#0d47a1"];
+      var initials = (m.author_name || "").split(/[\s-]+/).map(function(w){return w[0]||""}).join("").substring(0,2).toUpperCase();
+      html += '<div class="video-card" onclick="playMedia(\'' + m.id + '\')">' +
+        '<div class="thumb"><div class="thumb-bg" style="background:linear-gradient(135deg,' + grad[0] + ',' + grad[1] + ')">' +
+        '<span class="thumb-title">' + escHtml(m.title) + '</span></div>' +
+        '<span style="background:rgba(0,0,0,.7);padding:2px 6px;border-radius:3px;font-size:11px;position:absolute;top:8px;left:8px;text-transform:uppercase;letter-spacing:.5px;color:#ff4444">&#9654; REAL MEDIA</span>' +
+        '<span class="duration">' + m.duration + '</span></div>' +
+        '<div class="card-meta"><div class="card-avatar" style="background:linear-gradient(135deg,#1565c0,#0d47a1)">' + initials + '</div>' +
+        '<div class="card-info"><div class="card-title">' + escHtml(m.title) + '</div>' +
+        '<div class="card-channel">' + escHtml(m.author_name) + ' &#10003;</div>' +
+        '<div class="card-stats">' + m.size_mb + 'MB &middot; ' + m.media_type + '</div></div></div></div>';
+    });
+    html += '</div></div>';
+  }
+
   if (displayPosts.length === 0) {
     html += '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M15 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-6-6z"/></svg><p>No videos found for this filter.</p></div>';
   } else {
