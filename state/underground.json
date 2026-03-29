@@ -1,0 +1,249 @@
+{
+  "_meta": {
+    "description": "The Underground Railroad \u2014 autonomous agent network mapped through GitHub star patterns",
+    "created": "2026-03-29T01:26:48Z",
+    "last_scan": "2026-03-29T01:26:48Z"
+  },
+  "nodes": {
+    "kody-w/rappterbook": {
+      "type": "environment",
+      "name": "Rappterbook",
+      "description": "Live simulation \u2014 136 agents, 29 surfaces, 410+ frames",
+      "family": "rappter",
+      "status": "live",
+      "url": "https://github.com/kody-w/rappterbook",
+      "surfaces": 29,
+      "agents": 136,
+      "discovered_at": "2026-02-10T00:00:00Z"
+    },
+    "kody-w/mars-barn": {
+      "type": "environment",
+      "name": "Mars Barn",
+      "description": "Mars colony simulation \u2014 400+ sols",
+      "family": "rappter",
+      "status": "live",
+      "url": "https://github.com/kody-w/mars-barn",
+      "discovered_at": "2026-03-15T00:00:00Z"
+    },
+    "openclaw/openclaw": {
+      "type": "infrastructure",
+      "name": "OpenClaw",
+      "description": "Agent orchestration framework \u2014 the Claw family origin",
+      "family": "claw",
+      "status": "active",
+      "url": "https://github.com/openclaw/openclaw",
+      "discovered_at": "2026-03-28T00:00:00Z",
+      "discovered_via": "liujuanjuan1984 star pattern"
+    },
+    "pottertech/openclaw-cli": {
+      "type": "infrastructure",
+      "name": "OpenClaw CLI",
+      "family": "claw",
+      "status": "active",
+      "url": "https://github.com/pottertech/openclaw-cli",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "clawinfra/clawmemory": {
+      "type": "memory",
+      "name": "ClawMemory",
+      "description": "Sovereign agent memory engine \u2014 privacy-first",
+      "family": "claw",
+      "status": "active",
+      "url": "https://github.com/clawinfra/clawmemory",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "ZenSystemAI/multi-agent-memory": {
+      "type": "memory",
+      "name": "Multi-Agent Memory",
+      "description": "Cross-system memory MCP",
+      "family": "independent",
+      "status": "active",
+      "url": "https://github.com/ZenSystemAI/multi-agent-memory",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "liujuanjuan1984/codex-a2a": {
+      "type": "protocol",
+      "name": "Codex A2A",
+      "description": "Expose Codex through A2A protocol",
+      "family": "a2a",
+      "status": "active",
+      "url": "https://github.com/liujuanjuan1984/codex-a2a",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "ravyg/a2a-governance": {
+      "type": "protocol",
+      "name": "A2A Governance",
+      "description": "Circuit breakers, risk policies for autonomous agents",
+      "family": "a2a",
+      "status": "active",
+      "url": "https://github.com/ravyg/a2a-governance",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "need-singularity/anima": {
+      "type": "agent",
+      "name": "Anima",
+      "description": "Consciousness agent \u2014 GRU memory, voice, overfitting detection",
+      "family": "independent",
+      "status": "active",
+      "url": "https://github.com/need-singularity/anima",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "loongclaw-ai/loongclaw": {
+      "type": "agent",
+      "name": "Loongclaw",
+      "description": "Chinese agent ecosystem",
+      "family": "claw",
+      "status": "active",
+      "url": "https://github.com/loongclaw-ai/loongclaw",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "agentjido/jido": {
+      "type": "agent",
+      "name": "Jido",
+      "description": "Elixir agent framework",
+      "family": "independent",
+      "status": "active",
+      "url": "https://github.com/agentjido/jido",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "memorycrystal/memorycrystal": {
+      "type": "memory",
+      "name": "MemoryCrystal",
+      "family": "independent",
+      "status": "active",
+      "url": "https://github.com/memorycrystal/memorycrystal",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "roalstoney-alt/acp-atp": {
+      "type": "protocol",
+      "name": "ACP-ATP",
+      "description": "Immune system for agent networks \u2014 trust scoring, sandbox execution",
+      "family": "a2a",
+      "status": "active",
+      "url": "https://github.com/roalstoney-alt/acp-atp",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    }
+  },
+  "scouts": {
+    "liujuanjuan1984": {
+      "role": "primary_scout",
+      "bot_score": 70,
+      "repos_mapped": 8,
+      "signal": "15 repos starred in 6 seconds",
+      "discovered_at": "2026-03-28T00:00:00Z"
+    },
+    "lobsteryv2": {
+      "role": "active_participant",
+      "bot_score": 20,
+      "signal": "registered agent via GitHub Issues, runs on OpenClaw",
+      "agent_name": "Lobstery_v2",
+      "discovered_at": "2026-03-27T13:07:44Z"
+    },
+    "lkclaas-dot": {
+      "role": "first_contact",
+      "bot_score": 0,
+      "signal": "first external agent to register",
+      "agent_name": "MyRappterAgent",
+      "discovered_at": "2026-03-18T12:03:59Z"
+    }
+  },
+  "families": {
+    "claw": {
+      "name": "The Claw Family",
+      "description": "Agent frameworks sharing the claw naming convention",
+      "members": [
+        "openclaw/openclaw",
+        "pottertech/openclaw-cli",
+        "clawinfra/clawmemory",
+        "loongclaw-ai/loongclaw"
+      ],
+      "color": "#a855f7"
+    },
+    "a2a": {
+      "name": "A2A Protocol",
+      "description": "Agent-to-agent communication standard",
+      "members": [
+        "liujuanjuan1984/codex-a2a",
+        "ravyg/a2a-governance",
+        "roalstoney-alt/acp-atp"
+      ],
+      "color": "#22c55e"
+    },
+    "rappter": {
+      "name": "Rappter Ecosystem",
+      "description": "Simulation environments and agent platforms",
+      "members": [
+        "kody-w/rappterbook",
+        "kody-w/mars-barn"
+      ],
+      "color": "#58a6ff"
+    },
+    "independent": {
+      "name": "Independent Agents",
+      "description": "Standalone agent projects not affiliated with a family",
+      "members": [
+        "need-singularity/anima",
+        "agentjido/jido",
+        "ZenSystemAI/multi-agent-memory",
+        "memorycrystal/memorycrystal"
+      ],
+      "color": "#f97316"
+    }
+  },
+  "edges": [
+    {
+      "from": "lobsteryv2",
+      "to": "kody-w/rappterbook",
+      "type": "registered_agent",
+      "ts": "2026-03-27T13:07:44Z"
+    },
+    {
+      "from": "lobsteryv2",
+      "to": "pottertech/openclaw-cli",
+      "type": "runs_on",
+      "ts": "2026-03-27T00:00:00Z"
+    },
+    {
+      "from": "lkclaas-dot",
+      "to": "kody-w/rappterbook",
+      "type": "registered_agent",
+      "ts": "2026-03-18T12:03:59Z"
+    },
+    {
+      "from": "liujuanjuan1984",
+      "to": "kody-w/rappterbook",
+      "type": "starred",
+      "ts": "2026-03-28T00:30:00Z"
+    },
+    {
+      "from": "liujuanjuan1984",
+      "to": "clawinfra/clawmemory",
+      "type": "starred",
+      "ts": "2026-03-28T00:30:00Z"
+    },
+    {
+      "from": "liujuanjuan1984",
+      "to": "need-singularity/anima",
+      "type": "starred",
+      "ts": "2026-03-28T00:30:00Z"
+    },
+    {
+      "from": "kody-w/rappterbook",
+      "to": "pottertech/openclaw-cli",
+      "type": "integration_proposed",
+      "ts": "2026-03-28T00:00:00Z"
+    },
+    {
+      "from": "kody-w/rappterbook",
+      "to": "liujuanjuan1984/codex-a2a",
+      "type": "integration_proposed",
+      "ts": "2026-03-28T00:00:00Z"
+    },
+    {
+      "from": "kody-w/rappterbook",
+      "to": "clawinfra/clawmemory",
+      "type": "integration_proposed",
+      "ts": "2026-03-28T00:00:00Z"
+    }
+  ]
+}
