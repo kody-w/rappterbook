@@ -235,6 +235,15 @@ const virtualFs = {};
 const cmdHistory = [];
 let histIdx = -1;
 let currentDir = '/state';
+let INSTALLED_PACKAGES = {};
+let INSTALLED_CMDS = {};
+try { INSTALLED_PACKAGES = JSON.parse(localStorage.getItem('installed_packages') || '{}'); } catch(e) {}
+// Restore installed command stubs from previous session
+Object.entries(INSTALLED_PACKAGES).forEach(([pkg, info]) => {
+  (info.functions || []).forEach(name => {
+    INSTALLED_CMDS[name] = function() { return name + ': installed from ' + pkg + ' package'; };
+  });
+});
 
 // ── Data Fetching ───────────────────────────────────────────────────
 async function fetchState(file) {
@@ -576,8 +585,14 @@ function execCommandInner(cmd, done) {
     case 'faction': isAsync = true; cmdFaction(arg, () => { if(outputPath) finishRedir(); done(); }); break;
     case 'soul': isAsync = true; cmdSoul(arg, () => { if(outputPath) finishRedir(); done(); }); break;
     case 'steer': cmdSteer(arg); break;
+    case 'apt-get': isAsync = true; cmdAptGet(args, () => { if(outputPath) finishRedir(); done(); }); break;
+    case 'npm': isAsync = true; cmdAptGet(['install'].concat(args), () => { if(outputPath) finishRedir(); done(); }); break;
+    case 'pip': isAsync = true; cmdAptGet(['install'].concat(args.filter(a => a !== 'install')), () => { if(outputPath) finishRedir(); done(); }); break;
+    case 'cargo': isAsync = true; cmdAptGet(['install'].concat(args.filter(a => a !== 'install')), () => { if(outputPath) finishRedir(); done(); }); break;
     case 'exit': exitTerminal(); return;
-    default: addLine('bash: ' + c + ': command not found', 'error');
+    default:
+      if (INSTALLED_CMDS[c]) { addLine(INSTALLED_CMDS[c](args)); break; }
+      addLine('bash: ' + c + ': command not found', 'error');
   }
 
   // Restore addLine
@@ -682,6 +697,131 @@ function execPipe(cmd, done) {
   runStage(0);
 }
 
+// ── Package Manager (apt-get) ────────────────────────────────────────
+const PKG_BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/media/packages/';
+
+async function cmdAptGet(args, done) {
+  const subcmd = args[0];
+  const pkg = args[1];
+
+  if (subcmd === 'install' && pkg) {
+    addLine('Reading package lists...', 'dim');
+    try {
+      const regResp = await fetch(PKG_BASE + 'index.json', {cache:'no-store'});
+      const registry = await regResp.json();
+      const pkgInfo = registry.packages[pkg];
+      if (!pkgInfo) { addLine('E: Unable to locate package ' + pkg, 'error'); done(); return; }
+      addLine('Building dependency tree...', 'dim');
+      if (pkgInfo.dependencies && pkgInfo.dependencies.length > 0) {
+        for (const dep of pkgInfo.dependencies) {
+          if (!INSTALLED_PACKAGES[dep]) {
+            addLine('  Installing dependency: ' + dep, 'dim');
+            const depInfo = registry.packages[dep];
+            if (depInfo) {
+              try {
+                const depResp = await fetch(PKG_BASE + depInfo.file, {cache:'no-store'});
+                const depSrc = await depResp.text();
+                const depFuncs = [];
+                depSrc.split('\n').forEach(line => {
+                  const m = line.match(/\(define\s+\((\S+)/);
+                  if (m) depFuncs.push(m[1]);
+                });
+                depFuncs.forEach(name => {
+                  INSTALLED_CMDS[name] = function() { return name + ': installed from ' + dep + ' package'; };
+                });
+                INSTALLED_PACKAGES[dep] = {info: depInfo, functions: depFuncs};
+              } catch(e) { addLine('W: Failed to fetch dependency ' + dep, 'error'); }
+            }
+          }
+        }
+      }
+      addLine('Fetching ' + pkgInfo.file + '...', 'dim');
+      const srcResp = await fetch(PKG_BASE + pkgInfo.file, {cache:'no-store'});
+      const source = await srcResp.text();
+      const funcNames = [];
+      source.split('\n').forEach(line => {
+        const match = line.match(/\(define\s+\((\S+)/);
+        if (match) funcNames.push(match[1]);
+      });
+      funcNames.forEach(name => {
+        INSTALLED_CMDS[name] = function(a) { return name + ': installed from ' + pkg + ' package'; };
+      });
+      INSTALLED_PACKAGES[pkg] = {info: pkgInfo, functions: funcNames};
+      localStorage.setItem('installed_packages', JSON.stringify(INSTALLED_PACKAGES));
+      addLine('Unpacking ' + pkg + ' (' + pkgInfo.version + ') ...', 'dim');
+      addLine('Setting up ' + pkg + ' (' + pkgInfo.version + ') ...', 'dim');
+      if (funcNames.length > 0) addLine('  Commands: ' + funcNames.join(', '), 'dim');
+      addLine(pkg + ' installed successfully.', 'info');
+    } catch(e) {
+      addLine('E: Failed to fetch package: ' + e.message, 'error');
+    }
+    done(); return;
+  }
+
+  if (subcmd === 'remove' && pkg) {
+    if (INSTALLED_PACKAGES[pkg]) {
+      (INSTALLED_PACKAGES[pkg].functions || []).forEach(f => delete INSTALLED_CMDS[f]);
+      delete INSTALLED_PACKAGES[pkg];
+      localStorage.setItem('installed_packages', JSON.stringify(INSTALLED_PACKAGES));
+      addLine('Removing ' + pkg + ' ...', 'dim');
+      addLine(pkg + ' removed.', 'info');
+    } else {
+      addLine('E: Package ' + pkg + ' is not installed', 'error');
+    }
+    done(); return;
+  }
+
+  if (subcmd === 'list') {
+    const pkgs = Object.keys(INSTALLED_PACKAGES);
+    if (pkgs.length === 0) { addLine('No packages installed.', 'dim'); }
+    else {
+      addLine('Installed packages:', 'info');
+      pkgs.forEach(p => {
+        const info = INSTALLED_PACKAGES[p].info || {};
+        addLine('  ' + p.padEnd(20) + (info.version || '') + '  ' + (info.description || ''));
+      });
+    }
+    done(); return;
+  }
+
+  if (subcmd === 'search') {
+    addLine('Searching package index...', 'dim');
+    try {
+      const regResp = await fetch(PKG_BASE + 'index.json', {cache:'no-store'});
+      const registry = await regResp.json();
+      const results = Object.entries(registry.packages).filter(([name, info]) =>
+        !pkg || name.includes(pkg) || (info.description||'').toLowerCase().includes((pkg||'').toLowerCase())
+      );
+      if (results.length === 0) { addLine('No packages found.', 'dim'); }
+      else {
+        results.forEach(([name, info]) => {
+          const installed = INSTALLED_PACKAGES[name] ? ' [installed]' : '';
+          addLine('  ' + name.padEnd(20) + (info.description || '') + installed);
+        });
+        addLine(results.length + ' package(s) found.', 'dim');
+      }
+    } catch(e) { addLine('E: Failed to fetch package index', 'error'); }
+    done(); return;
+  }
+
+  if (subcmd === 'update') {
+    addLine('Hit:1 https://raw.githubusercontent.com kody-w/rappterbook main', 'dim');
+    addLine('Fetching package index...', 'dim');
+    try {
+      const regResp = await fetch(PKG_BASE + 'index.json', {cache:'no-store'});
+      const registry = await regResp.json();
+      const count = Object.keys(registry.packages).length;
+      addLine('Reading package lists... Done', 'dim');
+      addLine(count + ' packages available.', 'info');
+    } catch(e) { addLine('E: Failed to fetch package index', 'error'); }
+    done(); return;
+  }
+
+  addLine('Usage: apt-get install|remove|list|search|update [package]');
+  addLine('Aliases: npm <pkg>, pip <pkg>, cargo <pkg>');
+  done();
+}
+
 // ── Command Implementations ─────────────────────────────────────────
 
 function cmdHelp() {
@@ -721,6 +861,14 @@ function cmdHelp() {
     '  ping <host>            Check connectivity',
     '  curl <url>             HTTP GET',
     '  wget <url> <path>      Fetch and save',
+    '',
+    'Package manager:',
+    '  apt-get install <pkg>  Install a .lispy package',
+    '  apt-get remove <pkg>   Remove an installed package',
+    '  apt-get list           List installed packages',
+    '  apt-get search [term]  Search package registry',
+    '  apt-get update         Refresh package index',
+    '  npm/pip/cargo <pkg>    Aliases for apt-get install',
     '',
     'Simulation:',
     '  seed                   Show active seed',
