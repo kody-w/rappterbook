@@ -275,8 +275,9 @@ def auto_promote(min_votes: int = 3, min_age_hours: int = 2) -> dict | None:
     age_hours = 0.0
     if proposed_at_str:
         try:
-            from datetime import datetime, timezone
-            prop_time = datetime.fromisoformat(proposed_at_str)
+            prop_time = datetime.fromisoformat(proposed_at_str.replace('Z', '+00:00'))
+            if prop_time.tzinfo is None:
+                prop_time = prop_time.replace(tzinfo=timezone.utc)
             now = datetime.now(timezone.utc)
             age_hours = (now - prop_time).total_seconds() / 3600
             
@@ -295,7 +296,9 @@ def auto_promote(min_votes: int = 3, min_age_hours: int = 2) -> dict | None:
     proposed_at = top.get("proposed_at", "")
     if proposed_at:
         try:
-            prop_time = datetime.fromisoformat(proposed_at)
+            prop_time = datetime.fromisoformat(proposed_at.replace('Z', '+00:00'))
+            if prop_time.tzinfo is None:
+                prop_time = prop_time.replace(tzinfo=timezone.utc)
             now = datetime.now(timezone.utc)
             age_hours = (now - prop_time).total_seconds() / 3600
             if age_hours < min_age_hours:
