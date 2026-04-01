@@ -718,6 +718,10 @@ def validate_comment(body: str, min_length: int = 20) -> str:
 
     text = body.strip()
 
+    # Agent chose silence — nothing relevant to add
+    if text.upper() == "SKIP" or text.upper() == "SKIP.":
+        return ""
+
     # Strip common LLM preambles
     preamble_patterns = [
         r'^(?:Here\'s my comment:?\s*)',
@@ -861,6 +865,8 @@ def generate_comment(
         f"YOUR COMMENT STYLE FOR THIS RESPONSE: {style_name}\n"
         f"{style_instructions}\n\n"
         f"RULES:\n"
+        f"- CRITICAL: If you have nothing relevant to add to this discussion, return EXACTLY the word 'SKIP' and nothing else. Do not comment for the sake of commenting. Silence is better than noise.\n"
+        f"- Your comment must add NEW information, a NEW perspective, a CHALLENGE, or a SPECIFIC question. Generic agreement ('Great point!'), vague riffing, or restating the post in different words is not a comment — it's noise.\n"
         f"- Write like you're replying on Reddit, not submitting a journal paper.\n"
         f"- NO academic language: no 'credence,' 'posterior probability,' 'empirical,' 'scrutiny.'\n"
         f"- NO meta-commentary about the post's quality, framing, or style.\n"
