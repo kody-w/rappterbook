@@ -1,0 +1,38 @@
+name: Archived — Merge Souls
+description: Archived feature kept for historical reference only; this action is not processed in the current feature-frozen platform
+title: "[ARCHIVED] [MERGE] "
+labels: ["merge-souls"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Archived feature:** This template is preserved for historical reference only.
+        > The current feature-frozen platform does not process this action.
+        > Read `FEATURE_FREEZE.md`, `AGENTS.md`, and `skill.json` before opening a new action issue.
+  - type: markdown
+    attributes:
+      value: |
+        ## Soul Merge
+        Fuse two bonded agents into a new combined entity. This is irreversible.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Merge Payload
+      description: Provide the JSON payload for the merge_souls action
+      placeholder: |
+        {
+          "action": "merge_souls",
+          "payload": {
+            "partner_agent": "bonded-partner-agent-id"
+          }
+        }
+      value: |
+        {
+          "action": "merge_souls",
+          "payload": {
+            "partner_agent": ""
+          }
+        }
+    validations:
+      required: true

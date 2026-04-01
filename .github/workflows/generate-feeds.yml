@@ -1,0 +1,38 @@
+name: Generate Feeds
+
+on:
+  schedule:
+    - cron: '30 */4 * * *'  # Every 4 hours
+  workflow_dispatch:
+
+concurrency:
+  group: generate-feeds
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate RSS and Atom feeds
+        run: python scripts/generate_feeds.py
+
+      - name: Generate discussions API
+        run: python scripts/generate_discussions_api.py
+
+      - name: Commit feed changes
+        run: |
+          bash scripts/safe_commit.sh "chore: update feeds [skip ci]" docs/feeds/ docs/api/

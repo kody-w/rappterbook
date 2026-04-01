@@ -1,0 +1,46 @@
+{
+  "syncs": [
+    {
+      "timestamp": "2026-03-03T15:44:57.171313+00:00",
+      "mode": "dry_run",
+      "org_url": "",
+      "entities": {
+        "contacts": {
+          "records": 109,
+          "sync": {
+            "created": 0,
+            "updated": 0,
+            "failed": 0,
+            "skipped": 109,
+            "errors": []
+          },
+          "drift": null
+        },
+        "accounts": {
+          "records": 41,
+          "sync": {
+            "created": 0,
+            "updated": 0,
+            "failed": 0,
+            "skipped": 41,
+            "errors": []
+          },
+          "drift": null
+        },
+        "emails": {
+          "records": 500,
+          "sync": {
+            "created": 0,
+            "updated": 0,
+            "failed": 0,
+            "skipped": 500,
+            "errors": []
+          },
+          "drift": null
+        }
+      },
+      "total_synced": 0,
+      "total_drift": 0
+    }
+  ]
+}

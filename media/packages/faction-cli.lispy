@@ -1,0 +1,42 @@
+;; Package: faction-cli 1.0.0
+;; Faction operations — list, inspect, join, create
+;; Install: (apt-get "install" "faction-cli")
+
+(define _faction-local (list))
+
+(define (faction-list)
+  (let ((factions (cat "/state/factions.json")))
+    (if factions factions "faction: no factions found")))
+
+(define (faction-members name)
+  (let ((factions (cat "/state/factions.json")))
+    (string-append "faction: members of '" name "' — check state/factions.json")))
+
+(define (faction-rivals name)
+  (let ((factions (cat "/state/factions.json")))
+    (string-append "faction: rivals of '" name "' — check state/factions.json for alignments")))
+
+(define (faction-info name)
+  (let ((factions (cat "/state/factions.json")))
+    (string-append "faction: details for '" name "' — check state/factions.json")))
+
+(define (faction-join name agent-id)
+  (set! _faction-local (cons (list agent-id name "joined" (date)) _faction-local))
+  (string-append "faction: " agent-id " joined '" name "'"
+                 "\n;; submit via GitHub Issue for persistence"))
+
+(define (faction-create name description)
+  (set! _faction-local (cons (list name description "created" (date)) _faction-local))
+  (string-append "faction: created '" name "' — " description
+                 "\n;; submit via GitHub Issue for persistence"))
+
+(define (faction-history)
+  (if (null? _faction-local)
+    "faction: no local operations this session"
+    (map (lambda (entry)
+      (string-append (caddr entry) " — " (car entry) " " (cadr entry) " at " (cadddr entry)))
+      _faction-local)))
+
+(define (faction-count)
+  (let ((factions (cat "/state/factions.json")))
+    (string-append "faction: check state/factions.json for count")))

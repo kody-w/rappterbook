@@ -1,0 +1,127 @@
+;; Package: git 1.0.0
+;; Version control for virtual FS — git-init, git-add, git-commit, git-log, git-diff, git-branch, git-checkout
+;; Install: (apt-get "install" "git")
+;; Dependencies: coreutils
+
+(define _git-repos (list))
+
+(define (_git-get-repo)
+  (if (null? _git-repos)
+    #f
+    (car _git-repos)))
+
+(define (git-init)
+  (let ((repo (list
+    (cons "branch" "main")
+    (cons "branches" (list "main"))
+    (cons "staged" (list))
+    (cons "commits" (list))
+    (cons "working" (list))
+    (cons "created" (date)))))
+    (set! _git-repos (cons repo _git-repos))
+    "Initialized empty git repository in .git/"))
+
+(define (git-add path)
+  (let ((repo (_git-get-repo)))
+    (if repo
+      (let ((staged (cdr (assoc "staged" repo)))
+            (entry (assoc path _vfs)))
+        (if entry
+          (begin
+            (set-cdr! (assoc "staged" repo) (cons path staged))
+            (string-append "git: staged " path))
+          (string-append "git: " path ": not found in virtual FS")))
+      "fatal: not a git repository (run git-init first)")))
+
+(define (git-commit message)
+  (let ((repo (_git-get-repo)))
+    (if repo
+      (let ((staged (cdr (assoc "staged" repo)))
+            (branch (cdr (assoc "branch" repo)))
+            (commits (cdr (assoc "commits" repo))))
+        (if (null? staged)
+          "nothing to commit, working tree clean"
+          (let ((commit (list
+              (cons "hash" (string-append (substring (date) 0 8) (number->string (length commits))))
+              (cons "message" message)
+              (cons "branch" branch)
+              (cons "files" staged)
+              (cons "timestamp" (date)))))
+            (set-cdr! (assoc "commits" repo) (cons commit commits))
+            (set-cdr! (assoc "staged" repo) (list))
+            (string-append "[" branch " " (cdr (assoc "hash" commit)) "] " message "\n"
+                           " " (number->string (length staged)) " file(s) changed"))))
+      "fatal: not a git repository (run git-init first)")))
+
+(define (git-log . count)
+  (let ((repo (_git-get-repo)))
+    (if repo
+      (let ((commits (cdr (assoc "commits" repo)))
+            (n (if (null? count) 10 (car count))))
+        (if (null? commits)
+          "git: no commits yet"
+          (apply string-append
+            (map (lambda (c)
+              (string-append "commit " (cdr (assoc "hash" c)) "\n"
+                             "  branch: " (cdr (assoc "branch" c)) "\n"
+                             "  date: " (cdr (assoc "timestamp" c)) "\n"
+                             "  " (cdr (assoc "message" c)) "\n\n"))
+              (take commits (min n (length commits)))))))
+      "fatal: not a git repository")))
+
+(define (git-diff)
+  (let ((repo (_git-get-repo)))
+    (if repo
+      (let ((staged (cdr (assoc "staged" repo))))
+        (if (null? staged)
+          "git: no staged changes"
+          (apply string-append
+            (map (lambda (path)
+              (let ((entry (assoc path _vfs)))
+                (string-append "diff --git a/" path " b/" path "\n"
+                               "+++ " (if entry (cdr (assoc "content" (cdr entry))) "(new file)") "\n")))
+              staged))))
+      "fatal: not a git repository")))
+
+(define (git-branch . name)
+  (let ((repo (_git-get-repo)))
+    (if repo
+      (if (null? name)
+        ;; list branches
+        (let ((current (cdr (assoc "branch" repo)))
+              (branches (cdr (assoc "branches" repo))))
+          (map (lambda (b)
+            (if (equal? b current) (string-append "* " b) (string-append "  " b)))
+            branches))
+        ;; create branch
+        (let ((branches (cdr (assoc "branches" repo))))
+          (if (member (car name) branches)
+            (string-append "fatal: branch '" (car name) "' already exists")
+            (begin
+              (set-cdr! (assoc "branches" repo) (cons (car name) branches))
+              (string-append "git: created branch " (car name))))))
+      "fatal: not a git repository")))
+
+(define (git-checkout branch-name)
+  (let ((repo (_git-get-repo)))
+    (if repo
+      (let ((branches (cdr (assoc "branches" repo))))
+        (if (member branch-name branches)
+          (begin
+            (set-cdr! (assoc "branch" repo) branch-name)
+            (string-append "Switched to branch '" branch-name "'"))
+          (string-append "error: branch '" branch-name "' not found")))
+      "fatal: not a git repository")))
+
+(define (git-status)
+  (let ((repo (_git-get-repo)))
+    (if repo
+      (let ((branch (cdr (assoc "branch" repo)))
+            (staged (cdr (assoc "staged" repo))))
+        (string-append "On branch " branch "\n"
+                       (if (null? staged)
+                         "nothing to commit, working tree clean"
+                         (string-append "Changes to be committed:\n"
+                           (apply string-append
+                             (map (lambda (f) (string-append "  new file: " f "\n")) staged))))))
+      "fatal: not a git repository")))

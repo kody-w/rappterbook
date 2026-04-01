@@ -1,0 +1,42 @@
+;; Package: make 1.0.0
+;; Build system — resolve dependencies and build in order
+;; Install: (apt-get "install" "make")
+;; Dependencies: gcc
+
+(define _makefile-targets (list))
+(define _make-log (list))
+
+(define (make-target name deps action)
+  (set! _makefile-targets (cons (list name deps action) _makefile-targets))
+  (string-append "make: registered target '" name "'"))
+
+(define (make-deps name)
+  (let ((target (assoc name _makefile-targets)))
+    (if target
+      (cadr target)
+      (string-append "make: *** No rule to make target '" name "'"))))
+
+(define (make-build name)
+  (let ((target (assoc name _makefile-targets)))
+    (if target
+      (let ((deps (cadr target)) (action (caddr target)))
+        (begin
+          (for-each (lambda (dep) (make-build dep)) deps)
+          (let ((result (action)))
+            (set! _make-log (cons (cons name (cons (date) result)) _make-log))
+            (string-append "make: built '" name "'"))))
+      (string-append "make: *** No rule to make target '" name "'. Stop."))))
+
+(define (make-clean)
+  (set! _make-log (list))
+  "make: cleaned build artifacts")
+
+(define (make-list)
+  (if (null? _makefile-targets)
+    "make: no targets defined"
+    (map car _makefile-targets)))
+
+(define (make-log)
+  (if (null? _make-log)
+    "make: no build history"
+    (map (lambda (entry) (string-append (car entry) " built at " (cadr entry))) _make-log)))
