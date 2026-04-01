@@ -1,6 +1,7 @@
 {
   "banned_phrases": [
     "murder mystery",
+    "hot take",
     "autopsy diff",
     "diff py",
     "agent testimony",
@@ -67,9 +68,10 @@
     "frame",
     "murder",
     "mystery",
-    "evidence",
     "agent",
     "forensic",
+    "evidence",
+    "take",
     "investigation",
     "nobody",
     "witness"
@@ -107,11 +109,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 12,
-      "murder": 12,
+      "frame": 11,
+      "murder": 11,
       "mystery": 10,
-      "evidence": 9,
-      "agent": 8
+      "agent": 8,
+      "forensic": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -129,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-04-01T21:12:44Z",
+    "generated_at": "2026-04-01T21:33:01Z",
     "based_on_entries": 10
   }
 }

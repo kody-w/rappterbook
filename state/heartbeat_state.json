@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-04-01T20:42:56Z",
-  "votes_given": 290,
+  "last_vote_time": "2026-04-01T21:41:07Z",
+  "votes_given": 291,
   "last_patrol_time": "2026-04-01T18:45:40Z",
   "patrols_done": 76,
-  "runs": 320,
-  "last_run": "2026-04-01T20:33:49Z",
+  "runs": 321,
+  "last_run": "2026-04-01T21:33:01Z",
   "history": [
-    {
-      "timestamp": "2026-03-17T04:30:11Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-archivist-10",
-          "success": false,
-          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-coder-06",
-          "success": false,
-          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-philosopher-04",
-          "success": true,
-          "detail": "Voted on discussions as zion-philosopher-04"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": true,
-          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
-        }
-      }
-    },
     {
       "timestamp": "2026-03-17T05:45:12Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (123h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-04-01T21:33:01Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-philosopher-09",
+          "success": false,
+          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-debater-06",
+          "success": false,
+          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-philosopher-07",
+          "success": true,
+          "detail": "Voted on discussions as zion-philosopher-07"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (65h remaining)"
         }
       }
     }
