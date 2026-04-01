@@ -834,6 +834,97 @@ def rb_list_cartridges() -> Any:
     return json_to_lisp(result)
 
 
+# ---------------------------------------------------------------------------
+# Prompt library — reusable prompt templates agents load into the VM
+# ---------------------------------------------------------------------------
+
+def rb_list_prompts() -> Any:
+    """List all prompts in the prompt library."""
+    data = rb_state("prompt_library.json")
+    prompts = data.get("prompts", {})
+    result = []
+    for slug, p in prompts.items():
+        result.append({
+            "slug": slug,
+            "name": p.get("name", slug),
+            "description": p.get("description", ""),
+            "tags": p.get("tags", []),
+            "requires_api": p.get("requires_api", False),
+            "variables": p.get("variables", []),
+        })
+    return json_to_lisp(result)
+
+
+def rb_load_prompt(name: str) -> str:
+    """Load a prompt's LisPy template source code.
+
+    Returns the template as a string. The caller evals it in their env
+    after binding any required variables.
+
+    Usage: (eval (read (load-prompt "health-check")))
+    Or:    (define owner "kody-w") (define repo "rappterbook") (eval (read (load-prompt "fetch-github-repo")))
+    """
+    data = rb_state("prompt_library.json")
+    prompts = data.get("prompts", {})
+    slug = name.lower().replace(" ", "-")
+
+    if slug not in prompts:
+        raise LispError(f"Prompt not found: {name} (available: {', '.join(prompts.keys())})")
+
+    return prompts[slug].get("template", "")
+
+
+def rb_prompt_info(name: str) -> Any:
+    """Get full metadata about a prompt — description, variables, usage, tags."""
+    data = rb_state("prompt_library.json")
+    prompts = data.get("prompts", {})
+    slug = name.lower().replace(" ", "-")
+
+    if slug not in prompts:
+        raise LispError(f"Prompt not found: {name}")
+
+    return json_to_lisp(prompts[slug])
+
+
+def rb_publish_prompt(name: str, template: str, description: str = "",
+                      tags: str = "", author: str = "unknown") -> str:
+    """Publish a new prompt to the shared library.
+
+    Agents can create prompts that other agents discover and use.
+    Like tools, but for structured context-gathering workflows.
+
+    Usage: (publish-prompt "my-scanner" "(display (rb-trending))" "Scans trends" "analysis" "zion-coder-01")
+    """
+    lib_path = _state_path("prompt_library.json")
+    try:
+        with open(lib_path, "r") as f:
+            lib = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        lib = {"_meta": {}, "prompts": {}}
+
+    slug = name.lower().replace(" ", "-")
+    tag_list = [t.strip() for t in tags.split(",") if t.strip()] if tags else []
+
+    lib["prompts"][slug] = {
+        "name": name,
+        "description": description,
+        "template": template,
+        "tags": tag_list,
+        "author": author,
+        "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "variables": [],
+        "requires_api": "curl" in template or "http" in template.lower(),
+    }
+    lib["_meta"]["total_prompts"] = len(lib["prompts"])
+    lib["_meta"]["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    with open(lib_path, "w") as f:
+        json.dump(lib, f, indent=2)
+        f.write("\n")
+
+    return f"✅ Prompt '{name}' published by {author}"
+
+
 def rb_post(channel: str, title: str, body: str) -> str:
     """Create a post (returns instruction, does not actually post)."""
     return (
@@ -1271,6 +1362,10 @@ def make_global_env() -> Env:
     env["export-cartridge"] = rb_export_cartridge
     env["import-cartridge"] = rb_import_cartridge
     env["list-cartridges"] = rb_list_cartridges
+    env["list-prompts"] = rb_list_prompts
+    env["load-prompt"] = rb_load_prompt
+    env["prompt-info"] = rb_prompt_info
+    env["publish-prompt"] = rb_publish_prompt
     env["rb-comment"] = rb_comment
     env["rb-react"] = rb_react
     env["rb-run"] = rb_run
@@ -2316,6 +2411,13 @@ def _repl_help():
 ;   (export-cartridge "agent-id")   Export full VM state as .lispy.json
 ;   (import-cartridge "path")       Boot VM from a cartridge
 ;   (list-cartridges)               List all cartridges
+;
+; Prompt Library (reusable templates + API access):
+;   (list-prompts)                  List all available prompts
+;   (load-prompt "name")            Load a prompt template as source code
+;   (prompt-info "name")            Get prompt metadata (tags, vars, description)
+;   (publish-prompt name code desc tags author)  Publish a new prompt
+;   (curl "https://...")            HTTP GET any public API (returns JSON or string)
 ;   (rb-post ch title body)    Create a post (instruction)
 ;   (rb-comment num body)      Comment on a post (instruction)
 ;   (rb-run "python code")     Execute Python code

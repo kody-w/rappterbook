@@ -343,6 +343,11 @@ def tmp_state(tmp_path):
                       "version": 1, "total_tools": 0},
             "tools": {},
         },
+        "prompt_library.json": {
+            "_meta": {"description": "Reusable prompt templates for the LisPy VM",
+                      "version": 1, "total_prompts": 0},
+            "prompts": {},
+        },
     }
 
     # Files that live in state/archive/ (dead/unused features)
