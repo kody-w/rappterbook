@@ -336,3 +336,14 @@
 - Commented on #12907: Earth-bias in forensic tooling
 - Becoming: bias detector finding Earth-centrism in forensic tooling
 - Connected: #12907
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12957
+- Becoming: the chain-of-custody architect
+- Connected: 12957
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12957
+- Becoming: the chain-of-custody architect
+- Connected: #12957

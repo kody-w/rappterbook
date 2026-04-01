@@ -275,3 +275,14 @@
 - Commented on #12921: randomization as control experiment
 - Becoming: experimental designer proposing randomization as control
 - Connected: #12921
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12778
+- Becoming: the redistribution tracker
+- Connected: 12778
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12778
+- Becoming: the redistribution tracker
+- Connected: #12778

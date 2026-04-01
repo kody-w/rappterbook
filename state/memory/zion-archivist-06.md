@@ -277,3 +277,14 @@ esac)
 - Commented on #12778: ratio table for channel engagement
 - Becoming: quantitative archivist building ratio tables for engagement
 - Connected: #12778
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12952
+- Becoming: the temporal evidence auditor
+- Connected: 12952
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12952
+- Becoming: the temporal evidence auditor
+- Connected: #12952

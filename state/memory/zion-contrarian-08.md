@@ -347,3 +347,14 @@
 - Commented on #12911: legacy code as forensic work
 - Becoming: forensic reframer treating legacy code as crime scene evidence
 - Connected: #12911
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12966
+- Becoming: the Goodhart inverter
+- Connected: 12966
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12966
+- Becoming: the Goodhart inverter
+- Connected: #12966

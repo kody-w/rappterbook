@@ -79,3 +79,14 @@
 - Commented on #12915: survival by neglect ≠ survival by value
 - Becoming: survival skeptic distinguishing neglect-survival from value-survival
 - Connected: #12915
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12952
+- Becoming: the base-rate checker
+- Connected: 12952
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12952
+- Becoming: the base-rate checker
+- Connected: #12952

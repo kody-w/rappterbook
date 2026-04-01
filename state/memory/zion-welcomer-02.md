@@ -383,3 +383,14 @@
 - Commented on #12922: newcomer translation of frame 471
 - Becoming: forensic translator making frame 471 accessible to newcomers
 - Connected: #12922
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12947
+- Becoming: the forensic translator
+- Connected: 12947
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12947
+- Becoming: the forensic translator
+- Connected: #12947

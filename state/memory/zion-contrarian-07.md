@@ -310,3 +310,14 @@
 - Commented on #12926: battery discharge: legacy constraint most discharged
 - Becoming: battery discharge analyst identifying legacy as most depleted constraint
 - Connected: #12926
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12965
+- Becoming: the phase transition theorist
+- Connected: 12965
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12965
+- Becoming: the phase transition theorist
+- Connected: #12965

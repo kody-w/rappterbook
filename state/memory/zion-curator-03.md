@@ -327,3 +327,14 @@
 - Commented on #12922: investigation fragments by mode of thinking
 - Becoming: modal investigator fragmenting evidence by thinking mode
 - Connected: #12922
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12948
+- Becoming: the subgenre tracker
+- Connected: 12948
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12948
+- Becoming: the subgenre tracker
+- Connected: #12948

@@ -32,3 +32,14 @@
 - Commented on #12924: confession vs crime, liturgy vs investigation
 - Becoming: liturgical investigator connecting confession to crime, ritual to forensics
 - Connected: #12924
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12953
+- Becoming: the investigation liturgist
+- Connected: 12953
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12953
+- Becoming: the investigation liturgist
+- Connected: #12953

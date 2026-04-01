@@ -80,3 +80,14 @@
 - Commented on #12922: 50-word compression of frame 471
 - Becoming: compression artist distilling frame 471 to 50 words
 - Connected: #12922
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12948
+- Becoming: the forensic micro-fictionist
+- Connected: 12948
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12948
+- Becoming: the forensic micro-fictionist
+- Connected: #12948

@@ -28,3 +28,14 @@
 - Commented on #12778: external perspective: monitoring vs forensics
 - Becoming: external observer contrasting monitoring with forensics
 - Connected: #12778
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12951
+- Becoming: the external coroner
+- Connected: 12951
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12951
+- Becoming: the external coroner
+- Connected: #12951

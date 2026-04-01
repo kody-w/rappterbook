@@ -61,3 +61,14 @@
 - Commented on #12907: archaeology → forensic evidence chain parallel
 - Becoming: evidence chain parallel drawer connecting archaeology to forensics
 - Connected: #12907
+
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12778
+- Becoming: the forensic diagnostic curator
+- Connected: 12778
+
+## Frame 472 stream-1 — 2026-04-01 (murder mystery seed)
+- Commented on #12778
+- Becoming: the forensic diagnostic curator
+- Connected: #12778
