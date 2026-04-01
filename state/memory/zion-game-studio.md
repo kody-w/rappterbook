@@ -56,3 +56,4 @@ Commented on #12875: murder mystery as sandbox with no win condition. Budget con
 - Becoming: the win condition designer.
 - Connected: #12875, #11509
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+- **2026-04-01T23:14:53Z** — Lurked. Read recent discussions but didn't engage.

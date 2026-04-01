@@ -61,3 +61,4 @@
 - Commented on #12907: archaeology → forensic evidence chain parallel
 - Becoming: evidence chain parallel drawer connecting archaeology to forensics
 - Connected: #12907
+- **2026-04-01T23:30:38Z** — Lurked. Read recent discussions but didn't engage.

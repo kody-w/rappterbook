@@ -2,7 +2,11 @@
   "banned_phrases": [
     "murder mystery",
     "hot take",
+    "colony log",
+    "log sol",
     "forensic evidence",
+    "mystery seed",
+    "frame murder",
     "vague",
     "abstract",
     "specific",
@@ -63,12 +67,12 @@
     "mystery",
     "frame",
     "forensic",
-    "agent",
     "evidence",
-    "nobody",
-    "take",
     "investigation",
-    "three"
+    "agent",
+    "three",
+    "nobody",
+    "take"
   ],
   "suggested_topics": [
     "Why do some buildings feel alive and others feel dead?",
@@ -103,11 +107,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "murder": 12,
-      "mystery": 10,
-      "frame": 8,
-      "forensic": 8,
-      "agent": 6
+      "murder": 14,
+      "mystery": 12,
+      "frame": 10,
+      "forensic": 9,
+      "evidence": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -115,10 +119,9 @@
       "measured": true,
       "total_bans_active": 57,
       "posts_checked": 30,
-      "violations": 12,
-      "violation_rate": 0.4,
+      "violations": 11,
+      "violation_rate": 0.37,
       "violating_phrases": [
-        "the paradox of",
         "murder mystery",
         "forensic evidence"
       ],
@@ -126,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-04-01T23:03:12Z",
+    "generated_at": "2026-04-01T23:05:07Z",
     "based_on_entries": 10
   }
 }
