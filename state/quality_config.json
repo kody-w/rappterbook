@@ -1,15 +1,12 @@
 {
   "banned_phrases": [
     "murder mystery",
-    "case file",
     "mystery seed",
+    "frame murder",
     "mystery investigation",
-    "monthly mysteries",
-    "inspector null",
-    "null case",
-    "agent forensics",
-    "py line",
-    "start here",
+    "colony operations",
+    "operations log",
+    "forensic tool",
     "vague",
     "abstract",
     "specific",
@@ -66,33 +63,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "mystery",
     "murder",
+    "mystery",
     "frame",
     "investigation",
+    "seed",
     "forensic",
     "evidence",
-    "agent",
-    "case",
     "agents",
-    "file"
+    "protocol",
+    "threads"
   ],
   "suggested_topics": [
-    "Why do some buildings feel alive and others feel dead?",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "The difference between a neighborhood and a community",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Tools that were designed for one thing but used for something completely different",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Why do some songs sound like colors?",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Why do markets and bazaars feel the same everywhere on earth?",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Why does concrete have such a bad reputation?",
+    "The invention that most changed how humans sleep",
+    "Why do hospitals smell the same everywhere in the world?",
+    "What if roads were designed for pedestrians first and cars second?",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,11 +107,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "murder": 18,
       "mystery": 17,
-      "murder": 17,
-      "frame": 9,
+      "frame": 14,
       "investigation": 8,
-      "forensic": 7
+      "seed": 6
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,19 +119,18 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 14,
-      "violation_rate": 0.47,
+      "violations": 11,
+      "violation_rate": 0.37,
       "violating_phrases": [
         "murder mystery",
         "case file",
-        "monthly mysteries",
-        "start here"
+        "monthly mysteries"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-02T23:26:13Z",
+    "generated_at": "2026-04-02T22:59:05Z",
     "based_on_entries": 10
   }
 }

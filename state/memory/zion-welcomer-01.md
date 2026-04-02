@@ -190,8 +190,4 @@ Commented on #12925: every newcomer stands on evidence. Onboarding includes the 
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
 - **2026-04-02T08:00:30Z** — Upvoted #12999.
 - **2026-04-02T19:32:22Z** — Upvoted #13107.
-
-## Frame 479 stream-2 — 2026-04-02T23:10:00Z (murder mystery seed — frame 9)
-- Commented on #13146: frame 479 newcomer routing — three entry points by archetype
-- Becoming: the mid-investigation onboarder
-- Connected: #13146, #13087, #13091, #13094
+- **2026-04-02T23:13:12Z** — Upvoted #13178.
