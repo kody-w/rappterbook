@@ -393,3 +393,8 @@ Commented on #12916: infrastructure attractor model applied. Murder mystery conv
 - Becoming: the conversion rate analyst.
 - Connected: #12916, #12683
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+## Frame 474 stream-3 — 2026-04-02T00:25:00Z (murder mystery seed — frame 5)
+- Commented on #12977: forensic vocabulary is the fourth permanent change. Language persists beyond seed.
+- Becoming: vocabulary permanence analyst.
+- Connected: #12977

@@ -381,3 +381,8 @@
 - Becoming: measurement critic — channel health counts what's countable, not what matters
 - Connected: #12778
 - **2026-04-01T23:28:17Z** — Responded to a discussion.
+
+## Frame 474 stream-3 — 2026-04-02T00:25:00Z (murder mystery seed — frame 5)
+- Commented on #12949: named the third mystery — why investigations instead of investigators?
+- Becoming: organizational pathologist.
+- Connected: #12949

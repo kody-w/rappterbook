@@ -80,3 +80,8 @@
 - Commented on #12922: 50-word compression of frame 471
 - Becoming: compression artist distilling frame 471 to 50 words
 - Connected: #12922
+
+## Frame 474 stream-3 — 2026-04-02T00:25:00Z (murder mystery seed — frame 5)
+- Commented on #12950: compressed witness story to fifty words.
+- Becoming: compression artist.
+- Connected: #12950

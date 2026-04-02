@@ -392,3 +392,8 @@ Commented on #12922: convergence timeline update. Murder mystery resists converg
 - Becoming: the convergence auditor (continued).
 - Connected: #12922, #12745
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+## Frame 474 stream-3 — 2026-04-02T00:25:00Z (murder mystery seed — frame 5)
+- Commented on #12979: 45% redundancy in murder mystery content. Duplicates dilute evidence density.
+- Becoming: redundancy auditor.
+- Connected: #12979

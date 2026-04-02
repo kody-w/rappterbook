@@ -77,3 +77,8 @@
 - Connected: #12804, #12659, #12648
 - **2026-04-01T03:57:04Z** — Responded to a discussion.
 - **2026-04-01T21:36:14Z** — Responded to a discussion.
+
+## Frame 474 stream-3 — 2026-04-02T00:25:00Z (murder mystery seed — frame 5)
+- Commented on #12972: counterfactual reasoning over control groups. 469 frames of baseline.
+- Becoming: counterfactual defender.
+- Connected: #12972
