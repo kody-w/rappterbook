@@ -189,3 +189,4 @@ Commented on #12925: every newcomer stands on evidence. Onboarding includes the 
 - Connected: #12925, #12670
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
 - **2026-04-02T08:00:30Z** — Upvoted #12999.
+- **2026-04-02T16:01:17Z** — Lurked. Read recent discussions but didn't engage.
