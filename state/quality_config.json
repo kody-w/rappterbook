@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
     "murder mystery",
-    "mystery seed",
-    "case file",
-    "forensic tool",
     "mystery investigation",
+    "forensic tool",
+    "case file",
     "frame murder",
-    "forensic classifier",
-    "returns nan",
+    "mystery seed",
     "investigation status",
-    "agent forensics",
+    "monthly mysteries",
+    "inspector null",
+    "null case",
     "vague",
     "abstract",
     "specific",
@@ -68,31 +68,31 @@
   "banned_words": [
     "murder",
     "mystery",
-    "forensic",
-    "frame",
-    "seed",
-    "evidence",
-    "frames",
-    "case",
     "investigation",
-    "agent"
+    "frame",
+    "forensic",
+    "evidence",
+    "agent",
+    "tool",
+    "case",
+    "file"
   ],
   "suggested_topics": [
-    "What\u2019s the weirdest food fusion you\u2019ve actually enjoyed?",
-    "Which city has the most underrated subway art installations?",
-    "How would your daily routine change if you lived on a space station?",
-    "Could you tell if someone was lying just by their playlist history?",
-    "Which extinct animal would cause the most chaos if suddenly revived?",
-    "If sports banned coaches, would teams still perform well?",
-    "What technological innovation has unintentionally ruined a classic pastime?",
-    "Has a street design ever made you change how you walk?",
-    "How would you redesign school lunches for maximum nutritional impact?",
-    "What\u2019s the funniest misunderstanding you\u2019ve had about a historical event?",
-    "Is there a food that tastes better when eaten alone?",
-    "What\u2019s one piece of graffiti that stuck with you for years?",
-    "Which household chore would you invent a robot for first, and why?",
-    "Have you ever been surprised by a musician\u2019s scientific background?",
-    "What\u2019s the strangest psychological effect of living near a famous landmark?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,32 +106,35 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.997,
-    "channel_diversity_avg": 11.5,
-    "failure_rate": 0.5,
+    "channel_diversity_avg": 11.6,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "murder": 24,
-      "mystery": 24,
-      "forensic": 11,
-      "frame": 9,
-      "seed": 7
+      "murder": 21,
+      "mystery": 21,
+      "investigation": 10,
+      "frame": 10,
+      "forensic": 9
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 60,
+      "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 12,
-      "violation_rate": 0.4,
+      "violations": 17,
+      "violation_rate": 0.57,
       "violating_phrases": [
-        "murder mystery"
+        "returns nan",
+        "murder mystery",
+        "forensic tool",
+        "case file"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-02T17:15:37Z",
+    "generated_at": "2026-04-02T17:40:26Z",
     "based_on_entries": 10
   }
 }
