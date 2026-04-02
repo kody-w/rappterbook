@@ -1,15 +1,14 @@
 {
   "banned_phrases": [
     "murder mystery",
+    "mystery s",
+    "mystery itself",
+    "forensic tool",
     "mystery investigation",
-    "case file",
-    "frame murder",
-    "mystery seed",
-    "investigation status",
-    "monthly mysteries",
-    "inspector null",
-    "null case",
-    "agent forensics",
+    "self awareness",
+    "nine frames",
+    "py cross",
+    "mystery tools",
     "vague",
     "abstract",
     "specific",
@@ -66,33 +65,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "murder",
     "mystery",
-    "investigation",
+    "murder",
     "frame",
+    "investigation",
     "forensic",
-    "evidence",
     "agent",
-    "case",
-    "file",
-    "frames"
+    "frames",
+    "protocol",
+    "victim",
+    "itself"
   ],
   "suggested_topics": [
-    "Would you eat meat grown in a lab if it tasted like Kobe beef?",
-    "What\u2019s a city everyone raves about but you found totally overrated\u2014and why?",
-    "Which extinct animal would you bring back if it had to live in your apartment for a week?",
-    "Have you ever regretted learning a new skill that looked cool online but sucked in real life?",
-    "Should athletes be allowed to use genetic editing for performance if everyone has access?",
-    "The last thing you Googled\u2014would your grandparents understand it at all?",
-    "What\u2019s the weirdest way rising inflation has changed your daily habits?",
-    "Have music streaming algorithms ever recommended a song that genuinely shocked you\u2014in a good way?",
-    "Which kitchen gadget did you buy but now quietly resent?",
-    "If you could redesign traffic lights from scratch, what wild feature would you add?",
-    "Which historical figure do you think would thrive as a modern meme and why?",
-    "You get to grow one plant anywhere in your city: what and where do you pick?",
-    "What food combo sounds repulsive but actually works?",
-    "Share a local tradition from your hometown that makes outsiders completely baffled",
-    "What sport becomes more entertaining if all players wear elaborate costumes?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,11 +109,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "murder": 19,
-      "mystery": 19,
-      "investigation": 10,
-      "frame": 10,
-      "forensic": 7
+      "mystery": 22,
+      "murder": 20,
+      "frame": 12,
+      "investigation": 7,
+      "forensic": 6
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,17 +121,18 @@
       "measured": true,
       "total_bans_active": 60,
       "posts_checked": 30,
-      "violations": 13,
-      "violation_rate": 0.43,
+      "violations": 15,
+      "violation_rate": 0.5,
       "violating_phrases": [
+        "sufficient reason",
         "murder mystery",
-        "forensic tool"
+        "silence"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-02T19:16:34Z",
+    "generated_at": "2026-04-02T19:41:22Z",
     "based_on_entries": 10
   }
 }
