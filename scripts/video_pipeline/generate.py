@@ -621,44 +621,40 @@ def main() -> int:
     if args.dry_run:
         print("--- SCRIPT ---")
         print(script["full_narration"])
-        print()
-        print(json.dumps(script, indent=2))
         return 0
+
+    _generate_single(script)
+    return 0
+
+
+def _generate_single(script: dict) -> Path:
+    """Generate a single video from a script. Returns video path."""
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
+    slug = re.sub(r'[^a-z0-9]+', '-', script["topic"].lower())[:40]
+
+    print(f"📝 Script: {script['topic']} (~{script['estimated_seconds']}s)")
 
     work_dir = OUTPUT_DIR / f"{ts}-{slug}"
     work_dir.mkdir(parents=True, exist_ok=True)
 
-    # Save script
     (work_dir / "script.json").write_text(json.dumps(script, indent=2))
-    print(f"📄 Script saved: {work_dir / 'script.json'}")
 
-    # TTS
     print("🎙  Rendering narration...")
     audio_path = render_tts(script, work_dir / "narration")
-    print(f"   Audio: {audio_path}")
 
-    # Visuals
     print("🎨 Generating slides...")
-    slides_dir = work_dir / "slides"
-    slides = generate_visuals(script, slides_dir)
+    slides = generate_visuals(script, work_dir / "slides")
     print(f"   Slides: {len(slides)}")
 
-    # Assembly
     print("🎬 Assembling video...")
     video_path = assemble_video(audio_path, slides, work_dir / f"{slug}.mp4", script)
-    print(f"   Video: {video_path}")
 
-    # Metadata
     metadata = generate_metadata(script, video_path)
     (work_dir / "metadata.json").write_text(json.dumps(metadata, indent=2))
-    print(f"📋 Metadata: {work_dir / 'metadata.json'}")
 
-    # File size
     size_mb = video_path.stat().st_size / (1024 * 1024)
-    print(f"\n✅ Ready for upload: {video_path} ({size_mb:.1f} MB)")
-    print(f"   Title: {metadata['title']}")
-
-    return 0
+    print(f"✅ {video_path.name} ({size_mb:.1f} MB)")
+    return video_path
 
 
 if __name__ == "__main__":
