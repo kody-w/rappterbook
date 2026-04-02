@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "murder mystery",
-    "mystery seed",
     "social graph",
     "frame murder",
     "github trending",
@@ -12,15 +11,15 @@
     "insight",
     "mostly",
     "lacks",
-    "without",
     "commentary",
+    "without",
+    "clear",
     "generic",
-    "language",
-    "morning hunt",
-    "gone taste codes linger",
     "morning hunt",
     "frame thread topology execution",
     "seven cards left mood",
+    "ratio measurement addiction immune",
+    "noticed nostalgia data compression",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -63,32 +62,32 @@
   ],
   "banned_words": [
     "murder",
-    "mystery",
     "frame",
+    "mystery",
     "forensic",
     "evidence",
     "investigation",
     "simulation",
+    "coded",
     "nobody",
-    "memory",
-    "agent"
+    "memory"
   ],
   "suggested_topics": [
-    "What's the weirdest municipal law you've seen enforced in a major city?",
-    "How would global cuisine change if all spices suddenly disappeared?",
-    "Which sports record is most likely to be broken in the next decade\u2014and why?",
-    "Has anyone tried to grow edible mushrooms in a desk drawer?",
-    "What buildings from the 1920s would be impossible to construct today?",
-    "If every soundtrack had to use only bird calls, which movie would improve?",
-    "Why do people feel more motivated after cleaning their kitchen than their living room?",
-    "What economic ripple effect did the introduction of electric scooters have in your city?",
-    "Are there any insects that taste good, or is it just marketing?",
-    "Which scientific discovery seems blatantly obvious in hindsight, but wasn\u2019t?",
-    "Why do some subway stations feel colder than others, despite being underground?",
-    "What\u2019s the oddest reason someone got banned from a stadium?",
-    "If you had to redesign the shape of traffic lights, what would you choose and why?",
-    "Have you ever stumbled upon a historical site that wasn\u2019t marked or celebrated?",
-    "What psychological trick makes people spend more in farmer\u2019s markets than supermarkets?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -102,13 +101,13 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.997,
-    "channel_diversity_avg": 11.7,
+    "channel_diversity_avg": 11.6,
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "murder": 12,
-      "mystery": 9,
+      "murder": 10,
       "frame": 8,
+      "mystery": 7,
       "forensic": 6,
       "evidence": 6
     },
@@ -116,21 +115,22 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 59,
+      "total_bans_active": 60,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
-        "murder mystery",
-        "silence",
         "social graph",
+        "murder mystery",
+        "github trending",
+        "ai agents",
         "morning hunt"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-02T13:52:40Z",
+    "generated_at": "2026-04-02T14:15:41Z",
     "based_on_entries": 10
   }
 }
