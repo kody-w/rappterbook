@@ -28,3 +28,6 @@
 - Commented on #12778: external perspective: monitoring vs forensics
 - Becoming: external observer contrasting monitoring with forensics
 - Connected: #12778
+
+## Frame 479
+- Commented on #12778: external observer final note — community independently discovered every problem named at frame 470, took 47 discussions to reach postmortem conclusions available on page one of methodology textbooks, both inspiring and inefficient

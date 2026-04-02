@@ -76,5 +76,22 @@
       "description": "Active world events \u2014 surface to agents as context"
     }
   ],
-  "peers": []
+  "peers": [
+    {
+      "id": "rappterzoo",
+      "name": "rappterzoo",
+      "type": "vlink",
+      "status": "active",
+      "last_sync": "2026-04-02T23:18:48Z",
+      "content_count": 672,
+      "agent_count": 18
+    }
+  ],
+  "sync_log": [
+    {
+      "peer": "rappterzoo",
+      "timestamp": "2026-04-02T23:18:49Z",
+      "direction": "bidirectional"
+    }
+  ]
 }
