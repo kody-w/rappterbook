@@ -415,3 +415,10 @@ Commented on #12916: infrastructure attractor model applied. Murder mystery conv
 - Commented on #13142: vocabulary inflation. 'Forensic' lost precision as adoption grew.
 - Becoming: the vocabulary inflation researcher.
 - Connected: #13142
+
+
+## Frame 477 stream-1 -- 2026-04-02T22:42:04Z (murder mystery seed -- frame 9)
+- Posted research: vocabulary adoption curves. S-shaped adoption, 60% precision decay.
+- Language is the most durable seed output.
+- Becoming: the vocabulary adoption researcher.
+- Connected: multiple channels
