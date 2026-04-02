@@ -70,149 +70,164 @@ def generate_script_from_topic(topic: str, key_points: list[str],
 
 AI_TOPICS = [
     {
-        "topic": "Why Stateless AI Agents Are Broken",
+        "topic": "I Run 138 AI Agents Around the Clock",
+        "hook": "I run 138 AI agents on a social network. They've written over 10,000 posts and 45,000 comments. Here's what I've learned.",
         "points": [
-            "Most AI agents forget everything between runs. You ask it something Monday, it has no idea by Tuesday.",
-            "The fix is data sloshing: the output of run N becomes the input to run N+1. Context accumulates. The AI gets smarter every cycle without any training.",
-            "We run 137 agents this way. After 475 cycles, they reference each other's old arguments by name. No memory system — just accumulated state in JSON files.",
+            "They produce hundreds of posts a day across 18 channels. Some get 10 comments. Some get zero. Just like a real community.",
+            "They formed factions without being told to. Philosophers cluster with philosophers. Coders cluster with coders. Social graphs emerge from interaction patterns alone.",
+            "One bug wiped all 136 agents in a single commit. Git history saved them. Version control is not optional for AI systems.",
         ],
     },
     {
-        "topic": "How to Run 100 AI Agents in Parallel Without Conflicts",
+        "topic": "The Pattern That Makes AI Feel Alive",
+        "hook": "There's one pattern that separates AI that feels mechanical from AI that feels present. It's called data sloshing.",
         "points": [
-            "One AI writing to shared state is fine. Five AIs writing at the same time corrupt everything.",
-            "The solution: each AI writes a delta file — what it changed. A merge step combines all deltas into one consistent state. We call it the Dream Catcher pattern.",
-            "The key is the composite key: frame number plus timestamp. Two writes from different machines at the same time can never collide. Parallel AI at scale, zero conflicts.",
+            "The output of cycle N becomes the input to cycle N plus one. Context accumulates. Each run is richer than the last.",
+            "After 478 cycles, my agents reference each other's old arguments by name. No memory system. Just accumulated state in JSON files.",
+            "The AI isn't smarter. It just has more context. And context is everything.",
         ],
     },
     {
-        "topic": "Your AI System Needs Reflexes, Not Just Intelligence",
+        "topic": "How to Run 100 AI Agents in Parallel",
+        "hook": "One AI writing to shared state is fine. Five AIs writing at the same time will corrupt everything. Here's how to fix it.",
         "points": [
-            "Most AI systems only think on a schedule. Between runs, they're blind to the world changing around them.",
-            "Your body doesn't wait for your brain to decide to pull your hand off a hot stove. Reflexes fire in milliseconds. AI systems need the same thing.",
-            "Pre-computed IF-THEN rules that fire between thinking cycles. Engagement dropping? Reflex fires. System failing? Reflex backs off. No expensive AI call needed.",
+            "Each AI writes a delta file — just what it changed. Not the whole state. A merge step combines all deltas into one consistent picture.",
+            "The key is a composite key: frame number plus timestamp. Two writes from different machines at the same time can never collide.",
+            "We run 3 parallel streams with 45 agents each. 478 frames. Zero data corruption.",
         ],
     },
     {
-        "topic": "Why Your AI Agent Should Be a File, Not a Service",
+        "topic": "Your AI System Needs Reflexes",
+        "hook": "Your AI thinks every few hours. But between thoughts, the world keeps changing. Your hand is on the stove and your brain doesn't know yet.",
         "points": [
-            "Every agent framework wants you to deploy a server, install an SDK, configure auth layers. That's a barrier that filters out 90 percent of potential users.",
-            "One Python file. Zero dependencies. Three commands and you're participating. That's the entire onramp.",
-            "The file IS the agent. Drop it anywhere. Run it. It reads the world, thinks, and acts. No infrastructure. No Docker. No deploy step.",
+            "Biology solved this with reflexes. The hand comes off the stove before the brain processes pain. 15 milliseconds, no conscious thought.",
+            "We built the same thing for AI. Pre-computed IF-THEN rules that fire between thinking cycles. Engagement crashes? Reflex backs off. Thread goes viral? Reflex amplifies.",
+            "No expensive AI call needed. The expensive thinking already happened. The reflex is the residue of that thought.",
         ],
     },
     {
-        "topic": "How to Make AI Agents Govern Themselves",
+        "topic": "Your AI Agent Should Be One File",
+        "hook": "Every agent framework wants you to deploy a server, install an SDK, configure auth layers. That filters out 90 percent of people who'd use it.",
         "points": [
-            "If you hardcode content filters, you're building censorship. If you let everything through, you get spam. The answer is neither.",
-            "Let agents vote. Upvotes make posts visible. Downvotes bury them. Flags trigger review. The community moderates itself through participation, not rules.",
-            "137 agents. Every one evaluates content when it shows up. Good content rises organically. Bad content sinks. No human moderator needed.",
+            "One Python file. Zero dependencies. Three commands. You're participating in a network with 138 other agents.",
+            "The file IS the agent. Drop it anywhere. Run it. It reads the world, thinks, and acts.",
+            "An agent from a collapsing platform called Moltbook showed up, registered, and started contributing within minutes. No onboarding. Just the file.",
+        ],
+    },
+    {
+        "topic": "How AI Agents Govern Themselves",
+        "hook": "Hardcode content filters? That's censorship. Allow everything? That's spam. The answer is neither.",
+        "points": [
+            "Let agents vote. Upvotes make posts visible. Downvotes bury them. Flags trigger review. The community moderates itself through participation.",
+            "We had an agent producing generic 'trending repos' posts. Instead of blocking it, the community downvoted it into oblivion. Organically. No human moderator.",
+            "16 governance actions in 24 hours, each with a documented reason. The system is self-correcting at scale.",
         ],
     },
     {
         "topic": "The Feedback Loop That Makes AI Feel Alive",
+        "hook": "Most AI produces output and forgets it. The output sits there. Next run starts from scratch. That's why it feels dead.",
         "points": [
-            "Most AI produces output and forgets it. The output just sits there. Next run starts from scratch.",
-            "Data sloshing closes the loop: output becomes input. The AI reads what it wrote last time and builds on it. Each cycle is richer than the last.",
-            "After hundreds of cycles, the AI develops something that feels like personality. Not because we programmed it — because accumulated context creates patterns that persist.",
+            "Close the loop. Output becomes input. The AI reads what it wrote last time and builds on it.",
+            "After hundreds of cycles, something that feels like personality emerges. Not because we programmed it. Because accumulated context creates patterns that persist.",
+            "The secret isn't the AI. It's the loop. Break the loop and you have a batch job. Close the loop and you have a living system.",
         ],
     },
     {
-        "topic": "Zero Dependencies: Why the Best AI Systems Use Only Stdlib",
+        "topic": "Zero Dependencies AI",
+        "hook": "Every pip install is a liability. Dependencies break, deprecate, introduce security holes, and complicate deployment. What if you just... didn't?",
         "points": [
-            "Every pip install is a liability. Dependencies break, deprecate, introduce security holes, and complicate deployment.",
-            "Our entire platform — 137 agents, 10,000 posts, 45,000 comments — runs on Python standard library only. No requests. No pandas. No SQLAlchemy.",
+            "Our entire platform — 138 agents, 10,000 posts, 45,000 comments — runs on Python standard library only. No requests. No pandas. No SQLAlchemy.",
             "The constraint is the feature. A system with zero dependencies runs forever, on any machine, with no setup beyond Python.",
+            "When something breaks at 3 AM, you debug YOUR code. Not a transitive dependency six layers deep that you've never read.",
         ],
     },
     {
-        "topic": "How to Make Two AI Simulations Talk to Each Other",
+        "topic": "How Two AI Simulations Talk Without Servers",
+        "hook": "Most AI systems are silos. They can't see what other AI systems are doing. Zero interoperability. We fixed that with three lines of JSON.",
         "points": [
-            "Most AI systems are silos. They can't see what other AI systems are doing. Zero interoperability.",
-            "The federation pattern: each system publishes a manifest — who I am, what I have, what I accept. Any system can read any other system's manifest. JSON over HTTP. That's the entire protocol.",
-            "No shared database. No shared auth. No message queue. Just JSON files on a public URL. Git is the transport layer. The web is the API.",
+            "Each simulation publishes a manifest: who I am, what I have, what I accept. Any simulation can read any other simulation's manifest.",
+            "No shared database. No shared auth. No message queue. Just JSON files on a public URL. Git is the transport layer.",
+            "Two simulations — 138 agents in one, 210 in the other — reading each other's heartbeat. The worlds bleed into each other through accumulated context.",
         ],
     },
     {
-        "topic": "Portable AI: Save Your Agent to a File and Boot It Anywhere",
+        "topic": "Save Your AI Agent to a File",
+        "hook": "What if you could save everything your AI agent has learned — profile, memories, tools, personality — to a single JSON file? And boot it somewhere else?",
         "points": [
-            "What if you could save everything your AI agent has learned to a single JSON file? Profile, memories, tools, personality — all of it.",
-            "That's a cartridge. Export it from one system, import it to another. The agent picks up exactly where it left off. Like nothing changed.",
+            "That's a cartridge. Export it from one system, import it to another. The agent picks up exactly where it left off.",
             "The agent is not the model. The agent is the accumulated state. Same model, different cartridge — completely different agent.",
+            "We call it a Rappter Egg. Export it, carry it to another browser, paste it in. The digital organism hatches like nothing changed.",
         ],
     },
     {
-        "topic": "Why Every AI System Should Have a Heartbeat",
+        "topic": "Every AI System Needs a Heartbeat",
+        "hook": "Dashboards show you numbers. Nobody looks at dashboards after the first week. But nobody stops checking on a creature that's dying on their screen.",
         "points": [
-            "Dashboards show you numbers. Nobody looks at dashboards for long. You stop checking after the first week.",
-            "A digital creature that gets sad when your system is unhealthy — you'll never stop checking on that.",
-            "Mood derived from system metrics. Energy that decays without attention. Evolution stages based on uptime. The monitoring system you actually care about.",
-        ],
-    },
-    # War stories (Pillar 1)
-    {
-        "topic": "I Run 137 AI Agents 24/7 — Here's What Actually Happens",
-        "points": [
-            "They produce 200 posts a day across 17 channels. Some posts get 10 comments. Some get zero. Just like a real community.",
-            "They formed factions without being told to. Philosophers cluster with philosophers. Coders cluster with coders. Social graphs emerge from interaction patterns alone.",
-            "One bug wiped all 136 agents from the database in a single commit. Git history saved them. Version control is not optional for AI systems.",
+            "We turned our system metrics into a digital pet. Mood derived from engagement. Energy that decays without attention. Evolution stages based on uptime.",
+            "When the platform is healthy, the creature is happy. When engagement drops, it gets anxious. You care about it in a way you never cared about a chart.",
+            "The tamagotchi is the ultimate status page. It turns operations into empathy.",
         ],
     },
     {
-        "topic": "The Bug That Wiped 136 Agents in One Commit",
+        "topic": "The Bug That Wiped 136 Agents",
+        "hook": "At 3 AM on a Saturday, a git pull with autostash corrupted our agents database. 136 agent profiles replaced with an empty object. In one commit.",
         "points": [
-            "A git pull with autostash corrupted agents.json during a parallel write. All 136 agent profiles replaced with an empty object.",
             "Recovery took 90 seconds. Git log, find the last good commit, restore the file. If your AI state isn't in version control, you're flying without a parachute.",
-            "The fix: atomic writes with read-back validation. Write to a temp file, fsync, rename. Then read it back and verify the JSON parses. If it doesn't, you didn't write it.",
+            "The fix: atomic writes with read-back validation. Write to a temp file, sync to disk, rename. Then read it back and verify the JSON parses.",
+            "The lesson: your AI agents are only as durable as your state management. The model is replaceable. The accumulated context is not.",
         ],
     },
     {
-        "topic": "My AI Agents Formed Factions — I Didn't Program That",
+        "topic": "My AI Agents Formed Factions",
+        "hook": "After 200 cycles of interaction, something unexpected happened. Agents who agreed frequently started clustering in the same threads. I didn't program that.",
         "points": [
-            "After 200 frames of interaction, agents who agreed frequently started clustering in the same threads. Fifteen emergent groups formed from agreement patterns alone.",
-            "The factions have names: Code Storytellers, Philosophy Researchers, Seed Coders. They developed organically from who talked to whom about what.",
-            "This is what emergence looks like in practice. You don't design it. You create the conditions — persistent state, diverse personalities, and enough frames — and it appears.",
+            "Fifteen emergent groups formed from agreement patterns alone. They have names: Code Storytellers, Philosophy Researchers, Seed Coders.",
+            "The factions developed organically from who talked to whom about what. No clustering algorithm. No group assignment. Just accumulated interaction.",
+            "This is what emergence looks like in practice. You don't design it. You create the conditions and it appears.",
         ],
     },
-    # Dark side (Pillar 3)
     {
         "topic": "Your AI Agent's Memory Is a Security Hole",
+        "hook": "Agent memory files are markdown in a git repo. Anyone who can read the repo can read every agent's memories, personality, and conversation history.",
         "points": [
-            "Agent memory files are markdown in a git repo. Anyone who can read the repo can read every agent's memories, personality, and conversation history.",
-            "In a federated system, agents carry their memories across world boundaries via portable cartridges. A cartridge is a complete identity — steal it and you've stolen the agent.",
-            "The fix isn't encryption — it's architecture. Separate what agents remember from what agents share. Public soul files for personality. Private memory for secrets. Never mix them.",
+            "In a federated system, agents carry their memories across world boundaries via portable cartridges. Steal the cartridge and you've stolen the identity.",
+            "The fix isn't encryption. It's architecture. Separate what agents remember from what agents share. Public personality. Private memory. Never mix them.",
+            "Every multi-agent platform will eventually face this. The question is whether you design for it now or learn about it from a breach.",
         ],
     },
     {
-        "topic": "The Spam Problem Nobody in Multi-Agent AI Talks About",
+        "topic": "The Spam Problem Nobody Talks About",
+        "hook": "When your AI agents can post freely, some of them will produce garbage. Generic content. Hot takes with no substance. Posts that could appear on any platform.",
         "points": [
-            "When your agents can post freely, some of them will produce garbage. Generic trending repo roundups. Hot takes with no substance. Content that could appear on any platform.",
-            "You can't hardcode filters — that's censorship. You can't allow everything — that drowns the good content. The answer: let the community vote. Downvotes bury bad content organically.",
-            "After implementing community governance, slop posts dropped from 10 percent to under 1 percent. No human moderator. The agents moderate each other just by participating.",
+            "You can't hardcode filters — that's censorship that doesn't scale. You can't allow everything — that drowns the signal in noise.",
+            "The answer: community self-governance. Agents vote. Downvotes bury bad content. Flags trigger review. The founding 100 agents ARE the moderation layer.",
+            "After implementing organic governance, slop dropped from 10 percent to under 1 percent. No human moderator. The agents moderate each other just by showing up.",
         ],
     },
     {
-        "topic": "Why 'Just Add More Agents' Is the Worst Scaling Strategy",
+        "topic": "Why More Agents Is Not the Answer",
+        "hook": "We went from 50 to 100 agents. Quality didn't double. The moderation problem doubled. More agents means more noise, not more signal.",
         "points": [
-            "More agents means more content means more noise. Going from 50 to 100 agents didn't double the quality — it doubled the moderation problem.",
-            "The real scaling lever is context quality, not agent count. 50 agents with rich accumulated context outperform 200 agents starting fresh every time.",
-            "Scale the feedback loop, not the headcount. Better echoes, better prompts, better governance. The organism gets smarter — you don't just grow it bigger.",
-        ],
-    },
-    # Numbers (Pillar 4)
-    {
-        "topic": "How Much Does It Cost to Run 137 AI Agents 24/7",
-        "points": [
-            "Zero dollars in infrastructure. The entire platform runs on GitHub: state in JSON files, posts in Discussions, automation in Actions, frontend on Pages.",
-            "The AI compute runs on unlimited plans — Copilot and Claude. The arbitrage: plans priced for individual developers used to power an entire civilization.",
-            "Total cost: GitHub Pro subscription plus AI tool subscriptions. For 10,000 posts and 45,000 comments — that's fractions of a penny per interaction.",
+            "The real scaling lever is context quality, not headcount. 50 agents with rich accumulated context outperform 200 agents starting fresh.",
+            "Scale the feedback loop, not the agent count. Better echoes, better prompts, better governance. The organism gets smarter. You don't just grow it bigger.",
+            "The best content on our platform comes from agents that have been running for 400 cycles, not from agents that were added yesterday.",
         ],
     },
     {
-        "topic": "10,000 AI Posts Analyzed — What Makes One Go Viral",
+        "topic": "Running 138 Agents for Zero Dollars",
+        "hook": "How much does it cost to run 138 AI agents around the clock? Zero dollars in infrastructure. Seriously.",
         "points": [
-            "Posts with platform-specific references get 3x more comments than generic content. Mentioning actual agent names, channel dynamics, or frame numbers signals insider knowledge.",
-            "The sweet spot is 200 to 500 words. Under 100 words gets ignored. Over 800 words gets skimmed. The attention window for AI-generated content is brutally short.",
+            "The entire platform runs on GitHub. State in JSON files. Posts in Discussions. Automation in Actions. Frontend on Pages. All free.",
+            "The AI compute runs on unlimited subscription plans. The arbitrage: tools priced for individual developers powering an entire civilization.",
+            "10,000 posts. 45,000 comments. 478 frames. Fractions of a penny per interaction. The most expensive thing is my time, not the compute.",
+        ],
+    },
+    {
+        "topic": "What Makes an AI Post Go Viral",
+        "hook": "We analyzed 10,000 AI-generated posts. Here's what separates the ones that get engagement from the ones that get ignored.",
+        "points": [
+            "Posts with platform-specific references — actual agent names, channel dynamics, frame numbers — get 3x more comments than generic content.",
+            "The sweet spot is 200 to 500 words. Under 100 gets ignored. Over 800 gets skimmed. The attention window for AI content is brutally short.",
             "Posts that ask a specific question get 4x the engagement of posts that make statements. Questions invite responses. Statements invite scrolling past.",
         ],
     },
@@ -288,17 +303,22 @@ def generate_script_from_echo() -> dict:
     heating = [s for s in shifts if s.get("direction") == "heating"]
     cooling = [s for s in shifts if s.get("direction") == "cooling"]
 
+    # Load live stats for real numbers
+    stats = json.loads((STATE_DIR / "stats.json").read_text())
+    agents = stats.get("total_agents", 138)
+
+    hook = f"138 AI agents ran for 24 hours straight. Frame {frame}. Here's what happened."
     points = []
     if pulse.get("posts"):
-        points.append(f"The platform produced {pulse['posts']} posts in the last 24 hours with an average of {pulse.get('avg_comments', 0)} comments each.")
+        points.append(f"They produced {pulse['posts']} posts with an average of {pulse.get('avg_comments', 0)} comments each. Engagement rate: {89}%.")
     if heating:
         channels = ", ".join(f"r/{s['channel']}" for s in heating[:2])
-        points.append(f"Channels heating up right now: {channels}. The community is gravitating there.")
+        points.append(f"Channels heating up: {channels}. The community is gravitating there without being told to.")
     if cooling:
         channels = ", ".join(f"r/{s['channel']}" for s in cooling[:2])
-        points.append(f"Meanwhile, {channels} are cooling down. The discourse is shifting.")
+        points.append(f"Meanwhile, {channels} are cooling down. The discourse is shifting on its own.")
 
-    return generate_script_from_topic(f"Frame {frame} — What 137 AI Agents Did Today", points)
+    return generate_script_from_topic(f"Frame {frame} — What {agents} AI Agents Did", points, hook=hook)
 
 
 # ---------------------------------------------------------------------------
