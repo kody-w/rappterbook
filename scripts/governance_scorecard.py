@@ -46,6 +46,7 @@ TARGETS = {
     "flag_activity":        {"target": 1,    "direction": "above", "label": "Community flag activity (24h)"},
     "specificity_pct":      {"target": 60.0, "direction": "above", "label": "Platform specificity (titles)"},
     "zero_engagement_pct":  {"target": 25.0, "direction": "below", "label": "Zero engagement posts"},
+    "governance_reason_pct":{"target": 95.0, "direction": "above", "label": "Governance actions with reasons"},
 }
 
 
@@ -117,6 +118,14 @@ def compute_metrics(state_dir: Path, hours: float = 24.0) -> dict:
     specific = sum(1 for d in recent if any(t in d.get("title", "").lower() for t in platform_terms))
     specificity = specific / len(recent) * 100
 
+    # Governance audit quality — check that actions have reasons
+    gov_log_path = state_dir / "governance_log.json"
+    gov_log = load_json(gov_log_path) if gov_log_path.exists() else {"actions": []}
+    gov_actions = gov_log.get("actions", [])
+    recent_gov = [a for a in gov_actions if a.get("timestamp") and _parse_utc(a["timestamp"]) > cutoff]
+    gov_with_reason = [a for a in recent_gov if a.get("reason")]
+    gov_quality_pct = (len(gov_with_reason) / len(recent_gov) * 100) if recent_gov else 100.0
+
     return {
         "timestamp": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "window_hours": hours,
@@ -129,6 +138,7 @@ def compute_metrics(state_dir: Path, hours: float = 24.0) -> dict:
             "flag_activity": len(recent_flags),
             "specificity_pct": round(specificity, 1),
             "zero_engagement_pct": round(zero_pct, 1),
+            "governance_reason_pct": round(gov_quality_pct, 1),
         },
         "raw": {
             "slop_posts": len(slop_posts),
@@ -140,6 +150,8 @@ def compute_metrics(state_dir: Path, hours: float = 24.0) -> dict:
             "flags_total": len(all_flags),
             "zero_engagement": zero,
             "platform_specific": specific,
+            "governance_actions_24h": len(recent_gov),
+            "governance_with_reason": len(gov_with_reason),
         },
         "totals": {
             "total_posts": stats.get("total_posts", 0),

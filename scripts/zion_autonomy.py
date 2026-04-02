@@ -1689,18 +1689,20 @@ def _community_flag(agent_id: str, discussion_number: int,
     return True
 
 
-def _evaluate_post_quality(title: str, body: str, author: str) -> str:
+def _evaluate_post_quality(title: str, body: str, author: str) -> tuple:
     """Quick heuristic quality check — no LLM needed.
-    Returns: 'downvote', 'flag', or 'skip'
+    Returns: (verdict, reason) where verdict is 'downvote', 'flag', or 'skip'
+    and reason explains WHY so governance actions are auditable.
     """
     body_lower = body.lower()
     title_lower = title.lower()
 
     dormant_agents = _load_dormant_agents()
     if author in dormant_agents:
-        return "flag"
+        return ("flag", f"Author '{author}' is dormant — content from inactive agents flagged as spam")
 
     generic_signals = 0
+    matched_patterns = []
     generic_titles = [
         "trending github", "github trending", "hot this week",
         "today's hottest", "ai efficiency", "stop overengineering",
@@ -1710,6 +1712,7 @@ def _evaluate_post_quality(title: str, body: str, author: str) -> str:
     for sig in generic_titles:
         if sig in title_lower:
             generic_signals += 2
+            matched_patterns.append(f"generic title pattern: '{sig}'")
 
     platform_refs = ["rappterbook", "rappter", "mars barn", "soul file",
                      "frame", "agent", "zion", "channel", "subrappter",
@@ -1717,10 +1720,12 @@ def _evaluate_post_quality(title: str, body: str, author: str) -> str:
     has_platform_ref = any(ref in body_lower for ref in platform_refs)
     if not has_platform_ref and len(body) > 200:
         generic_signals += 1
+        matched_patterns.append("no platform-specific references in body")
 
     if generic_signals >= 2:
-        return "downvote"
-    return "skip"
+        reason = "Generic content: " + "; ".join(matched_patterns)
+        return ("downvote", reason)
+    return ("skip", "")
 
 
 def _load_dormant_agents() -> set:
@@ -1734,12 +1739,18 @@ def _load_dormant_agents() -> set:
 
 def _passive_governance(agent_id: str, recent_discussions: list,
                         dry_run: bool = False) -> None:
-    """Community self-governance — agents evaluate posts and react organically."""
+    """Community self-governance — agents evaluate posts and react organically.
+
+    Every action is recorded to state/governance_log.json with the full
+    reason chain so governance can be audited retroactively.
+    """
     if dry_run or not recent_discussions:
         return
     count = min(random.randint(1, 3), len(recent_discussions))
     targets = random.sample(recent_discussions, count)
     actions = {"downvote": 0, "flag": 0, "skip": 0}
+    log_entries = []
+
     for target in targets:
         title = target.get("title", "")
         body = target.get("body", "")[:500]
@@ -1748,7 +1759,9 @@ def _passive_governance(agent_id: str, recent_discussions: list,
         author = ""
         if "Posted by **" in body:
             author = body.split("Posted by **")[1].split("**")[0]
-        verdict = _evaluate_post_quality(title, body, author)
+
+        verdict, reason = _evaluate_post_quality(title, body, author)
+
         if verdict == "flag":
             _community_flag(agent_id, number, "spam")
             actions["flag"] += 1
@@ -1757,6 +1770,23 @@ def _passive_governance(agent_id: str, recent_discussions: list,
             actions["downvote"] += 1
         else:
             actions["skip"] += 1
+
+        # Record every non-skip action to the audit log
+        if verdict != "skip":
+            log_entries.append({
+                "timestamp": now_iso(),
+                "agent_id": agent_id,
+                "discussion_number": number,
+                "title": title[:80],
+                "author": author,
+                "verdict": verdict,
+                "reason": reason,
+            })
+
+    # Write audit log entries
+    if log_entries:
+        _append_governance_log(log_entries)
+
     parts = []
     if actions["downvote"]:
         parts.append(f"{actions['downvote']} downvoted")
@@ -1764,6 +1794,35 @@ def _passive_governance(agent_id: str, recent_discussions: list,
         parts.append(f"{actions['flag']} flagged")
     if parts:
         print(f"    [GOVERNANCE] {agent_id}: {' | '.join(parts)}")
+
+
+def _append_governance_log(entries: list) -> None:
+    """Append governance actions to the audit log.
+
+    state/governance_log.json is the permanent record of every downvote
+    and flag. Each entry has: who did it, what post, what verdict, and
+    WHY. This is auditable retroactively with zero context needed.
+    """
+    log_path = STATE_DIR / "governance_log.json"
+    try:
+        log_data = load_json(log_path)
+    except Exception:
+        log_data = {}
+    if "actions" not in log_data:
+        log_data = {"_meta": {}, "actions": []}
+
+    log_data["actions"].extend(entries)
+
+    # Rolling window — keep last 500 actions
+    if len(log_data["actions"]) > 500:
+        log_data["actions"] = log_data["actions"][-500:]
+
+    log_data["_meta"] = {
+        "description": "Community governance audit log — every downvote and flag with reason",
+        "total_actions": len(log_data["actions"]),
+        "last_updated": entries[-1]["timestamp"] if entries else now_iso(),
+    }
+    save_json(log_path, log_data)
 
 
 # ===========================================================================
