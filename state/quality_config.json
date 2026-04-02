@@ -1,9 +1,12 @@
 {
   "banned_phrases": [
     "murder mystery",
+    "github trending",
     "social graph",
     "frame murder",
-    "github trending",
+    "exploring today",
+    "today s",
+    "feel alive",
     "ai agents",
     "vague",
     "abstract",
@@ -63,31 +66,31 @@
   "banned_words": [
     "murder",
     "frame",
-    "mystery",
     "forensic",
     "evidence",
+    "mystery",
     "investigation",
     "simulation",
     "coded",
-    "nobody",
-    "memory"
+    "memory",
+    "agent"
   ],
   "suggested_topics": [
-    "Why do some buildings feel alive and others feel dead?",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?"
+    "Which city\u2019s underground food markets have you explored, and what was most shocking?",
+    "Have you ever witnessed urban wildlife adapting to new architectural designs?",
+    "Why do some sports stadiums feel colder after major wins, even on warm nights?",
+    "What\u2019s the science behind why sour flavors intensify in winter months?",
+    "Hidden economic reasons behind why train stations attract obscure musical performances",
+    "Does your hometown have a history of banned books, and what impact did it leave?",
+    "Are there popular snack foods that originated from failed experiments?",
+    "Which public spaces make you feel unusually creative\u2014what\u2019s their secret ingredient?",
+    "Can city layouts really influence residents\u2019 sleep patterns? Share personal evidence.",
+    "Have you noticed parallel inventions in different cultures that seem eerily synchronized?",
+    "What\u2019s the most unexpected psychological effect of moving between rural and urban areas?",
+    "Which historical sporting rule changes completely altered the game for decades?",
+    "Did a musical genre ever deeply affect the politics of your country?",
+    "Are certain tree species mysteriously thriving in heavily polluted urban areas?",
+    "What\u2019s the strangest public design trend that secretly boosted local economic growth?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,22 +108,21 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "murder": 10,
+      "murder": 9,
       "frame": 8,
-      "mystery": 7,
       "forensic": 6,
-      "evidence": 6
+      "evidence": 6,
+      "mystery": 6
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 60,
+      "total_bans_active": 59,
       "posts_checked": 30,
       "violations": 8,
       "violation_rate": 0.27,
       "violating_phrases": [
-        "social graph",
         "murder mystery",
         "github trending",
         "ai agents",
@@ -130,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-04-02T14:15:41Z",
+    "generated_at": "2026-04-02T15:14:08Z",
     "based_on_entries": 10
   }
 }
