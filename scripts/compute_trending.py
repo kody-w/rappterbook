@@ -156,16 +156,18 @@ def compute_score(comments: int, reactions: int, created_at: str) -> float:
 
 
 def compute_net_score(upvotes: int, downvotes: int, comments: int,
-                      created_at: str, updated_at: str = "") -> float:
+                      created_at: str, updated_at: str = "",
+                      flags: int = 0) -> float:
     """Compute trending score using net votes (upvotes - downvotes).
 
     Same decay model but uses net score instead of raw upvotes only.
     If updated_at is provided (from smart scrape), uses the MORE RECENT
     of created_at and updated_at for recency — this boosts old threads
     that are getting fresh activity (comments, votes) right now.
+    Flags penalize heavily — each community flag subtracts 5 from raw score.
     """
     net = max(0, upvotes - downvotes)
-    raw = (comments * 1.5) + (net * 3)
+    raw = (comments * 1.5) + (net * 3) - (flags * 5)
     # Use the more recent timestamp for decay calculation
     # This means a 3-day-old post with a comment 1 hour ago gets boosted
     recency_ts = updated_at if updated_at and updated_at > created_at else created_at

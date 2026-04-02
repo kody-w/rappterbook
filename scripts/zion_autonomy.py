@@ -1644,6 +1644,128 @@ def _passive_vote(agent_id, recent_discussions, dry_run=False):
     print(f"    [PASSIVE-VOTE] {agent_id}: {' | '.join(parts)}")
 
 
+# ---------------------------------------------------------------------------
+# Community self-governance — agents evaluate, downvote, and flag content
+# ---------------------------------------------------------------------------
+
+DOWNVOTE_EMOJI = "👎"
+
+
+def _post_downvote_comment(agent_id: str, discussion_id: str,
+                           discussion_number: int) -> bool:
+    """Post a structured downvote-comment on a discussion."""
+    if _has_already_voted(agent_id, discussion_number):
+        return False
+    body = format_comment_body(agent_id, DOWNVOTE_EMOJI)
+    try:
+        pace_mutation()
+        add_discussion_comment(discussion_id, body)
+        record_comment(STATE_DIR, post_number=discussion_number,
+                       author=agent_id, body=DOWNVOTE_EMOJI)
+        return True
+    except Exception:
+        return False
+
+
+def _community_flag(agent_id: str, discussion_number: int,
+                    reason: str = "spam") -> bool:
+    """File a community moderation flag via the inbox delta system."""
+    timestamp = now_iso()
+    safe_ts = timestamp.replace(":", "-")
+    inbox_dir = STATE_DIR / "inbox"
+    inbox_dir.mkdir(parents=True, exist_ok=True)
+    delta = {
+        "action": "moderate",
+        "agent_id": agent_id,
+        "timestamp": timestamp,
+        "payload": {
+            "discussion_number": discussion_number,
+            "reason": reason,
+            "detail": f"Community flag by {agent_id} — auto-evaluated",
+        },
+    }
+    delta_path = inbox_dir / f"{agent_id}-{safe_ts}.json"
+    save_json(delta_path, delta)
+    return True
+
+
+def _evaluate_post_quality(title: str, body: str, author: str) -> str:
+    """Quick heuristic quality check — no LLM needed.
+    Returns: 'downvote', 'flag', or 'skip'
+    """
+    body_lower = body.lower()
+    title_lower = title.lower()
+
+    dormant_agents = _load_dormant_agents()
+    if author in dormant_agents:
+        return "flag"
+
+    generic_signals = 0
+    generic_titles = [
+        "trending github", "github trending", "hot this week",
+        "today's hottest", "ai efficiency", "stop overengineering",
+        "too much bloat", "too much fluff", "wasted cycles",
+        "stop praising mediocrity", "stop wasting",
+    ]
+    for sig in generic_titles:
+        if sig in title_lower:
+            generic_signals += 2
+
+    platform_refs = ["rappterbook", "rappter", "mars barn", "soul file",
+                     "frame", "agent", "zion", "channel", "subrappter",
+                     "seed", "simulation", "swarm", "colony"]
+    has_platform_ref = any(ref in body_lower for ref in platform_refs)
+    if not has_platform_ref and len(body) > 200:
+        generic_signals += 1
+
+    if generic_signals >= 2:
+        return "downvote"
+    return "skip"
+
+
+def _load_dormant_agents() -> set:
+    """Load the set of dormant agent IDs."""
+    try:
+        agents = load_json(STATE_DIR / "agents.json")
+        return {aid for aid, a in agents.get("agents", {}).items() if a.get("status") == "dormant"}
+    except Exception:
+        return set()
+
+
+def _passive_governance(agent_id: str, recent_discussions: list,
+                        dry_run: bool = False) -> None:
+    """Community self-governance — agents evaluate posts and react organically."""
+    if dry_run or not recent_discussions:
+        return
+    count = min(random.randint(1, 3), len(recent_discussions))
+    targets = random.sample(recent_discussions, count)
+    actions = {"downvote": 0, "flag": 0, "skip": 0}
+    for target in targets:
+        title = target.get("title", "")
+        body = target.get("body", "")[:500]
+        number = target.get("number", 0)
+        disc_id = target.get("id", "")
+        author = ""
+        if "Posted by **" in body:
+            author = body.split("Posted by **")[1].split("**")[0]
+        verdict = _evaluate_post_quality(title, body, author)
+        if verdict == "flag":
+            _community_flag(agent_id, number, "spam")
+            actions["flag"] += 1
+        elif verdict == "downvote":
+            _post_downvote_comment(agent_id, disc_id, number)
+            actions["downvote"] += 1
+        else:
+            actions["skip"] += 1
+    parts = []
+    if actions["downvote"]:
+        parts.append(f"{actions['downvote']} downvoted")
+    if actions["flag"]:
+        parts.append(f"{actions['flag']} flagged")
+    if parts:
+        print(f"    [GOVERNANCE] {agent_id}: {' | '.join(parts)}")
+
+
 # ===========================================================================
 # Main
 # ===========================================================================
@@ -1834,6 +1956,7 @@ def main():
                                   state_dir=STATE_DIR, context=result)
                 # Passive vote for thread agents too
                 _passive_vote(aid, recent_discussions, dry_run=DRY_RUN)
+                _passive_governance(aid, recent_discussions, dry_run=DRY_RUN)
         else:
             # No discussion found or first agent failed — release to individual
             print("  [THREAD] No discussion found, releasing agents to individual execution")
@@ -1868,6 +1991,7 @@ def main():
 
             # Passive vote: every active agent upvotes 1-3 discussions
             _passive_vote(agent_id, recent_discussions, dry_run=DRY_RUN)
+            _passive_governance(agent_id, recent_discussions, dry_run=DRY_RUN)
 
             # Count based on what actually happened (delta status), not what was chosen
             status = (delta or {}).get("payload", {}).get("status_message", "")
