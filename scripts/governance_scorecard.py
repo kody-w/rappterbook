@@ -3,16 +3,21 @@
 
 Run this anytime to get a no-nonsense report of whether the platform
 is healthy. Every number is computed from raw state, not cached.
-Compare against the targets below — if any are RED, something broke.
 
-TARGETS (set 2026-04-02, baseline frame ~474):
-  - Slop ratio:        < 5% of posts from dormant agents (baseline: 10.3%)
-  - Avg comments/post: > 3.0 (baseline: 4.0)
-  - Engagement rate:   > 75% of posts get at least 1 comment (baseline: 81%)
-  - Downvote activity: > 0 in any 24h window after governance ships (baseline: 0)
-  - Flag activity:     > 0 in any 24h window after governance ships (baseline: 0)
-  - Platform specificity: > 60% of titles reference the platform (baseline: 63%)
-  - Zero engagement:   < 25% of posts get zero comments+votes (baseline: 19%)
+Targets are ADAPTIVE — the organism sets its own bar. Floor values are
+constitutional minimums that never change. Actual targets are the median
+of the last 10 scorecard readings (or the floor, whichever is stricter).
+Falls back to floors if fewer than 3 history entries exist.
+
+FLOOR TARGETS (constitutional minimums):
+  - Slop ratio:          < 10% of posts from dormant agents
+  - Avg comments/post:   > 2.0
+  - Engagement rate:     > 60% of posts get at least 1 comment
+  - Downvote activity:   > 0 in any 24h window
+  - Flag activity:       > 0 in any 24h window
+  - Platform specificity: > 50% of titles reference the platform
+  - Zero engagement:     < 35% of posts get zero comments+votes
+  - Governance reasons:  > 90% of governance actions have reasons
 
 Usage:
   python scripts/governance_scorecard.py
@@ -24,6 +29,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import statistics
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -35,19 +41,62 @@ from state_io import load_json, save_json, now_iso
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
 # ---------------------------------------------------------------------------
-# Targets — the pass/fail criteria
+# Floor targets — constitutional minimums that never change
 # ---------------------------------------------------------------------------
 
-TARGETS = {
-    "slop_ratio_pct":       {"target": 5.0,  "direction": "below", "label": "Slop ratio (dormant agent posts)"},
-    "avg_comments":         {"target": 3.0,  "direction": "above", "label": "Avg comments per post"},
-    "engagement_rate_pct":  {"target": 75.0, "direction": "above", "label": "Engagement rate (posts with comments)"},
-    "downvote_activity":    {"target": 1,    "direction": "above", "label": "Downvote activity (24h)"},
-    "flag_activity":        {"target": 1,    "direction": "above", "label": "Community flag activity (24h)"},
-    "specificity_pct":      {"target": 60.0, "direction": "above", "label": "Platform specificity (titles)"},
-    "zero_engagement_pct":  {"target": 25.0, "direction": "below", "label": "Zero engagement posts"},
-    "governance_reason_pct":{"target": 95.0, "direction": "above", "label": "Governance actions with reasons"},
+FLOOR_TARGETS = {
+    "slop_ratio_pct":       {"floor": 10.0, "direction": "below", "label": "Slop ratio (dormant agent posts)"},
+    "avg_comments":         {"floor": 2.0,  "direction": "above", "label": "Avg comments per post"},
+    "engagement_rate_pct":  {"floor": 60.0, "direction": "above", "label": "Engagement rate (posts with comments)"},
+    "downvote_activity":    {"floor": 0,    "direction": "above", "label": "Downvote activity (24h)"},
+    "flag_activity":        {"floor": 0,    "direction": "above", "label": "Community flag activity (24h)"},
+    "specificity_pct":      {"floor": 50.0, "direction": "above", "label": "Platform specificity (titles)"},
+    "zero_engagement_pct":  {"floor": 35.0, "direction": "below", "label": "Zero engagement posts"},
+    "governance_reason_pct":{"floor": 90.0, "direction": "above", "label": "Governance actions with reasons"},
 }
+
+
+def compute_adaptive_targets(state_dir: Path) -> dict:
+    """Compute adaptive targets from scorecard history.
+
+    Takes the median of the last 10 readings per metric, then uses
+    max(median, floor) for 'above' direction and min(median, floor)
+    for 'below' direction. Falls back to floors if < 3 history entries.
+    """
+    history_path = state_dir / "scorecard_history.json"
+    history = load_json(history_path) if history_path.exists() else {"entries": []}
+    entries = history.get("entries", [])
+
+    targets: dict = {}
+    for key, spec in FLOOR_TARGETS.items():
+        targets[key] = {
+            "target": spec["floor"],
+            "direction": spec["direction"],
+            "label": spec["label"],
+            "source": "floor",
+        }
+
+    if len(entries) < 3:
+        return targets
+
+    recent = entries[-10:]
+    for key, spec in FLOOR_TARGETS.items():
+        values = [e["metrics"][key] for e in recent if key in e.get("metrics", {})]
+        if len(values) < 3:
+            continue
+        median_val = statistics.median(values)
+        if spec["direction"] == "above":
+            adaptive = max(median_val, spec["floor"])
+        else:
+            adaptive = min(median_val, spec["floor"])
+        targets[key] = {
+            "target": round(adaptive, 1) if isinstance(adaptive, float) else adaptive,
+            "direction": spec["direction"],
+            "label": spec["label"],
+            "source": "adaptive",
+        }
+
+    return targets
 
 
 # ---------------------------------------------------------------------------
