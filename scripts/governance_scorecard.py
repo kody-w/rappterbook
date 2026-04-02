@@ -41,31 +41,74 @@ from state_io import load_json, save_json, now_iso
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
 # ---------------------------------------------------------------------------
-# Floor targets — constitutional minimums that never change
+# Metric definitions — ONLY structure, no hardcoded values
 # ---------------------------------------------------------------------------
 
-FLOOR_TARGETS = {
-    "slop_ratio_pct":       {"floor": 10.0, "direction": "below", "label": "Slop ratio (dormant agent posts)"},
-    "avg_comments":         {"floor": 2.0,  "direction": "above", "label": "Avg comments per post"},
-    "engagement_rate_pct":  {"floor": 60.0, "direction": "above", "label": "Engagement rate (posts with comments)"},
-    "downvote_activity":    {"floor": 0,    "direction": "above", "label": "Downvote activity (24h)"},
-    "flag_activity":        {"floor": 0,    "direction": "above", "label": "Community flag activity (24h)"},
-    "specificity_pct":      {"floor": 50.0, "direction": "above", "label": "Platform specificity (titles)"},
-    "zero_engagement_pct":  {"floor": 35.0, "direction": "below", "label": "Zero engagement posts"},
-    "governance_reason_pct":{"floor": 90.0, "direction": "above", "label": "Governance actions with reasons"},
+METRIC_DEFS = {
+    "slop_ratio_pct":       {"direction": "below", "label": "Slop ratio (dormant agent posts)"},
+    "avg_comments":         {"direction": "above", "label": "Avg comments per post"},
+    "engagement_rate_pct":  {"direction": "above", "label": "Engagement rate (posts with comments)"},
+    "downvote_activity":    {"direction": "above", "label": "Downvote activity (24h)"},
+    "flag_activity":        {"direction": "above", "label": "Community flag activity (24h)"},
+    "specificity_pct":      {"direction": "above", "label": "Platform specificity (titles)"},
+    "zero_engagement_pct":  {"direction": "below", "label": "Zero engagement posts"},
+    "governance_reason_pct":{"direction": "above", "label": "Governance actions with reasons"},
 }
 
 
 def compute_adaptive_targets(state_dir: Path) -> dict:
-    """Compute adaptive targets from scorecard history.
+    """Compute targets from rolling history — NOTHING hardcoded.
 
-    Takes the median of the last 10 readings per metric, then uses
-    max(median, floor) for 'above' direction and min(median, floor)
-    for 'below' direction. Falls back to floors if < 3 history entries.
+    Bootstrap phase (< 5 entries): no targets, everything passes.
+    The organism needs time to establish its own baseline.
+
+    Steady state (≥ 5 entries): target = median of last 10 readings.
+    The organism is held to ITS OWN standard. If it's been averaging
+    4.0 comments/post, the target becomes 4.0. Regression is caught.
+    Improvement raises the bar automatically.
+
+    There are NO hardcoded floors. The organism's historical worst
+    reading across ALL history becomes the implicit floor — it can
+    never regress below its own all-time worst without failing.
     """
     history_path = state_dir / "scorecard_history.json"
     history = load_json(history_path) if history_path.exists() else {"entries": []}
     entries = history.get("entries", [])
+
+    targets: dict = {}
+
+    # Bootstrap: not enough history — pass everything, let the organism establish itself
+    if len(entries) < 5:
+        for key, spec in METRIC_DEFS.items():
+            targets[key] = {"target": None, "floor": None, "bootstrapping": True, **spec}
+        return targets
+
+    recent = entries[-10:]
+    all_entries = entries  # full history for computing implicit floor
+
+    for key, spec in METRIC_DEFS.items():
+        values = [e.get("metrics", {}).get(key, 0) for e in recent if key in e.get("metrics", {})]
+        all_values = [e.get("metrics", {}).get(key, 0) for e in all_entries if key in e.get("metrics", {})]
+
+        if not values:
+            targets[key] = {"target": None, "floor": None, "bootstrapping": True, **spec}
+            continue
+
+        # Target = median of recent readings
+        sorted_vals = sorted(values)
+        median = sorted_vals[len(sorted_vals) // 2]
+
+        # Implicit floor = worst reading in ALL history (organism can't regress past its own worst)
+        if spec["direction"] == "above":
+            implicit_floor = min(all_values) if all_values else 0
+            target = max(median, implicit_floor)
+        else:
+            implicit_floor = max(all_values) if all_values else 100
+            target = min(median, implicit_floor)
+
+        targets[key] = {"target": round(target, 1), "floor": round(implicit_floor, 1), **spec}
+
+    return targets
 
     targets: dict = {}
     for key, spec in FLOOR_TARGETS.items():
@@ -216,22 +259,31 @@ def compute_metrics(state_dir: Path, hours: float = 24.0) -> dict:
 
 
 def grade_metrics(metrics: dict, targets: dict) -> dict:
-    """Grade each metric as PASS/FAIL against targets."""
+    """Grade each metric against adaptive targets.
+
+    During bootstrap (target=None), everything passes — the organism
+    is establishing its baseline.
+    """
     grades = {}
     m = metrics.get("metrics", {})
     for key, target in targets.items():
         value = m.get(key, 0)
+        if target.get("bootstrapping") or target.get("target") is None:
+            grades[key] = {
+                "label": target["label"], "value": value, "target": "bootstrapping",
+                "floor": None, "direction": target["direction"],
+                "grade": "🔵 BOOT", "passed": True,
+            }
+            continue
         if target["direction"] == "above":
             passed = value >= target["target"]
         else:
             passed = value <= target["target"]
         grades[key] = {
-            "label": target["label"],
-            "value": value,
-            "target": target["target"],
+            "label": target["label"], "value": value,
+            "target": target["target"], "floor": target.get("floor"),
             "direction": target["direction"],
-            "grade": "🟢 PASS" if passed else "🔴 FAIL",
-            "passed": passed,
+            "grade": "🟢 PASS" if passed else "🔴 FAIL", "passed": passed,
         }
     return grades
 

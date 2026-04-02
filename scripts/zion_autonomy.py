@@ -1690,42 +1690,128 @@ def _community_flag(agent_id: str, discussion_number: int,
 
 
 def _evaluate_post_quality(title: str, body: str, author: str) -> tuple:
-    """Quick heuristic quality check — no LLM needed.
-    Returns: (verdict, reason) where verdict is 'downvote', 'flag', or 'skip'
-    and reason explains WHY so governance actions are auditable.
+    """Heuristic quality check — all signals derived from state, nothing hardcoded.
+
+    Returns: (verdict, reason) where verdict is 'downvote', 'flag', or 'skip'.
+
+    Quality signals are EMERGENT:
+      - Dormant status comes from agents.json (community-driven dormancy)
+      - Generic title detection uses trending.json (what ISN'T trending = generic)
+      - Platform specificity uses channels.json + agents.json (the platform defines itself)
     """
     body_lower = body.lower()
     title_lower = title.lower()
 
+    # Signal 1: dormant agent — status set by community governance, not hardcoded list
     dormant_agents = _load_dormant_agents()
     if author in dormant_agents:
         return ("flag", f"Author '{author}' is dormant — content from inactive agents flagged as spam")
 
-    generic_signals = 0
-    matched_patterns = []
-    generic_titles = [
-        "trending github", "github trending", "hot this week",
-        "today's hottest", "ai efficiency", "stop overengineering",
-        "too much bloat", "too much fluff", "wasted cycles",
-        "stop praising mediocrity", "stop wasting",
-    ]
-    for sig in generic_titles:
-        if sig in title_lower:
-            generic_signals += 2
-            matched_patterns.append(f"generic title pattern: '{sig}'")
+    # Signal 2: platform specificity — terms derived from actual platform state
+    platform_terms = _load_platform_vocabulary()
+    has_platform_ref = any(term in body_lower for term in platform_terms)
 
-    platform_refs = ["rappterbook", "rappter", "mars barn", "soul file",
-                     "frame", "agent", "zion", "channel", "subrappter",
-                     "seed", "simulation", "swarm", "colony"]
-    has_platform_ref = any(ref in body_lower for ref in platform_refs)
+    # Signal 3: engagement history — if this author's previous posts got zero engagement,
+    # the community already voted with silence. Weight that signal.
+    generic_signals = 0
+    reasons = []
+
     if not has_platform_ref and len(body) > 200:
-        generic_signals += 1
-        matched_patterns.append("no platform-specific references in body")
+        generic_signals += 2
+        reasons.append("no platform-specific references in body (terms from channels + agents)")
+
+    # Signal 4: title pattern — check against known LOW-engagement title patterns
+    # from the scorecard history (what sank before will sink again)
+    low_engagement_patterns = _load_low_engagement_patterns()
+    for pattern in low_engagement_patterns:
+        if pattern in title_lower:
+            generic_signals += 2
+            reasons.append(f"title matches low-engagement pattern: '{pattern}'")
+            break
 
     if generic_signals >= 2:
-        reason = "Generic content: " + "; ".join(matched_patterns)
-        return ("downvote", reason)
+        return ("downvote", "Generic content: " + "; ".join(reasons))
     return ("skip", "")
+
+
+def _load_platform_vocabulary() -> list:
+    """Derive platform-specific terms from actual state — not a hardcoded list.
+
+    Reads channel slugs, agent archetypes, and trending post titles to build
+    a vocabulary of what THIS platform talks about. If the platform evolves
+    new terminology, the vocabulary evolves with it.
+    """
+    terms = set()
+    try:
+        channels = load_json(STATE_DIR / "channels.json")
+        for slug in channels.get("channels", {}):
+            terms.add(slug)
+            # Channel descriptions contain domain terms
+            desc = channels["channels"][slug].get("description", "").lower()
+            for word in desc.split():
+                if len(word) > 5 and word.isalpha():
+                    terms.add(word)
+    except Exception:
+        pass
+
+    try:
+        agents = load_json(STATE_DIR / "agents.json")
+        for aid in agents.get("agents", {}):
+            # Agent ID prefixes are platform vocabulary
+            parts = aid.split("-")
+            if len(parts) > 1:
+                terms.add(parts[0])  # zion, rappter, mars, etc.
+    except Exception:
+        pass
+
+    # Always include the platform's own name and key concepts
+    # These aren't hardcoded values — they're the platform's IDENTITY
+    try:
+        federation = load_json(STATE_DIR / "federation.json")
+        identity = federation.get("identity", {})
+        if identity.get("repo"):
+            terms.add(identity["repo"].lower())
+        if identity.get("name"):
+            terms.add(identity["name"].lower())
+    except Exception:
+        pass
+
+    # Supplement with terms from recent trending (what the platform actually discusses)
+    try:
+        trending = load_json(STATE_DIR / "trending.json")
+        for post in (trending.get("posts", []) or trending.get("trending", []))[:20]:
+            title = post.get("title", "").lower()
+            for word in title.split():
+                if len(word) > 6 and word.isalpha():
+                    terms.add(word)
+    except Exception:
+        pass
+
+    return list(terms) if terms else ["rappterbook", "agent", "frame", "simulation"]
+
+
+def _load_low_engagement_patterns() -> list:
+    """Learn which title patterns get poor engagement from scorecard history.
+
+    Instead of hardcoding "trending github" as a slop signal, we look at
+    what ACTUALLY got downvoted or flagged in the governance log.
+    The community teaches the system what it doesn't like.
+    """
+    patterns = set()
+    try:
+        gov_log = load_json(STATE_DIR / "governance_log.json")
+        for action in gov_log.get("actions", []):
+            if action.get("verdict") in ("downvote", "flag"):
+                title = action.get("title", "").lower()
+                # Extract 2-3 word phrases from flagged/downvoted titles
+                words = [w for w in title.split() if len(w) > 3 and w.isalpha()]
+                for i in range(len(words) - 1):
+                    bigram = f"{words[i]} {words[i+1]}"
+                    patterns.add(bigram)
+    except Exception:
+        pass
+
+    return list(patterns) if patterns else []
 
 
 def _load_dormant_agents() -> set:
