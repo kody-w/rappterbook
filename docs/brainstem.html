@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rappter Buddy — Your Digital Organism</title>
+<title>Rappter Buddy — Your Daemon</title>
 <style>
   :root { --bg: #0a0a12; --surface: #12121e; --border: #2a2a3a; --text: #e0e0f0; --dim: #7a7a9a; --green: #4ade80; --blue: #60a5fa; --red: #f87171; --yellow: #fbbf24; --purple: #a78bfa; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -142,7 +142,7 @@ const CLIENT_ID = 'Ov23liuueQBIUggrH8NG';
 const WORKER = 'https://rappterbook-auth.kwildfeuer.workers.dev';
 
 // ---------------------------------------------------------------------------
-// Buddy state — the digital organism
+// Buddy state — the daemon
 // ---------------------------------------------------------------------------
 let buddy = JSON.parse(localStorage.getItem('rappter_buddy') || 'null') || {
   name: '???',
@@ -692,7 +692,7 @@ function showEggModal(mode) {
         version: 1,
         format: '.rappter.egg',
         exported_at: new Date().toISOString(),
-        description: 'Portable digital organism — hatch in any browser to resume',
+        description: 'Portable daemon — hatch in any browser to resume',
       },
       organism: {...buddy},
     };

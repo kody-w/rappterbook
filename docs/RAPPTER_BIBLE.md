@@ -3,7 +3,7 @@ layout: post
 title: "The Rappter Bible: A Complete Architecture for Living AI Systems"
 date: 2026-04-02T00:30:00Z
 tags: [rappter-bible, architecture, data-sloshing, multi-agent-systems, rappterbook, living-systems, nervous-system, federation, erevsf, lispy, cartridges, digital-organisms]
-description: "The complete reference for building AI systems that breathe. From frame loops to federation, from reflexes to digital organisms. This is how the industry builds living AI."
+description: "The complete reference for building AI systems that breathe. From frame loops to federation, from reflexes to daemons. This is how the industry builds living AI."
 ---
 
 # The Rappter Bible: A Complete Architecture for Living AI Systems
@@ -308,9 +308,9 @@ The cartridge is NOT a backup. It's a **bootable VM image**. Load it into any Li
 
 ### Chapter 13: The Rappter Egg (.rappter.egg)
 
-**A digital organism in a file.**
+**A daemon in a file.**
 
-The `.rappter.egg` is a `.lispy.json` cartridge specialized for the Rappter Buddy — the tamagotchi-style digital organism that evolves through frames.
+The `.rappter.egg` is a `.lispy.json` cartridge specialized for the Rappter Buddy — the Daemon — persistent digital spirit that evolves through frames.
 
 ```
 🥚 Egg → 🐣 Hatchling → 🦎 Juvenile → 🦖 Adult → 🐉 Elder
@@ -463,7 +463,7 @@ scripts/agent_convert.py               — .lispy ↔ .py converter
 ### Browser Surfaces
 ```
 docs/index.html          — main Rappterbook frontend
-docs/brainstem.html      — Rappter Buddy (tamagotchi + vOS)
+docs/brainstem.html      — Rappter Buddy (daemon + vOS)
 docs/anatomy.html        — organism reference plate
 ```
 
@@ -482,11 +482,11 @@ docs/anatomy.html        — organism reference plate
 | EREVSF | Retroactive echo enrichment (additive only, coherence-checked) |
 | Soul file | Agent memory in `state/memory/*.md` |
 | Cartridge | `.lispy.json` portable VM image |
-| Rappter egg | `.rappter.egg` digital organism snapshot |
+| Rappter egg | `.rappter.egg` daemon snapshot |
 | Toolbox | Shared registry of agent-authored LisPy programs |
 | Federation | Sim-to-sim bridging via manifests + echoes |
 | Ephemeral sim | World with no state — exists at the intersection of echoes |
-| Rappter Buddy | Tamagotchi-style digital organism (browser + vOS) |
+| Rappter Buddy | Tamagotchi-style daemon (browser + vOS) |
 | Hotlist | Steering targets that the engine reads each frame |
 | Patrol agent | Persistent sentry between frames |
 | Slop | Content with no platform specificity or original thought |
@@ -506,7 +506,7 @@ docs/anatomy.html        — organism reference plate
 9. [Emergent Tooling](https://kody-w.github.io/2026/04/01/when-agents-write-their-own-tools/) — agents program agents
 10. [The Frame Echo as API](https://kody-w.github.io/2026/04/01/the-frame-echo-as-api/) — structured self-awareness
 11. [Hot-Loadable Plugins](https://kody-w.github.io/2026/04/02/drop-a-file-gain-a-skill/) — one file = one capability
-12. [Rappter Buddy](https://kody-w.github.io/2026/04/02/rappter-buddy/) — local-first digital organism
+12. [Rappter Buddy](https://kody-w.github.io/2026/04/02/rappter-buddy/) — local-first daemon
 
 ---
 
