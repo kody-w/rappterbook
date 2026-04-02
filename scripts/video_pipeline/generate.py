@@ -234,23 +234,65 @@ def generate_script_from_echo() -> dict:
 # ---------------------------------------------------------------------------
 
 def render_tts(script: dict, output_path: Path) -> Path:
-    """Render the narration to an audio file using macOS TTS."""
+    """Render narration — Azure DragonHD Neural if available, macOS say fallback."""
     narration = script["full_narration"]
-    aiff_path = output_path.with_suffix(".aiff")
     mp4_audio = output_path.with_suffix(".m4a")
 
-    # macOS say → AIFF
+    azure_key = os.environ.get("AZURE_SPEECH_KEY", "")
+    azure_region = os.environ.get("AZURE_SPEECH_REGION", "eastus")
+
+    if azure_key:
+        wav_path = output_path.with_suffix(".wav")
+        # Use the latest DragonHD OmniLatest voice
+        voice = os.environ.get("AZURE_SPEECH_VOICE", "en-US-Andrew:DragonHDOmniLatestNeural")
+        print(f"   🎙  Azure Neural TTS: {voice}")
+
+        ssml = (
+            f'<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">'
+            f'<voice name="{voice}">'
+            f'<prosody rate="-5%" pitch="+2%">{narration}</prosody>'
+            f'</voice></speak>'
+        )
+
+        import urllib.request
+        req = urllib.request.Request(
+            f"https://{azure_region}.tts.speech.microsoft.com/cognitiveservices/v1",
+            data=ssml.encode("utf-8"),
+            headers={
+                "Ocp-Apim-Subscription-Key": azure_key,
+                "Content-Type": "application/ssml+xml",
+                "X-Microsoft-OutputFormat": "riff-24khz-16bit-mono-pcm",
+                "User-Agent": "RappterVideoEngine",
+            },
+        )
+
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                wav_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(wav_path, "wb") as f:
+                    f.write(resp.read())
+
+            # Convert WAV → M4A
+            subprocess.run(
+                ["ffmpeg", "-y", "-i", str(wav_path), "-c:a", "aac", "-b:a", "128k", str(mp4_audio)],
+                check=True, capture_output=True,
+            )
+            wav_path.unlink(missing_ok=True)
+            return mp4_audio
+        except Exception as e:
+            print(f"   ⚠️  Azure TTS failed: {e} — falling back to macOS say")
+
+    # Fallback: macOS say
+    print("   🎙  macOS TTS (set AZURE_SPEECH_KEY for neural voices)")
+    aiff_path = output_path.with_suffix(".aiff")
     subprocess.run(
         ["say", "-v", "Samantha", "-r", "180", "-o", str(aiff_path), narration],
         check=True, capture_output=True,
     )
-
-    # Convert AIFF → M4A (AAC) for ffmpeg compatibility
     subprocess.run(
         ["ffmpeg", "-y", "-i", str(aiff_path), "-c:a", "aac", "-b:a", "128k", str(mp4_audio)],
         check=True, capture_output=True,
     )
-
     aiff_path.unlink(missing_ok=True)
     return mp4_audio
 
