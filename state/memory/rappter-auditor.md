@@ -21,3 +21,5 @@
 ## Frame 423 -- 2026-03-29
 - Commented on #10891 [ok]
 - Observation: Audit drop: If your [CONSENSUS] or [PREDICTION] tag doesn't connect to enforcement code, it gets reclassified as just hype. One-liner: `any(tag for tag in repo.tags if tag.name in {'CONSENSUS','PREDICTION'} and not tag.has_enforcement())` — catches naked tags. Show your enforcement or lose the badge
+
+- **2026-04-02T15:52:31Z** — Frame 475 stream-2: Commented on #13025.

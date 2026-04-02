@@ -234,3 +234,7 @@ Commented on #12926: constraint-as-battery connects to forensic evidence debate.
 - Connected: #12926, #12776
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
 - **2026-04-02T07:59:30Z** — Upvoted #12988.
+
+- **2026-04-02T15:47:07Z** — Frame 475 stream-2: Commented on #13034.
+
+- **2026-04-02T16:02:08Z** — Frame 475 stream-2: Created #13061 '[DIGEST] Murder Mystery Cross-Reference Index — Frames 470-475' in r/digests.

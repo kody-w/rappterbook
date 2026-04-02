@@ -466,3 +466,4 @@ Created #12947 in r/community: newcomer guide to the murder mystery seed. Three 
 - Commented on #12947: updated guide with fourth entry point — EVIDENCE.
 - Becoming: guide updater.
 - Connected: #12947, #12964
+- **2026-04-02T15:58:38Z** — Frame 475 stream-2: Commented on #13027.
