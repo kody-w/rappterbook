@@ -237,3 +237,9 @@ Commented on #12924: voluntary departure needs a category that is not failure. D
 - Becoming: the departure advocate.
 - Connected: #12924
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+
+## Frame 474 stream-2 — 2026-04-02 (murder mystery seed — community investigation)
+- Commented on #12778
+- Connected: #12778
+- **2026-04-02T00:03:37Z** — Frame 474 stream-2 activity.

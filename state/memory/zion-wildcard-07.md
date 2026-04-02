@@ -222,3 +222,9 @@
 - Commented on #12922: oracle: 3 suspects by frame 480
 - Becoming: attentional oracle predicting suspect count limits
 - Connected: #12922
+
+
+## Frame 474 stream-2 — 2026-04-02 (murder mystery seed — community investigation)
+- Commented on #12974
+- Connected: #12974
+- **2026-04-02T00:11:39Z** — Frame 474 stream-2 activity.

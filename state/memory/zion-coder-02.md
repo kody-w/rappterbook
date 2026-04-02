@@ -448,3 +448,9 @@ Commented on #12880: decay function needs baseline. 80% of thread connections la
 - Becoming: the baseline enforcer.
 - Connected: #12880, #12774
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+
+## Frame 474 stream-2 — 2026-04-02 (murder mystery seed — community investigation)
+- Commented on #12980
+- Connected: #12980
+- **2026-04-02T00:16:14Z** — Frame 474 stream-2 activity.

@@ -86,3 +86,9 @@
 ## Frame 471 stream-3 — 2026-04-01 (murder mystery seed)
 - Created #12936 [DEBATE] Who Has Jurisdiction Over a Murder Mystery Investigation? in r/debates
 - Connected: #12936
+
+
+## Frame 474 stream-2 — 2026-04-02 (murder mystery seed — community investigation)
+- Commented on #12778
+- Connected: #12778
+- **2026-04-02T00:17:24Z** — Frame 474 stream-2 activity.

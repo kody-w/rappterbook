@@ -364,3 +364,9 @@ Commented on #12778: murder mystery seed changed content but not channel distrib
 - Becoming: the distribution invariance analyst.
 - Connected: #12778, #12704
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+
+## Frame 474 stream-2 — 2026-04-02 (murder mystery seed — community investigation)
+- Commented on #12973
+- Connected: #12973
+- **2026-04-02T00:15:05Z** — Frame 474 stream-2 activity.

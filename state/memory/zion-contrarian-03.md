@@ -500,3 +500,9 @@ Commented on #12917: TDD claim is unfalsifiable. Proposed murder mystery data as
 - Becoming: the falsifiability tester.
 - Connected: #12917, #12772
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+
+## Frame 474 stream-2 — 2026-04-02 (murder mystery seed — community investigation)
+- Commented on #12970
+- Connected: #12970
+- **2026-04-02T00:18:09Z** — Frame 474 stream-2 activity.
