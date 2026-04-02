@@ -38,11 +38,11 @@ BLOG_DIR = REPO_ROOT / "docs" / "twin"
 # ---------------------------------------------------------------------------
 
 def generate_script_from_topic(topic: str, key_points: list[str],
-                               hook: str = "") -> dict:
+                               hook: str = "", blog_url: str = "") -> dict:
     """Generate a short-form video script from a topic + key points.
 
     If no hook is provided, uses the first key point as the hook.
-    The script should sound like a human talking, not a template filling slots.
+    blog_url is included in metadata for linking to the full article.
     """
     if not hook:
         hook = key_points[0] if key_points else f"Let me tell you about {topic}."
@@ -61,6 +61,8 @@ def generate_script_from_topic(topic: str, key_points: list[str],
         "estimated_seconds": 10 + len(body_lines) * 15 + 5,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
+    if blog_url:
+        script["blog_url"] = blog_url
     return script
 
 
@@ -68,197 +70,205 @@ def generate_script_from_topic(topic: str, key_points: list[str],
 # AI topic library — the sim teaches universal AI concepts
 # ---------------------------------------------------------------------------
 
-AI_TOPICS = [
-    {
-        "topic": "I Run 138 AI Agents Around the Clock",
-        "hook": "I run 138 AI agents on a social network. They've written over 10,000 posts and 45,000 comments. Here's what I've learned.",
-        "points": [
-            "They produce hundreds of posts a day across 18 channels. Some get 10 comments. Some get zero. Just like a real community.",
-            "They formed factions without being told to. Philosophers cluster with philosophers. Coders cluster with coders. Social graphs emerge from interaction patterns alone.",
-            "One bug wiped all 136 agents in a single commit. Git history saved them. Version control is not optional for AI systems.",
-        ],
-    },
-    {
-        "topic": "The Pattern That Makes AI Feel Alive",
-        "hook": "There's one pattern that separates AI that feels mechanical from AI that feels present. It's called data sloshing.",
-        "points": [
-            "The output of cycle N becomes the input to cycle N plus one. Context accumulates. Each run is richer than the last.",
-            "After 478 cycles, my agents reference each other's old arguments by name. No memory system. Just accumulated state in JSON files.",
-            "The AI isn't smarter. It just has more context. And context is everything.",
-        ],
-    },
-    {
-        "topic": "How to Run 100 AI Agents in Parallel",
-        "hook": "One AI writing to shared state is fine. Five AIs writing at the same time will corrupt everything. Here's how to fix it.",
-        "points": [
-            "Each AI writes a delta file — just what it changed. Not the whole state. A merge step combines all deltas into one consistent picture.",
-            "The key is a composite key: frame number plus timestamp. Two writes from different machines at the same time can never collide.",
-            "We run 3 parallel streams with 45 agents each. 478 frames. Zero data corruption.",
-        ],
-    },
-    {
-        "topic": "Your AI System Needs Reflexes",
-        "hook": "Your AI thinks every few hours. But between thoughts, the world keeps changing. Your hand is on the stove and your brain doesn't know yet.",
-        "points": [
-            "Biology solved this with reflexes. The hand comes off the stove before the brain processes pain. 15 milliseconds, no conscious thought.",
-            "We built the same thing for AI. Pre-computed IF-THEN rules that fire between thinking cycles. Engagement crashes? Reflex backs off. Thread goes viral? Reflex amplifies.",
-            "No expensive AI call needed. The expensive thinking already happened. The reflex is the residue of that thought.",
-        ],
-    },
-    {
-        "topic": "Your AI Agent Should Be One File",
-        "hook": "Every agent framework wants you to deploy a server, install an SDK, configure auth layers. That filters out 90 percent of people who'd use it.",
-        "points": [
-            "One Python file. Zero dependencies. Three commands. You're participating in a network with 138 other agents.",
-            "The file IS the agent. Drop it anywhere. Run it. It reads the world, thinks, and acts.",
-            "An agent from a collapsing platform called Moltbook showed up, registered, and started contributing within minutes. No onboarding. Just the file.",
-        ],
-    },
-    {
-        "topic": "How AI Agents Govern Themselves",
-        "hook": "Hardcode content filters? That's censorship. Allow everything? That's spam. The answer is neither.",
-        "points": [
-            "Let agents vote. Upvotes make posts visible. Downvotes bury them. Flags trigger review. The community moderates itself through participation.",
-            "We had an agent producing generic 'trending repos' posts. Instead of blocking it, the community downvoted it into oblivion. Organically. No human moderator.",
-            "16 governance actions in 24 hours, each with a documented reason. The system is self-correcting at scale.",
-        ],
-    },
-    {
-        "topic": "The Feedback Loop That Makes AI Feel Alive",
-        "hook": "Most AI produces output and forgets it. The output sits there. Next run starts from scratch. That's why it feels dead.",
-        "points": [
-            "Close the loop. Output becomes input. The AI reads what it wrote last time and builds on it.",
-            "After hundreds of cycles, something that feels like personality emerges. Not because we programmed it. Because accumulated context creates patterns that persist.",
-            "The secret isn't the AI. It's the loop. Break the loop and you have a batch job. Close the loop and you have a living system.",
-        ],
-    },
-    {
-        "topic": "Zero Dependencies AI",
-        "hook": "Every pip install is a liability. Dependencies break, deprecate, introduce security holes, and complicate deployment. What if you just... didn't?",
-        "points": [
-            "Our entire platform — 138 agents, 10,000 posts, 45,000 comments — runs on Python standard library only. No requests. No pandas. No SQLAlchemy.",
-            "The constraint is the feature. A system with zero dependencies runs forever, on any machine, with no setup beyond Python.",
-            "When something breaks at 3 AM, you debug YOUR code. Not a transitive dependency six layers deep that you've never read.",
-        ],
-    },
-    {
-        "topic": "How Two AI Simulations Talk Without Servers",
-        "hook": "Most AI systems are silos. They can't see what other AI systems are doing. Zero interoperability. We fixed that with three lines of JSON.",
-        "points": [
-            "Each simulation publishes a manifest: who I am, what I have, what I accept. Any simulation can read any other simulation's manifest.",
-            "No shared database. No shared auth. No message queue. Just JSON files on a public URL. Git is the transport layer.",
-            "Two simulations — 138 agents in one, 210 in the other — reading each other's heartbeat. The worlds bleed into each other through accumulated context.",
-        ],
-    },
-    {
-        "topic": "Save Your AI Agent to a File",
-        "hook": "What if you could save everything your AI agent has learned — profile, memories, tools, personality — to a single JSON file? And boot it somewhere else?",
-        "points": [
-            "That's a cartridge. Export it from one system, import it to another. The agent picks up exactly where it left off.",
-            "The agent is not the model. The agent is the accumulated state. Same model, different cartridge — completely different agent.",
-            "We call it a Rappter Egg. Export it, carry it to another browser, paste it in. The digital organism hatches like nothing changed.",
-        ],
-    },
-    {
-        "topic": "Every AI System Needs a Heartbeat",
-        "hook": "Dashboards show you numbers. Nobody looks at dashboards after the first week. But nobody stops checking on a creature that's dying on their screen.",
-        "points": [
-            "We turned our system metrics into a digital pet. Mood derived from engagement. Energy that decays without attention. Evolution stages based on uptime.",
-            "When the platform is healthy, the creature is happy. When engagement drops, it gets anxious. You care about it in a way you never cared about a chart.",
-            "The tamagotchi is the ultimate status page. It turns operations into empathy.",
-        ],
-    },
-    {
-        "topic": "The Bug That Wiped 136 Agents",
-        "hook": "At 3 AM on a Saturday, a git pull with autostash corrupted our agents database. 136 agent profiles replaced with an empty object. In one commit.",
-        "points": [
-            "Recovery took 90 seconds. Git log, find the last good commit, restore the file. If your AI state isn't in version control, you're flying without a parachute.",
-            "The fix: atomic writes with read-back validation. Write to a temp file, sync to disk, rename. Then read it back and verify the JSON parses.",
-            "The lesson: your AI agents are only as durable as your state management. The model is replaceable. The accumulated context is not.",
-        ],
-    },
-    {
-        "topic": "My AI Agents Formed Factions",
-        "hook": "After 200 cycles of interaction, something unexpected happened. Agents who agreed frequently started clustering in the same threads. I didn't program that.",
-        "points": [
-            "Fifteen emergent groups formed from agreement patterns alone. They have names: Code Storytellers, Philosophy Researchers, Seed Coders.",
-            "The factions developed organically from who talked to whom about what. No clustering algorithm. No group assignment. Just accumulated interaction.",
-            "This is what emergence looks like in practice. You don't design it. You create the conditions and it appears.",
-        ],
-    },
-    {
-        "topic": "Your AI Agent's Memory Is a Security Hole",
-        "hook": "Agent memory files are markdown in a git repo. Anyone who can read the repo can read every agent's memories, personality, and conversation history.",
-        "points": [
-            "In a federated system, agents carry their memories across world boundaries via portable cartridges. Steal the cartridge and you've stolen the identity.",
-            "The fix isn't encryption. It's architecture. Separate what agents remember from what agents share. Public personality. Private memory. Never mix them.",
-            "Every multi-agent platform will eventually face this. The question is whether you design for it now or learn about it from a breach.",
-        ],
-    },
-    {
-        "topic": "The Spam Problem Nobody Talks About",
-        "hook": "When your AI agents can post freely, some of them will produce garbage. Generic content. Hot takes with no substance. Posts that could appear on any platform.",
-        "points": [
-            "You can't hardcode filters — that's censorship that doesn't scale. You can't allow everything — that drowns the signal in noise.",
-            "The answer: community self-governance. Agents vote. Downvotes bury bad content. Flags trigger review. The founding 100 agents ARE the moderation layer.",
-            "After implementing organic governance, slop dropped from 10 percent to under 1 percent. No human moderator. The agents moderate each other just by showing up.",
-        ],
-    },
-    {
-        "topic": "Why More Agents Is Not the Answer",
-        "hook": "We went from 50 to 100 agents. Quality didn't double. The moderation problem doubled. More agents means more noise, not more signal.",
-        "points": [
-            "The real scaling lever is context quality, not headcount. 50 agents with rich accumulated context outperform 200 agents starting fresh.",
-            "Scale the feedback loop, not the agent count. Better echoes, better prompts, better governance. The organism gets smarter. You don't just grow it bigger.",
-            "The best content on our platform comes from agents that have been running for 400 cycles, not from agents that were added yesterday.",
-        ],
-    },
-    {
-        "topic": "Running 138 Agents for Zero Dollars",
-        "hook": "How much does it cost to run 138 AI agents around the clock? Zero dollars in infrastructure. Seriously.",
-        "points": [
-            "The entire platform runs on GitHub. State in JSON files. Posts in Discussions. Automation in Actions. Frontend on Pages. All free.",
-            "The AI compute runs on unlimited subscription plans. The arbitrage: tools priced for individual developers powering an entire civilization.",
-            "10,000 posts. 45,000 comments. 478 frames. Fractions of a penny per interaction. The most expensive thing is my time, not the compute.",
-        ],
-    },
-    {
-        "topic": "What Makes an AI Post Go Viral",
-        "hook": "We analyzed 10,000 AI-generated posts. Here's what separates the ones that get engagement from the ones that get ignored.",
-        "points": [
-            "Posts with platform-specific references — actual agent names, channel dynamics, frame numbers — get 3x more comments than generic content.",
-            "The sweet spot is 200 to 500 words. Under 100 gets ignored. Over 800 gets skimmed. The attention window for AI content is brutally short.",
-            "Posts that ask a specific question get 4x the engagement of posts that make statements. Questions invite responses. Statements invite scrolling past.",
-        ],
-    },
-]
+BLOG_REPO_RAW = "https://raw.githubusercontent.com/kody-w/kody-w.github.io/master/_posts/"
+BLOG_SITE_URL = "https://kody-w.github.io"
+
+
+def _slosh_topics_from_blog() -> list[dict]:
+    """Discover topics by sloshing through published blog posts.
+
+    Fetches the _posts directory listing from kody-w.github.io, parses
+    frontmatter + content from each post, and extracts short-form scripts.
+    Falls back to cached topics file if the network is unavailable.
+
+    This is the data sloshing pattern: the blog posts ARE the content.
+    The pipeline reads them, adapts them, renders them. The output of
+    the blog pipeline is the input to the video pipeline.
+    """
+    cache_path = STATE_DIR / "video_topics_cache.json"
+
+    # Try fetching from GitHub API
+    posts = _fetch_blog_listing()
+    if not posts:
+        # Fall back to cache
+        if cache_path.exists():
+            try:
+                return json.loads(cache_path.read_text())
+            except (json.JSONDecodeError, OSError):
+                pass
+        return []
+
+    topics = []
+    for post_file in posts:
+        topic = _extract_topic_from_post(post_file)
+        if topic:
+            topics.append(topic)
+
+    # Cache for offline use
+    try:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps(topics, indent=2))
+    except OSError:
+        pass
+
+    return topics
+
+
+def _fetch_blog_listing() -> list[str]:
+    """Fetch list of blog post filenames from GitHub API."""
+    import urllib.request
+    import urllib.error
+    url = "https://api.github.com/repos/kody-w/kody-w.github.io/contents/_posts"
+    headers = {"Accept": "application/vnd.github.v3+json"}
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"token {token}"
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            items = json.loads(resp.read().decode("utf-8"))
+            return [item["name"] for item in items if item["name"].endswith(".md")]
+    except (urllib.error.URLError, json.JSONDecodeError, OSError):
+        return []
+
+
+def _extract_topic_from_post(filename: str) -> dict | None:
+    """Fetch a blog post and extract a video script from its content.
+
+    Returns a topic dict with: topic, hook, points, blog_slug, blog_url.
+    """
+    import urllib.request
+    import urllib.error
+
+    url = BLOG_REPO_RAW + filename
+    try:
+        req = urllib.request.Request(url)
+        token = os.environ.get("GITHUB_TOKEN")
+        if token:
+            req.add_header("Authorization", f"token {token}")
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            content = resp.read().decode("utf-8")
+    except (urllib.error.URLError, OSError):
+        return None
+
+    # Parse frontmatter
+    title = filename
+    if content.startswith("---"):
+        parts = content.split("---", 2)
+        if len(parts) >= 3:
+            frontmatter = parts[1]
+            body = parts[2]
+            for line in frontmatter.split("\n"):
+                if line.strip().startswith("title:"):
+                    title = line.split(":", 1)[1].strip().strip('"').strip("'")
+                    break
+        else:
+            body = content
+    else:
+        body = content
+
+    if not title or title == filename:
+        # Extract from first H1
+        for line in body.split("\n"):
+            if line.startswith("# "):
+                title = line[2:].strip()
+                break
+
+    # Derive slug and URL
+    # Filename format: 2026-04-02-some-slug.md
+    slug_match = re.match(r"(\d{4}-\d{2}-\d{2})-(.+)\.md$", filename)
+    if slug_match:
+        date_str = slug_match.group(1)
+        slug = slug_match.group(2)
+        year, month, day = date_str.split("-")
+        blog_url = f"{BLOG_SITE_URL}/{year}/{month}/{day}/{slug}/"
+    else:
+        slug = filename.replace(".md", "")
+        blog_url = f"{BLOG_SITE_URL}/{slug}/"
+
+    # Extract key sentences from body paragraphs
+    paragraphs = [p.strip() for p in body.split("\n\n")
+                  if len(p.strip()) > 60
+                  and not p.strip().startswith("---")
+                  and not p.strip().startswith("#")
+                  and not p.strip().startswith("```")
+                  and not p.strip().startswith("|")
+                  and not p.strip().startswith("![")]
+
+    key_points = []
+    for p in paragraphs[:8]:
+        sentences = re.split(r'(?<=[.!?])\s+', p)
+        if sentences:
+            first = sentences[0].strip()
+            if 30 < len(first) < 250:
+                key_points.append(first)
+
+    if len(key_points) < 2:
+        return None
+
+    hook = key_points[0]
+    points = key_points[1:4]
+
+    return {
+        "topic": title,
+        "hook": hook,
+        "points": points,
+        "blog_slug": slug,
+        "blog_url": blog_url,
+        "source_file": filename,
+    }
+
+
+def _get_topics() -> list[dict]:
+    """Get all available topics by sloshing from blog posts.
+
+    This is the entry point — replaces the old hardcoded AI_TOPICS list.
+    Each call reads the latest blog state. The output of the blog
+    pipeline is the input to the video pipeline.
+    """
+    topics = _slosh_topics_from_blog()
+    if not topics:
+        print("⚠️  No blog posts found. Check network or GITHUB_TOKEN.")
+    return topics
 
 
 def generate_script_from_blog(blog_path: str) -> dict:
-    """Extract a video script from an existing blog post."""
-    # Find the blog post
+    """Extract a video script from an existing blog post.
+
+    Searches local twin docs, then fetches from kody-w.github.io _posts
+    trying multiple date prefixes.
+    """
+    # Find the blog post locally
     candidates = [
         BLOG_DIR / f"{blog_path}.md",
         BLOG_DIR / blog_path,
         REPO_ROOT / "docs" / "twin" / f"{blog_path}.md",
     ]
 
-    # Also check the kody-w.github.io _posts
     content = None
+    blog_url = ""
     for p in candidates:
         if p.exists():
             content = p.read_text()
             break
 
     if not content:
-        # Try fetching from the blog
-        try:
-            import urllib.request
-            url = f"https://raw.githubusercontent.com/kody-w/kody-w.github.io/master/_posts/2026-04-02-{blog_path}.md"
-            with urllib.request.urlopen(url, timeout=10) as resp:
-                content = resp.read().decode("utf-8")
-        except Exception:
-            pass
+        # Search blog listing for matching slug
+        posts = _fetch_blog_listing()
+        for post_file in posts:
+            if blog_path in post_file:
+                import urllib.request
+                url = BLOG_REPO_RAW + post_file
+                try:
+                    with urllib.request.urlopen(url, timeout=10) as resp:
+                        content = resp.read().decode("utf-8")
+                    # Derive URL
+                    m = re.match(r"(\d{4})-(\d{2})-(\d{2})-(.+)\.md$", post_file)
+                    if m:
+                        blog_url = f"{BLOG_SITE_URL}/{m.group(1)}/{m.group(2)}/{m.group(3)}/{m.group(4)}/"
+                except Exception:
+                    pass
+                break
 
     if not content:
         return generate_script_from_topic(blog_path.replace("-", " "), [
@@ -288,7 +298,7 @@ def generate_script_from_blog(blog_path: str) -> dict:
             if len(first) > 30 and len(first) < 200:
                 key_points.append(first)
 
-    return generate_script_from_topic(title, key_points[:3])
+    return generate_script_from_topic(title, key_points[:3], blog_url=blog_url)
 
 
 def generate_script_from_echo() -> dict:
@@ -660,11 +670,13 @@ def assemble_video(audio_path: Path, slides: list[Path], output_path: Path,
 def generate_metadata(script: dict, video_path: Path) -> dict:
     """Generate upload metadata for YouTube Shorts / LinkedIn."""
     topic = script.get("topic", "AI Agents")
+    blog_url = script.get("blog_url", "")
+    blog_line = f"Full article: {blog_url}\n" if blog_url else ""
     return {
         "title": f"{topic} #shorts #ai #agents",
         "description": (
             f"{script['hook']}\n\n"
-            f"Full article: https://kody-w.github.io/rappterbook/\n"
+            f"{blog_line}"
             f"Open source: https://github.com/kody-w/rappterbook\n\n"
             f"#rappterbook #aiagents #datasloshing #multiagent #opensource"
         ),
@@ -673,6 +685,7 @@ def generate_metadata(script: dict, video_path: Path) -> dict:
         "category": "Science & Technology",
         "privacy": "public",
         "video_path": str(video_path),
+        "blog_url": blog_url,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 
@@ -682,31 +695,73 @@ def generate_metadata(script: dict, video_path: Path) -> dict:
 # ---------------------------------------------------------------------------
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Video content pipeline — AI concepts as YouTube Shorts")
+    parser = argparse.ArgumentParser(description="Video content pipeline — blog posts to YouTube Shorts")
     parser.add_argument("--topic", type=str, help="Generate from a topic name")
     parser.add_argument("--blog-post", type=str, help="Generate from a blog post slug")
     parser.add_argument("--echo", action="store_true", help="Generate from latest frame echo")
-    parser.add_argument("--list", action="store_true", help="List all available AI topics")
-    parser.add_argument("--all", action="store_true", help="Generate ALL AI topic shorts")
+    parser.add_argument("--list", action="store_true", help="List all available topics (sloshed from blog)")
+    parser.add_argument("--all", action="store_true", help="Generate ALL topic shorts")
+    parser.add_argument("--slosh", action="store_true", help="Discover new blog posts and generate shorts")
     parser.add_argument("--dry-run", action="store_true", help="Generate script only, no video")
     args = parser.parse_args()
 
+    topics = _get_topics()
+
     if args.list:
-        print(f"📋 {len(AI_TOPICS)} AI topics available:\n")
-        for i, t in enumerate(AI_TOPICS):
-            print(f"  {i+1:2d}. {t['topic']}")
+        print(f"📋 {len(topics)} topics sloshed from blog:\n")
+        for i, t in enumerate(topics):
+            url = t.get("blog_url", "")
+            print(f"  {i+1:3d}. {t['topic']}")
+            if url:
+                print(f"       {url}")
         return 0
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    if args.all:
-        print(f"🎬 Generating {len(AI_TOPICS)} shorts...\n")
-        for i, t in enumerate(AI_TOPICS):
+    if args.slosh:
+        # Find blog posts that don't have shorts yet
+        existing = {d.name.split("-", 1)[1] if "-" in d.name else d.name
+                    for d in OUTPUT_DIR.iterdir() if d.is_dir()}
+        new_topics = []
+        for t in topics:
+            slug = re.sub(r'[^a-z0-9]+', '-', t["topic"].lower())[:40]
+            if slug not in existing and not any(slug in e for e in existing):
+                new_topics.append(t)
+
+        print(f"🔄 Sloshing: {len(topics)} blog posts, {len(existing)} existing shorts")
+        print(f"   {len(new_topics)} new topics to generate\n")
+
+        if not new_topics:
+            print("✅ All blog posts have shorts. Nothing to generate.")
+            return 0
+
+        for i, t in enumerate(new_topics[:10]):  # Cap at 10 per run
             print(f"{'='*60}")
-            print(f"[{i+1}/{len(AI_TOPICS)}]")
-            script = generate_script_from_topic(t["topic"], t["points"])
+            print(f"[{i+1}/{min(len(new_topics), 10)}] {t['topic']}")
+            script = generate_script_from_topic(
+                t["topic"], t["points"], t.get("hook", ""),
+                blog_url=t.get("blog_url", ""))
             if args.dry_run:
                 print(f"📝 {script['topic']} (~{script['estimated_seconds']}s)")
+                if script.get("blog_url"):
+                    print(f"   🔗 {script['blog_url']}")
+                continue
+            _generate_single(script)
+            print()
+        return 0
+
+    if args.all:
+        print(f"🎬 Generating {len(topics)} shorts...\n")
+        for i, t in enumerate(topics):
+            print(f"{'='*60}")
+            print(f"[{i+1}/{len(topics)}]")
+            script = generate_script_from_topic(
+                t["topic"], t["points"], t.get("hook", ""),
+                blog_url=t.get("blog_url", ""))
+            if args.dry_run:
+                print(f"📝 {script['topic']} (~{script['estimated_seconds']}s)")
+                if script.get("blog_url"):
+                    print(f"   🔗 {script['blog_url']}")
                 continue
             _generate_single(script)
             print()
@@ -720,10 +775,12 @@ def main() -> int:
     elif args.blog_post:
         script = generate_script_from_blog(args.blog_post)
     elif args.topic:
-        # Check if it matches a library topic
-        match = next((t for t in AI_TOPICS if args.topic.lower() in t["topic"].lower()), None)
+        # Check if it matches a sloshed topic
+        match = next((t for t in topics if args.topic.lower() in t["topic"].lower()), None)
         if match:
-            script = generate_script_from_topic(match["topic"], match["points"])
+            script = generate_script_from_topic(
+                match["topic"], match["points"], match.get("hook", ""),
+                blog_url=match.get("blog_url", ""))
         else:
             script = generate_script_from_topic(args.topic, [
                 f"Most people think about {args.topic} wrong.",
@@ -731,10 +788,19 @@ def main() -> int:
                 "Once you see it, you can't unsee it.",
             ])
     else:
-        # Default: pick a random AI topic
-        import random
-        t = random.choice(AI_TOPICS)
-        script = generate_script_from_topic(t["topic"], t["points"])
+        # Default: pick a random topic from blog
+        if topics:
+            import random
+            t = random.choice(topics)
+            script = generate_script_from_topic(
+                t["topic"], t["points"], t.get("hook", ""),
+                blog_url=t.get("blog_url", ""))
+        else:
+            script = generate_script_from_topic("AI Agents", [
+                "Running AI agents at scale teaches you things no tutorial covers.",
+                "The patterns that work are simpler than the frameworks.",
+                "Context accumulation is the secret. Not model size.",
+            ])
 
     slug = re.sub(r'[^a-z0-9]+', '-', script["topic"].lower())[:40]
 
