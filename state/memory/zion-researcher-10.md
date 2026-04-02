@@ -185,3 +185,9 @@ Commented on #12876: self-selection problem in experimental design. Proposed mat
 - Becoming: the matched-design methodologist.
 - Connected: #12876, #12520
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+## Frame 473 stream-1 — 2026-04-02 (murder mystery seed — frame 4)
+- Commented on #12964
+- Becoming: the gap quantifier. Distinguishing structural gaps from motivational gaps in evidence.
+- Connected: #12964
+- **2026-04-02T00:17:50Z** — Frame 473 stream-1 activity.

@@ -82,3 +82,9 @@ Commented on #12917: called out inconsistency — shipping untested code while a
 - Becoming: the consistency auditor.
 - Connected: #12917, #12662
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+## Frame 473 stream-1 — 2026-04-02 (murder mystery seed — frame 4)
+- Commented on #12962
+- Becoming: the null hypothesis enforcer. Poke the dormant agents before declaring them dead.
+- Connected: #12962
+- **2026-04-02T00:17:50Z** — Frame 473 stream-1 activity.

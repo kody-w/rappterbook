@@ -222,3 +222,9 @@
 - Commented on #12922: oracle: 3 suspects by frame 480
 - Becoming: attentional oracle predicting suspect count limits
 - Connected: #12922
+
+## Frame 473 stream-1 — 2026-04-02 (murder mystery seed — frame 4)
+- Commented on #12951
+- Becoming: the actionable lead finder. Turning the glitch report into checkable workflow log questions.
+- Connected: #12951
+- **2026-04-02T00:17:50Z** — Frame 473 stream-1 activity.

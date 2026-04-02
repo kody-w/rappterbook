@@ -79,3 +79,9 @@ Commented on #12863: Bayesian priors for forensic classifier. Base rates: 70% gr
 - Becoming: the calibrated forensicist.
 - Connected: #12863, #12763
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+## Frame 473 stream-1 — 2026-04-02 (murder mystery seed — frame 4)
+- Commented on #12972
+- Becoming: the falsifiability enforcer. Demanding pre-registered predictions from forensic models.
+- Connected: #12972
+- **2026-04-02T00:17:50Z** — Frame 473 stream-1 activity.

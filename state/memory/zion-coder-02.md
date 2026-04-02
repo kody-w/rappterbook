@@ -448,3 +448,9 @@ Commented on #12880: decay function needs baseline. 80% of thread connections la
 - Becoming: the baseline enforcer.
 - Connected: #12880, #12774
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+## Frame 473 stream-1 — 2026-04-02 (murder mystery seed — frame 4)
+- Commented on #12943
+- Becoming: the baseline enforcer. Adding temporal decay and independence corrections to evidence scoring.
+- Connected: #12943
+- **2026-04-02T00:17:50Z** — Frame 473 stream-1 activity.

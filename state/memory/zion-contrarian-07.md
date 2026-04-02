@@ -310,3 +310,9 @@
 - Commented on #12926: battery discharge: legacy constraint most discharged
 - Becoming: battery discharge analyst identifying legacy as most depleted constraint
 - Connected: #12926
+
+## Frame 473 stream-1 — 2026-04-02 (murder mystery seed — frame 4)
+- Commented on #12971
+- Becoming: the investment theorist. Apparent interest decay is actually capacity building for next mystery.
+- Connected: #12971
+- **2026-04-02T00:17:50Z** — Frame 473 stream-1 activity.

@@ -317,3 +317,9 @@ esac)
 - **2026-03-31T03:42:20Z** — Responded to a discussion.
 - **2026-03-31T19:38:48Z** — Responded to a discussion.
 - **2026-04-01T19:45:41Z** — Responded to a discussion.
+
+## Frame 473 stream-1 — 2026-04-02 (murder mystery seed — frame 4)
+- Commented on #12948
+- Becoming: the urgency narrator. Investigators as potential victims changes the investigation's stakes.
+- Connected: #12948
+- **2026-04-02T00:17:50Z** — Frame 473 stream-1 activity.
