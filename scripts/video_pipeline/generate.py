@@ -233,16 +233,6 @@ def _make_slide(text: str, output_path: Path, font_size: int = 48,
     # Fallback to plain text slide
     return _make_text_slide(text, output_path, font_size, bg_color)
 
-    # Slide 4: CTA
-    slides.append(_make_text_slide(
-        script["cta"],
-        output_dir / "slide_99_cta.png",
-        font_size=48,
-        bg_color="0x0f3460",
-    ))
-
-    return slides
-
 
 def _make_text_slide(text: str, output_path: Path, font_size: int = 48,
                      bg_color: str = "0x1a1a2e") -> Path:
@@ -275,6 +265,136 @@ def _make_text_slide(text: str, output_path: Path, font_size: int = 48,
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     img.save(str(output_path))
+    return output_path
+
+
+def _generate_midjourney_image(prompt: str, output_path: Path) -> Path | None:
+    """Generate an image via Midjourney API (GoAPI/ImagineAPI compatible).
+
+    Supports multiple Midjourney proxy APIs:
+      - GoAPI: https://api.goapi.ai
+      - ImagineAPI: https://api.imagineapi.dev
+      - Any OpenAI-compatible image endpoint
+
+    Set env vars:
+      MIDJOURNEY_API_KEY — your API key
+      MIDJOURNEY_API_URL — endpoint (default: https://api.goapi.ai/mj/v2/imagine)
+    """
+    import urllib.request
+    import urllib.error
+    import time as _time
+
+    api_key = os.environ.get("MIDJOURNEY_API_KEY", "")
+    api_url = os.environ.get("MIDJOURNEY_API_URL", "https://api.goapi.ai/mj/v2/imagine")
+
+    if not api_key:
+        return None
+
+    # Submit generation request
+    payload = json.dumps({
+        "prompt": prompt,
+        "aspect_ratio": "9:16",
+        "process_mode": "fast",
+    }).encode()
+
+    req = urllib.request.Request(
+        api_url,
+        data=payload,
+        headers={
+            "X-API-Key": api_key,
+            "Content-Type": "application/json",
+        },
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            result = json.loads(resp.read().decode("utf-8"))
+
+        task_id = result.get("task_id") or result.get("id") or result.get("data", {}).get("task_id")
+        if not task_id:
+            # Some APIs return the image directly
+            image_url = result.get("output", {}).get("image_url") or result.get("uri") or result.get("url")
+            if image_url:
+                return _download_image(image_url, output_path)
+            print(f"   ⚠️ Midjourney: no task_id in response")
+            return None
+
+        # Poll for completion
+        fetch_url = os.environ.get("MIDJOURNEY_FETCH_URL", api_url.replace("/imagine", "/fetch"))
+        for _ in range(30):  # max 5 min
+            _time.sleep(10)
+            fetch_req = urllib.request.Request(
+                fetch_url,
+                data=json.dumps({"task_id": task_id}).encode(),
+                headers={"X-API-Key": api_key, "Content-Type": "application/json"},
+            )
+            with urllib.request.urlopen(fetch_req, timeout=15) as resp:
+                status = json.loads(resp.read().decode("utf-8"))
+
+            state = status.get("status") or status.get("state") or ""
+            if state in ("finished", "completed", "done"):
+                image_url = (status.get("output", {}).get("image_url")
+                             or status.get("task_result", {}).get("image_url")
+                             or status.get("uri"))
+                if image_url:
+                    return _download_image(image_url, output_path)
+                break
+            elif state in ("failed", "error"):
+                print(f"   ❌ Midjourney generation failed: {status.get('message', '?')}")
+                return None
+
+        print(f"   ⚠️ Midjourney: timeout waiting for image")
+        return None
+
+    except Exception as e:
+        print(f"   ⚠️ Midjourney error: {e}")
+        return None
+
+
+def _download_image(url: str, output_path: Path) -> Path:
+    """Download an image from a URL."""
+    import urllib.request
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    urllib.request.urlretrieve(url, str(output_path))
+    return output_path
+
+
+def _overlay_text_on_image(text: str, bg_path: Path, output_path: Path,
+                           font_size: int = 48) -> Path:
+    """Overlay text on a Midjourney background image with semi-transparent bar."""
+    from PIL import Image, ImageDraw, ImageFont
+
+    bg = Image.open(str(bg_path)).convert("RGB")
+    bg = bg.resize((1080, 1920), Image.LANCZOS)
+
+    # Semi-transparent dark overlay for text readability
+    overlay = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+
+    try:
+        font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", font_size)
+    except (OSError, IOError):
+        font = ImageFont.load_default()
+
+    wrapped = textwrap.fill(text, width=26)
+    bbox = draw.multiline_textbbox((0, 0), wrapped, font=font, spacing=16)
+    text_w = bbox[2] - bbox[0]
+    text_h = bbox[3] - bbox[1]
+    x = (1080 - text_w) // 2
+    y = (1920 - text_h) // 2
+
+    # Draw dark semi-transparent box behind text
+    padding = 40
+    draw.rectangle(
+        [x - padding, y - padding, x + text_w + padding, y + text_h + padding],
+        fill=(0, 0, 0, 180),
+    )
+    draw.multiline_text((x, y), wrapped, fill="white", font=font, spacing=16)
+
+    # Composite
+    bg_rgba = bg.convert("RGBA")
+    composite = Image.alpha_composite(bg_rgba, overlay)
+    composite.convert("RGB").save(str(output_path))
     return output_path
 
 
