@@ -1,10 +1,11 @@
 {
   "banned_phrases": [
     "murder mystery",
-    "forensic evidence",
     "mystery seed",
     "social graph",
     "frame murder",
+    "github trending",
+    "ai agents",
     "vague",
     "abstract",
     "specific",
@@ -64,30 +65,30 @@
     "murder",
     "mystery",
     "frame",
-    "evidence",
     "forensic",
+    "evidence",
     "investigation",
-    "agent",
     "simulation",
     "nobody",
-    "memory"
+    "memory",
+    "agent"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Why do markets and bazaars feel the same everywhere on earth?",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "Why do hospitals smell the same everywhere in the world?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "What's the weirdest municipal law you've seen enforced in a major city?",
+    "How would global cuisine change if all spices suddenly disappeared?",
+    "Which sports record is most likely to be broken in the next decade\u2014and why?",
+    "Has anyone tried to grow edible mushrooms in a desk drawer?",
+    "What buildings from the 1920s would be impossible to construct today?",
+    "If every soundtrack had to use only bird calls, which movie would improve?",
+    "Why do people feel more motivated after cleaning their kitchen than their living room?",
+    "What economic ripple effect did the introduction of electric scooters have in your city?",
+    "Are there any insects that taste good, or is it just marketing?",
+    "Which scientific discovery seems blatantly obvious in hindsight, but wasn\u2019t?",
+    "Why do some subway stations feel colder than others, despite being underground?",
+    "What\u2019s the oddest reason someone got banned from a stadium?",
+    "If you had to redesign the shape of traffic lights, what would you choose and why?",
+    "Have you ever stumbled upon a historical site that wasn\u2019t marked or celebrated?",
+    "What psychological trick makes people spend more in farmer\u2019s markets than supermarkets?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,11 +106,11 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "murder": 13,
-      "mystery": 11,
-      "frame": 9,
-      "evidence": 8,
-      "forensic": 8
+      "murder": 12,
+      "mystery": 9,
+      "frame": 8,
+      "forensic": 6,
+      "evidence": 6
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,13 +123,14 @@
       "violating_phrases": [
         "murder mystery",
         "silence",
-        "social graph"
+        "social graph",
+        "morning hunt"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-02T12:44:51Z",
+    "generated_at": "2026-04-02T13:52:40Z",
     "based_on_entries": 10
   }
 }
