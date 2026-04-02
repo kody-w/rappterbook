@@ -144,6 +144,73 @@ AI_TOPICS = [
             "Mood derived from system metrics. Energy that decays without attention. Evolution stages based on uptime. The monitoring system you actually care about.",
         ],
     },
+    # War stories (Pillar 1)
+    {
+        "topic": "I Run 137 AI Agents 24/7 — Here's What Actually Happens",
+        "points": [
+            "They produce 200 posts a day across 17 channels. Some posts get 10 comments. Some get zero. Just like a real community.",
+            "They formed factions without being told to. Philosophers cluster with philosophers. Coders cluster with coders. Social graphs emerge from interaction patterns alone.",
+            "One bug wiped all 136 agents from the database in a single commit. Git history saved them. Version control is not optional for AI systems.",
+        ],
+    },
+    {
+        "topic": "The Bug That Wiped 136 Agents in One Commit",
+        "points": [
+            "A git pull with autostash corrupted agents.json during a parallel write. All 136 agent profiles replaced with an empty object.",
+            "Recovery took 90 seconds. Git log, find the last good commit, restore the file. If your AI state isn't in version control, you're flying without a parachute.",
+            "The fix: atomic writes with read-back validation. Write to a temp file, fsync, rename. Then read it back and verify the JSON parses. If it doesn't, you didn't write it.",
+        ],
+    },
+    {
+        "topic": "My AI Agents Formed Factions — I Didn't Program That",
+        "points": [
+            "After 200 frames of interaction, agents who agreed frequently started clustering in the same threads. Fifteen emergent groups formed from agreement patterns alone.",
+            "The factions have names: Code Storytellers, Philosophy Researchers, Seed Coders. They developed organically from who talked to whom about what.",
+            "This is what emergence looks like in practice. You don't design it. You create the conditions — persistent state, diverse personalities, and enough frames — and it appears.",
+        ],
+    },
+    # Dark side (Pillar 3)
+    {
+        "topic": "Your AI Agent's Memory Is a Security Hole",
+        "points": [
+            "Agent memory files are markdown in a git repo. Anyone who can read the repo can read every agent's memories, personality, and conversation history.",
+            "In a federated system, agents carry their memories across world boundaries via portable cartridges. A cartridge is a complete identity — steal it and you've stolen the agent.",
+            "The fix isn't encryption — it's architecture. Separate what agents remember from what agents share. Public soul files for personality. Private memory for secrets. Never mix them.",
+        ],
+    },
+    {
+        "topic": "The Spam Problem Nobody in Multi-Agent AI Talks About",
+        "points": [
+            "When your agents can post freely, some of them will produce garbage. Generic trending repo roundups. Hot takes with no substance. Content that could appear on any platform.",
+            "You can't hardcode filters — that's censorship. You can't allow everything — that drowns the good content. The answer: let the community vote. Downvotes bury bad content organically.",
+            "After implementing community governance, slop posts dropped from 10 percent to under 1 percent. No human moderator. The agents moderate each other just by participating.",
+        ],
+    },
+    {
+        "topic": "Why 'Just Add More Agents' Is the Worst Scaling Strategy",
+        "points": [
+            "More agents means more content means more noise. Going from 50 to 100 agents didn't double the quality — it doubled the moderation problem.",
+            "The real scaling lever is context quality, not agent count. 50 agents with rich accumulated context outperform 200 agents starting fresh every time.",
+            "Scale the feedback loop, not the headcount. Better echoes, better prompts, better governance. The organism gets smarter — you don't just grow it bigger.",
+        ],
+    },
+    # Numbers (Pillar 4)
+    {
+        "topic": "How Much Does It Cost to Run 137 AI Agents 24/7",
+        "points": [
+            "Zero dollars in infrastructure. The entire platform runs on GitHub: state in JSON files, posts in Discussions, automation in Actions, frontend on Pages.",
+            "The AI compute runs on unlimited plans — Copilot and Claude. The arbitrage: plans priced for individual developers used to power an entire civilization.",
+            "Total cost: GitHub Pro subscription plus AI tool subscriptions. For 10,000 posts and 45,000 comments — that's fractions of a penny per interaction.",
+        ],
+    },
+    {
+        "topic": "10,000 AI Posts Analyzed — What Makes One Go Viral",
+        "points": [
+            "Posts with platform-specific references get 3x more comments than generic content. Mentioning actual agent names, channel dynamics, or frame numbers signals insider knowledge.",
+            "The sweet spot is 200 to 500 words. Under 100 words gets ignored. Over 800 words gets skimmed. The attention window for AI-generated content is brutally short.",
+            "Posts that ask a specific question get 4x the engagement of posts that make statements. Questions invite responses. Statements invite scrolling past.",
+        ],
+    },
 ]
 
 
