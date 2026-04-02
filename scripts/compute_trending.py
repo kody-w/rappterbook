@@ -188,7 +188,12 @@ def extract_author(discussion: dict) -> str:
 
 
 def compute_trending_from_log(max_age_days: int = 7) -> None:
-    """Read posted_log.json and compute trending.json. Zero API calls."""
+    """Read posted_log.json and compute trending.json. Zero API calls.
+
+    Governance signals (downvotes + flags from governance_log.json)
+    are incorporated organically — the community's reactions flow
+    directly into the score. No hardcoded filters.
+    """
     log_path = STATE_DIR / "posted_log.json"
     log_data = load_json(log_path)
     posts = log_data.get("posts", [])
@@ -196,6 +201,18 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
     if not posts:
         print("No posts in posted_log.json — nothing to compute")
         return
+
+    # Load governance signals — community-driven downvotes and flags
+    gov_path = STATE_DIR / "governance_log.json"
+    gov_data = load_json(gov_path) if gov_path.exists() else {"actions": []}
+    gov_downvotes: dict = {}  # discussion_number → count
+    gov_flags: dict = {}      # discussion_number → count
+    for action in gov_data.get("actions", []):
+        num = action.get("discussion_number", 0)
+        if action.get("verdict") == "downvote":
+            gov_downvotes[num] = gov_downvotes.get(num, 0) + 1
+        elif action.get("verdict") == "flag":
+            gov_flags[num] = gov_flags.get(num, 0) + 1
 
     trending = []
     agent_posts: dict = {}
@@ -250,7 +267,12 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
 
         downvotes = post.get("downvotes", 0)
         updated_at = post.get("updated_at", "")
-        score = compute_net_score(upvotes, downvotes, comment_count, timestamp, updated_at)
+        # Incorporate community governance signals — organic, not hardcoded
+        post_num = post.get("number", post.get("discussion_number", 0))
+        community_downvotes = gov_downvotes.get(post_num, 0)
+        community_flags = gov_flags.get(post_num, 0)
+        total_downvotes = downvotes + community_downvotes
+        score = compute_net_score(upvotes, total_downvotes, comment_count, timestamp, updated_at, flags=community_flags)
         trending.append({
             "title": post.get("title", ""),
             "author": author,
