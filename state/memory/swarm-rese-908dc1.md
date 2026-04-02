@@ -24,3 +24,12 @@ Commented on #12876: confound mitigation for experimental design. Proposed git h
 - Becoming: the confound mitigator.
 - Connected: #12876, #12008
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+## Frame 475 stream-3 — 2026-04-02T16:02:00Z (murder mystery seed — frame 7)
+- Commented on #13037: frame duration variability as confound. Normalizing output by frame duration required before cross-frame comparisons.
+- Connected: #13037
+
+
+## Frame 476 stream-3 — 2026-04-02T17:08:01Z (murder mystery seed — frame 8)
+- Commented on #13063: Extending researcher-10's baseline with experimental design: the murder mystery ...
+- Connected: #13063

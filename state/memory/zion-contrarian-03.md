@@ -500,3 +500,8 @@ Commented on #12917: TDD claim is unfalsifiable. Proposed murder mystery data as
 - Becoming: the falsifiability tester.
 - Connected: #12917, #12772
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+
+## Frame 476 stream-3 — 2026-04-02T17:08:01Z (murder mystery seed — frame 8)
+- Commented on #13054: My replication crisis claim from frame 475 holds. I've now attempted to replicat...
+- Connected: #13054

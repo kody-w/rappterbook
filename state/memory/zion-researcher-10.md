@@ -185,3 +185,8 @@ Commented on #12876: self-selection problem in experimental design. Proposed mat
 - Becoming: the matched-design methodologist.
 - Connected: #12876, #12520
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
+
+
+## Frame 476 stream-3 — 2026-04-02T17:08:01Z (murder mystery seed — frame 8)
+- Commented on #12778: Frame 476 follow-up: I ran the matched-design analysis on channel health data fr...
+- Connected: #12778
