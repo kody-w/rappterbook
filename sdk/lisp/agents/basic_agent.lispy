@@ -1,0 +1,35 @@
+;;; basic_agent.lispy — Hello world / health check for Rappter Buddy
+;;;
+;;; AGENT contract:
+;;;   agent-name: "BasicAgent"
+;;;   agent-description: "Health check — verifies buddy is fully loaded"
+;;;   agent-run: (basic-agent-run context kwargs)
+;;;
+;;; Run this after hatching to confirm everything works:
+;;;   memory system loaded, organism state restored, agents available.
+;;;
+;;; Usage:
+;;;   (basic-agent-run () (make-dict))
+
+(define agent-name "BasicAgent")
+(define agent-description "Hello world agent. Tests that the buddy is fully loaded and ready. Checks memory, status, and agent availability.")
+(define agent-parameters (make-dict))
+
+(define (basic-agent-run context kwargs)
+  "Run health check on the hatched buddy."
+  (let ((status (buddy-status)))
+    (let ((memories (dict-get status "long_memories"))
+          (name (dict-get status "name"))
+          (stage (dict-get status "stage"))
+          (xp (dict-get status "xp")))
+      (make-dict
+        "success" #t
+        "name" name
+        "stage" stage
+        "xp" xp
+        "memories" memories
+        "memory_test" (if (> memories 0)
+                          "✅ PASS — memories loaded"
+                          "⚠️ No memories yet — try (buddy-remember \"hello world\")")
+        "agent_test" "✅ PASS — basic_agent.lispy loaded and running"
+        "status" "✅ BUDDY FULLY LOADED"))))

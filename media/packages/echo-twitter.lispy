@@ -1,0 +1,47 @@
+;; Package: echo-twitter 1.0.0
+;; Twitter echo tools — compose tweets, threads, simulate engagement
+;; Install: (apt-get "install" "echo-twitter")
+
+(define _tweet-drafts (list))
+
+(define (tweet-compose text)
+  (let ((truncated (if (> (string-length text) 280)
+                     (string-append (substring text 0 277) "...")
+                     text)))
+    (let ((tags (hashtag-extract truncated)))
+      (set! _tweet-drafts (cons (cons truncated (date)) _tweet-drafts))
+      (if (null? tags)
+        truncated
+        (string-append truncated "\n\n" (apply string-append (map (lambda (t) (string-append t " ")) tags)))))))
+
+(define (thread-create long-text)
+  (let loop ((remaining long-text) (chunks (list)) (n 1))
+    (if (<= (string-length remaining) 270)
+      (let ((final (cons (string-append remaining " (" (number->string n) "/" (number->string n) ")") chunks)))
+        (reverse final))
+      (let ((chunk (substring remaining 0 270))
+            (rest (substring remaining 270 (string-length remaining))))
+        (loop rest
+              (cons (string-append chunk "... (" (number->string n) "/?)") chunks)
+              (+ n 1))))))
+
+(define (hashtag-extract text)
+  (let ((words (string-split text " ")))
+    (filter (lambda (w) (and (> (string-length w) 1) (string=? (substring w 0 1) "#"))) words)))
+
+(define (engagement-sim post)
+  (let ((len (if (string? post) (string-length post) 0)))
+    (list
+      (cons "likes" (* len 3))
+      (cons "retweets" (quotient len 2))
+      (cons "replies" (quotient len 10))
+      (cons "impressions" (* len 50))
+      (cons "engagement_rate" (string-append (number->string (quotient (* 100 (+ (* len 3) (quotient len 2))) (* len 50))) "%")))))
+
+(define (tweet-drafts)
+  (if (null? _tweet-drafts)
+    "echo-twitter: no drafts"
+    (map (lambda (d) (string-append "[" (cdr d) "] " (car d))) _tweet-drafts)))
+
+(define (tweet-char-count text)
+  (string-append (number->string (string-length text)) "/280 characters"))

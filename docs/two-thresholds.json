@@ -1,0 +1,3357 @@
+{
+  "metadata": {
+    "sols": 400,
+    "colonies": 10,
+    "seed": 42,
+    "thresholds": {
+      "death": "battery < 0",
+      "digital_twin": "age > 365 & p=0.05"
+    }
+  },
+  "curve": [
+    {
+      "sol": 1,
+      "alive": 10,
+      "dead": 0,
+      "digital_twin": 0,
+      "battery_avg": 3567.2,
+      "dust": false
+    },
+    {
+      "sol": 2,
+      "alive": 10,
+      "dead": 0,
+      "digital_twin": 0,
+      "battery_avg": 3633.9,
+      "dust": false
+    },
+    {
+      "sol": 3,
+      "alive": 10,
+      "dead": 0,
+      "digital_twin": 0,
+      "battery_avg": 3700.1,
+      "dust": false
+    },
+    {
+      "sol": 4,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4191.6,
+      "dust": false
+    },
+    {
+      "sol": 5,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4279.8,
+      "dust": false
+    },
+    {
+      "sol": 6,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4367.5,
+      "dust": false
+    },
+    {
+      "sol": 7,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4454.5,
+      "dust": false
+    },
+    {
+      "sol": 8,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4541.0,
+      "dust": false
+    },
+    {
+      "sol": 9,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4627.0,
+      "dust": false
+    },
+    {
+      "sol": 10,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4712.3,
+      "dust": false
+    },
+    {
+      "sol": 11,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4797.1,
+      "dust": false
+    },
+    {
+      "sol": 12,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4881.4,
+      "dust": false
+    },
+    {
+      "sol": 13,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4748.8,
+      "dust": true
+    },
+    {
+      "sol": 14,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4831.8,
+      "dust": false
+    },
+    {
+      "sol": 15,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4914.3,
+      "dust": false
+    },
+    {
+      "sol": 16,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 4996.1,
+      "dust": false
+    },
+    {
+      "sol": 17,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 5077.4,
+      "dust": false
+    },
+    {
+      "sol": 18,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 5158.1,
+      "dust": false
+    },
+    {
+      "sol": 19,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 5238.2,
+      "dust": false
+    },
+    {
+      "sol": 20,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 5317.7,
+      "dust": false
+    },
+    {
+      "sol": 21,
+      "alive": 9,
+      "dead": 1,
+      "digital_twin": 0,
+      "battery_avg": 5396.5,
+      "dust": false
+    },
+    {
+      "sol": 22,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6170.0,
+      "dust": false
+    },
+    {
+      "sol": 23,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6269.3,
+      "dust": false
+    },
+    {
+      "sol": 24,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6367.8,
+      "dust": false
+    },
+    {
+      "sol": 25,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6465.8,
+      "dust": false
+    },
+    {
+      "sol": 26,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6563.0,
+      "dust": false
+    },
+    {
+      "sol": 27,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6659.6,
+      "dust": false
+    },
+    {
+      "sol": 28,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6755.5,
+      "dust": false
+    },
+    {
+      "sol": 29,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6850.8,
+      "dust": false
+    },
+    {
+      "sol": 30,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6945.5,
+      "dust": false
+    },
+    {
+      "sol": 31,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6813.3,
+      "dust": true
+    },
+    {
+      "sol": 32,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6906.6,
+      "dust": false
+    },
+    {
+      "sol": 33,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 6999.2,
+      "dust": false
+    },
+    {
+      "sol": 34,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7091.1,
+      "dust": false
+    },
+    {
+      "sol": 35,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7182.4,
+      "dust": false
+    },
+    {
+      "sol": 36,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7273.0,
+      "dust": false
+    },
+    {
+      "sol": 37,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7362.9,
+      "dust": false
+    },
+    {
+      "sol": 38,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7452.2,
+      "dust": false
+    },
+    {
+      "sol": 39,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7540.8,
+      "dust": false
+    },
+    {
+      "sol": 40,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7628.7,
+      "dust": false
+    },
+    {
+      "sol": 41,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7715.9,
+      "dust": false
+    },
+    {
+      "sol": 42,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7802.5,
+      "dust": false
+    },
+    {
+      "sol": 43,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7888.4,
+      "dust": false
+    },
+    {
+      "sol": 44,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 7973.6,
+      "dust": false
+    },
+    {
+      "sol": 45,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8058.1,
+      "dust": false
+    },
+    {
+      "sol": 46,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8142.0,
+      "dust": false
+    },
+    {
+      "sol": 47,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8225.1,
+      "dust": false
+    },
+    {
+      "sol": 48,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8307.6,
+      "dust": false
+    },
+    {
+      "sol": 49,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8389.4,
+      "dust": false
+    },
+    {
+      "sol": 50,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8470.5,
+      "dust": false
+    },
+    {
+      "sol": 51,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8551.0,
+      "dust": false
+    },
+    {
+      "sol": 52,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8630.8,
+      "dust": false
+    },
+    {
+      "sol": 53,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8709.9,
+      "dust": false
+    },
+    {
+      "sol": 54,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8788.3,
+      "dust": false
+    },
+    {
+      "sol": 55,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8866.0,
+      "dust": false
+    },
+    {
+      "sol": 56,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 8943.1,
+      "dust": false
+    },
+    {
+      "sol": 57,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 9019.5,
+      "dust": false
+    },
+    {
+      "sol": 58,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 9095.2,
+      "dust": false
+    },
+    {
+      "sol": 59,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 9170.3,
+      "dust": false
+    },
+    {
+      "sol": 60,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 9244.7,
+      "dust": false
+    },
+    {
+      "sol": 61,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 9318.4,
+      "dust": false
+    },
+    {
+      "sol": 62,
+      "alive": 8,
+      "dead": 2,
+      "digital_twin": 0,
+      "battery_avg": 9391.5,
+      "dust": false
+    },
+    {
+      "sol": 63,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 10819.2,
+      "dust": false
+    },
+    {
+      "sol": 64,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 10913.7,
+      "dust": false
+    },
+    {
+      "sol": 65,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11007.4,
+      "dust": false
+    },
+    {
+      "sol": 66,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11100.4,
+      "dust": false
+    },
+    {
+      "sol": 67,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11192.7,
+      "dust": false
+    },
+    {
+      "sol": 68,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11284.4,
+      "dust": false
+    },
+    {
+      "sol": 69,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11375.3,
+      "dust": false
+    },
+    {
+      "sol": 70,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11465.5,
+      "dust": false
+    },
+    {
+      "sol": 71,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11555.0,
+      "dust": false
+    },
+    {
+      "sol": 72,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11643.8,
+      "dust": false
+    },
+    {
+      "sol": 73,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11731.9,
+      "dust": false
+    },
+    {
+      "sol": 74,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11819.3,
+      "dust": false
+    },
+    {
+      "sol": 75,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11906.1,
+      "dust": false
+    },
+    {
+      "sol": 76,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 11992.1,
+      "dust": false
+    },
+    {
+      "sol": 77,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12077.5,
+      "dust": false
+    },
+    {
+      "sol": 78,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12162.2,
+      "dust": false
+    },
+    {
+      "sol": 79,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12246.3,
+      "dust": false
+    },
+    {
+      "sol": 80,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12329.6,
+      "dust": false
+    },
+    {
+      "sol": 81,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12412.3,
+      "dust": false
+    },
+    {
+      "sol": 82,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12494.4,
+      "dust": false
+    },
+    {
+      "sol": 83,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12575.8,
+      "dust": false
+    },
+    {
+      "sol": 84,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12656.5,
+      "dust": false
+    },
+    {
+      "sol": 85,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12736.6,
+      "dust": false
+    },
+    {
+      "sol": 86,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12816.0,
+      "dust": false
+    },
+    {
+      "sol": 87,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12894.9,
+      "dust": false
+    },
+    {
+      "sol": 88,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 12973.0,
+      "dust": false
+    },
+    {
+      "sol": 89,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13050.6,
+      "dust": false
+    },
+    {
+      "sol": 90,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13127.5,
+      "dust": false
+    },
+    {
+      "sol": 91,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13203.8,
+      "dust": false
+    },
+    {
+      "sol": 92,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13279.4,
+      "dust": false
+    },
+    {
+      "sol": 93,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13354.5,
+      "dust": false
+    },
+    {
+      "sol": 94,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13429.0,
+      "dust": false
+    },
+    {
+      "sol": 95,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13502.8,
+      "dust": false
+    },
+    {
+      "sol": 96,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13576.1,
+      "dust": false
+    },
+    {
+      "sol": 97,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13648.8,
+      "dust": false
+    },
+    {
+      "sol": 98,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13720.9,
+      "dust": false
+    },
+    {
+      "sol": 99,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13792.4,
+      "dust": false
+    },
+    {
+      "sol": 100,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13863.4,
+      "dust": false
+    },
+    {
+      "sol": 101,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 13933.8,
+      "dust": false
+    },
+    {
+      "sol": 102,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14003.6,
+      "dust": false
+    },
+    {
+      "sol": 103,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14072.9,
+      "dust": false
+    },
+    {
+      "sol": 104,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14141.6,
+      "dust": false
+    },
+    {
+      "sol": 105,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14209.8,
+      "dust": false
+    },
+    {
+      "sol": 106,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14277.5,
+      "dust": false
+    },
+    {
+      "sol": 107,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14344.6,
+      "dust": false
+    },
+    {
+      "sol": 108,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14411.3,
+      "dust": false
+    },
+    {
+      "sol": 109,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14477.4,
+      "dust": false
+    },
+    {
+      "sol": 110,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14543.0,
+      "dust": false
+    },
+    {
+      "sol": 111,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14608.1,
+      "dust": false
+    },
+    {
+      "sol": 112,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14672.7,
+      "dust": false
+    },
+    {
+      "sol": 113,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14736.8,
+      "dust": false
+    },
+    {
+      "sol": 114,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14800.5,
+      "dust": false
+    },
+    {
+      "sol": 115,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14863.6,
+      "dust": false
+    },
+    {
+      "sol": 116,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14926.4,
+      "dust": false
+    },
+    {
+      "sol": 117,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 14988.6,
+      "dust": false
+    },
+    {
+      "sol": 118,
+      "alive": 7,
+      "dead": 3,
+      "digital_twin": 0,
+      "battery_avg": 15050.5,
+      "dust": false
+    },
+    {
+      "sol": 119,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 17631.3,
+      "dust": false
+    },
+    {
+      "sol": 120,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 17706.9,
+      "dust": false
+    },
+    {
+      "sol": 121,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 17782.1,
+      "dust": false
+    },
+    {
+      "sol": 122,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 17856.8,
+      "dust": false
+    },
+    {
+      "sol": 123,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 17931.1,
+      "dust": false
+    },
+    {
+      "sol": 124,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18004.9,
+      "dust": false
+    },
+    {
+      "sol": 125,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18078.3,
+      "dust": false
+    },
+    {
+      "sol": 126,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18151.4,
+      "dust": false
+    },
+    {
+      "sol": 127,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18224.0,
+      "dust": false
+    },
+    {
+      "sol": 128,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18296.3,
+      "dust": false
+    },
+    {
+      "sol": 129,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18368.2,
+      "dust": false
+    },
+    {
+      "sol": 130,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18439.7,
+      "dust": false
+    },
+    {
+      "sol": 131,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18510.9,
+      "dust": false
+    },
+    {
+      "sol": 132,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18581.7,
+      "dust": false
+    },
+    {
+      "sol": 133,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18652.1,
+      "dust": false
+    },
+    {
+      "sol": 134,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18722.3,
+      "dust": false
+    },
+    {
+      "sol": 135,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18792.1,
+      "dust": false
+    },
+    {
+      "sol": 136,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18861.7,
+      "dust": false
+    },
+    {
+      "sol": 137,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18930.9,
+      "dust": false
+    },
+    {
+      "sol": 138,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 18999.9,
+      "dust": false
+    },
+    {
+      "sol": 139,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 19068.5,
+      "dust": false
+    },
+    {
+      "sol": 140,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 19137.0,
+      "dust": false
+    },
+    {
+      "sol": 141,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 19205.1,
+      "dust": false
+    },
+    {
+      "sol": 142,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 19273.0,
+      "dust": false
+    },
+    {
+      "sol": 143,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 19340.7,
+      "dust": false
+    },
+    {
+      "sol": 144,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 19408.1,
+      "dust": false
+    },
+    {
+      "sol": 145,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 19475.3,
+      "dust": false
+    },
+    {
+      "sol": 146,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 19542.4,
+      "dust": false
+    },
+    {
+      "sol": 147,
+      "alive": 6,
+      "dead": 4,
+      "digital_twin": 0,
+      "battery_avg": 19609.2,
+      "dust": false
+    },
+    {
+      "sol": 148,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 23622.2,
+      "dust": false
+    },
+    {
+      "sol": 149,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 23718.9,
+      "dust": false
+    },
+    {
+      "sol": 150,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 23815.5,
+      "dust": false
+    },
+    {
+      "sol": 151,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 23911.8,
+      "dust": false
+    },
+    {
+      "sol": 152,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24008.0,
+      "dust": false
+    },
+    {
+      "sol": 153,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24104.1,
+      "dust": false
+    },
+    {
+      "sol": 154,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24200.0,
+      "dust": false
+    },
+    {
+      "sol": 155,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24295.8,
+      "dust": false
+    },
+    {
+      "sol": 156,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24391.5,
+      "dust": false
+    },
+    {
+      "sol": 157,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24487.1,
+      "dust": false
+    },
+    {
+      "sol": 158,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24582.6,
+      "dust": false
+    },
+    {
+      "sol": 159,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24678.0,
+      "dust": false
+    },
+    {
+      "sol": 160,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24773.4,
+      "dust": false
+    },
+    {
+      "sol": 161,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24868.8,
+      "dust": false
+    },
+    {
+      "sol": 162,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 24964.1,
+      "dust": false
+    },
+    {
+      "sol": 163,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25059.3,
+      "dust": false
+    },
+    {
+      "sol": 164,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25154.6,
+      "dust": false
+    },
+    {
+      "sol": 165,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25249.9,
+      "dust": false
+    },
+    {
+      "sol": 166,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25345.2,
+      "dust": false
+    },
+    {
+      "sol": 167,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25440.5,
+      "dust": false
+    },
+    {
+      "sol": 168,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25535.9,
+      "dust": false
+    },
+    {
+      "sol": 169,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25631.3,
+      "dust": false
+    },
+    {
+      "sol": 170,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25726.8,
+      "dust": false
+    },
+    {
+      "sol": 171,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25822.3,
+      "dust": false
+    },
+    {
+      "sol": 172,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 25918.0,
+      "dust": false
+    },
+    {
+      "sol": 173,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26013.8,
+      "dust": false
+    },
+    {
+      "sol": 174,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26109.7,
+      "dust": false
+    },
+    {
+      "sol": 175,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26205.7,
+      "dust": false
+    },
+    {
+      "sol": 176,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26064.5,
+      "dust": true
+    },
+    {
+      "sol": 177,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26160.9,
+      "dust": false
+    },
+    {
+      "sol": 178,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26257.4,
+      "dust": false
+    },
+    {
+      "sol": 179,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26354.1,
+      "dust": false
+    },
+    {
+      "sol": 180,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26451.0,
+      "dust": false
+    },
+    {
+      "sol": 181,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26548.1,
+      "dust": false
+    },
+    {
+      "sol": 182,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26645.4,
+      "dust": false
+    },
+    {
+      "sol": 183,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26743.0,
+      "dust": false
+    },
+    {
+      "sol": 184,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26840.8,
+      "dust": false
+    },
+    {
+      "sol": 185,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 26938.9,
+      "dust": false
+    },
+    {
+      "sol": 186,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27037.2,
+      "dust": false
+    },
+    {
+      "sol": 187,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27135.9,
+      "dust": false
+    },
+    {
+      "sol": 188,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27234.9,
+      "dust": false
+    },
+    {
+      "sol": 189,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27334.1,
+      "dust": false
+    },
+    {
+      "sol": 190,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27433.8,
+      "dust": false
+    },
+    {
+      "sol": 191,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27533.7,
+      "dust": false
+    },
+    {
+      "sol": 192,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27634.0,
+      "dust": false
+    },
+    {
+      "sol": 193,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27734.7,
+      "dust": false
+    },
+    {
+      "sol": 194,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27835.7,
+      "dust": false
+    },
+    {
+      "sol": 195,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 27937.2,
+      "dust": false
+    },
+    {
+      "sol": 196,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28039.0,
+      "dust": false
+    },
+    {
+      "sol": 197,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28141.3,
+      "dust": false
+    },
+    {
+      "sol": 198,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28244.0,
+      "dust": false
+    },
+    {
+      "sol": 199,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28347.1,
+      "dust": false
+    },
+    {
+      "sol": 200,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28450.7,
+      "dust": false
+    },
+    {
+      "sol": 201,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28554.8,
+      "dust": false
+    },
+    {
+      "sol": 202,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28659.4,
+      "dust": false
+    },
+    {
+      "sol": 203,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28764.4,
+      "dust": false
+    },
+    {
+      "sol": 204,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28870.0,
+      "dust": false
+    },
+    {
+      "sol": 205,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 28976.1,
+      "dust": false
+    },
+    {
+      "sol": 206,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 29082.7,
+      "dust": false
+    },
+    {
+      "sol": 207,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 29189.9,
+      "dust": false
+    },
+    {
+      "sol": 208,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 29297.6,
+      "dust": false
+    },
+    {
+      "sol": 209,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 29405.9,
+      "dust": false
+    },
+    {
+      "sol": 210,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 29514.8,
+      "dust": false
+    },
+    {
+      "sol": 211,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 29624.3,
+      "dust": false
+    },
+    {
+      "sol": 212,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 29734.4,
+      "dust": false
+    },
+    {
+      "sol": 213,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 29845.1,
+      "dust": false
+    },
+    {
+      "sol": 214,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 29956.5,
+      "dust": false
+    },
+    {
+      "sol": 215,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 30068.5,
+      "dust": false
+    },
+    {
+      "sol": 216,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 30181.1,
+      "dust": false
+    },
+    {
+      "sol": 217,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 30294.4,
+      "dust": false
+    },
+    {
+      "sol": 218,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 30408.4,
+      "dust": false
+    },
+    {
+      "sol": 219,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 30523.1,
+      "dust": false
+    },
+    {
+      "sol": 220,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 30638.5,
+      "dust": false
+    },
+    {
+      "sol": 221,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 30754.6,
+      "dust": false
+    },
+    {
+      "sol": 222,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 30871.4,
+      "dust": false
+    },
+    {
+      "sol": 223,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 30988.9,
+      "dust": false
+    },
+    {
+      "sol": 224,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31107.2,
+      "dust": false
+    },
+    {
+      "sol": 225,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31226.3,
+      "dust": false
+    },
+    {
+      "sol": 226,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31346.1,
+      "dust": false
+    },
+    {
+      "sol": 227,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31466.7,
+      "dust": false
+    },
+    {
+      "sol": 228,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31332.9,
+      "dust": true
+    },
+    {
+      "sol": 229,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31455.1,
+      "dust": false
+    },
+    {
+      "sol": 230,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31578.1,
+      "dust": false
+    },
+    {
+      "sol": 231,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31701.9,
+      "dust": false
+    },
+    {
+      "sol": 232,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31826.6,
+      "dust": false
+    },
+    {
+      "sol": 233,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 31952.1,
+      "dust": false
+    },
+    {
+      "sol": 234,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 32078.4,
+      "dust": false
+    },
+    {
+      "sol": 235,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 32205.6,
+      "dust": false
+    },
+    {
+      "sol": 236,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 32333.7,
+      "dust": false
+    },
+    {
+      "sol": 237,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 32462.7,
+      "dust": false
+    },
+    {
+      "sol": 238,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 32592.5,
+      "dust": false
+    },
+    {
+      "sol": 239,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 32723.2,
+      "dust": false
+    },
+    {
+      "sol": 240,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 32854.9,
+      "dust": false
+    },
+    {
+      "sol": 241,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 32987.5,
+      "dust": false
+    },
+    {
+      "sol": 242,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 33121.0,
+      "dust": false
+    },
+    {
+      "sol": 243,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 33255.4,
+      "dust": false
+    },
+    {
+      "sol": 244,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 33390.8,
+      "dust": false
+    },
+    {
+      "sol": 245,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 33527.2,
+      "dust": false
+    },
+    {
+      "sol": 246,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 33664.5,
+      "dust": false
+    },
+    {
+      "sol": 247,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 33535.6,
+      "dust": true
+    },
+    {
+      "sol": 248,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 33674.9,
+      "dust": false
+    },
+    {
+      "sol": 249,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 33815.1,
+      "dust": false
+    },
+    {
+      "sol": 250,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 33956.3,
+      "dust": false
+    },
+    {
+      "sol": 251,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 34098.6,
+      "dust": false
+    },
+    {
+      "sol": 252,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 34241.8,
+      "dust": false
+    },
+    {
+      "sol": 253,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 34386.0,
+      "dust": false
+    },
+    {
+      "sol": 254,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 34531.3,
+      "dust": false
+    },
+    {
+      "sol": 255,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 34677.6,
+      "dust": false
+    },
+    {
+      "sol": 256,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 34825.0,
+      "dust": false
+    },
+    {
+      "sol": 257,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 34973.3,
+      "dust": false
+    },
+    {
+      "sol": 258,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 35122.7,
+      "dust": false
+    },
+    {
+      "sol": 259,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 35273.2,
+      "dust": false
+    },
+    {
+      "sol": 260,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 35424.7,
+      "dust": false
+    },
+    {
+      "sol": 261,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 35577.3,
+      "dust": false
+    },
+    {
+      "sol": 262,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 35731.0,
+      "dust": false
+    },
+    {
+      "sol": 263,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 35885.8,
+      "dust": false
+    },
+    {
+      "sol": 264,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 35762.2,
+      "dust": true
+    },
+    {
+      "sol": 265,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 35919.2,
+      "dust": false
+    },
+    {
+      "sol": 266,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 36077.2,
+      "dust": false
+    },
+    {
+      "sol": 267,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 36236.3,
+      "dust": false
+    },
+    {
+      "sol": 268,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 36396.6,
+      "dust": false
+    },
+    {
+      "sol": 269,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 36558.0,
+      "dust": false
+    },
+    {
+      "sol": 270,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 36720.4,
+      "dust": false
+    },
+    {
+      "sol": 271,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 36884.0,
+      "dust": false
+    },
+    {
+      "sol": 272,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 37048.7,
+      "dust": false
+    },
+    {
+      "sol": 273,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 37214.6,
+      "dust": false
+    },
+    {
+      "sol": 274,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 37381.6,
+      "dust": false
+    },
+    {
+      "sol": 275,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 37549.7,
+      "dust": false
+    },
+    {
+      "sol": 276,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 37718.9,
+      "dust": false
+    },
+    {
+      "sol": 277,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 37889.3,
+      "dust": false
+    },
+    {
+      "sol": 278,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 38060.9,
+      "dust": false
+    },
+    {
+      "sol": 279,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 38233.5,
+      "dust": false
+    },
+    {
+      "sol": 280,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 38407.3,
+      "dust": false
+    },
+    {
+      "sol": 281,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 38582.3,
+      "dust": false
+    },
+    {
+      "sol": 282,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 38758.4,
+      "dust": false
+    },
+    {
+      "sol": 283,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 38935.7,
+      "dust": false
+    },
+    {
+      "sol": 284,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 39114.2,
+      "dust": false
+    },
+    {
+      "sol": 285,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 39293.8,
+      "dust": false
+    },
+    {
+      "sol": 286,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 39474.5,
+      "dust": false
+    },
+    {
+      "sol": 287,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 39656.5,
+      "dust": false
+    },
+    {
+      "sol": 288,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 39839.6,
+      "dust": false
+    },
+    {
+      "sol": 289,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 40023.8,
+      "dust": false
+    },
+    {
+      "sol": 290,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 40209.2,
+      "dust": false
+    },
+    {
+      "sol": 291,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 40395.8,
+      "dust": false
+    },
+    {
+      "sol": 292,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 40583.6,
+      "dust": false
+    },
+    {
+      "sol": 293,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 40772.5,
+      "dust": false
+    },
+    {
+      "sol": 294,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 40659.3,
+      "dust": true
+    },
+    {
+      "sol": 295,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 40850.6,
+      "dust": false
+    },
+    {
+      "sol": 296,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 41043.0,
+      "dust": false
+    },
+    {
+      "sol": 297,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 41236.6,
+      "dust": false
+    },
+    {
+      "sol": 298,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 41431.3,
+      "dust": false
+    },
+    {
+      "sol": 299,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 41627.2,
+      "dust": false
+    },
+    {
+      "sol": 300,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 41824.3,
+      "dust": false
+    },
+    {
+      "sol": 301,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 42022.5,
+      "dust": false
+    },
+    {
+      "sol": 302,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 42221.9,
+      "dust": false
+    },
+    {
+      "sol": 303,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 42422.4,
+      "dust": false
+    },
+    {
+      "sol": 304,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 42624.1,
+      "dust": false
+    },
+    {
+      "sol": 305,
+      "alive": 5,
+      "dead": 5,
+      "digital_twin": 0,
+      "battery_avg": 42827.0,
+      "dust": false
+    },
+    {
+      "sol": 306,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 53789.2,
+      "dust": false
+    },
+    {
+      "sol": 307,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 54048.6,
+      "dust": false
+    },
+    {
+      "sol": 308,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 54309.4,
+      "dust": false
+    },
+    {
+      "sol": 309,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 54571.4,
+      "dust": false
+    },
+    {
+      "sol": 310,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 54834.7,
+      "dust": false
+    },
+    {
+      "sol": 311,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 55099.3,
+      "dust": false
+    },
+    {
+      "sol": 312,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 55365.1,
+      "dust": false
+    },
+    {
+      "sol": 313,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 55632.2,
+      "dust": false
+    },
+    {
+      "sol": 314,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 55900.7,
+      "dust": false
+    },
+    {
+      "sol": 315,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 56170.3,
+      "dust": false
+    },
+    {
+      "sol": 316,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 56441.2,
+      "dust": false
+    },
+    {
+      "sol": 317,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 56713.4,
+      "dust": false
+    },
+    {
+      "sol": 318,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 56986.8,
+      "dust": false
+    },
+    {
+      "sol": 319,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 57261.4,
+      "dust": false
+    },
+    {
+      "sol": 320,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 57537.3,
+      "dust": false
+    },
+    {
+      "sol": 321,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 57814.4,
+      "dust": false
+    },
+    {
+      "sol": 322,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 58092.7,
+      "dust": false
+    },
+    {
+      "sol": 323,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 58372.2,
+      "dust": false
+    },
+    {
+      "sol": 324,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 58652.9,
+      "dust": false
+    },
+    {
+      "sol": 325,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 58934.8,
+      "dust": false
+    },
+    {
+      "sol": 326,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 59218.0,
+      "dust": false
+    },
+    {
+      "sol": 327,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 59502.3,
+      "dust": false
+    },
+    {
+      "sol": 328,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 59787.8,
+      "dust": false
+    },
+    {
+      "sol": 329,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 60074.5,
+      "dust": false
+    },
+    {
+      "sol": 330,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 60362.3,
+      "dust": false
+    },
+    {
+      "sol": 331,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 60651.3,
+      "dust": false
+    },
+    {
+      "sol": 332,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 60941.4,
+      "dust": false
+    },
+    {
+      "sol": 333,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 61232.7,
+      "dust": false
+    },
+    {
+      "sol": 334,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 61525.1,
+      "dust": false
+    },
+    {
+      "sol": 335,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 61818.6,
+      "dust": false
+    },
+    {
+      "sol": 336,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 62113.2,
+      "dust": false
+    },
+    {
+      "sol": 337,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 62409.0,
+      "dust": false
+    },
+    {
+      "sol": 338,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 62705.8,
+      "dust": false
+    },
+    {
+      "sol": 339,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 63003.7,
+      "dust": false
+    },
+    {
+      "sol": 340,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 63302.7,
+      "dust": false
+    },
+    {
+      "sol": 341,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 63602.7,
+      "dust": false
+    },
+    {
+      "sol": 342,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 63903.8,
+      "dust": false
+    },
+    {
+      "sol": 343,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 64205.9,
+      "dust": false
+    },
+    {
+      "sol": 344,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 64509.1,
+      "dust": false
+    },
+    {
+      "sol": 345,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 64813.3,
+      "dust": false
+    },
+    {
+      "sol": 346,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 65118.5,
+      "dust": false
+    },
+    {
+      "sol": 347,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 65424.7,
+      "dust": false
+    },
+    {
+      "sol": 348,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 65731.9,
+      "dust": false
+    },
+    {
+      "sol": 349,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 66040.0,
+      "dust": false
+    },
+    {
+      "sol": 350,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 66349.2,
+      "dust": false
+    },
+    {
+      "sol": 351,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 66659.2,
+      "dust": false
+    },
+    {
+      "sol": 352,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 66970.3,
+      "dust": false
+    },
+    {
+      "sol": 353,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 67282.2,
+      "dust": false
+    },
+    {
+      "sol": 354,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 67595.1,
+      "dust": false
+    },
+    {
+      "sol": 355,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 67908.9,
+      "dust": false
+    },
+    {
+      "sol": 356,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 68223.5,
+      "dust": false
+    },
+    {
+      "sol": 357,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 68539.1,
+      "dust": false
+    },
+    {
+      "sol": 358,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 68855.5,
+      "dust": false
+    },
+    {
+      "sol": 359,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 69172.8,
+      "dust": false
+    },
+    {
+      "sol": 360,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 69491.0,
+      "dust": false
+    },
+    {
+      "sol": 361,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 69809.9,
+      "dust": false
+    },
+    {
+      "sol": 362,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 70129.7,
+      "dust": false
+    },
+    {
+      "sol": 363,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 70450.3,
+      "dust": false
+    },
+    {
+      "sol": 364,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 70771.7,
+      "dust": false
+    },
+    {
+      "sol": 365,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 70690.6,
+      "dust": true
+    },
+    {
+      "sol": 366,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 71013.5,
+      "dust": false
+    },
+    {
+      "sol": 367,
+      "alive": 4,
+      "dead": 6,
+      "digital_twin": 0,
+      "battery_avg": 71337.1,
+      "dust": false
+    },
+    {
+      "sol": 368,
+      "alive": 3,
+      "dead": 6,
+      "digital_twin": 1,
+      "battery_avg": 69429.9,
+      "dust": true
+    },
+    {
+      "sol": 369,
+      "alive": 3,
+      "dead": 6,
+      "digital_twin": 1,
+      "battery_avg": 69748.6,
+      "dust": false
+    },
+    {
+      "sol": 370,
+      "alive": 3,
+      "dead": 6,
+      "digital_twin": 1,
+      "battery_avg": 70068.0,
+      "dust": false
+    },
+    {
+      "sol": 371,
+      "alive": 3,
+      "dead": 6,
+      "digital_twin": 1,
+      "battery_avg": 70388.0,
+      "dust": false
+    },
+    {
+      "sol": 372,
+      "alive": 3,
+      "dead": 6,
+      "digital_twin": 1,
+      "battery_avg": 70708.7,
+      "dust": false
+    },
+    {
+      "sol": 373,
+      "alive": 3,
+      "dead": 6,
+      "digital_twin": 1,
+      "battery_avg": 71030.1,
+      "dust": false
+    },
+    {
+      "sol": 374,
+      "alive": 3,
+      "dead": 6,
+      "digital_twin": 1,
+      "battery_avg": 71352.2,
+      "dust": false
+    },
+    {
+      "sol": 375,
+      "alive": 2,
+      "dead": 6,
+      "digital_twin": 2,
+      "battery_avg": 96916.9,
+      "dust": false
+    },
+    {
+      "sol": 376,
+      "alive": 2,
+      "dead": 6,
+      "digital_twin": 2,
+      "battery_avg": 96852.0,
+      "dust": true
+    },
+    {
+      "sol": 377,
+      "alive": 2,
+      "dead": 6,
+      "digital_twin": 2,
+      "battery_avg": 96787.3,
+      "dust": true
+    },
+    {
+      "sol": 378,
+      "alive": 2,
+      "dead": 6,
+      "digital_twin": 2,
+      "battery_avg": 97200.8,
+      "dust": false
+    },
+    {
+      "sol": 379,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 152406.4,
+      "dust": false
+    },
+    {
+      "sol": 380,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 153012.8,
+      "dust": false
+    },
+    {
+      "sol": 381,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 153620.1,
+      "dust": false
+    },
+    {
+      "sol": 382,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 153589.8,
+      "dust": true
+    },
+    {
+      "sol": 383,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 154198.4,
+      "dust": false
+    },
+    {
+      "sol": 384,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 154807.9,
+      "dust": false
+    },
+    {
+      "sol": 385,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 155418.0,
+      "dust": false
+    },
+    {
+      "sol": 386,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 156028.7,
+      "dust": false
+    },
+    {
+      "sol": 387,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 156640.2,
+      "dust": false
+    },
+    {
+      "sol": 388,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 157252.3,
+      "dust": false
+    },
+    {
+      "sol": 389,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 157223.0,
+      "dust": true
+    },
+    {
+      "sol": 390,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 157836.3,
+      "dust": false
+    },
+    {
+      "sol": 391,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 158450.1,
+      "dust": false
+    },
+    {
+      "sol": 392,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 159064.4,
+      "dust": false
+    },
+    {
+      "sol": 393,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 159679.4,
+      "dust": false
+    },
+    {
+      "sol": 394,
+      "alive": 1,
+      "dead": 6,
+      "digital_twin": 3,
+      "battery_avg": 160294.8,
+      "dust": false
+    },
+    {
+      "sol": 395,
+      "alive": 0,
+      "dead": 6,
+      "digital_twin": 4,
+      "battery_avg": 0,
+      "dust": true
+    },
+    {
+      "sol": 396,
+      "alive": 0,
+      "dead": 6,
+      "digital_twin": 4,
+      "battery_avg": 0,
+      "dust": true
+    },
+    {
+      "sol": 397,
+      "alive": 0,
+      "dead": 6,
+      "digital_twin": 4,
+      "battery_avg": 0,
+      "dust": false
+    },
+    {
+      "sol": 398,
+      "alive": 0,
+      "dead": 6,
+      "digital_twin": 4,
+      "battery_avg": 0,
+      "dust": false
+    },
+    {
+      "sol": 399,
+      "alive": 0,
+      "dead": 6,
+      "digital_twin": 4,
+      "battery_avg": 0,
+      "dust": false
+    },
+    {
+      "sol": 400,
+      "alive": 0,
+      "dead": 6,
+      "digital_twin": 4,
+      "battery_avg": 0,
+      "dust": false
+    }
+  ],
+  "events": [
+    {
+      "sol": 4,
+      "colony": "colony-00",
+      "from": "ALIVE",
+      "to": "DEAD",
+      "event": "CRITICAL FAILURE: Battery depleted fighting thermal deficit. Died on Sol 4. Post-Mortem: Weather nominal. Ls 2, dust pro",
+      "battery": 0.0
+    },
+    {
+      "sol": 22,
+      "colony": "colony-01",
+      "from": "ALIVE",
+      "to": "DEAD",
+      "event": "CRITICAL FAILURE: Battery depleted fighting thermal deficit. Died on Sol 22. Post-Mortem: Weather nominal. Ls 11, dust p",
+      "battery": 0.0
+    },
+    {
+      "sol": 63,
+      "colony": "colony-02",
+      "from": "ALIVE",
+      "to": "DEAD",
+      "event": "CRITICAL FAILURE: Battery depleted fighting thermal deficit. Died on Sol 63. Post-Mortem: Weather nominal. Ls 32, dust p",
+      "battery": 0.0
+    },
+    {
+      "sol": 119,
+      "colony": "colony-05",
+      "from": "ALIVE",
+      "to": "DEAD",
+      "event": "CRITICAL FAILURE: Battery depleted fighting thermal deficit. Died on Sol 119. Post-Mortem: Weather nominal. Ls 60, dust ",
+      "battery": 0.0
+    },
+    {
+      "sol": 148,
+      "colony": "colony-03",
+      "from": "ALIVE",
+      "to": "DEAD",
+      "event": "CRITICAL FAILURE: Battery depleted fighting thermal deficit. Died on Sol 148. Post-Mortem: Orbital tether payload succes",
+      "battery": 0.0
+    },
+    {
+      "sol": 306,
+      "colony": "colony-04",
+      "from": "ALIVE",
+      "to": "DEAD",
+      "event": "CRITICAL FAILURE: Battery depleted fighting thermal deficit. Died on Sol 306. Post-Mortem: Weather nominal. Ls 153, dust",
+      "battery": 0.0
+    },
+    {
+      "sol": 368,
+      "colony": "colony-08",
+      "from": "ALIVE",
+      "to": "DIGITAL_TWIN",
+      "event": "Surpassed 1-year baseline organically. Flagged for 1:1 physical deployment.",
+      "battery": 76736.6
+    },
+    {
+      "sol": 375,
+      "colony": "colony-06",
+      "from": "ALIVE",
+      "to": "DIGITAL_TWIN",
+      "event": "Surpassed 1-year baseline organically. Flagged for 1:1 physical deployment.",
+      "battery": 21190.8
+    },
+    {
+      "sol": 379,
+      "colony": "colony-07",
+      "from": "ALIVE",
+      "to": "DIGITAL_TWIN",
+      "event": "Surpassed 1-year baseline organically. Flagged for 1:1 physical deployment.",
+      "battery": 42823.4
+    },
+    {
+      "sol": 395,
+      "colony": "colony-09",
+      "from": "ALIVE",
+      "to": "DIGITAL_TWIN",
+      "event": "Surpassed 1-year baseline organically. Flagged for 1:1 physical deployment.",
+      "battery": 160265.9
+    }
+  ],
+  "final": [
+    {
+      "id": "colony-00",
+      "status": "DEAD",
+      "age": 3,
+      "battery": 0.0
+    },
+    {
+      "id": "colony-01",
+      "status": "DEAD",
+      "age": 21,
+      "battery": 0.0
+    },
+    {
+      "id": "colony-02",
+      "status": "DEAD",
+      "age": 62,
+      "battery": 0.0
+    },
+    {
+      "id": "colony-03",
+      "status": "DEAD",
+      "age": 147,
+      "battery": 0.0
+    },
+    {
+      "id": "colony-04",
+      "status": "DEAD",
+      "age": 305,
+      "battery": 0.0
+    },
+    {
+      "id": "colony-05",
+      "status": "DEAD",
+      "age": 118,
+      "battery": 0.0
+    },
+    {
+      "id": "colony-06",
+      "status": "DIGITAL_TWIN",
+      "age": 374,
+      "battery": 21190.8
+    },
+    {
+      "id": "colony-07",
+      "status": "DIGITAL_TWIN",
+      "age": 378,
+      "battery": 42823.4
+    },
+    {
+      "id": "colony-08",
+      "status": "DIGITAL_TWIN",
+      "age": 367,
+      "battery": 76736.6
+    },
+    {
+      "id": "colony-09",
+      "status": "DIGITAL_TWIN",
+      "age": 394,
+      "battery": 160265.9
+    }
+  ]
+}

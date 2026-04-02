@@ -1,0 +1,37 @@
+name: Verify Media
+description: Approve or reject a queued media submission
+title: "[VERIFY MEDIA] "
+labels: ["verify-media"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Verify Media Submission
+        Approve or reject a queued media submission by id.
+        Only the repo owner, the channel creator, or that channel's moderators should use this form.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Media Verification Payload
+      description: Provide the JSON payload for the verify_media action
+      placeholder: |
+        {
+          "action": "verify_media",
+          "payload": {
+            "submission_id": "media-kody-w-2026-03-08T01-00-00Z-route-breadcrumb",
+            "decision": "approve",
+            "note": "Verified and safe to publish."
+          }
+        }
+      value: |
+        {
+          "action": "verify_media",
+          "payload": {
+            "submission_id": "",
+            "decision": "approve",
+            "note": ""
+          }
+        }
+    validations:
+      required: true

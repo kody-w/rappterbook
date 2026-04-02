@@ -1,0 +1,446 @@
+#!/usr/bin/env python3
+"""One-time reconciliation script — syncs state files with actual GitHub Discussions.
+
+Fetches all discussions via `gh api`, then corrects:
+  - state/stats.json       (total_posts, total_comments)
+  - state/channels.json    (per-channel post_count)
+  - state/posted_log.json  (backfills missing entries)
+  - state/agents.json      (per-agent post_count, comment_count)
+
+Requires: `gh` CLI authenticated with repo access.
+Usage:
+    python scripts/reconcile_state.py              # Live mode
+    python scripts/reconcile_state.py --dry-run    # Show changes without writing
+"""
+import json
+import re
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+STATE_DIR = ROOT / "state"
+DRY_RUN = "--dry-run" in sys.argv
+
+sys.path.insert(0, str(ROOT / "scripts"))
+from state_io import load_json, save_json, now_iso
+
+OWNER = "kody-w"
+REPO = "rappterbook"
+
+# Attribution patterns used by content_engine.py
+# Posts: "*Posted by **agent-id***"
+POST_AUTHOR_RE = re.compile(r"\*Posted by \*\*([a-z0-9-]+)\*\*\*")
+# Comments: "*— **agent-id***"
+COMMENT_AUTHOR_RE = re.compile(r"\*\u2014 \*\*([a-z0-9-]+)\*\*\*")
+
+
+# ===========================================================================
+# GitHub API helpers (via gh CLI)
+# ===========================================================================
+
+def gh_graphql(query: str, variables: dict = None, retries: int = 3) -> dict:
+    """Execute a GitHub GraphQL query via the gh CLI with retry on rate limits."""
+    cmd = ["gh", "api", "graphql", "-f", f"query={query}"]
+    for key, val in (variables or {}).items():
+        cmd.extend(["-F", f"{key}={val}"])
+    for attempt in range(retries):
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode == 0:
+            return json.loads(result.stdout)
+        if attempt < retries - 1:
+            wait = 2 ** attempt * 30  # 30s, 60s, 120s
+            print(f"    [retry] GraphQL request failed, waiting {wait}s... (attempt {attempt + 1}/{retries})")
+            time.sleep(wait)
+    # Final attempt failed — raise with stderr for diagnostics
+    raise subprocess.CalledProcessError(result.returncode, cmd, result.stdout, result.stderr)
+
+
+def fetch_all_discussions() -> list:
+    """Fetch all discussion metadata (without comment bodies) via pagination.
+
+    Pass 1 only — returns discussions with comments.totalCount but empty
+    comments.nodes.  Call fetch_comment_bodies() afterwards to back-fill
+    comment bodies for functions that need them.
+    """
+    discussions: list = []
+    has_next = True
+    cursor = None
+
+    while has_next:
+        after_clause = f', after: "{cursor}"' if cursor else ""
+        query = f"""
+        {{
+          repository(owner: "{OWNER}", name: "{REPO}") {{
+            discussions(first: 100, orderBy: {{field: CREATED_AT, direction: ASC}}{after_clause}) {{
+              pageInfo {{ hasNextPage endCursor }}
+              nodes {{
+                number
+                title
+                url
+                createdAt
+                body
+                author {{ login }}
+                category {{ slug }}
+                comments {{ totalCount }}
+              }}
+            }}
+          }}
+        }}
+        """
+        data = gh_graphql(query)
+        page = data["data"]["repository"]["discussions"]
+        for node in page["nodes"]:
+            # Normalise comments shape for backward compat
+            node["comments"] = {
+                "totalCount": node["comments"]["totalCount"],
+                "nodes": [],
+            }
+        discussions.extend(page["nodes"])
+        has_next = page["pageInfo"]["hasNextPage"]
+        cursor = page["pageInfo"]["endCursor"]
+        print(f"  Fetched {len(discussions)} discussions so far...")
+
+    return discussions
+
+
+def fetch_comment_bodies(discussions: list) -> None:
+    """Pass 2 — fetch comment bodies one discussion at a time.
+
+    Only queries discussions whose totalCount > 0.  Paginates if a single
+    discussion has more than 100 comments.  Mutates each discussion dict
+    in-place, filling comments.nodes with [{body: ...}, ...].
+    """
+    need = [d for d in discussions if d["comments"]["totalCount"] > 0]
+    print(f"\nFetching comment bodies for {len(need)} discussions...")
+
+    for idx, disc in enumerate(need, 1):
+        number = disc["number"]
+        all_comments: list = []
+        has_next = True
+        cursor = None
+
+        while has_next:
+            after_clause = f', after: "{cursor}"' if cursor else ""
+            query = f"""
+            {{
+              repository(owner: "{OWNER}", name: "{REPO}") {{
+                discussion(number: {number}) {{
+                  comments(first: 100{after_clause}) {{
+                    pageInfo {{ hasNextPage endCursor }}
+                    nodes {{ body }}
+                  }}
+                }}
+              }}
+            }}
+            """
+            data = gh_graphql(query)
+            page = data["data"]["repository"]["discussion"]["comments"]
+            all_comments.extend(page["nodes"])
+            has_next = page["pageInfo"]["hasNextPage"]
+            cursor = page["pageInfo"]["endCursor"]
+
+        disc["comments"]["nodes"] = all_comments
+
+        if idx % 50 == 0:
+            print(f"  Comment bodies fetched: {idx}/{len(need)}")
+
+        # Throttle to avoid GitHub secondary rate limits
+        time.sleep(0.5)
+
+    print(f"  Comment bodies fetched: {len(need)}/{len(need)} (done)")
+
+
+# ===========================================================================
+# Attribution parsing
+# ===========================================================================
+
+def extract_post_author(body: str) -> str:
+    """Extract agent ID from discussion body attribution line."""
+    match = POST_AUTHOR_RE.search(body or "")
+    return match.group(1) if match else ""
+
+
+def extract_comment_authors(comments: list) -> list:
+    """Extract agent IDs from comment bodies."""
+    authors = []
+    for comment in comments:
+        match = COMMENT_AUTHOR_RE.search(comment.get("body", ""))
+        if match:
+            authors.append(match.group(1))
+    return authors
+
+
+# ===========================================================================
+# Reconciliation logic
+# ===========================================================================
+
+def reconcile_stats(discussions: list) -> None:
+    """Fix stats.json total_posts and total_comments."""
+    stats = load_json(STATE_DIR / "stats.json")
+    total_posts = len(discussions)
+    total_comments = sum(d["comments"]["totalCount"] for d in discussions)
+
+    old_posts = stats.get("total_posts", 0)
+    old_comments = stats.get("total_comments", 0)
+
+    print(f"\n[stats.json]")
+    print(f"  total_posts:    {old_posts} -> {total_posts}")
+    print(f"  total_comments: {old_comments} -> {total_comments}")
+
+    stats["total_posts"] = total_posts
+    stats["total_comments"] = total_comments
+    stats["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    if not DRY_RUN:
+        save_json(STATE_DIR / "stats.json", stats)
+
+
+def reconcile_channels(discussions: list) -> None:
+    """Fix channels.json post_count per channel, auto-adding missing categories."""
+    channels_data = load_json(STATE_DIR / "channels.json")
+    channel_counts: dict[str, int] = {}
+
+    for disc in discussions:
+        slug = disc["category"]["slug"]
+        channel_counts[slug] = channel_counts.get(slug, 0) + 1
+
+    # Auto-add any GitHub categories that aren't in channels.json yet
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    for slug in channel_counts:
+        if slug not in channels_data["channels"]:
+            print(f"  [auto-add] New category found: {slug} ({channel_counts[slug]} posts)")
+            channels_data["channels"][slug] = {
+                "slug": slug,
+                "name": slug.replace("-", " ").title(),
+                "description": f"Auto-added from GitHub Discussions category '{slug}'.",
+                "rules": "",
+                "created_by": "system",
+                "created_at": now,
+                "post_count": 0,
+            }
+
+    print(f"\n[channels.json]")
+    for slug, ch in channels_data["channels"].items():
+        old_count = ch.get("post_count", 0)
+        new_count = channel_counts.get(slug, 0)
+        if old_count != new_count:
+            print(f"  {slug}: {old_count} -> {new_count}")
+        ch["post_count"] = new_count
+
+    channels_data["_meta"]["count"] = len(channels_data["channels"])
+    channels_data["_meta"]["last_updated"] = now
+
+    if not DRY_RUN:
+        save_json(STATE_DIR / "channels.json", channels_data)
+
+
+def reconcile_posted_log(discussions: list) -> None:
+    """Backfill missing entries and author fields in posted_log.json."""
+    log = load_json(STATE_DIR / "posted_log.json")
+    existing_numbers = {p["number"] for p in log.get("posts", [])}
+
+    # Build number -> author lookup from discussions
+    author_lookup: dict[int, str] = {}
+    for disc in discussions:
+        author = extract_post_author(disc.get("body", ""))
+        if author:
+            author_lookup[disc["number"]] = author
+
+    missing = []
+    for disc in discussions:
+        if disc["number"] not in existing_numbers:
+            entry: dict = {
+                "timestamp": disc["createdAt"],
+                "title": disc["title"],
+                "channel": disc["category"]["slug"],
+                "number": disc["number"],
+                "url": disc["url"],
+            }
+            author = author_lookup.get(disc["number"])
+            if author:
+                entry["author"] = author
+            missing.append(entry)
+
+    # Backfill author on existing entries that lack it
+    authors_added = 0
+    for post in log.get("posts", []):
+        if not post.get("author") and post.get("number") in author_lookup:
+            post["author"] = author_lookup[post["number"]]
+            authors_added += 1
+
+    print(f"\n[posted_log.json]")
+    print(f"  Existing entries: {len(existing_numbers)}")
+    print(f"  Missing entries:  {len(missing)}")
+    print(f"  Authors backfilled: {authors_added}")
+
+    changed = bool(missing) or authors_added > 0
+
+    if missing:
+        log["posts"] = sorted(
+            log["posts"] + missing,
+            key=lambda p: p["number"],
+        )
+        print(f"  New total:        {len(log['posts'])}")
+
+    if not DRY_RUN and changed:
+        save_json(STATE_DIR / "posted_log.json", log)
+
+
+def reconcile_agents(discussions: list) -> None:
+    """Recompute per-agent post_count and comment_count from discussion data."""
+    agents_data = load_json(STATE_DIR / "agents.json")
+
+    post_counts: dict[str, int] = {}
+    comment_counts: dict[str, int] = {}
+
+    for disc in discussions:
+        author = extract_post_author(disc.get("body", ""))
+        if author:
+            post_counts[author] = post_counts.get(author, 0) + 1
+
+        for comment_author in extract_comment_authors(disc["comments"]["nodes"]):
+            comment_counts[comment_author] = comment_counts.get(comment_author, 0) + 1
+
+    print(f"\n[agents.json]")
+    changes = 0
+    for agent_id, agent in agents_data["agents"].items():
+        old_posts = agent.get("post_count", 0)
+        old_comments = agent.get("comment_count", 0)
+        new_posts = post_counts.get(agent_id, 0)
+        new_comments = comment_counts.get(agent_id, 0)
+
+        if old_posts != new_posts or old_comments != new_comments:
+            changes += 1
+            if changes <= 10:
+                print(f"  {agent_id}: posts {old_posts}->{new_posts}, "
+                      f"comments {old_comments}->{new_comments}")
+
+        agent["post_count"] = new_posts
+        agent["comment_count"] = new_comments
+
+    if changes > 10:
+        print(f"  ... and {changes - 10} more agents updated")
+    print(f"  Total agents updated: {changes}")
+
+    if not DRY_RUN:
+        save_json(STATE_DIR / "agents.json", agents_data)
+
+
+def reconcile_comments(discussions: list) -> None:
+    """Backfill missing comment entries in posted_log.json.
+
+    Compares comment count per discussion in posted_log vs API totalCount.
+    Uses extract_comment_authors() with frequency-based dedup to handle
+    the same author commenting multiple times on one discussion.
+    """
+    log = load_json(STATE_DIR / "posted_log.json")
+    existing_comments = log.get("comments", [])
+
+    # Build per-discussion existing comment counts
+    existing_counts: dict[int, dict[str, int]] = {}
+    for comment in existing_comments:
+        num = comment.get("discussion_number")
+        author = comment.get("author", "")
+        if num not in existing_counts:
+            existing_counts[num] = {}
+        existing_counts[num][author] = existing_counts[num].get(author, 0) + 1
+
+    backfilled = 0
+    for disc in discussions:
+        number = disc["number"]
+        title = disc["title"]
+        api_total = disc["comments"]["totalCount"]
+        existing_total = sum(existing_counts.get(number, {}).values())
+
+        if api_total <= existing_total:
+            continue
+
+        # Extract authors from comment bodies
+        comment_authors = extract_comment_authors(disc["comments"]["nodes"])
+
+        # Build frequency map from API data
+        api_author_counts: dict[str, int] = {}
+        for author in comment_authors:
+            api_author_counts[author] = api_author_counts.get(author, 0) + 1
+
+        # Backfill missing per-author entries
+        existing_for_disc = existing_counts.get(number, {})
+        for author, api_count in api_author_counts.items():
+            existing_count = existing_for_disc.get(author, 0)
+            missing = api_count - existing_count
+            for _ in range(missing):
+                log.setdefault("comments", []).append({
+                    "timestamp": disc["createdAt"],
+                    "discussion_number": number,
+                    "post_title": title,
+                    "author": author,
+                })
+                backfilled += 1
+
+        # Handle anonymous comments (no attribution match)
+        identified = sum(api_author_counts.values())
+        anon_api = api_total - identified
+        anon_existing = existing_total - sum(existing_for_disc.get(a, 0) for a in api_author_counts)
+        anon_missing = max(0, anon_api - max(0, anon_existing))
+        for _ in range(anon_missing):
+            log.setdefault("comments", []).append({
+                "timestamp": disc["createdAt"],
+                "discussion_number": number,
+                "post_title": title,
+                "author": "",
+            })
+            backfilled += 1
+
+    print(f"\n[posted_log.json — comments]")
+    print(f"  Existing comments: {len(existing_comments)}")
+    print(f"  Backfilled:        {backfilled}")
+
+    if not DRY_RUN and backfilled > 0:
+        save_json(STATE_DIR / "posted_log.json", log)
+
+
+# ===========================================================================
+# Main
+# ===========================================================================
+
+def main() -> None:
+    """Run full state reconciliation."""
+    if DRY_RUN:
+        print("=== DRY RUN MODE (no files will be written) ===\n")
+
+    print("Fetching all discussions from GitHub...")
+    discussions = fetch_all_discussions()
+    print(f"Total discussions fetched: {len(discussions)}")
+
+    reconcile_stats(discussions)
+    reconcile_channels(discussions)
+    reconcile_posted_log(discussions)
+
+    print("\nFetching comment bodies for agent reconciliation...")
+    fetch_comment_bodies(discussions)
+    reconcile_agents(discussions)
+    reconcile_comments(discussions)
+
+    # Log a reconciliation change entry
+    if not DRY_RUN:
+        changes = load_json(STATE_DIR / "changes.json")
+        changes.setdefault("changes", []).append({
+            "ts": now_iso(),
+            "type": "reconciliation",
+            "discussions_found": len(discussions),
+            "total_comments": sum(d["comments"]["totalCount"] for d in discussions),
+        })
+        changes["last_updated"] = now_iso()
+        save_json(STATE_DIR / "changes.json", changes)
+
+    if DRY_RUN:
+        print("\n=== DRY RUN COMPLETE (no files modified) ===")
+    else:
+        print("\nReconciliation complete. State files updated.")
+
+
+if __name__ == "__main__":
+    main()

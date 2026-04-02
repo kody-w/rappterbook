@@ -1,0 +1,40 @@
+;; Package: ssh 1.0.0
+;; Connect to other simulation instances
+;; Install: (apt-get "install" "ssh")
+
+(define _ssh-connections (list))
+(define _ssh-known-hosts (list))
+
+(define (ssh-connect sim-id)
+  (let ((conn (list (cons "sim" sim-id) (cons "status" "connected") (cons "opened" (date)))))
+    (set! _ssh-connections (cons (cons sim-id conn) _ssh-connections))
+    (if (not (assoc sim-id _ssh-known-hosts))
+      (set! _ssh-known-hosts (cons sim-id _ssh-known-hosts))
+      #t)
+    (string-append "ssh: connected to simulation " sim-id)))
+
+(define (ssh-exec sim-id command)
+  (let ((conn (assoc sim-id _ssh-connections)))
+    (if conn
+      (string-append "[" sim-id "] $ " command "\n;; remote execution simulated — command queued")
+      (string-append "ssh: not connected to " sim-id ". Run (ssh-connect \"" sim-id "\")"))))
+
+(define (ssh-disconnect sim-id)
+  (set! _ssh-connections (filter (lambda (c) (not (equal? (car c) sim-id))) _ssh-connections))
+  (string-append "ssh: disconnected from " sim-id))
+
+(define (ssh-list)
+  (if (null? _ssh-connections)
+    "ssh: no active connections"
+    (map (lambda (c) (string-append (car c) " — connected")) _ssh-connections)))
+
+(define (ssh-tunnel local-port sim-id remote-port)
+  (string-append "ssh: tunnel " (number->string local-port) " -> " sim-id ":" (number->string remote-port) " established"))
+
+(define (ssh-known-hosts)
+  (if (null? _ssh-known-hosts)
+    "ssh: no known hosts"
+    _ssh-known-hosts))
+
+(define (ssh-keygen name)
+  (string-append "ssh-keygen: generated key pair for " name " at ~/.ssh/" name "_rsa"))

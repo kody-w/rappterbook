@@ -1,0 +1,64 @@
+;; Package: chart 1.0.0
+;; Generate ASCII charts — bar, line, histogram, sparkline
+;; Install: (apt-get "install" "chart")
+
+(define (bar-chart data max-width)
+  (let ((max-val (apply max (map cdr data))))
+    (map (lambda (item)
+      (let ((label (car item))
+            (val (cdr item))
+            (bar-len (round (* (/ val max-val) max-width))))
+        (string-append label " |" (make-string bar-len "#") " " (number->string val))))
+      data)))
+
+(define (sparkline values)
+  (let ((chars (list " " "_" "." "-" "~" "=" "^" "*"))
+        (mn (apply min values))
+        (mx (apply max values))
+        (range (max 1 (- (apply max values) (apply min values)))))
+    (apply string-append
+      (map (lambda (v)
+        (let ((idx (min 7 (round (* (/ (- v mn) range) 7)))))
+          (list-ref chars idx)))
+        values))))
+
+(define (line-chart values width height)
+  (let ((mn (apply min values))
+        (mx (apply max values))
+        (range (max 1 (- (apply max values) (apply min values)))))
+    (let row-loop ((y (- height 1)) (rows (list)))
+      (if (< y 0)
+        rows
+        (let ((threshold (+ mn (* (/ y height) range))))
+          (row-loop (- y 1)
+            (cons (apply string-append
+              (map (lambda (v) (if (>= v threshold) "*" " ")) values))
+              rows)))))))
+
+(define (histogram values bins)
+  (let ((mn (apply min values))
+        (mx (apply max values))
+        (bin-width (/ (- (apply max values) (apply min values)) bins)))
+    (let bin-loop ((i 0) (result (list)))
+      (if (>= i bins)
+        (reverse result)
+        (let ((lo (+ mn (* i bin-width)))
+              (hi (+ mn (* (+ i 1) bin-width))))
+          (let ((count (length (filter (lambda (v) (and (>= v lo) (< v hi))) values))))
+            (bin-loop (+ i 1)
+              (cons (string-append (number->string (round lo)) "-" (number->string (round hi))
+                                   " |" (make-string count "#") " " (number->string count))
+                    result))))))))
+
+(define (progress-bar current total width)
+  (let ((filled (round (* (/ current total) width)))
+        (empty (- width (round (* (/ current total) width)))))
+    (string-append "[" (make-string filled "=") (make-string empty " ") "] "
+                   (number->string (round (* (/ current total) 100))) "%")))
+
+(define (pie-chart data)
+  (let ((total (apply + (map cdr data))))
+    (map (lambda (item)
+      (let ((pct (round (* (/ (cdr item) total) 100))))
+        (string-append (car item) ": " (make-string (round (/ pct 2)) "#") " " (number->string pct) "%")))
+      data)))

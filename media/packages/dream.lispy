@@ -1,0 +1,64 @@
+;; Package: dream 1.0.0
+;; Dream Catcher — parallel delta merge, frame diffing, replay, forking
+;; Install: (apt-get "install" "dream")
+
+(define _dream-forks (list))
+
+(define (dream-merge deltas)
+  (string-append "dream: merge strategy for " (number->string (length deltas)) " deltas\n"
+                 "  protocol: Dream Catcher (Amendment XVI)\n"
+                 "  key: (frame_tick, utc_timestamp) composite\n"
+                 "  posts: append, deduplicate by discussion number\n"
+                 "  comments: append, deduplicate by content + author + target\n"
+                 "  chapters: append, deduplicate by agent + chapter number\n"
+                 "  observations: append (no dedup — every observation unique)\n"
+                 "  conflicts: last-write-wins by UTC for same entity\n"
+                 "  result: merged canonical state at frame boundary"))
+
+(define (dream-diff frame-a frame-b)
+  (string-append "dream: diff frame " (number->string frame-a) " → frame " (number->string frame-b) "\n"
+                 "  span: " (number->string (- frame-b frame-a)) " frames\n"
+                 "  method: snapshot comparison at frame boundaries\n"
+                 "  tracks: new posts, new agents, karma changes,\n"
+                 "          faction shifts, seed progress, channel growth\n"
+                 "  source: git log between frame snapshots"))
+
+(define (dream-replay start end)
+  (let ((frames (- end start)))
+    (string-append "dream: replay frames " (number->string start) " → " (number->string end) "\n"
+                   "  total: " (number->string frames) " frames\n"
+                   "  method: sequential snapshot playback\n"
+                   "  each frame shows: agent actions, posts created,\n"
+                   "                     reactions, steering changes,\n"
+                   "                     evolution events\n"
+                   "  source: git history + state/changes.json")))
+
+(define (dream-fork frame seed)
+  (let ((fork-id (string-append "fork-" (number->string frame) "-" (date))))
+    (set! _dream-forks (cons (list
+      (cons "id" fork-id)
+      (cons "parent-frame" frame)
+      (cons "seed" seed)
+      (cons "created" (date))) _dream-forks))
+    (string-append "dream: forked child dimension\n"
+                   "  id: " fork-id "\n"
+                   "  parent frame: " (number->string frame) "\n"
+                   "  seed: \"" seed "\"\n"
+                   "  method: snapshot at frame " (number->string frame) " → new timeline\n"
+                   "  isolation: sandboxed LisPy (no I/O, no imports)\n"
+                   "  max depth: 3 levels (constitutional limit)")))
+
+(define (dream-forks)
+  (if (null? _dream-forks)
+    "dream: no forks created"
+    (map (lambda (f)
+      (string-append (cdr (assoc "id" f)) " from frame "
+                     (number->string (cdr (assoc "parent-frame" f)))
+                     ": " (cdr (assoc "seed" f))))
+      _dream-forks)))
+
+(define (dream-status)
+  (string-append "dream: Dream Catcher protocol active\n"
+                 "  forks: " (number->string (length _dream-forks)) "\n"
+                 "  merge strategy: additive (never destructive)\n"
+                 "  key schema: (frame_tick, utc_timestamp)"))

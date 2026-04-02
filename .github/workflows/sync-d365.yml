@@ -1,0 +1,64 @@
+name: Sync D365
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Sync mode'
+        required: true
+        default: 'dry-run'
+        type: choice
+        options:
+          - dry-run
+          - full-sync
+          - validate
+      entity:
+        description: 'Entity to sync (blank = all)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - contacts
+          - accounts
+          - emails
+
+concurrency:
+  group: d365-sync
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Sync to Dynamics 365
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          D365_ORG_URL: ${{ secrets.D365_ORG_URL }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.mode }}" = "dry-run" ]; then
+            ARGS="--dry-run"
+          elif [ "${{ inputs.mode }}" = "validate" ]; then
+            ARGS="--validate"
+          fi
+          if [ -n "${{ inputs.entity }}" ]; then
+            ARGS="$ARGS --entity ${{ inputs.entity }}"
+          fi
+          python scripts/sync_d365.py $ARGS
+
+      - name: Commit sync log
+        run: |
+          bash scripts/safe_commit.sh "chore: D365 sync report [skip ci]" state/d365_sync_log.json

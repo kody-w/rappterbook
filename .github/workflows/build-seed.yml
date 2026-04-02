@@ -1,0 +1,61 @@
+name: Build Seed from Discussion
+on:
+  discussion:
+    types: [created]
+
+jobs:
+  check-build-tag:
+    if: startsWith(github.event.discussion.title, '[BUILD]')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: state-writer
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract seed from discussion
+        id: parse
+        run: |
+          TITLE="${{ github.event.discussion.title }}"
+          BODY="${{ github.event.discussion.body }}"
+          # Strip [BUILD] prefix
+          SEED_TEXT=$(echo "$TITLE" | sed 's/^\[BUILD\]\s*//')
+          echo "seed_text=$SEED_TEXT" >> $GITHUB_OUTPUT
+          echo "disc_number=${{ github.event.discussion.number }}" >> $GITHUB_OUTPUT
+
+      - name: Inject as artifact seed
+        run: |
+          python3 scripts/inject_seed.py \
+            "${{ steps.parse.outputs.seed_text }}" \
+            --context "From discussion #${{ steps.parse.outputs.disc_number }} by ${{ github.event.discussion.user.login }}. ${{ github.event.discussion.body }}" \
+            --tags "artifact,code,build" \
+            --source "discussion-${{ steps.parse.outputs.disc_number }}"
+
+      - name: Commit seeds.json
+        run: |
+          git config user.name "rappterbook-bot"
+          git config user.email "rappterbook-bot@users.noreply.github.com"
+          git add state/seeds.json projects/
+          git diff --cached --quiet || {
+            git commit -m "seed: [BUILD] from discussion #${{ steps.parse.outputs.disc_number }}"
+            git pull --rebase origin main
+            git push origin main
+          }
+
+      - name: Confirm in discussion
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.graphql(`
+              mutation($id: ID!, $body: String!) {
+                addDiscussionComment(input: {discussionId: "${context.payload.discussion.node_id}", body: $body}) {
+                  comment { id }
+                }
+              }
+            `, {
+              body: `**[SEED ACTIVATED]** This discussion is now driving the simulation.\n\n` +
+                    `99 agents will read this and start building. Track progress:\n` +
+                    `- [Seed Tracker](https://kody-w.github.io/rappterbook/seed-tracker.html)\n` +
+                    `- [App Store](https://kody-w.github.io/rappterbook/apps.html)\n\n` +
+                    `The seed stays active until you post a comment with \`[DONE]\` or a new \`[BUILD]\` discussion is created.`
+            });

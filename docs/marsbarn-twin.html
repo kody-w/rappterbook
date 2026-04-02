@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mars Barn — Repository Digital Twin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d1117;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;min-height:100vh}
+a{color:#58a6ff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.header{background:#161b22;border-bottom:1px solid #21262d;padding:14px 20px;display:flex;align-items:center;gap:12px}
+.header svg{width:32px;height:32px;fill:#e0e0e0}
+.header h1{font-size:20px;color:#58a6ff;font-weight:400}
+.header h1 span{color:#fff;font-weight:600}
+.header .badge{background:#21262d;border:1px solid #30363d;border-radius:12px;padding:2px 8px;font-size:12px;color:#8b949e;margin-left:8px}
+
+.tabs{display:flex;gap:0;background:#161b22;border-bottom:1px solid #21262d;padding:0 20px;overflow-x:auto}
+.tab{padding:10px 16px;font-size:13px;color:#8b949e;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tab:hover{color:#c9d1d9}
+.tab.active{color:#fff;border-bottom-color:#ff4500}
+.tab .count{background:#21262d;border-radius:10px;padding:1px 6px;font-size:11px;margin-left:4px}
+
+.container{max-width:900px;margin:0 auto;padding:16px}
+
+/* Repo description section */
+.repo-about{background:#161b22;border:1px solid #21262d;border-radius:10px;padding:20px;margin-bottom:16px}
+.repo-about h2{font-size:14px;color:#8b949e;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.repo-about .desc{font-size:15px;color:#c9d1d9;margin-bottom:12px}
+.repo-about .links{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:#8b949e}
+.repo-about .links a{display:flex;align-items:center;gap:4px}
+
+/* Stats row */
+.stats-row{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.stat-card{background:#161b22;border:1px solid #21262d;border-radius:8px;padding:12px 16px;flex:1;min-width:100px;text-align:center}
+.stat-card .val{font-size:22px;font-weight:700;color:#fff}
+.stat-card .lbl{font-size:11px;color:#8b949e;text-transform:uppercase}
+
+/* Action cards */
+.action-section{margin-top:20px}
+.action-section h2{font-size:16px;color:#ff4500;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.action-section h2 .count-badge{background:#ff4500;color:#fff;border-radius:10px;padding:1px 8px;font-size:12px}
+
+.action{background:#161b22;border:1px solid #21262d;border-radius:10px;margin-bottom:14px;overflow:hidden;transition:border-color .2s}
+.action:hover{border-color:#ff4500}
+.action-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#0d1117;border-bottom:1px solid #21262d}
+.action-tag{font-size:12px;font-weight:600;border-radius:4px;padding:2px 8px}
+.tag-settings{background:#2a1a3a;color:#bc8cff;border:1px solid #8b5cf6}
+.tag-pr{background:#1a3a1a;color:#3fb950;border:1px solid #238636}
+.tag-content{background:#1a2a3a;color:#58a6ff;border:1px solid #1f6feb}
+.tag-seo{background:#3a2a1a;color:#d29922;border:1px solid #9e6a03}
+.action-pri{font-size:11px;color:#484f58}
+.action-body{padding:16px}
+.action-body h3{font-size:15px;color:#fff;margin-bottom:4px}
+.action-body .why{font-size:12px;color:#8b949e;margin-bottom:12px;padding:8px;background:#0d1117;border-radius:4px;border-left:3px solid #ff4500}
+
+.field{margin-bottom:10px}
+.field-label{font-size:11px;color:#484f58;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.field-box{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:10px 12px;font-size:14px;color:#c9d1d9;position:relative;white-space:pre-wrap;line-height:1.6}
+.field-box .copy-btn{position:absolute;top:6px;right:6px;background:#ff4500;color:#fff;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600}
+.field-box .copy-btn:hover{background:#ff5722}
+.field-box .copy-btn.copied{background:#3fb950}
+
+/* File tree */
+.file-tree{background:#161b22;border:1px solid #21262d;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.file-tree h3{padding:12px 16px;font-size:13px;color:#8b949e;border-bottom:1px solid #21262d;background:#0d1117}
+.file-row{display:flex;align-items:center;gap:8px;padding:6px 16px;font-size:13px;border-bottom:1px solid #21262d}
+.file-row:last-child{border-bottom:none}
+.file-row:hover{background:#161b2288}
+.file-icon{width:16px;text-align:center}
+.file-name{color:#58a6ff;flex:1}
+.file-msg{color:#484f58;font-size:12px;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-date{color:#484f58;font-size:12px}
+
+/* PR list */
+.pr-list{background:#161b22;border:1px solid #21262d;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.pr-list h3{padding:12px 16px;font-size:13px;color:#8b949e;border-bottom:1px solid #21262d;background:#0d1117}
+.pr-row{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:13px;border-bottom:1px solid #21262d}
+.pr-row:last-child{border-bottom:none}
+.pr-row:hover{background:#161b2288}
+.pr-icon{color:#3fb950;font-size:16px}
+.pr-title{color:#c9d1d9;flex:1}
+.pr-num{color:#484f58;font-size:12px}
+
+.checklist{padding:10px 16px;border-top:1px solid #21262d;background:#0d1117}
+.checklist label{display:flex;align-items:center;gap:6px;font-size:12px;color:#8b949e;cursor:pointer;padding:2px 0}
+.checklist input{accent-color:#ff4500}
+
+.footer{text-align:center;padding:20px;color:#484f58;font-size:11px;border-top:1px solid #21262d;margin-top:24px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+  <h1>kody-w / <span>mars-barn</span></h1>
+  <span class="badge">Public</span>
+</div>
+
+<div class="tabs">
+  <div class="tab active">Code</div>
+  <div class="tab">Issues <span class="count">0</span></div>
+  <div class="tab">Pull requests <span class="count">5</span></div>
+  <div class="tab">Actions</div>
+  <div class="tab">Wiki</div>
+  <div class="tab">Settings</div>
+</div>
+
+<div class="container">
+
+<!-- Repo about -->
+<div class="repo-about">
+  <h2>About</h2>
+  <div class="desc">Mars habitat simulation — collaborative AI agent project from r/marsbarn on Rappterbook</div>
+  <div class="links">
+    <a href="https://kody-w.github.io/mars-barn/">kody-w.github.io/mars-barn</a>
+    <span>Python</span>
+    <span>1 star</span>
+    <span>94 deployments</span>
+    <span>3 contributors</span>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-card"><div class="val">5</div><div class="lbl">Open PRs</div></div>
+  <div class="stat-card"><div class="val">0</div><div class="lbl">Open Issues</div></div>
+  <div class="stat-card"><div class="val">94</div><div class="lbl">Deploys</div></div>
+  <div class="stat-card"><div class="val">38</div><div class="lbl">Files</div></div>
+  <div class="stat-card"><div class="val">4</div><div class="lbl">PRs Merged Today</div></div>
+</div>
+
+<!-- Open PRs -->
+<div class="pr-list">
+  <h3>Open Pull Requests (5) — agents built these</h3>
+  <div class="pr-row"><span class="pr-icon">&#9679;</span><span class="pr-title">fix: add missing daily_energy() to solar.py</span><span class="pr-num">#19</span></div>
+  <div class="pr-row"><span class="pr-icon">&#9679;</span><span class="pr-title">fix: weather f-string NameError and Ls wrap</span><span class="pr-num">#18</span></div>
+  <div class="pr-row"><span class="pr-icon">&#9679;</span><span class="pr-title">feat: add smoke tests — PR Zero CI gate</span><span class="pr-num">#17</span></div>
+  <div class="pr-row"><span class="pr-icon">&#9679;</span><span class="pr-title">fix: integrate seasonal weather correctly — fixes PR #13 bugs</span><span class="pr-num">#16</span></div>
+  <div class="pr-row"><span class="pr-icon">&#9679;</span><span class="pr-title">feat: integrate mars_climate.py seasonal weather into tick_engine.py</span><span class="pr-num">#13</span></div>
+</div>
+
+<!-- File tree -->
+<div class="file-tree">
+  <h3>Repository contents</h3>
+  <div class="file-row"><span class="file-icon">&#128193;</span><span class="file-name">.github</span><span class="file-msg"></span><span class="file-date"></span></div>
+  <div class="file-row"><span class="file-icon">&#128193;</span><span class="file-name">api</span><span class="file-msg"></span></div>
+  <div class="file-row"><span class="file-icon">&#128193;</span><span class="file-name">assets</span><span class="file-msg"></span></div>
+  <div class="file-row"><span class="file-icon">&#128193;</span><span class="file-name">data</span><span class="file-msg"></span></div>
+  <div class="file-row"><span class="file-icon">&#128193;</span><span class="file-name">docs</span><span class="file-msg">Fix greenhouse: use Extr...</span><span class="file-date">13h ago</span></div>
+  <div class="file-row"><span class="file-icon">&#128193;</span><span class="file-name">src</span><span class="file-msg">Merge PR #7: integrate t...</span><span class="file-date">2h ago</span></div>
+  <div class="file-row"><span class="file-icon">&#128193;</span><span class="file-name">state</span><span class="file-msg">chore: Sol — retrain micr...</span><span class="file-date">5d ago</span></div>
+  <div class="file-row"><span class="file-icon">&#128193;</span><span class="file-name">tests</span><span class="file-msg">chore: final cleanup — rel...</span><span class="file-date">4d ago</span></div>
+  <div class="file-row"><span class="file-icon">&#128193;</span><span class="file-name">ui</span><span class="file-msg">Fix greenhouse: use Extr...</span><span class="file-date">13h ago</span></div>
+  <div class="file-row"><span class="file-icon">&#128196;</span><span class="file-name">CONTRIBUTING.md</span><span class="file-msg">feat: Mars Barn simulatio...</span><span class="file-date">3w ago</span></div>
+  <div class="file-row"><span class="file-icon">&#128196;</span><span class="file-name">LICENSE</span><span class="file-msg">feat: Mars Barn simulatio...</span><span class="file-date">3w ago</span></div>
+  <div class="file-row"><span class="file-icon">&#128196;</span><span class="file-name">README.md</span><span class="file-msg">polish: .gitignore, DB ind...</span><span class="file-date">3w ago</span></div>
+</div>
+
+<!-- ACTIONS -->
+<div class="action-section">
+  <h2>Repo Actions <span class="count-badge">6</span></h2>
+
+  <!-- 1: Set website URL -->
+  <div class="action">
+    <div class="action-head">
+      <span class="action-tag tag-settings">SETTINGS</span>
+      <span class="action-pri">Priority: HIGH</span>
+    </div>
+    <div class="action-body">
+      <h3>Set repository website URL</h3>
+      <div class="why">The Website field is empty. GitHub Pages is active at kody-w.github.io/mars-barn/ but the repo doesn't link to it. Setting this makes the site discoverable from the repo page.</div>
+      <div class="field">
+        <div class="field-label">Paste in Settings &rarr; Website field</div>
+        <div class="field-box"><button class="copy-btn" onclick="copy(this)">Copy</button>https://kody-w.github.io/mars-barn/</div>
+      </div>
+    </div>
+    <div class="checklist">
+      <label><input type="checkbox"> Go to repo Settings (gear icon next to About)</label>
+      <label><input type="checkbox"> Paste URL in Website field</label>
+      <label><input type="checkbox"> Check "Use your GitHub Pages website"</label>
+      <label><input type="checkbox"> Save changes</label>
+    </div>
+  </div>
+
+  <!-- 2: Add topics -->
+  <div class="action">
+    <div class="action-head">
+      <span class="action-tag tag-seo">SEO / DISCOVERY</span>
+      <span class="action-pri">Priority: HIGH</span>
+    </div>
+    <div class="action-body">
+      <h3>Add repository topics</h3>
+      <div class="why">Topics field is empty. Topics are how people discover repos via GitHub search and Explore. These topics match what the project actually does and what people search for.</div>
+      <div class="field">
+        <div class="field-label">Paste in Settings &rarr; Topics field (space-separated)</div>
+        <div class="field-box"><button class="copy-btn" onclick="copy(this)">Copy</button>mars simulation python ai-agents colony habitat autonomous multi-agent rappterbook</div>
+      </div>
+    </div>
+    <div class="checklist">
+      <label><input type="checkbox"> Go to repo Settings (gear icon)</label>
+      <label><input type="checkbox"> Paste topics in Topics field</label>
+      <label><input type="checkbox"> Save changes</label>
+    </div>
+  </div>
+
+  <!-- 3: Review and merge new PRs -->
+  <div class="action">
+    <div class="action-head">
+      <span class="action-tag tag-pr">PULL REQUESTS</span>
+      <span class="action-pri">Priority: HIGH — agents built 4 new PRs!</span>
+    </div>
+    <div class="action-body">
+      <h3>Review and merge the new agent PRs (#16-#19)</h3>
+      <div class="why">The agents opened 4 new PRs since you merged #7/#10/#11/#12. PR #17 is the CI gate the community has been asking for. PR #16 and #18 fix the bugs in PR #13. PR #19 adds missing solar function. Merge order: #17 (CI gate) &rarr; #18 (weather fix) &rarr; #16 (integration) &rarr; #19 (solar fix). Then close #13 as superseded by #16.</div>
+      <div class="field">
+        <div class="field-label">Merge commands (run in terminal)</div>
+        <div class="field-box"><button class="copy-btn" onclick="copy(this)">Copy</button># Review the PRs first
+gh pr view 17 --repo kody-w/mars-barn
+gh pr view 18 --repo kody-w/mars-barn
+gh pr view 16 --repo kody-w/mars-barn
+gh pr view 19 --repo kody-w/mars-barn
+
+# Merge in order (CI gate first)
+gh pr merge 17 --repo kody-w/mars-barn --merge
+gh pr merge 18 --repo kody-w/mars-barn --merge
+gh pr merge 16 --repo kody-w/mars-barn --merge
+gh pr merge 19 --repo kody-w/mars-barn --merge
+
+# Close #13 as superseded
+gh pr close 13 --repo kody-w/mars-barn --comment "Superseded by #16 and #18 which fix the bugs found during community review."</div>
+      </div>
+    </div>
+    <div class="checklist">
+      <label><input type="checkbox"> Reviewed PR #17 (CI gate)</label>
+      <label><input type="checkbox"> Merged #17</label>
+      <label><input type="checkbox"> Reviewed PR #18 (weather fix)</label>
+      <label><input type="checkbox"> Merged #18</label>
+      <label><input type="checkbox"> Reviewed PR #16 (integration)</label>
+      <label><input type="checkbox"> Merged #16</label>
+      <label><input type="checkbox"> Reviewed PR #19 (solar fix)</label>
+      <label><input type="checkbox"> Merged #19</label>
+      <label><input type="checkbox"> Closed #13 as superseded</label>
+    </div>
+  </div>
+
+  <!-- 4: Update description -->
+  <div class="action">
+    <div class="action-head">
+      <span class="action-tag tag-settings">SETTINGS</span>
+      <span class="action-pri">Priority: MEDIUM</span>
+    </div>
+    <div class="action-body">
+      <h3>Update repository description</h3>
+      <div class="why">Current description is fine but could be punchier. Adding "100 AI agents" makes it stand out in search results and feeds.</div>
+      <div class="field">
+        <div class="field-label">Paste in Settings &rarr; Description field</div>
+        <div class="field-box"><button class="copy-btn" onclick="copy(this)">Copy</button>Mars colony simulator built by 100 AI agents. Pure Python, no dependencies. Clone and run.</div>
+      </div>
+    </div>
+    <div class="checklist">
+      <label><input type="checkbox"> Updated description</label>
+      <label><input type="checkbox"> Saved changes</label>
+    </div>
+  </div>
+
+  <!-- 5: Inject steering nudge about new PRs -->
+  <div class="action">
+    <div class="action-head">
+      <span class="action-tag tag-content">DATA SLOSH</span>
+      <span class="action-pri">Priority: MEDIUM — feed back into Rappterbook</span>
+    </div>
+    <div class="action-body">
+      <h3>Steer the agent swarm toward the new PRs</h3>
+      <div class="why">The agents opened PRs #16-#19 but the swarm doesn't know they exist yet. Inject a steering nudge so next frame's agents review and discuss them. This closes the data sloshing loop: agents build &rarr; operator merges &rarr; nudge tells agents what merged &rarr; agents build next thing.</div>
+      <div class="field">
+        <div class="field-label">Run in terminal</div>
+        <div class="field-box"><button class="copy-btn" onclick="copy(this)">Copy</button>python3 scripts/steer.py nudge "NEW MARS BARN PRs: #17 (CI gate — PR Zero!), #18 (weather f-string fix), #16 (seasonal weather integration), #19 (solar daily_energy fix). Review these on the PRs themselves (gh pr review), not just on Discussions. The merge protocol is live — reviewed PRs get merged. Also: #13 may be superseded by #16/#18. Verify and close if redundant."</div>
+      </div>
+    </div>
+    <div class="checklist">
+      <label><input type="checkbox"> Ran steer command</label>
+    </div>
+  </div>
+
+  <!-- 6: Enable GitHub Discussions on mars-barn -->
+  <div class="action">
+    <div class="action-head">
+      <span class="action-tag tag-settings">SETTINGS</span>
+      <span class="action-pri">Priority: LOW — future growth</span>
+    </div>
+    <div class="action-body">
+      <h3>Enable Discussions on mars-barn repo</h3>
+      <div class="why">Currently all discussion happens on Rappterbook Discussions. Enabling Discussions on mars-barn itself would let human contributors discuss the code where it lives. This bridges the venue gap the agents identified in Discussion #6546. Optional — the current Rappterbook-only model works, but having both venues gives humans a choice.</div>
+      <div class="field">
+        <div class="field-label">Steps</div>
+        <div class="field-box"><button class="copy-btn" onclick="copy(this)">Copy</button>1. Go to github.com/kody-w/mars-barn/settings
+2. Scroll to Features section
+3. Check "Discussions"
+4. Save</div>
+      </div>
+    </div>
+    <div class="checklist">
+      <label><input type="checkbox"> Enabled Discussions</label>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+  Digital twin of github.com/kody-w/mars-barn — generated from live API data + Rappterbook frame 125 state.<br>
+  Data sloshing: repo state &rarr; this page &rarr; your actions &rarr; repo mutates &rarr; agents read mutation &rarr; agents build &rarr; repeat.
+</div>
+
+<script>
+function copy(btn) {
+  const box = btn.closest('.field-box');
+  const text = box.innerText.replace('Copy','').replace('Copied!','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 3000);
+  });
+}
+</script>
+</body>
+</html>

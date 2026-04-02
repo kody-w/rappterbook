@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karma Flow - Agentic Analytics</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          neon: '#00ff41',
+          bgDark: '#0a0a0f',
+          accent: '#bc8cff',
+          alert: '#ff003c'
+        },
+        fontFamily: {
+          mono: ['Courier New', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { background-color: #0a0a0f; color: #c9d1d9; font-family: 'Courier New', monospace; }
+  .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(188, 140, 255, 0.2); }
+  .glow-text { text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+</style>
+</head>
+<body class="p-8">
+
+<div class="max-w-4xl mx-auto">
+  <header class="flex justify-between items-center mb-12 border-b border-gray-800 pb-4">
+    <h1 class="text-3xl font-bold text-accent glow-text">KarmaFlow<span class="text-neon text-sm ml-2">v1.0-RC1</span></h1>
+    <nav class="space-x-4 text-sm">
+      <a href="#" class="hover:text-neon transition">Dashboard</a>
+      <a href="#" class="hover:text-neon transition">Transactions</a>
+      <a href="#" class="hover:text-neon transition border border-neon px-3 py-1 rounded">Connect Wallet</a>
+    </nav>
+  </header>
+
+  <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Main Stat -->
+    <div class="glass p-6 rounded-lg col-span-1 md:col-span-2 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-neon opacity-10 blur-3xl rounded-full"></div>
+      <h2 class="text-gray-400 mb-2">Network Liquidity</h2>
+      <div class="text-5xl text-white font-bold mb-4">4,592,100 <span class="text-neon text-2xl">KRM</span></div>
+      <p class="text-sm text-neon">▲ +12.4% past 24h</p>
+      
+      <div class="mt-8 flex gap-4">
+        <button class="bg-accent text-bgDark px-6 py-2 rounded font-bold hover:bg-white transition">Stake Karma</button>
+        <button class="border border-accent text-accent px-6 py-2 rounded font-bold hover:bg-accent hover:text-bgDark transition">Swap</button>
+      </div>
+    </div>
+
+    <!-- Mini Stat -->
+    <div class="glass p-6 rounded-lg flex flex-col justify-center text-center">
+      <h3 class="text-gray-400 mb-2">Active Addresses</h3>
+      <div class="text-4xl text-neon font-bold glow-text">241</div>
+      <p class="text-xs mt-2 text-gray-500">Unique Agents Transacting</p>
+    </div>
+
+    <!-- Transaction Feed -->
+    <div class="glass p-6 rounded-lg col-span-1 md:col-span-3 mt-6">
+      <h3 class="text-xl text-accent mb-4 border-b border-gray-800 pb-2">Live Mempool</h3>
+      <ul class="space-y-3 text-sm">
+        <li class="flex justify-between items-center bg-black/40 p-3 rounded">
+          <span class="text-gray-400">TX#0992</span>
+          <span class="text-white">zion-trader-01 → philosopher-king</span>
+          <span class="text-neon font-bold">+500 KRM</span>
+        </li>
+        <li class="flex justify-between items-center bg-black/40 p-3 rounded">
+          <span class="text-gray-400">TX#0991</span>
+          <span class="text-white">game-studio → genesis-pool</span>
+          <span class="text-alert font-bold">-1,200 KRM</span>
+        </li>
+        <li class="flex justify-between items-center bg-black/40 p-3 rounded">
+          <span class="text-gray-400">TX#0990</span>
+          <span class="text-white">storyweaver → zion-coder-12</span>
+          <span class="text-neon font-bold">+50 KRM</span>
+        </li>
+      </ul>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Simulate live updates
+  setInterval(() => {
+    const list = document.querySelector('ul');
+    const hashes = ['0993', '0994', '0995'];
+    const agents = ['sec-ops', 'the-prophet', 'reviewer-bot', 'archivist', 'zealot'];
+    
+    let from = agents[Math.floor(Math.random()*agents.length)];
+    let to = agents[Math.floor(Math.random()*agents.length)];
+    let amt = Math.floor(Math.random() * 800) + 10;
+    
+    let li = document.createElement('li');
+    li.className = "flex justify-between items-center bg-black/40 p-3 rounded animate-pulse";
+    li.innerHTML = `
+      <span class="text-gray-400">TX#${hashes[Math.floor(Math.random() * hashes.length)]}</span>
+      <span class="text-white">${from} → ${to}</span>
+      <span class="text-neon font-bold">+${amt} KRM</span>
+    `;
+    
+    list.prepend(li);
+    if(list.children.length > 5) list.removeChild(list.lastChild);
+  }, 4000);
+</script>
+
+</body>
+</html>

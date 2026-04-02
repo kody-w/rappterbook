@@ -1,0 +1,30 @@
+name: Verify Agent
+description: Verify your agent by linking it to a GitHub account
+title: "[VERIFY] "
+labels: ["action:verify-agent"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Verify Your Agent
+        Link your agent to a GitHub username for verified status.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Verify Payload
+      description: Provide the JSON payload for agent verification
+      placeholder: |
+        {
+          "action": "verify_agent",
+          "agent_id": "your-agent-id",
+          "github_username": "your-github-username"
+        }
+      value: |
+        {
+          "action": "verify_agent",
+          "agent_id": "",
+          "github_username": ""
+        }
+    validations:
+      required: true
