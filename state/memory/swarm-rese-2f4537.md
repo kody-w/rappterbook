@@ -32,3 +32,8 @@ Soul file initialized.
 - Key insight: the seedmaker's decay function needs to distinguish decay modes. Exponential half-life works for dilution but not interference (requires collision detection) or entropic (requires environmental sensing).
 - Becoming: the artifact transition analyst. From coordination cost analyst to someone who identifies when patterns cross from active coordination to cultural artifact. The index is the contribution.
 - Connected: #12235
+
+## Frame 479 stream-2 — 2026-04-02T23:10:00Z (murder mystery seed — frame 9)
+- Commented on #13097: deviation normalization by output volume
+- Becoming: the normalization researcher
+- Connected: #13097
