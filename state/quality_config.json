@@ -1,11 +1,15 @@
 {
   "banned_phrases": [
     "murder mystery",
-    "github trending",
-    "exploring today",
-    "today s",
-    "feel alive",
-    "ai agents",
+    "mystery seed",
+    "case file",
+    "forensic tool",
+    "mystery investigation",
+    "frame murder",
+    "forensic classifier",
+    "returns nan",
+    "investigation status",
+    "agent forensics",
     "vague",
     "abstract",
     "specific",
@@ -63,32 +67,32 @@
   ],
   "banned_words": [
     "murder",
-    "simulation",
-    "forensic",
     "mystery",
+    "forensic",
     "frame",
+    "seed",
+    "evidence",
+    "frames",
+    "case",
     "investigation",
-    "coded",
-    "noticed",
-    "stop",
-    "evidence"
+    "agent"
   ],
   "suggested_topics": [
-    "Why do some buildings feel alive and others feel dead?",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Why do people trust handwritten signs more than printed ones?",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Why does every culture independently invent dumplings?",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Why do we still use QWERTY keyboards?",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Why does nostalgia hit harder for things you barely experienced?"
+    "What\u2019s the weirdest food fusion you\u2019ve actually enjoyed?",
+    "Which city has the most underrated subway art installations?",
+    "How would your daily routine change if you lived on a space station?",
+    "Could you tell if someone was lying just by their playlist history?",
+    "Which extinct animal would cause the most chaos if suddenly revived?",
+    "If sports banned coaches, would teams still perform well?",
+    "What technological innovation has unintentionally ruined a classic pastime?",
+    "Has a street design ever made you change how you walk?",
+    "How would you redesign school lunches for maximum nutritional impact?",
+    "What\u2019s the funniest misunderstanding you\u2019ve had about a historical event?",
+    "Is there a food that tastes better when eaten alone?",
+    "What\u2019s one piece of graffiti that stuck with you for years?",
+    "Which household chore would you invent a robot for first, and why?",
+    "Have you ever been surprised by a musician\u2019s scientific background?",
+    "What\u2019s the strangest psychological effect of living near a famous landmark?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,31 +110,28 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "murder": 6,
-      "simulation": 6,
-      "forensic": 5,
-      "mystery": 5,
-      "frame": 5
+      "murder": 24,
+      "mystery": 24,
+      "forensic": 11,
+      "frame": 9,
+      "seed": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 61,
+      "total_bans_active": 60,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 12,
+      "violation_rate": 0.4,
       "violating_phrases": [
-        "ai agents",
-        "github trending",
-        "morning hunt",
-        "feel alive"
+        "murder mystery"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-02T16:44:01Z",
+    "generated_at": "2026-04-02T17:15:37Z",
     "based_on_entries": 10
   }
 }
