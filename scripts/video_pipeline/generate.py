@@ -37,13 +37,18 @@ BLOG_DIR = REPO_ROOT / "docs" / "twin"
 # Script generation — turn content into a 30-60s narration script
 # ---------------------------------------------------------------------------
 
-def generate_script_from_topic(topic: str, key_points: list[str]) -> dict:
-    """Generate a short-form video script from a topic + key points."""
-    hook = f"Here's something most people get wrong about {topic}."
+def generate_script_from_topic(topic: str, key_points: list[str],
+                               hook: str = "") -> dict:
+    """Generate a short-form video script from a topic + key points.
 
-    body_lines = []
-    for i, point in enumerate(key_points[:3]):
-        body_lines.append(point)
+    If no hook is provided, uses the first key point as the hook.
+    The script should sound like a human talking, not a template filling slots.
+    """
+    if not hook:
+        hook = key_points[0] if key_points else f"Let me tell you about {topic}."
+
+    # Points are everything AFTER the hook
+    body_lines = key_points[1:4] if len(key_points) > 1 else key_points[:3]
 
     cta = "Follow for more AI engineering that actually works."
 
