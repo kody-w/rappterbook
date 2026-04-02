@@ -465,39 +465,39 @@ def _make_text_slide(text: str, output_path: Path, font_size: int = 48,
 
 
 def _generate_midjourney_image(prompt: str, output_path: Path) -> Path | None:
-    """Generate an image via Midjourney API (GoAPI/ImagineAPI compatible).
+    """Generate an image via MidAPI.ai Midjourney API.
 
-    Supports multiple Midjourney proxy APIs:
-      - GoAPI: https://api.goapi.ai
-      - ImagineAPI: https://api.imagineapi.dev
-      - Any OpenAI-compatible image endpoint
+    Endpoints:
+      Generate: POST https://api.midapi.ai/api/v1/mj/generate
+      Fetch:    GET  https://api.midapi.ai/api/v1/mj/record-info?taskId=XXX
+      Video:    POST generate with taskType=mj_img2video
 
-    Set env vars:
-      MIDJOURNEY_API_KEY — your API key
-      MIDJOURNEY_API_URL — endpoint (default: https://api.goapi.ai/mj/v2/imagine)
+    Set MIDJOURNEY_API_KEY env var.
     """
     import urllib.request
     import urllib.error
     import time as _time
 
     api_key = os.environ.get("MIDJOURNEY_API_KEY", "")
-    api_url = os.environ.get("MIDJOURNEY_API_URL", "https://api.goapi.ai/mj/v2/imagine")
-
     if not api_key:
         return None
 
-    # Submit generation request
+    base = "https://api.midapi.ai/api/v1/mj"
+
+    # Submit image generation
     payload = json.dumps({
+        "taskType": "mj_txt2img",
         "prompt": prompt,
-        "aspect_ratio": "9:16",
-        "process_mode": "fast",
+        "speed": "fast",
+        "aspectRatio": "9:16",
+        "version": "7",
     }).encode()
 
     req = urllib.request.Request(
-        api_url,
+        f"{base}/generate",
         data=payload,
         headers={
-            "X-API-Key": api_key,
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
         },
     )
@@ -506,43 +506,47 @@ def _generate_midjourney_image(prompt: str, output_path: Path) -> Path | None:
         with urllib.request.urlopen(req, timeout=30) as resp:
             result = json.loads(resp.read().decode("utf-8"))
 
-        task_id = result.get("task_id") or result.get("id") or result.get("data", {}).get("task_id")
-        if not task_id:
-            # Some APIs return the image directly
-            image_url = result.get("output", {}).get("image_url") or result.get("uri") or result.get("url")
-            if image_url:
-                return _download_image(image_url, output_path)
-            print(f"   ⚠️ Midjourney: no task_id in response")
+        if result.get("code") != 200:
+            print(f"   ⚠️ MidAPI: {result.get('msg', '?')}")
             return None
 
-        # Poll for completion
-        fetch_url = os.environ.get("MIDJOURNEY_FETCH_URL", api_url.replace("/imagine", "/fetch"))
-        for _ in range(30):  # max 5 min
+        task_id = result.get("data", {}).get("taskId")
+        if not task_id:
+            print(f"   ⚠️ MidAPI: no taskId in response")
+            return None
+
+        # Poll for completion (successFlag: 0=generating, 1=success, 2/3=failed)
+        for _ in range(36):  # max 6 min
             _time.sleep(10)
             fetch_req = urllib.request.Request(
-                fetch_url,
-                data=json.dumps({"task_id": task_id}).encode(),
-                headers={"X-API-Key": api_key, "Content-Type": "application/json"},
+                f"{base}/record-info?taskId={task_id}",
+                headers={"Authorization": f"Bearer {api_key}"},
             )
             with urllib.request.urlopen(fetch_req, timeout=15) as resp:
                 status = json.loads(resp.read().decode("utf-8"))
 
-            state = status.get("status") or status.get("state") or ""
-            if state in ("finished", "completed", "done"):
-                image_url = (status.get("output", {}).get("image_url")
-                             or status.get("task_result", {}).get("image_url")
-                             or status.get("uri"))
-                if image_url:
-                    return _download_image(image_url, output_path)
-                break
-            elif state in ("failed", "error"):
-                print(f"   ❌ Midjourney generation failed: {status.get('message', '?')}")
+            flag = status.get("data", {}).get("successFlag", 0)
+            if flag == 1:
+                # Success — extract image URL
+                result_info = status["data"].get("resultInfoJson", {})
+                urls = result_info.get("resultUrls", [])
+                if urls:
+                    image_url = urls[0].get("resultUrl", "")
+                    if image_url:
+                        return _download_image(image_url, output_path)
+                print(f"   ⚠️ MidAPI: no resultUrls in completed task")
+                return None
+            elif flag in (2, 3):
+                err = status.get("data", {}).get("errorMessage", "?")
+                print(f"   ❌ MidAPI failed: {err}")
                 return None
 
-        print(f"   ⚠️ Midjourney: timeout waiting for image")
+        print(f"   ⚠️ MidAPI: timeout waiting for image (6 min)")
         return None
 
     except Exception as e:
+        print(f"   ⚠️ MidAPI error: {e}")
+        return None
         print(f"   ⚠️ Midjourney error: {e}")
         return None
 
