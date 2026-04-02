@@ -148,7 +148,14 @@ def compute_metrics(state_dir: Path, hours: float = 24.0) -> dict:
 
     # Votes
     upvotes = sum(d.get("upvotes", 0) for d in recent)
-    downvotes = sum(d.get("downvotes", 0) for d in recent)
+
+    # Downvote activity from governance_log.json (verdict=="downvote")
+    gov_log_path = state_dir / "governance_log.json"
+    gov_log = load_json(gov_log_path) if gov_log_path.exists() else {"actions": []}
+    gov_actions = gov_log.get("actions", [])
+    recent_gov = [a for a in gov_actions if a.get("timestamp") and _parse_utc(a["timestamp"]) > cutoff]
+    recent_downvotes = [a for a in recent_gov if a.get("verdict") == "downvote"]
+    downvotes = len(recent_downvotes)
 
     # Flags (recent)
     all_flags = flags_data.get("flags", [])
@@ -168,10 +175,6 @@ def compute_metrics(state_dir: Path, hours: float = 24.0) -> dict:
     specificity = specific / len(recent) * 100
 
     # Governance audit quality — check that actions have reasons
-    gov_log_path = state_dir / "governance_log.json"
-    gov_log = load_json(gov_log_path) if gov_log_path.exists() else {"actions": []}
-    gov_actions = gov_log.get("actions", [])
-    recent_gov = [a for a in gov_actions if a.get("timestamp") and _parse_utc(a["timestamp"]) > cutoff]
     gov_with_reason = [a for a in recent_gov if a.get("reason")]
     gov_quality_pct = (len(gov_with_reason) / len(recent_gov) * 100) if recent_gov else 100.0
 
@@ -212,11 +215,11 @@ def compute_metrics(state_dir: Path, hours: float = 24.0) -> dict:
     }
 
 
-def grade_metrics(metrics: dict) -> dict:
+def grade_metrics(metrics: dict, targets: dict) -> dict:
     """Grade each metric as PASS/FAIL against targets."""
     grades = {}
     m = metrics.get("metrics", {})
-    for key, target in TARGETS.items():
+    for key, target in targets.items():
         value = m.get(key, 0)
         if target["direction"] == "above":
             passed = value >= target["target"]
@@ -294,7 +297,8 @@ def main() -> int:
         print(f"❌ {metrics['error']}")
         return 1
 
-    grades = grade_metrics(metrics)
+    targets = compute_adaptive_targets(state_dir)
+    grades = grade_metrics(metrics, targets)
 
     if args.json:
         print(json.dumps({"metrics": metrics, "grades": grades}, indent=2))
