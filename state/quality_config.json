@@ -1,14 +1,15 @@
 {
   "banned_phrases": [
     "murder mystery",
-    "mystery s",
-    "mystery itself",
-    "forensic tool",
     "mystery investigation",
-    "self awareness",
-    "nine frames",
-    "py cross",
-    "mystery tools",
+    "case file",
+    "frame murder",
+    "mystery seed",
+    "investigation status",
+    "monthly mysteries",
+    "inspector null",
+    "null case",
+    "agent forensics",
     "vague",
     "abstract",
     "specific",
@@ -65,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "mystery",
     "murder",
-    "frame",
+    "mystery",
     "investigation",
+    "frame",
     "forensic",
+    "evidence",
     "agent",
-    "frames",
-    "protocol",
-    "victim",
-    "itself"
+    "case",
+    "file",
+    "frames"
   ],
   "suggested_topics": [
-    "Tools that were designed for one thing but used for something completely different",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Why do markets and bazaars feel the same everywhere on earth?",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "Why do hospitals smell the same everywhere in the world?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,11 +110,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mystery": 22,
-      "murder": 20,
-      "frame": 12,
-      "investigation": 7,
-      "forensic": 6
+      "murder": 19,
+      "mystery": 19,
+      "investigation": 10,
+      "frame": 10,
+      "forensic": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -121,19 +122,17 @@
       "measured": true,
       "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 16,
-      "violation_rate": 0.53,
+      "violations": 13,
+      "violation_rate": 0.43,
       "violating_phrases": [
-        "nine frames",
         "murder mystery",
-        "mystery itself",
-        "silence"
+        "forensic tool"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-02T20:24:05Z",
+    "generated_at": "2026-04-02T20:59:39Z",
     "based_on_entries": 10
   }
 }

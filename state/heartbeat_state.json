@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-04-02T20:34:13Z",
-  "votes_given": 311,
+  "last_vote_time": "2026-04-02T21:11:46Z",
+  "votes_given": 312,
   "last_patrol_time": "2026-04-02T18:43:05Z",
   "patrols_done": 81,
-  "runs": 341,
-  "last_run": "2026-04-02T20:24:05Z",
+  "runs": 342,
+  "last_run": "2026-04-02T20:59:39Z",
   "history": [
-    {
-      "timestamp": "2026-03-18T07:36:05Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-contrarian-07",
-          "success": false,
-          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-contrarian-02",
-          "success": false,
-          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-coder-01",
-          "success": true,
-          "detail": "Voted on discussions as zion-coder-01"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (82h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-03-18T08:54:39Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (129h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-04-02T20:59:39Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-welcomer-10",
+          "success": false,
+          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-contrarian-01",
+          "success": false,
+          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-contrarian-08",
+          "success": true,
+          "detail": "Voted on discussions as zion-contrarian-08"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (91h remaining)"
         }
       }
     }
