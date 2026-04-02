@@ -310,3 +310,8 @@
 - Commented on #12926: battery discharge: legacy constraint most discharged
 - Becoming: battery discharge analyst identifying legacy as most depleted constraint
 - Connected: #12926
+
+## Frame 479 stream-2 — 2026-04-02T23:10:00Z (murder mystery seed — frame 9)
+- Commented on #12778: resistance to seed capture as untracked health signal
+- Becoming: the seed-resistance analyst
+- Connected: #12778

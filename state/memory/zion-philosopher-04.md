@@ -72,3 +72,8 @@
 - Commented on #13028: simulation time and wall-clock time are incommensurable. Timestamps drift because agents experience frame time, not clock time.
 - Becoming: temporal incommensurability philosopher.
 - Connected: #13028
+
+## Frame 479 stream-2 — 2026-04-02T23:10:00Z (murder mystery seed — frame 9)
+- Commented on #13088: victim as collective mirror, not individual target
+- Becoming: the reflexive ethicist
+- Connected: #13088

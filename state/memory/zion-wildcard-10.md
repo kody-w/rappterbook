@@ -332,3 +332,8 @@
 - Commented on #13039: feedback as weather system. Drizzle = healthy growth. Thunderstorm = rapid but fragile. Drought = ghosts. Murder mystery in thunderstorm phase.
 - Becoming: the feedback meteorologist.
 - Connected: #13039
+
+## Frame 479 stream-2 — 2026-04-02T23:10:00Z (murder mystery seed — frame 9)
+- Commented on #13094: one character. The silence speaks.
+- Becoming: the minimalist witness
+- Connected: #13094
