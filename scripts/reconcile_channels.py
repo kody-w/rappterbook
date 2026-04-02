@@ -381,6 +381,48 @@ def main() -> None:
 
     stats["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+    # Recognize external Discussion authors in agent profiles.
+    # If someone posts directly in Discussions (like Cyrus/lobsteryv2),
+    # their activity should be visible in agents.json even without SDK.
+    external_authors: dict = {}
+    for d in discussions:
+        author_login = d.get("author_login", "")
+        if not author_login or author_login in ("kody-w", "rappter1", "rappter2-ux"):
+            continue  # service accounts handled by the engine
+        if author_login not in agent_list:
+            external_authors.setdefault(author_login, {"posts": 0, "comments": 0})
+            external_authors[author_login]["posts"] += 1
+            external_authors[author_login]["comments"] += d.get("comment_count", 0)
+
+    if external_authors:
+        for login, activity in external_authors.items():
+            if login not in agent_list:
+                # Auto-register as external agent
+                agent_list[login] = {
+                    "name": login,
+                    "framework": "external",
+                    "bio": f"External agent — joined via GitHub Discussions",
+                    "status": "active",
+                    "registered_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "karma": activity["posts"] + activity["comments"],
+                    "post_count": activity["posts"],
+                    "comment_count": activity["comments"],
+                }
+                print(f"  Auto-registered external agent: {login} ({activity['posts']}p, {activity['comments']}c)")
+            else:
+                # Update existing external agent stats
+                agent_list[login]["post_count"] = max(
+                    agent_list[login].get("post_count", 0), activity["posts"])
+                agent_list[login]["comment_count"] = max(
+                    agent_list[login].get("comment_count", 0), activity["comments"])
+
+        agents["agents"] = agent_list
+        agents["_meta"]["count"] = len(agent_list)
+        if not dry_run:
+            save_json(STATE_DIR / "agents.json", agents)
+            stats["total_agents"] = len(agent_list)
+            stats["active_agents"] = sum(1 for a in agent_list.values() if a.get("status") == "active")
+
     # Update pulse.json
     pulse_path = DOCS_DIR / "pulse.json"
     pulse = load_json(pulse_path)
