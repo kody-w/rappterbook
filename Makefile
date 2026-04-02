@@ -70,6 +70,12 @@ resilience: ## Compute Resilience & Fidelity (R&F) score
 tree: ## Sync the RappterTree singleton (state/tree.json) from current state
 	python3 scripts/sync_tree.py
 
+vlink: ## Sync all vLink peers (pull → adapt → merge → echo)
+	python3 scripts/vlink.py sync rappterzoo
+
+vlink-status: ## Show vLink federation status
+	python3 scripts/vlink.py status
+
 hay: ## Make hay — pump echoes to all 19 twin surfaces, reconcile, compute trending
 	@echo "☀️  Making hay while the sun is shining..."
 	python3 scripts/echo_twins.py
