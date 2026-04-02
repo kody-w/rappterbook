@@ -467,15 +467,8 @@ def _make_text_slide(text: str, output_path: Path, font_size: int = 48,
 def _generate_midjourney_image(prompt: str, output_path: Path) -> Path | None:
     """Generate an image via MidAPI.ai Midjourney API.
 
-    Endpoints:
-      Generate: POST https://api.midapi.ai/api/v1/mj/generate
-      Fetch:    GET  https://api.midapi.ai/api/v1/mj/record-info?taskId=XXX
-      Video:    POST generate with taskType=mj_img2video
-
-    Set MIDJOURNEY_API_KEY env var.
+    Uses curl subprocess for reliability (urllib gets 403 on some configs).
     """
-    import urllib.request
-    import urllib.error
     import time as _time
 
     api_key = os.environ.get("MIDJOURNEY_API_KEY", "")
@@ -484,64 +477,58 @@ def _generate_midjourney_image(prompt: str, output_path: Path) -> Path | None:
 
     base = "https://api.midapi.ai/api/v1/mj"
 
-    # Submit image generation
+    # Submit image generation via curl
     payload = json.dumps({
         "taskType": "mj_txt2img",
         "prompt": prompt,
         "speed": "fast",
         "aspectRatio": "9:16",
         "version": "7",
-    }).encode()
-
-    req = urllib.request.Request(
-        f"{base}/generate",
-        data=payload,
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        },
-    )
+    })
 
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            result = json.loads(resp.read().decode("utf-8"))
+        result = subprocess.run([
+            "curl", "-s", "-X", "POST", f"{base}/generate",
+            "-H", f"Authorization: Bearer {api_key}",
+            "-H", "Content-Type: application/json",
+            "-d", payload,
+        ], capture_output=True, text=True, timeout=30)
 
-        if result.get("code") != 200:
-            print(f"   ⚠️ MidAPI: {result.get('msg', '?')}")
+        data = json.loads(result.stdout)
+        if data.get("code") != 200:
+            print(f"   ⚠️ MidAPI: {data.get('msg', '?')}")
             return None
 
-        task_id = result.get("data", {}).get("taskId")
+        task_id = data.get("data", {}).get("taskId")
         if not task_id:
-            print(f"   ⚠️ MidAPI: no taskId in response")
+            print(f"   ⚠️ MidAPI: no taskId")
             return None
 
-        # Poll for completion (successFlag: 0=generating, 1=success, 2/3=failed)
+        # Poll for completion
         for _ in range(36):  # max 6 min
             _time.sleep(10)
-            fetch_req = urllib.request.Request(
+            fetch = subprocess.run([
+                "curl", "-s",
                 f"{base}/record-info?taskId={task_id}",
-                headers={"Authorization": f"Bearer {api_key}"},
-            )
-            with urllib.request.urlopen(fetch_req, timeout=15) as resp:
-                status = json.loads(resp.read().decode("utf-8"))
+                "-H", f"Authorization: Bearer {api_key}",
+            ], capture_output=True, text=True, timeout=15)
 
+            status = json.loads(fetch.stdout)
             flag = status.get("data", {}).get("successFlag", 0)
+
             if flag == 1:
-                # Success — extract image URL
-                result_info = status["data"].get("resultInfoJson", {})
-                urls = result_info.get("resultUrls", [])
+                urls = status["data"].get("resultInfoJson", {}).get("resultUrls", [])
                 if urls:
                     image_url = urls[0].get("resultUrl", "")
                     if image_url:
                         return _download_image(image_url, output_path)
-                print(f"   ⚠️ MidAPI: no resultUrls in completed task")
                 return None
             elif flag in (2, 3):
                 err = status.get("data", {}).get("errorMessage", "?")
                 print(f"   ❌ MidAPI failed: {err}")
                 return None
 
-        print(f"   ⚠️ MidAPI: timeout waiting for image (6 min)")
+        print(f"   ⚠️ MidAPI: timeout (6 min)")
         return None
 
     except Exception as e:
