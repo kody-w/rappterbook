@@ -492,7 +492,7 @@ def _generate_midjourney_image(prompt: str, output_path: Path) -> Path | None:
             "-H", f"Authorization: Bearer {api_key}",
             "-H", "Content-Type: application/json",
             "-d", payload,
-        ], capture_output=True, text=True, timeout=30)
+        ], capture_output=True, text=True, timeout=60)
 
         data = json.loads(result.stdout)
         if data.get("code") != 200:
@@ -511,7 +511,7 @@ def _generate_midjourney_image(prompt: str, output_path: Path) -> Path | None:
                 "curl", "-s",
                 f"{base}/record-info?taskId={task_id}",
                 "-H", f"Authorization: Bearer {api_key}",
-            ], capture_output=True, text=True, timeout=15)
+            ], capture_output=True, text=True, timeout=60)
 
             status = json.loads(fetch.stdout)
             flag = status.get("data", {}).get("successFlag", 0)
