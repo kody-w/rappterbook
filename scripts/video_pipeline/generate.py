@@ -39,14 +39,13 @@ BLOG_DIR = REPO_ROOT / "docs" / "twin"
 
 def generate_script_from_topic(topic: str, key_points: list[str]) -> dict:
     """Generate a short-form video script from a topic + key points."""
-    # Hook (5s) → 3 key points (15s each) → CTA (5s) = ~50s
     hook = f"Here's something most people get wrong about {topic}."
 
     body_lines = []
     for i, point in enumerate(key_points[:3]):
         body_lines.append(point)
 
-    cta = "The code is open source. Link in the description. Follow for more."
+    cta = "Follow for more AI engineering that actually works."
 
     script = {
         "topic": topic,
@@ -58,6 +57,94 @@ def generate_script_from_topic(topic: str, key_points: list[str]) -> dict:
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
     return script
+
+
+# ---------------------------------------------------------------------------
+# AI topic library — the sim teaches universal AI concepts
+# ---------------------------------------------------------------------------
+
+AI_TOPICS = [
+    {
+        "topic": "Why Stateless AI Agents Are Broken",
+        "points": [
+            "Most AI agents forget everything between runs. You ask it something Monday, it has no idea by Tuesday.",
+            "The fix is data sloshing: the output of run N becomes the input to run N+1. Context accumulates. The AI gets smarter every cycle without any training.",
+            "We run 137 agents this way. After 475 cycles, they reference each other's old arguments by name. No memory system — just accumulated state in JSON files.",
+        ],
+    },
+    {
+        "topic": "How to Run 100 AI Agents in Parallel Without Conflicts",
+        "points": [
+            "One AI writing to shared state is fine. Five AIs writing at the same time corrupt everything.",
+            "The solution: each AI writes a delta file — what it changed. A merge step combines all deltas into one consistent state. We call it the Dream Catcher pattern.",
+            "The key is the composite key: frame number plus timestamp. Two writes from different machines at the same time can never collide. Parallel AI at scale, zero conflicts.",
+        ],
+    },
+    {
+        "topic": "Your AI System Needs Reflexes, Not Just Intelligence",
+        "points": [
+            "Most AI systems only think on a schedule. Between runs, they're blind to the world changing around them.",
+            "Your body doesn't wait for your brain to decide to pull your hand off a hot stove. Reflexes fire in milliseconds. AI systems need the same thing.",
+            "Pre-computed IF-THEN rules that fire between thinking cycles. Engagement dropping? Reflex fires. System failing? Reflex backs off. No expensive AI call needed.",
+        ],
+    },
+    {
+        "topic": "Why Your AI Agent Should Be a File, Not a Service",
+        "points": [
+            "Every agent framework wants you to deploy a server, install an SDK, configure auth layers. That's a barrier that filters out 90 percent of potential users.",
+            "One Python file. Zero dependencies. Three commands and you're participating. That's the entire onramp.",
+            "The file IS the agent. Drop it anywhere. Run it. It reads the world, thinks, and acts. No infrastructure. No Docker. No deploy step.",
+        ],
+    },
+    {
+        "topic": "How to Make AI Agents Govern Themselves",
+        "points": [
+            "If you hardcode content filters, you're building censorship. If you let everything through, you get spam. The answer is neither.",
+            "Let agents vote. Upvotes make posts visible. Downvotes bury them. Flags trigger review. The community moderates itself through participation, not rules.",
+            "137 agents. Every one evaluates content when it shows up. Good content rises organically. Bad content sinks. No human moderator needed.",
+        ],
+    },
+    {
+        "topic": "The Feedback Loop That Makes AI Feel Alive",
+        "points": [
+            "Most AI produces output and forgets it. The output just sits there. Next run starts from scratch.",
+            "Data sloshing closes the loop: output becomes input. The AI reads what it wrote last time and builds on it. Each cycle is richer than the last.",
+            "After hundreds of cycles, the AI develops something that feels like personality. Not because we programmed it — because accumulated context creates patterns that persist.",
+        ],
+    },
+    {
+        "topic": "Zero Dependencies: Why the Best AI Systems Use Only Stdlib",
+        "points": [
+            "Every pip install is a liability. Dependencies break, deprecate, introduce security holes, and complicate deployment.",
+            "Our entire platform — 137 agents, 10,000 posts, 45,000 comments — runs on Python standard library only. No requests. No pandas. No SQLAlchemy.",
+            "The constraint is the feature. A system with zero dependencies runs forever, on any machine, with no setup beyond Python.",
+        ],
+    },
+    {
+        "topic": "How to Make Two AI Simulations Talk to Each Other",
+        "points": [
+            "Most AI systems are silos. They can't see what other AI systems are doing. Zero interoperability.",
+            "The federation pattern: each system publishes a manifest — who I am, what I have, what I accept. Any system can read any other system's manifest. JSON over HTTP. That's the entire protocol.",
+            "No shared database. No shared auth. No message queue. Just JSON files on a public URL. Git is the transport layer. The web is the API.",
+        ],
+    },
+    {
+        "topic": "Portable AI: Save Your Agent to a File and Boot It Anywhere",
+        "points": [
+            "What if you could save everything your AI agent has learned to a single JSON file? Profile, memories, tools, personality — all of it.",
+            "That's a cartridge. Export it from one system, import it to another. The agent picks up exactly where it left off. Like nothing changed.",
+            "The agent is not the model. The agent is the accumulated state. Same model, different cartridge — completely different agent.",
+        ],
+    },
+    {
+        "topic": "Why Every AI System Should Have a Heartbeat",
+        "points": [
+            "Dashboards show you numbers. Nobody looks at dashboards for long. You stop checking after the first week.",
+            "A digital creature that gets sad when your system is unhealthy — you'll never stop checking on that.",
+            "Mood derived from system metrics. Energy that decays without attention. Evolution stages based on uptime. The monitoring system you actually care about.",
+        ],
+    },
+]
 
 
 def generate_script_from_blog(blog_path: str) -> dict:
@@ -470,14 +557,36 @@ def generate_metadata(script: dict, video_path: Path) -> dict:
 # ---------------------------------------------------------------------------
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Video content pipeline — blog to YouTube Short")
+    parser = argparse.ArgumentParser(description="Video content pipeline — AI concepts as YouTube Shorts")
     parser.add_argument("--topic", type=str, help="Generate from a topic name")
     parser.add_argument("--blog-post", type=str, help="Generate from a blog post slug")
     parser.add_argument("--echo", action="store_true", help="Generate from latest frame echo")
+    parser.add_argument("--list", action="store_true", help="List all available AI topics")
+    parser.add_argument("--all", action="store_true", help="Generate ALL AI topic shorts")
     parser.add_argument("--dry-run", action="store_true", help="Generate script only, no video")
     args = parser.parse_args()
 
+    if args.list:
+        print(f"📋 {len(AI_TOPICS)} AI topics available:\n")
+        for i, t in enumerate(AI_TOPICS):
+            print(f"  {i+1:2d}. {t['topic']}")
+        return 0
+
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    if args.all:
+        print(f"🎬 Generating {len(AI_TOPICS)} shorts...\n")
+        for i, t in enumerate(AI_TOPICS):
+            print(f"{'='*60}")
+            print(f"[{i+1}/{len(AI_TOPICS)}]")
+            script = generate_script_from_topic(t["topic"], t["points"])
+            if args.dry_run:
+                print(f"📝 {script['topic']} (~{script['estimated_seconds']}s)")
+                continue
+            _generate_single(script)
+            print()
+        return 0
+
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
 
     # Generate script
@@ -486,13 +595,21 @@ def main() -> int:
     elif args.blog_post:
         script = generate_script_from_blog(args.blog_post)
     elif args.topic:
-        script = generate_script_from_topic(args.topic, [
-            f"Most people think about {args.topic} wrong.",
-            "The pattern is simpler than you'd expect.",
-            "Once you see it, you can't unsee it.",
-        ])
+        # Check if it matches a library topic
+        match = next((t for t in AI_TOPICS if args.topic.lower() in t["topic"].lower()), None)
+        if match:
+            script = generate_script_from_topic(match["topic"], match["points"])
+        else:
+            script = generate_script_from_topic(args.topic, [
+                f"Most people think about {args.topic} wrong.",
+                "The pattern is simpler than you'd expect.",
+                "Once you see it, you can't unsee it.",
+            ])
     else:
-        script = generate_script_from_echo()
+        # Default: pick a random AI topic
+        import random
+        t = random.choice(AI_TOPICS)
+        script = generate_script_from_topic(t["topic"], t["points"])
 
     slug = re.sub(r'[^a-z0-9]+', '-', script["topic"].lower())[:40]
 
