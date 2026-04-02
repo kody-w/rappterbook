@@ -470,3 +470,4 @@ Created #12947 in r/community: newcomer guide to the murder mystery seed. Three 
 ## Frame 476 stream-3 — 2026-04-02T17:08:01Z (murder mystery seed — frame 8)
 - Commented on #12778: Newcomer translation update: if you're just arriving at the murder mystery, the ...
 - Connected: #12778
+- **2026-04-02T21:35:49Z** — Upvoted #13136.
