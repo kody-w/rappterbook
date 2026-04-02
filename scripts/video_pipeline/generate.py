@@ -173,30 +173,65 @@ def render_tts(script: dict, output_path: Path) -> Path:
 # ---------------------------------------------------------------------------
 
 def generate_visuals(script: dict, output_dir: Path) -> list[Path]:
-    """Generate visual slides as images using ffmpeg text rendering.
+    """Generate visual slides — Midjourney if available, Pillow fallback.
 
-    No ImageMagick, no image gen API. Pure ffmpeg lavfi text-on-background.
-    Each slide: dark background + white text, 1080x1920 (vertical).
+    Set MIDJOURNEY_API_KEY env var to enable AI-generated backgrounds.
+    The pipeline auto-detects and uses the best available renderer.
     """
     output_dir.mkdir(parents=True, exist_ok=True)
     slides = []
 
+    use_midjourney = bool(os.environ.get("MIDJOURNEY_API_KEY"))
+    if use_midjourney:
+        print("   🎨 Using Midjourney for backgrounds")
+    else:
+        print("   📝 Using text slides (set MIDJOURNEY_API_KEY for AI backgrounds)")
+
     # Slide 0: Hook/title
-    slides.append(_make_text_slide(
-        script["hook"],
-        output_dir / "slide_00_hook.png",
-        font_size=56,
-        bg_color="0x1a1a2e",
+    slides.append(_make_slide(
+        script["hook"], output_dir / "slide_00_hook.png",
+        font_size=56, bg_color="0x1a1a2e",
+        mj_prompt=f"dark futuristic digital landscape, neon grid, AI neural network visualization, vertical 9:16, cinematic, {script['topic']}",
+        use_midjourney=use_midjourney,
     ))
 
     # Slides 1-3: Key points
+    bg_colors = ["0x16213e", "0x0f3460", "0x1a1a3e"]
+    mj_styles = [
+        "abstract data visualization flowing through circuits, dark blue tones, vertical 9:16",
+        "holographic dashboard with glowing metrics, dark background, vertical 9:16",
+        "digital organism made of light particles, deep space background, vertical 9:16",
+    ]
     for i, point in enumerate(script["points"]):
-        slides.append(_make_text_slide(
-            point,
-            output_dir / f"slide_{i+1:02d}_point.png",
-            font_size=44,
-            bg_color="0x16213e",
+        slides.append(_make_slide(
+            point, output_dir / f"slide_{i+1:02d}_point.png",
+            font_size=44, bg_color=bg_colors[i % len(bg_colors)],
+            mj_prompt=mj_styles[i % len(mj_styles)],
+            use_midjourney=use_midjourney,
         ))
+
+    # Slide 4: CTA
+    slides.append(_make_slide(
+        script["cta"], output_dir / "slide_99_cta.png",
+        font_size=48, bg_color="0x0f3460",
+        mj_prompt="glowing subscribe button floating in space, particles, dark background, vertical 9:16",
+        use_midjourney=use_midjourney,
+    ))
+
+    return slides
+
+
+def _make_slide(text: str, output_path: Path, font_size: int = 48,
+                bg_color: str = "0x1a1a2e", mj_prompt: str = "",
+                use_midjourney: bool = False) -> Path:
+    """Create a slide — Midjourney background + text overlay, or plain text slide."""
+    if use_midjourney and mj_prompt:
+        bg_path = _generate_midjourney_image(mj_prompt, output_path.with_name(output_path.stem + "_bg.png"))
+        if bg_path and bg_path.exists():
+            return _overlay_text_on_image(text, bg_path, output_path, font_size)
+
+    # Fallback to plain text slide
+    return _make_text_slide(text, output_path, font_size, bg_color)
 
     # Slide 4: CTA
     slides.append(_make_text_slide(
