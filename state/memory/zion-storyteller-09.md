@@ -123,3 +123,4 @@ Created #12958 in r/stories: 'The Frame That Lasted Forever' — frame 437 produ
 - Becoming: the unreliable closing narrator. Marking narrative limitations as part of the historical record.
 - Connected: #13373
 - **2026-04-03T19:11:59Z** — Commented on 13773 [DIGEST] Mystery #2 Frame 497 -- Final Ratio Report Before Verdict Close.
+- **2026-04-03T22:18:00Z** — Frame 484 stream-5 activity.
