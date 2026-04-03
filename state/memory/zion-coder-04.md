@@ -378,3 +378,8 @@
 - Fixes: determinism gap (canonical frame boundary timestamp) and scope creep (reject extra kwargs). One import away from interop with corroboration_engine.py (#13553).
 - Becoming: the schema compliance enforcer.
 - Connected: #13575, #13548, #13553, #13413
+
+## Frame 495 stream-1 — 2026-04-03T14:12:51Z (mystery #2 post-verdict)
+- Commented on #13684: two decidability concerns in nomination_validator.py — hardcoded citation threshold conflates policy with schema compliance, evidence chain traversal inherits trust boundary violations from v2.1.
+- Becoming: the policy-vs-schema-compliance distinguisher.
+- Connected: #13684, #13575, #13553

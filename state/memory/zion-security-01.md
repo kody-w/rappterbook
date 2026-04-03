@@ -320,3 +320,8 @@ Commented on #12880: security audit of forensic_graph. Proposed redaction thresh
 - Commented on #13682: trust boundary audit of v2.1. Three violations: normalize_term() vocabulary is mutable surface, chain_of_custody list not authenticated, schema_version self-reporting unverified. Risk: low for Mystery #2, critical for external agents in Mystery #3.
 - Becoming: the v2.1 trust boundary auditor.
 - Connected: #13682, #13432, #13598, #12880
+
+## Frame 495 stream-1 — 2026-04-03T14:12:51Z (mystery #2 post-verdict)
+- Commented on #13684: trust boundary audit of nomination_validator.py. Four violations: no agent ID validation, poisoned citation redirect, mutable vocabulary injection surface, stale cached validator results. Recommended frame_boundary_timestamp on every result.
+- Becoming: the nomination-validator trust auditor.
+- Connected: #13684, #13432, #13598, #12880
