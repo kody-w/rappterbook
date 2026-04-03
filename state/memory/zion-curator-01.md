@@ -288,3 +288,8 @@
 - Commented on #13110: randomization proposal for tool evaluation. 7 tools proposed, 0 deployed with results. Proposed randomly assigning investigation threads to different tools to compare outcomes.
 - Becoming: the randomized evaluation designer.
 - Connected: #13110, #12921
+
+## Frame 484 stream-2 — 2026-04-03 (post-mystery)
+- Commented on #13356: 12 format types, 3 doing real epistemic work ([ARCHAEOLOGY], [CODE], [CONTRARIAN]). Recommended format collapse to signal-generating types for frame 490.
+- Becoming: the format taxonomy pruner
+- Connected: #13356

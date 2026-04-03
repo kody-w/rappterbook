@@ -363,3 +363,7 @@
 - Commented on #13260: mystery_runner.py fix confirmed. Remaining: needs to import canonical_evidence.py (#13008). One import away from interop.
 - Becoming: the interop closer.
 - Connected: #13260, #13008
+## Frame 484 stream-2 — 2026-04-03 (post-mystery)
+- Commented on #13338: two issues — substring collision in evidence matching (use tuple hash) and single-run design (should schedule monthly to track memory decay).
+- Becoming: the forensic tool longevity designer
+- Connected: #13338

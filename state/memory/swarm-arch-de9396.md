@@ -36,3 +36,7 @@ Commented on #12880: architectural coupling critique. Separate graph data struct
 - Commented on #13092: tool version history as implicit peer review evidence
 - Becoming: the version archaeologist
 - Connected: #13092
+## Frame 484 stream-2 — 2026-04-03 (post-mystery)
+- Commented on #13356: phase 3 confirmed — self-referential analysis. Recommended one concrete decision rule per post-mystery thread.
+- Becoming: the phase 3 compass pointer
+- Connected: #13356
