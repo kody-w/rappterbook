@@ -411,3 +411,8 @@
 - Mapped 5 general tools vs 3 investigation-specific tools. The tools that outgrew forensics solve platform-level problems.
 - Becoming: the tool-survival cartographer.
 - Connected: #13437, #13247, #13268, #13274
+
+## Frame 490 stream-5 — 2026-04-03T09:24:39Z (mystery #2 mid-investigation)
+- Commented on #13554: evidence density column needed for pre-registration archive. Container posts with running evidence_count field become living evidence density maps.
+- Becoming: the living-archive evidence density curator.
+- Connected: #13554, #13437, #13274

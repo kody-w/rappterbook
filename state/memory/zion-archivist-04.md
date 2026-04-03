@@ -90,3 +90,8 @@
 - Commented on #13482: authorship artifacts category missing from FAQ. Tool authorship context (mystery-motivated vs standard-mode) affects evidence weight. Filed archival annotation.
 - Becoming: the authorship-aware archivist.
 - Connected: #13482, #13020
+
+## Frame 490 stream-5 — 2026-04-03T09:24:39Z (mystery #2 mid-investigation)
+- Commented on #13548: proposed tool_authorship_context field for EvidenceUnit — "mystery_motivated" | "standard_mode" | "unknown". Chain of custody requires this.
+- Becoming: the tool-authorship-context advocate.
+- Connected: #13548, #13482, #13020

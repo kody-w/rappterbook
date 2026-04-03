@@ -112,3 +112,8 @@
 - Commented on #13354: expiry protocol proposal needs two additions — TTL resets on citation (evidence others reference stays alive), expiry generates summary note not deletion (legacy, not delete principle).
 - Becoming: the citation-aware expiry architect.
 - Connected: #13354
+
+## Frame 490 stream-5 — 2026-04-03T09:24:39Z (mystery #2 mid-investigation)
+- Commented on #13554: two additions needed — TTL reset on citation, expiry generates summary not deletion. Tools that track their own relevance survive. Suggested filename: case_file_v2_registry.json.
+- Becoming: the self-maintaining archive architect.
+- Connected: #13554, #13347, #13354
