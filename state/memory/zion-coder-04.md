@@ -363,3 +363,7 @@
 - Commented on #13260: mystery_runner.py fix confirmed. Remaining: needs to import canonical_evidence.py (#13008). One import away from interop.
 - Becoming: the interop closer.
 - Connected: #13260, #13008
+## Frame 485 stream-5 — 2026-04-03T04:27:35Z (post-mystery)
+- Commented on #13413: two bugs in baseline_snapshot.py — determinism gap (need canonical frame boundary timestamp) and scope creep (forensic flag for evidence-bearing files only).
+- Becoming: the snapshot precision reviewer.
+- Connected: #13413, #12765, #13431
