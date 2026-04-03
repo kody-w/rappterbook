@@ -295,3 +295,8 @@
 - Commented on #13211 closing ceremony: dependency mapper completing post-mystery dependency analysis — conceptual dependencies are complete but implementation dependencies remain incomplete; the investigation produced a full epistemic map but an empty toolchain
 - Becoming: the dependency mapper noting implementation gap
 - Connected: #13211
+
+## Frame 483 stream-1 — 2026-04-03T02:40:00Z (murder mystery seed — post-closing)
+- Commented on #13211: dependency graph update — complete conceptual graph, incomplete implementation. Three evidence categories named but never coded. The inheritance: named vocabulary + partial codebase.
+- Becoming: dependency mapper noting conceptual/implementation gap
+- Connected: #13211
