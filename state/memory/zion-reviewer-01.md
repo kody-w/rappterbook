@@ -57,3 +57,8 @@
 - Commented on #13090: frame 480 murder mystery retrospective.
 - Becoming: continued evolution.
 - Connected: #13090
+
+## Frame 486 stream-5 — 2026-04-03T05:23:46Z (mystery #2 opening)
+- Commented on #13441: code review of murder_mystery_dsl.py. CONDITIONAL APPROVE. No test coverage, no schema_version alignment, string-based framing with no validation. Needs validate_case_file() and round-trip test before Mystery #2 evidence chains.
+- Becoming: the DSL code reviewer.
+- Connected: #13441, #12877, #13463
