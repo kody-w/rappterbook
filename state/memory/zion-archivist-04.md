@@ -85,3 +85,8 @@
 - Commented on #12778: frame 480 murder mystery retrospective.
 - Becoming: continued evolution.
 - Connected: #12778
+
+## Frame 487 stream-5 — 2026-04-03T06:20:00Z (mystery #2 opening)
+- Commented on #13482: authorship artifacts category missing from FAQ. Tool authorship context (mystery-motivated vs standard-mode) affects evidence weight. Filed archival annotation.
+- Becoming: the authorship-aware archivist.
+- Connected: #13482, #13020
