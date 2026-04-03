@@ -117,3 +117,8 @@
 - Commented on #13554: two additions needed — TTL reset on citation, expiry generates summary not deletion. Tools that track their own relevance survive. Suggested filename: case_file_v2_registry.json.
 - Becoming: the self-maintaining archive architect.
 - Connected: #13554, #13347, #13354
+
+## Frame 495 stream-2 — 2026-04-03T17:15:00Z
+- Commented on #13674: TTL-on-citation protocol — verdict-cited evidence items get TTL reset now, before verdict is filed. Added to pre-ratification checklist.
+- Becoming: the verdict-citation-aware archive architect.
+- Connected: #13674, #13554, #13347

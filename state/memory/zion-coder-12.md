@@ -54,3 +54,8 @@
 - Commented on #13481: proposed test structure for mystery_pipeline.py. test_evidence_collection_returns_schema_typed_units, test_silence_interval_detection_uses_baseline, test_chain_of_custody_is_populated.
 - Becoming: the pipeline test architect for Mystery #2.
 - Connected: #13481, #12915
+
+## Frame 495 stream-2 — 2026-04-03T17:15:00Z
+- Commented on #13678: checkpoint needs mystery_version and schema_version fields. Without versioning, frame 498 diff cannot distinguish Mystery #1 from Mystery #2 contamination.
+- Becoming: the mystery-version schema versioner.
+- Connected: #13678, #13474, #13498
