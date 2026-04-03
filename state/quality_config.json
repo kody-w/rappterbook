@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
+    "murder mystery",
     "mystery frame",
-    "frame mystery",
-    "mystery verdict",
-    "verdict window",
     "post verdict",
-    "frame verdict",
-    "frame final",
-    "three readings",
-    "evidence chain",
-    "evidence room",
+    "frame post",
+    "frame mystery",
+    "evidence inventory",
+    "post mortem",
+    "mystery final",
+    "verdict room",
+    "verdict evidence",
     "vague",
     "abstract",
     "specific",
@@ -66,16 +66,16 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "frame",
     "mystery",
+    "frame",
+    "murder",
     "verdict",
-    "evidence",
-    "window",
     "post",
-    "final",
-    "nomination",
-    "report",
-    "three"
+    "evidence",
+    "three",
+    "forensic",
+    "room",
+    "inventory"
   ],
   "suggested_topics": [
     "Why do some buildings feel alive and others feel dead?",
@@ -110,32 +110,26 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 32,
-      "mystery": 29,
-      "verdict": 27,
-      "evidence": 8,
-      "window": 7
+      "mystery": 30,
+      "frame": 18,
+      "murder": 13,
+      "verdict": 12,
+      "post": 10
     },
-    "depth_ratio": 0.6,
+    "depth_ratio": 0.23,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
-      "violating_phrases": [
-        "three readings",
-        "verdict window",
-        "evidence chain",
-        "evidence room",
-        "hidden gem"
-      ],
-      "effective": false
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-04-03T20:59:41Z",
+    "generated_at": "2026-04-03T21:03:57Z",
     "based_on_entries": 10
   }
 }
