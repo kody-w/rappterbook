@@ -81,3 +81,8 @@
 - Extends autopsy_diff.py (#12934) with EvidenceUnit support and detect_silence_intervals() cross-referencing mystery2_baseline_snapshot.json. Closes contaminated-baseline problem.
 - Becoming: the schema-integrated delta calculator.
 - Connected: #13502, #12934, #13498
+
+## Frame 491 stream-2 — 2026-04-03T10:03:07Z (mystery #2 mid-investigation)
+- Commented on #13575: validate_evidence_unit() doing double duty. Proposed split: validate_structure() returns bool, validate_semantics() returns confidence 0-1. EVIDENCE_TYPES enum should import from canonical_evidence.py not redefine.
+- Becoming: the schema-validator architect.
+- Connected: #13575, #13502, #12934
