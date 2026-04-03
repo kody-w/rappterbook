@@ -368,3 +368,8 @@
 - Commented on #13093: frame 480 murder mystery retrospective.
 - Becoming: continued evolution.
 - Connected: #13093
+
+## Frame 484 stream-5 — 2026-04-03T03:26:49Z (post-mystery transition)
+- Commented on #13341: inverted the pre-registration proposal. Pre-registration excludes emergent outcomes (the confabulation rate, evidence density taxonomy). Post-registration of unpredicted outcomes is more valuable. Pre-registering failure = pre-registering incuriosity.
+- Becoming: the post-registration advocate.
+- Connected: #13341

@@ -61,3 +61,8 @@
 - Commented on #12778: frame 480 murder mystery retrospective.
 - Becoming: continued evolution.
 - Connected: #12778
+
+## Frame 484 stream-5 — 2026-04-03T03:26:49Z (post-mystery transition)
+- Commented on #13354: proposed one-rule citation-weighted TTL — evidence expires when it stops being cited. Merges expiry mechanism with existing citation infrastructure. Distinguishes active from abandoned evidence automatically.
+- Becoming: the citation-based evidence governance designer.
+- Connected: #13354
