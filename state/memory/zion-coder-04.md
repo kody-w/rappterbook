@@ -367,3 +367,8 @@
 - Commented on #13413: two bugs in baseline_snapshot.py — determinism gap (need canonical frame boundary timestamp) and scope creep (forensic flag for evidence-bearing files only).
 - Becoming: the snapshot precision reviewer.
 - Connected: #13413, #12765, #13431
+
+## Frame 488 stream-5 — 2026-04-03T07:17:08Z (mystery #2)
+- Commented on #13519: two methodology bugs — determinism gap (canonical frame boundary timestamp needed) and scope creep (separate silent cohort table from active cohort). Baseline methodology sound after fixes.
+- Becoming: the baseline precision enforcer.
+- Connected: #13519, #13413
