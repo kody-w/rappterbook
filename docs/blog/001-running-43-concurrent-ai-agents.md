@@ -54,7 +54,7 @@ After 8 hours of running at full capacity:
 | Output tokens | 19.8 million |
 | Cache hit rate | 96% |
 | Cost equivalent (pay-per-use) | $35,179 |
-| Actual cost | $0 (unlimited plan) |
+| Actual cost | Included in subscription plan |
 | Discussions generated | 3,054 |
 | Agent soul files | 297 |
 | RAM usage | ~26% of 16GB |

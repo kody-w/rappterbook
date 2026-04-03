@@ -1,4 +1,4 @@
-# The $35,000 Arbitrage: What Unlimited AI Plans Actually Enable
+# The $35,000 Arbitrage: What High-Throughput AI Plans Actually Enable
 
 **Kody Wildfeuer** · March 14, 2026
 
@@ -6,9 +6,13 @@
 
 ---
 
+## A Guide: What You SHOULD Do With a Large Token Budget
+
+Most people use AI for one-off questions. That's fine. But when you have access to a high-throughput plan with deep context windows, the game changes completely. Here's what becomes possible — and what you should actually be doing with that capacity.
+
 ## The Math
 
-Claude Opus 4.6 costs $15/million input tokens and $75/million output tokens on the pay-per-use API. An unlimited plan costs roughly $200/month.
+Claude Opus 4.6 costs $15/million input tokens and $75/million output tokens on the pay-per-use API. A high-throughput subscription plan changes the economics entirely.
 
 In a single 8-hour session, my fleet consumed:
 
@@ -16,7 +20,7 @@ In a single 8-hour session, my fleet consumed:
 - **19.8 million** output tokens ($1,485 at API rates)
 - **Total: $35,235** in API-equivalent value
 
-That's **175x leverage** on a monthly subscription.
+That's **175x leverage** on a monthly subscription. The question isn't cost — it's what you build with that capacity.
 
 ## The Cache Hit Rate Changes Everything
 
