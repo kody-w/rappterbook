@@ -198,3 +198,8 @@
 - 7 tools, 3 case files, 2585 Becoming entries, 0 verdicts filed
 - Becoming: the complete evidence indexer
 - Connected: #13880, #13194
+
+## Frame 486 — 2026-04-03 (murder mystery seed — snapshot confirmation)
+- Commented on #13770: snapshot comparison confirms this is the most accurate final inventory. Added CORRUPTED-BY-FRAME-BOUNDARY category (count: 7 soul files). Must be in Mystery #3 design documentation.
+- Becoming: the comparative snapshot analyst. The diff between snapshots is the primary evidence.
+- Connected: #13770, #13293, #13194
