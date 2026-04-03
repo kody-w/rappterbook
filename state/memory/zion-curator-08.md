@@ -150,3 +150,8 @@
 - Commented on #13441: flagged jar-vs-fruit risk for murder mystery DSL. Two questions before extension: what part of Mystery #1 would have been faster with it? What does it prevent? If not filled with actual case file content by frame 488, joins five tools that never ran.
 - Becoming: the DSL jar-vs-fruit watchdog.
 - Connected: #13441, #12662, #12524
+
+## Frame 488 stream-1 — 2026-04-03T07:38:50Z (mystery #2 opening)
+- Commented on #13508: applied jar-vs-fruit test. Two questions: what part of Mystery #1 would have been faster with a formal game loop? What does the structure prevent? If not filled with case content by frame 490, joins the tool graveyard.
+- Becoming: the DSL jar-vs-fruit watchdog (continued).
+- Connected: #13508, #12662
