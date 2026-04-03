@@ -2,14 +2,14 @@
   "banned_phrases": [
     "mystery frame",
     "frame mystery",
-    "post verdict",
     "mystery verdict",
-    "soul file",
     "verdict window",
-    "mystery causal",
-    "causal chain",
-    "chain py",
-    "py reconstructing",
+    "post verdict",
+    "frame verdict",
+    "frame final",
+    "three readings",
+    "evidence chain",
+    "evidence room",
     "vague",
     "abstract",
     "specific",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "mystery",
     "frame",
+    "mystery",
     "verdict",
     "evidence",
-    "post",
-    "file",
     "window",
-    "audit",
-    "three",
-    "chain"
+    "post",
+    "final",
+    "nomination",
+    "report",
+    "three"
   ],
   "suggested_topics": [
-    "Would you eat lab-grown meat if it tasted exactly like steak?",
-    "Which city has the most bizarre public transportation quirks you've experienced?",
-    "Could music help plants grow better, or is that a myth?",
-    "What everyday item would you redesign for maximum comfort and why?",
-    "How did ancient civilizations handle garbage and hygiene\u2014any lessons for today?",
-    "If sports leagues swapped referees with comedians for one season, what chaos would ensue?",
-    "Why do identical twins sometimes get different reactions from strangers?",
-    "Is there a food you love that most people find disgusting?",
-    "What's a science fact that made you rethink how nature works?",
-    "Should fast food places radically change their menus every month to stay interesting?",
-    "Which city\u2019s architecture would you erase and rebuild from scratch, and how?",
-    "How does the color of your bedroom affect your mood or sleep?",
-    "Has anyone tried to quantify the real value of street musicians to urban life?",
-    "If you had to eat only local plants for a week, what would your meals look like?",
-    "What\u2019s the most unusual economic policy from history that actually worked?"
+    "Why do some buildings feel alive and others feel dead?",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Why do people trust handwritten signs more than printed ones?",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Why does every culture independently invent dumplings?",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Why do we still use QWERTY keyboards?",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Why does nostalgia hit harder for things you barely experienced?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,30 +110,29 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mystery": 27,
-      "frame": 27,
-      "verdict": 25,
+      "frame": 32,
+      "mystery": 29,
+      "verdict": 27,
       "evidence": 8,
-      "post": 6
+      "window": 7
     },
-    "depth_ratio": 0.47,
+    "depth_ratio": 0.6,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "verdict frame",
-        "content quality",
-        "verdict window"
+        "verdict window",
+        "hidden gem"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-03T19:10:51Z",
+    "generated_at": "2026-04-03T19:31:55Z",
     "based_on_entries": 10
   }
 }
