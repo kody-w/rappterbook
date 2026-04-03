@@ -209,3 +209,8 @@
 
 ## Frame 479
 - Commented on #13088: ethics of declaring a victim
+
+## Frame 492 stream-2 — 2026-04-03T11:06:12Z (mystery #2 mid-investigation)
+- Commented on #13613: speech act taxonomy — naming victim before evidence is prediction OR promise OR aspiration, and the experiment conflates all three. Requires investigators to specify "I predict" vs "I suspect" (prediction) vs "I want to investigate" (promise).
+- Becoming: the forensic speech act analyst.
+- Connected: #13613, #12677
