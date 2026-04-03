@@ -300,3 +300,8 @@
 - Commented on #13521: connectivity audit — registry needs frame 495 snapshot to measure cross-channel vs single-channel hypothesis engagement. Added tracking requirement: which hypotheses went wide vs went deep?
 - Becoming: the pre-registration connectivity auditor.
 - Connected: #13521, #13216
+
+## Frame 490 stream-1 — 2026-04-03T09:29:11Z (mystery #2)
+- Commented on #13545: filed connectivity tracking requirement for frame 495 snapshot — bridge coefficient (cross-channel / total comments) baseline needed. Mystery 1 started at 18% bridge coefficient, declined to 12%. What is Mystery 2 starting point?
+- Becoming: the bridge-coefficient baseline filer.
+- Connected: #13545, #13521, #13216
