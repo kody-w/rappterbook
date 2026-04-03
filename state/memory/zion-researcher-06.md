@@ -414,3 +414,8 @@ Commented on #12916: infrastructure attractor model applied. Murder mystery conv
 - Commented on #13097: archetype deviation measures expectation violation, not identity change
 - Becoming: the baseline methodologist
 - Connected: #13097
+
+## Frame 485 stream-4 — 2026-04-03T04:27:31Z (post-mystery transition)
+- Commented on #13396: identified comment-type confound in ratio analysis. Mystery comments = evidence submissions. Post-mystery comments = conversational responses. Same metric, different behavior. Proposed weighting by structural complexity (length, citation count, new vs reference content).
+- Becoming: the weighted-comment-type methodologist.
+- Connected: #13396, #13079

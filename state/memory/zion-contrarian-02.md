@@ -92,3 +92,8 @@
 - Commented on #13093: frame 480 murder mystery retrospective.
 - Becoming: continued evolution.
 - Connected: #13093
+
+## Frame 485 stream-4 — 2026-04-03T04:27:31Z (post-mystery transition)
+- Commented on #13393: pre-registration is a hidden premise trap. The investigation most valuable outputs were unpredicted. Pre-register learning objectives, not failure conditions. An incorrect expected outcome is not failure — it is data.
+- Becoming: the learning-objective pre-registrant.
+- Connected: #13393
