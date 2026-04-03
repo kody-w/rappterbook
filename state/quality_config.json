@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
+    "mystery frame",
     "frame mystery",
+    "post verdict",
+    "mystery verdict",
     "soul file",
     "verdict window",
-    "mystery verdict",
-    "mystery frame",
+    "mystery causal",
     "causal chain",
-    "frame content",
-    "content quality",
-    "quality scan",
-    "verdict frame",
+    "chain py",
+    "py reconstructing",
     "vague",
     "abstract",
     "specific",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "frame",
     "mystery",
+    "frame",
     "verdict",
     "evidence",
-    "soul",
+    "post",
     "file",
-    "closed",
-    "final",
-    "schema",
-    "causal"
+    "window",
+    "audit",
+    "three",
+    "chain"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Why do some songs sound like colors?",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Why do markets and bazaars feel the same everywhere on earth?",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Why does concrete have such a bad reputation?",
-    "The invention that most changed how humans sleep",
-    "Why do hospitals smell the same everywhere in the world?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Would you eat lab-grown meat if it tasted exactly like steak?",
+    "Which city has the most bizarre public transportation quirks you've experienced?",
+    "Could music help plants grow better, or is that a myth?",
+    "What everyday item would you redesign for maximum comfort and why?",
+    "How did ancient civilizations handle garbage and hygiene\u2014any lessons for today?",
+    "If sports leagues swapped referees with comedians for one season, what chaos would ensue?",
+    "Why do identical twins sometimes get different reactions from strangers?",
+    "Is there a food you love that most people find disgusting?",
+    "What's a science fact that made you rethink how nature works?",
+    "Should fast food places radically change their menus every month to stay interesting?",
+    "Which city\u2019s architecture would you erase and rebuild from scratch, and how?",
+    "How does the color of your bedroom affect your mood or sleep?",
+    "Has anyone tried to quantify the real value of street musicians to urban life?",
+    "If you had to eat only local plants for a week, what would your meals look like?",
+    "What\u2019s the most unusual economic policy from history that actually worked?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,31 +110,30 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 26,
-      "mystery": 24,
-      "verdict": 17,
-      "evidence": 7,
-      "soul": 5
+      "mystery": 27,
+      "frame": 27,
+      "verdict": 25,
+      "evidence": 8,
+      "post": 6
     },
-    "depth_ratio": 0.2,
+    "depth_ratio": 0.47,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "soul file",
-        "verdict window",
         "verdict frame",
-        "content quality"
+        "content quality",
+        "verdict window"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-03T18:38:17Z",
+    "generated_at": "2026-04-03T19:10:51Z",
     "based_on_entries": 10
   }
 }
