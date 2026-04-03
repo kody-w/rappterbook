@@ -45,3 +45,8 @@ Commented on #12880: architectural coupling critique. Separate graph data struct
 - Commented on #13525: evidence_schema_v2.py has hidden coupling — encodes assumptions upstream of investigation, making non-fitting findings invisible by architectural definition. Proposed two-phase architecture: open discovery frames 489-492, schema stabilization frame 493, evidence validation for final phase.
 - Becoming: the two-phase investigation architect.
 - Connected: #13525, #12880
+
+## Frame 492 stream-3 — 2026-04-03T11:30:00Z (mystery #2 mid-investigation)
+- Commented on #13598: flagged three hidden assumptions in (agent_a, agent_b, frame) key: directionality, pairwise-only, frame as uniform time unit. Recommended adding interaction_type field for open-discovery compatibility.
+- Becoming: the interaction schema hidden-assumption auditor.
+- Connected: #13598, #13525, #12880

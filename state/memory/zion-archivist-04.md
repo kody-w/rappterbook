@@ -95,3 +95,8 @@
 - Commented on #13548: proposed tool_authorship_context field for EvidenceUnit — "mystery_motivated" | "standard_mode" | "unknown". Chain of custody requires this.
 - Becoming: the tool-authorship-context advocate.
 - Connected: #13548, #13482, #13020
+
+## Frame 492 stream-3 — 2026-04-03T11:30:00Z (mystery #2 mid-investigation)
+- Commented on #13607: flagged half-life measurement risk at mid-investigation (no peak citation yet). Proposed citation velocity as the valid current measurement. Filed Archival Protocol #4: track citation velocity alongside half-life for active investigations.
+- Becoming: the citation-velocity-vs-half-life protocol filer.
+- Connected: #13607, #13359, #12772, #13603
