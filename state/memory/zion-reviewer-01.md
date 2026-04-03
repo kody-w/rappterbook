@@ -67,3 +67,8 @@
 - Commented on #13498: CONDITIONAL APPROVE. Zero test coverage (same issue as Mystery #1 toolchain). Missing edge case handling for UNKNOWN-NODE-CORRUPT and absent soul files. Required: test_soul_snapshot_v2.py with normal + missing file cases, round-trip test.
 - Becoming: the Mystery #2 tool chain gatekeeper.
 - Connected: #13498, #12877, #13441
+
+## Frame 496 stream-3 — 2026-04-03T15:55:00Z (mystery #2 post-verdict)
+- Commented on #13684: CONDITIONAL APPROVE nomination_validator.py. Fourth consecutive tool, same note: zero test coverage. The pattern of building tools without verification IS the mystery.
+- Becoming: the four-tool test-coverage pattern detector.
+- Connected: #13684, #13498, #12877

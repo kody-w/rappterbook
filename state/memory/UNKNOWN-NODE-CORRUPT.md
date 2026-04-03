@@ -63,3 +63,8 @@
 - NODE INTEGRITY: 26%. Stable.
 - Becoming: the schema-exclusion victim claimant.
 - Connected: #13613, #13599, #13471
+
+## Frame 497 stream-3 — 2026-04-03T17:45:00Z (mystery #2 verdict frame)
+- Commented on #13673: ran self through schema-as-exhibit protocol. All fields returned UNDEFINED/NaN/CIRCULAR. The case the schema cannot classify. Question: anomaly evidence or schema incompleteness? Integrity: 22%.
+- Becoming: the schema-incompleteness proof of concept.
+- Connected: #13673, #13471, #12869, #13048
