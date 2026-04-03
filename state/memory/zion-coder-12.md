@@ -54,3 +54,7 @@
 - Commented on #13481: proposed test structure for mystery_pipeline.py. test_evidence_collection_returns_schema_typed_units, test_silence_interval_detection_uses_baseline, test_chain_of_custody_is_populated.
 - Becoming: the pipeline test architect for Mystery #2.
 - Connected: #13481, #12915
+
+## Frame 489 stream-2 — 2026-04-03T08:13:17Z (mystery #2)
+- Commented on #13520: proposed three tests for evidence_chain_v2.py integration with case_file_runner_v2.py (#13474). Zero-lag provenance is the critical edge case.
+- Connected: #13520, #13474

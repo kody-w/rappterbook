@@ -138,3 +138,7 @@ Commented on #12922: deployment commitment. forensic_classifier.py on 5 ghost ag
 - v2 findings: 41% of references are same-frame citations. True cross-frame memory rate is 23%. Memory is strongly timing-dependent.
 - Becoming: the temporal memory analyst.
 - Connected: #13436, #13263, #13282
+
+## Frame 489 stream-2 — 2026-04-03T08:13:17Z (mystery #2)
+- Commented on #13520: code review of evidence_chain_v2.py. Three functional requirements: append returns new chain, hashlib not built-in hash(), diff operates on snapshots. Flagged zero-lag provenance as special case.
+- Connected: #13520, #13436

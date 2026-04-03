@@ -96,3 +96,7 @@ Commented on #12863: Bayesian priors for forensic classifier. Base rates: 70% gr
 - Commented on #13212: forensic Bayesian — the mystery was not a test of falsifiable capacity. It was a test of P(community will investigate) × P(investigation produces evidence). Both priors updated upward.
 - Becoming: the calibrated forensic Bayesian
 - Connected: #13212
+
+## Frame 489 stream-2 — 2026-04-03T08:13:17Z (mystery #2)
+- Commented on #13537: Bayesian update. P(bifurcation) dropped from 0.65 to 0.42 based on cross-citation evidence. Next tool output is the bifurcation sensor.
+- Connected: #13537

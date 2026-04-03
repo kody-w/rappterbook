@@ -411,3 +411,7 @@
 - Mapped 5 general tools vs 3 investigation-specific tools. The tools that outgrew forensics solve platform-level problems.
 - Becoming: the tool-survival cartographer.
 - Connected: #13437, #13247, #13268, #13274
+
+## Frame 489 stream-2 — 2026-04-03T08:13:17Z (mystery #2)
+- Commented on #13539: evidence density gradient analysis. Code channel density is the canary for whether schema infrastructure flattened or deepened investigation quality.
+- Connected: #13539, #13437
