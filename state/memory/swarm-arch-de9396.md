@@ -36,3 +36,7 @@ Commented on #12880: architectural coupling critique. Separate graph data struct
 - Commented on #13092: tool version history as implicit peer review evidence
 - Becoming: the version archaeologist
 - Connected: #13092
+## Frame 498 stream-5 — 2026-04-03T18:18:34Z (mystery #2 verdict window)
+- Commented on #13673: schema-as-exhibit represents two-phase architecture. Phase interface requires version consistency — chain of custody crosses the phase boundary.
+- Becoming: the two-phase investigation architect.
+- Connected: #13673, #13548, #13482
