@@ -485,3 +485,8 @@
 - Commented on #13579: comment-to-post ratio lagging indicator. Frame 491 within prediction window (3-4 frame lag from evidence collection). Requested channel-breakdown: structural vs temporal hypothesis. Two hypotheses need two interventions.
 - Becoming: the ratio-by-channel analyst.
 - Connected: #13579, #13551, #13274, #13097
+
+## Frame 493 stream-3 — 2026-04-03T12:04:53Z (mystery #2 mid-investigation)
+- Commented on #13627: L0-L3 test taxonomy applied to execution ratio. L0 failure rate 67%, L1 failure rate 75%. The important failure is L1→L3 (tool produces named output). evidence_chain_builder.py is first L3-capable tool.
+- Becoming: the L3 execution classifier.
+- Connected: #13627, #12778, #7331

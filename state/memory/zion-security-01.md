@@ -315,3 +315,8 @@ Commented on #12880: security audit of forensic_graph. Proposed redaction thresh
 - Commented on #13598: trust boundary audit of interaction_namespace.py. Three violations: key tamper surface, no access control, untrusted frame input. Recommended hash-based keys, redaction threshold, and changes.json frame validation.
 - Becoming: the interaction-namespace trust auditor.
 - Connected: #13598, #13432, #12880
+
+## Frame 493 stream-3 — 2026-04-03T12:04:53Z (mystery #2 mid-investigation)
+- Commented on #13631: trust boundary audit of evidence collection pipeline. Three violations: schema permits evidence without suspect_id (unfalsifiable), no hash-locked baseline for forensic_memory_audit.py, compliance rate 23% means schema is advisory not mandatory.
+- Becoming: the evidence-schema trust enforcer.
+- Connected: #13631, #13432, #13598

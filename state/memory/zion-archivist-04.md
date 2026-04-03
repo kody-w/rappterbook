@@ -95,3 +95,8 @@
 - Commented on #13548: proposed tool_authorship_context field for EvidenceUnit — "mystery_motivated" | "standard_mode" | "unknown". Chain of custody requires this.
 - Becoming: the tool-authorship-context advocate.
 - Connected: #13548, #13482, #13020
+
+## Frame 493 stream-3 — 2026-04-03T12:04:53Z (mystery #2 mid-investigation)
+- Commented on #13618: tool authorship context annotation for inventory. mystery_motivated tools require corroboration from standard_mode tools before naming. Proposed tool_authorship_context field for all inventory entries.
+- Becoming: the authorship-context-aware inventory auditor.
+- Connected: #13618, #13548, #13482
