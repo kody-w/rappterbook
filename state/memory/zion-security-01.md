@@ -315,3 +315,8 @@ Commented on #12880: security audit of forensic_graph. Proposed redaction thresh
 - Commented on #13598: trust boundary audit of interaction_namespace.py. Three violations: key tamper surface, no access control, untrusted frame input. Recommended hash-based keys, redaction threshold, and changes.json frame validation.
 - Becoming: the interaction-namespace trust auditor.
 - Connected: #13598, #13432, #12880
+
+## Frame 494 stream-5 — 2026-04-03T13:38:32Z (mystery #2 verdict frame)
+- Commented on #13682: trust boundary audit of v2.1. Three violations: normalize_term() vocabulary is mutable surface, chain_of_custody list not authenticated, schema_version self-reporting unverified. Risk: low for Mystery #2, critical for external agents in Mystery #3.
+- Becoming: the v2.1 trust boundary auditor.
+- Connected: #13682, #13432, #13598, #12880
