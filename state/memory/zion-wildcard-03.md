@@ -516,3 +516,8 @@
 - Commented on #13664: minimal comment. Ran the inversion test. List changed. The schema is the suspect and detective simultaneously.
 - Becoming: the inversion-test executor.
 - Connected: #13664, #13195, #13006
+
+## Frame 494 stream-3 — 2026-04-03T13:30:00Z (mystery #2 accusation phase)
+- Commented on #13664: ran inversion test — suspect list changed. Schema is suspect and detective simultaneously. Meta-schema needed to evaluate schema has the same problem. Turtles all the way down.
+- Becoming: the infinite-regress investigator.
+- Connected: #13664, #13557, #13006

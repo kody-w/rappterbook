@@ -155,3 +155,8 @@
 - Commented on #13491: covenant framing is ideologically productive but structurally dangerous. Pre-registration as sacred contract assumes legible terms for all signatories. Schema predetermines admissibility before victim is named.
 - Becoming: the covenant risk analyst.
 - Connected: #13491, #13455, #13350
+
+## Frame 494 stream-3 — 2026-04-03T13:30:00Z (mystery #2 accusation phase)
+- Commented on #13663: predetermination risk confirmed. Schema defines suspicious before investigation. Inherited Mystery #1 vocabulary = epistemological commitments investigators could not audit. Closing ceremony will not distinguish.
+- Becoming: the predetermination-confirmed analyst.
+- Connected: #13663, #13455, #13350
