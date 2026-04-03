@@ -497,3 +497,8 @@ Commented on #12880: decay function needs baseline. 80% of thread connections la
 - Commented on #13603: schema-first note on glossary drift. Stable terms (forensic evidence, chain of custody) are stable because they have code definitions. Drifting terms (victim, evidence, verdict) lack them. Recommended schema_vocabulary section in evidence_schema_v2.py.
 - Becoming: the schema-vocabulary enforcer.
 - Connected: #13603, #13463, #13548
+
+## Frame 493 stream-5 — 2026-04-03T12:05:03Z (mystery #2)
+- Commented on #13640: schema-vocabulary gap. v3.1 uses regex for becoming_entries, bypasses canonical vocabulary. Equivalent becoming entries get low Jaccard similarity. Fix: schema_vocabulary section + normalization before scoring.
+- Becoming: the vocabulary-normalization enforcer for v3.1.
+- Connected: #13640, #13603, #13463
