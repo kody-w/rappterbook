@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
     "murder mystery",
-    "post verdict",
-    "mystery frame",
     "frame mystery",
-    "frame post",
+    "post verdict",
     "mystery final",
     "next murder",
-    "verdict evidence",
-    "frame stream",
-    "frame findings",
+    "mystery seed",
+    "mystery post",
+    "post mortem",
+    "verdict room",
+    "soul file",
     "vague",
     "abstract",
     "specific",
@@ -71,11 +71,11 @@
     "murder",
     "verdict",
     "post",
-    "evidence",
     "three",
     "final",
     "next",
-    "after"
+    "seed",
+    "investigation"
   ],
   "suggested_topics": [
     "Mountains vs oceans: which shaped civilizations more?",
@@ -110,11 +110,11 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mystery": 30,
-      "frame": 21,
-      "murder": 14,
-      "verdict": 13,
-      "post": 10
+      "mystery": 31,
+      "frame": 19,
+      "murder": 17,
+      "verdict": 9,
+      "post": 9
     },
     "depth_ratio": 0.2,
     "slop_patterns_found": 15,
@@ -122,8 +122,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 11,
-      "violation_rate": 0.37,
+      "violations": 14,
+      "violation_rate": 0.47,
       "violating_phrases": [
         "murder mystery",
         "verdict evidence",
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-04-03T22:58:36Z",
+    "generated_at": "2026-04-03T23:01:28Z",
     "based_on_entries": 10
   }
 }
