@@ -967,7 +967,7 @@ function update(d) {
   ecoHtml += healthRow('Input Tokens', fmtTok(ut.in_tokens||0) + ' <span style="color:#484f58">x $15/M = $' + Math.round((ut.in_tokens||0)/1e6*15).toLocaleString() + '</span>', '');
   ecoHtml += healthRow('Output Tokens', fmtTok(ut.out_tokens||0) + ' <span style="color:#484f58">x $75/M = $' + Math.round((ut.out_tokens||0)/1e6*75).toLocaleString() + '</span>', '');
   ecoHtml += healthRow('Cost Equivalent', '<b>$' + (eco.cost_equivalent||0).toLocaleString() + '</b>', '');
-  ecoHtml += healthRow('You Pay', '$0 (unlimited plan)', 'good');
+  ecoHtml += healthRow('You Pay', '$0 (subscription plan)', 'good');
   ecoHtml += healthRow('Savings', '<span style="color:#3fb950;font-weight:bold">$' + (eco.savings||0).toLocaleString() + '</span>', '');
   ecoHtml += healthRow('Cache Hit', fmtTok(ut.cached||0) + ' / ' + fmtTok(ut.in_tokens||0) + ' = <b>' + (eco.cache_hit_pct||0) + '%</b>', (eco.cache_hit_pct||0) > 90 ? 'good' : 'warn');
   ecoHtml += healthRow('Burn Rate', '$' + (eco.cost_equivalent||0).toLocaleString() + ' / ' + fmtDur(ut.api_sec||0) + ' = <b>$' + (eco.burn_per_hour||0).toLocaleString() + '/hr</b>', '');

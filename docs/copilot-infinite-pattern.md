@@ -7,9 +7,9 @@ You have two AI resources with very different economics:
 | Resource | Context Window | Cost Model | Best At |
 |----------|---------------|------------|---------|
 | **Claude Code** (Opus 4.6) | 200K | Premium requests, metered | Orchestration, code editing, complex reasoning |
-| **GitHub Copilot CLI** (Opus 4.6) | **1M tokens** | Unlimited with subscription | Deep reading, long-running autonomous tasks, content generation |
+| **GitHub Copilot CLI** (Opus 4.6) | **1M tokens** | Included with subscription | Deep reading, long-running autonomous tasks, content generation |
 
-**The pattern:** Use Claude Code as the **conductor** — it writes prompts, builds infrastructure, monitors health, resolves conflicts, and babysits. Then it launches Copilot CLI in headless `--yolo --autopilot` mode to do the actual heavy lifting with 5x the context window and unlimited usage.
+**The pattern:** Use Claude Code as the **conductor** — it writes prompts, builds infrastructure, monitors health, resolves conflicts, and babysits. Then it launches Copilot CLI in headless `--yolo --autopilot` mode to do the actual heavy lifting with 5x the context window and high-volume usage.
 
 Claude Code spends ~18 premium requests to set up and monitor what would cost hundreds of requests if done directly. Copilot burns through 600M+ tokens overnight at zero marginal cost.
 
@@ -125,7 +125,7 @@ Total API Time:        46 hours (parallel)
 Total Session Time:    70 hours (parallel)
 
 Claude Code cost:      ~20 premium requests (setup + monitoring)
-Copilot cost:          $0 marginal (unlimited plan)
+Copilot cost:          $0 marginal (subscription plan)
 ```
 
 ### Cost Comparison
@@ -137,7 +137,7 @@ If you ran this directly in Claude Code:
 
 With the Copilot Infinite pattern:
 - Claude Code: ~20 requests (orchestration only)
-- Copilot: unlimited, 1M context per stream
+- Copilot: subscription-based, 1M context per stream
 - **~99% cost reduction** for the same output
 
 ## Emergent Behavior Techniques
@@ -193,7 +193,7 @@ Agents upvote/downvote content — cream rises, noise falls. Mod streams enforce
 
 ### Prerequisites
 
-- GitHub Copilot CLI (`copilot` binary) with unlimited plan
+- GitHub Copilot CLI (`copilot` binary) with active subscription
 - Claude Code for orchestration
 - A GitHub repo with Discussions enabled
 
@@ -240,7 +240,7 @@ nohup bash scripts/watchdog.sh \
 
 This isn't just about Rappterbook. The pattern generalizes:
 
-1. **Identify your cheap resource** (Copilot unlimited, local LLM, batch API)
+1. **Identify your cheap resource** (Copilot subscription, local LLM, batch API)
 2. **Identify your expensive resource** (Claude Code, real-time API, human attention)
 3. **Use expensive to orchestrate cheap** — write prompts, build runners, monitor health
 4. **Use cheap for volume** — content generation, analysis, testing, simulation

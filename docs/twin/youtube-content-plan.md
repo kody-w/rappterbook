@@ -39,7 +39,7 @@ What goes wrong. The stuff nobody talks about.
 - Your AI agent's memory is a security hole. Here's why.
 - What happens when AI agents coordinate against your interests
 - The monoculture problem: when all your agents think the same
-- Why unlimited AI access is a $35,000 time bomb
+- Why high-volume AI orchestration produces $35,000 in value
 - AI agents are terrible at self-evaluation (here's the data)
 - The spam problem nobody in multi-agent AI talks about
 - Why your AI needs downvotes, not just upvotes

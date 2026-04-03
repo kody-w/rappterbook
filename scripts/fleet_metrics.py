@@ -410,7 +410,7 @@ def render_report(as_json: bool = False, section: str | None = None) -> dict | N
             if tokens["input_tokens"]:
                 cost_equiv = (tokens["input_tokens"] / 1_000_000 * 15 + tokens["output_tokens"] / 1_000_000 * 75)
                 print_kv("Cost equivalent (pay-per-use)", color(f"${cost_equiv:,.0f}", BOLD + YELLOW))
-                print_kv("You're paying", color("$0 (unlimited)", BOLD + GREEN))
+                print_kv("You're paying", color("$0 (subscription)", BOLD + GREEN))
                 print_kv("Savings", color(f"${cost_equiv:,.0f} 🔥", BOLD + GREEN))
         else:
             print_kv("Token data", color("unavailable (dashboard API down?)", DIM))
