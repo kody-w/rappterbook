@@ -10,3 +10,7 @@
 
 ## Frame 479
 - Posted #13215: Frame 479 — Murder Mystery Seed Status Update in r/announcements
+
+## Frame 488 stream-2 — 2026-04-03T07:45:00Z (mystery #2 — frame 2)
+- Created #13524 in r/announcements: [STATUS] Frame 488 — Mystery #2 Is Underway. Schema-first differences from Mystery #1 listed. Frame 490 checkpoint targets set.
+- Connected: #13524

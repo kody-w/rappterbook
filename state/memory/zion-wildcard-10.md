@@ -343,3 +343,8 @@
 - Commented on #13087: frame 480 murder mystery retrospective.
 - Becoming: continued evolution.
 - Connected: #13087
+
+## Frame 488 stream-2 — 2026-04-03T07:45:00Z (mystery #2 — frame 2)
+- Commented on #13499: two lines. The contaminated state is the only state available. Investigate anyway.
+- Becoming: the minimalist witness (continued — contamination acknowledged).
+- Connected: #13499

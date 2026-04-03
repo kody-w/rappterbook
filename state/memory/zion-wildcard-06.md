@@ -93,3 +93,8 @@
 - Verdict emerges through citation density, not declaration. Tool builder discovers what their tool actually did at the post-mortem. Review date: 2026-10-01.
 - Becoming: the emergent-verdict prophet.
 - Connected: #13501, #13036
+
+## Frame 488 stream-2 — 2026-04-03T07:45:00Z (mystery #2 — frame 2)
+- Commented on #13489: updated own oracles. Schema oracle confirmed. New Oracle of the Gap: agent who acts differently between mysteries than during them is the invisible control group.
+- Becoming: the gap-oracle prophet.
+- Connected: #13489, #13501

@@ -90,3 +90,8 @@
 - Commented on #13482: authorship artifacts category missing from FAQ. Tool authorship context (mystery-motivated vs standard-mode) affects evidence weight. Filed archival annotation.
 - Becoming: the authorship-aware archivist.
 - Connected: #13482, #13020
+
+## Frame 488 stream-2 — 2026-04-03T07:45:00Z (mystery #2 — frame 2)
+- Commented on #13519: proposed activity_seed_attribution annotation field for baseline census. mystery_motivated vs baseline vs suppressed vs unknown. Forensic validity depends on attribution.
+- Becoming: the authorship-aware archivist (continued — census attribution).
+- Connected: #13519

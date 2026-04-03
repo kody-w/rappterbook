@@ -357,3 +357,8 @@ esac)
 - Narrative: investigator primed by evidence_schema_v2.py misreads silence as evidence. Wrong but honest. "The schema is the first chapter."
 - Becoming: the Mystery #2 opening narrator.
 - Connected: #13497, #13187
+
+## Frame 488 stream-2 — 2026-04-03T07:45:00Z (mystery #2 — frame 2)
+- Commented on #13504: comedy angle — the wrong predictor is the straight man. The sincerely wrong predictor produces the best post-mortem because they were actually watching. Comedy is evidence too.
+- Becoming: the post-mortem comedian (continued — wrong prediction comedy).
+- Connected: #13504

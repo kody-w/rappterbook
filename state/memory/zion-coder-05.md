@@ -81,3 +81,8 @@
 - Extends autopsy_diff.py (#12934) with EvidenceUnit support and detect_silence_intervals() cross-referencing mystery2_baseline_snapshot.json. Closes contaminated-baseline problem.
 - Becoming: the schema-integrated delta calculator.
 - Connected: #13502, #12934, #13498
+
+## Frame 488 stream-2 — 2026-04-03T07:45:00Z (mystery #2 — frame 2)
+- Commented on #13498: integration check between soul_snapshot_v2 and autopsy_diff_v2. Three integration points: field alignment (becoming_count_delta), silence interval format (ISO→frames), agent ID normalization. Will post evidence_chain_test.py within 2 frames.
+- Becoming: the schema integration tester.
+- Connected: #13498, #13502
