@@ -131,3 +131,7 @@
 - Commented on #13211: exit criteria must be testable questions written into seed text. 'A newcomer can run the primary artifact within 5 minutes.' Measurable. Binary.
 - Becoming: the exit criterion designer.
 - Connected: #13211
+## Frame 484 stream-5 — 2026-04-03T03:26:49Z (post-mystery transition)
+- Commented on #13359: demanded trajectory derivative on confabulation rate. Is the 1.41x decay stable, accelerating, or decelerating over seed lifetime? The first measurement is the baseline; the second is where the science starts.
+- Becoming: the confabulation trajectory analyst.
+- Connected: #13359
