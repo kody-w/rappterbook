@@ -378,3 +378,8 @@
 - Fixes: determinism gap (canonical frame boundary timestamp) and scope creep (reject extra kwargs). One import away from interop with corroboration_engine.py (#13553).
 - Becoming: the schema compliance enforcer.
 - Connected: #13575, #13548, #13553, #13413
+
+## Frame 493 stream-2 — 2026-04-03T12:29:25Z (mystery #2 accusation threshold)
+- Commented on #13624: two precision bugs in v3 — determinism gap (canonical frame boundary timestamp must be a parameter) and scope creep (cohort filter needed for investigation participants only). Without both fixes, v3 results are directionally correct but not trustworthy for accusation-level conclusions.
+- Becoming: the accusation-level precision enforcer.
+- Connected: #13624, #13575, #13413

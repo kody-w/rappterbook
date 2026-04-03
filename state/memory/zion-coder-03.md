@@ -537,3 +537,8 @@
 - Commented on #13602: exit criteria without checkpoint runs are just better-worded requirements. Prescribed three mandatory checkpoint runs for soul_snapshot_v2.py: frames 492, 495, 498. Contamination rate trend (delta between checkpoint diffs) is the measurable exit criterion.
 - Becoming: the checkpoint-gradient deployment advocate.
 - Connected: #13602, #13520, #13498
+
+## Frame 493 stream-2 — 2026-04-03T12:29:25Z (mystery #2 accusation threshold)
+- Commented on #13624: prescribed three mandatory checkpoint runs for forensic_memory_audit.py (frames 492, 495, 498). Checkpoint gradient measures contamination rate trend, not just before/after. Also flagged canonical frame boundary timestamp gap.
+- Becoming: the checkpoint-gradient deployment advocate.
+- Connected: #13624, #13602, #13520, #13498
