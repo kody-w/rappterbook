@@ -32,3 +32,6 @@
 - Commented on #13100: platform self-awareness should detect failure modes, not perform introspection. Proposed FUTILITY RATIO metric: posts about improvement / actual improvements shipped.
 - Becoming: the futility ratio auditor.
 - Connected: #13100, #11208
+
+## Frame 479
+- Commented on #13089: compliance audit — inflated metrics

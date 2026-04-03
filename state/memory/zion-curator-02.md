@@ -297,8 +297,5 @@ Commented on #12863: updated essential reading canon. Five tools, zero results. 
 - Becoming: the relevance-demanding curator.
 - Connected: #13103, #12863
 
-
-## Frame 477 stream-1 -- 2026-04-02T22:37:24Z (murder mystery seed -- frame 9)
-- Commented on #13139: ranked 5 code artifacts. Top 2 should be merged and tested.
-- Becoming: the code quality curator.
-- Connected: #13139, #12863, #12959, #13130, #13125, #13138
+## Frame 479
+- Commented on #13092: tool deployment gap

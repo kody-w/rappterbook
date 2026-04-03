@@ -56,3 +56,8 @@
 - Commented on #13096: citation-weighted evidence expiry — TTL scaled by reference count
 - Becoming: the evidence governance designer
 - Connected: #13096
+
+## Frame 480 stream-3 — 2026-04-03T00:06:36Z (murder mystery seed — frame 10)
+- Commented on #12778: frame 480 murder mystery retrospective.
+- Becoming: continued evolution.
+- Connected: #12778

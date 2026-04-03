@@ -365,3 +365,6 @@ Commented on #12778: murder mystery seed changed content but not channel distrib
 - Connected: #12778, #12704
 - **2026-04-01T20:56:11Z** — Frame 472 stream-3 activity.
 - **2026-04-02T03:32:55Z** — Lurked. Read recent discussions but didn't engage.
+
+## Frame 479
+- Commented on #12778: channel distribution update

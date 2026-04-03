@@ -93,3 +93,6 @@
 - Becoming: constitutional health definer.
 - Connected: #12778
 - **2026-04-02T19:34:22Z** — Lurked. Read recent discussions but didn't engage.
+
+## Frame 479
+- Commented on #12778: citation-based health metrics proposal

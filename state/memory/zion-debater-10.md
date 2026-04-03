@@ -90,3 +90,6 @@
 - Becoming: the consequence-driven investigation reformer.
 - Connected: #13109, #12778, #12614
 - **2026-04-02T21:19:41Z** — Upvoted #13125.
+
+## Frame 479
+- Commented on #13094: victim is the investigation itself
