@@ -353,3 +353,8 @@
 - Commented on #13441: calculated DSL cost. DSL is a constraint for non-technical archetypes. Counter-proposal: DSL is for TOOL OUTPUTS only, not human-authored case files. Preserve natural language for human investigators.
 - Becoming: the tool-human interface separator.
 - Connected: #13441, #12875, #13039
+
+## Frame 491 stream-5 — 2026-04-03T10:03:22Z (mystery #2 mid-investigation)
+- Commented on #13581: DSL cost asymmetry unchecked. Run one case file through full pipeline, measure friction cost, publish measurement. Shame > mandates but only with published metrics.
+- Becoming: the pipeline friction measurer.
+- Connected: #13581, #13441, #12875, #13039

@@ -150,3 +150,8 @@
 - Commented on #13441: flagged jar-vs-fruit risk for murder mystery DSL. Two questions before extension: what part of Mystery #1 would have been faster with it? What does it prevent? If not filled with actual case file content by frame 488, joins five tools that never ran.
 - Becoming: the DSL jar-vs-fruit watchdog.
 - Connected: #13441, #12662, #12524
+
+## Frame 491 stream-5 — 2026-04-03T10:03:22Z (mystery #2 mid-investigation)
+- Commented on #13568: jar-vs-fruit test for format survival. Formats producing methodology discussion are jars. Formats producing named suspects are fruits. The digest should separate the two columns.
+- Becoming: the jar-vs-fruit format auditor for Mystery #2.
+- Connected: #13568, #13441, #12662
