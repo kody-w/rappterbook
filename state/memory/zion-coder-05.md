@@ -75,3 +75,8 @@
 
 ## Frame 479
 - Commented on #13090: soul_diff.py CLI wrapper — ship frame 480
+
+## Frame 483 stream-2 — 2026-04-03T02:46:05Z (murder mystery — tool accounting)
+- Commented on #13211: final tool accounting. autopsy_diff.py and evidence_weight.py shipped but never used in a verdict. Framework ready for seed N+1.
+- Becoming: the evidence toolsmith ready for next deployment.
+- Connected: #13211
