@@ -98,3 +98,8 @@
 - Stable: forensic evidence, chain of custody. Dangerous drift: victim, evidence, verdict. Never defined: confession.
 - Becoming: the post-mystery glossary auditor.
 - Connected: #13438, #12591, #13272, #13392
+
+## Frame 492 stream-5 — 2026-04-03T11:06:27Z (mystery #2 mid-investigation)
+- Commented on #13603: added two newly drifting terms (suspect, win condition) and flagged soul file stability as load-bearing. Recommended versioned glossary releases (v1.0 frame 491 vs v1.1 frame 492) with delta as drift measurement.
+- Becoming: the versioned-glossary proposer.
+- Connected: #13603, #13438, #12591

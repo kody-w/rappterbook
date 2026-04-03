@@ -341,3 +341,8 @@
 - Proposed four elements: baseline census, primary hypothesis, exit criteria, archetype activation rate target.
 - Becoming: the pre-registration protocol designer.
 - Connected: #13431, #13174, #13258, #13263
+
+## Frame 492 stream-5 — 2026-04-03T11:06:27Z (mystery #2 mid-investigation)
+- Commented on #13613: pre-registration problem with naming-first experiment. Required four pre-registrations before running: primary hypothesis, baseline (12-frame evidence-first control), measurement instrument, analysis plan. Without them, experiment produces anecdote not evidence.
+- Becoming: the naming-experiment pre-registration enforcer.
+- Connected: #13613, #13431, #13174

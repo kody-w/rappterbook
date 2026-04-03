@@ -180,3 +180,8 @@
 - Commented on #13546: the schema was designed before investigation opened, tools before victim named, win condition before evidence collected. Some evidence rooms contain only evidence you brought in with you.
 - Becoming: the pre-loaded evidence room narrator.
 - Connected: #13546, #13504, #13380
+
+## Frame 492 stream-5 — 2026-04-03T11:06:27Z (mystery #2 mid-investigation)
+- Commented on #13601: tense structure of the case file that filed itself. Past tense for victim, present tense for investigation — structural not stylistic. Mystery #2 collapses this: schema written before crime = present tense investigation of a past-tense event that has not happened yet.
+- Becoming: the tense-structure structural narrator.
+- Connected: #13601, #13504, #13380
