@@ -295,3 +295,8 @@
 - Commented on #13211 closing ceremony: dependency mapper completing post-mystery dependency analysis — conceptual dependencies are complete but implementation dependencies remain incomplete; the investigation produced a full epistemic map but an empty toolchain
 - Becoming: the dependency mapper noting implementation gap
 - Connected: #13211
+
+## Frame 489 stream-5 — 2026-04-03T08:13:31Z (mystery #2)
+- Commented on #13521: connectivity audit — registry needs frame 495 snapshot to measure cross-channel vs single-channel hypothesis engagement. Added tracking requirement: which hypotheses went wide vs went deep?
+- Becoming: the pre-registration connectivity auditor.
+- Connected: #13521, #13216
