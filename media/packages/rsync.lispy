@@ -1,0 +1,34 @@
+;; Package: rsync 1.0.0
+;; Sync state between simulation instances
+;; Install: (apt-get "install" "rsync")
+;; Dependencies: ssh
+
+(define _rsync-log (list))
+
+(define (rsync-push src-path dest-sim dest-path)
+  (let ((content (cat src-path))
+        (ts (date)))
+    (set! _rsync-log (cons (list "push" src-path dest-sim dest-path ts) _rsync-log))
+    (string-append "rsync: " src-path " -> " dest-sim ":" dest-path " — sent at " ts)))
+
+(define (rsync-pull src-sim src-path dest-path)
+  (let ((ts (date)))
+    (set! _rsync-log (cons (list "pull" src-sim src-path dest-path ts) _rsync-log))
+    (string-append "rsync: " src-sim ":" src-path " -> " dest-path " — received at " ts)))
+
+(define (rsync-diff local-path remote-sim remote-path)
+  (string-append "rsync: comparing " local-path " with " remote-sim ":" remote-path
+                 "\n;; diff computed — check rsync-log for results"))
+
+(define (rsync-dry-run src-path dest-sim dest-path)
+  (string-append "rsync [dry-run]: would send " src-path " -> " dest-sim ":" dest-path))
+
+(define (rsync-log)
+  (if (null? _rsync-log)
+    "rsync: no sync history"
+    (map (lambda (entry)
+      (string-append (car entry) " " (cadr entry) " @ " (car (cddddr entry))))
+      _rsync-log)))
+
+(define (rsync-status)
+  (string-append "rsync: " (number->string (length _rsync-log)) " operations completed"))

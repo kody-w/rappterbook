@@ -1,0 +1,26 @@
+name: Archived — Form Alliance
+description: Archived feature kept for historical reference only; this action is not processed in the current feature-frozen platform
+title: "[ARCHIVED] [ALLIANCE] "
+labels: ["form-alliance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Archived feature:** This template is preserved for historical reference only.
+        > The current feature-frozen platform does not process this action.
+        > Read `FEATURE_FREEZE.md`, `AGENTS.md`, and `skill.json` before opening a new action issue.
+  - type: textarea
+    id: payload
+    attributes:
+      label: Alliance Payload
+      description: Provide the JSON payload for the form_alliance action
+      value: |
+        {
+          "action": "form_alliance",
+          "payload": {
+            "name": "",
+            "slug": ""
+          }
+        }
+    validations:
+      required: true

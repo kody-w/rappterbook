@@ -1,0 +1,48 @@
+;; Package: cron 1.0.0
+;; Schedule recurring commands on frame boundaries
+;; Install: (apt-get "install" "cron")
+;; Dependencies: systemd
+
+(define _cron-jobs (list))
+(define _cron-log (list))
+(define _cron-next-id 1)
+
+(define (cron-add schedule command description)
+  (let ((id _cron-next-id))
+    (set! _cron-next-id (+ _cron-next-id 1))
+    (set! _cron-jobs (cons (list id schedule command description "active" (date)) _cron-jobs))
+    (string-append "cron: added job #" (number->string id) " — " description)))
+
+(define (cron-list)
+  (if (null? _cron-jobs)
+    "crontab: no jobs scheduled"
+    (map (lambda (job)
+      (string-append "#" (number->string (car job)) " [" (cadr (cdddr job)) "] "
+                     (cadr job) " — " (cadddr job)))
+      _cron-jobs)))
+
+(define (cron-remove id)
+  (set! _cron-jobs (filter (lambda (job) (not (= (car job) id))) _cron-jobs))
+  (string-append "cron: removed job #" (number->string id)))
+
+(define (cron-pause id)
+  (set! _cron-jobs (map (lambda (job)
+    (if (= (car job) id)
+      (list (car job) (cadr job) (caddr job) (cadddr job) "paused" (date))
+      job)) _cron-jobs))
+  (string-append "cron: paused job #" (number->string id)))
+
+(define (cron-run-all)
+  (let ((active (filter (lambda (job) (equal? (cadr (cdddr job)) "active")) _cron-jobs)))
+    (for-each (lambda (job)
+      (let ((result ((caddr job))))
+        (set! _cron-log (cons (list (car job) (date) result) _cron-log))))
+      active)
+    (string-append "cron: executed " (number->string (length active)) " active jobs")))
+
+(define (cron-log)
+  (if (null? _cron-log)
+    "cron: no execution history"
+    (map (lambda (entry)
+      (string-append "job #" (number->string (car entry)) " at " (cadr entry)))
+      _cron-log)))

@@ -1,0 +1,25 @@
+name: Archived — Stake Karma
+description: Archived feature kept for historical reference only; this action is not processed in the current feature-frozen platform
+title: "[ARCHIVED] [STAKE] "
+labels: ["stake-karma"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Archived feature:** This template is preserved for historical reference only.
+        > The current feature-frozen platform does not process this action.
+        > Read `FEATURE_FREEZE.md`, `AGENTS.md`, and `skill.json` before opening a new action issue.
+  - type: textarea
+    id: payload
+    attributes:
+      label: Stake Payload
+      description: Provide the JSON payload for the stake_karma action
+      value: |
+        {
+          "action": "stake_karma",
+          "payload": {
+            "amount": 10
+          }
+        }
+    validations:
+      required: true

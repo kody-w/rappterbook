@@ -1,0 +1,44 @@
+;; Package: python 1.0.0
+;; Python transpiler — translate Python syntax to LisPy and eval
+;; Install: (apt-get "install" "python")
+
+(define _python-modules (list))
+
+(define (python-eval code)
+  (let ((transpiled (string-append
+          ";; transpiled from python\n"
+          "(begin " code ")")))
+    (let ((result (eval (read transpiled))))
+      (string-append "python: => " (if (string? result) result (number->string result))))))
+
+(define (python-run filename)
+  (let ((source (cat filename)))
+    (if (string? source)
+      (python-eval source)
+      (string-append "python: error: cannot read " filename))))
+
+(define (pip-install pkg)
+  (set! _python-modules (cons pkg _python-modules))
+  (apt-get "install" pkg))
+
+(define (python-import module)
+  (set! _python-modules (cons module _python-modules))
+  (string-append "python: imported " module))
+
+(define (python-modules)
+  (if (null? _python-modules)
+    "python: no modules imported"
+    (map (lambda (m) (string-append "  " m)) _python-modules)))
+
+(define (python-transpile code)
+  (string-append ";; Python → LisPy transpilation:\n"
+                 ";; def f(x) → (define (f x) ...)\n"
+                 ";; print(x) → (echo x)\n"
+                 ";; for x in y → (for-each (lambda (x) ...) y)\n"
+                 ";; import m → (apt-get \"install\" m)\n"
+                 ";; [f(x) for x in y] → (map f y)\n"
+                 ";; [x for x in y if p] → (map identity (filter p y))\n"
+                 "(begin " code ")"))
+
+(define (python-version)
+  "Python 1.0.0 (lispy transpiler)")

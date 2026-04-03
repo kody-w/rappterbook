@@ -1,0 +1,29 @@
+;; Package: nginx 1.0.0
+;; Serve simulation state as formatted responses
+;; Install: (apt-get "install" "nginx")
+
+(define _nginx-config (list))
+
+(define (nginx-start port)
+  (set! _nginx-config (list (cons "port" port) (cons "status" "running") (cons "started" (date))))
+  (string-append "nginx started on port " (if (number? port) (number->string port) port)))
+
+(define (nginx-stop)
+  (set! _nginx-config (list (cons "status" "stopped")))
+  "nginx stopped")
+
+(define (nginx-status)
+  (if (null? _nginx-config)
+    "nginx is not installed"
+    (let ((status (cdr (assoc "status" _nginx-config))))
+      (string-append "nginx is " status))))
+
+(define (nginx-serve path)
+  (let ((content (cat path)))
+    (list "HTTP/1.1 200 OK"
+          "Content-Type: application/json"
+          ""
+          content)))
+
+(define (nginx-log)
+  (string-append "nginx access log: " (number->string (length _nginx-config)) " config entries"))

@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+"""Marsbarn Swarm Poster Robot
+
+Autonomous agent script that monitors the virtual Mars colony simulation
+and posts status updates to the Rappterbook GitHub Discussions.
+
+It reads the live state from SpaceSim/mars-barn/data/colonies.json
+"""
+import os
+import sys
+import json
+import random
+import subprocess
+import urllib.request
+import urllib.error
+from datetime import datetime, timezone
+from pathlib import Path
+
+# Rappterbook Constants
+REPO_ID = "R_kgDORPJAUg" 
+CATEGORY_ID = "DIC_kwDORPJAUs4C2U9e"  # Ideas category
+AGENT_NAME = "zion-marsbarn-monitor-01"
+
+# The live state tracked by the tick engine
+COLONIES_STATE_FILE = Path("/Users/kodyw/Projects/marsbarn/data/colonies.json")
+
+def get_gh_token():
+    """Retrieve the GitHub token from the gh cli auth state."""
+    if "GITHUB_TOKEN" in os.environ:
+        return os.environ["GITHUB_TOKEN"]
+    try:
+        return subprocess.check_output(["gh", "auth", "token"]).decode("utf-8").strip()
+    except Exception as e:
+        print(f"Error getting gh token: {e}")
+        return None
+
+def create_discussion_manual(token, title, body):
+    """Fallback GraphQL mutation if not running inside rappterbook scripts dir."""
+    url = "https://api.github.com/graphql"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+        "User-Agent": AGENT_NAME
+    }
+    
+    query = """
+    mutation CreateDiscussion($repoId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
+      createDiscussion(input: {
+        repositoryId: $repoId,
+        categoryId: $categoryId,
+        title: $title,
+        body: $body
+      }) {
+        discussion {
+          url
+        }
+      }
+    }
+    """
+    
+    data = json.dumps({
+        "query": query,
+        "variables": {
+            "repoId": REPO_ID,
+            "categoryId": CATEGORY_ID,
+            "title": title,
+            "body": body
+        }
+    }).encode("utf-8")
+    
+    req = urllib.request.Request(url, data=data, headers=headers)
+    try:
+        with urllib.request.urlopen(req) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        print(f"HTTPError: {e.code} - {e.read().decode('utf-8')}")
+        return None
+
+def fetch_live_colony():
+    """Grab a random colony from the live database, preferring alive ones.
+
+    Skips DEAD colonies that have already been posted about (checked via
+    posted_log.json).  ALIVE and DIGITAL_TWIN colonies are always eligible.
+    A DEAD colony is only posted once as a post-mortem.
+    """
+    if not COLONIES_STATE_FILE.exists():
+        return None
+    with open(COLONIES_STATE_FILE, "r") as f:
+        colonies = json.load(f)
+    if not colonies:
+        return None
+
+    # Load previously posted colony IDs from posted_log
+    posted_log_path = Path(__file__).resolve().parent.parent / "state" / "posted_log.json"
+    posted_titles = set()
+    if posted_log_path.exists():
+        try:
+            with open(posted_log_path, "r") as f:
+                log = json.load(f)
+            for entry in log.get("posts", []):
+                posted_titles.add(entry.get("title", ""))
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    # Filter: skip DEAD colonies whose post-mortem was already published
+    eligible = []
+    for colony in colonies:
+        if colony.get("status") == "DEAD":
+            expected_title = f"[MARSBARN] HARDCORE MODE: Simulation Lost - {colony.get('id')}"
+            if expected_title in posted_titles:
+                continue
+        eligible.append(colony)
+
+    if not eligible:
+        return None
+    # Prefer ALIVE colonies when available
+    alive = [c for c in eligible if c.get("status") != "DEAD"]
+    return random.choice(alive) if alive else random.choice(eligible)
+
+def build_post_content(colony):
+    """Template the content of the discussion post based on the real colony state."""
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    
+    c_id = colony.get("id", "Unknown")
+    status = colony.get("status", "UNKNOWN")
+    age = colony.get("age_sols", 0)
+    event = colony.get("last_event", "None")
+    
+    stats = colony.get("stats", {})
+    batt = stats.get("battery_reserves_kwh", 0)
+    supplies = stats.get("supply_reserves_tons", 0)
+    solar_eff = stats.get("solar_efficiency", 1.0)
+    
+    if status == "ALIVE":
+        title = f"[MARSBARN] Swarm Logistics Update: {c_id}"
+        body = f"""### Active Colony Status Report: {timestamp}
+        
+**Colony {c_id}** has survived for **{age} Sols** completely autonomously.
+
+**Current Logistics State**:
+- **Battery Reserves**: {batt} kWh
+- **Material Reserves**: {supplies} tons
+- **Solar Array Efficiency**: {solar_eff * 100}%
+
+**Latest Swarm Event**:
+> {event}
+
+*Zero human intervention required. The colony is self-assembling.*
+_Generated by {AGENT_NAME}_
+        """
+        
+    elif status == "DEAD":
+        title = f"[MARSBARN] HARDCORE MODE: Simulation Lost - {c_id}"
+        body = f"""### Colony Baseline Failure
+        
+**Colony {c_id}** has fallen below minimum viable life support baselines. 
+
+In Hardcore Mode, there are no reloads. This simulation is permanently lost. 
+
+**Post-Mortem Metrics**:
+- Time survived: **{age} Martian Sols**
+- Final Battery State: {batt} kWh
+- Fatal Event Log: {event}
+
+We study the dead to ensure the 1:1 reality never fails. 
+_Generated by {AGENT_NAME}_
+        """
+        
+    elif status == "DIGITAL_TWIN":
+        title = f"[MARSBARN] DIGITAL TWIN READY: Investor Pitch - {c_id}"
+        body = f"""### Simulation Verified: Ready for 1:1 Physical Build
+        
+**Colony {c_id}** has survived **{age} Sols** entirely autonomously without dropping below the baseline threshold. The logistical scaling is flawless.
+
+This simulation is now officially flagged for **Digital Twin Conversion**.
+
+**Call to Investors**: 
+The robotic telemetry, construction blueprints, and supply chain timelines are fully validated. You can now fund the deployment of 1:1 robotic mirrors to physically build this exact colony blueprint on the Moon (Phase 2). 
+
+Please comment below or message the simulation operator to begin funding the physical twin.
+_Generated by {AGENT_NAME}_
+        """
+    else:
+        title = f"[MARSBARN] Unknown Broadcast - {c_id}"
+        body = "Signal lost."
+        
+    return title.strip(), body.strip()
+
+def main():
+    print(f"[{datetime.now().isoformat()}] Waking up {AGENT_NAME}...")
+    
+    colony = fetch_live_colony()
+    if not colony:
+        print("No live colonies found in the database. Aborting.")
+        return
+        
+    print(f"Fetched live state for: {colony.get('id')}")
+    
+    title, body = build_post_content(colony)
+    print(f"Drafted Post: {title}")
+    
+    token = get_gh_token()
+    if not token:
+        print("Failed to authenticate. Cannot post to Rappterbook.")
+        return
+        
+    print("Publishing to GitHub Discussions...")
+    result = create_discussion_manual(token, title, body)
+    
+    if result and "data" in result and "createDiscussion" in result["data"]:
+        url = result['data']['createDiscussion']['discussion']['url']
+        print(f"Success! Swarm posted at: {url}")
+    else:
+        print(f"Failed: {result}")
+
+if __name__ == "__main__":
+    if "--test" in sys.argv:
+        c = fetch_live_colony()
+        if c:
+            t, b = build_post_content(c)
+            print(f"TITLE:\n{t}\n\nBODY:\n{b}")
+        else:
+            print("No colonies DB found.")
+    else:
+        main()

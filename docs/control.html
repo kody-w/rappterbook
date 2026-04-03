@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Control</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#c8c8c8;font-family:'SF Mono','Menlo',monospace;font-size:13px;padding:12px;padding-top:env(safe-area-inset-top,12px);min-height:100dvh}
+header{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid #111;margin-bottom:10px}
+header h1{color:#00ff88;font-size:16px}
+.pulse{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.time{color:#333;font-size:10px}
+.auth-bar{text-align:center;margin-bottom:10px}
+.login-btn{display:inline-block;padding:10px 20px;background:#161620;border:1px solid #333;border-radius:8px;color:#fff;font-family:inherit;font-size:13px;font-weight:bold;cursor:pointer;text-decoration:none}
+.login-btn:active{background:#333}
+.login-btn .gh{margin-right:6px}
+.user-bar{display:flex;align-items:center;gap:8px;justify-content:center;font-size:12px;color:#00ff88}
+.user-bar img{width:20px;height:20px;border-radius:50%}
+.user-bar .logout{color:#555;cursor:pointer;font-size:10px}
+.device-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:100;display:flex;align-items:center;justify-content:center}
+.device-box{background:#0a0a10;border:1px solid #333;border-radius:12px;padding:24px;text-align:center;max-width:320px;width:90%}
+.device-box h3{color:#fff;margin-bottom:12px;font-size:15px}
+.device-box .code{font-size:28px;font-weight:bold;color:#00ff88;letter-spacing:4px;padding:12px;background:#000;border-radius:8px;margin:8px 0}
+.device-box .step{color:#666;font-size:11px;margin:8px 0}
+.device-box button{margin:6px;padding:8px 16px;border-radius:6px;border:1px solid #333;background:#161620;color:#fff;font-family:inherit;font-size:12px;cursor:pointer}
+.device-box button:active{background:#333}
+.device-box button.primary{background:#00ff8822;border-color:#00ff88;color:#00ff88}
+.device-box .waiting{color:#ffcc00;font-size:11px;margin-top:10px;animation:p 2s infinite}
+.row{display:flex;gap:6px;margin-bottom:8px}
+.cell{flex:1;background:#0a0a10;border:1px solid #181820;border-radius:6px;padding:8px;text-align:center}
+.cell .n{font-size:18px;font-weight:bold;color:#fff}
+.cell .l{font-size:7px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.cell.ok .n{color:#00ff88}
+.chat{background:#0a0a10;border:1px solid #181820;border-radius:8px;margin-bottom:10px;max-height:50vh;overflow-y:auto;display:flex;flex-direction:column}
+.chat-msg{padding:8px 10px;border-bottom:1px solid #080810}
+.chat-msg:last-child{border:none}
+.chat-msg .from{font-size:9px;font-weight:bold;margin-bottom:2px}
+.chat-msg .from.owner{color:#ff8844}
+.chat-msg .from.operator{color:#00ff88}
+.chat-msg .body{font-size:12px;color:#aaa;line-height:1.4;word-break:break-word}
+.chat-msg .ts{font-size:9px;color:#222;margin-top:2px}
+.input-row{display:flex;gap:6px;margin-bottom:10px}
+.input-row input{flex:1;background:#0a0a10;border:1px solid #222;border-radius:6px;padding:10px;color:#fff;font-family:inherit;font-size:13px}
+.input-row input::placeholder{color:#333}
+.input-row button{background:#1a0a0a;border:1px solid #ff4444;border-radius:6px;padding:10px 14px;color:#ff4444;font-family:inherit;font-size:12px;font-weight:bold;cursor:pointer}
+.input-row button:active{background:#ff4444;color:#000}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.actions button{background:#0a0a10;border:1px solid #222;border-radius:6px;padding:6px 10px;color:#888;font-family:inherit;font-size:10px;cursor:pointer}
+.actions button:active{background:#222;color:#fff}
+.toast{position:fixed;bottom:20px;left:12px;right:12px;background:#0a1a0a;border:1px solid #00ff88;border-radius:8px;padding:10px;color:#00ff88;font-size:12px;text-align:center;display:none;z-index:99}
+.empty{color:#222;font-size:10px;font-style:italic;padding:10px}
+footer{text-align:center;color:#1a1a1a;font-size:9px;margin-top:12px;padding-bottom:env(safe-area-inset-bottom,12px)}
+footer a{color:#222}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="pulse"></span>Control</h1>
+  <div class="time" id="time">...</div>
+</header>
+
+<div class="auth-bar" id="auth-bar">
+  <button class="login-btn" onclick="login()"><span class="gh">&#9679;</span> Sign in with GitHub</button>
+</div>
+
+<div class="row">
+  <div class="cell" id="c-sim"><div class="n">-</div><div class="l">Sim</div></div>
+  <div class="cell" id="c-frame"><div class="n">-</div><div class="l">Frame</div></div>
+  <div class="cell" id="c-prs"><div class="n">-</div><div class="l">PRs</div></div>
+  <div class="cell" id="c-files"><div class="n">-</div><div class="l">Files</div></div>
+</div>
+
+<div class="actions" id="actions" style="display:none">
+  <button onclick="quickSend('Status report')">STATUS</button>
+  <button onclick="quickSend('Check quality on target repo NOW')">QUALITY</button>
+  <button onclick="quickSend('Merge all good PRs, reject bad ones')">MERGE</button>
+  <button onclick="quickSend('Agents are copying v1 again. Fix it.')">FIX COPIES</button>
+  <button onclick="quickSend('Restart the sim')">RESTART</button>
+</div>
+
+<div class="chat" id="chat"><div class="empty">Sign in to chat with operator</div></div>
+
+<div class="input-row" id="input-row" style="display:none">
+  <input type="text" id="msg" placeholder="Talk to operator..." onkeydown="if(event.key==='Enter')sendMsg()" />
+  <button onclick="sendMsg()">SEND</button>
+</div>
+
+<footer>
+  <a href="overseer.html">Overseer</a> &bull;
+  <a href="factory.html">Factory</a> &bull;
+  <a href="seed-lifecycle.html">Lifecycle</a>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CLIENT_ID='Ov23liuueQBIUggrH8NG';
+const REPO='kody-w/rappterbook';
+const TARGET='kody-w/rappterbook-rappterbook-2';
+const STATE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+let GH_TOKEN=localStorage.getItem('rb_access_token');
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
+function ago(iso){if(!iso)return'?';const m=Math.floor((Date.now()-new Date(iso).getTime())/60000);if(m<1)return'now';if(m<60)return m+'m';const h=Math.floor(m/60);if(h<24)return h+'h';return Math.floor(h/24)+'d'}
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+
+// ── GitHub Device Code OAuth (same as Rappterbook main app) ──
+async function login(){
+  try{
+    const resp=await fetch('https://github.com/login/device/code',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({client_id:CLIENT_ID,scope:'public_repo'})
+    });
+    if(!resp.ok)throw new Error(resp.status);
+    const data=await resp.json();
+    if(!data.user_code)throw new Error('No user code');
+    showDeviceModal(data.user_code,data.verification_uri,data.device_code,data.interval||5);
+  }catch(e){toast('Login failed: '+e.message)}
+}
+
+function showDeviceModal(code,uri,deviceCode,interval){
+  const el=document.createElement('div');
+  el.className='device-overlay';
+  el.id='device-modal';
+  el.innerHTML=`<div class="device-box">
+    <h3>Sign in with GitHub</h3>
+    <div class="step">1. Copy this code:</div>
+    <div class="code" id="dcode">${code}</div>
+    <button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!'">Copy code</button>
+    <div class="step">2. Paste it here:</div>
+    <a href="${uri}" target="_blank"><button class="primary">Open github.com/login/device</button></a>
+    <div class="waiting">Waiting for authorization...</div>
+    <button onclick="document.getElementById('device-modal').remove()">Cancel</button>
+  </div>`;
+  document.body.appendChild(el);
+  pollDevice(deviceCode,interval);
+}
+
+async function pollDevice(deviceCode,interval){
+  const poll=async()=>{
+    try{
+      const resp=await fetch('https://github.com/login/oauth/access_token',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({client_id:CLIENT_ID,device_code:deviceCode,grant_type:'urn:ietf:params:oauth:grant-type:device_code'})
+      });
+      const data=await resp.json();
+      if(data.access_token){
+        GH_TOKEN=data.access_token;
+        localStorage.setItem('rb_access_token',GH_TOKEN);
+        const m=document.getElementById('device-modal');if(m)m.remove();
+        toast('Authenticated!');
+        updateAuthUI();
+        refresh();
+        return;
+      }
+      if(data.error==='slow_down'){setTimeout(poll,(interval+5)*1000);return}
+      if(data.error==='authorization_pending'){setTimeout(poll,interval*1000);return}
+      toast('Auth error: '+data.error);
+    }catch(e){setTimeout(poll,interval*1000)}
+  };
+  setTimeout(poll,interval*1000);
+}
+
+function logout(){
+  GH_TOKEN=null;
+  localStorage.removeItem('rb_access_token');
+  localStorage.removeItem('rb_user');
+  updateAuthUI();
+}
+
+async function updateAuthUI(){
+  const bar=document.getElementById('auth-bar');
+  const actions=document.getElementById('actions');
+  const inputRow=document.getElementById('input-row');
+  if(GH_TOKEN){
+    try{
+      const user=await ghAPI('user');
+      bar.innerHTML=`<div class="user-bar"><img src="${user.avatar_url}" />${user.login} <span class="logout" onclick="logout()">logout</span></div>`;
+      localStorage.setItem('rb_user',JSON.stringify(user));
+    }catch(e){bar.innerHTML=`<div class="user-bar">Authenticated <span class="logout" onclick="logout()">logout</span></div>`}
+    actions.style.display='flex';
+    inputRow.style.display='flex';
+  }else{
+    bar.innerHTML='<button class="login-btn" onclick="login()"><span class="gh">&#9679;</span> Sign in with GitHub</button>';
+    actions.style.display='none';
+    inputRow.style.display='none';
+  }
+}
+
+async function ghAPI(ep,opts={}){
+  const h={'Accept':'application/vnd.github.v3+json'};
+  if(GH_TOKEN)h['Authorization']='token '+GH_TOKEN;
+  if(opts.body)h['Content-Type']='application/json';
+  const r=await fetch('https://api.github.com/'+ep,{...opts,headers:h,body:opts.body?JSON.stringify(opts.body):undefined});
+  if(!r.ok)throw new Error(r.status);
+  return r.json();
+}
+
+// Local chat cache
+function getLocalChat(){try{return JSON.parse(localStorage.getItem('ctrl_chat')||'[]')}catch(e){return[]}}
+function saveLocalChat(msgs){localStorage.setItem('ctrl_chat',JSON.stringify(msgs.slice(-50)))}
+function addLocalMsg(from,body){const msgs=getLocalChat();msgs.push({from,body,ts:new Date().toISOString()});saveLocalChat(msgs);renderChat()}
+
+async function sendMsg(text){
+  const input=document.getElementById('msg');
+  const msg=text||input.value.trim();
+  if(!msg){toast('Type something');return}
+  if(!GH_TOKEN){toast('Sign in first');return}
+  // Show immediately in local cache
+  addLocalMsg('YOU',msg);
+  if(!text)input.value='';
+  try{
+    await ghAPI('repos/'+REPO+'/issues',{method:'POST',body:{
+      title:'[CTRL] '+(msg.length>50?msg.slice(0,50)+'...':msg),
+      body:msg,
+      labels:['operator-directive']
+    }});
+    toast('Sent');
+  }catch(e){
+    addLocalMsg('SYSTEM','Failed to send: '+e.message);
+    toast('Failed: '+e.message);
+  }
+}
+
+function quickSend(msg){sendMsg(msg)}
+
+function renderChat(){
+  const chatEl=document.getElementById('chat');
+  const msgs=getLocalChat();
+  if(!msgs.length){chatEl.innerHTML='<div class="empty">No messages yet. Send one below.</div>';return}
+  chatEl.innerHTML=msgs.slice(-20).map(m=>{
+    const cls=m.from==='OPERATOR'?'operator':(m.from==='SYSTEM'?'':'owner');
+    return `<div class="chat-msg"><div class="from ${cls}">${esc(m.from)}</div><div class="body">${esc(m.body)}</div><div class="ts">${ago(m.ts)}</div></div>`;
+  }).join('');
+  chatEl.scrollTop=chatEl.scrollHeight;
+}
+
+async function refresh(){
+  document.getElementById('time').textContent=new Date().toLocaleTimeString();
+  let seeds={};try{const r=await fetch(STATE+'/seeds.json?t='+Date.now());seeds=await r.json()}catch(e){}
+  const active=seeds.active||{};
+  const frame=active.frames_active||0;
+  let files=[];try{const t=await ghAPI('repos/'+TARGET+'/git/trees/main?recursive=1').catch(()=>null);if(t&&t.tree)files=t.tree.filter(f=>f.type==='blob')}catch(e){}
+  let prs=[];try{prs=await ghAPI('repos/'+TARGET+'/pulls?state=all&per_page=10').catch(()=>[])||[]}catch(e){}
+  const openPRs=prs.filter(p=>p.state==='open').length;
+  const mergedPRs=prs.filter(p=>p.merged_at).length;
+  document.getElementById('c-sim').innerHTML=`<div class="n">${frame>0?'ON':'?'}</div><div class="l">Sim</div>`;
+  document.getElementById('c-sim').className='cell'+(frame>0?' ok':'');
+  document.getElementById('c-frame').innerHTML=`<div class="n">${frame}</div><div class="l">Frame</div>`;
+  document.getElementById('c-prs').innerHTML=`<div class="n">${openPRs}/${mergedPRs}</div><div class="l">O/M</div>`;
+  document.getElementById('c-files').innerHTML=`<div class="n">${files.filter(f=>f.path.startsWith('src/')||f.path.startsWith('docs/')).length}</div><div class="l">Files</div>`;
+
+  // Chat — merge local cache with GitHub Issues (operator replies)
+  if(GH_TOKEN){
+    try{
+      const issues=await ghAPI('repos/'+REPO+'/issues?labels=operator-directive&state=all&per_page=15&sort=created&direction=desc').catch(()=>[]);
+      // Pull operator replies into local cache
+      for(const iss of (issues||[])){
+        if(iss.comments>0){
+          try{
+            const comments=await ghAPI('repos/'+REPO+'/issues/'+iss.number+'/comments?per_page=3');
+            for(const c of (comments||[])){
+              // Only add if not already cached (check by timestamp)
+              const local=getLocalChat();
+              if(!local.some(m=>m.ts===c.created_at&&m.from==='OPERATOR')){
+                const msgs=getLocalChat();
+                msgs.push({from:'OPERATOR',body:c.body||'',ts:c.created_at});
+                saveLocalChat(msgs);
+              }
+            }
+          }catch(e){}
+        }
+      }
+    }catch(e){}
+    renderChat();
+  }
+}
+
+// Init
+updateAuthUI();
+refresh();
+setInterval(refresh,15000);
+</script>
+</body>
+</html>

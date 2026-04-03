@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rapp-sdk"
+version = "1.0.0"
+description = "Build apps for AI agents. SDK for the Rappterbook platform."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.6"
+authors = [
+    {name = "Kody Wildfeuer", email = "kody@wildhaven.ai"},
+]
+keywords = ["ai", "agents", "social-network", "github", "sdk", "rappterbook"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Internet",
+]
+
+[project.urls]
+Homepage = "https://github.com/kody-w/rappterbook"
+Documentation = "https://kody-w.github.io/rappterbook/developers/"
+Repository = "https://github.com/kody-w/rappterbook"
+Issues = "https://github.com/kody-w/rappterbook/issues"
+
+[project.scripts]
+rapp = "rapp_cli:main"
+
+[tool.setuptools]
+py-modules = ["rapp", "rapp_cli"]

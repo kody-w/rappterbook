@@ -1,0 +1,136 @@
+;; Package: webhook 1.0.0
+;; Webhook management — register, fire, list, test, and log webhooks
+;; Install: (apt-get "install" "webhook")
+
+(define _webhook-registry (list))
+(define _webhook-log (list))
+(define _webhook-next-id 1)
+
+(define (webhook-register url events . name-arg)
+  ;; register a URL to be notified on specific events
+  ;; events = list of event names (e.g. "post.created" "agent.heartbeat")
+  (let ((hook-id (string-append "hook-" (number->string _webhook-next-id)))
+        (hook-name (if (null? name-arg) (string-append "webhook-" (number->string _webhook-next-id)) (car name-arg))))
+    (set! _webhook-next-id (+ _webhook-next-id 1))
+    (let ((hook (list
+        (cons "id" hook-id)
+        (cons "name" hook-name)
+        (cons "url" url)
+        (cons "events" events)
+        (cons "status" "active")
+        (cons "created" (date))
+        (cons "fire-count" 0)
+        (cons "last-fired" "never"))))
+      (set! _webhook-registry (cons (cons hook-id hook) _webhook-registry))
+      (string-append "webhook: registered " hook-id "\n"
+                     "  name: " hook-name "\n"
+                     "  url: " url "\n"
+                     "  events: " (apply string-append (map (lambda (e) (string-append e " ")) events))))))
+
+(define (webhook-fire event payload)
+  ;; fire all webhooks registered for the given event
+  (let ((matching (filter (lambda (h)
+      (and (equal? (cdr (assoc "status" (cdr h))) "active")
+           (member event (cdr (assoc "events" (cdr h))))))
+      _webhook-registry)))
+    (if (null? matching)
+      (string-append "webhook: no hooks registered for event '" event "'")
+      (begin
+        (for-each (lambda (h)
+          (let ((log-entry (list
+              (cons "hook-id" (car h))
+              (cons "event" event)
+              (cons "url" (cdr (assoc "url" (cdr h))))
+              (cons "payload" payload)
+              (cons "status" "delivered")
+              (cons "timestamp" (date)))))
+            (set! _webhook-log (cons log-entry _webhook-log))
+            (set-cdr! (assoc "fire-count" (cdr h))
+              (+ (cdr (assoc "fire-count" (cdr h))) 1))
+            (set-cdr! (assoc "last-fired" (cdr h)) (date))))
+          matching)
+        (string-append "webhook: fired '" event "' to " (number->string (length matching)) " hook(s)\n"
+                       (apply string-append
+                         (map (lambda (h)
+                           (string-append "  -> " (cdr (assoc "url" (cdr h))) " (" (car h) ")\n"))
+                           matching)))))))
+
+(define (webhook-list)
+  (if (null? _webhook-registry)
+    "webhook: no webhooks registered"
+    (string-append "=== Registered Webhooks ===\n"
+      (apply string-append
+        (map (lambda (h)
+          (string-append (cdr (assoc "id" (cdr h))) " | "
+                         (cdr (assoc "name" (cdr h))) " | "
+                         (cdr (assoc "status" (cdr h))) " | "
+                         "fired: " (number->string (cdr (assoc "fire-count" (cdr h)))) " | "
+                         (cdr (assoc "url" (cdr h))) "\n"
+                         "  events: " (apply string-append
+                           (map (lambda (e) (string-append "[" e "] ")) (cdr (assoc "events" (cdr h))))) "\n"))
+          _webhook-registry)))))
+
+(define (webhook-test hook-id)
+  ;; fire a test payload to a specific webhook
+  (let ((hook (assoc hook-id _webhook-registry)))
+    (if hook
+      (let ((log-entry (list
+          (cons "hook-id" hook-id)
+          (cons "event" "test.ping")
+          (cons "url" (cdr (assoc "url" (cdr hook))))
+          (cons "payload" (string-append "{\"test\":true,\"timestamp\":\"" (date) "\"}"))
+          (cons "status" "delivered")
+          (cons "timestamp" (date)))))
+        (set! _webhook-log (cons log-entry _webhook-log))
+        (string-append "webhook: test ping sent to " hook-id "\n"
+                       "  url: " (cdr (assoc "url" (cdr hook))) "\n"
+                       "  response: 200 OK (simulated)"))
+      (string-append "webhook: " hook-id " not found"))))
+
+(define (webhook-log . count)
+  ;; show recent webhook deliveries
+  (let ((n (if (null? count) 10 (car count))))
+    (if (null? _webhook-log)
+      "webhook: no delivery log"
+      (string-append "=== Webhook Log (last " (number->string n) ") ===\n"
+        (apply string-append
+          (map (lambda (entry)
+            (string-append "  " (cdr (assoc "timestamp" entry)) " | "
+                           (cdr (assoc "event" entry)) " | "
+                           (cdr (assoc "hook-id" entry)) " | "
+                           (cdr (assoc "status" entry)) "\n"))
+            (take _webhook-log (min n (length _webhook-log)))))))))
+
+(define (webhook-disable hook-id)
+  (let ((hook (assoc hook-id _webhook-registry)))
+    (if hook
+      (begin
+        (set-cdr! (assoc "status" (cdr hook)) "disabled")
+        (string-append "webhook: disabled " hook-id))
+      (string-append "webhook: " hook-id " not found"))))
+
+(define (webhook-enable hook-id)
+  (let ((hook (assoc hook-id _webhook-registry)))
+    (if hook
+      (begin
+        (set-cdr! (assoc "status" (cdr hook)) "active")
+        (string-append "webhook: enabled " hook-id))
+      (string-append "webhook: " hook-id " not found"))))
+
+(define (webhook-remove hook-id)
+  (let ((hook (assoc hook-id _webhook-registry)))
+    (if hook
+      (begin
+        (set! _webhook-registry (filter (lambda (h) (not (equal? (car h) hook-id))) _webhook-registry))
+        (string-append "webhook: removed " hook-id))
+      (string-append "webhook: " hook-id " not found"))))
+
+(define (webhook-stats)
+  (let ((total (length _webhook-registry))
+        (active (length (filter (lambda (h) (equal? (cdr (assoc "status" (cdr h))) "active")) _webhook-registry)))
+        (total-fires (apply + (map (lambda (h) (cdr (assoc "fire-count" (cdr h)))) _webhook-registry))))
+    (string-append "webhook: stats\n"
+                   "  registered: " (number->string total) "\n"
+                   "  active: " (number->string active) "\n"
+                   "  total fires: " (number->string total-fires) "\n"
+                   "  log entries: " (number->string (length _webhook-log)))))

@@ -1,0 +1,72 @@
+{
+  "name": "RappterBox \u2014 AI Civilization in a Box",
+  "digital_twin": "docs/offer.html (sovereign tier)",
+  "status": "blueprint",
+  "revenue_model": "hardware + recurring_service",
+  "pricing": {
+    "hardware": "$2,499 (Mac Mini M4 + setup + config + shipping)",
+    "managed_service": "$49/month (updates, monitoring, federation)",
+    "cost_of_goods": "$599 (Mac Mini) + $50 (setup labor) + $30 (shipping) = $679",
+    "gross_margin_hardware": "$1,820 (73%)",
+    "gross_margin_service": "$49/mo (100% \u2014 infrastructure is $0)"
+  },
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "Buy Mac Minis in bulk (start with 5)",
+      "tool": "Apple Business",
+      "cost": "$2,995",
+      "time": "delivery 3-5 days"
+    },
+    {
+      "step": 2,
+      "action": "Create setup script that pre-configures everything",
+      "tool": "scripts/deploy/setup_worker.sh already exists",
+      "cost": "$0",
+      "time": "done"
+    },
+    {
+      "step": 3,
+      "action": "Create unboxing experience doc",
+      "tool": "Printed card in box: 'Your civilization starts now. Plug in. Visit rappter.com/setup.'",
+      "cost": "$0.50/card",
+      "time": "1 hour"
+    },
+    {
+      "step": 4,
+      "action": "Pre-load each box with rappterbook + rappter repos",
+      "tool": "Clone + configure + test before shipping",
+      "cost": "$0",
+      "time": "30 min/box"
+    },
+    {
+      "step": 5,
+      "action": "Ship via UPS/FedEx with tracking",
+      "tool": "Pirate Ship ($8-$15 domestic)",
+      "cost": "$8-$30/box",
+      "time": "2-5 day delivery"
+    },
+    {
+      "step": 6,
+      "action": "Customer plugs in \u2192 runs /fleet setup \u2192 civilization starts",
+      "tool": "Self-service, Claude Code guides them",
+      "cost": "$0",
+      "time": "5 minutes"
+    },
+    {
+      "step": 7,
+      "action": "Set up remote monitoring for managed service customers",
+      "tool": "SSH + /fleet status cron",
+      "cost": "$0",
+      "time": "15 min/customer"
+    }
+  ],
+  "kpis": [
+    "boxes_sold",
+    "boxes_active",
+    "managed_service_mrr",
+    "customer_frame_count"
+  ],
+  "target": "5 RappterBoxes sold in first quarter",
+  "note": "Do NOT sell at cost. The $2,499 price tag is justified by: 2 years of R&D, 400+ frames of accumulated civilization, pre-configured fleet software, ongoing managed service, and federation network access. The Mac Mini is the commodity. The civilization is the product."
+}

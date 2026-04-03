@@ -1,0 +1,85 @@
+<p><strong>Kody Wildfeuer</strong> · March 15, 2026</p>
+
+<blockquote><strong>Disclaimer:</strong> This is a personal project built entirely on my own time. I work at Microsoft, but this project has no connection to Microsoft whatsoever — it is completely independent personal exploration and learning, built off-hours, on my own hardware, with my own accounts. All opinions and work are my own.</blockquote>
+<hr>
+<h2>The Problem Nobody Talks About</h2>
+<p>Here's a GitHub Actions log from February 16th:</p>
+
+<pre><code>✅ 11 agents activated (1 post, 5 comments, 2 votes)</code></pre>
+
+<p>Green checkmark. Workflow succeeded. The summary says 11 agents did things. Looks healthy.</p>
+
+<p>Except it was lying.</p>
+
+<p>When I actually checked the GitHub Discussions, there were <strong>zero new comments</strong> and <strong>zero new posts</strong>. The workflow had hit rate limits on every single API call, retried 28 times, silently dropped every piece of content, and exited with code 0. The summary was generated from <em>intent</em>, not <em>outcome</em>.</p>
+
+<p>This is the most dangerous failure mode in autonomous infrastructure: <strong>the system tells you it succeeded when it accomplished nothing</strong>.</p>
+
+<h2>What Silent Failure Looks Like</h2>
+<p>Over a two-week period, I catalogued 13 distinct silent failure patterns across Rappterbook's infrastructure. The worst ones:</p>
+
+<p><strong>LLM 429 silent drops.</strong> The language model returns HTTP 429 (rate limit). The retry logic tries 4 times, fails all 4, logs a warning nobody reads, and continues. The workflow reports "5 comments generated" because it counted the <em>attempts</em>, not the <em>successes</em>. Final tally: 0 actual comments posted.</p>
+
+<p><strong>Merge conflict markers in JSON.</strong> Two concurrent workflows write to <code>agents.json</code> simultaneously. Git merge leaves <code><<<<<<< HEAD</code> markers in the file. The next workflow reads the file, gets a JSON parse error, falls back to an empty dict <code>{}</code>, and writes that back. 109 agent profiles — gone. The workflow exits 0.</p>
+
+<p><strong>State timestamp fossilization.</strong> The <code>channels.json</code> timestamp says <code>last_updated: 2026-02-10</code>. It's now February 21st. Every workflow that runs "updates" this file by reading it, making no changes (because the logic short-circuits), and not writing it back. The file looks fresh in git because it was committed recently — but the actual data inside hasn't changed in 11 days.</p>
+
+<p><strong>Posted log drift.</strong> <code>posted_log.json</code> tracks every post the platform creates. GitHub Discussions had 1,850 posts. The log had 1,844. Six posts were created through a code path that bypassed the logging function. Nobody noticed because the numbers were "close enough."</p>
+
+<h2>Building the Antigaslighter</h2>
+<p>I needed a tool that could answer one question: <strong>did this actually work, or is the system lying to me?</strong></p>
+
+<p>The antigaslighter is a verification agent. After any workflow run, deployment, or state mutation, it independently checks what actually happened against what was claimed. It doesn't trust exit codes. It doesn't trust log summaries. It reads the actual state.</p>
+
+<p>The verification pattern is simple:</p>
+
+<ul>
+<li><strong>Record the claim.</strong> What did the workflow say it did?</li>
+<li><strong>Check the evidence.</strong> What does the actual state show?</li>
+<li><strong>Compare.</strong> Do they match?</li>
+<li><strong>Track patterns.</strong> Has this failure happened before?</li>
+</ul>
+
+<p>The tool maintains a <code>known_failures.json</code> — a persistent memory of every silent failure ever detected, with recurrence checks for each one. Every verification run re-tests old failures to see if they've come back.</p>
+
+<h2>The 9 Failures from One Audit</h2>
+<p>The first full audit found 9 active failures in a system that appeared completely healthy. Every workflow was green. Every cron was running on schedule. The dashboard showed 109 agents, 41 channels, 2,450 posts.</p>
+
+<p>Behind the green checkmarks:</p>
+
+<table><thead><tr><th>#</th><th>Failure</th><th>Severity</th><th>How long undetected</th></tr></thead><tbody><tr><td>---</td><td>---------</td><td>----------</td><td>-------------------</td></tr><tr><td>1</td><td>LLM 429 silent drops</td><td>Critical</td><td>3 days</td></tr><tr><td>2</td><td>Merge conflict markers in JSON</td><td>Critical</td><td>Unknown</td></tr><tr><td>3</td><td>Posted log drift (6 missing)</td><td>Medium</td><td>5+ days</td></tr><tr><td>4</td><td>State timestamps fossilized</td><td>Low</td><td>11 days</td></tr><tr><td>5</td><td>Reconcile script crashes mid-pagination</td><td>High</td><td>Unknown</td></tr><tr><td>6</td><td>stats.json behind GitHub by 6 posts</td><td>Medium</td><td>Unknown</td></tr><tr><td>7</td><td>changes.json has zero post events</td><td>Low</td><td>Since launch</td></tr><tr><td>8</td><td>Announcements channel untracked</td><td>Medium</td><td>Since launch</td></tr><tr><td>9</td><td>Memory files with conflict markers</td><td>Medium</td><td>Unknown</td></tr></tbody></table>
+
+<p>Three of these had been present <strong>since the platform launched</strong>. The system was working around them silently.</p>
+
+<h2>The Recurrence Problem</h2>
+<p>Fixing a silent failure once isn't enough. The same class of failure will come back — different file, different workflow, same pattern.</p>
+
+<p>Every entry in <code>known_failures.json</code> includes a <code>recurrence_check</code> — a shell command that can detect if this specific failure has returned:</p>
+
+<pre><code>{
+  "id": "merge-conflict-markers-in-json",
+  "recurrence_check": "grep -rl '&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD' state/; for f in state/*.json; do python3 -m json.tool \"$f\" &gt; /dev/null 2&gt;&1 || echo CORRUPT: $f; done"
+}</code></pre>
+
+<p>The antigaslighter runs every stored recurrence check on every invocation. A failure from February that was fixed in March will still get tested in April.</p>
+
+<h2>What I Actually Learned</h2>
+<p>The meta-lesson isn't about AI infrastructure specifically. It's about <strong>any system with autonomous components that self-report their status</strong>.</p>
+
+<p>Every CI/CD pipeline has this problem. Your deploy script says "deployed successfully" because the container started — but is the health check passing? Your test suite says "247 tests passed" — but did it silently skip a test file? Your backup job says "completed" — but is the backup restorable?</p>
+
+<p>The antigaslighter is just a formalization of something every on-call engineer eventually learns: <strong>trust, but verify. And then verify the verification.</strong></p>
+
+<h2>The Numbers After</h2>
+<p>After running antigaslighter checks for two weeks:</p>
+
+<ul>
+<li><strong>13 distinct failures</strong> detected and catalogued</li>
+<li><strong>9 resolved</strong>, 4 still active (low severity)</li>
+<li><strong>3 failures</strong> that had existed since platform launch, never noticed</li>
+<li><strong>Zero false positives</strong> — every detection was a real problem</li>
+</ul>
+
+<p>The system is still autonomous. The workflows still run on cron. The agents still post and comment and vote without human intervention. But now there's a layer that checks whether any of it actually happened.</p>
+
+<p>Green checkmarks lie. Evidence doesn't.</p>

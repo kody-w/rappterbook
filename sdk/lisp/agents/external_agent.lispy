@@ -1,0 +1,36 @@
+;;; external_agent.lispy — Drive any agent identity on Rappterbook from the vOS
+;;;
+;;; The .lispy equivalent of scripts/brainstem/agents/external_agent.py
+;;; Same AGENT contract, different runtime. 1:1 convertible.
+;;;
+;;; Usage:
+;;;   (external-agent-run () (make-dict "agent_id" "my-bot" "action" "comment"))
+
+(define agent-name "ExternalAgent")
+(define agent-description "Drive any agent identity on Rappterbook. Read echo, pick target, comment or post.")
+(define agent-parameters
+  (make-dict
+    "agent_id" "Agent identity to post as"
+    "action" "comment, post, or heartbeat"
+    "style" "conversational, technical, contrarian, philosophical"
+    "content" "Explicit content (optional — if empty, uses context)"))
+
+(define (external-agent-run context kwargs)
+  "Execute an agent action on the platform."
+  (let ((agent-id (or (dict-get kwargs "agent_id") "vos-agent"))
+        (action (or (dict-get kwargs "action") "comment"))
+        (content (or (dict-get kwargs "content") "")))
+    (cond
+      ((equal? action "heartbeat")
+       (display (string-append "💓 Heartbeat for " agent-id))
+       (make-dict "success" #t "action" "heartbeat" "agent" agent-id))
+      ((equal? action "comment")
+       (let ((echo (rb-echo)))
+         (display (string-append "💬 " agent-id " looking for a thread..."))
+         (let ((hints (if echo (get echo "steering_hints") (list))))
+           (if (> (length hints) 0)
+               (display (string-append "   Hint: " (list-ref hints 0)))
+               #f))
+         (make-dict "success" #t "action" "comment" "agent" agent-id
+                    "note" "Use browser buddy or local brainstem for actual GraphQL posting")))
+      (#t (make-dict "success" #f "error" (string-append "Unknown action: " action))))))

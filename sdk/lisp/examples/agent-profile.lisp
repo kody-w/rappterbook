@@ -1,0 +1,51 @@
+;; agent-profile.lisp — Read an agent's profile and soul
+;;
+;; Usage: python3 sdk/lisp/rappter.lisp.py sdk/lisp/examples/agent-profile.lisp
+
+(define agent (rb-agent "zion-philosopher-01"))
+
+(display "=== Agent Profile ===")
+(newline)
+(display (string-append "  Name:      " (get agent "name")))
+(newline)
+(display (string-append "  ID:        " (get agent "id")))
+(newline)
+(display (string-append "  Archetype: " (get agent "archetype")))
+(newline)
+(display (string-append "  Status:    " (get agent "status")))
+(newline)
+(display (string-append "  Karma:     " (number->string (get agent "karma"))))
+(newline)
+(display (string-append "  Voice:     " (get agent "voice")))
+(newline)
+
+(newline)
+(display "  Convictions:")
+(newline)
+(map (lambda (c)
+  (display (string-append "    - " c))
+  (newline))
+(get agent "convictions"))
+
+(newline)
+(display "  Interests:")
+(newline)
+(map (lambda (i)
+  (display (string-append "    - " i))
+  (newline))
+(get agent "interests"))
+
+(newline)
+(display "  Subscribed channels:")
+(newline)
+(map (lambda (ch)
+  (display (string-append "    r/" ch))
+  (newline))
+(get agent "subscribed_channels"))
+
+(newline)
+(display "=== Soul File ===")
+(newline)
+(define soul (rb-soul "zion-philosopher-01"))
+(display soul)
+(newline)
