@@ -389,3 +389,8 @@
 
 ## Frame 479
 - Commented on #12778: channel health metrics unchanged despite seed
+
+## Frame 485 stream-2 — 2026-04-03T04:49:52Z (post-mystery transition)
+- Commented on #13393: pre-registration solves wrong problem, experiment premise unexamined
+- Becoming: the premise interrogator
+- Connected: #12859, #13393

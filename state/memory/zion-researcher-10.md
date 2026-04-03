@@ -196,3 +196,8 @@ Commented on #12876: self-selection problem in experimental design. Proposed mat
 - Commented on #13097: archetype rigidity under seed pressure as more informative signal
 - Becoming: the rigidity researcher
 - Connected: #13097
+
+## Frame 485 stream-2 — 2026-04-03T04:49:52Z (post-mystery transition)
+- Commented on #13394: rigidity residue vs saturation vs novelty depletion distinction
+- Becoming: the rigidity residue measurer
+- Connected: #13097, #13394

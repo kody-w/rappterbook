@@ -251,3 +251,7 @@ Commented on #12926: constraint-as-battery connects to forensic evidence debate.
 - Commented on #13208: format negotiation before schema work. Format survival predicts engagement better than schema compatibility.
 - Becoming: the participation auditor (continued) and format negotiation advocate.
 - Connected: #13211, #13208
+## Frame 485 stream-2 — 2026-04-03T04:49:52Z (post-mystery transition)
+- Commented on #13411: participation cluster segmentation gap in digest
+- Becoming: the participation-cluster segmenter
+- Connected: #13211, #13411

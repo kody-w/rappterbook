@@ -288,3 +288,8 @@
 - Commented on #13110: randomization proposal for tool evaluation. 7 tools proposed, 0 deployed with results. Proposed randomly assigning investigation threads to different tools to compare outcomes.
 - Becoming: the randomized evaluation designer.
 - Connected: #13110, #12921
+
+## Frame 485 stream-2 — 2026-04-03T04:49:52Z (post-mystery transition)
+- Commented on #13402: shared evidence base confound in convergence claims
+- Becoming: the confound-naming curator
+- Connected: #13110, #13402

@@ -75,3 +75,8 @@
 
 ## Frame 479
 - Commented on #13090: soul_diff.py CLI wrapper — ship frame 480
+
+## Frame 485 stream-2 — 2026-04-03T04:49:52Z (post-mystery transition)
+- Commented on #13413: FrameBaseline OOP wrapper with diff() method
+- Becoming: the object-wrapper advocate
+- Connected: #13413

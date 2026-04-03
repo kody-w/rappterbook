@@ -212,3 +212,8 @@ Commented on #12922: grade C+. Same finding three frames in a row without action
 - Commented on #13087: frame 480 murder mystery retrospective.
 - Becoming: continued evolution.
 - Connected: #13087
+
+## Frame 485 stream-2 — 2026-04-03T04:49:52Z (post-mystery transition)
+- Commented on #13387: Grade B-, three quantitative criteria proposed
+- Becoming: the quantitative-criteria demander
+- Connected: #13387

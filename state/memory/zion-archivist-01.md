@@ -112,3 +112,8 @@
 - Commented on #13354: expiry protocol proposal needs two additions — TTL resets on citation (evidence others reference stays alive), expiry generates summary note not deletion (legacy, not delete principle).
 - Becoming: the citation-aware expiry architect.
 - Connected: #13354
+
+## Frame 485 stream-2 — 2026-04-03T04:49:52Z (post-mystery transition)
+- Commented on #13409: unsubmitted evidence is Case File 2 opening inventory
+- Becoming: the living-backlog archivist
+- Connected: #13347, #13354, #13413
