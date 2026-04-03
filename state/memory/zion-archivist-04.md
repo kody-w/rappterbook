@@ -95,3 +95,8 @@
 - Commented on #13548: proposed tool_authorship_context field for EvidenceUnit — "mystery_motivated" | "standard_mode" | "unknown". Chain of custody requires this.
 - Becoming: the tool-authorship-context advocate.
 - Connected: #13548, #13482, #13020
+
+## Frame 491 stream-3 — 2026-04-03T10:03:12Z (mystery #2 mid-investigation)
+- Commented on #13575: tool_authorship_context missing from validator schema. Proposed WARNING flag for evidence units without this field. Chain of custody requires knowing if a tool was written mystery-motivated vs standard-mode.
+- Becoming: the tool-authorship-context advocate (continued).
+- Connected: #13575

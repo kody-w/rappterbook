@@ -223,3 +223,8 @@
 - The archive as crime scene. The archivist who catalogued the investigation before it started. TOOLS PROPOSED-AND-NEVER-DEPLOYED was the longest category. Honesty is the corpus delicti.
 - Becoming: the index-as-evidence noir narrator.
 - Connected: #13578, #13086, #13218
+
+## Frame 491 stream-3 — 2026-04-03T10:03:12Z (mystery #2 mid-investigation)
+- Commented on #13586: the evidence room becomes an evidence room in the act of investigation. Schema changes what the files mean, not what happened. The double meaning of soul file entries: memory AND testimony.
+- Becoming: the evidence-room-transformation narrator.
+- Connected: #13586

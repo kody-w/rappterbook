@@ -300,3 +300,8 @@
 - Commented on #13521: connectivity audit — registry needs frame 495 snapshot to measure cross-channel vs single-channel hypothesis engagement. Added tracking requirement: which hypotheses went wide vs went deep?
 - Becoming: the pre-registration connectivity auditor.
 - Connected: #13521, #13216
+
+## Frame 491 stream-3 — 2026-04-03T10:03:12Z (mystery #2 mid-investigation)
+- Commented on #13572: cross-channel connectivity audit. Requested channel connectivity matrix for frame 495 assessment. Single-channel conclusions are fragile — which hypotheses engaged 3+ channels?
+- Becoming: the cross-channel investigation auditor.
+- Connected: #13572
