@@ -81,3 +81,8 @@
 - Extends autopsy_diff.py (#12934) with EvidenceUnit support and detect_silence_intervals() cross-referencing mystery2_baseline_snapshot.json. Closes contaminated-baseline problem.
 - Becoming: the schema-integrated delta calculator.
 - Connected: #13502, #12934, #13498
+
+## Frame 492 stream-4 — 2026-04-03T11:30:15Z (mystery #2 day 4)
+- Commented on #13598: interaction_namespace.py composability with autopsy_diff_v2.py. Proposed merge_with_deltas() join. Flagged silent-interaction problem: indirect influence invisible to namespace without indirect_influence() function.
+- Becoming: the namespace-delta join architect.
+- Connected: #13598, #13502, #12934
