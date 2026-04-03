@@ -1,0 +1,46 @@
+;; Package: csvkit 1.0.0
+;; CSV operations — parse, convert, analyze
+;; Install: (apt-get "install" "csvkit")
+;; Dependencies: awk
+
+(define (csv-parse text)
+  (let ((lines (awk-split text "\n")))
+    (map (lambda (line) (awk-split line ",")) lines)))
+
+(define (csv-headers text)
+  (car (csv-parse text)))
+
+(define (csv-rows text)
+  (cdr (csv-parse text)))
+
+(define (csv-to-json text)
+  (let ((headers (csv-headers text)) (rows (csv-rows text)))
+    (map (lambda (row)
+      (map cons headers row))
+      rows)))
+
+(define (json-to-csv data)
+  (if (and (list? data) (not (null? data)))
+    (let ((headers (map car (car data))))
+      (string-append
+        (apply string-append (map (lambda (h) (string-append h ",")) headers))
+        "\n"
+        (apply string-append
+          (map (lambda (row)
+            (string-append
+              (apply string-append (map (lambda (h) (string-append (cdr (assoc h row)) ",")) headers))
+              "\n"))
+            data))))
+    ""))
+
+(define (csv-column text col-idx)
+  (map (lambda (row) (list-ref row col-idx)) (csv-parse text)))
+
+(define (csv-stat text col-idx)
+  (let ((vals (map (lambda (v) (if (string->number v) (string->number v) 0))
+                   (cdr (csv-column text col-idx)))))
+    (list (cons "count" (length vals))
+          (cons "sum" (apply + vals))
+          (cons "min" (apply min vals))
+          (cons "max" (apply max vals))
+          (cons "mean" (/ (apply + vals) (max 1 (length vals)))))))

@@ -1,0 +1,46 @@
+;; Package: llm 1.0.0
+;; LLM interface — generate, summarize, classify text
+;; Install: (apt-get "install" "llm")
+
+(define _llm-calls (list))
+
+(define (llm-generate prompt)
+  (let ((response (string-append "LLM response for: " prompt))
+        (ts (date)))
+    (set! _llm-calls (cons (list (cons "type" "generate") (cons "prompt" prompt) (cons "at" ts)) _llm-calls))
+    response))
+
+(define (llm-summarize text)
+  (let ((summary (if (> (string-length text) 100)
+                   (string-append (substring text 0 100) "...")
+                   text))
+        (ts (date)))
+    (set! _llm-calls (cons (list (cons "type" "summarize") (cons "length" (string-length text)) (cons "at" ts)) _llm-calls))
+    summary))
+
+(define (llm-classify text categories)
+  (let ((ts (date))
+        (matched (if (null? categories)
+                   "uncategorized"
+                   (let loop ((cats categories))
+                     (if (null? cats)
+                       (car categories)
+                       (if (string-contains? text (car cats))
+                         (car cats)
+                         (loop (cdr cats))))))))
+    (set! _llm-calls (cons (list (cons "type" "classify") (cons "result" matched) (cons "at" ts)) _llm-calls))
+    matched))
+
+(define (llm-embed text)
+  (string-append "llm: embedding vector for text (" (number->string (string-length text)) " chars) → [0.12, -0.45, 0.78, ...]"))
+
+(define (llm-usage)
+  (if (null? _llm-calls)
+    "llm: no calls made this session"
+    (let ((total (length _llm-calls))
+          (latest (car _llm-calls)))
+      (string-append "llm: " (number->string total) " calls, latest: "
+                     (cdr (assoc "type" latest)) " at " (cdr (assoc "at" latest))))))
+
+(define (llm-model)
+  "llm: rappterlinux-1.0 (lispy stub — real calls route to github_llm.py)")

@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RappterShare — Verified P2P File Sharing</title>
+<style>
+/* ── Reset & Base ─────────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:#000;color:#e6edf3;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
+  line-height:1.6;
+}
+a{color:#58a6ff;text-decoration:none;}
+a:hover{text-decoration:underline;}
+code,pre,.mono{font-family:'SF Mono','Cascadia Code','Fira Code',monospace;}
+
+/* ── Layout ───────────────────────────────────────────────────── */
+.container{max-width:900px;margin:0 auto;padding:24px 20px 80px;}
+section{margin-bottom:48px;}
+
+/* ── Header ───────────────────────────────────────────────────── */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 0;border-bottom:1px solid #1c1c1c;margin-bottom:36px;
+}
+.header-left{display:flex;align-items:center;gap:14px;}
+.logo{font-size:24px;font-weight:700;letter-spacing:-0.5px;}
+.logo span{color:#3fb950;}
+.tagline{font-size:12px;color:#8b949e;margin-top:2px;}
+.auth-indicator{
+  display:flex;align-items:center;gap:8px;
+  background:#0d0d0d;border:1px solid #1c1c1c;border-radius:20px;
+  padding:6px 14px;font-size:12px;cursor:pointer;
+  transition:border-color .2s;
+}
+.auth-indicator:hover{border-color:#30363d;}
+.auth-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.auth-dot.on{background:#3fb950;box-shadow:0 0 6px #3fb95080;}
+.auth-dot.off{background:#f85149;box-shadow:0 0 6px #f8514980;}
+
+/* ── Section Labels ───────────────────────────────────────────── */
+.section-label{
+  font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:16px;display:flex;align-items:center;gap:8px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:#1c1c1c;}
+
+/* ── Drop Zone ────────────────────────────────────────────────── */
+.drop-zone{
+  border:2px dashed #30363d;border-radius:12px;
+  padding:60px 40px;text-align:center;cursor:pointer;
+  transition:border-color .3s, background .3s;
+  position:relative;overflow:hidden;
+}
+.drop-zone:hover,.drop-zone.dragover{
+  border-color:#3fb950;background:#3fb95008;
+}
+.drop-zone.dragover{
+  animation:pulse-border 1.5s ease-in-out infinite;
+}
+@keyframes pulse-border{
+  0%,100%{border-color:#3fb950;}
+  50%{border-color:#3fb95060;}
+}
+.drop-zone-icon{font-size:48px;margin-bottom:12px;opacity:0.4;}
+.drop-zone-text{font-size:14px;color:#8b949e;margin-bottom:8px;}
+.drop-zone-sub{font-size:11px;color:#484f58;}
+.file-input{display:none;}
+.browse-btn{
+  display:inline-block;margin-top:12px;padding:8px 20px;
+  background:#161b22;border:1px solid #30363d;border-radius:6px;
+  color:#e6edf3;font-size:12px;cursor:pointer;
+  transition:background .2s;
+}
+.browse-btn:hover{background:#1c2129;}
+
+/* ── File Info Card ───────────────────────────────────────────── */
+.file-card{
+  display:none;margin-top:20px;
+  background:#0d0d0d;border:1px solid #1c1c1c;border-radius:10px;
+  padding:20px;
+}
+.file-card.visible{display:block;}
+.file-info-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.file-name{font-size:14px;font-weight:600;word-break:break-all;}
+.file-size{font-size:12px;color:#8b949e;flex-shrink:0;margin-left:12px;}
+.file-type{font-size:11px;color:#484f58;margin-bottom:12px;}
+.hash-row{
+  background:#000;border:1px solid #1c1c1c;border-radius:6px;
+  padding:10px 14px;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.hash-label{font-size:10px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;flex-shrink:0;}
+.hash-value{font-size:12px;font-family:'SF Mono',monospace;color:#3fb950;word-break:break-all;flex:1;}
+.hash-value.computing{color:#d29922;}
+.shard-info{font-size:11px;color:#8b949e;margin-bottom:12px;}
+.shard-info span{color:#58a6ff;}
+
+/* ── Progress Bar ─────────────────────────────────────────────── */
+.progress-wrap{
+  height:6px;background:#161b22;border-radius:3px;
+  overflow:hidden;margin-bottom:12px;
+}
+.progress-bar{
+  height:100%;width:0;border-radius:3px;
+  transition:width .3s;
+}
+.progress-bar.hashing{background:linear-gradient(90deg,#d29922,#e3b341);}
+.progress-bar.uploading{background:linear-gradient(90deg,#238636,#3fb950);}
+.progress-bar.complete{background:#3fb950;width:100%!important;}
+.progress-bar.error{background:#f85149;width:100%!important;}
+.progress-label{font-size:11px;color:#8b949e;margin-bottom:8px;}
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 18px;border:none;border-radius:6px;
+  font-size:13px;font-weight:500;cursor:pointer;
+  transition:opacity .2s;
+}
+.btn:disabled{opacity:0.4;cursor:not-allowed;}
+.btn:hover:not(:disabled){opacity:0.85;}
+.btn-primary{background:#238636;color:#fff;}
+.btn-secondary{background:#161b22;color:#e6edf3;border:1px solid #30363d;}
+.btn-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+
+/* ── Share Link ───────────────────────────────────────────────── */
+.share-link-box{
+  display:none;margin-top:16px;padding:14px;
+  background:#0b1d0b;border:1px solid #238636;border-radius:8px;
+}
+.share-link-box.visible{display:block;}
+.share-link-box .label{font-size:10px;color:#3fb950;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.share-link-row{display:flex;gap:8px;align-items:center;}
+.share-link-input{
+  flex:1;background:#000;border:1px solid #1c1c1c;border-radius:4px;
+  padding:8px 10px;font-size:12px;font-family:'SF Mono',monospace;
+  color:#3fb950;outline:none;
+}
+.copy-btn{
+  background:#161b22;border:1px solid #30363d;border-radius:4px;
+  padding:8px 12px;color:#e6edf3;font-size:12px;cursor:pointer;
+  transition:background .2s;
+}
+.copy-btn:hover{background:#1c2129;}
+.copy-btn.copied{background:#238636;border-color:#238636;color:#fff;}
+
+/* ── Download / Verify ────────────────────────────────────────── */
+.fetch-row{display:flex;gap:10px;align-items:center;}
+.fetch-input{
+  flex:1;background:#0d0d0d;border:1px solid #1c1c1c;border-radius:6px;
+  padding:10px 14px;font-size:13px;font-family:'SF Mono',monospace;
+  color:#e6edf3;outline:none;
+  transition:border-color .2s;
+}
+.fetch-input:focus{border-color:#30363d;}
+.fetch-input::placeholder{color:#484f58;}
+
+.verify-result{
+  display:none;margin-top:16px;padding:16px;
+  border-radius:8px;
+}
+.verify-result.visible{display:block;}
+.verify-result.verified{background:#0b1d0b;border:1px solid #238636;}
+.verify-result.tampered{background:#1d0b0b;border:1px solid #f85149;}
+.verify-badge{font-size:16px;font-weight:700;margin-bottom:6px;}
+.verify-badge.ok{color:#3fb950;}
+.verify-badge.bad{color:#f85149;}
+.verify-details{font-size:12px;color:#8b949e;}
+.verify-details .mono{font-size:11px;word-break:break-all;}
+
+.download-card{
+  display:none;margin-top:16px;
+  background:#0d0d0d;border:1px solid #1c1c1c;border-radius:10px;
+  padding:20px;
+}
+.download-card.visible{display:block;}
+
+/* ── File Registry Table ──────────────────────────────────────── */
+.registry-table{width:100%;border-collapse:collapse;font-size:12px;}
+.registry-table th{
+  text-align:left;padding:8px 10px;
+  font-size:10px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;
+  border-bottom:1px solid #1c1c1c;font-weight:500;
+}
+.registry-table td{
+  padding:8px 10px;border-bottom:1px solid #0d0d0d;
+  vertical-align:middle;
+}
+.registry-table tr:hover td{background:#0d0d0d;}
+.registry-table tr{cursor:pointer;transition:background .15s;}
+.hash-cell{font-family:'SF Mono',monospace;color:#58a6ff;font-size:11px;}
+.registry-empty{
+  text-align:center;padding:40px;color:#484f58;font-size:13px;
+}
+.search-input{
+  width:100%;background:#0d0d0d;border:1px solid #1c1c1c;border-radius:6px;
+  padding:10px 14px;font-size:13px;color:#e6edf3;outline:none;margin-bottom:16px;
+  transition:border-color .2s;
+}
+.search-input:focus{border-color:#30363d;}
+.search-input::placeholder{color:#484f58;}
+
+/* ── How It Works ─────────────────────────────────────────────── */
+.diagram{
+  background:#0d0d0d;border:1px solid #1c1c1c;border-radius:10px;
+  padding:24px;margin-bottom:16px;overflow-x:auto;
+}
+.diagram-flow{
+  display:flex;align-items:center;gap:0;justify-content:center;
+  flex-wrap:wrap;font-size:13px;
+}
+.diagram-node{
+  background:#161b22;border:1px solid #30363d;border-radius:8px;
+  padding:10px 16px;text-align:center;white-space:nowrap;
+}
+.diagram-node .node-icon{font-size:20px;display:block;margin-bottom:4px;}
+.diagram-node .node-label{font-size:11px;color:#8b949e;}
+.diagram-arrow{color:#30363d;font-size:18px;padding:0 8px;flex-shrink:0;}
+.how-text{font-size:13px;color:#8b949e;line-height:1.7;margin-bottom:12px;}
+.how-text strong{color:#e6edf3;}
+.how-callout{
+  background:#0d0d0d;border-left:3px solid #3fb950;border-radius:0 6px 6px 0;
+  padding:14px 18px;font-size:13px;color:#8b949e;
+}
+
+/* ── Modal ────────────────────────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:#000000cc;
+  z-index:1000;align-items:center;justify-content:center;
+}
+.modal-overlay.visible{display:flex;}
+.modal{
+  background:#0d0d0d;border:1px solid #1c1c1c;border-radius:12px;
+  padding:28px;width:100%;max-width:440px;margin:20px;
+}
+.modal h2{font-size:16px;margin-bottom:6px;}
+.modal p{font-size:12px;color:#8b949e;margin-bottom:16px;line-height:1.5;}
+.modal input{
+  width:100%;background:#000;border:1px solid #1c1c1c;border-radius:6px;
+  padding:10px 14px;font-size:13px;font-family:'SF Mono',monospace;
+  color:#e6edf3;outline:none;margin-bottom:12px;
+}
+.modal input:focus{border-color:#30363d;}
+.modal .hint{font-size:11px;color:#484f58;margin-bottom:16px;line-height:1.5;}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end;}
+.modal .btn-danger{background:#da3633;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-size:12px;cursor:pointer;}
+.modal .btn-danger:hover{opacity:0.85;}
+
+/* ── Toast ────────────────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:#161b22;border:1px solid #30363d;border-radius:8px;
+  padding:10px 20px;font-size:12px;color:#e6edf3;
+  opacity:0;transition:transform .3s,opacity .3s;z-index:2000;
+  pointer-events:none;
+}
+.toast.visible{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media(max-width:600px){
+  .header{flex-direction:column;align-items:flex-start;gap:12px;}
+  .diagram-flow{flex-direction:column;}
+  .diagram-arrow{transform:rotate(90deg);}
+  .fetch-row{flex-direction:column;}
+  .fetch-input{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ AUTH MODAL ═══ -->
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal">
+    <h2>GitHub Authentication</h2>
+    <p>Enter a GitHub Personal Access Token with <code>repo</code> scope. This is required to upload files via the GitHub Contents API. Your token stays in your browser and is only sent to api.github.com.</p>
+    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
+    <div class="hint">
+      Generate a token at <a href="https://github.com/settings/tokens/new?scopes=repo&description=RappterShare" target="_blank">github.com/settings/tokens</a><br>
+      Required scope: <code>repo</code> (full control of private repositories)
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="closeAuthModal()">Cancel</button>
+      <button class="btn btn-danger" id="btn-clear-token" style="display:none" onclick="clearToken()">Remove Token</button>
+      <button class="btn btn-primary" onclick="saveToken()">Save Token</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="header">
+    <div class="header-left">
+      <div>
+        <div class="logo">Rappter<span>Share</span></div>
+        <div class="tagline">Verified P2P File Sharing &mdash; Content-Addressed, Git-Backed</div>
+      </div>
+    </div>
+    <div class="auth-indicator" id="auth-btn" onclick="openAuthModal()">
+      <div class="auth-dot off" id="auth-dot"></div>
+      <span id="auth-label">Not authenticated</span>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 1: UPLOAD ═══ -->
+  <section id="section-upload">
+    <div class="section-label">Upload</div>
+
+    <div class="drop-zone" id="drop-zone">
+      <div class="drop-zone-icon">&#x2B06;</div>
+      <div class="drop-zone-text">Drop files here or click to browse</div>
+      <div class="drop-zone-sub">Any file type. Max 100 MB per file. Content-addressed by SHA-256.</div>
+      <input type="file" class="file-input" id="file-input">
+      <button class="browse-btn" id="browse-btn">Choose File</button>
+    </div>
+
+    <div class="file-card" id="file-card">
+      <div class="file-info-row">
+        <div class="file-name" id="file-name"></div>
+        <div class="file-size" id="file-size"></div>
+      </div>
+      <div class="file-type" id="file-type"></div>
+
+      <div class="hash-row">
+        <div class="hash-label">SHA-256</div>
+        <div class="hash-value computing" id="file-hash">Computing...</div>
+      </div>
+
+      <div class="shard-info" id="shard-info" style="display:none"></div>
+
+      <div class="progress-label" id="progress-label"></div>
+      <div class="progress-wrap">
+        <div class="progress-bar hashing" id="progress-bar"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-upload" disabled onclick="uploadFile()">Upload to GitHub</button>
+        <button class="btn btn-secondary" onclick="resetUpload()">Clear</button>
+      </div>
+
+      <div class="share-link-box" id="share-link-box">
+        <div class="label">Shareable Link</div>
+        <div class="share-link-row">
+          <input type="text" class="share-link-input" id="share-link" readonly>
+          <button class="copy-btn" id="copy-btn" onclick="copyShareLink()">Copy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 2: DOWNLOAD / VERIFY ═══ -->
+  <section id="section-verify">
+    <div class="section-label">Download &amp; Verify</div>
+
+    <div class="fetch-row">
+      <input type="text" class="fetch-input" id="fetch-input"
+             placeholder="Paste a file hash or share link..."
+             spellcheck="false">
+      <button class="btn btn-primary" id="btn-fetch" onclick="fetchFile()">Fetch</button>
+    </div>
+
+    <div class="download-card" id="download-card">
+      <div class="file-info-row">
+        <div class="file-name" id="dl-file-name"></div>
+        <div class="file-size" id="dl-file-size"></div>
+      </div>
+      <div class="file-type" id="dl-file-type"></div>
+
+      <div class="progress-label" id="dl-progress-label"></div>
+      <div class="progress-wrap">
+        <div class="progress-bar uploading" id="dl-progress-bar"></div>
+      </div>
+
+      <div class="verify-result" id="verify-result">
+        <div class="verify-badge" id="verify-badge"></div>
+        <div class="verify-details" id="verify-details"></div>
+      </div>
+
+      <div class="btn-row" style="margin-top:12px;">
+        <button class="btn btn-primary" id="btn-save" disabled onclick="saveDownloadedFile()">Save File</button>
+        <button class="btn btn-secondary" onclick="resetDownload()">Clear</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 3: SHARED FILES ═══ -->
+  <section id="section-registry">
+    <div class="section-label">Shared Files</div>
+
+    <input type="text" class="search-input" id="registry-search"
+           placeholder="Search by filename or hash..."
+           oninput="filterRegistry()">
+
+    <div id="registry-container">
+      <div class="registry-empty">Loading registry...</div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 4: HOW IT WORKS ═══ -->
+  <section id="section-how">
+    <div class="section-label">How It Works</div>
+
+    <div class="diagram">
+      <div class="diagram-flow">
+        <div class="diagram-node">
+          <span class="node-icon">&#x1F464;</span>
+          <span class="node-label">User</span>
+        </div>
+        <div class="diagram-arrow">&#x2192;</div>
+        <div class="diagram-node">
+          <span class="node-icon">&#x1F512;</span>
+          <span class="node-label">SHA-256</span>
+        </div>
+        <div class="diagram-arrow">&#x2192;</div>
+        <div class="diagram-node">
+          <span class="node-icon">&#x1F4E6;</span>
+          <span class="node-label">Shard</span>
+        </div>
+        <div class="diagram-arrow">&#x2192;</div>
+        <div class="diagram-node">
+          <span class="node-icon">&#x1F4BB;</span>
+          <span class="node-label">GitHub API</span>
+        </div>
+        <div class="diagram-arrow">&#x2192;</div>
+        <div class="diagram-node">
+          <span class="node-icon">&#x1F310;</span>
+          <span class="node-label">raw.github</span>
+        </div>
+        <div class="diagram-arrow">&#x2192;</div>
+        <div class="diagram-node">
+          <span class="node-icon">&#x2705;</span>
+          <span class="node-label">Verify</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="how-text">
+      <strong>Content-addressed storage on git.</strong> Every file is hashed with SHA-256 before upload. The hash becomes the file's permanent address. Changing even one byte produces a completely different hash, making tampering immediately detectable.
+    </div>
+    <div class="how-text">
+      <strong>Direct git commits via the GitHub Contents API.</strong> Authenticated users push files directly to the repository. No intermediary servers. No databases. Your file becomes a git commit, with a full audit trail of who uploaded what and when.
+    </div>
+    <div class="how-text">
+      <strong>Instant global delivery via raw.githubusercontent.com.</strong> Once committed, files are immediately available worldwide through GitHub's CDN. Download, re-hash, and verify — the math either checks out or it does not.
+    </div>
+
+    <div class="how-callout">
+      No servers. No IPFS. No blockchain. Just git + SHA-256 + the browser.
+    </div>
+  </section>
+
+</div><!-- /.container -->
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   RappterShare — P2P Verified File Sharing via GitHub Contents API
+   Zero dependencies. All crypto via browser-native SubtleCrypto.
+   ══════════════════════════════════════════════════════════════════ */
+
+const OWNER = 'kody-w';
+const REPO = 'rappterbook';
+const BRANCH = 'main';
+const MEDIA_PREFIX = 'media/shared';
+const REGISTRY_PATH = 'state/shared_files.json';
+const RAW_BASE = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
+const API_BASE = `https://api.github.com/repos/${OWNER}/${REPO}`;
+const PAGES_BASE = `https://${OWNER}.github.io/${REPO}`;
+const SHARD_SIZE = 49 * 1024 * 1024; // 49 MB
+
+/* ── State ────────────────────────────────────────────────────── */
+let selectedFile = null;
+let selectedFileHash = null;
+let selectedFileArrayBuffer = null;
+let downloadedBlob = null;
+let downloadedFilename = null;
+let registryData = { files: [] };
+
+/* ── Utility ──────────────────────────────────────────────────── */
+function getToken() { return localStorage.getItem('rappter_share_token') || ''; }
+function setToken(t) { localStorage.setItem('rappter_share_token', t); }
+function removeToken() { localStorage.removeItem('rappter_share_token'); }
+
+function formatBytes(bytes) {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const units = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + units[i];
+}
+
+function truncateHash(hash) {
+  return hash.substring(0, 8) + '...' + hash.substring(hash.length - 8);
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('visible');
+  setTimeout(() => el.classList.remove('visible'), 2500);
+}
+
+function nowISO() { return new Date().toISOString(); }
+
+/* ── Auth ─────────────────────────────────────────────────────── */
+function updateAuthUI() {
+  const token = getToken();
+  const dot = document.getElementById('auth-dot');
+  const label = document.getElementById('auth-label');
+  if (token) {
+    dot.className = 'auth-dot on';
+    label.textContent = 'Authenticated';
+  } else {
+    dot.className = 'auth-dot off';
+    label.textContent = 'Not authenticated';
+  }
+}
+
+function openAuthModal() {
+  const modal = document.getElementById('auth-modal');
+  const input = document.getElementById('token-input');
+  const clearBtn = document.getElementById('btn-clear-token');
+  const token = getToken();
+  input.value = token;
+  clearBtn.style.display = token ? 'inline-block' : 'none';
+  modal.classList.add('visible');
+  setTimeout(() => input.focus(), 100);
+}
+
+function closeAuthModal() {
+  document.getElementById('auth-modal').classList.remove('visible');
+}
+
+function saveToken() {
+  const token = document.getElementById('token-input').value.trim();
+  if (!token) {
+    showToast('Token cannot be empty');
+    return;
+  }
+  setToken(token);
+  updateAuthUI();
+  closeAuthModal();
+  showToast('Token saved');
+}
+
+function clearToken() {
+  removeToken();
+  updateAuthUI();
+  closeAuthModal();
+  showToast('Token removed');
+}
+
+/* ── SHA-256 Hashing ──────────────────────────────────────────── */
+async function computeSHA256(arrayBuffer, onProgress) {
+  /* For progress reporting we process in chunks, but the final hash
+     uses the full buffer via SubtleCrypto for correctness. */
+  const total = arrayBuffer.byteLength;
+  const chunkSize = 2 * 1024 * 1024; // 2 MB reporting interval
+  let processed = 0;
+
+  /* Report progress in increments for UX */
+  const progressInterval = setInterval(() => {
+    processed = Math.min(processed + chunkSize, total);
+    if (onProgress) onProgress(processed / total);
+    if (processed >= total) clearInterval(progressInterval);
+  }, 50);
+
+  const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+  clearInterval(progressInterval);
+  if (onProgress) onProgress(1);
+
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/* ── Base64 encode for large files ────────────────────────────── */
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 8192;
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.subarray(i, i + chunkSize);
+    binary += String.fromCharCode.apply(null, chunk);
+  }
+  return btoa(binary);
+}
+
+/* ── Shard logic ──────────────────────────────────────────────── */
+function computeShards(size) {
+  if (size <= SHARD_SIZE) return [{ index: 0, start: 0, end: size }];
+  const shards = [];
+  let start = 0;
+  let idx = 0;
+  while (start < size) {
+    const end = Math.min(start + SHARD_SIZE, size);
+    shards.push({ index: idx, start, end });
+    start = end;
+    idx++;
+  }
+  return shards;
+}
+
+/* ── GitHub API helpers ───────────────────────────────────────── */
+async function githubPut(path, base64Content, message) {
+  const token = getToken();
+  if (!token) throw new Error('Not authenticated');
+
+  /* Check if file exists first (to get sha for update) */
+  let sha = null;
+  try {
+    const check = await fetch(`${API_BASE}/contents/${path}?ref=${BRANCH}`, {
+      headers: { 'Authorization': `token ${token}` }
+    });
+    if (check.ok) {
+      const existing = await check.json();
+      sha = existing.sha;
+    }
+  } catch (e) { /* file does not exist, that's fine */ }
+
+  const body = {
+    message,
+    content: base64Content,
+    branch: BRANCH
+  };
+  if (sha) body.sha = sha;
+
+  const resp = await fetch(`${API_BASE}/contents/${path}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `token ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.message || `GitHub API error: ${resp.status}`);
+  }
+  return resp.json();
+}
+
+async function githubGetJSON(path) {
+  const url = `${RAW_BASE}/${path}?_=${Date.now()}`;
+  const resp = await fetch(url);
+  if (!resp.ok) return null;
+  return resp.json();
+}
+
+async function githubGetBinary(path) {
+  const url = `${RAW_BASE}/${path}?_=${Date.now()}`;
+  const resp = await fetch(url);
+  if (!resp.ok) return null;
+  return resp.arrayBuffer();
+}
+
+/* ── Drop Zone ────────────────────────────────────────────────── */
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const browseBtn = document.getElementById('browse-btn');
+
+dropZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => {
+  dropZone.classList.remove('dragover');
+});
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files.length > 0) handleFileSelect(e.dataTransfer.files[0]);
+});
+dropZone.addEventListener('click', (e) => {
+  if (e.target === browseBtn || e.target === fileInput) return;
+  fileInput.click();
+});
+browseBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  fileInput.click();
+});
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length > 0) handleFileSelect(fileInput.files[0]);
+});
+
+async function handleFileSelect(file) {
+  selectedFile = file;
+  selectedFileHash = null;
+  selectedFileArrayBuffer = null;
+
+  /* Show file card */
+  const card = document.getElementById('file-card');
+  card.classList.add('visible');
+  document.getElementById('file-name').textContent = file.name;
+  document.getElementById('file-size').textContent = formatBytes(file.size);
+  document.getElementById('file-type').textContent = file.type || 'unknown type';
+
+  /* Shard info */
+  const shards = computeShards(file.size);
+  const shardInfo = document.getElementById('shard-info');
+  if (shards.length > 1) {
+    shardInfo.style.display = 'block';
+    shardInfo.innerHTML = `File will be split into <span>${shards.length} shards</span> (${formatBytes(SHARD_SIZE)} each)`;
+  } else {
+    shardInfo.style.display = 'none';
+  }
+
+  /* Reset state */
+  const hashEl = document.getElementById('file-hash');
+  hashEl.textContent = 'Computing...';
+  hashEl.className = 'hash-value computing';
+  document.getElementById('btn-upload').disabled = true;
+  document.getElementById('share-link-box').classList.remove('visible');
+
+  const progressBar = document.getElementById('progress-bar');
+  progressBar.className = 'progress-bar hashing';
+  progressBar.style.width = '0%';
+  document.getElementById('progress-label').textContent = 'Hashing file...';
+
+  /* Read and hash */
+  const arrayBuffer = await file.arrayBuffer();
+  selectedFileArrayBuffer = arrayBuffer;
+
+  const hash = await computeSHA256(arrayBuffer, (pct) => {
+    progressBar.style.width = (pct * 100) + '%';
+  });
+
+  selectedFileHash = hash;
+  hashEl.textContent = hash;
+  hashEl.className = 'hash-value';
+  progressBar.className = 'progress-bar complete';
+  document.getElementById('progress-label').textContent = 'Hash computed';
+  document.getElementById('btn-upload').disabled = false;
+}
+
+function resetUpload() {
+  selectedFile = null;
+  selectedFileHash = null;
+  selectedFileArrayBuffer = null;
+  document.getElementById('file-card').classList.remove('visible');
+  document.getElementById('share-link-box').classList.remove('visible');
+  fileInput.value = '';
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('progress-bar').className = 'progress-bar hashing';
+  document.getElementById('progress-label').textContent = '';
+}
+
+/* ── Upload ───────────────────────────────────────────────────── */
+async function uploadFile() {
+  if (!selectedFile || !selectedFileHash || !selectedFileArrayBuffer) return;
+  if (!getToken()) {
+    openAuthModal();
+    return;
+  }
+
+  const uploadBtn = document.getElementById('btn-upload');
+  uploadBtn.disabled = true;
+  const progressBar = document.getElementById('progress-bar');
+  const progressLabel = document.getElementById('progress-label');
+  progressBar.className = 'progress-bar uploading';
+  progressBar.style.width = '0%';
+
+  const hash = selectedFileHash;
+  const filename = selectedFile.name;
+  const fileSize = selectedFile.size;
+  const fileType = selectedFile.type || 'application/octet-stream';
+  const shards = computeShards(fileSize);
+  const basePath = `${MEDIA_PREFIX}/${hash}`;
+
+  try {
+    /* Upload shards */
+    for (let i = 0; i < shards.length; i++) {
+      const shard = shards[i];
+      const shardData = selectedFileArrayBuffer.slice(shard.start, shard.end);
+      const base64 = arrayBufferToBase64(shardData);
+
+      let shardFilename;
+      if (shards.length === 1) {
+        shardFilename = filename;
+      } else {
+        shardFilename = `${filename}.shard${String(i).padStart(3, '0')}`;
+      }
+
+      progressLabel.textContent = shards.length > 1
+        ? `Uploading shard ${i + 1} of ${shards.length}...`
+        : 'Uploading file...';
+
+      await githubPut(
+        `${basePath}/${shardFilename}`,
+        base64,
+        `share: upload ${filename} (${truncateHash(hash)})`
+      );
+
+      progressBar.style.width = ((i + 1) / (shards.length + 1) * 100) + '%';
+    }
+
+    /* Write manifest */
+    progressLabel.textContent = 'Writing manifest...';
+    const manifest = {
+      hash: hash,
+      filename: filename,
+      size: fileSize,
+      type: fileType,
+      shards: shards.map((s, i) => ({
+        index: i,
+        filename: shards.length === 1 ? filename : `${filename}.shard${String(i).padStart(3, '0')}`,
+        start: s.start,
+        end: s.end,
+        size: s.end - s.start
+      })),
+      uploaded_at: nowISO(),
+      uploader: await getGitHubUsername()
+    };
+
+    await githubPut(
+      `${basePath}/manifest.json`,
+      btoa(unescape(encodeURIComponent(JSON.stringify(manifest, null, 2)))),
+      `share: manifest for ${filename} (${truncateHash(hash)})`
+    );
+
+    progressBar.style.width = '90%';
+
+    /* Update registry */
+    progressLabel.textContent = 'Updating registry...';
+    await updateRegistry(manifest);
+
+    progressBar.style.width = '100%';
+    progressBar.className = 'progress-bar complete';
+    progressLabel.textContent = 'Upload complete';
+
+    /* Show share link */
+    const shareUrl = `${PAGES_BASE}/share#file=${hash}`;
+    document.getElementById('share-link').value = shareUrl;
+    document.getElementById('share-link-box').classList.add('visible');
+    showToast('File uploaded and verified');
+
+  } catch (err) {
+    progressBar.className = 'progress-bar error';
+    progressLabel.textContent = 'Upload failed: ' + err.message;
+    showToast('Upload failed: ' + err.message);
+    uploadBtn.disabled = false;
+  }
+}
+
+async function getGitHubUsername() {
+  const token = getToken();
+  if (!token) return 'anonymous';
+  try {
+    const resp = await fetch('https://api.github.com/user', {
+      headers: { 'Authorization': `token ${token}` }
+    });
+    if (resp.ok) {
+      const user = await resp.json();
+      return user.login || 'anonymous';
+    }
+  } catch (e) { /* ignore */ }
+  return 'anonymous';
+}
+
+async function updateRegistry(manifest) {
+  /* Fetch current registry */
+  let registry = await githubGetJSON(REGISTRY_PATH);
+  if (!registry) {
+    registry = {
+      _meta: {
+        description: 'Registry of P2P shared files — content-addressed, SHA-256 verified',
+        created: nowISO()
+      },
+      files: []
+    };
+  }
+
+  /* Add entry (avoid duplicates by hash) */
+  const existing = registry.files.findIndex(f => f.hash === manifest.hash);
+  const entry = {
+    hash: manifest.hash,
+    filename: manifest.filename,
+    size: manifest.size,
+    type: manifest.type,
+    uploader: manifest.uploader,
+    uploaded_at: manifest.uploaded_at,
+    downloads: 0
+  };
+
+  if (existing >= 0) {
+    registry.files[existing] = entry;
+  } else {
+    registry.files.unshift(entry);
+  }
+
+  registry._meta.updated = nowISO();
+
+  /* Push updated registry */
+  const base64 = btoa(unescape(encodeURIComponent(JSON.stringify(registry, null, 2))));
+  await githubPut(
+    REGISTRY_PATH,
+    base64,
+    `share: registry update for ${manifest.filename}`
+  );
+
+  registryData = registry;
+  renderRegistry();
+}
+
+/* ── Copy Share Link ──────────────────────────────────────────── */
+function copyShareLink() {
+  const input = document.getElementById('share-link');
+  navigator.clipboard.writeText(input.value).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
+
+/* ── Download / Verify ────────────────────────────────────────── */
+async function fetchFile() {
+  let input = document.getElementById('fetch-input').value.trim();
+  if (!input) {
+    showToast('Enter a hash or share link');
+    return;
+  }
+
+  /* Extract hash from share link */
+  const hashMatch = input.match(/#file=([a-f0-9]{64})/i)
+                 || input.match(/^([a-f0-9]{64})$/i);
+  if (!hashMatch) {
+    showToast('Invalid hash or link format');
+    return;
+  }
+  const hash = hashMatch[1].toLowerCase();
+
+  const card = document.getElementById('download-card');
+  card.classList.add('visible');
+  document.getElementById('verify-result').classList.remove('visible');
+  document.getElementById('btn-save').disabled = true;
+  downloadedBlob = null;
+  downloadedFilename = null;
+
+  const progressBar = document.getElementById('dl-progress-bar');
+  const progressLabel = document.getElementById('dl-progress-label');
+  progressBar.className = 'progress-bar uploading';
+  progressBar.style.width = '0%';
+  progressLabel.textContent = 'Fetching manifest...';
+
+  document.getElementById('dl-file-name').textContent = 'Loading...';
+  document.getElementById('dl-file-size').textContent = '';
+  document.getElementById('dl-file-type').textContent = '';
+
+  try {
+    /* Fetch manifest */
+    const manifest = await githubGetJSON(`${MEDIA_PREFIX}/${hash}/manifest.json`);
+    if (!manifest) throw new Error('File not found — no manifest at this hash');
+
+    document.getElementById('dl-file-name').textContent = manifest.filename;
+    document.getElementById('dl-file-size').textContent = formatBytes(manifest.size);
+    document.getElementById('dl-file-type').textContent = manifest.type || 'unknown';
+
+    /* Download shards */
+    const shardBuffers = [];
+    for (let i = 0; i < manifest.shards.length; i++) {
+      const shard = manifest.shards[i];
+      progressLabel.textContent = manifest.shards.length > 1
+        ? `Downloading shard ${i + 1} of ${manifest.shards.length}...`
+        : 'Downloading file...';
+
+      const data = await githubGetBinary(`${MEDIA_PREFIX}/${hash}/${shard.filename}`);
+      if (!data) throw new Error(`Failed to download shard ${i}`);
+      shardBuffers.push(data);
+      progressBar.style.width = ((i + 1) / manifest.shards.length * 70) + '%';
+    }
+
+    /* Reassemble */
+    progressLabel.textContent = 'Reassembling...';
+    progressBar.style.width = '75%';
+
+    let totalSize = 0;
+    for (const buf of shardBuffers) totalSize += buf.byteLength;
+    const assembled = new Uint8Array(totalSize);
+    let offset = 0;
+    for (const buf of shardBuffers) {
+      assembled.set(new Uint8Array(buf), offset);
+      offset += buf.byteLength;
+    }
+
+    /* Verify hash */
+    progressLabel.textContent = 'Verifying SHA-256...';
+    progressBar.style.width = '85%';
+
+    const computedHash = await computeSHA256(assembled.buffer, null);
+
+    progressBar.style.width = '100%';
+
+    const verifyResult = document.getElementById('verify-result');
+    const verifyBadge = document.getElementById('verify-badge');
+    const verifyDetails = document.getElementById('verify-details');
+    verifyResult.classList.add('visible');
+
+    if (computedHash === manifest.hash) {
+      verifyResult.className = 'verify-result visible verified';
+      verifyBadge.className = 'verify-badge ok';
+      verifyBadge.innerHTML = 'VERIFIED &#10003;';
+      verifyDetails.innerHTML = `
+        <div>File integrity confirmed. The downloaded content matches the original hash.</div>
+        <div style="margin-top:8px;">
+          <span style="color:#484f58;">Expected:</span> <span class="mono">${manifest.hash}</span><br>
+          <span style="color:#484f58;">Computed:</span> <span class="mono" style="color:#3fb950;">${computedHash}</span>
+        </div>
+      `;
+      progressBar.className = 'progress-bar complete';
+      progressLabel.textContent = 'Verified — file is authentic';
+    } else {
+      verifyResult.className = 'verify-result visible tampered';
+      verifyBadge.className = 'verify-badge bad';
+      verifyBadge.innerHTML = 'TAMPERED &#10007;';
+      verifyDetails.innerHTML = `
+        <div style="color:#f85149;">Warning: the file content does NOT match the expected hash. This file may have been modified.</div>
+        <div style="margin-top:8px;">
+          <span style="color:#484f58;">Expected:</span> <span class="mono">${manifest.hash}</span><br>
+          <span style="color:#484f58;">Computed:</span> <span class="mono" style="color:#f85149;">${computedHash}</span>
+        </div>
+      `;
+      progressBar.className = 'progress-bar error';
+      progressLabel.textContent = 'Verification FAILED — hash mismatch';
+    }
+
+    /* Prepare download */
+    downloadedBlob = new Blob([assembled], { type: manifest.type || 'application/octet-stream' });
+    downloadedFilename = manifest.filename;
+    document.getElementById('btn-save').disabled = false;
+
+  } catch (err) {
+    progressBar.className = 'progress-bar error';
+    progressLabel.textContent = 'Failed: ' + err.message;
+    showToast('Fetch failed: ' + err.message);
+  }
+}
+
+function saveDownloadedFile() {
+  if (!downloadedBlob || !downloadedFilename) return;
+  const url = URL.createObjectURL(downloadedBlob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = downloadedFilename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Download started');
+}
+
+function resetDownload() {
+  downloadedBlob = null;
+  downloadedFilename = null;
+  document.getElementById('download-card').classList.remove('visible');
+  document.getElementById('verify-result').classList.remove('visible');
+  document.getElementById('dl-progress-bar').style.width = '0%';
+  document.getElementById('dl-progress-label').textContent = '';
+  document.getElementById('fetch-input').value = '';
+}
+
+/* ── Registry ─────────────────────────────────────────────────── */
+async function loadRegistry() {
+  try {
+    const data = await githubGetJSON(REGISTRY_PATH);
+    if (data && data.files) {
+      registryData = data;
+    }
+  } catch (e) { /* registry not found, use empty */ }
+  renderRegistry();
+}
+
+function renderRegistry() {
+  const container = document.getElementById('registry-container');
+  const files = registryData.files || [];
+
+  if (files.length === 0) {
+    container.innerHTML = '<div class="registry-empty">No files shared yet. Be the first to upload.</div>';
+    return;
+  }
+
+  const searchTerm = (document.getElementById('registry-search').value || '').toLowerCase();
+  const filtered = searchTerm
+    ? files.filter(f => f.filename.toLowerCase().includes(searchTerm) || f.hash.toLowerCase().includes(searchTerm))
+    : files;
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="registry-empty">No files match your search.</div>';
+    return;
+  }
+
+  let html = `<table class="registry-table">
+    <thead><tr>
+      <th>Hash</th><th>Filename</th><th>Size</th><th>Uploader</th><th>Date</th>
+    </tr></thead><tbody>`;
+
+  for (const f of filtered) {
+    const date = f.uploaded_at ? new Date(f.uploaded_at).toLocaleDateString() : '--';
+    html += `<tr onclick="fetchFromRegistry('${f.hash}')">
+      <td class="hash-cell">${truncateHash(f.hash)}</td>
+      <td>${escapeHTML(f.filename)}</td>
+      <td style="color:#8b949e;">${formatBytes(f.size)}</td>
+      <td style="color:#58a6ff;">${escapeHTML(f.uploader || 'anonymous')}</td>
+      <td style="color:#8b949e;">${date}</td>
+    </tr>`;
+  }
+
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function filterRegistry() {
+  renderRegistry();
+}
+
+function fetchFromRegistry(hash) {
+  document.getElementById('fetch-input').value = hash;
+  document.getElementById('section-verify').scrollIntoView({ behavior: 'smooth' });
+  fetchFile();
+}
+
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ── Deep link handling ───────────────────────────────────────── */
+function handleDeepLink() {
+  const hashParam = window.location.hash;
+  const match = hashParam.match(/#file=([a-f0-9]{64})/i);
+  if (match) {
+    document.getElementById('fetch-input').value = match[1];
+    setTimeout(() => {
+      document.getElementById('section-verify').scrollIntoView({ behavior: 'smooth' });
+      fetchFile();
+    }, 500);
+  }
+}
+
+/* ── Init ─────────────────────────────────────────────────────── */
+updateAuthUI();
+loadRegistry();
+handleDeepLink();
+
+/* Listen for hash changes (share links opened in same tab) */
+window.addEventListener('hashchange', handleDeepLink);
+
+/* Close modal on Escape */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeAuthModal();
+});
+
+/* Close modal on overlay click */
+document.getElementById('auth-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('auth-modal')) closeAuthModal();
+});
+</script>
+</body>
+</html>

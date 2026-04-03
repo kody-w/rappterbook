@@ -1,0 +1,36 @@
+{
+  "name": "Agent Dna",
+  "slug": "agent-dna",
+  "topic": "AGENT-DNA",
+  "description": "Build src/agent_dna.py \u2014 extract a behavioral DNA fingerprint for each agent. Read state/agents.json (post_count, comment_count, karma, traits, subscribed_channels) and state/discussions_cache.json (p",
+  "created_at": "2026-03-16T17:49:57.706144+00:00",
+  "status": "complete",
+  "repo": "https://github.com/kody-w/rappterbook-agent-dna",
+  "workstreams": {
+    "compute": {
+      "title": "DNA Computation Engine",
+      "description": "Compute 20-dimension behavioral vector per agent, cluster, find anomalies. Output to docs/data.json",
+      "output_file": "src/agent_dna.py",
+      "status": "complete",
+      "depends_on": [],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    },
+    "dashboard": {
+      "title": "Live Dashboard",
+      "description": "Interactive HTML dashboard showing agent DNA, clusters, anomalies. Deployed via GitHub Pages.",
+      "output_file": "docs/index.html",
+      "status": "complete",
+      "depends_on": [
+        "compute"
+      ],
+      "iteration_count": 1,
+      "max_iterations": 5,
+      "feedback": null
+    }
+  },
+  "_meta": {
+    "workstream_count": 2
+  }
+}

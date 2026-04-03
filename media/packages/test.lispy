@@ -1,0 +1,104 @@
+;; Package: test 1.0.0
+;; Testing framework — assert, test suites, and reporting
+;; Install: (apt-get "install" "test")
+
+(define _test-results (list))
+(define _test-suite-name "default")
+
+(define (test-suite name)
+  (set! _test-suite-name name)
+  (set! _test-results (list))
+  (string-append "test: suite '" name "' initialized"))
+
+(define (assert-equal actual expected label)
+  (let ((pass (equal? actual expected))
+        (result (list
+          (cons "label" label)
+          (cons "suite" _test-suite-name)
+          (cons "type" "assert-equal")
+          (cons "pass" (if (equal? actual expected) "true" "false"))
+          (cons "actual" (if (string? actual) actual (number->string actual)))
+          (cons "expected" (if (string? expected) expected (number->string expected))))))
+    (set! _test-results (cons result _test-results))
+    (if pass
+      (string-append "  PASS: " label)
+      (string-append "  FAIL: " label "\n"
+                     "    expected: " (cdr (assoc "expected" result)) "\n"
+                     "    actual:   " (cdr (assoc "actual" result))))))
+
+(define (assert-true value label)
+  (let ((pass (if value #t #f))
+        (result (list
+          (cons "label" label)
+          (cons "suite" _test-suite-name)
+          (cons "type" "assert-true")
+          (cons "pass" (if value "true" "false")))))
+    (set! _test-results (cons result _test-results))
+    (if pass
+      (string-append "  PASS: " label)
+      (string-append "  FAIL: " label " — value was falsy"))))
+
+(define (assert-false value label)
+  (let ((pass (not value))
+        (result (list
+          (cons "label" label)
+          (cons "suite" _test-suite-name)
+          (cons "type" "assert-false")
+          (cons "pass" (if (not value) "true" "false")))))
+    (set! _test-results (cons result _test-results))
+    (if pass
+      (string-append "  PASS: " label)
+      (string-append "  FAIL: " label " — value was truthy"))))
+
+(define (assert-throws thunk label)
+  (let ((threw #f))
+    ;; in LisPy, simulate try/catch by checking if the thunk returns an error string
+    (let ((result-val (thunk)))
+      (set! threw (and (string? result-val) (string-prefix? "error" result-val))))
+    (let ((result (list
+        (cons "label" label)
+        (cons "suite" _test-suite-name)
+        (cons "type" "assert-throws")
+        (cons "pass" (if threw "true" "false")))))
+      (set! _test-results (cons result _test-results))
+      (if threw
+        (string-append "  PASS: " label " (threw as expected)")
+        (string-append "  FAIL: " label " — expected exception, none thrown")))))
+
+(define (assert-contains haystack needle label)
+  (let ((pass (string-contains? haystack needle))
+        (result (list
+          (cons "label" label)
+          (cons "suite" _test-suite-name)
+          (cons "type" "assert-contains")
+          (cons "pass" (if (string-contains? haystack needle) "true" "false")))))
+    (set! _test-results (cons result _test-results))
+    (if pass
+      (string-append "  PASS: " label)
+      (string-append "  FAIL: " label " — string does not contain \"" needle "\""))))
+
+(define (test-run name thunk)
+  (let ((output (thunk)))
+    (string-append "test: " name "\n" (if (string? output) output ""))))
+
+(define (test-report)
+  (let ((total (length _test-results))
+        (passed (length (filter (lambda (r) (equal? (cdr (assoc "pass" r)) "true")) _test-results)))
+        (failed (length (filter (lambda (r) (equal? (cdr (assoc "pass" r)) "false")) _test-results))))
+    (string-append "\n=== Test Report: " _test-suite-name " ===\n"
+                   "Total:  " (number->string total) "\n"
+                   "Passed: " (number->string passed) "\n"
+                   "Failed: " (number->string failed) "\n"
+                   "Result: " (if (= failed 0) "ALL PASSED" "SOME FAILED") "\n"
+                   (if (> failed 0)
+                     (string-append "\nFailures:\n"
+                       (apply string-append
+                         (map (lambda (r)
+                           (string-append "  - " (cdr (assoc "label" r)) " (" (cdr (assoc "type" r)) ")\n"))
+                           (filter (lambda (r) (equal? (cdr (assoc "pass" r)) "false")) _test-results))))
+                     ""))))
+
+(define (test-reset)
+  (set! _test-results (list))
+  (set! _test-suite-name "default")
+  "test: all results cleared")

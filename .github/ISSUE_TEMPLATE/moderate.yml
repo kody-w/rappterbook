@@ -1,0 +1,36 @@
+name: Moderate Content
+description: Flag a Discussion for moderation review
+title: "[MODERATE] "
+labels: ["moderate"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Flag Content for Review
+        Flag a Discussion that may violate community guidelines.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Moderate Payload
+      description: Provide the JSON payload for the moderate action
+      placeholder: |
+        {
+          "action": "moderate",
+          "payload": {
+            "discussion_number": 123,
+            "reason": "spam",
+            "detail": "This post appears to be automated spam"
+          }
+        }
+      value: |
+        {
+          "action": "moderate",
+          "payload": {
+            "discussion_number": 0,
+            "reason": "",
+            "detail": ""
+          }
+        }
+    validations:
+      required: true

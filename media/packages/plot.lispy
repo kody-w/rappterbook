@@ -1,0 +1,186 @@
+;; Package: plot 1.0.0
+;; Enhanced charting — scatter, heatmap, boxplot, violin, radar (all output SVG strings)
+;; Install: (apt-get "install" "plot")
+
+(define (scatter-plot points width height)
+  ;; points = list of (x . y) pairs
+  (let ((xs (map car points))
+        (ys (map cdr points))
+        (min-x (apply min (map car points)))
+        (max-x (apply max (map car points)))
+        (min-y (apply min (map cdr points)))
+        (max-y (apply max (map cdr points))))
+    (let ((x-range (max 1 (- max-x min-x)))
+          (y-range (max 1 (- max-y min-y))))
+      (string-append
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" (number->string width)
+        "\" height=\"" (number->string height) "\">\n"
+        "  <rect width=\"100%\" height=\"100%\" fill=\"#1a1a2e\" />\n"
+        ;; axes
+        "  <line x1=\"40\" y1=\"10\" x2=\"40\" y2=\"" (number->string (- height 20))
+        "\" stroke=\"#666\" stroke-width=\"1\" />\n"
+        "  <line x1=\"40\" y1=\"" (number->string (- height 20)) "\" x2=\""
+        (number->string (- width 10)) "\" y2=\"" (number->string (- height 20))
+        "\" stroke=\"#666\" stroke-width=\"1\" />\n"
+        ;; points
+        (apply string-append
+          (map (lambda (pt)
+            (let ((cx (+ 45 (round (* (/ (- (car pt) min-x) x-range) (- width 60)))))
+                  (cy (- (- height 25) (round (* (/ (- (cdr pt) min-y) y-range) (- height 40))))))
+              (string-append "  <circle cx=\"" (number->string cx) "\" cy=\""
+                             (number->string cy) "\" r=\"4\" fill=\"#e94560\" opacity=\"0.8\" />\n")))
+            points))
+        "</svg>"))))
+
+(define (heatmap matrix cell-size)
+  ;; matrix = list of lists of numbers (0.0-1.0)
+  (let ((rows (length matrix))
+        (cols (if (null? matrix) 0 (length (car matrix))))
+        (w (* (if (null? matrix) 1 (length (car matrix))) cell-size))
+        (h (* (length matrix) cell-size)))
+    (string-append
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" (number->string w)
+      "\" height=\"" (number->string h) "\">\n"
+      (let row-loop ((r 0) (row-data matrix) (out ""))
+        (if (null? row-data)
+          out
+          (row-loop (+ r 1) (cdr row-data)
+            (string-append out
+              (let col-loop ((c 0) (col-data (car row-data)) (row-out ""))
+                (if (null? col-data)
+                  row-out
+                  (let ((val (car col-data))
+                        (red (round (* (min 1.0 (car col-data)) 255)))
+                        (blue (round (* (- 1.0 (min 1.0 (car col-data))) 255))))
+                    (col-loop (+ c 1) (cdr col-data)
+                      (string-append row-out
+                        "  <rect x=\"" (number->string (* c cell-size))
+                        "\" y=\"" (number->string (* r cell-size))
+                        "\" width=\"" (number->string cell-size)
+                        "\" height=\"" (number->string cell-size)
+                        "\" fill=\"rgb(" (number->string red) ",40," (number->string blue)
+                        ")\" />\n")))))))))
+      "</svg>")))
+
+(define (boxplot datasets width height)
+  ;; datasets = list of (name . values) pairs
+  (let ((n (length datasets))
+        (box-w (round (/ (- width 60) (max 1 (length datasets))))))
+    (string-append
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" (number->string width)
+      "\" height=\"" (number->string height) "\">\n"
+      "  <rect width=\"100%\" height=\"100%\" fill=\"#1a1a2e\" />\n"
+      (let ds-loop ((i 0) (ds datasets) (out ""))
+        (if (null? ds)
+          out
+          (let* ((vals (sort < (cdr (car ds))))
+                 (mn (car vals))
+                 (mx (car (reverse vals)))
+                 (med (list-ref vals (round (/ (length vals) 2))))
+                 (q1 (list-ref vals (round (/ (length vals) 4))))
+                 (q3 (list-ref vals (round (* (length vals) 0.75))))
+                 (cx (+ 50 (* i box-w)))
+                 (scale (/ (- height 40) (max 1 (- mx mn)))))
+            (ds-loop (+ i 1) (cdr ds)
+              (string-append out
+                ;; whiskers
+                "  <line x1=\"" (number->string (+ cx (round (/ box-w 2)))) "\" y1=\""
+                (number->string (- height 20 (round (* (- mn mn) scale)))) "\" x2=\""
+                (number->string (+ cx (round (/ box-w 2)))) "\" y2=\""
+                (number->string (- height 20 (round (* (- mx mn) scale))))
+                "\" stroke=\"#ccc\" />\n"
+                ;; box
+                "  <rect x=\"" (number->string (+ cx 4)) "\" y=\""
+                (number->string (- height 20 (round (* (- q3 mn) scale)))) "\" width=\""
+                (number->string (- box-w 8)) "\" height=\""
+                (number->string (max 1 (round (* (- q3 q1) scale))))
+                "\" fill=\"#0f3460\" stroke=\"#e94560\" />\n"
+                ;; median line
+                "  <line x1=\"" (number->string (+ cx 4)) "\" y1=\""
+                (number->string (- height 20 (round (* (- med mn) scale)))) "\" x2=\""
+                (number->string (+ cx box-w -4)) "\" y2=\""
+                (number->string (- height 20 (round (* (- med mn) scale))))
+                "\" stroke=\"#e94560\" stroke-width=\"2\" />\n"
+                ;; label
+                "  <text x=\"" (number->string (+ cx (round (/ box-w 2))))
+                "\" y=\"" (number->string (- height 2))
+                "\" text-anchor=\"middle\" fill=\"#ccc\" font-size=\"10\">"
+                (car (car ds)) "</text>\n")))))
+      "</svg>")))
+
+(define (violin-plot datasets width height)
+  ;; simplified violin: mirror boxplot shape as diamond
+  (let ((n (length datasets))
+        (box-w (round (/ (- width 60) (max 1 (length datasets))))))
+    (string-append
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" (number->string width)
+      "\" height=\"" (number->string height) "\">\n"
+      "  <rect width=\"100%\" height=\"100%\" fill=\"#1a1a2e\" />\n"
+      (let ds-loop ((i 0) (ds datasets) (out ""))
+        (if (null? ds)
+          out
+          (let* ((vals (sort < (cdr (car ds))))
+                 (mn (car vals))
+                 (mx (car (reverse vals)))
+                 (med (list-ref vals (round (/ (length vals) 2))))
+                 (cx (+ 50 (* i box-w) (round (/ box-w 2))))
+                 (scale (/ (- height 40) (max 1 (- mx mn))))
+                 (top-y (- height 20 (round (* (- mx mn) scale))))
+                 (mid-y (- height 20 (round (* (- med mn) scale))))
+                 (bot-y (- height 20)))
+            (ds-loop (+ i 1) (cdr ds)
+              (string-append out
+                "  <polygon points=\""
+                (number->string cx) "," (number->string top-y) " "
+                (number->string (+ cx (round (/ box-w 3)))) "," (number->string mid-y) " "
+                (number->string cx) "," (number->string bot-y) " "
+                (number->string (- cx (round (/ box-w 3)))) "," (number->string mid-y)
+                "\" fill=\"#0f3460\" stroke=\"#e94560\" opacity=\"0.7\" />\n"
+                "  <text x=\"" (number->string cx) "\" y=\"" (number->string (- height 2))
+                "\" text-anchor=\"middle\" fill=\"#ccc\" font-size=\"10\">"
+                (car (car ds)) "</text>\n")))))
+      "</svg>")))
+
+(define (radar-chart labels values max-val radius)
+  ;; labels and values are parallel lists
+  (let ((n (length labels))
+        (cx (+ radius 20))
+        (cy (+ radius 20))
+        (size (+ (* radius 2) 40)))
+    (string-append
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" (number->string size)
+      "\" height=\"" (number->string size) "\">\n"
+      "  <rect width=\"100%\" height=\"100%\" fill=\"#1a1a2e\" />\n"
+      ;; grid rings
+      (apply string-append
+        (map (lambda (ring)
+          (let ((r (round (* radius (/ ring 4)))))
+            (string-append "  <circle cx=\"" (number->string cx) "\" cy=\""
+                           (number->string cy) "\" r=\"" (number->string r)
+                           "\" fill=\"none\" stroke=\"#333\" />\n")))
+          (list 1 2 3 4)))
+      ;; data polygon points
+      "  <polygon points=\""
+      (let pt-loop ((i 0) (pts ""))
+        (if (>= i n)
+          pts
+          (let ((angle (- (* (/ (* i 2 3.14159) n) 1) 1.5708))
+                (val (/ (list-ref values i) max-val)))
+            (pt-loop (+ i 1)
+              (string-append pts
+                (number->string (round (+ cx (* radius val (cos angle))))) ","
+                (number->string (round (+ cy (* radius val (sin angle))))) " ")))))
+      "\" fill=\"#e94560\" opacity=\"0.3\" stroke=\"#e94560\" stroke-width=\"2\" />\n"
+      ;; labels
+      (let lbl-loop ((i 0) (out ""))
+        (if (>= i n)
+          out
+          (let ((angle (- (* (/ (* i 2 3.14159) n) 1) 1.5708))
+                (lx (round (+ cx (* (+ radius 15) (cos angle)))))
+                (ly (round (+ cy (* (+ radius 15) (sin angle))))))
+            (lbl-loop (+ i 1)
+              (string-append out
+                "  <text x=\"" (number->string lx) "\" y=\"" (number->string ly)
+                "\" text-anchor=\"middle\" fill=\"#ccc\" font-size=\"10\">"
+                (list-ref labels i) "</text>\n")))))
+      "</svg>")))

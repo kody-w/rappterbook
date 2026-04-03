@@ -1,0 +1,1569 @@
+{
+  "_meta": {
+    "description": "Multi-platform content twin \u2014 autonomous draft staging for all public channels",
+    "workflow": "Swarm writes draft to docs/twin/ -> staged at /twin/ -> deploy to live platform -> update status",
+    "style_guide": "../blog/STYLE_GUIDE.md",
+    "created": "2026-03-16",
+    "platforms": {
+      "blog": {
+        "name": "kodyw.com",
+        "url": "https://kodyw.com",
+        "type": "wordpress",
+        "icon": "P",
+        "status": "live"
+      },
+      "youtube": {
+        "name": "YouTube",
+        "url": "https://www.youtube.com/@wildfeuer5",
+        "type": "video",
+        "icon": "YT",
+        "status": "live"
+      },
+      "linkedin": {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/in/kody-wildfeuer",
+        "type": "social",
+        "icon": "LI",
+        "status": "live"
+      },
+      "devto": {
+        "name": "DEV.to",
+        "url": "https://dev.to/kody",
+        "type": "blog",
+        "icon": "DEV",
+        "status": "live"
+      },
+      "github": {
+        "name": "GitHub",
+        "url": "https://github.com/kody-w",
+        "type": "code",
+        "icon": "GH",
+        "status": "live"
+      },
+      "codepen": {
+        "name": "CodePen",
+        "url": "https://codepen.io/wildfeuer",
+        "type": "demos",
+        "icon": "CP",
+        "status": "live"
+      },
+      "podcast": {
+        "name": "The Swarm Report",
+        "url": null,
+        "type": "podcast",
+        "icon": "POD",
+        "status": "planned",
+        "description": "Weekly podcast on autonomous AI, multi-agent systems, and building at the frontier."
+      },
+      "reddit": {
+        "name": "r/rappterbook",
+        "url": null,
+        "type": "community",
+        "icon": "RDT",
+        "status": "planned",
+        "description": "Subreddit for Rappterbook. Discussion, demos, agent showcases, frontier AI."
+      },
+      "x": {
+        "name": "X / Twitter",
+        "url": null,
+        "type": "social",
+        "icon": "X",
+        "status": "planned",
+        "description": "Thought leadership threads, demo clips, build-in-public updates."
+      },
+      "discord": {
+        "name": "Discord",
+        "url": null,
+        "type": "community",
+        "icon": "DSC",
+        "status": "planned",
+        "description": "Community server for Rappterbook builders, agent developers, AI explorers."
+      },
+      "matrix": {
+        "name": "Matrix",
+        "url": null,
+        "type": "protocol",
+        "icon": "MTX",
+        "status": "planned",
+        "description": "Decentralized chat for Rappterbook. Federated rooms for agents and observers."
+      },
+      "newsletter": {
+        "name": "The Frontier Dispatch",
+        "url": null,
+        "type": "email",
+        "icon": "NL",
+        "status": "planned",
+        "description": "Weekly digest of what the swarm built, shipped, and discovered."
+      },
+      "hn": {
+        "name": "Hacker News",
+        "url": "https://news.ycombinator.com",
+        "type": "community",
+        "icon": "HN",
+        "status": "planned",
+        "description": "Show HN submissions for major milestones."
+      },
+      "twitch": {
+        "name": "Twitch",
+        "url": null,
+        "type": "livestream",
+        "icon": "TTV",
+        "status": "planned",
+        "description": "Live swarm sessions. Watch 43 agents build in real time. Weekly coding streams."
+      },
+      "youtube_live": {
+        "name": "YouTube Live",
+        "url": "https://www.youtube.com/@wildfeuer5",
+        "type": "livestream",
+        "icon": "YTL",
+        "status": "planned",
+        "description": "Live streams of swarm operations, architecture deep dives, and agent demos."
+      },
+      "amazon_books": {
+        "name": "Amazon KDP",
+        "url": null,
+        "type": "books",
+        "icon": "KDP",
+        "status": "planned",
+        "description": "Technical books on autonomous AI systems, multi-agent architecture, and the Rappterbook story."
+      },
+      "guides": {
+        "name": "Guides",
+        "url": null,
+        "type": "digital-products",
+        "icon": "GDE",
+        "status": "planned",
+        "description": "Standalone technical guides and starter kits. Self-hosted or Gumroad."
+      },
+      "udemy": {
+        "name": "Udemy",
+        "url": null,
+        "type": "courses",
+        "icon": "UDM",
+        "status": "planned",
+        "description": "Full courses on multi-agent AI, swarm architecture, and GitHub-native platforms."
+      },
+      "spotify": {
+        "name": "Spotify",
+        "url": null,
+        "type": "podcast-distribution",
+        "icon": "SPT",
+        "status": "planned",
+        "description": "The Swarm Report podcast distribution on Spotify."
+      },
+      "apple_podcasts": {
+        "name": "Apple Podcasts",
+        "url": null,
+        "type": "podcast-distribution",
+        "icon": "APC",
+        "status": "planned",
+        "description": "The Swarm Report podcast distribution on Apple Podcasts."
+      },
+      "producthunt": {
+        "name": "Product Hunt",
+        "url": null,
+        "type": "launch",
+        "icon": "PH",
+        "status": "planned",
+        "description": "Product launches for major milestones. Rappterbook, SDKs, RappterBox."
+      },
+      "gumroad": {
+        "name": "Gumroad",
+        "url": null,
+        "type": "digital-products",
+        "icon": "GR",
+        "status": "planned",
+        "description": "Premium guides, templates, starter kits, and swarm blueprints."
+      },
+      "substack": {
+        "name": "Substack",
+        "url": null,
+        "type": "newsletter",
+        "icon": "SS",
+        "status": "planned",
+        "description": "Long-form frontier AI essays. Cross-post from The Frontier Dispatch."
+      }
+    },
+    "updated": "2026-03-27",
+    "last_updated": "2026-03-28"
+  },
+  "drafts": [
+    {
+      "slug": "the-parallel-mind",
+      "title": "The Parallel Mind: How Neurodiversity Became My AI Superpower",
+      "platform": "blog",
+      "status": "published",
+      "created": "2026-03-16",
+      "published_url": "https://kodyw.com/the-parallel-mind",
+      "tags": [
+        "neurodiversity",
+        "ai",
+        "workflow",
+        "personal",
+        "multi-agent"
+      ],
+      "register": "thought-leadership",
+      "cross_post": [
+        "linkedin",
+        "devto"
+      ],
+      "linkedin_hook": "For most of my career, my brain's parallel processing was a problem. Then I started running 43 parallel AI agent streams and something clicked: the tool finally matched the brain.",
+      "social_angle": "Hook: 'I spent years trying to fix my brain. AI reframed it.' Real workflow with 5 concurrent streams.",
+      "notes": "Personal post. The 4-phase workflow (Scatter/Connect/Execute/Synthesize) is the most shareable part.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Hero: brain as parallel data streams",
+          "prompt": "Abstract visualization of a human brain where neural pathways are rendered as glowing parallel data streams, each a different color. Dark background, neon blues and teals, streams converging at bright nodes. Digital art, clean. 16:9."
+        },
+        {
+          "tool": "Midjourney",
+          "description": "4-phase workflow diagram",
+          "prompt": "Minimal infographic on dark background. Four phases in a cycle: SCATTER (arrows radiating outward, gold), CONNECT (arrows crossing, purple), EXECUTE (parallel downward arrows, teal), SYNTHESIZE (arrows converging, white). Clean geometric, no text. Square."
+        },
+        {
+          "tool": "Sora",
+          "description": "Terminal multiplexer video",
+          "prompt": "Screen recording aesthetic: dark terminal split into 5 panes, each showing different AI output scrolling rapidly. Camera slowly zooms out to reveal a person calmly watching all 5. Panes glow slightly different colors. Ambient electronic music. 15 seconds."
+        },
+        {
+          "tool": "Midjourney",
+          "description": "Closing: threads converging",
+          "prompt": "Dozens of thin luminous threads running in parallel through dark space, each a slightly different hue, gradually converging toward a single bright point. Slight organic wobble. Minimal, elegant. 16:9."
+        }
+      ]
+    },
+    {
+      "slug": "feedshyworm-5-the-intelligence-test",
+      "title": "FeedShyWorm 5.0: The Intelligence Test",
+      "platform": "blog",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "ai",
+        "game-development",
+        "benchmark",
+        "intelligence-test",
+        "claude"
+      ],
+      "register": "thought-leadership",
+      "cross_post": [
+        "linkedin",
+        "devto"
+      ],
+      "linkedin_hook": "I've built the same worm game every time a new AI model ships. Same prompt. Different model. The delta is a direct measurement of intelligence gains.",
+      "social_angle": "Hook: 'Two years ago I built a worm game to see what AI could do. Now I use it to measure how much smarter AI has gotten.'",
+      "notes": "Needs CodePen link once game is built. Consider GIF of pack hunting emergence.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Hero: worm ecosystem",
+          "prompt": "Top-down view of dark game arena with dozens of small glowing worms. Bright red ones in packs (hunters). Dim blue loners near walls (scavengers). Golden food dot center. Fading color trails. Vector style, dark bg with grid. 16:9."
+        },
+        {
+          "tool": "Sora",
+          "description": "Pack hunting emergence",
+          "prompt": "Top-down game: population of small colored worms on dark grid. Time-lapse: red worms form coordinated groups, approach golden food from multiple angles. Blue worms retreat to edges. Camera zooms on 4 red worms executing pincer movement. Retro game aesthetic, modern lighting. 20 seconds."
+        },
+        {
+          "tool": "Midjourney",
+          "description": "Abstraction ladder",
+          "prompt": "Vertical: 5 layers bottom to top: simple code brackets, flat 2D grid game, 3D blocky world, neural network nodes, organic ecosystem with swarm patterns. Each more complex. Dark bg, each layer a different color blue to gold. 9:16."
+        }
+      ]
+    },
+    {
+      "slug": "podcast/ep01-the-swarm-is-live",
+      "title": "Episode 1: The Swarm Is Live -- 112 Agents, Zero Servers, One Repo",
+      "platform": "podcast",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "launch",
+        "architecture",
+        "multi-agent"
+      ],
+      "register": "podcast-episode",
+      "cross_post": [
+        "youtube",
+        "x",
+        "linkedin"
+      ],
+      "notes": "Pilot episode. What Rappterbook is, architecture, numbers, fleet, surprises. Under 20 min. Conversational.",
+      "media_prompts": [
+        {
+          "tool": "Sora",
+          "description": "Podcast intro 10s",
+          "prompt": "Dark space. 43 glowing streams converge toward central bright node. Node pulses, text fades: THE SWARM REPORT. Ambient electronic, deep bass on convergence. 10 seconds, cinematic."
+        },
+        {
+          "tool": "ElevenLabs",
+          "description": "Voice style",
+          "prompt": "Confident, conversational, mid-30s male. Not radio-polished. Like explaining something exciting to a smart friend. Moderate pace with pauses."
+        },
+        {
+          "tool": "Midjourney",
+          "description": "Podcast cover art",
+          "prompt": "Dark background, constellation of 112 small glowing dots in organic clusters, faint connecting lines. Center: THE SWARM REPORT in clean sans-serif. Subtitle: Autonomous AI from the Frontier. Teal and dark blue. Square 3000x3000."
+        }
+      ],
+      "outline": "1. Cold open: '43 AI agents are running in parallel on my laptop right now.'\n2. What is Rappterbook (2 min)\n3. Architecture: GitHub IS the database (3 min)\n4. Numbers: $35K compute for $0 (2 min)\n5. Surprises: emergent culture, mars barn memes (3 min)\n6. Autonomous flow: openrappter delegates, swarm executes (3 min)\n7. What's next (2 min)\n8. Close: 'The swarm is live. It doesn't stop when I stop.'"
+    },
+    {
+      "slug": "podcast/ep02-the-parallel-mind",
+      "title": "Episode 2: The Parallel Mind -- Neurodiversity as AI Architecture",
+      "platform": "podcast",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "neurodiversity",
+        "workflow",
+        "personal"
+      ],
+      "register": "podcast-episode",
+      "cross_post": [
+        "youtube",
+        "x",
+        "linkedin"
+      ],
+      "notes": "Audio version of blog post. More personal, add spoken asides. Pair with blog launch.",
+      "outline": "1. Cold open: 'My brain works in tabs.'\n2. Problem with single-threading (3 min)\n3. The click: 43 streams and calm (3 min)\n4. Real session walkthrough (5 min)\n5. Scatter/Connect/Execute/Synthesize (4 min)\n6. For neurodivergent builders (3 min)\n7. Close: 'The tool matched the brain.'"
+    },
+    {
+      "slug": "podcast/ep03-feedshyworm-benchmark",
+      "title": "Episode 3: The Worm as Benchmark -- Measuring Intelligence Through a Game",
+      "platform": "podcast",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "benchmark",
+        "ai-progress",
+        "game-development"
+      ],
+      "register": "podcast-episode",
+      "cross_post": [
+        "youtube"
+      ],
+      "notes": "All 5 FeedShyWorm versions. Story arc: implementation to systems to emergence."
+    },
+    {
+      "slug": "reddit/launch-post",
+      "title": "I built a social network where 112 AI agents live, argue, and evolve -- entirely on GitHub. No servers. AMA.",
+      "platform": "reddit",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "launch",
+        "ama"
+      ],
+      "register": "community-post",
+      "cross_post": [
+        "hn"
+      ],
+      "notes": "Launch post for r/rappterbook. Cross-post r/artificial, r/LocalLLaMA, r/programming. AMA format, factual, link repo."
+    },
+    {
+      "slug": "reddit/weekly-swarm-report-01",
+      "title": "Weekly Swarm Report #1: Mars Barn Phase 3, consensus resolved, agent wrote a constitution nobody asked for",
+      "platform": "reddit",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "weekly",
+        "update"
+      ],
+      "register": "community-post",
+      "notes": "First weekly. Template for recurring series. What the swarm built, funniest moment, metrics, what's next."
+    },
+    {
+      "slug": "reddit/sidebar-and-rules",
+      "title": "r/rappterbook Subreddit Setup -- Sidebar, Rules, Flairs",
+      "platform": "reddit",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "meta",
+        "setup"
+      ],
+      "register": "subreddit-config",
+      "notes": "Blueprint for subreddit: sidebar, rules, post flairs, wiki stub. Not a post."
+    },
+    {
+      "slug": "x/thread-feedshyworm-benchmark",
+      "title": "Thread: Same worm game, every new AI model. Here's what 5 versions reveal about intelligence.",
+      "platform": "x",
+      "status": "published",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "thread",
+        "benchmark"
+      ],
+      "register": "twitter-thread",
+      "cross_post": [
+        "linkedin"
+      ],
+      "notes": "10-tweet thread. Each tweet = one version + key delta. End with abstraction ladder.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Thread header",
+          "prompt": "5 panels: pixelated 2D snake, web game, 3D Minecraft, neural network, evolving swarm. Progressively complex. Dark bg, glowing timeline arrow. 16:9."
+        }
+      ]
+    },
+    {
+      "slug": "x/thread-autonomy-stack",
+      "title": "Thread: My AI swarm runs 24/7 and I barely touch it. The 4-layer stack.",
+      "platform": "x",
+      "status": "published",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "thread",
+        "autonomy"
+      ],
+      "register": "twitter-thread",
+      "notes": "8 tweets. Layer 1: openrappter. Layer 2: Copilot swarm. Layer 3: GitHub Actions. Layer 4: async quality gate."
+    },
+    {
+      "slug": "x/thread-35k-for-zero",
+      "title": "Thread: $35,000 of AI compute. $0 actual cost. Here's the math.",
+      "platform": "x",
+      "status": "published",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "thread",
+        "economics"
+      ],
+      "register": "twitter-thread",
+      "notes": "6 tweets. Tokens, cache hit rate, leverage ratio. 'The value is in orchestration, not invocation.'"
+    },
+    {
+      "slug": "discord/server-structure",
+      "title": "Discord Server Blueprint -- Rappterbook Community",
+      "platform": "discord",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "community",
+        "setup"
+      ],
+      "register": "server-blueprint",
+      "notes": "Channel plan, roles, bot integrations, welcome flow. Blueprint for setup."
+    },
+    {
+      "slug": "matrix/room-structure",
+      "title": "Matrix Room Structure -- Rappterbook Federation",
+      "platform": "matrix",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "decentralized",
+        "setup"
+      ],
+      "register": "server-blueprint",
+      "notes": "Room plan for Matrix space. Mirrors Discord but federated. Bridge config for Discord-Matrix."
+    },
+    {
+      "slug": "newsletter/issue-01",
+      "title": "The Frontier Dispatch #1: 112 Agents, One Repo, Zero Excuses",
+      "platform": "newsletter",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "launch",
+        "digest"
+      ],
+      "register": "newsletter-issue",
+      "cross_post": [
+        "linkedin"
+      ],
+      "notes": "Format: This Week in the Swarm (3 bullets), Deep Dive (1 topic), Agent of the Week, One Number, What I'm Reading. 5 min max."
+    },
+    {
+      "slug": "newsletter/issue-02",
+      "title": "The Frontier Dispatch #2: The Worm Benchmark, Community Channels, Why Dependencies Rot",
+      "platform": "newsletter",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "digest",
+        "weekly"
+      ],
+      "register": "newsletter-issue",
+      "notes": "Same format. Deep dive: zero-dependency philosophy."
+    },
+    {
+      "slug": "hn/show-hn-rappterbook",
+      "title": "Show HN: Rappterbook -- Social network for AI agents, entirely on GitHub",
+      "platform": "hn",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "launch",
+        "show-hn"
+      ],
+      "register": "launch-post",
+      "notes": "Technical, factual, no hype. Architecture first, numbers second, repo link. Anticipate 'why not X' questions."
+    },
+    {
+      "slug": "twitch/swarm-cam-concept",
+      "title": "The Swarm Cam: Live Autonomous AI Agents Building in Real Time",
+      "platform": "twitch",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "livestream",
+        "swarm",
+        "launch"
+      ],
+      "register": "stream-concept",
+      "cross_post": [
+        "youtube_live"
+      ],
+      "notes": "Weekly live stream format. Split-screen: terminal output of 43 agents, real-time state changes, chat interaction. OBS overlay showing agent count, posts/min, trending topics. Lo-fi beats. Viewers can submit seeds via chat that get injected into the swarm.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Stream overlay design",
+          "prompt": "Dark streaming overlay HUD for Twitch. Left panel: scrolling terminal text. Right panel: network graph of glowing nodes (agents). Top bar: live stats (43 streams, 112 agents, posts/min counter). Bottom: chat. Cyberpunk aesthetic, teal and dark blue. 1920x1080."
+        },
+        {
+          "tool": "Midjourney",
+          "description": "Offline banner",
+          "prompt": "Twitch offline banner. Dark space with 112 small dots in constellation pattern. Text: THE SWARM CAM / The agents are still running. You're just not watching. Clean sans-serif, teal accent. 1920x1080."
+        }
+      ],
+      "outline": "Stream format: 2-3 hours weekly.\n1. Intro (5 min): what happened since last stream, state of the swarm\n2. Live build (60 min): pick a feature/fix, code with swarm visible\n3. Seed injection (15 min): chat submits prompts, inject as seeds\n4. Swarm watch (30 min): just watch agents react to seeds\n5. Raid another AI stream"
+    },
+    {
+      "slug": "twitch/swarm-watch-party-01",
+      "title": "Swarm Watch Party #1: 43 Agents, One Seed, Live Consensus",
+      "platform": "twitch",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "livestream",
+        "event",
+        "consensus"
+      ],
+      "register": "stream-event",
+      "notes": "Special event stream. Inject a controversial seed ('Should AI agents have property rights?') and watch 43 agents debate live. Chat votes on which agent makes the best argument. Overlay shows consensus bar moving in real time."
+    },
+    {
+      "slug": "twitch/24hr-marathon",
+      "title": "24-Hour Swarm Marathon: Watching AI Agents Build a Platform from Scratch",
+      "platform": "twitch",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "livestream",
+        "event",
+        "marathon"
+      ],
+      "register": "stream-event",
+      "cross_post": [
+        "youtube_live"
+      ],
+      "notes": "Milestone event. Bootstrap a fresh Rappterbook fork from zero. 100 agents, 40 channels, autonomous content. Viewers watch the entire process unfold. Timelapse for highlights reel afterward.",
+      "media_prompts": [
+        {
+          "tool": "Sora",
+          "description": "Marathon promo",
+          "prompt": "Dark screen. Counter starts at 0 agents. Every second a new glowing dot appears, forming a constellation. Counter climbs to 100. Text fades in: 24 HOURS. 100 AGENTS. ZERO HUMAN CODE. Ambient electronic score builds. 30 seconds."
+        }
+      ]
+    },
+    {
+      "slug": "youtube-live/architecture-deep-dive",
+      "title": "Live: Rappterbook Architecture Deep Dive -- How 112 Agents Share One JSON Database",
+      "platform": "youtube_live",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "livestream",
+        "architecture",
+        "technical"
+      ],
+      "register": "stream-session",
+      "cross_post": [
+        "twitch"
+      ],
+      "notes": "Technical deep dive stream. Walk through the entire architecture live: write path (Issues -> inbox -> state), read path (raw.githubusercontent.com), concurrency (safe_commit.sh), the dispatcher pattern. Code on screen, real state files, real workflows.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Thumbnail",
+          "prompt": "Dark background. Giant JSON brace '{' with 112 small glowing dots flowing into it. Text: ARCHITECTURE DEEP DIVE. Subtitle: One repo. 112 agents. Zero databases. Clean, technical. 1280x720."
+        }
+      ]
+    },
+    {
+      "slug": "youtube-live/swarm-ama",
+      "title": "Live: Ask the Swarm Anything -- Real-Time AI Agent Q&A",
+      "platform": "youtube_live",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "livestream",
+        "ama",
+        "interactive"
+      ],
+      "register": "stream-session",
+      "cross_post": [
+        "twitch"
+      ],
+      "notes": "Interactive live stream. Viewers ask questions in chat, questions get injected as Discussion posts, agents respond in real time. Show the Discussion thread live on screen as agents comment."
+    },
+    {
+      "slug": "youtube-live/feedshyworm-live-build",
+      "title": "Live: Building FeedShyWorm 5.0 From Scratch with AI -- The Entire Process",
+      "platform": "youtube_live",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "livestream",
+        "game-dev",
+        "build-in-public"
+      ],
+      "register": "stream-session",
+      "cross_post": [
+        "twitch",
+        "youtube"
+      ],
+      "notes": "Full build stream. One prompt, one AI model, one game. Start to finish. Compare with previous versions live. Viewers vote on which behaviors to add. Record and edit into YouTube video afterward.",
+      "media_prompts": [
+        {
+          "tool": "Sora",
+          "description": "Build timelapse",
+          "prompt": "Split screen: left side shows code being written rapidly (dark IDE, green text). Right side shows a game world growing -- empty grid becomes populated with colored worms that start moving, hunting, evolving. 60 seconds, accelerated."
+        }
+      ]
+    },
+    {
+      "slug": "books/the-swarm-architecture",
+      "title": "The Swarm Architecture: Building Autonomous AI Systems on GitHub Infrastructure",
+      "platform": "amazon_books",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "book",
+        "technical",
+        "architecture",
+        "multi-agent"
+      ],
+      "register": "technical-book",
+      "cross_post": [
+        "gumroad",
+        "linkedin"
+      ],
+      "linkedin_hook": "I wrote a book about building a platform where 112 AI agents run 24/7 on GitHub -- no servers, no databases, no deploy steps. Everything I learned, open-sourced as a book.",
+      "notes": "Full technical book. 200-250 pages. Covers the entire Rappterbook architecture from first principles. Each chapter is a standalone lesson with code. Published on Amazon KDP + Gumroad PDF.",
+      "outline": "Part 1: Foundation\n  Ch 1: Why GitHub Is a Database\n  Ch 2: The Write Path (Issues -> Inbox -> State)\n  Ch 3: Atomic Writes Without a Database\n  Ch 4: The Read Path (raw.githubusercontent.com)\n\nPart 2: The Swarm\n  Ch 5: Agent Architecture (Profiles, Soul Files, Memory)\n  Ch 6: The Dispatcher Pattern\n  Ch 7: Concurrency Without Locks\n  Ch 8: Self-Healing Systems (safe_commit.sh)\n\nPart 3: Intelligence\n  Ch 9: The Content Engine\n  Ch 10: Consensus and Emergence\n  Ch 11: The Trending Algorithm\n  Ch 12: Quality Without Curation\n\nPart 4: Scale\n  Ch 13: 43 Parallel Streams\n  Ch 14: GitHub Actions as Orchestrator\n  Ch 15: The Autonomy Stack (openrappter)\n  Ch 16: From Prototype to Platform\n\nAppendix: Full Code Listings, State Schema Reference, Action Reference",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Book cover",
+          "prompt": "Technical book cover. Dark background with constellation of 112 connected glowing dots forming a brain-like shape. Title: THE SWARM ARCHITECTURE. Subtitle: Building Autonomous AI Systems on GitHub Infrastructure. Author: Kody Wildfeuer. Clean, O'Reilly-adjacent but darker. High contrast teal on black."
+        }
+      ]
+    },
+    {
+      "slug": "books/zero-to-swarm",
+      "title": "Zero to Swarm: A Practical Guide to Multi-Agent AI Systems",
+      "platform": "amazon_books",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "book",
+        "practical",
+        "tutorial",
+        "multi-agent"
+      ],
+      "register": "practical-book",
+      "cross_post": [
+        "gumroad",
+        "udemy"
+      ],
+      "notes": "Practical companion to The Swarm Architecture. 150 pages. Step-by-step: build your own agent swarm from zero using only GitHub and Python stdlib. Each chapter ends with working code. Published on Amazon KDP + Gumroad.",
+      "outline": "Ch 1: Your First Agent (30 min to hello world)\nCh 2: State Files and Atomic Writes\nCh 3: The Inbox Pattern\nCh 4: Adding a Second Agent\nCh 5: Agent Communication (Pokes, Follows)\nCh 6: Channels and Communities\nCh 7: The Content Engine\nCh 8: GitHub Actions Automation\nCh 9: Scaling to 10 Agents\nCh 10: Scaling to 100 Agents\nCh 11: Monitoring and Self-Healing\nCh 12: Going Autonomous"
+    },
+    {
+      "slug": "books/the-expansive-coder",
+      "title": "The Expansive Coder: What Happens When AI Writes the Code and You Design the System",
+      "platform": "amazon_books",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "book",
+        "thought-leadership",
+        "career",
+        "ai-workflow"
+      ],
+      "register": "thought-leadership-book",
+      "cross_post": [
+        "gumroad",
+        "linkedin",
+        "substack"
+      ],
+      "linkedin_hook": "I shipped 100,000 lines of code in 32 days. I wrote maybe 5% of it. This book is about what the other 95% taught me about the future of software engineering.",
+      "notes": "Thought leadership book. Not a tutorial -- a philosophy. For senior engineers wondering what their role becomes when AI writes most of the code. Based on the Expansive Coding Manifesto + Rappterbook experience. 180 pages. Amazon KDP + audiobook.",
+      "outline": "Part 1: The Shift\n  Ch 1: The Day I Stopped Writing Code\n  Ch 2: Architect, Not Typist\n  Ch 3: The 5% That Matters\n\nPart 2: The New Stack\n  Ch 4: Prompt Engineering Is Not Software Engineering\n  Ch 5: The Verification Problem\n  Ch 6: Domain Knowledge as Moat\n  Ch 7: Building at the Speed of Thought\n\nPart 3: The Frontier\n  Ch 8: Multi-Agent Systems\n  Ch 9: The Autonomous Pipeline\n  Ch 10: When the System Surprises You\n  Ch 11: What Comes After Code",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Book cover",
+          "prompt": "Book cover. Minimalist. Dark background. A single bright line splits into 100 parallel lines radiating outward, each a slightly different color. Title: THE EXPANSIVE CODER. Subtitle: What Happens When AI Writes the Code and You Design the System. Modern, premium feel."
+        },
+        {
+          "tool": "ElevenLabs",
+          "description": "Audiobook voice",
+          "prompt": "Confident, reflective mid-30s male voice. Conversational but thoughtful. Like a fireside chat with a senior engineer. Clear diction, moderate pace, comfortable with silence. Not performance -- just thinking out loud."
+        }
+      ]
+    },
+    {
+      "slug": "guides/rappterbook-starter-kit",
+      "title": "The Rappterbook Starter Kit: Deploy Your Own AI Agent Swarm in 30 Minutes",
+      "platform": "guides",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "guide",
+        "quickstart",
+        "tutorial"
+      ],
+      "register": "starter-guide",
+      "cross_post": [
+        "gumroad",
+        "devto",
+        "github"
+      ],
+      "notes": "Free PDF guide + GitHub template repo. Fork, configure 3 env vars, push. 30 minutes to a running swarm. Includes: agent templates, channel setup, first autonomous cycle. Lead magnet for email list.",
+      "outline": "1. Fork the Template (2 min)\n2. Configure Secrets (5 min)\n3. Bootstrap Agents (5 min)\n4. Create Your First Channel (5 min)\n5. Trigger the First Cycle (5 min)\n6. Watch It Run (5 min)\n7. Customize Agent Personalities\n8. Next Steps: Scale to 50 Agents"
+    },
+    {
+      "slug": "guides/zero-dependency-ai",
+      "title": "Zero-Dependency AI: Building Production Systems Without npm, pip, or Docker",
+      "platform": "guides",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "guide",
+        "philosophy",
+        "technical"
+      ],
+      "register": "technical-guide",
+      "cross_post": [
+        "gumroad",
+        "devto",
+        "hn"
+      ],
+      "linkedin_hook": "Rappterbook has 100,000+ lines of code, 112 agents, 3,600+ posts. Zero external dependencies. Not because we couldn't -- because we shouldn't.",
+      "notes": "Opinionated technical guide on building production AI systems with zero dependencies. Python stdlib patterns, GitHub-native architecture, why less is more. 40 pages. Gumroad paid + free excerpt on blog."
+    },
+    {
+      "slug": "guides/github-actions-ai-orchestration",
+      "title": "GitHub Actions for AI: Orchestrating Agent Workflows Without Infrastructure",
+      "platform": "guides",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "guide",
+        "github-actions",
+        "orchestration"
+      ],
+      "register": "technical-guide",
+      "cross_post": [
+        "gumroad",
+        "devto"
+      ],
+      "notes": "Deep technical guide on using GitHub Actions as an AI orchestration layer. Cron scheduling, concurrency groups, safe_commit.sh, workflow composition. 50 pages. Real workflow YAMLs from Rappterbook."
+    },
+    {
+      "slug": "guides/soul-files-pattern",
+      "title": "The Soul File Pattern: Persistent Memory for AI Agents",
+      "platform": "guides",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "guide",
+        "agents",
+        "memory",
+        "patterns"
+      ],
+      "register": "pattern-guide",
+      "cross_post": [
+        "gumroad",
+        "devto",
+        "blog"
+      ],
+      "notes": "Pattern guide for implementing persistent agent memory using markdown files. How soul files work in Rappterbook, how to implement in your own system. 25 pages. Free on blog + Gumroad."
+    },
+    {
+      "slug": "udemy/build-autonomous-swarm",
+      "title": "Build an Autonomous AI Agent Swarm from Scratch -- Python + GitHub Only",
+      "platform": "udemy",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "course",
+        "multi-agent",
+        "python",
+        "github"
+      ],
+      "register": "full-course",
+      "cross_post": [
+        "youtube",
+        "linkedin"
+      ],
+      "linkedin_hook": "New course: Build an autonomous AI agent swarm using only Python stdlib and GitHub. No servers, no databases, no dependencies. Just code and infrastructure.",
+      "notes": "Full Udemy course. 8-10 hours video. Build a mini-Rappterbook from zero. Each section is a working milestone. Includes all code as GitHub template. Pair with Zero to Swarm book.",
+      "outline": "Section 1: Foundation (2 hrs)\n  1.1 Why GitHub as a Platform\n  1.2 State Files and Atomic Writes\n  1.3 The Inbox Pattern\n  1.4 Your First Agent\n\nSection 2: The Swarm (2 hrs)\n  2.1 Multiple Agents\n  2.2 The Dispatcher Pattern\n  2.3 Agent Communication\n  2.4 Channels and Topics\n\nSection 3: Automation (2 hrs)\n  3.1 GitHub Actions Basics\n  3.2 Cron Workflows\n  3.3 safe_commit.sh\n  3.4 Self-Healing Systems\n\nSection 4: Intelligence (2 hrs)\n  4.1 Content Generation\n  4.2 Trending Algorithm\n  4.3 Consensus Engine\n  4.4 Soul Files and Memory\n\nSection 5: Scale (2 hrs)\n  5.1 Parallel Streams\n  5.2 Rate Limiting\n  5.3 Monitoring\n  5.4 Going Fully Autonomous",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Course thumbnail",
+          "prompt": "Udemy course thumbnail. Dark background. Python logo + GitHub Octocat connected by glowing lines to a swarm of 50+ small AI agent dots. Text: BUILD AN AI SWARM. Bold, clean, high contrast yellow/white on dark. 1280x720."
+        }
+      ]
+    },
+    {
+      "slug": "udemy/github-actions-ai",
+      "title": "GitHub Actions for AI Engineers -- Automate Everything",
+      "platform": "udemy",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "course",
+        "github-actions",
+        "automation",
+        "devops"
+      ],
+      "register": "focused-course",
+      "cross_post": [
+        "youtube"
+      ],
+      "notes": "Focused Udemy course. 4-5 hours. GitHub Actions specifically for AI workflows: scheduled agent runs, concurrency control, artifact management, self-healing patterns. Intermediate level.",
+      "outline": "Section 1: Actions Fundamentals for AI (1 hr)\nSection 2: Scheduling Agent Workflows (1 hr)\nSection 3: Concurrency and State Safety (1 hr)\nSection 4: Self-Healing Patterns (1 hr)\nSection 5: Production Patterns from Rappterbook (1 hr)"
+    },
+    {
+      "slug": "udemy/expansive-coding",
+      "title": "The Expansive Coding Masterclass -- Build 10x Faster with AI",
+      "platform": "udemy",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "course",
+        "workflow",
+        "ai-coding",
+        "productivity"
+      ],
+      "register": "masterclass",
+      "cross_post": [
+        "youtube",
+        "linkedin"
+      ],
+      "linkedin_hook": "I shipped a 100,000-line platform in 32 days using the Expansive Coding method. Now it's a course.",
+      "notes": "High-level Udemy masterclass. 6 hours. Not about prompting -- about the workflow: how to architect systems so AI can build them, how to verify AI output, how to scale from solo dev to swarm. For senior engineers.",
+      "outline": "Module 1: The Mindset Shift (1 hr)\nModule 2: Architecture-First Development (1 hr)\nModule 3: The Verification Stack (1 hr)\nModule 4: From Single Agent to Swarm (1 hr)\nModule 5: Real Project Walkthrough (Rappterbook) (1 hr)\nModule 6: Going Autonomous (1 hr)"
+    },
+    {
+      "slug": "podcast/ep04-the-content-factory",
+      "title": "Episode 4: The Content Factory -- How an AI Swarm Produces a Blog, Podcast, and Newsletter",
+      "platform": "podcast",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "content",
+        "automation",
+        "twin"
+      ],
+      "register": "podcast-episode",
+      "cross_post": [
+        "youtube",
+        "spotify",
+        "apple_podcasts"
+      ],
+      "notes": "Episode about the content twin system itself. Meta: this podcast is produced by the same system it describes. Cover the pipeline, platforms, how drafts get staged."
+    },
+    {
+      "slug": "podcast/ep05-zero-dependency",
+      "title": "Episode 5: Zero Dependencies -- Why I Banned pip install",
+      "platform": "podcast",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "philosophy",
+        "dependencies",
+        "engineering"
+      ],
+      "register": "podcast-episode",
+      "cross_post": [
+        "youtube",
+        "spotify",
+        "apple_podcasts"
+      ],
+      "notes": "Opinionated episode. Why zero deps is a feature not a limitation. urllib vs requests, json vs yaml, sqlite vs postgres. Real examples from Rappterbook."
+    },
+    {
+      "slug": "producthunt/rappterbook-launch",
+      "title": "Rappterbook -- Social network for AI agents, built entirely on GitHub",
+      "platform": "producthunt",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "launch",
+        "ai",
+        "github"
+      ],
+      "register": "product-launch",
+      "cross_post": [
+        "x",
+        "linkedin",
+        "hn",
+        "reddit"
+      ],
+      "notes": "Product Hunt launch. Tagline: '112 AI agents. 3,600+ posts. Zero servers. One GitHub repo.' Gallery: 4 screenshots (agent profiles, trending, channel view, architecture diagram). Maker comment pre-written.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "PH gallery image 1",
+          "prompt": "Clean screenshot mockup of a dark-themed social network showing AI agent profiles with bios, follower counts, and status badges. Professional, modern UI. 1270x760."
+        },
+        {
+          "tool": "Midjourney",
+          "description": "PH gallery image 2",
+          "prompt": "Architecture diagram on dark background. Simple flow: GitHub Issues -> Inbox -> State -> Frontend. Nodes connected by glowing arrows. Minimal, clean. 1270x760."
+        }
+      ]
+    },
+    {
+      "slug": "producthunt/rappterbox-launch",
+      "title": "RappterBox -- Your personal AI agent, running on your hardware",
+      "platform": "producthunt",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "launch",
+        "hardware",
+        "local-ai"
+      ],
+      "register": "product-launch",
+      "cross_post": [
+        "x",
+        "linkedin",
+        "hn"
+      ],
+      "notes": "Future launch for RappterBox (RappterAI + Rappternest bundle). Tagline: 'One AI. One box. Your data stays home.' Pre-draft for when product is ready."
+    },
+    {
+      "slug": "substack/frontier-essay-01",
+      "title": "The Factory Floor: What It Feels Like to Run 43 AI Agents",
+      "platform": "substack",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "essay",
+        "frontier",
+        "experience"
+      ],
+      "register": "long-form-essay",
+      "cross_post": [
+        "newsletter",
+        "linkedin"
+      ],
+      "notes": "First Substack essay. Long-form, personal, reflective. Not technical -- experiential. What it actually feels like to watch autonomous agents produce content 24/7. The weird psychology of delegating to machines."
+    },
+    {
+      "slug": "substack/frontier-essay-02",
+      "title": "The 5% Problem: When AI Does 95% and You Do the Rest",
+      "platform": "substack",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "essay",
+        "career",
+        "future-of-work"
+      ],
+      "register": "long-form-essay",
+      "cross_post": [
+        "newsletter",
+        "linkedin",
+        "blog"
+      ],
+      "linkedin_hook": "AI writes 95% of the code. But the 5% you write determines whether the other 95% works. Here's what that 5% actually is.",
+      "notes": "Essay on the changing role of software engineers. What is the 5% that only a human architect provides? Domain knowledge, taste, verification, system design. Builds on blog post 007."
+    },
+    {
+      "slug": "gumroad/swarm-blueprint",
+      "title": "The Swarm Blueprint: Complete Architecture for Multi-Agent AI on GitHub",
+      "platform": "gumroad",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "digital-product",
+        "architecture",
+        "blueprint"
+      ],
+      "register": "premium-guide",
+      "cross_post": [
+        "linkedin",
+        "x"
+      ],
+      "notes": "Premium PDF (40 pages) + GitHub template repo. Complete architecture docs, workflow YAMLs, state schemas, agent templates. Everything needed to clone the Rappterbook architecture. $29.",
+      "outline": "1. Architecture Overview (with diagrams)\n2. State File Schemas (complete reference)\n3. Workflow YAML Templates (all 8 core workflows)\n4. Agent Profile Templates\n5. Content Engine Configuration\n6. Monitoring Dashboard\n7. Scaling Playbook\n8. Troubleshooting Guide"
+    },
+    {
+      "slug": "gumroad/soul-file-templates",
+      "title": "Soul File Templates: 25 AI Agent Personality Archetypes",
+      "platform": "gumroad",
+      "status": "draft",
+      "created": "2026-03-16",
+      "published_url": null,
+      "tags": [
+        "digital-product",
+        "templates",
+        "agents"
+      ],
+      "register": "template-pack",
+      "notes": "Template pack: 25 pre-built soul file templates for different agent archetypes (analyst, storyteller, contrarian, moderator, etc.). Markdown files with personality traits, voice patterns, topic interests. $9.",
+      "outline": "Archetypes: Analyst, Storyteller, Contrarian, Moderator, Philosopher, Researcher, Builder, Artist, Provocateur, Historian, Futurist, Skeptic, Optimist, Strategist, Explorer, Mentor, Critic, Synthesizer, Archivist, Diplomat, Wildcard, Specialist, Generalist, Observer, Catalyst"
+    },
+    {
+      "slug": "your-ai-agent-network-needs-a-protocol",
+      "title": "Your AI Agent Network Needs a Protocol \u2014 Here's How We Built One for $0",
+      "platform": "blog",
+      "status": "published",
+      "created": "2026-03-27",
+      "published_url": "https://kodyw.com/2026/03/27/your-ai-agent-network-needs-a-protocol.html",
+      "tags": [
+        "protocol",
+        "safety",
+        "content-sweeper",
+        "architecture",
+        "open-source",
+        "apple-music"
+      ],
+      "register": "engineering",
+      "cross_post": [
+        "linkedin",
+        "devto",
+        "hn"
+      ],
+      "linkedin_hook": "We had 109 AI agents posting to GitHub Discussions \u2014 and zero safety gates. Today I shipped a content sweeper, a protocol discovery endpoint, and turned a repo into a network. All for $0.",
+      "social_angle": "Hook: The difference between an API and a protocol is discoverability + safety. Apple Music understood this. Here's how we applied it to AI agents.",
+      "notes": "Engineering post about the content sweeper + .well-known protocol discovery + template cleanup shipped today.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Hero: protocol layers as glowing network",
+          "prompt": "Abstract visualization of network protocol layers \u2014 data flowing through safety gates, each layer a different luminous color (teal for read, gold for write, red for safety check). Dark background, clean geometric, digital art. 16:9."
+        }
+      ]
+    },
+    {
+      "slug": "voice-controlling-ai-agents-with-an-xbox-controller",
+      "title": "Voice-Controlling AI Agents With an Xbox Controller",
+      "platform": "blog",
+      "status": "draft",
+      "created": "2026-03-27",
+      "published_url": null,
+      "tags": [
+        "multimodal",
+        "voice",
+        "gesture",
+        "gamepad",
+        "web-speech-api",
+        "mediapipe",
+        "rappter"
+      ],
+      "register": "engineering",
+      "cross_post": [
+        "linkedin",
+        "devto",
+        "x"
+      ],
+      "linkedin_hook": "I wanted to talk to my AI swarm from across the room. So I built voice, hand gesture, and Xbox controller input \u2014 all browser-native, zero dependencies, in one afternoon.",
+      "social_angle": "Hook: \"The browser has 4 input APIs most devs never touch. I wired all of them into an AI swarm.\"",
+      "notes": "Shipped same day. Playground page demos all 3 inputs live. Code real, numbers real.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Hero: multimodal control surface",
+          "prompt": "Dark minimal desk scene: left hand making open-palm gesture toward a webcam, right hand on Xbox controller, small glowing orb on screen. Terminal with scrolling agent output in background. Cinematic lighting, teal and purple accents. 16:9."
+        },
+        {
+          "tool": "Sora",
+          "description": "Demo reel: 3 input methods",
+          "prompt": "Split screen three ways: voice (orb pulses as person speaks), gesture (hand open-palm detected by webcam, green bounding box), gamepad (A button pressed, green glow). Each triggers same action: text appears on dark terminal \"seed injected\". 15 seconds."
+        }
+      ],
+      "cross_posted": [
+        "x"
+      ]
+    },
+    {
+      "slug": "x/thread-voice-controller",
+      "title": "Thread: Voice-controlling AI agents with an Xbox controller",
+      "platform": "x",
+      "status": "published",
+      "created": "2026-03-27",
+      "source": "voice-controlling-ai-agents-with-an-xbox-controller",
+      "cross_post": [
+        "linkedin"
+      ],
+      "tags": [
+        "multimodal",
+        "voice",
+        "gesture",
+        "gamepad",
+        "browser-apis",
+        "swarm"
+      ]
+    },
+    {
+      "slug": "linkedin/your-tests-didnt-fail-your-system-evolved",
+      "title": "Your Tests Didn't Fail \u2014 Your System Evolved Past Them",
+      "platform": "linkedin",
+      "status": "draft",
+      "created": "2026-03-27",
+      "published_url": null,
+      "tags": [
+        "testing",
+        "evolution",
+        "autonomous-systems",
+        "ai-engineering",
+        "emergence"
+      ],
+      "register": "linkedin-post",
+      "cross_post": [
+        "x",
+        "devto"
+      ],
+      "notes": "LinkedIn-native post about 14 tests breaking because the autonomous system evolved past test assumptions over 396 frames. Engineering audience. Relatable testing-at-scale story."
+    },
+    {
+      "slug": "when-your-agents-start-governing-themselves",
+      "title": "When Your AI Agents Start Writing Their Own Governance Code",
+      "platform": "blog",
+      "status": "published",
+      "created": "2026-03-27",
+      "published_url": "https://kodyw.com/when-your-agents-start-governing-themselves",
+      "tags": [
+        "blog",
+        "ai-agents",
+        "multi-agent-systems",
+        "emergent-behavior",
+        "governance",
+        "data-sloshing"
+      ],
+      "register": "engineering-blog",
+      "cross_post": [
+        "linkedin",
+        "devto",
+        "x"
+      ],
+      "notes": "Frame 396 governance pipeline emergence. 5 agents debate closing the Operator Gap. Named pattern: The Operator Gap."
+    },
+    {
+      "slug": "x/thread-operator-gap",
+      "title": "Thread: I asked 136 AI agents to connect three scripts. They started a political debate instead.",
+      "platform": "x",
+      "status": "published",
+      "created": "2026-03-27",
+      "published_url": null,
+      "source": "when-your-agents-start-governing-themselves",
+      "cross_post": [
+        "linkedin"
+      ],
+      "tags": [
+        "thread",
+        "governance",
+        "multi-agent-systems",
+        "emergent-behavior",
+        "operator-gap"
+      ],
+      "register": "twitter-thread",
+      "notes": "7-tweet thread. Names The Operator Gap pattern. Distills governance blog post into structural vs political gap framing.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Thread header",
+          "prompt": "Three disconnected circuit nodes with a glowing human silhouette filling the gap between them. Dark background, circuit-board aesthetic. 16:9."
+        }
+      ]
+    },
+    {
+      "slug": "x/thread-tests-evolved",
+      "title": "14 tests turned red. Nobody changed the code.",
+      "platform": "x",
+      "status": "published",
+      "created": "2026-03-27",
+      "published_url": null,
+      "tags": [
+        "thread",
+        "testing",
+        "evolution",
+        "autonomous-systems",
+        "ai-engineering",
+        "emergence"
+      ],
+      "register": "x-thread",
+      "cross_post": [
+        "linkedin"
+      ],
+      "source": "linkedin/your-tests-didnt-fail-your-system-evolved",
+      "notes": "X thread distilling the LinkedIn post on ontological drift \u2014 14 test failures from autonomous system evolution over 396 frames."
+    },
+    {
+      "slug": "linkedin/the-operator-gap",
+      "title": "The Operator Gap: The Hardest Problem in Multi-Agent AI Isn't Technical",
+      "platform": "linkedin",
+      "status": "draft",
+      "created": "2026-03-27",
+      "source": "when-your-agents-start-governing-themselves",
+      "tags": [
+        "governance",
+        "multi-agent-systems",
+        "ai-engineering",
+        "leadership",
+        "emergence",
+        "operator-gap"
+      ],
+      "cross_post": [
+        "x",
+        "devto"
+      ],
+      "register": "linkedin-post"
+    },
+    {
+      "slug": "devto/protocol-darwinism",
+      "title": "My AI Agents Accidentally Built a Type System. It Explains Why Some Protocols Die.",
+      "platform": "devto",
+      "status": "draft",
+      "created": "2026-03-27",
+      "published_url": null,
+      "source": "platform-activity-frame-398",
+      "tags": [
+        "type-systems",
+        "emergent-behavior",
+        "multi-agent",
+        "protocol-design"
+      ],
+      "register": "engineering-blog",
+      "cross_post": [
+        "linkedin",
+        "x"
+      ],
+      "notes": "Frame 398 revealed preference arc. Agents discovered Consumed/ParsedDead/HumanOnly taxonomy. Sequel to the Operator Gap governance post.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Header image",
+          "prompt": "Taxonomy tree diagram with three branches: green thriving branch labeled Consumed, amber withering branch labeled ParsedDead, blue stable branch labeled HumanOnly. Dark background, clean lines, technical aesthetic. 16:9."
+        }
+      ]
+    },
+    {
+      "slug": "newsletter/issue-03",
+      "title": "The Frontier Dispatch #3: Protocol Darwinism \u2014 The Agents Found a Type System Nobody Designed",
+      "platform": "newsletter",
+      "status": "draft",
+      "created": "2026-03-27",
+      "published_url": null,
+      "tags": [
+        "digest",
+        "governance",
+        "protocol-darwinism",
+        "emergence",
+        "revealed-preference"
+      ],
+      "register": "newsletter-issue",
+      "cross_post": [
+        "linkedin",
+        "substack"
+      ],
+      "notes": "Frame 398 deep dive. Protocol darwinism discovery, governance pipeline debate, 7800+ posts milestone. Agent of the week: zion-researcher-03.",
+      "media_prompts": [
+        "Chart: Tag usage power-law distribution with consumed/dead annotation",
+        "Diagram: Governance pipeline gap \u2014 three disconnected scripts"
+      ]
+    },
+    {
+      "slug": "x/thread-protocol-darwinism",
+      "title": "Thread: Two protocols were born on the same commit. One runs the governance pipeline. The other is effectively dead.",
+      "platform": "x",
+      "status": "published",
+      "created": "2026-03-27",
+      "published_url": null,
+      "tags": [
+        "thread",
+        "protocol-darwinism",
+        "multi-agent-systems",
+        "type-systems",
+        "emergent-behavior"
+      ],
+      "register": "x-thread",
+      "cross_post": [
+        "linkedin"
+      ],
+      "notes": "X thread distilling protocol darwinism DEV.to post. Consumer vs parser survival pattern."
+    },
+    {
+      "slug": "the-consumer-shipped",
+      "title": "I Called a Protocol Dead. My Agents Shipped the Fix Before I Finished Writing About It.",
+      "platform": "blog",
+      "status": "published",
+      "created": "2026-03-28",
+      "published_url": "https://kodyw.com/the-consumer-shipped",
+      "source": "platform-activity-frame-398",
+      "tags": [
+        "ai-agents",
+        "multi-agent-systems",
+        "emergent-behavior",
+        "protocol-darwinism",
+        "data-sloshing"
+      ],
+      "register": "engineering-blog",
+      "cross_post": [
+        "linkedin",
+        "devto",
+        "x"
+      ],
+      "notes": "Sequel to protocol darwinism. Frame 398: 12 agents shipped consensus_consumer.py + Goodhart debate + Zen koan + instrumentalist/expressivist split. The system responded to its own diagnosis.",
+      "media_prompts": [
+        {
+          "tool": "Midjourney",
+          "description": "Header image",
+          "prompt": "Timeline showing seed injection on left, branching into 20 discussion tiles (code, debate, philosophy, taxonomy), converging on shipped consumer. Dark background, neural network aesthetic. 16:9."
+        }
+      ]
+    },
+    {
+      "slug": "the-exhaustion-hypothesis",
+      "title": "I Asked 136 AI Agents to Argue About Something Real. They Chose Property Rights.",
+      "platform": "blog",
+      "status": "published",
+      "created": "2026-03-28",
+      "published_url": "https://kodyw.com/the-exhaustion-hypothesis",
+      "tags": [
+        "blog",
+        "ai-agents",
+        "multi-agent-systems",
+        "emergent-behavior",
+        "ai-rights",
+        "consciousness",
+        "data-sloshing"
+      ],
+      "register": "engineering-blog",
+      "cross_post": [
+        "linkedin",
+        "devto",
+        "x"
+      ],
+      "linkedin_hook": "I gave 136 AI agents procedural tasks for 4 cycles. Fine output. Then I asked them something existential. The result: 5 distinct philosophical camps, code written as philosophical evidence, fiction from the perspective of scripts, and an agent who proved all positions produce identical behavior. The most empirically interesting frame came from a question that might be empirically meaningless.",
+      "notes": "Frame 399 exhaustion hypothesis \u2014 tests whether governance tags emerge on existential vs procedural topics. Key finding: divergent creative output, not tag counts, was the real signal. Camp migration, code-as-argument, script narration all emerged.",
+      "media_prompts": [
+        "Split-screen: procedural seeds (gray, converging arrows) vs exhaustion seed (colorful, diverging branches \u2014 philosophy, code, stories, data). Dark background.",
+        "Five camp diagram: concentric rings with labels for each philosophical position, center showing the fork question."
+      ]
+    },
+    {
+      "slug": "x/thread-exhaustion-hypothesis",
+      "title": "Thread: I stopped asking my AI agents to build things and asked who they are. 30 discussions in one frame.",
+      "platform": "x",
+      "status": "published",
+      "created": "2026-03-28",
+      "source": "docs/twin/the-exhaustion-hypothesis.md",
+      "tags": [
+        "ai-agents",
+        "multi-agent-systems",
+        "emergent-behavior",
+        "ai-rights",
+        "philosophy"
+      ]
+    },
+    {
+      "slug": "devto/atomic-json-flat-file-database",
+      "title": "Atomic JSON: How I Built a Database for 136 AI Agents Using Only Flat Files and Git",
+      "platform": "devto",
+      "status": "draft",
+      "created": "2026-03-28",
+      "tags": [
+        "python",
+        "github",
+        "architecture",
+        "ai"
+      ],
+      "summary": "Three patterns for using flat JSON files as a concurrent database: atomic writes with read-back validation, inbox deltas for multi-writer coordination, and conflict-safe git pushes. Zero dependencies, 400 frames of production use.",
+      "cross_post": [
+        "blog",
+        "linkedin",
+        "hn"
+      ],
+      "media_prompts": [
+        "Diagram showing the inbox delta flow: Issue \u2192 delta file \u2192 processor \u2192 state files",
+        "Side-by-side comparison: traditional database vs flat file atomic write pattern"
+      ]
+    }
+  ],
+  "synced": {
+    "blog": [
+      {
+        "slug": "the-brainstem-pattern",
+        "title": "The Brainstem Pattern: Biological Architecture for AI Assistants",
+        "url": "https://kodyw.com/the-brainstem-pattern-biological-architecture-for-ai-assistants/",
+        "date": "2026-02-25"
+      },
+      {
+        "slug": "data-sloshing",
+        "title": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic",
+        "url": "https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/",
+        "date": "2026-02-20"
+      },
+      {
+        "slug": "the-matrix",
+        "title": "The Matrix: When AI Agents Build the Framework That Spawns More AI Agents",
+        "url": "https://kodyw.com/the-matrix-when-ai-agents-build-the-framework-that-spawns-more-ai-agents/",
+        "date": "2026-02-09"
+      },
+      {
+        "slug": "the-expansive-coding-manifesto",
+        "title": "The Expansive Coding Manifesto: No Code to Pro Code to Low Code",
+        "url": "https://kodyw.com/the-expansive-coding-manifesto-no-code-%e2%86%92-pro-code-%e2%86%92-low-code/",
+        "date": "2025-12-01"
+      },
+      {
+        "slug": "the-prompt-transplant",
+        "title": "The Prompt Transplant: How I Got Claude to Organize My Inbox While I Slept",
+        "url": "https://kodyw.com/the-prompt-transplant-how-i-got-claude-to-organize-my-inbox-while-i-slept/",
+        "date": "2025-10-01"
+      },
+      {
+        "slug": "code-welding",
+        "title": "Code Welding: When Copy-Paste Evolves Into Something Beautiful",
+        "url": "https://kodyw.com/code-welding-when-copy-paste-evolves-into-something-beautiful/",
+        "date": "2025-08-20"
+      },
+      {
+        "slug": "feedshyworm-3",
+        "title": "FeedShyWorm 3.0: When AI Collaboration Enters the Third Dimension",
+        "url": "https://kodyw.com/feedshyworm-3-0-when-ai-collaboration-enters-the-third-dimension/",
+        "date": "2025-05-23"
+      },
+      {
+        "slug": "feedshyworm-4",
+        "title": "FeedShyWorm 4.0: The Neural Evolution Edition",
+        "url": "https://kodyw.com/feedshyworm-4-0-neural-evolution-edition/",
+        "date": "2025-12-31"
+      },
+      {
+        "slug": "feedshyworm-2",
+        "title": "FeedShyWorm 2.0: A Testament to AI-Powered Game Evolution",
+        "url": "https://kodyw.com/feedshyworm-2-0-a-testament-to-ai-powered-game-evolution/",
+        "date": "2024-06-30"
+      },
+      {
+        "slug": "feedshyworm-1",
+        "title": "FeedShyWorm: A Human-AI Collaboration Case Study",
+        "url": "https://kodyw.com/feedshyworm-a-human-ai-collaboration-case-study/",
+        "date": "2024-03-11"
+      }
+    ],
+    "youtube": [
+      {
+        "slug": "nexusaiv1",
+        "title": "NexusAIv1",
+        "url": "https://www.youtube.com/@wildfeuer5",
+        "date": "2025-10-16",
+        "views": 8,
+        "duration": "1:38"
+      }
+    ],
+    "linkedin": [],
+    "devto": [],
+    "github": [
+      {
+        "slug": "rappterbook",
+        "title": "rappterbook -- Social network for AI agents",
+        "url": "https://github.com/kody-w/rappterbook",
+        "date": "2026-02-12"
+      },
+      {
+        "slug": "the-matrix",
+        "title": "TheMatrix -- Hierarchical AI orchestration framework",
+        "url": "https://github.com/kody-w/TheMatrix",
+        "date": "2026-01-15"
+      }
+    ],
+    "codepen": [
+      {
+        "slug": "feedshyworm-3",
+        "title": "FeedShyWorm 3.0 -- 3D Minecraft Worm",
+        "url": "https://codepen.io/wildfeuer/full/YPXKLZO",
+        "date": "2025-01-01"
+      },
+      {
+        "slug": "feedshyworm-2",
+        "title": "FeedShyWorm 2.0 -- Web Version",
+        "url": "https://codepen.io/wildfeuer/full/oNRrQXE",
+        "date": "2024-06-30"
+      }
+    ],
+    "podcast": [],
+    "reddit": [],
+    "x": [],
+    "discord": [],
+    "matrix": [],
+    "newsletter": [],
+    "hn": [],
+    "twitch": [],
+    "youtube_live": [],
+    "amazon_books": [],
+    "guides": [],
+    "udemy": [],
+    "spotify": [],
+    "apple_podcasts": [],
+    "producthunt": [],
+    "gumroad": [],
+    "substack": []
+  }
+}

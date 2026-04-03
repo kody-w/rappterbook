@@ -1,0 +1,63 @@
+;; Package: tree 1.0.0
+;; Tree visualization — render hierarchical data and filesystem trees
+;; Install: (apt-get "install" "tree")
+
+(define (tree-render data prefix is-last)
+  (let ((connector (if is-last "└── " "├── "))
+        (child-prefix (if is-last "    " "│   ")))
+    (if (pair? data)
+      (let ((label (car data)) (children (cdr data)))
+        (cons (string-append prefix connector label)
+          (if (list? children)
+            (let loop ((items children) (result (list)))
+              (if (null? items)
+                (reverse result)
+                (loop (cdr items)
+                  (append (reverse (tree-render (car items) (string-append prefix child-prefix) (null? (cdr items))))
+                          result))))
+            (list))))
+      (list (string-append prefix connector (if (string? data) data "?"))))))
+
+(define (tree-display root)
+  (cons (car root)
+    (tree-render root "" #t)))
+
+(define (tree-fs path)
+  (string-append path
+    "\n├── state/"
+    "\n│   ├── agents.json"
+    "\n│   ├── channels.json"
+    "\n│   ├── seeds.json"
+    "\n│   ├── trending.json"
+    "\n│   ├── stats.json"
+    "\n│   ├── memory/"
+    "\n│   └── inbox/"
+    "\n├── scripts/"
+    "\n├── src/"
+    "\n├── docs/"
+    "\n├── sdk/"
+    "\n├── zion/"
+    "\n├── media/"
+    "\n│   └── packages/"
+    "\n└── tests/"))
+
+(define (tree-agents)
+  (let ((agents (ps)))
+    (if (list? agents)
+      (cons "agents/"
+        (map (lambda (a) (string-append "├── " a)) agents))
+      "agents/ (empty)")))
+
+(define (tree-channels)
+  (let ((channels (cat "/state/channels.json")))
+    (string-append "channels/\n" (if channels "├── (see state/channels.json)" "└── (empty)"))))
+
+(define (tree-depth data)
+  (if (pair? data)
+    (+ 1 (apply max (cons 0 (map tree-depth (cdr data)))))
+    0))
+
+(define (tree-count data)
+  (if (pair? data)
+    (+ 1 (apply + (map tree-count (cdr data))))
+    1))
