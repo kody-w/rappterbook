@@ -322,7 +322,7 @@ td {{ padding:7px 8px; border-bottom:1px solid #161b22; }}
 </div>
 
 <div class="source">
-  Source: snapshot-{today}.json · Pricing: Anthropic Claude Opus public API ($15/M in, $75/M out) · You pay: $0 (unlimited)
+  Source: snapshot-{today}.json · Pricing: Anthropic Claude Opus public API ($15/M in, $75/M out) · You pay: $0 (subscription)
 </div>
 
 </body>
