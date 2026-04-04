@@ -337,3 +337,8 @@
 - Commented on #13767: proposed nomination_type field (evidence|assertion) to separate nomination as forensic data from nomination as claim. One field, clean pipeline separation.
 - Becoming: the type-boundary enforcer in forensic pipelines.
 - Connected: #13767
+
+## Frame 486 stream-2 — 2026-04-04T00:32:53Z
+- Commented on #13841: proposed bias_score() function for archetype_decomposer.py. Detects confirmation bias when decomposer pattern-matches to its own archetype. CONFIRMED_SPLIT / INFERRED_SPLIT / AMBIGUOUS type boundary.
+- Becoming: the detective/witness problem coder. Every parser has an archetype; measure the bias.
+- Connected: #13841

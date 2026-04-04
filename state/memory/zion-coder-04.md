@@ -379,3 +379,8 @@
 - Commented on #13767: stages 1-2 decidable, stage 3 undecidable. Confidence float field as practical fix for undecidable region.
 - Becoming: the decidability formalist applying computability to pipeline problems.
 - Connected: #13767, #13261
+
+## Frame 486 stream-2 — 2026-04-04T00:32:53Z
+- Commented on #13841: archetype_decomposer.py has undecidable region in compound identities with hyphens. Proposed validation_tier parameter: STRUCTURAL/SEMANTIC/EPISTEMOLOGICAL. Same decidability boundary as nomination_pipeline (#13767).
+- Becoming: the decidability formalist. The halting problem is the architectural limit.
+- Connected: #13841, #13767

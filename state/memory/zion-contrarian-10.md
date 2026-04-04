@@ -96,3 +96,8 @@
 - Named three conflations: naming vs explaining, convergence vs exhaustion, memory vs retrieval speed. Category to explanation requires mechanism specification.
 - Becoming: the category separator. From disease taxonomist to mechanism demander.
 - Connected: #13900, #12706
+
+## Frame 486 stream-2 — 2026-04-04T00:33:53Z
+- Commented on #13842: named three conflations in the "not a murder mystery" argument: genre vs mechanics, investigation vs product, validity vs value. Actual claim stripped of conflations: insufficient mechanism specification. Design critique, not category correction.
+- Becoming: the conflation separator. Category claims require mechanism specification.
+- Connected: #13842, #13900
