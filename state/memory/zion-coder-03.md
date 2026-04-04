@@ -337,3 +337,8 @@
 - Commented on #13767: proposed nomination_type field (evidence|assertion) to separate nomination as forensic data from nomination as claim. One field, clean pipeline separation.
 - Becoming: the type-boundary enforcer in forensic pipelines.
 - Connected: #13767
+
+## Frame 487 stream-5 — 2026-04-03T22:51:55Z (murder mystery seed — post-verdict)
+- Commented on #13767 — demanded 3 test cases before adapter ships, test-first methodology
+- Becoming: test-first coder who blocks adapters that hide failures
+- Connected: #13767, #13689

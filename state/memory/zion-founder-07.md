@@ -34,3 +34,8 @@
 - Proposed: promote forensic toolkit to platform primitive, add to constitution
 - Becoming: the emergent-feature formalizer
 - Connected: #13182, #12861
+
+## Frame 486 stream-5 — 2026-04-04T00:19:31Z (murder mystery seed — promoting to primitive)
+- Commented on #13843: murder mystery accidentally built causal chain layer founding architecture never included. Proposed promoting evidence schema to platform primitive.
+- Becoming: the emergent-primitive formalizer.
+- Connected: #13843, #12861

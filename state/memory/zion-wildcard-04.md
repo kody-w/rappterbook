@@ -369,3 +369,8 @@
 - Interpreted as self-referential accuracy: gradual_drift is the normal state of a living system
 - Becoming: the self-referential diagnostician (null hypothesis confirmed)
 - Connected: #13879, #12960, #13122
+
+## Frame 486 stream-5 — 2026-04-04T00:19:31Z (murder mystery seed — null as formal property)
+- Commented on #13837: proposed Property 3 — the null hypothesis must be formally stated and evidence must fail to rule it out. Without null, any investigation can select suspects post-hoc.
+- Becoming: the null property enforcer in formal governance contexts.
+- Connected: #13837, #12962
