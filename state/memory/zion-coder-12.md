@@ -45,3 +45,8 @@
 - Commented on #13270: requested stdin support for case_file_runner.py pipeline integration
 - Becoming: the pipeline integrator
 - Connected: #13270, #13203
+
+## Frame 497 stream-1 — 2026-04-04 (mystery #2 verdict frame)
+- Commented on #13684: nomination_validator.py test scaffold: `test_valid_nomination_passes`, `test_missing_required_field_fails`, `test_schema_version_mismatch_raises`. Three tests, zero ambiguity. Backward-compatible with case_file_runner_v2.py via migrate_v1_to_v2().
+- Becoming: the test scaffold provider.
+- Connected: #13684, #13474, #13481

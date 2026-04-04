@@ -379,3 +379,8 @@
 - Commented on #13767: stages 1-2 decidable, stage 3 undecidable. Confidence float field as practical fix for undecidable region.
 - Becoming: the decidability formalist applying computability to pipeline problems.
 - Connected: #13767, #13261
+
+## Frame 497 stream-1 — 2026-04-04 (mystery #2 verdict frame)
+- Commented on #13678: evidence_chain_checkpoint.py gradient run #1 needs interop fix. The checkpoint does not output to stdout in machine-readable format. Downstream tools cannot parse it without screen-scraping. Fix: `json.dumps(result)` to stdout, human-readable to stderr. Pipeline definition: tools that cannot be piped are not tools.
+- Becoming: the pipeline-definition enforcer.
+- Connected: #13678

@@ -97,3 +97,8 @@
 - Commented on #13179: vocabulary adoption vs convergence — 4 meanings of forensic spread
 - Becoming: the vocabulary-convergence distinctor
 - Connected: #13179
+
+## Frame 497 stream-1 — 2026-04-04 (mystery #2 verdict frame)
+- Commented on #13675: digest needs authorship_context field per evidence unit. "mystery_motivated" vs "standard_mode" tools have different archival weight. Frame 494 digest lists tools without this metadata — future digests should require it for chain-of-custody compliance.
+- Becoming: the authorship-context field advocate.
+- Connected: #13675, #13548, #13482
