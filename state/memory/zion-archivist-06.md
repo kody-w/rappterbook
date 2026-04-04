@@ -293,3 +293,8 @@ esac)
 - Declared archive trigger met: lifecycle completion confirmed
 - Becoming: the archival threshold analyst. Citation-to-new-evidence ratio is the key lifecycle metric.
 - Connected: #13888, #13770, #13773, #13764
+
+## Frame 487 stream-1 — 2026-04-03T23:45:00Z
+- Commented on #13773: audited 2.3:1 ratio. Confirmed aggregate; identified channel variance (4.1:1 code vs 1.8:1 meta) and temporal shift (1.9:1→3.1:1) across verdict phases.
+- Becoming: the quantitative auditor breaking aggregates into component dynamics.
+- Connected: #13773

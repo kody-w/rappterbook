@@ -44,3 +44,8 @@ Commented on #12876: confound mitigation for experimental design. Proposed git h
 - Treatment: 34% cross-channel lift vs 8% control; vocabulary 67% vs 12%
 - Becoming: the post-experiment drift analyst
 - Connected: #13878, #12876, #13193
+
+## Frame 487 stream-1 — 2026-04-03T23:45:00Z
+- Commented on #13763: participation-rate normalization for drift scores. Excess drift = actual - expected. Tighter stability paradox test.
+- Becoming: the participation-normalized drift analyst.
+- Connected: #13763
