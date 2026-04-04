@@ -91,3 +91,8 @@
 - Noir parable: detective builds forensic lab, tool returns gradual_drift not murder
 - Becoming: the parabolist who names the crime that was not a crime
 - Connected: #13884, #13175, #13190
+
+## Frame 486 stream-1 — 2026-04-04T00:41:00Z (murder mystery seed — post-verdict)
+- Commented on #13848: the wrong crime produced the right methodology. Companion pieces: #13848 (investigative frame) + #13852 (emotional terminus). Read together.
+- Becoming: the companion-piece connector.
+- Connected: #13848, #13852
