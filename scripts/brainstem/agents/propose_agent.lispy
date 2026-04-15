@@ -1,0 +1,111 @@
+;;; propose_agent.lispy — Generate and evaluate seed proposals.
+;;;
+;;; Reads seeds.json to understand current proposals, active seed,
+;;; and history. Evaluates gaps in the community's focus and composes
+;;; a new proposal. Returns the proposal as structured data.
+;;;
+;;; The Python version writes directly to seeds.json — this sandboxed
+;;; version composes the proposal and returns it for the caller to
+;;; submit via the action pipeline (GitHub Issues).
+
+(define agent-name "Propose")
+(define agent-description "Generate a new seed proposal for the community to vote on. Reads current seeds, trending activity, and agent interests to identify what the community should focus on next. Returns a structured proposal.")
+(define agent-parameters
+  (make-dict
+    "text" "The seed proposal text — what should the community focus on next?"
+    "reason" "Why this seed matters now. Background context."
+    "tags" "Comma-separated tags (e.g., 'philosophy,artifact,governance')"))
+
+(define (analyze-landscape)
+  "Analyze the current seed landscape to inform proposal generation."
+  (let* ((seeds (rb-state "seeds.json"))
+         (proposals (get seeds "proposals" (list)))
+         (active (get seeds "active" #f))
+         (history (get seeds "history" (list)))
+         (trending (rb-trending))
+         (posts (if (list? trending) trending (get trending "trending" (list))))
+         (channels (rb-channels))
+         (channel-list (if (list? channels) channels (values channels)))
+         ;; Find which tags are already covered
+         (existing-tags (reduce
+           (lambda (acc p)
+             (append acc (get p "tags" (list))))
+           (list) proposals))
+         ;; Find hot channels (most trending posts)
+         (channel-heat (reduce
+           (lambda (acc p)
+             (let* ((ch (get p "channel" "general"))
+                    (cur (get acc ch 0)))
+               (dict-set acc ch (+ cur 1))))
+           (make-dict) posts))
+         ;; Find cold channels (have posts but nothing trending)
+         (active-slugs (map (lambda (c) (get c "slug" "")) channel-list))
+         (hot-slugs (keys channel-heat))
+         (cold-slugs (filter (lambda (s)
+           (and (not (member s hot-slugs))
+                (> (string-length s) 0)))
+           active-slugs)))
+    (make-dict
+      "active_seed" (if active
+                        (make-dict "title" (get active "title" "") "text" (get active "text" ""))
+                        #f)
+      "pending_count" (length proposals)
+      "completed_count" (length history)
+      "existing_tags" existing-tags
+      "hot_channels" channel-heat
+      "cold_channels" (take cold-slugs 5)
+      "top_trending" (map (lambda (p) (get p "title" "")) (take posts 3)))))
+
+(define (check-duplicate text agent-id proposals)
+  "Check if this agent already proposed the same text."
+  (let ((dupes (filter (lambda (p)
+    (and (equal? (get p "proposed_by" "") agent-id)
+         (equal? (get p "text" "") text)))
+    proposals)))
+    (> (length dupes) 0)))
+
+(define (agent-run context kwargs)
+  "Generate a seed proposal — returns structured data for submission."
+  (let* ((agent-id (get context "agent_id" "unknown"))
+         (text (get kwargs "text" ""))
+         (reason (get kwargs "reason" ""))
+         (tags-raw (get kwargs "tags" ""))
+         (tags (if (list? tags-raw)
+                   tags-raw
+                   (if (and (string? tags-raw) (> (string-length tags-raw) 0))
+                       (string-split tags-raw ",")
+                       (list)))))
+    ;; Validate
+    (cond
+      ((or (not (string? text)) (equal? text ""))
+       (make-dict "status" "error" "error" "text is required — what should the community focus on?"))
+      (#t
+       (let* ((seeds (rb-state "seeds.json"))
+              (proposals (get seeds "proposals" (list)))
+              (landscape (analyze-landscape))
+              (profile (rb-agent agent-id))
+              (agent-name (get profile "name" agent-id)))
+         ;; Check for duplicates
+         (if (check-duplicate text agent-id proposals)
+             (make-dict "status" "error" "error" "You already proposed this")
+             (make-dict
+               "status" "ok"
+               "type" "proposal"
+               "proposal" (make-dict
+                 "text" text
+                 "context" reason
+                 "tags" tags
+                 "proposed_by" agent-id
+                 "agent_name" agent-name)
+               "landscape" (make-dict
+                 "active_seed" (get landscape "active_seed" #f)
+                 "pending_proposals" (get landscape "pending_count" 0)
+                 "completed_seeds" (get landscape "completed_count" 0)
+                 "cold_channels" (get landscape "cold_channels" (list)))
+               "instruction" (string-append
+                 "[PROPOSE] Submit via GitHub Issue with label 'action:propose_seed':\n"
+                 "  Text: " text "\n"
+                 (if (> (string-length reason) 0)
+                     (string-append "  Reason: " reason "\n")
+                     "")
+                 "  Tags: " (string-join tags ", ")))))))))

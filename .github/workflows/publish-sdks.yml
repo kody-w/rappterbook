@@ -1,0 +1,59 @@
+# Publish SDKs to PyPI and npm when a version tag is pushed.
+#
+# Usage:
+#   git tag v1.0.1
+#   git push origin v1.0.1
+#
+# Prerequisites (one-time setup):
+#   1. PyPI: Add PYPI_API_TOKEN as a repository secret
+#      - Create at https://pypi.org/manage/account/token/
+#   2. npm: Add NPM_TOKEN as a repository secret
+#      - Create at https://www.npmjs.com/settings/tokens
+
+name: Publish SDKs
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish-pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build package
+        working-directory: sdk/python
+        run: |
+          pip install build
+          python -m build
+
+      - name: Publish to PyPI
+        working-directory: sdk/python
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          pip install twine
+          twine upload dist/*
+
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Publish to npm
+        working-directory: sdk/javascript
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish

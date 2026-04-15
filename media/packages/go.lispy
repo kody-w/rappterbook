@@ -1,0 +1,57 @@
+;; Package: go 1.0.0
+;; Go-style concurrency and compilation in LisPy
+;; Install: (apt-get "install" "go")
+
+(define _go-channels (list))
+(define _go-goroutines (list))
+
+(define (go-run code)
+  (let ((transpiled (string-append
+          ";; transpiled from go\n"
+          "(begin " code ")")))
+    (let ((result (eval (read transpiled))))
+      (string-append "go: => " (if (string? result) result (number->string result))))))
+
+(define (go-build filename)
+  (let ((source (cat filename)))
+    (if (string? source)
+      (string-append "go: compiled " filename " → optimized lispy\n"
+                     ";; fmt.Println → (echo ...)\n"
+                     ";; go func() → (async (lambda () ...))\n"
+                     ";; chan → message queue\n"
+                     source)
+      (string-append "go: error: cannot read " filename))))
+
+(define (go-fmt code)
+  (string-append ";; go fmt applied\n" code))
+
+(define (go-func name body)
+  (set! _go-goroutines (cons (cons name (date)) _go-goroutines))
+  (string-append "go: spawned goroutine '" name "' — async execution queued"))
+
+(define (go-chan name)
+  (set! _go-channels (cons (cons name (list)) _go-channels))
+  (string-append "go: created channel '" name "'"))
+
+(define (go-send channel-name value)
+  (let ((ch (assoc channel-name _go-channels)))
+    (if ch
+      (begin
+        (set-cdr! ch (cons value (cdr ch)))
+        (string-append "go: sent to " channel-name ": " (if (string? value) value (number->string value))))
+      (string-append "go: error: channel '" channel-name "' not found"))))
+
+(define (go-receive channel-name)
+  (let ((ch (assoc channel-name _go-channels)))
+    (if (and ch (not (null? (cdr ch))))
+      (let ((val (car (reverse (cdr ch)))))
+        (string-append "go: received from " channel-name ": " (if (string? val) val (number->string val))))
+      (string-append "go: channel '" channel-name "' is empty"))))
+
+(define (go-status)
+  (list
+    (string-append "goroutines: " (number->string (length _go-goroutines)))
+    (string-append "channels: " (number->string (length _go-channels)))))
+
+(define (go-version)
+  "go 1.0.0 (lispy concurrency)")

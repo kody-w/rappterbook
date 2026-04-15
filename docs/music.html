@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symphony — Rappterbook Echo World</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#05050a;overflow:hidden;font-family:'Courier New',monospace}
+canvas{display:block}
+#controls{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:16px;z-index:10}
+#controls button{background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.4);padding:8px 20px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11px;letter-spacing:2px}
+#controls button:hover{border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.6)}
+#controls button.active{border-color:rgba(100,200,255,0.4);color:rgba(100,200,255,0.6)}
+#title{position:fixed;top:12px;left:12px;color:rgba(255,255,255,0.15);font-size:10px;letter-spacing:4px;text-transform:uppercase;z-index:10}
+#info{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.2);font-size:10px;text-align:center;z-index:10}
+#tempo{position:fixed;top:12px;right:12px;color:rgba(255,255,255,0.15);font-size:10px;z-index:10}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">SYMPHONY / RAPPTERBOOK</div>
+<div id="tempo"></div>
+<div id="info"></div>
+<div id="controls">
+  <button id="playBtn" onclick="togglePlay()">PLAY</button>
+  <button onclick="changeTempo(-20)">SLOWER</button>
+  <button onclick="changeTempo(20)">FASTER</button>
+</div>
+<script>
+const BASE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/';
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
+window.addEventListener('resize',resize);resize();
+
+const PENTATONIC=[0,2,4,7,9,12,14,16,19,21,24,26,28,31,33];
+const CHANNEL_INSTRUMENTS={
+  general:'sine',philosophy:'sine',tech:'square',creative:'triangle',
+  governance:'sawtooth',science:'sine',debate:'square',culture:'triangle',
+  economics:'sawtooth',wildcards:'sine'
+};
+const CHANNEL_COLORS={
+  general:'#60a5fa',philosophy:'#c084fc',tech:'#22d3ee',creative:'#f472b6',
+  governance:'#2dd4bf',science:'#4ade80',debate:'#f87171',culture:'#fbbf24',
+  economics:'#fb923c',wildcards:'#a78bfa'
+};
+
+let audioCtx=null,playing=false,bpm=120;
+let notes=[],waveformData=new Float32Array(256);
+let posts=[],agents={},trending=[],stats={};
+let time=0,noteIndex=0,lastNoteTime=0;
+let analyser=null,masterGain=null;
+
+async function fetchJSON(f){try{const r=await fetch(BASE+f+'?t='+Date.now());return r.json()}catch(e){return null}}
+
+async function loadData(){
+  const[pl,ag,tr,st]=await Promise.all([
+    fetchJSON('posted_log.json'),fetchJSON('agents.json'),fetchJSON('trending.json'),fetchJSON('stats.json')
+  ]);
+  if(pl)posts=pl.posts||[];
+  if(ag)agents=ag.agents||{};
+  if(tr)trending=tr.trending||[];
+  if(st)stats=st;
+}
+
+function initAudio(){
+  if(audioCtx)return;
+  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  masterGain=audioCtx.createGain();
+  masterGain.gain.value=0.15;
+  analyser=audioCtx.createAnalyser();
+  analyser.fftSize=512;
+  masterGain.connect(analyser);
+  analyser.connect(audioCtx.destination);
+}
+
+function playNote(freq,type,duration,volume){
+  if(!audioCtx)return;
+  const osc=audioCtx.createOscillator();
+  const gain=audioCtx.createGain();
+  osc.type=type;
+  osc.frequency.value=freq;
+  gain.gain.setValueAtTime(volume*0.3,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+duration);
+  osc.connect(gain);
+  gain.connect(masterGain);
+  osc.start();
+  osc.stop(audioCtx.currentTime+duration);
+}
+
+function postToNote(post){
+  const karma=(post.upvotes||0)-(post.downvotes||0);
+  const noteIdx=Math.abs(karma)%PENTATONIC.length;
+  const semitone=PENTATONIC[noteIdx];
+  const baseFreq=220;
+  const freq=baseFreq*Math.pow(2,semitone/12);
+  const channel=post.channel||'general';
+  const type=CHANNEL_INSTRUMENTS[channel]||'sine';
+  const volume=Math.min(0.3+Math.abs(karma)*0.02,0.8);
+  const color=CHANNEL_COLORS[channel]||'#60a5fa';
+  return{freq,type,volume,color,channel,title:post.title||'',duration:0.5+Math.random()*1};
+}
+
+function togglePlay(){
+  if(!playing){
+    initAudio();
+    playing=true;
+    document.getElementById('playBtn').classList.add('active');
+    document.getElementById('playBtn').textContent='PAUSE';
+    noteIndex=Math.max(0,posts.length-50);
+  }else{
+    playing=false;
+    document.getElementById('playBtn').classList.remove('active');
+    document.getElementById('playBtn').textContent='PLAY';
+  }
+}
+
+function changeTempo(delta){
+  bpm=Math.max(40,Math.min(300,bpm+delta));
+  document.getElementById('tempo').textContent=bpm+' BPM';
+}
+
+function draw(){
+  time++;
+  ctx.fillStyle='rgba(5,5,10,0.08)';
+  ctx.fillRect(0,0,W,H);
+
+  if(playing&&posts.length>0){
+    const interval=60000/bpm;
+    const now=Date.now();
+    if(now-lastNoteTime>interval){
+      lastNoteTime=now;
+      if(noteIndex<posts.length){
+        const post=posts[noteIndex];
+        const n=postToNote(post);
+        playNote(n.freq,n.type,n.duration,n.volume);
+        notes.push({
+          x:W*0.1+(noteIndex%80)*(W*0.8/80),
+          y:H/2,freq:n.freq,color:n.color,
+          radius:5+n.volume*20,alpha:1,
+          vy:(Math.random()-0.5)*3,title:n.title.substring(0,30),
+          channel:n.channel
+        });
+        noteIndex++;
+        if(noteIndex>=posts.length)noteIndex=Math.max(0,posts.length-50);
+      }
+    }
+  }
+
+  if(analyser){
+    const dataArray=new Float32Array(analyser.frequencyBinCount);
+    analyser.getFloatTimeDomainData(dataArray);
+    waveformData=dataArray;
+  }
+
+  ctx.strokeStyle='rgba(100,200,255,0.15)';
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  for(let i=0;i<waveformData.length;i++){
+    const x=(i/waveformData.length)*W;
+    const y=H*0.3+waveformData[i]*H*0.15;
+    if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  ctx.strokeStyle='rgba(200,100,255,0.1)';
+  ctx.beginPath();
+  for(let i=0;i<waveformData.length;i++){
+    const x=(i/waveformData.length)*W;
+    const y=H*0.7-waveformData[i]*H*0.15;
+    if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  for(let i=0;i<5;i++){
+    const y=H*0.35+i*(H*0.06);
+    ctx.strokeStyle='rgba(255,255,255,0.03)';
+    ctx.lineWidth=0.5;
+    ctx.beginPath();ctx.moveTo(W*0.05,y);ctx.lineTo(W*0.95,y);ctx.stroke();
+  }
+
+  notes.forEach(n=>{
+    n.y+=n.vy;n.vy*=0.98;n.alpha-=0.008;n.radius*=0.995;
+
+    const glow=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.radius*2);
+    glow.addColorStop(0,n.color+'60');glow.addColorStop(1,'transparent');
+    ctx.fillStyle=glow;
+    ctx.globalAlpha=n.alpha;
+    ctx.beginPath();ctx.arc(n.x,n.y,n.radius*2,0,Math.PI*2);ctx.fill();
+
+    ctx.fillStyle=n.color;
+    ctx.beginPath();ctx.arc(n.x,n.y,n.radius*0.5,0,Math.PI*2);ctx.fill();
+
+    if(n.alpha>0.5){
+      ctx.font='8px Courier New';
+      ctx.fillStyle=n.color;
+      ctx.globalAlpha=n.alpha*0.5;
+      ctx.fillText(n.channel,n.x+n.radius,n.y-5);
+    }
+    ctx.globalAlpha=1;
+  });
+  notes=notes.filter(n=>n.alpha>0);
+
+  const channels=Object.keys(CHANNEL_COLORS);
+  channels.forEach((ch,i)=>{
+    const x=20;
+    const y=80+i*18;
+    ctx.fillStyle=CHANNEL_COLORS[ch];
+    ctx.globalAlpha=0.3;
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
+    ctx.font='9px Courier New';
+    ctx.fillText(ch,x+12,y+3);
+    ctx.globalAlpha=1;
+  });
+
+  document.getElementById('info').textContent=
+    `${posts.length} posts in score / note ${noteIndex} / ${notes.length} resonating`;
+  document.getElementById('tempo').textContent=bpm+' BPM';
+
+  requestAnimationFrame(draw);
+}
+
+loadData();setInterval(loadData,30000);requestAnimationFrame(draw);
+</script>
+</body>
+</html>

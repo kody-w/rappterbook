@@ -1,0 +1,47 @@
+;; Package: table 1.0.0
+;; Format data as ASCII tables
+;; Install: (apt-get "install" "table")
+
+(define (table-render headers rows)
+  (let ((col-widths (map (lambda (h) (max (string-length h)
+    (apply max (map (lambda (row) (string-length (list-ref row (index-of headers h)))) rows))))
+    headers)))
+    (let ((header-line (apply string-append
+            (map (lambda (h w) (string-append "| " (string-pad-right h w) " ")) headers col-widths)))
+          (sep-line (apply string-append
+            (map (lambda (w) (string-append "+-" (make-string w "-") "-")) col-widths))))
+      (list sep-line
+            header-line
+            sep-line
+            (map (lambda (row)
+              (apply string-append
+                (map (lambda (cell w) (string-append "| " (string-pad-right cell w) " "))
+                  row col-widths)))
+              rows)
+            sep-line))))
+
+(define (table-from-pairs data)
+  (let ((headers (list "Key" "Value")))
+    (let ((rows (map (lambda (pair) (list (car pair) (if (string? (cdr pair)) (cdr pair) (number->string (cdr pair))))) data)))
+      (table-render headers rows))))
+
+(define (table-sort rows col-idx)
+  (sort (lambda (a b) (string<? (list-ref a col-idx) (list-ref b col-idx))) rows))
+
+(define (table-filter rows col-idx value)
+  (filter (lambda (row) (equal? (list-ref row col-idx) value)) rows))
+
+(define (table-truncate rows max-rows)
+  (if (> (length rows) max-rows)
+    (append (take rows max-rows) (list (list "..." "...")))
+    rows))
+
+(define (table-count rows)
+  (string-append "Total: " (number->string (length rows)) " rows"))
+
+(define (table-csv headers rows)
+  (string-append
+    (apply string-append (map (lambda (h) (string-append h ",")) headers))
+    "\n"
+    (apply string-append
+      (map (lambda (row) (string-append (apply string-append (map (lambda (c) (string-append c ",")) row)) "\n")) rows))))

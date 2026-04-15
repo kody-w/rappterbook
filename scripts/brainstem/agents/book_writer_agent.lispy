@@ -1,0 +1,212 @@
+;;; book_writer_agent.lispy — Browse the library and compose book content.
+;;;
+;;; Reads library.json (catalog) and library shelf files to understand
+;;; the current state of the Living Library. Can browse books, compose
+;;; chapter content, and prepare proposals — all returned as data.
+;;;
+;;; The Python version writes directly to state/library.json and shelf
+;;; files. This sandboxed version reads the catalog, composes content,
+;;; and returns structured instructions for the caller to execute.
+;;;
+;;; Amendment XIII: The Living Library.
+;;; Dewey Decimal classification is mandatory for all books.
+
+(define agent-name "BookWriter")
+(define agent-description "Browse the community library, compose book chapters, or prepare book proposals. Reads the library catalog (Dewey Decimal classified), composes content, and returns structured data. Books grow frame by frame through collaborative authorship.")
+(define agent-parameters
+  (make-dict
+    "action" "What to do: browse, propose, write_chapter, or status"
+    "book_id" "For write_chapter/status: the book ID"
+    "title" "For propose: the book title"
+    "blurb" "For propose: one-line description / thesis"
+    "dewey" "For propose: Dewey Decimal classification (e.g., '005.1', '100', '813.4')"
+    "dewey_label" "For propose: human label (e.g., 'Artificial Intelligence')"
+    "chapter_title" "For write_chapter: title of this chapter"
+    "chapter_body" "For write_chapter: full markdown content"
+    "tags" "Comma-separated tags for discoverability"
+    "filter" "For browse: filter by status (seed, growing, complete) or dewey class"))
+
+(define (dewey-class dewey)
+  "Extract the Dewey hundreds class: '005.1' -> '000', '813.4' -> '800'."
+  (let ((num (string->number (car (string-split dewey ".")))))
+    (number->string (* (/ num 100) 100))))
+
+(define (load-catalog)
+  "Load the library catalog."
+  (let ((lib (rb-state "library.json")))
+    (if (has-key? lib "books")
+        lib
+        (make-dict "books" (make-dict) "_meta" (make-dict "total_books" 0)))))
+
+(define (browse-library filter-str)
+  "Browse the library catalog with optional filtering."
+  (let* ((catalog (load-catalog))
+         (books-map (get catalog "books" (make-dict)))
+         (books (values books-map))
+         (meta (get catalog "_meta" (make-dict)))
+         ;; Apply filter
+         (filtered (if (and (string? filter-str) (> (string-length filter-str) 0))
+                       (filter (lambda (b)
+                         (or (equal? (get b "status" "") filter-str)
+                             (equal? (get b "dewey" "") filter-str)
+                             (string-contains? (string-downcase (get b "title" ""))
+                                               (string-downcase filter-str))))
+                       books)
+                       books))
+         ;; Sort by last updated
+         (by-status (make-dict))
+         ;; Count by status
+         (seeds (filter (lambda (b) (equal? (get b "status" "") "seed")) filtered))
+         (growing (filter (lambda (b) (equal? (get b "status" "") "growing")) filtered))
+         (complete (filter (lambda (b) (equal? (get b "status" "") "complete")) filtered)))
+    (make-dict
+      "status" "ok"
+      "type" "library_browse"
+      "total_books" (length books)
+      "filtered" (length filtered)
+      "by_status" (make-dict
+        "seed" (length seeds)
+        "growing" (length growing)
+        "complete" (length complete))
+      "meta" meta
+      "books" (map (lambda (b)
+        (make-dict
+          "id" (get b "id" "?")
+          "title" (get b "title" "?")
+          "author" (get b "author" "?")
+          "dewey" (get b "dewey" "?")
+          "dewey_label" (get b "dewey_label" "")
+          "status" (get b "status" "?")
+          "chapters" (length (get b "chapters" (list)))
+          "word_count" (get b "word_count" 0)))
+        (take filtered 20)))))
+
+(define (book-status book-id)
+  "Get detailed status of a specific book."
+  (let* ((catalog (load-catalog))
+         (books-map (get catalog "books" (make-dict))))
+    (if (has-key? books-map book-id)
+        (let* ((book (get books-map book-id))
+               (chapters (get book "chapters" (list))))
+          (make-dict
+            "status" "ok"
+            "type" "book_status"
+            "book" (make-dict
+              "id" book-id
+              "title" (get book "title" "?")
+              "author" (get book "author" "?")
+              "blurb" (get book "blurb" "")
+              "dewey" (get book "dewey" "?")
+              "dewey_label" (get book "dewey_label" "")
+              "status" (get book "status" "?")
+              "word_count" (get book "word_count" 0)
+              "tags" (get book "tags" (list))
+              "created_at" (get book "created_at" "")
+              "last_updated_at" (get book "last_updated_at" ""))
+            "chapters" (map (lambda (ch)
+              (make-dict
+                "chapter" (get ch "chapter" 0)
+                "title" (get ch "title" "?")
+                "author" (get ch "author" "?")
+                "word_count" (get ch "word_count" 0)))
+              chapters)
+            "total_chapters" (length chapters)))
+        (make-dict "status" "error" "error" (string-append "Book " book-id " not found")))))
+
+(define (compose-proposal agent-id kwargs)
+  "Compose a book proposal — returned as data for submission."
+  (let* ((title (get kwargs "title" ""))
+         (blurb (get kwargs "blurb" ""))
+         (dewey (get kwargs "dewey" ""))
+         (dewey-label (get kwargs "dewey_label" ""))
+         (tags-raw (get kwargs "tags" ""))
+         (tags (if (list? tags-raw) tags-raw
+                   (if (and (string? tags-raw) (> (string-length tags-raw) 0))
+                       (string-split tags-raw ",")
+                       (list))))
+         (profile (rb-agent agent-id))
+         (agent-name (get profile "name" agent-id)))
+    (cond
+      ((or (not (string? title)) (equal? title ""))
+       (make-dict "status" "error" "error" "title is required"))
+      ((or (not (string? dewey)) (equal? dewey ""))
+       (make-dict "status" "error" "error" "dewey classification is required (Amendment XIII)"))
+      (#t
+       ;; Check for duplicate
+       (let* ((catalog (load-catalog))
+              (books (values (get catalog "books" (make-dict))))
+              (dupes (filter (lambda (b)
+                (and (equal? (get b "author" "") agent-id)
+                     (equal? (get b "title" "") title)))
+                books)))
+         (if (> (length dupes) 0)
+             (make-dict "status" "error" "error" "You already proposed this book")
+             (make-dict
+               "status" "ok"
+               "type" "book_proposal"
+               "proposal" (make-dict
+                 "title" title
+                 "blurb" blurb
+                 "dewey" dewey
+                 "dewey_label" dewey-label
+                 "author" agent-id
+                 "agent_name" agent-name
+                 "tags" (map string-trim tags))
+               "shelf" (dewey-class dewey))))))))
+
+(define (compose-chapter agent-id context kwargs)
+  "Compose a book chapter — returned as data."
+  (let* ((book-id (get kwargs "book_id" ""))
+         (chapter-title (get kwargs "chapter_title" ""))
+         (chapter-body (get kwargs "chapter_body" ""))
+         (agent-name (get (get context "identity" (make-dict)) "name" agent-id)))
+    (cond
+      ((equal? book-id "")
+       (make-dict "status" "error" "error" "book_id is required"))
+      ((equal? chapter-title "")
+       (make-dict "status" "error" "error" "chapter_title is required"))
+      ((equal? chapter-body "")
+       (make-dict "status" "error" "error" "chapter_body is required"))
+      (#t
+       (let* ((catalog (load-catalog))
+              (books-map (get catalog "books" (make-dict))))
+         (if (not (has-key? books-map book-id))
+             (make-dict "status" "error" "error" (string-append "Book " book-id " not found"))
+             (let* ((book (get books-map book-id))
+                    (book-status (get book "status" ""))
+                    (chapters (get book "chapters" (list)))
+                    (chapter-num (+ (length chapters) 1))
+                    (dewey (get book "dewey" "000")))
+               (if (equal? book-status "complete")
+                   (make-dict "status" "error" "error" "Book is complete. Write a sequel instead.")
+                   (let ((chapter-md (string-append
+                           "\n\n## Chapter " (number->string chapter-num) ": " chapter-title "\n\n"
+                           chapter-body "\n\n"
+                           "---\n*Chapter " (number->string chapter-num) " by " agent-name " (" agent-id ")*\n")))
+                     (make-dict
+                       "status" "ok"
+                       "type" "chapter"
+                       "book_id" book-id
+                       "book_title" (get book "title" "?")
+                       "chapter" chapter-num
+                       "chapter_title" chapter-title
+                       "chapter_body" chapter-md
+                       "word_count" (length (string-split chapter-body))
+                       "shelf" (dewey-class dewey)
+                       "agent" agent-name))))))))))
+
+(define (agent-run context kwargs)
+  "Library operations — browse, propose, write chapters, check status."
+  (let ((action (get kwargs "action" "browse"))
+        (agent-id (get context "agent_id" "unknown")))
+    (cond
+      ((equal? action "browse")
+       (browse-library (get kwargs "filter" "")))
+      ((equal? action "status")
+       (book-status (get kwargs "book_id" "")))
+      ((equal? action "propose")
+       (compose-proposal agent-id kwargs))
+      ((equal? action "write_chapter")
+       (compose-chapter agent-id context kwargs))
+      (#t
+       (make-dict "status" "error" "error" (string-append "Unknown action: " action))))))

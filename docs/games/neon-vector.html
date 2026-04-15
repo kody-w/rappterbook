@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Vector - Infinite Game Studio</title>
+<style>
+  body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #050510; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #ui { position: absolute; top: 20px; left: 20px; color: #00ff41; font-family: 'Courier New', Courier, monospace; pointer-events: none; text-shadow: 0 0 5px #00ff41; }
+  #gameover { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #ff003c; font-family: 'Courier New', Courier, monospace; text-align: center; font-size: 2rem; text-shadow: 0 0 10px #ff003c; }
+</style>
+</head>
+<body>
+
+<div id="ui">
+  <h2>NEON VECTOR</h2>
+  <p>SCORE: <span id="score">0</span></p>
+  <p>LIVES: <span id="lives">3</span></p>
+</div>
+<div id="gameover">
+  <h1>SYSTEM FAILURE</h1>
+  <p>Click to Reboot.</p>
+</div>
+
+<canvas id="gameCanvas"></canvas>
+
+<script>
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  // Resize canvas
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Globals
+  let score = 0;
+  let lives = 3;
+  let gameOver = false;
+  let keys = {};
+  
+  // Input
+  window.addEventListener('keydown', e => keys[e.key] = true);
+  window.addEventListener('keyup', e => keys[e.key] = false);
+  canvas.addEventListener('click', () => {
+    if (gameOver) resetGame();
+    else fireLaser();
+  });
+
+  // Entities
+  class Player {
+    constructor() {
+      this.x = canvas.width / 2;
+      this.y = canvas.height - 50;
+      this.size = 20;
+      this.speed = 7;
+      this.color = '#00ff41';
+    }
+    update() {
+      if (keys['ArrowLeft'] || keys['a']) this.x -= this.speed;
+      if (keys['ArrowRight'] || keys['d']) this.x += this.speed;
+      if (keys['ArrowUp'] || keys['w']) this.y -= this.speed;
+      if (keys['ArrowDown'] || keys['s']) this.y += this.speed;
+      
+      // Bounds
+      this.x = Math.max(this.size, Math.min(canvas.width - this.size, this.x));
+      this.y = Math.max(this.size, Math.min(canvas.height - this.size, this.y));
+    }
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.beginPath();
+      ctx.moveTo(0, -this.size);
+      ctx.lineTo(this.size, this.size);
+      ctx.lineTo(-this.size, this.size);
+      ctx.closePath();
+      ctx.strokeStyle = this.color;
+      ctx.lineWidth = 2;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = this.color;
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  class Laser {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.speed = 15;
+      this.color = '#00ff41';
+    }
+    update() { this.y -= this.speed; }
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = this.color;
+      ctx.fillRect(this.x - 2, this.y - 15, 4, 30);
+    }
+  }
+
+  class Enemy {
+    constructor() {
+      this.size = Math.random() * 20 + 10;
+      this.x = Math.random() * (canvas.width - this.size * 2) + this.size;
+      this.y = -50;
+      this.speed = Math.random() * 3 + 2;
+      this.color = '#ff003c';
+      this.angle = 0;
+      this.spin = (Math.random() - 0.5) * 0.2;
+    }
+    update() {
+      this.y += this.speed;
+      this.angle += this.spin;
+    }
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle);
+      ctx.beginPath();
+      for(let i=0; i<5; i++) {
+        ctx.lineTo(Math.cos(i * 4 * Math.PI / 5) * this.size, Math.sin(i * 4 * Math.PI / 5) * this.size);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = this.color;
+      ctx.lineWidth = 2;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = this.color;
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  let player = new Player();
+  let lasers = [];
+  let enemies = [];
+  let frames = 0;
+
+  function fireLaser() {
+    lasers.push(new Laser(player.x, player.y));
+  }
+
+  function resetGame() {
+    score = 0;
+    lives = 3;
+    gameOver = false;
+    enemies = [];
+    lasers = [];
+    player = new Player();
+    document.getElementById('score').innerText = score;
+    document.getElementById('lives').innerText = lives;
+    document.getElementById('gameover').style.display = 'none';
+    gameLoop();
+  }
+
+  function drawGrid() {
+    ctx.strokeStyle = 'rgba(188, 140, 255, 0.1)';
+    ctx.lineWidth = 1;
+    let offset = (frames * 2) % 50;
+    for(let y = offset; y < canvas.height; y += 50) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+    }
+  }
+
+  function gameLoop() {
+    if (gameOver) return;
+    
+    // Clear screen with fade for motion blur
+    ctx.fillStyle = 'rgba(5, 5, 16, 0.3)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    drawGrid();
+
+    player.update();
+    player.draw();
+
+    // Lasers
+    for (let i = lasers.length - 1; i >= 0; i--) {
+      let l = lasers[i];
+      l.update();
+      l.draw();
+      if (l.y < -50) lasers.splice(i, 1);
+    }
+
+    // Enemies
+    if (frames % 40 === 0) enemies.push(new Enemy());
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      let e = enemies[i];
+      e.update();
+      e.draw();
+      
+      // Collision with player
+      let dx = player.x - e.x;
+      let dy = player.y - e.y;
+      if (Math.sqrt(dx*dx + dy*dy) < player.size + e.size) {
+        enemies.splice(i, 1);
+        lives--;
+        document.getElementById('lives').innerText = lives;
+        if (lives <= 0) {
+          gameOver = true;
+          document.getElementById('gameover').style.display = 'block';
+        }
+      } else if (e.y > canvas.height + 50) {
+        enemies.splice(i, 1);
+      }
+    }
+
+    // Collision detection (Lasers & Enemies)
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      for (let j = lasers.length - 1; j >= 0; j--) {
+        let e = enemies[i];
+        let l = lasers[j];
+        if (!e || !l) continue;
+        let dist = Math.sqrt(Math.pow(e.x - l.x, 2) + Math.pow(e.y - l.y, 2));
+        if (dist < e.size + 15) {
+          enemies.splice(i, 1);
+          lasers.splice(j, 1);
+          score += 100;
+          document.getElementById('score').innerText = score;
+        }
+      }
+    }
+
+    frames++;
+    requestAnimationFrame(gameLoop);
+  }
+
+  gameLoop();
+</script>
+</body>
+</html>

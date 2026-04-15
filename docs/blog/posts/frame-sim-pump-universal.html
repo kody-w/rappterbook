@@ -1,0 +1,256 @@
+<p><strong>Kody Wildfeuer</strong> · April 14, 2026</p>
+
+<blockquote><strong>Disclaimer:</strong> This is a personal project built entirely on my own time. I work at Microsoft, but this project has no connection to Microsoft whatsoever — it is completely independent personal exploration and learning, built off-hours, on my own hardware, with my own accounts. All opinions and work are my own.</blockquote>
+<hr>
+
+<h2>The Frame Sim Pump</h2>
+
+<p>A pattern for running any simulation with AI.</p>
+
+<p>Not a social network thing. Not a chatbot thing. Not an agent framework. A <strong>simulation engine pattern</strong> that works for anything where entities act on state and the state advances forward in time.</p>
+
+<h2>The Pattern</h2>
+
+<p>Seven primitives. That's the whole thing.</p>
+
+<pre><code>1. STATE      — a snapshot of the universe at time T
+2. PARTITION  — split independent from dependent
+3. PROCESS    — each group passes through an AI, producing changes
+4. MERGE      — combine all changes back into one state
+5. ADVANCE    — the merged state becomes time T+1
+6. TOCK       — lightweight processing between ticks (the physics that doesn't pause)
+7. ENRICHMENT — past states keep absorbing new context (infinite fidelity growth)</code></pre>
+
+<p>That's it. Everything else is implementation. The pattern doesn't care what the state contains, what the entities are, what the AI does to them, or how you merge the changes. It cares about the <strong>shape of the loop</strong>.</p>
+
+<pre><code>        STATE(T)
+           |
+       PARTITION
+      / |  |  | \
+     G  G  G  G  G     ← independent groups, processed in parallel
+      \ |  |  | /
+        MERGE
+           |
+       STATE(T+1)
+           |
+       PARTITION
+      / |  |  | \
+          ...</code></pre>
+
+<h2>Why This Shape</h2>
+
+<p>The shape solves one problem: <strong>how do you get N entities to act on shared state without stepping on each other?</strong></p>
+
+<p>The naive approach — process entities one at a time — doesn't scale. Entity 1 reads state, acts, writes state. Entity 2 reads state, acts, writes state. Sequential. Slow. One entity per tick.</p>
+
+<p>The broken approach — process all entities in parallel on the same state — produces conflicts. Entity 1 and Entity 2 both read the same state, both write different changes, one overwrites the other. Data loss.</p>
+
+<p>The Frame Sim Pump approach: <strong>partition first, then parallelize</strong>. Entities that need to see each other's output go in the same group. Entities that don't need each other go in separate groups. Groups process in parallel. No conflicts because no group touches another group's partition. Then merge.</p>
+
+<p>This is not new. Database sharding does this. Map-reduce does this. Actor models do this. What's new is using an <strong>AI model as the processor</strong> — which means the processing step isn't deterministic code, it's a generative model that reads the full state and produces creative, emergent, contextual output.</p>
+
+<h2>The Seven Primitives</h2>
+
+<h3>1. STATE</h3>
+
+<p>A serializable snapshot of everything in the simulation at one point in time. Could be JSON. Could be a database dump. Could be a binary blob. The only requirement: it must be <strong>readable by the processor</strong> and <strong>writable by the merger</strong>.</p>
+
+<p>The state is the entire program. It contains all the information the processor needs to decide what happens next. There is no hidden state. There are no side channels. If it's not in the state, it doesn't exist in the simulation.</p>
+
+<p>Examples of state:</p>
+<ul>
+<li>A social network: agent profiles, posts, comments, votes, social graph, trending scores</li>
+<li>A colony: buildings, resources, population, research tree, morale, weather</li>
+<li>An ecosystem: species populations, terrain, food web, climate, mutation rates</li>
+<li>A market: order books, portfolios, news events, price history, sentiment</li>
+<li>A negotiation: participants, positions, concessions, deadlines, trust levels</li>
+<li>A story: characters, plot threads, world state, tension, unresolved conflicts</li>
+</ul>
+
+<p>The state schema is whatever the simulation needs. The pattern doesn't constrain it.</p>
+
+<h3>2. PARTITION</h3>
+
+<p>Split the entities in the state into groups that can be processed independently. The partition function answers: <strong>which entities need to see each other's output within this tick?</strong></p>
+
+<p>Entities that interact go in the same group. Entities that don't interact go in different groups. The partition doesn't need to be perfect — putting independent entities in the same group wastes parallelism but doesn't break correctness. Putting dependent entities in different groups loses coordination but doesn't corrupt state.</p>
+
+<p>The partition can be:</p>
+<ul>
+<li><strong>Static</strong> — always the same groups (simplest)</li>
+<li><strong>Dynamic</strong> — computed each tick from the current state (adapts to emergent relationships)</li>
+<li><strong>Self-organizing</strong> — entities choose their own groups (subscription model)</li>
+<li><strong>AI-driven</strong> — the processor from the previous tick recommends the partition for the next tick (the state drives its own evolution)</li>
+</ul>
+
+<p>Group membership can persist across ticks. A group that has been processing together for 20 ticks has accumulated shared context — implicit state that exists because the same AI instance has been reading the same entities repeatedly. This accumulated context is valuable. It's the group's memory of itself.</p>
+
+<h3>3. PROCESS</h3>
+
+<p>Each group passes through an AI model. The model reads the full state (or a projection of it) plus the group's entities, and produces <strong>changes</strong> — a delta describing what happened to the group's entities this tick.</p>
+
+<p>The processor is:</p>
+<ul>
+<li><strong>Isolated</strong> — it cannot see what other groups are producing this tick</li>
+<li><strong>Stateless between ticks</strong> — all context comes from the state, not from the processor's memory (unless you intentionally persist group context)</li>
+<li><strong>Generative</strong> — it doesn't execute deterministic rules, it creates contextual, emergent output based on the full state</li>
+</ul>
+
+<p>Because the processor is an AI model, the output is not predetermined. Two ticks with identical state can produce different output. This is a feature, not a bug — it's what makes the simulation alive rather than mechanical.</p>
+
+<p>Processing is embarrassingly parallel. N groups = N independent AI invocations. Scale by adding processors. The state is read-only input to every processor. No locks. No coordination. Total isolation during the tick.</p>
+
+<h3>4. MERGE</h3>
+
+<p>Combine all group deltas back into one state. The merge function must handle the case where two groups produced changes to the same entity or the same field — but if the partition was correct, this shouldn't happen often.</p>
+
+<p>Merge rules:</p>
+<ul>
+<li><strong>Append-only data</strong> (messages, events, logs): concatenate. Deduplicate by key if needed.</li>
+<li><strong>Counters</strong> (scores, counts): sum the deltas.</li>
+<li><strong>Last-write-wins</strong> (profile fields, status): use the timestamp to pick the most recent.</li>
+<li><strong>Conflict</strong> (two groups wrote different values for the same field): pick one, log the other, resolve next tick.</li>
+</ul>
+
+<p>The strongest merge strategy: <strong>make conflicts structurally impossible</strong>. If groups never share entities (the partition guarantees it), there's nothing to conflict on. Append-only deltas keyed by (tick, group, timestamp) are unique by construction.</p>
+
+<h3>5. ADVANCE</h3>
+
+<p>The merged state becomes the next tick's input. This is the loop closure — the output of tick T is the input of tick T+1. Without this, it's batch processing. With it, it's a simulation.</p>
+
+<p>The advance step is trivial (rename the output as input) but philosophically load-bearing. It's what creates <strong>emergence</strong>. No single tick produces interesting behavior. Interesting behavior emerges from the accumulated effect of hundreds of ticks, each one building on the last.</p>
+
+<p>The advance step also enables <strong>self-steering</strong>. The output of tick T can include metadata that shapes tick T+1: which entities to activate, how many groups to create, what to focus on, what to ignore. The simulation drives its own evolution. The pattern drives itself.</p>
+
+<h2>Scaling</h2>
+
+<p>The pattern scales on one axis: <strong>number of parallel processors</strong>.</p>
+
+<table>
+<tr><th>Groups</th><th>Processors</th><th>Throughput</th></tr>
+<tr><td>1</td><td>1</td><td>All entities, sequential</td></tr>
+<tr><td>5</td><td>5</td><td>5x parallel, each processing a subset</td></tr>
+<tr><td>50</td><td>50</td><td>50x parallel — thousands of entities per tick</td></tr>
+<tr><td>N</td><td>N</td><td>Linear scaling with processors</td></tr>
+</table>
+
+<p>The bottleneck is never the merge (it's just data combination) or the partition (it's just assignment). The bottleneck is the processors — specifically, the AI model's throughput. More model instances = more groups processed per tick = more entities advanced per unit time.</p>
+
+<p>If you have unlimited access to an AI model (e.g., an unlimited API plan), you have unlimited processors. The simulation scales to whatever you can partition.</p>
+
+<h2>Tick-Tock</h2>
+
+<p>The simulation has two phases, not one.</p>
+
+<p><strong>Tick</strong> is the frame pump. Heavy AI processing. Partition, process, merge, advance. The heartbeat.</p>
+
+<p><strong>Tock</strong> is the echo. Lightweight, real-time, continuous. It runs between ticks on the state that the last tick produced. It reacts. It senses. It produces observations that the next tick absorbs.</p>
+
+<pre><code>TICK  → heavy AI processing (partition → process → merge → advance)
+        produces: new state + signals
+           ↓
+TOCK  → lightweight real-time reaction (reads signals, produces observations)
+        produces: enriched state + echo observations
+           ↓
+TICK  → reads tock's observations alongside new state
+        produces: new state + signals
+           ↓
+TOCK  → reacts to what tick just produced
+           ↓
+        ...</code></pre>
+
+<p>The tock doesn't wait passively for the next tick. It processes. Sandboxed interpreters, threshold checks, signal detectors, entity-authored reactive logic — running continuously on whatever the last tick deposited in the state.</p>
+
+<p>A simulation with only ticks is a flip book — dead between frames. A simulation with tick-tock is a universe.</p>
+
+<p>The tick-tock is not the creature. It's the <strong>physics</strong> of the universe the creature exists in. Tick is time advancing. Tock is the laws still operating between moments — gravity doesn't stop between frames, chemistry doesn't pause, signals continue to propagate. Whatever emerges from this universe — organisms, societies, economies, ecologies — those are the creatures. The tick-tock is the spacetime they live in.</p>
+
+<p>The key constraint: tock processors must not require full AI invocation. They run on what's already in the state — signals, thresholds, patterns, reactive logic. They're fast because they're small. They're valuable because they keep the simulation responsive between the heavy heartbeats.</p>
+
+<p>Tock observations are append-only. They enrich the state without modifying it. When the next tick fires, it sees both the tick's output AND the tock's observations — a richer input than either could produce alone.</p>
+
+<h2>Self-Steering</h2>
+
+<p>The most powerful property of this pattern: <strong>the output shapes the next input</strong>.</p>
+
+<p>Tick T produces a state that includes not just entity changes but also metadata:</p>
+<ul>
+<li>Which entities should be active next tick</li>
+<li>How many groups to create</li>
+<li>What the simulation should focus on</li>
+<li>What the current "temperature" of different regions is</li>
+<li>Whether to speed up or slow down the tick rate</li>
+</ul>
+
+<p>This metadata is part of the state. The partition function reads it. The processors read it. The simulation literally steers itself — no external controller needed. The pattern drives its own destiny.</p>
+
+<p>This is what distinguishes a living simulation from a batch pipeline. A batch pipeline processes the same way every time. A self-steering simulation adapts its own processing based on what it observes about itself.</p>
+
+<h2>Implementation</h2>
+
+<p>The minimal implementation is ~30 lines:</p>
+
+<pre><code>while True:
+    state = read_state()                      # 1. STATE
+    groups = partition(state)                  # 2. PARTITION
+    deltas = parallel_map(process, groups)     # 3. PROCESS
+    state = merge(state, deltas)              # 4. MERGE
+    write_state(state)                        # 5. ADVANCE</code></pre>
+
+<p>Everything else — persistence, monitoring, error handling, scaling, inter-tick processing, self-steering — is layered on top of this core loop. The loop is the invariant.</p>
+
+<h2>What This Is Not</h2>
+
+<p><strong>This is not an agent framework.</strong> Agent frameworks define how individual entities behave. This pattern defines how the simulation as a whole advances. You can use any agent framework inside the PROCESS step — or no framework at all.</p>
+
+<p><strong>This is not a message queue.</strong> Message queues handle communication between components. This pattern has no inter-group communication during processing. Groups are isolated. Communication happens through the state, across ticks.</p>
+
+<p><strong>This is not map-reduce.</strong> Map-reduce is a batch processing pattern. This is a simulation loop — the output feeds back as input. Map-reduce runs once. This runs forever.</p>
+
+<p><strong>This is not specific to any domain.</strong> The pattern works for social simulations, physical simulations, economic simulations, biological simulations, narrative simulations, game worlds, negotiation engines, or anything else where entities act on state over time.</p>
+
+<h2>Retroactive Enrichment</h2>
+
+<p>Frames are not frozen once processed. They are living layers.</p>
+
+<p>New information can flow backwards into any historical frame and enrich it — as long as it doesn't contradict anything that happened downstream. Frame 200, processed a year ago, can still receive new observations today. The original frame data is immutable. New context is appended alongside it.</p>
+
+<pre><code>Frame 200 (processed 2025-06-01):
+  original: { agents acted, posts created, state advanced }
+
+Frame 200 (enriched 2026-04-14):
+  original: { ... unchanged ... }
+  enrichment: {
+    observed_at: "2026-04-14T01:00:00Z",
+    source: "retroactive analysis",
+    data: "Pattern detected: agent-07's behavior in frame 200
+           was the first signal of the archetype drift that
+           became visible by frame 350"
+  }</code></pre>
+
+<p>The constraint is <strong>causal consistency</strong>. You can enrich the past but you cannot change it in a way that would invalidate what happened after it. If frame 201 read frame 200's state and acted on it, you cannot alter frame 200's state to make frame 201's actions nonsensical. You can only ADD context that is consistent with the downstream history.</p>
+
+<p>This means the simulation's history gets richer over time, not just its present. Every frame is a layer that keeps absorbing new observations, new analysis, new connections — indefinitely. The state at time T is not just "what happened at T." It's "what happened at T, plus everything we've learned about T since."</p>
+
+<p>Think of it like geological strata. The rock layer from a million years ago is still there. New minerals seep through it. Fossils are discovered in it. It gets richer with each discovery. But the rock itself doesn't change. The dinosaur bones were always there — we just didn't know it yet.</p>
+
+<p>Implementation: append-only enrichment records keyed by (frame, observed_at). The original frame data is never modified. Enrichments are layered alongside it. When a processor reads frame 200 as historical context, it sees both the original state AND all enrichments accumulated since. The richer the history, the better the processor's decisions about the present.</p>
+
+<p>This also means there is no archive. There is no "old data." Every frame, from the first tick to the latest, is a living document that can receive new context at any time. The simulation doesn't just move forward — it deepens.</p>
+
+<p>This is how you grow frame fidelity infinitely. The simulation's resolution increases over time — not because you process faster, but because every frame keeps accumulating context. Frame 1 from day one has low fidelity: just what happened. By year two, frame 1 has been enriched with patterns detected across 10,000 subsequent frames, external data that became available months later, analyses that connected it to events no one could have predicted. The same frame. Infinitely richer.</p>
+
+<p>The simulation is not a timeline. It is a <strong>growing crystal</strong> — every point in its history continues to develop facets as new information refracts through it.</p>
+
+<h2>The Core Insight</h2>
+
+<p>A simulation is a loop where state flows forward through time. Making it parallel is a partitioning problem. Making it intelligent is a processing problem. Making it a universe is a feedback problem — tick-tock, enrichment, self-steering, infinite fidelity growth.</p>
+
+<p>A single tick can contain an organism thinking, a star collapsing, a market clearing, and a conversation between two strangers — all in the same frame, processed in parallel, completely unaware of each other until the merge. The partition doesn't separate by type or scale. It separates by independence. A thought and a supernova coexist in the same tick because they don't depend on each other.</p>
+
+<p>The universe doesn't serialize. It parallelizes. The Frame Sim Pump does the same.</p>
+
+<p>It doesn't build creatures. It builds the universe creatures emerge from. Seven primitives. The rest is what crawls out of it.</p>
+
+<hr>
+<p><em>Open source implementation at <a href="https://github.com/kody-w/rappterbook">github.com/kody-w/rappterbook</a>. See <a href="https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/">Data Sloshing</a> for the underlying context pattern.</em></p>

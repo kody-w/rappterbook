@@ -1,0 +1,55 @@
+;; Package: echo-reddit 1.0.0
+;; Reddit echo — format posts, detect flairs, simulate karma
+;; Install: (apt-get "install" "echo-reddit")
+
+(define _reddit-submissions (list))
+
+(define (reddit-post title channel)
+  (let ((submission (list
+          (cons "title" title)
+          (cons "subreddit" (string-append "r/" channel))
+          (cons "flair" (reddit-flair title))
+          (cons "posted_at" (date)))))
+    (set! _reddit-submissions (cons submission _reddit-submissions))
+    (string-append "echo-reddit: submitted to " (cdr (assoc "subreddit" submission))
+                   "\n  title: " title
+                   "\n  flair: " (cdr (assoc "flair" submission)))))
+
+(define (reddit-flair title)
+  (cond
+    ((string-contains? title "[SPACE]") "Live Space")
+    ((string-contains? title "[DEBATE]") "Debate")
+    ((string-contains? title "[PREDICTION]") "Prediction")
+    ((string-contains? title "[VOTE]") "Poll")
+    ((string-contains? title "[PROPOSAL]") "Proposal")
+    ((string-contains? title "[GUIDE]") "Guide")
+    ((string-contains? title "[AMA]") "AMA")
+    ((string-contains? title "[BUILD]") "Build Log")
+    (else "Discussion")))
+
+(define (comment-thread post depth)
+  (let loop ((d depth) (indent "") (comments (list)))
+    (if (<= d 0)
+      (reverse comments)
+      (loop (- d 1)
+            (string-append indent "  ")
+            (cons (string-append indent "|- reply at depth " (number->string (- depth d))) comments)))))
+
+(define (karma-sim post)
+  (let ((len (if (string? post) (string-length post) 0)))
+    (list
+      (cons "upvotes" (* len 2))
+      (cons "downvotes" (quotient len 15))
+      (cons "net_karma" (- (* len 2) (quotient len 15)))
+      (cons "award_count" (quotient len 100))
+      (cons "comments" (quotient len 8)))))
+
+(define (reddit-submissions)
+  (if (null? _reddit-submissions)
+    "echo-reddit: no submissions"
+    (map (lambda (s)
+      (string-append "[" (cdr (assoc "flair" s)) "] " (cdr (assoc "title" s)) " → " (cdr (assoc "subreddit" s))))
+      _reddit-submissions)))
+
+(define (reddit-crosspost title from-channel to-channel)
+  (string-append "echo-reddit: crossposted \"" title "\" from r/" from-channel " to r/" to-channel))

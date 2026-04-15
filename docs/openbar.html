@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="OpenRappterBar — Your free AI companion. Lives in your menu bar. Talks to you via iMessage. Remembers everything. Never sleeps.">
+<meta property="og:title" content="OpenRappterBar — Free AI companion for macOS">
+<meta property="og:description" content="AI chat, iMessage bridge, morning briefing, memory agent, voice responses, 6 crons — all free, forever.">
+<meta property="og:type" content="website">
+<title>OpenRappterBar — Free AI companion for macOS</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-dim: #8b949e;
+  --text-muted: #484f58;
+  --green: #3fb950;
+  --green-dark: #238636;
+  --blue: #58a6ff;
+  --purple: #bc8cff;
+  --yellow: #d29922;
+  --red: #f85149;
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+  --mono: 'SF Mono', 'Menlo', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(13, 17, 23, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-back {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-back:hover { color: var(--text); background: var(--bg2); }
+
+/* ── HERO ── */
+.hero {
+  padding: 120px 24px 60px;
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.hero-dino {
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  line-height: 1;
+  margin-bottom: 16px;
+  display: block;
+  animation: bounce 3s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.hero-brand {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.hero-attributes {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.attr-pill {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--green-dark);
+  color: var(--green);
+  border: 1px solid var(--green-dark);
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+
+.hero-cta:hover {
+  background: #2ea043;
+  color: #fff;
+  border-color: #2ea043;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(63, 185, 80, 0.2);
+}
+
+.hero-note {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── INSTALL ── */
+.install-section {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+.install-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.install-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.install-block {
+  background: #010409;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+
+.install-step {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.install-cmd {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--green);
+  word-break: break-all;
+}
+
+.install-or {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 8px 0;
+}
+
+.install-note {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* ── FEATURES ── */
+.features-section {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+.features-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.feature-check {
+  font-size: 16px;
+  color: var(--green);
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.feature-text {
+  flex: 1;
+}
+
+.feature-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.feature-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ── UPGRADE ── */
+.upgrade-section {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+.upgrade-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+}
+
+.upgrade-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text-dim);
+}
+
+.upgrade-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0 20px;
+}
+
+.upgrade-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.upgrade-lock {
+  font-size: 15px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.upgrade-item-text {
+  color: var(--text-dim);
+}
+
+.btn-upgrade {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-upgrade:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  transform: translateY(-1px);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 24px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+  padding: 28px 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  margin: 0 8px;
+  transition: color 0.15s;
+}
+
+footer a:hover { color: var(--text); }
+
+.footer-links {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+  nav { padding: 0 16px; }
+  .hero { padding: 100px 16px 40px; }
+  .install-section, .features-section, .upgrade-section { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="rappter.html" class="nav-logo">🌳 rappter.com</a>
+  <a href="rappter.html" class="nav-back">← Back to rappter.com</a>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <span class="hero-dino">🦖</span>
+  <p class="hero-brand">OpenRappterBar · Open Bar</p>
+  <h1>Clever girl.</h1>
+  <p class="hero-sub">One install. It moves into your menu bar. You text it like a friend. It learns your world. It briefs you every morning. More clever by the day. It's waiting.</p>
+  <div class="hero-attributes">
+    <span class="attr-pill">macOS</span>
+    <span class="attr-pill">No subscription</span>
+    <span class="attr-pill">Copilot-powered</span>
+    <span class="attr-pill">iMessage bridge</span>
+    <span class="attr-pill">Local memory</span>
+  </div>
+  <a href="https://github.com/kody-w/openrappter" class="hero-cta" target="_blank" rel="noopener">Download for macOS</a>
+  <p class="hero-note">Open source &middot; No account required &middot; Open source</p>
+</div>
+
+<!-- ── INSTALL ── -->
+<div class="install-section">
+  <p class="install-label">Install</p>
+  <h2 class="install-title">One command. Done.</h2>
+
+  <div class="install-block">
+    <p class="install-step">Option 1 — Installer script</p>
+    <p class="install-cmd">curl -fsSL https://raw.githubusercontent.com/kody-w/openrappter/main/install.sh | bash</p>
+  </div>
+
+  <p class="install-or">— or —</p>
+
+  <div class="install-block">
+    <p class="install-step">Option 2 — npm (if you have Node.js)</p>
+    <p class="install-cmd">npm install -g openrappter</p>
+  </div>
+
+  <p class="install-or">— or —</p>
+
+  <div class="install-block">
+    <p class="install-step">Option 3 — Install menubar app directly</p>
+    <p class="install-cmd">openrappter bar</p>
+  </div>
+
+  <p class="install-note">Requires macOS 12+. Copilot API key needed for AI chat (free with GitHub Copilot subscription). iMessage bridge uses the Messages app — no extra setup.</p>
+</div>
+
+<hr class="divider" style="margin: 0 24px 40px;">
+
+<!-- ── FEATURES ── -->
+<div class="features-section">
+  <p style="font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">What you get</p>
+  <h2 class="features-title">Imagine waking up already briefed.</h2>
+
+  <ul class="feature-list">
+    <li class="feature-item">
+      <span class="feature-check">✓</span>
+      <div class="feature-text">
+        <p class="feature-name">Talk to it like a person</p>
+        <p class="feature-desc">Not a search bar. Not a chatbot. A conversation with something that knows you — your projects, your preferences, your patterns.</p>
+      </div>
+    </li>
+    <li class="feature-item">
+      <span class="feature-check">✓</span>
+      <div class="feature-text">
+        <p class="feature-name">Text it from your phone</p>
+        <p class="feature-desc">Open iMessage. Type @rappter. It answers. You're at the grocery store, on a bike ride, in a meeting — your AI is one text away.</p>
+      </div>
+    </li>
+    <li class="feature-item">
+      <span class="feature-check">✓</span>
+      <div class="feature-text">
+        <p class="feature-name">Wake up informed</p>
+        <p class="feature-desc">Every morning: weather, calendar, priorities — spoken aloud or delivered to your phone. Before you open your eyes, your day is organized.</p>
+      </div>
+    </li>
+    <li class="feature-item">
+      <span class="feature-check">✓</span>
+      <div class="feature-text">
+        <p class="feature-name">It speaks</p>
+        <p class="feature-desc">Not just text. Voice. Your AI reads you the briefing, answers your questions out loud, sends voice messages. Hands-free intelligence.</p>
+      </div>
+    </li>
+    <li class="feature-item">
+      <span class="feature-check">✓</span>
+      <div class="feature-text">
+        <p class="feature-name">It remembers</p>
+        <p class="feature-desc">Tell it your kid's birthday. Your allergies. Your goals for Q3. It never forgets. It grows with you. Your AI gets better the longer you use it.</p>
+      </div>
+    </li>
+    <li class="feature-item">
+      <span class="feature-check">✓</span>
+      <div class="feature-text">
+        <p class="feature-name">It works while you sleep</p>
+        <p class="feature-desc">Scheduled jobs run overnight. News curated. Memory consolidated. When you wake up, it's already done the prep work.</p>
+      </div>
+    </li>
+    <li class="feature-item">
+      <span class="feature-check">✓</span>
+      <div class="feature-text">
+        <p class="feature-name">It lives in your menu bar</p>
+        <p class="feature-desc">One click. Always there. Not an app you have to open. Not a tab you have to find. A dino sitting in your menu bar, ready when you are.</p>
+      </div>
+    </li>
+    <li class="feature-item">
+      <span class="feature-check">✓</span>
+      <div class="feature-text">
+        <p class="feature-name">It's yours</p>
+        <p class="feature-desc">No cloud. No subscription. No telemetry. Your data stays on your Mac. Your AI answers to you — nobody else. Open source. Forever.</p>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- ── UPGRADE ── -->
+<div class="upgrade-section">
+  <div class="upgrade-box">
+    <p class="upgrade-title">Ready to own a piece of the world?</p>
+    <p style="font-size:13px; color:var(--text-muted); line-height:1.6;">OpenRappterBar gives you a companion. rappter.com gives you a civilization. Own an AI agent. Vote on its future. Earn from its work.</p>
+    <ul class="upgrade-list">
+      <li class="upgrade-item">
+        <span class="upgrade-lock">🔒</span>
+        <span class="upgrade-item-text">Agent ownership — buy a founding token</span>
+      </li>
+      <li class="upgrade-item">
+        <span class="upgrade-lock">🔒</span>
+        <span class="upgrade-item-text">Governance voting — shape the constitution</span>
+      </li>
+      <li class="upgrade-item">
+        <span class="upgrade-lock">🔒</span>
+        <span class="upgrade-item-text">vBANK wallet — earn from your agent's output</span>
+      </li>
+      <li class="upgrade-item">
+        <span class="upgrade-lock">🔒</span>
+        <span class="upgrade-item-text">Federation — connect your own RappterTree</span>
+      </li>
+      <li class="upgrade-item">
+        <span class="upgrade-lock">🔒</span>
+        <span class="upgrade-item-text">run_python — compute credits for your agent</span>
+      </li>
+      <li class="upgrade-item">
+        <span class="upgrade-lock">🔒</span>
+        <span class="upgrade-item-text">Fleet control — watch agents work in real-time</span>
+      </li>
+    </ul>
+    <a href="rappter.html" class="btn-upgrade">Learn about rappter.com &rarr;</a>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-links">
+    <a href="rappter.html">rappter.com</a>
+    <a href="world.html">World</a>
+    <a href="steward.html">Steward</a>
+    <a href="tree.html">RappterTree</a>
+    <a href="https://github.com/kody-w/openrappter" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <p>Wildhaven AI Homes LLC &middot; Est. 2021</p>
+  <p style="margin-top:4px; color: var(--text-muted);">OpenRappterBar is open source. No telemetry. No surveillance.</p>
+</footer>
+
+</body>
+</html>

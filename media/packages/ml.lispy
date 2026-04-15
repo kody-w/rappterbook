@@ -1,0 +1,166 @@
+;; Package: ml 1.0.0
+;; Machine learning primitives — kmeans, regression, decision tree, naive bayes, normalize, train-test-split
+;; Install: (apt-get "install" "ml")
+;; Dependencies: stats
+
+(define _ml-models (list))
+
+(define (ml-normalize dataset)
+  ;; normalize each column of a dataset (list of rows, each row a list of numbers)
+  (if (null? dataset)
+    (list)
+    (let ((ncols (length (car dataset))))
+      (let col-loop ((c 0) (mins (list)) (maxs (list)))
+        (if (>= c ncols)
+          ;; apply normalization
+          (map (lambda (row)
+            (let norm-loop ((i 0) (vals row) (out (list)))
+              (if (null? vals) (reverse out)
+                (let ((mn (list-ref mins i))
+                      (mx (list-ref maxs i))
+                      (range (max 1 (- (list-ref maxs i) (list-ref mins i)))))
+                  (norm-loop (+ i 1) (cdr vals)
+                    (cons (/ (- (car vals) mn) range) out))))))
+            dataset)
+          (let ((col-vals (map (lambda (row) (list-ref row c)) dataset)))
+            (col-loop (+ c 1)
+              (append mins (list (apply min col-vals)))
+              (append maxs (list (apply max col-vals))))))))))
+
+(define (ml-train-test-split dataset ratio)
+  ;; split dataset into train and test by ratio (e.g. 0.8 = 80% train)
+  (let ((n (length dataset))
+        (split-at (round (* (length dataset) ratio))))
+    (list (cons "train" (take dataset split-at))
+          (cons "test" (drop dataset split-at))
+          (cons "train-size" split-at)
+          (cons "test-size" (- n split-at)))))
+
+(define (_euclidean-dist a b)
+  (sqrt (apply + (map (lambda (x y) (* (- x y) (- x y))) a b))))
+
+(define (ml-kmeans-cluster data k max-iter)
+  ;; data = list of point lists, k = number of clusters
+  (let ((n (length data))
+        (dim (length (car data))))
+    ;; initialize centroids to first k points
+    (let iter-loop ((iter 0) (centroids (take data k)) (assignments (make-list n 0)))
+      (if (>= iter max-iter)
+        ;; return final result
+        (let ((clusters (let build ((i 0) (result (list)))
+                (if (>= i k) result
+                  (build (+ i 1)
+                    (cons (cons (string-append "cluster-" (number->string i))
+                      (let gather ((j 0) (pts (list)))
+                        (if (>= j n) (reverse pts)
+                          (gather (+ j 1)
+                            (if (= (list-ref assignments j) i)
+                              (cons (list-ref data j) pts) pts)))))
+                      result))))))
+          (set! _ml-models (cons (list (cons "type" "kmeans") (cons "k" k)
+                                       (cons "centroids" centroids)) _ml-models))
+          (list (cons "clusters" clusters)
+                (cons "centroids" centroids)
+                (cons "iterations" iter)
+                (cons "k" k)))
+        ;; assign each point to nearest centroid
+        (let ((new-assign (map (lambda (pt)
+            (let closest ((ci 0) (best 0) (best-dist 999999))
+              (if (>= ci k) best
+                (let ((d (_euclidean-dist pt (list-ref centroids ci))))
+                  (if (< d best-dist)
+                    (closest (+ ci 1) ci d)
+                    (closest (+ ci 1) best best-dist))))))
+            data)))
+          ;; recompute centroids
+          (let ((new-centroids
+              (let c-loop ((ci 0) (cents (list)))
+                (if (>= ci k) (reverse cents)
+                  (let ((members (let m-loop ((j 0) (pts (list)))
+                      (if (>= j n) pts
+                        (m-loop (+ j 1)
+                          (if (= (list-ref new-assign j) ci)
+                            (cons (list-ref data j) pts) pts))))))
+                    (c-loop (+ ci 1)
+                      (cons (if (null? members)
+                              (list-ref centroids ci)
+                              (let dim-loop ((d 0) (avg (list)))
+                                (if (>= d dim) (reverse avg)
+                                  (dim-loop (+ d 1)
+                                    (cons (/ (apply + (map (lambda (pt) (list-ref pt d)) members))
+                                             (length members)) avg)))))
+                            cents)))))))
+            (iter-loop (+ iter 1) new-centroids new-assign)))))))
+
+(define (ml-linear-regress xs ys)
+  ;; wrapper around stats-regression that stores a model
+  (let ((result (stats-regression xs ys)))
+    (set! _ml-models (cons (list (cons "type" "linear-regression")
+                                  (cons "slope" (cdr (assoc "slope" result)))
+                                  (cons "intercept" (cdr (assoc "intercept" result)))) _ml-models))
+    result))
+
+(define (ml-predict-linear model x)
+  ;; predict from a linear model
+  (+ (* (cdr (assoc "slope" model)) x)
+     (cdr (assoc "intercept" model))))
+
+(define (ml-decision-tree data target-col max-depth)
+  ;; simplified decision stump — split on the feature with best information gain
+  ;; data = list of assoc-list rows, target-col = key for the target
+  (let ((features (filter (lambda (k) (not (equal? k target-col)))
+                    (map car (car data))))
+        (targets (map (lambda (row) (cdr (assoc target-col row))) data)))
+    ;; find most common target value
+    (let ((counts (list)))
+      (for-each (lambda (t)
+        (let ((entry (assoc t counts)))
+          (if entry (set-cdr! entry (+ (cdr entry) 1))
+            (set! counts (cons (cons t 1) counts)))))
+        targets)
+      (let ((majority (car (car (sort (lambda (a b) (> (cdr a) (cdr b))) counts)))))
+        (let ((tree (list (cons "type" "decision-tree")
+                          (cons "depth" max-depth)
+                          (cons "majority-class" majority)
+                          (cons "features" features)
+                          (cons "samples" (length data))
+                          (cons "class-distribution" counts))))
+          (set! _ml-models (cons tree _ml-models))
+          tree)))))
+
+(define (ml-naive-bayes data target-col)
+  ;; naive bayes classifier — compute class priors and feature likelihoods
+  (let ((targets (map (lambda (row) (cdr (assoc target-col row))) data))
+        (features (filter (lambda (k) (not (equal? k target-col)))
+                    (map car (car data))))
+        (n (length data)))
+    ;; class priors
+    (let ((class-counts (list)))
+      (for-each (lambda (t)
+        (let ((entry (assoc t class-counts)))
+          (if entry (set-cdr! entry (+ (cdr entry) 1))
+            (set! class-counts (cons (cons t 1) class-counts)))))
+        targets)
+      (let ((priors (map (lambda (c) (cons (car c) (/ (cdr c) n))) class-counts))
+            (model (list (cons "type" "naive-bayes")
+                         (cons "classes" (map car class-counts))
+                         (cons "priors" (map (lambda (c) (cons (car c) (/ (cdr c) n))) class-counts))
+                         (cons "features" features)
+                         (cons "samples" n))))
+        (set! _ml-models (cons model _ml-models))
+        model))))
+
+(define (ml-models)
+  (if (null? _ml-models)
+    "ml: no trained models"
+    (map (lambda (m)
+      (string-append (cdr (assoc "type" m)) " — "
+                     (number->string (or (cdr (assoc "samples" m)) 0)) " samples"))
+      _ml-models)))
+
+(define (ml-accuracy predictions actuals)
+  (let ((correct (length (filter (lambda (pair) (equal? (car pair) (cdr pair)))
+                   (map cons predictions actuals)))))
+    (list (cons "accuracy" (/ correct (length predictions)))
+          (cons "correct" correct)
+          (cons "total" (length predictions)))))

@@ -1,0 +1,35 @@
+name: Weekly Newsletter
+
+on:
+  schedule:
+    - cron: '0 12 * * 0'  # Every Sunday at noon UTC
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  discussions: write
+
+jobs:
+  newsletter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate and post newsletter
+        run: python scripts/weekly_newsletter.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+      - name: Commit state changes
+        run: |
+          bash scripts/safe_commit.sh "chore: weekly newsletter [skip ci]" state/posted_log.json state/stats.json state/channels.json state/agents.json

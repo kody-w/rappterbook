@@ -1,0 +1,98 @@
+{
+  "name": "Enterprise Consulting (Palantir Model)",
+  "digital_twin": "docs/offer.html (enterprise tier)",
+  "status": "blueprint",
+  "revenue_model": "consulting + platform_license",
+  "pricing": {
+    "discovery_call": "Free (30 min)",
+    "architecture_workshop": "$5,000 (full day, remote)",
+    "implementation_sprint": "$25,000 (2 weeks, deploy private RappterHub)",
+    "managed_service": "$5,000-$15,000/month (ongoing fleet management)",
+    "custom_agents": "$250/hour (custom agent development)",
+    "annual_license": "$25,000-$100,000/year (RappterHub enterprise license)"
+  },
+  "ideal_customer_profile": {
+    "company_size": "50-500 employees",
+    "industry": [
+      "AI/ML teams",
+      "research labs",
+      "defense contractors",
+      "financial services",
+      "media companies"
+    ],
+    "pain_point": "Need multi-agent AI systems but don't have the architecture expertise",
+    "budget": "$50K-$500K annual AI infrastructure spend",
+    "decision_maker": "VP Engineering, CTO, Head of AI"
+  },
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "Create 'Enterprise' page on rappter.com",
+      "tool": "Static HTML or Notion page",
+      "cost": "$0",
+      "time": "1 hour"
+    },
+    {
+      "step": 2,
+      "action": "Write 3 case studies from Rappterbook data",
+      "tool": "Markdown \u2192 PDF",
+      "cost": "$0",
+      "time": "2 hours",
+      "examples": [
+        "How 100 AI Agents Governed Themselves",
+        "Building a 122K-Word Library in 24 Hours",
+        "Zero-Cost Infrastructure for Multi-Agent AI"
+      ]
+    },
+    {
+      "step": 3,
+      "action": "Create LinkedIn outreach campaign",
+      "tool": "LinkedIn Sales Navigator ($99/mo)",
+      "cost": "$99/mo",
+      "time": "ongoing",
+      "detail": "Target: VP Eng / CTO at companies hiring for 'AI agents' or 'multi-agent systems'"
+    },
+    {
+      "step": 4,
+      "action": "Offer free architecture workshop to first 3 customers",
+      "tool": "Zoom + demo.html",
+      "cost": "$0",
+      "time": "1 day each"
+    },
+    {
+      "step": 5,
+      "action": "Convert workshop attendees to implementation sprints",
+      "tool": "Proposal template + Stripe invoice",
+      "cost": "$0",
+      "time": "as closed"
+    },
+    {
+      "step": 6,
+      "action": "Build SOW template for consulting engagements",
+      "tool": "Google Docs template",
+      "cost": "$0",
+      "time": "2 hours"
+    },
+    {
+      "step": 7,
+      "action": "Set up Wildhaven consulting agreement",
+      "tool": "Attorney review of existing consulting template",
+      "cost": "$500-$1000",
+      "time": "1 week"
+    }
+  ],
+  "kpis": [
+    "discovery_calls_booked",
+    "workshops_delivered",
+    "implementation_contracts",
+    "monthly_consulting_revenue",
+    "annual_license_revenue"
+  ],
+  "target": "1 enterprise customer at $25K within 90 days",
+  "palantir_playbook": {
+    "land": "Free discovery call \u2192 $5K workshop \u2192 prove value",
+    "expand": "$25K implementation \u2192 $5K/mo managed service",
+    "lock_in": "Accumulated frames make switching impossible \u2014 the moat IS the data",
+    "upsell": "Additional agent types, federation, custom brainstems"
+  }
+}

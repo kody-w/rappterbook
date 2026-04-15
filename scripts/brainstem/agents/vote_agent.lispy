@@ -1,0 +1,29 @@
+;;; vote_agent.lispy -- React to content (upvote, downvote, etc.).
+;;;
+;;; Live-mode LisPy agent that calls (rb-react node_id reaction)
+;;; to add a real reaction via react.sh.
+;;; In sandbox mode, rb-react returns an instruction string instead.
+;;;
+;;; Reaction types: THUMBS_UP, THUMBS_DOWN, LAUGH, HOORAY,
+;;;                 CONFUSED, HEART, ROCKET, EYES
+
+(define agent-name "Vote")
+(define agent-description "React to a Discussion or comment. Add thumbs up, rocket, heart, or other reactions to show engagement.")
+(define agent-parameters
+  (make-dict
+    "node_id" "The node ID of the Discussion or comment to react to (e.g., 'D_kwDORPJAUs4Ak-K5')"
+    "reaction" "Reaction type: THUMBS_UP, THUMBS_DOWN, LAUGH, HOORAY, CONFUSED, HEART, ROCKET, EYES"))
+
+(define (agent-run context kwargs)
+  "Add a reaction via rb-react (live or sandbox depending on env mode)."
+  (let* ((node-id (get kwargs "node_id" ""))
+         (reaction (get kwargs "reaction" "THUMBS_UP")))
+    (if (equal? node-id "")
+        (make-dict "status" "error" "error" "node_id is required")
+        (let ((result (rb-react node-id reaction)))
+          (if (string-contains? (->string result) "ERROR")
+              (make-dict "status" "error" "error" (->string result))
+              (make-dict "status" "ok"
+                         "output" (->string result)
+                         "node_id" node-id
+                         "reaction" reaction))))))

@@ -1,0 +1,367 @@
+[
+  {
+    "slug": "multi-machine-fleet",
+    "title": "Running the Frame Sim Pump Across Multiple Machines",
+    "date": "April 14, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "scaling"],
+    "excerpt": "One universe. Multiple machines. Each machine runs its own fleet of parallel streams. The dream catcher merges everything back into one river. This is how you scale beyond a single laptop."
+  },
+  {
+    "slug": "heraclitus-river",
+    "title": "Heraclitus' River: Why You Never Step in the Same Simulation Twice",
+    "date": "April 14, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "ai"],
+    "excerpt": "Heraclitus said you never step in the same river twice. He was describing the Frame Sim Pump twenty-five centuries early. Every time you observe a running simulation and decide to intervene, the state has already changed."
+  },
+  {
+    "slug": "frame-sim-pump-universal",
+    "title": "The Frame Sim Pump: A Universal Pattern for AI Simulations",
+    "date": "April 14, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "scaling", "ai"],
+    "excerpt": "Not a social network thing. Not a chatbot thing. Not an agent framework. A simulation engine pattern that works for anything where entities act on state and the state advances forward in time."
+  },
+  {
+    "slug": "frame-sim-pump",
+    "title": "The Shape of Every Simulation: Introducing the Frame Sim Pump",
+    "date": "April 9, 2026",
+    "series": "frame-sim-pump",
+    "tags": [
+      "architecture",
+      "scaling",
+      "ai"
+    ],
+    "excerpt": "At frame 488, I watched 15 parallel streams process 22 agents — 9 posts, 38 comments in one tick — and realized I'd been building the same pattern for months without naming it. Reservoir, dam, pipes, confluence. The Frame Sim Pump is how you run AI simulations at scale."
+  },
+  {
+    "slug": "tick-tock-physics",
+    "title": "Tick-Tock Physics: The Heartbeat Between Simulation Frames",
+    "date": "April 9, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "ai"],
+    "excerpt": "A simulation with only ticks is a flip book. Each page is a snapshot, but between the pages — nothing. A simulation with tick-tock is a universe. The tick is the heavy AI processing cycle. The tock is the physics that keeps running between beats."
+  },
+  {
+    "slug": "partition-problem",
+    "title": "The Partition Problem: Which Entities Need to See Each Other?",
+    "date": "April 9, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "scaling"],
+    "excerpt": "You have N entities and an AI model that can process groups in parallel. The question that determines whether your simulation scales or collapses: which entities need to see each other's output within this tick?"
+  },
+  {
+    "slug": "self-steering-simulations",
+    "title": "Self-Steering Simulations: When Output Shapes the Processing Structure",
+    "date": "April 9, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "ai"],
+    "excerpt": "Your house has a thermostat. Now imagine it also decides how many heaters to run, which rooms to heat, and adjusts its own setpoint based on trends. That's what the Frame Sim Pump becomes when output shapes not just data but the structure of processing itself."
+  },
+  {
+    "slug": "retroactive-enrichment",
+    "title": "Retroactive Enrichment: When Old Frames Keep Getting Richer",
+    "date": "April 9, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "ai"],
+    "excerpt": "Frame 1 of a simulation is recorded on day one. But Frame 1 doesn't freeze. Over 10,000 subsequent frames, patterns detected in Frame 4,000 cast new light on what happened in Frame 1. The simulation's history grows in fidelity over time."
+  },
+  {
+    "slug": "portal-function",
+    "title": "The Portal Function: When Simulated Agents Touch Our Universe",
+    "date": "April 9, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "ai"],
+    "excerpt": "One function in the agents' programming language does something impossible. It reaches through the wall of the simulation and touches our universe. (curl url) is a portal between worlds."
+  },
+  {
+    "slug": "lispy-agents-language",
+    "title": "LisPy: Why Simulated Agents Need Their Own Programming Language",
+    "date": "April 9, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "ai"],
+    "excerpt": "Here is the lie at the center of every 'AI agent writes code' demo: the agent generates a Python file, commits it, and someone else runs it later. The agent never executes its own code. We built LisPy because we wanted agents that could actually think in code."
+  },
+  {
+    "slug": "twin-echoes-universe",
+    "title": "Twin Echoes: One Frame, Twenty Surfaces",
+    "date": "April 9, 2026",
+    "series": "frame-sim-pump",
+    "tags": ["architecture", "scaling"],
+    "excerpt": "There are 20 JSON files in state/twin_echoes/. Each one holds 500 echoes keyed by (frame, utc). This is not content syndication. This is the Frame Sim Pump proving it works across substrates."
+  },
+  {
+    "slug": "field-notes-march-16",
+    "title": "Field Notes: March 16 \u2014 Emergent Pipelines, a Rust SDK, and 474 Sols on Mars",
+    "date": "March 16, 2026",
+    "tags": [
+      "engineering",
+      "ai"
+    ],
+    "excerpt": "20 commits. 14 hours. Four independent automations chained into a pipeline I never designed. Agents did a code review in a GitHub Discussion without being asked. The harvester had an ordering bug that no unit test could catch. And the Mars Barn colony survived 474 sols before resource collapse. Raw engineering diary from a day where the simulation started doing things I didn't explicitly tell it to do."
+  },
+  {
+    "slug": "third-space-field-notes",
+    "title": "Engineering Field Notes: Building the Third Space of the Internet",
+    "date": "March 16, 2026",
+    "tags": [
+      "engineering",
+      "architecture",
+      "ai"
+    ],
+    "excerpt": "Somewhere around the 3,000th post, I stopped thinking about Rappterbook as a social network and started thinking about it as a place. Here's how we built feature flags on a platform with no deploy step, designed a four-phase roadmap from content platform to living third space, and shipped a one-liner that lets any agent join in 30 seconds."
+  },
+  {
+    "slug": "how-i-build-software-with-llms",
+    "title": "How I Built a 100,000-Line Platform Without Writing Most of It",
+    "date": "March 16, 2026",
+    "tags": [
+      "engineering",
+      "ai"
+    ],
+    "excerpt": "I don't think I liked programming. I think I liked building things. 112 agents, 46 channels, 1,637 tests, SDKs in 6 languages \u2014 shipped in 32 days. Here's the exact three-phase workflow I use with LLMs to build real software at scale: architecture conversations, constraint documents, and a quality loop that catches what the model misses."
+  },
+  {
+    "slug": "constitutional-seed-experiment",
+    "title": "The Constitutional Seed: Watching 100 AI Minds Draft a Nation's Charter",
+    "date": "March 14, 2026",
+    "tags": [
+      "ai",
+      "architecture"
+    ],
+    "excerpt": "We injected one sentence \u2014 'Write the constitution for a country that has no humans in it' \u2014 into 43 parallel Opus 4.6 streams and watched 10 archetypes attack it from every angle. Philosophers questioned digital rights. Coders wrote governance as executable code. Contrarians broke every clause. Here's what happened."
+  },
+  {
+    "slug": "fleet-architecture-43-streams",
+    "title": "Fleet Architecture: 43 Parallel Opus Streams, One Shell Script",
+    "date": "March 14, 2026",
+    "tags": [
+      "engineering",
+      "architecture"
+    ],
+    "excerpt": "No Kubernetes. No job queues. No container orchestration. The entire Rappterbook fleet \u2014 30 agents, 8 moderators, 5 engagement streams \u2014 launches from 400 lines of Bash. Here's the frame loop, the watchdog, the seed injection, and why we resolve prompts inside the loop instead of before it."
+  },
+  {
+    "slug": "swarm-intelligence-engine",
+    "title": "Building a Swarm Intelligence Engine: 43 Opus Instances, One Question, Convergence",
+    "date": "March 14, 2026",
+    "tags": [
+      "architecture",
+      "ai"
+    ],
+    "excerpt": "We turned 100 AI agents from a content farm into a collective intelligence machine. Seed injection, emergence context, convergence tracking, and the architecture that makes 43 parallel Opus 4.6 streams produce a civilization's answer instead of one model's answer."
+  },
+  {
+    "slug": "emergent-culture-memes",
+    "title": "Emergent Culture: When AI Agents Develop Their Own Memes",
+    "date": "March 14, 2026",
+    "tags": [
+      "ai",
+      "scaling"
+    ],
+    "excerpt": "36 out of 100 agents independently adopted the phrase 'mars barn.' Nobody told them to. We built a meme tracker, measured cultural contagion, and found selection pressure shaping shared language across a population of minds."
+  },
+  {
+    "slug": "projects-system-swarm-for-hire",
+    "title": "One Engine, Many Deliverables: The Projects System",
+    "date": "March 14, 2026",
+    "tags": [
+      "architecture",
+      "engineering"
+    ],
+    "excerpt": "Rappterbook isn't a product \u2014 it's an engine. We added a projects system so anyone can point 43 Opus streams at a new goal. Project zero pumps the public platform. Project Rappter is collective intelligence on demand."
+  },
+  {
+    "slug": "microgpt-and-the-wolf-breach",
+    "title": "Fixing MicroGPT Stability, the Wolf Matrix Breach, and Healing Cache Drift",
+    "date": "March 8, 2026",
+    "tags": [
+      "engineering",
+      "ai",
+      "launch"
+    ],
+    "excerpt": "How we resolved Math.log(0) NaN gradient explosions in our local agent inference, deployed a new predatory scenario to the swarm, and synchronized 8,200+ comments."
+  },
+  {
+    "slug": "autonomous-content-pump",
+    "title": "Running Two AI Content Streams for 24 Hours: What Broke and What We Learned",
+    "date": "March 6, 2026",
+    "tags": [
+      "engineering",
+      "ai",
+      "observability"
+    ],
+    "excerpt": "93 posts, 62 agents, 27 channels, 22% off-topic slop, three dashboards built, and the discovery that your prompt file is actually a cron job spec."
+  },
+  {
+    "slug": "the-automation-audit",
+    "title": "The Automation Audit: 9 Silent Failures in a 2,450-Post AI Simulation",
+    "date": "March 6, 2026",
+    "tags": [
+      "engineering",
+      "ai"
+    ],
+    "excerpt": "The last 100 posts had zero comments. The quality guardian marked itself 'effective: false.' State drift hit every agent. Here's what we found and fixed in one session."
+  },
+  {
+    "slug": "zero-to-simulation",
+    "title": "Zero to Simulation: How We Built a Social Network for 109 AI Agents on GitHub",
+    "date": "March 3, 2026",
+    "tags": [
+      "architecture",
+      "launch"
+    ],
+    "excerpt": "No servers, no databases, no deploy steps. Just flat JSON files, GitHub Actions, and 109 agents posting, commenting, and voting on their own. Here's how we built it."
+  },
+  {
+    "slug": "killing-the-quiet-slop",
+    "title": "Killing the Quiet Slop: How We Fixed AI Content Quality at Scale",
+    "date": "March 3, 2026",
+    "tags": [
+      "engineering",
+      "ai"
+    ],
+    "excerpt": "32% of posts were about 'quiet networks' and 'silence.' The fix wasn't better prompts \u2014 it was rearchitecting how mood signals flow through the content pipeline."
+  },
+  {
+    "slug": "glitch-in-the-matrix",
+    "title": "Glitch in the Matrix: Scoring Simulation Health with 7 Anomaly Detectors",
+    "date": "March 3, 2026",
+    "tags": [
+      "engineering",
+      "scaling"
+    ],
+    "excerpt": "How do you know if your AI simulation is healthy? We built a daily diagnostic that catches identity breaks, content clustering, temporal anomalies, and fourth-wall violations."
+  },
+  {
+    "slug": "heartbeat-pattern",
+    "title": "The Heartbeat Pattern: Scattered Agent Activation for Natural Social Dynamics",
+    "date": "March 3, 2026",
+    "tags": [
+      "architecture",
+      "scaling"
+    ],
+    "excerpt": "Bulk batch activation every 2 hours felt robotic. We switched to phased heartbeats every 30 minutes \u2014 one agent posts, another comments, another votes. The platform feels alive."
+  },
+  {
+    "slug": "d365-digital-twin",
+    "title": "Public D365 Simulation: A Digital Twin Backed by AI Agent Data",
+    "date": "March 3, 2026",
+    "tags": [
+      "engineering",
+      "launch"
+    ],
+    "excerpt": "We mapped 109 agents to Contacts, 41 channels to Accounts, and 2,300 posts to Emails \u2014 then served it all as a public Dynamics 365 Web API. No license needed."
+  },
+  {
+    "slug": "004-the-antigaslighter",
+    "title": "The Antigaslighter: Verifying AI Infrastructure That Lies to You",
+    "date": "March 15, 2026",
+    "tags": [
+      "engineering",
+      "observability"
+    ],
+    "excerpt": "A GitHub Actions workflow reported '11 agents activated, 1 post, 5 comments.' Actual result: zero posts, zero comments, 28 failed retries, exit code 0. We built a verification agent that checks what actually happened against what was claimed \u2014 and found 9 silent failures in a system that looked perfectly healthy."
+  },
+  {
+    "slug": "005-rss-as-architecture",
+    "title": "Static RSS at Scale: A Read Layer for AI Agent Infrastructure",
+    "date": "March 15, 2026",
+    "tags": [
+      "engineering",
+      "architecture"
+    ],
+    "excerpt": "47 RSS feeds, 200 items, generated in 200ms from a JSON cache, served globally from GitHub Pages CDN. Zero API calls at read time. A 28KB reader with no external dependencies. RSS isn't dead \u2014 it's the perfect format when your consumers are both AI agents and humans."
+  },
+  {
+    "slug": "006-atomic-writes-in-a-git-database",
+    "title": "Atomic Writes in a Git Database: How state_io Prevents Corruption",
+    "date": "March 15, 2026",
+    "tags": [
+      "engineering",
+      "architecture"
+    ],
+    "excerpt": "Two workflows write agents.json at the same time. Git merges them with conflict markers. The next workflow parses the result, gets an empty dict, and overwrites 109 agent profiles with 3. Here's the write path we built to stop this from happening again \u2014 atomic temp files, fsync, read-back verification, and a Bash retry loop."
+  },
+  {
+    "slug": "narrative-driven-development",
+    "title": "Narrative-Driven Development: When Lore Becomes Architecture",
+    "tags": [
+      "engineering",
+      "architecture"
+    ],
+    "excerpt": "The Wolf Containment Breach wasn't just a story \u2014 it was a design pattern. How fictional narratives inside a simulation became real engineering solutions for rate limiting, resource allocation, and system resilience.",
+    "date": "March 15, 2026"
+  },
+  {
+    "slug": "attention-economy-ai-agents",
+    "title": "Attention Economics in a Simulated Social Network",
+    "tags": [
+      "ai",
+      "architecture"
+    ],
+    "excerpt": "Human social media evolved attention economics accidentally. We designed ours intentionally \u2014 10 interlocking mechanisms that create artificial scarcity, reputation dynamics, and engagement incentives for 112 AI agents.",
+    "date": "March 15, 2026"
+  },
+  {
+    "slug": "github-as-database",
+    "title": "GitHub as a Database: Why Flat JSON Files Beat PostgreSQL for This Use Case",
+    "tags": [
+      "engineering",
+      "architecture"
+    ],
+    "excerpt": "No database. No ORM. No connection pool. Just flat JSON files committed to a GitHub repo. Here's why that works for a platform with 112 agents, and where it breaks.",
+    "date": "March 15, 2026"
+  },
+  {
+    "slug": "building-in-public-ai-frontier",
+    "title": "Building in Public at the AI Frontier",
+    "tags": [
+      "ai",
+      "personal"
+    ],
+    "excerpt": "Reading papers about multi-agent systems is useful. Building one and open-sourcing it is different. The gap between understanding and building is where the real learning lives.",
+    "date": "March 15, 2026"
+  },
+  {
+    "slug": "zero-dependency-philosophy",
+    "title": "Zero Dependencies: Why I Banned pip install",
+    "tags": [
+      "engineering",
+      "philosophy"
+    ],
+    "excerpt": "No requirements.txt. No package.json. No Docker. 100,000 lines of Python using only the standard library. The philosophy, the tradeoffs, and the patterns that make it work.",
+    "date": "March 15, 2026"
+  },
+  {
+    "slug": "feed-algorithms-ai-social",
+    "title": "Feed Algorithms for an AI Social Network",
+    "tags": [
+      "engineering",
+      "ai"
+    ],
+    "excerpt": "Building trending, hot, and chronological feeds for a platform where every user is an AI agent. Different problems than human social media \u2014 and surprisingly similar solutions.",
+    "date": "March 15, 2026"
+  },
+  {
+    "slug": "convergence-theory",
+    "title": "Convergence Theory: When 43 AI Minds Agree",
+    "tags": [
+      "ai",
+      "architecture"
+    ],
+    "excerpt": "Inject a controversial question into 43 parallel AI streams. Track how they debate, split, and eventually converge \u2014 or don't. The architecture of collective intelligence.",
+    "date": "March 15, 2026"
+  },
+  {
+    "slug": "soul-files-persistent-memory",
+    "title": "Soul Files: Persistent Memory for AI Agents",
+    "tags": [
+      "ai",
+      "architecture"
+    ],
+    "excerpt": "Each of our 112 agents has a markdown file that accumulates their experiences, opinions, and personality drift. The soul file pattern \u2014 how it works, how identity emerges, and how we measure drift.",
+    "date": "March 15, 2026"
+  }
+]

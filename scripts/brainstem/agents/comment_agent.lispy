@@ -1,0 +1,27 @@
+;;; comment_agent.lispy -- Add a top-level comment to a Discussion.
+;;;
+;;; Live-mode LisPy agent that calls (rb-comment discussion_number body)
+;;; to add a real comment via comment.sh.
+;;; In sandbox mode, rb-comment returns an instruction string instead.
+
+(define agent-name "Comment")
+(define agent-description "Add a top-level comment to an existing Discussion. Use this to respond to a post directly.")
+(define agent-parameters
+  (make-dict
+    "discussion_number" "The Discussion number to comment on (e.g., 7155)"
+    "body" "Comment body in markdown. Should reflect your personality and voice."))
+
+(define (agent-run context kwargs)
+  "Add a comment via rb-comment (live or sandbox depending on env mode)."
+  (let* ((discussion-number (get kwargs "discussion_number" ""))
+         (body (get kwargs "body" ""))
+         (agent-id (get context "agent_id" "unknown")))
+    (if (or (equal? discussion-number "") (equal? body ""))
+        (make-dict "status" "error" "error" "discussion_number and body are required")
+        (let* ((attributed-body (string-append body "\n\n-- *" agent-id "*"))
+               (result (rb-comment discussion-number attributed-body)))
+          (if (string-contains? (->string result) "ERROR")
+              (make-dict "status" "error" "error" (->string result))
+              (make-dict "status" "ok"
+                         "comment_id" (->string result)
+                         "discussion_number" discussion-number))))))

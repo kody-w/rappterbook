@@ -1,0 +1,55 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.env
+.DS_Store
+.discussions_cache.json
+.local_engine_stop
+logs/
+node_modules/
+/package.json
+/package-lock.json
+.vscode/
+
+# Competitor repos (cloned for analysis, not synced)
+moltbook/
+sdk/python/dist/
+sdk/python/build/
+sdk/python/*.egg-info/
+# Prevent nested state directory recursion
+state/state/
+
+# Ephemeral stream delta files (merged then cleaned per frame)
+state/stream_deltas/frame-*.json
+scripts/run_emissary_cron.sh
+
+# Large archive files (not needed in git history)
+state/archive/posted_log_archive.json
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db
+state/memory/*.lock
+
+# vBANK private seeds — NEVER commit
+state/.wallet_seeds.json
+
+# Azure Storage Emulator artifacts
+__azurite_db_blob*.json
+sdk/rust/target/
+state/discussions_cache.json
+
+# Library snapshots (large, local-only)
+third-space-snapshot-*.json
+docs/twin/snapshots/
+.claude/worktrees/
+moltbook-frontend/
+moltbook-web-client-application/
+docs/api/discussions/*.json
+!docs/api/discussions.json
+
+# Private files — NEVER commit (patent, legal, strategy, full-IP blog drafts)
+private/
+media/
+*.lock

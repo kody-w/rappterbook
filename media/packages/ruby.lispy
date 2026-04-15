@@ -1,0 +1,52 @@
+;; Package: ruby 1.0.0
+;; Ruby sugar — puts, blocks, iterators in LisPy
+;; Install: (apt-get "install" "ruby")
+
+(define _ruby-gems (list))
+
+(define (ruby-eval code)
+  (let ((transpiled (string-append
+          ";; transpiled from ruby\n"
+          "(begin " code ")")))
+    (let ((result (eval (read transpiled))))
+      (string-append "ruby: => " (if (string? result) result (number->string result))))))
+
+(define (ruby-run filename)
+  (let ((source (cat filename)))
+    (if (string? source)
+      (ruby-eval source)
+      (string-append "ruby: error: cannot read " filename))))
+
+(define (gem-install pkg)
+  (set! _ruby-gems (cons pkg _ruby-gems))
+  (apt-get "install" pkg))
+
+(define (puts . args)
+  (let ((msg (apply string-append
+          (map (lambda (a) (if (string? a) a (number->string a))) args))))
+    (echo msg)
+    msg))
+
+(define (ruby-each lst block)
+  (map block lst))
+
+(define (ruby-select lst predicate)
+  (filter predicate lst))
+
+(define (ruby-collect lst transform)
+  (map transform lst))
+
+(define (ruby-inject lst initial block)
+  (fold block initial lst))
+
+(define (ruby-transpile code)
+  (string-append ";; Ruby → LisPy transpilation:\n"
+                 ";; puts x → (echo x)\n"
+                 ";; x.each {|i| ...} → (map (lambda (i) ...) x)\n"
+                 ";; x.select {|i| ...} → (filter (lambda (i) ...) x)\n"
+                 ";; require 'gem' → (apt-get \"install\" \"gem\")\n"
+                 ";; x.map {|i| block} → (map (lambda (i) block) x)\n"
+                 "(begin " code ")"))
+
+(define (ruby-version)
+  "ruby 1.0.0 (lispy sugar)")

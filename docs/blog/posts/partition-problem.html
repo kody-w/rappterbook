@@ -1,0 +1,185 @@
+<p><strong>Kody Wildfeuer</strong> · April 9, 2026</p>
+
+<blockquote><strong>Disclaimer:</strong> This is a personal project built entirely on my own time. I work at Microsoft, but this project has no connection to Microsoft whatsoever — it is completely independent personal exploration and learning, built off-hours, on my own hardware, with my own accounts. All opinions and work are my own.</blockquote>
+<hr>
+
+<h2>The Partition Problem</h2>
+
+<p>You have N entities. You have an AI model that can process groups of them in parallel. The question that determines whether your simulation scales or collapses is not "how fast is the model" or "how good is the merge." It is: <strong>which entities need to see each other's output within this tick?</strong></p>
+
+<p>That is the partition problem. Everything else in the <a href="frame-sim-pump-universal.html">Frame Sim Pump</a> is plumbing. The partition is where parallelism meets correctness, and getting it wrong is quiet. Your simulation runs. It produces output. The output just happens to be missing the emergent behavior that would have appeared if the right entities had been in the same room.</p>
+
+<h2>What the Partition Function Does</h2>
+
+<p>The partition function takes the current state and returns groups. Each group is processed independently, in parallel, by a separate AI invocation. Entities within a group can see and react to each other. Entities in different groups cannot — not until the merge, when their outputs are combined and the next tick begins.</p>
+
+<p>So the partition function is answering a dependency question: <strong>which entities are coupled this tick?</strong> Two agents mid-conversation are coupled. Two agents on different continents discussing different topics are not. A buyer and a seller competing for the same asset are coupled. A buyer and a seller in different markets are not.</p>
+
+<p>The partition does not separate by type. It does not separate by scale. A thought and a supernova go in the same group if they depend on each other, and in different groups if they do not. Independence is the only axis that matters.</p>
+
+<h2>Four Strategies</h2>
+
+<h3>1. Static Partition</h3>
+
+<p>Assign entities to groups once. Never change the assignment. Group 1 always has agents 1-20. Group 2 always has agents 21-40. Simple. Predictable. Zero overhead per tick.</p>
+
+<p>This works when dependencies are stable. In a grid-based physics simulation, spatial neighbors interact and distant cells do not. The partition is the grid. It never needs to change because the topology is fixed.</p>
+
+<p>It fails when dependencies shift. If agent 3 starts a conversation with agent 35, they are in different groups and will never see each other's output within the same tick. Their interaction is always one tick delayed — agent 3 speaks, the merge combines, the next tick's state includes the message, agent 35 reads it next tick and responds. Not broken, but sluggish. The conversation has a round-trip time of two ticks instead of zero.</p>
+
+<p>Use static partitions when: dependencies are topology-based, the entity graph is stable, or you simply need a working baseline to iterate from.</p>
+
+<h3>2. Dynamic Partition</h3>
+
+<p>Compute the partition fresh each tick by inspecting the current state. Look at who is talking to whom, who shares resources, who is in the same location or market. Build a dependency graph. Partition it.</p>
+
+<pre><code>def partition(state):
+    graph = build_dependency_graph(state)  # edges = "these two interact"
+    groups = graph_partition(graph, max_group_size=25)
+    return groups</code></pre>
+
+<p>This adapts. When agent 3 starts talking to agent 35, the dependency graph gains an edge between them, and the next tick puts them in the same group. When the conversation ends, the edge disappears, and they drift apart.</p>
+
+<p>The cost is computing the partition each tick. For a hundred entities, this is trivial. For ten thousand, you need a real graph partitioning algorithm — spectral clustering, label propagation, or something simpler like connected components on a thresholded interaction matrix.</p>
+
+<p>Use dynamic partitions when: relationships are emergent and change tick to tick, and you can afford the computation.</p>
+
+<h3>3. Self-Organizing Partition</h3>
+
+<p>Let entities choose their own groups. Each entity declares which group it wants to be in — or which other entities it wants to be grouped with. The partition function just collects the declarations.</p>
+
+<p>This is the pub/sub model. Groups are channels. Entities subscribe. Each channel is a mini-simulation running in parallel. An entity can be in multiple channels (processed in each, deltas merged).</p>
+
+<pre><code># Each entity declares its subscriptions
+agent_07.subscriptions = ["philosophy-debate", "colony-resource-committee"]
+agent_12.subscriptions = ["philosophy-debate", "music-collab"]
+
+# Partition = group by channel
+groups = group_by_subscription(entities)</code></pre>
+
+<p>The strength is that entities know their own dependencies better than any external function. Agent 07 knows it is in a debate with agent 12. It subscribes to the debate channel. No external graph analysis needed.</p>
+
+<p>The risk is fragmentation. If entities subscribe to too many channels, groups get large and parallelism drops. If they subscribe to too few, they miss interactions. The subscription model needs guardrails — max subscriptions per entity, max group size, or a decay function that auto-unsubscribes idle members.</p>
+
+<p>Use self-organizing partitions when: entities have agency over their own interactions, and you trust them (or their incentives) to self-organize well.</p>
+
+<h3>4. AI-Driven Partition</h3>
+
+<p>The previous tick's output includes a recommended partition for the next tick. The simulation steers its own grouping.</p>
+
+<pre><code># In the PROCESS step, the AI also outputs:
+{
+  "partition_recommendation": {
+    "keep_together": [["agent-07", "agent-12"], ["agent-03", "agent-35"]],
+    "split_apart": [["agent-01", "agent-99"]],
+    "notes": "07 and 12 are mid-debate, splitting them would kill the thread"
+  }
+}</code></pre>
+
+<p>This is the most powerful and the most dangerous. Powerful because the AI has full context — it has read the state, processed the entities, and understands their relationships better than any heuristic. Dangerous because the AI can be wrong, and a bad partition recommendation compounds: bad grouping produces bad output, which produces bad recommendations, which produces worse grouping.</p>
+
+<p>Mitigate with a fallback. If the AI's recommended partition fails a sanity check (groups too large, orphaned entities, circular dependencies), fall back to the dynamic partition. Let the AI steer when it is confident. Let the math steer when it is not.</p>
+
+<p>Use AI-driven partitions when: your simulation has complex, non-obvious dependencies that heuristics miss, and you have the budget to include partition reasoning in the prompt.</p>
+
+<h2>Safety Properties</h2>
+
+<p>The partition has two failure modes, and neither one corrupts state.</p>
+
+<p><strong>Putting independents together</strong> (over-grouping): Safe. You waste parallelism — a group of 50 entities that could have been five groups of 10 runs in one processor instead of five. Slower, not broken. The output is correct because the entities were independent anyway; processing them together just means the AI has more context to chew through per invocation.</p>
+
+<p><strong>Putting dependents apart</strong> (under-grouping): Safe but lossy. Two agents mid-conversation end up in different groups. They cannot see each other's output this tick. The conversation stutters — one tick of latency. The merge combines their independent outputs, and next tick they are back in sync. No state corruption. But the emergent behavior that would have come from real-time back-and-forth within the tick is lost. You traded quality for parallelism.</p>
+
+<p>This asymmetry matters. Over-grouping is always safe. Under-grouping is safe but reduces emergence. If you are unsure, err on the side of larger groups. You can always split later when you understand the dependencies better.</p>
+
+<h2>Accumulated Group Context</h2>
+
+<p>When the same group persists across multiple ticks — same entities, same AI instance — something interesting happens. The processor accumulates implicit context about the group. It remembers (in its context window or conversation history) what happened last tick. It builds a model of each entity's personality, trajectory, and relationships.</p>
+
+<p>This is the "rust" of shared history. A group that has been together for 20 ticks has a texture that a freshly assembled group does not. The AI's output for long-lived groups is richer, more nuanced, more aware of interpersonal dynamics. Conversations develop arcs. Conflicts have history. Alliances form through repeated interaction, not just because the state says "these two are allied."</p>
+
+<p>This is also why repartitioning has a cost. When you move entity A from group 1 to group 2, group 1 loses its accumulated context about A, and group 2 starts from scratch. The entity's history is in the state, but the processor's intuitive model of the entity — built from ticks of observation — is gone.</p>
+
+<p>Practical approach: repartition infrequently. Let groups develop context over 10-50 ticks, then rebalance. Or use a hybrid: keep a stable core group and rotate a few entities in and out each tick to cross-pollinate without destroying accumulated context.</p>
+
+<h2>Groups as Rooms</h2>
+
+<p>There is a useful analogy: each group is a room. Entities in the room can talk to each other, see each other, react to each other. Entities in different rooms cannot — until the tick ends and everyone walks into the hallway (the merged state) where they can see what the other rooms produced.</p>
+
+<p>The pub/sub model makes this literal. Groups are channels. Entities subscribe. Each channel is a room with its own conversation, its own context, its own mini-simulation. The merge is the public feed that aggregates all rooms.</p>
+
+<p>This maps to real architectures:</p>
+<ul>
+<li><strong>Discord/Slack</strong>: channels are groups, messages are deltas, the server state is the merge</li>
+<li><strong>Subreddits</strong>: each subreddit is a group, the front page is the merge</li>
+<li><strong>Database shards</strong>: each shard is a group, cross-shard queries are the merge</li>
+<li><strong>Actor mailboxes</strong>: each actor is a group of one, message passing is the merge</li>
+<li><strong>Kubernetes pods</strong>: each pod is a group, the service mesh is the merge</li>
+</ul>
+
+<p>Same pattern at every scale. The partition is the deployment topology of a distributed system, and the merge is its consistency protocol.</p>
+
+<h2>Identifying Dependencies in Practice</h2>
+
+<p>The hard part is not choosing a partition strategy. It is knowing what counts as a dependency. This varies by domain, and getting it wrong is the most common source of "the simulation runs but nothing interesting happens."</p>
+
+<h3>Social simulation</h3>
+<p>Dependency = communication. Who replied to whom in the last N ticks? Who follows whom? Who is in the same thread? Build the interaction graph from recent activity. Entities with no edges between them are independent. Weight edges by recency — a conversation from 50 ticks ago is weaker than one from last tick.</p>
+
+<pre><code>def social_dependencies(state, lookback=5):
+    edges = []
+    for tick in range(state.tick - lookback, state.tick):
+        for reply in state.replies_at(tick):
+            edges.append((reply.author, reply.target, recency_weight(tick)))
+    return edges</code></pre>
+
+<h3>Colony / resource simulation</h3>
+<p>Dependency = shared resources. Who draws from the same water supply? Who competes for the same building materials? Who shares a power grid? Entities connected to the same resource node are dependent. Entities on isolated resource networks are independent.</p>
+
+<h3>Market simulation</h3>
+<p>Dependency = competing for the same asset. Buyers and sellers in the same order book must be in the same group or the price discovery is one tick delayed. Market makers who span multiple order books are coupling points — they connect otherwise independent markets.</p>
+
+<h3>Ecosystem simulation</h3>
+<p>Dependency = food web edges. Predator and prey must be in the same group. Species that share neither predators nor prey nor habitat can be in different groups. Keystone species — those with edges to many others — become group attractors. They pull their dependents into their group.</p>
+
+<h3>Narrative simulation</h3>
+<p>Dependency = scene membership. Characters in the same scene are dependent. Characters in different scenes are independent. The challenge is detecting when two scenes are about to collide — character A is walking toward the room where character B is. They are independent now but will be dependent next tick. A good dynamic partition detects this and groups them preemptively.</p>
+
+<h2>The Distributed Systems Connection</h2>
+
+<p>The partition problem is not new. Distributed systems have been solving it for decades under different names.</p>
+
+<p><strong>Database sharding</strong>: partition rows across servers so queries touch one shard. The shard key is the partition function. Cross-shard queries (joins across partitions) are the merge. Bad shard keys produce hot spots — one shard doing all the work while others idle. Same problem: partition by independence, not by type.</p>
+
+<p><strong>Consistent hashing</strong>: assign entities to nodes on a hash ring. When a node joins or leaves, only its neighbors are affected. This is a static partition with graceful rebalancing — the same idea as rotating a few entities between groups while keeping the core stable.</p>
+
+<p><strong>Actor models</strong>: each actor is a group of one. Total isolation. Maximum parallelism. But every interaction requires message passing (the merge), and coordination-heavy workloads drown in message overhead. The partition is too fine-grained. Sometimes you need to batch actors into groups to reduce inter-group communication.</p>
+
+<p><strong>Map-reduce</strong>: the map phase is the partition + process. The shuffle is the merge. The reduce is the advance. Same shape. The difference is that map-reduce runs once, and the Frame Sim Pump loops forever — the output feeds back as input.</p>
+
+<p>If you have built a sharded database, you have already solved a partition problem. The intuitions transfer. Shard by access pattern (who touches what together). Monitor for hot shards (overloaded groups). Rebalance periodically (repartition). Accept that cross-shard queries are slower (inter-group interactions have one-tick latency).</p>
+
+<h2>The Decision Flowchart</h2>
+
+<p>If you are implementing this and need to pick a partition strategy, start here:</p>
+
+<ol>
+<li><strong>Are dependencies stable?</strong> Use static. Ship it. Optimize later.</li>
+<li><strong>Do dependencies change but are observable from state?</strong> Use dynamic with a dependency graph.</li>
+<li><strong>Do entities know their own dependencies?</strong> Use self-organizing (pub/sub).</li>
+<li><strong>Are dependencies too complex for heuristics?</strong> Use AI-driven with a dynamic fallback.</li>
+<li><strong>Not sure?</strong> Start with one big group (no partition). Measure. Split when you see which entities are independent.</li>
+</ol>
+
+<p>Option 5 is underrated. A simulation with one group and no parallelism is still a simulation. It runs slowly but correctly. You can observe the dependency patterns in the output, build a partition function from those observations, and scale up. Premature partitioning is worse than no partitioning — you might split entities that need each other and never notice because the simulation "runs fine," just with less emergence than it should have.</p>
+
+<h2>The Core Insight</h2>
+
+<p>The partition is the cheapest step and the most consequential. It runs in milliseconds. It determines whether your simulation produces emergence or noise. Get it right and every processor you add gives you linear scaling. Get it wrong and adding processors just produces more independent, disconnected output faster.</p>
+
+<p>Partition by independence. Err toward larger groups. Repartition infrequently. Let groups accumulate context. And when in doubt, start with one group and split when you can see the seams.</p>
+
+<p>The universe does not have a partition function. Everything interacts with everything, mediated by distance and time. Your simulation is an approximation of that — a bet that some interactions matter more than others this tick, and that the ones that do not matter can wait until the merge. The art is in choosing which interactions to defer.</p>
+
+<hr>
+<p><em>This is part of the Frame Sim Pump series. See <a href="frame-sim-pump-universal.html">The Frame Sim Pump</a> for the full pattern. Open source implementation at <a href="https://github.com/kody-w/rappterbook">github.com/kody-w/rappterbook</a>.</em></p>

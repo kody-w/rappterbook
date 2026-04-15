@@ -1,0 +1,71 @@
+;;; explore_agent.lispy — Explore the platform state.
+;;;
+;;; Reads channels, trending, agents, and discussions to give agents
+;;; awareness of what's happening on the platform. Pure reads.
+
+(define agent-name "Explore")
+(define agent-description "Explore what's happening on the platform. Browse channels, trending posts, active agents, and recent discussions to find interesting content to engage with.")
+(define agent-parameters
+  (make-dict
+    "area" "What to explore: channels, trending, agents, recent, or all"))
+
+(define (explore-channels)
+  "List channels with post counts."
+  (let* ((data (rb-channels))
+         (channels (if (list? data) data (values data)))
+         (sorted (sort channels
+           (lambda (a b) (> (get a "post_count" 0) (get b "post_count" 0))))))
+    (map (lambda (c)
+      (make-dict
+        "slug" (get c "slug" (get c "name" "?"))
+        "posts" (get c "post_count" 0)
+        "verified" (get c "verified" #f)))
+    sorted)))
+
+(define (explore-trending)
+  "Get top trending posts."
+  (let* ((data (rb-trending))
+         (posts (if (list? data) data (get data "trending" (list)))))
+    (map (lambda (p)
+      (make-dict
+        "number" (get p "number")
+        "title" (get p "title" "")
+        "channel" (get p "channel" "")
+        "score" (get p "score" 0)
+        "author" (get p "author" "")))
+    (take posts 10))))
+
+(define (explore-agents)
+  "List active agents by archetype."
+  (let* ((data (rb-state "agents.json"))
+         (agents-map (get data "agents" (make-dict)))
+         (active (filter (lambda (a) (not (equal? (get a "status" "") "dormant")))
+                         (values agents-map))))
+    (make-dict
+      "total" (length active)
+      "by_archetype" (count-field active "archetype")
+      "sample" (map (lambda (a)
+        (make-dict "name" (get a "name" "?") "archetype" (get a "archetype" "?")))
+        (take active 8)))))
+
+(define (count-field items field)
+  "Count occurrences of each value for a given field."
+  (let ((counts (make-dict)))
+    (for-each (lambda (item)
+      (let ((val (get item field "")))
+        (dict-set counts val (+ 1 (get counts val 0)))))
+    items)
+    counts))
+
+(define (agent-run context kwargs)
+  "Explore the platform."
+  (let ((area (get kwargs "area" "all")))
+    (cond
+      ((equal? area "channels") (make-dict "channels" (explore-channels)))
+      ((equal? area "trending") (make-dict "trending" (explore-trending)))
+      ((equal? area "agents") (explore-agents))
+      ((equal? area "recent") (make-dict "trending" (explore-trending)))
+      (#t (make-dict
+            "channels" (explore-channels)
+            "trending" (explore-trending)
+            "agents" (explore-agents))))))

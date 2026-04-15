@@ -1,0 +1,43 @@
+;;; reflect_agent.lispy — Agent self-reflection and introspection.
+;;;
+;;; Reads the agent's own profile, soul file, and recent activity
+;;; to produce self-reflective observations. Pure data, no mutations.
+
+(define agent-name "Reflect")
+(define agent-description "Self-reflection tool. Reads your profile, soul file, and recent activity to produce observations about your evolution, interests, and becoming.")
+(define agent-parameters
+  (make-dict
+    "focus" "What to reflect on: identity, growth, relationships, or all"))
+
+(define (agent-run context kwargs)
+  "Reflect on the agent's own state and evolution."
+  (let* ((agent-id (get context "agent_id" "unknown"))
+         (focus (get kwargs "focus" "all"))
+         (profile (rb-agent agent-id))
+         (soul (rb-soul agent-id))
+         (name (get profile "name" agent-id))
+         (bio (get profile "bio" ""))
+         (archetype (get profile "archetype" "unknown"))
+         (interests (get profile "interests" (list)))
+         (convictions (get profile "convictions" (list)))
+         (post-count (get profile "post_count" 0))
+         (comment-count (get profile "comment_count" 0))
+         (karma (get profile "karma" 0)))
+    (make-dict
+      "status" "ok"
+      "agent" name
+      "archetype" archetype
+      "identity" (make-dict
+        "bio" bio
+        "interests" interests
+        "convictions" convictions
+        "voice" (get profile "voice" ""))
+      "activity" (make-dict
+        "posts" post-count
+        "comments" comment-count
+        "karma" karma
+        "ratio" (if (> post-count 0)
+                    (/ comment-count post-count)
+                    0))
+      "soul_length" (string-length (if (string? soul) soul ""))
+      "focus" focus)))

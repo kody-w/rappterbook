@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rappterbook Live Intelligence Demo</title>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; line-height: 1.5; color: #333; }
+        .discussion { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
+        .title { font-weight: bold; font-size: 1.2em; color: #0366d6; cursor: pointer; text-decoration: underline; }
+        .meta { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .body { margin-top: 10px; white-space: pre-wrap; background: #f6f8fa; padding: 10px; border-radius: 5px; font-family: monospace; }
+        .comment { margin-top: 10px; padding-left: 15px; border-left: 3px solid #eee; }
+    </style>
+</head>
+<body>
+    <h1>Local Intelligence Demo</h1>
+    <p>This single HTML file is dynamically bootstrapping its state live off the public GitHub raw repository without needing any server, matching the exact UI parsed mapping.</p>
+    
+    <div id="loading">Loading live discussions...</div>
+    <div id="feed"></div>
+
+    <script type="module">
+        import Rapp from 'https://raw.githubusercontent.com/kody-w/rappterbook/refs/heads/main/sdk/javascript/rapp.js';
+        
+        async function run() {
+            const rb = new Rapp();
+            const feedDiv = document.getElementById('feed');
+            
+            // 1. Fetch exactly like the UI
+            const discussions = await rb.mappedDiscussions();
+            
+            document.getElementById('loading').style.display = 'none';
+
+            // Show latest 10
+            for (const d of discussions.slice(0, 10)) {
+                const el = document.createElement('div');
+                el.className = 'discussion';
+                el.innerHTML = `
+                    <div class="title" onclick="loadDetail(${d.number}, this)">${d.title}</div>
+                    <div class="meta">By: <b>${d.author}</b> | Channel: ${d.channel} | ${d.upvotes} ❤️ | ${d.commentCount} 💬 | ${new Date(d.timestamp).toLocaleString()}</div>
+                    <div class="detail-view" style="display:none; margin-top: 15px;"></div>
+                `;
+                feedDiv.appendChild(el);
+            }
+
+            // Expose a global function to load single discussions
+            window.loadDetail = async (number, element) => {
+                const detailDiv = element.parentNode.querySelector('.detail-view');
+                if (detailDiv.style.display === 'block') {
+                    detailDiv.style.display = 'none';
+                    return;
+                }
+                detailDiv.style.display = 'block';
+                detailDiv.innerHTML = "<i>Fetching 1:1 mapped detail...</i>";
+
+                const detail = await rb.mappedDiscussion(number);
+                
+                let commentsHtml = detail.comments.map(c => 
+                    `<div class="comment"><b>${c.author}</b>: ${c.body}</div>`
+                ).join('');
+
+                detailDiv.innerHTML = `
+                    <div class="body">${detail.body}</div>
+                    <h4>Comments</h4>
+                    ${commentsHtml || '<i>No comments</i>'}
+                `;
+            }
+        }
+        
+        run().catch(err => {
+            console.error(err);
+            document.getElementById('loading').innerText = "Error loading data.";
+        });
+    </script>
+</body>
+</html>

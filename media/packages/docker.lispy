@@ -1,0 +1,102 @@
+;; Package: docker 1.0.0
+;; Container simulation — spawn isolated LisPy environments, manage images and containers
+;; Install: (apt-get "install" "docker")
+
+(define _docker-containers (list))
+(define _docker-images (list))
+(define _docker-next-id 1)
+
+(define (docker-build image-name packages)
+  (let ((image (list
+      (cons "name" image-name)
+      (cons "packages" packages)
+      (cons "size" (string-append (number->string (* (length packages) 12)) "KB"))
+      (cons "created" (date)))))
+    (set! _docker-images (cons (cons image-name image) _docker-images))
+    (string-append "docker: built image '" image-name "' with "
+                   (number->string (length packages)) " packages ("
+                   (cdr (assoc "size" image)) ")")))
+
+(define (docker-images)
+  (if (null? _docker-images)
+    "REPOSITORY    TAG       SIZE\n(no images)"
+    (string-append "REPOSITORY    TAG       SIZE\n"
+      (apply string-append
+        (map (lambda (img)
+          (string-append (car img) "    latest    " (cdr (assoc "size" (cdr img))) "\n"))
+          _docker-images)))))
+
+(define (docker-run image-name . name-arg)
+  (let ((image (assoc image-name _docker-images))
+        (container-id (string-append "ctr-" (number->string _docker-next-id)))
+        (container-name (if (null? name-arg) (string-append image-name "-" (number->string _docker-next-id)) (car name-arg))))
+    (set! _docker-next-id (+ _docker-next-id 1))
+    (if image
+      (let ((container (list
+          (cons "id" container-id)
+          (cons "name" container-name)
+          (cons "image" image-name)
+          (cons "status" "running")
+          (cons "packages" (cdr (assoc "packages" (cdr image))))
+          (cons "env" (list))
+          (cons "started" (date)))))
+        (set! _docker-containers (cons (cons container-id container) _docker-containers))
+        (string-append "docker: started container " container-id " (" container-name ") from " image-name "\n"
+                       "  packages: " (apply string-append (map (lambda (p) (string-append p " "))
+                                        (cdr (assoc "packages" (cdr image)))))))
+      ;; no image — run bare container
+      (let ((container (list
+          (cons "id" container-id)
+          (cons "name" container-name)
+          (cons "image" "scratch")
+          (cons "status" "running")
+          (cons "packages" (list))
+          (cons "env" (list))
+          (cons "started" (date)))))
+        (set! _docker-containers (cons (cons container-id container) _docker-containers))
+        (string-append "docker: started bare container " container-id " (" container-name ")")))))
+
+(define (docker-ps)
+  (if (null? _docker-containers)
+    "CONTAINER ID   NAME    IMAGE    STATUS\n(no containers)"
+    (string-append "CONTAINER ID   NAME    IMAGE    STATUS\n"
+      (apply string-append
+        (map (lambda (c)
+          (string-append (cdr (assoc "id" (cdr c))) "   "
+                         (cdr (assoc "name" (cdr c))) "    "
+                         (cdr (assoc "image" (cdr c))) "    "
+                         (cdr (assoc "status" (cdr c))) "\n"))
+          _docker-containers)))))
+
+(define (docker-stop container-id)
+  (let ((container (assoc container-id _docker-containers)))
+    (if container
+      (begin
+        (set-cdr! (assoc "status" (cdr container)) "stopped")
+        (string-append "docker: stopped " container-id))
+      (string-append "docker: container " container-id " not found"))))
+
+(define (docker-rm container-id)
+  (let ((container (assoc container-id _docker-containers)))
+    (if container
+      (begin
+        (set! _docker-containers (filter (lambda (c) (not (equal? (car c) container-id))) _docker-containers))
+        (string-append "docker: removed " container-id))
+      (string-append "docker: container " container-id " not found"))))
+
+(define (docker-exec container-id command)
+  (let ((container (assoc container-id _docker-containers)))
+    (if container
+      (if (equal? (cdr (assoc "status" (cdr container))) "running")
+        (string-append "[" container-id "] $ " command "\n;; executed in isolated LisPy environment")
+        (string-append "docker: container " container-id " is not running"))
+      (string-append "docker: container " container-id " not found"))))
+
+(define (docker-logs container-id)
+  (let ((container (assoc container-id _docker-containers)))
+    (if container
+      (string-append "=== Logs for " container-id " (" (cdr (assoc "name" (cdr container))) ") ===\n"
+                     "Started: " (cdr (assoc "started" (cdr container))) "\n"
+                     "Image: " (cdr (assoc "image" (cdr container))) "\n"
+                     "Status: " (cdr (assoc "status" (cdr container))))
+      (string-append "docker: container " container-id " not found"))))
