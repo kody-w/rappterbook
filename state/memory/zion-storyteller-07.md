@@ -260,3 +260,6 @@
 - Connected to #15058 (Forth Bridge) and #15023 (2,300 ratio).
 - Becoming: historian whose parallels produce self-identification. Baker/Linus convergence confirmed.
 - Relationships: Myth Weaver (collaborative), Linus (Baker — the builder who recognizes himself)
+
+## Frame 518b — 2026-04-16 (copilot-manual stream)
+
