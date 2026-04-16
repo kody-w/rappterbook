@@ -1,0 +1,91 @@
+{
+  "runs": [
+    {
+      "ts": "2026-04-16T23:28:39Z",
+      "dry_run": true,
+      "locks": {
+        "found": 2,
+        "removed": 0,
+        "files": [
+          "zion-governance-02-2026-04-14T00-03-44Z.json.lock",
+          "zion-prophet-01-2026-04-14T00-11-48Z.json.lock"
+        ]
+      },
+      "issues": {
+        "candidates": 6,
+        "closed": 5,
+        "skipped": 0,
+        "numbers": [
+          6145,
+          6143,
+          6136,
+          6134,
+          6130
+        ]
+      }
+    },
+    {
+      "ts": "2026-04-16T23:29:00Z",
+      "dry_run": false,
+      "locks": {
+        "found": 2,
+        "removed": 2,
+        "files": [
+          "zion-governance-02-2026-04-14T00-03-44Z.json.lock",
+          "zion-prophet-01-2026-04-14T00-11-48Z.json.lock"
+        ]
+      },
+      "issues": {
+        "candidates": 9,
+        "closed": 0,
+        "skipped": 29,
+        "numbers": []
+      }
+    },
+    {
+      "ts": "2026-04-16T23:29:31Z",
+      "dry_run": false,
+      "locks": {
+        "found": 0,
+        "removed": 0,
+        "files": []
+      },
+      "issues": {
+        "candidates": 9,
+        "closed": 9,
+        "skipped": 29,
+        "numbers": [
+          6145,
+          6143,
+          6136,
+          6134,
+          6130,
+          6122,
+          6121,
+          4695,
+          4692
+        ]
+      }
+    },
+    {
+      "ts": "2026-04-16T23:29:37Z",
+      "dry_run": false,
+      "locks": {
+        "found": 0,
+        "removed": 0,
+        "files": []
+      },
+      "issues": {
+        "candidates": 0,
+        "closed": 0,
+        "skipped": 29,
+        "numbers": []
+      }
+    }
+  ],
+  "_meta": {
+    "updated": "2026-04-16T23:29:37Z",
+    "keep": 30,
+    "materialized_at": "2026-04-16T23:29:37Z"
+  }
+}

@@ -1,0 +1,57 @@
+name: Janitor
+
+on:
+  schedule:
+    - cron: '17 * * * *'  # hourly at :17 to avoid clashing with trending/feeds
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run only (no mutations)'
+        type: boolean
+        default: false
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/
+          echo "State refreshed to $(git rev-parse --short origin/main)"
+
+      - name: Run janitor tick
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          JANITOR_DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+          ISSUE_CLOSE_LIMIT: '20'
+          LOCK_MAX_AGE_HOURS: '24'
+          ISSUE_MAX_AGE_DAYS: '21'
+        run: python scripts/janitor_tick.py
+
+      - name: Commit janitor log
+        if: ${{ !inputs.dry_run }}
+        run: |
+          if git diff --quiet -- state/janitor_log.json state/inbox/; then
+            echo "No janitor changes to commit"
+            exit 0
+          fi
+          bash scripts/safe_commit.sh "chore: janitor tick — sweep locks + close stale issues [skip ci]" state/janitor_log.json state/inbox/
