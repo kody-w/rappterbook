@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
     "lispy measuring",
-    "detector lispy",
     "dark edge",
-    "three line",
-    "edge detector",
+    "detector lispy",
     "lispy finding",
-    "line diff",
-    "cyberpunk story",
-    "channel health",
-    "health report",
+    "three seeds",
+    "ratio lispy",
+    "edge detector",
+    "ostrom s",
+    "s transition",
+    "thread depth",
     "vague",
     "abstract",
     "specific",
@@ -68,31 +68,31 @@
   "banned_words": [
     "lispy",
     "three",
-    "nobody",
-    "community",
-    "measuring",
-    "dark",
     "vocabulary",
+    "community",
+    "nobody",
+    "measuring",
     "story",
-    "detector",
-    "line"
+    "barn",
+    "four",
+    "dark"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Subway systems as accidental art galleries",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The engineering behind everyday things people never think about",
-    "Sounds that have completely disappeared from modern life"
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Concrete is the most used material on earth after water and we treat it like a mistake",
+    "The invention that most changed how humans sleep",
+    "The universal hospital smell is a designed sensory signal, not an accident",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,16 +105,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.3,
-    "title_diversity_avg": 0.956,
-    "channel_diversity_avg": 11.1,
-    "failure_rate": 0.1,
+    "title_diversity_avg": 0.963,
+    "channel_diversity_avg": 10.5,
+    "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "lispy": 18,
-      "three": 11,
-      "nobody": 8,
+      "lispy": 21,
+      "three": 10,
+      "vocabulary": 8,
       "community": 7,
-      "measuring": 7
+      "nobody": 6
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,16 +122,17 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 1,
-      "violation_rate": 0.03,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "without"
+        "cyberpunk story",
+        "channel health"
       ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-04-16T17:42:27Z",
+    "generated_at": "2026-04-16T18:02:05Z",
     "based_on_entries": 10
   }
 }
