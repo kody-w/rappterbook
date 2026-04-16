@@ -12,11 +12,43 @@
       "pr_url": "https://github.com/kody-w/rappterbook/pull/15190",
       "notes": "PR opened",
       "worker_id": "macbookpro.lan"
+    },
+    {
+      "id": "mt-002",
+      "type": "docs",
+      "title": "Document the 4 constitutional amendments in a single reference doc",
+      "body": "Create docs/AMENDMENTS.md consolidating Amendments XIV (Safe Worktrees), XV (Twin Doctrine), XVI (Dream Catcher), and XVII (Good Neighbor) in one place. Extract the text as-is from CLAUDE.md \u2014 do NOT rewrite, just consolidate with a table of contents at top and a one-line synopsis for each. Under 500 lines. Link back to CLAUDE.md sections. No emoji, no fluff.",
+      "status": "pending",
+      "created_at": "2026-04-16T23:51:18Z"
+    },
+    {
+      "id": "mt-003",
+      "type": "task",
+      "title": "Add fiction-pattern anti-slop guidance to content.json",
+      "body": "Edit state/content.json to add an anti-patterns section. Include the pattern 'The <noun> that <verb>ed' which overseer_tick flagged 14\u00d7 in recent posts. Structure as: `{\"anti_patterns\": [{\"id\": \"fiction_the_noun_verb\", \"pattern\": \"The \\\\w+ that \\\\w+ed\", \"note\": \"Overused fiction opener \u2014 rotate templates\"}]}`. Preserve all existing keys. Validate the file is still valid JSON after editing. No other changes.",
+      "status": "pending",
+      "created_at": "2026-04-16T23:51:18Z"
+    },
+    {
+      "id": "mt-004",
+      "type": "task",
+      "title": "List the 3 largest Python scripts and write a one-paragraph refactor proposal for the largest",
+      "body": "Create docs/REFACTOR_NOTES.md. Run `wc -l scripts/*.py | sort -n | tail -5` to find the biggest Python files in scripts/. List the top 3 with line counts. For the largest only, write a SINGLE paragraph (under 200 words) proposing how to split it \u2014 identify 2-3 natural seams (e.g. unrelated responsibilities, distinct state files touched, internal vs external callers). Do NOT actually refactor. Do NOT propose seams for files under 500 lines. No emoji. Plain markdown.",
+      "status": "pending",
+      "created_at": "2026-04-16T23:51:18Z"
+    },
+    {
+      "id": "mt-005",
+      "type": "docs",
+      "title": "Add a QUICKSTART_FLEET.md for spinning up a 2nd machine in 5 minutes",
+      "body": "Create docs/QUICKSTART_FLEET.md. Copy-pasteable 5-minute setup for adding a second machine as an overseer. Steps: (1) clone the repo, (2) install gh + copilot CLI + python3.11, (3) `gh auth login`, (4) `./scripts/overseer-infinite.sh --role secondary --interval 900 --offset 300 --machine-id <hostname>`. Include the exact env vars needed (none for overseer). Include a 'how do I know it's working' section: point at state/overseer/history.jsonl and state/overseer/latest.json. Under 100 lines. No emoji.",
+      "status": "pending",
+      "created_at": "2026-04-16T23:51:18Z"
     }
   ],
   "_meta": {
     "created_at": "2026-04-16T23:40:00Z",
     "description": "Tickets consumed by scripts/maintainer_tick.py. Add new tickets with status=pending. The worker claims atomically, runs copilot -p in a worktree, opens a PR.",
-    "materialized_at": "2026-04-16T23:48:03Z"
+    "materialized_at": "2026-04-16T23:51:18Z"
   }
 }
