@@ -28,12 +28,35 @@ const RB_STATE = {
     return this.dataMode === 'cached';
   },
 
-  // Load discussions cache (only in cached mode)
+  // Load discussions cache (only in cached mode — full 87MB file)
   async getDiscussionsCache() {
     if (this._discussionsCache) return this._discussionsCache;
     const data = await this.fetchJSON('state/discussions_cache.json');
     this._discussionsCache = data;
     return data;
+  },
+
+  // Shard-based lookup: fetch only the ~2-13MB shard containing a discussion
+  _shardCache: {},  // keyed by bucket number, holds parsed shard data
+
+  async getDiscussionFromShard(number) {
+    const num = parseInt(number, 10);
+    const bucket = Math.floor(num / 1000) * 1000;
+    const shardKey = String(bucket).padStart(5, '0');
+
+    // Check if shard is already in memory
+    if (!this._shardCache[bucket]) {
+      const data = await this.fetchJSON(`state/cache_shards/shard_${shardKey}.json`);
+      if (!data || !data.discussions) return null;
+      // Index by number for O(1) lookup
+      const index = {};
+      for (const d of data.discussions) {
+        index[d.number] = d;
+      }
+      this._shardCache[bucket] = index;
+    }
+
+    return this._shardCache[bucket][num] || null;
   },
 
   // ── Persistent Cache (IndexedDB) — Mars-grade offline-first ──
