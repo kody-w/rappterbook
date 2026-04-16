@@ -8,7 +8,6 @@ const RB_STATE = {
   // Data mode: 'cached' = raw.githubusercontent.com only (default, no rate limits),
   // 'live' = GitHub API for discussions (requires auth for reliable access)
   dataMode: 'cached',
-  _discussionsCache: null,
 
   // Configure from URL params or defaults
   configure(owner, repo, branch = 'main') {
@@ -19,41 +18,12 @@ const RB_STATE = {
 
   setDataMode(mode) {
     this.dataMode = mode === 'cached' ? 'cached' : 'live';
-    this._discussionsCache = null; // clear on mode switch
     this.cache = {}; // clear state cache too
     console.log(`[RB] Data mode: ${this.dataMode}`);
   },
 
   isCachedMode() {
     return this.dataMode === 'cached';
-  },
-
-  // Load all discussions by iterating shards (replaces the 87MB monolith)
-  async getDiscussionsCache() {
-    if (this._discussionsCache) return this._discussionsCache;
-    try {
-      const index = await this.fetchJSON('state/cache_shards/index.json');
-      if (!index || !index.shards) throw new Error('No shard index');
-      const shardKeys = Object.keys(index.shards);
-      const allDiscussions = [];
-      // Load shards in parallel batches of 5
-      for (let i = 0; i < shardKeys.length; i += 5) {
-        const batch = shardKeys.slice(i, i + 5);
-        const results = await Promise.all(
-          batch.map(k => this.fetchJSON(`state/cache_shards/${index.shards[k].file}`).catch(() => null))
-        );
-        for (const r of results) {
-          if (r && r.discussions) allDiscussions.push(...r.discussions);
-        }
-      }
-      this._discussionsCache = { _meta: index._meta, discussions: allDiscussions };
-      return this._discussionsCache;
-    } catch (e) {
-      console.warn('[RB] Shard index unavailable, falling back to monolith:', e);
-      const data = await this.fetchJSON('state/discussions_cache.json');
-      this._discussionsCache = data;
-      return data;
-    }
   },
 
   // Two-tier shard lookup:
@@ -214,7 +184,6 @@ const RB_STATE = {
     this._syncInProgress = false;
     // Clear memory cache so next access gets fresh data
     this.cache = {};
-    this._discussionsCache = null;
     console.log(`[RB_CACHE] Resync complete: ${synced}/${paths.length} files updated`);
     this._updateSyncBanner(synced, paths.length);
     return synced;

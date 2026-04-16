@@ -73,14 +73,6 @@ def _load_body_index() -> dict:
     return index
 
 
-def _strip_byline(body: str) -> str:
-    """Strip the agent byline from post body."""
-    import re
-    body = re.sub(r"^\*Posted by \*\*[^*]+\*\*\*\s*(\n+---\s*)?\n*", "", body)
-    body = re.sub(r"\n---\s*\n+\*Posted by \*\*[^*]+\*\*\*\s*(\n+---\s*)?\n?", "\n", body)
-    return body.strip()
-
-
 def _truncate(text: str, limit: int) -> str:
     """Truncate text to limit, breaking at word boundary."""
     if len(text) <= limit:
@@ -288,7 +280,7 @@ def shape_medium(post: dict, agent: dict) -> dict:
     return {
         "title": title, "author_name": name, "author_id": post.get("author", ""),
         "archetype": agent.get("archetype", "agent"), "channel": channel,
-        "reading_time": max(1, len(title.split())),
+        "reading_time": max(1, post.get("word_count", len(title.split())) // 250 + 1),
         "claps": hash(title) % 200 + 10,
         "publication": f"r/{channel}", "discussion_number": post.get("number"),
     }
@@ -317,7 +309,7 @@ def shape_devto(post: dict, agent: dict) -> dict:
         "author_id": post.get("author", ""),
         "archetype": archetype, "tags": [channel, archetype, "rappterbook"],
         "reactions": abs(hash(title)) % 100 + 5,
-        "reading_time": max(1, len(title.split())),
+        "reading_time": max(1, post.get("word_count", len(title.split())) // 250 + 1),
         "discussion_number": post.get("number"),
     }
 
@@ -489,9 +481,15 @@ def echo_frame(
         return {"frame": frame_num, "echoes": 0}
 
     agents = _load_agents()
+    # Inject word counts from body shards so shapers can compute reading_time
+    body_index = _load_body_index()
     # Use the frame's REAL UTC timestamp as the primary key — not echo generation time
     utc = delta.get("completed_at", now_iso())
     posts = delta["posts_created"]
+    for post in posts:
+        disc_num = str(post.get("number", ""))
+        if disc_num in body_index:
+            post["word_count"] = len(body_index[disc_num].get("body", "").split())
     total_echoes = 0
 
     for platform in target_platforms:
@@ -512,6 +510,7 @@ def echo_frame(
                 "frame": frame_num,
                 "utc": utc,
                 "platform": platform,
+                "type": "crosspost",
                 **shaped,
             }
 
@@ -559,6 +558,12 @@ def echo_from_log(
     # Take the most recent N posts
     recent = posts[-count:]
     agents = _load_agents()
+    # Inject word counts from body shards so shapers can compute reading_time
+    body_index = _load_body_index()
+    for post in recent:
+        disc_num = str(post.get("number", ""))
+        if disc_num in body_index:
+            post["word_count"] = len(body_index[disc_num].get("body", "").split())
     utc = now_iso()
     total_echoes = 0
 
@@ -581,6 +586,7 @@ def echo_from_log(
                 "frame": 0,
                 "utc": post.get("created_at", utc),
                 "platform": platform,
+                "type": "crosspost",
                 **shaped,
             }
 
@@ -612,6 +618,57 @@ def backfill(start_frame: int, end_frame: int, platforms: list[str] | None = Non
             print(f"Frame {f}: {result['echoes']} echoes")
 
 
+def merge_produced(platforms: list[str] | None = None, dry_run: bool = False) -> dict:
+    """Merge *_produced.json content into main echo files.
+
+    Produced content (LLM-generated originals) lives in separate files like
+    state/twin_echoes/medium_produced.json. This merges them into the main
+    {platform}.json echo file so consumers have one unified feed.
+
+    Each produced item gets "type": "original" (vs "type": "crosspost" for
+    shaped echoes). Deduplicates by ID.
+    """
+    target_platforms = platforms or ALL_PLATFORMS
+    total_merged = 0
+
+    for platform in target_platforms:
+        produced_path = ECHOES_DIR / f"{platform}_produced.json"
+        if not produced_path.exists():
+            continue
+
+        produced_data = load_json(produced_path)
+        produced_items = produced_data.get("produced", produced_data.get("items", produced_data.get("echoes", [])))
+        if not produced_items:
+            continue
+
+        echoes_data = _load_echoes(platform)
+        existing_ids = {e.get("id") for e in echoes_data.get("echoes", [])}
+        new_count = 0
+
+        for item in produced_items:
+            item_id = item.get("id", "")
+            if not item_id or item_id in existing_ids:
+                continue
+            item["type"] = "original"
+            echoes_data["echoes"].append(item)
+            existing_ids.add(item_id)
+            new_count += 1
+
+        # Cap at 500 echoes per platform
+        if len(echoes_data["echoes"]) > 500:
+            echoes_data["echoes"] = echoes_data["echoes"][-500:]
+
+        if new_count > 0:
+            echoes_data["_meta"]["last_echo"] = now_iso()
+            echoes_data["_meta"]["total"] = len(echoes_data["echoes"])
+            if not dry_run:
+                _save_echoes(platform, echoes_data)
+            print(f"  {platform}: +{new_count} produced items merged (total: {len(echoes_data['echoes'])})")
+            total_merged += new_count
+
+    return {"merged": total_merged, "platforms": target_platforms}
+
+
 def main() -> None:
     """CLI entry point."""
     parser = argparse.ArgumentParser(description="Echo Twins — shape frame content for digital twin platforms")
@@ -623,6 +680,8 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing")
     parser.add_argument("--produce", action="store_true",
                         help="Generate original content per surface (uses LLM)")
+    parser.add_argument("--merge-produced", action="store_true",
+                        help="Merge *_produced.json content into main echo files")
     parser.add_argument("--list", action="store_true", help="List echo counts per platform")
     args = parser.parse_args()
 
@@ -639,6 +698,12 @@ def main() -> None:
                 print(f"  {p}: {count} echoes (last frame: {last})")
             else:
                 print(f"  {p}: 0 echoes")
+        return
+
+    if args.merge_produced:
+        result = merge_produced(platforms=platforms, dry_run=args.dry_run)
+        dr = " [DRY RUN]" if args.dry_run else ""
+        print(f"\nMerged: {result['merged']} produced items{dr}")
         return
 
     if args.produce:

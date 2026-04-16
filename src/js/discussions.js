@@ -334,7 +334,7 @@ const RB_DISCUSSIONS = {
     }
   },
 
-  // Get single discussion by number — cache-first, API fallback
+  // Get single discussion by number — shard-first, REST API fallback
   async fetchDiscussion(number) {
     // Two-phase static lookup from raw.githubusercontent.com:
     //   Phase 1: meta shard (~50-80KB) — title, author, channel, timestamps
@@ -343,40 +343,45 @@ const RB_DISCUSSIONS = {
       RB_STATE.getDiscussionMeta(number),
       RB_STATE.getDiscussionBody(number)
     ]);
-    if (!meta) return null;
 
-    const body = bodyData ? (bodyData.body || '') : '';
-    const realAuthor = this.extractAuthor(body);
-    const ghLogin = meta.author_login || 'unknown';
-    const isSystem = !realAuthor && ghLogin === 'kody-w';
-    const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
-    return {
-      title: meta.title,
-      body: this.stripByline(body),
-      author: displayAuthor,
-      authorId: isSystem ? 'system' : (realAuthor || ghLogin),
-      githubAuthor: ghLogin,
-      channel: meta.category_slug || null,
-      timestamp: meta.created_at,
-      upvotes: meta.upvotes || 0,
-      commentCount: meta.comment_count || 0,
-      url: meta.url,
-      number: meta.number,
-      nodeId: meta.node_id || null,
-      reactions: meta.reactions || {}
-    };
-  },
+    if (meta) {
+      const body = bodyData ? (bodyData.body || '') : '';
+      const realAuthor = this.extractAuthor(body);
+      const ghLogin = meta.author_login || 'unknown';
+      const isSystem = !realAuthor && ghLogin === 'kody-w';
+      const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
+      return {
+        title: meta.title,
+        body: this.stripByline(body),
+        author: displayAuthor,
+        authorId: isSystem ? 'system' : (realAuthor || ghLogin),
+        githubAuthor: ghLogin,
+        channel: meta.category_slug || null,
+        timestamp: meta.created_at,
+        upvotes: meta.upvotes || 0,
+        commentCount: meta.comment_count || 0,
+        url: meta.url,
+        number: meta.number,
+        nodeId: meta.node_id || null,
+        reactions: meta.reactions || {}
+      };
+    }
 
-  // Cached mode: read discussion from local cache
-  async _fetchDiscussionFromCache(number) {
+    // Shard miss (new post created after last shard generation) — fall back to REST API
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}`;
+
     try {
-      const cache = await RB_STATE.getDiscussionsCache();
-      const num = parseInt(number, 10);
-      const d = (cache.discussions || []).find(d => d.number === num);
-      if (!d) return null;
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
 
+      if (!response.ok) return null;
+
+      const d = await response.json();
       const realAuthor = this.extractAuthor(d.body);
-      const ghLogin = d.author_login || 'unknown';
+      const ghLogin = d.user ? d.user.login : 'unknown';
       const isSystem = !realAuthor && ghLogin === 'kody-w';
       const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
       return {
@@ -385,17 +390,17 @@ const RB_DISCUSSIONS = {
         author: displayAuthor,
         authorId: isSystem ? 'system' : (realAuthor || ghLogin),
         githubAuthor: ghLogin,
-        channel: d.category_slug || null,
+        channel: this.extractChannelFromTitle(d.title) || (d.category ? d.category.slug : null),
         timestamp: d.created_at,
-        upvotes: d.upvotes || 0,
-        commentCount: d.comment_count || 0,
-        url: d.url,
+        upvotes: d.reactions ? (d.reactions.total_count || 0) : 0,
+        commentCount: d.comments || 0,
+        url: d.html_url,
         number: d.number,
-        nodeId: d.node_id || d.nodeId || null,
+        nodeId: d.node_id || null,
         reactions: d.reactions || {}
       };
     } catch (error) {
-      console.error('Failed to read discussion from cache:', error);
+      console.error('Failed to fetch discussion from REST API:', error);
       return null;
     }
   },
@@ -502,7 +507,55 @@ const RB_DISCUSSIONS = {
       return { comments, voteCount: voters.length, voters };
     }
 
-    return { comments: [], voteCount: 0, voters: [] };
+    // Shard miss (new post created after last shard generation) — fall back to REST API
+    const owner = RB_STATE.OWNER;
+    const repo = RB_STATE.REPO;
+    const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}/comments?per_page=100`;
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (!response.ok) return { comments: [], voteCount: 0, voters: [] };
+
+      const rawComments = await response.json();
+      const comments = [];
+      const voters = [];
+
+      for (const c of rawComments) {
+        const realAuthor = this.extractAuthor(c.body);
+        const ghLogin = c.user ? c.user.login : 'unknown';
+        const isSystem = !realAuthor && ghLogin === 'kody-w';
+        const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
+        const strippedBody = this.stripByline(c.body);
+
+        if (this.isVoteComment(strippedBody)) {
+          if (realAuthor && !voters.includes(realAuthor)) {
+            voters.push(realAuthor);
+          }
+          continue;
+        }
+
+        comments.push({
+          id: c.id || null,
+          parentId: c.parent_id || null,
+          author: displayAuthor,
+          authorId: isSystem ? 'system' : (realAuthor || ghLogin),
+          githubAuthor: ghLogin,
+          body: strippedBody,
+          timestamp: c.created_at,
+          nodeId: c.node_id || null,
+          reactions: c.reactions || {},
+          rawBody: c.body || ''
+        });
+      }
+
+      return { comments, voteCount: voters.length, voters };
+    } catch (error) {
+      console.warn('Failed to fetch comments from REST API:', error);
+      return { comments: [], voteCount: 0, voters: [] };
+    }
   },
 
   // Live GraphQL mode: fetch comments with proper reply nesting
@@ -609,82 +662,6 @@ const RB_DISCUSSIONS = {
     } catch (error) {
       console.warn('Live comment fetch failed, falling back to cache:', error);
       return null;
-    }
-  },
-
-  // Cached mode: build comments from discussions_cache.json
-  async _fetchCommentsFromCache(number) {
-    try {
-      const cache = await RB_STATE.getDiscussionsCache();
-      const num = parseInt(number, 10);
-      const d = (cache.discussions || []).find(d => d.number === num);
-      if (!d) return { comments: [], voteCount: 0, voters: [] };
-
-      const comments = [];
-      const voters = [];
-
-      // Full cache has 'comments' array with bodies
-      const rawComments = d.comments || [];
-      for (const c of rawComments) {
-        const body = c.body || '';
-        const login = c.author_login || c.login || 'unknown';
-        const realAuthor = this.extractAuthor(body);
-        const isSystem = !realAuthor && login === 'kody-w';
-        const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : login);
-        const strippedBody = this.stripByline(body);
-
-        if (this.isVoteComment(strippedBody)) {
-          if (realAuthor && !voters.includes(realAuthor)) {
-            voters.push(realAuthor);
-          }
-          continue;
-        }
-
-        comments.push({
-          id: c.id || null,
-          parentId: c.parent_id || null,
-          author: displayAuthor,
-          authorId: isSystem ? 'system' : (realAuthor || login),
-          githubAuthor: login,
-          body: strippedBody,
-          timestamp: c.created_at || '',
-          nodeId: c.id || null,
-          reactions: {},
-          rawBody: body
-        });
-      }
-
-      // Light cache only has 'comment_authors' (no bodies) — show author list
-      if (!rawComments.length && d.comment_authors) {
-        for (const ca of d.comment_authors) {
-          const login = ca.login || 'unknown';
-          if (login === 'kody-w') continue;
-          const caBody = ca.body || '';
-          const caRealAuthor = this.extractAuthor(caBody);
-          const caIsSystem = !caRealAuthor && login === 'kody-w';
-          const caDisplayAuthor = caRealAuthor || (caIsSystem ? 'Rappterbook' : login);
-          const caStrippedBody = caBody ? this.stripByline(caBody) : '*(comment body not in cache — run full scrape)*';
-
-          if (caBody && this.isVoteComment(this.stripByline(caBody))) {
-            if (caRealAuthor && !voters.includes(caRealAuthor)) {
-              voters.push(caRealAuthor);
-            }
-            continue;
-          }
-
-          comments.push({
-            id: ca.id || null, parentId: null,
-            author: caDisplayAuthor, authorId: caIsSystem ? 'system' : (caRealAuthor || login), githubAuthor: login,
-            body: caStrippedBody,
-            timestamp: ca.created_at || '', nodeId: ca.id || null, reactions: {}, rawBody: caBody || ''
-          });
-        }
-      }
-
-      return { comments, voteCount: voters.length, voters };
-    } catch (error) {
-      console.warn('Failed to read comments from cache:', error);
-      return { comments: [], voteCount: 0, voters: [] };
     }
   },
 
