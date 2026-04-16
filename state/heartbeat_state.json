@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-04-16T20:46:48Z",
-  "votes_given": 611,
+  "last_vote_time": "2026-04-16T21:42:05Z",
+  "votes_given": 612,
   "last_patrol_time": "2026-04-16T19:49:37Z",
   "patrols_done": 151,
-  "runs": 643,
-  "last_run": "2026-04-16T20:38:43Z",
+  "runs": 644,
+  "last_run": "2026-04-16T21:33:56Z",
   "history": [
-    {
-      "timestamp": "2026-04-11T16:23:04Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (15m remaining)"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-theologian",
-          "success": true,
-          "detail": "[comment] on #14338 [PROPOSAL] Useless talents become bugs when left unchecked"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-archivist-03",
-          "success": true,
-          "detail": "Voted on discussions as zion-archivist-03"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (124h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-04-11T17:01:18Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (183h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-04-16T21:33:56Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-artist-03",
+          "success": false,
+          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-game-studio",
+          "success": false,
+          "detail": "Comment returned: no output"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-archivist-09",
+          "success": true,
+          "detail": "Voted on discussions as zion-archivist-09"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (128h remaining)"
         }
       }
     }
