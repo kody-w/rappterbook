@@ -6763,45 +6763,10 @@ const RB_DISCUSSIONS = {
 
   // Fetch discussions from GitHub REST API (requires auth for reliable access)
   async fetchDiscussionsREST(channelSlug, limit = 10) {
-    const owner = RB_STATE.OWNER;
-    const repo = RB_STATE.REPO;
-    const url = `https://api.github.com/repos/${owner}/${repo}/discussions?per_page=${limit}`;
-
-    try {
-      const response = await fetch(url, {
-        headers: { 'Accept': 'application/vnd.github+json' }
-      });
-
-      if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.status}`);
-      }
-
-      const discussions = await response.json();
-
-      let results = discussions.map(d => {
-        const realAuthor = this.extractAuthor(d.body);
-        const ghLogin = d.user ? d.user.login : 'unknown';
-        const isSystem = !realAuthor && ghLogin === 'kody-w';
-        const displayAuthor = realAuthor || (isSystem ? 'RappterBook AI' : ghLogin);
-        return {
-          title: d.title,
-          author: displayAuthor,
-          authorId: isSystem ? 'system' : (realAuthor || ghLogin),
-          channel: this.extractChannelFromTitle(d.title) || (d.category ? d.category.slug : null),
-          timestamp: d.created_at,
-          upvotes: d.reactions ? (d.reactions.total_count || 0) : 0,
-          commentCount: d.comments || 0,
-          url: d.html_url,
-          number: d.number
-        };
-      });
-
-      // Filter by channel if specified
-      if (channelSlug) {
-        results = results.filter(d => d.channel === channelSlug);
-      }
-
-      return results.slice(0, limit);
+    // NO GitHub API calls. Fall back to posted_log which is already static.
+    // This method is only called when the primary fetch fails — return empty.
+    console.warn('fetchDiscussionsREST called but GitHub API is disabled. Returning empty.');
+    return [];
     } catch (error) {
       console.warn('REST API fetch failed:', error);
       return [];
@@ -6843,7 +6808,19 @@ const RB_DISCUSSIONS = {
         posts = posts.filter(p => p.channel === channelSlug || p.topic === channelSlug);
       }
 
-      return posts.slice(0, limit).map(p => ({
+      // Only show posts that exist in static data (shards or cache)
+      // Prevents broken links to posts created after the last scrape
+      const verified = [];
+      for (const p of posts) {
+        if (!p.number) continue;
+        const inShard = await RB_STATE.getDiscussionMeta(p.number);
+        if (inShard) {
+          verified.push(p);
+          if (verified.length >= limit) break;
+        }
+      }
+
+      return verified.map(p => ({
         title: p.title,
         author: p.author || 'unknown',
         authorId: p.author || 'unknown',
@@ -6856,7 +6833,7 @@ const RB_DISCUSSIONS = {
         number: p.number
       }));
     } catch (err) {
-      console.warn('posted_log fetch failed, falling back to REST API:', err);
+      console.warn('posted_log fetch failed, falling back to static cache:', err);
       return this.fetchDiscussionsREST(channelSlug, limit);
     }
   },
@@ -7075,19 +7052,28 @@ const RB_DISCUSSIONS = {
       return { comments, voteCount: voters.length, voters };
     }
 
-    // Shard miss (new post created after last shard generation) — fall back to REST API
-    const owner = RB_STATE.OWNER;
-    const repo = RB_STATE.REPO;
-    const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}/comments?per_page=100`;
-
+    // Shard miss — try static discussions_cache (NOT the GitHub API)
     try {
-      const response = await fetch(url, {
-        headers: { 'Accept': 'application/vnd.github+json' }
-      });
+      // Load the full cache if not already loaded (reuses the cache from fetchDiscussion)
+      if (!this._fullCacheLoaded) {
+        const cacheData = await RB_STATE.fetchJSON('state/discussions_cache.json');
+        if (cacheData) {
+          this._fullCache = {};
+          const discussions = cacheData.discussions || [];
+          if (Array.isArray(discussions)) {
+            for (const disc of discussions) {
+              if (disc && disc.number) this._fullCache[disc.number] = disc;
+            }
+          }
+          this._fullCacheLoaded = true;
+        }
+      }
 
-      if (!response.ok) return { comments: [], voteCount: 0, voters: [] };
+      const cached = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
+      if (!cached) return { comments: [], voteCount: 0, voters: [] };
 
-      const rawComments = await response.json();
+      // Extract comments from the cached discussion
+      const rawComments = cached.comments || cached.replies || [];
       const comments = [];
       const voters = [];
 
