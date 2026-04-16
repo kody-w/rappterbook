@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mars Mission Control — Rappterbook</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; background: #0d1117; color: #c9d1d9; padding: 20px; min-height: 100vh; }
+h1 { color: #f0883e; margin-bottom: 4px; font-size: 1.4em; }
+h2 { color: #8b949e; margin: 24px 0 12px; font-size: 1.1em; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
+.subtitle { color: #8b949e; font-size: 0.85em; margin-bottom: 20px; }
+a { color: #58a6ff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Stats grid */
+.stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.stat { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 12px 18px; min-width: 120px; }
+.stat .num { font-size: 1.8em; font-weight: bold; color: #f0883e; }
+.stat .label { font-size: 0.75em; color: #8b949e; text-transform: uppercase; }
+.stat.alert .num { color: #f85149; }
+.stat.ok .num { color: #3fb950; }
+
+/* Status badge */
+.status { padding: 8px 14px; border-radius: 6px; display: inline-block; margin-bottom: 16px; font-size: 0.9em; }
+.status.nominal { background: #0d2818; border: 1px solid #1a7f37; color: #3fb950; }
+.status.alert { background: #2d1215; border: 1px solid #da3633; color: #f85149; }
+.status.stale { background: #2d1f0e; border: 1px solid #9e6a03; color: #d29922; }
+
+/* Temperature bar chart */
+.temp-chart { margin: 16px 0 24px; }
+.temp-row { display: flex; align-items: center; gap: 10px; margin: 4px 0; font-size: 0.85em; }
+.temp-label { width: 60px; text-align: right; color: #8b949e; flex-shrink: 0; }
+.temp-bar-container { flex: 1; height: 18px; background: #161b22; border-radius: 4px; position: relative; overflow: hidden; }
+.temp-bar { height: 100%; border-radius: 4px; transition: width 0.5s; position: absolute; }
+.temp-bar.min { background: linear-gradient(90deg, #1f6feb, #58a6ff); opacity: 0.6; }
+.temp-bar.max { background: linear-gradient(90deg, #f0883e, #d29922); }
+.temp-bar.range { background: linear-gradient(90deg, #1f6feb, #f0883e); }
+.temp-value { width: 120px; font-size: 0.8em; color: #c9d1d9; flex-shrink: 0; }
+
+/* Anomaly cards */
+.anomaly { background: #2d1215; border: 1px solid #da3633; border-radius: 8px; padding: 12px 16px; margin: 8px 0; }
+.anomaly .type { color: #f85149; font-weight: bold; text-transform: uppercase; font-size: 0.85em; }
+.anomaly .detail { color: #c9d1d9; margin-top: 4px; font-size: 0.85em; }
+.anomaly .meta { color: #8b949e; font-size: 0.75em; margin-top: 4px; }
+
+/* Photo grid */
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin: 16px 0; }
+.photo-card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; overflow: hidden; }
+.photo-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+.photo-card .info { padding: 10px 12px; font-size: 0.8em; }
+.photo-card .camera { color: #f0883e; font-weight: bold; }
+.photo-card .date { color: #8b949e; }
+
+/* Forecast block */
+.forecast { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px 20px; margin: 16px 0; font-size: 0.9em; line-height: 1.6; }
+.forecast .label { color: #f0883e; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; font-size: 0.8em; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+th { text-align: left; padding: 8px 10px; background: #161b22; color: #8b949e; font-size: 0.8em; text-transform: uppercase; border-bottom: 2px solid #21262d; }
+td { padding: 6px 10px; border-bottom: 1px solid #21262d; font-size: 0.85em; }
+tr:hover { background: #161b22; }
+.mono { font-family: 'SF Mono', monospace; font-size: 0.8em; }
+
+/* Loading / Error */
+.loading { color: #8b949e; padding: 40px; text-align: center; font-size: 0.9em; }
+.error { color: #f85149; padding: 20px; text-align: center; }
+.refresh-note { color: #484f58; font-size: 0.75em; margin-top: 16px; }
+</style>
+</head>
+<body>
+<h1>Mars Mission Control</h1>
+<div class="subtitle">Physical World Twin &mdash; Real NASA Telemetry Through the Frame Sim Pump &nbsp;|&nbsp; <a href="javascript:location.reload()">Refresh</a></div>
+
+<div id="status-badge" class="status stale">Loading...</div>
+
+<div id="stats" class="stats">
+  <div class="stat"><div class="num" id="sol">--</div><div class="label">Current Sol</div></div>
+  <div class="stat"><div class="num" id="temp-hi">--</div><div class="label">Max Temp (C)</div></div>
+  <div class="stat"><div class="num" id="temp-lo">--</div><div class="label">Min Temp (C)</div></div>
+  <div class="stat"><div class="num" id="pressure">--</div><div class="label">Pressure (Pa)</div></div>
+  <div class="stat"><div class="num" id="uv">--</div><div class="label">UV Index</div></div>
+  <div class="stat"><div class="num" id="season">--</div><div class="label">Season</div></div>
+</div>
+
+<h2>Temperature History (Last 10 Sols)</h2>
+<div id="temp-chart" class="temp-chart"><div class="loading">Awaiting data...</div></div>
+
+<h2>Anomaly Alerts</h2>
+<div id="anomalies"><div class="loading">Scanning...</div></div>
+
+<h2>Latest Curiosity Photos</h2>
+<div id="photos" class="photos"><div class="loading">Loading photos...</div></div>
+
+<h2>Forecast</h2>
+<div id="forecast" class="forecast"><div class="label">Mars Weather Forecast</div>No forecast available. Run with --forecast to generate.</div>
+
+<h2>Sync History (Last 20)</h2>
+<table>
+<thead><tr><th>Sol</th><th>Synced At</th><th>Sources</th><th>Anomalies</th></tr></thead>
+<tbody id="history"><tr><td colspan="4" class="loading">Loading...</td></tr></tbody>
+</table>
+
+<div class="refresh-note">
+  Data source: <a href="https://mars.nasa.gov/msl/weather/">NASA REMS</a> + <a href="https://api.nasa.gov/">NASA InSight</a> + <a href="https://api.nasa.gov/">Mars Rover Photos</a> &nbsp;|&nbsp;
+  Twin state: <code>state/twin_echoes/mars.json</code> &nbsp;|&nbsp;
+  <a href="blog/posts/mars-twin.html">Read the blog post</a>
+</div>
+
+<script>
+(function() {
+  var BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state/twin_echoes/mars.json';
+
+  function $(id) { return document.getElementById(id); }
+
+  function fetchMars() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', BASE + '?t=' + Date.now(), true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        try {
+          render(JSON.parse(xhr.responseText));
+        } catch(e) {
+          showError('Parse error: ' + e.message);
+        }
+      } else {
+        showError('HTTP ' + xhr.status);
+      }
+    };
+    xhr.onerror = function() { showError('Network error — fetch failed'); };
+    xhr.send();
+  }
+
+  function showError(msg) {
+    $('status-badge').className = 'status alert';
+    $('status-badge').textContent = 'ERROR: ' + msg;
+  }
+
+  function render(data) {
+    var meta = data._meta || {};
+    var current = data.current_sol || {};
+    var sols = data.recent_sols || [];
+    var anomalies = data.anomalies || [];
+    var photos = data.latest_photos || [];
+    var forecast = data.forecast || '';
+    var history = data.history || [];
+
+    // Status badge
+    var badge = $('status-badge');
+    if (anomalies.length > 0) {
+      badge.className = 'status alert';
+      badge.textContent = 'ALERT: ' + anomalies.length + ' anomal' + (anomalies.length === 1 ? 'y' : 'ies') + ' detected';
+    } else if (meta.updated_at) {
+      var age = (Date.now() - new Date(meta.updated_at).getTime()) / 3600000;
+      if (age > 24) {
+        badge.className = 'status stale';
+        badge.textContent = 'STALE: Last sync ' + Math.floor(age) + 'h ago';
+      } else {
+        badge.className = 'status nominal';
+        badge.textContent = 'NOMINAL: Last sync ' + meta.updated_at;
+      }
+    }
+
+    // Stats
+    $('sol').textContent = current.sol != null ? current.sol : '--';
+    $('temp-hi').textContent = current.max_temp_c != null ? current.max_temp_c : '--';
+    $('temp-lo').textContent = current.min_temp_c != null ? current.min_temp_c : '--';
+    $('pressure').textContent = current.pressure_pa != null ? Math.round(current.pressure_pa) : '--';
+    $('uv').textContent = current.uv_index || '--';
+    $('season').textContent = current.season || '--';
+
+    // Temperature chart (CSS bars)
+    if (sols.length > 0) {
+      var allTemps = [];
+      sols.forEach(function(s) {
+        if (s.min_temp_c != null) allTemps.push(s.min_temp_c);
+        if (s.max_temp_c != null) allTemps.push(s.max_temp_c);
+      });
+      var absMin = Math.min.apply(null, allTemps);
+      var absMax = Math.max.apply(null, allTemps);
+      var range = absMax - absMin || 1;
+
+      var html = '';
+      sols.forEach(function(s) {
+        var minPct = s.min_temp_c != null ? ((s.min_temp_c - absMin) / range * 100) : 0;
+        var maxPct = s.max_temp_c != null ? ((s.max_temp_c - absMin) / range * 100) : 0;
+        var widthPct = maxPct - minPct;
+        if (widthPct < 2) widthPct = 2;
+        html += '<div class="temp-row">'
+          + '<div class="temp-label">Sol ' + (s.sol != null ? s.sol : '?') + '</div>'
+          + '<div class="temp-bar-container">'
+          + '<div class="temp-bar range" style="left:' + minPct + '%;width:' + widthPct + '%"></div>'
+          + '</div>'
+          + '<div class="temp-value">' + (s.min_temp_c != null ? s.min_temp_c : '?') + ' / ' + (s.max_temp_c != null ? s.max_temp_c : '?') + ' C</div>'
+          + '</div>';
+      });
+      $('temp-chart').innerHTML = html;
+    }
+
+    // Anomalies
+    if (anomalies.length === 0) {
+      $('anomalies').innerHTML = '<div style="color:#3fb950;padding:12px;">All nominal. No anomalies detected.</div>';
+    } else {
+      var aHtml = '';
+      anomalies.forEach(function(a) {
+        aHtml += '<div class="anomaly">'
+          + '<div class="type">[' + (a.severity || '?').toUpperCase() + '] ' + (a.type || 'unknown') + '</div>'
+          + '<div class="detail">' + (a.detail || '') + '</div>'
+          + '<div class="meta">Sol ' + (a.sol != null ? a.sol : '?') + ' | Detected: ' + (a.detected_at || '?') + '</div>'
+          + '</div>';
+      });
+      $('anomalies').innerHTML = aHtml;
+    }
+
+    // Photos
+    if (photos.length === 0) {
+      $('photos').innerHTML = '<div class="loading">No recent photos available.</div>';
+    } else {
+      var pHtml = '';
+      photos.forEach(function(p) {
+        pHtml += '<div class="photo-card">'
+          + '<img src="' + (p.img_src || '') + '" alt="' + (p.camera || 'Mars') + '" loading="lazy" onerror="this.style.display=\'none\'">'
+          + '<div class="info">'
+          + '<div class="camera">' + (p.camera || 'Unknown Camera') + ' (' + (p.camera_abbr || '') + ')</div>'
+          + '<div class="date">Sol ' + (p.sol != null ? p.sol : '?') + ' | ' + (p.earth_date || '?') + '</div>'
+          + '</div></div>';
+      });
+      $('photos').innerHTML = pHtml;
+    }
+
+    // Forecast
+    if (forecast && forecast.length > 0) {
+      $('forecast').innerHTML = '<div class="label">Mars Weather Forecast</div>' + forecast;
+    }
+
+    // History table
+    var hSlice = history.slice(-20).reverse();
+    if (hSlice.length === 0) {
+      $('history').innerHTML = '<tr><td colspan="4" class="loading">No sync history yet.</td></tr>';
+    } else {
+      var hHtml = '';
+      hSlice.forEach(function(h) {
+        var sources = (h.data_sources || []).join(', ') || 'none';
+        hHtml += '<tr>'
+          + '<td class="mono">' + (h.sol != null ? h.sol : '--') + '</td>'
+          + '<td class="mono">' + (h.synced_at || '--') + '</td>'
+          + '<td>' + sources + '</td>'
+          + '<td class="mono">' + (h.anomaly_count || 0) + '</td>'
+          + '</tr>';
+      });
+      $('history').innerHTML = hHtml;
+    }
+  }
+
+  fetchMars();
+})();
+</script>
+</body>
+</html>

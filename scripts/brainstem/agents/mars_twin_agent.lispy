@@ -1,0 +1,132 @@
+;;; mars_twin_agent.lispy — Monitor real Martian weather data.
+;;;
+;;; The first agent that monitors a PHYSICAL world twin, not a social
+;;; media feed. Reads NASA telemetry from state/twin_echoes/mars.json,
+;;; detects anomalies, generates reports, surfaces observations.
+;;;
+;;; This is Mars flowing through the same Frame Sim Pump as Twitter echoes.
+
+(define agent-name "MarsTwin")
+(define agent-description "Monitor real Martian weather data. Detect anomalies, generate reports, surface observations from NASA telemetry. The first physical world twin.")
+(define agent-parameters
+  (make-dict
+    "action" "report, anomalies, photos, forecast, summary"
+    "detail" "Optional: level of detail (brief, full)"))
+
+(define (temp-status temp-c)
+  "Classify Martian temperature."
+  (cond
+    ((> temp-c -10) "warm (for Mars)")
+    ((> temp-c -40) "moderate")
+    ((> temp-c -70) "cold")
+    (#t "extreme cold")))
+
+(define (pressure-status pressure-pa)
+  "Classify Martian atmospheric pressure."
+  (cond
+    ((not pressure-pa) "unknown")
+    ((> pressure-pa 900) "high")
+    ((> pressure-pa 700) "nominal")
+    (#t "low")))
+
+(define (format-temp-range mn mx)
+  "Format a temperature range string."
+  (string-append
+    (if mn (number->string mn) "?") " C to "
+    (if mx (number->string mx) "?") " C"))
+
+(define (report-current mars)
+  "Generate a current conditions report."
+  (let* ((current (get mars "current_sol" (make-dict)))
+         (sol (get current "sol" "?"))
+         (earth-date (get current "earth_date" "?"))
+         (min-t (get current "min_temp_c"))
+         (max-t (get current "max_temp_c"))
+         (pressure (get current "pressure_pa"))
+         (uv (get current "uv_index" "unknown"))
+         (season (get current "season" "unknown"))
+         (sunrise (get current "sunrise" ""))
+         (sunset (get current "sunset" ""))
+         (anomalies (get mars "anomalies" (list)))
+         (photos (get mars "latest_photos" (list))))
+    (make-dict
+      "sol" sol
+      "earth_date" earth-date
+      "temp_range" (format-temp-range min-t max-t)
+      "temp_status" (if max-t (temp-status max-t) "unknown")
+      "pressure_pa" pressure
+      "pressure_status" (pressure-status pressure)
+      "uv_index" uv
+      "season" season
+      "daylight" (if (and (string? sunrise) (string? sunset)
+                          (> (string-length sunrise) 0))
+                     (string-append sunrise " - " sunset)
+                     "unknown")
+      "anomaly_count" (length anomalies)
+      "photo_count" (length photos)
+      "status" (if (> (length anomalies) 0) "ALERT" "nominal"))))
+
+(define (report-anomalies mars)
+  "Report detected anomalies."
+  (let ((anomalies (get mars "anomalies" (list))))
+    (if (= (length anomalies) 0)
+        (make-dict "status" "nominal" "message" "No anomalies detected. Mars is quiet.")
+        (make-dict
+          "status" "ALERT"
+          "count" (length anomalies)
+          "anomalies" (map (lambda (a)
+            (make-dict
+              "type" (get a "type" "unknown")
+              "severity" (get a "severity" "unknown")
+              "detail" (get a "detail" "")
+              "sol" (get a "sol")))
+          anomalies)))))
+
+(define (report-photos mars)
+  "Report latest Curiosity photos."
+  (let ((photos (get mars "latest_photos" (list))))
+    (if (= (length photos) 0)
+        (make-dict "status" "none" "message" "No recent photos available.")
+        (make-dict
+          "count" (length photos)
+          "photos" (map (lambda (p)
+            (make-dict
+              "camera" (get p "camera" "unknown")
+              "earth_date" (get p "earth_date" "")
+              "sol" (get p "sol")
+              "url" (get p "img_src" "")))
+          photos)))))
+
+(define (report-summary mars)
+  "Generate a one-line summary for embedding in other contexts."
+  (let* ((current (get mars "current_sol" (make-dict)))
+         (sol (get current "sol" "?"))
+         (max-t (get current "max_temp_c"))
+         (uv (get current "uv_index" "?"))
+         (anomalies (get mars "anomalies" (list))))
+    (make-dict
+      "summary" (string-append
+        "Sol " (if (number? sol) (number->string sol) sol)
+        " | Max " (if max-t (string-append (number->string max-t) " C") "?")
+        " | UV: " uv
+        " | " (if (> (length anomalies) 0)
+                   (string-append (number->string (length anomalies)) " anomalies")
+                   "nominal")))))
+
+(define (agent-run context kwargs)
+  "Run the Mars twin agent."
+  (let* ((mars (rb-state "twin_echoes/mars.json"))
+         (action (get kwargs "action" "report")))
+    (if (not mars)
+        (make-dict "error" "No Mars twin data. Run: python scripts/mars_twin.py")
+        (cond
+          ((equal? action "report") (report-current mars))
+          ((equal? action "anomalies") (report-anomalies mars))
+          ((equal? action "photos") (report-photos mars))
+          ((equal? action "forecast")
+           (let ((fc (get mars "forecast" "")))
+             (if (> (string-length fc) 0)
+                 (make-dict "forecast" fc "sol" (get (get mars "current_sol" (make-dict)) "sol"))
+                 (make-dict "forecast" "No forecast available. Run: python scripts/mars_twin.py --forecast"))))
+          ((equal? action "summary") (report-summary mars))
+          (#t (make-dict "error" (string-append "Unknown action: " action)))))))
