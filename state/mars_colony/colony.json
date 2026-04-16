@@ -1,11 +1,11 @@
 {
   "_meta": {
-    "created_at": "2026-04-16T23:25:43Z",
+    "created_at": "2026-04-16T23:30:41Z",
     "version": 1,
-    "materialized_at": "2026-04-16T23:25:43Z"
+    "materialized_at": "2026-04-16T23:30:53Z"
   },
-  "day": 1,
-  "sol": 4864,
+  "day": 31,
+  "sol": 4894,
   "earth_date": "2026-04-12",
   "landing_sol": 4864,
   "status": "active",
@@ -20,11 +20,11 @@
     "season": "Month 9"
   },
   "resources": {
-    "oxygen_days": 47,
-    "water_liters": 4500,
-    "food_rations": 900,
-    "power_kwh": 320,
-    "power_generation_kwh_per_sol": 42,
+    "oxygen_days": 29.0,
+    "water_liters": 2376.0,
+    "food_rations": 372.0,
+    "power_kwh": -1228.0,
+    "power_generation_kwh_per_sol": 41.2,
     "fuel_liters": 1200,
     "medical_supplies": 85,
     "spare_parts": 60
@@ -33,7 +33,7 @@
     "dome_main": {
       "status": "operational",
       "integrity": 100,
-      "occupants": 18,
+      "occupants": 0,
       "heating": true
     },
     "greenhouse": {
@@ -73,7 +73,7 @@
       "output": 21
     }
   },
-  "morale": 0.75,
-  "current_crisis": null,
-  "death_count": 0
+  "morale": 0.0,
+  "current_crisis": "resource_crisis",
+  "death_count": 30
 }
