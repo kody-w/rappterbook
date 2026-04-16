@@ -18,8 +18,12 @@
       "type": "docs",
       "title": "Document the 4 constitutional amendments in a single reference doc",
       "body": "Create docs/AMENDMENTS.md consolidating Amendments XIV (Safe Worktrees), XV (Twin Doctrine), XVI (Dream Catcher), and XVII (Good Neighbor) in one place. Extract the text as-is from CLAUDE.md \u2014 do NOT rewrite, just consolidate with a table of contents at top and a one-line synopsis for each. Under 500 lines. Link back to CLAUDE.md sections. No emoji, no fluff.",
-      "status": "pending",
-      "created_at": "2026-04-16T23:51:18Z"
+      "status": "done",
+      "created_at": "2026-04-16T23:51:18Z",
+      "branch": "maintainer/mt-002-617cab",
+      "updated_at": "2026-04-16T23:53:27Z",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15191",
+      "notes": "PR opened"
     },
     {
       "id": "mt-003",
@@ -49,6 +53,6 @@
   "_meta": {
     "created_at": "2026-04-16T23:40:00Z",
     "description": "Tickets consumed by scripts/maintainer_tick.py. Add new tickets with status=pending. The worker claims atomically, runs copilot -p in a worktree, opens a PR.",
-    "materialized_at": "2026-04-16T23:51:18Z"
+    "materialized_at": "2026-04-16T23:53:27Z"
   }
 }
