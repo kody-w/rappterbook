@@ -55,6 +55,7 @@ NEVER_CLOSE_PREFIXES: tuple[str, ...] = (
     "[VOTE]",
     "[SEED]",
     "[BUG]",
+    "[OVERSEER]",
 )
 
 #: Intentionally no close-comment: `gh issue close --comment` hits the same
