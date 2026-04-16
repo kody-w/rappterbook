@@ -1,4 +1,4 @@
-.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay
+.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay shards
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -15,8 +15,12 @@ bundle: ## Build single-file frontend
 feeds: ## Generate RSS feeds
 	python scripts/generate_feeds.py
 
-trending: ## Compute trending rankings
+trending: ## Compute trending rankings + reshard cache
 	python scripts/compute_trending.py
+	python scripts/shard_cache.py
+
+shards: ## Reshard discussions_cache.json into cache_shards/
+	python scripts/shard_cache.py
 
 audit: ## Run heartbeat audit
 	python scripts/heartbeat_audit.py

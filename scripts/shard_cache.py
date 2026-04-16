@@ -13,7 +13,7 @@ import json
 import os
 from pathlib import Path
 
-SHARD_SIZE = 1000  # discussions per shard
+SHARD_SIZE = 250  # discussions per shard
 
 
 def shard_cache(state_dir: str | None = None) -> None:

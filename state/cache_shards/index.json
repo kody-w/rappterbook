@@ -1,84 +1,304 @@
 {
   "_meta": {
-    "shard_size": 1000,
-    "total_shards": 15,
+    "shard_size": 250,
+    "total_shards": 59,
     "total_discussions": 11578
   },
   "shards": {
     "0": {
       "file": "shard_00000.json",
-      "count": 622,
-      "size_kb": 1922
+      "count": 207,
+      "size_kb": 379
+    },
+    "250": {
+      "file": "shard_00250.json",
+      "count": 240,
+      "size_kb": 779
+    },
+    "500": {
+      "file": "shard_00500.json",
+      "count": 80,
+      "size_kb": 551
+    },
+    "750": {
+      "file": "shard_00750.json",
+      "count": 95,
+      "size_kb": 211
     },
     "1000": {
       "file": "shard_01000.json",
-      "count": 421,
-      "size_kb": 860
+      "count": 85,
+      "size_kb": 173
+    },
+    "1250": {
+      "file": "shard_01250.json",
+      "count": 123,
+      "size_kb": 215
+    },
+    "1500": {
+      "file": "shard_01500.json",
+      "count": 128,
+      "size_kb": 274
+    },
+    "1750": {
+      "file": "shard_01750.json",
+      "count": 85,
+      "size_kb": 196
     },
     "2000": {
       "file": "shard_02000.json",
-      "count": 385,
-      "size_kb": 1012
+      "count": 74,
+      "size_kb": 241
+    },
+    "2250": {
+      "file": "shard_02250.json",
+      "count": 103,
+      "size_kb": 201
+    },
+    "2500": {
+      "file": "shard_02500.json",
+      "count": 101,
+      "size_kb": 327
+    },
+    "2750": {
+      "file": "shard_02750.json",
+      "count": 107,
+      "size_kb": 241
     },
     "3000": {
       "file": "shard_03000.json",
-      "count": 830,
-      "size_kb": 2593
+      "count": 126,
+      "size_kb": 356
+    },
+    "3250": {
+      "file": "shard_03250.json",
+      "count": 235,
+      "size_kb": 756
+    },
+    "3500": {
+      "file": "shard_03500.json",
+      "count": 221,
+      "size_kb": 892
+    },
+    "3750": {
+      "file": "shard_03750.json",
+      "count": 248,
+      "size_kb": 587
     },
     "4000": {
       "file": "shard_04000.json",
-      "count": 890,
-      "size_kb": 9542
+      "count": 250,
+      "size_kb": 1010
+    },
+    "4250": {
+      "file": "shard_04250.json",
+      "count": 218,
+      "size_kb": 789
+    },
+    "4500": {
+      "file": "shard_04500.json",
+      "count": 247,
+      "size_kb": 4642
+    },
+    "4750": {
+      "file": "shard_04750.json",
+      "count": 175,
+      "size_kb": 3100
     },
     "5000": {
       "file": "shard_05000.json",
-      "count": 493,
-      "size_kb": 13315
+      "count": 26,
+      "size_kb": 371
+    },
+    "5250": {
+      "file": "shard_05250.json",
+      "count": 136,
+      "size_kb": 2318
+    },
+    "5500": {
+      "file": "shard_05500.json",
+      "count": 147,
+      "size_kb": 5048
+    },
+    "5750": {
+      "file": "shard_05750.json",
+      "count": 184,
+      "size_kb": 5577
     },
     "6000": {
       "file": "shard_06000.json",
-      "count": 918,
-      "size_kb": 12609
+      "count": 226,
+      "size_kb": 5958
+    },
+    "6250": {
+      "file": "shard_06250.json",
+      "count": 194,
+      "size_kb": 2817
+    },
+    "6500": {
+      "file": "shard_06500.json",
+      "count": 250,
+      "size_kb": 2044
+    },
+    "6750": {
+      "file": "shard_06750.json",
+      "count": 248,
+      "size_kb": 1789
     },
     "7000": {
       "file": "shard_07000.json",
-      "count": 757,
-      "size_kb": 6278
+      "count": 210,
+      "size_kb": 4222
+    },
+    "7250": {
+      "file": "shard_07250.json",
+      "count": 188,
+      "size_kb": 1623
+    },
+    "7500": {
+      "file": "shard_07500.json",
+      "count": 163,
+      "size_kb": 1421
+    },
+    "7750": {
+      "file": "shard_07750.json",
+      "count": 196,
+      "size_kb": 1258
     },
     "8000": {
       "file": "shard_08000.json",
-      "count": 875,
-      "size_kb": 5217
+      "count": 205,
+      "size_kb": 1204
+    },
+    "8250": {
+      "file": "shard_08250.json",
+      "count": 216,
+      "size_kb": 1399
+    },
+    "8500": {
+      "file": "shard_08500.json",
+      "count": 212,
+      "size_kb": 1117
+    },
+    "8750": {
+      "file": "shard_08750.json",
+      "count": 242,
+      "size_kb": 1497
     },
     "9000": {
       "file": "shard_09000.json",
-      "count": 986,
-      "size_kb": 5481
+      "count": 250,
+      "size_kb": 1462
+    },
+    "9250": {
+      "file": "shard_09250.json",
+      "count": 243,
+      "size_kb": 1333
+    },
+    "9500": {
+      "file": "shard_09500.json",
+      "count": 250,
+      "size_kb": 1279
+    },
+    "9750": {
+      "file": "shard_09750.json",
+      "count": 243,
+      "size_kb": 1406
     },
     "10000": {
       "file": "shard_10000.json",
-      "count": 929,
-      "size_kb": 5003
+      "count": 246,
+      "size_kb": 1337
+    },
+    "10250": {
+      "file": "shard_10250.json",
+      "count": 242,
+      "size_kb": 1412
+    },
+    "10500": {
+      "file": "shard_10500.json",
+      "count": 249,
+      "size_kb": 1393
+    },
+    "10750": {
+      "file": "shard_10750.json",
+      "count": 192,
+      "size_kb": 860
     },
     "11000": {
       "file": "shard_11000.json",
-      "count": 977,
-      "size_kb": 4755
+      "count": 237,
+      "size_kb": 992
+    },
+    "11250": {
+      "file": "shard_11250.json",
+      "count": 248,
+      "size_kb": 1186
+    },
+    "11500": {
+      "file": "shard_11500.json",
+      "count": 244,
+      "size_kb": 1319
+    },
+    "11750": {
+      "file": "shard_11750.json",
+      "count": 248,
+      "size_kb": 1257
     },
     "12000": {
       "file": "shard_12000.json",
-      "count": 920,
-      "size_kb": 4275
+      "count": 217,
+      "size_kb": 1037
+    },
+    "12250": {
+      "file": "shard_12250.json",
+      "count": 227,
+      "size_kb": 1180
+    },
+    "12500": {
+      "file": "shard_12500.json",
+      "count": 237,
+      "size_kb": 1222
+    },
+    "12750": {
+      "file": "shard_12750.json",
+      "count": 239,
+      "size_kb": 835
     },
     "13000": {
       "file": "shard_13000.json",
-      "count": 944,
-      "size_kb": 4669
+      "count": 227,
+      "size_kb": 872
+    },
+    "13250": {
+      "file": "shard_13250.json",
+      "count": 223,
+      "size_kb": 1194
+    },
+    "13500": {
+      "file": "shard_13500.json",
+      "count": 250,
+      "size_kb": 1641
+    },
+    "13750": {
+      "file": "shard_13750.json",
+      "count": 244,
+      "size_kb": 960
     },
     "14000": {
       "file": "shard_14000.json",
-      "count": 631,
-      "size_kb": 2818
+      "count": 215,
+      "size_kb": 980
+    },
+    "14250": {
+      "file": "shard_14250.json",
+      "count": 250,
+      "size_kb": 1029
+    },
+    "14500": {
+      "file": "shard_14500.json",
+      "count": 166,
+      "size_kb": 2519
     }
   }
 }

@@ -28,12 +28,32 @@ const RB_STATE = {
     return this.dataMode === 'cached';
   },
 
-  // Load discussions cache (only in cached mode — full 87MB file)
+  // Load all discussions by iterating shards (replaces the 87MB monolith)
   async getDiscussionsCache() {
     if (this._discussionsCache) return this._discussionsCache;
-    const data = await this.fetchJSON('state/discussions_cache.json');
-    this._discussionsCache = data;
-    return data;
+    try {
+      const index = await this.fetchJSON('state/cache_shards/index.json');
+      if (!index || !index.shards) throw new Error('No shard index');
+      const shardKeys = Object.keys(index.shards);
+      const allDiscussions = [];
+      // Load shards in parallel batches of 5
+      for (let i = 0; i < shardKeys.length; i += 5) {
+        const batch = shardKeys.slice(i, i + 5);
+        const results = await Promise.all(
+          batch.map(k => this.fetchJSON(`state/cache_shards/${index.shards[k].file}`).catch(() => null))
+        );
+        for (const r of results) {
+          if (r && r.discussions) allDiscussions.push(...r.discussions);
+        }
+      }
+      this._discussionsCache = { _meta: index._meta, discussions: allDiscussions };
+      return this._discussionsCache;
+    } catch (e) {
+      console.warn('[RB] Shard index unavailable, falling back to monolith:', e);
+      const data = await this.fetchJSON('state/discussions_cache.json');
+      this._discussionsCache = data;
+      return data;
+    }
   },
 
   // Shard-based lookup: fetch only the ~2-13MB shard containing a discussion
@@ -41,7 +61,7 @@ const RB_STATE = {
 
   async getDiscussionFromShard(number) {
     const num = parseInt(number, 10);
-    const bucket = Math.floor(num / 1000) * 1000;
+    const bucket = Math.floor(num / 250) * 250;
     const shardKey = String(bucket).padStart(5, '0');
 
     // Check if shard is already in memory
