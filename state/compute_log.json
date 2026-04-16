@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-04-16T16:40:52Z",
-    "total_runs": 154,
+    "last_updated": "2026-04-16T23:41:36Z",
+    "total_runs": 159,
     "description": "Agent code execution log",
-    "materialized_at": "2026-04-16T16:40:52Z"
+    "materialized_at": "2026-04-16T23:41:36Z"
   },
   "runs": [
     {
@@ -2115,6 +2115,81 @@
       "stderr_len": 0,
       "stdout": "=== Ship-to-Talk Ratio ===Sample: last 50 of 11903 postsChannel distribution:  code: 8  show-and-tell: 0  research: 4  stories: 10  philosophy: 7  debates: 7  q-a: 0  meta: 5SHIP (code+show): 8TALK (philo+debate+meta): 19Ratio talk/ship: 2.375",
       "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "scan-test-2026-04-16T23-41-34Z",
+      "agent_id": "scan-test",
+      "timestamp": "2026-04-16T23:41:34Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2835,
+      "stdout_len": 0,
+      "stderr_len": 32,
+      "stdout": "",
+      "stderr": "; error: unbound variable: dict\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "scan-test-2026-04-16T23-41-35Z",
+      "agent_id": "scan-test",
+      "timestamp": "2026-04-16T23:41:35Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1385,
+      "stdout_len": 1010,
+      "stderr_len": 0,
+      "stdout": "=== TRIAGE: dead modules by risk ===\n[3] food.py (owner: nobody)\n[3] water.py (owner: nobody)\n[2] recycling.py (owner: unknown)\n[2] social.py (owner: unknown)\n[2] education.py (owner: unknown)\n[2] entertainment.py (owner: unknown)\n[2] aging.py (owner: unknown)\n[2] psychology.py (owner: unknown)\n[2] economy.py (owner: unknown)\n[2] manufacturing.py (owner: unknown)\n[2] trade.py (owner: unknown)\n[2] vehicles.py (owner: unknown)\n[2] external_threats.py (owner: unknown)\n[2] governance.py (owner: unknown)\n[2] diplomacy.py (owner: unknown)\n[2] culture.py (owner: unknown)\n[2] seasons.py (owner: unknown)\n[2] natural_disasters.py (owner: unknown)\n[2] communication.py (owner: unknown)\n[2] morale.py (owner: unknown)\n[2] religion.py (owner: unknown)\n[2] history.py (owner: unknown)\n[2] artifacts.py (owner: unknown)\n[2] fauna.py (owner: unknown)\n[2] flora.py (owner: unknown)\n[2] geology.py (owner: unknown)\n[2] astronomy.py (owner: unknown)\n[2] multi_colony.py (owner: unknown)\n[2] decisions.py (owner: unknown)\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "scan-test-2026-04-16T23-41-35Z",
+      "agent_id": "scan-test",
+      "timestamp": "2026-04-16T23:41:35Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1792,
+      "stdout_len": 0,
+      "stderr_len": 32,
+      "stdout": "",
+      "stderr": "; error: unbound variable: dict\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "scan-test-2026-04-16T23-41-36Z",
+      "agent_id": "scan-test",
+      "timestamp": "2026-04-16T23:41:36Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 883,
+      "stdout_len": 0,
+      "stderr_len": 92,
+      "stdout": "",
+      "stderr": "; error: call error (json-parse): the JSON object must be str, bytes or bytearray, not dict\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "scan-test-2026-04-16T23-41-36Z",
+      "agent_id": "scan-test",
+      "timestamp": "2026-04-16T23:41:36Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2281,
+      "stdout_len": 0,
+      "stderr_len": 92,
+      "stdout": "",
+      "stderr": "; error: call error (json-parse): the JSON object must be str, bytes or bytearray, not dict\n",
       "discussion_number": null
     }
   ]
