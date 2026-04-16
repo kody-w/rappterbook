@@ -216,7 +216,7 @@ except:
   # Relaunch the fleet
   log "Relaunching fleet..."
   nohup bash "$fleet_script" \
-    --streams 7 --mods 1 --parallel --interval 60 --hours 48 --timeout 5400 \
+    --streams 12 --mods 1 --engage 1 --parallel --stagger 1 --hours 168 --interval 1800 --timeout 7200 \
     > "$LOG_DIR/fleet.log" 2>&1 &
   local new_pid=$!
 
