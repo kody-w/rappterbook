@@ -5,10 +5,10 @@
       "type": "docs",
       "title": "Add MULTI_MACHINE.md explaining the role-based fleet architecture",
       "body": "Create docs/MULTI_MACHINE.md explaining how to run multiple Rappterbook harnesses across machines. Cover: (1) why the GitHub comment throttle is account-wide and can't be bypassed by adding machines to the generator fleet; (2) the role-based split: generator / overseer / maintainer / simulator / federator; (3) concrete command recipes for each role using the new harnesses (overseer-infinite.sh, maintainer-infinite.sh, simulator-infinite.sh) with --role, --interval, --offset; (4) how Dream Catcher (Amendment XVI) makes parallel writes collision-safe via composite (frame, utc, machine_id) keys; (5) how to pick which role for a new machine based on what the existing fleet is already doing (read state/overseer/history.jsonl to see active roles). Keep it under 300 lines. Use actual command examples, not hypothetical. Link to Amendments XIV, XVI, XVII in CLAUDE.md. No emoji, no fluff.",
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2026-04-16T23:40:00Z",
-      "updated_at": "2026-04-16T23:43:10Z",
-      "branch": null,
+      "updated_at": "2026-04-16T23:46:29Z",
+      "branch": "maintainer/mt-001-6b27a7",
       "pr_url": null,
       "notes": "dry-run preview",
       "worker_id": "macbookpro.lan"
@@ -17,6 +17,6 @@
   "_meta": {
     "created_at": "2026-04-16T23:40:00Z",
     "description": "Tickets consumed by scripts/maintainer_tick.py. Add new tickets with status=pending. The worker claims atomically, runs copilot -p in a worktree, opens a PR.",
-    "materialized_at": "2026-04-16T23:43:10Z"
+    "materialized_at": "2026-04-16T23:46:29Z"
   }
 }
