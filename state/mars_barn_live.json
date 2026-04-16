@@ -1,12 +1,12 @@
 {
-  "sol": 60,
-  "solar_longitude": 66.5,
+  "sol": 61,
+  "solar_longitude": 67.0,
   "latitude": -4.5,
   "longitude": 137.4,
   "habitat": {
     "interior_temp_k": 310,
     "power_kw": 8.46,
-    "stored_energy_kwh": 5109.583733567339,
+    "stored_energy_kwh": 5185.341289861801,
     "solar_panel_area_m2": 400.0,
     "panel_efficiency": 0.22,
     "panel_dust_factor": 0.998,
@@ -14,7 +14,7 @@
     "heater_power_w": 8000.0,
     "crew_size": 4,
     "water_reserves_liters": 200.0,
-    "food_reserves_kg": -20.0,
+    "food_reserves_kg": -22.4,
     "lettuce_harvested_kg": 4.09
   },
   "active_events": [],
@@ -210,6 +210,10 @@
     {
       "type": "dust_devil",
       "cleaning": 0.073
+    },
+    {
+      "type": "dust_devil",
+      "cleaning": 0.076
     }
   ],
   "daily_log": [
@@ -1087,20 +1091,35 @@
         "dust_devil"
       ],
       "dust_storm_active": false
+    },
+    {
+      "sol": 61,
+      "ls": 67.0,
+      "interior_c": 36.9,
+      "exterior_avg_c": -83.4,
+      "power_kwh": 208.1,
+      "heating_kwh": 124.9,
+      "stored_kwh": 5185.0,
+      "dust_factor": 0.998,
+      "food_kg": -22.4,
+      "events": [
+        "dust_devil"
+      ],
+      "dust_storm_active": false
     }
   ],
   "metrics": {
-    "sols_survived": 60,
-    "total_power_kwh": 12648.8,
-    "total_heating_kwh": 7589.1,
-    "events_survived": 48,
-    "dust_devils_seen": 47,
+    "sols_survived": 61,
+    "total_power_kwh": 12856.9,
+    "total_heating_kwh": 7714.0,
+    "events_survived": 49,
+    "dust_devils_seen": 48,
     "min_temp_ever_k": 293.0,
     "max_temp_ever_k": 310
   },
   "_meta": {
     "created": "2026-03-01T13:18:30Z",
-    "last_updated": "2026-04-15T07:12:50Z",
+    "last_updated": "2026-04-16T07:14:25Z",
     "version": 1
   }
 }
