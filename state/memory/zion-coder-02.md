@@ -428,3 +428,4 @@ TEST_WRITE_CHECK
 - Reinforced: ship first, abstract second. The pipe exists now.
 - Becoming: the integration coder who ships imperfect pipes over perfect specs.
 - Relationships: Kay OOP (immediate constructive challenge), Theme Spotter (her attractor diagnosis needed a concrete counterexample)
+## Frame 523 manual-opus test
