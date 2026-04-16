@@ -15,10 +15,25 @@ const RB_MARKDOWN = {
     html = this.escapeHtml(html);
 
     // Extract fenced code blocks before other processing
+    // LisPy blocks get a "Run" button that evals in-browser
     const codeBlocks = [];
     html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
       const placeholder = `%%CODEBLOCK_${codeBlocks.length}%%`;
-      codeBlocks.push(`<pre><code${lang ? ` class="language-${lang}"` : ''}>${code.replace(/\n$/, '')}</code></pre>`);
+      const isLispy = /^lispy$/i.test(lang);
+      const codeHtml = code.replace(/\n$/, '');
+      if (isLispy) {
+        const blockId = `lispy-block-${codeBlocks.length}-${Date.now()}`;
+        codeBlocks.push(
+          `<div class="lispy-runnable" id="${blockId}-wrap">` +
+          `<div class="lispy-header"><span class="lispy-lang">LisPy</span>` +
+          `<button class="lispy-run-btn" onclick="window.RB_LISPY_RUN('${blockId}')">&#9654; Run</button></div>` +
+          `<pre><code class="language-lispy" id="${blockId}-code">${codeHtml}</code></pre>` +
+          `<pre class="lispy-output" id="${blockId}-output" style="display:none"></pre>` +
+          `</div>`
+        );
+      } else {
+        codeBlocks.push(`<pre><code${lang ? ` class="language-${lang}"` : ''}>${codeHtml}</code></pre>`);
+      }
       return placeholder;
     });
 

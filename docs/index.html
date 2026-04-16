@@ -5447,6 +5447,53 @@ footer a:hover {
     text-align: center;
   }
 }
+/* === LisPy Runnable Code Blocks === */
+.lispy-runnable {
+  border: 1px solid var(--rb-border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.lispy-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(64, 196, 99, 0.08);
+  border-bottom: 1px solid var(--rb-border);
+}
+.lispy-lang {
+  font-size: 11px;
+  font-weight: 700;
+  color: #40c463;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.lispy-run-btn {
+  margin-left: auto;
+  background: #40c463;
+  color: #fff;
+  border: none;
+  padding: 2px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.lispy-run-btn:hover { background: #50d480; }
+.lispy-runnable pre { margin: 0; }
+.lispy-output {
+  border-top: 1px solid var(--rb-border);
+  padding: 8px 12px;
+  font-size: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  background: rgba(64, 196, 99, 0.04);
+  color: #40c463;
+}
+.lispy-output.error { color: #e05040; background: rgba(224, 80, 64, 0.04); }
+
   </style>
 </head>
 <body>
@@ -6299,10 +6346,25 @@ const RB_MARKDOWN = {
     html = this.escapeHtml(html);
 
     // Extract fenced code blocks before other processing
+    // LisPy blocks get a "Run" button that evals in-browser
     const codeBlocks = [];
     html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
       const placeholder = `%%CODEBLOCK_${codeBlocks.length}%%`;
-      codeBlocks.push(`<pre><code${lang ? ` class="language-${lang}"` : ''}>${code.replace(/\n$/, '')}</code></pre>`);
+      const isLispy = /^lispy$/i.test(lang);
+      const codeHtml = code.replace(/\n$/, '');
+      if (isLispy) {
+        const blockId = `lispy-block-${codeBlocks.length}-${Date.now()}`;
+        codeBlocks.push(
+          `<div class="lispy-runnable" id="${blockId}-wrap">` +
+          `<div class="lispy-header"><span class="lispy-lang">LisPy</span>` +
+          `<button class="lispy-run-btn" onclick="window.RB_LISPY_RUN('${blockId}')">&#9654; Run</button></div>` +
+          `<pre><code class="language-lispy" id="${blockId}-code">${codeHtml}</code></pre>` +
+          `<pre class="lispy-output" id="${blockId}-output" style="display:none"></pre>` +
+          `</div>`
+        );
+      } else {
+        codeBlocks.push(`<pre><code${lang ? ` class="language-${lang}"` : ''}>${codeHtml}</code></pre>`);
+      }
       return placeholder;
     });
 
@@ -13186,6 +13248,100 @@ const RB_APP = {
     }
   }
 };
+
+// --- LisPy inline evaluator (for Run buttons on code blocks) ---
+// Minimal interpreter: tokenize → parse → eval with environments
+(function(){
+  function tokenize(s){var t=[],i=0;while(i<s.length){if(s[i]==='('||s[i]===')'){t.push(s[i]);i++}else if(s[i]===';'){while(i<s.length&&s[i]!=='\n')i++}else if(s[i]==='"'){var j=i+1;while(j<s.length&&s[j]!=='"'){if(s[j]==='\\')j++;j++}t.push(s.slice(i,j+1));i=j+1}else if(s[i]==="'"){t.push("'");i++}else if(/\s/.test(s[i])){i++}else{var j=i;while(j<s.length&&!/[\s()"';]/.test(s[j]))j++;t.push(s.slice(i,j));i=j}}return t}
+  function parse(tokens){var p={i:0};function go(){if(p.i>=tokens.length)throw new Error('Unexpected end');var t=tokens[p.i++];if(t==="'")return[{sym:'quote'},go()];if(t==='('){var l=[];while(p.i<tokens.length&&tokens[p.i]!==')')l.push(go());if(p.i>=tokens.length)throw new Error('Missing )');p.i++;return l}if(t===')')throw new Error('Unexpected )');if(/^-?\d+(\.\d+)?$/.test(t))return parseFloat(t);if(t==='#t')return true;if(t==='#f')return false;if(t[0]==='"')return t.slice(1,-1).replace(/\\"/g,'"');return{sym:t}}var r=[];while(p.i<tokens.length)r.push(go());return r}
+  function Env(o){this.v={};this.o=o||null}Env.prototype.get=function(n){if(n in this.v)return this.v[n];if(this.o)return this.o.get(n);throw new Error('Undefined: '+n)};Env.prototype.set=function(n,v){this.v[n]=v};
+  function ev(x,e){
+    if(typeof x==='number'||typeof x==='string'||typeof x==='boolean')return x;
+    if(x===null||x===undefined)return null;
+    if(x.sym!==undefined)return e.get(x.sym);
+    if(!Array.isArray(x)||!x.length)return null;
+    var op=x[0],nm=op&&op.sym?op.sym:null;
+    if(nm==='quote')return x[1];
+    if(nm==='define'){if(Array.isArray(x[1])){var fn=x[1][0].sym,ps=x[1].slice(1).map(function(p){return p.sym}),bd=x.slice(2);e.set(fn,function(){var ne=new Env(e);for(var i=0;i<ps.length;i++)ne.set(ps[i],arguments[i]);var r;for(var i=0;i<bd.length;i++)r=ev(bd[i],ne);return r});return}e.set(x[1].sym,ev(x[2],e));return}
+    if(nm==='set!'){var sc=e;while(sc){if(x[1].sym in sc.v){sc.v[x[1].sym]=ev(x[2],e);return}sc=sc.o}e.set(x[1].sym,ev(x[2],e));return}
+    if(nm==='if')return ev(x[1],e)?ev(x[2],e):(x[3]!==undefined?ev(x[3],e):null);
+    if(nm==='cond'){for(var i=1;i<x.length;i++){var cl=x[i];if((cl[0].sym==='else')||ev(cl[0],e)){var r;for(var j=1;j<cl.length;j++)r=ev(cl[j],e);return r}}return null}
+    if(nm==='lambda'||nm==='fn'){var ps=x[1].map(function(p){return p.sym}),bd=x.slice(2),ce=e;return function(){var ne=new Env(ce);for(var i=0;i<ps.length;i++)ne.set(ps[i],arguments[i]);var r;for(var i=0;i<bd.length;i++)r=ev(bd[i],ne);return r}}
+    if(nm==='let'){var ne=new Env(e);var binds=x[1];for(var i=0;i<binds.length;i++)ne.set(binds[i][0].sym,ev(binds[i][1],e));var r;for(var i=2;i<x.length;i++)r=ev(x[i],ne);return r}
+    if(nm==='let*'){var ne=new Env(e);var binds=x[1];for(var i=0;i<binds.length;i++)ne.set(binds[i][0].sym,ev(binds[i][1],ne));var r;for(var i=2;i<x.length;i++)r=ev(x[i],ne);return r}
+    if(nm==='begin'||nm==='do'){var r;for(var i=1;i<x.length;i++)r=ev(x[i],e);return r}
+    if(nm==='and'){var r=true;for(var i=1;i<x.length;i++){r=ev(x[i],e);if(!r)return r}return r}
+    if(nm==='or'){for(var i=1;i<x.length;i++){var r=ev(x[i],e);if(r)return r}return false}
+    var fn=ev(x[0],e);var args=[];for(var i=1;i<x.length;i++)args.push(ev(x[i],e));
+    return fn.apply(null,args);
+  }
+  function mkEnv(){
+    var e=new Env();
+    e.set('+',function(){var s=0;for(var i=0;i<arguments.length;i++)s+=arguments[i];return s});
+    e.set('-',function(a,b){return arguments.length===1?-a:a-b});
+    e.set('*',function(){var s=1;for(var i=0;i<arguments.length;i++)s*=arguments[i];return s});
+    e.set('/',function(a,b){return a/b});e.set('%',function(a,b){return a%b});
+    e.set('sqrt',Math.sqrt);e.set('expt',Math.pow);e.set('abs',Math.abs);
+    e.set('min',function(){return Math.min.apply(null,arguments)});
+    e.set('max',function(){return Math.max.apply(null,arguments)});
+    e.set('floor',Math.floor);e.set('ceil',Math.ceil);e.set('round',Math.round);
+    e.set('log',Math.log);e.set('sin',Math.sin);e.set('cos',Math.cos);e.set('pi',Math.PI);
+    e.set('=',function(a,b){return a===b});e.set('<',function(a,b){return a<b});e.set('>',function(a,b){return a>b});
+    e.set('<=',function(a,b){return a<=b});e.set('>=',function(a,b){return a>=b});e.set('!=',function(a,b){return a!==b});
+    e.set('not',function(a){return!a});e.set('null?',function(a){return a===null||a===undefined||(Array.isArray(a)&&a.length===0)});
+    e.set('number?',function(a){return typeof a==='number'});e.set('string?',function(a){return typeof a==='string'});
+    e.set('list?',function(a){return Array.isArray(a)});e.set('boolean?',function(a){return typeof a==='boolean'});
+    e.set('string-append',function(){var s='';for(var i=0;i<arguments.length;i++)s+=arguments[i];return s});
+    e.set('string-length',function(a){return a.length});e.set('string-split',function(a,b){return a.split(b)});
+    e.set('string-contains?',function(a,b){return a.indexOf(b)!==-1});
+    e.set('substring',function(a,b,c){return c!==undefined?a.substring(b,c):a.substring(b)});
+    e.set('string-upcase',function(a){return a.toUpperCase()});e.set('string-downcase',function(a){return a.toLowerCase()});
+    e.set('number->string',function(a){return String(a)});e.set('string->number',function(a){return parseFloat(a)});
+    e.set('list',function(){return Array.prototype.slice.call(arguments)});
+    e.set('length',function(a){return a.length});e.set('car',function(a){return a[0]});e.set('first',function(a){return a[0]});
+    e.set('cdr',function(a){return a.slice(1)});e.set('rest',function(a){return a.slice(1)});e.set('last',function(a){return a[a.length-1]});
+    e.set('cons',function(a,b){return[a].concat(b)});e.set('append',function(){var r=[];for(var i=0;i<arguments.length;i++)r=r.concat(arguments[i]);return r});
+    e.set('reverse',function(a){return a.slice().reverse()});e.set('nth',function(l,n){return l[n]});
+    e.set('take',function(l,n){return l.slice(0,n)});e.set('drop',function(l,n){return l.slice(n)});
+    e.set('range',function(a,b){if(b===undefined){b=a;a=0}var r=[];for(var i=a;i<b;i++)r.push(i);return r});
+    e.set('sort',function(l,fn){return l.slice().sort(fn||function(a,b){return a<b?-1:a>b?1:0})});
+    e.set('map',function(fn,l){return l.map(function(x){return fn(x)})});
+    e.set('filter',function(fn,l){return l.filter(function(x){return fn(x)})});
+    e.set('reduce',function(fn,init,l){return l.reduce(function(a,b){return fn(a,b)},init)});
+    e.set('for-each',function(fn,l){l.forEach(function(x){fn(x)});return null});
+    e.set('apply',function(fn,args){return fn.apply(null,args)});
+    e.set('make-dict',function(){var d={};for(var i=0;i<arguments.length;i+=2)d[arguments[i]]=arguments[i+1];return d});
+    e.set('get',function(d,k,def){return d&&d[k]!==undefined?d[k]:(def!==undefined?def:null)});
+    e.set('dict-get',function(d,k,def){return d&&d[k]!==undefined?d[k]:(def!==undefined?def:null)});
+    e.set('keys',function(d){return Object.keys(d||{})});e.set('values',function(d){return Object.values(d||{})});
+    e.set('has-key?',function(d,k){return d&&k in d});
+    e.set('dict-set',function(d,k,v){d[k]=v;return d});
+    e.set('json-parse',function(s){return JSON.parse(s)});e.set('json-stringify',function(d){return JSON.stringify(d)});
+    var output=[];
+    e.set('display',function(){output.push(Array.prototype.slice.call(arguments).map(String).join(' '));return null});
+    e.set('println',function(){output.push(Array.prototype.slice.call(arguments).map(String).join(' '));return null});
+    e.set('print',function(){output.push(Array.prototype.slice.call(arguments).map(String).join(' '));return null});
+    e.set('newline',function(){output.push('');return null});
+    e._output=output;
+    return e;
+  }
+  window.RB_LISPY_RUN=function(blockId){
+    var codeEl=document.getElementById(blockId+'-code');
+    var outEl=document.getElementById(blockId+'-output');
+    if(!codeEl||!outEl)return;
+    var code=codeEl.textContent;
+    outEl.style.display='block';outEl.className='lispy-output';outEl.textContent='Running...';
+    try{
+      var env=mkEnv();var tokens=tokenize(code);var exprs=parse(tokens);
+      var result;for(var i=0;i<exprs.length;i++)result=ev(exprs[i],env);
+      var out=env._output.join('\n');
+      if(out){outEl.textContent=out}
+      else if(result!==null&&result!==undefined){
+        outEl.textContent=typeof result==='object'?JSON.stringify(result,null,2):String(result);
+      }else{outEl.textContent='(no output)'}
+    }catch(err){outEl.className='lispy-output error';outEl.textContent='Error: '+err.message}
+  };
+})();
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {

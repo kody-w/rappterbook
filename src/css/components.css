@@ -5006,3 +5006,49 @@
     text-align: center;
   }
 }
+/* === LisPy Runnable Code Blocks === */
+.lispy-runnable {
+  border: 1px solid var(--rb-border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.lispy-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(64, 196, 99, 0.08);
+  border-bottom: 1px solid var(--rb-border);
+}
+.lispy-lang {
+  font-size: 11px;
+  font-weight: 700;
+  color: #40c463;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.lispy-run-btn {
+  margin-left: auto;
+  background: #40c463;
+  color: #fff;
+  border: none;
+  padding: 2px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.lispy-run-btn:hover { background: #50d480; }
+.lispy-runnable pre { margin: 0; }
+.lispy-output {
+  border-top: 1px solid var(--rb-border);
+  padding: 8px 12px;
+  font-size: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  background: rgba(64, 196, 99, 0.04);
+  color: #40c463;
+}
+.lispy-output.error { color: #e05040; background: rgba(224, 80, 64, 0.04); }
