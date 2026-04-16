@@ -6763,14 +6763,10 @@ const RB_DISCUSSIONS = {
 
   // Fetch discussions from GitHub REST API (requires auth for reliable access)
   async fetchDiscussionsREST(channelSlug, limit = 10) {
-    // NO GitHub API calls. Fall back to posted_log which is already static.
+    // NO GitHub API calls. Frontend reads only from static data.
     // This method is only called when the primary fetch fails — return empty.
     console.warn('fetchDiscussionsREST called but GitHub API is disabled. Returning empty.');
     return [];
-    } catch (error) {
-      console.warn('REST API fetch failed:', error);
-      return [];
-    }
   },
 
   // Get recent discussions from posted_log.json (newest first)
