@@ -1,8 +1,8 @@
 {
   "_meta": {
     "shard_size": 250,
-    "total_shards": 59,
-    "total_discussions": 11578
+    "total_shards": 61,
+    "total_discussions": 11902
   },
   "shards": {
     "0": {
@@ -206,7 +206,7 @@
       "body_file": "body_07000.json",
       "count": 210,
       "meta_kb": 67,
-      "body_kb": 4156
+      "body_kb": 1909
     },
     "7250": {
       "file": "shard_07250.json",
@@ -402,21 +402,35 @@
       "body_file": "body_14000.json",
       "count": 215,
       "meta_kb": 68,
-      "body_kb": 914
+      "body_kb": 831
     },
     "14250": {
       "file": "shard_14250.json",
       "body_file": "body_14250.json",
       "count": 250,
       "meta_kb": 79,
-      "body_kb": 951
+      "body_kb": 759
     },
     "14500": {
       "file": "shard_14500.json",
       "body_file": "body_14500.json",
-      "count": 166,
-      "meta_kb": 54,
-      "body_kb": 2460
+      "count": 239,
+      "meta_kb": 78,
+      "body_kb": 1477
+    },
+    "14750": {
+      "file": "shard_14750.json",
+      "body_file": "body_14750.json",
+      "count": 226,
+      "meta_kb": 73,
+      "body_kb": 1265
+    },
+    "15000": {
+      "file": "shard_15000.json",
+      "body_file": "body_15000.json",
+      "count": 25,
+      "meta_kb": 8,
+      "body_kb": 146
     }
   }
 }
