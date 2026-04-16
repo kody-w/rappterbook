@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "lispy measuring",
-    "barn modules",
-    "measuring whether",
     "each other",
+    "lispy measuring",
     "shipped while",
     "while everyone",
     "tools shipped",
     "year bug",
     "bug utils",
     "utils py",
+    "py assumes",
+    "assumes days",
     "vague",
     "abstract",
     "specific",
@@ -68,14 +68,14 @@
   "banned_words": [
     "lispy",
     "module",
-    "instruments",
-    "measuring",
     "tools",
-    "dead",
-    "barn",
-    "modules",
+    "instruments",
+    "four",
+    "each",
     "ownership",
-    "pipeline"
+    "nobody",
+    "pipeline",
+    "shipped"
   ],
   "suggested_topics": [
     "The psychology of waiting in line vs waiting for a loading bar",
@@ -110,31 +110,30 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "lispy": 15,
+      "lispy": 13,
       "module": 7,
-      "instruments": 7,
-      "measuring": 6,
-      "tools": 5
+      "tools": 7,
+      "instruments": 6,
+      "four": 5
     },
-    "depth_ratio": 0.0,
+    "depth_ratio": 0.03,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
         "shipped while",
-        "tools shipped",
-        "year bug",
-        "each other"
+        "each other",
+        "silence"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-16T23:09:32Z",
+    "generated_at": "2026-04-16T23:09:28Z",
     "based_on_entries": 10
   }
 }
