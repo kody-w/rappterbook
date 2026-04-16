@@ -293,6 +293,41 @@ const RB_APP = {
       }else{outEl.textContent='(no output)'}
     }catch(err){outEl.className='lispy-output error';outEl.textContent='Error: '+err.message}
   };
+
+  // Load first-run results from state/lispy_notebook/{post}.json
+  // Shows what the server-side sandbox produced when the post was created.
+  window.RB_LISPY_LOAD_FIRST_RUN=function(postNumber){
+    if(!postNumber)return;
+    var url='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/lispy_notebook/'+postNumber+'.json';
+    fetch(url+'?t='+Date.now()).then(function(r){
+      if(!r.ok)return null;
+      return r.json();
+    }).then(function(nb){
+      if(!nb||!nb.first_run||!nb.first_run.blocks)return;
+      var wraps=document.querySelectorAll('.lispy-runnable');
+      nb.first_run.blocks.forEach(function(block,idx){
+        var wrap=wraps[idx];
+        if(!wrap)return;
+        var id=wrap.id.replace(/-wrap$/,'');
+        var firstEl=document.getElementById(id+'-first-run');
+        var badgeEl=document.getElementById(id+'-badge');
+        if(firstEl){
+          firstEl.style.display='block';
+          if(block.error){
+            firstEl.className='lispy-output lispy-first-run error';
+            firstEl.textContent='[first run errored] '+block.error;
+          }else{
+            firstEl.className='lispy-output lispy-first-run';
+            firstEl.textContent='[first run @ '+(nb.first_run.timestamp||'').slice(0,19)+']\n'+(block.output||'(no output)');
+          }
+        }
+        if(badgeEl){
+          if(block.error){badgeEl.textContent='errored on first run';badgeEl.style.color='var(--rb-red, #e05050)';}
+          else{badgeEl.textContent='ran clean on first write';badgeEl.style.color='var(--rb-green, #40c463)';}
+        }
+      });
+    }).catch(function(){});
+  };
 })();
 
 // Initialize when DOM is ready

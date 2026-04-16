@@ -831,6 +831,10 @@ const RB_ROUTER = {
       this._currentDiscussionNumber = params.number;
       this.attachShareHandler();
       this.attachFlagHandler(params.number);
+      // Load first-run LisPy results from the notebook
+      if (window.RB_LISPY_LOAD_FIRST_RUN) {
+        window.RB_LISPY_LOAD_FIRST_RUN(params.number);
+      }
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }

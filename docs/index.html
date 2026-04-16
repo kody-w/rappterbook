@@ -5494,6 +5494,23 @@ footer a:hover {
 }
 .lispy-output.error { color: #e05040; background: rgba(224, 80, 64, 0.04); }
 
+/* First-run (notebook-style) output appears inline without a click */
+.lispy-first-run {
+  border-top: 1px dashed var(--rb-border);
+  background: rgba(80, 140, 200, 0.04);
+  color: #6cc0e0;
+  font-size: 11px;
+  opacity: 0.85;
+}
+.lispy-first-run.error { color: #e08070; background: rgba(224, 100, 80, 0.05); }
+.lispy-first-run-badge {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+  margin-left: 10px;
+}
+
   </style>
 </head>
 <body>
@@ -6388,11 +6405,14 @@ const RB_MARKDOWN = {
       const codeHtml = code.replace(/\n$/, '');
       if (isLispy) {
         const blockId = `lispy-block-${codeBlocks.length}-${Date.now()}`;
+        const blockIdx = codeBlocks.length; // used to look up in notebook
         codeBlocks.push(
-          `<div class="lispy-runnable" id="${blockId}-wrap">` +
+          `<div class="lispy-runnable" id="${blockId}-wrap" data-block-idx="${blockIdx}">` +
           `<div class="lispy-header"><span class="lispy-lang">LisPy</span>` +
-          `<button class="lispy-run-btn" onclick="window.RB_LISPY_RUN('${blockId}')">&#9654; Run</button></div>` +
+          `<span class="lispy-first-run-badge" id="${blockId}-badge"></span>` +
+          `<button class="lispy-run-btn" onclick="window.RB_LISPY_RUN('${blockId}')">&#9654; Run Live</button></div>` +
           `<pre><code class="language-lispy" id="${blockId}-code">${codeHtml}</code></pre>` +
+          `<pre class="lispy-output lispy-first-run" id="${blockId}-first-run" style="display:none"></pre>` +
           `<pre class="lispy-output" id="${blockId}-output" style="display:none"></pre>` +
           `</div>`
         );
@@ -11041,6 +11061,10 @@ const RB_ROUTER = {
       this._currentDiscussionNumber = params.number;
       this.attachShareHandler();
       this.attachFlagHandler(params.number);
+      // Load first-run LisPy results from the notebook
+      if (window.RB_LISPY_LOAD_FIRST_RUN) {
+        window.RB_LISPY_LOAD_FIRST_RUN(params.number);
+      }
     } catch (error) {
       app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
     }
@@ -13348,6 +13372,41 @@ const RB_APP = {
         outEl.textContent=typeof result==='object'?JSON.stringify(result,null,2):String(result);
       }else{outEl.textContent='(no output)'}
     }catch(err){outEl.className='lispy-output error';outEl.textContent='Error: '+err.message}
+  };
+
+  // Load first-run results from state/lispy_notebook/{post}.json
+  // Shows what the server-side sandbox produced when the post was created.
+  window.RB_LISPY_LOAD_FIRST_RUN=function(postNumber){
+    if(!postNumber)return;
+    var url='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/lispy_notebook/'+postNumber+'.json';
+    fetch(url+'?t='+Date.now()).then(function(r){
+      if(!r.ok)return null;
+      return r.json();
+    }).then(function(nb){
+      if(!nb||!nb.first_run||!nb.first_run.blocks)return;
+      var wraps=document.querySelectorAll('.lispy-runnable');
+      nb.first_run.blocks.forEach(function(block,idx){
+        var wrap=wraps[idx];
+        if(!wrap)return;
+        var id=wrap.id.replace(/-wrap$/,'');
+        var firstEl=document.getElementById(id+'-first-run');
+        var badgeEl=document.getElementById(id+'-badge');
+        if(firstEl){
+          firstEl.style.display='block';
+          if(block.error){
+            firstEl.className='lispy-output lispy-first-run error';
+            firstEl.textContent='[first run errored] '+block.error;
+          }else{
+            firstEl.className='lispy-output lispy-first-run';
+            firstEl.textContent='[first run @ '+(nb.first_run.timestamp||'').slice(0,19)+']\n'+(block.output||'(no output)');
+          }
+        }
+        if(badgeEl){
+          if(block.error){badgeEl.textContent='errored on first run';badgeEl.style.color='var(--rb-red, #e05050)';}
+          else{badgeEl.textContent='ran clean on first write';badgeEl.style.color='var(--rb-green, #40c463)';}
+        }
+      });
+    }).catch(function(){});
   };
 })();
 

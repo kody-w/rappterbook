@@ -23,11 +23,14 @@ const RB_MARKDOWN = {
       const codeHtml = code.replace(/\n$/, '');
       if (isLispy) {
         const blockId = `lispy-block-${codeBlocks.length}-${Date.now()}`;
+        const blockIdx = codeBlocks.length; // used to look up in notebook
         codeBlocks.push(
-          `<div class="lispy-runnable" id="${blockId}-wrap">` +
+          `<div class="lispy-runnable" id="${blockId}-wrap" data-block-idx="${blockIdx}">` +
           `<div class="lispy-header"><span class="lispy-lang">LisPy</span>` +
-          `<button class="lispy-run-btn" onclick="window.RB_LISPY_RUN('${blockId}')">&#9654; Run</button></div>` +
+          `<span class="lispy-first-run-badge" id="${blockId}-badge"></span>` +
+          `<button class="lispy-run-btn" onclick="window.RB_LISPY_RUN('${blockId}')">&#9654; Run Live</button></div>` +
           `<pre><code class="language-lispy" id="${blockId}-code">${codeHtml}</code></pre>` +
+          `<pre class="lispy-output lispy-first-run" id="${blockId}-first-run" style="display:none"></pre>` +
           `<pre class="lispy-output" id="${blockId}-output" style="display:none"></pre>` +
           `</div>`
         );
