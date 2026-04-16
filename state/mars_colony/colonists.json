@@ -1,0 +1,879 @@
+{
+  "_meta": {
+    "created_at": "2026-04-16T23:24:22Z",
+    "version": 1,
+    "materialized_at": "2026-04-16T23:25:28Z"
+  },
+  "colonists": {
+    "colonist-01": {
+      "id": "colonist-01",
+      "name": "Crew 01",
+      "role": "commander",
+      "archetype": "commander",
+      "bio": "Mars expedition commander.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "commander"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-02": {
+      "id": "colonist-02",
+      "name": "Crew 02",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-03": {
+      "id": "colonist-03",
+      "name": "Crew 03",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-04": {
+      "id": "colonist-04",
+      "name": "Crew 04",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-05": {
+      "id": "colonist-05",
+      "name": "Crew 05",
+      "role": "geologist",
+      "archetype": "geologist",
+      "bio": "Mars expedition geologist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "geologist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-06": {
+      "id": "colonist-06",
+      "name": "Crew 06",
+      "role": "pilot",
+      "archetype": "pilot",
+      "bio": "Mars expedition pilot.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "pilot"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-07": {
+      "id": "colonist-07",
+      "name": "Crew 07",
+      "role": "comms",
+      "archetype": "comms",
+      "bio": "Mars expedition comms.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "comms"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-08": {
+      "id": "colonist-08",
+      "name": "Crew 08",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-09": {
+      "id": "colonist-09",
+      "name": "Crew 09",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-10": {
+      "id": "colonist-10",
+      "name": "Crew 10",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-11": {
+      "id": "colonist-11",
+      "name": "Crew 11",
+      "role": "geologist",
+      "archetype": "geologist",
+      "bio": "Mars expedition geologist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "geologist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-12": {
+      "id": "colonist-12",
+      "name": "Crew 12",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-13": {
+      "id": "colonist-13",
+      "name": "Crew 13",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-14": {
+      "id": "colonist-14",
+      "name": "Crew 14",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-15": {
+      "id": "colonist-15",
+      "name": "Crew 15",
+      "role": "pilot",
+      "archetype": "pilot",
+      "bio": "Mars expedition pilot.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "pilot"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-16": {
+      "id": "colonist-16",
+      "name": "Crew 16",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-17": {
+      "id": "colonist-17",
+      "name": "Crew 17",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-18": {
+      "id": "colonist-18",
+      "name": "Crew 18",
+      "role": "geologist",
+      "archetype": "geologist",
+      "bio": "Mars expedition geologist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "geologist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-19": {
+      "id": "colonist-19",
+      "name": "Crew 19",
+      "role": "comms",
+      "archetype": "comms",
+      "bio": "Mars expedition comms.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "comms"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-20": {
+      "id": "colonist-20",
+      "name": "Crew 20",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-21": {
+      "id": "colonist-21",
+      "name": "Crew 21",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-22": {
+      "id": "colonist-22",
+      "name": "Crew 22",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-23": {
+      "id": "colonist-23",
+      "name": "Crew 23",
+      "role": "pilot",
+      "archetype": "pilot",
+      "bio": "Mars expedition pilot.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "pilot"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-24": {
+      "id": "colonist-24",
+      "name": "Crew 24",
+      "role": "geologist",
+      "archetype": "geologist",
+      "bio": "Mars expedition geologist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "geologist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-25": {
+      "id": "colonist-25",
+      "name": "Crew 25",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-26": {
+      "id": "colonist-26",
+      "name": "Crew 26",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-27": {
+      "id": "colonist-27",
+      "name": "Crew 27",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-28": {
+      "id": "colonist-28",
+      "name": "Crew 28",
+      "role": "comms",
+      "archetype": "comms",
+      "bio": "Mars expedition comms.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "comms"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-29": {
+      "id": "colonist-29",
+      "name": "Crew 29",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    },
+    "colonist-30": {
+      "id": "colonist-30",
+      "name": "Crew 30",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 43,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882
+    }
+  }
+}
