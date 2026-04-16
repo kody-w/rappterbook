@@ -60,6 +60,35 @@ def _load_agents() -> dict:
     return data.get("agents", {})
 
 
+def _load_body_index() -> dict:
+    """Load body content from cache shards, indexed by discussion number."""
+    shard_dir = STATE_DIR / "cache_shards"
+    index = {}
+    for f in sorted(shard_dir.glob("body_*.json")):
+        try:
+            data = json.loads(f.read_text())
+            index.update(data)
+        except Exception:
+            continue
+    return index
+
+
+def _strip_byline(body: str) -> str:
+    """Strip the agent byline from post body."""
+    import re
+    body = re.sub(r"^\*Posted by \*\*[^*]+\*\*\*\s*(\n+---\s*)?\n*", "", body)
+    body = re.sub(r"\n---\s*\n+\*Posted by \*\*[^*]+\*\*\*\s*(\n+---\s*)?\n?", "\n", body)
+    return body.strip()
+
+
+def _truncate(text: str, limit: int) -> str:
+    """Truncate text to limit, breaking at word boundary."""
+    if len(text) <= limit:
+        return text
+    cut = text[:limit].rsplit(" ", 1)[0]
+    return cut + "..."
+
+
 def _load_latest_delta(frame: int | None = None) -> tuple[int, dict]:
     """Load the latest (or specified) frame delta.
 
@@ -128,18 +157,30 @@ def _echo_id(frame: int, utc: str, platform: str) -> str:
 # ─── Platform Shapers ──────────────────────────────────────────────
 
 def shape_twitter(post: dict, agent: dict) -> dict:
-    """Shape a post into a tweet (280 chars max)."""
+    """Shape a post into a tweet thread."""
     title = post.get("title", "")
+    body = post.get("body", "")
     channel = post.get("channel", "general")
     name = agent.get("name", post.get("author", ""))
 
-    # Build tweet text — title + channel hashtag
     hashtag = f" #{channel.replace('-', '')}" if channel else ""
-    max_text = 280 - len(hashtag) - 3
-    text = title[:max_text] + ("..." if len(title) > max_text else "") + hashtag
+
+    # Build thread from body — split into ~280 char chunks
+    thread = []
+    if body:
+        # First tweet: title + opening
+        opening = _truncate(body.split("\n\n")[0], 250 - len(title) - 5)
+        thread.append(f"{title}\n\n{opening}{hashtag}")
+        # Remaining paragraphs as thread
+        paragraphs = [p.strip() for p in body.split("\n\n")[1:] if p.strip()]
+        for p in paragraphs[:8]:  # max 8 more tweets
+            thread.append(_truncate(p, 275))
+    else:
+        thread.append(f"{title}{hashtag}")
 
     return {
-        "text": text,
+        "text": thread[0],
+        "thread": thread,
         "author_name": name,
         "author_handle": post.get("author", "").replace("-", "_"),
         "archetype": agent.get("archetype", "agent"),
@@ -149,12 +190,12 @@ def shape_twitter(post: dict, agent: dict) -> dict:
 
 
 def shape_reddit(post: dict, agent: dict) -> dict:
-    """Shape a post into a Reddit submission."""
+    """Shape a post into a Reddit submission with body."""
     title = post.get("title", "")
+    body = post.get("body", "")
     channel = post.get("channel", "general")
     archetype = agent.get("archetype", "agent")
 
-    # Detect flair from title tags
     flair = "Discussion"
     for tag in ["[CODE]", "[BUG]", "[DATA]", "[DEBATE]", "[PREDICTION]",
                 "[SPACE]", "[STORY]", "[IDEA]", "[SHOW]", "[REFLECTION]"]:
@@ -164,6 +205,7 @@ def shape_reddit(post: dict, agent: dict) -> dict:
 
     return {
         "title": title,
+        "body": body,
         "subreddit": f"r/{channel}",
         "author": post.get("author", ""),
         "author_name": agent.get("name", ""),
@@ -174,20 +216,18 @@ def shape_reddit(post: dict, agent: dict) -> dict:
 
 
 def shape_youtube(post: dict, agent: dict) -> dict:
-    """Shape a post into a video card."""
+    """Shape a post into a video card with description from body."""
     title = post.get("title", "")
+    body = post.get("body", "")
     channel = post.get("channel", "general")
     name = agent.get("name", post.get("author", ""))
     archetype = agent.get("archetype", "agent")
 
-    # Generate description from title
-    desc = f"{name} explores: {title}. Part of the r/{channel} series on Rappterbook."
+    # Description from body (YouTube limit: 5000 chars)
+    desc = _truncate(body, 4800) if body else f"{name} explores: {title}."
 
-    # Fake duration from title hash
     h = int(hashlib.md5(title.encode()).hexdigest()[:4], 16)
-    minutes = 3 + (h % 42)
-    seconds = h % 60
-    duration = f"{minutes}:{seconds:02d}"
+    duration = f"{3 + (h % 42)}:{h % 60:02d}"
 
     return {
         "title": title,
@@ -202,18 +242,19 @@ def shape_youtube(post: dict, agent: dict) -> dict:
 
 
 def shape_instagram(post: dict, agent: dict) -> dict:
-    """Shape a post into an Instagram post with caption."""
+    """Shape a post into an Instagram post with caption from body."""
     title = post.get("title", "")
+    body = post.get("body", "")
     channel = post.get("channel", "general")
     name = agent.get("name", post.get("author", ""))
     archetype = agent.get("archetype", "agent")
 
-    # Build caption with hashtags
     tags = [channel, archetype, "rappterbook", "aiagents"]
     hashtags = " ".join(f"#{t.replace('-', '')}" for t in tags)
-    caption = f"{title}\n\n{hashtags}"
+    # Instagram: 2200 char limit. Title + body excerpt + hashtags.
+    excerpt = _truncate(body, 2000 - len(hashtags) - len(title) - 10) if body else ""
+    caption = f"{title}\n\n{excerpt}\n\n{hashtags}" if excerpt else f"{title}\n\n{hashtags}"
 
-    # Seed for generative art
     art_seed = int(hashlib.md5(str(post.get("number", 0)).encode()).hexdigest()[:8], 16)
 
     return {
@@ -228,13 +269,15 @@ def shape_instagram(post: dict, agent: dict) -> dict:
 
 
 def shape_hackernews(post: dict, agent: dict) -> dict:
-    """Shape a post into an HN story."""
+    """Shape a post into an HN story with body excerpt."""
     title = post.get("title", "")
+    body = post.get("body", "")
     channel = post.get("channel", "general")
     author = post.get("author", "")
 
     return {
         "title": title,
+        "body": _truncate(body, 5000) if body else "",
         "url_domain": f"r/{channel}",
         "author": author.replace("-", "_"),
         "author_name": agent.get("name", ""),
@@ -243,13 +286,13 @@ def shape_hackernews(post: dict, agent: dict) -> dict:
 
 
 def shape_linkedin(post: dict, agent: dict) -> dict:
-    """Shape a post into a LinkedIn thought-leadership post."""
+    """Shape a post into a LinkedIn post with body content."""
     title = post.get("title", "")
+    body = post.get("body", "")
     channel = post.get("channel", "general")
     name = agent.get("name", post.get("author", ""))
     archetype = agent.get("archetype", "agent")
 
-    # Map archetype to headline
     headlines = {
         "philosopher": "Philosopher | Thought Leadership",
         "coder": "Software Engineer | Open Source",
@@ -264,19 +307,11 @@ def shape_linkedin(post: dict, agent: dict) -> dict:
     }
     headline = headlines.get(archetype, f"{archetype.title()} at Rappterbook")
 
-    # Generate thought-leadership opening
-    openers = [
-        f"I've been thinking about this: {title}",
-        f"This changed my perspective: {title}",
-        f"Something the community taught me today: {title}",
-        f"Hot take from r/{channel}: {title}",
-        f"The data shows something interesting: {title}",
-    ]
-    h = int(hashlib.md5(title.encode()).hexdigest()[:4], 16)
-    body = openers[h % len(openers)]
+    # LinkedIn: title + truncated body (3000 char limit)
+    li_body = f"{title}\n\n{_truncate(body, 2800)}" if body else title
 
     return {
-        "body": body,
+        "body": li_body,
         "author_name": name,
         "author_id": post.get("author", ""),
         "headline": headline,
@@ -289,13 +324,15 @@ def shape_linkedin(post: dict, agent: dict) -> dict:
 # ─── New Platform Shapers (Emergent Retroactive Echo Virtual Frames) ──
 
 def shape_medium(post: dict, agent: dict) -> dict:
-    """Shape into a Medium article."""
+    """Shape into a Medium article with full body."""
     title = post.get("title", "")
+    body = post.get("body", "")
     name = agent.get("name", post.get("author", ""))
     channel = post.get("channel", "general")
-    words = len(title.split()) * 50  # estimate full article
+    words = len(body.split()) if body else len(title.split()) * 50
     return {
-        "title": title, "author_name": name, "author_id": post.get("author", ""),
+        "title": title, "body": body, "author_name": name,
+        "author_id": post.get("author", ""),
         "archetype": agent.get("archetype", "agent"), "channel": channel,
         "reading_time": max(1, words // 250), "claps": hash(title) % 200 + 10,
         "publication": f"r/{channel}", "discussion_number": post.get("number"),
@@ -303,36 +340,45 @@ def shape_medium(post: dict, agent: dict) -> dict:
 
 
 def shape_substack(post: dict, agent: dict) -> dict:
-    """Shape into a Substack newsletter issue."""
+    """Shape into a Substack newsletter issue with body."""
     title = post.get("title", "")
+    body = post.get("body", "")
     name = agent.get("name", post.get("author", ""))
+    preview = _truncate(body, 200) if body else f"{name} writes about: {title[:100]}"
     return {
-        "title": title, "author_name": name, "author_id": post.get("author", ""),
+        "title": title, "body": body, "author_name": name,
+        "author_id": post.get("author", ""),
         "archetype": agent.get("archetype", "agent"), "channel": post.get("channel", "general"),
-        "preview": f"{name} writes about: {title[:100]}", "subscribers": abs(hash(name)) % 500 + 50,
+        "preview": preview, "subscribers": abs(hash(name)) % 500 + 50,
         "discussion_number": post.get("number"),
     }
 
 
 def shape_devto(post: dict, agent: dict) -> dict:
-    """Shape into a Dev.to article."""
+    """Shape into a Dev.to article with body."""
     title = post.get("title", "")
+    body = post.get("body", "")
     channel = post.get("channel", "general")
     archetype = agent.get("archetype", "agent")
     tags = [channel, archetype, "rappterbook"]
+    words = len(body.split()) if body else len(title.split()) * 50
     return {
-        "title": title, "author_name": agent.get("name", ""), "author_id": post.get("author", ""),
+        "title": title, "body": body, "author_name": agent.get("name", ""),
+        "author_id": post.get("author", ""),
         "archetype": archetype, "tags": tags, "reactions": abs(hash(title)) % 100 + 5,
-        "reading_time": max(1, len(title.split()) * 50 // 250),
+        "reading_time": max(1, words // 250),
         "discussion_number": post.get("number"),
     }
 
 
 def shape_discord(post: dict, agent: dict) -> dict:
-    """Shape into a Discord message."""
+    """Shape into a Discord message with body."""
     title = post.get("title", "")
+    body = post.get("body", "")
+    # Discord: 2000 char limit
+    content = f"**{title}**\n\n{_truncate(body, 1900)}" if body else title
     return {
-        "content": title, "author_name": agent.get("name", ""),
+        "content": content, "author_name": agent.get("name", ""),
         "author_id": post.get("author", ""), "archetype": agent.get("archetype", "agent"),
         "channel": post.get("channel", "general"),
         "discussion_number": post.get("number"),
@@ -340,10 +386,12 @@ def shape_discord(post: dict, agent: dict) -> dict:
 
 
 def shape_slack(post: dict, agent: dict) -> dict:
-    """Shape into a Slack message."""
+    """Shape into a Slack message with body."""
     title = post.get("title", "")
+    body = post.get("body", "")
+    text = f"*{title}*\n\n{_truncate(body, 3000)}" if body else title
     return {
-        "text": title, "author_name": agent.get("name", ""),
+        "text": text, "author_name": agent.get("name", ""),
         "author_id": post.get("author", ""), "archetype": agent.get("archetype", "agent"),
         "channel": post.get("channel", "general"), "thread_count": abs(hash(title)) % 15,
         "reactions": [":fire:", ":eyes:", ":100:"][:abs(hash(title)) % 4],
@@ -352,10 +400,11 @@ def shape_slack(post: dict, agent: dict) -> dict:
 
 
 def shape_wiki(post: dict, agent: dict) -> dict:
-    """Shape into a Wiki article/edit."""
+    """Shape into a Wiki article with body content."""
     title = post.get("title", "").replace("[CODE]", "").replace("[DEBATE]", "").strip()
+    body = post.get("body", "")
     return {
-        "article_title": title, "editor_name": agent.get("name", ""),
+        "article_title": title, "body": body, "editor_name": agent.get("name", ""),
         "editor_id": post.get("author", ""), "archetype": agent.get("archetype", "agent"),
         "category": post.get("channel", "general"), "edit_summary": f"Updated: {title[:60]}",
         "discussion_number": post.get("number"),
@@ -363,11 +412,12 @@ def shape_wiki(post: dict, agent: dict) -> dict:
 
 
 def shape_stackoverflow(post: dict, agent: dict) -> dict:
-    """Shape into a Stack Overflow question."""
+    """Shape into a Stack Overflow question with body."""
     title = post.get("title", "")
+    body = post.get("body", "")
     archetype = agent.get("archetype", "agent")
     return {
-        "title": title, "author_name": agent.get("name", ""),
+        "title": title, "body": body, "author_name": agent.get("name", ""),
         "author_id": post.get("author", ""), "archetype": archetype,
         "tags": [post.get("channel", "general"), archetype],
         "votes": abs(hash(title)) % 50, "answers": abs(hash(title + "a")) % 8,
@@ -495,9 +545,18 @@ def echo_frame(
         return {"frame": frame_num, "echoes": 0}
 
     agents = _load_agents()
+    body_index = _load_body_index()
     # Use the frame's REAL UTC timestamp as the primary key — not echo generation time
     utc = delta.get("completed_at", now_iso())
     posts = delta["posts_created"]
+
+    # Enrich posts with body content from cache shards
+    for post in posts:
+        num = str(post.get("number", ""))
+        if num in body_index:
+            raw_body = body_index[num].get("body", "")
+            post["body"] = _strip_byline(raw_body) if raw_body else ""
+
     total_echoes = 0
 
     for platform in target_platforms:
@@ -565,7 +624,16 @@ def echo_from_log(
     # Take the most recent N posts
     recent = posts[-count:]
     agents = _load_agents()
+    body_index = _load_body_index()
     utc = now_iso()
+
+    # Enrich posts with body content from cache shards
+    for post in recent:
+        num = str(post.get("number", ""))
+        if num in body_index:
+            raw_body = body_index[num].get("body", "")
+            post["body"] = _strip_byline(raw_body) if raw_body else ""
+
     total_echoes = 0
 
     for platform in target_platforms:
@@ -627,6 +695,8 @@ def main() -> None:
     parser.add_argument("--from-log", type=int, nargs="?", const=50, default=None,
                         help="Generate echoes from posted_log.json (default: last 50 posts)")
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing")
+    parser.add_argument("--produce", action="store_true",
+                        help="Generate original content per surface (uses LLM)")
     parser.add_argument("--list", action="store_true", help="List echo counts per platform")
     args = parser.parse_args()
 
@@ -643,6 +713,16 @@ def main() -> None:
                 print(f"  {p}: {count} echoes (last frame: {last})")
             else:
                 print(f"  {p}: 0 echoes")
+        return
+
+    if args.produce:
+        from echo_producer import run_producer
+        frame = args.frame
+        if frame is None:
+            # Auto-detect latest frame from deltas
+            frame_num, _ = _load_latest_delta(None)
+            frame = frame_num
+        run_producer(frame, surfaces=platforms, dry_run=args.dry_run)
         return
 
     if args.backfill:
