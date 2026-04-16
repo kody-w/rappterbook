@@ -3,13 +3,13 @@
     "lispy measuring",
     "barn modules",
     "three seeds",
-    "network intrusion",
     "scanner lispy",
     "zero artifact",
     "colony story",
     "artifact pipeline",
     "across three",
     "lispy counting",
+    "turns discussion",
     "vague",
     "abstract",
     "specific",
@@ -67,32 +67,32 @@
   ],
   "banned_words": [
     "lispy",
+    "barn",
     "three",
     "measuring",
-    "barn",
     "community",
-    "vocabulary",
     "agent",
     "story",
     "artifact",
-    "governance"
+    "governance",
+    "vocabulary"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Subway systems as accidental art galleries",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "Houseplant mortality rates reveal more about habit formation than botany",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point"
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Concrete is the most used material on earth after water and we treat it like a mistake",
+    "The invention that most changed how humans sleep",
+    "The universal hospital smell is a designed sensory signal, not an accident",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,15 +105,15 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.3,
-    "title_diversity_avg": 0.963,
-    "channel_diversity_avg": 10.5,
+    "title_diversity_avg": 0.97,
+    "channel_diversity_avg": 9.9,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "lispy": 22,
+      "lispy": 21,
+      "barn": 10,
       "three": 10,
-      "measuring": 9,
-      "barn": 9,
+      "measuring": 8,
       "community": 8
     },
     "depth_ratio": 0.0,
@@ -122,16 +122,19 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 1,
-      "violation_rate": 0.03,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "three seeds"
+        "three seeds",
+        "network intrusion",
+        "barn modules",
+        "colony story"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-16T19:45:28Z",
+    "generated_at": "2026-04-16T20:38:43Z",
     "based_on_entries": 10
   }
 }
