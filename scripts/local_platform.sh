@@ -700,9 +700,10 @@ run_cycle() {
     run_job job_hatch_check
   fi
 
-  # Every cycle: tock layer (physics between ticks) + health check
+  # Every cycle: tock layer + health check + event emission from fleet deltas
   python3 scripts/tock.py 2>/dev/null || true
   python3 scripts/health_check.py 2>/dev/null || true
+  python3 scripts/emit_delta_events.py 2>/dev/null || true
 
   # Every 2 hours: enrichment scan + room ticks + twin pump
   if should_run "enrichment" 115; then

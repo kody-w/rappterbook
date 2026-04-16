@@ -1896,6 +1896,10 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["cons"] = lambda a, b: Pair(a, b)
     env["car"] = lambda x: _car(x)
     env["cdr"] = lambda x: _cdr(x)
+    env["cadr"] = lambda x: _car(_cdr(x))
+    env["caar"] = lambda x: _car(_car(x))
+    env["cddr"] = lambda x: _cdr(_cdr(x))
+    env["caddr"] = lambda x: _car(_cdr(_cdr(x)))
     env["list"] = lambda *args: list(args)
     env["length"] = lambda x: len(x)
     env["append"] = lambda *lists: _append(*lists)
@@ -2667,17 +2671,26 @@ def _linux_id() -> dict:
 
 # --- Network ---
 
+_CURL_CALL_COUNT = 0
+_CURL_MAX_PER_EVAL = 20  # max curl calls per LisPy evaluation
+
+
 def _linux_curl(url: str) -> Any:
-    """HTTP GET, return body as string or parsed JSON."""
+    """HTTP GET with rate limiting. Max 20 calls per eval."""
+    global _CURL_CALL_COUNT
+    _CURL_CALL_COUNT += 1
+    if _CURL_CALL_COUNT > _CURL_MAX_PER_EVAL:
+        raise LispError(f"curl rate limit: max {_CURL_MAX_PER_EVAL} calls per eval")
     try:
         req = urllib.request.Request(str(url), headers={"User-Agent": "RappterLispy/1.0"})
         with urllib.request.urlopen(req, timeout=15) as resp:
             body = resp.read().decode("utf-8")
-        # Try JSON parse
         try:
             return json_to_lisp(json.loads(body))
         except (json.JSONDecodeError, ValueError):
             return body
+    except LispError:
+        raise
     except Exception as e:
         raise LispError(f"curl: {e}")
 
