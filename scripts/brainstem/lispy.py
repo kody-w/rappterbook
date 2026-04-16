@@ -1900,11 +1900,20 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["caar"] = lambda x: _car(_car(x))
     env["cddr"] = lambda x: _cdr(_cdr(x))
     env["caddr"] = lambda x: _car(_cdr(_cdr(x)))
+    env["cdar"] = lambda x: _cdr(_car(x))
+    env["cdddr"] = lambda x: _cdr(_cdr(_cdr(x)))
+    env["cadddr"] = lambda x: _car(_cdr(_cdr(_cdr(x))))
+    env["caaar"] = lambda x: _car(_car(_car(x)))
+    env["caadr"] = lambda x: _car(_car(_cdr(x)))
     env["list"] = lambda *args: list(args)
     env["length"] = lambda x: len(x)
     env["append"] = lambda *lists: _append(*lists)
     env["reverse"] = lambda x: list(reversed(x)) if isinstance(x, list) else x
-    env["nth"] = lambda lst, n: lst[n] if isinstance(lst, list) else NIL
+    def _nth(lst, n, *default):
+        if isinstance(lst, (list, tuple, str)) and 0 <= n < len(lst):
+            return lst[n]
+        return default[0] if default else NIL
+    env["nth"] = _nth
     env["take"] = lambda lst, n: lst[:n] if isinstance(lst, list) else NIL
     env["drop"] = lambda lst, n: lst[n:] if isinstance(lst, list) else NIL
     env["range"] = lambda *args: list(range(*args))
@@ -1914,6 +1923,15 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["rest"] = lambda x: _cdr(x)
     env["last"] = lambda x: x[-1] if isinstance(x, list) and x else NIL
     env["empty?"] = lambda x: x is NIL or x is None or (isinstance(x, (list, dict, str)) and len(x) == 0)
+    def _contains(container, item):
+        if container is NIL or container is None: return False
+        if isinstance(container, (list, tuple, str)): return item in container
+        if isinstance(container, dict): return item in container
+        return False
+    env["contains?"] = _contains  # (contains? container item)
+    env["member?"] = lambda item, container: _contains(container, item)  # Scheme: (member? item container)
+    env["member"] = lambda item, container: _contains(container, item)  # Scheme: (member item container)
+    env["index-of"] = lambda container, item: (container.index(item) if item in container else -1) if isinstance(container, (list, tuple, str)) else -1
 
     # -- Higher-order functions --
     env["map"] = _map_fn
@@ -1935,10 +1953,19 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["string-trim"] = lambda s: s.strip()
     env["string-replace"] = lambda s, old, new: s.replace(old, new)
     env["string-ref"] = lambda s, i: s[i]
+    env["string-prefix?"] = lambda prefix, s: isinstance(s, str) and s.startswith(prefix)
+    env["string-suffix?"] = lambda suffix, s: isinstance(s, str) and s.endswith(suffix)
+    env["string-starts-with?"] = lambda s, prefix: isinstance(s, str) and s.startswith(prefix)
+    env["string-ends-with?"] = lambda s, suffix: isinstance(s, str) and s.endswith(suffix)
 
     # -- Type conversion --
     env["number->string"] = lambda n: str(n)
-    env["string->number"] = lambda s: int(s) if "." not in s else float(s)
+    def _str_to_num(s):
+        if s is NIL or s is None: return 0
+        s = str(s).strip()
+        if not s: return 0
+        return int(s) if "." not in s and "e" not in s.lower() else float(s)
+    env["string->number"] = _str_to_num
     env["symbol->string"] = lambda s: str(s)
     env["string->symbol"] = lambda s: Symbol(s)
     env["->string"] = lambda x: str(x) if not isinstance(x, str) else x
@@ -1955,6 +1982,7 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["dict-map"] = _dict_map_fn
     env["dict-filter"] = _dict_filter_fn
     env["make-dict"] = lambda *pairs: dict(zip(pairs[::2], pairs[1::2]))
+    env["dict"] = lambda *pairs: dict(zip(pairs[::2], pairs[1::2]))  # alias for make-dict
 
     # -- I/O --
     env["display"] = lambda *args: _display(*args)
@@ -1965,8 +1993,20 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["write-file"] = lambda path, content: _write_file(path, content)
 
     # -- JSON --
-    env["json-parse"] = lambda s: json_to_lisp(json.loads(s))
+    def _json_parse(s):
+        if isinstance(s, (dict, list)): return json_to_lisp(s)  # idempotent for (curl) output
+        if isinstance(s, bytes): s = s.decode("utf-8")
+        return json_to_lisp(json.loads(s))
+    env["json-parse"] = _json_parse
+    env["json-decode"] = _json_parse  # alias
     env["json-dump"] = lambda val: json.dumps(lisp_to_json(val), indent=2)
+    env["json-encode"] = lambda val: json.dumps(lisp_to_json(val))  # alias, no indent
+
+    # -- Regex --
+    import re as _re
+    env["regex-match"] = lambda pattern, s: (_re.search(pattern, s).group(0) if isinstance(s, str) and _re.search(pattern, s) else NIL)
+    env["regex-match-all"] = lambda pattern, s: _re.findall(pattern, s) if isinstance(s, str) else []
+    env["regex-replace"] = lambda pattern, repl, s: _re.sub(pattern, repl, s) if isinstance(s, str) else s
 
     # -- Rappterbook bindings --
     env["rb-state"] = rb_state
@@ -2034,7 +2074,10 @@ def make_global_env(live_mode: bool = False) -> Env:
     # -- Special values --
     env["#t"] = True
     env["#f"] = False
+    env["true"] = True
+    env["false"] = False
     env["nil"] = NIL
+    env["null"] = NIL
     env["pi"] = math.pi
     env["e"] = math.e
 
@@ -3021,7 +3064,8 @@ def _make_linux_builtins() -> dict:
         "wget": lambda url, path: _linux_wget(str(url), str(path)),
 
         # Piping (> and >> are special forms handled in evaluate)
-        "<": lambda path: _linux_read(str(path)),
+        # Note: "<" is reserved for numeric comparison; use "read-file" for file reads.
+        "read-file": lambda path: _linux_read(str(path)),
 
         # Simulation-specific
         "seed": lambda: _linux_seed(),
