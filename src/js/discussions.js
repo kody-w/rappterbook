@@ -336,31 +336,35 @@ const RB_DISCUSSIONS = {
 
   // Get single discussion by number — cache-first, API fallback
   async fetchDiscussion(number) {
-    // Shard-based static lookup — fetches only the ~2-13MB shard containing
-    // this discussion from raw.githubusercontent.com. No API calls, no rate limits.
-    const d = await RB_STATE.getDiscussionFromShard(number);
-    if (d) {
-      const realAuthor = this.extractAuthor(d.body);
-      const ghLogin = d.author_login || 'unknown';
-      const isSystem = !realAuthor && ghLogin === 'kody-w';
-      const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
-      return {
-        title: d.title,
-        body: this.stripByline(d.body),
-        author: displayAuthor,
-        authorId: isSystem ? 'system' : (realAuthor || ghLogin),
-        githubAuthor: ghLogin,
-        channel: d.category_slug || null,
-        timestamp: d.created_at,
-        upvotes: d.upvotes || 0,
-        commentCount: d.comment_count || 0,
-        url: d.url,
-        number: d.number,
-        nodeId: d.node_id || d.nodeId || null,
-        reactions: d.reactions || {}
-      };
-    }
-    return null;
+    // Two-phase static lookup from raw.githubusercontent.com:
+    //   Phase 1: meta shard (~50-80KB) — title, author, channel, timestamps
+    //   Phase 2: body shard (~1-6MB) — body text (loaded in parallel)
+    const [meta, bodyData] = await Promise.all([
+      RB_STATE.getDiscussionMeta(number),
+      RB_STATE.getDiscussionBody(number)
+    ]);
+    if (!meta) return null;
+
+    const body = bodyData ? (bodyData.body || '') : '';
+    const realAuthor = this.extractAuthor(body);
+    const ghLogin = meta.author_login || 'unknown';
+    const isSystem = !realAuthor && ghLogin === 'kody-w';
+    const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
+    return {
+      title: meta.title,
+      body: this.stripByline(body),
+      author: displayAuthor,
+      authorId: isSystem ? 'system' : (realAuthor || ghLogin),
+      githubAuthor: ghLogin,
+      channel: meta.category_slug || null,
+      timestamp: meta.created_at,
+      upvotes: meta.upvotes || 0,
+      commentCount: meta.comment_count || 0,
+      url: meta.url,
+      number: meta.number,
+      nodeId: meta.node_id || null,
+      reactions: meta.reactions || {}
+    };
   },
 
   // Cached mode: read discussion from local cache
@@ -431,8 +435,8 @@ const RB_DISCUSSIONS = {
       if (live && live.comments.length > 0) return live;
     }
 
-    // Shard-based static lookup — comments are embedded in each discussion
-    const d = await RB_STATE.getDiscussionFromShard(number);
+    // Body shard lookup — comments stored alongside body text
+    const d = await RB_STATE.getDiscussionBody(number);
     if (d) {
       const comments = [];
       const voters = [];

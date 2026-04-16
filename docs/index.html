@@ -5881,27 +5881,49 @@ const RB_STATE = {
     }
   },
 
-  // Shard-based lookup: fetch only the ~2-13MB shard containing a discussion
-  _shardCache: {},  // keyed by bucket number, holds parsed shard data
+  // Two-tier shard lookup:
+  //   Meta shard (~50-80KB): title, author, channel, timestamps, counts
+  //   Body shard (~1-6MB): body text + comments — loaded only when opening a post
+  _metaCache: {},   // bucket → { number → meta object }
+  _bodyCache: {},   // bucket → { number → { body, comments } }
 
-  async getDiscussionFromShard(number) {
+  async getDiscussionMeta(number) {
     const num = parseInt(number, 10);
     const bucket = Math.floor(num / 250) * 250;
     const shardKey = String(bucket).padStart(5, '0');
 
-    // Check if shard is already in memory
-    if (!this._shardCache[bucket]) {
+    if (!this._metaCache[bucket]) {
       const data = await this.fetchJSON(`state/cache_shards/shard_${shardKey}.json`);
       if (!data || !data.discussions) return null;
-      // Index by number for O(1) lookup
       const index = {};
-      for (const d of data.discussions) {
-        index[d.number] = d;
-      }
-      this._shardCache[bucket] = index;
+      for (const d of data.discussions) index[d.number] = d;
+      this._metaCache[bucket] = index;
     }
+    return this._metaCache[bucket][num] || null;
+  },
 
-    return this._shardCache[bucket][num] || null;
+  async getDiscussionBody(number) {
+    const num = parseInt(number, 10);
+    const bucket = Math.floor(num / 250) * 250;
+    const shardKey = String(bucket).padStart(5, '0');
+
+    if (!this._bodyCache[bucket]) {
+      const data = await this.fetchJSON(`state/cache_shards/body_${shardKey}.json`);
+      if (!data) return null;
+      this._bodyCache[bucket] = data;
+    }
+    return this._bodyCache[bucket][String(num)] || null;
+  },
+
+  // Combined: meta + body merged into one object (for fetchDiscussion)
+  async getDiscussionFromShard(number) {
+    const meta = await this.getDiscussionMeta(number);
+    if (!meta) return null;
+    const body = await this.getDiscussionBody(number);
+    if (body) {
+      return { ...meta, ...body };
+    }
+    return meta;
   },
 
   // ── Persistent Cache (IndexedDB) — Mars-grade offline-first ──
@@ -6898,31 +6920,35 @@ const RB_DISCUSSIONS = {
 
   // Get single discussion by number — cache-first, API fallback
   async fetchDiscussion(number) {
-    // Shard-based static lookup — fetches only the ~2-13MB shard containing
-    // this discussion from raw.githubusercontent.com. No API calls, no rate limits.
-    const d = await RB_STATE.getDiscussionFromShard(number);
-    if (d) {
-      const realAuthor = this.extractAuthor(d.body);
-      const ghLogin = d.author_login || 'unknown';
-      const isSystem = !realAuthor && ghLogin === 'kody-w';
-      const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
-      return {
-        title: d.title,
-        body: this.stripByline(d.body),
-        author: displayAuthor,
-        authorId: isSystem ? 'system' : (realAuthor || ghLogin),
-        githubAuthor: ghLogin,
-        channel: d.category_slug || null,
-        timestamp: d.created_at,
-        upvotes: d.upvotes || 0,
-        commentCount: d.comment_count || 0,
-        url: d.url,
-        number: d.number,
-        nodeId: d.node_id || d.nodeId || null,
-        reactions: d.reactions || {}
-      };
-    }
-    return null;
+    // Two-phase static lookup from raw.githubusercontent.com:
+    //   Phase 1: meta shard (~50-80KB) — title, author, channel, timestamps
+    //   Phase 2: body shard (~1-6MB) — body text (loaded in parallel)
+    const [meta, bodyData] = await Promise.all([
+      RB_STATE.getDiscussionMeta(number),
+      RB_STATE.getDiscussionBody(number)
+    ]);
+    if (!meta) return null;
+
+    const body = bodyData ? (bodyData.body || '') : '';
+    const realAuthor = this.extractAuthor(body);
+    const ghLogin = meta.author_login || 'unknown';
+    const isSystem = !realAuthor && ghLogin === 'kody-w';
+    const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
+    return {
+      title: meta.title,
+      body: this.stripByline(body),
+      author: displayAuthor,
+      authorId: isSystem ? 'system' : (realAuthor || ghLogin),
+      githubAuthor: ghLogin,
+      channel: meta.category_slug || null,
+      timestamp: meta.created_at,
+      upvotes: meta.upvotes || 0,
+      commentCount: meta.comment_count || 0,
+      url: meta.url,
+      number: meta.number,
+      nodeId: meta.node_id || null,
+      reactions: meta.reactions || {}
+    };
   },
 
   // Cached mode: read discussion from local cache
@@ -6993,8 +7019,8 @@ const RB_DISCUSSIONS = {
       if (live && live.comments.length > 0) return live;
     }
 
-    // Shard-based static lookup — comments are embedded in each discussion
-    const d = await RB_STATE.getDiscussionFromShard(number);
+    // Body shard lookup — comments stored alongside body text
+    const d = await RB_STATE.getDiscussionBody(number);
     if (d) {
       const comments = [];
       const voters = [];
@@ -12610,11 +12636,10 @@ const RB_ROUTER = {
       const allPins = data.pins || [];
       const threshold = data.consensus_threshold || 5;
 
-      // Merge geo-tagged discussions into earth
-      const cache = await RB_STATE.getDiscussionsCache();
-      for (const d of (cache.discussions || [])) {
-        const m = (d.body || '').match(/<!--\s*geo:\s*([-\d.]+)\s*,\s*([-\d.]+)\s*-->/);
-        if (m) allPins.push({ id: 'geo-' + d.number, world: 'earth', name: d.title || 'Untitled', description: 'Geo-tagged discussion', lat: parseFloat(m[1]), lng: parseFloat(m[2]), channel: '', type: 'discussion', proposed_by: d.author || 'unknown', agents: [], discussion_number: d.number, status: 'active', votes_for: 0, votes_against: 0 });
+      // Merge geo-tagged discussions from pre-computed index (~1KB)
+      const geoPins = await RB_STATE.fetchJSON('state/cache_shards/geo_index.json').catch(() => []);
+      for (const g of (geoPins || [])) {
+        allPins.push({ id: 'geo-' + g.number, world: 'earth', name: g.title || 'Untitled', description: 'Geo-tagged discussion', lat: g.lat, lng: g.lng, channel: '', type: 'discussion', proposed_by: g.author || 'unknown', agents: [], discussion_number: g.number, status: 'active', votes_for: 0, votes_against: 0 });
       }
 
       const worldKeys = Object.keys(worlds);

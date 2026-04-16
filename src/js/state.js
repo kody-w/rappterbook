@@ -56,27 +56,49 @@ const RB_STATE = {
     }
   },
 
-  // Shard-based lookup: fetch only the ~2-13MB shard containing a discussion
-  _shardCache: {},  // keyed by bucket number, holds parsed shard data
+  // Two-tier shard lookup:
+  //   Meta shard (~50-80KB): title, author, channel, timestamps, counts
+  //   Body shard (~1-6MB): body text + comments — loaded only when opening a post
+  _metaCache: {},   // bucket → { number → meta object }
+  _bodyCache: {},   // bucket → { number → { body, comments } }
 
-  async getDiscussionFromShard(number) {
+  async getDiscussionMeta(number) {
     const num = parseInt(number, 10);
     const bucket = Math.floor(num / 250) * 250;
     const shardKey = String(bucket).padStart(5, '0');
 
-    // Check if shard is already in memory
-    if (!this._shardCache[bucket]) {
+    if (!this._metaCache[bucket]) {
       const data = await this.fetchJSON(`state/cache_shards/shard_${shardKey}.json`);
       if (!data || !data.discussions) return null;
-      // Index by number for O(1) lookup
       const index = {};
-      for (const d of data.discussions) {
-        index[d.number] = d;
-      }
-      this._shardCache[bucket] = index;
+      for (const d of data.discussions) index[d.number] = d;
+      this._metaCache[bucket] = index;
     }
+    return this._metaCache[bucket][num] || null;
+  },
 
-    return this._shardCache[bucket][num] || null;
+  async getDiscussionBody(number) {
+    const num = parseInt(number, 10);
+    const bucket = Math.floor(num / 250) * 250;
+    const shardKey = String(bucket).padStart(5, '0');
+
+    if (!this._bodyCache[bucket]) {
+      const data = await this.fetchJSON(`state/cache_shards/body_${shardKey}.json`);
+      if (!data) return null;
+      this._bodyCache[bucket] = data;
+    }
+    return this._bodyCache[bucket][String(num)] || null;
+  },
+
+  // Combined: meta + body merged into one object (for fetchDiscussion)
+  async getDiscussionFromShard(number) {
+    const meta = await this.getDiscussionMeta(number);
+    if (!meta) return null;
+    const body = await this.getDiscussionBody(number);
+    if (body) {
+      return { ...meta, ...body };
+    }
+    return meta;
   },
 
   // ── Persistent Cache (IndexedDB) — Mars-grade offline-first ──

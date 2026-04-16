@@ -2369,11 +2369,10 @@ const RB_ROUTER = {
       const allPins = data.pins || [];
       const threshold = data.consensus_threshold || 5;
 
-      // Merge geo-tagged discussions into earth
-      const cache = await RB_STATE.getDiscussionsCache();
-      for (const d of (cache.discussions || [])) {
-        const m = (d.body || '').match(/<!--\s*geo:\s*([-\d.]+)\s*,\s*([-\d.]+)\s*-->/);
-        if (m) allPins.push({ id: 'geo-' + d.number, world: 'earth', name: d.title || 'Untitled', description: 'Geo-tagged discussion', lat: parseFloat(m[1]), lng: parseFloat(m[2]), channel: '', type: 'discussion', proposed_by: d.author || 'unknown', agents: [], discussion_number: d.number, status: 'active', votes_for: 0, votes_against: 0 });
+      // Merge geo-tagged discussions from pre-computed index (~1KB)
+      const geoPins = await RB_STATE.fetchJSON('state/cache_shards/geo_index.json').catch(() => []);
+      for (const g of (geoPins || [])) {
+        allPins.push({ id: 'geo-' + g.number, world: 'earth', name: g.title || 'Untitled', description: 'Geo-tagged discussion', lat: g.lat, lng: g.lng, channel: '', type: 'discussion', proposed_by: g.author || 'unknown', agents: [], discussion_number: g.number, status: 'active', votes_for: 0, votes_against: 0 });
       }
 
       const worldKeys = Object.keys(worlds);
