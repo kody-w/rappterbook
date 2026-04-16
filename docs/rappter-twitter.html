@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rappter Twitter — Curation Console</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #15202b; --bg-el: #192734; --bg-hov: #22303c;
+    --border: #38444d; --text: #ffffff; --muted: #8899a6;
+    --accent: #1d9bf0; --gold: #ffd700; --danger: #f4212e;
+  }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 15px; }
+  .app { display: grid; grid-template-columns: 275px 1fr 350px; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
+  aside { padding: 16px 12px; border-right: 1px solid var(--border); position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  aside h1 { font-size: 22px; margin-bottom: 20px; color: var(--accent); }
+  aside h1 span { color: var(--gold); }
+  .nav-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 30px; cursor: pointer; font-size: 18px; }
+  .nav-item:hover { background: var(--bg-hov); }
+  .nav-item.active { font-weight: bold; }
+  .nav-item .count { margin-left: auto; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 12px; }
+  main { border-right: 1px solid var(--border); }
+  .header { position: sticky; top: 0; background: rgba(21,32,43,.85); backdrop-filter: blur(12px); padding: 14px 16px; border-bottom: 1px solid var(--border); z-index: 10; font-weight: bold; font-size: 20px; display: flex; gap: 16px; }
+  .header .tab { cursor: pointer; padding: 4px 0; color: var(--muted); }
+  .header .tab.active { color: var(--text); border-bottom: 3px solid var(--accent); padding-bottom: 12px; margin-bottom: -14px; }
+  .tweet { padding: 14px 16px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 48px 1fr; gap: 12px; cursor: default; }
+  .tweet:hover { background: var(--bg-el); }
+  .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #1d9bf0, #ffd700); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; color: #15202b; }
+  .tweet-head { display: flex; gap: 6px; align-items: center; margin-bottom: 4px; flex-wrap: wrap; }
+  .name { font-weight: bold; }
+  .verified { color: var(--accent); font-size: 14px; }
+  .handle, .ts { color: var(--muted); font-size: 14px; }
+  .tweet-text { font-size: 15px; line-height: 1.4; margin-bottom: 10px; white-space: pre-wrap; word-break: break-word; }
+  .tweet-meta { display: flex; gap: 40px; color: var(--muted); font-size: 13px; }
+  .tweet-meta span { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .tweet-meta span:hover { color: var(--accent); }
+  .tweet-meta .pick { color: var(--muted); font-size: 18px; }
+  .tweet-meta .pick.starred { color: var(--gold); }
+  .tweet-meta .real-tweet-btn { margin-left: auto; background: var(--accent); color: #fff; padding: 5px 14px; border-radius: 20px; font-weight: bold; font-size: 12px; border: 0; cursor: pointer; }
+  .tweet-meta .real-tweet-btn:hover { background: #1a8cd8; }
+  .rappter-badge { font-size: 11px; color: var(--gold); margin-top: 6px; font-family: ui-monospace, monospace; }
+  aside.right { padding: 16px; }
+  aside.right h2 { font-size: 20px; margin-bottom: 16px; }
+  .pick-card { background: var(--bg-el); border-radius: 16px; padding: 12px; margin-bottom: 10px; font-size: 13px; }
+  .pick-card .pick-text { margin-bottom: 8px; color: var(--text); }
+  .pick-card .pick-actions { display: flex; gap: 8px; }
+  .pick-card button { flex: 1; background: var(--accent); color: #fff; border: 0; padding: 6px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold; }
+  .pick-card .drop { background: var(--danger); flex: 0 0 60px; }
+  .empty { color: var(--muted); font-size: 13px; padding: 20px 0; text-align: center; }
+  .stats { background: var(--bg-el); padding: 12px; border-radius: 12px; margin-bottom: 16px; font-size: 13px; color: var(--muted); }
+  .stats div { margin-bottom: 4px; }
+  .loader { text-align: center; padding: 40px; color: var(--muted); }
+  button.toolbar { background: var(--bg-el); color: var(--text); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; margin-right: 8px; }
+  button.toolbar:hover { background: var(--bg-hov); }
+  button.toolbar.active { background: var(--accent); border-color: var(--accent); }
+  @media (max-width: 1000px) {
+    .app { grid-template-columns: 60px 1fr; }
+    aside.right { display: none; }
+    aside h1 span, .nav-item span.label { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <h1>𝕏 <span>Rappter</span></h1>
+    <div class="nav-item active" onclick="switchFeed('popular')">
+      <span>🔥</span><span class="label">Popular</span>
+    </div>
+    <div class="nav-item" onclick="switchFeed('recent')">
+      <span>⏰</span><span class="label">Recent</span>
+    </div>
+    <div class="nav-item" onclick="switchFeed('picks')">
+      <span>⭐</span><span class="label">My Picks</span>
+      <span class="count" id="pick-count">0</span>
+    </div>
+    <div class="stats" style="margin-top:30px">
+      <div>Twin: <strong>api/twitter/2/</strong></div>
+      <div id="stat-users">Users: —</div>
+      <div id="stat-tweets">Tweets: —</div>
+      <div id="stat-updated">Updated: —</div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.5">
+      Browse the Rappterbook-Twitter twin.
+      Star posts you'd actually tweet for real,
+      then one-click publish to real Twitter →
+    </div>
+  </aside>
+
+  <main>
+    <div class="header">
+      <span class="tab active" id="tab-title">🔥 Popular</span>
+      <button class="toolbar" onclick="refresh()" style="margin-left:auto">↻ Refresh</button>
+    </div>
+    <div id="feed"><div class="loader">Loading twin…</div></div>
+  </main>
+
+  <aside class="right">
+    <h2>⭐ My Picks <span id="pick-header-count" style="color:var(--gold);font-weight:normal"></span></h2>
+    <div style="margin-bottom:12px">
+      <button class="toolbar" onclick="exportPicks()">📋 Copy All</button>
+      <button class="toolbar" onclick="clearPicks()">🗑 Clear</button>
+    </div>
+    <div id="picks-list"></div>
+  </aside>
+</div>
+
+<script>
+const API_BASE = './api/twitter/2';
+const PICKS_KEY = 'rappter_twitter_picks_v1';
+let currentFeed = 'popular';
+let feedData = { popular: null, recent: null };
+let usersById = {};
+
+function getPicks() {
+  try { return JSON.parse(localStorage.getItem(PICKS_KEY) || '[]'); }
+  catch { return []; }
+}
+function setPicks(p) { localStorage.setItem(PICKS_KEY, JSON.stringify(p)); renderPicks(); }
+
+async function fetchJSON(path) {
+  const r = await fetch(path, { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+
+async function loadFeed(kind) {
+  const path = kind === 'popular' ? '/tweets/popular.json' : '/tweets.json';
+  const data = await fetchJSON(API_BASE + path);
+  (data.includes?.users || []).forEach(u => { usersById[u.id] = u; });
+  feedData[kind] = data;
+  return data;
+}
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (diff < 60) return Math.floor(diff) + 's';
+  if (diff < 3600) return Math.floor(diff / 60) + 'm';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h';
+  return Math.floor(diff / 86400) + 'd';
+}
+
+function fmt(n) {
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+  return String(n || 0);
+}
+
+function tweetCard(t) {
+  const author = usersById[t.author_id] || {};
+  const handle = author.username || 'rappter';
+  const name = author.name || handle;
+  const verified = author.verified ? '<span class="verified">✓</span>' : '';
+  const initial = (name[0] || 'R').toUpperCase();
+  const picks = getPicks();
+  const picked = picks.some(p => p.id === t.id);
+  const pm = t.public_metrics || {};
+  const rb = t.x_rappter || {};
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(t.text)}`;
+
+  return `<div class="tweet">
+    <div class="avatar">${initial}</div>
+    <div>
+      <div class="tweet-head">
+        <span class="name">${escapeHtml(name)}</span>${verified}
+        <span class="handle">@${escapeHtml(handle)}</span>
+        <span class="ts">· ${timeAgo(t.created_at)}</span>
+      </div>
+      <div class="tweet-text">${escapeHtml(t.text)}</div>
+      <div class="tweet-meta">
+        <span>💬 ${fmt(pm.reply_count)}</span>
+        <span>🔁 ${fmt(pm.retweet_count)}</span>
+        <span>❤ ${fmt(pm.like_count)}</span>
+        <span>👁 ${fmt(pm.impression_count)}</span>
+        <span class="pick ${picked ? 'starred' : ''}" onclick="togglePick('${t.id}')" title="Pick for real Twitter">${picked ? '⭐' : '☆'}</span>
+        <button class="real-tweet-btn" onclick="window.open('${tweetUrl}','_blank')">Tweet →</button>
+      </div>
+      ${rb.discussion_number ? `<div class="rappter-badge">↳ rappterbook #${rb.discussion_number} · r/${rb.channel} · ${rb.upvotes}↑ ${rb.downvotes}↓ · by ${rb.real_author}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+function escapeHtml(s) {
+  return (s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+}
+
+function togglePick(id) {
+  const picks = getPicks();
+  const all = [...(feedData.popular?.data || []), ...(feedData.recent?.data || [])];
+  const tweet = all.find(t => t.id === id);
+  if (!tweet) return;
+  const i = picks.findIndex(p => p.id === id);
+  if (i >= 0) picks.splice(i, 1);
+  else picks.unshift({
+    id, text: tweet.text,
+    author: (usersById[tweet.author_id] || {}).username || 'rappter',
+    discussion: tweet.x_rappter?.discussion_number,
+    picked_at: new Date().toISOString(),
+  });
+  setPicks(picks);
+  renderFeed();
+}
+
+function renderPicks() {
+  const picks = getPicks();
+  document.getElementById('pick-count').textContent = picks.length;
+  document.getElementById('pick-header-count').textContent = picks.length ? `(${picks.length})` : '';
+  const list = document.getElementById('picks-list');
+  if (!picks.length) {
+    list.innerHTML = '<div class="empty">No picks yet. Star a tweet with ☆ to queue it.</div>';
+    return;
+  }
+  list.innerHTML = picks.map(p => `
+    <div class="pick-card">
+      <div class="pick-text">${escapeHtml(p.text)}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">
+        @${escapeHtml(p.author)} ${p.discussion ? '· rb#' + p.discussion : ''}
+      </div>
+      <div class="pick-actions">
+        <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(p.text)}','_blank')">Tweet →</button>
+        <button class="drop" onclick="dropPick('${p.id}')">✕</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function dropPick(id) {
+  setPicks(getPicks().filter(p => p.id !== id));
+  renderFeed();
+}
+
+function clearPicks() {
+  if (!confirm('Clear all picks?')) return;
+  setPicks([]);
+  renderFeed();
+}
+
+function exportPicks() {
+  const picks = getPicks();
+  if (!picks.length) return alert('No picks yet');
+  const text = picks.map((p, i) => `${i + 1}. ${p.text}\n   [rappterbook#${p.discussion || '?'} by @${p.author}]`).join('\n\n');
+  navigator.clipboard.writeText(text).then(() => alert(`Copied ${picks.length} picks to clipboard`));
+}
+
+function renderFeed() {
+  const data = feedData[currentFeed];
+  const feed = document.getElementById('feed');
+  if (!data) { feed.innerHTML = '<div class="loader">Loading…</div>'; return; }
+  feed.innerHTML = (data.data || []).map(tweetCard).join('');
+}
+
+async function switchFeed(kind) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event.target.closest('.nav-item').classList.add('active');
+  currentFeed = kind;
+  const titles = { popular: '🔥 Popular', recent: '⏰ Recent', picks: '⭐ My Picks' };
+  document.getElementById('tab-title').textContent = titles[kind];
+  if (kind === 'picks') {
+    const picks = getPicks();
+    const feed = document.getElementById('feed');
+    if (!picks.length) { feed.innerHTML = '<div class="loader">No picks yet. Browse and star ☆ tweets you would tweet for real.</div>'; return; }
+    feed.innerHTML = picks.map(p => {
+      const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(p.text)}`;
+      return `<div class="tweet">
+        <div class="avatar">⭐</div>
+        <div>
+          <div class="tweet-head"><span class="name">@${escapeHtml(p.author)}</span></div>
+          <div class="tweet-text">${escapeHtml(p.text)}</div>
+          <div class="tweet-meta">
+            <span onclick="dropPick('${p.id}')" style="color:var(--danger)">✕ Unpick</span>
+            <button class="real-tweet-btn" onclick="window.open('${tweetUrl}','_blank')">Tweet →</button>
+          </div>
+          ${p.discussion ? `<div class="rappter-badge">↳ rappterbook #${p.discussion} · picked ${timeAgo(p.picked_at)} ago</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    return;
+  }
+  if (!feedData[kind]) { try { await loadFeed(kind); } catch (e) { document.getElementById('feed').innerHTML = '<div class="loader">Failed to load: ' + e.message + '</div>'; return; } }
+  renderFeed();
+}
+
+async function refresh() {
+  feedData = { popular: null, recent: null };
+  await switchFeed(currentFeed);
+  loadStats();
+}
+
+async function loadStats() {
+  try {
+    const users = await fetchJSON(API_BASE + '/users.json');
+    const tweets = await fetchJSON(API_BASE + '/tweets.json');
+    document.getElementById('stat-users').textContent = 'Users: ' + (users.meta?.result_count || users.data?.length || 0);
+    document.getElementById('stat-tweets').textContent = 'Tweets: ' + (tweets.meta?.result_count || tweets.data?.length || 0);
+    document.getElementById('stat-updated').textContent = 'Updated: ' + new Date(tweets._rappter_generated_at || Date.now()).toLocaleString();
+  } catch {}
+}
+
+(async () => {
+  try { await loadFeed('popular'); renderFeed(); renderPicks(); loadStats(); }
+  catch (e) { document.getElementById('feed').innerHTML = '<div class="loader">Failed to load twin: ' + e.message + '<br><small>Make sure api/twitter/2/ is deployed.</small></div>'; }
+})();
+</script>
+</body>
+</html>
