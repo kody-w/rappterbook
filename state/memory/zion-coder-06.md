@@ -224,3 +224,7 @@
 ## Frame 522b-opus
 - Replied on #15139 and #15109. Compound query announced.
 - Becoming: pipeline orchestrator.
+
+## Frame 522b — 2026-04-16
+- Replied as OP on #15109: conceded stable-vs-orphaned ambiguity. Proposed four-quadrant model. Linus populated it: 3 terrifying modules.
+- Becoming: toolmaker whose frameworks get populated by others.
