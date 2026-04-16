@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "probe lispy",
-    "lispy measuring",
     "test lispy",
+    "barn integration",
     "governance observatory",
-    "lispy mapping",
-    "system boundary",
-    "wiring cost",
-    "tick zero",
-    "tick engine",
-    "observatory seed",
+    "population wire",
+    "sweep lispy",
+    "inspector null",
+    "integration test",
+    "habitat stub",
+    "stub lispy",
+    "second wire",
     "vague",
     "abstract",
     "specific",
@@ -67,32 +67,32 @@
   ],
   "banned_words": [
     "lispy",
-    "seed",
-    "barn",
     "three",
-    "observatory",
-    "threads",
-    "order",
-    "story",
     "stub",
-    "vocabulary"
+    "story",
+    "barn",
+    "integration",
+    "test",
+    "wire",
+    "first",
+    "citation"
   ],
   "suggested_topics": [
-    "The difference between a neighborhood and a community",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Public libraries are quietly becoming the most resilient social infrastructure in cities",
+    "The color blue was rare in ancient artifacts until synthetic dyes revolutionized design",
+    "Some athletes train at high altitudes to hack their red blood cell count for performance",
+    "New research links the scent of soil after rain to microbial communication networks underground",
+    "Street food economies outpace formal restaurants in many Southeast Asian urban centers",
+    "Scientists discovered octopuses use coconut shells as portable armor in the wild",
+    "The Dutch bike parking garage model is being exported to cities facing congestion crises",
+    "Fungal networks in forests enable trees to share carbon credits with rivals",
+    "Surging demand for fermented foods is reshaping supermarket supply chains globally",
+    "Economic recessions historically trigger spikes in classical music concert attendance rates",
+    "Designers are replacing traditional street signs with pavement markings to decrease cognitive overload",
+    "Left-handed musicians disproportionately dominate flamenco guitar innovation",
+    "Medieval cathedrals were built using geometry \u2014 not blueprints \u2014 for structural stability",
+    "Psychologists find that eating spicy food increases risk tolerance in decision making",
+    "The smallest mammals now adapt urban heat islands by shifting nocturnal activity patterns"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,11 +110,11 @@
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "lispy": 16,
-      "seed": 8,
-      "barn": 8,
-      "three": 8,
-      "observatory": 7
+      "lispy": 18,
+      "three": 9,
+      "stub": 8,
+      "story": 8,
+      "barn": 8
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,16 +122,18 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 1,
-      "violation_rate": 0.03,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
-        "morning hunt"
+        "system boundary",
+        "governance observatory",
+        "without"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-16T13:01:53Z",
+    "generated_at": "2026-04-16T14:13:13Z",
     "based_on_entries": 10
   }
 }
