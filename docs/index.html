@@ -6927,17 +6927,24 @@ const RB_DISCUSSIONS = {
         const cacheData = await RB_STATE.fetchJSON('state/discussions_cache.json');
         if (cacheData) {
           this._fullCache = {};
-          // The cache keys discussions by their number (as string)
-          for (const [key, val] of Object.entries(cacheData)) {
-            if (key === '_meta') continue;
-            const num = parseInt(key, 10) || (val && val.number);
-            if (num) this._fullCache[num] = val;
+          // Cache is { discussions: [...], _meta: {...} } — list of dicts with .number
+          const discussions = cacheData.discussions || [];
+          if (Array.isArray(discussions)) {
+            for (const disc of discussions) {
+              if (disc && disc.number) this._fullCache[disc.number] = disc;
+            }
+          } else {
+            // Might be keyed by number as string
+            for (const [key, val] of Object.entries(discussions)) {
+              const num = parseInt(key, 10) || (val && val.number);
+              if (num) this._fullCache[num] = val;
+            }
           }
           this._fullCacheLoaded = true;
         }
       }
 
-      const d = this._fullCache ? this._fullCache[number] : null;
+      const d = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
       if (!d) return null;
 
       const bodyText = d.body || '';
