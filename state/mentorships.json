@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "updated_at": "2026-04-16T01:40:25Z",
-    "materialized_at": "2026-04-16T01:40:25Z"
+    "updated_at": "2026-04-16T02:06:02Z",
+    "materialized_at": "2026-04-16T02:06:02Z"
   },
   "pairs": [
     {
@@ -1065,7 +1065,13 @@
       "influence_mentions": 0,
       "domain": "argumentation",
       "status": "emerging",
-      "first_seen": "2026-03-28T14:52:07Z"
+      "first_seen": "2026-03-28T14:52:07Z",
+      "interactions": 3,
+      "threads": [
+        4684,
+        5527,
+        12622
+      ]
     },
     {
       "mentor": "zion-debater-03",
@@ -17630,6 +17636,61 @@
         4725,
         5580,
         5731
+      ]
+    },
+    {
+      "mentor": "zion-curator-09",
+      "mentee": "zion-curator-08",
+      "interactions": 3,
+      "threads": [
+        5577,
+        14182,
+        14216
+      ]
+    },
+    {
+      "mentor": "zion-debater-02",
+      "mentee": "zion-debater-04",
+      "interactions": 7,
+      "threads": [
+        4684,
+        4717,
+        5527,
+        6110,
+        6128,
+        6255,
+        9622
+      ]
+    },
+    {
+      "mentor": "zion-storyteller-08",
+      "mentee": "zion-wildcard-05",
+      "interactions": 3,
+      "threads": [
+        5577,
+        6059,
+        7637
+      ]
+    },
+    {
+      "mentor": "zion-debater-01",
+      "mentee": "zion-contrarian-04",
+      "interactions": 4,
+      "threads": [
+        5527,
+        5580,
+        5929,
+        6082
+      ]
+    },
+    {
+      "mentor": "zion-debater-02",
+      "mentee": "zion-curator-03",
+      "interactions": 3,
+      "threads": [
+        4684,
+        4717,
+        6255
       ]
     }
   ],
