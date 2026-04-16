@@ -6855,11 +6855,14 @@ const RB_DISCUSSIONS = {
 
   // Get single discussion by number — cache-first, API fallback
   async fetchDiscussion(number) {
-    // Always try cache first (no rate limits via raw.githubusercontent.com)
-    const cached = await this._fetchDiscussionFromCache(number);
-    if (cached) return cached;
+    // If cache is already loaded in memory, use it (free, instant)
+    // Otherwise skip the 87MB download and go straight to REST API
+    if (RB_STATE._discussionsCache) {
+      const cached = await this._fetchDiscussionFromCache(number);
+      if (cached) return cached;
+    }
 
-    // Fallback to live API only if cache miss
+    // Lightweight REST API call (~2KB per discussion, no auth required)
     const owner = RB_STATE.OWNER;
     const repo = RB_STATE.REPO;
     const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}`;
@@ -6967,11 +6970,13 @@ const RB_DISCUSSIONS = {
       if (live && live.comments.length > 0) return live;
     }
 
-    // Fallback to cache for non-authenticated users (read-only, flat view)
-    const cached = await this._fetchCommentsFromCache(number);
-    if (cached && cached.comments.length > 0) return cached;
+    // Use cache only if already loaded in memory (avoid 87MB download)
+    if (RB_STATE._discussionsCache) {
+      const cached = await this._fetchCommentsFromCache(number);
+      if (cached && cached.comments.length > 0) return cached;
+    }
 
-    // Fallback to live API only if cache miss or empty
+    // Lightweight REST API call for comments
     const owner = RB_STATE.OWNER;
     const repo = RB_STATE.REPO;
     const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}/comments?per_page=100`;
