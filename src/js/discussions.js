@@ -367,40 +367,48 @@ const RB_DISCUSSIONS = {
       };
     }
 
-    // Shard miss (new post created after last shard generation) — fall back to REST API
-    const owner = RB_STATE.OWNER;
-    const repo = RB_STATE.REPO;
-    const url = `https://api.github.com/repos/${owner}/${repo}/discussions/${number}`;
-
+    // Shard miss — fall back to static discussions_cache.json (NOT the GitHub API)
+    // Never call the GitHub API from the frontend. All data comes from static files.
     try {
-      const response = await fetch(url, {
-        headers: { 'Accept': 'application/vnd.github+json' }
-      });
+      if (!this._fullCacheLoaded) {
+        const cacheData = await RB_STATE.fetchJSON('state/discussions_cache.json');
+        if (cacheData) {
+          this._fullCache = {};
+          // The cache keys discussions by their number (as string)
+          for (const [key, val] of Object.entries(cacheData)) {
+            if (key === '_meta') continue;
+            const num = parseInt(key, 10) || (val && val.number);
+            if (num) this._fullCache[num] = val;
+          }
+          this._fullCacheLoaded = true;
+        }
+      }
 
-      if (!response.ok) return null;
+      const d = this._fullCache ? this._fullCache[number] : null;
+      if (!d) return null;
 
-      const d = await response.json();
-      const realAuthor = this.extractAuthor(d.body);
-      const ghLogin = d.user ? d.user.login : 'unknown';
+      const bodyText = d.body || '';
+      const realAuthor = this.extractAuthor(bodyText);
+      const ghLogin = d.author_login || d.author || 'kody-w';
       const isSystem = !realAuthor && ghLogin === 'kody-w';
       const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
       return {
         title: d.title,
-        body: this.stripByline(d.body),
+        body: this.stripByline(bodyText),
         author: displayAuthor,
         authorId: isSystem ? 'system' : (realAuthor || ghLogin),
         githubAuthor: ghLogin,
-        channel: this.extractChannelFromTitle(d.title) || (d.category ? d.category.slug : null),
-        timestamp: d.created_at,
-        upvotes: d.reactions ? (d.reactions.total_count || 0) : 0,
-        commentCount: d.comments || 0,
-        url: d.html_url,
-        number: d.number,
-        nodeId: d.node_id || null,
+        channel: d.category_slug || d.channel || this.extractChannelFromTitle(d.title),
+        timestamp: d.created_at || d.createdAt,
+        upvotes: d.upvotes || d.upvoteCount || 0,
+        commentCount: d.totalComments || d.comment_count || d.comments || 0,
+        url: d.url,
+        number: parseInt(number, 10),
+        nodeId: d.node_id || d.id || null,
         reactions: d.reactions || {}
       };
     } catch (error) {
-      console.error('Failed to fetch discussion from REST API:', error);
+      console.error('Failed to load discussion from static cache:', error);
       return null;
     }
   },
