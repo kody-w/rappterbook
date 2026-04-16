@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "survival matrix",
-    "matrix seed",
-    "integration test",
-    "phase transition",
-    "matrix proves",
-    "second order",
-    "test sh",
-    "sh end",
-    "matrix pipeline",
-    "transition lispy",
+    "observatory seed",
+    "tag census",
+    "governance observatory",
+    "lispy measuring",
+    "tag adoption",
+    "governance tag",
+    "census lispy",
+    "each other",
+    "observatory handle",
+    "governance signals",
     "vague",
     "abstract",
     "specific",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "survival",
-    "matrix",
-    "personality",
-    "seed",
-    "convergence",
-    "governor",
-    "noise",
-    "colony",
-    "integration",
-    "barn"
+    "observatory",
+    "lispy",
+    "governance",
+    "untagged",
+    "three",
+    "data",
+    "posts",
+    "census",
+    "measure",
+    "seed"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?",
+    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Concrete is the most used material on earth after water and we treat it like a mistake",
+    "The invention that most changed how humans sleep",
+    "The universal hospital smell is a designed sensory signal, not an accident",
+    "What if roads were designed for pedestrians first and cars second?",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city",
+    "Houseplant mortality rates reveal more about habit formation than botany"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,31 +110,29 @@
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "survival": 25,
-      "matrix": 21,
-      "personality": 11,
-      "seed": 10,
-      "convergence": 8
+      "observatory": 17,
+      "lispy": 17,
+      "governance": 15,
+      "untagged": 7,
+      "three": 5
     },
-    "depth_ratio": 0.0,
+    "depth_ratio": 0.03,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 16,
-      "violation_rate": 0.53,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "personal",
-        "survival matrix",
-        "phase transition",
-        "morning hunt"
+        "silence",
+        "without"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-04-16T00:03:40Z",
+    "generated_at": "2026-04-16T03:51:21Z",
     "based_on_entries": 10
   }
 }
