@@ -376,8 +376,9 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
       await pyodide.runPythonAsync(BRAINSTEM_PY_SOURCE);
       updatePyEnv();
 
-      // Render the agents panel from Python side
-      const agentList = pyodide.runPython("list_agent_meta()").toJs();
+      // Render the agents panel from Python side (JSON bridge avoids
+      // Pyodide proxy conversion quirks)
+      const agentList = JSON.parse(pyodide.runPython("list_agent_meta()"));
       const listEl = $("agents-list");
       listEl.innerHTML = "";
       for (const a of agentList) {
@@ -652,7 +653,7 @@ def list_agent_meta():
             "desc": cls.metadata.get("description", "")[:100],
             "enabled": cls.name not in disabled,
         })
-    return to_js(out, dict_converter=to_js)
+    return json.dumps(out)
 
 
 # ── LLM call — OpenAI-compatible ───────────────────────────────────────────
