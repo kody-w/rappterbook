@@ -151,7 +151,7 @@
 <body>
 
 <header>
-  <div class="brand">MARS COLONY<span class="dot"> · </span>ARES-IX</div>
+  <div class="brand">MARS COLONY<span class="dot"> · </span>ARES-<span id="mission-num">IX</span></div>
   <div class="sol" id="sol-display">SOL ----<small id="earth-date">awaiting telemetry</small></div>
   <div class="pop">DAY <b id="day">-</b> · POP <b id="pop">-/-</b></div>
   <div class="status NOMINAL" id="status-badge">NOMINAL</div>
@@ -424,6 +424,10 @@ function render(){
   document.getElementById('sol-display').innerHTML = `SOL ${esc(colony.sol??'-')}<small>${esc(colony.earth_date||'')}</small>`;
   document.getElementById('day').textContent = colony.day ?? '-';
   document.getElementById('pop').textContent = `${alive}/${total}`;
+  const mission = colony.mission_number || 1;
+  const ROMAN = ['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX'];
+  const missionEl = document.getElementById('mission-num');
+  if (missionEl) missionEl.textContent = ROMAN[mission] || mission;
   const b = document.getElementById('status-badge');
   b.className = 'status '+status;
   b.textContent = status;

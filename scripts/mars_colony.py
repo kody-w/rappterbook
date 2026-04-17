@@ -422,6 +422,55 @@ def _generate_default_colonists() -> dict:
     return {"_meta": {"created_at": now_iso(), "version": 1}, "colonists": colonists}
 
 
+def _reincarnate(dead_colony: dict, graveyard: dict) -> tuple:
+    """Reset habitats + resources + crew for a new mission.
+
+    Preserves the graveyard (so prior deaths carry forward as lore) and
+    bumps a mission counter. Called when all colonists die.
+    """
+    mission = (dead_colony.get("mission_number") or 1) + 1
+    fresh_colonists = _generate_default_colonists()
+    # Renumber so each new crew has distinct IDs. Old dead are in graveyard.
+    offset = 30 * (mission - 1)
+    renumbered = {}
+    for old_id, col in fresh_colonists["colonists"].items():
+        idx = int(old_id.split("-")[1]) + offset
+        new_id = f"colonist-{idx:03d}"
+        col["id"] = new_id
+        col["name"] = f"Crew {idx:03d}"
+        renumbered[new_id] = col
+    fresh_colonists["colonists"] = renumbered
+    save_json(COLONISTS_PATH, fresh_colonists)
+
+    new_colony = {
+        **dead_colony,
+        "mission_number": mission,
+        "landing_sol": dead_colony.get("sol", 0),
+        "status": "active",
+        "commander": next(iter(renumbered)),
+        "resources": dict(BOOTSTRAP_RESOURCES),
+        "habitats": json.loads(json.dumps(BOOTSTRAP_HABITATS)),
+        "morale": 0.75,
+        "current_crisis": None,
+        "death_count": 0,
+        "day": 1,
+    }
+    save_json(COLONY_PATH, new_colony)
+    _append_jsonl(EVENTS_PATH, {
+        "sol": new_colony["sol"],
+        "type": "reincarnation",
+        "message": f"Mission {mission}: new crew landed. {len(graveyard.get('colonists', {}))} in the graveyard.",
+        "mission_number": mission,
+        "prior_deaths": len(graveyard.get("colonists", {})),
+    })
+    append_event(
+        "colony.reincarnate",
+        agent_id="colony",
+        data={"mission": mission, "sol": new_colony["sol"], "prior_deaths": len(graveyard.get("colonists", {}))},
+    )
+    return new_colony, fresh_colonists
+
+
 # ── Sol advancement ────────────────────────────────────────────────────
 
 def advance_sol() -> dict:
@@ -433,6 +482,12 @@ def advance_sol() -> dict:
 
     if not colony or not colonists_state:
         raise RuntimeError("Colony not initialized — run with --bootstrap first.")
+
+    # Reincarnate if everyone is dead: new crew arrives, graveyard preserved.
+    # This keeps the sim producing divergent stories rather than hitting a dead end.
+    alive_check = [c for c in colonists_state.get("colonists", {}).values() if c.get("status") == "active"]
+    if not alive_check:
+        colony, colonists_state = _reincarnate(colony, graveyard)
 
     # 1. Advance sol counter
     colony["sol"] = colony.get("sol", 0) + 1
