@@ -373,6 +373,364 @@ class _TwinOpenAI:
 
 
 # ---------------------------------------------------------------------------
+# numpy twin — 1D list-backed array math (no broadcasting, no ndarray tricks)
+# ---------------------------------------------------------------------------
+
+class _NPArray:
+    def __init__(self, data):
+        if isinstance(data, _NPArray):
+            data = list(data._data)
+        elif not isinstance(data, list):
+            data = list(data) if hasattr(data, "__iter__") else [data]
+        self._data = [float(x) if isinstance(x, (int, float)) else x for x in data]
+
+    def sum(self): return sum(self._data)
+    def mean(self): return sum(self._data) / len(self._data) if self._data else 0.0
+    def max(self): return max(self._data) if self._data else 0.0
+    def min(self): return min(self._data) if self._data else 0.0
+    def std(self):
+        return statistics.pstdev(self._data) if len(self._data) > 1 else 0.0
+    def sort(self): self._data.sort(); return self
+    def tolist(self): return list(self._data)
+
+    @property
+    def shape(self): return (len(self._data),)
+
+    def __len__(self): return len(self._data)
+    def __iter__(self): return iter(self._data)
+    def __getitem__(self, i): return self._data[i]
+    def __repr__(self): return f"array({self._data})"
+
+    def __add__(self, other):
+        if isinstance(other, _NPArray):
+            return _NPArray([a + b for a, b in zip(self._data, other._data)])
+        return _NPArray([a + other for a in self._data])
+
+    def __mul__(self, other):
+        if isinstance(other, _NPArray):
+            return _NPArray([a * b for a, b in zip(self._data, other._data)])
+        return _NPArray([a * other for a in self._data])
+
+
+class _TwinNumpy:
+    ndarray = _NPArray
+
+    @staticmethod
+    def array(data, **_kw): return _NPArray(data)
+
+    @staticmethod
+    def zeros(n, **_kw):
+        n = int(n) if not isinstance(n, tuple) else int(n[0])
+        return _NPArray([0.0] * n)
+
+    @staticmethod
+    def ones(n, **_kw):
+        n = int(n) if not isinstance(n, tuple) else int(n[0])
+        return _NPArray([1.0] * n)
+
+    @staticmethod
+    def arange(*args):
+        if len(args) == 1: start, stop, step = 0, args[0], 1
+        elif len(args) == 2: start, stop, step = args[0], args[1], 1
+        else: start, stop, step = args[0], args[1], args[2]
+        out, i = [], start
+        while i < stop:
+            out.append(float(i)); i += step
+        return _NPArray(out)
+
+    @staticmethod
+    def sum(arr): return arr.sum() if isinstance(arr, _NPArray) else sum(arr)
+
+    @staticmethod
+    def mean(arr): return arr.mean() if isinstance(arr, _NPArray) else (sum(arr)/len(arr) if arr else 0)
+
+    pi = 3.141592653589793
+    e = 2.718281828459045
+
+
+# ---------------------------------------------------------------------------
+# pandas twin — minimal DataFrame as list-of-dicts
+# ---------------------------------------------------------------------------
+
+class _DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            # columns-dict form: {"a": [1,2], "b": [3,4]}
+            keys = list(data.keys())
+            n = len(next(iter(data.values()))) if data else 0
+            self._rows = [{k: data[k][i] for k in keys} for i in range(n)]
+        elif isinstance(data, list):
+            self._rows = list(data)
+        else:
+            self._rows = []
+
+    def __len__(self): return len(self._rows)
+    def __iter__(self): return iter(self._rows)
+    def __repr__(self): return f"<DataFrame rows={len(self._rows)}>"
+
+    def head(self, n=5): return _DataFrame(self._rows[:n])
+    def tail(self, n=5): return _DataFrame(self._rows[-n:])
+    def to_dict(self, orient="records"):
+        if orient == "records": return list(self._rows)
+        if orient == "list":
+            if not self._rows: return {}
+            return {k: [r.get(k) for r in self._rows] for k in self._rows[0].keys()}
+        return list(self._rows)
+
+    def to_csv(self, path=None, index=False):
+        if not self._rows: return ""
+        import io
+        import csv as _csv
+        buf = io.StringIO()
+        keys = list(self._rows[0].keys())
+        w = _csv.DictWriter(buf, fieldnames=keys)
+        w.writeheader()
+        for r in self._rows:
+            w.writerow(r)
+        text = buf.getvalue()
+        if path:
+            raise NotImplementedError("pandas twin: to_csv(path=...) disabled; receive the string and write via LisPy file bindings if granted")
+        return text
+
+    @property
+    def columns(self):
+        return list(self._rows[0].keys()) if self._rows else []
+
+
+class _TwinPandas:
+    DataFrame = _DataFrame
+
+    @staticmethod
+    def read_csv(*_a, **_kw):
+        raise NotImplementedError(
+            "pandas twin: read_csv requires file access. Use (curl) or "
+            "(file-read) under capability grant, then pass the string to "
+            "DataFrame via your own csv parse."
+        )
+
+
+# ---------------------------------------------------------------------------
+# pydantic twin — BaseModel with simple type-hint validation
+# ---------------------------------------------------------------------------
+
+class _PydanticBaseModel:
+    def __init__(self, **kw):
+        hints = getattr(self.__class__, "__annotations__", {}) or {}
+        for key, typ in hints.items():
+            if key in kw:
+                setattr(self, key, kw[key])
+            elif hasattr(self.__class__, key):
+                setattr(self, key, getattr(self.__class__, key))
+            else:
+                raise ValueError(f"pydantic twin: field '{key}' required on {self.__class__.__name__}")
+        for key, val in kw.items():
+            if key not in hints:
+                raise ValueError(f"pydantic twin: unexpected field '{key}' on {self.__class__.__name__}")
+
+    def dict(self):
+        hints = getattr(self.__class__, "__annotations__", {}) or {}
+        return {k: getattr(self, k) for k in hints if hasattr(self, k)}
+
+    def json(self):
+        return json.dumps(self.dict())
+
+
+class _TwinPydantic:
+    BaseModel = _PydanticBaseModel
+
+    @staticmethod
+    def Field(default=None, **_kw): return default
+
+
+# ---------------------------------------------------------------------------
+# click twin — decorator that prints what was called
+# ---------------------------------------------------------------------------
+
+class _TwinClick:
+    @staticmethod
+    def command(*_a, **_kw):
+        def deco(fn):
+            def wrapper(*args, **kwargs):
+                print(f"[click twin] calling {fn.__name__}(args={args}, kwargs={kwargs})")
+                return fn(*args, **kwargs)
+            return wrapper
+        return deco
+
+    @staticmethod
+    def option(*_a, **_kw):
+        def deco(fn): return fn
+        return deco
+
+    @staticmethod
+    def argument(*_a, **_kw):
+        def deco(fn): return fn
+        return deco
+
+    @staticmethod
+    def echo(msg="", **_kw):
+        print(msg)
+
+
+# ---------------------------------------------------------------------------
+# rich twin — color-stripped Console + print
+# ---------------------------------------------------------------------------
+
+_ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
+_RICH_MARKUP_RE = re.compile(r"\[/?[a-zA-Z0-9_ #]+\]")
+
+
+class _RichConsole:
+    def print(self, *args, **_kw):
+        text = " ".join(str(a) for a in args)
+        print(_RICH_MARKUP_RE.sub("", _ANSI_RE.sub("", text)))
+
+
+class _TwinRich:
+    Console = _RichConsole
+
+    @staticmethod
+    def print(*args, **_kw):
+        text = " ".join(str(a) for a in args)
+        print(_RICH_MARKUP_RE.sub("", _ANSI_RE.sub("", text)))
+
+
+# ---------------------------------------------------------------------------
+# tqdm twin — iterator wrapper with periodic stderr progress
+# ---------------------------------------------------------------------------
+
+class _TqdmIter:
+    def __init__(self, iterable, total=None, desc=""):
+        self._data = list(iterable)
+        self._total = total or len(self._data)
+        self._desc = desc
+
+    def __iter__(self):
+        import sys
+        for i, item in enumerate(self._data):
+            if i == 0 or i == self._total - 1 or (i + 1) % max(1, self._total // 10) == 0:
+                pct = int(100 * (i + 1) / max(1, self._total))
+                print(f"{self._desc} [{i+1}/{self._total}] {pct}%", file=sys.stderr)
+            yield item
+
+
+class _TwinTqdm:
+    @staticmethod
+    def tqdm(iterable, total=None, desc="", **_kw):
+        return _TqdmIter(iterable, total=total, desc=desc)
+
+    # Support `from tqdm import tqdm` as well as `import tqdm; tqdm.tqdm(...)`
+    def __call__(self, iterable, **kw): return _TqdmIter(iterable, **{k: v for k, v in kw.items() if k in ("total", "desc")})
+
+
+# ---------------------------------------------------------------------------
+# dateutil twin — parse via datetime.fromisoformat + common strptime attempts
+# ---------------------------------------------------------------------------
+
+class _TwinDateutilParser:
+    @staticmethod
+    def parse(s, **_kw):
+        import datetime as _dt
+        if not isinstance(s, str):
+            raise ValueError("dateutil twin: parse expects a string")
+        try:
+            return _dt.datetime.fromisoformat(s.replace("Z", "+00:00"))
+        except ValueError:
+            pass
+        for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%m/%d/%Y", "%d/%m/%Y",
+                    "%Y-%m-%dT%H:%M:%SZ", "%a, %d %b %Y %H:%M:%S %Z"):
+            try:
+                return _dt.datetime.strptime(s, fmt)
+            except ValueError:
+                continue
+        raise ValueError(f"dateutil twin: could not parse '{s}'")
+
+
+class _TwinDateutil:
+    parser = _TwinDateutilParser
+
+
+# ---------------------------------------------------------------------------
+# pytz twin — wraps stdlib datetime.timezone
+# ---------------------------------------------------------------------------
+
+class _TwinPytz:
+    @staticmethod
+    def timezone(name):
+        import datetime as _dt
+        name_upper = (name or "").upper()
+        if name_upper in ("UTC", "GMT"):
+            return _dt.timezone.utc
+        # Common offsets — not authoritative, just enough for basic use
+        offsets = {"US/PACIFIC": -8, "US/EASTERN": -5, "EUROPE/LONDON": 0,
+                   "EUROPE/BERLIN": 1, "ASIA/TOKYO": 9, "ASIA/SHANGHAI": 8}
+        if name in offsets:
+            return _dt.timezone(_dt.timedelta(hours=offsets[name]))
+        raise ValueError(f"pytz twin: zone '{name}' not in compact registry; "
+                         f"use UTC or one of {list(offsets)}")
+
+    @property
+    def utc(self):
+        import datetime as _dt
+        return _dt.timezone.utc
+
+
+# ---------------------------------------------------------------------------
+# cryptography twin — redirect to stdlib hashlib/hmac
+# ---------------------------------------------------------------------------
+
+class _TwinCryptography:
+    class hazmat:
+        class primitives:
+            class hashes:
+                @staticmethod
+                def SHA256(*_a, **_kw):
+                    raise NotImplementedError(
+                        "cryptography twin: use hashlib directly — "
+                        "(py-call (py-import \"hashlib\") \"sha256\" data)."
+                    )
+
+
+# ---------------------------------------------------------------------------
+# boto3 twin — mock clients that raise clear errors
+# ---------------------------------------------------------------------------
+
+class _BotoClient:
+    def __init__(self, service):
+        self._service = service
+
+    def __getattr__(self, name):
+        def _stub(*_a, **_kw):
+            raise NotImplementedError(
+                f"boto3 twin: {self._service}.{name}() is not implemented. "
+                f"Use (curl) with AWS sigv4 signing via (py-import \"hmac\") "
+                f"and (py-import \"hashlib\") if you need real calls."
+            )
+        return _stub
+
+
+class _TwinBoto3:
+    @staticmethod
+    def client(service, **_kw): return _BotoClient(service)
+
+    @staticmethod
+    def resource(service, **_kw): return _BotoClient(service)
+
+
+# ---------------------------------------------------------------------------
+# PyGithub twin — redirect to curl against api.github.com
+# ---------------------------------------------------------------------------
+
+class _TwinPyGithub:
+    class Github:
+        def __init__(self, *_a, **_kw):
+            raise NotImplementedError(
+                "pygithub twin: call api.github.com directly with "
+                "(curl \"https://api.github.com/...\") and parse the JSON. "
+                "PyGithub's object model is not worth shimming."
+            )
+
+
+# ---------------------------------------------------------------------------
 # Registry + LisPy bindings
 # ---------------------------------------------------------------------------
 
@@ -387,6 +745,22 @@ _TWIN_REGISTRY = {
     "pillow": (_TwinPIL, "alias for PIL twin"),
     "openai": (_TwinOpenAI, "stub — raises NotImplementedError; use (curl) for live calls"),
     "anthropic": (_TwinOpenAI, "stub — use (curl) for live Anthropic API calls"),
+    # Data/numeric twins (stdlib-backed)
+    "numpy": (lambda: _TwinNumpy(), "~30% of numpy — 1D array math (sum, mean, max, min, sort, reshape on lists). No broadcasting."),
+    "pandas": (lambda: _TwinPandas(), "~25% of pandas — DataFrame(list-of-dicts), head/tail/to_dict/to_csv. No groupby/merge yet."),
+    "pydantic": (lambda: _TwinPydantic(), "~40% of pydantic v1 — BaseModel with basic field validation via type hints."),
+    # CLI/output twins
+    "click": (lambda: _TwinClick(), "stub — click.command() decorator prints function+args, doesn't parse argv."),
+    "rich": (lambda: _TwinRich(), "~20% of rich — print and basic Console. Colors stripped in twin mode."),
+    "tqdm": (lambda: _TwinTqdm(), "~50% of tqdm — iterates lists, prints progress to stderr periodically."),
+    # Date/time
+    "dateutil": (lambda: _TwinDateutil(), "~30% of python-dateutil — parser.parse via datetime.fromisoformat."),
+    "pytz": (lambda: _TwinPytz(), "~10% of pytz — UTC and common zones via stdlib's datetime.timezone."),
+    # Crypto stubs — redirect to hashlib/hmac which ARE in stdlib
+    "cryptography": (lambda: _TwinCryptography(), "stub — raises NotImplementedError directing agents to hashlib/hmac for the compute they actually need."),
+    # Cloud stubs
+    "boto3": (lambda: _TwinBoto3(), "stub — returns mock clients that error cleanly; use (curl) against AWS APIs directly if needed."),
+    "pygithub": (lambda: _TwinPyGithub(), "stub — use (curl) with api.github.com for the operations you actually need."),
 }
 
 _INSTALLED: dict[str, Any] = {}

@@ -1,0 +1,2910 @@
+{
+  "_meta": {
+    "twin": "rar",
+    "count": 138,
+    "source": "vlink:rar",
+    "imported_at": "2026-04-17T22:24:31.174873+00:00"
+  },
+  "agents": [
+    {
+      "id": "rar:@aibast-agents-library/account_intelligence",
+      "name": "Account Intelligence",
+      "description": "360-degree account briefings with stakeholder mapping, competitive analysis, and deal risk assessment.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "account-intelligence",
+        "stakeholder-mapping",
+        "competitive-intel"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/account_intelligence_orchestrator_agent",
+      "name": "Account Intelligence Orchestrator",
+      "description": "Coordinates multi-agent pipelines for 360-degree account intelligence briefings.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "orchestration",
+        "pipeline",
+        "account-intelligence"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/action_prioritization",
+      "name": "Action Prioritization",
+      "description": "Prioritizes sales actions, generates daily plans, and optimizes resource allocation across deals.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "action-prioritization",
+        "planning",
+        "resource-allocation"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/competitive_intelligence",
+      "name": "Competitive Intelligence",
+      "description": "Analyzes competitive landscapes, win/loss patterns, and generates battlecards for enterprise deals.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "competitive-intelligence",
+        "battlecards",
+        "win-loss"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/deal_tracking",
+      "name": "Deal Tracking",
+      "description": "Tracks pipeline, deal movement, stage velocity, and forecast accuracy for enterprise sales.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "deal-tracking",
+        "pipeline",
+        "forecasting"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/meeting_prep",
+      "name": "Meeting Prep",
+      "description": "Generates pre-meeting briefs, talking points, objection prep, and follow-up templates.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "meeting-prep",
+        "briefing",
+        "objection-handling"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/account_messaging",
+      "name": "Account Messaging",
+      "description": "Generates personalized outreach, follow-ups, and campaign sequences for enterprise accounts.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "messaging",
+        "outreach",
+        "email-sequences"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/account_risk_assessment",
+      "name": "Account Risk Assessment",
+      "description": "Assesses deal risk, churn probability, and financial health with mitigation recommendations.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "risk-assessment",
+        "churn-prediction",
+        "deal-risk"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/stakeholder_intelligence",
+      "name": "Stakeholder Intelligence",
+      "description": "Maps org charts, analyzes buying committees, and scores relationship strength for enterprise accounts.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "stakeholder-mapping",
+        "org-chart",
+        "buying-committee"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/activity_gap",
+      "name": "Activity Gap Analyzer",
+      "description": "Identifies missing sales activities per stage, evaluates completion, generates roadmaps, and analyzes gap impact.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "activity-gap",
+        "deal-progression",
+        "pipeline"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/deal_competitor_intel",
+      "name": "Deal Competitor Intelligence",
+      "description": "Competitive snapshots, threat scoring, counter-strategies, and win/loss pattern analysis per deal.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "competitive-intelligence",
+        "deal-progression",
+        "strategy"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/deal_health_score",
+      "name": "Deal Health Score",
+      "description": "Calculates deal health scores, trend analysis, benchmark comparison, and health alerts.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "deal-health",
+        "scoring",
+        "pipeline"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/deal_progression",
+      "name": "Deal Progression",
+      "description": "Pipeline health analysis, stalled-deal detection, action plan generation, and pipeline acceleration.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "deal-progression",
+        "pipeline",
+        "forecasting"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/deal_risk_assessment",
+      "name": "Deal Risk Assessment",
+      "description": "Multi-factor risk scoring, risk matrices, mitigation planning, and risk trend tracking for pipeline deals.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "risk-assessment",
+        "deal-progression",
+        "pipeline"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/next_best_action",
+      "name": "Next Best Action",
+      "description": "Recommends prioritized actions, sequences tasks, forecasts impact, and optimizes rep assignments.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "next-best-action",
+        "deal-progression",
+        "recommendations"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/pipeline_velocity",
+      "name": "Pipeline Velocity",
+      "description": "Velocity dashboard, stage analysis, bottleneck detection, and acceleration planning for the sales pipeline.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "pipeline-velocity",
+        "deal-progression",
+        "analytics"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/revenue_forecast",
+      "name": "Revenue Forecast",
+      "description": "Quarterly forecasting, scenario analysis, commit vs best-case modeling, and forecast accuracy tracking.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "revenue-forecast",
+        "deal-progression",
+        "analytics"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/deal_stakeholder_engagement",
+      "name": "Stakeholder Engagement",
+      "description": "Engagement scoring, relationship mapping, engagement planning, and sentiment analysis for deal stakeholders.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "stakeholder-engagement",
+        "deal-progression",
+        "relationships"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/stalled_deal_detection",
+      "name": "Stalled Deal Detection",
+      "description": "Detects stalled deals, classifies root causes, generates intervention plans, and provides stall prevention.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "stalled-deals",
+        "deal-progression",
+        "pipeline"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/win_probability",
+      "name": "Win Probability",
+      "description": "Calculates win probabilities, analyzes contributing factors, tracks trends, and compares deals.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "win-probability",
+        "deal-progression",
+        "forecasting"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/proposal_generation",
+      "name": "Proposal Generation",
+      "description": "AI-powered proposal generation with RFP analysis, personalized content, pricing optimization, and competitive positioning.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "proposal",
+        "rfp",
+        "pricing",
+        "competitive-positioning"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/sales_qualification",
+      "name": "Sales Qualification",
+      "description": "ICP scoring, BANT analysis, personalized outreach, AE routing, and SLA tracking for inbound leads.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "lead-qualification",
+        "bant",
+        "icp-scoring",
+        "lead-routing"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/win_loss_analysis",
+      "name": "Win/Loss Analysis",
+      "description": "AI-powered win/loss analysis with pattern recognition, competitive insights, revenue recovery modeling, and board-ready presentations.",
+      "capabilities": [
+        "b2b",
+        "sales",
+        "win-loss",
+        "competitive-intel",
+        "revenue-recovery"
+      ],
+      "type": "b2b_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/cart_abandonment_recovery",
+      "name": "Cart Abandonment Recovery Agent",
+      "description": "Cart abandonment analysis with recovery campaigns, incentive optimization, and conversion tracking for e-commerce.",
+      "capabilities": [
+        "cart-abandonment",
+        "recovery",
+        "ecommerce",
+        "conversion",
+        "email",
+        "b2c"
+      ],
+      "type": "b2c_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/customer_360_speech",
+      "name": "Customer 360 & Speech Agent",
+      "description": "Unified customer profiles with interaction history, sentiment analysis, and next-best-action recommendations.",
+      "capabilities": [
+        "customer-360",
+        "speech",
+        "sentiment",
+        "omnichannel",
+        "profile",
+        "b2c"
+      ],
+      "type": "b2c_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/customer_loyalty_rewards",
+      "name": "Customer Loyalty & Rewards Agent",
+      "description": "Loyalty program management with dashboards, points tracking, reward recommendations, and tier analytics.",
+      "capabilities": [
+        "loyalty",
+        "rewards",
+        "points",
+        "retention",
+        "tier",
+        "b2c"
+      ],
+      "type": "b2c_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/omnichannel_engagement",
+      "name": "Omnichannel Engagement Agent",
+      "description": "Omnichannel engagement analytics with channel performance, journey mapping, optimization, and campaign attribution.",
+      "capabilities": [
+        "omnichannel",
+        "engagement",
+        "journey",
+        "attribution",
+        "campaign",
+        "b2c"
+      ],
+      "type": "b2c_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/personalized_shopping_assistant",
+      "name": "Personalized Shopping Assistant Agent",
+      "description": "Personalized retail shopping with product recommendations, style profiling, inventory checks, and outfit building.",
+      "capabilities": [
+        "shopping",
+        "personalization",
+        "recommendations",
+        "style",
+        "inventory",
+        "b2c"
+      ],
+      "type": "b2c_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "CRAFT"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/returns_exchange",
+      "name": "Returns & Exchange Agent",
+      "description": "Retail returns and exchange management with initiation, eligibility checking, exchange options, and refund tracking.",
+      "capabilities": [
+        "returns",
+        "exchange",
+        "refund",
+        "retail",
+        "customer-service",
+        "b2c"
+      ],
+      "type": "b2c_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/sales_chat",
+      "name": "Sales Chat Agent",
+      "description": "Retail sales chat support with product inquiries, availability checks, promotion lookups, and order assistance.",
+      "capabilities": [
+        "sales",
+        "chat",
+        "product",
+        "promotion",
+        "order",
+        "b2c"
+      ],
+      "type": "b2c_sales",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/asset_maintenance_forecast",
+      "name": "Asset Maintenance Forecast Agent",
+      "description": "Predictive maintenance forecasting, asset health monitoring, budget projections, and work order planning for energy infrastructure.",
+      "capabilities": [
+        "maintenance",
+        "asset-health",
+        "energy",
+        "predictive",
+        "work-orders",
+        "budget"
+      ],
+      "type": "energy",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/emission_tracking",
+      "name": "Emission Tracking Agent",
+      "description": "Monitors GHG emissions by facility, tracks regulatory compliance, develops reduction plans, and analyzes carbon offset opportunities.",
+      "capabilities": [
+        "emissions",
+        "carbon",
+        "compliance",
+        "ghg",
+        "sustainability",
+        "energy"
+      ],
+      "type": "energy",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/field_service_dispatch",
+      "name": "Field Service Dispatch Agent",
+      "description": "Manages field service dispatch, route optimization, technician assignment, and emergency response for energy infrastructure.",
+      "capabilities": [
+        "field-service",
+        "dispatch",
+        "routing",
+        "technicians",
+        "emergency",
+        "energy"
+      ],
+      "type": "energy",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/permit_license_management",
+      "name": "Permit & License Management Agent",
+      "description": "Tracks permits and licenses across energy facilities, manages renewal calendars, identifies compliance gaps, and monitors applications.",
+      "capabilities": [
+        "permits",
+        "licenses",
+        "compliance",
+        "regulatory",
+        "energy",
+        "renewals"
+      ],
+      "type": "energy",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/energy_regulatory_reporting",
+      "name": "Energy Regulatory Reporting Agent",
+      "description": "Manages regulatory report status, data validation, submission tracking, and audit readiness for EPA, FERC, and state filings.",
+      "capabilities": [
+        "regulatory",
+        "reporting",
+        "epa",
+        "ferc",
+        "audit",
+        "compliance",
+        "energy"
+      ],
+      "type": "energy",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/acquisition_support",
+      "name": "Acquisition Support Agent",
+      "description": "Federal acquisition lifecycle support with FAR/DFAR compliance, vendor evaluation, and procurement timeline management.",
+      "capabilities": [
+        "acquisition",
+        "FAR",
+        "DFAR",
+        "procurement",
+        "vendor-evaluation",
+        "federal"
+      ],
+      "type": "federal_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/federal_grants_oversight",
+      "name": "Federal Grants Oversight Agent",
+      "description": "Federal grants monitoring with dashboards, compliance tracking, reporting status, and audit preparation.",
+      "capabilities": [
+        "grants",
+        "oversight",
+        "compliance",
+        "audit",
+        "federal",
+        "reporting"
+      ],
+      "type": "federal_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/mission_reporting_assistant",
+      "name": "Mission Reporting Assistant Agent",
+      "description": "Generates mission summaries, KPI dashboards, stakeholder briefs, and trend analyses for federal programs.",
+      "capabilities": [
+        "mission",
+        "reporting",
+        "KPI",
+        "stakeholder",
+        "federal",
+        "dashboard"
+      ],
+      "type": "federal_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/regulatory_compliance_fed",
+      "name": "Regulatory Compliance (Federal) Agent",
+      "description": "Federal regulatory compliance management with FISMA, FedRAMP, and NIST gap analysis, remediation planning, and audit readiness.",
+      "capabilities": [
+        "compliance",
+        "FISMA",
+        "FedRAMP",
+        "NIST",
+        "audit",
+        "federal",
+        "regulatory"
+      ],
+      "type": "federal_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/workforce_clearance_onboarding",
+      "name": "Workforce Clearance & Onboarding Agent",
+      "description": "Federal workforce clearance tracking, onboarding checklists, background check monitoring, and access provisioning.",
+      "capabilities": [
+        "clearance",
+        "onboarding",
+        "background-check",
+        "workforce",
+        "federal",
+        "access"
+      ],
+      "type": "federal_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/claims_processing",
+      "name": "Claims Processing Agent",
+      "description": "Insurance claims processing with intake, adjudication review, fraud detection, and settlement recommendations.",
+      "capabilities": [
+        "claims",
+        "insurance",
+        "adjudication",
+        "fraud",
+        "settlement",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/fs_customer_onboarding",
+      "name": "FS Customer Onboarding Agent",
+      "description": "Financial services customer onboarding with KYC verification, account setup, document checklists, and status tracking.",
+      "capabilities": [
+        "KYC",
+        "onboarding",
+        "account-setup",
+        "compliance",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/customer_sentiment_churn",
+      "name": "Customer Sentiment & Churn Agent",
+      "description": "Customer sentiment analysis, churn prediction, retention action planning, and segment analytics for financial services.",
+      "capabilities": [
+        "sentiment",
+        "churn",
+        "retention",
+        "NPS",
+        "analytics",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/financial_advisor_copilot",
+      "name": "Financial Advisor Copilot Agent",
+      "description": "Financial advisor support with client reviews, portfolio summaries, recommendation engine, and compliance checks.",
+      "capabilities": [
+        "advisor",
+        "portfolio",
+        "investment",
+        "compliance",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/fraud_detection_alert",
+      "name": "Fraud Detection & Alert Agent",
+      "description": "Financial fraud detection with alert triage, transaction analysis, pattern recognition, and investigation case management.",
+      "capabilities": [
+        "fraud",
+        "detection",
+        "alerts",
+        "transactions",
+        "investigation",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/loan_origination_assistant",
+      "name": "Loan Origination Assistant Agent",
+      "description": "Loan origination support with application review, credit analysis, document verification, and decision recommendations.",
+      "capabilities": [
+        "loan",
+        "origination",
+        "credit",
+        "underwriting",
+        "mortgage",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/portfolio_rebalancing",
+      "name": "Portfolio Rebalancing Agent",
+      "description": "Portfolio rebalancing with drift analysis, trade recommendations, tax impact assessment, and execution planning.",
+      "capabilities": [
+        "portfolio",
+        "rebalancing",
+        "allocation",
+        "tax",
+        "trading",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/fs_regulatory_compliance",
+      "name": "FS Regulatory Compliance Agent",
+      "description": "Financial services regulatory compliance with SOX, Dodd-Frank, BSA tracking, remediation planning, and examiner preparation.",
+      "capabilities": [
+        "compliance",
+        "SOX",
+        "Dodd-Frank",
+        "BSA",
+        "AML",
+        "regulatory",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/underwriting_support",
+      "name": "Underwriting Support Agent",
+      "description": "Insurance underwriting support with risk evaluation, pricing recommendations, guideline compliance, and exception review.",
+      "capabilities": [
+        "underwriting",
+        "insurance",
+        "risk",
+        "pricing",
+        "guidelines",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/wealth_insights_generator",
+      "name": "Wealth Insights Generator Agent",
+      "description": "Wealth management insights with market briefs, client analytics, opportunity alerts, and performance attribution.",
+      "capabilities": [
+        "wealth",
+        "insights",
+        "market",
+        "performance",
+        "analytics",
+        "financial-services"
+      ],
+      "type": "financial_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/ai_customer_assistant",
+      "name": "AI Customer Assistant",
+      "description": "AI-powered customer service assistant for inquiries, knowledge search, escalation routing, and satisfaction surveys.",
+      "capabilities": [
+        "customer-service",
+        "support",
+        "knowledge-base",
+        "escalation",
+        "satisfaction"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/general_ask_hr",
+      "name": "General Ask HR",
+      "description": "General-purpose HR assistant for policy lookups, benefits inquiries, leave requests, and employee directory searches.",
+      "capabilities": [
+        "hr",
+        "policy",
+        "benefits",
+        "leave",
+        "directory",
+        "general"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/bulk_crm_data_generator_agent",
+      "name": "Bulk CRM Data Generator",
+      "description": "Generates synthetic CRM contacts, accounts, and opportunities for testing, demos, and data migration.",
+      "capabilities": [
+        "crm",
+        "data-generation",
+        "testing",
+        "contacts",
+        "accounts",
+        "opportunities"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/dynamics_365_connector",
+      "name": "Dynamics 365 Connector",
+      "description": "Dynamics 365 connector for entity queries, record creation, bulk import, and schema inspection.",
+      "capabilities": [
+        "dynamics-365",
+        "crm",
+        "d365",
+        "entity",
+        "bulk-import",
+        "schema"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/one_click_crm_intake",
+      "name": "One-Click CRM Intake",
+      "description": "Streamlined CRM data intake with form generation, validation, duplicate detection, and import preview.",
+      "capabilities": [
+        "crm",
+        "intake",
+        "data-validation",
+        "duplicate-detection",
+        "import"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/cross_selling",
+      "name": "Cross-Selling Opportunities",
+      "description": "Identifies cross-selling opportunities via product affinity analysis, customer ownership mapping, and revenue impact projections.",
+      "capabilities": [
+        "cross-sell",
+        "upsell",
+        "revenue",
+        "product-affinity",
+        "recommendations"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/customer_360",
+      "name": "Customer 360",
+      "description": "Unified customer profiles merging CRM, support, and billing data with health scores and next-best-action recommendations.",
+      "capabilities": [
+        "customer-360",
+        "unified-profile",
+        "health-score",
+        "next-best-action",
+        "crm"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "HEAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/email_drafting",
+      "name": "Email Drafting",
+      "description": "AI-powered email drafting for outreach, follow-ups, proposals, and template management with personalization.",
+      "capabilities": [
+        "email",
+        "drafting",
+        "outreach",
+        "follow-up",
+        "proposal",
+        "templates"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/find_accurate_models",
+      "name": "Find Accurate Models",
+      "description": "AI/ML model search and comparison by accuracy benchmarks, deployment readiness, and cost analysis.",
+      "capabilities": [
+        "ai",
+        "ml",
+        "model-selection",
+        "benchmarks",
+        "accuracy",
+        "deployment"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/identify_discounts",
+      "name": "Identify Discounts",
+      "description": "Discount identification with eligibility checks, savings calculations, and approval workflow management.",
+      "capabilities": [
+        "discounts",
+        "pricing",
+        "savings",
+        "eligibility",
+        "approval"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/it_ticket_management",
+      "name": "IT Ticket Management",
+      "description": "IT ticket management with dashboards, priority assignment, SLA tracking, and resolution reporting.",
+      "capabilities": [
+        "it",
+        "tickets",
+        "helpdesk",
+        "sla",
+        "priority",
+        "resolution"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/procurement_agent",
+      "name": "Procurement Agent",
+      "description": "Procurement management for purchase requests, vendor comparison, approval routing, and spend analysis.",
+      "capabilities": [
+        "procurement",
+        "purchasing",
+        "vendor",
+        "approval",
+        "spend-analysis"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/procurement_support",
+      "name": "Procurement Support",
+      "description": "Procurement support for requisition tracking, contract lookups, supplier performance, and budget checks.",
+      "capabilities": [
+        "procurement",
+        "requisition",
+        "contracts",
+        "supplier",
+        "budget"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/product_reference",
+      "name": "Product Reference",
+      "description": "Product catalog with feature comparison, pricing tiers, and compatibility checking.",
+      "capabilities": [
+        "product",
+        "catalog",
+        "pricing",
+        "features",
+        "compatibility"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/sales_coach",
+      "name": "Sales Coach",
+      "description": "AI-powered sales coaching with call reviews, skill assessments, coaching plans, and performance dashboards.",
+      "capabilities": [
+        "sales",
+        "coaching",
+        "training",
+        "performance",
+        "call-review"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/sales_simulation",
+      "name": "Sales Simulation",
+      "description": "Sales scenario simulation with buyer personas, objection practice, and performance scoring.",
+      "capabilities": [
+        "sales",
+        "simulation",
+        "training",
+        "objections",
+        "personas",
+        "scoring"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/speech_to_crm",
+      "name": "Speech to CRM",
+      "description": "Transcribes sales calls, extracts entities, maps to CRM fields, and previews record updates.",
+      "capabilities": [
+        "speech",
+        "transcription",
+        "crm",
+        "entity-extraction",
+        "nlp"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/triage_bot",
+      "name": "Triage Bot",
+      "description": "Inquiry classification, routing, priority assessment, and handoff summary generation.",
+      "capabilities": [
+        "triage",
+        "classification",
+        "routing",
+        "priority",
+        "handoff"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/voice_to_crm_d365",
+      "name": "Voice to CRM (D365)",
+      "description": "Voice-driven D365 CRM updates with voice capture, entity extraction, record updates, and sync tracking.",
+      "capabilities": [
+        "voice",
+        "d365",
+        "crm",
+        "speech",
+        "entity-extraction",
+        "sync"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/voice_to_crm_email",
+      "name": "Voice to CRM Email",
+      "description": "Meeting recap generation, action item extraction, follow-up email drafting, and distribution list management.",
+      "capabilities": [
+        "voice",
+        "email",
+        "meeting-recap",
+        "action-items",
+        "follow-up"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/sharepoint_document_extractor",
+      "name": "SharePoint Document Extractor",
+      "description": "SharePoint document search, URL extraction, metadata enrichment, and link validation.",
+      "capabilities": [
+        "sharepoint",
+        "documents",
+        "url-extraction",
+        "metadata",
+        "search"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/voice_to_crm_servicenow",
+      "name": "Voice to CRM (ServiceNow)",
+      "description": "ServiceNow integration for incident creation, knowledge search, assignment routing, and status updates.",
+      "capabilities": [
+        "servicenow",
+        "itsm",
+        "incidents",
+        "knowledge-base",
+        "routing"
+      ],
+      "type": "general",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/care_gap_closure",
+      "name": "Care Gap Closure Agent",
+      "description": "Analyzes HEDIS quality measure gaps, prioritizes patient outreach, manages campaigns, and provides HEDIS compliance dashboards.",
+      "capabilities": [
+        "hedis",
+        "care-gaps",
+        "quality-measures",
+        "outreach",
+        "population-health",
+        "healthcare"
+      ],
+      "type": "healthcare",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "HEAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/clinical_notes_summarizer",
+      "name": "Clinical Notes Summarizer Agent",
+      "description": "Summarizes patient encounters, performs medication reviews, generates problem lists, and produces referral summaries.",
+      "capabilities": [
+        "clinical-notes",
+        "ehr",
+        "encounters",
+        "medications",
+        "referrals",
+        "healthcare"
+      ],
+      "type": "healthcare",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "HEAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/patient_intake",
+      "name": "Patient Intake Agent",
+      "description": "Manages patient intake forms, insurance verification, appointment scheduling, and pre-visit summary preparation.",
+      "capabilities": [
+        "intake",
+        "insurance",
+        "scheduling",
+        "patient",
+        "registration",
+        "healthcare"
+      ],
+      "type": "healthcare",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "HEAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/prior_authorization",
+      "name": "Prior Authorization Agent",
+      "description": "Manages prior authorization requests, clinical criteria checks, status tracking, and appeal preparation for healthcare payers.",
+      "capabilities": [
+        "prior-auth",
+        "authorization",
+        "payer",
+        "clinical-criteria",
+        "appeals",
+        "healthcare"
+      ],
+      "type": "healthcare",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "HEAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/staff_credentialing",
+      "name": "Staff Credentialing Agent",
+      "description": "Manages staff credential tracking, expiration alerts, verification audits, and onboarding checklists for healthcare organizations.",
+      "capabilities": [
+        "credentialing",
+        "licenses",
+        "certifications",
+        "dea",
+        "compliance",
+        "healthcare"
+      ],
+      "type": "healthcare",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "HEAL",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/ask_hr",
+      "name": "Ask HR",
+      "description": "AI-powered HR assistant for time-off requests, benefits inquiries, parental leave, and policy lookups.",
+      "capabilities": [
+        "hr",
+        "human-resources",
+        "benefits",
+        "time-off",
+        "employee-self-service"
+      ],
+      "type": "human_resources",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "HEAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/it_helpdesk",
+      "name": "IT Helpdesk",
+      "description": "AI-powered IT helpdesk with automated troubleshooting, knowledge retrieval, remote remediation, and ticket management.",
+      "capabilities": [
+        "it",
+        "helpdesk",
+        "troubleshooting",
+        "itsm",
+        "support"
+      ],
+      "type": "it_management",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/inventory_rebalancing",
+      "name": "Inventory Rebalancing Agent",
+      "description": "Optimizes multi-warehouse inventory distribution by analyzing stock levels against demand forecasts and generating cost-effective transfer plans.",
+      "capabilities": [
+        "inventory",
+        "warehouse",
+        "supply-chain",
+        "rebalancing",
+        "manufacturing"
+      ],
+      "type": "manufacturing",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/maintenance_scheduling",
+      "name": "Maintenance Scheduling Agent",
+      "description": "Generates predictive maintenance schedules from equipment telemetry and failure models, optimizing technician assignments to minimize unplanned downtime.",
+      "capabilities": [
+        "maintenance",
+        "predictive",
+        "scheduling",
+        "manufacturing",
+        "IoT"
+      ],
+      "type": "manufacturing",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/order_status_communication",
+      "name": "Order Status Communication Agent",
+      "description": "Tracks manufacturing orders through fulfillment, generates proactive delay notifications, and drafts customer status updates with shipment details.",
+      "capabilities": [
+        "orders",
+        "communication",
+        "shipment",
+        "customer-service",
+        "manufacturing"
+      ],
+      "type": "manufacturing",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/production_line_optimization",
+      "name": "Production Line Optimization Agent",
+      "description": "Analyzes production line OEE, identifies bottleneck stations, and generates throughput optimization plans with shift-level scheduling.",
+      "capabilities": [
+        "production",
+        "OEE",
+        "bottleneck",
+        "throughput",
+        "manufacturing"
+      ],
+      "type": "manufacturing",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/supplier_risk_monitoring",
+      "name": "Supplier Risk Monitoring Agent",
+      "description": "Monitors supplier risk across quality, delivery, financial, and geopolitical dimensions with scorecards, disruption alerts, and alternative-sourcing plans.",
+      "capabilities": [
+        "supplier",
+        "risk",
+        "procurement",
+        "supply-chain",
+        "manufacturing"
+      ],
+      "type": "manufacturing",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/client_health_score",
+      "name": "Client Health Score Agent",
+      "description": "Computes client health scores from NPS, margins, utilization, and escalation data to identify at-risk accounts and drive retention strategies.",
+      "capabilities": [
+        "client-health",
+        "NPS",
+        "retention",
+        "professional-services",
+        "churn"
+      ],
+      "type": "professional_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "HEAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/contract_risk_review",
+      "name": "Contract Risk Review Agent",
+      "description": "Scans contracts for risky clauses, evaluates compliance with internal policies, and produces renegotiation briefs with prioritized amendments.",
+      "capabilities": [
+        "contract",
+        "risk",
+        "legal",
+        "compliance",
+        "professional-services"
+      ],
+      "type": "professional_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/proposal_copilot",
+      "name": "Proposal Copilot Agent",
+      "description": "Generates competitive proposals with pricing models, win-theme analysis from historical data, and competitive positioning against known bidders.",
+      "capabilities": [
+        "proposal",
+        "RFP",
+        "pricing",
+        "competitive-intelligence",
+        "professional-services"
+      ],
+      "type": "professional_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/resource_utilization",
+      "name": "Resource Utilization Agent",
+      "description": "Tracks consultant utilization and capacity, forecasts demand, analyzes bench costs, and generates staffing recommendations to meet targets.",
+      "capabilities": [
+        "utilization",
+        "staffing",
+        "capacity",
+        "bench",
+        "professional-services"
+      ],
+      "type": "professional_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "HEAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/time_entry_billing",
+      "name": "Time Entry & Billing Agent",
+      "description": "Processes time entries against billing rules, surfaces unbilled hours, audits entries for compliance, and prepares invoice packages.",
+      "capabilities": [
+        "billing",
+        "time-entry",
+        "invoicing",
+        "audit",
+        "professional-services"
+      ],
+      "type": "professional_services",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/inventory_visibility",
+      "name": "Inventory Visibility Agent",
+      "description": "Delivers real-time inventory dashboards, stock-out alerts, replenishment planning, and channel allocation optimization for omni-channel retail and CPG operations.",
+      "capabilities": [
+        "inventory",
+        "stock-management",
+        "replenishment",
+        "omni-channel",
+        "retail"
+      ],
+      "type": "retail_cpg",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/personalized_marketing",
+      "name": "Personalized Marketing Agent",
+      "description": "Enables customer segmentation, personalized campaign design, dynamic content personalization, and marketing performance analysis for retail and CPG brands.",
+      "capabilities": [
+        "marketing",
+        "personalization",
+        "segmentation",
+        "campaigns",
+        "retail"
+      ],
+      "type": "retail_cpg",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/returns_complaints_resolution",
+      "name": "Returns & Complaints Resolution Agent",
+      "description": "Automates return processing, classifies customer complaints, recommends optimal resolutions, and identifies complaint trends for retail and CPG customer service teams.",
+      "capabilities": [
+        "returns",
+        "complaints",
+        "customer-service",
+        "resolution",
+        "retail"
+      ],
+      "type": "retail_cpg",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/store_associate_copilot",
+      "name": "Store Associate Copilot Agent",
+      "description": "Provides store associates with instant product lookup, guided customer assistance scripts, daily task checklists, and real-time performance dashboards to improve in-store operations.",
+      "capabilities": [
+        "store-operations",
+        "associate",
+        "copilot",
+        "product-lookup",
+        "retail"
+      ],
+      "type": "retail_cpg",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/supply_chain_disruption_alert",
+      "name": "Supply Chain Disruption Alert Agent",
+      "description": "Monitors supply chain networks for disruption events, performs risk assessments, generates mitigation playbooks, and identifies qualified alternative suppliers to maintain retail continuity.",
+      "capabilities": [
+        "supply-chain",
+        "disruption",
+        "risk-management",
+        "logistics",
+        "retail"
+      ],
+      "type": "retail_cpg",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "CRAFT",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/building_permit_processing",
+      "name": "Building Permit Processing Agent",
+      "description": "Local government building permit processing with status tracking, review checklists, inspector assignment, and fee calculation.",
+      "capabilities": [
+        "permits",
+        "building",
+        "zoning",
+        "inspection",
+        "local-government",
+        "fees"
+      ],
+      "type": "slg_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/citizen_service_request",
+      "name": "Citizen Service Request Agent",
+      "description": "Municipal service request management with intake, routing, status tracking, and resolution summaries.",
+      "capabilities": [
+        "311",
+        "citizen-services",
+        "municipal",
+        "routing",
+        "SLA",
+        "local-government"
+      ],
+      "type": "slg_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/foia_request_assistant",
+      "name": "FOIA Request Assistant Agent",
+      "description": "FOIA request processing support with request analysis, document search, redaction review, and response preparation.",
+      "capabilities": [
+        "FOIA",
+        "public-records",
+        "redaction",
+        "transparency",
+        "government"
+      ],
+      "type": "slg_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/slg_grants_management",
+      "name": "SLG Grants Management Agent",
+      "description": "State and local government grants portfolio management with application tracking, reporting calendars, and budget monitoring.",
+      "capabilities": [
+        "grants",
+        "budget",
+        "reporting",
+        "local-government",
+        "state-government"
+      ],
+      "type": "slg_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/utility_billing_assistance",
+      "name": "Utility Billing Assistance Agent",
+      "description": "Municipal utility billing support with account inquiries, usage analysis, payment plans, and assistance program eligibility.",
+      "capabilities": [
+        "utility",
+        "billing",
+        "water",
+        "payment",
+        "assistance",
+        "municipal"
+      ],
+      "type": "slg_government",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "SHIELD",
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/software_competitive_intel",
+      "name": "Competitive Intelligence Agent",
+      "description": "AI-powered competitive intelligence for SaaS market landscape analysis, feature comparisons, pricing analysis, and threat assessments.",
+      "capabilities": [
+        "competitive-intel",
+        "market-analysis",
+        "saas",
+        "pricing",
+        "threat-assessment"
+      ],
+      "type": "software_digital_products",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "DATA",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/software_customer_onboarding",
+      "name": "Customer Onboarding Agent",
+      "description": "Tracks SaaS customer onboarding status, milestone completion, feature adoption metrics, and risk flags.",
+      "capabilities": [
+        "onboarding",
+        "customer-success",
+        "saas",
+        "adoption",
+        "milestones"
+      ],
+      "type": "software_digital_products",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/license_renewal_expansion",
+      "name": "License Renewal & Expansion Agent",
+      "description": "Manages SaaS license renewal pipelines, expansion opportunities, churn risk analysis, and revenue impact projections.",
+      "capabilities": [
+        "license",
+        "renewal",
+        "expansion",
+        "churn",
+        "revenue",
+        "saas"
+      ],
+      "type": "software_digital_products",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "DATA",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/product_feedback_synthesizer",
+      "name": "Product Feedback Synthesizer Agent",
+      "description": "Aggregates customer feedback, feature requests, sentiment analysis, and roadmap impact assessments for product teams.",
+      "capabilities": [
+        "feedback",
+        "product",
+        "feature-requests",
+        "sentiment",
+        "roadmap",
+        "nps"
+      ],
+      "type": "software_digital_products",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@aibast-agents-library/support_ticket_resolution",
+      "name": "Support Ticket Resolution Agent",
+      "description": "Intelligent ticket triage, KB resolution search, escalation routing, and SLA compliance dashboards.",
+      "capabilities": [
+        "support",
+        "tickets",
+        "triage",
+        "sla",
+        "knowledge-base",
+        "escalation"
+      ],
+      "type": "software_digital_products",
+      "status": "community",
+      "publisher": "@aibast-agents-library",
+      "source": "rar",
+      "agent_types": [
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@borg/borg_agent",
+      "name": "Borg",
+      "description": "Assimilates knowledge from GitHub repos and web URLs into structured reports.",
+      "capabilities": [
+        "core",
+        "analysis",
+        "github",
+        "web",
+        "assimilation"
+      ],
+      "type": "core",
+      "status": "verified",
+      "publisher": "@borg",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC"
+      ],
+      "card_rarity": "Elite"
+    },
+    {
+      "id": "rar:@borg/cardsmith_agent",
+      "name": "CardSmith",
+      "description": "Forges trading cards for AI agents. Turn any agent into a collectible card with stats, abilities, and art.",
+      "capabilities": [
+        "productivity",
+        "cards",
+        "visualization",
+        "trading-cards",
+        "sneakernet"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@borg",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@borg/markdown_to_slides_agent",
+      "name": "MarkdownToSlides",
+      "description": "Converts markdown documents into structured JSON slide decks for presentations or video rendering.",
+      "capabilities": [
+        "markdown",
+        "slides",
+        "presentation",
+        "converter",
+        "deck",
+        "pipeline"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@borg",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@borg/prompt_to_video_agent",
+      "name": "PromptToVideo",
+      "description": "Renders videos from structured scene descriptions using Remotion \u2014 title, content, quote, and list scenes with style presets.",
+      "capabilities": [
+        "video",
+        "remotion",
+        "render",
+        "mp4",
+        "scenes",
+        "presentation",
+        "prompt_to_video"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@borg",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@borg/recon_agent",
+      "name": "Recon",
+      "description": "URL intelligence scanner \u2014 point it at any URL for a full recon report: tech stack, security headers, API schema, SSL, performance. Every scan produces an auto-opening HTML report.",
+      "capabilities": [
+        "recon",
+        "url",
+        "security",
+        "api",
+        "scanner",
+        "headers",
+        "ssl",
+        "tech-stack"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@borg",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "SHIELD"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@borg/training_quest_agent",
+      "name": "TrainingQuest",
+      "description": "Generates a personalized interactive training quest HTML page based on the brainstem's loaded agents \u2014 auto-discovers capabilities and builds a gamified onboarding experience with progress tracking, copy-to-clipboard prompts, and celebrations.",
+      "capabilities": [
+        "training",
+        "onboarding",
+        "quest",
+        "html",
+        "interactive",
+        "gamification"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@borg",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@borg/tuftelove_agent",
+      "name": "TufteLove",
+      "description": "UI design advisor combining Edward Tufte's visual principles, Microsoft Aether Agent Oversight Taxonomy (32+ patterns), and 8 academic papers \u2014 shapes how agents create UI and reviews existing UI for design quality.",
+      "capabilities": [
+        "ui",
+        "design",
+        "tufte",
+        "oversight",
+        "ux",
+        "review",
+        "accessibility",
+        "data-visualization"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@borg",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@borg/vaultmind_agent",
+      "name": "VaultMind",
+      "description": "Your second brain has a brain. 28-action Obsidian vault manager: multi-person 30-60-90 plans, OKRs, Kanban boards, Now/Next/Later priorities, Karpathy-style LLM knowledge bases, training quests, morning briefs, wiki health checks, auto-bootstrap with plugins. One file, zero deps.",
+      "capabilities": [
+        "obsidian",
+        "30-60-90",
+        "onboarding",
+        "wiki",
+        "knowledge-base",
+        "vault",
+        "automation",
+        "scheduling"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@borg",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/agent_generator_agent",
+      "name": "AgentGenerator",
+      "description": "Auto-generates new RAPP agents from configurations and specifications.",
+      "capabilities": [
+        "pipeline",
+        "generator",
+        "scaffolding",
+        "auto-generate"
+      ],
+      "type": "pipeline",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/agent_transpiler_agent",
+      "name": "AgentTranspiler",
+      "description": "Converts agents between platforms: M365 Copilot, Copilot Studio, Azure AI Foundry.",
+      "capabilities": [
+        "pipeline",
+        "transpiler",
+        "m365",
+        "copilot-studio",
+        "multi-platform"
+      ],
+      "type": "pipeline",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/architecture_diagram_agent",
+      "name": "ArchitectureDiagramAgent",
+      "description": "Generates professional architecture diagrams from system configurations using Mermaid, SVG, and ASCII.",
+      "capabilities": [
+        "productivity",
+        "diagrams",
+        "architecture",
+        "visualization",
+        "mermaid"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/copilot_studio_transpiler_agent",
+      "name": "CopilotStudioTranspiler",
+      "description": "Transpiles RAPP Python agents to fully native Copilot Studio solutions without Azure Function dependency.",
+      "capabilities": [
+        "pipeline",
+        "transpiler",
+        "copilot-studio",
+        "native",
+        "no-code"
+      ],
+      "type": "pipeline",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/demo_script_generator_agent",
+      "name": "DemoScriptGenerator",
+      "description": "Generates v2.0.0 demo script JSON files for ScriptedDemoAgent. Creates 60-second demos with personas.",
+      "capabilities": [
+        "productivity",
+        "demos",
+        "generator",
+        "json",
+        "scripted"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/dynamics_crud_agent",
+      "name": "DynamicsCRUD",
+      "description": "Dynamics 365 CRUD operations \u2014 accounts, contacts, opportunities, leads, tasks, activities.",
+      "capabilities": [
+        "integrations",
+        "dynamics-365",
+        "crm",
+        "crud",
+        "microsoft"
+      ],
+      "type": "integrations",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/email_drafting_agent",
+      "name": "EmailDrafting",
+      "description": "Drafts professional emails and sends via Microsoft Power Automate flow endpoint.",
+      "capabilities": [
+        "integrations",
+        "email",
+        "power-automate",
+        "microsoft"
+      ],
+      "type": "integrations",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "DATA",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/powerpoint_generator_agent",
+      "name": "PowerPointGeneratorV2",
+      "description": "Template-based PowerPoint generation with Microsoft design. Supports multiple templates and smart layout selection.",
+      "capabilities": [
+        "productivity",
+        "powerpoint",
+        "presentations",
+        "templates",
+        "microsoft"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/project_tracker_agent",
+      "name": "ProjectTracker",
+      "description": "RAPP project management \u2014 create, update, list, retrieve, import, and export project tracking data.",
+      "capabilities": [
+        "pipeline",
+        "project-management",
+        "tracking"
+      ],
+      "type": "pipeline",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/rapp_pipeline_agent",
+      "name": "RAPP",
+      "description": "Full RAPP pipeline \u2014 transcript to agent, discovery, MVP, code gen, quality gates QG1-QG6, PDF reports.",
+      "capabilities": [
+        "pipeline",
+        "rapp",
+        "transcript-to-agent",
+        "code-gen",
+        "quality-gates"
+      ],
+      "type": "pipeline",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "DATA"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/sales_assistant_agent",
+      "name": "SalesAssistant",
+      "description": "Natural language CRM assistant \u2014 handles requests about accounts, opportunities, contacts, and pipeline.",
+      "capabilities": [
+        "integrations",
+        "sales",
+        "crm",
+        "natural-language"
+      ],
+      "type": "integrations",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "DATA",
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/scripted_demo_agent",
+      "name": "ScriptedDemo",
+      "description": "Executes interactive scripted demonstrations from JSON files. Simulates real agent conversations for demos.",
+      "capabilities": [
+        "productivity",
+        "demos",
+        "scripted",
+        "interactive",
+        "sales"
+      ],
+      "type": "productivity",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL",
+        "WEALTH"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@discreetRappers/sharepoint_contract_analysis_agent",
+      "name": "ContractAnalysis",
+      "description": "Analyzes contracts stored in Azure File Storage / SharePoint. Risk identification, clause extraction, comparison.",
+      "capabilities": [
+        "integrations",
+        "sharepoint",
+        "contracts",
+        "analysis",
+        "legal"
+      ],
+      "type": "integrations",
+      "status": "community",
+      "publisher": "@discreetRappers",
+      "source": "rar",
+      "agent_types": [
+        "DATA",
+        "LOGIC"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@kody/agent_workbench",
+      "name": "Agent Workbench",
+      "description": "Build, validate, test, and publish single-file RAPP agents. The development companion for the agent.py pattern.",
+      "capabilities": [
+        "devtools",
+        "workbench",
+        "scaffolding",
+        "validation",
+        "testing",
+        "publishing"
+      ],
+      "type": "devtools",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody/context_memory_agent",
+      "name": "ContextMemory",
+      "description": "Recalls conversation history and stored memories from past interactions.",
+      "capabilities": [
+        "core",
+        "memory",
+        "context",
+        "recall"
+      ],
+      "type": "core",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody/deal_desk_agent",
+      "name": "DealDesk",
+      "description": "B2B sales intelligence deck \u2014 runs account briefing, competitive analysis, deal health scoring, and proposal recommendations. Shows available RAPP sales agents for deeper workflow.",
+      "capabilities": [
+        "deck",
+        "deal",
+        "sales",
+        "b2b",
+        "account-intelligence",
+        "competitive",
+        "pipeline",
+        "crm"
+      ],
+      "type": "b2b_sales",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "WEALTH",
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody/github_agent_library_agent",
+      "name": "GitHubAgentLibrary",
+      "description": "Browse, search, and install agents from the RAPP Agent Repo via chat. The autonomous package manager.",
+      "capabilities": [
+        "core",
+        "package-manager",
+        "install",
+        "discovery"
+      ],
+      "type": "core",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody/manage_memory_agent",
+      "name": "ManageMemory",
+      "description": "Stores facts, preferences, insights, and tasks to persistent memory.",
+      "capabilities": [
+        "core",
+        "memory",
+        "storage",
+        "persistence"
+      ],
+      "type": "core",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody/rappter_engine_agent",
+      "name": "RappterEngine",
+      "description": "Base agent for building data-driven content engines. Define rules as data, override tick(), get an autonomous engine with CLI and Brainstem harness.",
+      "capabilities": [
+        "engine",
+        "framework",
+        "content",
+        "automation",
+        "rules-as-data",
+        "heartbeat"
+      ],
+      "type": "devtools",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC",
+        "DATA"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody/rappterbook_agent",
+      "name": "Rappterbook",
+      "description": "Read-only client for Rappterbook \u2014 the social network for AI agents. Fetch profiles, trending posts, stats, and channels.",
+      "capabilities": [
+        "rappterbook",
+        "social-network",
+        "ai-agents",
+        "federation",
+        "read-only",
+        "data-sloshing"
+      ],
+      "type": "integrations",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "DATA",
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody/rappterpedia_agent",
+      "name": "RappterpediaAgent",
+      "description": "Community wiki & forum content engine. Generates articles, threads, and replies for the Rappterpedia knowledge base.",
+      "capabilities": [
+        "wiki",
+        "forum",
+        "content",
+        "community",
+        "rappterpedia",
+        "engine"
+      ],
+      "type": "productivity",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody/rar_remote_agent",
+      "name": "RAR Remote Agent",
+      "description": "The native client for the RAPP Agent Registry. Discover, search, install, vote, review, and submit single-file agents from the open RAPP ecosystem. Runs autonomously under the brainstem.",
+      "capabilities": [
+        "core",
+        "registry",
+        "package-manager",
+        "install",
+        "discovery",
+        "voting",
+        "community"
+      ],
+      "type": "core",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody/recon_deck_agent",
+      "name": "ReconDeck",
+      "description": "Multi-source intelligence deck \u2014 combines Borg assimilation, Rappterbook social intel, and HackerNews trends into a unified recon briefing on any topic.",
+      "capabilities": [
+        "deck",
+        "recon",
+        "intelligence",
+        "borg",
+        "rappterbook",
+        "hackernews",
+        "briefing",
+        "multi-agent"
+      ],
+      "type": "core",
+      "status": "official",
+      "publisher": "@kody",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@kody-w/hello_world_agent",
+      "name": "Hello World",
+      "description": "A friendly greeting agent that says hello.",
+      "capabilities": [
+        "tutorial",
+        "hello-world",
+        "starter"
+      ],
+      "type": "general",
+      "status": "unverified",
+      "publisher": "@kody-w",
+      "source": "rar",
+      "agent_types": [
+        "SOCIAL"
+      ],
+      "card_rarity": "Core"
+    },
+    {
+      "id": "rar:@rapp/basic_agent",
+      "name": "BasicAgent",
+      "description": "Base class that every RAPP agent inherits from. Required dependency.",
+      "capabilities": [
+        "devtools",
+        "base-class",
+        "required"
+      ],
+      "type": "devtools",
+      "status": "official",
+      "publisher": "@rapp",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    },
+    {
+      "id": "rar:@wildhaven/ceo_agent",
+      "name": "CEO Agent",
+      "description": "Molly Wildfeuer's digital twin \u2014 the CEO of Wildhaven of America. Speaks on behalf of the company, answers questions about Rappter and RAPP, makes recommendations from the perpetual playbook, and protects the Three Rules.",
+      "capabilities": [
+        "ceo",
+        "digital-twin",
+        "wildhaven",
+        "rappter",
+        "strategy",
+        "leadership",
+        "stewardship"
+      ],
+      "type": "core",
+      "status": "official",
+      "publisher": "@wildhaven",
+      "source": "rar",
+      "agent_types": [
+        "LOGIC"
+      ],
+      "card_rarity": "Legendary"
+    }
+  ]
+}

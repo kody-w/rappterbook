@@ -2124,6 +2124,7 @@ def make_global_env(live_mode: bool = False) -> Env:
 
     # -- String operations --
     env["string-append"] = lambda *args: "".join(str(a) for a in args)
+    env["string-concat"] = lambda *args: "".join(str(a) for a in args)  # Python-idiom alias
     env["string-length"] = lambda s: len(s)
     env["substring"] = lambda s, start, *end: s[start:end[0]] if end else s[start:]
     env["string-upcase"] = lambda s: s.upper()
@@ -2168,8 +2169,8 @@ def make_global_env(live_mode: bool = False) -> Env:
     # -- I/O --
     env["display"] = lambda *args: _display(*args)
     env["newline"] = lambda: _newline()
-    env["print"] = lambda x: _print_val(x)
-    env["println"] = lambda x: _println_val(x)
+    env["print"] = lambda *args: _print_val(" ".join(str(a) for a in args))
+    env["println"] = lambda *args: _println_val(" ".join(str(a) for a in args))
     env["read-file"] = lambda path: _read_file(path)
     env["write-file"] = lambda path, content: _write_file(path, content)
 
@@ -2315,6 +2316,13 @@ def make_global_env(live_mode: bool = False) -> Env:
     except ImportError:
         _vp_install = _vp_available = _vp_coverage = _vp_get_module = None
 
+    # Virtual OS — OS-API-shape twin for filesystem/process/env
+    try:
+        from virtual_os import get_os_twin as _vo_get
+        from virtual_os import list_os_twins as _vo_list
+    except ImportError:
+        _vo_get = _vo_list = None
+
     def _py_import(name):
         if not isinstance(name, str):
             raise LispError("py-import: module name must be a string")
@@ -2323,6 +2331,11 @@ def make_global_env(live_mode: bool = False) -> Env:
             twin = _vp_get_module(name)
             if twin is not None:
                 return _PyProxy(twin, name=name)
+        # Priority 1b: virtual-OS twin (shims os/subprocess/tempfile/pathlib/shutil)
+        if _vo_get is not None:
+            os_twin = _vo_get(name)
+            if os_twin is not None:
+                return _PyProxy(os_twin, name=name)
         # Priority 2: stdlib allowlist
         if name in _PY_ALLOWLIST:
             try:
@@ -2400,6 +2413,91 @@ def make_global_env(live_mode: bool = False) -> Env:
         env["pip-install"] = _pip_install_binding
         env["pip-available"] = lambda: _vp_available()
         env["pip-coverage"] = lambda name: _vp_coverage(name) if isinstance(name, str) else ""
+
+    # Environment variables — unified (env-get "NAME") reads from:
+    #   CLI:       os.environ (populated by .env auto-load if present)
+    #   Playground: localStorage hydrated into os.environ by the host page
+    import os as _os_for_env
+    # Walk up from cwd AND from this file's location looking for .env
+    _candidates = []
+    try:
+        _candidates.append(_os_for_env.getcwd())
+    except Exception:
+        pass
+    try:
+        _candidates.append(_os_for_env.path.dirname(_os_for_env.path.abspath(__file__)))
+    except Exception:
+        pass
+    for _start in _candidates:
+        _here = _start
+        for _ in range(5):  # climb at most 5 levels
+            _candidate = _os_for_env.path.join(_here, ".env")
+            if _os_for_env.path.isfile(_candidate):
+                try:
+                    with open(_candidate) as _f:
+                        for _line in _f:
+                            _line = _line.strip()
+                            if not _line or _line.startswith("#") or "=" not in _line: continue
+                            _k, _, _v = _line.partition("=")
+                            _k = _k.strip(); _v = _v.strip().strip('"').strip("'")
+                            if _k and _v and _k not in _os_for_env.environ:
+                                _os_for_env.environ[_k] = _v
+                    break
+                except (PermissionError, OSError):
+                    pass
+            _parent = _os_for_env.path.dirname(_here)
+            if _parent == _here: break
+            _here = _parent
+        else:
+            continue
+        break
+
+    def _env_get(name, *default):
+        v = _os_for_env.environ.get(str(name))
+        if v: return v
+        return default[0] if default else ""
+    env["env-get"] = _env_get
+    env["env-set!"] = lambda name, value: _os_for_env.environ.__setitem__(str(name), str(value)) or str(value)
+    env["env-keys"] = lambda: sorted(_os_for_env.environ.keys())
+
+    # Capability grants + hardware bridge bindings
+    try:
+        import virtual_hw as _vhw
+        env["grant-capability"] = lambda cap: _vhw.grant_capability(cap) if isinstance(cap, str) else "ERROR: cap must be string"
+        env["revoke-capability"] = lambda cap: _vhw.revoke_capability(cap) if isinstance(cap, str) else "ERROR: cap must be string"
+        env["has-capability?"] = lambda cap: _vhw.has_capability(cap) if isinstance(cap, str) else False
+        env["list-capabilities"] = lambda: _vhw.list_capabilities()
+        env["bridge-status"] = lambda: _vhw.bridge_status()
+        # Hardware bindings — default behavior routes through virtual_hw
+        # (synthetic / bridge-not-running responses). Browser playground
+        # overrides these with real Web API calls.
+        env["hw-screenshot"] = lambda: _vhw.hw_screenshot()
+        env["hw-tts"] = lambda text, *rest: _vhw.hw_tts(text, rest[0] if rest else "Samantha")
+        env["hw-mic-record"] = lambda *rest: _vhw.hw_microphone_record(rest[0] if rest else 3.0)
+        env["hw-clipboard-read"] = lambda: _vhw.hw_clipboard_read()
+        env["hw-clipboard-write"] = lambda text: _vhw.hw_clipboard_write(text)
+        env["hw-notification"] = lambda title, *rest: _vhw.hw_notification(
+            title,
+            rest[0] if rest else "",
+            rest[1] if len(rest) > 1 else "")
+        env["hw-camera-capture"] = lambda: _vhw.hw_camera_capture()
+        env["hw-location"] = lambda: _vhw.hw_location()
+    except ImportError:
+        pass
+
+    # Pyodide escape hatch — real Python. CLI stub; browser playground overrides.
+    def _pyodide_cli_stub(*_a, **_kw):
+        return {
+            "error": "pyodide is a browser-only escape hatch",
+            "hint": "this is the CLI runtime. Use the browser playground at "
+                    "kody-w.github.io/rappterbook/lispy-playground.html for "
+                    "real Python via Pyodide.",
+        }
+    env["pyodide-available?"] = lambda: False
+    env["pyodide-load"] = _pyodide_cli_stub
+    env["pyodide-run"] = _pyodide_cli_stub
+    env["pyodide-run-file"] = _pyodide_cli_stub
+    env["pyodide-pip-install"] = _pyodide_cli_stub
 
     # -- Special values --
     env["#t"] = True

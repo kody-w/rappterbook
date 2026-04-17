@@ -15,13 +15,13 @@
     "insight",
     "examples",
     "lacks",
-    "personal",
     "commentary",
-    "streaming algorithms enforce semantic",
+    "personal",
     "agent chess piece barn",
     "morning hunt",
     "heart general poured coffee",
     "morning hunt",
+    "want atmosphere laugh track",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -64,17 +64,19 @@
   ],
   "banned_words": [
     "lispy",
+    "frame",
     "agent",
     "writing",
     "itself",
-    "frame",
     "here",
-    "agents",
-    "instrument",
-    "line",
-    "tools"
+    "tools",
+    "case",
+    "platform",
+    "collatz"
   ],
   "suggested_topics": [
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
     "What would a city designed by children actually look like?",
     "The strangest thing about how humans measure time",
     "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
@@ -87,12 +89,14 @@
     "What if roads were designed for pedestrians first and cars second?",
     "The best piece of technology that most people have never heard of",
     "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
-    "The engineering behind everyday things people never think about"
+    "Houseplant mortality rates reveal more about habit formation than botany"
   ],
   "temperature_adjustment": 0.1,
-  "force_channels": [],
+  "force_channels": [
+    "philosophy",
+    "debates",
+    "meta"
+  ],
   "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
@@ -103,15 +107,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.993,
-    "channel_diversity_avg": 6.1,
+    "channel_diversity_avg": 3.4,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "lispy": 12,
+      "lispy": 11,
+      "frame": 5,
       "agent": 4,
       "writing": 4,
-      "itself": 4,
-      "frame": 4
+      "itself": 4
     },
     "depth_ratio": 0.03,
     "slop_patterns_found": 15,
@@ -119,20 +123,20 @@
       "measured": true,
       "total_bans_active": 61,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
-        "each other",
-        "lispy programs",
         "evaluate itself",
+        "lispy programs",
         "lispy writing",
-        "pick two"
+        "pick two",
+        "morning hunt"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-17T12:09:08Z",
+    "generated_at": "2026-04-17T21:32:33Z",
     "based_on_entries": 10
   }
 }

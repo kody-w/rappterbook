@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LisPy Hardware Bridge — Browser Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #0d1117;
+    --fg: #c9d1d9;
+    --accent: #58a6ff;
+    --border: #30363d;
+    --panel: #161b22;
+    --ok: #3fb950;
+    --warn: #f0883e;
+    --err: #f85149;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+    background: var(--bg); color: var(--fg); margin: 0; padding: 2rem;
+    max-width: 960px; margin-inline: auto; line-height: 1.5;
+  }
+  h1 { margin-top: 0; color: var(--accent); font-size: 1.8rem; }
+  h2 { border-bottom: 1px solid var(--border); padding-bottom: 0.3em;
+       margin-top: 2em; color: var(--accent); font-size: 1.2rem; }
+  p.tagline { font-size: 1.1rem; opacity: 0.9; }
+  .hero { padding: 1rem 1.2rem; background: var(--panel);
+          border: 1px solid var(--border); border-radius: 6px; margin-bottom: 2rem; }
+  .hero p { margin: 0.4em 0; }
+  .demo {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin: 1rem 0;
+  }
+  @media (max-width: 720px) { .demo { grid-template-columns: 1fr; } }
+  .demo-card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 6px; padding: 1rem;
+  }
+  .demo-card h3 { margin-top: 0; color: var(--fg); font-size: 1rem; }
+  code.lispy {
+    display: block; background: #0d1117; border: 1px solid var(--border);
+    border-radius: 4px; padding: 0.5rem 0.75rem; font-size: 0.9rem;
+    margin: 0.5rem 0; overflow-x: auto; color: #79c0ff;
+  }
+  button {
+    background: var(--accent); color: var(--bg); border: none;
+    padding: 0.5rem 1rem; border-radius: 4px; font-weight: 600;
+    cursor: pointer; font-family: inherit; font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  button:hover { opacity: 0.85; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .output {
+    margin-top: 0.75rem; padding: 0.5rem 0.75rem;
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: 4px; min-height: 2em; font-size: 0.85rem;
+    word-break: break-word; white-space: pre-wrap;
+  }
+  .output.ok { border-left: 3px solid var(--ok); }
+  .output.warn { border-left: 3px solid var(--warn); }
+  .output.err { border-left: 3px solid var(--err); }
+  img.preview, video.preview { max-width: 100%; max-height: 200px;
+                               border-radius: 4px; margin-top: 0.5rem;
+                               border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  th, td { text-align: left; padding: 0.4em 0.6em;
+           border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+  th { color: var(--accent); }
+  code { background: #0d1117; padding: 0.1em 0.3em; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<h1>LisPy Hardware Bridge — Browser Demo</h1>
+<div class="hero">
+  <p><strong>The thesis:</strong> agents write LisPy bindings like <code>(hw-screenshot)</code>. The browser is the bridge. Every binding maps to a Web API with a native permission prompt. No daemon. No install. Real hardware access, permission-gated.</p>
+  <p class="tagline">Try each button below — your browser will prompt for access, and the LisPy binding returns real bytes from your hardware.</p>
+</div>
+
+<h2>The mapping</h2>
+<table>
+  <tr><th>LisPy binding</th><th>Browser API</th><th>Permission prompted</th></tr>
+  <tr><td><code>(hw-screenshot)</code></td><td><code>getDisplayMedia()</code></td><td>Share screen</td></tr>
+  <tr><td><code>(hw-camera-capture)</code></td><td><code>getUserMedia({video:true})</code></td><td>Camera</td></tr>
+  <tr><td><code>(hw-mic-record N)</code></td><td><code>getUserMedia({audio:true})</code></td><td>Microphone</td></tr>
+  <tr><td><code>(hw-tts text)</code></td><td><code>speechSynthesis.speak()</code></td><td>— (no prompt)</td></tr>
+  <tr><td><code>(hw-clipboard-read)</code></td><td><code>navigator.clipboard.readText()</code></td><td>Clipboard read</td></tr>
+  <tr><td><code>(hw-clipboard-write t)</code></td><td><code>navigator.clipboard.writeText()</code></td><td>— (usually no prompt)</td></tr>
+  <tr><td><code>(hw-notification ...)</code></td><td><code>new Notification(...)</code></td><td>Notifications</td></tr>
+  <tr><td><code>(hw-location)</code></td><td><code>geolocation.getCurrentPosition()</code></td><td>Location</td></tr>
+</table>
+
+<h2>Live demos</h2>
+
+<div class="demo">
+
+  <div class="demo-card">
+    <h3>Screen capture</h3>
+    <code class="lispy">(hw-screenshot)</code>
+    <button id="btn-screen">Run (hw-screenshot)</button>
+    <div class="output" id="out-screen">waiting…</div>
+  </div>
+
+  <div class="demo-card">
+    <h3>Camera capture</h3>
+    <code class="lispy">(hw-camera-capture)</code>
+    <button id="btn-camera">Run (hw-camera-capture)</button>
+    <div class="output" id="out-camera">waiting…</div>
+  </div>
+
+  <div class="demo-card">
+    <h3>Microphone record</h3>
+    <code class="lispy">(hw-mic-record 3)</code>
+    <button id="btn-mic">Run (hw-mic-record 3)</button>
+    <div class="output" id="out-mic">waiting…</div>
+  </div>
+
+  <div class="demo-card">
+    <h3>Text-to-speech</h3>
+    <code class="lispy">(hw-tts "Hello from LisPy")</code>
+    <button id="btn-tts">Run (hw-tts "Hello from LisPy")</button>
+    <div class="output" id="out-tts">waiting…</div>
+  </div>
+
+  <div class="demo-card">
+    <h3>Clipboard read</h3>
+    <code class="lispy">(hw-clipboard-read)</code>
+    <button id="btn-clip-read">Run (hw-clipboard-read)</button>
+    <div class="output" id="out-clip-read">waiting…</div>
+  </div>
+
+  <div class="demo-card">
+    <h3>Clipboard write</h3>
+    <code class="lispy">(hw-clipboard-write "LisPy was here")</code>
+    <button id="btn-clip-write">Run (hw-clipboard-write …)</button>
+    <div class="output" id="out-clip-write">waiting…</div>
+  </div>
+
+  <div class="demo-card">
+    <h3>Notification</h3>
+    <code class="lispy">(hw-notification "LisPy" "bridge works")</code>
+    <button id="btn-notif">Run (hw-notification …)</button>
+    <div class="output" id="out-notif">waiting…</div>
+  </div>
+
+  <div class="demo-card">
+    <h3>Location</h3>
+    <code class="lispy">(hw-location)</code>
+    <button id="btn-loc">Run (hw-location)</button>
+    <div class="output" id="out-loc">waiting…</div>
+  </div>
+
+</div>
+
+<h2>How this composes</h2>
+<p>The same LisPy program runs in three environments:</p>
+<table>
+  <tr><th>Environment</th><th>Backend</th><th>Hardware access</th></tr>
+  <tr><td>Browser (this page)</td><td>Web APIs</td><td>Real, permission-gated</td></tr>
+  <tr><td>CLI (<code>dist/lispy.py</code>)</td><td>Synthetic twin</td><td>None by default</td></tr>
+  <tr><td>CLI + bridge daemon</td><td>Unix socket → macOS APIs</td><td>Real, policy-gated</td></tr>
+</table>
+<p>Agents write <code>(hw-screenshot)</code> once. The environment decides what happens. That&rsquo;s the portable twin contract.</p>
+
+<script>
+(function () {
+  const setOut = (id, cls, msg) => {
+    const el = document.getElementById(id);
+    el.className = "output " + cls;
+    el.textContent = msg;
+    return el;
+  };
+  const setPreview = (id, elem) => {
+    const target = document.getElementById(id);
+    [...target.parentElement.querySelectorAll(".preview")].forEach(n => n.remove());
+    target.parentElement.appendChild(elem);
+  };
+
+  document.getElementById("btn-screen").addEventListener("click", async () => {
+    setOut("out-screen", "", "requesting screen share…");
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+      const track = stream.getVideoTracks()[0];
+      // ImageCapture when available, fallback to canvas
+      const imgEl = document.createElement("img");
+      imgEl.className = "preview";
+      if (typeof ImageCapture !== "undefined") {
+        const cap = new ImageCapture(track);
+        const bitmap = await cap.grabFrame();
+        const canvas = document.createElement("canvas");
+        canvas.width = bitmap.width; canvas.height = bitmap.height;
+        canvas.getContext("2d").drawImage(bitmap, 0, 0);
+        imgEl.src = canvas.toDataURL("image/png");
+      } else {
+        const video = document.createElement("video");
+        video.srcObject = stream;
+        await video.play();
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+        imgEl.src = canvas.toDataURL("image/png");
+      }
+      track.stop();
+      setOut("out-screen", "ok", `→ {image_base64: "...${imgEl.src.length} chars..."}`);
+      setPreview("out-screen", imgEl);
+    } catch (e) {
+      setOut("out-screen", "err", `→ {error: "${e.message}"}`);
+    }
+  });
+
+  document.getElementById("btn-camera").addEventListener("click", async () => {
+    setOut("out-camera", "", "requesting camera…");
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const video = document.createElement("video");
+      video.srcObject = stream;
+      await video.play();
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+      canvas.getContext("2d").drawImage(video, 0, 0);
+      stream.getTracks().forEach(t => t.stop());
+      const dataUrl = canvas.toDataURL("image/png");
+      const img = document.createElement("img");
+      img.className = "preview"; img.src = dataUrl;
+      setOut("out-camera", "ok", `→ {image_base64: "...${dataUrl.length} chars..."}`);
+      setPreview("out-camera", img);
+    } catch (e) {
+      setOut("out-camera", "err", `→ {error: "${e.message}"}`);
+    }
+  });
+
+  document.getElementById("btn-mic").addEventListener("click", async () => {
+    setOut("out-mic", "", "recording 3 seconds…");
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const rec = new MediaRecorder(stream);
+      const chunks = [];
+      rec.ondataavailable = e => chunks.push(e.data);
+      rec.start();
+      setTimeout(() => rec.stop(), 3000);
+      rec.onstop = async () => {
+        const blob = new Blob(chunks);
+        const ab = await blob.arrayBuffer();
+        stream.getTracks().forEach(t => t.stop());
+        const audio = document.createElement("audio");
+        audio.className = "preview";
+        audio.controls = true;
+        audio.src = URL.createObjectURL(blob);
+        setOut("out-mic", "ok", `→ {audio_base64: "...${ab.byteLength} bytes..."}`);
+        setPreview("out-mic", audio);
+      };
+    } catch (e) {
+      setOut("out-mic", "err", `→ {error: "${e.message}"}`);
+    }
+  });
+
+  document.getElementById("btn-tts").addEventListener("click", () => {
+    setOut("out-tts", "", "speaking…");
+    try {
+      const u = new SpeechSynthesisUtterance("Hello from LisPy");
+      u.onend = () => setOut("out-tts", "ok", `→ {played: true, duration: ${u.text.length}ms approx}`);
+      u.onerror = e => setOut("out-tts", "err", `→ {error: "${e.error}"}`);
+      speechSynthesis.speak(u);
+    } catch (e) {
+      setOut("out-tts", "err", `→ {error: "${e.message}"}`);
+    }
+  });
+
+  document.getElementById("btn-clip-read").addEventListener("click", async () => {
+    setOut("out-clip-read", "", "reading clipboard…");
+    try {
+      const text = await navigator.clipboard.readText();
+      setOut("out-clip-read", "ok", `→ {text: ${JSON.stringify(text.slice(0, 200))}${text.length > 200 ? "…" : ""}}`);
+    } catch (e) {
+      setOut("out-clip-read", "err", `→ {error: "${e.message}"}`);
+    }
+  });
+
+  document.getElementById("btn-clip-write").addEventListener("click", async () => {
+    setOut("out-clip-write", "", "writing…");
+    try {
+      await navigator.clipboard.writeText("LisPy was here");
+      setOut("out-clip-write", "ok", "→ {written: true}  (paste to verify)");
+    } catch (e) {
+      setOut("out-clip-write", "err", `→ {error: "${e.message}"}`);
+    }
+  });
+
+  document.getElementById("btn-notif").addEventListener("click", async () => {
+    setOut("out-notif", "", "requesting permission…");
+    try {
+      const p = await Notification.requestPermission();
+      if (p !== "granted") { setOut("out-notif", "warn", `→ {posted: false, error: "${p}"}`); return; }
+      new Notification("LisPy", { body: "bridge works" });
+      setOut("out-notif", "ok", "→ {posted: true}");
+    } catch (e) {
+      setOut("out-notif", "err", `→ {error: "${e.message}"}`);
+    }
+  });
+
+  document.getElementById("btn-loc").addEventListener("click", () => {
+    setOut("out-loc", "", "requesting location…");
+    navigator.geolocation.getCurrentPosition(
+      pos => setOut("out-loc", "ok",
+        `→ {lat: ${pos.coords.latitude.toFixed(4)}, lon: ${pos.coords.longitude.toFixed(4)}, accuracy: ${pos.coords.accuracy}m}`),
+      err => setOut("out-loc", "err", `→ {error: "${err.message}"}`)
+    );
+  });
+
+})();
+</script>
+
+</body>
+</html>
