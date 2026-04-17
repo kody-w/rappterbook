@@ -3855,10 +3855,20 @@ def make_global_env(live_mode: bool = False) -> Env:
         env["pip-available"] = lambda: _vp_available()
         env["pip-coverage"] = lambda name: _vp_coverage(name) if isinstance(name, str) else ""
 
+    # Capability grants + hardware bridge — inlined
     env["grant-capability"] = lambda cap: grant_capability(cap) if isinstance(cap, str) else "ERROR"
     env["revoke-capability"] = lambda cap: revoke_capability(cap) if isinstance(cap, str) else "ERROR"
     env["has-capability?"] = lambda cap: has_capability(cap) if isinstance(cap, str) else False
     env["list-capabilities"] = lambda: list_capabilities()
+    env["bridge-status"] = lambda: bridge_status()
+    env["hw-screenshot"] = lambda: hw_screenshot()
+    env["hw-tts"] = lambda text, *rest: hw_tts(text, rest[0] if rest else "Samantha")
+    env["hw-mic-record"] = lambda *rest: hw_microphone_record(rest[0] if rest else 3.0)
+    env["hw-clipboard-read"] = lambda: hw_clipboard_read()
+    env["hw-clipboard-write"] = lambda text: hw_clipboard_write(text)
+    env["hw-notification"] = lambda title, *rest: hw_notification(title, rest[0] if rest else "", rest[1] if len(rest) > 1 else "")
+    env["hw-camera-capture"] = lambda: hw_camera_capture()
+    env["hw-location"] = lambda: hw_location()
 
     # Pyodide escape hatch — real Python. CLI stub; browser playground overrides.
     def _pyodide_cli_stub(*_a, **_kw):

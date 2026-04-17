@@ -311,17 +311,18 @@
       pyodide = await loadPyodide();
       print("[boot] Pyodide ready. Fetching lispy.py…", "info");
 
-      // Prefer same-origin `lispy.py` (served alongside the HTML in docs/)
-      // so the playground always runs the version shipped with this page.
-      // Fall back to raw.githubusercontent.com only if the local file is
-      // unavailable (e.g. page loaded from a different origin).
+      // Always cache-bust so you never boot against a stale VM. Edge /
+      // Safari cache aggressively; without this, users keep running old
+      // code after we ship a fix. Tradeoff: 180KB re-download per boot,
+      // but that's cached server-side via Pages CDN anyway.
+      const CACHE_BUST = "?t=" + Date.now();
       let lispySrc;
-      const local = await fetch("lispy.py").catch(() => null);
+      const local = await fetch("lispy.py" + CACHE_BUST, { cache: "no-store" }).catch(() => null);
       if (local && local.ok) {
         lispySrc = await local.text();
       } else {
         const CDN_URL = "https://raw.githubusercontent.com/kody-w/rappterbook/main/dist/lispy.py";
-        const resp = await fetch(CDN_URL);
+        const resp = await fetch(CDN_URL + CACHE_BUST, { cache: "no-store" });
         if (!resp.ok) throw new Error(`fetch lispy.py failed: HTTP ${resp.status}`);
         lispySrc = await resp.text();
       }
@@ -349,17 +350,153 @@ for _name in ("make_global_env", "parse", "evaluate", "NIL", "LispError", "lisp_
 
       // Inject browser-backed hw-notification + Pyodide escape hatch
       await pyodide.runPythonAsync(`
+from pyodide.ffi import to_js as _to_js
+
+
+def _cap_check(cap):
+    fn = globals().get("has_capability")
+    if fn is None or not fn(cap):
+        return {"error": f"capability '{cap}' not granted",
+                "hint": f"call (grant-capability \\"{cap}\\") first"}
+    return None
+
+
 def _browser_notify(title, body="", subtitle=""):
+    err = _cap_check("hw-notification")
+    if err: return err
     from js import Notification
-    from pyodide.ffi import to_js
     try:
         perm = Notification.permission
         if perm != "granted":
             return {"posted": False, "error": f"permission: {perm}", "hint": "grant in browser"}
-        Notification.new(str(title), to_js({"body": str(body)}))
+        Notification.new(str(title), _to_js({"body": str(body)}))
         return {"posted": True, "via": "browser"}
     except Exception as e:
         return {"posted": False, "error": str(e)}
+
+
+def _browser_tts(text, voice="Samantha"):
+    err = _cap_check("hw-speakers")
+    if err: return err
+    try:
+        from js import window
+        utterance = window.SpeechSynthesisUtterance.new(str(text))
+        window.speechSynthesis.speak(utterance)
+        return {"played": True, "via": "speechSynthesis", "text": str(text)}
+    except Exception as e:
+        return {"played": False, "error": str(e)}
+
+
+async def _browser_clipboard_read():
+    err = _cap_check("hw-clipboard")
+    if err: return err
+    try:
+        from js import navigator
+        text = await navigator.clipboard.readText()
+        return {"text": str(text)}
+    except Exception as e:
+        return {"text": "", "error": str(e)}
+
+
+async def _browser_clipboard_write(text):
+    err = _cap_check("hw-clipboard")
+    if err: return err
+    try:
+        from js import navigator
+        await navigator.clipboard.writeText(str(text))
+        return {"written": True}
+    except Exception as e:
+        return {"written": False, "error": str(e)}
+
+
+async def _browser_location():
+    err = _cap_check("hw-location")
+    if err: return err
+    try:
+        from js import navigator
+        import asyncio
+        future = asyncio.get_event_loop().create_future()
+        def _ok(pos):
+            if not future.done():
+                future.set_result({
+                    "lat": float(pos.coords.latitude),
+                    "lon": float(pos.coords.longitude),
+                    "accuracy": float(pos.coords.accuracy),
+                })
+        def _err(e):
+            if not future.done():
+                future.set_result({"error": str(e.message) if hasattr(e, "message") else "geolocation error"})
+        navigator.geolocation.getCurrentPosition(_ok, _err)
+        return await asyncio.wait_for(future, timeout=15)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+async def _browser_screenshot():
+    err = _cap_check("hw-screen")
+    if err: return err
+    try:
+        from js import navigator, document
+        stream = await navigator.mediaDevices.getDisplayMedia(_to_js({"video": True}))
+        video = document.createElement("video")
+        video.srcObject = stream
+        await video.play()
+        canvas = document.createElement("canvas")
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+        ctx = canvas.getContext("2d")
+        ctx.drawImage(video, 0, 0)
+        for t in stream.getTracks(): t.stop()
+        data_url = canvas.toDataURL("image/png")
+        return {"image_base64": str(data_url), "width": int(canvas.width), "height": int(canvas.height)}
+    except Exception as e:
+        return {"image_base64": "", "error": str(e)}
+
+
+async def _browser_mic_record(seconds=3.0):
+    err = _cap_check("hw-microphone")
+    if err: return err
+    try:
+        from js import navigator, window, MediaRecorder, Blob, Uint8Array
+        import asyncio, base64
+        stream = await navigator.mediaDevices.getUserMedia(_to_js({"audio": True}))
+        rec = MediaRecorder.new(stream)
+        chunks = []
+        future = asyncio.get_event_loop().create_future()
+        def _on_data(evt): chunks.append(evt.data)
+        def _on_stop(_evt):
+            if not future.done(): future.set_result(True)
+        rec.ondataavailable = _on_data
+        rec.onstop = _on_stop
+        rec.start()
+        await asyncio.sleep(float(seconds))
+        rec.stop()
+        await future
+        for t in stream.getTracks(): t.stop()
+        return {"recorded": True, "seconds": float(seconds), "chunks": len(chunks)}
+    except Exception as e:
+        return {"recorded": False, "error": str(e)}
+
+
+async def _browser_camera_capture():
+    err = _cap_check("hw-camera")
+    if err: return err
+    try:
+        from js import navigator, document
+        stream = await navigator.mediaDevices.getUserMedia(_to_js({"video": True}))
+        video = document.createElement("video")
+        video.srcObject = stream
+        await video.play()
+        canvas = document.createElement("canvas")
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+        ctx = canvas.getContext("2d")
+        ctx.drawImage(video, 0, 0)
+        for t in stream.getTracks(): t.stop()
+        return {"image_base64": str(canvas.toDataURL("image/png")),
+                "width": int(canvas.width), "height": int(canvas.height)}
+    except Exception as e:
+        return {"image_base64": "", "error": str(e)}
 
 
 # --- Pyodide escape hatch: real Python inside the same runtime ---
@@ -430,14 +567,36 @@ async def _pyodide_pip_install(pkg):
         return {"error": f"{type(e).__name__}: {e}"}
 
 
+# Wrap async Web-API-backed bindings so they\'re synchronously callable
+# from LisPy (which doesn\'t know about coroutines). Uses pyodide.ffi.run_sync
+# when available; falls back to returning the coroutine as a dict.
+try:
+    from pyodide.ffi import run_sync as _run_sync
+    def _sync(coro):
+        try: return _run_sync(coro)
+        except Exception as e: return {"error": f"async call failed: {e}"}
+except Exception:
+    def _sync(coro):
+        return {"error": "pyodide.ffi.run_sync unavailable — use (pyodide-run) to drive async APIs",
+                "coroutine_type": type(coro).__name__}
+
+
 # Patch make_global_env so every new env has browser-backed bindings
 _original_make_global_env = make_global_env
 def _patched_make_global_env(live_mode=False):
     env = _original_make_global_env(live_mode)
+    # Synchronous hardware bindings — fire-and-forget Web APIs
     env["hw-notification"] = lambda title, *rest: _browser_notify(
-        title,
-        rest[0] if rest else "",
-        rest[1] if len(rest) > 1 else "")
+        title, rest[0] if rest else "", rest[1] if len(rest) > 1 else "")
+    env["hw-tts"] = lambda text, *rest: _browser_tts(text, rest[0] if rest else "Samantha")
+    # Async hardware bindings — wrapped with run_sync to block until complete
+    env["hw-clipboard-read"] = lambda: _sync(_browser_clipboard_read())
+    env["hw-clipboard-write"] = lambda text: _sync(_browser_clipboard_write(text))
+    env["hw-location"] = lambda: _sync(_browser_location())
+    env["hw-screenshot"] = lambda: _sync(_browser_screenshot())
+    env["hw-mic-record"] = lambda *rest: _sync(_browser_mic_record(rest[0] if rest else 3.0))
+    env["hw-camera-capture"] = lambda: _sync(_browser_camera_capture())
+    # Pyodide escape hatch
     env["pyodide-available?"] = _pyodide_available
     env["pyodide-load"] = _pyodide_load
     env["pyodide-run"] = _pyodide_run

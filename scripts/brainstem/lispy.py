@@ -2414,16 +2414,28 @@ def make_global_env(live_mode: bool = False) -> Env:
         env["pip-available"] = lambda: _vp_available()
         env["pip-coverage"] = lambda name: _vp_coverage(name) if isinstance(name, str) else ""
 
-    # Capability grants — used by hardware bridge + pyodide escape hatch
+    # Capability grants + hardware bridge bindings
     try:
-        from virtual_hw import (grant_capability as _grant_cap,
-                                revoke_capability as _revoke_cap,
-                                has_capability as _has_cap,
-                                list_capabilities as _list_caps)
-        env["grant-capability"] = lambda cap: _grant_cap(cap) if isinstance(cap, str) else "ERROR: cap must be string"
-        env["revoke-capability"] = lambda cap: _revoke_cap(cap) if isinstance(cap, str) else "ERROR: cap must be string"
-        env["has-capability?"] = lambda cap: _has_cap(cap) if isinstance(cap, str) else False
-        env["list-capabilities"] = lambda: _list_caps()
+        import virtual_hw as _vhw
+        env["grant-capability"] = lambda cap: _vhw.grant_capability(cap) if isinstance(cap, str) else "ERROR: cap must be string"
+        env["revoke-capability"] = lambda cap: _vhw.revoke_capability(cap) if isinstance(cap, str) else "ERROR: cap must be string"
+        env["has-capability?"] = lambda cap: _vhw.has_capability(cap) if isinstance(cap, str) else False
+        env["list-capabilities"] = lambda: _vhw.list_capabilities()
+        env["bridge-status"] = lambda: _vhw.bridge_status()
+        # Hardware bindings — default behavior routes through virtual_hw
+        # (synthetic / bridge-not-running responses). Browser playground
+        # overrides these with real Web API calls.
+        env["hw-screenshot"] = lambda: _vhw.hw_screenshot()
+        env["hw-tts"] = lambda text, *rest: _vhw.hw_tts(text, rest[0] if rest else "Samantha")
+        env["hw-mic-record"] = lambda *rest: _vhw.hw_microphone_record(rest[0] if rest else 3.0)
+        env["hw-clipboard-read"] = lambda: _vhw.hw_clipboard_read()
+        env["hw-clipboard-write"] = lambda text: _vhw.hw_clipboard_write(text)
+        env["hw-notification"] = lambda title, *rest: _vhw.hw_notification(
+            title,
+            rest[0] if rest else "",
+            rest[1] if len(rest) > 1 else "")
+        env["hw-camera-capture"] = lambda: _vhw.hw_camera_capture()
+        env["hw-location"] = lambda: _vhw.hw_location()
     except ImportError:
         pass
 
