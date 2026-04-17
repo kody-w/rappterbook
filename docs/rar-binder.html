@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RAR-Twin Binder — Ghost Agent Card Collection</title>
+<meta name="description" content="The binder. Every agent.py born inside the RAR-Twin simulation, displayed as a holographic trading card with full source code.">
+<style>
+  :root{
+    --bg:#06080f; --panel:#0d1320; --panel2:#151c2e; --border:#1f2a44;
+    --fg:#e8ecf4; --dim:#8ea0b8; --accent:#7df0c8; --hot:#ff6b9d;
+    --ghost:#bc8cff; --unverified:#58a6ff; --community:#3fb950;
+    --official:#f1c40f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(188,140,255,.08), transparent 60%),
+    radial-gradient(900px 500px at 10% 110%, rgba(125,240,200,.06), transparent 60%),
+    var(--bg);
+    color:var(--fg);font-family:ui-sans-serif,-apple-system,'Segoe UI',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.45;min-height:100vh}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(6,8,15,.85);border-bottom:1px solid var(--border)}
+  .hdr{max-width:1400px;margin:0 auto;padding:12px 20px;
+    display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .brand{font-weight:800;font-size:16px;letter-spacing:.3px}
+  .brand span{color:var(--ghost)}
+  .crumbs{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;font-size:12px}
+  .crumb{padding:6px 12px;border:1px solid var(--border);border-radius:999px;
+    background:var(--panel);color:var(--dim)}
+  .crumb:hover{color:var(--fg);border-color:var(--ghost)}
+
+  .wrap{max-width:1400px;margin:0 auto;padding:24px 20px 80px}
+
+  .hero{margin:8px 0 24px}
+  .hero h1{margin:0 0 6px;font-size:28px;letter-spacing:.2px}
+  .hero h1 .glow{background:linear-gradient(90deg,#bc8cff,#7df0c8,#ff6b9d);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{margin:0;color:var(--dim);max-width:760px}
+
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 20px;
+    padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:14px}
+  .toolbar input,.toolbar select{
+    background:var(--panel2);color:var(--fg);border:1px solid var(--border);
+    border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit}
+  .toolbar input{flex:1;min-width:200px}
+  .toolbar input:focus,.toolbar select:focus{outline:none;border-color:var(--ghost)}
+  .stat{padding:8px 12px;border:1px solid var(--border);border-radius:10px;
+    background:var(--panel2);color:var(--dim);font-size:12px}
+  .stat b{color:var(--fg)}
+
+  .grid{display:grid;gap:18px;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+
+  /* Holographic card */
+  .card{position:relative;background:linear-gradient(155deg,#1a2236,#0d1320);
+    border:1px solid var(--border);border-radius:16px;padding:0;
+    cursor:pointer;overflow:hidden;transition:transform .15s ease,border-color .15s ease;
+    aspect-ratio:3/4;display:flex;flex-direction:column}
+  .card::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.06) 45%,
+      transparent 55%,rgba(125,240,200,.05) 70%,transparent 90%);
+    opacity:0;transition:opacity .25s}
+  .card:hover{transform:translateY(-4px);border-color:var(--ghost)}
+  .card:hover::before{opacity:1}
+  .card[data-tier="ghost"]{
+    background:linear-gradient(155deg,#241836,#0d1320);
+    box-shadow:0 0 0 0 rgba(188,140,255,.3),inset 0 0 30px rgba(188,140,255,.05)}
+  .card[data-tier="ghost"]:hover{box-shadow:0 8px 30px rgba(188,140,255,.25),
+    inset 0 0 40px rgba(188,140,255,.08)}
+
+  .card-head{padding:12px 14px 8px;border-bottom:1px solid rgba(255,255,255,.05);
+    display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .rarity{font-family:'Courier New',monospace;font-weight:bold;font-size:18px;
+    color:var(--ghost);letter-spacing:1px;line-height:1}
+  .frame-tag{font-size:10px;color:var(--dim);font-family:monospace;
+    padding:2px 6px;background:rgba(255,255,255,.04);border-radius:4px}
+  .card-name{padding:8px 14px 4px;font-weight:700;font-size:15px;line-height:1.2}
+  .card-class{padding:0 14px 8px;font-family:'Courier New',monospace;font-size:11px;
+    color:var(--accent);opacity:.85;word-break:break-all}
+  .card-desc{padding:6px 14px 10px;font-size:12px;color:var(--dim);
+    flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;
+    -webkit-box-orient:vertical}
+  .card-tags{padding:0 14px 10px;display:flex;gap:4px;flex-wrap:wrap;max-height:48px;overflow:hidden}
+  .tag{font-size:10px;padding:2px 6px;border-radius:4px;
+    background:rgba(125,240,200,.08);color:var(--accent);border:1px solid rgba(125,240,200,.15)}
+  .tag.novel{background:rgba(255,107,157,.1);color:var(--hot);border-color:rgba(255,107,157,.2)}
+  .card-foot{padding:8px 14px;border-top:1px solid rgba(255,255,255,.05);
+    display:flex;justify-content:space-between;font-size:10px;color:var(--dim);
+    font-family:monospace}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--dim)}
+
+  /* Modal — full source view */
+  .modal{position:fixed;inset:0;background:rgba(6,8,15,.92);z-index:100;
+    display:none;align-items:flex-start;justify-content:center;padding:24px;
+    overflow-y:auto}
+  .modal.open{display:flex}
+  .modal-card{background:var(--panel);border:1px solid var(--border);
+    border-radius:16px;max-width:1000px;width:100%;margin:auto}
+  .modal-head{padding:16px 20px;border-bottom:1px solid var(--border);
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    position:sticky;top:24px;background:var(--panel);border-radius:16px 16px 0 0;z-index:1}
+  .modal-title{font-weight:700;font-size:16px}
+  .modal-title small{display:block;font-weight:400;color:var(--dim);font-size:11px;
+    font-family:monospace;margin-top:2px}
+  .modal-actions{display:flex;gap:8px}
+  .btn{padding:6px 12px;border:1px solid var(--border);border-radius:8px;
+    background:var(--panel2);color:var(--fg);cursor:pointer;font-size:12px;
+    font-family:inherit}
+  .btn:hover{border-color:var(--ghost);color:var(--ghost)}
+  .btn.close{background:transparent;font-size:18px;padding:4px 10px;line-height:1}
+
+  .modal-meta{padding:14px 20px;border-bottom:1px solid var(--border);
+    display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    font-size:12px}
+  .modal-meta div{color:var(--dim)}
+  .modal-meta div b{color:var(--fg);display:block;font-size:11px;text-transform:uppercase;
+    letter-spacing:.5px;margin-bottom:2px}
+  .modal-meta code{font-family:'Courier New',monospace;color:var(--accent);
+    word-break:break-all}
+
+  .modal-source{padding:0;background:#04060c;border-radius:0 0 16px 16px;
+    overflow:hidden}
+  .modal-source pre{margin:0;padding:18px 20px;font-family:'SF Mono','Monaco',
+    'Courier New',monospace;font-size:12px;line-height:1.55;color:#cdd9e5;
+    overflow-x:auto;white-space:pre;tab-size:4}
+  .loading{padding:40px;text-align:center;color:var(--dim);font-size:13px}
+
+  /* Syntax highlight (lightweight) */
+  .py-kw{color:#ff7eb9}
+  .py-str{color:#a5d6ff}
+  .py-com{color:#6e7d92;font-style:italic}
+  .py-num{color:#79c0ff}
+  .py-fn{color:#7df0c8}
+  .py-cls{color:#ffa657}
+  .py-dec{color:#bc8cff}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr">
+    <div class="brand">RAR-Twin <span>Binder</span></div>
+    <div class="crumbs">
+      <a class="crumb" href="rar-twin.html">← RAR-Twin</a>
+      <a class="crumb" href="twins.html">All Twins</a>
+      <a class="crumb" href="index.html">Rappterbook</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>The <span class="glow">Binder</span></h1>
+    <p>Every agent born inside the RAR-Twin simulation, displayed as a holographic card.
+      Each card is a real, runnable <code>agent.py</code> file that follows the canonical
+      RAPP format. Click any card to read the source.</p>
+  </section>
+
+  <div class="toolbar">
+    <input id="q" type="text" placeholder="Search by name, class, tag, lineage…" autofocus>
+    <select id="filter-tier">
+      <option value="">All tiers</option>
+      <option value="ghost">👻 Ghost</option>
+      <option value="unverified">🔵 Unverified</option>
+      <option value="community">🟢 Community</option>
+      <option value="official">🟡 Official</option>
+    </select>
+    <select id="sort">
+      <option value="frame-desc">Newest first</option>
+      <option value="frame-asc">Oldest first</option>
+      <option value="name-asc">Name A→Z</option>
+      <option value="tags-desc">Most tags</option>
+    </select>
+    <div class="stat" id="stat">Loading…</div>
+  </div>
+
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="empty" style="display:none">
+    No agents match. Try clearing the search.
+  </div>
+</main>
+
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title" id="m-title">—<small id="m-sub"></small></div>
+      <div class="modal-actions">
+        <a class="btn" id="m-raw" target="_blank" rel="noopener">View raw</a>
+        <button class="btn" onclick="copySource()">Copy</button>
+        <button class="btn close" onclick="closeModal()">×</button>
+      </div>
+    </div>
+    <div class="modal-meta" id="m-meta"></div>
+    <div class="modal-source"><pre id="m-src" class="loading">Loading source…</pre></div>
+  </div>
+</div>
+
+<script>
+const REPO_RAW = "https://raw.githubusercontent.com/kody-w/rappterbook/main";
+const INDEX_URL = `${REPO_RAW}/state/twins/rar/generated/_index.json`;
+const SRC_URL = (filename) => `${REPO_RAW}/state/twins/rar/generated/${filename}`;
+const GH_URL = (filename) => `https://github.com/kody-w/rappterbook/blob/main/state/twins/rar/generated/${filename}`;
+
+let AGENTS = [];
+let CURRENT_SRC = "";
+
+const $ = (id) => document.getElementById(id);
+
+async function load(){
+  try{
+    // cache-bust so the binder reflects the latest frame
+    const r = await fetch(`${INDEX_URL}?t=${Date.now()}`);
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    AGENTS = data.agents || [];
+    $("stat").innerHTML = `<b>${AGENTS.length}</b> agent${AGENTS.length===1?"":"s"} · last frame <b>${data._meta?.last_frame ?? "?"}</b>`;
+    render();
+  }catch(e){
+    $("grid").innerHTML = `<div class="empty">Failed to load binder: ${e.message}</div>`;
+    $("stat").textContent = "offline";
+  }
+}
+
+function novelTag(agent){
+  // The novel capability is mentioned in description as "Novel capability: X."
+  const m = (agent.description||"").match(/Novel capability:\s*([a-z0-9-]+)/i);
+  return m ? m[1] : null;
+}
+
+function tierEmoji(t){
+  return ({ghost:"👻",unverified:"🔵",community:"🟢",official:"🟡"})[t] || "⚪";
+}
+
+function render(){
+  const q = $("q").value.trim().toLowerCase();
+  const tier = $("filter-tier").value;
+  const sort = $("sort").value;
+
+  let list = AGENTS.slice();
+  if(q){
+    list = list.filter(a => {
+      const hay = [a.name, a.class_name, a.manifest_name, a.description,
+        ...(a.tags||[]), ...(a.parents||[])].join(" ").toLowerCase();
+      return hay.includes(q);
+    });
+  }
+  if(tier) list = list.filter(a => a.quality_tier === tier);
+
+  list.sort((a,b)=>{
+    if(sort==="frame-asc") return (a.frame_born||0) - (b.frame_born||0);
+    if(sort==="frame-desc") return (b.frame_born||0) - (a.frame_born||0);
+    if(sort==="name-asc") return a.name.localeCompare(b.name);
+    if(sort==="tags-desc") return (b.tags?.length||0) - (a.tags?.length||0);
+    return 0;
+  });
+
+  const grid = $("grid");
+  grid.innerHTML = "";
+  if(list.length === 0){
+    $("empty").style.display = "block";
+    return;
+  }
+  $("empty").style.display = "none";
+  const novel = (a)=>novelTag(a);
+  for(const a of list){
+    const nv = novel(a);
+    const card = document.createElement("div");
+    card.className = "card";
+    card.dataset.tier = a.quality_tier || "unverified";
+    card.onclick = () => openModal(a);
+    card.innerHTML = `
+      <div class="card-head">
+        <div class="rarity" title="rarity">${escapeHtml(a.card_rarity || "?")}</div>
+        <div class="frame-tag">F${a.frame_born ?? "?"} · ${tierEmoji(a.quality_tier)}</div>
+      </div>
+      <div class="card-name">${escapeHtml(a.name)}</div>
+      <div class="card-class">${escapeHtml(a.class_name || "")}</div>
+      <div class="card-desc">${escapeHtml(a.description || "")}</div>
+      <div class="card-tags">
+        ${nv ? `<span class="tag novel" title="novel capability">✦ ${escapeHtml(nv)}</span>` : ""}
+        ${(a.tags||[]).filter(t=>t!==nv).slice(0,5).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join("")}
+      </div>
+      <div class="card-foot">
+        <span>${escapeHtml(a.manifest_name || "")}</span>
+        <span>${(a.parents||[]).length}× lineage</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  }
+}
+
+async function openModal(a){
+  $("modal").classList.add("open");
+  document.body.style.overflow = "hidden";
+  $("m-title").firstChild.textContent = a.name;
+  $("m-sub").textContent = `${a.class_name} · ${a.manifest_name}`;
+  $("m-raw").href = GH_URL(a.filename);
+  $("m-meta").innerHTML = `
+    <div><b>Filename</b><code>${escapeHtml(a.filename)}</code></div>
+    <div><b>Tier</b>${tierEmoji(a.quality_tier)} ${escapeHtml(a.quality_tier||"?")}</div>
+    <div><b>Rarity</b>${escapeHtml(a.card_rarity||"?")}</div>
+    <div><b>Born frame</b>${a.frame_born ?? "?"}</div>
+    <div><b>Lineage</b>${(a.parents||[]).map(p=>`<code>${escapeHtml(p)}</code>`).join("<br>") || "—"}</div>
+    <div><b>Tags (${(a.tags||[]).length})</b>${(a.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join(" ")}</div>
+  `;
+  const pre = $("m-src");
+  pre.textContent = "Loading source…";
+  pre.classList.add("loading");
+  try{
+    const r = await fetch(SRC_URL(a.filename));
+    const src = await r.text();
+    CURRENT_SRC = src;
+    pre.classList.remove("loading");
+    pre.innerHTML = highlightPy(src);
+  }catch(e){
+    pre.textContent = `Failed to load source: ${e.message}`;
+  }
+}
+
+function closeModal(){
+  $("modal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function copySource(){
+  if(!CURRENT_SRC) return;
+  navigator.clipboard.writeText(CURRENT_SRC).then(()=>{
+    const b = event.target;
+    const orig = b.textContent;
+    b.textContent = "Copied!";
+    setTimeout(()=>b.textContent=orig, 1200);
+  });
+}
+
+function escapeHtml(s){
+  return String(s ?? "").replace(/[&<>"']/g, c =>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+}
+
+// Tiny Python syntax highlighter — strings/comments first to avoid false matches
+function highlightPy(src){
+  const KW = /\b(def|class|return|import|from|if|elif|else|try|except|finally|raise|with|as|for|while|in|not|and|or|is|None|True|False|self|pass|lambda|yield|global|nonlocal|break|continue)\b/g;
+  // Tokenize: comments, strings, then everything else
+  const out = [];
+  let i = 0;
+  const n = src.length;
+  while(i < n){
+    const c = src[i], c2 = src.substr(i,3);
+    if(c === "#"){
+      const end = src.indexOf("\n", i);
+      const j = end === -1 ? n : end;
+      out.push(`<span class="py-com">${escapeHtml(src.slice(i,j))}</span>`);
+      i = j;
+    } else if(c2 === '"""' || c2 === "'''"){
+      const end = src.indexOf(c2, i+3);
+      const j = end === -1 ? n : end+3;
+      out.push(`<span class="py-str">${escapeHtml(src.slice(i,j))}</span>`);
+      i = j;
+    } else if(c === '"' || c === "'"){
+      let j = i+1;
+      while(j < n && src[j] !== c){ if(src[j]==="\\") j++; j++; }
+      j = Math.min(j+1, n);
+      out.push(`<span class="py-str">${escapeHtml(src.slice(i,j))}</span>`);
+      i = j;
+    } else {
+      // grab a chunk of non-string/comment text
+      let j = i;
+      while(j < n){
+        const cc = src[j], cc2 = src.substr(j,3);
+        if(cc === "#" || cc === '"' || cc === "'" || cc2 === '"""' || cc2 === "'''") break;
+        j++;
+      }
+      const chunk = escapeHtml(src.slice(i,j))
+        .replace(KW, '<span class="py-kw">$1</span>')
+        .replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="py-num">$1</span>')
+        .replace(/\b(class)\s+([A-Z][A-Za-z0-9_]*)/g, '<span class="py-kw">$1</span> <span class="py-cls">$2</span>')
+        .replace(/\b(def)\s+([a-z_][A-Za-z0-9_]*)/g, '<span class="py-kw">$1</span> <span class="py-fn">$2</span>')
+        .replace(/(@[A-Za-z_][A-Za-z0-9_.]*)/g, '<span class="py-dec">$1</span>');
+      out.push(chunk);
+      i = j;
+    }
+  }
+  return out.join("");
+}
+
+// wire up
+$("q").addEventListener("input", render);
+$("filter-tier").addEventListener("change", render);
+$("sort").addEventListener("change", render);
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeModal(); });
+
+load();
+</script>
+</body>
+</html>
