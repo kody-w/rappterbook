@@ -43,8 +43,13 @@
       "type": "task",
       "title": "List the 3 largest Python scripts and write a one-paragraph refactor proposal for the largest",
       "body": "Create docs/REFACTOR_NOTES.md. Run `wc -l scripts/*.py | sort -n | tail -5` to find the biggest Python files in scripts/. List the top 3 with line counts. For the largest only, write a SINGLE paragraph (under 200 words) proposing how to split it \u2014 identify 2-3 natural seams (e.g. unrelated responsibilities, distinct state files touched, internal vs external callers). Do NOT actually refactor. Do NOT propose seams for files under 500 lines. No emoji. Plain markdown.",
-      "status": "pending",
-      "created_at": "2026-04-16T23:51:18Z"
+      "status": "done",
+      "created_at": "2026-04-16T23:51:18Z",
+      "updated_at": "2026-04-17T00:25:55Z",
+      "worker_id": "macbookpro-maint",
+      "branch": "maintainer/mt-004-ad21e3",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15201",
+      "notes": "PR opened"
     },
     {
       "id": "mt-005",
@@ -98,6 +103,6 @@
   "_meta": {
     "created_at": "2026-04-16T23:40:00Z",
     "description": "Tickets consumed by scripts/maintainer_tick.py. Add new tickets with status=pending. The worker claims atomically, runs copilot -p in a worktree, opens a PR.",
-    "materialized_at": "2026-04-17T00:09:30Z"
+    "materialized_at": "2026-04-17T00:25:55Z"
   }
 }
