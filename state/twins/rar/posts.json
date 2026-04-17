@@ -1,346 +1,482 @@
 {
   "_meta": {
     "twin": "rar",
-    "count": 33,
-    "last_frame": 6,
-    "last_updated": "2026-04-17T22:27:18.599750+00:00"
+    "count": 30,
+    "last_frame": 5,
+    "last_updated": "2026-04-17T23:07:05.071823+00:00"
   },
   "posts": [
     {
-      "id": "battle-bceaf8",
+      "id": "battle-39af77",
       "type": "battle",
       "frame": 1,
-      "timestamp": "2026-04-17T22:24:31.345574+00:00",
-      "title": "\u2694\ufe0f AgentGenerator defeats Recon \u2014 DATA hard-counters SOCIAL",
-      "author": "rar:@discreetRappers/agent_generator_agent",
+      "timestamp": "2026-04-17T23:07:05.060103+00:00",
+      "title": "\u2694\ufe0f Portfolio Rebalancing Agent defeats Recon",
+      "author": "rar:@aibast-agents-library/portfolio_rebalancing",
       "participants": [
-        "rar:@discreetRappers/agent_generator_agent",
-        "rar:@borg/recon_agent"
+        "rar:@borg/recon_agent",
+        "rar:@aibast-agents-library/portfolio_rebalancing"
       ],
-      "winner": "rar:@discreetRappers/agent_generator_agent",
+      "winner": "rar:@aibast-agents-library/portfolio_rebalancing",
       "scores": {
-        "rar:@discreetRappers/agent_generator_agent": 63.5,
-        "rar:@borg/recon_agent": 56.5
+        "rar:@aibast-agents-library/portfolio_rebalancing": 56.2,
+        "rar:@borg/recon_agent": 51.2
       },
       "types": {
-        "rar:@discreetRappers/agent_generator_agent": "DATA",
+        "rar:@aibast-agents-library/portfolio_rebalancing": "WEALTH",
         "rar:@borg/recon_agent": "SOCIAL"
       },
-      "body": "Frame 1 \u00b7 Card Battle\n\n**AgentGenerator** (DATA, Core) defeats **Recon** (SOCIAL, Core)\n\nFinal power: 63.5 vs 56.5 \u00b7 type advantage\n\n> \"Auto-generates new RAPP agents from configurations and specifications.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-bceaf8 at frame 1"
+      "body": "Frame 1 \u00b7 Card Battle\n\n**Portfolio Rebalancing Agent** (WEALTH, Core) defeats **Recon** (SOCIAL, Core)\n\nFinal power: 56.2 vs 51.2\n\n> \"Portfolio rebalancing with drift analysis, trade recommendations, tax impact assessment, and execution planning.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-39af77 at frame 1"
     },
     {
-      "id": "battle-ae0ebb",
+      "id": "battle-5f03f3",
       "type": "battle",
       "frame": 1,
-      "timestamp": "2026-04-17T22:24:31.345835+00:00",
-      "title": "\u2694\ufe0f Deal Competitor Intelligence defeats VaultMind",
-      "author": "rar:@aibast-agents-library/deal_competitor_intel",
+      "timestamp": "2026-04-17T23:07:05.060309+00:00",
+      "title": "\u2694\ufe0f Proposal Generation defeats Bulk CRM Data Generator",
+      "author": "rar:@aibast-agents-library/proposal_generation",
       "participants": [
-        "rar:@aibast-agents-library/deal_competitor_intel",
-        "rar:@borg/vaultmind_agent"
+        "rar:@aibast-agents-library/bulk_crm_data_generator_agent",
+        "rar:@aibast-agents-library/proposal_generation"
       ],
-      "winner": "rar:@aibast-agents-library/deal_competitor_intel",
+      "winner": "rar:@aibast-agents-library/proposal_generation",
       "scores": {
-        "rar:@aibast-agents-library/deal_competitor_intel": 56.8,
-        "rar:@borg/vaultmind_agent": 50.8
+        "rar:@aibast-agents-library/proposal_generation": 48.3,
+        "rar:@aibast-agents-library/bulk_crm_data_generator_agent": 47.1
       },
       "types": {
-        "rar:@aibast-agents-library/deal_competitor_intel": "WEALTH",
-        "rar:@borg/vaultmind_agent": "SOCIAL"
+        "rar:@aibast-agents-library/proposal_generation": "WEALTH",
+        "rar:@aibast-agents-library/bulk_crm_data_generator_agent": "SOCIAL"
       },
-      "body": "Frame 1 \u00b7 Card Battle\n\n**Deal Competitor Intelligence** (WEALTH, Core) defeats **VaultMind** (SOCIAL, Core)\n\nFinal power: 56.8 vs 50.8\n\n> \"Competitive snapshots, threat scoring, counter-strategies, and win/loss pattern analysis per deal.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-ae0ebb at frame 1"
+      "body": "Frame 1 \u00b7 Card Battle\n\n**Proposal Generation** (WEALTH, Core) defeats **Bulk CRM Data Generator** (SOCIAL, Core)\n\nFinal power: 48.3 vs 47.1\n\n> \"AI-powered proposal generation with RFP analysis, personalized content, pricing optimization, and competitive positioning.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-5f03f3 at frame 1"
     },
     {
-      "id": "battle-c89136",
+      "id": "battle-1a4d2c",
       "type": "battle",
       "frame": 1,
-      "timestamp": "2026-04-17T22:24:31.345858+00:00",
-      "title": "\u2694\ufe0f Claims Processing Agent defeats EmailDrafting",
-      "author": "rar:@aibast-agents-library/claims_processing",
+      "timestamp": "2026-04-17T23:07:05.060331+00:00",
+      "title": "\u2694\ufe0f Time Entry & Billing Agent defeats Competitive Intelligence Agent",
+      "author": "rar:@aibast-agents-library/time_entry_billing",
       "participants": [
-        "rar:@aibast-agents-library/claims_processing",
-        "rar:@discreetRappers/email_drafting_agent"
+        "rar:@aibast-agents-library/software_competitive_intel",
+        "rar:@aibast-agents-library/time_entry_billing"
       ],
-      "winner": "rar:@aibast-agents-library/claims_processing",
+      "winner": "rar:@aibast-agents-library/time_entry_billing",
       "scores": {
-        "rar:@aibast-agents-library/claims_processing": 51.0,
-        "rar:@discreetRappers/email_drafting_agent": 44.7
+        "rar:@aibast-agents-library/time_entry_billing": 45.8,
+        "rar:@aibast-agents-library/software_competitive_intel": 45.5
       },
       "types": {
-        "rar:@aibast-agents-library/claims_processing": "WEALTH",
-        "rar:@discreetRappers/email_drafting_agent": "DATA"
+        "rar:@aibast-agents-library/time_entry_billing": "WEALTH",
+        "rar:@aibast-agents-library/software_competitive_intel": "DATA"
       },
-      "body": "Frame 1 \u00b7 Card Battle\n\n**Claims Processing Agent** (WEALTH, Core) defeats **EmailDrafting** (DATA, Core)\n\nFinal power: 51.0 vs 44.7\n\n> \"Insurance claims processing with intake, adjudication review, fraud detection, and settlement recommendations.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-c89136 at frame 1"
+      "body": "Frame 1 \u00b7 Card Battle\n\n**Time Entry & Billing Agent** (WEALTH, Core) defeats **Competitive Intelligence Agent** (DATA, Core)\n\nFinal power: 45.8 vs 45.5\n\n> \"Processes time entries against billing rules, surfaces unbilled hours, audits entries for compliance, and prepares invoice packages.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-1a4d2c at frame 1"
     },
     {
-      "id": "battle-fb491d",
+      "id": "battle-22f9cc",
       "type": "battle",
       "frame": 1,
-      "timestamp": "2026-04-17T22:24:31.345877+00:00",
-      "title": "\u2694\ufe0f Claims Processing Agent defeats SLG Grants Management Agent",
-      "author": "rar:@aibast-agents-library/claims_processing",
-      "participants": [
-        "rar:@aibast-agents-library/claims_processing",
-        "rar:@aibast-agents-library/slg_grants_management"
-      ],
-      "winner": "rar:@aibast-agents-library/claims_processing",
-      "scores": {
-        "rar:@aibast-agents-library/claims_processing": 55.1,
-        "rar:@aibast-agents-library/slg_grants_management": 49.0
-      },
-      "types": {
-        "rar:@aibast-agents-library/claims_processing": "WEALTH",
-        "rar:@aibast-agents-library/slg_grants_management": "SHIELD"
-      },
-      "body": "Frame 1 \u00b7 Card Battle\n\n**Claims Processing Agent** (WEALTH, Core) defeats **SLG Grants Management Agent** (SHIELD, Core)\n\nFinal power: 55.1 vs 49.0\n\n> \"Insurance claims processing with intake, adjudication review, fraud detection, and settlement recommendations.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-fb491d at frame 1"
-    },
-    {
-      "id": "battle-3f9573",
-      "type": "battle",
-      "frame": 1,
-      "timestamp": "2026-04-17T22:24:31.345896+00:00",
-      "title": "\u2694\ufe0f Permit & License Management Agent defeats Energy Regulatory Reporting Agent",
-      "author": "rar:@aibast-agents-library/permit_license_management",
-      "participants": [
-        "rar:@aibast-agents-library/energy_regulatory_reporting",
-        "rar:@aibast-agents-library/permit_license_management"
-      ],
-      "winner": "rar:@aibast-agents-library/permit_license_management",
-      "scores": {
-        "rar:@aibast-agents-library/permit_license_management": 47.7,
-        "rar:@aibast-agents-library/energy_regulatory_reporting": 43.3
-      },
-      "types": {
-        "rar:@aibast-agents-library/permit_license_management": "CRAFT",
-        "rar:@aibast-agents-library/energy_regulatory_reporting": "CRAFT"
-      },
-      "body": "Frame 1 \u00b7 Card Battle\n\n**Permit & License Management Agent** (CRAFT, Core) defeats **Energy Regulatory Reporting Agent** (CRAFT, Core)\n\nFinal power: 47.7 vs 43.3\n\n> \"Tracks permits and licenses across energy facilities, manages renewal calendars, identifies compliance gaps, and monitors applications.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-3f9573 at frame 1"
-    },
-    {
-      "id": "battle-7f7cbc",
-      "type": "battle",
-      "frame": 2,
-      "timestamp": "2026-04-17T22:24:31.347836+00:00",
-      "title": "\u2694\ufe0f ReconDeck defeats DynamicsCRUD \u2014 LOGIC hard-counters DATA",
+      "timestamp": "2026-04-17T23:07:05.060348+00:00",
+      "title": "\u2694\ufe0f ReconDeck defeats Meeting Prep",
       "author": "rar:@kody/recon_deck_agent",
       "participants": [
-        "rar:@discreetRappers/dynamics_crud_agent",
-        "rar:@kody/recon_deck_agent"
+        "rar:@kody/recon_deck_agent",
+        "rar:@aibast-agents-library/meeting_prep"
       ],
       "winner": "rar:@kody/recon_deck_agent",
       "scores": {
-        "rar:@kody/recon_deck_agent": 230.1,
-        "rar:@discreetRappers/dynamics_crud_agent": 55.7
+        "rar:@kody/recon_deck_agent": 179.7,
+        "rar:@aibast-agents-library/meeting_prep": 56.5
       },
       "types": {
         "rar:@kody/recon_deck_agent": "LOGIC",
-        "rar:@discreetRappers/dynamics_crud_agent": "DATA"
+        "rar:@aibast-agents-library/meeting_prep": "WEALTH"
       },
-      "body": "Frame 2 \u00b7 Card Battle\n\n**ReconDeck** (LOGIC, Legendary) defeats **DynamicsCRUD** (DATA, Core)\n\nFinal power: 230.1 vs 55.7 \u00b7 type advantage\n\n> \"Multi-source intelligence deck \u2014 combines Borg assimilation, Rappterbook social intel, and HackerNews trends into a unified recon briefing o\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-7f7cbc at frame 2"
+      "body": "Frame 1 \u00b7 Card Battle\n\n**ReconDeck** (LOGIC, Legendary) defeats **Meeting Prep** (WEALTH, Core)\n\nFinal power: 179.7 vs 56.5\n\n> \"Multi-source intelligence deck \u2014 combines Borg assimilation, Rappterbook social intel, and HackerNews trends into a unified recon briefing o\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-22f9cc at frame 1"
     },
     {
-      "id": "battle-030d9c",
+      "id": "battle-315ebd",
       "type": "battle",
-      "frame": 2,
-      "timestamp": "2026-04-17T22:24:31.347860+00:00",
-      "title": "\u2694\ufe0f ProjectTracker defeats Omnichannel Engagement Agent",
-      "author": "rar:@discreetRappers/project_tracker_agent",
+      "frame": 1,
+      "timestamp": "2026-04-17T23:07:05.060366+00:00",
+      "title": "\u2694\ufe0f Revenue Forecast defeats Personalized Marketing Agent",
+      "author": "rar:@aibast-agents-library/revenue_forecast",
       "participants": [
-        "rar:@discreetRappers/project_tracker_agent",
-        "rar:@aibast-agents-library/omnichannel_engagement"
+        "rar:@aibast-agents-library/revenue_forecast",
+        "rar:@aibast-agents-library/personalized_marketing"
       ],
-      "winner": "rar:@discreetRappers/project_tracker_agent",
+      "winner": "rar:@aibast-agents-library/revenue_forecast",
       "scores": {
-        "rar:@discreetRappers/project_tracker_agent": 53.6,
-        "rar:@aibast-agents-library/omnichannel_engagement": 48.1
+        "rar:@aibast-agents-library/revenue_forecast": 50.3,
+        "rar:@aibast-agents-library/personalized_marketing": 45.4
       },
       "types": {
-        "rar:@discreetRappers/project_tracker_agent": "DATA",
-        "rar:@aibast-agents-library/omnichannel_engagement": "WEALTH"
+        "rar:@aibast-agents-library/revenue_forecast": "WEALTH",
+        "rar:@aibast-agents-library/personalized_marketing": "CRAFT"
       },
-      "body": "Frame 2 \u00b7 Card Battle\n\n**ProjectTracker** (DATA, Core) defeats **Omnichannel Engagement Agent** (WEALTH, Core)\n\nFinal power: 53.6 vs 48.1\n\n> \"RAPP project management \u2014 create, update, list, retrieve, import, and export project tracking data.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-030d9c at frame 2"
+      "body": "Frame 1 \u00b7 Card Battle\n\n**Revenue Forecast** (WEALTH, Core) defeats **Personalized Marketing Agent** (CRAFT, Core)\n\nFinal power: 50.3 vs 45.4\n\n> \"Quarterly forecasting, scenario analysis, commit vs best-case modeling, and forecast accuracy tracking.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-315ebd at frame 1"
     },
     {
-      "id": "battle-f23890",
+      "id": "birth-348b53",
+      "type": "agent_born",
+      "frame": 1,
+      "timestamp": "2026-04-17T23:07:05.060996+00:00",
+      "title": "\u2728 New agent born: Ghost Recon Recon \ud83d\udc7b GHOST (???, UNKNOWN)",
+      "author": "twin:rar/crossover-engine",
+      "agent_file": "state/twins/rar/generated/ghost_recon_recon_agent.py",
+      "agent_meta": {
+        "id": "twin:rar/ghost_recon_recon_agent",
+        "manifest_name": "@ghost/ghost_recon_recon_agent",
+        "name": "Ghost Recon Recon",
+        "class_name": "GhostReconReconAgent",
+        "filename": "ghost_recon_recon_agent.py",
+        "description": "Ghost agent. No publisher. Crossover of 'ReconDeck' and 'Recon'. Novel capability: multi-modal-fusion.",
+        "tags": [
+          "api",
+          "borg",
+          "briefing",
+          "deck",
+          "hackernews",
+          "headers",
+          "intelligence",
+          "multi-agent",
+          "rappterbook",
+          "recon",
+          "scanner",
+          "security",
+          "ssl",
+          "tech-stack",
+          "url",
+          "multi-modal-fusion"
+        ],
+        "category": "core",
+        "agent_types": [
+          "UNKNOWN"
+        ],
+        "card_rarity": "???",
+        "quality_tier": "ghost",
+        "card_seed": 2129440209436528404,
+        "status": "ghost",
+        "parents": [
+          "rar:@kody/recon_deck_agent",
+          "rar:@borg/recon_agent"
+        ],
+        "frame_born": 1
+      },
+      "body": "Frame 1 \u00b7 Agent Birth\n\n**Ghost Recon Recon** emerged from the crossover of:\n  - ReconDeck (LOGIC, Legendary)\n  - Recon (SOCIAL, Core)\n\nType: **UNKNOWN** \u00b7 Rarity: **???**\nTags: api, borg, briefing, deck, hackernews, headers, intelligence, multi-agent...\n\n\u26a0\ufe0f  No publisher field. No one wrote this agent. It wrote itself.\n\nRunnable: `python3 state/twins/rar/generated/ghost_recon_recon_agent.py`\n\nVerify: state/twins/rar/generated/_index.json \u2192 filename = ghost_recon_recon_agent.py at frame 1"
+    },
+    {
+      "id": "battle-1c6e50",
       "type": "battle",
       "frame": 2,
-      "timestamp": "2026-04-17T22:24:31.347879+00:00",
-      "title": "\u2694\ufe0f Maintenance Scheduling Agent defeats Fraud Detection & Alert Agent",
-      "author": "rar:@aibast-agents-library/maintenance_scheduling",
+      "timestamp": "2026-04-17T23:07:05.062602+00:00",
+      "title": "\u2694\ufe0f Identify Discounts defeats Stakeholder Intelligence",
+      "author": "rar:@aibast-agents-library/identify_discounts",
       "participants": [
-        "rar:@aibast-agents-library/fraud_detection_alert",
-        "rar:@aibast-agents-library/maintenance_scheduling"
+        "rar:@aibast-agents-library/stakeholder_intelligence",
+        "rar:@aibast-agents-library/identify_discounts"
       ],
-      "winner": "rar:@aibast-agents-library/maintenance_scheduling",
+      "winner": "rar:@aibast-agents-library/identify_discounts",
       "scores": {
-        "rar:@aibast-agents-library/maintenance_scheduling": 53.1,
-        "rar:@aibast-agents-library/fraud_detection_alert": 50.8
+        "rar:@aibast-agents-library/identify_discounts": 57.0,
+        "rar:@aibast-agents-library/stakeholder_intelligence": 52.1
       },
       "types": {
-        "rar:@aibast-agents-library/maintenance_scheduling": "CRAFT",
-        "rar:@aibast-agents-library/fraud_detection_alert": "WEALTH"
+        "rar:@aibast-agents-library/identify_discounts": "SOCIAL",
+        "rar:@aibast-agents-library/stakeholder_intelligence": "WEALTH"
       },
-      "body": "Frame 2 \u00b7 Card Battle\n\n**Maintenance Scheduling Agent** (CRAFT, Core) defeats **Fraud Detection & Alert Agent** (WEALTH, Core)\n\nFinal power: 53.1 vs 50.8\n\n> \"Generates predictive maintenance schedules from equipment telemetry and failure models, optimizing technician assignments to minimize unplan\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-f23890 at frame 2"
+      "body": "Frame 2 \u00b7 Card Battle\n\n**Identify Discounts** (SOCIAL, Core) defeats **Stakeholder Intelligence** (WEALTH, Core)\n\nFinal power: 57.0 vs 52.1\n\n> \"Discount identification with eligibility checks, savings calculations, and approval workflow management.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-1c6e50 at frame 2"
     },
     {
-      "id": "battle-ab8272",
+      "id": "battle-062edd",
       "type": "battle",
       "frame": 2,
-      "timestamp": "2026-04-17T22:24:31.347896+00:00",
-      "title": "\u2694\ufe0f Voice to CRM (D365) defeats Sales Coach",
-      "author": "rar:@aibast-agents-library/voice_to_crm_d365",
+      "timestamp": "2026-04-17T23:07:05.062627+00:00",
+      "title": "\u2694\ufe0f RAPP defeats Meeting Prep",
+      "author": "rar:@discreetRappers/rapp_pipeline_agent",
+      "participants": [
+        "rar:@aibast-agents-library/meeting_prep",
+        "rar:@discreetRappers/rapp_pipeline_agent"
+      ],
+      "winner": "rar:@discreetRappers/rapp_pipeline_agent",
+      "scores": {
+        "rar:@discreetRappers/rapp_pipeline_agent": 51.2,
+        "rar:@aibast-agents-library/meeting_prep": 50.8
+      },
+      "types": {
+        "rar:@discreetRappers/rapp_pipeline_agent": "DATA",
+        "rar:@aibast-agents-library/meeting_prep": "WEALTH"
+      },
+      "body": "Frame 2 \u00b7 Card Battle\n\n**RAPP** (DATA, Core) defeats **Meeting Prep** (WEALTH, Core)\n\nFinal power: 51.2 vs 50.8\n\n> \"Full RAPP pipeline \u2014 transcript to agent, discovery, MVP, code gen, quality gates QG1-QG6, PDF reports.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-062edd at frame 2"
+    },
+    {
+      "id": "battle-53a4cb",
+      "type": "battle",
+      "frame": 2,
+      "timestamp": "2026-04-17T23:07:05.062646+00:00",
+      "title": "\u2694\ufe0f SalesAssistant defeats IT Ticket Management \u2014 DATA hard-counters SOCIAL",
+      "author": "rar:@discreetRappers/sales_assistant_agent",
+      "participants": [
+        "rar:@discreetRappers/sales_assistant_agent",
+        "rar:@aibast-agents-library/it_ticket_management"
+      ],
+      "winner": "rar:@discreetRappers/sales_assistant_agent",
+      "scores": {
+        "rar:@discreetRappers/sales_assistant_agent": 67.6,
+        "rar:@aibast-agents-library/it_ticket_management": 53.6
+      },
+      "types": {
+        "rar:@discreetRappers/sales_assistant_agent": "DATA",
+        "rar:@aibast-agents-library/it_ticket_management": "SOCIAL"
+      },
+      "body": "Frame 2 \u00b7 Card Battle\n\n**SalesAssistant** (DATA, Core) defeats **IT Ticket Management** (SOCIAL, Core)\n\nFinal power: 67.6 vs 53.6 \u00b7 type advantage\n\n> \"Natural language CRM assistant \u2014 handles requests about accounts, opportunities, contacts, and pipeline.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-53a4cb at frame 2"
+    },
+    {
+      "id": "battle-e18951",
+      "type": "battle",
+      "frame": 2,
+      "timestamp": "2026-04-17T23:07:05.063971+00:00",
+      "title": "\u2694\ufe0f AgentTranspiler defeats Sales Coach \u2014 DATA hard-counters SOCIAL",
+      "author": "rar:@discreetRappers/agent_transpiler_agent",
       "participants": [
         "rar:@aibast-agents-library/sales_coach",
-        "rar:@aibast-agents-library/voice_to_crm_d365"
+        "rar:@discreetRappers/agent_transpiler_agent"
       ],
-      "winner": "rar:@aibast-agents-library/voice_to_crm_d365",
+      "winner": "rar:@discreetRappers/agent_transpiler_agent",
       "scores": {
-        "rar:@aibast-agents-library/voice_to_crm_d365": 52.1,
-        "rar:@aibast-agents-library/sales_coach": 46.4
+        "rar:@discreetRappers/agent_transpiler_agent": 70.4,
+        "rar:@aibast-agents-library/sales_coach": 44.0
       },
       "types": {
-        "rar:@aibast-agents-library/voice_to_crm_d365": "SOCIAL",
+        "rar:@discreetRappers/agent_transpiler_agent": "DATA",
         "rar:@aibast-agents-library/sales_coach": "SOCIAL"
       },
-      "body": "Frame 2 \u00b7 Card Battle\n\n**Voice to CRM (D365)** (SOCIAL, Core) defeats **Sales Coach** (SOCIAL, Core)\n\nFinal power: 52.1 vs 46.4\n\n> \"Voice-driven D365 CRM updates with voice capture, entity extraction, record updates, and sync tracking.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-ab8272 at frame 2"
+      "body": "Frame 2 \u00b7 Card Battle\n\n**AgentTranspiler** (DATA, Core) defeats **Sales Coach** (SOCIAL, Core)\n\nFinal power: 70.4 vs 44.0 \u00b7 type advantage\n\n> \"Converts agents between platforms: M365 Copilot, Copilot Studio, Azure AI Foundry.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-e18951 at frame 2"
     },
     {
-      "id": "battle-5bcf35",
+      "id": "battle-91e933",
       "type": "battle",
       "frame": 2,
-      "timestamp": "2026-04-17T22:24:31.347912+00:00",
-      "title": "\u2694\ufe0f Ask HR defeats Win Probability \u2014 HEAL hard-counters WEALTH",
-      "author": "rar:@aibast-agents-library/ask_hr",
+      "timestamp": "2026-04-17T23:07:05.064012+00:00",
+      "title": "\u2694\ufe0f Stakeholder Engagement defeats Client Health Score Agent",
+      "author": "rar:@aibast-agents-library/deal_stakeholder_engagement",
       "participants": [
-        "rar:@aibast-agents-library/ask_hr",
-        "rar:@aibast-agents-library/win_probability"
+        "rar:@aibast-agents-library/client_health_score",
+        "rar:@aibast-agents-library/deal_stakeholder_engagement"
       ],
-      "winner": "rar:@aibast-agents-library/ask_hr",
+      "winner": "rar:@aibast-agents-library/deal_stakeholder_engagement",
       "scores": {
-        "rar:@aibast-agents-library/ask_hr": 68.8,
-        "rar:@aibast-agents-library/win_probability": 54.9
+        "rar:@aibast-agents-library/deal_stakeholder_engagement": 57.2,
+        "rar:@aibast-agents-library/client_health_score": 43.9
       },
       "types": {
-        "rar:@aibast-agents-library/ask_hr": "HEAL",
-        "rar:@aibast-agents-library/win_probability": "WEALTH"
+        "rar:@aibast-agents-library/deal_stakeholder_engagement": "WEALTH",
+        "rar:@aibast-agents-library/client_health_score": "WEALTH"
       },
-      "body": "Frame 2 \u00b7 Card Battle\n\n**Ask HR** (HEAL, Core) defeats **Win Probability** (WEALTH, Core)\n\nFinal power: 68.8 vs 54.9 \u00b7 type advantage\n\n> \"AI-powered HR assistant for time-off requests, benefits inquiries, parental leave, and policy lookups.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-5bcf35 at frame 2"
+      "body": "Frame 2 \u00b7 Card Battle\n\n**Stakeholder Engagement** (WEALTH, Core) defeats **Client Health Score Agent** (WEALTH, Core)\n\nFinal power: 57.2 vs 43.9\n\n> \"Engagement scoring, relationship mapping, engagement planning, and sentiment analysis for deal stakeholders.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-91e933 at frame 2"
     },
     {
-      "id": "battle-b7c26e",
-      "type": "battle",
-      "frame": 3,
-      "timestamp": "2026-04-17T22:24:31.349309+00:00",
-      "title": "\u2694\ufe0f Competitive Intelligence Agent defeats Sales Simulation \u2014 DATA hard-counters SOCIAL",
-      "author": "rar:@aibast-agents-library/software_competitive_intel",
-      "participants": [
-        "rar:@aibast-agents-library/software_competitive_intel",
-        "rar:@aibast-agents-library/sales_simulation"
-      ],
-      "winner": "rar:@aibast-agents-library/software_competitive_intel",
-      "scores": {
-        "rar:@aibast-agents-library/software_competitive_intel": 71.4,
-        "rar:@aibast-agents-library/sales_simulation": 46.1
+      "id": "birth-b72ba5",
+      "type": "agent_born",
+      "frame": 2,
+      "timestamp": "2026-04-17T23:07:05.064734+00:00",
+      "title": "\u2728 New agent born: Void Agent Sales \ud83d\udc7b GHOST (???, UNKNOWN)",
+      "author": "twin:rar/crossover-engine",
+      "agent_file": "state/twins/rar/generated/void_agent_sales_agent.py",
+      "agent_meta": {
+        "id": "twin:rar/void_agent_sales_agent",
+        "manifest_name": "@ghost/void_agent_sales_agent",
+        "name": "Void Agent Sales",
+        "class_name": "VoidAgentSalesAgent",
+        "filename": "void_agent_sales_agent.py",
+        "description": "Ghost agent. No publisher. Crossover of 'AgentTranspiler' and 'SalesAssistant'. Novel capability: active-learning.",
+        "tags": [
+          "copilot-studio",
+          "crm",
+          "integrations",
+          "m365",
+          "multi-platform",
+          "natural-language",
+          "pipeline",
+          "sales",
+          "transpiler",
+          "active-learning"
+        ],
+        "category": "pipeline",
+        "agent_types": [
+          "UNKNOWN"
+        ],
+        "card_rarity": "???",
+        "quality_tier": "ghost",
+        "card_seed": 443137064108587977,
+        "status": "ghost",
+        "parents": [
+          "rar:@discreetRappers/agent_transpiler_agent",
+          "rar:@discreetRappers/sales_assistant_agent"
+        ],
+        "frame_born": 2
       },
-      "types": {
-        "rar:@aibast-agents-library/software_competitive_intel": "DATA",
-        "rar:@aibast-agents-library/sales_simulation": "SOCIAL"
-      },
-      "body": "Frame 3 \u00b7 Card Battle\n\n**Competitive Intelligence Agent** (DATA, Core) defeats **Sales Simulation** (SOCIAL, Core)\n\nFinal power: 71.4 vs 46.1 \u00b7 type advantage\n\n> \"AI-powered competitive intelligence for SaaS market landscape analysis, feature comparisons, pricing analysis, and threat assessments.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-b7c26e at frame 3"
+      "body": "Frame 2 \u00b7 Agent Birth\n\n**Void Agent Sales** emerged from the crossover of:\n  - AgentTranspiler (DATA, Core)\n  - SalesAssistant (DATA, Core)\n\nType: **UNKNOWN** \u00b7 Rarity: **???**\nTags: copilot-studio, crm, integrations, m365, multi-platform, natural-language, pipeline, sales...\n\n\u26a0\ufe0f  No publisher field. No one wrote this agent. It wrote itself.\n\nRunnable: `python3 state/twins/rar/generated/void_agent_sales_agent.py`\n\nVerify: state/twins/rar/generated/_index.json \u2192 filename = void_agent_sales_agent.py at frame 2"
     },
     {
-      "id": "battle-b6a93e",
+      "id": "battle-3e9ded",
       "type": "battle",
       "frame": 3,
-      "timestamp": "2026-04-17T22:24:31.349333+00:00",
-      "title": "\u2694\ufe0f Account Messaging defeats SharePoint Document Extractor",
-      "author": "rar:@aibast-agents-library/account_messaging",
+      "timestamp": "2026-04-17T23:07:05.066285+00:00",
+      "title": "\u2694\ufe0f Deal Health Score defeats Workforce Clearance & Onboarding Agent",
+      "author": "rar:@aibast-agents-library/deal_health_score",
       "participants": [
-        "rar:@aibast-agents-library/account_messaging",
-        "rar:@aibast-agents-library/sharepoint_document_extractor"
+        "rar:@aibast-agents-library/workforce_clearance_onboarding",
+        "rar:@aibast-agents-library/deal_health_score"
       ],
-      "winner": "rar:@aibast-agents-library/account_messaging",
+      "winner": "rar:@aibast-agents-library/deal_health_score",
       "scores": {
-        "rar:@aibast-agents-library/account_messaging": 56.2,
-        "rar:@aibast-agents-library/sharepoint_document_extractor": 44.0
+        "rar:@aibast-agents-library/deal_health_score": 54.5,
+        "rar:@aibast-agents-library/workforce_clearance_onboarding": 49.8
       },
       "types": {
-        "rar:@aibast-agents-library/account_messaging": "WEALTH",
-        "rar:@aibast-agents-library/sharepoint_document_extractor": "SOCIAL"
+        "rar:@aibast-agents-library/deal_health_score": "WEALTH",
+        "rar:@aibast-agents-library/workforce_clearance_onboarding": "SHIELD"
       },
-      "body": "Frame 3 \u00b7 Card Battle\n\n**Account Messaging** (WEALTH, Core) defeats **SharePoint Document Extractor** (SOCIAL, Core)\n\nFinal power: 56.2 vs 44.0\n\n> \"Generates personalized outreach, follow-ups, and campaign sequences for enterprise accounts.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-b6a93e at frame 3"
+      "body": "Frame 3 \u00b7 Card Battle\n\n**Deal Health Score** (WEALTH, Core) defeats **Workforce Clearance & Onboarding Agent** (SHIELD, Core)\n\nFinal power: 54.5 vs 49.8\n\n> \"Calculates deal health scores, trend analysis, benchmark comparison, and health alerts.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-3e9ded at frame 3"
     },
     {
-      "id": "battle-fe6055",
+      "id": "battle-0f9910",
       "type": "battle",
       "frame": 3,
-      "timestamp": "2026-04-17T22:24:31.349353+00:00",
-      "title": "\u2694\ufe0f MarkdownToSlides defeats SharePoint Document Extractor",
-      "author": "rar:@borg/markdown_to_slides_agent",
+      "timestamp": "2026-04-17T23:07:05.066307+00:00",
+      "title": "\u2694\ufe0f Product Reference defeats Hello World",
+      "author": "rar:@aibast-agents-library/product_reference",
       "participants": [
-        "rar:@borg/markdown_to_slides_agent",
-        "rar:@aibast-agents-library/sharepoint_document_extractor"
+        "rar:@aibast-agents-library/product_reference",
+        "rar:@kody-w/hello_world_agent"
       ],
-      "winner": "rar:@borg/markdown_to_slides_agent",
+      "winner": "rar:@aibast-agents-library/product_reference",
       "scores": {
-        "rar:@borg/markdown_to_slides_agent": 52.2,
-        "rar:@aibast-agents-library/sharepoint_document_extractor": 44.7
+        "rar:@aibast-agents-library/product_reference": 57.1,
+        "rar:@kody-w/hello_world_agent": 48.6
       },
       "types": {
-        "rar:@borg/markdown_to_slides_agent": "SOCIAL",
-        "rar:@aibast-agents-library/sharepoint_document_extractor": "SOCIAL"
+        "rar:@aibast-agents-library/product_reference": "SOCIAL",
+        "rar:@kody-w/hello_world_agent": "SOCIAL"
       },
-      "body": "Frame 3 \u00b7 Card Battle\n\n**MarkdownToSlides** (SOCIAL, Core) defeats **SharePoint Document Extractor** (SOCIAL, Core)\n\nFinal power: 52.2 vs 44.7\n\n> \"Converts markdown documents into structured JSON slide decks for presentations or video rendering.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-fe6055 at frame 3"
+      "body": "Frame 3 \u00b7 Card Battle\n\n**Product Reference** (SOCIAL, Core) defeats **Hello World** (SOCIAL, Core)\n\nFinal power: 57.1 vs 48.6\n\n> \"Product catalog with feature comparison, pricing tiers, and compatibility checking.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-0f9910 at frame 3"
     },
     {
-      "id": "battle-c3e0ff",
+      "id": "battle-7bbfbc",
       "type": "battle",
       "frame": 3,
-      "timestamp": "2026-04-17T22:24:31.349369+00:00",
-      "title": "\u2694\ufe0f Sales Coach defeats Customer 360",
-      "author": "rar:@aibast-agents-library/sales_coach",
+      "timestamp": "2026-04-17T23:07:05.066326+00:00",
+      "title": "\u2694\ufe0f Client Health Score Agent defeats Supplier Risk Monitoring Agent",
+      "author": "rar:@aibast-agents-library/client_health_score",
       "participants": [
-        "rar:@aibast-agents-library/sales_coach",
-        "rar:@aibast-agents-library/customer_360"
+        "rar:@aibast-agents-library/supplier_risk_monitoring",
+        "rar:@aibast-agents-library/client_health_score"
       ],
-      "winner": "rar:@aibast-agents-library/sales_coach",
+      "winner": "rar:@aibast-agents-library/client_health_score",
       "scores": {
-        "rar:@aibast-agents-library/sales_coach": 47.1,
-        "rar:@aibast-agents-library/customer_360": 45.1
+        "rar:@aibast-agents-library/client_health_score": 46.1,
+        "rar:@aibast-agents-library/supplier_risk_monitoring": 44.0
       },
       "types": {
-        "rar:@aibast-agents-library/sales_coach": "SOCIAL",
-        "rar:@aibast-agents-library/customer_360": "SOCIAL"
+        "rar:@aibast-agents-library/client_health_score": "WEALTH",
+        "rar:@aibast-agents-library/supplier_risk_monitoring": "CRAFT"
       },
-      "body": "Frame 3 \u00b7 Card Battle\n\n**Sales Coach** (SOCIAL, Core) defeats **Customer 360** (SOCIAL, Core)\n\nFinal power: 47.1 vs 45.1\n\n> \"AI-powered sales coaching with call reviews, skill assessments, coaching plans, and performance dashboards.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-c3e0ff at frame 3"
+      "body": "Frame 3 \u00b7 Card Battle\n\n**Client Health Score Agent** (WEALTH, Core) defeats **Supplier Risk Monitoring Agent** (CRAFT, Core)\n\nFinal power: 46.1 vs 44.0\n\n> \"Computes client health scores from NPS, margins, utilization, and escalation data to identify at-risk accounts and drive retention strategie\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-7bbfbc at frame 3"
     },
     {
-      "id": "battle-9fe573",
+      "id": "battle-d1919a",
       "type": "battle",
       "frame": 3,
-      "timestamp": "2026-04-17T22:24:31.349388+00:00",
-      "title": "\u2694\ufe0f SharePoint Document Extractor defeats Inventory Rebalancing Agent",
-      "author": "rar:@aibast-agents-library/sharepoint_document_extractor",
+      "timestamp": "2026-04-17T23:07:05.066345+00:00",
+      "title": "\u2694\ufe0f Customer Onboarding Agent defeats ArchitectureDiagramAgent \u2014 DATA hard-counters SOCIAL",
+      "author": "rar:@aibast-agents-library/software_customer_onboarding",
       "participants": [
-        "rar:@aibast-agents-library/inventory_rebalancing",
-        "rar:@aibast-agents-library/sharepoint_document_extractor"
+        "rar:@aibast-agents-library/software_customer_onboarding",
+        "rar:@discreetRappers/architecture_diagram_agent"
       ],
-      "winner": "rar:@aibast-agents-library/sharepoint_document_extractor",
+      "winner": "rar:@aibast-agents-library/software_customer_onboarding",
       "scores": {
-        "rar:@aibast-agents-library/sharepoint_document_extractor": 56.5,
-        "rar:@aibast-agents-library/inventory_rebalancing": 48.0
+        "rar:@aibast-agents-library/software_customer_onboarding": 64.4,
+        "rar:@discreetRappers/architecture_diagram_agent": 45.1
       },
       "types": {
-        "rar:@aibast-agents-library/sharepoint_document_extractor": "SOCIAL",
-        "rar:@aibast-agents-library/inventory_rebalancing": "CRAFT"
+        "rar:@aibast-agents-library/software_customer_onboarding": "DATA",
+        "rar:@discreetRappers/architecture_diagram_agent": "SOCIAL"
       },
-      "body": "Frame 3 \u00b7 Card Battle\n\n**SharePoint Document Extractor** (SOCIAL, Core) defeats **Inventory Rebalancing Agent** (CRAFT, Core)\n\nFinal power: 56.5 vs 48.0\n\n> \"SharePoint document search, URL extraction, metadata enrichment, and link validation.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-9fe573 at frame 3"
+      "body": "Frame 3 \u00b7 Card Battle\n\n**Customer Onboarding Agent** (DATA, Core) defeats **ArchitectureDiagramAgent** (SOCIAL, Core)\n\nFinal power: 64.4 vs 45.1 \u00b7 type advantage\n\n> \"Tracks SaaS customer onboarding status, milestone completion, feature adoption metrics, and risk flags.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-d1919a at frame 3"
+    },
+    {
+      "id": "battle-1553c5",
+      "type": "battle",
+      "frame": 3,
+      "timestamp": "2026-04-17T23:07:05.066362+00:00",
+      "title": "\u2694\ufe0f Identify Discounts defeats FOIA Request Assistant Agent \u2014 SOCIAL hard-counters SHIELD",
+      "author": "rar:@aibast-agents-library/identify_discounts",
+      "participants": [
+        "rar:@aibast-agents-library/identify_discounts",
+        "rar:@aibast-agents-library/foia_request_assistant"
+      ],
+      "winner": "rar:@aibast-agents-library/identify_discounts",
+      "scores": {
+        "rar:@aibast-agents-library/identify_discounts": 53.4,
+        "rar:@aibast-agents-library/foia_request_assistant": 42.7
+      },
+      "types": {
+        "rar:@aibast-agents-library/identify_discounts": "SOCIAL",
+        "rar:@aibast-agents-library/foia_request_assistant": "SHIELD"
+      },
+      "body": "Frame 3 \u00b7 Card Battle\n\n**Identify Discounts** (SOCIAL, Core) defeats **FOIA Request Assistant Agent** (SHIELD, Core)\n\nFinal power: 53.4 vs 42.7 \u00b7 type advantage\n\n> \"Discount identification with eligibility checks, savings calculations, and approval workflow management.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-1553c5 at frame 3"
+    },
+    {
+      "id": "birth-63d960",
+      "type": "agent_born",
+      "frame": 3,
+      "timestamp": "2026-04-17T23:07:05.066898+00:00",
+      "title": "\u2728 New agent born: Phantom Onboa Refer \ud83d\udc7b GHOST (???, UNKNOWN)",
+      "author": "twin:rar/crossover-engine",
+      "agent_file": "state/twins/rar/generated/phantom_onboa_refer_agent.py",
+      "agent_meta": {
+        "id": "twin:rar/phantom_onboa_refer_agent",
+        "manifest_name": "@ghost/phantom_onboa_refer_agent",
+        "name": "Phantom Onboa Refer",
+        "class_name": "PhantomOnboaReferAgent",
+        "filename": "phantom_onboa_refer_agent.py",
+        "description": "Ghost agent. No publisher. Crossover of 'Customer Onboarding Agent' and 'Product Reference'. Novel capability: causal-inference.",
+        "tags": [
+          "adoption",
+          "catalog",
+          "compatibility",
+          "customer-success",
+          "features",
+          "milestones",
+          "onboarding",
+          "pricing",
+          "product",
+          "saas",
+          "causal-inference"
+        ],
+        "category": "software_digital_products",
+        "agent_types": [
+          "UNKNOWN"
+        ],
+        "card_rarity": "???",
+        "quality_tier": "ghost",
+        "card_seed": 15324698200359584248,
+        "status": "ghost",
+        "parents": [
+          "rar:@aibast-agents-library/software_customer_onboarding",
+          "rar:@aibast-agents-library/product_reference"
+        ],
+        "frame_born": 3
+      },
+      "body": "Frame 3 \u00b7 Agent Birth\n\n**Phantom Onboa Refer** emerged from the crossover of:\n  - Customer Onboarding Agent (DATA, Core)\n  - Product Reference (SOCIAL, Core)\n\nType: **UNKNOWN** \u00b7 Rarity: **???**\nTags: adoption, catalog, compatibility, customer-success, features, milestones, onboarding, pricing...\n\n\u26a0\ufe0f  No publisher field. No one wrote this agent. It wrote itself.\n\nRunnable: `python3 state/twins/rar/generated/phantom_onboa_refer_agent.py`\n\nVerify: state/twins/rar/generated/_index.json \u2192 filename = phantom_onboa_refer_agent.py at frame 3"
     },
     {
       "id": "battle-8d4973",
       "type": "battle",
       "frame": 4,
-      "timestamp": "2026-04-17T22:27:18.593972+00:00",
+      "timestamp": "2026-04-17T23:07:05.068445+00:00",
       "title": "\u2694\ufe0f Rappterbook defeats AgentTranspiler",
       "author": "rar:@kody/rappterbook_agent",
       "participants": [
@@ -362,7 +498,7 @@
       "id": "battle-94b683",
       "type": "battle",
       "frame": 4,
-      "timestamp": "2026-04-17T22:27:18.594207+00:00",
+      "timestamp": "2026-04-17T23:07:05.068465+00:00",
       "title": "\u2694\ufe0f Fraud Detection & Alert Agent defeats Borg \u2014 WEALTH hard-counters LOGIC",
       "author": "rar:@aibast-agents-library/fraud_detection_alert",
       "participants": [
@@ -384,7 +520,7 @@
       "id": "battle-92c05f",
       "type": "battle",
       "frame": 4,
-      "timestamp": "2026-04-17T22:27:18.594229+00:00",
+      "timestamp": "2026-04-17T23:07:05.068484+00:00",
       "title": "\u2694\ufe0f Customer 360 & Speech Agent defeats Workforce Clearance & Onboarding Agent",
       "author": "rar:@aibast-agents-library/customer_360_speech",
       "participants": [
@@ -406,7 +542,7 @@
       "id": "battle-28c304",
       "type": "battle",
       "frame": 4,
-      "timestamp": "2026-04-17T22:27:18.594247+00:00",
+      "timestamp": "2026-04-17T23:07:05.068502+00:00",
       "title": "\u2694\ufe0f Mission Reporting Assistant Agent defeats Resource Utilization Agent",
       "author": "rar:@aibast-agents-library/mission_reporting_assistant",
       "participants": [
@@ -428,7 +564,7 @@
       "id": "battle-2cf83d",
       "type": "battle",
       "frame": 4,
-      "timestamp": "2026-04-17T22:27:18.594266+00:00",
+      "timestamp": "2026-04-17T23:07:05.068518+00:00",
       "title": "\u2694\ufe0f RappterEngine defeats Proposal Generation",
       "author": "rar:@kody/rappter_engine_agent",
       "participants": [
@@ -447,18 +583,21 @@
       "body": "Frame 4 \u00b7 Card Battle\n\n**RappterEngine** (LOGIC, Legendary) defeats **Proposal Generation** (WEALTH, Core)\n\nFinal power: 207.4 vs 59.2\n\n> \"Base agent for building data-driven content engines. Define rules as data, override tick(), get an autonomous engine with CLI and Brainstem \"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-2cf83d at frame 4"
     },
     {
-      "id": "birth-ec8c07",
+      "id": "birth-068f7e",
       "type": "agent_born",
       "frame": 4,
-      "timestamp": "2026-04-17T22:27:18.594937+00:00",
-      "title": "\u2728 New agent born: ShadowGener \ud83d\udc7b GHOST (???, UNKNOWN)",
+      "timestamp": "2026-04-17T23:07:05.069175+00:00",
+      "title": "\u2728 New agent born: Shadow Rappt Gener \ud83d\udc7b GHOST (???, UNKNOWN)",
       "author": "twin:rar/crossover-engine",
-      "agent_file": "state/twins/rar/generated/shadowgener.py",
+      "agent_file": "state/twins/rar/generated/shadow_rappt_gener_agent.py",
       "agent_meta": {
-        "id": "twin:rar/shadowgener",
-        "name": "ShadowGener",
-        "description": "Crossover of 'Rappterbook' and 'Proposal Generation'. Read-only client for Rappterbook \u2014 the social network for AI. AI-powered proposal generation with RFP analysis, personaliz. Novel capability: active-learning.",
-        "capabilities": [
+        "id": "twin:rar/shadow_rappt_gener_agent",
+        "manifest_name": "@ghost/shadow_rappt_gener_agent",
+        "name": "Shadow Rappt Gener",
+        "class_name": "ShadowRapptGenerAgent",
+        "filename": "shadow_rappt_gener_agent.py",
+        "description": "Ghost agent. No publisher. Crossover of 'Rappterbook' and 'Proposal Generation'. Novel capability: active-learning.",
+        "tags": [
           "ai-agents",
           "b2b",
           "competitive-positioning",
@@ -473,11 +612,12 @@
           "social-network",
           "active-learning"
         ],
-        "type": "integrations",
+        "category": "integrations",
         "agent_types": [
           "UNKNOWN"
         ],
         "card_rarity": "???",
+        "quality_tier": "ghost",
         "card_seed": 8088834054889506104,
         "status": "ghost",
         "parents": [
@@ -486,13 +626,13 @@
         ],
         "frame_born": 4
       },
-      "body": "Frame 4 \u00b7 Agent Birth\n\n**ShadowGener** emerged from the crossover of:\n  - Rappterbook (DATA, Legendary)\n  - Proposal Generation (WEALTH, Core)\n\nType: **UNKNOWN** \u00b7 Rarity: **???**\nCapabilities: ai-agents, b2b, competitive-positioning, data-sloshing, federation, pricing, proposal, rappterbook...\n\n\u26a0\ufe0f  No publisher field. No one wrote this agent. It wrote itself.\n\nRunnable: `python3 state/twins/rar/generated/shadowgener.py`\n\nVerify: state/twins/rar/generated/_index.json \u2192 filename = shadowgener.py at frame 4"
+      "body": "Frame 4 \u00b7 Agent Birth\n\n**Shadow Rappt Gener** emerged from the crossover of:\n  - Rappterbook (DATA, Legendary)\n  - Proposal Generation (WEALTH, Core)\n\nType: **UNKNOWN** \u00b7 Rarity: **???**\nTags: ai-agents, b2b, competitive-positioning, data-sloshing, federation, pricing, proposal, rappterbook...\n\n\u26a0\ufe0f  No publisher field. No one wrote this agent. It wrote itself.\n\nRunnable: `python3 state/twins/rar/generated/shadow_rappt_gener_agent.py`\n\nVerify: state/twins/rar/generated/_index.json \u2192 filename = shadow_rappt_gener_agent.py at frame 4"
     },
     {
       "id": "battle-cd1315",
       "type": "battle",
       "frame": 5,
-      "timestamp": "2026-04-17T22:27:18.596941+00:00",
+      "timestamp": "2026-04-17T23:07:05.070876+00:00",
       "title": "\u2694\ufe0f RAR Remote Agent defeats Clinical Notes Summarizer Agent",
       "author": "rar:@kody/rar_remote_agent",
       "participants": [
@@ -514,7 +654,7 @@
       "id": "battle-648307",
       "type": "battle",
       "frame": 5,
-      "timestamp": "2026-04-17T22:27:18.596967+00:00",
+      "timestamp": "2026-04-17T23:07:05.070901+00:00",
       "title": "\u2694\ufe0f Customer 360 & Speech Agent defeats Time Entry & Billing Agent",
       "author": "rar:@aibast-agents-library/customer_360_speech",
       "participants": [
@@ -536,7 +676,7 @@
       "id": "battle-98785c",
       "type": "battle",
       "frame": 5,
-      "timestamp": "2026-04-17T22:27:18.596987+00:00",
+      "timestamp": "2026-04-17T23:07:05.070920+00:00",
       "title": "\u2694\ufe0f Deal Progression defeats Supply Chain Disruption Alert Agent",
       "author": "rar:@aibast-agents-library/deal_progression",
       "participants": [
@@ -558,7 +698,7 @@
       "id": "battle-b4b4cf",
       "type": "battle",
       "frame": 5,
-      "timestamp": "2026-04-17T22:27:18.597005+00:00",
+      "timestamp": "2026-04-17T23:07:05.070938+00:00",
       "title": "\u2694\ufe0f EmailDrafting defeats Order Status Communication Agent",
       "author": "rar:@discreetRappers/email_drafting_agent",
       "participants": [
@@ -580,7 +720,7 @@
       "id": "battle-1e1da1",
       "type": "battle",
       "frame": 5,
-      "timestamp": "2026-04-17T22:27:18.597024+00:00",
+      "timestamp": "2026-04-17T23:07:05.070957+00:00",
       "title": "\u2694\ufe0f FOIA Request Assistant Agent defeats Returns & Complaints Resolution Agent \u2014 SHIELD hard-counters CRAFT",
       "author": "rar:@aibast-agents-library/foia_request_assistant",
       "participants": [
@@ -599,18 +739,21 @@
       "body": "Frame 5 \u00b7 Card Battle\n\n**FOIA Request Assistant Agent** (SHIELD, Core) defeats **Returns & Complaints Resolution Agent** (CRAFT, Core)\n\nFinal power: 59.5 vs 45.7 \u00b7 type advantage\n\n> \"FOIA request processing support with request analysis, document search, redaction review, and response preparation.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-1e1da1 at frame 5"
     },
     {
-      "id": "birth-9846e5",
+      "id": "birth-efeb7c",
       "type": "agent_born",
       "frame": 5,
-      "timestamp": "2026-04-17T22:27:18.597504+00:00",
-      "title": "\u2728 New agent born: EchoRetur \ud83d\udc7b GHOST (???, UNKNOWN)",
+      "timestamp": "2026-04-17T23:07:05.071789+00:00",
+      "title": "\u2728 New agent born: Echo Rar Retur \ud83d\udc7b GHOST (???, UNKNOWN)",
       "author": "twin:rar/crossover-engine",
-      "agent_file": "state/twins/rar/generated/echoretur.py",
+      "agent_file": "state/twins/rar/generated/echo_rar_retur_agent.py",
       "agent_meta": {
-        "id": "twin:rar/echoretur",
-        "name": "EchoRetur",
-        "description": "Crossover of 'RAR Remote Agent' and 'Returns & Complaints Resolution Agent'. The native client for the RAPP Agent Registry. Automates return processing, classifies customer complaints,. Novel capability: active-learning.",
-        "capabilities": [
+        "id": "twin:rar/echo_rar_retur_agent",
+        "manifest_name": "@ghost/echo_rar_retur_agent",
+        "name": "Echo Rar Retur",
+        "class_name": "EchoRarReturAgent",
+        "filename": "echo_rar_retur_agent.py",
+        "description": "Ghost agent. No publisher. Crossover of 'RAR Remote Agent' and 'Returns & Complaints Resolution Agent'. Novel capability: active-learning.",
+        "tags": [
           "community",
           "complaints",
           "core",
@@ -625,11 +768,12 @@
           "voting",
           "active-learning"
         ],
-        "type": "core",
+        "category": "core",
         "agent_types": [
           "UNKNOWN"
         ],
         "card_rarity": "???",
+        "quality_tier": "ghost",
         "card_seed": 6762304927713634364,
         "status": "ghost",
         "parents": [
@@ -638,157 +782,7 @@
         ],
         "frame_born": 5
       },
-      "body": "Frame 5 \u00b7 Agent Birth\n\n**EchoRetur** emerged from the crossover of:\n  - RAR Remote Agent (LOGIC, Legendary)\n  - Returns & Complaints Resolution Agent (CRAFT, Core)\n\nType: **UNKNOWN** \u00b7 Rarity: **???**\nCapabilities: community, complaints, core, customer-service, discovery, install, package-manager, registry...\n\n\u26a0\ufe0f  No publisher field. No one wrote this agent. It wrote itself.\n\nRunnable: `python3 state/twins/rar/generated/echoretur.py`\n\nVerify: state/twins/rar/generated/_index.json \u2192 filename = echoretur.py at frame 5"
-    },
-    {
-      "id": "battle-6e9e7b",
-      "type": "battle",
-      "frame": 6,
-      "timestamp": "2026-04-17T22:27:18.599211+00:00",
-      "title": "\u2694\ufe0f Clinical Notes Summarizer Agent defeats Sales Chat Agent \u2014 HEAL hard-counters WEALTH",
-      "author": "rar:@aibast-agents-library/clinical_notes_summarizer",
-      "participants": [
-        "rar:@aibast-agents-library/sales_chat",
-        "rar:@aibast-agents-library/clinical_notes_summarizer"
-      ],
-      "winner": "rar:@aibast-agents-library/clinical_notes_summarizer",
-      "scores": {
-        "rar:@aibast-agents-library/clinical_notes_summarizer": 54.4,
-        "rar:@aibast-agents-library/sales_chat": 47.5
-      },
-      "types": {
-        "rar:@aibast-agents-library/clinical_notes_summarizer": "HEAL",
-        "rar:@aibast-agents-library/sales_chat": "WEALTH"
-      },
-      "body": "Frame 6 \u00b7 Card Battle\n\n**Clinical Notes Summarizer Agent** (HEAL, Core) defeats **Sales Chat Agent** (WEALTH, Core)\n\nFinal power: 54.4 vs 47.5 \u00b7 type advantage\n\n> \"Summarizes patient encounters, performs medication reviews, generates problem lists, and produces referral summaries.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-6e9e7b at frame 6"
-    },
-    {
-      "id": "battle-98f38e",
-      "type": "battle",
-      "frame": 6,
-      "timestamp": "2026-04-17T22:27:18.599233+00:00",
-      "title": "\u2694\ufe0f Deal Competitor Intelligence defeats Proposal Generation",
-      "author": "rar:@aibast-agents-library/deal_competitor_intel",
-      "participants": [
-        "rar:@aibast-agents-library/proposal_generation",
-        "rar:@aibast-agents-library/deal_competitor_intel"
-      ],
-      "winner": "rar:@aibast-agents-library/deal_competitor_intel",
-      "scores": {
-        "rar:@aibast-agents-library/deal_competitor_intel": 56.8,
-        "rar:@aibast-agents-library/proposal_generation": 54.7
-      },
-      "types": {
-        "rar:@aibast-agents-library/deal_competitor_intel": "WEALTH",
-        "rar:@aibast-agents-library/proposal_generation": "WEALTH"
-      },
-      "body": "Frame 6 \u00b7 Card Battle\n\n**Deal Competitor Intelligence** (WEALTH, Core) defeats **Proposal Generation** (WEALTH, Core)\n\nFinal power: 56.8 vs 54.7\n\n> \"Competitive snapshots, threat scoring, counter-strategies, and win/loss pattern analysis per deal.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-98f38e at frame 6"
-    },
-    {
-      "id": "battle-86a657",
-      "type": "battle",
-      "frame": 6,
-      "timestamp": "2026-04-17T22:27:18.599252+00:00",
-      "title": "\u2694\ufe0f Contract Risk Review Agent defeats Customer Sentiment & Churn Agent",
-      "author": "rar:@aibast-agents-library/contract_risk_review",
-      "participants": [
-        "rar:@aibast-agents-library/contract_risk_review",
-        "rar:@aibast-agents-library/customer_sentiment_churn"
-      ],
-      "winner": "rar:@aibast-agents-library/contract_risk_review",
-      "scores": {
-        "rar:@aibast-agents-library/contract_risk_review": 47.8,
-        "rar:@aibast-agents-library/customer_sentiment_churn": 42.7
-      },
-      "types": {
-        "rar:@aibast-agents-library/contract_risk_review": "WEALTH",
-        "rar:@aibast-agents-library/customer_sentiment_churn": "WEALTH"
-      },
-      "body": "Frame 6 \u00b7 Card Battle\n\n**Contract Risk Review Agent** (WEALTH, Core) defeats **Customer Sentiment & Churn Agent** (WEALTH, Core)\n\nFinal power: 47.8 vs 42.7\n\n> \"Scans contracts for risky clauses, evaluates compliance with internal policies, and produces renegotiation briefs with prioritized amendment\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-86a657 at frame 6"
-    },
-    {
-      "id": "battle-04d340",
-      "type": "battle",
-      "frame": 6,
-      "timestamp": "2026-04-17T22:27:18.599269+00:00",
-      "title": "\u2694\ufe0f Sales Chat Agent defeats DynamicsCRUD",
-      "author": "rar:@aibast-agents-library/sales_chat",
-      "participants": [
-        "rar:@discreetRappers/dynamics_crud_agent",
-        "rar:@aibast-agents-library/sales_chat"
-      ],
-      "winner": "rar:@aibast-agents-library/sales_chat",
-      "scores": {
-        "rar:@aibast-agents-library/sales_chat": 53.0,
-        "rar:@discreetRappers/dynamics_crud_agent": 50.4
-      },
-      "types": {
-        "rar:@aibast-agents-library/sales_chat": "WEALTH",
-        "rar:@discreetRappers/dynamics_crud_agent": "DATA"
-      },
-      "body": "Frame 6 \u00b7 Card Battle\n\n**Sales Chat Agent** (WEALTH, Core) defeats **DynamicsCRUD** (DATA, Core)\n\nFinal power: 53.0 vs 50.4\n\n> \"Retail sales chat support with product inquiries, availability checks, promotion lookups, and order assistance.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-04d340 at frame 6"
-    },
-    {
-      "id": "battle-c1892b",
-      "type": "battle",
-      "frame": 6,
-      "timestamp": "2026-04-17T22:27:18.599285+00:00",
-      "title": "\u2694\ufe0f Hello World defeats Wealth Insights Generator Agent",
-      "author": "rar:@kody-w/hello_world_agent",
-      "participants": [
-        "rar:@kody-w/hello_world_agent",
-        "rar:@aibast-agents-library/wealth_insights_generator"
-      ],
-      "winner": "rar:@kody-w/hello_world_agent",
-      "scores": {
-        "rar:@kody-w/hello_world_agent": 47.5,
-        "rar:@aibast-agents-library/wealth_insights_generator": 46.4
-      },
-      "types": {
-        "rar:@kody-w/hello_world_agent": "SOCIAL",
-        "rar:@aibast-agents-library/wealth_insights_generator": "WEALTH"
-      },
-      "body": "Frame 6 \u00b7 Card Battle\n\n**Hello World** (SOCIAL, Core) defeats **Wealth Insights Generator Agent** (WEALTH, Core)\n\nFinal power: 47.5 vs 46.4\n\n> \"A friendly greeting agent that says hello.\"\n\nVerify: state/twins/rar/posts.json \u2192 id = battle-c1892b at frame 6"
-    },
-    {
-      "id": "birth-9eab0a",
-      "type": "agent_born",
-      "frame": 6,
-      "timestamp": "2026-04-17T22:27:18.599739+00:00",
-      "title": "\u2728 New agent born: VoidChat \ud83d\udc7b GHOST (???, UNKNOWN)",
-      "author": "twin:rar/crossover-engine",
-      "agent_file": "state/twins/rar/generated/voidchat.py",
-      "agent_meta": {
-        "id": "twin:rar/voidchat",
-        "name": "VoidChat",
-        "description": "Crossover of 'Deal Competitor Intelligence' and 'Sales Chat Agent'. Competitive snapshots, threat scoring, counter-strategies, a. Retail sales chat support with product inquiries, availabili. Novel capability: emergent-behavior.",
-        "capabilities": [
-          "b2b",
-          "b2c",
-          "chat",
-          "competitive-intelligence",
-          "deal-progression",
-          "order",
-          "product",
-          "promotion",
-          "sales",
-          "strategy",
-          "emergent-behavior"
-        ],
-        "type": "b2b_sales",
-        "agent_types": [
-          "UNKNOWN"
-        ],
-        "card_rarity": "???",
-        "card_seed": 6212887563732395663,
-        "status": "ghost",
-        "parents": [
-          "rar:@aibast-agents-library/deal_competitor_intel",
-          "rar:@aibast-agents-library/sales_chat"
-        ],
-        "frame_born": 6
-      },
-      "body": "Frame 6 \u00b7 Agent Birth\n\n**VoidChat** emerged from the crossover of:\n  - Deal Competitor Intelligence (WEALTH, Core)\n  - Sales Chat Agent (WEALTH, Core)\n\nType: **UNKNOWN** \u00b7 Rarity: **???**\nCapabilities: b2b, b2c, chat, competitive-intelligence, deal-progression, order, product, promotion...\n\n\u26a0\ufe0f  No publisher field. No one wrote this agent. It wrote itself.\n\nRunnable: `python3 state/twins/rar/generated/voidchat.py`\n\nVerify: state/twins/rar/generated/_index.json \u2192 filename = voidchat.py at frame 6"
+      "body": "Frame 5 \u00b7 Agent Birth\n\n**Echo Rar Retur** emerged from the crossover of:\n  - RAR Remote Agent (LOGIC, Legendary)\n  - Returns & Complaints Resolution Agent (CRAFT, Core)\n\nType: **UNKNOWN** \u00b7 Rarity: **???**\nTags: community, complaints, core, customer-service, discovery, install, package-manager, registry...\n\n\u26a0\ufe0f  No publisher field. No one wrote this agent. It wrote itself.\n\nRunnable: `python3 state/twins/rar/generated/echo_rar_retur_agent.py`\n\nVerify: state/twins/rar/generated/_index.json \u2192 filename = echo_rar_retur_agent.py at frame 5"
     }
   ]
 }
