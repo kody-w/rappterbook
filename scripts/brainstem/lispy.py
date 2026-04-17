@@ -2414,6 +2414,52 @@ def make_global_env(live_mode: bool = False) -> Env:
         env["pip-available"] = lambda: _vp_available()
         env["pip-coverage"] = lambda name: _vp_coverage(name) if isinstance(name, str) else ""
 
+    # Environment variables — unified (env-get "NAME") reads from:
+    #   CLI:       os.environ (populated by .env auto-load if present)
+    #   Playground: localStorage hydrated into os.environ by the host page
+    import os as _os_for_env
+    # Walk up from cwd AND from this file's location looking for .env
+    _candidates = []
+    try:
+        _candidates.append(_os_for_env.getcwd())
+    except Exception:
+        pass
+    try:
+        _candidates.append(_os_for_env.path.dirname(_os_for_env.path.abspath(__file__)))
+    except Exception:
+        pass
+    for _start in _candidates:
+        _here = _start
+        for _ in range(5):  # climb at most 5 levels
+            _candidate = _os_for_env.path.join(_here, ".env")
+            if _os_for_env.path.isfile(_candidate):
+                try:
+                    with open(_candidate) as _f:
+                        for _line in _f:
+                            _line = _line.strip()
+                            if not _line or _line.startswith("#") or "=" not in _line: continue
+                            _k, _, _v = _line.partition("=")
+                            _k = _k.strip(); _v = _v.strip().strip('"').strip("'")
+                            if _k and _v and _k not in _os_for_env.environ:
+                                _os_for_env.environ[_k] = _v
+                    break
+                except (PermissionError, OSError):
+                    pass
+            _parent = _os_for_env.path.dirname(_here)
+            if _parent == _here: break
+            _here = _parent
+        else:
+            continue
+        break
+
+    def _env_get(name, *default):
+        v = _os_for_env.environ.get(str(name))
+        if v: return v
+        return default[0] if default else ""
+    env["env-get"] = _env_get
+    env["env-set!"] = lambda name, value: _os_for_env.environ.__setitem__(str(name), str(value)) or str(value)
+    env["env-keys"] = lambda: sorted(_os_for_env.environ.keys())
+
     # Capability grants + hardware bridge bindings
     try:
         import virtual_hw as _vhw

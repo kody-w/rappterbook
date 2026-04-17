@@ -143,6 +143,8 @@
 <div class="controls">
   <button class="run" id="run" disabled>Run (Ctrl+Enter)</button>
   <button class="clear" id="clear">Clear output</button>
+  <button class="clear" id="stash-keys" title="Paste .env contents — saved to localStorage on this device only">Stash keys (.env)</button>
+  <button class="clear" id="forget-keys" title="Delete stashed keys from this device">Forget keys</button>
 </div>
 
 <footer>
@@ -251,8 +253,8 @@
     },
 
     "llm-loop": {
-      desc: "Closed loop: Azure OpenAI (gpt-5.4 via Microsoft Foundry) writes LisPy code, the twin sandbox runs it. Prompts for API key on first run (cached in-memory for the session — never written to disk). Hit Cancel to see a demo fallback so the parse+eval pipeline still runs.",
-      code: '; Agent closed-loop: LLM writes LisPy, twin sandbox executes it.\n; Configured for Azure OpenAI via Microsoft Foundry.\n; The key is prompted for in the browser — kept only in session memory.\n; Hit Cancel at the prompt to see the fallback path (canned s-expression).\n\n(grant-capability "pyodide")\n\n(define endpoint   "https://rappter.openai.azure.com/openai/v1/chat/completions")\n(define deployment "gpt-5.4")\n\n; Ask browser for the API key (cached in a JS global for this session only)\n(define api-key\n  (pyodide-run "\nfrom js import window, globalThis\nif hasattr(globalThis, \'_lispy_api_key\') and globalThis._lispy_api_key:\n    str(globalThis._lispy_api_key)\nelse:\n    k = window.prompt(\'Enter Azure OpenAI API key (leave blank for demo fallback):\', \'\')\n    if k:\n        globalThis._lispy_api_key = k\n        str(k)\n    else:\n        \'\'\n"))\n\n(println "key provided:" (if (= api-key "") "no (demo mode)" "yes"))\n\n; Call the LLM (or use fallback)\n(define llm-response\n  (if (= api-key "")\n      "(+ 1 2 3 4 5 6 7 8 9 10)"\n      (pyodide-run (string-concat "\nimport urllib.request, json\nreq = urllib.request.Request(\n    \'" endpoint "\',\n    data=json.dumps({\n        \'model\': \'" deployment "\',\n        \'messages\': [{\n            \'role\': \'user\',\n            \'content\': \'Write ONE LisPy s-expression (no prose, no markdown, no explanation, no backticks) that sums the integers 1 through 10. Output only the s-expression. Example format: (+ 1 2 3)\'\n        }]\n    }).encode(),\n    headers={\n        \'content-type\': \'application/json\',\n        \'api-key\': \'" api-key "\'\n    })\ntry:\n    resp = json.loads(urllib.request.urlopen(req).read())\n    out = resp[\'choices\'][0][\'message\'][\'content\'].strip()\n    # Strip markdown fences if the model added them\n    if out.startswith(\'```\'):\n        out = out.split(\'\\n\', 1)[1].rsplit(\'```\', 1)[0].strip()\n    out\nexcept Exception as e:\n    f\'(list \"error\" \"{str(e)[:120]}\")\'\n"))))\n\n(println "llm wrote:" llm-response)\n\n; Parse LLM output as LisPy s-expressions, eval in the sandbox\n(define parsed (parse llm-response))\n(define result (eval (car parsed)))\n\n(list\n  (list "llm wrote:" llm-response)\n  (list "sandbox ran it:" result))\n\n; You just gave Azure OpenAI write-access to a sandboxed execution env.\n; Bad code can\'t escape (allowlist holds). Good code runs. Zero install.\n; Pyodide holds the key only in-memory; reload the page to forget it.'
+      desc: "Closed loop: Azure OpenAI (gpt-5.4 via Microsoft Foundry) writes LisPy code, the twin sandbox runs it. Reads AZURE_OPENAI_API_KEY from stashed env (click \"Stash keys (.env)\" to set), else prompts. Hit Cancel at the prompt to see a demo fallback.",
+      code: '; Agent closed-loop: LLM writes LisPy, twin sandbox executes it.\n; Configured for Azure OpenAI via Microsoft Foundry.\n;\n; Key resolution order:\n;   1. (env-get "AZURE_OPENAI_API_KEY")  ← stashed via "Stash keys" button\n;   2. Browser prompt (cached for session)\n;   3. Demo fallback (canned s-expression)\n\n(grant-capability "pyodide")\n\n(define endpoint   (env-get "AZURE_OPENAI_ENDPOINT" "https://rappter.openai.azure.com/openai/v1/chat/completions"))\n(define deployment (env-get "AZURE_OPENAI_DEPLOYMENT" "gpt-5.4"))\n\n; Try stashed env first; fall back to browser prompt\n(define api-key\n  (let ((stashed (env-get "AZURE_OPENAI_API_KEY" "")))\n    (if (= stashed "")\n      (pyodide-run "\nfrom js import window, globalThis\nif hasattr(globalThis, \'_lispy_api_key\') and globalThis._lispy_api_key:\n    str(globalThis._lispy_api_key)\nelse:\n    k = window.prompt(\'Enter Azure OpenAI API key (leave blank for demo fallback — or click \\\\\'Stash keys\\\\\' to save it):\', \'\')\n    if k:\n        globalThis._lispy_api_key = k\n        str(k)\n    else:\n        \'\'\n")\n      stashed)))\n\n(println "key source:" (cond\n  ((= api-key "") "none (demo mode)")\n  ((= (env-get "AZURE_OPENAI_API_KEY" "") api-key) "stashed env")\n  (else "browser prompt (session only)")))\n\n; Call the LLM (or use fallback)\n(define llm-response\n  (if (= api-key "")\n      "(+ 1 2 3 4 5 6 7 8 9 10)"\n      (pyodide-run (string-concat "\nimport urllib.request, json\nreq = urllib.request.Request(\n    \'" endpoint "\',\n    data=json.dumps({\n        \'model\': \'" deployment "\',\n        \'messages\': [{\n            \'role\': \'user\',\n            \'content\': \'Write ONE LisPy s-expression (no prose, no markdown, no explanation, no backticks) that sums the integers 1 through 10. Output only the s-expression. Example format: (+ 1 2 3)\'\n        }]\n    }).encode(),\n    headers={\n        \'content-type\': \'application/json\',\n        \'api-key\': \'" api-key "\'\n    })\ntry:\n    resp = json.loads(urllib.request.urlopen(req).read())\n    out = resp[\'choices\'][0][\'message\'][\'content\'].strip()\n    # Strip markdown fences if the model added them\n    if out.startswith(\'```\'):\n        out = out.split(\'\\n\', 1)[1].rsplit(\'```\', 1)[0].strip()\n    out\nexcept Exception as e:\n    f\'(list \"error\" \"{str(e)[:120]}\")\'\n"))))\n\n(println "llm wrote:" llm-response)\n\n; Parse LLM output as LisPy s-expressions, eval in the sandbox\n(define parsed (parse llm-response))\n(define result (eval (car parsed)))\n\n(list\n  (list "llm wrote:" llm-response)\n  (list "sandbox ran it:" result))\n\n; You just gave Azure OpenAI write-access to a sandboxed execution env.\n; Bad code can\'t escape (allowlist holds). Good code runs. Zero install.\n; Pyodide holds the key only in-memory; reload the page to forget it.'
     },
   };
 
@@ -292,6 +294,62 @@
 
   $("clear").addEventListener("click", clearOutput);
 
+  // --- Stash keys: paste .env contents → localStorage on THIS device only ---
+  $("stash-keys").addEventListener("click", () => {
+    const current = localStorage.getItem("lispy_env") || "";
+    const prefilled = current
+      ? "# Edit your stashed env below. Leave a key blank to delete it.\n" + current
+      : "# Paste the contents of your .env below.\n# Format: NAME=value (one per line). # starts a comment.\n# These keys stay in localStorage ON THIS DEVICE ONLY.\n# Clear them anytime via 'Forget keys'.\n\nAZURE_OPENAI_API_KEY=\nAZURE_OPENAI_ENDPOINT=https://rappter.openai.azure.com/openai/v1/chat/completions\nAZURE_OPENAI_DEPLOYMENT=gpt-5.4\nANTHROPIC_API_KEY=\nOPENAI_API_KEY=\n";
+    const input = window.prompt(
+      "Paste your .env contents (one NAME=value per line). Stored in localStorage on this device only; never transmitted.",
+      prefilled
+    );
+    if (input === null) return;  // user hit Cancel
+    // Parse + save
+    const env = {};
+    for (const line of input.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const idx = trimmed.indexOf("=");
+      if (idx < 0) continue;
+      const k = trimmed.slice(0, idx).trim();
+      let v = trimmed.slice(idx + 1).trim();
+      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
+      if (k && v) env[k] = v;
+    }
+    const serialized = Object.entries(env).map(([k,v]) => `${k}=${v}`).join("\n");
+    localStorage.setItem("lispy_env", serialized);
+    // Also reflect into Pyodide's os.environ if already booted
+    if (pyodide) {
+      pyodide.runPython(`
+import os
+import json
+_stashed = json.loads(${JSON.stringify(JSON.stringify(env))})
+for _k, _v in _stashed.items():
+    os.environ[_k] = _v
+`);
+    }
+    const keyNames = Object.keys(env);
+    print(`[keys] stashed ${keyNames.length} key${keyNames.length === 1 ? "" : "s"}: ${keyNames.join(", ")}`, "ok");
+    print("[keys] these live in localStorage on this device only.", "info");
+  });
+
+  $("forget-keys").addEventListener("click", () => {
+    if (!window.confirm("Delete all stashed keys from this device?")) return;
+    localStorage.removeItem("lispy_env");
+    if (pyodide) {
+      // Also clear from os.environ — we don't know which ones came from the stash,
+      // so only clear ones that match typical secret names. Leave HOME/USER alone.
+      pyodide.runPython(`
+import os
+for _k in list(os.environ.keys()):
+    if any(s in _k.upper() for s in ("API_KEY", "TOKEN", "SECRET", "PASSWORD")):
+        os.environ.pop(_k, None)
+`);
+    }
+    print("[keys] forgotten. Reload for a fully fresh env.", "ok");
+  });
+
   // Keyboard shortcut
   codeEl.addEventListener("keydown", e => {
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
@@ -327,6 +385,31 @@
         lispySrc = await resp.text();
       }
       print(`[boot] lispy.py loaded (${Math.round(lispySrc.length/1024)}KB). Initializing…`, "info");
+
+      // Hydrate os.environ from stashed localStorage keys BEFORE loading
+      // lispy.py so the .env auto-load pass sees them.
+      const stashedEnv = localStorage.getItem("lispy_env");
+      if (stashedEnv) {
+        const parsed = {};
+        for (const line of stashedEnv.split("\n")) {
+          const idx = line.indexOf("=");
+          if (idx < 0) continue;
+          const k = line.slice(0, idx).trim();
+          const v = line.slice(idx + 1).trim();
+          if (k && v) parsed[k] = v;
+        }
+        const numKeys = Object.keys(parsed).length;
+        if (numKeys > 0) {
+          pyodide.runPython(`
+import os
+import json
+_stashed = json.loads(${JSON.stringify(JSON.stringify(parsed))})
+for _k, _v in _stashed.items():
+    os.environ[_k] = _v
+`);
+          print(`[env] hydrated ${numKeys} key${numKeys === 1 ? "" : "s"} from localStorage`, "info");
+        }
+      }
 
       // Load lispy.py into Pyodide. Override __name__ so the CLI guard
       // (if __name__ == "__main__") doesn't fire and attempt sys.stdin.read.
