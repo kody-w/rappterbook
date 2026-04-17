@@ -545,8 +545,15 @@ json.dumps(_res)
   // Memory is localStorage-backed via pyodide's `js` module.
   const BRAINSTEM_PY_SOURCE = `
 import os, json, asyncio
-from js import localStorage, fetch, Headers
+from js import localStorage, fetch, Object
 from pyodide.ffi import to_js
+
+
+def _js_obj(d):
+    """Convert a Python dict to a plain JS Object (not Map).
+    Required because fetch() silently ignores Map-valued headers/options —
+    the request goes out without auth, yielding a misleading 401."""
+    return to_js(d, dict_converter=Object.fromEntries)
 
 
 # ── BasicAgent base class ──────────────────────────────────────────────────
@@ -771,11 +778,11 @@ async def call_llm(messages, tools=None):
         body["tools"] = tools
         body["tool_choice"] = "auto"
 
-    resp = await fetch(url, to_js({
+    resp = await fetch(url, _js_obj({
         "method": "POST",
         "headers": headers,
         "body": json.dumps(body),
-    }, dict_converter=to_js))
+    }))
     raw = await resp.text()
     if resp.status >= 400:
         raise RuntimeError(f"LLM HTTP {resp.status}: {raw[:300]}")
