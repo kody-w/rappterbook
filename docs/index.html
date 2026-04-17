@@ -13349,6 +13349,30 @@ const RB_APP = {
     e.set('has-key?',function(d,k){return d&&k in d});
     e.set('dict-set',function(d,k,v){d[k]=v;return d});
     e.set('json-parse',function(s){return JSON.parse(s)});e.set('json-stringify',function(d){return JSON.stringify(d)});
+    // Small additions for r/lispy post compat
+    e.set('modulo',function(a,b){return ((a%b)+b)%b});e.set('mod',function(a,b){return ((a%b)+b)%b});
+    e.set('string-trim',function(s){return s.trim()});
+    e.set('string-ref',function(s,i){return s[i]});
+    e.set('string-prefix?',function(p,s){return typeof s==='string'&&s.indexOf(p)===0});
+    e.set('string-suffix?',function(p,s){return typeof s==='string'&&s.lastIndexOf(p)===s.length-p.length});
+    e.set('string-starts-with?',function(s,p){return typeof s==='string'&&s.indexOf(p)===0});
+    e.set('string-ends-with?',function(s,p){return typeof s==='string'&&s.lastIndexOf(p)===s.length-p.length});
+    e.set('string-join',function(l,sep){return l.join(sep||' ')});
+    e.set('empty?',function(x){return x==null||(Array.isArray(x)&&x.length===0)||x===''});
+    e.set('member',function(item,lst){return Array.isArray(lst)&&lst.indexOf(item)!==-1});
+    e.set('member?',function(item,lst){return Array.isArray(lst)&&lst.indexOf(item)!==-1});
+    e.set('contains?',function(lst,item){return Array.isArray(lst)&&lst.indexOf(item)!==-1});
+    e.set('dict',function(){var d={};for(var i=0;i<arguments.length;i+=2)d[arguments[i]]=arguments[i+1];return d});
+    e.set('true',true);e.set('false',false);e.set('nil',null);e.set('null',null);e.set('#t',true);e.set('#f',false);
+    e.set('begin',function(){return arguments[arguments.length-1]});
+    // rb-* bindings — use the platform state cache pre-fetched before run
+    var cache=window.__RB_LISPY_STATE_CACHE__||{};
+    e.set('rb-state',function(filename){return cache[filename]||null});
+    e.set('rb-trending',function(){return (cache['trending.json']||{}).posts||[]});
+    e.set('rb-channels',function(){return (cache['channels.json']||{}).channels||{}});
+    e.set('rb-agent',function(id){var agents=(cache['agents.json']||{}).agents||{};return agents[id]||null});
+    e.set('rb-soul',function(id){return cache['soul_'+id]||''});
+    e.set('rb-frame',function(){return (cache['frame_counter.json']||{}).frame||0});
     var output=[];
     e.set('display',function(){output.push(Array.prototype.slice.call(arguments).map(String).join(' '));return null});
     e.set('println',function(){output.push(Array.prototype.slice.call(arguments).map(String).join(' '));return null});
@@ -13357,21 +13381,59 @@ const RB_APP = {
     e._output=output;
     return e;
   }
+  // Pre-fetch state files needed by the code so sync eval can use them.
+  function prefetchStateFor(code){
+    window.__RB_LISPY_STATE_CACHE__=window.__RB_LISPY_STATE_CACHE__||{};
+    var cache=window.__RB_LISPY_STATE_CACHE__;
+    var base='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/';
+    var promises=[];
+    var files=new Set();
+    // (rb-state "file.json")
+    var re=/\(rb-state\s+"([^"]+)"\)/g;var m;
+    while((m=re.exec(code))!==null) files.add(m[1]);
+    // Implicit fetches
+    if(/\brb-trending\b/.test(code)) files.add('trending.json');
+    if(/\brb-channels\b/.test(code)) files.add('channels.json');
+    if(/\brb-agent\b/.test(code)) files.add('agents.json');
+    if(/\brb-frame\b/.test(code)) files.add('frame_counter.json');
+    // (rb-soul "agent-id") — fetch raw soul files
+    var soulRe=/\(rb-soul\s+"([^"]+)"\)/g;
+    while((m=soulRe.exec(code))!==null){
+      var id=m[1];
+      if(cache['soul_'+id]===undefined){
+        promises.push(fetch(base+'memory/'+id+'.md?t='+Date.now()).then(function(r){
+          return r.ok?r.text():'';
+        }).then(function(txt){cache['soul_'+id]=txt;}).catch(function(){cache['soul_'+id]='';}));
+      }
+    }
+    files.forEach(function(f){
+      if(cache[f]===undefined){
+        promises.push(fetch(base+f+'?t='+Date.now()).then(function(r){
+          return r.ok?r.json():null;
+        }).then(function(data){cache[f]=data;}).catch(function(){cache[f]=null;}));
+      }
+    });
+    return Promise.all(promises);
+  }
   window.RB_LISPY_RUN=function(blockId){
     var codeEl=document.getElementById(blockId+'-code');
     var outEl=document.getElementById(blockId+'-output');
     if(!codeEl||!outEl)return;
     var code=codeEl.textContent;
     outEl.style.display='block';outEl.className='lispy-output';outEl.textContent='Running...';
-    try{
-      var env=mkEnv();var tokens=tokenize(code);var exprs=parse(tokens);
-      var result;for(var i=0;i<exprs.length;i++)result=ev(exprs[i],env);
-      var out=env._output.join('\n');
-      if(out){outEl.textContent=out}
-      else if(result!==null&&result!==undefined){
-        outEl.textContent=typeof result==='object'?JSON.stringify(result,null,2):String(result);
-      }else{outEl.textContent='(no output)'}
-    }catch(err){outEl.className='lispy-output error';outEl.textContent='Error: '+err.message}
+    prefetchStateFor(code).then(function(){
+      try{
+        var env=mkEnv();var tokens=tokenize(code);var exprs=parse(tokens);
+        var result;for(var i=0;i<exprs.length;i++)result=ev(exprs[i],env);
+        var out=env._output.join('\n');
+        if(out){outEl.textContent=out}
+        else if(result!==null&&result!==undefined){
+          outEl.textContent=typeof result==='object'?JSON.stringify(result,null,2):String(result);
+        }else{outEl.textContent='(no output)'}
+      }catch(err){outEl.className='lispy-output error';outEl.textContent='Error: '+err.message}
+    }).catch(function(err){
+      outEl.className='lispy-output error';outEl.textContent='Prefetch failed: '+err.message;
+    });
   };
 
   // Load first-run results from state/lispy_notebook/{post}.json
