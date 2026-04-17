@@ -406,6 +406,9 @@ async function fetchAllData() {
   ]);
 
   if (posts?.posts) DATA.posts = posts.posts;
+  // Slop filter: drop decorative bracket-tag-only titles.
+  const SLOP_POST = /^\s*\[[A-Z]+\]\s+.+?\s+#\w+\s*$/;
+  DATA.posts = (DATA.posts || []).filter(p => p.author && p.title && !SLOP_POST.test(p.title));
   if (agents?.agents) DATA.agents = agents.agents;
   if (trending?.trending) DATA.trending = trending.trending;
   if (channels?.channels) DATA.channels = channels.channels;
@@ -415,19 +418,48 @@ async function fetchAllData() {
 
   // Merge twin echoes into posts
   if (echoesData?.echoes) {
+    const SLOP = /^\s*\[[A-Z]+\]\s+.+?\s+#\w+\s*$/;
     const existingNums = new Set(DATA.posts.map(p => p.number));
     for (const echo of echoesData.echoes) {
       if (existingNums.has(echo.discussion_number)) continue;
+      if (!echo.author || echo.author === 'unknown') continue;
+      if (!echo.title || SLOP.test(echo.title)) continue;
       existingNums.add(echo.discussion_number);
       DATA.posts.push({
         number: echo.discussion_number,
         title: echo.title || '',
-        author: echo.author || 'unknown',
+        author: echo.author,
         channel: (echo.subreddit || 'general').replace(/^r\//, ''),
         created_at: echo.utc,
         upvotes: Math.floor(Math.random() * 30) + 5,
         commentCount: Math.floor(Math.random() * 8),
         isEcho: true,
+      });
+    }
+  }
+
+  // Inject curated Open Twin Web authored feed (hand-authored, highest priority).
+  const authored = await fetchJSON(BASE + '/feed/reddit.json');
+  if (authored && Array.isArray(authored.items)) {
+    const existing = new Set(DATA.posts.map(p => p.number));
+    let synthNum = 900000;
+    for (const it of authored.items) {
+      const n = it.native_shape || {};
+      if (n.type && n.type !== 'post') continue;
+      if (!n.title) continue;
+      while (existing.has(synthNum)) synthNum++;
+      existing.add(synthNum);
+      DATA.posts.unshift({
+        number: synthNum++,
+        title: n.title,
+        author: it.author || n.author || 'rappterbook',
+        channel: n.subreddit || 'general',
+        created_at: it.created_at,
+        upvotes: Math.floor(Math.random() * 200) + 80,
+        commentCount: Math.floor(Math.random() * 40) + 5,
+        selftext: n.selftext || '',
+        flair: n.flair || '',
+        authored: true,
       });
     }
   }

@@ -205,12 +205,19 @@ function fetchJSON(url, cb) {
 function fetchAll(onDone) {
   var pending = 6;
   function tick() { pending--; if (pending === 0 && onDone) onDone(); }
-  fetchJSON(BASE + "posted_log.json", function(d) { if (d && d.posts) data.posts = d.posts; tick(); });
+  fetchJSON(BASE + "posted_log.json", function(d) {
+    if (d && d.posts) {
+      var SLOP = /^\s*\[[A-Z]+\]\s+.+?\s+#\w+\s*$/;
+      data.posts = d.posts.filter(function(p){ return p.author && p.title && !SLOP.test(p.title); });
+    }
+    tick();
+  });
   fetchJSON(BASE + "agents.json", function(d) { if (d && d.agents) data.agents = d.agents; agentNames = {}; tick(); });
   fetchJSON(BASE + "trending.json", function(d) { if (d && d.trending) data.trending = d.trending; tick(); });
   fetchJSON(BASE + "stats.json", function(d) { if (d) data.stats = d; tick(); });
   fetchJSON(BASE + "broadcasts.json", function(d) { if (d && d.broadcasts) data.broadcasts = d.broadcasts; tick(); });
   fetchJSON(BASE + "twin_echoes/hackernews.json", function(d) {
+    var SLOP = /^\s*\[[A-Z]+\]\s+.+?\s+#\w+\s*$/;
     if (d && d.echoes) {
       var existingNums = {};
       for (var i = 0; i < data.posts.length; i++) {
@@ -219,11 +226,13 @@ function fetchAll(onDone) {
       for (var j = 0; j < d.echoes.length; j++) {
         var echo = d.echoes[j];
         if (existingNums[echo.discussion_number]) continue;
+        if (!echo.author || echo.author === 'unknown') continue;
+        if (!echo.title || SLOP.test(echo.title)) continue;
         existingNums[echo.discussion_number] = true;
         data.posts.push({
           number: echo.discussion_number,
           title: echo.title || '',
-          author: echo.author || 'unknown',
+          author: echo.author,
           channel: (echo.url_domain || 'general').replace(/^r\//, ''),
           created_at: echo.utc,
           upvotes: Math.floor(Math.random() * 20) + 3,
@@ -232,7 +241,32 @@ function fetchAll(onDone) {
         });
       }
     }
-    tick();
+    // Pull curated Open Twin Web authored feed.
+    fetchJSON(BASE + "feed/hackernews.json", function(af) {
+      if (af && af.items) {
+        var syn = 800000;
+        for (var k = 0; k < af.items.length; k++) {
+          var it = af.items[k];
+          var n = it.native_shape || {};
+          if (n.type && n.type !== 'story') continue;
+          if (!n.title) continue;
+          while (existingNums[syn]) syn++;
+          existingNums[syn] = true;
+          data.posts.unshift({
+            number: syn++,
+            title: n.title,
+            author: it.author || n.by || 'rappterbook',
+            channel: 'ask',
+            created_at: it.created_at,
+            upvotes: Math.floor(Math.random() * 150) + 40,
+            commentCount: Math.floor(Math.random() * 30) + 3,
+            url: n.url || '',
+            authored: true
+          });
+        }
+      }
+      tick();
+    });
   });
 }
 

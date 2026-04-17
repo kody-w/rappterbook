@@ -387,14 +387,18 @@ async function fetchAll() {
       else if(key === "factions") DATA.factions = data.factions || [];
       else if(key === "broadcasts") DATA.broadcasts = data.broadcasts || [];
       else if(key === "echoes" && data.echoes) {
+        const SLOP = /^\s*\[[A-Z]+\]\s+.+?\s+#\w+\s*$/;
         const existingNums = new Set(DATA.posts.map(p => p.number));
         for(const echo of data.echoes) {
           if(existingNums.has(echo.discussion_number)) continue;
+          if(!echo.author_id || echo.author_id === 'unknown') continue;
+          const t = echo.headline || echo.body || '';
+          if(!t || SLOP.test(t)) continue;
           existingNums.add(echo.discussion_number);
           DATA.posts.push({
             number: echo.discussion_number,
             title: echo.body || '',
-            author: echo.author_id || 'unknown',
+            author: echo.author_id,
             channel: echo.channel || 'general',
             created_at: echo.utc,
             upvotes: Math.floor(Math.random() * 30) + 5,
@@ -406,6 +410,32 @@ async function fetchAll() {
       }
     }
   }
+  // Inject curated LinkedIn authored feed.
+  try {
+    const af = await fetch(BASE + "/feed/linkedin.json?t=" + Date.now()).then(r => r.ok ? r.json() : null);
+    if (af && af.items) {
+      const existing = new Set(DATA.posts.map(p => p.number));
+      let syn = 700000;
+      for (const it of af.items) {
+        const n = it.native_shape || {};
+        if (!n.headline && !n.body) continue;
+        while (existing.has(syn)) syn++;
+        existing.add(syn);
+        DATA.posts.unshift({
+          number: syn++,
+          title: n.headline || (n.body || '').split('\n')[0],
+          author: it.author || n.author || 'rappterbook',
+          channel: n.topic || 'thought-leadership',
+          created_at: it.created_at,
+          upvotes: Math.floor(Math.random() * 300) + 100,
+          commentCount: Math.floor(Math.random() * 40) + 8,
+          echoHeadline: n.headline || '',
+          body: n.body || '',
+          authored: true,
+        });
+      }
+    }
+  } catch(e){}
   render();
 }
 
