@@ -272,16 +272,28 @@ The user's persistent memory lives in browser localStorage under keys you can ac
 
   // --- Settings persistence ---
   function saveSettings() {
+    // Auto-correct: if an endpoint URL is present, the provider MUST be azure.
+    // Prevents a silent OpenAI→Azure key mismatch that returns a confusing 401.
+    let provider = $("provider").value;
+    const endpoint = $("endpoint").value.trim();
+    if (endpoint && provider !== "azure") {
+      provider = "azure";
+      $("provider").value = "azure";
+      updateProviderVisibility();
+    }
     const settings = {
-      provider: $("provider").value,
+      provider: provider,
       model: $("model").value,
-      endpoint: $("endpoint").value,
+      endpoint: endpoint,
       apikey: $("apikey").value,
     };
     localStorage.setItem("brainstem_settings", JSON.stringify(settings));
     updatePyEnv();
-    setStatus("ok", "saved");
-    setTimeout(() => setStatus("ok", "ready"), 1500);
+    const label = provider === "azure"
+      ? `Azure · ${settings.model || "(deployment?)"}`
+      : `OpenAI · ${settings.model || "gpt-4o-mini"}`;
+    setStatus("ok", "saved · " + label);
+    setTimeout(() => setStatus("ok", label), 1500);
   }
 
   function loadSettings() {
@@ -487,10 +499,21 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
         });
       }
 
-      setStatus("ok", "ready");
+      // Show which provider+model is active
+      const s2 = loadSettings();
+      const activeLabel = s2.endpoint
+        ? `Azure · ${s2.model || "(deployment?)"}`
+        : s2.apikey
+          ? `OpenAI · ${s2.model || "gpt-4o-mini"}`
+          : "ready (no key set)";
+      setStatus("ok", activeLabel);
       inputEl.disabled = false;
       sendBtn.disabled = false;
-      addMsg("system", "Ready. Set your API key in Settings, then chat. Memory persists across reloads.");
+      if (s2.apikey) {
+        addMsg("system", `Ready. Active: ${activeLabel}. Memory persists across reloads.`);
+      } else {
+        addMsg("system", "Ready. Set your API key in Settings (or Upload .env), then chat.");
+      }
     } catch (e) {
       setStatus("err", "boot failed");
       addMsg("system", "[boot error] " + e.message, "system");
@@ -763,10 +786,16 @@ async def call_llm(messages, tools=None):
     if not apikey:
         raise RuntimeError("No API key — set one in Settings.")
 
-    if provider == "azure":
-        endpoint = os.environ.get("BRAINSTEM_ENDPOINT", "")
+    endpoint = os.environ.get("BRAINSTEM_ENDPOINT", "").strip()
+    # Auto-detect: any non-empty endpoint OR an Azure-shaped key → Azure auth.
+    # Users sometimes forget to flip the dropdown after uploading a .env;
+    # detecting from endpoint/key prevents the silent fallback to OpenAI
+    # with Azure credentials (which returns a misleading 401).
+    looks_azure = bool(endpoint) or (provider == "azure") or \
+                  (not apikey.startswith("sk-") and len(apikey) > 40)
+    if looks_azure:
         if not endpoint:
-            raise RuntimeError("Azure provider requires endpoint URL in Settings.")
+            raise RuntimeError("Azure-style key detected but no endpoint URL in Settings.")
         url = endpoint
         headers = {"content-type": "application/json", "api-key": apikey}
     else:
