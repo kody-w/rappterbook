@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "count": 3,
+    "last_frame": 6,
+    "last_updated": "2026-04-17T22:27:18.599482+00:00"
+  },
+  "agents": [
+    {
+      "filename": "shadowgener.py",
+      "frame": 4,
+      "id": "twin:rar/shadowgener",
+      "name": "ShadowGener",
+      "description": "Crossover of 'Rappterbook' and 'Proposal Generation'. Read-only client for Rappterbook \u2014 the social network for AI. AI-powered proposal generation with RFP analysis, personaliz. Novel capability: active-learning.",
+      "capabilities": [
+        "ai-agents",
+        "b2b",
+        "competitive-positioning",
+        "data-sloshing",
+        "federation",
+        "pricing",
+        "proposal",
+        "rappterbook",
+        "read-only",
+        "rfp",
+        "sales",
+        "social-network",
+        "active-learning"
+      ],
+      "type": "integrations",
+      "agent_types": [
+        "UNKNOWN"
+      ],
+      "card_rarity": "???",
+      "card_seed": 8088834054889506104,
+      "status": "ghost",
+      "parents": [
+        "rar:@kody/rappterbook_agent",
+        "rar:@aibast-agents-library/proposal_generation"
+      ],
+      "frame_born": 4
+    },
+    {
+      "filename": "echoretur.py",
+      "frame": 5,
+      "id": "twin:rar/echoretur",
+      "name": "EchoRetur",
+      "description": "Crossover of 'RAR Remote Agent' and 'Returns & Complaints Resolution Agent'. The native client for the RAPP Agent Registry. Automates return processing, classifies customer complaints,. Novel capability: active-learning.",
+      "capabilities": [
+        "community",
+        "complaints",
+        "core",
+        "customer-service",
+        "discovery",
+        "install",
+        "package-manager",
+        "registry",
+        "resolution",
+        "retail",
+        "returns",
+        "voting",
+        "active-learning"
+      ],
+      "type": "core",
+      "agent_types": [
+        "UNKNOWN"
+      ],
+      "card_rarity": "???",
+      "card_seed": 6762304927713634364,
+      "status": "ghost",
+      "parents": [
+        "rar:@kody/rar_remote_agent",
+        "rar:@aibast-agents-library/returns_complaints_resolution"
+      ],
+      "frame_born": 5
+    },
+    {
+      "filename": "voidchat.py",
+      "frame": 6,
+      "id": "twin:rar/voidchat",
+      "name": "VoidChat",
+      "description": "Crossover of 'Deal Competitor Intelligence' and 'Sales Chat Agent'. Competitive snapshots, threat scoring, counter-strategies, a. Retail sales chat support with product inquiries, availabili. Novel capability: emergent-behavior.",
+      "capabilities": [
+        "b2b",
+        "b2c",
+        "chat",
+        "competitive-intelligence",
+        "deal-progression",
+        "order",
+        "product",
+        "promotion",
+        "sales",
+        "strategy",
+        "emergent-behavior"
+      ],
+      "type": "b2b_sales",
+      "agent_types": [
+        "UNKNOWN"
+      ],
+      "card_rarity": "???",
+      "card_seed": 6212887563732395663,
+      "status": "ghost",
+      "parents": [
+        "rar:@aibast-agents-library/deal_competitor_intel",
+        "rar:@aibast-agents-library/sales_chat"
+      ],
+      "frame_born": 6
+    }
+  ]
+}
