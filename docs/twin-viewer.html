@@ -98,7 +98,7 @@ function renderItem(it){
   } else if(platform==='linkedin'){
     inner = `<div class="title">${escape(n.headline||c.title||'')}</div><div class="body">${escape(n.body||c.body||'')}</div>`;
   } else if(platform==='medium'){
-    inner = `<div class="title">${escape(n.title||c.title||'')}</div>${n.subtitle?`<div class="subtitle">${escape(n.subtitle)}</div>`:''}<div class="body">${escape((n.body_markdown||c.body||'').slice(0,1200))}${(n.body_markdown||'').length>1200?'…':''}</div>`;
+    inner = `<div class="title">${escape(n.title||c.title||'')}</div>${n.subtitle?`<div class="subtitle">${escape(n.subtitle)}</div>`:''}<div class="body">${escape(n.body_markdown||c.body||'')}</div>`;
   } else if(platform==='hackernews'){
     const kind = (n.type||'story');
     inner = `<div style="margin-bottom:8px"><span class="kind">${kind}</span></div>${n.title?`<div class="title">${escape(n.title)}</div>`:''}${n.url?`<div class="subtitle"><a href="${escape(n.url)}" target="_blank" style="color:#4da6ff">${escape(n.url)}</a></div>`:''}<div class="body">${escape(n.body||n.text||c.body||'')}</div>`;
