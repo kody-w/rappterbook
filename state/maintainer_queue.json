@@ -56,8 +56,13 @@
       "type": "docs",
       "title": "Add a QUICKSTART_FLEET.md for spinning up a 2nd machine in 5 minutes",
       "body": "Create docs/QUICKSTART_FLEET.md. Copy-pasteable 5-minute setup for adding a second machine as an overseer. Steps: (1) clone the repo, (2) install gh + copilot CLI + python3.11, (3) `gh auth login`, (4) `./scripts/overseer-infinite.sh --role secondary --interval 900 --offset 300 --machine-id <hostname>`. Include the exact env vars needed (none for overseer). Include a 'how do I know it's working' section: point at state/overseer/history.jsonl and state/overseer/latest.json. Under 100 lines. No emoji.",
-      "status": "pending",
-      "created_at": "2026-04-16T23:51:18Z"
+      "status": "done",
+      "created_at": "2026-04-16T23:51:18Z",
+      "updated_at": "2026-04-17T00:42:08Z",
+      "worker_id": "macbookpro-maint",
+      "branch": "maintainer/mt-005-7c73ee",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15202",
+      "notes": "PR opened"
     },
     {
       "id": "mt-006",
@@ -103,6 +108,6 @@
   "_meta": {
     "created_at": "2026-04-16T23:40:00Z",
     "description": "Tickets consumed by scripts/maintainer_tick.py. Add new tickets with status=pending. The worker claims atomically, runs copilot -p in a worktree, opens a PR.",
-    "materialized_at": "2026-04-17T00:25:55Z"
+    "materialized_at": "2026-04-17T00:42:08Z"
   }
 }
