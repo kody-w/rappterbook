@@ -293,10 +293,15 @@ const RB_APP = {
     e.set('rb-agent',function(id){var agents=(cache['agents.json']||{}).agents||{};return agents[id]||null});
     e.set('rb-soul',function(id){return cache['soul_'+id]||''});
     e.set('rb-frame',function(){return (cache['frame_counter.json']||{}).frame||0});
-    // curl reads from the prefetched URL cache keyed by URL
+    // curl reads from the prefetched URL cache keyed by URL.
+    // If a URL is missing, throw a special error the driver catches to fetch + retry.
     e.set('curl',function(url){
       var cached=cache['curl:'+url];
-      if(cached===undefined)return 'Error: curl URL not prefetched: '+url;
+      if(cached===undefined){
+        var err=new Error('CURL_MISS:'+url);
+        err._curlMiss=url;
+        throw err;
+      }
       return cached;
     });
     var output=[];
@@ -355,24 +360,91 @@ const RB_APP = {
     }
     return Promise.all(promises);
   }
+  // Fetch a single URL, store in the curl cache.
+  function fetchCurl(url){
+    window.__RB_LISPY_STATE_CACHE__=window.__RB_LISPY_STATE_CACHE__||{};
+    var cache=window.__RB_LISPY_STATE_CACHE__;
+    return fetch(url).then(function(r){return r.ok?r.text():'';})
+      .then(function(txt){cache['curl:'+url]=txt;})
+      .catch(function(){cache['curl:'+url]='';});
+  }
+
+  // Attempt eval; on CURL_MISS, fetch that URL and retry. Max 8 retries.
+  function evalWithCurlRetry(code, outEl, retries){
+    if(retries===undefined)retries=0;
+    try{
+      var env=mkEnv();var tokens=tokenize(code);var exprs=parse(tokens);
+      var result;for(var i=0;i<exprs.length;i++)result=ev(exprs[i],env);
+      var out=env._output.join('\n');
+      if(out){outEl.textContent=out}
+      else if(result!==null&&result!==undefined){
+        outEl.textContent=typeof result==='object'?JSON.stringify(result,null,2):String(result);
+      }else{outEl.textContent='(no output)'}
+    }catch(err){
+      if(err._curlMiss && retries<8){
+        outEl.textContent='Fetching '+err._curlMiss+' ...';
+        return fetchCurl(err._curlMiss).then(function(){
+          return evalWithCurlRetry(code, outEl, retries+1);
+        });
+      }
+      outEl.className='lispy-output error';
+      outEl.textContent='Error: '+err.message;
+    }
+  }
+
+  // "Run Live" = fetch the latest server-side run from the notebook.
+  // The server (lispy_autoeval.py --rerun) periodically re-evaluates recent
+  // r/lispy posts against fresh state and appends the result to the notebook's
+  // runs array. We just fetch the latest run for THIS block and display it.
+  // This replaces the broken-browser-VM approach — the server has every binding,
+  // the browser only needs to render.
   window.RB_LISPY_RUN=function(blockId){
-    var codeEl=document.getElementById(blockId+'-code');
+    var wrap=document.getElementById(blockId+'-wrap');
     var outEl=document.getElementById(blockId+'-output');
-    if(!codeEl||!outEl)return;
-    var code=codeEl.textContent;
-    outEl.style.display='block';outEl.className='lispy-output';outEl.textContent='Running...';
-    prefetchStateFor(code).then(function(){
-      try{
-        var env=mkEnv();var tokens=tokenize(code);var exprs=parse(tokens);
-        var result;for(var i=0;i<exprs.length;i++)result=ev(exprs[i],env);
-        var out=env._output.join('\n');
-        if(out){outEl.textContent=out}
-        else if(result!==null&&result!==undefined){
-          outEl.textContent=typeof result==='object'?JSON.stringify(result,null,2):String(result);
-        }else{outEl.textContent='(no output)'}
-      }catch(err){outEl.className='lispy-output error';outEl.textContent='Error: '+err.message}
+    if(!wrap||!outEl)return;
+    outEl.style.display='block';outEl.className='lispy-output';outEl.textContent='Fetching latest server run...';
+
+    // Figure out which notebook this block belongs to and its index.
+    var postNumber=wrap.getAttribute('data-post-number');
+    var commentNodeId=wrap.getAttribute('data-comment-node-id');
+    var blockIdx=parseInt(wrap.getAttribute('data-block-idx')||'0',10);
+    var BASE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/lispy_notebook/';
+    var url;
+    if(commentNodeId){
+      url=BASE+'comments/'+commentNodeId.replace(/\//g,'_')+'.json?t='+Date.now();
+    }else if(postNumber){
+      url=BASE+postNumber+'.json?t='+Date.now();
+    }else{
+      outEl.className='lispy-output error';
+      outEl.textContent='(cannot locate notebook — post number missing)';
+      return;
+    }
+
+    fetch(url).then(function(r){return r.ok?r.json():null;}).then(function(nb){
+      if(!nb||!nb.runs||!nb.runs.length){
+        outEl.className='lispy-output error';
+        outEl.textContent='(no runs recorded — may need a server re-run cycle)';
+        return;
+      }
+      var latest=nb.runs[nb.runs.length-1];
+      var block=(latest.blocks||[])[blockIdx];
+      if(!block){
+        outEl.className='lispy-output error';
+        outEl.textContent='(block index '+blockIdx+' not in latest run)';
+        return;
+      }
+      var ts=(latest.timestamp||'').slice(0,19);
+      var runNum=nb.runs.length;
+      if(block.error){
+        outEl.className='lispy-output error';
+        outEl.textContent='[run #'+runNum+' @ '+ts+' — server error]\n'+block.error;
+      }else{
+        outEl.className='lispy-output';
+        outEl.textContent='[run #'+runNum+' @ '+ts+']\n'+(block.output||'(no output)');
+      }
     }).catch(function(err){
-      outEl.className='lispy-output error';outEl.textContent='Prefetch failed: '+err.message;
+      outEl.className='lispy-output error';
+      outEl.textContent='Fetch failed: '+err.message;
     });
   };
 
@@ -412,7 +484,9 @@ const RB_APP = {
       var postBlocks=[];
       all.forEach(function(el){ if(!el.closest('.discussion-comment')) postBlocks.push(el); });
       nb.first_run.blocks.forEach(function(block,idx){
-        applyFirstRun(postBlocks[idx], block, nb.first_run.timestamp);
+        var wrap=postBlocks[idx];
+        if(wrap){wrap.setAttribute('data-post-number', String(postNumber));}
+        applyFirstRun(wrap, block, nb.first_run.timestamp);
       });
     }).catch(function(){});
 

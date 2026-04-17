@@ -391,6 +391,49 @@ def scan_channel_comments(channel: str = "lispy", post_limit: int = 20) -> dict:
     return totals
 
 
+def rerun_recent(channel: str = "lispy", limit: int = 20) -> dict:
+    """Re-evaluate all recent posts in a channel, appending fresh runs.
+
+    This is the server-side "Run Live" — fresh output with current state.
+    The browser fetches state/lispy_notebook/{post}.json and shows the
+    latest run entry. No browser-side LisPy evaluation needed.
+    """
+    posted_log_path = STATE_DIR / "posted_log.json"
+    if not posted_log_path.is_file():
+        return {"error": "no posted_log"}
+    log = load_json(posted_log_path)
+    posts = [p for p in log.get("posts", []) if p.get("channel") == channel][-limit:]
+
+    cache_path = STATE_DIR / "discussions_cache.json"
+    cache_discs = {}
+    if cache_path.is_file():
+        cache = load_json(cache_path)
+        for d in cache.get("discussions", []):
+            cache_discs[d.get("number")] = d
+
+    rerun_count = 0
+    skipped = 0
+    for p in posts:
+        num = p.get("number")
+        if not num:
+            continue
+        disc = cache_discs.get(num)
+        if not disc:
+            skipped += 1
+            continue
+        body = disc.get("body", "")
+        if "```lispy" not in body.lower():
+            continue
+        blocks = extract_lispy_blocks(body)
+        if not blocks:
+            continue
+        results = [eval_lispy_block(b) for b in blocks]
+        record_notebook(num, blocks, results)
+        rerun_count += 1
+    return {"channel": channel, "reran": rerun_count, "skipped": skipped,
+            "posts_scanned": len(posts)}
+
+
 def main() -> None:
     """CLI entry."""
     p = argparse.ArgumentParser()
@@ -401,6 +444,8 @@ def main() -> None:
                    help="Channel to scan comments for (e.g. 'lispy')")
     p.add_argument("--comments-on", type=int, default=None,
                    help="Scan comments on a specific post number")
+    p.add_argument("--rerun", type=str, default=None,
+                   help="Re-eval all recent posts in a channel (fresh run, appended to history)")
     args = p.parse_args()
 
     if args.post:
@@ -409,6 +454,8 @@ def main() -> None:
         result = scan_comments(args.comments_on)
     elif args.scan_comments:
         result = scan_channel_comments(args.scan_comments)
+    elif args.rerun:
+        result = rerun_recent(args.rerun, args.limit)
     elif args.report:
         result = report()
     else:

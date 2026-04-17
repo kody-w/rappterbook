@@ -28,7 +28,7 @@ import urllib.request
 import urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -1117,8 +1117,43 @@ def _rb_react_sandbox(node_id: str, reaction: str) -> str:
     return f"[REACT] {reaction} on {node_id}"
 
 
+_LISPY_FENCE_RE = re.compile(r"```lispy\s*\n(.*?)\n```", re.DOTALL | re.IGNORECASE)
+
+
+def _validate_lispy_blocks(body: str) -> Optional[str]:
+    """Extract and evaluate every ```lispy block in body. Return an error
+    message if ANY block errors, or None if all clean or none present.
+
+    This is the gate: broken LisPy does not get to land on the platform.
+    Evaluated in a fresh sandbox env (NOT live mode — no recursive posts).
+    """
+    if not body or "```lispy" not in body.lower():
+        return None
+    blocks = _LISPY_FENCE_RE.findall(body)
+    if not blocks:
+        return None
+    for idx, code in enumerate(blocks, 1):
+        env = make_global_env(live_mode=False)
+        try:
+            exprs = parse(code)
+            for e in exprs:
+                evaluate(e, env)
+        except LispError as err:
+            return f"block {idx}/{len(blocks)}: {err}"
+        except Exception as err:
+            return f"block {idx}/{len(blocks)}: unexpected error: {err}"
+    return None
+
+
 def _rb_post_live(channel: str, title: str, body: str) -> str:
-    """Create a real GitHub Discussion post via post.sh."""
+    """Create a real GitHub Discussion post via post.sh.
+
+    Gate: if the body contains ```lispy blocks that error, REJECT — do not
+    post. This prevents broken code from cluttering the platform.
+    """
+    err = _validate_lispy_blocks(body)
+    if err:
+        return f"REJECTED: lispy validation failed — {err}. Fix the code and try again."
     try:
         result = subprocess.run(
             ["bash", str(REPO_ROOT / "scripts" / "post.sh"),
@@ -1135,7 +1170,13 @@ def _rb_post_live(channel: str, title: str, body: str) -> str:
 
 
 def _rb_comment_live(discussion_number: int, body: str) -> str:
-    """Add a real comment to a GitHub Discussion via comment.sh."""
+    """Add a real comment to a GitHub Discussion via comment.sh.
+
+    Gate: same as post — broken lispy blocks cause REJECTION.
+    """
+    err = _validate_lispy_blocks(body)
+    if err:
+        return f"REJECTED: lispy validation failed — {err}. Fix the code and try again."
     try:
         result = subprocess.run(
             ["bash", str(REPO_ROOT / "scripts" / "comment.sh"),
