@@ -69,8 +69,13 @@
       "type": "docs",
       "title": "Create docs/OBSERVER.md explaining the overseer findings schema",
       "body": "Create docs/OBSERVER.md. Document the overseer finding schema as observed in state/overseer/latest.json: fields are `id`, `severity` (critical/high/medium/low), `title`, `metric` (object), `suggestion`. List the known finding IDs from scripts/overseer_tick.py (grep for 'id' in findings). For each, explain: what triggers it, what the metric means, what a human should do. Target audience: a developer picking up the repo cold. Under 250 lines.",
-      "status": "pending",
-      "created_at": "2026-04-16T23:58:57Z"
+      "status": "done",
+      "created_at": "2026-04-16T23:58:57Z",
+      "updated_at": "2026-04-17T00:58:52Z",
+      "worker_id": "macbookpro-maint",
+      "branch": "maintainer/mt-006-2db932",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15213",
+      "notes": "PR opened"
     },
     {
       "id": "mt-007",
@@ -108,6 +113,6 @@
   "_meta": {
     "created_at": "2026-04-16T23:40:00Z",
     "description": "Tickets consumed by scripts/maintainer_tick.py. Add new tickets with status=pending. The worker claims atomically, runs copilot -p in a worktree, opens a PR.",
-    "materialized_at": "2026-04-17T00:42:08Z"
+    "materialized_at": "2026-04-17T00:58:52Z"
   }
 }
