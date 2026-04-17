@@ -2,19 +2,16 @@
 """LisPy — The Zero-Dependency Agent Runtime.
 
 Single-file distribution. Pure Python stdlib. Python 3.8+.
-Bundled: LisPy core + Virtual Pip.
 
 USAGE:
     python3 lispy.py program.lispy       run a file
-    echo '(+ 1 2)' | python3 lispy.py --  pipe mode
-    python3 lispy.py --repl               interactive REPL
-    python3 lispy.py --eval '(+ 1 2)'     one-liner
+    echo '(+ 1 2)' | python3 lispy.py    pipe mode
+    python3 lispy.py --repl              interactive REPL
+    python3 lispy.py --eval '(+ 1 2)'    one-liner
 
 DOCS:  https://kody-w.github.io/rappterbook/LISPY_MANIFESTO.md
 SPEC:  https://kody-w.github.io/rappterbook/LISPY_SPEC.md
-REPO:  https://github.com/kody-w/rappterbook
-
-License: Apache 2.0
+LICENSE: Apache 2.0
 """
 from __future__ import annotations
 
@@ -2711,7 +2708,7 @@ def make_global_env(live_mode: bool = False) -> Env:
             return None
         return x
 
-    # Virtual pip — inlined in single-file dist
+    # Virtual pip — inlined
     _vp_install = pip_install
     _vp_available = pip_available
     _vp_coverage = pip_coverage
@@ -4069,48 +4066,33 @@ def run_string(source: str, env: Env | None = None):
 # Entry point
 # ---------------------------------------------------------------------------
 
-def main():
-    # If given a file argument, run it
-    if len(sys.argv) > 1:
-        run_file(sys.argv[1])
-        return
-
-    # If stdin is not a terminal, read from pipe
-    if not sys.stdin.isatty():
-        source = sys.stdin.read()
-        if source.strip():
-            run_string(source)
-        return
-
-    # Interactive REPL
-    repl()
 
 
-if __name__ == "__main__":
-    main()
-
-
-# === Single-file CLI driver ===
+# === Single-file CLI entry point ===
 
 def _cli_main():
     import sys, os
     args = sys.argv[1:]
-    if "--repl" in args or (not args and sys.stdin.isatty()):
-        return _run_repl()
+    # Priority: --eval > --repl > file arg > stdin
     if "--eval" in args:
         i = args.index("--eval")
         if i + 1 >= len(args):
             print("--eval needs an expression", file=sys.stderr); return 1
         return _run_source(args[i + 1])
-    if args and args[0] == "--":
-        return _run_source(sys.stdin.read())
-    if args:
-        path = args[0]
+    if "--repl" in args:
+        return _run_repl()
+    # File arg (not starting with --)
+    file_args = [a for a in args if not a.startswith("--")]
+    if file_args:
+        path = file_args[0]
         if not os.path.isfile(path):
             print(f"file not found: {path}", file=sys.stderr); return 1
         with open(path) as f:
             return _run_source(f.read())
-    return _run_source(sys.stdin.read())
+    # No args: either pipe-in or REPL
+    if not sys.stdin.isatty():
+        return _run_source(sys.stdin.read())
+    return _run_repl()
 
 
 def _run_source(source):
@@ -4140,7 +4122,7 @@ def _run_source(source):
 def _run_repl():
     import traceback
     env = make_global_env(live_mode=False)
-    print("LisPy REPL — Python's digital twin, statically available. :quit to exit.")
+    print("LisPy REPL — Python\'s digital twin, statically available. :quit to exit.")
     buf = ""
     while True:
         try:
