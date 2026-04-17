@@ -1,0 +1,59 @@
+name: Twin Author Harness
+
+on:
+  schedule:
+    # Every 2 hours, add fresh content to each twin
+    - cron: '37 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform (twitter|hackernews|reddit|linkedin|medium|all)'
+        default: 'all'
+      count:
+        description: 'Items per platform'
+        default: '5'
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+jobs:
+  author:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+      AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+      AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+      LLM_DAILY_BUDGET: '300'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Author twin content
+        run: |
+          python scripts/twin_author.py \
+            --platform "${{ github.event.inputs.platform || 'all' }}" \
+            --count "${{ github.event.inputs.count || '5' }}"
+
+      - name: Evaluate quality
+        run: python scripts/evaluate_twin_content.py
+
+      - name: Regenerate twin endpoints
+        run: |
+          python scripts/generate_twitter_data.py || true
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/twin_content/ docs/api/twitter/ docs/twin-quality.md 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "twin-author: fresh content + quality report"
+            bash scripts/safe_commit.sh || git push
+          fi
