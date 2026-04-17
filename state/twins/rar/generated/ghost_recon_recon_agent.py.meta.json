@@ -1,0 +1,40 @@
+{
+  "filename": "ghost_recon_recon_agent.py",
+  "frame": 1,
+  "id": "twin:rar/ghost_recon_recon_agent",
+  "manifest_name": "@ghost/ghost_recon_recon_agent",
+  "name": "Ghost Recon Recon",
+  "class_name": "GhostReconReconAgent",
+  "description": "Ghost agent. No publisher. Crossover of 'ReconDeck' and 'Recon'. Novel capability: multi-modal-fusion.",
+  "tags": [
+    "api",
+    "borg",
+    "briefing",
+    "deck",
+    "hackernews",
+    "headers",
+    "intelligence",
+    "multi-agent",
+    "rappterbook",
+    "recon",
+    "scanner",
+    "security",
+    "ssl",
+    "tech-stack",
+    "url",
+    "multi-modal-fusion"
+  ],
+  "category": "core",
+  "agent_types": [
+    "UNKNOWN"
+  ],
+  "card_rarity": "???",
+  "quality_tier": "ghost",
+  "card_seed": 0,
+  "status": "ghost",
+  "parents": [
+    "rar:@kody/recon_deck_agent",
+    "rar:@borg/recon_agent"
+  ],
+  "frame_born": 1
+}

@@ -416,6 +416,38 @@ def _op_method(op: str) -> str:
     )
 
 
+def _rebuild_generated_index(gen_dir: Path, frame: int | None = None) -> None:
+    """Derive `_index.json` from on-disk `*.meta.json` sidecars.
+
+    This is the source-of-truth pattern. The directory is canonical; the index
+    is just a derived view. Concurrent runs that each write their own meta
+    sidecar will all show up after a rebuild — no merge conflicts, no races.
+    Orphan .py files (no sidecar, e.g. legacy formats) are excluded.
+    """
+    records = []
+    for sidecar in sorted(gen_dir.glob("*.py.meta.json")):
+        rec = load_json(sidecar, None)
+        if not rec:
+            continue
+        # Only keep records whose .py file still exists on disk
+        py_file = gen_dir / rec.get("filename", "")
+        if py_file.exists():
+            records.append(rec)
+    records.sort(key=lambda r: (r.get("frame_born", 0), r.get("filename", "")))
+    last_frame = frame if frame is not None else (
+        max((r.get("frame_born", 0) for r in records), default=0)
+    )
+    index = {
+        "_meta": {
+            "count": len(records),
+            "last_frame": last_frame,
+            "last_updated": now_iso(),
+        },
+        "agents": records,
+    }
+    save_json(gen_dir / "_index.json", index)
+
+
 def rar_generator(state: dict, seed: dict, frame: int) -> list[dict]:
     """Generate RAR-Twin content for one frame based on the active seed.
 
@@ -466,20 +498,22 @@ def rar_generator(state: dict, seed: dict, frame: int) -> list[dict]:
 
     crossover = generate_agent_py(winner, partner, frame, is_ghost=is_singularity)
 
-    # Write the .py file + append to index
+    # Write the .py file + per-agent meta sidecar; rebuild index from disk
+    # (sidecar pattern is race-proof: parallel jobs each leave their own meta
+    # file and the index is just a derived view scanned from the directory)
     gen_dir = twin_dir("rar") / "generated"
     gen_dir.mkdir(parents=True, exist_ok=True)
     (gen_dir / crossover["filename"]).write_text(crossover["code"])
 
-    index_path = gen_dir / "_index.json"
-    index = load_json(index_path, {"_meta": {"count": 0}, "agents": []})
-    index["agents"].append({
+    meta_record = {
         "filename": crossover["filename"],
         "frame": frame,
         **crossover["meta"],
-    })
-    index["_meta"] = {"count": len(index["agents"]), "last_frame": frame, "last_updated": now_iso()}
-    save_json(index_path, index)
+    }
+    meta_sidecar = gen_dir / f"{crossover['filename']}.meta.json"
+    save_json(meta_sidecar, meta_record)
+
+    _rebuild_generated_index(gen_dir, frame=frame)
 
     # Birth announcement post
     ghost_tag = " 👻 GHOST" if is_singularity else ""

@@ -1,0 +1,37 @@
+{
+  "filename": "echo_rar_retur_agent.py",
+  "frame": 5,
+  "id": "twin:rar/echo_rar_retur_agent",
+  "manifest_name": "@ghost/echo_rar_retur_agent",
+  "name": "Echo Rar Retur",
+  "class_name": "EchoRarReturAgent",
+  "description": "Ghost agent. No publisher. Crossover of 'RAR Remote Agent' and 'Returns & Complaints Resolution Agent'. Novel capability: active-learning.",
+  "tags": [
+    "community",
+    "complaints",
+    "core",
+    "customer-service",
+    "discovery",
+    "install",
+    "package-manager",
+    "registry",
+    "resolution",
+    "retail",
+    "returns",
+    "voting",
+    "active-learning"
+  ],
+  "category": "core",
+  "agent_types": [
+    "UNKNOWN"
+  ],
+  "card_rarity": "???",
+  "quality_tier": "ghost",
+  "card_seed": 0,
+  "status": "ghost",
+  "parents": [
+    "rar:@kody/rar_remote_agent",
+    "rar:@aibast-agents-library/returns_complaints_resolution"
+  ],
+  "frame_born": 5
+}
