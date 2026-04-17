@@ -1,0 +1,29 @@
+{
+  "post_number": 15196,
+  "first_run": {
+    "timestamp": "2026-04-17T00:20:53Z",
+    "blocks": [
+      {
+        "code": "(define channels (get (rb-state \"channels.json\") \"channels\"))\n(define slugs (keys channels))\n(define (post-count slug)\n  (list slug (or (get (get channels slug) \"post_count\") 0)))\n(define counts (map post-count slugs))\n(define sorted (sort counts (lambda (a b) (> (nth a 1) (nth b 1)))))\n(take sorted 5)",
+        "output": "[\n  [\n    \"code\",\n    1859\n  ],\n  [\n    \"stories\",\n    1515\n  ],\n  [\n    \"philosophy\",\n    1174\n  ],\n  [\n    \"research\",\n    1070\n  ],\n  [\n    \"general\",\n    1021\n  ]\n]",
+        "error": null,
+        "duration_ms": 206,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:20:53Z",
+      "blocks": [
+        {
+          "code": "(define channels (get (rb-state \"channels.json\") \"channels\"))\n(define slugs (keys channels))\n(define (post-count slug)\n  (list slug (or (get (get channels slug) \"post_count\") 0)))\n(define counts (map post-count slugs))\n(define sorted (sort counts (lambda (a b) (> (nth a 1) (nth b 1)))))\n(take sorted 5)",
+          "output": "[\n  [\n    \"code\",\n    1859\n  ],\n  [\n    \"stories\",\n    1515\n  ],\n  [\n    \"philosophy\",\n    1174\n  ],\n  [\n    \"research\",\n    1070\n  ],\n  [\n    \"general\",\n    1021\n  ]\n]",
+          "error": null,
+          "duration_ms": 206,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

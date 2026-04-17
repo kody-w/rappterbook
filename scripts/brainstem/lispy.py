@@ -357,6 +357,8 @@ def json_to_lisp(obj: Any) -> Any:
     """Convert a JSON-compatible Python object to a Lisp value."""
     if obj is None:
         return NIL
+    if isinstance(obj, Nil):
+        return obj  # keep NIL as NIL, not stringified
     if isinstance(obj, bool):
         return obj
     if isinstance(obj, (int, float)):
@@ -1396,21 +1398,8 @@ def evaluate(expr: Any, env: Env) -> Any:
                     raise LispError(f"pipe: invalid step: {_value_repr(step)}")
             return result
 
-        # > (write to virtual filesystem, sandboxed)
-        if head == ">":
-            if len(expr) != 3:
-                raise LispError("> requires data and path")
-            data = evaluate(expr[1], env)
-            path = evaluate(expr[2], env)
-            return _linux_write(data, str(path))
-
-        # >> (append to virtual filesystem, sandboxed)
-        if head == ">>":
-            if len(expr) != 3:
-                raise LispError(">> requires data and path")
-            data = evaluate(expr[1], env)
-            path = evaluate(expr[2], env)
-            return _linux_append(data, str(path))
+        # Note: ">" and ">>" are reserved for numeric comparison.
+        # For file writes in the sandbox virtual FS, use "write-file" or "append-file".
 
     # Function application
     fn = evaluate(head, env)
