@@ -1,20 +1,9 @@
 #!/usr/bin/env python3
-"""LisPy — The Zero-Dependency Agent Runtime.
-
-Single-file distribution. Pure Python stdlib. Python 3.8+.
-Bundled: LisPy core + Virtual Pip (20 pkgs) + Virtual OS (5 modules)
-         + Virtual HW contract + Pyodide escape hatch stub.
-
-USAGE:
-    python3 lispy.py program.lispy       run a file
-    echo '(+ 1 2)' | python3 lispy.py    pipe mode
-    python3 lispy.py --repl              interactive REPL
-    python3 lispy.py --eval '(+ 1 2)'    one-liner
-"""
+"""LisPy — Python's digital twin. Single file. Zero deps. Python 3.8+."""
 from __future__ import annotations
 
 
-# === Virtual Pip (inlined) ===
+# === Virtual Pip ===
 
 
 import base64
@@ -787,7 +776,7 @@ def pip_get_module(name: str):
     return _INSTALLED.get(name)
 
 
-# === Virtual OS (inlined) ===
+# === Virtual OS ===
 
 
 import io
@@ -1276,7 +1265,7 @@ def list_os_twins() -> list[str]:
     return sorted(_OS_TWINS.keys())
 
 
-# === Virtual HW (inlined) ===
+# === Virtual HW ===
 
 
 import base64
@@ -3628,8 +3617,8 @@ def make_global_env(live_mode: bool = False) -> Env:
     # -- I/O --
     env["display"] = lambda *args: _display(*args)
     env["newline"] = lambda: _newline()
-    env["print"] = lambda x: _print_val(x)
-    env["println"] = lambda x: _println_val(x)
+    env["print"] = lambda *args: _print_val(" ".join(str(a) for a in args))
+    env["println"] = lambda *args: _println_val(" ".join(str(a) for a in args))
     env["read-file"] = lambda path: _read_file(path)
     env["write-file"] = lambda path, content: _write_file(path, content)
 
@@ -3766,13 +3755,11 @@ def make_global_env(live_mode: bool = False) -> Env:
             return None
         return x
 
-    # Virtual pip — inlined
     _vp_install = pip_install
     _vp_available = pip_available
     _vp_coverage = pip_coverage
     _vp_get_module = pip_get_module
 
-    # Virtual OS — inlined
     _vo_get = get_os_twin
     _vo_list = list_os_twins
 
@@ -3867,9 +3854,8 @@ def make_global_env(live_mode: bool = False) -> Env:
         env["pip-available"] = lambda: _vp_available()
         env["pip-coverage"] = lambda name: _vp_coverage(name) if isinstance(name, str) else ""
 
-    # Capability grants — inlined
-    env["grant-capability"] = lambda cap: grant_capability(cap) if isinstance(cap, str) else "ERROR: cap must be string"
-    env["revoke-capability"] = lambda cap: revoke_capability(cap) if isinstance(cap, str) else "ERROR: cap must be string"
+    env["grant-capability"] = lambda cap: grant_capability(cap) if isinstance(cap, str) else "ERROR"
+    env["revoke-capability"] = lambda cap: revoke_capability(cap) if isinstance(cap, str) else "ERROR"
     env["has-capability?"] = lambda cap: has_capability(cap) if isinstance(cap, str) else False
     env["list-capabilities"] = lambda: list_capabilities()
 
@@ -5171,7 +5157,6 @@ def _cli_main():
     if not sys.stdin.isatty(): return _run_source(sys.stdin.read())
     return _run_repl()
 
-
 def _run_source(source):
     import json, sys
     env = make_global_env(live_mode=False)
@@ -5188,16 +5173,15 @@ def _run_source(source):
         except Exception: print(str(result))
     return 0
 
-
 def _run_repl():
     import traceback
     env = make_global_env(live_mode=False)
-    print("LisPy REPL — Python\'s digital twin, statically available. :quit to exit.")
+    print("LisPy REPL. :quit to exit.")
     buf = ""
     while True:
         try: line = input("lispy> " if not buf else "  ... ")
         except (EOFError, KeyboardInterrupt): print(); return 0
-        if line.strip() in (":quit", ":q", "(exit)"): return 0
+        if line.strip() in (":quit", ":q"): return 0
         buf += line + "\n"
         if buf.count("(") == buf.count(")"):
             try:
@@ -5207,7 +5191,6 @@ def _run_repl():
             except LispError as err: print(f"; error: {err}")
             except Exception: traceback.print_exc()
             buf = ""
-
 
 if __name__ == "__main__":
     import sys; sys.exit(_cli_main())

@@ -2168,8 +2168,8 @@ def make_global_env(live_mode: bool = False) -> Env:
     # -- I/O --
     env["display"] = lambda *args: _display(*args)
     env["newline"] = lambda: _newline()
-    env["print"] = lambda x: _print_val(x)
-    env["println"] = lambda x: _println_val(x)
+    env["print"] = lambda *args: _print_val(" ".join(str(a) for a in args))
+    env["println"] = lambda *args: _println_val(" ".join(str(a) for a in args))
     env["read-file"] = lambda path: _read_file(path)
     env["write-file"] = lambda path, content: _write_file(path, content)
 
