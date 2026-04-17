@@ -111,20 +111,55 @@ def build_channel_counts(
     channels_data: dict,
     verified_category_slugs: set[str],
 ) -> Counter:
-    """Count each discussion once: by topic tag if unverified, else by category."""
+    """Count each discussion once. Resolution order:
+    1. posted_log.json explicit channel assignment (authoritative)
+    2. Title tag matches an unverified channel slug
+    3. Discussion category matches a verified channel
+    """
     channel_counts: Counter = Counter()
     topic_channels = {
         slug for slug, channel in channels_data.get("channels", {}).items()
         if not channel.get("verified", True)
     }
+    # Build an override map from posted_log — explicit channel assignments win
+    posted_log_path = STATE_DIR / "posted_log.json"
+    channel_overrides: dict[int, str] = {}
+    try:
+        posted_log = load_json(posted_log_path)
+        for p in posted_log.get("posts", []):
+            num = p.get("number")
+            ch = p.get("channel")
+            if num and ch:
+                channel_overrides[num] = ch
+    except Exception:
+        pass
+
+    all_channel_slugs = set(channels_data.get("channels", {}).keys())
+    seen_numbers: set[int] = set()
+
     for discussion in discussions:
+        num = discussion.get("number")
+        seen_numbers.add(num)
+        # Priority 1: explicit channel override from posted_log
+        if num in channel_overrides:
+            ch = channel_overrides[num]
+            if ch in all_channel_slugs:
+                channel_counts[ch] += 1
+                continue
+
         category_slug = discussion.get("category", {}).get("slug", "general")
         topic = title_to_topic_slug(discussion.get("title", ""), channels_data)
-        # Count by topic for unverified channels, by category otherwise — never both
         if topic and topic in topic_channels:
             channel_counts[topic] += 1
         elif category_slug in verified_category_slugs:
             channel_counts[category_slug] += 1
+
+    # Catch posts in posted_log that aren't yet in discussions cache
+    # (fresh posts between cache refreshes). Only count if channel is valid.
+    for num, ch in channel_overrides.items():
+        if num not in seen_numbers and ch in all_channel_slugs:
+            channel_counts[ch] += 1
+
     return channel_counts
 
 
