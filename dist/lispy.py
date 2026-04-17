@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LisPy — Python's digital twin. Single file. Zero deps. Python 3.8+."""
+"""LisPy single-file dist. Python 3.8+. Zero deps."""
 from __future__ import annotations
 
 
@@ -3573,6 +3573,7 @@ def make_global_env(live_mode: bool = False) -> Env:
 
     # -- String operations --
     env["string-append"] = lambda *args: "".join(str(a) for a in args)
+    env["string-concat"] = lambda *args: "".join(str(a) for a in args)  # Python-idiom alias
     env["string-length"] = lambda s: len(s)
     env["substring"] = lambda s, start, *end: s[start:end[0]] if end else s[start:]
     env["string-upcase"] = lambda s: s.upper()
