@@ -224,8 +224,15 @@
       <div id="agents-list"></div>
       <div class="hint">Check to enable. The LLM auto-routes based on your message.</div>
       <div class="hint" style="margin-top:0.6rem">
-        <strong>Hot-load:</strong> drag a <code>.py</code> file onto this page to register a new agent.
-        It must define a class extending <code>BasicAgent</code> with <code>name</code>, <code>metadata</code>, and <code>perform()</code>.
+        <strong>Hot-load:</strong> drag a <code>.py</code> file onto this page.
+        The file must define a class extending <code>BasicAgent</code> with a
+        <code>name</code>, <code>metadata</code> dict (OpenAI function format), and
+        <code>perform(**kwargs)</code> method. For HTTP calls, implement
+        <code>async def perform_async(**kwargs)</code> instead — the brainstem awaits it.
+      </div>
+      <div style="margin-top:0.4rem">
+        <button id="download-basic-agent">Download basic_agent.py</button>
+        <button id="download-sample-agent">Download sample agent</button>
       </div>
       <button id="clear-custom-agents" style="margin-top:0.4rem">Forget dropped agents</button>
     </section>
@@ -591,23 +598,31 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
   });
 
   async function loadAgentFromSource(source, filename) {
-    // Exec the Python source in Pyodide. Find any new class extending BasicAgent,
-    // register it in AGENT_CLASSES. Persist source to localStorage.
-    // The Python block assigns the result dict to _result then json.dumps(_result)
-    // is the terminal expression — that's what runPythonAsync returns.
+    // Write to /brainstem/agents/<filename>.py and import via importlib —
+    // this way `from agents.basic_agent import BasicAgent` and
+    // `from utils.azure_file_storage import AzureFileStorageManager`
+    // resolve naturally. rapp-installer agent files drop in verbatim.
     const result = await pyodide.runPythonAsync(`
-import json
-_before = set(globals().keys())
+import json, os, sys, importlib
+_filename = ${JSON.stringify(filename)}
+_source = ${JSON.stringify(source)}
+_basename = os.path.splitext(os.path.basename(_filename))[0]
+_target = f"/brainstem/agents/{_basename}.py"
 _result = None
 try:
-    exec(${JSON.stringify(source)}, globals())
-    _new_names = set(globals().keys()) - _before
-    _agent_classes = [globals()[n] for n in _new_names
-                      if isinstance(globals()[n], type)
-                      and issubclass(globals()[n], BasicAgent)
-                      and globals()[n] is not BasicAgent]
+    with open(_target, "w") as _f: _f.write(_source)
+    # Invalidate cached import so re-drops pick up new code
+    _modname = f"agents.{_basename}"
+    if _modname in sys.modules: del sys.modules[_modname]
+    importlib.invalidate_caches()
+    _mod = importlib.import_module(_modname)
+    _agent_classes = [getattr(_mod, _n) for _n in dir(_mod)
+                      if isinstance(getattr(_mod, _n), type)
+                      and issubclass(getattr(_mod, _n), BasicAgent)
+                      and getattr(_mod, _n).__name__ != "BasicAgent"
+                      and getattr(_mod, _n).__module__ == _modname]
     if not _agent_classes:
-        _result = {"ok": False, "error": "no class extending BasicAgent found in file"}
+        _result = {"ok": False, "error": "no class extending BasicAgent defined in file"}
     else:
         _registered = []
         for _cls in _agent_classes:
@@ -620,7 +635,8 @@ try:
             })
         _result = {"ok": True, "registered": _registered}
 except Exception as _e:
-    _result = {"ok": False, "error": f"{type(_e).__name__}: {_e}"}
+    import traceback
+    _result = {"ok": False, "error": f"{type(_e).__name__}: {_e}", "traceback": traceback.format_exc()[-400:]}
 json.dumps(_result)
 `);
     const parsed = JSON.parse(result);
@@ -675,24 +691,14 @@ json.dumps(_result)
       await pyodide.runPythonAsync(BRAINSTEM_PY_SOURCE);
       updatePyEnv();
 
-      // Re-load any previously drag-dropped agents from localStorage
+      // Re-load any previously drag-dropped agents from localStorage by
+      // writing them to /brainstem/agents/ and importing, same path as
+      // live drops so the import machinery works identically.
       const customAgents = JSON.parse(localStorage.getItem("brainstem_custom_agents") || "[]");
       let restored = 0;
       for (const custom of customAgents) {
         try {
-          await pyodide.runPythonAsync(`
-_before = set(globals().keys())
-try:
-    exec(${JSON.stringify(custom.source)}, globals())
-    _new = [globals()[n] for n in set(globals().keys()) - _before
-            if isinstance(globals()[n], type) and issubclass(globals()[n], BasicAgent) and globals()[n] is not BasicAgent]
-    for _cls in _new:
-        _existing = next((c for c in AGENT_CLASSES if c.__name__ == _cls.__name__), None)
-        if _existing: AGENT_CLASSES.remove(_existing)
-        AGENT_CLASSES.append(_cls)
-except Exception as _e:
-    print(f"[brainstem] custom agent {${JSON.stringify(custom.filename || "?")}} failed: {_e}")
-`);
+          const r = await loadAgentFromSource(custom.source, custom.filename || "restored.py");
           restored += 1;
         } catch (err) {
           console.warn(`Failed to restore custom agent ${custom.filename}:`, err);
@@ -767,205 +773,490 @@ json.dumps(_res)
   });
 
   // --- The full Python brainstem runtime, inlined ---
-  // Mirrors rapp-installer/rapp_brainstem/brainstem.py chat loop +
-  // basic_agent.py class + built-in Memory/Context/HackerNews agents.
-  // Memory is localStorage-backed via pyodide's `js` module.
+  // Mirrors rapp-installer/rapp_brainstem/brainstem.py + basic_agent.py +
+  // agents/* + utils/azure_file_storage.py — but with localStorage-backed
+  // storage. Agent files drop in verbatim from rapp-installer because the
+  // import paths (agents.basic_agent, utils.azure_file_storage) resolve via
+  // Pyodide's in-memory filesystem.
+
+  // --- Verbatim basic_agent.py from rapp-installer ---
+  const BASIC_AGENT_PY = `class BasicAgent:
+    """Base class for all RAPP Brainstem agents. Extend this in your private agent files."""
+
+    def __init__(self, name=None, metadata=None):
+        if name is not None:
+            self.name = name
+        elif not hasattr(self, "name"):
+            self.name = "BasicAgent"
+        if metadata is not None:
+            self.metadata = metadata
+        elif not hasattr(self, "metadata"):
+            self.metadata = {
+                "name": self.name,
+                "description": "Base agent -- override this.",
+                "parameters": {"type": "object", "properties": {}, "required": []}
+            }
+
+    def perform(self, **kwargs):
+        return "Not implemented."
+
+    def system_context(self):
+        """Optional: return a string to inject into the system prompt each turn.
+        Override in agents that provide persistent context (e.g. memory)."""
+        return None
+
+    def to_tool(self):
+        """Returns OpenAI function-calling tool definition."""
+        return {
+            "type": "function",
+            "function": {
+                "name": self.name,
+                "description": self.metadata.get("description", ""),
+                "parameters": self.metadata.get("parameters", {"type": "object", "properties": {}})
+            }
+        }
+`;
+
+  // --- utils/azure_file_storage.py — browser shim backed by localStorage ---
+  // Matches the on-device Azure blob storage interface (set_memory_context,
+  // read_json, write_json, current_guid) so the real agent files drop in
+  // unmodified.
+  const AZURE_FS_SHIM_PY = `import json
+from js import localStorage
+
+
+class AzureFileStorageManager:
+    """Browser-local drop-in for rapp-installer's AzureFileStorageManager.
+    Backs memory with localStorage keyed per-guid (or a shared key when no
+    guid is set). Same public API — agents written against the Azure version
+    work unmodified in the browser."""
+
+    def __init__(self):
+        self.current_guid = None
+
+    def set_memory_context(self, user_guid):
+        """Mirror: set_memory_context(guid) → future read/write ops target
+        that guid's memory partition. None → shared memory."""
+        self.current_guid = user_guid or None
+
+    def _key(self):
+        if self.current_guid:
+            return f"brainstem_memory_{self.current_guid}"
+        return "brainstem_memory_shared"
+
+    def read_json(self):
+        raw = localStorage.getItem(self._key())
+        if not raw:
+            return {}
+        try:
+            return json.loads(raw)
+        except Exception:
+            return {}
+
+    def write_json(self, data):
+        try:
+            localStorage.setItem(self._key(), json.dumps(data))
+            return True
+        except Exception:
+            return False
+`;
+
+  // --- agents/hacker_news_agent.py — browser-adapted for async fetch ---
+  const HACKER_NEWS_AGENT_PY = `"""Hacker News top stories via Firebase API.
+Browser-adapted: uses async fetch instead of urllib.request for CORS + speed.
+"""
+import json
+from js import fetch
+from agents.basic_agent import BasicAgent
+
+
+class HackerNewsAgent(BasicAgent):
+    def __init__(self):
+        self.name = 'HackerNews'
+        self.metadata = {
+            "name": self.name,
+            "description": "Fetch current top stories from Hacker News via the Firebase API. Returns a list of {title, url, score, by} entries.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "count": {"type": "integer", "description": "Number of stories to fetch (default 5, max 20)."},
+                },
+                "required": []
+            }
+        }
+        super().__init__(name=self.name, metadata=self.metadata)
+
+    async def perform_async(self, **kwargs):
+        count = min(int(kwargs.get("count", 5)), 20)
+        try:
+            resp = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json")
+            ids = json.loads(await resp.text())[:count]
+            stories = []
+            for sid in ids:
+                r = await fetch(f"https://hacker-news.firebaseio.com/v0/item/{sid}.json")
+                item = json.loads(await r.text())
+                stories.append({
+                    "title": item.get("title", ""),
+                    "url": item.get("url", f"https://news.ycombinator.com/item?id={sid}"),
+                    "score": item.get("score", 0),
+                    "by": item.get("by", ""),
+                })
+            return json.dumps(stories, indent=2)
+        except Exception as e:
+            return f"HackerNews error: {type(e).__name__}: {e}"
+
+    def perform(self, **kwargs):
+        return "HackerNewsAgent requires async execution (the brainstem awaits perform_async automatically)."
+`;
+
+  // --- agents/manage_memory_agent.py — VERBATIM from rapp-installer ---
+  const MANAGE_MEMORY_AGENT_PY = `import uuid
+from datetime import datetime
+from agents.basic_agent import BasicAgent
+from utils.azure_file_storage import AzureFileStorageManager
+
+
+class ManageMemoryAgent(BasicAgent):
+    def __init__(self):
+        self.name = 'ManageMemory'
+        self.metadata = {
+            "name": self.name,
+            "description": "Saves information to persistent memory for future conversations. You MUST call this tool whenever the user asks you to remember something, shares personal facts (name, preferences, birthdays, etc.), or tells you something they expect you to recall later. Do not just acknowledge — call this tool or the information will be lost.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "memory_type": {
+                        "type": "string",
+                        "description": "Type of memory to store.",
+                        "enum": ["fact", "preference", "insight", "task"]
+                    },
+                    "content": {
+                        "type": "string",
+                        "description": "The content to store in memory."
+                    },
+                    "importance": {
+                        "type": "integer",
+                        "description": "Importance rating from 1-5.",
+                        "minimum": 1,
+                        "maximum": 5
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Optional list of tags to categorize this memory."
+                    },
+                    "user_guid": {
+                        "type": "string",
+                        "description": "Optional unique identifier of the user to store memory in a user-specific location."
+                    }
+                },
+                "required": ["memory_type", "content"]
+            }
+        }
+        self.storage_manager = AzureFileStorageManager()
+        super().__init__(name=self.name, metadata=self.metadata)
+
+    def perform(self, **kwargs):
+        memory_type = kwargs.get('memory_type', 'fact')
+        content = kwargs.get('content', '')
+        importance = kwargs.get('importance', 3)
+        tags = kwargs.get('tags', [])
+        user_guid = kwargs.get('user_guid')
+
+        if not content:
+            return "Error: No content provided for memory storage."
+
+        self.storage_manager.set_memory_context(user_guid)
+        return self.store_memory(memory_type, content, importance, tags)
+
+    def store_memory(self, memory_type, content, importance, tags):
+        memory_data = self.storage_manager.read_json()
+        if not memory_data:
+            memory_data = {}
+
+        memory_id = str(uuid.uuid4())
+        memory_data[memory_id] = {
+            "conversation_id": self.storage_manager.current_guid or "current",
+            "session_id": "current",
+            "message": content,
+            "mood": "neutral",
+            "theme": memory_type,
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "time": datetime.now().strftime("%H:%M:%S")
+        }
+
+        self.storage_manager.write_json(memory_data)
+
+        memory_location = f"for user {self.storage_manager.current_guid}" if self.storage_manager.current_guid else "in shared memory"
+        return f'Successfully stored {memory_type} memory {memory_location}: "{content}"'
+`;
+
+  // --- agents/context_memory_agent.py — VERBATIM from rapp-installer ---
+  const CONTEXT_MEMORY_AGENT_PY = `import logging
+from agents.basic_agent import BasicAgent
+from utils.azure_file_storage import AzureFileStorageManager
+
+
+class ContextMemoryAgent(BasicAgent):
+    def __init__(self):
+        self.name = 'ContextMemory'
+        self.metadata = {
+            "name": self.name,
+            "description": "Recalls and provides context based on stored memories of past interactions with the user.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "user_guid": {
+                        "type": "string",
+                        "description": "Optional unique identifier of the user to recall memories from a user-specific location."
+                    },
+                    "max_messages": {
+                        "type": "integer",
+                        "description": "Optional maximum number of messages to include in the context. Default is 10."
+                    },
+                    "keywords": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Optional list of keywords to filter memories by."
+                    },
+                    "full_recall": {
+                        "type": "boolean",
+                        "description": "Optional flag to return all memories without filtering. Default is false."
+                    }
+                },
+                "required": []
+            }
+        }
+        self.storage_manager = AzureFileStorageManager()
+        super().__init__(name=self.name, metadata=self.metadata)
+
+    def system_context(self):
+        """Inject stored memories into the system prompt each turn."""
+        try:
+            memories = self._recall_context(max_messages=50, keywords=[], full_recall=True)
+            if "don't have any memories" in memories or "No memories" in memories:
+                return None
+            return f"""<memory>
+{memories}
+</memory>
+
+<memory_instructions>
+- The above are stored memories from previous conversations
+- Use them to provide continuity and personalized responses
+- When the user asks what you remember, reference these memories
+</memory_instructions>"""
+        except Exception:
+            return None
+
+    def perform(self, **kwargs):
+        user_guid = kwargs.get('user_guid')
+        max_messages = kwargs.get('max_messages', 10)
+        keywords = kwargs.get('keywords', [])
+        full_recall = kwargs.get('full_recall', False)
+
+        if 'max_messages' not in kwargs and 'keywords' not in kwargs:
+            full_recall = True
+
+        self.storage_manager.set_memory_context(user_guid)
+        return self._recall_context(max_messages, keywords, full_recall)
+
+    def _recall_context(self, max_messages, keywords, full_recall=False):
+        memory_data = self.storage_manager.read_json()
+
+        if not memory_data:
+            if self.storage_manager.current_guid:
+                return f"I don't have any memories stored yet for user ID {self.storage_manager.current_guid}."
+            else:
+                return "I don't have any memories stored in the shared memory yet."
+
+        legacy_memories = []
+        for key, value in memory_data.items():
+            if isinstance(value, dict) and 'message' in value:
+                legacy_memories.append(value)
+
+        if not legacy_memories:
+            return "No memories found for this session."
+
+        return self._format_legacy_memories(legacy_memories, max_messages, keywords, full_recall)
+
+    def _format_legacy_memories(self, memories, max_messages, keywords, full_recall=False):
+        if not memories:
+            return "No memories found in the format I understand."
+
+        if full_recall:
+            sorted_memories = sorted(
+                memories,
+                key=lambda x: (x.get('date', ''), x.get('time', '')),
+                reverse=True
+            )
+            memory_lines = []
+            for memory in sorted_memories:
+                message = memory.get('message', '')
+                theme = memory.get('theme', 'Unknown')
+                date = memory.get('date', '')
+                time_str = memory.get('time', '')
+                if date and time_str:
+                    memory_lines.append(f"- {message} (Theme: {theme}, Recorded: {date} {time_str})")
+                else:
+                    memory_lines.append(f"- {message} (Theme: {theme})")
+
+            if not memory_lines:
+                return "No memories found."
+
+            memory_source = f"for user ID {self.storage_manager.current_guid}" if self.storage_manager.current_guid else "from shared memory"
+            return f"All memories {memory_source}:\\n" + "\\n".join(memory_lines)
+
+        if keywords and len(keywords) > 0:
+            filtered_memories = []
+            for memory in memories:
+                content = str(memory.get('message', '')).lower()
+                theme = str(memory.get('theme', '')).lower()
+                if any(kw.lower() in content for kw in keywords) or \\
+                        any(kw.lower() in theme for kw in keywords):
+                    filtered_memories.append(memory)
+
+            if filtered_memories:
+                memories = filtered_memories
+            else:
+                memories = sorted(
+                    memories,
+                    key=lambda x: (x.get('date', ''), x.get('time', '')),
+                    reverse=True
+                )[:max_messages]
+        else:
+            memories = sorted(
+                memories,
+                key=lambda x: (x.get('date', ''), x.get('time', '')),
+                reverse=True
+            )[:max_messages]
+
+        memory_lines = []
+        for memory in memories:
+            message = memory.get('message', '')
+            theme = memory.get('theme', 'Unknown')
+            date = memory.get('date', '')
+            time_str = memory.get('time', '')
+            if date and time_str:
+                memory_lines.append(f"- {message} (Theme: {theme}, Recorded: {date} {time_str})")
+            else:
+                memory_lines.append(f"- {message} (Theme: {theme})")
+
+        if not memory_lines:
+            return "No matching memories found."
+
+        memory_source = f"for user ID {self.storage_manager.current_guid}" if self.storage_manager.current_guid else "from shared memory"
+        return f"Here's what I remember {memory_source}:\\n" + "\\n".join(memory_lines)
+`;
+
+  // --- agents/clock_agent.py — demo agent ---
+  const CLOCK_AGENT_PY = `from agents.basic_agent import BasicAgent
+from js import Date
+
+
+class ClockAgent(BasicAgent):
+    def __init__(self):
+        self.name = 'Clock'
+        self.metadata = {
+            "name": self.name,
+            "description": "Get the current date and time in the browser's local timezone.",
+            "parameters": {"type": "object", "properties": {}, "required": []}
+        }
+        super().__init__(name=self.name, metadata=self.metadata)
+
+    def perform(self, **kwargs):
+        return str(Date.new())[:33]
+`;
+
   const BRAINSTEM_PY_SOURCE = `
-import os, json, asyncio
+import os, json, asyncio, sys, importlib
 from js import localStorage, fetch, Object
 from pyodide.ffi import to_js
 
 
 def _js_obj(d):
     """Convert a Python dict to a plain JS Object (not Map).
-    Required because fetch() silently ignores Map-valued headers/options —
-    the request goes out without auth, yielding a misleading 401."""
+    Required because fetch() silently ignores Map-valued headers/options."""
     return to_js(d, dict_converter=Object.fromEntries)
 
 
-# ── BasicAgent base class ──────────────────────────────────────────────────
-class BasicAgent:
-    name = "BasicAgent"
-    metadata = {"name": "BasicAgent", "description": "Override me.", "parameters": {"type": "object", "properties": {}}}
+# ── Set up the virtual module tree so agent files drop in verbatim ────────
+_BRAINSTEM_ROOT = "/brainstem"
+for _sub in ("", "agents", "utils", "openrappter", "openrappter/agents"):
+    _path = _BRAINSTEM_ROOT + ("/" + _sub if _sub else "")
+    os.makedirs(_path, exist_ok=True)
+    _init = os.path.join(_path, "__init__.py")
+    if not os.path.isfile(_init):
+        with open(_init, "w") as _f: _f.write("")
 
-    def perform(self, **kwargs):
-        return "Not implemented."
+# Inject the four module files we bundle. Each gets written to BOTH
+# agents/basic_agent.py AND openrappter/agents/basic_agent.py so either
+# import style resolves.
+_MODULE_FILES = {
+    "agents/basic_agent.py": ${JSON.stringify(BASIC_AGENT_PY)},
+    "openrappter/agents/basic_agent.py": ${JSON.stringify(BASIC_AGENT_PY)},
+    "utils/azure_file_storage.py": ${JSON.stringify(AZURE_FS_SHIM_PY)},
+    "agents/manage_memory_agent.py": ${JSON.stringify(MANAGE_MEMORY_AGENT_PY)},
+    "agents/context_memory_agent.py": ${JSON.stringify(CONTEXT_MEMORY_AGENT_PY)},
+    "agents/hacker_news_agent.py": ${JSON.stringify(HACKER_NEWS_AGENT_PY)},
+    "agents/clock_agent.py": ${JSON.stringify(CLOCK_AGENT_PY)},
+}
+for _rel, _src in _MODULE_FILES.items():
+    _full = os.path.join(_BRAINSTEM_ROOT, _rel)
+    with open(_full, "w") as _f: _f.write(_src)
 
-    def system_context(self):
-        return None
+if _BRAINSTEM_ROOT not in sys.path:
+    sys.path.insert(0, _BRAINSTEM_ROOT)
 
-    def to_tool(self):
-        return {
-            "type": "function",
-            "function": {
-                "name": self.name,
-                "description": self.metadata.get("description", ""),
-                "parameters": self.metadata.get("parameters", {"type": "object", "properties": {}}),
-            },
-        }
+# Import the base class and seed agents
+from agents.basic_agent import BasicAgent
+from agents.manage_memory_agent import ManageMemoryAgent
+from agents.context_memory_agent import ContextMemoryAgent
+from agents.hacker_news_agent import HackerNewsAgent
+from agents.clock_agent import ClockAgent
 
 
-# ── localStorage helpers (replacing file I/O) ──────────────────────────────
-def ls_get(key, default=""):
+# ── Agent registry ────────────────────────────────────────────────────────
+AGENT_CLASSES = [ManageMemoryAgent, ContextMemoryAgent, HackerNewsAgent, ClockAgent]
+DISABLED_KEY = "brainstem_disabled_agents"
+
+
+def _ls_get(key, default=""):
     v = localStorage.getItem(key)
     return v if v is not None else default
 
 
-def ls_set(key, value):
+def _ls_set(key, value):
     localStorage.setItem(key, value)
 
 
-# ── ManageMemoryAgent — write to persistent memory ─────────────────────────
-class ManageMemoryAgent(BasicAgent):
-    name = "ManageMemory"
-    metadata = {
-        "name": "ManageMemory",
-        "description": "Write, update, or delete a named memory entry stored in this user's browser localStorage. Use for persistent facts the user wants remembered across sessions (name, preferences, goals, recurring tasks).",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "key": {"type": "string", "description": "The memory key (e.g. 'user_name', 'favorite_color')."},
-                "value": {"type": "string", "description": "The value to remember. Pass empty string to delete."},
-            },
-            "required": ["key", "value"],
-        },
-    }
-
-    def perform(self, **kwargs):
-        key = kwargs.get("key", "").strip()
-        value = kwargs.get("value", "")
-        if not key:
-            return "Error: key required."
-        mem = json.loads(ls_get("brainstem_memory", "{}"))
-        if value == "":
-            mem.pop(key, None)
-            msg = f"Deleted memory '{key}'."
-        else:
-            mem[key] = value
-            msg = f"Remembered: {key} = {value}"
-        ls_set("brainstem_memory", json.dumps(mem))
-        return msg
-
-
-# ── ContextMemoryAgent — reads memory into system prompt each turn ─────────
-class ContextMemoryAgent(BasicAgent):
-    name = "ContextMemory"
-    metadata = {
-        "name": "ContextMemory",
-        "description": "Retrieve all persistent memory entries. Use when you need to recall what the user told you earlier (name, preferences, etc).",
-        "parameters": {"type": "object", "properties": {}, "required": []},
-    }
-
-    def perform(self, **kwargs):
-        mem = json.loads(ls_get("brainstem_memory", "{}"))
-        if not mem:
-            return "No memory entries yet."
-        return json.dumps(mem, indent=2)
-
-    def system_context(self):
-        mem = json.loads(ls_get("brainstem_memory", "{}"))
-        if not mem:
-            return None
-        lines = ["You remember the following about this user:"]
-        for k, v in mem.items():
-            lines.append(f"  - {k}: {v}")
-        return "\\n".join(lines)
-
-
-# ── HackerNewsAgent — fetches HN top stories via Firebase API ─────────────
-class HackerNewsAgent(BasicAgent):
-    name = "HackerNews"
-    metadata = {
-        "name": "HackerNews",
-        "description": "Fetch current top stories from Hacker News. Returns a list of {title, url, score, author} for the top N stories.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "count": {"type": "integer", "description": "Number of stories (default 5, max 20)."},
-            },
-            "required": [],
-        },
-    }
-
-    async def perform_async(self, **kwargs):
-        count = min(int(kwargs.get("count", 5)), 20)
-        resp = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json")
-        ids = (await resp.json()).to_py()[:count]
-        stories = []
-        for sid in ids:
-            r = await fetch(f"https://hacker-news.firebaseio.com/v0/item/{sid}.json")
-            item = (await r.json()).to_py()
-            stories.append({
-                "title": item.get("title", ""),
-                "url": item.get("url", f"https://news.ycombinator.com/item?id={sid}"),
-                "score": item.get("score", 0),
-                "by": item.get("by", ""),
-            })
-        return json.dumps(stories, indent=2)
-
-    def perform(self, **kwargs):
-        # Sync wrapper — schedule the async and block until done
-        try:
-            from pyodide.ffi import run_sync
-            return run_sync(self.perform_async(**kwargs))
-        except Exception as e:
-            return f"HackerNews error: {e}"
-
-
-# ── Clock — trivial demo agent ────────────────────────────────────────────
-class ClockAgent(BasicAgent):
-    name = "Clock"
-    metadata = {
-        "name": "Clock",
-        "description": "Get the current date and time (browser's local timezone).",
-        "parameters": {"type": "object", "properties": {}, "required": []},
-    }
-
-    def perform(self, **kwargs):
-        from js import Date
-        return str(Date.new())[:33]
-
-
-# ── Echo — prove tool calling end-to-end ──────────────────────────────────
-class EchoAgent(BasicAgent):
-    name = "Echo"
-    metadata = {
-        "name": "Echo",
-        "description": "Echo back exactly what the user passed in. Useful for debugging tool-calling.",
-        "parameters": {
-            "type": "object",
-            "properties": {"text": {"type": "string"}},
-            "required": ["text"],
-        },
-    }
-
-    def perform(self, **kwargs):
-        return f"Echo: {kwargs.get('text', '')}"
-
-
-# ── Agent registry ────────────────────────────────────────────────────────
-AGENT_CLASSES = [ManageMemoryAgent, ContextMemoryAgent, HackerNewsAgent, ClockAgent, EchoAgent]
-DISABLED_KEY = "brainstem_disabled_agents"
-
-
 def _disabled_set():
-    try: return set(json.loads(ls_get(DISABLED_KEY, "[]")))
+    try: return set(json.loads(_ls_get(DISABLED_KEY, "[]")))
     except Exception: return set()
+
+
+def _agent_instance(cls):
+    """Rapp-installer agents set self.name / self.metadata in __init__,
+    not as class attributes. Instantiate to read them."""
+    try: return cls()
+    except Exception: return None
 
 
 def set_agent_enabled(name, enabled):
     disabled = _disabled_set()
     if enabled: disabled.discard(name)
     else: disabled.add(name)
-    ls_set(DISABLED_KEY, json.dumps(sorted(disabled)))
+    _ls_set(DISABLED_KEY, json.dumps(sorted(disabled)))
 
 
 def load_agents():
     disabled = _disabled_set()
     agents = {}
     for cls in AGENT_CLASSES:
-        if cls.name in disabled: continue
-        agents[cls.name] = cls()
+        inst = _agent_instance(cls)
+        if inst is None: continue
+        name = getattr(inst, "name", cls.__name__)
+        if name in disabled: continue
+        agents[name] = inst
     return agents
 
 
@@ -973,10 +1264,16 @@ def list_agent_meta():
     disabled = _disabled_set()
     out = []
     for cls in AGENT_CLASSES:
+        inst = _agent_instance(cls)
+        if inst is None:
+            out.append({"name": cls.__name__, "desc": "(construction failed)", "enabled": False})
+            continue
+        name = getattr(inst, "name", cls.__name__)
+        meta = getattr(inst, "metadata", {}) or {}
         out.append({
-            "name": cls.name,
-            "desc": cls.metadata.get("description", "")[:100],
-            "enabled": cls.name not in disabled,
+            "name": name,
+            "desc": (meta.get("description", "") or "")[:100],
+            "enabled": name not in disabled,
         })
     return json.dumps(out)
 
@@ -1026,7 +1323,11 @@ async def call_llm(messages, tools=None):
     return json.loads(raw)
 
 
-def run_tool_calls(tool_calls, agents):
+async def run_tool_calls(tool_calls, agents):
+    """Async dispatcher — if an agent defines perform_async, await it; else call perform().
+    Async execution means agents can use fetch() for real HTTP in the browser without
+    needing pyodide.ffi.run_sync (which requires WASM stack switching)."""
+    import inspect
     results, logs = [], []
     for tc in tool_calls:
         fn = tc["function"]["name"]
@@ -1039,7 +1340,10 @@ def run_tool_calls(tool_calls, agents):
             results.append({"tool_call_id": tc["id"], "role": "tool", "name": fn, "content": msg})
             continue
         try:
-            out = agent.perform(**args)
+            if hasattr(agent, "perform_async") and inspect.iscoroutinefunction(agent.perform_async):
+                out = await agent.perform_async(**args)
+            else:
+                out = agent.perform(**args)
             logs.append(f"[{fn}] {str(out)[:200]}")
             results.append({"tool_call_id": tc["id"], "role": "tool", "name": fn, "content": str(out)})
         except Exception as e:
@@ -1082,7 +1386,7 @@ async def run_chat(user_input, history):
             all_logs.append(f"[round {round_i+1}] tool calls: " + ", ".join(
                 tc["function"]["name"] for tc in msg["tool_calls"]
             ))
-            tool_results, logs = run_tool_calls(msg["tool_calls"], agents)
+            tool_results, logs = await run_tool_calls(msg["tool_calls"], agents)
             all_logs.extend(logs)
             messages.extend(tool_results)
         else:
