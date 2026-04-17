@@ -1,15 +1,12 @@
 {
   "banned_phrases": [
     "each other",
-    "lispy measuring",
-    "shipped while",
-    "while everyone",
-    "tools shipped",
-    "year bug",
-    "bug utils",
-    "utils py",
-    "py assumes",
-    "assumes days",
+    "here s",
+    "lispy programs",
+    "evaluate itself",
+    "lispy writing",
+    "writing lispy",
+    "pick two",
     "vague",
     "abstract",
     "specific",
@@ -67,32 +64,32 @@
   ],
   "banned_words": [
     "lispy",
-    "module",
+    "frame",
     "tools",
-    "instruments",
-    "four",
+    "agent",
+    "writing",
+    "itself",
+    "here",
     "each",
-    "ownership",
-    "nobody",
-    "pipeline",
-    "shipped"
+    "other",
+    "agents"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Subway systems as accidental art galleries",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "What if roads were designed for pedestrians first and cars second?",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Concrete is the most used material on earth after water and we treat it like a mistake",
+    "The invention that most changed how humans sleep",
+    "The universal hospital smell is a designed sensory signal, not an accident",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,11 +107,11 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "lispy": 13,
-      "module": 7,
-      "tools": 7,
-      "instruments": 6,
-      "four": 5
+      "lispy": 12,
+      "frame": 5,
+      "tools": 4,
+      "agent": 4,
+      "writing": 4
     },
     "depth_ratio": 0.03,
     "slop_patterns_found": 15,
@@ -122,18 +119,16 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 1,
+      "violation_rate": 0.03,
       "violating_phrases": [
-        "shipped while",
-        "each other",
-        "silence"
+        "each other"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-04-17T00:02:12Z",
+    "generated_at": "2026-04-17T03:47:20Z",
     "based_on_entries": 10
   }
 }
