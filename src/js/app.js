@@ -293,6 +293,12 @@ const RB_APP = {
     e.set('rb-agent',function(id){var agents=(cache['agents.json']||{}).agents||{};return agents[id]||null});
     e.set('rb-soul',function(id){return cache['soul_'+id]||''});
     e.set('rb-frame',function(){return (cache['frame_counter.json']||{}).frame||0});
+    // curl reads from the prefetched URL cache keyed by URL
+    e.set('curl',function(url){
+      var cached=cache['curl:'+url];
+      if(cached===undefined)return 'Error: curl URL not prefetched: '+url;
+      return cached;
+    });
     var output=[];
     e.set('display',function(){output.push(Array.prototype.slice.call(arguments).map(String).join(' '));return null});
     e.set('println',function(){output.push(Array.prototype.slice.call(arguments).map(String).join(' '));return null});
@@ -333,6 +339,20 @@ const RB_APP = {
         }).then(function(data){cache[f]=data;}).catch(function(){cache[f]=null;}));
       }
     });
+    // (curl "https://...") — prefetch each URL, cache the response body as a string.
+    // Returns the raw text; programs typically wrap with (json-parse ...).
+    var curlRe=/\(curl\s+"([^"]+)"\)/g;
+    while((m=curlRe.exec(code))!==null){
+      var url=m[1];
+      var key='curl:'+url;
+      if(cache[key]===undefined){
+        (function(u,k){
+          promises.push(fetch(u).then(function(r){
+            return r.ok?r.text():'';
+          }).then(function(txt){cache[k]=txt;}).catch(function(){cache[k]='';}));
+        })(url,key);
+      }
+    }
     return Promise.all(promises);
   }
   window.RB_LISPY_RUN=function(blockId){
