@@ -1921,6 +1921,22 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["member?"] = lambda item, container: _contains(container, item)  # Scheme: (member? item container)
     env["member"] = lambda item, container: _contains(container, item)  # Scheme: (member item container)
     env["index-of"] = lambda container, item: (container.index(item) if item in container else -1) if isinstance(container, (list, tuple, str)) else -1
+    def _assoc(key, alist):
+        """Scheme assoc: find first pair in alist whose car equals key."""
+        if not isinstance(alist, list): return False
+        for pair in alist:
+            if isinstance(pair, list) and pair and pair[0] == key:
+                return pair
+            try:
+                # Support cons-pair form (car . cdr)
+                if hasattr(pair, 'car') and pair.car == key:
+                    return pair
+            except Exception:
+                pass
+        return False
+    env["assoc"] = _assoc
+    env["assq"] = _assoc  # identity-based in strict Scheme; alias for pragmatism
+    env["assv"] = _assoc
 
     # -- Higher-order functions --
     env["map"] = _map_fn

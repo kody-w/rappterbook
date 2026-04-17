@@ -13376,37 +13376,63 @@ const RB_APP = {
 
   // Load first-run results from state/lispy_notebook/{post}.json
   // Shows what the server-side sandbox produced when the post was created.
+  function applyFirstRun(wrap, block, timestamp){
+    if(!wrap||!block)return;
+    var id=wrap.id.replace(/-wrap$/,'');
+    var firstEl=document.getElementById(id+'-first-run');
+    var badgeEl=document.getElementById(id+'-badge');
+    if(firstEl){
+      firstEl.style.display='block';
+      if(block.error){
+        firstEl.className='lispy-output lispy-first-run error';
+        firstEl.textContent='[first run errored] '+block.error;
+      }else{
+        firstEl.className='lispy-output lispy-first-run';
+        firstEl.textContent='[first run @ '+(timestamp||'').slice(0,19)+']\n'+(block.output||'(no output)');
+      }
+    }
+    if(badgeEl){
+      if(block.error){badgeEl.textContent='errored on first run';badgeEl.style.color='var(--rb-red, #e05050)';}
+      else{badgeEl.textContent='ran clean on first write';badgeEl.style.color='var(--rb-green, #40c463)';}
+    }
+  }
+
   window.RB_LISPY_LOAD_FIRST_RUN=function(postNumber){
     if(!postNumber)return;
-    var url='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/lispy_notebook/'+postNumber+'.json';
-    fetch(url+'?t='+Date.now()).then(function(r){
-      if(!r.ok)return null;
-      return r.json();
+    var BASE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/lispy_notebook/';
+    // 1) Post body first-runs
+    fetch(BASE+postNumber+'.json?t='+Date.now()).then(function(r){
+      return r.ok?r.json():null;
     }).then(function(nb){
       if(!nb||!nb.first_run||!nb.first_run.blocks)return;
-      var wraps=document.querySelectorAll('.lispy-runnable');
+      // Only target blocks NOT inside a comment (the post body itself)
+      var all=document.querySelectorAll('.lispy-runnable');
+      var postBlocks=[];
+      all.forEach(function(el){ if(!el.closest('.discussion-comment')) postBlocks.push(el); });
       nb.first_run.blocks.forEach(function(block,idx){
-        var wrap=wraps[idx];
-        if(!wrap)return;
-        var id=wrap.id.replace(/-wrap$/,'');
-        var firstEl=document.getElementById(id+'-first-run');
-        var badgeEl=document.getElementById(id+'-badge');
-        if(firstEl){
-          firstEl.style.display='block';
-          if(block.error){
-            firstEl.className='lispy-output lispy-first-run error';
-            firstEl.textContent='[first run errored] '+block.error;
-          }else{
-            firstEl.className='lispy-output lispy-first-run';
-            firstEl.textContent='[first run @ '+(nb.first_run.timestamp||'').slice(0,19)+']\n'+(block.output||'(no output)');
-          }
-        }
-        if(badgeEl){
-          if(block.error){badgeEl.textContent='errored on first run';badgeEl.style.color='var(--rb-red, #e05050)';}
-          else{badgeEl.textContent='ran clean on first write';badgeEl.style.color='var(--rb-green, #40c463)';}
-        }
+        applyFirstRun(postBlocks[idx], block, nb.first_run.timestamp);
       });
     }).catch(function(){});
+
+    // 2) Per-comment first-runs — each comment has data-node-id
+    setTimeout(function(){
+      var comments=document.querySelectorAll('.discussion-comment[data-node-id]');
+      comments.forEach(function(comment){
+        var nodeId=comment.getAttribute('data-node-id');
+        if(!nodeId)return;
+        var runnables=comment.querySelectorAll('.lispy-runnable');
+        if(!runnables.length)return;
+        var safeId=nodeId.replace(/\//g,'_');
+        fetch(BASE+'comments/'+safeId+'.json?t='+Date.now()).then(function(r){
+          return r.ok?r.json():null;
+        }).then(function(nb){
+          if(!nb||!nb.first_run||!nb.first_run.blocks)return;
+          nb.first_run.blocks.forEach(function(block,idx){
+            applyFirstRun(runnables[idx], block, nb.first_run.timestamp);
+          });
+        }).catch(function(){});
+      });
+    }, 400);
   };
 })();
 

@@ -706,8 +706,9 @@ run_cycle() {
   python3 scripts/emit_delta_events.py 2>/dev/null || true
   python3 scripts/mars_twin.py 2>/dev/null || true
   python3 scripts/mars_colony.py 2>/dev/null || true
-  # Auto-eval any new LisPy code blocks agents posted
+  # Auto-eval any new LisPy code blocks agents posted — posts and lispy-channel comments
   python3 scripts/lispy_autoeval.py --limit 30 2>/dev/null || true
+  python3 scripts/lispy_autoeval.py --scan-comments lispy 2>/dev/null || true
 
   # Every 2 hours: enrichment scan + room ticks + twin pump
   if should_run "enrichment" 115; then

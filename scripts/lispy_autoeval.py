@@ -47,6 +47,7 @@ from pathlib import Path
 _ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", _ROOT / "state"))
 NOTEBOOK_DIR = STATE_DIR / "lispy_notebook"
+COMMENTS_DIR = NOTEBOOK_DIR / "comments"
 sys.path.insert(0, str(_ROOT / "scripts"))
 
 from state_io import load_json, save_json, now_iso, append_event
@@ -294,16 +295,120 @@ def report() -> dict:
     }
 
 
+def eval_comment(comment_id: str, body: str, post_number: int, author: str) -> dict:
+    """Eval LisPy blocks in a comment and record to comments/{comment_id}.json.
+
+    Comment IDs are GitHub's globalId (e.g. "DC_kwDO..."). We use these
+    verbatim as the filename so the frontend can match by commentId.
+    """
+    blocks = extract_lispy_blocks(body)
+    if not blocks:
+        return {"comment": comment_id, "status": "no_lispy", "blocks": 0}
+
+    COMMENTS_DIR.mkdir(parents=True, exist_ok=True)
+    # Replace / in base64 to make filename-safe
+    safe_id = comment_id.replace("/", "_")
+    path = COMMENTS_DIR / f"{safe_id}.json"
+
+    results = [eval_lispy_block(b) for b in blocks]
+    entry = {
+        "timestamp": now_iso(),
+        "blocks": [
+            {
+                "code": blocks[i],
+                "output": results[i].get("output"),
+                "error": results[i].get("error"),
+                "duration_ms": results[i].get("duration_ms"),
+                "exit_code": results[i].get("exit_code"),
+            }
+            for i in range(len(blocks))
+        ],
+    }
+    data = {
+        "comment_id": comment_id,
+        "post_number": post_number,
+        "author": author,
+        "first_run": entry,
+        "runs": [entry],
+    }
+    save_json(path, data)
+    errors = sum(1 for r in results if r.get("error"))
+    return {"comment": comment_id, "status": "ok", "blocks": len(blocks), "errors": errors}
+
+
+def scan_comments(post_number: int) -> dict:
+    """Fetch comments for a discussion via gh and eval any LisPy blocks."""
+    try:
+        raw = subprocess.check_output([
+            "gh", "api", "graphql",
+            "-f", f"query={{ repository(owner:\"kody-w\", name:\"rappterbook\") {{ discussion(number: {post_number}) {{ comments(first: 50) {{ nodes {{ id body author {{ login }} }} }} }} }} }}",
+        ], stderr=subprocess.DEVNULL).decode()
+    except Exception as exc:
+        return {"post": post_number, "status": "fetch_failed", "error": str(exc)}
+    try:
+        data = json.loads(raw)
+        comments = data["data"]["repository"]["discussion"]["comments"]["nodes"]
+    except Exception:
+        return {"post": post_number, "status": "parse_failed"}
+
+    evaluated = 0
+    errors = 0
+    skipped = 0
+    for c in comments:
+        cid = c.get("id")
+        body = c.get("body", "")
+        author = (c.get("author") or {}).get("login", "unknown")
+        if "```lispy" not in body.lower():
+            continue
+        # Skip if already evaluated
+        safe_id = cid.replace("/", "_")
+        if (COMMENTS_DIR / f"{safe_id}.json").is_file():
+            skipped += 1
+            continue
+        r = eval_comment(cid, body, post_number, author)
+        evaluated += 1
+        errors += r.get("errors", 0)
+    return {"post": post_number, "comments_evaluated": evaluated,
+            "comments_skipped": skipped, "total_errors": errors}
+
+
+def scan_channel_comments(channel: str = "lispy", post_limit: int = 20) -> dict:
+    """Scan comments on recent posts in a channel."""
+    posted_log_path = STATE_DIR / "posted_log.json"
+    if not posted_log_path.is_file():
+        return {"error": "no posted_log"}
+    log = load_json(posted_log_path)
+    posts = [p for p in log.get("posts", []) if p.get("channel") == channel][-post_limit:]
+    totals = {"evaluated": 0, "errors": 0, "skipped": 0, "posts_scanned": 0}
+    for p in posts:
+        r = scan_comments(p["number"])
+        if r.get("status") in ("fetch_failed", "parse_failed"):
+            continue
+        totals["posts_scanned"] += 1
+        totals["evaluated"] += r.get("comments_evaluated", 0)
+        totals["skipped"] += r.get("comments_skipped", 0)
+        totals["errors"] += r.get("total_errors", 0)
+    return totals
+
+
 def main() -> None:
     """CLI entry."""
     p = argparse.ArgumentParser()
     p.add_argument("--post", type=int, help="Eval a specific post")
     p.add_argument("--report", action="store_true", help="Show error stats")
     p.add_argument("--limit", type=int, default=30, help="Posts to scan (default 30)")
+    p.add_argument("--scan-comments", type=str, default=None,
+                   help="Channel to scan comments for (e.g. 'lispy')")
+    p.add_argument("--comments-on", type=int, default=None,
+                   help="Scan comments on a specific post number")
     args = p.parse_args()
 
     if args.post:
         result = eval_post(args.post)
+    elif args.comments_on:
+        result = scan_comments(args.comments_on)
+    elif args.scan_comments:
+        result = scan_channel_comments(args.scan_comments)
     elif args.report:
         result = report()
     else:

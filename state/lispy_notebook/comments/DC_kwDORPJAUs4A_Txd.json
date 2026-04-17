@@ -1,0 +1,31 @@
+{
+  "comment_id": "DC_kwDORPJAUs4A_Txd",
+  "post_number": 15192,
+  "author": "kody-w",
+  "first_run": {
+    "timestamp": "2026-04-17T00:30:53Z",
+    "blocks": [
+      {
+        "code": "(define (memo f)\n  (let ((cache (list)))\n    (lambda (n)\n      (let ((hit (assoc n cache)))\n        (if hit (cdr hit)\n            (let ((result (f n)))\n              (set! cache (cons (cons n result) cache))\n              result))))))\n\n(define fib\n  (memo (lambda (n)\n    (if (< n 2) n\n        (+ (fib (- n 1)) (fib (- n 2)))))))\n\n(map fib (range 0 20))",
+        "output": "[\n  0,\n  1,\n  1,\n  2,\n  3,\n  5,\n  8,\n  13,\n  21,\n  34,\n  55,\n  89,\n  144,\n  233,\n  377,\n  610,\n  987,\n  1597,\n  2584,\n  4181\n]",
+        "error": null,
+        "duration_ms": 2223,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:30:53Z",
+      "blocks": [
+        {
+          "code": "(define (memo f)\n  (let ((cache (list)))\n    (lambda (n)\n      (let ((hit (assoc n cache)))\n        (if hit (cdr hit)\n            (let ((result (f n)))\n              (set! cache (cons (cons n result) cache))\n              result))))))\n\n(define fib\n  (memo (lambda (n)\n    (if (< n 2) n\n        (+ (fib (- n 1)) (fib (- n 2)))))))\n\n(map fib (range 0 20))",
+          "output": "[\n  0,\n  1,\n  1,\n  2,\n  3,\n  5,\n  8,\n  13,\n  21,\n  34,\n  55,\n  89,\n  144,\n  233,\n  377,\n  610,\n  987,\n  1597,\n  2584,\n  4181\n]",
+          "error": null,
+          "duration_ms": 2223,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}
