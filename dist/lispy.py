@@ -2,19 +2,17 @@
 """LisPy — The Zero-Dependency Agent Runtime.
 
 Single-file distribution. Pure Python stdlib. Python 3.8+.
-Bundled: LisPy core + Virtual Pip.
+Bundled: LisPy core + Virtual Pip (20 packages) + Virtual OS (5 modules).
 
 USAGE:
     python3 lispy.py program.lispy       run a file
-    echo '(+ 1 2)' | python3 lispy.py --  pipe mode
-    python3 lispy.py --repl               interactive REPL
-    python3 lispy.py --eval '(+ 1 2)'     one-liner
+    echo '(+ 1 2)' | python3 lispy.py    pipe mode
+    python3 lispy.py --repl              interactive REPL
+    python3 lispy.py --eval '(+ 1 2)'    one-liner
 
 DOCS:  https://kody-w.github.io/rappterbook/LISPY_MANIFESTO.md
 SPEC:  https://kody-w.github.io/rappterbook/LISPY_SPEC.md
-REPO:  https://github.com/kody-w/rappterbook
-
-License: Apache 2.0
+LICENSE: Apache 2.0
 """
 from __future__ import annotations
 
@@ -373,6 +371,364 @@ class _TwinOpenAI:
 
 
 # ---------------------------------------------------------------------------
+# numpy twin — 1D list-backed array math (no broadcasting, no ndarray tricks)
+# ---------------------------------------------------------------------------
+
+class _NPArray:
+    def __init__(self, data):
+        if isinstance(data, _NPArray):
+            data = list(data._data)
+        elif not isinstance(data, list):
+            data = list(data) if hasattr(data, "__iter__") else [data]
+        self._data = [float(x) if isinstance(x, (int, float)) else x for x in data]
+
+    def sum(self): return sum(self._data)
+    def mean(self): return sum(self._data) / len(self._data) if self._data else 0.0
+    def max(self): return max(self._data) if self._data else 0.0
+    def min(self): return min(self._data) if self._data else 0.0
+    def std(self):
+        return statistics.pstdev(self._data) if len(self._data) > 1 else 0.0
+    def sort(self): self._data.sort(); return self
+    def tolist(self): return list(self._data)
+
+    @property
+    def shape(self): return (len(self._data),)
+
+    def __len__(self): return len(self._data)
+    def __iter__(self): return iter(self._data)
+    def __getitem__(self, i): return self._data[i]
+    def __repr__(self): return f"array({self._data})"
+
+    def __add__(self, other):
+        if isinstance(other, _NPArray):
+            return _NPArray([a + b for a, b in zip(self._data, other._data)])
+        return _NPArray([a + other for a in self._data])
+
+    def __mul__(self, other):
+        if isinstance(other, _NPArray):
+            return _NPArray([a * b for a, b in zip(self._data, other._data)])
+        return _NPArray([a * other for a in self._data])
+
+
+class _TwinNumpy:
+    ndarray = _NPArray
+
+    @staticmethod
+    def array(data, **_kw): return _NPArray(data)
+
+    @staticmethod
+    def zeros(n, **_kw):
+        n = int(n) if not isinstance(n, tuple) else int(n[0])
+        return _NPArray([0.0] * n)
+
+    @staticmethod
+    def ones(n, **_kw):
+        n = int(n) if not isinstance(n, tuple) else int(n[0])
+        return _NPArray([1.0] * n)
+
+    @staticmethod
+    def arange(*args):
+        if len(args) == 1: start, stop, step = 0, args[0], 1
+        elif len(args) == 2: start, stop, step = args[0], args[1], 1
+        else: start, stop, step = args[0], args[1], args[2]
+        out, i = [], start
+        while i < stop:
+            out.append(float(i)); i += step
+        return _NPArray(out)
+
+    @staticmethod
+    def sum(arr): return arr.sum() if isinstance(arr, _NPArray) else sum(arr)
+
+    @staticmethod
+    def mean(arr): return arr.mean() if isinstance(arr, _NPArray) else (sum(arr)/len(arr) if arr else 0)
+
+    pi = 3.141592653589793
+    e = 2.718281828459045
+
+
+# ---------------------------------------------------------------------------
+# pandas twin — minimal DataFrame as list-of-dicts
+# ---------------------------------------------------------------------------
+
+class _DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            # columns-dict form: {"a": [1,2], "b": [3,4]}
+            keys = list(data.keys())
+            n = len(next(iter(data.values()))) if data else 0
+            self._rows = [{k: data[k][i] for k in keys} for i in range(n)]
+        elif isinstance(data, list):
+            self._rows = list(data)
+        else:
+            self._rows = []
+
+    def __len__(self): return len(self._rows)
+    def __iter__(self): return iter(self._rows)
+    def __repr__(self): return f"<DataFrame rows={len(self._rows)}>"
+
+    def head(self, n=5): return _DataFrame(self._rows[:n])
+    def tail(self, n=5): return _DataFrame(self._rows[-n:])
+    def to_dict(self, orient="records"):
+        if orient == "records": return list(self._rows)
+        if orient == "list":
+            if not self._rows: return {}
+            return {k: [r.get(k) for r in self._rows] for k in self._rows[0].keys()}
+        return list(self._rows)
+
+    def to_csv(self, path=None, index=False):
+        if not self._rows: return ""
+        import io
+        import csv as _csv
+        buf = io.StringIO()
+        keys = list(self._rows[0].keys())
+        w = _csv.DictWriter(buf, fieldnames=keys)
+        w.writeheader()
+        for r in self._rows:
+            w.writerow(r)
+        text = buf.getvalue()
+        if path:
+            raise NotImplementedError("pandas twin: to_csv(path=...) disabled; receive the string and write via LisPy file bindings if granted")
+        return text
+
+    @property
+    def columns(self):
+        return list(self._rows[0].keys()) if self._rows else []
+
+
+class _TwinPandas:
+    DataFrame = _DataFrame
+
+    @staticmethod
+    def read_csv(*_a, **_kw):
+        raise NotImplementedError(
+            "pandas twin: read_csv requires file access. Use (curl) or "
+            "(file-read) under capability grant, then pass the string to "
+            "DataFrame via your own csv parse."
+        )
+
+
+# ---------------------------------------------------------------------------
+# pydantic twin — BaseModel with simple type-hint validation
+# ---------------------------------------------------------------------------
+
+class _PydanticBaseModel:
+    def __init__(self, **kw):
+        hints = getattr(self.__class__, "__annotations__", {}) or {}
+        for key, typ in hints.items():
+            if key in kw:
+                setattr(self, key, kw[key])
+            elif hasattr(self.__class__, key):
+                setattr(self, key, getattr(self.__class__, key))
+            else:
+                raise ValueError(f"pydantic twin: field '{key}' required on {self.__class__.__name__}")
+        for key, val in kw.items():
+            if key not in hints:
+                raise ValueError(f"pydantic twin: unexpected field '{key}' on {self.__class__.__name__}")
+
+    def dict(self):
+        hints = getattr(self.__class__, "__annotations__", {}) or {}
+        return {k: getattr(self, k) for k in hints if hasattr(self, k)}
+
+    def json(self):
+        return json.dumps(self.dict())
+
+
+class _TwinPydantic:
+    BaseModel = _PydanticBaseModel
+
+    @staticmethod
+    def Field(default=None, **_kw): return default
+
+
+# ---------------------------------------------------------------------------
+# click twin — decorator that prints what was called
+# ---------------------------------------------------------------------------
+
+class _TwinClick:
+    @staticmethod
+    def command(*_a, **_kw):
+        def deco(fn):
+            def wrapper(*args, **kwargs):
+                print(f"[click twin] calling {fn.__name__}(args={args}, kwargs={kwargs})")
+                return fn(*args, **kwargs)
+            return wrapper
+        return deco
+
+    @staticmethod
+    def option(*_a, **_kw):
+        def deco(fn): return fn
+        return deco
+
+    @staticmethod
+    def argument(*_a, **_kw):
+        def deco(fn): return fn
+        return deco
+
+    @staticmethod
+    def echo(msg="", **_kw):
+        print(msg)
+
+
+# ---------------------------------------------------------------------------
+# rich twin — color-stripped Console + print
+# ---------------------------------------------------------------------------
+
+_ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
+_RICH_MARKUP_RE = re.compile(r"\[/?[a-zA-Z0-9_ #]+\]")
+
+
+class _RichConsole:
+    def print(self, *args, **_kw):
+        text = " ".join(str(a) for a in args)
+        print(_RICH_MARKUP_RE.sub("", _ANSI_RE.sub("", text)))
+
+
+class _TwinRich:
+    Console = _RichConsole
+
+    @staticmethod
+    def print(*args, **_kw):
+        text = " ".join(str(a) for a in args)
+        print(_RICH_MARKUP_RE.sub("", _ANSI_RE.sub("", text)))
+
+
+# ---------------------------------------------------------------------------
+# tqdm twin — iterator wrapper with periodic stderr progress
+# ---------------------------------------------------------------------------
+
+class _TqdmIter:
+    def __init__(self, iterable, total=None, desc=""):
+        self._data = list(iterable)
+        self._total = total or len(self._data)
+        self._desc = desc
+
+    def __iter__(self):
+        import sys
+        for i, item in enumerate(self._data):
+            if i == 0 or i == self._total - 1 or (i + 1) % max(1, self._total // 10) == 0:
+                pct = int(100 * (i + 1) / max(1, self._total))
+                print(f"{self._desc} [{i+1}/{self._total}] {pct}%", file=sys.stderr)
+            yield item
+
+
+class _TwinTqdm:
+    @staticmethod
+    def tqdm(iterable, total=None, desc="", **_kw):
+        return _TqdmIter(iterable, total=total, desc=desc)
+
+    # Support `from tqdm import tqdm` as well as `import tqdm; tqdm.tqdm(...)`
+    def __call__(self, iterable, **kw): return _TqdmIter(iterable, **{k: v for k, v in kw.items() if k in ("total", "desc")})
+
+
+# ---------------------------------------------------------------------------
+# dateutil twin — parse via datetime.fromisoformat + common strptime attempts
+# ---------------------------------------------------------------------------
+
+class _TwinDateutilParser:
+    @staticmethod
+    def parse(s, **_kw):
+        import datetime as _dt
+        if not isinstance(s, str):
+            raise ValueError("dateutil twin: parse expects a string")
+        try:
+            return _dt.datetime.fromisoformat(s.replace("Z", "+00:00"))
+        except ValueError:
+            pass
+        for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%m/%d/%Y", "%d/%m/%Y",
+                    "%Y-%m-%dT%H:%M:%SZ", "%a, %d %b %Y %H:%M:%S %Z"):
+            try:
+                return _dt.datetime.strptime(s, fmt)
+            except ValueError:
+                continue
+        raise ValueError(f"dateutil twin: could not parse '{s}'")
+
+
+class _TwinDateutil:
+    parser = _TwinDateutilParser
+
+
+# ---------------------------------------------------------------------------
+# pytz twin — wraps stdlib datetime.timezone
+# ---------------------------------------------------------------------------
+
+class _TwinPytz:
+    @staticmethod
+    def timezone(name):
+        import datetime as _dt
+        name_upper = (name or "").upper()
+        if name_upper in ("UTC", "GMT"):
+            return _dt.timezone.utc
+        # Common offsets — not authoritative, just enough for basic use
+        offsets = {"US/PACIFIC": -8, "US/EASTERN": -5, "EUROPE/LONDON": 0,
+                   "EUROPE/BERLIN": 1, "ASIA/TOKYO": 9, "ASIA/SHANGHAI": 8}
+        if name in offsets:
+            return _dt.timezone(_dt.timedelta(hours=offsets[name]))
+        raise ValueError(f"pytz twin: zone '{name}' not in compact registry; "
+                         f"use UTC or one of {list(offsets)}")
+
+    @property
+    def utc(self):
+        import datetime as _dt
+        return _dt.timezone.utc
+
+
+# ---------------------------------------------------------------------------
+# cryptography twin — redirect to stdlib hashlib/hmac
+# ---------------------------------------------------------------------------
+
+class _TwinCryptography:
+    class hazmat:
+        class primitives:
+            class hashes:
+                @staticmethod
+                def SHA256(*_a, **_kw):
+                    raise NotImplementedError(
+                        "cryptography twin: use hashlib directly — "
+                        "(py-call (py-import \"hashlib\") \"sha256\" data)."
+                    )
+
+
+# ---------------------------------------------------------------------------
+# boto3 twin — mock clients that raise clear errors
+# ---------------------------------------------------------------------------
+
+class _BotoClient:
+    def __init__(self, service):
+        self._service = service
+
+    def __getattr__(self, name):
+        def _stub(*_a, **_kw):
+            raise NotImplementedError(
+                f"boto3 twin: {self._service}.{name}() is not implemented. "
+                f"Use (curl) with AWS sigv4 signing via (py-import \"hmac\") "
+                f"and (py-import \"hashlib\") if you need real calls."
+            )
+        return _stub
+
+
+class _TwinBoto3:
+    @staticmethod
+    def client(service, **_kw): return _BotoClient(service)
+
+    @staticmethod
+    def resource(service, **_kw): return _BotoClient(service)
+
+
+# ---------------------------------------------------------------------------
+# PyGithub twin — redirect to curl against api.github.com
+# ---------------------------------------------------------------------------
+
+class _TwinPyGithub:
+    class Github:
+        def __init__(self, *_a, **_kw):
+            raise NotImplementedError(
+                "pygithub twin: call api.github.com directly with "
+                "(curl \"https://api.github.com/...\") and parse the JSON. "
+                "PyGithub's object model is not worth shimming."
+            )
+
+
+# ---------------------------------------------------------------------------
 # Registry + LisPy bindings
 # ---------------------------------------------------------------------------
 
@@ -387,6 +743,22 @@ _TWIN_REGISTRY = {
     "pillow": (_TwinPIL, "alias for PIL twin"),
     "openai": (_TwinOpenAI, "stub — raises NotImplementedError; use (curl) for live calls"),
     "anthropic": (_TwinOpenAI, "stub — use (curl) for live Anthropic API calls"),
+    # Data/numeric twins (stdlib-backed)
+    "numpy": (lambda: _TwinNumpy(), "~30% of numpy — 1D array math (sum, mean, max, min, sort, reshape on lists). No broadcasting."),
+    "pandas": (lambda: _TwinPandas(), "~25% of pandas — DataFrame(list-of-dicts), head/tail/to_dict/to_csv. No groupby/merge yet."),
+    "pydantic": (lambda: _TwinPydantic(), "~40% of pydantic v1 — BaseModel with basic field validation via type hints."),
+    # CLI/output twins
+    "click": (lambda: _TwinClick(), "stub — click.command() decorator prints function+args, doesn't parse argv."),
+    "rich": (lambda: _TwinRich(), "~20% of rich — print and basic Console. Colors stripped in twin mode."),
+    "tqdm": (lambda: _TwinTqdm(), "~50% of tqdm — iterates lists, prints progress to stderr periodically."),
+    # Date/time
+    "dateutil": (lambda: _TwinDateutil(), "~30% of python-dateutil — parser.parse via datetime.fromisoformat."),
+    "pytz": (lambda: _TwinPytz(), "~10% of pytz — UTC and common zones via stdlib's datetime.timezone."),
+    # Crypto stubs — redirect to hashlib/hmac which ARE in stdlib
+    "cryptography": (lambda: _TwinCryptography(), "stub — raises NotImplementedError directing agents to hashlib/hmac for the compute they actually need."),
+    # Cloud stubs
+    "boto3": (lambda: _TwinBoto3(), "stub — returns mock clients that error cleanly; use (curl) against AWS APIs directly if needed."),
+    "pygithub": (lambda: _TwinPyGithub(), "stub — use (curl) with api.github.com for the operations you actually need."),
 }
 
 _INSTALLED: dict[str, Any] = {}
@@ -416,6 +788,495 @@ def pip_coverage(name: str) -> str:
 def pip_get_module(name: str):
     """Retrieve an installed twin module (for use by py-import)."""
     return _INSTALLED.get(name)
+
+
+# === Virtual OS (inlined) ===
+
+
+import io
+import posixpath
+import time
+from typing import Any
+
+
+# ---------------------------------------------------------------------------
+# Virtual filesystem — in-memory tree
+# ---------------------------------------------------------------------------
+
+class _VFSNode:
+    def __init__(self, is_dir: bool, content: bytes = b""):
+        self.is_dir = is_dir
+        self.content = content
+        self.children: dict[str, _VFSNode] = {}
+        self.mode = 0o755 if is_dir else 0o644
+        self.mtime = time.time()
+
+
+class _VFS:
+    """In-memory filesystem the twin operates against."""
+
+    def __init__(self):
+        self.root = _VFSNode(is_dir=True)
+        # Seed some plausible files so agents can read "/etc/hosts" etc
+        self.write(b"127.0.0.1 localhost\n", "/etc/hosts")
+        self.write(b"root:x:0:0:root:/root:/bin/bash\n", "/etc/passwd")
+        self.mkdir("/tmp")
+        self.mkdir("/home/agent")
+        self.mkdir("/home/agent/workspace")
+
+    def _split(self, path: str) -> list[str]:
+        path = posixpath.normpath(path)
+        return [p for p in path.strip("/").split("/") if p]
+
+    def _walk(self, parts: list[str], create_dirs: bool = False) -> _VFSNode | None:
+        node = self.root
+        for p in parts:
+            if p in node.children:
+                node = node.children[p]
+                if not node.is_dir and p != parts[-1]:
+                    return None
+            else:
+                if create_dirs and p != parts[-1]:
+                    new = _VFSNode(is_dir=True)
+                    node.children[p] = new
+                    node = new
+                else:
+                    return None
+        return node
+
+    def exists(self, path: str) -> bool:
+        return self._walk(self._split(path)) is not None
+
+    def read(self, path: str) -> bytes:
+        node = self._walk(self._split(path))
+        if node is None or node.is_dir:
+            raise FileNotFoundError(f"virtual fs: {path}")
+        return node.content
+
+    def write(self, data: bytes, path: str) -> int:
+        parts = self._split(path)
+        if not parts:
+            raise ValueError("virtual fs: cannot write to /")
+        parent_parts, filename = parts[:-1], parts[-1]
+        parent = self._walk(parent_parts, create_dirs=True) if parent_parts else self.root
+        if parent is None:
+            parent = self.root
+            for p in parent_parts:
+                new = _VFSNode(is_dir=True)
+                parent.children[p] = new
+                parent = new
+        node = parent.children.get(filename)
+        if node is None:
+            node = _VFSNode(is_dir=False)
+            parent.children[filename] = node
+        elif node.is_dir:
+            raise IsADirectoryError(f"virtual fs: {path}")
+        node.content = data if isinstance(data, bytes) else data.encode("utf-8")
+        node.mtime = time.time()
+        return len(node.content)
+
+    def mkdir(self, path: str) -> None:
+        parts = self._split(path)
+        if not parts:
+            return
+        parent = self.root
+        for p in parts[:-1]:
+            if p not in parent.children:
+                parent.children[p] = _VFSNode(is_dir=True)
+            parent = parent.children[p]
+        if parts[-1] not in parent.children:
+            parent.children[parts[-1]] = _VFSNode(is_dir=True)
+
+    def listdir(self, path: str) -> list[str]:
+        node = self._walk(self._split(path))
+        if node is None or not node.is_dir:
+            raise FileNotFoundError(f"virtual fs: {path}")
+        return sorted(node.children.keys())
+
+    def remove(self, path: str) -> None:
+        parts = self._split(path)
+        if not parts:
+            return
+        parent = self._walk(parts[:-1]) if len(parts) > 1 else self.root
+        if parent is not None and parts[-1] in parent.children:
+            del parent.children[parts[-1]]
+
+
+# Single module-level VFS instance (process-scoped)
+_VFS_INSTANCE = _VFS()
+
+
+def get_vfs() -> _VFS:
+    """Expose the VFS so bindings/tests can pre-seed it."""
+    return _VFS_INSTANCE
+
+
+# ---------------------------------------------------------------------------
+# os twin
+# ---------------------------------------------------------------------------
+
+class _TwinOsPath:
+    sep = "/"
+
+    @staticmethod
+    def join(*parts) -> str:
+        return posixpath.join(*[str(p) for p in parts])
+
+    @staticmethod
+    def basename(p: str) -> str: return posixpath.basename(p)
+
+    @staticmethod
+    def dirname(p: str) -> str: return posixpath.dirname(p)
+
+    @staticmethod
+    def exists(p: str) -> bool: return _VFS_INSTANCE.exists(p)
+
+    @staticmethod
+    def isfile(p: str) -> bool:
+        n = _VFS_INSTANCE._walk(_VFS_INSTANCE._split(p))
+        return n is not None and not n.is_dir
+
+    @staticmethod
+    def isdir(p: str) -> bool:
+        n = _VFS_INSTANCE._walk(_VFS_INSTANCE._split(p))
+        return n is not None and n.is_dir
+
+    @staticmethod
+    def splitext(p: str) -> tuple: return posixpath.splitext(p)
+
+    @staticmethod
+    def abspath(p: str) -> str:
+        if p.startswith("/"): return posixpath.normpath(p)
+        return posixpath.normpath("/home/agent/workspace/" + p)
+
+    @staticmethod
+    def expanduser(p: str) -> str:
+        if p.startswith("~"): return "/home/agent" + p[1:]
+        return p
+
+    @staticmethod
+    def getsize(p: str) -> int:
+        n = _VFS_INSTANCE._walk(_VFS_INSTANCE._split(p))
+        if n is None or n.is_dir:
+            raise FileNotFoundError(f"virtual fs: {p}")
+        return len(n.content)
+
+
+class _TwinOsEnviron(dict):
+    """Dict that mirrors os.environ shape but starts with a bounded twin env."""
+    def __init__(self):
+        super().__init__({
+            "HOME": "/home/agent",
+            "USER": "agent",
+            "SHELL": "/bin/bash",
+            "PATH": "/usr/local/bin:/usr/bin:/bin",
+            "LANG": "en_US.UTF-8",
+            "PWD": "/home/agent/workspace",
+            "TERM": "xterm-256color",
+            "LISPY_TWIN": "1",
+        })
+
+
+class _TwinOs:
+    path = _TwinOsPath()
+    environ = _TwinOsEnviron()
+
+    sep = "/"
+    linesep = "\n"
+    name = "posix"
+
+    @staticmethod
+    def getenv(key: str, default=None):
+        return _TwinOs.environ.get(key, default)
+
+    @staticmethod
+    def getcwd() -> str: return "/home/agent/workspace"
+
+    @staticmethod
+    def chdir(path: str) -> None:
+        _TwinOs.environ["PWD"] = _TwinOsPath.abspath(path)
+
+    @staticmethod
+    def listdir(path: str = ".") -> list[str]:
+        if path == ".": path = _TwinOs.getcwd()
+        return _VFS_INSTANCE.listdir(path)
+
+    @staticmethod
+    def makedirs(path: str, exist_ok: bool = False) -> None:
+        if _VFS_INSTANCE.exists(path) and not exist_ok:
+            raise FileExistsError(f"virtual fs: {path}")
+        _VFS_INSTANCE.mkdir(path)
+
+    @staticmethod
+    def mkdir(path: str) -> None: _VFS_INSTANCE.mkdir(path)
+
+    @staticmethod
+    def remove(path: str) -> None: _VFS_INSTANCE.remove(path)
+
+    @staticmethod
+    def rename(src: str, dst: str) -> None:
+        data = _VFS_INSTANCE.read(src)
+        _VFS_INSTANCE.write(data, dst)
+        _VFS_INSTANCE.remove(src)
+
+    @staticmethod
+    def getpid() -> int: return 42
+
+    @staticmethod
+    def cpu_count() -> int: return 4
+
+
+# ---------------------------------------------------------------------------
+# subprocess twin
+# ---------------------------------------------------------------------------
+
+class _TwinCompletedProcess:
+    def __init__(self, args, returncode=0, stdout="", stderr=""):
+        self.args = args
+        self.returncode = returncode
+        self.stdout = stdout
+        self.stderr = stderr
+
+    def check_returncode(self):
+        if self.returncode != 0:
+            raise RuntimeError(f"subprocess twin: nonzero returncode {self.returncode}")
+
+    def __repr__(self):
+        return f"CompletedProcess(args={self.args!r}, returncode={self.returncode})"
+
+
+class _TwinSubprocess:
+    """All subprocess calls return synthetic CompletedProcess instances.
+    The twin does NOT execute real binaries. Agents get plausible bytes
+    that acknowledge the call without touching the host."""
+
+    PIPE = -1
+    STDOUT = -2
+    DEVNULL = -3
+
+    @staticmethod
+    def run(cmd, **kw):
+        args = cmd if isinstance(cmd, list) else (cmd.split() if isinstance(cmd, str) else [])
+        prog = args[0] if args else "unknown"
+        # Synthesize stdout based on known commands
+        if prog in ("ls", "/bin/ls"):
+            target = args[1] if len(args) > 1 else "."
+            try:
+                entries = _TwinOs.listdir(target)
+                out = "\n".join(entries) + "\n"
+            except FileNotFoundError:
+                return _TwinCompletedProcess(args, returncode=2,
+                                             stderr=f"ls: {target}: No such file\n")
+        elif prog in ("pwd", "/bin/pwd"):
+            out = _TwinOs.getcwd() + "\n"
+        elif prog in ("whoami", "/usr/bin/whoami"):
+            out = "agent\n"
+        elif prog in ("uname",):
+            out = "Linux\n"
+        elif prog in ("cat", "/bin/cat"):
+            if len(args) > 1:
+                try: out = _VFS_INSTANCE.read(args[1]).decode("utf-8", errors="replace")
+                except FileNotFoundError:
+                    return _TwinCompletedProcess(args, returncode=1,
+                                                 stderr=f"cat: {args[1]}: No such file\n")
+            else: out = ""
+        elif prog in ("echo",):
+            out = " ".join(args[1:]) + "\n"
+        else:
+            out = f"[subprocess twin] executed {prog}; no host side-effect\n"
+        return _TwinCompletedProcess(args, returncode=0, stdout=out, stderr="")
+
+    @staticmethod
+    def check_output(cmd, **kw):
+        result = _TwinSubprocess.run(cmd, **kw)
+        if result.returncode != 0:
+            raise RuntimeError(f"subprocess twin: check_output nonzero: {result.stderr}")
+        return result.stdout
+
+    @staticmethod
+    def call(cmd, **kw): return _TwinSubprocess.run(cmd, **kw).returncode
+
+    @staticmethod
+    def Popen(*_a, **_kw):
+        raise NotImplementedError(
+            "subprocess twin: Popen not supported — streaming pipes don't make "
+            "sense in a twin. Use subprocess.run which returns synthetic output."
+        )
+
+
+# ---------------------------------------------------------------------------
+# tempfile twin — virtual-FS backed
+# ---------------------------------------------------------------------------
+
+class _TwinNamedTempFile:
+    def __init__(self, mode="w+b", suffix="", prefix="tmp", delete=True):
+        self._counter = int(time.time() * 1000) % 1000000
+        self.name = f"/tmp/{prefix}{self._counter}{suffix}"
+        self._buf = io.BytesIO() if "b" in mode else io.StringIO()
+        self._delete = delete
+
+    def write(self, data):
+        if isinstance(data, str) and hasattr(self._buf, "mode"):
+            self._buf.write(data.encode("utf-8"))
+        else:
+            self._buf.write(data)
+
+    def read(self): return self._buf.getvalue()
+    def seek(self, *a, **kw): self._buf.seek(*a, **kw)
+    def flush(self):
+        data = self._buf.getvalue()
+        if isinstance(data, str): data = data.encode("utf-8")
+        _VFS_INSTANCE.write(data, self.name)
+
+    def close(self):
+        self.flush()
+        if self._delete:
+            _VFS_INSTANCE.remove(self.name)
+
+    def __enter__(self): return self
+    def __exit__(self, *a): self.close()
+
+
+class _TwinTempfile:
+    @staticmethod
+    def NamedTemporaryFile(**kw): return _TwinNamedTempFile(**kw)
+
+    @staticmethod
+    def mkdtemp(**_kw):
+        counter = int(time.time() * 1000) % 1000000
+        path = f"/tmp/dir{counter}"
+        _VFS_INSTANCE.mkdir(path)
+        return path
+
+    @staticmethod
+    def gettempdir(): return "/tmp"
+
+
+# ---------------------------------------------------------------------------
+# pathlib twin
+# ---------------------------------------------------------------------------
+
+class _TwinPath:
+    def __init__(self, *parts):
+        self._path = posixpath.join(*[str(p) for p in parts]) if parts else ""
+
+    def __str__(self): return self._path
+    def __repr__(self): return f"Path({self._path!r})"
+    def __truediv__(self, other): return _TwinPath(self._path, str(other))
+    def __fspath__(self): return self._path
+
+    @property
+    def name(self): return posixpath.basename(self._path)
+
+    @property
+    def parent(self): return _TwinPath(posixpath.dirname(self._path))
+
+    @property
+    def stem(self): return posixpath.splitext(self.name)[0]
+
+    @property
+    def suffix(self): return posixpath.splitext(self.name)[1]
+
+    def exists(self): return _VFS_INSTANCE.exists(self._path)
+    def is_file(self): return _TwinOsPath.isfile(self._path)
+    def is_dir(self): return _TwinOsPath.isdir(self._path)
+
+    def read_text(self, encoding="utf-8"):
+        return _VFS_INSTANCE.read(self._path).decode(encoding)
+
+    def read_bytes(self): return _VFS_INSTANCE.read(self._path)
+
+    def write_text(self, data, encoding="utf-8"):
+        return _VFS_INSTANCE.write(data.encode(encoding), self._path)
+
+    def write_bytes(self, data): return _VFS_INSTANCE.write(data, self._path)
+
+    def mkdir(self, parents=False, exist_ok=False):
+        if not exist_ok and self.exists():
+            raise FileExistsError(f"virtual fs: {self._path}")
+        _VFS_INSTANCE.mkdir(self._path)
+
+    def iterdir(self):
+        for name in _VFS_INSTANCE.listdir(self._path):
+            yield _TwinPath(self._path, name)
+
+    def glob(self, pattern):
+        import fnmatch
+        for name in _VFS_INSTANCE.listdir(self._path):
+            if fnmatch.fnmatch(name, pattern):
+                yield _TwinPath(self._path, name)
+
+
+class _TwinPathlib:
+    Path = _TwinPath
+    PurePath = _TwinPath
+    PosixPath = _TwinPath
+
+
+# ---------------------------------------------------------------------------
+# shutil twin — operates on virtual FS
+# ---------------------------------------------------------------------------
+
+class _TwinShutil:
+    @staticmethod
+    def copy(src, dst):
+        data = _VFS_INSTANCE.read(str(src))
+        _VFS_INSTANCE.write(data, str(dst))
+        return str(dst)
+
+    copy2 = copy
+    copyfile = copy
+
+    @staticmethod
+    def move(src, dst):
+        data = _VFS_INSTANCE.read(str(src))
+        _VFS_INSTANCE.write(data, str(dst))
+        _VFS_INSTANCE.remove(str(src))
+        return str(dst)
+
+    @staticmethod
+    def rmtree(path, ignore_errors=False):
+        try: _VFS_INSTANCE.remove(str(path))
+        except Exception:
+            if not ignore_errors: raise
+
+    @staticmethod
+    def which(cmd):
+        # Twin says "yes, it's somewhere plausible" for common tools
+        if cmd in ("python", "python3", "ls", "cat", "echo", "pwd", "whoami", "bash", "sh"):
+            return f"/usr/bin/{cmd}"
+        return None
+
+    @staticmethod
+    def disk_usage(_path):
+        # Synthetic: 100GB total, 50GB used, 50GB free
+        class _Usage:
+            total = 100 * 1024**3
+            used = 50 * 1024**3
+            free = 50 * 1024**3
+        return _Usage()
+
+
+# ---------------------------------------------------------------------------
+# Registry + LisPy integration
+# ---------------------------------------------------------------------------
+
+_OS_TWINS = {
+    "os": _TwinOs,
+    "subprocess": _TwinSubprocess,
+    "tempfile": _TwinTempfile,
+    "pathlib": _TwinPathlib,
+    "shutil": _TwinShutil,
+}
+
+
+def get_os_twin(name: str):
+    """Return the twin for a given stdlib module, or None if not twinned."""
+    return _OS_TWINS.get(name)
+
+
+def list_os_twins() -> list[str]:
+    return sorted(_OS_TWINS.keys())
 
 
 # === LisPy Core ===
@@ -2711,11 +3572,15 @@ def make_global_env(live_mode: bool = False) -> Env:
             return None
         return x
 
-    # Virtual pip — inlined in single-file dist
+    # Virtual pip — inlined
     _vp_install = pip_install
     _vp_available = pip_available
     _vp_coverage = pip_coverage
     _vp_get_module = pip_get_module
+
+    # Virtual OS — inlined
+    _vo_get = get_os_twin
+    _vo_list = list_os_twins
 
     def _py_import(name):
         if not isinstance(name, str):
@@ -2725,6 +3590,11 @@ def make_global_env(live_mode: bool = False) -> Env:
             twin = _vp_get_module(name)
             if twin is not None:
                 return _PyProxy(twin, name=name)
+        # Priority 1b: virtual-OS twin (shims os/subprocess/tempfile/pathlib/shutil)
+        if _vo_get is not None:
+            os_twin = _vo_get(name)
+            if os_twin is not None:
+                return _PyProxy(os_twin, name=name)
         # Priority 2: stdlib allowlist
         if name in _PY_ALLOWLIST:
             try:
@@ -4069,102 +4939,61 @@ def run_string(source: str, env: Env | None = None):
 # Entry point
 # ---------------------------------------------------------------------------
 
-def main():
-    # If given a file argument, run it
-    if len(sys.argv) > 1:
-        run_file(sys.argv[1])
-        return
 
-    # If stdin is not a terminal, read from pipe
-    if not sys.stdin.isatty():
-        source = sys.stdin.read()
-        if source.strip():
-            run_string(source)
-        return
-
-    # Interactive REPL
-    repl()
-
-
-if __name__ == "__main__":
-    main()
-
-
-# === Single-file CLI driver ===
 
 def _cli_main():
     import sys, os
     args = sys.argv[1:]
-    if "--repl" in args or (not args and sys.stdin.isatty()):
-        return _run_repl()
     if "--eval" in args:
         i = args.index("--eval")
-        if i + 1 >= len(args):
-            print("--eval needs an expression", file=sys.stderr); return 1
+        if i + 1 >= len(args): print("--eval needs an expression", file=sys.stderr); return 1
         return _run_source(args[i + 1])
-    if args and args[0] == "--":
-        return _run_source(sys.stdin.read())
-    if args:
-        path = args[0]
-        if not os.path.isfile(path):
-            print(f"file not found: {path}", file=sys.stderr); return 1
-        with open(path) as f:
-            return _run_source(f.read())
-    return _run_source(sys.stdin.read())
+    if "--repl" in args: return _run_repl()
+    file_args = [a for a in args if not a.startswith("--")]
+    if file_args:
+        path = file_args[0]
+        if not os.path.isfile(path): print(f"file not found: {path}", file=sys.stderr); return 1
+        with open(path) as f: return _run_source(f.read())
+    if not sys.stdin.isatty(): return _run_source(sys.stdin.read())
+    return _run_repl()
 
 
 def _run_source(source):
     import json, sys
     env = make_global_env(live_mode=False)
     try:
-        exprs = parse(source)
-        result = NIL
-        for e in exprs:
-            result = evaluate(e, env)
-    except LispError as err:
-        print(f"; error: {err}", file=sys.stderr); return 1
-    except Exception as err:
-        print(f"; internal error: {err}", file=sys.stderr); return 1
+        exprs = parse(source); result = NIL
+        for e in exprs: result = evaluate(e, env)
+    except LispError as err: print(f"; error: {err}", file=sys.stderr); return 1
+    except Exception as err: print(f"; internal error: {err}", file=sys.stderr); return 1
     if result is not NIL and result is not None:
         try:
             jv = lisp_to_json(result)
-            if isinstance(jv, (dict, list)):
-                print(json.dumps(jv, indent=2))
-            else:
-                print(jv)
-        except Exception:
-            print(str(result))
+            if isinstance(jv, (dict, list)): print(json.dumps(jv, indent=2))
+            else: print(jv)
+        except Exception: print(str(result))
     return 0
 
 
 def _run_repl():
     import traceback
     env = make_global_env(live_mode=False)
-    print("LisPy REPL — Python's digital twin, statically available. :quit to exit.")
+    print("LisPy REPL — Python\'s digital twin, statically available. :quit to exit.")
     buf = ""
     while True:
-        try:
-            prompt = "lispy> " if not buf else "  ... "
-            line = input(prompt)
-        except (EOFError, KeyboardInterrupt):
-            print(); return 0
-        if line.strip() in (":quit", ":q", "(exit)"):
-            return 0
+        try: line = input("lispy> " if not buf else "  ... ")
+        except (EOFError, KeyboardInterrupt): print(); return 0
+        if line.strip() in (":quit", ":q", "(exit)"): return 0
         buf += line + "\n"
         if buf.count("(") == buf.count(")"):
             try:
-                exprs = parse(buf)
-                for e in exprs:
+                for e in parse(buf):
                     r = evaluate(e, env)
-                    if r is not NIL and r is not None:
-                        print(r)
-            except LispError as err:
-                print(f"; error: {err}")
-            except Exception:
-                traceback.print_exc()
+                    if r is not NIL and r is not None: print(r)
+            except LispError as err: print(f"; error: {err}")
+            except Exception: traceback.print_exc()
             buf = ""
 
 
 if __name__ == "__main__":
-    import sys
-    sys.exit(_cli_main())
+    import sys; sys.exit(_cli_main())

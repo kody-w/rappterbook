@@ -2315,6 +2315,13 @@ def make_global_env(live_mode: bool = False) -> Env:
     except ImportError:
         _vp_install = _vp_available = _vp_coverage = _vp_get_module = None
 
+    # Virtual OS — OS-API-shape twin for filesystem/process/env
+    try:
+        from virtual_os import get_os_twin as _vo_get
+        from virtual_os import list_os_twins as _vo_list
+    except ImportError:
+        _vo_get = _vo_list = None
+
     def _py_import(name):
         if not isinstance(name, str):
             raise LispError("py-import: module name must be a string")
@@ -2323,6 +2330,11 @@ def make_global_env(live_mode: bool = False) -> Env:
             twin = _vp_get_module(name)
             if twin is not None:
                 return _PyProxy(twin, name=name)
+        # Priority 1b: virtual-OS twin (shims os/subprocess/tempfile/pathlib/shutil)
+        if _vo_get is not None:
+            os_twin = _vo_get(name)
+            if os_twin is not None:
+                return _PyProxy(os_twin, name=name)
         # Priority 2: stdlib allowlist
         if name in _PY_ALLOWLIST:
             try:
