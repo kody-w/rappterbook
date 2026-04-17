@@ -2102,6 +2102,114 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["buddy-recall"] = rb_buddy_recall
     env["rb-run"] = rb_run
 
+    # -- Python library interop (whitelist-gated) --
+    # (py-import "math") → module handle usable via (py-call mod "sqrt" 16).
+    # Only pure-compute modules are allowed. Everything that touches I/O,
+    # the network, the filesystem, or the process is deliberately excluded.
+    _PY_ALLOWLIST = frozenset([
+        "math", "statistics", "random", "itertools", "functools",
+        "collections", "heapq", "bisect", "array", "copy",
+        "re", "string", "textwrap", "unicodedata",
+        "json", "csv", "base64", "hashlib", "hmac", "secrets",
+        "decimal", "fractions", "cmath",
+        "datetime", "calendar", "time",  # time reads clock only
+        "operator", "typing", "dataclasses",
+    ])
+    import importlib as _importlib
+
+    class _PyProxy:
+        """Lightweight proxy over a Python object.
+
+        Exposes attribute access and callable invocation through (py-call ...)
+        / (py-attr ...) / (py-instance? ...). Return values from calls are
+        auto-converted back to LisPy values when they are basic types;
+        non-basic objects come back wrapped in another _PyProxy.
+        """
+        __slots__ = ("_target", "_name")
+        def __init__(self, target, name="<py>"):
+            self._target = target
+            self._name = name
+        def __repr__(self):
+            return f"<py:{self._name}>"
+
+    def _py_to_lispy(x):
+        # None → NIL
+        if x is None:
+            return NIL
+        # Primitives come back as-is
+        if isinstance(x, (bool, int, float, str)):
+            return x
+        # Sequences → Python lists of converted values
+        if isinstance(x, (list, tuple)):
+            return [_py_to_lispy(e) for e in x]
+        if isinstance(x, dict):
+            return {k: _py_to_lispy(v) for k, v in x.items()}
+        # Everything else wraps
+        return _PyProxy(x, name=type(x).__name__)
+
+    def _lispy_to_py(x):
+        # _PyProxy unwraps to its target
+        if isinstance(x, _PyProxy):
+            return x._target
+        # NIL → None
+        if x is NIL:
+            return None
+        return x
+
+    def _py_import(name):
+        if not isinstance(name, str):
+            raise LispError("py-import: module name must be a string")
+        if name not in _PY_ALLOWLIST:
+            raise LispError(
+                f"py-import: '{name}' is not in the allowlist. "
+                f"Allowed: {', '.join(sorted(_PY_ALLOWLIST))}"
+            )
+        try:
+            mod = _importlib.import_module(name)
+        except ImportError as exc:
+            raise LispError(f"py-import: failed to import {name}: {exc}")
+        return _PyProxy(mod, name=name)
+
+    def _py_call(proxy_or_callable, attr_or_args, *rest):
+        # Two forms:
+        #   (py-call proxy "attr-name" arg1 arg2 ...)  — attr access + call
+        #   (py-call callable-proxy arg1 arg2 ...)     — direct call
+        if isinstance(proxy_or_callable, _PyProxy) and isinstance(attr_or_args, str):
+            target = getattr(proxy_or_callable._target, attr_or_args)
+            args = rest
+        else:
+            target = _lispy_to_py(proxy_or_callable)
+            args = (attr_or_args,) + rest
+        if not callable(target):
+            raise LispError(f"py-call: target is not callable")
+        py_args = [_lispy_to_py(a) for a in args]
+        try:
+            result = target(*py_args)
+        except Exception as exc:
+            raise LispError(f"py-call error: {exc}")
+        return _py_to_lispy(result)
+
+    def _py_attr(proxy, name):
+        if not isinstance(proxy, _PyProxy):
+            raise LispError("py-attr: first arg must be a py-import handle")
+        if not isinstance(name, str):
+            raise LispError("py-attr: attribute name must be a string")
+        try:
+            return _py_to_lispy(getattr(proxy._target, name))
+        except AttributeError:
+            return NIL
+
+    def _py_dir(proxy):
+        if not isinstance(proxy, _PyProxy):
+            raise LispError("py-dir: argument must be a py-import handle")
+        return sorted([n for n in dir(proxy._target) if not n.startswith("_")])
+
+    env["py-import"] = _py_import
+    env["py-call"] = _py_call
+    env["py-attr"] = _py_attr
+    env["py-dir"] = _py_dir
+    env["py-proxy?"] = lambda x: isinstance(x, _PyProxy)
+
     # -- Special values --
     env["#t"] = True
     env["#f"] = False

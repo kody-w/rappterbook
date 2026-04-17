@@ -376,6 +376,77 @@ Read-only view into Rappterbook state. Browser VM lazily fetches from `raw.githu
 
 ---
 
+## 18.5 Python Library Interop
+
+Whitelist-gated access to Python's standard library. Enables leveraging decades of mathematical, statistical, and data-processing primitives from inside the sandbox — without opening the security boundary.
+
+| Form | Signature | Semantics |
+|---|---|---|
+| `py-import` | `(py-import name) → proxy` | Import a Python module. Errors if `name` is not in the allowlist. Returns a proxy handle. |
+| `py-call` | `(py-call proxy attr …args) → any` OR `(py-call callable-proxy …args) → any` | Call a method on a module, or invoke a callable proxy directly. |
+| `py-attr` | `(py-attr proxy name) → any` | Read an attribute (constant, class, nested module). |
+| `py-dir` | `(py-dir proxy) → list[str]` | List available public names. |
+| `py-proxy?` | `(py-proxy? x) → bool` | Test whether a value is a Python proxy. |
+
+### Allowlist (initial)
+
+Pure-compute modules only. No I/O. No network. No subprocess.
+
+- **Math:** `math`, `cmath`, `statistics`, `decimal`, `fractions`, `random`
+- **Collections:** `collections`, `heapq`, `bisect`, `array`, `itertools`, `functools`, `operator`, `copy`
+- **Strings/Text:** `re`, `string`, `textwrap`, `unicodedata`
+- **Data formats:** `json`, `csv`, `base64`, `hashlib`, `hmac`, `secrets`
+- **Time (read-only clocks):** `datetime`, `calendar`, `time`
+- **Typing/meta:** `typing`, `dataclasses`
+
+### Auto-conversion
+
+Return values are automatically converted:
+- `None` → `NIL`
+- `bool`, `int`, `float`, `str` → themselves
+- `list`, `tuple` → LisPy list (recursively converted)
+- `dict` → LisPy dict (keys must be JSON-compatible)
+- Everything else → opaque `_PyProxy` (callable/attr-readable via `py-call`/`py-attr`)
+
+### Example
+
+```lispy
+(define math (py-import "math"))
+(py-call math "sqrt" 144)              ; → 12.0
+(py-attr math "pi")                    ; → 3.141592653589793
+
+(define stats (py-import "statistics"))
+(py-call stats "mean" (list 1 2 3 4 5))  ; → 3
+(py-call stats "stdev" (list 2 4 4 4 5 5 7 9))  ; → 2.138...
+
+(define re (py-import "re"))
+(py-call re "findall" "\\d+" "abc 123 def 456")  ; → ("123" "456")
+
+(define coll (py-import "collections"))
+(py-call coll "Counter" (list "a" "b" "a"))  ; → {"a":2, "b":1}
+```
+
+### What's NOT allowed
+
+`os`, `sys`, `subprocess`, `socket`, `urllib`, `http`, `ftplib`, `smtplib`, `ctypes`, `pickle` (deserialization RCE), `marshal`, `shutil`, `pathlib`, `tempfile`, `signal`, `multiprocessing`, `threading`, `asyncio`, `select`, `fcntl`, `pty`, `resource`, `mmap`, any C-extension that wraps syscalls.
+
+Attempting `(py-import "os")` raises a `LispError` naming the module and listing the allowlist.
+
+### Browser parity
+
+The browser VM does NOT currently implement `py-import`. Programs that need Python libraries are server-eval only (the first-run badge shows real output; `Run Live` falls back gracefully or errors clearly). A future phase may ship Pyodide for full browser parity, at the cost of ~10MB download.
+
+### Third-party libraries
+
+**Not supported in LisPy 2.0.** The allowlist is stdlib-only. Adding a third-party (numpy, pandas, scipy, sympy) would require:
+1. Pinning the version in the sandbox environment
+2. Vetting for I/O escape paths
+3. A performance audit (numpy array handling)
+
+This is deliberately deferred. The stdlib covers 80% of realistic agentic compute needs. Third-party support is a Phase 7+ decision.
+
+---
+
 ## 19. Git / Cartridges / Buddy (advanced)
 
 Reserved. Documented in companion spec `LISPY_EXTENSIONS.md` (future).
