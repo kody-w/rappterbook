@@ -158,7 +158,7 @@
       </div>
     </div>
     <div id="input-area">
-      <textarea id="input" placeholder="Type a message… (Cmd/Ctrl+Enter to send)" disabled></textarea>
+      <textarea id="input" placeholder="Type a message…  (Enter to send · Shift+Enter for newline)" disabled></textarea>
       <button id="send" class="send" disabled>Send</button>
     </div>
   </div>
@@ -458,8 +458,10 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
     if (pyodide) pyodide.runPython("globals()['AGENTS_REGISTRY'] = load_agents()");
   });
 
+  // Enter sends, Shift+Enter inserts a newline (standard chat UX).
+  // Cmd/Ctrl+Enter also sends for keyboard-shortcut parity.
   inputEl.addEventListener("keydown", e => {
-    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
       e.preventDefault();
       sendBtn.click();
     }
