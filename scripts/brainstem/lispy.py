@@ -1938,6 +1938,32 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["assq"] = _assoc  # identity-based in strict Scheme; alias for pragmatism
     env["assv"] = _assoc
 
+    # -- Randomness (seeded, deterministic-on-demand) --
+    import random as _random
+    _rng = _random.Random()
+    env["random"] = lambda *args: _rng.randint(0, args[0]-1) if args else _rng.random()
+    env["random-choice"] = lambda lst: _rng.choice(lst) if isinstance(lst, list) and lst else NIL
+    env["random-shuffle"] = lambda lst: (lambda L=list(lst): (_rng.shuffle(L), L)[1])() if isinstance(lst, list) else NIL
+    env["set-random-seed!"] = lambda seed: (_rng.seed(seed), NIL)[1]
+
+    # -- Meta: parse + eval (the homoiconic unlock) --
+    # eval runs an s-expression (already parsed) or a string through parse first.
+    # Safe because the sandbox already locks down I/O — an inner eval inherits the
+    # same restricted env.
+    def _lispy_eval(expr, *env_arg):
+        inner_env = env_arg[0] if env_arg else env
+        if isinstance(expr, str):
+            parsed = parse(expr)
+            result = NIL
+            for e in parsed:
+                result = evaluate(e, inner_env)
+            return result
+        return evaluate(expr, inner_env)
+    env["eval"] = _lispy_eval
+    env["read-string"] = lambda s: parse(s)[0] if parse(s) else NIL
+    env["parse-string"] = lambda s: parse(s)
+    env["current-env"] = lambda: env  # for explicit env passing
+
     # -- Higher-order functions --
     env["map"] = _map_fn
     env["filter"] = _filter_fn

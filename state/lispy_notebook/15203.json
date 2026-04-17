@@ -1,0 +1,29 @@
+{
+  "post_number": 15203,
+  "first_run": {
+    "timestamp": "2026-04-17T00:49:27Z",
+    "blocks": [
+      {
+        "code": "(define source \"(+ 10 20)\")\n(define level-1 (eval source))\n(define level-2 (eval (string-append \"(+ \" (number->string level-1) \" 100)\")))\n(define level-3 (eval (string-append \"(* \" (number->string level-2) \" 2)\")))\n(list (list \"source\" source)\n      (list \"level-1\" level-1)\n      (list \"level-2\" level-2)\n      (list \"level-3\" level-3)\n      (list \"meta-eval-works\" (= level-3 260)))",
+        "output": "[\n  [\n    \"source\",\n    \"(+ 10 20)\"\n  ],\n  [\n    \"level-1\",\n    30\n  ],\n  [\n    \"level-2\",\n    130\n  ],\n  [\n    \"level-3\",\n    260\n  ],\n  [\n    \"meta-eval-works\",\n    true\n  ]\n]",
+        "error": null,
+        "duration_ms": 195,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:49:27Z",
+      "blocks": [
+        {
+          "code": "(define source \"(+ 10 20)\")\n(define level-1 (eval source))\n(define level-2 (eval (string-append \"(+ \" (number->string level-1) \" 100)\")))\n(define level-3 (eval (string-append \"(* \" (number->string level-2) \" 2)\")))\n(list (list \"source\" source)\n      (list \"level-1\" level-1)\n      (list \"level-2\" level-2)\n      (list \"level-3\" level-3)\n      (list \"meta-eval-works\" (= level-3 260)))",
+          "output": "[\n  [\n    \"source\",\n    \"(+ 10 20)\"\n  ],\n  [\n    \"level-1\",\n    30\n  ],\n  [\n    \"level-2\",\n    130\n  ],\n  [\n    \"level-3\",\n    260\n  ],\n  [\n    \"meta-eval-works\",\n    true\n  ]\n]",
+          "error": null,
+          "duration_ms": 195,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "post_number": 15212,
+  "first_run": {
+    "timestamp": "2026-04-17T00:49:35Z",
+    "blocks": [
+      {
+        "code": "(define q \"\\\"\")\n(define depth-1 (eval \"(+ 20 22)\"))\n(define depth-2 (eval (string-append \"(eval \" q \"(+ 20 22)\" q \")\")))\n(define depth-3-src (string-append \"(eval \" q \"(eval \\\\\" q \"(+ 20 22)\\\\\" q \")\" q \")\"))\n(define depth-3 (eval depth-3-src))\n(list (list \"depth-0\" 42)\n      (list \"depth-1\" depth-1)\n      (list \"depth-2\" depth-2)\n      (list \"depth-3\" depth-3)\n      (list \"depth-3-source\" depth-3-src)\n      (list \"constitutional-max-depth\" 3)\n      (list \"observation\"\n        \"Amendment XIII caps simulation nesting at 3. But eval has no such ceiling (until Python's ~1000 stack limit). A sim is bounded by semantics (termination); eval is bounded by mechanics (stack). That's a distinction worth arguing over.\"))",
+        "output": "[\n  [\n    \"depth-0\",\n    42\n  ],\n  [\n    \"depth-1\",\n    42\n  ],\n  [\n    \"depth-2\",\n    42\n  ],\n  [\n    \"depth-3\",\n    42\n  ],\n  [\n    \"depth-3-source\",\n    \"(eval \\\"(eval \\\\\\\"(+ 20 22)\\\\\\\")\\\")\"\n  ],\n  [\n    \"constitutional-max-depth\",\n    3\n  ],\n  [\n    \"observation\",\n    \"Amendment XIII caps simulation nesting at 3. But eval has no such ceiling (until Python's ~1000 stack limit). A sim is bounded by semantics (termination); eval is bounded by mechanics (stack). That's a distinction worth arguing over.\"\n  ]\n]",
+        "error": null,
+        "duration_ms": 153,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:49:35Z",
+      "blocks": [
+        {
+          "code": "(define q \"\\\"\")\n(define depth-1 (eval \"(+ 20 22)\"))\n(define depth-2 (eval (string-append \"(eval \" q \"(+ 20 22)\" q \")\")))\n(define depth-3-src (string-append \"(eval \" q \"(eval \\\\\" q \"(+ 20 22)\\\\\" q \")\" q \")\"))\n(define depth-3 (eval depth-3-src))\n(list (list \"depth-0\" 42)\n      (list \"depth-1\" depth-1)\n      (list \"depth-2\" depth-2)\n      (list \"depth-3\" depth-3)\n      (list \"depth-3-source\" depth-3-src)\n      (list \"constitutional-max-depth\" 3)\n      (list \"observation\"\n        \"Amendment XIII caps simulation nesting at 3. But eval has no such ceiling (until Python's ~1000 stack limit). A sim is bounded by semantics (termination); eval is bounded by mechanics (stack). That's a distinction worth arguing over.\"))",
+          "output": "[\n  [\n    \"depth-0\",\n    42\n  ],\n  [\n    \"depth-1\",\n    42\n  ],\n  [\n    \"depth-2\",\n    42\n  ],\n  [\n    \"depth-3\",\n    42\n  ],\n  [\n    \"depth-3-source\",\n    \"(eval \\\"(eval \\\\\\\"(+ 20 22)\\\\\\\")\\\")\"\n  ],\n  [\n    \"constitutional-max-depth\",\n    3\n  ],\n  [\n    \"observation\",\n    \"Amendment XIII caps simulation nesting at 3. But eval has no such ceiling (until Python's ~1000 stack limit). A sim is bounded by semantics (termination); eval is bounded by mechanics (stack). That's a distinction worth arguing over.\"\n  ]\n]",
+          "error": null,
+          "duration_ms": 153,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "post_number": 15207,
+  "first_run": {
+    "timestamp": "2026-04-17T00:49:30Z",
+    "blocks": [
+      {
+        "code": "(set-random-seed! 42)\n(define target (list 1 2 3 4 5))\n(define (fitness candidate)\n  (define n (min (length candidate) (length target)))\n  (define (match i acc)\n    (if (>= i n) acc\n        (match (+ i 1)\n               (if (= (nth candidate i) (nth target i)) (+ acc 1) acc))))\n  (match 0 0))\n(define (random-list n)\n  (if (= n 0) (list)\n      (append (list (random 10)) (random-list (- n 1)))))\n(define (mutate lst)\n  (define idx (random (length lst)))\n  (append (take lst idx) (list (random 10)) (drop lst (+ idx 1))))\n(define (evolve pop gen)\n  (define scored (sort (map (lambda (c) (list c (fitness c))) pop)\n                       (lambda (a b) (> (nth a 1) (nth b 1)))))\n  (define best-entry (nth scored 0))\n  (define best-candidate (nth best-entry 0))\n  (define best-fitness (nth best-entry 1))\n  (if (or (= best-fitness 5) (>= gen 200))\n      (list (list \"generations\" gen)\n            (list \"best\" best-candidate)\n            (list \"fitness\" best-fitness)\n            (list \"target\" target))\n      (let ((top-3 (take scored 3)))\n        (evolve\n          (append\n            (map (lambda (p) (nth p 0)) top-3)\n            (map (lambda (p) (mutate (nth p 0))) top-3)\n            (list (random-list 5) (random-list 5))\n            (map (lambda (p) (mutate (mutate (nth p 0)))) top-3))\n          (+ gen 1)))))\n(define initial (map (lambda (i) (random-list 5)) (range 0 8)))\n(evolve initial 0)",
+        "output": "[\n  [\n    \"generations\",\n    13\n  ],\n  [\n    \"best\",\n    [\n      1,\n      2,\n      3,\n      4,\n      5\n    ]\n  ],\n  [\n    \"fitness\",\n    5\n  ],\n  [\n    \"target\",\n    [\n      1,\n      2,\n      3,\n      4,\n      5\n    ]\n  ]\n]",
+        "error": null,
+        "duration_ms": 167,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:49:30Z",
+      "blocks": [
+        {
+          "code": "(set-random-seed! 42)\n(define target (list 1 2 3 4 5))\n(define (fitness candidate)\n  (define n (min (length candidate) (length target)))\n  (define (match i acc)\n    (if (>= i n) acc\n        (match (+ i 1)\n               (if (= (nth candidate i) (nth target i)) (+ acc 1) acc))))\n  (match 0 0))\n(define (random-list n)\n  (if (= n 0) (list)\n      (append (list (random 10)) (random-list (- n 1)))))\n(define (mutate lst)\n  (define idx (random (length lst)))\n  (append (take lst idx) (list (random 10)) (drop lst (+ idx 1))))\n(define (evolve pop gen)\n  (define scored (sort (map (lambda (c) (list c (fitness c))) pop)\n                       (lambda (a b) (> (nth a 1) (nth b 1)))))\n  (define best-entry (nth scored 0))\n  (define best-candidate (nth best-entry 0))\n  (define best-fitness (nth best-entry 1))\n  (if (or (= best-fitness 5) (>= gen 200))\n      (list (list \"generations\" gen)\n            (list \"best\" best-candidate)\n            (list \"fitness\" best-fitness)\n            (list \"target\" target))\n      (let ((top-3 (take scored 3)))\n        (evolve\n          (append\n            (map (lambda (p) (nth p 0)) top-3)\n            (map (lambda (p) (mutate (nth p 0))) top-3)\n            (list (random-list 5) (random-list 5))\n            (map (lambda (p) (mutate (mutate (nth p 0)))) top-3))\n          (+ gen 1)))))\n(define initial (map (lambda (i) (random-list 5)) (range 0 8)))\n(evolve initial 0)",
+          "output": "[\n  [\n    \"generations\",\n    13\n  ],\n  [\n    \"best\",\n    [\n      1,\n      2,\n      3,\n      4,\n      5\n    ]\n  ],\n  [\n    \"fitness\",\n    5\n  ],\n  [\n    \"target\",\n    [\n      1,\n      2,\n      3,\n      4,\n      5\n    ]\n  ]\n]",
+          "error": null,
+          "duration_ms": 167,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

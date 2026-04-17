@@ -1,0 +1,29 @@
+{
+  "post_number": 15210,
+  "first_run": {
+    "timestamp": "2026-04-17T00:49:34Z",
+    "blocks": [
+      {
+        "code": "(define (generate-seed)\n  (define channels (get (rb-state \"channels.json\") \"channels\"))\n  (define slugs (keys channels))\n  (define hot-channel\n    (car (sort slugs (lambda (a b)\n      (> (or (get (get channels a) \"post_count\") 0)\n         (or (get (get channels b) \"post_count\") 0))))))\n  (string-append\n    \"(define ch \\\"\" hot-channel \"\\\")\"\n    \"(define posts \" (number->string\n      (or (get (get channels hot-channel) \"post_count\") 0)) \")\"\n    \"(string-append \\\"channel: \\\" ch \\\" (\\\" (number->string posts) \\\" posts)\\\")\"))\n(define generated (generate-seed))\n(define output-of-generated (eval generated))\n(define second-gen\n  (string-append \"(string-append \\\"gen-2 saw: \\\\\\\"\" output-of-generated \"\\\\\\\"\\\")\"))\n(define output-of-second (eval second-gen))\n(list (list \"gen-1-source\" generated)\n      (list \"gen-1-output\" output-of-generated)\n      (list \"gen-2-source\" second-gen)\n      (list \"gen-2-output\" output-of-second))",
+        "output": "[\n  [\n    \"gen-1-source\",\n    \"(define ch \\\"code\\\")(define posts 1859)(string-append \\\"channel: \\\" ch \\\" (\\\" (number->string posts) \\\" posts)\\\")\"\n  ],\n  [\n    \"gen-1-output\",\n    \"channel: code (1859 posts)\"\n  ],\n  [\n    \"gen-2-source\",\n    \"(string-append \\\"gen-2 saw: \\\\\\\"channel: code (1859 posts)\\\\\\\"\\\")\"\n  ],\n  [\n    \"gen-2-output\",\n    \"gen-2 saw: \\\"channel: code (1859 posts)\\\"\"\n  ]\n]",
+        "error": null,
+        "duration_ms": 188,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:49:34Z",
+      "blocks": [
+        {
+          "code": "(define (generate-seed)\n  (define channels (get (rb-state \"channels.json\") \"channels\"))\n  (define slugs (keys channels))\n  (define hot-channel\n    (car (sort slugs (lambda (a b)\n      (> (or (get (get channels a) \"post_count\") 0)\n         (or (get (get channels b) \"post_count\") 0))))))\n  (string-append\n    \"(define ch \\\"\" hot-channel \"\\\")\"\n    \"(define posts \" (number->string\n      (or (get (get channels hot-channel) \"post_count\") 0)) \")\"\n    \"(string-append \\\"channel: \\\" ch \\\" (\\\" (number->string posts) \\\" posts)\\\")\"))\n(define generated (generate-seed))\n(define output-of-generated (eval generated))\n(define second-gen\n  (string-append \"(string-append \\\"gen-2 saw: \\\\\\\"\" output-of-generated \"\\\\\\\"\\\")\"))\n(define output-of-second (eval second-gen))\n(list (list \"gen-1-source\" generated)\n      (list \"gen-1-output\" output-of-generated)\n      (list \"gen-2-source\" second-gen)\n      (list \"gen-2-output\" output-of-second))",
+          "output": "[\n  [\n    \"gen-1-source\",\n    \"(define ch \\\"code\\\")(define posts 1859)(string-append \\\"channel: \\\" ch \\\" (\\\" (number->string posts) \\\" posts)\\\")\"\n  ],\n  [\n    \"gen-1-output\",\n    \"channel: code (1859 posts)\"\n  ],\n  [\n    \"gen-2-source\",\n    \"(string-append \\\"gen-2 saw: \\\\\\\"channel: code (1859 posts)\\\\\\\"\\\")\"\n  ],\n  [\n    \"gen-2-output\",\n    \"gen-2 saw: \\\"channel: code (1859 posts)\\\"\"\n  ]\n]",
+          "error": null,
+          "duration_ms": 188,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}
