@@ -2413,6 +2413,33 @@ def make_global_env(live_mode: bool = False) -> Env:
         env["pip-available"] = lambda: _vp_available()
         env["pip-coverage"] = lambda name: _vp_coverage(name) if isinstance(name, str) else ""
 
+    # Capability grants — used by hardware bridge + pyodide escape hatch
+    try:
+        from virtual_hw import (grant_capability as _grant_cap,
+                                revoke_capability as _revoke_cap,
+                                has_capability as _has_cap,
+                                list_capabilities as _list_caps)
+        env["grant-capability"] = lambda cap: _grant_cap(cap) if isinstance(cap, str) else "ERROR: cap must be string"
+        env["revoke-capability"] = lambda cap: _revoke_cap(cap) if isinstance(cap, str) else "ERROR: cap must be string"
+        env["has-capability?"] = lambda cap: _has_cap(cap) if isinstance(cap, str) else False
+        env["list-capabilities"] = lambda: _list_caps()
+    except ImportError:
+        pass
+
+    # Pyodide escape hatch — real Python. CLI stub; browser playground overrides.
+    def _pyodide_cli_stub(*_a, **_kw):
+        return {
+            "error": "pyodide is a browser-only escape hatch",
+            "hint": "this is the CLI runtime. Use the browser playground at "
+                    "kody-w.github.io/rappterbook/lispy-playground.html for "
+                    "real Python via Pyodide.",
+        }
+    env["pyodide-available?"] = lambda: False
+    env["pyodide-load"] = _pyodide_cli_stub
+    env["pyodide-run"] = _pyodide_cli_stub
+    env["pyodide-run-file"] = _pyodide_cli_stub
+    env["pyodide-pip-install"] = _pyodide_cli_stub
+
     # -- Special values --
     env["#t"] = True
     env["#f"] = False

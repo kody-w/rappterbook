@@ -2,17 +2,14 @@
 """LisPy — The Zero-Dependency Agent Runtime.
 
 Single-file distribution. Pure Python stdlib. Python 3.8+.
-Bundled: LisPy core + Virtual Pip (20 packages) + Virtual OS (5 modules).
+Bundled: LisPy core + Virtual Pip (20 pkgs) + Virtual OS (5 modules)
+         + Virtual HW contract + Pyodide escape hatch stub.
 
 USAGE:
     python3 lispy.py program.lispy       run a file
     echo '(+ 1 2)' | python3 lispy.py    pipe mode
     python3 lispy.py --repl              interactive REPL
     python3 lispy.py --eval '(+ 1 2)'    one-liner
-
-DOCS:  https://kody-w.github.io/rappterbook/LISPY_MANIFESTO.md
-SPEC:  https://kody-w.github.io/rappterbook/LISPY_SPEC.md
-LICENSE: Apache 2.0
 """
 from __future__ import annotations
 
@@ -1277,6 +1274,203 @@ def get_os_twin(name: str):
 
 def list_os_twins() -> list[str]:
     return sorted(_OS_TWINS.keys())
+
+
+# === Virtual HW (inlined) ===
+
+
+import base64
+import json
+import os
+import socket
+import time
+from typing import Any
+
+
+# ---------------------------------------------------------------------------
+# Bridge client — talks to the local harness over Unix socket
+# ---------------------------------------------------------------------------
+
+BRIDGE_SOCKET = os.environ.get("LISPY_BRIDGE_SOCKET", "/tmp/lispy-bridge.sock")
+BRIDGE_TIMEOUT = 10.0
+
+_GRANTED_CAPABILITIES: set[str] = set()
+
+
+def _bridge_available() -> bool:
+    """Check if a bridge daemon is listening on the Unix socket."""
+    if not os.path.exists(BRIDGE_SOCKET):
+        return False
+    try:
+        s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        s.settimeout(0.5)
+        s.connect(BRIDGE_SOCKET)
+        s.close()
+        return True
+    except (OSError, socket.timeout):
+        return False
+
+
+def _bridge_call(method: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Send a JSON-RPC request to the bridge and return the response."""
+    if not _bridge_available():
+        return {"error": "bridge not running",
+                "hint": f"Start bridge: python3 -m scripts.brainstem.bridge --listen {BRIDGE_SOCKET}"}
+    try:
+        s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        s.settimeout(BRIDGE_TIMEOUT)
+        s.connect(BRIDGE_SOCKET)
+        req = json.dumps({"method": method, "params": params or {}}) + "\n"
+        s.sendall(req.encode("utf-8"))
+        buf = b""
+        while True:
+            chunk = s.recv(65536)
+            if not chunk: break
+            buf += chunk
+            if b"\n" in buf: break
+        s.close()
+        return json.loads(buf.decode("utf-8").strip())
+    except Exception as exc:
+        return {"error": f"bridge call failed: {exc}"}
+
+
+# ---------------------------------------------------------------------------
+# Capability grants — scoped, revocable
+# ---------------------------------------------------------------------------
+
+VALID_CAPABILITIES = frozenset([
+    "hw-screen",        # screenshot / screen recording
+    "hw-microphone",    # record audio
+    "hw-camera",        # capture photo / video
+    "hw-speakers",      # play audio / TTS
+    "hw-clipboard",     # read / write clipboard
+    "hw-notification",  # push macOS notification
+    "hw-keyboard",      # listen for keypresses
+    "hw-mouse",         # read / move / click
+    "hw-file-dialog",   # native open / save dialogs
+    "hw-location",      # GPS / CoreLocation
+    "pyodide",          # escape hatch — run real Python via Pyodide (browser only)
+])
+
+
+def grant_capability(cap: str) -> str:
+    """Grant a capability for the current scope. Returns status string."""
+    if cap not in VALID_CAPABILITIES:
+        return f"ERROR: unknown capability '{cap}'. Valid: {sorted(VALID_CAPABILITIES)}"
+    _GRANTED_CAPABILITIES.add(cap)
+    return f"granted: {cap}"
+
+
+def revoke_capability(cap: str) -> str:
+    _GRANTED_CAPABILITIES.discard(cap)
+    return f"revoked: {cap}"
+
+
+def has_capability(cap: str) -> bool:
+    return cap in _GRANTED_CAPABILITIES
+
+
+def list_capabilities() -> list[str]:
+    return sorted(_GRANTED_CAPABILITIES)
+
+
+def _require(cap: str, action: str) -> dict | None:
+    """Return error dict if capability is missing, None if OK."""
+    if cap not in _GRANTED_CAPABILITIES:
+        return {"error": f"capability '{cap}' not granted",
+                "hint": f"Call (grant-capability \"{cap}\") before {action}"}
+    if not _bridge_available():
+        return {"error": "bridge not running",
+                "hint": f"Start bridge: python3 -m scripts.brainstem.bridge"}
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Hardware bindings — each checks capability, routes to bridge or twins
+# ---------------------------------------------------------------------------
+
+def hw_screenshot() -> dict:
+    """Capture the current screen. Returns {'image_base64': ...} or synthetic."""
+    err = _require("hw-screen", "calling hw-screenshot")
+    if err:
+        # Synthetic fallback: 1x1 transparent PNG
+        synthetic = base64.b64encode(
+            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01"
+            b"\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\nIDATx\x9cc\x00\x01"
+            b"\x00\x00\x05\x00\x01\r\n-\xb4\x00\x00\x00\x00IEND\xaeB`\x82"
+        ).decode("ascii")
+        return {"image_base64": synthetic, "synthetic": True, **err}
+    return _bridge_call("screenshot")
+
+
+def hw_tts(text: str, voice: str = "Samantha") -> dict:
+    """Speak text through the speakers. Returns {'played': true/false}."""
+    err = _require("hw-speakers", "calling hw-tts")
+    if err:
+        return {"played": False, "synthetic": True, **err}
+    return _bridge_call("tts", {"text": text, "voice": voice})
+
+
+def hw_microphone_record(seconds: float = 3.0) -> dict:
+    """Record audio from the microphone. Returns {'audio_base64': ...}."""
+    err = _require("hw-microphone", "calling hw-microphone-record")
+    if err:
+        return {"audio_base64": "", "synthetic": True, **err}
+    return _bridge_call("microphone_record", {"seconds": seconds})
+
+
+def hw_clipboard_read() -> dict:
+    """Read the system clipboard. Returns {'text': ...}."""
+    err = _require("hw-clipboard", "calling hw-clipboard-read")
+    if err:
+        return {"text": "[twin-mode: clipboard not granted]", **err}
+    return _bridge_call("clipboard_read")
+
+
+def hw_clipboard_write(text: str) -> dict:
+    """Write text to the system clipboard."""
+    err = _require("hw-clipboard", "calling hw-clipboard-write")
+    if err:
+        return {"written": False, **err}
+    return _bridge_call("clipboard_write", {"text": text})
+
+
+def hw_notification(title: str, body: str = "", subtitle: str = "") -> dict:
+    """Post a macOS notification."""
+    err = _require("hw-notification", "calling hw-notification")
+    if err:
+        return {"posted": False, **err}
+    return _bridge_call("notification", {"title": title, "body": body, "subtitle": subtitle})
+
+
+def hw_camera_capture() -> dict:
+    """Capture a photo from the webcam. Returns {'image_base64': ...}."""
+    err = _require("hw-camera", "calling hw-camera-capture")
+    if err:
+        return {"image_base64": "", "synthetic": True, **err}
+    return _bridge_call("camera_capture")
+
+
+def hw_location() -> dict:
+    """Get current location. Returns {'lat': ..., 'lon': ..., 'accuracy': ...}."""
+    err = _require("hw-location", "calling hw-location")
+    if err:
+        return {"lat": 0.0, "lon": 0.0, "synthetic": True, **err}
+    return _bridge_call("location")
+
+
+# ---------------------------------------------------------------------------
+# Introspection
+# ---------------------------------------------------------------------------
+
+def bridge_status() -> dict:
+    """Inspect whether the bridge is running and what's granted."""
+    return {
+        "bridge_running": _bridge_available(),
+        "bridge_socket": BRIDGE_SOCKET,
+        "granted_capabilities": sorted(_GRANTED_CAPABILITIES),
+        "available_capabilities": sorted(VALID_CAPABILITIES),
+    }
 
 
 # === LisPy Core ===
@@ -3672,6 +3866,26 @@ def make_global_env(live_mode: bool = False) -> Env:
         env["pip-install"] = _pip_install_binding
         env["pip-available"] = lambda: _vp_available()
         env["pip-coverage"] = lambda name: _vp_coverage(name) if isinstance(name, str) else ""
+
+    # Capability grants — inlined
+    env["grant-capability"] = lambda cap: grant_capability(cap) if isinstance(cap, str) else "ERROR: cap must be string"
+    env["revoke-capability"] = lambda cap: revoke_capability(cap) if isinstance(cap, str) else "ERROR: cap must be string"
+    env["has-capability?"] = lambda cap: has_capability(cap) if isinstance(cap, str) else False
+    env["list-capabilities"] = lambda: list_capabilities()
+
+    # Pyodide escape hatch — real Python. CLI stub; browser playground overrides.
+    def _pyodide_cli_stub(*_a, **_kw):
+        return {
+            "error": "pyodide is a browser-only escape hatch",
+            "hint": "this is the CLI runtime. Use the browser playground at "
+                    "kody-w.github.io/rappterbook/lispy-playground.html for "
+                    "real Python via Pyodide.",
+        }
+    env["pyodide-available?"] = lambda: False
+    env["pyodide-load"] = _pyodide_cli_stub
+    env["pyodide-run"] = _pyodide_cli_stub
+    env["pyodide-run-file"] = _pyodide_cli_stub
+    env["pyodide-pip-install"] = _pyodide_cli_stub
 
     # -- Special values --
     env["#t"] = True

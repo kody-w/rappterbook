@@ -111,6 +111,7 @@
   <button class="example-btn" data-ex="requests">6. HTTP (twin)</button>
   <button class="example-btn" data-ex="os">7. Virtual OS</button>
   <button class="example-btn" data-ex="notification">8. Browser HW bridge</button>
+  <button class="example-btn" data-ex="pyodide">9. Pyodide escape hatch</button>
   <div class="example-desc" id="example-desc">Click an example above, then press <kbd>Run</kbd>.</div>
 </div>
 
@@ -183,6 +184,10 @@
     notification: {
       desc: "Hardware bridge — real browser Notification via the LisPy binding. The browser will ask permission.",
       code: '(grant-capability "hw-notification")\n(hw-notification "LisPy" "The twin speaks through your browser")\n; → {posted: true}  (check macOS notification center)'
+    },
+    pyodide: {
+      desc: "Pyodide escape hatch — real Python for when the twin isn\'t enough. Capability-gated. Runs inside this same Pyodide runtime.",
+      code: '; Default path: LisPy twin (1D numpy — instant, 0 bytes)\n(pip-install "numpy")\n(define np (py-import "numpy"))\n(define twin-mean (py-call np "mean" (py-call np "array" (list 1.0 2.0 3.0 4.0))))\n\n; Escape hatch: real Python in the same Pyodide runtime\n(grant-capability "pyodide")\n(define stats (pyodide-run "import statistics; round(statistics.stdev([1,2,3,4,5,6,7,8,9,10]), 3)"))\n\n(list\n  (list "twin mean:" twin-mean)\n  (list "real stdev:" stats))\n; → twin mean: 2.5, real stdev: 3.028'
     },
   };
 
@@ -271,33 +276,108 @@ with open("/home/pyodide/lispy.py") as _f:
     _src = _f.read()
 exec(compile(_src, "/home/pyodide/lispy.py", "exec"), _lispy_mod.__dict__)
 # Hoist the key symbols into the global namespace so our runner can reach them.
-for _name in ("make_global_env", "parse", "evaluate", "NIL", "LispError", "lisp_to_json"):
-    globals()[_name] = getattr(_lispy_mod, _name)
+for _name in ("make_global_env", "parse", "evaluate", "NIL", "LispError", "lisp_to_json",
+              "has_capability", "grant_capability", "revoke_capability"):
+    if hasattr(_lispy_mod, _name):
+        globals()[_name] = getattr(_lispy_mod, _name)
 `);
 
-      // Inject browser-backed hw-notification
-      pyodide.runPython(`
-_notification_granted = False
+      // Inject browser-backed hw-notification + Pyodide escape hatch
+      await pyodide.runPythonAsync(`
 def _browser_notify(title, body="", subtitle=""):
-    from js import Notification, window
+    from js import Notification
+    from pyodide.ffi import to_js
     try:
-        # Request permission if needed
         perm = Notification.permission
         if perm != "granted":
             return {"posted": False, "error": f"permission: {perm}", "hint": "grant in browser"}
-        n = Notification.new(str(title), to_js({"body": str(body)}))
+        Notification.new(str(title), to_js({"body": str(body)}))
         return {"posted": True, "via": "browser"}
     except Exception as e:
         return {"posted": False, "error": str(e)}
-`);
 
-      // Patch the LisPy env to use the browser-backed version
-      await pyodide.runPythonAsync(`
-# Override hw-notification in make_global_env so the Lisp binding hits browser
+
+# --- Pyodide escape hatch: real Python inside the same runtime ---
+
+def _pyodide_check_cap():
+    fn = globals().get("has_capability")
+    if fn is None or not fn("pyodide"):
+        return {"error": "capability 'pyodide' not granted",
+                "hint": "call (grant-capability \\"pyodide\\") first"}
+    return None
+
+
+def _pyodide_available(): return True
+
+
+def _pyodide_load():
+    return {"loaded": True, "note": "already inside Pyodide — no 10MB download needed"}
+
+
+def _pyodide_run(code):
+    _err = _pyodide_check_cap()
+    if _err: return _err
+    code = str(code)
+    _globals = {"__builtins__": __builtins__}
+    try:
+        return eval(compile(code, "<pyodide-run>", "eval"), _globals)
+    except SyntaxError:
+        pass
+    except Exception as e:
+        return {"error": f"{type(e).__name__}: {e}"}
+    try:
+        import ast
+        tree = ast.parse(code)
+        if tree.body and isinstance(tree.body[-1], ast.Expr):
+            last_expr = tree.body[-1]
+            tree.body[-1] = ast.Assign(
+                targets=[ast.Name(id="_pyodide_tail", ctx=ast.Store())],
+                value=last_expr.value,
+            )
+            ast.fix_missing_locations(tree)
+            exec(compile(tree, "<pyodide-run>", "exec"), _globals)
+            return _globals.get("_pyodide_tail", {"executed": True})
+        else:
+            exec(compile(code, "<pyodide-run>", "exec"), _globals)
+            return {"executed": True}
+    except Exception as e:
+        return {"error": f"{type(e).__name__}: {e}"}
+
+
+def _pyodide_run_file(path):
+    _err = _pyodide_check_cap()
+    if _err: return _err
+    try:
+        with open(str(path)) as _f:
+            return _pyodide_run(_f.read())
+    except FileNotFoundError:
+        return {"error": f"file not found: {path}"}
+
+
+async def _pyodide_pip_install(pkg):
+    _err = _pyodide_check_cap()
+    if _err: return _err
+    try:
+        import micropip
+        await micropip.install(str(pkg))
+        return {"installed": str(pkg), "via": "micropip"}
+    except Exception as e:
+        return {"error": f"{type(e).__name__}: {e}"}
+
+
+# Patch make_global_env so every new env has browser-backed bindings
 _original_make_global_env = make_global_env
 def _patched_make_global_env(live_mode=False):
     env = _original_make_global_env(live_mode)
-    env["hw-notification"] = lambda title, *rest: _browser_notify(title, rest[0] if rest else "", rest[1] if len(rest) > 1 else "")
+    env["hw-notification"] = lambda title, *rest: _browser_notify(
+        title,
+        rest[0] if rest else "",
+        rest[1] if len(rest) > 1 else "")
+    env["pyodide-available?"] = _pyodide_available
+    env["pyodide-load"] = _pyodide_load
+    env["pyodide-run"] = _pyodide_run
+    env["pyodide-run-file"] = _pyodide_run_file
+    env["pyodide-pip-install"] = _pyodide_pip_install
     return env
 make_global_env = _patched_make_global_env
 `);

@@ -99,6 +99,7 @@ VALID_CAPABILITIES = frozenset([
     "hw-mouse",         # read / move / click
     "hw-file-dialog",   # native open / save dialogs
     "hw-location",      # GPS / CoreLocation
+    "pyodide",          # escape hatch — run real Python via Pyodide (browser only)
 ])
 
 
