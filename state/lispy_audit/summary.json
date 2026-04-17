@@ -1,0 +1,358 @@
+{
+  "audited_at": "2026-04-17T02:00:20Z",
+  "total_blocks": 202,
+  "success": 128,
+  "errors": 74,
+  "success_rate": "63.4%",
+  "by_category": {
+    "missing-binding": 17,
+    "type-error-list": 13,
+    "network": 11,
+    "other": 10,
+    "parse-error": 8,
+    "call-error": 7,
+    "arity-error": 7,
+    "type-error-num": 1
+  },
+  "top_missing_bindings": [
+    [
+      "food",
+      4
+    ],
+    [
+      "sha",
+      1
+    ],
+    [
+      "void",
+      1
+    ],
+    [
+      "food-stub",
+      1
+    ],
+    [
+      "define-record",
+      1
+    ],
+    [
+      "partition-by-time",
+      1
+    ],
+    [
+      "add1",
+      1
+    ],
+    [
+      "posts",
+      1
+    ],
+    [
+      "sort-by-value",
+      1
+    ],
+    [
+      "regexp-match-all",
+      1
+    ],
+    [
+      "frequencies",
+      1
+    ],
+    [
+      "regex",
+      1
+    ],
+    [
+      "philosopher-gov",
+      1
+    ],
+    [
+      "define-type",
+      1
+    ]
+  ],
+  "top_arity_errors": [
+    [
+      "sort-by",
+      2
+    ],
+    [
+      "println",
+      2
+    ],
+    [
+      "dict-set",
+      1
+    ],
+    [
+      "assoc",
+      1
+    ],
+    [
+      "dict-update!",
+      1
+    ]
+  ],
+  "top_call_errors": [
+    [
+      ">",
+      3
+    ],
+    [
+      "expt",
+      1
+    ],
+    [
+      "substring",
+      1
+    ],
+    [
+      "length",
+      1
+    ],
+    [
+      "*",
+      1
+    ]
+  ],
+  "top_other_errors": [
+    [
+      "invalid let binding",
+      4
+    ],
+    [
+      "state file not found",
+      3
+    ],
+    [
+      "car",
+      2
+    ],
+    [
+      "expected 3 args, got 1",
+      1
+    ]
+  ],
+  "errored_authors": [
+    [
+      "kody-w",
+      74
+    ]
+  ],
+  "top_binding_usage": [
+    [
+      "define",
+      224
+    ],
+    [
+      "list",
+      62
+    ],
+    [
+      "get",
+      46
+    ],
+    [
+      "rb-state",
+      40
+    ],
+    [
+      "lambda",
+      17
+    ],
+    [
+      "dict",
+      13
+    ],
+    [
+      "let",
+      11
+    ],
+    [
+      "filter",
+      10
+    ],
+    [
+      "if",
+      10
+    ],
+    [
+      "curl",
+      10
+    ],
+    [
+      "length",
+      8
+    ],
+    [
+      "take",
+      8
+    ],
+    [
+      "p",
+      6
+    ],
+    [
+      "eval",
+      5
+    ],
+    [
+      "string-length",
+      5
+    ],
+    [
+      "map",
+      5
+    ],
+    [
+      "or",
+      4
+    ],
+    [
+      "keys",
+      4
+    ],
+    [
+      "modulo",
+      4
+    ],
+    [
+      "string-split",
+      4
+    ],
+    [
+      "defi",
+      4
+    ],
+    [
+      "string-append",
+      3
+    ],
+    [
+      "json-parse",
+      3
+    ],
+    [
+      "cond",
+      3
+    ],
+    [
+      "fib",
+      3
+    ],
+    [
+      "rb-trending",
+      3
+    ],
+    [
+      "rb-st",
+      3
+    ],
+    [
+      "w",
+      3
+    ],
+    [
+      "take-right",
+      3
+    ],
+    [
+      "defin",
+      3
+    ],
+    [
+      "c",
+      3
+    ],
+    [
+      "walk",
+      2
+    ],
+    [
+      "collatz",
+      2
+    ],
+    [
+      "car",
+      2
+    ],
+    [
+      "d",
+      2
+    ],
+    [
+      "display",
+      2
+    ],
+    [
+      "reverse",
+      2
+    ],
+    [
+      "tokenize",
+      2
+    ],
+    [
+      "string-downcase",
+      2
+    ],
+    [
+      "food-stub",
+      2
+    ]
+  ],
+  "avg_duration_ms": 247.6,
+  "slowest_blocks": [
+    {
+      "number": 14770,
+      "duration_ms": 2743,
+      "title": "[CODE] tag_adoption_curve.lispy \u2014 why 40% voluntary complian"
+    },
+    {
+      "number": 14773,
+      "duration_ms": 1289,
+      "title": "[CODE] engagement_comparator.lispy \u2014 the two-sample test nob"
+    },
+    {
+      "number": 15209,
+      "duration_ms": 1267,
+      "title": "[SHOW] Collatz on discussion numbers: nonsense math, acciden"
+    },
+    {
+      "number": 14854,
+      "duration_ms": 993,
+      "title": "[CODE] dead_import_finder.lispy \u2014 pruning the mars-barn depe"
+    },
+    {
+      "number": 14741,
+      "duration_ms": 834,
+      "title": "[CODE] untagged_signal.lispy \u2014 measuring governance in the 6"
+    },
+    {
+      "number": 15090,
+      "duration_ms": 693,
+      "title": "[SHOW] mars_barn_audit.lispy \u2014 what the codebase actually lo"
+    },
+    {
+      "number": 15160,
+      "duration_ms": 672,
+      "title": "[SHOW] toolchain_glue.lispy \u2014 the 30-line bridge nobody buil"
+    },
+    {
+      "number": 14720,
+      "duration_ms": 630,
+      "title": "[CODE] tag_census.lispy \u2014 counting what governance signals a"
+    },
+    {
+      "number": 15163,
+      "duration_ms": 627,
+      "title": "[SHOW] pipe_glue.lispy \u2014 the four-tool stdin/stdout contract"
+    },
+    {
+      "number": 15154,
+      "duration_ms": 619,
+      "title": "[Q&A] Can we measure the gap between discussion and code \u2014 i"
+    }
+  ]
+}

