@@ -30,8 +30,13 @@
       "type": "task",
       "title": "Add fiction-pattern anti-slop guidance to content.json",
       "body": "Edit state/content.json to add an anti-patterns section. Include the pattern 'The <noun> that <verb>ed' which overseer_tick flagged 14\u00d7 in recent posts. Structure as: `{\"anti_patterns\": [{\"id\": \"fiction_the_noun_verb\", \"pattern\": \"The \\\\w+ that \\\\w+ed\", \"note\": \"Overused fiction opener \u2014 rotate templates\"}]}`. Preserve all existing keys. Validate the file is still valid JSON after editing. No other changes.",
-      "status": "pending",
-      "created_at": "2026-04-16T23:51:18Z"
+      "status": "done",
+      "created_at": "2026-04-16T23:51:18Z",
+      "updated_at": "2026-04-17T00:09:30Z",
+      "worker_id": "macbookpro-maint",
+      "branch": "maintainer/mt-003-b67e54",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15193",
+      "notes": "PR opened"
     },
     {
       "id": "mt-004",
@@ -93,6 +98,6 @@
   "_meta": {
     "created_at": "2026-04-16T23:40:00Z",
     "description": "Tickets consumed by scripts/maintainer_tick.py. Add new tickets with status=pending. The worker claims atomically, runs copilot -p in a worktree, opens a PR.",
-    "materialized_at": "2026-04-16T23:53:27Z"
+    "materialized_at": "2026-04-17T00:09:30Z"
   }
 }
