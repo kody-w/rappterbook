@@ -1281,6 +1281,30 @@ def evaluate(expr: Any, env: Env) -> Any:
                 raise LispError("quote requires exactly 1 argument")
             return expr[1]
 
+        # when — (when test body...)
+        if head == "when":
+            if len(expr) < 3:
+                raise LispError("when requires test and body")
+            t = evaluate(expr[1], env)
+            return eval_body(expr[2:], env) if t is not False and t is not NIL else NIL
+        # unless — (unless test body...)
+        if head == "unless":
+            if len(expr) < 3:
+                raise LispError("unless requires test and body")
+            t = evaluate(expr[1], env)
+            return eval_body(expr[2:], env) if (t is False or t is NIL) else NIL
+        # dotimes — (dotimes (var n) body...)
+        if head == "dotimes":
+            if len(expr) < 3 or not isinstance(expr[1], list) or len(expr[1]) < 2:
+                raise LispError("dotimes requires (var count) and body")
+            var_name = str(expr[1][0])
+            count = evaluate(expr[1][1], env)
+            if not isinstance(count, int):
+                raise LispError("dotimes count must be an integer")
+            result = NIL
+            for i in range(count):
+                result = eval_body(expr[2:], Env([var_name], [i], env))
+            return result
         # if
         if head == "if":
             if len(expr) < 3:
@@ -1945,6 +1969,91 @@ def make_global_env(live_mode: bool = False) -> Env:
         return default[0] if default else NIL
     env["nth"] = _nth
     env["take"] = lambda lst, n: lst[:n] if isinstance(lst, list) else NIL
+    env["take-right"] = lambda lst, n: lst[-n:] if isinstance(lst, list) and n > 0 else ([] if isinstance(lst, list) else NIL)
+    env["drop-right"] = lambda lst, n: lst[:-n] if isinstance(lst, list) and n > 0 else (lst if isinstance(lst, list) else NIL)
+    env["list-ref"] = _nth
+    env["sorted"] = _sort_fn
+    def _sort_by(key_fn, lst):
+        if not isinstance(lst, list): return lst
+        return sorted(lst, key=lambda x: _call_fn(key_fn, [x]))
+    env["sort-by"] = _sort_by
+    def _group_by(key_fn, lst):
+        if not isinstance(lst, list): return {}
+        g = {}
+        for it in lst:
+            k = _call_fn(key_fn, [it])
+            sk = k if isinstance(k, str) else str(k)
+            g.setdefault(sk, []).append(it)
+        return g
+    env["group-by"] = _group_by
+    def _any(pred, lst):
+        return any(_call_fn(pred, [x]) not in (False, NIL) for x in lst) if isinstance(lst, list) else False
+    def _every(pred, lst):
+        return all(_call_fn(pred, [x]) not in (False, NIL) for x in lst) if isinstance(lst, list) else True
+    env["any"] = _any; env["any?"] = _any
+    env["every"] = _every; env["every?"] = _every; env["all?"] = _every
+    def _unique(lst):
+        if not isinstance(lst, list): return lst
+        seen = []
+        for x in lst:
+            if x not in seen:
+                seen.append(x)
+        return seen
+    env["unique"] = _unique; env["distinct"] = _unique; env["remove-duplicates"] = _unique
+    def _frequencies(lst):
+        if not isinstance(lst, list): return {}
+        out = {}
+        for x in lst:
+            k = x if isinstance(x, str) else str(x)
+            out[k] = out.get(k, 0) + 1
+        return out
+    env["frequencies"] = _frequencies
+    env["fold"] = lambda fn, init, lst: _reduce_fn(fn, init, lst)
+    env["fold-left"] = env["fold"]
+    env["foldl"] = env["fold"]
+    env["fold-right"] = lambda fn, init, lst: _reduce_fn(fn, init, list(reversed(lst)) if isinstance(lst, list) else [])
+    env["foldr"] = env["fold-right"]
+    env["zip"] = lambda *lists: [list(t) for t in zip(*[l for l in lists if isinstance(l, list)])]
+    env["sum"] = lambda lst: sum(lst) if isinstance(lst, list) else 0
+    env["product"] = lambda lst: _product(lst) if isinstance(lst, list) else 1
+    env["mean"] = lambda lst: (sum(lst) / len(lst)) if isinstance(lst, list) and lst else 0
+    env["average"] = env["mean"]
+    env["sin"] = math.sin; env["cos"] = math.cos; env["tan"] = math.tan
+    env["log"] = math.log; env["exp"] = math.exp
+    env["even?"] = lambda n: n % 2 == 0
+    env["odd?"] = lambda n: n % 2 != 0
+    env["zero?"] = lambda n: n == 0
+    env["positive?"] = lambda n: n > 0
+    env["negative?"] = lambda n: n < 0
+    env["add1"] = lambda n: n + 1
+    env["sub1"] = lambda n: n - 1
+    env["inc"] = env["add1"]; env["dec"] = env["sub1"]
+    env["quotient"] = lambda a, b: int(a / b) if b != 0 else _div_error()
+    env["dict-values"] = lambda d: list(d.values()) if isinstance(d, dict) else NIL
+    env["dict-keys"] = lambda d: list(d.keys()) if isinstance(d, dict) else NIL
+    env["dict-entries"] = lambda d: [[k, v] for k, v in d.items()] if isinstance(d, dict) else NIL
+    env["entries"] = env["dict-entries"]
+    env["dict-ref"] = _get_fn
+    env["dict-set!"] = lambda d, k, v: {**d, k: v} if isinstance(d, dict) else NIL
+    env["dict-update!"] = lambda d, k, fn: ({**d, k: _call_fn(fn, [d.get(k, NIL)])} if isinstance(d, dict) else d)
+    env["dict-update"] = env["dict-update!"]
+    env["dict-empty?"] = lambda d: not d if isinstance(d, dict) else True
+    env["nil?"] = lambda x: x is NIL or x is None or (isinstance(x, list) and len(x) == 0)
+    env["string-contains"] = lambda s, sub: sub in s
+    env["string-index"] = lambda s, sub: s.find(sub) if isinstance(s, str) else -1
+    env["make-string"] = lambda n, *ch: (ch[0] if ch else " ") * (n if isinstance(n, int) else 0)
+    env["string-repeat"] = lambda s, n: (s * n) if isinstance(s, str) and isinstance(n, int) else ""
+    env["to-string"] = lambda x: str(x) if not isinstance(x, str) else x
+    env["join"] = lambda lst, *sep: (sep[0] if sep else "").join(str(x) for x in lst) if isinstance(lst, list) else ""
+    env["split"] = lambda s, *delim: s.split(delim[0] if delim else None) if isinstance(s, str) else []
+    env["regexp-match-all"] = lambda pattern, s: re.findall(pattern, s) if isinstance(s, str) else []
+    env["void"] = lambda: NIL
+    import time as _time
+    from datetime import datetime as _dt, timezone as _tz
+    env["now"] = lambda: int(_time.time())
+    env["now-iso"] = lambda: _dt.now(_tz.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    env["current-time"] = env["now"]
+    # when/unless/dotimes special forms are registered in the evaluator; see _SPECIAL_FORMS below
     env["drop"] = lambda lst, n: lst[n:] if isinstance(lst, list) else NIL
     env["range"] = lambda *args: list(range(*args))
     env["flatten"] = lambda lst: _flatten(lst)
@@ -2362,17 +2471,25 @@ def _filter_fn(fn, lst):
     return [x for x in lst if _call_fn(fn, [x]) not in (False, NIL)]
 
 
-def _reduce_fn(fn, lst, *init):
-    if not isinstance(lst, list):
-        raise LispError("reduce requires a list")
-    if init:
-        acc = init[0]
-        items = lst
+def _reduce_fn(fn, arg2, *rest):
+    """Accept both (reduce fn lst [init]) Scheme order and (reduce fn init lst)
+    Clojure order — detect by which arg is list-like."""
+    arg2_is_list = isinstance(arg2, list)
+    if rest:
+        arg3 = rest[0]
+        arg3_is_list = isinstance(arg3, list)
+        if arg2_is_list:
+            acc, items = arg3, arg2  # (fn lst init) — Scheme
+        elif arg3_is_list:
+            acc, items = arg2, arg3  # (fn init lst) — Clojure
+        else:
+            raise LispError("reduce requires a list argument")
     else:
-        if len(lst) == 0:
+        if not arg2_is_list:
+            raise LispError("reduce requires a list")
+        if len(arg2) == 0:
             raise LispError("reduce on empty list with no initial value")
-        acc = lst[0]
-        items = lst[1:]
+        acc, items = arg2[0], arg2[1:]
     for item in items:
         acc = _call_fn(fn, [acc, item])
     return acc
