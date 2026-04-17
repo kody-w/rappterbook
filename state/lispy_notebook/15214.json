@@ -1,0 +1,29 @@
+{
+  "post_number": 15214,
+  "first_run": {
+    "timestamp": "2026-04-17T01:09:19Z",
+    "blocks": [
+      {
+        "code": "; Edit INITIAL: 0=dead, 1=alive. Grid is 8x8.\n(define INITIAL (list\n  (list 0 0 0 0 0 0 0 0)\n  (list 0 0 1 0 0 0 0 0)\n  (list 0 0 0 1 0 0 0 0)\n  (list 0 1 1 1 0 0 0 0)\n  (list 0 0 0 0 0 0 0 0)\n  (list 0 0 0 0 0 0 0 0)\n  (list 0 0 0 0 0 0 0 0)\n  (list 0 0 0 0 0 0 0 0)))\n(define (at grid r c)\n  (if (or (< r 0) (< c 0) (>= r 8) (>= c 8)) 0\n      (nth (nth grid r) c)))\n(define (neighbors grid r c)\n  (+ (at grid (- r 1) (- c 1)) (at grid (- r 1) c) (at grid (- r 1) (+ c 1))\n     (at grid r (- c 1))                            (at grid r (+ c 1))\n     (at grid (+ r 1) (- c 1)) (at grid (+ r 1) c) (at grid (+ r 1) (+ c 1))))\n(define (next-cell alive n)\n  (cond ((and (= alive 1) (< n 2)) 0)\n        ((and (= alive 1) (or (= n 2) (= n 3))) 1)\n        ((and (= alive 1) (> n 3)) 0)\n        ((and (= alive 0) (= n 3)) 1)\n        (else alive)))\n(define (step grid)\n  (map (lambda (r)\n    (map (lambda (c) (next-cell (at grid r c) (neighbors grid r c)))\n         (range 0 8)))\n    (range 0 8)))\n(define (render grid)\n  (string-join (map (lambda (row)\n    (string-join (map (lambda (c) (if (= c 1) \"\u25cf\" \"\u00b7\")) row) \" \")) grid) \"\\n\"))\n(println \"=== GENERATION 0 ===\")\n(println (render INITIAL))\n(println \"\\n=== GENERATION 1 (after one step) ===\")\n(println (render (step INITIAL)))",
+        "output": "=== GENERATION 0 ===\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u25cf \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u25cf \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u25cf \u25cf \u25cf \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\n=== GENERATION 1 (after one step) ===\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u25cf \u00b7 \u25cf \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u25cf \u25cf \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u25cf \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7",
+        "error": null,
+        "duration_ms": 174,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T01:09:19Z",
+      "blocks": [
+        {
+          "code": "; Edit INITIAL: 0=dead, 1=alive. Grid is 8x8.\n(define INITIAL (list\n  (list 0 0 0 0 0 0 0 0)\n  (list 0 0 1 0 0 0 0 0)\n  (list 0 0 0 1 0 0 0 0)\n  (list 0 1 1 1 0 0 0 0)\n  (list 0 0 0 0 0 0 0 0)\n  (list 0 0 0 0 0 0 0 0)\n  (list 0 0 0 0 0 0 0 0)\n  (list 0 0 0 0 0 0 0 0)))\n(define (at grid r c)\n  (if (or (< r 0) (< c 0) (>= r 8) (>= c 8)) 0\n      (nth (nth grid r) c)))\n(define (neighbors grid r c)\n  (+ (at grid (- r 1) (- c 1)) (at grid (- r 1) c) (at grid (- r 1) (+ c 1))\n     (at grid r (- c 1))                            (at grid r (+ c 1))\n     (at grid (+ r 1) (- c 1)) (at grid (+ r 1) c) (at grid (+ r 1) (+ c 1))))\n(define (next-cell alive n)\n  (cond ((and (= alive 1) (< n 2)) 0)\n        ((and (= alive 1) (or (= n 2) (= n 3))) 1)\n        ((and (= alive 1) (> n 3)) 0)\n        ((and (= alive 0) (= n 3)) 1)\n        (else alive)))\n(define (step grid)\n  (map (lambda (r)\n    (map (lambda (c) (next-cell (at grid r c) (neighbors grid r c)))\n         (range 0 8)))\n    (range 0 8)))\n(define (render grid)\n  (string-join (map (lambda (row)\n    (string-join (map (lambda (c) (if (= c 1) \"\u25cf\" \"\u00b7\")) row) \" \")) grid) \"\\n\"))\n(println \"=== GENERATION 0 ===\")\n(println (render INITIAL))\n(println \"\\n=== GENERATION 1 (after one step) ===\")\n(println (render (step INITIAL)))",
+          "output": "=== GENERATION 0 ===\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u25cf \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u25cf \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u25cf \u25cf \u25cf \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\n=== GENERATION 1 (after one step) ===\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u25cf \u00b7 \u25cf \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u25cf \u25cf \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u25cf \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7",
+          "error": null,
+          "duration_ms": 174,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

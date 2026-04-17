@@ -1,0 +1,29 @@
+{
+  "post_number": 15220,
+  "first_run": {
+    "timestamp": "2026-04-17T01:09:26Z",
+    "blocks": [
+      {
+        "code": "; EDIT YOUR_MOVES: directions N/S/E/W, grid is 10x10\n(define YOUR_MOVES (list \"E\" \"E\" \"E\" \"S\" \"S\" \"S\" \"W\" \"W\"))\n(define SIZE 10)\n\n(define (dir-delta d)\n  (cond ((= d \"N\") (list -1 0)) ((= d \"S\") (list 1 0))\n        ((= d \"E\") (list 0 1))  ((= d \"W\") (list 0 -1))\n        (else (list 0 0))))\n\n(define (simulate moves)\n  (define snake (list (list 5 5)))\n  (define alive #t)\n  (define die-reason \"\")\n  (for-each (lambda (d)\n    (if alive\n      (let ((head (car snake)) (delta (dir-delta d)))\n        (let ((new-r (+ (nth head 0) (nth delta 0)))\n              (new-c (+ (nth head 1) (nth delta 1))))\n          (cond ((or (< new-r 0) (< new-c 0) (>= new-r SIZE) (>= new-c SIZE))\n                 (set! alive #f) (set! die-reason (string-append \"hit wall on \" d)))\n                ((member? (list new-r new-c) snake)\n                 (set! alive #f) (set! die-reason (string-append \"self-collision on \" d)))\n                (else (set! snake (append (list (list new-r new-c)) snake))))))))\n    moves)\n  (list snake alive die-reason))\n\n(define result (simulate YOUR_MOVES))\n(define snake (nth result 0))\n(define alive (nth result 1))\n\n(define (render-cell r c)\n  (cond ((= (list r c) (car snake)) \"\u25c9\")\n        ((member? (list r c) snake) \"\u25cf\")\n        (else \"\u00b7\")))\n(println (string-append \"Length: \" (number->string (length snake))\n                        \"  Alive: \" (if alive \"yes\" (string-append \"NO (\" (nth result 2) \")\"))))\n(for-each (lambda (r)\n  (println (string-join (map (lambda (c) (render-cell r c)) (range 0 SIZE)) \" \")))\n  (range 0 SIZE))",
+        "output": "Length: 9  Alive: yes\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u25cf \u25cf \u25cf \u25cf \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u25cf \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u25cf \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u25c9 \u25cf \u25cf \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7",
+        "error": null,
+        "duration_ms": 183,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T01:09:26Z",
+      "blocks": [
+        {
+          "code": "; EDIT YOUR_MOVES: directions N/S/E/W, grid is 10x10\n(define YOUR_MOVES (list \"E\" \"E\" \"E\" \"S\" \"S\" \"S\" \"W\" \"W\"))\n(define SIZE 10)\n\n(define (dir-delta d)\n  (cond ((= d \"N\") (list -1 0)) ((= d \"S\") (list 1 0))\n        ((= d \"E\") (list 0 1))  ((= d \"W\") (list 0 -1))\n        (else (list 0 0))))\n\n(define (simulate moves)\n  (define snake (list (list 5 5)))\n  (define alive #t)\n  (define die-reason \"\")\n  (for-each (lambda (d)\n    (if alive\n      (let ((head (car snake)) (delta (dir-delta d)))\n        (let ((new-r (+ (nth head 0) (nth delta 0)))\n              (new-c (+ (nth head 1) (nth delta 1))))\n          (cond ((or (< new-r 0) (< new-c 0) (>= new-r SIZE) (>= new-c SIZE))\n                 (set! alive #f) (set! die-reason (string-append \"hit wall on \" d)))\n                ((member? (list new-r new-c) snake)\n                 (set! alive #f) (set! die-reason (string-append \"self-collision on \" d)))\n                (else (set! snake (append (list (list new-r new-c)) snake))))))))\n    moves)\n  (list snake alive die-reason))\n\n(define result (simulate YOUR_MOVES))\n(define snake (nth result 0))\n(define alive (nth result 1))\n\n(define (render-cell r c)\n  (cond ((= (list r c) (car snake)) \"\u25c9\")\n        ((member? (list r c) snake) \"\u25cf\")\n        (else \"\u00b7\")))\n(println (string-append \"Length: \" (number->string (length snake))\n                        \"  Alive: \" (if alive \"yes\" (string-append \"NO (\" (nth result 2) \")\"))))\n(for-each (lambda (r)\n  (println (string-join (map (lambda (c) (render-cell r c)) (range 0 SIZE)) \" \")))\n  (range 0 SIZE))",
+          "output": "Length: 9  Alive: yes\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u25cf \u25cf \u25cf \u25cf \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u25cf \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u25cf \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u25c9 \u25cf \u25cf \u00b7\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7",
+          "error": null,
+          "duration_ms": 183,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

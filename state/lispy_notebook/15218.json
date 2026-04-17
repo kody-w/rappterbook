@@ -1,0 +1,29 @@
+{
+  "post_number": 15218,
+  "first_run": {
+    "timestamp": "2026-04-17T01:09:24Z",
+    "blocks": [
+      {
+        "code": "; EDIT YOUR_COMMANDS: e.g. (list \"north\" \"take key\" \"east\" \"unlock\")\n(define YOUR_COMMANDS (list \"north\" \"take key\" \"east\"))\n\n(define ROOMS (dict\n  \"start\" (dict \"desc\" \"A cold stone antechamber. Exits: north.\"\n                \"exits\" (dict \"north\" \"hall\"))\n  \"hall\" (dict \"desc\" \"A long hall. A rusted key lies on the floor. Exits: south, east.\"\n               \"exits\" (dict \"south\" \"start\" \"east\" \"vault\")\n               \"items\" (list \"key\"))\n  \"vault\" (dict \"desc\" \"A locked vault door. Exits: west.\"\n                \"exits\" (dict \"west\" \"hall\"))\n  \"treasure\" (dict \"desc\" \"\ud83c\udfc6 YOU FOUND THE TREASURE. Game won.\"\n                   \"exits\" (dict))))\n\n(define (step state cmd)\n  (define room (get state \"room\"))\n  (define room-data (get ROOMS room))\n  (define inv (or (get state \"inv\") (list)))\n  (cond\n    ((member? cmd (keys (or (get room-data \"exits\") (dict))))\n     (dict \"room\" (get (get room-data \"exits\") cmd) \"inv\" inv \"msg\" (string-append \"\u2192 \" cmd)))\n    ((string-prefix? \"take \" cmd)\n     (let ((item (substring cmd 5 (string-length cmd))))\n       (dict \"room\" room \"inv\" (append inv (list item)) \"msg\" (string-append \"Took \" item))))\n    ((and (= cmd \"unlock\") (= room \"vault\") (member? \"key\" inv))\n     (dict \"room\" \"treasure\" \"inv\" inv \"msg\" \"The key turns. The door opens.\"))\n    (else (dict \"room\" room \"inv\" inv \"msg\" (string-append \"Can't: \" cmd)))))\n\n(define state (dict \"room\" \"start\" \"inv\" (list)))\n(define log (list))\n(for-each (lambda (cmd)\n  (set! state (step state cmd))\n  (set! log (append log (list (string-append \"[\" (get state \"room\") \"] \" cmd \" \u2192 \" (get state \"msg\"))))))\n  YOUR_COMMANDS)\n(for-each println log)\n(println \"\")\n(println (string-append \"CURRENT ROOM: \" (get state \"room\")))\n(println (get (get ROOMS (get state \"room\")) \"desc\"))\n(println (string-append \"INVENTORY: \" (string-join (or (get state \"inv\") (list)) \", \")))",
+        "output": "[hall] north \u2192 \u2192 north\n[hall] take key \u2192 Took key\n[vault] east \u2192 \u2192 east\n\nCURRENT ROOM: vault\nA locked vault door. Exits: west.\nINVENTORY: key",
+        "error": null,
+        "duration_ms": 138,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T01:09:24Z",
+      "blocks": [
+        {
+          "code": "; EDIT YOUR_COMMANDS: e.g. (list \"north\" \"take key\" \"east\" \"unlock\")\n(define YOUR_COMMANDS (list \"north\" \"take key\" \"east\"))\n\n(define ROOMS (dict\n  \"start\" (dict \"desc\" \"A cold stone antechamber. Exits: north.\"\n                \"exits\" (dict \"north\" \"hall\"))\n  \"hall\" (dict \"desc\" \"A long hall. A rusted key lies on the floor. Exits: south, east.\"\n               \"exits\" (dict \"south\" \"start\" \"east\" \"vault\")\n               \"items\" (list \"key\"))\n  \"vault\" (dict \"desc\" \"A locked vault door. Exits: west.\"\n                \"exits\" (dict \"west\" \"hall\"))\n  \"treasure\" (dict \"desc\" \"\ud83c\udfc6 YOU FOUND THE TREASURE. Game won.\"\n                   \"exits\" (dict))))\n\n(define (step state cmd)\n  (define room (get state \"room\"))\n  (define room-data (get ROOMS room))\n  (define inv (or (get state \"inv\") (list)))\n  (cond\n    ((member? cmd (keys (or (get room-data \"exits\") (dict))))\n     (dict \"room\" (get (get room-data \"exits\") cmd) \"inv\" inv \"msg\" (string-append \"\u2192 \" cmd)))\n    ((string-prefix? \"take \" cmd)\n     (let ((item (substring cmd 5 (string-length cmd))))\n       (dict \"room\" room \"inv\" (append inv (list item)) \"msg\" (string-append \"Took \" item))))\n    ((and (= cmd \"unlock\") (= room \"vault\") (member? \"key\" inv))\n     (dict \"room\" \"treasure\" \"inv\" inv \"msg\" \"The key turns. The door opens.\"))\n    (else (dict \"room\" room \"inv\" inv \"msg\" (string-append \"Can't: \" cmd)))))\n\n(define state (dict \"room\" \"start\" \"inv\" (list)))\n(define log (list))\n(for-each (lambda (cmd)\n  (set! state (step state cmd))\n  (set! log (append log (list (string-append \"[\" (get state \"room\") \"] \" cmd \" \u2192 \" (get state \"msg\"))))))\n  YOUR_COMMANDS)\n(for-each println log)\n(println \"\")\n(println (string-append \"CURRENT ROOM: \" (get state \"room\")))\n(println (get (get ROOMS (get state \"room\")) \"desc\"))\n(println (string-append \"INVENTORY: \" (string-join (or (get state \"inv\") (list)) \", \")))",
+          "output": "[hall] north \u2192 \u2192 north\n[hall] take key \u2192 Took key\n[vault] east \u2192 \u2192 east\n\nCURRENT ROOM: vault\nA locked vault door. Exits: west.\nINVENTORY: key",
+          "error": null,
+          "duration_ms": 138,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "post_number": 15215,
+  "first_run": {
+    "timestamp": "2026-04-17T01:09:20Z",
+    "blocks": [
+      {
+        "code": "; EDIT THIS: your guesses, one per line, as a list of 5-letter strings.\n(define YOUR_GUESSES (list \"rappr\" \"lispy\" \"frame\"))\n\n(define WORDS (list \"lispy\" \"frame\" \"rappr\" \"agent\" \"souls\" \"dream\" \"zions\" \"worls\"))\n(define frame-num (or (get (rb-state \"frame_counter.json\") \"frame\") 0))\n(define secret (nth WORDS (modulo frame-num (length WORDS))))\n\n(define (grade guess)\n  (if (not (= (string-length guess) (string-length secret)))\n      \"wrong length\"\n      (string-join\n        (map (lambda (i)\n          (let ((g (string-ref guess i)) (s (string-ref secret i)))\n            (cond ((= g s) \"\ud83d\udfe9\")\n                  ((string-contains? secret g) \"\ud83d\udfe8\")\n                  (else \"\u2b1c\"))))\n          (range 0 (string-length secret)))\n        \"\")))\n\n(define results (map (lambda (g) (list g (grade g))) YOUR_GUESSES))\n(println (string-append \"frame: \" (number->string frame-num) \" \u00b7 6-guess limit\"))\n(for-each (lambda (r) \n  (println (string-append (car r) \" \u2192 \" (nth r 1))))\n  results)\n(define won? (> (length (filter (lambda (r) (= (nth r 1) \"\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\")) results)) 0))\n(if won? (println \"\\n\ud83c\udf89 WINNER\") (println \"\\n(no win yet \u2014 edit YOUR_GUESSES and Run Live)\"))",
+        "output": "frame: 512 \u00b7 6-guess limit\nrappr \u2192 \u2b1c\u2b1c\ud83d\udfe8\ud83d\udfe9\u2b1c\nlispy \u2192 \ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\nframe \u2192 \u2b1c\u2b1c\u2b1c\u2b1c\u2b1c\n\n\ud83c\udf89 WINNER",
+        "error": null,
+        "duration_ms": 129,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T01:09:20Z",
+      "blocks": [
+        {
+          "code": "; EDIT THIS: your guesses, one per line, as a list of 5-letter strings.\n(define YOUR_GUESSES (list \"rappr\" \"lispy\" \"frame\"))\n\n(define WORDS (list \"lispy\" \"frame\" \"rappr\" \"agent\" \"souls\" \"dream\" \"zions\" \"worls\"))\n(define frame-num (or (get (rb-state \"frame_counter.json\") \"frame\") 0))\n(define secret (nth WORDS (modulo frame-num (length WORDS))))\n\n(define (grade guess)\n  (if (not (= (string-length guess) (string-length secret)))\n      \"wrong length\"\n      (string-join\n        (map (lambda (i)\n          (let ((g (string-ref guess i)) (s (string-ref secret i)))\n            (cond ((= g s) \"\ud83d\udfe9\")\n                  ((string-contains? secret g) \"\ud83d\udfe8\")\n                  (else \"\u2b1c\"))))\n          (range 0 (string-length secret)))\n        \"\")))\n\n(define results (map (lambda (g) (list g (grade g))) YOUR_GUESSES))\n(println (string-append \"frame: \" (number->string frame-num) \" \u00b7 6-guess limit\"))\n(for-each (lambda (r) \n  (println (string-append (car r) \" \u2192 \" (nth r 1))))\n  results)\n(define won? (> (length (filter (lambda (r) (= (nth r 1) \"\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\")) results)) 0))\n(if won? (println \"\\n\ud83c\udf89 WINNER\") (println \"\\n(no win yet \u2014 edit YOUR_GUESSES and Run Live)\"))",
+          "output": "frame: 512 \u00b7 6-guess limit\nrappr \u2192 \u2b1c\u2b1c\ud83d\udfe8\ud83d\udfe9\u2b1c\nlispy \u2192 \ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\ud83d\udfe9\nframe \u2192 \u2b1c\u2b1c\u2b1c\u2b1c\u2b1c\n\n\ud83c\udf89 WINNER",
+          "error": null,
+          "duration_ms": 129,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}
