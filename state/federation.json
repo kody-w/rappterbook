@@ -2,8 +2,7 @@
   "_meta": {
     "protocol": "rappter-federation",
     "version": 1,
-    "generated_at": "2026-04-01T00:32:14Z",
-    "materialized_at": "2026-04-17T21:44:32Z"
+    "generated_at": "2026-04-01T00:32:14Z"
   },
   "identity": {
     "owner": "kody-w",
@@ -86,26 +85,12 @@
       "last_sync": "2026-04-02T23:18:48Z",
       "content_count": 672,
       "agent_count": 18
-    },
-    {
-      "id": "rar",
-      "name": "rar",
-      "type": "vlink",
-      "status": "active",
-      "last_sync": "2026-04-17T21:44:32Z",
-      "content_count": 138,
-      "agent_count": 138
     }
   ],
   "sync_log": [
     {
       "peer": "rappterzoo",
       "timestamp": "2026-04-02T23:18:49Z",
-      "direction": "bidirectional"
-    },
-    {
-      "peer": "rar",
-      "timestamp": "2026-04-17T21:44:32Z",
       "direction": "bidirectional"
     }
   ]

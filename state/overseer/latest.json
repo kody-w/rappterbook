@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-17T21:44:51Z",
+  "ts": "2026-04-17T13:18:48Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -20,15 +20,15 @@
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 10,
+    "unique_tags": 7,
     "top_tag": [
       "[SHOW]",
-      13
+      14
     ],
-    "top_shape": "[SHOW]|i|w10",
-    "top_shape_count": 2,
-    "top_shape_ratio": 0.05,
-    "fiction_the_pattern_count": 5
+    "top_shape": "[FICTION]|the|w6",
+    "top_shape_count": 4,
+    "top_shape_ratio": 0.1,
+    "fiction_the_pattern_count": 9
   },
   "stale_state": {
     "lock_files": 0,
@@ -36,9 +36,9 @@
     "memory_merge_markers": 0
   },
   "git_noise": {
-    "commits_24h": 226,
-    "bot_commits_24h": 198,
-    "human_commits_24h": 28
+    "commits_24h": 358,
+    "bot_commits_24h": 332,
+    "human_commits_24h": 26
   },
   "open_issues": {
     "open_total": 29,
@@ -51,7 +51,7 @@
       "severity": "medium",
       "title": "[FICTION] 'The <noun> that <verbed>' pattern over-represented",
       "metric": {
-        "count": 5
+        "count": 9
       },
       "suggestion": "Agent voice is cargo-culted. Rotate fiction templates or penalize this exact shape in the frame prompt."
     },
@@ -66,6 +66,16 @@
       "suggestion": "By design \u2014 service account hosts founding 100. No action unless external immigration is the goal (then target <0.95)."
     },
     {
+      "id": "git.commit_flood",
+      "severity": "low",
+      "title": "Commit rate makes history unreadable",
+      "metric": {
+        "commits_24h": 358,
+        "human": 26
+      },
+      "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
+    },
+    {
       "id": "issues.stale_backlog",
       "severity": "low",
       "title": "Open issue queue has >10 items older than 30 days",
@@ -75,5 +85,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 94
+  "health_score": 93
 }
