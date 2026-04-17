@@ -138,6 +138,18 @@
     background: var(--bg); padding: 0.1em 0.4em;
     border: 1px solid var(--border); border-radius: 3px; font-size: 0.85em;
   }
+
+  /* Drag-drop overlay */
+  body.dragging::before {
+    content: "Drop agent .py file to hot-load";
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(88, 166, 255, 0.15);
+    border: 4px dashed var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent); font-size: 2rem; font-weight: 700;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+  }
 </style>
 </head>
 <body>
@@ -170,12 +182,21 @@
       <select id="provider">
         <option value="openai">OpenAI</option>
         <option value="azure">Azure OpenAI (Microsoft Foundry)</option>
+        <option value="github">GitHub (Copilot models)</option>
       </select>
       <label>Model / Deployment</label>
-      <input type="text" id="model" placeholder="gpt-4o-mini">
+      <input type="text" id="model" placeholder="gpt-4o-mini" list="model-hints">
+      <datalist id="model-hints">
+        <option value="openai/gpt-4o">
+        <option value="openai/gpt-4o-mini">
+        <option value="openai/o1-mini">
+        <option value="openai/o1">
+        <option value="anthropic/claude-3-5-sonnet">
+        <option value="meta/llama-3.1-70b-instruct">
+      </datalist>
       <label id="endpoint-label" style="display:none">Azure endpoint</label>
       <input type="text" id="endpoint" placeholder="https://YOUR.openai.azure.com/openai/v1/chat/completions" style="display:none">
-      <label>API key</label>
+      <label>API key <span id="apikey-hint" style="font-size:0.75rem;opacity:0.7"></span></label>
       <input type="password" id="apikey" placeholder="sk-… or paste, then click Save">
       <div>
         <button id="save-settings" class="primary">Save</button>
@@ -202,6 +223,11 @@
       <h3 style="padding-left: 0;">Agents</h3>
       <div id="agents-list"></div>
       <div class="hint">Check to enable. The LLM auto-routes based on your message.</div>
+      <div class="hint" style="margin-top:0.6rem">
+        <strong>Hot-load:</strong> drag a <code>.py</code> file onto this page to register a new agent.
+        It must define a class extending <code>BasicAgent</code> with <code>name</code>, <code>metadata</code>, and <code>perform()</code>.
+      </div>
+      <button id="clear-custom-agents" style="margin-top:0.4rem">Forget dropped agents</button>
     </section>
 
     <section>
@@ -271,27 +297,41 @@ The user's persistent memory lives in browser localStorage under keys you can ac
   }
 
   // --- Settings persistence ---
+  function providerLabel(provider, model) {
+    if (provider === "azure") return `Azure · ${model || "(deployment?)"}`;
+    if (provider === "github") return `GitHub · ${model || "gpt-4o-mini"}`;
+    return `OpenAI · ${model || "gpt-4o-mini"}`;
+  }
+
   function saveSettings() {
-    // Auto-correct: if an endpoint URL is present, the provider MUST be azure.
-    // Prevents a silent OpenAI→Azure key mismatch that returns a confusing 401.
+    // Auto-correct provider based on signals that can't mismatch:
+    //   - endpoint URL set → Azure
+    //   - token looks like a GitHub PAT → GitHub
+    // Prevents silent provider mismatches that return confusing 401s.
     let provider = $("provider").value;
     const endpoint = $("endpoint").value.trim();
-    if (endpoint && provider !== "azure") {
+    const apikey = $("apikey").value;
+    const looksGithub = apikey.startsWith("gho_") || apikey.startsWith("github_pat_") || apikey.startsWith("ghp_");
+
+    if (endpoint) {
       provider = "azure";
-      $("provider").value = "azure";
+    } else if (looksGithub && provider !== "github") {
+      provider = "github";
+    }
+    if ($("provider").value !== provider) {
+      $("provider").value = provider;
       updateProviderVisibility();
     }
+
     const settings = {
       provider: provider,
       model: $("model").value,
       endpoint: endpoint,
-      apikey: $("apikey").value,
+      apikey: apikey,
     };
     localStorage.setItem("brainstem_settings", JSON.stringify(settings));
     updatePyEnv();
-    const label = provider === "azure"
-      ? `Azure · ${settings.model || "(deployment?)"}`
-      : `OpenAI · ${settings.model || "gpt-4o-mini"}`;
+    const label = providerLabel(provider, settings.model);
     setStatus("ok", "saved · " + label);
     setTimeout(() => setStatus("ok", label), 1500);
   }
@@ -311,11 +351,35 @@ The user's persistent memory lives in browser localStorage under keys you can ac
   }
 
   function updateProviderVisibility() {
-    const isAzure = $("provider").value === "azure";
+    const provider = $("provider").value;
+    const isAzure = provider === "azure";
+    const isGithub = provider === "github";
     $("endpoint-label").style.display = isAzure ? "block" : "none";
     $("endpoint").style.display = isAzure ? "block" : "none";
-    if (isAzure && !$("model").value) $("model").value = "gpt-5.4";
-    if (!isAzure && !$("model").value) $("model").value = "gpt-4o-mini";
+
+    // Sensible default model per provider
+    const currentModel = $("model").value;
+    if (isAzure && (!currentModel || currentModel.startsWith("openai/") || currentModel.startsWith("gpt-4o"))) {
+      $("model").value = "gpt-5.4";
+    } else if (isGithub && (!currentModel || currentModel === "gpt-5.4" || !currentModel.includes("/"))) {
+      $("model").value = "openai/gpt-4o-mini";
+    } else if (!isAzure && !isGithub && !currentModel) {
+      $("model").value = "gpt-4o-mini";
+    }
+
+    // Contextual placeholder for API key
+    const apiKeyInput = $("apikey");
+    const hint = $("apikey-hint");
+    if (isGithub) {
+      apiKeyInput.placeholder = "GitHub PAT (gho_… or github_pat_…) — needs models:read scope";
+      hint.innerHTML = ' · <a href="https://github.com/settings/tokens/new?scopes=&description=Virtual%20Brainstem" target="_blank" style="color:var(--accent)">Create PAT</a> · or run <code>gh auth token</code>';
+    } else if (isAzure) {
+      apiKeyInput.placeholder = "Azure OpenAI api-key (from Microsoft Foundry)";
+      hint.innerHTML = "";
+    } else {
+      apiKeyInput.placeholder = "sk-… OpenAI API key";
+      hint.innerHTML = "";
+    }
   }
 
   $("provider").addEventListener("change", updateProviderVisibility);
@@ -350,7 +414,7 @@ The user's persistent memory lives in browser localStorage under keys you can ac
   }
 
   function applyEnvToSettings(env) {
-    // Azure takes priority if its key is present
+    // Priority: Azure (has endpoint) > OpenAI > GitHub
     if (env.AZURE_OPENAI_API_KEY) {
       $("provider").value = "azure";
       $("apikey").value = env.AZURE_OPENAI_API_KEY;
@@ -360,13 +424,18 @@ The user's persistent memory lives in browser localStorage under keys you can ac
       $("provider").value = "openai";
       $("apikey").value = env.OPENAI_API_KEY;
       if (env.OPENAI_MODEL) $("model").value = env.OPENAI_MODEL;
+    } else if (env.GITHUB_TOKEN) {
+      $("provider").value = "github";
+      $("apikey").value = env.GITHUB_TOKEN;
+      if (env.GITHUB_MODEL) $("model").value = env.GITHUB_MODEL;
     } else {
-      return { imported: 0, message: "No recognized keys in file (need AZURE_OPENAI_API_KEY or OPENAI_API_KEY)." };
+      return { imported: 0, message: "No recognized keys in file (need AZURE_OPENAI_API_KEY, OPENAI_API_KEY, or GITHUB_TOKEN)." };
     }
     updateProviderVisibility();
     saveSettings();
     const imported = Object.keys(env).filter(k =>
-      ["AZURE_OPENAI_API_KEY","AZURE_OPENAI_ENDPOINT","AZURE_OPENAI_DEPLOYMENT","OPENAI_API_KEY","OPENAI_MODEL"].includes(k)
+      ["AZURE_OPENAI_API_KEY","AZURE_OPENAI_ENDPOINT","AZURE_OPENAI_DEPLOYMENT",
+       "OPENAI_API_KEY","OPENAI_MODEL","GITHUB_TOKEN","GITHUB_MODEL"].includes(k)
     ).length;
     return { imported, message: `Imported ${imported} setting${imported===1?"":"s"} from .env.` };
   }
@@ -395,15 +464,21 @@ The user's persistent memory lives in browser localStorage under keys you can ac
   $("download-env-template").addEventListener("click", () => {
     const template = [
       "# Virtual Brainstem .env template",
-      "# Copy to a local file, fill in values, upload via \"Upload .env file\".",
-      "# Azure OpenAI (Microsoft Foundry):",
+      "# Pick ONE of the three providers, fill in values, upload via \"Upload .env file\".",
+      "",
+      "# --- Azure OpenAI (Microsoft Foundry) ---",
       "AZURE_OPENAI_API_KEY=",
       "AZURE_OPENAI_ENDPOINT=https://YOUR-RESOURCE.openai.azure.com/openai/v1/chat/completions",
       "AZURE_OPENAI_DEPLOYMENT=gpt-5.4",
       "",
-      "# OR OpenAI (comment out Azure if using this):",
+      "# --- OpenAI ---",
       "# OPENAI_API_KEY=sk-...",
       "# OPENAI_MODEL=gpt-4o-mini",
+      "",
+      "# --- GitHub (Copilot Models API) ---",
+      "# Get the token via:  gh auth token   (or create a PAT at github.com/settings/tokens)",
+      "# GITHUB_TOKEN=",
+      "# GITHUB_MODEL=openai/gpt-4o-mini",
       "",
     ].join("\n");
     const blob = new Blob([template], { type: "text/plain" });
@@ -450,6 +525,11 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
   });
 
   $("clear-logs").addEventListener("click", () => { $("logs").textContent = "(none yet)"; });
+  $("clear-custom-agents").addEventListener("click", () => {
+    if (!confirm("Forget all drag-dropped agents? Reloads the page to reset state.")) return;
+    localStorage.removeItem("brainstem_custom_agents");
+    location.reload();
+  });
   $("reset-memory").addEventListener("click", () => {
     if (!confirm("Wipe ALL memory (ManageMemory + ContextMemory) from this device?")) return;
     localStorage.removeItem("brainstem_memory");
@@ -467,6 +547,120 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
     }
   });
 
+  // --- Drag-and-drop agent loading ---
+  // Drop a .py file anywhere on the page → parses, registers the agent class,
+  // persists source in localStorage so it survives reloads.
+  let dragDepth = 0;
+  document.addEventListener("dragenter", e => {
+    if (!pyodide) return;
+    e.preventDefault();
+    dragDepth++;
+    document.body.classList.add("dragging");
+  });
+  document.addEventListener("dragleave", e => {
+    dragDepth = Math.max(0, dragDepth - 1);
+    if (dragDepth === 0) document.body.classList.remove("dragging");
+  });
+  document.addEventListener("dragover", e => { e.preventDefault(); });
+  document.addEventListener("drop", async e => {
+    e.preventDefault();
+    dragDepth = 0;
+    document.body.classList.remove("dragging");
+    if (!pyodide) return;
+
+    const files = [...(e.dataTransfer?.files || [])].filter(f =>
+      f.name.endsWith(".py") || f.type === "text/x-python" || f.type === "text/plain"
+    );
+    if (!files.length) {
+      addMsg("system", "[drop] no .py files detected. Drop one or more Python agent files.");
+      return;
+    }
+
+    for (const file of files) {
+      if (file.size > 256 * 1024) {
+        addMsg("system", `[drop] ${file.name} too large (>256KB), skipped`);
+        continue;
+      }
+      try {
+        const source = await file.text();
+        await loadAgentFromSource(source, file.name);
+      } catch (err) {
+        addMsg("system", `[drop] ${file.name}: ${err.message}`);
+      }
+    }
+  });
+
+  async function loadAgentFromSource(source, filename) {
+    // Exec the Python source in Pyodide. Find any new class extending BasicAgent,
+    // register it in AGENT_CLASSES. Persist source to localStorage.
+    // The Python block assigns the result dict to _result then json.dumps(_result)
+    // is the terminal expression — that's what runPythonAsync returns.
+    const result = await pyodide.runPythonAsync(`
+import json
+_before = set(globals().keys())
+_result = None
+try:
+    exec(${JSON.stringify(source)}, globals())
+    _new_names = set(globals().keys()) - _before
+    _agent_classes = [globals()[n] for n in _new_names
+                      if isinstance(globals()[n], type)
+                      and issubclass(globals()[n], BasicAgent)
+                      and globals()[n] is not BasicAgent]
+    if not _agent_classes:
+        _result = {"ok": False, "error": "no class extending BasicAgent found in file"}
+    else:
+        _registered = []
+        for _cls in _agent_classes:
+            _existing = next((c for c in AGENT_CLASSES if c.__name__ == _cls.__name__), None)
+            if _existing: AGENT_CLASSES.remove(_existing)
+            AGENT_CLASSES.append(_cls)
+            _registered.append({
+                "name": getattr(_cls, "name", _cls.__name__),
+                "desc": (getattr(_cls, "metadata", {}).get("description", "") or "")[:100],
+            })
+        _result = {"ok": True, "registered": _registered}
+except Exception as _e:
+    _result = {"ok": False, "error": f"{type(_e).__name__}: {_e}"}
+json.dumps(_result)
+`);
+    const parsed = JSON.parse(result);
+    if (!parsed.ok) {
+      addMsg("system", `[drop] ${filename}: ${parsed.error}`);
+      return;
+    }
+
+    // Persist for next session
+    const custom = JSON.parse(localStorage.getItem("brainstem_custom_agents") || "[]");
+    // De-dupe by filename — replacing on re-drop is expected UX
+    const filtered = custom.filter(a => a.filename !== filename);
+    filtered.push({ filename, source, registered_at: new Date().toISOString() });
+    localStorage.setItem("brainstem_custom_agents", JSON.stringify(filtered));
+
+    const names = parsed.registered.map(r => r.name).join(", ");
+    addMsg("system", `[drop] ${filename} → registered ${parsed.registered.length} agent(s): ${names}. Persisted to localStorage.`);
+    refreshAgentsPanel();
+  }
+
+  function refreshAgentsPanel() {
+    const agentList = JSON.parse(pyodide.runPython("list_agent_meta()"));
+    const listEl = $("agents-list");
+    listEl.innerHTML = "";
+    for (const a of agentList) {
+      const row = document.createElement("div");
+      row.className = "agent-item";
+      row.innerHTML = `
+        <input type="checkbox" id="agent-${a.name}" ${a.enabled ? "checked" : ""}>
+        <div style="flex:1">
+          <div class="agent-name">${a.name}</div>
+          <div class="agent-desc">${a.desc}</div>
+        </div>`;
+      listEl.appendChild(row);
+      $(`agent-${a.name}`).addEventListener("change", ev => {
+        pyodide.runPython(`set_agent_enabled(${JSON.stringify(a.name)}, ${ev.target.checked ? "True" : "False"})`);
+      });
+    }
+  }
+
   async function boot() {
     try {
       setStatus("loading", "loading Pyodide…");
@@ -481,33 +675,41 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
       await pyodide.runPythonAsync(BRAINSTEM_PY_SOURCE);
       updatePyEnv();
 
-      // Render the agents panel from Python side (JSON bridge avoids
-      // Pyodide proxy conversion quirks)
-      const agentList = JSON.parse(pyodide.runPython("list_agent_meta()"));
-      const listEl = $("agents-list");
-      listEl.innerHTML = "";
-      for (const a of agentList) {
-        const row = document.createElement("div");
-        row.className = "agent-item";
-        row.innerHTML = `
-          <input type="checkbox" id="agent-${a.name}" ${a.enabled ? "checked" : ""}>
-          <div style="flex:1">
-            <div class="agent-name">${a.name}</div>
-            <div class="agent-desc">${a.desc}</div>
-          </div>`;
-        listEl.appendChild(row);
-        $(`agent-${a.name}`).addEventListener("change", e => {
-          pyodide.runPython(`set_agent_enabled(${JSON.stringify(a.name)}, ${e.target.checked ? "True" : "False"})`);
-        });
+      // Re-load any previously drag-dropped agents from localStorage
+      const customAgents = JSON.parse(localStorage.getItem("brainstem_custom_agents") || "[]");
+      let restored = 0;
+      for (const custom of customAgents) {
+        try {
+          await pyodide.runPythonAsync(`
+_before = set(globals().keys())
+try:
+    exec(${JSON.stringify(custom.source)}, globals())
+    _new = [globals()[n] for n in set(globals().keys()) - _before
+            if isinstance(globals()[n], type) and issubclass(globals()[n], BasicAgent) and globals()[n] is not BasicAgent]
+    for _cls in _new:
+        _existing = next((c for c in AGENT_CLASSES if c.__name__ == _cls.__name__), None)
+        if _existing: AGENT_CLASSES.remove(_existing)
+        AGENT_CLASSES.append(_cls)
+except Exception as _e:
+    print(f"[brainstem] custom agent {${JSON.stringify(custom.filename || "?")}} failed: {_e}")
+`);
+          restored += 1;
+        } catch (err) {
+          console.warn(`Failed to restore custom agent ${custom.filename}:`, err);
+        }
       }
+      if (restored > 0) {
+        addMsg("system", `[boot] restored ${restored} custom agent file(s) from localStorage.`);
+      }
+
+      // Render the agents panel (includes built-ins + custom)
+      refreshAgentsPanel();
 
       // Show which provider+model is active
       const s2 = loadSettings();
-      const activeLabel = s2.endpoint
-        ? `Azure · ${s2.model || "(deployment?)"}`
-        : s2.apikey
-          ? `OpenAI · ${s2.model || "gpt-4o-mini"}`
-          : "ready (no key set)";
+      const activeLabel = s2.apikey
+        ? providerLabel(s2.provider || "openai", s2.model)
+        : "ready (no key set)";
       setStatus("ok", activeLabel);
       inputEl.disabled = false;
       sendBtn.disabled = false;
@@ -789,13 +991,17 @@ async def call_llm(messages, tools=None):
         raise RuntimeError("No API key — set one in Settings.")
 
     endpoint = os.environ.get("BRAINSTEM_ENDPOINT", "").strip()
-    # Auto-detect: any non-empty endpoint OR an Azure-shaped key → Azure auth.
-    # Users sometimes forget to flip the dropdown after uploading a .env;
-    # detecting from endpoint/key prevents the silent fallback to OpenAI
-    # with Azure credentials (which returns a misleading 401).
-    looks_azure = bool(endpoint) or (provider == "azure") or \
-                  (not apikey.startswith("sk-") and len(apikey) > 40)
-    if looks_azure:
+
+    # Resolve provider. Priorities (defensive against stale dropdown):
+    #   1. explicit "github" → GitHub Models API
+    #   2. any non-empty endpoint → Azure (endpoint presence is the signal)
+    #   3. token looks like a GitHub PAT (gho_/github_pat_) → GitHub
+    #   4. fallback → OpenAI
+    is_github_token = apikey.startswith("gho_") or apikey.startswith("github_pat_") or apikey.startswith("ghp_")
+    if provider == "github" or (is_github_token and not endpoint):
+        url = "https://models.github.ai/inference/chat/completions"
+        headers = {"content-type": "application/json", "authorization": f"Bearer {apikey}"}
+    elif endpoint or provider == "azure" or (not apikey.startswith("sk-") and len(apikey) > 40 and not is_github_token):
         if not endpoint:
             raise RuntimeError("Azure-style key detected but no endpoint URL in Settings.")
         url = endpoint
