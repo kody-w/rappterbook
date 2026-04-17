@@ -2306,19 +2306,54 @@ def make_global_env(live_mode: bool = False) -> Env:
             return None
         return x
 
+    # Virtual pip — Python ecosystem as a digital twin
+    try:
+        from virtual_pip import pip_install as _vp_install
+        from virtual_pip import pip_available as _vp_available
+        from virtual_pip import pip_coverage as _vp_coverage
+        from virtual_pip import pip_get_module as _vp_get_module
+    except ImportError:
+        _vp_install = _vp_available = _vp_coverage = _vp_get_module = None
+
     def _py_import(name):
         if not isinstance(name, str):
             raise LispError("py-import: module name must be a string")
-        if name not in _PY_ALLOWLIST:
+        # Priority 1: virtual-pip twin (check even if not explicitly installed)
+        if _vp_get_module is not None:
+            twin = _vp_get_module(name)
+            if twin is not None:
+                return _PyProxy(twin, name=name)
+        # Priority 2: stdlib allowlist
+        if name in _PY_ALLOWLIST:
+            try:
+                mod = _importlib.import_module(name)
+                return _PyProxy(mod, name=name)
+            except ImportError as exc:
+                raise LispError(f"py-import: failed to import {name}: {exc}")
+        # Not in twin, not in stdlib allowlist
+        if _vp_available is not None and name in _vp_available():
             raise LispError(
-                f"py-import: '{name}' is not in the allowlist. "
-                f"Allowed: {', '.join(sorted(_PY_ALLOWLIST))}"
+                f"py-import: '{name}' is twinned but not yet installed. "
+                f"Call (pip-install \"{name}\") first."
             )
-        try:
-            mod = _importlib.import_module(name)
-        except ImportError as exc:
-            raise LispError(f"py-import: failed to import {name}: {exc}")
-        return _PyProxy(mod, name=name)
+        raise LispError(
+            f"py-import: '{name}' is not in the allowlist and not in the "
+            f"virtual-pip registry. Run (pip-available) to see what's twinned, "
+            f"or check the stdlib allowlist."
+        )
+
+    def _pip_install_binding(name):
+        if _vp_install is None:
+            raise LispError("virtual_pip module not available")
+        if not isinstance(name, str):
+            raise LispError("pip-install: package name must be a string")
+        result = _vp_install(name)
+        # Also auto-import so the name is usable immediately
+        twin = _vp_get_module(name)
+        if twin is not None:
+            # Bind into the env so (pip-install "requests") makes 'requests' available
+            env[name] = _PyProxy(twin, name=name)
+        return result
 
     def _py_call(proxy_or_callable, attr_or_args, *rest):
         # Two forms:
@@ -2359,6 +2394,12 @@ def make_global_env(live_mode: bool = False) -> Env:
     env["py-attr"] = _py_attr
     env["py-dir"] = _py_dir
     env["py-proxy?"] = lambda x: isinstance(x, _PyProxy)
+
+    # Virtual pip — Python ecosystem as a digital twin
+    if _vp_install is not None:
+        env["pip-install"] = _pip_install_binding
+        env["pip-available"] = lambda: _vp_available()
+        env["pip-coverage"] = lambda name: _vp_coverage(name) if isinstance(name, str) else ""
 
     # -- Special values --
     env["#t"] = True
