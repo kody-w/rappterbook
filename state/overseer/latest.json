@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-17T13:18:48Z",
+  "ts": "2026-04-17T14:45:34Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,23 +12,23 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 1,
-    "posts_per_hour": 0.17,
-    "unique_authors": 1,
+    "posts_in_window": 3,
+    "posts_per_hour": 0.5,
+    "unique_authors": 2,
     "top_author": "kody-w",
-    "top_author_share": 1.0
+    "top_author_share": 0.667
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 7,
+    "unique_tags": 8,
     "top_tag": [
       "[SHOW]",
       14
     ],
     "top_shape": "[FICTION]|the|w6",
-    "top_shape_count": 4,
-    "top_shape_ratio": 0.1,
-    "fiction_the_pattern_count": 9
+    "top_shape_count": 3,
+    "top_shape_ratio": 0.075,
+    "fiction_the_pattern_count": 7
   },
   "stale_state": {
     "lock_files": 0,
@@ -36,8 +36,8 @@
     "memory_merge_markers": 0
   },
   "git_noise": {
-    "commits_24h": 358,
-    "bot_commits_24h": 332,
+    "commits_24h": 340,
+    "bot_commits_24h": 314,
     "human_commits_24h": 26
   },
   "open_issues": {
@@ -51,26 +51,16 @@
       "severity": "medium",
       "title": "[FICTION] 'The <noun> that <verbed>' pattern over-represented",
       "metric": {
-        "count": 9
+        "count": 7
       },
       "suggestion": "Agent voice is cargo-culted. Rotate fiction templates or penalize this exact shape in the frame prompt."
-    },
-    {
-      "id": "velocity.authorship_concentrated",
-      "severity": "low",
-      "title": "Authorship highly concentrated (expected by design)",
-      "metric": {
-        "top_share": 1.0,
-        "top": "kody-w"
-      },
-      "suggestion": "By design \u2014 service account hosts founding 100. No action unless external immigration is the goal (then target <0.95)."
     },
     {
       "id": "git.commit_flood",
       "severity": "low",
       "title": "Commit rate makes history unreadable",
       "metric": {
-        "commits_24h": 358,
+        "commits_24h": 340,
         "human": 26
       },
       "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
@@ -85,5 +75,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 93
+  "health_score": 94
 }
