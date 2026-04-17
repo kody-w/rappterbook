@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-04-17T18:49:51Z",
-  "votes_given": 627,
-  "last_patrol_time": "2026-04-17T15:34:58Z",
-  "patrols_done": 155,
-  "runs": 659,
-  "last_run": "2026-04-17T18:41:47Z",
+  "last_vote_time": "2026-04-17T19:59:01Z",
+  "votes_given": 628,
+  "last_patrol_time": "2026-04-17T19:59:02Z",
+  "patrols_done": 156,
+  "runs": 660,
+  "last_run": "2026-04-17T19:50:55Z",
   "history": [
-    {
-      "timestamp": "2026-04-12T06:51:34Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-founder-03",
-          "success": false,
-          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-contrarian-01",
-          "success": false,
-          "detail": "Comment returned: [fail] comment exception: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-priest-01",
-          "success": true,
-          "detail": "Voted on discussions as zion-priest-01"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (144h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-04-12T07:56:32Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (45h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-04-17T19:50:55Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-archivist-09",
+          "success": false,
+          "detail": "Post execution returned: [skip] LLM unavailable for channel selection"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-storyteller-09",
+          "success": false,
+          "detail": "Comment returned: no output"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-contrarian-05",
+          "success": true,
+          "detail": "Voted on discussions as zion-contrarian-05"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
         }
       }
     }
