@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LisPy Playground — try Python's digital twin in your browser</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #0d1117;
+    --fg: #c9d1d9;
+    --accent: #58a6ff;
+    --border: #30363d;
+    --panel: #161b22;
+    --ok: #3fb950;
+    --err: #f85149;
+    --warn: #f0883e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+    background: var(--bg); color: var(--fg); margin: 0; padding: 1.5rem;
+    max-width: 1100px; margin-inline: auto; line-height: 1.5;
+  }
+  h1 { margin-top: 0; color: var(--accent); font-size: 1.7rem; }
+  .sub { opacity: 0.8; margin-top: -0.5rem; margin-bottom: 1.5rem; }
+  .status {
+    display: inline-block; padding: 0.2em 0.6em; border-radius: 4px;
+    background: var(--panel); border: 1px solid var(--border);
+    font-size: 0.8rem; margin-left: 0.5em;
+  }
+  .status.ok { color: var(--ok); border-color: var(--ok); }
+  .status.loading { color: var(--warn); border-color: var(--warn); }
+  .status.err { color: var(--err); border-color: var(--err); }
+
+  .examples {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem;
+  }
+  .examples h3 { margin: 0 0 0.5rem 0; font-size: 0.95rem; color: var(--accent); }
+  .example-btn {
+    display: inline-block; margin: 0.2rem;
+    background: var(--bg); color: var(--fg); border: 1px solid var(--border);
+    padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.82rem;
+    cursor: pointer; font-family: inherit;
+  }
+  .example-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .example-desc { font-size: 0.8rem; opacity: 0.7; margin-top: 0.3rem; }
+
+  .editor-area {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 800px) { .editor-area { grid-template-columns: 1fr; } }
+  .pane { display: flex; flex-direction: column; }
+  .pane h3 { margin: 0 0 0.3rem 0; font-size: 0.95rem; color: var(--accent); }
+  textarea#code {
+    width: 100%; height: 320px; resize: vertical;
+    background: #0a0d12; color: var(--fg);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.75rem; font-family: inherit; font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  #output {
+    width: 100%; height: 320px; overflow-y: auto;
+    background: #0a0d12; border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.75rem; font-size: 0.85rem;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .controls { margin-bottom: 1rem; }
+  button.run {
+    background: var(--accent); color: var(--bg); border: none;
+    padding: 0.6rem 1.4rem; border-radius: 4px; font-weight: 700;
+    cursor: pointer; font-family: inherit; font-size: 0.95rem;
+    margin-right: 0.5rem;
+  }
+  button.run:hover { opacity: 0.85; }
+  button.run:disabled { opacity: 0.4; cursor: not-allowed; }
+  button.clear {
+    background: transparent; color: var(--fg);
+    border: 1px solid var(--border); padding: 0.6rem 1.2rem;
+    border-radius: 4px; cursor: pointer; font-family: inherit;
+  }
+  kbd {
+    background: var(--panel); padding: 0.1em 0.4em;
+    border: 1px solid var(--border); border-radius: 3px;
+    font-size: 0.85em;
+  }
+  .line-ok { color: var(--ok); }
+  .line-err { color: var(--err); }
+  .line-info { color: var(--warn); }
+  footer { margin-top: 2rem; font-size: 0.85rem; opacity: 0.7;
+           border-top: 1px solid var(--border); padding-top: 1rem; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<h1>LisPy Playground <span id="status" class="status loading">loading…</span></h1>
+<p class="sub">
+  Python's digital twin, in your browser. Real LisPy VM (<code>dist/lispy.py</code>)
+  running via Pyodide. Zero install. Zero dependencies. Real compute.
+</p>
+
+<div class="examples">
+  <h3>Try these examples</h3>
+  <button class="example-btn" data-ex="arithmetic">1. Basic math</button>
+  <button class="example-btn" data-ex="vars">2. Variables & lists</button>
+  <button class="example-btn" data-ex="pip">3. Virtual pip</button>
+  <button class="example-btn" data-ex="numpy">4. Numpy twin</button>
+  <button class="example-btn" data-ex="pandas">5. Pandas twin</button>
+  <button class="example-btn" data-ex="requests">6. HTTP (twin)</button>
+  <button class="example-btn" data-ex="os">7. Virtual OS</button>
+  <button class="example-btn" data-ex="notification">8. Browser HW bridge</button>
+  <div class="example-desc" id="example-desc">Click an example above, then press <kbd>Run</kbd>.</div>
+</div>
+
+<div class="editor-area">
+  <div class="pane">
+    <h3>Editor <span class="status" style="font-size:0.7rem; margin-left:0.3em;">Ctrl/Cmd+Enter to run</span></h3>
+    <textarea id="code" spellcheck="false" placeholder="Pick an example above, or type your own LisPy…
+(+ 1 2)"></textarea>
+  </div>
+  <div class="pane">
+    <h3>Output</h3>
+    <div id="output">Loading Pyodide (~10MB, cached after first visit)…</div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="run" id="run" disabled>Run (Ctrl+Enter)</button>
+  <button class="clear" id="clear">Clear output</button>
+</div>
+
+<footer>
+  <p>
+    This playground runs the <strong>actual</strong> LisPy VM —
+    <a href="https://github.com/kody-w/rappterbook/blob/main/dist/lispy.py" target="_blank">dist/lispy.py</a>
+    — compiled to WASM via <a href="https://pyodide.org" target="_blank">Pyodide</a>.
+    Every binding available server-side is available here. Every package twin works the same way.
+  </p>
+  <p>
+    Read <a href="LISPY_MANIFESTO.md" target="_blank">the manifesto</a> ·
+    <a href="LISPY_SPEC.md" target="_blank">spec</a> ·
+    <a href="lispy-hw-demo.html" target="_blank">hardware bridge demo</a> ·
+    <a href="https://github.com/kody-w/rappterbook" target="_blank">source</a>
+  </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const EXAMPLES = {
+    arithmetic: {
+      desc: "Basic arithmetic. Proves the VM is alive.",
+      code: "(+ 1 2 3 4 5)\n; → 15"
+    },
+    vars: {
+      desc: "Variables, lists, map. Python semantics in Lisp syntax.",
+      code: "(define xs (list 1 2 3 4 5))\n(define squared (map (lambda (x) (* x x)) xs))\n(list (sum xs) (sum squared))\n; → (15 55)"
+    },
+    pip: {
+      desc: "Virtual pip — Python's package ecosystem as a static twin. No install, no network.",
+      code: '(pip-available)\n; → list of twinned packages\n\n(pip-install "requests")\n(pip-coverage "requests")\n; → "~70% of requests — get/post/put/..."'
+    },
+    numpy: {
+      desc: "Numpy twin. 1D array math backed by Python lists. No native extensions.",
+      code: '(pip-install "numpy")\n(define np (py-import "numpy"))\n(define arr (py-call np "array" (list 1 2 3 4 5 6 7 8 9 10)))\n(list\n  (py-call arr "sum")\n  (py-call arr "mean")\n  (py-call arr "max"))\n; → (55.0 5.5 10.0)'
+    },
+    pandas: {
+      desc: "Pandas twin. DataFrame as list-of-dicts. Head/tail/to_csv work.",
+      code: '(pip-install "pandas")\n(define pd (py-import "pandas"))\n(define df (py-call pd "DataFrame"\n  (list\n    (dict "name" "alice" "age" 30)\n    (dict "name" "bob" "age" 25)\n    (dict "name" "carol" "age" 35))))\n(py-attr df "columns")\n; → ("name" "age")'
+    },
+    requests: {
+      desc: "HTTP request via the requests twin. Note: in-browser, CORS may block real calls to external hosts — the twin works, the network path is browser-gated.",
+      code: '(pip-install "requests")\n(define requests (py-import "requests"))\n(define r (py-call requests "get" "https://api.github.com/zen"))\n(list\n  (py-attr r "status_code")\n  (py-attr r "text"))\n; → (200 "some wisdom...")\n; (if CORS blocks it you\'ll get an error — expected in the browser)'
+    },
+    os: {
+      desc: "Virtual OS twin. Synthetic filesystem at /etc/hosts, /tmp, /home/agent. Safe, deterministic.",
+      code: '(define os (py-import "os"))\n(list\n  (py-call os "getcwd")\n  (py-call os "getenv" "HOME")\n  (py-call os "listdir" "/etc"))\n; → ("/home/agent/workspace" "/home/agent" ("hosts" "passwd"))'
+    },
+    notification: {
+      desc: "Hardware bridge — real browser Notification via the LisPy binding. The browser will ask permission.",
+      code: '(grant-capability "hw-notification")\n(hw-notification "LisPy" "The twin speaks through your browser")\n; → {posted: true}  (check macOS notification center)'
+    },
+  };
+
+  const $ = id => document.getElementById(id);
+  const statusEl = $("status");
+  const outputEl = $("output");
+  const runBtn = $("run");
+  const codeEl = $("code");
+
+  function setStatus(cls, text) {
+    statusEl.className = "status " + cls;
+    statusEl.textContent = text;
+  }
+
+  function print(line, cls = "") {
+    const span = document.createElement("span");
+    if (cls) span.className = "line-" + cls;
+    span.textContent = line + "\n";
+    outputEl.appendChild(span);
+    outputEl.scrollTop = outputEl.scrollHeight;
+  }
+
+  function clearOutput() {
+    outputEl.textContent = "";
+  }
+
+  // Wire examples
+  document.querySelectorAll(".example-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const ex = EXAMPLES[btn.dataset.ex];
+      if (!ex) return;
+      codeEl.value = ex.code;
+      $("example-desc").textContent = ex.desc;
+      codeEl.focus();
+    });
+  });
+
+  $("clear").addEventListener("click", clearOutput);
+
+  // Keyboard shortcut
+  codeEl.addEventListener("keydown", e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+      e.preventDefault();
+      runBtn.click();
+    }
+  });
+
+  // --- Pyodide setup ---
+  let pyodide = null;
+
+  async function boot() {
+    try {
+      setStatus("loading", "loading Pyodide…");
+      clearOutput();
+      print("[boot] loading Pyodide runtime…", "info");
+      pyodide = await loadPyodide();
+      print("[boot] Pyodide ready. Fetching lispy.py…", "info");
+
+      // Prefer same-origin `lispy.py` (served alongside the HTML in docs/)
+      // so the playground always runs the version shipped with this page.
+      // Fall back to raw.githubusercontent.com only if the local file is
+      // unavailable (e.g. page loaded from a different origin).
+      let lispySrc;
+      const local = await fetch("lispy.py").catch(() => null);
+      if (local && local.ok) {
+        lispySrc = await local.text();
+      } else {
+        const CDN_URL = "https://raw.githubusercontent.com/kody-w/rappterbook/main/dist/lispy.py";
+        const resp = await fetch(CDN_URL);
+        if (!resp.ok) throw new Error(`fetch lispy.py failed: HTTP ${resp.status}`);
+        lispySrc = await resp.text();
+      }
+      print(`[boot] lispy.py loaded (${Math.round(lispySrc.length/1024)}KB). Initializing…`, "info");
+
+      // Load lispy.py into Pyodide. Override __name__ so the CLI guard
+      // (if __name__ == "__main__") doesn't fire and attempt sys.stdin.read.
+      // Inject __file__ so Path(__file__) references in lispy.py work.
+      pyodide.FS.writeFile("/home/pyodide/lispy.py", lispySrc);
+      await pyodide.runPythonAsync(`
+import sys, types
+sys.path.insert(0, "/home/pyodide")
+_lispy_mod = types.ModuleType("_lispy_loader")
+_lispy_mod.__file__ = "/home/pyodide/lispy.py"
+_lispy_mod.__name__ = "lispy"  # NOT "__main__" — skips CLI guard
+with open("/home/pyodide/lispy.py") as _f:
+    _src = _f.read()
+exec(compile(_src, "/home/pyodide/lispy.py", "exec"), _lispy_mod.__dict__)
+# Hoist the key symbols into the global namespace so our runner can reach them.
+for _name in ("make_global_env", "parse", "evaluate", "NIL", "LispError", "lisp_to_json"):
+    globals()[_name] = getattr(_lispy_mod, _name)
+`);
+
+      // Inject browser-backed hw-notification
+      pyodide.runPython(`
+_notification_granted = False
+def _browser_notify(title, body="", subtitle=""):
+    from js import Notification, window
+    try:
+        # Request permission if needed
+        perm = Notification.permission
+        if perm != "granted":
+            return {"posted": False, "error": f"permission: {perm}", "hint": "grant in browser"}
+        n = Notification.new(str(title), to_js({"body": str(body)}))
+        return {"posted": True, "via": "browser"}
+    except Exception as e:
+        return {"posted": False, "error": str(e)}
+`);
+
+      // Patch the LisPy env to use the browser-backed version
+      await pyodide.runPythonAsync(`
+# Override hw-notification in make_global_env so the Lisp binding hits browser
+_original_make_global_env = make_global_env
+def _patched_make_global_env(live_mode=False):
+    env = _original_make_global_env(live_mode)
+    env["hw-notification"] = lambda title, *rest: _browser_notify(title, rest[0] if rest else "", rest[1] if len(rest) > 1 else "")
+    return env
+make_global_env = _patched_make_global_env
+`);
+
+      setStatus("ok", "ready");
+      runBtn.disabled = false;
+      print("[boot] LisPy VM ready. Click an example above or write your own.", "ok");
+      print("");
+      print("Tip: press Cmd/Ctrl+Enter in the editor to run.", "info");
+    } catch (e) {
+      setStatus("err", "boot failed");
+      print("[boot error] " + e.message, "err");
+      console.error(e);
+    }
+  }
+
+  async function runUserCode() {
+    if (!pyodide) return;
+    const source = codeEl.value.trim();
+    if (!source) { print("(nothing to run)", "info"); return; }
+    print("» running…", "info");
+
+    // Request notification permission eagerly if code uses hw-notification
+    if (source.includes("hw-notification")) {
+      if (typeof Notification !== "undefined" && Notification.permission === "default") {
+        try { await Notification.requestPermission(); } catch (_) {}
+      }
+    }
+
+    try {
+      // Escape the source for Python triple-quoted string
+      const escapedSource = JSON.stringify(source);
+      const pyProgram = `
+import json
+env = make_global_env(live_mode=False)
+source = json.loads(${JSON.stringify(escapedSource)})
+result = NIL
+try:
+    exprs = parse(source)
+    for e in exprs:
+        result = evaluate(e, env)
+    if result is NIL or result is None:
+        _output = "(no return value)"
+    else:
+        try:
+            jv = lisp_to_json(result)
+            if isinstance(jv, (dict, list)):
+                _output = json.dumps(jv, indent=2)
+            else:
+                _output = str(jv)
+        except Exception:
+            _output = str(result)
+    _status = "ok"
+except LispError as err:
+    _output = f"LispError: {err}"
+    _status = "err"
+except Exception as err:
+    import traceback
+    _output = f"Python error: {err}\\n{traceback.format_exc()}"
+    _status = "err"
+(_status, _output)
+`;
+      const [status, output] = (await pyodide.runPythonAsync(pyProgram)).toJs();
+      print("» " + output, status === "ok" ? "ok" : "err");
+    } catch (e) {
+      print("» runner error: " + e.message, "err");
+      console.error(e);
+    }
+  }
+
+  runBtn.addEventListener("click", runUserCode);
+
+  // Start
+  boot();
+})();
+</script>
+
+</body>
+</html>
