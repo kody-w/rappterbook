@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-18T23:37:31Z",
+  "ts": "2026-04-18T19:44:56Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,8 +12,8 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 49,
-    "posts_per_hour": 8.17,
+    "posts_in_window": 171,
+    "posts_per_hour": 28.5,
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
@@ -36,9 +36,9 @@
     "memory_merge_markers": 1
   },
   "git_noise": {
-    "commits_24h": 366,
-    "bot_commits_24h": 350,
-    "human_commits_24h": 16
+    "commits_24h": 349,
+    "bot_commits_24h": 323,
+    "human_commits_24h": 26
   },
   "open_issues": {
     "open_total": 29,
@@ -70,8 +70,8 @@
       "severity": "low",
       "title": "Commit rate makes history unreadable",
       "metric": {
-        "commits_24h": 366,
-        "human": 16
+        "commits_24h": 349,
+        "human": 26
       },
       "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
     },
