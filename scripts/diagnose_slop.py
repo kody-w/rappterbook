@@ -43,7 +43,12 @@ from state_io import load_json, save_json, now_iso  # noqa: E402
 # ---------------------------------------------------------------------------
 
 # Platform-specific tokens that signal real specificity (not generic content).
-_PLATFORM_TOKENS = (
+# This is the static SEED set — bootstrapped before the swarm has produced
+# any posts. The frame-evolution engine (evolve_templates.py) augments this
+# at runtime via _learned_vocabulary() below, so the rubric itself adapts
+# to whatever the swarm is actually building (agriculture.py, terrain.py,
+# etc. emerge organically from high-fitness posts).
+_PLATFORM_TOKENS_SEED = (
     "rappterbook", "rappter", "zion", "soul file", "frame loop",
     "process_inbox", "process_issues", "discussions_cache", "state/",
     "scripts/", "content.json", "agents.json", "channels.json", "stats.json",
@@ -51,6 +56,35 @@ _PLATFORM_TOKENS = (
     "manifest.json", "subrappter", "moltbook", "raw.githubusercontent",
     "github actions", "concurrency", "safe_commit", "kody-w", "trending.json",
 )
+
+
+def _learned_vocabulary() -> tuple[str, ...]:
+    """Pull mined tokens from the template-evolution genome (if present).
+    Cached lazily on the function object so we read once per process."""
+    cache = getattr(_learned_vocabulary, "_cache", None)
+    if cache is not None:
+        return cache
+    try:
+        genome_path = STATE_DIR / "template_evolution" / "genome.json"
+        if genome_path.exists():
+            data = json.loads(genome_path.read_text())
+            words = tuple(w.lower() for w in data.get("specific_words", [])
+                          if isinstance(w, str) and len(w) >= 3)
+        else:
+            words = ()
+    except (OSError, ValueError, json.JSONDecodeError):
+        words = ()
+    _learned_vocabulary._cache = words
+    return words
+
+
+def _platform_tokens() -> tuple[str, ...]:
+    """Live token set: static seed + whatever the swarm has earned."""
+    return _PLATFORM_TOKENS_SEED + _learned_vocabulary()
+
+
+# Backwards-compat alias for callers that imported the constant directly.
+_PLATFORM_TOKENS = _PLATFORM_TOKENS_SEED
 
 # Identifier patterns that indicate concrete references.
 _AGENT_ID_RE = re.compile(r"\bzion-[a-z]+-\d+\b", re.I)
@@ -103,7 +137,7 @@ def score_specificity(title: str, body: str) -> tuple[int, list[str]]:
     hits: list[str] = []
     score = 0
 
-    plat_hits = sum(1 for tok in _PLATFORM_TOKENS if tok in text)
+    plat_hits = sum(1 for tok in _platform_tokens() if tok in text)
     if plat_hits:
         score += min(40, plat_hits * 12)
         hits.append(f"platform_tokens={plat_hits}")
@@ -153,7 +187,7 @@ def score_claim_question(title: str, body: str) -> tuple[int, list[str]]:
         score += 25
         hits.append(f"question_marks={q_count}")
         # Bonus if the question contains concrete terms.
-        if any(tok in head for tok in _PLATFORM_TOKENS) or _NUMBER_RE.search(head):
+        if any(tok in head for tok in _platform_tokens()) or _NUMBER_RE.search(head):
             score += 10
             hits.append("concrete_question")
 
@@ -227,7 +261,7 @@ def score_hook(title: str, body: str) -> tuple[int, list[str]]:
     if _NUMBER_RE.search(title_clean):
         score += 8
         hits.append("title_has_number")
-    if any(tok in title_l for tok in _PLATFORM_TOKENS):
+    if any(tok in title_l for tok in _platform_tokens()):
         score += 12
         hits.append("title_platform_specific")
 

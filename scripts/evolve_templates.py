@@ -223,8 +223,25 @@ def evolve_content(content: dict, fitness: dict[str, dict],
 
     top_ids, mid_ids, bottom_ids = _bucket(fitness)
 
-    # 1. CULL the bottom decile — replace each with a mutation of a random
-    #    top template (so the slot stays filled but with better DNA).
+    # 1. CULL the bottom decile — replace each with a mutation of a top
+    #    template. Diversify parents: shuffle the pool and walk it so two
+    #    culls in the same frame don't both produce the same offspring.
+    parent_walk: dict[str, list[str]] = {}
+
+    def _next_parent(section: str) -> str | None:
+        if section not in parent_walk:
+            same_section_top = [t for t in top_ids
+                                if fitness[t]["section"] == section]
+            pool = list(same_section_top or top_ids)
+            rng.shuffle(pool)
+            parent_walk[section] = pool
+        if not parent_walk[section]:
+            # Pool exhausted — refill from full top set in shuffled order.
+            pool = list(top_ids)
+            rng.shuffle(pool)
+            parent_walk[section] = pool
+        return parent_walk[section].pop() if parent_walk[section] else None
+
     for tid in bottom_ids:
         info = fitness[tid]
         section = info["section"]
@@ -237,13 +254,9 @@ def evolve_content(content: dict, fitness: dict[str, dict],
         if not isinstance(bucket, list) or index >= len(bucket):
             continue
 
-        # Pick a parent from top_ids in the same section if possible.
-        same_section_top = [t for t in top_ids
-                            if fitness[t]["section"] == section]
-        parent_pool = same_section_top or top_ids
-        if not parent_pool:
+        parent_tid = _next_parent(section)
+        if parent_tid is None:
             continue
-        parent_tid = rng.choice(parent_pool)
         parent_text = fitness[parent_tid]["text"]
 
         old = bucket[index]
