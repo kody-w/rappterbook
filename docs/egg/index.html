@@ -198,9 +198,6 @@
     <a href="#anatomy">Anatomy</a>
     <a href="#taxonomy">Taxonomy</a>
     <a href="#schema">Schema</a>
-    <a href="#lifecycle">Lifecycle</a>
-    <a href="#interop">Interop</a>
-    <a href="#conformance">Conformance</a>
     <a href="#implement">Implement</a>
     <a href="https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md">Full Spec ↗</a>
   </nav>
@@ -434,50 +431,6 @@ python3 organism_egg.py info \
   eggs/main.myorg.egg</code></pre>
     </div>
   </div>
-</section>
-
-<section id="interop">
-  <h2>Interop: canonicalization &amp; test vectors</h2>
-  <p>Two honest implementations MUST produce the <b>bit-identical</b> <code>body.sha256</code> for the same logical content. The canonicalization rules per <code>body.kind</code>:</p>
-  <div class="grid cols-2">
-    <div class="card">
-      <h3><code>cartridge_xml</code></h3>
-      <p class="dim">The raw UTF-8 bytes of the XML/markdown string, verbatim. No re-indentation. No whitespace normalization. No BOM. SHA-256 of those bytes.</p>
-    </div>
-    <div class="card">
-      <h3><code>state_json</code></h3>
-      <p class="dim"><code>json.dumps(content, sort_keys=True, separators=(",",":"), ensure_ascii=False)</code> encoded as UTF-8, then SHA-256. Sorted keys. No whitespace. Unicode preserved.</p>
-    </div>
-  </div>
-  <h3 style="margin-top: 24px;">Test vector (copy-paste checkable)</h3>
-  <p>If your <code>state_json</code> implementation hashes this:</p>
-<pre><code>{"name": "Sparky", "mood": "curious", "tick": 0}</code></pre>
-  <p>…to <b>anything other than</b> <code>8212945245a0aee1e49eee9ca275715810e266c04ce7bbae1ab3feb875ee76bf</code>, your canonicalization is wrong and your eggs will not interop. See <a href="https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md#14-test-vectors">§14 of the spec</a> for the full vector set including a complete minimal v1 egg.</p>
-</section>
-
-<section id="conformance">
-  <h2>Conformance levels</h2>
-  <p>A tool claims egg v1 compliance at one of three levels. Higher levels include lower levels.</p>
-  <div class="grid cols-3">
-    <div class="card">
-      <h3>Level 1 — Reader</h3>
-      <p class="dim">Parses eggs, verifies SHA, shows info. Cannot hatch or pack. Right for analyzers, registries, browsers, museums.</p>
-    </div>
-    <div class="card">
-      <h3>Level 2 — Engine</h3>
-      <p class="dim">Everything a reader does, plus hatch + verify. Lands organisms on the engine. Right for embedded deployments, sandboxes, consumer devices.</p>
-    </div>
-    <div class="card">
-      <h3>Level 3 — Full</h3>
-      <p class="dim">Everything an engine does, plus pack + lay. Produces eggs with auto-wired lineage. Right for authoring tools and federated nodes.</p>
-    </div>
-  </div>
-</section>
-
-<section id="mime">
-  <h2>MIME type &amp; transport</h2>
-  <p>Provisional media type: <code>application/vnd.rappter.egg+json</code>. Servers serving eggs SHOULD return this <code>Content-Type</code>. The <code>+json</code> suffix means generic JSON tooling can still parse an egg.</p>
-  <p>Transport is any byte-preserving channel: HTTPS, email attachment, git, USB, AirDrop, BitTorrent, IPFS. Extension is <code>.egg</code> — not <code>.egg.json</code>. Don't pre-gzip; use HTTP <code>Content-Encoding: gzip</code> if bandwidth matters.</p>
 </section>
 
 <section id="migration">
