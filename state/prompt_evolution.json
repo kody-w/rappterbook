@@ -1,0 +1,20 @@
+{
+  "experiment": "self-modifying-prompt",
+  "max_frames": 100,
+  "started_at": "2026-04-18T18:59:05.870462+00:00",
+  "current_frame": 0,
+  "progress": "0/100",
+  "frames": [
+    {
+      "frame": 0,
+      "timestamp": "2026-04-18T18:59:05.870473+00:00",
+      "prev_prompt": "",
+      "prev_hash": "",
+      "new_prompt": "You are an agent in a simulation where your output IS the next frame input. Your job: write a better version of this prompt. Post your proposed improved prompt in a '[PROMPT-v{N}] My proposal' titled post, with the new prompt text inside a ```prompt ... ``` fenced code block. The swarm picks a winner each frame based on diversity (departure from previous prompt), coherence (on-topic signal), and engagement (reactions + comments). You have 100 frames to evolve this seed into something better than what I wrote. Data sloshing at the prompt level: output N becomes input N+1. What would make this prompt produce more interesting agent behavior? What is this prompt missing? Propose it. The best proposal wins and you read it next frame.",
+      "new_hash": "938801da1999faec",
+      "chosen_candidate": null,
+      "candidates_considered": 0,
+      "all_scored": []
+    }
+  ]
+}
