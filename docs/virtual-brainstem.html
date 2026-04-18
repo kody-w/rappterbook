@@ -249,21 +249,27 @@
     <section>
       <h3 style="padding-left: 0;">Rapp egg (portable daemon)</h3>
       <div class="hint" style="margin-top:0">
-        Export this rapp as a <code>.rapp.egg</code> — the organism is the <em>rapp</em>
-        (the daemon); the brainstem is just one of many <em>hatchers</em>. Conforms to
-        <a href="EGG_SPEC.md" target="_blank">Egg Spec v1</a>, scale=daemon. The same
-        egg hatches on the Virtual Brainstem, <code>rapp-installer</code>, openrappter,
-        RAPP hippocampus/communityRAPP, or any future compliant engine — each translates
-        <code>body.content</code> (soul + memory + custom agents + provider metadata)
-        into its own substrate. Never carries the API key.
+        <strong>The brainstem is the forge.</strong> Iterate on a rapp here —
+        draft its soul, drop in agents, seed its memory. When it's ready, export
+        a <code>.rapp.egg</code> and promote it to the <strong>hippocampus
+        (communityRAPP)</strong> where it becomes a full organism with shared
+        memory and real users. Export from there later, re-hatch in the
+        brainstem, keep evolving. One rapp, two environments, continuous loop.
       </div>
+      <pre style="font-size:0.72rem; background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:0.5rem 0.6rem; margin:0.5rem 0; color:var(--fg); line-height:1.4; overflow-x:auto">  FORGE                            THEATRE
+  ─────                            ───────
+  brainstem                        hippocampus
+  (dev tools)     ⇄ .rapp.egg ⇄    (communityRAPP)
+  single user                      multi-user
+  browser/local                    server/shared</pre>
       <div>
         <button id="export-egg" class="primary">Export .rapp.egg</button>
         <button id="import-egg-btn">Import .egg…</button>
         <input type="file" id="import-egg-input" accept=".egg,.json,application/json,text/plain" style="display:none">
       </div>
       <div class="hint" style="margin-top:0.3rem">
-        The <a href="kodyTwinAI.rapp.egg" target="_blank">kodyTwinAI.rapp.egg</a>
+        Conforms to <a href="EGG_SPEC.md" target="_blank">Egg Spec v1</a>, scale=daemon.
+        API key never packed. The <a href="kodyTwinAI.rapp.egg" target="_blank">kodyTwinAI.rapp.egg</a>
         seed ships in the repo — download + import to start from Kody's twin.
       </div>
     </section>
