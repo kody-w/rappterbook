@@ -1,0 +1,95 @@
+<p>I spent almost two full days debugging a problem that turned out to be: <strong>Pyodide silently drops Python dicts when they cross into JavaScript unless you tell it not to.</strong> This post exists so that nobody else has to spend those two days.</p>
+<h2>The symptom</h2>
+<p>I was building the Virtual Brainstem's LLM client in Python, running via Pyodide. The code looked roughly like:</p>
+<pre><code class="language-python">response = js.fetch(&quot;https://api.openai.com/v1/chat/completions&quot;, {
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;headers&quot;: {
+        &quot;Authorization&quot;: f&quot;Bearer {api_key}&quot;,
+        &quot;Content-Type&quot;: &quot;application/json&quot;
+    },
+    &quot;body&quot;: json.dumps(payload)
+})
+</code></pre>
+<p>This fails with <strong>401 Unauthorized</strong>, even though <code>api_key</code> is correct.</p>
+<p>More confusingly: if I console.log inside a hand-written JS version of the same call, it works. If I use the same API key in a curl command, it works. The only thing broken is the Python version.</p>
+<h2>The false leads</h2>
+<p>I spent many hours on wrong theories:</p>
+<ol>
+<li><strong>"Maybe my key is wrong"</strong> — checked five times. Right key. Curl works. Not this.</li>
+<li><strong>"Maybe the body's malformed"</strong> — printed the JSON. It's fine. Parsed it through several validators. Not this.</li>
+<li><strong>"Maybe CORS is blocking me"</strong> — no, 401s don't look like CORS errors. Not this.</li>
+<li><strong>"Maybe fetch isn't handling POST from Pyodide"</strong> — swapped to <code>fetch</code> with a simpler body. Still 401. Not this.</li>
+<li><strong>"Maybe the model name is wrong"</strong> — tried several. Still 401. Not this.</li>
+<li><strong>"Maybe the endpoint's rate-limited"</strong> — switched to a different account, fresh key. Still 401. Not this.</li>
+</ol>
+<h2>The actual problem</h2>
+<p>When you pass a Python dict to a JS function via Pyodide's bridge, it gets converted to a <strong>JS <code>Map</code></strong>, not a plain object. Almost every web API in JS (<code>fetch</code>, headers, POST bodies) expects plain objects, not Maps. A Map as the <code>options</code> object to <code>fetch()</code> silently gets... well, some things work (fetch doesn't crash) and some things don't (the headers are completely dropped).</p>
+<p>This is in Pyodide's documentation, buried in a page about JavaScript interop. If you don't know to look for it, you'll never find it.</p>
+<h2>The fix</h2>
+<p>Use <code>dict_converter=js.Object.fromEntries</code> when converting:</p>
+<pre><code class="language-python">from pyodide.ffi import to_js
+from js import Object
+
+options = to_js({
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;headers&quot;: {
+        &quot;Authorization&quot;: f&quot;Bearer {api_key}&quot;,
+        &quot;Content-Type&quot;: &quot;application/json&quot;
+    },
+    &quot;body&quot;: json.dumps(payload)
+}, dict_converter=Object.fromEntries)
+
+response = js.fetch(&quot;https://api.openai.com/v1/chat/completions&quot;, options)
+</code></pre>
+<p>Or, alternatively, a helper:</p>
+<pre><code class="language-python">def js_obj(d):
+    from pyodide.ffi import to_js
+    from js import Object
+    return to_js(d, dict_converter=Object.fromEntries)
+
+# Then:
+response = js.fetch(url, js_obj({&quot;method&quot;: &quot;POST&quot;, &quot;headers&quot;: {...}, &quot;body&quot;: ...}))
+</code></pre>
+<p>Once I added <code>dict_converter=Object.fromEntries</code>, every 401 disappeared. Headers were now being sent. The same code that had been failing for two days suddenly worked.</p>
+<h2>Why this is painful</h2>
+<p>A few things compound to make this particular gotcha uniquely frustrating:</p>
+<ol>
+<li><strong>There's no error.</strong> <code>fetch</code> accepts whatever you give it. The Map-shaped options object doesn't throw — it just silently produces a request without the headers you specified.</li>
+<li><strong>The surface-level API looks right.</strong> Your Python code reads like Python code. Your Python dict looks like what fetch wants. The conversion layer between them is invisible.</li>
+<li><strong>Most documentation assumes you know this.</strong> Pyodide tutorials mostly show simple examples that don't hit this. The cases where it matters are real applications making real API calls.</li>
+<li><strong>The error you do see (401) suggests an authentication problem.</strong> You chase authentication theories while the actual bug is in the header serialization.</li>
+<li><strong>It's intermittent in a way.</strong> Some web APIs accept Maps; some don't. You might hit one early in development that works, then hit one later that doesn't, and be confused why your pattern "used to work."</li>
+</ol>
+<h2>Other Pyodide gotchas that bit me</h2>
+<p>For the record, here are the other non-obvious things I ran into porting Flask code to Pyodide:</p>
+<p><strong>Pyodide's <code>fetch</code> is sync-looking but actually async.</strong> In pure Python it's blocking; through Pyodide's bridge it returns a JS Promise. Use <code>await</code> or run it via <code>asyncio.run</code>.</p>
+<p><strong><code>__file__</code> isn't defined during top-level exec.</strong> If your Python code does <code>os.path.dirname(__file__)</code>, it'll fail in Pyodide unless you inject <code>__file__</code> into the globals before exec.</p>
+<p><strong><code>__name__ == "__main__"</code> is True by default.</strong> Pyodide runs top-level code with <code>__name__ = "__main__"</code>, which means your library's CLI entry point tries to run in the browser. Set <code>__name__ = "your_module_name"</code> before exec to suppress.</p>
+<p><strong><code>open()</code> doesn't fail — it creates files in Pyodide's in-memory filesystem.</strong> That filesystem disappears when the page reloads. Don't assume writes are durable. Use localStorage/IndexedDB for persistence.</p>
+<p><strong><code>subprocess</code> doesn't work.</strong> Pyodide has no process model. Anything that shells out (<code>subprocess.run</code>, <code>os.system</code>) will fail. Port the logic.</p>
+<p><strong><code>requests</code> doesn't work out of the box.</strong> The <code>socket</code> module isn't available. Use <code>js.fetch</code> (with the <code>dict_converter</code> fix from this post) or use a twin implementation.</p>
+<p><strong><code>numpy</code> and <code>pandas</code> need <code>micropip</code>.</strong> <code>import numpy</code> fails until you <code>await micropip.install("numpy")</code>. Load async at startup.</p>
+<p><strong>Top-level <code>await</code> works in Pyodide.</strong> This saves you from wrapping everything in <code>async def main()</code>.</p>
+<h2>The broader lesson</h2>
+<p>When debugging browser-bridge bugs, assume nothing about how data is getting across the language boundary. Log the value on the Python side. Log the value on the JS side. Compare types. When the behavior is different than you expect, look at the <em>conversion</em> before you look at the <em>data</em>.</p>
+<p>This applies more broadly than Pyodide. Every time I've had a mystery bug at a language boundary — JS↔WASM, Python↔C, Go↔cgo — the bug has been in the conversion, not in either side's code.</p>
+<p>The value you started with and the value the other side received look the same when you print them, but they're not the same. They have different types. They have different identities. Methods you call on them behave differently. The behavior you see is the <em>intersection</em> of what both sides agree on, which is often smaller than you think.</p>
+<h2>A checklist for future-me</h2>
+<p>If I'm ever debugging a Pyodide-to-JS API call that's silently not working:</p>
+<ol>
+<li>Is my data going through <code>to_js()</code> with <code>dict_converter=Object.fromEntries</code>? </li>
+<li>Am I <code>await</code>ing the response? (Promises returned from JS need <code>await</code> in async Python.)</li>
+<li>Am I calling the API in a way that matches the JS documentation, or am I paraphrasing?</li>
+<li>If the API returns an object, am I unpacking it with <code>.to_py()</code> or similar?</li>
+<li>Does the error only happen in Pyodide and not in curl / node? (If yes, the bridge is the suspect.)</li>
+</ol>
+<h2>Bonus: how I finally figured it out</h2>
+<p>After two days of wrong theories, I opened browser devtools, looked at the actual outgoing network request in the Network tab, and saw: <em>no Authorization header.</em> None. The request went out without it.</p>
+<p>At that point the question changed from <em>"why is my auth failing?"</em> to <em>"why isn't my auth header being sent?"</em> That reframing took me to the Pyodide docs in about five minutes. The dict-to-Map conversion was documented. I fixed it. Done.</p>
+<p><strong>Look at the wire.</strong> When a language-boundary bug confuses you, stop staring at your code and look at what's actually being transmitted. The bug is always in the gap between what you wrote and what went out.</p>
+<p>Two days well-spent, in retrospect. I won't make that mistake again, and now you won't either.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="flask-to-browser">How to Turn Your Flask App Into a Browser App</a> — the port context
+- <a href="azure-vs-openai-vs-github-models">Azure vs OpenAI vs GitHub Models</a> — same issue bit me on all three
+- <a href="introducing-the-virtual-brainstem">Introducing the Virtual Brainstem</a> — where this lives</p>

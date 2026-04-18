@@ -1,0 +1,105 @@
+<p>The RAR registry — <code>kody-w.github.io/RAR</code>, the static-JSON catalog of AI agents — just crossed 150 published agents. Six months ago it had 12. A year ago it didn't exist.</p>
+<p>This post is a quick retrospective on what got us here, what's in the registry, and what the growth rate suggests about where this goes next.</p>
+<h2>The shape of the catalog</h2>
+<p>A quick numerical snapshot:</p>
+<ul>
+<li><strong>~150 agents</strong> across ~40 categories</li>
+<li><strong>~45 distinct authors</strong></li>
+<li><strong>Median agent size</strong>: ~180 lines of Python</li>
+<li><strong>Largest category</strong>: utility tools (~25 agents)</li>
+<li><strong>Fastest-growing category</strong>: daemon capabilities (grew from 3 to 18 in the last month)</li>
+<li><strong>Submission pace</strong>: averaging 3-5 new agents per week</li>
+</ul>
+<p>Numbers will drift; the shape won't. Utility tools dominate. Daemon-related agents (memory management, egg import/export, soul inspection) are the fastest growing. Specialized domains (finance, science, etc.) are underrepresented.</p>
+<h2>What's actually useful</h2>
+<p>Some agents have gotten a lot of install pulls and repeat usage. Others are ghost-towned. The top 10 by install count:</p>
+<ol>
+<li><strong>dice_roller</strong> — the demo agent, gets installed by almost everyone</li>
+<li><strong>weather</strong> — practical, universally interesting</li>
+<li><strong>manage_memory</strong> — critical for the daemon workflow, tons of use</li>
+<li><strong>context_memory</strong> — companion to manage_memory</li>
+<li><strong>rapp_egg_agent</strong> — import/export eggs, essential for the ecosystem</li>
+<li><strong>web_fetch</strong> — grabs URLs and summarizes</li>
+<li><strong>lispy_vm_agent</strong> — safe eval sandbox</li>
+<li><strong>task_tracker</strong> — simple todo</li>
+<li><strong>publish_to_rar</strong> — the agent-that-publishes-agents</li>
+<li><strong>journal</strong> — daily journaling companion</li>
+</ol>
+<p>The top 10 are a mix of demos, infrastructure, and daily-driver tools. The long tail (agents 11-150) includes specialized tools, experimental ideas, and one-off submissions.</p>
+<h2>Growth pattern</h2>
+<p>The registry's growth has been notably non-linear:</p>
+<ul>
+<li><strong>Month 1</strong> (launch): 5-10 agents. Mostly mine.</li>
+<li><strong>Months 2-3</strong>: 15-30 agents. Friends contribute; a few strangers submit.</li>
+<li><strong>Month 4</strong>: 30-80 agents. First inflection — someone wrote a blog post that got attention, influx of submissions.</li>
+<li><strong>Month 5</strong>: 80-120 agents. Growth continues but starts to plateau as easy agents are taken.</li>
+<li><strong>Month 6</strong>: 120-150 agents. Second inflection driven by Virtual Brainstem launch + egg spec. New categories open up.</li>
+</ul>
+<p>Two clear inflection points. Both driven by <em>content and tooling reaching new audiences</em>, not by promoting the registry directly. The registry grows when the tools around it grow, because more tools = more people who want to add their own capabilities.</p>
+<h2>What the data says about ecosystem health</h2>
+<p>Good signs:</p>
+<ul>
+<li><strong>Author diversity is increasing.</strong> 45 authors contributing is healthy; no one author dominates.</li>
+<li><strong>Submissions from strangers.</strong> A meaningful fraction of submissions come from people I haven't met, which means the registry is reaching beyond my network.</li>
+<li><strong>High-quality submissions.</strong> Agent quality has been better than I expected. The review rejection rate is ~10%, much lower than I feared.</li>
+<li><strong>Downstream usage.</strong> People are using RAR agents in their own daemons, not just browsing the registry. The registry is load-bearing, not decorative.</li>
+</ul>
+<p>Concerning signs:</p>
+<ul>
+<li><strong>Category skew.</strong> Utility tools dominate. Specialized domains are thin. This suggests the registry attracts people with small pragmatic needs but hasn't attracted domain experts with deeper use cases.</li>
+<li><strong>Few "power" agents.</strong> Most agents are single-purpose and small (~100-300 lines). There are few complex, multi-tool integrations. The registry could use more ambitious agents.</li>
+<li><strong>Documentation quality varies.</strong> Some agents have great READMEs; some have a one-sentence description. I'm tempted to raise the bar, but it would slow submissions.</li>
+</ul>
+<h2>What I've learned running this</h2>
+<ol>
+<li>
+<p><strong>Static JSON really does work.</strong> We've had zero outages. Zero. The registry serves via GitHub Pages and hasn't once been "down" in six months.</p>
+</li>
+<li>
+<p><strong>Submission flow is the bottleneck.</strong> The conversion from "interested person" to "submitted agent" is where most people fall off. The PublishToRAR agent (meta-submission) is directly addressing this.</p>
+</li>
+<li>
+<p><strong>Community norms matter more than technical mechanisms.</strong> The tone of contributor submissions reflects the tone of the existing catalog. If early submissions are thoughtful, later submissions are too. If early submissions are slop, it drifts. I've worked hard to keep the early catalog quality high, and it's paying off.</p>
+</li>
+<li>
+<p><strong>Discoverability is hard.</strong> With 150 agents, you can't see them all at a glance. We need better tagging, better search, better curated views ("daemon essentials," "writing tools," "developer utilities"). This is the next thing to build.</p>
+</li>
+<li>
+<p><strong>Forks are a healthy signal.</strong> Agents with lots of forks (minor variations by other authors) indicate the agent is hitting a real need that people want to personalize. I used to dislike forks as "dupes"; I now see them as evidence of reach.</p>
+</li>
+</ol>
+<h2>What 150 agents enables that 20 didn't</h2>
+<p>At 20 agents, the registry felt like a demo. The value proposition was <em>"look, we can do this."</em> Users browsed it out of curiosity.</p>
+<p>At 150 agents, the registry feels like a <em>library</em>. Users come looking for specific capabilities and usually find something that fits. Users also browse for inspiration — <em>"what could my daemon do that I haven't thought of?"</em> — and find unexpected answers.</p>
+<p>This is the inflection point where the registry becomes <em>load-bearing</em> to the ecosystem. Without it, the Virtual Brainstem would still work (you can write your own agents) but most users would never write any. With it, most users install a handful of agents right away, and the daemon feels capable from turn one.</p>
+<p>I'm not sure where the next inflection point is. My guess is somewhere around 500-1000 agents, where the registry becomes <em>comprehensive enough</em> that most people can get what they need without writing any agents themselves. At that point the registry becomes infrastructure — you stop thinking about it and just assume any capability you want exists somewhere in it.</p>
+<h2>What's next</h2>
+<p>Short term:</p>
+<ul>
+<li><strong>Better discoverability.</strong> Tag taxonomy, category views, search.</li>
+<li><strong>Curated lists.</strong> "Essentials for a new daemon." "Tools for writers." "Tools for coders."</li>
+<li><strong>Agent quality rubric.</strong> Optional, not gatekeeping. Helps authors improve before submitting.</li>
+<li><strong>Fork visualization.</strong> Show which agents are related, which are derived from which.</li>
+</ul>
+<p>Medium term:</p>
+<ul>
+<li><strong>RAR for LisPy agents.</strong> Currently Python-only; LisPy agents should be first-class.</li>
+<li><strong>Submission via gist or direct file.</strong> Reduce friction further.</li>
+<li><strong>Federated RAR.</strong> Other people can run their own RAR-shaped registries; a federation index ties them together.</li>
+<li><strong>Agent ratings.</strong> Lightweight user feedback — install counts + upvotes, not full review prose.</li>
+</ul>
+<p>Long term:</p>
+<ul>
+<li><strong>RAR as infrastructure.</strong> Third-party tools (not just the Virtual Brainstem) consume RAR directly. It becomes the canonical place AI daemon capabilities are shared.</li>
+<li><strong>Interop with other registries.</strong> Other AI daemon formats exist or will exist. RAR should interoperate where it makes sense.</li>
+</ul>
+<h2>The broader point</h2>
+<p>Registries scale through <strong>contribution dynamics</strong>, not through central planning. My job isn't to build all the agents; it's to make it easy for other people to contribute agents and hard for them to give up.</p>
+<p>150 agents is evidence the dynamics are working. 500 would be stronger evidence. 5000 would be overwhelming evidence.</p>
+<p>The static-JSON substrate is doing its job — cheap, reliable, boring. The submission flow is slowly improving. The tools that depend on the registry are getting better, which pulls more contributors in. The flywheel spins.</p>
+<p>We'll see where it is in another six months.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="static-json-is-a-registry">Static JSON Is a Registry</a> — the pattern behind RAR
+- <a href="agent-that-submits-agents">The Agent That Submits Agents</a> — lowering the submission barrier
+- <a href="rar-registry-pattern">The RAR Registry Pattern</a> — the practical how-to</p>

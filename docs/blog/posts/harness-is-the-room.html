@@ -1,0 +1,55 @@
+<p>A follow-up to <a href="the-agent-is-the-feature"><em>The Agent Is the Feature</em></a>. That post made the practical argument: ship features as agent files, not framework additions. This one goes after the philosophical under-argument — <em>why</em> that pattern works and why most plugin systems don't.</p>
+<h2>Two shapes of extensibility</h2>
+<p>Every extensible system has to decide: does the plugin layer run <em>inside</em> the core, or <em>alongside</em> it?</p>
+<p><strong>Inside</strong> means plugins are privileged. They can read and write core state. They can override core behavior. They can reshape the framework's self-understanding. This is the shape of most IDE plugin systems, CMS extensions, traditional Drupal-style architectures.</p>
+<p><strong>Alongside</strong> means plugins are citizens, not officers. They talk to the core through a bounded interface. They can't see core state except through that interface. They can't override; they can only <em>offer</em> behavior the core chooses whether to use.</p>
+<p>The inside-style plugin architecture is the one that accumulates feature bloat until the core is the only place anyone can work. Why: every plugin that gets privileged access becomes a reason to expand the privileged-access surface area. "Plugin X needs to hook here" becomes "let's add a hook." A year later, the hook system is 40% of the codebase and nobody remembers why each hook exists.</p>
+<p>The alongside-style plugin architecture stays small. Why: plugins can only ask for capabilities through the bounded interface, so the interface has to stay narrow enough for someone to understand. "Plugin X wants Y" becomes "does Y fit in the interface we already defined?" If yes, the plugin is written. If no, the plugin doesn't exist.</p>
+<h2>Unix got there first</h2>
+<p>This is the Unix philosophy in slightly different clothes.</p>
+<p>A Unix kernel doesn't have a plugin system, in the inside-style sense. What it has is a bounded interface (system calls + signals) that userspace programs talk to. The kernel decides what the interface is. Userspace decides what to do with it. Userspace can't reach into kernel state except through the interface.</p>
+<p>The result: kernels stay ~20 million lines (a lot, but bounded) while userspace expands to include <em>everything</em> — compilers, browsers, databases, AI agent frameworks. Userspace expansion doesn't bloat the kernel because userspace can't reach in.</p>
+<p>Contrast with any framework whose extensions are inside-plugins. The framework grows in proportion to its plugin ecosystem because every plugin needs a hook, and every hook lives in the framework.</p>
+<h2>The AI agent application</h2>
+<p>In RAPP-ecosystem terms, the <strong>harness</strong> is the kernel. Agents are userspace programs. The bounded interface is OpenAI's function-calling schema.</p>
+<p>What the harness does:
+- Loads soul (system prompt)
+- Loads agents from a directory (discovers them as userspace-style files)
+- Handles one chat turn: package user message + registered agents' tool schemas + conversation history, send to LLM
+- Dispatches tool calls the LLM returns
+- Loops up to N rounds
+- Returns final text to user</p>
+<p>That's core. That never changes when a new agent ships.</p>
+<p>What agents do:
+- Expose capabilities via <code>self.name</code> + <code>self.metadata</code> (OpenAI function schema)
+- Implement <code>perform(**kwargs)</code> that returns a string
+- Optionally implement <code>system_context()</code> for persistent-memory-style injection
+- Optionally implement <code>perform_async(**kwargs)</code> for network calls</p>
+<p>That's userspace. Agents can do <em>anything</em> they want inside <code>perform()</code> — hit APIs, mutate localStorage, render to DOM, shell out to subprocesses — but the harness doesn't care. The harness only sees the return value as a string.</p>
+<p>This is narrow enough that writing a new agent requires Python literacy, not framework knowledge. Thick enough that agents can do interesting things.</p>
+<h2>Why people break the rule</h2>
+<p>Every time a feature feels "really essential," there's pressure to make it part of the core. "Memory is fundamental to a chat app — surely it should be in the harness?" "Logging is universal — surely it should be in the harness?" "Auth is foundational — surely..."</p>
+<p>Every one of these arguments is wrong, and the reason is subtle. Features that feel universal are usually <em>not</em> universal — they're universal <em>for the current class of users</em>. The moment a new class of user shows up with a different requirement (stateless chat, different memory backend, different auth), the "essential feature" becomes an obstacle.</p>
+<p>In RAPP, memory is an agent (<code>ManageMemory</code>, <code>ContextMemory</code>). This felt wrong for about five minutes before I realized: if memory lived in the core, I couldn't have swapped localStorage for Azure Blob when porting to the browser. I couldn't have added per-user-guid partitioning without the core changing. I couldn't have disabled memory entirely for privacy-sensitive use cases without a config flag added to core.</p>
+<p>Memory-as-agent gave me all of those capabilities for free. The cost was a ~50-line <code>BasicAgent</code> subclass. That's a bargain.</p>
+<h2>What the room metaphor captures</h2>
+<p>A harness is like a room. It has walls, doors, floor, ceiling. It's a place where things happen. It doesn't <em>do</em> much on its own — it just creates the conditions for activity.</p>
+<p>Agents are furniture. They're the things that make the room useful. A couch for sitting, a table for eating, a desk for writing. You rearrange them. You add more. You remove ones you don't use. The room doesn't care.</p>
+<p>The mistake most framework designers make is treating the harness as furniture too. They think the framework should <em>come with</em> a lot of stuff. A default couch, a default table, a default desk. Then users want different couches and the framework has to ship more couch types, and the framework's identity becomes "the couch store."</p>
+<p>Better: the harness ships with <em>nothing</em> except the walls. Users (or the ecosystem) bring their own furniture. The room is reusable because it's not committed to any particular arrangement.</p>
+<p>This is why I've been shipping frameworks with aggressively sparse cores recently. The Virtual Brainstem's harness is maybe 400 lines of orchestration logic; everything else is agents. The <code>rapp-installer</code> harness is ~1500 lines of Flask-y stuff; same thing, slightly bigger. Both gain capabilities at the same rate because capabilities ship as files, not as PRs against the core.</p>
+<h2>Practical test</h2>
+<p>If you're designing a framework and wondering whether a feature belongs in the core or as an extension, ask:</p>
+<ol>
+<li>Does this feature need read/write access to orchestration state that the bounded interface doesn't expose?</li>
+<li>Is this feature <em>universal</em> in the sense that every plausible user will want it in the same shape?</li>
+<li>Does removing this feature break the framework in a way that can't be recovered by an extension?</li>
+</ol>
+<p>If you answer yes to #1, it has to be in the core. If you answer yes to #2 <em>and</em> #3, it's probably okay to put in the core. If you answer yes only to #2, you're probably wrong about universality — put it in userspace and let users confirm.</p>
+<p>Most things people think belong in the core don't pass this test. They belong alongside, as agents.</p>
+<p>Keep the harness sacred. Keep the room empty. Let the furniture arrive as files.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="the-agent-is-the-feature">The Agent Is the Feature</a> — the practical version of this argument
+- <a href="software-that-isnt-yours">Writing Software That Isn't Yours</a> — the deeper "why" below even this philosophical framing
+- <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">Virtual Brainstem</a> — the harness that embodies this design</p>

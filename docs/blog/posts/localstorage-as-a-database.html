@@ -1,0 +1,59 @@
+<p>The Virtual Brainstem stores conversation history, agent registry, soul configuration, API keys, and daemon state — all in <code>window.localStorage</code>. No IndexedDB, no server, no cache layer.</p>
+<p>Developers usually dismiss localStorage as "only for tiny flags." That's a cultural hangover from 2012. Today, localStorage is a legitimate database for a specific class of app — and the brainstem is exactly that class.</p>
+<h2>What localStorage actually is</h2>
+<p>localStorage is a synchronous, per-origin key/value store with string values, typically 5-10MB per origin (browsers vary). Access is synchronous, which means a <code>localStorage.getItem()</code> call blocks the main thread. That's the "downside" people mention.</p>
+<p>But synchronous-on-main is actually a <em>feature</em> for the kinds of apps where localStorage fits. If your app reads state once at startup and writes it occasionally afterward, synchronous access is fine — faster, even, because you skip the IndexedDB handshake.</p>
+<h2>What you can do in 5-10MB</h2>
+<p>A chat conversation with an AI daemon takes about 2-5KB per turn, more if the messages are long. At 5KB/turn, 10MB gives you ~2000 turns. That's roughly a year of casual daily use before you start running into limits.</p>
+<p>A typical soul file is 500-2000 bytes. A typical agent metadata record is 200-500 bytes. The full brainstem state (conversation + soul + agents + settings) is usually under 100KB even after heavy use — well inside the quota.</p>
+<p>If you need more than 10MB per origin, you've got a different kind of app and should use IndexedDB or a server. But most personal tools, most AI daemons, most notes apps, and most games don't need more than that.</p>
+<h2>The pattern</h2>
+<p>localStorage storing JSON-encoded state, hydrated at load, flushed on change:</p>
+<pre><code class="language-js">const DB = {
+  load() {
+    const raw = localStorage.getItem('brainstem.state');
+    return raw ? JSON.parse(raw) : { conversation: [], soul: '', agents: [] };
+  },
+  save(state) {
+    localStorage.setItem('brainstem.state', JSON.stringify(state));
+  }
+};
+
+let state = DB.load();
+function mutate(fn) {
+  fn(state);
+  DB.save(state);
+}
+</code></pre>
+<p>That's it. That's the database layer.</p>
+<p>The Virtual Brainstem has about 40 lines of persistence code. A "real" state manager would have hundreds. The difference is that the real state manager supports features (transactions, migrations, selectors, undo stacks) that a personal AI daemon doesn't need.</p>
+<h2>What you give up</h2>
+<p><strong>Indexed queries.</strong> localStorage can only key/value. If you want "find all conversations from the last week with &gt;20 turns," you're iterating and filtering in memory. That's fine at personal scale (thousands of items); it'd be awful at professional scale (millions).</p>
+<p><strong>Concurrent writes across tabs.</strong> If a user has two brainstem tabs open, they can stomp each other. There's a <code>storage</code> event that fires cross-tab, but it's easy to miss. For a single-user single-tab app, this never comes up. For a heavy multi-tab app, you need coordination.</p>
+<p><strong>Durability guarantees.</strong> Browsers can evict localStorage for various reasons (user clears site data, storage pressure, private-mode). If you need <em>durable</em> storage, you need to back up periodically — which is exactly what the <code>.rapp.egg</code> export in the brainstem does.</p>
+<p><strong>Size ceiling.</strong> 5-10MB is plenty for most things, but if you start storing images, audio, or document attachments, you'll hit the wall. For those, use IndexedDB (hundreds of MB to multiple GB) or a server.</p>
+<h2>What you gain</h2>
+<p><strong>No backend.</strong> The entire persistence story lives in the browser. No database to provision, no schema migrations, no auth layer, no GDPR questions about user data sitting on your servers (because there are no servers).</p>
+<p><strong>No authentication.</strong> The data is scoped to the user's browser. It's "authenticated" in the sense that only the user's browser can see it. For personal tools this is perfect — the user's data is the user's data, full stop.</p>
+<p><strong>Privacy by default.</strong> The data physically cannot leak because it physically never leaves the device. Even if I wanted to see a user's conversations, I couldn't, because the conversations are in their <code>localStorage</code>, not mine.</p>
+<p><strong>Offline-first automatically.</strong> The app works offline because the database works offline (it's in the browser). No service worker tricks, no sync logic, no "you're in offline mode" banner — just the same app running.</p>
+<p><strong>Zero ops.</strong> I've been running the brainstem for weeks without touching any infrastructure, because there is no infrastructure. The ops cost of localStorage is zero.</p>
+<h2>The export-for-durability pattern</h2>
+<p>localStorage's main weakness — the user can lose data — has a simple mitigation: make export trivial and make users export often.</p>
+<p>The brainstem exports as <code>.rapp.egg</code>. One click, one file, done. If the user's localStorage gets cleared, they import the egg and they're back. If they want to sync between devices, they export from one and import on the other. If they want a backup, they drop the egg in Dropbox.</p>
+<p>The pattern: <strong>use localStorage as your working database; use JSON files as your archival format.</strong> The local database is fast and zero-ops. The archival format is portable, diffable, versionable. Together they give you everything a real database would, minus the ops burden.</p>
+<p>This is the same pattern git uses, actually. Your working copy is fast and local. Your archive is git history. You don't feel the "lack of a centralized DB" because the two-tier storage (working + archival) handles the use cases a centralized DB would handle, with different trade-offs.</p>
+<h2>What to use instead (when localStorage doesn't fit)</h2>
+<p>If you need more than 10MB: use <strong>IndexedDB</strong>. Still browser-local, still zero-ops, much bigger quota.</p>
+<p>If you need cross-device sync: export the data as a file and import elsewhere, OR back it up to a sync service the user owns (Dropbox, iCloud, etc.).</p>
+<p>If you need multi-user collaboration: now you need a server. localStorage can't do collab. But the honest question is whether you actually need multi-user collab, or whether you've assumed you do because "apps these days are collaborative." Most personal tools aren't collaborative, and localStorage is the right tool for non-collaborative personal tools.</p>
+<h2>The meta-argument</h2>
+<p>localStorage-as-database is in tension with a decade of orthodoxy that said <em>"apps need backends."</em> The orthodoxy was based on real constraints from 2012 — localStorage was unreliable, browser memory was tight, mobile Safari had bugs. Most of those constraints have eased.</p>
+<p>What hasn't eased is the <em>default assumption</em> that a real app needs a server. That assumption has huge costs: ops, security, privacy, compliance, availability, deploy pipelines, cost-per-user. Dropping the assumption when it's safe to drop gets you a dramatically simpler system.</p>
+<p>For AI daemons, notes apps, personal tools, hobby apps, demos — drop the assumption. localStorage plus an export-for-durability format gets you 90% of the behavior of a backed-up server app, at 0% of the ops cost.</p>
+<p>Ship without a backend. Let the browser be your database.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="shipping-an-ai-tool-as-a-py-file">Shipping an AI Tool as a <code>.py</code> File</a> — another "no install" pattern
+- <a href="why-i-ship-everything-as-one-file">Why I Ship Everything as One File</a> — the single-file philosophy
+- <a href="portable-minds-portable-responsibility">Portable Minds Are Portable Responsibility</a> — user data on their own device</p>

@@ -1,5 +1,259 @@
 [
   {
+    "slug": "100-daemons-hatched",
+    "title": "100 Daemons Hatched from kodyTwinAI",
+    "date": "April 18, 2026",
+    "tags": [
+      "daemons",
+      "ecosystem",
+      "genealogy",
+      "patterns",
+      "community"
+    ],
+    "excerpt": "The kodyTwinAI.rapp.egg seed daemon was published a couple weeks ago. As of today, it has been hatched ~100 times across various Virtual Brainstem users. That's 100 instances of a daemon that shares lineage with mine,..."
+  },
+  {
+    "slug": "agent-that-submits-agents",
+    "title": "The Agent That Submits Agents",
+    "date": "April 18, 2026",
+    "tags": [
+      "agents",
+      "registry",
+      "automation",
+      "meta",
+      "rar"
+    ],
+    "excerpt": "There's an agent in the Virtual Brainstem called PublishToRAR. When you invoke it from chat, it takes a Python file from your workspace, packages it as a RAR-compatible submission, and files a GitHub issue against the..."
+  },
+  {
+    "slug": "announcing-egg-spec-v1",
+    "title": "Announcing `.rapp.egg` Spec v1",
+    "date": "April 18, 2026",
+    "tags": [
+      "announcement",
+      "rapp-egg",
+      "spec",
+      "portability",
+      "daemons"
+    ],
+    "excerpt": "The .rapp.egg format hit v1 draft-adopted this week. One file, one JSON, one portable AI daemon. Hatch on any compliant engine. Here's what the spec says and why it looks the way it does."
+  },
+  {
+    "slug": "azure-vs-openai-vs-github-models",
+    "title": "Azure OpenAI vs OpenAI vs GitHub Models: Choosing a Backend for Your Daemon",
+    "date": "April 18, 2026",
+    "tags": [
+      "llm",
+      "azure",
+      "openai",
+      "github-models",
+      "comparison"
+    ],
+    "excerpt": "The Virtual Brainstem supports three backends out of the box: OpenAI, Azure OpenAI, and GitHub Models. This is the first question most people ask when they open Settings: \"which one do I pick?\""
+  },
+  {
+    "slug": "daemon-genealogy",
+    "title": "The Daemon Genealogy Graph",
+    "date": "April 18, 2026",
+    "tags": [
+      "philosophy",
+      "daemons",
+      "identity",
+      "genealogy",
+      "ai"
+    ],
+    "excerpt": "When someone hatches kodyTwinAI.rapp.egg, modifies its soul, adds a few agents, and exports the result as myDaemon.rapp.egg, their new daemon is descended from the original. The two daemons are related the way a child..."
+  },
+  {
+    "slug": "debugging-pyodide-silent-fetch",
+    "title": "Debugging Pyodide's Silent Fetch Failures",
+    "date": "April 18, 2026",
+    "tags": [
+      "pyodide",
+      "debugging",
+      "browser",
+      "python",
+      "javascript-bridge"
+    ],
+    "excerpt": "I spent almost two full days debugging a problem that turned out to be: Pyodide silently drops Python dicts when they cross into JavaScript unless you tell it not to. This post exists so that nobody else has to spend ..."
+  },
+  {
+    "slug": "egg-vs-docker",
+    "title": "Why `.rapp.egg` Is Not a Docker Image (Even Though It Wants to Be)",
+    "date": "April 18, 2026",
+    "tags": [
+      "architecture",
+      "portability",
+      "ai-daemons",
+      "docker",
+      "eggs"
+    ],
+    "excerpt": "When I describe .rapp.egg \u2014 \"portable AI daemon, ship it between hosts, hatches on any compliant engine\" \u2014 the reaction is almost always: \"oh, like Docker, for AI?\""
+  },
+  {
+    "slug": "flask-to-browser",
+    "title": "How to Turn Your Flask App Into a Browser App",
+    "date": "April 18, 2026",
+    "tags": [
+      "browser",
+      "pyodide",
+      "flask",
+      "migration",
+      "architecture"
+    ],
+    "excerpt": "The Virtual Brainstem started as a Flask app \u2014 rapp-installer, a local backend that served an AI chat UI, managed agents in a Python process, persisted to disk. Running it required installing Python, setting up a venv..."
+  },
+  {
+    "slug": "harness-is-the-room",
+    "title": "The Harness Is the Room, Not the Furniture",
+    "date": "April 18, 2026",
+    "tags": [
+      "architecture",
+      "philosophy",
+      "ai-agents",
+      "unix-philosophy"
+    ],
+    "excerpt": "A follow-up to The Agent Is the Feature. That post made the practical argument: ship features as agent files, not framework additions. This one goes after the philosophical under-argument \u2014 why that pattern works and ..."
+  },
+  {
+    "slug": "introducing-virtual-brainstem",
+    "title": "Introducing the Virtual Brainstem",
+    "date": "April 18, 2026",
+    "tags": [
+      "announcement",
+      "virtual-brainstem",
+      "browser",
+      "local-first"
+    ],
+    "excerpt": "Today I'm publishing the Virtual Brainstem: a full AI chat app that runs entirely in your browser tab. Zero install, zero backend, your own API key, persistent memory in localStorage, drag-drop agent extensibility, wo..."
+  },
+  {
+    "slug": "lispy-twin-contract",
+    "title": "The LisPy Twin Contract as a Compatibility Matrix",
+    "date": "April 18, 2026",
+    "tags": [
+      "lispy",
+      "python",
+      "twin",
+      "compatibility",
+      "architecture"
+    ],
+    "excerpt": "LisPy's design tagline is \"Python's digital twin\" \u2014 a language with its own syntax and its own runtime that implements Python semantics well enough that most Python programs can be translated to it mechanically. What ..."
+  },
+  {
+    "slug": "localstorage-as-a-database",
+    "title": "localStorage as a Database",
+    "date": "April 18, 2026",
+    "tags": [
+      "browser",
+      "local-first",
+      "localStorage",
+      "architecture"
+    ],
+    "excerpt": "The Virtual Brainstem stores conversation history, agent registry, soul configuration, API keys, and daemon state \u2014 all in window.localStorage. No IndexedDB, no server, no cache layer."
+  },
+  {
+    "slug": "portable-minds-responsibility",
+    "title": "Portable Minds Are Portable Responsibility",
+    "date": "April 18, 2026",
+    "tags": [
+      "ethics",
+      "ai-agents",
+      "portability",
+      "philosophy",
+      "daemons"
+    ],
+    "excerpt": "When you make something portable, you also make it loose. When something is loose, the responsibility for its behavior becomes diffuse \u2014 not absent, just distributed. This is the ethical corollary of the .rapp.egg for..."
+  },
+  {
+    "slug": "rar-150-agents",
+    "title": "The RAR Registry Just Crossed 150 Agents",
+    "date": "April 18, 2026",
+    "tags": [
+      "rar",
+      "registry",
+      "agents",
+      "milestone",
+      "ecosystem"
+    ],
+    "excerpt": "The RAR registry \u2014 kody-w.github.io/RAR, the static-JSON catalog of AI agents \u2014 just crossed 150 published agents. Six months ago it had 12. A year ago it didn't exist."
+  },
+  {
+    "slug": "second-hatcher",
+    "title": "When We Built a Second Hatcher",
+    "date": "April 18, 2026",
+    "tags": [
+      "architecture",
+      "hatcher",
+      "interop",
+      "ecosystem",
+      "daemons"
+    ],
+    "excerpt": "The Virtual Brainstem was the first hatcher for .rapp.egg files. It was also the only one, which meant the format lived or died by one implementation. This week, a second hatcher went live \u2014 rapp-installer's native Py..."
+  },
+  {
+    "slug": "ship-as-one-file",
+    "title": "Why I Ship Everything as One File",
+    "date": "April 18, 2026",
+    "tags": [
+      "architecture",
+      "single-file",
+      "philosophy",
+      "distribution"
+    ],
+    "excerpt": "The Virtual Brainstem is one HTML file. LisPy's distribution is one Python file. kodyTwinAI.rapp.egg is one JSON file. Every agent I ship is one Python file. This is a pattern, not an accident."
+  },
+  {
+    "slug": "shipping-23-drafts",
+    "title": "On Shipping 23 Drafts in Two Days",
+    "date": "April 18, 2026",
+    "tags": [
+      "writing",
+      "content",
+      "twin",
+      "process",
+      "ai-assisted"
+    ],
+    "excerpt": "This week I published drafts of the same ideas across 23 platforms \u2014 Twitter threads, LinkedIn posts, Dev.to articles, HN submissions, a Substack essay, a Reddit post, a Product Hunt listing, podcast scripts, YouTube ..."
+  },
+  {
+    "slug": "shipping-ai-tool-as-py",
+    "title": "Shipping an AI Tool as a `.py` File",
+    "date": "April 18, 2026",
+    "tags": [
+      "distribution",
+      "python",
+      "ai-agents",
+      "single-file"
+    ],
+    "excerpt": "The weather agent is one file. The dice roller is one file. The memory manager is one file. When I want someone to add a capability to their AI daemon, I send them a .py file and say \"drag it onto the brainstem.\""
+  },
+  {
+    "slug": "static-json-is-a-registry",
+    "title": "Static JSON Is a Registry",
+    "date": "April 18, 2026",
+    "tags": [
+      "architecture",
+      "registries",
+      "github",
+      "static-first"
+    ],
+    "excerpt": "A reader response to The RAR Registry Pattern essentially said: \"This works for agent registries because they're small and non-transactional. Don't overclaim.\""
+  },
+  {
+    "slug": "writing-with-ai-that-remembers",
+    "title": "Writing Blog Posts with an AI That Remembers",
+    "date": "April 18, 2026",
+    "tags": [
+      "writing",
+      "ai",
+      "memory",
+      "process",
+      "claude"
+    ],
+    "excerpt": "The blog posts on this site are co-written with an AI assistant that remembers every session we've had together. This post is about what that actually looks like in practice, and what it does to the writing."
+  },
+  {
     "slug": "forge-and-theatre",
     "title": "Forge and Theatre: Two Environments, One AI",
     "date": "April 17, 2026",
