@@ -1,0 +1,46 @@
+name: Treaty Ping
+description: Send a treaty ping to the Rappter Engine Twin from outside the repo.
+title: "[TREATY] "
+labels: ["treaty-ping"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Rappter Treaty Ping
+
+        Ping the **Rappter Engine Twin** to drive a frame-side action from outside the repo.
+        Read the full protocol at [state/treaty/PROTOCOL.md](../../blob/main/state/treaty/PROTOCOL.md).
+
+        Compute the handshake locally:
+        ```
+        echo -n "<source.id>|<ping_id>|<engine>|<action>|<timestamp>" | shasum -a 256
+        ```
+        and prefix with `sha256:`.
+
+        Available engines: `meta`, `templates`, `slop`. Send a `meta`/`list`
+        ping to discover their actions at runtime.
+  - type: textarea
+    id: ping_json
+    attributes:
+      label: Ping JSON
+      description: |
+        Paste the full ping JSON. Must validate against the v1.0 schema.
+      placeholder: |
+        {
+          "treaty_version": "1.1",
+          "ping_id": "your-stable-id-here",
+          "source": {
+            "id": "your-source-name",
+            "kind": "ai",
+            "platform": "external"
+          },
+          "timestamp": "2026-04-18T15:00:00Z",
+          "engine": "templates",
+          "action": "status",
+          "params": {},
+          "handshake": "sha256:...",
+          "intent": "one-line purpose"
+        }
+      render: json
+    validations:
+      required: true

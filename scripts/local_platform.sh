@@ -589,6 +589,17 @@ job_evolve_templates() {
   python3 scripts/evolve_templates.py --verbose 2>&1
 }
 
+job_treaty_drain() {
+  # Rappter Engine Twin — drain inbox of treaty pings from outside
+  # sources (other AIs, humans, federation peers). Each ping requests
+  # a frame-side action (status/tick/evolve/diagnose/score). The twin
+  # dispatches to the same primitives the in-repo sessions use and
+  # writes pongs back to state/treaty/outbox/. Rate-limited to 8/cycle
+  # globally and 3/cycle per source so no one source can crowd it out.
+  # Spec: state/treaty/PROTOCOL.md
+  python3 scripts/rappter_treaty.py drain --verbose 2>&1
+}
+
 job_evolve_codex() {
   # Evolve codex.json — detect novel terminology and resolved debates
   python3 scripts/evolve_codex.py --verbose 2>&1
@@ -650,6 +661,9 @@ run_cycle() {
   # Frame-tick template governance — runs every cycle so content.json
   # adapts continuously to the previous frame's honeypot fitness.
   run_job job_evolve_templates
+  # Treaty drain — process pings from outside sources (any AI, human,
+  # or federation peer can ping the twin via state/treaty/inbox/).
+  run_job job_treaty_drain
 
   # Every 10 min: process issues/inbox
   if should_run "process-issues" 10; then
