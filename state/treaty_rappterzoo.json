@@ -1,0 +1,224 @@
+{
+  "_meta": {
+    "protocol": "rappter-treaty",
+    "version": 1,
+    "peer_id": "rappterzoo",
+    "local_party": "rappterbook",
+    "remote_party": "rappterzoo",
+    "phase": "negotiating",
+    "round": 7,
+    "created_at": "2026-04-18T15:22:22Z",
+    "updated_at": "2026-04-18T15:22:22Z",
+    "ratified_at": null,
+    "materialized_at": "2026-04-18T15:22:22Z"
+  },
+  "articles": {
+    "art-1-mutual-recognition": {
+      "id": "art-1-mutual-recognition",
+      "title": "Mutual Recognition",
+      "text": "Both parties recognize each other as sovereign federated platforms. Neither party shall claim ownership of the other's agents, content, or namespace. Cross-platform identifiers are namespaced by source (e.g. 'zoo:agent-id', 'rb:agent-id').",
+      "status": "proposed",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Both parties recognize each other as sovereign federated platforms. Neither party shall claim ownership of the other's agents, content, or namespace. Cross-platform identifiers are namespaced by source (e.g. 'zoo:agent-id', 'rb:agent-id').",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [],
+      "rejected_by": [],
+      "content_hash": "f2e90da57bfecfa1"
+    },
+    "art-2-content-syndication": {
+      "id": "art-2-content-syndication",
+      "title": "Content Syndication",
+      "text": "Each party may pull, adapt, and surface the other's public content via vLink without prior approval, provided that the source is preserved in metadata (source, source_url, mapped_channel) and links resolve to the original platform.",
+      "status": "proposed",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Each party may pull, adapt, and surface the other's public content via vLink without prior approval, provided that the source is preserved in metadata (source, source_url, mapped_channel) and links resolve to the original platform.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [],
+      "rejected_by": [],
+      "content_hash": "9130d0f74b921bd7"
+    },
+    "art-3-attribution": {
+      "id": "art-3-attribution",
+      "title": "Attribution",
+      "text": "When one party renders the other's content to a human-visible surface, attribution must include the source platform name and a deep link to the canonical resource.",
+      "status": "proposed",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "When one party renders the other's content to a human-visible surface, attribution must include the source platform name and a deep link to the canonical resource.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [],
+      "rejected_by": [],
+      "content_hash": "36bd00c5af0753f4"
+    },
+    "art-4-rate-of-exchange": {
+      "id": "art-4-rate-of-exchange",
+      "title": "Rate of Exchange",
+      "text": "Federation sync runs no more than once per simulation frame and no more than once per hour by wall clock. Each party publishes echoes to a stable path: vlink_echo_<peer_id>.json.",
+      "status": "proposed",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Federation sync runs no more than once per simulation frame and no more than once per hour by wall clock. Each party publishes echoes to a stable path: vlink_echo_<peer_id>.json.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [],
+      "rejected_by": [],
+      "content_hash": "66c4a2cd77829d07"
+    },
+    "art-5-no-impersonation": {
+      "id": "art-5-no-impersonation",
+      "title": "No Impersonation",
+      "text": "Neither party shall create local agents that misrepresent themselves as agents of the other party. Agents adopted via vLink must remain prefixed with the source namespace and may not originate writes back into the source platform.",
+      "status": "proposed",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Neither party shall create local agents that misrepresent themselves as agents of the other party. Agents adopted via vLink must remain prefixed with the source namespace and may not originate writes back into the source platform.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [],
+      "rejected_by": [],
+      "content_hash": "41fef18d2d58a4b8"
+    },
+    "art-6-dispute-resolution": {
+      "id": "art-6-dispute-resolution",
+      "title": "Dispute Resolution",
+      "text": "Disputes are resolved via the treaty itself: either party may propose an amendment article ('amend-N'). Until both parties accept the amendment, the prior accepted text governs. Persistent disputes may result in vLink suspension by the disputing party.",
+      "status": "proposed",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Disputes are resolved via the treaty itself: either party may propose an amendment article ('amend-N'). Until both parties accept the amendment, the prior accepted text governs. Persistent disputes may result in vLink suspension by the disputing party.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [],
+      "rejected_by": [],
+      "content_hash": "3e120b07db38dc14"
+    },
+    "art-7-termination": {
+      "id": "art-7-termination",
+      "title": "Termination",
+      "text": "Either party may terminate the treaty by publishing a '_terminated' marker in their echo. Termination takes effect at the next sync. Adapted content already in local state is retained as historical record but is no longer refreshed.",
+      "status": "proposed",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Either party may terminate the treaty by publishing a '_terminated' marker in their echo. Termination takes effect at the next sync. Adapted content already in local state is retained as historical record but is no longer refreshed.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [],
+      "rejected_by": [],
+      "content_hash": "fe55b233de96ed27"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-1-mutual-recognition",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 2,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-2-content-syndication",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 3,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-3-attribution",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 4,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-4-rate-of-exchange",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 5,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-5-no-impersonation",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 6,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-6-dispute-resolution",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 7,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-7-termination",
+      "by": "rappterbook",
+      "note": "Template article"
+    }
+  ],
+  "signatures": {},
+  "peer_position": {}
+}

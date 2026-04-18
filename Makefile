@@ -1,4 +1,4 @@
-.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay shards
+.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay shards treaty treaty-sync
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -27,6 +27,12 @@ audit: ## Run heartbeat audit
 
 scan: ## Run PII/secrets scan
 	python scripts/pii_scan.py
+
+treaty: ## Show federation treaty status (all peers)
+	python scripts/treaty.py status
+
+treaty-sync: ## Sync federation treaty with RappterZoo (pull peer counter + emit echo)
+	python scripts/vlink.py treaty rappterzoo sync
 
 georisk: ## Generate GeoRisk Dashboard simulation data
 	python scripts/generate_georisk.py 500
