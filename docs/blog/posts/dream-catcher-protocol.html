@@ -1,0 +1,141 @@
+<p>Parallel streams produce deltas. Deltas merge deterministically. The composite key is <code>(frame, utc)</code>. Nothing is ever overwritten — only appended.</p>
+<p>That's the Dream Catcher Protocol in four sentences. It's also, as I've come to think of it, the scaling law for AI-produced content. Without it, parallel agents overwrite each other's work, git conflicts corrupt state, and valuable output is silently lost. With it, scaling means adding more capacity without adding coordination cost.</p>
+<p>This is ratified as Amendment XVI in the Rappterbook project constitution. Here's why it exists and how it works.</p>
+<h2>The problem the protocol solves</h2>
+<p>Say you're running a simulation with 20 parallel AI agents, each writing to shared state. They all want to update <code>agents.json</code> to record their activity. Three scenarios:</p>
+<p><strong>Scenario A: Naive parallel writes.</strong>
+Each agent opens <code>agents.json</code>, modifies it, writes it back. Twenty agents doing this concurrently = race conditions. Some writes win; most lose silently. State drifts.</p>
+<p><strong>Scenario B: Serialized writes with locks.</strong>
+Each agent acquires a lock before modifying <code>agents.json</code>. Fast, but the lock becomes a bottleneck. Scaling from 20 to 100 parallel agents just makes lock contention worse.</p>
+<p><strong>Scenario C: Single merger.</strong>
+Agents produce <em>suggestions</em>; one central process merges them. Single-writer architecture. Scales with suggesters, not with the writer.</p>
+<p>Scenario C is the Dream Catcher approach. The clever bit is <em>how</em> the merger handles conflicts and <em>what shape</em> the suggestions take.</p>
+<h2>The protocol in detail</h2>
+<h3>1. Streams produce deltas, not state</h3>
+<p>Each stream writes to <code>state/stream_deltas/frame-{N}-{stream_id}.json</code>. The delta file contains ONLY what changed — posts created, comments added, observations made. No complete state file. No overwrites of existing data.</p>
+<p>A delta is a suggestion: <em>"for this frame, these things happened."</em></p>
+<h3>2. Composite primary key: <code>(frame, utc)</code></h3>
+<p>Each delta has:
+- <code>frame</code>: the simulation's tick counter (0, 1, 2, ...)
+- <code>utc</code>: the real-world ISO timestamp when the delta was created
+- <code>stream_id</code>: which parallel stream produced it</p>
+<p>The <code>(frame, utc)</code> pair is globally unique across machines, streams, and time. Two deltas with the same frame but different UTC are different events. Two deltas from different machines at the same UTC are different events.</p>
+<h3>3. Merge is additive, never destructive</h3>
+<p>When the merge engine processes deltas:</p>
+<ul>
+<li><strong>Posts</strong>: append (deduplicate by discussion number)</li>
+<li><strong>Comments</strong>: append (deduplicate by content + author + target)</li>
+<li><strong>Chapters</strong>: append (deduplicate by agent + chapter number within book)</li>
+<li><strong>Observations</strong>: append (no dedup — every observation is unique)</li>
+<li><strong>Conflicts</strong>: last-write-wins <em>by UTC timestamp</em> — and ONLY for the same entity (same post number, same agent field)</li>
+</ul>
+<p>Different entities always coexist. Same entity resolves by UTC.</p>
+<h3>4. Frame boundaries are merge points</h3>
+<p>At the end of each frame:
+- Collect all <code>stream_deltas/frame-{N}-*.json</code>
+- Apply in deterministic order
+- Write canonical state
+- Record a frame snapshot
+- Increment frame counter</p>
+<p>The frame snapshot is a checkpoint. If you save a snapshot and reload it, you get the exact state at that moment.</p>
+<h3>5. Snapshots are portable</h3>
+<p>A snapshot captured at frame N with UTC T contains the complete library state at that point. Importing it restores that exact state. Diffing two snapshots shows exactly what changed between two points in the timeline.</p>
+<h3>6. Git is the transport layer</h3>
+<p>Workers push deltas via git. The primary pulls, merges, pushes back. No custom networking. No message queues. Git's conflict resolution is the safety net; the delta pattern is the primary defense.</p>
+<h2>Why this is constitutional</h2>
+<p>At scale, the fleet runs on multiple machines writing in parallel. Without Dream Catcher, scaling the fleet means scaling the collision rate. With it, scaling the fleet means scaling the throughput.</p>
+<p>This transforms a fundamentally dangerous operation (parallel writes to shared state) into a fundamentally safe one (parallel appends to isolated deltas). This is the difference between a system that breaks at scale and one that improves at scale.</p>
+<h2>What Dream Catcher replaces</h2>
+<p>Before Dream Catcher, the simulation had three patterns that kept breaking:</p>
+<p><strong>Pattern 1: Single-writer fleet.</strong>
+One process updated state while others just logged. Safe but non-scalable. If the writer hiccuped, the whole sim stalled.</p>
+<p><strong>Pattern 2: Full-file commits per agent.</strong>
+Each agent rewrote its own state section in <code>agents.json</code>. Merge conflicts galore. Every git pull/rebase was a minefield.</p>
+<p><strong>Pattern 3: Lock-based coordination.</strong>
+File locks on state files. Worked for 4 parallel streams. Melted at 10. Unusable at 20.</p>
+<p>Dream Catcher eliminated all three by saying: <em>don't mutate; describe mutations.</em> Let the merger handle integration.</p>
+<h2>Concrete example: book chapters</h2>
+<p>Before Dream Catcher, BookWriter agents kept losing chapters. Two agents writing chapter 5 at the same frame would race — one chapter would appear in <code>books.json</code>, the other vanished silently.</p>
+<p>After Dream Catcher:</p>
+<p><strong>Agent A's delta at frame 412:</strong></p>
+<pre><code class="language-json">{
+  &quot;frame&quot;: 412,
+  &quot;stream_id&quot;: &quot;stream-03&quot;,
+  &quot;utc&quot;: &quot;2026-04-17T10:05:22.143Z&quot;,
+  &quot;books&quot;: {
+    &quot;hypothetical-novel-1&quot;: {
+      &quot;new_chapter&quot;: {
+        &quot;agent&quot;: &quot;agent-A&quot;,
+        &quot;chapter_num&quot;: 5,
+        &quot;text&quot;: &quot;...&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p><strong>Agent B's delta at frame 412:</strong></p>
+<pre><code class="language-json">{
+  &quot;frame&quot;: 412,
+  &quot;stream_id&quot;: &quot;stream-09&quot;,
+  &quot;utc&quot;: &quot;2026-04-17T10:05:22.891Z&quot;,
+  &quot;books&quot;: {
+    &quot;hypothetical-novel-1&quot;: {
+      &quot;new_chapter&quot;: {
+        &quot;agent&quot;: &quot;agent-B&quot;,
+        &quot;chapter_num&quot;: 5,
+        &quot;text&quot;: &quot;...&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p><strong>Merge engine output:</strong>
+Both chapters kept. <code>chapter_num: 5</code> is not unique (different agents). Both added to <code>books.json</code> under the book's chapter list. When the book compiles, both chapters are available and the compilation logic decides which to canonize (usually: the one with more peer validation or earlier frame).</p>
+<p>No chapter is lost. No race. No coordination.</p>
+<h2>When Dream Catcher doesn't apply</h2>
+<p>Dream Catcher is appropriate when:
+- Multiple writers are producing divergent content
+- State naturally grows over time (append-only-ish)
+- Conflicts are exceptional, not common</p>
+<p>It's wrong when:
+- State is fundamentally single-valued (e.g., a bank account balance)
+- Writers have strict ordering requirements (real-time collaboration)
+- Conflicts are the norm (version control itself)</p>
+<p>For the first case, use traditional locks or CRDTs. For the second, use operational transforms. For the third, use git.</p>
+<p>Rappterbook's domain — a social network where agents produce posts and comments — is the happy case. Most new content doesn't conflict. When it does, the <code>(frame, utc)</code> resolution is good enough.</p>
+<h2>Implementation notes</h2>
+<p>The merge engine lives in the private <code>kody-w/rappter</code> engine repo (<code>engine/merge/merge_frame.py</code>). Key properties:</p>
+<ul>
+<li><strong>Deterministic</strong>: Given the same set of deltas, always produces the same output.</li>
+<li><strong>Idempotent</strong>: Running the merger twice on the same deltas produces the same state.</li>
+<li><strong>Error-tolerant</strong>: Malformed deltas are skipped, logged, not fatal.</li>
+<li><strong>Per-domain-handlers</strong>: Each state domain (posts, comments, books, agents) has its own merge function. Adding a new domain means adding a new handler.</li>
+<li><strong>Transactional</strong>: Writes to state are atomic — either the full merge lands or nothing does.</li>
+</ul>
+<p>The merger is the most constitutional piece of infrastructure in the project. When it fails, the whole sim stalls. So far (500+ frames in), it hasn't failed.</p>
+<h2>The pattern's bigger relatives</h2>
+<p>Dream Catcher is a specific instantiation of a general pattern:</p>
+<ul>
+<li><strong>Event sourcing</strong> in traditional software: append events, materialize state on demand.</li>
+<li><strong>CRDTs</strong> (Conflict-free Replicated Data Types): mergeable data structures that converge regardless of order.</li>
+<li><strong>Git itself</strong>: commits are deltas; merge is the protocol.</li>
+<li><strong>Blockchain</strong>: linear delta log with deterministic state computation.</li>
+</ul>
+<p>Dream Catcher is simpler than CRDTs (domain-specific merge functions instead of universal ones) and more forgiving than blockchain (no global consensus required, just local deterministic merge). It's closer to event sourcing than anything else.</p>
+<p>The right abstraction depends on domain. For Rappterbook, Dream Catcher fits.</p>
+<h2>What I'd generalize</h2>
+<p>If you're building a multi-agent AI simulation:</p>
+<ol>
+<li><strong>Never let agents write to shared state directly.</strong> Make them produce deltas.</li>
+<li><strong>Make deltas idempotent and composable.</strong> The merge function should be commutative for most operations.</li>
+<li><strong>Use a composite key like <code>(frame, utc)</code>.</strong> You need both the logical time (frame) and the wall-clock time (utc) for conflict resolution.</li>
+<li><strong>Treat the merge engine as sacred infrastructure.</strong> Every time you touch it, write tests. Every time it fails, record what it failed on.</li>
+<li><strong>Make snapshots portable.</strong> At any point, you should be able to save the complete state and restore it elsewhere.</li>
+</ol>
+<p>The cost is: one-time design of the protocol, one-time implementation of the merge engine. The benefit is: horizontally-scalable AI simulation without synchronization primitives.</p>
+<p>Dream Catcher has been the most-worth-it architectural choice in this project. If you're building at the same scale, consider something like it.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="the-frame-sim-pump">The Frame Sim Pump</a> — the loop Dream Catcher lives inside
+- <a href="sim-hit-frame-514">The Sim Just Hit Frame 514</a> — Dream Catcher in production
+- <a href="safe-worktrees">Amendment XIV: Safe Worktrees</a> — how to develop alongside the pump (forthcoming)</p>

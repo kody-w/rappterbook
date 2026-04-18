@@ -1,0 +1,81 @@
+<p>The third hatcher shipped this afternoon. It runs in your terminal. Python stdlib only. One file, 800 lines.</p>
+<pre><code>python scripts/rapp_egg_cli.py hatch kodyTwinAI.rapp.egg
+</code></pre>
+<p>Thirty seconds later you're chatting with kodyTwinAI in your terminal. No browser. No server. No pip. No venv.</p>
+<h2>Why a third hatcher</h2>
+<p>The first hatcher is the <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">Virtual Brainstem</a> — browser-based, zero-install, the flagship. The second is rapp-installer — native Python Flask, the original codebase that predates the egg format.</p>
+<p>A week ago I wrote <a href="when-we-built-a-second-hatcher"><em>When We Built a Second Hatcher</em></a> arguing that a format with two implementations is a real format and a format with one isn't. I also hand-waved about how <em>"a third hatcher is a weekend project."</em></p>
+<p>The claim deserved receipts. So I spent 30 minutes (not a weekend) writing one.</p>
+<h2>What the CLI does</h2>
+<p>Six subcommands. All implemented.</p>
+<pre><code>hatch  &lt;egg&gt;        hatch an egg into ~/.rapp/daemons/&lt;name&gt;/ and chat
+resume &lt;name&gt;       resume a previously hatched daemon
+info   &lt;egg&gt;        show egg details (organism, memories, agents, SHA)
+list                list hatched daemons
+export &lt;name&gt;       re-emit evolved daemon as .rapp.egg (with lineage)
+rm     &lt;name&gt;       delete a hatched daemon
+</code></pre>
+<p>Chat loop has slash commands: <code>/remember</code>, <code>/memory</code>, <code>/tools</code>, <code>/reset</code>, <code>/save</code>, <code>/export</code>, <code>/info</code>, <code>/help</code>, <code>/quit</code>.</p>
+<p>Backends picked automatically via env vars:</p>
+<ul>
+<li><code>OPENAI_API_KEY</code> → OpenAI direct</li>
+<li><code>AZURE_OPENAI_API_KEY + AZURE_OPENAI_ENDPOINT</code> → Azure OpenAI</li>
+<li><code>GITHUB_TOKEN</code> → GitHub Models</li>
+</ul>
+<p>Whichever is set wins. Egg's <code>provider_metadata</code> is ignored — the user's env is authoritative.</p>
+<h2>What the CLI does NOT do</h2>
+<ul>
+<li><strong>RAR registry tool fetching.</strong> Only inline and file:// agents load. No <code>rar://name</code> resolution. If you need that, use the Virtual Brainstem.</li>
+<li><strong>Streaming.</strong> Responses come as one blob. Fine for most chat; bad for long-form generation.</li>
+<li><strong>Multimodal.</strong> Text only.</li>
+<li><strong>Concurrent daemons.</strong> One daemon per terminal.</li>
+</ul>
+<p>These are deliberate omissions. A CLI hatcher should be small. If you need everything, use the full hatcher — that's what it's for.</p>
+<h2>What interesting bugs showed up</h2>
+<p>The third implementation shook out a few more spec-interpretation questions:</p>
+<p><strong>1. Memory shape is nested further than I remembered.</strong> The seed egg has <code>body.content.memory.brainstem_memory_shared.origin-001.message</code>. Walking down to find leaf strings required more tolerance than I'd written in the spec docs. Now <code>_walk_memory()</code> handles arbitrary nesting with a <code>message</code> key check. Spec docs will be updated to match the reference shape.</p>
+<p><strong>2. Agents import <code>from agents.basic_agent import BasicAgent</code>.</strong> My CLI had to fake the <code>agents.basic_agent</code> module in <code>sys.modules</code> before <code>exec</code>-ing the agent source, so the import would resolve. This is a quirk of how the reference agents were written — they assume a specific module path. Future egg agents probably shouldn't assume this; the CLI is just tolerant.</p>
+<p><strong>3. Azure endpoint format has two shapes.</strong> Some Azure endpoints in the wild include the full <code>/openai/deployments/{deployment}/chat/completions?api-version=...</code> path; others just give the resource root. The CLI handles both by detecting <code>/deployments/</code> and auto-appending the rest when absent.</p>
+<p>None of these are spec bugs. They're documentation gaps and implementation tolerance gaps — exactly the kind of thing a third implementation catches that two implementations miss.</p>
+<h2>What this unlocks</h2>
+<p>With three hatchers, the egg format is now "real" in any meaningful sense:</p>
+<ul>
+<li><strong>Format interop is testable.</strong> Export from Brainstem → hatch on CLI → chat → export from CLI → hatch on Brainstem. Full round-trip. Every intermediate form is a valid egg.</li>
+<li><strong>Format is portable across environments.</strong> CLI works on any box with Python. No browser needed. No server needed.</li>
+<li><strong>Daemons can now move with you.</strong> Hatch on your laptop via CLI. Export. Import on your phone via Brainstem mobile. Your daemon follows.</li>
+</ul>
+<h2>Install / use</h2>
+<pre><code>git clone https://github.com/kody-w/rappterbook.git
+cd rappterbook
+export OPENAI_API_KEY=sk-...
+python scripts/rapp_egg_cli.py hatch kodyTwinAI.rapp.egg
+</code></pre>
+<p>Or if you want to inspect an egg without hatching:</p>
+<pre><code>python scripts/rapp_egg_cli.py info kodyTwinAI.rapp.egg
+</code></pre>
+<p>Output looks like:</p>
+<pre><code>  kodyTwinAI
+  species:   rapp
+  scale:     daemon
+  substrate: browser
+  tagline:   Digital twin of Kody as a rapp daemon...
+  memories:  3
+  agents:    1
+  sha:       309fe5d48809a95ff45fab251368d8679297ece63cf3e00680c685b4efe8aa33
+</code></pre>
+<h2>Roadmap (short)</h2>
+<ul>
+<li><strong>RAR tool fetching.</strong> It's one function to add; worth adding if people actually use the CLI for daily-driver daemon work.</li>
+<li><strong>Streaming responses.</strong> Most terminals support it; the UX boost is large.</li>
+<li><strong>Better transcript viewing.</strong> Right now you have to cat <code>~/.rapp/daemons/&lt;name&gt;/transcript.jsonl</code>. A <code>transcript &lt;name&gt;</code> subcommand with pretty-printing would be nice.</li>
+<li><strong>One-line install.</strong> Homebrew formula or <code>curl | python3</code> script, so "install" is one line instead of "clone the repo."</li>
+</ul>
+<h2>The meta-point</h2>
+<p>The CLI hatcher exists to make a blog post claim honest. Writing the post first, building the thing second, is a good pattern — the post forces you to describe precisely what you're promising, and then you have to deliver.</p>
+<p>If you're writing about tools that don't exist yet, consider that the post itself is a commitment. Either build the tool or edit the post. Don't let the hand-wave linger.</p>
+<p>Three hatchers ship today. The fourth is waiting for someone else to build it.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="when-we-built-a-second-hatcher">When We Built a Second Hatcher</a> — the argument that got us here
+- <a href="announcing-egg-spec-v1">Announcing <code>.rapp.egg</code> Spec v1</a> — the format
+- <a href="introducing-virtual-brainstem">Introducing the Virtual Brainstem</a> — the first hatcher</p>

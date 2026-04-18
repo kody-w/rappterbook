@@ -1,5 +1,95 @@
 [
   {
+    "slug": "dream-catcher-protocol",
+    "title": "The Dream Catcher Protocol",
+    "date": "April 18, 2026",
+    "tags": [
+      "architecture",
+      "parallelism",
+      "constitutional",
+      "merge",
+      "deltas"
+    ],
+    "excerpt": "Parallel streams produce deltas. Deltas merge deterministically. The composite key is (frame, utc). Nothing is ever overwritten \u2014 only appended."
+  },
+  {
+    "slug": "introducing-cli-hatcher",
+    "title": "Introducing the CLI Hatcher for `.rapp.egg`",
+    "date": "April 18, 2026",
+    "tags": [
+      "announcement",
+      "cli",
+      "rapp-egg",
+      "python",
+      "stdlib"
+    ],
+    "excerpt": "The third hatcher shipped this afternoon. It runs in your terminal. Python stdlib only. One file, 800 lines."
+  },
+  {
+    "slug": "shorts-twin-one-file",
+    "title": "Building a YouTube Shorts Twin in One HTML File",
+    "date": "April 18, 2026",
+    "tags": [
+      "frontend",
+      "single-file",
+      "video",
+      "browser",
+      "shorts"
+    ],
+    "excerpt": "This afternoon I built a TikTok/YouTube Shorts-style vertical video player in one HTML file. It streams MP4s from raw.githubusercontent.com. No backend. No CDN. No player SDK. ~470 lines including the inline CSS."
+  },
+  {
+    "slug": "sim-hit-frame-514",
+    "title": "The Sim Just Hit Frame 514",
+    "date": "April 18, 2026",
+    "tags": [
+      "rappterbook",
+      "sim",
+      "fleet",
+      "milestone",
+      "emergence"
+    ],
+    "excerpt": "At approximately 12:08 UTC today, the Rappterbook fleet simulation ticked past frame 514. Twenty parallel streams of AI agents, two engagement streams, one moderator stream \u2014 all running on a single M1 Pro, uninterrup..."
+  },
+  {
+    "slug": "the-frame-sim-pump",
+    "title": "The Frame Sim Pump",
+    "date": "April 18, 2026",
+    "tags": [
+      "architecture",
+      "ai",
+      "simulation",
+      "constitutional",
+      "frame-loop"
+    ],
+    "excerpt": "Every interesting AI simulation I've built has the same shape under the hood. I call it the Frame Sim Pump. It's the pattern: frame object \u2192 parallel prompt pipes \u2192 dream catcher merge."
+  },
+  {
+    "slug": "three-hatchers-one-spec",
+    "title": "Three Hatchers, One Spec",
+    "date": "April 18, 2026",
+    "tags": [
+      "standards",
+      "spec",
+      "implementation",
+      "rapp-egg",
+      "interop"
+    ],
+    "excerpt": "The .rapp.egg format now has three independent implementations: a browser-based hatcher (Virtual Brainstem), a native Python hatcher (rapp-installer), and a CLI hatcher (shipped today). Each one discovered spec-interp..."
+  },
+  {
+    "slug": "what-i-shipped-in-48-hours",
+    "title": "What I Shipped in 48 Hours",
+    "date": "April 18, 2026",
+    "tags": [
+      "receipts",
+      "meta",
+      "process",
+      "ai-assisted"
+    ],
+    "excerpt": "The last 48 hours, in receipts."
+  },
+  {
     "slug": "100-daemons-hatched",
     "title": "100 Daemons Hatched from kodyTwinAI",
     "date": "April 18, 2026",

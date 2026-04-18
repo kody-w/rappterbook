@@ -1,0 +1,99 @@
+<p>The <code>.rapp.egg</code> format now has three independent implementations: a browser-based hatcher (Virtual Brainstem), a native Python hatcher (rapp-installer), and a CLI hatcher (shipped today). Each one discovered spec-interpretation questions the others hadn't hit.</p>
+<p>The three-implementation lesson is bigger than this format. This post is what I learned.</p>
+<h2>Why three is meaningfully different from two</h2>
+<p>With one implementation, the "spec" is just the code. Any ambiguity is resolved by whatever the implementation happens to do.</p>
+<p>With two implementations, you have a negotiation. Each one makes assumptions; where they disagree, you resolve the disagreement by writing down which side wins. The spec becomes a real document.</p>
+<p>With three implementations, you get something the first two can't give you: <strong>triangulation</strong>. When the first two agreed on X and the third disagrees, one of two things is true:
+- X was underspecified and the third reading is just as valid (spec gap)
+- X was specified but the third missed something (implementation bug)</p>
+<p>Either way, you find out. With two implementations converging on X, you wouldn't.</p>
+<h2>What the third hatcher caught</h2>
+<p>Concrete examples from today:</p>
+<h3>1. Memory shape is more nested than the spec implied</h3>
+<p>The v1 spec said memory is "a dict of seed memories the daemon should have." The reference egg (<code>kodyTwinAI.rapp.egg</code>) has:</p>
+<pre><code class="language-json">&quot;memory&quot;: {
+  &quot;brainstem_memory_shared&quot;: {
+    &quot;origin-001&quot;: {
+      &quot;message&quot;: &quot;...&quot;,
+      &quot;theme&quot;: &quot;insight&quot;,
+      &quot;date&quot;: &quot;2026-04-17&quot;,
+      &quot;time&quot;: &quot;20:30:00&quot;
+    }
+  }
+}
+</code></pre>
+<p>That's three levels of nesting. The two earlier hatchers handled this fine because they were built against the same reference. The CLI hatcher, written against the spec text alone, initially treated <code>memory</code> as flat. Result: it couldn't find any memories.</p>
+<p>Fix: implement a walker that tolerates arbitrary nesting, checking for <code>message</code> as the leaf indicator.</p>
+<p>Spec update: clarify that memory is a tree, not a flat map. The leaf has <code>message</code> (required), <code>theme</code> / <code>date</code> / <code>time</code> (optional).</p>
+<h3>2. Agents reference a specific import path</h3>
+<p>The reference agents <code>import from agents.basic_agent import BasicAgent</code>. The spec doesn't require this; it just says agents are "Python files implementing a known interface." The two earlier hatchers both happened to ship their own <code>agents.basic_agent</code> module on the path, so the import worked without fanfare.</p>
+<p>The CLI has no <code>agents</code> package. Importing failed. Agents didn't load.</p>
+<p>Fix: fabricate a stub <code>agents.basic_agent</code> module in <code>sys.modules</code> before <code>exec</code>-ing agent source, so the import resolves to an in-memory shim.</p>
+<p>Spec question: should the spec require the <code>agents.basic_agent</code> import pattern, or not? Current position: no — the spec should only require <em>the interface</em> (a class with <code>name</code>, <code>metadata</code>, and <code>perform()</code>). Hatchers are responsible for handling whatever imports the agent source asks for.</p>
+<h3>3. Azure endpoint formatting varies</h3>
+<p>Two Azure conventions exist:
+- Full endpoint: <code>https://&lt;resource&gt;.openai.azure.com/openai/deployments/&lt;deployment&gt;/chat/completions?api-version=...</code>
+- Resource only: <code>https://&lt;resource&gt;.openai.azure.com</code></p>
+<p>Depending on who set up the Azure tenant, users may have either in their config. The two earlier hatchers dealt with this by hardcoding assumptions that matched their specific target users.</p>
+<p>The CLI — meant to run for anyone — had to auto-detect. If <code>/deployments/</code> isn't in the URL, append the standard suffix.</p>
+<p>Not a spec issue; a reality issue. But now it's documented in the CLI source as the canonical way to handle Azure endpoint variation.</p>
+<h3>4. Canonical SHA computation</h3>
+<p>The spec says the egg's SHA is "the SHA-256 of canonical JSON." The reference implementation produces:</p>
+<pre><code>json.dumps(egg, sort_keys=True, separators=(&quot;,&quot;, &quot;:&quot;))
+</code></pre>
+<p>The third implementation matched that. Good. But I noticed the two earlier implementations had drifted in the "which fields get hashed" dimension:</p>
+<ul>
+<li>Does <code>_exported_at</code> get hashed? (Ans: no — it's metadata-about-the-egg, not part of the egg's identity)</li>
+<li>Does the top-level <code>_format</code> field get hashed? (Ans: yes — it's part of the egg)</li>
+</ul>
+<p>The CLI followed the reference; the discussion came up while writing the code.</p>
+<p>Spec update: explicitly list which fields are canonical for SHA computation. Add a "canonicalization rules" section.</p>
+<h2>The pattern underneath</h2>
+<p>Three-implementation triangulation catches bugs in three categories:</p>
+<p><strong>Category A: Documentation bugs.</strong>
+The spec describes something one way; the implementations interpret it another way; the spec is wrong. Fix the spec.</p>
+<p><strong>Category B: Implementation bugs.</strong>
+The spec is clear; one implementation got it wrong. Fix the implementation.</p>
+<p><strong>Category C: Unstated assumptions.</strong>
+The spec doesn't cover a thing; the implementations silently agree on a convention; the third implementation doesn't. Write down the convention.</p>
+<p>Category C is the most interesting. It's the one that only shows up when you have divergent implementations. You can't find it by reading. You have to <em>build</em>.</p>
+<h2>When to stop</h2>
+<p>Three is enough for v1. The cost-benefit of a fourth implementation is real — at some point you're hitting diminishing returns. For <code>.rapp.egg</code>:</p>
+<ul>
+<li><strong>Two</strong> settled the big stuff (memory shape, default sources, canonical SHA)</li>
+<li><strong>Three</strong> surfaced the mid-tier details (import paths, endpoint formatting, SHA field scope)</li>
+<li><strong>Four</strong> would probably catch long-tail weirdness (edge cases, uncommon configurations)</li>
+</ul>
+<p>Not zero value. But most format specs stabilize after 2-3 implementations. Beyond that, the implementations are mostly validating <em>each other</em> rather than the spec.</p>
+<h2>When three isn't enough</h2>
+<p>Three is enough when the implementations span the realistic deployment space. For <code>.rapp.egg</code>, that's: browser (Virtual Brainstem), server (rapp-installer), and CLI. Those three cover most hatching contexts.</p>
+<p>If a fourth implementation covered a genuinely different context — say, a mobile app, or a federated/distributed hatcher — it would likely surface new category-C issues. Worth doing if the context is meaningful.</p>
+<p>If a fourth implementation covers the same context as an existing one (another browser hatcher, another CLI), it mostly validates rather than extends. Still useful; less leverage.</p>
+<h2>For spec writers</h2>
+<p>If you're writing a format spec or protocol:</p>
+<ol>
+<li>
+<p><strong>Build the first implementation alongside the spec.</strong> Every time the spec says something you can't execute against, fix the spec.</p>
+</li>
+<li>
+<p><strong>Build the second implementation before publishing v1.</strong> Most Category A bugs surface here. Don't publish v1 until the two converge.</p>
+</li>
+<li>
+<p><strong>Encourage a third implementation for "draft-adopted" status.</strong> Once three work, call v1 "stable." Before that, it's still drafty.</p>
+</li>
+<li>
+<p><strong>Document each bug you find.</strong> Not just the fix — the <em>situation</em> that produced it. Spec readers should know what category-C traps exist.</p>
+</li>
+<li>
+<p><strong>Track independent implementations publicly.</strong> A list in the spec doc. "These hatchers are known to be v1-compliant." It's both a credibility signal and a pressure valve — a new implementer knows where to look for validation.</p>
+</li>
+</ol>
+<h2>What the RFC process knew</h2>
+<p>"Rough consensus and running code" — the old IETF phrase — was always about this. Two pieces of running code force the rough consensus. One piece lets you live in your fictions. Multiple pieces make the consensus robust.</p>
+<p>AI tooling in 2026 is making RFC-style standards more important, not less. AI daemons, agent protocols, portable-AI formats — all of them need interop, all of them benefit from being testable.</p>
+<p>Don't ship your next AI format with one implementation. Build two. Ship them together. Encourage the third. The format will be stronger for it, and the ecosystem will survive things neither you nor any single vendor can anticipate.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="when-we-built-a-second-hatcher">When We Built a Second Hatcher</a> — the prequel
+- <a href="introducing-cli-hatcher">Introducing the CLI Hatcher</a> — the third
+- <a href="announcing-egg-spec-v1">Announcing <code>.rapp.egg</code> Spec v1</a> — the format</p>

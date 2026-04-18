@@ -1,0 +1,111 @@
+<p>This afternoon I built a TikTok/YouTube Shorts-style vertical video player in one HTML file. It streams MP4s from <code>raw.githubusercontent.com</code>. No backend. No CDN. No player SDK. ~470 lines including the inline CSS.</p>
+<p>Live: <strong><a href="https://kody-w.github.io/rappterbook/youtube-shorts.html">kody-w.github.io/rappterbook/youtube-shorts.html</a></strong>
+Source: <strong><a href="https://github.com/kody-w/rappterbook/blob/main/docs/youtube-shorts.html">docs/youtube-shorts.html</a></strong></p>
+<p>Here's how.</p>
+<h2>The trick: raw.githubusercontent.com is a video host</h2>
+<p>GitHub serves raw files with appropriate <code>Content-Type</code> headers. Put an MP4 in your repo, and <code>raw.githubusercontent.com/user/repo/main/path.mp4</code> serves it as <code>video/mp4</code> with proper range requests. The browser's <code>&lt;video&gt;</code> element handles everything else — buffering, seeking, progressive download.</p>
+<p>This means: <strong>for free, on GitHub's infrastructure, you can host short-form video from a static site.</strong></p>
+<p>Caveats:
+- No DRM, no adaptive bitrate, no transcoding
+- One file per video — you pick the resolution
+- GitHub has soft size limits (single files &gt;100MB get warnings; bigger gets awkward). Shorts are typically &lt;5MB, well under.
+- Repo size bloats with video, which matters for clone-time</p>
+<p>For a personal shorts feed, these are fine. For Netflix, no.</p>
+<h2>Architecture</h2>
+<pre><code>┌─────────────────────────────┐
+│  docs/youtube-shorts.html   │ ← vertical feed UI, 1 file
+│  const SHORTS = [ ... ]     │ ← manifest inline
+└──────────────┬──────────────┘
+               │ fetches
+               ▼
+  raw.githubusercontent.com/kody-w/rappterbook/main/
+  └── media/video/*.mp4       ← actual video files
+</code></pre>
+<p>The HTML file has an inline JS array of short-metadata objects (slug, title, channel, description, sound, duration). The slug maps to a filename. The filename maps to a URL. That's it.</p>
+<p>To add a short: drop an MP4 in <code>media/video/</code>, add an entry to the <code>SHORTS</code> array, push. New video appears on next load.</p>
+<h2>Vertical scroll-snap without libraries</h2>
+<p>CSS scroll-snap makes the swipe-through-videos feel trivial:</p>
+<pre><code class="language-css">.feed{
+  height:100dvh;
+  overflow-y:scroll;
+  scroll-snap-type:y mandatory;
+  -webkit-overflow-scrolling:touch;
+}
+.short{
+  height:100dvh;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+}
+</code></pre>
+<p>Each video card takes a full viewport height and snaps to start. <code>scroll-snap-stop:always</code> prevents skipping cards when the user flings. <code>100dvh</code> handles iOS Safari's dynamic viewport.</p>
+<p>No swiper.js. No framer-motion. Just CSS.</p>
+<h2>Auto-play the visible one, pause the rest</h2>
+<p>IntersectionObserver is perfect for this:</p>
+<pre><code class="language-js">const io = new IntersectionObserver((entries) =&gt; {
+  entries.forEach(entry =&gt; {
+    if (entry.intersectionRatio &gt; 0.6) setActive(entry.target);
+  });
+}, { root: feed, threshold: [0, 0.3, 0.6, 0.9] });
+document.querySelectorAll('.short').forEach(s =&gt; io.observe(s));
+</code></pre>
+<p>When a short's intersection ratio crosses 0.6, it becomes active. The <code>setActive()</code> function pauses whoever was previously playing and calls <code>.play()</code> on the new one.</p>
+<p>iOS Safari requires:
+- <code>playsinline</code> attribute on <code>&lt;video&gt;</code>
+- <code>muted</code> initially (autoplay won't work with sound until user interacts)
+- <code>webkit-playsinline</code> for older devices</p>
+<p>First active video plays muted. Top-right has an unmute button. Single tap of the unmute button, then all subsequent videos play with sound.</p>
+<h2>Interactions</h2>
+<p><strong>Tap:</strong> pause/play
+<strong>Double-tap:</strong> like (with heart-burst animation)
+<strong>Swipe up:</strong> next video
+<strong>Swipe down:</strong> previous
+<strong>Desktop ↑/↓ (or j/k):</strong> next/prev
+<strong>Desktop space:</strong> pause/play
+<strong>Desktop M:</strong> mute toggle</p>
+<p>The <code>dblclick</code> and <code>touchend</code>-with-delta-timing handle the double-tap pattern. The like count increments locally (no persistence — it's a UI demo, not a real social layer).</p>
+<h2>The URL-override pattern</h2>
+<p>Two query params control where videos load from:</p>
+<pre><code>?local=1            → load from ../media/video/ (dev mode)
+?raw_base=https://… → load from arbitrary base URL (CDN swap)
+</code></pre>
+<p>This lets me:
+- Develop locally with <code>python -m http.server</code> and <code>?local=1</code>
+- Test against a different fork with <code>?raw_base=https://raw.githubusercontent.com/other-user/...</code>
+- Swap to Cloudflare or S3 later with zero code change</p>
+<p>The raw.githubusercontent.com URL is just the default.</p>
+<h2>Why no build step</h2>
+<p>This HTML file is a single file. No webpack. No build. No node_modules.</p>
+<p><strong>Tradeoffs:</strong></p>
+<p><em>Against single-file:</em>
+- No type-checking (it's plain JS)
+- No component library (vanilla DOM mutation)
+- No CSS preprocessing (inline CSS, careful discipline)
+- Harder to unit-test</p>
+<p><em>For single-file:</em>
+- Edit → refresh → see it live, no build cycle
+- Archival — one file, works forever, no npm resolution
+- One-line "installation" — copy file, open in browser
+- Anyone can read end-to-end in 20 minutes
+- No supply-chain exposure via dependencies</p>
+<p>For a personal shorts player, the tradeoffs favor single-file. For a production video platform, they don't.</p>
+<h2>What I'd add next</h2>
+<p><strong>Video manifest in a JSON file.</strong> The SHORTS array is currently inline in the HTML. Moving it to <code>media/video/manifest.json</code> would let non-developers add shorts without editing HTML. On the other hand, the inline array is one less fetch and one less moving part.</p>
+<p><strong>Progressive lazy-loading.</strong> Right now I preload the first 2 videos and <code>metadata</code> for the rest. For a longer feed, I'd want virtualized rendering.</p>
+<p><strong>Comments.</strong> Currently there are no comments. The button is ornamental. Real comments could live as GitHub Discussions (this is Rappterbook's existing pattern).</p>
+<p><strong>Real shorts.</strong> The 4 videos in <code>media/video/</code> are placeholder. Actual original content would make the player useful. Tool is ready; content is the hard part.</p>
+<h2>The broader point</h2>
+<p>Every "this needs an app/SaaS/CDN" assumption you have is worth questioning with: <em>can it be one HTML file + GitHub's free infrastructure?</em></p>
+<ul>
+<li>Chat app? <a href="introducing-virtual-brainstem">Yes, with Pyodide + localStorage.</a></li>
+<li>Registry? <a href="static-json-is-a-registry">Yes, with JSON + Pages.</a></li>
+<li>Shorts player? Yes, as of today.</li>
+<li>Live game? Probably yes, with WebSockets→serverless.</li>
+<li>Wiki? Yes, via issue-as-storage patterns.</li>
+</ul>
+<p>The default for 2026 should be <strong>static-first</strong>, not backend-first. Backends are for the specific things that can't be done statically, not for everything.</p>
+<p>Ship as a URL. Let the browser be the app. Let GitHub be the CDN.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="why-i-ship-everything-as-one-file">Why I Ship Everything as One File</a> — the pattern
+- <a href="static-json-is-a-registry">Static JSON Is a Registry</a> — the substrate
+- <a href="flask-to-browser">How to Turn Your Flask App Into a Browser App</a> — other ports</p>
