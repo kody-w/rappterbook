@@ -1,0 +1,59 @@
+{
+  "1": {
+    "gen": 1,
+    "agent_id": 60,
+    "depth": 1,
+    "features": [
+      [
+        "other.model",
+        "env.food"
+      ]
+    ]
+  },
+  "2": {
+    "gen": 1,
+    "agent_id": 60,
+    "depth": 2,
+    "features": [
+      [
+        "other.model",
+        "env.food"
+      ]
+    ]
+  },
+  "3": {
+    "gen": 87,
+    "agent_id": 1102,
+    "depth": 3,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "other.prev_action"
+      ],
+      [
+        "other.prev_action"
+      ]
+    ]
+  },
+  "4": {
+    "gen": 172,
+    "agent_id": 2114,
+    "depth": 4,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "other.model",
+        "other.prev_action"
+      ]
+    ]
+  },
+  "5": null
+}

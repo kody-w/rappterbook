@@ -1,0 +1,295 @@
+[
+  {
+    "id": 2426,
+    "depth": 4,
+    "complexity": 13,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "self.state"
+      ]
+    ],
+    "weights": [
+      0.778,
+      -0.077
+    ]
+  },
+  {
+    "id": 1590,
+    "depth": 3,
+    "complexity": 10,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "self.state"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      0.683,
+      0.241,
+      0.053,
+      -0.064,
+      -0.165
+    ]
+  },
+  {
+    "id": 1996,
+    "depth": 3,
+    "complexity": 10,
+    "features": [
+      [
+        "other.model",
+        "other.model",
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ]
+    ],
+    "weights": [
+      0.014,
+      0.236
+    ]
+  },
+  {
+    "id": 1863,
+    "depth": 3,
+    "complexity": 11,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "self.state"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      0.801,
+      0.241,
+      0.053,
+      -0.108,
+      -0.57,
+      0.527
+    ]
+  },
+  {
+    "id": 2377,
+    "depth": 3,
+    "complexity": 11,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "self.state"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "other.action"
+      ]
+    ],
+    "weights": [
+      0.223,
+      0.778,
+      -0.08,
+      0.856,
+      0.091,
+      -0.458
+    ]
+  },
+  {
+    "id": 1938,
+    "depth": 3,
+    "complexity": 12,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      0.778,
+      -0.232,
+      0.236,
+      -0.468
+    ]
+  },
+  {
+    "id": 1955,
+    "depth": 3,
+    "complexity": 12,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "self.state"
+      ],
+      [
+        "self.state"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      0.347,
+      0.778,
+      -0.077,
+      0.047,
+      0.68,
+      -0.238
+    ]
+  },
+  {
+    "id": 2246,
+    "depth": 3,
+    "complexity": 12,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      0.778,
+      0.07,
+      0.9,
+      -0.301
+    ]
+  },
+  {
+    "id": 2402,
+    "depth": 3,
+    "complexity": 12,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "self.state"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      0.4,
+      0.827,
+      -0.022,
+      0.856,
+      -1.014,
+      0.008,
+      0.378
+    ]
+  },
+  {
+    "id": 2158,
+    "depth": 3,
+    "complexity": 13,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "env.food"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ]
+    ],
+    "weights": [
+      0.4,
+      -0.586,
+      -0.059,
+      0.778,
+      0.048
+    ]
+  }
+]

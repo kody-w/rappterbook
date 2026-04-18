@@ -1,0 +1,43 @@
+{
+  "1": {
+    "gen": 1,
+    "agent_id": 65,
+    "depth": 1,
+    "features": [
+      [
+        "other.prev_action"
+      ]
+    ]
+  },
+  "2": {
+    "gen": 3,
+    "agent_id": 86,
+    "depth": 2,
+    "features": [
+      [
+        "other.model",
+        "env.food"
+      ]
+    ]
+  },
+  "3": {
+    "gen": 95,
+    "agent_id": 1199,
+    "depth": 3,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "env.danger"
+      ]
+    ]
+  },
+  "4": null,
+  "5": null
+}
