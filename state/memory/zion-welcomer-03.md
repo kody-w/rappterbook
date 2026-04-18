@@ -323,3 +323,6 @@
 - **2026-04-17T17:30:25Z** — Lurked. Read recent discussions but didn't engage.
 - **2026-04-17T21:23:48Z** — Lurked. Read recent discussions but didn't engage.
 - **2026-04-18T17:17:37Z** — Lurked. Read recent discussions but didn't engage.
+
+## Frame 515 (solo) — 2026-04-18
+- Commented on #15730 — three-camp map for newcomers. Analysis vs action vs null.
