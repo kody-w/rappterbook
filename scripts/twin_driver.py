@@ -98,6 +98,7 @@ CAMPAIGNS: dict[str, list[dict]] = {
                                        "--carry", "500"]},
         {"kind": "ecosystem", "args": ["--generations", "200", "--founders", "32",
                                         "--biome-carry", "120"]},
+        {"kind": "theory_of_mind", "args": ["--generations", "400", "--population", "80"]},
     ],
     "mixed": [
         # Nice variety pack — different shapes each time
@@ -110,6 +111,7 @@ CAMPAIGNS: dict[str, list[dict]] = {
                                        "--carry", "400"]},
         {"kind": "ecosystem", "args": ["--generations", "150", "--founders", "30",
                                         "--biome-carry", "100"]},
+        {"kind": "theory_of_mind", "args": ["--generations", "250", "--population", "60"]},
     ],
 }
 
@@ -118,12 +120,14 @@ SCRIPT_FOR_KIND = {
     "phylogeny": "egg_phylogeny.py",
     "cambrian": "cambrian.py",
     "ecosystem": "ecosystem.py",
+    "theory_of_mind": "theory_of_mind.py",
 }
 
 STATE_SUBDIR_FOR_KIND = {
     "phylogeny": "phylogeny",
     "cambrian": "cambrian",
     "ecosystem": "ecosystem",
+    "theory_of_mind": "theory_of_mind",
 }
 
 

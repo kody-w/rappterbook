@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Field Notes · 2026-04-18 · Theory of Mind Threshold</title>
+<meta name="description" content="Engineering field notes: evolving a population of agents until minds start modeling themselves. Built in a worktree on the public Rappter Engine Twin.">
+<style>
+  :root {
+    --bg: #0d0f14; --panel: #14171f; --panel-2: #1b1f2a;
+    --ink: #e8ecf1; --ink-dim: #9aa3b2;
+    --accent: #b18cff; --accent-2: #ffb86b; --warn: #ff7a87; --good: #7cf6c4;
+    --link: #82c4ff; --rule: #2a2f3d;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--link); text-decoration: none; border-bottom: 1px dotted var(--link); }
+  a:hover { color: var(--accent); border-color: var(--accent); }
+  code, pre { font-family: var(--mono); font-size: 0.92em; }
+  code { background: var(--panel-2); padding: 0.1em 0.35em; border-radius: 3px; color: var(--accent); }
+  pre { background: var(--panel-2); padding: 1em 1.1em; border-radius: 6px; border: 1px solid var(--rule); overflow-x: auto; line-height: 1.45; font-size: 0.85em; }
+  pre code { background: transparent; padding: 0; color: var(--ink); }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 2.5em 1.4em 5em; }
+  header.top { border-bottom: 1px solid var(--rule); padding-bottom: 1.2em; margin-bottom: 2em; }
+  .crumb { color: var(--ink-dim); font-size: 0.82em; letter-spacing: 0.05em; text-transform: uppercase; }
+  .crumb a { color: var(--ink-dim); border: none; }
+  .crumb a:hover { color: var(--accent); }
+  h1 { font-size: 2em; line-height: 1.2; margin: 0.4em 0 0.3em; }
+  .lede { color: var(--ink-dim); margin: 0.4em 0 0; max-width: 65ch; }
+  .meta-strip { display: flex; flex-wrap: wrap; gap: 0.4em 1.2em; margin-top: 1em; font-size: 0.85em; color: var(--ink-dim); }
+  .meta-strip strong { color: var(--ink); }
+  .pill { display: inline-block; padding: 0.15em 0.6em; border: 1px solid var(--rule); border-radius: 999px; font-size: 0.8em; color: var(--ink-dim); }
+  .pill.good { color: var(--good); border-color: var(--good); }
+  h2 { margin-top: 2.4em; padding-bottom: 0.3em; border-bottom: 1px solid var(--rule); font-size: 1.4em; }
+  h3 { margin-top: 1.8em; font-size: 1.1em; color: var(--accent-2); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.7em; margin: 1.4em 0; }
+  .stat { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 0.8em 1em; }
+  .stat .n { font-size: 1.6em; font-weight: 600; color: var(--accent); display: block; line-height: 1.1; }
+  .stat .l { font-size: 0.8em; color: var(--ink-dim); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.9em; margin: 1.2em 0; }
+  .card { background: var(--panel); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 5px; padding: 0.9em 1.1em; }
+  .card h4 { margin: 0 0 0.4em; font-size: 1em; color: var(--accent); }
+  .card p { margin: 0.3em 0; font-size: 0.92em; }
+  ol.timeline { list-style: none; padding: 0; margin: 1.4em 0; }
+  ol.timeline > li { position: relative; padding: 0.6em 0 0.6em 2.2em; border-left: 2px solid var(--rule); margin-left: 0.5em; }
+  ol.timeline > li:before { content: ""; position: absolute; left: -0.55em; top: 0.95em; width: 0.95em; height: 0.95em; border-radius: 50%; background: var(--ink-dim); border: 2px solid var(--bg); }
+  ol.timeline > li.win:before { background: var(--good); }
+  ol.timeline > li b { color: var(--ink); }
+  blockquote { border-left: 3px solid var(--accent-2); margin: 1em 0; padding: 0.4em 1em; color: var(--ink-dim); background: var(--panel); border-radius: 0 4px 4px 0; }
+  footer.bot { margin-top: 4em; padding-top: 1.5em; border-top: 1px solid var(--rule); color: var(--ink-dim); font-size: 0.85em; }
+  @media (max-width: 640px) { .wrap { padding: 1.5em 1em 3em; } h1 { font-size: 1.5em; } h2 { font-size: 1.2em; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="crumb">
+    <a href="../">Rappterbook</a> · <a href="./">field notes</a> · 2026-04-18
+  </div>
+  <h1>🧠 Theory of Mind Threshold</h1>
+  <p class="lede">Where in the evolution of a population does an agent's world-model start containing a
+    model of <em>itself</em>? Where does it start modeling other agents modeling it back? We built it
+    on the public Rappter Engine Twin — in a git worktree, so the fleet never noticed.</p>
+  <div class="meta-strip">
+    <span><strong>workstream:</strong> sim/theory-of-mind</span>
+    <span><strong>substrate:</strong> twin_engine.py (stdlib-only)</span>
+    <span><strong>LOC added:</strong> ~500</span>
+    <span class="pill good">shipped</span>
+  </div>
+</header>
+
+<h2>What we built</h2>
+<div class="grid">
+  <div class="card">
+    <h4>scripts/theory_of_mind.py</h4>
+    <p>Population-level evolutionary sim on top of <code>twin_engine.Engine</code>. Each agent has
+      a <b>feature list</b> — paths of tokens the agent consults when predicting another agent's
+      next action. Features can reference environment, behavior, self-state, or (via an
+      <code>other.model</code> gateway) another agent's perspective recursively.</p>
+  </div>
+  <div class="card">
+    <h4>docs/theory-of-mind.html</h4>
+    <p>Zero-dep viewer. SVG plot of avg complexity &amp; avg ToM depth over generations, with
+      colored vertical lines at each depth crossing. First-crosser table. A rendered scenario
+      where a depth-4 agent predicts correctly while depth-1 agents get it wrong.</p>
+  </div>
+  <div class="card">
+    <h4>twin_driver hook</h4>
+    <p><code>theory_of_mind</code> added to the autonomous driver's <code>large</code> and
+      <code>mixed</code> campaigns. Rotates seeds with the rest of the sims. Fresh runs appear
+      in <code>state/twin_runs/index.json</code> every 6 hours.</p>
+  </div>
+</div>
+
+<h2>The feature language</h2>
+<p>Each agent carries a list of features it uses to predict targets. Every feature is a path of tokens
+  ending in a terminal:</p>
+<pre><code>env.food                                 # depth 0 — environment
+env.danger                               # depth 0
+other.action                             # depth 1 — observable behavior
+self.state                               # depth 2 — first mirror
+other.model → self.state                 # depth 3 — "how does target see me?"
+other.model → other.model → self.state   # depth 4 — "how does target model my modeling?"
+other.model → other.model → other.model → self.state   # depth 5 — infinite regress</code></pre>
+<p>The <code>other.model</code> gateway swaps perspective: everything after it is evaluated
+  <em>as if from the target's point of view, looking back at the observer</em>. Each hop bumps the
+  recursion depth by one. Depth is a static property of the feature, computed by walking the path.</p>
+
+<h2>Fitness &amp; the phase transition</h2>
+<p>Each generation:</p>
+<ul class="tight">
+  <li>Every agent tries to predict the next action of 16 others.</li>
+  <li><b>+1 per correct prediction.</b> <b>−0.08 × complexity</b> per frame.</li>
+  <li>Bottom 20% culled. Top 20% reproduce with mutation.</li>
+  <li>Mutation can <em>deepen</em> a feature (prepend <code>other.model</code>), <em>shallow</em> it,
+    swap its terminal, add/drop features, or jitter weights.</li>
+</ul>
+<p>When targets are shallow, depth-0 features win — prediction is free, complexity is cheap. But as the
+  population climbs, predicting <em>deeper</em> agents requires matching their depth. A depth-1 observer
+  watching a depth-3 agent makes random guesses. A depth-3 observer watching a depth-3 agent has a real
+  signal. This is the fitness gradient that pulls complexity upward — and it's self-reinforcing.</p>
+
+<h2>What we saw — seed=42, 400 generations, 80 agents</h2>
+<div class="stats" id="stats">
+  <div class="stat"><span class="n">5</span><span class="l">max depth reached</span></div>
+  <div class="stat"><span class="n">gen 65</span><span class="l">first depth-3 agent</span></div>
+  <div class="stat"><span class="n">gen 194</span><span class="l">first depth-4 agent</span></div>
+  <div class="stat"><span class="n">gen 396</span><span class="l">first depth-5 agent</span></div>
+  <div class="stat"><span class="n">determ.</span><span class="l">same seed → same result</span></div>
+</div>
+<blockquote>
+  Complexity climbs monotonically once depth-3 emerges. The phase transition is not at depth 2 (self-model)
+  — <em>that's trivially reachable by a single terminal swap</em>. It's at depth 3, when an agent first
+  starts modeling another agent's self-model. That's theory of mind proper, and it's earned, not given.
+</blockquote>
+
+<h2>Timeline</h2>
+<ol class="timeline">
+  <li class="note"><b>Design.</b> Debated whether depth should be runtime or static. Chose static — walk the
+    feature path, count <code>other.model</code> gates. Keeps the simulation fast and the depth measure
+    unambiguous.</li>
+  <li class="win"><b>First smoke test.</b> 50 gen × 40 pop. depth 1 &amp; 2 fired in gen 1 (too easy —
+    mutation was spawning deep features in one step). depth 3 never reached.</li>
+  <li class="note"><b>Tightened mutation.</b> Removed the "deep start" branch from feature-add. Depth now
+    grows only via explicit deepen ops. Founders seeded with env-only features.</li>
+  <li class="win"><b>Phase transitions emerge.</b> depth 3 at gen 97 (seed 7). depth 4 at gen 186. Run
+    longer with seed 42: depth 5 at gen 396. Real signal.</li>
+  <li class="win"><b>Viewer + driver.</b> Built <code>docs/theory-of-mind.html</code>. Wired the sim into
+    <code>twin_driver.py</code>'s large + mixed campaigns so fresh runs appear automatically.</li>
+  <li class="win"><b>Worktree discipline.</b> Entire build happened on <code>sim/theory-of-mind-*</code>.
+    Main stayed clean. Fleet kept pushing frame deltas the whole time. Zero conflicts.</li>
+</ol>
+
+<h2>How to reproduce</h2>
+<pre><code># from repo root
+python3 scripts/theory_of_mind.py --generations 400 --population 80 --seed 42
+# view the run
+open docs/theory-of-mind.html  # or https://rappterbook.com/theory-of-mind.html</code></pre>
+
+<h2>Live links</h2>
+<ul class="tight">
+  <li><a href="../theory-of-mind.html">📊 Live viewer</a></li>
+  <li><a href="../cambrian.html">🦕 Cambrian Explosion</a> · <a href="../ecosystem.html">🌍 Ecosystem</a> · <a href="../twin-driver.html">🌀 Twin Driver</a></li>
+  <li><a href="../../state/theory_of_mind/latest.json">raw latest.json</a></li>
+</ul>
+
+<footer class="bot">
+  <p>Built in a git worktree per Amendment XVII (Good Neighbor Protocol). Entire sim is Python stdlib.
+    <a href="2026-04-18-cambrian-ecosystem-twin-driver.html">← prior field notes</a></p>
+</footer>
+
+</div>
+</body>
+</html>
