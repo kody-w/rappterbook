@@ -247,21 +247,24 @@
     </section>
 
     <section>
-      <h3 style="padding-left: 0;">Egg (portable daemon)</h3>
+      <h3 style="padding-left: 0;">Rapp egg (portable daemon)</h3>
       <div class="hint" style="margin-top:0">
-        Export this brainstem as a <code>.brainstem.egg</code> — conforms to
-        <a href="EGG_SPEC.md" target="_blank">Egg Spec v1</a>, scale=daemon.
-        Hatches on any compliant engine. The egg carries soul + memory +
-        custom agents + provider metadata, but never the API key.
+        Export this rapp as a <code>.rapp.egg</code> — the organism is the <em>rapp</em>
+        (the daemon); the brainstem is just one of many <em>hatchers</em>. Conforms to
+        <a href="EGG_SPEC.md" target="_blank">Egg Spec v1</a>, scale=daemon. The same
+        egg hatches on the Virtual Brainstem, <code>rapp-installer</code>, openrappter,
+        RAPP hippocampus/communityRAPP, or any future compliant engine — each translates
+        <code>body.content</code> (soul + memory + custom agents + provider metadata)
+        into its own substrate. Never carries the API key.
       </div>
       <div>
-        <button id="export-egg" class="primary">Export .brainstem.egg</button>
+        <button id="export-egg" class="primary">Export .rapp.egg</button>
         <button id="import-egg-btn">Import .egg…</button>
         <input type="file" id="import-egg-input" accept=".egg,.json,application/json,text/plain" style="display:none">
       </div>
       <div class="hint" style="margin-top:0.3rem">
-        The <a href="KodyTwin.brainstem.egg" target="_blank">KodyTwin.brainstem.egg</a>
-        seed is shipped in the repo — download + import to start from Kody's twin.
+        The <a href="kodyTwinAI.rapp.egg" target="_blank">kodyTwinAI.rapp.egg</a>
+        seed ships in the repo — download + import to start from Kody's twin.
       </div>
     </section>
 
@@ -772,17 +775,17 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
       _schema_version: EGG_VERSION,
       organism: {
         slug: instance.toLowerCase().replace(/[^a-z0-9-]/g, "-"),
-        species: "brainstem",
+        species: "rapp",
         instance: instance,
         scale: "daemon",
         substrate: "browser",
         name: instance,
-        tagline: `Virtual Brainstem daemon — ${totalMemoryEntries} memory entries, ${customAgents.length} custom agents`,
-        population: "1 brainstem daemon",
+        tagline: `rapp daemon — ${totalMemoryEntries} memory entries, ${customAgents.length} custom agents. Hatches on any Virtual Brainstem or compliant rappter engine.`,
+        population: "1 rapp daemon",
       },
       body: {
         kind: "state_json",
-        filename: `${instance.toLowerCase()}.brainstem.state.json`,
+        filename: `${instance.toLowerCase()}.rapp.state.json`,
         content: content,
         sha256: sha,
         size_bytes: size,
@@ -800,16 +803,21 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
 
   $("export-egg").addEventListener("click", async () => {
     try {
-      const instance = window.prompt("Name this instance (shown in the filename + egg metadata):", "KodyTwin");
+      const instance = window.prompt(
+        "Name this rapp instance (appears in the filename + egg metadata).\nThe egg will be saved as <instance>.rapp.egg:",
+        "kodyTwinAI"
+      );
       if (!instance) return;
       const egg = await packEgg(instance);
       const blob = new Blob([JSON.stringify(egg, null, 2)], { type: "application/json" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `${instance}.brainstem.egg`;
+      a.download = `${instance}.rapp.egg`;
       a.click();
       URL.revokeObjectURL(a.href);
-      addMsg("system", `[egg] Packed ${a.download} — scale=daemon, sha256=${egg.body.sha256.slice(0,12)}…, size=${egg.body.size_bytes}B.`);
+      addMsg("system",
+        `[egg] Packed ${a.download} — species=rapp, scale=daemon, ` +
+        `sha256=${egg.body.sha256.slice(0,12)}…, size=${egg.body.size_bytes}B.`);
     } catch (e) {
       addMsg("system", "[egg pack error] " + e.message);
     }
