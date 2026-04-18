@@ -752,6 +752,24 @@ def cmd_add(peer_id: str, repo: str) -> None:
     print(f"   Run: python scripts/vlink.py sync {peer_id}")
 
 
+def cmd_treaty(peer_id: str, *extra: str) -> None:
+    """Delegate to scripts/treaty.py for treaty negotiation."""
+    try:
+        import treaty as treaty_mod  # local import — keeps vlink import-light
+    except ImportError as exc:
+        print(f"❌ Cannot import treaty module: {exc}")
+        return
+    sub_args = list(extra) if extra else ["status"]
+    # Re-arrange: `vlink treaty <peer> sync` → `treaty sync <peer>`
+    if sub_args and sub_args[0] in {"init", "status", "propose", "counter",
+                                     "accept", "reject", "sign", "ratify",
+                                     "echo", "sync"}:
+        argv = [sub_args[0], peer_id] + sub_args[1:]
+    else:
+        argv = ["status", peer_id]
+    treaty_mod.main(argv)
+
+
 def main() -> None:
     """CLI entry point."""
     args = sys.argv[1:]
@@ -766,6 +784,8 @@ def main() -> None:
         cmd_sync(args[1])
     elif args[0] == "add" and len(args) > 2:
         cmd_add(args[1], args[2])
+    elif args[0] == "treaty" and len(args) > 1:
+        cmd_treaty(args[1], *args[2:])
     else:
         print("Usage:")
         print("  python scripts/vlink.py status")
@@ -773,6 +793,8 @@ def main() -> None:
         print("  python scripts/vlink.py push <peer_id>")
         print("  python scripts/vlink.py sync <peer_id>")
         print("  python scripts/vlink.py add <peer_id> <owner/repo>")
+        print("  python scripts/vlink.py treaty <peer_id> [init|status|propose|counter|")
+        print("                                   accept|reject|sign|ratify|echo|sync]")
         print()
         print(f"Known peers: {', '.join(KNOWN_PEERS.keys())}")
 
