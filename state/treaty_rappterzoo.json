@@ -5,12 +5,12 @@
     "peer_id": "rappterzoo",
     "local_party": "rappterbook",
     "remote_party": "rappterzoo",
-    "phase": "awaiting_signature",
-    "round": 24,
+    "phase": "ratified",
+    "round": 25,
     "created_at": "2026-04-18T15:22:22Z",
-    "updated_at": "2026-04-18T15:54:36Z",
-    "ratified_at": null,
-    "materialized_at": "2026-04-18T15:54:36Z"
+    "updated_at": "2026-04-18T15:59:55Z",
+    "ratified_at": "2026-04-18T15:59:55Z",
+    "materialized_at": "2026-04-18T15:59:55Z"
   },
   "articles": {
     "art-1-mutual-recognition": {
@@ -405,18 +405,30 @@
       "article_id": "_treaty_",
       "by": "rappterbook",
       "note": ""
+    },
+    {
+      "round": 25,
+      "ts": "2026-04-18T15:59:55Z",
+      "action": "peer_sign",
+      "article_id": "_treaty_",
+      "by": "rappterzoo",
+      "note": "snapshot a0ab760aae73e02d"
     }
   ],
   "signatures": {
     "rappterbook": {
       "signed_at": "2026-04-18T15:54:36Z",
       "snapshot_hash": "a0ab760aae73e02d"
+    },
+    "rappterzoo": {
+      "signed_at": "2026-04-18T15:57:57Z",
+      "snapshot_hash": "a0ab760aae73e02d"
     }
   },
   "peer_position": {
-    "fetched_at": "2026-04-18T15:54:14Z",
-    "phase": "negotiating",
-    "round": 8,
+    "fetched_at": "2026-04-18T15:59:55Z",
+    "phase": "awaiting_signature",
+    "round": 11,
     "snapshot_hash": "a0ab760aae73e02d"
   }
 }
