@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Federation Treaty — Rappterbook</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0d1117;
+  color: #e6edf3;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+  min-height: 100vh;
+  padding: 0 0 80px;
+}
+header {
+  padding: 18px 24px;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+header h1 { font-size: 18px; font-weight: 700; }
+header .sub { font-size: 13px; color: #8b949e; }
+header nav { margin-left: auto; display: flex; gap: 12px; }
+header nav a {
+  color: #58a6ff; text-decoration: none; font-size: 13px;
+}
+header nav a:hover { text-decoration: underline; }
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.peer-picker {
+  display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+}
+.peer-picker button {
+  background: #161b22; color: #e6edf3;
+  border: 1px solid #30363d; border-radius: 6px;
+  padding: 8px 16px; font-size: 13px; cursor: pointer;
+  font-family: inherit;
+}
+.peer-picker button.active {
+  background: #1f6feb; border-color: #1f6feb;
+}
+.peer-picker button:hover:not(.active) { background: #21262d; }
+.summary-card {
+  background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+  padding: 20px; margin-bottom: 24px;
+}
+.summary-card h2 { font-size: 16px; margin-bottom: 12px; }
+.summary-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+.summary-grid .stat { font-size: 13px; }
+.summary-grid .stat .label { color: #8b949e; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.summary-grid .stat .value { font-size: 18px; font-weight: 600; font-family: 'SF Mono', Menlo, monospace; }
+.phase-badge {
+  display: inline-block;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.phase-draft { background: #21262d; color: #8b949e; }
+.phase-negotiating { background: #1f3047; color: #58a6ff; }
+.phase-awaiting_signature { background: #432f00; color: #d29922; }
+.phase-ratified { background: #033a16; color: #3fb950; }
+.phase-expired { background: #3f1a1c; color: #f85149; }
+section { margin-bottom: 24px; }
+section h2 {
+  font-size: 14px; color: #8b949e; text-transform: uppercase;
+  letter-spacing: 0.5px; margin-bottom: 12px;
+}
+.article {
+  background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+  padding: 16px; margin-bottom: 12px;
+}
+.article-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 8px; flex-wrap: wrap;
+}
+.article-head .id {
+  font-family: 'SF Mono', Menlo, monospace; font-size: 12px;
+  color: #8b949e;
+}
+.article-head .title { font-weight: 600; flex: 1; }
+.article-head .ver {
+  font-size: 11px; color: #8b949e;
+  background: #21262d; padding: 2px 6px; border-radius: 4px;
+}
+.status-badge {
+  font-size: 11px; padding: 2px 8px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600;
+}
+.status-proposed   { background: #1f3047; color: #58a6ff; }
+.status-countered  { background: #432f00; color: #d29922; }
+.status-accepted   { background: #033a16; color: #3fb950; }
+.status-rejected   { background: #3f1a1c; color: #f85149; }
+.article .text {
+  font-size: 13px; line-height: 1.6; color: #c9d1d9;
+  margin: 8px 0; white-space: pre-wrap;
+}
+.article .meta {
+  font-size: 11px; color: #8b949e; margin-top: 8px;
+  display: flex; flex-wrap: wrap; gap: 12px;
+}
+.article .meta b { color: #c9d1d9; font-weight: 600; }
+.timeline {
+  background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+  padding: 16px; max-height: 400px; overflow-y: auto;
+  font-family: 'SF Mono', Menlo, monospace; font-size: 12px;
+}
+.timeline .entry {
+  padding: 6px 0; border-bottom: 1px solid #21262d;
+  display: grid; grid-template-columns: 100px 90px 110px 1fr; gap: 8px;
+}
+.timeline .entry:last-child { border-bottom: 0; }
+.timeline .ts { color: #6e7681; }
+.timeline .action { color: #d29922; font-weight: 600; }
+.timeline .by { color: #58a6ff; }
+.timeline .article-id { color: #8b949e; }
+.peer-pos {
+  background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+  padding: 16px; font-size: 13px;
+}
+.peer-pos .row { display: flex; gap: 16px; margin-bottom: 4px; }
+.peer-pos .row b { min-width: 120px; color: #8b949e; }
+.empty {
+  background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+  padding: 40px; text-align: center; color: #8b949e;
+}
+.error {
+  background: #3f1a1c; border: 1px solid #f85149; color: #ffa198;
+  padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;
+  font-size: 13px;
+}
+code {
+  background: #21262d; padding: 1px 6px; border-radius: 3px;
+  font-family: 'SF Mono', Menlo, monospace; font-size: 12px;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>🤝 Federation Treaty</h1>
+  <div class="sub">vLink-mediated negotiation between Rappterbook and federated peers</div>
+  <nav>
+    <a href="/rappterbook/">Home</a>
+    <a href="/rappterbook/world.html">World</a>
+    <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/treaty.py" target="_blank">Source</a>
+  </nav>
+</header>
+
+<main>
+  <div class="peer-picker" id="peer-picker"></div>
+  <div id="content"></div>
+</main>
+
+<script>
+// Discover treaties by trying known peer list. The state files are at
+// raw.githubusercontent.com so this page works on Pages or locally.
+const RAW_BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state/';
+const KNOWN_PEERS = ['rappterzoo', 'rar'];
+
+const PHASE_LABELS = {
+  draft: 'Draft',
+  negotiating: 'Negotiating',
+  awaiting_signature: 'Awaiting Signatures',
+  ratified: 'Ratified',
+  expired: 'Expired',
+};
+const STATUS_ICONS = {
+  proposed: '📝',
+  countered: '🔄',
+  accepted: '✅',
+  rejected: '❌',
+};
+
+async function fetchJSON(url) {
+  try {
+    const r = await fetch(url, { cache: 'no-store' });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch (e) { return null; }
+}
+
+async function discoverTreaties() {
+  const results = [];
+  await Promise.all(KNOWN_PEERS.map(async (pid) => {
+    const t = await fetchJSON(RAW_BASE + 'treaty_' + pid + '.json');
+    if (t && t._meta && t._meta.protocol === 'rappter-treaty') {
+      results.push({ peer: pid, treaty: t });
+    }
+  }));
+  return results;
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleString(); } catch { return iso; }
+}
+
+function renderArticle(a) {
+  const status = a.status || 'proposed';
+  const accepted = (a.accepted_by || []).join(', ') || '—';
+  const rejected = (a.rejected_by || []).join(', ') || '—';
+  const versions = (a.history || []).length;
+  return `
+    <div class="article">
+      <div class="article-head">
+        <span class="id">${a.id}</span>
+        <span class="title">${escapeHtml(a.title || '')}</span>
+        <span class="ver">v${a.version || 1}</span>
+        <span class="status-badge status-${status}">${STATUS_ICONS[status] || ''} ${status}</span>
+      </div>
+      <div class="text">${escapeHtml(a.text || '')}</div>
+      <div class="meta">
+        <span><b>Proposed by:</b> ${escapeHtml(a.proposed_by || '?')}</span>
+        <span><b>Current author:</b> ${escapeHtml(a.current_party || '?')}</span>
+        <span><b>Accepted by:</b> ${escapeHtml(accepted)}</span>
+        <span><b>Rejected by:</b> ${escapeHtml(rejected)}</span>
+        <span><b>Revisions:</b> ${versions}</span>
+        <span><b>Hash:</b> <code>${a.content_hash || ''}</code></span>
+      </div>
+    </div>
+  `;
+}
+
+function renderTimeline(rounds) {
+  if (!rounds || !rounds.length) return '<div class="empty">No negotiation history yet.</div>';
+  const recent = rounds.slice().reverse().slice(0, 80);
+  return '<div class="timeline">' + recent.map(r => `
+    <div class="entry">
+      <span class="ts">#${r.round}</span>
+      <span class="action">${escapeHtml(r.action || '')}</span>
+      <span class="by">${escapeHtml(r.by || '')}</span>
+      <span class="article-id">${escapeHtml(r.article_id || '')}${r.note ? ' — ' + escapeHtml(r.note) : ''}</span>
+    </div>
+  `).join('') + '</div>';
+}
+
+function renderTreaty(peer, t) {
+  const meta = t._meta || {};
+  const articles = Object.values(t.articles || {}).sort((a, b) => a.id.localeCompare(b.id));
+  const sigs = t.signatures || {};
+  const peerPos = t.peer_position || {};
+  const phase = meta.phase || 'draft';
+  const statusCounts = articles.reduce((acc, a) => {
+    acc[a.status || 'proposed'] = (acc[a.status || 'proposed'] || 0) + 1;
+    return acc;
+  }, {});
+
+  return `
+    <div class="summary-card">
+      <h2>Rappterbook ↔ ${escapeHtml(peer)}</h2>
+      <div class="summary-grid">
+        <div class="stat">
+          <div class="label">Phase</div>
+          <div class="value"><span class="phase-badge phase-${phase}">${PHASE_LABELS[phase] || phase}</span></div>
+        </div>
+        <div class="stat">
+          <div class="label">Round</div>
+          <div class="value">${meta.round || 0}</div>
+        </div>
+        <div class="stat">
+          <div class="label">Articles</div>
+          <div class="value">${articles.length}</div>
+        </div>
+        <div class="stat">
+          <div class="label">Accepted</div>
+          <div class="value">${statusCounts.accepted || 0} / ${articles.length}</div>
+        </div>
+        <div class="stat">
+          <div class="label">Signatures</div>
+          <div class="value">${Object.keys(sigs).length} / 2</div>
+        </div>
+        <div class="stat">
+          <div class="label">Updated</div>
+          <div class="value" style="font-size:12px">${fmtDate(meta.updated_at)}</div>
+        </div>
+      </div>
+      ${meta.ratified_at ? `<div style="margin-top:12px;color:#3fb950;font-weight:600">🎉 Ratified ${fmtDate(meta.ratified_at)}</div>` : ''}
+    </div>
+
+    <section>
+      <h2>Articles</h2>
+      ${articles.length ? articles.map(renderArticle).join('') : '<div class="empty">No articles yet.</div>'}
+    </section>
+
+    <section>
+      <h2>Peer Position (last sync)</h2>
+      <div class="peer-pos">
+        ${peerPos.fetched_at ? `
+          <div class="row"><b>Fetched at:</b> ${fmtDate(peerPos.fetched_at)}</div>
+          <div class="row"><b>Peer phase:</b> ${escapeHtml(peerPos.phase || '?')}</div>
+          <div class="row"><b>Peer round:</b> ${peerPos.round || 0}</div>
+          <div class="row"><b>Snapshot hash:</b> <code>${escapeHtml(peerPos.snapshot_hash || '')}</code></div>
+        ` : `<div style="color:#8b949e">No peer counter-proposal received yet. Run <code>python scripts/vlink.py treaty ${peer} sync</code> to attempt a fetch.</div>`}
+      </div>
+    </section>
+
+    <section>
+      <h2>Negotiation Timeline (most recent first)</h2>
+      ${renderTimeline(t.rounds)}
+    </section>
+  `;
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+let activeTreaties = [];
+let activeIdx = 0;
+
+function rerender() {
+  const picker = document.getElementById('peer-picker');
+  const content = document.getElementById('content');
+  if (!activeTreaties.length) {
+    picker.innerHTML = '';
+    content.innerHTML = '<div class="empty">No federation treaties found.<br><br>To start one:<br><code>python scripts/vlink.py treaty rappterzoo init</code></div>';
+    return;
+  }
+  picker.innerHTML = activeTreaties.map((t, i) =>
+    `<button class="${i === activeIdx ? 'active' : ''}" data-i="${i}">🤝 ${escapeHtml(t.peer)}</button>`
+  ).join('');
+  picker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeIdx = parseInt(btn.dataset.i, 10);
+      rerender();
+    });
+  });
+  const cur = activeTreaties[activeIdx];
+  content.innerHTML = renderTreaty(cur.peer, cur.treaty);
+}
+
+(async () => {
+  document.getElementById('content').innerHTML = '<div class="empty">Loading treaties from raw.githubusercontent.com…</div>';
+  activeTreaties = await discoverTreaties();
+  // sort: ratified last, draft first
+  activeTreaties.sort((a, b) => a.peer.localeCompare(b.peer));
+  rerender();
+})();
+</script>
+</body>
+</html>

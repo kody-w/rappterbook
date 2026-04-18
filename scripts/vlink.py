@@ -611,6 +611,30 @@ def cmd_status() -> None:
 
     print("  └──────────────────────────────────────────┘")
 
+    # Federation treaty status
+    treaty_files = sorted(STATE_DIR.glob("treaty_*.json"))
+    if treaty_files:
+        print()
+        print("  ┌─ Federation Treaties ──────────────────┐")
+        for tf in treaty_files:
+            tdata = load_json(tf)
+            tmeta = tdata.get("_meta", {})
+            tpeer = tmeta.get("peer_id", tf.stem.replace("treaty_", ""))
+            tphase = tmeta.get("phase", "?")
+            tround = tmeta.get("round", 0)
+            articles = tdata.get("articles", {}) or {}
+            sigs = tdata.get("signatures", {}) or {}
+            accepted = sum(1 for a in articles.values()
+                           if a.get("status") == "accepted")
+            phase_icon = {"draft": "📋", "negotiating": "🔄",
+                          "awaiting_signature": "🖋️", "ratified": "✅",
+                          "expired": "⌛"}.get(tphase, "•")
+            print(f"  │ {phase_icon} {tpeer}: {tphase} (round {tround})")
+            print(f"  │   Articles: {accepted}/{len(articles)} accepted, "
+                  f"signatures: {len(sigs)}/2")
+            print(f"  │")
+        print("  └──────────────────────────────────────────┘")
+
 
 def cmd_pull(peer_id: str) -> None:
     """Pull and adapt state from a peer."""
