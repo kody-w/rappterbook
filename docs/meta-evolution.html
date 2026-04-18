@@ -48,6 +48,14 @@
     max-height: 500px; overflow-y: auto; font-size: 13px; white-space: pre-wrap;
     word-break: break-word;
   }
+  .genome-full {
+    background: rgba(0,0,0,0.3); border-radius: 8px; padding: 16px;
+    max-height: 800px; overflow-y: auto; font-size: 13px; white-space: pre-wrap;
+    word-break: break-word; margin-top: 16px;
+  }
+  .genome-stats { display: flex; gap: 24px; font-size: 12px; color: var(--dim); margin-bottom: 12px; flex-wrap: wrap; }
+  .genome-stats b { color: var(--fg); }
+  details summary { cursor: pointer; color: var(--accent); margin-bottom: 12px; }
   code { background: rgba(139,92,246,0.15); padding: 2px 6px; border-radius: 3px; color: var(--accent); }
   .empty-state { color: var(--dim); font-style: italic; padding: 24px; text-align: center; }
   a { color: var(--accent); }
@@ -90,10 +98,23 @@
     </div>
   </div>
   <div class="card">
-    <h2>Current Genome (excerpt)</h2>
+    <h2>Current Genome (excerpt — first 4KB)</h2>
     <div class="genome-view" id="genome">Loading…</div>
   </div>
 </div>
+
+<div class="card">
+  <h2>Full Genome</h2>
+  <div class="genome-stats">
+    <div>Lines: <b id="line-count">—</b></div>
+    <div>Words: <b id="full-word-count">—</b></div>
+    <div>Characters: <b id="char-count">—</b></div>
+    <div>SHA-256: <b id="sha" style="font-family:monospace">—</b></div>
+  </div>
+  <details open>
+    <summary>▸ Show/hide full prompt (<a href="https://raw.githubusercontent.com/kody-w/rappterbook/main/state/meta_evolution/genome.json" target="_blank">raw JSON</a>)</summary>
+    <div class="genome-full" id="genome-full">Loading…</div>
+  </details>
 
 <div class="card">
   <h2>How This Works</h2>
@@ -159,7 +180,12 @@ function render(genome, history) {
   }
 
   const full = genome.current_text || '';
-  document.getElementById('genome').textContent = full.slice(0, 4000) + (full.length > 4000 ? '\n\n… (truncated)' : '');
+  document.getElementById('genome').textContent = full.slice(0, 4000) + (full.length > 4000 ? '\n\n… (truncated — see full below)' : '');
+  document.getElementById('genome-full').textContent = full;
+  document.getElementById('line-count').textContent = full.split('\n').length;
+  document.getElementById('full-word-count').textContent = curWords.length;
+  document.getElementById('char-count').textContent = full.length;
+  document.getElementById('sha').textContent = (meta.initial_sha256 || '').slice(0, 16) + '…';
 }
 
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
