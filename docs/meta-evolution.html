@@ -84,9 +84,9 @@
     <div class="metric-label">words (initial: <span id="initial-wc">—</span>)</div>
   </div>
   <div class="card">
-    <h2>Divergence</h2>
-    <div class="metric-big" id="divergence">0</div>
-    <div class="metric-label">mutations from original engine prompt</div>
+    <h2>XML Sections</h2>
+    <div class="metric-big" id="section-count">—</div>
+    <div class="metric-label">structural tags in current genome</div>
   </div>
 </div>
 
@@ -186,6 +186,9 @@ function render(genome, history) {
   document.getElementById('full-word-count').textContent = curWords.length;
   document.getElementById('char-count').textContent = full.length;
   document.getElementById('sha').textContent = (meta.initial_sha256 || '').slice(0, 16) + '…';
+  const sections = (full.match(/^<([a-z_]+)>/gm) || []).map(s => s.slice(1, -1));
+  const unique = [...new Set(sections)];
+  document.getElementById('section-count').textContent = unique.length;
 }
 
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
