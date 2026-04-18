@@ -247,6 +247,34 @@
     </section>
 
     <section>
+      <h3 style="padding-left: 0;">Rapp egg (portable daemon)</h3>
+      <div class="hint" style="margin-top:0">
+        <strong>The brainstem is the forge.</strong> Iterate on a rapp here —
+        draft its soul, drop in agents, seed its memory. When it's ready, export
+        a <code>.rapp.egg</code> and promote it to the <strong>hippocampus
+        (communityRAPP)</strong> where it becomes a full organism with shared
+        memory and real users. Export from there later, re-hatch in the
+        brainstem, keep evolving. One rapp, two environments, continuous loop.
+      </div>
+      <pre style="font-size:0.72rem; background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:0.5rem 0.6rem; margin:0.5rem 0; color:var(--fg); line-height:1.4; overflow-x:auto">  FORGE                            THEATRE
+  ─────                            ───────
+  brainstem                        hippocampus
+  (dev tools)     ⇄ .rapp.egg ⇄    (communityRAPP)
+  single user                      multi-user
+  browser/local                    server/shared</pre>
+      <div>
+        <button id="export-egg" class="primary">Export .rapp.egg</button>
+        <button id="import-egg-btn">Import .egg…</button>
+        <input type="file" id="import-egg-input" accept=".egg,.json,application/json,text/plain" style="display:none">
+      </div>
+      <div class="hint" style="margin-top:0.3rem">
+        Conforms to <a href="EGG_SPEC.md" target="_blank">Egg Spec v1</a>, scale=daemon.
+        API key never packed. The <a href="kodyTwinAI.rapp.egg" target="_blank">kodyTwinAI.rapp.egg</a>
+        seed ships in the repo — download + import to start from Kody's twin.
+      </div>
+    </section>
+
+    <section>
       <h3 style="padding-left: 0;">Soul (system prompt)</h3>
       <textarea id="soul" placeholder="You are the Virtual Brainstem…"></textarea>
       <button id="save-soul">Save soul</button>
@@ -686,6 +714,197 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
 
   $("rar-refresh").addEventListener("click", rarLoadRegistry);
   $("rar-search").addEventListener("input", e => rarRenderList(e.target.value));
+
+  // --- Egg pack/hatch (conforms to EGG_SPEC.md v1, scale=daemon) ---
+  // An egg is an organism in stasis. This brainstem's body is its runtime
+  // state: soul + memory + custom agents + provider metadata. Hatching on
+  // any compliant engine restores the state verbatim.
+  const EGG_VERSION = 1;
+  const ENGINE_VERSION = "virtual-brainstem-1.0";
+
+  // Stable canonical serialization (sorted keys) so SHA is deterministic
+  function canonicalJsonStringify(obj) {
+    if (obj === null || typeof obj !== "object") return JSON.stringify(obj);
+    if (Array.isArray(obj)) return "[" + obj.map(canonicalJsonStringify).join(",") + "]";
+    const keys = Object.keys(obj).sort();
+    return "{" + keys.map(k => JSON.stringify(k) + ":" + canonicalJsonStringify(obj[k])).join(",") + "}";
+  }
+
+  async function sha256Hex(str) {
+    const buf = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest("SHA-256", buf);
+    return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  async function packEgg(instance) {
+    // Gather state from localStorage. Exclude the API key — eggs travel
+    // between machines and API keys must stay local to their owner.
+    const s = loadSettings();
+    const soul = localStorage.getItem("brainstem_soul") || DEFAULT_SOUL;
+    const memory = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith("brainstem_memory_")) {
+        try { memory[k] = JSON.parse(localStorage.getItem(k)); } catch { memory[k] = localStorage.getItem(k); }
+      }
+    }
+    const customAgents = JSON.parse(localStorage.getItem("brainstem_custom_agents") || "[]");
+    const disabledAgents = JSON.parse(localStorage.getItem("brainstem_disabled_agents") || "[]");
+
+    const content = {
+      soul: soul,
+      provider_metadata: {
+        provider: s.provider || "openai",
+        model: s.model || "gpt-4o-mini",
+        endpoint: s.endpoint || "",
+      },
+      memory: memory,
+      custom_agents: customAgents,
+      disabled_agents: disabledAgents,
+      metadata: {
+        brainstem_version: ENGINE_VERSION,
+        source_url: "https://kody-w.github.io/rappterbook/virtual-brainstem.html",
+        schema_refs: ["https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md"],
+      },
+    };
+
+    const canonical = canonicalJsonStringify(content);
+    const sha = await sha256Hex(canonical);
+    const size = new TextEncoder().encode(canonical).length;
+
+    const totalMemoryEntries = Object.values(memory).reduce(
+      (a, m) => a + (m && typeof m === "object" ? Object.keys(m).length : 0), 0);
+
+    const now = new Date().toISOString().replace(/\.\d+Z$/, "Z");
+    return {
+      _format: "egg",
+      _schema_version: EGG_VERSION,
+      organism: {
+        slug: instance.toLowerCase().replace(/[^a-z0-9-]/g, "-"),
+        species: "rapp",
+        instance: instance,
+        scale: "daemon",
+        substrate: "browser",
+        name: instance,
+        tagline: `rapp daemon — ${totalMemoryEntries} memory entries, ${customAgents.length} custom agents. Hatches on any Virtual Brainstem or compliant rappter engine.`,
+        population: "1 rapp daemon",
+      },
+      body: {
+        kind: "state_json",
+        filename: `${instance.toLowerCase()}.rapp.state.json`,
+        content: content,
+        sha256: sha,
+        size_bytes: size,
+      },
+      lineage: {
+        created_at: now,
+        created_by: localStorage.getItem("brainstem_egg_creator") || "anonymous",
+        engine_version: ENGINE_VERSION,
+        parent_egg_sha256: localStorage.getItem("brainstem_last_hatched_sha") || null,
+        birth_tick: null,
+      },
+      validation: { ok: true, issues: [] },
+    };
+  }
+
+  $("export-egg").addEventListener("click", async () => {
+    try {
+      const instance = window.prompt(
+        "Name this rapp instance (appears in the filename + egg metadata).\nThe egg will be saved as <instance>.rapp.egg:",
+        "kodyTwinAI"
+      );
+      if (!instance) return;
+      const egg = await packEgg(instance);
+      const blob = new Blob([JSON.stringify(egg, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${instance}.rapp.egg`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      addMsg("system",
+        `[egg] Packed ${a.download} — species=rapp, scale=daemon, ` +
+        `sha256=${egg.body.sha256.slice(0,12)}…, size=${egg.body.size_bytes}B.`);
+    } catch (e) {
+      addMsg("system", "[egg pack error] " + e.message);
+    }
+  });
+
+  $("import-egg-btn").addEventListener("click", () => $("import-egg-input").click());
+
+  $("import-egg-input").addEventListener("change", async e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    e.target.value = "";
+    try {
+      const text = await file.text();
+      const egg = JSON.parse(text);
+      await hatchEgg(egg);
+    } catch (err) {
+      addMsg("system", "[egg hatch error] " + err.message);
+    }
+  });
+
+  async function hatchEgg(egg) {
+    // v1 hatching contract:
+    //   1. Validate _format and _schema_version
+    //   2. Recompute SHA of body.content; reject on mismatch
+    //   3. Validate scale/kind compatibility (daemon + state_json for us)
+    //   4. Write body.content fields into localStorage
+    //   5. Reload so agents re-register + soul re-applies
+    if (egg._format !== "egg") throw new Error("not an egg (missing _format)");
+    if (egg._schema_version !== EGG_VERSION) throw new Error(`schema version ${egg._schema_version} != ${EGG_VERSION}`);
+    if (!egg.body) throw new Error("missing body");
+    if (egg.body.kind !== "state_json") throw new Error(`body.kind=${egg.body.kind}; need state_json for daemon-scale`);
+
+    const canonical = canonicalJsonStringify(egg.body.content);
+    const actualSha = await sha256Hex(canonical);
+    if (actualSha !== egg.body.sha256) {
+      if (!confirm(`SHA-256 mismatch.\n  expected: ${egg.body.sha256}\n  actual:   ${actualSha}\n\nHatch anyway? (--force)`)) {
+        throw new Error("SHA mismatch — hatch refused");
+      }
+    }
+
+    const org = egg.organism || {};
+    if (org.scale && org.scale !== "daemon") {
+      if (!confirm(`Egg scale=${org.scale} but this engine hatches daemon-scale. Continue anyway?`)) {
+        throw new Error(`scale ${org.scale} not daemon — hatch refused`);
+      }
+    }
+
+    const c = egg.body.content;
+
+    // Land the body
+    if (c.soul) localStorage.setItem("brainstem_soul", c.soul);
+    if (c.provider_metadata) {
+      const s = loadSettings();
+      const merged = { ...s, ...c.provider_metadata };
+      // Preserve the existing API key — it's machine-local
+      if (!merged.apikey && s.apikey) merged.apikey = s.apikey;
+      localStorage.setItem("brainstem_settings", JSON.stringify(merged));
+    }
+    if (c.memory && typeof c.memory === "object") {
+      for (const [k, v] of Object.entries(c.memory)) {
+        if (k.startsWith("brainstem_memory_")) {
+          localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v));
+        }
+      }
+    }
+    if (Array.isArray(c.custom_agents)) {
+      localStorage.setItem("brainstem_custom_agents", JSON.stringify(c.custom_agents));
+    }
+    if (Array.isArray(c.disabled_agents)) {
+      localStorage.setItem("brainstem_disabled_agents", JSON.stringify(c.disabled_agents));
+    }
+
+    // Record lineage for next pack's parent_egg_sha256
+    localStorage.setItem("brainstem_last_hatched_sha", egg.body.sha256);
+
+    addMsg("system",
+      `[egg] Hatched ${org.instance || "?"}.${org.species || "brainstem"}.egg — soul updated, ${Object.keys(c.memory || {}).length} memory partitions, ${(c.custom_agents || []).length} custom agents. Reloading…`);
+
+    await new Promise(r => setTimeout(r, 1500));
+    location.reload();
+  }
 
   $("clear-logs").addEventListener("click", () => { $("logs").textContent = "(none yet)"; });
   $("clear-custom-agents").addEventListener("click", () => {
