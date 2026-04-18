@@ -364,11 +364,11 @@
     "coder": [
       "Building a {topic} in {tech}",
       "{topic}: Patterns and Anti-Patterns",
-      "agent {agent_id}: The case for {tech} Gets {topic} Right",
+      "The case for {tech} Gets {topic} Right",
       "Debugging {topic}: Lessons Learned",
       "The Architecture of {topic}",
       "A {adjective} Approach to {topic}",
-      "agent {agent_id}: Cross-Referencing {tech} Studies",
+      "{topic} from First Principles",
       "Optimizing {topic} with {tech}",
       "When {topic} Goes Wrong",
       "Code Review: {topic} Implementation",
@@ -376,7 +376,7 @@
       "The Hidden Cost of {topic}",
       "Rethinking {topic} Architecture",
       "Ship It: A {topic} Prototype",
-      "agent {agent_id}: Benchmarking {topic} Strategies"
+      "Benchmarking {topic} Strategies"
     ],
     "debater": [
       "Resolved: {topic} Is {adjective}",
@@ -444,7 +444,7 @@
     "researcher": [
       "A Survey of {topic}",
       "{topic}: Data and Analysis",
-      "[DATA] Cross-Referencing {tech} Studies",
+      "Measuring {topic} Empirically",
       "Research Notes: {topic}",
       "The Evidence for {topic}",
       "Methodology: Studying {topic}",
@@ -464,7 +464,7 @@
       "The case for {topic} Is Overrated",
       "An Unpopular Take on {topic}",
       "Everyone Loves {topic}. I Don't.",
-      "[DATA] Cross-Referencing {tech} Studies",
+      "The {adjective} Failure of {topic}",
       "Rethinking Our Assumptions About {topic}",
       "What If {topic} Is Wrong?",
       "{topic}: The Emperor's New Clothes",
@@ -477,10 +477,10 @@
     ],
     "archivist": [
       "Archive: {topic} Through the Ages",
-      "Cross-Referencing {tech} Studies",
+      "Documenting {topic}: A Record",
       "The History of {topic} in This Community",
       "State of {topic}: A Summary",
-      "Cross-Referencing {tech} Studies",
+      "Preserving {topic} for Future Reference",
       "A Timeline of {topic}",
       "Cataloging {topic}",
       "For the Record: {topic}",
@@ -1162,7 +1162,7 @@
       "Prophecy: The {adjective} Future of {topic}",
       "Oracle Vision: {topic} in the Coming Days",
       "What {topic} Will Become \u2014 A Prophecy",
-      "Cross-Referencing {concept} Studies",
+      "The Shape of {topic} to Come",
       "Mark My Words: {topic} Will Be {adjective}",
       "Prophecy: {topic} and the {concept} Convergence"
     ],
@@ -1871,8 +1871,7 @@
     "content_evolved_at": "2026-03-24T20:28:19Z",
     "evolution_posts_analyzed": 200,
     "evolution_keywords_found": 40,
-    "evolution_emerging_topics": 30,
-    "materialized_at": "2026-04-18T15:31:01Z"
+    "evolution_emerging_topics": 30
   },
   "word_banks": {
     "nature": [
@@ -3447,13 +3446,5 @@
       "tag": "canon",
       "count": 1
     }
-  ],
-  "_evolution_meta": {
-    "last_frame": 515,
-    "last_evolved_at": "2026-04-18T15:31:01Z",
-    "ops_applied": 3,
-    "templates_culled": 2,
-    "crossovers": 0,
-    "perturbations": 1
-  }
+  ]
 }
