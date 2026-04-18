@@ -139,6 +139,40 @@
     border: 1px solid var(--border); border-radius: 3px; font-size: 0.85em;
   }
 
+  /* Agent-call output under each assistant message — matches rapp-installer UI */
+  .agent-logs-wrapper {
+    margin-top: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: logsAppear 0.3s ease-out;
+  }
+  @keyframes logsAppear {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .logs-label {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 10px; background: var(--bg);
+    color: #8b949e; font-size: 10px; font-weight: 600;
+    font-family: "SF Mono", Menlo, monospace;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    cursor: pointer; user-select: none;
+  }
+  .logs-label:hover { background: var(--panel); color: var(--fg); }
+  .logs-label .arrow { transition: transform 0.2s; font-size: 8px; }
+  .logs-label .arrow.open { transform: rotate(90deg); }
+  .logs-label .agent-name-tag { color: #d2a8ff; text-transform: none; letter-spacing: 0; }
+  .agent-logs {
+    padding: 8px 10px; background: var(--bg);
+    font-size: 11px; color: #7ee787;
+    font-family: "SF Mono", Menlo, monospace;
+    white-space: pre-wrap; max-height: 200px;
+    overflow-y: auto; border-top: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .agent-logs.collapsed { display: none; }
+
   /* Drag-drop overlay */
   body.dragging::before {
     content: "Drop agent .py file to hot-load";
@@ -295,12 +329,49 @@ The user's persistent memory lives in browser localStorage under keys you can ac
     statusEl.textContent = text;
   }
 
-  function addMsg(role, body, cls) {
+  function addMsg(role, body, cls, logs) {
     const div = document.createElement("div");
     div.className = "msg " + (cls || role);
     const r = document.createElement("div"); r.className = "role"; r.textContent = role;
     const b = document.createElement("div"); b.className = "body"; b.textContent = body;
     div.appendChild(r); div.appendChild(b);
+
+    // Agent-call output — matches rapp-installer UI exactly
+    if (logs && logs.length > 0) {
+      const logsText = Array.isArray(logs) ? logs.join("\n") : String(logs);
+      if (logsText.trim().length > 0) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "agent-logs-wrapper";
+
+        // Extract unique agent names from "[AgentName] ..." lines
+        const agentNames = [...new Set(
+          (logsText.match(/\[([^\]]+)\]/g) || [])
+            .map(m => m.slice(1, -1))
+            .filter(n => !n.startsWith("round "))
+        )];
+
+        const label = document.createElement("div");
+        label.className = "logs-label";
+        const nameTag = agentNames.length > 0
+          ? ' <span class="agent-name-tag">' + agentNames.map(n => n.replace(/[<>&"]/g, "")).join(", ") + '</span>'
+          : "";
+        label.innerHTML = '<span class="arrow">\u25B6</span> agent called' + nameTag;
+
+        const logBox = document.createElement("div");
+        logBox.className = "agent-logs collapsed";
+        logBox.textContent = logsText;
+
+        label.addEventListener("click", () => {
+          logBox.classList.toggle("collapsed");
+          label.querySelector(".arrow").classList.toggle("open");
+        });
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(logBox);
+        b.parentElement.appendChild(wrapper);
+      }
+    }
+
     messagesEl.appendChild(div);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     return div;
@@ -844,7 +915,9 @@ json.dumps(_res)
       if (parsed.logs && parsed.logs.length) {
         for (const log of parsed.logs) appendLog(log);
       }
-      addMsg("assistant", parsed.reply);
+      // Pass the agent-call logs to addMsg so the collapsible panel renders
+      // under this assistant message — matches rapp-installer's per-message UI.
+      addMsg("assistant", parsed.reply, null, parsed.logs);
       conversationHistory = parsed.history;
       setStatus("ok", "ready");
     } catch (e) {
