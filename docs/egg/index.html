@@ -356,7 +356,49 @@
     </li>
     <li>Refuse to overwrite an existing organism at the same path without <code>--force</code>.</li>
     <li>Accept legacy formats (<code>_format: "organism_egg"</code>, <code>_meta.type: "rappter.egg"</code>) and transparently map them to v1 with a migration warning.</li>
+    <li><b>Consume the shell</b> on successful hatch — move the egg file to <code>engine/eggs/hatched/{body.sha256}.egg</code>. The organism is alive now; the egg was the vessel, not the organism. Engines MAY offer a <code>--keep</code> flag to preserve the original (useful when distributing the same egg to multiple recipients).</li>
   </ol>
+</section>
+
+<section id="lifecycle">
+  <h2>The egg lifecycle</h2>
+  <p>An egg isn't a one-shot delivery — it's one phase of a two-phase cycle. An organism is either <b>at rest</b> (an egg on disk, portable, SHA-pinned) or <b>in motion</b> (alive on an engine, ticking, mutating). The two states are interconvertible.</p>
+
+<pre style="text-align:center; color: var(--dim); font-size: 13px; line-height: 1.4;"><code>   ┌─────────┐      hatch       ┌──────────┐      lay       ┌─────────┐
+   │   egg   │ ───────────────▶ │  living  │ ─────────────▶ │   egg   │
+   │ (stasis)│                  │ organism │   (new SHA,    │ (stasis)│
+   └─────────┘                  └──────────┘    parent=old) └─────────┘
+         │                           │                           │
+         │ shell archives to         │ ticks, mutates,           │ distributable
+         │ eggs/hatched/{sha}.egg    │ evolves on engine         │ again
+         ▼                           ▼                           ▼
+    lineage root                 real work happens          next generation</code></pre>
+
+  <div class="grid cols-3" style="margin-top: 24px;">
+    <div class="card">
+      <h3>🐣 hatch</h3>
+      <p class="dim">Cracks an egg into a living organism. Shell moves to <code>eggs/hatched/</code> — not deleted, archived, so future generations can reference it as parent.</p>
+      <p><code>--keep</code> opts out of archiving.</p>
+    </div>
+    <div class="card">
+      <h3>🥚 lay</h3>
+      <p class="dim">Packs a fresh egg from the currently-alive organism. Auto-wires <code>lineage.parent_egg_sha256</code> from the most recent archived shell of that species. Organism stays alive.</p>
+      <p>Snapshot, not death.</p>
+    </div>
+    <div class="card">
+      <h3>🧬 pack</h3>
+      <p class="dim">The low-level primitive. <code>lay</code> is <code>pack</code> + automatic lineage wiring. Use <code>pack</code> for genesis eggs (no parent). Use <code>lay</code> for every generation after.</p>
+    </div>
+  </div>
+  <p class="dim" style="margin-top: 16px;">An egg is a quantum of organism-at-rest. A living organism is the same organism in motion. Hatch puts it in motion. Lay puts it back at rest. The lineage chain walks itself.</p>
+
+  <div class="card" style="margin-top: 24px; border-left: 3px solid var(--accent);">
+    <h3>🧬 Eggs are evolutionary, not archival</h3>
+    <p>The egg you lay after a thousand ticks is <b>not the same egg you hatched</b>. Different SHA. Different body. The organism lived on your engine — population grew, memories accrued, the cartridge itself may have mutated — and <code>lay</code> captures that current state as a new egg.</p>
+    <p><code>lineage.parent_egg_sha256</code> is the only thing linking parent and child. It's ancestry, not version control.</p>
+    <p class="dim">This is why you'd run the same species on two engines. Hatch <code>main.rappterbook.egg</code> on my laptop and yours. A thousand ticks later, lay from each. You now have <b>two different organisms</b> with a shared ancestor — divergent evolution, captured as files you can trade.</p>
+    <p class="dim" style="margin-bottom: 0;">Reproduction is opt-in: the engine never lays eggs on its own. You decide when to snapshot a generation. But once you do, the child can travel, hatch elsewhere, and start its own lineage — carrying everything its parent learned.</p>
+  </div>
 </section>
 
 <section id="implement">

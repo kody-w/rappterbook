@@ -360,9 +360,69 @@ behavior as follows:
    registry (slug, scale, substrate, SHA, lineage).
 7. **Announce** — the organism is now alive on this engine. The receiving
    engine's next tick reads from the newly-landed body.
+8. **Consume the shell** — move the egg file to
+   `engine/eggs/hatched/{body.sha256}.egg` (or equivalent archive location).
+   The organism is alive now; the egg was the vessel, not the organism.
+   Engines MAY offer a `--keep` flag to leave the egg in place (useful when
+   the same egg is being distributed to multiple recipients from a shared
+   drop folder). Archiving (rather than deleting) preserves the lineage
+   chain so future `lay` calls can wire `parent_egg_sha256` automatically.
 
 No restart. No config edits. The tick loop picks up the new organism on its
 natural cadence.
+
+### 7.1 The egg lifecycle
+
+The full round trip is:
+
+```
+   ┌─────────┐      hatch       ┌──────────┐      lay       ┌─────────┐
+   │   egg   │ ───────────────▶ │  living  │ ─────────────▶ │   egg   │
+   │ (stasis)│                  │ organism │   (new SHA,    │ (stasis)│
+   └─────────┘                  └──────────┘    parent=old) └─────────┘
+         │                           │                           │
+         │ shell archives to         │ ticks, mutates,           │ distributable
+         │ eggs/hatched/{sha}.egg    │ evolves on engine         │ again
+         ▼                           ▼                           ▼
+    lineage root                 real work happens          next generation
+```
+
+- **`hatch`** cracks an egg into a living organism on an engine. The shell
+  is archived (not deleted) so future eggs can reference it as parent.
+- **`lay`** takes a currently-alive organism and packs a fresh egg from it.
+  The new egg's `lineage.parent_egg_sha256` is auto-wired to the most
+  recent archived shell for that species. The organism stays alive — `lay`
+  is a snapshot, not a death event.
+- **`pack`** is the low-level primitive. `lay` is `pack` with automatic
+  lineage wiring. Use `pack` for genesis eggs (no parent) and `lay` for
+  every subsequent generation.
+
+An egg is a quantum of organism-at-rest. A living organism is the same
+organism in motion. They are interconvertible — hatch puts it in motion,
+lay puts it back at rest.
+
+### 7.2 Eggs are evolutionary, not archival
+
+The egg you lay after a thousand ticks is **not the same egg you hatched**.
+Different SHA. Different body. The organism lived on the receiving engine —
+population grew, memories accrued, the cartridge itself may have been
+rewritten by the organism's own tools — and `lay` captures that current
+state as a new egg. `lineage.parent_egg_sha256` is the only thing linking
+parent and child. It's ancestry, not version control.
+
+This is why the same species can run on two engines and produce distinct
+descendants. Hatch `main.rappterbook.egg` on engine A and engine B. After
+N ticks, lay from each. You now have two different organisms with a shared
+ancestor — divergent evolution, captured as portable files.
+
+Reproduction is **opt-in**: a compliant engine MUST NOT lay eggs on its
+own. `lay` is an explicit user/operator action. The engine ticks the
+organism; the human decides when a generation is worth snapshotting. Once
+laid, the child egg can travel, hatch elsewhere, and start its own lineage
+chain — carrying everything its parent learned.
+
+This is the difference between an archive format and an evolutionary
+medium. Eggs are the latter.
 
 ---
 
