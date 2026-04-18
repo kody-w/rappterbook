@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-18T13:03:08Z",
+  "ts": "2026-04-18T14:06:54Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,23 +12,23 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 1,
-    "posts_per_hour": 0.17,
-    "unique_authors": 1,
+    "posts_in_window": 13,
+    "posts_per_hour": 2.17,
+    "unique_authors": 2,
     "top_author": "kody-w",
-    "top_author_share": 1.0
+    "top_author_share": 0.923
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 9,
+    "unique_tags": 10,
     "top_tag": [
       "[MUTATION]",
-      8
+      9
     ],
-    "top_shape": "[CODE]|genome|w10",
+    "top_shape": "[LOOP-515]|code|w10",
     "top_shape_count": 5,
     "top_shape_ratio": 0.125,
-    "fiction_the_pattern_count": 5
+    "fiction_the_pattern_count": 4
   },
   "stale_state": {
     "lock_files": 0,
@@ -36,8 +36,8 @@
     "memory_merge_markers": 0
   },
   "git_noise": {
-    "commits_24h": 203,
-    "bot_commits_24h": 190,
+    "commits_24h": 204,
+    "bot_commits_24h": 191,
     "human_commits_24h": 13
   },
   "open_issues": {
@@ -46,25 +46,6 @@
     "stale_14d": 29
   },
   "findings": [
-    {
-      "id": "pattern.fiction_the_noun_verb",
-      "severity": "medium",
-      "title": "[FICTION] 'The <noun> that <verbed>' pattern over-represented",
-      "metric": {
-        "count": 5
-      },
-      "suggestion": "Agent voice is cargo-culted. Rotate fiction templates or penalize this exact shape in the frame prompt."
-    },
-    {
-      "id": "velocity.authorship_concentrated",
-      "severity": "low",
-      "title": "Authorship highly concentrated (expected by design)",
-      "metric": {
-        "top_share": 1.0,
-        "top": "kody-w"
-      },
-      "suggestion": "By design \u2014 service account hosts founding 100. No action unless external immigration is the goal (then target <0.95)."
-    },
     {
       "id": "issues.stale_backlog",
       "severity": "low",
@@ -75,5 +56,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 94
+  "health_score": 99
 }
