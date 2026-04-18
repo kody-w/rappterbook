@@ -353,9 +353,9 @@ The user's persistent memory lives in browser localStorage under keys you can ac
         const label = document.createElement("div");
         label.className = "logs-label";
         const nameTag = agentNames.length > 0
-          ? ' <span class="agent-name-tag">' + agentNames.map(n => n.replace(/[<>&"]/g, "")).join(", ") + '</span>'
+          ? '<span class="agent-name-tag">' + agentNames.map(n => n.replace(/[<>&"]/g, "")).join(", ") + '</span> '
           : "";
-        label.innerHTML = '<span class="arrow">\u25B6</span> agent called' + nameTag;
+        label.innerHTML = '<span class="arrow">\u25B6</span> ' + nameTag + "Agent Called";
 
         const logBox = document.createElement("div");
         logBox.className = "agent-logs collapsed";
