@@ -1,31 +1,62 @@
-"""rapp_egg_agent.py — the portable driver for .rapp.egg (v1 EGG_SPEC).
+"""
+Rapp Egg Agent — the portable driver for .rapp.egg (v1 EGG_SPEC).
 
-One file. Drop it into any compliant hatcher — Virtual Brainstem, rapp-installer,
-openrappter, RAPP hippocampus/communityRAPP, any future rappter engine — and
-that hatcher GAINS egg capability without modifying its core.
+Drop this single file into any compliant hatcher — Virtual Brainstem,
+rapp-installer, openrappter, RAPP hippocampus/communityRAPP, any future
+rappter engine — and that hatcher gains full egg capability (export + hatch)
+without modifying its core. The agent.py IS the portability layer.
 
 Exposes two tools:
+  ExportRappEgg — pack the host's current rapp state as a v1 .rapp.egg
+  HatchRappEgg  — load a .rapp.egg (inline JSON or URL) into the host
 
-  ExportRappEgg    — pack the host's current rapp state as a v1 .rapp.egg
-  HatchRappEgg     — load a .rapp.egg (inline JSON or URL) into the host
+Environment-agnostic: detects Pyodide (browser) vs CPython (local) and
+reads/writes state through the host's native substrate. API key is NEVER
+packed per EGG_SPEC.md §9 — secrets stay local.
 
-Because the agent itself IS the egg driver, no hatcher needs special
-egg-handling code. Hatchers that can load agents can now export and
-import rapps through a uniform contract. The agent.py is the portability
-layer.
-
-Environment-agnostic: detects Pyodide (Virtual Brainstem) vs CPython
-(rapp-installer / server engines). Reads and writes state through the
-host's native substrate — browser localStorage or local filesystem.
-
-Conforms to https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md
-API key is NEVER packed or transmitted per §9. Secrets stay local.
+Canonical EGG_SPEC: https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md
 """
+
+# ═══════════════════════════════════════════════════════════════
+# RAPP AGENT MANIFEST — Do not remove. Used by registry builder.
+# ═══════════════════════════════════════════════════════════════
+__manifest__ = {
+    "schema": "rapp-agent/1.0",
+    "name": "@kody-w/rapp_egg_agent",
+    "version": "1.0.0",
+    "display_name": "Rapp Egg",
+    "description": "Portable driver for .rapp.egg (v1 EGG_SPEC). Export the current rapp state as a daemon-scale egg, or hatch an incoming egg into the host hatcher's substrate. Works identically on Virtual Brainstem (browser localStorage), rapp-installer (on-device filesystem), openrappter, and RAPP hippocampus. The agent IS the portability layer — no hatcher changes needed.",
+    "author": "Kody Wildfeuer",
+    "tags": [
+        "rapp-egg",
+        "egg-spec",
+        "portability",
+        "export",
+        "hatch",
+        "daemon",
+        "state-json",
+        "brainstem",
+        "hippocampus",
+        "communityRAPP",
+    ],
+    "category": "infrastructure",
+    "quality_tier": "community",
+    "requires_env": [],
+    "dependencies": ["@rapp/basic_agent"],
+}
+# ═══════════════════════════════════════════════════════════════
+
 import hashlib
 import json
 import os
 
-from agents.basic_agent import BasicAgent
+# Flexible BasicAgent import — works whether the hatcher exposes the base
+# class at `basic_agent` (rapp-installer layout) or `agents.basic_agent`
+# (Virtual Brainstem layout / rapp-installer via agents/ package).
+try:
+    from basic_agent import BasicAgent
+except ModuleNotFoundError:
+    from agents.basic_agent import BasicAgent
 
 
 # Environment detection — are we in Pyodide (browser) or CPython (local)?
