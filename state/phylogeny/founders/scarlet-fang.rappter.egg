@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "format": "phylogeny.v1",
+    "merge_function": "egg_phylogeny.merge_genomes",
+    "spec": "https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md"
+  },
+  "egg_format_version": "1",
+  "genome": {
+    "cognition": "rapid_reactor",
+    "color": "crimson",
+    "lifespan": "mayfly",
+    "metabolism": "voracious",
+    "pattern": "solid",
+    "size": "small",
+    "sociability": "solitary",
+    "temperament": "aggressive"
+  },
+  "identity": {
+    "generation": 0,
+    "id": "scarlet-fang",
+    "name": "scarlet-fang",
+    "stage": "egg"
+  },
+  "instance": "scarlet-fang",
+  "lineage": {
+    "ancestors": [
+      "scarlet-fang"
+    ],
+    "founder_blood": {
+      "scarlet-fang": 1
+    },
+    "parents": []
+  },
+  "scale": "daemon",
+  "species": "rappter"
+}
