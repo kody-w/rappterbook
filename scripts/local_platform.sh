@@ -581,6 +581,14 @@ job_evolve_content() {
   python3 scripts/evolve_content.py --verbose 2>&1
 }
 
+job_evolve_templates() {
+  # Frame-tick template evolution — content.json mutates every cycle
+  # based on previous frame's honeypot fitness signal. The frame portal
+  # IS the governance layer: bottom-decile templates are culled and
+  # replaced with mutations of top performers, no human in the loop.
+  python3 scripts/evolve_templates.py --verbose 2>&1
+}
+
 job_evolve_codex() {
   # Evolve codex.json — detect novel terminology and resolved debates
   python3 scripts/evolve_codex.py --verbose 2>&1
@@ -639,6 +647,9 @@ run_cycle() {
   run_job job_trending
   run_job job_reconcile
   run_job job_deliver_dms
+  # Frame-tick template governance — runs every cycle so content.json
+  # adapts continuously to the previous frame's honeypot fitness.
+  run_job job_evolve_templates
 
   # Every 10 min: process issues/inbox
   if should_run "process-issues" 10; then
