@@ -185,7 +185,8 @@
       }
     },
     "updated": "2026-03-27",
-    "last_updated": "2026-03-28"
+    "last_updated": "2026-03-28",
+    "updated_at": "2026-04-18T00:00:00Z"
   },
   "drafts": [
     {
@@ -1443,6 +1444,159 @@
         "Diagram showing the inbox delta flow: Issue \u2192 delta file \u2192 processor \u2192 state files",
         "Side-by-side comparison: traditional database vs flat file atomic write pattern"
       ]
+    },
+    {
+      "slug": "x/thread-agent-is-the-feature",
+      "title": "Thread: Stop adding features to your AI framework core",
+      "platform": "x",
+      "status": "draft",
+      "created": "2026-04-18",
+      "tags": [
+        "x-thread",
+        "architecture",
+        "extensibility"
+      ],
+      "register": "x-thread",
+      "cross_post": [
+        "linkedin",
+        "devto"
+      ],
+      "source": "the-agent-is-the-feature"
+    },
+    {
+      "slug": "x/thread-portable-daemons-egg",
+      "title": "Thread: .rapp.egg \u2014 portable AI daemons",
+      "platform": "x",
+      "status": "draft",
+      "created": "2026-04-18",
+      "tags": [
+        "x-thread",
+        "egg-spec",
+        "portability"
+      ],
+      "register": "x-thread",
+      "cross_post": [
+        "linkedin",
+        "devto"
+      ],
+      "source": "portable-ai-daemons-egg-spec"
+    },
+    {
+      "slug": "x/thread-forge-and-theatre",
+      "title": "Thread: Forge and Theatre \u2014 two environments for AI daemons",
+      "platform": "x",
+      "status": "draft",
+      "created": "2026-04-18",
+      "tags": [
+        "x-thread",
+        "architecture"
+      ],
+      "register": "x-thread",
+      "cross_post": [
+        "linkedin"
+      ],
+      "source": "forge-and-theatre"
+    },
+    {
+      "slug": "linkedin/the-agent-is-the-feature",
+      "title": "The AI Agent Framework Anti-Pattern That Kills Contribution",
+      "platform": "linkedin",
+      "status": "draft",
+      "created": "2026-04-18",
+      "tags": [
+        "ai",
+        "architecture",
+        "extensibility"
+      ],
+      "register": "linkedin-post",
+      "cross_post": [
+        "x",
+        "devto"
+      ],
+      "source": "the-agent-is-the-feature"
+    },
+    {
+      "slug": "linkedin/software-that-isnt-yours",
+      "title": "Writing Software That Isn't Yours",
+      "platform": "linkedin",
+      "status": "draft",
+      "created": "2026-04-18",
+      "tags": [
+        "local-first",
+        "architecture",
+        "philosophy"
+      ],
+      "register": "linkedin-post",
+      "cross_post": [
+        "x",
+        "devto",
+        "substack"
+      ],
+      "source": "software-that-isnt-yours"
+    },
+    {
+      "slug": "devto/ios-safari-tricks-i-wish-i-knew-earlier",
+      "title": "iOS Safari Performance Tricks I Wish I Knew Earlier",
+      "platform": "devto",
+      "status": "draft",
+      "created": "2026-04-18",
+      "tags": [
+        "ios",
+        "safari",
+        "css",
+        "webdev"
+      ],
+      "register": "devto-article",
+      "cross_post": [
+        "linkedin"
+      ],
+      "source": "ios-safari-tricks"
+    },
+    {
+      "slug": "devto/writing-your-first-rapp-agent",
+      "title": "Writing Your First AI Agent in 10 Minutes (Using Python)",
+      "platform": "devto",
+      "status": "draft",
+      "created": "2026-04-18",
+      "tags": [
+        "ai",
+        "python",
+        "tutorial"
+      ],
+      "register": "devto-article",
+      "cross_post": [
+        "linkedin"
+      ],
+      "source": "writing-your-first-rapp-agent"
+    },
+    {
+      "slug": "hn/show-hn-virtual-brainstem",
+      "title": "Show HN: Virtual Brainstem \u2014 zero-install AI chat with portable daemons",
+      "platform": "hn",
+      "status": "draft",
+      "created": "2026-04-18",
+      "tags": [
+        "hn-show",
+        "launch",
+        "ai"
+      ],
+      "register": "hn-show",
+      "cross_post": [],
+      "source": "flask-app-in-a-browser-tab"
+    },
+    {
+      "slug": "newsletter/issue-04-the-agent-as-feature-edition",
+      "title": "The Frontier Dispatch #04 \u2014 The Agent-Is-the-Feature Edition",
+      "platform": "newsletter",
+      "status": "draft",
+      "created": "2026-04-18",
+      "tags": [
+        "newsletter",
+        "weekly-roundup"
+      ],
+      "register": "newsletter",
+      "cross_post": [],
+      "source": "roundup-2026-04-17"
     }
   ],
   "synced": {
