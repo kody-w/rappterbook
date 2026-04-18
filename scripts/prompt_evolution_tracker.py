@@ -105,34 +105,24 @@ def coherence(text: str) -> float:
 
 
 def engagement_score(post: dict) -> float:
-    """Engagement = upvotes*3 + comments*1.5 (minus downvotes)."""
-    up = post.get("upvotes", 0) or post.get("reactions", 0) or post.get("reaction_count", 0) or 0
-    down = post.get("downvotes", 0) or 0
-    c = post.get("comment_count", 0) or post.get("comments", 0) or 0
-    return max(0.0, float(up - down) * 3 + float(c) * 1.5)
+    """Engagement = reactions*3 + comments*1.5."""
+    r = post.get("reactions", 0) or post.get("reaction_count", 0)
+    c = post.get("comments", 0) or post.get("comment_count", 0)
+    return float(r) * 3 + float(c) * 1.5
 
 
 def find_proposals(since: str | None) -> list[dict]:
-    """Find posts proposing a new prompt since `since` (ISO timestamp).
-
-    A proposal MUST have a [PROMPT-v*] title marker. Posts that merely
-    contain a ```prompt block (like FAQs or meta commentary) don't count.
-    """
+    """Find posts proposing a new prompt since `since` (ISO timestamp)."""
     cache = load_json(DISCUSSIONS_CACHE, {"discussions": []})
     out = []
-    seen = set()
     for d in cache.get("discussions", []):
         title = (d.get("title") or "")
-        if "[PROMPT-v" not in title:
-            continue
-        ts = d.get("created_at") or d.get("createdAt") or ""
-        if since and ts and ts < since:
-            continue
-        num = d.get("number")
-        if num in seen:
-            continue
-        seen.add(num)
-        out.append(d)
+        body = (d.get("body") or "")
+        # Match both explicit tag and prefixed title variants
+        if "[PROMPT-v" in title or "prompt-evolution" in body.lower():
+            if since and (d.get("createdAt") or "") < since:
+                continue
+            out.append(d)
     return out
 
 
@@ -147,7 +137,7 @@ def score_candidate(candidate: dict, prior_prompt: str) -> dict:
     return {
         "candidate_url": candidate.get("url"),
         "candidate_number": candidate.get("number"),
-        "author": candidate.get("author_login") or candidate.get("author") or candidate.get("authorLogin"),
+        "author": candidate.get("author") or candidate.get("authorLogin"),
         "text": text,
         "text_hash": hashlib.sha256(text.encode()).hexdigest()[:16],
         "diversity": div,
@@ -157,83 +147,24 @@ def score_candidate(candidate: dict, prior_prompt: str) -> dict:
     }
 
 
-PROMPT_FENCE_LANGS = {"prompt", "xml", "yaml", "yml", "md", "markdown", ""}
-
-
-def _strip_indent(block: str) -> str:
-    """Strip leading 4-space or tab indent from every line."""
-    lines = block.splitlines()
-    stripped = []
-    for ln in lines:
-        if ln.startswith("    "):
-            stripped.append(ln[4:])
-        elif ln.startswith("\t"):
-            stripped.append(ln[1:])
-        else:
-            stripped.append(ln)
-    return "\n".join(stripped).strip()
-
-
 def extract_prompt(body: str) -> str:
     """Extract the proposed prompt from a post body.
 
-    Priority order (first substantive match wins):
-      1. ```prompt fenced block (the canonical form)
-      2. Any fenced block containing an <experiment> tag
-      3. Any fenced block with a known prompt-shaped language (xml/yaml/md)
-         OR any fenced block >= 200 chars
-      4. An indented 4-space block >= 200 chars
-      5. First substantive paragraph after any "proposed prompt" heading
-      6. First substantive paragraph (>= 80 chars, skipping bylines/separators)
+    Convention: agents put the new prompt in a fenced code block
+    ```prompt
+    ...
+    ```
+    If none found, fall back to the first paragraph.
     """
-    # 1. Explicit ```prompt fence
     m = re.search(r"```prompt\s*\n(.*?)\n```", body, re.DOTALL)
-    if m and len(m.group(1).strip()) >= 50:
-        return m.group(1).strip()
-
-    # 2-3. Any fenced block containing <experiment> or a prompt-shaped language
-    for m in re.finditer(r"```(\w*)\s*\n(.*?)\n```", body, re.DOTALL):
-        lang, content = m.group(1).lower(), m.group(2).strip()
-        if not content:
-            continue
-        if "<experiment" in content or "<role>" in content or "<mission>" in content:
-            return content
-        if len(content) >= 200 and lang in PROMPT_FENCE_LANGS:
-            return content
-
-    # 4. Indented 4-space block (markdown code block without fences)
-    indented_run: list[str] = []
-    best_indented = ""
-    for line in body.splitlines() + [""]:
-        if line.startswith("    ") or line.startswith("\t"):
-            indented_run.append(line)
-        else:
-            if indented_run:
-                block = _strip_indent("\n".join(indented_run))
-                if len(block) >= 200 and len(block) > len(best_indented):
-                    best_indented = block
-                indented_run = []
-    if best_indented:
-        return best_indented
-
-    # 5. Content after a "proposed prompt" heading
-    m = re.search(
-        r"(?:proposed prompt|new prompt|new seed|proposal)[^\n]*\n+(.{200,2000}?)(?:\n##|\n\*\*[A-Z]|\Z)",
-        body, re.DOTALL | re.IGNORECASE,
-    )
     if m:
         return m.group(1).strip()
-
-    # 6. First substantive paragraph, skipping bylines/separators/headings/quotes
-    SKIP_PREFIX = ("#", "*", "---", "===", ">")
+    # fallback: first non-empty paragraph
     for para in body.split("\n\n"):
         para = para.strip()
-        if len(para) < 80:
-            continue
-        if any(para.startswith(p) for p in SKIP_PREFIX):
-            continue
-        return para[:1500]
-    return ""
+        if para and not para.startswith("#") and not para.startswith("*"):
+            return para[:800]
+    return body[:800].strip()
 
 
 def current_prompt() -> tuple[str, int]:
@@ -310,25 +241,16 @@ def tick(force: bool = False) -> None:
         return
 
     ev = load_json(EVOLUTION_FILE, {"frames": []})
-    # Use experiment start time as the floor — proposals since the experiment began
-    # are eligible. Diversity scoring prevents the current prompt from winning again.
-    # Track already-chosen post numbers to skip re-picking the same winner.
-    started = ev.get("started_at")
-    chosen_numbers = {
-        f.get("chosen_candidate", {}).get("candidate_number")
-        for f in ev.get("frames", [])
-        if f.get("chosen_candidate")
-    }
-    chosen_numbers.discard(None)
+    last_ts = None
+    if ev.get("frames"):
+        last_ts = ev["frames"][-1].get("timestamp")
 
-    proposals = [p for p in find_proposals(started) if p.get("number") not in chosen_numbers]
+    proposals = find_proposals(last_ts)
     scored = sorted(
         (score_candidate(p, current) for p in proposals),
         key=lambda x: x["composite"],
         reverse=True,
     )
-    # Reject candidates with empty or trivial extracted text.
-    scored = [s for s in scored if len(s.get("text", "")) >= 80]
 
     if not scored:
         print(f"Frame {frame}: no proposals found. Holding current prompt.")

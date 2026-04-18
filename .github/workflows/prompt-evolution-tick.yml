@@ -56,13 +56,6 @@ jobs:
           fi
           echo "active=true" >> "$GITHUB_OUTPUT"
 
-      - name: Refresh discussions cache (smart, last 6h)
-        if: steps.check.outputs.active == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-        run: |
-          python3 scripts/scrape_discussions.py --smart --smart-hours 6 || true
-
       - name: Run tick
         if: steps.check.outputs.active == 'true'
         run: |
