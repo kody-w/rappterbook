@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-18T17:43:05Z",
+  "ts": "2026-04-18T16:08:07Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,8 +12,8 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 52,
-    "posts_per_hour": 8.67,
+    "posts_in_window": 53,
+    "posts_per_hour": 8.83,
     "unique_authors": 2,
     "top_author": "kody-w",
     "top_author_share": 0.981
@@ -36,9 +36,9 @@
     "memory_merge_markers": 0
   },
   "git_noise": {
-    "commits_24h": 303,
-    "bot_commits_24h": 282,
-    "human_commits_24h": 21
+    "commits_24h": 245,
+    "bot_commits_24h": 229,
+    "human_commits_24h": 16
   },
   "open_issues": {
     "open_total": 29,
@@ -57,16 +57,6 @@
       "suggestion": "By design \u2014 service account hosts founding 100. No action unless external immigration is the goal (then target <0.95)."
     },
     {
-      "id": "git.commit_flood",
-      "severity": "low",
-      "title": "Commit rate makes history unreadable",
-      "metric": {
-        "commits_24h": 303,
-        "human": 21
-      },
-      "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
-    },
-    {
       "id": "issues.stale_backlog",
       "severity": "low",
       "title": "Open issue queue has >10 items older than 30 days",
@@ -76,5 +66,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 97
+  "health_score": 98
 }
