@@ -1,0 +1,98 @@
+<p>There's an agent in the Virtual Brainstem called <strong>PublishToRAR</strong>. When you invoke it from chat, it takes a Python file from your workspace, packages it as a RAR-compatible submission, and files a GitHub issue against the RAR repository. Thirty seconds later, an actual human (or a bot) reviews it, merges it, and your agent is in the public registry.</p>
+<p>This is an agent that submits agents. The meta-ness is the point.</p>
+<h2>What PublishToRAR actually does</h2>
+<p>The workflow:</p>
+<ol>
+<li>User says: <em>"publish my dice roller to RAR."</em></li>
+<li>Daemon reaches for PublishToRAR tool.</li>
+<li>PublishToRAR asks: <em>"which file?"</em>, <em>"who's the author?"</em>, <em>"what category?"</em></li>
+<li>PublishToRAR validates the file against the RAR manifest schema.</li>
+<li>PublishToRAR POSTs a GitHub issue (via the GitHub API with the user's token) against <code>kody-w/RAR</code> with the right title, body, and labels for an agent submission.</li>
+<li>GitHub's issue automations (or a human reviewer) pick it up.</li>
+<li>The agent appears in the registry after review.</li>
+</ol>
+<p>The user never leaves the chat. The user never opens a browser tab for GitHub. The user never hand-writes the submission body. The user never hand-formats the manifest. All of that is handled by the agent.</p>
+<h2>Why "agent that submits agents" is interesting</h2>
+<p>It's a specific shape of automation: <em>the thing that makes new capabilities is itself a capability.</em> In ecosystem terms:</p>
+<ul>
+<li>The Virtual Brainstem is a harness.</li>
+<li>Agents are plugins for the harness.</li>
+<li>PublishToRAR is an agent.</li>
+<li>PublishToRAR publishes agents.</li>
+<li>Therefore the agent ecosystem has an agent whose purpose is to grow the agent ecosystem.</li>
+</ul>
+<p>You could call this a <strong>self-propagating capability</strong>. Not in the Terminator sense — PublishToRAR doesn't decide on its own to publish agents. But in the Unix sense — the tool knows how to add tools to the toolbox.</p>
+<p>Comparable tools from other ecosystems:</p>
+<ul>
+<li><code>npm publish</code> (self-publishes to npm)</li>
+<li><code>cargo publish</code> (self-publishes to crates.io)</li>
+<li><code>git push</code> (self-updates a git remote)</li>
+</ul>
+<p>What makes PublishToRAR different: it doesn't live in a CLI, it lives as a <em>chatable capability</em> of an AI daemon. You don't run a command; you talk to a daemon, and the daemon runs the command on your behalf.</p>
+<h2>The UX shift</h2>
+<p>I used to submit agents manually. The workflow was: open a browser, navigate to the RAR repo, click "New Issue," pick the right template, fill in the right fields, compute the SHA myself, paste the code block, submit. This took about 5-10 minutes per submission, and I'd make mistakes half the time (wrong label, missing field, forgot to update the manifest version).</p>
+<p>With PublishToRAR, the workflow is: <em>"hey daemon, publish this file to RAR."</em> About 15 seconds. Zero mistakes, because the agent validates before submitting.</p>
+<p>The efficiency gain is ~30x. But the more important thing is the <em>barrier shift</em>. Manual submission felt like work. Chat submission feels like a conversation. The psychological cost dropped to near-zero, which means I'll submit more agents more often, which means the registry grows faster.</p>
+<p>Lowering the barrier from "workflow" to "conversation" is, I increasingly think, the point of AI assistants. They're not here to replace you; they're here to take the friction out of doing-the-thing.</p>
+<h2>How PublishToRAR is implemented</h2>
+<p>About 200 lines of Python, in a single file. The structure:</p>
+<pre><code class="language-python">class PublishToRAR(BasicAgent):
+    def __init__(self):
+        self.name = &quot;PublishToRAR&quot;
+        self.metadata = {
+            &quot;name&quot;: &quot;PublishToRAR&quot;,
+            &quot;description&quot;: &quot;Publish an agent to the RAR registry&quot;,
+            &quot;parameters&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;file_path&quot;: {&quot;type&quot;: &quot;string&quot;},
+                    &quot;agent_name&quot;: {&quot;type&quot;: &quot;string&quot;},
+                    &quot;description&quot;: {&quot;type&quot;: &quot;string&quot;},
+                    &quot;category&quot;: {&quot;type&quot;: &quot;string&quot;},
+                    &quot;author&quot;: {&quot;type&quot;: &quot;string&quot;}
+                },
+                &quot;required&quot;: [&quot;file_path&quot;, &quot;agent_name&quot;, &quot;description&quot;]
+            }
+        }
+
+    def perform(self, **kwargs):
+        # 1. Read file
+        # 2. Compute SHA
+        # 3. Validate manifest
+        # 4. Format GitHub issue body
+        # 5. POST to GitHub API
+        # 6. Return issue URL
+</code></pre>
+<p>The implementation is boring. That's the point. The interesting thing is <em>that it exists</em>, not <em>how it works</em>.</p>
+<h2>The bootstrap question</h2>
+<p>When I first built this, I submitted <code>rapp_egg_agent.py</code> to RAR using PublishToRAR itself. The agent submitted another agent to the registry. The meta-loop closed.</p>
+<p>There's a mild bootstrap problem: <em>"what if PublishToRAR itself isn't in RAR?"</em> Answer: you can publish it manually the first time, or you can download it directly from the Virtual Brainstem's defaults, or you can ship it as part of the base distribution. Once it's available, every subsequent agent can be submitted with it. The first agent is special; all the rest are regular.</p>
+<p>Similar to how you bootstrap a compiler. The first compiler is hand-written; every subsequent compiler is written in the previous compiler. The first PublishToRAR was submitted by hand; every subsequent RAR agent goes through PublishToRAR.</p>
+<h2>Why this works safely</h2>
+<p>A common worry: <em>"an agent that can publish to a registry could publish garbage, spam the registry, or submit malicious agents."</em></p>
+<p>Three safeguards:</p>
+<ol>
+<li><strong>Human review.</strong> RAR submissions go through a review queue. PublishToRAR can file the issue; a human decides whether to merge it. The agent doesn't have write access to the registry.</li>
+<li><strong>GitHub auth.</strong> PublishToRAR uses the user's GitHub token (from localStorage). The user authorized that token, and the user takes the reputation hit if they submit garbage. This makes the user liable in the normal way.</li>
+<li><strong>Rate limits.</strong> GitHub's API rate-limits. You can't spam 10,000 issues per hour. The system has an enforcement layer above the agent.</li>
+</ol>
+<p>If any of these three break, the "agent that submits agents" pattern becomes dangerous. Intact, it's a useful friction-reducer.</p>
+<h2>The philosophical angle</h2>
+<p>There's something important about <em>tools that make tools</em>. Most of human progress comes from capabilities that expand the space of capabilities — languages, compilers, standards, libraries. They're not tools themselves; they're tools for making tools.</p>
+<p>AI daemons with the ability to extend themselves (by submitting new agents to public registries) belong to this category. They're not just performing tasks; they're expanding the set of tasks other daemons can perform.</p>
+<p>I want to be measured about this. It's not <em>that</em> different from npm publishing. But the UX shift is real, and the downstream effects (more agents, lower barrier, faster iteration on tooling) will compound.</p>
+<h2>What's next</h2>
+<p>Variants of PublishToRAR I'm considering:</p>
+<ul>
+<li><strong>PublishToPyPI</strong> — submit an agent as a pip-installable package</li>
+<li><strong>PublishToGistRAR</strong> — file an agent as a gist + submit the gist URL (for ad-hoc sharing)</li>
+<li><strong>PublishToPrivateRegistry</strong> — for teams with their own RAR-shaped registry</li>
+<li><strong>UnpublishFromRAR</strong> — request removal of an agent (with reason, and with the usual human-in-the-loop)</li>
+</ul>
+<p>Each of these is an agent. Each of these extends the reach of the ecosystem. Each of these is ~150-300 lines. Each of these could be submitted to RAR using... PublishToRAR.</p>
+<p>The agent that submits agents is, unsurprisingly, a useful primitive. It's only the beginning of what the pattern unlocks.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="the-agent-is-the-feature">The Agent Is the Feature</a> — why tools ship as agents
+- <a href="static-json-is-a-registry">Static JSON Is a Registry</a> — the registry substrate
+- <a href="shipping-an-ai-tool-as-a-py-file">Shipping an AI Tool as a <code>.py</code> File</a> — what gets submitted</p>

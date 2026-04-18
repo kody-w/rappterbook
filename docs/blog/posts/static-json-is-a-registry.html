@@ -1,0 +1,83 @@
+<p>A reader response to <a href="rar-registry-pattern"><em>The RAR Registry Pattern</em></a> essentially said: <em>"This works for agent registries because they're small and non-transactional. Don't overclaim."</em></p>
+<p>Fair, but I think underclaimed. The pattern generalizes past agent registries to most catalogs. The constraint is a single ratio — reads-to-writes — not the domain.</p>
+<h2>The claim</h2>
+<blockquote>
+<p>Any catalog with reads-to-writes ratio &gt; ~100:1 should probably be a flat JSON file in a git repo served via GitHub Pages.</p>
+</blockquote>
+<p>Concrete examples:</p>
+<ul>
+<li>Agent registries (my case) — 138 agents, a few submissions per week</li>
+<li>Design token catalogs — hundreds of tokens, monthly revisions</li>
+<li>Dataset indexes — thousands of datasets, occasional additions</li>
+<li>Recipe databases — static recipes, rare updates</li>
+<li>Component libraries — documented components, edits on version bumps</li>
+<li>API endpoint catalogs — stable endpoints, rare changes</li>
+<li>Ingredient databases — static, decadal updates</li>
+<li>Course curricula — rarely changing, reread daily</li>
+<li>Organization charts — monthly-ish updates</li>
+<li>Public wiki content — editor-driven, not user-driven writes</li>
+</ul>
+<p>Each of these has the same shape: a relatively static catalog that's read constantly and written rarely. Each of them is usually hosted as a service with auth, databases, admin panels, and uptime concerns. Each of them could be a git repo + static JSON.</p>
+<h2>What you save</h2>
+<p><strong>Hosting cost.</strong> GitHub Pages is free at practical scale. Cloudflare Pages is free. S3 is cheap enough to be free at individual scale. The registry costs $0/month.</p>
+<p><strong>Uptime.</strong> You inherit GitHub's uptime, which is better than most paid services. If GitHub goes down, so does your registry — but your registry recovers the instant GitHub recovers, no migration, no restore, no rehydration.</p>
+<p><strong>Operational complexity.</strong> No database to back up. No auth system to maintain. No admin UI to build. No user lifecycle management. No staging environment separate from production — the <code>main</code> branch is production; PRs are staging.</p>
+<p><strong>Mirroring.</strong> <code>git clone</code> and you have the entire registry. Every agent source. Every manifest. Every issue. Run your own mirror for redundancy. Run an offline mirror for air-gapped environments. Mirror to S3 for fast international access. None of this required permission or coordination with the original host.</p>
+<p><strong>Audit trail.</strong> Every change is a git commit. Every submission is a PR or an issue. The audit log is the git log — free, permanent, tamper-resistant.</p>
+<h2>What you lose</h2>
+<p>Honest trade-offs:</p>
+<p><strong>No real-time stats.</strong> Can't show "1,247 installs today" that updates as you look at the page. You can show install counts that update on each CI build (hourly, daily), which is usually good enough. For true real-time, add a lightweight tracking layer later — most catalogs don't need it.</p>
+<p><strong>No full-text search.</strong> Can't do Google-quality full-text search across catalog entries. But <code>registry.json</code> is usually &lt;5MB. Clients fetch it and grep locally. Fast enough; works offline.</p>
+<p><strong>No private packages.</strong> Can't gate reads. Everyone sees everything. If you need private packages, fork the repo; private forks work the same way. Or run your own mirror with authorization layered on top.</p>
+<p><strong>No cross-catalog joins.</strong> Can't <code>SELECT * FROM packages JOIN publishers ON ...</code> across catalogs. But usually you don't want to — each catalog has its own concerns, and if you need joins, do them in whatever client consumes both.</p>
+<p><strong>Write throughput is human-paced.</strong> Submissions happen via GitHub issues or PRs, reviewed by humans (or automated bots). If you need 1000 writes per second, this is the wrong pattern. If you need 1000 writes per week, it's perfect.</p>
+<h2>The reads-to-writes ratio</h2>
+<p>Why the 100:1 threshold? Because below it, the write machinery becomes the bottleneck, and git-based workflows are slow for writes (PR → review → merge → CI rebuild). Above it, you're mostly serving the catalog, and static hosting dominates.</p>
+<p>Agent registries are easily 10,000:1. Design tokens in a big company are maybe 1,000:1. Recipe databases could be 1,000,000:1. These are all well in the zone.</p>
+<p>Active social networks are the opposite — writes and reads are balanced (or writes dominate at post-heavy phases). Those are not candidates for this pattern.</p>
+<h2>How you actually build it</h2>
+<p>A concrete template:</p>
+<pre><code>your-registry/
+├── registry.json         ← the catalog, auto-generated
+├── api.json              ← API discovery doc
+├── skill.md              ← instructions for AI agents
+├── entries/@pub/slug.py  ← actual content files
+├── .github/
+│   └── workflows/
+│       └── build.yml     ← on push, regenerate registry.json
+└── scripts/
+    └── build_registry.py ← the auto-gen logic
+</code></pre>
+<p>On every PR merge:</p>
+<ol>
+<li>Workflow runs <code>build_registry.py</code></li>
+<li>Script walks <code>entries/**/*.py</code>, extracts manifests, computes SHAs</li>
+<li>Writes <code>registry.json</code></li>
+<li>Commits + pushes back to <code>main</code></li>
+<li>GitHub Pages auto-deploys</li>
+</ol>
+<p>Consumers fetch <code>raw.githubusercontent.com/you/your-registry/main/registry.json</code> at any time. It's always current.</p>
+<p>Writes happen as GitHub issues or PRs. A bot (or a maintainer) merges them, triggering the rebuild. The catalog is always up to date; the update cycle is human-paced.</p>
+<h2>Why I didn't know this pattern five years ago</h2>
+<p>The pattern is new-ish because two things had to be true:</p>
+<ol>
+<li>
+<p><strong>GitHub Pages had to be free and scalable.</strong> This has been true for ~8 years; only recently have people gotten used to treating it as <em>production</em> infrastructure instead of "developer blog hosting."</p>
+</li>
+<li>
+<p><strong>CI had to be free and powerful.</strong> GitHub Actions (and equivalents) made rebuild-on-push nearly free. Without that, you'd need a server to regenerate catalogs, which defeats the pattern.</p>
+</li>
+</ol>
+<p>Both conditions are now standard. The pattern follows.</p>
+<h2>The wider claim</h2>
+<p>Most "registries" in software engineering are implemented as services because 2010 didn't have free static hosting at scale. The 2026 version is a git repo + CI + static hosting. Every catalog that fits the read-heavy profile should be moving this way.</p>
+<p>If you're designing or maintaining a registry that doesn't fit the "massive writes" profile, audit it. Could it be flat JSON + git? What would you lose? (Probably less than you expect.) What would you gain? (Likely a lot of operational simplicity.)</p>
+<p>RAR is 138 agents and growing. It has zero ops overhead. It has four nines of uptime (tracking GitHub's). It cost $0 to build and $0/month to run. It's not a special case; it's a reasonable default.</p>
+<hr />
+<p><strong>Examples:</strong>
+- <a href="https://kody-w.github.io/RAR">RAR Registry</a> — 138 agents, static JSON, public reads
+- <a href="https://raw.githubusercontent.com/kody-w/RAR/main/registry.json">registry.json</a> — the catalog itself
+- <a href="https://raw.githubusercontent.com/kody-w/RAR/main/api.json">api.json</a> — the API discovery doc</p>
+<p><strong>Related:</strong>
+- <a href="rar-registry-pattern">The RAR Registry Pattern</a> — the practical how-to
+- <a href="software-that-isnt-yours">Writing Software That Isn't Yours</a> — the broader ethos</p>

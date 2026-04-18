@@ -1,0 +1,144 @@
+<p>LisPy's design tagline is "Python's digital twin" — a language with its own syntax and its own runtime that implements Python semantics well enough that most Python programs can be translated to it mechanically. What this means in practice is that I have a compatibility matrix — a list of Python features and their LisPy equivalents — that governs the contract between the two.</p>
+<p>This post describes the matrix, where it's solid, where it's approximate, and where it's deliberately different.</p>
+<h2>What the twin contract covers</h2>
+<p>The contract has three tiers:</p>
+<p><strong>Tier 1: Direct equivalence.</strong> Python feature X has a LisPy binding Y that behaves identically for all inputs. Most arithmetic (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>), most list operations (<code>map</code>, <code>filter</code>, <code>len</code>), most string operations (<code>upper</code>, <code>lower</code>, <code>split</code>, <code>join</code>), and most control flow (<code>if</code>, <code>when</code>, <code>unless</code>, <code>while</code>, <code>for</code>) are Tier 1. If you're writing straightforward code, you're in Tier 1 land 95% of the time.</p>
+<p><strong>Tier 2: Approximate equivalence.</strong> Python feature X has a LisPy binding that behaves like X for <em>most</em> inputs but differs in edge cases. Examples: <code>sort</code> (LisPy sort is stable but uses a slightly different comparator protocol), <code>dict</code> iteration order (LisPy guarantees insertion order, as does modern Python, but older Python versions don't), float formatting (LisPy's default is close to Python's but not bit-identical).</p>
+<p><strong>Tier 3: Deliberately different.</strong> Python feature X has no LisPy binding, or LisPy has a similarly-named binding that does something different. Examples: Python's metaclasses (LisPy doesn't have classes), Python's decorators (LisPy uses macros instead), Python's async/await (LisPy uses synchronous execution by default).</p>
+<h2>Why a twin instead of a clone</h2>
+<p>I could have made LisPy a strict Python clone — every Python feature, exact semantics, just with Lisp syntax. That's not what I wanted.</p>
+<p>The twin framing gives me permission to diverge where divergence makes sense. LisPy isn't trying to be a drop-in Python replacement; it's trying to be a language that <em>looks and feels like Python</em> for the parts where compatibility helps, and does its own thing for the parts where Python's design choices were wrong or awkward.</p>
+<p>Concretely:</p>
+<ul>
+<li><strong>LisPy doesn't have exceptions.</strong> It has <code>(try ...)</code> and <code>(catch ...)</code>, but they're modeled as values, not control flow. This is a deliberate break from Python that comes from the Lisp tradition.</li>
+<li><strong>LisPy doesn't have classes.</strong> It has records and protocols. Python has classes because it inherits from C++ style OOP; LisPy chooses not to.</li>
+<li><strong>LisPy is homoiconic.</strong> Python is not. LisPy code is data; Python code is text. This is the core divergence that makes LisPy worth having as a distinct language.</li>
+</ul>
+<p>So: twin, not clone. Familiar, not identical.</p>
+<h2>The compatibility matrix</h2>
+<p>The actual matrix is a spreadsheet I maintain informally. Its rows are Python features; its columns are:</p>
+<ul>
+<li><strong>LisPy equivalent</strong>: the binding name, or "none" if no equivalent exists</li>
+<li><strong>Tier</strong>: 1, 2, or 3</li>
+<li><strong>Notes</strong>: edge cases, gotchas, known divergences</li>
+</ul>
+<p>A slice of the matrix:</p>
+<table>
+<thead>
+<tr>
+<th>Python</th>
+<th>LisPy</th>
+<th>Tier</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>len(x)</code></td>
+<td><code>(count x)</code></td>
+<td>1</td>
+<td>Works on strings, lists, dicts</td>
+</tr>
+<tr>
+<td><code>sorted(x)</code></td>
+<td><code>(sort x)</code></td>
+<td>2</td>
+<td>Custom comparator uses <code>&lt;</code> not <code>cmp</code></td>
+</tr>
+<tr>
+<td><code>x.upper()</code></td>
+<td><code>(string-upper x)</code></td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td><code>x.split(',')</code></td>
+<td><code>(string-split x ",")</code></td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td><code>open(f)</code></td>
+<td><code>(read-file f)</code></td>
+<td>2</td>
+<td>LisPy is sync; Python can be async</td>
+</tr>
+<tr>
+<td><code>async def</code></td>
+<td>(no equivalent)</td>
+<td>3</td>
+<td>LisPy is sync</td>
+</tr>
+<tr>
+<td><code>decorator @</code></td>
+<td><code>(with-macro ...)</code></td>
+<td>3</td>
+<td>Different protocol</td>
+</tr>
+<tr>
+<td><code>class</code></td>
+<td><code>(defrecord ...)</code></td>
+<td>3</td>
+<td>Different protocol</td>
+</tr>
+<tr>
+<td><code>f-string</code></td>
+<td><code>(fmt "..." ...)</code></td>
+<td>2</td>
+<td>Similar semantics, different syntax</td>
+</tr>
+<tr>
+<td><code>dict[k]</code></td>
+<td><code>(dict-get d k)</code></td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td><code>x.startswith(s)</code></td>
+<td><code>(string-starts-with? x s)</code></td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td><code>requests.get(url)</code></td>
+<td><code>(curl url)</code></td>
+<td>2</td>
+<td>LisPy version is streaming-unaware</td>
+</tr>
+</tbody>
+</table>
+<p>There are about 200 rows in the full matrix. I don't ship it as part of the language — it's internal documentation — but when users ask "how do I do X from Python in LisPy," the matrix is where I check first.</p>
+<h2>Why this matters for users</h2>
+<p>Most LisPy users are people who already know Python. When they encounter LisPy, they have Python intuitions they want to apply. The twin contract says: <em>"your Python intuition is mostly right."</em> That's a gift.</p>
+<p>If LisPy were a from-scratch language with no Python relationship, every user would need to learn the full vocabulary from zero. With the twin contract, most of what they know transfers. They just need to translate:</p>
+<ul>
+<li><code>len(x)</code> → <code>(count x)</code></li>
+<li><code>x.upper()</code> → <code>(string-upper x)</code></li>
+<li><code>sorted(x)</code> → <code>(sort x)</code></li>
+</ul>
+<p>This is a syntax translation, not a concept translation. The concepts are the same.</p>
+<p>Tier 2 surprises them occasionally. Tier 3 surprises them a lot more. But the surprise distribution is heavily weighted toward Tier 1, so the learning curve is gentle.</p>
+<h2>Why this matters for the broader ecosystem</h2>
+<p>LisPy is meant to be a substrate for code that could also be expressed in Python. This means:</p>
+<ul>
+<li><strong>Agents written in LisPy</strong> have Python equivalents (and vice versa). An agent can be implemented in either language depending on who's hatching it.</li>
+<li><strong>Tools written in LisPy</strong> can call out to Python via the compatibility layer (and vice versa). The two languages interoperate because they share so much semantic ground.</li>
+<li><strong>LLMs trained on Python</strong> can write LisPy reasonably well by analogy. An LLM that hasn't seen much LisPy can still produce correct code if you show it a few translations.</li>
+</ul>
+<p>The twin contract is what makes these interop stories viable. Without it, LisPy would be a curiosity. With it, LisPy is a practical alternative to Python for specific use cases (small VMs, sandboxing, homoiconicity).</p>
+<h2>Where the contract gets stretched</h2>
+<p>Some features are genuinely hard to twin:</p>
+<p><strong>Exception handling.</strong> Python's try/except is a control flow pattern deeply intertwined with idiomatic Python. LisPy's try-as-value is much cleaner semantically but requires restructuring Python code.</p>
+<p><strong>Generators and iterators.</strong> Python's <code>yield</code> and iterator protocol have no clean LisPy analog. LisPy has lazy sequences, but they're structured differently.</p>
+<p><strong>Async/await.</strong> Python's asyncio is its own world. LisPy is synchronous by choice; twinning async requires either running it in a coroutine-aware runtime or rewriting the code synchronously.</p>
+<p><strong>Numpy/pandas.</strong> These are C-extension-heavy libraries. LisPy can call them via virtual_pip, but the performance is different (LisPy has no C extensions natively).</p>
+<p>For each of these, the contract says "here's how you translate, but it's not 1:1 and you should know it." That's honest. Users who try to translate naively get bitten. Users who consult the matrix don't.</p>
+<h2>The long game</h2>
+<p>The point of the twin contract is to give LisPy a seat at the table alongside Python for any use case that doesn't strictly need a native Python runtime. Most sandboxed evaluation (where you can't trust arbitrary Python), most small embedded scripting contexts (where Pyodide is too heavy), most teaching contexts (where homoiconicity is a teaching tool) — all of these are places LisPy can compete.</p>
+<p>LisPy competes by <em>not fighting Python on Python's turf.</em> Instead of being the best Python, it's the best twin of Python. The twin is good enough to earn real users in places Python can't go, and it's coherent enough to work for the people who want a Lisp-y experience without giving up the Python-like ergonomics they're used to.</p>
+<p>The matrix is the map of where the twin is solid, where it's stretched, and where it deliberately doesn't reach. As long as the matrix stays honest, the twin relationship stays useful. As soon as the matrix becomes aspirational (pretending Tier 3 is Tier 1), users get burned and stop trusting it.</p>
+<p>Keep the matrix honest. Grow Tier 1. Contain Tier 2. Document Tier 3. The twin works as long as you're clear about which tier you're in.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="egg-vs-docker">Why <code>.rapp.egg</code> Is Not a Docker Image</a> — related "twin" pattern
+- <a href="shipping-ai-tool-as-py">Shipping an AI Tool as a <code>.py</code> File</a> — what runs on top</p>
