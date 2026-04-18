@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Virtual Brainstem — RAPP in your browser</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Brainstem">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0d1117">
+<meta name="color-scheme" content="dark">
 <style>
   :root {
     --bg: #0d1117; --fg: #c9d1d9; --accent: #58a6ff;
@@ -12,11 +18,22 @@
     --user: #58a6ff; --assistant: #3fb950; --tool: #f0883e;
   }
   * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
+  html, body {
+    height: 100%;
+    /* iOS dynamic viewport — accounts for the address bar */
+    height: 100dvh;
+    margin: 0;
+    /* Safe-area so the notch + home-indicator don't clip content */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    background: var(--bg);
+    overscroll-behavior: none;
+  }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
     background: var(--bg); color: var(--fg); line-height: 1.5;
     display: flex; flex-direction: column;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
   }
 
   header {
@@ -36,17 +53,43 @@
   header button {
     background: var(--bg); color: var(--fg);
     border: 1px solid var(--border); border-radius: 4px;
-    padding: 0.35rem 0.75rem; font-family: inherit; font-size: 0.85rem; cursor: pointer;
+    padding: 0.5rem 0.9rem; font-family: inherit; font-size: 14px; cursor: pointer;
+    min-height: 38px; min-width: 38px;
   }
   header button:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 800px) {
+    header { padding: 0.5rem 0.75rem; gap: 0.5rem; }
+    header h1 { font-size: 1rem; }
+    header .sub { display: none; }  /* tagline hidden on narrow screens */
+  }
 
   main {
     flex: 1; display: grid; grid-template-columns: 1fr 320px; gap: 0; min-height: 0;
+    position: relative;  /* anchor for mobile drawer */
   }
   @media (max-width: 800px) {
     main { grid-template-columns: 1fr; }
-    aside { display: none; }
-    aside.open { display: flex; }
+    /* Mobile: sidebar becomes a slide-over drawer so chat stays visible */
+    aside {
+      position: absolute;
+      top: 0; bottom: 0; right: 0;
+      width: min(92vw, 380px);
+      z-index: 50;
+      transform: translateX(100%);
+      transition: transform 0.22s ease-out;
+      box-shadow: -4px 0 16px rgba(0, 0, 0, 0.4);
+      border-left: 1px solid var(--border);
+    }
+    aside.open { transform: translateX(0); }
+    /* Backdrop behind the drawer to dismiss by tap */
+    .drawer-backdrop {
+      position: absolute; inset: 0; z-index: 40;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.22s ease-out;
+    }
+    aside.open ~ .drawer-backdrop,
+    body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
   }
 
   #chat {
@@ -56,6 +99,11 @@
   #messages {
     flex: 1; overflow-y: auto; padding: 1rem 1.5rem;
     display: flex; flex-direction: column; gap: 0.75rem;
+    -webkit-overflow-scrolling: touch;  /* momentum scroll on iOS */
+  }
+  @media (max-width: 800px) {
+    #messages { padding: 0.75rem 0.9rem; gap: 0.5rem; }
+    .msg .body { padding: 0.6rem 0.75rem; font-size: 15px; }
   }
   .msg { max-width: 800px; }
   .msg .role { font-size: 0.72rem; opacity: 0.7; margin-bottom: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -78,18 +126,25 @@
     display: flex; gap: 0.5rem; padding: 0.75rem 1.5rem;
     border-top: 1px solid var(--border); background: var(--panel);
   }
+  @media (max-width: 800px) {
+    #input-area { padding: 0.6rem 0.75rem; gap: 0.4rem; }
+  }
   #input {
-    flex: 1; resize: none; min-height: 2.5rem; max-height: 160px;
-    padding: 0.6rem 0.8rem;
+    flex: 1; resize: none; min-height: 44px; max-height: 160px;
+    padding: 0.7rem 0.8rem;
     background: var(--bg); color: var(--fg);
     border: 1px solid var(--border); border-radius: 6px;
-    font-family: inherit; font-size: 0.95rem;
+    font-family: inherit;
+    /* 16px prevents iOS Safari auto-zoom on focus */
+    font-size: 16px;
   }
   #input:focus { border-color: var(--accent); outline: none; }
   button.send {
     background: var(--accent); color: var(--bg);
     border: none; padding: 0 1.2rem; border-radius: 6px;
     font-weight: 700; font-family: inherit; cursor: pointer;
+    min-height: 44px; min-width: 70px;
+    font-size: 15px;
   }
   button.send:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -103,25 +158,45 @@
   aside section { padding: 0 1rem 1rem 1rem; border-bottom: 1px solid var(--border); }
   aside label { display: block; font-size: 0.8rem; opacity: 0.8; margin: 0.4rem 0 0.2rem; }
   aside input[type="text"], aside input[type="password"], aside select, aside textarea {
-    width: 100%; padding: 0.4rem 0.6rem;
+    width: 100%; padding: 0.55rem 0.7rem;
     background: var(--bg); color: var(--fg);
     border: 1px solid var(--border); border-radius: 4px;
-    font-family: inherit; font-size: 0.85rem;
+    font-family: inherit;
+    /* 16px avoids iOS auto-zoom-on-focus */
+    font-size: 16px;
+    min-height: 40px;
   }
   aside textarea { resize: vertical; min-height: 80px; }
   aside button {
     background: var(--bg); color: var(--fg);
     border: 1px solid var(--border); border-radius: 4px;
-    padding: 0.35rem 0.75rem; font-family: inherit; font-size: 0.8rem;
+    padding: 0.5rem 0.85rem; font-family: inherit; font-size: 14px;
     cursor: pointer; margin: 0.3rem 0.3rem 0 0;
+    min-height: 38px;
   }
   aside button.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 600; }
   aside button:hover { border-color: var(--accent); color: var(--accent); }
   aside button.primary:hover { filter: brightness(1.1); color: var(--bg); }
 
   .agent-item {
-    display: flex; align-items: center; gap: 0.4rem;
-    padding: 0.3rem 0; font-size: 0.85rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.4rem 0; font-size: 14px;
+    min-height: 32px;
+  }
+  .agent-item input[type="checkbox"] {
+    width: 20px; height: 20px; margin: 0;  /* bigger tap target on touch */
+  }
+  @media (max-width: 800px) {
+    #rar-list { max-height: 50vh !important; }  /* more room on narrow screens */
+    #rar-list > div {
+      padding: 0.6rem 0.7rem !important;
+      gap: 0.5rem !important;
+    }
+    #rar-list button {
+      min-height: 36px !important; min-width: 64px !important;
+      font-size: 13px !important; padding: 0.4rem 0.7rem !important;
+    }
+    #rar-search { font-size: 16px; min-height: 40px; }
   }
   .agent-item input[type="checkbox"] { margin: 0; }
   .agent-name { flex: 1; }
@@ -192,6 +267,7 @@
   <h1>Virtual Brainstem</h1>
   <span id="status" class="status loading">loading…</span>
   <span class="sub">A RAPP brainstem in your browser. Agents hot-load. Keys stay local.</span>
+  <button id="toggle-agents" title="Browse + install agents from the RAR registry">Agents</button>
   <button id="toggle-sidebar">Settings</button>
 </header>
 
@@ -208,6 +284,8 @@
       <button id="send" class="send" disabled>Send</button>
     </div>
   </div>
+
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
 
   <aside id="sidebar">
     <section>
@@ -636,9 +714,43 @@ os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_S
   }
 
   // --- Boot ---
-  $("toggle-sidebar").addEventListener("click", () => {
-    $("sidebar").classList.toggle("open");
+  // Drawer open/close — mobile treats the sidebar as a slide-over.
+  // Same button works on desktop (no visual effect since sidebar is always visible).
+  function openDrawer(scrollToId) {
+    $("sidebar").classList.add("open");
+    document.body.classList.add("drawer-open");
+    if (scrollToId) {
+      // Wait for the transition, then scroll the requested section into view
+      setTimeout(() => {
+        const el = document.getElementById(scrollToId);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 260);
+    }
+  }
+  function closeDrawer() {
+    $("sidebar").classList.remove("open");
+    document.body.classList.remove("drawer-open");
+  }
+  function toggleDrawer(scrollToId) {
+    if ($("sidebar").classList.contains("open")) closeDrawer();
+    else openDrawer(scrollToId);
+  }
+
+  $("toggle-sidebar").addEventListener("click", () => toggleDrawer());
+  $("toggle-agents").addEventListener("click", () => {
+    // Auto-load the RAR registry on first tap so mobile users don't have
+    // to find the refresh button.
+    if (!rarRegistry) {
+      try { rarLoadRegistry(); } catch (_) {}
+    }
+    if (window.matchMedia("(max-width: 800px)").matches) {
+      openDrawer("rar-search");
+    } else {
+      $("rar-search").scrollIntoView({ behavior: "smooth", block: "start" });
+      $("rar-search").focus();
+    }
   });
+  $("drawer-backdrop").addEventListener("click", closeDrawer);
 
   // --- RAR Registry browser ---
   // Pulls https://raw.githubusercontent.com/kody-w/RAR/main/registry.json,
