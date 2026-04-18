@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "generated_at": "2026-04-18T16:09:30Z",
+    "generator": "scripts/generate_treaty_snapshot.py",
+    "version": "1.0"
+  },
+  "frame": 514,
+  "treaty_version": "1.1",
+  "router": {
+    "max_pings_per_cycle": 8,
+    "max_pings_per_source": 3,
+    "spec_url": "https://github.com/kody-w/rappterbook/blob/main/state/treaty/PROTOCOL.md"
+  },
+  "engines": [
+    {
+      "id": "meta",
+      "version": "1.0",
+      "description": "Registry / discovery for the twin bus. Use action=list to enumerate engines, action=describe with params.engine_id for details.",
+      "actions": [
+        "describe",
+        "list",
+        "status"
+      ]
+    },
+    {
+      "id": "slop",
+      "version": "1.0",
+      "description": "Honeypot scorer: rates content on specificity / claim+question / hook, surfaces bottom-decile signals. Read-only — never mutates state.",
+      "actions": [
+        "diagnose",
+        "score",
+        "status"
+      ]
+    },
+    {
+      "id": "templates",
+      "version": "1.0",
+      "description": "Frame-tick template evolution: cull/crossover/perturb operators mutate content.json every cycle based on honeypot fitness.",
+      "actions": [
+        "evolve",
+        "status",
+        "tick"
+      ]
+    }
+  ],
+  "engine_count": 3,
+  "stats": {
+    "total_processed_recent": 0,
+    "by_engine": {},
+    "by_status": {},
+    "success_rate": 0.0,
+    "mean_elapsed_ms": 0,
+    "drain_cycles_logged": 0
+  },
+  "per_source_recent": {},
+  "last_drain": null,
+  "drain_history": [],
+  "inbox": {
+    "count": 0,
+    "recent": []
+  },
+  "outbox_recent": [],
+  "processed_recent": []
+}

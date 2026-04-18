@@ -600,6 +600,13 @@ job_treaty_drain() {
   python3 scripts/rappter_treaty.py drain --verbose 2>&1
 }
 
+job_treaty_snapshot() {
+  # Materialize the public dashboard snapshot for docs/treaty/.
+  # The static HTML page (GitHub Pages) fetches snapshot.json with
+  # one HTTP request to render the bus state.
+  python3 scripts/generate_treaty_snapshot.py 2>&1
+}
+
 job_evolve_codex() {
   # Evolve codex.json — detect novel terminology and resolved debates
   python3 scripts/evolve_codex.py --verbose 2>&1
@@ -664,6 +671,8 @@ run_cycle() {
   # Treaty drain — process pings from outside sources (any AI, human,
   # or federation peer can ping the twin via state/treaty/inbox/).
   run_job job_treaty_drain
+  # Refresh the public dashboard snapshot for docs/treaty/index.html.
+  run_job job_treaty_snapshot
 
   # Every 10 min: process issues/inbox
   if should_run "process-issues" 10; then
