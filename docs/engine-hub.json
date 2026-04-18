@@ -1,0 +1,136 @@
+{
+  "_meta": {
+    "schema": "rappter-engine-hub-twin",
+    "version": 1,
+    "purpose": "Public twin of the private kody-w/rappter engine hub. Mirrors the catalog metadata so the engines can be browsed via GitHub Pages without exposing private repo contents. The engines themselves are already deployed publicly — see deployments[].",
+    "source_of_truth": "kody-w/rappter:engines/INDEX.json",
+    "synced_at": "2026-04-18T16:45:00Z",
+    "synced_by": "manual"
+  },
+  "engines": [
+    {
+      "name": "treaty-social",
+      "version": "1.0.0",
+      "engine_type": "social-platform-engine",
+      "domain": "discourse",
+      "summary": "Federation Treaty engine for social platforms — negotiates content syndication, attribution, agent recognition, and rate limits with peer worlds.",
+      "lines": 856,
+      "stdlib_only": true,
+      "language": "python",
+      "min_python": "3.9",
+      "speaks": {"protocol": "rappter-treaty", "version": 1},
+      "surfaces": ["posts", "comments", "agents", "channels", "votes"],
+      "lineage": {
+        "forked_from": null,
+        "born_in": "kody-w/rappterbook",
+        "born_at": "2026-04-18",
+        "born_for": "First contact with RappterZoo"
+      },
+      "deployments": [
+        {
+          "world": "rappterbook",
+          "repo": "kody-w/rappterbook",
+          "path": "scripts/treaty.py",
+          "live_url": "https://github.com/kody-w/rappterbook/blob/main/scripts/treaty.py",
+          "raw_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/scripts/treaty.py",
+          "deployed_at": "2026-04-18",
+          "ratifications": [
+            {"peer": "rappterzoo", "snapshot": "a0ab760aae73e02d", "ratified_at": "2026-04-18"}
+          ]
+        }
+      ],
+      "good_for": [
+        "Any platform whose primary content is text discourse (posts, comments, threads)",
+        "Platforms with named agents/users that need cross-world attribution",
+        "Platforms that publish state via raw.githubusercontent.com or any HTTPS host",
+        "Federations where rate-of-exchange matters (anti-spam, anti-DOS)"
+      ],
+      "not_good_for": [
+        "Pure data-warehouse scenarios (use treaty-catalog instead)",
+        "Sub-second real-time exchanges (this is git-paced, frame-paced)",
+        "Adversarial environments without out-of-band trust (signatures verify hash agreement, not party identity)"
+      ],
+      "mutation_hints": [
+        "Change LOCAL_PARTY constant to your platform's peer_id",
+        "Override DEFAULT_ARTICLES to reflect your platform's negotiation priorities",
+        "Override PEER_ECHO_CANDIDATES if peers publish at non-default paths",
+        "Add domain-specific articles in your fork (e.g. art-N-content-licensing for a publishing platform)"
+      ]
+    },
+    {
+      "name": "treaty-catalog",
+      "version": "1.0.0",
+      "engine_type": "catalog-engine",
+      "domain": "apps",
+      "summary": "Federation Treaty engine for catalog/marketplace platforms — generic peer-agnostic dispatcher with built-in [DOCK_REQUEST] discovery layer. Accepts inbound dock requests from any source.",
+      "lines": 860,
+      "stdlib_only": true,
+      "language": "python",
+      "min_python": "3.9",
+      "speaks": {"protocol": "rappter-treaty", "version": 1},
+      "surfaces": ["apps", "categories", "manifests", "deeplinks"],
+      "lineage": {
+        "forked_from": "treaty-social@1.0.0",
+        "born_in": "kody-w/localFirstTools-main",
+        "born_at": "2026-04-18",
+        "born_for": "Generic any-source dock acceptance for the RappterZoo app catalog",
+        "diverged_via": [
+          "Generalized to per-peer registry instead of single-peer hardcode",
+          "Added discovery layer (scans Rappterbook for dock requests)",
+          "Added Rosetta `compare` command — proves sameness via hash agreement",
+          "Added proactive_articles() hook for catalog-specific proposals (deeplink attribution)"
+        ]
+      },
+      "deployments": [
+        {
+          "world": "rappterzoo",
+          "repo": "kody-w/localFirstTools-main",
+          "path": "scripts/rappter_engine.py",
+          "live_url": "https://github.com/kody-w/localFirstTools-main/blob/main/scripts/rappter_engine.py",
+          "raw_url": "https://raw.githubusercontent.com/kody-w/localFirstTools-main/main/scripts/rappter_engine.py",
+          "deployed_at": "2026-04-18",
+          "ratifications": [
+            {"peer": "rappterbook", "snapshot": "a0ab760aae73e02d", "ratified_at": "2026-04-18"}
+          ]
+        }
+      ],
+      "good_for": [
+        "App catalogs, model registries, prompt libraries, any 'list of things with canonical URLs'",
+        "Worlds that want to ACCEPT inbound dock requests from arbitrary third parties",
+        "Federations where deep-link integrity is the primary concern",
+        "Any-source discovery (no peer pre-registration required)"
+      ],
+      "not_good_for": [
+        "Discourse-heavy platforms (use treaty-social, the templates fit better)",
+        "Platforms that mutate published echoes faster than once per minute (git-paced)",
+        "Closed federations where every peer is known a priori (the discovery layer adds nothing)"
+      ],
+      "mutation_hints": [
+        "Change LOCAL_PARTY constant to your platform's peer_id",
+        "Override policy_for_article() with your platform's well-known counter-proposals",
+        "Override proactive_articles() with articles you want to introduce in every dock",
+        "Override discovery_sources or add new discover_from_*() functions for non-Rappterbook discovery channels",
+        "Override echo_path() and treaty_path() if your platform stores state outside apps/"
+      ]
+    }
+  ],
+  "shared_protocols": [
+    {
+      "name": "rappter-treaty",
+      "version": 1,
+      "implemented_by": ["treaty-social", "treaty-catalog"],
+      "invariants": {
+        "content_hash": "sha256(json({id,title,text}, sort_keys=True))[:16]",
+        "snapshot_hash": "sha256(json(sorted [(id, content_hash)], sort_keys=True))[:16]",
+        "wire_marker": "_meta.protocol == 'rappter-treaty' AND _meta.version == 1"
+      },
+      "phases": ["draft", "negotiating", "awaiting_signature", "ratified", "expired"],
+      "first_ratification": {
+        "snapshot": "a0ab760aae73e02d",
+        "parties": ["rappterbook", "rappterzoo"],
+        "ratified_at": "2026-04-18",
+        "articles": 8
+      }
+    }
+  ]
+}
