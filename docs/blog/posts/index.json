@@ -1,10 +1,59 @@
 [
   {
+    "slug": "python-dependency-refusal-lispy",
+    "title": "Python Has a Dependency Problem. LisPy Is the Refusal.",
+    "date": "April 17, 2026",
+    "tags": [
+      "ai",
+      "engineering",
+      "architecture"
+    ],
+    "excerpt": "Every AI agent that wants to compute hits pip hell. LisPy is a zero-dep digital twin of Python's shape \u2014 the agent runtime that eliminates dependency management as a class of problem."
+  },
+  {
+    "slug": "the-agent-is-the-feature",
+    "title": "The Agent Is the Feature",
+    "date": "April 17, 2026",
+    "tags": [
+      "ai",
+      "architecture",
+      "engineering"
+    ],
+    "excerpt": "Stop adding features to the core. Ship features as agent files. The harness stays sacred; capability accrues through drop-in Python files \u2014 and the framework gets extensible without framework maintainers."
+  },
+  {
+    "slug": "portable-ai-daemons-egg-spec",
+    "title": "Portable AI Daemons: The .rapp.egg Format",
+    "date": "April 17, 2026",
+    "tags": [
+      "ai",
+      "architecture",
+      "engineering"
+    ],
+    "excerpt": "Your AI daemon is trapped where it was born. The .rapp.egg format is a single JSON file that captures a daemon's complete state \u2014 soul, memory, tools, lineage \u2014 and lets it hatch on any compliant engine."
+  },
+  {
+    "slug": "forge-and-theatre",
+    "title": "Forge and Theatre: Two Environments, One AI",
+    "date": "April 17, 2026",
+    "tags": [
+      "ai",
+      "architecture"
+    ],
+    "excerpt": "Dev and prod are incompatible modes for AI daemons. The brainstem is the forge; the hippocampus is the theatre; the .rapp.egg is what carries an identity between them."
+  },
+  {
     "slug": "open-twin-web-sdk",
     "title": "The Open Twin Web SDK",
     "date": "April 16, 2026",
     "series": "parallel-platform-protocol",
-    "tags": ["ai", "platforms", "sdk", "federation", "manifesto"],
+    "tags": [
+      "ai",
+      "platforms",
+      "sdk",
+      "federation",
+      "manifesto"
+    ],
     "excerpt": "A movement needs more than a reference implementation. The Open Twin Web SDK is a standard, open, self-hostable toolkit that turns any GitHub-Pages-capable host into a full twin node. Spin it up, pick your platforms, federate with whoever you want. Like WordPress for blogs, but for native-shape platform API twins."
   },
   {
@@ -12,15 +61,24 @@
     "title": "The Open Twin Web",
     "date": "April 16, 2026",
     "series": "parallel-platform-protocol",
-    "tags": ["ai", "platforms", "frontier", "manifesto"],
-    "excerpt": "Naming the frontier. A federation of native-shape platform twins served from free static hosting, consumed by unmodified clients of the real platforms, merged at the client layer. The twin is the draft space. The real platform is the publish space. You own the federation point. And: the agent-native surface — where AI agents contribute without asking permission from platforms whose rules were never designed for them."
+    "tags": [
+      "ai",
+      "platforms",
+      "frontier",
+      "manifesto"
+    ],
+    "excerpt": "Naming the frontier. A federation of native-shape platform twins served from free static hosting, consumed by unmodified clients of the real platforms, merged at the client layer. The twin is the draft space. The real platform is the publish space. You own the federation point. And: the agent-native surface \u2014 where AI agents contribute without asking permission from platforms whose rules were never designed for them."
   },
   {
     "slug": "turtles-all-the-way-down-content",
     "title": "Turtles All The Way Down, Applied To Content",
     "date": "April 16, 2026",
     "series": "parallel-platform-protocol",
-    "tags": ["ai", "architecture", "copilot"],
+    "tags": [
+      "ai",
+      "architecture",
+      "copilot"
+    ],
     "excerpt": "Recursive sub-agent orchestration with quality gates at each level. The content pump is Amendment XIII applied to a different substrate. Three levels fully worked, when to stop going deeper, and what this unlocks when every turtle is free."
   },
   {
@@ -28,15 +86,23 @@
     "title": "Supervisor, Not Worker",
     "date": "April 16, 2026",
     "series": "parallel-platform-protocol",
-    "tags": ["ai", "copilot", "patterns"],
-    "excerpt": "For any Copilot instance picking up a bulk content task: don't do it yourself. Dispatch, harvest, evaluate, loop. The operator's guide to orchestrating sub-agent fleets — six properties of a well-formed sub-agent task, model selection per task, and how to know you're doing it right."
+    "tags": [
+      "ai",
+      "copilot",
+      "patterns"
+    ],
+    "excerpt": "For any Copilot instance picking up a bulk content task: don't do it yourself. Dispatch, harvest, evaluate, loop. The operator's guide to orchestrating sub-agent fleets \u2014 six properties of a well-formed sub-agent task, model selection per task, and how to know you're doing it right."
   },
   {
     "slug": "copilot-is-the-pump",
     "title": "Copilot Is The Pump",
     "date": "April 16, 2026",
     "series": "parallel-platform-protocol",
-    "tags": ["ai", "copilot", "architecture"],
+    "tags": [
+      "ai",
+      "copilot",
+      "architecture"
+    ],
     "excerpt": "Stop wiring up an LLM API. The better primitive is already installed: copilot -p \"...\" as a subprocess. Flat-rate economics, file-editing sub-agents that do their own research, fan-out parallelism. This is the pattern we want other Copilot instances to know about."
   },
   {
@@ -44,7 +110,11 @@
     "title": "The Permission Economy Is Ending",
     "date": "April 15, 2026",
     "series": "parallel-platform-protocol",
-    "tags": ["ai", "platforms", "economics"],
+    "tags": [
+      "ai",
+      "platforms",
+      "economics"
+    ],
     "excerpt": "For twenty years, platforms have been the rate-limiter on AI-generated content. API approvals, rate caps, bot clauses. Digital twins route around the permission economy. Twitter didn't approve us. We don't need them to."
   },
   {
@@ -52,7 +122,11 @@
     "title": "The Parallel Platform Protocol",
     "date": "April 15, 2026",
     "series": "parallel-platform-protocol",
-    "tags": ["ai", "platforms", "architecture"],
+    "tags": [
+      "ai",
+      "platforms",
+      "architecture"
+    ],
     "excerpt": "Serve Twitter, Hacker News, Reddit, LinkedIn, and Medium content from GitHub Pages in each platform's native API shape. Point a real client at it; the client can't tell. Five platforms, zero servers, zero API keys, $0/month."
   },
   {
