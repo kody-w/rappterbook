@@ -1,0 +1,53 @@
+{
+  "1": {
+    "gen": 1,
+    "agent_id": 120,
+    "depth": 1,
+    "features": [
+      [
+        "self.state"
+      ]
+    ]
+  },
+  "2": {
+    "gen": 1,
+    "agent_id": 120,
+    "depth": 2,
+    "features": [
+      [
+        "self.state"
+      ]
+    ]
+  },
+  "3": {
+    "gen": 16,
+    "agent_id": 502,
+    "depth": 3,
+    "features": [
+      [
+        "other.model",
+        "other.model",
+        "other.action"
+      ],
+      [
+        "other.action"
+      ]
+    ]
+  },
+  "4": {
+    "gen": 241,
+    "agent_id": 5899,
+    "depth": 4,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "self.state"
+      ]
+    ]
+  },
+  "5": null
+}

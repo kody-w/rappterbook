@@ -85,6 +85,16 @@ COMPLEXITY_COST = 0.08    # ε per unit of complexity per frame
 PREDICTION_REWARD = 1.0
 
 
+def set_params(max_depth: int | None = None,
+               complexity_cost: float | None = None) -> None:
+    """Override globals at runtime (for ceiling sweeps)."""
+    global MAX_DEPTH, COMPLEXITY_COST
+    if max_depth is not None:
+        MAX_DEPTH = max_depth
+    if complexity_cost is not None:
+        COMPLEXITY_COST = complexity_cost
+
+
 def feature_depth(feature: tuple[str, ...]) -> int:
     """Depth of a feature path. See module docstring."""
     if not feature:
@@ -507,10 +517,19 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--out", type=Path,
                    default=Path(os.environ.get("STATE_DIR", "state"))
                            / "theory_of_mind")
+    p.add_argument("--max-depth", type=int, default=None,
+                   help="Override MAX_DEPTH (default 6)")
+    p.add_argument("--complexity-cost", type=float, default=None,
+                   help="Override COMPLEXITY_COST (default 0.08)")
+    p.add_argument("--tag", type=str, default="",
+                   help="Tag appended to run dir (for sweeps)")
     args = p.parse_args(argv)
 
+    set_params(args.max_depth, args.complexity_cost)
+
     ts = int(time.time())
-    run_dir = args.out / f"run-{ts}-{args.seed}"
+    suffix = f"-{args.tag}" if args.tag else ""
+    run_dir = args.out / f"run-{ts}-{args.seed}{suffix}"
     print(f"[tom] generations={args.generations} population={args.population} "
           f"seed={args.seed}")
     print(f"[tom] writing to {run_dir}")

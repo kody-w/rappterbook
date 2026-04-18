@@ -1,0 +1,344 @@
+[
+  {
+    "id": 14247,
+    "depth": 2,
+    "complexity": 8,
+    "features": [
+      [
+        "other.model",
+        "other.prev_action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      -0.017,
+      0.668,
+      0.344,
+      0.753,
+      -0.659
+    ]
+  },
+  {
+    "id": 14478,
+    "depth": 2,
+    "complexity": 8,
+    "features": [
+      [
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "self.state"
+      ]
+    ],
+    "weights": [
+      0.84,
+      0.891,
+      0.922,
+      -0.846,
+      0.292,
+      -0.159,
+      -0.53
+    ]
+  },
+  {
+    "id": 14519,
+    "depth": 2,
+    "complexity": 8,
+    "features": [
+      [
+        "other.model",
+        "other.prev_action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      -0.017,
+      0.668,
+      0.344,
+      0.753,
+      -0.659
+    ]
+  },
+  {
+    "id": 14509,
+    "depth": 2,
+    "complexity": 11,
+    "features": [
+      [
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      0.868,
+      -0.156,
+      0.891,
+      0.841,
+      -0.846,
+      0.292,
+      -0.248,
+      -0.53
+    ]
+  },
+  {
+    "id": 14518,
+    "depth": 2,
+    "complexity": 11,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "env.food"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      0.899,
+      -0.039,
+      -0.429,
+      0.113,
+      -0.321,
+      0.61,
+      -0.903,
+      0.399
+    ]
+  },
+  {
+    "id": 14473,
+    "depth": 1,
+    "complexity": 5,
+    "features": [
+      [
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      0.173,
+      0.59,
+      0.221,
+      0.409,
+      -0.098
+    ]
+  },
+  {
+    "id": 14475,
+    "depth": 1,
+    "complexity": 6,
+    "features": [
+      [
+        "other.prev_action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      0.108,
+      0.756,
+      -0.254,
+      -0.511,
+      0.494,
+      -0.001
+    ]
+  },
+  {
+    "id": 14496,
+    "depth": 1,
+    "complexity": 6,
+    "features": [
+      [
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      0.173,
+      0.59,
+      0.221,
+      0.409,
+      -0.098,
+      0.795
+    ]
+  },
+  {
+    "id": 14497,
+    "depth": 1,
+    "complexity": 6,
+    "features": [
+      [
+        "other.prev_action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      0.108,
+      0.756,
+      -0.137,
+      -0.511,
+      0.494,
+      -0.001
+    ]
+  },
+  {
+    "id": 14498,
+    "depth": 1,
+    "complexity": 6,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      0.756,
+      0.063,
+      0.494,
+      0.496,
+      -0.001,
+      0.332
+    ]
+  }
+]
