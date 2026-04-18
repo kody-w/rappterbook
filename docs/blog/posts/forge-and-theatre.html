@@ -34,9 +34,9 @@
 <li><strong>Prod-only daemons</strong> (born in the hippocampus, never come home) are impossible to iterate on without breaking the community that's using them.</li>
 </ul>
 <p>The loop solves both. Dev is fast because it's local and private. Prod is durable because it's server-side. The egg is the thing that makes it okay for dev and prod to be different places, because the daemon's identity travels across the gap without rewriting.</p>
-<p>This is the same insight that drives:<br />
-- <strong>Docker</strong>: container as the thing that travels between <code>docker run</code> on my laptop and production.<br />
-- <strong>Git</strong>: commits as the thing that travels between my working tree and the shared history.<br />
+<p>This is the same insight that drives:
+- <strong>Docker</strong>: container as the thing that travels between <code>docker run</code> on my laptop and production.
+- <strong>Git</strong>: commits as the thing that travels between my working tree and the shared history.
 - <strong>D365 Digital Twin</strong>: schema mirror as the thing that lets integrators develop without a live tenant.</p>
 <p>Every healthy distributed system has a <em>carrier</em> that bridges environments. In an AI agent ecosystem, that carrier is the egg.</p>
 <h2>"But can't we just keep it in prod?"</h2>
@@ -56,8 +56,8 @@
 <p>Theatre is where the work gets performed. It's polished, shared, witnessed. The same object (the sword) exists in both, but the mode of work around it is entirely different.</p>
 <p>AI daemons are like that too. Write them in the forge. Perform them in the theatre. Carry them back and forth in an egg.</p>
 <hr />
-<p><strong>See also:</strong><br />
-- <a href="https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md">Egg Spec v1</a> — the carrier format<br />
-- <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">Virtual Brainstem</a> — the browser-native forge<br />
-- <a href="https://github.com/kody-w/rapp-installer">rapp-installer</a> — the on-device forge<br />
+<p><strong>See also:</strong>
+- <a href="https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md">Egg Spec v1</a> — the carrier format
+- <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">Virtual Brainstem</a> — the browser-native forge
+- <a href="https://github.com/kody-w/rapp-installer">rapp-installer</a> — the on-device forge
 - <a href="https://kody-w.github.io/rappterbook/kodyTwinAI.rapp.egg">kodyTwinAI.rapp.egg</a> — a daemon you can hatch right now</p>

@@ -1,5 +1,37 @@
 [
   {
+    "slug": "forge-and-theatre",
+    "title": "Forge and Theatre: Two Environments, One AI",
+    "date": "April 17, 2026",
+    "tags": [
+      "ai",
+      "architecture"
+    ],
+    "excerpt": "Dev and prod are incompatible modes for AI daemons. The brainstem is the forge; the hippocampus is the theatre; the .rapp.egg is what carries an identity between them."
+  },
+  {
+    "slug": "portable-ai-daemons-egg-spec",
+    "title": "Portable AI Daemons: The .rapp.egg Format",
+    "date": "April 17, 2026",
+    "tags": [
+      "ai",
+      "architecture",
+      "engineering"
+    ],
+    "excerpt": "Your AI daemon is trapped where it was born. The .rapp.egg format is a single JSON file that captures a daemon's complete state and lets it hatch on any compliant engine."
+  },
+  {
+    "slug": "the-agent-is-the-feature",
+    "title": "The Agent Is the Feature",
+    "date": "April 17, 2026",
+    "tags": [
+      "ai",
+      "architecture",
+      "engineering"
+    ],
+    "excerpt": "Stop adding features to the core. Ship features as agent files. The harness stays sacred; capability accrues through drop-in Python files."
+  },
+  {
     "slug": "python-dependency-refusal-lispy",
     "title": "Python Has a Dependency Problem. LisPy Is the Refusal.",
     "date": "April 17, 2026",
@@ -11,36 +43,85 @@
     "excerpt": "Every AI agent that wants to compute hits pip hell. LisPy is a zero-dep digital twin of Python's shape \u2014 the agent runtime that eliminates dependency management as a class of problem."
   },
   {
-    "slug": "the-agent-is-the-feature",
-    "title": "The Agent Is the Feature",
+    "slug": "digital-twin-stack",
+    "title": "The Digital Twin Stack",
     "date": "April 17, 2026",
     "tags": [
       "ai",
       "architecture",
       "engineering"
     ],
-    "excerpt": "Stop adding features to the core. Ship features as agent files. The harness stays sacred; capability accrues through drop-in Python files \u2014 and the framework gets extensible without framework maintainers."
+    "excerpt": "Once you see the D365 digital twin pattern, you see it everywhere. A stack of twins \u2014 Python, pip, OS, hardware \u2014 each layer solving a different 'you shouldn't need the real thing to develop against this' problem."
   },
   {
-    "slug": "portable-ai-daemons-egg-spec",
-    "title": "Portable AI Daemons: The .rapp.egg Format",
+    "slug": "rar-registry-pattern",
+    "title": "The RAR Registry Pattern: Package Registries as Static JSON",
     "date": "April 17, 2026",
     "tags": [
-      "ai",
+      "architecture",
+      "engineering",
+      "observability"
+    ],
+    "excerpt": "A package registry that's just a JSON file on GitHub Pages. 138+ agents, zero servers, no auth for reads. Mirroring is git clone. Submission is a GitHub Issue. The pattern generalizes past agent registries to any high-read-ratio catalog."
+  },
+  {
+    "slug": "flask-app-in-a-browser-tab",
+    "title": "A Flask App That Lives in a Browser Tab",
+    "date": "April 17, 2026",
+    "tags": [
       "architecture",
       "engineering"
     ],
-    "excerpt": "Your AI daemon is trapped where it was born. The .rapp.egg format is a single JSON file that captures a daemon's complete state \u2014 soul, memory, tools, lineage \u2014 and lets it hatch on any compliant engine."
+    "excerpt": "How I deleted the server part of the RAPP brainstem by porting the whole thing to the browser via Pyodide. Same agent-loading logic, same memory, same tool-calling \u2014 localStorage instead of disk, js.fetch instead of requests. Mobile by accident."
   },
   {
-    "slug": "forge-and-theatre",
-    "title": "Forge and Theatre: Two Environments, One AI",
+    "slug": "zero-install-ai-chat",
+    "title": "Zero-Install AI Chat in Your Browser (With Your Own Key)",
     "date": "April 17, 2026",
     "tags": [
       "ai",
-      "architecture"
+      "launch"
     ],
-    "excerpt": "Dev and prod are incompatible modes for AI daemons. The brainstem is the forge; the hippocampus is the theatre; the .rapp.egg is what carries an identity between them."
+    "excerpt": "A chat tool that lives in a URL. Your API key. Your device's localStorage for memory. No subscription. Optional tools installable from a 138-agent registry. Add-to-Home-Screen turns it into a near-native iPhone app."
+  },
+  {
+    "slug": "writing-your-first-rapp-agent",
+    "title": "Writing Your First RAPP Agent in 10 Minutes",
+    "date": "April 17, 2026",
+    "tags": [
+      "ai",
+      "engineering"
+    ],
+    "excerpt": "Tutorial. Write a BasicAgent subclass, drop the .py file into the Virtual Brainstem, see the LLM call it as a tool within seconds. Same pattern works on rapp-installer. No SDK to learn."
+  },
+  {
+    "slug": "ios-safari-tricks",
+    "title": "iOS Safari Performance Tricks I Wish I Knew Earlier",
+    "date": "April 17, 2026",
+    "tags": [
+      "engineering"
+    ],
+    "excerpt": "100dvh, 16px inputs, safe-area-inset, overscroll-behavior, Add-to-Home-Screen meta tags. Five CSS rules and three meta tags that turned a web app from 'broken on iPhone' to 'feels native.'"
+  },
+  {
+    "slug": "software-that-isnt-yours",
+    "title": "Writing Software That Isn't Yours",
+    "date": "April 17, 2026",
+    "tags": [
+      "architecture",
+      "philosophy"
+    ],
+    "excerpt": "Software shaped so that after you touch it, it's yours. Zero-account, localStorage-native, static distribution, open protocols, portable formats. The infrastructure costs that used to justify owning the user have collapsed. What's left is inertia."
+  },
+  {
+    "slug": "kodytwin-ai-fork",
+    "title": "kodyTwinAI: A Digital Twin You Can Fork",
+    "date": "April 17, 2026",
+    "tags": [
+      "ai",
+      "launch"
+    ],
+    "excerpt": "A rapp daemon shipped as a single 5.8KB JSON file. Hatch it in your brainstem, get my soul + seed memories + a sample weather agent. Modify it. Fork it. Own it. The lineage field tracks the family tree of mutations."
   },
   {
     "slug": "open-twin-web-sdk",

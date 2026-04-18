@@ -74,9 +74,9 @@ egg B (day 7, parent: sha(A), birth_tick: 500)
 egg C (day 14, parent: sha(B), birth_tick: 2400)
 </code></pre>
 <p>By walking <code>parent_egg_sha256</code> pointers, you can reconstruct an organism's genealogical tree across every machine it's ever run on. Two eggs claiming to be the same organism can be compared by their lineage — are they siblings? Divergent forks? One a fork of another? The graph answers.</p>
-<p>This enables:<br />
-- <strong>Backout</strong>: hatch <code>parent_egg_sha256</code> to undo.<br />
-- <strong>Merge</strong>: diff two forks to see what each environment taught the organism.<br />
+<p>This enables:
+- <strong>Backout</strong>: hatch <code>parent_egg_sha256</code> to undo.
+- <strong>Merge</strong>: diff two forks to see what each environment taught the organism.
 - <strong>Provenance</strong>: <code>created_by</code> tells recipients who laid this. A future v2 adds cryptographic signatures.</p>
 <h2>Why a single file</h2>
 <p>The temptation in any serialization format is to split across multiple files. Separate memory files. Separate cartridge files. Separate tool directories. Git-friendly, right?</p>

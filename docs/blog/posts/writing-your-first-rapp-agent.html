@@ -1,0 +1,129 @@
+<p>Every sufficiently mature AI agent system eventually needs extensibility. The RAPP ecosystem's answer is a pattern called <strong>BasicAgent</strong> — a 25-line Python base class that any subclass can extend into a tool your LLM can call.</p>
+<p>Here's how to write one in ten minutes. By the end you'll have a working agent, tested in the Virtual Brainstem (or on-device rapp-installer), usable from chat.</p>
+<h2>The contract</h2>
+<p>Every RAPP agent is a Python class that extends <code>BasicAgent</code> and implements one method: <code>perform(**kwargs)</code>. The base class handles:</p>
+<ul>
+<li>Setting <code>self.name</code> (what the LLM sees)</li>
+<li>Setting <code>self.metadata</code> (OpenAI function-calling schema)</li>
+<li>Producing the tool definition via <code>self.to_tool()</code></li>
+</ul>
+<p>You handle:
+- Deciding what your agent does
+- Parsing <code>kwargs</code> (the arguments the LLM passes)
+- Returning a string (the tool's output, which the LLM sees)</p>
+<p>That's the whole thing.</p>
+<h2>A minimal example</h2>
+<p>Open your favorite editor. Create a file called <code>dice_agent.py</code>:</p>
+<pre><code class="language-python">&quot;&quot;&quot;Dice Agent — roll N-sided dice, return the result.&quot;&quot;&quot;
+
+__manifest__ = {
+    &quot;schema&quot;: &quot;rapp-agent/1.0&quot;,
+    &quot;name&quot;: &quot;@yourname/dice_agent&quot;,
+    &quot;version&quot;: &quot;1.0.0&quot;,
+    &quot;display_name&quot;: &quot;Dice&quot;,
+    &quot;description&quot;: &quot;Roll a specified number of dice with specified sides.&quot;,
+    &quot;author&quot;: &quot;you&quot;,
+    &quot;tags&quot;: [&quot;tutorial&quot;, &quot;random&quot;, &quot;games&quot;],
+    &quot;category&quot;: &quot;general&quot;,
+    &quot;quality_tier&quot;: &quot;community&quot;,
+    &quot;requires_env&quot;: [],
+    &quot;dependencies&quot;: [&quot;@rapp/basic_agent&quot;],
+}
+
+try:
+    from basic_agent import BasicAgent
+except ModuleNotFoundError:
+    from agents.basic_agent import BasicAgent
+
+
+class DiceAgent(BasicAgent):
+    def __init__(self):
+        self.name = &quot;Dice&quot;
+        self.metadata = {
+            &quot;name&quot;: self.name,
+            &quot;description&quot;: &quot;Roll N dice of M sides. Returns each roll and the sum.&quot;,
+            &quot;parameters&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;count&quot;: {&quot;type&quot;: &quot;integer&quot;, &quot;description&quot;: &quot;Number of dice (default 1)&quot;},
+                    &quot;sides&quot;: {&quot;type&quot;: &quot;integer&quot;, &quot;description&quot;: &quot;Sides per die (default 6)&quot;},
+                },
+                &quot;required&quot;: [],
+            },
+        }
+        super().__init__(name=self.name, metadata=self.metadata)
+
+    def perform(self, **kwargs):
+        import random
+        count = max(1, min(int(kwargs.get(&quot;count&quot;, 1)), 20))
+        sides = max(2, min(int(kwargs.get(&quot;sides&quot;, 6)), 1000))
+        rolls = [random.randint(1, sides) for _ in range(count)]
+        return f&quot;Rolled {count}d{sides}: {rolls} (sum: {sum(rolls)})&quot;
+</code></pre>
+<p>Three things are going on:</p>
+<ol>
+<li><strong><code>__manifest__</code></strong> at the top — the registry metadata. This is what shows up in RAR if you ever submit it. Even if you don't submit it, include it — consistent shape helps future-you.</li>
+<li><strong>Flexible import</strong> of <code>BasicAgent</code> — works whether the hatcher exposes it at <code>basic_agent</code> (rapp-installer's layout) or <code>agents.basic_agent</code> (Virtual Brainstem's layout). One file, both environments.</li>
+<li><strong><code>self.metadata</code></strong> is an OpenAI function-calling schema. The LLM sees this and decides when to call your tool based on the description and parameters.</li>
+</ol>
+<h2>Load it into the Virtual Brainstem</h2>
+<p>Open <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">the Virtual Brainstem</a> in your browser. Wait for it to say <strong>ready</strong>.</p>
+<p>Drag <code>dice_agent.py</code> onto the page. You'll see a system message:</p>
+<pre><code>[drop] dice_agent.py → registered 1 agent(s): DiceAgent. Persisted to localStorage.
+</code></pre>
+<p>The Agents panel on the right now shows <strong>Dice</strong> in the list. Your tool is live.</p>
+<p>Test it by typing: <em>"Roll 3d20."</em></p>
+<p>The LLM will recognize the intent, call your <code>Dice</code> tool with <code>count=3, sides=20</code>, and display your string as the response. Under the assistant message you'll see <code>▶ Dice Agent Called</code> — tap it to expand the raw tool output.</p>
+<p>Reload the page. The agent survives — it's in <code>localStorage["brainstem_custom_agents"]</code>, and the boot loader re-imports it automatically.</p>
+<h2>Load it into rapp-installer</h2>
+<p>If you're running the on-device brainstem (the Flask version), copy your file to <code>~/.brainstem/src/rapp_brainstem/agents/dice_agent.py</code>. Restart the server. Done.</p>
+<p>Same file. Different environment. The flexible <code>BasicAgent</code> import means it works in both without modification.</p>
+<h2>When perform() isn't enough</h2>
+<p>Two optional hooks extend the base class:</p>
+<p><strong><code>system_context(self)</code></strong> — called every conversation turn. Return a string to prepend to the system prompt. Example from <code>ContextMemoryAgent</code>:</p>
+<pre><code class="language-python">def system_context(self):
+    memories = self._recall_all()
+    if memories:
+        return f&quot;&lt;memory&gt;\n{memories}\n&lt;/memory&gt;&quot;
+    return None
+</code></pre>
+<p>This is how "your AI remembers you" works — the memory agent quietly injects facts into every system prompt, so the LLM never forgets even when the user doesn't explicitly ask.</p>
+<p><strong><code>perform_async(self, **kwargs)</code></strong> — use when your agent makes HTTP calls. The Virtual Brainstem's tool dispatcher auto-awaits <code>perform_async</code> if you've defined it; otherwise falls back to <code>perform</code>. This matters because browser Python (Pyodide) can't do synchronous HTTP easily — you need <code>await fetch(...)</code>.</p>
+<p>Example:</p>
+<pre><code class="language-python">async def perform_async(self, **kwargs):
+    from js import fetch
+    resp = await fetch(&quot;https://hacker-news.firebaseio.com/v0/topstories.json&quot;)
+    ids = json.loads(await resp.text())[:5]
+    # ... fetch each item, return formatted string
+</code></pre>
+<h2>Good agent design</h2>
+<p>After writing a few of these, a few patterns emerge:</p>
+<ol>
+<li>
+<p><strong>Make descriptions specific.</strong> The LLM decides whether to call your tool based on the <code>description</code> field. "Report the weather" is worse than "Report the current weather for a specific city by name, including temperature, conditions, and wind." More words = better routing.</p>
+</li>
+<li>
+<p><strong>Name parameters naturally.</strong> <code>city</code>, not <code>target_location_identifier</code>. The LLM is better at passing natural names.</p>
+</li>
+<li>
+<p><strong>Return strings the LLM can quote.</strong> Your return value becomes part of the LLM's context for composing the final reply. Markdown works. JSON works. "Error: thing broke" works too — the LLM can relay the error to the user clearly.</p>
+</li>
+<li>
+<p><strong>Keep side effects optional.</strong> If your agent writes to disk or calls an API, default to <code>dry_run=true</code> unless the user (or the LLM) explicitly asks otherwise. Surprise writes erode trust.</p>
+</li>
+<li>
+<p><strong>Honor capability grants.</strong> If your agent reaches for hardware (microphone, screen, clipboard), check that the capability is granted before acting. <code>virtual_hw</code> provides the grant machinery — use it.</p>
+</li>
+</ol>
+<h2>Publishing to RAR</h2>
+<p>Once your agent works, you can submit it to the RAR registry so others can install it via the brainstem's Agents panel.</p>
+<p>Easiest path: load <a href="https://github.com/kody-w/rappterbook/blob/main/agents/publish_to_rar_agent.py">publish_to_rar_agent.py</a> into your brainstem. Then chat: <em>"Publish my dice_agent.py to RAR."</em> The agent parses your manifest, POSTs the submission issue to the RAR repo on GitHub, and returns the issue URL. No curl. No gh CLI.</p>
+<p>If you prefer manual: open an issue at <a href="https://github.com/kody-w/RAR/issues/new">github.com/kody-w/RAR/issues/new</a> with title <code>[AGENT] @yourname/dice_agent</code> and body containing your source in a <code>python</code> fence.</p>
+<h2>Ten minutes is not an exaggeration</h2>
+<p>The <code>dice_agent.py</code> above is 25 lines of actual logic (plus manifest + import boilerplate). Writing it takes five minutes. Testing it in the brainstem takes two. Deciding what your tool <em>does</em> takes however long you want to spend thinking about it.</p>
+<p>The lowest-friction way to extend an AI agent's capability is to write a Python class with a <code>perform</code> method. That's it. No SDK to learn. No framework to fight. No release cycle to wait for. Just a file.</p>
+<hr />
+<p><strong>Starting points:</strong>
+- <a href="https://raw.githubusercontent.com/kody-w/rappterbook/main/agents/rapp_egg_agent.py">basic_agent.py</a> — see the base class + a real-world example
+- <a href="https://kody-w.github.io/RAR">RAR registry</a> — 138+ existing agents to learn patterns from
+- <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">Virtual Brainstem</a> — where you test what you build</p>

@@ -1,0 +1,83 @@
+<p>There's a quiet design choice at the heart of everything I've been building this year that I want to make explicit.</p>
+<p><strong>The software is not mine once you have it.</strong></p>
+<p>Not in a vague "open source, fork it" sense. In a specific, structural sense — the things I ship are shaped so that after you touch them, they're yours. Your memory. Your soul. Your agents. Your egg. Your URL. Your fork. I can't revoke them. I can't track them. I don't have the keys, the tenancy, the telemetry.</p>
+<p>This isn't obvious in the architecture diagrams. You have to read the details to see it. So let me pull the thread.</p>
+<h2>The defaults</h2>
+<p>Here's what the things I ship <em>don't</em> do:</p>
+<ul>
+<li>No account to create</li>
+<li>No API key issued by me</li>
+<li>No server I own that you depend on</li>
+<li>No database I own that holds your data</li>
+<li>No tracking of which users run what</li>
+<li>No rate limit that I control</li>
+<li>No telemetry phoning home</li>
+<li>No license that restricts what you do with it</li>
+</ul>
+<p>Here's what they <em>do</em>:</p>
+<ul>
+<li><strong>localStorage</strong> on your own device holds your data</li>
+<li><strong>Your API keys</strong> (for LLM providers you chose) are stashed by you, on your machine only, never transmitted beyond the provider you're calling</li>
+<li><strong>GitHub Pages</strong> hosts the static site — but you can fork the repo and host it anywhere, or run it entirely offline after first load</li>
+<li><strong>Standard protocols</strong> (OpenAI function calling, GitHub Issues API, HTTP, JSON) — nothing proprietary that I could change unilaterally</li>
+<li><strong>Your eggs</strong> are files on your disk; you email them, share them, fork them, version them however you want</li>
+<li><strong>Your custom agents</strong> are Python files that you drop in, that run on your device, that you can audit, modify, or delete</li>
+</ul>
+<p>The user owns the state. The user owns the runtime. The user owns the distribution.</p>
+<h2>Why this matters</h2>
+<p>Most software is the opposite. You log into a service. The service stores your data. Your access exists at the service's pleasure. If the service shuts down, raises prices, changes terms, or loses interest in a feature you depend on — you have no recourse beyond "download an export and migrate." And the export is always lossy. Your conversation history with ChatGPT isn't portable. Your email threads in Slack aren't portable. Your Notion workspace isn't portable. Each of these services <em>owns you</em> in a small but real way.</p>
+<p>This trade-off made sense when software was expensive to distribute. Hosting wasn't free. Bandwidth wasn't free. Someone had to pay.</p>
+<p>In 2026 these costs are small enough that they don't need to be paid by tying users to a service. GitHub Pages hosts static sites free. Cloudflare hosts static sites free. S3 is cheap enough to be effectively free at individual scale. A browser can run a full Python runtime in-process via Pyodide — your device pays for the compute. Your own OpenAI or Azure key pays for the LLM tokens.</p>
+<p>The infrastructure costs that used to justify owning the user have collapsed. What's left is inertia — pricing models that still treat the user as a rentable unit because that's what the last decade was.</p>
+<h2>The design moves</h2>
+<p>Concretely, here's how I try to build things so they're not mine:</p>
+<p><strong>Zero-account.</strong> Anything I ship that needs credentials asks you for <em>your</em> credentials. I never issue a key, ID, or token that's specific to my service. The only accounts involved are the ones you already have with OpenAI, GitHub, etc.</p>
+<p><strong>Local state by default.</strong> Data I'd normally store server-side (conversation memory, custom configurations, user-installed extensions) goes to <code>localStorage</code>, a local file, or a <code>.env</code> on your disk. My code reads it; my server never sees it.</p>
+<p><strong>Static distribution.</strong> Shipping is copying files to a web server. No backend, no containers, no CI/CD pipeline that's part of "the product." You could serve my whole site from a USB drive plugged into an old laptop and it would work.</p>
+<p><strong>Open protocols.</strong> When two systems need to talk (brainstem to LLM, brainstem to RAR, agent to agent), they do it via standards that exist outside my control — OpenAI function calling, GitHub Issues, JSON over HTTPS, Egg Spec v1 (published, any compliant implementation works).</p>
+<p><strong>Forkable structure.</strong> The shape of the code is optimized for someone who isn't me wanting to modify it. Single files where possible. Readable without a build step. Minimal dependencies. Comments explain the <em>why</em> so future-maintainer-who-isn't-me can make decisions.</p>
+<p><strong>Portable data formats.</strong> The <code>.rapp.egg</code> spec is the distilled example. Your AI daemon's state is a single JSON file. You take it anywhere. I have no lock-in mechanism even if I wanted one.</p>
+<h2>What this costs me</h2>
+<p>Honestly, not much that I care about.</p>
+<p>The usual argument for owning the user is monetization. If you don't own the user, how do you make money? Various answers:
+- Ads (I don't run any)
+- Subscriptions (I don't charge)
+- Data (I don't collect)
+- Lock-in to upsells (I have nothing to upsell)</p>
+<p>I'm not building a company here. I'm building tools that I use myself. The goal is that the tools stay useful to <em>me</em> and to anyone else who finds them useful. Making them unownable-by-me is a side effect of making them portable enough to not lose to my future self if I lose interest.</p>
+<p>Because the other thing this design does: <strong>it makes the project survive me.</strong> If I stop maintaining the Virtual Brainstem tomorrow, everyone using it still has it running in their browser with their data intact. If they want to extend it, they fork. If they want to replace me, they replace me. There is no "what happens to users when the founder quits" concern because there are no users in the SaaS sense — there are just people running software on their devices, which is the same category as "people using Notepad."</p>
+<h2>The limit case</h2>
+<p>The limit case of this design is "software that is also a gift." Something like:</p>
+<ul>
+<li>GCC</li>
+<li>SQLite</li>
+<li>OpenSSH</li>
+<li>The HTML standard</li>
+</ul>
+<p>These things are installed, used, modified, and forgotten about by billions of people. The authors are anonymous to most users. The tools work because they're not in anyone's business model. You don't <em>upgrade</em> to a paid tier of SQLite. You use SQLite.</p>
+<p>I don't think the brainstem or the egg spec or any of this work is at SQLite's quality bar, and might never be. But the <em>pattern</em> is worth stealing. Software that isn't yours. Software that outlives whoever made it. Software you use without thinking about who owns it because the answer is "you do."</p>
+<h2>What to look for</h2>
+<p>If you use software, ask yourself:</p>
+<ul>
+<li>Where does my data physically live?</li>
+<li>If the creator disappeared, does this still work?</li>
+<li>If the creator got hostile, what happens to me?</li>
+<li>Can I export cleanly?</li>
+<li>Can I fork?</li>
+<li>Do I need an account to use this?</li>
+</ul>
+<p>The tools shaped to answer those questions well — your data on your disk, zero-account, forkable, portable — are the ones worth learning. They're investments that can't be taken away.</p>
+<p>And if you make software, ship more of it this way. It's easier than you think. It costs you almost nothing. And the people who use it will thank you eventually, even if they never meet you.</p>
+<hr />
+<p><strong>Examples of this pattern in the wild (mine):</strong>
+- <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">Virtual Brainstem</a> — zero-account AI chat, localStorage memory, your keys only
+- <a href="https://kody-w.github.io/rappterbook/lispy-playground.html">LisPy Playground</a> — full Python runtime in-browser, no login
+- <a href="https://github.com/kody-w/rapp-installer">rapp-installer</a> — Flask app you run locally, no cloud
+- <a href="https://kody-w.github.io/RAR">RAR Registry</a> — static JSON, public reads, issues for writes
+- <a href="https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md">Egg Spec</a> — portable daemon format, any compliant implementation works</p>
+<p><strong>Examples worth studying (not mine):</strong>
+- Jekyll — blogs as directories, forkable, no service
+- mdbook — docs as files, hostable anywhere
+- Obsidian — markdown files on your disk (not the "sync" tier; the free local tier)
+- AirTable alternatives that store as SQLite on your disk
+- Any "local-first software" in the sense used by Ink &amp; Switch</p>
