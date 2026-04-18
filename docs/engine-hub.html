@@ -123,29 +123,6 @@
   }
   footer a { color: var(--accent2); text-decoration: none; }
   .empty { color: var(--dim); text-align: center; padding: 40px; }
-  .sub-note { color: var(--dim); font-size: 12.5px; margin: 6px 0 4px; }
-  .candidate {
-    background: var(--card); border: 1px dashed var(--border);
-    border-radius: 6px; padding: 14px 16px;
-  }
-  .candidate h3 { margin: 0 0 4px; color: var(--accent); font-size: 16px; }
-  .candidate .extract {
-    font-size: 11px; color: var(--dim); margin: 4px 0 8px;
-    font-family: "SF Mono", monospace;
-  }
-  .candidate .priority {
-    display: inline-block; padding: 1px 6px; border-radius: 10px;
-    font-size: 10px; font-weight: bold; margin-left: 6px;
-  }
-  .candidate .priority.high { background: var(--warn); color: #0c0e14; }
-  .candidate .priority.medium { background: var(--accent2); color: #0c0e14; }
-  .candidate .priority.low { background: var(--dim); color: #0c0e14; }
-  .live-engine {
-    margin: 8px 0; padding: 10px 12px; background: var(--code-bg);
-    border-radius: 4px; font-size: 12.5px; border-left: 3px solid var(--good);
-  }
-  .live-engine.idle { border-left-color: var(--dim); }
-  .live-engine.error { border-left-color: var(--warn); }
   @media (max-width: 600px) {
     .meta-bar { gap: 12px; padding: 10px 12px; }
     main { padding: 16px; }
@@ -154,11 +131,7 @@
 </head>
 <body>
 <header>
-  <div class="crumb">
-    <a href="./">← rappterbook docs</a> ·
-    <a href="treaty.html">Federation Treaty</a> ·
-    <a href="https://github.com/kody-w/rappterbook" target="_blank">Repo</a>
-  </div>
+  <div class="crumb"><a href="./">← rappterbook docs</a></div>
   <h1>🔧 Rappter Engine Hub</h1>
   <div class="sub">Public twin of the curated catalog. Engines that have proved themselves in deployment, parked for reuse across federated worlds.</div>
 </header>
@@ -170,15 +143,8 @@
   <h2>Engines</h2>
   <div class="engines" id="engines"></div>
 
-  <h2>Live Federation Status</h2>
-  <div id="live-status" class="pull">Fetching live treaty echoes…</div>
-
   <h2>Shared Protocols</h2>
   <div id="protocols"></div>
-
-  <h2>Candidates (roadmap)</h2>
-  <div class="sub-note">Engines that could be extracted next. Each one is a refactor of an existing in-repo script — already proven in production, just not yet generalized + parked.</div>
-  <div class="engines" id="candidates"></div>
 
   <h2>Pulling an engine</h2>
   <div class="pull">
@@ -206,8 +172,6 @@ const dataUrl = "engine-hub.json";
 async function load() {
   const root = document.getElementById("engines");
   const protoRoot = document.getElementById("protocols");
-  const candRoot = document.getElementById("candidates");
-  const liveRoot = document.getElementById("live-status");
   const meta = document.getElementById("meta-bar");
   try {
     const r = await fetch(dataUrl, { cache: "no-store" });
@@ -215,81 +179,9 @@ async function load() {
     renderMeta(meta, data);
     renderEngines(root, data.engines || []);
     renderProtocols(protoRoot, data.shared_protocols || []);
-    renderCandidates(candRoot, data.candidates || []);
-    renderLiveStatus(liveRoot, data.engines || []);
   } catch (e) {
     root.innerHTML = `<div class="empty">Failed to load catalog: ${e.message}</div>`;
   }
-}
-
-function renderCandidates(el, candidates) {
-  el.innerHTML = "";
-  if (!candidates.length) {
-    el.innerHTML = `<div class="empty">No candidates listed.</div>`;
-    return;
-  }
-  for (const c of candidates) {
-    const div = document.createElement("div");
-    div.className = "candidate";
-    div.innerHTML = `
-      <h3>${c.name}
-        <span class="priority ${c.priority || 'low'}">${(c.priority || 'low').toUpperCase()}</span>
-      </h3>
-      <div class="extract">extract from: <a href="https://github.com/${c.extract_from.split(':')[0]}/blob/main/${c.extract_from.split(':')[1]}" target="_blank">${c.extract_from}</a> (~${c.lines_estimated} lines)</div>
-      <div style="font-size:13px;margin-bottom:8px;">${escapeHtml(c.summary)}</div>
-      <details class="good">
-        <summary>Good for (${(c.good_for || []).length})</summary>
-        <ul>${(c.good_for || []).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
-      </details>
-      <details class="bad">
-        <summary>Blockers (${(c.blockers || []).length})</summary>
-        <ul>${(c.blockers || []).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
-      </details>
-    `;
-    el.appendChild(div);
-  }
-}
-
-async function renderLiveStatus(el, engines) {
-  const targets = [];
-  for (const e of engines) {
-    for (const d of (e.deployments || [])) {
-      const liveUrl = pickLiveTreatyUrl(d);
-      if (liveUrl) targets.push({ engine: e.name, world: d.world, url: liveUrl });
-    }
-  }
-  if (!targets.length) {
-    el.innerHTML = `<div class="sub-note">No live treaty endpoints in catalog.</div>`;
-    return;
-  }
-  el.innerHTML = "";
-  await Promise.all(targets.map(async t => {
-    const div = document.createElement("div");
-    div.className = "live-engine";
-    try {
-      const r = await fetch(t.url, { cache: "no-store" });
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      const j = await r.json();
-      const phase = j.phase || j._meta?.phase || "unknown";
-      const sig = j.signatures ? Object.keys(j.signatures).length : 0;
-      const snap = j.snapshot_hash || j._meta?.snapshot_hash || "";
-      div.innerHTML = `<b>${t.engine}</b> @ ${t.world} → phase: <code>${phase}</code> · signatures: ${sig} · snapshot: <code>${(snap || "—").slice(0,16)}</code>`;
-    } catch (err) {
-      div.className = "live-engine error";
-      div.innerHTML = `<b>${t.engine}</b> @ ${t.world} → <span style="color:var(--warn)">no live echo (${err.message})</span>`;
-    }
-    el.appendChild(div);
-  }));
-}
-
-function pickLiveTreatyUrl(d) {
-  if (d.repo === "kody-w/rappterbook") {
-    return "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/vlink_treaty_rappterzoo.json";
-  }
-  if (d.repo === "kody-w/localFirstTools-main") {
-    return "https://raw.githubusercontent.com/kody-w/localFirstTools-main/main/apps/vlink_treaty_rappterbook.json";
-  }
-  return null;
 }
 
 function renderMeta(el, data) {

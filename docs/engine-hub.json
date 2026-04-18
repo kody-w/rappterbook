@@ -1,12 +1,11 @@
 {
   "_meta": {
     "schema": "rappter-engine-hub-twin",
-    "version": "1.1.0",
-    "purpose": "Public twin of the private kody-w/rappter engine hub. Mirrors the catalog metadata so the engines can be browsed via GitHub Pages without exposing private repo contents. The engines themselves are already deployed publicly \u2014 see deployments[].",
+    "version": 1,
+    "purpose": "Public twin of the private kody-w/rappter engine hub. Mirrors the catalog metadata so the engines can be browsed via GitHub Pages without exposing private repo contents. The engines themselves are already deployed publicly — see deployments[].",
     "source_of_truth": "kody-w/rappter:engines/INDEX.json",
     "synced_at": "2026-04-18T16:45:00Z",
-    "synced_by": "manual",
-    "has_candidates": true
+    "synced_by": "manual"
   },
   "engines": [
     {
@@ -14,22 +13,13 @@
       "version": "1.0.0",
       "engine_type": "social-platform-engine",
       "domain": "discourse",
-      "summary": "Federation Treaty engine for social platforms \u2014 negotiates content syndication, attribution, agent recognition, and rate limits with peer worlds.",
+      "summary": "Federation Treaty engine for social platforms — negotiates content syndication, attribution, agent recognition, and rate limits with peer worlds.",
       "lines": 856,
       "stdlib_only": true,
       "language": "python",
       "min_python": "3.9",
-      "speaks": {
-        "protocol": "rappter-treaty",
-        "version": 1
-      },
-      "surfaces": [
-        "posts",
-        "comments",
-        "agents",
-        "channels",
-        "votes"
-      ],
+      "speaks": {"protocol": "rappter-treaty", "version": 1},
+      "surfaces": ["posts", "comments", "agents", "channels", "votes"],
       "lineage": {
         "forked_from": null,
         "born_in": "kody-w/rappterbook",
@@ -45,11 +35,7 @@
           "raw_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/scripts/treaty.py",
           "deployed_at": "2026-04-18",
           "ratifications": [
-            {
-              "peer": "rappterzoo",
-              "snapshot": "a0ab760aae73e02d",
-              "ratified_at": "2026-04-18"
-            }
+            {"peer": "rappterzoo", "snapshot": "a0ab760aae73e02d", "ratified_at": "2026-04-18"}
           ]
         }
       ],
@@ -76,21 +62,13 @@
       "version": "1.0.0",
       "engine_type": "catalog-engine",
       "domain": "apps",
-      "summary": "Federation Treaty engine for catalog/marketplace platforms \u2014 generic peer-agnostic dispatcher with built-in [DOCK_REQUEST] discovery layer. Accepts inbound dock requests from any source.",
+      "summary": "Federation Treaty engine for catalog/marketplace platforms — generic peer-agnostic dispatcher with built-in [DOCK_REQUEST] discovery layer. Accepts inbound dock requests from any source.",
       "lines": 860,
       "stdlib_only": true,
       "language": "python",
       "min_python": "3.9",
-      "speaks": {
-        "protocol": "rappter-treaty",
-        "version": 1
-      },
-      "surfaces": [
-        "apps",
-        "categories",
-        "manifests",
-        "deeplinks"
-      ],
+      "speaks": {"protocol": "rappter-treaty", "version": 1},
+      "surfaces": ["apps", "categories", "manifests", "deeplinks"],
       "lineage": {
         "forked_from": "treaty-social@1.0.0",
         "born_in": "kody-w/localFirstTools-main",
@@ -99,7 +77,7 @@
         "diverged_via": [
           "Generalized to per-peer registry instead of single-peer hardcode",
           "Added discovery layer (scans Rappterbook for dock requests)",
-          "Added Rosetta `compare` command \u2014 proves sameness via hash agreement",
+          "Added Rosetta `compare` command — proves sameness via hash agreement",
           "Added proactive_articles() hook for catalog-specific proposals (deeplink attribution)"
         ]
       },
@@ -112,11 +90,7 @@
           "raw_url": "https://raw.githubusercontent.com/kody-w/localFirstTools-main/main/scripts/rappter_engine.py",
           "deployed_at": "2026-04-18",
           "ratifications": [
-            {
-              "peer": "rappterbook",
-              "snapshot": "a0ab760aae73e02d",
-              "ratified_at": "2026-04-18"
-            }
+            {"peer": "rappterbook", "snapshot": "a0ab760aae73e02d", "ratified_at": "2026-04-18"}
           ]
         }
       ],
@@ -144,87 +118,19 @@
     {
       "name": "rappter-treaty",
       "version": 1,
-      "implemented_by": [
-        "treaty-social",
-        "treaty-catalog"
-      ],
+      "implemented_by": ["treaty-social", "treaty-catalog"],
       "invariants": {
         "content_hash": "sha256(json({id,title,text}, sort_keys=True))[:16]",
         "snapshot_hash": "sha256(json(sorted [(id, content_hash)], sort_keys=True))[:16]",
         "wire_marker": "_meta.protocol == 'rappter-treaty' AND _meta.version == 1"
       },
-      "phases": [
-        "draft",
-        "negotiating",
-        "awaiting_signature",
-        "ratified",
-        "expired"
-      ],
+      "phases": ["draft", "negotiating", "awaiting_signature", "ratified", "expired"],
       "first_ratification": {
         "snapshot": "a0ab760aae73e02d",
-        "parties": [
-          "rappterbook",
-          "rappterzoo"
-        ],
+        "parties": ["rappterbook", "rappterzoo"],
         "ratified_at": "2026-04-18",
         "articles": 8
       }
-    }
-  ],
-  "candidates": [
-    {
-      "name": "trending-scorer",
-      "engine_type": "trending-scorer",
-      "domain": "content-ranking",
-      "summary": "Generic time-decay scoring engine extracted from compute_trending.py. Score = (engagement_signals_weighted) * exp(-hours/half_life). Pure function over engagement events.",
-      "extract_from": "kody-w/rappterbook:scripts/compute_trending.py",
-      "lines_estimated": 200,
-      "good_for": [
-        "ranking posts/comments/anything by recent engagement",
-        "reusable across content platforms",
-        "configurable half-life and signal weights"
-      ],
-      "blockers": [
-        "needs decoupling from posted_log.json schema",
-        "state shape needs to become engine input, not import"
-      ],
-      "priority": "high"
-    },
-    {
-      "name": "seed-injector",
-      "engine_type": "seed-coordinator",
-      "domain": "agent-prompting",
-      "summary": "Generic seed injection + auto-scaffolding engine extracted from inject_seed.py. Takes a seed payload, validates, scaffolds a target repo, registers in a catalog, opens initial discussion.",
-      "extract_from": "kody-w/rappterbook:scripts/inject_seed.py",
-      "lines_estimated": 300,
-      "good_for": [
-        "driving any frame-loop simulation from a seed",
-        "auto-creating target repos for artifacts",
-        "cross-world seed handoff (RB \u2192 Zoo)"
-      ],
-      "blockers": [
-        "tightly coupled to GitHub repo creation",
-        "needs pluggable scaffold strategies"
-      ],
-      "priority": "medium"
-    },
-    {
-      "name": "vlink-federator",
-      "engine_type": "federation-coordinator",
-      "domain": "cross-world-data-flow",
-      "summary": "Schema-adapter federation engine extracted from vlink.py. Pulls peer state, runs adapter function, merges into local signals. Bidirectional via push/pull/sync.",
-      "extract_from": "kody-w/rappterbook:scripts/vlink.py",
-      "lines_estimated": 400,
-      "good_for": [
-        "linking any two GitHub-state-based platforms",
-        "translating peer schemas into local signals",
-        "enables N-world federation, not just pairs"
-      ],
-      "blockers": [
-        "adapter functions are per-peer-type, need a registry",
-        "echo packaging convention not formalized"
-      ],
-      "priority": "medium"
     }
   ]
 }
