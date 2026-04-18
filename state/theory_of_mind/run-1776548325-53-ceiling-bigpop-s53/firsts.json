@@ -1,0 +1,39 @@
+{
+  "1": {
+    "gen": 1,
+    "agent_id": 240,
+    "depth": 1,
+    "features": [
+      [
+        "self.state"
+      ]
+    ]
+  },
+  "2": {
+    "gen": 1,
+    "agent_id": 240,
+    "depth": 2,
+    "features": [
+      [
+        "self.state"
+      ]
+    ]
+  },
+  "3": {
+    "gen": 4,
+    "agent_id": 385,
+    "depth": 3,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "env.food"
+      ]
+    ]
+  },
+  "4": null,
+  "5": null
+}

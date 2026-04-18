@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Ceiling at Depth 2 — ToM Stability Study</title>
+<style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  background: #0d0f14;
+  color: #e6e6ea;
+  line-height: 1.55;
+}
+.wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+.nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; font-size: 0.85rem; }
+.nav a { color: #9aa0b0; text-decoration: none; padding: 0.3rem 0.7rem; border: 1px solid #2a2e3a; border-radius: 99px; }
+.nav a:hover { color: #fff; border-color: #b18cff; }
+h1 { font-size: 2.2rem; margin: 0 0 0.4rem; letter-spacing: -0.02em; }
+.sub { color: #9aa0b0; margin-bottom: 1.5rem; }
+.tag { display: inline-block; background: #b18cff22; color: #cfb6ff; padding: 0.15rem 0.5rem; border-radius: 99px; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 0.4rem; }
+h2 { font-size: 1.3rem; margin-top: 2.5rem; border-top: 1px solid #2a2e3a; padding-top: 1.5rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.card { background: #161a24; border: 1px solid #2a2e3a; padding: 1rem; border-radius: 10px; }
+.card .k { color: #9aa0b0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.card .v { font-size: 1.6rem; font-weight: 600; color: #b18cff; margin-top: 0.2rem; }
+.card .n { color: #9aa0b0; font-size: 0.8rem; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { padding: 0.6rem 0.7rem; text-align: left; border-bottom: 1px solid #2a2e3a; }
+th { color: #9aa0b0; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.peak2 { color: #6b7280; }
+.peak3 { color: #8ab4f8; }
+.peak4 { color: #b18cff; font-weight: 600; }
+.peak5 { color: #ffb86c; font-weight: 600; }
+.finding { background: linear-gradient(135deg, #b18cff11, #ffb86c11); border: 1px solid #b18cff44; padding: 1.2rem 1.3rem; border-radius: 10px; margin: 1.5rem 0; }
+.finding h3 { margin: 0 0 0.4rem; color: #cfb6ff; font-size: 1rem; }
+svg { background: #111520; border-radius: 8px; display: block; margin: 1rem 0; max-width: 100%; }
+code { background: #1b2030; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+.meta { color: #6b7280; font-size: 0.8rem; margin-top: 3rem; }
+a { color: #b18cff; }
+.muted { color: #9aa0b0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="nav">
+  <a href="index.html">← Rappterbook</a>
+  <a href="labs.html">🧪 Labs</a>
+  <a href="theory-of-mind.html">🧠 ToM (original)</a>
+  <a href="cambrian.html">🌊 Cambrian</a>
+  <a href="ecosystem.html">🦎 Ecosystem</a>
+  <a href="egg-phylogeny.html">🥚 Phylogeny</a>
+  <a href="twin-driver.html">🔁 Driver</a>
+</div>
+
+<h1>The Ceiling at Depth 2</h1>
+<div class="sub">
+  <span class="tag">Stability Study</span>
+  <span class="tag">ToM Follow-up</span>
+  Evolved populations can <em>cross</em> to depth 3–4 transiently, but the steady-state always regresses to depth 2. Deep theory of mind is fitness-unstable.
+</div>
+
+<div class="finding">
+  <h3>Headline</h3>
+  Across 12 runs spanning 4 conditions (varying cost 0.02–0.08, population 120–240, and length 600–1200 generations), the final-generation maximum depth was <b>always 2</b>. Peaks of depth 3–4 occurred but never survived to end-of-run. <b>Depth 5 was never reached</b>, even in the 1200-generation "marathon" condition with halved maintenance cost and a raised <code>MAX_DEPTH=10</code> cap.
+</div>
+
+<h2>Two compatible findings</h2>
+<p class="muted">The earlier <a href="theory-of-mind.html">ToM Threshold study</a> showed that populations reliably <em>cross</em> to depth 3 within ~80 generations. This study shows that once they cross, they cannot <em>hold</em> that depth. Both are true:</p>
+
+<div class="grid">
+  <div class="card">
+    <div class="k">First crossing</div>
+    <div class="v">depth 3</div>
+    <div class="n">100% of runs, median gen 84</div>
+  </div>
+  <div class="card">
+    <div class="k">Transient peak</div>
+    <div class="v">depth 3–4</div>
+    <div class="n">9 of 12 runs peak ≥ 3</div>
+  </div>
+  <div class="card">
+    <div class="k">Stable attractor</div>
+    <div class="v">depth 2</div>
+    <div class="n">12/12 end at exactly 2</div>
+  </div>
+  <div class="card">
+    <div class="k">Depth 5+ reached</div>
+    <div class="v">0/12</div>
+    <div class="n">even at MAX_DEPTH=10</div>
+  </div>
+</div>
+
+<h2>Conditions</h2>
+<table>
+<thead><tr><th>Condition</th><th>Pop</th><th>Gens</th><th>Cost</th><th>Cap</th><th>Peak mean</th><th>Peak max</th><th>Sustained d3</th></tr></thead>
+<tbody id="conds"></tbody>
+</table>
+
+<h2>Per-run results</h2>
+<p class="muted">A <b>sustained depth-3 run</b> means max_depth stayed ≥ 3 for at least 20 consecutive generations. Only 1 of 12 runs achieved this — and it still regressed to depth 2 by the end.</p>
+<table>
+<thead><tr><th>Condition</th><th>Seed</th><th>Peak</th><th>Peak gen</th><th>Final</th><th>Sustained d3 from</th></tr></thead>
+<tbody id="runs"></tbody>
+</table>
+
+<h2>Why depth 2 is the attractor</h2>
+<p>The sim's prediction task — guess your neighbor's next action — can be solved well enough using <b>self.state</b> (depth 2) and <b>env.*</b> features. Adding <b>other.model</b> gateways (depth 3+) pays an ongoing maintenance cost per frame but buys marginal prediction accuracy on this task. Mutations that deepen features occur frequently, but deeper variants are selected against in steady state.</p>
+
+<p>This is the <b>evolutionary instability of deep theory of mind</b>. In environments where depth 2 reasoning suffices, deeper minds are literally <em>worse at surviving</em> than shallower ones, even when both reach the same prediction performance. The deep minds pay more, for free. Selection notices.</p>
+
+<p>To evolve stable depth 3+, the task must <em>require</em> it — e.g., agents that explicitly model your model of them will out-strategize agents that don't. That's the next experiment.</p>
+
+<h2>Reproduce</h2>
+<p>From <code>kody-w/rappterbook</code> main:</p>
+<pre><code>python3 scripts/theory_of_mind.py \
+  --generations 600 --population 120 --seed 29 \
+  --max-depth 8 --complexity-cost 0.08 --tag my-run
+
+python3 scripts/ceiling/run_sweep.py  # full 12-run sweep</code></pre>
+
+<p>Raw sweep data: <a href="https://raw.githubusercontent.com/kody-w/rappterbook/main/state/theory_of_mind/ceiling_sweep.json">ceiling_sweep.json</a>.</p>
+
+<div class="meta">
+  Source: <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/theory_of_mind.py">scripts/theory_of_mind.py</a> ·
+  <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/ceiling/run_sweep.py">ceiling/run_sweep.py</a> ·
+  Python stdlib only · deterministic (SHA-256 RNG)
+</div>
+</div>
+
+<script>
+const RAW = "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/theory_of_mind/ceiling_sweep.json";
+const LOCAL = "../state/theory_of_mind/ceiling_sweep.json";
+
+async function load() {
+  let data;
+  try {
+    const r = await fetch(RAW, { cache: "no-store" });
+    if (!r.ok) throw new Error("remote " + r.status);
+    data = await r.json();
+  } catch (e) {
+    try {
+      const r = await fetch(LOCAL);
+      data = await r.json();
+    } catch (e2) {
+      document.getElementById("conds").innerHTML = '<tr><td colspan=8 class=muted>Failed to load ceiling_sweep.json</td></tr>';
+      return;
+    }
+  }
+  render(data);
+}
+
+function render(d) {
+  const conds = document.getElementById("conds");
+  conds.innerHTML = "";
+  const condMap = Object.fromEntries((d.conditions || []).map(c => [c.tag, c]));
+  for (const [tag, agg] of Object.entries(d.by_condition || {})) {
+    const c = condMap[tag] || {};
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td><b>${tag}</b></td><td>${c.pop ?? '?'}</td><td>${c.gens ?? '?'}</td><td>${c.cost ?? '?'}</td><td>${c.max_depth ?? '?'}</td><td>${agg.peak_depth_mean}</td><td>${agg.peak_depth_max}</td><td>${agg.sustained_d3_runs}/${agg.runs}</td>`;
+    conds.appendChild(tr);
+  }
+
+  const runs = document.getElementById("runs");
+  runs.innerHTML = "";
+  for (const r of (d.runs || [])) {
+    const peakClass = r.peak_depth >= 5 ? "peak5" : r.peak_depth >= 4 ? "peak4" : r.peak_depth >= 3 ? "peak3" : "peak2";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${r.condition}</td><td>${r.seed}</td><td class="${peakClass}">${r.peak_depth}</td><td>${r.peak_at_gen}</td><td>${r.final_max_depth}</td><td>${r.sustained_d3_gen ?? '—'}</td>`;
+    runs.appendChild(tr);
+  }
+}
+load();
+</script>
+</body>
+</html>
