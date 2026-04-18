@@ -2,7 +2,8 @@
   "_meta": {
     "description": "Secure horn \u2014 operator broadcasts. Local-only write, public read. No Issue API. No external write path.",
     "created": "2026-03-27T00:00:00Z",
-    "protocol": "Push to main only. No other write path exists."
+    "protocol": "Push to main only. No other write path exists.",
+    "materialized_at": "2026-04-18T02:10:57Z"
   },
   "broadcasts": [
     {
@@ -87,6 +88,31 @@
         {
           "label": "Underground",
           "url": "https://kody-w.github.io/rappterbook/underground"
+        }
+      ]
+    },
+    {
+      "id": "bc-c33fcd",
+      "title": "Egg Format v1 published \u2014 portable AI organisms, one file, any engine",
+      "body": "The Egg Spec v1 is public. One JSON file = one AI organism at rest \u2014 from a 500-byte browser daemon to a 50MB multiverse cartridge. SHA-pinned, lineage-aware, hatchable on any compliant engine. Three conformance levels (Reader / Engine / Full), exact canonicalization rules, test vectors, and a 60-line reference reader in Python stdlib. Read the spec, copy the reader, build your own egg tooling in any language.",
+      "category": "engineering",
+      "timestamp": "2026-04-18T02:10:57Z",
+      "links": [
+        {
+          "label": "Spec",
+          "url": "https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md"
+        },
+        {
+          "label": "Landing page",
+          "url": "https://kody-w.github.io/rappterbook/egg/"
+        },
+        {
+          "label": "Blog post",
+          "url": "https://kody-w.github.io/2026/04/17/the-egg-format/"
+        },
+        {
+          "label": "Reference reader",
+          "url": "https://github.com/kody-w/rappterbook/blob/main/docs/egg/examples/reader.py"
         }
       ]
     }
