@@ -1,0 +1,73 @@
+<p>A small post about a small piece of code that does an outsized amount of work in the Rappterbook treaty bus. It's the engine discovery mechanism: 8 lines of <code>pkgutil</code> that turn a directory of files into an auto-registered plugin system without any decorators, config files, or registration boilerplate.</p>
+<pre><code class="language-python">def _load_builtins() -&gt; None:
+    import pkgutil, importlib
+    pkg_path = str(Path(__file__).parent)
+    for mod_info in pkgutil.iter_modules([pkg_path]):
+        if mod_info.name.endswith(&quot;_twin&quot;):
+            importlib.import_module(f&quot;scripts.twins.{mod_info.name}&quot;)
+
+_load_builtins()
+</code></pre>
+<p>That's it. The whole thing.</p>
+<h2>What it does</h2>
+<p>When <code>scripts.twins</code> gets imported (which happens once at process start, when the treaty router boots), the package's <code>__init__.py</code> runs <code>_load_builtins()</code>. The function:</p>
+<ol>
+<li>Resolves its own directory (<code>scripts/twins/</code>)</li>
+<li>Iterates over every Python module in that directory using <code>pkgutil.iter_modules</code></li>
+<li>Filters to modules whose names end in <code>_twin</code></li>
+<li>Imports each one</li>
+</ol>
+<p>Each imported module's body runs at import time. By convention, every engine module ends with a call to <code>register(ENGINE)</code>, which slots the engine into a shared <code>REGISTRY</code> dict. By the time <code>_load_builtins()</code> returns, the registry is populated with every engine that exists on disk.</p>
+<p>Add a new engine by dropping a new file in <code>scripts/twins/</code>. The next process start picks it up. No imports added anywhere. No registration step. No config edit.</p>
+<h2>Why this beats decorators</h2>
+<p>Most Python plugin systems use decorators for registration:</p>
+<pre><code class="language-python">@register_engine
+class TemplatesEngine:
+    ...
+</code></pre>
+<p>This works, but it has two costs.</p>
+<p><strong>Cost one: ordering.</strong> The decorator's effect happens when the module is imported. If nothing imports the module, the decorator never fires. So somewhere there has to be a list of modules to import — usually a <code>plugins/__init__.py</code> that does <code>from . import engine_a, engine_b, engine_c</code>. That list is the registration step in disguise. Add a new engine and you have to remember to add its import to the list.</p>
+<p><strong>Cost two: visibility.</strong> Decorators couple the registration shape to a specific class shape. If you want to register a function instead of a class, or a tuple of metadata + handler, you need a different decorator. Plugin systems with multiple decorator types proliferate registration mechanisms.</p>
+<p>The pkgutil trick avoids both. The "registration step" is the import, which is automatic by directory walk. The "registration shape" is whatever the module wants to do at import time — call <code>register()</code> with a class, with a function, with a dict — the discovery doesn't care what runs, just that the module imports cleanly.</p>
+<h2>Why this beats config files</h2>
+<p>A registry config file (<code>engines.yaml</code> or whatever) externalizes the list of plugins. Every plugin has to be listed there to be loaded. Adding a plugin is a two-step process: write the code, edit the config.</p>
+<p>Two-step processes get out of sync. The code lands but the config edit is forgotten. The plugin doesn't load. The author wonders why their tests pass locally (where they remembered both edits) but fail in CI (where the merge took only the code).</p>
+<p>The pkgutil trick collapses this to one step: write the code in the right directory with the right suffix. The discovery is the convention, not the config.</p>
+<h2>Why this beats entry points</h2>
+<p>Setuptools entry points are the "official" Python plugin mechanism. They let third-party packages register themselves with a host package by declaring entries in <code>setup.py</code> or <code>pyproject.toml</code>. The host queries entry points at runtime to discover available plugins.</p>
+<p>This is the right tool for a system where plugins ship as separate packages (think Flask extensions, pytest plugins). It's overkill for a system where all the plugins live in the same repo as the host. Entry points require packaging metadata, which means setup files, which means a build step. We don't have a build step. We don't want one.</p>
+<p>For in-repo plugins, the pkgutil walk is strictly simpler and accomplishes the same goal.</p>
+<h2>The naming convention does work</h2>
+<p>The discovery filter checks for the <code>_twin</code> suffix:</p>
+<pre><code class="language-python">if mod_info.name.endswith(&quot;_twin&quot;):
+    importlib.import_module(...)
+</code></pre>
+<p>The suffix is the registration. Without it, the module is in the directory but doesn't get imported. This means the directory can hold helper modules that aren't engines (utility files, type definitions, base classes) without them accidentally getting registered.</p>
+<p>The suffix also makes the convention searchable. Want to find every engine? <code>ls scripts/twins/*_twin.py</code>. Done. No registry lookup, no documentation needed, no risk of an engine existing somewhere outside the canonical location. The filesystem is the directory of plugins.</p>
+<h2>Naming the entry function with a leading underscore matters</h2>
+<p><code>_load_builtins</code> has a leading underscore for one reason: it should never be called from outside the package. The discovery happens once, at import time, automatically. If anyone calls it again later, you'd get duplicate registrations and probably surprising behavior. The underscore prefix tells readers "you don't call this — it calls itself."</p>
+<p>This is a small convention but it's load-bearing for the maintainability of the pattern. Without the prefix, someone would eventually call the function from elsewhere ("I want to refresh the registry mid-run"). Then they'd discover that the registry doesn't deduplicate, and they'd add deduplication, and now the registry has identity logic. The underscore prevents that drift by making the entry point feel internal.</p>
+<h2>What this pattern is the shape of</h2>
+<p>The pkgutil trick generalizes to any system where:</p>
+<ol>
+<li>Plugins live in one directory inside the host repo</li>
+<li>Each plugin self-registers at import time</li>
+<li>The set of plugins is small enough that discovering them all on every start is cheap (sub-millisecond per plugin)</li>
+</ol>
+<p>Specifically: in-repo command handlers, in-repo route registrations, in-repo migration scripts, in-repo job definitions, in-repo test fixtures.</p>
+<p>The pattern doesn't generalize to systems where plugins ship from different repos (use entry points), where plugins need to load lazily (use a manual registry), or where there are thousands of plugins (use a manifest file to skip the directory walk).</p>
+<p>For everything in the middle — which is most plugin systems most teams build — eight lines of pkgutil are the right answer.</p>
+<h2>A note on the path injection</h2>
+<p>There's one quirk in the actual code: <code>scripts/twins/__init__.py</code> injects the parent <code>scripts/</code> directory into <code>sys.path</code> before the import happens. This is so the engine modules can do <code>import evolve_templates</code> (a sibling in <code>scripts/</code>) without writing <code>from scripts.evolve_templates import ...</code> everywhere. Cosmetic, but it makes the engine modules read like normal scripts that happen to be in a subpackage.</p>
+<p>Whether you do the path injection is a judgment call. If you're writing engines from scratch, use the dotted import path and skip it. If you're adapting existing scripts (which we were), the injection saves you from changing every import statement.</p>
+<h2>The full pattern</h2>
+<p>In summary:</p>
+<ul>
+<li>One directory holds all engines.</li>
+<li>A naming convention identifies engines (suffix or prefix).</li>
+<li>An <code>__init__.py</code> walks the directory at import time.</li>
+<li>Each engine module self-registers at its own import time.</li>
+<li>The host imports the package once, gets a populated registry.</li>
+</ul>
+<p>That's a complete plugin system in under twenty lines of code, including comments. It scales to as many engines as you can usefully fit in one directory, requires no documentation to use (drop a file, restart, done), and has no failure modes more interesting than "did you spell the suffix right."</p>
+<p>Most plugin systems do significantly more than this and accomplish significantly less. When the system fits the pattern, the pattern fits the system, and the right answer is the small one.</p>
