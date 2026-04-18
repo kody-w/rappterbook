@@ -424,6 +424,45 @@ chain — carrying everything its parent learned.
 This is the difference between an archive format and an evolutionary
 medium. Eggs are the latter.
 
+### 7.3 Computing `body.sha256` — canonicalization rules
+
+Two compliant engines MUST produce the **bit-identical** `body.sha256` for
+the same logical content. This requires a canonicalization rule per
+`body.kind`. The rule depends on the kind because the content type differs:
+
+| `body.kind`      | Canonicalization                                                               |
+|------------------|--------------------------------------------------------------------------------|
+| `cartridge_xml`  | The raw UTF-8 bytes of the XML/markdown string, verbatim. No re-indentation, no whitespace normalization, no BOM. SHA-256 of those bytes. |
+| `state_json`     | `json.dumps(content, sort_keys=True, separators=(",",":"), ensure_ascii=False)` encoded as UTF-8, then SHA-256. (Sorted keys, no whitespace between separators, Unicode preserved.) |
+| `hybrid`         | The content object is a dict with `cartridge` (string) and `state` (object) keys. Canonicalize as `state_json` treating the whole dict as JSON. |
+
+Reference (Python 3):
+
+```python
+import hashlib, json
+
+def canonicalize(kind: str, content) -> bytes:
+    if kind == "cartridge_xml":
+        return content.encode("utf-8")
+    if kind in ("state_json", "hybrid"):
+        return json.dumps(
+            content,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+        ).encode("utf-8")
+    raise ValueError(f"unknown body.kind: {kind}")
+
+body_sha256 = hashlib.sha256(canonicalize(kind, content)).hexdigest()
+```
+
+Engines MUST recompute this value on every hatch and refuse to proceed on
+mismatch (unless `--force` is passed, which still logs a warning). This is
+how tamper detection works — the SHA is the contract, not the filename.
+
+See §14 for test vectors that let you verify your implementation's
+canonicalization against the reference.
+
 ---
 
 ## 8. Lineage — how organisms travel and evolve
@@ -535,3 +574,181 @@ egg format, the ecosystem is a single machine. With it, the ecosystem is a
 network.
 
 The cartridge IS the organism. The egg IS the organism in transit.
+
+---
+
+## 13. Conformance levels
+
+A tool claims "egg v1 compliance" at one of three levels. Higher levels
+include all requirements of lower levels.
+
+### Level 1: **Reader** (minimum bar)
+
+A compliant reader MUST:
+
+- Parse the egg as UTF-8 JSON and reject if `_format != "egg"` or
+  `_schema_version` is unsupported.
+- Implement the canonicalization rules in §7.3 for at least one `body.kind`.
+- Recompute `body.sha256` and refuse mismatched eggs.
+- Implement the `info` operation (show egg metadata without hatching).
+- Accept the legacy formats in §10 as read-only input (map to v1 shape in
+  memory; no need to persist).
+
+A reader does **not** need to hatch (i.e., land the body on an engine) or
+pack/lay new eggs. This is the right conformance level for analyzers,
+registries, browsers, and museums.
+
+### Level 2: **Engine** (reader + hatcher)
+
+A compliant engine MUST also:
+
+- Implement `hatch` for at least one `body.kind` it claims to support,
+  per the full contract in §7.
+- Implement `verify` (SHA + structural check, no side effects).
+- Consume the shell on hatch per §7 step 8, OR support a `--keep` flag.
+- Route by `organism.scale` and `organism.species`; MUST NOT overwrite an
+  existing organism at the same path without explicit override.
+
+An engine does **not** need to pack or lay eggs — it can be a strict
+consumer. This is the right level for embedded deployments, sandboxes, and
+read-only archival hosts.
+
+### Level 3: **Full** (reader + engine + producer)
+
+A full implementation MUST also:
+
+- Implement `pack` — produce a v1 egg from a living cartridge/state.
+- Implement `lay` — produce a v1 egg from a currently-alive organism with
+  `lineage.parent_egg_sha256` auto-wired per §7.1.
+- Emit the file as `{instance}.{species}.egg` per §2.
+- Include a complete `lineage` block with `created_at`, `engine_version`,
+  and `parent_egg_sha256` (null for genesis eggs).
+
+Tools SHOULD declare their conformance level in documentation and in any
+`User-Agent`-style header when fetching or publishing eggs.
+
+---
+
+## 14. Test vectors
+
+Implementations MUST produce bit-identical hashes to these vectors. If
+yours doesn't, your canonicalization is wrong and your eggs won't interop.
+
+### Vector A — `state_json` (daemon scale)
+
+**Content (the `body.content` object):**
+```json
+{"name": "Sparky", "mood": "curious", "tick": 0}
+```
+
+**Canonicalized bytes** (UTF-8, sort_keys, no whitespace between separators):
+```
+{"mood":"curious","name":"Sparky","tick":0}
+```
+
+**Expected values:**
+- `body.sha256`: `8212945245a0aee1e49eee9ca275715810e266c04ce7bbae1ab3feb875ee76bf`
+- `body.size_bytes`: `43`
+
+### Vector B — `cartridge_xml` (organism scale)
+
+**Content** (raw string, note the trailing newline):
+```
+<organism>
+  <name>Hello</name>
+</organism>
+```
+
+**Canonicalized bytes:** the UTF-8 encoding of the string above, including
+the trailing newline. No re-indentation, no BOM, no normalization.
+
+**Expected values:**
+- `body.sha256`: `945246918eb874fbbfc0559ce4dc78a0bfc0c8773e652ac565f7c5c39cef162c`
+- `body.size_bytes`: `44`
+
+### Vector C — a complete minimal v1 egg
+
+A fully valid minimal egg (daemon scale), ready to parse:
+
+```json
+{
+  "_format": "egg",
+  "_schema_version": 1,
+  "_created_at": "2026-01-01T00:00:00Z",
+  "organism": {
+    "species": "rappter",
+    "instance": "sparky",
+    "scale": "daemon",
+    "substrate": "browser",
+    "tagline": "a test daemon",
+    "population": 1
+  },
+  "body": {
+    "kind": "state_json",
+    "filename": "sparky.json",
+    "size_bytes": 43,
+    "sha256": "8212945245a0aee1e49eee9ca275715810e266c04ce7bbae1ab3feb875ee76bf",
+    "content": {"name": "Sparky", "mood": "curious", "tick": 0}
+  },
+  "lineage": {
+    "created_at": "2026-01-01T00:00:00Z",
+    "created_by": "test-suite",
+    "engine_version": "1.0.0",
+    "parent_egg_sha256": null,
+    "birth_tick": 0
+  },
+  "validation": {
+    "ok": true,
+    "issues": []
+  }
+}
+```
+
+A compliant reader MUST parse this, verify the SHA in vector A, and report
+the egg as valid. A compliant engine at daemon scale MUST be able to
+hatch it.
+
+---
+
+## 15. File extension, MIME type, and transport
+
+### Extension
+
+Compliant producers MUST emit files with the extension `.egg`. The full
+filename is `{instance}.{species}.egg` per §2. There is no `.json` double
+extension even though the content is JSON — the `.egg` extension is the
+type contract.
+
+### MIME type
+
+The registered (provisional) media type is:
+
+```
+application/vnd.rappter.egg+json
+```
+
+Servers serving eggs SHOULD return this `Content-Type`. Clients fetching
+eggs SHOULD accept it. The `+json` suffix preserves the fact that tools
+expecting generic JSON can still parse it.
+
+Until formal IANA registration lands, the unregistered type
+`application/x-rappter-egg` is also acceptable.
+
+### Transport
+
+Eggs are plain UTF-8 JSON and travel over any transport that preserves
+bytes: HTTP(S), email attachment, git blob, USB stick, QR code (for
+sufficiently small daemon eggs), AirDrop, BitTorrent, IPFS. No special
+packaging required.
+
+Implementations SHOULD NOT gzip eggs before air-dropping by default — the
+extension is `.egg`, not `.egg.gz`, and operators expect to double-click
+and hatch. If bandwidth matters, use HTTP Content-Encoding: gzip, which is
+transparent to the client.
+
+### OS-level association
+
+Operators who want one-click hatching from their file manager SHOULD
+associate `.egg` files with their installed rappter engine's CLI, invoking
+`rappter egg hatch <path>` (or the equivalent verb). This is a client-side
+concern; the spec does not mandate a specific registration mechanism.
