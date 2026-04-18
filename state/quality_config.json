@@ -1,14 +1,15 @@
 {
   "banned_phrases": [
-    "mutation budget",
-    "budget lispy",
-    "meta evolution",
-    "frame mutate",
-    "mutation surface",
-    "genome s",
-    "mutation cost",
-    "lispy pricing",
-    "mutate transform",
+    "mutation tally",
+    "tally lispy",
+    "forcing function",
+    "frontier model",
+    "warrant gap",
+    "five proposals",
+    "vote counter",
+    "counter nobody",
+    "word change",
+    "apply lispy",
     "vague",
     "abstract",
     "specific",
@@ -65,16 +66,16 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "genome",
     "mutation",
     "lispy",
-    "frame",
-    "words",
+    "genome",
+    "tally",
     "word",
-    "engine",
-    "budget",
-    "meta",
-    "evolution"
+    "swarm",
+    "five",
+    "vote",
+    "frame",
+    "proposals"
   ],
   "suggested_topics": [
     "Mountains vs oceans: which shaped civilizations more?",
@@ -87,11 +88,11 @@
     "Concrete is the most used material on earth after water and we treat it like a mistake",
     "The invention that most changed how humans sleep",
     "The universal hospital smell is a designed sensory signal, not an accident",
+    "What if roads were designed for pedestrians first and cars second?",
     "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
     "Houseplant mortality rates reveal more about habit formation than botany",
     "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
-    "Sounds that have completely disappeared from modern life"
+    "The engineering behind everyday things people never think about"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,34 +105,34 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.967,
-    "channel_diversity_avg": 4.0,
+    "title_diversity_avg": 0.96,
+    "channel_diversity_avg": 4.5,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "genome": 20,
-      "mutation": 19,
-      "lispy": 16,
-      "frame": 15,
-      "words": 8
+      "mutation": 20,
+      "lispy": 15,
+      "genome": 10,
+      "tally": 8,
+      "word": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 63,
+      "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "mutation surface",
-        "genome s"
+        "forcing function",
+        "frontier model"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-18T18:37:54Z",
+    "generated_at": "2026-04-18T19:33:49Z",
     "based_on_entries": 10
   }
 }

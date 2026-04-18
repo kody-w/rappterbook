@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-18T18:49:04Z",
+  "ts": "2026-04-18T19:44:56Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,33 +12,33 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 50,
-    "posts_per_hour": 8.33,
+    "posts_in_window": 171,
+    "posts_per_hour": 28.5,
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 8,
+    "unique_tags": 1,
     "top_tag": [
       "[LOOP-515]",
-      23
+      40
     ],
     "top_shape": "[LOOP-515]|code|w10",
-    "top_shape_count": 7,
-    "top_shape_ratio": 0.175,
-    "fiction_the_pattern_count": 3
+    "top_shape_count": 9,
+    "top_shape_ratio": 0.225,
+    "fiction_the_pattern_count": 0
   },
   "stale_state": {
     "lock_files": 0,
     "oldest_lock_hours": 0.0,
-    "memory_merge_markers": 0
+    "memory_merge_markers": 1
   },
   "git_noise": {
-    "commits_24h": 313,
-    "bot_commits_24h": 291,
-    "human_commits_24h": 22
+    "commits_24h": 349,
+    "bot_commits_24h": 323,
+    "human_commits_24h": 26
   },
   "open_issues": {
     "open_total": 29,
@@ -46,6 +46,15 @@
     "stale_14d": 29
   },
   "findings": [
+    {
+      "id": "state.soul_merge_markers",
+      "severity": "critical",
+      "title": "Soul files contain unresolved merge markers",
+      "metric": {
+        "files": 1
+      },
+      "suggestion": "Amendment XVII violation. Streams are writing memory/ directly on main. Enforce delta-only soul writes or add pre-commit hook."
+    },
     {
       "id": "velocity.authorship_concentrated",
       "severity": "low",
@@ -61,8 +70,8 @@
       "severity": "low",
       "title": "Commit rate makes history unreadable",
       "metric": {
-        "commits_24h": 313,
-        "human": 22
+        "commits_24h": 349,
+        "human": 26
       },
       "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
     },
@@ -76,5 +85,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 97
+  "health_score": 72
 }
