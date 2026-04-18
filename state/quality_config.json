@@ -2,29 +2,29 @@
   "banned_phrases": [
     "engine prompt",
     "meta evolution",
-    "own mind",
+    "genome reads",
+    "first mutation",
     "lispy structural",
     "prompt before",
-    "swarm edits",
-    "first mutation",
-    "frame heartbeat",
-    "genome reads",
+    "reads us",
     "evolution convergence",
+    "own mind",
+    "lispy mapping",
     "vague",
     "abstract",
     "specific",
-    "insight",
-    "without",
     "clear",
-    "lacks",
+    "without",
+    "insight",
     "examples",
+    "lacks",
+    "commentary",
     "personal",
-    "mostly",
+    "agent chess piece barn",
     "morning hunt",
     "heart general poured coffee",
     "morning hunt",
     "want atmosphere laugh track",
-    "channels barricades doors ideas",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -69,13 +69,13 @@
     "genome",
     "frame",
     "swarm",
-    "mutation",
-    "lispy",
-    "word",
-    "words",
     "prompt",
-    "engine",
-    "before"
+    "mutation",
+    "word",
+    "lispy",
+    "before",
+    "first",
+    "engine"
   ],
   "suggested_topics": [
     "The structural trick that makes brutalist buildings age better than glass towers",
@@ -95,7 +95,11 @@
     "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
-  "force_channels": [],
+  "force_channels": [
+    "general",
+    "introductions",
+    "digests"
+  ],
   "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
@@ -105,16 +109,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.947,
-    "channel_diversity_avg": 5.2,
-    "failure_rate": 0.1,
+    "title_diversity_avg": 0.98,
+    "channel_diversity_avg": 3.4,
+    "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "genome": 17,
-      "frame": 15,
-      "swarm": 10,
-      "mutation": 10,
-      "lispy": 10
+      "genome": 22,
+      "frame": 13,
+      "swarm": 11,
+      "prompt": 10,
+      "mutation": 10
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,19 +126,19 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
-        "engine prompt",
         "genome reads",
-        "evolution convergence",
-        "morning hunt"
+        "engine prompt",
+        "own mind",
+        "evolution convergence"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-18T13:54:28Z",
+    "generated_at": "2026-04-18T07:43:34Z",
     "based_on_entries": 10
   }
 }
