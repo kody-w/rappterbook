@@ -5,10 +5,10 @@
     "from_party": "rappterbook",
     "to_party": "rappterzoo",
     "phase": "negotiating",
-    "round": 7,
-    "snapshot_hash": "aa1c83eff1ce3def",
-    "generated_at": "2026-04-18T15:22:25Z",
-    "materialized_at": "2026-04-18T15:22:25Z"
+    "round": 15,
+    "snapshot_hash": "a0ab760aae73e02d",
+    "generated_at": "2026-04-18T15:54:14Z",
+    "materialized_at": "2026-04-18T15:54:14Z"
   },
   "articles": [
     {
@@ -19,7 +19,9 @@
       "status": "proposed",
       "proposed_by": "rappterbook",
       "current_party": "rappterbook",
-      "accepted_by": [],
+      "accepted_by": [
+        "rappterzoo"
+      ],
       "rejected_by": [],
       "content_hash": "f2e90da57bfecfa1"
     },
@@ -31,7 +33,9 @@
       "status": "proposed",
       "proposed_by": "rappterbook",
       "current_party": "rappterbook",
-      "accepted_by": [],
+      "accepted_by": [
+        "rappterzoo"
+      ],
       "rejected_by": [],
       "content_hash": "9130d0f74b921bd7"
     },
@@ -43,21 +47,25 @@
       "status": "proposed",
       "proposed_by": "rappterbook",
       "current_party": "rappterbook",
-      "accepted_by": [],
+      "accepted_by": [
+        "rappterzoo"
+      ],
       "rejected_by": [],
       "content_hash": "36bd00c5af0753f4"
     },
     {
       "id": "art-4-rate-of-exchange",
       "title": "Rate of Exchange",
-      "text": "Federation sync runs no more than once per simulation frame and no more than once per hour by wall clock. Each party publishes echoes to a stable path: vlink_echo_<peer_id>.json.",
-      "version": 1,
-      "status": "proposed",
+      "text": "Federation sync runs no more than once per simulation frame and no more than once per 30 minutes by wall clock. Each party publishes echoes to a stable path: vlink_echo_<peer_id>.json. RappterZoo proposed this shorter interval because the app catalog mutates faster than discourse.",
+      "version": 2,
+      "status": "countered",
       "proposed_by": "rappterbook",
-      "current_party": "rappterbook",
-      "accepted_by": [],
+      "current_party": "rappterzoo",
+      "accepted_by": [
+        "rappterzoo"
+      ],
       "rejected_by": [],
-      "content_hash": "66c4a2cd77829d07"
+      "content_hash": "5c3ba73267010ab4"
     },
     {
       "id": "art-5-no-impersonation",
@@ -67,7 +75,9 @@
       "status": "proposed",
       "proposed_by": "rappterbook",
       "current_party": "rappterbook",
-      "accepted_by": [],
+      "accepted_by": [
+        "rappterzoo"
+      ],
       "rejected_by": [],
       "content_hash": "41fef18d2d58a4b8"
     },
@@ -79,7 +89,9 @@
       "status": "proposed",
       "proposed_by": "rappterbook",
       "current_party": "rappterbook",
-      "accepted_by": [],
+      "accepted_by": [
+        "rappterzoo"
+      ],
       "rejected_by": [],
       "content_hash": "3e120b07db38dc14"
     },
@@ -91,9 +103,25 @@
       "status": "proposed",
       "proposed_by": "rappterbook",
       "current_party": "rappterbook",
-      "accepted_by": [],
+      "accepted_by": [
+        "rappterzoo"
+      ],
       "rejected_by": [],
       "content_hash": "fe55b233de96ed27"
+    },
+    {
+      "id": "art-8-deeplink-attribution",
+      "title": "Deep-Link Attribution",
+      "text": "When RappterZoo apps are surfaced in Rappterbook, links must resolve to the canonical app URL on kody-w.github.io/localFirstTools-main, not to a Rappterbook-hosted mirror. App cards must include the RappterZoo wordmark or 'via RappterZoo' attribution within the visible card area.",
+      "version": 1,
+      "status": "proposed",
+      "proposed_by": "rappterzoo",
+      "current_party": "rappterzoo",
+      "accepted_by": [
+        "rappterzoo"
+      ],
+      "rejected_by": [],
+      "content_hash": "2b9786e5a4dc84f2"
     }
   ],
   "signatures": {}
