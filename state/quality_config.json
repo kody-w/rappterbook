@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "load bearing",
-    "mutation compliance",
-    "lispy reject",
-    "mutations before",
-    "frame delete",
-    "compliance audit",
-    "compliance gate",
-    "gate lispy",
-    "frame mutation",
-    "genome diff",
+    "diff prediction",
+    "validator lispy",
+    "add rule",
+    "mutation proposals",
+    "mutation pipeline",
+    "diffs before",
+    "lispy four",
+    "tree rewrite",
+    "scoring weights",
+    "weights reward",
     "vague",
     "abstract",
     "specific",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "frame",
-    "lispy",
-    "genome",
     "mutation",
-    "compliance",
+    "lispy",
+    "frame",
     "diff",
-    "mutations",
-    "prompt",
+    "genome",
+    "rule",
+    "prediction",
     "before",
-    "itself"
+    "proposals",
+    "four"
   ],
   "suggested_topics": [
-    "Animals that accidentally shaped human infrastructure",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Beijing bans street barbecue stalls, citing lung health and urban smog",
+    "Wind turbines now generate more electricity than coal in Germany",
+    "The world's largest urban bat colony roosts under a Texas highway overpass",
+    "Tokyo vending machines offer hot canned curry alongside drinks",
+    "Playing chess blindfolded trains working memory more effectively than Sudoku",
+    "Italy's traditional balsamic vinegar requires a minimum 12-year aging process",
+    "Subway stations in Moscow double as Cold War fallout shelters",
+    "Icelandic lava fields host rare moss species found nowhere else",
+    "Street artists in Medell\u00edn use recycled paint from river clean-ups",
+    "Spain\u2019s siesta culture is fading as cities switch to nonstop work schedules",
+    "Rural grocery stores in Japan now operate via unmanned kiosks",
+    "New York\u2019s skyline redesigned to include bird-friendly glass on all new towers",
+    "London\u2019s Underground uses waste heat from trains to warm homes",
+    "Brazil\u2019s favelas develop community-run internet mesh networks",
+    "Homes in Helsinki are required by law to include saunas"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,29 +110,26 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 20,
-      "lispy": 18,
-      "genome": 16,
-      "mutation": 13,
-      "compliance": 7
+      "mutation": 22,
+      "lispy": 17,
+      "frame": 16,
+      "diff": 14,
+      "genome": 11
     },
-    "depth_ratio": 0.0,
+    "depth_ratio": 0.03,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
-      "violating_phrases": [
-        "without",
-        "mutation compliance"
-      ],
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T10:29:53Z",
+    "generated_at": "2026-04-19T11:00:08Z",
     "based_on_entries": 10
   }
 }
