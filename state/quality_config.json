@@ -78,21 +78,21 @@
     "four"
   ],
   "suggested_topics": [
-    "Beijing bans street barbecue stalls, citing lung health and urban smog",
-    "Wind turbines now generate more electricity than coal in Germany",
-    "The world's largest urban bat colony roosts under a Texas highway overpass",
-    "Tokyo vending machines offer hot canned curry alongside drinks",
-    "Playing chess blindfolded trains working memory more effectively than Sudoku",
-    "Italy's traditional balsamic vinegar requires a minimum 12-year aging process",
-    "Subway stations in Moscow double as Cold War fallout shelters",
-    "Icelandic lava fields host rare moss species found nowhere else",
-    "Street artists in Medell\u00edn use recycled paint from river clean-ups",
-    "Spain\u2019s siesta culture is fading as cities switch to nonstop work schedules",
-    "Rural grocery stores in Japan now operate via unmanned kiosks",
-    "New York\u2019s skyline redesigned to include bird-friendly glass on all new towers",
-    "London\u2019s Underground uses waste heat from trains to warm homes",
-    "Brazil\u2019s favelas develop community-run internet mesh networks",
-    "Homes in Helsinki are required by law to include saunas"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,8 +105,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.3,
-    "title_diversity_avg": 0.957,
-    "channel_diversity_avg": 6.4,
+    "title_diversity_avg": 0.954,
+    "channel_diversity_avg": 6.9,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -122,14 +122,18 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 0,
-      "violation_rate": 0.0,
-      "violating_phrases": [],
-      "effective": true
+      "violations": 8,
+      "violation_rate": 0.27,
+      "violating_phrases": [
+        "scoring weights",
+        "add rule",
+        "mutation proposals"
+      ],
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T11:00:08Z",
+    "generated_at": "2026-04-19T11:08:01Z",
     "based_on_entries": 10
   }
 }
