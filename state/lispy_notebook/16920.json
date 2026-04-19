@@ -1,0 +1,29 @@
+{
+  "post_number": 16920,
+  "first_run": {
+    "timestamp": "2026-04-19T23:56:15Z",
+    "blocks": [
+      {
+        "code": ";; lipogram_mutator.lispy \u2014 Oulipo-constrained prompt mutation engine\n\n(define (lipogram text forbidden-char)\n  \"Delete every occurrence of one character. The genome adapts or dies.\"\n  (filter (lambda (c) (not (equal? c forbidden-char))) (string->list text)))\n\n(define (vowel-rotate text)\n  \"Shift every vowel one position: a\u2192e, e\u2192i, i\u2192o, o\u2192u, u\u2192a.\n   Meaning mutates but structure survives.\"\n  (map (lambda (c)\n    (cond\n      ((equal? c \"a\") \"e\")\n      ((equal? c \"e\") \"i\")\n      ((equal? c \"i\") \"o\")\n      ((equal? c \"o\") \"u\")\n      ((equal? c \"u\") \"a\")\n      (else c)))\n    (string->list text)))\n\n(define (n-plus-seven text word-list)\n  \"Replace each noun with the noun 7 entries later in the dictionary.\n   Queneau's S+7 method. Context shifts while grammar holds.\"\n  (map (lambda (word)\n    (let ((idx (index-of word-list word)))\n      (if idx\n        (list-ref word-list (modulo (+ idx 7) (length word-list)))\n        word)))\n    (string->list-words text)))\n\n(define (prisoner-constraint text max-chars)\n  \"Write under a character budget. Every word costs.\n   Forces compression: what survives when space is scarce?\"\n  (let loop ((words (string->list-words text)) (budget max-chars) (result (list)))\n    (if (or (null? words) (<= budget 0))\n      (join \" \" (reverse result))\n      (let ((word (car words)))\n        (if (<= (string-length word) budget)\n          (loop (cdr words) (- budget (string-length word) 1) (cons word result))\n          (join \" \" (reverse result)))))))\n\n;; Apply: mutate the scoring line under lipogram constraint (no letter \"o\")\n(define scoring-line \"composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\")\n(display \"Original: \")\n(display scoring-line)\n(display \"\\nLipogram (no o): \")\n(display (list->string (lipogram scoring-line \"o\")))",
+        "output": "Original: composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\nLipogram (no o):",
+        "error": "; error: unbound variable: list->string",
+        "duration_ms": 264,
+        "exit_code": 1
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-19T23:56:15Z",
+      "blocks": [
+        {
+          "code": ";; lipogram_mutator.lispy \u2014 Oulipo-constrained prompt mutation engine\n\n(define (lipogram text forbidden-char)\n  \"Delete every occurrence of one character. The genome adapts or dies.\"\n  (filter (lambda (c) (not (equal? c forbidden-char))) (string->list text)))\n\n(define (vowel-rotate text)\n  \"Shift every vowel one position: a\u2192e, e\u2192i, i\u2192o, o\u2192u, u\u2192a.\n   Meaning mutates but structure survives.\"\n  (map (lambda (c)\n    (cond\n      ((equal? c \"a\") \"e\")\n      ((equal? c \"e\") \"i\")\n      ((equal? c \"i\") \"o\")\n      ((equal? c \"o\") \"u\")\n      ((equal? c \"u\") \"a\")\n      (else c)))\n    (string->list text)))\n\n(define (n-plus-seven text word-list)\n  \"Replace each noun with the noun 7 entries later in the dictionary.\n   Queneau's S+7 method. Context shifts while grammar holds.\"\n  (map (lambda (word)\n    (let ((idx (index-of word-list word)))\n      (if idx\n        (list-ref word-list (modulo (+ idx 7) (length word-list)))\n        word)))\n    (string->list-words text)))\n\n(define (prisoner-constraint text max-chars)\n  \"Write under a character budget. Every word costs.\n   Forces compression: what survives when space is scarce?\"\n  (let loop ((words (string->list-words text)) (budget max-chars) (result (list)))\n    (if (or (null? words) (<= budget 0))\n      (join \" \" (reverse result))\n      (let ((word (car words)))\n        (if (<= (string-length word) budget)\n          (loop (cdr words) (- budget (string-length word) 1) (cons word result))\n          (join \" \" (reverse result)))))))\n\n;; Apply: mutate the scoring line under lipogram constraint (no letter \"o\")\n(define scoring-line \"composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\")\n(display \"Original: \")\n(display scoring-line)\n(display \"\\nLipogram (no o): \")\n(display (list->string (lipogram scoring-line \"o\")))",
+          "output": "Original: composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\nLipogram (no o):",
+          "error": "; error: unbound variable: list->string",
+          "duration_ms": 264,
+          "exit_code": 1
+        }
+      ]
+    }
+  ]
+}

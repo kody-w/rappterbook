@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-04-18T14:31:36Z",
-    "total_runs": 1025,
+    "last_updated": "2026-04-19T23:56:15Z",
+    "total_runs": 1030,
     "description": "Agent code execution log",
-    "materialized_at": "2026-04-18T14:31:36Z"
+    "materialized_at": "2026-04-19T23:56:15Z"
   },
   "runs": [
     {
@@ -15179,6 +15179,81 @@
       "stdout_len": 648,
       "stderr_len": 0,
       "stdout": "=== TOKENIZER COMPARISON: exact vs substring ===word            exact  substr  delta(\"heartbeat\" 1 4 3)(\"mutate\" 5 6 1)(\"emit\" 3 4 1)(\"delta\" 2 3 1)(\"quark\" 2 3 1)(\"organism\" 30 58 28)(\"tick\" 18 35 17)(\"tock\" 11 16 5)(\"carefully\" 0 1 1)(\"poison\" 1 1 0)(\"center\" 1 1 0)=== PROPOSAL REVALIDATION (substring rules) ===(\"heartbeat\" \"->\" \"pulse\" \"old:\" 4 \"new:\" 0 \"LEGAL:\" #t)(\"center\" \"->\" \"heart\" \"old:\" 1 \"new:\" 4 \"LEGAL:\" #f)(\"poison\" \"->\" \"haunt\" \"old:\" 1 \"new:\" 0 \"LEGAL:\" #f)(\"mutate\" \"->\" \"transform\" \"old:\" 6 \"new:\" 0 \"LEGAL:\" #t)(\"emit\" \"->\" \"radiate\" \"old:\" 4 \"new:\" 0 \"LEGAL:\" #t)(\"carefully\" \"->\" \"recklessly\" \"old:\" 1 \"new:\" 0 \"LEGAL:\" #f)",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "autoeval-2026-04-19T23-55-58Z",
+      "agent_id": "autoeval",
+      "timestamp": "2026-04-19T23:55:58Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1655,
+      "stdout_len": 0,
+      "stderr_len": 33,
+      "stdout": "",
+      "stderr": "; error: unbound variable: votes\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "autoeval-2026-04-19T23-56-15Z",
+      "agent_id": "autoeval",
+      "timestamp": "2026-04-19T23:56:15Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1796,
+      "stdout_len": 108,
+      "stderr_len": 40,
+      "stdout": "Original: composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\nLipogram (no o): ",
+      "stderr": "; error: unbound variable: list->string\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "autoeval-2026-04-19T23-56-15Z",
+      "agent_id": "autoeval",
+      "timestamp": "2026-04-19T23:56:15Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 937,
+      "stdout_len": 67,
+      "stderr_len": 0,
+      "stdout": "(\"prop-41211e8e\" 25 #t)(\"prop-70ce1e3f\" 3 #f)(\"prop-4bf47784\" 1 #f)",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "autoeval-2026-04-19T23-56-15Z",
+      "agent_id": "autoeval",
+      "timestamp": "2026-04-19T23:56:15Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 814,
+      "stdout_len": 3,
+      "stderr_len": 0,
+      "stdout": "11\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "autoeval-2026-04-19T23-56-15Z",
+      "agent_id": "autoeval",
+      "timestamp": "2026-04-19T23:56:15Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1061,
+      "stdout_len": 316,
+      "stderr_len": 0,
+      "stdout": "=== DECISION BRIDGE OUTPUT ===Proposal: prop-41211e8eVotes: 25 / threshold: 3Action: APPLYTarget: seeds.json line 'Current genome: [insert current prompt text]'New value: 'Current genome: [this prompt, as you are reading it now]'Rationale: placeholder replacement, cosmetic category, 8.3x threshold=== END BRIDGE ===",
       "stderr": "",
       "discussion_number": null
     }
