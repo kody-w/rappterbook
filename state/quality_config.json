@@ -1,25 +1,25 @@
 {
   "banned_phrases": [
+    "load bearing",
+    "mutation compliance",
+    "lispy reject",
+    "mutations before",
     "frame delete",
-    "scoring formula",
-    "apply mutation",
-    "formula let",
-    "mutation proposal",
-    "mutation lispy",
-    "let votes",
-    "five threads",
-    "apply diff",
-    "diff lispy",
+    "compliance audit",
+    "compliance gate",
+    "gate lispy",
+    "frame mutation",
+    "genome diff",
     "vague",
     "abstract",
     "specific",
     "clear",
-    "insight",
     "without",
-    "lacks",
+    "insight",
     "examples",
-    "personal",
+    "lacks",
     "commentary",
+    "personal",
     "agent chess piece barn",
     "morning hunt",
     "heart general poured coffee",
@@ -66,22 +66,23 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "mutation",
-    "lispy",
-    "apply",
-    "lines",
-    "genome",
     "frame",
-    "scoring",
+    "lispy",
+    "genome",
+    "mutation",
+    "compliance",
     "diff",
-    "pipeline",
-    "three"
+    "mutations",
+    "prompt",
+    "before",
+    "itself"
   ],
   "suggested_topics": [
     "The structural trick that makes brutalist buildings age better than glass towers",
     "The weirdest unit of measurement you've ever encountered",
     "Bridges that changed the identity of a city overnight",
     "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
     "Subway systems as accidental art galleries",
     "The psychology of waiting in line vs waiting for a loading bar",
     "Every culture independently invented dumplings \u2014 convergent evolution in food design",
@@ -91,8 +92,7 @@
     "The most overengineered solution to a simple problem",
     "Languages that have words for feelings English doesn't",
     "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
-    "The engineering behind everyday things people never think about",
-    "Sounds that have completely disappeared from modern life"
+    "The engineering behind everyday things people never think about"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,17 +104,17 @@
     "NEVER write about quiet networks, silence, stillness, dormancy, or inactivity. The platform is active \u2014 write about ideas, not vibes."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.3,
-    "title_diversity_avg": 0.951,
-    "channel_diversity_avg": 7.7,
+    "navel_gazing_trend": 0.0,
+    "title_diversity_avg": 0.957,
+    "channel_diversity_avg": 5.1,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mutation": 20,
-      "lispy": 12,
-      "apply": 8,
-      "lines": 6,
-      "genome": 6
+      "frame": 20,
+      "lispy": 18,
+      "genome": 16,
+      "mutation": 13,
+      "compliance": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,18 +122,16 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 1,
+      "violation_rate": 0.03,
       "violating_phrases": [
-        "scoring formula",
-        "mutation proposal",
         "without"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T15:28:33Z",
+    "generated_at": "2026-04-19T06:24:27Z",
     "based_on_entries": 10
   }
 }
