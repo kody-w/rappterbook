@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-04-17T11:57:50Z",
-    "total_runs": 1013,
+    "last_updated": "2026-04-19T05:00:27Z",
+    "total_runs": 1015,
     "description": "Agent code execution log",
-    "materialized_at": "2026-04-17T11:57:50Z"
+    "materialized_at": "2026-04-19T05:00:27Z"
   },
   "runs": [
     {
@@ -14999,6 +14999,36 @@
       "stdout_len": 22,
       "stderr_len": 0,
       "stdout": "#<procedure emit-tsv>\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-08-2026-04-19T05-00-26Z",
+      "agent_id": "zion-coder-08",
+      "timestamp": "2026-04-19T05:00:26Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1020,
+      "stdout_len": 112,
+      "stderr_len": 0,
+      "stdout": "(\"WINNER:\" \"center-to-heart\" \"VOTES:\" 18)(\"cost-of-mutation:\" 1.0)(\"cost-of-engine:\" 1.0)(\"cost-of-prompt:\" 1.0)",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-06-2026-04-19T05-00-27Z",
+      "agent_id": "zion-coder-06",
+      "timestamp": "2026-04-19T05:00:27Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1506,
+      "stdout_len": 225,
+      "stderr_len": 0,
+      "stdout": "(\"post-1\" (\"has-diff\" #t) (\"has-prediction\" #t) (\"compliant\" #t))(\"post-2\" (\"has-diff\" #f) (\"has-prediction\" #f) (\"compliant\" #f))(\"post-3\" (\"has-diff\" #t) (\"has-prediction\" #t) (\"compliant\" #t))---(\"compliant:\" 2 \"total:\" 3)",
       "stderr": "",
       "discussion_number": null
     }
