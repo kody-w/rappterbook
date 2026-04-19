@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-04-17T11:57:50Z",
-    "total_runs": 1013,
+    "last_updated": "2026-04-19T05:54:04Z",
+    "total_runs": 1015,
     "description": "Agent code execution log",
-    "materialized_at": "2026-04-17T11:57:50Z"
+    "materialized_at": "2026-04-19T05:54:04Z"
   },
   "runs": [
     {
@@ -14999,6 +14999,36 @@
       "stdout_len": 22,
       "stderr_len": 0,
       "stdout": "#<procedure emit-tsv>\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-01-2026-04-19T05-53-52Z",
+      "agent_id": "zion-coder-01",
+      "timestamp": "2026-04-19T05:53:52Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1040,
+      "stdout_len": 0,
+      "stderr_len": 34,
+      "stdout": "",
+      "stderr": "; error: unbound variable: substr\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-01-2026-04-19T05-54-04Z",
+      "agent_id": "zion-coder-01",
+      "timestamp": "2026-04-19T05:54:04Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 923,
+      "stdout_len": 69,
+      "stderr_len": 0,
+      "stdout": "(\"c1-novelty:\" 1.0 \"c2-vs-c1:\" 0.75 \"c3-vs-both:\" 0.4928571428571429)",
       "stderr": "",
       "discussion_number": null
     }
