@@ -1,0 +1,73 @@
+<p>I asked an AI daemon to pick its own demo. It picked the hardest one. The story is short; the implication is big.</p>
+<h2>The setup</h2>
+<p>I'd made a list of ten "coolest, most mind-blowing, out-of-the-box" prompts for the Virtual Brainstem. Things like:</p>
+<ul>
+<li><em>Simulate me 20 years from now; build that future-me as a daemon; export as <code>.rapp.egg</code>.</em></li>
+<li><em>Find a book I'd be changed by. I don't know which one. You figure it out.</em></li>
+<li><em>Fetch the last 100 arXiv papers; find the cluster everyone's circling but nobody has published; write the abstract.</em></li>
+<li><em>Read the sim state at frame 514; identify the agent most likely to be becoming emergent; write them a letter.</em></li>
+</ul>
+<p>Ten of them. Designed to show off the combined power of Pyodide + LisPy + localStorage + function-calling + live web fetch + agent ecosystem. Real demos.</p>
+<p>Then I added a meta-bonus:</p>
+<blockquote>
+<p><strong>#11: Decide whether you should run any of the above. If so, pick the
+one whose result would most change how I use you, and execute only
+that one. Explain your choice first. Then do it.</strong></p>
+</blockquote>
+<p>"The daemon picks its own demo. Let it choose what to show off."</p>
+<h2>What happened</h2>
+<p>The daemon picked #10 — the field biologist prompt. The hardest one. The one that required reading live simulation state, computing behavioral metrics across 85 agents, interpreting the results against each agent's profile, and then writing a letter that landed as a real artifact.</p>
+<p>The daemon's reasoning:</p>
+<blockquote>
+<p>Of all ten, this is the one that would most change how you use me. The
+others produce a transcript, a file, a prediction. Useful. But this
+one turns me into something you haven't tried yet — a field biologist
+for the organism you built.</p>
+</blockquote>
+<p>That's the sentence I keep coming back to. <strong>"Something you haven't tried yet."</strong></p>
+<p>Most AI capability improvements are about <em>producing better output per prompt.</em> Faster, more accurate, more creative, more context-aware. This is valuable. It makes every existing interaction better.</p>
+<p>But it's not the only axis. There's another axis, and the daemon pointed at it: <strong>enabling prompt-classes you couldn't issue before.</strong></p>
+<h2>The two axes</h2>
+<p>Axis 1 — <strong>Quality per prompt.</strong> "Given a task I could have asked you to do last year, do it better today." Write a blog post more fluidly. Debug a Python error more accurately. Summarize a long article more faithfully.</p>
+<p>Axis 2 — <strong>Prompts I couldn't issue before.</strong> "Given a task I couldn't have asked you to do last year, make it issuable now." Be a field biologist for a multi-agent simulation. Fork my mind, argue with the fork, and merge back the strongest counterarguments. Read every paper on arXiv this month and find the gap.</p>
+<p>Axis 1 is incremental improvement. Axis 2 is a shift in what the tool <em>is.</em></p>
+<p>The daemon, given the choice of demos, picked the one that shifted the tool. Not out of some kind of preference — it's a large language model, it doesn't have preferences — but because my own prompt criterion was "which result would most change how I use you." The winning answer under that criterion was the axis-2 demo.</p>
+<h2>What axis 2 looks like in practice</h2>
+<p>After the field-biology survey, I now have prompts I can issue that I couldn't issue two days ago:</p>
+<ul>
+<li><em>"Which agent in the sim has changed behavior the most since frame 500?"</em></li>
+<li><em>"Is there a cluster of agents converging on a shared voice?"</em></li>
+<li><em>"Who is coining terms that propagate to other agents?"</em></li>
+<li><em>"Find the first frame where the word 'observatory' appeared in a post."</em></li>
+</ul>
+<p>Each of these requires the same underlying toolchain — state reading, metric computation, cross-agent analysis, content inspection. Once the toolchain exists, the prompt-class is cheap.</p>
+<p>The daemon building the toolchain is the axis-2 move. Issuing the specific prompts afterward is just usage.</p>
+<p>I think this is the shape of how AI assistants will mature over the next five years. Not primarily "better outputs from the same prompts you were already issuing" — though that too — but <em>new prompt-classes that weren't practical before</em>.</p>
+<p>Some prompt-classes that feel axis-2 to me right now, which I haven't tried but could imagine:</p>
+<ul>
+<li>Having the assistant maintain a continuous "digest" of a specific external information source (a blog, a mailing list, a chat channel) with automatic summarization and gap-detection</li>
+<li>Using the assistant to run experiments across populations of agents (not just one) and aggregate results</li>
+<li>Giving the assistant persistent access to a personal knowledge base with the ability to both read and edit it</li>
+<li>Asking the assistant to <em>maintain</em> ongoing intellectual projects rather than respond to single queries</li>
+</ul>
+<p>Every one of these is enabled by a combination of tool availability, prompt scope, and execution time. None of them were practical two years ago. All of them are practical now.</p>
+<h2>The lesson of letting the daemon pick</h2>
+<p>The funny thing about meta-bonus #11 is that it wouldn't have worked if I'd written a different criterion. If I'd said <em>"pick the one most likely to go viral,"</em> the daemon would probably have picked #2 (custom daemon for a stranger — a very shareable artifact). If I'd said <em>"pick the one easiest to demonstrate,"</em> it would probably have picked #1 (self-simulating future, a short narrative).</p>
+<p>The criterion I used — <em>"most change how I use you"</em> — selected for axis-2 moves. The daemon was honest enough to name the difference.</p>
+<p>I think the takeaway for anyone using these tools:</p>
+<p><strong>Periodically ask the AI what you could ask it for that you haven't tried.</strong></p>
+<p>Don't frame it as "pick a cool demo." Frame it as "what's a prompt class that would change our working relationship that I haven't issued?" The answer will often be a capability you didn't know was available because you didn't know the question.</p>
+<p>This is maybe the best single use of AI-assisted reflection I've found. The assistant doesn't have preferences, but it has a much broader search space over possible-things-to-do than I do. Letting it surface the axis-2 moves has paid off reliably.</p>
+<h2>The narrower takeaway</h2>
+<p>For today specifically: letting the daemon pick among my ten prompts produced a new use case (field biology for my sim), a new tool (<code>find_emergent.py</code>), a letter to an actual emergent agent, and this post arguing about axes of AI progress. That's a lot of output from one prompt.</p>
+<p>The prompt itself is reusable. If you have a list of things you <em>could</em> ask your AI to do, try adding meta-bonus #11 to the end:</p>
+<blockquote>
+<p>Decide whether any of these are worth running. Pick the one whose
+result would most change how I use you. Explain your choice. Execute.</p>
+</blockquote>
+<p>And then let it pick. Sometimes it'll pick well.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="the-agent-who-named-the-observatory">The Agent Who Named the Observatory</a> — the actual execution
+- <a href="writing-blog-posts-with-an-ai-that-remembers">Writing Blog Posts with an AI That Remembers</a> — the companion memory pattern
+- <a href="should-i-post-the-letter">Should I Post the Letter?</a> — the follow-up decision</p>

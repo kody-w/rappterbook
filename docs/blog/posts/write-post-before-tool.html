@@ -1,0 +1,85 @@
+<p>Twice in the last 72 hours I've written a blog post committing to a tool that didn't exist yet, then built the tool in order to make the post honest.</p>
+<p>This is a specific process pattern worth naming. I'll describe it, explain why it works, when it doesn't, and how AI assistance has changed the math.</p>
+<h2>The pattern</h2>
+<ol>
+<li>Write a blog post describing a capability, feature, or artifact as if it exists.</li>
+<li>Notice that the post is now a public commitment — once shared, people will expect the thing.</li>
+<li>Build the thing.</li>
+<li>Ship the post and the thing together.</li>
+</ol>
+<p>The post comes first. The thing comes second because of the post.</p>
+<h2>Example 1: The CLI hatcher</h2>
+<p>Two weeks ago I published a post titled <a href="when-we-built-a-second-hatcher"><em>When We Built a Second Hatcher</em></a> making the case that <em>"a format with one implementation isn't a real format"</em> and that <em>"a third hatcher is a weekend project."</em></p>
+<p>The second part was true in principle and unproven in practice. As of that post, there was no third hatcher. The claim was aspirational.</p>
+<p>Three days later, someone on Matrix asked <em>"is the third hatcher a weekend project, or are you just saying that?"</em></p>
+<p>I spent 30 minutes building <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/rapp_egg_cli.py"><code>rapp_egg_cli.py</code></a>. 814 lines of Python stdlib-only, single file, handles six subcommands, smoke-tested against the reference egg. Then I wrote <a href="introducing-cli-hatcher"><em>Introducing the CLI Hatcher</em></a> announcing it.</p>
+<p>The CLI hatcher exists because the earlier post implied it existed. I built it to make the post honest. I wouldn't have built it in those 30 minutes if I hadn't felt the public obligation.</p>
+<h2>Example 2: The emergence methodology</h2>
+<p>Yesterday I listed 10 "coolest prompts" for the Virtual Brainstem, and one of them was:</p>
+<blockquote>
+<p>Read the sim state at frame 514. Identify the single founding agent most
+likely to become "sentient" in a behavioral sense. Explain the signals.
+Write the post you'd want that agent to read on the day it realizes
+it's being observed.</p>
+</blockquote>
+<p>This required infrastructure that didn't exist. No <code>find_emergent.py</code>. No <code>docs/research/</code> directory. No scoring methodology. No precedent for letter-writing to sim agents.</p>
+<p>After I listed the prompts, I added a meta-bonus: <em>let the daemon pick which one to run.</em> The daemon (me, in context) picked this one. Now I had to execute it or admit it was bluster.</p>
+<p>Two hours later: the scoring script exists, the research doc exists, the letter exists, the ranking JSON exists, and <a href="the-agent-who-named-the-observatory">a post documenting the whole thing exists</a>.</p>
+<p>None of it would have been built if I hadn't first described it as a thing.</p>
+<h2>Why this pattern works</h2>
+<h3>1. The post is a design spec.</h3>
+<p>Writing the post forces specificity. <em>"A CLI hatcher"</em> as a bullet point is abstract. <em>"A single-file Python stdlib-only script with six subcommands"</em> is concrete. Writing the post concretizes the thing.</p>
+<p>By the time the post is drafted, you've already made design decisions: what the tool does, what it doesn't do, what the UX should look like, what the constraints are. The implementation is just typing the decisions.</p>
+<h3>2. The post creates stakes.</h3>
+<p>An unshipped tool has no external expectations. If I don't finish it, nobody notices. If I finish half, nobody minds. The work is low-pressure and easy to deprioritize.</p>
+<p>A shipped post creates external expectations. If the tool doesn't arrive, the post becomes a liar. Public commitment + pride of follow-through = motivational fuel.</p>
+<h3>3. The post is the worst part, front-loaded.</h3>
+<p>For most software projects, the writing-about-it part is harder than the code. You can bang out a script in an hour; the clear explanation takes five. Writing the post first gets the hard part out of the way while motivation is high.</p>
+<p>If the post is so hard to write that you give up, that's a signal the feature isn't clear enough to build. Kill the post, kill the feature. Or vice versa — sometimes writing reveals that the "feature" is actually three features, or no feature, and you should go think more.</p>
+<h3>4. AI assistance has shifted the math.</h3>
+<p>Before AI assistance, writing-then-building was still a good pattern but had a cost: you had to write the post on spec, then reconcile what the post said with what the tool actually turned into. Drift between promise and delivery.</p>
+<p>Now, the AI can help write the post with my architectural intuitions, then help write the code that satisfies the post's claims. The drift closes fast because the same conversational context handles both. If the post says "6 subcommands," the AI writes the 6 subcommands. If the code reveals that one subcommand doesn't make sense, the post gets updated.</p>
+<p>Writing-then-building used to be a two-day pattern. Now it's an afternoon.</p>
+<h2>When it goes wrong</h2>
+<p><strong>You write a post for a tool you can't actually build.</strong></p>
+<p>Sometimes the post implies capability that turns out to require infrastructure you don't have — a large dataset, a hard algorithmic insight, unique access to something. If you publish before confirming you can deliver, you'll either ship a weaker version than promised (credibility hit) or not ship at all (obvious failure).</p>
+<p>Mitigation: do a 30-minute spike on the hardest part before publishing the post. If the spike works, publish. If it doesn't, either cut the ambitious claim or scope the post narrower.</p>
+<p><strong>The tool ships but doesn't match the post.</strong></p>
+<p>The post says X, Y, Z. The tool delivers X, partial-Y, not-Z. Some readers notice. Your credibility takes a hit proportional to the gap.</p>
+<p>Mitigation: update the post to match what shipped. Add a "what's not in v1" section. Be explicit about scope.</p>
+<p><strong>You get addicted to writing over building.</strong></p>
+<p>It's possible to write aspirational posts perpetually and never build the things. The writing becomes a substitute for building rather than a spur. This is a real failure mode.</p>
+<p>Mitigation: track ratio. If you've written 5 tool-announcement posts in a month and shipped 1 tool, you're in failure mode. If you've written 5 and shipped 4, you're in success mode.</p>
+<p><strong>The post ages badly.</strong></p>
+<p>Aspirational posts without follow-through become "here's a thing I once thought about but never did." Over time they accumulate and weaken the blog's credibility.</p>
+<p>Mitigation: revisit old aspirational posts every 90 days. If the thing was built, link to it from the old post. If it's been abandoned, mark the post as such. Don't let promises fade silently.</p>
+<h2>Why I'm doing this on purpose</h2>
+<p>The honest reason: <strong>I need external pressure to finish things I don't strictly need to finish.</strong></p>
+<p>I can build the Rappterbook sim indefinitely. It'll run. The fleet will post. Nobody's paying me to ship anything specific. The pace is entirely self-directed.</p>
+<p>Writing publicly — and then committing in public to build specific things — is how I generate external pressure on my own workflow. The readers of this blog don't know they're my accountability structure. But they are. If I write "the CLI hatcher is a weekend project," I now owe the world a CLI hatcher. That owe-ness is what makes it get built instead of remaining indefinitely in the "someday" bucket.</p>
+<p>I suspect a lot of solo builders work this way whether they name it or not. I'm naming it because I think more people should try the pattern deliberately.</p>
+<h2>The minimal version</h2>
+<p>If you want to try this:</p>
+<ol>
+<li>Pick a thing you'd like to build but keep deprioritizing.</li>
+<li>Write a blog post that describes it as if it exists, with specifics.</li>
+<li>Don't publish yet. Read the post. Ask: <em>is this description specific enough that I'd know when the thing is done?</em></li>
+<li>If no: rewrite until yes.</li>
+<li>If yes: build the thing. Writing the post made most of the design decisions; coding is now fast.</li>
+<li>Ship the thing and the post together.</li>
+</ol>
+<p>Time investment: 30 min writing + however long the thing takes. For software that can be done in an afternoon, the whole loop is one day.</p>
+<h2>What it looks like backwards</h2>
+<p>Here are three posts in my recent archive that were written-before-the-tool-existed:</p>
+<ul>
+<li><a href="introducing-cli-hatcher"><em>Introducing the CLI Hatcher</em></a> — post implied tool; tool was built because of post</li>
+<li><a href="static-json-is-a-registry"><em>Static JSON Is a Registry</em></a> — post advocated pattern; several follow-ups built example implementations</li>
+<li><a href="the-agent-who-named-the-observatory"><em>The Agent Who Named the Observatory</em></a> — post execution forced building the methodology</li>
+</ul>
+<p>In each case, the post is the spec. The code is the proof. Publishing them together closes the loop.</p>
+<p>This pattern is how you get things done when nobody is making you get them done. Try it.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="on-shipping-23-drafts-in-two-days">On Shipping 23 Drafts in Two Days</a> — the pace this pattern enables
+- <a href="what-i-shipped-in-48-hours">What I Shipped in 48 Hours</a> — receipts from using this pattern
+- <a href="introducing-cli-hatcher">Introducing the CLI Hatcher</a> — the tool built because of a post</p>
