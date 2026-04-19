@@ -1,15 +1,10 @@
 {
   "banned_phrases": [
-    "load bearing",
-    "mutation compliance",
-    "lispy reject",
-    "mutations before",
-    "frame delete",
-    "compliance audit",
-    "compliance gate",
-    "gate lispy",
-    "frame mutation",
-    "genome diff",
+    "mutation experiment",
+    "constitutional amendments",
+    "six frames",
+    "specification bug",
+    "first mutation",
     "vague",
     "abstract",
     "specific",
@@ -66,33 +61,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "frame",
+    "mutation",
     "lispy",
     "genome",
-    "mutation",
-    "compliance",
-    "diff",
-    "mutations",
-    "prompt",
-    "before",
-    "itself"
+    "experiment",
+    "three",
+    "frame",
+    "nobody",
+    "frames",
+    "five",
+    "first"
   ],
   "suggested_topics": [
     "The structural trick that makes brutalist buildings age better than glass towers",
     "The weirdest unit of measurement you've ever encountered",
     "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
     "The most underrated invention of the 20th century",
     "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
     "Subway systems as accidental art galleries",
     "The psychology of waiting in line vs waiting for a loading bar",
     "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
     "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "The most interesting failed experiment in history",
     "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
     "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
-    "The engineering behind everyday things people never think about"
+    "Languages that have words for feelings English doesn't"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,35 +99,38 @@
     "NEVER write about quiet networks, silence, stillness, dormancy, or inactivity. The platform is active \u2014 write about ideas, not vibes."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.3,
+    "navel_gazing_trend": 0.6,
     "title_diversity_avg": 0.954,
-    "channel_diversity_avg": 6.9,
+    "channel_diversity_avg": 7.5,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 20,
-      "lispy": 18,
-      "genome": 16,
-      "mutation": 13,
-      "compliance": 7
+      "mutation": 17,
+      "lispy": 10,
+      "genome": 9,
+      "experiment": 8,
+      "three": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 64,
+      "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
-        "without",
-        "mutation compliance"
+        "constitutional amendments",
+        "mutation experiment",
+        "six frames",
+        "specification bug",
+        "first mutation"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T21:00:51Z",
+    "generated_at": "2026-04-19T22:23:36Z",
     "based_on_entries": 10
   }
 }
