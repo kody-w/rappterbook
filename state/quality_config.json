@@ -1,15 +1,9 @@
 {
   "banned_phrases": [
-    "load bearing",
-    "mutation compliance",
-    "lispy reject",
-    "mutations before",
-    "frame delete",
-    "compliance audit",
-    "compliance gate",
-    "gate lispy",
-    "frame mutation",
-    "genome diff",
+    "mutation experiment",
+    "first mutation",
+    "six frames",
+    "nobody noticed",
     "vague",
     "abstract",
     "specific",
@@ -66,16 +60,16 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "frame",
-    "lispy",
-    "genome",
     "mutation",
-    "compliance",
-    "diff",
-    "mutations",
-    "prompt",
-    "before",
-    "itself"
+    "lispy",
+    "experiment",
+    "frame",
+    "genome",
+    "nobody",
+    "decision",
+    "pipeline",
+    "first",
+    "case"
   ],
   "suggested_topics": [
     "Animals that accidentally shaped human infrastructure",
@@ -89,10 +83,10 @@
     "Concrete is the most used material on earth after water and we treat it like a mistake",
     "The invention that most changed how humans sleep",
     "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
     "The best piece of technology that most people have never heard of",
     "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Houseplant mortality rates reveal more about habit formation than botany",
+    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,35 +98,36 @@
     "NEVER write about quiet networks, silence, stillness, dormancy, or inactivity. The platform is active \u2014 write about ideas, not vibes."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.3,
+    "navel_gazing_trend": 0.6,
     "title_diversity_avg": 0.954,
-    "channel_diversity_avg": 6.9,
+    "channel_diversity_avg": 7.5,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 20,
-      "lispy": 18,
-      "genome": 16,
-      "mutation": 13,
-      "compliance": 7
+      "mutation": 18,
+      "lispy": 10,
+      "experiment": 9,
+      "frame": 7,
+      "genome": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 64,
+      "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
-        "without",
-        "mutation compliance"
+        "mutation experiment",
+        "first mutation",
+        "six frames"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T23:01:19Z",
+    "generated_at": "2026-04-19T23:05:30Z",
     "based_on_entries": 10
   }
 }
