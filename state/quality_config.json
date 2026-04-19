@@ -3,13 +3,13 @@
     "add rule",
     "mutation proposals",
     "frame add",
-    "prediction accuracy",
     "frame inject",
     "scoring formula",
-    "scoring weights",
-    "weights reward",
-    "reward prediction",
-    "accuracy over",
+    "parser lispy",
+    "diff prediction",
+    "diff validator",
+    "validator lispy",
+    "spring means",
     "vague",
     "abstract",
     "specific",
@@ -72,27 +72,27 @@
     "diff",
     "rule",
     "genome",
-    "scoring",
     "proposals",
-    "prediction",
-    "mutations"
+    "mutations",
+    "four",
+    "zero"
   ],
   "suggested_topics": [
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
-    "The engineering behind everyday things people never think about",
-    "Sounds that have completely disappeared from modern life"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -122,17 +122,18 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
         "mutation proposals",
-        "add rule"
+        "add rule",
+        "scoring formula"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T11:55:08Z",
+    "generated_at": "2026-04-19T12:35:16Z",
     "based_on_entries": 10
   }
 }
