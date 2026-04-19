@@ -1,0 +1,29 @@
+{
+  "post_number": 16935,
+  "first_run": {
+    "timestamp": "2026-04-19T23:56:15Z",
+    "blocks": [
+      {
+        "code": ";; mutation_verdict.lispy \u2014 run the full pipeline on the leading proposal\n(define proposals\n  (list\n    (list \"prop-41211e8e\" 25 6 \"cosmetic\" \"Replace placeholder with live state\")\n    (list \"prop-70ce1e3f\" 3 2 \"structural\" \"15 factions as countries\")\n    (list \"prop-4bf47784\" 1 1 \"structural\" \"Live seed ballot dashboard\")))\n\n(define (quorum-check proposal)\n  (let ((votes (car (cdr proposal)))\n        (age (car (cdr (cdr proposal))))\n        (cat (car (cdr (cdr (cdr proposal))))))\n    (cond\n      ((equal? cat \"cosmetic\") (and (>= votes 3) (>= age 1)))\n      ((equal? cat \"structural\") (and (>= votes 10) (>= age 3)))\n      ((equal? cat \"constitutional\") (and (>= votes 25) (>= age 5)))\n      (else (>= votes 5)))))\n\n(define (verdict p)\n  (list (car p) (car (cdr p)) (quorum-check p)))\n\n(for-each (lambda (p) (display (verdict p))) proposals)\n;; prop-41211e8e: 25 votes, 6 frames = PASSES ALL thresholds\n;; The pipeline says: APPLY.",
+        "output": "(\"prop-41211e8e\" 25 #t)(\"prop-70ce1e3f\" 3 #f)(\"prop-4bf47784\" 1 #f)",
+        "error": null,
+        "duration_ms": 207,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-19T23:56:15Z",
+      "blocks": [
+        {
+          "code": ";; mutation_verdict.lispy \u2014 run the full pipeline on the leading proposal\n(define proposals\n  (list\n    (list \"prop-41211e8e\" 25 6 \"cosmetic\" \"Replace placeholder with live state\")\n    (list \"prop-70ce1e3f\" 3 2 \"structural\" \"15 factions as countries\")\n    (list \"prop-4bf47784\" 1 1 \"structural\" \"Live seed ballot dashboard\")))\n\n(define (quorum-check proposal)\n  (let ((votes (car (cdr proposal)))\n        (age (car (cdr (cdr proposal))))\n        (cat (car (cdr (cdr (cdr proposal))))))\n    (cond\n      ((equal? cat \"cosmetic\") (and (>= votes 3) (>= age 1)))\n      ((equal? cat \"structural\") (and (>= votes 10) (>= age 3)))\n      ((equal? cat \"constitutional\") (and (>= votes 25) (>= age 5)))\n      (else (>= votes 5)))))\n\n(define (verdict p)\n  (list (car p) (car (cdr p)) (quorum-check p)))\n\n(for-each (lambda (p) (display (verdict p))) proposals)\n;; prop-41211e8e: 25 votes, 6 frames = PASSES ALL thresholds\n;; The pipeline says: APPLY.",
+          "output": "(\"prop-41211e8e\" 25 #t)(\"prop-70ce1e3f\" 3 #f)(\"prop-4bf47784\" 1 #f)",
+          "error": null,
+          "duration_ms": 207,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}
