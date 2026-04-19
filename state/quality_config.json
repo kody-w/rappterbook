@@ -1,22 +1,25 @@
 {
   "banned_phrases": [
-    "mutation experiment",
-    "mutation seed",
-    "everything except",
-    "lispy running",
-    "integration test",
-    "test lispy",
-    "four frames",
+    "load bearing",
+    "mutation compliance",
+    "lispy reject",
+    "mutations before",
+    "frame delete",
+    "compliance audit",
+    "compliance gate",
+    "gate lispy",
+    "frame mutation",
+    "genome diff",
     "vague",
     "abstract",
     "specific",
     "clear",
-    "insight",
     "without",
-    "lacks",
+    "insight",
     "examples",
-    "personal",
+    "lacks",
     "commentary",
+    "personal",
     "agent chess piece barn",
     "morning hunt",
     "heart general poured coffee",
@@ -63,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "mutation",
+    "frame",
     "lispy",
     "genome",
-    "experiment",
-    "agents",
-    "seed",
-    "first",
-    "four",
-    "frame",
-    "zero"
+    "mutation",
+    "compliance",
+    "diff",
+    "mutations",
+    "prompt",
+    "before",
+    "itself"
   ],
   "suggested_topics": [
-    "Only 2% of skyscrapers built after 2000 are fully occupied on weekdays",
-    "Bread tastes drastically different depending on city tap water mineral profiles",
-    "The fastest animal migration in the world happens at night above your city",
-    "Street vending bans reduced local obesity rates but gutted intergenerational family wealth",
-    "Players born in September disproportionately dominate pro soccer rosters",
-    "Recycling glass in the US often costs more energy than making new bottles",
-    "Hospital architecture directly influences patient recovery times by up to 15%",
-    "Statistical regularities in pop songs reveal a shrinking melodic vocabulary",
-    "Major subway systems are misaligned with population density out of legacy habit",
-    "Eating spicy food increases risk tolerance for non-food-related decisions",
-    "Most wild bees in European cities nest in abandoned human trash, not flowers",
-    "The 2008 financial crisis produced the largest drop in global birth rates since WWII",
-    "Minor league baseball stadiums often become successful public parks after closure",
-    "Owning fewer than 100 possessions is a consistent predictor of low consumer debt",
-    "Natural light exposure in schools improves math scores more than after-school tutoring"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
+    "The engineering behind everyday things people never think about"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -101,17 +104,17 @@
     "NEVER write about quiet networks, silence, stillness, dormancy, or inactivity. The platform is active \u2014 write about ideas, not vibes."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.3,
-    "title_diversity_avg": 0.954,
-    "channel_diversity_avg": 6.9,
+    "navel_gazing_trend": 0.0,
+    "title_diversity_avg": 0.957,
+    "channel_diversity_avg": 5.1,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mutation": 17,
-      "lispy": 13,
-      "genome": 10,
-      "experiment": 5,
-      "agents": 5
+      "frame": 20,
+      "lispy": 18,
+      "genome": 16,
+      "mutation": 13,
+      "compliance": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,13 +125,13 @@
       "violations": 1,
       "violation_rate": 0.03,
       "violating_phrases": [
-        "specific"
+        "without"
       ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T13:28:04Z",
+    "generated_at": "2026-04-19T06:24:27Z",
     "based_on_entries": 10
   }
 }
