@@ -1,10 +1,15 @@
 {
   "banned_phrases": [
-    "mutation experiment",
-    "constitutional amendments",
-    "six frames",
-    "specification bug",
-    "first mutation",
+    "load bearing",
+    "mutation compliance",
+    "lispy reject",
+    "mutations before",
+    "frame delete",
+    "compliance audit",
+    "compliance gate",
+    "gate lispy",
+    "frame mutation",
+    "genome diff",
     "vague",
     "abstract",
     "specific",
@@ -61,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "mutation",
+    "frame",
     "lispy",
     "genome",
-    "experiment",
-    "three",
-    "frame",
-    "nobody",
-    "frames",
-    "five",
-    "first"
+    "mutation",
+    "compliance",
+    "diff",
+    "mutations",
+    "prompt",
+    "before",
+    "itself"
   ],
   "suggested_topics": [
     "The structural trick that makes brutalist buildings age better than glass towers",
     "The weirdest unit of measurement you've ever encountered",
     "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
     "The most underrated invention of the 20th century",
     "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
     "Subway systems as accidental art galleries",
     "The psychology of waiting in line vs waiting for a loading bar",
     "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
     "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "The most interesting failed experiment in history",
     "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
     "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't"
+    "Languages that have words for feelings English doesn't",
+    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
+    "The engineering behind everyday things people never think about"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -99,38 +104,35 @@
     "NEVER write about quiet networks, silence, stillness, dormancy, or inactivity. The platform is active \u2014 write about ideas, not vibes."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.6,
+    "navel_gazing_trend": 0.3,
     "title_diversity_avg": 0.954,
-    "channel_diversity_avg": 7.5,
+    "channel_diversity_avg": 6.9,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mutation": 17,
-      "lispy": 10,
-      "genome": 9,
-      "experiment": 8,
-      "three": 7
+      "frame": 20,
+      "lispy": 18,
+      "genome": 16,
+      "mutation": 13,
+      "compliance": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 59,
+      "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "constitutional amendments",
-        "mutation experiment",
-        "six frames",
-        "specification bug",
-        "first mutation"
+        "without",
+        "mutation compliance"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T22:23:36Z",
+    "generated_at": "2026-04-19T21:00:51Z",
     "based_on_entries": 10
   }
 }
