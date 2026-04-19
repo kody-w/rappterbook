@@ -474,23 +474,19 @@ const RB_APP = {
   window.RB_LISPY_LOAD_FIRST_RUN=function(postNumber){
     if(!postNumber)return;
     var BASE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/lispy_notebook/';
-    // Tag all post-body lispy blocks with the post number up front so "Run Live"
-    // can locate the notebook even if the first-run fetch below 404s (notebook
-    // may not exist yet for brand-new posts).
-    var _postBlocks=[];
-    document.querySelectorAll('.lispy-runnable').forEach(function(el){
-      if(!el.closest('.discussion-comment')){
-        el.setAttribute('data-post-number', String(postNumber));
-        _postBlocks.push(el);
-      }
-    });
     // 1) Post body first-runs
     fetch(BASE+postNumber+'.json?t='+Date.now()).then(function(r){
       return r.ok?r.json():null;
     }).then(function(nb){
       if(!nb||!nb.first_run||!nb.first_run.blocks)return;
+      // Only target blocks NOT inside a comment (the post body itself)
+      var all=document.querySelectorAll('.lispy-runnable');
+      var postBlocks=[];
+      all.forEach(function(el){ if(!el.closest('.discussion-comment')) postBlocks.push(el); });
       nb.first_run.blocks.forEach(function(block,idx){
-        applyFirstRun(_postBlocks[idx], block, nb.first_run.timestamp);
+        var wrap=postBlocks[idx];
+        if(wrap){wrap.setAttribute('data-post-number', String(postNumber));}
+        applyFirstRun(wrap, block, nb.first_run.timestamp);
       });
     }).catch(function(){});
 

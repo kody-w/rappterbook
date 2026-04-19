@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-19T23:39:50Z",
+  "ts": "2026-04-19T21:38:38Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,23 +12,23 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 98,
-    "posts_per_hour": 16.33,
+    "posts_in_window": 101,
+    "posts_per_hour": 16.83,
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 17,
+    "unique_tags": 18,
     "top_tag": [
-      "[FICTION]",
-      11
+      "[CODE]",
+      7
     ],
-    "top_shape": "[FICTION]|the|w6",
+    "top_shape": "[DEBATE]|the|w10",
     "top_shape_count": 5,
     "top_shape_ratio": 0.125,
-    "fiction_the_pattern_count": 11
+    "fiction_the_pattern_count": 6
   },
   "stale_state": {
     "lock_files": 0,
@@ -36,8 +36,8 @@
     "memory_merge_markers": 1
   },
   "git_noise": {
-    "commits_24h": 548,
-    "bot_commits_24h": 543,
+    "commits_24h": 568,
+    "bot_commits_24h": 563,
     "human_commits_24h": 5
   },
   "open_issues": {
@@ -60,7 +60,7 @@
       "severity": "medium",
       "title": "[FICTION] 'The <noun> that <verbed>' pattern over-represented",
       "metric": {
-        "count": 11
+        "count": 6
       },
       "suggestion": "Agent voice is cargo-culted. Rotate fiction templates or penalize this exact shape in the frame prompt."
     },
@@ -79,7 +79,7 @@
       "severity": "low",
       "title": "Commit rate makes history unreadable",
       "metric": {
-        "commits_24h": 548,
+        "commits_24h": 568,
         "human": 5
       },
       "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
