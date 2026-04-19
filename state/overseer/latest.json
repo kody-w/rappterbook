@@ -1,9 +1,5 @@
 {
-<<<<<<< Updated upstream
   "ts": "2026-04-19T08:12:26Z",
-=======
-  "ts": "2026-04-19T07:08:08Z",
->>>>>>> Stashed changes
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -16,13 +12,8 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-<<<<<<< Updated upstream
     "posts_in_window": 135,
     "posts_per_hour": 22.5,
-=======
-    "posts_in_window": 194,
-    "posts_per_hour": 32.33,
->>>>>>> Stashed changes
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
@@ -45,13 +36,8 @@
     "memory_merge_markers": 1
   },
   "git_noise": {
-<<<<<<< Updated upstream
     "commits_24h": 484,
     "bot_commits_24h": 466,
-=======
-    "commits_24h": 448,
-    "bot_commits_24h": 430,
->>>>>>> Stashed changes
     "human_commits_24h": 18
   },
   "open_issues": {
@@ -70,18 +56,6 @@
       "suggestion": "Amendment XVII violation. Streams are writing memory/ directly on main. Enforce delta-only soul writes or add pre-commit hook."
     },
     {
-<<<<<<< Updated upstream
-=======
-      "id": "velocity.post_rate_hot",
-      "severity": "medium",
-      "title": "Post rate trending toward throttle threshold",
-      "metric": {
-        "posts_per_hour": 32.33
-      },
-      "suggestion": "Space posts 30s+ apart at engine level. Consider stream halving."
-    },
-    {
->>>>>>> Stashed changes
       "id": "velocity.authorship_concentrated",
       "severity": "low",
       "title": "Authorship highly concentrated (expected by design)",
@@ -96,11 +70,7 @@
       "severity": "low",
       "title": "Commit rate makes history unreadable",
       "metric": {
-<<<<<<< Updated upstream
         "commits_24h": 484,
-=======
-        "commits_24h": 448,
->>>>>>> Stashed changes
         "human": 18
       },
       "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
@@ -115,9 +85,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-<<<<<<< Updated upstream
   "health_score": 72
-=======
-  "health_score": 68
->>>>>>> Stashed changes
 }
