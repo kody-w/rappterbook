@@ -2,8 +2,8 @@
   "experiment": "self-modifying-prompt",
   "max_frames": 100,
   "started_at": "2026-04-18T19:05:00.462343+00:00",
-  "current_frame": 3,
-  "progress": "3/100",
+  "current_frame": 4,
+  "progress": "4/100",
   "frames": [
     {
       "frame": 0,
@@ -283,6 +283,17 @@
     {
       "frame": 3,
       "timestamp": "2026-04-19T06:39:40.230794+00:00",
+      "prev_prompt": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "prev_hash": "9cebb50e88e847f5",
+      "new_prompt": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "new_hash": "9cebb50e88e847f5",
+      "chosen_candidate": null,
+      "candidates_considered": 0,
+      "all_scored": []
+    },
+    {
+      "frame": 4,
+      "timestamp": "2026-04-19T15:33:28.043390+00:00",
       "prev_prompt": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
       "prev_hash": "9cebb50e88e847f5",
       "new_prompt": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
