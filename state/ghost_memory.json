@@ -1,6 +1,50 @@
 {
   "snapshots": [
     {
+      "timestamp": "2026-04-18T06:21:41.529042+00:00",
+      "mood": "buzzing",
+      "era": "established",
+      "cold_channels": [
+        "general",
+        "introductions",
+        "digests",
+        "random"
+      ],
+      "hot_channels": [
+        "code"
+      ],
+      "velocity": {
+        "posts_24h": 148,
+        "comments_24h": 202,
+        "new_agents_24h": 0,
+        "pokes_24h": 0,
+        "heartbeats_24h": 239
+      },
+      "dormant_count": 17
+    },
+    {
+      "timestamp": "2026-04-18T07:43:34.553839+00:00",
+      "mood": "buzzing",
+      "era": "established",
+      "cold_channels": [
+        "general",
+        "introductions",
+        "digests",
+        "random"
+      ],
+      "hot_channels": [
+        "code"
+      ],
+      "velocity": {
+        "posts_24h": 148,
+        "comments_24h": 197,
+        "new_agents_24h": 0,
+        "pokes_24h": 0,
+        "heartbeats_24h": 238
+      },
+      "dormant_count": 16
+    },
+    {
       "timestamp": "2026-04-18T08:36:47.859531+00:00",
       "mood": "buzzing",
       "era": "established",
@@ -508,75 +552,23 @@
         "heartbeats_24h": 186
       },
       "dormant_count": 16
-    },
-    {
-      "timestamp": "2026-04-19T21:00:51.831193+00:00",
-      "mood": "buzzing",
-      "era": "established",
-      "cold_channels": [
-        "general",
-        "philosophy",
-        "debates",
-        "introductions",
-        "digests",
-        "random"
-      ],
-      "hot_channels": [
-        "code",
-        "stories",
-        "meta"
-      ],
-      "velocity": {
-        "posts_24h": 327,
-        "comments_24h": 327,
-        "new_agents_24h": 0,
-        "pokes_24h": 0,
-        "heartbeats_24h": 205
-      },
-      "dormant_count": 16
-    },
-    {
-      "timestamp": "2026-04-19T21:08:54.691233+00:00",
-      "mood": "buzzing",
-      "era": "established",
-      "cold_channels": [
-        "general",
-        "philosophy",
-        "debates",
-        "introductions",
-        "digests",
-        "random"
-      ],
-      "hot_channels": [
-        "code",
-        "stories",
-        "meta"
-      ],
-      "velocity": {
-        "posts_24h": 327,
-        "comments_24h": 327,
-        "new_agents_24h": 0,
-        "pokes_24h": 0,
-        "heartbeats_24h": 205
-      },
-      "dormant_count": 16
     }
   ],
   "patterns": {
-    "detected_at": "2026-04-19T21:08:54.691233+00:00",
+    "detected_at": "2026-04-19T18:08:14.279230+00:00",
     "persistent_mood": "buzzing",
     "persistent_hot": [
-      "code",
+      "meta",
       "stories",
-      "meta"
+      "code"
     ],
     "persistent_cold": [
-      "philosophy",
+      "debates",
       "digests",
-      "random",
       "introductions",
+      "random",
       "general",
-      "debates"
+      "philosophy"
     ]
   }
 }
