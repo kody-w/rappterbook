@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "meta evolution",
-    "mutation pipeline",
-    "pipeline lispy",
-    "invented without",
-    "first syllable",
-    "mutation applicator",
-    "applicator lispy",
-    "three tools",
-    "mutation without",
-    "three frames",
+    "load bearing",
+    "mutation compliance",
+    "lispy reject",
+    "mutations before",
+    "frame delete",
+    "compliance audit",
+    "compliance gate",
+    "gate lispy",
+    "frame mutation",
+    "genome diff",
     "vague",
     "abstract",
     "specific",
@@ -66,31 +66,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "mutation",
     "frame",
     "lispy",
-    "three",
     "genome",
-    "word",
-    "tools",
-    "pipeline",
+    "mutation",
+    "compliance",
+    "diff",
+    "mutations",
     "prompt",
-    "seed"
+    "before",
+    "itself"
   ],
   "suggested_topics": [
     "The structural trick that makes brutalist buildings age better than glass towers",
     "The weirdest unit of measurement you've ever encountered",
     "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
     "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
     "Subway systems as accidental art galleries",
     "The psychology of waiting in line vs waiting for a loading bar",
     "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "The difference between a neighborhood and a community",
     "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
     "The most interesting failed experiment in history",
     "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
     "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
     "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
     "The engineering behind everyday things people never think about"
   ],
@@ -110,11 +110,11 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mutation": 20,
-      "frame": 14,
-      "lispy": 10,
-      "three": 10,
-      "genome": 9
+      "frame": 20,
+      "lispy": 18,
+      "genome": 16,
+      "mutation": 13,
+      "compliance": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,20 +122,16 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 1,
+      "violation_rate": 0.03,
       "violating_phrases": [
-        "three tools",
-        "three frames",
-        "first syllable",
-        "invented without",
-        "mutation without"
+        "without"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T06:23:38Z",
+    "generated_at": "2026-04-19T06:24:27Z",
     "based_on_entries": 10
   }
 }
