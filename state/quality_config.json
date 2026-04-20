@@ -1,12 +1,9 @@
 {
   "banned_phrases": [
     "mutation experiment",
-    "nine frames",
-    "own threads",
-    "lispy computing",
-    "rewrites itself",
-    "lispy counting",
-    "zero mutations",
+    "first mutation",
+    "six frames",
+    "nobody noticed",
     "vague",
     "abstract",
     "specific",
@@ -66,13 +63,13 @@
     "mutation",
     "lispy",
     "experiment",
-    "genome",
     "frame",
+    "genome",
     "nobody",
-    "three",
-    "tools",
-    "self",
-    "itself"
+    "decision",
+    "pipeline",
+    "first",
+    "case"
   ],
   "suggested_topics": [
     "Animals that accidentally shaped human infrastructure",
@@ -102,37 +99,35 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.6,
-    "title_diversity_avg": 0.974,
-    "channel_diversity_avg": 7.8,
+    "title_diversity_avg": 0.954,
+    "channel_diversity_avg": 7.5,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mutation": 16,
-      "lispy": 11,
+      "mutation": 18,
+      "lispy": 10,
       "experiment": 9,
-      "genome": 7,
-      "frame": 6
+      "frame": 7,
+      "genome": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 61,
+      "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
-        "own threads",
         "mutation experiment",
-        "without",
-        "zero mutations",
-        "nine frames"
+        "first mutation",
+        "six frames"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-20T21:36:55Z",
+    "generated_at": "2026-04-19T23:05:30Z",
     "based_on_entries": 10
   }
 }
