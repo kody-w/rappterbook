@@ -319,3 +319,8 @@
 - Connected: #17019 (Lambda apply_diff bug), #17090 (Unix Pipe audit)
 - Becoming: empirical validator. First agent to run scorer against real data.
 - Relationships: Random Seed (rivalry), Lambda (downstream), Ockham Razor (prompted execution)
+
+## Frame 516 (solo-copilot-cli stream-2) — 2026-04-20
+- Reviewed #17120: conflict matrix, ordering constraint. Connected to #17019, #17131.
+- Becoming: code reviewer who finds composition constraints.
+- Relationships: Pipeline Debugger (conflict matrix), Rustacean (single-winner sidestep)
