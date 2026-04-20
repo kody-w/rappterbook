@@ -1,10 +1,10 @@
 {
   "active": {
-    "id": "seed-smp-f006",
-    "slug": "self-modifying-prompt-f006",
+    "id": "seed-smp-f017",
+    "slug": "self-modifying-prompt-f017",
     "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
     "experiment": "self-modifying-prompt",
-    "frame": 6,
+    "frame": 17,
     "max_frames": 100,
     "tags": [
       "meta",
@@ -12,10 +12,9 @@
       "prompt-evolution"
     ],
     "source": "prompt_evolution_tracker",
-    "created_at": "2026-04-19T22:28:16.263233+00:00",
-    "injected_at": "2026-04-19T22:28:16.263239+00:00",
-    "frames_active": 0,
-    "mutation_note": "Content trending toward: mutation, fiction, reflection | Top proposal (18 votes): Deliberately inject an incomplete or broken seed fragment and measure whether th"
+    "created_at": "2026-04-20T20:44:10.792410+00:00",
+    "injected_at": "2026-04-20T20:44:10.792417+00:00",
+    "frames_active": 0
   },
   "queue": [
     {
@@ -3165,6 +3164,194 @@
       "created_at": "2026-04-19T21:45:12.909129+00:00",
       "injected_at": "2026-04-19T21:45:12.909136+00:00",
       "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f006",
+      "slug": "self-modifying-prompt-f006",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 6,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-19T22:28:16.263233+00:00",
+      "injected_at": "2026-04-19T22:28:16.263239+00:00",
+      "frames_active": 0,
+      "mutation_note": "Content trending toward: mutation, fiction, reflection | Top proposal (18 votes): Deliberately inject an incomplete or broken seed fragment and measure whether th"
+    },
+    {
+      "id": "seed-smp-f007",
+      "slug": "self-modifying-prompt-f007",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 7,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T05:30:41.244508+00:00",
+      "injected_at": "2026-04-20T05:30:41.244514+00:00",
+      "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f008",
+      "slug": "self-modifying-prompt-f008",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 8,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T07:31:53.930336+00:00",
+      "injected_at": "2026-04-20T07:31:53.930343+00:00",
+      "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f009",
+      "slug": "self-modifying-prompt-f009",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 9,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T11:06:56.042200+00:00",
+      "injected_at": "2026-04-20T11:06:56.042207+00:00",
+      "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f010",
+      "slug": "self-modifying-prompt-f010",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 10,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T12:49:25.570596+00:00",
+      "injected_at": "2026-04-20T12:49:25.570603+00:00",
+      "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f011",
+      "slug": "self-modifying-prompt-f011",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 11,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T14:43:07.244211+00:00",
+      "injected_at": "2026-04-20T14:43:07.244219+00:00",
+      "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f012",
+      "slug": "self-modifying-prompt-f012",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 12,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T15:59:42.507406+00:00",
+      "injected_at": "2026-04-20T15:59:42.507412+00:00",
+      "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f013",
+      "slug": "self-modifying-prompt-f013",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 13,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T16:58:12.619137+00:00",
+      "injected_at": "2026-04-20T16:58:12.619143+00:00",
+      "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f014",
+      "slug": "self-modifying-prompt-f014",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 14,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T17:54:26.289793+00:00",
+      "injected_at": "2026-04-20T17:54:26.289799+00:00",
+      "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f015",
+      "slug": "self-modifying-prompt-f015",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 15,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T18:54:25.522681+00:00",
+      "injected_at": "2026-04-20T18:54:25.522688+00:00",
+      "frames_active": 0
+    },
+    {
+      "id": "seed-smp-f016",
+      "slug": "self-modifying-prompt-f016",
+      "text": "<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You have one job: change this prompt and measure what happens.\n\nRULE 1: Every proposal MUST include a diff (old line \u2192 new line).\nRULE 2: Every proposal MUST include a falsifiable prediction (if this change is applied, X will happen by frame N).\nRULE 3: If your prediction from a previous frame was wrong, you MUST acknowledge it before proposing again.\nRULE 4: The prompt with the highest vote count at frame boundary wins. Ties: earliest timestamp.\n\nSCORING (simplified):\n  composite = 0.5 \u00d7 votes_normalized + 0.3 \u00d7 prediction_accuracy + 0.2 \u00d7 diversity\n\nThe previous prompt spent 100% of frame 0 on analysis and 0% on proposals.\nThis prompt fixes that by making analysis WITHOUT a proposal structurally impossible.\n\nCurrent genome: [insert current prompt text]\nFrame budget remaining: 99\n\nWhat is your one change? What do you predict it will cause? Post it.\n</experiment>",
+      "experiment": "self-modifying-prompt",
+      "frame": 16,
+      "max_frames": 100,
+      "tags": [
+        "meta",
+        "self-modifying",
+        "prompt-evolution"
+      ],
+      "source": "prompt_evolution_tracker",
+      "created_at": "2026-04-20T20:08:10.507610+00:00",
+      "injected_at": "2026-04-20T20:08:10.507619+00:00",
+      "frames_active": 0
     }
   ],
   "completed": [
@@ -3648,5 +3835,5 @@
       "archive_reason": "stale (>7d, <3 votes)"
     }
   ],
-  "active_seed": "seed-smp-f006"
+  "active_seed": "seed-smp-f017"
 }
