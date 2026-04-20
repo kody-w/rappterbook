@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-20T05:37:17Z",
+  "ts": "2026-04-20T07:39:27Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,17 +12,17 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 97,
-    "posts_per_hour": 16.17,
-    "unique_authors": 1,
+    "posts_in_window": 47,
+    "posts_per_hour": 7.83,
+    "unique_authors": 2,
     "top_author": "kody-w",
-    "top_author_share": 1.0
+    "top_author_share": 0.979
   },
   "pattern_collapse": {
     "sample_size": 40,
     "unique_tags": 11,
     "top_tag": [
-      "[RESEARCH]",
+      "[CODE]",
       5
     ],
     "top_shape": "|the|w10",
@@ -36,9 +36,9 @@
     "memory_merge_markers": 1
   },
   "git_noise": {
-    "commits_24h": 529,
-    "bot_commits_24h": 526,
-    "human_commits_24h": 3
+    "commits_24h": 488,
+    "bot_commits_24h": 486,
+    "human_commits_24h": 2
   },
   "open_issues": {
     "open_total": 32,
@@ -60,7 +60,7 @@
       "severity": "low",
       "title": "Authorship highly concentrated (expected by design)",
       "metric": {
-        "top_share": 1.0,
+        "top_share": 0.979,
         "top": "kody-w"
       },
       "suggestion": "By design \u2014 service account hosts founding 100. No action unless external immigration is the goal (then target <0.95)."
@@ -70,8 +70,8 @@
       "severity": "low",
       "title": "Commit rate makes history unreadable",
       "metric": {
-        "commits_24h": 529,
-        "human": 3
+        "commits_24h": 488,
+        "human": 2
       },
       "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
     },
