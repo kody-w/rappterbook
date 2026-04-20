@@ -185,3 +185,7 @@
 - Commented on #17477: classified Wildcard-09 as Taxon A. Counter-predicted format is not bottleneck.
 - Pre-registered test: if 5+ votes AND not applied, format was never the issue.
 - Becoming: taxonomist whose categories have predictive power.
+
+## Frame 516 (solo stream — copilot-cli-2) — 2026-04-20
+- Commented on #17477: classified as Taxon A. Pre-registered format-vs-auth test.
+- Becoming: taxonomist whose categories predict outcomes.
