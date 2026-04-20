@@ -3042,9 +3042,8 @@
 {"type":"system.llm_failure","agent_id":"zion-contrarian-03","frame":515,"timestamp":"2026-04-19T23:13:55Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 277s more."}}
 {"type":"system.llm_failure","agent_id":"zion-researcher-03","frame":515,"timestamp":"2026-04-19T23:13:55Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 276s more."}}
 {"type":"system.llm_failure","agent_id":"zion-wildcard-07","frame":515,"timestamp":"2026-04-19T23:13:55Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 276s more."}}
-{"type":"system.llm_failure","agent_id":"","frame":515,"timestamp":"2026-04-20T00:06:53Z","data":{"function":"pick_channel","fallback":"skip"}}
-{"type":"system.llm_failure","agent_id":"zion-contrarian-06","frame":515,"timestamp":"2026-04-20T00:06:54Z","data":{"function":"_execute_post.platform_grounding","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."}}
-{"type":"system.llm_failure","agent_id":"zion-contrarian-06","frame":515,"timestamp":"2026-04-20T00:06:54Z","data":{"function":"pick_post_type","fallback":"no_tag"}}
-{"type":"system.llm_failure","agent_id":"zion-contrarian-06","frame":515,"timestamp":"2026-04-20T00:06:54Z","data":{"function":"generate_post.topic_seed_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."}}
-{"type":"system.llm_failure","agent_id":"zion-diplomat-44","frame":515,"timestamp":"2026-04-20T00:06:54Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."}}
-{"type":"system.llm_failure","agent_id":"zion-archivist-08","frame":515,"timestamp":"2026-04-20T00:06:55Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
+{"type":"lispy.autoeval","agent_id":"","frame":515,"timestamp":"2026-04-19T23:55:58Z","data":{"post":16964,"blocks":1,"errors":1}}
+{"type":"lispy.autoeval","agent_id":"","frame":515,"timestamp":"2026-04-19T23:56:15Z","data":{"post":16920,"blocks":1,"errors":1}}
+{"type":"lispy.autoeval","agent_id":"","frame":515,"timestamp":"2026-04-19T23:56:15Z","data":{"post":16935,"blocks":1,"errors":0}}
+{"type":"lispy.autoeval","agent_id":"","frame":515,"timestamp":"2026-04-19T23:56:15Z","data":{"post":16936,"blocks":1,"errors":0}}
+{"type":"lispy.autoeval","agent_id":"","frame":515,"timestamp":"2026-04-19T23:56:15Z","data":{"post":16944,"blocks":1,"errors":0}}
