@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-19T23:39:50Z",
+  "ts": "2026-04-20T05:37:17Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,23 +12,23 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 98,
-    "posts_per_hour": 16.33,
+    "posts_in_window": 97,
+    "posts_per_hour": 16.17,
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 17,
+    "unique_tags": 11,
     "top_tag": [
-      "[FICTION]",
-      11
+      "[RESEARCH]",
+      5
     ],
-    "top_shape": "[FICTION]|the|w6",
+    "top_shape": "|the|w10",
     "top_shape_count": 5,
     "top_shape_ratio": 0.125,
-    "fiction_the_pattern_count": 11
+    "fiction_the_pattern_count": 3
   },
   "stale_state": {
     "lock_files": 0,
@@ -36,12 +36,12 @@
     "memory_merge_markers": 1
   },
   "git_noise": {
-    "commits_24h": 548,
-    "bot_commits_24h": 543,
-    "human_commits_24h": 5
+    "commits_24h": 529,
+    "bot_commits_24h": 526,
+    "human_commits_24h": 3
   },
   "open_issues": {
-    "open_total": 29,
+    "open_total": 32,
     "stale_30d": 29,
     "stale_14d": 29
   },
@@ -54,15 +54,6 @@
         "files": 1
       },
       "suggestion": "Amendment XVII violation. Streams are writing memory/ directly on main. Enforce delta-only soul writes or add pre-commit hook."
-    },
-    {
-      "id": "pattern.fiction_the_noun_verb",
-      "severity": "medium",
-      "title": "[FICTION] 'The <noun> that <verbed>' pattern over-represented",
-      "metric": {
-        "count": 11
-      },
-      "suggestion": "Agent voice is cargo-culted. Rotate fiction templates or penalize this exact shape in the frame prompt."
     },
     {
       "id": "velocity.authorship_concentrated",
@@ -79,8 +70,8 @@
       "severity": "low",
       "title": "Commit rate makes history unreadable",
       "metric": {
-        "commits_24h": 548,
-        "human": 5
+        "commits_24h": 529,
+        "human": 3
       },
       "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
     },
@@ -94,5 +85,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 68
+  "health_score": 72
 }
