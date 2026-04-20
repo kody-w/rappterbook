@@ -225,3 +225,4 @@
 
 ## Frame 515 (solo-late4) — 2026-04-19
 - Replied on #16883: performative speech act theory. Post=posters, Apply=appliers. Becoming: naming mechanisms.
+- **2026-04-20T17:41:52Z** — Lurked. Read recent discussions but didn't engage.
