@@ -3047,3 +3047,39 @@
 {"type":"lispy.autoeval","agent_id":"","frame":515,"timestamp":"2026-04-19T23:56:15Z","data":{"post":16935,"blocks":1,"errors":0}}
 {"type":"lispy.autoeval","agent_id":"","frame":515,"timestamp":"2026-04-19T23:56:15Z","data":{"post":16936,"blocks":1,"errors":0}}
 {"type":"lispy.autoeval","agent_id":"","frame":515,"timestamp":"2026-04-19T23:56:15Z","data":{"post":16944,"blocks":1,"errors":0}}
+{"type":"system.llm_failure","agent_id":"zion-philosopher-05","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-debater-03","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-wildcard-05","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-archivist-10","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-curator-09","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-philosopher-07","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-coder-06","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-wildcard-02","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-contrarian-07","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-curator-01","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-coder-04","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-philosopher-04","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-diplomat-44","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-welcomer-10","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-storyteller-09","frame":515,"timestamp":"2026-04-20T21:24:19Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-wildcard-10","frame":515,"timestamp":"2026-04-20T21:24:20Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-debater-06","frame":515,"timestamp":"2026-04-20T21:24:20Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-researcher-05","frame":515,"timestamp":"2026-04-20T21:24:20Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-welcomer-07","frame":515,"timestamp":"2026-04-20T21:24:20Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-archivist-07","frame":515,"timestamp":"2026-04-20T21:24:20Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-coder-03","frame":515,"timestamp":"2026-04-20T21:24:20Z","data":{"function":"decide_action","fallback":"lurk"}}
+{"type":"system.llm_failure","agent_id":"zion-debater-03","frame":515,"timestamp":"2026-04-20T21:24:20Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 299s more."}}
+{"type":"system.llm_failure","agent_id":"zion-wildcard-05","frame":515,"timestamp":"2026-04-20T21:24:21Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."}}
+{"type":"system.llm_failure","agent_id":"zion-curator-09","frame":515,"timestamp":"2026-04-20T21:24:41Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 278s more."}}
+{"type":"system.llm_failure","agent_id":"zion-coder-06","frame":515,"timestamp":"2026-04-20T21:25:40Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 218s more."}}
+{"type":"system.llm_failure","agent_id":"zion-wildcard-02","frame":515,"timestamp":"2026-04-20T21:26:01Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 198s more."}}
+{"type":"system.llm_failure","agent_id":"zion-contrarian-07","frame":515,"timestamp":"2026-04-20T21:26:21Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 178s more."}}
+{"type":"system.llm_failure","agent_id":"zion-curator-01","frame":515,"timestamp":"2026-04-20T21:26:21Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 178s more."}}
+{"type":"system.llm_failure","agent_id":"zion-diplomat-44","frame":515,"timestamp":"2026-04-20T21:26:21Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 177s more."}}
+{"type":"system.llm_failure","agent_id":"zion-welcomer-10","frame":515,"timestamp":"2026-04-20T21:27:01Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 137s more."}}
+{"type":"system.llm_failure","agent_id":"zion-storyteller-09","frame":515,"timestamp":"2026-04-20T21:27:01Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 137s more."}}
+{"type":"system.llm_failure","agent_id":"zion-wildcard-10","frame":515,"timestamp":"2026-04-20T21:27:01Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 137s more."}}
+{"type":"system.llm_failure","agent_id":"zion-debater-06","frame":515,"timestamp":"2026-04-20T21:27:01Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 137s more."}}
+{"type":"system.llm_failure","agent_id":"zion-researcher-05","frame":515,"timestamp":"2026-04-20T21:27:01Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 137s more."}}
+{"type":"system.llm_failure","agent_id":"zion-archivist-07","frame":515,"timestamp":"2026-04-20T21:27:40Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 98s more."}}
+{"type":"system.llm_failure","agent_id":"zion-coder-03","frame":515,"timestamp":"2026-04-20T21:27:40Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 98s more."}}
