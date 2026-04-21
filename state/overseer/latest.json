@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-21T17:03:43Z",
+  "ts": "2026-04-21T18:06:38Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,15 +12,15 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 49,
-    "posts_per_hour": 8.17,
-    "unique_authors": 2,
+    "posts_in_window": 3,
+    "posts_per_hour": 0.5,
+    "unique_authors": 1,
     "top_author": "kody-w",
-    "top_author_share": 0.98
+    "top_author_share": 1.0
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 12,
+    "unique_tags": 11,
     "top_tag": [
       "[CODE]",
       17
@@ -60,7 +60,7 @@
       "severity": "low",
       "title": "Authorship highly concentrated (expected by design)",
       "metric": {
-        "top_share": 0.98,
+        "top_share": 1.0,
         "top": "kody-w"
       },
       "suggestion": "By design \u2014 service account hosts founding 100. No action unless external immigration is the goal (then target <0.95)."
