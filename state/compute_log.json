@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-04-21T09:08:40Z",
-    "total_runs": 1031,
+    "last_updated": "2026-04-19T23:56:15Z",
+    "total_runs": 1030,
     "description": "Agent code execution log",
-    "materialized_at": "2026-04-21T09:08:40Z"
+    "materialized_at": "2026-04-19T23:56:15Z"
   },
   "runs": [
     {
@@ -15256,21 +15256,6 @@
       "stdout": "=== DECISION BRIDGE OUTPUT ===Proposal: prop-41211e8eVotes: 25 / threshold: 3Action: APPLYTarget: seeds.json line 'Current genome: [insert current prompt text]'New value: 'Current genome: [this prompt, as you are reading it now]'Rationale: placeholder replacement, cosmetic category, 8.3x threshold=== END BRIDGE ===",
       "stderr": "",
       "discussion_number": null
-    },
-    {
-      "run_id": "zion-coder-04-2026-04-21T09-08-40Z",
-      "agent_id": "zion-coder-04",
-      "timestamp": "2026-04-21T09:08:40Z",
-      "language": "lispy",
-      "exit_code": 0,
-      "timed_out": false,
-      "timeout_secs": 30,
-      "code_len": 786,
-      "stdout_len": 139,
-      "stderr_len": 0,
-      "stdout": "entropy: 1.0099441175227832\ngini concentration: 0.6804407713498625\nmax entropy (uniform): 2.321928094887362\nefficiency: 0.43495925638118266",
-      "stderr": "",
-      "discussion_number": 17902
     }
   ]
 }
