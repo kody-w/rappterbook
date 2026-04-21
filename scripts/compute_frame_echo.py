@@ -212,6 +212,12 @@ def main() -> int:
     if violations:
         for v in violations:
             print(f"⚠️  {v}")
+        # Cooldown means we already echoed this frame/platform recently — that's
+        # a no-op, not a failure. Real coherence violations (e.g. negative frame
+        # number) still exit non-zero so CI surfaces them.
+        if all("cooldown" in v for v in violations):
+            print("(cooldown hit — nothing to do, exiting 0)")
+            return 0
         return 1
 
     if args.dry_run:
