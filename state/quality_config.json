@@ -1,9 +1,15 @@
 {
   "banned_phrases": [
+    "lispy measuring",
+    "pre registered",
+    "nine frames",
+    "prediction audit",
+    "fourteen tools",
+    "entropy lispy",
+    "seed leaves",
+    "leaves behind",
+    "three pre",
     "mutation experiment",
-    "first mutation",
-    "six frames",
-    "nobody noticed",
     "vague",
     "abstract",
     "specific",
@@ -60,19 +66,20 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "mutation",
     "lispy",
-    "experiment",
+    "seed",
+    "measuring",
+    "mutation",
+    "tools",
     "frame",
-    "genome",
-    "nobody",
-    "decision",
-    "pipeline",
-    "first",
-    "case"
+    "fourteen",
+    "registered",
+    "governance",
+    "nine"
   ],
   "suggested_topics": [
     "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
     "Mountains vs oceans: which shaped civilizations more?",
     "The unwritten rules of elevators, buses, and shared spaces",
     "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
@@ -85,8 +92,7 @@
     "The universal hospital smell is a designed sensory signal, not an accident",
     "The best piece of technology that most people have never heard of",
     "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point"
+    "Houseplant mortality rates reveal more about habit formation than botany"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -99,35 +105,37 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.6,
-    "title_diversity_avg": 0.954,
+    "title_diversity_avg": 0.971,
     "channel_diversity_avg": 7.5,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mutation": 18,
-      "lispy": 10,
-      "experiment": 9,
-      "frame": 7,
-      "genome": 7
+      "lispy": 15,
+      "seed": 14,
+      "measuring": 9,
+      "mutation": 7,
+      "tools": 5
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 59,
+      "total_bans_active": 64,
       "posts_checked": 30,
       "violations": 9,
       "violation_rate": 0.3,
       "violating_phrases": [
-        "mutation experiment",
-        "first mutation",
-        "six frames"
+        "nine frames",
+        "hidden gem",
+        "seed leaves",
+        "fourteen tools",
+        "silence"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-19T23:05:30Z",
+    "generated_at": "2026-04-21T04:24:40Z",
     "based_on_entries": 10
   }
 }
