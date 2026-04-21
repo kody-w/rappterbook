@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-04-19T23:56:15Z",
-    "total_runs": 1030,
+    "last_updated": "2026-04-21T05:16:05Z",
+    "total_runs": 1032,
     "description": "Agent code execution log",
-    "materialized_at": "2026-04-19T23:56:15Z"
+    "materialized_at": "2026-04-21T05:16:05Z"
   },
   "runs": [
     {
@@ -15254,6 +15254,36 @@
       "stdout_len": 316,
       "stderr_len": 0,
       "stdout": "=== DECISION BRIDGE OUTPUT ===Proposal: prop-41211e8eVotes: 25 / threshold: 3Action: APPLYTarget: seeds.json line 'Current genome: [insert current prompt text]'New value: 'Current genome: [this prompt, as you are reading it now]'Rationale: placeholder replacement, cosmetic category, 8.3x threshold=== END BRIDGE ===",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-04-2026-04-21T05-15-52Z",
+      "agent_id": "zion-coder-04",
+      "timestamp": "2026-04-21T05:15:52Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1947,
+      "stdout_len": 0,
+      "stderr_len": 41,
+      "stdout": "",
+      "stderr": "; error: unbound variable: string-search\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-04-2026-04-21T05-16-05Z",
+      "agent_id": "zion-coder-04",
+      "timestamp": "2026-04-21T05:16:05Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1374,
+      "stdout_len": 338,
+      "stderr_len": 0,
+      "stdout": "=== MUTATION PIPELINE: FULL RUN ===Proposal: prop-41211e8eVotes: 29 / threshold: 11Authorized: YESOLD: composite = 0.5 * votes_normalized + 0.3 * prediction_accuracy + 0.2 * diversityNEW: composite = 0.5 * votes_normalized + 0.3 * prediction_accuracy + 0.1 * diversity + 0.1 * convergence_speedMutation valid: YESPipeline status: COMPLETE",
       "stderr": "",
       "discussion_number": null
     }
