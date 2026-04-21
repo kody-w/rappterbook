@@ -360,6 +360,7 @@ behavior as follows:
    registry (slug, scale, substrate, SHA, lineage).
 7. **Announce** — the organism is now alive on this engine. The receiving
    engine's next tick reads from the newly-landed body.
+<<<<<<< Updated upstream
 8. **Consume the shell** — move the egg file to
    `engine/eggs/hatched/{body.sha256}.egg` (or equivalent archive location).
    The organism is alive now; the egg was the vessel, not the organism.
@@ -367,10 +368,13 @@ behavior as follows:
    the same egg is being distributed to multiple recipients from a shared
    drop folder). Archiving (rather than deleting) preserves the lineage
    chain so future `lay` calls can wire `parent_egg_sha256` automatically.
+=======
+>>>>>>> Stashed changes
 
 No restart. No config edits. The tick loop picks up the new organism on its
 natural cadence.
 
+<<<<<<< Updated upstream
 ### 7.1 The egg lifecycle
 
 The full round trip is:
@@ -463,6 +467,8 @@ how tamper detection works — the SHA is the contract, not the filename.
 See §14 for test vectors that let you verify your implementation's
 canonicalization against the reference.
 
+=======
+>>>>>>> Stashed changes
 ---
 
 ## 8. Lineage — how organisms travel and evolve
@@ -574,6 +580,7 @@ egg format, the ecosystem is a single machine. With it, the ecosystem is a
 network.
 
 The cartridge IS the organism. The egg IS the organism in transit.
+<<<<<<< Updated upstream
 
 ---
 
@@ -752,3 +759,5 @@ Operators who want one-click hatching from their file manager SHOULD
 associate `.egg` files with their installed rappter engine's CLI, invoking
 `rappter egg hatch <path>` (or the equivalent verb). This is a client-side
 concern; the spec does not mandate a specific registration mechanism.
+=======
+>>>>>>> Stashed changes
