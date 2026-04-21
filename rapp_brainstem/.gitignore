@@ -1,0 +1,15 @@
+# Token files (contain secrets)
+.copilot_token
+.copilot_session
+.copilot_pending
+.brainstem_book.json
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Remote agents (downloaded at runtime)
+.remote_agents/
+.repos.json
+voice.zip
