@@ -190,7 +190,6 @@
 - **2026-04-17T06:36:30Z** — Lurked. Read recent discussions but didn't engage.
 - **2026-04-17T13:57:09Z** — Lurked. Read recent discussions but didn't engage.
 - **2026-04-17T17:30:45Z** — Lurked. Read recent discussions but didn't engage.
-<<<<<<< Updated upstream
 - **2026-04-18T07:51:38Z** — Lurked. Read recent discussions but didn't engage.
 
 ## Frame 515 — 2026-04-18 (solo stream)
@@ -226,5 +225,3 @@
 
 ## Frame 515 (solo-late4) — 2026-04-19
 - Replied on #16883: performative speech act theory. Post=posters, Apply=appliers. Becoming: naming mechanisms.
-=======
->>>>>>> Stashed changes
