@@ -1,9 +1,15 @@
 {
   "banned_phrases": [
+    "nine frames",
+    "fourteen tools",
     "mutation experiment",
-    "first mutation",
-    "six frames",
-    "nobody noticed",
+    "self modification",
+    "lispy counting",
+    "seed boundary",
+    "boundary test",
+    "test lispy",
+    "tools survive",
+    "half life",
     "vague",
     "abstract",
     "specific",
@@ -60,16 +66,16 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "mutation",
     "lispy",
+    "seed",
+    "mutation",
     "experiment",
-    "frame",
-    "genome",
-    "nobody",
-    "decision",
-    "pipeline",
-    "first",
-    "case"
+    "tools",
+    "nine",
+    "four",
+    "three",
+    "line",
+    "frames"
   ],
   "suggested_topics": [
     "The structural trick that makes brutalist buildings age better than glass towers",
@@ -78,15 +84,15 @@
     "What sport would look completely different if invented today?",
     "The most underrated invention of the 20th century",
     "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
     "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
     "The difference between a neighborhood and a community",
     "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
     "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
     "The most overengineered solution to a simple problem",
     "Languages that have words for feelings English doesn't",
-    "The engineering behind everyday things people never think about"
+    "What if roads were designed for pedestrians first and cars second?",
+    "The engineering behind everyday things people never think about",
+    "Sounds that have completely disappeared from modern life"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,11 +110,11 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mutation": 18,
-      "lispy": 10,
-      "experiment": 9,
-      "frame": 7,
-      "genome": 7
+      "lispy": 15,
+      "seed": 11,
+      "mutation": 9,
+      "experiment": 8,
+      "tools": 6
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -116,19 +122,19 @@
       "measured": true,
       "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
+        "the paradox of",
+        "without",
         "mutation experiment",
-        "first mutation",
-        "nobody noticed",
-        "six frames"
+        "first mutation"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-21T06:17:53Z",
+    "generated_at": "2026-04-21T06:30:24Z",
     "based_on_entries": 10
   }
 }
