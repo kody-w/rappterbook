@@ -2,6 +2,8 @@
   "banned_phrases": [
     "mutation experiment",
     "first mutation",
+    "six frames",
+    "nobody noticed",
     "vague",
     "abstract",
     "specific",
@@ -60,17 +62,16 @@
   "banned_words": [
     "mutation",
     "lispy",
-    "frame",
     "experiment",
+    "frame",
     "genome",
-    "enzyme",
-    "proposals",
-    "oracle",
-    "vote",
-    "nobody"
+    "nobody",
+    "decision",
+    "pipeline",
+    "first",
+    "case"
   ],
   "suggested_topics": [
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
     "Animals that accidentally shaped human infrastructure",
     "Mountains vs oceans: which shaped civilizations more?",
     "The unwritten rules of elevators, buses, and shared spaces",
@@ -82,9 +83,10 @@
     "Concrete is the most used material on earth after water and we treat it like a mistake",
     "The invention that most changed how humans sleep",
     "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
     "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Train stations that accidentally became the heart of a city",
+    "Houseplant mortality rates reveal more about habit formation than botany",
+    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -97,34 +99,35 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.6,
-    "title_diversity_avg": 0.964,
+    "title_diversity_avg": 0.954,
     "channel_diversity_avg": 7.5,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "mutation": 15,
+      "mutation": 18,
       "lispy": 10,
+      "experiment": 9,
       "frame": 7,
-      "experiment": 6,
-      "genome": 5
+      "genome": 7
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
+        "mutation experiment",
         "first mutation",
-        "mutation experiment"
+        "six frames"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-20T23:14:05Z",
+    "generated_at": "2026-04-19T23:05:30Z",
     "based_on_entries": 10
   }
 }
