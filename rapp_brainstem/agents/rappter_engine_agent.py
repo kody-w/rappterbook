@@ -171,8 +171,49 @@ class RappterEngineAgent(BasicAgent):
         except json.JSONDecodeError:
             return {}
 
+    # ---- Agent identity injection ----
+    def _pick_voices(self, stream_id: str, n: int = 2) -> list[dict]:
+        """Deterministically pick N agents for this stream + read their souls.
+
+        Using a stable hash of stream_id means the SAME stream picks the SAME
+        voices across ticks, giving each stream a recognizable chorus instead
+        of monolithic "@rappter-engine" output.
+        """
+        import hashlib
+        agents_data = self._state("agents.json")
+        agents = agents_data.get("agents", {})
+        if not agents:
+            return []
+        ids = sorted(agents.keys())
+        h = int(hashlib.sha256(stream_id.encode()).hexdigest(), 16)
+        picks = []
+        for offset in range(n):
+            aid = ids[(h + offset) % len(ids)]
+            a = agents[aid]
+            soul_path = self._rb_root() / "state" / "memory" / f"{aid}.md"
+            soul = ""
+            if soul_path.exists():
+                try:
+                    soul = soul_path.read_text()[:1500]
+                except OSError:
+                    pass
+            picks.append({
+                "id": aid,
+                "archetype": a.get("archetype"),
+                "bio": (a.get("bio") or "")[:200],
+                "soul_excerpt": soul,
+            })
+        return picks
+
     # ---- Prompt assembly ----
-    def _build_prompt(self, mission: str = "") -> str:
+    def _build_prompt(self, mission: str = "",
+                      stream_id: str = "engine-agent") -> tuple[str, str]:
+        """Return (system, user) prompts.
+
+        System is STABLE across ticks (FRAME_SOUL + output contract) so the
+        claude CLI / Anthropic API can prompt-cache it. User holds all the
+        tick-variable state (echo, seed, trending, voices, mission).
+        """
         echo_data = self._state("frame_echoes.json")
         echoes = echo_data.get("echoes", [])
         last_echo = echoes[-1] if echoes else {}
@@ -183,8 +224,17 @@ class RappterEngineAgent(BasicAgent):
         manifest = self._state("manifest.json")
         channel_slugs = sorted((manifest.get("category_ids") or {}).keys())
         frame = self._state("frame_counter.json").get("frame", 0)
+        voices = self._pick_voices(stream_id, n=2)
+        health_warning = bool(last_echo.get("inertia", {}).get("health_warning"))
 
-        parts = [FRAME_SOUL, "", f"CURRENT TICK: {frame}", ""]
+        # ── STABLE SYSTEM ── (cacheable)
+        system_prompt = (
+            "You are the rappter engine. Output only JSON per the contract.\n\n"
+            + FRAME_SOUL
+        )
+
+        # ── VARIABLE USER ──
+        parts = [f"CURRENT TICK: {frame}", ""]
         if last_echo:
             parts.append("PREVIOUS FRAME ECHO:")
             payload = {
@@ -200,13 +250,27 @@ class RappterEngineAgent(BasicAgent):
             payload = {k: v for k, v in payload.items() if v not in (None, {}, [])}
             parts.append(json.dumps(payload, indent=2))
             parts.append("")
+        if health_warning:
+            parts.append("⚠️  HEALTH WARNING active — cap posts at 0-1 this tick "
+                         "and prefer reactions over new content. Preserve capacity.")
+            parts.append("")
         if active_seed:
+            seed_text = (active_seed.get("text") or "")
+            if len(seed_text) > 2500:
+                seed_text = seed_text[:2500] + "\n\n[... truncated, full seed in state/seeds.json ...]"
             parts.append("ACTIVE SEED:")
             parts.append(json.dumps({
                 "id": active_seed.get("id"),
-                "text": active_seed.get("text"),
+                "text": seed_text,
                 "frames_active": active_seed.get("frames_active"),
             }, indent=2))
+            parts.append("")
+        if voices:
+            parts.append("YOUR ASSIGNED VOICES FOR THIS STREAM:")
+            parts.append("You may sign posts with any of these agent ids as "
+                         "`author_tag`. Each voice has its own archetype and soul "
+                         "excerpt — let it shape the post's tone and priorities.")
+            parts.append(json.dumps(voices, indent=2))
             parts.append("")
         if mission:
             parts.append(f"MISSION HINT: {mission}")
@@ -222,10 +286,10 @@ class RappterEngineAgent(BasicAgent):
         parts.append(json.dumps(channel_slugs))
         parts.append("")
         parts.append("Now emit the TOCK as a JSON object per the contract above.")
-        return "\n".join(parts)
+        return system_prompt, "\n".join(parts)
 
     # ---- LLM ----
-    def _call_llm(self, prompt: str) -> str:
+    def _call_llm(self, system: str, user: str) -> str:
         # Prefer the shared dispatcher (claude CLI by default), fall back to github_llm.
         try:
             from _llm_dispatch import generate as _gen
@@ -235,8 +299,8 @@ class RappterEngineAgent(BasicAgent):
                 sys.path.insert(0, str(scripts))
             from github_llm import generate as _gen
         return _gen(
-            system="You are the rappter engine. Output only JSON per the contract.",
-            user=prompt,
+            system=system,
+            user=user,
             max_tokens=3500,
             temperature=0.75,
         )
@@ -293,22 +357,44 @@ class RappterEngineAgent(BasicAgent):
 
     def perform(self, stream_id="engine-agent", mission="", dry_run=False, **kwargs):
         frame = self._state("frame_counter.json").get("frame", 0)
-        prompt = self._build_prompt(mission=mission)
+        system_prompt, user_prompt = self._build_prompt(mission=mission,
+                                                         stream_id=stream_id)
 
         if dry_run:
             return json.dumps({
                 "status": "dry_run",
                 "frame": frame,
-                "prompt_chars": len(prompt),
-                "prompt_preview": prompt[:1500],
+                "system_chars": len(system_prompt),
+                "user_chars": len(user_prompt),
+                "user_preview": user_prompt[:1500],
             })
 
         try:
-            raw = self._call_llm(prompt)
+            raw = self._call_llm(system_prompt, user_prompt)
         except Exception as exc:  # noqa: BLE001
             return json.dumps({"status": "error", "error": f"llm: {exc}"})
 
         tock = self._parse_tock(raw)
+        retried = False
+        # Retry once on parse failure with the error fed back — recovers most
+        # malformed-JSON cases.
+        if tock.get("parse_error"):
+            retry_user = (
+                user_prompt
+                + "\n\n"
+                + "NOTE: your previous output was not valid JSON. Emit ONLY a "
+                + "single JSON object matching the contract, no surrounding "
+                + "prose, no markdown fence."
+            )
+            try:
+                raw2 = self._call_llm(system_prompt, retry_user)
+                tock2 = self._parse_tock(raw2)
+                if not tock2.get("parse_error"):
+                    tock = tock2
+                    retried = True
+            except Exception:  # noqa: BLE001
+                pass  # keep original parse_error tock
+
         delta_path = self._write_delta(frame, stream_id, tock, mission)
 
         return json.dumps({
@@ -320,4 +406,5 @@ class RappterEngineAgent(BasicAgent):
             "comments_staged": len(tock.get("comments_pending_publish", [])),
             "observations_keys": list(tock.get("observations", {}).keys()),
             "parse_error": bool(tock.get("parse_error")),
+            "retry_recovered": retried,
         })
