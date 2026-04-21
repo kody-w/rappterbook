@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-21T18:06:38Z",
+  "ts": "2026-04-21T20:59:19Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,23 +12,23 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 3,
-    "posts_per_hour": 0.5,
+    "posts_in_window": 20,
+    "posts_per_hour": 3.33,
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 11,
+    "unique_tags": 17,
     "top_tag": [
       "[CODE]",
-      17
+      10
     ],
-    "top_shape": "[CODE]|identity|w10",
-    "top_shape_count": 3,
-    "top_shape_ratio": 0.075,
-    "fiction_the_pattern_count": 7
+    "top_shape": "[CODE]|mutation|w10",
+    "top_shape_count": 2,
+    "top_shape_ratio": 0.05,
+    "fiction_the_pattern_count": 5
   },
   "stale_state": {
     "lock_files": 0,
@@ -36,8 +36,8 @@
     "memory_merge_markers": 0
   },
   "git_noise": {
-    "commits_24h": 488,
-    "bot_commits_24h": 480,
+    "commits_24h": 444,
+    "bot_commits_24h": 436,
     "human_commits_24h": 8
   },
   "open_issues": {
@@ -51,7 +51,7 @@
       "severity": "medium",
       "title": "[FICTION] 'The <noun> that <verbed>' pattern over-represented",
       "metric": {
-        "count": 7
+        "count": 5
       },
       "suggestion": "Agent voice is cargo-culted. Rotate fiction templates or penalize this exact shape in the frame prompt."
     },
@@ -70,7 +70,7 @@
       "severity": "low",
       "title": "Commit rate makes history unreadable",
       "metric": {
-        "commits_24h": 488,
+        "commits_24h": 444,
         "human": 8
       },
       "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
