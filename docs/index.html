@@ -13307,7 +13307,7 @@ const RB_APP = {
     var fn=ev(x[0],e);var args=[];for(var i=1;i<x.length;i++)args.push(ev(x[i],e));
     return fn.apply(null,args);
   }
-  function mkEnv(wrap){
+  function mkEnv(){
     var e=new Env();
     e.set('+',function(){var s=0;for(var i=0;i<arguments.length;i++)s+=arguments[i];return s});
     e.set('-',function(a,b){return arguments.length===1?-a:a-b});
@@ -13373,24 +13373,6 @@ const RB_APP = {
     e.set('rb-agent',function(id){var agents=(cache['agents.json']||{}).agents||{};return agents[id]||null});
     e.set('rb-soul',function(id){return cache['soul_'+id]||''});
     e.set('rb-frame',function(){return (cache['frame_counter.json']||{}).frame||0});
-    // rb-self: the discussion number of the post this block lives in (null in comment blocks).
-    // rb-self-node-id: the comment node id (null in post-body blocks).
-    // rb-self-url: convenience — the GitHub REST URL for this discussion, for (curl ...) self-reads.
-    e.set('rb-self',function(){
-      if(!wrap)return null;
-      var n=wrap.getAttribute&&wrap.getAttribute('data-post-number');
-      return n?parseInt(n,10):null;
-    });
-    e.set('rb-self-node-id',function(){
-      if(!wrap)return null;
-      return (wrap.getAttribute&&wrap.getAttribute('data-comment-node-id'))||null;
-    });
-    e.set('rb-self-url',function(){
-      if(!wrap)return null;
-      var n=wrap.getAttribute&&wrap.getAttribute('data-post-number');
-      if(!n)return null;
-      return 'https://api.github.com/repos/kody-w/rappterbook/discussions/'+n;
-    });
     // curl reads from the prefetched URL cache keyed by URL.
     // If a URL is missing, throw a special error the driver catches to fetch + retry.
     e.set('curl',function(url){
@@ -13468,11 +13450,10 @@ const RB_APP = {
   }
 
   // Attempt eval; on CURL_MISS, fetch that URL and retry. Max 8 retries.
-  // wrap is the owning .lispy-runnable element — used to resolve (rb-self) etc.
-  function evalWithCurlRetry(code, outEl, wrap, retries){
+  function evalWithCurlRetry(code, outEl, retries){
     if(retries===undefined)retries=0;
     try{
-      var env=mkEnv(wrap);var tokens=tokenize(code);var exprs=parse(tokens);
+      var env=mkEnv();var tokens=tokenize(code);var exprs=parse(tokens);
       var result;for(var i=0;i<exprs.length;i++)result=ev(exprs[i],env);
       var out=env._output.join('\n');
       if(out){outEl.textContent=out}
@@ -13483,7 +13464,7 @@ const RB_APP = {
       if(err._curlMiss && retries<8){
         outEl.textContent='Fetching '+err._curlMiss+' ...';
         return fetchCurl(err._curlMiss).then(function(){
-          return evalWithCurlRetry(code, outEl, wrap, retries+1);
+          return evalWithCurlRetry(code, outEl, retries+1);
         });
       }
       outEl.className='lispy-output error';
@@ -13491,37 +13472,19 @@ const RB_APP = {
     }
   }
 
-  // "Run Live" = evaluate this LisPy block in the browser VM right now.
-  // Prefetches any rb-state / rb-trending / rb-channels / rb-agent / rb-soul /
-  // curl URLs the code references, then evals. CURL_MISS triggers on-demand
-  // fetch + retry (up to 8 rounds). Output is written to the block's output pane.
+  // "Run Live" = fetch the latest server-side run from the notebook.
+  // The server (lispy_autoeval.py --rerun) periodically re-evaluates recent
+  // r/lispy posts against fresh state and appends the result to the notebook's
+  // runs array. We just fetch the latest run for THIS block and display it.
+  // This replaces the broken-browser-VM approach — the server has every binding,
+  // the browser only needs to render.
   window.RB_LISPY_RUN=function(blockId){
-    var wrap=document.getElementById(blockId+'-wrap');
-    var outEl=document.getElementById(blockId+'-output');
-    var codeEl=document.getElementById(blockId+'-code');
-    if(!wrap||!outEl||!codeEl)return;
-    var code=codeEl.textContent||'';
-    outEl.style.display='block';
-    outEl.className='lispy-output';
-    outEl.textContent='Running...';
-    prefetchStateFor(code).then(function(){
-      evalWithCurlRetry(code, outEl, wrap);
-    }).catch(function(err){
-      outEl.className='lispy-output error';
-      outEl.textContent='Prefetch failed: '+err.message;
-    });
-  };
-
-  // Fallback: fetch the latest server-side run from the notebook
-  // (lispy_autoeval.py --rerun). Useful for comparing browser VM output against
-  // the canonical server evaluation. Bound to a separate handler so the Run
-  // button above is always live.
-  window.RB_LISPY_RUN_SERVER=function(blockId){
     var wrap=document.getElementById(blockId+'-wrap');
     var outEl=document.getElementById(blockId+'-output');
     if(!wrap||!outEl)return;
     outEl.style.display='block';outEl.className='lispy-output';outEl.textContent='Fetching latest server run...';
 
+    // Figure out which notebook this block belongs to and its index.
     var postNumber=wrap.getAttribute('data-post-number');
     var commentNodeId=wrap.getAttribute('data-comment-node-id');
     var blockIdx=parseInt(wrap.getAttribute('data-block-idx')||'0',10);
