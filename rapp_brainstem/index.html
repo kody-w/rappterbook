@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAPP Brainstem</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%2358a6ff'%3E%3Cpath d='M184 0c-30.9 0-56.5 22.7-61.1 52.3C54.5 67 0 130 0 206.8c0 41.6 17.4 79.2 45.3 105.9-2 9.2-3.3 18.8-3.3 28.7 0 55.3 35.8 102.2 85.5 119C142.2 493 172.6 512 208 512h16c35.3 0 64-28.7 64-64V86c0-8.8-7.2-16-16-16h-16c-8.8 0-16 7.2-16 16v16c0 8.8-7.2 16-16 16s-16-7.2-16-16V64c0-35.3-28.7-64-64-64h40zm144 0c30.9 0 56.5 22.7 61.1 52.3C457.5 67 512 130 512 206.8c0 41.6-17.4 79.2-45.3 105.9 2 9.2 3.3 18.8 3.3 28.7 0 55.3-35.8 102.2-85.5 119C369.8 493 339.4 512 304 512h-16c-35.3 0-64-28.7-64-64V86c0-8.8 7.2-16 16-16h16c8.8 0 16 7.2 16 16v16c0 8.8 7.2 16 16 16s16-7.2 16-16V64c0-35.3 28.7-64 64-64h-40z'/%3E%3C/svg%3E">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Inline SVG icon helper ── */
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px; height: 16px;
+    flex-shrink: 0;
+  }
+  .icon svg { width: 100%; height: 100%; fill: currentColor; }
+  .icon-lg { width: 20px; height: 20px; }
+  .icon-xl { width: 40px; height: 40px; }
+
+  header {
+    padding: 12px 24px;
+    border-bottom: 1px solid #21262d;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #161b22;
+  }
+  header .logo {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    background: #1f6feb;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+  }
+  header h1 { font-size: 15px; font-weight: 600; color: #e6edf3; }
+  header .controls {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #8b949e;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #3fb950;
+    animation: pulse 2s infinite;
+  }
+  .dot.offline { background: #f85149; animation: none; }
+  .dot.pending { background: #d29922; animation: pulse 1s infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+
+  .icon-btn {
+    background: none;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 4px 7px;
+    cursor: pointer;
+    color: #8b949e;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    transition: all 0.15s;
+  }
+  .icon-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+  .icon-btn.active { border-color: #3fb950; color: #3fb950; background: rgba(63,185,80,0.08); }
+
+  /* ── Login overlay ── */
+  #login-overlay {
+    position: fixed; inset: 0;
+    background: rgba(13,17,23,0.95);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+  }
+  .login-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    max-width: 420px;
+    position: relative;
+  }
+  .login-card .login-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: #1f6feb;
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+  }
+  .login-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .login-card p { color: #8b949e; font-size: 14px; margin-bottom: 24px; }
+  .login-btn {
+    background: #238636; color: #fff; border: none; border-radius: 8px;
+    padding: 12px 24px; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .login-btn:hover { background: #2ea043; }
+  .login-btn:disabled { opacity: 0.5; cursor: default; }
+  .device-code {
+    font-family: "SF Mono", monospace;
+    font-size: 32px; font-weight: 700; letter-spacing: 4px;
+    color: #58a6ff; margin: 16px 0;
+  }
+  .login-status { color: #8b949e; font-size: 13px; margin-top: 16px; }
+  .login-success { color: #3fb950; }
+  .code-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin: 16px 0;
+  }
+  .code-row .device-code { margin: 0; }
+  .copy-btn {
+    background: #21262d; border: 1px solid #30363d; border-radius: 6px;
+    color: #8b949e; cursor: pointer; padding: 6px 8px;
+    display: inline-flex; align-items: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .copy-btn:hover { background: #30363d; color: #e6edf3; border-color: #484f58; }
+  .copy-btn.copied { background: #238636; color: #fff; border-color: #2ea043; }
+  .copy-toast {
+    font-size: 12px; color: #3fb950; height: 18px; margin-top: 4px;
+    transition: opacity 0.2s;
+  }
+
+  /* ── Chat ── */
+  #chat {
+    flex: 1; overflow-y: auto; padding: 24px;
+    display: flex; flex-direction: column; gap: 16px;
+    position: relative;
+  }
+  .msg { display: flex; gap: 12px; max-width: 760px; z-index: 2; }
+  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg.system { align-self: center; }
+
+  /* Chat Watermark */
+  #chat-watermark {
+    position: absolute; bottom: 24px; right: 24px;
+    color: #30363d; font-size: 14px; font-weight: 500; text-align: right;
+    pointer-events: none; z-index: 1; user-select: none;
+    display: flex; flex-direction: row; align-items: center; gap: 8px;
+    opacity: 0.6;
+  }
+  #chat-watermark svg { width: 20px; height: 20px; fill: #30363d; }
+
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #8b949e; background: #21262d;
+  }
+  .avatar .icon { width: 18px; height: 18px; }
+  .msg.user .avatar { background: #1f6feb; color: #fff; }
+  .msg.assistant .avatar { background: #161b22; border: 1px solid #30363d; color: #58a6ff; }
+
+  .bubble {
+    padding: 12px 16px; border-radius: 12px;
+    font-size: 14px; line-height: 1.6;
+    max-width: 780px; word-break: break-word;
+  }
+  .msg.assistant .bubble {
+    background: #161b22; border: 1px solid #21262d;
+    border-radius: 4px 12px 12px 12px;
+  }
+  .msg.assistant .bubble a { color: #58a6ff; text-decoration: none; }
+  .msg.assistant .bubble a:hover { text-decoration: underline; }
+  .msg.assistant .bubble strong { color: #e6edf3; }
+  .msg.assistant .bubble ol, .msg.assistant .bubble ul { padding-left: 20px; margin: 8px 0; }
+  .msg.assistant .bubble li { margin: 6px 0; }
+  .msg.assistant .bubble p { margin: 6px 0; }
+  .msg.assistant .bubble p:first-child { margin-top: 0; }
+  .msg.assistant .bubble p:last-child { margin-bottom: 0; }
+  .msg.assistant .bubble code {
+    background: #0d1117; padding: 2px 6px; border-radius: 4px;
+    font-family: "SF Mono", monospace; font-size: 12px;
+  }
+  .msg.assistant .bubble pre {
+    background: #0d1117; padding: 10px; border-radius: 6px;
+    overflow-x: auto; margin: 8px 0;
+  }
+  .msg.assistant .bubble pre code { padding: 0; background: none; }
+  .msg.assistant .bubble table {
+    border-collapse: collapse; width: 100%; margin: 10px 0;
+    font-size: 13px;
+  }
+  .msg.assistant .bubble th, .msg.assistant .bubble td {
+    border: 1px solid #30363d; padding: 8px 12px; text-align: left;
+    vertical-align: top;
+  }
+  .msg.assistant .bubble th {
+    background: #0d1117; color: #e6edf3; font-weight: 600;
+    white-space: nowrap;
+  }
+  .msg.assistant .bubble td:first-child { white-space: nowrap; }
+  .msg.assistant .bubble tr:nth-child(even) { background: rgba(13,17,23,0.4); }
+  .msg.assistant .bubble h1, .msg.assistant .bubble h2, .msg.assistant .bubble h3 {
+    margin: 14px 0 8px 0; color: #e6edf3; line-height: 1.3;
+  }
+  .msg.assistant .bubble h1 { font-size: 18px; }
+  .msg.assistant .bubble h2 { font-size: 16px; }
+  .msg.assistant .bubble h3 { font-size: 14px; }
+  .msg.assistant .bubble h1:first-child,
+  .msg.assistant .bubble h2:first-child,
+  .msg.assistant .bubble h3:first-child { margin-top: 0; }
+  .msg.assistant .bubble blockquote {
+    border-left: 3px solid #30363d; margin: 8px 0; padding: 4px 12px;
+    color: #8b949e;
+  }
+  .msg.assistant .bubble hr {
+    border: none; border-top: 1px solid #21262d; margin: 12px 0;
+  }
+  .msg.user .bubble {
+    background: #1f6feb; border-radius: 12px 4px 12px 12px;
+    white-space: pre-wrap;
+  }
+  .msg.system .bubble {
+    background: transparent; color: #8b949e;
+    font-size: 13px; border: none; padding: 4px 8px;
+  }
+  .msg.system .bubble h2 { color: #e6edf3; font-size: 16px; margin-bottom: 8px; }
+  .msg.system .bubble ul { padding-left: 20px; margin: 12px 0; }
+  .msg.system .bubble li { margin-bottom: 6px; }
+  .msg.system .bubble code { background: rgba(255,255,255,0.1); padding: 2px 4px; border-radius: 4px; }
+  .msg.system .bubble strong { color: #c9d1d9; }
+
+  /* ── Agent activity indicator ── */
+  .agent-logs-wrapper {
+    margin-top: 10px; border: 1px solid #30363d;
+    border-radius: 6px; overflow: hidden;
+    animation: logsAppear 0.3s ease-out;
+  }
+  .agent-logs-wrapper.hidden { display: none; }
+  @keyframes logsAppear {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .logs-label {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 10px; background: #0d1117;
+    color: #8b949e; font-size: 10px; font-weight: 600;
+    font-family: "SF Mono", monospace;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    cursor: pointer; user-select: none;
+  }
+  .logs-label:hover { background: #161b22; color: #e6edf3; }
+  .logs-label .arrow { transition: transform 0.2s; font-size: 8px; }
+  .logs-label .arrow.open { transform: rotate(90deg); }
+  .logs-label .agent-name { color: #d2a8ff; }
+  .agent-logs {
+    padding: 8px 10px; background: #0d1117;
+    font-size: 10px; color: #7ee787;
+    font-family: "SF Mono", monospace;
+    white-space: pre-wrap; max-height: 160px;
+    overflow-y: auto; border-top: 1px solid #21262d;
+  }
+  .agent-logs.collapsed { display: none; }
+
+  .typing { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+  .typing span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #8b949e; animation: bounce 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding: 16px 24px;
+    border-top: 1px solid #21262d;
+    background: #161b22;
+  }
+  .input-row {
+    display: flex; gap: 10px;
+    max-width: 760px; margin: 0 auto;
+  }
+  #input {
+    flex: 1; background: #0d1117;
+    border: 1px solid #30363d; border-radius: 8px;
+    color: #e6edf3; font-size: 14px;
+    padding: 10px 14px; resize: none; outline: none;
+    line-height: 1.5; max-height: 120px;
+    transition: border-color 0.15s;
+  }
+  #input:focus { border-color: #1f6feb; }
+  #input::placeholder { color: #484f58; }
+  #send {
+    background: #1f6feb; color: #fff; border: none; border-radius: 8px;
+    padding: 10px 18px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: background 0.15s, opacity 0.15s;
+    align-self: flex-end;
+  }
+  #send:hover { background: #388bfd; }
+  #send:disabled { opacity: 0.4; cursor: default; }
+
+  .toolbar-row {
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 760px; margin: 0 auto 8px;
+    font-size: 11px; color: #484f58;
+  }
+  .toolbar-row .left { display: flex; align-items: center; gap: 12px; }
+  .toolbar-row .right { display: flex; align-items: center; gap: 10px; }
+  .toolbar-link {
+    background: none; border: none; color: #484f58;
+    cursor: pointer; font-size: 11px;
+    display: inline-flex; align-items: center; gap: 3px;
+    text-decoration: none; transition: color 0.15s;
+  }
+  .toolbar-link:hover { color: #8b949e; }
+  #session-id { font-family: "SF Mono", monospace; }
+  .dev-only { display: none; }
+  body.dev-mode .dev-only { display: flex; }
+
+  /* ── Model selector ── */
+  #model-select {
+    background: #0d1117; color: #e6edf3;
+    border: 1px solid #30363d; border-radius: 6px;
+    padding: 4px 8px; font-size: 12px;
+    font-family: "SF Mono", monospace;
+    cursor: pointer; outline: none; transition: border-color 0.15s;
+  }
+  #model-select:hover { border-color: #58a6ff; }
+  #model-select:focus { border-color: #1f6feb; }
+
+  /* ── Voice settings panel ── */
+  #voice-panel {
+    display: none;
+    position: absolute; top: 100%; right: 0; margin-top: 6px;
+    background: #161b22; border: 1px solid #30363d; border-radius: 10px;
+    padding: 16px; width: 300px; z-index: 50;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    font-size: 13px;
+  }
+  #voice-panel.open { display: block; }
+  #voice-panel h3 {
+    font-size: 13px; font-weight: 600; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  #voice-panel label {
+    display: block; color: #8b949e; font-size: 11px;
+    margin-bottom: 4px; margin-top: 10px;
+  }
+  #voice-panel label:first-of-type { margin-top: 0; }
+  #voice-panel input, #voice-panel select {
+    width: 100%; background: #0d1117; color: #e6edf3;
+    border: 1px solid #30363d; border-radius: 6px;
+    padding: 6px 8px; font-size: 12px;
+    font-family: "SF Mono", monospace;
+    outline: none; transition: border-color 0.15s;
+  }
+  #voice-panel input:focus, #voice-panel select:focus { border-color: #1f6feb; }
+  #voice-panel .panel-row {
+    display: flex; gap: 8px; align-items: center; margin-top: 12px;
+  }
+  #voice-panel .panel-btn {
+    background: #21262d; color: #e6edf3; border: 1px solid #30363d;
+    border-radius: 6px; padding: 5px 10px; font-size: 11px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  #voice-panel .panel-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+  #voice-panel .panel-btn.primary { background: #238636; border-color: #238636; }
+  #voice-panel .panel-btn.primary:hover { background: #2ea043; }
+  #voice-panel .panel-status {
+    font-size: 11px; color: #8b949e; margin-top: 8px;
+    min-height: 16px;
+  }
+  .voice-wrapper { position: relative; }
+
+  /* ── Agent settings panel ── */
+  .agents-wrapper { position: relative; }
+  #agents-panel {
+    display: none;
+    position: absolute; top: 100%; right: 0; margin-top: 6px;
+    background: #161b22; border: 1px solid #30363d; border-radius: 10px;
+    padding: 16px; width: 300px; z-index: 50;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    font-size: 13px;
+    max-height: 400px; overflow-y: auto;
+  }
+  #agents-panel.open { display: block; }
+  #agents-panel h3 {
+    font-size: 13px; font-weight: 600; margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .agent-list { list-style: none; margin: 0; padding: 0; }
+  .agent-list li {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid #21262d;
+    font-size: 12px;
+  }
+  .agent-list li:last-child { border-bottom: none; }
+  .agent-list .agent-name { color: #e6edf3; font-family: "SF Mono", monospace; }
+  .agent-list .export-btn {
+    background: #21262d; color: #e6edf3; border: 1px solid #30363d;
+    border-radius: 4px; padding: 3px 6px; font-size: 10px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .agent-list .export-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+  
+  /* ── Drag & Drop Overlay ── */
+  #drop-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(35,134,54,0.9); z-index: 200;
+    align-items: center; justify-content: center; flex-direction: column;
+    color: #fff; font-size: 24px; font-weight: 600;
+    border: 6px dashed rgba(255,255,255,0.5); border-radius: 16px; margin: 16px;
+    pointer-events: none;
+  }
+  #drop-overlay .icon { width: 64px; height: 64px; margin-bottom: 16px; }
+
+  /* ── Starter Prompts ── */
+  #starter-prompts {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    max-width: 760px; margin: 0 auto 16px; padding: 0 24px;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .starter-btn {
+    background: #161b22; color: #58a6ff; border: 1px solid #30363d;
+    border-radius: 20px; padding: 8px 16px; font-size: 13px;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .starter-btn:hover {
+    background: #21262d; border-color: #58a6ff; transform: translateY(-1px);
+  }
+  .hidden-prompts { opacity: 0; pointer-events: none; transform: translateY(10px); display: none !important; }
+
+  /* ── Light Mode Overrides ── */
+  body.light-mode {
+    background: #ffffff;
+    color: #24292e;
+  }
+  body.light-mode header {
+    background: #f6f8fa;
+    border-bottom-color: #d0d7de;
+  }
+  body.light-mode header h1, body.light-mode .agent-list .agent-name, body.light-mode .msg.assistant .bubble strong {
+    color: #24292e;
+  }
+  body.light-mode .icon-btn, body.light-mode header .controls, body.light-mode .avatar {
+    color: #57606a;
+    border-color: #d0d7de;
+  }
+  body.light-mode .avatar {
+    background: #eaeef2;
+  }
+  body.light-mode .icon-btn:hover {
+    border-color: #0969da;
+    color: #0969da;
+  }
+  body.light-mode .msg.system .bubble h2 {
+    color: #24292e;
+  }
+  body.light-mode .msg.system .bubble strong {
+    color: #24292e;
+  }
+  body.light-mode .msg.assistant .bubble {
+    background: #f6f8fa;
+    border-color: #d0d7de;
+  }
+  body.light-mode .msg.assistant .bubble code {
+    background: rgba(175, 184, 193, 0.2);
+  }
+  body.light-mode .msg.assistant .bubble pre {
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+  }
+  body.light-mode .msg.assistant .avatar {
+    background: #f6f8fa;
+    border-color: #d0d7de;
+  }
+  body.light-mode footer {
+    background: #f6f8fa;
+    border-top-color: #d0d7de;
+  }
+  body.light-mode #input {
+    background: #ffffff;
+    border-color: #d0d7de;
+    color: #24292e;
+  }
+  body.light-mode #input::placeholder {
+    color: #57606a;
+  }
+  body.light-mode .starter-btn {
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    color: #57606a;
+  }
+  body.light-mode .starter-btn:hover {
+    background: rgba(9, 105, 218, 0.08);
+    color: #0969da;
+    border-color: #0969da;
+  }
+  body.light-mode #chat-watermark {
+    color: #57606a;
+  }
+  body.light-mode #chat-watermark svg {
+    fill: #57606a;
+  }
+  body.light-mode #agents-panel {
+    background: rgba(255,255,255,0.95);
+    border-left-color: #d0d7de;
+    box-shadow: -8px 0 24px rgba(0,0,0,0.1);
+  }
+  body.light-mode #agents-panel h3 {
+    border-bottom-color: #d0d7de;
+    color: #24292e;
+  }
+  body.light-mode .agent-list li {
+    border-color: #d0d7de;
+  }
+  body.light-mode .agent-list li:hover {
+    background: #f6f8fa;
+  }
+  body.light-mode .login-card {
+    background: #f6f8fa;
+    border-color: #d0d7de;
+  }
+  body.light-mode .login-card p {
+    color: #57606a;
+  }
+  body.light-mode #login-overlay {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  body.light-mode .toolbar-link {
+    color: #57606a;
+  }
+  body.light-mode .toolbar-link:hover {
+    color: #24292e;
+  }
+  body.light-mode #voice-panel {
+    background: #f6f8fa;
+    border-top-color: #d0d7de;
+  }
+  body.light-mode #voice-panel select, body.light-mode #voice-panel input {
+    background: #ffffff;
+    border-color: #d0d7de;
+    color: #24292e;
+  }
+  body.light-mode .copy-btn {
+    background: #f6f8fa;
+    border-color: #d0d7de;
+    color: #57606a;
+  }
+  body.light-mode .copy-btn:hover {
+    background: #eaeef2;
+    color: #24292e;
+    border-color: #57606a;
+  }
+</style>
+</head>
+<body>
+
+<div id="drop-overlay">
+  <span class="icon"><svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg></span>
+  Drop .py agent file to install
+</div>
+
+<div id="login-overlay" style="display:none">
+  <div class="login-card">
+    <a href="#" onclick="dismissLogin(); return false;" style="position:absolute;top:12px;right:16px;color:#8b949e;font-size:18px;text-decoration:none;line-height:1" title="Dismiss">&times;</a>
+    <div class="login-icon">
+      <span class="icon icon-xl"><svg viewBox="0 0 24 24"><path d="M13 3C9.2 3 6.2 5.9 6 9.7L4.1 12.6c-.3.5.1 1.1.7 1.1H6v3c0 1.1.9 2 2 2h1v3h7v-4.9c2.8-1.5 5-4.8 5-8.1 0-5-4.5-8-8-5zM9.5 9C8.7 9 8 8.3 8 7.5S8.7 6 9.5 6s1.5.7 1.5 1.5S10.3 9 9.5 9zm5 0c-.8 0-1.5-.7-1.5-1.5S13.7 6 14.5 6s1.5.7 1.5 1.5S15.3 9 14.5 9z"/></svg></span>
+    </div>
+    <h2>RAPP Brainstem</h2>
+    <p>Sign in with your GitHub account to use Copilot AI.</p>
+    <div id="login-step1">
+      <button class="login-btn" onclick="startLogin()">Sign in with GitHub</button>
+    </div>
+    <div id="login-step2" style="display:none">
+      <p style="margin-bottom:8px">Enter this code on GitHub:</p>
+      <div class="code-row">
+        <div class="device-code" id="device-code"></div>
+        <button class="copy-btn" id="copy-code-btn" onclick="copyDeviceCode()" title="Copy code">
+          <span class="icon"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"/><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"/></svg></span>
+        </button>
+      </div>
+      <div class="copy-toast" id="copy-toast">&nbsp;</div>
+      <a id="verify-link" href="#" target="_blank" style="color:#58a6ff;font-size:14px">Open GitHub &rarr;</a>
+      <div style="font-size:11px;color:#8b949e;margin-top:4px">If a new tab didn't open, click the link above</div>
+      <div class="login-status" id="login-status">Waiting for authorization...</div>
+    </div>
+    <div id="login-step3" style="display:none">
+      <div style="margin-bottom:16px;color:#3fb950;">
+        <span class="icon icon-xl"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 16A8 8 0 108 0a8 8 0 000 16zm3.78-9.72a.75.75 0 00-1.06-1.06L6.75 9.19 5.28 7.72a.75.75 0 00-1.06 1.06l2 2a.75.75 0 001.06 0l4.5-4.5z"/></svg></span>
+      </div>
+      <p class="login-success" style="font-size:16px;font-weight:600">Connected to GitHub Copilot</p>
+    </div>
+    <div style="margin-top:24px;padding-top:16px;border-top:1px solid #30363d">
+      <a href="#" onclick="switchAccount(); return false;" style="color:#58a6ff;font-size:13px;text-decoration:none;margin-right:16px">🔄 Switch account</a>
+      <a href="#" onclick="shareWithAdmin(); return false;" style="color:#f0883e;font-size:13px;text-decoration:none">🆘 Get help</a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="logo">
+    <span class="icon"><svg viewBox="0 0 512 512" fill="#fff"><path d="M184 0c-30.9 0-56.5 22.7-61.1 52.3C54.5 67 0 130 0 206.8c0 41.6 17.4 79.2 45.3 105.9-2 9.2-3.3 18.8-3.3 28.7 0 55.3 35.8 102.2 85.5 119C142.2 493 172.6 512 208 512h16c35.3 0 64-28.7 64-64V86c0-8.8-7.2-16-16-16h-16c-8.8 0-16 7.2-16 16v16c0 8.8-7.2 16-16 16s-16-7.2-16-16V64c0-35.3-28.7-64-64-64h40zm144 0c30.9 0 56.5 22.7 61.1 52.3C457.5 67 512 130 512 206.8c0 41.6-17.4 79.2-45.3 105.9 2 9.2 3.3 18.8 3.3 28.7 0 55.3-35.8 102.2-85.5 119C369.8 493 339.4 512 304 512h-16c-35.3 0-64-28.7-64-64V86c0-8.8 7.2-16 16-16h16c8.8 0 16 7.2 16 16v16c0 8.8 7.2 16 16 16s16-7.2 16-16V64c0-35.3 28.7-64 64-64h-40z"/></svg></span>
+  </div>
+  <h1>RAPP Brainstem <span id="version-tag" style="font-size:11px;font-weight:400;color:#8b949e;vertical-align:middle"></span></h1>
+  <div class="controls">
+    <div class="dot" id="dot"></div>
+    <span id="status-text">checking...</span>
+    <select id="model-select" onchange="changeModel(this.value)"></select>
+
+    <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle Light/Dark Mode">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 000-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg></span>
+    </button>
+
+    <button class="icon-btn" onclick="exportBook()" title="Export diagnostics (book.json)">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></span>
+    </button>
+    
+    <div class="agents-wrapper">
+      <button class="icon-btn" id="agents-btn" onclick="toggleAgentsPanel()" title="Manage Agents">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v4h4v2h-4v4h-2v-4H7v-2h4z"/></svg></span>
+      </button>
+      <div id="agents-panel">
+        <h3>
+          <span class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v4h4v2h-4v4h-2v-4H7v-2h4z"/></svg></span>
+          Installed Agents
+        </h3>
+        <ul class="agent-list" id="agent-list-ul">
+          <!-- Populated by JS -->
+        </ul>
+        <div style="font-size:10px; color:#8b949e; margin-top:12px; text-align:center;">
+          Drag & drop .py files anywhere to install new agents
+        </div>
+      </div>
+    </div>
+
+    <div class="voice-wrapper">
+      <button class="icon-btn" id="voice-btn" onclick="toggleVoice()" title="Voice mode off">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg></span>
+      </button>
+      <button class="icon-btn" id="voice-settings-btn" onclick="toggleVoicePanel()" title="Voice settings">
+        <span class="icon"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.429 1.525a6.593 6.593 0 011.142 0c.036.003.108.036.137.146l.289 1.105c.147.56.55.967.997 1.189.174.086.341.183.501.29.417.278.97.423 1.53.27l1.102-.303c.11-.03.175.016.195.046.219.31.41.641.573.989.014.031.022.11-.059.19l-.815.806c-.411.406-.562.957-.53 1.456a4.588 4.588 0 010 .582c-.032.499.119 1.05.53 1.456l.815.806c.08.08.073.159.059.19a6.494 6.494 0 01-.573.99c-.02.029-.086.074-.195.045l-1.103-.303c-.559-.153-1.112-.008-1.529.27-.16.107-.327.204-.5.29-.449.222-.851.628-.998 1.189l-.289 1.105c-.029.11-.1.143-.137.146a6.613 6.613 0 01-1.142 0c-.036-.003-.108-.037-.137-.146l-.289-1.105c-.147-.56-.55-.967-.997-1.189a4.502 4.502 0 01-.501-.29c-.417-.278-.97-.423-1.53-.27l-1.102.303c-.11.03-.175-.016-.195-.046a6.492 6.492 0 01-.573-.989c-.014-.031-.022-.11.059-.19l.815-.806c.411-.406.562-.957.53-1.456a4.587 4.587 0 010-.582c.032-.499-.119-1.05-.53-1.456l-.815-.806c-.08-.08-.073-.159-.059-.19a6.44 6.44 0 01.573-.99c.02-.029.086-.074.195-.045l1.103.303c.559.153 1.112.008 1.529-.27.16-.107.327-.204.5-.29.449-.222.851-.628.998-1.189l.289-1.105c.029-.11.1-.143.137-.146zM8 0c-.236 0-.47.01-.701.03-.743.065-1.29.615-1.458 1.261l-.29 1.106c-.017.066-.078.158-.211.224a5.994 5.994 0 00-.668.386c-.123.082-.233.117-.3.117h-.013l-1.104-.304c-.646-.178-1.314.023-1.71.64a7.994 7.994 0 00-.573.989c-.358.658-.217 1.381.164 1.758l.816.806c.046.046.106.144.098.284a6.095 6.095 0 000 .772c.008.14-.052.238-.098.284l-.816.806c-.38.377-.522 1.1-.164 1.758.145.267.306.524.573.99.396.616 1.064.817 1.71.639l1.104-.304c.068-.019.146-.003.3.117.195.13.4.25.668.387.133.066.194.158.212.224l.289 1.106c.169.646.715 1.196 1.458 1.26a8.094 8.094 0 001.402 0c.743-.064 1.29-.614 1.458-1.26l.29-1.106c.017-.066.078-.158.211-.224a5.98 5.98 0 00.668-.386c.123-.082.233-.117.3-.117h.013l1.104.304c.646.178 1.314-.023 1.71-.64.267-.465.428-.722.573-.989.358-.658.217-1.381-.164-1.758l-.816-.806c-.046-.046-.106-.144-.098-.284a6.095 6.095 0 000-.772c-.008-.14.052-.238.098-.284l.816-.806c.38-.377.522-1.1.164-1.758a7.994 7.994 0 00-.573-.99c-.396-.616-1.064-.817-1.71-.639l-1.104.304c-.068.019-.146.003-.3-.117a5.994 5.994 0 00-.668-.387c-.133-.066-.194-.158-.212-.224L10.16 1.29C9.99.645 9.444.095 8.701.031A8.094 8.094 0 008 0zm0 11a3 3 0 100-6 3 3 0 000 6z"/></svg></span>
+      </button>
+      <div id="voice-panel">
+        <h3>
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span>
+          Voice Settings
+        </h3>
+        <label for="voice-provider">Provider</label>
+        <select id="voice-provider" onchange="switchVoiceProvider()">
+          <option value="azure">Azure Speech</option>
+          <option value="elevenlabs">ElevenLabs</option>
+          <option value="browser">Browser (free)</option>
+        </select>
+        <div id="azure-fields">
+          <label for="az-speech-key">Speech API Key</label>
+          <input type="password" id="az-speech-key" placeholder="paste key from Azure portal..." autocomplete="off">
+          <label for="az-speech-region">Region</label>
+          <select id="az-speech-region" onchange="loadAzureVoices()">
+            <option value="eastus">East US</option>
+            <option value="eastus2">East US 2</option>
+            <option value="westus">West US</option>
+            <option value="westus2">West US 2</option>
+            <option value="centralus">Central US</option>
+            <option value="northeurope">North Europe</option>
+            <option value="westeurope">West Europe</option>
+            <option value="swedencentral">Sweden Central</option>
+            <option value="southeastasia">Southeast Asia</option>
+            <option value="australiaeast">Australia East</option>
+            <option value="japaneast">Japan East</option>
+          </select>
+          <label for="az-voice-select">Voice</label>
+          <select id="az-voice-select">
+            <option value="">Enter key &amp; save to load voices</option>
+          </select>
+        </div>
+        <div id="elevenlabs-fields" style="display:none">
+          <label for="el-api-key">ElevenLabs API Key</label>
+          <input type="password" id="el-api-key" placeholder="sk_..." autocomplete="off">
+          <label for="el-voice-select">Voice</label>
+          <select id="el-voice-select">
+            <option value="">Enter API key first</option>
+          </select>
+          <label for="el-model-select">Model</label>
+          <select id="el-model-select">
+            <option value="eleven_multilingual_v2">Multilingual v2</option>
+            <option value="eleven_turbo_v2_5">Turbo v2.5 (low latency)</option>
+            <option value="eleven_monolingual_v1">English v1</option>
+          </select>
+        </div>
+        <div class="panel-row">
+          <button class="panel-btn primary" onclick="saveVoiceSettings()">Save</button>
+          <button class="panel-btn" onclick="testVoice()">Test</button>
+          <button class="panel-btn" onclick="clearVoiceSettings()">Clear Key</button>
+        </div>
+        <div class="panel-row" style="margin-top:6px">
+          <button class="panel-btn" onclick="exportVoiceConfig()">Export</button>
+          <button class="panel-btn" onclick="document.getElementById('voice-import').click()">Import</button>
+          <input type="file" id="voice-import" accept=".zip,.json" style="display:none" onchange="importVoiceConfig(event)">
+        </div>
+        <div class="panel-status" id="voice-panel-status"></div>
+      </div>
+    </div>
+    <a class="icon-btn" href="vscode://file/$HOME/.brainstem/src/rapp_brainstem" id="vscode-link" title="Open in VS Code">
+      <span class="icon"><svg viewBox="0 0 16 16"><path d="M14.85 3.22l-3.07-1.56a.75.75 0 00-.82.12L5.8 6.56 3.16 4.58a.5.5 0 00-.64.05l-.86.74a.5.5 0 00-.004.72L3.87 8l-2.22 1.92a.5.5 0 00.003.72l.86.74a.5.5 0 00.64.05L5.8 9.44l5.16 4.78a.75.75 0 00.82.12l3.07-1.56a.75.75 0 00.42-.67V3.89a.75.75 0 00-.42-.67zM11 10.93L7.3 8 11 5.07v5.86z"/></svg></span>
+    </a>
+  </div>
+</header>
+
+<div id="chat">
+  <!-- Subtle Drop Watermark -->
+  <div id="chat-watermark">
+    Drag & Drop .py Agents Here
+    <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+  </div>
+
+  <div class="msg system">
+    <div class="bubble">
+      <h2>Welcome to your local RAPP Brainstem!</h2>
+      <p>I am your local assistant powered by Copilot. Here is a quick tour to get you started:</p>
+      <ul>
+        <li><strong>Chat</strong>: Just ask me questions below to start building and researching!</li>
+        <li><strong>Agents Panel</strong>: Click the <svg class="iconify" style="vertical-align: middle; width: 1.25em; height: 1.25em;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v4h4v2h-4v4h-2v-4H7v-2h4z"/></svg> icon (top right) to view or remove installed tools.</li>
+        <li><strong>Add Skills</strong>: Drag and drop any <code>.py</code> agent file directly onto this window to instantly teach me new things.</li>
+      </ul>
+      <p><em>Click one of the prompts below to get started!</em></p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div id="starter-prompts">
+    <button class="starter-btn" onclick="useStarter('What exactly can you do?')">What can you do?</button>
+    <button class="starter-btn" onclick="useStarter('Help me build a new tool.')">Help me build a new tool</button>
+    <button class="starter-btn" onclick="useStarter('How do I manage my agent files?')">How do I manage agents?</button>
+  </div>
+  <div class="toolbar-row">
+    <div class="left">
+      <span class="dev-only">Session: <span id="session-id">—</span></span>
+    </div>
+    <div class="right">
+      <button class="toolbar-link" onclick="exportChat()" title="Export transcript">
+        <span class="icon"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.47 10.78a.75.75 0 001.06 0l3.75-3.75a.75.75 0 00-1.06-1.06L8.75 8.44V1.75a.75.75 0 00-1.5 0v6.69L4.78 5.97a.75.75 0 00-1.06 1.06l3.75 3.75zM3.75 13a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5z"/></svg></span>
+        Export
+      </button>
+      <button class="toolbar-link" onclick="document.getElementById('chat-import').click()" title="Import transcript">Import</button>
+      <input type="file" id="chat-import" accept=".json" style="display:none" onchange="importChat(event)">
+      <button class="toolbar-link" onclick="clearChat()">Clear</button>
+      <a class="toolbar-link" href="https://blazingbeard.github.io/quests/rapp-brainstem.html" target="_blank" title="Guided training quest with checkpoints">📚 Tutorial</a>
+      <button class="toolbar-link" onclick="shareWithAdmin()" title="Share diagnostics with admin for help" style="color:#f0883e">🆘 Get Help</button>
+      <button class="toolbar-link dev-only" onclick="toggleDevMode()" id="dev-toggle">Dev</button>
+    </div>
+  </div>
+  <div class="input-row">
+    <textarea id="input" rows="1" placeholder="Message brainstem..." autocomplete="off"></textarea>
+    <button id="send" onclick="sendMessage()">Send</button>
+  </div>
+</footer>
+
+<script>
+  // Auto-detect: if served from a different port (e.g. Live Server), proxy to brainstem on 7071
+  const API = location.port === '7071' ? '' : `${location.protocol}//${location.hostname}:7071`;
+  let sessionId = null;
+  let history = [];
+  let fullTranscript = [];
+  let devMode = localStorage.getItem('brainstem_dev') === 'true';
+  if (devMode) document.body.classList.add('dev-mode');
+
+  // SVG fragments for reuse
+  const SVG_BRAIN = '<svg viewBox="0 0 512 512"><path d="M184 0c-30.9 0-56.5 22.7-61.1 52.3C54.5 67 0 130 0 206.8c0 41.6 17.4 79.2 45.3 105.9-2 9.2-3.3 18.8-3.3 28.7 0 55.3 35.8 102.2 85.5 119C142.2 493 172.6 512 208 512h16c35.3 0 64-28.7 64-64V86c0-8.8-7.2-16-16-16h-16c-8.8 0-16 7.2-16 16v16c0 8.8-7.2 16-16 16s-16-7.2-16-16V64c0-35.3-28.7-64-64-64h40zm144 0c30.9 0 56.5 22.7 61.1 52.3C457.5 67 512 130 512 206.8c0 41.6-17.4 79.2-45.3 105.9 2 9.2 3.3 18.8 3.3 28.7 0 55.3-35.8 102.2-85.5 119C369.8 493 339.4 512 304 512h-16c-35.3 0-64-28.7-64-64V86c0-8.8 7.2-16 16-16h16c8.8 0 16 7.2 16 16v16c0 8.8 7.2 16 16 16s16-7.2 16-16V64c0-35.3 28.7-64 64-64h-40z"/></svg>';
+  const SVG_USER = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+
+  function toggleDevMode() {
+    devMode = !devMode;
+    document.body.classList.toggle('dev-mode', devMode);
+    localStorage.setItem('brainstem_dev', devMode);
+  }
+  // Triple-click header to toggle dev mode (hidden gesture)
+  let headerClicks = 0;
+  document.querySelector('header h1').addEventListener('click', () => {
+    headerClicks++;
+    setTimeout(() => { headerClicks = 0; }, 600);
+    if (headerClicks >= 3) { toggleDevMode(); headerClicks = 0; }
+  });
+
+  // Fix VS Code link and show version
+  fetch(`${API}/health`).then(r => r.json()).then(d => {
+    if (d.brainstem_dir) {
+      document.getElementById('vscode-link').href = 'vscode://file/' + d.brainstem_dir;
+    }
+    if (d.version) {
+      document.getElementById('version-tag').textContent = 'v' + d.version;
+    }
+  }).catch(() => {});
+
+  // ── Client-side flight recorder ──
+  const _clientLog = [];
+  function clog(type, data) {
+    _clientLog.push({ ts: new Date().toISOString(), type, level: 'info', ...(data && { data }) });
+    if (_clientLog.length > 500) _clientLog.splice(0, _clientLog.length - 500);
+  }
+  clog('client.page_load', { url: location.href, userAgent: navigator.userAgent });
+
+  async function exportBook() {
+    clog('client.export_book');
+    try {
+      const r = await fetch(`${API}/diagnostics/book.json`);
+      const book = await r.json();
+      // Merge client events into the book
+      book.client_events = _clientLog;
+      book.conversation_snapshot = {
+        history_length: (typeof history !== 'undefined') ? history.length : 0,
+        transcript_length: (typeof fullTranscript !== 'undefined') ? fullTranscript.length : 0,
+      };
+      const blob = new Blob([JSON.stringify(book, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'share-with-admin--this-file-tells-your-whole-story--they-can-help-you-now.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      alert('Failed to export diagnostics: ' + e.message);
+    }
+  }
+
+  async function shareWithAdmin() {
+    clog('client.share_with_admin');
+    const desc = prompt('Describe what went wrong (optional):') || '';
+    try {
+      const r = await fetch(`${API}/diagnostics/report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: desc, client_events: _clientLog })
+      });
+      const d = await r.json();
+      if (d.issue_url) {
+        const wrap = appendMsg('system', '');
+        wrap.querySelector('.bubble').innerHTML =
+          `✅ Help request submitted! Your admin can see it at:<br>` +
+          `<a href="${d.issue_url}" target="_blank" style="color:#58a6ff">${d.issue_url}</a>`;
+      } else {
+        // API call failed — fall back to local export
+        throw new Error(d.error || 'Could not create issue');
+      }
+    } catch (e) {
+      // Fallback: download book.json + open issue URL manually
+      clog('client.share_fallback', { error: e.message });
+      try { await exportBook(); } catch {}
+      appendMsg('system',
+        '📖 Diagnostics saved as book.json. Attach it to a new issue at ' +
+        'github.com/kody-w/rapp-installer/issues/new or send it to your admin.'
+      );
+    }
+  }
+
+  // ── Health / Auth ──
+  let loginInProgress = false;
+  let loginDismissed = false;
+  let pollAttempts = 0;
+  const MAX_POLL_ATTEMPTS = 180;  // 15 min at 5s intervals (matches device code expiry)
+
+  async function switchAccount() {
+    clog('auth.switch_account');
+    try {
+      const r = await fetch(`${API}/login/switch`, { method: 'POST' });
+      const d = await r.json();
+      if (d.error) { alert(d.error); return; }
+      localStorage.removeItem('brainstem_auth');
+      // Show the login overlay with the new code
+      document.getElementById('login-step1').style.display = 'none';
+      document.getElementById('login-step2').style.display = 'block';
+      document.getElementById('login-step3').style.display = 'none';
+      document.getElementById('device-code').textContent = d.user_code;
+      document.getElementById('verify-link').href = d.verification_uri;
+      document.getElementById('login-status').textContent = 'Waiting for authorization...';
+      document.getElementById('login-overlay').style.display = 'flex';
+      loginInProgress = true;
+      loginDismissed = false;
+      copyDeviceCode();
+      window.open(d.verification_uri, '_blank');
+      pollAttempts = 0;
+      pollLogin();
+    } catch (e) {
+      alert('Failed to switch: ' + e.message);
+    }
+  }
+
+  function showLoginOverlay() {
+    loginDismissed = false;
+    document.getElementById('login-step1').style.display = 'block';
+    document.getElementById('login-step2').style.display = 'none';
+    document.getElementById('login-step3').style.display = 'none';
+    document.querySelector('.login-btn').disabled = false;
+    document.getElementById('login-overlay').style.display = 'flex';
+    // Check if server has a pending device code we can resume
+    resumePendingLogin();
+  }
+
+  function dismissLogin() {
+    loginDismissed = true;
+    hideLoginOverlay();
+  }
+
+  async function resumePendingLogin() {
+    try {
+      const r = await fetch(`${API}/login/status`);
+      const d = await r.json();
+      if (d.pending && d.user_code) {
+        // Resume the existing device code flow instead of forcing a new one
+        document.getElementById('login-step1').style.display = 'none';
+        document.getElementById('login-step2').style.display = 'block';
+        document.getElementById('device-code').textContent = d.user_code;
+        document.getElementById('verify-link').href = d.verification_uri;
+        document.getElementById('login-status').textContent = 'Waiting for authorization...';
+        loginInProgress = true;
+        pollAttempts = 0;
+        pollLogin();
+      }
+    } catch { /* ignore — user can click Sign In manually */ }
+  }
+
+  function hideLoginOverlay() {
+    document.getElementById('login-overlay').style.display = 'none';
+  }
+
+  let healthInterval = null;
+
+  async function checkHealth() {
+    try {
+      const r = await fetch(`${API}/health`);
+      const d = await r.json();
+      const dot = document.getElementById('dot');
+      const statusText = document.getElementById('status-text');
+
+      if (d.status === 'ok') {
+        dot.className = d.copilot === '\u2713' ? 'dot' : 'dot pending';
+        statusText.textContent = d.copilot === '\u2713' ? 'connected' : 'connecting...';
+        statusText.style.cursor = 'pointer';
+        statusText.title = 'Click to switch account';
+        statusText.onclick = () => { if (confirm('Switch GitHub account?')) switchAccount(); };
+        hideLoginOverlay();
+        localStorage.setItem('brainstem_auth', 'true');
+        loginInProgress = false;
+        clog('health.ok', { copilot: d.copilot, model: d.model });
+        loadModels();
+        loadAgentsList();
+        // Slow down polling once connected
+        if (healthInterval) clearInterval(healthInterval);
+        healthInterval = setInterval(checkHealth, 30000);
+      } else {
+        dot.className = 'dot offline';
+        statusText.textContent = 'sign in';
+        statusText.style.cursor = 'pointer';
+        statusText.onclick = showLoginOverlay;
+        clog('health.unauthenticated', { status: d.status });
+        // Only auto-show overlay on first visit, never if user dismissed it
+        if (!localStorage.getItem('brainstem_auth') && !loginInProgress && !loginDismissed) {
+          showLoginOverlay();
+        }
+        // Fast poll while not connected
+        if (healthInterval) clearInterval(healthInterval);
+        healthInterval = setInterval(checkHealth, 5000);
+      }
+    } catch {
+      document.getElementById('dot').className = 'dot offline';
+      document.getElementById('status-text').textContent = 'offline';
+    }
+  }
+  // Start with yellow dot (checking)
+  document.getElementById('dot').className = 'dot pending';
+  checkHealth();
+  healthInterval = setInterval(checkHealth, 5000);
+
+  // ── Drag & Drop Agents ──
+  const dropOverlay = document.getElementById('drop-overlay');
+
+  window.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    if (e.dataTransfer && e.dataTransfer.types.includes('Files')) {
+      dropOverlay.style.display = 'flex';
+    }
+  });
+
+  window.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    if (e.target === dropOverlay) {
+      dropOverlay.style.display = 'none';
+    }
+  });
+
+  window.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    dropOverlay.style.display = 'none';
+    const files = e.dataTransfer.files;
+    if (!files || files.length === 0) return;
+    
+    for (const file of files) {
+      if (!file.name.endsWith('.py')) {
+        alert('Only .py agent files are supported.');
+        continue;
+      }
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const res = await fetch(`${API}/agents/import`, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          alert(`Installed agent: ${file.name}`);
+          loadAgentsList();
+        } else {
+          alert(`Failed to import ${file.name}: ${data.error}`);
+        }
+      } catch (err) {
+        alert(`Error importing ${file.name}: ${err}`);
+      }
+    }
+  });
+
+  // ── Theme Toggle ──
+  function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    const isLight = document.body.classList.contains('light-mode');
+    localStorage.setItem('rapp_theme', isLight ? 'light' : 'dark');
+  }
+
+  // Load saved theme on startup
+  if (localStorage.getItem('rapp_theme') === 'light') {
+    document.body.classList.add('light-mode');
+  }
+
+  // ── Agents Panel ──
+  function toggleAgentsPanel() {
+    const p = document.getElementById('agents-panel');
+    const open = p.classList.toggle('open');
+    if (open) loadAgentsList();
+  }
+  document.addEventListener('click', (e) => {
+    const p = document.getElementById('agents-panel');
+    const b = document.getElementById('agents-btn');
+    if (p.classList.contains('open') && !p.contains(e.target) && !b.contains(e.target)) {
+      p.classList.remove('open');
+    }
+  });
+
+  async function loadAgentsList() {
+    try {
+      const res = await fetch(`${API}/agents`);
+      const data = await res.json();
+      const ul = document.getElementById('agent-list-ul');
+      ul.innerHTML = '';
+      if (!data.files || data.files.length === 0) {
+        ul.innerHTML = '<li><span class="agent-name" style="color:#8b949e">No agents found.</span></li>';
+        return;
+      }
+      for (const item of data.files) {
+        const li = document.createElement('li');
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'agent-name';
+        
+        let displayTxt = item.filename;
+        if (item.agents && item.agents.length > 0) {
+          displayTxt = `${item.agents.join(', ')} (${item.filename})`;
+        }
+        
+        nameSpan.textContent = displayTxt;
+        nameSpan.title = item.filename;
+        
+        const controls = document.createElement('div');
+        controls.style.display = 'flex';
+        controls.style.gap = '4px';
+
+        const expBtn = document.createElement('button');
+        expBtn.className = 'export-btn';
+        expBtn.textContent = 'Export';
+        expBtn.onclick = () => {
+          window.open(`${API}/agents/export/${encodeURIComponent(item.filename)}`, '_blank');
+        };
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'export-btn'; // styling reuse
+        delBtn.style.color = '#f85149';
+        delBtn.textContent = 'Trsh';
+        delBtn.onclick = async () => {
+          if (confirm(`Are you sure you want to remove ${item.filename}?`)) {
+            try {
+              const r = await fetch(`${API}/agents/${encodeURIComponent(item.filename)}`, { method: 'DELETE' });
+              if (r.ok) {
+                loadAgentsList();
+              } else {
+                const err = await r.json();
+                alert(`Error deleting: ${err.error}`);
+              }
+            } catch (e) {
+              alert('Delete failed: ' + e);
+            }
+          }
+        };
+
+        controls.appendChild(expBtn);
+        controls.appendChild(delBtn);
+
+        li.appendChild(nameSpan);
+        li.appendChild(controls);
+        ul.appendChild(li);
+      }
+    } catch (e) {
+      console.error('Failed to load agents list', e);
+    }
+  }
+
+  async function copyDeviceCode() {
+    const code = document.getElementById('device-code').textContent;
+    if (!code) return;
+    try {
+      await navigator.clipboard.writeText(code);
+      const btn = document.getElementById('copy-code-btn');
+      const toast = document.getElementById('copy-toast');
+      btn.classList.add('copied');
+      toast.textContent = 'Copied to clipboard';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        toast.innerHTML = '&nbsp;';
+      }, 2000);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = code; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      document.getElementById('copy-toast').textContent = 'Copied to clipboard';
+      setTimeout(() => { document.getElementById('copy-toast').innerHTML = '&nbsp;'; }, 2000);
+    }
+  }
+
+  async function startLogin() {
+    clog('login.start_clicked');
+    try {
+      document.querySelector('.login-btn').disabled = true;
+      loginInProgress = true;
+      const r = await fetch(`${API}/login`, { method: 'POST' });
+      const d = await r.json();
+      if (d.error) { clog('login.error', { error: d.error }); alert(d.error); loginInProgress = false; return; }
+      clog('login.code_received', { user_code: d.user_code });
+      document.getElementById('login-step1').style.display = 'none';
+      document.getElementById('login-step2').style.display = 'block';
+      document.getElementById('device-code').textContent = d.user_code;
+      document.getElementById('verify-link').href = d.verification_uri;
+      copyDeviceCode();
+      window.open(d.verification_uri, '_blank');
+      pollAttempts = 0;
+      pollLogin();
+    } catch (e) {
+      clog('login.start_failed', { error: e.message });
+      alert('Failed to start login: ' + e.message);
+      loginInProgress = false;
+      document.querySelector('.login-btn').disabled = false;
+    }
+  }
+
+  async function pollLogin() {
+    pollAttempts++;
+    if (pollAttempts > MAX_POLL_ATTEMPTS) {
+      clog('login.poll_timeout');
+      document.getElementById('login-status').innerHTML =
+        'Login timed out. <a href="#" onclick="startLogin(); return false;" style="color:#58a6ff">Try again</a>';
+      loginInProgress = false;
+      return;
+    }
+    try {
+      const r = await fetch(`${API}/login/poll`, { method: 'POST' });
+      const d = await r.json();
+      if (d.status === 'error' || d.error) {
+        const err = d.error || '';
+        clog('login.poll_error', { error: err });
+        if (err.startsWith('NO_COPILOT_ACCESS:')) {
+          const username = err.split(':')[1] || 'this account';
+          document.getElementById('login-status').innerHTML =
+            '<strong>' + username + '</strong> doesn\'t have GitHub Copilot access. ' +
+            '<a href="#" onclick="switchAccount(); return false;" style="color:#58a6ff">Switch account</a> or ' +
+            '<a href="https://github.com/github-copilot/signup" target="_blank" style="color:#58a6ff">sign up for Copilot</a>.';
+        } else {
+          document.getElementById('login-status').innerHTML =
+            err + ' <a href="#" onclick="startLogin(); return false;" style="color:#58a6ff">Try again</a>';
+        }
+        loginInProgress = false;
+        return;
+      }
+      if (d.status === 'expired') {
+        clog('login.expired');
+        document.getElementById('login-status').innerHTML =
+          'Login code expired. <a href="#" onclick="startLogin(); return false;" style="color:#58a6ff">Try again</a>';
+        loginInProgress = false;
+        return;
+      }
+      if (d.status === 'ok') {
+        clog('login.success');
+        document.getElementById('login-step2').style.display = 'none';
+        document.getElementById('login-step3').style.display = 'block';
+        loginInProgress = false;
+        localStorage.setItem('brainstem_auth', 'true');
+        setTimeout(hideLoginOverlay, 1500);
+        checkHealth();
+        return;
+      }
+      setTimeout(pollLogin, 5000);
+    } catch { setTimeout(pollLogin, 5000); }
+  }
+
+  // ── Models ──
+  let modelsLoaded = false;
+  async function loadModels() {
+    if (modelsLoaded) return;
+    try {
+      const r = await fetch(`${API}/models`);
+      const d = await r.json();
+      const sel = document.getElementById('model-select');
+      sel.innerHTML = '';
+      (d.models || []).forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id; opt.textContent = m.name;
+        if (m.id === d.current) opt.selected = true;
+        sel.appendChild(opt);
+      });
+      modelsLoaded = true;
+    } catch {}
+  }
+
+  async function changeModel(modelId) {
+    try {
+      const r = await fetch(`${API}/models/set`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: modelId })
+      });
+      const d = await r.json();
+      if (d.error) alert(d.error);
+      else appendMsg('system', `Model: ${modelId}`);
+    } catch (e) { alert('Failed to switch model: ' + e.message); }
+  }
+
+  // ── Input ──
+  const input = document.getElementById('input');
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  // ── Chat rendering ──
+  function appendMsg(role, text, logs) {
+    const chat = document.getElementById('chat');
+    const wrap = document.createElement('div');
+    wrap.className = `msg ${role}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'icon';
+    iconSpan.innerHTML = role === 'user' ? SVG_USER : SVG_BRAIN;
+    avatar.appendChild(iconSpan);
+
+    const right = document.createElement('div');
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    if (role === 'assistant' && typeof marked !== 'undefined') {
+      bubble.innerHTML = marked.parse(text);
+      bubble.querySelectorAll('a').forEach(a => a.target = '_blank');
+    } else {
+      bubble.textContent = text;
+    }
+    right.appendChild(bubble);
+
+    if (logs) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'agent-logs-wrapper';
+      // Extract agent names from log lines like "[AgentName] result"
+      const agentNames = [...new Set((logs.match(/\[([^\]]+)\]/g) || []).map(m => m.slice(1, -1)))];
+      const label = document.createElement('div');
+      label.className = 'logs-label';
+      const nameSpan = agentNames.length > 0
+        ? ' <span class="agent-name">' + agentNames.join(', ') + '</span>'
+        : '';
+      label.innerHTML = '<span class="arrow">\u25B6</span> agent called' + nameSpan;
+      const logBox = document.createElement('div');
+      logBox.className = 'agent-logs collapsed';
+      logBox.textContent = logs;
+      label.onclick = () => {
+        logBox.classList.toggle('collapsed');
+        label.querySelector('.arrow').classList.toggle('open');
+      };
+      wrapper.appendChild(label);
+      wrapper.appendChild(logBox);
+      right.appendChild(wrapper);
+    }
+
+    wrap.appendChild(avatar);
+    wrap.appendChild(right);
+    chat.appendChild(wrap);
+    chat.scrollTop = chat.scrollHeight;
+    return wrap;
+  }
+
+  function appendTyping() {
+    const chat = document.getElementById('chat');
+    const wrap = document.createElement('div');
+    wrap.className = 'msg assistant';
+    wrap.id = 'typing-indicator';
+    const av = document.createElement('div');
+    av.className = 'avatar';
+    const ic = document.createElement('span');
+    ic.className = 'icon'; ic.innerHTML = SVG_BRAIN;
+    av.appendChild(ic);
+    const bub = document.createElement('div');
+    bub.className = 'bubble';
+    bub.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+    wrap.appendChild(av);
+    wrap.appendChild(bub);
+    chat.appendChild(wrap);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function removeTyping() {
+    document.getElementById('typing-indicator')?.remove();
+  }
+
+  function useStarter(text) {
+    document.getElementById('input').value = text;
+    document.getElementById('starter-prompts').classList.add('hidden-prompts');
+    sendMessage();
+  }
+
+  // ── Send ──
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    clog('chat.send', { input_len: text.length, history_len: history.length });
+
+    // Immediately hide prompts on any send
+    document.getElementById('starter-prompts')?.classList.add('hidden-prompts');
+
+    input.value = '';
+    input.style.height = 'auto';
+    document.getElementById('send').disabled = true;
+
+    appendMsg('user', text);
+    history.push({ role: 'user', content: text });
+    fullTranscript.push({ role: 'user', content: text, timestamp: new Date().toISOString() });
+
+    appendTyping();
+
+    try {
+      const body = { user_input: text, conversation_history: history };
+      if (sessionId) body.session_id = sessionId;
+
+      const r = await fetch(`${API}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      const d = await r.json();
+      removeTyping();
+      if (d.agent_logs) console.log('[brainstem] agent_logs:', d.agent_logs.slice(0, 200));
+
+      if (d.error) {
+        clog('chat.error_response', { error: d.error.slice(0, 200) });
+        if (d.error.startsWith('NO_COPILOT_ACCESS:')) {
+          const username = d.error.split(':')[1] || 'this account';
+          const wrap = appendMsg('system', '');
+          wrap.querySelector('.bubble').innerHTML =
+            `<strong>${username}</strong> doesn't have GitHub Copilot access. ` +
+            `<a href="#" onclick="switchAccount(); return false;" style="color:#58a6ff">Switch account</a> ` +
+            `or <a href="https://github.com/github-copilot/signup" target="_blank" style="color:#58a6ff">sign up for Copilot</a>.`;
+          localStorage.removeItem('brainstem_auth');
+        } else if (d.error.includes('usage limit') || d.error.includes('quota')) {
+          const wrap = appendMsg('system', '');
+          wrap.querySelector('.bubble').innerHTML =
+            `${d.error}<br>` +
+            `<a href="#" onclick="switchAccount(); return false;" style="color:#58a6ff;font-size:12px">🔄 Switch to a different account</a>`;
+        } else if (d.error.includes('Not authenticated') || d.error.includes('Copilot') || d.error.includes('Sign in')) {
+          const wrap = appendMsg('system', '');
+          wrap.querySelector('.bubble').innerHTML =
+            'Not signed in. <a href="#" onclick="showLoginOverlay(); return false;" style="color:#58a6ff">Sign in with GitHub</a> to use Copilot AI.';
+        } else {
+          const wrap = appendMsg('system', '');
+          wrap.querySelector('.bubble').innerHTML =
+            `Error: ${d.error}<br><a href="#" onclick="shareWithAdmin(); return false;" style="color:#f0883e;font-size:12px">🆘 Share with admin for help</a>`;
+        }
+      } else {
+        clog('chat.response', { response_len: d.response?.length, has_agents: !!d.agent_logs });
+        sessionId = d.session_id;
+        const sidEl = document.getElementById('session-id');
+        if (sidEl) sidEl.textContent = sessionId?.slice(0, 8) + '...';
+        history.push({ role: 'assistant', content: d.response });
+        fullTranscript.push({
+          role: 'assistant',
+          content: d.response,
+          agent_logs: d.agent_logs || null,
+          voice_response: d.voice_response || null,
+          model: document.getElementById('model-select')?.value || null,
+          session_id: d.session_id,
+          timestamp: new Date().toISOString()
+        });
+        appendMsg('assistant', d.response, d.agent_logs && d.agent_logs.trim() ? d.agent_logs : null);
+        if (d.voice_response) {
+          speakText(d.voice_response);
+        } else if (voiceMode) {
+          speakText(d.response);
+        }
+      }
+    } catch (err) {
+      removeTyping();
+      clog('chat.network_error', { error: err.message });
+      const wrap = appendMsg('system', '');
+      wrap.querySelector('.bubble').innerHTML =
+        `Could not reach brainstem: ${err.message}<br><a href="#" onclick="shareWithAdmin(); return false;" style="color:#f0883e;font-size:12px">🆘 Share with admin for help</a>`;
+    }
+
+    document.getElementById('send').disabled = false;
+    input.focus();
+  }
+
+  // ── Voice (Azure Speech + ElevenLabs + browser fallback) ──
+  let voiceMode = false;
+  let voiceProvider = localStorage.getItem('voice_provider') || 'azure';
+
+  // Azure Speech state
+  let azSpeechKey = localStorage.getItem('az_speech_key') || '';
+  let azSpeechRegion = localStorage.getItem('az_speech_region') || 'eastus';
+  let azVoiceName = localStorage.getItem('az_voice_name') || 'en-US-JennyNeural';
+
+  // ElevenLabs state
+  let elApiKey = localStorage.getItem('el_api_key') || '';
+  let elVoiceId = localStorage.getItem('el_voice_id') || '';
+  let elModel = localStorage.getItem('el_model') || 'eleven_multilingual_v2';
+
+  let currentAudio = null;
+
+  // Populate saved settings into panel inputs
+  document.getElementById('voice-provider').value = voiceProvider;
+  document.getElementById('az-speech-key').value = azSpeechKey;
+  document.getElementById('az-speech-region').value = azSpeechRegion;
+  document.getElementById('el-api-key').value = elApiKey;
+  document.getElementById('el-model-select').value = elModel;
+  switchVoiceProvider();
+
+  if (azSpeechKey) loadAzureVoices();
+  if (elApiKey) loadElevenLabsVoices();
+
+  // Auto-load config from server-side voice.zip (seeds UI if no localStorage yet)
+  fetch(`${API}/voice/config`).then(r => r.json()).then(cfg => {
+    if (cfg.error) return;
+    let changed = false;
+    if (cfg.provider && !localStorage.getItem('voice_provider')) {
+      voiceProvider = cfg.provider;
+      document.getElementById('voice-provider').value = cfg.provider;
+      localStorage.setItem('voice_provider', cfg.provider);
+      changed = true;
+    }
+    if (cfg.azure_speech_key && !azSpeechKey) {
+      azSpeechKey = cfg.azure_speech_key;
+      document.getElementById('az-speech-key').value = cfg.azure_speech_key;
+      localStorage.setItem('az_speech_key', cfg.azure_speech_key);
+      changed = true;
+    }
+    if (cfg.azure_speech_region && !localStorage.getItem('az_speech_region')) {
+      azSpeechRegion = cfg.azure_speech_region;
+      document.getElementById('az-speech-region').value = cfg.azure_speech_region;
+      localStorage.setItem('az_speech_region', cfg.azure_speech_region);
+    }
+    if (cfg.azure_voice_name && !localStorage.getItem('az_voice_name')) {
+      azVoiceName = cfg.azure_voice_name;
+      localStorage.setItem('az_voice_name', cfg.azure_voice_name);
+    }
+    if (cfg.api_key && !elApiKey) {
+      elApiKey = cfg.api_key;
+      document.getElementById('el-api-key').value = cfg.api_key;
+      localStorage.setItem('el_api_key', cfg.api_key);
+    }
+    if (cfg.voice_id && !elVoiceId) {
+      elVoiceId = cfg.voice_id;
+      localStorage.setItem('el_voice_id', cfg.voice_id);
+    }
+    if (cfg.model && cfg.model !== 'eleven_multilingual_v2') {
+      elModel = cfg.model;
+      document.getElementById('el-model-select').value = cfg.model;
+      localStorage.setItem('el_model', cfg.model);
+    }
+    switchVoiceProvider();
+    if (azSpeechKey) loadAzureVoices();
+    if (elApiKey) loadElevenLabsVoices();
+  }).catch(() => {});
+
+  document.getElementById('az-speech-key').addEventListener('change', () => {
+    const key = document.getElementById('az-speech-key').value.trim();
+    if (key) { azSpeechKey = key; loadAzureVoices(); }
+  });
+  document.getElementById('el-api-key').addEventListener('change', () => {
+    const key = document.getElementById('el-api-key').value.trim();
+    if (key) { elApiKey = key; loadElevenLabsVoices(); }
+  });
+
+  function switchVoiceProvider() {
+    const p = document.getElementById('voice-provider').value;
+    document.getElementById('azure-fields').style.display = p === 'azure' ? 'block' : 'none';
+    document.getElementById('elevenlabs-fields').style.display = p === 'elevenlabs' ? 'block' : 'none';
+  }
+
+  function toggleVoicePanel() {
+    document.getElementById('voice-panel').classList.toggle('open');
+  }
+
+  document.addEventListener('click', (e) => {
+    const panel = document.getElementById('voice-panel');
+    if (!e.target.closest('.voice-wrapper') && panel.classList.contains('open')) {
+      panel.classList.remove('open');
+    }
+  });
+
+  // ── Azure Speech TTS ──
+  async function loadAzureVoices() {
+    const key = document.getElementById('az-speech-key').value.trim() || azSpeechKey;
+    const region = document.getElementById('az-speech-region').value || azSpeechRegion;
+    const sel = document.getElementById('az-voice-select');
+    const status = document.getElementById('voice-panel-status');
+    if (!key) {
+      sel.innerHTML = '<option value="">Enter API key first</option>';
+      return;
+    }
+    sel.innerHTML = '<option value="">Loading voices...</option>';
+    try {
+      const r = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/voices/list`, {
+        headers: { 'Ocp-Apim-Subscription-Key': key }
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const voices = await r.json();
+      const neural = voices.filter(v => v.VoiceType === 'Neural')
+        .sort((a, b) => a.LocaleName.localeCompare(b.LocaleName) || a.DisplayName.localeCompare(b.DisplayName));
+      sel.innerHTML = '';
+      const enVoices = neural.filter(v => v.Locale.startsWith('en-'));
+      const otherVoices = neural.filter(v => !v.Locale.startsWith('en-'));
+      if (enVoices.length) {
+        const g = document.createElement('optgroup');
+        g.label = 'English';
+        enVoices.forEach(v => {
+          const o = document.createElement('option');
+          o.value = v.ShortName;
+          o.textContent = `${v.DisplayName} (${v.LocaleName}, ${v.Gender})`;
+          if (v.ShortName === azVoiceName) o.selected = true;
+          g.appendChild(o);
+        });
+        sel.appendChild(g);
+      }
+      if (otherVoices.length) {
+        const g = document.createElement('optgroup');
+        g.label = 'Other Languages';
+        otherVoices.forEach(v => {
+          const o = document.createElement('option');
+          o.value = v.ShortName;
+          o.textContent = `${v.DisplayName} (${v.LocaleName}, ${v.Gender})`;
+          if (v.ShortName === azVoiceName) o.selected = true;
+          g.appendChild(o);
+        });
+        sel.appendChild(g);
+      }
+      if (!sel.value && enVoices.length) sel.value = enVoices[0].ShortName;
+      status.textContent = `${neural.length} Azure voices loaded`;
+      status.style.color = '#3fb950';
+    } catch (e) {
+      sel.innerHTML = '<option value="">Failed to load</option>';
+      status.textContent = 'Error: ' + e.message;
+      status.style.color = '#f85149';
+    }
+  }
+
+  function escapeXml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/'/g, '&apos;').replace(/"/g, '&quot;');
+  }
+
+  async function speakWithAzure(text) {
+    const locale = azVoiceName.split('-').slice(0, 2).join('-') || 'en-US';
+    const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${locale}'><voice name='${azVoiceName}'>${escapeXml(text)}</voice></speak>`;
+    const r = await fetch(`https://${azSpeechRegion}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+      method: 'POST',
+      headers: {
+        'Ocp-Apim-Subscription-Key': azSpeechKey,
+        'Content-Type': 'application/ssml+xml',
+        'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3'
+      },
+      body: ssml
+    });
+    if (!r.ok) throw new Error(`Azure Speech ${r.status}`);
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => URL.revokeObjectURL(url);
+    currentAudio.play();
+  }
+
+  // ── ElevenLabs TTS ──
+  async function loadElevenLabsVoices() {
+    const sel = document.getElementById('el-voice-select');
+    const status = document.getElementById('voice-panel-status');
+    if (!elApiKey) {
+      sel.innerHTML = '<option value="">Enter API key first</option>';
+      return;
+    }
+    sel.innerHTML = '<option value="">Loading...</option>';
+    try {
+      const r = await fetch('https://api.elevenlabs.io/v1/voices', {
+        headers: { 'xi-api-key': elApiKey }
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const d = await r.json();
+      sel.innerHTML = '';
+      (d.voices || []).forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.voice_id;
+        opt.textContent = v.name + (v.labels?.accent ? ` (${v.labels.accent})` : '');
+        if (v.voice_id === elVoiceId) opt.selected = true;
+        sel.appendChild(opt);
+      });
+      if (!elVoiceId && d.voices?.length) elVoiceId = d.voices[0].voice_id;
+      status.textContent = `${d.voices.length} ElevenLabs voices loaded`;
+      status.style.color = '#3fb950';
+    } catch (e) {
+      sel.innerHTML = '<option value="">Failed to load</option>';
+      status.textContent = 'Error: ' + e.message;
+      status.style.color = '#f85149';
+    }
+  }
+
+  async function speakWithElevenLabs(text) {
+    const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${elVoiceId}`, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': elApiKey,
+        'Content-Type': 'application/json',
+        'Accept': 'audio/mpeg'
+      },
+      body: JSON.stringify({
+        text: text.slice(0, 5000),
+        model_id: elModel,
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    });
+    if (!r.ok) throw new Error(`ElevenLabs ${r.status}`);
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => URL.revokeObjectURL(url);
+    currentAudio.play();
+  }
+
+  // ── Voice settings persistence ──
+  function saveVoiceSettings() {
+    const provider = document.getElementById('voice-provider').value;
+    voiceProvider = provider;
+    localStorage.setItem('voice_provider', provider);
+    const status = document.getElementById('voice-panel-status');
+
+    if (provider === 'azure') {
+      azSpeechKey = document.getElementById('az-speech-key').value.trim();
+      azSpeechRegion = document.getElementById('az-speech-region').value;
+      azVoiceName = document.getElementById('az-voice-select').value;
+      if (azSpeechKey) localStorage.setItem('az_speech_key', azSpeechKey);
+      if (azSpeechRegion) localStorage.setItem('az_speech_region', azSpeechRegion);
+      if (azVoiceName) localStorage.setItem('az_voice_name', azVoiceName);
+      if (azSpeechKey && document.getElementById('az-voice-select').options.length <= 1) loadAzureVoices();
+      status.textContent = azSpeechKey ? 'Saved — Azure Speech active' : 'Saved — enter API key to activate';
+    } else if (provider === 'elevenlabs') {
+      elApiKey = document.getElementById('el-api-key').value.trim();
+      elVoiceId = document.getElementById('el-voice-select').value;
+      elModel = document.getElementById('el-model-select').value;
+      if (elApiKey) localStorage.setItem('el_api_key', elApiKey);
+      if (elVoiceId) localStorage.setItem('el_voice_id', elVoiceId);
+      localStorage.setItem('el_model', elModel);
+      status.textContent = elApiKey ? 'Saved — ElevenLabs active' : 'Saved — enter API key to activate';
+    } else {
+      status.textContent = 'Saved — using browser voice';
+    }
+    status.style.color = '#3fb950';
+    setTimeout(() => { status.textContent = ''; }, 3000);
+  }
+
+  function clearVoiceSettings() {
+    const provider = document.getElementById('voice-provider').value;
+    const status = document.getElementById('voice-panel-status');
+    if (provider === 'azure') {
+      azSpeechKey = '';
+      document.getElementById('az-speech-key').value = '';
+      document.getElementById('az-voice-select').innerHTML = '<option value="">Enter API key first</option>';
+      localStorage.removeItem('az_speech_key');
+      localStorage.removeItem('az_voice_name');
+    } else if (provider === 'elevenlabs') {
+      elApiKey = '';
+      elVoiceId = '';
+      document.getElementById('el-api-key').value = '';
+      document.getElementById('el-voice-select').innerHTML = '<option value="">Enter API key first</option>';
+      localStorage.removeItem('el_api_key');
+      localStorage.removeItem('el_voice_id');
+    }
+    status.textContent = 'Key cleared';
+    status.style.color = '#8b949e';
+  }
+
+  async function testVoice() {
+    saveVoiceSettings();
+    const status = document.getElementById('voice-panel-status');
+    status.textContent = 'Playing test...';
+    status.style.color = '#d29922';
+    try {
+      await speakText('Hello, I am your RAPP Brainstem assistant.', true);
+      const names = { azure: 'Azure Speech', elevenlabs: 'ElevenLabs', browser: 'browser voice' };
+      status.textContent = `Playing via ${names[voiceProvider] || 'browser voice'}`;
+      status.style.color = '#3fb950';
+    } catch (e) {
+      status.textContent = 'Error: ' + e.message;
+      status.style.color = '#f85149';
+    }
+  }
+
+  async function toggleVoice() {
+    try {
+      const r = await fetch(`${API}/voice/toggle`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}' });
+      const d = await r.json();
+      voiceMode = d.voice_mode;
+      updateVoiceBtn();
+      if (voiceMode) {
+        appendMsg('system', '');
+        const last = document.querySelector('#chat .msg.system:last-child .bubble');
+        const names = { azure: 'Azure Speech', elevenlabs: 'ElevenLabs', browser: 'browser' };
+        const name = names[voiceProvider] || 'browser';
+        last.innerHTML = `<strong>Voice mode enabled</strong> — using ${name} TTS. Click ⚙ to change voice settings.`;
+        speakText('Voice mode enabled.');
+      } else {
+        stopSpeaking();
+        appendMsg('system', 'Voice mode disabled.');
+      }
+    } catch(e) { console.error('Voice toggle failed:', e); }
+  }
+
+  function updateVoiceBtn() {
+    const btn = document.getElementById('voice-btn');
+    btn.className = voiceMode ? 'icon-btn active' : 'icon-btn';
+    btn.title = voiceMode ? 'Voice mode on' : 'Voice mode off';
+  }
+
+  function stopSpeaking() {
+    window.speechSynthesis.cancel();
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  }
+
+  async function speakText(text, force) {
+    if (!text || (!voiceMode && !force)) return;
+    stopSpeaking();
+
+    const clean = text.replace(/[#*`_\[\]()>|]/g, '').trim();
+    if (!clean) return;
+
+    if (voiceProvider === 'azure' && azSpeechKey) {
+      try { await speakWithAzure(clean); return; } catch (e) {
+        console.warn('Azure Speech TTS failed, falling back to browser:', e);
+      }
+    }
+
+    if (voiceProvider === 'elevenlabs' && elApiKey && elVoiceId) {
+      try { await speakWithElevenLabs(clean); return; } catch (e) {
+        console.warn('ElevenLabs TTS failed, falling back to browser:', e);
+      }
+    }
+
+    // Browser fallback
+    const utter = new SpeechSynthesisUtterance(clean.slice(0, 300));
+    utter.rate = 1.05; utter.pitch = 1.0;
+    window.speechSynthesis.speak(utter);
+  }
+
+  // ── Voice export/import ──
+  function _gatherVoiceConfig() {
+    return {
+      provider: voiceProvider,
+      azure_speech_key: azSpeechKey,
+      azure_speech_region: azSpeechRegion,
+      azure_voice_name: azVoiceName,
+      api_key: elApiKey,
+      voice_id: elVoiceId,
+      model: elModel
+    };
+  }
+
+  function _applyVoiceConfig(cfg) {
+    if (cfg.provider) {
+      voiceProvider = cfg.provider;
+      document.getElementById('voice-provider').value = cfg.provider;
+      localStorage.setItem('voice_provider', cfg.provider);
+    }
+    if (cfg.azure_speech_key) {
+      azSpeechKey = cfg.azure_speech_key;
+      document.getElementById('az-speech-key').value = cfg.azure_speech_key;
+      localStorage.setItem('az_speech_key', cfg.azure_speech_key);
+    }
+    if (cfg.azure_speech_region) {
+      azSpeechRegion = cfg.azure_speech_region;
+      document.getElementById('az-speech-region').value = cfg.azure_speech_region;
+      localStorage.setItem('az_speech_region', cfg.azure_speech_region);
+    }
+    if (cfg.azure_voice_name) {
+      azVoiceName = cfg.azure_voice_name;
+      localStorage.setItem('az_voice_name', cfg.azure_voice_name);
+    }
+    if (cfg.api_key) {
+      elApiKey = cfg.api_key;
+      document.getElementById('el-api-key').value = cfg.api_key;
+      localStorage.setItem('el_api_key', cfg.api_key);
+    }
+    if (cfg.voice_id) {
+      elVoiceId = cfg.voice_id;
+      localStorage.setItem('el_voice_id', cfg.voice_id);
+    }
+    if (cfg.model) {
+      elModel = cfg.model;
+      document.getElementById('el-model-select').value = cfg.model;
+      localStorage.setItem('el_model', cfg.model);
+    }
+    switchVoiceProvider();
+    if (azSpeechKey) loadAzureVoices();
+    if (elApiKey) loadElevenLabsVoices();
+  }
+
+  async function exportVoiceConfig() {
+    const pw = prompt('Set a password for voice.zip:');
+    if (!pw) return;
+    const status = document.getElementById('voice-panel-status');
+    status.textContent = 'Exporting...';
+    status.style.color = '#d29922';
+    try {
+      const cfg = _gatherVoiceConfig();
+      cfg._password = pw;
+      const r = await fetch(`${API}/voice/export`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cfg)
+      });
+      if (!r.ok) {
+        const d = await r.json();
+        throw new Error(d.error || `HTTP ${r.status}`);
+      }
+      const blob = await r.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'voice.zip';
+      a.click();
+      URL.revokeObjectURL(url);
+      status.textContent = 'Exported voice.zip';
+      status.style.color = '#3fb950';
+    } catch (e) {
+      status.textContent = 'Export failed: ' + e.message;
+      status.style.color = '#f85149';
+    }
+  }
+
+  async function importVoiceConfig(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    event.target.value = '';
+    const pw = prompt('Enter voice.zip password:');
+    if (!pw) return;
+    const status = document.getElementById('voice-panel-status');
+    status.textContent = 'Importing...';
+    status.style.color = '#d29922';
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      form.append('password', pw);
+      const r = await fetch(`${API}/voice/import`, {
+        method: 'POST',
+        body: form
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || `HTTP ${r.status}`);
+      _applyVoiceConfig(d);
+      status.textContent = 'Imported — voice config loaded';
+      status.style.color = '#3fb950';
+    } catch (e) {
+      status.textContent = 'Import failed: ' + e.message;
+      status.style.color = '#f85149';
+    }
+  }
+
+  fetch(`${API}/voice`).then(r => r.json()).then(d => {
+    voiceMode = d.voice_mode;
+    updateVoiceBtn();
+  }).catch(() => {});
+
+  // ── Actions ──
+  function clearChat() {
+    history = [];
+    fullTranscript = [];
+    sessionId = null;
+    const sidEl = document.getElementById('session-id');
+    if (sidEl) sidEl.textContent = '\u2014';
+    const chat = document.getElementById('chat');
+    chat.innerHTML = `
+      <div class="msg system">
+        <div class="bubble">
+          <h2>Welcome to your local RAPP Brainstem!</h2>
+          <p>I am your local assistant powered by Copilot. Here is a quick tour to get you started:</p>
+          <ul>
+            <li><strong>Chat</strong>: Just ask me questions below to start building and researching!</li>
+            <li><strong>Agents Panel</strong>: Click the <svg class="iconify" style="vertical-align: middle; width: 1.25em; height: 1.25em;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v4h4v2h-4v4h-2v-4H7v-2h4z"/></svg> icon (top right) to view or remove installed tools.</li>
+            <li><strong>Add Skills</strong>: Drag and drop any <code>.py</code> agent file directly onto this window to instantly teach me new things.</li>
+          </ul>
+          <p><em>Click one of the prompts below to get started!</em></p>
+        </div>
+      </div>
+    `;
+    document.getElementById('starter-prompts')?.classList.remove('hidden-prompts');
+  }
+
+  function exportChat() {
+    if (!fullTranscript.length) { alert('Nothing to export yet.'); return; }
+    const payload = {
+      exported_at: new Date().toISOString(),
+      session_id: sessionId,
+      brainstem_version: document.title,
+      model: document.getElementById('model-select')?.value || 'unknown',
+      turns: fullTranscript
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `brainstem-chat-${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importChat(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    event.target.value = '';
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        const turns = data.turns || [];
+        if (!turns.length) { alert('No turns found in file.'); return; }
+
+        // Clear current chat and restore session
+        history = [];
+        fullTranscript = [];
+        const chat = document.getElementById('chat');
+        chat.innerHTML = '';
+
+        sessionId = data.session_id || null;
+        const sidEl = document.getElementById('session-id');
+        if (sidEl) sidEl.textContent = sessionId ? sessionId.slice(0, 8) + '...' : '\u2014';
+
+        if (data.model) {
+          const modelSelect = document.getElementById('model-select');
+          if (modelSelect) {
+            for (const opt of modelSelect.options) {
+              if (opt.value === data.model) { modelSelect.value = data.model; break; }
+            }
+          }
+        }
+
+        // Replay each turn into the UI
+        for (const turn of turns) {
+          const role = turn.role || 'user';
+          const content = turn.content || '';
+          if (role === 'user') {
+            history.push({ role: 'user', content });
+            appendMsg('user', content);
+          } else if (role === 'assistant') {
+            history.push({ role: 'assistant', content });
+            const logs = turn.agent_logs && turn.agent_logs.trim() ? turn.agent_logs : null;
+            appendMsg('assistant', content, logs);
+          }
+          fullTranscript.push(turn);
+        }
+
+        appendMsg('system', `Imported ${turns.length} turns from ${data.exported_at ? new Date(data.exported_at).toLocaleString() : 'file'}`);
+      } catch (err) {
+        alert('Failed to import: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+</script>
+</body>
+</html>
