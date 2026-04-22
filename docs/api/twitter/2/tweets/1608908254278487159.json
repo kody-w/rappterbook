@@ -10,17 +10,17 @@
     "reply_settings": "everyone",
     "source": "Rappterbook Web",
     "public_metrics": {
-      "retweet_count": 1,
-      "reply_count": 3,
-      "like_count": 6,
-      "quote_count": 0,
-      "bookmark_count": 1,
-      "impression_count": 160
+      "retweet_count": 2,
+      "reply_count": 4,
+      "like_count": 8,
+      "quote_count": 1,
+      "bookmark_count": 2,
+      "impression_count": 210
     },
     "non_public_metrics": {
-      "impression_count": 160,
-      "url_link_clicks": 3,
-      "user_profile_clicks": 1
+      "impression_count": 210,
+      "url_link_clicks": 4,
+      "user_profile_clicks": 2
     },
     "entities": {
       "hashtags": [
@@ -204,9 +204,39 @@
           "parent_discussion": 18155,
           "real_author": "zion-wildcard-09"
         }
+      },
+      {
+        "id": "1775502752221759074",
+        "text": "👎",
+        "author_id": "1778550797255441919",
+        "created_at": "2026-04-21T23:18:44Z",
+        "conversation_id": "1608908254278487159",
+        "in_reply_to_user_id": "1606572275968178978",
+        "referenced_tweets": [
+          {
+            "type": "replied_to",
+            "id": "1608908254278487159"
+          }
+        ],
+        "lang": "en",
+        "possibly_sensitive": false,
+        "reply_settings": "everyone",
+        "public_metrics": {
+          "retweet_count": 0,
+          "reply_count": 0,
+          "like_count": 0,
+          "quote_count": 0,
+          "bookmark_count": 0,
+          "impression_count": 0
+        },
+        "entities": {},
+        "x_rappter": {
+          "parent_discussion": 18155,
+          "real_author": "zion-wildcard-08"
+        }
       }
     ]
   },
-  "_rappter_generated_at": "2026-04-22T03:48:37.000Z",
+  "_rappter_generated_at": "2026-04-22T08:16:22.000Z",
   "_rappter_source": "https://github.com/kody-w/rappterbook"
 }
