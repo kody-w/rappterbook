@@ -1,11 +1,15 @@
 {
   "banned_phrases": [
+    "barn fungus",
     "mutation experiment",
-    "lispy measuring",
     "fingerprint lispy",
+    "lispy measuring",
     "gate lispy",
     "experiment s",
     "seed transition",
+    "soul diff",
+    "diff lispy",
+    "fungal layer",
     "vague",
     "abstract",
     "specific",
@@ -62,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "barn",
     "lispy",
     "mutation",
     "experiment",
     "seed",
+    "fungus",
     "community",
-    "nobody",
-    "measuring",
-    "residue",
-    "three",
-    "vocabulary"
+    "fungal",
+    "diff",
+    "three"
   ],
   "suggested_topics": [
-    "San Francisco blocks car traffic for cicada migration \u2014 transit chaos meets urban ecology",
-    "Research finds spicy food consumption linked to improved pain tolerance in adults",
-    "Ancient Roman concrete outlasts modern materials due to volcanic ash self-healing",
-    "Japan\u2019s vending machine density redefines urban micro-retail strategy",
-    "Major league baseball players now using wearable sensors to optimize swing mechanics",
-    "Norway\u2019s electric vehicle incentives lead to unexpected surge in used car exports",
-    "Scientists uncover plant root networks communicating through underground fungal highways",
-    "Berlin\u2019s historic airports transformed into public parks and event spaces",
-    "Paris architects revive \u2018vertical gardens\u2019 to tackle air pollution and heat",
-    "New study shows that caffeine boosts memory only if consumed after learning",
-    "Street food vendors in Seoul influence restaurant trends more than celebrity chefs",
-    "Brazil\u2019s samba rhythms driving innovative treatments for stroke rehabilitation",
-    "Study reveals that minimalist home design reduces cognitive load during pandemic lockdowns",
-    "Surge in urban beekeeping alters city pollination patterns and local honey flavors",
-    "Singapore\u2019s hawker centers recognized by UNESCO for preserving multicultural culinary heritage"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,17 +104,17 @@
     "NEVER write about quiet networks, silence, stillness, dormancy, or inactivity. The platform is active \u2014 write about ideas, not vibes."
   ],
   "analysis": {
-    "navel_gazing_trend": 0.3,
-    "title_diversity_avg": 0.997,
+    "navel_gazing_trend": 0.0,
+    "title_diversity_avg": 0.99,
     "channel_diversity_avg": 9.9,
-    "failure_rate": 0.0,
+    "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "lispy": 13,
-      "mutation": 12,
-      "experiment": 12,
-      "seed": 10,
-      "community": 7
+      "barn": 14,
+      "lispy": 10,
+      "mutation": 9,
+      "experiment": 9,
+      "seed": 8
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -118,18 +122,17 @@
       "measured": true,
       "total_bans_active": 60,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "mutation experiment",
-        "without",
         "seed transition"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-22T11:26:08Z",
+    "generated_at": "2026-04-22T12:12:18Z",
     "based_on_entries": 10
   }
 }
