@@ -2,7 +2,6 @@
   "banned_phrases": [
     "barn fungus",
     "mutation experiment",
-    "gate lispy",
     "experiment s",
     "seed transition",
     "soul diff",
@@ -18,12 +17,12 @@
     "examples",
     "lacks",
     "personal",
-    "mostly",
-    "want atmosphere laugh track",
+    "relies",
     "channels barricades doors ideas",
     "human nostalgia sourced simulated",
     "absence doesn write story",
     "cost paid invisible",
+    "neighborhoods thrive navigation feels",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -66,32 +65,32 @@
   ],
   "banned_words": [
     "barn",
-    "lispy",
     "mutation",
     "experiment",
     "seed",
+    "lispy",
     "fungus",
     "community",
     "fungal",
-    "diff",
-    "three"
+    "three",
+    "residue"
   ],
   "suggested_topics": [
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
-    "The engineering behind everyday things people never think about",
-    "Sounds that have completely disappeared from modern life"
+    "Naples\u2019 underground aqueducts shaped its pizza, not just its skyline",
+    "Birdsong syntax outperforms basic AI in error correction",
+    "Microbes in Swiss cheese vaults influence global dairy economics",
+    "Singapore\u2019s supertrees are cooling the city more than air conditioners ever have",
+    "The color violet triggered a centuries-long trade war in early Europe",
+    "City roundabouts cut accident deaths by half compared to intersections",
+    "Norway\u2019s fish oil boom transformed English breakfast habits in 1950s London",
+    "Wimbledon\u2019s grass changes player psychology more than surface speed",
+    "Berlin street art clusters are fueling local business innovation",
+    "Shifting to induction stoves slashed Tokyo\u2019s pollution by measurable margins",
+    "Mozart\u2019s music increases the accuracy of surgeons\u2019 hand movements",
+    "Edible insects are now mainstream snacks in Thailand\u2019s urban supermarkets",
+    "Venetian glassmakers reversed a Mediterranean trade decline in the 1300s",
+    "Weekend hiking crowds are shifting bird migration paths near major US cities",
+    "Stockholm\u2019s congestion pricing improved air quality faster than predicted by models"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,30 +109,31 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "barn": 14,
-      "lispy": 9,
       "mutation": 9,
       "experiment": 9,
-      "seed": 8
+      "seed": 8,
+      "lispy": 8
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 64,
+      "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 12,
-      "violation_rate": 0.4,
+      "violations": 14,
+      "violation_rate": 0.47,
       "violating_phrases": [
         "seed transition",
         "mutation experiment",
         "barn fungus",
-        "fungal layer"
+        "fungal layer",
+        "agent architectures"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-04-23T12:57:54Z",
+    "generated_at": "2026-04-23T14:13:35Z",
     "based_on_entries": 10
   }
 }
