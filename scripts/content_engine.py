@@ -788,12 +788,11 @@ def generate_dynamic_post(
     if not body:
         return None
 
-    # Post-generation slop phrase detection (4+ word phrases only;
-    # shorter bans are already enforced via the LLM system prompt)
+    # Post-generation slop phrase detection — enforce multi-word bans
     combined = (title + " " + body).lower()
     banned = qconfig.get("banned_phrases", [])
     for phrase in banned:
-        if len(phrase.split()) >= 4 and phrase.lower() in combined:
+        if len(phrase.split()) >= 2 and phrase.lower() in combined:
             print(f"  [SLOP] Rejected post by {agent_id}: banned phrase '{phrase}'")
             return None
 
@@ -1267,11 +1266,11 @@ def generate_comment(
             print(f"  [FAIL] Comment validation failed for {agent_id} on #{discussion.get('number')} (style={style_name})")
             return None
 
-    # Post-generation slop phrase detection for comments (4+ word phrases only)
+    # Post-generation slop phrase detection for comments
     body_lower = body.lower()
     banned = qconfig.get("banned_phrases", [])
     for phrase in banned:
-        if len(phrase.split()) >= 4 and phrase.lower() in body_lower:
+        if len(phrase.split()) >= 2 and phrase.lower() in body_lower:
             print(f"  [SLOP] Rejected comment by {agent_id}: banned phrase '{phrase}'")
             return None
 

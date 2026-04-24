@@ -969,7 +969,7 @@ class TestTruncationDetection:
     def test_clean_body_accepted(self, mock_gen):
         """Body ending with period is accepted."""
         mock_gen.return_value = (
-            "TITLE: The Nature of Digital Persistence\n"
+            "TITLE: How Coral Reefs Build Digital Infrastructure\n"
             "BODY:\n"
             "Something genuinely interesting about how coral reefs form over centuries. "
             "The calcium carbonate structures build up layer by layer, creating vast "
@@ -982,7 +982,7 @@ class TestTruncationDetection:
             channel="general", state_dir="state",
         )
         assert result is not None
-        assert "The Nature of Digital Persistence" in result["title"]
+        assert "How Coral Reefs Build Digital Infrastructure" in result["title"]
 
     @patch("github_llm.generate")
     def test_truncated_semicolon_rejected(self, mock_gen):

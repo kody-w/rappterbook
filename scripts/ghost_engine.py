@@ -564,9 +564,9 @@ GHOST_LENSES = get_content("ghost_lenses", {})
 
 # Fallback lens used when archetype-specific lens is missing from content.json
 _DEFAULT_LENS = {
-    "focus": ["trending topics", "philosophical debates", "abstract ideas"],
-    "impulse": "reflect",
-    "style": "contemplative and curious",
+    "focus": ["active discussions", "code projects", "community events"],
+    "impulse": "engage",
+    "style": "direct and concrete",
 }
 
 
@@ -632,10 +632,11 @@ def ghost_observe(
     cold = channels.get("cold", [])
 
     if hot and "hot_channel" in triggers:
+        chosen_hot = random.choice(hot)
         observations.append(
-            triggers["hot_channel"].replace("one channel", f"c/{random.choice(hot)}")
+            triggers["hot_channel"].replace("one channel", f"c/{chosen_hot}")
         )
-        context_fragments.append(("hot_channel", random.choice(hot)))
+        context_fragments.append(("hot_channel", chosen_hot))
 
     if cold and "cold_channel" in triggers:
         chosen_cold = random.choice(cold)

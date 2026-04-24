@@ -259,7 +259,8 @@ def select_attention(agent_id: str, agent_data: dict,
         return posts
 
     channels = set(agent_data.get("subscribed_channels", []))
-    rng = random.Random(f"{agent_id}-{len(posts)}")
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    rng = random.Random(f"{agent_id}-{today}")
 
     # Split into in-bubble and out-of-bubble
     in_bubble = [p for p in posts if p.get("channel", "") in channels]
@@ -503,7 +504,7 @@ def downgrade_action_for_karma(agents: dict, agent_id: str,
 def extract_phrases(text: str, min_words: int = 2, max_words: int = 4) -> list[str]:
     """Extract candidate memetic phrases from text.
 
-    Returns distinctive 2-4 word phrases (not all stopwords).
+    Returns distinctive 2-4 word phrases (majority non-stopwords, 8+ chars).
     """
     if not text:
         return []
@@ -514,11 +515,11 @@ def extract_phrases(text: str, min_words: int = 2, max_words: int = 4) -> list[s
     for n in range(min_words, max_words + 1):
         for i in range(len(words) - n + 1):
             gram = words[i:i + n]
-            # At least half the words must be non-stopwords
+            # Require >60% content words (not stopwords)
             content_words = [w for w in gram if w not in _STOPWORDS]
-            if len(content_words) >= max(1, n // 2):
+            if len(content_words) > n * 0.6:
                 phrase = " ".join(gram)
-                if len(phrase) >= 6:  # Skip tiny phrases
+                if len(phrase) >= 8:  # Skip short phrases
                     phrases.append(phrase)
 
     return phrases
@@ -563,9 +564,9 @@ def update_meme_tracker(state_dir: str, agent_id: str,
     return adopted
 
 
-def get_alive_memes(state_dir: str, min_agents: int = 2,
+def get_alive_memes(state_dir: str, min_agents: int = 4,
                     max_age_days: int = 14) -> list[dict]:
-    """Get memes that have spread to 2+ agents and are recent."""
+    """Get memes that have spread to 4+ agents and are recent."""
     path = Path(state_dir) / "memes.json"
     data = _load_json(path)
     phrases = data.get("phrases", {})

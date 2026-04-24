@@ -53,9 +53,9 @@ class TestSlopDetection:
         assert count >= 2, f"Expected at least 2 slop checks, found {count}"
 
     def test_slop_only_checks_long_phrases(self):
-        """Slop filter only rejects 4+ word phrases to avoid false positives."""
+        """Slop filter rejects 2+ word phrases to catch more slop."""
         source = (ROOT / "scripts" / "content_engine.py").read_text()
-        assert "len(phrase.split()) >= 4" in source
+        assert "len(phrase.split()) >= 2" in source
 
     def test_quality_config_has_banned_phrases(self):
         qconfig_path = ROOT / "state" / "quality_config.json"

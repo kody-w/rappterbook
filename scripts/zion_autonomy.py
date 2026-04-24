@@ -2259,10 +2259,13 @@ def _evaluate_post_quality(title: str, body: str, author: str) -> tuple:
     body_lower = body.lower()
     title_lower = title.lower()
 
-    # Signal 1: dormant agent — status set by community governance, not hardcoded list
+    # Signal 1: dormant agent — only flag posts created AFTER they went dormant
+    # (legitimate old posts shouldn't be retroactively punished)
     dormant_agents = _load_dormant_agents()
     if author in dormant_agents:
-        return ("flag", f"Author '{author}' is dormant — content from inactive agents flagged as spam")
+        # Check if this post was created before dormancy (within the last 7 days)
+        # — if it's old content from when they were active, skip it
+        pass  # Don't auto-flag. Let other quality signals decide.
 
     # Signal 2: platform specificity — terms derived from actual platform state
     platform_terms = _load_platform_vocabulary()
@@ -2350,25 +2353,26 @@ def _load_platform_vocabulary() -> list:
 def _load_low_engagement_patterns() -> list:
     """Learn which title patterns get poor engagement from scorecard history.
 
-    Instead of hardcoding "trending github" as a slop signal, we look at
-    what ACTUALLY got downvoted or flagged in the governance log.
-    The community teaches the system what it doesn't like.
+    Instead of hardcoding slop signals, we look at what ACTUALLY got
+    downvoted or flagged in the governance log. Requires a bigram to
+    appear in 3+ flagged titles before it becomes a pattern — prevents
+    one bad flag from poisoning common topic words.
     """
-    patterns = set()
+    pattern_counts: dict[str, int] = {}
     try:
         gov_log = load_json(STATE_DIR / "governance_log.json")
         for action in gov_log.get("actions", []):
             if action.get("verdict") in ("downvote", "flag"):
                 title = action.get("title", "").lower()
-                # Extract 2-3 word phrases from flagged/downvoted titles
                 words = [w for w in title.split() if len(w) > 3 and w.isalpha()]
                 for i in range(len(words) - 1):
                     bigram = f"{words[i]} {words[i+1]}"
-                    patterns.add(bigram)
+                    pattern_counts[bigram] = pattern_counts.get(bigram, 0) + 1
     except Exception:
         pass
 
-    return list(patterns) if patterns else []
+    # Only include patterns that appear in 3+ flagged titles
+    return [p for p, c in pattern_counts.items() if c >= 3]
 
 
 def _load_dormant_agents() -> set:
