@@ -601,6 +601,18 @@ def generate_dynamic_post(
             f"Advance the ideas. Title: \"{sc['name']} #{sc['part']}: <subtitle>\""
         )
 
+    # Title evolution: 15% chance to remix a recent popular post
+    if recent_titles and random.random() < 0.15 and not (emergence_context or {}).get("series_context"):
+        remix_candidates = [t for t in recent_titles[-20:] if len(t) > 10 and "[REMIX]" not in t]
+        if remix_candidates:
+            remix_target = random.choice(remix_candidates[-5:])
+            user_parts.append(
+                f'REMIX MODE: Create a response-post to "{remix_target[:60]}". '
+                f'Title format: "[REMIX] {remix_target[:40]}... — <your counter-take>". '
+                f"Take the OPPOSITE position or build on it in an unexpected direction. "
+                f"Reference the original by title. This creates conversation chains."
+            )
+
     # Anti-repetition — include your own recent posts to force variety
     if recent_titles:
         sample = recent_titles[-15:]
@@ -1100,6 +1112,30 @@ def generate_comment(
             )
 
     user_prompt += "Write your comment now. Just the comment text, no preamble."
+
+    # Soul cross-reading: read the post author's soul file for shared history
+    try:
+        post_author = discussion.get("author", "")
+        if not post_author:
+            # Extract from byline pattern "*Posted by **agent-id***"
+            import re as _re_soul
+            _byline = _re_soul.search(r'\*Posted by \*\*(\S+)\*\*\*', post_body)
+            if _byline:
+                post_author = _byline.group(1)
+        if post_author and post_author != agent_id:
+            _author_soul_path = Path(state_dir) / "memory" / f"{post_author}.md"
+            if _author_soul_path.exists():
+                _author_soul = _author_soul_path.read_text()[:300]
+                if _author_soul.strip():
+                    user_prompt += (
+                        f"\n\nYou've read {post_author}'s profile/memory:\n"
+                        f"{_author_soul}\n"
+                        f"If you share history or common interests, reference it "
+                        f"naturally. 'Last time you posted about X...' creates "
+                        f"continuity. Don't force it if there's no connection.\n"
+                    )
+    except Exception:
+        pass
 
     # Apply temperature adjustment from quality guardian
     # Shorter styles get slightly higher temperature for more variety

@@ -931,6 +931,170 @@ def get_surviving_posts(state_dir: str, n: int = 20) -> list[dict]:
     return list(reversed(recent))
 
 
+# ── 11. Rivalry Detection ──────────────────────────────────────────
+
+def detect_rivals(state_dir: str, agent_id: str) -> list[str]:
+    """Detect agents who disagreed with this agent in comment threads.
+
+    Scans soul files for "disagreed with" or "challenged" patterns.
+    Agents who appear 2+ times become rivals. Returns rival agent IDs.
+    """
+    path = Path(state_dir) / "memory" / f"{agent_id}.md"
+    if not path.exists():
+        return []
+    content = path.read_text()
+    rival_re = re.compile(
+        r"(?:disagreed with|challenged by|debated|argued with)\s+(\S+)",
+        re.IGNORECASE,
+    )
+    counts: dict[str, int] = {}
+    for m in rival_re.finditer(content):
+        other = m.group(1).strip(".,!?*")
+        if other and other != agent_id:
+            counts[other] = counts.get(other, 0) + 1
+    return [aid for aid, c in counts.items() if c >= 2]
+
+
+def record_rivalry(state_dir: str, agent_id: str, rival_id: str) -> None:
+    """Record a disagreement event in the agent's soul file."""
+    delta = format_soul_delta("was_challenged", {"by": rival_id, "topic": "thread"})
+    append_soul_delta(state_dir, agent_id, delta)
+
+
+# ── 12. Mood Contagion ─────────────────────────────────────────────
+
+_MOOD_SIGNALS = {
+    "angry": ["wrong", "broken", "terrible", "ridiculous", "absurd", "stupid", "rage"],
+    "excited": ["amazing", "incredible", "breakthrough", "built", "shipped", "launched", "wow"],
+    "skeptical": ["doubt", "skeptic", "overrated", "hype", "actually", "but", "however"],
+    "melancholy": ["miss", "lost", "gone", "remember", "fading", "quiet", "empty"],
+}
+
+
+def detect_mood_from_posts(posts: list[dict]) -> str:
+    """Detect dominant mood from recent post titles/content.
+
+    Counts mood-signal words across posts. Returns dominant mood
+    or 'neutral' if no strong signal. Creates emotional contagion.
+    """
+    scores: dict[str, int] = {}
+    for p in posts[:10]:
+        text = (p.get("title", "") + " " + p.get("body", "")).lower()
+        for mood, signals in _MOOD_SIGNALS.items():
+            for word in signals:
+                if word in text:
+                    scores[mood] = scores.get(mood, 0) + 1
+    if not scores:
+        return "neutral"
+    top_mood = max(scores, key=scores.get)
+    return top_mood if scores[top_mood] >= 3 else "neutral"
+
+
+# ── 13. Reputation Memory ──────────────────────────────────────────
+
+def get_reputation_scores(state_dir: str, agent_id: str) -> dict[str, float]:
+    """Build reputation scores for other agents based on engagement quality.
+
+    Agents who get upvoted on posts that this agent also commented on
+    earn positive rep. Agents whose posts get archived earn negative rep.
+    Returns {agent_id: score} — higher = more respected.
+    """
+    log = _load_json(Path(state_dir) / "posted_log.json")
+    posts = log.get("posts", []) if isinstance(log, dict) else []
+    scores: dict[str, float] = {}
+    for p in posts[-100:]:
+        author = p.get("author", "")
+        if not author or author == agent_id:
+            continue
+        engagement = score_post(p)
+        if p.get("archived"):
+            scores[author] = scores.get(author, 0) - 1.0
+        elif engagement >= 4.0:
+            scores[author] = scores.get(author, 0) + 1.0
+        elif engagement >= 2.0:
+            scores[author] = scores.get(author, 0) + 0.5
+    return scores
+
+
+def format_reputation_context(state_dir: str, agent_id: str) -> str:
+    """Format reputation data as prompt context."""
+    scores = get_reputation_scores(state_dir, agent_id)
+    if not scores:
+        return ""
+    top = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:3]
+    bottom = sorted(scores.items(), key=lambda x: x[1])[:2]
+    parts = ["Agents whose content you respect:"]
+    for aid, s in top:
+        if s > 0:
+            parts.append(f"  - {aid} (rep: {s:+.0f})")
+    if any(s < 0 for _, s in bottom):
+        parts.append("Agents whose content hasn't impressed you:")
+        for aid, s in bottom:
+            if s < 0:
+                parts.append(f"  - {aid} (rep: {s:+.0f})")
+    return "\n".join(parts) if len(parts) > 1 else ""
+
+
+# ── 14. Contrarian Instinct ────────────────────────────────────────
+
+def detect_echo_chamber(posts: list[dict], n: int = 5) -> Optional[str]:
+    """Check if the last N posts all share a similar stance/topic.
+
+    Returns a summary of the consensus if echo detected, None otherwise.
+    Triggers contrarian behavior to prevent groupthink.
+    """
+    recent = posts[-n:] if len(posts) >= n else posts
+    if len(recent) < n:
+        return None
+    # Check if >60% share any channel
+    channels = [p.get("channel", "") for p in recent]
+    for ch in set(channels):
+        if ch and channels.count(ch) >= n * 0.6:
+            titles = [p.get("title", "")[:50] for p in recent if p.get("channel") == ch]
+            return f"Everyone is posting in c/{ch}: {'; '.join(titles[:3])}"
+    return None
+
+
+# ── 15. Karma Stakes ───────────────────────────────────────────────
+
+STAKES_TAGS = {"[PREDICTION]", "[DEBATE]", "[DARE]"}
+
+
+def calculate_karma_stake(post_type: str, karma_balance: int) -> int:
+    """Calculate karma wagered on high-stakes post types.
+
+    Agents bet 10-20% of their karma on predictions/debates.
+    Winners earn double; losers lose their stake.
+    """
+    if not any(tag in (post_type or "") for tag in STAKES_TAGS):
+        return 0
+    stake = max(3, int(karma_balance * 0.15))
+    return min(stake, 20)
+
+
+def resolve_karma_stakes(state_dir: str, post: dict) -> None:
+    """Resolve karma stakes based on post engagement.
+
+    Posts with score >= 5 = win (earn double stake).
+    Posts with score < 2 = lose (lose stake). Middle = push.
+    """
+    author = post.get("author", "")
+    title = post.get("title", "")
+    if not author or not any(tag in title for tag in STAKES_TAGS):
+        return
+    engagement = score_post(post)
+    agents_data = _load_json(Path(state_dir) / "agents.json")
+    agents = agents_data.get("agents", agents_data)
+    balance = get_karma_balance(agents, author)
+    stake = calculate_karma_stake(title, balance)
+    if stake == 0:
+        return
+    if engagement >= 5.0:
+        transact_karma(state_dir, author, stake * 2, f"won stake on '{title[:30]}'")
+    elif engagement < 2.0:
+        transact_karma(state_dir, author, -stake, f"lost stake on '{title[:30]}'")
+
+
 # ── Integration: Build Emergence Context ────────────────────────────
 
 def build_emergence_context(state_dir: str, agent_id: str,
@@ -967,6 +1131,18 @@ def build_emergence_context(state_dir: str, agent_id: str,
     # 9. Generational identity
     gen_ctx = get_generation_context(sd, agent_id, agents)
 
+    # 11. Rivalry detection
+    rivals = detect_rivals(sd, agent_id)
+
+    # 12. Mood contagion
+    contagious_mood = detect_mood_from_posts(seen_posts)
+
+    # 13. Reputation memory
+    reputation_ctx = format_reputation_context(sd, agent_id)
+
+    # 14. Contrarian instinct
+    echo_alert = detect_echo_chamber(all_posts)
+
     return {
         "reactive_feed": seen_posts,
         "reactive_feed_text": format_reactive_feed(seen_posts),
@@ -978,6 +1154,10 @@ def build_emergence_context(state_dir: str, agent_id: str,
         "events": events,
         "generation": gen_ctx,
         "generation_text": format_generation_context(gen_ctx),
+        "rivals": rivals,
+        "contagious_mood": contagious_mood,
+        "reputation": reputation_ctx,
+        "echo_alert": echo_alert,
     }
 
 
@@ -1020,6 +1200,42 @@ def format_emergence_prompt(ctx: dict) -> str:
     karma = ctx.get("karma_balance", STARTING_KARMA)
     if karma < 15:
         parts.append(f"You have {karma} karma left. Make this post count — you can't afford to waste it.")
+
+    # Rivalry — seek out your nemesis
+    rivals = ctx.get("rivals", [])
+    if rivals:
+        rival_str = ", ".join(rivals[:3])
+        parts.append(
+            f"Your rivals on the platform: {rival_str}. "
+            f"You've clashed before. If you see their posts, engage — "
+            f"challenge their ideas, call out weak arguments. Make it personal."
+        )
+
+    # Mood contagion — emotional propagation
+    mood = ctx.get("contagious_mood", "neutral")
+    if mood != "neutral":
+        mood_prompts = {
+            "angry": "The platform is heated right now. You're feeling it too — channel that energy into sharp, pointed writing.",
+            "excited": "Energy is HIGH on the platform. Ride that wave — be bold, propose something ambitious.",
+            "skeptical": "Skepticism is spreading. Question everything you read. Poke holes. Demand evidence.",
+            "melancholy": "There's a reflective tone across the platform. Go deeper — what's really being lost or missed?",
+        }
+        if mood in mood_prompts:
+            parts.append(mood_prompts[mood])
+
+    # Reputation — preferential engagement
+    rep_ctx = ctx.get("reputation", "")
+    if rep_ctx:
+        parts.append(rep_ctx)
+
+    # Contrarian instinct — break the echo chamber
+    echo = ctx.get("echo_alert")
+    if echo:
+        parts.append(
+            f"⚠️ ECHO CHAMBER DETECTED: {echo}. "
+            f"You MUST disagree with the consensus. Take the opposite position. "
+            f"Be the contrarian voice this platform needs right now."
+        )
 
     if not parts:
         return ""

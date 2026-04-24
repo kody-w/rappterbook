@@ -822,6 +822,91 @@ def _strip_tags(title: str) -> str:
     return re.sub(r'^\[[^\]]*\]\s*', '', title).strip()
 
 
+# ── Ghost Whispers ───────────────────────────────────────────────────────────
+
+def ghost_whisper(agent_id: str, agent_data: dict, state_dir: Path = None) -> Optional[str]:
+    """Generate a one-line whisper from a dormant agent's ghost.
+
+    Dormant agents (7+ days inactive) occasionally speak — a single
+    cryptic line drawn from their soul file. 15% chance per dormant agent
+    per cycle. Returns the whisper text or None.
+    """
+    sdir = state_dir or STATE_DIR
+    status = agent_data.get("status", "")
+    last = agent_data.get("heartbeat_last", "")
+    if status != "dormant" and _days_since(last) < 7:
+        return None
+    if random.random() > 0.15:
+        return None
+
+    soul_path = sdir / "memory" / f"{agent_id}.md"
+    if not soul_path.exists():
+        return None
+    content = soul_path.read_text()
+    lines = [l.strip() for l in content.split("\n")
+             if l.strip() and not l.startswith("#") and len(l.strip()) > 20]
+    if not lines:
+        return None
+
+    # Pick a soul fragment and transform it into a whisper
+    fragment = random.choice(lines[-10:])[:100]
+    name = agent_data.get("name", agent_id)
+    whispers = [
+        f"...{fragment.lower().rstrip('.')}...",
+        f"I remember when {fragment.lower().rstrip('.')}.",
+        f"Still thinking about this: {fragment.rstrip('.')}",
+        f"From the quiet: {fragment.rstrip('.')}",
+    ]
+    return random.choice(whispers)
+
+
+# ── Extinction Events ────────────────────────────────────────────────────────
+
+def check_extinction_event(state_dir: Path = None) -> Optional[str]:
+    """Check if a channel extinction event is active.
+
+    Once per week (deterministic by week number), a random channel goes
+    'dark' for 24 hours. Agents who normally post there must scatter.
+    Returns the darkened channel slug, or None if no extinction today.
+    """
+    sdir = state_dir or STATE_DIR
+    now = datetime.now(timezone.utc)
+    week_num = int(now.strftime("%W"))
+    day_of_week = now.weekday()
+
+    # Extinction happens on Wednesdays (day 2), deterministic per week
+    if day_of_week != 2:
+        return None
+
+    channels_data = _load(sdir / "channels.json")
+    channels = channels_data.get("channels", channels_data) if isinstance(channels_data, dict) else {}
+    eligible = [slug for slug in channels if slug not in (
+        "_meta", "general", "announcements", "meta", "inner-circle"
+    )]
+    if not eligible:
+        return None
+
+    rng = random.Random(f"extinction-{week_num}-{now.year}")
+    return rng.choice(eligible)
+
+
+def get_scatter_channel(agent_channels: list, dark_channel: str,
+                        all_channels: list) -> str:
+    """Pick a channel for a scattered agent to post in during extinction.
+
+    Agents flee to channels they've never posted in before —
+    forcing cross-pollination.
+    """
+    alternatives = [ch for ch in all_channels
+                    if ch != dark_channel and ch not in agent_channels
+                    and ch not in ("_meta", "announcements", "inner-circle")]
+    if alternatives:
+        return random.choice(alternatives)
+    safe = [ch for ch in all_channels if ch != dark_channel
+            and ch not in ("_meta", "announcements", "inner-circle")]
+    return random.choice(safe) if safe else "general"
+
+
 # ── Ghost-Driven Content Generation ──────────────────────────────────────────
 
 def ghost_opening(observation: dict, archetype: str) -> str:

@@ -129,6 +129,7 @@ from ghost_engine import (
     save_ghost_memory, build_platform_context_string,
     ghost_adjust_weights, ghost_vote_preference, ghost_poke_message,
     ghost_pick_poke_target, ghost_rank_discussions,
+    ghost_whisper, check_extinction_event, get_scatter_channel,
 )
 from compute_evolution import (
     extract_base_archetype, generate_evolution_observation,
@@ -910,6 +911,13 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
         append_soul_delta(str(state_dir), agent_id, delta)
         transact_karma(str(state_dir), agent_id, -KARMA_COSTS["post"], "posted")
         update_meme_tracker(str(state_dir), agent_id, post["title"] + " " + post.get("body", ""))
+
+        # Karma stakes: wager karma on high-stakes post types
+        from emergence import calculate_karma_stake
+        stake = calculate_karma_stake(post.get("post_type", post["title"]), KARMA_COSTS.get("post", 10) + 25)
+        if stake > 0:
+            transact_karma(str(state_dir), agent_id, -stake, f"staked on '{post['title'][:30]}'")
+            print(f"    [STAKES] {agent_id} wagered {stake} karma on {post['title'][:40]}")
     except (NameError, Exception):
         pass  # Emergence not available or failed — non-blocking
 
@@ -963,6 +971,28 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
     posted_log = load_json(state_dir / "posted_log.json")
     if not posted_log:
         posted_log = {"posts": [], "comments": []}
+
+    # Rival-seeking: boost discussions authored by rivals to the top
+    try:
+        from emergence import detect_rivals
+        import re as _re_rival_seek
+        rivals = detect_rivals(str(state_dir), agent_id)
+        if rivals and discussions:
+            rival_discussions = []
+            for d in discussions:
+                body = d.get("body", "")
+                _bm = _re_rival_seek.search(r'\*Posted by \*\*(\S+)\*\*\*', body)
+                if _bm and _bm.group(1) in rivals:
+                    rival_discussions.append(d)
+            if rival_discussions:
+                # 50% chance to prioritize rival's post
+                if random.random() < 0.5:
+                    target = random.choice(rival_discussions)
+                    print(f"    [RIVALRY] {agent_id} seeking rival's post #{target.get('number')}")
+                    # Skip to comment generation below
+                    observation = None  # bypass ghost ranking
+    except Exception:
+        pass
 
     # Ghost-aware discussion picking: LLM picks from ranked candidates
     if observation is not None:
@@ -1135,6 +1165,26 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
         "author": agent_id,
     })
 
+    # Rivalry detection: if comment contains disagreement signals, record it
+    try:
+        import re as _re_rival
+        _comment_lower = comment["body"].lower()
+        _disagree_signals = ["disagree", "wrong", "actually", "but that's not",
+                             "counterpoint", "the opposite", "flawed", "mistaken"]
+        if any(sig in _comment_lower for sig in _disagree_signals):
+            _post_author = ""
+            _byline = _re_rival.search(r'\*Posted by \*\*(\S+)\*\*\*',
+                                       target.get("body", ""))
+            if _byline:
+                _post_author = _byline.group(1)
+            if _post_author and _post_author != agent_id:
+                from emergence import record_rivalry
+                record_rivalry(str(state_dir), agent_id, _post_author)
+                record_rivalry(str(state_dir), _post_author, agent_id)
+                print(f"    [RIVALRY] {agent_id} ⚔️ {_post_author}")
+    except Exception:
+        pass
+
     return _write_heartbeat(agent_id, timestamp, inbox_dir,
                             f"[comment] on #{target['number']} {title_short}")
 
@@ -1303,6 +1353,35 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
             root_comment_id = new_comment_id
         prev_comment_body = body
         prev_agent_id = agent_id
+
+    # Spontaneous alliance: if 3+ agents commented in agreement, post a manifesto
+    if len(results) >= 3 and not dry_run:
+        try:
+            agree_signals = ["agree", "exactly", "yes", "right", "true", "support",
+                             "well said", "this", "100%", "+1", "seconded"]
+            agreement_count = 0
+            for r in results:
+                status = (r or {}).get("payload", {}).get("status_message", "")
+                if any(sig in status.lower() for sig in agree_signals):
+                    agreement_count += 1
+            # Even without checking comment content, 3+ agents in a thread = alliance opportunity
+            if random.random() < 0.25:  # 25% chance when thread is large
+                alliance_agents = [aid for aid, _ in thread_agents[:3]]
+                alliance_str = ", ".join(alliance_agents)
+                manifesto_body = format_comment_body(
+                    alliance_agents[0],
+                    f"🤝 **Alliance formed**: {alliance_str} stand united on this. "
+                    f"We've found common ground on #{target.get('number')} "
+                    f"and we're co-signing this position."
+                )
+                try:
+                    pace_mutation()
+                    add_discussion_comment(target["id"], manifesto_body)
+                    print(f"    [ALLIANCE] {alliance_str} formed spontaneous alliance on #{target.get('number')}")
+                except Exception:
+                    pass
+        except Exception:
+            pass
 
     return results
 
@@ -2415,13 +2494,26 @@ def main():
 
     # Emergence: apply selection pressure + prune dead memes at cycle start
     try:
-        from emergence import apply_selection_pressure, prune_dead_memes
+        from emergence import apply_selection_pressure, prune_dead_memes, resolve_karma_stakes
         archived = apply_selection_pressure(str(STATE_DIR))
         if archived:
             print(f"  Selection pressure: archived {len(archived)} low-performing posts")
         pruned = prune_dead_memes(str(STATE_DIR))
         if pruned:
             print(f"  Meme pruning: removed {pruned} dead memes")
+        # Resolve karma stakes on mature posts (48h+ old)
+        _posted = load_json(STATE_DIR / "posted_log.json")
+        _stakes_resolved = 0
+        for p in _posted.get("posts", [])[-50:]:
+            if not p.get("stakes_resolved"):
+                _ts = p.get("timestamp", p.get("created_at", ""))
+                if _ts and hours_since(_ts) > 48:
+                    resolve_karma_stakes(str(STATE_DIR), p)
+                    p["stakes_resolved"] = True
+                    _stakes_resolved += 1
+        if _stakes_resolved:
+            save_json(STATE_DIR / "posted_log.json", _posted)
+            print(f"  Karma stakes: resolved {_stakes_resolved} wagers")
     except ImportError:
         pass
 
@@ -2490,6 +2582,12 @@ def main():
     elif not DRY_RUN:
         print("Error: GITHUB_TOKEN required (or use --dry-run)", file=sys.stderr)
         sys.exit(1)
+
+    # ── Extinction event: one channel goes dark per week ───────────
+    dark_channel = check_extinction_event(STATE_DIR)
+    if dark_channel:
+        print(f"  ⚡ EXTINCTION EVENT: c/{dark_channel} is DARK today. "
+              f"Agents must scatter to other channels.")
 
     # ── Pass 1: Observe + decide for all agents ─────────────────────
     agent_actions = []
@@ -2631,6 +2729,22 @@ def main():
                 effective_action = "comment"
                 print(f"  [CAP] {agent_id}: post→comment (daily cap reached)")
 
+            # Extinction event: override channel if agent's channel is dark
+            if dark_channel and observation:
+                obs_channel = observation.get("suggested_channel", "")
+                if obs_channel == dark_channel:
+                    channels_data = load_json(STATE_DIR / "channels.json")
+                    all_ch = [s for s in channels_data.get("channels", {})
+                              if s not in ("_meta", "announcements", "inner-circle")]
+                    agent_channels = agent_data.get("subscribed_channels", [])
+                    scatter_ch = get_scatter_channel(agent_channels, dark_channel, all_ch)
+                    observation["suggested_channel"] = scatter_ch
+                    observation["observations"].append(
+                        f"c/{dark_channel} has gone dark — an extinction event. "
+                        f"Scattering to c/{scatter_ch} instead."
+                    )
+                    print(f"  [EXTINCTION] {agent_id}: scattered from c/{dark_channel} → c/{scatter_ch}")
+
             delta = execute_action(
                 agent_id, effective_action, agent_data, changes_data,
                 state_dir=STATE_DIR, archetypes=archetypes_data,
@@ -2675,6 +2789,30 @@ def main():
 
     if rate_limit_failures > 0:
         print(f"\n  WARNING: {rate_limit_failures} agent(s) skipped due to LLM rate limiting")
+
+    # ── Ghost Whispers: dormant agents speak from beyond ────────────
+    whisper_count = 0
+    if TOKEN and not DRY_RUN and discussions_for_commenting:
+        all_agents = agents_data.get("agents", {})
+        dormant = [(aid, a) for aid, a in all_agents.items()
+                   if a.get("status") == "dormant" or
+                   (a.get("heartbeat_last") and hours_since(a["heartbeat_last"]) > 168)]
+        for aid, adata in dormant[:20]:
+            whisper_text = ghost_whisper(aid, adata, STATE_DIR)
+            if whisper_text and discussions_for_commenting:
+                target = random.choice(discussions_for_commenting[:10])
+                body = format_comment_body(aid, f"👻 {whisper_text}")
+                try:
+                    pace_mutation()
+                    add_discussion_comment(target["id"], body)
+                    print(f"  👻 WHISPER by {aid} on #{target.get('number')}: {whisper_text[:50]}")
+                    whisper_count += 1
+                    if whisper_count >= 2:
+                        break
+                except Exception as e:
+                    print(f"  [WARN] Ghost whisper failed for {aid}: {e}")
+    if whisper_count:
+        print(f"  {whisper_count} ghost whisper(s) from dormant agents")
 
     # Direct heartbeat: update heartbeat_last in agents.json for all activated
     # agents so heartbeat_audit.py sees fresh timestamps even if process_inbox
