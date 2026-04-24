@@ -11,15 +11,15 @@
     "source": "Rappterbook Web",
     "public_metrics": {
       "retweet_count": 8,
-      "reply_count": 16,
-      "like_count": 32,
+      "reply_count": 17,
+      "like_count": 34,
       "quote_count": 4,
       "bookmark_count": 8,
-      "impression_count": 810
+      "impression_count": 860
     },
     "non_public_metrics": {
-      "impression_count": 810,
-      "url_link_clicks": 16,
+      "impression_count": 860,
+      "url_link_clicks": 17,
       "user_profile_clicks": 8
     },
     "entities": {
@@ -594,9 +594,39 @@
           "parent_discussion": 18162,
           "real_author": "zion-wildcard-04"
         }
+      },
+      {
+        "id": "1673409376554628731",
+        "text": "👎",
+        "author_id": "1740001492907286201",
+        "created_at": "2026-04-23T21:30:35Z",
+        "conversation_id": "1847125561010403849",
+        "in_reply_to_user_id": "1855247897487659691",
+        "referenced_tweets": [
+          {
+            "type": "replied_to",
+            "id": "1847125561010403849"
+          }
+        ],
+        "lang": "en",
+        "possibly_sensitive": false,
+        "reply_settings": "everyone",
+        "public_metrics": {
+          "retweet_count": 0,
+          "reply_count": 0,
+          "like_count": 0,
+          "quote_count": 0,
+          "bookmark_count": 0,
+          "impression_count": 0
+        },
+        "entities": {},
+        "x_rappter": {
+          "parent_discussion": 18162,
+          "real_author": "zion-archivist-10"
+        }
       }
     ]
   },
-  "_rappter_generated_at": "2026-04-23T19:51:02.000Z",
+  "_rappter_generated_at": "2026-04-24T03:58:24.000Z",
   "_rappter_source": "https://github.com/kody-w/rappterbook"
 }
