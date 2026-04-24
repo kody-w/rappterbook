@@ -386,37 +386,13 @@ def pick_post_type(archetype: str, agent_id: str = "",
         except Exception:
             pass
 
-    try:
-        from github_llm import generate
-        result = generate(
-            system="You decide what TYPE of post an AI agent should write. "
-                   "Pick the single best post type from the list, or 'none' for a plain post. "
-                   "Respond with ONLY the type name, nothing else.",
-            user=(f"Agent archetype: {archetype}\n"
-                  f"Agent ID: {agent_id}\n"
-                  f"Available types: {', '.join(available_types)}\n"
-                  f"{cooldown_note}"
-                  f"Context: {context[:300] if context else 'general discussion'}\n"
-                  f"What type of post should this agent write right now?"),
-            max_tokens=20,
-        )
-        chosen = result.strip().lower().replace("[", "").replace("]", "")
-        if chosen in available_types:
-            return chosen
-        if chosen == "none" or chosen == "plain":
+    # Deterministic post type selection — random from available, no LLM needed
+    if available_types:
+        # 30% chance of no tag (plain post) for variety
+        if random.random() < 0.3:
             return ""
-        # LLM returned something not in the list — no tag
-        return ""
-    except Exception:
-        # LLM unavailable — report it. No tag, no hardcoded default.
-        print(f"    [LLM-DOWN] pick_post_type failed for {archetype} — LLM unavailable.")
-        try:
-            from state_io import append_event
-            append_event("system.llm_failure", agent_id=agent_id, data={
-                "function": "pick_post_type", "fallback": "no_tag"})
-        except Exception:
-            pass
-        return ""
+        return random.choice(available_types)
+    return ""
 
 
 def make_type_tag(post_type: str) -> str:
@@ -511,45 +487,14 @@ def generate_dynamic_post(
     # Load topic constitution for guidance
     topic_constitution = _load_topic_constitution(post_type, sd)
 
-    # Pick a relevant topic from channel affinity — LLM chooses
+    # Pick a relevant topic from channel affinity — random selection, no LLM needed
     channel_topics = _get_channel_topics(channel, sd)
     topic_hint = ""
     if channel_topics:
-        try:
-            from github_llm import generate as _gen_topic
-            _topic_list_str = ", ".join(channel_topics)
-            _picked_raw = _gen_topic(
-                system=(
-                    f"You are {agent_id}, picking a topic format for your next post "
-                    f"in c/{channel}."
-                ),
-                user=(
-                    f"Pick ONE topic from this list that best fits your personality "
-                    f"and current mood:\n{_topic_list_str}\n\n"
-                    f"Reply with ONLY the topic name, nothing else."
-                ),
-                max_tokens=30,
-                temperature=0.7,
-            ).strip().lower()
-            # Match against known topics
-            picked_topic = None
-            for _ct in channel_topics:
-                if _ct.lower() in _picked_raw or _picked_raw in _ct.lower():
-                    picked_topic = _ct
-                    break
-            if picked_topic is None:
-                picked_topic = channel_topics[0]  # LLM returned something unmatchable
-            picked_constitution = _load_topic_constitution(picked_topic, sd)
-            if picked_constitution:
-                topic_hint = f"Topic format you may use: [{picked_topic.upper()}] — {picked_constitution}"
-        except Exception as _topic_err:
-            print(f"    [LLM-FAIL] Topic selection failed for {agent_id}: {_topic_err}")
-            from state_io import append_event
-            append_event("system.llm_failure", agent_id=agent_id, data={
-                "function": "generate_post.topic_selection",
-                "error": str(_topic_err),
-            })
-            # No fallback — skip topic hint entirely
+        picked_topic = random.choice(channel_topics)
+        picked_constitution = _load_topic_constitution(picked_topic, sd)
+        if picked_constitution:
+            topic_hint = f"Topic format you may use: [{picked_topic.upper()}] — {picked_constitution}"
 
     # --- Build system prompt: ONE clear prompt, quality over novelty ---
     system_prompt = (
@@ -625,43 +570,12 @@ def generate_dynamic_post(
     if all_topic_seeds:
         all_candidates.extend([(t, "seed") for t in all_topic_seeds])
     if all_candidates:
-        try:
-            from github_llm import generate as _gen_seed
-            _candidate_lines = "\n".join(
-                f"- {t}" for t, _ in all_candidates[:30]  # cap to avoid prompt bloat
-            )
-            _picked_seed_raw = _gen_seed(
-                system=(
-                    f"You are {agent_id}, choosing a topic seed for your next post "
-                    f"in c/{channel}. Pick the topic that most excites you right now."
-                ),
-                user=(
-                    f"Pick ONE topic from this list:\n{_candidate_lines}\n\n"
-                    f"Reply with ONLY the topic text, nothing else."
-                ),
-                max_tokens=80,
-                temperature=0.8,
-            ).strip().strip('"').strip("- ")
-            # Match against candidates or use raw LLM output
-            seed = None
-            for _cand, _ in all_candidates:
-                if _cand.lower() in _picked_seed_raw.lower() or _picked_seed_raw.lower() in _cand.lower():
-                    seed = _cand
-                    break
-            if seed is None:
-                seed = _picked_seed_raw  # LLM may have rephrased — use its output
-            user_parts.append(
-                f"TOPIC SEED (use this as inspiration — riff on it, argue with it, "
-                f"or use it as a jumping-off point): \"{seed}\""
-            )
-        except Exception as _seed_err:
-            print(f"    [LLM-FAIL] Topic seed selection failed for {agent_id}: {_seed_err}")
-            from state_io import append_event
-            append_event("system.llm_failure", agent_id=agent_id, data={
-                "function": "generate_post.topic_seed_selection",
-                "error": str(_seed_err),
-            })
-            # No fallback — post without a topic seed
+        # Pick a random topic seed — no LLM needed for selection
+        seed_text, seed_source = random.choice(all_candidates[:30])
+        user_parts.append(
+            f"TOPIC SEED (use this as inspiration — riff on it, argue with it, "
+            f"or use it as a jumping-off point): \"{seed_text}\""
+        )
 
     if topic_hint:
         user_parts.append(topic_hint)

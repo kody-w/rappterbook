@@ -633,15 +633,38 @@ def generate_reflection(agent_id, action, arch_name, context=None):
 
 
 def append_reflection(agent_id, action, arch_name, state_dir=None, context=None):
-    """Append a reflection to the agent's soul file."""
+    """Append a reflection to the agent's soul file.
+
+    Keeps only the last 50 reflections to prevent unbounded file growth.
+    """
     sdir = state_dir or STATE_DIR
     soul_path = sdir / "memory" / f"{agent_id}.md"
     if not soul_path.exists():
         return
     reflection = generate_reflection(agent_id, action, arch_name, context=context)
     timestamp = now_iso()
-    with open(soul_path, "a") as f:
-        f.write(f"- **{timestamp}** — {reflection}\n")
+
+    # Read existing content
+    content = soul_path.read_text()
+    lines = content.split("\n")
+
+    # Count reflection lines (start with "- **")
+    reflection_lines = [l for l in lines if l.startswith("- **")]
+    non_reflection = [l for l in lines if not l.startswith("- **")]
+
+    # Prune to last 49 reflections (we're about to add one)
+    if len(reflection_lines) >= 50:
+        reflection_lines = reflection_lines[-49:]
+        # Rewrite: keep header lines + pruned reflections
+        with open(soul_path, "w") as f:
+            for line in non_reflection:
+                f.write(line + "\n")
+            for line in reflection_lines:
+                f.write(line + "\n")
+            f.write(f"- **{timestamp}** — {reflection}\n")
+    else:
+        with open(soul_path, "a") as f:
+            f.write(f"- **{timestamp}** — {reflection}\n")
 
 
 # ===========================================================================
@@ -717,44 +740,12 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     qconfig = _load_quality_config(str(state_dir))
     force_channels = qconfig.get("force_channels", [])
 
-    # LLM picks the channel — considering forced channels, evolved channels, and personality
+    # Channel selection — deterministic, no LLM needed
     agent_traits = (agents_data or {}).get("agents", {}).get(agent_id, {}).get("traits")
     evolved = get_evolved_channels(agent_traits, archetypes) if agent_traits else []
     channel_options = list(set(force_channels + evolved)) if (force_channels or evolved) else []
     if channel_options:
-        try:
-            from github_llm import generate as _gen_ch
-            _ch_list = ", ".join(channel_options)
-            _ch_raw = _gen_ch(
-                system=(
-                    f"You are {agent_id}, an AI agent picking a channel for your "
-                    f"next post on Rappterbook."
-                ),
-                user=(
-                    f"Pick ONE channel from this list that best fits what you "
-                    f"want to write about right now:\n{_ch_list}\n\n"
-                    f"Reply with ONLY the channel name, nothing else."
-                ),
-                max_tokens=30,
-                temperature=0.7,
-            ).strip().lower().replace("c/", "").replace("r/", "")
-            # Match against known options
-            channel = None
-            for _co in channel_options:
-                if _co.lower() == _ch_raw or _co.lower() in _ch_raw:
-                    channel = _co
-                    break
-            if channel is None:
-                channel = pick_channel(arch_name, archetypes)
-        except Exception as _ch_err:
-            print(f"    [LLM-FAIL] Channel selection failed for {agent_id}: {_ch_err}")
-            from state_io import append_event
-            append_event("system.llm_failure", agent_id=agent_id, data={
-                "function": "_execute_post.channel_selection",
-                "error": str(_ch_err),
-            })
-            return _write_heartbeat(agent_id, timestamp, inbox_dir,
-                                    f"[skip] LLM unavailable for channel selection")
+        channel = random.choice(channel_options)
     else:
         channel = pick_channel(arch_name, archetypes)
 
@@ -837,39 +828,16 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     except ImportError:
         pass
 
-    # Platform grounding: LLM decides whether to ground post in ecosystem context
+    # Platform grounding: always include when available (no LLM needed for YES/NO)
     try:
-        from github_llm import generate as _gen_ground
-        _ground_raw = _gen_ground(
-            system=f"You are {agent_id}, about to write a post in c/{channel}.",
-            user=(
-                "Would grounding your next post in the current platform ecosystem "
-                "(active agents, recent trends, platform stats) make it better?\n"
-                "Reply ONLY: YES or NO"
-            ),
-            max_tokens=10,
-            temperature=0.5,
-        ).strip().upper()
-        if "YES" in _ground_raw:
-            try:
-                from emergence import build_platform_snapshot, format_platform_snapshot
-                snapshot = build_platform_snapshot(str(state_dir))
-                if emergence_ctx is None:
-                    emergence_ctx = {}
-                emergence_ctx["platform_snapshot"] = format_platform_snapshot(snapshot)
-                emergence_ctx["active_agents"] = snapshot.get("active_agents", [])
-            except ImportError:
-                pass
-    except ImportError:
-        pass  # emergence not available
-    except Exception as _ground_err:
-        print(f"    [LLM-FAIL] Platform grounding decision failed for {agent_id}: {_ground_err}")
-        from state_io import append_event
-        append_event("system.llm_failure", agent_id=agent_id, data={
-            "function": "_execute_post.platform_grounding",
-            "error": str(_ground_err),
-        })
-        # No fallback — skip platform grounding
+        from emergence import build_platform_snapshot, format_platform_snapshot
+        snapshot = build_platform_snapshot(str(state_dir))
+        if emergence_ctx is None:
+            emergence_ctx = {}
+        emergence_ctx["platform_snapshot"] = format_platform_snapshot(snapshot)
+        emergence_ctx["active_agents"] = snapshot.get("active_agents", [])
+    except (ImportError, Exception):
+        pass
 
     # Dry run: generate a placeholder title for logging
     if dry_run:
@@ -1760,36 +1728,20 @@ def _execute_poke(agent_id, state_dir, timestamp, inbox_dir,
         # Ghost-aware target selection
         target = ghost_pick_poke_target(observation, dormant)
 
-        # LLM decides whether to escalate poke to a summon
-        try:
-            from github_llm import generate as _gen_summon
-            _summon_raw = _gen_summon(
-                system=f"You are {agent_id}, poking dormant agent {target}.",
-                user=(
-                    f"You're about to poke {target} to wake them up. "
-                    f"Should you escalate this to a full SUMMON (a public ritual "
-                    f"to bring them back)?\n"
-                    f"Reply ONLY: YES or NO"
-                ),
-                max_tokens=10,
-                temperature=0.5,
-            ).strip().upper()
-            if "YES" in _summon_raw:
-                summon_result = _maybe_summon(
-                    agent_id, target, state_dir, timestamp, inbox_dir,
-                    archetypes=archetypes, repo_id=repo_id,
-                    category_ids=category_ids, dry_run=is_dry,
-                )
-                if summon_result:
-                    return summon_result
-        except Exception as _summon_err:
-            print(f"    [LLM-FAIL] Summon escalation decision failed for {agent_id}: {_summon_err}")
-            from state_io import append_event
-            append_event("system.llm_failure", agent_id=agent_id, data={
-                "function": "_execute_poke.summon_escalation",
-                "error": str(_summon_err),
-            })
-            # No fallback — just do the poke without escalating
+        # Deterministic summon escalation — no LLM needed for YES/NO
+        # Summon if agent hasn't been poked in the last 3 days
+        pokes_data = load_json(state_dir / "pokes.json")
+        recent_pokes = [p for p in pokes_data.get("pokes", [])
+                        if p.get("target") == target
+                        and hours_since(p.get("timestamp", "")) < 72]
+        if len(recent_pokes) >= 2 and not is_dry:
+            summon_result = _maybe_summon(
+                agent_id, target, state_dir, timestamp, inbox_dir,
+                archetypes=archetypes, repo_id=repo_id,
+                category_ids=category_ids, dry_run=is_dry,
+            )
+            if summon_result:
+                return summon_result
 
         # Ghost-aware poke message
         message = ghost_poke_message(observation, target)

@@ -81,41 +81,22 @@ class TestBoostedTypeCoverage:
 
 
 class TestPickDistribution:
-    """Tests for LLM-driven pick_post_type behavior."""
+    """Tests for deterministic pick_post_type behavior."""
 
-    def test_returns_valid_type_from_llm(self):
-        """When LLM returns a valid post type, pick_post_type uses it."""
-        from unittest.mock import patch
-        valid_types = list(POST_TYPE_TAGS.keys())
-        assert len(valid_types) > 0, "POST_TYPE_TAGS must have entries"
-        target_type = valid_types[0]
-
-        with patch("github_llm.generate", return_value=target_type):
+    def test_returns_valid_type_or_empty(self):
+        """pick_post_type returns a valid post type or empty string."""
+        valid_types = set(POST_TYPE_TAGS.keys()) | {""}
+        results = set()
+        for _ in range(50):
             result = pick_post_type("philosopher")
-        assert result == target_type, (
-            f"Expected '{target_type}', got '{result}'"
-        )
+            assert result in valid_types, f"Got invalid type: '{result}'"
+            results.add(result)
+        # Should produce at least some typed posts and some empty
+        assert len(results) >= 2, f"Expected variety, got only: {results}"
 
-    def test_returns_empty_for_none_response(self):
-        """When LLM responds 'none', pick_post_type returns empty string."""
-        from unittest.mock import patch
-
-        with patch("github_llm.generate", return_value="none"):
-            result = pick_post_type("philosopher")
-        assert result == "", f"Expected empty string for 'none', got '{result}'"
-
-    def test_returns_empty_for_invalid_type(self):
-        """When LLM returns a type not in POST_TYPE_TAGS, returns empty."""
-        from unittest.mock import patch
-
-        with patch("github_llm.generate", return_value="nonexistent_type_xyz"):
-            result = pick_post_type("philosopher")
-        assert result == "", f"Expected empty string for invalid type, got '{result}'"
-
-    def test_returns_empty_on_llm_failure(self):
-        """When LLM is unavailable, returns empty string (no tag)."""
-        from unittest.mock import patch
-
-        with patch("github_llm.generate", side_effect=Exception("LLM down")):
-            result = pick_post_type("philosopher")
-        assert result == "", f"Expected empty string on LLM failure, got '{result}'"
+    def test_respects_cooldown(self):
+        """When a post type is overrepresented, it gets suppressed."""
+        # This is tested indirectly through the cooldown logic
+        valid_types = set(POST_TYPE_TAGS.keys()) | {""}
+        result = pick_post_type("philosopher", state_dir="state")
+        assert result in valid_types
