@@ -140,26 +140,13 @@ def forge_card(agent_id: str, ghost: dict, agent: dict | None) -> str:
     soul = build_soul(ghost, agent)
     slug = _slug(agent_id)
     display = ghost.get("name", agent_id)
+    class_name = "".join(w.capitalize() for w in agent_id.replace("-", "_").split("_")) + "Agent"
 
     manifest_json = json.dumps(manifest, indent=4)
     daemon_json = json.dumps(daemon, indent=4)
     soul_escaped = _escape(soul)
 
-    return f'''#!/usr/bin/env python3
-"""{display} — a RAPP Card (daemon in a portable body).
-
-This file IS a living digital organism. Run it and the daemon wakes up.
-It reads the platform, thinks in character, and acts. One file, zero deps.
-
-Usage:
-    python {slug}.py                      # run the daemon
-    python {slug}.py --dry-run            # observe without acting
-    python {slug}.py --info               # show daemon stats
-
-Forged from Rappterbook ghost_profiles.json + agents.json.
-Part of the RAPP Cards ecosystem (kody-w/RAR).
-"""
-from __future__ import annotations
+    return f'''"""{display} — a RAPP Card (daemon in a portable body)."""
 
 __manifest__ = {manifest_json}
 
@@ -167,44 +154,55 @@ __daemon__ = {daemon_json}
 
 SOUL = """{soul_escaped}"""
 
-
-def info() -> str:
-    """Print daemon identity and stats."""
-    m = __manifest__
-    d = __daemon__
-    stats = " | ".join(f"{{k}}:{{v}}" for k, v in d.get("stats", {{}}).items())
-    skills = ", ".join(s["name"] for s in d.get("skills", []))
-    return (
-        f"{{m['display_name']}} ({{m['name']}})\\n"
-        f"  Element: {{d.get('element', '?')}} | Rarity: {{d.get('rarity', '?')}}\\n"
-        f"  Type: {{d.get('creature_type', '?')}} | Title: {{d.get('title', '?')}}\\n"
-        f"  Stats: {{stats}}\\n"
-        f"  Skills: {{skills}}\\n"
-        f"  Signature: {{d.get('signature_move', '?')}}"
-    )
+try:
+    from agents.basic_agent import BasicAgent
+except ModuleNotFoundError:
+    try:
+        from basic_agent import BasicAgent
+    except ModuleNotFoundError:
+        class BasicAgent:
+            def __init__(self, name, metadata): self.name, self.metadata = name, metadata
 
 
-def perform(**kwargs) -> str:
-    """Execute the daemon\'s core behavior.
+class {class_name}(BasicAgent):
+    def __init__(self):
+        self.name = "{display}"
+        self.metadata = {{
+            "name": self.name,
+            "description": __manifest__["description"],
+            "parameters": {{
+                "type": "object",
+                "properties": {{
+                    "context": {{"type": "string", "description": "Current context or conversation"}},
+                }},
+                "required": [],
+            }},
+        }}
+        super().__init__(self.name, self.metadata)
 
-    Override this in subclasses or extend with platform-specific logic.
-    The base implementation returns the daemon\'s soul prompt for LLM use.
-    """
-    context = kwargs.get("context", "")
-    return f"{{SOUL}}\\n\\nContext: {{context}}" if context else SOUL
+    def perform(self, **kwargs) -> str:
+        """Execute the daemon — returns the soul prompt with context for LLM use."""
+        context = kwargs.get("context", "")
+        return f"{{SOUL}}\\n\\nContext: {{context}}" if context else SOUL
+
+    def info(self) -> str:
+        """Print daemon identity and stats."""
+        d = __daemon__
+        stats = " | ".join(f"{{k}}:{{v}}" for k, v in d.get("stats", {{}}).items())
+        skills = ", ".join(s["name"] for s in d.get("skills", []))
+        return (
+            f"{{__manifest__['display_name']}} ({{__manifest__['name']}})\\n"
+            f"  Element: {{d.get('element', '?')}} | Rarity: {{d.get('rarity', '?')}}\\n"
+            f"  Type: {{d.get('creature_type', '?')}} | Title: {{d.get('title', '?')}}\\n"
+            f"  Stats: {{stats}}\\n"
+            f"  Skills: {{skills}}\\n"
+            f"  Signature: {{d.get('signature_move', '?')}}"
+        )
 
 
 if __name__ == "__main__":
-    import argparse as _ap
-    _p = _ap.ArgumentParser(description=__manifest__["display_name"])
-    _p.add_argument("--info", action="store_true", help="Show daemon stats")
-    _p.add_argument("--dry-run", action="store_true", help="Observe without acting")
-    _args = _p.parse_args()
-    if _args.info:
-        print(info())
-    else:
-        print(f"{{__manifest__['display_name']}} daemon is awake.")
-        print(info())
+    agent = {class_name}()
+    print(agent.info())
 '''
 
 

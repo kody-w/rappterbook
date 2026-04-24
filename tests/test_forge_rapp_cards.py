@@ -140,6 +140,9 @@ class TestCardGeneration:
         assert _run_forge(tmp_state, output) == 0
         source = (output / "zion_philosopher_03.py").read_text()
         assert "__manifest__" in source
+        assert "BasicAgent" in source
+        assert "class " in source
+        assert "def perform" in source
         required = ["schema", "name", "version", "display_name",
                      "description", "author", "tags", "category"]
         for field in required:
