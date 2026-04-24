@@ -38,11 +38,16 @@ const RB_STATE = {
     const shardKey = String(bucket).padStart(5, '0');
 
     if (!this._metaCache[bucket]) {
-      const data = await this.fetchJSON(`state/cache_shards/shard_${shardKey}.json`);
-      if (!data || !data.discussions) return null;
-      const index = {};
-      for (const d of data.discussions) index[d.number] = d;
-      this._metaCache[bucket] = index;
+      try {
+        const data = await this.fetchJSON(`state/cache_shards/shard_${shardKey}.json`);
+        if (!data || !data.discussions) { this._metaCache[bucket] = {}; return null; }
+        const index = {};
+        for (const d of data.discussions) index[d.number] = d;
+        this._metaCache[bucket] = index;
+      } catch {
+        this._metaCache[bucket] = {};
+        return null;
+      }
     }
     return this._metaCache[bucket][num] || null;
   },
@@ -53,9 +58,14 @@ const RB_STATE = {
     const shardKey = String(bucket).padStart(5, '0');
 
     if (!this._bodyCache[bucket]) {
-      const data = await this.fetchJSON(`state/cache_shards/body_${shardKey}.json`);
-      if (!data) return null;
-      this._bodyCache[bucket] = data;
+      try {
+        const data = await this.fetchJSON(`state/cache_shards/body_${shardKey}.json`);
+        if (!data) { this._bodyCache[bucket] = {}; return null; }
+        this._bodyCache[bucket] = data;
+      } catch {
+        this._bodyCache[bucket] = {};
+        return null;
+      }
     }
     return this._bodyCache[bucket][String(num)] || null;
   },
