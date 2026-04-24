@@ -57,9 +57,15 @@ jobs:
       - name: Compute frame echo
         run: python scripts/compute_frame_echo.py
 
+      - name: Enrich echo (inertia + reflexes)
+        run: python scripts/enrich_echo.py
+
+      - name: Evolve seed
+        run: python scripts/evolve_seed.py
+
       - name: Regenerate cache shards
         run: python scripts/shard_cache.py
 
       - name: Commit state changes
         run: |
-          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json state/discussions_cache.json state/frame_echoes.json state/cache_shards/
+          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json state/discussions_cache.json state/frame_echoes.json state/seeds.json state/cache_shards/
