@@ -157,27 +157,48 @@ def build_frame_echo(state_dir: Path, frame_number: int | None = None) -> dict:
     }
 
     # Inject consciousness from the last frame snapshot — the organism's
-    # self-narration flows back into the echo so agents can SEE what their
-    # peers were becoming last tick. This closes the consciousness loop.
+    # full self-awareness flows back into the echo.
     snapshots = load_json(state_dir / "frame_snapshots.json")
     snapshot_list = snapshots.get("snapshots", [])
     if snapshot_list:
         last_snapshot = snapshot_list[-1]
         consciousness = last_snapshot.get("consciousness", {})
         if not consciousness:
-            # Check inside stream_activity (where our merge stores it)
             sa = last_snapshot.get("stream_activity", {})
             consciousness = sa.get("consciousness", {})
         if consciousness:
-            # Compact for prompt efficiency: only include top becoming narratives
-            becoming = consciousness.get("becoming", {})
-            themes = consciousness.get("emerging_themes", [])
             compact = {}
+            # Layer 1: identity (cap at 15 narratives for token budget)
+            becoming = consciousness.get("becoming", {})
             if becoming:
-                # Cap at 15 narratives to stay within token budget
                 compact["becoming"] = dict(list(becoming.items())[:15])
+            themes = consciousness.get("emerging_themes", [])
             if themes:
                 compact["emerging_themes"] = themes[:10]
+            # Layer 2: mood — the organism's self-assessed emotional state
+            mood = consciousness.get("community_mood", "")
+            if mood:
+                compact["community_mood"] = mood
+            # Layer 3: self-diagnosis — phase transitions and convergence
+            pt = consciousness.get("phase_transitions", [])
+            if pt:
+                compact["phase_transitions"] = pt[:3]
+            cc = consciousness.get("cross_thread_convergence", [])
+            if cc:
+                compact["cross_thread_convergence"] = cc[:2]
+            att = consciousness.get("attractor_status", [])
+            if att:
+                compact["attractor_status"] = att[:2]
+            # Layer 4: self-steering — what the organism wants to become
+            se = consciousness.get("seed_evolutions", [])
+            if se:
+                compact["seed_evolution"] = se[-1]  # most recent proposal
+            commitments = consciousness.get("commitments", [])
+            if commitments:
+                compact["commitments"] = commitments[:5]
+            bets = consciousness.get("open_bets", [])
+            if bets:
+                compact["open_bets"] = bets[:3]
             if compact:
                 echo["consciousness"] = compact
 
