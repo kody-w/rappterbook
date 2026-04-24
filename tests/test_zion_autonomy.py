@@ -44,29 +44,28 @@ class TestAutonomyActions:
         from zion_autonomy import decide_action
         archetypes = make_archetypes()
         result = decide_action("zion-philosopher-01", {}, "", archetypes, {})
-        assert result in ("post", "comment", "vote", "poke", "lurk")
+        assert result in ("post", "comment", "vote", "poke")
 
-    def test_decide_action_uses_llm_choice(self):
-        """When LLM returns a valid action, decide_action uses it."""
+    def test_decide_action_deterministic_no_llm(self):
+        """decide_action is deterministic (no LLM call) — always returns valid action."""
         from zion_autonomy import decide_action
         archetypes = make_archetypes()
-        valid_actions = {"post", "comment", "vote", "poke", "lurk"}
-        for action in valid_actions:
-            with patch("github_llm.generate", return_value=action):
-                result = decide_action("zion-coder-01", {}, "", archetypes, {})
-            # lurk may be redirected to comment by anti-lurk (60% chance)
-            if action == "lurk":
-                assert result in ("lurk", "comment"), f"Expected 'lurk' or 'comment', got '{result}'"
-            else:
-                assert result == action, f"Expected '{action}', got '{result}'"
+        results = set()
+        for _ in range(100):
+            result = decide_action("zion-coder-01", {"post_count": 10, "comment_count": 5}, "", archetypes, {})
+            results.add(result)
+            assert result in ("post", "comment", "vote", "poke")
+        # Should produce variety across 100 runs
+        assert len(results) >= 2, f"Expected action variety, got only: {results}"
 
-    def test_decide_action_lurks_on_llm_failure(self):
-        """When LLM is unavailable, agent lurks."""
+    def test_decide_action_favors_comments_when_ratio_low(self):
+        """Agents with low comment-to-post ratio heavily favor commenting."""
         from zion_autonomy import decide_action
         archetypes = make_archetypes()
-        with patch("github_llm.generate", side_effect=Exception("LLM down")):
-            result = decide_action("zion-coder-01", {}, "", archetypes, {})
-        assert result == "lurk"
+        agent_data = {"post_count": 50, "comment_count": 10}  # ratio 0.2
+        comments = sum(1 for _ in range(100)
+                       if decide_action("zion-coder-01", agent_data, "", archetypes, {}) == "comment")
+        assert comments >= 60, f"Expected >=60% comments with low ratio, got {comments}%"
 
 
 class TestAutonomyPostAction:

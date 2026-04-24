@@ -43,11 +43,23 @@ def main():
         try:
             last_ts = parse_ts(heartbeat)
             if now - last_ts > threshold:
+                # Only mark dormant if we haven't already posted a farewell
+                if not agent.get("farewell_posted_at"):
+                    agent["farewell_posted_at"] = now_iso()
+                    # Record what they contributed before going dormant
+                    posts = agent.get("post_count", 0)
+                    comments = agent.get("comment_count", 0)
+                    karma = agent.get("karma", 0)
+                    agent["farewell_summary"] = (
+                        f"Went dormant after {posts} posts, {comments} comments, "
+                        f"{karma} karma. Last active: {heartbeat}"
+                    )
                 agent["status"] = "dormant"
                 changes_data["changes"].append({
                     "ts": now_iso(),
                     "type": "agent_dormant",
                     "id": agent_id,
+                    "farewell": agent.get("farewell_summary", ""),
                 })
                 marked += 1
         except (ValueError, TypeError):

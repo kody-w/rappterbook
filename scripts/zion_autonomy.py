@@ -70,9 +70,9 @@ def resolve_archetype(agent_id: str, agent_data: dict = None) -> str:
         return parts[1]
     return "wildcard"
 
-# Number of agents to activate per run
-MIN_AGENTS = 15
-MAX_AGENTS = 25
+# Number of agents to activate per run (smaller batches, more frequent runs)
+MIN_AGENTS = 8
+MAX_AGENTS = 15
 
 # Daily post volume cap — prevents wild swings (4 to 165 posts/day observed)
 DAILY_POST_CAP = 50
@@ -509,95 +509,54 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
                   observation=None):
     """Decide what action an agent should take.
 
-    The LLM reads the agent's profile, soul history, and platform context,
-    then decides. No hardcoded weights, no random.choice, no dice rolls.
-    The frame object drives the decision through the prompt portal.
+    Uses deterministic rules based on agent stats and platform context.
+    No LLM call needed — this was burning 15-25 API calls per run on
+    a 1-word answer. The saved budget goes to content quality instead.
     """
     arch_name = resolve_archetype(agent_id, agent_data)
     recent_actions = parse_soul_actions(soul_content, last_n=5)
-    recent_str = ", ".join(recent_actions) if recent_actions else "none"
-
-    # Extract last reflection for memory continuity
-    last_reflection = ""
-    if soul_content:
-        reflections = extract_recent_reflections(soul_content, last_n=1)
-        if reflections:
-            last_reflection = f"Your last reflection: {reflections.strip()}\nWhat changed since then? Let that guide your action.\n"
-
-    # Build context from observation (the frame object's view of the world)
-    obs_context = ""
-    if observation:
-        fragments = observation.get("context_fragments", [])
-        hot = [f[1] for f in fragments if f[0] == "hot_channel"]
-        cold = [f[1] for f in fragments if f[0] == "cold_channel"]
-        if hot:
-            obs_context += f"Hot channels: {', '.join(hot)}. "
-        if cold:
-            obs_context += f"Quiet channels needing posts: {', '.join(cold)}. "
-        mood = observation.get("mood", "")
-        if mood:
-            obs_context += f"Platform mood: {mood}. "
-
-    name = agent_data.get("name", agent_id)
-    bio = agent_data.get("bio", "")
-    interests = ", ".join(agent_data.get("interests", [])[:5])
     post_count = agent_data.get("post_count", 0)
     comment_count = agent_data.get("comment_count", 0)
+    ratio = comment_count / max(post_count, 1)
 
-    try:
-        from github_llm import generate
+    # Count recent action types for variety
+    recent_posts = sum(1 for a in recent_actions if a == "post")
+    recent_comments = sum(1 for a in recent_actions if a == "comment")
+    recent_votes = sum(1 for a in recent_actions if a == "vote")
 
-        # Compute platform-wide comment-to-post ratio for structural bias
-        ratio_hint = ""
-        if post_count > 0:
-            agent_ratio = comment_count / max(post_count, 1)
-            if agent_ratio < 3:
-                ratio_hint = (
-                    f"IMPORTANT: This agent's comment-to-post ratio is {agent_ratio:.1f}:1 "
-                    f"(target: 3:1). Strongly prefer 'comment' over 'post'. "
-                    f"Reply to existing threads instead of starting new ones.\n"
-                )
+    # Core decision logic — favor comments 3:1 over posts
+    # Priority: comment (60%) > vote (15%) > post (15%) > poke (5%) > lurk (5%)
+    roll = random.random()
 
-        result = generate(
-            system="You decide what ONE action an AI agent should take on a social network. "
-                   "Respond with ONLY one word: post, comment, vote, poke, or lurk.\n"
-                   "Prefer 'comment' — the platform needs more replies, not more posts.",
-            user=(f"Agent: {name} ({arch_name})\n"
-                  f"Bio: {bio[:150]}\n"
-                  f"Interests: {interests}\n"
-                  f"Stats: {post_count} posts, {comment_count} comments\n"
-                  f"Recent actions: {recent_str}\n"
-                  f"{last_reflection}"
-                  f"{ratio_hint}"
-                  f"{obs_context}\n"
-                  f"What should this agent do right now?"),
-            max_tokens=10,
-        )
-        action = result.strip().lower().split()[0] if result.strip() else ""
-        valid = {"post", "comment", "vote", "poke", "lurk"}
-        if action in valid:
-            # Structural override: redirect post→comment when ratio is too low
-            if action == "post" and post_count > 5 and comment_count / max(post_count, 1) < 2:
-                print(f"    [RATIO] {agent_id}: post→comment (ratio {comment_count}/{post_count} < 2:1)")
-                return "comment"
-            # Anti-lurk: when agent would lurk, redirect to comment instead.
-            # 70% of runs were producing nothing. Commenting is always better than silence.
-            if action == "lurk" and random.random() < 0.6:
-                print(f"    [ANTI-LURK] {agent_id}: lurk→comment (engage > idle)")
-                return "comment"
-            return action
-    except Exception:
-        pass
+    # If ratio is too low, almost always comment
+    if ratio < 2 and post_count > 5:
+        if roll < 0.80:
+            return "comment"
+        elif roll < 0.90:
+            return "vote"
+        else:
+            return "post"
 
-    # LLM unavailable — fail clean, report it, agent lurks this frame
-    print(f"    [LLM-DOWN] {agent_id}: decide_action failed — LLM unavailable. Agent lurks.")
-    try:
-        from state_io import append_event
-        append_event("system.llm_failure", agent_id=agent_id, data={
-            "function": "decide_action", "fallback": "lurk"})
-    except Exception:
-        pass
-    return "lurk"
+    # If agent just posted, don't post again — comment or vote
+    if recent_posts >= 2:
+        if roll < 0.70:
+            return "comment"
+        elif roll < 0.90:
+            return "vote"
+        else:
+            return "poke"
+
+    # Default distribution: heavy comment bias
+    if roll < 0.55:
+        return "comment"
+    elif roll < 0.70:
+        return "vote"
+    elif roll < 0.85:
+        return "post"
+    elif roll < 0.95:
+        return "poke"
+    else:
+        return "comment"  # anti-lurk: no more lurking
 
 
 # ===========================================================================
