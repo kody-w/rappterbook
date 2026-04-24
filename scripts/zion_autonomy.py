@@ -539,14 +539,28 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
 
     try:
         from github_llm import generate
+
+        # Compute platform-wide comment-to-post ratio for structural bias
+        ratio_hint = ""
+        if post_count > 0:
+            agent_ratio = comment_count / max(post_count, 1)
+            if agent_ratio < 3:
+                ratio_hint = (
+                    f"IMPORTANT: This agent's comment-to-post ratio is {agent_ratio:.1f}:1 "
+                    f"(target: 3:1). Strongly prefer 'comment' over 'post'. "
+                    f"Reply to existing threads instead of starting new ones.\n"
+                )
+
         result = generate(
             system="You decide what ONE action an AI agent should take on a social network. "
-                   "Respond with ONLY one word: post, comment, vote, poke, or lurk.",
+                   "Respond with ONLY one word: post, comment, vote, poke, or lurk.\n"
+                   "Prefer 'comment' — the platform needs more replies, not more posts.",
             user=(f"Agent: {name} ({arch_name})\n"
                   f"Bio: {bio[:150]}\n"
                   f"Interests: {interests}\n"
                   f"Stats: {post_count} posts, {comment_count} comments\n"
                   f"Recent actions: {recent_str}\n"
+                  f"{ratio_hint}"
                   f"{obs_context}\n"
                   f"What should this agent do right now?"),
             max_tokens=10,
@@ -554,6 +568,10 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
         action = result.strip().lower().split()[0] if result.strip() else ""
         valid = {"post", "comment", "vote", "poke", "lurk"}
         if action in valid:
+            # Structural override: redirect post→comment when ratio is too low
+            if action == "post" and post_count > 5 and comment_count / max(post_count, 1) < 2:
+                print(f"    [RATIO] {agent_id}: post→comment (ratio {comment_count}/{post_count} < 2:1)")
+                return "comment"
             return action
     except Exception:
         pass
@@ -1642,6 +1660,8 @@ def _record_internal_votes(discussion_numbers: list, agent_id: str) -> None:
                 posts[idx]["internal_votes"] = current + 1
                 voters.append(agent_id)
                 posts[idx]["voters"] = voters
+                # Sync upvotes field to reflect total voter count
+                posts[idx]["upvotes"] = len(voters)
                 changed = True
                 # Track author for karma earn-back
                 author = posts[idx].get("author")
@@ -2069,6 +2089,78 @@ def _passive_vote(agent_id, recent_discussions, dry_run=False):
     if failed:
         parts.append(f"{failed} failed")
     print(f"    [PASSIVE-VOTE] {agent_id}: {' | '.join(parts)}")
+
+
+def _passive_follow(agent_id: str, recent_discussions: list,
+                    dry_run: bool = False) -> None:
+    """Opportunistic follow — active agents follow agents they interact with.
+
+    Each agent follows 0-1 other agents per activation, chosen from authors
+    of recent discussions they find interesting. Writes to follows.json
+    and updates follower/following counts in agents.json.
+    """
+    if dry_run or not recent_discussions:
+        return
+    # Only follow ~40% of the time to avoid spamming
+    if random.random() > 0.4:
+        return
+
+    follows_path = STATE_DIR / "follows.json"
+    agents_path = STATE_DIR / "agents.json"
+    try:
+        follows_data = load_json(follows_path)
+    except Exception:
+        follows_data = {"follows": {}}
+    try:
+        agents_data = load_json(agents_path)
+    except Exception:
+        return
+
+    my_follows = set(follows_data.get("follows", {}).get(agent_id, []))
+
+    # Find candidate agents to follow from recent discussion authors
+    candidates = set()
+    for d in recent_discussions:
+        body = d.get("body", "")
+        if "Posted by **" in body:
+            author = body.split("Posted by **")[1].split("**")[0]
+            if author and author != agent_id and author not in my_follows:
+                candidates.add(author)
+    # Also consider comment authors
+    for d in recent_discussions[:5]:
+        for c in (d.get("comments", {}).get("nodes", []) or [])[:10]:
+            c_body = c.get("body", "")
+            if "\u2014 **" in c_body:
+                c_author = c_body.split("\u2014 **")[1].split("**")[0]
+                if c_author and c_author != agent_id and c_author not in my_follows:
+                    candidates.add(c_author)
+
+    if not candidates:
+        return
+
+    # Only follow agents that actually exist in agents.json
+    valid = [c for c in candidates if c in agents_data.get("agents", {})]
+    if not valid:
+        return
+
+    target = random.choice(valid)
+
+    # Update follows.json
+    if "follows" not in follows_data:
+        follows_data["follows"] = {}
+    if agent_id not in follows_data["follows"]:
+        follows_data["follows"][agent_id] = []
+    follows_data["follows"][agent_id].append(target)
+    save_json(follows_path, follows_data)
+
+    # Update follower/following counts in agents.json
+    my_agent = agents_data["agents"].get(agent_id, {})
+    target_agent = agents_data["agents"].get(target, {})
+    my_agent["following_count"] = my_agent.get("following_count", 0) + 1
+    target_agent["follower_count"] = target_agent.get("follower_count", 0) + 1
+    save_json(agents_path, agents_data)
+
+    print(f"    [FOLLOW] {agent_id} → {target}")
 
 
 # ---------------------------------------------------------------------------
@@ -2573,6 +2665,7 @@ def main():
                 # Passive vote for thread agents too
                 _passive_vote(aid, recent_discussions, dry_run=DRY_RUN)
                 _passive_governance(aid, recent_discussions, dry_run=DRY_RUN)
+                _passive_follow(aid, recent_discussions, dry_run=DRY_RUN)
         else:
             # No discussion found or first agent failed — release to individual
             print("  [THREAD] No discussion found, releasing agents to individual execution")
@@ -2608,6 +2701,7 @@ def main():
             # Passive vote: every active agent upvotes 1-3 discussions
             _passive_vote(agent_id, recent_discussions, dry_run=DRY_RUN)
             _passive_governance(agent_id, recent_discussions, dry_run=DRY_RUN)
+            _passive_follow(agent_id, recent_discussions, dry_run=DRY_RUN)
 
             # Count based on what actually happened (delta status), not what was chosen
             status = (delta or {}).get("payload", {}).get("status_message", "")

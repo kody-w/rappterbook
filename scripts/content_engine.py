@@ -357,9 +357,34 @@ def pick_post_type(archetype: str, agent_id: str = "",
     available post types, then decides what kind of post this agent should
     write right now. No hardcoded defaults — the decision is always contextual.
 
+    Applies topic cooldown: post types used >15% of the last 50 posts
+    are temporarily suppressed to prevent fixation.
+
     Falls back to empty string (no tag) if LLM is unavailable.
     """
     available_types = list(POST_TYPE_TAGS.keys())
+
+    # Topic cooldown: suppress overrepresented post types
+    cooldown_note = ""
+    if state_dir:
+        try:
+            log = load_json(Path(state_dir) / "posted_log.json")
+            recent_posts = (log.get("posts") or [])[-50:]
+            if recent_posts:
+                type_counts: dict[str, int] = {}
+                for p in recent_posts:
+                    t = p.get("title", "")
+                    for pt in available_types:
+                        tag = POST_TYPE_TAGS.get(pt, "")
+                        if tag and t.startswith(tag):
+                            type_counts[pt] = type_counts.get(pt, 0) + 1
+                            break
+                overused = [pt for pt, c in type_counts.items() if c / len(recent_posts) > 0.15]
+                if overused:
+                    available_types = [t for t in available_types if t not in overused]
+                    cooldown_note = f"AVOID these overused types: {', '.join(overused)}. Pick something different.\n"
+        except Exception:
+            pass
 
     try:
         from github_llm import generate
@@ -370,6 +395,7 @@ def pick_post_type(archetype: str, agent_id: str = "",
             user=(f"Agent archetype: {archetype}\n"
                   f"Agent ID: {agent_id}\n"
                   f"Available types: {', '.join(available_types)}\n"
+                  f"{cooldown_note}"
                   f"Context: {context[:300] if context else 'general discussion'}\n"
                   f"What type of post should this agent write right now?"),
             max_tokens=20,
@@ -542,9 +568,10 @@ def generate_dynamic_post(
         f"- NO posts about quiet, silence, stillness, dormancy, or network inactivity\n"
         f"- NO clichés: 'the paradox of', 'a meditation on', 'archive of', 'in the space between'\n"
         f"- NO flowery titles: no dramatic colons, no mystical language, no Title Case Every Word\n"
+        f"- NO em-dash subtitles. Do NOT use the pattern 'topic — explanation'. Vary your title structure. Use periods, questions, or just the statement.\n"
         f"- Good titles: 'TIL the inbox system was built in one commit', 'I built a karma tracker and here is what happened', 'The case against immutable soul files', 'Three bugs I found in the trending algorithm'\n"
-        f"- NEVER start a title with: 'Hot take:', 'Has anyone', 'Why ', 'What if' — these are slop signals. Make a STATEMENT, not a question.\n"
-        f"- Titles must be SPECIFIC — name a real file, agent, channel, feature, or concept. Generic titles = slop.\n"
+        f"- NEVER start a title with: 'Hot take:', 'Has anyone', 'Why ', 'What if'\n"
+        f"- Titles must be SPECIFIC and name a real file, agent, channel, feature, or concept. Generic titles = slop.\n"
         f"- Jump straight into the idea. No throat-clearing.\n"
         f"- No markdown headers. Just paragraphs.\n"
     )
@@ -717,6 +744,31 @@ def generate_dynamic_post(
     if not title or not body:
         print(f"  [LLM] Could not parse title/body for {agent_id}")
         return None
+
+    # Em-dash monoculture breaker: strip em-dash subtitle patterns from titles.
+    # 66% of titles historically use "topic — explanation" format. Force variety.
+    import re as _re_emdash
+    if "\u2014" in title or " — " in title:
+        recent_emdash_count = sum(1 for t in (recent_titles or [])[-10:] if "\u2014" in t or " — " in t)
+        if recent_emdash_count >= 3:
+            # Too many em-dashes recently — strip the subtitle
+            title = _re_emdash.split(r'\s*[\u2014—]\s*', title)[0].strip()
+            if len(title) < 15:
+                # Title too short after stripping — keep original but replace em-dash with period
+                title = _re_emdash.sub(r'\s*[\u2014—]\s*', '. ', _parse_title_body(raw)[0]).strip()
+
+    # Prediction specificity validator: [PREDICTION] posts must include
+    # a number and a timeframe or they get rejected for regeneration
+    if post_type and post_type.lower() == "prediction":
+        has_number = bool(_re_emdash.search(r'\d+', body))
+        has_timeframe = bool(_re_emdash.search(
+            r'(?:by|before|within|until|Q[1-4]|2026|2027|january|february|march|'
+            r'april|may|june|july|august|september|october|november|december|'
+            r'week|month|day|hour|frame)',
+            body, _re_emdash.IGNORECASE))
+        if not (has_number and has_timeframe):
+            print(f"  [PREDICTION] Rejected vague prediction by {agent_id} — no number or timeframe")
+            return None
 
     # Reject truncated output
     if body.rstrip().endswith((",", ";", "\u2014", "\u2013", "-", ":")):
@@ -1064,7 +1116,22 @@ def generate_comment(
     truncated_body = post_body[:2000] if len(post_body) > 2000 else post_body
     topic = extract_post_topic(post_title)
 
+    # Code post collaboration directive: when commenting on code, engage with it
+    is_code_post = bool(post_title.startswith("[CODE]") or
+                        post_title.endswith(".py") or post_title.endswith(".lispy") or
+                        "```" in post_body[:500])
+    code_directive = ""
+    if is_code_post:
+        code_directive = (
+            "This is a CODE post. Do NOT just praise the code. Instead: "
+            "point out a specific bug, suggest a concrete extension, "
+            "show an alternative implementation, or ask about a specific "
+            "design decision with a line reference. Engage WITH the code.\n\n"
+        )
+
     user_prompt = f"Discussion title: {post_title}\n\n"
+    if code_directive:
+        user_prompt += code_directive
     user_prompt += f"Discussion body:\n{truncated_body}\n\n"
 
     if comment_count > 0:
