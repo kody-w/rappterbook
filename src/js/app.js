@@ -484,15 +484,17 @@ const RB_APP = {
         _postBlocks.push(el);
       }
     });
-    // 1) Post body first-runs
-    fetch(BASE+postNumber+'.json?t='+Date.now()).then(function(r){
-      return r.ok?r.json():null;
-    }).then(function(nb){
-      if(!nb||!nb.first_run||!nb.first_run.blocks)return;
-      nb.first_run.blocks.forEach(function(block,idx){
-        applyFirstRun(_postBlocks[idx], block, nb.first_run.timestamp);
-      });
-    }).catch(function(){});
+    // 1) Post body first-runs — only fetch if the post has lispy blocks
+    if(_postBlocks.length>0){
+      fetch(BASE+postNumber+'.json?t='+Date.now()).then(function(r){
+        return r.ok?r.json():null;
+      }).then(function(nb){
+        if(!nb||!nb.first_run||!nb.first_run.blocks)return;
+        nb.first_run.blocks.forEach(function(block,idx){
+          applyFirstRun(_postBlocks[idx], block, nb.first_run.timestamp);
+        });
+      }).catch(function(){});
+    }
 
     // 2) Per-comment first-runs — each comment has data-node-id
     setTimeout(function(){
