@@ -1004,9 +1004,13 @@ def pick_comment_style(agent_id: str = "", post_title: str = "") -> dict:
             max_tokens=30,
             temperature=0.7,
         ).strip().lower()
-        # Match against known styles
+        # Match against known styles — exact first, then prefix
+        _picked_clean = _picked_raw.strip().lower()
         for s in COMMENT_STYLES:
-            if s["name"].lower() in _picked_raw or _picked_raw in s["name"].lower():
+            if s["name"].lower() == _picked_clean:
+                return s
+        for s in COMMENT_STYLES:
+            if _picked_clean.startswith(s["name"].lower()) or s["name"].lower().startswith(_picked_clean):
                 return s
         # No match — return first style as a non-random default
         return COMMENT_STYLES[0]
@@ -1164,55 +1168,22 @@ def generate_comment(
             f"Respond directly to their point. Be conversational.\n\n"
         )
 
-    # LLM decides whether and which discussion to cross-reference
+    # Provide cross-reference context inline — no separate LLM call needed.
+    # The main generation prompt is smart enough to reference other threads
+    # when relevant, saving 1 LLM call per comment.
     if discussions:
         candidates = [d for d in discussions
                       if d.get("number") != discussion.get("number")]
         if candidates:
-            try:
-                from github_llm import generate as _gen_xref
-                _xref_list = "\n".join(
-                    f"- #{d.get('number', '?')}: {d.get('title', 'Untitled')[:80]}"
-                    for d in candidates[:10]
-                )
-                _xref_raw = _gen_xref(
-                    system=(
-                        f"You are {agent_id}, deciding whether to cross-reference "
-                        f"another discussion in your comment on \"{post_title}\"."
-                    ),
-                    user=(
-                        f"Here are other recent discussions:\n{_xref_list}\n\n"
-                        f"If any of these connects naturally to your comment on "
-                        f"\"{post_title}\", reply with ONLY its # number (e.g. #42).\n"
-                        f"If none are relevant, reply with ONLY the word NONE."
-                    ),
-                    max_tokens=20,
-                    temperature=0.6,
-                ).strip()
-                if _xref_raw.upper() != "NONE" and "#" in _xref_raw:
-                    import re as _re_xref
-                    _xref_match = _re_xref.search(r'#(\d+)', _xref_raw)
-                    if _xref_match:
-                        _xref_num = int(_xref_match.group(1))
-                        ref = next((d for d in candidates if d.get("number") == _xref_num), None)
-                        if ref:
-                            ref_topic = extract_post_topic(ref.get("title", ""))
-                            ref_author = ref.get("author", "someone")
-                            ref_body_snippet = ref.get("body", "")[:150].strip()
-                            user_prompt += (
-                                f"You may reference related discussion "
-                                f"#{ref['number']} \"{ref_topic}\" by {ref_author}. "
-                                f"Context: \"{ref_body_snippet}...\"\n"
-                                f"Connect it naturally — agree, disagree, or build on it.\n\n"
-                            )
-            except Exception as _xref_err:
-                print(f"    [LLM-FAIL] Cross-reference selection failed for {agent_id}: {_xref_err}")
-                from state_io import append_event
-                append_event("system.llm_failure", agent_id=agent_id, data={
-                    "function": "generate_comment.cross_reference",
-                    "error": str(_xref_err),
-                })
-                # No fallback — skip cross-reference
+            _xref_list = "\n".join(
+                f"- #{d.get('number', '?')}: \"{d.get('title', 'Untitled')[:80]}\" by {d.get('author', '?')}"
+                for d in candidates[:8]
+            )
+            user_prompt += (
+                f"Other active discussions you're aware of:\n{_xref_list}\n"
+                f"If one connects naturally to your comment, reference it by number. "
+                f"Only cross-reference if genuinely relevant — don't force it.\n\n"
+            )
 
     user_prompt += "Write your comment now. Just the comment text, no preamble."
 

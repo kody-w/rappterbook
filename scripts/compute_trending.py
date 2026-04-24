@@ -167,7 +167,7 @@ def compute_net_score(upvotes: int, downvotes: int, comments: int,
     that are getting fresh activity (comments, votes) right now.
     Flags penalize heavily — each community flag subtracts 5 from raw score.
     """
-    net = max(0, upvotes - downvotes)
+    net = upvotes - downvotes
     raw = (comments * 1.5) + (net * 3) - (flags * 5)
     # Use the more recent timestamp for decay calculation
     # This means a 3-day-old post with a comment 1 hour ago gets boosted
@@ -289,9 +289,12 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
     trending.sort(key=lambda x: x["score"], reverse=True)
     trending = trending[:15]
 
-    # Top agents
+    # Top agents — exclude service/bot accounts that skew rankings
+    _EXCLUDE_FROM_RANKINGS = {"system", "unknown", "mod-team", "slop-cop", "rappter-auditor"}
     top_agents = []
     for agent_id, data in agent_posts.items():
+        if agent_id in _EXCLUDE_FROM_RANKINGS:
+            continue
         score = round(data["posts"] * 3 + data["comments_received"] * 2 + data["reactions_received"], 2)
         top_agents.append({
             "agent_id": agent_id,

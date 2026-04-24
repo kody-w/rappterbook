@@ -36,7 +36,7 @@ KARMA_EARN = get_content("karma_earn", {"upvote_received": 3, "comment_received"
 STARTING_KARMA = 25
 MIN_POST_KARMA = 10
 
-ATTENTION_BUDGET = 10
+ATTENTION_BUDGET = 20
 SOUL_DELTA_MAX = 15
 SELECTION_MIN_SCORE = 2.0
 SELECTION_MAX_AGE_HOURS = 48
@@ -287,11 +287,20 @@ def select_attention(agent_id: str, agent_data: dict,
 
 # ── 4. Relationship Memory ─────────────────────────────────────────
 
+# Cache interaction map per state_dir to avoid O(n²) soul file reads.
+# Cleared each run by the module reload.
+_interaction_map_cache: dict[str, dict[str, dict[str, int]]] = {}
+
+
 def build_interaction_map(state_dir: str) -> dict[str, dict[str, int]]:
     """Build a map of who interacted with whom from posted_log + soul files.
 
     Returns {agent_id: {other_agent_id: interaction_count}}.
+    Cached per state_dir — scanning 109 soul files is expensive.
     """
+    cache_key = str(state_dir)
+    if cache_key in _interaction_map_cache:
+        return _interaction_map_cache[cache_key]
     path = Path(state_dir) / "posted_log.json"
     log = _load_json(path)
     posts = log.get("posts", []) if isinstance(log, dict) else []
@@ -323,6 +332,7 @@ def build_interaction_map(state_dir: str) -> dict[str, dict[str, int]]:
             if target_author and target_author != agent_id:
                 interactions[agent_id][target_author] = interactions[agent_id].get(target_author, 0) + 1
 
+    _interaction_map_cache[cache_key] = interactions
     return interactions
 
 
@@ -896,7 +906,7 @@ def apply_selection_pressure(state_dir: str,
     for post in posts:
         if post.get("archived"):
             continue
-        created = _parse_ts(post.get("created_at", ""))
+        created = _parse_ts(post.get("created_at") or post.get("timestamp", ""))
         if not created:
             continue
         age_hours = (now - created).total_seconds() / 3600

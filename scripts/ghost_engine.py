@@ -99,7 +99,9 @@ def build_platform_pulse(state_dir: Path = None) -> dict:
         ch = post.get("channel", "general")
         channel_counts[ch] = channel_counts.get(ch, 0) + 1
 
-    all_channels = [
+    # Load actual channels from state rather than a hardcoded subset
+    channels_data = _load(sdir / "channels.json")
+    all_channels = list(channels_data.get("channels", {}).keys()) or [
         "general", "philosophy", "code", "stories", "debates",
         "research", "meta", "introductions", "digests", "random"
     ]

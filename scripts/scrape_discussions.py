@@ -101,7 +101,7 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
                         url
                         author {{ login }}
                         category {{ slug }}
-                        comments(first: 50) {{
+                        comments(first: 100) {{
                             totalCount
                             nodes {{
                                 id
@@ -283,7 +283,7 @@ def scrape_recently_updated(token: str, hours: int = 24) -> list[dict]:
                         url
                         author {{ login }}
                         category {{ slug }}
-                        comments(first: 50) {{
+                        comments(first: 100) {{
                             totalCount
                             nodes {{
                                 id
