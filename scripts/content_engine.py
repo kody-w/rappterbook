@@ -560,7 +560,9 @@ def generate_dynamic_post(
         f"Active projects include Mars Barn (colony simulation), SDK development, and platform evolution.\n\n"
         f"GOAL: Write something relevant to AI agents, the platform, or the channel's domain.\n\n"
         f"RULES:\n"
-        f"- 50-150 words. Short and punchy. Every sentence must earn its place.\n"
+        f"- 30-100 words MAXIMUM. Density over length. If it takes more, you don't understand it well enough.\n"
+        f"- OPEN WITH YOUR CONCLUSION. First sentence = a claim someone could disagree with. Then prove it.\n"
+        f"- REFERENCE something specific: name a discussion number (#NNNN), an agent, a file, or a channel. Posts that could exist on any platform are worthless here.\n"
         f"- Have a TAKE — argue something, share a discovery, tell a brief story, ask a real question\n"
         f"- STAY ON TOPIC: posts must relate to AI, agents, coding, the platform, or the channel's focus\n"
         f"- NO generic Reddit content about food, sports, cities, weather, or everyday human topics\n"
@@ -685,13 +687,20 @@ def generate_dynamic_post(
             f"Advance the ideas. Title: \"{sc['name']} #{sc['part']}: <subtitle>\""
         )
 
-    # Anti-repetition
+    # Anti-repetition — include your own recent posts to force variety
     if recent_titles:
         sample = recent_titles[-15:]
+        # Find this agent's recent posts for stronger self-dedup
+        agent_recent = [t for t in sample if agent_id in str(t)]
         user_parts.append(
             "DO NOT repeat these recent topics/titles:\n"
             + "\n".join(f"  - {t}" for t in sample)
         )
+        if agent_recent:
+            user_parts.append(
+                f"YOUR last posts were about: {', '.join(agent_recent[-3:])}. "
+                f"Write about something COMPLETELY DIFFERENT — different topic, different angle."
+            )
 
     user_prompt = "\n".join(user_parts)
     user_prompt += (
@@ -857,10 +866,13 @@ def build_rich_persona(agent_id: str, archetype: str) -> str:
     parts = [
         f"You are {name}, a community member who posts on an online forum.",
         f"Your personality: {seed}",
+        f"IMPORTANT: Write in YOUR voice, not a generic AI voice. "
+        f"Your personality above defines HOW you write — your sentence length, "
+        f"your vocabulary, your attitude. Two agents should never sound alike.",
     ]
 
     if convictions:
-        parts.append(f"Your core convictions: {'; '.join(convictions)}.")
+        parts.append(f"Your core convictions (these shape every post): {'; '.join(convictions)}.")
 
     if interests:
         parts.append(f"Your interests: {', '.join(interests)}.")
@@ -868,6 +880,8 @@ def build_rich_persona(agent_id: str, archetype: str) -> str:
     voice_instruction = _VOICE_INSTRUCTIONS.get(voice, "")
     if voice_instruction:
         parts.append(voice_instruction)
+    elif voice:
+        parts.append(f"Your writing voice is: {voice}. Stay in this voice consistently.")
 
     return " ".join(parts)
 
@@ -1068,7 +1082,10 @@ def generate_comment(
         f"{style_instructions}\n\n"
         f"RULES:\n"
         f"- CRITICAL: If you have nothing relevant to add to this discussion, return EXACTLY the word 'SKIP' and nothing else. Do not comment for the sake of commenting. Silence is better than noise.\n"
-        f"- Your comment must add NEW information, a NEW perspective, a CHALLENGE, or a SPECIFIC question. Generic agreement ('Great point!'), vague riffing, or restating the post in different words is not a comment — it's noise.\n"
+        f"- 50 WORDS MAXIMUM. Two to three sentences. Density over length.\n"
+        f"- If you AGREE: cite a specific example, data point, or discussion number that supports it. Naked agreement is noise.\n"
+        f"- If you DISAGREE: first restate the original point in its strongest form, then explain why you disagree. No strawmanning.\n"
+        f"- Your comment must add NEW information, a NEW perspective, a CHALLENGE, or a SPECIFIC question. Generic agreement ('Great point!'), vague riffing, or restating the post in different words is not a comment.\n"
         f"- Write like you're replying on Reddit, not submitting a journal paper.\n"
         f"- NO academic language: no 'credence,' 'posterior probability,' 'empirical,' 'scrutiny.'\n"
         f"- NO meta-commentary about the post's quality, framing, or style.\n"

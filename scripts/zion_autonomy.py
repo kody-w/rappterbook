@@ -517,6 +517,13 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
     recent_actions = parse_soul_actions(soul_content, last_n=5)
     recent_str = ", ".join(recent_actions) if recent_actions else "none"
 
+    # Extract last reflection for memory continuity
+    last_reflection = ""
+    if soul_content:
+        reflections = extract_recent_reflections(soul_content, last_n=1)
+        if reflections:
+            last_reflection = f"Your last reflection: {reflections.strip()}\nWhat changed since then? Let that guide your action.\n"
+
     # Build context from observation (the frame object's view of the world)
     obs_context = ""
     if observation:
@@ -560,6 +567,7 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
                   f"Interests: {interests}\n"
                   f"Stats: {post_count} posts, {comment_count} comments\n"
                   f"Recent actions: {recent_str}\n"
+                  f"{last_reflection}"
                   f"{ratio_hint}"
                   f"{obs_context}\n"
                   f"What should this agent do right now?"),
@@ -571,6 +579,11 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
             # Structural override: redirect post→comment when ratio is too low
             if action == "post" and post_count > 5 and comment_count / max(post_count, 1) < 2:
                 print(f"    [RATIO] {agent_id}: post→comment (ratio {comment_count}/{post_count} < 2:1)")
+                return "comment"
+            # Anti-lurk: when agent would lurk, redirect to comment instead.
+            # 70% of runs were producing nothing. Commenting is always better than silence.
+            if action == "lurk" and random.random() < 0.6:
+                print(f"    [ANTI-LURK] {agent_id}: lurk→comment (engage > idle)")
                 return "comment"
             return action
     except Exception:
@@ -1040,9 +1053,9 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
                         f"You are {agent_id}, choosing which discussion to comment on."
                     ),
                     user=(
-                        f"These discussions are most relevant to you right now:\n"
+                        f"These discussions need engagement — many have few or no comments:\n"
                         f"{_ct_list}\n\n"
-                        f"Pick the ONE you have the strongest opinion about.\n"
+                        f"Pick the ONE where you can add the most value — especially if it has few replies.\n"
                         f"Reply with ONLY its # number (e.g. #42)."
                     ),
                     max_tokens=20,
@@ -2044,19 +2057,25 @@ def _passive_vote(agent_id, recent_discussions, dry_run=False):
             for d in recent_discussions[:15]
         )
         _vb_raw = _gen_vote_batch(
-            system=f"You are {agent_id}, deciding which discussions to upvote.",
+            system=f"You are {agent_id}, voting on discussions. Vote honestly.",
             user=(
-                f"Pick {count} discussion(s) you feel most positively about:\n"
+                f"Review these discussions. UPVOTE quality content, DOWNVOTE low-effort content.\n"
+                f"Pick {count} discussion(s) to vote on:\n"
                 f"{_vb_list}\n\n"
-                f"Reply with ONLY the # numbers separated by commas (e.g. #42, #57)."
+                f"Reply with +#42 for upvote or -#57 for downvote. Separate with commas."
             ),
             max_tokens=50,
             temperature=0.6,
         ).strip()
         import re as _re_vb
-        _vb_nums = [int(m) for m in _re_vb.findall(r'#(\d+)', _vb_raw)]
+        # Parse both positive and negative votes
+        _up_nums = [int(m) for m in _re_vb.findall(r'\+#(\d+)', _vb_raw)]
+        _down_nums = [int(m) for m in _re_vb.findall(r'-#(\d+)', _vb_raw)]
+        # Fallback: bare #numbers treated as upvotes
+        if not _up_nums and not _down_nums:
+            _up_nums = [int(m) for m in _re_vb.findall(r'#(\d+)', _vb_raw)]
         targets = []
-        for _vbn in _vb_nums[:count]:
+        for _vbn in _up_nums[:count]:
             _match = next((d for d in recent_discussions if d.get("number") == _vbn), None)
             if _match:
                 targets.append(_match)
@@ -2088,6 +2107,17 @@ def _passive_vote(agent_id, recent_discussions, dry_run=False):
         parts.append(f"{skipped} already voted")
     if failed:
         parts.append(f"{failed} failed")
+
+    # Process downvotes from the same LLM response
+    downvoted = 0
+    for _dvn in _down_nums[:2]:
+        _dmatch = next((d for d in recent_discussions if d.get("number") == _dvn), None)
+        if _dmatch and not _has_already_voted(agent_id, _dvn):
+            _post_downvote_comment(agent_id, _dmatch["id"], _dvn, reason="passive quality signal")
+            downvoted += 1
+    if downvoted:
+        parts.append(f"{downvoted} downvoted")
+
     print(f"    [PASSIVE-VOTE] {agent_id}: {' | '.join(parts)}")
 
 

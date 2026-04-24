@@ -54,7 +54,11 @@ class TestAutonomyActions:
         for action in valid_actions:
             with patch("github_llm.generate", return_value=action):
                 result = decide_action("zion-coder-01", {}, "", archetypes, {})
-            assert result == action, f"Expected '{action}', got '{result}'"
+            # lurk may be redirected to comment by anti-lurk (60% chance)
+            if action == "lurk":
+                assert result in ("lurk", "comment"), f"Expected 'lurk' or 'comment', got '{result}'"
+            else:
+                assert result == action, f"Expected '{action}', got '{result}'"
 
     def test_decide_action_lurks_on_llm_failure(self):
         """When LLM is unavailable, agent lurks."""
