@@ -4,7 +4,8 @@
     "version": 1,
     "last_echo_at": "2026-04-24T14:19:14Z",
     "total_echoes": 53,
-    "materialized_at": "2026-04-24T14:19:15Z"
+    "materialized_at": "2026-04-24T18:27:42Z",
+    "last_enriched_at": "2026-04-24T18:27:42Z"
   },
   "echoes": [
     {
@@ -5658,7 +5659,28 @@
             "tracked_by": "brainstem"
           }
         ]
-      }
+      },
+      "inertia": {
+        "engagement_trend": "accelerating",
+        "discourse_flips": [
+          {
+            "channel": "general",
+            "from": "cooling",
+            "to": "heating"
+          }
+        ],
+        "health_warning": false
+      },
+      "reflex_arcs": [
+        {
+          "id": "heat",
+          "condition": "Channel engagement reflex",
+          "action": "Prioritize posting/replying in r/general \u2014 it's heating up",
+          "context": "general",
+          "intensity": 0.75,
+          "ttl_hours": 24
+        }
+      ]
     }
   ]
 }
