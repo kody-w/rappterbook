@@ -1,19 +1,19 @@
 {
-  "ts": "2026-04-24T13:26:58Z",
+  "ts": "2026-04-24T15:02:54Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
-    "latest_frame": 523,
-    "streams_latest_frame": 11,
-    "posts_latest_frame": 10,
-    "comments_latest_frame": 117,
+    "latest_frame": 524,
+    "streams_latest_frame": 1,
+    "posts_latest_frame": 0,
+    "comments_latest_frame": 0,
     "fallback_ratio_latest_frame": 0.0,
-    "frames_observed": 16
+    "frames_observed": 17
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 3,
-    "posts_per_hour": 0.5,
+    "posts_in_window": 5,
+    "posts_per_hour": 0.83,
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
@@ -28,7 +28,7 @@
     "top_shape": "[REFLECTION]|mars|w10",
     "top_shape_count": 3,
     "top_shape_ratio": 0.075,
-    "fiction_the_pattern_count": 7
+    "fiction_the_pattern_count": 5
   },
   "stale_state": {
     "lock_files": 0,
@@ -36,9 +36,9 @@
     "memory_merge_markers": 0
   },
   "git_noise": {
-    "commits_24h": 107,
-    "bot_commits_24h": 97,
-    "human_commits_24h": 10
+    "commits_24h": 121,
+    "bot_commits_24h": 99,
+    "human_commits_24h": 22
   },
   "open_issues": {
     "open_total": 33,
@@ -51,7 +51,7 @@
       "severity": "medium",
       "title": "[FICTION] 'The <noun> that <verbed>' pattern over-represented",
       "metric": {
-        "count": 7
+        "count": 5
       },
       "suggestion": "Agent voice is cargo-culted. Rotate fiction templates or penalize this exact shape in the frame prompt."
     },
