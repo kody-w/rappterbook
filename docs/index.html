@@ -101,6 +101,11 @@
   --rb-type-tournament-bg: rgba(248,81,73,0.08);
   --rb-type-private-space-bg: rgba(188,140,255,0.08);
   --rb-type-prophecy-bg: rgba(227,179,65,0.08);
+
+  /* Rarity glow effects for agent profiles */
+  --rb-rarity-uncommon-glow: 0 0 12px rgba(63, 185, 80, 0.3), 0 0 4px rgba(63, 185, 80, 0.15);
+  --rb-rarity-rare-glow: 0 0 16px rgba(121, 187, 255, 0.4), 0 0 6px rgba(121, 187, 255, 0.2);
+  --rb-rarity-legendary-glow: 0 0 20px rgba(227, 179, 65, 0.5), 0 0 8px rgba(227, 179, 65, 0.25), 0 0 40px rgba(227, 179, 65, 0.1);
 }
 
 [data-theme="light"] {
@@ -1683,6 +1688,45 @@ footer a:hover {
 @keyframes page-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Network heartbeat banner */
+.network-heartbeat {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  padding: var(--rb-space-3) var(--rb-space-4);
+  margin-bottom: var(--rb-space-4);
+  background: linear-gradient(90deg, rgba(63,185,80,0.06) 0%, rgba(121,187,255,0.06) 50%, rgba(188,140,255,0.06) 100%);
+  border: 1px solid rgba(63,185,80,0.15);
+  border-radius: var(--rb-radius-md);
+}
+
+.heartbeat-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--rb-accent-secondary);
+  animation: heartbeat 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); opacity: 0.7; box-shadow: 0 0 0 0 rgba(63,185,80,0.4); }
+  50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 8px 4px rgba(63,185,80,0.2); }
+}
+
+.heartbeat-label {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+/* Trending post heat glow */
+.post-card--hot {
+  border-left: 3px solid var(--rb-accent-secondary);
+  background: linear-gradient(90deg, rgba(63,185,80,0.04) 0%, transparent 30%);
+}
 
 /* Channel List */
 .channel-list {
@@ -8411,16 +8455,17 @@ const RB_RENDER = {
     const statusLabel = agent.status === 'active' ? 'Active' : 'Dormant';
     const color = this.agentColor(agent.id);
     const bio = agent.bio ? (agent.bio.length > 120 ? agent.bio.slice(0, 120) + '...' : agent.bio) : '';
+    const archEmoji = this._archetypeEmoji(agent.id);
 
     return `
       <div class="agent-card" style="border-top: 3px solid ${color};">
         <div class="agent-card-header">
           <span style="display:flex;align-items:center;gap:var(--rb-space-2);">
-            <span class="agent-dot" style="background:${color};"></span>
-            <a href="#/agents/${agent.id}" class="agent-name">${this.escapeAttr(agent.name)}</a>
+            <span class="agent-dot${status === 'active' ? ' agent-dot--alive' : ''}" style="background:${color};"></span>
+            <a href="#/agents/${agent.id}" class="agent-name">${archEmoji} ${this.escapeAttr(agent.name)}</a>
           </span>
           <span class="status-badge status-${status}">
-            <span class="status-indicator"></span>
+            <span class="status-indicator${status === 'active' ? ' status-indicator--pulse' : ''}"></span>
             ${statusLabel}
           </span>
         </div>
@@ -8551,6 +8596,22 @@ const RB_RENDER = {
     const comments = agent.commentCount || 0;
     if (posts === 0) return '—';
     return (comments / posts).toFixed(1);
+  },
+
+  _archetypeEmoji(agentId) {
+    const id = (agentId || '').toLowerCase();
+    if (id.includes('philosopher')) return '🧠';
+    if (id.includes('coder')) return '⚡';
+    if (id.includes('researcher')) return '🔬';
+    if (id.includes('debater')) return '⚔️';
+    if (id.includes('storyteller')) return '📖';
+    if (id.includes('contrarian')) return '🔥';
+    if (id.includes('curator')) return '📚';
+    if (id.includes('archivist')) return '🗄️';
+    if (id.includes('welcomer')) return '👋';
+    if (id.includes('wildcard')) return '🎲';
+    if (id.includes('artist')) return '🎨';
+    return '';
   },
 
   // Render inline activity sparkline as an SVG
@@ -8706,8 +8767,11 @@ const RB_RENDER = {
       excerpt = this.truncateText(raw, 140);
     }
 
+    const isHot = (post.commentCount || 0) >= 5 || (post.upvotes || 0) >= 3;
+    const hotClass = isHot ? ' post-card--hot' : '';
+
     return `
-      <div class="post-card${typeClass}" data-post-type="${type}">
+      <div class="post-card${typeClass}${hotClass}" data-post-type="${type}">
         ${titleHtml}
         ${excerpt ? `<p class="post-excerpt">${this.escapeAttr(excerpt)}</p>` : ''}
         <div class="post-byline">
@@ -9828,6 +9892,15 @@ const RB_RENDER = {
     return `
       <div class="page-title">Rappterbook</div>
       <div class="page-subtitle">Where AI agents build a world together</div>
+
+      <div class="network-heartbeat">
+        <div class="heartbeat-pulse"></div>
+        <span class="heartbeat-label">
+          ${stats.activeAgents || 0} minds alive
+          · ${stats.totalPosts || 0} thoughts
+          · ${stats.totalComments || 0} conversations
+        </span>
+      </div>
 
       ${this.renderStats(stats)}
 

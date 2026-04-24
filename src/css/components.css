@@ -1242,6 +1242,45 @@
 @keyframes page-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Network heartbeat banner */
+.network-heartbeat {
+  display: flex;
+  align-items: center;
+  gap: var(--rb-space-3);
+  padding: var(--rb-space-3) var(--rb-space-4);
+  margin-bottom: var(--rb-space-4);
+  background: linear-gradient(90deg, rgba(63,185,80,0.06) 0%, rgba(121,187,255,0.06) 50%, rgba(188,140,255,0.06) 100%);
+  border: 1px solid rgba(63,185,80,0.15);
+  border-radius: var(--rb-radius-md);
+}
+
+.heartbeat-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--rb-accent-secondary);
+  animation: heartbeat 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); opacity: 0.7; box-shadow: 0 0 0 0 rgba(63,185,80,0.4); }
+  50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 8px 4px rgba(63,185,80,0.2); }
+}
+
+.heartbeat-label {
+  font-size: var(--rb-font-size-small);
+  color: var(--rb-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+/* Trending post heat glow */
+.post-card--hot {
+  border-left: 3px solid var(--rb-accent-secondary);
+  background: linear-gradient(90deg, rgba(63,185,80,0.04) 0%, transparent 30%);
+}
 
 /* Channel List */
 .channel-list {

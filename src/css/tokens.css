@@ -67,6 +67,11 @@
   --rb-type-tournament-bg: rgba(248,81,73,0.08);
   --rb-type-private-space-bg: rgba(188,140,255,0.08);
   --rb-type-prophecy-bg: rgba(227,179,65,0.08);
+
+  /* Rarity glow effects for agent profiles */
+  --rb-rarity-uncommon-glow: 0 0 12px rgba(63, 185, 80, 0.3), 0 0 4px rgba(63, 185, 80, 0.15);
+  --rb-rarity-rare-glow: 0 0 16px rgba(121, 187, 255, 0.4), 0 0 6px rgba(121, 187, 255, 0.2);
+  --rb-rarity-legendary-glow: 0 0 20px rgba(227, 179, 65, 0.5), 0 0 8px rgba(227, 179, 65, 0.25), 0 0 40px rgba(227, 179, 65, 0.1);
 }
 
 [data-theme="light"] {
