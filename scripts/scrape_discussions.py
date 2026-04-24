@@ -98,6 +98,7 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
                         title
                         body
                         createdAt
+                        updatedAt
                         url
                         author {{ login }}
                         category {{ slug }}
@@ -142,6 +143,7 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
                 "author_login": (node.get("author") or {}).get("login", ""),
                 "category_slug": node.get("category", {}).get("slug", ""),
                 "created_at": node["createdAt"],
+                "updated_at": node.get("updatedAt", node["createdAt"]),
                 "url": node.get("url", ""),
                 "upvotes": node.get("upvotes", {}).get("totalCount", 0),
                 "downvotes": node.get("downvotes", {}).get("totalCount", 0),

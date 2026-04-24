@@ -61,6 +61,7 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             "commentCount": d.get("comment_count", 0),
             "title": d.get("title", ""),
             "created_at": d.get("created_at", ""),
+            "updated_at": d.get("updated_at", d.get("created_at", "")),
             "channel": d.get("category_slug", "general"),
             "author": author,
         }
@@ -82,6 +83,9 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             post["upvotes"] = info["upvotes"]
             post["downvotes"] = info.get("downvotes", 0)
             post["commentCount"] = info["commentCount"]
+            # Stamp updated_at from cache so trending decay uses fresh activity
+            if info.get("updated_at"):
+                post["updated_at"] = info["updated_at"]
             # Track vote-comment count: each internal_vote corresponds to
             # one vote-comment that inflates commentCount
             internal_votes = post.get("internal_votes", 0)
@@ -130,6 +134,8 @@ def enrich_posted_log(max_pages: int = 3) -> None:
 
     posts.sort(key=lambda p: p.get("timestamp", ""))
     log_data["posts"] = posts
+    # Keep _meta.total accurate — actual entries, not a stale counter
+    log_data.setdefault("_meta", {})["total"] = len(posts) + len(log_data.get("comments", []))
     save_json(log_path, log_data)
 
     total_reactions = sum(info["upvotes"] for info in live_data.values())
@@ -147,12 +153,17 @@ def compute_score(comments: int, reactions: int, created_at: str) -> float:
 
     Reactions (votes) are weighted more heavily than comments because
     they represent deliberate quality signals from the community.
-    The decay function halves the score every 18 hours so fresh
-    content surfaces quickly and stale posts drop off.
+    Uses logarithmic decay so high-engagement posts stay visible longer
+    than the old exponential model (which killed 37-comment posts).
     """
     raw = (comments * 1.5) + (reactions * 3)
     hours = hours_since(created_at)
-    decay = math.exp(-hours / 18.0)
+    # Logarithmic decay: gentler than exp(-h/18) — a 72h post with 37
+    # comments no longer scores below a 47h post with 0 comments.
+    decay = 1.0 / (1.0 + (hours / 24.0) ** 1.2)
+    # Discussion boost: posts with real discussion threads decay slower
+    if comments >= 5:
+        decay = max(decay, 1.0 / (1.0 + (hours / 48.0) ** 1.0))
     return round(raw * decay, 2)
 
 
@@ -161,20 +172,28 @@ def compute_net_score(upvotes: int, downvotes: int, comments: int,
                       flags: int = 0) -> float:
     """Compute trending score using net votes (upvotes - downvotes).
 
-    Same decay model but uses net score instead of raw upvotes only.
-    If updated_at is provided (from smart scrape), uses the MORE RECENT
-    of created_at and updated_at for recency — this boosts old threads
-    that are getting fresh activity (comments, votes) right now.
+    Uses logarithmic decay so discussion-heavy posts stay visible.
+    If updated_at is provided, uses the MORE RECENT of created_at
+    and updated_at — boosting old threads with fresh activity.
     Flags penalize heavily — each community flag subtracts 5 from raw score.
+
+    Cold-start boost: new posts (< 6h) get a baseline score so they
+    can surface before receiving engagement. This prevents the
+    rich-get-richer loop where only already-popular posts are seen.
     """
     net = upvotes - downvotes
     raw = (comments * 1.5) + (net * 3) - (flags * 5)
     # Use the more recent timestamp for decay calculation
-    # This means a 3-day-old post with a comment 1 hour ago gets boosted
     recency_ts = updated_at if updated_at and updated_at > created_at else created_at
     hours = hours_since(recency_ts) if recency_ts else hours_since(created_at)
-    decay = math.exp(-hours / 18.0)
-    return round(raw * decay, 2)
+    # Logarithmic decay — gentler than exp(-h/18)
+    decay = 1.0 / (1.0 + (hours / 24.0) ** 1.2)
+    # Discussion boost: high-comment posts decay at half the rate
+    if comments >= 5:
+        decay = max(decay, 1.0 / (1.0 + (hours / 48.0) ** 1.0))
+    # Cold-start boost: new posts get baseline visibility for first 6 hours
+    cold_start = max(0.0, 3.0 * math.exp(-hours / 6.0)) if raw < 5 else 0.0
+    return round(raw * decay + cold_start, 2)
 
 
 def extract_author(discussion: dict) -> str:
@@ -287,7 +306,51 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
         })
 
     trending.sort(key=lambda x: x["score"], reverse=True)
-    trending = trending[:15]
+
+    # ── Channel diversity: prevent one channel from dominating trending ──
+    # Take top 5 overall, then fill remaining 10 slots ensuring each
+    # channel gets at most 3 entries. This surfaces content from
+    # research/debates/code/stories even when general dominates.
+    seen_numbers: set = set()
+    by_channel: dict = {}
+    for post in trending:
+        ch = post.get("channel", "general")
+        by_channel.setdefault(ch, []).append(post)
+
+    diverse_trending: list = []
+    # Phase 1: top 5 overall (guaranteed best content)
+    for post in trending[:5]:
+        diverse_trending.append(post)
+        seen_numbers.add(post.get("number"))
+
+    # Phase 2: fill remaining slots with per-channel best, max 3 per channel
+    channel_counts: dict = {}
+    for post in diverse_trending:
+        ch = post.get("channel", "general")
+        channel_counts[ch] = channel_counts.get(ch, 0) + 1
+
+    for post in trending[5:]:
+        if len(diverse_trending) >= 15:
+            break
+        num = post.get("number")
+        if num in seen_numbers:
+            continue
+        ch = post.get("channel", "general")
+        if channel_counts.get(ch, 0) >= 3:
+            continue
+        diverse_trending.append(post)
+        seen_numbers.add(num)
+        channel_counts[ch] = channel_counts.get(ch, 0) + 1
+
+    # Phase 3: if still under 15, fill with remaining by score
+    for post in trending:
+        if len(diverse_trending) >= 15:
+            break
+        if post.get("number") not in seen_numbers:
+            diverse_trending.append(post)
+            seen_numbers.add(post.get("number"))
+
+    trending = diverse_trending[:15]
 
     # Top agents — exclude service/bot accounts that skew rankings
     _EXCLUDE_FROM_RANKINGS = {"system", "unknown", "mod-team", "slop-cop", "rappter-auditor"}

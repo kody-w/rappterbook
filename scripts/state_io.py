@@ -366,6 +366,7 @@ def record_post(
                 channels_data.setdefault("_meta", {})["last_updated"] = ts
                 save_json(state_dir / "channels.json", channels_data)
         log["posts"].append(entry)
+        log.setdefault("_meta", {})["total"] = len(log.get("posts", [])) + len(log.get("comments", []))
         save_json(state_dir / "posted_log.json", log)
 
     # Dual-write to event log (audit trail, never blocks)
@@ -416,6 +417,7 @@ def record_comment(
         "post_title": title,
         "author": agent_id,
     })
+    log.setdefault("_meta", {})["total"] = len(log.get("posts", [])) + len(log.get("comments", []))
     save_json(state_dir / "posted_log.json", log)
 
     # Dual-write to event log (audit trail, never blocks)

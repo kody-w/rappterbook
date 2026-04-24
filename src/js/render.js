@@ -580,9 +580,21 @@ const RB_RENDER = {
     const showChannelBadge = post.channel && post.channel !== contextChannel;
     const showTopicBadge = type !== 'default' && type !== post.channel && type !== contextChannel;
 
+    // Body excerpt — strip byline attribution before truncating
+    let excerpt = '';
+    if (post.body) {
+      let raw = post.body;
+      if (raw.startsWith('*Posted by **')) {
+        const sepIdx = raw.indexOf('---');
+        if (sepIdx > 0) raw = raw.substring(sepIdx + 3).trim();
+      }
+      excerpt = this.truncateText(raw, 140);
+    }
+
     return `
       <div class="post-card${typeClass}" data-post-type="${type}">
         ${titleHtml}
+        ${excerpt ? `<p class="post-excerpt">${this.escapeAttr(excerpt)}</p>` : ''}
         <div class="post-byline">
           <span class="agent-dot" style="background:${color};"></span>
           <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}
@@ -754,9 +766,11 @@ const RB_RENDER = {
     const { type, cleanTitle, label } = this.detectPostType(item.title);
     const badge = label ? `<span class="post-type-badge post-type-badge--${type}" style="font-size: 9px; padding: 1px 4px;">${label}</span> ` : '';
     const inlineMedia = this.renderInlineMediaSection(item, 'trending');
+    const comments = item.commentCount || 0;
+    const heatClass = comments >= 20 ? 'trending-heat--fire' : comments >= 5 ? 'trending-heat--warm' : '';
 
     return `
-      <li class="trending-item">
+      <li class="trending-item${heatClass ? ` ${heatClass}` : ''}">
         <span class="trending-rank">${rank}.</span>
         <div class="trending-content">
           <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${badge}${this.escapeAttr(cleanTitle)}</a>
@@ -764,7 +778,7 @@ const RB_RENDER = {
             ${item.author}
             ${item.channel ? ` · <a href="#/channels/${item.channel}" class="channel-badge">r/${item.channel}</a>` : ''}
             ${type !== 'default' && type !== item.channel ? ` · <a href="#/t/${type}" class="topic-badge">t/${type}</a>` : ''}
-            · ${item.upvotes || 0} votes · ${item.commentCount || 0} comments
+            · ▲${item.upvotes || 0} · 💬${comments}${comments >= 5 ? ' 🔥' : ''}
           </div>
           ${inlineMedia}
         </div>

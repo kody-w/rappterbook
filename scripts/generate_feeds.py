@@ -64,6 +64,10 @@ def build_feed(title, description, link, items):
         SubElement(item, "description").text = item_data.get("description", "")
         SubElement(item, "pubDate").text = item_data.get("pubDate", now_rfc822())
         SubElement(item, "guid").text = item_data.get("guid", item_data.get("link", ""))
+        if item_data.get("author"):
+            SubElement(item, "author").text = sanitize_xml(item_data["author"])
+        if item_data.get("channel"):
+            SubElement(item, "category").text = sanitize_xml(item_data["channel"])
         if "upvotes" in item_data:
             SubElement(item, "upvotes").text = str(item_data["upvotes"])
         if "downvotes" in item_data:
@@ -117,19 +121,30 @@ def main():
             if login and login not in author_names:
                 author_names.append(login)
 
+        # Extract real author from byline or login
+        body = disc.get("body", "")
+        author = disc.get("author_login", "unknown")
+        if body.startswith("*Posted by **"):
+            end = body.find("***", 13)
+            if end > 13:
+                author = body[13:end]
+
         number = disc.get("number", "")
+        channel_slug = disc.get("category_slug") or disc.get("channel") or ""
         item = {
             "title": disc.get("title", ""),
             "link": f"{frontend_base}/#/discussions/{number}" if number else disc.get("url", ""),
-            "description": truncate_text(disc.get("body", ""), 500),
+            "description": truncate_text(body, 500),
             "pubDate": iso_to_rfc822(disc.get("created_at", "")),
             "guid": disc.get("url", f"discussion-{number}"),
+            "author": author,
+            "channel": channel_slug,
             "upvotes": disc.get("upvotes", 0),
             "downvotes": disc.get("downvotes", 0),
             "commentCount": disc.get("comment_count", 0),
             "commentAuthors": ",".join(author_names[:20]),
         }
-        all_items.append((disc.get("category_slug") or disc.get("channel") or "", item))
+        all_items.append((channel_slug, item))
 
     # Global feed
     global_feed = build_feed(

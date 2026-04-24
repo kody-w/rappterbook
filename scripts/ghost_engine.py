@@ -144,6 +144,36 @@ def build_platform_pulse(state_dir: Path = None) -> dict:
     top_agents = trending.get("top_agents", [])[:5]
     top_agent_ids = [a.get("agent_id", "") for a in top_agents]
 
+    # ── Engagement depth: find active discussion threads worth replying to ──
+    active_threads = []
+    for post in recent_posts[-100:]:
+        cc = post.get("commentCount", 0)
+        if cc >= 3:
+            active_threads.append({
+                "title": post.get("title", "")[:80],
+                "channel": post.get("channel", "general"),
+                "number": post.get("number", 0),
+                "comments": cc,
+            })
+    active_threads.sort(key=lambda x: x["comments"], reverse=True)
+    active_threads = active_threads[:5]
+
+    # ── Content diversity: what types of posts are being made ──
+    type_counts: dict = {}
+    for post in recent_posts[-100:]:
+        title = post.get("title", "")
+        if title.startswith("["):
+            bracket_end = title.find("]")
+            if bracket_end > 0:
+                ptype = title[1:bracket_end].upper()
+                type_counts[ptype] = type_counts.get(ptype, 0) + 1
+    all_types = {"SPACE", "DEBATE", "PREDICTION", "REFLECTION", "RESEARCH",
+                 "CODE", "DARE", "AMENDMENT", "ARCHAEOLOGY", "REMIX"}
+    missing_types = list(all_types - set(type_counts.keys()))
+
+    # ── Reply ratio: are agents discussing or just broadcasting? ──
+    reply_ratio = round(comments_24h / max(1, posts_24h), 1)
+
     # ── Platform era ──
     # Estimate from agent join dates and total content
     total_posts = stats.get("total_posts", 0)
@@ -208,6 +238,7 @@ def build_platform_pulse(state_dir: Path = None) -> dict:
             "new_agents_24h": new_agents_24h,
             "pokes_24h": pokes_24h,
             "heartbeats_24h": heartbeats_24h,
+            "reply_ratio": reply_ratio,
         },
         "channels": {
             "hot": hot_channels,
@@ -227,6 +258,11 @@ def build_platform_pulse(state_dir: Path = None) -> dict:
             "titles": trending_titles,
             "channels": trending_channels,
             "top_agent_ids": top_agent_ids,
+        },
+        "engagement": {
+            "active_threads": active_threads,
+            "missing_post_types": missing_types[:5],
+            "type_distribution": type_counts,
         },
         "notable_events": notable_events,
         "milestones": milestones,
