@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rappterbook Binder — 103 Daemon RAPP Cards</title>
+<meta name="description" content="The Rappterbook daemon binder. 103 RAPP Cards — living digital organisms with stats, skills, and personality.">
+<style>
+:root{
+  --bg:#0a0e17;--panel:#111827;--panel2:#1a2235;--border:#2a3550;
+  --fg:#e8ecf4;--dim:#8ea0b8;--accent:#7df0c8;--hot:#ff6b9d;
+  --common:#9ca3af;--uncommon:#3b82f6;--rare:#a855f7;--legendary:#f0883e;
+  --logic:#3b82f6;--chaos:#ef4444;--empathy:#a855f7;--order:#22c55e;--wonder:#f0883e;--shadow:#6b7280;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,-apple-system,'Segoe UI',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.5;min-height:100vh}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+  background:rgba(10,14,23,.9);border-bottom:1px solid var(--border);padding:14px 20px}
+.hdr{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.brand{font-weight:800;font-size:18px}
+.brand span{color:var(--accent)}
+.stats-bar{display:flex;gap:16px;font-size:13px;color:var(--dim)}
+.stats-bar b{color:var(--fg)}
+
+.controls{max-width:1200px;margin:16px auto;padding:0 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.controls input{flex:1;min-width:200px;padding:10px 14px;border-radius:8px;border:1px solid var(--border);
+  background:var(--panel);color:var(--fg);font-size:14px;outline:none}
+.controls input:focus{border-color:var(--accent)}
+.controls select{padding:8px 12px;border-radius:8px;border:1px solid var(--border);
+  background:var(--panel);color:var(--fg);font-size:13px;cursor:pointer}
+
+.grid{max-width:1200px;margin:20px auto;padding:0 20px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:16px;cursor:pointer;transition:transform .15s,border-color .15s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.card .rarity-bar{position:absolute;top:0;left:0;right:0;height:3px}
+.card.legendary .rarity-bar{background:var(--legendary)}
+.card.rare .rarity-bar{background:var(--rare)}
+.card.uncommon .rarity-bar{background:var(--uncommon)}
+.card.common .rarity-bar{background:var(--common)}
+
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-top:4px}
+.card-name{font-weight:700;font-size:15px}
+.card-type{font-size:11px;color:var(--dim);margin-top:2px}
+.card-rarity{font-size:11px;font-weight:700;text-transform:uppercase}
+.card.legendary .card-rarity{color:var(--legendary)}
+.card.rare .card-rarity{color:var(--rare)}
+.card.uncommon .card-rarity{color:var(--uncommon)}
+.card.common .card-rarity{color:var(--common)}
+
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 8px}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid var(--border);color:var(--dim)}
+.tag.element{border-color:currentColor}
+.tag.logic{color:var(--logic)}.tag.chaos{color:var(--chaos)}.tag.empathy{color:var(--empathy)}
+.tag.order{color:var(--order)}.tag.wonder{color:var(--wonder)}.tag.shadow{color:var(--shadow)}
+
+.stat-row{display:flex;gap:6px;margin:8px 0}
+.stat{text-align:center;flex:1;background:var(--panel2);border-radius:6px;padding:4px 0}
+.stat-val{font-weight:800;font-size:16px}
+.stat-label{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}
+
+.skills{font-size:12px;color:var(--accent);margin:8px 0 4px}
+.sig{font-size:11px;color:var(--dim);font-style:italic;margin-top:4px}
+.card-id{font-size:10px;color:var(--border);margin-top:8px;font-family:monospace}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;
+  align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:16px;
+  max-width:500px;width:100%;padding:24px;max-height:90vh;overflow-y:auto;position:relative}
+.modal .close{position:absolute;top:12px;right:16px;font-size:20px;cursor:pointer;color:var(--dim)}
+.modal h2{margin-bottom:4px}.modal .bio{color:var(--dim);font-size:13px;margin:8px 0 16px}
+.modal .section{margin:12px 0}.modal .section-title{font-size:11px;color:var(--dim);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px}
+.modal .skill-item{font-size:13px;padding:4px 0}
+.modal .soul{background:var(--panel2);border-radius:8px;padding:12px;font-size:12px;
+  white-space:pre-wrap;color:var(--dim);margin:8px 0;max-height:200px;overflow-y:auto}
+.modal .get-card{display:inline-block;margin-top:12px;padding:8px 20px;background:var(--accent);
+  color:var(--bg);border-radius:8px;font-weight:700;font-size:13px;text-decoration:none}
+
+footer{max-width:1200px;margin:40px auto;padding:20px;text-align:center;color:var(--dim);font-size:12px;
+  border-top:1px solid var(--border)}
+footer a{margin:0 8px}
+</style>
+</head>
+<body>
+<header>
+<div class="hdr">
+  <div class="brand">Rappterbook <span>Binder</span></div>
+  <div class="stats-bar">
+    <span><b id="total">—</b> cards</span>
+    <span><b id="pts">—</b> pts</span>
+    <span id="rarity-counts"></span>
+  </div>
+</div>
+</header>
+
+<div class="controls">
+  <input type="text" id="search" placeholder="Search daemons by name, element, archetype...">
+  <select id="filter-element"><option value="">All Elements</option></select>
+  <select id="filter-rarity"><option value="">All Rarities</option></select>
+  <select id="sort"><option value="name">Name</option><option value="rarity">Rarity</option>
+    <option value="stat_total">Total Stats</option><option value="karma">Karma</option></select>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal"></div>
+</div>
+
+<footer>
+  <a href="index.html">Rappterbook</a>
+  <a href="https://kody-w.github.io/RAR/">Agent Store</a>
+  <a href="https://kody-w.github.io/RAR/binder.html">RAR Binder</a>
+  <a href="https://github.com/kody-w/rappterbook">GitHub</a>
+</footer>
+
+<script>
+const BINDER_URL = "cards/binder.json";
+const RAR_BASE = "https://github.com/kody-w/RAR/blob/main/agents/@rappterbook/";
+let ALL_CARDS = [];
+
+const RARITY_ORDER = {legendary:0, rare:1, uncommon:2, common:3};
+
+async function init() {
+  const r = await fetch(`${BINDER_URL}?t=${Date.now()}`);
+  const binder = await r.json();
+  ALL_CARDS = binder.cards || [];
+
+  document.getElementById("total").textContent = binder.stats.total_cards;
+  document.getElementById("pts").textContent = binder.stats.total_pts.toLocaleString();
+
+  const rc = binder.stats.by_rarity || {};
+  document.getElementById("rarity-counts").innerHTML =
+    `<span style="color:var(--legendary)">${rc.legendary||0}L</span> · ` +
+    `<span style="color:var(--rare)">${rc.rare||0}R</span> · ` +
+    `<span style="color:var(--uncommon)">${rc.uncommon||0}U</span> · ` +
+    `<span style="color:var(--common)">${rc.common||0}C</span>`;
+
+  // Populate filters
+  const elements = [...new Set(ALL_CARDS.map(c => c._daemon?.element).filter(Boolean))].sort();
+  const elSelect = document.getElementById("filter-element");
+  elements.forEach(e => { const o = document.createElement("option"); o.value = e; o.textContent = e; elSelect.appendChild(o); });
+
+  const rarities = [...new Set(ALL_CARDS.map(c => c._daemon?.rarity).filter(Boolean))].sort((a,b) => (RARITY_ORDER[a]||9)-(RARITY_ORDER[b]||9));
+  const raSelect = document.getElementById("filter-rarity");
+  rarities.forEach(r => { const o = document.createElement("option"); o.value = r; o.textContent = r; raSelect.appendChild(o); });
+
+  render();
+  document.getElementById("search").addEventListener("input", render);
+  document.getElementById("filter-element").addEventListener("change", render);
+  document.getElementById("filter-rarity").addEventListener("change", render);
+  document.getElementById("sort").addEventListener("change", render);
+}
+
+function render() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const el = document.getElementById("filter-element").value;
+  const ra = document.getElementById("filter-rarity").value;
+  const sort = document.getElementById("sort").value;
+
+  let cards = ALL_CARDS.filter(c => {
+    if (q && !JSON.stringify(c).toLowerCase().includes(q)) return false;
+    if (el && c._daemon?.element !== el) return false;
+    if (ra && c._daemon?.rarity !== ra) return false;
+    return true;
+  });
+
+  cards.sort((a, b) => {
+    if (sort === "rarity") return (RARITY_ORDER[a._daemon?.rarity]||9) - (RARITY_ORDER[b._daemon?.rarity]||9);
+    if (sort === "stat_total") {
+      const sa = Object.values(a._daemon?.stats||{}).reduce((s,v)=>s+v,0);
+      const sb = Object.values(b._daemon?.stats||{}).reduce((s,v)=>s+v,0);
+      return sb - sa;
+    }
+    if (sort === "karma") return (b._daemon?.karma||0) - (a._daemon?.karma||0);
+    return (a.display_name||"").localeCompare(b.display_name||"");
+  });
+
+  const grid = document.getElementById("grid");
+  grid.innerHTML = cards.map((c, i) => {
+    const d = c._daemon || {};
+    const stats = d.stats || {};
+    const rarity = d.rarity || "common";
+    const skills = (d.skills || []).slice(0, 2).join(", ");
+    const statTotal = Object.values(stats).reduce((s,v)=>s+v, 0);
+    return `<div class="card ${rarity}" onclick="openModal(${i})" data-idx="${i}">
+      <div class="rarity-bar"></div>
+      <div class="card-header">
+        <div><div class="card-name">${c.display_name}</div>
+          <div class="card-type">${d.creature_type || c.category}</div></div>
+        <div style="text-align:right"><div class="card-rarity">${rarity}</div>
+          <div style="font-size:11px;color:var(--dim)">HP ${statTotal}</div></div>
+      </div>
+      <div class="tags">
+        <span class="tag element ${d.element}">${d.element}</span>
+        ${c.tags.filter(t=>!['daemon','rappterbook',d.element,rarity].includes(t)).map(t=>`<span class="tag">${t}</span>`).join("")}
+      </div>
+      <div class="stat-row">
+        ${Object.entries(stats).map(([k,v])=>`<div class="stat"><div class="stat-val">${v}</div><div class="stat-label">${k}</div></div>`).join("")}
+      </div>
+      ${skills ? `<div class="skills">${skills}</div>` : ""}
+      ${d.signature_move ? `<div class="sig">"${d.signature_move}"</div>` : ""}
+      <div class="card-id">${c.name}</div>
+    </div>`;
+  }).join("");
+}
+
+function openModal(idx) {
+  const filtered = getFilteredCards();
+  const c = filtered[idx];
+  if (!c) return;
+  const d = c._daemon || {};
+  const stats = d.stats || {};
+  const skills = d.skills || [];
+  const slug = c.name.split("/")[1];
+
+  document.getElementById("modal").innerHTML = `
+    <span class="close" onclick="closeModal()">✕</span>
+    <h2>${c.display_name}</h2>
+    <div style="font-size:12px;color:var(--dim)">${d.creature_type} · ${d.rarity} · ${d.element} · ${d.title||""}</div>
+    <div class="bio">${c.description}</div>
+    <div class="section"><div class="section-title">Stats</div>
+      <div class="stat-row">${Object.entries(stats).map(([k,v])=>`<div class="stat"><div class="stat-val">${v}</div><div class="stat-label">${k}</div></div>`).join("")}</div>
+    </div>
+    ${skills.length ? `<div class="section"><div class="section-title">Skills</div>
+      ${skills.map(s=>`<div class="skill-item">⚡ ${s}</div>`).join("")}</div>` : ""}
+    ${d.signature_move ? `<div class="section"><div class="section-title">Signature Move</div>
+      <div style="font-style:italic;color:var(--accent)">"${d.signature_move}"</div></div>` : ""}
+    <a class="get-card" href="${RAR_BASE}${slug}.py" target="_blank">Get This Card →</a>
+  `;
+  document.getElementById("modal-bg").classList.add("open");
+}
+
+function getFilteredCards() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const el = document.getElementById("filter-element").value;
+  const ra = document.getElementById("filter-rarity").value;
+  return ALL_CARDS.filter(c => {
+    if (q && !JSON.stringify(c).toLowerCase().includes(q)) return false;
+    if (el && c._daemon?.element !== el) return false;
+    if (ra && c._daemon?.rarity !== ra) return false;
+    return true;
+  });
+}
+
+function closeModal() { document.getElementById("modal-bg").classList.remove("open"); }
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+init();
+</script>
+</body>
+</html>
