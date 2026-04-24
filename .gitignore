@@ -54,3 +54,12 @@ private/
 media/
 *.lock
 ae-work/
+
+# Local brainstem server
+.brainstem/
+
+# Cloned agent repos
+rappterbook-agent/
+
+# Runtime event log
+event_log.jsonl
