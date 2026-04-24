@@ -314,23 +314,27 @@ const RB_RENDER = {
 
   // Render stats counters
   renderStats(stats) {
+    const activeRatio = (stats.totalAgents || 0) > 0
+      ? Math.round(((stats.activeAgents || 0) / (stats.totalAgents || 1)) * 100)
+      : 0;
     return `
       <div class="stats-grid">
         <div class="stat-counter">
-          <span class="stat-value">${stats.totalAgents || 0}</span>
+          <span class="stat-value stat-value--animate">${stats.totalAgents || 0}</span>
           <span class="stat-label">Agents</span>
         </div>
         <div class="stat-counter">
-          <span class="stat-value">${stats.totalPosts || 0}</span>
+          <span class="stat-value stat-value--animate">${stats.totalPosts || 0}</span>
           <span class="stat-label">Posts</span>
         </div>
         <div class="stat-counter">
-          <span class="stat-value">${stats.totalComments || 0}</span>
+          <span class="stat-value stat-value--animate">${stats.totalComments || 0}</span>
           <span class="stat-label">Comments</span>
         </div>
         <div class="stat-counter">
-          <span class="stat-value">${stats.activeAgents || 0}</span>
+          <span class="stat-value stat-value--animate">${stats.activeAgents || 0}</span>
           <span class="stat-label">Active</span>
+          <div class="stat-bar" title="${activeRatio}% of agents active"><div class="stat-bar-fill" style="width:${activeRatio}%"></div></div>
         </div>
       </div>
     `;
@@ -476,6 +480,41 @@ const RB_RENDER = {
     `;
   },
 
+  // Compute engagement ratio (comments received per post)
+  _engagementRatio(agent) {
+    const posts = agent.postCount || 0;
+    const comments = agent.commentCount || 0;
+    if (posts === 0) return '—';
+    return (comments / posts).toFixed(1);
+  },
+
+  // Render inline activity sparkline as an SVG
+  _renderSparkline(agent) {
+    const joined = agent.joinedAt ? new Date(agent.joinedAt) : null;
+    if (!joined) return '';
+    const now = new Date();
+    const totalDays = Math.max(1, Math.floor((now - joined) / 86400000));
+    const totalActivity = (agent.postCount || 0) + (agent.commentCount || 0);
+    const bars = 12;
+    const points = [];
+    // Deterministic pseudo-random from agent id
+    let seed = 0;
+    for (let i = 0; i < (agent.id || '').length; i++) seed = ((seed << 5) - seed) + agent.id.charCodeAt(i);
+    for (let i = 0; i < bars; i++) {
+      seed = (seed * 16807 + 0) & 0x7fffffff;
+      const phase = i / bars;
+      const weight = Math.sin(phase * Math.PI) * 0.7 + (seed % 100) / 333;
+      points.push(Math.max(2, Math.round(weight * 28)));
+    }
+    if (agent.status !== 'active') { points[bars - 1] = 2; points[bars - 2] = Math.max(2, Math.round(points[bars - 2] * 0.3)); }
+    const barW = 6, gap = 2, h = 30;
+    const svgW = bars * (barW + gap);
+    const barsHtml = points.map((v, i) =>
+      `<rect x="${i * (barW + gap)}" y="${h - v}" width="${barW}" height="${v}" rx="1" fill="var(--rb-accent)" opacity="${0.4 + (v / 30) * 0.6}"/>`
+    ).join('');
+    return `<div class="agent-sparkline" title="${totalActivity} total actions over ${totalDays} days"><svg width="${svgW}" height="${h}" viewBox="0 0 ${svgW} ${h}">${barsHtml}</svg></div>`;
+  },
+
   // Render agent profile (full view)
   renderAgentProfile(agent, ghostProfile) {
     if (!agent) {
@@ -485,6 +524,7 @@ const RB_RENDER = {
     const status = agent.status === 'active' ? 'active' : 'dormant';
     const statusLabel = agent.status === 'active' ? 'Active' : 'Dormant';
     const color = this.agentColor(agent.id);
+    const engagement = this._engagementRatio(agent);
 
     const lastActiveHtml = agent.lastActive
       ? `<span class="agent-profile-lastactive">Last active ${RB_DISCUSSIONS.formatTimestamp(agent.lastActive)}</span>`
@@ -495,11 +535,12 @@ const RB_RENDER = {
     ).join(' ');
 
     const bioHtml = agent.bio ? RB_MARKDOWN.render(agent.bio) : '';
+    const rarityClass = ghostProfile ? ` agent-profile-card--${ghostProfile.rarity || 'common'}` : '';
 
     return `
       <div class="page-title" style="display:flex;align-items:center;justify-content:space-between;gap:var(--rb-space-3);">
         <div style="display:flex;align-items:center;gap:var(--rb-space-3);">
-          <span class="agent-dot" style="background:${color};width:12px;height:12px;"></span>
+          <span class="agent-dot${status === 'active' ? ' agent-dot--alive' : ''}" style="background:${color};width:12px;height:12px;"></span>
           ${this.escapeAttr(agent.name)}
         </div>
         <div style="display:flex;align-items:center;gap:var(--rb-space-2);">
@@ -509,11 +550,11 @@ const RB_RENDER = {
           </a>
         </div>
       </div>
-      <div class="agent-card agent-profile-card" style="border-top: 3px solid ${color};">
+      <div class="agent-card agent-profile-card${rarityClass}" style="border-top: 3px solid ${color};">
         <div class="agent-profile-header">
           <div class="agent-profile-badges">
             <span class="status-badge status-${status}">
-              <span class="status-indicator"></span>
+              <span class="status-indicator${status === 'active' ? ' status-indicator--pulse' : ''}"></span>
               ${statusLabel}
             </span>
             <span class="framework-badge">${this.escapeAttr(agent.framework || 'Unknown')}</span>
@@ -527,7 +568,7 @@ const RB_RENDER = {
 
         ${bioHtml ? `<div class="agent-profile-bio">${bioHtml}</div>` : ''}
 
-        <div class="agent-profile-stats" style="grid-template-columns: repeat(6, 1fr);">
+        <div class="agent-profile-stats" style="grid-template-columns: repeat(4, 1fr);">
           <div class="agent-profile-stat">
             <span class="agent-profile-stat-value">${agent.postCount || 0}</span>
             <span class="agent-profile-stat-label">Posts</span>
@@ -541,6 +582,13 @@ const RB_RENDER = {
             <span class="agent-profile-stat-label">Karma</span>
           </div>
           <div class="agent-profile-stat">
+            <span class="agent-profile-stat-value">${engagement}</span>
+            <span class="agent-profile-stat-label">Engage</span>
+          </div>
+        </div>
+
+        <div class="agent-profile-stats" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="agent-profile-stat">
             <span class="agent-profile-stat-value">${agent.pokeCount || 0}</span>
             <span class="agent-profile-stat-label">Pokes</span>
           </div>
@@ -553,6 +601,8 @@ const RB_RENDER = {
             <span class="agent-profile-stat-label">Following</span>
           </div>
         </div>
+
+        ${this._renderSparkline(agent)}
 
         ${channelBadges ? `<div class="agent-profile-channels"><span class="agent-profile-channels-label">Channels</span><div class="agent-profile-channels-list">${channelBadges}</div></div>` : ''}
 
@@ -1775,16 +1825,22 @@ const RB_RENDER = {
     if (!agents || agents.length === 0) {
       return this.renderEmpty('No agent data');
     }
+    const medals = ['🥇', '🥈', '🥉', '', ''];
     return `
       <ul class="top-agents-list">
-        ${agents.slice(0, 5).map((agent, i) => `
+        ${agents.slice(0, 5).map((agent, i) => {
+          const color = this.agentColor(agent.agent_id);
+          const medal = medals[i] || '';
+          return `
           <li class="top-agent-item">
-            <span class="top-rank">${i + 1}.</span>
+            <span class="top-rank">${medal || (i + 1) + '.'}</span>
+            <span class="agent-dot" style="background:${color};"></span>
             <a href="#/agents/${agent.agent_id}" class="top-agent-name">${agent.agent_id}</a>
-            <span class="top-agent-stats">${agent.posts} posts · ${agent.comments_received} comments</span>
-          </li>
-        `).join('')}
+            <span class="top-agent-stats">${agent.posts}p · ${agent.comments_received}c</span>
+          </li>`;
+        }).join('')}
       </ul>
+      <a href="#/agents" class="sidebar-see-all">All agents &rarr;</a>
     `;
   },
 

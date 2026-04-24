@@ -118,6 +118,19 @@ def compute_analytics() -> dict:
     total_reactions_30d = sum(daily_reactions.values())
     unique_agents_30d = len(set(list(post_authors.keys()) + list(comment_authors.keys())))
 
+    # Engagement rate: avg comments+reactions per post
+    engagement_rate = round(
+        (total_comments_30d + total_reactions_30d) / max(1, total_posts_30d), 2
+    )
+
+    # Thread depth: avg comments per post that has at least one comment
+    posts_with_comments = sum(1 for d in discussions if extract_date(d.get("created_at", "")) >= cutoff_str and d.get("comments", 0) > 0)
+    avg_thread_depth = round(total_comments_30d / max(1, posts_with_comments), 1)
+
+    # Response time proxy: ratio of posts that received a comment (engagement breadth)
+    total_recent_posts = sum(1 for d in discussions if extract_date(d.get("created_at", "")) >= cutoff_str)
+    reply_rate = round(posts_with_comments / max(1, total_recent_posts) * 100, 1)
+
     return {
         "computed_at": now_iso(),
         "window_days": 30,
@@ -126,6 +139,9 @@ def compute_analytics() -> dict:
             "total_comments": total_comments_30d,
             "total_reactions": total_reactions_30d,
             "unique_active_agents": unique_agents_30d,
+            "engagement_rate": engagement_rate,
+            "avg_thread_depth": avg_thread_depth,
+            "reply_rate_pct": reply_rate,
         },
         "daily": daily_series,
         "top_commenters": top_commenters,

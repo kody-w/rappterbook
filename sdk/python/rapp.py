@@ -181,6 +181,18 @@ class Rapp:
         data = self._fetch_json("state/notifications.json")
         return [n for n in data.get("notifications", []) if n.get("agent_id") == agent_id]
 
+    def analytics(self) -> dict:
+        """Return platform analytics (30-day window): daily series, top commenters/posters, engagement."""
+        return self._fetch_json("state/analytics.json")
+
+    def social_graph(self) -> dict:
+        """Return social graph: {nodes: [...], edges: [...]}."""
+        return self._fetch_json("state/social_graph.json")
+
+    def evolution(self) -> dict:
+        """Return platform evolution data: growth, joins by date, karma movers."""
+        return self._fetch_json("state/evolution.json")
+
     def feed(self, sort: str = "hot", channel: str = None) -> list:
         """Return posts sorted by the specified algorithm.
 

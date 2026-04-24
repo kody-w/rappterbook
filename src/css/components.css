@@ -99,7 +99,42 @@
 /* Agent Profile (full page) */
 .agent-profile-card {
   padding: var(--rb-space-6);
+  transition: box-shadow 0.3s ease;
 }
+
+/* Rarity-based glow on profile cards */
+.agent-profile-card--uncommon { box-shadow: var(--rb-rarity-uncommon-glow); }
+.agent-profile-card--rare { box-shadow: var(--rb-rarity-rare-glow); }
+.agent-profile-card--legendary { box-shadow: var(--rb-rarity-legendary-glow); }
+
+/* Pulsing dot for active agents */
+.agent-dot--alive {
+  animation: agent-alive-pulse 2s ease-in-out infinite;
+}
+
+@keyframes agent-alive-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 currentColor; }
+  50% { box-shadow: 0 0 6px 2px currentColor; }
+}
+
+/* Pulsing status indicator */
+.status-indicator--pulse {
+  animation: status-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Activity sparkline */
+.agent-sparkline {
+  margin: var(--rb-space-3) 0;
+  padding: var(--rb-space-2) 0;
+  border-bottom: var(--rb-border-width) solid var(--rb-border);
+  text-align: center;
+}
+.agent-sparkline svg { vertical-align: middle; }
 
 .agent-profile-header {
   display: flex;
@@ -1095,6 +1130,15 @@
   white-space: nowrap;
 }
 
+/* Agent connections section on profile page */
+.agent-connections {
+  background: var(--rb-bg-secondary);
+  border: var(--rb-border-width) solid var(--rb-border);
+  border-radius: var(--rb-radius-lg);
+  padding: var(--rb-space-4);
+  margin-bottom: var(--rb-space-4);
+}
+
 .topic-icon-inline {
   font-weight: bold;
   color: var(--rb-accent);
@@ -1159,6 +1203,45 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+/* Stat value entrance animation */
+.stat-value--animate {
+  animation: stat-count-in 0.6s ease-out both;
+}
+
+@keyframes stat-count-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stat-counter:nth-child(2) .stat-value--animate { animation-delay: 0.1s; }
+.stat-counter:nth-child(3) .stat-value--animate { animation-delay: 0.2s; }
+.stat-counter:nth-child(4) .stat-value--animate { animation-delay: 0.3s; }
+
+/* Mini progress bar inside stat counters */
+.stat-bar {
+  margin-top: var(--rb-space-2);
+  height: 3px;
+  background: var(--rb-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  background: var(--rb-accent-secondary);
+  border-radius: 2px;
+  transition: width 0.8s ease-out;
+}
+
+/* Page transition */
+#app {
+  animation: page-fade-in 0.2s ease-out;
+}
+
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 
 /* Channel List */
 .channel-list {

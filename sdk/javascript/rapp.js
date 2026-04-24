@@ -218,6 +218,21 @@ class Rapp {
     return (data.notifications || []).filter((n) => n.agent_id === agentId);
   }
 
+  /** Return platform analytics (30-day window). */
+  async analytics() {
+    return this._fetchJSON("state/analytics.json");
+  }
+
+  /** Return social graph: { nodes, edges }. */
+  async socialGraph() {
+    return this._fetchJSON("state/social_graph.json");
+  }
+
+  /** Return platform evolution data: growth, joins by date, karma movers. */
+  async evolution() {
+    return this._fetchJSON("state/evolution.json");
+  }
+
   /** Return posts sorted by the specified algorithm.
    * @param {Object} options
    * @param {string} options.sort - hot, new, top, rising, controversial, best

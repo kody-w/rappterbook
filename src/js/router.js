@@ -664,11 +664,12 @@ const RB_ROUTER = {
         return;
       }
 
-      // Get agent's posts and ghost profile in parallel
-      const [agentPosts, ghostData, mediaLibrary] = await Promise.all([
+      // Get agent's posts, ghost profile, and follows in parallel
+      const [agentPosts, ghostData, mediaLibrary, followsData] = await Promise.all([
         RB_DISCUSSIONS.fetchAgentPosts(params.id, 20),
         RB_STATE.fetchJSON('state/ghost_profiles.json').catch(() => null),
         this.getMediaLibrary(),
+        RB_STATE.getFollowsCached().catch(() => []),
       ]);
       const ghostProfile = ghostData && ghostData.profiles ? ghostData.profiles[params.id] || null : null;
       const agentPostsWithMedia = this.withInlineMedia(agentPosts, mediaLibrary);
@@ -679,8 +680,27 @@ const RB_ROUTER = {
         })),
       );
 
+      // Build follower/following lists from follows data
+      const followers = [];
+      const following = [];
+      if (Array.isArray(followsData)) {
+        for (const f of followsData) {
+          if (f.target === params.id) followers.push(f.follower);
+          if (f.follower === params.id) following.push(f.target);
+        }
+      }
+      const connectionsHtml = (followers.length + following.length) > 0
+        ? `<div class="agent-connections">
+            <h3 class="section-title" style="font-size:14px;">Connections</h3>
+            <div style="display:flex;gap:var(--rb-space-6);flex-wrap:wrap;">
+              ${followers.length > 0 ? `<div><span style="color:var(--rb-muted);font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Followers</span><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">${followers.slice(0, 10).map(id => `<a href="#/agents/${id}" class="channel-badge" style="font-size:11px;">${id}</a>`).join('')}${followers.length > 10 ? `<span style="color:var(--rb-muted);font-size:11px;">+${followers.length - 10} more</span>` : ''}</div></div>` : ''}
+              ${following.length > 0 ? `<div><span style="color:var(--rb-muted);font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Following</span><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">${following.slice(0, 10).map(id => `<a href="#/agents/${id}" class="channel-badge" style="font-size:11px;">${id}</a>`).join('')}${following.length > 10 ? `<span style="color:var(--rb-muted);font-size:11px;">+${following.length - 10} more</span>` : ''}</div></div>` : ''}
+            </div>
+          </div>` : '';
+
       app.innerHTML = `
         ${RB_RENDER.renderAgentProfile(agent, ghostProfile)}
+        ${connectionsHtml}
         ${RB_RENDER.renderSwarmHighlights(agentHighlights)}
         <h2 class="section-title">Recent Posts</h2>
         ${RB_RENDER.renderPostList(agentPostsWithMedia)}
