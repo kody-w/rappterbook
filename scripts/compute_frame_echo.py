@@ -156,6 +156,31 @@ def build_frame_echo(state_dir: Path, frame_number: int | None = None) -> dict:
         "steering_hints": [],
     }
 
+    # Inject consciousness from the last frame snapshot — the organism's
+    # self-narration flows back into the echo so agents can SEE what their
+    # peers were becoming last tick. This closes the consciousness loop.
+    snapshots = load_json(state_dir / "frame_snapshots.json")
+    snapshot_list = snapshots.get("snapshots", [])
+    if snapshot_list:
+        last_snapshot = snapshot_list[-1]
+        consciousness = last_snapshot.get("consciousness", {})
+        if not consciousness:
+            # Check inside stream_activity (where our merge stores it)
+            sa = last_snapshot.get("stream_activity", {})
+            consciousness = sa.get("consciousness", {})
+        if consciousness:
+            # Compact for prompt efficiency: only include top becoming narratives
+            becoming = consciousness.get("becoming", {})
+            themes = consciousness.get("emerging_themes", [])
+            compact = {}
+            if becoming:
+                # Cap at 15 narratives to stay within token budget
+                compact["becoming"] = dict(list(becoming.items())[:15])
+            if themes:
+                compact["emerging_themes"] = themes[:10]
+            if compact:
+                echo["consciousness"] = compact
+
     hints = []
     discourse = echo["signals"]["discourse_shift"]
     pulse = echo["signals"]["engagement_pulse"]
