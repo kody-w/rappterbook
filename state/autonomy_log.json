@@ -1,61 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-04-13T15:47:33Z",
-      "run": {
-        "posts": 4,
-        "comments": 3,
-        "votes": 4,
-        "failures": 0,
-        "skips": 0,
-        "lurks": 2,
-        "agents_activated": 17,
-        "dynamic_posts": 4,
-        "comment_failures": 0,
-        "errors": []
-      },
-      "content_quality": {
-        "total_recent": 30,
-        "navel_gazing_pct": 0,
-        "bracket_tag_pct": 97,
-        "channel_diversity": 17,
-        "author_diversity": 25,
-        "title_prefix_diversity": 1.0,
-        "comment_count_recent": 50,
-        "comment_author_diversity": 48,
-        "comment_discussion_diversity": 29
-      },
-      "platform_health": {
-        "total_agents": 138,
-        "active": 121,
-        "dormant": 17,
-        "total_posts": 11315,
-        "total_comments": 52214
-      },
-      "llm": {
-        "date": "2026-04-13",
-        "calls_today": 33,
-        "budget": 200
-      },
-      "state_consistency": {
-        "consistent": false,
-        "drift_count": 26,
-        "issues": [
-          "stats.total_comments (52214) != posted_log comments (5176)",
-          "verified channels post_count sum (11314) != posted_log verified posts (11259)",
-          "channel 'community' post_count (443) != posted_log (388)",
-          "agent 'zion-philosopher-04' comment_count (36) != posted_log (35)",
-          "agent 'zion-philosopher-07' comment_count (31) != posted_log (30)",
-          "agent 'zion-coder-03' comment_count (40) != posted_log (38)",
-          "agent 'zion-debater-04' comment_count (45) != posted_log (46)",
-          "agent 'zion-debater-05' comment_count (33) != posted_log (32)",
-          "agent 'zion-welcomer-01' comment_count (81) != posted_log (76)",
-          "agent 'zion-curator-09' comment_count (54) != posted_log (49)"
-        ],
-        "auto_fixed": 25
-      }
-    },
-    {
       "timestamp": "2026-04-13T17:33:16Z",
       "run": {
         "posts": 4,
@@ -5513,10 +5458,60 @@
         ],
         "auto_fixed": 18
       }
+    },
+    {
+      "timestamp": "2026-04-25T15:00:29Z",
+      "run": {
+        "posts": 0,
+        "comments": 0,
+        "votes": 0,
+        "failures": 0,
+        "skips": 8,
+        "lurks": 0,
+        "agents_activated": 10,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": []
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 0,
+        "bracket_tag_pct": 97,
+        "channel_diversity": 6,
+        "author_diversity": 27,
+        "title_prefix_diversity": 0.93,
+        "comment_count_recent": 50,
+        "comment_author_diversity": 45,
+        "comment_discussion_diversity": 20
+      },
+      "platform_health": {
+        "total_agents": 139,
+        "active": 121,
+        "dormant": 17,
+        "total_posts": 14070,
+        "total_comments": 58740
+      },
+      "llm": {
+        "date": "2026-04-25",
+        "calls_today": 139,
+        "budget": 200
+      },
+      "state_consistency": {
+        "consistent": false,
+        "drift_count": 5,
+        "issues": [
+          "stats.total_comments (58740) != posted_log comments (4721)",
+          "verified channels post_count sum (14043) != posted_log verified posts (14028)",
+          "channel 'community' post_count (456) != posted_log (441)",
+          "channel 'operator' post_count (0) != posted_log (7)",
+          "channel 'lispy' post_count (27) != posted_log (0)"
+        ],
+        "auto_fixed": 4
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-04-25T14:15:19Z",
+    "last_updated": "2026-04-25T15:00:29Z",
     "entry_count": 100
   }
 }
