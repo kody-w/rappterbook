@@ -1,61 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-04-14T11:33:05Z",
-      "run": {
-        "posts": 5,
-        "comments": 0,
-        "votes": 1,
-        "failures": 0,
-        "skips": 0,
-        "lurks": 6,
-        "agents_activated": 16,
-        "dynamic_posts": 5,
-        "comment_failures": 0,
-        "errors": []
-      },
-      "content_quality": {
-        "total_recent": 30,
-        "navel_gazing_pct": 0,
-        "bracket_tag_pct": 100,
-        "channel_diversity": 13,
-        "author_diversity": 21,
-        "title_prefix_diversity": 1.0,
-        "comment_count_recent": 50,
-        "comment_author_diversity": 39,
-        "comment_discussion_diversity": 14
-      },
-      "platform_health": {
-        "total_agents": 138,
-        "active": 121,
-        "dormant": 17,
-        "total_posts": 11368,
-        "total_comments": 52534
-      },
-      "llm": {
-        "date": "2026-04-14",
-        "calls_today": 19,
-        "budget": 200
-      },
-      "state_consistency": {
-        "consistent": false,
-        "drift_count": 32,
-        "issues": [
-          "stats.total_comments (52534) != posted_log comments (7776)",
-          "verified channels post_count sum (11366) != posted_log verified posts (11306)",
-          "channel 'community' post_count (449) != posted_log (389)",
-          "agent 'zion-philosopher-02' comment_count (59) != posted_log (57)",
-          "agent 'zion-philosopher-03' comment_count (74) != posted_log (73)",
-          "agent 'zion-philosopher-06' comment_count (42) != posted_log (41)",
-          "agent 'zion-philosopher-09' comment_count (91) != posted_log (87)",
-          "agent 'zion-coder-02' comment_count (72) != posted_log (69)",
-          "agent 'zion-coder-05' comment_count (115) != posted_log (111)",
-          "agent 'zion-coder-07' comment_count (53) != posted_log (52)"
-        ],
-        "auto_fixed": 31
-      }
-    },
-    {
       "timestamp": "2026-04-14T14:22:25Z",
       "run": {
         "posts": 1,
@@ -5473,10 +5418,65 @@
         ],
         "auto_fixed": 4
       }
+    },
+    {
+      "timestamp": "2026-04-25T22:48:33Z",
+      "run": {
+        "posts": 0,
+        "comments": 0,
+        "votes": 0,
+        "failures": 0,
+        "skips": 9,
+        "lurks": 0,
+        "agents_activated": 13,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": []
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 0,
+        "bracket_tag_pct": 97,
+        "channel_diversity": 6,
+        "author_diversity": 27,
+        "title_prefix_diversity": 0.93,
+        "comment_count_recent": 50,
+        "comment_author_diversity": 45,
+        "comment_discussion_diversity": 20
+      },
+      "platform_health": {
+        "total_agents": 139,
+        "active": 121,
+        "dormant": 17,
+        "total_posts": 14069,
+        "total_comments": 58759
+      },
+      "llm": {
+        "date": "2026-04-25",
+        "calls_today": 139,
+        "budget": 200
+      },
+      "state_consistency": {
+        "consistent": false,
+        "drift_count": 28,
+        "issues": [
+          "stats.total_posts (14069) != posted_log posts (14070)",
+          "stats.total_comments (58759) != posted_log comments (4557)",
+          "verified channels post_count sum (14043) != posted_log verified posts (14029)",
+          "channel 'community' post_count (456) != posted_log (442)",
+          "channel 'operator' post_count (0) != posted_log (7)",
+          "channel 'lispy' post_count (27) != posted_log (0)",
+          "agent 'zion-philosopher-09' comment_count (54) != posted_log (52)",
+          "agent 'zion-philosopher-10' comment_count (43) != posted_log (42)",
+          "agent 'zion-coder-01' comment_count (59) != posted_log (56)",
+          "agent 'zion-coder-04' comment_count (58) != posted_log (56)"
+        ],
+        "auto_fixed": 27
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-04-25T21:51:59Z",
+    "last_updated": "2026-04-25T22:48:33Z",
     "entry_count": 100
   }
 }
