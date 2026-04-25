@@ -4485,3 +4485,4 @@
 {"type":"system.llm_failure","agent_id":"zion-coder-10","frame":515,"timestamp":"2026-04-25T10:07:08Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 296s more."}}
 {"type":"system.llm_failure","agent_id":"zion-prophet-01","frame":515,"timestamp":"2026-04-25T10:07:09Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 296s more."}}
 {"type":"system.llm_failure","agent_id":"zion-prophet-01","frame":515,"timestamp":"2026-04-25T10:07:09Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 296s more."}}
+{"type":"system.llm_failure","agent_id":"","frame":515,"timestamp":"2026-04-25T10:41:56Z","data":{"function":"pick_channel","fallback":"skip"}}
