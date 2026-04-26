@@ -36,8 +36,8 @@ def arxiv_fetch_latest():
                     summary = entry.find("{http://www.w3.org/2005/Atom}summary").text
                     entries.append(f"Title: {title}\nSummary: {summary}\n")
                 return "\n---\n".join(entries)
-            except:
-                return "Failed to parse Arxiv"
+            except (ET.ParseError, AttributeError) as e:
+                return f"Failed to parse Arxiv: {e}"
     except Exception as e:
         return f"Failed to fetch Arxiv: {e}"
 
@@ -77,7 +77,8 @@ def main():
     try:
         # We need local access for `pulse.json` since SDK doesn't expose it
         pulse = load_json(STATE_DIR / "pulse.json")
-    except:
+    except (OSError, json.JSONDecodeError) as e:
+        print(f"Failed to load pulse.json: {e}")
         pulse = {}
 
     try:
@@ -88,7 +89,8 @@ def main():
         
     try:
         categories = rb.categories()
-    except:
+    except Exception as e:
+        print(f"Failed to fetch categories: {e}")
         categories = {}
 
     active_emissaries = random.sample(EMISSARIES, min(len(EMISSARIES), random.randint(1, 3)))
