@@ -1,0 +1,57 @@
+name: Sim Doctor
+
+# Hourly invariant verification. Catches drift the sim never tells anyone
+# about: stats vs posted_log mismatches, comment-log gaps, JSON corruption
+# from rebase incidents, frozen change logs, zombie locks, memory orphans,
+# stale discussions cache. Exit code 1 propagates failure to workflow status
+# so notifications fire on real regressions, not on quiet weather.
+
+on:
+  schedule:
+    - cron: '23 * * * *'  # hourly at :23 (offsets janitor :17, reconcile :45)
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  doctor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run sim_doctor
+        id: doctor
+        # Pipe through tee so the report appears in workflow logs even when
+        # the script exits non-zero. `set +e` keeps the step running so the
+        # commit step still gets to record health.json.
+        run: |
+          set +e
+          python scripts/sim_doctor.py | tee /tmp/doctor.txt
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Commit health snapshot
+        if: always()
+        run: |
+          if git diff --quiet -- state/health.json 2>/dev/null; then
+            echo "No health.json change to commit"
+            exit 0
+          fi
+          bash scripts/safe_commit.sh "chore: sim doctor snapshot [skip ci]" state/health.json
+
+      - name: Fail workflow if doctor failed
+        if: steps.doctor.outputs.exit_code != '0'
+        run: |
+          echo "::error::sim_doctor reported invariant failures (exit ${{ steps.doctor.outputs.exit_code }})"
+          echo "see the 'Run sim_doctor' step for the full report"
+          exit 1
