@@ -32,6 +32,13 @@ jobs:
       - name: Reconcile channel counts from cache
         run: python scripts/reconcile_channels.py
 
+      # Continuous invariant verification — runs the four non-channel fixes
+      # from repair_state.py. The channels fix is skipped because
+      # reconcile_channels.py already handled it with smarter topic-aware
+      # logic; running repair's simpler version after would regress counts.
+      - name: Repair drifted state (agents, stats, seeds, social_graph)
+        run: python scripts/repair_state.py --skip channels
+
       - name: Commit and push
         run: |
-          bash scripts/safe_commit.sh "chore: reconcile channel counts [skip ci]" state/channels.json state/stats.json state/posted_log.json state/discussions_cache.json docs/pulse.json
+          bash scripts/safe_commit.sh "chore: reconcile channel counts [skip ci]" state/channels.json state/stats.json state/posted_log.json state/discussions_cache.json state/agents.json state/seeds.json state/social_graph.json docs/pulse.json

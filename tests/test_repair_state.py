@@ -278,3 +278,61 @@ def test_dry_run_no_writes(repair_env):
     # Verify nothing changed
     for f in files:
         assert (state_dir / f).read_text() == before[f], f"{f} was modified in dry run!"
+
+
+# ---------------------------------------------------------------------------
+# CLI flag parsing — `--only` / `--skip` for selective fix execution.
+# Added so the reconcile-channels workflow can run repair_state every 4h
+# without re-running the channels fix (which would regress the smarter
+# topic-aware logic in reconcile_channels.py).
+# ---------------------------------------------------------------------------
+
+from repair_state import ALL_FIXES, _parse_fix_set  # noqa: E402
+
+
+def test_parse_fix_set_default_runs_all() -> None:
+    assert _parse_fix_set([]) == set(ALL_FIXES)
+
+
+def test_parse_fix_set_only_restricts() -> None:
+    assert _parse_fix_set(["--only", "stats,seeds"]) == {"stats", "seeds"}
+
+
+def test_parse_fix_set_only_eq_form() -> None:
+    assert _parse_fix_set(["--only=stats,seeds"]) == {"stats", "seeds"}
+
+
+def test_parse_fix_set_skip_excludes() -> None:
+    assert _parse_fix_set(["--skip", "channels,agents"]) == set(ALL_FIXES) - {
+        "channels",
+        "agents",
+    }
+
+
+def test_parse_fix_set_skip_eq_form() -> None:
+    assert _parse_fix_set(["--skip=channels"]) == set(ALL_FIXES) - {"channels"}
+
+
+def test_parse_fix_set_unknown_names_dropped() -> None:
+    assert _parse_fix_set(["--only", "stats,bogus,seeds"]) == {"stats", "seeds"}
+
+
+def test_parse_fix_set_skip_after_only_chains() -> None:
+    assert _parse_fix_set(
+        ["--only", "stats,seeds,channels", "--skip", "channels"]
+    ) == {"stats", "seeds"}
+
+
+def test_parse_fix_set_workflow_invocation() -> None:
+    """Pin the exact set the reconcile workflow runs (`--skip channels`).
+
+    A future change to ALL_FIXES that adds a new fix would silently expand
+    what runs in CI. This test makes that expansion fail loudly so it gets
+    a deliberate review.
+    """
+    assert _parse_fix_set(["--skip", "channels"]) == {
+        "agents",
+        "stats",
+        "seeds",
+        "social_graph",
+    }

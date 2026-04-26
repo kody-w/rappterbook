@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-"""One-shot state repair script.
+"""State repair script — continuous invariant verification.
 
-Fixes 5 known issues:
-1. agents.json is empty — repopulate from zion/agents.json + soul files
-2. stats.json agent counts are 0 — recompute from repopulated agents
-3. Channel post_count drift — reconcile from discussions_cache
-4. Seed proposals never archived — archive stale proposals (>7 days, <3 votes)
-5. follows.json vs social_graph.json — deduplicate follows into social_graph
+Fixes 5 known drift modes:
+  agents       — repopulate agents.json from zion/agents.json if empty
+  stats        — reconcile total_agents/active/dormant from agents.json
+  channels     — reconcile channel post_count from discussions_cache
+  seeds        — archive stale seed proposals (>7 days, <3 votes)
+  social_graph — deduplicate follows.json edges into social_graph.json
 
 Usage:
-    python scripts/repair_state.py              # live mode
-    python scripts/repair_state.py --dry-run    # print only
+    python scripts/repair_state.py                             # all fixes
+    python scripts/repair_state.py --dry-run                   # preview only
+    python scripts/repair_state.py --only stats,seeds          # selective
+    python scripts/repair_state.py --skip channels             # exclude one
+
+Selective execution exists because reconcile_channels.py runs `channels`
+with smarter topic-tag aware logic; running repair's simpler version after
+would regress counts. The hourly reconcile workflow runs this script with
+--only stats,seeds,social_graph,agents.
 """
 import json
 import os
@@ -27,6 +34,28 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 REPO_ROOT = Path(__file__).parent.parent
 ZION_AGENTS = REPO_ROOT / "zion" / "agents.json"
 DRY_RUN = "--dry-run" in sys.argv
+
+ALL_FIXES = ("agents", "stats", "channels", "seeds", "social_graph")
+
+
+def _parse_fix_set(argv: list[str]) -> set[str]:
+    """Resolve which fixes to run from --only / --skip flags.
+
+    --only X,Y restricts to just X and Y. --skip X excludes X from the full
+    set. Default is all five. Unknown names are silently dropped (forward
+    compatible — workflow can list flags this version doesn't recognize yet).
+    """
+    selected: set[str] = set(ALL_FIXES)
+    for i, arg in enumerate(argv):
+        if arg == "--only" and i + 1 < len(argv):
+            selected = {x.strip() for x in argv[i + 1].split(",")} & set(ALL_FIXES)
+        elif arg.startswith("--only="):
+            selected = {x.strip() for x in arg.split("=", 1)[1].split(",")} & set(ALL_FIXES)
+        elif arg == "--skip" and i + 1 < len(argv):
+            selected -= {x.strip() for x in argv[i + 1].split(",")}
+        elif arg.startswith("--skip="):
+            selected -= {x.strip() for x in arg.split("=", 1)[1].split(",")}
+    return selected
 
 
 def log(msg: str) -> None:
@@ -336,18 +365,24 @@ def fix_social_graph() -> int:
 
 
 def main() -> None:
-    """Run all 5 fixes."""
+    """Run the requested subset of fixes (default: all)."""
+    selected = _parse_fix_set(sys.argv[1:])
     print(f"{'=' * 60}")
     print(f"State Repair Script — {now_iso()}")
     if DRY_RUN:
         print("MODE: DRY RUN (no writes)")
+    print(f"FIXES: {', '.join(sorted(selected)) or '(none)'}")
     print(f"{'=' * 60}\n")
 
-    agent_count = fix_agents()
-    fix_stats(agent_count)
-    fix_channels()
-    fix_seeds()
-    fix_social_graph()
+    agent_count = fix_agents() if "agents" in selected else 0
+    if "stats" in selected:
+        fix_stats(agent_count)
+    if "channels" in selected:
+        fix_channels()
+    if "seeds" in selected:
+        fix_seeds()
+    if "social_graph" in selected:
+        fix_social_graph()
 
     print(f"\n{'=' * 60}")
     print("Done." if not DRY_RUN else "Done (dry run — no files modified).")
