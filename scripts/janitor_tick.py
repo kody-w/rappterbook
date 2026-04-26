@@ -23,6 +23,7 @@ Exit code is 0 even when nothing to do; non-zero only on unexpected error.
 """
 from __future__ import annotations
 
+import fcntl
 import json
 import os
 import subprocess
@@ -75,18 +76,56 @@ def _log(msg: str) -> None:
     print(f"[janitor] {msg}", flush=True)
 
 
-def sweep_zombie_locks(state_dir: Path, max_age_hours: int, dry_run: bool) -> dict:
-    """Remove .lock files in state/inbox older than max_age_hours.
+def _is_lock_unowned(lock_path: Path) -> bool:
+    """Return True if no process holds an exclusive flock on lock_path.
 
-    Returns a result dict: {"found": int, "removed": int, "files": list[str]}.
+    Race-safe deletion gate: we open the lock file and try to acquire an
+    exclusive lock non-blocking. If we get it, no one else owns the lock —
+    the file is a zombie and safe to unlink. If we can't get it, the lock
+    is live and we must leave it alone (even if the file is old; some writer
+    could be mid-fsync).
     """
-    inbox = state_dir / "inbox"
-    result: dict = {"found": 0, "removed": 0, "files": []}
-    if not inbox.is_dir():
+    try:
+        fd = open(lock_path, "r")
+    except OSError:
+        return False
+    try:
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except (OSError, IOError):
+            return False
+        try:
+            fcntl.flock(fd, fcntl.LOCK_UN)
+        except Exception:
+            pass
+        return True
+    finally:
+        try:
+            fd.close()
+        except Exception:
+            pass
+
+
+def sweep_zombie_locks(state_dir: Path, max_age_hours: int, dry_run: bool) -> dict:
+    """Remove zombie .lock files anywhere under state_dir, older than max_age_hours.
+
+    State_io._file_lock creates a .lock sidecar per save_json call but never
+    unlinks it (unlinking on release would race with waiters). The files
+    accumulate forever — observed: 62 stale locks in stream_deltas/ from
+    frame 515. This sweeps them.
+
+    Safety gate: a lock is only deleted if (a) older than max_age_hours AND
+    (b) no process currently holds an flock on it. This means concurrent
+    writers are never disturbed — we only collect garbage no one owns.
+
+    Returns: {"found": int, "removed": int, "skipped_live": int, "files": list[str]}.
+    """
+    result: dict = {"found": 0, "removed": 0, "skipped_live": 0, "files": []}
+    if not state_dir.is_dir():
         return result
 
     cutoff = time.time() - (max_age_hours * 3600)
-    for lock in inbox.glob("*.lock"):
+    for lock in state_dir.rglob("*.lock"):
         try:
             mtime = lock.stat().st_mtime
         except FileNotFoundError:
@@ -94,16 +133,21 @@ def sweep_zombie_locks(state_dir: Path, max_age_hours: int, dry_run: bool) -> di
         if mtime >= cutoff:
             continue
         result["found"] += 1
-        result["files"].append(lock.name)
+        rel = lock.relative_to(state_dir).as_posix()
+        if not _is_lock_unowned(lock):
+            result["skipped_live"] += 1
+            _log(f"  skip live {rel}")
+            continue
+        result["files"].append(rel)
         if dry_run:
-            _log(f"  DRY: would unlink {lock.name}")
+            _log(f"  DRY: would unlink {rel}")
             continue
         try:
             lock.unlink()
             result["removed"] += 1
-            _log(f"  unlinked {lock.name}")
+            _log(f"  unlinked {rel}")
         except OSError as exc:
-            _log(f"  FAILED to unlink {lock.name}: {exc}")
+            _log(f"  FAILED to unlink {rel}: {exc}")
     return result
 
 
@@ -208,7 +252,10 @@ def main() -> int:
     _log(f"state_dir={state_dir} dry_run={dry_run}")
 
     locks = sweep_zombie_locks(state_dir, lock_hours, dry_run)
-    _log(f"locks: found={locks['found']} removed={locks['removed']}")
+    _log(
+        f"locks: found={locks['found']} removed={locks['removed']} "
+        f"skipped_live={locks.get('skipped_live', 0)}"
+    )
 
     issues = close_stale_issues(issue_days, issue_limit, dry_run)
     _log(
