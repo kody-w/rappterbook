@@ -1,4 +1,4 @@
-.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay shards treaty treaty-sync doctor doctor-quiet doctor-fix doctor-history
+.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay shards treaty treaty-sync doctor doctor-quiet doctor-fix doctor-history archive-deltas archive-deltas-dry
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -36,6 +36,12 @@ doctor-fix: ## Doctor + auto-repair safe drift (locks, stats, memory orphans)
 
 doctor-history: ## Show last 20 doctor runs from health_history.jsonl
 	python scripts/sim_doctor.py --history 20
+
+archive-deltas: ## Move stream_deltas older than last 7 frames to archive/
+	python scripts/archive_stream_deltas.py
+
+archive-deltas-dry: ## Preview which stream_deltas would be archived
+	python scripts/archive_stream_deltas.py --dry-run
 
 scan: ## Run PII/secrets scan
 	python scripts/pii_scan.py

@@ -242,6 +242,26 @@ def check_agents_schema() -> tuple[str, str]:
     return "fail", f"{len(bad)} agents missing name/status: {', '.join(bad[:3])}"
 
 
+def check_stream_delta_growth() -> tuple[str, str]:
+    """state/stream_deltas/ should not grow unbounded.
+
+    Each parallel Dream Catcher stream writes a delta file per frame.
+    Without periodic archival, this dir accumulates forever — observed:
+    255 files spanning frames 500–523. Use scripts/archive_stream_deltas.py
+    to relieve.
+    """
+    deltas = STATE_DIR / "stream_deltas"
+    if not deltas.is_dir():
+        return "ok", "no stream_deltas dir"
+    files = [p for p in deltas.iterdir() if p.is_file() and p.suffix == ".json"]
+    n = len(files)
+    if n < 100:
+        return "ok", f"{n} delta files"
+    if n < 250:
+        return "warn", f"{n} delta files — consider running archive_stream_deltas.py"
+    return "fail", f"{n} delta files — unbounded growth, archive_stream_deltas.py needed"
+
+
 def check_discussions_cache_fresh() -> tuple[str, str]:
     """discussions_cache.json should have been refreshed within 24h."""
     cache = load_json(STATE_DIR / "discussions_cache.json")
@@ -273,6 +293,7 @@ CHECKS: list[tuple[str, Callable[[], tuple[str, str]]]] = [
     ("memory_orphans", check_memory_orphans),
     ("agents_schema", check_agents_schema),
     ("discussions_cache_fresh", check_discussions_cache_fresh),
+    ("stream_delta_growth", check_stream_delta_growth),
 ]
 
 

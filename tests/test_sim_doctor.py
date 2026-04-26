@@ -97,6 +97,29 @@ def test_detects_conflict_markers_in_text_files(doctor_state):
     assert "memory/agent-1.md" in cm["detail"]
 
 
+def test_stream_delta_growth_warns_at_threshold(doctor_state):
+    """100–249 delta files = warn, 250+ = fail."""
+    deltas = doctor_state / "stream_deltas"
+    deltas.mkdir(exist_ok=True)
+    for i in range(120):
+        (deltas / f"frame-{500 + i}-stream.json").write_text("{}")
+    report = sim_doctor.run_checks()
+    growth = next(c for c in report["checks"] if c["name"] == "stream_delta_growth")
+    assert growth["status"] == "warn"
+    assert "120" in growth["detail"]
+
+
+def test_stream_delta_growth_fails_at_unbounded(doctor_state):
+    """255+ files (the observed real-world incident) triggers fail."""
+    deltas = doctor_state / "stream_deltas"
+    deltas.mkdir(exist_ok=True)
+    for i in range(260):
+        (deltas / f"frame-{500 + i}-stream.json").write_text("{}")
+    report = sim_doctor.run_checks()
+    growth = next(c for c in report["checks"] if c["name"] == "stream_delta_growth")
+    assert growth["status"] == "fail"
+
+
 def test_no_conflict_markers_passes_on_clean(doctor_state):
     """Clean state with no markers reports OK."""
     report = sim_doctor.run_checks()
