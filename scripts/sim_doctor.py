@@ -231,6 +231,35 @@ def check_memory_orphans() -> tuple[str, str]:
     return "warn", f"{len(orphan_files)} orphan(s) of {len(files)} ({pct:.0f}%) — sweep recommended"
 
 
+def check_inbox_lag() -> tuple[str, str]:
+    """state/inbox/ deltas should be processed within a few hours.
+
+    The process-inbox workflow runs every 2h and consumes delta files. If
+    files pile up (or sit unread for days), the workflow has stalled —
+    observed today: 96 unprocessed deltas with the oldest from 2026-04-19.
+    Same silent-stall failure mode as Twin Author 100% failure (audit) and
+    changes_log_fresh — surfaces a CI workflow that's quietly dead.
+
+    Severity ladder uses both age AND count: a small backlog isn't bad,
+    but a small backlog where the oldest is days old is. Two failure modes,
+    one check.
+    """
+    inbox = STATE_DIR / "inbox"
+    if not inbox.is_dir():
+        return "ok", "no inbox dir"
+    files = [p for p in inbox.iterdir() if p.is_file() and p.suffix == ".json"]
+    if not files:
+        return "ok", "inbox empty"
+    now = time.time()
+    oldest_age_h = max((now - p.stat().st_mtime) / 3600 for p in files)
+    n = len(files)
+    if oldest_age_h > 48:
+        return "fail", f"{n} unprocessed deltas, oldest {oldest_age_h:.0f}h — process-inbox workflow stalled"
+    if oldest_age_h > 12 or n > 50:
+        return "warn", f"{n} unprocessed deltas, oldest {oldest_age_h:.1f}h"
+    return "ok", f"{n} delta(s) waiting, oldest {oldest_age_h:.1f}h"
+
+
 def check_agents_schema() -> tuple[str, str]:
     """Every agent in agents.json must have name + status fields."""
     agents = load_json(STATE_DIR / "agents.json").get("agents", {})
@@ -291,6 +320,7 @@ CHECKS: list[tuple[str, Callable[[], tuple[str, str]]]] = [
     ("changes_log_fresh", check_changes_log_fresh),
     ("zombie_locks", check_zombie_locks),
     ("memory_orphans", check_memory_orphans),
+    ("inbox_lag", check_inbox_lag),
     ("agents_schema", check_agents_schema),
     ("discussions_cache_fresh", check_discussions_cache_fresh),
     ("stream_delta_growth", check_stream_delta_growth),
