@@ -7,12 +7,58 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from reconcile_channels import (  # noqa: E402
+    apply_posted_log_truth,
     build_channel_counts,
     build_stats_snapshot,
     discussion_to_posted_log_entry,
     infer_post_channel_and_topic,
     sync_posted_log_from_discussions,
 )
+
+
+def test_apply_posted_log_truth_lowers_inflated_stats():
+    """Inflated cached counters must be corrected down to posted_log truth.
+
+    The old asymmetric shrink guard would have left stats at 99/999, locking
+    in drift forever. The new logic trusts posted_log absolutely.
+    """
+    stats = {"total_posts": 99, "total_comments": 999}
+    posted_log = {
+        "posts": [
+            {"number": 1, "commentCount": 2},
+            {"number": 2, "commentCount": 3},
+            {"number": 3, "commentCount": 1},
+        ]
+    }
+    apply_posted_log_truth(stats, posted_log)
+    assert stats["total_posts"] == 3
+    assert stats["total_comments"] == 6
+
+
+def test_apply_posted_log_truth_raises_undercount():
+    """Counters below posted_log truth still get raised — symmetric correction."""
+    stats = {"total_posts": 0, "total_comments": 0}
+    posted_log = {"posts": [{"number": 1, "commentCount": 5}]}
+    apply_posted_log_truth(stats, posted_log)
+    assert stats["total_posts"] == 1
+    assert stats["total_comments"] == 5
+
+
+def test_apply_posted_log_truth_preserves_stats_when_log_empty():
+    """Empty posted_log (fresh boot) must NOT clobber cache-derived snapshot."""
+    stats = {"total_posts": 12, "total_comments": 34}
+    apply_posted_log_truth(stats, {"posts": []})
+    assert stats["total_posts"] == 12
+    assert stats["total_comments"] == 34
+
+
+def test_apply_posted_log_truth_handles_missing_commentcount():
+    """Posts without a commentCount field count as zero, not crash."""
+    stats = {"total_posts": 99, "total_comments": 999}
+    posted_log = {"posts": [{"number": 1}, {"number": 2, "commentCount": 4}]}
+    apply_posted_log_truth(stats, posted_log)
+    assert stats["total_posts"] == 2
+    assert stats["total_comments"] == 4
 
 
 def test_infer_post_channel_and_topic_keeps_verified_category_and_topic():

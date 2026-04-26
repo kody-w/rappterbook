@@ -197,6 +197,29 @@ def ensure_verified_channels(
     return added
 
 
+def apply_posted_log_truth(stats: dict, posted_log: dict) -> None:
+    """Overwrite stats.total_posts/comments from posted_log when it has data.
+
+    posted_log is the canonical record of every post + GitHub-reported
+    commentCount at scrape time. Stats counters can over-inflate via spurious
+    engine increments (e.g. local_engine.py += 1 on a failed comment) and
+    those drifts compound forever unless overwritten.
+
+    The previous asymmetric "shrink guard" only updated stats when posted_log
+    was bigger, which permanently locked in any over-count. We now trust
+    posted_log absolutely when it has data; the cache-derived snapshot stays
+    as the floor only when posted_log is empty (fresh boot before first
+    scrape).
+
+    Mutates `stats` in place.
+    """
+    log_posts = posted_log.get("posts", [])
+    if not log_posts:
+        return
+    stats["total_posts"] = len(log_posts)
+    stats["total_comments"] = sum(p.get("commentCount", 0) for p in log_posts)
+
+
 def build_stats_snapshot(
     discussions: list[dict],
     agent_list: dict,
@@ -403,16 +426,8 @@ def main() -> None:
     agent_list = agents.get("agents", {})
     stats.update(build_stats_snapshot(discussions, agent_list, len(ch_data)))
 
-    # SHRINK GUARD: posted_log is authoritative for total_posts/comments.
-    # If the cache-based count is lower than posted_log, use posted_log.
     log = load_json(STATE_DIR / "posted_log.json")
-    log_posts = log.get("posts", [])
-    log_post_count = len(log_posts)
-    log_comment_count = sum(p.get("commentCount", 0) for p in log_posts)
-    if log_post_count > stats.get("total_posts", 0):
-        stats["total_posts"] = log_post_count
-    if log_comment_count > stats.get("total_comments", 0):
-        stats["total_comments"] = log_comment_count
+    apply_posted_log_truth(stats, log)
 
     stats["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
