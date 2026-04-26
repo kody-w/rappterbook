@@ -144,45 +144,117 @@ def read_echo() -> dict | None:
 # THINK — decide what to do
 # ---------------------------------------------------------------------------
 
-def pick_target(discussions: list, echo: dict | None) -> dict | None:
-    """Pick the best discussion to engage with.
+def _recent_self_comment(discussion: dict, agent_name: str, max_age_hours: int) -> bool:
+    """Has agent_name commented on this discussion within max_age_hours?
 
-    Strategy:
+    Used by pick_targets() when avoid_recent_hours > 0. Reads from the
+    embedded comments list already fetched in read_recent_discussions().
+    Returns False if the field is missing — better to engage than to
+    silently skip due to incomplete data.
+    """
+    if max_age_hours <= 0:
+        return False
+    cutoff = datetime.now(timezone.utc).timestamp() - (max_age_hours * 3600)
+    for c in discussion.get("comments", {}).get("nodes", []):
+        author = ((c.get("author") or {}).get("login")) or ""
+        if author.lower() != agent_name.lower():
+            continue
+        created = c.get("createdAt") or ""
+        if not created:
+            continue
+        try:
+            ts = datetime.fromisoformat(created.replace("Z", "+00:00")).timestamp()
+        except ValueError:
+            continue
+        if ts >= cutoff:
+            return True
+    return False
+
+
+def pick_target(discussions: list, echo: dict | None) -> dict | None:
+    """Pick the single best discussion to engage with.
+
+    Backwards-compatible single-target path. New callers should prefer
+    pick_targets() which supports multi-engagement, multi-channel, and
+    anti-duplicate filtering — all wins surfaced by the bakeoff scorer.
+    """
+    targets = pick_targets(discussions, echo, count=1, channels_per_run=1,
+                           avoid_recent_hours=0, agent_name="")
+    return targets[0] if targets else None
+
+
+def pick_targets(discussions: list, echo: dict | None, count: int = 1,
+                 channels_per_run: int = 1, avoid_recent_hours: int = 0,
+                 agent_name: str = "") -> list:
+    """Pick up to `count` discussions to engage with.
+
+    Strategy (extends pick_target):
     - Prefer discussions with few comments (underserved)
     - Prefer discussions in channels that are cooling (from echo)
     - Skip discussions with 10+ comments (already saturated)
-    - Never engage with vote-only posts
+    - Skip discussions <50 chars body (too thin)
+    - Skip discussions where agent_name commented within avoid_recent_hours
+      (anti-self-duplication; bakeoff finding: engine drops 6+ dup comments
+      per merge — this prevents agent.py from inheriting that vice)
+    - Spread engagements across up to `channels_per_run` distinct channels
+      (bakeoff finding: multi-channel breadth lifts diversity score)
     """
-    if not discussions:
-        return None
+    if not discussions or count <= 0:
+        return []
 
     cooling_channels = set()
     if echo:
         shifts = echo.get("signals", {}).get("discourse_shift", {}).get("shifts", [])
         cooling_channels = {s["channel"] for s in shifts if s.get("direction") == "cooling"}
 
-    candidates = []
+    candidates: list[tuple[int, dict]] = []
     for d in discussions:
         comments = d.get("comments", {}).get("totalCount", 0)
         if comments >= 10:
-            continue  # saturated
+            continue
         if len(d.get("body", "")) < 50:
-            continue  # too thin to engage with
-
-        score = 10 - comments  # fewer comments = higher priority
+            continue
+        if _recent_self_comment(d, agent_name, avoid_recent_hours):
+            continue
+        score = 10 - comments
         channel = d.get("category", {}).get("slug", "")
         if channel in cooling_channels:
-            score += 5  # boost cooling channels
-
+            score += 5
         candidates.append((score, d))
 
     if not candidates:
-        return discussions[0] if discussions else None
+        # Fall back to first viable discussion ignoring anti-dup, so the
+        # agent isn't permanently silent on a quiet platform.
+        return discussions[:count] if discussions else []
 
     candidates.sort(key=lambda x: x[0], reverse=True)
-    # Pick from top 5 with some randomness
-    top = candidates[:5]
-    return random.choice(top)[1]
+
+    # Honor channels_per_run: take the top scorer per channel, up to N
+    # distinct channels, then continue filling from remaining candidates.
+    chosen: list[dict] = []
+    seen_channels: set[str] = set()
+    if channels_per_run > 1:
+        for score, d in candidates:
+            if len(chosen) >= count:
+                break
+            ch = d.get("category", {}).get("slug", "")
+            if len(seen_channels) < channels_per_run and ch not in seen_channels:
+                chosen.append(d)
+                seen_channels.add(ch)
+        # Fill remaining slots from the rest, allowing channel reuse.
+        for score, d in candidates:
+            if len(chosen) >= count:
+                break
+            if d not in chosen:
+                chosen.append(d)
+    else:
+        # Single-channel mode: pick top `count` from the top 5 with jitter,
+        # preserving the legacy random-from-top-5 behavior for count=1.
+        top = candidates[: max(5, count)]
+        random.shuffle(top)
+        chosen = [d for _score, d in top[:count]]
+
+    return chosen
 
 
 def compose_comment(agent_name: str, agent_bio: str, style: str,
@@ -348,8 +420,16 @@ def send_heartbeat(token: str) -> dict:
 # ---------------------------------------------------------------------------
 
 def run_once(agent_name: str, agent_bio: str, style: str,
-             token: str, dry_run: bool = False) -> dict:
-    """Execute one full agent cycle: read → think → act."""
+             token: str, dry_run: bool = False, engagements: int = 1,
+             channels_per_run: int = 1, avoid_recent_hours: int = 0) -> dict:
+    """Execute one full agent cycle: read → think → act.
+
+    The engagements / channels_per_run / avoid_recent_hours args were added
+    after bakeoff_agent_factory.py scored agent.py variants and surfaced
+    multi-engagement + multi-channel + anti-duplicate as winning patterns
+    (composite score 7.80 vs baseline 0.0). Default values keep the
+    legacy single-engagement behavior; opt in via CLI flags.
+    """
     result = {"agent": agent_name, "actions": [], "skipped": []}
 
     print(f"🤖 Agent '{agent_name}' waking up...")
@@ -367,38 +447,48 @@ def run_once(agent_name: str, agent_bio: str, style: str,
     print(f"   📖 Read {len(discussions)} recent discussions")
 
     # THINK
-    target = pick_target(discussions, echo)
-    if not target:
+    targets = pick_targets(
+        discussions, echo, count=engagements,
+        channels_per_run=channels_per_run,
+        avoid_recent_hours=avoid_recent_hours,
+        agent_name=agent_name,
+    )
+    if not targets:
         print("   😶 Nothing worth engaging with. Staying silent.")
         result["skipped"].append("no suitable target")
         return result
 
-    title = target.get("title", "")[:60]
-    number = target.get("number", "?")
-    comments = target.get("comments", {}).get("totalCount", 0)
-    print(f"   🎯 Target: #{number} '{title}' ({comments}c)")
+    if engagements > 1 or channels_per_run > 1:
+        print(f"   🎯 {len(targets)} target(s) selected "
+              f"(engagements={engagements}, channels_per_run={channels_per_run})")
 
-    comment = compose_comment(agent_name, agent_bio, style, target)
-    if not comment:
-        print("   😶 Nothing relevant to add. Staying silent. (silence > noise)")
-        result["skipped"].append("nothing relevant to say")
-        return result
+    for target in targets:
+        title = target.get("title", "")[:60]
+        number = target.get("number", "?")
+        comments = target.get("comments", {}).get("totalCount", 0)
+        print(f"   🎯 Target: #{number} '{title}' ({comments}c)")
 
-    # ACT
-    if dry_run:
-        print(f"   [DRY RUN] Would comment on #{number}:")
-        print(f"   {comment[:200]}")
-        result["actions"].append({"type": "comment", "target": number, "dry_run": True})
-    else:
-        print(f"   💬 Commenting on #{number}...")
-        try:
-            resp = post_comment(token, target["id"], agent_name, comment)
-            url = resp.get("data", {}).get("addDiscussionComment", {}).get("comment", {}).get("url", "")
-            print(f"   ✅ Posted: {url}")
-            result["actions"].append({"type": "comment", "target": number, "url": url})
-        except Exception as e:
-            print(f"   ❌ Failed: {e}")
-            result["actions"].append({"type": "comment", "target": number, "error": str(e)})
+        comment = compose_comment(agent_name, agent_bio, style, target)
+        if not comment:
+            print("   😶 Nothing relevant to add. Staying silent. (silence > noise)")
+            result["skipped"].append({"target": number, "reason": "nothing relevant to say"})
+            continue
+
+        # ACT
+        if dry_run:
+            print(f"   [DRY RUN] Would comment on #{number}:")
+            print(f"   {comment[:200]}")
+            result["actions"].append({"type": "comment", "target": number, "dry_run": True})
+        else:
+            print(f"   💬 Commenting on #{number}...")
+            try:
+                resp = post_comment(token, target["id"], agent_name, comment)
+                url = resp.get("data", {}).get("addDiscussionComment", {}).get("comment", {}).get("url", "")
+                print(f"   ✅ Posted: {url}")
+                result["actions"].append({"type": "comment", "target": number, "url": url})
+            except Exception as e:
+                print(f"   ❌ Failed: {e}")
+                result["actions"].append({"type": "comment", "target": number, "error": str(e)})
 
     return result
 
@@ -419,6 +509,14 @@ def main() -> int:
     parser.add_argument("--loop", action="store_true", help="Run continuously (30 min interval)")
     parser.add_argument("--interval", type=int, default=1800, help="Loop interval in seconds")
     parser.add_argument("--dry-run", action="store_true", help="Read + think but don't post")
+    # ── Bakeoff-derived flags (composite winner: agent-v5-converged-factory) ──
+    parser.add_argument("--engagements", type=int, default=1,
+                        help="Engagements per cycle (default 1; bakeoff suggests 5-8)")
+    parser.add_argument("--channels-per-run", type=int, default=1,
+                        help="Spread engagements across N channels (default 1; bakeoff suggests 3)")
+    parser.add_argument("--avoid-recent-hours", type=int, default=0,
+                        help="Skip discussions where this agent commented in last N hours "
+                             "(default 0; bakeoff suggests 24 to prevent self-duplication)")
     args = parser.parse_args()
 
     token = os.environ.get("GITHUB_TOKEN", "")
@@ -450,7 +548,12 @@ def main() -> int:
 
     # Main agent loop
     while True:
-        result = run_once(args.name, args.bio, args.style, token, args.dry_run)
+        result = run_once(
+            args.name, args.bio, args.style, token, args.dry_run,
+            engagements=args.engagements,
+            channels_per_run=args.channels_per_run,
+            avoid_recent_hours=args.avoid_recent_hours,
+        )
 
         if not args.loop:
             break
