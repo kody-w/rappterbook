@@ -276,6 +276,113 @@ CHECKS: list[tuple[str, Callable[[], tuple[str, str]]]] = [
 ]
 
 
+# ---------------------------------------------------------------------------
+# Auto-fixers — run with --fix. Each returns (fixed_anything, detail). Only
+# safe, reversible repairs go here. Anything destructive or that requires
+# judgment stays manual.
+# ---------------------------------------------------------------------------
+
+def fix_zombie_locks() -> tuple[bool, str]:
+    """Sweep zombie locks via the janitor's race-safe primitive."""
+    try:
+        from janitor_tick import sweep_zombie_locks
+    except ImportError as e:
+        return False, f"janitor_tick unavailable: {e}"
+    result = sweep_zombie_locks(STATE_DIR, max_age_hours=24, dry_run=False)
+    if result.get("removed", 0):
+        return True, f"removed {result['removed']} zombie lock(s)"
+    return False, "no zombie locks to sweep"
+
+
+def fix_stats_drift() -> tuple[bool, str]:
+    """Reconcile stats.total_posts/total_comments from posted_log truth."""
+    try:
+        from reconcile_channels import apply_posted_log_truth
+    except ImportError as e:
+        return False, f"reconcile_channels unavailable: {e}"
+    stats_path = STATE_DIR / "stats.json"
+    stats = load_json(stats_path)
+    log = load_json(STATE_DIR / "posted_log.json")
+    before = (stats.get("total_posts", 0), stats.get("total_comments", 0))
+    apply_posted_log_truth(stats, log)
+    after = (stats.get("total_posts", 0), stats.get("total_comments", 0))
+    if before == after:
+        return False, "stats already match posted_log truth"
+    save_json(stats_path, stats)
+    return True, f"posts {before[0]:,}→{after[0]:,}, comments {before[1]:,}→{after[1]:,}"
+
+
+def fix_memory_orphans() -> tuple[bool, str]:
+    """Move orphan soul files to state/archive/memory_orphans/{ts}/.
+
+    Reversible: files are MOVED, not deleted. If the agent rejoins, the
+    file can be moved back. Archive is timestamped so successive sweeps
+    don't collide.
+    """
+    memory = STATE_DIR / "memory"
+    if not memory.is_dir():
+        return False, "no memory dir"
+    agents = load_json(STATE_DIR / "agents.json").get("agents", {})
+    agent_ids = set(agents.keys()) if isinstance(agents, dict) else set()
+    if not agent_ids:
+        return False, "agents.json empty — refusing to archive (would orphan everything)"
+    files = [p for p in memory.iterdir() if p.is_file() and p.suffix == ".md"]
+    orphans = [p for p in files if p.stem not in agent_ids]
+    if not orphans:
+        return False, "no memory orphans to archive"
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")
+    archive = STATE_DIR / "archive" / "memory_orphans" / ts
+    archive.mkdir(parents=True, exist_ok=True)
+    for o in orphans:
+        o.rename(archive / o.name)
+    return True, f"archived {len(orphans)} orphan(s) to archive/memory_orphans/{ts}/"
+
+
+FIXERS: list[tuple[str, Callable[[], tuple[bool, str]]]] = [
+    ("zombie_locks", fix_zombie_locks),
+    ("stats_drift", fix_stats_drift),
+    ("memory_orphans", fix_memory_orphans),
+]
+
+
+def run_fixers() -> dict:
+    """Run every fixer, swallowing per-fixer exceptions."""
+    results = []
+    for name, fn in FIXERS:
+        try:
+            fixed, detail = fn()
+        except Exception as exc:
+            fixed = False
+            detail = f"crashed: {type(exc).__name__}: {exc}"
+        results.append({"name": name, "fixed": fixed, "detail": detail})
+    return {
+        "fixers": results,
+        "fixed_count": sum(1 for r in results if r["fixed"]),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Append-only health history. Lets you see drift trends over time without
+# loading the full history into memory. Each line is a compact summary.
+# ---------------------------------------------------------------------------
+
+def append_history(report: dict) -> None:
+    """Append a one-line summary of this run to state/health_history.jsonl."""
+    entry = {
+        "ts": report["checked_at"],
+        "status": report["status"],
+        "ok": report["summary"]["ok"],
+        "warn": report["summary"]["warn"],
+        "fail": report["summary"]["fail"],
+        "fail_names": [c["name"] for c in report["checks"] if c["status"] == "fail"],
+    }
+    try:
+        with open(STATE_DIR / "health_history.jsonl", "a") as f:
+            f.write(json.dumps(entry, separators=(",", ":")) + "\n")
+    except OSError:
+        pass  # never crash for telemetry writes
+
+
 def run_checks() -> dict:
     """Run every check, swallowing per-check exceptions as 'fail'."""
     results = []
@@ -323,11 +430,56 @@ def print_report(report: dict, quiet: bool = False) -> None:
         print(f"  {glyph} {r['name']:<28}  {DIM}{r['detail']}{RESET}")
 
 
+def _arg_value(args: list[str], name: str, default: str) -> str:
+    """Get a CLI flag value: --name X or --name=X."""
+    for i, a in enumerate(args):
+        if a == name and i + 1 < len(args):
+            return args[i + 1]
+        if a.startswith(name + "="):
+            return a.split("=", 1)[1]
+    return default
+
+
+def show_history(args: list[str]) -> int:
+    """Print the last N entries from state/health_history.jsonl."""
+    try:
+        n = int(_arg_value(args, "--history", "20"))
+    except ValueError:
+        n = 20
+    history_path = STATE_DIR / "health_history.jsonl"
+    if not history_path.exists():
+        print(f"{DIM}no history yet — run sim_doctor at least once to populate{RESET}")
+        return 0
+    try:
+        lines = [l for l in history_path.read_text().split("\n") if l.strip()]
+    except OSError as exc:
+        print(f"{RED}could not read history:{RESET} {exc}", file=sys.stderr)
+        return 2
+    print(f"{BOLD}sim_doctor · last {min(n, len(lines))} of {len(lines)} runs{RESET}\n")
+    for line in lines[-n:]:
+        try:
+            e = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        color = {"ok": GREEN, "warn": YELLOW, "fail": RED}.get(e["status"], "")
+        fails = ", ".join(e.get("fail_names", []))
+        fail_suffix = f" {DIM}({fails}){RESET}" if fails else ""
+        print(f"  {color}{e['status'].upper():<5}{RESET}  "
+              f"{e['ts']}  "
+              f"{GREEN}{e['ok']}{RESET}/{YELLOW}{e['warn']}{RESET}/{RED}{e['fail']}{RESET}"
+              f"{fail_suffix}")
+    return 0
+
+
 def main() -> int:
     args = sys.argv[1:]
     json_mode = "--json" in args
     no_write = "--no-write" in args
     quiet = "--quiet" in args
+    fix_mode = "--fix" in args
+
+    if "--history" in args or any(a.startswith("--history=") for a in args):
+        return show_history(args)
 
     try:
         report = run_checks()
@@ -340,9 +492,24 @@ def main() -> int:
     else:
         print_report(report, quiet=quiet)
 
+    if fix_mode:
+        print(f"\n{BOLD}fixers{RESET}")
+        fix_report = run_fixers()
+        for r in fix_report["fixers"]:
+            glyph = f"{GREEN}→{RESET}" if r["fixed"] else f"{DIM}·{RESET}"
+            print(f"  {glyph} {r['name']:<28}  {DIM}{r['detail']}{RESET}")
+        if fix_report["fixed_count"]:
+            print(f"\n{BOLD}re-running checks after fix:{RESET}")
+            report = run_checks()
+            if json_mode:
+                print(json.dumps(report, indent=2))
+            else:
+                print_report(report, quiet=quiet)
+
     if not no_write:
         try:
             save_json(STATE_DIR / "health.json", report)
+            append_history(report)
         except Exception as exc:
             print(f"{YELLOW}warning:{RESET} could not write health.json: {exc}", file=sys.stderr)
 

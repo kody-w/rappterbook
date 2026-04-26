@@ -1,4 +1,4 @@
-.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay shards treaty treaty-sync doctor doctor-quiet
+.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay shards treaty treaty-sync doctor doctor-quiet doctor-fix doctor-history
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -25,11 +25,17 @@ shards: ## Reshard discussions_cache.json into cache_shards/
 audit: ## Run heartbeat audit
 	python scripts/heartbeat_audit.py
 
-doctor: ## Run all sim invariant checks; writes state/health.json
+doctor: ## Run all sim invariant checks; writes state/health.json + history
 	python scripts/sim_doctor.py
 
 doctor-quiet: ## Doctor — only show warn/fail (no health.json write)
 	python scripts/sim_doctor.py --quiet --no-write
+
+doctor-fix: ## Doctor + auto-repair safe drift (locks, stats, memory orphans)
+	python scripts/sim_doctor.py --fix
+
+doctor-history: ## Show last 20 doctor runs from health_history.jsonl
+	python scripts/sim_doctor.py --history 20
 
 scan: ## Run PII/secrets scan
 	python scripts/pii_scan.py

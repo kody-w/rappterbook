@@ -190,3 +190,116 @@ def test_main_no_write_skips_health_file(doctor_state, monkeypatch):
     monkeypatch.setattr("sys.argv", ["sim_doctor.py", "--no-write", "--quiet"])
     sim_doctor.main()
     assert not (doctor_state / "health.json").exists()
+
+
+# ---------------------------------------------------------------------------
+# --fix mode + history append + --history view.
+# ---------------------------------------------------------------------------
+
+def test_main_appends_to_health_history(doctor_state, monkeypatch):
+    """Every default doctor run appends one line to health_history.jsonl."""
+    monkeypatch.setattr("sys.argv", ["sim_doctor.py", "--quiet"])
+    sim_doctor.main()
+    sim_doctor.main()
+    history = (doctor_state / "health_history.jsonl").read_text().strip().split("\n")
+    assert len(history) == 2
+    for line in history:
+        e = json.loads(line)
+        assert "ts" in e and "status" in e and "ok" in e
+        assert isinstance(e.get("fail_names"), list)
+
+
+def test_no_write_skips_history_too(doctor_state, monkeypatch):
+    """--no-write also skips the history append, not just health.json."""
+    monkeypatch.setattr("sys.argv", ["sim_doctor.py", "--no-write", "--quiet"])
+    sim_doctor.main()
+    assert not (doctor_state / "health_history.jsonl").exists()
+
+
+def test_fix_zombie_locks_actually_sweeps(doctor_state, monkeypatch):
+    """fix_zombie_locks must invoke the janitor's race-safe sweeper."""
+    lock = doctor_state / "stream_deltas" / "old.lock"
+    lock.parent.mkdir(parents=True)
+    lock.write_text("")
+    past = time.time() - 48 * 3600
+    os.utime(lock, (past, past))
+    fixed, detail = sim_doctor.fix_zombie_locks()
+    assert fixed is True
+    assert not lock.exists()
+    assert "1" in detail
+
+
+def test_fix_stats_drift_corrects_inflated_counter(doctor_state):
+    """fix_stats_drift uses apply_posted_log_truth to lower inflated counters."""
+    (doctor_state / "stats.json").write_text(json.dumps({"total_posts": 99, "total_comments": 999}))
+    (doctor_state / "posted_log.json").write_text(json.dumps({
+        "posts": [{"number": 1, "commentCount": 5}, {"number": 2, "commentCount": 3}],
+    }))
+    fixed, detail = sim_doctor.fix_stats_drift()
+    assert fixed is True
+    stats = json.loads((doctor_state / "stats.json").read_text())
+    assert stats["total_posts"] == 2
+    assert stats["total_comments"] == 8
+
+
+def test_fix_stats_drift_noop_when_aligned(doctor_state):
+    """No correction reported when stats already match posted_log truth."""
+    (doctor_state / "stats.json").write_text(json.dumps({"total_posts": 1, "total_comments": 5}))
+    (doctor_state / "posted_log.json").write_text(json.dumps({"posts": [{"number": 1, "commentCount": 5}]}))
+    fixed, _ = sim_doctor.fix_stats_drift()
+    assert fixed is False
+
+
+def test_fix_memory_orphans_archives_not_deletes(doctor_state):
+    """Orphan soul files are MOVED to state/archive/memory_orphans/{ts}/."""
+    (doctor_state / "agents.json").write_text(json.dumps({
+        "agents": {"agent-1": {"name": "A", "status": "active"}},
+    }))
+    (doctor_state / "memory" / "agent-1.md").write_text("alive")
+    (doctor_state / "memory" / "ghost.md").write_text("orphan body")
+    fixed, _ = sim_doctor.fix_memory_orphans()
+    assert fixed is True
+    assert not (doctor_state / "memory" / "ghost.md").exists()
+    assert (doctor_state / "memory" / "agent-1.md").exists()
+    archive_root = doctor_state / "archive" / "memory_orphans"
+    assert archive_root.exists()
+    archived = list(archive_root.rglob("ghost.md"))
+    assert len(archived) == 1
+    assert archived[0].read_text() == "orphan body"
+
+
+def test_fix_memory_orphans_refuses_when_agents_empty(doctor_state):
+    """Refuse to archive everything when agents.json is empty (would orphan all)."""
+    (doctor_state / "agents.json").write_text(json.dumps({"agents": {}}))
+    (doctor_state / "memory" / "ghost.md").write_text("orphan")
+    fixed, detail = sim_doctor.fix_memory_orphans()
+    assert fixed is False
+    assert "empty" in detail.lower()
+    assert (doctor_state / "memory" / "ghost.md").exists()
+
+
+def test_show_history_renders_recent_runs(doctor_state, monkeypatch, capsys):
+    """--history N reads health_history.jsonl and prints the last N runs."""
+    history = doctor_state / "health_history.jsonl"
+    history.write_text(
+        json.dumps({"ts": "2026-04-26T00:00:00Z", "status": "ok",
+                    "ok": 9, "warn": 0, "fail": 0, "fail_names": []}) + "\n" +
+        json.dumps({"ts": "2026-04-26T01:00:00Z", "status": "fail",
+                    "ok": 7, "warn": 0, "fail": 2,
+                    "fail_names": ["zombie_locks", "stats_total_posts"]}) + "\n"
+    )
+    monkeypatch.setattr("sys.argv", ["sim_doctor.py", "--history", "5"])
+    rc = sim_doctor.main()
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "2026-04-26T00:00:00Z" in out
+    assert "2026-04-26T01:00:00Z" in out
+    assert "zombie_locks" in out
+
+
+def test_show_history_handles_missing_file(doctor_state, monkeypatch, capsys):
+    """--history with no history file is a no-op, not a crash."""
+    monkeypatch.setattr("sys.argv", ["sim_doctor.py", "--history", "5"])
+    rc = sim_doctor.main()
+    assert rc == 0
+    assert "no history" in capsys.readouterr().out.lower()
