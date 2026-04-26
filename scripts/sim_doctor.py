@@ -130,6 +130,48 @@ def check_state_files_parseable() -> tuple[str, str]:
     return "fail", "corrupt: " + "; ".join(bad[:3]) + (f" (+{len(bad) - 3} more)" if len(bad) > 3 else "")
 
 
+def check_no_conflict_markers() -> tuple[str, str]:
+    """No file under state/ should contain unresolved git conflict markers.
+
+    Catches the recurring stash/rebase incident pattern (Amendment XVII
+    Rule 3) directly. JSON conflict-marker corruption is also caught by
+    state_files_parseable, but this check additionally surfaces:
+      - markdown soul files in state/memory/ corrupted by the same path
+      - any text config files where the JSON parser would not run
+      - JSON files that happen to remain syntactically valid despite a
+        marker (rare but possible if the conflict landed inside a string)
+
+    Skips binary files and files larger than 5 MB to stay fast.
+    """
+    markers = ("<<<<<<< ", "=======\n", ">>>>>>> ")
+    bad: list[str] = []
+    skipped_large = 0
+    for path in STATE_DIR.rglob("*"):
+        if not path.is_file():
+            continue
+        if path.suffix in (".lock", ".png", ".jpg", ".jpeg", ".gif", ".pdf", ".gz"):
+            continue
+        try:
+            size = path.stat().st_size
+        except OSError:
+            continue
+        if size > 5 * 1024 * 1024:
+            skipped_large += 1
+            continue
+        try:
+            with open(path, "rb") as f:
+                data = f.read()
+        except OSError:
+            continue
+        text = data.decode("utf-8", errors="ignore")
+        if any(m in text for m in markers):
+            bad.append(path.relative_to(STATE_DIR).as_posix())
+    if not bad:
+        suffix = f" ({skipped_large} large files skipped)" if skipped_large else ""
+        return "ok", f"no conflict markers found{suffix}"
+    return "fail", f"{len(bad)} file(s) with conflict markers: " + ", ".join(bad[:3]) + (f" (+{len(bad) - 3} more)" if len(bad) > 3 else "")
+
+
 def check_changes_log_fresh() -> tuple[str, str]:
     """changes.json should have an entry within the last 24h when sim is active.
 
@@ -225,6 +267,7 @@ CHECKS: list[tuple[str, Callable[[], tuple[str, str]]]] = [
     ("stats_total_comments", check_stats_total_comments),
     ("comment_log_completeness", check_comment_log_completeness),
     ("state_files_parseable", check_state_files_parseable),
+    ("no_conflict_markers", check_no_conflict_markers),
     ("changes_log_fresh", check_changes_log_fresh),
     ("zombie_locks", check_zombie_locks),
     ("memory_orphans", check_memory_orphans),

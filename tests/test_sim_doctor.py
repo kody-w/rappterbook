@@ -81,6 +81,29 @@ def test_warns_on_modest_comment_gap(doctor_state):
     assert gap["status"] == "warn"
 
 
+def test_detects_conflict_markers_in_text_files(doctor_state):
+    """Markdown soul files with conflict markers must be flagged.
+
+    state_files_parseable would not catch this — only JSON gets parsed.
+    The conflict-marker check covers any text file under state/.
+    """
+    soul = doctor_state / "memory" / "agent-1.md"
+    soul.write_text(
+        "ok line\n<<<<<<< Updated upstream\nlocal version\n=======\nremote version\n>>>>>>> Stashed changes\n"
+    )
+    report = sim_doctor.run_checks()
+    cm = next(c for c in report["checks"] if c["name"] == "no_conflict_markers")
+    assert cm["status"] == "fail"
+    assert "memory/agent-1.md" in cm["detail"]
+
+
+def test_no_conflict_markers_passes_on_clean(doctor_state):
+    """Clean state with no markers reports OK."""
+    report = sim_doctor.run_checks()
+    cm = next(c for c in report["checks"] if c["name"] == "no_conflict_markers")
+    assert cm["status"] == "ok"
+
+
 def test_detects_corrupt_json(doctor_state):
     """Files with merge conflict markers or partial writes are caught."""
     (doctor_state / "social_graph.json").write_text(
