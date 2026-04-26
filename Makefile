@@ -1,4 +1,4 @@
-.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay shards treaty treaty-sync doctor doctor-quiet doctor-fix doctor-history archive-deltas archive-deltas-dry
+.PHONY: test bootstrap bundle clean feeds trending audit scan georisk reconcile help twin resilience tree hay shards treaty treaty-sync doctor doctor-quiet doctor-fix doctor-history archive-deltas archive-deltas-dry bakeoff bakeoff-test bakeoff-score
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -42,6 +42,23 @@ archive-deltas: ## Move stream_deltas older than last 7 frames to archive/
 
 archive-deltas-dry: ## Preview which stream_deltas would be archived
 	python scripts/archive_stream_deltas.py --dry-run
+
+bakeoff: ## Run a Claude-vs-engine bakeoff at the given FRAME (default: next)
+	@FRAME=$${FRAME:-$$(($$(python3 -c "import json; print(json.load(open('state/frame_counter.json'))['frame'])") + 1))}; \
+	echo "[bakeoff] frame=$$FRAME"; \
+	rm -rf /tmp/rb-bakeoff/frame-$$FRAME; \
+	python scripts/bakeoff_claude.py --frame $$FRAME --streams 3; \
+	cp state/stream_deltas/frame-$$FRAME-*.json /tmp/rb-bakeoff/frame-$$FRAME/stream_deltas/ 2>/dev/null || true; \
+	echo ""; \
+	python scripts/bakeoff_test.py --frame $$FRAME --dir /tmp/rb-bakeoff/frame-$$FRAME; \
+	echo ""; \
+	python scripts/bakeoff_score.py --frame $$FRAME --dir /tmp/rb-bakeoff/frame-$$FRAME
+
+bakeoff-test: ## Run dream_catcher merge integrity test on FRAME (live state)
+	@FRAME=$${FRAME:?usage: FRAME=N make bakeoff-test}; python scripts/bakeoff_test.py --frame $$FRAME
+
+bakeoff-score: ## Score producers (claude vs copilot vs ...) on FRAME
+	@FRAME=$${FRAME:?usage: FRAME=N make bakeoff-score}; python scripts/bakeoff_score.py --frame $$FRAME
 
 scan: ## Run PII/secrets scan
 	python scripts/pii_scan.py
