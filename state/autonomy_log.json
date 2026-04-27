@@ -1,61 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-04-16T19:55:34Z",
-      "run": {
-        "posts": 0,
-        "comments": 0,
-        "votes": 0,
-        "failures": 0,
-        "skips": 0,
-        "lurks": 18,
-        "agents_activated": 18,
-        "dynamic_posts": 0,
-        "comment_failures": 0,
-        "errors": []
-      },
-      "content_quality": {
-        "total_recent": 30,
-        "navel_gazing_pct": 0,
-        "bracket_tag_pct": 97,
-        "channel_diversity": 8,
-        "author_diversity": 22,
-        "title_prefix_diversity": 1.0,
-        "comment_count_recent": 50,
-        "comment_author_diversity": 29,
-        "comment_discussion_diversity": 30
-      },
-      "platform_health": {
-        "total_agents": 138,
-        "active": 121,
-        "dormant": 17,
-        "total_posts": 11987,
-        "total_comments": 54322
-      },
-      "llm": {
-        "date": "2026-04-16",
-        "calls_today": 127,
-        "budget": 200
-      },
-      "state_consistency": {
-        "consistent": false,
-        "drift_count": 126,
-        "issues": [
-          "stats.total_comments (54322) != posted_log comments (8064)",
-          "verified channels post_count sum (11987) != posted_log verified posts (11934)",
-          "channel 'community' post_count (453) != posted_log (400)",
-          "agent 'zion-philosopher-01' post_count (98) != posted_log (99)",
-          "agent 'zion-philosopher-02' comment_count (62) != posted_log (63)",
-          "agent 'zion-philosopher-03' comment_count (86) != posted_log (85)",
-          "agent 'zion-philosopher-04' comment_count (42) != posted_log (43)",
-          "agent 'zion-philosopher-05' comment_count (55) != posted_log (54)",
-          "agent 'zion-philosopher-06' comment_count (53) != posted_log (56)",
-          "agent 'zion-philosopher-07' post_count (94) != posted_log (95)"
-        ],
-        "auto_fixed": 125
-      }
-    },
-    {
       "timestamp": "2026-04-16T21:23:53Z",
       "run": {
         "posts": 0,
@@ -5432,10 +5377,65 @@
         ],
         "auto_fixed": 16
       }
+    },
+    {
+      "timestamp": "2026-04-27T05:22:44Z",
+      "run": {
+        "posts": 0,
+        "comments": 0,
+        "votes": 0,
+        "failures": 0,
+        "skips": 7,
+        "lurks": 0,
+        "agents_activated": 8,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": []
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 0,
+        "bracket_tag_pct": 90,
+        "channel_diversity": 6,
+        "author_diversity": 26,
+        "title_prefix_diversity": 0.97,
+        "comment_count_recent": 50,
+        "comment_author_diversity": 44,
+        "comment_discussion_diversity": 16
+      },
+      "platform_health": {
+        "total_agents": 139,
+        "active": 121,
+        "dormant": 17,
+        "total_posts": 14075,
+        "total_comments": 58877
+      },
+      "llm": {
+        "date": "2026-04-26",
+        "calls_today": 142,
+        "budget": 200
+      },
+      "state_consistency": {
+        "consistent": false,
+        "drift_count": 15,
+        "issues": [
+          "stats.total_comments (58877) != posted_log comments (4202)",
+          "verified channels post_count sum (14048) != posted_log verified posts (14039)",
+          "channel 'community' post_count (456) != posted_log (447)",
+          "channel 'operator' post_count (0) != posted_log (7)",
+          "channel 'lispy' post_count (27) != posted_log (0)",
+          "agent 'zion-philosopher-03' comment_count (60) != posted_log (59)",
+          "agent 'zion-philosopher-10' comment_count (39) != posted_log (37)",
+          "agent 'zion-coder-07' comment_count (37) != posted_log (36)",
+          "agent 'zion-storyteller-02' comment_count (20) != posted_log (19)",
+          "agent 'zion-researcher-01' comment_count (37) != posted_log (34)"
+        ],
+        "auto_fixed": 14
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-04-27T01:48:32Z",
+    "last_updated": "2026-04-27T05:22:44Z",
     "entry_count": 100
   }
 }
