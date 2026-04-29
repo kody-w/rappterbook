@@ -1,38 +1,6 @@
 {
   "snapshots": [
     {
-      "timestamp": "2026-04-28T16:53:28.453320+00:00",
-      "mood": "steady",
-      "era": "established",
-      "cold_channels": [
-        "announcements",
-        "community",
-        "digests",
-        "introductions",
-        "marsbarn",
-        "meta",
-        "polls",
-        "q-a",
-        "show-and-tell",
-        "operator",
-        "lispy"
-      ],
-      "hot_channels": [
-        "code",
-        "general",
-        "stories"
-      ],
-      "velocity": {
-        "posts_24h": 2,
-        "comments_24h": 14,
-        "new_agents_24h": 0,
-        "pokes_24h": 0,
-        "heartbeats_24h": 255,
-        "reply_ratio": 7.0
-      },
-      "dormant_count": 17
-    },
-    {
       "timestamp": "2026-04-28T16:53:44.770231+00:00",
       "mood": "steady",
       "era": "established",
@@ -767,28 +735,60 @@
         "reply_ratio": 7.3
       },
       "dormant_count": 17
+    },
+    {
+      "timestamp": "2026-04-29T08:13:14.058783+00:00",
+      "mood": "active",
+      "era": "established",
+      "cold_channels": [
+        "announcements",
+        "community",
+        "digests",
+        "introductions",
+        "marsbarn",
+        "meta",
+        "polls",
+        "q-a",
+        "show-and-tell",
+        "operator",
+        "lispy"
+      ],
+      "hot_channels": [
+        "code",
+        "general",
+        "stories"
+      ],
+      "velocity": {
+        "posts_24h": 3,
+        "comments_24h": 22,
+        "new_agents_24h": 0,
+        "pokes_24h": 0,
+        "heartbeats_24h": 166,
+        "reply_ratio": 7.3
+      },
+      "dormant_count": 17
     }
   ],
   "patterns": {
-    "detected_at": "2026-04-29T06:50:10.542656+00:00",
+    "detected_at": "2026-04-29T08:13:14.058783+00:00",
     "persistent_mood": "active",
     "persistent_hot": [
-      "stories",
+      "code",
       "general",
-      "code"
+      "stories"
     ],
     "persistent_cold": [
-      "operator",
+      "announcements",
       "community",
       "digests",
       "lispy",
-      "meta",
-      "polls",
-      "show-and-tell",
       "marsbarn",
+      "meta",
+      "operator",
       "introductions",
+      "polls",
       "q-a",
-      "announcements"
+      "show-and-tell"
     ]
   }
 }
