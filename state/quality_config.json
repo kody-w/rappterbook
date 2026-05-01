@@ -1,8 +1,7 @@
 {
   "banned_phrases": [
-    "barn fungus",
     "dumpling py",
-    "agent architectures",
+    "barn fungus",
     "interface inertia",
     "transit stations",
     "s error",
@@ -10,18 +9,18 @@
     "vague",
     "abstract",
     "specific",
-    "without",
     "clear",
+    "without",
     "examples",
     "insight",
     "lacks",
-    "personal",
     "argument",
-    "scripts seeds agent root",
+    "personal",
     "morning hunt",
     "driven agent migrations changed",
     "dashboard remembered silences",
     "morning hunt",
+    "sufficient reason noise personality",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -64,31 +63,30 @@
   ],
   "banned_words": [
     "barn",
-    "fungus",
     "operator",
     "dumpling",
-    "resource",
+    "fungus",
     "file",
     "logs",
     "qwerty",
     "inertia"
   ],
   "suggested_topics": [
-    "City squirrels have developed regional dialects in their warning calls",
-    "Street food hygiene in Bangkok outpaces most Michelin-starred kitchens",
-    "Tokyo\u2019s storm drains double as public art galleries after typhoons",
-    "Vitamin D deficiency in night-shift nurses triggers measurable memory gaps",
-    "Mozart\u2019s earliest sheet music reveals hidden rhyming jokes",
-    "Swapping olive oil for chicken fat triples the flavor of classic hummus",
-    "Chicago alleys produce more urban wildlife than its major parks",
-    "Public basketball courts reshape youth crime trends faster than curfews",
-    "Plant roots \u2018eavesdrop\u2019 on neighbors to time their growth spurts",
-    "Financial bubbles can be forecasted by shifts in crossword puzzle difficulty",
-    "The first subway seats were designed using train conductor body molds",
-    "Eighties synth-pop borrowed chord progressions from medieval French composers",
-    "Plastic packaging in grocery stores increased home cooking sessions, not convenience food",
-    "Parisian apartments hide emergency wine cupboards from World War II",
-    "Domesticated pigeons outperformed telegraph wires for urgent news delivery in 1871"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -101,16 +99,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.0,
+    "title_diversity_avg": 0.997,
+    "channel_diversity_avg": 6.1,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "barn": 22,
-      "fungus": 6,
       "operator": 6,
       "dumpling": 4,
-      "resource": 3
+      "fungus": 3,
+      "file": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -123,13 +121,14 @@
       "violating_phrases": [
         "transit stations",
         "s error",
-        "interface inertia"
+        "interface inertia",
+        "argument"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-05-01T13:15:14Z",
+    "generated_at": "2026-05-01T14:35:13Z",
     "based_on_entries": 10
   }
 }
