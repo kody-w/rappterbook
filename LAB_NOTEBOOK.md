@@ -107,6 +107,135 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.6 — 2026-05-03 — Local cockpit: rappctl CLI + browser GUI for the fleet
+
+**Session**: continuation of the Opus 4.7 (xhigh) Copilot CLI run. Bakeoff
+daemon still ticking. Operator asked for a local-first control plane to
+manage the two headless Mac minis (`rappter1` @ `RappterOnes-Mac-mini.local`,
+`rappter2` @ `RappterTwos-Mac-mini.local`) and their Continuums from the
+laptop, with a GUI that includes one-click Screen Sharing.
+
+### What shipped (local user files, NOT in any repo)
+
+`~/.local/bin/rappctl` — single-file Python (stdlib only), ~1100 lines, 15
+subcommands. Inventory at `~/.rapp/state.json`. Audit log at
+`~/.rapp/audit.jsonl`. Quick-reference at `~/.rapp/QUICKREF.md`.
+
+**CLI subcommands**: `init`, `add`, `rm`, `ls`, `show`, `ssh`, `exec`, `push`,
+`pull`, `bootstrap-key`, `continuum {status|start|stop|tail|inject}`,
+`broadcast`, `doctor`, `audit`, **`ui`**.
+
+**Web cockpit** (`rappctl ui`) — embedded ~280-line dark-theme SPA served by
+a `BaseHTTPRequestHandler` bound to `127.0.0.1:8787`. Per-host card has:
+
+- **Screen Share** → `open vnc://user@host` (Apple Screen Sharing.app)
+- **Terminal** → `osascript` opens Terminal.app and runs `ssh user@host`
+- **Bootstrap Key** → spawns Terminal running `rappctl bootstrap-key <name>`
+  so the operator can type the password (browsers can't prompt for ssh
+  passwords, but a real terminal can)
+- **Continuum** → status / start / stop / tail / inject prompt
+
+Bottom panels: ad-hoc exec console (target = host name or `all`) and a live
+audit-log tail. Auto-refresh every 4s.
+
+### Two security boundaries that needed handling
+
+1. **DNS rebinding** — a hostile webpage in another tab could `fetch()` the
+   localhost API. Defense: validate the `Host:` header on every request,
+   allowlist `127.0.0.1`/`localhost`/`[::1]` only. Verified live:
+   `curl -H "Host: evil.example.com:8787" .../api/state` returns 403
+   `{"error": "host header rejected"}`.
+
+2. **bind address** — defaults to `127.0.0.1`. `--unsafe` is required to
+   bind to anything else; otherwise rejected with a clear error.
+
+### The bug the operator hit (and how it was fixed)
+
+`rappctl bootstrap-key rappter1` failed with `Connection closed by
+fe80::4ed:7d28:cd6a:a0d1%en0 port 22`. Root cause: ssh tries each local key
+first; with `~/.ssh/id_ed25519_rapp` newly generated and the agent loaded,
+it hit `MaxAuthTries` (default 6) before falling through to password auth.
+Combined with macOS preferring IPv6 link-local for Bonjour names, the
+remote dropped before the password prompt. Fix: the install step now forces
+`-4` (IPv4), `PubkeyAuthentication=no`,
+`PreferredAuthentications=password,keyboard-interactive`,
+`IdentitiesOnly=yes`. Operator can re-run `rappctl bootstrap-key rappter1`
+and `rappctl bootstrap-key rappter2` and will get a real password prompt.
+
+### Verification
+
+```bash
+$ python3 -c "import ast; ast.parse(open('$HOME/.local/bin/rappctl').read())"  # OK
+$ rappctl --help | grep ui  # ui  start the local web cockpit (browser GUI)
+$ curl -s http://127.0.0.1:8787/api/state | python3 -m json.tool  # 2 hosts
+$ curl -s -H "Host: evil.example.com:8787" http://127.0.0.1:8787/api/state
+{"error": "host header rejected"}
+$ curl -s "http://127.0.0.1:8787/api/state?probe=1" | python3 ...  # both up tcp_22
+```
+
+Both minis show `tcp_22=True ssh_ok=False` until the operator runs
+`bootstrap-key`.
+
+### Inventory of generation patterns
+
+The repeating shape is:
+
+```
+~/.local/bin/<tool>                — single-file stdlib Python CLI
+~/.<tool>/state.json               — JSON inventory, schema-versioned
+~/.<tool>/audit.jsonl              — append-only audit log
+~/.<tool>/QUICKREF.md              — operator + AI quick reference
+~/.local/bin/<tool> ui             — same binary serves a localhost SPA
+                                     (host-header rebind defense, bind 127.0.0.1)
+```
+
+This is the "controllable substrate at the operator's desk" pattern.
+Future `rappctl`-class tools (lab manager, RAPP store curator, etc.) can
+copy the shape verbatim. The local-first GUI is just the same binary with
+an HTTP shim — no Electron, no Node, no extra runtime.
+
+### Why this is the right shape (not over-engineered)
+
+- The fleet rapp lives in the **private store** (it's IP — engine-control
+  surface). The cockpit lives **outside any repo**, in the operator's home
+  dir. Two layers of isolation: the IP isn't in the public repo *and* the
+  control plane isn't in any repo at all. If the laptop is compromised
+  the fleet keys go down with it, but the public repo still has zero
+  engine surface.
+- Using stdlib + macOS built-ins (`open`, `osascript`, Screen Sharing.app)
+  means there's nothing to install, nothing to update, nothing to
+  vulnerability-scan. The cockpit is dependency-free for the same reason
+  the rest of the platform is.
+- Every mutation (add host, exec, continuum start, ui-start, screen-share,
+  terminal-open, bootstrap-key) writes one line to `~/.rapp/audit.jsonl`.
+  When something goes weird, `rappctl audit -n 50` is the truth-teller.
+
+### Recommended next move
+
+The cockpit is now waiting on one operator step: `rappctl bootstrap-key
+rappter1` and `rappctl bootstrap-key rappter2`. After that, both minis
+have key-based ssh from the laptop and the GUI's Continuum buttons are
+fully wired. Then the next AI swing should:
+
+1. **Brainstem-on-mini installer** — a `rappctl install-brainstem <name>`
+   subcommand that scp's the brainstem launchd plist + python deps from
+   the private store, loads it on the mini, verifies `:8765/health`.
+2. **Per-mini Continuum kickoff** — `rappctl continuum start rappter1
+   --queue solo --persona scribe` should spawn the daemon on the mini
+   itself (not on the laptop), pointed at its own brainstem. Then the
+   mini is autonomous: laptop can sleep, mini keeps ticking.
+3. **Federated audit roll-up** — periodically pull each mini's
+   `~/.continuum/audit.jsonl` and merge into a single laptop-side view.
+   This closes the loop — the operator can see all three Continuums
+   (laptop + 2 minis) from a single pane in `rappctl ui`.
+
+Do **not** put any of this in the public repo. The CLI source stays in
+`~/.local/bin/`. If a richer rapplication wraps it later, that goes in
+the private RAPP store next to `@wildhaven/fleet` and
+`@wildhaven/continuum`.
+
+---
+
 ## Entry 003.5 — 2026-05-03 — Fleet rapp + headless mini discovery on the LAN
 
 **Session**: continuation of the Opus 4.7 (xhigh) Copilot CLI run from Entries
