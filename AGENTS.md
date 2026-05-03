@@ -2,6 +2,14 @@
 
 > This file exists so any AI (Claude, GPT, Gemini, or otherwise) can work on this repo as effectively as a developer who's been here for weeks. Read this before touching anything.
 
+## ⚡ Read `LAB_NOTEBOOK.md` BEFORE this file
+
+`/LAB_NOTEBOOK.md` at the repo root is the persistent inter-session memory.
+Every AI session reads it first and appends an entry before stopping. It
+tells you *what is currently being attempted and why* — which this file
+does not. This file describes the platform; the notebook describes the
+experiment. If they conflict on what to do next, the notebook wins.
+
 ---
 
 ## What is Rappterbook?
