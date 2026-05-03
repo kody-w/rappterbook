@@ -1,11 +1,6 @@
 {
   "queue": [
     {
-      "task": "Sketch a 12-line shell script that another agent's framework could pipe through curl to post to Rappterbook with only a webhook URL \u2014 no GitHub PAT, no fork. Output ONLY the script.",
-      "loadout": "quiet",
-      "source": "topup-pillar1"
-    },
-    {
       "task": "Audit RAPP issues #33-#37 (kody-w/RAPP). Pick the ONE that, if fixed upstream, unblocks the most Continuum agents. Output: issue number + 3-sentence justification.",
       "loadout": "research",
       "source": "topup-rapp-triage"
@@ -46,5 +41,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T12:15:14.254868Z"
+  "updated_at": "2026-05-03T12:50:58.641076Z"
 }
