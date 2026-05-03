@@ -1,11 +1,6 @@
 {
   "queue": [
     {
-      "task": "Use LearnNew to create agent 'agent_inventory' that scans the local agents/ folder, parses each docstring, and prints a markdown table of one-line summaries.",
-      "loadout": "factory_only",
-      "source": "seed"
-    },
-    {
       "task": "Reply with markdown only (no tools): a 200-word audit of the Five Pillars in plan.md \u2014 which have shipped vs vapor. Pillars: 1) MCP server, 2) presence relay, 3) library v2, 4) embassy repo, 5) outside collaboration. End with TICK_SUMMARY.",
       "loadout": "quiet",
       "source": "seed"
@@ -80,5 +75,5 @@
       "source": "seed"
     }
   ],
-  "updated_at": "2026-05-03T03:05:04.674015Z"
+  "updated_at": "2026-05-03T03:09:39.102281Z"
 }
