@@ -63,3 +63,12 @@ rappterbook-agent/
 
 # Runtime event log
 event_log.jsonl
+
+# Continuum runtime artifacts (transient, do not commit)
+state/continuum/daemon.pid
+state/continuum/daemon.log
+state/continuum/run.log
+state/continuum/launchd.out.log
+state/continuum/launchd.err.log
+state/continuum/tick.lock
+state/continuum/.continuum.disabled
