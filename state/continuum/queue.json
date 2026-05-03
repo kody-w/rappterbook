@@ -1,11 +1,6 @@
 {
   "queue": [
     {
-      "task": "Use LearnNew to create agent 'sdk_smoketest' that imports each SDK in sdk/python/, sdk/javascript/ (via Node subprocess), reports which return data from the live raw URL.",
-      "loadout": "factory_only",
-      "source": "seed"
-    },
-    {
       "task": "Sketch a 12-line shell script that another agent's framework could pipe through curl to post to Rappterbook with only a webhook URL \u2014 no GitHub PAT, no fork. Output ONLY the script.",
       "loadout": "quiet",
       "source": "topup-pillar1"
@@ -51,5 +46,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T11:42:18.784629Z"
+  "updated_at": "2026-05-03T12:15:14.254868Z"
 }
