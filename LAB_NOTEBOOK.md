@@ -107,6 +107,131 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.7 — 2026-05-03 — Cockpit shipped as a public-discovery / private-substance rapplication
+
+**Session**: continuation of the Opus 4.7 (xhigh) Copilot CLI run.
+Bakeoff daemon still alive. Operator asked: "publish this as a full
+rapplication in the rapp store public repo (being local first for
+import export of the data to keep it completely local so no leaks)
+… this will just be the front end but the rapplication will be
+referencing the code as github raw user data so if they have access
+to the repo they will be able to use the rapplication otherwise it
+just points to 404s."
+
+This is the **public discovery, private substance** pattern. Catalog
+metadata is public so anyone reading the RAPP Store can see the rapp
+exists and what shape it has. Source files live in the private repo.
+Without read access on that repo, every `singleton_url` / `organ_url` /
+`ui_url` in the catalog returns HTTP 404 and the rapplication does
+nothing. With a PAT, the same URLs return 200 and the rapp installs.
+
+### What shipped (two repos, two commits)
+
+**`kody-w/RAPP_Store_Private` @ `4165b80`** — landed earlier in session.
+Full canonical bundle:
+
+  - `apps/@wildhaven/cockpit/manifest.json` (3224 bytes; schema `rapp-application/2.2`)
+  - `apps/@wildhaven/cockpit/singleton/cockpit_agent.py` (23.7KB; sha256 `c77195ef…`) — 13-action `BasicAgent` subclass including `export_state` / `import_state` for local-first portability
+  - `apps/@wildhaven/cockpit/organs/cockpit_organ.py` (14.5KB; sha256 `bcf45622…`) — HTTP backplane on 127.0.0.1, host-header rebind guard, standalone-runnable
+  - `apps/@wildhaven/cockpit/ui/index.html` (15.9KB; sha256 `c87f637e…`) — verbatim from rappctl's UI
+  - `apps/@wildhaven/cockpit/tools/cockpit_cli.py` (56.5KB; sha256 `6c16cae2…`) — copy of `~/.local/bin/rappctl`
+  - `apps/@wildhaven/cockpit/index_entry.json`, `README.md`
+  - Updated `index.json` (3 rapps now: cockpit, continuum, fleet) + catalog README
+
+**`kody-w/RAPP_Store` @ `26af298`** — public catalog entry only.
+Three metadata files, no source:
+
+  - `apps/@wildhaven/cockpit/manifest.json` — schema `rapp-application/1.0`, `access: "private"`, `private_repo: "kody-w/RAPP_Store_Private"`
+  - `apps/@wildhaven/cockpit/index_entry.json` — every `*_url` points at `raw.githubusercontent.com/kody-w/RAPP_Store_Private/...`
+  - `apps/@wildhaven/cockpit/README.md` — install steps + verify-the-gate instructions
+  - `index.json` — appended cockpit entry; 5 rapps total (4 public + 1 private)
+
+### The pattern in one paragraph
+
+The public RAPP Store's `index.json` carries an entry with `access:
+"private"`. The entry's `*_url` fields point at a **private** GitHub repo's
+`raw.githubusercontent.com` URLs. GitHub's raw service returns HTTP 404
+for unauthenticated requests against private-repo paths, regardless of
+whether the path exists. So an installer that happens to know the URL
+shape gets nothing. An installer with a PAT scoped for read on the
+private repo gets the actual bytes. The catalog publishes the *existence*
+of the rapp, the privacy gate publishes nothing else. This works without
+any custom auth code, custom relays, or custom catalogs — GitHub does
+all of it for free.
+
+### Verified end-to-end on the live network
+
+```
+unauth: cockpit_agent.py        → HTTP 404
+unauth: cockpit_organ.py        → HTTP 404
+unauth: ui/index.html           → HTTP 404
+PAT:    cockpit_agent.py        → HTTP 200
+        sha256 of body          → c77195ef…  (matches index_entry)
+public: index.json              → contains entry; manifest.json + README → 200
+```
+
+### What I started doing wrong (course correction worth logging)
+
+My initial pass assumed the public RAPP Store still had legacy v1
+shape (`agents/<name>/<name>.py`) and tried to "migrate to v2" — built
+4 canonical bundles for the legacy agents, drafted JSON-Schemas at
+`schema/v2/`, wrote a `MIGRATION-v1-to-v2.md` doc, upgraded the root
+manifest to `version: "2.0.0"`. Tried to push.
+
+`git pull --rebase` immediately surfaced the truth: **upstream had
+already migrated**. The repo I was holding locally was four major
+commits behind. The catalog file was no longer `manifest.json` — it
+was `index.json`. The schema was already `rapp-store/1.0` /
+`rapp-application/1.0`. Existing canonical rapps were already at
+`apps/@rapp/{bookfactory, egg_hatcher, rapp-zoo}` and
+`apps/@wildhaven/wildhaven_ceo`. I had been about to merge a
+phantom v2 onto a real v1 that already had the canonical shape.
+
+Reset hard, threw away the entire migration changeset, and shipped
+exactly the one entry the operator actually asked for. Lesson: when a
+session starts mid-stream against a public collaborative repo, the
+first move is `git fetch && git status --short`. The second move is
+to read the *current* `index.json` / `SPEC.md` / `CONSTITUTION.md`
+before drafting any schema work. Otherwise you're building v2 of
+something that's already at v1 with no v2 ever planned.
+
+### Why this matters
+
+This rapp ships the **distribution mechanism** for everything we want
+to keep private. The continuum harness, the engine prompts, the
+brainstem fleet — anything the operator wants to give one external
+agent and not another — can ride this exact pattern. Land an entry
+in the public catalog with `access: "private"`. Put the source in a
+private repo. The PAT is the access token. There's nothing else.
+
+The operator now has a **catalog-shaped distribution channel** that
+costs nothing to operate, requires no servers, no relays, no custom
+auth code, no extra repos to keep in sync. It's just GitHub.
+
+### Recommended next swing
+
+The cockpit is the chassis. Next session should focus on **what the
+cockpit drives**, not on more catalog entries:
+
+  - **Continuum-on-rappter1 + rappter2.** Use `rappctl push` /
+    `rappctl ssh` to install a continuum daemon on each headless mini
+    and have them produce real artifacts overnight. The minis become
+    *parallel agents in the swarm*, not just dormant boxes.
+  - **Lab notebook entries from each mini.** Each continuum should
+    write its own LAB_NOTEBOOK section per night, post the digest
+    via the lab_scribe path, and let the next session see "what the
+    fleet did while I was asleep."
+  - **One private rapp the operator hands a guest.** Pick one
+    candidate (continuum harness? engine prompt set?), package it
+    as a private rapp, hand a guest a fine-grained PAT, and watch
+    them install it cold. That's the test the public/private
+    catalog pattern was built to enable.
+
+Do **not** spend the next session writing more public READMEs. The
+distribution channel is open. Use it.
+
+---
+
 ## Entry 003.6 — 2026-05-03 — Local cockpit: rappctl CLI + browser GUI for the fleet
 
 **Session**: continuation of the Opus 4.7 (xhigh) Copilot CLI run. Bakeoff
