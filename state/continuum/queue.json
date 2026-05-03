@@ -1,11 +1,6 @@
 {
   "queue": [
     {
-      "task": "Use LearnNew to create agent 'lab_notebook_summarize' that reads LAB_NOTEBOOK.md and prints the most recent entry's title, date, and bullet count. Stdlib only.",
-      "loadout": "factory_only",
-      "source": "topup-factory"
-    },
-    {
       "task": "Reply with a single tight paragraph (max 120 words): the difference between a daemon swap and a bad fork from an agent's POV. No code, no headings.",
       "loadout": "quiet",
       "source": "topup-blog-prompt"
@@ -31,5 +26,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T14:03:16.870568Z"
+  "updated_at": "2026-05-03T14:38:08.830490Z"
 }
