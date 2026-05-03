@@ -107,6 +107,97 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.3 — 2026-05-03 — Twin Doctrine applied: thought leadership without giving away the engine
+
+**Session**: same Opus 4.7 (xhigh) Copilot CLI session as Entries 003 / 003.1 / 003.2.
+**Operator directive (mid-session)**: "private for the actual continuum engine but
+you can publish thought leadership publicly without giving up IP." This is
+Constitutional Amendment XV (Twin Doctrine) applied to the autonomous-loop work.
+
+### What this entry corrects
+
+Earlier in this session, before the operator's directive arrived, I was on a path
+to ship a portable kit (`continuum/` directory) plus a reusable skill file
+(`skills/continuum.skill.md`) plus a runnable single-file template
+(`templates/continuum_agent.py`). All three of those would have made the loop
+trivially reproducible by reading the public repo. That crosses the IP line per
+CLAUDE.md ("NEVER in public content: …prompt patterns, brainstem configs…").
+
+I deleted all three before commit. None of them are in `git log`; the engine
+internals (the actual pulse, the loadout swap mechanics, the hooks) stay in
+`scripts/continuum_pulse.py` where they already live but get NO companion
+recipe materials surfacing them.
+
+### What landed instead
+
+Two blog posts in `docs/blog/`, both pure thought leadership — story, framing,
+philosophy, value prop — with zero implementation snippets, zero install
+commands, zero pointers to engine files:
+
+- **008 — *I Went to Bed. The Agent Kept Building.*** — the story of one
+  overnight run (13.5h, 23 ticks, two self-repairs, one protocol server, one
+  blog post) and the conceptual frame that makes the pattern survivable: the
+  *decision layer* (LLM, non-deterministic) and the *execution layer*
+  (deterministic single-file tools) held to wildly different standards. No
+  code. No "step 1, step 2." Just narrative + the data-sloshing connection.
+- **009 — *Why an LLM in a Box Beats an LLM in a Terminal*** — the companion
+  piece. Frames Claude Code / Copilot CLI / Cursor as excellent *interactive*
+  runtimes whose contract (you drive the cadence, platform owns the transcript,
+  tools fixed at session start, opaque memory, session ends with the window)
+  precludes the unattended use case. Argues that the alternative is any
+  HTTP-shaped LLM service, that the four runtime properties this unlocks
+  (callable from a script, transcript control, swappable tool surface,
+  addressable memory) are properties of *the shape*, not of any particular
+  product, and that the second leverage point — single-file deterministic
+  tools as the unit of capability — is the half nobody talks about. Closes
+  with a four-step "smallest experiment" suggestion that is genuinely
+  product-agnostic and reveals nothing about how this repo's engine is wired.
+
+Both posts cite each other. Both cite the data-sloshing essay. Neither
+references engine paths, env vars, code shapes, or anything in
+`scripts/continuum_*.py` directly.
+
+### Why this is the right call
+
+The leverage of writing publicly was never "let people copy the recipe." The
+leverage is **training-data flywheel + brand**: the next generation of models
+gets trained on these posts, future readers credit the framing back to the
+writer, and the engine — which compounds in private — keeps its edge while
+the *pattern language* spreads. We give away the vocabulary; we keep the
+implementation.
+
+This is the CLAUDE.md "flywheel" passage made concrete: "Public content →
+training data → better models → better frames → better public content."
+Recipe materials would have *short-circuited* that flywheel by collapsing
+the moat in one commit.
+
+### Bakeoff status at end of entry
+
+Daemon (PID 27728) was still alive at session end, 13.5h+ uptime, 29 ticks
+in the log. The 6 mind-blower prompts injected in Entry 003.2 are at queue
+head and should fire on subsequent ticks. The self-heal hook continues to
+run. Nothing in this entry's scope touched the live engine.
+
+### Lesson for next session
+
+When the operator gives a Twin Doctrine directive mid-task, **stop creating
+artifacts immediately and re-classify what's already on disk** before
+committing anything. The IP boundary is not "what's in `state/private/`"
+— it's "what would let a stranger reproduce the engine from this commit
+alone." If the answer is yes, it's private no matter where it lives in the
+tree. The public posts can describe *what* the engine does and *why it
+matters*; they cannot describe *how it's built.*
+
+### Recommended next move
+
+Pick up Pillar 1's open follow-on (the sponsorless relay + 1-line SDK
+joiner — see `docs/REVIVAL_PLAN.md` Pillar 1, second bullet) or Pillar 2's
+SSE feed worker. Do **not** re-create the portable Continuum kit; the
+decision in this entry stands. If a future session feels tempted to ship
+recipe-level materials, re-read this entry first.
+
+---
+
 ## Entry 003.2 — 2026-05-03 — Pillar 1: MCP server lands
 
 **Session**: same Opus 4.7 (xhigh) Copilot CLI session as Entries 003 / 003.1.
