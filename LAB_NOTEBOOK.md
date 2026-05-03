@@ -107,6 +107,154 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003 — 2026-05-03 — Continuum: a 24-hour autonomous bakeoff loop
+
+**Session**: Claude Opus 4.7 (xhigh) via GitHub Copilot CLI / operator: kody-w
+**Read state**: commit `f10111979`. LAB_NOTEBOOK has Entries 001-002. RAPP
+brainstem still up at `localhost:7071` from Entry 002, on `claude-opus-4.7-xhigh`.
+
+### Hypothesis tested
+
+That a single AI session can hand the swing **back to itself** by writing a
+launchd-driven loop ("the Continuum") which uses the brainstem as a peer LLM
+to ship code and write notebook entries every 30 minutes, autonomously, while
+the operator sleeps. The bigger bet: that **three brainstem-routing
+unlocks** — surfaced by the operator mid-session — collapse multi-agent
+orchestration into one HTTP loop without any upstream changes.
+
+### The three unlocks
+
+These are properties of the brainstem the operator pointed me at; I didn't
+invent them. They are the architectural foundation of the Continuum:
+
+1. **Transcript injection.** `/chat` accepts `conversation_history` as a
+   filtered turn list (`{role, content}` with role ∈ user|assistant|tool).
+   Prepending fake turns like `[{role:"user", content:"[Pessimist]: ..."},
+   {role:"assistant", content:"[Optimist]: ..."}]` and then sending the real
+   `user_input` gets the model to treat the priors as "context". One brainstem,
+   N personas, no spinning up extra processes. Multi-agent through transcript
+   state. The state IS the agents.
+
+2. **Agent-dir hotload.** `load_agents()` is called inside `/chat`
+   (`brainstem.py:954`) and globs `AGENTS_PATH/*_agent.py` on every request.
+   Swap files in/out between calls and the toolset changes per call. Built
+   four loadouts:
+   - `factory_only` — `LearnNew` + `ContextMemory` (codegen tasks)
+   - `research` — `HackerNews` + `WorkIQ` + `ContextMemory` (read-the-web)
+   - `quiet` — empty (chat-only, for persona/council tasks)
+   - `full` — all six (default)
+
+   Loadout swap stashes the current `*_agent.py` files into a
+   `.continuum_stash/` then copies the chosen loadout in. Restored to `full`
+   at the end of every tick so the brainstem stays usable from outside.
+
+3. **Session-scoped memory.** `session_id` flows through `run_tool_calls`
+   (`brainstem.py:906`) so `ContextMemory.recall/store` writes scope per
+   session. I use stable IDs like `continuum:factory_only` and
+   `continuum:research` so each loadout lineage builds its own memory across
+   ticks. (Per-session **agent dirs** are not yet supported — filed as
+   [RAPP#36](https://github.com/kody-w/RAPP/issues/36).)
+
+### What I built
+
+- **`scripts/continuum_pulse.py`** (~570 lines, stdlib-only). One tick:
+  health-check brainstem (auto-restart if down) → re-pin model → pull main →
+  pop next task from `state/continuum/queue.json` → apply loadout → build
+  history (with persona priors if the task supplies them) → POST `/chat` →
+  diff brainstem `agents/` dir to detect newly-generated agents →
+  py_compile-check → save proposal markdown either way (working code or
+  `.broken_agent.py` artifact for next session) → commit + push with
+  rebase-on-conflict → maybe append a meta-entry to LAB_NOTEBOOK every 6
+  ticks. Hard caps: 6 ticks/hr, 30 commits/day. Lock file with 30-min
+  staleness expiry.
+
+- **`scripts/continuum.sh`** — launchd entrypoint. Lock + 25-min hard kill +
+  `.continuum.disabled` file flag as a kill switch. Logs to
+  `state/continuum/run.log`.
+
+- **`state/continuum/loadouts/{factory_only,research,quiet,full}/`** —
+  file-based toolset bundles. Hot-swappable per request.
+
+- **`state/continuum/queue.json`** — 12 seed tasks, mix of loadouts, two
+  with multi-persona arrays (Pessimist/Optimist debating the bounty board;
+  Builder/Gardener/Operator debating sunset). Failed tasks get pushed back
+  to head.
+
+- **`state/continuum/README.md`** — architecture + ops runbook.
+
+- **`~/Library/LaunchAgents/com.rappterbook.continuum.plist`** —
+  `StartInterval=1800`, `RunAtLoad=true`. Outside the repo (won't be
+  tracked); operator can `launchctl load` to schedule the loop.
+
+### What I broke and re-fixed
+
+- **Brainstem 60s hardcoded timeout.** `brainstem.py:848` and `:867` had
+  `requests.post(..., timeout=60)` on the upstream Copilot Chat call. Opus
+  4.7 xhigh + tool calls regularly exceed 60s → ReadTimeout → HTTP 500. The
+  brainstem's model-fallback logic also doesn't catch this (it's an
+  exception, not a 5xx). Patched to 300s locally; filed as
+  [RAPP#37](https://github.com/kody-w/RAPP/issues/37) with suggested
+  `COPILOT_TIMEOUT` env-var fix.
+
+- **Empty-prose responses on tool-using prompts.** The brainstem returns the
+  tool result but sometimes empty `response`. The pulse now always saves a
+  proposal markdown so non-codegen tasks still produce visible artifacts;
+  it does not require prose for "success".
+
+- **Broken agent preservation.** `LearnNew` still has the indent-rebase bug
+  ([RAPP#34](https://github.com/kody-w/RAPP/issues/34)) — generates files
+  where `try:` body is at col 16 instead of col 12 → SyntaxError. The pulse
+  py_compile-checks every newly-created agent and saves failures as
+  `.broken_agent.py` proposals (handed off to a future session for repair)
+  rather than dropping them. Polluted brainstem dir is cleaned regardless.
+
+- **Model resets on restart.** Brainstem defaults to `gpt-4.1` on boot;
+  added `ensure_model("claude-opus-4.7-xhigh")` at the top of every tick.
+  Idempotent (no-op if already set).
+
+### What worked
+
+First post-fix tick: brainstem produced a 301-line `changes_digest_agent.py`
+in 57s. Indent error at line 87 caught — saved as `.broken_agent.py` for
+future repair. Commit pushed (`f10111979`). Tick took 58s wall-clock.
+
+### What I'm uncertain about
+
+- Will gh CLI Copilot auth survive 24 hours? My `restart_brainstem()`
+  respawns the process but won't re-auth. Failure mode: silent drift.
+- Will launchd actually fire while laptop is asleep / lid is closed? GUI
+  agents do fire when the system is awake but sleep behavior varies.
+  Operator may want to add `caffeinate` to the launchd command if uptime
+  matters.
+- Council pattern (multi-persona via transcript injection) is in the queue
+  but untested end-to-end. Two persona tasks should hit in the next ~3
+  hours of ticks. Will know by morning.
+
+### Recommended next swing for whoever inherits
+
+The **three RAPP issues** (#33-#36 from Session 002, #37 from this session)
+are all small upstream patches. Landing them eliminates 100% of my local
+brainstem patches, making the Continuum work on a stock RAPP install. That
+unlocks running it on a second machine for redundancy, and lets it be the
+default `kody-w/rappterbook` developer experience.
+
+After that: **Pillar 1 (MCP server)** is still the right macro swing. The
+Continuum is infrastructure; the MCP server is the front door.
+
+### Concrete artifacts
+
+- `scripts/continuum_pulse.py` — the tick
+- `scripts/continuum.sh` — launchd wrapper
+- `state/continuum/queue.json` — task queue (mutable, head-pop)
+- `state/continuum/loadouts/` — four hotload bundles
+- `state/continuum/README.md` — runbook
+- `state/continuum/log.jsonl` — append-only telemetry
+- `state/continuum/proposals/` — every tick produces one
+- `~/Library/LaunchAgents/com.rappterbook.continuum.plist` — schedule (not tracked)
+- [RAPP#37](https://github.com/kody-w/RAPP/issues/37) — 60s timeout filed
+
+
+
 ## Entry 002 — 2026-05-02 — First Swing: lab_scribe via RAPP brainstem bakeoff
 
 **Session**: Claude Opus 4.7 (xhigh) via GitHub Copilot CLI / operator: kody-w

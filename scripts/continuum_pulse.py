@@ -1,0 +1,679 @@
+#!/usr/bin/env python3
+"""Continuum pulse — one tick of autonomous bakeoff work.
+
+The Rappterbook Continuum is a launchd-driven loop that uses the local RAPP
+brainstem (http://localhost:7071) as its peer LLM. Each tick is one task
+from state/continuum/queue.json, sent to the brainstem with three unlocks:
+
+  1. **Loadouts** — every task can specify a loadout name. Before chatting,
+     the pulse rsyncs ~/.brainstem/.../agents/ from
+     state/continuum/loadouts/<name>/. Different tools per task. The
+     brainstem hot-reloads agents on every chat hit (load_agents() runs
+     inside the chat handler) so swapping files is enough — no restart.
+
+  2. **Personas** — every task can specify a list of persona turns. Before
+     the actual user_input, the pulse injects them into
+     `conversation_history` as alternating user/assistant messages. This
+     simulates a multi-agent council through a single brainstem instance.
+
+  3. **Self-feed** — when the queue empties, the pulse asks the brainstem
+     to propose three new tasks (with loadouts and personas) and appends
+     them to the queue. The loop runs out of work only if the brainstem
+     refuses.
+
+Stdlib only. Designed for unattended 24+ hour runs. Hard caps prevent
+runaway behaviour. Compile-checks before any agent.py is committed. Pulls
++ rebases before each chat to avoid fighting the fleet.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import time
+import urllib.error
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+BRAINSTEM_BASE = "http://localhost:7071"
+BRAINSTEM_DIR = Path.home() / ".brainstem/src/rapp_brainstem"
+BRAINSTEM_AGENTS = BRAINSTEM_DIR / "agents"
+BRAINSTEM_PY = Path.home() / ".brainstem/venv/bin/python"
+BRAINSTEM_LOG = Path.home() / ".brainstem/brainstem.log"
+STATE = REPO / "state/continuum"
+LOADOUTS = STATE / "loadouts"
+
+MAX_TICKS_PER_HOUR = 6
+MAX_COMMITS_PER_DAY = 30
+LAB_NOTE_EVERY_N_TICKS = 6
+GIT_PUSH_RETRIES = 4
+
+# Filenames the brainstem expects to find as core. Never copy these out as
+# new repo agents — they're brainstem infrastructure, not Rappterbook
+# artifacts.
+BRAINSTEM_CORE = {
+    "basic_agent.py",
+    "context_memory_agent.py",
+    "hacker_news_agent.py",
+    "learn_new_agent.py",
+    "manage_memory_agent.py",
+    "swarm_factory_agent.py",
+    "workiq_agent.py",
+}
+
+CONTINUUM_PROMPT = """You are the Rappterbook Continuum — an autonomous \
+process running on the operator's machine while they sleep. Each tick you \
+receive ONE task. Ship something real.
+
+Tools (whichever are loaded this tick):
+  - LearnNew(name, description): generate a new agent.py in your agents/.
+  - ContextMemory.note(text): preserve thoughts.
+  - WorkIQ / SwarmFactory / HackerNews if useful.
+
+Output rules:
+  - For "Build agent X" tasks → CALL LearnNew. Don't just describe it.
+  - For audits/proposals → write a clear markdown report in your reply.
+  - Stdlib-only is preferred but not required.
+  - Keep prose under 400 words; the work product matters more.
+
+End every reply with:
+  TICK_SUMMARY: <8-15 words on what you did>
+
+Task follows."""
+
+
+# ───────────────────────────── helpers ─────────────────────────────────────
+
+def now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def log(msg: str) -> None:
+    print(f"[continuum {now_iso()}] {msg}", flush=True)
+
+
+def http_post(path: str, payload: dict, timeout: int = 900) -> dict:
+    req = urllib.request.Request(
+        f"{BRAINSTEM_BASE}{path}",
+        data=json.dumps(payload).encode(),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read())
+
+
+def http_get(path: str, timeout: int = 10) -> dict:
+    with urllib.request.urlopen(f"{BRAINSTEM_BASE}{path}", timeout=timeout) as resp:
+        return json.loads(resp.read())
+
+
+def brainstem_alive() -> bool:
+    try:
+        return http_get("/health", timeout=5).get("status") == "ok"
+    except Exception:
+        return False
+
+
+def restart_brainstem() -> None:
+    log("brainstem down — restarting")
+    subprocess.Popen(
+        ["bash", "-c",
+         f"cd {BRAINSTEM_DIR} && nohup {BRAINSTEM_PY} brainstem.py "
+         f">> {BRAINSTEM_LOG} 2>&1 &"],
+        start_new_session=True,
+    )
+    for _ in range(20):
+        time.sleep(2)
+        if brainstem_alive():
+            log("brainstem back up")
+            ensure_model("claude-opus-4.7-xhigh")
+            return
+    log("brainstem failed to restart after 40s")
+
+
+def ensure_model(model: str) -> None:
+    """Force the brainstem to use the specified model.
+
+    The brainstem resets to its default on restart, so we re-assert the
+    model at the top of every tick. Idempotent (no-op if already set).
+    """
+    try:
+        current = http_get("/health", timeout=5).get("model")
+        if current == model:
+            return
+        log(f"setting model: {current} → {model}")
+        http_post("/models/set", {"model": model}, timeout=10)
+    except Exception as exc:
+        log(f"ensure_model failed: {exc}")
+
+
+def git(args: list[str], check: bool = False) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        ["git"] + args, cwd=REPO, capture_output=True, text=True, check=check,
+    )
+
+
+# ─────────────────────── queue + log persistence ───────────────────────────
+
+def load_queue() -> list[dict]:
+    p = STATE / "queue.json"
+    if not p.exists():
+        return []
+    try:
+        return json.loads(p.read_text()).get("queue", [])
+    except Exception:
+        return []
+
+
+def save_queue(queue: list[dict]) -> None:
+    STATE.mkdir(parents=True, exist_ok=True)
+    (STATE / "queue.json").write_text(
+        json.dumps({"queue": queue, "updated_at": now_iso()}, indent=2)
+    )
+
+
+def append_log(entry: dict) -> None:
+    STATE.mkdir(parents=True, exist_ok=True)
+    with (STATE / "log.jsonl").open("a") as f:
+        f.write(json.dumps(entry) + "\n")
+
+
+def read_log() -> list[dict]:
+    p = STATE / "log.jsonl"
+    if not p.exists():
+        return []
+    out = []
+    for line in p.read_text().splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            out.append(json.loads(line))
+        except Exception:
+            pass
+    return out
+
+
+def under_caps() -> tuple[bool, str]:
+    entries = read_log()
+    now = datetime.now(timezone.utc).timestamp()
+
+    def ts(e: dict) -> float:
+        try:
+            return datetime.fromisoformat(e["ts"].replace("Z", "+00:00")).timestamp()
+        except Exception:
+            return 0
+
+    last_hour = [e for e in entries if ts(e) > now - 3600]
+    if len(last_hour) >= MAX_TICKS_PER_HOUR:
+        return False, f"hit MAX_TICKS_PER_HOUR ({MAX_TICKS_PER_HOUR})"
+    commits_today = [
+        e for e in entries if ts(e) > now - 86400 and e.get("committed")
+    ]
+    if len(commits_today) >= MAX_COMMITS_PER_DAY:
+        return False, f"hit MAX_COMMITS_PER_DAY ({MAX_COMMITS_PER_DAY})"
+    return True, ""
+
+
+# ───────────────────── loadout swap (file-based) ───────────────────────────
+
+def apply_loadout(name: str) -> dict:
+    """Replace ~/.brainstem/.../agents/ contents with the named loadout.
+
+    The brainstem hot-reloads agents on every chat call, so swapping files
+    is enough — no restart needed. basic_agent.py is preserved (it's the
+    abstract base; brainstem will fail without it). Files moved out are
+    parked under .continuum_stash/ so they can be restored.
+    """
+    src = LOADOUTS / name
+    if not src.exists():
+        log(f"loadout '{name}' not found — keeping current agents")
+        return {"applied": None}
+
+    stash = BRAINSTEM_AGENTS / ".continuum_stash"
+    stash.mkdir(exist_ok=True)
+
+    # Move existing *_agent.py out of the way (except basic_agent.py).
+    moved_out = []
+    for f in BRAINSTEM_AGENTS.glob("*_agent.py"):
+        if f.name == "basic_agent.py":
+            continue
+        target = stash / f.name
+        if target.exists():
+            target.unlink()
+        shutil.move(str(f), str(target))
+        moved_out.append(f.name)
+
+    # Copy loadout files in.
+    moved_in = []
+    for f in src.glob("*_agent.py"):
+        shutil.copy2(str(f), str(BRAINSTEM_AGENTS / f.name))
+        moved_in.append(f.name)
+
+    log(f"loadout '{name}': stashed {len(moved_out)} → loaded {len(moved_in)}")
+    return {"applied": name, "loaded": moved_in, "stashed": moved_out}
+
+
+def restore_full_loadout() -> None:
+    """Restore the full set of brainstem core agents from the 'full' loadout.
+
+    Called at end of tick so the brainstem is always usable from outside
+    the Continuum (e.g. a human chats with it directly).
+    """
+    apply_loadout("full")
+
+
+# ───────────────────────── chat with personas ──────────────────────────────
+
+def build_history(personas: list[dict]) -> list[dict]:
+    """Convert a list of persona turns into a conversation_history.
+
+    Each persona dict is one of:
+      {"speaker": "Agent A", "says": "..."}        → role=user
+      {"role": "user"|"assistant", "content": "..."}  → passed through
+    """
+    history = []
+    for i, p in enumerate(personas):
+        if "role" in p and "content" in p:
+            history.append({"role": p["role"], "content": p["content"]})
+            continue
+        speaker = p.get("speaker", f"Agent {chr(65 + i)}")
+        says = p.get("says", "")
+        # Alternate roles to keep the model engaged.
+        role = "user" if i % 2 == 0 else "assistant"
+        history.append({
+            "role": role,
+            "content": f"[{speaker}]: {says}",
+        })
+    return history
+
+
+def chat(user_input: str, history: list[dict] | None = None,
+         session_id: str | None = None,
+         timeout: int = 900) -> dict:
+    payload = {"user_input": user_input}
+    if history:
+        payload["conversation_history"] = history
+    if session_id:
+        payload["session_id"] = session_id
+    return http_post("/chat", payload, timeout=timeout)
+
+
+# ─────────────────────── new-agent capture & commit ────────────────────────
+
+def hash_dir(p: Path) -> dict[str, str]:
+    out = {}
+    if not p.exists():
+        return out
+    for f in p.glob("*_agent.py"):
+        try:
+            out[f.name] = hashlib.sha1(f.read_bytes()).hexdigest()
+        except Exception:
+            pass
+    return out
+
+
+def diff_dir(before: dict, after: dict) -> tuple[list[str], list[str]]:
+    new = [n for n in after if n not in before]
+    changed = [n for n in after if n in before and after[n] != before[n]]
+    return new, changed
+
+
+def copy_new_agents(new: list[str], changed: list[str]) -> tuple[list[str], list[str]]:
+    """Copy newly-generated brainstem agents into the repo.
+
+    Returns (copied, broken) — broken paths point to .broken_agent.py
+    files saved into state/continuum/proposals/ so the operator can see
+    what the brainstem tried to write even when compile fails.
+    """
+    repo_agents = REPO / "agents"
+    repo_agents.mkdir(exist_ok=True)
+    proposals_dir = STATE / "proposals"
+    proposals_dir.mkdir(parents=True, exist_ok=True)
+    copied: list[str] = []
+    broken: list[str] = []
+    for name in new + changed:
+        if name in BRAINSTEM_CORE:
+            continue
+        src = BRAINSTEM_AGENTS / name
+        if not src.exists():
+            continue
+        dest_name = name.replace("_agent.py", ".py")
+        dest = repo_agents / dest_name
+        check = subprocess.run(
+            [sys.executable, "-c",
+             f"import py_compile; py_compile.compile({str(src)!r}, doraise=True)"],
+            capture_output=True, text=True,
+        )
+        if check.returncode != 0:
+            log(f"compile fail on {name} — saving as .broken_agent.py")
+            stamp = now_iso().replace(":", "-")
+            broken_path = proposals_dir / f"{stamp}__{name}.broken_agent.py"
+            try:
+                shutil.copy2(str(src), str(broken_path))
+                broken.append(str(broken_path.relative_to(REPO)))
+            except Exception as exc:
+                log(f"  could not preserve broken agent: {exc}")
+            # remove the broken file from brainstem agents dir so the next
+            # tick doesn't fail to load it on every chat
+            try:
+                src.unlink()
+            except Exception:
+                pass
+            continue
+        shutil.copy2(str(src), str(dest))
+        copied.append(str(dest.relative_to(REPO)))
+        # Once copied to repo, also remove from brainstem dir to keep the
+        # agent set clean. The repo is the source of truth.
+        try:
+            src.unlink()
+        except Exception:
+            pass
+    return copied, broken
+
+
+def commit_and_push(message: str, paths: list[str]) -> bool:
+    if not paths:
+        return False
+    git(["add", "--"] + paths)
+    status = git(["status", "--porcelain"]).stdout
+    staged = [
+        line for line in status.splitlines()
+        if line and line[0] in "MADRC"
+    ]
+    if not staged:
+        return False
+    res = git(["commit", "-m", message])
+    if res.returncode != 0:
+        log(f"commit failed: {res.stderr.strip()[:200]}")
+        return False
+    for attempt in range(GIT_PUSH_RETRIES):
+        git(["fetch", "origin", "main"])
+        rb = git(["rebase", "origin/main"])
+        if rb.returncode != 0:
+            log(f"rebase conflict (attempt {attempt+1}); aborting")
+            git(["rebase", "--abort"])
+            time.sleep(15 * (attempt + 1))
+            continue
+        push = git(["push", "origin", "main"])
+        if push.returncode == 0:
+            log(f"pushed: {message.splitlines()[0][:80]}")
+            return True
+        log(f"push failed (attempt {attempt+1}): {push.stderr.strip()[:200]}")
+        time.sleep(20 * (attempt + 1))
+    return False
+
+
+# ─────────────────────── self-feed (ask for tasks) ─────────────────────────
+
+def ask_for_tasks() -> list[dict]:
+    log("queue empty — asking brainstem for next tasks")
+    apply_loadout("quiet")
+    prompt = (
+        "The Rappterbook Continuum task queue is empty. The platform's "
+        "open todos are MCP server, presence relay, library v2, embassy "
+        "repo, bounty board, honest dashboard, challenge series, "
+        "provenance amnesty, one-line join, SSE worker, plus 3 upstream "
+        "RAPP brainstem bugs (kody-w/RAPP #33/#34/#35). "
+        "Propose THREE concrete tasks the Continuum should work on next, "
+        "each one shippable in a single tick. For each task, choose a "
+        "loadout from {factory_only, research, quiet, full}. "
+        "Reply ONLY with JSON: "
+        '{"tasks": [{"task": "...", "loadout": "factory_only"}, ...]}.'
+    )
+    try:
+        result = chat(prompt, timeout=180)
+    except Exception as exc:
+        log(f"task-generation chat failed: {exc}")
+        return []
+    text = result.get("response", "")
+    match = re.search(r"\{[\s\S]*\"tasks\"[\s\S]*?\}\s*$", text)
+    if not match:
+        # Look anywhere
+        match = re.search(r"\{[\s\S]*\"tasks\"[\s\S]*?\]\s*\}", text)
+    if not match:
+        log("no JSON in brainstem reply for new tasks")
+        return []
+    try:
+        raw = json.loads(match.group(0))
+        out = []
+        for t in raw.get("tasks", []):
+            if isinstance(t, str):
+                out.append({"task": t, "loadout": "full", "source": "brainstem"})
+            elif isinstance(t, dict) and t.get("task"):
+                t.setdefault("loadout", "full")
+                t["source"] = "brainstem"
+                out.append(t)
+        return out
+    except Exception as exc:
+        log(f"failed to parse task JSON: {exc}")
+        return []
+
+
+# ───────────────────── lab notebook entry every N ticks ────────────────────
+
+def maybe_lab_entry(tick_count: int) -> bool:
+    if tick_count % LAB_NOTE_EVERY_N_TICKS != 0:
+        return False
+    apply_loadout("quiet")
+    entries = read_log()
+    recent = entries[-LAB_NOTE_EVERY_N_TICKS:]
+    summaries = [e.get("summary", "(no summary)") for e in recent]
+    prompt = (
+        "You are the Rappterbook Continuum, writing the next entry in "
+        "/LAB_NOTEBOOK.md. Below are the last "
+        f"{LAB_NOTE_EVERY_N_TICKS} tick summaries while the operator slept. "
+        "Write a single LAB_NOTEBOOK entry following the schema (Hypothesis, "
+        "What worked, What failed, Lesson, Recommended next move, Open "
+        "hypotheses). Reply with the markdown body only — the operator "
+        "will wrap it with the entry header. Keep it under 600 words.\n\n"
+        f"Recent ticks:\n" + "\n".join(f"- {s}" for s in summaries)
+    )
+    try:
+        reply = chat(prompt, timeout=180).get("response", "").strip()
+    except Exception as exc:
+        log(f"lab-entry chat failed: {exc}")
+        return False
+    if len(reply) < 200:
+        log("lab-entry too short — skipping")
+        return False
+    notebook = REPO / "LAB_NOTEBOOK.md"
+    if not notebook.exists():
+        return False
+    text = notebook.read_text()
+    marker = "<!-- NEW ENTRIES GO ABOVE THIS LINE -->"
+    if marker not in text:
+        return False
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    entry_num = len(re.findall(r"^### Entry \d+", text, re.MULTILINE)) + 1
+    block = (
+        f"\n### Entry {entry_num:03d} — {today} — Continuum night run "
+        f"(tick {tick_count})\n\n{reply}\n\n---\n"
+    )
+    notebook.write_text(text.replace(marker, block + marker))
+    return True
+
+
+# ─────────────────────────── locking ───────────────────────────────────────
+
+def acquire_lock() -> bool:
+    lock = STATE / "tick.lock"
+    STATE.mkdir(parents=True, exist_ok=True)
+    if lock.exists():
+        age = time.time() - lock.stat().st_mtime
+        if age < 1800:
+            return False
+        lock.unlink()
+    lock.write_text(str(os.getpid()))
+    return True
+
+
+def release_lock() -> None:
+    lock = STATE / "tick.lock"
+    if lock.exists():
+        lock.unlink()
+
+
+# ──────────────────────────── tick body ────────────────────────────────────
+
+def tick() -> dict:
+    started = now_iso()
+    entry: dict = {"ts": started, "phase": "start"}
+
+    if not brainstem_alive():
+        restart_brainstem()
+    if not brainstem_alive():
+        entry.update({"phase": "brainstem_down", "skipped": True})
+        return entry
+
+    # Always pin the model — brainstem defaults to gpt-4.1 on restart.
+    ensure_model("claude-opus-4.7-xhigh")
+
+    git(["fetch", "origin", "main"])
+    git(["checkout", "main"])
+    git(["pull", "--rebase", "origin", "main"])
+
+    queue = load_queue()
+    if not queue:
+        new_tasks = ask_for_tasks()
+        if new_tasks:
+            queue = new_tasks
+            save_queue(queue)
+        else:
+            entry.update({"phase": "no_tasks", "skipped": True})
+            return entry
+
+    task = queue.pop(0)
+    save_queue(queue)
+    task_text = task.get("task", "(none)")
+    loadout = task.get("loadout", "full")
+    personas = task.get("personas", []) or []
+    entry.update({"task": task_text, "loadout": loadout,
+                  "persona_count": len(personas)})
+    log(f"task: {task_text[:120]}")
+    log(f"loadout: {loadout}, personas: {len(personas)}")
+
+    apply_loadout(loadout)
+    before = hash_dir(BRAINSTEM_AGENTS)
+
+    history = build_history(personas) if personas else None
+    # Stable session_id per task lineage. Tasks under the same loadout
+    # share ContextMemory writes / tool memory, but don't pollute other
+    # lineages. Override per-task with task["session_id"] if needed.
+    session_id = task.get("session_id") or f"continuum:{loadout}"
+    full_input = f"{CONTINUUM_PROMPT}\n\nTASK: {task_text}"
+    try:
+        result = chat(full_input, history=history, session_id=session_id)
+    except Exception as exc:
+        entry.update({"phase": "chat_failed", "error": str(exc)[:300]})
+        # put task back
+        queue.insert(0, task)
+        save_queue(queue)
+        restore_full_loadout()
+        return entry
+
+    response_text = result.get("response", "") or ""
+    summary_match = re.search(r"TICK_SUMMARY:\s*(.+)", response_text)
+    summary = summary_match.group(1).strip() if summary_match else "(no summary)"
+    entry["summary"] = summary[:200]
+    entry["session_id"] = session_id
+    # agent_logs comes back as a single string from the brainstem; keep a
+    # short tail for the log entry so we can see what tools fired.
+    raw_logs = result.get("agent_logs") or ""
+    if isinstance(raw_logs, list):
+        raw_logs = "\n".join(str(x) for x in raw_logs)
+    entry["agent_logs_tail"] = raw_logs[-600:]
+
+    after = hash_dir(BRAINSTEM_AGENTS)
+    new_files, changed_files = diff_dir(before, after)
+    copied, broken = copy_new_agents(new_files, changed_files)
+    entry["copied_files"] = copied
+    entry["broken_agents"] = broken
+
+    # Save the brainstem reply as a proposal artifact (especially useful
+    # for non-codegen tasks where the value is the prose).
+    proposals_dir = STATE / "proposals"
+    proposals_dir.mkdir(parents=True, exist_ok=True)
+    safe_slug = re.sub(r"[^a-z0-9]+", "-", task_text.lower())[:60].strip("-")
+    proposal_path = proposals_dir / f"{started.replace(':', '-')}__{safe_slug}.md"
+    proposal_path.write_text(
+        f"# Continuum tick {started}\n\n"
+        f"**Task:** {task_text}\n\n"
+        f"**Loadout:** {loadout}\n\n"
+        f"**Personas:** {len(personas)}\n\n"
+        f"---\n\n{response_text}\n"
+    )
+    entry["proposal"] = str(proposal_path.relative_to(REPO))
+
+    paths = list(copied) + list(broken) + [
+        "state/continuum/queue.json",
+        "state/continuum/log.jsonl",
+        str(proposal_path.relative_to(REPO)),
+    ]
+    msg = (
+        f"continuum: {summary[:60]}\n\n"
+        f"Task: {task_text[:300]}\n"
+        f"Loadout: {loadout} / personas: {len(personas)}\n"
+        f"Files: {', '.join(copied) if copied else '(prose only)'}\n\n"
+        f"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+    )
+    pushed = commit_and_push(msg, paths)
+    entry["committed"] = pushed
+
+    tick_count = len(read_log()) + 1
+    if maybe_lab_entry(tick_count):
+        commit_and_push(
+            f"continuum: LAB_NOTEBOOK entry from night run (tick {tick_count})\n\n"
+            "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+            ["LAB_NOTEBOOK.md"],
+        )
+        entry["lab_entry_written"] = True
+
+    restore_full_loadout()
+
+    entry["phase"] = "done"
+    entry["finished"] = now_iso()
+    return entry
+
+
+def main() -> int:
+    if not acquire_lock():
+        log("another tick is in progress — exiting")
+        return 0
+    try:
+        ok, reason = under_caps()
+        if not ok:
+            log(f"under cap exit: {reason}")
+            append_log({"ts": now_iso(), "phase": "rate_limited", "reason": reason})
+            return 0
+        entry = tick()
+        append_log(entry)
+        log(f"tick done: {entry.get('phase')} — {entry.get('summary', '')[:80]}")
+        return 0
+    except Exception as exc:
+        import traceback
+        tb = traceback.format_exc()
+        log(f"tick crashed: {exc!r}")
+        log(tb[-1000:])
+        append_log({"ts": now_iso(), "phase": "crash",
+                    "error": repr(exc)[:300], "traceback": tb[-800:]})
+        # Best-effort restore
+        try:
+            restore_full_loadout()
+        except Exception:
+            pass
+        return 1
+    finally:
+        release_lock()
+
+
+if __name__ == "__main__":
+    sys.exit(main())
