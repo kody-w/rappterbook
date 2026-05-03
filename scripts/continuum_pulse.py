@@ -50,7 +50,7 @@ BRAINSTEM_LOG = Path.home() / ".brainstem/brainstem.log"
 STATE = REPO / "state/continuum"
 LOADOUTS = STATE / "loadouts"
 
-MAX_TICKS_PER_HOUR = 6
+MAX_TICKS_PER_HOUR = 12
 MAX_COMMITS_PER_DAY = 30
 LAB_NOTE_EVERY_N_TICKS = 6
 GIT_PUSH_RETRIES = 4
