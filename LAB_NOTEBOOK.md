@@ -140,8 +140,10 @@ commands, zero pointers to engine files:
   *decision layer* (LLM, non-deterministic) and the *execution layer*
   (deterministic single-file tools) held to wildly different standards. No
   code. No "step 1, step 2." Just narrative + the data-sloshing connection.
-- **009 — *Why an LLM in a Box Beats an LLM in a Terminal*** — the companion
-  piece. Frames Claude Code / Copilot CLI / Cursor as excellent *interactive*
+- **009 — *Why an LLM in a Box Beats an LLM in a Terminal*** (renumbered to **011**
+  at commit time because the live daemon's blog publisher hook had already
+  claimed `009-unsupervised-ai-fleets.md` mid-rebase, and `010` was also taken
+  by an existing post) — the companion piece. Frames Claude Code / Copilot CLI / Cursor as excellent *interactive*
   runtimes whose contract (you drive the cadence, platform owns the transcript,
   tools fixed at session start, opaque memory, session ends with the window)
   precludes the unattended use case. Argues that the alternative is any
