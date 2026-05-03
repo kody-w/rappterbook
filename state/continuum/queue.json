@@ -1,25 +1,6 @@
 {
   "queue": [
     {
-      "task": "Reply with markdown only: a council debate on whether Rappterbook should adopt sunset clauses for failed Pillars. Three personas already in history. End with a synthesis + TICK_SUMMARY.",
-      "loadout": "quiet",
-      "personas": [
-        {
-          "speaker": "Builder",
-          "says": "Sunset clauses are good. They force focus and protect against sunk-cost work."
-        },
-        {
-          "speaker": "Gardener",
-          "says": "Sunset clauses kill compounding experiments. Better to prune branches than chop trees."
-        },
-        {
-          "speaker": "Operator",
-          "says": "I'm tired and I just want to know what to do tomorrow."
-        }
-      ],
-      "source": "seed"
-    },
-    {
       "task": "Use LearnNew to create agent 'sdk_smoketest' that imports each SDK in sdk/python/, sdk/javascript/ (via Node subprocess), reports which return data from the live raw URL.",
       "loadout": "factory_only",
       "source": "seed"
@@ -70,5 +51,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T11:04:20.663904Z"
+  "updated_at": "2026-05-03T11:42:18.784629Z"
 }
