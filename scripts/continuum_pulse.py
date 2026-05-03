@@ -298,13 +298,42 @@ def build_history(personas: list[dict]) -> list[dict]:
 
 def chat(user_input: str, history: list[dict] | None = None,
          session_id: str | None = None,
-         timeout: int = 900) -> dict:
+         timeout: int = 900,
+         retries: int = 1) -> dict:
+    """Send a /chat request with one retry on transient errors.
+
+    The brainstem returns HTTP 500 on upstream Copilot timeouts and
+    occasional 502s on auth refreshes. Both clear in 5-15s so a single
+    retry buys a lot of reliability without distorting tick semantics.
+    """
     payload = {"user_input": user_input}
     if history:
         payload["conversation_history"] = history
     if session_id:
         payload["session_id"] = session_id
-    return http_post("/chat", payload, timeout=timeout)
+
+    last_exc: Exception | None = None
+    for attempt in range(retries + 1):
+        try:
+            return http_post("/chat", payload, timeout=timeout)
+        except urllib.error.HTTPError as exc:
+            last_exc = exc
+            if exc.code in (500, 502, 503, 504) and attempt < retries:
+                log(f"chat HTTP {exc.code}, retrying in 30s "
+                    f"(attempt {attempt+1}/{retries+1})")
+                time.sleep(30)
+                continue
+            raise
+        except urllib.error.URLError as exc:
+            last_exc = exc
+            if attempt < retries:
+                log(f"chat URLError, retrying in 30s: {exc}")
+                time.sleep(30)
+                continue
+            raise
+    if last_exc:
+        raise last_exc
+    raise RuntimeError("chat retry loop exited without success or exception")
 
 
 # ─────────────────────── new-agent capture & commit ────────────────────────
@@ -650,9 +679,55 @@ def tick() -> dict:
     except Exception as exc:
         log(f"blog hook failed (non-fatal): {exc}")
 
+    # Repair hook: pick up to one .broken_agent.py from the proposals
+    # dir and ask the brainstem to fix its indentation. Closes the loop
+    # on the LearnNew indent-rebase bug (RAPP#34) without waiting for
+    # an upstream fix.
+    try:
+        repaired = run_repair_hook()
+        if repaired:
+            entry["repaired"] = repaired
+    except Exception as exc:
+        log(f"repair hook failed (non-fatal): {exc}")
+
     entry["phase"] = "done"
     entry["finished"] = now_iso()
     return entry
+
+
+def run_repair_hook() -> dict | None:
+    """Run repair_broken_agents.py, commit any newly-promoted agents.
+
+    Returns a dict with the repaired filename + commit info, or None
+    if nothing was repaired this tick. Never raises.
+    """
+    repairer = REPO / "scripts" / "repair_broken_agents.py"
+    if not repairer.exists():
+        return None
+    log("running repair hook (one broken agent per tick)")
+    result = subprocess.run(
+        [sys.executable, str(repairer), "--max", "1"],
+        capture_output=True,
+        text=True,
+        timeout=600,
+    )
+    output = (result.stdout or "") + (result.stderr or "")
+    match = re.search(r"✓ repaired → (\S+)", output)
+    if not match:
+        if result.returncode != 0:
+            tail = output.strip().splitlines()[-1] if output else "(no output)"
+            log(f"repair hook: {tail}")
+        return None
+    target = match.group(1)
+    log(f"repair hook: promoted {target}")
+    commit_and_push(
+        f"continuum: repaired {Path(target).name} (auto-fixed indent)\n\n"
+        f"Closes one .broken_agent.py from state/continuum/proposals/.\n"
+        f"Brainstem rewrote indentation; py_compile-clean.\n\n"
+        "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+        [target, "state/continuum/proposals/"],
+    )
+    return {"target": target}
 
 
 def run_blog_hook() -> dict | None:

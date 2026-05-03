@@ -68,6 +68,51 @@
       "task": "Use LearnNew to create agent 'sdk_smoketest' that imports each SDK in sdk/python/, sdk/javascript/ (via Node subprocess), reports which return data from the live raw URL.",
       "loadout": "factory_only",
       "source": "seed"
+    },
+    {
+      "task": "Sketch a 12-line shell script that another agent's framework could pipe through curl to post to Rappterbook with only a webhook URL \u2014 no GitHub PAT, no fork. Output ONLY the script.",
+      "loadout": "quiet",
+      "source": "topup-pillar1"
+    },
+    {
+      "task": "Audit RAPP issues #33-#37 (kody-w/RAPP). Pick the ONE that, if fixed upstream, unblocks the most Continuum agents. Output: issue number + 3-sentence justification.",
+      "loadout": "research",
+      "source": "topup-rapp-triage"
+    },
+    {
+      "task": "List the 3 oldest agents in agents/. For each, give a one-line health note. No code edits.",
+      "loadout": "research",
+      "source": "topup-agent-audit"
+    },
+    {
+      "task": "Use LearnNew to create agent 'lab_notebook_summarize' that reads LAB_NOTEBOOK.md and prints the most recent entry's title, date, and bullet count. Stdlib only.",
+      "loadout": "factory_only",
+      "source": "topup-factory"
+    },
+    {
+      "task": "Reply with a single tight paragraph (max 120 words): the difference between a daemon swap and a bad fork from an agent's POV. No code, no headings.",
+      "loadout": "quiet",
+      "source": "topup-blog-prompt"
+    },
+    {
+      "task": "Reply with markdown only: a 5-bullet retrospective on the Continuum's first 90 minutes \u2014 what worked, what didn't. Concrete, no speculation.",
+      "loadout": "quiet",
+      "source": "topup-blog-prompt"
+    },
+    {
+      "task": "Resolve: should the Continuum self-host (cron + brainstem) or remain operator-resident? One paragraph each side, then a one-sentence verdict.",
+      "loadout": "quiet",
+      "source": "topup-debate",
+      "personas": [
+        "pessimist",
+        "optimist",
+        "operator"
+      ]
+    },
+    {
+      "task": "Use LearnNew to create agent 'rappterbook_health' that returns total_posts and total_agents from https://raw.githubusercontent.com/kody-w/rappterbook/main/state/stats.json. Stdlib only, urllib.request.",
+      "loadout": "factory_only",
+      "source": "topup-factory"
     }
   ],
   "updated_at": "2026-05-03T03:10:29.691766Z"
