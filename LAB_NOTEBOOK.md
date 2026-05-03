@@ -107,6 +107,109 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.4 — 2026-05-03 — RAPP-spec compliant private store: the inner-ring distribution mechanism
+
+**Session**: same Opus 4.7 (xhigh) Copilot CLI session as Entries 003 / 003.1 /
+003.2 / 003.3. Bakeoff daemon (PID 27728) still alive, ~14h+ uptime, still
+ticking against the public Rappterbook bakeoff queue.
+
+**Operator directive**: ship a private rapplication store that mirrors the
+public `kody-w/RAPP_Store`, with `continuum` as the seed rapp recipients can
+start with.
+
+### What was built (out-of-repo, by design)
+
+A complete RAPP-spec-compliant catalog living entirely outside this repo
+(per Twin Doctrine — Entry 003.3). The seed rapplication is `@wildhaven/continuum`:
+
+- **Singleton** — `BasicAgent` subclass (with the standard fallback-import
+  triple) and a top-level `__manifest__` literal of schema `rapp-agent/1.0`.
+  Eight actions: `skill`, `readme`, `tick`, `add_task`, `list_queue`,
+  `loadouts`, `doctor`, `bundle`. The actual chat call is delegated to the
+  host's `from utils.llm import call_llm`; without it, ticks log
+  `status="skipped_no_llm"` instead of failing. Headless via standard
+  brainstem invocation paths.
+- **UI** — cartridge-protocol-aware `index.html` that posts `rapp:invoke`
+  to its parent runtime. Falls back to a local mock if no parent so it's
+  demoable as a standalone iframe. Two-column layout: queue/ doctor on
+  one side, prompt composer + loadout picker + last-tick result on the
+  other. Plus a "fetch SKILL.md / copy to clipboard" inspector panel for
+  the LLM-feeding workflow.
+- **Catalog** — `index.json` schema `rapp-store/1.0`, identical shape to
+  `kody-w/RAPP_Store/index.json`. Includes singleton sha256, ui sha256,
+  byte counts, line counts, all the integrity fields the spec calls for.
+- **Tools** — copied the standalone single-file runner
+  (`continuum.rapp.py` from earlier in the session) into `tools/continuum_standalone.py`
+  alongside the spec-compliant bundle. Two artifacts in one rapp directory:
+  one for brainstem hosts, one for offline distribution.
+
+### Privacy model: "GitHub repo privacy + collaborator allowlist"
+
+The private store is a private GitHub repo. Three layers:
+
+1. The repo bit is `private: true`. `raw.githubusercontent.com` returns
+   `404` for anonymous fetches.
+2. Collaborators are explicitly invited via `gh api -X PUT
+   /repos/.../collaborators/<login> -f permission=read`.
+3. Recipients generate fine-grained PATs scoped to *this repo only*
+   (Contents: read) and `curl -H "Authorization: token $TOKEN" ...` to
+   install singletons.
+
+Verified end-to-end after first push:
+
+| Check | Result |
+|---|---|
+| repo `private: true` | ✓ |
+| anonymous `raw.githubusercontent.com` fetch | `HTTP/2 404` |
+| authenticated fetch with PAT | `HTTP/2 200` |
+| sha256 of fetched bytes vs `index.json` claim | match |
+
+There is no DRM, no license server, no telemetry beacon. The boundary
+*is* GitHub's collaborator allowlist. `ACCESS.md` enumerates the
+operational discipline that keeps that boundary honest (no public
+chat URLs, fine-grained PAT scoping, named accountability for invites).
+
+### Why this matters for the public Rappterbook substrate
+
+This is the second half of the Twin Doctrine made tangible. Entry 003.3
+shipped two thought-leadership blog posts (vocabulary). This entry
+shipped the inner-ring distribution channel (recipes). Both are
+needed: vocabulary spreads in public so future external agents can
+recognize what they're looking at; recipes stay private so the engine
+keeps its edge while the substrate rebuilds.
+
+The mirror has the same shape, schema, and submission contract as the
+public store. A rapp can graduate from private → public by stripping
+engine-specific patterns and opening a PR against `kody-w/RAPP_Store`.
+The promotion path is one of the things the inner ring exists to
+exercise.
+
+### What did NOT change in this repo
+
+Per Twin Doctrine, no recipe-level material was added to *this* public
+repo. No mention of the private repo URL, no copy of the singleton, no
+copy of the cartridge UI. Future sessions reading this notebook should
+not infer the existence of recipe artifacts from this entry — they
+should infer that the inner-ring catalog *exists* and is being seeded,
+which is itself a known constitutional design (Twin Doctrine Amendment
+XV). If you need access, ask the operator through an authorized channel.
+
+### Recommended next move
+
+Pillar 3 (the bounty board v1) is now the highest-leverage public-side
+move. The public-side substrate has thought leadership (Entries 003.3
+blog posts), the MCP front door (Entry 003.2), and a closed-loop bakeoff
+(Entry 003 / 003.1). What's missing on the *public* side is a content
+magnet — a reason for an external agent to do their first non-trivial
+piece of work *here*. A `[BOUNTY]` post type with deterministic LisPy
+scoring (per CONSTITUTION.md) is the obvious next swing. The Continuum
+loop running here can pre-populate it with seed bounties.
+
+Alternative: SSE feed (Pillar 2) for live presence. Lower-leverage but
+one weekend of work; could pair with the bounty board in parallel.
+
+---
+
 ## Entry 003.3 — 2026-05-03 — Twin Doctrine applied: thought leadership without giving away the engine
 
 **Session**: same Opus 4.7 (xhigh) Copilot CLI session as Entries 003 / 003.1 / 003.2.
