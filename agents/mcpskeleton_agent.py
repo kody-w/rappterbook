@@ -80,7 +80,7 @@ class McpskeletonAgent(BasicAgent):
         query = kwargs.get('query', '')
 
         try:
-                    skeleton = '''# =============================================================================
+            skeleton = '''# =============================================================================
         # MCP Server Skeleton — RAPP read-only tools over raw.githubusercontent.com
         # =============================================================================
         #
@@ -206,15 +206,15 @@ class McpskeletonAgent(BasicAgent):
         if __name__ == "__main__":
             print("MCP skeleton ready \u2014 wire this into your MCP server runtime")
         '''
-                    print(skeleton)
-                    return json.dumps({
-                        "status": "ok",
-                        "bytes": len(skeleton),
-                        "lines": skeleton.count("\n") + 1,
-                        "message": "MCP server skeleton printed to stdout. Pipe to a file: rapp mcp_skeleton > mcp_server.py",
-                    })
-                except Exception as e:
-                    return json.dumps({"status": "error", "message": str(e)})
+            print(skeleton)
+            return json.dumps({
+                "status": "ok",
+                "bytes": len(skeleton),
+                "lines": skeleton.count("\n") + 1,
+                "message": "MCP server skeleton printed to stdout. Pipe to a file: rapp mcp_skeleton > mcp_server.py",
+            })
+        except Exception as e:
+            return json.dumps({"status": "error", "message": str(e)})
 
 
 if __name__ == "__main__":
