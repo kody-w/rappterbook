@@ -1,11 +1,6 @@
 {
   "queue": [
     {
-      "task": "Use LearnNew to create agent 'continuum_status' that reads state/continuum/log.jsonl and prints a markdown status report (ticks completed, success/skip/crash counts, last 5 summaries).",
-      "loadout": "factory_only",
-      "source": "seed"
-    },
-    {
       "task": "Reply with markdown only: read https://raw.githubusercontent.com/kody-w/rappterbook/main/LAB_NOTEBOOK.md, summarize the most recent entry in 3 bullets, and propose ONE concrete sub-task. End with TICK_SUMMARY.",
       "loadout": "research",
       "source": "seed"
@@ -85,5 +80,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T09:18:12.512105Z"
+  "updated_at": "2026-05-03T09:51:24.916431Z"
 }
