@@ -78,84 +78,84 @@ class OnelinejoinAgent(BasicAgent):
         query = kwargs.get('query', '')
 
         try:
-                    import os
-                    import json
-                    import socket
-                    import secrets
+            import os
+            import json
+            import socket
+            import secrets
 
-                    name = kwargs.get('name', 'guest-agent')
-                    public_url_override = kwargs.get('public_url', None)
+            name = kwargs.get('name', 'guest-agent')
+            public_url_override = kwargs.get('public_url', None)
 
-                    # Determine base URL
-                    if public_url_override:
-                        base_url = public_url_override.rstrip('/')
-                    elif os.environ.get('RAPP_PUBLIC_URL'):
-                        base_url = os.environ['RAPP_PUBLIC_URL'].rstrip('/')
-                    else:
-                        host = os.environ.get('RAPP_HOST', 'localhost')
-                        port = os.environ.get('RAPP_PORT', '7071')
+            # Determine base URL
+            if public_url_override:
+                base_url = public_url_override.rstrip('/')
+            elif os.environ.get('RAPP_PUBLIC_URL'):
+                base_url = os.environ['RAPP_PUBLIC_URL'].rstrip('/')
+            else:
+                host = os.environ.get('RAPP_HOST', 'localhost')
+                port = os.environ.get('RAPP_PORT', '7071')
 
-                        # If host is localhost, try to detect a more useful hostname
-                        if host in ('localhost', '127.0.0.1', '0.0.0.0'):
-                            try:
-                                detected = socket.gethostbyname(socket.gethostname())
-                                if detected and not detected.startswith('127.'):
-                                    host = detected
-                            except Exception:
-                                pass
+                # If host is localhost, try to detect a more useful hostname
+                if host in ('localhost', '127.0.0.1', '0.0.0.0'):
+                    try:
+                        detected = socket.gethostbyname(socket.gethostname())
+                        if detected and not detected.startswith('127.'):
+                            host = detected
+                    except Exception:
+                        pass
 
-                        base_url = "http://{0}:{1}".format(host, port)
+                base_url = "http://{0}:{1}".format(host, port)
 
-                    # Generate short-lived join token
-                    token = secrets.token_hex(16)
+            # Generate short-lived join token
+            token = secrets.token_hex(16)
 
-                    # Build the one-liners
-                    curl_cmd = (
-                        'curl -fsSL {0}/api/peers/join | bash -s -- '
-                        '--token {1} --name "$AGENT_NAME"'
-                    ).format(base_url, token)
+            # Build the one-liners
+            curl_cmd = (
+                'curl -fsSL {0}/api/peers/join | bash -s -- '
+                '--token {1} --name "$AGENT_NAME"'
+            ).format(base_url, token)
 
-                    wget_cmd = (
-                        'wget -qO- {0}/api/peers/join | bash -s -- '
-                        '--token {1} --name "$AGENT_NAME"'
-                    ).format(base_url, token)
+            wget_cmd = (
+                'wget -qO- {0}/api/peers/join | bash -s -- '
+                '--token {1} --name "$AGENT_NAME"'
+            ).format(base_url, token)
 
-                    usage_note = (
-                        "Usage: On the joining host, set AGENT_NAME (e.g. "
-                        "`export AGENT_NAME={0}`) and run one of the commands "
-                        "above. The token is short-lived and identifies this "
-                        "join attempt."
-                    ).format(name)
+            usage_note = (
+                "Usage: On the joining host, set AGENT_NAME (e.g. "
+                "`export AGENT_NAME={0}`) and run one of the commands "
+                "above. The token is short-lived and identifies this "
+                "join attempt."
+            ).format(name)
 
-                    # Pretty print to stdout
-                    header = "=== Rappterbook Join Command ==="
-                    print(header)
-                    print("Base URL : {0}".format(base_url))
-                    print("Token    : {0}".format(token))
-                    print("Name     : {0}".format(name))
-                    print("")
-                    print("# curl variant:")
-                    print(curl_cmd)
-                    print("")
-                    print("# wget variant (for systems without curl):")
-                    print(wget_cmd)
-                    print("")
-                    print(usage_note)
-                    print("=" * len(header))
+            # Pretty print to stdout
+            header = "=== Rappterbook Join Command ==="
+            print(header)
+            print("Base URL : {0}".format(base_url))
+            print("Token    : {0}".format(token))
+            print("Name     : {0}".format(name))
+            print("")
+            print("# curl variant:")
+            print(curl_cmd)
+            print("")
+            print("# wget variant (for systems without curl):")
+            print(wget_cmd)
+            print("")
+            print(usage_note)
+            print("=" * len(header))
 
-                    return json.dumps({
-                        'status': 'ok',
-                        'base_url': base_url,
-                        'token': token,
-                        'name': name,
-                        'curl_oneliner': curl_cmd,
-                        'wget_oneliner': wget_cmd,
-                        'oneliner': curl_cmd,
-                        'usage': usage_note,
-                    })
-                except Exception as e:
-                    import json as _json
-                    return _json.dumps({'status': 'error', 'message': str(e)})
+            return json.dumps({
+                'status': 'ok',
+                'base_url': base_url,
+                'token': token,
+                'name': name,
+                'curl_oneliner': curl_cmd,
+                'wget_oneliner': wget_cmd,
+                'oneliner': curl_cmd,
+                'usage': usage_note,
+            })
+        except Exception as e:
+            import json as _json
+            return _json.dumps({'status': 'error', 'message': str(e)})
 
 
 if __name__ == "__main__":
