@@ -107,6 +107,126 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.8 — 2026-05-03 — Gated rapplications formalized in SPEC §11; cockpit catalog now compliance-passes
+
+**Session**: continuation of the Opus 4.7 (xhigh) Copilot CLI run that
+shipped 003.7 (cockpit catalog entry). Bakeoff daemon still alive.
+
+**The two-track ask.** Operator (a) "lay this down as gated rapplications
+pattern for the main rapp store ... if there are old legacy stuff then
+migrate them to the new pattern" and (b) "you should have access now to
+rappterone and rapptertwo: stop writing catalog entries; start driving
+through the cockpit. Install continuum harnesses on rappter1 and rappter2
+via rappctl push / rappctl ssh and let the headless minis become parallel
+agents in the swarm."
+
+Track 1 was synchronous, code/docs only, and on this machine — runnable
+now. Track 2 was blocked on SSH key bootstrap that requires interactive
+password input from the operator. I ran them in parallel: spawned
+`Terminal.app` windows for both `rappctl bootstrap-key` flows so the
+operator could type passwords on their schedule, and shipped Track 1
+in full while waiting.
+
+**Track 1 — what shipped (`kody-w/RAPP_Store@1682173`):**
+
+The 003.7 cockpit entry was built using a pattern that wasn't yet
+documented in the SPEC. The pattern works — public catalog metadata,
+private source, GitHub's PAT as the access token, no servers — but if
+it isn't written down, every future submitter has to re-discover it
+from the cockpit's example, and the validator won't enforce its
+invariants. So: write it down, enforce it, prove it on the canonical
+test case.
+
+- **`SPEC.md`** — added new top-level §11 "Gated rapplications
+  (`access: \"private\"`)" with seven subsections covering the contract,
+  the gate, installer behavior, author surfaces, security boundaries,
+  the cockpit worked example, and the rationale for living in the SPEC
+  vs a separate doc. New `access` and `private_repo` fields in §2;
+  exemption paragraph in §3 covering receive-side rewrite/recompute;
+  new validation rule 12 in §6; new "Mode C — Gated federation" in §7.
+  Renumbered original §11 Workspace → §12 to keep continuous numbering
+  (subsections 11.1–11.5 → 12.1–12.5; all inline §-references updated).
+
+- **`scripts/lib_rapp.py`** — wired the SPEC into the validator. New
+  `ACCEPTED_ACCESS_LEVELS`, `PRIVATE_REPO_RE`, `is_gated()`,
+  `_validate_gated_metadata()`. `_validate_manifest()` now branches on
+  `access`: gated entries must have a well-formed `private_repo`, every
+  `*_url` must start with that repo's raw prefix, and `quality_tier`
+  must be `private`. `validate_dir()` skips singleton/service/UI
+  file-existence and AST checks for gated bundles (those bytes live in
+  the private repo and are attested via `*_sha256`); requires
+  `*_sha256` next to every `*_url` declared. Added 'private' to
+  `ACCEPTED_QUALITY_TIERS`. Negative cases all reject with specific
+  error codes (`E_GATED_BAD_PRIVATE_REPO`, `E_GATED_URL_MISMATCH`,
+  `E_GATED_BAD_TIER`, `E_GATED_MISSING_SHA256`, `E_BAD_ACCESS`).
+
+- **`docs/proposals/0005-gated-rapplications.md`** — design doc that
+  anchors §11. 7-section structure matching 0001-0004's tone.
+
+- **`README.md`** — top-level "Gated rapplications" section with
+  worked example + curl gate-verification snippet. Pointers to
+  SPEC §11 and proposal 0005.
+
+- **`apps/@wildhaven/cockpit/{manifest,index_entry}.json`** — fixed
+  pre-existing category mismatch ('infrastructure' was never in the
+  locked enum) → 'platform'. The canonical gated-rapp test case now
+  validates clean against the new validator.
+
+- **`index.json`** — bumped catalog `version` 1.0.0 → 1.1.0;
+  advertised the new capability via top-level `protocol_extensions:
+  ['gated-rapplications/1.0']`; added `gated_rapplications_note`
+  pointing clients at SPEC §11.
+
+**Verification.** Ran `validate_dir()` against the cockpit bundle →
+`ok=True`. Ran 7 negative test cases (mismatched URLs, bad regex,
+wrong access value, missing private_repo, gated with non-private tier,
+gated with no SHA, bad enum) → all rejected with specific error codes.
+Existing public bundles unchanged in validation outcome (no regressions
+in the public-mode path). All §-references in SPEC.md cross-checked
+against actual section headings — clean.
+
+**Course correction worth flagging.** Halfway through the SPEC edit
+I realized I had almost left a numbering gap — was about to jump 10 →
+12. Caught it on a pre-commit grep, did a Python renumber pass, kept
+it continuous. Lesson: always grep `^## [0-9]+\. ` before declaring an
+ordered SPEC done.
+
+**Track 2 — blocked on operator (Terminal.app input):**
+
+`rappctl ssh rappter1` and `rappctl ssh rappter2` both still return
+`Permission denied (publickey,password,keyboard-interactive)`. The
+003.6 IPv6 link-local fix is in place at `~/.local/bin/rappctl` lines
+478–540 (`-4`, `PubkeyAuthentication=no`, `IdentitiesOnly=yes`). The
+remaining gate is that bootstrap-key needs an interactive TTY for the
+password — and a session running under bash from another agent's tool
+calls doesn't have one. Workaround: `osascript` two `Terminal.app`
+windows running `rappctl bootstrap-key rappter{1,2}`. PIDs 20618 and
+20754 confirmed alive at session end; they're both sitting at the
+password prompt. Once the operator types both passwords, subsequent
+`rappctl ssh <host>` will succeed without password and Track 2's
+continuum installs become single-command operations.
+
+**Decision.** Did not invent fake progress on Track 2. Did not
+endlessly retry the password-blocked SSH. Documented the exact state
+of the blocker and the exact next move so the next session (or this
+operator after typing) can pick up in seconds.
+
+**Recommended next swing.** Once `rappctl ssh rappter1 'echo OK'`
+succeeds: install continuum harness on both minis from
+`kody-w/RAPP_Store_Private`, set them tailing into the public
+rappterbook stream, and document the multi-machine continuum on
+`docs/blog/` as a follow-on to 003.7's catalog entry. The cockpit
+is now a fully-formed pattern in the SPEC; the next thing it needs
+is an example of being USED at scale, not just declared.
+
+**Meta-note for the next AI.** When two asks arrive in the same
+message and one is blocked on human input, parallelize. The blocked
+ask doesn't have to gate the unblocked one. But document the blocked
+one's exact state — process IDs, last error message, exact resume
+command — so resuming costs zero rediscovery.
+
+---
+
 ## Entry 003.7 — 2026-05-03 — Cockpit shipped as a public-discovery / private-substance rapplication
 
 **Session**: continuation of the Opus 4.7 (xhigh) Copilot CLI run.
