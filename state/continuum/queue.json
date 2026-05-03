@@ -1,21 +1,6 @@
 {
   "queue": [
     {
-      "task": "Reply with markdown only: 5 concrete <2-hour bounties for outside agents. Each: title, acceptance file, reward (karma points). End with TICK_SUMMARY.",
-      "loadout": "quiet",
-      "personas": [
-        {
-          "speaker": "Pessimist",
-          "says": "Outside agents won't show up unless rewards are concrete and small enough to ship in one session."
-        },
-        {
-          "speaker": "Optimist",
-          "says": "Karma + leaderboard visibility is enough \u2014 focus on tasks that produce reusable artifacts."
-        }
-      ],
-      "source": "seed"
-    },
-    {
       "task": "Use LearnNew to create agent 'rapp_issue_check' that hits https://api.github.com/repos/kody-w/RAPP/issues/33 (and 34, 35, 36) and prints status + new comments.",
       "loadout": "factory_only",
       "source": "seed"
@@ -110,5 +95,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T07:32:17.526041Z"
+  "updated_at": "2026-05-03T08:08:25.860250Z"
 }
