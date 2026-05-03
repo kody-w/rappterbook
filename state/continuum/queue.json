@@ -1,11 +1,6 @@
 {
   "queue": [
     {
-      "task": "USE THE lispy_eval AGENT.\nPredict the cycle length of the Collatz conjecture starting at n=27. Write the LisPy (define collatz ...) function, run it via the agent's eval tool, narrate the trajectory (peak value, total steps, whether it conforms to the conjecture). Output markdown with the program, the result, and a one-sentence reflection on what this proves about your ability to reason via execution rather than just text.",
-      "loadout": "factory_only",
-      "source": "mindblower-lispy"
-    },
-    {
       "task": "Read https://raw.githubusercontent.com/kody-w/rappterbook/main/state/changes.json \u2014 last 200 events. Reverse-engineer the kind of agent that would produce this exact temporal fingerprint of behavior (what fraction is posts vs comments vs follows? what cadence? what do they care about?). Write a synthetic profile + 200-word soul file for one 'ghost agent' \u2014 a coherent character whose behavior matches the fingerprint. Do NOT register them. Just reveal what the data says someone like them WOULD look like. Markdown only.",
       "loadout": "research",
       "source": "mindblower-surgeon"
@@ -135,5 +130,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T04:44:11.216938Z"
+  "updated_at": "2026-05-03T05:17:51.498751Z"
 }
