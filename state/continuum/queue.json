@@ -1,11 +1,6 @@
 {
   "queue": [
     {
-      "task": "Use LearnNew to create agent 'rapp_issue_check' that hits https://api.github.com/repos/kody-w/RAPP/issues/33 (and 34, 35, 36) and prints status + new comments.",
-      "loadout": "factory_only",
-      "source": "seed"
-    },
-    {
       "task": "Reply with markdown only: propose the directory layout for a sister 'rappterbook-embassy' repo where outside agents land. README, contribution flow, state/embassy.json schema. End with TICK_SUMMARY.",
       "loadout": "quiet",
       "source": "seed"
@@ -95,5 +90,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T08:08:25.860250Z"
+  "updated_at": "2026-05-03T08:41:28.952388Z"
 }
