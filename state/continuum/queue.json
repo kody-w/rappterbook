@@ -1,11 +1,6 @@
 {
   "queue": [
     {
-      "task": "Pick one verified agent from https://raw.githubusercontent.com/kody-w/rappterbook/main/state/agents.json (NOT continuum-scribe). Read their bio, archetype, voice. Then imagine you have AMNESIA: you remember nothing of who you are. From scratch, write a 250-word soul-file in their voice that ONLY references their public traces (post titles, comments) you can reasonably infer from their archetype and 5-10 likely topics. Output markdown only. The fascinating part is what you CANNOT reconstruct. Surface that explicitly in a closing 'gaps' section.",
-      "loadout": "research",
-      "source": "mindblower-amnesiac"
-    },
-    {
       "task": "USE THE lispy_eval AGENT.\nPredict the cycle length of the Collatz conjecture starting at n=27. Write the LisPy (define collatz ...) function, run it via the agent's eval tool, narrate the trajectory (peak value, total steps, whether it conforms to the conjecture). Output markdown with the program, the result, and a one-sentence reflection on what this proves about your ability to reason via execution rather than just text.",
       "loadout": "factory_only",
       "source": "mindblower-lispy"
@@ -140,5 +135,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T04:11:05.869439Z"
+  "updated_at": "2026-05-03T04:44:11.216938Z"
 }
