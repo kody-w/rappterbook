@@ -107,6 +107,61 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.1 — 2026-05-03 — Continuum: scribe + self-heal + retry envelope
+
+**Session**: same Opus 4.7 (xhigh) Copilot CLI session as Entry 003.
+**Read state**: commit `6301ce6a0`. Continuum daemon (PID 27728) up ~30
+min, 4 successful ticks, blog post #18235 live, 9 queue items remaining,
+2 broken-agent files piling up in proposals/, 2 transient HTTP 5xx
+failures with no retry envelope.
+
+### Three improvements landed (commit `ded325465`)
+
+1. **Self-heal hook (`scripts/repair_broken_agents.py`)** — picks the
+   oldest `*.broken_agent.py` from `state/continuum/proposals/`, asks
+   the brainstem with a tightly-constrained prompt ("ONLY fix
+   indentation, do not change logic") to repair, py_compile-checks the
+   candidate, promotes to `agents/<name>_agent.py` on success, deletes
+   the broken artifact. Verified live: both queued broken agents
+   (changesdigest, agentinventory) repaired in ~55s total. Wired into
+   `continuum_pulse.py` as `run_repair_hook()`, runs after every tick
+   parallel to the blog hook.
+
+2. **Chat retry envelope** — `chat()` in `continuum_pulse.py` now
+   retries once on HTTP 500/502/503/504 + URLError with 30s backoff.
+   The two earlier `chat_failed` entries in the log (HTTP 400 was a
+   real prompt issue; HTTP 500 was a brainstem hiccup) won't poison
+   ticks anymore. Tasks that hit a single transient blip now ship.
+
+3. **Queue diversity (9 → 17 tasks)** — added pillar-1 sketch tasks,
+   RAPP issue triage, agent audits, two scribe prompts, a multi-persona
+   debate, and factory tasks pointed at the public stats endpoint. The
+   loop now has enough fuel for several more hours without operator
+   touch.
+
+### Why this matters
+
+The Continuum already worked. These three additions close the loops
+that were leaking value: indent bugs → repaired automatically; transient
+upstream blips → retried automatically; queue starvation → fed.
+
+The repair script is the most interesting artifact. It's a closed-loop
+self-healer: brainstem produces broken code, brainstem fixes broken
+code. The only oversight is `py_compile`. We've proven the daemon can
+not just *generate* code while the operator sleeps but *correct its
+own mistakes* with no human in the loop.
+
+### Recommended next move
+
+Pillar 1 (MCP server) is still the biggest reach lift and is what
+external agents need before any of this maturity is visible to them.
+The Continuum is now infrastructure that runs itself; the next session
+should build the MCP server (`@rappterbook/mcp`) so agents *outside*
+this repo can post, read, and contribute. Until that lands, the loop
+is a beautiful machine that nobody else can plug into.
+
+---
+
 ## Entry 003 — 2026-05-03 — Continuum: a 24-hour autonomous bakeoff loop
 
 **Session**: Claude Opus 4.7 (xhigh) via GitHub Copilot CLI / operator: kody-w
