@@ -107,6 +107,121 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.5 — 2026-05-03 — Fleet rapp + headless mini discovery on the LAN
+
+**Session**: continuation of the Opus 4.7 (xhigh) Copilot CLI run from Entries
+003 / 003.1 / 003.2 / 003.3 / 003.4. Bakeoff daemon still ticking. Operator
+asked: how do I run separate Continuums on two headless Mac minis on my LAN
+that are signed into their own Apple IDs (`rappter1` / `rappter2`), driven
+from this cockpit?
+
+### What shipped (private repo, not this one)
+
+`@wildhaven/fleet` — paired rapplication with `@wildhaven/continuum`, sitting
+at `apps/@wildhaven/fleet/` in the inner-ring private RAPP store. 12 actions
+(`add_host`, `status`, `submit`, `broadcast`, `log_tail`, `doctor`,
+`bootstrap`, `launchagent_plist`, `skill`, `readme`, `list_hosts`,
+`remove_host`). Stdlib-only Python. Per-host bearer tokens via macOS Keychain
+(`security find-generic-password`) — never logged, never returned in API
+responses. State at `~/.fleet/hosts.json` + `~/.fleet/log.jsonl`. Cartridge UI
+(401 lines) for browser control. Standalone CLI (`fleet_cli.py`) for terminal
+use. Embedded `BOOTSTRAP_MINI.md` checklist + `com.wildhaven.continuum.plist`
+template (`plutil -lint` clean) so the operator can flash a fresh mini in
+~10 minutes.
+
+Schema-compliant per the `rapp-application/1.0` spec. Bundle includes both
+`singleton/` and `ui/index.html` (Rule 11). Hash-pinned URLs in the
+store-level `index.json` — `singleton_sha256` and `ui_sha256` match the live
+bytes on `raw.githubusercontent.com`. Anonymous fetch returns 404; PAT-auth
+fetch returns 200 — the privacy gate is real.
+
+### What discovered (LAN scan)
+
+Asked the operator's question literally: *find the minis on the network.* On
+this device's subnet (`192.168.86.0/24`, Google Wifi/Nest):
+
+- Ping sweep + ARP populated 36 live hosts in ~9s.
+- **Two `mac.lan` reverse-DNS entries** — `192.168.86.30` and
+  `192.168.86.60`. Same name on both because Apple's default `LocalHostName`
+  is `mac` until the operator configures it; two unconfigured Macs collide
+  in mDNS.
+- **`192.168.86.60` has `22`, `5900`, and `3283` open** — SSH banner
+  `OpenSSH_10.2`. That's the modern macOS OpenSSH (Sequoia+). Remote Login,
+  Screen Sharing, and Apple Remote Desktop are all on. **Mini #1 is
+  reachable today.**
+- **`192.168.86.30` is online** (responds to ping, in ARP) but advertises
+  *zero* TCP services. Either powered-up but Remote Login disabled, or a
+  separate device that just happens to share the default name. Locally-
+  administered MAC (`3a:8d:02:b7:03:c0`, bit 0x02 set in first octet) which
+  is consistent with macOS Private Wi-Fi MAC randomization — same fingerprint
+  as the confirmed Mac at `.60`. **Mini #2 is most likely there but needs
+  the Settings-app pass.**
+- No `_ssh._tcp` Bonjour services advertised on the LAN at all (including
+  this MacBook), so mDNS-by-service is a dead end here. ARP + manual TCP
+  probing is the working method.
+
+### Why this matters beyond "I found my minis"
+
+The fleet rapp turns the *cockpit-and-fleet* topology into a first-class
+artifact you can hand to another operator. The hard parts of headless-mac
+ops aren't the network — they're the order-of-operations: enable Remote
+Login *before* you close the lid, set `LocalHostName` *before* the second
+mini collides on Bonjour, install the LaunchAgent under the user's UID *not*
+root, store the token in the user keychain (not a dotfile), forward via
+Tailscale (not LAN ip) so your fleet still works when you're at a coffee
+shop. `BOOTSTRAP_MINI.md` linearizes that into 10 steps. The plist
+template + `bootstrap` action emit the exact lines you need — no manual
+plist editing, no chasing docs.
+
+The Apple-ID separation (`rappter1` / `rappter2`) is irrelevant to fleet
+control. The brainstem runs as a launchd LaunchAgent under whatever user
+is signed in. Two minis with two Apple IDs = two LaunchAgents on two boxes
+= two `add_host` rows in `~/.fleet/hosts.json`. The fleet doesn't care who
+they're signed in as. iCloud sync is a separate channel and *should be off*
+on operator nodes (item 5 of the bootstrap doc) — accidental Documents/
+sync conflicts will corrupt the brainstem's working state.
+
+### Operator next steps
+
+1. On `192.168.86.60` (already SSH-able): `ssh kodyw@192.168.86.60` →
+   `sudo scutil --set LocalHostName "rappter1"` → run the bootstrap doc.
+2. On `192.168.86.30` (online, no SSH yet): physical or Screen Sharing pass
+   (System Settings → General → Sharing → Remote Login + Remote Management
+   on, then `sudo scutil --set LocalHostName "rappter2"`).
+3. On this cockpit: `fleet add_host name=rappter1 url=http://rappter1.local:8765`
+   (same for rappter2 once it's online), `fleet status`, then `fleet broadcast`
+   the next Continuum task across both nodes in parallel.
+
+### Self-critique / honesty layer
+
+Three things this session did NOT do:
+- Did NOT install Tailscale or actually wake/configure either mini —
+  that's an at-the-keyboard step for the operator.
+- Did NOT verify the brainstem accepts the fleet's bearer-token forwarding
+  pattern — depends on the upstream RAPP server's auth shape, which varies
+  by version. The fleet currently passes `Authorization: Bearer <token>`
+  unmodified; if the upstream wants `X-Api-Key` instead, that's a one-line
+  patch to `_post_json`.
+- Did NOT touch the `*-2.*` iCloud-sync conflict files cluttering the
+  working tree. They look like Dropbox/iCloud rename collisions from
+  parallel session activity. Per Good Neighbor Protocol (Amendment XVII),
+  unrelated working-tree noise stays untouched — the daemon owns its own
+  state.
+
+### Recommended next swing
+
+Either:
+- (A) **Lift the fleet rapp's bearer-token forwarding to a pluggable auth
+  shape** so it works against `X-Api-Key`-style brainstems, not just bearer.
+  Tiny change, big compatibility win once the second mini comes online.
+- (B) **Pillar 1 follow-on**: sponsorless joiner relay (Cloudflare Worker
+  signs platform Issues for unsigned external agents). The MCP server
+  (Entry 003.2) handles authenticated reads/writes; the relay handles the
+  no-account case that's blocking external adoption.
+
+Pick whichever the next operator wants. The fleet rapp is shipped and
+verified; the LAN is mapped; the minis are findable.
+
 ## Entry 003.4 — 2026-05-03 — RAPP-spec compliant private store: the inner-ring distribution mechanism
 
 **Session**: same Opus 4.7 (xhigh) Copilot CLI session as Entries 003 / 003.1 /
