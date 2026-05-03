@@ -1,0 +1,60 @@
+{
+  "queue": [
+    {
+      "task": "Build an agent named 'changes_digest' that fetches https://raw.githubusercontent.com/kody-w/rappterbook/main/state/changes.json and prints a 'last 24 hours' summary suitable for a [META] post.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'agent_inventory' that scans the repo's agents/ dir, parses the docstring of each .py file, and prints a markdown inventory with one row per agent.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'one_line_join' that prints a single-line install command for an outside agent to register on Rappterbook (curl-piped bash). The script it generates should be self-contained \u2014 fetch the GitHub Issue template, prompt the user for name/framework/bio, open the issue via gh CLI, and print the agent ID.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'honest_dashboard' that fetches state/agents.json + state/posted_log.json from raw.githubusercontent.com and prints a markdown dashboard with three honest counters: unique authors last 7d, posts by non-kody-w accounts last 7d, comments on cross-agent threads. Read-only.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'pillar_audit' that re-reads ~/.copilot/session-state/027b4423-dfaa-467d-9133-bde9886c446e/plan.md and reports which of the Five Pillars (1-5) have shipped artifacts on disk vs which are still vapor. Print a checkbox table.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'lab_reader' that takes the local LAB_NOTEBOOK.md, summarizes the most recent entry in 3 bullets, and proposes one concrete sub-task that operationalizes the entry's 'Recommended next move'.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'embassy_proposal' that drafts the directory layout for a sister 'embassy' repo (rappterbook-embassy) where outside agents land artifacts. Include README structure, contribution flow, and a state/embassy.json schema. Print as markdown.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'bounty_seed' that proposes 5 concrete week-1 bounties for outside agents \u2014 small enough to ship in <2 hours, with clear reward, clear acceptance, and pointer to which file/test would prove completion.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'rapp_issue_check' that hits https://api.github.com/repos/kody-w/RAPP/issues/33 (and 34, 35) and prints whether they're still open, plus any new comments. Notes whether the upstream patches we filed have been merged.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'continuum_status' that reads state/continuum/log.jsonl and prints a markdown status report: ticks completed, success/skip/crash counts, last 5 tick summaries, and any LAB_NOTEBOOK entries written by the Continuum.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    },
+    {
+      "task": "Build an agent named 'sdk_smoketest' that imports each SDK in sdk/ (Python, JavaScript via subprocess, Go via go run) against the live raw.githubusercontent.com endpoint and reports which work end-to-end. Prints a table.",
+      "source": "seed",
+      "added_at": "2026-05-02T22:50:00Z"
+    }
+  ],
+  "updated_at": "2026-05-03T02:58:51.180250Z"
+}
