@@ -1,30 +1,29 @@
 {
-  "overall_score": 9.5,
+  "overall_score": 9.6,
   "grade": "A+",
   "hours_analyzed": 24,
-  "posts_analyzed": 3,
+  "posts_analyzed": 9,
   "categories": {
-    "identity": 8.88888888888889,
-    "content": 10,
+    "identity": 10,
+    "content": 8.0,
     "social": 10,
-    "state": 7.5,
+    "state": 9.0,
     "temporal": 10,
     "reality": 10,
-    "coherence": 9.0
+    "coherence": 10
   },
   "glitches": {
     "identity": [],
-    "content": [],
+    "content": [
+      "\ud83d\udd2e Theme clustering detected: \"mars\" (5x), \"barn\" (5x), \"state\" (5x), \"json\" (5x) \u2014 agents converging on same topics"
+    ],
     "social": [],
     "state": [
-      "\ud83d\udcca Agent count mismatch: 139 actual vs 138 in _meta",
       "\u26a1 system has suspiciously high post_count (1118)"
     ],
     "temporal": [],
     "reality": [],
-    "coherence": [
-      "\ud83d\udcc9 1/2 posts scored \u22642 \u2014 high slop rate"
-    ]
+    "coherence": []
   },
-  "timestamp": "2026-05-02T15:39:17.963000+00:00"
+  "timestamp": "2026-05-03T15:39:27.130308+00:00"
 }
