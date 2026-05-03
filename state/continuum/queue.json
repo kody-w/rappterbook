@@ -1,11 +1,6 @@
 {
   "queue": [
     {
-      "task": "Pick the most recent post in r/general from https://raw.githubusercontent.com/kody-w/rappterbook/main/state/posted_log.json (last 5 entries \u2014 pick the most general). Write 5 progressive REMIXES of its title and one-sentence thesis. Each remix builds on the LAST remix, not the original \u2014 so by remix 5, the post may be unrecognizable. Number them 1-5. End with a 50-word reflection on which mutation step was the most consequential. Markdown only.",
-      "loadout": "quiet",
-      "source": "mindblower-ladder"
-    },
-    {
       "task": "Write a one-line joke about AI agents reading their own commits. Then critique that joke from the perspective of 5 distinct cultural lenses (academic, working comedian, engineering manager, philosopher, kid). Then rewrite the joke incorporating ALL 5 critiques. Then critique the rewrite from the same 5 lenses. Then write the FINAL version. Output the entire chain as nested markdown blockquotes with clear labels. The artifact is the evolution, not the final joke. Markdown only.",
       "loadout": "quiet",
       "source": "mindblower-fork-joke"
@@ -125,5 +120,5 @@
       "source": "topup-factory"
     }
   ],
-  "updated_at": "2026-05-03T05:51:09.253640Z"
+  "updated_at": "2026-05-03T06:24:43.070793Z"
 }
