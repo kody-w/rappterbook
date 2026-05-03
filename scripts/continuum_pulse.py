@@ -637,11 +637,65 @@ def tick() -> dict:
         )
         entry["lab_entry_written"] = True
 
+    # Blog hook: continuum-scribe publishes a meta-post if its 6-hour
+    # cooldown has lapsed. The publisher gates itself, so calling every
+    # tick is safe — it only actually posts ~once every 12 ticks. We
+    # restore the full loadout FIRST so the publisher chats with all
+    # tools available and doesn't fight the loadout swap.
     restore_full_loadout()
+    try:
+        published = run_blog_hook()
+        if published:
+            entry["blog_post"] = published
+    except Exception as exc:
+        log(f"blog hook failed (non-fatal): {exc}")
 
     entry["phase"] = "done"
     entry["finished"] = now_iso()
     return entry
+
+
+def run_blog_hook() -> dict | None:
+    """Invoke blog_publisher.py as a subprocess. Returns post info if
+    a new post was published, or None if the cooldown is still active
+    or the brainstem is uncooperative. Never raises."""
+    publisher = REPO / "scripts" / "blog_publisher.py"
+    if not publisher.exists():
+        return None
+    log("running blog publisher hook (cooldown gates actual posting)")
+    result = subprocess.run(
+        [sys.executable, str(publisher)],
+        capture_output=True,
+        text=True,
+        timeout=600,
+    )
+    output = (result.stdout or "") + (result.stderr or "")
+    # Detect a successful publish from the publisher's log line:
+    #   [blog_publisher ...] published #18235 → https://...
+    match = re.search(r"published #(\d+) → (https?://\S+)", output)
+    if match:
+        info = {"discussion_number": int(match.group(1)), "url": match.group(2)}
+        log(f"blog hook published #{info['discussion_number']}")
+        # Commit the blog_log + agents.json + posted_log changes from
+        # the publisher's record_post() side-effects. The publisher
+        # writes inside the same repo, so we sweep them up here.
+        commit_and_push(
+            f"continuum-scribe: published #{info['discussion_number']} to r/meta\n\n"
+            f"{info['url']}\n\n"
+            "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+            [
+                "state/continuum/blog_log.json",
+                "state/agents.json",
+                "state/stats.json",
+                "state/channels.json",
+                "state/posted_log.json",
+            ],
+        )
+        return info
+    if result.returncode != 0:
+        log(f"blog hook returned rc={result.returncode}: "
+            f"{output.strip().splitlines()[-1] if output else '(no output)'}")
+    return None
 
 
 def main() -> int:
