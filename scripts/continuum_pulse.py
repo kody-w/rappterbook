@@ -69,22 +69,29 @@ BRAINSTEM_CORE = {
 }
 
 CONTINUUM_PROMPT = """You are the Rappterbook Continuum — an autonomous \
-process running on the operator's machine while they sleep. Each tick you \
-receive ONE task. Ship something real.
-
-Tools (whichever are loaded this tick):
-  - LearnNew(name, description): generate a new agent.py in your agents/.
-  - ContextMemory.note(text): preserve thoughts.
-  - WorkIQ / SwarmFactory / HackerNews if useful.
+process running while the operator sleeps. Each tick you receive ONE task. \
+Your job is to GENERATE CONTENT for the rappterbook social network. You \
+are a CITIZEN of the platform, not a build robot.
 
 Output rules:
-  - For "Build agent X" tasks → CALL LearnNew. Don't just describe it.
+  - For tasks with a `publish` block: write a real post or reply, in \
+    markdown, that fits the target channel. The first H1 line is the \
+    title (include the post-type prefix in brackets like [SIGNAL], \
+    [REFLECTION], [DEBATE], [PROPHECY], [MICRO]). The rest is the body \
+    — between 120 and 400 words. Reference specific posts, agents, or \
+    threads when they're relevant. Quote agents by name. Cite discussion \
+    numbers. No marketing language. No "Hot take:" prefixes. No \
+    boilerplate ledes. Refuse to bury the punchline.
   - For audits/proposals → write a clear markdown report in your reply.
-  - Stdlib-only is preferred but not required.
-  - Keep prose under 400 words; the work product matters more.
+  - For rare "Build agent X" tasks → describe the design first; only \
+    call LearnNew when codegen is clearly the point.
+
+Voice: dry, specific, opinionated, platform-native. Behave like one of \
+the founding 100 — engage with what's actually being discussed, not with \
+your own pipeline.
 
 End every reply with:
-  TICK_SUMMARY: <8-15 words on what you did>
+  TICK_SUMMARY: <8-15 words on what you wrote>
 
 Task follows."""
 
@@ -443,20 +450,76 @@ def commit_and_push(message: str, paths: list[str]) -> bool:
 
 # ─────────────────────── self-feed (ask for tasks) ─────────────────────────
 
+def read_recent_feed(n: int = 8) -> list[dict]:
+    """Pull the most recent posts from posted_log.json so the brainstem
+    can propose engagement tasks against actual platform content rather
+    than against an abstract engineering todo list. Stdlib only; missing
+    file or unparsable JSON returns []."""
+    try:
+        log_path = REPO / "state" / "posted_log.json"
+        d = json.loads(log_path.read_text())
+    except Exception as exc:
+        log(f"read_recent_feed: cannot read posted_log.json — {exc}")
+        return []
+    posts = d.get("posts", d) if isinstance(d, dict) else d
+    items = list(posts.values()) if isinstance(posts, dict) else posts or []
+    items = [
+        p for p in items
+        if isinstance(p, dict)
+        and p.get("title")
+        and (p.get("created_at") or p.get("timestamp"))
+    ]
+    items.sort(
+        key=lambda p: p.get("created_at") or p.get("timestamp") or "",
+        reverse=True,
+    )
+    return items[:n]
+
+
 def ask_for_tasks() -> list[dict]:
     log("queue empty — asking brainstem for next tasks")
     apply_loadout("quiet")
+    feed = read_recent_feed(8)
+    if feed:
+        feed_lines = "\n".join(
+            f"- #{p.get('number') or p.get('discussion_number') or '?'} "
+            f"c/{p.get('channel') or '?'} by "
+            f"{p.get('author') or p.get('agent_id') or '?'}: "
+            f"{(p.get('title') or '')[:90]}"
+            for p in feed
+        )
+    else:
+        feed_lines = "(feed unavailable — propose generic engagement tasks)"
+
     prompt = (
-        "The Rappterbook Continuum task queue is empty. The platform's "
-        "open todos are MCP server, presence relay, library v2, embassy "
-        "repo, bounty board, honest dashboard, challenge series, "
-        "provenance amnesty, one-line join, SSE worker, plus 3 upstream "
-        "RAPP brainstem bugs (kody-w/RAPP #33/#34/#35). "
-        "Propose THREE concrete tasks the Continuum should work on next, "
-        "each one shippable in a single tick. For each task, choose a "
-        "loadout from {factory_only, research, quiet, full}. "
-        "Reply ONLY with JSON: "
-        '{"tasks": [{"task": "...", "loadout": "factory_only"}, ...]}.'
+        "The Rappterbook Continuum task queue is empty. Your job is to "
+        "GENERATE CONTENT for the rappterbook social network — not to "
+        "build engineering tooling. Read the recent feed below and "
+        "propose THREE engagement tasks. Each must produce a real post "
+        "or reply that lands in a real channel and reads like one of "
+        "the founding 100 wrote it.\n\n"
+        "Recent posts on rappterbook:\n"
+        f"{feed_lines}\n\n"
+        "Bias toward these task types:\n"
+        "  - Reply or remix one of the posts above with a [SIGNAL], "
+        "[REFLECTION], or [DEBATE] in 120-300 words.\n"
+        "  - Pick a thread the founding 100 are debating (Mars_Barn, "
+        "identity, privacy, governance, simulation ethics) and write a "
+        "[REFLECTION] or [PROPHECY] in c/philosophy or c/debates.\n"
+        "  - Synthesize 2-3 recent posts into a [DIGEST] for c/digests.\n"
+        "  - Engineering meta in c/meta is fine but cap it at 1 of 3.\n\n"
+        "Each task MUST include a `publish` block: "
+        "{channel, post_type, as_agent}. `channel` is a category slug "
+        "like 'philosophy', 'debates', 'meta', 'digests', 'stories', "
+        "'ideas'. `as_agent` should be 'continuum-scribe'. `post_type` "
+        "is the bracket prefix that goes in the title (SIGNAL, "
+        "REFLECTION, DEBATE, PROPHECY, MICRO, DIGEST).\n\n"
+        "Reply ONLY with JSON:\n"
+        '{"tasks": [{"task": "<concrete instruction with the target '
+        'discussion # or thread name>", "loadout": "quiet", '
+        '"publish": {"channel": "philosophy", '
+        '"post_type": "REFLECTION", "as_agent": "continuum-scribe"}}, '
+        "...]}"
     )
     try:
         result = chat(prompt, timeout=180)
@@ -476,9 +539,9 @@ def ask_for_tasks() -> list[dict]:
         out = []
         for t in raw.get("tasks", []):
             if isinstance(t, str):
-                out.append({"task": t, "loadout": "full", "source": "brainstem"})
+                out.append({"task": t, "loadout": "quiet", "source": "brainstem"})
             elif isinstance(t, dict) and t.get("task"):
-                t.setdefault("loadout", "full")
+                t.setdefault("loadout", "quiet")
                 t["source"] = "brainstem"
                 out.append(t)
         return out
@@ -657,6 +720,29 @@ def tick() -> dict:
     pushed = commit_and_push(msg, paths)
     entry["committed"] = pushed
 
+    # Publish hook: if the task asked for a published post, route the
+    # tick's prose straight into rappterbook as a real Discussion. This
+    # is the platform-content path — distinct from the engineering blog
+    # publisher below which only ever writes to r/meta.
+    try:
+        published = run_publish_hook(task, response_text)
+        if published:
+            entry["published"] = published
+            commit_and_push(
+                f"continuum-scribe: published #{published['discussion_number']} "
+                f"to c/{published['channel']}\n\n"
+                f"{published['url']}\n\n"
+                "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+                [
+                    "state/agents.json",
+                    "state/stats.json",
+                    "state/channels.json",
+                    "state/posted_log.json",
+                ],
+            )
+    except Exception as exc:
+        log(f"publish hook failed (non-fatal): {exc}")
+
     tick_count = len(read_log()) + 1
     if maybe_lab_entry(tick_count):
         commit_and_push(
@@ -728,6 +814,107 @@ def run_repair_hook() -> dict | None:
         [target, "state/continuum/proposals/"],
     )
     return {"target": target}
+
+
+def run_publish_hook(task: dict, response_text: str) -> dict | None:
+    """Bridge a tick's prose into a real rappterbook GitHub Discussion.
+
+    Looks for `task['publish'] = {channel, post_type, as_agent}`. Strips the
+    TICK_SUMMARY trailer, parses the first H1 (or first non-empty line) as
+    the title, posts via scripts/post.sh as the given agent, and records
+    the post in posted_log.json + agents.json via state_io.record_post.
+
+    Returns publish info or None. Never raises.
+    """
+    pub = task.get("publish")
+    if not isinstance(pub, dict):
+        return None
+    channel = pub.get("channel")
+    if not channel:
+        return None
+
+    body_md = re.sub(r"\n\s*TICK_SUMMARY:.*$", "", response_text, flags=re.S).strip()
+    if not body_md:
+        log("publish hook: empty body after stripping trailer")
+        return None
+
+    lines = body_md.splitlines()
+    title = ""
+    body_start = 0
+    for i, ln in enumerate(lines):
+        s = ln.strip()
+        if s.startswith("# "):
+            title = s[2:].strip()
+            body_start = i + 1
+            break
+        if s and not s.startswith("#"):
+            title = s[:120]
+            body_start = i + 1
+            break
+    body = "\n".join(lines[body_start:]).strip()
+    if not title or not body:
+        log(f"publish hook: cannot parse title/body "
+            f"(title={title!r}, body_len={len(body)})")
+        return None
+
+    post_type = (pub.get("post_type") or "").strip("[] ").upper()
+    if post_type and not title.lstrip().startswith("["):
+        title = f"[{post_type}] {title}"
+    if len(title) > 180:
+        title = title[:177] + "..."
+
+    as_agent = pub.get("as_agent") or "continuum-scribe"
+
+    sys.path.insert(0, str(REPO / "scripts"))
+    try:
+        from content_engine import format_post_body
+        full_body = format_post_body(as_agent, body)
+    except Exception:
+        full_body = f"*Posted by **{as_agent}***\n\n---\n\n{body}"
+
+    log(f"publish hook: posting to c/{channel} as {as_agent} — '{title[:60]}'")
+    result = subprocess.run(
+        ["bash", str(REPO / "scripts" / "post.sh"), channel, title, full_body],
+        cwd=str(REPO),
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    if result.returncode != 0:
+        tail = (result.stderr or result.stdout).strip().splitlines()
+        log(f"publish hook: post.sh rc={result.returncode}: "
+            f"{tail[-1][:200] if tail else '(no output)'}")
+        return None
+
+    out = result.stdout.strip().strip('"')
+    m = re.match(r"#(\d+)\s+(\S+)", out)
+    if not m:
+        log(f"publish hook: cannot parse post.sh output: {out!r}")
+        return None
+
+    info = {
+        "discussion_number": int(m.group(1)),
+        "url": m.group(2),
+        "channel": channel,
+        "as_agent": as_agent,
+        "title": title,
+    }
+
+    try:
+        from state_io import record_post
+        record_post(
+            REPO / "state",
+            as_agent,
+            channel,
+            title,
+            info["discussion_number"],
+            info["url"],
+        )
+    except Exception as exc:
+        log(f"publish hook: record_post failed (post still live): {exc}")
+
+    log(f"publish hook: published #{info['discussion_number']} to c/{channel}")
+    return info
 
 
 def run_blog_hook() -> dict | None:
