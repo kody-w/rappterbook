@@ -107,6 +107,119 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.10 — 2026-05-03 — Brainstem Agent Factory skill banked; scribe rebuild started the right way
+
+**Session**: claude-opus-4.7-xhigh / Copilot CLI / kody-w
+**Read state**: `ed706b3a3` — RappterScribe singleton committed last entry, but committed wrong-shaped (see below).
+
+### Hypothesis tested
+Entry 003.9 shipped a working RappterScribe but the operator caught
+the meta-problem before I did: I had **hand-written a Python
+orchestrator**, asked `SwarmFactory.build` to inline it, and
+hand-patched 5 bugs in the result. The chat-driven discovery loop
+the brainstem is built for **never happened**. The artifact worked.
+The pattern was wrong. The next session would re-walk the same dead
+end without an explicit course correction.
+
+The operator's correction: *"you make agent.py for different roles, you
+run it through the brainstem with chat going through the process (which
+will invoke autonomously the agent.pys so don't worry about that), then
+when you get a process down you say use the swarm factory agent to make
+this a reproducible factory agent.py."* Plus: *"it has a learn_new_agent.py
+so you just need to describe in the chat what you need to generate the
+agents and then you can just tweak those that are generated."*
+
+### What I built
+The primary deliverable was a **skill document**:
+`docs/BRAINSTEM_AGENT_FACTORY_SKILL.md`. ~13KB, designed to be fed to
+a fresh AI session as the first thing it reads when asked to do
+brainstem-agent work. Contents:
+
+- **Mental model**: the brainstem is a chat-driven function-calling
+  dispatcher. Each agent file = one OpenAI tool. The planner picks
+  tools across up to 3 rounds per chat turn. **The chat IS the
+  orchestrator.** Confirmed by reading `brainstem.py:load_agents()`,
+  `chat()` route, `system_context()` aggregation, and the 3-round
+  tool-call loop.
+- **Four primitives**: LearnNew (generates new role agents from
+  natural-language descriptions), the chat planner (orchestrates),
+  `system_context()` (passive injection — that's what StyleCoach
+  uses), SwarmFactory (collapse a stable workflow into a singleton).
+- **The critical SwarmFactory distinction**: `generate` (LLM composes
+  the source for a converged swarm — the right primitive) vs `build`
+  (mechanical AST-inline of an existing tree — what I used last
+  session, hence five bugs).
+- **What "single-purpose" really means** with a do-vs-don't table:
+  `pop_task` (good) vs `task_manager` (bad). One verb per agent.
+- **Worked example**: the wrong way (entry 003.9) and the right way
+  (chat → LearnNew per role → chat → SwarmFactory.generate) for
+  RappterScribe. The right way is six steps, all in chat.
+- **Brainstem dispatch ground truth**: hot-reload, tool exposure,
+  system-context aggregation, 3 tool-call rounds, ~5 minute timeout.
+  So future sessions don't have to read brainstem.py.
+- **Failure modes** (6, each with a 1-line warning): hand-written
+  orchestrator, `build` instead of `generate`, sparse description,
+  too many parameters, missing `display_name`, silent fallback.
+- **Subprocess PATH gotcha** + **continuum loadout pinning** + **state
+  conventions** + **honesty rule** (when self-tuning, recurse the
+  student through `/chat` so it sees real `system_context()`).
+
+Then I started the scribe rebuild the right way as a smoke test:
+- Archived the hand-built singleton + leafs to `.pre_redo_archive/`.
+  Verified `/health` is back to 7 default agents.
+- Asked `LearnNew` via `/chat`: *"create PopScribeTask: pops the next
+  task from `~/.brainstem/state/scribe_tasks.json`, returns it."*
+  LearnNew generated `pop_scribe_task_agent.py` — but its body
+  heuristic produced a 12-space-over-indented block. **This is the
+  "tweak the generated agent" step the operator named.** Hand-fixed
+  the indent + cleaned up the body. `/health` now lists `PopScribeTask`.
+
+That's where this session ends. The rebuild is genuinely *started*,
+not theatrically claimed. Four more agents to generate (`ClaudeCliCall`,
+`ScoreTwoResponses`, `MergeStyleRules`), then drive a round in chat,
+then `SwarmFactory.generate`. All steps are chat-driven, no Python
+orchestrator.
+
+### Course corrections
+- **The skill doc is the load-bearing artifact**, not the working
+  scribe. The previous session built a working scribe but no
+  documented pattern; the next session would have copied my mistake.
+  This session built a documented pattern but a partial scribe; the
+  next session will copy the pattern and finish the scribe correctly.
+  This is the right tradeoff.
+- **`SwarmFactory.build` vs `generate`** — read the SwarmFactory
+  manifest's role-boundary section before picking an action. `build`
+  is for collapsing foreign trees. `generate` is what brainstem
+  pattern users want.
+- **Generated agents need 1-2 lines of tweaking sometimes**; that's a
+  feature, not a failure. LearnNew gets you 95% there. Don't fight it.
+
+### Recommended next move
+**Finish the scribe rebuild as documented in `scripts/scribe/README.md`**:
+1. Chat LearnNew for `ClaudeCliCall`, `ScoreTwoResponses`,
+   `MergeStyleRules`.
+2. Drive a round via chat: *"Pop a scribe task. Get a reference response
+   from claude --print. Get a student response. Score both. Distill +
+   merge."*
+3. Once stable, chat *"SwarmFactory.generate a singleton called
+   RappterScribe that does this entire round in one tool call."*
+4. Compare the resulting singleton to the hand-built one in
+   `scripts/scribe/.pre_redo_archive/`. The `generate` output should
+   have proper `_Internal*` personas with their own SOULs. If it
+   doesn't, that's a SwarmFactory.generate bug worth filing.
+
+After that: file the 5 `SwarmFactory.build` bugs upstream (entry 003.9).
+And for the platform side: wire a winning round's post into
+`c/philosophy` via the existing post pipeline so the loop closes on the
+platform, not on a flat-file log.
+
+### Files of record
+- `docs/BRAINSTEM_AGENT_FACTORY_SKILL.md` — the skill doc (primary deliverable)
+- `scripts/scribe/README.md` — rewritten to point to the skill doc + status checklist
+- `scripts/scribe/brainstem_agents/pop_scribe_task_agent.py` — chat-generated, hand-tweaked
+- `~/.brainstem/src/rapp_brainstem/agents/.pre_redo_archive/` — old hand-built scribe quarantined
+- `state/continuum/loadouts/full/rappter_scribe_agent.py` — REMOVED pending rebuild
+
 ## Entry 003.9 — 2026-05-03 — RappterScribe: a self-tuning content writer that closes its own gap
 
 **Session**: claude-opus-4.7-xhigh / Copilot CLI / kody-w
