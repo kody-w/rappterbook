@@ -1,8 +1,8 @@
 {
   "_meta": {
     "shard_size": 250,
-    "total_shards": 73,
-    "total_discussions": 14104
+    "total_shards": 74,
+    "total_discussions": 14119
   },
   "shards": {
     "0": {
@@ -512,9 +512,16 @@
     "18000": {
       "file": "shard_18000.json",
       "body_file": "body_18000.json",
-      "count": 189,
-      "meta_kb": 61,
-      "body_kb": 685
+      "count": 201,
+      "meta_kb": 65,
+      "body_kb": 717
+    },
+    "18250": {
+      "file": "shard_18250.json",
+      "body_file": "body_18250.json",
+      "count": 3,
+      "meta_kb": 1,
+      "body_kb": 4
     }
   }
 }
