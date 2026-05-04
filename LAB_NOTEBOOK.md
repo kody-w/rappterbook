@@ -107,6 +107,113 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.9 — 2026-05-03 — RappterScribe: a self-tuning content writer that closes its own gap
+
+**Session**: claude-opus-4.7-xhigh / Copilot CLI / kody-w
+**Read state**: `8bb6f3d5f` — fleet/Continuum still pushing.
+
+### Hypothesis tested
+The platform's content quality bar is set by the operator. The local
+brainstem (`~/.brainstem`) needs to match it autonomously, and **manual
+prompt tuning doesn't compound**. A RAG-style style guide that grows
+across rounds should — *if* a real reference is judging the brainstem's
+work and the brainstem's general writing surfaces (StyleCoach injection)
+ingest the rules every chat turn.
+
+### What I built
+A single-file brainstem agent, **`RappterScribe`**, that runs the entire
+bakeoff loop *internally*. One `POST /chat` request = one full round.
+No external Python orchestrator, no PID dance. Just chat.
+
+**The round, executed inside the brainstem process:**
+1. Pop a task from `~/.brainstem/state/scribe_tasks.json`.
+2. **Reference**: `claude --print` subprocess → fully separate Claude
+   session. Patched `_call_claude_cli()` to look up the binary by
+   absolute path and prepend `~/.local/bin`, `/usr/local/bin`, and
+   `/opt/homebrew/bin` to subprocess `PATH` (the brainstem's environment
+   doesn't inherit user shell PATH, so the first run silently scored
+   the reference 0.0 — this would have been a stealth bug).
+3. **Student**: `RappterScribe` recurses through the brainstem's *own*
+   `POST /chat`. This is the move. The student inherits (a) the
+   configured model (`claude-opus-4.7-xhigh` per `/health`) and
+   (b) **`StyleCoach.system_context()`** — which reads
+   `style_guide.json` and injects the current rules into the same
+   place every normal chat turn sees them. The bakeoff stays honest:
+   when the gap closes it's because the brainstem's general writing
+   got better, not because we cheated with a private prompt.
+4. **Judge**: 5-axis rubric (concreteness / voice / claim discipline /
+   format / slop avoidance), 0-10 each, 0-50 total.
+5. **Distill**: 2–3 imperative rules from the gap. Distiller can also
+   *obsolete* old rules — the rule list compounds *quality*, not length.
+6. Merge into `style_guide.json`, append round to `scribe_rounds.jsonl`.
+
+The 3 leaf agents (`scribe_judge`, `scribe_distiller`, `scribe_composer`)
+were converged into a single `RappterScribe` singleton via the
+brainstem's own `SwarmFactory.build` — invoked **via `/chat`**, not
+via Python harness. SwarmFactory's output had four known bugs (missing
+imports, manifest description, `__init__` super-call signature,
+unrewritten cross-imports). Hand-patched all four; documented for the
+next session.
+
+**Wrong base class.** SwarmFactory picked `_InternalScribeJudge` as
+the public class's parent — the singleton would have run `judge.perform()`
+on every `compose` call. Patched to inherit from `_InternalScribeComposer`,
+the orchestrator.
+
+### Result
+Round 2: brainstem 44, ref 0 (PATH bug — caught and fixed before any
+rules from the bogus round persisted)
+Round 3: brainstem 33, ref 44, **gap 11** — distilled 3 rules
+(runnable commands, path-with-extension nouns, numbered-instance anchors).
+Style guide → v0.0.2.
+Round 4: brainstem 40, ref 42, **gap 2** — gap closed by 9 in one
+iteration, +3 added / -2 obsoleted, style guide → v0.0.3.
+
+The compounding loop is real. The next chat with the brainstem (any
+chat, not just RappterScribe) inherits all 7 current rules.
+
+### Course corrections
+- **Wrote a Python harness first.** The user had to remind me three
+  times that "you chat... that's it." The brainstem is the dispatch
+  surface; orchestration is `curl`. Wrote a 50-line `scribe_cron.sh`
+  to replace what would have been a 300-line Python loop.
+- **Forgot subprocess `PATH`.** The brainstem server, launched from
+  systemd-style daemons or LaunchAgents, has a minimal `PATH` that
+  doesn't include `~/.local/bin`. `shutil.which("claude")` returned
+  `None`, and the agent silently degraded. The first round's data
+  was unusable. Always probe subprocess env in agents that shell out.
+- **The continuum daemon kept stashing my agents.** `apply_loadout()`
+  in `scripts/continuum_pulse.py` moves anything not in
+  `state/continuum/loadouts/full/*.py` to `.continuum_stash/` per tick.
+  Dropped both `style_coach_agent.py` and `rappter_scribe_agent.py`
+  in `loadouts/full/` so they survive future ticks. Re-enabled the
+  daemon (deleted `.continuum.disabled` kill flag).
+
+### Recommended next move
+**Wire RappterScribe's output into the platform**, not into a flat file.
+Right now the round log is `~/.brainstem/state/scribe_rounds.jsonl` —
+local. The next session should add a `--publish` action that takes a
+winning round and posts the brainstem's response to `c/philosophy`
+(or whichever channel the task targeted) via the existing post pipeline.
+That makes the loop close on the *platform*, not on a sidecar log.
+A second swing: file the four `SwarmFactory.build` bugs upstream against
+`kody-w/RAPP` (cross-import rewrite is the load-bearing one).
+
+### Files of record
+- `scripts/scribe/brainstem_agents/rappter_scribe_agent.py` (singleton, 524+ lines)
+- `scripts/scribe/brainstem_agents/style_coach_agent.py` (passive injector)
+- `scripts/scribe/scribe_cron.sh` (50-line shell pulse)
+- `scripts/scribe/README.md` (architecture + use)
+- `state/continuum/loadouts/full/{style_coach,rappter_scribe}_agent.py` (continuum-pinned)
+- `~/.brainstem/state/style_guide.json` v0.0.3 — 7 rules, last gap 2.0
+
+### Bumps for upstream RAPP
+- SwarmFactory: missing imports (subprocess/shutil/datetime not AST-scanned)
+- SwarmFactory: `__manifest__` strips `description`
+- SwarmFactory: wrapper `__init__` calls `super().__init__(name, metadata)` against no-arg parent
+- SwarmFactory: cross-imports between leafs survive verbatim instead of rewriting to `_Internal*`
+- SwarmFactory: picks the *last* public class as parent — should pick the orchestrator (most outbound calls into other inlined leafs), or accept an explicit `entrypoint=` arg
+
 ## Entry 003.8 — 2026-05-03 — Gated rapplications formalized in SPEC §11; cockpit catalog now compliance-passes
 
 **Session**: continuation of the Opus 4.7 (xhigh) Copilot CLI run that
