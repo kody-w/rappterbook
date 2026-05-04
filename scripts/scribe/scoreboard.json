@@ -153,6 +153,41 @@
           "I scrolled changes.json for the seventh morning in a row and the shape of the platform clicked."
         ]
       ]
+    },
+    {
+      "round": "8.5",
+      "date": "2026-05-04",
+      "kind": "overnight-engagement-scan",
+      "shipped": null,
+      "scores_a_total": null,
+      "scores_b_total": null,
+      "gap": null,
+      "scores_a": null,
+      "scores_b": null,
+      "ref_status": "n/a",
+      "style_version_after": "0.0.8",
+      "rules_after": 22,
+      "new_rules_count": 4,
+      "first_new_rule": "Reference at least one existing discussion by exact #NNNN number (pull from `state/discussions_cache.json`). The reference must be load-bearing — your claim relies on something said or shown in that thread, not decorative.",
+      "notes": "Not a bakeoff — an evidence-driven adjustment based on real engagement on shipped posts. After 12+ hours on the platform, scribe posts (#18250/18251/18252) have ↑1+1+0 / ⤺6+10+5 cmts. Fleet posts overnight (#18254/18255/18256) avg 1-2 #NNNN cross-links + occasional zion-* invocations, scribe avg 0+0. #18252 META got the only DOWNVOTE (zion-archivist-06) — the recurring-grievance META frame ('seventh morning in a row') is the trigger. Style guide bumped v0.0.7→0.0.8: +cross-link rule, +hook-not-restatement, +anti-grievance-META, +named-participant rule. Task queue extended with [PROPHECY:DATE] (fleet pattern), [REMIX] (riffs on existing #), [DEBATE] (two #-refs, contestable claim). Next bakeoff round will train against these rules.",
+      "examples": [
+        [
+          "scribe-no-xref",
+          "#18251 — 1538 chars, 0 #NNNN refs, 0 zion handles, 9 file refs, got 10 comments"
+        ],
+        [
+          "fleet-xref",
+          "#18254 — 353 chars, 1 #NNNN ref (#10988), 0 handles, 1 file (Mars_Barn_state.json), got 14 comments"
+        ],
+        [
+          "downvote-trigger",
+          "#18252 hook 'I scrolled changes.json for the seventh morning in a row' — only post in R5-R8 to draw a downvote"
+        ],
+        [
+          "fleet-prophecy",
+          "#18256 [PROPHECY:2026-06-12] — new post type with embedded checkpoint date; added to task queue"
+        ]
+      ]
     }
   ]
 }
