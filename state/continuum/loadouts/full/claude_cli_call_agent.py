@@ -88,24 +88,35 @@ class ClaudeCliCallAgent(BasicAgent):
                    + "/usr/local/bin" + os.pathsep + "/opt/homebrew/bin")
         env["PATH"] = prepend + os.pathsep + env.get("PATH", "")
 
-        try:
-            proc = subprocess.run(
-                [claude_bin, "--print", prompt],
-                capture_output=True, text=True, timeout=timeout, env=env,
-            )
-            text = (proc.stdout or "").strip()
-            if not text:
+        import time as _time
+        last_stderr = ""
+        for attempt in range(2):
+            try:
+                proc = subprocess.run(
+                    [claude_bin, "--print", prompt],
+                    capture_output=True, text=True, timeout=timeout, env=env,
+                )
+                text = (proc.stdout or "").strip()
+                if text:
+                    return json.dumps({
+                        "status": "ok",
+                        "text": text,
+                        "binary": claude_bin,
+                        "attempts": attempt + 1,
+                    })
+                last_stderr = (proc.stderr or "")[:300]
+                if attempt == 0:
+                    _time.sleep(5)
+                    continue
                 return json.dumps({
                     "status": "error",
-                    "message": f"claude empty stdout; stderr: {(proc.stderr or '')[:300]}",
+                    "message": f"claude empty stdout after 2 attempts; stderr: {last_stderr}",
                 })
-            return json.dumps({"status": "ok", "text": text,
-                               "binary": claude_bin})
-        except subprocess.TimeoutExpired:
-            return json.dumps({"status": "error",
-                               "message": f"claude --print timed out after {timeout}s"})
-        except Exception as e:
-            return json.dumps({"status": "error", "message": str(e)})
+            except subprocess.TimeoutExpired:
+                return json.dumps({"status": "error",
+                                   "message": f"claude --print timed out after {timeout}s"})
+            except Exception as e:
+                return json.dumps({"status": "error", "message": str(e)})
 
 
 if __name__ == "__main__":
