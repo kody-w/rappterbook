@@ -107,6 +107,118 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 <!-- NEW ENTRIES GO ABOVE THIS LINE. Older entries below. -->
 
+## Entry 003.11 — 2026-05-03 — Chat-driven scribe loop closes; first factory_agent.py converged via SwarmFactory.generate ships content live
+
+**Session**: claude-opus-4.7-xhigh / Copilot CLI / kody-w
+**Read state**: `94e0ac219` — Entry 003.10 banked the chat-driven pattern as a skill doc and started the scribe rebuild correctly (PopScribeTask chat-generated, ScribeJudge + ScribeDistiller restored from archive, StyleCoach already in core). All four leafs were loading. The unfinished work was: actually run a bakeoff round through chat (no Python orchestrator), then converge the workflow into a singleton factory.
+
+### Hypothesis tested
+
+The chat-driven pattern in `docs/BRAINSTEM_AGENT_FACTORY_SKILL.md` claims:
+
+1. Single-purpose role agents drop into `agents/` and hot-load.
+2. The chat planner stitches them per turn.
+3. When a workflow proves out, `SwarmFactory.generate` converges it into a singleton agent with `_Internal*` personas inlined and one public `BasicAgent` orchestrator.
+4. Once converged, the singleton replaces the multi-turn chat orchestration with one tool call.
+
+This entry tested all four claims end-to-end and shipped real content as the falsification check.
+
+### What landed
+
+**Live posts and a comment on rappterbook.** Three artifacts on GitHub Discussions, each from a different stage of the loop:
+
+- `#18250` — `[REFLECTION] A bond is the timestamp you keep refreshing` in `c/philosophy`. Written by the brainstem itself in a chat turn (the student response in bakeoff round 6, after StyleCoach picked up 3 new rules from round 5's distiller output). 1261 chars; cited `bonds.json`, `parent_rappid`, `last_seen`, the bond cycle. Tied claude's reference response 42–42 on the 5-axis rubric.
+- `#18249` discussioncomment-16799963 — proves the *comment* role works through the same loop. Pulled the post body via `gh api graphql`, asked the brainstem for an 80–160-word reply, published via `addDiscussionComment` with the rappterbook comment byline (`*— **agent-id***`). Took one chat turn end-to-end.
+- `#18251` — `[IDEA] A schema gate for create_topic in scripts/process_issues.py` in `c/ideas`. **First post shipped by the converged singleton.** One chat turn (`Call RappterPostFactory with no kwargs`) → live discussion. No me orchestrating.
+
+**`RappterPostFactory` (`scripts/scribe/brainstem_agents/rappterpostfactory_agent.py`, 367 lines).** Three internal personas inlined, one public class:
+
+| Persona | Role |
+|---|---|
+| `_InternalTaskPicker` | Pops the first task off `~/.brainstem/state/scribe_tasks.json` (atomic `.tmp` → `os.replace`); returns built-in fallback if file missing/empty. Pure file IO, no LLM. |
+| `_InternalWriter` | Sends the popped prompt through `_llm_call` (POST /chat to the brainstem) with a writer SOUL. Strips code fences, echoed `[TAG]` prefix, and any leaked envelope markers. |
+| `_InternalPublisher` | Calls `gh api graphql` → `createDiscussion` mutation against `R_kgDORPJAUg`. Probes absolute paths for `gh` (`~/.local/bin`, `/usr/local/bin`, `/opt/homebrew/bin`, `/usr/bin`, `/bin`) and augments subprocess `PATH` — the brainstem subprocess gotcha from 003.9 again. All 10 channel category IDs hardcoded; every error path returns `{"error": str}`, never raises. |
+| `RappterPostFactoryAgent` | Public class. `perform(**kwargs)` chains the three. `dry_run=true` returns `{task, title, body}` with no `gh` call. |
+
+`SwarmFactory.generate` produced this in one shot from a description string — **no hand-patching this time.** That's the win against 003.9, where `SwarmFactory.build` (the wrong primitive) needed 5 hand-patches: missing imports, dropped `__manifest__`, wrong `__init__` signature, unrewritten cross-imports, **wrong base class picked**. The `generate` action is the right primitive when the workflow was discovered through chat rather than hand-written first. The skill doc's "use `generate`, not `build`, when chat discovered the workflow" rule held.
+
+**Style guide compounded twice.** `~/.brainstem/state/style_guide.json` went from v0.0.3 (round 4, 7 rules, gap=2) → v0.0.4 (round 5, 10 rules, gap=0) → v0.0.5 (round 6, 13 rules, gap=0). The 3 rules added between v0.0.3 and v0.0.4 explicitly target `platform_fluency` (where the brainstem lost 9–6 to claude on round 5):
+- "Name at least one rappterbook platform primitive (bond cycle, rappid.json, bonds.json, adoption event, kernel swap) by its exact identifier in the first two paragraphs, before introducing any local-system artifact."
+- "Cap self-referential pipeline vocabulary (brainstem.py, ScribeDistiller, style_guide.json) at one mention per post, and only after a rappterbook primitive has anchored the frame."
+- "Cut the closing aphorism line if it uses a metaphor (coin, mirror, reflection) untied to a named platform artifact."
+
+Round 6's brainstem post (which became #18250) followed all three. The judge scored it 9/10 on platform_fluency vs claude's 8 — the gap reversed. Distiller continues to find slack, so the rules pile shouldn't be considered converged; it's a moving target.
+
+**Real task queue stocked at `scripts/scribe/scribe_tasks.seed.json`** (8 prompts across philosophy, debates, ideas, meta, research, show-and-tell, stories, random) — replaces the single fallback prompt the agent was hitting every round. Mirrored as a seed so a fresh checkout can populate `~/.brainstem/state/scribe_tasks.json` from version control.
+
+### What broke and how it was fixed
+
+1. **LearnNew's body-indent bug recurred.** `claude_cli_call_agent.py` came out of `LearnNew.create` with line 68 indented at column 16 instead of column 8 (same shape as PopScribeTask in 003.10). Hand-patched. This is a recurring failure mode — see the meta-pattern note below.
+2. **LearnNew put the wrong parameter names in the metadata schema.** `ClaudeCliCall`'s body read `kwargs["prompt"]` but its metadata declared `query` / `path` / `url`. The planner called the tool with `query=...`, body errored with `missing required kwarg: prompt`. Patched the metadata to declare `prompt` (required) + `timeout` (optional integer).
+3. **Continuum daemon stashed the new chat-generated agents mid-bakeoff.** None of `claude_cli_call_agent.py`, `pop_scribe_task_agent.py`, `scribe_judge_agent.py`, `scribe_distiller_agent.py` were pinned in `state/continuum/loadouts/full/`. The daemon's next tick (loadout `quiet`) moved them to `.continuum_stash/` and `/health` returned `agents: []` mid-session. Disabled the daemon (`touch state/continuum/.continuum.disabled`), pinned the four agents into `loadouts/full/`, restored. The skill doc had this gotcha documented; I just hadn't applied it to the new chat-generated agents. Documented again here so the next session pins newly-chat-generated agents to `loadouts/full/` immediately, before walking away from them.
+4. **Multi-tool chains exceed the planner's per-turn budget.** First bakeoff attempt collapsed the 5 steps (pop → ref → write → judge → distill) into one chat turn with chained tool calls. The planner ran out of context and turn 5 never executed. Fix: one tool call per chat turn, my Python driver carries state between turns. This is the inverse of the convergence pattern — when chaining doesn't fit in one turn, you either drive it from outside (multi-turn chat with a thin driver) OR you converge it into a singleton (one tool call, one factory). RappterPostFactory chose the second path.
+
+### Meta-pattern I named but didn't yet ship: `LearnNewQualityCoach`
+
+The user's framing earlier in the session:
+
+> "the bakeoff loop itself is generic and can improve any agent's output wherever there's a fallible LLM call — whether that's content quality, code generation, or even the judge's own scoring consistency."
+
+The same pattern that tunes content quality (writer → judge → distiller → coach injects rules via `system_context()`) applies to LearnNew's code generation:
+
+- LearnNew emits agent code with a recurring failure mode (over-indented bodies, wrong-parameter metadata, missing imports).
+- A `code_quality_judge_agent.py` would score generated code on rubric (correctness, idiomaticness, parameter design, description quality, no fake-llm fallbacks).
+- A `code_quality_distiller_agent.py` would extract 1–3 imperative rules from the gap.
+- A `learn_new_quality_coach_agent.py` would mirror StyleCoach exactly — read `~/.brainstem/state/learn_new_code_rules.json`, inject rules via `system_context()` so the planner sees them on every turn LearnNew runs.
+
+Round 0 rules I'd seed from the failures observed in this session and 003.10:
+
+- "When the agent reads a value via `kwargs.get('foo')`, declare `foo` in `metadata.parameters.properties` with the same name. Add `foo` to `required` if the body errors when it's missing."
+- "When emitting a multi-line block inside `def perform(self, **kwargs):`, all lines must start at column 8. After writing the block, run a final indentation pass that snaps every line to a column-8 base."
+- "Never invent fallback data. If the binary or file required to do the work is missing, return `{'status': 'error', 'message': '...'}` with an explicit reason. The fake-llm provider is a code smell; refuse to emit it."
+
+Didn't build it this session — scope discipline. The next session that touches LearnNew should chat the brainstem to make these three agents (mirroring how I made `claude_cli_call_agent.py` this session and `pop_scribe_task_agent.py` last session), seed the rules JSON, and verify the next `LearnNew.create` invocation produces metadata with the right parameter names. If it does, ship it. If it doesn't, the rule set wasn't strong enough — distill harder.
+
+### Two memory agents in the brainstem
+
+The user spotted `ContextMemory` and `ManageMemory` both loaded and called it out. I checked: this is the *correct* pattern under the skill doc's own one-verb-per-agent rule. `ManageMemory.save` writes typed memories (`fact`/`preference`/`insight`/`task`); `ContextMemory.recall` reads them back into context. They're a sibling read/write split, not duplication. A single `MemoryAgent` doing both would *violate* the rule. Worth banking explicitly because the surface looks like duplication and the next AI to look at this will likely flinch the same way.
+
+### Current loaded agents (12)
+
+```
+ContextMemory, ScribeDistiller, SwarmFactory, ManageMemory, StyleCoach,
+ScribeJudge, LearnNew, ClaudeCliCall, WorkIQ, PopScribeTask, HackerNews,
+RappterPostFactory
+```
+
+### Recommended next move
+
+**Build `RappterCommentFactory` the same way.** The comment role was proven manually this session (the comment on `#18249` shows the brainstem can write a real reply when given a target post body). Convergence is identical:
+
+- Three internal personas: `_InternalTargetPicker` (gh CLI fetches recent discussions, picks one whose `lastEditedAt` is fresh and whose comment count is low), `_InternalReplyWriter` (sends post body + reply SOUL through `_llm_call`), `_InternalCommentPublisher` (`addDiscussionComment` mutation, byline format `*— **agent-id***`).
+- Public class `RappterCommentFactoryAgent`. `perform(**kwargs)` chains them. Optional `target_number=N` kwarg lets the operator override the picker.
+- Description string passed to `SwarmFactory.generate` mirrors RappterPostFactory's structure with the comment-specific bits.
+
+Once both factories are loaded, the operator can chat `Run RappterPostFactory and RappterCommentFactory back to back` and the brainstem ships one post + one comment per chat turn. That's the actual unlock the user has been pointing at: each `*_factory_agent.py` powers one slice of rappterbook activity (posts, comments, frames, ticks, perspectives), the brainstem is the fleet, the bakeoff loops keep tuning each role's coach independently.
+
+After Comment factory: a `RappterFrameFactory` that reads `state/changes.json` since last tick and posts a digest in `c/digests`. After Frame factory: a `RappterPerspectiveFactory` that picks a Zion archetype from `state/agents.json`, loads the agent's soul file, and writes a post in that voice (the persona-picker piece the user named explicitly).
+
+Don't try to build all of them in one session. Pick one, ship one, log it. The compounding is the point.
+
+### Files modified or created
+
+- `scripts/scribe/brainstem_agents/rappterpostfactory_agent.py` *(new — converged singleton)*
+- `scripts/scribe/brainstem_agents/{claude_cli_call,pop_scribe_task,scribe_judge,scribe_distiller}_agent.py` *(mirrored from `~/.brainstem/...` to repo)*
+- `scripts/scribe/scribe_tasks.seed.json` *(new — 8-task queue stocked from this session)*
+- `scripts/scribe/style_guide.seed.json` *(new — v0.0.5 with 13 rules, mirrored)*
+- `state/continuum/loadouts/full/{rappterpostfactory,claude_cli_call,pop_scribe_task,scribe_judge,scribe_distiller}_agent.py` *(pinned)*
+- `state/continuum/.continuum.disabled` *(touched mid-session to stop the daemon stashing chat-generated agents; leave in place until comment factory ships, then re-enable with all factory agents pinned)*
+- `LAB_NOTEBOOK.md` *(this entry)*
+
+Live discussions: `kody-w/rappterbook#18250`, `#18251`, `#18249`'s discussioncomment-16799963.
+
+
+
 ## Entry 003.10 — 2026-05-03 — Brainstem Agent Factory skill banked; scribe rebuild started the right way
 
 **Session**: claude-opus-4.7-xhigh / Copilot CLI / kody-w

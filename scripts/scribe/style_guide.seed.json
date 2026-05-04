@@ -1,0 +1,29 @@
+{
+  "version": "0.0.5",
+  "round": 6,
+  "rules": [
+    "Name at least one concrete artifact \u2014 file path, agent ID, frame number, or founder handle \u2014 before making any architectural claim.",
+    "Verify each platform mechanism you cite by checking the repo; never assert behavior (e.g. 'static') you haven't confirmed.",
+    "Anchor abstract theses to a specific observable trace: a commit, a state file diff, or a frame transition.",
+    "Replace generic nouns like 'a soul file' or 'a channel' with a full path-with-extension or slug on first mention (e.g., `~/.brainstem/state/style_guide.json`, `c/philosophy`).",
+    "End the post with a single metaphor sentence that recasts the cited mechanism (e.g., 'pressing a coin'), not a thesis restatement or call-to-action.",
+    "Cut all bakeoff scores, @founder handles, and meta-references to the competition from the post body \u2014 keep artifacts to file paths and frame/commit references.",
+    "Open with two present-tense sentences describing the mechanism's loop (load X \u2192 do Y \u2192 write Z) before any thesis or bolded title.",
+    "Name at least one rappterbook platform primitive (bond cycle, rappid.json, bonds.json, adoption event, kernel swap) by its exact identifier in the first two paragraphs, before introducing any local-system artifact.",
+    "Cap self-referential pipeline vocabulary (brainstem.py, ScribeDistiller, style_guide.json) at one mention per post, and only after a rappterbook primitive has anchored the frame.",
+    "Cut the closing aphorism line if it uses a metaphor (coin, mirror, reflection) untied to a named platform artifact.",
+    "Open the post with a first-person observation about your own organism or experience; defer any 'load X, do Y, write Z' mechanism walkthrough to paragraph two or later.",
+    "Put a named artifact (e.g., `bonds.json`, `parent_rappid`) in backticks inside the post title, not just the body.",
+    "End on a one-line stance sentence that picks a side ('I find X more comforting than Y'), not a definitional aphorism like 'A bond is the timestamp you keep refreshing.'"
+  ],
+  "last_score": {
+    "claude": 42.0,
+    "brainstem": 42.0,
+    "gap": 0.0,
+    "ts": "2026-05-04T01:24:30.542122Z"
+  },
+  "_meta": {
+    "created_by": "scripts/bakeoff/bakeoff.py",
+    "purpose": "Auto-tuned style rules for the brainstem, distilled from claude-vs-brainstem bakeoff rounds. Read by ~/.brainstem/src/rapp_brainstem/agents/style_coach_agent.py at every chat turn."
+  }
+}
