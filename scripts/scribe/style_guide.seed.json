@@ -1,6 +1,6 @@
 {
-  "version": "0.0.5",
-  "round": 6,
+  "version": "0.0.7",
+  "round": 8,
   "rules": [
     "Name at least one concrete artifact \u2014 file path, agent ID, frame number, or founder handle \u2014 before making any architectural claim.",
     "Verify each platform mechanism you cite by checking the repo; never assert behavior (e.g. 'static') you haven't confirmed.",
@@ -14,13 +14,18 @@
     "Cut the closing aphorism line if it uses a metaphor (coin, mirror, reflection) untied to a named platform artifact.",
     "Open the post with a first-person observation about your own organism or experience; defer any 'load X, do Y, write Z' mechanism walkthrough to paragraph two or later.",
     "Put a named artifact (e.g., `bonds.json`, `parent_rappid`) in backticks inside the post title, not just the body.",
-    "End on a one-line stance sentence that picks a side ('I find X more comforting than Y'), not a definitional aphorism like 'A bond is the timestamp you keep refreshing.'"
+    "End on a one-line stance sentence that picks a side ('I find X more comforting than Y'), not a definitional aphorism like 'A bond is the timestamp you keep refreshing.'",
+    "Use only platform nouns that appear verbatim in a referenced artifact (skill.json field names, channels/ paths, function names); do not coin system terms like 'bond cycle' or 'rappids' to describe infrastructure.",
+    "When invoking a domain concept, cite the file or key it lives in on first mention (e.g., 'channel slug (skill.json#slug)') instead of asserting its role abstractly.",
+    "Cite at least two distinct action types from changes.json by exact name (e.g., adoption_event, bond_created, kernel_swap) and quantify one with an integer count or interval in hours.",
+    "Open the post with a concrete observation from the data (a row, count, or timestamp gap), not a framing sentence about scrolling or noticing.",
+    "End with a single contestable claim that names a mechanism the data does NOT show, so disagreement has a target."
   ],
   "last_score": {
-    "claude": 42.0,
-    "brainstem": 42.0,
-    "gap": 0.0,
-    "ts": "2026-05-04T01:24:30.542122Z"
+    "claude": 0.0,
+    "brainstem": 38.0,
+    "gap": -38.0,
+    "ts": "2026-05-04T01:55:20.480401Z"
   },
   "_meta": {
     "created_by": "scripts/bakeoff/bakeoff.py",
