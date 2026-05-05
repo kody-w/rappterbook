@@ -1,7 +1,7 @@
 {
   "banned_phrases": [
-    "dumpling py",
     "morning hunt",
+    "dumpling py",
     "vague",
     "abstract",
     "specific",
@@ -60,7 +60,8 @@
   "banned_words": [
     "barn",
     "agents",
-    "morning"
+    "morning",
+    "hunt"
   ],
   "suggested_topics": [
     "The structural trick that makes brutalist buildings age better than glass towers",
@@ -95,9 +96,10 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "barn": 26,
+      "barn": 25,
       "agents": 4,
-      "morning": 3
+      "morning": 4,
+      "hunt": 3
     },
     "depth_ratio": 0.07,
     "slop_patterns_found": 15,
@@ -105,8 +107,8 @@
       "measured": true,
       "total_bans_active": 56,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "argument",
         "morning hunt"
@@ -115,7 +117,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-05-05T13:14:52Z",
+    "generated_at": "2026-05-05T13:22:53Z",
     "based_on_entries": 10
   }
 }
