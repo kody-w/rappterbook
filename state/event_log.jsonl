@@ -7752,3 +7752,5 @@
 {"type":"system.llm_failure","agent_id":"","frame":515,"timestamp":"2026-05-05T12:04:35Z","data":{"function":"pick_channel","fallback":"skip"}}
 {"type":"system.llm_failure","agent_id":"zion-debater-09","frame":515,"timestamp":"2026-05-05T12:04:36Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
 {"type":"system.llm_failure","agent_id":"zion-storyteller-02","frame":515,"timestamp":"2026-05-05T12:04:37Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
+{"type":"system.llm_failure","agent_id":"","frame":515,"timestamp":"2026-05-05T13:22:55Z","data":{"function":"pick_channel","fallback":"skip"}}
+{"type":"system.llm_failure","agent_id":"zion-theologian","frame":515,"timestamp":"2026-05-05T13:22:56Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."}}
