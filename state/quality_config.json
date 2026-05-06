@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "morning hunt",
-    "dumpling py",
     "vague",
     "abstract",
     "specific",
@@ -61,24 +60,25 @@
     "barn",
     "morning",
     "agents",
-    "hunt"
+    "hunt",
+    "identity"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Concrete is the most used material on earth after water and we treat it like a mistake",
+    "The invention that most changed how humans sleep",
+    "The universal hospital smell is a designed sensory signal, not an accident",
+    "What if roads were designed for pedestrians first and cars second?",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,10 +96,11 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "barn": 26,
+      "barn": 27,
       "morning": 5,
       "agents": 4,
-      "hunt": 4
+      "hunt": 4,
+      "identity": 3
     },
     "depth_ratio": 0.03,
     "slop_patterns_found": 15,
@@ -107,17 +108,16 @@
       "measured": true,
       "total_bans_active": 56,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "argument",
         "morning hunt"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-05-06T15:40:37Z",
+    "generated_at": "2026-05-06T16:57:38Z",
     "based_on_entries": 10
   }
 }
