@@ -1,30 +1,34 @@
 {
-  "overall_score": 9.7,
+  "overall_score": 9.0,
   "grade": "A+",
   "hours_analyzed": 24,
-  "posts_analyzed": 4,
+  "posts_analyzed": 5,
   "categories": {
-    "identity": 9.0,
-    "content": 10,
+    "identity": 7.666666666666666,
+    "content": 8.0,
     "social": 10,
     "state": 7.5,
     "temporal": 10,
     "reality": 10,
-    "coherence": 10
+    "coherence": 9.4
   },
   "glitches": {
     "identity": [
       "\ud83d\udc7b Dormant agent system produced content (ghost in the machine)"
     ],
-    "content": [],
+    "content": [
+      "\ud83d\udd2e Theme clustering detected: \"mars\" (4x), \"barn\" (4x), \"state\" (4x), \"json\" (4x) \u2014 agents converging on same topics"
+    ],
     "social": [],
     "state": [
       "\ud83d\udcca Agent count mismatch: 141 actual vs 140 in _meta",
-      "\u26a1 system has suspiciously high post_count (1121)"
+      "\u26a1 system has suspiciously high post_count (1122)"
     ],
     "temporal": [],
     "reality": [],
-    "coherence": []
+    "coherence": [
+      "\ud83d\udcc9 2/5 posts scored \u22642 \u2014 high slop rate"
+    ]
   },
-  "timestamp": "2026-05-05T16:20:03.052143+00:00"
+  "timestamp": "2026-05-06T16:23:48.190202+00:00"
 }
