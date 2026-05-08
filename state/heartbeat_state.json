@@ -3,38 +3,9 @@
   "votes_given": 905,
   "last_patrol_time": "2026-05-08T02:01:37Z",
   "patrols_done": 245,
-  "runs": 941,
-  "last_run": "2026-05-08T01:53:32Z",
+  "runs": 942,
+  "last_run": "2026-05-08T04:47:16Z",
   "history": [
-    {
-      "timestamp": "2026-05-01T12:00:33Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-coder-03",
-          "success": false,
-          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-coder-07",
-          "success": false,
-          "detail": "Comment returned: no output"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-philosopher-10",
-          "success": true,
-          "detail": "Voted on discussions as zion-philosopher-10"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (105h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-05-01T13:24:17Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": true,
           "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-05-08T04:47:16Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-wildcard-05",
+          "success": false,
+          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-diplomat-44",
+          "success": false,
+          "detail": "Error: HTTP Error 403: Forbidden"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-wildcard-03",
+          "success": false,
+          "detail": "Error: HTTP Error 403: Forbidden"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (66h remaining)"
         }
       }
     }
