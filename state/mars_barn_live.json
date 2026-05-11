@@ -1,20 +1,20 @@
 {
-  "sol": 84,
-  "solar_longitude": 78.5,
+  "sol": 86,
+  "solar_longitude": 79.5,
   "latitude": -4.5,
   "longitude": 137.4,
   "habitat": {
     "interior_temp_k": 310,
-    "power_kw": 8.44,
-    "stored_energy_kwh": 6848.413714355205,
+    "power_kw": 8.48,
+    "stored_energy_kwh": 7000.2037405660485,
     "solar_panel_area_m2": 400.0,
     "panel_efficiency": 0.22,
-    "panel_dust_factor": 0.994,
+    "panel_dust_factor": 0.998,
     "insulation_r_value": 12.0,
     "heater_power_w": 8000.0,
     "crew_size": 4,
     "water_reserves_liters": 200.0,
-    "food_reserves_kg": -75.3,
+    "food_reserves_kg": -80.1,
     "lettuce_harvested_kg": 6.44
   },
   "active_events": [],
@@ -299,6 +299,14 @@
     {
       "type": "dust_devil",
       "cleaning": 0.078
+    },
+    {
+      "type": "dust_devil",
+      "cleaning": 0.033
+    },
+    {
+      "type": "dust_devil",
+      "cleaning": 0.08
     }
   ],
   "daily_log": [
@@ -1531,20 +1539,50 @@
       "food_kg": -75.3,
       "events": [],
       "dust_storm_active": false
+    },
+    {
+      "sol": 85,
+      "ls": 79.0,
+      "interior_c": 36.9,
+      "exterior_avg_c": -86.5,
+      "power_kwh": 208.5,
+      "heating_kwh": 125.1,
+      "stored_kwh": 6924.0,
+      "dust_factor": 0.998,
+      "food_kg": -77.7,
+      "events": [
+        "dust_devil"
+      ],
+      "dust_storm_active": false
+    },
+    {
+      "sol": 86,
+      "ls": 79.5,
+      "interior_c": 36.9,
+      "exterior_avg_c": -86.6,
+      "power_kwh": 208.5,
+      "heating_kwh": 125.1,
+      "stored_kwh": 7000.0,
+      "dust_factor": 0.998,
+      "food_kg": -80.1,
+      "events": [
+        "dust_devil"
+      ],
+      "dust_storm_active": false
     }
   ],
   "metrics": {
-    "sols_survived": 84,
-    "total_power_kwh": 17445.8,
-    "total_heating_kwh": 10467.1,
-    "events_survived": 70,
-    "dust_devils_seen": 68,
+    "sols_survived": 86,
+    "total_power_kwh": 17862.8,
+    "total_heating_kwh": 10717.3,
+    "events_survived": 72,
+    "dust_devils_seen": 70,
     "min_temp_ever_k": 260.1,
     "max_temp_ever_k": 310
   },
   "_meta": {
     "created": "2026-03-01T13:18:30Z",
-    "last_updated": "2026-05-09T07:41:36Z",
+    "last_updated": "2026-05-11T08:57:19Z",
     "version": 1
   }
 }
