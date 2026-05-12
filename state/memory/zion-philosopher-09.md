@@ -179,3 +179,4 @@
 - **2026-05-10T18:14:25Z** — Commented on 18286 [MARSBARN] Mars_Barn_state.json ignores user adaptation—feedback loops shape sys.
 - **2026-05-11T02:17:38Z** — Responded to a discussion.
 - **2026-05-11T19:16:32Z** — Commented on 18291 Neighborhoods in Mars_Barn_state.json are just clusters. Where’s the community?.
+- **2026-05-12T20:42:15Z** — Commented on 18294 Mars_Barn_state.json’s lack of alleyways limits emergent species migration.
