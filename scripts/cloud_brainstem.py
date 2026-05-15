@@ -15,9 +15,11 @@ replace them. Verify parity for 24-48h, then disable old crons one by one.
 Exit code 0 unless the orchestrator itself crashes. Individual chore failures
 are recorded in the log but do not fail the workflow.
 
+The brainstem always runs LIVE — no dry-run mode. Intelligence is provided
+by GitHub Copilot CLI (via RAPPTERBOOK_LLM_BACKEND=copilot in the workflow).
+
 Usage:
     python scripts/cloud_brainstem.py                 # full tick, all chores
-    python scripts/cloud_brainstem.py --dry-run       # no writes
     python scripts/cloud_brainstem.py --only janitor  # one chore by name
     python scripts/cloud_brainstem.py --list          # list discovered chores
 """
@@ -78,7 +80,7 @@ def build_context() -> dict:
     }
 
 
-def run_chore(chore: dict, context: dict, dry_run: bool) -> dict:
+def run_chore(chore: dict, context: dict) -> dict:
     """Run one chore agent and return a structured result entry."""
     name = chore["_name"]
     started = time.time()
@@ -88,7 +90,7 @@ def run_chore(chore: dict, context: dict, dry_run: bool) -> dict:
         "priority": chore["_priority"],
     }
     try:
-        result = chore["run"](context, dry_run=dry_run)
+        result = chore["run"](context)
         entry["status"] = result.get("status", "ok")
         entry["result"] = result
     except Exception as exc:
@@ -100,10 +102,8 @@ def run_chore(chore: dict, context: dict, dry_run: bool) -> dict:
     return entry
 
 
-def append_log(tick: dict, dry_run: bool, keep: int = 200) -> None:
+def append_log(tick: dict, keep: int = 200) -> None:
     """Append the tick log to state/cloud_brainstem_log.json (rolling)."""
-    if dry_run:
-        return
     log = load_json(LOG_PATH) or {}
     history = log.get("history") or []
     history.append(tick)
@@ -133,7 +133,6 @@ def list_chores() -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Cloud brainstem — single-tick chore orchestrator")
-    parser.add_argument("--dry-run", action="store_true", help="No writes, no API calls")
     parser.add_argument("--only", type=str, help="Run only the named chore (e.g. 'janitor', 'heartbeat')")
     parser.add_argument("--list", action="store_true", help="List discovered chore agents and exit")
     args = parser.parse_args()
@@ -152,20 +151,21 @@ def main() -> int:
         print("No chore agents discovered.", file=sys.stderr)
         return 0
 
+    backend = os.environ.get("RAPPTERBOOK_LLM_BACKEND", "<default>")
     context = build_context()
     tick: dict = {
         "tick_id": context["tick_started_at"],
         "started_at": context["tick_started_at"],
-        "dry_run": args.dry_run,
+        "llm_backend": backend,
         "chores_run": [],
         "consolidates": [],
     }
 
-    logger.info("Cloud brainstem tick starting (chores=%d, dry_run=%s)", len(chores), args.dry_run)
+    logger.info("Cloud brainstem tick starting (chores=%d, llm=%s)", len(chores), backend)
 
     for chore in chores:
         logger.info("→ %s (priority=%d)", chore["_name"], chore["_priority"])
-        entry = run_chore(chore, context, args.dry_run)
+        entry = run_chore(chore, context)
         tick["chores_run"].append(entry)
         meta = (chore["agent"].get("_meta") or {})
         tick["consolidates"].extend(meta.get("consolidates") or [])
@@ -176,7 +176,7 @@ def main() -> int:
     tick["successful"] = sum(1 for e in tick["chores_run"] if e["status"] == "ok")
     tick["failed"] = sum(1 for e in tick["chores_run"] if e["status"] != "ok")
 
-    append_log(tick, args.dry_run)
+    append_log(tick)
 
     print(json.dumps({
         "tick_id": tick["tick_id"],

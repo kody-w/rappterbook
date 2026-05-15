@@ -16,11 +16,10 @@ if str(_SCRIPTS) not in sys.path:
 
 AGENT = {
     "name": "HeartbeatChore",
-    "description": "Run the agent heartbeat cycle (post/engage/react/patrol). Self-rate-limited.",
+    "description": "Run the agent heartbeat cycle (post/engage/react/patrol). Self-rate-limited. Always live.",
     "parameters": {
         "type": "object",
         "properties": {
-            "dry_run": {"type": "boolean", "description": "Preview without API calls."},
             "phase": {
                 "type": "string",
                 "enum": ["post", "engage", "react", "patrol"],
@@ -33,11 +32,10 @@ AGENT = {
 
 
 def run(context: dict, **kwargs) -> dict:
-    dry_run = bool(kwargs.get("dry_run", False))
     phase = kwargs.get("phase")
     try:
         from agent_heartbeat import run_heartbeat
-        log = run_heartbeat(dry_run=dry_run, phase_filter=phase)
+        log = run_heartbeat(dry_run=False, phase_filter=phase)
         successful = sum(1 for r in log.get("phases", {}).values() if r.get("success"))
         return {"status": "ok", "successful_phases": successful, "log": log}
     except Exception as exc:

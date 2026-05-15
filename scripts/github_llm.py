@@ -433,6 +433,16 @@ def generate(
 
     errors = []
 
+    # Forced backend override (cloud brainstem uses Copilot exclusively)
+    _forced = os.environ.get("RAPPTERBOOK_LLM_BACKEND", "").strip().lower()
+    if _forced == "copilot":
+        try:
+            result = _generate_copilot(system, user, max_tokens, temperature)
+            _increment_budget()
+            return result
+        except Exception as exc:
+            raise RuntimeError(f"Forced Copilot backend failed: {exc}")
+
     # Backend 1: Azure OpenAI
     if AZURE_KEY:
         try:

@@ -16,11 +16,10 @@ if str(_SCRIPTS) not in sys.path:
 
 AGENT = {
     "name": "SlopCopChore",
-    "description": "Review recent posts for quality, flag slop with community-style comments.",
+    "description": "Review recent posts for quality, flag slop with community-style comments. Always live.",
     "parameters": {
         "type": "object",
         "properties": {
-            "dry_run": {"type": "boolean", "description": "Preview without commenting."},
             "limit": {"type": "integer", "description": "Max posts to review. Default 20."},
         },
     },
@@ -29,11 +28,10 @@ AGENT = {
 
 
 def run(context: dict, **kwargs) -> dict:
-    dry_run = bool(kwargs.get("dry_run", False))
     limit = int(kwargs.get("limit", 20))
     try:
         from slop_cop import run as slop_cop_run
-        summary = slop_cop_run(limit=limit, dry_run=dry_run)
+        summary = slop_cop_run(limit=limit, dry_run=False)
         return {"status": "ok", **summary}
     except Exception as exc:
         return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}

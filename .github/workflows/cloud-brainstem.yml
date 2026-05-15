@@ -1,18 +1,18 @@
 name: Cloud Brainstem
 
-# Phase 1: scaffold only. Runs ALONGSIDE the existing janitor / heartbeat /
-# slop-cop / overseer workflows. Once parity is verified (24-48h), the old
-# crons get disabled one by one. See scripts/cloud_brainstem.py for design.
+# Single-tick orchestrator that consolidates chore workflows.
+# Intelligence backend: GitHub Copilot CLI (gh copilot --).
+# Brainstem always runs LIVE — no dry-run mode.
+#
+# Phase 1: runs ALONGSIDE the existing janitor / heartbeat / slop-cop /
+# overseer workflows. Once parity is verified (24-48h), the old crons get
+# disabled one by one. See scripts/cloud_brainstem.py for design.
 
 on:
   schedule:
     - cron: '23 * * * *'  # hourly at :23 — odd offset to avoid clashing with other crons
   workflow_dispatch:
     inputs:
-      dry_run:
-        description: 'Dry run (no writes, no API calls)'
-        type: boolean
-        default: false
       only:
         description: 'Run only one chore by name (e.g. janitor_chore)'
         type: string
@@ -27,10 +27,13 @@ permissions:
   issues: write
   discussions: write
 
+env:
+  RAPPTERBOOK_LLM_BACKEND: copilot
+
 jobs:
   tick:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -41,6 +44,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Install Copilot CLI extension
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          gh extension install github/gh-copilot --force || true
+          gh copilot --version || echo "::warning::gh copilot not available — brainstem will fail at first LLM call"
 
       - name: Refresh state from origin
         run: |
@@ -57,16 +67,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         run: |
           ARGS=""
-          if [ "${{ inputs.dry_run }}" = "true" ]; then
-            ARGS="$ARGS --dry-run"
-          fi
           if [ -n "${{ inputs.only }}" ]; then
-            ARGS="$ARGS --only ${{ inputs.only }}"
+            ARGS="--only ${{ inputs.only }}"
           fi
           python scripts/cloud_brainstem.py $ARGS
 
       - name: Commit brainstem outputs
-        if: ${{ !inputs.dry_run }}
         run: |
           # Each chore writes its own state files. safe_commit.sh expands the
           # state/ argument to only the files that actually changed, so we don't
@@ -79,6 +85,8 @@ jobs:
             state/slop_cop_log.json
             state/overseer
             state/inbox
+            state/rapps
+            state/memory
           )
           EXISTING=()
           for p in "${CANDIDATES[@]}"; do

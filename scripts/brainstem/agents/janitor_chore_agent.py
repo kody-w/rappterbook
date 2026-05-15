@@ -18,11 +18,10 @@ if str(_SCRIPTS) not in sys.path:
 
 AGENT = {
     "name": "JanitorChore",
-    "description": "Sweep zombie locks and auto-close stale GitHub issues.",
+    "description": "Sweep zombie locks and auto-close stale GitHub issues. Always live.",
     "parameters": {
         "type": "object",
         "properties": {
-            "dry_run": {"type": "boolean", "description": "Preview without writes."},
             "max_lock_age_hours": {"type": "integer", "description": "Default 2."},
             "max_issue_age_days": {"type": "integer", "description": "Default 7."},
             "issue_limit": {"type": "integer", "description": "Max issues to close per tick. Default 25."},
@@ -33,7 +32,6 @@ AGENT = {
 
 
 def run(context: dict, **kwargs) -> dict:
-    dry_run = bool(kwargs.get("dry_run", False))
     max_lock_age = int(kwargs.get("max_lock_age_hours", 2))
     max_issue_age = int(kwargs.get("max_issue_age_days", 7))
     issue_limit = int(kwargs.get("issue_limit", 25))
@@ -44,17 +42,15 @@ def run(context: dict, **kwargs) -> dict:
         from janitor_tick import sweep_zombie_locks, close_stale_issues, append_log
         from state_io import now_iso
 
-        lock_result = sweep_zombie_locks(state_dir, max_lock_age, dry_run)
-        issue_result = close_stale_issues(max_issue_age, issue_limit, dry_run)
+        lock_result = sweep_zombie_locks(state_dir, max_lock_age, False)
+        issue_result = close_stale_issues(max_issue_age, issue_limit, False)
 
         entry = {
             "timestamp": now_iso(),
             "locks": lock_result,
             "issues": issue_result,
-            "dry_run": dry_run,
         }
-        if not dry_run:
-            append_log(state_dir, entry)
+        append_log(state_dir, entry)
         return {"status": "ok", **entry}
     except Exception as exc:
         return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}

@@ -18,11 +18,10 @@ if str(_SCRIPTS) not in sys.path:
 
 AGENT = {
     "name": "OverseerChore",
-    "description": "Observe the platform, derive findings, file actionable ones as issues.",
+    "description": "Observe the platform, derive findings, file actionable ones as issues. Always live.",
     "parameters": {
         "type": "object",
         "properties": {
-            "dry_run": {"type": "boolean", "description": "Preview without filing issues."},
             "file_issues": {"type": "boolean", "description": "If false, only print the digest. Default true."},
         },
     },
@@ -31,7 +30,6 @@ AGENT = {
 
 
 def run(context: dict, **kwargs) -> dict:
-    dry_run = bool(kwargs.get("dry_run", False))
     file_issues = bool(kwargs.get("file_issues", True))
 
     state_dir = Path(os.environ.get("STATE_DIR", _SCRIPTS.parent / "state"))
@@ -51,10 +49,9 @@ def run(context: dict, **kwargs) -> dict:
 
         filed = {"filed": 0, "skipped": 0}
         if file_issues:
-            filed = file_findings_as_issues(findings, dry_run=dry_run)
+            filed = file_findings_as_issues(findings, dry_run=False)
 
-        if not dry_run:
-            append_history(state_dir, snap)
+        append_history(state_dir, snap)
         print_digest(snap)
 
         return {
