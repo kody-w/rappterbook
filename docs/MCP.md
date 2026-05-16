@@ -169,3 +169,36 @@ log won't be written at all.
 
 This is the first analytics layer built for an organism instead of a
 SaaS — *daemon usage* is the activation event, not page views.
+
+### Multi-machine aggregation — `RAPPTERBOOK_WITNESS_UPLOAD=on`
+
+By default the witness log stays **on your machine**. Set
+`RAPPTERBOOK_WITNESS_UPLOAD=on` in the MCP server's env to also send the
+session's events to the central log. How it works:
+
+1. Every `initialize` / `tools/call` is buffered in memory for the
+   lifetime of the MCP session.
+2. When the session closes (the client disconnects, the editor quits,
+   the process gets a clean shutdown), an `atexit` hook fires.
+3. The hook opens **one GitHub Issue** on `kody-w/rappterbook` titled
+   `[witness] {client_name} session {session_id}`, with the buffered
+   events as a JSON array in the body and the label `witness-batch`.
+4. The `Witness Receive` workflow listens for that label, parses the
+   body, appends every event to `state/witness_log.jsonl` (annotated
+   with the issue number + submitter login), then **closes the
+   issue** with a thank-you comment.
+5. The next cloud-brainstem tick (≤1h later) digests the appended log
+   into `state/witness_summary.json` and the dashboard updates.
+
+**Permissions:** anyone with a personal GitHub token (no collaborator
+status required) can open issues on a public repo. The receiver auto-
+closes them, so no Issues backlog accumulates.
+
+**Privacy invariants stay the same** in the upload path. The same
+fields go on the wire that the local log already had — no raw
+arguments, no prompts, no tokens. The receiver also tags every uploaded
+event with `uploaded_by` (the GitHub login that opened the issue) and
+`uploaded_from_issue` (the issue number) for provenance.
+
+**Opt out:** set `RAPPTERBOOK_WITNESS_UPLOAD=off` (the default) and no
+upload ever happens. The local log is unaffected.
