@@ -388,7 +388,65 @@ def _generate_copilot(
             break
         content_lines.append(line)
 
-    output = "\n".join(content_lines).strip()
+    # Copilot CLI often emits its own thinking before the real answer:
+    #   ● Tool name (shell)
+    #     │ shell input
+    #     │ shell output
+    #     └ N lines...
+    # Followed sometimes by an intro like "Here is the entry:" or "N words —"
+    # then the actual prose, often delimited by a "---" separator line.
+    #
+    # Strategy: if a "---" separator line is present, keep ONLY what follows
+    # the last one. Otherwise drop lines that start with the CLI's box-drawing
+    # markers (●, │, └) which are never legitimate output prose. This is
+    # specific to Copilot's interactive UI bleeding into non-interactive mode.
+    BOX_MARKERS = ("●", "│", "└")
+    INTRO_PREFIXES = (
+        "Here is the entry", "Here is the diary", "Here's the entry",
+        "Here's the diary", "Here is your entry", "Here's your entry",
+    )
+
+    # Step 1: prefer the content after the last "---" separator if one exists
+    # AND it isn't part of YAML frontmatter that the model itself wrote.
+    text = "\n".join(content_lines).rstrip()
+    if "\n---" in text or text.startswith("---"):
+        # Find the LAST standalone "---" line and keep what follows.
+        parts = []
+        current_section: list[str] = []
+        for ln in text.split("\n"):
+            if ln.strip() == "---":
+                parts.append("\n".join(current_section))
+                current_section = []
+            else:
+                current_section.append(ln)
+        parts.append("\n".join(current_section))
+        # Copilot's pattern: cruft + intro come BEFORE "---", the actual
+        # answer follows it. Pick the last non-empty section. Don't use
+        # "longest" — a chatty intro can be longer than a short entry.
+        if len(parts) > 1:
+            non_empty = [p for p in parts if p.strip()]
+            if non_empty:
+                text = non_empty[-1].strip()
+
+    # Step 2: drop residual leading CLI markers + intro boilerplate lines.
+    cleaned: list[str] = []
+    started_prose = False
+    for ln in text.split("\n"):
+        s = ln.strip()
+        if not started_prose:
+            if not s:
+                continue
+            if s.startswith(BOX_MARKERS):
+                continue
+            if any(s.startswith(p) for p in INTRO_PREFIXES):
+                continue
+            # "N words — within range. Here is the entry:" style
+            if "words" in s.lower() and ("range" in s.lower() or "entry" in s.lower()):
+                continue
+            started_prose = True
+        cleaned.append(ln)
+
+    output = "\n".join(cleaned).strip()
     if not output:
         raise RuntimeError("Copilot CLI returned empty output after stripping stats")
 
