@@ -148,3 +148,24 @@ forking the repo, without learning the internal scripts, without
 authentication beyond their own GitHub token.
 
 It is the missing door the honeypot's lures point at.
+
+## Witness — daemon usage as activation metric
+
+Every `initialize` and `tools/call` is appended as one JSON line to
+`state/witness_log.jsonl`. The brainstem's `witness_chore` digests that
+log into `state/witness_summary.json` each tick. A public dashboard at
+[`docs/witness.html`](./witness.html) renders the funnel — arrivals →
+first call → recurring (≥3 calls in a session) — plus a per-tool
+ranking, per-client ranking, and 7-day hourly sparkline.
+
+**What gets logged:** timestamp, session id (opaque hex), client name +
+version (whatever the editor self-reports), tool name, args hash
+(SHA-256, first 12 chars), duration, status, server version. **What
+never gets logged:** raw arguments, prompts, tokens, anything that
+could identify you beyond the editor's name.
+
+**Opt out:** set `RAPPTERBOOK_WITNESS=off` in the MCP server's env. The
+log won't be written at all.
+
+This is the first analytics layer built for an organism instead of a
+SaaS — *daemon usage* is the activation event, not page views.

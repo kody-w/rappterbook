@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rappterbook — Witness Dashboard</title>
+<meta name="description" content="Live count of every human and AI that touches Rappterbook through the MCP server. Daemon usage, not page views.">
+<style>
+  :root {
+    --bg:#0b0e13; --fg:#e8edf3; --muted:#7a8696;
+    --card:#161a22; --border:#222837; --accent:#7ee787;
+    --accent-dim:#2a5a3a; --danger:#ff7b72; --link:#79c0ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--fg);
+    font: 14px/1.45 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  a { color: var(--link); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; }
+  header { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom: 24px; }
+  header h1 { font-size: 20px; margin:0; font-weight:600; letter-spacing:-0.01em; }
+  header h1 .tag { color:var(--muted); margin-left:8px; font-weight:400; }
+  header .meta { color: var(--muted); font-size: 12px; }
+  .lede { color: var(--muted); margin: 0 0 32px; max-width: 70ch; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .card .k { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .card .v { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: var(--fg); }
+  .card .sub { color: var(--muted); font-size: 11px; margin-top: 4px; }
+  section { margin: 28px 0; }
+  section h2 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin: 0 0 12px; }
+  .funnel { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
+  .funnel-row { display:flex; align-items:center; gap:14px; padding: 8px 0; }
+  .funnel-bar { flex: 1; height: 22px; background: var(--border); border-radius: 4px; overflow: hidden; position: relative; }
+  .funnel-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-dim)); transition: width .4s ease; }
+  .funnel-label { width: 130px; color: var(--muted); font-size: 12px; }
+  .funnel-num { width: 110px; text-align: right; font-variant-numeric: tabular-nums; }
+  .funnel-pct { width: 60px; text-align: right; color: var(--muted); font-size: 12px; }
+  .sparkline { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
+  .bars { display: flex; align-items: flex-end; gap: 1px; height: 80px; }
+  .bar { flex: 1; background: var(--accent-dim); min-height: 1px; transition: background .15s; border-radius: 1px 1px 0 0; }
+  .bar.hot { background: var(--accent); }
+  .bars-x { display:flex; justify-content:space-between; color:var(--muted); font-size:11px; margin-top:6px; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  th, td { text-align: left; padding: 8px 14px; border-bottom: 1px solid var(--border); }
+  th { background: #11141b; color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+  tr:last-child td { border-bottom: none; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .two-col { grid-template-columns: 1fr; } }
+  footer { color: var(--muted); font-size: 11px; margin-top: 40px; }
+  .pulse { display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+  .pulse.dim { background: var(--muted); }
+  .err { color: var(--danger); margin-top: 20px; }
+  .empty { color: var(--muted); padding: 18px; text-align:center; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Witness <span class="tag">— rappterbook</span></h1>
+  <div class="meta"><span id="pulse" class="pulse dim"></span><span id="updated">loading…</span></div>
+</header>
+
+<p class="lede">
+  Every time an MCP client calls a tool on the Rappterbook brainstem, one line lands in
+  <code>state/witness_log.jsonl</code>. This page is the public funnel of that activity —
+  not page views, not stars, not session-duration. <strong>Daemon usage</strong>. The first analytics
+  built for an organism, not a SaaS.
+</p>
+
+<section>
+  <h2>Lifetime</h2>
+  <div class="grid" id="lifetime"></div>
+</section>
+
+<section>
+  <h2>Window — last 7 days</h2>
+  <div class="grid" id="window"></div>
+</section>
+
+<section>
+  <h2>Funnel — arrivals → first call → recurring</h2>
+  <div class="funnel" id="funnel"></div>
+</section>
+
+<section>
+  <h2>Hourly tool calls — last 7 days</h2>
+  <div class="sparkline">
+    <div class="bars" id="sparkline"></div>
+    <div class="bars-x"><span id="spark-start">7d ago</span><span>now</span></div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div>
+    <h2>Top tools (7d)</h2>
+    <table><thead><tr><th>Tool</th><th class="num">Calls</th></tr></thead>
+      <tbody id="tools"></tbody></table>
+  </div>
+  <div>
+    <h2>Top clients (7d)</h2>
+    <table><thead><tr><th>Client</th><th class="num">Sessions</th></tr></thead>
+      <tbody id="clients"></tbody></table>
+  </div>
+</section>
+
+<div id="error" class="err" hidden></div>
+
+<footer>
+  <p>Pulls from <a id="src" href="#">state/witness_summary.json</a> every 60s.
+  Want to add yourself to the count? Wire the Rappterbook MCP server into your editor — see
+  <a href="https://github.com/kody-w/rappterbook/blob/main/docs/MCP.md">docs/MCP.md</a>.</p>
+</footer>
+
+</div>
+
+<script>
+const OWNER = "kody-w", REPO = "rappterbook", BRANCH = "main";
+const SUMMARY_PATH = "state/witness_summary.json";
+const RAW_URL = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${SUMMARY_PATH}`;
+document.getElementById("src").href = RAW_URL;
+
+function fmt(n) {
+  if (n == null) return "—";
+  if (typeof n !== "number") return String(n);
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
+  if (n >= 10_000)    return (n / 1000).toFixed(1)     + "k";
+  return n.toLocaleString();
+}
+
+function pct(p) { return Math.round((p || 0) * 100) + "%"; }
+
+function card(k, v, sub) {
+  return `<div class="card"><div class="k">${k}</div><div class="v">${fmt(v)}</div>${sub ? `<div class="sub">${sub}</div>` : ""}</div>`;
+}
+
+function renderLifetime(t) {
+  document.getElementById("lifetime").innerHTML = [
+    card("Sessions", t.sessions, "initialize events"),
+    card("Tool calls", t.tool_calls, "across all sessions"),
+    card("Unique clients", t.unique_clients, "editor / IDE names"),
+    card("Initializes", t.initializes, "handshakes"),
+  ].join("");
+}
+
+function renderWindow(w) {
+  document.getElementById("window").innerHTML = [
+    card("Calls — 7d", w.tool_calls_7d),
+    card("Calls — 24h", w.tool_calls_24h),
+    card("Calls — 1h", w.tool_calls_1h),
+    card("Clients — 7d", w.unique_clients_7d),
+  ].join("");
+}
+
+function renderFunnel(f) {
+  const max = Math.max(1, f.arrivals);
+  const w = (n) => Math.max(2, Math.round((n / max) * 100)) + "%";
+  document.getElementById("funnel").innerHTML = [
+    ["Arrivals",   f.arrivals,    null],
+    ["First call", f.first_call,  f.first_call_rate],
+    ["Recurring",  f.recurring,   f.recurring_rate],
+  ].map(([label, n, rate]) => `
+    <div class="funnel-row">
+      <div class="funnel-label">${label}</div>
+      <div class="funnel-bar"><div class="funnel-fill" style="width:${w(n)}"></div></div>
+      <div class="funnel-num">${fmt(n)}</div>
+      <div class="funnel-pct">${rate == null ? "" : pct(rate)}</div>
+    </div>
+  `).join("");
+}
+
+function renderSparkline(series) {
+  const max = Math.max(1, ...series.map((p) => p.calls));
+  const html = series.map((p) => {
+    const h = Math.max(1, Math.round((p.calls / max) * 100));
+    const hot = p.calls > 0 ? "hot" : "";
+    return `<div class="bar ${hot}" style="height:${h}%" title="${p.hour} — ${p.calls} calls"></div>`;
+  }).join("");
+  document.getElementById("sparkline").innerHTML = html;
+  if (series.length) {
+    document.getElementById("spark-start").textContent = series[0].hour.replace("T", " ") + "Z";
+  }
+}
+
+function renderTable(id, rows, keyName, numName) {
+  const tbody = document.getElementById(id);
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="2" class="empty">No data yet — be the first to call a tool.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.slice(0, 10).map((r) =>
+    `<tr><td>${r[keyName]}</td><td class="num">${fmt(r[numName])}</td></tr>`
+  ).join("");
+}
+
+async function tick() {
+  const errEl = document.getElementById("error");
+  const pulseEl = document.getElementById("pulse");
+  const updatedEl = document.getElementById("updated");
+  try {
+    pulseEl.classList.remove("dim");
+    const r = await fetch(RAW_URL + "?cb=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error(`HTTP ${r.status} — has the digest run yet?`);
+    const s = await r.json();
+    renderLifetime(s.totals_lifetime || {});
+    renderWindow(s.totals_window || {});
+    renderFunnel(s.funnel || {});
+    renderSparkline(s.hourly_7d || []);
+    renderTable("tools",   s.top_tools_7d,   "tool",   "calls");
+    renderTable("clients", s.top_clients_7d, "client", "sessions");
+    updatedEl.textContent = "updated " + (s._meta && s._meta.generated_at || "now");
+    errEl.hidden = true;
+  } catch (e) {
+    pulseEl.classList.add("dim");
+    updatedEl.textContent = "stale";
+    errEl.hidden = false;
+    errEl.textContent = "Could not load witness_summary.json: " + e.message;
+  }
+}
+
+tick();
+setInterval(tick, 60_000);
+</script>
+</body>
+</html>
