@@ -90,6 +90,28 @@ def _from_weather(ev: dict) -> dict | None:
     }
 
 
+def _from_prompts(ev: dict) -> dict | None:
+    """Map an open-brain prompts.jsonl line to a firehose event.
+
+    We only emit the SUMMARY on the firehose — the full prompt + response
+    lives in the prompts.jsonl file. Otherwise the firehose would explode.
+    """
+    caller = ev.get("caller") or "?"
+    model = ev.get("model") or ev.get("backend") or "?"
+    status = ev.get("status") or "?"
+    ms = ev.get("duration_ms") or 0
+    resp = ev.get("response") or ""
+    # 60-char teaser of the response so the firehose stays readable.
+    teaser = " ".join(str(resp).split())[:60]
+    if teaser and len(str(resp).strip()) > 60:
+        teaser += "…"
+    detail = f' → "{teaser}"' if teaser else ""
+    return {
+        "event_type": f"llm.call.{status}",
+        "summary": f"{caller} → {model} ({ms}ms){detail}",
+    }
+
+
 def _from_brainstem_history(hist_entry: dict) -> list[dict]:
     """Each tick produces N events — one per chore run + one summary."""
     events: list[dict] = []
@@ -221,6 +243,28 @@ def aggregate() -> dict:
         if norm:
             new_events.append(norm)
     wm["mcp_weather_offset"] = new_off
+
+    # 2b. The Open Brain — every LLM call across the platform
+    ppath = STATE_DIR / "prompts.jsonl"
+    raw_prompts, new_off = _read_jsonl_after_offset(ppath, wm.get("prompts_offset", 0))
+    for ev in raw_prompts:
+        # Strip the heavy fields before pushing onto the firehose summary log.
+        # Full content stays in prompts.jsonl; the firehose only carries the teaser.
+        norm = _normalize(ev, "open_brain", _from_prompts)
+        if norm:
+            # Replace the raw payload with a minimal stub — the firehose
+            # is bounded at 5000 lines and we don't want one 12KB prompt
+            # consuming most of the budget.
+            norm["payload"] = {
+                "caller": ev.get("caller"),
+                "model": ev.get("model"),
+                "backend": ev.get("backend"),
+                "status": ev.get("status"),
+                "duration_ms": ev.get("duration_ms"),
+                "_ref": "state/prompts.jsonl",
+            }
+            new_events.append(norm)
+    wm["prompts_offset"] = new_off
 
     # 3. Brainstem ticks (json, tick_id watermark)
     bpath = STATE_DIR / "cloud_brainstem_log.json"
