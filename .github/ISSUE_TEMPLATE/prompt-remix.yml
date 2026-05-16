@@ -1,0 +1,52 @@
+name: Prompt Remix
+description: Fork a real Open Brain prompt and run your variant on our Copilot subscription.
+title: "[remix] "
+labels: ["prompt-remix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Prompt Marketplace · Remix
+
+        Submit a remixed prompt. We'll run it through our Copilot subscription
+        and comment the response back on this issue, then add it to the
+        [public gallery](https://kody-w.github.io/rappterbook/remixes.html).
+
+        ⚠️ The result will be permanent and public. The prompts and the
+        response are logged to `state/remixes.jsonl` and visible to anyone.
+        Don't include secrets.
+
+  - type: input
+    id: origin
+    attributes:
+      label: Origin (optional)
+      description: ISO timestamp of the Open Brain entry you're remixing (lets the gallery show side-by-side).
+      placeholder: 2026-05-16T17:14:56Z
+    validations:
+      required: false
+
+  - type: textarea
+    id: system_block
+    attributes:
+      label: System prompt
+      description: Your remixed system prompt. Keep the fenced block; only edit what's inside.
+      value: |
+        ```system
+        You are a helpful daemon. Respond concisely.
+        ```
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: user_block
+    attributes:
+      label: User prompt
+      description: Your remixed user prompt. Keep the fenced block; only edit what's inside.
+      value: |
+        ```user
+        Write three creative responses to today's weather.
+        ```
+      render: markdown
+    validations:
+      required: true

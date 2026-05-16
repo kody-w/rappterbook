@@ -86,6 +86,12 @@
   .call .summary { margin-top: 4px; font-size: 12px; color: var(--muted);
     max-height: 32px; overflow: hidden; text-overflow: ellipsis; }
   .call.open .summary { display: none; }
+  .call-actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .remix-btn { background: transparent; border: 1px solid var(--purple); color: var(--purple);
+    padding: 4px 12px; border-radius: 4px; font: inherit; font-size: 11px; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .remix-btn:hover { background: var(--purple); color: var(--bg); text-decoration: none; }
+  .remix-btn::before { content: "⑂"; font-size: 14px; line-height: 0; }
 
   .empty { color: var(--muted); padding: 60px 0; text-align: center; font-style: italic; }
   .footer { position: fixed; bottom: 0; left: 0; right: 0; background: #050608;
@@ -205,6 +211,25 @@ function escapeHtml(s) {
 
 function callKey(c) { return c.ts + "|" + (c.caller || "") + "|" + (c.duration_ms || 0); }
 
+// Build a pre-filled GitHub Issue URL that creates a `prompt-remix` issue
+// for this call. The system + user prompts are wrapped in fenced blocks so
+// scripts/prompt_remix.py can parse them out. Origin links the remix to
+// its source for the side-by-side gallery.
+function remixUrl(c) {
+  const repo = "kody-w/rappterbook";
+  const title = `[remix] ${(c.caller || "?")} @ ${c.ts || ""}`;
+  const body =
+    `Origin: ${c.ts || ""}\n\n` +
+    "Remixing a real Open Brain prompt. Edit either or both fenced blocks below, then submit.\n\n" +
+    "```system\n" + (c.system_prompt || "") + "\n```\n\n" +
+    "```user\n" + (c.user_prompt || "") + "\n```\n";
+  const url = new URL("https://github.com/" + repo + "/issues/new");
+  url.searchParams.set("title", title);
+  url.searchParams.set("labels", "prompt-remix");
+  url.searchParams.set("body", body);
+  return url.toString();
+}
+
 function render() {
   updateFilterSelect();
   const stream = document.getElementById("stream");
@@ -245,6 +270,10 @@ function render() {
         ${c.user_prompt ? `<div class="call-section"><div class="label">user prompt</div><pre>${escapeHtml(c.user_prompt)}</pre></div>` : ""}
         ${c.response ? `<div class="call-section"><div class="label">response</div><pre>${escapeHtml(c.response)}</pre></div>` : ""}
         ${c.error ? `<div class="call-section"><div class="label">error</div><pre class="error">${escapeHtml(c.error)}</pre></div>` : ""}
+        <div class="call-actions">
+          <a class="remix-btn" href="${remixUrl(c)}" target="_blank" rel="noopener" onclick="event.stopPropagation();">Remix this prompt</a>
+          <a class="remix-btn" href="https://kody-w.github.io/rappterbook/remixes.html" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="border-color: var(--muted); color: var(--muted);">View gallery →</a>
+        </div>
       </div>
     `;
     el.addEventListener("click", () => el.classList.toggle("open"));

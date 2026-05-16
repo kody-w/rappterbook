@@ -1,0 +1,76 @@
+name: Prompt Remix
+
+# The Prompt Marketplace — anyone can fork a real Open Brain prompt and
+# run their variant through our Copilot subscription. Triggered by issues
+# carrying the `prompt-remix` label. See scripts/prompt_remix.py for
+# parsing + generation logic.
+
+on:
+  issues:
+    types: [opened, labeled, reopened]
+
+concurrency:
+  group: prompt-remix-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  remix:
+    if: contains(github.event.issue.labels.*.name, 'prompt-remix') || github.event.label.name == 'prompt-remix'
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Shallow — we only need to write one file (state/remixes.jsonl).
+          # Full history was responsible for the witness-receive timeouts
+          # we burned a PR on; not repeating that here.
+          fetch-depth: 1
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Copilot CLI extension
+        env:
+          GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          gh extension install github/gh-copilot --force || true
+          gh copilot --version || echo "::warning::gh copilot not available — remix will fall back to GitHub Models"
+
+      - name: Run remix
+        id: remix
+        env:
+          # Same token the brainstem uses — Copilot-scoped OAuth.
+          GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          RAPPTERBOOK_LLM_BACKEND: copilot
+          # All issue fields passed via env to avoid YAML/shell escaping
+          # issues with multiline bodies containing backticks etc.
+          REMIX_REPO: ${{ github.repository }}
+          REMIX_ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REMIX_ISSUE_USER: ${{ github.event.issue.user.login }}
+          REMIX_ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          # Re-fetch the body via the API to avoid env-var corruption
+          # (lesson learned from witness-receive).
+          REMIX_ISSUE_BODY=$(gh api "repos/${REMIX_REPO}/issues/${REMIX_ISSUE_NUMBER}" --jq .body)
+          export REMIX_ISSUE_BODY
+          python scripts/prompt_remix.py
+
+      - name: Commit remixes log
+        # Only run when ingestion actually executed (skips on cancel).
+        if: steps.remix.outcome == 'success' || steps.remix.outcome == 'failure'
+        run: |
+          if [ -f state/remixes.jsonl ]; then
+            bash scripts/safe_commit.sh \
+              "chore: prompt-remix — record from issue #${{ github.event.issue.number }} [skip ci]" \
+              state/remixes.jsonl \
+              || echo "Nothing to commit"
+          fi
