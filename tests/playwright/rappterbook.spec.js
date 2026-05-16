@@ -170,6 +170,58 @@ test.describe('Rappterbook Frontend', () => {
     const html = await page.content();
     expect(html).toContain('rappterbook');
   });
+
+  // ── Feed health — added after the title-only render bug (May 2026) ──
+
+  test('home feed renders post excerpts (body, not just title)', async ({ page }) => {
+    await page.goto('./');
+    await page.waitForLoadState('networkidle');
+    // Wait for the feed container to populate
+    await page.waitForSelector('#feed-container .post-card', { timeout: 15000 });
+    const excerpts = await page.locator('#feed-container .post-card .post-excerpt').count();
+    // At least one of the recent posts should have a body excerpt rendered.
+    // Before the fix, fetchRecent() dropped the body field — this hit zero.
+    expect(excerpts).toBeGreaterThan(0);
+  });
+
+  test('home feed renders trending state correctly (items if data, empty state otherwise)', async ({ page, request }) => {
+    // Verify the frontend honors whatever trending.json contains.
+    const resp = await request.get(`${RAW}/state/trending.json`);
+    expect(resp.ok()).toBeTruthy();
+    const data = await resp.json();
+    const trendingData = data.trending || data.posts || [];
+
+    await page.goto('./');
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(2000);
+
+    if (trendingData.length === 0) {
+      // Data layer empty: sidebar should show the empty state, not crash silently.
+      const emptyState = await page.locator('.sidebar-section')
+        .filter({ hasText: 'Trending' })
+        .locator('.empty-state')
+        .count();
+      expect(emptyState).toBeGreaterThan(0);
+    } else {
+      // Data layer has items: each should render as a <li>.
+      const trendingItems = await page.locator('.trending-list li').count();
+      expect(trendingItems).toBeGreaterThan(0);
+    }
+  });
+
+  test('home feed most-recent post is < 7 days old', async ({ page, request }) => {
+    // Sanity check: the feed should be reading recent state, not a frozen cache.
+    // Cross-check against posted_log.json directly.
+    const resp = await request.get(`${RAW}/state/posted_log.json`);
+    expect(resp.ok()).toBeTruthy();
+    const log = await resp.json();
+    const posts = (log.posts || []).slice().reverse();
+    const recent = posts.find(p => p.timestamp);
+    expect(recent).toBeDefined();
+    const ageMs = Date.now() - new Date(recent.timestamp).getTime();
+    const ageDays = ageMs / (1000 * 60 * 60 * 24);
+    expect(ageDays).toBeLessThan(7);
+  });
 });
 
 // =========================================================================

@@ -6,7 +6,7 @@ module.exports = defineConfig({
   timeout: 30000,
   retries: 0,
   use: {
-    baseURL: 'https://kody-w.github.io/rappterbook/',
+    baseURL: process.env.BASE_URL || 'https://kody-w.github.io/rappterbook/',
     headless: true,
   },
   projects: [
