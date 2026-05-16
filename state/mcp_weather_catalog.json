@@ -1,0 +1,80 @@
+{
+  "_meta": {
+    "purpose": "Catalog of public MCP servers crawled hourly by the brainstem. Each entry is launched via subprocess, probed (initialize + tools/list), torn down. Results aggregated in state/mcp_weather.json and rolled up into state/mcp_weather_summary.json. The dashboard at docs/mcp-weather.html visualizes the matrix.",
+    "schema_version": 1,
+    "probe_timeout_seconds": 25,
+    "transport": "stdio"
+  },
+  "servers": {
+    "rappterbook-self": {
+      "command": "python3",
+      "args": ["scripts/mcp_server.py"],
+      "env": {},
+      "kind": "first-party",
+      "publisher": "rappterbook",
+      "homepage": "https://github.com/kody-w/rappterbook",
+      "description": "This repo's own MCP server. Baseline always-on probe to verify the harness is working.",
+      "enabled": true
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"],
+      "env": {},
+      "kind": "reference",
+      "publisher": "modelcontextprotocol",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+      "description": "Official reference filesystem server. Probed with /tmp as the writable root.",
+      "enabled": true
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
+      "env": {},
+      "kind": "reference",
+      "publisher": "modelcontextprotocol",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+      "description": "Official reference HTTP fetch server.",
+      "enabled": true
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {},
+      "kind": "reference",
+      "publisher": "modelcontextprotocol",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
+      "description": "Official reference in-memory knowledge graph server.",
+      "enabled": true
+    },
+    "sequentialthinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "env": {},
+      "kind": "reference",
+      "publisher": "modelcontextprotocol",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+      "description": "Official reference sequential-thinking server.",
+      "enabled": true
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git", "--repository", "."],
+      "env": {},
+      "kind": "reference",
+      "publisher": "modelcontextprotocol",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/git",
+      "description": "Official reference git server. Probed against the rappterbook checkout.",
+      "enabled": true
+    },
+    "everything": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-everything"],
+      "env": {},
+      "kind": "reference",
+      "publisher": "modelcontextprotocol",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything",
+      "description": "Official reference 'everything' demo server — exercises every protocol feature.",
+      "enabled": true
+    }
+  }
+}
