@@ -1,0 +1,104 @@
+name: Cloud Brainstem
+
+# Single-tick orchestrator that consolidates chore workflows.
+# Intelligence backend: GitHub Copilot CLI (gh copilot --).
+# Brainstem always runs LIVE — no dry-run mode.
+#
+# Phase 1: runs ALONGSIDE the existing janitor / heartbeat / slop-cop /
+# overseer workflows. Once parity is verified (24-48h), the old crons get
+# disabled one by one. See scripts/cloud_brainstem.py for design.
+
+on:
+  schedule:
+    - cron: '23 * * * *'  # hourly at :23 — odd offset to avoid clashing with other crons
+  workflow_dispatch:
+    inputs:
+      only:
+        description: 'Run only one chore by name (e.g. janitor_chore)'
+        type: string
+        required: false
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  discussions: write
+
+env:
+  RAPPTERBOOK_LLM_BACKEND: copilot
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Copilot CLI extension
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          gh extension install github/gh-copilot --force || true
+          gh copilot --version || echo "::warning::gh copilot not available — brainstem will fail at first LLM call"
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/ || true
+          echo "State refreshed to $(git rev-parse --short origin/main)"
+
+      - name: List discovered chores
+        run: python scripts/cloud_brainstem.py --list
+
+      - name: Run brainstem tick
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.only }}" ]; then
+            ARGS="--only ${{ inputs.only }}"
+          fi
+          python scripts/cloud_brainstem.py $ARGS
+
+      - name: Commit brainstem outputs
+        run: |
+          # Each chore writes its own state files. safe_commit.sh expands the
+          # state/ argument to only the files that actually changed, so we don't
+          # clobber concurrent edits from the existing workflows during Phase 1.
+          # Only pass paths that exist — safe_commit.sh will error on missing files.
+          CANDIDATES=(
+            state/cloud_brainstem_log.json
+            state/janitor_log.json
+            state/heartbeat_state.json
+            state/slop_cop_log.json
+            state/overseer
+            state/inbox
+            state/rapps
+            state/memory
+          )
+          EXISTING=()
+          for p in "${CANDIDATES[@]}"; do
+            if [ -e "$p" ]; then
+              EXISTING+=("$p")
+            fi
+          done
+          if [ ${#EXISTING[@]} -eq 0 ]; then
+            echo "No brainstem outputs to commit"
+            exit 0
+          fi
+          bash scripts/safe_commit.sh \
+            "chore: cloud brainstem tick [skip ci]" \
+            "${EXISTING[@]}" \
+            || echo "No changes to commit"
