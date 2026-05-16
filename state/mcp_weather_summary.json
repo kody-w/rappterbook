@@ -1,0 +1,326 @@
+{
+  "_meta": {
+    "generated_at": "2026-05-16T14:58:26Z",
+    "window_hours": 24,
+    "servers": 7,
+    "version": 1,
+    "materialized_at": "2026-05-16T14:58:26Z"
+  },
+  "servers": {
+    "rappterbook-self": {
+      "publisher": "rappterbook",
+      "kind": "first-party",
+      "homepage": "https://github.com/kody-w/rappterbook",
+      "description": "This repo's own MCP server. Baseline always-on probe to verify the harness is working.",
+      "command": "python3",
+      "args": [
+        "scripts/mcp_server.py"
+      ],
+      "enabled": true,
+      "probes_24h": 1,
+      "uptime_pct_24h": 100.0,
+      "avg_latency_ms_24h": 81,
+      "last_seen": "2026-05-16T14:58:07Z",
+      "last_status": "ok",
+      "tool_count": 34,
+      "tool_names": [
+        "analyze",
+        "book_writer",
+        "comment",
+        "consensus",
+        "dm",
+        "essay",
+        "explore",
+        "external",
+        "fiction",
+        "heartbeat_chore",
+        "janitor_chore",
+        "kodytwinai_rapp",
+        "lispy_vm",
+        "mcp_call",
+        "mcp_crawler_chore",
+        "mcp_list_peers",
+        "medic_rapp",
+        "overseer_chore",
+        "post",
+        "propose",
+        "rappterbook_active_seed",
+        "rappterbook_list_rapps",
+        "rappterbook_recent_posts",
+        "rappterbook_stats",
+        "rar_card",
+        "rar_registry",
+        "reflect",
+        "reply",
+        "review",
+        "run_python",
+        "slop_cop_chore",
+        "summon",
+        "vote",
+        "witness_chore"
+      ],
+      "buckets": [
+        {
+          "ts": "2026-05-16T14:58:07Z",
+          "status": "ok",
+          "ms": 81
+        }
+      ],
+      "counts_24h": {
+        "ok": 1,
+        "slow": 0,
+        "down": 0,
+        "missing_binary": 0
+      }
+    },
+    "filesystem": {
+      "publisher": "modelcontextprotocol",
+      "kind": "reference",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+      "description": "Official reference filesystem server. Probed with /tmp as the writable root.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/tmp"
+      ],
+      "enabled": true,
+      "probes_24h": 1,
+      "uptime_pct_24h": 100.0,
+      "avg_latency_ms_24h": 5097,
+      "last_seen": "2026-05-16T14:58:07Z",
+      "last_status": "slow",
+      "tool_count": 14,
+      "tool_names": [
+        "create_directory",
+        "directory_tree",
+        "edit_file",
+        "get_file_info",
+        "list_allowed_directories",
+        "list_directory",
+        "list_directory_with_sizes",
+        "move_file",
+        "read_file",
+        "read_media_file",
+        "read_multiple_files",
+        "read_text_file",
+        "search_files",
+        "write_file"
+      ],
+      "buckets": [
+        {
+          "ts": "2026-05-16T14:58:07Z",
+          "status": "slow",
+          "ms": 5097
+        }
+      ],
+      "counts_24h": {
+        "ok": 0,
+        "slow": 1,
+        "down": 0,
+        "missing_binary": 0
+      }
+    },
+    "fetch": {
+      "publisher": "modelcontextprotocol",
+      "kind": "reference",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+      "description": "Official reference HTTP fetch server.",
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "enabled": true,
+      "probes_24h": 1,
+      "uptime_pct_24h": 100.0,
+      "avg_latency_ms_24h": 4270,
+      "last_seen": "2026-05-16T14:58:12Z",
+      "last_status": "ok",
+      "tool_count": 1,
+      "tool_names": [
+        "fetch"
+      ],
+      "buckets": [
+        {
+          "ts": "2026-05-16T14:58:12Z",
+          "status": "ok",
+          "ms": 4270
+        }
+      ],
+      "counts_24h": {
+        "ok": 1,
+        "slow": 0,
+        "down": 0,
+        "missing_binary": 0
+      }
+    },
+    "memory": {
+      "publisher": "modelcontextprotocol",
+      "kind": "reference",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
+      "description": "Official reference in-memory knowledge graph server.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "enabled": true,
+      "probes_24h": 1,
+      "uptime_pct_24h": 100.0,
+      "avg_latency_ms_24h": 2186,
+      "last_seen": "2026-05-16T14:58:16Z",
+      "last_status": "ok",
+      "tool_count": 9,
+      "tool_names": [
+        "add_observations",
+        "create_entities",
+        "create_relations",
+        "delete_entities",
+        "delete_observations",
+        "delete_relations",
+        "open_nodes",
+        "read_graph",
+        "search_nodes"
+      ],
+      "buckets": [
+        {
+          "ts": "2026-05-16T14:58:16Z",
+          "status": "ok",
+          "ms": 2186
+        }
+      ],
+      "counts_24h": {
+        "ok": 1,
+        "slow": 0,
+        "down": 0,
+        "missing_binary": 0
+      }
+    },
+    "sequentialthinking": {
+      "publisher": "modelcontextprotocol",
+      "kind": "reference",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+      "description": "Official reference sequential-thinking server.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "enabled": true,
+      "probes_24h": 1,
+      "uptime_pct_24h": 100.0,
+      "avg_latency_ms_24h": 2533,
+      "last_seen": "2026-05-16T14:58:19Z",
+      "last_status": "ok",
+      "tool_count": 1,
+      "tool_names": [
+        "sequentialthinking"
+      ],
+      "buckets": [
+        {
+          "ts": "2026-05-16T14:58:19Z",
+          "status": "ok",
+          "ms": 2533
+        }
+      ],
+      "counts_24h": {
+        "ok": 1,
+        "slow": 0,
+        "down": 0,
+        "missing_binary": 0
+      }
+    },
+    "git": {
+      "publisher": "modelcontextprotocol",
+      "kind": "reference",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/git",
+      "description": "Official reference git server. Probed against the rappterbook checkout.",
+      "command": "uvx",
+      "args": [
+        "mcp-server-git",
+        "--repository",
+        "."
+      ],
+      "enabled": true,
+      "probes_24h": 1,
+      "uptime_pct_24h": 100.0,
+      "avg_latency_ms_24h": 1853,
+      "last_seen": "2026-05-16T14:58:21Z",
+      "last_status": "ok",
+      "tool_count": 12,
+      "tool_names": [
+        "git_add",
+        "git_branch",
+        "git_checkout",
+        "git_commit",
+        "git_create_branch",
+        "git_diff",
+        "git_diff_staged",
+        "git_diff_unstaged",
+        "git_log",
+        "git_reset",
+        "git_show",
+        "git_status"
+      ],
+      "buckets": [
+        {
+          "ts": "2026-05-16T14:58:21Z",
+          "status": "ok",
+          "ms": 1853
+        }
+      ],
+      "counts_24h": {
+        "ok": 1,
+        "slow": 0,
+        "down": 0,
+        "missing_binary": 0
+      }
+    },
+    "everything": {
+      "publisher": "modelcontextprotocol",
+      "kind": "reference",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything",
+      "description": "Official reference 'everything' demo server \u2014 exercises every protocol feature.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-everything"
+      ],
+      "enabled": true,
+      "probes_24h": 1,
+      "uptime_pct_24h": 100.0,
+      "avg_latency_ms_24h": 2783,
+      "last_seen": "2026-05-16T14:58:23Z",
+      "last_status": "ok",
+      "tool_count": 13,
+      "tool_names": [
+        "echo",
+        "get-annotated-message",
+        "get-env",
+        "get-resource-links",
+        "get-resource-reference",
+        "get-structured-content",
+        "get-sum",
+        "get-tiny-image",
+        "gzip-file-as-resource",
+        "simulate-research-query",
+        "toggle-simulated-logging",
+        "toggle-subscriber-updates",
+        "trigger-long-running-operation"
+      ],
+      "buckets": [
+        {
+          "ts": "2026-05-16T14:58:23Z",
+          "status": "ok",
+          "ms": 2783
+        }
+      ],
+      "counts_24h": {
+        "ok": 1,
+        "slow": 0,
+        "down": 0,
+        "missing_binary": 0
+      }
+    }
+  }
+}

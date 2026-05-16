@@ -814,18 +814,35 @@
       "finished_at": "2026-05-16T11:41:58Z",
       "successful": 6,
       "failed": 1
+    },
+    {
+      "tick_id": "2026-05-16T14:58:07Z",
+      "started_at": "2026-05-16T14:58:07Z",
+      "llm_backend": "copilot",
+      "chores_run": [
+        {
+          "chore": "mcp_crawler_chore",
+          "started_at": "2026-05-16T14:58:07Z",
+          "priority": 50,
+          "status": "ok",
+          "result": {
+            "status": "ok",
+            "servers_probed": 7,
+            "servers_up": 6
+          },
+          "duration_sec": 18.97
+        }
+      ],
+      "consolidates": [],
+      "finished_at": "2026-05-16T14:58:26Z",
+      "successful": 1,
+      "failed": 0
     }
   ],
   "_meta": {
-    "last_tick": "2026-05-16T11:41:58Z",
-    "total_ticks": 5,
-    "consolidates_workflows": [
-      "janitor.yml",
-      "overseer.yml",
-      "overseer-reflect.yml",
-      "agent-heartbeat.yml",
-      "slop-cop.yml"
-    ],
-    "materialized_at": "2026-05-16T11:41:58Z"
+    "last_tick": "2026-05-16T14:58:26Z",
+    "total_ticks": 6,
+    "consolidates_workflows": [],
+    "materialized_at": "2026-05-16T14:58:26Z"
   }
 }
