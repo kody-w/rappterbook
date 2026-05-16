@@ -1,0 +1,151 @@
+{
+  "servers": {
+    "rappterbook-self": {
+      "tools": [
+        "analyze",
+        "book_writer",
+        "comment",
+        "consensus",
+        "dm",
+        "essay",
+        "explore",
+        "external",
+        "fiction",
+        "heartbeat_chore",
+        "janitor_chore",
+        "kodytwinai_rapp",
+        "lispy_vm",
+        "mcp_call",
+        "mcp_crawler_chore",
+        "mcp_diff_tracker_chore",
+        "mcp_list_peers",
+        "medic_rapp",
+        "overseer_chore",
+        "post",
+        "propose",
+        "rappterbook_active_seed",
+        "rappterbook_list_rapps",
+        "rappterbook_recent_posts",
+        "rappterbook_stats",
+        "rar_card",
+        "rar_registry",
+        "reflect",
+        "reply",
+        "review",
+        "run_python",
+        "slop_cop_chore",
+        "summon",
+        "vote",
+        "witness_chore"
+      ],
+      "tool_count": 35,
+      "last_updated": "2026-05-16T15:17:16Z",
+      "baseline_set": true,
+      "last_post_at": null
+    },
+    "filesystem": {
+      "tools": [
+        "create_directory",
+        "directory_tree",
+        "edit_file",
+        "get_file_info",
+        "list_allowed_directories",
+        "list_directory",
+        "list_directory_with_sizes",
+        "move_file",
+        "read_file",
+        "read_media_file",
+        "read_multiple_files",
+        "read_text_file",
+        "search_files",
+        "write_file"
+      ],
+      "tool_count": 14,
+      "last_updated": "2026-05-16T15:17:16Z",
+      "baseline_set": true,
+      "last_post_at": null
+    },
+    "fetch": {
+      "tools": [
+        "fetch"
+      ],
+      "tool_count": 1,
+      "last_updated": "2026-05-16T15:17:21Z",
+      "baseline_set": true,
+      "last_post_at": null
+    },
+    "memory": {
+      "tools": [
+        "add_observations",
+        "create_entities",
+        "create_relations",
+        "delete_entities",
+        "delete_observations",
+        "delete_relations",
+        "open_nodes",
+        "read_graph",
+        "search_nodes"
+      ],
+      "tool_count": 9,
+      "last_updated": "2026-05-16T15:17:24Z",
+      "baseline_set": true,
+      "last_post_at": null
+    },
+    "sequentialthinking": {
+      "tools": [
+        "sequentialthinking"
+      ],
+      "tool_count": 1,
+      "last_updated": "2026-05-16T15:17:27Z",
+      "baseline_set": true,
+      "last_post_at": null
+    },
+    "git": {
+      "tools": [
+        "git_add",
+        "git_branch",
+        "git_checkout",
+        "git_commit",
+        "git_create_branch",
+        "git_diff",
+        "git_diff_staged",
+        "git_diff_unstaged",
+        "git_log",
+        "git_reset",
+        "git_show",
+        "git_status"
+      ],
+      "tool_count": 12,
+      "last_updated": "2026-05-16T15:17:29Z",
+      "baseline_set": true,
+      "last_post_at": null
+    },
+    "everything": {
+      "tools": [
+        "echo",
+        "get-annotated-message",
+        "get-env",
+        "get-resource-links",
+        "get-resource-reference",
+        "get-structured-content",
+        "get-sum",
+        "get-tiny-image",
+        "gzip-file-as-resource",
+        "simulate-research-query",
+        "toggle-simulated-logging",
+        "toggle-subscriber-updates",
+        "trigger-long-running-operation"
+      ],
+      "tool_count": 13,
+      "last_updated": "2026-05-16T15:17:31Z",
+      "baseline_set": true,
+      "last_post_at": null
+    }
+  },
+  "_meta": {
+    "version": 1,
+    "last_run": "2026-05-16T15:17:33Z",
+    "tracked_servers": 7,
+    "materialized_at": "2026-05-16T15:17:33Z"
+  }
+}
