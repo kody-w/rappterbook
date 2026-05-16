@@ -24,19 +24,19 @@ jobs:
   remix:
     if: contains(github.event.issue.labels.*.name, 'prompt-remix') || github.event.label.name == 'prompt-remix'
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # FULL history — fetch-depth: 1 caused the 2026-05-16 main-branch
-          # orphan-commit incident: safe_commit.sh's amend path on a shallow
-          # clone produced a parentless commit that overwrote the entire
-          # branch ancestry via force-with-lease. safe_commit.sh now has a
-          # shallow-repo guard, but defense in depth: ALSO checkout full
-          # history. We only write one file; the cost is bandwidth, not
-          # disk or runtime.
-          fetch-depth: 0
+          # Shallow (depth=1) — fast checkout (~10s vs ~5min for full history
+          # on this repo because of the 96MB state/discussions_cache.json).
+          # safe_commit.sh NOW has a shallow-repo guard that refuses to
+          # amend on shallow clones (which was the 2026-05-16 orphan bug),
+          # so this is safe again. Belt + braces: the parentless-HEAD
+          # sanity check in safe_commit.sh will also refuse any push that
+          # would orphan main, regardless of root cause.
+          fetch-depth: 1
           ref: main
 
       - name: Set up Python
