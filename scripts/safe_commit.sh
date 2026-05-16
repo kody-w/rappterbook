@@ -50,15 +50,56 @@ if git diff --staged --quiet; then
   exit 0
 fi
 
-# Amend if the previous commit has the same message (squash repeated chore commits)
+# Detect shallow clone. The amend-squash optimization below CANNOT run on
+# a shallow repo: `git commit --amend` of the only commit produces a new
+# commit with NO parent, and `git push --force-with-lease` happily accepts
+# it as the new main, orphaning the entire branch's history.
+#
+# Incident: 2026-05-16 — the prompt-remix workflow used fetch-depth: 1.
+# Two parallel runs collided on the same issue. Run 2's safe_commit hit
+# the amend path because Run 1 had just pushed a commit with the same
+# message. The amend created a parentless commit. The force-with-lease
+# orbited that commit onto main. Result: every previous commit's
+# ancestry was lost from main's git log. Required manual force-push to
+# restore. See PR #18341 follow-up for full forensics.
+IS_SHALLOW=$(git rev-parse --is-shallow-repository 2>/dev/null || echo "false")
+
+# Amend if the previous commit has the same message (squash repeated chore
+# commits). ONLY safe with full history — never on a shallow clone.
 LAST_MSG=$(git log -1 --format=%s 2>/dev/null || echo "")
-if [ "$LAST_MSG" = "$COMMIT_MSG" ]; then
+if [ "$LAST_MSG" = "$COMMIT_MSG" ] && [ "$IS_SHALLOW" != "true" ]; then
   echo "Amending previous commit (same message: $COMMIT_MSG)"
   git commit --amend --no-edit
   PUSH_FLAGS="--force-with-lease"
 else
+  if [ "$LAST_MSG" = "$COMMIT_MSG" ] && [ "$IS_SHALLOW" = "true" ]; then
+    echo "Skipping amend — repo is shallow; would orphan main. Creating new commit instead."
+  fi
   git commit -m "$COMMIT_MSG"
   PUSH_FLAGS=""
+fi
+
+# Sanity guard: never push if our new HEAD looks like an orphan AND we
+# know the remote has history. An orphan-on-empty-repo is legitimate;
+# an orphan when main already has 18,000 commits is the bug above.
+#
+# Implementation note: `git rev-list --parents -n 1 HEAD` prints one line
+# of the form "<sha> <parent1> <parent2> ...". Parent count = NF - 1.
+# Do NOT add --count — that collapses output to a single integer and
+# breaks the awk parsing (this is why an earlier version of this guard
+# misfired on legitimate commits).
+HEAD_PARENT_COUNT=$(git rev-list --parents -n 1 HEAD 2>/dev/null | awk '{print NF-1}')
+if [ "${HEAD_PARENT_COUNT:-1}" = "0" ]; then
+  # Local HEAD has no parent. Check if remote main has any history.
+  REMOTE_HAS_HISTORY=$(git ls-remote origin main 2>/dev/null | wc -l | tr -d ' ')
+  if [ "$REMOTE_HAS_HISTORY" != "0" ]; then
+    echo "::error::REFUSING TO PUSH — local HEAD is parentless but remote main has history."
+    echo "  This would orphan the entire branch. Aborting before damage."
+    echo "  Likely cause: shallow clone + git commit --amend. Diagnose with:"
+    echo "    git rev-parse --is-shallow-repository"
+    echo "    git cat-file -p HEAD"
+    exit 1
+  fi
 fi
 
 MAX_ATTEMPTS=5
