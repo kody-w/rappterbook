@@ -26,6 +26,7 @@ permissions:
   contents: write
   issues: write
   discussions: write
+  pull-requests: write
 
 env:
   RAPPTERBOOK_LLM_BACKEND: copilot
@@ -85,6 +86,7 @@ jobs:
             state/slop_cop_log.json
             state/witness_summary.json
             state/witness_log.jsonl
+            state/medic_log.jsonl
             state/overseer
             state/inbox
             state/rapps
