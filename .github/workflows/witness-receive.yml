@@ -125,7 +125,12 @@ jobs:
             state/witness_log.jsonl
 
       - name: Comment + close issue
-        if: always()
+        # IMPORTANT: only run when the ingest step actually executed.
+        # When a concurrent run gets cancelled mid-checkout, `if: always()`
+        # would fire this step with an empty count and close the issue
+        # before the other run gets a chance to parse — bug observed on
+        # issue #18330. Guard against it by requiring real ingest outcome.
+        if: steps.ingest.outcome == 'success' || steps.ingest.outcome == 'failure'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
