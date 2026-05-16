@@ -1,0 +1,122 @@
+name: Witness Receive
+
+# Multi-machine witness aggregation. External MCP sessions running with
+# RAPPTERBOOK_WITNESS_UPLOAD=on open a labeled Issue at session end with
+# their witness events in the body. This workflow processes those Issues:
+# parses the JSON, appends to state/witness_log.jsonl, closes the Issue.
+#
+# The witness_chore (priority 35) on the next cloud brainstem tick will
+# digest the appended log into state/witness_summary.json — the dashboard
+# at docs/witness.html picks up the new data automatically.
+
+on:
+  issues:
+    types: [opened, labeled, reopened]
+
+concurrency:
+  group: witness-receive-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  ingest:
+    if: contains(github.event.issue.labels.*.name, 'witness-batch') || github.event.label.name == 'witness-batch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/ || true
+
+      - name: Parse issue body + append to witness_log.jsonl
+        id: ingest
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+        run: |
+          python3 - <<'PYEOF'
+          import json, os, re, sys
+          from pathlib import Path
+
+          body = os.environ.get("ISSUE_BODY") or ""
+          number = os.environ.get("ISSUE_NUMBER", "?")
+          submitter = os.environ.get("ISSUE_USER", "unknown")
+
+          # Pull the JSON array out of the fenced ```json block in the issue body
+          m = re.search(r"```json\s*\n(.*?)\n```", body, re.DOTALL)
+          if not m:
+              print(f"::warning::Issue #{number}: no JSON block found, ignoring")
+              # Set output so the close step knows nothing got appended
+              with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+                  fh.write("count=0\n")
+              sys.exit(0)
+
+          try:
+              events = json.loads(m.group(1))
+          except Exception as exc:
+              print(f"::warning::Issue #{number}: malformed JSON ({exc})")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+                  fh.write("count=0\n")
+              sys.exit(0)
+
+          if not isinstance(events, list):
+              print(f"::warning::Issue #{number}: payload is not an array")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+                  fh.write("count=0\n")
+              sys.exit(0)
+
+          # Annotate every event with the issue + submitter for provenance.
+          # Submitter is the GitHub login that opened the issue — not a personal
+          # identifier beyond what GitHub already exposes publicly.
+          log_path = Path("state/witness_log.jsonl")
+          log_path.parent.mkdir(parents=True, exist_ok=True)
+          appended = 0
+          with log_path.open("a") as fh:
+              for ev in events:
+                  if not isinstance(ev, dict):
+                      continue
+                  ev["uploaded_from_issue"] = int(number)
+                  ev["uploaded_by"] = submitter
+                  fh.write(json.dumps(ev, default=str) + "\n")
+                  appended += 1
+
+          print(f"witness-receive: appended {appended} events from issue #{number} (submitter={submitter})")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"count={appended}\n")
+          PYEOF
+
+      - name: Commit appended log
+        if: steps.ingest.outputs.count != '0'
+        run: |
+          bash scripts/safe_commit.sh \
+            "chore: witness-receive — append batch from issue #${{ github.event.issue.number }} [skip ci]" \
+            state/witness_log.jsonl
+
+      - name: Comment + close issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COUNT="${{ steps.ingest.outputs.count }}"
+          if [ -z "$COUNT" ] || [ "$COUNT" = "0" ]; then
+            MSG="No valid witness events found in body — nothing appended. Closing."
+          else
+            MSG="Thanks. Appended $COUNT event(s) to \`state/witness_log.jsonl\`. The witness dashboard will reflect this on the next brainstem tick."
+          fi
+          gh issue comment ${{ github.event.issue.number }} --body "$MSG" || true
+          gh issue close ${{ github.event.issue.number }} --reason completed || true

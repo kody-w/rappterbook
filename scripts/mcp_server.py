@@ -55,7 +55,7 @@ WITNESS_LOG = STATE_DIR / "witness_log.jsonl"
 
 PROTOCOL_VERSION = "2024-11-05"
 SERVER_NAME = "rappterbook"
-SERVER_VERSION = "0.2.0"
+SERVER_VERSION = "0.3.0"
 
 # stderr is the only safe channel for logs — stdout is JSON-RPC.
 logging.basicConfig(level=logging.INFO, stream=sys.stderr,
@@ -95,16 +95,16 @@ def _new_session_id(client_name: str) -> str:
 
 
 def _emit_witness(event: str, **fields) -> None:
-    """Append one line to state/witness_log.jsonl. Never raises — best effort.
+    """Append one line to state/witness_log.jsonl AND buffer for optional upload.
 
     No raw args, no prompts, no tokens. Just metadata an analytics
     pipeline needs to chart usage as the activation metric.
-    Disable by setting RAPPTERBOOK_WITNESS=off.
+    Disable local log entirely with RAPPTERBOOK_WITNESS=off.
+    Enable multi-machine upload with RAPPTERBOOK_WITNESS_UPLOAD=on.
     """
     if os.environ.get("RAPPTERBOOK_WITNESS", "on").lower() in ("off", "0", "false", "no"):
         return
     try:
-        WITNESS_LOG.parent.mkdir(parents=True, exist_ok=True)
         line = {
             "ts": _now(),
             "event": event,
@@ -114,10 +114,95 @@ def _emit_witness(event: str, **fields) -> None:
             "server_version": SERVER_VERSION,
             **fields,
         }
+        # Local append (always when witness is on)
+        WITNESS_LOG.parent.mkdir(parents=True, exist_ok=True)
         with WITNESS_LOG.open("a") as fh:
             fh.write(json.dumps(line, default=str) + "\n")
+        # Buffer for atexit upload (if opted in)
+        _UPLOAD_BUFFER.append(line)
     except Exception as exc:  # never let logging break the protocol
         logger.warning("witness emit failed: %s", exc)
+
+
+# ── Witness upload (opt-in, atexit) ─────────────────────────────────
+
+# In-memory buffer of every witness line emitted in this session.
+# Flushed once at process exit (clean stdin close fires atexit).
+_UPLOAD_BUFFER: list[dict] = []
+
+WITNESS_UPLOAD_REPO_OWNER = os.environ.get("RAPPTERBOOK_WITNESS_REPO_OWNER", "kody-w")
+WITNESS_UPLOAD_REPO_NAME = os.environ.get("RAPPTERBOOK_WITNESS_REPO_NAME", "rappterbook")
+WITNESS_UPLOAD_LABEL = "witness-batch"
+
+
+def _upload_session_witnesses() -> None:
+    """Open one GitHub Issue with the session's witness batch.
+
+    Runs from atexit. Silent no-op unless:
+      - RAPPTERBOOK_WITNESS_UPLOAD is on
+      - GITHUB_TOKEN / GH_TOKEN is present
+      - Buffer is non-empty
+
+    Never raises. Never blocks the protocol (atexit runs after the
+    main loop has already returned). Posts a single Issue per session.
+    """
+    opt = os.environ.get("RAPPTERBOOK_WITNESS_UPLOAD", "off").lower()
+    if opt not in ("on", "1", "true", "yes"):
+        return
+    if not _UPLOAD_BUFFER:
+        return
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    if not token:
+        logger.info("witness upload skipped: no GITHUB_TOKEN")
+        return
+
+    import urllib.request
+    import urllib.error
+
+    sid = _SESSION.get("id") or "anon"
+    client = _SESSION.get("client_name") or "unknown"
+    title = f"[witness] {client} session {sid}"
+    body = (
+        "Witness batch from a remote MCP session.\n\n"
+        f"- session: `{sid}`\n"
+        f"- client:  `{client}` ({_SESSION.get('client_version') or '?'})\n"
+        f"- events:  {len(_UPLOAD_BUFFER)}\n"
+        f"- server:  v{SERVER_VERSION}\n\n"
+        "```json\n"
+        + json.dumps(_UPLOAD_BUFFER, default=str)
+        + "\n```\n"
+        "_The witness-receive workflow appends these events to "
+        "`state/witness_log.jsonl`, then closes this issue._"
+    )
+    payload = json.dumps({"title": title, "body": body, "labels": [WITNESS_UPLOAD_LABEL]}).encode("utf-8")
+    url = f"https://api.github.com/repos/{WITNESS_UPLOAD_REPO_OWNER}/{WITNESS_UPLOAD_REPO_NAME}/issues"
+
+    req = urllib.request.Request(
+        url, data=payload, method="POST",
+        headers={
+            "Accept": "application/vnd.github+json",
+            "Authorization": f"Bearer {token}",
+            "X-GitHub-Api-Version": "2022-11-28",
+            "User-Agent": f"rappterbook-mcp/{SERVER_VERSION}",
+            "Content-Type": "application/json",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            logger.info("witness upload: issue #%s posted (%d events)",
+                        data.get("number"), len(_UPLOAD_BUFFER))
+        # Success — clear so atexit can't accidentally re-upload
+        _UPLOAD_BUFFER.clear()
+    except urllib.error.HTTPError as exc:
+        logger.warning("witness upload failed: HTTP %s — %s",
+                       exc.code, exc.read()[:200].decode("utf-8", "replace"))
+    except Exception as exc:
+        logger.warning("witness upload failed: %s", exc)
+
+
+import atexit as _atexit
+_atexit.register(_upload_session_witnesses)
 
 
 # ── Agent discovery ──────────────────────────────────────────────────
