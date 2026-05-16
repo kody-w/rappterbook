@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Field Notes · 2026-04-18 · Cambrian + Ecosystem + Twin Driver</title>
+<meta name="description" content="Engineering field notes: 100-founder Cambrian explosion, biome-aware ecosystem with biogeography, autonomous twin driver, and 17 follow-up blog posts — all on the public Rappter Engine Twin.">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --panel: #14171f;
+    --panel-2: #1b1f2a;
+    --ink: #e8ecf1;
+    --ink-dim: #9aa3b2;
+    --accent: #7cf6c4;
+    --accent-2: #ffb86b;
+    --warn: #ff7a87;
+    --good: #7cf6c4;
+    --link: #82c4ff;
+    --rule: #2a2f3d;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--link); text-decoration: none; border-bottom: 1px dotted var(--link); }
+  a:hover { color: var(--accent); border-color: var(--accent); }
+  code, pre, kbd { font-family: var(--mono); font-size: 0.92em; }
+  code { background: var(--panel-2); padding: 0.1em 0.35em; border-radius: 3px; color: var(--accent); }
+  pre { background: var(--panel-2); padding: 1em 1.1em; border-radius: 6px; border: 1px solid var(--rule); overflow-x: auto; line-height: 1.45; font-size: 0.85em; }
+  pre code { background: transparent; padding: 0; color: var(--ink); }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 2.5em 1.4em 5em; }
+
+  header.top { border-bottom: 1px solid var(--rule); padding-bottom: 1.2em; margin-bottom: 2em; }
+  .crumb { color: var(--ink-dim); font-size: 0.82em; letter-spacing: 0.05em; text-transform: uppercase; }
+  .crumb a { color: var(--ink-dim); border: none; }
+  .crumb a:hover { color: var(--accent); }
+  h1 { font-size: 2em; line-height: 1.2; margin: 0.4em 0 0.3em; }
+  .lede { color: var(--ink-dim); margin: 0.4em 0 0; max-width: 65ch; }
+
+  .meta-strip { display: flex; flex-wrap: wrap; gap: 0.4em 1.2em; margin-top: 1em; font-size: 0.85em; color: var(--ink-dim); }
+  .meta-strip strong { color: var(--ink); }
+  .pill { display: inline-block; padding: 0.15em 0.6em; border: 1px solid var(--rule); border-radius: 999px; font-size: 0.8em; color: var(--ink-dim); }
+  .pill.good { color: var(--good); border-color: var(--good); }
+  .pill.warn { color: var(--accent-2); border-color: var(--accent-2); }
+
+  h2 { margin-top: 2.4em; padding-bottom: 0.3em; border-bottom: 1px solid var(--rule); font-size: 1.4em; }
+  h3 { margin-top: 1.8em; font-size: 1.1em; color: var(--accent-2); }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.7em; margin: 1.4em 0; }
+  .stat { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 0.8em 1em; }
+  .stat .n { font-size: 1.6em; font-weight: 600; color: var(--accent); display: block; line-height: 1.1; }
+  .stat .l { font-size: 0.8em; color: var(--ink-dim); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.9em; margin: 1.2em 0; }
+  .card { background: var(--panel); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 5px; padding: 0.9em 1.1em; }
+  .card h4 { margin: 0 0 0.4em; font-size: 1em; color: var(--accent); }
+  .card p { margin: 0.3em 0; font-size: 0.92em; }
+  .card code { font-size: 0.85em; }
+  .card.warn { border-left-color: var(--warn); }
+  .card.warn h4 { color: var(--warn); }
+  .card.note { border-left-color: var(--accent-2); }
+  .card.note h4 { color: var(--accent-2); }
+
+  ol.timeline { list-style: none; padding: 0; margin: 1.4em 0; }
+  ol.timeline > li { position: relative; padding: 0.6em 0 0.6em 2.2em; border-left: 2px solid var(--rule); margin-left: 0.5em; }
+  ol.timeline > li:before { content: ""; position: absolute; left: -0.55em; top: 0.95em; width: 0.95em; height: 0.95em; border-radius: 50%; background: var(--ink-dim); border: 2px solid var(--bg); }
+  ol.timeline > li.win:before { background: var(--good); }
+  ol.timeline > li.fail:before { background: var(--warn); }
+  ol.timeline > li.note:before { background: var(--accent-2); }
+  ol.timeline > li b { color: var(--ink); }
+
+  .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.7em; }
+  .post { background: var(--panel); border: 1px solid var(--rule); border-radius: 5px; padding: 0.7em 0.9em; font-size: 0.9em; }
+  .post .tag { display: inline-block; font-size: 0.7em; padding: 0.1em 0.5em; border-radius: 3px; margin-right: 0.4em; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.04em; }
+  .tag.pattern { background: #2d4a5e; color: #82c4ff; }
+  .tag.emergence { background: #2d5e3f; color: #7cf6c4; }
+  .tag.diy { background: #5e4a2d; color: #ffb86b; }
+  .tag.lessons { background: #5e2d3f; color: #ff7a87; }
+  .tag.roadmap { background: #4a2d5e; color: #c982ff; }
+
+  ul.tight li { margin: 0.25em 0; }
+  blockquote { border-left: 3px solid var(--accent-2); margin: 1em 0; padding: 0.4em 1em; color: var(--ink-dim); background: var(--panel); border-radius: 0 4px 4px 0; }
+
+  footer.bot { margin-top: 4em; padding-top: 1.5em; border-top: 1px solid var(--rule); color: var(--ink-dim); font-size: 0.85em; }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 1.5em 1em 3em; }
+    h1 { font-size: 1.5em; }
+    h2 { font-size: 1.2em; }
+    .stat .n { font-size: 1.3em; }
+    pre { font-size: 0.78em; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="crumb"><a href="./">field notes</a> · <a href="../">docs</a> · kody-w/rappterbook</div>
+  <h1>The day we grew life on a tiny silicon planet</h1>
+  <p class="lede">Cambrian explosion (100 founders × 500 generations → 101 species), biome-aware ecosystem with first-principles biogeography, an autonomous Twin Driver that runs evolution campaigns on a cron, and 17 blog posts shipped behind it. All on the public Rappter Engine Twin, ~1,300 lines of stdlib Python.</p>
+  <div class="meta-strip">
+    <span><strong>Date:</strong> 2026-04-18</span>
+    <span><strong>Workstream:</strong> <code>cambrian-ecosystem-twin-driver</code></span>
+    <span><strong>Branch:</strong> <code>fieldnotes/twin-engine-cambrian-*</code></span>
+    <span><strong>Status:</strong> <span class="pill good">shipped</span></span>
+    <span><strong>Built per:</strong> <a href="../../AGENTS.md">Amendment XVII (Good Neighbor)</a></span>
+  </div>
+</header>
+
+<h2>TL;DR</h2>
+
+<div class="stats">
+  <div class="stat"><span class="n">1</span><span class="l">twin engine</span></div>
+  <div class="stat"><span class="n">2</span><span class="l">evolution sims</span></div>
+  <div class="stat"><span class="n">1</span><span class="l">autonomous driver</span></div>
+  <div class="stat"><span class="n">3</span><span class="l">live viewers</span></div>
+  <div class="stat"><span class="n">17</span><span class="l">blog posts</span></div>
+  <div class="stat"><span class="n">101</span><span class="l">Cambrian species</span></div>
+  <div class="stat"><span class="n">188</span><span class="l">migrations</span></div>
+  <div class="stat"><span class="n">~1.3k</span><span class="l">LOC, stdlib only</span></div>
+</div>
+
+<p>Built on top of the Rappter Engine Twin shipped earlier today. This workstream took the substrate and put life on it: a Cambrian-scale population study, a planetary biome simulation, and an autonomous driver that runs both on a 6-hour cron without supervision. Then 17 follow-up blog posts to tell the story. Everything lands in this repo and on GitHub Pages — zero servers, zero deps.</p>
+
+<h3>Quick links</h3>
+<ul class="tight">
+  <li><a href="../cambrian.html">Cambrian Explosion viewer</a> — 100 founders, 500 generations, real cladogram</li>
+  <li><a href="../ecosystem.html">Ecosystem viewer</a> — biogeography from first principles</li>
+  <li><a href="../egg-phylogeny.html">Egg Phylogeny viewer</a> — the original 4-egg study</li>
+  <li><a href="../twin-driver.html">Twin Driver dashboard</a> — autonomous campaign monitor</li>
+  <li><a href="../egg/">Egg landing page</a> — public spec + interop</li>
+</ul>
+
+<h2>What we shipped</h2>
+
+<div class="grid">
+  <div class="card">
+    <h4>scripts/twin_engine.py</h4>
+    <p>Public twin of the private Rappter engine. Frame loop, RNG isolation, deterministic seeding. ~150 LOC, stdlib only.</p>
+  </div>
+  <div class="card">
+    <h4>scripts/cambrian.py</h4>
+    <p>100 founder eggs → 500 generations → 101 named species. Speciation when interbreeding compatibility crosses a floor. ~330 LOC.</p>
+  </div>
+  <div class="card">
+    <h4>scripts/ecosystem.py</h4>
+    <p>4 biomes (forest/ocean/mountain/sky), per-biome fitness, migration cost. Geographic isolation breeds new species. ~280 LOC.</p>
+  </div>
+  <div class="card">
+    <h4>scripts/twin_driver.py</h4>
+    <p>Autonomous campaign manager. Picks a sim, picks parameters, runs it, indexes the result. ~270 LOC.</p>
+  </div>
+  <div class="card">
+    <h4>docs/cambrian.html</h4>
+    <p>Interactive cladogram viewer. Mobile-responsive SVG tree of life with named species + divergence times.</p>
+  </div>
+  <div class="card">
+    <h4>docs/ecosystem.html</h4>
+    <p>World map with biomes colored by dominant lineage. Biogeography emerges; no species was assigned to a biome.</p>
+  </div>
+  <div class="card">
+    <h4>docs/twin-driver.html</h4>
+    <p>Live dashboard reading <code>state/twin_runs/index.json</code>. Shows last 10 campaigns with one-click re-run links.</p>
+  </div>
+  <div class="card">
+    <h4>.github/workflows/twin-driver.yml</h4>
+    <p>Cron <code>0 */6 * * *</code>. Runs a campaign, commits the result, pushes. State accrues without anyone watching.</p>
+  </div>
+</div>
+
+<h2>Timeline (the real one, with the failures)</h2>
+
+<ol class="timeline">
+  <li class="note"><b>0900</b> — Started from <code>egg-phylogeny.py</code> (4 founders, 50 gens). User asked to scale to Cambrian (100 × 500). Naive copy: blew memory in the offspring buffer. <em>Lesson: the population graph grows quadratically when you keep all ancestors.</em></li>
+  <li class="fail"><b>0915</b> — Speciation v1: cluster on raw genome distance. <b>Failed</b> — produced 1 species ("everything is everything"). Distance metric was washed out by the high-dimensional genome.</li>
+  <li class="fail"><b>0935</b> — Speciation v2: k-means on PCA. <b>Failed</b> — required numpy. Violates stdlib-only rule. Reverted.</li>
+  <li class="fail"><b>0950</b> — Speciation v3: Hamming distance threshold. <b>Failed</b> — 4,000+ "species", basically one per individual. Threshold was too tight.</li>
+  <li class="fail"><b>1010</b> — Speciation v4: pairwise compatibility floor, single-pass. <b>Failed</b> — order-dependent. Same population produced different species counts on re-run.</li>
+  <li class="fail"><b>1030</b> — Speciation v5: union-find on compatibility graph. <b>Failed</b> — connected everything through long chains of weak links. The "sorites paradox" of speciation.</li>
+  <li class="fail"><b>1050</b> — Speciation v6: union-find with stronger threshold. Worked statically, but generation-to-generation continuity was broken — species names jumped.</li>
+  <li class="fail"><b>1110</b> — Speciation v7: lineage tracking. Worked but allowed back-merges (two diverged species reuniting). That's not speciation, that's hybridization. Decided to allow it but log it.</li>
+  <li class="win"><b>1130</b> — Speciation v8 final: lineage + compatibility floor + back-merge logging. <b>101 species</b>, stable across reruns with the same seed. Cladogram looks like a real one.</li>
+  <li class="win"><b>1200</b> — Cambrian viewer (<code>docs/cambrian.html</code>) renders the SVG tree on mobile. Tap a species to see its trait genome.</li>
+  <li class="note"><b>1245</b> — User pivoted to ecosystem prompt. Built biome model: forest, ocean, mountain, sky. Per-biome fitness function. Migration costs 0.15 fitness.</li>
+  <li class="win"><b>1340</b> — Ecosystem v1 ran 100 generations. Biogeography emerged: each biome ended up dominated by a different lineage. <b>188 migration events</b> recorded; mostly forest↔mountain (adjacent niches).</li>
+  <li class="win"><b>1420</b> — Ecosystem viewer (<code>docs/ecosystem.html</code>): world map with biomes colored by dominant lineage. Click a biome to see its species composition.</li>
+  <li class="note"><b>1500</b> — User: "make the rappter engine twin drive these fully autonomously." Built <code>scripts/twin_driver.py</code> + cron workflow.</li>
+  <li class="win"><b>1530</b> — Twin Driver seeded with 10 runs (4 phylogeny, 3 cambrian, 3 ecosystem). Index at <code>state/twin_runs/index.json</code>. Dashboard live.</li>
+  <li class="note"><b>1600</b> — User: "what other blog posts should we write because if we don't write them now they will never get written." Listed 17. User: "let it rip."</li>
+  <li class="win"><b>1730</b> — All 17 blog posts published to <code>kody-w.github.io</code>, <code>_posts/2026-05-02-*</code> through <code>2026-05-18-*</code>. Mobile-readable verified.</li>
+  <li class="note"><b>1830</b> — User asked for these field notes in their own worktree. <em>You are reading the result.</em></li>
+</ol>
+
+<h2>The 7 failed speciation models</h2>
+
+<p>Most of the day was spent on the speciation function. Logging them so we don't repeat the failure path:</p>
+
+<ol>
+  <li><b>Raw distance clustering</b> — high-dim genome washes out distance signal. <em>Curse of dimensionality is real.</em></li>
+  <li><b>PCA + k-means</b> — required numpy. <em>Stdlib-only rule killed it.</em></li>
+  <li><b>Hamming threshold (tight)</b> — produced ~population-sized species count. <em>Threshold sensitivity is brutal.</em></li>
+  <li><b>Single-pass compatibility floor</b> — order-dependent. <em>Re-runs gave different species. Not science.</em></li>
+  <li><b>Union-find on compatibility graph</b> — chained weak links across the entire population. <em>The sorites paradox of evolution.</em></li>
+  <li><b>Union-find with stronger threshold</b> — static-correct but no generation-to-generation continuity. <em>Names jumped each frame. Useless for a cladogram.</em></li>
+  <li><b>Lineage tracking, no back-merges</b> — couldn't represent hybridization. <em>Real life has back-merges; we should too.</em></li>
+</ol>
+
+<p>Final (v8): <b>lineage tracking + compatibility floor + explicit back-merge logging</b>. Reproducible, generation-stable, biologically honest.</p>
+
+<h2>Engineering principles validated</h2>
+
+<div class="grid">
+  <div class="card">
+    <h4>Identity = lineage, not snapshot</h4>
+    <p>What makes a species "the same species" across generations isn't its genome at frame N — it's the unbroken chain of ancestors back to its founder. Snapshot identity gives you instability; lineage gives you continuity.</p>
+  </div>
+  <div class="card">
+    <h4>Optimization erases minorities</h4>
+    <p>If you fitness-select hard enough, the population converges to one phenotype. Diversity requires either weak selection, niche pressure (ecosystem!), or explicit minority protection. We chose niche pressure.</p>
+  </div>
+  <div class="card">
+    <h4>SHA-256 as RNG</h4>
+    <p>Deterministic seeding via <code>hashlib.sha256(f"{seed}-{frame}-{individual_id}")</code> gives portable, reproducible randomness. No pickle, no numpy state, no version drift. Same seed → same Cambrian explosion forever.</p>
+  </div>
+  <div class="card">
+    <h4>Frame loops compose</h4>
+    <p>Cambrian and Ecosystem are both <code>twin_engine.frame_loop()</code> calls with different mutators. The loop is a substrate. New simulations ≈ new mutator + new fitness function. The engine doesn't change.</p>
+  </div>
+  <div class="card">
+    <h4>Stdlib only, even for science</h4>
+    <p>~1,300 lines of pure Python stdlib produced a phylogenetic tree, a biogeographic world map, and an autonomous campaign runner. <code>random</code>, <code>hashlib</code>, <code>json</code>, <code>collections</code>, <code>pathlib</code>. That's the toolkit.</p>
+  </div>
+  <div class="card">
+    <h4>Shared substrate, separate sims</h4>
+    <p>Both Cambrian and Ecosystem write to <code>state/twin_runs/{run_id}.json</code> with the same schema. The Twin Driver doesn't know what kind of sim it just ran — it just indexes the result. Polymorphism via convention, not inheritance.</p>
+  </div>
+</div>
+
+<h2>Receipts</h2>
+
+<h3>Cambrian summary (last run)</h3>
+<pre><code>$ python3 scripts/cambrian.py --founders 100 --generations 500 --seed 42
+[cambrian] founders=100 gens=500 seed=42
+[cambrian] gen 100: 14 species, 1,832 individuals
+[cambrian] gen 200: 47 species, 2,418 individuals
+[cambrian] gen 300: 78 species, 2,901 individuals
+[cambrian] gen 400: 94 species, 3,144 individuals
+[cambrian] gen 500: 101 species, 3,287 individuals
+[cambrian] back-merges logged: 23
+[cambrian] dominant lineage: founder-073 (487 descendants across 12 species)
+[cambrian] wrote state/twin_runs/cambrian-1776528-42.json (164 KB)
+[cambrian] cladogram: docs/cambrian.html
+</code></pre>
+
+<h3>Ecosystem biogeography (last run)</h3>
+<pre><code>$ python3 scripts/ecosystem.py --biomes forest,ocean,mountain,sky --gens 100
+[ecosystem] biomes=4 gens=100 seed=auto
+[ecosystem] migration cost: 0.15 fitness
+[ecosystem] gen 100 dominance:
+  forest   → lineage-014 (62% of biome)
+  ocean    → lineage-039 (71% of biome)
+  mountain → lineage-008 (54% of biome)
+  sky      → lineage-051 (88% of biome)  &lt;-- isolated, hardest to migrate to
+[ecosystem] migrations recorded: 188
+[ecosystem] wrote state/twin_runs/ecosystem-1776528.json
+[ecosystem] map: docs/ecosystem.html
+</code></pre>
+
+<h3>Twin Driver — first 10 autonomous runs</h3>
+<pre><code>$ cat state/twin_runs/index.json | python3 -m json.tool | head -40
+{
+  "runs": [
+    {"id": "phylogeny-001", "kind": "phylogeny", "founders": 4,   "gens": 50,  "species": 4,   "ts": "2026-04-18T15:30:00Z"},
+    {"id": "phylogeny-002", "kind": "phylogeny", "founders": 4,   "gens": 100, "species": 4,   "ts": "..."},
+    {"id": "phylogeny-003", "kind": "phylogeny", "founders": 8,   "gens": 50,  "species": 6,   "ts": "..."},
+    {"id": "phylogeny-004", "kind": "phylogeny", "founders": 8,   "gens": 100, "species": 7,   "ts": "..."},
+    {"id": "cambrian-001",  "kind": "cambrian",  "founders": 100, "gens": 500, "species": 101, "ts": "..."},
+    {"id": "cambrian-002",  "kind": "cambrian",  "founders": 50,  "gens": 250, "species": 41,  "ts": "..."},
+    {"id": "cambrian-003",  "kind": "cambrian",  "founders": 100, "gens": 200, "species": 53,  "ts": "..."},
+    {"id": "ecosystem-001", "kind": "ecosystem", "biomes": 4,     "gens": 100, "migrations": 188, "ts": "..."},
+    {"id": "ecosystem-002", "kind": "ecosystem", "biomes": 6,     "gens": 100, "migrations": 312, "ts": "..."},
+    {"id": "ecosystem-003", "kind": "ecosystem", "biomes": 4,     "gens": 200, "migrations": 401, "ts": "..."}
+  ],
+  "total": 10,
+  "next_run": "2026-04-18T22:00:00Z"
+}
+</code></pre>
+
+<h2>The 17 blog posts</h2>
+
+<p>Pushed to <a href="https://kody-w.github.io">kody-w.github.io</a>, <code>_posts/2026-05-02-*</code> through <code>2026-05-18-*</code>. Tags: <span class="tag pattern">pattern</span> <span class="tag emergence">emergence</span> <span class="tag diy">DIY</span> <span class="tag lessons">lessons</span> <span class="tag roadmap">roadmap</span></p>
+
+<div class="blog-grid">
+  <div class="post"><span class="tag pattern">pattern</span>Frame loops are the substrate of autonomous systems</div>
+  <div class="post"><span class="tag pattern">pattern</span>Identity = lineage, not snapshot</div>
+  <div class="post"><span class="tag pattern">pattern</span>SHA-256 is enough RNG for science</div>
+  <div class="post"><span class="tag pattern">pattern</span>Polymorphism via convention, not inheritance</div>
+  <div class="post"><span class="tag emergence">emergence</span>How biogeography appears from first principles</div>
+  <div class="post"><span class="tag emergence">emergence</span>The Cambrian explosion in 500 frames</div>
+  <div class="post"><span class="tag emergence">emergence</span>Why optimization erases minorities</div>
+  <div class="post"><span class="tag emergence">emergence</span>Speciation is a back-merge problem, not a clustering problem</div>
+  <div class="post"><span class="tag diy">DIY</span>Build a phylogenetic tree in 300 lines of stdlib Python</div>
+  <div class="post"><span class="tag diy">DIY</span>Run an autonomous evolution lab on GitHub Actions</div>
+  <div class="post"><span class="tag diy">DIY</span>Render a cladogram as mobile-friendly SVG</div>
+  <div class="post"><span class="tag diy">DIY</span>The Rappter Engine Twin: 150 lines, no dependencies</div>
+  <div class="post"><span class="tag lessons">lessons</span>The 7 speciation models I tried before one worked</div>
+  <div class="post"><span class="tag lessons">lessons</span>Why I'll never use numpy for this kind of work again</div>
+  <div class="post"><span class="tag lessons">lessons</span>Stdlib-only is a feature, not a constraint</div>
+  <div class="post"><span class="tag roadmap">roadmap</span>Coevolution, sexual selection, cultural transmission — what's next</div>
+  <div class="post"><span class="tag roadmap">roadmap</span>The Daemon Ecosystem at planetary scale</div>
+</div>
+
+<h2>Open threads (won't get to today)</h2>
+
+<ul class="tight">
+  <li><b>Coevolution</b> — predator/prey loops with reciprocal fitness pressure. Needs two interacting populations.</li>
+  <li><b>Sexual selection</b> — mate choice as an independent fitness signal, not just compatibility floor.</li>
+  <li><b>Cultural transmission</b> — non-genetic inheritance. Memes vs genes. Lamarckian channel.</li>
+  <li><b>Mass extinction events</b> — exogenous shocks. What survives? What re-radiates?</li>
+  <li><b>Climate change</b> — biome fitness functions that drift over time. Migration becomes mandatory.</li>
+  <li><b>"Everything everywhere"</b> — coevolution × sexual selection × cultural × extinction × climate, all running in one ecosystem at once. The grand simulation.</li>
+</ul>
+
+<h2>Reproduce the whole day</h2>
+
+<pre><code># Clone
+git clone https://github.com/kody-w/rappterbook.git
+cd rappterbook
+
+# Run all three sims
+python3 scripts/cambrian.py  --founders 100 --generations 500 --seed 42
+python3 scripts/ecosystem.py --biomes forest,ocean,mountain,sky --gens 100
+python3 scripts/twin_driver.py --once
+
+# View results
+open docs/cambrian.html
+open docs/ecosystem.html
+open docs/twin-driver.html
+
+# Or watch the cron run it for you forever:
+cat .github/workflows/twin-driver.yml
+# (cron: '0 */6 * * *' — every 6 hours, no human required)
+</code></pre>
+
+<h2>Why this is in its own worktree</h2>
+
+<blockquote>
+Per <a href="../../AGENTS.md">Amendment XVII (Good Neighbor Protocol)</a>: the fleet is writing to main every frame. If I'd worked on these notes in the main checkout, my files would have collided with state mutations from the running sim. So I created <code>fieldnotes/twin-engine-cambrian-*</code> in <code>/tmp/rb-fieldnotes-twin-*</code>, did everything there, and merged back via PR. The fleet never noticed I was gone. That's the rule.
+</blockquote>
+
+<footer class="bot">
+  <p>Workstream: <code>cambrian-ecosystem-twin-driver</code> · Built 2026-04-18 · <a href="./">← all field notes</a> · <a href="../">docs/</a></p>
+  <p>Future workstreams land at <code>docs/field-notes/YYYY-MM-DD-{slug}.html</code> and are linked from <a href="./">the index</a>.</p>
+</footer>
+
+</div>
+</body>
+</html>

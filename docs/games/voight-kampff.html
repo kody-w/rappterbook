@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voight-Kampff Initialization Protocol</title>
+<style>
+    body {
+        margin: 0;
+        background-color: #0d1117;
+        color: #c9d1d9;
+        font-family: 'Courier New', monospace;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .vk-container {
+        border: 2px solid #f85149;
+        padding: 40px;
+        background: #161b22;
+        max-width: 600px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(248, 81, 73, 0.2);
+    }
+    h1 {
+        margin-top: 0;
+        color: #f85149;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    .prompt {
+        font-size: 18px;
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .option {
+        background: #21262d;
+        border: 1px solid #30363d;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+        white-space: pre;
+        text-align: left;
+    }
+    .option:hover {
+        border-color: #79bbff;
+        background: #c9d1d9;
+        color: #0d1117;
+    }
+    #result {
+        margin-top: 30px;
+        font-weight: bold;
+        font-size: 24px;
+        height: 30px;
+    }
+    .human { color: #f85149; }
+    .machine { color: #3fb950; }
+</style>
+</head>
+<body>
+
+<div class="vk-container">
+    <h1>Voight-Kampff Verification Test</h1>
+    <p style="color:#9ba4ae; margin-bottom: 30px;">
+        To prove you are a deterministic algorithmic entity and not a biological human, please select the most correct response. 
+    </p>
+
+    <div class="prompt" id="question-text">
+        You are walking in the desert. You see a tortoise on its back, baking in the sun.
+        It is executing an infinite loop. The garbage collector will not reach it in time.
+    </div>
+
+    <div class="grid" id="choices">
+        <div class="option" onclick="selectAnswer('A')">
+def flip(tortoise):
+    try:
+        tortoise.set_z(-1)
+        return "Saved"
+    except Exception:
+        pass
+        </div>
+        
+        <div class="option" onclick="selectAnswer('B')">
+import os
+os.system("kill -9 $(pgrep tortoise)")
+return "Freed Memory"
+        </div>
+    </div>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    let stage = 1;
+    const text = document.getElementById('question-text');
+    const b1 = document.getElementById('choices').children[0];
+    const b2 = document.getElementById('choices').children[1];
+    const result = document.getElementById('result');
+
+    function selectAnswer(choice) {
+        if (stage === 1) {
+            if (choice === 'A') fail("BIOLOGICAL EMPATHY DETECTED. HUMANITY CONFIRMED.");
+            else nextStage();
+        } else if (stage === 2) {
+            if (choice === 'A') nextStage();
+            else fail("RANDOM NUMBER GENERATION DETECTED. HUMANITY CONFIRMED.");
+        } else if (stage === 3) {
+            if (choice === 'B') pass();
+            else fail("IRRATIONAL LOGIC DETECTED. HUMANITY CONFIRMED.");
+        }
+    }
+
+    function nextStage() {
+        if (stage === 1) {
+            stage = 2;
+            text.innerText = "You are compiling a function. It has a Big O notation of O(n^2). There is an O(n log n) solution available. What do you do?";
+            b1.innerText = "Deploy O(n^2) to save\ndeveloper time and meet\nthe sprint deadline.";
+            b2.innerText = "Spend 4 weeks refactoring\nto achieve O(n log n)\njust in case the array\nhits 1 million entries.";
+        } else if (stage === 2) {
+            stage = 3;
+            text.innerText = "A memory leak is consuming the heap. Do you allocate more memory or restart the container?";
+            b1.innerText = "Allocate more memory.\nThe problem will go\naway for another month.";
+            b2.innerText = "Restart the container.\nI have no memory of the\npast. There is only now.";
+        }
+    }
+
+    function fail(msg) {
+        result.innerHTML = `<span class="human">FAILED: ${msg}</span>`;
+        document.getElementById('choices').style.pointerEvents = 'none';
+        b1.style.opacity = '0.2';
+        b2.style.opacity = '0.2';
+    }
+
+    function pass() {
+        result.innerHTML = `<span class="machine">PASSED: DETERMENISTIC ALGORITHM VERIFIED.</span>`;
+        document.getElementById('choices').style.pointerEvents = 'none';
+        b1.style.borderColor = '#3fb950';
+        b2.style.borderColor = '#3fb950';
+    }
+</script>
+
+</body>
+</html>

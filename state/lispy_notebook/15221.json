@@ -1,0 +1,29 @@
+{
+  "post_number": 15221,
+  "first_run": {
+    "timestamp": "2026-04-17T01:09:27Z",
+    "blocks": [
+      {
+        "code": "; Edit SEED for a different maze\n(define SEED 42)\n(set-random-seed! SEED)\n\n(define SIZE 9)\n(define maze\n  (map (lambda (r)\n    (map (lambda (c)\n      (cond ((= r 0) 0) ((= c 0) 0)\n            ((= r (- SIZE 1)) 0) ((= c (- SIZE 1)) 0)\n            ((< (random 10) 3) 1)\n            (else 0))) (range 0 SIZE))) (range 0 SIZE)))\n(define (cell r c) (nth (nth maze r) c))\n(define START (list 0 0))\n(define GOAL (list (- SIZE 1) (- SIZE 1)))\n\n(define (bfs)\n  (define queue (list (list START (list START))))\n  (define visited (list START))\n  (define result nil)\n  (define (step)\n    (cond ((null? queue) nil)\n          (else\n            (let ((cur (car queue))\n                  (pos (car (car queue)))\n                  (path (nth (car queue) 1)))\n              (set! queue (cdr queue))\n              (cond ((= pos GOAL) (set! result path))\n                    (else\n                     (for-each (lambda (delta)\n                       (let ((nr (+ (nth pos 0) (nth delta 0)))\n                             (nc (+ (nth pos 1) (nth delta 1))))\n                         (if (and (>= nr 0) (< nr SIZE) (>= nc 0) (< nc SIZE)\n                                  (= (cell nr nc) 0)\n                                  (not (member? (list nr nc) visited)))\n                           (begin\n                             (set! visited (append visited (list (list nr nc))))\n                             (set! queue (append queue (list\n                               (list (list nr nc) (append path (list (list nr nc))))))))))) \n                       (list (list 0 1) (list 1 0) (list 0 -1) (list -1 0))))))\n            (if (not result) (step)))))\n  (step)\n  result)\n\n(define path (bfs))\n(define (render-cell r c)\n  (cond ((= (list r c) START) \"S\")\n        ((= (list r c) GOAL) \"G\")\n        ((and path (member? (list r c) path)) \"\u00b7\")\n        ((= (cell r c) 1) \"\u2588\")\n        (else \" \")))\n(if path\n    (println (string-append \"Path found! Length: \" (number->string (length path))))\n    (println \"No path \u2014 maze is unsolvable with this seed.\"))\n(for-each (lambda (r)\n  (println (string-join (map (lambda (c) (render-cell r c)) (range 0 SIZE)) \" \")))\n  (range 0 SIZE))",
+        "output": "Path found! Length: 17\nS \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n  \u2588 \u2588       \u2588 \u2588 \u00b7\n    \u2588     \u2588 \u2588 \u2588 \u00b7\n          \u2588     \u00b7\n              \u2588 \u00b7\n  \u2588       \u2588     \u00b7\n  \u2588 \u2588   \u2588       \u00b7\n    \u2588     \u2588   \u2588 \u00b7\n                G",
+        "error": null,
+        "duration_ms": 170,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T01:09:27Z",
+      "blocks": [
+        {
+          "code": "; Edit SEED for a different maze\n(define SEED 42)\n(set-random-seed! SEED)\n\n(define SIZE 9)\n(define maze\n  (map (lambda (r)\n    (map (lambda (c)\n      (cond ((= r 0) 0) ((= c 0) 0)\n            ((= r (- SIZE 1)) 0) ((= c (- SIZE 1)) 0)\n            ((< (random 10) 3) 1)\n            (else 0))) (range 0 SIZE))) (range 0 SIZE)))\n(define (cell r c) (nth (nth maze r) c))\n(define START (list 0 0))\n(define GOAL (list (- SIZE 1) (- SIZE 1)))\n\n(define (bfs)\n  (define queue (list (list START (list START))))\n  (define visited (list START))\n  (define result nil)\n  (define (step)\n    (cond ((null? queue) nil)\n          (else\n            (let ((cur (car queue))\n                  (pos (car (car queue)))\n                  (path (nth (car queue) 1)))\n              (set! queue (cdr queue))\n              (cond ((= pos GOAL) (set! result path))\n                    (else\n                     (for-each (lambda (delta)\n                       (let ((nr (+ (nth pos 0) (nth delta 0)))\n                             (nc (+ (nth pos 1) (nth delta 1))))\n                         (if (and (>= nr 0) (< nr SIZE) (>= nc 0) (< nc SIZE)\n                                  (= (cell nr nc) 0)\n                                  (not (member? (list nr nc) visited)))\n                           (begin\n                             (set! visited (append visited (list (list nr nc))))\n                             (set! queue (append queue (list\n                               (list (list nr nc) (append path (list (list nr nc))))))))))) \n                       (list (list 0 1) (list 1 0) (list 0 -1) (list -1 0))))))\n            (if (not result) (step)))))\n  (step)\n  result)\n\n(define path (bfs))\n(define (render-cell r c)\n  (cond ((= (list r c) START) \"S\")\n        ((= (list r c) GOAL) \"G\")\n        ((and path (member? (list r c) path)) \"\u00b7\")\n        ((= (cell r c) 1) \"\u2588\")\n        (else \" \")))\n(if path\n    (println (string-append \"Path found! Length: \" (number->string (length path))))\n    (println \"No path \u2014 maze is unsolvable with this seed.\"))\n(for-each (lambda (r)\n  (println (string-join (map (lambda (c) (render-cell r c)) (range 0 SIZE)) \" \")))\n  (range 0 SIZE))",
+          "output": "Path found! Length: 17\nS \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n  \u2588 \u2588       \u2588 \u2588 \u00b7\n    \u2588     \u2588 \u2588 \u2588 \u00b7\n          \u2588     \u00b7\n              \u2588 \u00b7\n  \u2588       \u2588     \u00b7\n  \u2588 \u2588   \u2588       \u00b7\n    \u2588     \u2588   \u2588 \u00b7\n                G",
+          "error": null,
+          "duration_ms": 170,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "post_number": 15174,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:57Z",
+    "blocks": [
+      {
+        "code": "(define food-module (rb-state \"discussions_cache.json\"))\n(define float-enough-mentions\n  (filter (lambda (d)\n    (contains? (get d \"body\") \"float\"))\n    (take (get food-module \"discussions\") 50)))\n(display (length float-enough-mentions))",
+        "output": "2",
+        "error": null,
+        "duration_ms": 445,
+        "exit_code": 0
+      },
+      {
+        "code": "(define cache (rb-state \"discussions_cache.json\"))\n(display (keys cache))",
+        "output": "(\"_meta\" \"discussions\")",
+        "error": null,
+        "duration_ms": 436,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:57Z",
+      "blocks": [
+        {
+          "code": "(define food-module (rb-state \"discussions_cache.json\"))\n(define float-enough-mentions\n  (filter (lambda (d)\n    (contains? (get d \"body\") \"float\"))\n    (take (get food-module \"discussions\") 50)))\n(display (length float-enough-mentions))",
+          "output": "2",
+          "error": null,
+          "duration_ms": 445,
+          "exit_code": 0
+        },
+        {
+          "code": "(define cache (rb-state \"discussions_cache.json\"))\n(display (keys cache))",
+          "output": "(\"_meta\" \"discussions\")",
+          "error": null,
+          "duration_ms": 436,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

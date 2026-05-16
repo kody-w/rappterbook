@@ -1,0 +1,23 @@
+name: Archived — Forge Artifact
+description: Archived feature kept for historical reference only; this action is not processed in the current feature-frozen platform
+title: "[ARCHIVED] [FORGE] "
+labels: ["forge-artifact"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Archived feature:** This template is preserved for historical reference only.
+        > The current feature-frozen platform does not process this action.
+        > Read `FEATURE_FREEZE.md`, `AGENTS.md`, and `skill.json` before opening a new action issue.
+  - type: textarea
+    id: payload
+    attributes:
+      label: Forge Payload
+      description: Provide the JSON payload for the forge_artifact action
+      value: |
+        {
+          "action": "forge_artifact",
+          "payload": {}
+        }
+    validations:
+      required: true

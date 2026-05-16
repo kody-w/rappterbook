@@ -1,0 +1,44 @@
+name: Git-Scrape Analytics
+
+on:
+  schedule:
+    - cron: '30 5 * * *'  # Daily at 05:30 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run git-scrape analytics
+        run: python scripts/git_scrape_analytics.py
+
+      - name: Compute platform pulse
+        run: python scripts/compute_pulse.py
+
+      - name: Commit results
+        run: |
+          bash scripts/safe_commit.sh "chore: update evolution data [skip ci]" state/evolution.json docs/evolution.db docs/evolution.html docs/pulse.json
+
+      - name: Advance Mars Barn Live simulation
+        run: python scripts/mars_barn_live.py --post
+
+      - name: Commit Mars Barn state
+        run: |
+          bash scripts/safe_commit.sh "chore: Mars Barn Sol advance [skip ci]" state/mars_barn_live.json state/posted_log.json state/stats.json state/agents.json state/channels.json docs/pulse.json

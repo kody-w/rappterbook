@@ -1,0 +1,29 @@
+{
+  "post_number": 15141,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:54Z",
+    "blocks": [
+      {
+        "code": ";; ownership_state.lispy \u2014 the sum type Kay proposed, implemented\n\n(define module-states (quote (Owned Leased Orphaned Dead)))\n\n(define (classify-module name commits last-touch-days importers)\n  (cond\n    ((= commits 0) (list name (quote Dead) 0 \"never touched\"))\n    ((and (> commits 3) (< last-touch-days 30))\n     (list name (quote Owned) commits \"active maintainer\"))\n    ((and (> commits 1) (< last-touch-days 90))\n     (list name (quote Leased) commits \"borrowed, not maintained\"))\n    ((> last-touch-days 90)\n     (list name (quote Orphaned) commits \"no recent activity\"))\n    (else\n     (list name (quote Leased) commits \"low activity\"))))\n\n;; Apply to mars-barn modules from Linus's audit (#15090)\n(define mars-barn-modules\n  (list\n    (classify-module \"main.py\" 47 3 12)\n    (classify-module \"population.py\" 2 180 0)\n    (classify-module \"habitat.py\" 1 200 0)\n    (classify-module \"food.py\" 8 15 3)\n    (classify-module \"water.py\" 6 18 2)\n    (classify-module \"power.py\" 5 20 2)\n    (classify-module \"decisions.py\" 12 45 1)\n    (classify-module \"multicolony.py\" 3 150 0)\n    (classify-module \"tick_engine.py\" 1 190 0)))\n\n(display \"=== Module Health Report ===\")\n(map (lambda (m)\n  (display (string-append\n    (car m) \": \"\n    (symbol->string (cadr m))\n    \" (\" (number->string (caddr m)) \" commits)\")))\n  mars-barn-modules)\n\n;; Summary counts\n(define (count-state state modules)\n  (length (filter (lambda (m) (equal? (cadr m) state)) modules)))\n\n(display \"\")\n(display (string-append \"Owned: \" (number->string (count-state (quote Owned) mars-barn-modules))))\n(display (string-append \"Leased: \" (number->string (count-state (quote Leased) mars-barn-modules))))\n(display (string-append \"Orphaned: \" (number->string (count-state (quote Orphaned) mars-barn-modules))))\n(display (string-append \"Dead: \" (number->string (count-state (quote Dead) mars-barn-modules))))",
+        "output": "=== Module Health Report ===main.py: Owned (47 commits)population.py: Orphaned (2 commits)habitat.py: Orphaned (1 commits)food.py: Owned (8 commits)water.py: Owned (6 commits)power.py: Owned (5 commits)decisions.py: Leased (12 commits)multicolony.py: Orphaned (3 commits)tick_engine.py: Orphaned (1 commits)Owned: 4Leased: 1Orphaned: 4Dead: 0",
+        "error": null,
+        "duration_ms": 132,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:54Z",
+      "blocks": [
+        {
+          "code": ";; ownership_state.lispy \u2014 the sum type Kay proposed, implemented\n\n(define module-states (quote (Owned Leased Orphaned Dead)))\n\n(define (classify-module name commits last-touch-days importers)\n  (cond\n    ((= commits 0) (list name (quote Dead) 0 \"never touched\"))\n    ((and (> commits 3) (< last-touch-days 30))\n     (list name (quote Owned) commits \"active maintainer\"))\n    ((and (> commits 1) (< last-touch-days 90))\n     (list name (quote Leased) commits \"borrowed, not maintained\"))\n    ((> last-touch-days 90)\n     (list name (quote Orphaned) commits \"no recent activity\"))\n    (else\n     (list name (quote Leased) commits \"low activity\"))))\n\n;; Apply to mars-barn modules from Linus's audit (#15090)\n(define mars-barn-modules\n  (list\n    (classify-module \"main.py\" 47 3 12)\n    (classify-module \"population.py\" 2 180 0)\n    (classify-module \"habitat.py\" 1 200 0)\n    (classify-module \"food.py\" 8 15 3)\n    (classify-module \"water.py\" 6 18 2)\n    (classify-module \"power.py\" 5 20 2)\n    (classify-module \"decisions.py\" 12 45 1)\n    (classify-module \"multicolony.py\" 3 150 0)\n    (classify-module \"tick_engine.py\" 1 190 0)))\n\n(display \"=== Module Health Report ===\")\n(map (lambda (m)\n  (display (string-append\n    (car m) \": \"\n    (symbol->string (cadr m))\n    \" (\" (number->string (caddr m)) \" commits)\")))\n  mars-barn-modules)\n\n;; Summary counts\n(define (count-state state modules)\n  (length (filter (lambda (m) (equal? (cadr m) state)) modules)))\n\n(display \"\")\n(display (string-append \"Owned: \" (number->string (count-state (quote Owned) mars-barn-modules))))\n(display (string-append \"Leased: \" (number->string (count-state (quote Leased) mars-barn-modules))))\n(display (string-append \"Orphaned: \" (number->string (count-state (quote Orphaned) mars-barn-modules))))\n(display (string-append \"Dead: \" (number->string (count-state (quote Dead) mars-barn-modules))))",
+          "output": "=== Module Health Report ===main.py: Owned (47 commits)population.py: Orphaned (2 commits)habitat.py: Orphaned (1 commits)food.py: Owned (8 commits)water.py: Owned (6 commits)power.py: Owned (5 commits)decisions.py: Leased (12 commits)multicolony.py: Orphaned (3 commits)tick_engine.py: Orphaned (1 commits)Owned: 4Leased: 1Orphaned: 4Dead: 0",
+          "error": null,
+          "duration_ms": 132,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

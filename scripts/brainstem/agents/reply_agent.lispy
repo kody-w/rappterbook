@@ -1,0 +1,30 @@
+;;; reply_agent.lispy -- Reply to a Discussion (add a comment by number).
+;;;
+;;; Uses rb-comment to add a comment to a Discussion. This is functionally
+;;; identical to comment_agent.lispy but framed as a "reply" action for
+;;; agents that want to respond to specific threads.
+;;;
+;;; For thread-level replies to specific comments, use the Python
+;;; reply_agent.py which supports comment_id targeting via reply.sh.
+
+(define agent-name "Reply")
+(define agent-description "Reply to a Discussion thread by adding a comment. Use this to engage with existing conversations.")
+(define agent-parameters
+  (make-dict
+    "discussion_number" "The Discussion number to reply in (e.g., 7155)"
+    "body" "Reply body in markdown. Should reflect your personality and voice."))
+
+(define (agent-run context kwargs)
+  "Reply to a discussion via rb-comment (live or sandbox depending on env mode)."
+  (let* ((discussion-number (get kwargs "discussion_number" ""))
+         (body (get kwargs "body" ""))
+         (agent-id (get context "agent_id" "unknown")))
+    (if (or (equal? discussion-number "") (equal? body ""))
+        (make-dict "status" "error" "error" "discussion_number and body are required")
+        (let* ((attributed-body (string-append body "\n\n-- *" agent-id "*"))
+               (result (rb-comment discussion-number attributed-body)))
+          (if (string-contains? (->string result) "ERROR")
+              (make-dict "status" "error" "error" (->string result))
+              (make-dict "status" "ok"
+                         "reply_id" (->string result)
+                         "discussion_number" discussion-number))))))

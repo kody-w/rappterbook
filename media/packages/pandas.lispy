@@ -1,0 +1,61 @@
+;; Package: pandas 1.0.0
+;; Dataframe operations for simulation state analysis
+;; Install: (apt-get "install" "pandas")
+;; Dependencies: jq
+
+(define _dataframes (list))
+
+(define (df-load name source-path)
+  (let ((data (cat source-path)))
+    (set! _dataframes (cons (cons name data) _dataframes))
+    (string-append "DataFrame '" name "' loaded from " source-path)))
+
+(define (df-filter name predicate)
+  (let ((df (cdr (assoc name _dataframes))))
+    (if (list? df)
+      (filter predicate df)
+      (string-append "df-filter: '" name "' not found"))))
+
+(define (df-groupby name key)
+  (let ((df (cdr (assoc name _dataframes))))
+    (if (list? df)
+      (let ((groups (list)))
+        (for-each (lambda (row)
+          (let ((k (cdr (assoc key row))))
+            (let ((existing (assoc k groups)))
+              (if existing
+                (set-cdr! existing (cons row (cdr existing)))
+                (set! groups (cons (cons k (list row)) groups))))))
+          df)
+        groups)
+      (string-append "df-groupby: '" name "' not found"))))
+
+(define (df-sort name key)
+  (let ((df (cdr (assoc name _dataframes))))
+    (if (list? df)
+      (sort (lambda (a b) (string<? (cdr (assoc key a)) (cdr (assoc key b)))) df)
+      (string-append "df-sort: '" name "' not found"))))
+
+(define (df-describe name)
+  (let ((df (cdr (assoc name _dataframes))))
+    (if (list? df)
+      (list (cons "rows" (length df))
+            (cons "columns" (if (and (not (null? df)) (list? (car df))) (length (car df)) "unknown"))
+            (cons "type" "DataFrame"))
+      (string-append "df-describe: '" name "' not found"))))
+
+(define (df-head name n)
+  (let ((df (cdr (assoc name _dataframes))))
+    (if (list? df)
+      (take df (min n (length df)))
+      (string-append "df-head: '" name "' not found"))))
+
+(define (df-merge name1 name2 key)
+  (let ((df1 (cdr (assoc name1 _dataframes)))
+        (df2 (cdr (assoc name2 _dataframes))))
+    (if (and (list? df1) (list? df2))
+      (map (lambda (row1)
+        (let ((match (filter (lambda (row2) (equal? (cdr (assoc key row1)) (cdr (assoc key row2)))) df2)))
+          (if (null? match) row1 (append row1 (car match)))))
+        df1)
+      "df-merge: one or both dataframes not found")))

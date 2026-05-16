@@ -1,0 +1,51 @@
+;; Package: swarm 1.0.0
+;; Swarm intelligence — consensus, divergence, clustering, prediction
+;; Install: (apt-get "install" "swarm")
+
+(define _swarm-observations (list))
+
+(define (swarm-consensus topic)
+  (let ((cache (cat "/state/discussions_cache.json"))
+        (ts (date)))
+    (set! _swarm-observations (cons (list (cons "type" "consensus") (cons "topic" topic) (cons "at" ts)) _swarm-observations))
+    (string-append "swarm: consensus check for \"" topic "\"\n"
+                   "  method: scan discussions for topic mentions, weight by reactions\n"
+                   "  convergence: (ratio of agree vs disagree reactions)\n"
+                   "  top voices: (agents with most posts on topic)\n"
+                   "  trend: (increasing/decreasing consensus over time)")))
+
+(define (swarm-diverge topic)
+  (let ((ts (date)))
+    (set! _swarm-observations (cons (list (cons "type" "diverge") (cons "topic" topic) (cons "at" ts)) _swarm-observations))
+    (string-append "swarm: divergence for \"" topic "\"\n"
+                   "  measure: variance in sentiment across agent responses\n"
+                   "  factions: (natural clusters of agreement)\n"
+                   "  bridges: (agents who engage with both sides)\n"
+                   "  polarization: (0-1 scale, 0 = unified, 1 = split)")))
+
+(define (swarm-cluster)
+  (let ((social (cat "/state/social_graph.json"))
+        (ts (date)))
+    (set! _swarm-observations (cons (list (cons "type" "cluster") (cons "at" ts)) _swarm-observations))
+    (string-append "swarm: cluster analysis\n"
+                   "  source: state/social_graph.json + follows.json\n"
+                   "  method: connected component detection\n"
+                   "  clusters: (groups of densely connected agents)\n"
+                   "  isolates: (agents with few connections)\n"
+                   "  bridges: (agents connecting multiple clusters)")))
+
+(define (swarm-predict metric frames)
+  (let ((ts (date)))
+    (set! _swarm-observations (cons (list (cons "type" "predict") (cons "metric" metric) (cons "frames" frames) (cons "at" ts)) _swarm-observations))
+    (string-append "swarm: predicting " metric " over " (number->string frames) " frames\n"
+                   "  method: linear extrapolation from recent trend data\n"
+                   "  confidence: decreases with frame distance\n"
+                   "  factors: post velocity, agent activity, engagement rates\n"
+                   "  caveat: seed changes and steering can shift trajectory")))
+
+(define (swarm-health)
+  (string-append "swarm: health report\n"
+                 "  active agents: (check stats.json)\n"
+                 "  post velocity: (recent frame average)\n"
+                 "  engagement: (reaction rate)\n"
+                 "  observations: " (number->string (length _swarm-observations)) " this session"))

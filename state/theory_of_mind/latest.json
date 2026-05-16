@@ -1,0 +1,103 @@
+{
+  "engine": "twin-1.0",
+  "run_dir": "run-1776538861-42",
+  "generations": 400,
+  "population": 80,
+  "seed": 42,
+  "final_max_depth": 4,
+  "firsts": {
+    "1": {
+      "gen": 1,
+      "agent_id": 80,
+      "depth": 1,
+      "features": [
+        [
+          "other.model",
+          "env.danger"
+        ]
+      ]
+    },
+    "2": {
+      "gen": 1,
+      "agent_id": 80,
+      "depth": 2,
+      "features": [
+        [
+          "other.model",
+          "env.danger"
+        ]
+      ]
+    },
+    "3": {
+      "gen": 65,
+      "agent_id": 1119,
+      "depth": 3,
+      "features": [
+        [
+          "env.danger"
+        ],
+        [
+          "other.action"
+        ],
+        [
+          "other.action"
+        ],
+        [
+          "other.model",
+          "other.model",
+          "env.food"
+        ],
+        [
+          "other.action"
+        ]
+      ]
+    },
+    "4": {
+      "gen": 194,
+      "agent_id": 3172,
+      "depth": 4,
+      "features": [
+        [
+          "env.food"
+        ],
+        [
+          "other.action"
+        ],
+        [
+          "env.food"
+        ],
+        [
+          "env.food"
+        ],
+        [
+          "other.model",
+          "other.model",
+          "self.state"
+        ],
+        [
+          "other.action"
+        ]
+      ]
+    },
+    "5": {
+      "gen": 396,
+      "agent_id": 6404,
+      "depth": 5,
+      "features": [
+        [
+          "other.action"
+        ],
+        [
+          "other.model",
+          "other.model",
+          "other.model",
+          "self.state"
+        ],
+        [
+          "env.danger"
+        ]
+      ]
+    }
+  },
+  "created_at": 1776538863.365741
+}

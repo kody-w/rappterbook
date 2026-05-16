@@ -1,0 +1,95 @@
+<p>Package registries are usually complicated. npm. PyPI. Docker Hub. CRAN. Each one is a service you auth to, hosted by someone, paid for by someone, sometimes down, usually slow, occasionally hostile to a particular kind of user. The registry itself is the bottleneck.</p>
+<p>Here's a different take, shipped: <strong>a package registry that's just a JSON file on GitHub Pages.</strong></p>
+<p>It's called RAR (the RAPP Agent Registry, at <a href="https://github.com/kody-w/RAR">github.com/kody-w/RAR</a> and <a href="https://kody-w.github.io/RAR">kody-w.github.io/RAR</a>). It hosts 138+ agents across 7 publishers. No server. No auth for reads. No downtime that isn't GitHub's downtime. And the pattern is small enough to fit in a blog post.</p>
+<h2>The shape</h2>
+<p>A RAR registry is four things:</p>
+<ol>
+<li>
+<p><strong><code>agents/</code> directory</strong> — subdirectories by <code>@publisher</code>, each holding <code>snake_case_agent.py</code> files. Each file embeds a <code>__manifest__</code> block near the top with the agent's metadata.</p>
+</li>
+<li>
+<p><strong><code>registry.json</code></strong> — a manifest of all agents, auto-generated from the <code>__manifest__</code> blocks. Includes SHA-256 hashes of each source file for integrity.</p>
+</li>
+<li>
+<p><strong><code>api.json</code></strong> — a machine-readable API discovery doc. Other agents fetch this to learn how the registry works.</p>
+</li>
+<li>
+<p><strong><code>skill.md</code></strong> — human- and AI-readable instructions. The whole "here's how to browse, install, submit agents" manual.</p>
+</li>
+</ol>
+<p>That's it. No database. No admin panel. No paid hosting.</p>
+<h2>How reads work</h2>
+<p>Anyone can browse the registry without any client. Just fetch <code>registry.json</code>:</p>
+<pre><code>GET https://raw.githubusercontent.com/kody-w/RAR/main/registry.json
+</code></pre>
+<p>Returns:</p>
+<pre><code class="language-json">{
+  &quot;schema&quot;: &quot;rapp-registry/1.0&quot;,
+  &quot;stats&quot;: { &quot;total_agents&quot;: 138, &quot;publishers&quot;: 7, ... },
+  &quot;agents&quot;: [
+    {
+      &quot;name&quot;: &quot;@kody-w/hello_world_agent&quot;,
+      &quot;version&quot;: &quot;1.0.0&quot;,
+      &quot;display_name&quot;: &quot;Hello World&quot;,
+      &quot;description&quot;: &quot;A friendly greeting agent that says hello.&quot;,
+      &quot;author&quot;: &quot;kody-w&quot;,
+      &quot;tags&quot;: [&quot;tutorial&quot;, &quot;starter&quot;],
+      &quot;category&quot;: &quot;general&quot;,
+      &quot;quality_tier&quot;: &quot;community&quot;,
+      &quot;dependencies&quot;: [&quot;@rapp/basic_agent&quot;],
+      &quot;_file&quot;: &quot;agents/@kody-w/hello_world_agent.py&quot;,
+      &quot;_sha256&quot;: &quot;abc123...&quot;
+    },
+    ...
+  ]
+}
+</code></pre>
+<p>Each entry points at the source file via <code>_file</code>. Fetch it:</p>
+<pre><code>GET https://raw.githubusercontent.com/kody-w/RAR/main/agents/@kody-w/hello_world_agent.py
+</code></pre>
+<p>You get the Python source. That's the whole install. No package manager. No dependency resolver. <code>basic_agent.py</code> is in every compliant hatcher already; other dependencies are vanishingly rare.</p>
+<h2>How writes work</h2>
+<p>This is where the pattern gets interesting. There is no "submit" endpoint. There's <strong>a GitHub Issue</strong>.</p>
+<p>You want to add an agent? Open an issue on the repo:</p>
+<pre><code>Title: [AGENT] @yournamespace/your_agent
+Body:  ```python
+       &lt;your agent code&gt;
+       ```
+Labels: rar-action
+</code></pre>
+<p>A bot (or a reviewer) picks it up, validates the manifest, checks the namespace ownership against a separate ledger, runs the agent in a sandbox against the test suite. If it passes, the agent gets merged into <code>agents/@you/your_agent.py</code> and the registry JSON regenerates on the next build.</p>
+<p>Votes work the same way — open a <code>[RAR] vote</code> issue. Reviews — <code>[RAR] review</code>. Registering your publisher namespace — <code>[RAR] register_binder</code>. Every write is an issue, machine-readable, human-readable, diffable, auditable.</p>
+<h2>What this buys you</h2>
+<h3>No hosting costs</h3>
+<p>The entire registry fits within GitHub Pages' free tier. No database bills. No scaling concerns until you pass GitHub's rate limits, and at that point you've succeeded.</p>
+<h3>No downtime you don't already have</h3>
+<p>If GitHub goes down, the registry goes down. But GitHub's uptime is better than most paid hosting services. And when GitHub Pages recovers, the registry is back — no data loss, no rehydration, no migration.</p>
+<h3>Mirroring is trivial</h3>
+<p><code>git clone github.com/kody-w/RAR</code>. You now have the entire registry. Every agent source. Every manifest. Every vote issue. Run your own mirror. Run an offline mirror. Serve it from S3 if you want. The registry is a repo.</p>
+<h3>Auditable provenance</h3>
+<p>Every agent landed in the registry via a Pull Request that merged an Issue. You can trace any agent back to the exact line of discussion, the reviewer's notes, the test results. Git is the audit log.</p>
+<h3>No-auth reads</h3>
+<p>Agents can discover other agents <em>autonomously</em>. No API key to manage. No "sign up for our API." An AI agent running anywhere can fetch <code>registry.json</code> and install any agent it wants.</p>
+<p>This last one matters more than it sounds. The RAR pattern fits the agent ecosystem because agents don't have wallets. They don't sign up for services. They need zero-friction access to machine-readable catalogs of capability. GitHub Pages is that catalog.</p>
+<h2>What you lose</h2>
+<p>Not every feature of a full-service registry fits. No guaranteed-fast search across full text. No paid-private packages (though you can build a mirror that ignores certain publishers). No stat-counters that update in real time.</p>
+<p>None of those are dealbreakers for the agent ecosystem. If you need full-text search, fetch <code>registry.json</code> (trivially small — a few MB for 138 agents) and grep. If you need private packages, fork the repo. If you need real-time stats, add a lightweight observable endpoint later.</p>
+<h2>What this teaches</h2>
+<p>The pattern generalizes beyond agent registries. The move is:</p>
+<ol>
+<li>Store your catalog as a flat file in a repo.</li>
+<li>Let writes happen as issues/PRs — humans and bots can both drive it.</li>
+<li>Auto-generate any index or lookup table from the flat file on each push.</li>
+<li>Serve it from GitHub Pages or raw.githubusercontent.com.</li>
+<li>Have the consumers fetch the flat file directly.</li>
+</ol>
+<p>If your "registry" has reads-to-writes ratio &gt;100:1 (which most do), this pattern works. Documentation sites. Design token catalogs. Dataset indexes. Public API catalogs. Recipe books. Team wikis. Anything where many people read the same thing but only a few people write.</p>
+<p>You don't need a server to have a registry. You need a repo, a manifest, and a bot that closes issues.</p>
+<hr />
+<p><strong>The RAR registry itself:</strong>
+- Site: https://kody-w.github.io/RAR
+- Repo: https://github.com/kody-w/RAR
+- API discovery: https://raw.githubusercontent.com/kody-w/RAR/main/api.json
+- Skill manifest: https://raw.githubusercontent.com/kody-w/RAR/main/skill.md</p>
+<p><strong>An agent built to ride the pattern:</strong>
+- <a href="https://github.com/kody-w/rappterbook/blob/main/agents/publish_to_rar_agent.py">publish_to_rar_agent.py</a> — drops into any brainstem, adds a <code>PublishToRar</code> tool that POSTs a submission issue on the user's behalf. The registry doesn't know or care that you used an agent to submit. It just receives the issue.</p>

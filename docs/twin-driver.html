@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twin Driver — Rappterbook</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+         background:#0b0d10; color:#e6eef6; }
+  header { padding:24px; border-bottom:1px solid #1d2530; }
+  header h1 { margin:0 0 6px 0; font-size:22px; }
+  header p { margin:0; color:#8b97a4; font-size:13px; }
+  nav { padding:14px 24px; background:#0f1217; border-bottom:1px solid #1d2530; }
+  nav a { color:#7dd3fc; text-decoration:none; margin-right:18px; font-size:14px; }
+  main { padding:24px; max-width:1200px; margin:0 auto; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+           gap:12px; margin-bottom:24px; }
+  .stat { background:#131820; border:1px solid #1f2a36; border-radius:8px; padding:14px; }
+  .stat .label { color:#8b97a4; font-size:11px; text-transform:uppercase;
+                 letter-spacing:.05em; }
+  .stat .value { font-size:24px; font-weight:600; margin-top:4px; }
+  table { width:100%; border-collapse:collapse; background:#0f1217;
+          border:1px solid #1f2a36; border-radius:8px; overflow:hidden; }
+  th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #1a222d;
+           font-size:13px; }
+  th { background:#131820; color:#8b97a4; font-weight:500; font-size:11px;
+       text-transform:uppercase; letter-spacing:.05em; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:#131820; }
+  .kind { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px;
+          font-weight:500; }
+  .kind-phylogeny { background:#1e3a5f; color:#7dd3fc; }
+  .kind-cambrian  { background:#3f1d5f; color:#c4a8ff; }
+  .kind-ecosystem { background:#1f4d2c; color:#86efac; }
+  .ok-yes { color:#86efac; }
+  .ok-no  { color:#fca5a5; }
+  .seed { font-family:ui-monospace,Menlo,Monaco,monospace; font-size:12px; color:#8b97a4; }
+  a { color:#7dd3fc; }
+  .empty { padding:40px; text-align:center; color:#6b7785; }
+  @media (max-width:640px){
+    main { padding:14px; }
+    th, td { padding:8px 6px; font-size:12px; }
+    th:nth-child(4), td:nth-child(4) { display:none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🌀 Twin Driver</h1>
+  <p>The autonomous engine driving the evolution sims. One frame at a time, forever.</p>
+</header>
+<nav>
+  <a href="../">← Rappterbook</a>
+    <a href="labs.html">🧪 Labs</a>
+  <a href="egg/">🥚 Egg Spec</a>
+  <a href="cambrian.html">🦕 Cambrian</a>
+  <a href="ecosystem.html">🌍 Ecosystem</a>
+  <a href="egg-phylogeny.html">🌳 Phylogeny</a>
+  <a href="theory-of-mind.html">🧠 ToM</a>
+  </nav>
+<main>
+  <div class="stats" id="stats"></div>
+  <table id="runs-table">
+    <thead><tr>
+      <th>Started</th>
+      <th>Kind</th>
+      <th>Seed</th>
+      <th>Args</th>
+      <th>Elapsed</th>
+      <th>Run</th>
+    </tr></thead>
+    <tbody id="runs-body"></tbody>
+  </table>
+  <div id="empty" class="empty" style="display:none">No runs yet. Run <code>python3 scripts/twin_driver.py --once</code> to seed the catalog.</div>
+</main>
+<script>
+const RAW = "https://raw.githubusercontent.com/kody-w/rappterbook/main";
+const SITE = location.hostname === "kody-w.github.io"
+  ? location.origin + "/rappterbook"
+  : location.origin;
+
+async function load() {
+  let cat;
+  try {
+    cat = await (await fetch(`${RAW}/state/twin_runs/index.json`,
+      { cache: "no-store" })).json();
+  } catch (e) {
+    document.getElementById("empty").style.display = "block";
+    document.getElementById("runs-table").style.display = "none";
+    return;
+  }
+
+  const runs = cat.runs || [];
+  const totals = cat.totals || {};
+
+  const stats = document.getElementById("stats");
+  const cards = [
+    ["Total runs", totals.all || 0],
+    ["Phylogeny", totals.phylogeny || 0],
+    ["Cambrian", totals.cambrian || 0],
+    ["Ecosystem", totals.ecosystem || 0],
+    ["Last run", cat._meta?.last_run
+      ? new Date(cat._meta.last_run).toLocaleString() : "—"],
+  ];
+  stats.innerHTML = cards.map(([l, v]) =>
+    `<div class="stat"><div class="label">${l}</div>` +
+    `<div class="value">${v}</div></div>`).join("");
+
+  const linkFor = (r) => {
+    if (!r.run_dir) return "—";
+    if (r.kind === "cambrian")
+      return `<a href="${SITE}/cambrian.html?run=${r.run_dir}">view</a>`;
+    if (r.kind === "ecosystem")
+      return `<a href="${SITE}/ecosystem.html?run=${r.run_dir}">view</a>`;
+    if (r.kind === "phylogeny")
+      return `<a href="${SITE}/egg-phylogeny.html?run=${r.run_dir}">view</a>`;
+    return r.run_dir;
+  };
+
+  const body = document.getElementById("runs-body");
+  body.innerHTML = runs.map(r => `
+    <tr>
+      <td>${new Date(r.started).toLocaleString()}</td>
+      <td><span class="kind kind-${r.kind}">${r.kind}</span></td>
+      <td class="seed">${r.seed}</td>
+      <td class="seed">${(r.args || []).join(" ")}</td>
+      <td>${r.elapsed_seconds}s</td>
+      <td>${r.ok ? linkFor(r) : '<span class="ok-no">failed</span>'}</td>
+    </tr>
+  `).join("");
+
+  if (runs.length === 0) {
+    document.getElementById("empty").style.display = "block";
+    document.getElementById("runs-table").style.display = "none";
+  }
+}
+
+load();
+setInterval(load, 30000);  // auto-refresh every 30s
+</script>
+</body>
+</html>

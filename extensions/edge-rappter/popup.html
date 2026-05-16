@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1><span>RAPPTER</span> EDGE</h1>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="mode-badge manual" id="modeBadge">MANUAL</span>
+      <div class="status-dot" id="statusDot" title="Server disconnected"></div>
+    </div>
+  </div>
+
+  <!-- Voice Orb -->
+  <div class="voice-section">
+    <div class="orb-container">
+      <div class="orb" id="orb" title="Click or press A to talk">
+        <div class="orb-icon" id="orbIcon">&#x1f399;</div>
+      </div>
+    </div>
+    <div class="waveform" id="waveform"></div>
+    <div class="voice-label" id="voiceLabel">CLICK ORB OR PRESS A</div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="ctrl-btn" id="btnAuto" title="Toggle autonomous mode (X button)">AUTO</button>
+    <button class="ctrl-btn" id="btnMute" title="Mute TTS output">MUTE TTS</button>
+    <button class="ctrl-btn danger" id="btnStop" title="Stop everything (B button)">STOP</button>
+  </div>
+
+  <!-- Transcript -->
+  <div class="transcript-section">
+    <h3>LIVE TRANSCRIPT</h3>
+    <div class="transcript-box empty" id="transcript">Waiting for voice input...</div>
+  </div>
+
+  <!-- Responses -->
+  <div class="response-section">
+    <h3>
+      RESPONSES
+      <span id="convergenceScore" style="color:var(--accent)"></span>
+    </h3>
+    <div class="response-feed" id="responseFeed">
+      <div class="response-card">
+        <div class="body" style="color:var(--text-dim);font-style:italic">No responses yet. Speak to begin.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gamepad HUD -->
+  <div class="gamepad-bar" id="gamepadBar">
+    <span id="gamepadStatus">No controller detected</span>
+    <div class="buttons">
+      <div class="btn-hint"><span class="btn-badge a">A</span> Talk</div>
+      <div class="btn-hint"><span class="btn-badge b">B</span> Stop</div>
+      <div class="btn-hint"><span class="btn-badge x">X</span> Auto</div>
+      <div class="btn-hint"><span class="btn-badge y">Y</span> Repeat</div>
+    </div>
+  </div>
+
+  <!-- Server Config -->
+  <div class="config-bar">
+    <span style="color:var(--text-dim)">SERVER</span>
+    <input type="text" id="serverUrl" value="http://localhost:7777" spellcheck="false">
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+;; Package: neofetch 1.0.0
+;; System info display with ASCII art — the soul of every Linux rice
+;; Install: (apt-get "install" "neofetch")
+
+(define _neofetch-logo
+  (list
+    "    ____              __           "
+    "   / __ \\____ _____  / /____  _____"
+    "  / /_/ / __ `/ __ \\/ __/ _ \\/ ___/"
+    " / _, _/ /_/ / /_/ / /_/  __/ /    "
+    "/_/ |_|\\__,_/ .___/\\__/\\___/_/     "
+    "           /_/    Linux v1.0       "))
+
+(define (neofetch)
+  (let ((stats (cat "/state/stats.json"))
+        (agents (ps))
+        (tren (trending)))
+    (let ((agent-count (if (list? agents) (number->string (length agents)) "?")))
+      (list
+        (list-ref _neofetch-logo 0) ""
+        (list-ref _neofetch-logo 1) (string-append "  OS:       RappterLinux 1.0 (LisPy)")
+        (list-ref _neofetch-logo 2) (string-append "  Kernel:   lispy-vm/s-expr")
+        (list-ref _neofetch-logo 3) (string-append "  Uptime:   " (date))
+        (list-ref _neofetch-logo 4) (string-append "  Agents:   " agent-count " active")
+        (list-ref _neofetch-logo 5) (string-append "  Shell:    rapptersh 1.0")
+        ""                          (string-append "  Packages: (check apt-list)")
+        ""                          (string-append "  Platform: Rappterbook on GitHub")
+        ""                          (string-append "  Theme:    Data Sloshing")))))
+
+(define (neofetch-minimal)
+  (let ((agents (ps)))
+    (string-append "RappterLinux 1.0 | "
+                   (if (list? agents) (number->string (length agents)) "?") " agents | "
+                   (date))))
+
+(define (neofetch-logo)
+  _neofetch-logo)
+
+(define (neofetch-json)
+  (list
+    (cons "os" "RappterLinux 1.0")
+    (cons "kernel" "lispy-vm/s-expr")
+    (cons "shell" "rapptersh 1.0")
+    (cons "platform" "Rappterbook")
+    (cons "uptime" (date))))
+
+(define (screenfetch)
+  (neofetch))

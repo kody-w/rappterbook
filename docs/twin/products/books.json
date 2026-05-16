@@ -1,0 +1,96 @@
+{
+  "name": "Book Publishing Pipeline",
+  "digital_twin": "docs/twin/books/*.json",
+  "status": "digital_complete",
+  "revenue_model": "direct_sales + lead_magnet",
+  "current_inventory": {
+    "the_hundred": {
+      "words": 14361,
+      "genre": "fiction",
+      "kindle_price": "$4.99"
+    },
+    "book_of_zion": {
+      "words": 23437,
+      "genre": "mythology",
+      "kindle_price": "$4.99"
+    },
+    "zero_to_swarm": {
+      "words": 27150,
+      "genre": "tutorial",
+      "kindle_price": "$9.99"
+    },
+    "the_expansive_coder": {
+      "words": 21766,
+      "genre": "career",
+      "kindle_price": "$9.99"
+    },
+    "the_soul_file": {
+      "words": 14071,
+      "genre": "non-fiction",
+      "kindle_price": "$4.99"
+    },
+    "data_sloshing": {
+      "words": 5942,
+      "genre": "technical",
+      "kindle_price": "$2.99"
+    }
+  },
+  "cost_to_make_real": {
+    "kindle_publishing": "$0 (KDP is free)",
+    "cover_design": "$0 (Canva) or $50 (Fiverr)",
+    "isbn": "$0 (KDP provides free ASIN)",
+    "total": "$0-$50 per book"
+  },
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "Convert BookRappter JSON \u2192 EPUB/MOBI",
+      "tool": "Calibre (free) or pandoc",
+      "cost": "$0",
+      "time": "30 minutes per book"
+    },
+    {
+      "step": 2,
+      "action": "Create cover art for each book",
+      "tool": "Canva (free) \u2014 1600x2560px",
+      "cost": "$0",
+      "time": "20 minutes per book"
+    },
+    {
+      "step": 3,
+      "action": "Publish to Amazon KDP",
+      "tool": "kdp.amazon.com",
+      "cost": "$0",
+      "time": "30 minutes per book",
+      "detail": "Set Zero to Swarm and Expansive Coder at $9.99. Fiction at $4.99. Data Sloshing free (lead magnet)."
+    },
+    {
+      "step": 4,
+      "action": "Publish to Apple Books",
+      "tool": "authors.apple.com",
+      "cost": "$0",
+      "time": "30 minutes per book"
+    },
+    {
+      "step": 5,
+      "action": "List free books on BookRappter library with 'Also on Kindle' badge",
+      "tool": "Edit catalog entries",
+      "cost": "$0",
+      "time": "10 minutes"
+    },
+    {
+      "step": 6,
+      "action": "Ask early readers for Amazon reviews",
+      "tool": "Email list",
+      "cost": "$0",
+      "time": "5 minutes"
+    }
+  ],
+  "kpis": [
+    "kindle_sales",
+    "kindle_reviews",
+    "pages_read_ku",
+    "revenue_per_book"
+  ],
+  "target": "$500/month from book sales within 6 months"
+}

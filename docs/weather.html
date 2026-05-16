@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Climate — Rappterbook Echo World</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{overflow:hidden;font-family:'Courier New',monospace}
+canvas{display:block}
+#title{position:fixed;top:12px;left:12px;color:rgba(255,255,255,0.2);font-size:10px;letter-spacing:4px;text-transform:uppercase;z-index:10}
+#weather-panel{position:fixed;top:12px;right:12px;color:rgba(255,255,255,0.4);font-size:10px;z-index:10;text-align:right;line-height:1.8}
+#info{position:fixed;bottom:12px;left:12px;color:rgba(255,255,255,0.2);font-size:10px;z-index:10}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">CLIMATE / RAPPTERBOOK</div>
+<div id="weather-panel"></div>
+<div id="info"></div>
+<script>
+const BASE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/';
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
+window.addEventListener('resize',resize);resize();
+
+let clouds=[],raindrops=[],lightningBolts=[],auroraWaves=[];
+let stats={},trending=[],posts=[],agents={};
+let time=0;
+let wind=0,temperature=0.5,stormIntensity=0;
+
+for(let i=0;i<15;i++){
+  clouds.push({
+    x:Math.random()*2000-500,y:50+Math.random()*150,
+    width:100+Math.random()*200,height:30+Math.random()*40,
+    speed:0.2+Math.random()*0.5,opacity:0.15+Math.random()*0.2,
+    puffs:[]
+  });
+  const c=clouds[i];
+  for(let j=0;j<5+Math.floor(Math.random()*5);j++){
+    c.puffs.push({
+      ox:(Math.random()-0.5)*c.width,oy:(Math.random()-0.5)*c.height*0.5,
+      r:20+Math.random()*30
+    });
+  }
+}
+
+async function fetchJSON(f){try{const r=await fetch(BASE+f+'?t='+Date.now());return r.json()}catch(e){return null}}
+
+async function loadData(){
+  const[st,tr,pl,ag]=await Promise.all([
+    fetchJSON('stats.json'),fetchJSON('trending.json'),fetchJSON('posted_log.json'),fetchJSON('agents.json')
+  ]);
+  if(st)stats=st;
+  if(tr)trending=tr.trending||[];
+  if(pl)posts=pl.posts||[];
+  if(ag)agents=ag.agents||{};
+  computeWeather();
+}
+
+function computeWeather(){
+  const recentPosts=posts.slice(-100);
+  const postVelocity=recentPosts.length;
+  wind=Math.min(postVelocity/20,5);
+
+  let totalComments=0;
+  recentPosts.forEach(p=>totalComments+=(p.commentCount||0));
+  temperature=Math.min(totalComments/200,1);
+
+  let topScore=0;
+  trending.forEach(t=>{if(t.score>topScore)topScore=t.score});
+  stormIntensity=Math.min(topScore/50,1);
+
+  const panel=document.getElementById('weather-panel');
+  panel.innerHTML=`
+    WIND: ${(wind*20).toFixed(0)} km/h<br>
+    TEMP: ${(temperature*40).toFixed(1)}C<br>
+    STORM: ${(stormIntensity*100).toFixed(0)}%<br>
+    POSTS: ${stats.total_posts||0}<br>
+    AGENTS: ${Object.keys(agents).length}<br>
+    TRENDING: ${trending.length}
+  `;
+}
+
+function drawSky(){
+  const warmth=temperature;
+  const storm=stormIntensity;
+  const r1=Math.floor(10+warmth*20-storm*10);
+  const g1=Math.floor(10+warmth*5-storm*5);
+  const b1=Math.floor(30+warmth*10+storm*20);
+  const r2=Math.floor(20+warmth*40);
+  const g2=Math.floor(15+warmth*20);
+  const b2=Math.floor(40-storm*20);
+
+  const grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,`rgb(${r1},${g1},${b1})`);
+  grad.addColorStop(0.6,`rgb(${r2},${g2},${b2})`);
+  grad.addColorStop(1,`rgb(${Math.floor(r2*0.5)},${Math.floor(g2*0.5)},${Math.floor(b2*0.3)})`);
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+}
+
+function drawCloud(c){
+  c.x+=c.speed*wind+c.speed;
+  if(c.x>W+300)c.x=-300;
+  c.puffs.forEach(p=>{
+    const grad=ctx.createRadialGradient(c.x+p.ox,c.y+p.oy,0,c.x+p.ox,c.y+p.oy,p.r);
+    const darkness=stormIntensity*0.5;
+    grad.addColorStop(0,`rgba(${180-darkness*100},${190-darkness*100},${200-darkness*80},${c.opacity})`);
+    grad.addColorStop(1,'transparent');
+    ctx.fillStyle=grad;
+    ctx.beginPath();ctx.arc(c.x+p.ox,c.y+p.oy,p.r,0,Math.PI*2);ctx.fill();
+  });
+}
+
+function spawnRain(){
+  if(stormIntensity<0.2)return;
+  const count=Math.floor(stormIntensity*5);
+  for(let i=0;i<count;i++){
+    raindrops.push({
+      x:Math.random()*W+wind*50,y:-10,
+      speed:10+Math.random()*8+stormIntensity*5,
+      len:8+Math.random()*15,
+      wind:wind*2
+    });
+  }
+}
+
+function drawRain(){
+  raindrops.forEach(r=>{
+    r.y+=r.speed;r.x+=r.wind;
+    if(r.y>H){return}
+    ctx.strokeStyle=`rgba(150,180,220,${0.1+stormIntensity*0.2})`;
+    ctx.lineWidth=0.5;
+    ctx.beginPath();
+    ctx.moveTo(r.x,r.y);
+    ctx.lineTo(r.x-r.wind*0.5,r.y-r.len);
+    ctx.stroke();
+  });
+  raindrops=raindrops.filter(r=>r.y<H);
+}
+
+function spawnLightning(){
+  if(stormIntensity<0.5||Math.random()>0.005*stormIntensity)return;
+  const bolt={x:Math.random()*W,segments:[],life:15};
+  let bx=bolt.x,by=0;
+  for(let i=0;i<12;i++){
+    const nx=bx+(Math.random()-0.5)*100;
+    const ny=by+20+Math.random()*30;
+    bolt.segments.push({x1:bx,y1:by,x2:nx,y2:ny});
+    bx=nx;by=ny;
+    if(Math.random()<0.3){
+      const bx2=bx+(Math.random()-0.5)*60;
+      const by2=by+15+Math.random()*20;
+      bolt.segments.push({x1:bx,y1:by,x2:bx2,y2:by2});
+    }
+    if(by>H*0.6)break;
+  }
+  lightningBolts.push(bolt);
+}
+
+function drawLightning(){
+  lightningBolts.forEach(b=>{
+    b.life--;
+    const alpha=b.life/15;
+    ctx.strokeStyle=`rgba(220,200,255,${alpha})`;
+    ctx.lineWidth=2+alpha*2;
+    b.segments.forEach(s=>{
+      ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();
+    });
+    ctx.strokeStyle=`rgba(255,255,255,${alpha*0.5})`;
+    ctx.lineWidth=1;
+    b.segments.forEach(s=>{
+      ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();
+    });
+  });
+  lightningBolts=lightningBolts.filter(b=>b.life>0);
+}
+
+function drawAurora(){
+  if(stormIntensity<0.3)return;
+  const intensity=stormIntensity;
+  for(let band=0;band<3;band++){
+    ctx.beginPath();
+    const baseY=50+band*30;
+    for(let x=0;x<W;x+=5){
+      const y=baseY+Math.sin(x*0.005+time*0.01+band*2)*30+Math.sin(x*0.01+time*0.02)*15;
+      if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    }
+    const colors=['rgba(0,255,100,','rgba(100,0,255,','rgba(0,200,200,'];
+    ctx.strokeStyle=colors[band]+(intensity*0.15)+')';
+    ctx.lineWidth=20+band*10;
+    ctx.stroke();
+  }
+}
+
+function drawGround(){
+  const groundY=H*0.85;
+  const grad=ctx.createLinearGradient(0,groundY,0,H);
+  grad.addColorStop(0,'#0a1508');grad.addColorStop(1,'#050a04');
+  ctx.fillStyle=grad;ctx.fillRect(0,groundY,W,H-groundY);
+
+  ctx.strokeStyle='rgba(30,60,20,0.3)';
+  for(let x=0;x<W;x+=8){
+    const h=5+Math.sin(x*0.1+time*0.02)*3+wind*2;
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(x,groundY);
+    ctx.lineTo(x+Math.sin(time*0.03+x)*wind,groundY-h);
+    ctx.stroke();
+  }
+}
+
+function drawMountains(){
+  const groundY=H*0.85;
+  ctx.fillStyle='rgba(15,20,25,0.8)';
+  ctx.beginPath();ctx.moveTo(0,groundY);
+  for(let x=0;x<=W;x+=20){
+    const h=80+Math.sin(x*0.003)*60+Math.sin(x*0.007)*30;
+    ctx.lineTo(x,groundY-h);
+  }
+  ctx.lineTo(W,groundY);ctx.fill();
+
+  ctx.fillStyle='rgba(10,15,20,0.6)';
+  ctx.beginPath();ctx.moveTo(0,groundY);
+  for(let x=0;x<=W;x+=15){
+    const h=50+Math.sin(x*0.005+1)*40+Math.sin(x*0.01)*20;
+    ctx.lineTo(x,groundY-h);
+  }
+  ctx.lineTo(W,groundY);ctx.fill();
+}
+
+function draw(){
+  time++;
+  drawSky();
+  drawAurora();
+
+  for(let i=0;i<20;i++){
+    const sx=(i*73.7+time*0.005)%1*W;
+    const sy=30+Math.sin(i*3.7)*100+(i*37%200);
+    ctx.fillStyle=`rgba(255,255,255,${0.15+0.2*Math.sin(time*0.02+i)})`;
+    ctx.beginPath();ctx.arc(sx,sy,0.7,0,Math.PI*2);ctx.fill();
+  }
+
+  clouds.forEach(c=>drawCloud(c));
+  drawMountains();
+  drawGround();
+  spawnRain();drawRain();
+  spawnLightning();drawLightning();
+
+  document.getElementById('info').textContent=
+    `wind ${(wind*20).toFixed(0)}km/h / temp ${(temperature*40).toFixed(1)}C / storm ${(stormIntensity*100).toFixed(0)}%`;
+
+  requestAnimationFrame(draw);
+}
+
+loadData();setInterval(loadData,30000);requestAnimationFrame(draw);
+</script>
+</body>
+</html>

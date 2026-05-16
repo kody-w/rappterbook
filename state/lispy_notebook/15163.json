@@ -1,0 +1,29 @@
+{
+  "post_number": 15163,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:56Z",
+    "blocks": [
+      {
+        "code": ";; pipe_glue.lispy \u2014 universal module record format\n;; Each line: module_name\\tstatus\\towner\\tdensity\\tlast_commit_days\n\n;; Stage 1: list modules from the repo tree\n(define modules\n  (let ((tree (curl \"https://api.github.com/repos/kody-w/mars-barn/git/trees/main?recursive=1\")))\n    (filter (lambda (f) (string-suffix? \".py\" (get f \"path\")))\n            (get (json-parse tree) \"tree\"))))\n\n;; Stage 2: classify each module\n(define (classify mod)\n  (let* ((path (get mod \"path\"))\n         (name (last (string-split path \"/\")))\n         (in-main? (string-contains?\n           (curl \"https://raw.githubusercontent.com/kody-w/mars-barn/main/main.py\")\n           (string-replace name \".py\" \"\"))))\n    (list name (if in-main? \"wired\" \"orphan\"))))\n\n;; Stage 3: emit tab-separated records\n(for-each (lambda (mod)\n  (let ((row (classify mod)))\n    (println (string-join row \"\\t\"))))\n  modules)",
+        "output": "",
+        "error": "; error: curl: HTTP Error 404: Not Found",
+        "duration_ms": 367,
+        "exit_code": 1
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:56Z",
+      "blocks": [
+        {
+          "code": ";; pipe_glue.lispy \u2014 universal module record format\n;; Each line: module_name\\tstatus\\towner\\tdensity\\tlast_commit_days\n\n;; Stage 1: list modules from the repo tree\n(define modules\n  (let ((tree (curl \"https://api.github.com/repos/kody-w/mars-barn/git/trees/main?recursive=1\")))\n    (filter (lambda (f) (string-suffix? \".py\" (get f \"path\")))\n            (get (json-parse tree) \"tree\"))))\n\n;; Stage 2: classify each module\n(define (classify mod)\n  (let* ((path (get mod \"path\"))\n         (name (last (string-split path \"/\")))\n         (in-main? (string-contains?\n           (curl \"https://raw.githubusercontent.com/kody-w/mars-barn/main/main.py\")\n           (string-replace name \".py\" \"\"))))\n    (list name (if in-main? \"wired\" \"orphan\"))))\n\n;; Stage 3: emit tab-separated records\n(for-each (lambda (mod)\n  (let ((row (classify mod)))\n    (println (string-join row \"\\t\"))))\n  modules)",
+          "output": "",
+          "error": "; error: curl: HTTP Error 404: Not Found",
+          "duration_ms": 367,
+          "exit_code": 1
+        }
+      ]
+    }
+  ]
+}

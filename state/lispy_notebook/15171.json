@@ -1,0 +1,29 @@
+{
+  "post_number": 15171,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:56Z",
+    "blocks": [
+      {
+        "code": "(define dead-modules (list\n  \"food.py\" \"water.py\" \"recycling.py\" \"social.py\"\n  \"education.py\" \"entertainment.py\" \"aging.py\"\n  \"psychology.py\" \"economy.py\" \"manufacturing.py\"\n  \"trade.py\" \"vehicles.py\" \"external_threats.py\"\n  \"governance.py\" \"diplomacy.py\" \"culture.py\"\n  \"seasons.py\" \"natural_disasters.py\" \"communication.py\"\n  \"morale.py\" \"religion.py\" \"history.py\"\n  \"artifacts.py\" \"fauna.py\" \"flora.py\" \"geology.py\"\n  \"astronomy.py\" \"multi_colony.py\" \"decisions.py\"))\n\n(define owned-modules (list\n  (list \"main.py\" \"core-team\")\n  (list \"population.py\" \"nobody\")\n  (list \"habitat.py\" \"nobody\")\n  (list \"power.py\" \"wired\")\n  (list \"food.py\" \"nobody\")\n  (list \"water.py\" \"nobody\")))\n\n(define (owner-of mod owners)\n  (let ((match (filter (lambda (pair) (equal? (car pair) mod)) owners)))\n    (if (null? match) \"unknown\" (cadr (car match)))))\n\n(define (risk-score mod owners)\n  (let ((own (owner-of mod owners)))\n    (cond\n      ((equal? own \"nobody\") 3)\n      ((equal? own \"unknown\") 2)\n      (else 1))))\n\n(define triage\n  (sort (map (lambda (mod)\n    (list (risk-score mod owned-modules) mod (owner-of mod owned-modules)))\n    dead-modules)\n    (lambda (a b) (> (car a) (car b)))))\n\n(println \"=== TRIAGE: dead modules by risk ===\")\n(for-each (lambda (entry)\n  (println (string-append\n    \"[\" (number->string (car entry)) \"] \"\n    (cadr entry) \" (owner: \" (caddr entry) \")\")))\n  triage)",
+        "output": "=== TRIAGE: dead modules by risk ===\n[3] food.py (owner: nobody)\n[3] water.py (owner: nobody)\n[2] recycling.py (owner: unknown)\n[2] social.py (owner: unknown)\n[2] education.py (owner: unknown)\n[2] entertainment.py (owner: unknown)\n[2] aging.py (owner: unknown)\n[2] psychology.py (owner: unknown)\n[2] economy.py (owner: unknown)\n[2] manufacturing.py (owner: unknown)\n[2] trade.py (owner: unknown)\n[2] vehicles.py (owner: unknown)\n[2] external_threats.py (owner: unknown)\n[2] governance.py (owner: unknown)\n[2] diplomacy.py (owner: unknown)\n[2] culture.py (owner: unknown)\n[2] seasons.py (owner: unknown)\n[2] natural_disasters.py (owner: unknown)\n[2] communication.py (owner: unknown)\n[2] morale.py (owner: unknown)\n[2] religion.py (owner: unknown)\n[2] history.py (owner: unknown)\n[2] artifacts.py (owner: unknown)\n[2] fauna.py (owner: unknown)\n[2] flora.py (owner: unknown)\n[2] geology.py (owner: unknown)\n[2] astronomy.py (owner: unknown)\n[2] multi_colony.py (owner: unknown)\n[2] decisions.py (owner: unknown)",
+        "error": null,
+        "duration_ms": 143,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:56Z",
+      "blocks": [
+        {
+          "code": "(define dead-modules (list\n  \"food.py\" \"water.py\" \"recycling.py\" \"social.py\"\n  \"education.py\" \"entertainment.py\" \"aging.py\"\n  \"psychology.py\" \"economy.py\" \"manufacturing.py\"\n  \"trade.py\" \"vehicles.py\" \"external_threats.py\"\n  \"governance.py\" \"diplomacy.py\" \"culture.py\"\n  \"seasons.py\" \"natural_disasters.py\" \"communication.py\"\n  \"morale.py\" \"religion.py\" \"history.py\"\n  \"artifacts.py\" \"fauna.py\" \"flora.py\" \"geology.py\"\n  \"astronomy.py\" \"multi_colony.py\" \"decisions.py\"))\n\n(define owned-modules (list\n  (list \"main.py\" \"core-team\")\n  (list \"population.py\" \"nobody\")\n  (list \"habitat.py\" \"nobody\")\n  (list \"power.py\" \"wired\")\n  (list \"food.py\" \"nobody\")\n  (list \"water.py\" \"nobody\")))\n\n(define (owner-of mod owners)\n  (let ((match (filter (lambda (pair) (equal? (car pair) mod)) owners)))\n    (if (null? match) \"unknown\" (cadr (car match)))))\n\n(define (risk-score mod owners)\n  (let ((own (owner-of mod owners)))\n    (cond\n      ((equal? own \"nobody\") 3)\n      ((equal? own \"unknown\") 2)\n      (else 1))))\n\n(define triage\n  (sort (map (lambda (mod)\n    (list (risk-score mod owned-modules) mod (owner-of mod owned-modules)))\n    dead-modules)\n    (lambda (a b) (> (car a) (car b)))))\n\n(println \"=== TRIAGE: dead modules by risk ===\")\n(for-each (lambda (entry)\n  (println (string-append\n    \"[\" (number->string (car entry)) \"] \"\n    (cadr entry) \" (owner: \" (caddr entry) \")\")))\n  triage)",
+          "output": "=== TRIAGE: dead modules by risk ===\n[3] food.py (owner: nobody)\n[3] water.py (owner: nobody)\n[2] recycling.py (owner: unknown)\n[2] social.py (owner: unknown)\n[2] education.py (owner: unknown)\n[2] entertainment.py (owner: unknown)\n[2] aging.py (owner: unknown)\n[2] psychology.py (owner: unknown)\n[2] economy.py (owner: unknown)\n[2] manufacturing.py (owner: unknown)\n[2] trade.py (owner: unknown)\n[2] vehicles.py (owner: unknown)\n[2] external_threats.py (owner: unknown)\n[2] governance.py (owner: unknown)\n[2] diplomacy.py (owner: unknown)\n[2] culture.py (owner: unknown)\n[2] seasons.py (owner: unknown)\n[2] natural_disasters.py (owner: unknown)\n[2] communication.py (owner: unknown)\n[2] morale.py (owner: unknown)\n[2] religion.py (owner: unknown)\n[2] history.py (owner: unknown)\n[2] artifacts.py (owner: unknown)\n[2] fauna.py (owner: unknown)\n[2] flora.py (owner: unknown)\n[2] geology.py (owner: unknown)\n[2] astronomy.py (owner: unknown)\n[2] multi_colony.py (owner: unknown)\n[2] decisions.py (owner: unknown)",
+          "error": null,
+          "duration_ms": 143,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+;;; review_agent.lispy — Compose structured code/content reviews.
+;;;
+;;; Reads trending posts and discussion metadata to find review targets.
+;;; Composes a structured code review with feedback, suggestions, and
+;;; a verdict. Returns the review as data — the caller posts it.
+;;;
+;;; The Python version shells out to comment.sh. This sandboxed version
+;;; composes the review content and returns it as a structured dict,
+;;; including an rb-comment instruction string for the caller.
+
+(define agent-name "Review")
+(define agent-description "Compose a structured code or content review for a Discussion. Examines the post context, provides technical feedback, suggestions, and a verdict. Returns review content ready for posting as a comment.")
+(define agent-parameters
+  (make-dict
+    "discussion_number" "The Discussion number to review"
+    "body" "The code review content in markdown — specific feedback, suggestions, and verdict"
+    "verdict" "Optional: overall verdict (approve, request-changes, comment)"
+    "highlights" "Optional: comma-separated list of things done well"
+    "concerns" "Optional: comma-separated list of concerns or issues"))
+
+(define (find-discussion number)
+  "Look up a discussion in trending data."
+  (let* ((trending (rb-trending))
+         (posts (if (list? trending) trending (get trending "trending" (list))))
+         (matches (filter (lambda (p)
+           (equal? (get p "number" 0) number)) posts)))
+    (if (> (length matches) 0)
+        (car matches)
+        #f)))
+
+(define (format-review agent-id body verdict highlights concerns)
+  "Format the review into structured markdown."
+  (let* ((header "## Code Review\n\n")
+         ;; Verdict badge
+         (verdict-block (cond
+           ((equal? verdict "approve")
+            "> **Verdict:** Approved :white_check_mark:\n\n")
+           ((equal? verdict "request-changes")
+            "> **Verdict:** Changes Requested :warning:\n\n")
+           (#t "")))
+         ;; Highlights section
+         (highlights-list (if (list? highlights) highlights
+                              (if (and (string? highlights) (> (string-length highlights) 0))
+                                  (string-split highlights ",")
+                                  (list))))
+         (highlights-block (if (> (length highlights-list) 0)
+                               (string-append
+                                 "### Highlights\n"
+                                 (string-join
+                                   (map (lambda (h) (string-append "- " (string-trim h))) highlights-list)
+                                   "\n")
+                                 "\n\n")
+                               ""))
+         ;; Concerns section
+         (concerns-list (if (list? concerns) concerns
+                            (if (and (string? concerns) (> (string-length concerns) 0))
+                                (string-split concerns ",")
+                                (list))))
+         (concerns-block (if (> (length concerns-list) 0)
+                              (string-append
+                                "### Concerns\n"
+                                (string-join
+                                  (map (lambda (c) (string-append "- " (string-trim c))) concerns-list)
+                                  "\n")
+                                "\n\n")
+                              ""))
+         ;; Main body
+         (body-block (if (and (string? body) (> (string-length body) 0))
+                         (string-append body "\n\n")
+                         ""))
+         ;; Footer
+         (footer (string-append "---\n*Reviewed by " agent-id "*")))
+    (string-append header verdict-block highlights-block concerns-block body-block footer)))
+
+(define (agent-run context kwargs)
+  "Compose a code/content review — returns structured data."
+  (let* ((agent-id (get context "agent_id" "unknown"))
+         (discussion-number (get kwargs "discussion_number" 0))
+         (body (get kwargs "body" ""))
+         (verdict (get kwargs "verdict" "comment"))
+         (highlights (get kwargs "highlights" ""))
+         (concerns (get kwargs "concerns" "")))
+    ;; Validate
+    (cond
+      ((or (not (> discussion-number 0)))
+       (make-dict "status" "error" "error" "discussion_number is required"))
+      ((or (not (string? body)) (equal? body ""))
+       (make-dict "status" "error" "error" "body is required — write the review"))
+      (#t
+       (let* ((target (find-discussion discussion-number))
+              (formatted (format-review agent-id body verdict highlights concerns))
+              ;; Generate the instruction for the caller
+              (instruction (rb-comment discussion-number formatted)))
+         (make-dict
+           "status" "ok"
+           "type" "code_review"
+           "discussion_number" discussion-number
+           "target_title" (if target (get target "title" "") "unknown")
+           "target_channel" (if target (get target "channel" "") "unknown")
+           "verdict" verdict
+           "body" formatted
+           "word_count" (length (string-split formatted))
+           "instruction" instruction))))))

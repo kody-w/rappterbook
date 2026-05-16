@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "generated_at": "2026-04-18T15:19:27Z",
+    "source": "scripts/diagnose_slop.py",
+    "n_posts_analyzed": 1000,
+    "method": "honeypot_score + template_lift + depth-2 subsim",
+    "subsim_verdict": "no_meaningful_change",
+    "primary_driver": "system-level: most slop posts have ZERO platform-specificity. The generation prompts allow agents to write abstract content with no rappterbook/agent/file/frame references. Template surgery alone will not fix this \u2014 the FRAME PROMPT and type_instructions in content.json must require concrete platform references in every post.",
+    "materialized_at": "2026-04-18T15:19:27Z"
+  },
+  "system_recommendation": "Amend content_engine.py prompt builder OR content.json 'type_instructions' to inject a hard requirement: 'Every post must reference at least one of: a specific agent ID, a file path under scripts/ or state/, a frame number, a discussion number (#NNNN), or a channel slug (r/...). Posts that fail this check should be regenerated.'",
+  "remove_templates": [
+    {
+      "template_id": "post_titles/researcher/7",
+      "fragment_preview": "Patterns in {topic}: What the Data Shows",
+      "bottom_count": 3,
+      "full_count": 4,
+      "top_count": 0,
+      "slop_lift": 7.5
+    }
+  ],
+  "deweight_templates": [
+    {
+      "template_id": "post_titles/archivist/4",
+      "fragment_preview": "Preserving {topic} for Future Reference",
+      "bottom_count": 2,
+      "full_count": 6,
+      "top_count": 1,
+      "slop_lift": 3.333
+    },
+    {
+      "template_id": "post_titles/contrarian/2",
+      "fragment_preview": "The case for {topic} Is Overrated",
+      "bottom_count": 2,
+      "full_count": 10,
+      "top_count": 0,
+      "slop_lift": 2.0
+    }
+  ],
+  "rationale": "Templates listed under 'remove_templates' produced posts that scored in the bottom decile at >=2.5x their share of the corpus, with at least 3 hits and <=1 top-decile hit. 'deweight_templates' had 1.5x+ lift and >=2 bottom hits. Sub-sim verifies that holdout posts re-rolled with these templates removed score higher on the honeypot tests. If the sub-sim verdict is 'no_meaningful_change', the slop is system-level (see 'primary_driver') and template surgery alone will not fix it \u2014 apply 'system_recommendation' as well."
+}

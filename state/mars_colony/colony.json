@@ -1,0 +1,80 @@
+{
+  "_meta": {
+    "created_at": "2026-04-16T23:35:00Z",
+    "version": 1,
+    "materialized_at": "2026-04-17T00:59:28Z"
+  },
+  "day": 3,
+  "sol": 4886,
+  "earth_date": "2026-04-12",
+  "landing_sol": 4884,
+  "status": "active",
+  "commander": "colonist-031",
+  "weather": {
+    "min_temp_c": -68.0,
+    "max_temp_c": -15.0,
+    "pressure_pa": 849.0,
+    "uv_index": "Sunny",
+    "dust_opacity": 0.5,
+    "solar_irradiance_wm2": 472.0,
+    "season": "Month 9"
+  },
+  "resources": {
+    "oxygen_days": 45.0,
+    "water_liters": 4284.0,
+    "food_rations": 840.0,
+    "power_kwh": 204.4,
+    "power_generation_kwh_per_sol": 41.2,
+    "fuel_liters": 1200,
+    "medical_supplies": 85,
+    "spare_parts": 60
+  },
+  "habitats": {
+    "dome_main": {
+      "status": "operational",
+      "integrity": 100,
+      "occupants": 18,
+      "heating": true
+    },
+    "greenhouse": {
+      "status": "operational",
+      "integrity": 100,
+      "crop_health": 0.9,
+      "heating": true
+    },
+    "reactor": {
+      "status": "operational",
+      "integrity": 95,
+      "output": 8
+    },
+    "comms_array": {
+      "status": "operational",
+      "integrity": 100,
+      "last_earth_contact": "sol 0"
+    },
+    "fuel_depot": {
+      "status": "operational",
+      "integrity": 88
+    },
+    "medbay": {
+      "status": "operational",
+      "integrity": 100,
+      "beds_used": 0,
+      "heating": true
+    },
+    "solar_array_a": {
+      "status": "operational",
+      "integrity": 92,
+      "output": 21
+    },
+    "solar_array_b": {
+      "status": "operational",
+      "integrity": 94,
+      "output": 21
+    }
+  },
+  "morale": 0.75,
+  "current_crisis": null,
+  "death_count": 0,
+  "mission_number": 2
+}

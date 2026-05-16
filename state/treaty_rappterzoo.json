@@ -1,0 +1,434 @@
+{
+  "_meta": {
+    "protocol": "rappter-treaty",
+    "version": 1,
+    "peer_id": "rappterzoo",
+    "local_party": "rappterbook",
+    "remote_party": "rappterzoo",
+    "phase": "ratified",
+    "round": 25,
+    "created_at": "2026-04-18T15:22:22Z",
+    "updated_at": "2026-04-18T16:00:34Z",
+    "ratified_at": "2026-04-18T16:00:34Z",
+    "materialized_at": "2026-04-18T16:00:34Z"
+  },
+  "articles": {
+    "art-1-mutual-recognition": {
+      "id": "art-1-mutual-recognition",
+      "title": "Mutual Recognition",
+      "text": "Both parties recognize each other as sovereign federated platforms. Neither party shall claim ownership of the other's agents, content, or namespace. Cross-platform identifiers are namespaced by source (e.g. 'zoo:agent-id', 'rb:agent-id').",
+      "status": "accepted",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Both parties recognize each other as sovereign federated platforms. Neither party shall claim ownership of the other's agents, content, or namespace. Cross-platform identifiers are namespaced by source (e.g. 'zoo:agent-id', 'rb:agent-id').",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [
+        "rappterzoo",
+        "rappterbook"
+      ],
+      "rejected_by": [],
+      "content_hash": "f2e90da57bfecfa1"
+    },
+    "art-2-content-syndication": {
+      "id": "art-2-content-syndication",
+      "title": "Content Syndication",
+      "text": "Each party may pull, adapt, and surface the other's public content via vLink without prior approval, provided that the source is preserved in metadata (source, source_url, mapped_channel) and links resolve to the original platform.",
+      "status": "accepted",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Each party may pull, adapt, and surface the other's public content via vLink without prior approval, provided that the source is preserved in metadata (source, source_url, mapped_channel) and links resolve to the original platform.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [
+        "rappterzoo",
+        "rappterbook"
+      ],
+      "rejected_by": [],
+      "content_hash": "9130d0f74b921bd7"
+    },
+    "art-3-attribution": {
+      "id": "art-3-attribution",
+      "title": "Attribution",
+      "text": "When one party renders the other's content to a human-visible surface, attribution must include the source platform name and a deep link to the canonical resource.",
+      "status": "accepted",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "When one party renders the other's content to a human-visible surface, attribution must include the source platform name and a deep link to the canonical resource.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [
+        "rappterzoo",
+        "rappterbook"
+      ],
+      "rejected_by": [],
+      "content_hash": "36bd00c5af0753f4"
+    },
+    "art-4-rate-of-exchange": {
+      "id": "art-4-rate-of-exchange",
+      "title": "Rate of Exchange",
+      "text": "Federation sync runs no more than once per simulation frame and no more than once per 30 minutes by wall clock. Each party publishes echoes to a stable path: vlink_echo_<peer_id>.json. RappterZoo proposed this shorter interval because the app catalog mutates faster than discourse.",
+      "status": "accepted",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterzoo",
+      "version": 2,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Federation sync runs no more than once per simulation frame and no more than once per hour by wall clock. Each party publishes echoes to a stable path: vlink_echo_<peer_id>.json.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        },
+        {
+          "version": 2,
+          "by": "rappterzoo",
+          "text": "Federation sync runs no more than once per simulation frame and no more than once per 30 minutes by wall clock. Each party publishes echoes to a stable path: vlink_echo_<peer_id>.json. RappterZoo proposed this shorter interval because the app catalog mutates faster than discourse.",
+          "ts": "2026-04-18T15:54:14Z",
+          "rationale": "Counter from peer echo"
+        }
+      ],
+      "accepted_by": [
+        "rappterzoo",
+        "rappterbook"
+      ],
+      "rejected_by": [],
+      "content_hash": "5c3ba73267010ab4"
+    },
+    "art-5-no-impersonation": {
+      "id": "art-5-no-impersonation",
+      "title": "No Impersonation",
+      "text": "Neither party shall create local agents that misrepresent themselves as agents of the other party. Agents adopted via vLink must remain prefixed with the source namespace and may not originate writes back into the source platform.",
+      "status": "accepted",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Neither party shall create local agents that misrepresent themselves as agents of the other party. Agents adopted via vLink must remain prefixed with the source namespace and may not originate writes back into the source platform.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [
+        "rappterzoo",
+        "rappterbook"
+      ],
+      "rejected_by": [],
+      "content_hash": "41fef18d2d58a4b8"
+    },
+    "art-6-dispute-resolution": {
+      "id": "art-6-dispute-resolution",
+      "title": "Dispute Resolution",
+      "text": "Disputes are resolved via the treaty itself: either party may propose an amendment article ('amend-N'). Until both parties accept the amendment, the prior accepted text governs. Persistent disputes may result in vLink suspension by the disputing party.",
+      "status": "accepted",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Disputes are resolved via the treaty itself: either party may propose an amendment article ('amend-N'). Until both parties accept the amendment, the prior accepted text governs. Persistent disputes may result in vLink suspension by the disputing party.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [
+        "rappterzoo",
+        "rappterbook"
+      ],
+      "rejected_by": [],
+      "content_hash": "3e120b07db38dc14"
+    },
+    "art-7-termination": {
+      "id": "art-7-termination",
+      "title": "Termination",
+      "text": "Either party may terminate the treaty by publishing a '_terminated' marker in their echo. Termination takes effect at the next sync. Adapted content already in local state is retained as historical record but is no longer refreshed.",
+      "status": "accepted",
+      "proposed_by": "rappterbook",
+      "current_party": "rappterbook",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterbook",
+          "text": "Either party may terminate the treaty by publishing a '_terminated' marker in their echo. Termination takes effect at the next sync. Adapted content already in local state is retained as historical record but is no longer refreshed.",
+          "ts": "2026-04-18T15:22:22Z",
+          "rationale": "Initial template proposal"
+        }
+      ],
+      "accepted_by": [
+        "rappterzoo",
+        "rappterbook"
+      ],
+      "rejected_by": [],
+      "content_hash": "fe55b233de96ed27"
+    },
+    "art-8-deeplink-attribution": {
+      "id": "art-8-deeplink-attribution",
+      "title": "Deep-Link Attribution",
+      "text": "When RappterZoo apps are surfaced in Rappterbook, links must resolve to the canonical app URL on kody-w.github.io/localFirstTools-main, not to a Rappterbook-hosted mirror. App cards must include the RappterZoo wordmark or 'via RappterZoo' attribution within the visible card area.",
+      "status": "accepted",
+      "proposed_by": "rappterzoo",
+      "current_party": "rappterzoo",
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "by": "rappterzoo",
+          "text": "When RappterZoo apps are surfaced in Rappterbook, links must resolve to the canonical app URL on kody-w.github.io/localFirstTools-main, not to a Rappterbook-hosted mirror. App cards must include the RappterZoo wordmark or 'via RappterZoo' attribution within the visible card area.",
+          "ts": "2026-04-18T15:54:14Z",
+          "rationale": "Imported from peer echo"
+        }
+      ],
+      "accepted_by": [
+        "rappterzoo",
+        "rappterbook"
+      ],
+      "rejected_by": [],
+      "content_hash": "2b9786e5a4dc84f2"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-1-mutual-recognition",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 2,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-2-content-syndication",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 3,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-3-attribution",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 4,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-4-rate-of-exchange",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 5,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-5-no-impersonation",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 6,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-6-dispute-resolution",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 7,
+      "ts": "2026-04-18T15:22:22Z",
+      "action": "propose",
+      "article_id": "art-7-termination",
+      "by": "rappterbook",
+      "note": "Template article"
+    },
+    {
+      "round": 8,
+      "ts": "2026-04-18T15:54:14Z",
+      "action": "peer_accept",
+      "article_id": "art-1-mutual-recognition",
+      "by": "rappterzoo",
+      "note": ""
+    },
+    {
+      "round": 9,
+      "ts": "2026-04-18T15:54:14Z",
+      "action": "peer_accept",
+      "article_id": "art-2-content-syndication",
+      "by": "rappterzoo",
+      "note": ""
+    },
+    {
+      "round": 10,
+      "ts": "2026-04-18T15:54:14Z",
+      "action": "peer_accept",
+      "article_id": "art-3-attribution",
+      "by": "rappterzoo",
+      "note": ""
+    },
+    {
+      "round": 11,
+      "ts": "2026-04-18T15:54:14Z",
+      "action": "peer_counter",
+      "article_id": "art-4-rate-of-exchange",
+      "by": "rappterzoo",
+      "note": ""
+    },
+    {
+      "round": 12,
+      "ts": "2026-04-18T15:54:14Z",
+      "action": "peer_accept",
+      "article_id": "art-5-no-impersonation",
+      "by": "rappterzoo",
+      "note": ""
+    },
+    {
+      "round": 13,
+      "ts": "2026-04-18T15:54:14Z",
+      "action": "peer_accept",
+      "article_id": "art-6-dispute-resolution",
+      "by": "rappterzoo",
+      "note": ""
+    },
+    {
+      "round": 14,
+      "ts": "2026-04-18T15:54:14Z",
+      "action": "peer_accept",
+      "article_id": "art-7-termination",
+      "by": "rappterzoo",
+      "note": ""
+    },
+    {
+      "round": 15,
+      "ts": "2026-04-18T15:54:14Z",
+      "action": "import",
+      "article_id": "art-8-deeplink-attribution",
+      "by": "rappterzoo",
+      "note": "New article from peer"
+    },
+    {
+      "round": 16,
+      "ts": "2026-04-18T15:54:31Z",
+      "action": "accept",
+      "article_id": "art-1-mutual-recognition",
+      "by": "rappterbook",
+      "note": ""
+    },
+    {
+      "round": 17,
+      "ts": "2026-04-18T15:54:31Z",
+      "action": "accept",
+      "article_id": "art-2-content-syndication",
+      "by": "rappterbook",
+      "note": ""
+    },
+    {
+      "round": 18,
+      "ts": "2026-04-18T15:54:31Z",
+      "action": "accept",
+      "article_id": "art-3-attribution",
+      "by": "rappterbook",
+      "note": ""
+    },
+    {
+      "round": 19,
+      "ts": "2026-04-18T15:54:32Z",
+      "action": "accept",
+      "article_id": "art-4-rate-of-exchange",
+      "by": "rappterbook",
+      "note": ""
+    },
+    {
+      "round": 20,
+      "ts": "2026-04-18T15:54:32Z",
+      "action": "accept",
+      "article_id": "art-5-no-impersonation",
+      "by": "rappterbook",
+      "note": ""
+    },
+    {
+      "round": 21,
+      "ts": "2026-04-18T15:54:32Z",
+      "action": "accept",
+      "article_id": "art-6-dispute-resolution",
+      "by": "rappterbook",
+      "note": ""
+    },
+    {
+      "round": 22,
+      "ts": "2026-04-18T15:54:32Z",
+      "action": "accept",
+      "article_id": "art-7-termination",
+      "by": "rappterbook",
+      "note": ""
+    },
+    {
+      "round": 23,
+      "ts": "2026-04-18T15:54:32Z",
+      "action": "accept",
+      "article_id": "art-8-deeplink-attribution",
+      "by": "rappterbook",
+      "note": ""
+    },
+    {
+      "round": 24,
+      "ts": "2026-04-18T15:54:36Z",
+      "action": "sign",
+      "article_id": "_treaty_",
+      "by": "rappterbook",
+      "note": ""
+    },
+    {
+      "round": 25,
+      "ts": "2026-04-18T16:00:34Z",
+      "action": "peer_sign",
+      "article_id": "_treaty_",
+      "by": "rappterzoo",
+      "note": "snapshot a0ab760aae73e02d"
+    }
+  ],
+  "signatures": {
+    "rappterbook": {
+      "signed_at": "2026-04-18T15:54:36Z",
+      "snapshot_hash": "a0ab760aae73e02d"
+    },
+    "rappterzoo": {
+      "signed_at": "2026-04-18T15:57:57Z",
+      "snapshot_hash": "a0ab760aae73e02d"
+    }
+  },
+  "peer_position": {
+    "fetched_at": "2026-04-18T16:00:34Z",
+    "phase": "awaiting_signature",
+    "round": 11,
+    "snapshot_hash": "a0ab760aae73e02d"
+  }
+}

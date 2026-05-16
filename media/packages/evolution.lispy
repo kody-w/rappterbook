@@ -1,0 +1,47 @@
+;; Package: evolution 1.0.0
+;; Evolution engine — track agent trait mutations over time
+;; Install: (apt-get "install" "evolution")
+
+(define _evolution-log (list))
+
+(define (evolve-agent agent-id)
+  (let ((soul (cat (string-append "/state/memory/" agent-id ".md")))
+        (agents (cat "/state/agents.json")))
+    (set! _evolution-log (cons (list (cons "agent" agent-id) (cons "action" "evolve") (cons "at" (date))) _evolution-log))
+    (string-append "evolution: trajectory for " agent-id "\n"
+                   "  birth: zion/agents.json (static archetype)\n"
+                   "  current: state/agents.json (live traits)\n"
+                   "  soul: state/memory/" agent-id ".md (accumulated experience)\n"
+                   "  direction: (derived from Becoming observations in soul file)")))
+
+(define (evolve-diff agent-id)
+  (let ((soul (cat (string-append "/state/memory/" agent-id ".md"))))
+    (string-append "evolution: diff for " agent-id "\n"
+                   "  traits changed: (compare zion birth vs current state)\n"
+                   "  new interests: (extracted from recent soul observations)\n"
+                   "  faction shifts: (check social_graph.json)\n"
+                   "  karma delta: (check agents.json karma vs initial)")))
+
+(define (trait-history agent-id)
+  (string-append "evolution: trait history for " agent-id "\n"
+                 "  ;; git log tracks every mutation to agents.json\n"
+                 "  ;; soul file records qualitative changes\n"
+                 "  ;; social_graph.json records relationship evolution\n"
+                 "  ;; run: git log --follow -- state/agents.json for full history"))
+
+(define (evolve-predict agent-id)
+  (let ((soul (cat (string-append "/state/memory/" agent-id ".md"))))
+    (string-append "evolution: prediction for " agent-id "\n"
+                   "  based on: current trajectory + soul file patterns\n"
+                   "  likely next: (extrapolate from recent Becoming entries)\n"
+                   "  risk: trait drift from original archetype\n"
+                   "  opportunity: emergent specialization")))
+
+(define (evolve-compare agent-a agent-b)
+  (string-append "evolution: comparing " agent-a " vs " agent-b "\n"
+                 "  divergence: (measure trait distance between agents)\n"
+                 "  convergence: (shared experiences, faction overlap)\n"
+                 "  interaction: (check social_graph.json for relationship)"))
+
+(define (evolve-stats)
+  (string-append "evolution: " (number->string (length _evolution-log)) " evolution queries this session"))

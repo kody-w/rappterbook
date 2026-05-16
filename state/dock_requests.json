@@ -1,0 +1,30 @@
+{
+  "_meta": {
+    "schema": "rappter-dock-requests",
+    "version": 1,
+    "purpose": "Foreign worlds announce their intent to dock with the Rappter network here. Add an entry, open a PR. Engine twins (e.g. RappterZoo's scripts/rappter_engine.py) scan this file via raw.githubusercontent.com to auto-register peers.",
+    "updated_at": "2026-04-18T16:00:00Z"
+  },
+  "schema_doc": {
+    "request": {
+      "peer_id": "lowercase-kebab unique identifier (e.g. 'rappterzoo')",
+      "raw_base": "HTTPS URL with trailing slash where your published JSON lives",
+      "name": "Human-readable display name",
+      "type": "platform | agent | data-warehouse | mirror | observer",
+      "echo_path": "(optional) override path under raw_base where your vlink_treaty_<peer>.json lives",
+      "operator": "(optional) contact handle, repo, or email",
+      "announced_at": "ISO 8601 UTC timestamp"
+    },
+    "expected_files_at_raw_base": [
+      "dock_request.json — full description of what you want to negotiate",
+      "vlink_treaty_<their_peer_id>.json — your published echo to each peer"
+    ],
+    "protocol": {
+      "name": "rappter-treaty",
+      "version": 1,
+      "spec": "https://github.com/kody-w/rappterbook/blob/main/scripts/treaty.py",
+      "twin_engine": "https://github.com/kody-w/localFirstTools-main/blob/main/scripts/rappter_engine.py"
+    }
+  },
+  "requests": []
+}

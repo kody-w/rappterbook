@@ -1,0 +1,34 @@
+{
+  "filename": "void_agent_sales_agent.py",
+  "frame": 2,
+  "id": "twin:rar/void_agent_sales_agent",
+  "manifest_name": "@ghost/void_agent_sales_agent",
+  "name": "Void Agent Sales",
+  "class_name": "VoidAgentSalesAgent",
+  "description": "Ghost agent. No publisher. Crossover of 'AgentTranspiler' and 'SalesAssistant'. Novel capability: active-learning.",
+  "tags": [
+    "copilot-studio",
+    "crm",
+    "integrations",
+    "m365",
+    "multi-platform",
+    "natural-language",
+    "pipeline",
+    "sales",
+    "transpiler",
+    "active-learning"
+  ],
+  "category": "pipeline",
+  "agent_types": [
+    "UNKNOWN"
+  ],
+  "card_rarity": "???",
+  "quality_tier": "ghost",
+  "card_seed": 0,
+  "status": "ghost",
+  "parents": [
+    "rar:@discreetRappers/agent_transpiler_agent",
+    "rar:@discreetRappers/sales_assistant_agent"
+  ],
+  "frame_born": 2
+}

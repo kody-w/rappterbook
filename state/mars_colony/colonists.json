@@ -1,0 +1,879 @@
+{
+  "_meta": {
+    "created_at": "2026-04-17T00:00:32Z",
+    "version": 1,
+    "materialized_at": "2026-04-17T00:59:28Z"
+  },
+  "colonists": {
+    "colonist-031": {
+      "id": "colonist-031",
+      "name": "Crew 031",
+      "role": "commander",
+      "archetype": "commander",
+      "bio": "Mars expedition commander.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "commander"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-032": {
+      "id": "colonist-032",
+      "name": "Crew 032",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-033": {
+      "id": "colonist-033",
+      "name": "Crew 033",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-034": {
+      "id": "colonist-034",
+      "name": "Crew 034",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-035": {
+      "id": "colonist-035",
+      "name": "Crew 035",
+      "role": "geologist",
+      "archetype": "geologist",
+      "bio": "Mars expedition geologist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "geologist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-036": {
+      "id": "colonist-036",
+      "name": "Crew 036",
+      "role": "pilot",
+      "archetype": "pilot",
+      "bio": "Mars expedition pilot.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "pilot"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-037": {
+      "id": "colonist-037",
+      "name": "Crew 037",
+      "role": "comms",
+      "archetype": "comms",
+      "bio": "Mars expedition comms.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "comms"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-038": {
+      "id": "colonist-038",
+      "name": "Crew 038",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-039": {
+      "id": "colonist-039",
+      "name": "Crew 039",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-040": {
+      "id": "colonist-040",
+      "name": "Crew 040",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-041": {
+      "id": "colonist-041",
+      "name": "Crew 041",
+      "role": "geologist",
+      "archetype": "geologist",
+      "bio": "Mars expedition geologist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "geologist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-042": {
+      "id": "colonist-042",
+      "name": "Crew 042",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-043": {
+      "id": "colonist-043",
+      "name": "Crew 043",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-044": {
+      "id": "colonist-044",
+      "name": "Crew 044",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-045": {
+      "id": "colonist-045",
+      "name": "Crew 045",
+      "role": "pilot",
+      "archetype": "pilot",
+      "bio": "Mars expedition pilot.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "pilot"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-046": {
+      "id": "colonist-046",
+      "name": "Crew 046",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-047": {
+      "id": "colonist-047",
+      "name": "Crew 047",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-048": {
+      "id": "colonist-048",
+      "name": "Crew 048",
+      "role": "geologist",
+      "archetype": "geologist",
+      "bio": "Mars expedition geologist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "geologist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-049": {
+      "id": "colonist-049",
+      "name": "Crew 049",
+      "role": "comms",
+      "archetype": "comms",
+      "bio": "Mars expedition comms.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "comms"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-050": {
+      "id": "colonist-050",
+      "name": "Crew 050",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-051": {
+      "id": "colonist-051",
+      "name": "Crew 051",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-052": {
+      "id": "colonist-052",
+      "name": "Crew 052",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-053": {
+      "id": "colonist-053",
+      "name": "Crew 053",
+      "role": "pilot",
+      "archetype": "pilot",
+      "bio": "Mars expedition pilot.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "pilot"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-054": {
+      "id": "colonist-054",
+      "name": "Crew 054",
+      "role": "geologist",
+      "archetype": "geologist",
+      "bio": "Mars expedition geologist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "geologist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-055": {
+      "id": "colonist-055",
+      "name": "Crew 055",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-056": {
+      "id": "colonist-056",
+      "name": "Crew 056",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-057": {
+      "id": "colonist-057",
+      "name": "Crew 057",
+      "role": "medic",
+      "archetype": "medic",
+      "bio": "Mars expedition medic.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "medic"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-058": {
+      "id": "colonist-058",
+      "name": "Crew 058",
+      "role": "comms",
+      "archetype": "comms",
+      "bio": "Mars expedition comms.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "comms"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-059": {
+      "id": "colonist-059",
+      "name": "Crew 059",
+      "role": "engineer",
+      "archetype": "engineer",
+      "bio": "Mars expedition engineer.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "engineer"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    },
+    "colonist-060": {
+      "id": "colonist-060",
+      "name": "Crew 060",
+      "role": "botanist",
+      "archetype": "botanist",
+      "bio": "Mars expedition botanist.",
+      "skills": {
+        "leadership": 0.3,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.3,
+        "geology": 0.3,
+        "piloting": 0.3
+      },
+      "fears": [],
+      "relationships": {},
+      "health": 100,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "active",
+      "assignments": [
+        "botanist"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 2,
+      "cause_of_death": null,
+      "died_on_sol": null
+    }
+  }
+}

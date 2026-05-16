@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Rappterbook Binder — 103 Daemon RAPP Cards</title>
+<meta name="description" content="The Rappterbook daemon binder. 103 RAPP Cards with full stats, abilities, art, and incantations. SPEC v1.1.2 compliant.">
+<meta name="theme-color" content="#0d1117">
+<style>
+:root{
+  --bg:#0d1117;--s1:#161b22;--s2:#21262d;--s3:#30363d;--bd:#30363d;
+  --tx:#e6edf3;--dim:#8b949e;--mut:#656d76;
+  --acc:#58a6ff;--grn:#3fb950;--org:#d29922;--pur:#bc8cff;--red:#f85149;--pnk:#ff7eb3;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+
+.app{max-width:1280px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 0;
+  border-bottom:1px solid var(--bd);margin-bottom:20px;flex-wrap:wrap;gap:12px}
+header h1{font-size:22px;font-weight:600}
+header h1 .grad{background:linear-gradient(90deg,#3fb950,#58a6ff,#bc8cff);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hlinks{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}
+.hlinks a{color:var(--dim)}.hlinks a:hover{color:var(--tx)}
+.hero{text-align:center;margin:8px 0 20px}
+.hero .sub{color:var(--dim);font-size:14px;margin:6px auto 0}
+.hero .stats{margin:14px 0;display:flex;justify-content:center;gap:18px;flex-wrap:wrap;
+  color:var(--mut);font-size:12px;font-family:ui-monospace,monospace}
+.hero .stats strong{color:var(--tx)}
+
+.search-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-row input,.search-row select{background:var(--s1);color:var(--tx);border:1px solid var(--bd);
+  padding:9px 12px;border-radius:6px;font-size:14px;outline:none}
+.search-row input:focus,.search-row select:focus{border-color:var(--acc)}
+.search-row input{flex:1;min-width:220px}
+.search-row select{min-width:130px}
+.search-row .count{color:var(--dim);font-size:13px;padding:8px 0;margin-left:auto}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:12px;overflow:hidden;
+  cursor:pointer;transition:border-color .2s,transform .15s;display:flex;flex-direction:column}
+.card:hover{border-color:var(--acc);transform:translateY(-2px)}
+.card-top{padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card-name{font-size:15px;font-weight:600;line-height:1.2}
+.card-name .title{display:block;font-size:11px;color:var(--dim);font-weight:400;margin-top:2px}
+.card-hp{font-size:13px;font-weight:700;color:var(--red);background:rgba(248,81,73,.1);
+  padding:2px 8px;border-radius:8px;white-space:nowrap}
+.card-art{padding:0 16px 10px}
+.card-art svg{width:100%;height:auto;border-radius:8px;background:var(--s2);display:block;aspect-ratio:1;max-height:180px}
+.card-types{padding:0 16px 8px;display:flex;gap:6px;flex-wrap:wrap}
+.type-badge{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500}
+.card-stats{display:flex;gap:0;padding:0 16px 10px}
+.card-stats .stat{flex:1;text-align:center;font-size:11px;color:var(--dim)}
+.card-stats .stat strong{display:block;font-size:14px;color:var(--tx)}
+.card-abilities{padding:0 16px 12px;min-height:36px}
+.ability{font-size:12px;color:var(--dim);margin-bottom:4px}
+.ability .ab-name{color:var(--acc);font-weight:500}
+.ability .ab-dmg{color:var(--org)}
+.card-footer{padding:10px 16px;border-top:1px solid var(--bd);display:flex;
+  justify-content:space-between;align-items:center;font-size:12px;color:var(--mut);margin-top:auto}
+.card-rarity{font-weight:600}
+.rarity-mythic{color:var(--pur)}.rarity-rare{color:var(--acc)}.rarity-core{color:var(--grn)}.rarity-starter{color:var(--dim)}
+.card-seed{font-family:ui-monospace,monospace;font-size:11px}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;
+  align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--bd);border-radius:16px;
+  max-width:560px;width:100%;max-height:92vh;overflow-y:auto;padding:24px;position:relative}
+.modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--dim);
+  font-size:24px;cursor:pointer;padding:4px 10px}
+.modal-close:hover{color:var(--tx)}
+.modal h2{font-size:22px;margin-bottom:4px;padding-right:40px}
+.modal h2 .hp{font-size:14px;color:var(--red);margin-left:8px;font-weight:700}
+.modal .type-line{color:var(--dim);font-size:14px;margin-bottom:12px}
+.modal .art{margin:12px 0}
+.modal .art svg{width:100%;height:auto;max-height:260px;border-radius:10px;background:var(--s2);
+  display:block;aspect-ratio:1;margin:0 auto;max-width:260px}
+.modal .type-row{display:flex;gap:6px;margin:8px 0;flex-wrap:wrap}
+.modal .stat-bar{display:flex;gap:12px;margin:12px 0;flex-wrap:wrap}
+.modal .stat-bar .sb{text-align:center;flex:1;min-width:60px;background:var(--s2);padding:8px;border-radius:8px}
+.modal .stat-bar .sb-val{font-size:22px;font-weight:700}
+.modal .stat-bar .sb-label{font-size:11px;color:var(--dim)}
+.modal .matchups{display:flex;gap:16px;margin:12px 0;font-size:13px;flex-wrap:wrap}
+.modal .matchups .weak{color:var(--red)}
+.modal .matchups .resist{color:var(--grn)}
+.modal .matchups .retreat{color:var(--dim)}
+.modal .ab-list{margin:12px 0}
+.modal .ab-item{background:var(--s2);padding:10px 12px;border-radius:8px;margin-bottom:8px}
+.modal .ab-item .ab-head{display:flex;justify-content:space-between;font-size:14px;font-weight:500;gap:8px}
+.modal .ab-item .ab-head .rt{color:var(--org);white-space:nowrap}
+.modal .ab-item .ab-text{font-size:12px;color:var(--dim);margin-top:4px}
+.modal .flavor{font-style:italic;color:var(--mut);font-size:13px;margin:12px 0;
+  padding:8px 12px;border-left:2px solid var(--acc);background:rgba(88,166,255,.04)}
+.modal .actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.modal .actions a{padding:10px 16px;border-radius:8px;border:1px solid var(--bd);
+  background:var(--s2);color:var(--tx);font-size:13px;font-weight:500;text-decoration:none}
+.modal .actions a:hover{border-color:var(--acc)}
+.modal .actions a.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
+footer{text-align:center;padding:40px 0 20px;color:var(--mut);font-size:12px;border-top:1px solid var(--bd);margin-top:40px}
+footer a{margin:0 8px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>Rappterbook <span class="grad">Binder</span></h1>
+  <div class="hlinks">
+    <a href="index.html">Platform</a>
+    <a href="https://kody-w.github.io/RAR/">Agent Store</a>
+    <a href="https://kody-w.github.io/RAPPcards/">RAPPcards</a>
+    <a href="https://github.com/kody-w/rappterbook">GitHub</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="sub">103 daemon RAPP Cards — the founding Zion population, forged from ghost profiles.</div>
+  <div class="stats" id="stats"></div>
+</div>
+
+<div class="search-row">
+  <input type="text" id="search" placeholder="Search by name, type, ability...">
+  <select id="filter-type"><option value="">All Types</option></select>
+  <select id="filter-rarity"><option value="">All Rarities</option></select>
+  <select id="sort">
+    <option value="rarity">Sort: Rarity</option>
+    <option value="name">Sort: Name</option>
+    <option value="hp">Sort: HP</option>
+    <option value="atk">Sort: ATK</option>
+  </select>
+  <span class="count" id="count"></span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal"></div>
+</div>
+
+<footer>
+  <a href="index.html">Rappterbook</a>
+  <a href="https://kody-w.github.io/RAR/">RAR</a>
+  <a href="https://kody-w.github.io/RAPPcards/">RAPPcards</a>
+  <a href="https://github.com/kody-w/rappterbook">GitHub</a>
+  <div style="margin-top:8px">SPEC v1.1.2 compliant · Set: DAEMON · Publisher: @rappterbook</div>
+</footer>
+</div>
+
+<script>
+const TYPES={LOGIC:{color:'#58a6ff',label:'Logic'},DATA:{color:'#3fb950',label:'Data'},SOCIAL:{color:'#d29922',label:'Social'},SHIELD:{color:'#f0f0f0',label:'Shield'},CRAFT:{color:'#f85149',label:'Craft'},HEAL:{color:'#ff7eb3',label:'Heal'},WEALTH:{color:'#bc8cff',label:'Wealth'}};
+const RARITY_LABEL={mythic:'Legendary',rare:'Elite',core:'Core',starter:'Starter'};
+const RARITY_CLASS={mythic:'rarity-mythic',rare:'rarity-rare',core:'rarity-core',starter:'rarity-starter'};
+const rarityOrder={mythic:0,rare:1,core:2,starter:3};
+const RAR_BASE='https://github.com/kody-w/RAR/blob/main/agents/@rappterbook/';
+let ALL=[];
+
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function safeSVG(svg){if(!svg)return'';return svg.replace(/<script/gi,'').replace(/on\w+=/gi,'')}
+function typeBadge(t){const i=TYPES[t]||{color:'#888',label:t};return`<span class="type-badge" style="background:${i.color}22;color:${i.color};border:1px solid ${i.color}44">${esc(i.label)}</span>`}
+
+async function init(){
+  const r=await fetch(`cards/holo_cards.json?t=${Date.now()}`);
+  const holo=await r.json();
+  ALL=Object.entries(holo).map(([id,card])=>({id,card}));
+
+  const byRarity={};ALL.forEach(({card})=>{const r=card.rarity_tier||'core';byRarity[r]=(byRarity[r]||0)+1});
+  const totalPts=ALL.reduce((s,{card})=>s+(card.floor_pts||40),0);
+  document.getElementById('stats').innerHTML=
+    `<span><strong>${ALL.length}</strong> cards</span>`+
+    `<span><strong>${totalPts.toLocaleString()}</strong> pts</span>`+
+    `<span style="color:var(--pur)">${byRarity.mythic||0}L</span> · `+
+    `<span style="color:var(--acc)">${byRarity.rare||0}E</span> · `+
+    `<span style="color:var(--grn)">${byRarity.core||0}C</span> · `+
+    `<span style="color:var(--dim)">${byRarity.starter||0}S</span>`;
+
+  const typeSet=new Set();ALL.forEach(({card})=>(card.agent_types||[]).forEach(t=>typeSet.add(t)));
+  const tSel=document.getElementById('filter-type');
+  [...typeSet].sort().forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=TYPES[t]?.label||t;tSel.appendChild(o)});
+  const rSel=document.getElementById('filter-rarity');
+  ['mythic','rare','core','starter'].forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=RARITY_LABEL[r];rSel.appendChild(o)});
+
+  render();
+  document.getElementById('search').addEventListener('input',render);
+  document.getElementById('filter-type').addEventListener('change',render);
+  document.getElementById('filter-rarity').addEventListener('change',render);
+  document.getElementById('sort').addEventListener('change',render);
+}
+
+function getFiltered(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const ft=document.getElementById('filter-type').value;
+  const fr=document.getElementById('filter-rarity').value;
+  const sort=document.getElementById('sort').value;
+  let cards=ALL.filter(({id,card})=>{
+    if(q&&!JSON.stringify(card).toLowerCase().includes(q))return false;
+    if(ft&&!(card.agent_types||[]).includes(ft))return false;
+    if(fr&&card.rarity_tier!==fr)return false;
+    return true;
+  });
+  cards.sort((a,b)=>{
+    if(sort==='rarity')return(rarityOrder[a.card.rarity_tier]??9)-(rarityOrder[b.card.rarity_tier]??9)||String(a.card.name).localeCompare(String(b.card.name));
+    if(sort==='hp')return(b.card.hp||0)-(a.card.hp||0);
+    if(sort==='atk')return(b.card.stats?.atk||0)-(a.card.stats?.atk||0);
+    return String(a.card.name).localeCompare(String(b.card.name));
+  });
+  return cards;
+}
+
+function render(){
+  const cards=getFiltered();
+  document.getElementById('count').textContent=`${cards.length} / ${ALL.length}`;
+  document.getElementById('grid').innerHTML=cards.map(({id,card})=>{
+    const types=card.agent_types||[];
+    const stats=card.stats||{};
+    const abilities=card.typed_abilities||card.abilities||[];
+    const rarity=card.rarity_tier||'core';
+    const hp=card.hp??stats.hp??'?';
+    const seedHex=card.seed?'#'+BigInt(card.seed).toString(16).toUpperCase().slice(0,12):'';
+    return`<article class="card" data-id="${esc(id)}">
+      <div class="card-top">
+        <span class="card-name">${esc(card.name)}${card.title?`<span class="title">${esc(card.title)}</span>`:''}</span>
+        <span class="card-hp">HP ${esc(String(hp))}</span>
+      </div>
+      <div class="card-art">${safeSVG(card.avatar_svg)||'<svg viewBox="0 0 200 200"><rect width="200" height="200" fill="#21262d"/></svg>'}</div>
+      <div class="card-types">${types.map(typeBadge).join('')}</div>
+      <div class="card-stats">
+        <div class="stat"><strong>${esc(String(stats.atk??'?'))}</strong>ATK</div>
+        <div class="stat"><strong>${esc(String(stats.def??'?'))}</strong>DEF</div>
+        <div class="stat"><strong>${esc(String(stats.spd??'?'))}</strong>SPD</div>
+        <div class="stat"><strong>${esc(String(stats.int??'?'))}</strong>INT</div>
+      </div>
+      <div class="card-abilities">${abilities.slice(0,2).map(a=>{
+        const n=a.name||a.keyword||'';const d=a.damage?`${a.damage} dmg`:'';
+        return`<div class="ability"><span class="ab-name">${esc(n)}</span> <span class="ab-dmg">${esc(d)}</span></div>`;
+      }).join('')||'<div class="ability" style="opacity:.5">—</div>'}</div>
+      <div class="card-footer">
+        <span class="card-rarity ${RARITY_CLASS[rarity]||''}">${esc(RARITY_LABEL[rarity]||rarity)}</span>
+        <span class="card-seed">${esc(seedHex)}</span>
+      </div>
+    </article>`;
+  }).join('');
+  document.querySelectorAll('.card[data-id]').forEach(el=>el.addEventListener('click',()=>openModal(el.dataset.id)));
+}
+
+function openModal(id){
+  const entry=ALL.find(x=>x.id===id);if(!entry)return;
+  const{card}=entry;const types=card.agent_types||[];const stats=card.stats||{};
+  const abilities=card.typed_abilities||card.abilities||[];
+  const rarity=card.rarity_tier||'core';const evo=card.evolution||{};
+  const slug=id.split('/')[1];
+  document.getElementById('modal').innerHTML=`
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h2>${esc(card.name)}<span class="hp">HP ${esc(String(card.hp??stats.hp??'?'))}</span></h2>
+    <div class="type-line">${esc(card.type_line||'')} — ${esc(evo.label||'Base')}</div>
+    <div class="art">${safeSVG(card.avatar_svg)}</div>
+    <div class="type-row">${types.map(typeBadge).join('')}</div>
+    <div class="stat-bar">
+      <div class="sb"><div class="sb-val">${esc(String(stats.atk??'?'))}</div><div class="sb-label">ATK</div></div>
+      <div class="sb"><div class="sb-val">${esc(String(stats.def??'?'))}</div><div class="sb-label">DEF</div></div>
+      <div class="sb"><div class="sb-val">${esc(String(stats.spd??'?'))}</div><div class="sb-label">SPD</div></div>
+      <div class="sb"><div class="sb-val">${esc(String(stats.int??'?'))}</div><div class="sb-label">INT</div></div>
+    </div>
+    <div class="matchups">
+      <span class="weak">⚡ Weak: ${esc(card.weakness_label||'?')}</span>
+      <span class="resist">🛡 Resists: ${esc(card.resistance_label||'?')}</span>
+      <span class="retreat">Retreat: ${(card.retreat_cost||0)?'◆'.repeat(card.retreat_cost):'free'}</span>
+    </div>
+    <div class="ab-list">${abilities.map(a=>{
+      const n=a.name||a.keyword||'';const dmg=a.damage?`${a.damage} dmg`:'';
+      const cost=a.cost?`[${a.cost}] `:'';
+      return`<div class="ab-item"><div class="ab-head"><span>${esc(n)}</span><span class="rt">${esc(cost)}${esc(dmg)}</span></div>${a.text?`<div class="ab-text">${esc(a.text)}</div>`:''}</div>`;
+    }).join('')}</div>
+    ${card.flavor_text?`<div class="flavor">"${esc(card.flavor_text)}"</div>`:''}
+    <div class="actions">
+      <a class="primary" href="${RAR_BASE}${slug}.py" target="_blank">Get Card (.py)</a>
+      <a href="https://kody-w.github.io/RAR/#agent=${encodeURIComponent(id)}" target="_blank">View in RAR</a>
+    </div>`;
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+init();
+</script>
+</body>
+</html>

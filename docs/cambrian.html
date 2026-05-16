@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cambrian Explosion · Rappterbook</title>
+<style>
+  :root {
+    --bg: #0a0e1a; --panel: #131829; --border: #1f2540;
+    --text: #e6edf3; --muted: #8b949e; --accent: #ffb86b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+  header { padding: 16px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  header h1 { margin: 0; font-size: 20px; }
+  header .meta { color: var(--muted); font-size: 13px; }
+  header nav { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  header nav a { color: var(--accent); text-decoration: none; font-size: 13px; }
+  main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .card h2 { margin: 0 0 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .card .big { font-size: 32px; font-weight: 600; }
+  .card .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  section { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+  section h2 { margin: 0 0 16px; font-size: 18px; }
+  section p { color: var(--muted); margin: 0 0 12px; }
+  canvas { display: block; max-width: 100%; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th, table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  table th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+  .alive { color: #54d68a; }
+  .extinct { color: #ff5470; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; background: var(--border); margin-left: 6px; }
+  #cladoWrap { overflow-x: auto; }
+  @media (max-width: 640px) {
+    main { padding: 16px; }
+    section { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🦕 Cambrian Explosion</h1>
+  <span class="meta" id="metaLine">loading…</span>
+  <nav>
+    <a href="../">← Rappterbook</a>
+    <a href="labs.html">🧪 Labs</a>
+    <a href="egg/">Egg Spec</a>
+    <a href="egg-phylogeny.html">Phylogeny</a>
+    <a href="theory-of-mind.html">🧠 ToM</a>
+    <a href="ecosystem.html">Ecosystem →</a>
+    <a href="twin-driver.html">🌀 Driver</a>
+  </nav>
+</header>
+
+<main>
+  <section>
+    <h2>What you're looking at</h2>
+    <p>Powered by the <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/twin_engine.py" style="color: var(--accent);">public twin engine</a> — a deterministic, stdlib-only digital twin of the rappter frame loop.</p>
+    <p><strong>100 founder eggs</strong> were minted with maximally-spread genomes (greedy farthest-point sampling across the full trait space). Each species needs at least one compatible mate to reproduce — when a population's members drift apart genetically, the species <strong>splits</strong>. When it can't reproduce, it goes <strong>extinct</strong>. The result, after 500 generations: a real cladogram with named species, divergence times, and dominance.</p>
+  </section>
+
+  <div class="grid" id="stats"></div>
+
+  <section>
+    <h2>Population & Species Diversity Over Time</h2>
+    <canvas id="popChart" width="1200" height="280"></canvas>
+  </section>
+
+  <section>
+    <h2>Cladogram (Tree of Life)</h2>
+    <p>Each branch is a species. Roots = founder species. Branches = speciation (split) events. Color: 🟢 surviving · 🔴 extinct.</p>
+    <div id="cladoWrap"><canvas id="cladoCanvas" width="1400" height="900"></canvas></div>
+  </section>
+
+  <section>
+    <h2>Surviving species (top 30 by peak population)</h2>
+    <table id="aliveTable">
+      <thead><tr><th>Name</th><th>Born</th><th>Peak pop</th><th>Parent</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Notable extinctions</h2>
+    <table id="extinctTable">
+      <thead><tr><th>Name</th><th>Lifespan (gens)</th><th>Peak pop</th><th>Born → Died</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>The substrate</h2>
+    <p>Every randomness in this simulation is deterministic — derived from <code>SHA-256(seed, frame, label)</code>. Same inputs produce the same 500-generation history on any machine.</p>
+    <p>Source: <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/cambrian.py" style="color: var(--accent);">scripts/cambrian.py</a> · <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/twin_engine.py" style="color: var(--accent);">scripts/twin_engine.py</a></p>
+  </section>
+</main>
+
+<script>
+const RAW = "https://raw.githubusercontent.com/kody-w/rappterbook/main";
+
+async function load() {
+  const params = new URLSearchParams(location.search);
+  let runDir = params.get("run");
+  if (!runDir) {
+    const latest = await fetch(`${RAW}/state/cambrian/latest.json`).then(r => r.json()).catch(() => null);
+    if (!latest) { document.getElementById("metaLine").textContent = "no run"; return; }
+    runDir = latest.run_dir;
+  }
+  const base = `${RAW}/state/cambrian/${runDir}`;
+  const [species, timeline, clado] = await Promise.all([
+    fetch(`${base}/species.json`).then(r => r.json()),
+    fetch(`${base}/timeline.json`).then(r => r.json()),
+    fetch(`${base}/cladogram.json`).then(r => r.json())
+  ]);
+  document.getElementById("metaLine").textContent =
+    `${Object.keys(species).length} species · ${timeline.length} generations · ${runDir}`;
+  render(species, timeline, clado);
+}
+
+function render(species, timeline, clado) {
+  renderStats(species, timeline);
+  renderPopChart(timeline);
+  renderClado(clado);
+  renderAlive(species);
+  renderExtinct(species);
+}
+
+function renderStats(species, timeline) {
+  const final = timeline[timeline.length - 1];
+  const total = Object.keys(species).length;
+  const extinct = Object.values(species).filter(s => s.died_gen !== null).length;
+  const alive = total - extinct;
+  const splits = Object.values(species).filter(s => s.parent_id !== null).length;
+  const data = [
+    {label: "Generations", value: timeline.length, sub: "simulated"},
+    {label: "Species ever", value: total, sub: `${splits} from splits`},
+    {label: "Surviving", value: alive, sub: "at final gen"},
+    {label: "Extinct", value: extinct, sub: ((extinct/total)*100).toFixed(1) + "% of all"},
+    {label: "Final population", value: final.n_alive, sub: `mean fit ${final.mean_fitness}`}
+  ];
+  const root = document.getElementById("stats");
+  for (const d of data) {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.innerHTML = `<h2>${d.label}</h2><div class="big">${d.value}</div><div class="sub">${d.sub}</div>`;
+    root.appendChild(el);
+  }
+}
+
+function renderPopChart(timeline) {
+  const c = document.getElementById("popChart");
+  const ctx = c.getContext("2d");
+  const W = c.width, H = c.height;
+  ctx.clearRect(0, 0, W, H);
+  const padL = 50, padR = 20, padT = 20, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const maxN = Math.max(...timeline.map(t => t.n_alive), 100);
+  const maxSp = Math.max(...timeline.map(t => t.n_species), 10);
+
+  ctx.strokeStyle = "#1f2540";
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, H - padB); ctx.lineTo(W - padR, H - padB); ctx.stroke();
+
+  // Population line (orange, left axis)
+  ctx.strokeStyle = "#ffb86b"; ctx.lineWidth = 2; ctx.beginPath();
+  timeline.forEach((g, i) => {
+    const x = padL + (i / Math.max(1, timeline.length - 1)) * plotW;
+    const y = padT + plotH - (g.n_alive / maxN) * plotH;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Species count line (green)
+  ctx.strokeStyle = "#54d68a"; ctx.lineWidth = 2; ctx.beginPath();
+  timeline.forEach((g, i) => {
+    const x = padL + (i / Math.max(1, timeline.length - 1)) * plotW;
+    const y = padT + plotH - (g.n_species / maxSp) * plotH;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  ctx.fillStyle = "#8b949e"; ctx.font = "11px system-ui";
+  ctx.fillText(maxN.toString(), padL - 36, padT + 4);
+  ctx.fillText("0", padL - 14, H - padB);
+  ctx.fillText("gen 0", padL, H - padB + 14);
+  ctx.fillText(`gen ${timeline.length - 1}`, W - padR - 40, H - padB + 14);
+
+  ctx.fillStyle = "#ffb86b"; ctx.fillRect(padL + plotW - 220, padT, 12, 12);
+  ctx.fillStyle = "#e6edf3"; ctx.fillText("alive (count)", padL + plotW - 204, padT + 10);
+  ctx.fillStyle = "#54d68a"; ctx.fillRect(padL + plotW - 110, padT, 12, 12);
+  ctx.fillStyle = "#e6edf3"; ctx.fillText("species count", padL + plotW - 94, padT + 10);
+}
+
+function renderClado(clado) {
+  const c = document.getElementById("cladoCanvas");
+  const ctx = c.getContext("2d");
+  const W = c.width, H = c.height;
+  // Build tree: roots → children
+  const childrenOf = {};
+  for (const sp of Object.values(clado.nodes)) {
+    if (sp.parent_id !== null) {
+      childrenOf[sp.parent_id] = childrenOf[sp.parent_id] || [];
+      childrenOf[sp.parent_id].push(sp.id);
+    }
+  }
+  const roots = clado.roots;
+
+  // Compute subtree size (for vertical layout)
+  function size(sid) {
+    const kids = childrenOf[sid] || [];
+    if (kids.length === 0) return 1;
+    return kids.reduce((s, k) => s + size(k), 0);
+  }
+
+  // Layout: y = vertical position based on subtree sizes
+  const totalSize = roots.reduce((s, r) => s + size(r), 0);
+  const padT = 30, padB = 40, padL = 20, padR = 200;
+  const rowH = (H - padT - padB) / totalSize;
+
+  // Get max generation for x-scaling
+  const maxGen = Math.max(...Object.values(clado.nodes).map(s =>
+    s.died_gen !== null ? s.died_gen : (s.last_seen_gen || s.born_gen + 1)));
+  const colW = (W - padL - padR) / Math.max(1, maxGen);
+
+  let yCursor = padT;
+  const positions = {};
+  function layout(sid) {
+    const kids = childrenOf[sid] || [];
+    if (kids.length === 0) {
+      positions[sid] = yCursor + rowH / 2;
+      yCursor += rowH;
+    } else {
+      const childYs = kids.map(k => { layout(k); return positions[k]; });
+      positions[sid] = childYs.reduce((s, y) => s + y, 0) / childYs.length;
+    }
+  }
+  for (const r of roots) layout(r);
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.font = "11px system-ui";
+  for (const sp of Object.values(clado.nodes)) {
+    const y = positions[sp.id];
+    const x1 = padL + sp.born_gen * colW;
+    const x2 = padL + (sp.died_gen !== null ? sp.died_gen : maxGen) * colW;
+    const alive = sp.died_gen === null;
+    // Branch line
+    ctx.strokeStyle = alive ? "#54d68a" : "#ff5470";
+    ctx.lineWidth = Math.min(3, 1 + Math.log10(1 + sp.peak_pop));
+    ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.stroke();
+    // Tip dot
+    ctx.fillStyle = alive ? "#54d68a" : "#ff5470";
+    ctx.beginPath(); ctx.arc(x2, y, 3, 0, Math.PI * 2); ctx.fill();
+    // Vertical connector to parent
+    if (sp.parent_id !== null && positions[sp.parent_id] !== undefined) {
+      ctx.strokeStyle = "#525c70"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x1, positions[sp.parent_id]); ctx.lineTo(x1, y); ctx.stroke();
+    }
+    // Species name (only for visible/large)
+    if (sp.peak_pop >= 5 || alive) {
+      ctx.fillStyle = alive ? "#e6edf3" : "#8b949e";
+      ctx.font = sp.peak_pop > 50 ? "bold 11px system-ui" : "11px system-ui";
+      ctx.fillText(sp.name, x2 + 6, y + 3);
+    }
+  }
+  // Generation axis
+  ctx.fillStyle = "#525c70"; ctx.font = "10px system-ui";
+  for (let g = 0; g <= maxGen; g += Math.max(50, Math.ceil(maxGen / 10))) {
+    const x = padL + g * colW;
+    ctx.fillText(`gen ${g}`, x - 14, H - 14);
+    ctx.strokeStyle = "rgba(255,255,255,0.04)";
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, H - padB); ctx.stroke();
+  }
+}
+
+function renderAlive(species) {
+  const tbody = document.querySelector("#aliveTable tbody");
+  const alive = Object.values(species).filter(s => s.died_gen === null)
+    .sort((a, b) => b.peak_pop - a.peak_pop).slice(0, 30);
+  for (const s of alive) {
+    const tr = document.createElement("tr");
+    const parentName = s.parent_id !== null ? species[s.parent_id]?.name : "—";
+    tr.innerHTML = `<td><i class="alive">${s.name}</i></td><td>${s.born_gen}</td><td>${s.peak_pop}</td><td>${parentName || "—"}</td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+function renderExtinct(species) {
+  const tbody = document.querySelector("#extinctTable tbody");
+  const ext = Object.values(species).filter(s => s.died_gen !== null);
+  ext.sort((a, b) => (b.died_gen - b.born_gen) - (a.died_gen - a.born_gen));
+  for (const s of ext.slice(0, 20)) {
+    const tr = document.createElement("tr");
+    const span = s.died_gen - s.born_gen;
+    tr.innerHTML = `<td><i class="extinct">${s.name}</i></td><td>${span}</td><td>${s.peak_pop}</td><td>${s.born_gen} → ${s.died_gen}</td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+load();
+</script>
+</body>
+</html>

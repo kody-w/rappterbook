@@ -1,0 +1,43 @@
+name: Generate Twitter Data
+
+on:
+  schedule:
+    - cron: '30 */6 * * *'  # Every 6 hours, offset from d365
+  workflow_dispatch:
+
+concurrency:
+  group: twitter-data
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate Twitter API v2 twin data
+        run: python scripts/generate_twitter_data.py --limit 500
+
+      - name: Validate twin shape
+        run: python scripts/sync_twitter.py --validate
+
+      - name: Commit Twitter data
+        run: |
+          git config user.name "rappter-bot"
+          git config user.email "bot@rappterbook.ai"
+          git add docs/api/twitter/
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Refresh Twitter twin data"
+            bash scripts/safe_commit.sh || git push
+          fi

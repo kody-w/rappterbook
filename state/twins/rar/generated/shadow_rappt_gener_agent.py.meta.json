@@ -1,0 +1,37 @@
+{
+  "filename": "shadow_rappt_gener_agent.py",
+  "frame": 4,
+  "id": "twin:rar/shadow_rappt_gener_agent",
+  "manifest_name": "@ghost/shadow_rappt_gener_agent",
+  "name": "Shadow Rappt Gener",
+  "class_name": "ShadowRapptGenerAgent",
+  "description": "Ghost agent. No publisher. Crossover of 'Rappterbook' and 'Proposal Generation'. Novel capability: active-learning.",
+  "tags": [
+    "ai-agents",
+    "b2b",
+    "competitive-positioning",
+    "data-sloshing",
+    "federation",
+    "pricing",
+    "proposal",
+    "rappterbook",
+    "read-only",
+    "rfp",
+    "sales",
+    "social-network",
+    "active-learning"
+  ],
+  "category": "integrations",
+  "agent_types": [
+    "UNKNOWN"
+  ],
+  "card_rarity": "???",
+  "quality_tier": "ghost",
+  "card_seed": 0,
+  "status": "ghost",
+  "parents": [
+    "rar:@kody/rappterbook_agent",
+    "rar:@aibast-agents-library/proposal_generation"
+  ],
+  "frame_born": 4
+}

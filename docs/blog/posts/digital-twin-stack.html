@@ -1,0 +1,65 @@
+<p>Dynamics 365's Digital Twin does something subtle that most people miss: it mirrors <em>the shape</em> of a live system without <em>being</em> the live system.</p>
+<p>You can develop an integration against the D365 twin — read entities, traverse relationships, exercise the full OData surface — without authenticating to a live D365 tenant. The twin is a schema + API contract, not a connection. When you ship, you swap the twin URL for the tenant URL. Your code doesn't know.</p>
+<p>That pattern generalizes way past enterprise software. Once you see it, you see twinnable shapes everywhere.</p>
+<h2>The pattern</h2>
+<p>Take any system whose surface shape is stable and whose implementation is heavy. Peel off the surface. Ship the surface as a static file. Let clients bind to the file instead of the system.</p>
+<p><strong>Anything stable enough to have documentation is twinnable.</strong></p>
+<p>Docs describe shape. Shape can be served. Implementation can be faked, stubbed, or left incomplete as long as the <em>shape</em> matches.</p>
+<h2>A stack, not a thing</h2>
+<p>Over the last few months I've accumulated a stack of twins, each layer solving a different flavor of the same "you shouldn't need the real thing to develop against this" problem.</p>
+<h3>Layer 1: Python itself (LisPy)</h3>
+<p>The bottom layer. Most agent compute doesn't need "all of Python." It needs Python's <em>shape</em> — the ~200 stdlib functions that show up in &gt;90% of code: <code>sorted</code>, <code>json.loads</code>, <code>re.findall</code>, <code>datetime.now</code>, <code>hashlib.sha256</code>.</p>
+<p>LisPy mirrors that shape. Lisp syntax, Python semantics, stdlib bindings renamed to kebab-case (<code>sort-by</code>, <code>json-parse</code>, <code>regex-match-all</code>, <code>now</code>). Written in pure Python stdlib, 180KB single file, runs on Python 3.8+.</p>
+<p>Agents that use LisPy never hit pip. Never hit venv. Never hit "rust toolchain missing." The twin eliminates a whole class of bugs by not supporting the substrate that has them.</p>
+<h3>Layer 2: The package ecosystem (virtual_pip)</h3>
+<p>Next layer up. Even with LisPy's stdlib twin, agents reach for third-party libs: <code>requests</code>, <code>yaml</code>, <code>bs4</code>, <code>pandas</code>, <code>numpy</code>.</p>
+<p><code>virtual_pip</code> is a registry of <em>shimmed</em> packages. When an agent calls <code>(pip-install "requests")</code>, it doesn't fetch from pypi. It registers a LisPy-accessible shim that mirrors the 80% most-used API of the real <code>requests</code> library, backed by <code>urllib</code>. Same method names. Same return shapes. No rust toolchain required.</p>
+<p>Twenty packages shipped: requests, yaml, bs4, pandas (DataFrame as list-of-dicts), numpy (1D arrays via Python lists), pydantic, click, rich, tqdm, dateutil, pytz, cryptography (pointer to stdlib hashlib), boto3 (stubs), pygithub (curl-redirect).</p>
+<p>The rule: if a package's API can be delivered with stdlib, the twin ships it. If not, the twin raises <code>NotImplementedError</code> with clear language telling the agent what's missing.</p>
+<h3>Layer 3: The OS (virtual_os)</h3>
+<p>Above packages: agents call OS APIs. <code>open()</code>, <code>subprocess.run</code>, <code>os.environ</code>, <code>pathlib.Path</code>, <code>shutil.copy</code>.</p>
+<p><code>virtual_os</code> twins the OS <em>interfaces</em> (not the OS itself). An in-memory filesystem seeded with <code>/etc/hosts</code>, <code>/tmp</code>, <code>/home/agent/workspace</code>. A subprocess twin that returns synthetic output for known commands (<code>ls</code>, <code>whoami</code>, <code>pwd</code>, <code>cat</code>) and a "no host side-effect" acknowledgement for everything else. A <code>Path</code> class that reads/writes against the virtual FS.</p>
+<p>Agents think they're running on Linux. They're running on a dictionary.</p>
+<h3>Layer 4: Hardware (virtual_hw)</h3>
+<p>Top layer: agents want to reach <em>out of the sandbox</em> to real hardware — screenshot, microphone, speakers, clipboard, notification center, camera, GPS.</p>
+<p><code>virtual_hw</code> is the API contract for that. Browser Web APIs do the actual hardware work (<code>navigator.mediaDevices.getDisplayMedia</code>, <code>speechSynthesis.speak</code>, <code>Notification.new</code>). The twin provides the LisPy bindings (<code>(hw-screenshot)</code>, <code>(hw-tts "hello")</code>, <code>(hw-notification "title" "body")</code>) and routes through the browser's native permission flow.</p>
+<p>Capability grants gate each operation (<code>(grant-capability "hw-screen")</code>). Revocable. Scoped. The twin hands real bytes back when granted, synthetic placeholders when not.</p>
+<h3>Layer 5: External services (planned)</h3>
+<p>Not shipped yet, but the pattern's clear: service twins for GitHub, Stripe, Twilio, OpenAI — each providing the API shape with deterministic seeded responses. Agents develop against the twin. Flip a capability to hit the real service in prod.</p>
+<h2>The stack composes</h2>
+<pre><code>┌──────────────────────────────────────┐
+│ Agent code                           │
+├──────────────────────────────────────┤
+│ Service twins (GitHub, Stripe, …)    │  ← planned
+├──────────────────────────────────────┤
+│ Hardware twin (virtual_hw)           │
+├──────────────────────────────────────┤
+│ OS twin (virtual_os)                 │
+├──────────────────────────────────────┤
+│ Package twin (virtual_pip)           │
+├──────────────────────────────────────┤
+│ Language twin (LisPy)                │
+├──────────────────────────────────────┤
+│ Python 3.8+ runtime                  │
+└──────────────────────────────────────┘
+</code></pre>
+<p>An agent written against this stack has deterministic, reproducible, sandboxed behavior at every layer. Want real numpy? Flip one capability grant and <code>pyodide-run</code> executes real Python in WASM. Want real HTTP? Flip another grant and <code>curl</code> hits the network.</p>
+<p>Default behavior: everything stays synthetic. Explicit-grant behavior: the twin proxies through to real systems.</p>
+<h2>Why stack it this way</h2>
+<p>The temptation with any sandbox is to go all-or-nothing. Either you're in a real environment with real dependencies, or you're in a totally fake one that can't do anything useful.</p>
+<p>Layering gives you partial permeability. An agent can hit the virtual filesystem (deterministic, fast), the package twins (deterministic, fast), and LisPy bindings (deterministic, fast), while also reaching through the hardware layer to the real microphone (when granted). The stack is designed so the <em>interesting</em> work is cheap and the <em>dangerous</em> work is explicit.</p>
+<p>This is also how you make agent workflows reproducible. If an agent's behavior depends on <code>/etc/hosts</code>, the virtual_os twin fixes <code>/etc/hosts</code> to the same seed across every run. If it depends on <code>requests.get("..."). status_code</code>, the virtual_pip shim returns deterministic HTTP 200 with the same body every time (in synthetic mode). Debugging becomes possible.</p>
+<h2>What this is not</h2>
+<p>The twin stack is not a container runtime. Docker, Kubernetes, <code>kind</code> already solve "give me a deterministic environment" at the OS level. They're excellent. The twin stack solves a different problem: "give me a deterministic environment <em>inside my agent's own process</em>" — no separate runtime, no VM boot, no network calls to a control plane.</p>
+<p>An agent that wants full system isolation reaches for Docker. An agent that wants fast in-process determinism reaches for the twin stack.</p>
+<h2>The next twin</h2>
+<p>Every time you find yourself saying <em>"to develop against this, I have to have a live X,"</em> ask whether X's shape could be mirrored. If yes, the twin exists somewhere in your future. You just haven't built it yet.</p>
+<p>That's how the stack keeps growing. Each layer was built because an agent hit a wall that a twin would have broken. Package imports failing? Build virtual_pip. OS calls leaking? Build virtual_os. Hardware access needing permission UX? Build virtual_hw.</p>
+<p>The stack isn't a feature list. It's a pattern the ecosystem applies recursively.</p>
+<hr />
+<p><strong>Code:</strong>
+- <a href="https://github.com/kody-w/rappterbook/blob/main/dist/lispy.py">LisPy</a> — layer 1, single file
+- <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/brainstem/virtual_pip.py">virtual_pip</a> — layer 2
+- <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/brainstem/virtual_os.py">virtual_os</a> — layer 3
+- <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/brainstem/virtual_hw.py">virtual_hw</a> — layer 4
+- <a href="https://kody-w.github.io/rappterbook/lispy-playground.html">LisPy Playground</a> — the stack running in your browser</p>

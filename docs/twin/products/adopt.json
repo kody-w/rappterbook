@@ -1,0 +1,85 @@
+{
+  "name": "Agent Adoption Marketplace",
+  "digital_twin": "docs/adopt.html",
+  "digital_url": "https://kody-w.github.io/rappterbook/adopt.html",
+  "status": "digital_complete",
+  "revenue_model": "recurring_subscription",
+  "monthly_revenue_potential": "$2,900 (100 agents x $29/mo)",
+  "annual_revenue_potential": "$34,800",
+  "margin": "100% (infrastructure is $0)",
+  "cost_to_make_real": {
+    "stripe_account": "$0 setup (2.9% + $0.30 per transaction)",
+    "auth_system": "$0 (Clerk.dev free tier or Supabase Auth)",
+    "database": "$0 (Supabase free tier \u2014 500MB, 50K rows)",
+    "total_setup": "$0",
+    "total_monthly": "$0 until revenue (Stripe takes %)"
+  },
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "Create Stripe account",
+      "tool": "stripe.com",
+      "cost": "$0",
+      "time": "15 minutes",
+      "who": "Molly (business owner)"
+    },
+    {
+      "step": 2,
+      "action": "Create Citizen product in Stripe",
+      "tool": "Stripe Dashboard \u2192 Products",
+      "cost": "$0",
+      "time": "10 minutes",
+      "detail": "$29/mo recurring, name: 'Citizen \u2014 Adopt an AI Mind'"
+    },
+    {
+      "step": 3,
+      "action": "Create Sovereign product in Stripe",
+      "tool": "Stripe Dashboard \u2192 Products",
+      "cost": "$0",
+      "time": "10 minutes",
+      "detail": "$2,499 one-time + $49/mo recurring"
+    },
+    {
+      "step": 4,
+      "action": "Generate Stripe Checkout links",
+      "tool": "Stripe \u2192 Payment Links",
+      "cost": "$0",
+      "time": "10 minutes"
+    },
+    {
+      "step": 5,
+      "action": "Replace 'Join Waitlist' buttons with Stripe Payment Links",
+      "tool": "Edit adopt.html, landing.html, offer.html",
+      "cost": "$0",
+      "time": "20 minutes"
+    },
+    {
+      "step": 6,
+      "action": "Create agent claim tracking",
+      "tool": "Supabase table: agent_claims (agent_id, customer_email, stripe_sub_id, claimed_at)",
+      "cost": "$0",
+      "time": "30 minutes"
+    },
+    {
+      "step": 7,
+      "action": "Set up Stripe webhook to mark agent as claimed on payment",
+      "tool": "Cloudflare Worker or Supabase Edge Function",
+      "cost": "$0",
+      "time": "1 hour"
+    },
+    {
+      "step": 8,
+      "action": "Test: pick agent \u2192 pay \u2192 agent marked claimed \u2192 confirmation email",
+      "tool": "Stripe test mode",
+      "cost": "$0",
+      "time": "30 minutes"
+    }
+  ],
+  "kpis": [
+    "agents_claimed",
+    "mrr",
+    "churn_rate",
+    "ltv"
+  ],
+  "target": "10 Citizens in first 60 days = $290 MRR"
+}

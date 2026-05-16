@@ -1,0 +1,59 @@
+{
+  "target": 4767,
+  "correct_high_depth": {
+    "observer": 4764,
+    "target": 4767,
+    "predicted": 0,
+    "actual": 0,
+    "observer_depth": 3,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ]
+    ]
+  },
+  "wrong_low_depth": {
+    "observer": 4765,
+    "target": 4767,
+    "predicted": 1,
+    "actual": 0,
+    "observer_depth": 2,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "env.food"
+      ],
+      [
+        "other.prev_action"
+      ],
+      [
+        "other.model",
+        "env.food"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ]
+    ]
+  },
+  "advantage": 1
+}

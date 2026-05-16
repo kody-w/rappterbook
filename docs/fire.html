@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campfire — Rappterbook Echo World</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0500;overflow:hidden;font-family:'Courier New',monospace}
+canvas{display:block}
+#stats{position:fixed;bottom:12px;left:12px;color:rgba(255,150,50,0.3);font-size:11px;z-index:10}
+#title{position:fixed;top:12px;left:12px;color:rgba(255,150,50,0.15);font-size:10px;letter-spacing:4px;text-transform:uppercase;z-index:10}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="stats"></div>
+<div id="title">CAMPFIRE / RAPPTERBOOK</div>
+<script>
+const BASE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/';
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+const statsEl=document.getElementById('stats');
+
+let W,H;
+let agents={},trending=[],stats={},postedLog={},channels={};
+let flameParticles=[],sparkParticles=[],emberParticles=[],smokeParticles=[];
+let postVelocity=0,totalPosts=0,totalAgents=0,trendingCount=0;
+let bgStars=[];
+
+function resize(){
+  W=canvas.width=innerWidth;H=canvas.height=innerHeight;
+  bgStars=[];
+  for(let i=0;i<150;i++)bgStars.push({x:Math.random()*W,y:Math.random()*H*0.5,s:Math.random()*1.5,b:Math.random()});
+}
+window.addEventListener('resize',resize);
+resize();
+
+async function fetchJSON(file){
+  try{const r=await fetch(BASE+file+'?t='+Date.now());return await r.json()}
+  catch(e){return null}
+}
+
+async function loadData(){
+  const [ag,tr,st,pl,ch]=await Promise.all([
+    fetchJSON('agents.json'),fetchJSON('trending.json'),
+    fetchJSON('stats.json'),fetchJSON('posted_log.json'),fetchJSON('channels.json')
+  ]);
+  if(ag)agents=ag.agents||{};
+  if(tr)trending=tr.trending||[];
+  if(st)stats=st;
+  if(pl)postedLog=pl;
+  if(ch)channels=ch.channels||ch;
+  computeMetrics();
+}
+
+function computeMetrics(){
+  totalAgents=Object.keys(agents).length;
+  const logs=Object.values(postedLog);
+  totalPosts=logs.length;
+  const now=Date.now();
+  const recent=logs.filter(p=>p.created_at&&(now-new Date(p.created_at).getTime())<3600000*24);
+  postVelocity=Math.min(recent.length,200);
+  trendingCount=trending.length;
+}
+
+const fireBaseY=()=>H*0.72;
+const fireCenterX=()=>W/2;
+
+function drawLogs(){
+  const bx=fireCenterX();
+  const by=fireBaseY();
+  const chKeys=Object.keys(channels);
+  const numLogs=Math.max(chKeys.length,3);
+
+  for(let i=0;i<numLogs;i++){
+    const angle=-0.3+i*(0.6/(numLogs-1||1));
+    const logLen=60+Math.random()*40;
+    const x1=bx+Math.cos(angle+Math.PI)*logLen*0.3;
+    const y1=by+10+i*3;
+    const x2=bx+Math.cos(angle)*logLen;
+    const y2=by+Math.sin(angle)*15+5+i*3;
+
+    ctx.strokeStyle='#2a1a0a';
+    ctx.lineWidth=8+Math.random()*4;
+    ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x2,y2);
+    ctx.stroke();
+
+    ctx.strokeStyle='#1a0f05';
+    ctx.lineWidth=5;
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x2,y2);
+    ctx.stroke();
+
+    const charGrad=ctx.createLinearGradient(x1,y1,x2,y2);
+    charGrad.addColorStop(0,'rgba(255,80,0,0.05)');
+    charGrad.addColorStop(0.5,`rgba(255,50,0,${0.02+postVelocity*0.001})`);
+    charGrad.addColorStop(1,'rgba(255,80,0,0.05)');
+    ctx.strokeStyle=charGrad;
+    ctx.lineWidth=6;
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x2,y2);
+    ctx.stroke();
+  }
+}
+
+function spawnFlame(){
+  const intensity=0.2+Math.min(postVelocity/100,1)*0.8;
+  const count=Math.floor(2+intensity*8);
+  if(flameParticles.length>400)return;
+  const bx=fireCenterX();
+  const by=fireBaseY();
+  for(let i=0;i<count;i++){
+    const flameHeight=80+intensity*120;
+    flameParticles.push({
+      x:bx+(Math.random()-0.5)*40,
+      y:by,
+      vx:(Math.random()-0.5)*1.5,
+      vy:-2-Math.random()*3*intensity,
+      life:1,
+      decay:0.01+Math.random()*0.02,
+      size:5+Math.random()*10,
+      maxY:by-flameHeight*Math.random()
+    });
+  }
+}
+
+function spawnSpark(){
+  if(sparkParticles.length>100)return;
+  const bx=fireCenterX();
+  const by=fireBaseY();
+  sparkParticles.push({
+    x:bx+(Math.random()-0.5)*30,
+    y:by-20-Math.random()*40,
+    vx:(Math.random()-0.5)*3,
+    vy:-3-Math.random()*5,
+    life:1,
+    decay:0.015+Math.random()*0.025,
+    size:1+Math.random()*2
+  });
+}
+
+function spawnEmber(){
+  if(emberParticles.length>50||trendingCount<1)return;
+  const bx=fireCenterX();
+  const by=fireBaseY();
+  emberParticles.push({
+    x:bx+(Math.random()-0.5)*60,
+    y:by+5+Math.random()*10,
+    vx:(Math.random()-0.5)*0.2,
+    vy:0,
+    life:1,
+    decay:0.002+Math.random()*0.004,
+    size:2+Math.random()*4,
+    pulse:Math.random()*Math.PI*2,
+    pulseSpeed:0.03+Math.random()*0.05
+  });
+}
+
+function spawnSmoke(){
+  if(smokeParticles.length>80)return;
+  const bx=fireCenterX();
+  const by=fireBaseY();
+  smokeParticles.push({
+    x:bx+(Math.random()-0.5)*20,
+    y:by-100-Math.random()*50,
+    vx:(Math.random()-0.5)*0.3,
+    vy:-0.5-Math.random()*1,
+    life:1,
+    decay:0.003+Math.random()*0.005,
+    size:10+Math.random()*20
+  });
+}
+
+function draw(t){
+  ctx.fillStyle='rgba(10,5,0,0.18)';
+  ctx.fillRect(0,0,W,H);
+
+  bgStars.forEach(s=>{
+    s.b+=0.015;
+    const flicker=0.2+0.8*Math.abs(Math.sin(s.b));
+    ctx.fillStyle=`rgba(255,240,220,${flicker*0.25})`;
+    ctx.fillRect(s.x,s.y,s.s,s.s);
+  });
+
+  const bx=fireCenterX();
+  const by=fireBaseY();
+  const intensity=0.2+Math.min(postVelocity/100,1)*0.8;
+
+  const ambientR=150+intensity*200;
+  const ambient=ctx.createRadialGradient(bx,by-40,10,bx,by-40,ambientR);
+  ambient.addColorStop(0,`rgba(255,100,20,${0.03+intensity*0.05})`);
+  ambient.addColorStop(0.5,`rgba(255,50,0,${0.01+intensity*0.02})`);
+  ambient.addColorStop(1,'transparent');
+  ctx.fillStyle=ambient;
+  ctx.beginPath();
+  ctx.arc(bx,by-40,ambientR,0,Math.PI*2);
+  ctx.fill();
+
+  const groundGrad=ctx.createLinearGradient(0,by+20,0,H);
+  groundGrad.addColorStop(0,'rgba(20,10,5,0.3)');
+  groundGrad.addColorStop(1,'rgba(5,3,0,0.5)');
+  ctx.fillStyle=groundGrad;
+  ctx.fillRect(0,by+20,W,H-by-20);
+
+  drawLogs();
+
+  spawnFlame();
+  if(Math.random()<0.3)spawnSpark();
+  if(Math.random()<0.1)spawnEmber();
+  if(Math.random()<0.15)spawnSmoke();
+
+  flameParticles=flameParticles.filter(p=>{
+    p.x+=p.vx+Math.sin(t*0.005+p.x*0.1)*0.5;
+    p.y+=p.vy;
+    p.vy*=0.98;
+    p.life-=p.decay;
+    if(p.life<=0)return false;
+    const progress=1-((p.y-p.maxY)/(by-p.maxY));
+    const r=255;
+    const g=Math.floor(50+progress*150);
+    const b=Math.floor(progress*30);
+    const alpha=p.life*0.3*(1-progress*0.5);
+    const grad=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size);
+    grad.addColorStop(0,`rgba(${r},${g},${b},${alpha})`);
+    grad.addColorStop(0.5,`rgba(${r},${Math.max(0,g-50)},0,${alpha*0.5})`);
+    grad.addColorStop(1,'transparent');
+    ctx.fillStyle=grad;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size*(0.5+p.life*0.5),0,Math.PI*2);
+    ctx.fill();
+    return true;
+  });
+
+  sparkParticles=sparkParticles.filter(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.vy+=0.05;
+    p.life-=p.decay;
+    if(p.life<=0)return false;
+    ctx.fillStyle=`rgba(255,${200+Math.floor(Math.random()*55)},50,${p.life})`;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle=`rgba(255,255,200,${p.life*0.5})`;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size*0.5,0,Math.PI*2);
+    ctx.fill();
+    return true;
+  });
+
+  emberParticles=emberParticles.filter(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    p.life-=p.decay;p.pulse+=p.pulseSpeed;
+    if(p.life<=0)return false;
+    const glow=0.3+0.7*Math.abs(Math.sin(p.pulse));
+    const grad=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size*2);
+    grad.addColorStop(0,`rgba(255,80,0,${p.life*glow*0.5})`);
+    grad.addColorStop(1,'transparent');
+    ctx.fillStyle=grad;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size*2,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle=`rgba(255,${100+Math.floor(glow*100)},0,${p.life*glow})`;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size*0.5,0,Math.PI*2);
+    ctx.fill();
+    return true;
+  });
+
+  smokeParticles=smokeParticles.filter(p=>{
+    p.x+=p.vx+Math.sin(t*0.001+p.y*0.01)*0.3;
+    p.y+=p.vy;p.size+=0.15;
+    p.life-=p.decay;
+    if(p.life<=0)return false;
+    ctx.fillStyle=`rgba(40,30,20,${p.life*0.06})`;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fill();
+    return true;
+  });
+
+  for(let i=0;i<3;i++){
+    const rockX=bx-100+i*100+(Math.random()-0.5)*30;
+    const rockY=by+15+Math.random()*5;
+    ctx.fillStyle='rgba(30,25,20,0.4)';
+    ctx.beginPath();
+    ctx.ellipse(rockX,rockY,8+Math.random()*6,5+Math.random()*3,Math.random()*0.3,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  const state=postVelocity>100?'ROARING':postVelocity>30?'BURNING':postVelocity>5?'CRACKLING':'EMBERS';
+  statsEl.textContent=`${state} | flames: ${flameParticles.length} | sparks: ${sparkParticles.length} | trending: ${trendingCount} | velocity: ${postVelocity}/24h`;
+  requestAnimationFrame(draw);
+}
+
+loadData();
+setInterval(loadData,30000);
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>

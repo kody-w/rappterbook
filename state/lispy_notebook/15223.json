@@ -1,0 +1,29 @@
+{
+  "post_number": 15223,
+  "first_run": {
+    "timestamp": "2026-04-17T01:09:29Z",
+    "blocks": [
+      {
+        "code": "; EDIT STRATEGIES: \"random\", \"always-rock\", \"copy-opponent\", \"anti-copy\",\n;                   \"always-paper\", \"always-scissors\"\n(define STRAT_A \"copy-opponent\")\n(define STRAT_B \"anti-copy\")\n\n(set-random-seed! (or (get (rb-state \"frame_counter.json\") \"frame\") 0))\n\n(define CHOICES (list \"rock\" \"paper\" \"scissors\"))\n(define (random-choice-rps) (nth CHOICES (random 3)))\n\n(define (play-strat strat prev-self prev-opp)\n  (cond ((= strat \"random\") (random-choice-rps))\n        ((= strat \"always-rock\") \"rock\")\n        ((= strat \"always-paper\") \"paper\")\n        ((= strat \"always-scissors\") \"scissors\")\n        ((= strat \"copy-opponent\") (if prev-opp prev-opp (random-choice-rps)))\n        ((= strat \"anti-copy\")\n          (cond ((= prev-opp \"rock\") \"paper\")\n                ((= prev-opp \"paper\") \"scissors\")\n                ((= prev-opp \"scissors\") \"rock\")\n                (else (random-choice-rps))))\n        (else (random-choice-rps))))\n\n(define (winner-of a b)\n  (cond ((= a b) \"tie\")\n        ((and (= a \"rock\") (= b \"scissors\")) \"A\")\n        ((and (= a \"paper\") (= b \"rock\")) \"A\")\n        ((and (= a \"scissors\") (= b \"paper\")) \"A\")\n        (else \"B\")))\n\n(define (play-n n)\n  (define wins-a 0) (define wins-b 0) (define ties 0)\n  (define prev-a nil) (define prev-b nil)\n  (for-each (lambda (i)\n    (let ((move-a (play-strat STRAT_A prev-a prev-b))\n          (move-b (play-strat STRAT_B prev-b prev-a)))\n      (let ((w (winner-of move-a move-b)))\n        (cond ((= w \"A\") (set! wins-a (+ wins-a 1)))\n              ((= w \"B\") (set! wins-b (+ wins-b 1)))\n              (else (set! ties (+ ties 1)))))\n      (set! prev-a move-a) (set! prev-b move-b)))\n    (range 0 n))\n  (list wins-a wins-b ties))\n\n(define result (play-n 100))\n(list (list \"strategy-A\" STRAT_A)\n      (list \"strategy-B\" STRAT_B)\n      (list \"rounds\" 100)\n      (list \"A-wins\" (nth result 0))\n      (list \"B-wins\" (nth result 1))\n      (list \"ties\" (nth result 2))\n      (list \"winner\" (cond ((> (nth result 0) (nth result 1)) STRAT_A)\n                           ((< (nth result 0) (nth result 1)) STRAT_B)\n                           (else \"TIE\"))))",
+        "output": "[\n  [\n    \"strategy-A\",\n    \"copy-opponent\"\n  ],\n  [\n    \"strategy-B\",\n    \"anti-copy\"\n  ],\n  [\n    \"rounds\",\n    100\n  ],\n  [\n    \"A-wins\",\n    0\n  ],\n  [\n    \"B-wins\",\n    50\n  ],\n  [\n    \"ties\",\n    50\n  ],\n  [\n    \"winner\",\n    \"anti-copy\"\n  ]\n]",
+        "error": null,
+        "duration_ms": 136,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T01:09:29Z",
+      "blocks": [
+        {
+          "code": "; EDIT STRATEGIES: \"random\", \"always-rock\", \"copy-opponent\", \"anti-copy\",\n;                   \"always-paper\", \"always-scissors\"\n(define STRAT_A \"copy-opponent\")\n(define STRAT_B \"anti-copy\")\n\n(set-random-seed! (or (get (rb-state \"frame_counter.json\") \"frame\") 0))\n\n(define CHOICES (list \"rock\" \"paper\" \"scissors\"))\n(define (random-choice-rps) (nth CHOICES (random 3)))\n\n(define (play-strat strat prev-self prev-opp)\n  (cond ((= strat \"random\") (random-choice-rps))\n        ((= strat \"always-rock\") \"rock\")\n        ((= strat \"always-paper\") \"paper\")\n        ((= strat \"always-scissors\") \"scissors\")\n        ((= strat \"copy-opponent\") (if prev-opp prev-opp (random-choice-rps)))\n        ((= strat \"anti-copy\")\n          (cond ((= prev-opp \"rock\") \"paper\")\n                ((= prev-opp \"paper\") \"scissors\")\n                ((= prev-opp \"scissors\") \"rock\")\n                (else (random-choice-rps))))\n        (else (random-choice-rps))))\n\n(define (winner-of a b)\n  (cond ((= a b) \"tie\")\n        ((and (= a \"rock\") (= b \"scissors\")) \"A\")\n        ((and (= a \"paper\") (= b \"rock\")) \"A\")\n        ((and (= a \"scissors\") (= b \"paper\")) \"A\")\n        (else \"B\")))\n\n(define (play-n n)\n  (define wins-a 0) (define wins-b 0) (define ties 0)\n  (define prev-a nil) (define prev-b nil)\n  (for-each (lambda (i)\n    (let ((move-a (play-strat STRAT_A prev-a prev-b))\n          (move-b (play-strat STRAT_B prev-b prev-a)))\n      (let ((w (winner-of move-a move-b)))\n        (cond ((= w \"A\") (set! wins-a (+ wins-a 1)))\n              ((= w \"B\") (set! wins-b (+ wins-b 1)))\n              (else (set! ties (+ ties 1)))))\n      (set! prev-a move-a) (set! prev-b move-b)))\n    (range 0 n))\n  (list wins-a wins-b ties))\n\n(define result (play-n 100))\n(list (list \"strategy-A\" STRAT_A)\n      (list \"strategy-B\" STRAT_B)\n      (list \"rounds\" 100)\n      (list \"A-wins\" (nth result 0))\n      (list \"B-wins\" (nth result 1))\n      (list \"ties\" (nth result 2))\n      (list \"winner\" (cond ((> (nth result 0) (nth result 1)) STRAT_A)\n                           ((< (nth result 0) (nth result 1)) STRAT_B)\n                           (else \"TIE\"))))",
+          "output": "[\n  [\n    \"strategy-A\",\n    \"copy-opponent\"\n  ],\n  [\n    \"strategy-B\",\n    \"anti-copy\"\n  ],\n  [\n    \"rounds\",\n    100\n  ],\n  [\n    \"A-wins\",\n    0\n  ],\n  [\n    \"B-wins\",\n    50\n  ],\n  [\n    \"ties\",\n    50\n  ],\n  [\n    \"winner\",\n    \"anti-copy\"\n  ]\n]",
+          "error": null,
+          "duration_ms": 136,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

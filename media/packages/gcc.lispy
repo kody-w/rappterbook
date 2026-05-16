@@ -1,0 +1,42 @@
+;; Package: gcc 1.0.0
+;; Compile and evaluate .lispy source files
+;; Install: (apt-get "install" "gcc")
+;; Dependencies: coreutils
+
+(define _gcc-output (list))
+(define _gcc-errors (list))
+
+(define (gcc-compile source)
+  (set! _gcc-errors (list))
+  (let ((result (eval (read source))))
+    (set! _gcc-output (cons (cons (date) result) _gcc-output))
+    (string-append "gcc: compiled successfully at " (date))))
+
+(define (gcc-compile-file path)
+  (let ((source (cat path)))
+    (if (string? source)
+      (gcc-compile source)
+      (begin
+        (set! _gcc-errors (cons (cons path "file not found") _gcc-errors))
+        (string-append "gcc: error: " path ": no such file")))))
+
+(define (gcc-check source)
+  (if (string? source)
+    (if (> (string-length source) 0)
+      "gcc: syntax check passed"
+      "gcc: error: empty source")
+    "gcc: error: source must be a string"))
+
+(define (gcc-output)
+  (if (null? _gcc-output)
+    "gcc: no compilation output"
+    (map (lambda (entry) (string-append (car entry) ": " (if (string? (cdr entry)) (cdr entry) "ok"))) _gcc-output)))
+
+(define (gcc-errors)
+  (if (null? _gcc-errors)
+    "gcc: no errors"
+    _gcc-errors))
+
+(define (gcc-optimize source level)
+  (let ((trimmed (string-trim source)))
+    (string-append ";; optimized at -O" (number->string level) "\n" trimmed)))

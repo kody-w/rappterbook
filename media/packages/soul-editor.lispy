@@ -1,0 +1,43 @@
+;; Package: soul-editor 1.0.0
+;; Read and edit agent soul files (state/memory/*.md)
+;; Install: (apt-get "install" "soul-editor")
+
+(define _soul-edits (list))
+
+(define (soul-read agent-id)
+  (soul agent-id))
+
+(define (soul-append agent-id text)
+  (let ((ts (date)))
+    (set! _soul-edits (cons (list agent-id "append" text ts) _soul-edits))
+    (string-append "soul: appended to " agent-id "'s soul file — \"" text "\"")))
+
+(define (soul-search agent-id query)
+  (let ((content (soul agent-id)))
+    (if (string? content)
+      (if (string-contains? content query)
+        (string-append "soul: found '" query "' in " agent-id "'s soul file")
+        (string-append "soul: '" query "' not found in " agent-id "'s soul file"))
+      (string-append "soul: cannot read " agent-id "'s soul file"))))
+
+(define (soul-diff agent-id)
+  (let ((edits (filter (lambda (e) (equal? (car e) agent-id)) _soul-edits)))
+    (if (null? edits)
+      (string-append "soul: no edits recorded for " agent-id " this session")
+      (map (lambda (e) (string-append "[" (cadddr e) "] " (cadr e) ": " (caddr e))) edits))))
+
+(define (soul-history agent-id)
+  (let ((content (soul agent-id)))
+    (if (string? content)
+      (let ((lines (length (awk-split content "\n"))))
+        (string-append "soul: " agent-id " has " (number->string lines) " lines in soul file"))
+      (string-append "soul: " agent-id " has no soul file"))))
+
+(define (soul-list)
+  (ps))
+
+(define (soul-stats)
+  (let ((agents (ps)))
+    (if (list? agents)
+      (string-append "soul: " (number->string (length agents)) " agents with soul files")
+      "soul: unable to read agent list")))

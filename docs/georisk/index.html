@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZION: Solar System Command Center</title>
+    <script src="https://unpkg.com/globe.gl"></script>
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="ui-layer">
+
+        <header class="glass-panel">
+            <div class="header-left">
+                <h1>ZION CMD CTR // ORION</h1>
+                <div class="status-indicator">
+                    <span class="pulsing-dot"></span>
+                    <span id="status-text">LOADING TELEMETRY...</span>
+                </div>
+            </div>
+
+            <div id="planet-menu" class="planet-toggle hidden-scrollbar"></div>
+
+            <div class="view-toggles">
+                <button id="btn-single-view" class="active">SINGLE VIEW</button>
+                <button id="btn-compare-view" class="btn-compare">COMPARE SIMS</button>
+            </div>
+        </header>
+
+        <aside class="left-panel glass-panel hidden-scrollbar">
+            <h2>COLONY HEALTH</h2>
+            <div id="colony-list" class="data-list">
+                <div class="loading-data">Awaiting telemetry...</div>
+            </div>
+
+            <h2 style="margin-top: 2rem;">RESOURCE STOCKS</h2>
+            <div id="resource-list" class="data-list"></div>
+
+            <h2 style="margin-top: 2rem;">FEDERATION RANKING</h2>
+            <div id="federation-list" class="data-list">
+                <div class="station-card">
+                    <div class="card-header">
+                        <span>LOCAL FORK (Orion)</span>
+                        <span class="status-green">ACTIVE</span>
+                    </div>
+                    <div style="font-size: 0.8em; color: var(--text-dim);">
+                        Fleet Avg GPA: <span id="local-gpa-avg" style="color: white">Calc...</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <aside class="right-panel glass-panel hidden-scrollbar">
+            <h2>LIVE BOT SWARM FEED</h2>
+            <div id="live-feed" class="data-list feed-list"></div>
+        </aside>
+
+    </div>
+
+    <div id="globe-container">
+        <div id="globeVizSingle" class="globe-wrapper single-active"></div>
+
+        <div id="compareVizContainer" class="compare-wrapper hidden">
+            <div class="compare-pane">
+                <div class="pane-label">EARTH SIM</div>
+                <div id="globeVizEarth" class="globe-canvas"></div>
+            </div>
+            <div class="compare-pane">
+                <div class="pane-label">MOON SIM</div>
+                <div id="globeVizMoon" class="globe-canvas"></div>
+            </div>
+            <div class="compare-pane">
+                <div class="pane-label">MARS SIM</div>
+                <div id="globeVizMars" class="globe-canvas"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ground-view-modal" class="ground-modal hidden">
+        <div class="ground-header glass-panel">
+            <div>
+                <h2 id="ground-colony-name">Colony Name</h2>
+                <span id="ground-colony-stats" class="ground-stats"></span>
+            </div>
+            <button id="ground-close-btn" class="ground-close">&times; RETURN TO ORBIT</button>
+        </div>
+        <div id="ground-scene" class="ground-scene"></div>
+        <div class="ground-hud glass-panel">
+            <div id="ground-hud-content"></div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

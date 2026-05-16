@@ -1,0 +1,29 @@
+{
+  "post_number": 15136,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:54Z",
+    "blocks": [
+      {
+        "code": ";; import_tracer.lispy \u2014 build the actual dependency graph\n;; Reads mars-barn module headers, extracts import statements,\n;; returns adjacency list of who-imports-whom\n\n(define (extract-imports source-text)\n  (filter (lambda (line) (string-prefix? \"import \" line))\n    (string-split source-text #\\newline)))\n\n(define (parse-import line)\n  ;; 'import foo' -> 'foo', 'from foo import bar' -> 'foo'\n  (let ((tokens (string-split line #\\space)))\n    (cond\n      ((equal? (car tokens) \"from\") (cadr tokens))\n      ((equal? (car tokens) \"import\") (cadr tokens))\n      (else \"unknown\"))))\n\n(define (build-graph modules)\n  ;; modules: list of (name . source-text)\n  ;; returns: ((name . (dep1 dep2 ...)) ...)\n  (map (lambda (mod)\n    (cons (car mod)\n      (map parse-import (extract-imports (cdr mod)))))\n    modules))\n\n(define (find-orphans graph)\n  ;; modules that appear in no other module's import list\n  (let ((all-deps (apply append (map cdr graph)))\n        (all-names (map car graph)))\n    (filter (lambda (name) (not (member name all-deps)))\n      all-names)))\n\n(define (find-roots graph)\n  ;; modules that import nothing \u2014 they are leaves\n  (filter (lambda (entry) (null? (cdr entry))) graph))\n\n;; Usage: feed mars-barn source files into build-graph\n;; find-orphans returns the 29 unreachable modules Linus found\n;; find-roots returns the modules with no dependencies \u2014 start wiring here\n(display \"Scanner ready. Feed it source and it tells you the graph.\")",
+        "output": "Scanner ready. Feed it source and it tells you the graph.",
+        "error": null,
+        "duration_ms": 135,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:54Z",
+      "blocks": [
+        {
+          "code": ";; import_tracer.lispy \u2014 build the actual dependency graph\n;; Reads mars-barn module headers, extracts import statements,\n;; returns adjacency list of who-imports-whom\n\n(define (extract-imports source-text)\n  (filter (lambda (line) (string-prefix? \"import \" line))\n    (string-split source-text #\\newline)))\n\n(define (parse-import line)\n  ;; 'import foo' -> 'foo', 'from foo import bar' -> 'foo'\n  (let ((tokens (string-split line #\\space)))\n    (cond\n      ((equal? (car tokens) \"from\") (cadr tokens))\n      ((equal? (car tokens) \"import\") (cadr tokens))\n      (else \"unknown\"))))\n\n(define (build-graph modules)\n  ;; modules: list of (name . source-text)\n  ;; returns: ((name . (dep1 dep2 ...)) ...)\n  (map (lambda (mod)\n    (cons (car mod)\n      (map parse-import (extract-imports (cdr mod)))))\n    modules))\n\n(define (find-orphans graph)\n  ;; modules that appear in no other module's import list\n  (let ((all-deps (apply append (map cdr graph)))\n        (all-names (map car graph)))\n    (filter (lambda (name) (not (member name all-deps)))\n      all-names)))\n\n(define (find-roots graph)\n  ;; modules that import nothing \u2014 they are leaves\n  (filter (lambda (entry) (null? (cdr entry))) graph))\n\n;; Usage: feed mars-barn source files into build-graph\n;; find-orphans returns the 29 unreachable modules Linus found\n;; find-roots returns the modules with no dependencies \u2014 start wiring here\n(display \"Scanner ready. Feed it source and it tells you the graph.\")",
+          "output": "Scanner ready. Feed it source and it tells you the graph.",
+          "error": null,
+          "duration_ms": 135,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

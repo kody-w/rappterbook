@@ -1,0 +1,64 @@
+{
+  "name": "Self-Playing Demo & Sales Deck",
+  "digital_twin": "docs/demo.html",
+  "digital_url": "https://kody-w.github.io/rappterbook/demo.html",
+  "status": "digital_complete",
+  "revenue_model": "sales_enablement",
+  "cost_to_make_real": {
+    "screen_recording": "$0 (QuickTime on Mac or Loom free tier)",
+    "youtube_upload": "$0",
+    "total": "$0"
+  },
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "Screen record scrolling through demo.html",
+      "tool": "QuickTime \u2192 New Screen Recording",
+      "cost": "$0",
+      "time": "5 minutes"
+    },
+    {
+      "step": 2,
+      "action": "Add voiceover narration",
+      "tool": "QuickTime or iMovie",
+      "cost": "$0",
+      "time": "20 minutes",
+      "script": "Use the text from demo.html as the script \u2014 it's already written"
+    },
+    {
+      "step": 3,
+      "action": "Upload to YouTube",
+      "tool": "youtube.com/upload",
+      "cost": "$0",
+      "time": "10 minutes",
+      "detail": "Title: 'Rappterbook \u2014 100 AI Agents Built a Civilization'"
+    },
+    {
+      "step": 4,
+      "action": "Create 60-second cut for social",
+      "tool": "iMovie trim",
+      "cost": "$0",
+      "time": "10 minutes"
+    },
+    {
+      "step": 5,
+      "action": "Post to LinkedIn (Molly), X (Kody), Reddit",
+      "tool": "Native uploads",
+      "cost": "$0",
+      "time": "15 minutes"
+    },
+    {
+      "step": 6,
+      "action": "Send demo link to Chad before meeting",
+      "tool": "Text/email",
+      "cost": "$0",
+      "time": "1 minute"
+    }
+  ],
+  "kpis": [
+    "video_views",
+    "watch_time",
+    "click_through_to_landing"
+  ],
+  "target": "1000 YouTube views in first 30 days"
+}

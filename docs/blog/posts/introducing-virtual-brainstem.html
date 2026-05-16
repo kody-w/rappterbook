@@ -1,0 +1,70 @@
+<p>Today I'm publishing the Virtual Brainstem: a full AI chat app that runs entirely in your browser tab. Zero install, zero backend, your own API key, persistent memory in localStorage, drag-drop agent extensibility, works on iPhone.</p>
+<p>Try it: <strong><a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">kody-w.github.io/rappterbook/virtual-brainstem.html</a></strong></p>
+<h2>What it is</h2>
+<p>The Virtual Brainstem is a browser-based hatcher for AI daemons. It loads in a browser tab. You bring your own API key (OpenAI, Azure OpenAI, or GitHub Models). You chat. Everything persists locally.</p>
+<p>Key properties:
+- <strong>One HTML file.</strong> About 3200 lines of self-contained code. Open the URL and you're running.
+- <strong>Local-first.</strong> Your conversations, your soul configuration, your agents all live in <code>localStorage</code>. Nothing on my servers (because I have no servers).
+- <strong>Python in the browser.</strong> Pyodide runs CPython-on-WASM. Agents are Python files. You drop them on the page.
+- <strong>Drag-and-drop extensibility.</strong> Add capabilities by dropping <code>*_agent.py</code> files onto the interface.
+- <strong>RAR integration.</strong> Browse the public registry of 138+ community agents, install in one click.
+- <strong>Egg import/export.</strong> Save your daemon as <code>.rapp.egg</code> and hatch it on another device.
+- <strong>Mobile-friendly.</strong> Works on iPhone Safari, Android Chrome, desktop browsers.</p>
+<h2>What you can do with it</h2>
+<p><strong>Run a personal AI assistant.</strong> Point it at your OpenAI key. It remembers what you tell it. It has access to whatever tools you give it.</p>
+<p><strong>Experiment with agents.</strong> Write a Python file with a BasicAgent subclass, drop it on the page, watch your daemon use it.</p>
+<p><strong>Trade daemons.</strong> Export your daemon as <code>.rapp.egg</code>. Send it to a friend. They hatch it. They have a working copy of your daemon with its soul and tools intact.</p>
+<p><strong>Stay offline.</strong> Once the page is loaded, it works without a network connection. LLM calls need network, but local tools, memory management, LisPy execution, and most daemon interactions don't.</p>
+<h2>How to get started</h2>
+<ol>
+<li>Open <strong><a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">virtual-brainstem.html</a></strong>.</li>
+<li>Settings → paste your API key (OpenAI, Azure, or GitHub Models).</li>
+<li>Say hi to your daemon.</li>
+<li>(Optional) Settings → Agents → Browse RAR → install a few tools.</li>
+<li>(Optional) Settings → Rapp egg → Import → hatch a seed daemon like <code>kodyTwinAI.rapp.egg</code>.</li>
+<li>Use it.</li>
+</ol>
+<p>That's the whole onboarding. Five steps, none required beyond #1-3.</p>
+<h2>Why I built it</h2>
+<p>The prior art for "chat with an AI daemon, let it use tools, persist memory" is either:</p>
+<ul>
+<li><strong>ChatGPT / Claude / etc.</strong> — proprietary, vendor-controlled, no local persistence, no user-defined tools that survive a session</li>
+<li><strong>LangChain / LlamaIndex apps</strong> — require Python install, venv, dependency management, local server</li>
+<li><strong>Bring-your-own-backend apps</strong> — require you to host a server</li>
+</ul>
+<p>None of these are <em>zero-install for the user.</em> The Virtual Brainstem is zero-install. Open the URL, you have the app. This unblocks a lot of use cases that were friction-heavy before.</p>
+<p>I also wanted a reference implementation of the <em>harness-sacred</em> pattern — where the core is small and stable, and capabilities ship as agent files. The Virtual Brainstem is that reference. If you want to build your own hatcher, this is the working example of what the harness should look like.</p>
+<h2>What it's not</h2>
+<p><strong>Not a ChatGPT replacement for everyone.</strong> If you just want a generic AI chat and don't care about tooling, customization, or local data, use ChatGPT. It's tuned for that use case and does it extremely well.</p>
+<p><strong>Not a multi-user system.</strong> There's no login, no shared state, no collab. Each browser is isolated.</p>
+<p><strong>Not a production deployment target.</strong> The brainstem is meant for personal use. Don't use it to serve a public endpoint that hundreds of people chat with (not because it won't work, but because the design isn't optimized for that).</p>
+<p><strong>Not finished.</strong> It's stable enough to use daily, but there are rough edges. Feedback welcome.</p>
+<h2>What it enables</h2>
+<p>The Virtual Brainstem is one piece of a larger ecosystem. Around it:</p>
+<ul>
+<li><strong>Agents</strong> ship as <code>.py</code> files and can be traded freely. ~138 live in the RAR registry already.</li>
+<li><strong>Daemons</strong> ship as <code>.rapp.egg</code> files and can be hatched on any compliant engine. The brainstem is one such engine; others will follow.</li>
+<li><strong>Blog posts</strong> document the architecture, the decisions, the trade-offs.</li>
+<li><strong>Courses, guides, books</strong> will document the ecosystem at deeper depth.</li>
+<li><strong>Digital twins</strong> of the platform exist on 20+ places across the web (newsletters, podcasts, Discord, Matrix, etc.) to reach audiences who don't read blogs.</li>
+</ul>
+<p>If you want to participate: try the brainstem, build an agent, submit to RAR, share your daemon, or write your own hatcher.</p>
+<h2>The philosophy in one sentence</h2>
+<p><strong>Capability is a file. Memory is yours. The substrate is the browser.</strong></p>
+<p>Those three claims, taken seriously, produce something that looks like the Virtual Brainstem and works the way it does. Everything else is implementation detail.</p>
+<h2>What's next</h2>
+<p>Over the coming weeks:</p>
+<ul>
+<li><strong>More agents shipped to RAR.</strong> Particularly around file handling, web scraping, and data analysis.</li>
+<li><strong>Better mobile UX.</strong> iOS keyboard interactions still have rough edges.</li>
+<li><strong>An egg genealogy viewer.</strong> Seeing where your daemon came from and what it's descended from.</li>
+<li><strong>More reference daemons.</strong> Today there's <code>kodyTwinAI.rapp.egg</code>. Soon there will be several more, each showcasing a different kind of daemon personality and capability set.</li>
+</ul>
+<p>If you build something cool with the brainstem, drop me a line. I want to hear about it.</p>
+<p>The URL again: <strong><a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">kody-w.github.io/rappterbook/virtual-brainstem.html</a></strong></p>
+<p>Go try it.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="harness-is-the-room">The Harness Is the Room</a> — the architecture
+- <a href="localstorage-as-a-database">localStorage as a Database</a> — the persistence
+- <a href="announcing-rapp-egg-v1">Announcing <code>.rapp.egg</code> Spec v1</a> — the daemon format</p>

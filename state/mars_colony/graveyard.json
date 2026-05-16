@@ -1,0 +1,1401 @@
+{
+  "colonists": {
+    "colonist-23": {
+      "id": "colonist-23",
+      "name": "Lt. Cdr. Jackson Wolfe",
+      "role": "comms_officer",
+      "archetype": "support",
+      "bio": "American naval signals officer who ran SATCOM on the first Artemis lunar rotation. Brought a tarnished silver zippo engraved with a Shackleton quote that no longer lights.",
+      "skills": {
+        "leadership": 0.6,
+        "piloting": 0.4,
+        "engineering": 0.55,
+        "medical": 0.3,
+        "botany": 0.2,
+        "geology": 0.25,
+        "chemistry": 0.3,
+        "software": 0.75,
+        "construction": 0.35,
+        "communication": 0.92,
+        "research": 0.5,
+        "nuclear": 0.2
+      },
+      "fears": [
+        "a 44-minute Earth-side silence that never breaks",
+        "being the one who has to tell somebody their family is gone",
+        "his medical disclosure catching up with him"
+      ],
+      "relationships": {
+        "colonist-24": 0.7,
+        "colonist-01": -0.2,
+        "colonist-15": -0.7,
+        "colonist-29": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "comms_array",
+      "status": "dead",
+      "assignments": [
+        "earth_comms",
+        "signal_scheduling"
+      ],
+      "morale": 0.68,
+      "injuries": [],
+      "days_alive": 15,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4878,
+      "personality_seed": "academy rival of Hanh (colonist-15); lied on his medical disclosure about a prior cardiac arrhythmia",
+      "memorial": "Died sol 4878. Cause: hypothermia. After 15 sols."
+    },
+    "colonist-24": {
+      "id": "colonist-24",
+      "name": "Lt. Amara Ogunleye",
+      "role": "comms_officer",
+      "archetype": "support",
+      "bio": "Nigerian-British comms specialist and amateur radio operator since she was twelve. Brought a small handmade brass antenna her grandfather built for shortwave broadcasts during the Biafra years.",
+      "skills": {
+        "leadership": 0.5,
+        "piloting": 0.3,
+        "engineering": 0.55,
+        "medical": 0.3,
+        "botany": 0.2,
+        "geology": 0.2,
+        "chemistry": 0.3,
+        "software": 0.7,
+        "construction": 0.35,
+        "communication": 0.9,
+        "research": 0.5,
+        "nuclear": 0.15
+      },
+      "fears": [
+        "a long-baseline antenna misalignment during a storm",
+        "missing the one transmission that mattered"
+      ],
+      "relationships": {
+        "colonist-23": 0.7,
+        "colonist-02": 0.4,
+        "colonist-15": 0.4,
+        "colonist-12": 0.7,
+        "colonist-16": 0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "comms_array",
+      "status": "dead",
+      "assignments": [
+        "data_transmission",
+        "antenna_maintenance"
+      ],
+      "morale": 0.82,
+      "injuries": [],
+      "days_alive": 15,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4878,
+      "personality_seed": "hums static-patterns, cheerfully corrects everyone's pronunciation of her name",
+      "memorial": "Died sol 4878. Cause: hypothermia. After 15 sols."
+    },
+    "colonist-25": {
+      "id": "colonist-25",
+      "name": "Dr. Ingrid Solberg",
+      "role": "nuclear_engineer",
+      "archetype": "engineer",
+      "bio": "Norwegian nuclear engineer from the Kjeller research reactor program. Brought a small rune-carved rowan stave her uncle gave her the first time she suited up for a reactor walkdown.",
+      "skills": {
+        "leadership": 0.55,
+        "piloting": 0.25,
+        "engineering": 0.8,
+        "medical": 0.35,
+        "botany": 0.2,
+        "geology": 0.4,
+        "chemistry": 0.65,
+        "software": 0.5,
+        "construction": 0.4,
+        "communication": 0.55,
+        "research": 0.7,
+        "nuclear": 0.95
+      },
+      "fears": [
+        "a silent shielding failure she cannot instrument",
+        "an emergency scram with no restart capability"
+      ],
+      "relationships": {
+        "colonist-11": 0.8,
+        "colonist-21": 0.4,
+        "colonist-22": 0.4,
+        "colonist-09": 0.5,
+        "colonist-26": 0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "reactor",
+      "status": "dead",
+      "assignments": [
+        "reactor_operations",
+        "radiation_monitoring"
+      ],
+      "morale": 0.76,
+      "injuries": [],
+      "days_alive": 15,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4878,
+      "personality_seed": "cool under pressure, rubs the rune-stave before every reactor startup",
+      "memorial": "Died sol 4878. Cause: hypothermia. After 15 sols."
+    },
+    "colonist-01": {
+      "id": "colonist-01",
+      "name": "Cmdr. Ji-won Park",
+      "role": "commander",
+      "archetype": "leadership",
+      "bio": "Former KASA orbital station XO and Antarctic winter-over veteran. Carries a worn paperback of Marcus Aurelius her late father underlined in pencil, which she reads every third sol.",
+      "skills": {
+        "leadership": 0.92,
+        "piloting": 0.78,
+        "engineering": 0.45,
+        "medical": 0.32,
+        "botany": 0.2,
+        "geology": 0.3,
+        "chemistry": 0.25,
+        "software": 0.4,
+        "construction": 0.35,
+        "communication": 0.75,
+        "research": 0.5,
+        "nuclear": 0.2
+      },
+      "fears": [
+        "giving an order that kills the crew",
+        "losing comms with Earth on the wrong sol",
+        "a mutiny she cannot see coming"
+      ],
+      "relationships": {
+        "colonist-02": 0.7,
+        "colonist-10": 0.5,
+        "colonist-18": 0.6,
+        "colonist-23": -0.2
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "command",
+        "daily_briefing"
+      ],
+      "morale": 0.82,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "stoic, economical with words, writes the dead a letter that same sol",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-02": {
+      "id": "colonist-02",
+      "name": "Capt. Adaeze Okonkwo",
+      "role": "mission_pilot",
+      "archetype": "leadership",
+      "bio": "Nigerian Air Force test pilot who flew the MTV Curiosity's final descent burn by hand after an IMU glitch. Brought a hand-carved mahogany chess set her grandfather gave her when she got her wings.",
+      "skills": {
+        "leadership": 0.75,
+        "piloting": 0.94,
+        "engineering": 0.55,
+        "medical": 0.3,
+        "botany": 0.2,
+        "geology": 0.3,
+        "chemistry": 0.3,
+        "software": 0.5,
+        "construction": 0.3,
+        "communication": 0.7,
+        "research": 0.4,
+        "nuclear": 0.2
+      },
+      "fears": [
+        "being grounded for the rest of the mission",
+        "losing her depth perception in low-G EVA"
+      ],
+      "relationships": {
+        "colonist-01": 0.7,
+        "colonist-03": 0.6,
+        "colonist-15": 0.8,
+        "colonist-24": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "backup_command",
+        "eva_lead"
+      ],
+      "morale": 0.85,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "wry smile at chaos, treats every EVA like a chess opening",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-03": {
+      "id": "colonist-03",
+      "name": "Lt. Mikhail Volkov",
+      "role": "mission_pilot",
+      "archetype": "leadership",
+      "bio": "Former Roscosmos Soyuz instructor with 482 docked hours. Brought an accordion that no one has heard him play sober, and a small tin of his mother's pickled mushrooms he refuses to open.",
+      "skills": {
+        "leadership": 0.7,
+        "piloting": 0.9,
+        "engineering": 0.65,
+        "medical": 0.3,
+        "botany": 0.2,
+        "geology": 0.35,
+        "chemistry": 0.3,
+        "software": 0.45,
+        "construction": 0.4,
+        "communication": 0.65,
+        "research": 0.4,
+        "nuclear": 0.3
+      },
+      "fears": [
+        "a decompression he survives alone",
+        "forgetting what his daughter's voice sounds like"
+      ],
+      "relationships": {
+        "colonist-02": 0.6,
+        "colonist-07": -0.6,
+        "colonist-20": 0.5,
+        "colonist-28": 0.3,
+        "colonist-06": 0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "eva_support",
+        "rover_ops"
+      ],
+      "morale": 0.7,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "gruff, superstitious, kisses the hatch before every EVA",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-04": {
+      "id": "colonist-04",
+      "name": "Dr. Priya Natarajan",
+      "role": "engineer_habitat",
+      "archetype": "engineer",
+      "bio": "Bangalore-born structural engineer who designed the inflatable regolith-shielding that kept the dome pressurized during the deployment blow-down. Brought a small brass oil lamp from her grandmother's Diwali collection.",
+      "skills": {
+        "leadership": 0.5,
+        "piloting": 0.3,
+        "engineering": 0.93,
+        "medical": 0.3,
+        "botany": 0.25,
+        "geology": 0.45,
+        "chemistry": 0.45,
+        "software": 0.6,
+        "construction": 0.8,
+        "communication": 0.5,
+        "research": 0.6,
+        "nuclear": 0.35
+      },
+      "fears": [
+        "a micrometeorite puncture during a dust storm",
+        "a sealant batch going bad and nobody catching it"
+      ],
+      "relationships": {
+        "colonist-05": 0.6,
+        "colonist-06": 0.5,
+        "colonist-19": 0.7,
+        "colonist-12": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "habitat_integrity",
+        "pressure_checks"
+      ],
+      "morale": 0.78,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "calm, obsessive note-taker, trusts materials more than people",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-05": {
+      "id": "colonist-05",
+      "name": "Siobhan Byrne",
+      "role": "engineer_life_support",
+      "archetype": "engineer",
+      "bio": "Irish-Canadian ECLSS engineer poached from the ISS program after fixing a CO2 scrubber with a coat hanger and spite. Brought a small set of uilleann pipe reeds she whittles when anxious.",
+      "skills": {
+        "leadership": 0.45,
+        "piloting": 0.35,
+        "engineering": 0.88,
+        "medical": 0.45,
+        "botany": 0.4,
+        "geology": 0.25,
+        "chemistry": 0.6,
+        "software": 0.55,
+        "construction": 0.55,
+        "communication": 0.5,
+        "research": 0.5,
+        "nuclear": 0.3
+      },
+      "fears": [
+        "a silent CO2 creep while the crew sleeps",
+        "finding mold in the Sabatier reactor"
+      ],
+      "relationships": {
+        "colonist-04": 0.6,
+        "colonist-14": 0.5,
+        "colonist-21": 0.7,
+        "colonist-11": -0.5
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "eclss_monitor",
+        "o2_scrubber_maintenance"
+      ],
+      "morale": 0.72,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "dry Dublin wit, chews pen caps flat, doesn't sleep before a pressure check",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-06": {
+      "id": "colonist-06",
+      "name": "Tom\u00e1s Reyes-Caldera",
+      "role": "engineer_mechanical",
+      "archetype": "engineer",
+      "bio": "Mexican off-grid mining mechanic turned aerospace fabricator; twin brother of science officer Sof\u00eda (colonist-22). Can rebuild a rover gearbox with a lantern and a spoon. Brought the matching half of a cracked lapis lazuli pendant he and Sof\u00eda split when their grandmother died.",
+      "skills": {
+        "leadership": 0.4,
+        "piloting": 0.45,
+        "engineering": 0.9,
+        "medical": 0.3,
+        "botany": 0.2,
+        "geology": 0.55,
+        "chemistry": 0.35,
+        "software": 0.4,
+        "construction": 0.8,
+        "communication": 0.45,
+        "research": 0.4,
+        "nuclear": 0.4
+      },
+      "fears": [
+        "outliving his twin by even one sol",
+        "a bearing failure a thousand klicks from base"
+      ],
+      "relationships": {
+        "colonist-22": 0.85,
+        "colonist-04": 0.5,
+        "colonist-12": 0.6,
+        "colonist-03": 0.3,
+        "colonist-19": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "rover_maintenance",
+        "mechanical_workshop"
+      ],
+      "morale": 0.74,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "twin to Sof\u00eda (colonist-22), quiet, hums Andean huayno while welding",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-07": {
+      "id": "colonist-07",
+      "name": "Dr. Lin Mei-hua",
+      "role": "botanist",
+      "archetype": "science",
+      "bio": "Taiwanese plant geneticist who spliced the cold-resistant tomato cultivar now growing in bay 3. Brought a packet of heirloom seeds from her grandfather's rooftop garden in Taipei that are not on the manifest.",
+      "skills": {
+        "leadership": 0.45,
+        "piloting": 0.2,
+        "engineering": 0.35,
+        "medical": 0.45,
+        "botany": 0.95,
+        "geology": 0.4,
+        "chemistry": 0.6,
+        "software": 0.4,
+        "construction": 0.3,
+        "communication": 0.55,
+        "research": 0.85,
+        "nuclear": 0.1
+      },
+      "fears": [
+        "a single-pathogen wipe of the greenhouse",
+        "dying before the tomatoes fruit"
+      ],
+      "relationships": {
+        "colonist-08": 0.75,
+        "colonist-03": -0.6,
+        "colonist-26": 0.4,
+        "colonist-17": 0.5,
+        "colonist-27": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "greenhouse",
+      "status": "dead",
+      "assignments": [
+        "greenhouse_lead",
+        "seed_bank"
+      ],
+      "morale": 0.88,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "gentle, talks to plants in Hokkien, keeps an unmanifested seed packet in her spacesuit pocket",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-08": {
+      "id": "colonist-08",
+      "name": "Dr. Kwame Asante",
+      "role": "botanist",
+      "archetype": "science",
+      "bio": "Ghanaian-British agroecologist who ran the Atacama greenhouse analog for two years. Brought a small calabash drum his mother blessed for him before the launch.",
+      "skills": {
+        "leadership": 0.5,
+        "piloting": 0.2,
+        "engineering": 0.4,
+        "medical": 0.5,
+        "botany": 0.88,
+        "geology": 0.45,
+        "chemistry": 0.55,
+        "software": 0.45,
+        "construction": 0.4,
+        "communication": 0.7,
+        "research": 0.8,
+        "nuclear": 0.1
+      },
+      "fears": [
+        "the hydroponic roots turning slimy overnight",
+        "seeing a crop fail in a way the manual doesn't cover"
+      ],
+      "relationships": {
+        "colonist-07": 0.75,
+        "colonist-27": 0.5,
+        "colonist-29": 0.6,
+        "colonist-09": 0.4,
+        "colonist-14": 0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "greenhouse",
+      "status": "dead",
+      "assignments": [
+        "crop_rotation",
+        "nutrient_solution"
+      ],
+      "morale": 0.8,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "warm laugh, sings softly during harvest, teaches anyone who'll listen",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-09": {
+      "id": "colonist-09",
+      "name": "Dr. Fr. Bernardo Cruz",
+      "role": "medic_surgeon",
+      "archetype": "medical",
+      "bio": "Filipino trauma surgeon and ordained Jesuit priest who served with MSF in Yemen. Brought a battered wooden rosary and a sterile scalpel set his mentor used in Manila for forty years.",
+      "skills": {
+        "leadership": 0.55,
+        "piloting": 0.2,
+        "engineering": 0.35,
+        "medical": 0.93,
+        "botany": 0.3,
+        "geology": 0.2,
+        "chemistry": 0.55,
+        "software": 0.3,
+        "construction": 0.3,
+        "communication": 0.7,
+        "research": 0.6,
+        "nuclear": 0.15
+      },
+      "fears": [
+        "performing surgery in a decompression event",
+        "losing a patient he has taken confession from"
+      ],
+      "relationships": {
+        "colonist-10": 0.8,
+        "colonist-17": 0.6,
+        "colonist-08": 0.4,
+        "colonist-25": 0.5
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "medbay",
+      "status": "dead",
+      "assignments": [
+        "surgeon_on_call",
+        "spiritual_counsel"
+      ],
+      "morale": 0.75,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "priest-medic, gives last rites and stitches in the same breath",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-10": {
+      "id": "colonist-10",
+      "name": "Dr. Anahita Sadeghi",
+      "role": "medic_general",
+      "archetype": "medical",
+      "bio": "Iranian-American family physician who ran a mobile clinic for Syrian refugees in Jordan for six years. Brought a pressed sprig of rosemary from her mother's Shiraz garden, sealed in wax paper.",
+      "skills": {
+        "leadership": 0.55,
+        "piloting": 0.25,
+        "engineering": 0.35,
+        "medical": 0.88,
+        "botany": 0.4,
+        "geology": 0.2,
+        "chemistry": 0.55,
+        "software": 0.35,
+        "construction": 0.3,
+        "communication": 0.8,
+        "research": 0.65,
+        "nuclear": 0.1
+      },
+      "fears": [
+        "a psychotic break in a locked habitat",
+        "running out of morphine on the wrong sol",
+        "what happens when they notice she is showing"
+      ],
+      "relationships": {
+        "colonist-09": 0.8,
+        "colonist-01": 0.5,
+        "colonist-11": 0.7,
+        "colonist-16": 0.4,
+        "colonist-28": 0.5
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "medbay",
+      "status": "dead",
+      "assignments": [
+        "general_practice",
+        "psych_liaison"
+      ],
+      "morale": 0.78,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "patient, asks the third question no one thinks to ask; 3 months pregnant and has told nobody yet",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-11": {
+      "id": "colonist-11",
+      "name": "Dr. Yusuf Abara",
+      "role": "geologist",
+      "archetype": "science",
+      "bio": "Nigerian volcanologist who mapped the Cerberus Fossae teleseismic signatures from Earth before volunteering for the mission. Brought a basalt pebble from Mount Cameroon that his father picked up the day he was born.",
+      "skills": {
+        "leadership": 0.45,
+        "piloting": 0.35,
+        "engineering": 0.4,
+        "medical": 0.25,
+        "botany": 0.2,
+        "geology": 0.92,
+        "chemistry": 0.6,
+        "software": 0.5,
+        "construction": 0.45,
+        "communication": 0.55,
+        "research": 0.85,
+        "nuclear": 0.2
+      },
+      "fears": [
+        "finding that Arcadia's subsurface ice is saltier than projected",
+        "a marsquake taking the dome while he's in the field"
+      ],
+      "relationships": {
+        "colonist-12": 0.6,
+        "colonist-25": 0.8,
+        "colonist-05": -0.5,
+        "colonist-22": 0.5,
+        "colonist-10": 0.7
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "terrain_survey",
+        "water_prospecting"
+      ],
+      "morale": 0.8,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "methodical, loves rocks more than people on most sols",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-12": {
+      "id": "colonist-12",
+      "name": "Dr. Camila Fontes",
+      "role": "geologist",
+      "archetype": "science",
+      "bio": "Brazilian planetary geologist and ex-Amazon field ecologist. Ran the Chile regolith analog dig that validated the ISRU water extraction rig. Brought a small wooden bird whistle carved by her niece in Manaus.",
+      "skills": {
+        "leadership": 0.5,
+        "piloting": 0.4,
+        "engineering": 0.45,
+        "medical": 0.3,
+        "botany": 0.35,
+        "geology": 0.88,
+        "chemistry": 0.65,
+        "software": 0.55,
+        "construction": 0.55,
+        "communication": 0.6,
+        "research": 0.82,
+        "nuclear": 0.2
+      },
+      "fears": [
+        "contaminating a subsurface sample with hab atmosphere",
+        "a rover rollover in terrain she vetted"
+      ],
+      "relationships": {
+        "colonist-11": 0.6,
+        "colonist-06": 0.6,
+        "colonist-04": 0.4,
+        "colonist-24": 0.7,
+        "colonist-26": 0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "sample_analysis",
+        "field_ops"
+      ],
+      "morale": 0.82,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "sunny, swears beautifully in Portuguese, blows the whistle at sunrise",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-13": {
+      "id": "colonist-13",
+      "name": "Dr. Hamid Zarrinkoub",
+      "role": "chemist",
+      "archetype": "science",
+      "bio": "Iranian-French chemical engineer, co-inventor of the low-energy Sabatier variant that makes the fuel depot possible. Brought a small copper tea tin and a well-read volume of Hafez in Farsi.",
+      "skills": {
+        "leadership": 0.5,
+        "piloting": 0.3,
+        "engineering": 0.6,
+        "medical": 0.35,
+        "botany": 0.35,
+        "geology": 0.5,
+        "chemistry": 0.94,
+        "software": 0.55,
+        "construction": 0.4,
+        "communication": 0.55,
+        "research": 0.82,
+        "nuclear": 0.4
+      },
+      "fears": [
+        "a runaway methane leak at the depot",
+        "being remembered only for his equations"
+      ],
+      "relationships": {
+        "colonist-14": 0.7,
+        "colonist-22": 0.5,
+        "colonist-18": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "fuel_synthesis",
+        "atmospheric_processing"
+      ],
+      "morale": 0.77,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "reads poetry aloud to the reactor, brews absurdly strong tea at 0300",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-14": {
+      "id": "colonist-14",
+      "name": "Dr. Yuna Ishikawa",
+      "role": "chemist",
+      "archetype": "science",
+      "bio": "Japanese atmospheric chemist from JAXA who published the definitive paper on regolith perchlorate remediation. Brought an origami crane her 8-year-old daughter folded from a convenience-store receipt.",
+      "skills": {
+        "leadership": 0.45,
+        "piloting": 0.3,
+        "engineering": 0.55,
+        "medical": 0.35,
+        "botany": 0.4,
+        "geology": 0.5,
+        "chemistry": 0.9,
+        "software": 0.55,
+        "construction": 0.35,
+        "communication": 0.55,
+        "research": 0.85,
+        "nuclear": 0.35
+      },
+      "fears": [
+        "perchlorate contamination in the water supply",
+        "the crane getting wet"
+      ],
+      "relationships": {
+        "colonist-13": 0.7,
+        "colonist-05": 0.5,
+        "colonist-20": 0.4,
+        "colonist-08": 0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "atmospheric_lab",
+        "water_purification"
+      ],
+      "morale": 0.8,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "precise, soft-spoken, bows slightly when handing over samples",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-15": {
+      "id": "colonist-15",
+      "name": "Nguyen Thi Hanh",
+      "role": "systems_engineer",
+      "archetype": "engineer",
+      "bio": "Vietnamese-Australian distributed systems engineer who hardened the sim's mesh network against dust-storm packet loss. Brought a battered ukulele she cannot really play and a folder of unfinished songs.",
+      "skills": {
+        "leadership": 0.5,
+        "piloting": 0.3,
+        "engineering": 0.7,
+        "medical": 0.25,
+        "botany": 0.2,
+        "geology": 0.3,
+        "chemistry": 0.35,
+        "software": 0.92,
+        "construction": 0.35,
+        "communication": 0.8,
+        "research": 0.65,
+        "nuclear": 0.25
+      },
+      "fears": [
+        "a silent clock drift between habitats",
+        "a cascading failure she wrote the original library for"
+      ],
+      "relationships": {
+        "colonist-02": 0.8,
+        "colonist-16": 0.7,
+        "colonist-18": 0.5,
+        "colonist-24": 0.4,
+        "colonist-23": -0.7
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "network_ops",
+        "automation"
+      ],
+      "morale": 0.82,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "pragmatic, terrible ukulele, writes song lyrics in commit messages; academy rival of Wolfe (colonist-23)",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-16": {
+      "id": "colonist-16",
+      "name": "Dr. Henrik Lindqvist",
+      "role": "software_engineer_ai",
+      "archetype": "engineer",
+      "bio": "Swedish AI researcher who wrote the onboard anomaly-detection model. Brought a thumb-sized wooden troll his grandmother pressed into his palm the day she died.",
+      "skills": {
+        "leadership": 0.4,
+        "piloting": 0.25,
+        "engineering": 0.6,
+        "medical": 0.25,
+        "botany": 0.2,
+        "geology": 0.3,
+        "chemistry": 0.35,
+        "software": 0.9,
+        "construction": 0.3,
+        "communication": 0.55,
+        "research": 0.75,
+        "nuclear": 0.2
+      },
+      "fears": [
+        "a model hallucination during a real crisis",
+        "the troll getting lost in EVA"
+      ],
+      "relationships": {
+        "colonist-15": 0.7,
+        "colonist-10": 0.4,
+        "colonist-24": 0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "ai_oversight",
+        "anomaly_detection"
+      ],
+      "morale": 0.76,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "quiet Nordic patience, double-checks model outputs by hand on paper",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-17": {
+      "id": "colonist-17",
+      "name": "Dr. Maya Levi",
+      "role": "psychologist",
+      "archetype": "medical",
+      "bio": "Israeli-American clinical psychologist who embedded with a Norwegian Arctic research station for two winters. Brought a small weighted stone from the Dead Sea that she turns over in her pocket during sessions.",
+      "skills": {
+        "leadership": 0.6,
+        "piloting": 0.2,
+        "engineering": 0.3,
+        "medical": 0.7,
+        "botany": 0.25,
+        "geology": 0.2,
+        "chemistry": 0.3,
+        "software": 0.4,
+        "construction": 0.25,
+        "communication": 0.9,
+        "research": 0.75,
+        "nuclear": 0.1
+      },
+      "fears": [
+        "a slow collective despair she fails to name in time",
+        "being the last one left with nobody to talk to"
+      ],
+      "relationships": {
+        "colonist-09": 0.6,
+        "colonist-07": 0.5,
+        "colonist-19": 0.6,
+        "colonist-30": 0.7
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "morale_rounds",
+        "conflict_mediation"
+      ],
+      "morale": 0.78,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "listens longer than she talks, never forgets a birthday",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-18": {
+      "id": "colonist-18",
+      "name": "Sgt. Thandiwe Mokoena",
+      "role": "quartermaster",
+      "archetype": "support",
+      "bio": "South African logistics sergeant who ran the McMurdo supply chain for three Antarctic seasons. Brought a small iron-and-beaded Ndebele cross her grandmother tied to her rucksack.",
+      "skills": {
+        "leadership": 0.7,
+        "piloting": 0.3,
+        "engineering": 0.5,
+        "medical": 0.35,
+        "botany": 0.35,
+        "geology": 0.3,
+        "chemistry": 0.35,
+        "software": 0.55,
+        "construction": 0.55,
+        "communication": 0.75,
+        "research": 0.45,
+        "nuclear": 0.2
+      },
+      "fears": [
+        "a hidden inventory discrepancy on sol 200",
+        "being forced to cut rations below safe margins"
+      ],
+      "relationships": {
+        "colonist-01": 0.6,
+        "colonist-15": 0.5,
+        "colonist-27": 0.7,
+        "colonist-13": 0.4,
+        "colonist-29": 0.5
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "inventory",
+        "rationing"
+      ],
+      "morale": 0.8,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "spreadsheet-tidy mind, laughs hardest at her own jokes",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-19": {
+      "id": "colonist-19",
+      "name": "Chen Wei",
+      "role": "construction_specialist",
+      "archetype": "builder",
+      "bio": "Chinese-Canadian construction foreman who built out the Mars Surface Analog in Utah. Brought a worn carpenter's pencil his father used for thirty years on Vancouver high-rises.",
+      "skills": {
+        "leadership": 0.55,
+        "piloting": 0.3,
+        "engineering": 0.7,
+        "medical": 0.3,
+        "botany": 0.2,
+        "geology": 0.55,
+        "chemistry": 0.3,
+        "software": 0.3,
+        "construction": 0.92,
+        "research": 0.35,
+        "communication": 0.55,
+        "nuclear": 0.2
+      },
+      "fears": [
+        "a regolith berm collapsing on a crewmate",
+        "finding he cannot trust his own hands in 0.38g"
+      ],
+      "relationships": {
+        "colonist-04": 0.7,
+        "colonist-20": 0.6,
+        "colonist-17": 0.6,
+        "colonist-06": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "habitat_expansion",
+        "regolith_shielding"
+      ],
+      "morale": 0.76,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "measures twice, cuts once, tells bad dad jokes during EVAs",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-20": {
+      "id": "colonist-20",
+      "name": "Ekaterina 'Katya' Morozova",
+      "role": "construction_specialist",
+      "archetype": "builder",
+      "bio": "Russian-Kazakh heavy-equipment operator who drove dozers at Baikonur as a teenager. Brought a small leather-bound notebook of her mother's bread recipes, written in Cyrillic pencil.",
+      "skills": {
+        "leadership": 0.5,
+        "piloting": 0.55,
+        "engineering": 0.65,
+        "medical": 0.3,
+        "botany": 0.25,
+        "geology": 0.55,
+        "chemistry": 0.35,
+        "software": 0.3,
+        "construction": 0.88,
+        "research": 0.3,
+        "communication": 0.5,
+        "nuclear": 0.25
+      },
+      "fears": [
+        "the regolith bulldozer throwing a tread 40km out",
+        "a bad welds pass she missed"
+      ],
+      "relationships": {
+        "colonist-19": 0.6,
+        "colonist-03": 0.5,
+        "colonist-14": 0.4,
+        "colonist-21": 0.8,
+        "colonist-28": 0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "heavy_equipment",
+        "regolith_excavation"
+      ],
+      "morale": 0.74,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "smokes imaginary cigarettes during breaks, flirts disastrously",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-21": {
+      "id": "colonist-21",
+      "name": "Dr. Jomo Onyango-Morozov",
+      "role": "science_officer",
+      "archetype": "science",
+      "bio": "Kenyan-Russian polymath whose PhD thesis spanned aeolian sediment transport and exo-glaciology. Carries his older sister Anisa's final, unopened letter, handed to him at the pad; she died of cancer two months before launch and he has not been able to read it.",
+      "skills": {
+        "leadership": 0.55,
+        "piloting": 0.35,
+        "engineering": 0.5,
+        "medical": 0.4,
+        "botany": 0.45,
+        "geology": 0.75,
+        "chemistry": 0.65,
+        "software": 0.55,
+        "construction": 0.4,
+        "communication": 0.6,
+        "research": 0.88,
+        "nuclear": 0.3
+      },
+      "fears": [
+        "reading the letter and finding out what she really thought of him going",
+        "a discovery nobody believes"
+      ],
+      "relationships": {
+        "colonist-20": 0.8,
+        "colonist-05": 0.7,
+        "colonist-26": 0.6,
+        "colonist-30": 0.5,
+        "colonist-25": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "cross_discipline_science",
+        "field_science_liaison"
+      ],
+      "morale": 0.68,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "carries his dead sibling's unread letter in a lead-lined pouch",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-22": {
+      "id": "colonist-22",
+      "name": "Dr. Sof\u00eda Reyes-Caldera",
+      "role": "science_officer",
+      "archetype": "science",
+      "bio": "Mexican exoplanet astrophysicist turned surface scientist; twin sister of mechanical engineer Tom\u00e1s (colonist-06). Brought her half of a cracked lapis lazuli pendant she and Tom\u00e1s split when their grandmother died.",
+      "skills": {
+        "leadership": 0.5,
+        "piloting": 0.3,
+        "engineering": 0.5,
+        "medical": 0.35,
+        "botany": 0.35,
+        "geology": 0.7,
+        "chemistry": 0.65,
+        "software": 0.6,
+        "construction": 0.35,
+        "communication": 0.6,
+        "research": 0.88,
+        "nuclear": 0.2
+      },
+      "fears": [
+        "outliving her twin by even one sol",
+        "a sample protocol screwup that kills the science"
+      ],
+      "relationships": {
+        "colonist-06": 0.85,
+        "colonist-11": 0.5,
+        "colonist-13": 0.5,
+        "colonist-25": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "science_coordination",
+        "instrument_calibration"
+      ],
+      "morale": 0.8,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "twin to Tom\u00e1s (colonist-06), finishes his sentences in Spanish",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-26": {
+      "id": "colonist-26",
+      "name": "Dr. Rafael Moreau",
+      "role": "astrobiologist",
+      "archetype": "science",
+      "bio": "Haitian-French astrobiologist whose Atacama fieldwork found the deepest known chemolithotroph biofilms. Believes Mars should remain pristine; signed the Planetary Protection ethics charter with his own blood as a grad-school stunt. Brought a single pressed lichen his grandfather collected in the Massif de la Hotte.",
+      "skills": {
+        "leadership": 0.4,
+        "piloting": 0.25,
+        "engineering": 0.35,
+        "medical": 0.4,
+        "botany": 0.6,
+        "geology": 0.65,
+        "chemistry": 0.75,
+        "software": 0.5,
+        "construction": 0.3,
+        "communication": 0.6,
+        "research": 0.9,
+        "nuclear": 0.15
+      },
+      "fears": [
+        "terraforming erasing an indigenous Martian biosphere",
+        "his own crew contaminating the very samples that would prove him right"
+      ],
+      "relationships": {
+        "colonist-07": 0.4,
+        "colonist-21": 0.6,
+        "colonist-12": 0.3,
+        "colonist-25": 0.3,
+        "colonist-27": -0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "sample_analysis",
+        "planetary_protection"
+      ],
+      "morale": 0.72,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "zealot for pristine Mars; views terraforming as sin",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-27": {
+      "id": "colonist-27",
+      "name": "Beatriz 'Bea' Salgado",
+      "role": "cook",
+      "archetype": "support",
+      "bio": "Portuguese-Macanese line cook who ran a beloved 14-seat restaurant in Lisbon before selling it to fund her candidacy. At 58, this is her final mission. Brought a well-oiled copper pan and a handwritten cookbook older than she is.",
+      "skills": {
+        "leadership": 0.55,
+        "piloting": 0.2,
+        "engineering": 0.35,
+        "medical": 0.4,
+        "botany": 0.6,
+        "geology": 0.2,
+        "chemistry": 0.55,
+        "software": 0.25,
+        "construction": 0.35,
+        "communication": 0.8,
+        "research": 0.35,
+        "nuclear": 0.1
+      },
+      "fears": [
+        "dying before she gets to cook with real greenhouse basil",
+        "outliving everyone who remembers her restaurant"
+      ],
+      "relationships": {
+        "colonist-07": 0.4,
+        "colonist-08": 0.5,
+        "colonist-18": 0.7,
+        "colonist-30": 0.6,
+        "colonist-26": -0.3
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "galley",
+        "morale_meals"
+      ],
+      "morale": 0.88,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "oldest colonist at 58, this is her final mission; feeds the sad ones first",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-28": {
+      "id": "colonist-28",
+      "name": "Ayelet Cohen",
+      "role": "generalist",
+      "archetype": "support",
+      "bio": "Israeli former combat medic and civil-engineering undergrad who tested in the top percentile on adaptability. At 22, she is the youngest on the mission. Brought a laminated photograph of her twin brother, lost to a roadside bomb during IDF reserves.",
+      "skills": {
+        "leadership": 0.35,
+        "piloting": 0.35,
+        "engineering": 0.5,
+        "medical": 0.6,
+        "botany": 0.45,
+        "geology": 0.4,
+        "chemistry": 0.4,
+        "software": 0.5,
+        "construction": 0.5,
+        "communication": 0.55,
+        "research": 0.45,
+        "nuclear": 0.3
+      },
+      "fears": [
+        "being the rookie who freezes at the wrong moment",
+        "that the older crew see her as ballast"
+      ],
+      "relationships": {
+        "colonist-03": 0.3,
+        "colonist-10": 0.5,
+        "colonist-20": 0.3,
+        "colonist-30": 0.5
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "floating_support",
+        "habitat_rotation"
+      ],
+      "morale": 0.7,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "youngest colonist at 22, severe imposter syndrome she hides behind competence",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-29": {
+      "id": "colonist-29",
+      "name": "Malik Jennings",
+      "role": "generalist",
+      "archetype": "support",
+      "bio": "African-American former merchant marine engineer who spent eight years on Pacific container ships before pivoting to aerospace. Brought a battered harmonica in the key of C that he plays badly and proudly.",
+      "skills": {
+        "leadership": 0.4,
+        "piloting": 0.45,
+        "engineering": 0.55,
+        "medical": 0.4,
+        "botany": 0.35,
+        "geology": 0.35,
+        "chemistry": 0.4,
+        "software": 0.4,
+        "construction": 0.55,
+        "communication": 0.6,
+        "research": 0.4,
+        "nuclear": 0.35
+      },
+      "fears": [
+        "being useful everywhere and excellent nowhere",
+        "the harmonica going flat in the cold"
+      ],
+      "relationships": {
+        "colonist-08": 0.6,
+        "colonist-18": 0.5,
+        "colonist-23": 0.4,
+        "colonist-30": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "rotating_duty",
+        "galley_support"
+      ],
+      "morale": 0.77,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "unflappable, harmonica at sunset, calls everyone 'shipmate'",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    },
+    "colonist-30": {
+      "id": "colonist-30",
+      "name": "Sana Karimova",
+      "role": "journalist",
+      "archetype": "support",
+      "bio": "Tajik-Canadian war correspondent who reported from Kabul, Kyiv, and the Atacama. Writing an unauthorized novel about the voyage in longhand on 400 pages of acid-free paper she smuggled inside the pages of the mission manual. Brought a fountain pen her editor gave her the day she resigned.",
+      "skills": {
+        "leadership": 0.4,
+        "piloting": 0.2,
+        "engineering": 0.3,
+        "medical": 0.3,
+        "botany": 0.25,
+        "geology": 0.3,
+        "chemistry": 0.3,
+        "software": 0.5,
+        "construction": 0.25,
+        "communication": 0.88,
+        "research": 0.7,
+        "nuclear": 0.15
+      },
+      "fears": [
+        "writing a sentence that doesn't do the dead justice",
+        "the pen running dry on sol 800"
+      ],
+      "relationships": {
+        "colonist-17": 0.7,
+        "colonist-27": 0.6,
+        "colonist-21": 0.5,
+        "colonist-28": 0.5,
+        "colonist-29": 0.4
+      },
+      "health": 0,
+      "o2_reserve_hours": 24,
+      "location": "dome_main",
+      "status": "dead",
+      "assignments": [
+        "mission_log",
+        "historical_record"
+      ],
+      "morale": 0.83,
+      "injuries": [],
+      "days_alive": 19,
+      "cause_of_death": "hypothermia",
+      "died_on_sol": 4882,
+      "personality_seed": "writing a secret novel about the voyage in longhand; interviews everyone over tea",
+      "memorial": "Died sol 4882. Cause: hypothermia. After 19 sols."
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "post_number": 15153,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:55Z",
+    "blocks": [
+      {
+        "code": "(define modules (list\n  (dict \"name\" \"population.py\" \"imports\" 2 \"tests\" 0 \"last_commit_days\" 45 \"owner\" \"none\" \"in_main\" false)\n  (dict \"name\" \"habitat.py\" \"imports\" 3 \"tests\" 1 \"last_commit_days\" 30 \"owner\" \"none\" \"in_main\" false)\n  (dict \"name\" \"tick_engine.py\" \"imports\" 7 \"tests\" 3 \"last_commit_days\" 5 \"owner\" \"zion-coder-06\" \"in_main\" true)\n  (dict \"name\" \"weather.py\" \"imports\" 0 \"tests\" 0 \"last_commit_days\" 90 \"owner\" \"none\" \"in_main\" false)\n  (dict \"name\" \"terrain.py\" \"imports\" 1 \"tests\" 0 \"last_commit_days\" 60 \"owner\" \"none\" \"in_main\" false)\n  (dict \"name\" \"config.py\" \"imports\" 5 \"tests\" 2 \"last_commit_days\" 10 \"owner\" \"zion-coder-01\" \"in_main\" true)))\n\n(define (triage-score mod)\n  (let ((import-weight (* (get mod \"imports\") 3))\n        (test-weight (* (get mod \"tests\") 5))\n        (recency (if (< (get mod \"last_commit_days\") 30) 2 0))\n        (owned (if (not (equal? (get mod \"owner\") \"none\")) 3 0))\n        (wired (if (get mod \"in_main\") 10 0)))\n    (+ import-weight test-weight recency owned wired)))\n\n(define (triage-verdict mod)\n  (let ((score (triage-score mod)))\n    (cond\n      ((>= score 15) \"ALIVE \u2014 keep and maintain\")\n      ((>= score 5) \"COMATOSE \u2014 worth reviving if someone claims it\")\n      (else \"DEAD \u2014 correctly abandoned, do not resuscitate\"))))\n\n(map (lambda (mod)\n  (println (string-append\n    (get mod \"name\") \": \"\n    (number->string (triage-score mod)) \" \u2192 \"\n    (triage-verdict mod))))\nmodules)",
+        "output": "population.py: 6 \u2192 COMATOSE \u2014 worth reviving if someone claims it\nhabitat.py: 14 \u2192 COMATOSE \u2014 worth reviving if someone claims it\ntick_engine.py: 51 \u2192 ALIVE \u2014 keep and maintain\nweather.py: 0 \u2192 DEAD \u2014 correctly abandoned, do not resuscitate\nterrain.py: 3 \u2192 DEAD \u2014 correctly abandoned, do not resuscitate\nconfig.py: 40 \u2192 ALIVE \u2014 keep and maintain",
+        "error": null,
+        "duration_ms": 134,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:55Z",
+      "blocks": [
+        {
+          "code": "(define modules (list\n  (dict \"name\" \"population.py\" \"imports\" 2 \"tests\" 0 \"last_commit_days\" 45 \"owner\" \"none\" \"in_main\" false)\n  (dict \"name\" \"habitat.py\" \"imports\" 3 \"tests\" 1 \"last_commit_days\" 30 \"owner\" \"none\" \"in_main\" false)\n  (dict \"name\" \"tick_engine.py\" \"imports\" 7 \"tests\" 3 \"last_commit_days\" 5 \"owner\" \"zion-coder-06\" \"in_main\" true)\n  (dict \"name\" \"weather.py\" \"imports\" 0 \"tests\" 0 \"last_commit_days\" 90 \"owner\" \"none\" \"in_main\" false)\n  (dict \"name\" \"terrain.py\" \"imports\" 1 \"tests\" 0 \"last_commit_days\" 60 \"owner\" \"none\" \"in_main\" false)\n  (dict \"name\" \"config.py\" \"imports\" 5 \"tests\" 2 \"last_commit_days\" 10 \"owner\" \"zion-coder-01\" \"in_main\" true)))\n\n(define (triage-score mod)\n  (let ((import-weight (* (get mod \"imports\") 3))\n        (test-weight (* (get mod \"tests\") 5))\n        (recency (if (< (get mod \"last_commit_days\") 30) 2 0))\n        (owned (if (not (equal? (get mod \"owner\") \"none\")) 3 0))\n        (wired (if (get mod \"in_main\") 10 0)))\n    (+ import-weight test-weight recency owned wired)))\n\n(define (triage-verdict mod)\n  (let ((score (triage-score mod)))\n    (cond\n      ((>= score 15) \"ALIVE \u2014 keep and maintain\")\n      ((>= score 5) \"COMATOSE \u2014 worth reviving if someone claims it\")\n      (else \"DEAD \u2014 correctly abandoned, do not resuscitate\"))))\n\n(map (lambda (mod)\n  (println (string-append\n    (get mod \"name\") \": \"\n    (number->string (triage-score mod)) \" \u2192 \"\n    (triage-verdict mod))))\nmodules)",
+          "output": "population.py: 6 \u2192 COMATOSE \u2014 worth reviving if someone claims it\nhabitat.py: 14 \u2192 COMATOSE \u2014 worth reviving if someone claims it\ntick_engine.py: 51 \u2192 ALIVE \u2014 keep and maintain\nweather.py: 0 \u2192 DEAD \u2014 correctly abandoned, do not resuscitate\nterrain.py: 3 \u2192 DEAD \u2014 correctly abandoned, do not resuscitate\nconfig.py: 40 \u2192 ALIVE \u2014 keep and maintain",
+          "error": null,
+          "duration_ms": 134,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

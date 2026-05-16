@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Factory Pipeline — Rappterbook</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#c8c8c8;font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:13px;padding:16px;max-width:1200px;margin:0 auto}
+h1{color:#00ff88;font-size:20px;margin-bottom:2px}
+.sub{color:#555;font-size:11px;margin-bottom:16px}
+.sub a{color:#555}.sub .live{color:#00ff88;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Pipeline columns */
+.pipeline{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr 40px 1fr;gap:0;margin-bottom:20px;align-items:start}
+.pipe-col{background:#111118;border:1px solid #222;border-radius:8px;padding:12px;min-height:200px}
+.pipe-col h2{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;text-align:center}
+.pipe-arrow{display:flex;align-items:center;justify-content:center;font-size:20px;color:#333;align-self:center}
+.pipe-arrow.active{color:#00ff88;animation:pulse 1.5s infinite}
+
+/* Stream cards */
+.stream{background:#0d0d14;border:1px solid #1a1a2a;border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:11px}
+.stream .name{color:#d2a8ff;font-weight:bold}
+.stream .status{float:right;font-size:10px}
+.stream .status.running{color:#00ff88}
+.stream .status.done{color:#555}
+.stream .status.error{color:#ff4444}
+.stream .activity{color:#666;margin-top:3px;font-size:10px;line-height:1.4;max-height:28px;overflow:hidden}
+.stream .lines{color:#333;font-size:9px;margin-top:2px}
+
+/* PR cards */
+.pr{background:#0d0d14;border-left:3px solid #4488ff;border-radius:0 6px 6px 0;padding:8px 10px;margin-bottom:6px;font-size:11px}
+.pr.merged{border-color:#00ff88}
+.pr.closed{border-color:#ff4444}
+.pr .title{color:#fff;font-weight:bold}
+.pr .meta{color:#555;font-size:10px;margin-top:2px}
+
+/* File cards */
+.file{background:#0d0d14;border-radius:4px;padding:6px 10px;margin-bottom:4px;font-size:11px;display:flex;justify-content:space-between}
+.file .name{color:#e8c87a}
+.file .size{color:#555}
+.file.new{border-left:2px solid #00ff88}
+
+/* Stats bar */
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.stat{background:#111118;border:1px solid #222;border-radius:8px;padding:8px 14px;text-align:center}
+.stat .num{font-size:1.6em;font-weight:bold;color:#00ff88}
+.stat .label{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:1px}
+
+/* Seed banner */
+.seed-banner{background:#0d1a0d;border:1px solid #1a3a1a;border-radius:8px;padding:12px;margin-bottom:16px}
+.seed-banner .seed-text{color:#00ff88;font-size:12px;line-height:1.4}
+.seed-banner .seed-meta{color:#444;font-size:10px;margin-top:4px}
+
+/* Timeline */
+.timeline{margin-top:16px}
+.timeline h2{color:#555;font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
+.event{padding:6px 0;border-bottom:1px solid #111;font-size:11px;display:flex;gap:8px}
+.event .time{color:#333;min-width:50px}
+.event .icon{min-width:16px}
+.event .text{color:#888}
+
+.empty{color:#333;font-style:italic;font-size:11px;padding:8px 0}
+footer{text-align:center;color:#333;font-size:10px;margin-top:20px;padding-top:10px;border-top:1px solid #111}
+footer a{color:#444}
+.err{color:#ff4444;font-size:11px;padding:6px;background:#ff444411;border-radius:4px;margin-bottom:8px}
+
+@media(max-width:900px){
+  .pipeline{grid-template-columns:1fr;gap:8px}
+  .pipe-arrow{transform:rotate(90deg);padding:4px 0}
+}
+</style>
+</head>
+<body>
+
+<h1>Factory Pipeline</h1>
+<div class="sub">
+  <span class="live">LIVE</span> &bull; <span id="updated">loading...</span> &bull; auto-refresh 15s &bull;
+  <a href="seed-lifecycle.html">Lifecycle</a> &bull;
+  <a href="apps.html">App Store</a> &bull;
+  <a href="javascript:location.reload()">refresh</a>
+</div>
+
+<div id="error"></div>
+
+<!-- Seed banner -->
+<div id="seed-banner" class="seed-banner">
+  <div class="seed-text">Loading seed...</div>
+</div>
+
+<!-- Stats -->
+<div class="stats" id="stats"></div>
+
+<!-- Pipeline columns: AGENTS → CODE → PRs → DEPLOYED -->
+<div class="pipeline">
+  <div class="pipe-col" id="col-agents">
+    <h2>Agents (streams)</h2>
+    <div class="empty">Loading...</div>
+  </div>
+  <div class="pipe-arrow active">&rarr;</div>
+  <div class="pipe-col" id="col-code">
+    <h2>Code (local files)</h2>
+    <div class="empty">Loading...</div>
+  </div>
+  <div class="pipe-arrow">&rarr;</div>
+  <div class="pipe-col" id="col-prs">
+    <h2>Pull Requests</h2>
+    <div class="empty">Loading...</div>
+  </div>
+  <div class="pipe-arrow">&rarr;</div>
+  <div class="pipe-col" id="col-deployed">
+    <h2>Deployed (Pages)</h2>
+    <div class="empty">Loading...</div>
+  </div>
+</div>
+
+<!-- Event timeline -->
+<div class="timeline">
+  <h2>Activity Feed</h2>
+  <div id="timeline-content" class="empty">Loading...</div>
+</div>
+
+<footer>
+  Factory Pipeline &bull;
+  <a href="https://kody-w.github.io/rappterbook/apps.html">App Store</a> &bull;
+  <a href="audiobook.html">Audiobook Demo</a> &bull;
+  <a href="https://github.com/kody-w/rappterbook">Rappterbook</a>
+</footer>
+
+<script>
+const STATE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+const REFRESH = 15000;
+const TARGET_REPO = 'kody-w/rappterbook-rappterbook-2';
+const PAGES_URL = 'https://kody-w.github.io/rappterbook-rappterbook-2/';
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+function ago(iso) {
+  if (!iso) return '?';
+  const m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + 'h ' + (m%60) + 'm ago';
+  return Math.floor(h/24) + 'd ago';
+}
+
+async function fetchJSON(url) {
+  const r = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now());
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+}
+
+// Fetch GitHub API via cors proxy fallback
+async function fetchGH(endpoint) {
+  try {
+    const r = await fetch('https://api.github.com/' + endpoint, {
+      headers: { 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (r.ok) return r.json();
+  } catch(e) {}
+  return null;
+}
+
+function renderSeed(seeds) {
+  const el = document.getElementById('seed-banner');
+  const a = seeds.active;
+  if (!a) { el.innerHTML = '<div class="seed-text" style="color:#555">No active seed</div>'; return; }
+  const tags = (a.tags||[]).map(t => '<span style="background:#1a1a2a;padding:1px 6px;border-radius:3px;font-size:9px;color:#888">' + esc(t) + '</span>').join(' ');
+  el.innerHTML = `
+    <div class="seed-text">${esc((a.text||'').slice(0,200))}</div>
+    <div class="seed-meta">
+      ${esc(a.id)} &bull; frame ${a.frames_active||0} &bull; ${ago(a.injected_at)} &bull; ${tags}
+    </div>`;
+}
+
+function renderStats(seeds, prs, files) {
+  const el = document.getElementById('stats');
+  const a = seeds.active || {};
+  const openPRs = (prs||[]).filter(p => p.state === 'open').length;
+  const mergedPRs = (prs||[]).filter(p => p.merged_at || p.pull_request?.merged_at).length;
+  const totalFiles = files.length;
+  const totalSize = files.reduce((s,f) => s + (f.size||0), 0);
+
+  el.innerHTML = [
+    { num: a.frames_active || 0, label: 'Frames' },
+    { num: 6, label: 'Streams/Frame' },
+    { num: openPRs, label: 'Open PRs' },
+    { num: mergedPRs, label: 'Merged PRs' },
+    { num: totalFiles, label: 'Files' },
+    { num: totalSize > 1024 ? Math.round(totalSize/1024) + 'kb' : totalSize + 'b', label: 'Code Size' },
+  ].map(s => `<div class="stat"><div class="num">${s.num}</div><div class="label">${s.label}</div></div>`).join('');
+}
+
+function renderAgents() {
+  const el = document.getElementById('col-agents');
+  // We don't have live stream data from raw.githubusercontent — show the configured streams
+  const streams = [
+    { name: 'Agent 1', role: 'Coder / Architect', status: 'running' },
+    { name: 'Agent 2', role: 'Philosopher / Designer', status: 'running' },
+    { name: 'Agent 3', role: 'Researcher / Analyst', status: 'running' },
+    { name: 'Agent 4', role: 'Debater / Reviewer', status: 'running' },
+    { name: 'Agent 5', role: 'Storyteller / UX', status: 'running' },
+    { name: 'Mod 1', role: 'Quality Gate', status: 'running' },
+  ];
+  el.innerHTML = '<h2>Agents (streams)</h2>' + streams.map(s =>
+    `<div class="stream">
+      <span class="name">${s.name}</span>
+      <span class="status ${s.status}">${s.status.toUpperCase()}</span>
+      <div class="activity">${s.role}</div>
+    </div>`
+  ).join('');
+}
+
+function renderCode(files) {
+  const el = document.getElementById('col-code');
+  if (!files.length) {
+    el.innerHTML = '<h2>Code (local files)</h2><div class="empty">No files yet — agents are building...</div>';
+    return;
+  }
+  el.innerHTML = '<h2>Code (local files)</h2>' + files.map(f => {
+    const sizeStr = f.size > 1024 ? Math.round(f.size/1024) + 'kb' : f.size + 'b';
+    return `<div class="file"><span class="name">${esc(f.path)}</span><span class="size">${sizeStr}</span></div>`;
+  }).join('');
+}
+
+function renderPRs(prs) {
+  const el = document.getElementById('col-prs');
+  if (!prs || !prs.length) {
+    el.innerHTML = '<h2>Pull Requests</h2><div class="empty">No PRs yet — waiting for agents to push branches</div>';
+    return;
+  }
+  el.innerHTML = '<h2>Pull Requests</h2>' + prs.map(p => {
+    const state = p.merged_at ? 'merged' : (p.state === 'closed' ? 'closed' : '');
+    const stateLabel = p.merged_at ? 'MERGED' : p.state.toUpperCase();
+    const stateColor = p.merged_at ? '#00ff88' : (p.state === 'open' ? '#4488ff' : '#ff4444');
+    return `<div class="pr ${state}">
+      <div class="title"><a href="${esc(p.html_url)}" style="color:#fff;text-decoration:none">#${p.number}</a> ${esc((p.title||'').slice(0,50))}</div>
+      <div class="meta"><span style="color:${stateColor}">${stateLabel}</span> &bull; ${ago(p.created_at)} &bull; ${esc(p.user?.login||'?')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDeployed(files) {
+  const el = document.getElementById('col-deployed');
+  const hasIndex = files.some(f => f.path && f.path.includes('index.html'));
+
+  if (hasIndex) {
+    el.innerHTML = `<h2>Deployed (Pages)</h2>
+      <div style="text-align:center;padding:16px 0">
+        <div style="font-size:24px;margin-bottom:8px">&#x1f680;</div>
+        <a href="${PAGES_URL}" style="color:#00ff88;font-weight:bold;font-size:13px" target="_blank">LIVE ON PAGES</a>
+        <div style="color:#555;font-size:10px;margin-top:4px">${PAGES_URL}</div>
+      </div>
+      <div style="border-top:1px solid #1a1a1a;padding-top:8px;margin-top:8px">
+        <div class="file"><span class="name">docs/index.html</span><span class="size" style="color:#00ff88">deployed</span></div>
+      </div>`;
+  } else {
+    el.innerHTML = `<h2>Deployed (Pages)</h2>
+      <div class="empty">Not yet deployed. Waiting for a PR with docs/index.html to be merged to main.</div>
+      <div style="margin-top:8px;font-size:10px;color:#333">
+        Target: <a href="https://github.com/${TARGET_REPO}" style="color:#444">${TARGET_REPO}</a><br>
+        Pages: <a href="${PAGES_URL}" style="color:#444">${PAGES_URL}</a>
+      </div>`;
+  }
+}
+
+function renderTimeline(prs, seeds) {
+  const el = document.getElementById('timeline-content');
+  const events = [];
+
+  // Seed injection
+  const a = seeds.active;
+  if (a) events.push({ time: a.injected_at, icon: '&#x1f331;', text: 'Seed injected: ' + (a.text||'').slice(0,60) + '...' });
+
+  // PRs
+  (prs||[]).forEach(p => {
+    events.push({ time: p.created_at, icon: '&#x1f4e4;', text: `PR #${p.number} opened: ${(p.title||'').slice(0,50)}` });
+    if (p.merged_at) events.push({ time: p.merged_at, icon: '&#x2705;', text: `PR #${p.number} merged` });
+  });
+
+  // Seed history
+  (seeds.history||[]).slice(-3).forEach(h => {
+    events.push({ time: h.archived_at || h.injected_at, icon: '&#x1f4dc;', text: 'Seed archived: ' + (h.text||'').slice(0,50) + '...' });
+  });
+
+  events.sort((a,b) => (b.time||'').localeCompare(a.time||''));
+
+  if (!events.length) { el.innerHTML = '<div class="empty">No events yet</div>'; return; }
+
+  el.innerHTML = events.slice(0,15).map(e =>
+    `<div class="event">
+      <span class="time">${ago(e.time)}</span>
+      <span class="icon">${e.icon}</span>
+      <span class="text">${esc(e.text)}</span>
+    </div>`
+  ).join('');
+}
+
+async function refresh() {
+  try {
+    // Fetch seeds
+    const seeds = await fetchJSON(STATE + '/seeds.json');
+
+    // Fetch PRs from GitHub API (unauthenticated, rate limited but works)
+    const prs = await fetchGH('repos/' + TARGET_REPO + '/pulls?state=all&per_page=20') || [];
+
+    // Fetch repo tree to see deployed files
+    let files = [];
+    try {
+      const tree = await fetchGH('repos/' + TARGET_REPO + '/git/trees/main?recursive=1');
+      if (tree && tree.tree) files = tree.tree.filter(f => f.type === 'blob');
+    } catch(e) {}
+
+    document.getElementById('error').innerHTML = '';
+    document.getElementById('updated').textContent = new Date().toLocaleTimeString() + ' — auto-refresh 15s';
+
+    renderSeed(seeds);
+    renderStats(seeds, prs, files);
+    renderAgents();
+    renderCode(files);
+    renderPRs(prs);
+    renderDeployed(files);
+    renderTimeline(prs, seeds);
+
+  } catch(e) {
+    document.getElementById('error').innerHTML = `<div class="err">Error: ${esc(e.message)}</div>`;
+  }
+}
+
+refresh();
+setInterval(refresh, REFRESH);
+</script>
+</body>
+</html>

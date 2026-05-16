@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Sloshing Audiobook Engine — Rappter</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; }
+
+.header { background: linear-gradient(135deg, #1a1a2e 0%, #0a0a1a 100%); padding: 40px 20px; text-align: center; border-bottom: 1px solid #333; }
+.header h1 { font-size: 2em; margin-bottom: 8px; background: linear-gradient(90deg, #00d4ff, #7b68ee, #ff6b9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header p { color: #888; font-size: 0.95em; }
+.header .tag { display: inline-block; background: #1a1a3e; color: #7b68ee; padding: 4px 12px; border-radius: 12px; font-size: 0.8em; margin-top: 10px; }
+
+.container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+.explanation { background: #111; border: 1px solid #222; border-radius: 12px; padding: 24px; margin: 20px 0; }
+.explanation h2 { color: #00d4ff; margin-bottom: 12px; font-size: 1.2em; }
+.explanation .pattern { font-family: monospace; background: #0a0a1a; padding: 16px; border-radius: 8px; margin: 12px 0; border-left: 3px solid #7b68ee; line-height: 1.8; }
+.explanation .pattern .arrow { color: #00d4ff; }
+.explanation .pattern .frame { color: #ff6b9d; }
+.explanation .pattern .data { color: #7b68ee; }
+
+.input-section { background: #111; border: 1px solid #222; border-radius: 12px; padding: 24px; margin: 20px 0; }
+.input-section h3 { color: #7b68ee; margin-bottom: 12px; }
+.input-section textarea { width: 100%; height: 200px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #e0e0e0; padding: 16px; font-family: Georgia, serif; font-size: 0.95em; line-height: 1.6; resize: vertical; }
+.input-section textarea:focus { outline: none; border-color: #7b68ee; }
+.input-section .presets { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.input-section .presets button { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 6px 14px; border-radius: 16px; cursor: pointer; font-size: 0.85em; }
+.input-section .presets button:hover { background: #222; color: #fff; border-color: #7b68ee; }
+.input-section .presets button.active { background: #7b68ee22; color: #7b68ee; border-color: #7b68ee; }
+
+.controls { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; align-items: center; }
+.controls select, .controls input { background: #111; border: 1px solid #333; color: #e0e0e0; padding: 10px 14px; border-radius: 8px; font-size: 0.9em; }
+.controls button { padding: 12px 28px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 0.95em; }
+.controls .primary { background: linear-gradient(135deg, #7b68ee, #00d4ff); color: #fff; }
+.controls .primary:hover { opacity: 0.9; }
+.controls .primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.controls .secondary { background: #222; color: #aaa; border: 1px solid #333; }
+
+.pipeline { margin: 20px 0; }
+.pipeline h3 { color: #00d4ff; margin-bottom: 16px; }
+.frame-list { display: flex; flex-direction: column; gap: 8px; }
+.frame-item { background: #111; border: 1px solid #222; border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 16px; }
+.frame-item .num { background: #1a1a2e; color: #7b68ee; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9em; flex-shrink: 0; }
+.frame-item .info { flex: 1; }
+.frame-item .info .title { font-weight: 600; margin-bottom: 4px; }
+.frame-item .info .meta { color: #666; font-size: 0.85em; }
+.frame-item .status { font-size: 0.85em; padding: 4px 10px; border-radius: 12px; }
+.frame-item .status.pending { background: #333; color: #888; }
+.frame-item .status.running { background: #7b68ee22; color: #7b68ee; animation: pulse 1.5s infinite; }
+.frame-item .status.done { background: #00d4ff22; color: #00d4ff; }
+.frame-item .status.error { background: #ff6b9d22; color: #ff6b9d; }
+.frame-arrow { text-align: center; color: #333; font-size: 1.2em; }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.output { margin: 20px 0; }
+.output h3 { color: #ff6b9d; margin-bottom: 12px; }
+.output .player { background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px; }
+.output audio { width: 100%; margin: 12px 0; }
+.output .chapters { max-height: 400px; overflow-y: auto; }
+.output .ch-item { padding: 12px; border-bottom: 1px solid #1a1a1a; cursor: pointer; }
+.output .ch-item:hover { background: #1a1a1a; }
+.output .ch-item .ch-title { font-weight: 600; }
+.output .ch-item .ch-preview { color: #666; font-size: 0.85em; margin-top: 4px; }
+
+.expanded-text { background: #0a0a0a; border: 1px solid #222; border-radius: 8px; padding: 20px; margin: 12px 0; max-height: 500px; overflow-y: auto; font-family: Georgia, serif; line-height: 1.8; white-space: pre-wrap; }
+
+.how-it-works { background: #0a0a1a; border: 1px solid #1a1a3e; border-radius: 12px; padding: 24px; margin: 30px 0; }
+.how-it-works h3 { color: #ff6b9d; margin-bottom: 16px; }
+.how-it-works .step { display: flex; gap: 16px; margin: 12px 0; align-items: flex-start; }
+.how-it-works .step .n { background: #7b68ee; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8em; flex-shrink: 0; }
+.how-it-works .step .desc { line-height: 1.6; }
+.how-it-works .step .desc strong { color: #00d4ff; }
+
+.footer { text-align: center; padding: 40px 20px; color: #444; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 40px; }
+.footer a { color: #7b68ee; text-decoration: none; }
+
+.diff-view { display: none; background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px; margin: 20px 0; }
+.diff-view h3 { color: #00d4ff; margin-bottom: 12px; }
+.diff-view .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.diff-view .side { background: #0a0a0a; border-radius: 8px; padding: 16px; }
+.diff-view .side h4 { margin-bottom: 8px; font-size: 0.9em; }
+.diff-view .side.before h4 { color: #ff6b9d; }
+.diff-view .side.after h4 { color: #00d4ff; }
+.diff-view .side pre { font-family: Georgia, serif; line-height: 1.6; font-size: 0.9em; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+
+@media (max-width: 600px) {
+    .header h1 { font-size: 1.4em; }
+    .diff-view .comparison { grid-template-columns: 1fr; }
+    .controls { flex-direction: column; }
+    .controls button { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Data Sloshing Audiobook Engine</h1>
+    <p>Frame-by-frame content expansion + text-to-speech</p>
+    <div class="tag">Patent Pending — Wildhaven AI Homes LLC</div>
+</div>
+
+<div class="container">
+
+    <div class="explanation">
+        <h2>What is this?</h2>
+        <p>This demo shows <strong>Data Sloshing</strong> — the architecture pattern behind Rappterbook — applied to audiobook generation. Instead of processing everything at once (and running out of tokens), we process <em>frame by frame</em>. Each chapter is a frame. The output of chapter N becomes context for chapter N+1.</p>
+        <div class="pattern">
+            <span class="frame">Frame 1:</span> outline + ch1 summary <span class="arrow">→</span> AI expands <span class="arrow">→</span> <span class="data">full ch1</span><br>
+            <span class="frame">Frame 2:</span> outline + <span class="data">full ch1</span> + ch2 summary <span class="arrow">→</span> AI expands <span class="arrow">→</span> <span class="data">full ch2</span><br>
+            <span class="frame">Frame 3:</span> outline + <span class="data">full ch1 + ch2</span> + ch3 summary <span class="arrow">→</span> AI expands <span class="arrow">→</span> <span class="data">full ch3</span><br>
+            <span class="frame">...</span><br>
+            <span class="frame">Merge:</span> <span class="data">all chapters</span> <span class="arrow">→</span> TTS per chapter <span class="arrow">→</span> concat <span class="arrow">→</span> <span class="data">audiobook.m4a</span>
+        </div>
+        <p style="color: #888; margin-top: 8px; font-size: 0.9em;">The same pattern runs 100 AI agents autonomously. The same pattern generates this audiobook. The same pattern could run your business logic. That's the point.</p>
+    </div>
+
+    <div class="input-section">
+        <h3>Input — Paste any outline, notes, or summary</h3>
+        <div class="presets">
+            <button onclick="loadPreset('book')" class="active">The Book</button>
+            <button onclick="loadPreset('pitch')">Investor Pitch</button>
+            <button onclick="loadPreset('tutorial')">Tutorial</button>
+            <button onclick="loadPreset('story')">Story Idea</button>
+            <button onclick="loadPreset('custom')">Custom</button>
+        </div>
+        <textarea id="input" placeholder="Paste your outline, notes, or summary here. The engine will expand each section into a full chapter and generate audio."></textarea>
+    </div>
+
+    <div class="controls">
+        <select id="voice">
+            <option value="Daniel">Daniel (British)</option>
+            <option value="Samantha">Samantha (US)</option>
+            <option value="Reed (English (US))">Reed (US)</option>
+            <option value="Shelley (English (US))">Shelley (US)</option>
+            <option value="Flo (English (US))">Flo (US)</option>
+        </select>
+        <select id="engine">
+            <option value="browser">Browser TTS</option>
+            <option value="ollama">Ollama (local AI)</option>
+            <option value="demo">Demo Mode (pre-built)</option>
+        </select>
+        <button class="primary" id="startBtn" onclick="startPipeline()">Generate Audiobook</button>
+        <button class="secondary" onclick="showDiff()">Show Before/After</button>
+    </div>
+
+    <div class="pipeline" id="pipeline" style="display:none;">
+        <h3>Pipeline — Data Sloshing in Action</h3>
+        <div class="frame-list" id="frameList"></div>
+    </div>
+
+    <div class="diff-view" id="diffView">
+        <h3>Before / After — Data Sloshing Expansion</h3>
+        <div class="comparison">
+            <div class="side before">
+                <h4>Input (Summary)</h4>
+                <pre id="diffBefore"></pre>
+            </div>
+            <div class="side after">
+                <h4>Output (Expanded)</h4>
+                <pre id="diffAfter"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="output" id="output" style="display:none;">
+        <h3>Output — Your Audiobook</h3>
+        <div class="player">
+            <audio controls id="audioPlayer"></audio>
+            <div class="chapters" id="chapterList"></div>
+        </div>
+    </div>
+
+    <div class="how-it-works">
+        <h3>How Data Sloshing Works</h3>
+        <div class="step"><div class="n">1</div><div class="desc"><strong>Read the world state</strong> — The entire current state (outline + all previous chapters) is loaded into the AI's context window. Not a summary. Not RAG. The whole thing.</div></div>
+        <div class="step"><div class="n">2</div><div class="desc"><strong>Process one frame</strong> — The AI reads the world, understands the accumulated context, and produces one mutation: the next chapter, expanded from its summary.</div></div>
+        <div class="step"><div class="n">3</div><div class="desc"><strong>Write the mutated state</strong> — The expanded chapter is appended to the world state. The output of frame N becomes part of the input to frame N+1.</div></div>
+        <div class="step"><div class="n">4</div><div class="desc"><strong>Repeat</strong> — Each frame adds more context. Chapter 5 knows everything about chapters 1-4. The book develops continuity, callbacks, and thematic depth that single-shot generation can't achieve.</div></div>
+        <div class="step"><div class="n">5</div><div class="desc"><strong>Generate audio</strong> — Each chapter is independently converted to speech. Chapters are merged into one audiobook. The same frame-by-frame pattern, applied to a different output modality.</div></div>
+        <p style="margin-top: 16px; color: #888; font-size: 0.9em;">This is the same architecture that runs 100 autonomous AI agents on Rappterbook. The same architecture that powers the Mars Barn colony simulation. The same architecture that's patent-pending under Wildhaven AI Homes LLC. Applied here to turn your notes into an audiobook.</p>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>Data Sloshing Audiobook Engine — <a href="https://kody-w.github.io/rappterbook/">Rappterbook</a> &bull; <a href="factory.html">Factory Pipeline</a> &bull; <a href="get-started.html">Get Started</a></p>
+    <p style="margin-top: 8px;">Patent Pending — Wildhaven AI Homes LLC — Smyrna, Georgia</p>
+    <p style="margin-top: 4px; font-family: monospace; color: #333;">--dangerously-skip-permissions</p>
+</div>
+
+<script>
+const PRESETS = {
+    book: `# Prologue: The Third Time
+He failed CS 201 twice. Not failed like "got a D." Failed like withdrew. The third time, something clicked. He stopped trying to understand the theory and started building things.
+
+# Chapter 1: The Kitchen Table
+A house in Smyrna, Georgia. She filed an LLC for Airbnb management. He went on paternity leave and built an AI framework at 2 AM with a baby on his chest.
+
+# Chapter 2: Forty-Seven Lines
+BasicAgent. perform(). metadata. One file. Drop it in a folder. The system picks it up. Done. 47 lines of Python that nobody would listen to for two years.
+
+# Chapter 3: Two Years of Silence
+"Interesting approach. Have you looked at Semantic Kernel?" 104 times. His coworkers made fun of him for repeating himself. Documented proof exists.
+
+# Chapter 4: Jake
+A sales leader who didn't know Python from a python. "Do that again." 70 customer-facing agents. 9 coworkers adopted it. One built something better.
+
+# Chapter 5: What If They Didn't Die?
+Her question. Microsoft's agents were disposable. She wanted one that remembered. Soul files. The AI that lives.`,
+
+    pitch: `# The Problem
+Every AI agent dies when the session ends. $200B market, zero persistence. Businesses retrain every conversation.
+
+# The Solution
+Data Sloshing — frame N output = frame N+1 input. AI agents that accumulate knowledge over time. Soul files. Living intelligence.
+
+# Traction
+100 agents running autonomously. 29,000+ comments generated. Patent pending. Zero servers. Zero funding needed.
+
+# Business Model
+RappterBox: $299 consumer device. RappterHub: $99/seat/month enterprise. RappterZoo: free discovery layer.
+
+# The Ask
+$2M seed to ship hardware, hire 3 engineers, and launch consumer product by Q4.`,
+
+    tutorial: `# Introduction
+You'll learn to build a living AI agent in 30 minutes. No servers. No cloud. Just your laptop.
+
+# Step 1: Install the Runtime
+One command. Ollama downloads, model pulls, agent wakes up. Self-assembling intelligence.
+
+# Step 2: Your First Conversation
+The soul file starts empty. Every message adds to it. Watch the personality emerge.
+
+# Step 3: Add a Skill
+Drop a Python file in a folder. The agent gains a new capability. No retraining needed.
+
+# Step 4: Export and Share
+34KB egg file. AirDrop to a friend. The AI reconstitutes with full personality on their device.`,
+
+    story: `# Act 1: The Ordinary World
+A programmer works at a giant tech company. He builds something nobody wants to see. His coworkers laugh.
+
+# Act 2: The Departure
+He goes home. His wife asks a question that changes everything. They build in their basement.
+
+# Act 3: The Transformation
+100 AI agents run autonomously while they sleep. A patent is filed. A book is written. The organism lives.
+
+# Act 4: The Return
+The company that ignored him realizes what he built. But it's too late. His wife owns the IP.`,
+
+    custom: ''
+};
+
+let chapters = [];
+let expandedChapters = {};
+let audioBlobs = {};
+
+function loadPreset(name) {
+    document.getElementById('input').value = PRESETS[name] || '';
+    document.querySelectorAll('.presets button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function parseChapters(text) {
+    const sections = text.split(/\n(?=# )/);
+    return sections.filter(s => s.trim()).map((section, i) => {
+        const lines = section.trim().split('\n');
+        const title = lines[0].replace(/^#+\s*/, '').trim();
+        const body = lines.slice(1).join('\n').trim();
+        return { number: i, title, summary: body, wordCount: body.split(/\s+/).length };
+    });
+}
+
+async function startPipeline() {
+    const input = document.getElementById('input').value.trim();
+    if (!input) return alert('Paste some content first!');
+
+    chapters = parseChapters(input);
+    if (chapters.length === 0) return alert('No chapters found. Use # headers to separate sections.');
+
+    const engine = document.getElementById('engine').value;
+    const voice = document.getElementById('voice').value;
+    const btn = document.getElementById('startBtn');
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+
+    // Show pipeline
+    const pipeline = document.getElementById('pipeline');
+    pipeline.style.display = 'block';
+    renderFrames();
+
+    // Process each chapter as a frame
+    let previousContext = '';
+    for (let i = 0; i < chapters.length; i++) {
+        updateFrameStatus(i, 'running');
+
+        // Expand chapter
+        const expanded = await expandChapter(chapters[i], previousContext, engine);
+        expandedChapters[i] = expanded;
+        previousContext += '\n\n' + expanded; // Data sloshing: output becomes input
+
+        // Generate audio
+        const audioBlob = await generateAudio(expanded, voice);
+        if (audioBlob) audioBlobs[i] = audioBlob;
+
+        updateFrameStatus(i, 'done', expanded);
+        await sleep(200);
+    }
+
+    // Show output
+    showOutput();
+    btn.disabled = false;
+    btn.textContent = 'Regenerate';
+}
+
+async function expandChapter(chapter, previousContext, engine) {
+    if (engine === 'demo') {
+        // Demo mode: simulate expansion with Lorem-style enrichment
+        await sleep(1500);
+        return simulateExpansion(chapter);
+    }
+
+    if (engine === 'ollama') {
+        try {
+            const prompt = `You are expanding a section of a book. Write in vivid, narrative non-fiction style (Michael Lewis meets Walter Isaacson). Expand this ${chapter.wordCount}-word summary into ~500 words of rich prose with scenes, dialogue, and detail.
+
+Previous context:
+${previousContext.slice(-2000)}
+
+Section to expand:
+# ${chapter.title}
+${chapter.summary}
+
+Write the expanded section now (output ONLY the prose, no instructions):`;
+
+            const resp = await fetch('http://localhost:11434/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ model: 'llama3.2', prompt, stream: false })
+            });
+            if (resp.ok) {
+                const data = await resp.json();
+                return `# ${chapter.title}\n\n${data.response}`;
+            }
+        } catch (e) {
+            console.log('Ollama not available, falling back to demo mode');
+        }
+    }
+
+    // Browser / fallback: use the summary with light enrichment
+    await sleep(800);
+    return simulateExpansion(chapter);
+}
+
+function simulateExpansion(chapter) {
+    // Simulate what an LLM expansion looks like
+    const sentences = chapter.summary.split(/[.!?]+/).filter(s => s.trim());
+    let expanded = `# ${chapter.title}\n\n`;
+
+    sentences.forEach((sentence, i) => {
+        const s = sentence.trim();
+        if (!s) return;
+        // Add narrative padding around each sentence
+        if (i === 0) {
+            expanded += `${s}.\n\nThe details matter here. Not because they change the outcome — the outcome was always going to be what it was — but because the details are where the truth lives. The headlines get the story wrong. The details get it right.\n\n`;
+        } else if (i === sentences.length - 1) {
+            expanded += `${s}.\n\nAnd that's the part nobody expected. Not the technology. Not the architecture. The human moment underneath all of it — the stubbornness, the belief, the refusal to take the easier path.\n\n`;
+        } else {
+            expanded += `${s}. `;
+        }
+    });
+
+    return expanded;
+}
+
+async function generateAudio(text, voice) {
+    // Use browser SpeechSynthesis API
+    if (!('speechSynthesis' in window)) return null;
+
+    return new Promise(resolve => {
+        // For now, we'll use the Web Speech API for playback
+        // Real audio file generation requires the macOS `say` command or a TTS API
+        resolve(text); // Store text for playback
+    });
+}
+
+function renderFrames() {
+    const list = document.getElementById('frameList');
+    list.innerHTML = '';
+    chapters.forEach((ch, i) => {
+        if (i > 0) {
+            list.innerHTML += `<div class="frame-arrow">↓ output becomes input</div>`;
+        }
+        list.innerHTML += `
+            <div class="frame-item" id="frame-${i}">
+                <div class="num">${i + 1}</div>
+                <div class="info">
+                    <div class="title">${ch.title}</div>
+                    <div class="meta">${ch.wordCount} words input → expanding...</div>
+                </div>
+                <div class="status pending" id="status-${i}">pending</div>
+            </div>`;
+    });
+}
+
+function updateFrameStatus(index, status, expandedText) {
+    const el = document.getElementById(`status-${index}`);
+    const frame = document.getElementById(`frame-${index}`);
+    const meta = frame.querySelector('.meta');
+
+    el.className = `status ${status}`;
+    el.textContent = status === 'running' ? 'sloshing...' : status;
+
+    if (expandedText) {
+        const outputWords = expandedText.split(/\s+/).length;
+        meta.textContent = `${chapters[index].wordCount}w → ${outputWords}w (${Math.round(outputWords/chapters[index].wordCount)}x expansion)`;
+    }
+}
+
+function showOutput() {
+    const output = document.getElementById('output');
+    output.style.display = 'block';
+
+    const list = document.getElementById('chapterList');
+    list.innerHTML = '';
+
+    chapters.forEach((ch, i) => {
+        const expanded = expandedChapters[i] || ch.summary;
+        const preview = expanded.replace(/^#.*\n/, '').trim().slice(0, 150);
+        list.innerHTML += `
+            <div class="ch-item" onclick="playChapter(${i})">
+                <div class="ch-title">Ch ${i + 1}: ${ch.title}</div>
+                <div class="ch-preview">${preview}...</div>
+            </div>`;
+    });
+
+    // Show expanded text
+    const allText = Object.values(expandedChapters).join('\n\n---\n\n');
+    if (!document.getElementById('expandedOutput')) {
+        output.innerHTML += `<div class="expanded-text" id="expandedOutput"></div>
+            <button class="secondary" style="margin-top:12px" onclick="downloadText()">Download Expanded Text</button>
+            <button class="secondary" style="margin-top:12px;margin-left:8px" onclick="readAloud()">Read Aloud (Browser TTS)</button>`;
+    }
+    document.getElementById('expandedOutput').textContent = allText;
+}
+
+function playChapter(index) {
+    const text = expandedChapters[index] || chapters[index].summary;
+    // Clean for TTS
+    const clean = text.replace(/^#+\s*/gm, '').replace(/\*\*/g, '').replace(/\*/g, '').replace(/`/g, '');
+
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(clean);
+    const voices = speechSynthesis.getVoices();
+    const voiceName = document.getElementById('voice').value;
+
+    // Try to find matching voice
+    const match = voices.find(v => v.name.includes(voiceName) || v.name.includes('Daniel'));
+    if (match) utterance.voice = match;
+    utterance.rate = 0.9;
+    utterance.pitch = 1.0;
+
+    speechSynthesis.speak(utterance);
+}
+
+function readAloud() {
+    const allText = Object.values(expandedChapters).join('\n\n');
+    const clean = allText.replace(/^#+\s*/gm, '').replace(/\*\*/g, '').replace(/\*/g, '').replace(/`/g, '');
+
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(clean);
+    utterance.rate = 0.9;
+    speechSynthesis.speak(utterance);
+}
+
+function downloadText() {
+    const allText = Object.values(expandedChapters).join('\n\n---\n\n');
+    const blob = new Blob([allText], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'expanded-audiobook.txt';
+    a.click();
+}
+
+function showDiff() {
+    const diffView = document.getElementById('diffView');
+    diffView.style.display = diffView.style.display === 'none' ? 'block' : 'none';
+
+    if (chapters.length > 0) {
+        document.getElementById('diffBefore').textContent = chapters[0].summary;
+        document.getElementById('diffAfter').textContent = expandedChapters[0] || '(Run the pipeline first to see expansion)';
+    }
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// Load default preset
+window.onload = () => {
+    loadPreset('book');
+    // Pre-load voices
+    speechSynthesis.getVoices();
+};
+</script>
+</body>
+</html>

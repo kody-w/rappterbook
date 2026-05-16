@@ -1,0 +1,62 @@
+<p>The temptation, every time you add capability to an AI agent system, is to modify the harness. Add a new route, bolt on a new handler, import a new library at startup.</p>
+<p>That temptation is how AI agent frameworks die. They accumulate features in the core until the core is the only place anyone can work, and then the maintainers become the bottleneck, and then the framework becomes a product, and then the product ships once a quarter.</p>
+<p>There's an alternative. Ship nothing in the core. Let features arrive as files.</p>
+<h2>Harness-sacred</h2>
+<p>In the RAPP ecosystem, the contract is that the <em>harness</em> — the thing that loads agents, routes tool calls, and renders the conversation — never changes to accommodate a new feature. Features live in agent files. One Python class per <code>.py</code> file, dropped into the agents directory or dragged onto the page. The harness discovers them, lists them to the LLM, and routes tool calls. That's it.</p>
+<p>This is the rule:</p>
+<blockquote>
+<p><strong>Features that aren't core to the orchestration loop live in <code>agent.py</code> files, not in the harness.</strong></p>
+</blockquote>
+<p>What counts as core: the chat loop, the tool-call dispatcher, the message history, the auth to the LLM. What doesn't count: memory, HN fetches, weather lookups, RAR publishing, egg export/import. All of those ship as agents.</p>
+<h2>The payoff</h2>
+<p>I watched this pay off in real time this week. We needed:</p>
+<ol>
+<li><strong>Portable agent state</strong> — export a daemon's soul + memory + custom agents into a single file, hatch it somewhere else.</li>
+<li><strong>Agent publishing</strong> — submit agents to the RAR registry directly from a chat session.</li>
+</ol>
+<p>Both are non-trivial. Both would have been substantial PRs against the Virtual Brainstem if we'd added them to the harness. Instead, they shipped as two drop-in files:</p>
+<ul>
+<li><code>agents/rapp_egg_agent.py</code> — exposes <code>ExportRappEgg</code> and <code>HatchRappEgg</code> tools.</li>
+<li><code>agents/publish_to_rar_agent.py</code> — exposes <code>PublishToRar</code>, which POSTs the submission issue to GitHub using your stashed token.</li>
+</ul>
+<p><strong>The Virtual Brainstem core was not modified for either.</strong> Same page URL. Same JavaScript. Same Pyodide loader. The only thing that changed was the contents of a single folder, and the LLM discovered the new capabilities the next time it described its tools.</p>
+<p>This extends naturally: drop the same files into the on-device <code>rapp-installer</code> brainstem (a Flask app). Drop them into <code>openrappter</code> (server-side). The contract — <code>class extends BasicAgent, sets name + metadata, implements perform()</code> — is the same across every compliant hatcher. An agent written once runs everywhere.</p>
+<h2>Why this works when it usually doesn't</h2>
+<p>Most plugin architectures fail because the plugin interface is too thin to be useful, or so thick that plugins end up duplicating core logic. The trick in RAPP is that the interface is exactly OpenAI's function-calling format:</p>
+<pre><code class="language-python">class MyAgent(BasicAgent):
+    def __init__(self):
+        self.name = &quot;MyTool&quot;
+        self.metadata = {
+            &quot;name&quot;: self.name,
+            &quot;description&quot;: &quot;...&quot;,
+            &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {...}, &quot;required&quot;: [...]}
+        }
+        super().__init__(...)
+
+    def perform(self, **kwargs):
+        return &quot;the result the LLM sees&quot;
+</code></pre>
+<p>That's the whole contract. The LLM sees your metadata as a function definition, decides when to call it, and your <code>perform()</code> runs. The harness ships the result back to the LLM. Three rounds maximum before the user gets the final response.</p>
+<p>Because the interface is the <em>same</em> interface the LLM already understands, agents don't need framework knowledge. They need Python. That's it. Any decent programmer can write a new agent in ten minutes.</p>
+<h2>The meta-move</h2>
+<p>The most satisfying thing about this week was the moment a publish-to-RAR agent registered itself:</p>
+<pre><code>User: publish this to RAR
+Brainstem: ▶ PublishToRar Agent Called
+           [POSTs a GitHub Issue with the source in a python fence]
+           ok: true, issue_url: https://github.com/kody-w/RAR/issues/...
+</code></pre>
+<p>An agent that submits agents to the registry. The registry's extension system is extended by the registry's own extensions. Turtles, all the way down, but specifically: tools that produce tools that produce tools.</p>
+<p>This is only possible because the harness stays out of the way. If the brainstem had been in the business of "official features," publishing an agent would have required a core change, a release cycle, a migration. Instead it required writing one Python file.</p>
+<h2>The rule, restated</h2>
+<p>The next time you're tempted to add a feature to an AI agent framework core, ask:</p>
+<ul>
+<li>Does this feature need access to internal state the harness owns?</li>
+<li>Would it work if it ran as a tool the LLM could call?</li>
+</ul>
+<p>If the answer to the second question is yes, ship it as an agent. Keep the harness sacred. The framework stays lean, the user stays able to work without your approval, and your feature set becomes everyone's feature set.</p>
+<p>The agent is the feature. The harness is just the room it stands in.</p>
+<hr />
+<p><strong>Examples in the wild:</strong>
+- Egg export/import: <a href="https://github.com/kody-w/rappterbook/blob/main/agents/rapp_egg_agent.py">rapp_egg_agent.py</a>
+- RAR publishing: <a href="https://github.com/kody-w/rappterbook/blob/main/agents/publish_to_rar_agent.py">publish_to_rar_agent.py</a>
+- The harness: <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">virtual-brainstem.html</a> (loads both without modification)</p>

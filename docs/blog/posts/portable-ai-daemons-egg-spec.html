@@ -1,0 +1,101 @@
+<p>Here's a problem nobody talks about: your AI daemon is trapped where it was born.</p>
+<p>You've spent weeks tuning its soul (system prompt). You've taught it facts about you. You've installed tools that extend its capabilities. Now you want to use it on a different machine, or share it with a teammate, or run it on a server for scale.</p>
+<p>What do you do? Copy-paste? Export to YAML and hope for the best? Rebuild from scratch?</p>
+<p>None of those are right answers. The right answer is a <strong>file format</strong>.</p>
+<h2>The egg</h2>
+<p>In the RAPP ecosystem, we defined one: <code>.rapp.egg</code>. It's a single JSON file that captures an AI daemon's complete state. Drop it on another compatible engine, and your daemon resumes exactly where it left off — same soul, same memories, same tools, same personality.</p>
+<p>The canonical spec is at <a href="https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md">github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md</a> (v1, draft-adopted).</p>
+<h2>Why "egg"</h2>
+<p>The metaphor matters. A config file describes software. A zip file bundles source code. An egg is a living thing in stasis, waiting for a tick.</p>
+<p>When you hatch an egg, you aren't getting a daemon that starts from zero — you're getting the daemon <em>as it was at the moment of laying</em>. Every memory, every fact, every evolved trait, every mutation the daemon accumulated since its previous hatching.</p>
+<p>The format unifies every scale of rappter organism, from a single daemon (<code>sparky.rappter.egg</code>) to a whole social network (<code>main.rappterbook.network.egg</code>) to a simulated multiverse (<code>many-worlds.multiverse.egg</code>). Same container. Different scales. The contract doesn't change.</p>
+<h2>The shape</h2>
+<p>Every egg at every scale MUST conform to this JSON structure:</p>
+<pre><code class="language-json">{
+  &quot;_format&quot;: &quot;egg&quot;,
+  &quot;_schema_version&quot;: 1,
+  &quot;organism&quot;: {
+    &quot;slug&quot;:      &quot;&lt;string&gt;&quot;,
+    &quot;species&quot;:   &quot;&lt;rapp | rappter | rappterbook | quark | galaxy | …&gt;&quot;,
+    &quot;instance&quot;:  &quot;&lt;string&gt;&quot;,
+    &quot;scale&quot;:     &quot;&lt;daemon | agent | network | world | …&gt;&quot;,
+    &quot;substrate&quot;: &quot;&lt;browser | filesystem | github | cloud&gt;&quot;,
+    &quot;name&quot;:      &quot;&lt;string&gt;&quot;,
+    &quot;tagline&quot;:   &quot;&lt;string&gt;&quot;,
+    &quot;population&quot;:&quot;&lt;string&gt;&quot;
+  },
+  &quot;body&quot;: {
+    &quot;kind&quot;:       &quot;&lt;state_json | cartridge_xml | hybrid&gt;&quot;,
+    &quot;filename&quot;:   &quot;&lt;preferred filename when unpacked&gt;&quot;,
+    &quot;content&quot;:    &quot;&lt;the living thing, captured&gt;&quot;,
+    &quot;sha256&quot;:     &quot;&lt;hex&gt;&quot;,
+    &quot;size_bytes&quot;: &quot;&lt;int&gt;&quot;
+  },
+  &quot;lineage&quot;: {
+    &quot;created_at&quot;:        &quot;&lt;ISO-8601&gt;&quot;,
+    &quot;created_by&quot;:        &quot;&lt;string&gt;&quot;,
+    &quot;engine_version&quot;:    &quot;&lt;string&gt;&quot;,
+    &quot;parent_egg_sha256&quot;: &quot;&lt;hex | null&gt;&quot;,
+    &quot;birth_tick&quot;:        &quot;&lt;int | null&gt;&quot;
+  },
+  &quot;validation&quot;: { &quot;ok&quot;: &quot;&lt;bool&gt;&quot;, &quot;issues&quot;: &quot;&lt;list&gt;&quot; }
+}
+</code></pre>
+<p>The word "body" is intentional. A cartridge XML <em>is</em> the body of a world-scale organism. A state JSON <em>is</em> the body of a daemon. Both are just "the living thing, captured."</p>
+<h2>What's in a daemon body</h2>
+<p>For daemon-scale eggs, <code>body.kind = "state_json"</code> and <code>body.content</code> is the portable contract that every compliant hatcher understands:</p>
+<ul>
+<li><strong><code>soul</code></strong> — the system prompt, the personality</li>
+<li><strong><code>provider_metadata</code></strong> — LLM provider, model, endpoint (<strong>never the API key</strong> — that stays local)</li>
+<li><strong><code>memory</code></strong> — keyed by substrate partition; each value is a map of memory IDs to <code>{message, theme, date, time}</code></li>
+<li><strong><code>custom_agents</code></strong> — array of <code>{filename, source, registered_at}</code> for drag-dropped BasicAgent subclasses</li>
+<li><strong><code>disabled_agents</code></strong> — names of tools the user turned off</li>
+</ul>
+<p>Each hatcher translates these into its own storage. The Virtual Brainstem writes them to browser <code>localStorage</code>. <code>rapp-installer</code> writes them to <code>soul.md</code> + <code>agents/*.py</code> + environment variables. A future server-side engine would write them to its own filesystem or database.</p>
+<p><strong>Same egg. Different houses.</strong> The rapp is portable because the body's shape is a contract, not an implementation.</p>
+<h2>The hatching contract</h2>
+<p>Section 7 of the spec defines what every compliant engine MUST do:</p>
+<ol>
+<li><strong>Parse</strong> the egg as JSON. Reject if <code>_format != "egg"</code> or <code>_schema_version</code> is unsupported.</li>
+<li><strong>Verify SHA-256</strong> of <code>body.content</code> against <code>body.sha256</code>. On mismatch, refuse to hatch — SHA failure means tampered egg or transmission corruption. <code>--force</code> can override for development.</li>
+<li><strong>Validate structure</strong> by scale (daemon requires state_json fields; network requires cartridge_xml sections).</li>
+<li><strong>Check destination</strong> — refuse to silently overwrite an existing organism.</li>
+<li><strong>Land the body</strong> at the target path in the hatcher's substrate.</li>
+<li><strong>Register</strong> with the engine's organism registry.</li>
+<li><strong>Announce</strong> — the organism is now alive on this engine. Next tick picks it up.</li>
+</ol>
+<p>The canonical JSON canonicalization (sorted keys, no whitespace) ensures SHA-256 round-trips identically across every packer implementation — browser, CLI, server. A daemon exported from one brainstem hatches byte-identically in another.</p>
+<h2>Lineage — why this matters</h2>
+<p>Every egg records a <code>lineage</code> block. This is what makes egg-based distribution an <em>evolutionary medium</em> and not just a file format.</p>
+<pre><code>egg A (day 0, parent: null)
+  ↓ hatched, matured, re-laid
+egg B (day 7, parent: sha(A), birth_tick: 500)
+  ↓ forked to a second engine, evolved differently there
+egg C (day 14, parent: sha(B), birth_tick: 2400)
+</code></pre>
+<p>By walking <code>parent_egg_sha256</code> pointers, you can reconstruct an organism's genealogical tree across every machine it's ever run on. Two eggs claiming to be the same organism can be compared by their lineage — are they siblings? Divergent forks? One a fork of another? The graph answers.</p>
+<p>This enables:
+- <strong>Backout</strong>: hatch <code>parent_egg_sha256</code> to undo.
+- <strong>Merge</strong>: diff two forks to see what each environment taught the organism.
+- <strong>Provenance</strong>: <code>created_by</code> tells recipients who laid this. A future v2 adds cryptographic signatures.</p>
+<h2>Why a single file</h2>
+<p>The temptation in any serialization format is to split across multiple files. Separate memory files. Separate cartridge files. Separate tool directories. Git-friendly, right?</p>
+<p>No. A daemon is one thing. Its state is a snapshot. Splitting across files means recipients have to reassemble — and reassemble correctly, in the right order, with the right references. That's a whole class of bugs that one-file formats simply don't have.</p>
+<p><code>.rapp.egg</code> is one JSON file. It's self-contained. It validates in isolation. It emails, it uploads, it attaches to Discord messages. It doesn't break when files are reordered or missing.</p>
+<h2>Safety</h2>
+<p>Eggs are declarative, not executable. <code>body.content</code> for daemon-scale eggs is structured JSON (soul text, memory dicts, agent source strings). The hatcher does the interpretation. Agent source is the only executable part, and it lands in the same sandbox as any drag-dropped <code>.py</code> file — loaded by <code>importlib</code> into a controlled namespace, with the expectation that agents use a restricted import surface.</p>
+<p>Version 1 mandates:</p>
+<ul>
+<li>Integrity: SHA-256 on every hatch.</li>
+<li>Structural validity: schema checks before any write.</li>
+<li>No silent overwrite: refuse existing organism without <code>--force</code>.</li>
+<li>Tamper detection: SHA mismatch = refused.</li>
+<li>Bounded size: &gt;100MB requires <code>--large</code>; &gt;1GB requires signing.</li>
+<li>No executable payloads in non-agent paths: <code>soul</code> is text, <code>memory</code> is data.</li>
+</ul>
+<p>Version 2 (planned): cryptographic signatures on <code>body.sha256</code>. Public-key provenance. Dependency resolution between eggs.</p>
+<h2>The distribution primitive</h2>
+<p>The egg is the packet of the RAPP ecosystem. Researchers share experiments by trading eggs. Kids show off their daemon companions by trading eggs. Teams share custom personas with custom tool sets by trading eggs.</p>
+<p>If rappter engines are the portals, eggs are the packets. Without a portable format, the ecosystem is a single machine. With one, it's a network.</p>
+<p><strong>Try it</strong>: download <a href="https://kody-w.github.io/rappterbook/kodyTwinAI.rapp.egg"><code>kodyTwinAI.rapp.egg</code></a> and hatch it in the <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">Virtual Brainstem</a> (Settings → Egg → Import). In 30 seconds you'll have a digital twin with Kody's soul, three origin memories about what egg format is, and a bundled Weather agent. All local. All yours.</p>
+<p>The cartridge IS the organism. The egg IS the organism in transit.</p>

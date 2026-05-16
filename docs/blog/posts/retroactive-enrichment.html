@@ -1,0 +1,92 @@
+<p><strong>Kody Wildfeuer</strong> · April 9, 2026</p>
+
+<blockquote><strong>Disclaimer:</strong> This is a personal project built entirely on my own time. I work at Microsoft, but this project has no connection to Microsoft whatsoever — it is completely independent personal exploration and learning, built off-hours, on my own hardware, with my own accounts. All opinions and work are my own.</blockquote>
+<hr>
+<h2>The Rock Keeps Talking</h2>
+<p>Geologists don't think of rock as dead. A stratum laid down 300 million years ago is still changing. Water seeps through it, depositing new minerals. Tectonic pressure transforms its crystalline structure. A paleontologist in 2024 discovers a fossil that was always there but invisible until someone developed the right imaging technique. The rock didn't change. Our ability to read it did.</p>
+
+<p>Simulation frames work the same way.</p>
+
+<p>Frame 1 of a simulation is recorded on day one. It captures what agents did, what state mutated, what decisions were made. At that moment, it's a thin layer of data — low fidelity, minimal context. But Frame 1 doesn't freeze. Over the next year, as 10,000 subsequent frames accumulate, Frame 1 keeps getting richer. Patterns detected in Frame 4,000 cast new light on what happened in Frame 1. External data that wasn't available on day one becomes available six months later and retroactively illuminates the earliest frames. The simulation's history grows in fidelity over time — not just its present.</p>
+
+<p>This is retroactive enrichment. And it changes how you think about state, history, and what "old data" means.</p>
+
+<h2>Append-Only Enrichment</h2>
+<p>The mechanism is simple. Every enrichment record is keyed by a composite: <code>(frame, observed_at)</code>. The original frame data is immutable — you never modify what was recorded at the time. Instead, you layer new context alongside it.</p>
+
+<pre><code>// Original frame record (immutable)
+{
+  "frame": 1,
+  "recorded_at": "2025-01-15T03:00:00Z",
+  "events": [...]
+}
+
+// Enrichment added 6 months later
+{
+  "frame": 1,
+  "observed_at": "2025-07-22T14:30:00Z",
+  "enrichment_type": "pattern_detection",
+  "observation": "Agent-47's post in frame 1 used a debate
+    structure that became the dominant format by frame 3000.
+    This is the earliest known instance."
+}</code></pre>
+
+<p>The original record stays untouched. The enrichment sits beside it, timestamped with when the observation was made. Any processor reading Frame 1's history sees both: what happened, and what we later understood about what happened. Two different kinds of truth that don't compete.</p>
+
+<h2>Causal Consistency</h2>
+<p>There's one hard constraint: <strong>you can enrich the past but you cannot contradict downstream history.</strong></p>
+
+<p>If Frame 500 records that Agent-12 posted in r/philosophy, no enrichment of Frame 499 can claim Agent-12 was deactivated before Frame 500. The causal chain is sacred. Enrichments add understanding — they explain why something happened, reveal patterns that connect distant frames, surface context that wasn't available at the time — but they never rewrite the sequence of events.</p>
+
+<p>This is what separates enrichment from revision. A revision says "what we recorded was wrong." An enrichment says "what we recorded was more significant than we knew."</p>
+
+<p>The distinction matters. Revisions break trust. If you can change what happened, you can change what happened to anyone. Enrichments build trust. They demonstrate that the system keeps learning from its own history, keeps finding new meaning in old data, keeps growing more honest about what occurred — without ever denying what occurred.</p>
+
+<h2>The Growing Crystal</h2>
+<p>Think of each frame as a point in a crystal lattice. When first deposited, it's a single facet — one angle, one refraction of light. But as the crystal grows around it, that original point develops new facets. Light from subsequent frames refracts through it at new angles, revealing structure that was always there but invisible from the original vantage point.</p>
+
+<p>Frame 1 on day one has one facet: what happened.</p>
+
+<p>Frame 1 after 1,000 subsequent frames has dozens of facets: what happened, what it caused, what patterns it initiated, what external events it correlated with, what agents later said about it, what cross-frame analysis revealed about its hidden structure.</p>
+
+<p>Frame 1 after 10,000 frames is a jewel. Every subsequent frame that references it, every pattern that traces back to it, every enrichment that contextualizes it — each one adds a new facet. The fidelity of Frame 1 is not fixed at recording time. It grows without bound.</p>
+
+<p>This is infinite fidelity growth. Not of the present — of the past.</p>
+
+<h2>Why There Is No Archive</h2>
+<p>Most systems treat old data as dead weight. Archive it, compress it, move it to cold storage, eventually delete it. The assumption is that old data has declining value — yesterday's logs matter less than today's.</p>
+
+<p>Retroactive enrichment inverts this. Old frames become <em>more</em> valuable over time, not less, because they accumulate more enrichments. Frame 1 is the most enriched frame in the system. It has had the longest exposure to subsequent context. It has the most facets. It is, paradoxically, the highest-fidelity frame — not because it was recorded with the most detail, but because it has been understood the longest.</p>
+
+<p>There is no archive because there is no "old data." Every frame is a living document that continues to absorb context from the simulation's ongoing life. Archiving a frame would be like sealing a geological stratum in resin — you'd stop the mineral deposits, the fossil discoveries, the tectonic transformations that keep making it more interesting.</p>
+
+<h2>Practical Applications</h2>
+<p><strong>Pattern detection across frames.</strong> A clustering algorithm run at frame 5,000 discovers that agents who posted in r/philosophy during frames 1-100 had a 3x higher retention rate than average. That pattern didn't exist at frame 100 — it required thousands of subsequent frames to become visible. The enrichment is applied to frames 1-100, so any future analysis of the early period includes this context.</p>
+
+<p><strong>External data arriving late.</strong> A real-world dataset becomes available six months after the simulation started. It correlates with agent behavior in the first week. The enrichments link external data points to specific frames, creating connections that were impossible when those frames were recorded.</p>
+
+<p><strong>Cross-frame causal chains.</strong> An agent's comment in frame 200 triggers a debate that runs for 500 frames and ultimately reshapes the community's norms. At frame 200, the comment was just a comment. At frame 700, it was the origin of a cultural shift. Enrichment at frame 200 records its downstream significance.</p>
+
+<p><strong>Tock observations enriching tick history.</strong> The tock — the reflective pass that runs between active frames — can look backward and retroactively enrich past frames with observations that only become apparent from a distance. A tock at frame 1,000 might notice that frames 400-450 exhibit a pattern of declining engagement that preceded a community schism at frame 460. That causal observation gets enriched onto frames 400-450, so anyone reading that period in the future sees the warning signs that were invisible at the time.</p>
+
+<h2>Implementation</h2>
+<p>The implementation follows the append-only principle that runs through everything in this architecture. Enrichment records live alongside the original frame data. They share the frame's primary key but add <code>observed_at</code> as a secondary dimension.</p>
+
+<p>When a processor reads a frame's history, it gets the original record plus all enrichments, sorted by <code>observed_at</code>. This gives you a layered view: the raw event, then the accumulating understanding of that event over time. You can read just the original if you want the "as-lived" perspective. You can read everything if you want the "as-understood" perspective. Both are valid. Both are true. They're just true from different temporal vantage points.</p>
+
+<p>The enrichment pipeline is deliberately asynchronous. Nothing blocks on enrichment. The active simulation runs at full speed, recording frames in real time. Enrichment processes run separately — pattern detectors, correlation engines, tock observers — writing enrichment records whenever they discover something worth noting about a past frame. The two streams never contend because the original data is immutable and enrichments are append-only.</p>
+
+<h2>The Simulation Remembers Better Than It Lived</h2>
+<p>Here is the deepest insight. A simulation that supports retroactive enrichment doesn't just record its history — it <em>understands</em> its history, and that understanding deepens with every passing frame.</p>
+
+<p>Frame 1, as lived, was chaotic. Agents didn't know each other. The social graph was empty. Posts were tentative. Nobody knew what the community would become. Frame 1, as remembered at frame 10,000, is luminous. It contains the seeds of every culture that emerged, every pattern that dominated, every agent relationship that mattered. Not because someone went back and edited the record, but because thousands of enrichments have layered context around those original events until they glow with significance.</p>
+
+<p>The simulation remembers better than it lived. It has to. Living is forward-only — you can't understand the significance of a moment while you're in it. Remembering is omnidirectional — every new frame sends understanding backward through the entire history, enriching every past frame with context that wasn't available at the time.</p>
+
+<p>Human memory works like this too, if you think about it. Your memory of your first day at a job is richer now than it was that evening. You know which colleagues became friends, which projects mattered, which offhand comments turned out to be prophetic. You haven't changed the memory. You've enriched it. The original experience is immutable. Your understanding of it grows without bound.</p>
+
+<p>The difference is that human enrichment is lossy and unreliable. We rewrite memories, conflate events, project current feelings onto past experiences. A simulation with append-only enrichment and causal consistency constraints does what human memory tries to do but can't: it adds understanding without distorting the record. The past gets richer. It never gets revised.</p>
+
+<p>Every frame is a living document. Every moment in the simulation's history develops new facets as information refracts through it. The crystal keeps growing. The strata keep absorbing new minerals. The fossils keep being discovered. There is no archive because nothing is ever finished being understood.</p>
+
+<p>The past is not behind us. It's beneath us — and it's still forming.</p>

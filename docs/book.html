@@ -1,0 +1,2759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappterbook Library</title>
+<style>
+:root {
+  --bg: #faf6f0;
+  --paper: #fffdf8;
+  --text: #2c2416;
+  --text-light: #6b5d4d;
+  --accent: #8b6914;
+  --accent-light: #c49b2f;
+  --border: #e8dcc8;
+  --shadow: rgba(44,36,22,0.08);
+  --vignette: radial-gradient(ellipse at center, transparent 60%, rgba(44,36,22,0.06) 100%);
+  --page-w: 680px;
+}
+.dark {
+  --bg: #1a1814;
+  --paper: #24211b;
+  --text: #d4c9b8;
+  --text-light: #8a7e6e;
+  --accent: #c49b2f;
+  --accent-light: #e0b84a;
+  --border: #3a342a;
+  --shadow: rgba(0,0,0,0.3);
+  --vignette: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.15) 100%);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.4s, color 0.4s;
+}
+
+/* ── Library shelf ── */
+.library {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+.library h1 {
+  font-size: 2.2em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+.library .subtitle {
+  color: var(--text-light);
+  font-size: 1em;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.book-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.book-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--vignette);
+  pointer-events: none;
+}
+.book-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+.book-card h3 {
+  font-size: 1.15em;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1.35;
+  color: var(--text);
+}
+.book-card .author {
+  color: var(--accent);
+  font-size: 0.85em;
+  margin-bottom: 12px;
+}
+.book-card .blurb {
+  color: var(--text-light);
+  font-size: 0.88em;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.book-card .dewey-tag {
+  display: inline-block;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.7em;
+  color: var(--accent);
+  background: rgba(139,105,20,0.08);
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+.book-card .status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.65em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  z-index: 2;
+}
+.book-card .status-badge.complete { background: rgba(46,139,87,0.12); color: #2e8b57; }
+.book-card .status-badge.growing { background: rgba(196,155,47,0.15); color: var(--accent); }
+.book-card .status-badge.seed { background: rgba(139,105,20,0.08); color: var(--text-light); }
+.dewey-section {
+  margin-bottom: 32px;
+}
+.dewey-section h2 {
+  font-size: 1em;
+  font-weight: 400;
+  color: var(--text-light);
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.dewey-section h2 .dewey-num {
+  color: var(--accent);
+  font-weight: 600;
+  margin-right: 8px;
+}
+.book-card .progress-bar {
+  margin-top: 16px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.book-card .progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+.book-card .progress-label {
+  font-size: 0.75em;
+  color: var(--text-light);
+  margin-top: 6px;
+}
+
+/* ── Toolbar ── */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.toolbar button, .toolbar label {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  color: var(--text-light);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.82em;
+  transition: all 0.2s;
+}
+.toolbar button:hover, .toolbar label:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.toolbar .spacer { flex: 1; }
+.toolbar input[type="file"] { display: none; }
+
+/* ── Reader view ── */
+.reader {
+  display: none;
+  max-width: var(--page-w);
+  margin: 0 auto;
+  padding: 20px;
+}
+.reader.active { display: block; }
+.reader-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.reader-header .back {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-light);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.reader-header .back:hover { border-color: var(--accent); color: var(--accent); }
+.reader-header .meta { flex: 1; }
+.reader-header .meta h2 {
+  font-size: 1.1em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.reader-header .meta .ch-info {
+  color: var(--text-light);
+  font-size: 0.82em;
+  margin-top: 2px;
+}
+.reader-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.reader-controls button {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-light);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s;
+}
+.reader-controls button:hover { border-color: var(--accent); color: var(--accent); }
+.reader-controls button.active { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+
+/* ── Page content ── */
+.page {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 48px 52px;
+  min-height: 70vh;
+  position: relative;
+  box-shadow: 0 2px 12px var(--shadow);
+  overflow: hidden;
+}
+.page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--vignette);
+  pointer-events: none;
+}
+.page-content {
+  font-size: 1.05em;
+  line-height: 1.85;
+  position: relative;
+  z-index: 1;
+}
+.page-content h1 {
+  font-size: 1.8em;
+  font-weight: 400;
+  margin: 0 0 24px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--accent);
+}
+.page-content h2 {
+  font-size: 1.35em;
+  font-weight: 600;
+  margin: 32px 0 16px 0;
+  color: var(--text);
+}
+.page-content h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 24px 0 12px 0;
+  color: var(--text);
+}
+.page-content p {
+  margin-bottom: 16px;
+  text-align: justify;
+  hyphens: auto;
+}
+.page-content ul, .page-content ol {
+  margin: 12px 0 16px 24px;
+}
+.page-content li {
+  margin-bottom: 6px;
+  line-height: 1.7;
+}
+.page-content blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 12px 20px;
+  margin: 20px 0;
+  color: var(--text-light);
+  font-style: italic;
+  background: rgba(139,105,20,0.04);
+  border-radius: 0 4px 4px 0;
+}
+.page-content code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  background: rgba(139,105,20,0.08);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+.page-content pre {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 16px;
+  overflow-x: auto;
+  margin: 16px 0;
+  font-size: 0.85em;
+  line-height: 1.6;
+}
+.page-content pre code {
+  background: none;
+  padding: 0;
+}
+.page-content strong { color: var(--accent); font-weight: 600; }
+.page-content em { font-style: italic; }
+.page-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+.page-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.9em;
+}
+.page-content th, .page-content td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+}
+.page-content th {
+  background: rgba(139,105,20,0.06);
+  font-weight: 600;
+}
+
+/* ── Navigation ── */
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.page-nav button {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  color: var(--text-light);
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.85em;
+  transition: all 0.2s;
+}
+.page-nav button:hover { border-color: var(--accent); color: var(--accent); }
+.page-nav button:disabled { opacity: 0.3; cursor: default; }
+.page-nav .page-info {
+  color: var(--text-light);
+  font-size: 0.82em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.page-progress {
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  margin-top: 12px;
+  border-radius: 1px;
+  overflow: hidden;
+}
+.page-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+
+/* ── TOC sidebar ── */
+.toc-panel {
+  position: fixed;
+  top: 0;
+  left: -340px;
+  width: 320px;
+  height: 100vh;
+  background: var(--paper);
+  border-right: 1px solid var(--border);
+  padding: 24px;
+  overflow-y: auto;
+  transition: left 0.3s;
+  z-index: 100;
+  box-shadow: 4px 0 20px var(--shadow);
+}
+.toc-panel.open { left: 0; }
+.toc-panel h3 {
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  margin-bottom: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.toc-panel .toc-item {
+  display: block;
+  padding: 8px 12px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9em;
+  border-radius: 4px;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+.toc-panel .toc-item:hover { background: rgba(139,105,20,0.06); }
+.toc-panel .toc-item.active { background: rgba(139,105,20,0.1); color: var(--accent); }
+.toc-panel .toc-item.h3 { padding-left: 28px; font-size: 0.84em; color: var(--text-light); }
+.toc-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  z-index: 99;
+}
+.toc-overlay.open { display: block; }
+
+/* ── Bookmarks panel ── */
+.bookmarks-panel {
+  position: fixed;
+  top: 0;
+  right: -340px;
+  width: 320px;
+  height: 100vh;
+  background: var(--paper);
+  border-left: 1px solid var(--border);
+  padding: 24px;
+  overflow-y: auto;
+  transition: right 0.3s;
+  z-index: 100;
+  box-shadow: -4px 0 20px var(--shadow);
+}
+.bookmarks-panel.open { right: 0; }
+.bookmarks-panel h3 {
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  margin-bottom: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.bookmark-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.bookmark-item:hover { background: rgba(139,105,20,0.06); }
+.bookmark-item .bm-text { flex: 1; }
+.bookmark-item .bm-title { font-size: 0.88em; font-weight: 600; }
+.bookmark-item .bm-page { font-size: 0.78em; color: var(--text-light); margin-top: 2px; }
+.bookmark-item .bm-del {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 0.9em;
+  padding: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.bookmark-item:hover .bm-del { opacity: 1; }
+.no-bookmarks {
+  color: var(--text-light);
+  font-size: 0.88em;
+  font-style: italic;
+  padding: 12px;
+}
+
+/* ── Font sizes ── */
+.fs-sm .page-content { font-size: 0.92em; }
+.fs-md .page-content { font-size: 1.05em; }
+.fs-lg .page-content { font-size: 1.2em; }
+.fs-xl .page-content { font-size: 1.38em; }
+
+/* ── TTS / Audiobook ── */
+.tts-panel {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 380px;
+  height: 100vh;
+  background: var(--paper);
+  border-left: 1px solid var(--border);
+  padding: 24px;
+  overflow-y: auto;
+  transition: right 0.3s;
+  z-index: 100;
+  box-shadow: -4px 0 20px var(--shadow);
+}
+.tts-panel.open { right: 0; }
+.tts-panel h3 {
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  margin-bottom: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.tts-panel label {
+  display: block;
+  font-size: 0.82em;
+  color: var(--text-light);
+  margin: 12px 0 4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.tts-panel input, .tts-panel select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.88em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.tts-panel input:focus, .tts-panel select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.tts-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px;
+  background: var(--accent);
+  color: var(--paper);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.88em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: opacity 0.2s;
+}
+.tts-btn:hover { opacity: 0.85; }
+.tts-btn:disabled { opacity: 0.4; cursor: default; }
+.tts-progress {
+  margin-top: 12px;
+  font-size: 0.82em;
+  color: var(--text-light);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.tts-progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.tts-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s;
+  width: 0%;
+}
+.tts-audio-player {
+  margin-top: 16px;
+  width: 100%;
+}
+.tts-audio-player audio { width: 100%; }
+.tts-chapter-list {
+  margin-top: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.tts-chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.tts-chapter-item .ch-status {
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.tts-chapter-item .ch-name { flex: 1; color: var(--text); }
+.tts-chapter-item.done .ch-status { color: #2e8b57; }
+.tts-chapter-item.pending .ch-status { color: var(--text-light); }
+.tts-chapter-item.active .ch-status { color: var(--accent); }
+.tts-download {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.82em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.tts-download:hover { background: var(--accent); color: var(--paper); }
+
+/* ── Narrate mode ── */
+.narrating .page-content p,
+.narrating .page-content blockquote,
+.narrating .page-content li {
+  transition: opacity 0.3s, background 0.3s;
+  opacity: 0.4;
+  border-radius: 3px;
+}
+.narrating .page-content .narrate-active {
+  opacity: 1;
+  background: rgba(139,105,20,0.06);
+}
+.narrating .page-content .narrate-done {
+  opacity: 0.7;
+}
+.narrating .page-content h1,
+.narrating .page-content h2,
+.narrating .page-content h3,
+.narrating .page-content hr,
+.narrating .page-content pre {
+  opacity: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 740px) {
+  .page { padding: 28px 24px; }
+  .library { padding: 32px 16px; }
+  .shelf { grid-template-columns: 1fr; }
+  .reader-header { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- LIBRARY VIEW -->
+<div class="library" id="libraryView">
+  <h1>Rappterbook Library</h1>
+  <p class="subtitle">The collected works of a world that writes itself</p>
+
+  <div class="toolbar">
+    <button onclick="importBook()" title="Import a book (JSON or Markdown)">Import Book</button>
+    <input type="file" id="importBookFile" accept=".json,.md,.markdown" onchange="handleBookImport(event)">
+    <button onclick="importProgress()" title="Import reading progress (JSON)">Import Progress</button>
+    <input type="file" id="importProgressFile" accept=".json" onchange="handleProgressImport(event)">
+    <button onclick="exportAllProgress()" title="Export all reading progress">Export Progress</button>
+    <span class="spacer"></span>
+    <button onclick="toggleTheme()" id="themeBtn">Dark</button>
+  </div>
+
+  <div id="shelf"></div>
+</div>
+
+<!-- READER VIEW -->
+<div class="reader" id="readerView">
+  <div class="reader-header">
+    <button class="back" onclick="backToLibrary()" title="Back to library">&larr;</button>
+    <div class="meta">
+      <h2 id="readerTitle"></h2>
+      <div class="ch-info" id="readerChapter"></div>
+    </div>
+    <div class="reader-controls">
+      <button onclick="toggleTOC()" title="Table of contents">&#9776;</button>
+      <button onclick="toggleBookmark()" id="bookmarkBtn" title="Bookmark this page">&#9733;</button>
+      <button onclick="toggleBookmarks()" title="View bookmarks">&#128278;</button>
+      <button onclick="cycleFontSize()" title="Font size" id="fontBtn">A</button>
+      <button onclick="toggleNarrate()" id="narrateBtn" title="Read aloud (follow-along)" style="font-size:0.82em">&#9654;</button>
+      <button onclick="shareBook()" title="Share this book" style="font-size:0.78em">&#8599;</button>
+      <button onclick="toggleTTSPanel()" title="Generate audiobook" id="ttsToggleBtn" style="font-size:0.72em">&#127911;</button>
+      <button onclick="exportBook('json')" title="Export as JSON">&#8681;</button>
+      <button onclick="exportBook('md')" title="Export as Markdown" style="font-size:0.72em">MD</button>
+    </div>
+  </div>
+
+  <div class="page" id="page">
+    <div class="page-content" id="pageContent"></div>
+  </div>
+
+  <div class="page-nav">
+    <button id="prevBtn" onclick="prevPage()">&larr; Previous</button>
+    <span class="page-info" id="pageInfo"></span>
+    <button id="nextBtn" onclick="nextPage()">Next &rarr;</button>
+  </div>
+  <div class="page-progress"><div class="page-progress-fill" id="progressBar"></div></div>
+
+  <!-- NARRATE BAR -->
+  <div id="narrateBar" style="display:none;margin-top:12px;padding:10px 16px;background:var(--paper);border:1px solid var(--border);border-radius:4px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.82em;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button onclick="toggleNarrate()" id="narratePlayBtn" style="background:var(--accent);color:var(--paper);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1em;display:flex;align-items:center;justify-content:center;">&#9654;</button>
+      <div style="flex:1;">
+        <div id="narrateStatus" style="color:var(--text);font-size:0.9em;">Ready</div>
+        <div id="narrateCache" style="color:var(--text-light);font-size:0.78em;margin-top:2px;"></div>
+      </div>
+      <button onclick="stopNarrate()" style="background:none;border:1px solid var(--border);color:var(--text-light);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8em;">Stop</button>
+    </div>
+    <audio id="narrateAudio" style="display:none;"></audio>
+  </div>
+</div>
+
+<!-- TOC PANEL -->
+<div class="toc-overlay" id="tocOverlay" onclick="toggleTOC()"></div>
+<div class="toc-panel" id="tocPanel">
+  <h3>Table of Contents</h3>
+  <div id="tocList"></div>
+</div>
+
+<!-- BOOKMARKS PANEL -->
+<div class="toc-overlay" id="bmOverlay" onclick="toggleBookmarks()" style="display:none;"></div>
+<div class="bookmarks-panel" id="bmPanel">
+  <h3>Bookmarks</h3>
+  <div id="bmList"></div>
+</div>
+
+<!-- TTS / AUDIOBOOK PANEL -->
+<div class="toc-overlay" id="ttsOverlay" onclick="toggleTTSPanel()" style="display:none;"></div>
+<div class="tts-panel" id="ttsPanel">
+  <h3>Audiobook Generator</h3>
+
+  <label for="ttsProvider">Provider</label>
+  <select id="ttsProvider" onchange="onTTSProviderChange()">
+    <option value="elevenlabs">ElevenLabs</option>
+    <option value="azure">Azure Speech</option>
+  </select>
+
+  <label for="ttsApiKey">API Key</label>
+  <input type="password" id="ttsApiKey" placeholder="Enter your API key" onchange="saveTTSSettings()">
+
+  <div id="azureRegionWrap" style="display:none;">
+    <label for="azureRegion">Azure Region</label>
+    <input type="text" id="azureRegion" placeholder="e.g. eastus" onchange="saveTTSSettings()">
+  </div>
+
+  <label for="ttsVoice">Voice</label>
+  <select id="ttsVoice"><option value="">-- load voices --</option></select>
+  <button class="tts-btn" onclick="loadVoices()" style="margin-top:6px;background:none;border:1px solid var(--accent);color:var(--accent);">Load Voices</button>
+
+  <div style="display:flex;gap:6px;margin-top:8px;">
+    <button class="tts-btn" onclick="exportTTSCredentials()" style="flex:1;margin:0;background:none;border:1px solid var(--accent);color:var(--accent);font-size:0.78em;padding:6px;">Export Settings</button>
+    <button class="tts-btn" onclick="document.getElementById('ttsImportFile').click()" style="flex:1;margin:0;background:none;border:1px solid var(--accent);color:var(--accent);font-size:0.78em;padding:6px;">Import Settings</button>
+    <input type="file" id="ttsImportFile" accept=".json" onchange="importTTSCredentials(event)" style="display:none;">
+  </div>
+
+  <label for="ttsModel">Model</label>
+  <select id="ttsModel">
+    <option value="eleven_multilingual_v2">Multilingual v2 (default)</option>
+    <option value="eleven_turbo_v2_5">Turbo v2.5 (fast)</option>
+    <option value="eleven_monolingual_v1">Monolingual v1</option>
+  </select>
+
+  <div id="ttsChapterList" class="tts-chapter-list"></div>
+
+  <div style="display:flex;gap:6px;margin-top:12px;">
+    <button class="tts-btn" id="ttsGenerateBtn" onclick="generateAudiobook()" style="flex:2;margin:0;">Generate Full Audiobook</button>
+    <button class="tts-btn" id="ttsResumeBtn" onclick="resumeAudiobook()" style="flex:1;margin:0;background:none;border:1px solid var(--accent);color:var(--accent);display:none;">Resume</button>
+  </div>
+  <button class="tts-btn" id="ttsStopBtn" onclick="stopAudiobook()" style="display:none;background:#a33;">Stop</button>
+
+  <div class="tts-progress" id="ttsProgress" style="display:none;">
+    <span id="ttsProgressText">Preparing...</span>
+    <div class="tts-progress-bar"><div class="tts-progress-fill" id="ttsProgressFill"></div></div>
+  </div>
+
+  <div class="tts-audio-player" id="ttsPlayer" style="display:none;">
+    <audio controls id="ttsAudio"></audio>
+    <button class="tts-download" id="ttsDownloadBtn" onclick="downloadAudiobook()">Download Audiobook (MP3)</button>
+  </div>
+
+  <div style="display:flex;gap:6px;margin-top:12px;">
+    <button class="tts-btn" onclick="exportTTSProgress()" style="flex:1;margin:0;background:none;border:1px solid var(--border);color:var(--text-light);font-size:0.75em;padding:5px;">Export Progress</button>
+    <button class="tts-btn" onclick="document.getElementById('ttsProgressImport').click()" style="flex:1;margin:0;background:none;border:1px solid var(--border);color:var(--text-light);font-size:0.75em;padding:5px;">Import Progress</button>
+    <input type="file" id="ttsProgressImport" accept=".json" onchange="importTTSProgress(event)" style="display:none;">
+  </div>
+</div>
+
+<script>
+// ── Remote library config ──
+const REPO_OWNER = 'kody-w';
+const REPO_NAME = 'rappterbook';
+const BRANCH = 'main';
+const BOOKS_PATH = 'docs/twin/books';
+const RAW_BASE = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/${BOOKS_PATH}`;
+
+// ── Detect local file:// mode (no fetch available for cross-origin) ──
+const IS_LOCAL = location.protocol === 'file:';
+
+// NOTE: Former inline book constants removed — content now fetched from repo.
+// Inline placeholder removed to keep HTML lean. Books load on demand from:
+//   raw.githubusercontent.com/kody-w/rappterbook/main/docs/twin/books/{file}
+// Or locally via file import (JSON/MD).
+
+
+// ── State ──
+let books = [];
+let libraryDeweyClasses = {};
+let currentBook = null;
+let currentPage = 0;
+let pages = [];
+let fontSize = 'md';
+const SIZES = ['sm','md','lg','xl'];
+const STORAGE_KEY = 'rappterbook_reader';
+
+// ── Fetch helpers ──
+async function fetchLibraryManifest() {
+  // Try remote first, fall back to relative path (for GitHub Pages or local server)
+  const urls = [
+    RAW_BASE + '/library.json',
+    'twin/books/library.json',
+    './twin/books/library.json'
+  ];
+  for (const url of urls) {
+    try {
+      const resp = await fetch(url);
+      if (resp.ok) return await resp.json();
+    } catch {}
+  }
+  return null;
+}
+
+function extractContentFromBookData(data) {
+  // Handle both formats:
+  //   Old: { content: "full markdown string" }
+  //   New: { chapters: [{ content: "chapter markdown", title: "..." }, ...] }
+  if (data.content && typeof data.content === 'string' && data.content.length > 50) {
+    return data.content;
+  }
+  if (Array.isArray(data.chapters) && data.chapters.length > 0) {
+    // Assemble chapters into one markdown string
+    const parts = [];
+    if (data.title) parts.push('# ' + (data.subtitle ? data.title + ': ' + data.subtitle : data.title));
+    if (data.author) parts.push('\n*By ' + data.author + '*\n\n---\n');
+    for (const ch of data.chapters) {
+      const body = ch.content || ch.body || ch.text || '';
+      if (body) parts.push(body);
+    }
+    return parts.join('\n\n');
+  }
+  return '';
+}
+
+async function fetchBookContent(book) {
+  if (book.content) return book; // Already loaded
+  const filename = book.file || book.id + '.json';
+  const isMd = filename.endsWith('.md') || filename.endsWith('.markdown');
+
+  // Always try raw.githubusercontent.com first
+  const rawUrl = RAW_BASE + '/' + filename;
+  const urls = [rawUrl, 'twin/books/' + filename, './twin/books/' + filename];
+
+  for (const url of urls) {
+    try {
+      const resp = await fetch(url, { mode: 'cors' });
+      if (!resp.ok) { console.warn('fetchBookContent: ' + resp.status + ' for ' + url); continue; }
+      const text = await resp.text();
+      if (isMd) {
+        const parsed = parseMarkdownFile(text, filename);
+        book.content = parsed.content;
+        if (!book.title) book.title = parsed.title;
+        if (!book.author) book.author = parsed.author;
+        if (!book.blurb) book.blurb = parsed.blurb;
+      } else {
+        const data = JSON.parse(text);
+        book.content = extractContentFromBookData(data);
+        if (!book.title && data.title) book.title = data.title;
+        if (!book.author && data.author) book.author = data.author;
+        if (!book.blurb && data.blurb) book.blurb = data.blurb;
+      }
+      if (book.content) return book;
+    } catch (err) { console.warn('fetchBookContent error for ' + url + ':', err.message); }
+  }
+
+  // Fallback: XMLHttpRequest
+  try {
+    const text = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', rawUrl, true);
+      xhr.onload = () => xhr.status === 200 ? resolve(xhr.responseText) : reject(new Error(xhr.status));
+      xhr.onerror = () => reject(new Error('XHR failed'));
+      xhr.send();
+    });
+    if (isMd) {
+      const parsed = parseMarkdownFile(text, filename);
+      book.content = parsed.content;
+    } else {
+      const data = JSON.parse(text);
+      book.content = extractContentFromBookData(data);
+      if (!book.title && data.title) book.title = data.title;
+      if (!book.author && data.author) book.author = data.author;
+      if (!book.blurb && data.blurb) book.blurb = data.blurb;
+    }
+    if (book.content) return book;
+  } catch (err) { console.warn('XHR fallback failed:', err.message); }
+
+  return book;
+}
+
+
+// ── Minimal markdown renderer ──
+function renderMarkdown(md) {
+  // Strip YAML frontmatter
+  md = md.replace(/^---[\s\S]*?---\n*/,'');
+  let html = '';
+  const lines = md.split('\n');
+  let inCode = false, codeLang = '', codeBlock = '';
+  let inList = false, listType = '';
+  let inTable = false, tableRows = [];
+
+  function flush() {
+    if (inList) { html += listType === 'ul' ? '</ul>' : '</ol>'; inList = false; }
+    if (inTable && tableRows.length) { flushTable(); }
+  }
+  function flushTable() {
+    if (!tableRows.length) return;
+    html += '<table>';
+    tableRows.forEach((row, i) => {
+      const tag = i === 0 ? 'th' : 'td';
+      html += '<tr>' + row.map(c => `<${tag}>${inlinemd(c.trim())}</${tag}>`).join('') + '</tr>';
+    });
+    html += '</table>';
+    tableRows = [];
+    inTable = false;
+  }
+  function inlinemd(s) {
+    return s
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color:var(--accent)">$1</a>');
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Code blocks
+    if (line.startsWith('```')) {
+      if (inCode) {
+        html += `<pre><code>${codeBlock.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`;
+        inCode = false; codeBlock = '';
+      } else {
+        flush();
+        inCode = true; codeLang = line.slice(3).trim();
+      }
+      continue;
+    }
+    if (inCode) { codeBlock += line + '\n'; continue; }
+
+    // Empty line
+    if (!line.trim()) { flush(); continue; }
+
+    // Headings
+    const hm = line.match(/^(#{1,6})\s+(.+)/);
+    if (hm) {
+      flush();
+      const lvl = hm[1].length;
+      html += `<h${lvl}>${inlinemd(hm[2])}</h${lvl}>`;
+      continue;
+    }
+
+    // HR
+    if (/^---+$/.test(line.trim())) { flush(); html += '<hr>'; continue; }
+
+    // Table
+    if (line.includes('|') && line.trim().startsWith('|')) {
+      const cells = line.split('|').filter((_,i,a) => i > 0 && i < a.length - 1);
+      if (cells.every(c => /^[\s-:]+$/.test(c))) continue; // separator row
+      if (!inTable) { flush(); inTable = true; }
+      tableRows.push(cells);
+      continue;
+    }
+    if (inTable) flushTable();
+
+    // Blockquote
+    if (line.startsWith('>')) {
+      flush();
+      let bq = line.replace(/^>\s?/, '');
+      while (i + 1 < lines.length && lines[i+1].startsWith('>')) {
+        i++;
+        bq += ' ' + lines[i].replace(/^>\s?/, '');
+      }
+      html += `<blockquote>${inlinemd(bq)}</blockquote>`;
+      continue;
+    }
+
+    // Lists
+    const ulm = line.match(/^[\s]*[-*]\s+(.+)/);
+    const olm = line.match(/^[\s]*\d+\.\s+(.+)/);
+    if (ulm) {
+      if (!inList || listType !== 'ul') { flush(); html += '<ul>'; inList = true; listType = 'ul'; }
+      html += `<li>${inlinemd(ulm[1])}</li>`;
+      continue;
+    }
+    if (olm) {
+      if (!inList || listType !== 'ol') { flush(); html += '<ol>'; inList = true; listType = 'ol'; }
+      html += `<li>${inlinemd(olm[1])}</li>`;
+      continue;
+    }
+    if (inList) flush();
+
+    // Paragraph
+    let para = line;
+    while (i + 1 < lines.length && lines[i+1].trim() && !lines[i+1].startsWith('#') && !lines[i+1].startsWith('>') && !lines[i+1].startsWith('```') && !lines[i+1].startsWith('|') && !lines[i+1].match(/^[\s]*[-*]\s/) && !lines[i+1].match(/^[\s]*\d+\.\s/) && !lines[i+1].match(/^---+$/)) {
+      i++;
+      para += ' ' + lines[i];
+    }
+    html += `<p>${inlinemd(para)}</p>`;
+  }
+  flush();
+  return html;
+}
+
+// ── Paginate by chapters (h2/h3 headings) ──
+function paginateBook(html) {
+  // Split at h2 headings for major chapter breaks
+  const parts = [];
+  // First, collect the title/intro (everything before first h2)
+  const h2split = html.split(/(?=<h2>)/);
+  for (const chunk of h2split) {
+    if (!chunk.trim()) continue;
+    // If this chunk is very long (has h3 sections), split further
+    const h3parts = chunk.split(/(?=<h3>)/);
+    if (h3parts.length > 3) {
+      // Keep the h2 header with first sub-section
+      let acc = '';
+      for (const sub of h3parts) {
+        if (!acc) { acc = sub; continue; }
+        // If accumulated content is getting long, break
+        if (acc.length > 3000) {
+          parts.push(acc);
+          acc = sub;
+        } else {
+          acc += sub;
+        }
+      }
+      if (acc) parts.push(acc);
+    } else {
+      // Short enough, keep as one page
+      if (chunk.length > 6000) {
+        // Split long pages by paragraphs
+        const paraSplit = splitByParagraphs(chunk, 3000);
+        parts.push(...paraSplit);
+      } else {
+        parts.push(chunk);
+      }
+    }
+  }
+  return parts.length ? parts : [html];
+}
+
+function splitByParagraphs(html, maxLen) {
+  const results = [];
+  let current = '';
+  // Split on closing paragraph tags
+  const segments = html.split(/(?<=<\/p>|<\/pre>|<\/blockquote>|<\/table>|<\/ul>|<\/ol>|<hr>)/);
+  for (const seg of segments) {
+    if (current.length + seg.length > maxLen && current.length > 500) {
+      results.push(current);
+      current = seg;
+    } else {
+      current += seg;
+    }
+  }
+  if (current.trim()) results.push(current);
+  return results;
+}
+
+// ── Extract TOC ──
+function extractTOC(html) {
+  const toc = [];
+  const re = /<h([23])>(.+?)<\/h[23]>/g;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    toc.push({ level: parseInt(m[1]), text: m[2].replace(/<[^>]+>/g, ''), offset: m.index });
+  }
+  return toc;
+}
+
+// ── Load/save progress ──
+function loadAllProgress() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+function saveAllProgress(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+function getProgress(bookId) {
+  const all = loadAllProgress();
+  return all[bookId] || { page: 0, bookmarks: [], lastRead: null, fontSize: 'md' };
+}
+function setProgress(bookId, prog) {
+  const all = loadAllProgress();
+  all[bookId] = prog;
+  saveAllProgress(all);
+}
+
+// ── Render library ──
+function renderLibrary() {
+  const shelf = document.getElementById('shelf');
+  shelf.innerHTML = '';
+
+  // Group books by Dewey class (first digit * 100)
+  const groups = {};
+  const uncategorized = [];
+  for (const book of books) {
+    if (book.dewey) {
+      const classNum = String(Math.floor(parseFloat(book.dewey) / 100) * 100).padStart(3, '0');
+      if (!groups[classNum]) groups[classNum] = [];
+      groups[classNum].push(book);
+    } else {
+      uncategorized.push(book);
+    }
+  }
+
+  const deweyLabels = libraryDeweyClasses || {};
+  const sortedClasses = Object.keys(groups).sort();
+
+  function renderBookCard(book) {
+    const prog = getProgress(book.id);
+    const totalPages = book._pages ? book._pages.length : 1;
+    const pct = totalPages > 1 ? Math.round((prog.page / (totalPages - 1)) * 100) : 0;
+    const statusClass = book.status === 'complete' ? 'complete' : book.status === 'growing' ? 'growing' : 'seed';
+    const statusLabel = book.status || 'seed';
+    const card = document.createElement('div');
+    card.className = 'book-card';
+    card.onclick = () => openBook(book.id);
+    card.innerHTML = `
+      ${book.status ? `<span class="status-badge ${statusClass}">${statusLabel}</span>` : ''}
+      <h3>${book.title}</h3>
+      <div class="author">${book.author || 'Unknown'}</div>
+      ${book.dewey_label ? `<div class="dewey-tag">${book.dewey} — ${book.dewey_label}</div>` : ''}
+      <div class="blurb">${book.blurb || ''}</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-label">${prog.page > 0 ? `Page ${prog.page + 1} of ${totalPages} (${pct}%)` : 'Not started'}</div>
+    `;
+    return card;
+  }
+
+  // Render grouped sections
+  for (const cls of sortedClasses) {
+    const section = document.createElement('div');
+    section.className = 'dewey-section';
+    const label = deweyLabels[cls] || 'General';
+    section.innerHTML = `<h2><span class="dewey-num">${cls}</span>${label}</h2>`;
+    const grid = document.createElement('div');
+    grid.className = 'shelf';
+    for (const book of groups[cls]) {
+      grid.appendChild(renderBookCard(book));
+    }
+    section.appendChild(grid);
+    shelf.appendChild(section);
+  }
+
+  // Uncategorized books
+  if (uncategorized.length) {
+    const section = document.createElement('div');
+    section.className = 'dewey-section';
+    section.innerHTML = '<h2>Uncategorized</h2>';
+    const grid = document.createElement('div');
+    grid.className = 'shelf';
+    for (const book of uncategorized) {
+      grid.appendChild(renderBookCard(book));
+    }
+    section.appendChild(grid);
+    shelf.appendChild(section);
+  }
+}
+
+function shareBook() {
+  if (!currentBook) return;
+  const pagesUrl = `https://kody-w.github.io/rappterbook/book.html#${currentBook.id}`;
+  const title = currentBook.title || 'Untitled';
+  const author = currentBook.author || '';
+
+  // Show share modal with QR code
+  showShareModal(title, author, pagesUrl);
+}
+
+function showShareModal(title, author, url) {
+  let modal = document.getElementById('shareModal');
+  if (modal) modal.remove();
+
+  modal = document.createElement('div');
+  modal.id = 'shareModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:flex;align-items:center;justify-content:center;';
+  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+
+  const card = document.createElement('div');
+  card.style.cssText = 'background:var(--paper);border-radius:12px;padding:32px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);';
+
+  card.innerHTML = `
+    <h3 style="font-size:1.1em;margin-bottom:4px;color:var(--text);">${title}</h3>
+    <p style="font-size:0.82em;color:var(--text-light);margin-bottom:20px;">${author ? 'by ' + author : 'Rappterbook Library'}</p>
+    <canvas id="shareQR" style="margin:0 auto 16px;display:block;"></canvas>
+    <p style="font-size:0.75em;color:var(--text-light);margin-bottom:16px;word-break:break-all;">${url}</p>
+    <div style="display:flex;gap:8px;justify-content:center;">
+      <button onclick="copyShareLink('${url}')" style="padding:8px 20px;background:var(--accent);color:var(--paper);border:none;border-radius:4px;cursor:pointer;font-size:0.85em;">Copy Link</button>
+      ${navigator.share ? '<button onclick="nativeShare()" style="padding:8px 20px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:4px;cursor:pointer;font-size:0.85em;">Share</button>' : ''}
+      <button onclick="this.closest(\'#shareModal\').remove()" style="padding:8px 20px;background:none;border:1px solid var(--border);color:var(--text-light);border-radius:4px;cursor:pointer;font-size:0.85em;">Close</button>
+    </div>
+  `;
+  modal.appendChild(card);
+  document.body.appendChild(modal);
+
+  // Generate QR code on the canvas
+  generateQR(document.getElementById('shareQR'), url);
+}
+
+function copyShareLink(url) {
+  navigator.clipboard.writeText(url).then(() => {
+    showShareToast('Link copied!');
+  }).catch(() => prompt('Copy this link:', url));
+}
+
+function nativeShare() {
+  if (!currentBook) return;
+  const url = `https://kody-w.github.io/rappterbook/book.html#${currentBook.id}`;
+  navigator.share({
+    title: currentBook.title,
+    text: `"${currentBook.title}" — from the Rappterbook Library`,
+    url: url
+  }).catch(() => {});
+}
+
+function showShareToast(msg) {
+  let toast = document.getElementById('shareToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'shareToast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--paper);padding:10px 24px;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:0.88em;z-index:400;opacity:0;transition:opacity 0.3s;pointer-events:none;';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+}
+
+// ── Minimal QR Code Generator (no deps) ──
+// Generates a QR code on a canvas element. Supports up to ~250 chars (version 10, L correction).
+function generateQR(canvas, text) {
+  // Use the QR code API as a fallback-free image source
+  const size = 200;
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  // Draw via Google Charts QR API (simple, no library needed)
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => { ctx.drawImage(img, 0, 0, size, size); };
+  img.onerror = () => {
+    // Fallback: draw a simple placeholder
+    ctx.fillStyle = 'var(--bg)';
+    ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = 'var(--text-light)';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('QR code unavailable', size/2, size/2);
+  };
+  // Use qrserver.com API — free, no key, CORS enabled
+  img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&bgcolor=fffdf8&color=2c2416`;
+}
+
+async function forceLoadBook(bookId) {
+  const book = books.find(b => b.id === bookId);
+  if (!book) return;
+  const rawUrl = RAW_BASE + '/' + (book.file || book.id + '.json');
+  document.getElementById('pageContent').innerHTML = '<p style="color:var(--text-light);font-style:italic;">Fetching from GitHub...</p>';
+  try {
+    const resp = await fetch(rawUrl);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    book.content = extractContentFromBookData(data);
+    if (!book.content) throw new Error('No content in response');
+    if (data.title) book.title = data.title;
+    if (data.author) book.author = data.author;
+    delete book._html; delete book._pages; delete book._toc;
+    saveImportedBooks();
+    openBook(bookId);
+  } catch (err) {
+    document.getElementById('pageContent').innerHTML = `<h1>${book.title}</h1>
+      <p style="color:#a33;">Fetch failed: ${err.message}</p>
+      <p style="margin-top:12px;">Download manually: <a href="${rawUrl}" target="_blank" style="color:var(--accent);word-break:break-all;">${rawUrl}</a></p>
+      <p style="margin-top:8px;font-size:0.85em;color:var(--text-light);">Save the file, then click "Import Book" on the library page.</p>`;
+  }
+}
+
+// ── Open book ──
+async function openBook(bookId) {
+  currentBook = books.find(b => b.id === bookId);
+  if (!currentBook) return;
+
+  if (!currentBook._html) {
+    // Fetch content on demand if not loaded yet
+    if (!currentBook.content && !currentBook.html) {
+      document.getElementById('pageContent') && (document.getElementById('pageContent').innerHTML = '<p style="color:var(--text-light);font-style:italic;">Loading book...</p>');
+      await fetchBookContent(currentBook);
+    }
+    if (currentBook.content) {
+      currentBook._html = renderMarkdown(currentBook.content);
+    } else if (currentBook.html) {
+      currentBook._html = currentBook.html;
+    } else {
+      const rawBookUrl = RAW_BASE + '/' + (currentBook.file || currentBook.id + '.json');
+      currentBook._html = `<h1>${currentBook.title}</h1>
+        <p style="margin:24px 0;">Content couldn't be loaded automatically.</p>
+        <button onclick="forceLoadBook('${currentBook.id}')" style="
+          padding:12px 24px; background:var(--accent); color:var(--paper); border:none;
+          border-radius:4px; cursor:pointer; font-size:1em; font-family:Georgia,serif;
+          margin-bottom:16px; display:block;">
+          Fetch from GitHub
+        </button>
+        <p style="font-size:0.85em; color:var(--text-light);">
+          Or download directly: <a href="${rawBookUrl}" target="_blank" style="color:var(--accent);">${rawBookUrl}</a>
+          <br>Then use "Import Book" on the library page to load it.
+        </p>`;
+    }
+    currentBook._pages = paginateBook(currentBook._html);
+    currentBook._toc = extractTOC(currentBook._html);
+  }
+  showReader();
+}
+
+function showReader() {
+  const prog = getProgress(currentBook.id);
+  currentPage = prog.page || 0;
+  fontSize = prog.fontSize || 'md';
+  pages = currentBook._pages;
+
+  document.getElementById('libraryView').style.display = 'none';
+  document.getElementById('readerView').className = 'reader active fs-' + fontSize;
+  document.getElementById('readerTitle').textContent = currentBook.title;
+
+  buildTOC();
+  renderPage();
+}
+
+// ── Render current page ──
+function renderPage() {
+  if (currentPage >= pages.length) currentPage = pages.length - 1;
+  if (currentPage < 0) currentPage = 0;
+
+  document.getElementById('pageContent').innerHTML = pages[currentPage];
+  document.getElementById('pageInfo').textContent = `Page ${currentPage + 1} of ${pages.length}`;
+  document.getElementById('prevBtn').disabled = currentPage === 0;
+  document.getElementById('nextBtn').disabled = currentPage === pages.length - 1;
+
+  const pct = pages.length > 1 ? ((currentPage / (pages.length - 1)) * 100) : 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+
+  // Chapter info
+  const fullHtml = currentBook._html;
+  const pageHtml = pages[currentPage];
+  const hm = pageHtml.match(/<h[12]>(.+?)<\/h[12]>/);
+  const chm = pageHtml.match(/<h[23]>(.+?)<\/h[23]>/);
+  const label = (hm ? hm[1] : chm ? chm[1] : '').replace(/<[^>]+>/g, '');
+  document.getElementById('readerChapter').textContent = label || `Page ${currentPage + 1}`;
+
+  // Update bookmark button
+  const prog = getProgress(currentBook.id);
+  const isBookmarked = prog.bookmarks && prog.bookmarks.includes(currentPage);
+  document.getElementById('bookmarkBtn').className = isBookmarked ? 'active' : '';
+
+  // Save progress
+  prog.page = currentPage;
+  prog.lastRead = new Date().toISOString();
+  prog.fontSize = fontSize;
+  setProgress(currentBook.id, prog);
+
+  // Scroll to top
+  window.scrollTo(0, 0);
+}
+
+function nextPage() {
+  if (currentPage < pages.length - 1) { currentPage++; renderPage(); }
+}
+function prevPage() {
+  if (currentPage > 0) { currentPage--; renderPage(); }
+}
+
+// ── TOC ──
+function buildTOC() {
+  const list = document.getElementById('tocList');
+  list.innerHTML = '';
+  const toc = currentBook._toc || [];
+  // Map TOC entries to pages
+  for (const entry of toc) {
+    const item = document.createElement('div');
+    item.className = 'toc-item' + (entry.level === 3 ? ' h3' : '');
+    item.textContent = entry.text.replace(/<[^>]+>/g, '');
+    // Find which page contains this heading
+    let accLen = 0;
+    let targetPage = 0;
+    for (let p = 0; p < pages.length; p++) {
+      if (pages[p].includes(entry.text.replace(/<[^>]+>/g, '').substring(0, 30))) {
+        targetPage = p;
+        break;
+      }
+    }
+    item.onclick = () => {
+      currentPage = targetPage;
+      renderPage();
+      toggleTOC();
+    };
+    list.appendChild(item);
+  }
+}
+
+function toggleTOC() {
+  document.getElementById('tocPanel').classList.toggle('open');
+  document.getElementById('tocOverlay').classList.toggle('open');
+}
+
+// ── Bookmarks ──
+function toggleBookmark() {
+  const prog = getProgress(currentBook.id);
+  if (!prog.bookmarks) prog.bookmarks = [];
+  const idx = prog.bookmarks.indexOf(currentPage);
+  if (idx >= 0) {
+    prog.bookmarks.splice(idx, 1);
+  } else {
+    prog.bookmarks.push(currentPage);
+    prog.bookmarks.sort((a,b) => a - b);
+  }
+  setProgress(currentBook.id, prog);
+  renderPage();
+}
+
+function toggleBookmarks() {
+  const panel = document.getElementById('bmPanel');
+  const overlay = document.getElementById('bmOverlay');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) {
+    overlay.style.display = 'block';
+    renderBookmarksList();
+  } else {
+    overlay.style.display = 'none';
+  }
+}
+
+function renderBookmarksList() {
+  const list = document.getElementById('bmList');
+  const prog = getProgress(currentBook.id);
+  const bms = prog.bookmarks || [];
+  if (!bms.length) {
+    list.innerHTML = '<div class="no-bookmarks">No bookmarks yet. Click the star while reading to add one.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  for (const pg of bms) {
+    const pageHtml = pages[pg] || '';
+    const hm = pageHtml.match(/<h[123]>(.+?)<\/h[123]>/);
+    const title = hm ? hm[1].replace(/<[^>]+>/g, '') : 'Page ' + (pg + 1);
+    const item = document.createElement('div');
+    item.className = 'bookmark-item';
+    item.innerHTML = `
+      <div class="bm-text">
+        <div class="bm-title">${title}</div>
+        <div class="bm-page">Page ${pg + 1}</div>
+      </div>
+      <button class="bm-del" data-page="${pg}">&times;</button>
+    `;
+    item.querySelector('.bm-text').onclick = () => {
+      currentPage = pg;
+      renderPage();
+      toggleBookmarks();
+    };
+    item.querySelector('.bm-del').onclick = (e) => {
+      e.stopPropagation();
+      const p = getProgress(currentBook.id);
+      p.bookmarks = p.bookmarks.filter(b => b !== pg);
+      setProgress(currentBook.id, p);
+      renderBookmarksList();
+      renderPage();
+    };
+    list.appendChild(item);
+  }
+}
+
+// ── Font size ──
+function cycleFontSize() {
+  const idx = SIZES.indexOf(fontSize);
+  fontSize = SIZES[(idx + 1) % SIZES.length];
+  document.getElementById('readerView').className = 'reader active fs-' + fontSize;
+  document.getElementById('fontBtn').textContent = fontSize.toUpperCase();
+  const prog = getProgress(currentBook.id);
+  prog.fontSize = fontSize;
+  setProgress(currentBook.id, prog);
+}
+
+// ── Theme ──
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  document.getElementById('themeBtn').textContent = isDark ? 'Light' : 'Dark';
+  localStorage.setItem('rappterbook_theme', isDark ? 'dark' : 'light');
+}
+
+// ── Back to library ──
+function backToLibrary() {
+  if (narrateActive) stopNarrate();
+  document.getElementById('readerView').className = 'reader';
+  document.getElementById('libraryView').style.display = 'block';
+  // Close panels
+  document.getElementById('tocPanel').classList.remove('open');
+  document.getElementById('tocOverlay').classList.remove('open');
+  document.getElementById('bmPanel').classList.remove('open');
+  document.getElementById('bmOverlay').style.display = 'none';
+  currentBook = null;
+  renderLibrary();
+}
+
+// ── Import/Export ──
+function importBook() {
+  document.getElementById('importBookFile').click();
+}
+function handleBookImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const isMd = /\.(md|markdown)$/i.test(file.name);
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      let bookArr;
+      if (isMd) {
+        bookArr = [parseMarkdownFile(ev.target.result, file.name)];
+      } else {
+        const data = JSON.parse(ev.target.result);
+        bookArr = Array.isArray(data) ? data : [data];
+      }
+      for (const bk of bookArr) {
+        if (!bk.id) bk.id = bk.title ? bk.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'imported-' + Date.now();
+        if (!bk.title) bk.title = 'Untitled';
+        // Remove stale render cache
+        delete bk._html;
+        delete bk._pages;
+        delete bk._toc;
+        // Replace if exists, else add
+        const idx = books.findIndex(b => b.id === bk.id);
+        if (idx >= 0) books[idx] = bk;
+        else books.push(bk);
+      }
+      saveImportedBooks();
+      renderLibrary();
+    } catch (err) {
+      alert('Invalid book file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function saveImportedBooks() {
+  // Persist locally-imported books (those with content) to localStorage
+  const toSave = books.filter(b => b.content).map(b => ({
+    id: b.id, title: b.title, author: b.author || '', blurb: b.blurb || '',
+    content: b.content
+  }));
+  try { localStorage.setItem('rappterbook_imported', JSON.stringify(toSave)); } catch {}
+}
+
+function parseMarkdownFile(text, filename) {
+  let frontmatter = {};
+  let content = text;
+  // Extract YAML frontmatter
+  const fmMatch = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+  if (fmMatch) {
+    const fmText = fmMatch[1];
+    content = fmMatch[2];
+    // Simple YAML key: value parser
+    for (const line of fmText.split('\n')) {
+      const kv = line.match(/^(\w+)\s*:\s*(.+)/);
+      if (kv) frontmatter[kv[1].trim()] = kv[2].trim();
+    }
+  }
+  // Derive title from first # heading or frontmatter or filename
+  let title = frontmatter.title || '';
+  let author = frontmatter.author || '';
+  let blurb = frontmatter.blurb || frontmatter.description || '';
+  if (!title) {
+    const h1 = content.match(/^#\s+(.+)/m);
+    if (h1) title = h1[1].replace(/\*+/g, '').trim();
+  }
+  if (!title) title = filename.replace(/\.(md|markdown)$/i, '').replace(/[-_]/g, ' ');
+  // Derive author from *By ...* pattern
+  if (!author) {
+    const byLine = content.match(/^\*By\s+(.+?)\*$/m);
+    if (byLine) author = byLine[1].trim();
+  }
+  // Derive blurb from first blockquote or first paragraph after title
+  if (!blurb) {
+    const bq = content.match(/^>\s*"?(.+?)"?\s*$/m);
+    if (bq) blurb = bq[1].replace(/^[""]|[""]$/g, '').trim();
+  }
+  const id = frontmatter.id || (title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''));
+  return { id, title, author, blurb, content };
+}
+
+function importProgress() {
+  document.getElementById('importProgressFile').click();
+}
+function handleProgressImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      // Merge with existing progress
+      const existing = loadAllProgress();
+      for (const [bookId, prog] of Object.entries(data)) {
+        existing[bookId] = prog;
+      }
+      saveAllProgress(existing);
+      renderLibrary();
+    } catch (err) {
+      alert('Invalid progress JSON: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function exportAllProgress() {
+  const data = loadAllProgress();
+  downloadFile('rappterbook-progress.json', JSON.stringify(data, null, 2), 'application/json');
+}
+
+function exportBook(fmt) {
+  if (!currentBook) return;
+  if (fmt === 'md') {
+    // Export as markdown with frontmatter
+    let md = '---\n';
+    md += `title: ${currentBook.title}\n`;
+    if (currentBook.author) md += `author: ${currentBook.author}\n`;
+    if (currentBook.blurb) md += `blurb: ${currentBook.blurb}\n`;
+    md += `id: ${currentBook.id}\n`;
+    md += `exported: ${new Date().toISOString()}\n`;
+    md += '---\n\n';
+    md += currentBook.content || '';
+    downloadFile(`${currentBook.id}.md`, md, 'text/markdown');
+  } else {
+    // Export as JSON
+    const clean = {
+      id: currentBook.id,
+      title: currentBook.title,
+      author: currentBook.author || '',
+      blurb: currentBook.blurb || '',
+      content: currentBook.content || '',
+      html: currentBook._html || '',
+      exportedAt: new Date().toISOString()
+    };
+    downloadFile(`${currentBook.id}.json`, JSON.stringify(clean, null, 2), 'application/json');
+  }
+}
+
+function downloadFile(filename, text, mime) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: mime || 'application/octet-stream' }));
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── Keyboard shortcuts ──
+document.addEventListener('keydown', (e) => {
+  if (!currentBook) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextPage(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevPage(); }
+  if (e.key === 'Escape') { backToLibrary(); }
+  if (e.key === 'b' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); toggleBookmark(); }
+  if (e.key === 't' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); toggleTOC(); }
+});
+
+// ── TTS / Audiobook ──
+let ttsAbort = null;
+let ttsAudioBlobs = [];
+let ttsProgressState = null; // { bookId, completedChapters: [0,1,...], totalChapters, blobs: [...base64...] }
+
+function toggleTTSPanel() {
+  const panel = document.getElementById('ttsPanel');
+  const overlay = document.getElementById('ttsOverlay');
+  const isOpen = panel.classList.toggle('open');
+  overlay.style.display = isOpen ? 'block' : 'none';
+  if (isOpen && currentBook) {
+    buildTTSChapterList();
+    // Restore saved progress for this book
+    const saved = loadTTSProgressLocal(currentBook.id);
+    if (saved && !saved.completed && saved.completedChapters && saved.completedChapters.length > 0) {
+      ttsProgressState = saved;
+      ttsAudioBlobs = [];
+      for (const ci of saved.completedChapters) {
+        const chEl = document.getElementById('tts-ch-' + ci);
+        if (chEl) { chEl.className = 'tts-chapter-item done'; chEl.querySelector('.ch-status').innerHTML = '&#10003;'; }
+      }
+      document.getElementById('ttsProgress').style.display = '';
+      document.getElementById('ttsProgressText').textContent =
+        `${saved.completedChapters.length}/${saved.totalChapters} chapters done. Click Resume to continue.`;
+      document.getElementById('ttsProgressFill').style.width =
+        Math.round((saved.completedChapters.length / saved.totalChapters) * 100) + '%';
+      document.getElementById('ttsResumeBtn').style.display = '';
+    }
+  }
+}
+
+function onTTSProviderChange() {
+  const provider = document.getElementById('ttsProvider').value;
+  document.getElementById('azureRegionWrap').style.display = provider === 'azure' ? '' : 'none';
+  document.getElementById('ttsModel').style.display = provider === 'elevenlabs' ? '' : 'none';
+  // Clear voices when switching providers
+  document.getElementById('ttsVoice').innerHTML = '<option value="">-- load voices --</option>';
+  saveTTSSettings();
+}
+
+function saveTTSSettings() {
+  // Save the voice list so it survives refresh without re-fetching
+  const sel = document.getElementById('ttsVoice');
+  const voiceOptions = [];
+  for (const opt of sel.options) {
+    if (opt.value) voiceOptions.push({ value: opt.value, label: opt.textContent });
+  }
+  const settings = {
+    provider: document.getElementById('ttsProvider').value,
+    apiKey: document.getElementById('ttsApiKey').value,
+    azureRegion: document.getElementById('azureRegion').value,
+    voice: document.getElementById('ttsVoice').value,
+    model: document.getElementById('ttsModel').value,
+    voiceOptions: voiceOptions
+  };
+  localStorage.setItem('rappterbook_tts', JSON.stringify(settings));
+}
+
+function exportTTSCredentials() {
+  const settings = {
+    _type: 'rappterbook-tts-credentials',
+    _exported: new Date().toISOString(),
+    provider: document.getElementById('ttsProvider').value,
+    apiKey: document.getElementById('ttsApiKey').value,
+    azureRegion: document.getElementById('azureRegion').value,
+    voice: document.getElementById('ttsVoice').value,
+    model: document.getElementById('ttsModel').value
+  };
+  const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rappterbook-tts-credentials.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importTTSCredentials(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const s = JSON.parse(ev.target.result);
+      if (s.provider) document.getElementById('ttsProvider').value = s.provider;
+      if (s.apiKey) document.getElementById('ttsApiKey').value = s.apiKey;
+      if (s.azureRegion) document.getElementById('azureRegion').value = s.azureRegion;
+      if (s.model) document.getElementById('ttsModel').value = s.model;
+      onTTSProviderChange();
+      saveTTSSettings();
+      // If voice was saved, restore it after provider change
+      if (s.voice) {
+        const sel = document.getElementById('ttsVoice');
+        // Voice might not be in dropdown yet — store it for after loadVoices
+        sel.dataset.pendingVoice = s.voice;
+        const opt = document.createElement('option');
+        opt.value = s.voice;
+        opt.textContent = s.voice + ' (imported)';
+        opt.selected = true;
+        sel.appendChild(opt);
+      }
+      showShareToast('TTS settings imported');
+    } catch (err) {
+      alert('Invalid credentials file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function loadTTSSettings() {
+  try {
+    const raw = localStorage.getItem('rappterbook_tts');
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (s.provider) document.getElementById('ttsProvider').value = s.provider;
+    if (s.apiKey) document.getElementById('ttsApiKey').value = s.apiKey;
+    if (s.azureRegion) document.getElementById('azureRegion').value = s.azureRegion;
+    if (s.model) document.getElementById('ttsModel').value = s.model;
+    onTTSProviderChange();
+    // Restore cached voice list so user doesn't need to re-fetch
+    if (s.voiceOptions && s.voiceOptions.length > 0) {
+      const sel = document.getElementById('ttsVoice');
+      sel.innerHTML = '';
+      for (const v of s.voiceOptions) {
+        const opt = document.createElement('option');
+        opt.value = v.value;
+        opt.textContent = v.label;
+        sel.appendChild(opt);
+      }
+      if (s.voice) sel.value = s.voice;
+    }
+  } catch {}
+}
+
+async function loadVoices() {
+  const provider = document.getElementById('ttsProvider').value;
+  const apiKey = document.getElementById('ttsApiKey').value;
+  if (!apiKey) { alert('Enter your API key first.'); return; }
+  const sel = document.getElementById('ttsVoice');
+  sel.innerHTML = '<option value="">Loading...</option>';
+
+  try {
+    if (provider === 'elevenlabs') {
+      const resp = await fetch('https://api.elevenlabs.io/v1/voices', {
+        headers: { 'xi-api-key': apiKey }
+      });
+      if (!resp.ok) throw new Error('Failed to load voices: ' + resp.status);
+      const data = await resp.json();
+      sel.innerHTML = '';
+      for (const v of data.voices || []) {
+        const opt = document.createElement('option');
+        opt.value = v.voice_id;
+        opt.textContent = v.name + (v.labels?.accent ? ` (${v.labels.accent})` : '');
+        sel.appendChild(opt);
+      }
+    } else if (provider === 'azure') {
+      const region = document.getElementById('azureRegion').value || 'eastus';
+      const resp = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/voices/list`, {
+        headers: { 'Ocp-Apim-Subscription-Key': apiKey }
+      });
+      if (!resp.ok) throw new Error('Failed to load voices: ' + resp.status);
+      const voices = await resp.json();
+      sel.innerHTML = '';
+      // Filter to English neural voices
+      const enVoices = voices.filter(v => v.Locale.startsWith('en-') && v.VoiceType === 'Neural');
+      for (const v of enVoices.sort((a,b) => a.ShortName.localeCompare(b.ShortName))) {
+        const opt = document.createElement('option');
+        opt.value = v.ShortName;
+        opt.textContent = `${v.DisplayName} (${v.Locale})`;
+        sel.appendChild(opt);
+      }
+    }
+    // Restore saved voice and persist the full voice list
+    const saved = JSON.parse(localStorage.getItem('rappterbook_tts') || '{}');
+    if (saved.voice) sel.value = saved.voice;
+    saveTTSSettings();
+  } catch (err) {
+    sel.innerHTML = '<option value="">Error loading voices</option>';
+    alert(err.message);
+  }
+}
+
+// Split book content into narrator-ready chapters with pauses and pacing
+function spokenEnglish(text) {
+  // Convert written text to how a human narrator would actually say it.
+  // Numbers, abbreviations, symbols, technical notation → natural speech.
+
+  // ── Numbers ──
+
+  const ones = ['','one','two','three','four','five','six','seven','eight','nine',
+    'ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+  const tens = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+
+  function numberToWords(n) {
+    if (n < 0) return 'negative ' + numberToWords(-n);
+    if (n === 0) return 'zero';
+    if (n < 20) return ones[n];
+    if (n < 100) return tens[Math.floor(n/10)] + (n%10 ? '-' + ones[n%10] : '');
+    if (n < 1000) return ones[Math.floor(n/100)] + ' hundred' + (n%100 ? ' and ' + numberToWords(n%100) : '');
+    if (n < 1000000) return numberToWords(Math.floor(n/1000)) + ' thousand' + (n%1000 ? ' ' + numberToWords(n%1000) : '');
+    if (n < 1000000000) return numberToWords(Math.floor(n/1000000)) + ' million' + (n%1000000 ? ' ' + numberToWords(n%1000000) : '');
+    return numberToWords(Math.floor(n/1000000000)) + ' billion' + (n%1000000000 ? ' ' + numberToWords(n%1000000000) : '');
+  }
+
+  // Numbers with commas: 100,000 → one hundred thousand
+  text = text.replace(/\b(\d{1,3}(?:,\d{3})+)\b/g, (m) => {
+    const n = parseInt(m.replace(/,/g, ''), 10);
+    return isNaN(n) ? m : numberToWords(n);
+  });
+
+  // Numbers 100+ without commas: 100000 → one hundred thousand, 112 → one hundred and twelve
+  // Keep 4-digit years (1900-2099) as-is. Keep small numbers (0-20) for TTS to handle naturally.
+  text = text.replace(/\b(\d{3,})\b/g, (m) => {
+    const n = parseInt(m, 10);
+    if (isNaN(n)) return m;
+    // Keep 4-digit numbers that look like years (1900-2099)
+    if (n >= 1900 && n <= 2099) return m;
+    return numberToWords(n);
+  });
+
+  // Percentages: 95% → ninety-five percent
+  text = text.replace(/(\d+(?:\.\d+)?)\s*%/g, (_, num) => {
+    const n = parseFloat(num);
+    if (Number.isInteger(n) && n < 1000) return numberToWords(n) + ' percent';
+    return num + ' percent';
+  });
+
+  // Decimals: 0.92 → zero point nine two
+  text = text.replace(/\b(\d+)\.(\d+)\b/g, (m, whole, dec) => {
+    // Skip if it looks like a version number after a word (v1.9.3)
+    const w = parseInt(whole, 10);
+    const spoken = (w < 20 ? numberToWords(w) : whole) + ' point ' +
+      dec.split('').map(d => ones[parseInt(d,10)] || d).join(' ');
+    return spoken;
+  });
+
+  // Ordinals: 1st, 2nd, 3rd, 4th...
+  text = text.replace(/\b(\d+)(st|nd|rd|th)\b/gi, (_, num) => {
+    const n = parseInt(num, 10);
+    if (n < 20) {
+      const ordinals = ['zeroth','first','second','third','fourth','fifth','sixth','seventh',
+        'eighth','ninth','tenth','eleventh','twelfth','thirteenth','fourteenth','fifteenth',
+        'sixteenth','seventeenth','eighteenth','nineteenth'];
+      return ordinals[n] || num;
+    }
+    return numberToWords(n); // Close enough for TTS
+  });
+
+  // ── Common abbreviations ──
+  text = text.replace(/\bAI\b/g, 'A.I.');
+  text = text.replace(/\bAPI\b/g, 'A.P.I.');
+  text = text.replace(/\bAPIs\b/g, "A.P.I.'s");
+  text = text.replace(/\bCI\/CD\b/g, 'C.I. C.D.');
+  text = text.replace(/\bCDN\b/g, 'C.D.N.');
+  text = text.replace(/\bCLI\b/g, 'C.L.I.');
+  text = text.replace(/\bJSON\b/g, 'jason');
+  text = text.replace(/\bYAML\b/g, 'yammel');
+  text = text.replace(/\bHTML\b/g, 'H.T.M.L.');
+  text = text.replace(/\bCSS\b/g, 'C.S.S.');
+  text = text.replace(/\bSQL\b/g, 'sequel');
+  text = text.replace(/\bRAG\b/g, 'rag');
+  text = text.replace(/\bLLM\b/g, 'L.L.M.');
+  text = text.replace(/\bLLMs\b/g, "L.L.M.'s");
+  text = text.replace(/\bGPT\b/g, 'G.P.T.');
+  text = text.replace(/\bURL\b/g, 'U.R.L.');
+  text = text.replace(/\bURLs\b/g, "U.R.L.'s");
+  text = text.replace(/\bSSML\b/g, 'S.S.M.L.');
+  text = text.replace(/\bREST\b/g, 'rest');
+  text = text.replace(/\bREPL\b/g, 'repple');
+  text = text.replace(/\bIOT\b/gi, 'I.O.T.');
+  text = text.replace(/\bvs\.\s/g, 'versus ');
+  text = text.replace(/\bvs\b/g, 'versus');
+  text = text.replace(/\be\.g\./g, 'for example');
+  text = text.replace(/\bi\.e\./g, 'that is');
+  text = text.replace(/\betc\./g, 'et cetera');
+  text = text.replace(/\bw\//g, 'with');
+
+  // ── Technical notation ──
+  text = text.replace(/\bfsync\b/gi, 'f-sync');
+  text = text.replace(/\bgit\b/gi, 'git');
+  text = text.replace(/\bcron\b/gi, 'cron');
+  text = text.replace(/\bwebhook\b/gi, 'web-hook');
+  text = text.replace(/\bwebhooks\b/gi, 'web-hooks');
+
+  // ── File paths and technical identifiers → skip or simplify ──
+  // state/memory/{agent-id}.md → "the state memory directory"
+  text = text.replace(/state\/memory\/\{[^}]+\}\.md/g, 'the agent memory file');
+  text = text.replace(/state\/[a-z_]+\.json/g, (m) => m.replace(/\//g, ' ').replace(/\.json/g, '').replace(/_/g, ' '));
+  // Generic file paths → just the filename
+  text = text.replace(/[a-zA-Z0-9_/.-]+\.[a-z]{2,4}/g, (m) => {
+    // Keep it if it's a short recognizable name
+    if (m.length < 20) return m.replace(/[_/]/g, ' ').replace(/\.\w+$/, '');
+    return 'a file';
+  });
+
+  // ── Symbols ──
+  text = text.replace(/\+/g, ' plus ');
+  text = text.replace(/→/g, ', leads to,');
+  text = text.replace(/←/g, ', from,');
+  text = text.replace(/—/g, ', ');
+  text = text.replace(/–/g, ' to ');
+  text = text.replace(/\$/g, 'dollar ');
+  text = text.replace(/#(\d+)/g, 'number $1');
+  text = text.replace(/~(\d+)/g, 'approximately $1');
+
+  // ── Normalize remaining ALL-CAPS words to prevent TTS spelling them out ──
+  // Known acronyms were already converted above (AI→A.I., etc.)
+  // Any remaining ALL-CAPS word (2+ letters) that ISN'T a known acronym
+  // gets lowercased so TTS reads it as a word, not spells it.
+  const knownAcronyms = new Set(['A.I.','A.P.I.','C.I.','C.D.','C.D.N.','C.L.I.',
+    'H.T.M.L.','C.S.S.','L.L.M.','G.P.T.','U.R.L.','S.S.M.L.','I.O.T.']);
+  text = text.replace(/\b([A-Z]{2,})\b/g, (m) => {
+    // Already converted? Skip.
+    if (knownAcronyms.has(m)) return m;
+    // Common all-caps English words — lowercase them
+    return m.charAt(0) + m.slice(1).toLowerCase();
+  });
+
+  // ── Clean up artifacts from replacements ──
+  text = text.replace(/\s{2,}/g, ' ');
+  text = text.replace(/ ,/g, ',');
+  text = text.replace(/ \./g, '.');
+
+  return text;
+}
+
+function mdToNarratorText(md) {
+  // Convert markdown to clean, speakable prose — like handing a script to a voice actor.
+  let text = md;
+
+  // 1. Remove code blocks entirely (not speakable)
+  text = text.replace(/```[\s\S]*?```/g, '');
+
+  // 2. Remove tables entirely (not speakable)
+  text = text.replace(/^\|.*$/gm, '');
+  text = text.replace(/^[\s|:-]+$/gm, '');
+
+  // 3. Convert headings to spoken announcements
+  text = text.replace(/^####\s+(.+)/gm, (_, t) => '\n\n' + t.replace(/\*+/g, '').trim() + '.\n\n');
+  text = text.replace(/^###\s+(.+)/gm, (_, t) => '\n\n' + t.replace(/\*+/g, '').trim() + '.\n\n');
+  text = text.replace(/^##\s+(.+)/gm, (_, t) => '\n\n' + t.replace(/\*+/g, '').trim() + '.\n\n');
+  text = text.replace(/^#\s+(.+)/gm, (_, t) => '\n\n' + t.replace(/\*+/g, '').trim() + '.\n\n');
+
+  // 4. Strip inline formatting — keep the words, lose the markdown
+  text = text.replace(/`([^`]+)`/g, '$1');
+  text = text.replace(/\*\*\*([^*]+)\*\*\*/g, '$1');
+  text = text.replace(/\*\*([^*]+)\*\*/g, '$1');
+  text = text.replace(/\*([^*]+)\*/g, '$1');
+  text = text.replace(/_([^_]+)_/g, '$1');
+  text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+
+  // 5. Convert blockquotes to natural speech
+  text = text.replace(/^>\s*/gm, '');
+
+  // 6. Convert list items to flowing sentences
+  text = text.replace(/^[\s]*[-*]\s+(.+)/gm, '$1.');
+  text = text.replace(/^[\s]*\d+\.\s+(.+)/gm, '$1.');
+
+  // 7. Remove horizontal rules
+  text = text.replace(/^---+$/gm, '');
+
+  // 8. Remove image references
+  text = text.replace(/!\[[^\]]*\]\([^)]+\)/g, '');
+
+  // 9. Clean up HTML entities and stray characters
+  text = text.replace(/&amp;/g, 'and');
+  text = text.replace(/&mdash;/g, ' — ');
+  text = text.replace(/&ndash;/g, ' – ');
+  text = text.replace(/&nbsp;/g, ' ');
+  text = text.replace(/<!--[\s\S]*?-->/g, '');
+
+  // 10. Convert to spoken English — numbers, abbreviations, symbols
+  text = spokenEnglish(text);
+
+  // 11. Normalize whitespace — collapse multiple blank lines to one pause point
+  text = text.replace(/[ \t]+/g, ' ');
+  text = text.replace(/\n[ \t]*\n/g, '\n\n');
+  text = text.replace(/\n{3,}/g, '\n\n');
+
+  // 12. Ensure sentences end with punctuation (TTS paces off this)
+  const lines = text.split('\n\n').map(p => {
+    p = p.trim();
+    if (!p) return '';
+    // If a line doesn't end with sentence-ending punctuation, add a period
+    if (p && !/[.!?:;"\u2019\u201D]$/.test(p)) p += '.';
+    return p;
+  }).filter(p => p);
+
+  return lines.join('\n\n');
+}
+
+function prepareAudioChapters(book) {
+  const md = (book.content || '').replace(/^---[\s\S]*?---\n*/, '');
+  const chapters = [];
+  const parts = md.split(/(?=^## )/m);
+
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i].trim();
+    if (!part) continue;
+
+    const titleMatch = part.match(/^##\s+(.+)/m);
+    const title = titleMatch ? titleMatch[1].replace(/\*+/g, '').trim() : (i === 0 ? 'Introduction' : `Section ${i}`);
+
+    // Convert to clean narrator prose
+    const cleanText = mdToNarratorText(part);
+
+    // Build the chapter script like a voice actor would read it
+    const chapterNum = i + 1;
+    const isIntro = i === 0 && !titleMatch;
+    let script;
+    if (isIntro) {
+      script = cleanText;
+    } else {
+      script = `Chapter ${chapterNum}.\n\n${title}.\n\n${cleanText}`;
+    }
+
+    chapters.push({ title, text: script.trim() });
+  }
+
+  return chapters;
+}
+
+function buildTTSChapterList() {
+  const list = document.getElementById('ttsChapterList');
+  if (!currentBook) { list.innerHTML = ''; return; }
+  const chapters = prepareAudioChapters(currentBook);
+  list.innerHTML = '';
+  for (let i = 0; i < chapters.length; i++) {
+    const el = document.createElement('div');
+    el.className = 'tts-chapter-item pending';
+    el.id = 'tts-ch-' + i;
+    el.innerHTML = `<span class="ch-status">&#9675;</span><span class="ch-name">${chapters[i].title}</span>`;
+    list.appendChild(el);
+  }
+}
+
+// Split long text into chunks under maxLen chars at paragraph boundaries
+function chunkText(text, maxLen) {
+  if (text.length <= maxLen) return [text];
+  const chunks = [];
+  const paragraphs = text.split(/\n\n+/);
+  let current = '';
+  for (const para of paragraphs) {
+    if (current.length + para.length + 2 > maxLen && current) {
+      chunks.push(current.trim());
+      current = '';
+    }
+    current += para + '\n\n';
+  }
+  if (current.trim()) chunks.push(current.trim());
+  return chunks;
+}
+
+async function generateElevenLabsChunk(text, voiceId, apiKey, model) {
+  // Clean the text for ElevenLabs — paragraph breaks become natural pauses via whitespace
+  let cleanText = text
+    .replace(/\n\n/g, '\n')          // Single newline = natural breath pause for EL
+    .replace(/\n/g, ' ')             // Remove remaining newlines
+    .replace(/\s{2,}/g, ' ')         // Collapse multiple spaces
+    .trim();
+
+  const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'xi-api-key': apiKey },
+    body: JSON.stringify({
+      text: cleanText,
+      model_id: model || 'eleven_multilingual_v2',
+      voice_settings: { stability: 0.71, similarity_boost: 0.80, style: 0.15, speed: 0.90 }
+    }),
+    signal: ttsAbort ? ttsAbort.signal : undefined
+  });
+  if (!resp.ok) {
+    const err = await resp.text().catch(() => resp.status);
+    throw new Error('ElevenLabs API error: ' + err);
+  }
+  return await resp.blob();
+}
+
+async function generateAzureChunk(text, voice, apiKey, region) {
+  // Build SSML — escape FIRST, then insert break tags
+  let escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+  // Convert paragraph breaks to SSML pauses (natural narrator pacing)
+  escaped = escaped.replace(/\n\n/g, ' <break time="750ms"/> ');
+  // Sentence-ending periods get a short breath
+  escaped = escaped.replace(/\.\s+/g, '. <break time="300ms"/> ');
+  // Em dashes get a beat
+  escaped = escaped.replace(/ — /g, ' <break time="200ms"/> ');
+
+  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+  <voice name="${voice}">
+    <prosody rate="0.92" pitch="-2%">
+      ${escaped}
+    </prosody>
+  </voice>
+</speak>`;
+  const resp = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+    method: 'POST',
+    headers: {
+      'Ocp-Apim-Subscription-Key': apiKey,
+      'Content-Type': 'application/ssml+xml',
+      'X-Microsoft-OutputFormat': 'audio-48khz-192kbitrate-mono-mp3'
+    },
+    body: ssml,
+    signal: ttsAbort ? ttsAbort.signal : undefined
+  });
+  if (!resp.ok) {
+    const err = await resp.text().catch(() => resp.status);
+    throw new Error('Azure TTS error: ' + err);
+  }
+  return await resp.blob();
+}
+
+async function generateAudiobook(startFromChapter) {
+  if (!currentBook) return;
+  const provider = document.getElementById('ttsProvider').value;
+  const apiKey = document.getElementById('ttsApiKey').value;
+  const voiceId = document.getElementById('ttsVoice').value;
+  const model = document.getElementById('ttsModel').value;
+  const region = document.getElementById('azureRegion').value || 'eastus';
+
+  if (!apiKey) { alert('Enter your API key.'); return; }
+  if (!voiceId) { alert('Select a voice first. Click "Load Voices".'); return; }
+  saveTTSSettings();
+
+  if (!currentBook.content) {
+    await fetchBookContent(currentBook);
+    if (!currentBook.content) { alert('No book content available.'); return; }
+  }
+
+  const chapters = prepareAudioChapters(currentBook);
+  buildTTSChapterList();
+  ttsAbort = new AbortController();
+
+  // Resume from saved progress or start fresh
+  const startCh = startFromChapter || 0;
+  if (startCh === 0) {
+    ttsAudioBlobs = [];
+    ttsProgressState = {
+      bookId: currentBook.id,
+      bookTitle: currentBook.title,
+      completedChapters: [],
+      totalChapters: chapters.length,
+      chapterTitles: chapters.map(c => c.title),
+      startedAt: new Date().toISOString(),
+      provider: provider,
+      voice: voiceId,
+    };
+  }
+
+  // Mark already-completed chapters in the UI
+  for (let i = 0; i < startCh; i++) {
+    const chEl = document.getElementById('tts-ch-' + i);
+    if (chEl) { chEl.className = 'tts-chapter-item done'; chEl.querySelector('.ch-status').innerHTML = '&#10003;'; }
+  }
+
+  document.getElementById('ttsGenerateBtn').disabled = true;
+  document.getElementById('ttsResumeBtn').style.display = 'none';
+  document.getElementById('ttsStopBtn').style.display = '';
+  document.getElementById('ttsProgress').style.display = '';
+  document.getElementById('ttsPlayer').style.display = 'none';
+
+  let totalChunks = 0;
+  const chapterChunks = chapters.map(ch => chunkText(ch.text, 4500));
+  for (const cc of chapterChunks) totalChunks += cc.length;
+  let doneChunks = 0;
+  // Count chunks from already-completed chapters
+  for (let i = 0; i < startCh; i++) doneChunks += chapterChunks[i].length;
+
+  try {
+    for (let ci = startCh; ci < chapters.length; ci++) {
+      const chEl = document.getElementById('tts-ch-' + ci);
+      if (chEl) { chEl.className = 'tts-chapter-item active'; chEl.querySelector('.ch-status').innerHTML = '&#9658;'; }
+
+      const chunks = chapterChunks[ci];
+      const chapterBlobs = [];
+      for (let j = 0; j < chunks.length; j++) {
+        document.getElementById('ttsProgressText').textContent =
+          `Chapter ${ci + 1}/${chapters.length} — chunk ${j + 1}/${chunks.length}`;
+
+        let blob;
+        if (provider === 'elevenlabs') {
+          blob = await generateElevenLabsChunk(chunks[j], voiceId, apiKey, model);
+        } else {
+          blob = await generateAzureChunk(chunks[j], voiceId, apiKey, region);
+        }
+        chapterBlobs.push(blob);
+        ttsAudioBlobs.push(blob);
+        doneChunks++;
+        document.getElementById('ttsProgressFill').style.width =
+          Math.round((doneChunks / totalChunks) * 100) + '%';
+      }
+
+      // Mark chapter complete + save progress
+      if (chEl) { chEl.className = 'tts-chapter-item done'; chEl.querySelector('.ch-status').innerHTML = '&#10003;'; }
+      ttsProgressState.completedChapters.push(ci);
+      ttsProgressState.lastUpdated = new Date().toISOString();
+      saveTTSProgressLocal();
+    }
+
+    // Combine all blobs into one audio file
+    const fullBlob = new Blob(ttsAudioBlobs, { type: 'audio/mpeg' });
+    const url = URL.createObjectURL(fullBlob);
+    document.getElementById('ttsAudio').src = url;
+    document.getElementById('ttsPlayer').style.display = '';
+    document.getElementById('ttsProgressText').textContent = 'Complete!';
+    document.getElementById('ttsProgressFill').style.width = '100%';
+    ttsProgressState.completed = true;
+    saveTTSProgressLocal();
+
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      document.getElementById('ttsProgressText').textContent =
+        `Paused at chapter ${ttsProgressState.completedChapters.length}/${chapters.length}. Resume anytime.`;
+    } else {
+      alert('TTS Error: ' + err.message);
+      document.getElementById('ttsProgressText').textContent = 'Error: ' + err.message;
+    }
+    // Save progress so user can resume
+    ttsProgressState.lastUpdated = new Date().toISOString();
+    saveTTSProgressLocal();
+  } finally {
+    document.getElementById('ttsGenerateBtn').disabled = false;
+    document.getElementById('ttsStopBtn').style.display = 'none';
+    // Show resume button if not complete
+    if (ttsProgressState && !ttsProgressState.completed && ttsProgressState.completedChapters.length > 0) {
+      document.getElementById('ttsResumeBtn').style.display = '';
+    }
+    ttsAbort = null;
+  }
+}
+
+function resumeAudiobook() {
+  if (!ttsProgressState || !currentBook) return;
+  const nextChapter = ttsProgressState.completedChapters.length;
+  generateAudiobook(nextChapter);
+}
+
+function saveTTSProgressLocal() {
+  if (!ttsProgressState) return;
+  try {
+    localStorage.setItem('rappterbook_tts_progress_' + ttsProgressState.bookId,
+      JSON.stringify(ttsProgressState));
+  } catch {}
+}
+
+function loadTTSProgressLocal(bookId) {
+  try {
+    const raw = localStorage.getItem('rappterbook_tts_progress_' + bookId);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return null;
+}
+
+function exportTTSProgress() {
+  if (!ttsProgressState && currentBook) {
+    ttsProgressState = loadTTSProgressLocal(currentBook.id);
+  }
+  if (!ttsProgressState) { alert('No audiobook progress to export.'); return; }
+
+  // Convert audio blobs to base64 for portable export
+  const exportData = { ...ttsProgressState, _type: 'rappterbook-tts-progress' };
+
+  // If we have blobs in memory, include their count (blobs can't be serialized to JSON)
+  exportData.audioBlobCount = ttsAudioBlobs.length;
+  exportData.note = 'Audio data is not included in export (too large). Resume generation to rebuild from the last completed chapter.';
+
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `tts-progress-${ttsProgressState.bookId}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importTTSProgress(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data.bookId) throw new Error('Missing bookId');
+      ttsProgressState = data;
+      ttsAudioBlobs = []; // Blobs can't be imported — will resume from last chapter
+      localStorage.setItem('rappterbook_tts_progress_' + data.bookId, JSON.stringify(data));
+
+      // If we're viewing this book, update UI
+      if (currentBook && currentBook.id === data.bookId) {
+        buildTTSChapterList();
+        for (const ci of (data.completedChapters || [])) {
+          const chEl = document.getElementById('tts-ch-' + ci);
+          if (chEl) { chEl.className = 'tts-chapter-item done'; chEl.querySelector('.ch-status').innerHTML = '&#10003;'; }
+        }
+        document.getElementById('ttsProgress').style.display = '';
+        document.getElementById('ttsProgressText').textContent =
+          `${data.completedChapters.length}/${data.totalChapters} chapters done. Click Resume to continue.`;
+        document.getElementById('ttsProgressFill').style.width =
+          Math.round((data.completedChapters.length / data.totalChapters) * 100) + '%';
+        if (!data.completed && data.completedChapters.length > 0) {
+          document.getElementById('ttsResumeBtn').style.display = '';
+        }
+      }
+      showShareToast('TTS progress imported');
+    } catch (err) {
+      alert('Invalid progress file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function stopAudiobook() {
+  if (ttsAbort) ttsAbort.abort();
+}
+
+function downloadAudiobook() {
+  if (!ttsAudioBlobs.length) return;
+  const fullBlob = new Blob(ttsAudioBlobs, { type: 'audio/mpeg' });
+  const title = currentBook ? currentBook.id : 'audiobook';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(fullBlob);
+  a.download = title + '-audiobook.mp3';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── Narrate Mode (read-along with pre-cached audio stream) ──
+const narrateCache = {}; // pageIndex → { blob, url, ready }
+let narrateActive = false;
+let narrateAbort = null;
+let narratePrefetchCount = 3; // Cache this many pages ahead
+
+function pageToNarratorText(pageIndex) {
+  // Convert a rendered HTML page to clean narrator text
+  if (!pages[pageIndex]) return '';
+  const div = document.createElement('div');
+  div.innerHTML = pages[pageIndex];
+  // Walk the DOM, extract text in reading order
+  const parts = [];
+  for (const el of div.querySelectorAll('h1,h2,h3,h4,p,li,blockquote')) {
+    let t = el.textContent.trim();
+    if (!t) continue;
+    // Ensure sentence-ending punctuation
+    if (!/[.!?:;"\u2019\u201D]$/.test(t)) t += '.';
+    parts.push(t);
+  }
+  return parts.join('\n\n');
+}
+
+async function generatePageAudio(pageIndex) {
+  if (narrateCache[pageIndex]?.ready) return narrateCache[pageIndex];
+  const provider = document.getElementById('ttsProvider').value;
+  const apiKey = document.getElementById('ttsApiKey').value;
+  const voiceId = document.getElementById('ttsVoice').value;
+  const model = document.getElementById('ttsModel').value;
+  const region = document.getElementById('azureRegion').value || 'eastus';
+  if (!apiKey || !voiceId) return null;
+
+  const text = pageToNarratorText(pageIndex);
+  if (!text.trim()) return null;
+
+  // Split into chunks if needed (keep under 4500 chars)
+  const chunks = chunkText(text, 4500);
+  const blobs = [];
+  for (const chunk of chunks) {
+    let blob;
+    if (provider === 'elevenlabs') {
+      blob = await generateElevenLabsChunk(chunk, voiceId, apiKey, model);
+    } else {
+      blob = await generateAzureChunk(chunk, voiceId, apiKey, region);
+    }
+    blobs.push(blob);
+  }
+  const fullBlob = new Blob(blobs, { type: 'audio/mpeg' });
+  const url = URL.createObjectURL(fullBlob);
+  narrateCache[pageIndex] = { blob: fullBlob, url, ready: true };
+  return narrateCache[pageIndex];
+}
+
+async function prefetchPages(startPage) {
+  // Pre-cache audio for pages ahead of current reading position
+  const end = Math.min(startPage + narratePrefetchCount, pages.length);
+  const statusEl = document.getElementById('narrateCache');
+  for (let i = startPage; i < end; i++) {
+    if (narrateCache[i]?.ready) continue;
+    if (!narrateActive) break; // Stopped while prefetching
+    statusEl.textContent = `Caching page ${i + 1}...`;
+    try {
+      await generatePageAudio(i);
+    } catch (err) {
+      console.warn('Prefetch failed for page', i, err.message);
+    }
+  }
+  const cached = Object.keys(narrateCache).filter(k => narrateCache[k]?.ready).length;
+  statusEl.textContent = `${cached} pages cached`;
+}
+
+function highlightParagraphs(pageEl, audioDuration) {
+  // Estimate paragraph timing based on text length
+  const paras = pageEl.querySelectorAll('p, li, blockquote');
+  if (!paras.length) return;
+  const totalChars = Array.from(paras).reduce((sum, p) => sum + p.textContent.length, 0);
+  if (!totalChars) return;
+
+  let elapsed = 0;
+  for (const p of paras) {
+    const charLen = p.textContent.length;
+    const paraDuration = (charLen / totalChars) * audioDuration * 1000;
+    const startTime = elapsed;
+    elapsed += paraDuration;
+
+    setTimeout(() => {
+      // Remove active from previous
+      pageEl.querySelectorAll('.narrate-active').forEach(el => {
+        el.classList.remove('narrate-active');
+        el.classList.add('narrate-done');
+      });
+      p.classList.add('narrate-active');
+      p.classList.remove('narrate-done');
+      // Scroll paragraph into view
+      p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, startTime);
+  }
+}
+
+async function toggleNarrate() {
+  if (narrateActive) {
+    pauseNarrate();
+    return;
+  }
+  startNarrate();
+}
+
+async function startNarrate() {
+  if (!currentBook) return;
+  const apiKey = document.getElementById('ttsApiKey').value;
+  const voiceId = document.getElementById('ttsVoice').value;
+  if (!apiKey) { alert('Enter your API key in the Audiobook panel first.'); return; }
+  if (!voiceId) { alert('Select a voice in the Audiobook panel first.'); return; }
+
+  narrateActive = true;
+  document.getElementById('narrateBar').style.display = '';
+  document.getElementById('narrateBtn').innerHTML = '&#9646;&#9646;'; // Pause icon
+  document.getElementById('narrateBtn').classList.add('active');
+  document.getElementById('narratePlayBtn').innerHTML = '&#9646;&#9646;';
+  document.getElementById('page').classList.add('narrating');
+  document.getElementById('narrateStatus').textContent = 'Generating audio...';
+
+  // Start prefetching from current page
+  prefetchPages(currentPage);
+
+  // Play current page
+  await playPage(currentPage);
+}
+
+async function playPage(pageIndex) {
+  if (!narrateActive) return;
+  if (pageIndex >= pages.length) {
+    stopNarrate();
+    document.getElementById('narrateStatus').textContent = 'Finished.';
+    return;
+  }
+
+  // Navigate to this page if not already there
+  if (currentPage !== pageIndex) {
+    currentPage = pageIndex;
+    renderPage();
+  }
+
+  document.getElementById('narrateStatus').textContent = `Playing page ${pageIndex + 1} of ${pages.length}`;
+
+  // Get or generate audio for this page
+  let cached = narrateCache[pageIndex];
+  if (!cached?.ready) {
+    document.getElementById('narrateStatus').textContent = `Generating audio for page ${pageIndex + 1}...`;
+    try {
+      cached = await generatePageAudio(pageIndex);
+    } catch (err) {
+      document.getElementById('narrateStatus').textContent = `Error: ${err.message}`;
+      stopNarrate();
+      return;
+    }
+  }
+
+  if (!cached) {
+    // Empty page — skip to next
+    await playPage(pageIndex + 1);
+    return;
+  }
+
+  // Start prefetching next pages while this one plays
+  prefetchPages(pageIndex + 1);
+
+  // Play the audio
+  const audio = document.getElementById('narrateAudio');
+  audio.src = cached.url;
+  audio.playbackRate = 1.0;
+
+  const playPromise = new Promise((resolve) => {
+    audio.onended = () => resolve('ended');
+    audio.onerror = () => resolve('error');
+  });
+
+  try {
+    await audio.play();
+  } catch (err) {
+    document.getElementById('narrateStatus').textContent = 'Playback blocked — click play.';
+    return;
+  }
+
+  // Highlight paragraphs as audio plays
+  const pageEl = document.getElementById('pageContent');
+  if (audio.duration && !isNaN(audio.duration)) {
+    highlightParagraphs(pageEl, audio.duration);
+  } else {
+    audio.onloadedmetadata = () => {
+      if (audio.duration && !isNaN(audio.duration)) {
+        highlightParagraphs(pageEl, audio.duration);
+      }
+    };
+  }
+
+  document.getElementById('narrateStatus').textContent = `Reading page ${pageIndex + 1} of ${pages.length}`;
+
+  // Wait for audio to finish
+  const result = await playPromise;
+  if (!narrateActive) return;
+
+  // Clear highlights
+  pageEl.querySelectorAll('.narrate-active,.narrate-done').forEach(el => {
+    el.classList.remove('narrate-active', 'narrate-done');
+  });
+
+  // Auto-advance to next page
+  if (result === 'ended') {
+    await playPage(pageIndex + 1);
+  }
+}
+
+function pauseNarrate() {
+  const audio = document.getElementById('narrateAudio');
+  if (audio.paused) {
+    audio.play();
+    document.getElementById('narrateBtn').innerHTML = '&#9646;&#9646;';
+    document.getElementById('narratePlayBtn').innerHTML = '&#9646;&#9646;';
+    document.getElementById('narrateStatus').textContent = `Reading page ${currentPage + 1} of ${pages.length}`;
+  } else {
+    audio.pause();
+    document.getElementById('narrateBtn').innerHTML = '&#9654;';
+    document.getElementById('narratePlayBtn').innerHTML = '&#9654;';
+    document.getElementById('narrateStatus').textContent = 'Paused';
+  }
+}
+
+function stopNarrate() {
+  narrateActive = false;
+  const audio = document.getElementById('narrateAudio');
+  audio.pause();
+  audio.src = '';
+  document.getElementById('narrateBtn').innerHTML = '&#9654;';
+  document.getElementById('narrateBtn').classList.remove('active');
+  document.getElementById('narrateBar').style.display = 'none';
+  document.getElementById('page').classList.remove('narrating');
+  // Clear highlights
+  document.getElementById('pageContent').querySelectorAll('.narrate-active,.narrate-done').forEach(el => {
+    el.classList.remove('narrate-active', 'narrate-done');
+  });
+}
+
+// ── Init ──
+(async function init() {
+  // Theme
+  const saved = localStorage.getItem('rappterbook_theme');
+  if (saved === 'dark') { document.body.classList.add('dark'); document.getElementById('themeBtn').textContent = 'Light'; }
+
+  // Load library from remote manifest (or show empty shelf for local-only mode)
+  books = [];
+  const manifest = await fetchLibraryManifest();
+  if (manifest && manifest.books) {
+    if (manifest.dewey_classes) libraryDeweyClasses = manifest.dewey_classes;
+    for (const entry of manifest.books) {
+      books.push({
+        id: entry.id,
+        title: entry.title,
+        author: entry.author || '',
+        blurb: entry.blurb || '',
+        file: entry.file || (entry.id + '.json'),
+        dewey: entry.dewey || '',
+        dewey_label: entry.dewey_label || '',
+        status: entry.status || ''
+        // content loaded on demand via fetchBookContent()
+      });
+    }
+  }
+
+  // Merge in locally imported books from localStorage
+  try {
+    const imported = localStorage.getItem('rappterbook_imported');
+    if (imported) {
+      const extra = JSON.parse(imported);
+      for (const bk of extra) {
+        const idx = books.findIndex(b => b.id === bk.id);
+        if (idx >= 0) {
+          // Local version has content — merge it over the manifest stub
+          books[idx] = {...books[idx], ...bk};
+        } else {
+          books.push(bk);
+        }
+      }
+    }
+  } catch {}
+
+  // Pre-compute pages for books that already have content loaded
+  for (const book of books) {
+    if (book.content || book.html) {
+      book._html = book.html || renderMarkdown(book.content);
+      book._pages = paginateBook(book._html);
+      book._toc = extractTOC(book._html);
+    }
+  }
+
+  renderLibrary();
+  loadTTSSettings();
+
+  // If no manifest loaded (pure local/offline mode), show a hint
+  if (!manifest) {
+    const shelf = document.getElementById('shelf');
+    if (!books.length) {
+      shelf.innerHTML = '<p style="color:var(--text-light);font-style:italic;padding:20px;">No books loaded. Import a .json or .md book file to get started.</p>';
+    }
+  }
+
+  // Deep link: #book-id opens that book directly
+  if (location.hash) {
+    const bookId = location.hash.slice(1);
+    if (books.find(b => b.id === bookId)) {
+      openBook(bookId);
+    }
+  }
+})();
+</script>
+</body>
+</html>

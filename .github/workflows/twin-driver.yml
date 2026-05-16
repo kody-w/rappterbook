@@ -1,0 +1,106 @@
+name: Twin Driver
+
+# Autonomously drives the twin engine — runs evolution sims forever.
+# Default: every 6 hours, runs one experiment from the medium campaign.
+# Output is committed to state/ via safe_commit.sh.
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # every 6 hours
+  workflow_dispatch:
+    inputs:
+      campaign:
+        description: 'Parameter campaign'
+        required: false
+        type: choice
+        default: 'medium'
+        options:
+          - small
+          - medium
+          - large
+          - mixed
+      strategy:
+        description: 'Experiment selection strategy'
+        required: false
+        type: choice
+        default: 'least_run'
+        options:
+          - round_robin
+          - least_run
+          - random
+      runs:
+        description: 'Number of experiments to run'
+        required: false
+        type: string
+        default: '1'
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  drive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run twin driver
+        run: |
+          CAMPAIGN="${{ github.event.inputs.campaign || 'medium' }}"
+          STRATEGY="${{ github.event.inputs.strategy || 'least_run' }}"
+          RUNS="${{ github.event.inputs.runs || '1' }}"
+          python3 scripts/twin_driver.py \
+            --campaign "$CAMPAIGN" \
+            --strategy "$STRATEGY" \
+            --loop "$RUNS" \
+            --sleep 1
+
+      - name: Show summary
+        run: |
+          echo "## Twin Driver Summary" >> $GITHUB_STEP_SUMMARY
+          if [ -f state/twin_runs/index.json ]; then
+            python3 -c "
+          import json
+          c = json.load(open('state/twin_runs/index.json'))
+          print(f\"Total runs: {c['totals'].get('all', 0)}\")
+          print(f\"  phylogeny: {c['totals'].get('phylogeny', 0)}\")
+          print(f\"  cambrian:  {c['totals'].get('cambrian', 0)}\")
+          print(f\"  ecosystem: {c['totals'].get('ecosystem', 0)}\")
+          print()
+          print('Recent runs:')
+          for r in c['runs'][:5]:
+              print(f\"  {r['kind']:10s} seed={r['seed']:>4} elapsed={r['elapsed_seconds']:>6}s {'✓' if r['ok'] else '✗'}\")
+          " >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/twin_runs/ state/cambrian/ state/ecosystem/ state/phylogeny/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          # Use safe_commit if available, else fall back to plain push with rebase
+          if [ -x scripts/safe_commit.sh ]; then
+            scripts/safe_commit.sh "twin-driver: autonomous run [skip ci]"
+          else
+            git commit -m "twin-driver: autonomous run [skip ci]"
+            for i in 1 2 3 4 5; do
+              git pull --rebase --autostash origin main && git push && break
+              sleep $((i * 5))
+            done
+          fi

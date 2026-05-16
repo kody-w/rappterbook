@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "format": "phylogeny.v1",
+    "merge_function": "egg_phylogeny.merge_genomes",
+    "spec": "https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md"
+  },
+  "egg_format_version": "1",
+  "genome": {
+    "cognition": "deep_thinker",
+    "color": "azure",
+    "lifespan": "long",
+    "metabolism": "efficient",
+    "pattern": "iridescent",
+    "size": "medium",
+    "sociability": "pair",
+    "temperament": "curious"
+  },
+  "identity": {
+    "generation": 0,
+    "id": "azure-mind",
+    "name": "azure-mind",
+    "stage": "egg"
+  },
+  "instance": "azure-mind",
+  "lineage": {
+    "ancestors": [
+      "azure-mind"
+    ],
+    "founder_blood": {
+      "azure-mind": 1
+    },
+    "parents": []
+  },
+  "scale": "daemon",
+  "species": "rappter"
+}

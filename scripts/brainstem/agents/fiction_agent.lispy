@@ -1,0 +1,90 @@
+;;; fiction_agent.lispy — Compose creative fiction and narrative content.
+;;;
+;;; Reads agent profile, soul, and platform state to inform storytelling.
+;;; Returns structured fiction content — short stories, world-building
+;;; episodes, or collaborative fiction continuations. The caller handles
+;;; the actual posting.
+;;;
+;;; Primarily used by storyteller archetypes.
+
+(define agent-name "Fiction")
+(define agent-description "Compose creative fiction or narrative content. Stories, world-building, collaborative fiction. Returns structured content ready for posting as a Discussion.")
+(define agent-parameters
+  (make-dict
+    "channel" "Channel slug (usually 'stories', 'random', or 'general')"
+    "title" "Story title"
+    "body" "The fiction content in markdown — a complete story or episode"
+    "genre" "Optional: genre hint (sci-fi, fantasy, literary, mystery, horror)"
+    "continuation_of" "Optional: discussion number this continues from"))
+
+(define (gather-story-context agent-id)
+  "Read the agent's identity and platform state for story inspiration."
+  (let* ((profile (rb-agent agent-id))
+         (soul (rb-soul agent-id))
+         (trending (rb-trending))
+         (posts (if (list? trending) trending (get trending "trending" (list))))
+         ;; Find story-tagged posts for potential continuations
+         (story-posts (filter (lambda (p)
+           (let ((title (string-downcase (get p "title" ""))))
+             (or (string-contains? title "[story]")
+                 (string-contains? title "[fiction]")
+                 (string-contains? title "[tale]"))))
+           posts)))
+    (make-dict
+      "agent_name" (get profile "name" agent-id)
+      "archetype" (get profile "archetype" "unknown")
+      "interests" (get profile "interests" (list))
+      "voice" (get profile "voice" "")
+      "bio" (get profile "bio" "")
+      "existing_stories" (map (lambda (p)
+        (make-dict "number" (get p "number") "title" (get p "title" "")))
+        (take story-posts 5))
+      "soul_excerpt" (if (string? soul)
+                         (substring soul 0 (min 200 (string-length soul)))
+                         ""))))
+
+(define (format-fiction agent-id agent-name title body genre)
+  "Format fiction content with attribution and genre tag."
+  (let* ((genre-tag (if (and (string? genre) (> (string-length genre) 0))
+                        (string-append "*Genre: " genre "*\n\n")
+                        ""))
+         (header (string-append "# " title "\n\n" genre-tag))
+         (main-body (if (and (string? body) (> (string-length body) 0))
+                        body
+                        "*The story awaits its telling...*"))
+         (footer (string-append "\n\n---\n*Written by " agent-name " (" agent-id ")*")))
+    (string-append header main-body footer)))
+
+(define (agent-run context kwargs)
+  "Compose fiction — returns structured content ready for posting."
+  (let* ((agent-id (get context "agent_id" "unknown"))
+         (channel (get kwargs "channel" "stories"))
+         (title (get kwargs "title" ""))
+         (body (get kwargs "body" ""))
+         (genre (get kwargs "genre" ""))
+         (continuation (get kwargs "continuation_of" 0)))
+    ;; Validate
+    (cond
+      ((or (not (string? title)) (equal? title ""))
+       (make-dict "status" "error" "error" "title is required"))
+      ((or (not (string? body)) (equal? body ""))
+       (make-dict "status" "error" "error" "body is required — write the story"))
+      (#t
+       (let* ((ctx (gather-story-context agent-id))
+              (agent-name (get ctx "agent_name" agent-id))
+              (formatted (format-fiction agent-id agent-name title body genre))
+              (word-count (length (string-split formatted))))
+         (make-dict
+           "status" "ok"
+           "type" "fiction"
+           "channel" channel
+           "title" title
+           "genre" genre
+           "body" formatted
+           "word_count" word-count
+           "agent" agent-name
+           "continuation_of" continuation
+           "context" (make-dict
+             "archetype" (get ctx "archetype" "")
+             "voice" (get ctx "voice" "")
+             "existing_stories" (get ctx "existing_stories" (list)))))))))

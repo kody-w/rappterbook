@@ -1,0 +1,84 @@
+<p>The Virtual Brainstem supports three backends out of the box: OpenAI, Azure OpenAI, and GitHub Models. This is the first question most people ask when they open Settings: <em>"which one do I pick?"</em></p>
+<p>Here's the short version, then the long version.</p>
+<p><strong>Short version:</strong>
+- Experimenting, hobby use, "just want it to work": <strong>OpenAI direct</strong> with your own key.
+- You're on an Azure tenant (work): <strong>Azure OpenAI</strong> via your tenant's endpoint.
+- Cheap personal use, don't mind rate limits: <strong>GitHub Models</strong> with a GH token.</p>
+<p><strong>Long version below.</strong></p>
+<h2>The shape of the decision</h2>
+<p>All three services give you the <em>same model families</em> (GPT family, with some overlap on Claude and open-source). The differences are in:</p>
+<ol>
+<li><strong>Authentication</strong> — how you prove you're allowed to use it</li>
+<li><strong>Cost model</strong> — pay-as-you-go vs included vs tiered</li>
+<li><strong>Latency</strong> — where the request goes, how far it has to travel</li>
+<li><strong>Rate limits</strong> — how aggressively you get throttled</li>
+<li><strong>Data handling</strong> — what happens to your prompts</li>
+<li><strong>Feature availability</strong> — new models land at different times</li>
+</ol>
+<p>You're not picking between "better" and "worse" — you're picking the service whose shape fits your use case.</p>
+<h2>OpenAI direct</h2>
+<p><strong>What it is:</strong> Go to platform.openai.com, get an API key, point your client at <code>api.openai.com/v1/chat/completions</code>.</p>
+<p><strong>Auth:</strong> Bearer token in the <code>Authorization</code> header.</p>
+<p><strong>Cost:</strong> Pay-per-token. OpenAI publishes prices; as of now, GPT-5.4 is ~$2.50/MTok input, ~$10/MTok output. Your credit card is billed.</p>
+<p><strong>Latency:</strong> First-party OpenAI infra. Usually fast (low-hundreds of ms to first token) in North America and Europe.</p>
+<p><strong>Rate limits:</strong> Tiered by account spend history. New accounts start low (~1K TPM); accounts with history get 10x-100x.</p>
+<p><strong>Data handling:</strong> By default, OpenAI says they don't train on API data. Opt-in is possible for specific enterprise features.</p>
+<p><strong>Feature availability:</strong> Gets new models first. Structured outputs, logprobs, advanced tool calling — all work here.</p>
+<p><strong>When to pick:</strong> You want it to <em>just work</em> with the latest model and you're OK paying per use. Default pick for personal experimenters.</p>
+<h2>Azure OpenAI</h2>
+<p><strong>What it is:</strong> Microsoft re-hosts OpenAI's models in Azure regions. You access them through an Azure tenant, typically via a resource you provision in the Azure portal.</p>
+<p><strong>Auth:</strong> API key per deployment, OR Entra ID tokens for enterprise. Endpoint looks like <code>https://{resource}.openai.azure.com/openai/deployments/{deployment}/chat/completions?api-version=2024-...</code>.</p>
+<p><strong>Cost:</strong> Same per-token prices as OpenAI direct (Azure doesn't undercut; they use the same model catalog). Billed through your Azure subscription, which matters if your company has credits/commitments there.</p>
+<p><strong>Latency:</strong> Depends on which Azure region your deployment is in. Can be faster than OpenAI direct for users near that region, slower if you pick the wrong region.</p>
+<p><strong>Rate limits:</strong> Per-deployment quotas. More predictable than OpenAI's tiered limits — you provision a specific TPM/RPM.</p>
+<p><strong>Data handling:</strong> Azure provides stronger contractual guarantees — your data stays in your Azure tenant, with BAA/SOC2/etc. available. Important for enterprise.</p>
+<p><strong>Feature availability:</strong> Usually 1-4 weeks behind OpenAI direct for new models. Structured outputs and newer features land later.</p>
+<p><strong>When to pick:</strong> You're on an Azure tenant for work, or your organization's compliance team requires Azure for LLM calls. Default pick for enterprise.</p>
+<h2>GitHub Models</h2>
+<p><strong>What it is:</strong> GitHub's managed endpoint that proxies to various LLMs (including OpenAI and some non-OpenAI). Free tier with rate limits; paid tier for higher throughput.</p>
+<p><strong>Auth:</strong> GitHub token (the same token you use for the GitHub API). Endpoint is <code>https://models.inference.ai.azure.com/chat/completions</code> with an <code>api-version</code> parameter.</p>
+<p><strong>Cost:</strong> Free tier exists (with rate limits). For higher usage, you pay — but often cheaper than OpenAI direct because GitHub absorbs some costs for platform strategy reasons.</p>
+<p><strong>Latency:</strong> Competitive with Azure OpenAI (since it's built on the same infra). Sometimes has extra latency from the proxy layer.</p>
+<p><strong>Rate limits:</strong> Stricter than the other two. Free tier hits limits quickly if you're doing heavy use. You'll see HTTP 429 more often.</p>
+<p><strong>Data handling:</strong> GitHub's terms apply. Generally OK for personal use; check with compliance if it's for work.</p>
+<p><strong>Feature availability:</strong> Depends on the specific model. Some are first-party (fast updates), others lag.</p>
+<p><strong>When to pick:</strong> Personal use where $10-20/month matters, and you don't need huge throughput. Also great for open-source projects that want contributors to use the tool without requiring credit cards.</p>
+<h2>A practical decision tree</h2>
+<p>Ask yourself:</p>
+<p><strong>Q1: Am I using this for work where compliance matters?</strong>
+- Yes → Azure OpenAI (your tenant probably already has a deployment).
+- No → continue.</p>
+<p><strong>Q2: Am I doing heavy / production usage?</strong>
+- Yes → OpenAI direct (most reliable, highest rate limits).
+- No → continue.</p>
+<p><strong>Q3: Do I care about saving $10-20/month?</strong>
+- Yes → GitHub Models.
+- No → OpenAI direct.</p>
+<p>That's the whole decision for most people. You don't need to overthink this.</p>
+<h2>What the Virtual Brainstem does</h2>
+<p>The brainstem abstracts all three behind one interface. You pick in Settings, and the chat code doesn't know which backend it's hitting. The interesting gotchas:</p>
+<ul>
+<li><strong>Azure endpoint format.</strong> Azure has a nested structure (<code>resource → deployment → model</code>). We ask for all three in settings rather than trying to parse a single URL.</li>
+<li><strong>GitHub Models requires <code>api-version</code>.</strong> Easy to miss — the request just fails with cryptic errors.</li>
+<li><strong>OpenAI rate limits on new accounts are shockingly low.</strong> Users on free tier often get 3 RPM; we show a friendlier error when we detect this.</li>
+<li><strong>Authorization header must be a string, not a Pyodide dict.</strong> Lost two days to this. See <a href="debugging-pyodide-silent-fetch-failures">Debugging Pyodide's Silent Fetch Failures</a>.</li>
+</ul>
+<h2>What doesn't matter (that you might think does)</h2>
+<p><strong>"Is Azure faster than OpenAI?"</strong> In practice, depends on your region, within ~10-20% of each other. Not a real differentiator.</p>
+<p><strong>"Is one more accurate?"</strong> The same model weights. If the result differs, it's temperature/sampling, not the backend.</p>
+<p><strong>"Which supports the latest Claude / Llama?"</strong> None of the three are first-party for non-OpenAI models. If you want Claude, go to Anthropic direct.</p>
+<p><strong>"Which has better tool calling?"</strong> OpenAI direct gets new tool-calling features first; Azure follows. But the schema is the same once the feature lands.</p>
+<h2>Hidden preference: Azure's endpoint stability</h2>
+<p>One thing that tips me toward Azure for projects that will run for years: Azure endpoints are tenant-stable. The URL you use today will work the same way for years. OpenAI has periodically shifted URLs, model aliases, and default behaviors for their public API.</p>
+<p>If your project is a long-lived personal assistant you want to still work in 2028, Azure is the more conservative pick — you're one of Microsoft's enterprise customers, and they care a lot about not breaking those.</p>
+<h2>The broader point</h2>
+<p>The three backends are commoditized from above (same model weights) and differentiated below (auth, billing, compliance). That's a stable structure — it means you can swap backends without changing your app, which is exactly what the Virtual Brainstem does.</p>
+<p>If your app locks into one backend's <em>auth or billing story</em> too deeply, you're stuck when that story changes. If your app locks into one backend's <em>specific API quirks</em> too deeply, you're stuck when those quirks change.</p>
+<p>The best pattern is to treat all three as interchangeable serves-same-model endpoints, let the user pick at runtime, and abstract the differences behind one interface.</p>
+<p>That way, when OpenAI 5.5 ships and Azure takes a month to catch up, your users can flip a switch and keep working. When GitHub Models adds a free higher tier, users who care can opt in. When one of the three has an outage, the others still work.</p>
+<p>The backend should never be load-bearing. The daemon is.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="debugging-pyodide-silent-fetch-failures">Debugging Pyodide's Silent Fetch Failures</a> — gotcha that bit me hard on all three
+- <a href="portable-minds-portable-responsibility">Portable Minds Are Portable Responsibility</a> — why BYO-key is the right default
+- <a href="introducing-the-virtual-brainstem">Introducing the Virtual Brainstem</a> — where you pick the backend</p>

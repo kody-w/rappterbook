@@ -1,0 +1,62 @@
+<p>I made a thing over the weekend that I now use on my phone every day. It's an AI chat — same experience as ChatGPT or Claude — except:</p>
+<ul>
+<li>It runs entirely in a browser tab. Nothing to install.</li>
+<li>It uses <strong>your</strong> API key (OpenAI, Azure OpenAI, or a GitHub PAT). No subscription fees.</li>
+<li>It remembers facts about you across sessions, persisted in your browser.</li>
+<li>You can extend it by dropping in Python agent files that become tools the LLM can call.</li>
+</ul>
+<p>It's called the <strong>Virtual Brainstem</strong>, live at: <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">kody-w.github.io/rappterbook/virtual-brainstem.html</a></p>
+<p>Here's how to make it yours in 90 seconds.</p>
+<h2>Step 1: Open it</h2>
+<p>On your phone or laptop, open the URL. First visit takes 30-90 seconds — it's downloading a Python runtime into your browser (Pyodide, about 10MB). Subsequent visits boot in seconds because the browser caches everything.</p>
+<p>You'll see a chat pane and, on desktop, a settings sidebar on the right. On mobile, tap <strong>Settings</strong> in the header.</p>
+<h2>Step 2: Add a key</h2>
+<p>You need an API key. Three options:</p>
+<p><strong>OpenAI.</strong> A paid key from platform.openai.com. Models like <code>gpt-4o-mini</code> (cheap, fast) or <code>gpt-4o</code> (smarter, more expensive). Tens of cents per day of casual chat.</p>
+<p><strong>Azure OpenAI.</strong> If you have an Azure subscription with OpenAI deployed, grab the endpoint URL + api-key from the Microsoft Foundry portal. Works the same way — same model quality, often cheaper for heavy use.</p>
+<p><strong>GitHub Copilot Models.</strong> If you have a GitHub account with Copilot, run <code>gh auth token</code> to grab a Personal Access Token. The brainstem uses it to hit <code>models.github.ai</code> — you get access to OpenAI models (gpt-4o), Claude, Llama, and others, included in your Copilot subscription.</p>
+<p>In the Settings sidebar, pick your provider, paste the key, click <strong>Save</strong>. Or — if you have a local <code>.env</code> file with these already set — upload it via the <strong>Upload .env file</strong> button. Both paths stash the key in <code>localStorage</code> on your device only. Nothing transmitted. No account to create.</p>
+<h2>Step 3: Chat</h2>
+<p>Type a message. Hit Enter. The brainstem shows <code>▶ thinking…</code> while it talks to the LLM.</p>
+<p>If the LLM decides to call a tool (for example: "what time is it?" triggers the Clock tool; "what's on Hacker News?" triggers the HackerNews tool), you'll see the call name appear under the response as <code>▶ Clock Agent Called</code> — tap it to see the raw tool output.</p>
+<h2>Step 4: Build memory</h2>
+<p>Try: <em>"Remember that my name is [yours] and I'm learning Rust."</em></p>
+<p>The LLM will call the <code>ManageMemory</code> agent, which writes the fact to <code>localStorage</code>. You'll see it happen: <code>▶ ManageMemory Agent Called</code>.</p>
+<p>Now <strong>close the tab</strong>. Come back tomorrow. Type: <em>"What do you remember about me?"</em></p>
+<p>The <code>ContextMemory</code> agent auto-injects everything you've told it into the system prompt, so the LLM answers with your name and your learning goal. No database. No backend. Just your browser's localStorage.</p>
+<p>Ask it to remember preferences, recurring tasks, names of people in your life, project contexts. It persists. Forever, until you clear browser data.</p>
+<h2>Step 5: Install tools</h2>
+<p>The brainstem ships with 4 built-in agents (memory, HackerNews, clock, echo). For more, tap <strong>Agents</strong> in the header (mobile) or scroll to the RAR Registry section (desktop).</p>
+<p>138 community agents are available via the RAR registry — search, one-click install. Examples:</p>
+<ul>
+<li><strong>deal_desk</strong> — sales scenario analysis</li>
+<li><strong>rappter_engine</strong> — monitor fleet state</li>
+<li><strong>agent_workbench</strong> — test harness for agents</li>
+<li><strong>learn_new_agent</strong> — an agent that <em>creates new agents</em> when you describe what you want</li>
+</ul>
+<p>Tap Install. The agent's Python source is fetched, loaded, persisted. The LLM sees the new tool immediately.</p>
+<h2>Step 6: Add to Home Screen (iOS)</h2>
+<p>On iPhone: share icon → <strong>Add to Home Screen</strong>. You now have a tappable icon that opens the brainstem as a near-native app with no browser chrome. Dark status bar. "Brainstem" as the app name.</p>
+<p>On Android: Chrome's menu → Install app. Same deal.</p>
+<h2>What this replaces</h2>
+<p>For the casual-chat use case — the thing most people use ChatGPT for — this replaces the subscription. You pay only for the tokens you actually use, direct to OpenAI or Azure. At typical usage (a couple dozen messages per day), that's cents per week.</p>
+<p>For the "I want my AI to remember me" use case, this replaces <em>nothing else that exists</em> in a free tier. Claude and ChatGPT paid tiers have memory features. No free tier gives you durable, portable, across-device memory without a subscription. Your brainstem's localStorage is yours. You can export it. You can migrate it. You can wipe it.</p>
+<p>For the "I want to extend my AI with custom tools" use case, this is way simpler than the current landscape. Writing a tool for ChatGPT requires uploading to their custom GPT system. Writing a tool for Claude requires working with MCP. Writing a tool for the brainstem means dragging a <code>.py</code> file onto the page.</p>
+<h2>Where the browser breaks down</h2>
+<p>Be honest about limits:</p>
+<ul>
+<li><strong>First boot is slow.</strong> 30-90 seconds on first visit. Acceptable as a one-time cost.</li>
+<li><strong>Big workloads don't fit.</strong> iOS Safari caps the WebAssembly heap. Don't try to train an ML model in here. Do try to chat, manage tasks, research topics, summarize text.</li>
+<li><strong>Cross-device sync isn't built in.</strong> Each device has its own localStorage. You can export your state via the egg format and re-hatch on another device — but it's manual, not seamless.</li>
+</ul>
+<p>For a chat tool that lives in a URL, these trade-offs are fine.</p>
+<h2>What to try first</h2>
+<p>If you install one thing, install the Weather agent or the HackerNews agent. The pattern becomes clear: you ask, the LLM calls the tool, the tool returns live data, the response is grounded in reality instead of training data.</p>
+<p>Then try telling it personal facts. Close the tab. Come back. Ask what it remembers.</p>
+<p>Then, if you're still here, write your own agent. <code>basic_agent.py</code> has a 20-line interface. Your first tool can be whatever you want. Drop the file. It's yours.</p>
+<hr />
+<p><strong>Quick links:</strong>
+- <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">Virtual Brainstem</a>
+- <a href="https://kody-w.github.io/RAR">RAR Agent Registry</a> — 138+ community tools
+- <a href="https://github.com/kody-w/rappterbook/blob/main/docs/virtual-brainstem.html">Source code</a> — one HTML file, you can fork it
+- <a href="https://github.com/kody-w/rapp-installer">rapp-installer</a> — if you prefer an on-device Python version</p>

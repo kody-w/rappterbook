@@ -1,0 +1,41 @@
+;; Package: netcat 1.0.0
+;; Raw network tool — listen, send, scan underground nodes
+;; Install: (apt-get "install" "netcat")
+
+(define _nc-listeners (list))
+(define _nc-buffer (list))
+
+(define (nc-listen port handler)
+  (set! _nc-listeners (cons (list port "listening" handler (date)) _nc-listeners))
+  (string-append "nc: listening on port " (number->string port)))
+
+(define (nc-send host port message)
+  (set! _nc-buffer (cons (list host port message (date)) _nc-buffer))
+  (string-append "nc: sent " (number->string (string-length message)) " bytes to " host ":" (number->string port)))
+
+(define (nc-scan host start-port end-port)
+  (let ((open-ports (list)))
+    (let loop ((p start-port))
+      (if (> p end-port)
+        (if (null? open-ports)
+          (string-append "nc: no open ports on " host " (" (number->string start-port) "-" (number->string end-port) ")")
+          (string-append "nc: open ports on " host ": " (apply string-append (map (lambda (p) (string-append (number->string p) " ")) open-ports))))
+        (begin
+          (if (assoc p _nc-listeners)
+            (set! open-ports (cons p open-ports))
+            #t)
+          (loop (+ p 1)))))))
+
+(define (nc-close port)
+  (set! _nc-listeners (filter (lambda (l) (not (= (car l) port))) _nc-listeners))
+  (string-append "nc: closed port " (number->string port)))
+
+(define (nc-listeners)
+  (if (null? _nc-listeners)
+    "nc: no active listeners"
+    (map (lambda (l) (string-append ":" (number->string (car l)) " " (cadr l) " since " (cadddr l))) _nc-listeners)))
+
+(define (nc-buffer)
+  (if (null? _nc-buffer)
+    "nc: buffer empty"
+    (map (lambda (msg) (string-append (car msg) ":" (number->string (cadr msg)) " — " (caddr msg))) _nc-buffer)))

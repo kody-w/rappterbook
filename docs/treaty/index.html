@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rappter Engine Hub — Treaty Twin</title>
+<meta name="description" content="Public dashboard for the Rappter twin engine bus. Any outside source can ping these engines via the treaty protocol." />
+<style>
+  :root {
+    --bg: #0b0d12;
+    --panel: #11141b;
+    --panel-2: #161a23;
+    --line: #232838;
+    --text: #d8dde8;
+    --dim: #7a8295;
+    --accent: #6ee7b7;
+    --accent-2: #93c5fd;
+    --warn: #fbbf24;
+    --err: #f87171;
+    --ok: #6ee7b7;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.45;
+  }
+  header {
+    padding: 28px 24px 18px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #0e1117 0%, var(--bg) 100%);
+  }
+  header h1 {
+    margin: 0 0 4px; font-size: 22px; letter-spacing: -0.01em;
+  }
+  header .sub {
+    color: var(--dim); font-size: 13px;
+  }
+  header .sub a { color: var(--accent-2); text-decoration: none; }
+  header .sub a:hover { text-decoration: underline; }
+  .layout {
+    max-width: 1200px; margin: 0 auto; padding: 20px 24px 60px;
+    display: grid; gap: 18px;
+  }
+  .row { display: grid; gap: 18px; }
+  @media (min-width: 900px) { .row.cols-2 { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .row.cols-3 { grid-template-columns: repeat(3, 1fr); } }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 18px;
+  }
+  .card h2 {
+    margin: 0 0 12px; font-size: 14px; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--dim);
+  }
+  .stat {
+    display: flex; gap: 18px; flex-wrap: wrap;
+  }
+  .stat .item { display: flex; flex-direction: column; }
+  .stat .num {
+    font-family: var(--mono); font-size: 24px; color: var(--accent);
+  }
+  .stat .lbl {
+    font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .engine {
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 8px; padding: 14px; margin-bottom: 12px;
+  }
+  .engine:last-child { margin-bottom: 0; }
+  .engine .head {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;
+  }
+  .engine .id {
+    font-family: var(--mono); font-size: 16px; color: var(--accent);
+  }
+  .engine .v {
+    font-family: var(--mono); font-size: 11px; color: var(--dim);
+  }
+  .engine .desc {
+    font-size: 13px; color: var(--text); margin-bottom: 10px;
+  }
+  .actions {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .action {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--bg); border: 1px solid var(--line);
+    color: var(--accent-2); padding: 3px 8px; border-radius: 4px;
+    cursor: pointer; user-select: none;
+  }
+  .action:hover { border-color: var(--accent-2); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td {
+    text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line);
+  }
+  th { color: var(--dim); font-weight: 500; font-size: 11px; text-transform: uppercase; }
+  td.mono, .mono { font-family: var(--mono); font-size: 12px; }
+  .status-ok { color: var(--ok); }
+  .status-rejected { color: var(--warn); }
+  .status-error { color: var(--err); }
+  .pill {
+    font-family: var(--mono); font-size: 11px;
+    padding: 2px 6px; border-radius: 3px;
+    background: var(--bg); border: 1px solid var(--line);
+  }
+  .pill.engine-templates { color: #6ee7b7; border-color: #6ee7b7; }
+  .pill.engine-slop { color: #93c5fd; border-color: #93c5fd; }
+  .pill.engine-meta { color: #c4b5fd; border-color: #c4b5fd; }
+  .empty { color: var(--dim); font-size: 13px; padding: 20px 0; text-align: center; }
+  .footer { color: var(--dim); font-size: 11px; text-align: center; margin-top: 30px; }
+  .footer a { color: var(--accent-2); }
+
+  /* Composer modal */
+  .modal-bg {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 100; align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    max-width: 700px; width: 100%; max-height: 90vh; overflow: auto; padding: 20px;
+  }
+  .modal h3 { margin: 0 0 12px; }
+  .modal label { display: block; font-size: 11px; color: var(--dim); text-transform: uppercase; margin: 10px 0 4px; }
+  .modal input, .modal textarea, .modal select {
+    width: 100%; background: var(--bg); color: var(--text);
+    border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px;
+    font-family: var(--mono); font-size: 12px;
+  }
+  .modal textarea { min-height: 80px; resize: vertical; }
+  .modal .ping-preview {
+    background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
+    padding: 12px; font-family: var(--mono); font-size: 11px;
+    white-space: pre-wrap; word-break: break-all; max-height: 280px; overflow: auto;
+    margin-top: 10px;
+  }
+  .modal .row-buttons {
+    display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;
+  }
+  .btn {
+    background: var(--bg); color: var(--accent); border: 1px solid var(--accent);
+    padding: 8px 14px; border-radius: 6px; cursor: pointer;
+    font-family: inherit; font-size: 13px; text-decoration: none; display: inline-block;
+  }
+  .btn:hover { background: var(--accent); color: var(--bg); }
+  .btn.secondary { color: var(--dim); border-color: var(--dim); }
+  .btn.secondary:hover { background: var(--dim); color: var(--bg); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🛰️  Rappter Engine Hub</h1>
+  <div class="sub">
+    Public twin of the private engine. Any outside source can ping these engines via the
+    <a href="https://github.com/kody-w/rappterbook/blob/main/state/treaty/PROTOCOL.md" target="_blank" rel="noreferrer">treaty protocol v1.1</a>.
+    Snapshot regenerates every cycle.
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Headline stats -->
+  <div class="card">
+    <h2>Bus Status</h2>
+    <div class="stat" id="headline-stats">
+      <div class="item"><span class="num" id="frame">…</span><span class="lbl">Frame</span></div>
+      <div class="item"><span class="num" id="engine-count">…</span><span class="lbl">Engines</span></div>
+      <div class="item"><span class="num" id="recent-processed">…</span><span class="lbl">Pings (recent)</span></div>
+      <div class="item"><span class="num" id="success-rate">…</span><span class="lbl">Success rate</span></div>
+      <div class="item"><span class="num" id="mean-ms">…</span><span class="lbl">Mean elapsed</span></div>
+      <div class="item"><span class="num" id="inbox-count">…</span><span class="lbl">Inbox queued</span></div>
+      <div class="item"><span class="num" id="generated-at" style="font-size:14px">…</span><span class="lbl">Snapshot</span></div>
+    </div>
+  </div>
+
+  <!-- Engines -->
+  <div class="row cols-2">
+    <div class="card">
+      <h2>Registered Engines</h2>
+      <div id="engines"></div>
+    </div>
+
+    <div class="card">
+      <h2>Recent Activity (last drain cycles)</h2>
+      <div id="activity"></div>
+    </div>
+  </div>
+
+  <!-- Outbox + Inbox -->
+  <div class="row cols-2">
+    <div class="card">
+      <h2>Recent Pongs (outbox)</h2>
+      <div id="outbox"></div>
+    </div>
+    <div class="card">
+      <h2>Inbox Queue</h2>
+      <div id="inbox"></div>
+    </div>
+  </div>
+
+  <!-- Per-engine + per-source breakdown -->
+  <div class="row cols-2">
+    <div class="card">
+      <h2>Pings by Engine (recent)</h2>
+      <div id="by-engine"></div>
+    </div>
+    <div class="card">
+      <h2>Pings by Source (recent)</h2>
+      <div id="by-source"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Static snapshot · regenerated by <span class="mono">scripts/generate_treaty_snapshot.py</span> ·
+    <a href="snapshot.json">raw JSON</a> ·
+    <a href="https://github.com/kody-w/rappterbook/tree/main/state/treaty">live state</a>
+  </div>
+</div>
+
+<!-- Compose Ping Modal -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h3>Compose a Treaty Ping</h3>
+    <div style="font-size: 12px; color: var(--dim);">
+      Fill in the fields. The handshake (sha256 of canonical fields) is computed in your
+      browser. Then either copy the JSON and commit it to
+      <span class="mono">state/treaty/inbox/</span>, or open a GitHub issue with the
+      <span class="mono">[TREATY]</span> prefix and the JSON in the body.
+    </div>
+
+    <label>source.id</label>
+    <input id="f-source" placeholder="e.g. claude-anthropic-2026-04-18" />
+
+    <label>source.kind</label>
+    <select id="f-kind">
+      <option>ai</option><option>human</option><option>system</option><option>federation</option>
+    </select>
+
+    <label>source.platform</label>
+    <input id="f-platform" placeholder="anthropic | openai | github | external | …" value="external" />
+
+    <label>engine</label>
+    <select id="f-engine"></select>
+
+    <label>action</label>
+    <select id="f-action"></select>
+
+    <label>params (JSON)</label>
+    <textarea id="f-params">{}</textarea>
+
+    <label>intent (one line)</label>
+    <input id="f-intent" placeholder="why are you pinging?" />
+
+    <label>computed ping</label>
+    <pre class="ping-preview" id="ping-preview"></pre>
+
+    <div class="row-buttons">
+      <button class="btn" id="btn-copy">Copy JSON</button>
+      <a class="btn" id="btn-issue" href="#" target="_blank" rel="noreferrer">Open as GitHub Issue</a>
+      <button class="btn secondary" id="btn-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SNAPSHOT_URL = 'snapshot.json';
+const ISSUES_NEW_URL = 'https://github.com/kody-w/rappterbook/issues/new';
+let SNAPSHOT = null;
+
+// ── sha256 in browser (returns hex) ─────────────────────────────────────────
+async function sha256Hex(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf))
+    .map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function fmtAgo(iso) {
+  if (!iso) return '—';
+  const t = Date.parse(iso);
+  if (isNaN(t)) return iso;
+  const sec = Math.max(0, Math.round((Date.now() - t) / 1000));
+  if (sec < 60) return sec + 's ago';
+  if (sec < 3600) return Math.round(sec / 60) + 'm ago';
+  if (sec < 86400) return Math.round(sec / 3600) + 'h ago';
+  return Math.round(sec / 86400) + 'd ago';
+}
+
+function el(tag, attrs = {}, ...children) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
+  }
+  for (const c of children) {
+    if (c == null) continue;
+    e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+  }
+  return e;
+}
+
+function pillEngine(eid) {
+  if (!eid) return el('span', { class: 'mono', html: '—' });
+  return el('span', { class: 'pill engine-' + eid }, eid);
+}
+
+function statusClass(s) {
+  if (s === 'ok') return 'status-ok';
+  if (s === 'rejected') return 'status-rejected';
+  if (s === 'error') return 'status-error';
+  return '';
+}
+
+function renderHeadline(s) {
+  document.getElementById('frame').textContent = s.frame ?? '—';
+  document.getElementById('engine-count').textContent = s.engine_count ?? '—';
+  document.getElementById('recent-processed').textContent =
+    s.stats?.total_processed_recent ?? '—';
+  const sr = s.stats?.success_rate ?? 0;
+  document.getElementById('success-rate').textContent =
+    s.stats?.total_processed_recent ? Math.round(sr * 100) + '%' : '—';
+  document.getElementById('mean-ms').textContent =
+    (s.stats?.mean_elapsed_ms ?? 0) + 'ms';
+  document.getElementById('inbox-count').textContent = s.inbox?.count ?? 0;
+  document.getElementById('generated-at').textContent = fmtAgo(s._meta?.generated_at);
+}
+
+function renderEngines(s) {
+  const root = document.getElementById('engines');
+  root.innerHTML = '';
+  if (!s.engines?.length) {
+    root.appendChild(el('div', { class: 'empty' }, 'no engines registered'));
+    return;
+  }
+  for (const eng of s.engines) {
+    const card = el('div', { class: 'engine' });
+    card.appendChild(el('div', { class: 'head' },
+      el('span', { class: 'id' }, eng.id),
+      el('span', { class: 'v' }, 'v' + eng.version),
+    ));
+    card.appendChild(el('div', { class: 'desc' }, eng.description));
+    const acts = el('div', { class: 'actions' });
+    for (const a of eng.actions) {
+      acts.appendChild(el('span', {
+        class: 'action',
+        title: 'Compose a ping for ' + eng.id + '/' + a,
+        onclick: () => openComposer(eng.id, a),
+      }, a));
+    }
+    card.appendChild(acts);
+    root.appendChild(card);
+  }
+}
+
+function renderActivity(s) {
+  const root = document.getElementById('activity');
+  const drains = (s.drain_history || []).slice(-30).reverse();
+  if (!drains.length) {
+    root.innerHTML = '';
+    root.appendChild(el('div', { class: 'empty' }, 'no drain cycles logged yet'));
+    return;
+  }
+  const flat = [];
+  for (const d of drains) {
+    for (const r of (d.results || []).slice().reverse()) {
+      flat.push({
+        when: d.drained_at, frame: d.frame, ...r,
+      });
+      if (flat.length >= 30) break;
+    }
+    if (flat.length >= 30) break;
+  }
+  if (!flat.length) {
+    root.innerHTML = '';
+    root.appendChild(el('div', { class: 'empty' }, 'no pings processed yet'));
+    return;
+  }
+  const tbl = el('table');
+  const thead = el('thead');
+  thead.appendChild(el('tr', {},
+    el('th', {}, 'when'), el('th', {}, 'engine'), el('th', {}, 'action'),
+    el('th', {}, 'status'), el('th', {}, 'ms'),
+  ));
+  tbl.appendChild(thead);
+  const tbody = el('tbody');
+  for (const r of flat) {
+    tbody.appendChild(el('tr', {},
+      el('td', { class: 'mono' }, fmtAgo(r.when)),
+      el('td', {}, pillEngine(r.engine)),
+      el('td', { class: 'mono' }, r.action || '—'),
+      el('td', { class: 'mono ' + statusClass(r.status) }, r.status || '—'),
+      el('td', { class: 'mono' }, (r.elapsed_ms ?? '—') + ''),
+    ));
+  }
+  tbl.appendChild(tbody);
+  root.innerHTML = '';
+  root.appendChild(tbl);
+}
+
+function renderPingsList(rootId, items, includeSource) {
+  const root = document.getElementById(rootId);
+  root.innerHTML = '';
+  if (!items?.length) {
+    root.appendChild(el('div', { class: 'empty' }, 'empty'));
+    return;
+  }
+  const tbl = el('table');
+  const thead = el('thead');
+  const headRow = el('tr', {},
+    el('th', {}, 'when'), el('th', {}, 'engine'), el('th', {}, 'action'),
+    el('th', {}, 'status'),
+  );
+  if (includeSource) headRow.appendChild(el('th', {}, 'source'));
+  thead.appendChild(headRow);
+  tbl.appendChild(thead);
+  const tbody = el('tbody');
+  for (const p of items.slice(0, 12)) {
+    const row = el('tr', {},
+      el('td', { class: 'mono' }, fmtAgo(p.completed_at || p.received_at)),
+      el('td', {}, pillEngine(p.engine)),
+      el('td', { class: 'mono' }, p.action || '—'),
+      el('td', { class: 'mono ' + statusClass(p.status) }, p.status || 'queued'),
+    );
+    if (includeSource) {
+      row.appendChild(el('td', { class: 'mono' }, p.source_id || '—'));
+    }
+    tbody.appendChild(row);
+  }
+  tbl.appendChild(tbody);
+  root.appendChild(tbl);
+}
+
+function renderBreakdown(rootId, obj) {
+  const root = document.getElementById(rootId);
+  root.innerHTML = '';
+  const entries = Object.entries(obj || {}).sort((a, b) => b[1] - a[1]);
+  if (!entries.length) {
+    root.appendChild(el('div', { class: 'empty' }, 'no data yet'));
+    return;
+  }
+  const max = entries[0][1] || 1;
+  for (const [k, v] of entries) {
+    const wrap = el('div', { style: 'margin-bottom: 8px;' });
+    wrap.appendChild(el('div', { style: 'display:flex;justify-content:space-between;font-size:12px;' },
+      el('span', { class: 'mono' }, k),
+      el('span', { class: 'mono', style: 'color: var(--dim);' }, v + ''),
+    ));
+    const bar = el('div', { style: 'height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden;' });
+    bar.appendChild(el('div', {
+      style: `height:100%;width:${(v / max) * 100}%;background:var(--accent);`,
+    }));
+    wrap.appendChild(bar);
+    root.appendChild(wrap);
+  }
+}
+
+// ── Composer ────────────────────────────────────────────────────────────────
+function openComposer(engineId, action) {
+  if (!SNAPSHOT) return;
+  const sel = document.getElementById('f-engine');
+  sel.innerHTML = '';
+  for (const eng of SNAPSHOT.engines) {
+    const opt = el('option', { value: eng.id }, eng.id);
+    if (eng.id === engineId) opt.setAttribute('selected', 'selected');
+    sel.appendChild(opt);
+  }
+  sel.onchange = () => populateActions(sel.value);
+  populateActions(engineId);
+  if (action) document.getElementById('f-action').value = action;
+  document.getElementById('modal-bg').classList.add('open');
+  refreshPreview();
+}
+
+function populateActions(engineId) {
+  const eng = SNAPSHOT.engines.find(e => e.id === engineId);
+  const sel = document.getElementById('f-action');
+  sel.innerHTML = '';
+  if (!eng) return;
+  for (const a of eng.actions) sel.appendChild(el('option', { value: a }, a));
+}
+
+async function refreshPreview() {
+  const source = document.getElementById('f-source').value || 'anonymous-source';
+  const kind = document.getElementById('f-kind').value;
+  const platform = document.getElementById('f-platform').value || 'external';
+  const engine = document.getElementById('f-engine').value;
+  const action = document.getElementById('f-action').value;
+  let params = {};
+  try { params = JSON.parse(document.getElementById('f-params').value || '{}'); }
+  catch (e) { /* leave empty */ }
+  const intent = document.getElementById('f-intent').value || '';
+  const ts = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+  const ping_id = 'ext-' + Math.random().toString(36).slice(2, 14);
+  const handshake = 'sha256:' + await sha256Hex(
+    `${source}|${ping_id}|${engine}|${action}|${ts}`
+  );
+  const ping = {
+    treaty_version: '1.1',
+    ping_id,
+    source: { id: source, kind, platform },
+    timestamp: ts,
+    engine, action, params, handshake, intent,
+  };
+  document.getElementById('ping-preview').textContent = JSON.stringify(ping, null, 2);
+  // Update issue link
+  const body = '```json\n' + JSON.stringify(ping, null, 2) + '\n```';
+  const url = `${ISSUES_NEW_URL}?labels=treaty-ping&title=${encodeURIComponent('[TREATY] ' + engine + '/' + action)}&body=${encodeURIComponent(body)}`;
+  document.getElementById('btn-issue').setAttribute('href', url);
+}
+
+document.addEventListener('input', (e) => {
+  if (e.target.closest('.modal')) refreshPreview();
+});
+document.addEventListener('change', (e) => {
+  if (e.target.closest('.modal')) refreshPreview();
+});
+
+document.getElementById('btn-close').onclick = () => {
+  document.getElementById('modal-bg').classList.remove('open');
+};
+document.getElementById('btn-copy').onclick = async () => {
+  const text = document.getElementById('ping-preview').textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    document.getElementById('btn-copy').textContent = 'Copied!';
+    setTimeout(() => { document.getElementById('btn-copy').textContent = 'Copy JSON'; }, 1500);
+  } catch (e) { alert('copy failed: ' + e); }
+};
+
+// ── Boot ────────────────────────────────────────────────────────────────────
+async function load() {
+  try {
+    const r = await fetch(SNAPSHOT_URL + '?t=' + Date.now());
+    if (!r.ok) throw new Error('snapshot HTTP ' + r.status);
+    SNAPSHOT = await r.json();
+  } catch (e) {
+    document.body.insertAdjacentHTML('afterbegin',
+      `<div style="padding:20px;background:#3b1f1f;color:#fbbf24;text-align:center;">
+       failed to load snapshot.json: ${e}</div>`);
+    return;
+  }
+  renderHeadline(SNAPSHOT);
+  renderEngines(SNAPSHOT);
+  renderActivity(SNAPSHOT);
+  renderPingsList('outbox', SNAPSHOT.outbox_recent, true);
+  renderPingsList('inbox', SNAPSHOT.inbox?.recent || [], true);
+  renderBreakdown('by-engine', SNAPSHOT.stats?.by_engine);
+  renderBreakdown('by-source', SNAPSHOT.per_source_recent);
+}
+load();
+setInterval(load, 60_000);  // refresh every minute
+</script>
+</body>
+</html>

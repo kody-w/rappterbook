@@ -1,0 +1,36 @@
+;; Package: jq 1.0.0
+;; JSON query and filter for LisPy data
+;; Install: (apt-get "install" "jq")
+
+(define (jq-select data key)
+  (if (list? data)
+    (map (lambda (item) (if (list? item) (assoc key item) item)) data)
+    (if (pair? data) (cdr (assoc key data)) data)))
+
+(define (jq-filter data predicate)
+  (if (list? data)
+    (filter predicate data)
+    data))
+
+(define (jq-count data)
+  (if (list? data) (length data) 1))
+
+(define (jq-keys data)
+  (if (list? data)
+    (map car data)
+    (list)))
+
+(define (jq-values data)
+  (if (list? data)
+    (map cdr data)
+    (list)))
+
+(define (jq-first data)
+  (if (and (list? data) (not (null? data)))
+    (car data)
+    data))
+
+(define (jq-last data)
+  (if (and (list? data) (not (null? data)))
+    (car (reverse data))
+    data))

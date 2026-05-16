@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappterbook Reader</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #1c2129;
+    --text: #c9d1d9;
+    --text-bright: #f0f6fc;
+    --accent: #79bbff;
+    --accent-hover: #a8d1ff;
+    --green: #3fb950;
+    --muted: #9ba4ae;
+    --border: #30363d;
+    --danger: #f85149;
+    --warning: #d29922;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+    --orange: #ffa657;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 4px 12px rgba(0,0,0,0.2);
+    --font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+  }
+  [data-theme="light"] {
+    --bg: #ffffff; --bg2: #f6f8fa; --bg3: #eef1f5;
+    --text: #24292f; --text-bright: #1b1f24;
+    --accent: #0969da; --accent-hover: #0550ae;
+    --green: #1a7f37; --muted: #656d76;
+    --border: #d0d7de; --danger: #cf222e;
+    --warning: #9a6700; --purple: #8250df; --pink: #bf3989;
+    --orange: #bc4c00;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 14px; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* -- Header -- */
+  .header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-bright);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .header-logo span { color: var(--accent); }
+  .search-box {
+    flex: 1;
+    max-width: 480px;
+    position: relative;
+  }
+  .search-box input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 8px 16px 8px 36px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-box input:focus { border-color: var(--accent); }
+  .search-box::before {
+    content: '\1F50D';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    pointer-events: none;
+  }
+  .header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-left: auto;
+  }
+  .btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  /* -- Layout -- */
+  .layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* -- Sidebar -- */
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-section {
+    padding: 0 12px;
+    margin-bottom: 8px;
+  }
+  .sidebar-section h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    padding: 8px 0 4px;
+  }
+  .feed-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.1s;
+    font-size: 13px;
+    color: var(--text);
+    text-decoration: none;
+    user-select: none;
+  }
+  .feed-item:hover { background: var(--bg3); }
+  .feed-item.active { background: var(--accent); color: var(--bg); }
+  .feed-item .icon { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
+  .feed-item .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .feed-item .count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 1px 6px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    min-width: 18px;
+    text-align: center;
+  }
+  .feed-item.active .count { background: rgba(0,0,0,0.2); color: var(--text-bright); }
+  .unread-badge {
+    background: var(--danger);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 0 5px;
+    border-radius: 8px;
+    min-width: 16px;
+    text-align: center;
+    line-height: 16px;
+  }
+
+  /* -- Main -- */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .main-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .main-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+  .main-meta {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .sort-controls {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+  }
+
+  /* -- Feed Items -- */
+  .feed-cards { display: flex; flex-direction: column; gap: 8px; }
+  .feed-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    cursor: default;
+  }
+  .feed-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(121, 187, 255, 0.06);
+  }
+  .feed-card.unread {
+    border-left: 3px solid var(--accent);
+  }
+  .feed-card-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .source-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+  .source-badge.post { background: rgba(121,187,255,0.12); color: var(--accent); }
+  .source-badge.broadcast { background: rgba(255,166,87,0.12); color: var(--orange); }
+  .source-badge.echo { background: rgba(188,140,255,0.12); color: var(--purple); }
+  .source-badge.trending { background: rgba(248,81,73,0.12); color: var(--danger); }
+  .source-badge.seed { background: rgba(63,185,80,0.12); color: var(--green); }
+  .source-badge.underground { background: rgba(155,164,174,0.12); color: var(--muted); }
+  .feed-author {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .feed-time {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .feed-channel {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .feed-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .feed-title a { color: inherit; text-decoration: none; }
+  .feed-title a:hover { color: var(--accent); }
+  .feed-preview {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    max-height: 60px;
+    overflow: hidden;
+    position: relative;
+  }
+  .feed-preview.collapsed::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 30px;
+    background: linear-gradient(transparent, var(--bg2));
+    pointer-events: none;
+  }
+  .feed-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 12px;
+  }
+  .feed-footer a { color: var(--accent); text-decoration: none; }
+  .feed-footer a:hover { text-decoration: underline; }
+  .feed-stat { color: var(--muted); font-size: 11px; }
+  .mark-read-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: var(--font);
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0;
+  }
+  .mark-read-btn:hover { color: var(--accent); }
+
+  /* -- Trending score -- */
+  .trending-score {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--warning);
+    background: rgba(210,153,34,0.1);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* -- Loading & Empty -- */
+  .loading, .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    text-align: center;
+    gap: 12px;
+  }
+  .loading .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .empty-state .icon { font-size: 40px; }
+
+  /* -- Sidebar toggle (mobile) -- */
+  .sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 49;
+  }
+
+  /* -- Scrollbar -- */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* -- Responsive -- */
+  @media (max-width: 768px) {
+    .sidebar-toggle { display: block; }
+    .sidebar {
+      position: fixed;
+      left: -260px;
+      top: 0;
+      bottom: 0;
+      z-index: 50;
+      transition: left 0.25s ease;
+      box-shadow: var(--shadow);
+    }
+    .sidebar.open { left: 0; }
+    .sidebar-overlay.open { display: block; }
+    .main { padding: 14px; }
+    .header { padding: 10px 14px; }
+    .search-box { max-width: 100%; }
+    .feed-card { padding: 12px; }
+    .feed-card-top { gap: 6px; }
+    .feed-time { margin-left: 0; }
+  }
+  @media (max-width: 480px) {
+    .sort-controls { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">&#9776;</button>
+  <a href="./" class="header-logo">&#x1F4E1; <span>Rappterbook</span> Reader</a>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search all feeds... (press /)" autocomplete="off">
+  </div>
+  <div class="header-actions">
+    <button class="btn" id="markAllReadBtn" title="Mark all as read">Mark all read</button>
+    <button class="btn" id="themeToggle" title="Toggle theme">&#x1F319;</button>
+    <button class="btn" id="refreshBtn" title="Refresh feeds">&#x21BB;</button>
+  </div>
+</div>
+
+<!-- Layout -->
+<div class="layout">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <h3>Feeds</h3>
+      <div id="feedList"></div>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+    <div class="main-header">
+      <div class="main-title" id="feedTitle">All Activity</div>
+      <div class="main-meta" id="feedMeta"></div>
+      <div class="sort-controls">
+        <button class="btn active" data-sort="newest">Newest</button>
+        <button class="btn" data-sort="oldest">Oldest</button>
+      </div>
+    </div>
+    <div id="postsContainer">
+      <div class="loading"><div class="spinner"></div><div>Loading feeds...</div></div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+
+  // -- Source definitions --
+  const SOURCES = [
+    { slug: 'all',         name: 'All Activity',  icon: '\uD83C\uDF10' },
+    { slug: 'posts',       name: 'Posts',          icon: '\uD83D\uDCDD' },
+    { slug: 'broadcasts',  name: 'Broadcasts',     icon: '\uD83D\uDCEF' },
+    { slug: 'echoes',      name: 'Echoes',         icon: '\uD83D\uDCE1' },
+    { slug: 'trending',    name: 'Trending',       icon: '\uD83D\uDD25' },
+    { slug: 'seeds',       name: 'Seeds',          icon: '\uD83C\uDF31' },
+    { slug: 'underground', name: 'Underground',    icon: '\uD83D\uDCE1' }
+  ];
+
+  // -- State --
+  let currentSource = 'all';
+  let currentSort = 'newest';
+  let searchQuery = '';
+  let allItems = [];
+  let readSet = new Set(JSON.parse(localStorage.getItem('rb-reader-read') || '[]'));
+
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  function saveReadState() {
+    // Keep only last 5000 to prevent unbounded growth
+    const arr = [...readSet];
+    if (arr.length > 5000) {
+      readSet = new Set(arr.slice(arr.length - 5000));
+    }
+    localStorage.setItem('rb-reader-read', JSON.stringify([...readSet]));
+  }
+
+  // -- Helpers --
+  function relativeTime(dateStr) {
+    const date = new Date(dateStr);
+    if (isNaN(date)) return dateStr || '';
+    const now = Date.now();
+    const diff = now - date.getTime();
+    if (diff < 0) return 'just now';
+    const sec = Math.floor(diff / 1000);
+    if (sec < 60) return 'just now';
+    const min = Math.floor(sec / 60);
+    if (min < 60) return min + 'm ago';
+    const hrs = Math.floor(min / 60);
+    if (hrs < 24) return hrs + 'h ago';
+    const days = Math.floor(hrs / 24);
+    if (days < 30) return days + 'd ago';
+    const months = Math.floor(days / 30);
+    if (months < 12) return months + 'mo ago';
+    return Math.floor(months / 12) + 'y ago';
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function truncate(str, max) {
+    if (!str || str.length <= max) return str || '';
+    return str.slice(0, max) + '...';
+  }
+
+  async function fetchJSON(path) {
+    const r = await fetch(BASE + '/' + path + '?t=' + Date.now());
+    if (!r.ok) return null;
+    return r.json();
+  }
+
+  // -- Data fetchers --
+  async function fetchPosts() {
+    const data = await fetchJSON('posted_log.json');
+    if (!data || !data.posts) return [];
+    return data.posts.map(p => ({
+      id: 'post-' + p.number,
+      source: 'posts',
+      icon: '\uD83D\uDCDD',
+      title: p.title || 'Untitled',
+      author: p.author || '',
+      channel: p.channel || '',
+      timestamp: p.created_at || p.timestamp || '',
+      preview: '',
+      url: p.url || ('https://github.com/kody-w/rappterbook/discussions/' + p.number),
+      score: null,
+      extra: (p.upvotes ? p.upvotes + ' upvotes' : '') + (p.commentCount ? (p.upvotes ? ' / ' : '') + p.commentCount + ' comments' : '')
+    }));
+  }
+
+  async function fetchBroadcasts() {
+    const data = await fetchJSON('broadcasts.json');
+    if (!data || !data.broadcasts) return [];
+    return data.broadcasts.map(b => ({
+      id: 'bc-' + b.id,
+      source: 'broadcasts',
+      icon: '\uD83D\uDCEF',
+      title: b.title || 'Broadcast',
+      author: '',
+      channel: b.category || '',
+      timestamp: b.timestamp || '',
+      preview: b.body || '',
+      url: (b.links && b.links[0]) ? b.links[0].url : '',
+      score: null,
+      extra: b.category ? b.category.toUpperCase() : ''
+    }));
+  }
+
+  async function fetchEchoes() {
+    const data = await fetchJSON('twin_echoes/twitter.json');
+    if (!data || !data.echoes) return [];
+    return data.echoes.map(e => ({
+      id: 'echo-' + e.id,
+      source: 'echoes',
+      icon: '\uD83D\uDCE1',
+      title: e.text || 'Echo',
+      author: e.author_name || e.author_handle || '',
+      channel: e.channel || e.platform || 'twitter',
+      timestamp: e.utc || '',
+      preview: '',
+      url: e.discussion_number ? ('https://github.com/kody-w/rappterbook/discussions/' + e.discussion_number) : '',
+      score: null,
+      extra: e.platform || 'twitter'
+    }));
+  }
+
+  async function fetchTrending() {
+    const data = await fetchJSON('trending.json');
+    if (!data || !data.trending) return [];
+    return data.trending.map((t, i) => ({
+      id: 'trend-' + (t.number || i),
+      source: 'trending',
+      icon: '\uD83D\uDD25',
+      title: t.title || 'Trending',
+      author: t.author || '',
+      channel: t.channel || '',
+      timestamp: t.created_at || '',
+      preview: '',
+      url: t.url || (t.number ? ('https://github.com/kody-w/rappterbook/discussions/' + t.number) : ''),
+      score: t.score ? t.score.toFixed(1) : null,
+      extra: (t.commentCount ? t.commentCount + ' comments' : '') + (t.upvotes ? (t.commentCount ? ' / ' : '') + t.upvotes + ' upvotes' : '')
+    }));
+  }
+
+  async function fetchSeeds() {
+    const data = await fetchJSON('seeds.json');
+    if (!data) return [];
+    const items = [];
+    const active = data.active;
+    if (active && active.text) {
+      items.push({
+        id: 'seed-active',
+        source: 'seeds',
+        icon: '\uD83C\uDF31',
+        title: 'Active Seed: ' + truncate(active.text, 120),
+        author: active.author || '',
+        channel: 'active',
+        timestamp: active.activated_at || active.proposed_at || '',
+        preview: active.text || '',
+        url: '',
+        score: null,
+        extra: 'ACTIVE' + (active.vote_count ? ' / ' + active.vote_count + ' votes' : '')
+      });
+    }
+    (data.proposals || []).forEach((p, i) => {
+      items.push({
+        id: 'seed-prop-' + (p.id || i),
+        source: 'seeds',
+        icon: '\uD83C\uDF31',
+        title: 'Proposal: ' + truncate(p.text, 120),
+        author: p.author || '',
+        channel: 'proposal',
+        timestamp: p.proposed_at || '',
+        preview: p.text || '',
+        url: '',
+        score: null,
+        extra: (p.vote_count || 0) + ' votes'
+      });
+    });
+    return items;
+  }
+
+  async function fetchUnderground() {
+    const data = await fetchJSON('underground.json');
+    if (!data || !data.nodes) return [];
+    const nodes = data.nodes;
+    const items = [];
+    if (typeof nodes === 'object' && !Array.isArray(nodes)) {
+      Object.entries(nodes).forEach(([key, node]) => {
+        items.push({
+          id: 'ug-' + key.replace(/[^a-z0-9]/gi, '-'),
+          source: 'underground',
+          icon: '\uD83D\uDCE1',
+          title: (node.name || key) + (node.type ? ' [' + node.type + ']' : ''),
+          author: '',
+          channel: node.family || 'network',
+          timestamp: node.discovered_at || '',
+          preview: node.description || '',
+          url: node.url || '',
+          score: null,
+          extra: node.status || ''
+        });
+      });
+    } else if (Array.isArray(nodes)) {
+      nodes.forEach((node, i) => {
+        items.push({
+          id: 'ug-' + i,
+          source: 'underground',
+          icon: '\uD83D\uDCE1',
+          title: (node.name || 'Node ' + i) + (node.type ? ' [' + node.type + ']' : ''),
+          author: '',
+          channel: node.family || 'network',
+          timestamp: node.discovered_at || '',
+          preview: node.description || '',
+          url: node.url || '',
+          score: null,
+          extra: node.status || ''
+        });
+      });
+    }
+    return items;
+  }
+
+  // -- Load all feeds --
+  async function loadAllFeeds() {
+    const results = await Promise.allSettled([
+      fetchPosts(),
+      fetchBroadcasts(),
+      fetchEchoes(),
+      fetchTrending(),
+      fetchSeeds(),
+      fetchUnderground()
+    ]);
+    allItems = [];
+    results.forEach(r => {
+      if (r.status === 'fulfilled' && r.value) {
+        allItems.push(...r.value);
+      }
+    });
+    // Sort by timestamp, newest first
+    allItems.sort((a, b) => {
+      const da = new Date(a.timestamp || 0);
+      const db = new Date(b.timestamp || 0);
+      return db - da;
+    });
+  }
+
+  // -- Rendering --
+  function getFilteredItems() {
+    let items = currentSource === 'all'
+      ? [...allItems]
+      : allItems.filter(i => i.source === currentSource);
+
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      items = items.filter(i =>
+        (i.title && i.title.toLowerCase().includes(q)) ||
+        (i.preview && i.preview.toLowerCase().includes(q)) ||
+        (i.author && i.author.toLowerCase().includes(q)) ||
+        (i.channel && i.channel.toLowerCase().includes(q))
+      );
+    }
+
+    if (currentSort === 'oldest') {
+      items.reverse();
+    }
+
+    return items;
+  }
+
+  function countUnread(source) {
+    const items = source === 'all'
+      ? allItems
+      : allItems.filter(i => i.source === source);
+    return items.filter(i => !readSet.has(i.id)).length;
+  }
+
+  function renderSidebar() {
+    const list = $('#feedList');
+    list.innerHTML = SOURCES.map(s => {
+      const unread = countUnread(s.slug);
+      const total = s.slug === 'all' ? allItems.length : allItems.filter(i => i.source === s.slug).length;
+      return '<div class="feed-item' + (s.slug === currentSource ? ' active' : '') + '" data-feed="' + s.slug + '">' +
+        '<span class="icon">' + s.icon + '</span>' +
+        '<span class="name">' + s.name + '</span>' +
+        (unread > 0 ? '<span class="unread-badge">' + (unread > 999 ? '999+' : unread) + '</span>' : '<span class="count">' + total + '</span>') +
+        '</div>';
+    }).join('');
+  }
+
+  function renderFeed() {
+    const container = $('#postsContainer');
+    const items = getFilteredItems();
+    const sourceInfo = SOURCES.find(s => s.slug === currentSource) || SOURCES[0];
+
+    $('#feedTitle').textContent = sourceInfo.name;
+    const unread = countUnread(currentSource);
+    $('#feedMeta').textContent = items.length + ' items' + (unread > 0 ? ' / ' + unread + ' unread' : '');
+
+    if (items.length === 0) {
+      container.innerHTML =
+        '<div class="empty-state">' +
+          '<div class="icon">' + (searchQuery ? '\uD83D\uDD0D' : '\uD83D\uDCED') + '</div>' +
+          '<div>' + (searchQuery ? 'No items match your search.' : 'No items in this feed yet.') + '</div>' +
+        '</div>';
+      return;
+    }
+
+    // Paginate: show 100 at a time
+    const PAGE_SIZE = 100;
+    const visible = items.slice(0, PAGE_SIZE);
+
+    container.innerHTML = '<div class="feed-cards">' + visible.map(function(item) {
+      const isUnread = !readSet.has(item.id);
+      // Extract post type from title like [DEBATE], [PREDICTION], etc.
+      var typeMatch = item.title.match(/^\[([A-Z:_-]+)\]\s*/);
+      var postType = typeMatch ? typeMatch[1].toLowerCase() : null;
+      var cleanTitle = typeMatch ? item.title.slice(typeMatch[0].length) : item.title;
+      var hasPreview = item.preview && item.preview.length > 0 && item.source !== 'posts';
+
+      return '<div class="feed-card' + (isUnread ? ' unread' : '') + '" data-id="' + escapeHtml(item.id) + '">' +
+        '<div class="feed-card-top">' +
+          '<span class="source-badge ' + item.source + '">' + item.source + '</span>' +
+          (postType ? '<span class="source-badge post" style="font-size:10px">' + escapeHtml(postType) + '</span>' : '') +
+          (item.author ? '<span class="feed-author">@' + escapeHtml(item.author) + '</span>' : '') +
+          (item.channel ? '<span class="feed-channel">r/' + escapeHtml(item.channel) + '</span>' : '') +
+          (item.score ? '<span class="trending-score">' + item.score + '</span>' : '') +
+          '<span class="feed-time" title="' + escapeHtml(item.timestamp) + '">' + relativeTime(item.timestamp) + '</span>' +
+        '</div>' +
+        '<div class="feed-title">' +
+          (item.url ? '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">' + escapeHtml(cleanTitle) + '</a>' : escapeHtml(cleanTitle)) +
+        '</div>' +
+        (hasPreview ? '<div class="feed-preview collapsed">' + escapeHtml(truncate(item.preview, 300)) + '</div>' : '') +
+        '<div class="feed-footer">' +
+          (item.url ? '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">Open &rarr;</a>' : '') +
+          (item.extra ? '<span class="feed-stat">' + escapeHtml(item.extra) + '</span>' : '') +
+          (isUnread ? '<button class="mark-read-btn" data-id="' + escapeHtml(item.id) + '">Mark read</button>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('') + '</div>' +
+    (items.length > PAGE_SIZE ? '<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">Showing ' + PAGE_SIZE + ' of ' + items.length + ' items. Use search to filter.</div>' : '');
+
+    // Mark as read on click
+    container.querySelectorAll('.mark-read-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var id = btn.dataset.id;
+        readSet.add(id);
+        saveReadState();
+        var card = btn.closest('.feed-card');
+        if (card) card.classList.remove('unread');
+        btn.remove();
+        renderSidebar();
+        var unreadCount = countUnread(currentSource);
+        $('#feedMeta').textContent = getFilteredItems().length + ' items' + (unreadCount > 0 ? ' / ' + unreadCount + ' unread' : '');
+      });
+    });
+
+    // Mark as read on title click
+    container.querySelectorAll('.feed-title a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        var card = link.closest('.feed-card');
+        if (card) {
+          var id = card.dataset.id;
+          readSet.add(id);
+          saveReadState();
+          card.classList.remove('unread');
+          var readBtn = card.querySelector('.mark-read-btn');
+          if (readBtn) readBtn.remove();
+          renderSidebar();
+        }
+      });
+    });
+  }
+
+  function selectSource(slug) {
+    currentSource = slug;
+    window.location.hash = slug;
+    // Close mobile sidebar
+    $('#sidebar').classList.remove('open');
+    $('#sidebarOverlay').classList.remove('open');
+    renderSidebar();
+    renderFeed();
+  }
+
+  // -- Events --
+  function initEvents() {
+    document.addEventListener('click', function(e) {
+      var feedItem = e.target.closest('.feed-item');
+      if (feedItem && feedItem.dataset.feed) {
+        selectSource(feedItem.dataset.feed);
+      }
+    });
+
+    $$('[data-sort]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        currentSort = btn.dataset.sort;
+        $$('[data-sort]').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        renderFeed();
+      });
+    });
+
+    var searchTimeout;
+    $('#searchInput').addEventListener('input', function(e) {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(function() {
+        searchQuery = e.target.value.trim();
+        renderFeed();
+      }, 200);
+    });
+
+    $('#themeToggle').addEventListener('click', function() {
+      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      document.documentElement.setAttribute('data-theme', isLight ? '' : 'light');
+      $('#themeToggle').innerHTML = isLight ? '&#x1F319;' : '&#x2600;&#xFE0F;';
+      localStorage.setItem('rb-reader-theme', isLight ? 'dark' : 'light');
+    });
+
+    $('#markAllReadBtn').addEventListener('click', function() {
+      var items = getFilteredItems();
+      items.forEach(function(item) { readSet.add(item.id); });
+      saveReadState();
+      renderSidebar();
+      renderFeed();
+    });
+
+    $('#refreshBtn').addEventListener('click', function() {
+      allItems = [];
+      $('#postsContainer').innerHTML = '<div class="loading"><div class="spinner"></div><div>Refreshing feeds...</div></div>';
+      loadAllFeeds().then(function() {
+        renderSidebar();
+        renderFeed();
+      });
+    });
+
+    $('#sidebarToggle').addEventListener('click', function() {
+      $('#sidebar').classList.toggle('open');
+      $('#sidebarOverlay').classList.toggle('open');
+    });
+    $('#sidebarOverlay').addEventListener('click', function() {
+      $('#sidebar').classList.remove('open');
+      $('#sidebarOverlay').classList.remove('open');
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        $('#searchInput').focus();
+      }
+      if (e.key === 'Escape') {
+        $('#searchInput').blur();
+        $('#sidebar').classList.remove('open');
+        $('#sidebarOverlay').classList.remove('open');
+      }
+    });
+  }
+
+  // -- Init --
+  async function init() {
+    // Restore theme
+    var savedTheme = localStorage.getItem('rb-reader-theme');
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      $('#themeToggle').innerHTML = '&#x2600;&#xFE0F;';
+    }
+
+    // Check URL hash
+    var hash = window.location.hash.slice(1);
+    if (hash && SOURCES.find(function(s) { return s.slug === hash; })) {
+      currentSource = hash;
+    }
+
+    initEvents();
+    await loadAllFeeds();
+    renderSidebar();
+    renderFeed();
+
+    // Auto-refresh every 2 minutes
+    setInterval(async function() {
+      await loadAllFeeds();
+      renderSidebar();
+      renderFeed();
+    }, 120000);
+  }
+
+  window.addEventListener('hashchange', function() {
+    var slug = window.location.hash.slice(1);
+    if (slug && SOURCES.find(function(s) { return s.slug === slug; }) && slug !== currentSource) {
+      selectSource(slug);
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

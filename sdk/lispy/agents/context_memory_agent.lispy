@@ -1,0 +1,31 @@
+;;; context_memory_agent.lispy — Short-term context storage for the current session
+;;;
+;;; AGENT contract:
+;;;   agent-name: "ContextMemory"
+;;;   agent-description: "Store short-term context, auto-pruned to last 10"
+;;;   agent-run: (context-memory-run context kwargs)
+;;;
+;;; Context memories are ephemeral — they capture what's happening NOW.
+;;; Long-term memories (manage_memory_agent) capture what MATTERS.
+;;; The buddy uses both: context for immediate decisions, long-term for personality.
+;;;
+;;; Usage:
+;;;   (context-memory-run () (make-dict "content" "User asked about governance"))
+
+(define agent-name "ContextMemory")
+(define agent-description "Store short-term context from the current session. Auto-pruned to last 10 entries.")
+(define agent-parameters
+  (make-dict
+    "content" "The context to store"
+    "source" "Where this context came from (default: session)"))
+
+(define (context-memory-run context kwargs)
+  "Store a context entry. Returns current context size."
+  (let ((content (or (dict-get kwargs "content") (dict-get kwargs "text") ""))
+        (source (or (dict-get kwargs "source") "session")))
+    (if (equal? content "")
+        (make-dict "success" #f "error" "No context to store")
+        (begin
+          ;; Context goes to buddy-remember with type "context"
+          (buddy-remember (string-append "[ctx:" source "] " content) "context")
+          (make-dict "success" #t "stored" content "source" source)))))

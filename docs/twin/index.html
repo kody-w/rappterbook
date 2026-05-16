@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Twin — Command Center</title>
+<style>
+:root{--bg:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--border:#222;--text:#e0e0e0;--muted:#888;--accent:#00d4aa;--accent2:#0078d4;--code-bg:#161616;--draft:#f59e0b;--published:#00d4aa;--review:#8b5cf6;--planned:#6b7280;--live:#00d4aa;--warn:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+
+.header{border-bottom:1px solid var(--border);padding:12px 24px;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:16px}
+.header h1{font-size:18px;font-weight:700;cursor:pointer}.header h1 span{color:var(--accent)}
+.header nav{margin-left:auto;font-size:13px;display:flex;gap:16px;align-items:center}
+.header nav a{color:var(--muted)}
+.nav-tab{padding:4px 12px;border-radius:4px;font-size:13px;cursor:pointer;color:var(--muted);border:1px solid transparent;transition:all .2s}
+.nav-tab:hover,.nav-tab.active{color:var(--accent);border-color:var(--accent);text-decoration:none}
+
+/* Views */
+.view{display:none;max-width:1200px;margin:0 auto;padding:24px}
+.view.active{display:block}
+
+/* Dashboard */
+.dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:32px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.stat-card .num{font-size:32px;font-weight:800;color:var(--accent)}
+.stat-card .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+.category-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+.platform-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:8px}
+.p-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.p-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.p-card .p-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.p-card .p-icon{font-size:20px;font-weight:800;color:var(--accent);min-width:36px;text-align:center}
+.p-card .p-name{font-weight:700;font-size:15px}
+.p-card .p-status{margin-left:auto;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.p-card .p-status.live{background:rgba(0,212,170,.15);color:var(--live);border:1px solid var(--live)}
+.p-card .p-status.planned{background:rgba(107,114,128,.15);color:var(--planned);border:1px solid var(--planned)}
+.p-card .p-desc{font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.4}
+.p-card .p-counts{display:flex;gap:12px;font-size:12px}
+.p-card .p-counts span{padding:2px 8px;border-radius:4px;border:1px solid var(--border)}
+.p-card .p-counts .has{border-color:var(--accent);color:var(--accent)}
+.p-card .p-bar{position:absolute;bottom:0;left:0;height:3px;background:var(--accent);transition:width .3s}
+
+/* Platform detail view */
+.platform-hero{padding:24px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.platform-hero .ph-top{display:flex;align-items:center;gap:16px;margin-bottom:8px}
+.platform-hero .ph-icon{font-size:32px;font-weight:800;color:var(--accent)}
+.platform-hero .ph-name{font-size:28px;font-weight:800}
+.platform-hero .ph-meta{display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted);margin-top:4px}
+.platform-hero .ph-desc{color:var(--muted);font-size:14px;margin-top:8px;max-width:640px}
+
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+/* Cards */
+.card{border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:12px;background:var(--surface);transition:border-color .2s}
+.card:hover{border-color:var(--accent)}
+.card h3{font-size:17px;font-weight:700;margin-bottom:4px}
+.card h3 a{color:var(--text)}.card h3 a:hover{color:var(--accent);text-decoration:none}
+.card .meta{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.badge-draft{background:rgba(245,158,11,0.15);color:var(--draft);border:1px solid var(--draft)}
+.badge-review{background:rgba(139,92,246,0.15);color:var(--review);border:1px solid var(--review)}
+.badge-published{background:rgba(0,212,170,0.15);color:var(--published);border:1px solid var(--published)}
+.badge-synced{background:rgba(0,212,170,0.1);color:var(--published);border:1px solid var(--border)}
+.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:11px;color:var(--muted);border:1px solid var(--border);margin-right:3px}
+.card .excerpt{color:var(--muted);font-size:13px;line-height:1.4;margin-top:6px}
+.card .social{margin-top:10px;padding:10px;background:var(--surface2);border-radius:6px;font-size:12px;color:var(--muted);border-left:3px solid var(--accent2)}
+.card .social strong{color:var(--text);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.cross-post{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:4px;font-size:10px;color:var(--accent2);border:1px solid var(--accent2);margin-left:3px}
+
+.outline-box{margin-top:10px;padding:10px;background:var(--code-bg);border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--muted);white-space:pre-wrap;font-family:'Cascadia Code',Consolas,monospace;line-height:1.5;max-height:200px;overflow-y:auto}
+
+.media-box{margin-top:10px;padding:10px;background:var(--surface2);border-radius:6px;border-left:3px solid #ec4899}
+.media-box strong{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#ec4899}
+.media-item{margin-top:6px;font-size:12px;color:var(--muted)}
+.media-item .tool-badge{font-size:10px;padding:1px 5px;border-radius:3px;border:1px solid var(--border);margin-right:4px}
+.media-item .prompt-text{display:block;margin-top:3px;padding:6px;background:var(--code-bg);border-radius:4px;font-family:monospace;font-size:11px;white-space:pre-wrap;cursor:pointer;transition:background .2s}
+.media-item .prompt-text:hover{background:var(--surface2)}
+.media-item .prompt-text.copied{background:rgba(0,212,170,.1)}
+
+/* Sync matrix */
+.sync-grid{overflow-x:auto;margin:16px 0}
+.sync-grid table{border-collapse:collapse;font-size:12px;width:100%}
+.sync-grid th,.sync-grid td{padding:6px 10px;border:1px solid var(--border);text-align:center;white-space:nowrap}
+.sync-grid th{background:var(--surface2);font-weight:600;position:sticky;top:0}
+.sync-grid td:first-child{text-align:left;font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;position:sticky;left:0;background:var(--surface);z-index:1}
+.sync-grid .dot{display:inline-block;width:10px;height:10px;border-radius:50%}
+.sync-grid .dot-published{background:var(--published)}
+.sync-grid .dot-draft{background:var(--draft)}
+.sync-grid .dot-target{background:var(--accent2);opacity:.4}
+.sync-grid .dot-none{background:var(--border)}
+
+/* Post view */
+.post-view{max-width:800px;margin:0 auto;padding:40px 24px}
+.post-view .back{font-size:13px;color:var(--muted);margin-bottom:24px;display:inline-block;cursor:pointer}
+.post-view h1{font-size:28px;font-weight:800;line-height:1.2;margin-bottom:12px}
+.post-view .post-meta{color:var(--muted);font-size:13px;margin-bottom:24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.post-body h2{font-size:20px;font-weight:700;margin:24px 0 8px}
+.post-body h3{font-size:16px;font-weight:600;margin:16px 0 6px}
+.post-body p{margin-bottom:12px;font-size:15px}
+.post-body ul,.post-body ol{margin:0 0 12px 24px}
+.post-body li{margin-bottom:4px}
+.post-body blockquote{border-left:3px solid var(--accent);padding:8px 16px;margin:12px 0;color:var(--muted);background:var(--surface2);border-radius:0 6px 6px 0}
+.post-body code{background:var(--code-bg);padding:2px 6px;border-radius:3px;font-family:'Cascadia Code',Consolas,monospace;font-size:13px}
+.post-body pre{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:14px;overflow-x:auto;margin:12px 0;font-size:12px;line-height:1.5}
+.post-body pre code{background:none;padding:0}
+.post-body table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+.post-body th,.post-body td{padding:6px 10px;border:1px solid var(--border);text-align:left}
+.post-body th{background:var(--surface2);font-weight:600}
+.post-body hr{border:none;border-top:1px solid var(--border);margin:20px 0}
+
+/* Responsive */
+@media(max-width:640px){
+  .platform-grid{grid-template-columns:1fr}
+  .dash-stats{grid-template-columns:repeat(2,1fr)}
+  .header nav{gap:8px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1 onclick="navigate('')">Content <span>Twin</span></h1>
+  <nav>
+    <a href="#" class="nav-tab" data-view="dashboard">Dashboard</a>
+    <a href="#" class="nav-tab" data-view="sync">Sync Matrix</a>
+    <a href="../blog/">Blog</a>
+    <a href="https://kodyw.com" target="_blank">kodyw.com</a>
+  </nav>
+</div>
+
+<!-- Dashboard View -->
+<div class="view" id="view-dashboard">
+  <div class="dash-stats" id="dash-stats"></div>
+  <div id="platform-sections"></div>
+</div>
+
+<!-- Platform Detail View -->
+<div class="view" id="view-platform">
+  <div id="platform-detail"></div>
+</div>
+
+<!-- Sync Matrix View -->
+<div class="view" id="view-sync">
+  <h2 style="font-size:22px;font-weight:800;margin-bottom:4px">Sync Matrix</h2>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:20px">Content across all platforms. Green = published. Yellow = drafted. Blue = cross-post target. Gray = no content.</p>
+  <div id="sync-matrix"></div>
+</div>
+
+<!-- Post Detail View -->
+<div class="view" id="view-post">
+  <div class="post-view" id="post-view-inner"></div>
+</div>
+
+<script>
+const BASE = location.pathname.replace(/\/[^/]*$/, '/');
+let DATA = null;
+
+async function loadIndex() {
+  if (DATA) return DATA;
+  const res = await fetch(BASE + 'index.json?v=' + Date.now());
+  DATA = await res.json();
+  return DATA;
+}
+
+async function loadPost(slug) {
+  try {
+    const res = await fetch(BASE + slug + '.md?v=' + Date.now());
+    if (!res.ok) return null;
+    const text = await res.text();
+    return text && text.length > 10 ? text : null;
+  } catch { return null; }
+}
+
+function renderMarkdown(md) {
+  md = md.replace(/^---[\s\S]*?---\s*/, '');
+  md = md.replace(/^#\s+.+\n*/, '');
+  let html = md
+    .replace(/```(\w*)\n([\s\S]*?)```/g, (_, l, c) => '<pre><code>' + c.replace(/</g, '&lt;').replace(/>/g, '&gt;').trim() + '</code></pre>')
+    .replace(/(\|.+\|)\n(\|[\s:-]+\|)\n((?:\|.+\|\n?)+)/g, (_, h, s, r) => {
+      const ths = h.split('|').filter(c=>c.trim()).map(c=>'<th>'+c.trim()+'</th>').join('');
+      const trs = r.trim().split('\n').map(row=>'<tr>'+row.split('|').filter(c=>c.trim()).map(c=>'<td>'+c.trim()+'</td>').join('')+'</tr>').join('');
+      return '<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';
+    })
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/\n{2,}/g, '</p><p>');
+  html = html.replace(/((?:<li>.*<\/li>\s*)+)/g, '<ul>$1</ul>');
+  html = '<p>' + html + '</p>';
+  html = html.replace(/<p>\s*<\/p>/g, '').replace(/<p>\s*(<[huptb])/g, '$1').replace(/(<\/[huptb][^>]*>)\s*<\/p>/g, '$1').replace(/<p>\s*(<hr>)/g,'$1').replace(/(<hr>)\s*<\/p>/g,'$1');
+  return html;
+}
+
+function badge(s) { return '<span class="badge badge-'+s+'">'+s+'</span>'; }
+
+// Group platforms by type for dashboard
+const TYPE_CATEGORIES = {
+  'Content': ['wordpress','blog','podcast','newsletter','email'],
+  'Video & Live': ['video','livestream'],
+  'Social': ['social'],
+  'Community': ['community','protocol'],
+  'Products': ['books','courses','digital-products'],
+  'Distribution': ['podcast-distribution','launch'],
+  'Code': ['code','demos']
+};
+
+function categorize(type) {
+  for (const [cat, types] of Object.entries(TYPE_CATEGORIES)) {
+    if (types.includes(type)) return cat;
+  }
+  return 'Other';
+}
+
+// ── Dashboard ──
+async function showDashboard() {
+  const data = await loadIndex();
+  const platforms = data._meta.platforms;
+  const drafts = data.drafts || [];
+  const synced = data.synced || {};
+
+  const totalDrafts = drafts.length;
+  const totalSynced = Object.values(synced).flat().length;
+  const totalPlatforms = Object.keys(platforms).length;
+  const livePlatforms = Object.values(platforms).filter(p => p.status === 'live').length;
+  const crossPosts = drafts.reduce((n, d) => n + (d.cross_post || []).length, 0);
+  const mediaPrompts = drafts.reduce((n, d) => n + (d.media_prompts || []).length, 0);
+
+  document.getElementById('dash-stats').innerHTML =
+    stat(totalPlatforms, 'Platforms') + stat(livePlatforms, 'Live') +
+    stat(totalDrafts, 'Drafts') + stat(totalSynced, 'Published') +
+    stat(crossPosts, 'Cross-Posts') + stat(mediaPrompts, 'Media Prompts');
+
+  // Group platforms
+  const groups = {};
+  for (const [key, p] of Object.entries(platforms)) {
+    const cat = categorize(p.type);
+    if (!groups[cat]) groups[cat] = [];
+    const draftCount = drafts.filter(d => d.platform === key).length;
+    const syncedCount = (synced[key] || []).length;
+    const targetCount = drafts.filter(d => (d.cross_post || []).includes(key)).length;
+    groups[cat].push({ key, ...p, draftCount, syncedCount, targetCount, total: draftCount + syncedCount });
+  }
+
+  let html = '';
+  for (const [cat, items] of Object.entries(groups)) {
+    if (items.length === 0) continue;
+    html += '<div class="category-title">' + cat + '</div><div class="platform-grid">';
+    for (const p of items.sort((a,b) => b.total - a.total)) {
+      const pct = p.total > 0 ? Math.round(p.syncedCount / Math.max(p.total, 1) * 100) : 0;
+      html += '<div class="p-card" onclick="navigate(\'platform/'+p.key+'\')">' +
+        '<div class="p-top"><span class="p-icon">'+p.icon+'</span><span class="p-name">'+p.name+'</span>' +
+        '<span class="p-status '+p.status+'">'+p.status+'</span></div>' +
+        (p.description ? '<div class="p-desc">'+p.description+'</div>' : '') +
+        '<div class="p-counts">' +
+        (p.syncedCount > 0 ? '<span class="has">'+p.syncedCount+' published</span>' : '') +
+        (p.draftCount > 0 ? '<span class="has" style="border-color:var(--draft);color:var(--draft)">'+p.draftCount+' drafts</span>' : '') +
+        (p.targetCount > 0 ? '<span>'+p.targetCount+' incoming</span>' : '') +
+        (p.total === 0 && p.targetCount === 0 ? '<span>empty</span>' : '') +
+        '</div>' +
+        '<div class="p-bar" style="width:'+pct+'%"></div></div>';
+    }
+    html += '</div>';
+  }
+  document.getElementById('platform-sections').innerHTML = html;
+}
+
+function stat(n, label) {
+  return '<div class="stat-card"><div class="num">'+n+'</div><div class="label">'+label+'</div></div>';
+}
+
+// ── Platform Detail ──
+async function showPlatform(key) {
+  const data = await loadIndex();
+  const platforms = data._meta.platforms;
+  const p = platforms[key];
+  if (!p) { document.getElementById('platform-detail').innerHTML = '<p>Platform not found: '+key+'</p>'; return; }
+
+  const drafts = (data.drafts || []).filter(d => d.platform === key);
+  const incoming = (data.drafts || []).filter(d => (d.cross_post || []).includes(key));
+  const synced = (data.synced || {})[key] || [];
+
+  let html = '<a href="#" onclick="navigate(\'\');return false" style="font-size:13px;color:var(--muted)">&larr; All Platforms</a>';
+  html += '<div class="platform-hero"><div class="ph-top"><span class="ph-icon">'+p.icon+'</span><span class="ph-name">'+p.name+'</span></div>';
+  html += '<div class="ph-meta"><span class="p-status '+(p.status)+'">'+p.status+'</span>';
+  if (p.url) html += '<a href="'+p.url+'" target="_blank">'+p.url+' &#8599;</a>';
+  html += '<span>'+p.type+'</span></div>';
+  if (p.description) html += '<div class="ph-desc">'+p.description+'</div>';
+  html += '</div>';
+
+  // Quick stats
+  html += '<div class="dash-stats" style="margin-bottom:20px">';
+  html += stat(drafts.length, 'Drafts') + stat(synced.length, 'Published') + stat(incoming.length, 'Incoming Cross-Posts');
+  html += '</div>';
+
+  // Drafts
+  if (drafts.length > 0) {
+    html += '<div class="section-title">Drafts (' + drafts.length + ')</div>';
+    for (const post of drafts) html += renderCard(post, platforms);
+  }
+
+  // Incoming cross-posts
+  if (incoming.length > 0) {
+    html += '<div class="section-title">Incoming Cross-Posts (' + incoming.length + ')</div>';
+    for (const post of incoming) html += renderCard(post, platforms, true);
+  }
+
+  // Synced/published
+  if (synced.length > 0) {
+    html += '<div class="section-title">Published (' + synced.length + ')</div>';
+    for (const item of synced) {
+      html += '<div class="card"><h3><a href="'+item.url+'" target="_blank">'+item.title+' &#8599;</a></h3>' +
+        '<div class="meta">'+badge('synced')+' <span>'+item.date+'</span>' +
+        (item.views != null ? ' <span>'+item.views+' views</span>' : '') +
+        (item.duration ? ' <span>'+item.duration+'</span>' : '') +
+        '</div></div>';
+    }
+  }
+
+  if (drafts.length === 0 && synced.length === 0 && incoming.length === 0) {
+    html += '<div style="padding:40px;text-align:center;color:var(--muted)"><p style="font-size:18px;margin-bottom:8px">No content yet</p><p>This platform is ready for drafts.</p></div>';
+  }
+
+  document.getElementById('platform-detail').innerHTML = html;
+}
+
+function renderCard(post, platforms, isIncoming) {
+  const pIcon = platforms[post.platform] ? platforms[post.platform].icon : '';
+  const crossPosts = (post.cross_post || []).map(cp => {
+    const cp_p = platforms[cp]; return cp_p ? '<span class="cross-post">'+cp_p.icon+' '+cp_p.name+'</span>' : '';
+  }).join('');
+  const tags = (post.tags || []).map(t => '<span class="tag">'+t+'</span>').join('');
+
+  let mediaHtml = '';
+  if (post.media_prompts && post.media_prompts.length > 0) {
+    mediaHtml = '<div class="media-box"><strong>Media Prompts ('+post.media_prompts.length+')</strong>';
+    for (const mp of post.media_prompts) {
+      mediaHtml += '<div class="media-item"><span class="tool-badge">'+mp.tool+'</span> <span style="color:var(--text)">'+mp.description+'</span>' +
+        '<span class="prompt-text" onclick="copyPrompt(this)" title="Click to copy">'+mp.prompt+'</span></div>';
+    }
+    mediaHtml += '</div>';
+  }
+
+  let outlineHtml = '';
+  if (post.outline) {
+    outlineHtml = '<div class="outline-box">'+post.outline+'</div>';
+  }
+
+  return '<div class="card">' +
+    '<h3><a href="#post/'+post.slug+'">'+post.title+'</a></h3>' +
+    '<div class="meta">' + badge(post.status) +
+    (isIncoming ? ' <span style="color:var(--accent2)">from '+pIcon+' '+(platforms[post.platform]||{}).name+'</span>' : '') +
+    ' <span>'+post.created+'</span> ' +
+    (post.register ? '<span class="tag">'+post.register+'</span>' : '') + crossPosts + '</div>' +
+    '<div>'+tags+'</div>' +
+    (post.notes ? '<div class="excerpt">'+post.notes+'</div>' : '') +
+    (post.linkedin_hook ? '<div class="social"><strong>LinkedIn hook:</strong><br>'+post.linkedin_hook+'</div>' : '') +
+    outlineHtml + mediaHtml + '</div>';
+}
+
+function copyPrompt(el) {
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 1500);
+  });
+}
+
+// ── Sync Matrix ──
+async function showSyncMatrix() {
+  const data = await loadIndex();
+  const platforms = data._meta.platforms;
+  const drafts = data.drafts || [];
+  const synced = data.synced || {};
+
+  // Collect all unique content pieces
+  const contentMap = new Map();
+
+  // Add synced items
+  for (const [pKey, items] of Object.entries(synced)) {
+    for (const item of items) {
+      const id = item.slug || item.title;
+      if (!contentMap.has(id)) contentMap.set(id, { title: item.title, platforms: {} });
+      contentMap.get(id).platforms[pKey] = 'published';
+    }
+  }
+
+  // Add drafts
+  for (const d of drafts) {
+    const id = d.slug;
+    if (!contentMap.has(id)) contentMap.set(id, { title: d.title, platforms: {} });
+    const entry = contentMap.get(id);
+    entry.platforms[d.platform] = d.status === 'published' ? 'published' : 'draft';
+    for (const cp of (d.cross_post || [])) {
+      if (!entry.platforms[cp]) entry.platforms[cp] = 'target';
+    }
+  }
+
+  // Only show platforms that have at least one item
+  const activePlatformKeys = Object.keys(platforms).filter(k => {
+    for (const [, entry] of contentMap) { if (entry.platforms[k]) return true; }
+    return false;
+  });
+
+  let html = '<div class="sync-grid"><table><thead><tr><th style="text-align:left;min-width:200px">Content</th>';
+  for (const k of activePlatformKeys) {
+    html += '<th title="'+platforms[k].name+'">'+platforms[k].icon+'</th>';
+  }
+  html += '</tr></thead><tbody>';
+
+  for (const [, entry] of contentMap) {
+    html += '<tr><td title="'+entry.title+'">'+entry.title.substring(0, 50)+(entry.title.length > 50 ? '...' : '')+'</td>';
+    for (const k of activePlatformKeys) {
+      const status = entry.platforms[k];
+      if (status === 'published') html += '<td><span class="dot dot-published" title="Published"></span></td>';
+      else if (status === 'draft') html += '<td><span class="dot dot-draft" title="Draft"></span></td>';
+      else if (status === 'target') html += '<td><span class="dot dot-target" title="Cross-post target"></span></td>';
+      else html += '<td><span class="dot dot-none"></span></td>';
+    }
+    html += '</tr>';
+  }
+  html += '</tbody></table></div>';
+
+  // Legend
+  html += '<div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--muted)">' +
+    '<span><span class="dot dot-published" style="display:inline-block;vertical-align:middle;margin-right:4px"></span> Published</span>' +
+    '<span><span class="dot dot-draft" style="display:inline-block;vertical-align:middle;margin-right:4px"></span> Draft</span>' +
+    '<span><span class="dot dot-target" style="display:inline-block;vertical-align:middle;margin-right:4px"></span> Cross-post target</span>' +
+    '<span><span class="dot dot-none" style="display:inline-block;vertical-align:middle;margin-right:4px"></span> No content</span></div>';
+
+  document.getElementById('sync-matrix').innerHTML = html;
+}
+
+// ── Post Detail ──
+async function showPost(slug) {
+  const data = await loadIndex();
+  const post = (data.drafts || []).find(p => p.slug === slug);
+  const container = document.getElementById('post-view-inner');
+
+  if (!post) {
+    container.innerHTML = '<a href="#" class="back" onclick="history.back();return false">&larr; Back</a><h1>Post not found: '+slug+'</h1>';
+    return;
+  }
+
+  const backTarget = post.platform ? 'platform/'+post.platform : '';
+  let html = '<a href="#" class="back" onclick="navigate(\''+backTarget+'\');return false">&larr; Back to '+((data._meta.platforms[post.platform]||{}).name||'Dashboard')+'</a>';
+
+  const md = await loadPost(slug);
+  const platforms = data._meta.platforms;
+  const tags = (post.tags || []).map(t => '<span class="tag">'+t+'</span>').join(' ');
+  const p = platforms[post.platform] || {icon:'',name:''};
+
+  if (md) {
+    const title = (md.match(/^#\s+(.+)$/m) || [, post.title])[1];
+    html += '<h1>'+title+'</h1>';
+    html += '<div class="post-meta">'+badge(post.status)+' <span>'+p.icon+' '+p.name+'</span> <span>'+post.created+'</span> '+tags+'</div>';
+    html += '<div class="post-body">'+renderMarkdown(md)+'</div>';
+  } else {
+    html += '<h1>'+post.title+'</h1>';
+    html += '<div class="post-meta">'+badge(post.status)+' <span>'+p.icon+' '+p.name+'</span> <span>'+post.created+'</span> '+tags+'</div>';
+    html += '<div style="padding:32px;text-align:center;border:1px dashed var(--border);border-radius:8px;margin:20px 0">' +
+      '<p style="color:var(--draft);font-size:16px;margin-bottom:8px">Draft — no content file yet</p>' +
+      '<p style="color:var(--muted);font-size:13px">Expected: <code>'+slug+'.md</code></p></div>';
+
+    // Show metadata as content
+    if (post.notes) html += '<div class="section-title">Notes</div><p style="color:var(--muted)">'+post.notes+'</p>';
+    if (post.outline) html += '<div class="section-title">Outline</div><div class="outline-box">'+post.outline+'</div>';
+    if (post.linkedin_hook) html += '<div class="section-title">LinkedIn Hook</div><div class="social"><strong>Hook:</strong><br>'+post.linkedin_hook+'</div>';
+    if (post.media_prompts) {
+      html += '<div class="section-title">Media Prompts</div>';
+      for (const mp of post.media_prompts) {
+        html += '<div class="media-item" style="margin-bottom:12px"><span class="tool-badge">'+mp.tool+'</span> <strong style="color:var(--text)">'+mp.description+'</strong>' +
+          '<span class="prompt-text" onclick="copyPrompt(this)" title="Click to copy">'+mp.prompt+'</span></div>';
+      }
+    }
+  }
+
+  container.innerHTML = html;
+}
+
+// ── Navigation ──
+function navigate(path) {
+  location.hash = path;
+}
+
+function route() {
+  const hash = location.hash.slice(1);
+  const views = document.querySelectorAll('.view');
+  views.forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+  if (hash.startsWith('post/')) {
+    document.getElementById('view-post').classList.add('active');
+    showPost(hash.slice(5));
+  } else if (hash.startsWith('platform/')) {
+    document.getElementById('view-platform').classList.add('active');
+    showPlatform(hash.slice(9));
+  } else if (hash === 'sync') {
+    document.getElementById('view-sync').classList.add('active');
+    document.querySelector('[data-view="sync"]').classList.add('active');
+    showSyncMatrix();
+  } else {
+    document.getElementById('view-dashboard').classList.add('active');
+    document.querySelector('[data-view="dashboard"]').classList.add('active');
+    showDashboard();
+  }
+}
+
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', (e) => {
+    e.preventDefault();
+    const view = tab.dataset.view;
+    navigate(view === 'dashboard' ? '' : view);
+  });
+});
+
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>

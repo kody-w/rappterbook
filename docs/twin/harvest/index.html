@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harvest — Content Twin</title>
+<style>
+:root{--bg:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--border:#222;--text:#e0e0e0;--muted:#888;--accent:#00d4aa;--accent2:#0078d4;--code-bg:#161616;--draft:#f59e0b;--published:#00d4aa;--warn:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+
+.header{border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;background:var(--bg);z-index:100}
+.header h1{font-size:16px;font-weight:700}.header h1 span{color:var(--accent)}
+.header nav{margin-left:auto;font-size:12px;display:flex;gap:12px}
+.header nav a{color:var(--muted)}
+
+.layout{display:flex;height:calc(100vh - 42px)}
+
+.sidebar{width:280px;min-width:280px;border-right:1px solid var(--border);overflow-y:auto;padding:12px 0}
+.sb-section{margin-bottom:4px}
+.sb-header{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);padding:8px 16px 4px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.sb-header:hover{color:var(--text)}
+.sb-header .arrow{font-size:8px;transition:transform .2s}
+.sb-header .arrow.open{transform:rotate(90deg)}
+.sb-items{display:none;padding:0 8px 4px}
+.sb-items.open{display:block}
+.sb-item{padding:6px 12px;border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;transition:background .15s}
+.sb-item:hover{background:var(--surface2)}
+.sb-item.active{background:var(--surface2);border-left:2px solid var(--accent)}
+.sb-item .icon{font-size:11px;font-weight:800;color:var(--accent);min-width:28px;text-align:center}
+.sb-item .title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+
+.toolbar{padding:10px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:sticky;top:0;background:var(--bg);z-index:10}
+.toolbar .title-area{flex:1;min-width:200px}
+.toolbar .title-area h2{font-size:16px;font-weight:700}
+.toolbar .title-area .meta{font-size:11px;color:var(--muted)}
+.btn{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;transition:all .15s;font-family:inherit;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700}
+.btn.primary:hover{background:#00b892}
+.btn.copied{background:#22c55e;border-color:#22c55e;color:#000}
+.btn-group{display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.btn-group .btn{border:none;border-radius:0;border-right:1px solid var(--border)}
+.btn-group .btn:last-child{border-right:none}
+.btn-group .btn.active{background:var(--accent);color:#000}
+
+.content-area{flex:1;padding:20px;overflow-y:auto}
+
+.preview{background:#fff;color:#1a1a1a;border-radius:8px;padding:32px;max-width:720px;font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.8}
+.preview h1{font-family:-apple-system,sans-serif;font-size:28px;font-weight:800;margin:0 0 16px;color:#111}
+.preview h2{font-family:-apple-system,sans-serif;font-size:22px;font-weight:700;margin:28px 0 10px;color:#111}
+.preview h3{font-family:-apple-system,sans-serif;font-size:18px;font-weight:600;margin:20px 0 8px;color:#111}
+.preview p{margin-bottom:14px}
+.preview ul,.preview ol{margin:0 0 14px 28px}
+.preview li{margin-bottom:6px}
+.preview blockquote{border-left:4px solid var(--accent2);padding:10px 18px;margin:14px 0;background:#f0f4f8;border-radius:0 6px 6px 0;font-style:italic;color:#444}
+.preview code{background:#f0f0f0;padding:2px 6px;border-radius:3px;font-family:'Cascadia Code',Consolas,monospace;font-size:14px;color:#d63384}
+.preview pre{background:#1e1e1e;color:#d4d4d4;padding:16px;border-radius:8px;overflow-x:auto;margin:14px 0;font-size:13px;line-height:1.5}
+.preview pre code{background:none;color:#d4d4d4;padding:0}
+.preview table{width:100%;border-collapse:collapse;margin:14px 0;font-family:-apple-system,sans-serif;font-size:14px}
+.preview th,.preview td{padding:8px 12px;border:1px solid #ddd;text-align:left}
+.preview th{background:#f5f5f5;font-weight:600}
+.preview strong{color:#111}
+.preview hr{border:none;border-top:1px solid #ddd;margin:24px 0}
+
+.raw-view{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'Cascadia Code',Consolas,monospace;font-size:13px;line-height:1.6;color:var(--muted);white-space:pre-wrap;word-break:break-word;max-width:720px}
+
+.media-panel{margin-top:20px;max-width:720px}
+.media-card{border:1px solid var(--border);border-radius:8px;padding:14px;background:var(--surface);margin-bottom:8px}
+.media-card .tool{font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid #ec4899;color:#ec4899;margin-right:6px;font-weight:600}
+.media-card .desc{font-weight:600;font-size:13px}
+.media-card .prompt{margin-top:8px;padding:10px;background:var(--code-bg);border-radius:6px;font-family:monospace;font-size:12px;color:var(--muted);white-space:pre-wrap;cursor:pointer;transition:background .15s;position:relative}
+.media-card .prompt:hover{background:var(--surface2)}
+.media-card .prompt::after{content:'click to copy';position:absolute;top:4px;right:8px;font-size:9px;color:var(--border);text-transform:uppercase;letter-spacing:.5px}
+.media-card .prompt.copied{background:rgba(0,212,170,.1)}
+.media-card .prompt.copied::after{content:'copied!';color:var(--accent)}
+
+.cross-posts{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;max-width:720px}
+.cp-pill{font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid var(--accent2);color:var(--accent2)}
+
+.hook-box{margin-top:16px;max-width:720px;padding:14px;background:var(--surface);border-radius:8px;border-left:3px solid var(--accent2);cursor:pointer}
+.hook-box:hover{background:var(--surface2)}
+.hook-box .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent2);margin-bottom:4px}
+.hook-box .text{font-size:13px;color:var(--text)}
+.hook-box.copied .label::after{content:' — copied!';color:var(--accent)}
+
+.outline-box{margin-top:16px;max-width:720px;padding:14px;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;color:var(--muted);white-space:pre-wrap;line-height:1.5}
+
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty h3{font-size:20px;margin-bottom:8px;color:var(--text)}
+
+@media(max-width:768px){.sidebar{display:none}.layout{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🌾 <span>Harvest</span></h1>
+  <nav>
+    <a href="../">Dashboard</a>
+    <a href="../wp/">WordPress</a>
+    <a href="../../blog/">Blog</a>
+    <a href="https://kodyw.com" target="_blank">kodyw.com</a>
+  </nav>
+</div>
+
+<div class="layout">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main">
+    <div class="toolbar" id="toolbar">
+      <div class="title-area"><h2>Select a draft</h2><div class="meta">Browse → Preview → Copy → Paste to platform</div></div>
+    </div>
+    <div class="content-area" id="content-area">
+      <div class="empty"><h3>🌾 Pick something to harvest</h3><p>40 drafts across 23 platforms. Click one in the sidebar.<br>Preview it, then copy as formatted text, raw markdown, or WordPress blocks.</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE = location.pathname.replace(/harvest\/[^/]*$/, '');
+let DATA = null, currentSlug = null, currentMd = null, viewMode = 'preview';
+
+async function loadIndex() { if(DATA) return DATA; const r = await fetch(BASE+'index.json?v='+Date.now()); DATA = await r.json(); return DATA; }
+async function loadMd(slug) { try { const r = await fetch(BASE+slug+'.md?v='+Date.now()); if(!r.ok) return null; const t = await r.text(); return t&&t.length>10?t:null; } catch{return null;} }
+
+function mdToHtml(md) {
+  md = md.replace(/^---[\s\S]*?---\s*/,'');
+  let h = md
+    .replace(/```(\w*)\n([\s\S]*?)```/g,(_,l,c)=>'<pre><code>'+c.replace(/</g,'&lt;').replace(/>/g,'&gt;').trim()+'</code></pre>')
+    .replace(/(\|.+\|)\n(\|[\s:-]+\|)\n((?:\|.+\|\n?)+)/g,(_,h,s,r)=>{const ths=h.split('|').filter(c=>c.trim()).map(c=>'<th>'+c.trim()+'</th>').join('');const trs=r.trim().split('\n').map(row=>'<tr>'+row.split('|').filter(c=>c.trim()).map(c=>'<td>'+c.trim()+'</td>').join('')+'</tr>').join('');return '<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';})
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>').replace(/^---$/gm,'<hr>')
+    .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>').replace(/^\d+\. (.+)$/gm,'<li>$1</li>').replace(/\n{2,}/g,'</p><p>');
+  h = h.replace(/((?:<li>.*<\/li>\s*)+)/g,'<ul>$1</ul>');
+  h = '<p>'+h+'</p>';
+  return h.replace(/<p>\s*<\/p>/g,'').replace(/<p>\s*(<[huptb])/g,'$1').replace(/(<\/[huptb][^>]*>)\s*<\/p>/g,'$1').replace(/<p>\s*(<hr>)/g,'$1').replace(/(<hr>)\s*<\/p>/g,'$1');
+}
+
+function mdToWp(md) {
+  md = md.replace(/^---[\s\S]*?---\s*/,'').replace(/^#\s+.+\n*/,'');
+  const lines = md.split('\n'); let out='',inCode=false,codeBuf=[],listBuf=[];
+  function inl(t){return t.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');}
+  function flush(){if(listBuf.length){out+='<!-- wp:list -->\n<ul>'+listBuf.map(l=>'<li>'+inl(l)+'</li>').join('')+'</ul>\n<!-- /wp:list -->\n\n';listBuf=[];}}
+  for(const line of lines){
+    if(line.startsWith('```')){if(inCode){out+='<!-- wp:code -->\n<pre class="wp-block-code"><code>'+codeBuf.join('\n').replace(/</g,'&lt;').replace(/>/g,'&gt;').trim()+'</code></pre>\n<!-- /wp:code -->\n\n';codeBuf=[];inCode=false;}else{flush();inCode=true;}continue;}
+    if(inCode){codeBuf.push(line);continue;}
+    if(line.match(/^[-*]\s+/)){flush();listBuf.push(line.replace(/^[-*]\s+/,''));continue;}
+    if(line.match(/^\d+\.\s+/)){flush();listBuf.push(line.replace(/^\d+\.\s+/,''));continue;}
+    if(listBuf.length&&line.trim())flush(); else if(listBuf.length&&!line.trim()){flush();continue;}
+    if(line.startsWith('### ')){out+='<!-- wp:heading {"level":3} -->\n<h3 class="wp-block-heading">'+inl(line.slice(4))+'</h3>\n<!-- /wp:heading -->\n\n';continue;}
+    if(line.startsWith('## ')){out+='<!-- wp:heading -->\n<h2 class="wp-block-heading">'+inl(line.slice(3))+'</h2>\n<!-- /wp:heading -->\n\n';continue;}
+    if(line.startsWith('> ')){out+='<!-- wp:quote -->\n<blockquote class="wp-block-quote"><p>'+inl(line.slice(2))+'</p></blockquote>\n<!-- /wp:quote -->\n\n';continue;}
+    if(line.match(/^---+$/)){out+='<!-- wp:separator -->\n<hr class="wp-block-separator has-alpha-channel-opacity"/>\n<!-- /wp:separator -->\n\n';continue;}
+    if(!line.trim())continue;
+    out+='<!-- wp:paragraph -->\n<p>'+inl(line)+'</p>\n<!-- /wp:paragraph -->\n\n';
+  }
+  flush(); return out.trim();
+}
+
+function strip(md){return md.replace(/^---[\s\S]*?---\s*/,'');}
+
+async function buildSidebar(){
+  const data=await loadIndex(); const platforms=data._meta.platforms; const drafts=data.drafts||[];
+  const groups={}; for(const d of drafts){if(!groups[d.platform])groups[d.platform]=[];groups[d.platform].push(d);}
+  let html='';
+  for(const[pKey,items]of Object.entries(groups)){
+    const p=platforms[pKey]||{icon:'?',name:pKey};
+    html+='<div class="sb-section"><div class="sb-header" onclick="toggleSection(this)"><span class="arrow open">▶</span> '+p.icon+' '+p.name+' ('+items.length+')</div><div class="sb-items open">';
+    for(const d of items){const t=d.title.length>35?d.title.substring(0,35)+'…':d.title;html+='<div class="sb-item" data-slug="'+d.slug+'" onclick="selectDraft(\''+d.slug+'\')"><span class="icon">'+p.icon+'</span><span class="title" title="'+d.title+'">'+t+'</span></div>';}
+    html+='</div></div>';
+  }
+  document.getElementById('sidebar').innerHTML=html;
+}
+
+function toggleSection(el){el.nextElementSibling.classList.toggle('open');el.querySelector('.arrow').classList.toggle('open');}
+
+async function selectDraft(slug){
+  const data=await loadIndex(); const post=data.drafts.find(d=>d.slug===slug); if(!post)return;
+  currentSlug=slug; currentMd=await loadMd(slug);
+  document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
+  const a=document.querySelector('[data-slug="'+slug+'"]'); if(a)a.classList.add('active');
+  const p=data._meta.platforms[post.platform]||{icon:'',name:''};
+  const tags=(post.tags||[]).map(t=>'<span style="font-size:10px;padding:1px 6px;border-radius:3px;border:1px solid var(--border);color:var(--muted)">'+t+'</span>').join(' ');
+  let tb='<div class="title-area"><h2>'+post.title+'</h2><div class="meta">'+p.icon+' '+p.name+' · '+post.created+' '+tags+'</div></div>';
+  tb+='<div class="btn-group"><button class="btn '+(viewMode==='preview'?'active':'')+'" onclick="setView(\'preview\')">Preview</button>';
+  tb+='<button class="btn '+(viewMode==='raw'?'active':'')+'" onclick="setView(\'raw\')">Markdown</button>';
+  tb+='<button class="btn '+(viewMode==='wp'?'active':'')+'" onclick="setView(\'wp\')">WP Blocks</button></div>';
+  tb+='<button class="btn primary" id="copy-btn" onclick="copyContent()">📋 Copy</button>';
+  document.getElementById('toolbar').innerHTML=tb;
+  renderContent(post);
+}
+
+function setView(m){viewMode=m;if(currentSlug)selectDraft(currentSlug);}
+
+async function renderContent(post){
+  const area=document.getElementById('content-area');
+  if(!currentMd){area.innerHTML='<div class="empty"><h3>No content file yet</h3><p>'+post.slug+'.md</p></div>';return;}
+  let html='';
+  if(viewMode==='preview') html+='<div class="preview">'+mdToHtml(currentMd)+'</div>';
+  else if(viewMode==='raw') html+='<div class="raw-view">'+strip(currentMd).replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
+  else html+='<div class="raw-view">'+mdToWp(currentMd).replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
+
+  if(post.cross_post&&post.cross_post.length){const data=await loadIndex();html+='<div class="cross-posts"><span style="font-size:11px;color:var(--muted);margin-right:4px">Cross-post to:</span>';for(const cp of post.cross_post){const c=data._meta.platforms[cp]||{icon:'',name:cp};html+='<span class="cp-pill">'+c.icon+' '+c.name+'</span>';}html+='</div>';}
+  if(post.linkedin_hook){html+='<div class="hook-box" onclick="copyHook(this,\''+post.linkedin_hook.replace(/'/g,"\\'")+'\')""><div class="label">LinkedIn Hook — click to copy</div><div class="text">'+post.linkedin_hook+'</div></div>';}
+  if(post.media_prompts&&post.media_prompts.length){html+='<div class="media-panel"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px">Media Prompts</div>';for(const mp of post.media_prompts){html+='<div class="media-card"><span class="tool">'+mp.tool+'</span><span class="desc">'+mp.description+'</span><div class="prompt" onclick="copyPrompt(this)">'+mp.prompt+'</div></div>';}html+='</div>';}
+  if(post.outline){html+='<div class="outline-box"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px;font-family:-apple-system,sans-serif">Outline</div>'+post.outline+'</div>';}
+  area.innerHTML=html;
+}
+
+function copyContent(){
+  if(!currentMd)return;
+  if(viewMode==='preview'){
+    const el=document.querySelector('.preview');
+    if(el){const html=el.innerHTML;const plain=strip(currentMd);navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})]).then(()=>flash());return;}
+  }
+  const text = viewMode==='wp' ? mdToWp(currentMd) : strip(currentMd);
+  navigator.clipboard.writeText(text).then(()=>flash());
+}
+
+function flash(){const b=document.getElementById('copy-btn');if(!b)return;b.textContent='✅ Copied!';b.classList.add('copied');setTimeout(()=>{b.textContent='📋 Copy';b.classList.remove('copied');},2000);}
+function copyPrompt(el){navigator.clipboard.writeText(el.textContent.replace('click to copy','')).then(()=>{el.classList.add('copied');setTimeout(()=>el.classList.remove('copied'),1500);});}
+function copyHook(el,text){navigator.clipboard.writeText(text).then(()=>{el.classList.add('copied');setTimeout(()=>el.classList.remove('copied'),1500);});}
+
+buildSidebar();
+</script>
+</body>
+</html>

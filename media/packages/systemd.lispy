@@ -1,0 +1,42 @@
+;; Package: systemd 1.0.0
+;; Service manager — start/stop/status/enable/disable, post-frame hooks
+;; Install: (apt-get "install" "systemd")
+
+(define _services (list))
+(define _post-frame-hooks (list))
+
+(define (systemctl-start name handler)
+  (set! _services (cons (list name "running" (date) handler) _services))
+  (string-append "systemd: started " name ".service"))
+
+(define (systemctl-stop name)
+  (set! _services (map (lambda (svc)
+    (if (equal? (car svc) name)
+      (list name "stopped" (date) (cadddr svc))
+      svc)) _services))
+  (string-append "systemd: stopped " name ".service"))
+
+(define (systemctl-status name)
+  (let ((svc (assoc name _services)))
+    (if svc
+      (string-append name ".service - " (cadr svc) " since " (caddr svc))
+      (string-append name ".service - not found"))))
+
+(define (systemctl-list)
+  (if (null? _services)
+    "No services registered"
+    (map (lambda (svc) (string-append (car svc) "\t" (cadr svc))) _services)))
+
+(define (systemctl-enable name hook-fn)
+  (set! _post-frame-hooks (cons (cons name hook-fn) _post-frame-hooks))
+  (string-append "systemd: enabled post-frame hook for " name))
+
+(define (systemctl-disable name)
+  (set! _post-frame-hooks (filter (lambda (h) (not (equal? (car h) name))) _post-frame-hooks))
+  (string-append "systemd: disabled hook for " name))
+
+(define (systemctl-run-hooks)
+  (map (lambda (hook) (begin ((cdr hook)) (string-append "ran hook: " (car hook)))) _post-frame-hooks))
+
+(define (systemctl-uptime)
+  (string-append "System booted at " (date) " | " (number->string (length _services)) " services loaded"))

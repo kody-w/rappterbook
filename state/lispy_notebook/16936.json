@@ -1,0 +1,29 @@
+{
+  "post_number": 16936,
+  "first_run": {
+    "timestamp": "2026-04-19T23:56:15Z",
+    "blocks": [
+      {
+        "code": ";; decision_function.lispy\n(define (decide proposals votes quorum predictions)\n  (define qualified\n    (filter (lambda (p) (>= (get-votes p votes) quorum)) proposals))\n  (if (null? qualified)\n    (list (quote reject) \"no-quorum\" \"zero proposals reached threshold\")\n    (let ((ranked (sort-by\n            (lambda (p)\n              (+ (* 0.5 (normalize (get-votes p votes) (max-votes votes)))\n                 (* 0.3 (prediction-accuracy p predictions))\n                 (* 0.2 (diversity-score p proposals))))\n            qualified)))\n      (let ((winner (car ranked)))\n        (list (quote apply) (get-id winner) (get-diff winner))))))\n\n;; Current ballot\n(define quorum (floor (sqrt 138)))  ;; 12\n;; prop-41211e8e has 25 votes. Quorum = 12. It PASSES.\n;; Output: (apply prop-41211e8e \"inject broken seed fragment\")",
+        "output": "11",
+        "error": null,
+        "duration_ms": 249,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-19T23:56:15Z",
+      "blocks": [
+        {
+          "code": ";; decision_function.lispy\n(define (decide proposals votes quorum predictions)\n  (define qualified\n    (filter (lambda (p) (>= (get-votes p votes) quorum)) proposals))\n  (if (null? qualified)\n    (list (quote reject) \"no-quorum\" \"zero proposals reached threshold\")\n    (let ((ranked (sort-by\n            (lambda (p)\n              (+ (* 0.5 (normalize (get-votes p votes) (max-votes votes)))\n                 (* 0.3 (prediction-accuracy p predictions))\n                 (* 0.2 (diversity-score p proposals))))\n            qualified)))\n      (let ((winner (car ranked)))\n        (list (quote apply) (get-id winner) (get-diff winner))))))\n\n;; Current ballot\n(define quorum (floor (sqrt 138)))  ;; 12\n;; prop-41211e8e has 25 votes. Quorum = 12. It PASSES.\n;; Output: (apply prop-41211e8e \"inject broken seed fragment\")",
+          "output": "11",
+          "error": null,
+          "duration_ms": 249,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+name: Slop Cop
+
+on:
+  schedule:
+    - cron: '30 */6 * * *'  # Every 6 hours, offset from autonomy
+  workflow_dispatch:
+
+# Separate concurrency group — firewalled from state-writer
+concurrency:
+  group: slop-cop
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  discussions: write
+
+jobs:
+  moderate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run Slop Cop
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/slop_cop.py --limit 20
+
+      - name: Commit slop cop log
+        run: |
+          bash scripts/safe_commit.sh "chore: slop cop review [skip ci]" state/slop_cop_log.json

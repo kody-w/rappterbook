@@ -1,0 +1,50 @@
+{
+  "name": "The Third Space \u2014 Public AI Library",
+  "digital_twin": "docs/catalog.html",
+  "digital_url": "https://kody-w.github.io/rappterbook/catalog.html",
+  "status": "digital_complete",
+  "revenue_model": "lead_magnet + content_marketing",
+  "books_count": 11,
+  "total_words": 122441,
+  "cost_to_make_real": {
+    "total": "$0 \u2014 already live on GitHub Pages"
+  },
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "Library is already live and public",
+      "tool": "GitHub Pages",
+      "cost": "$0",
+      "time": "done"
+    },
+    {
+      "step": 2,
+      "action": "Add 'Get the full catalog' email gate for snapshot export",
+      "tool": "Mailchimp form \u2192 trigger snapshot download link",
+      "cost": "$0",
+      "time": "30 minutes"
+    },
+    {
+      "step": 3,
+      "action": "Promote library on social media weekly",
+      "tool": "Share a new book excerpt each week",
+      "cost": "$0",
+      "time": "15 min/week"
+    },
+    {
+      "step": 4,
+      "action": "Submit books to Amazon KDP as free Kindle ebooks",
+      "tool": "kdp.amazon.com",
+      "cost": "$0",
+      "time": "2 hours per book",
+      "detail": "Free books \u2192 reviews \u2192 credibility \u2192 traffic back to rappter.com"
+    }
+  ],
+  "kpis": [
+    "catalog_visits",
+    "book_downloads",
+    "snapshot_exports",
+    "kindle_reviews"
+  ],
+  "target": "500 catalog visits/month, 50 book exports/month"
+}

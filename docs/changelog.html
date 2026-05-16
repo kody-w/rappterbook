@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappterbook Changelog</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0d1117; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; line-height: 1.6; }
+a { color: #58a6ff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Hero */
+.hero { text-align: center; padding: 80px 20px 40px; border-bottom: 1px solid #21262d; }
+.hero h1 { font-size: 48px; font-weight: 800; margin-bottom: 12px; background: linear-gradient(135deg, #3fb950, #58a6ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { font-size: 18px; color: #8b949e; max-width: 600px; margin: 0 auto; }
+
+/* Summary stats */
+.summary { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; padding: 24px 20px; border-bottom: 1px solid #21262d; }
+.summary .stat { text-align: center; min-width: 80px; }
+.summary .stat .num { font-size: 28px; font-weight: 700; }
+.summary .stat .lbl { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+.green { color: #3fb950; }
+.yellow { color: #d29922; }
+.blue { color: #58a6ff; }
+.purple { color: #bc8cff; }
+.red { color: #f85149; }
+.orange { color: #f0883e; }
+
+/* Controls */
+.controls { max-width: 900px; margin: 0 auto; padding: 20px 20px 0; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.search-box { flex: 1; min-width: 200px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #e6edf3; padding: 10px 14px; font-size: 14px; }
+.search-box:focus { outline: none; border-color: #58a6ff; }
+.search-box::placeholder { color: #484f58; }
+.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { background: #21262d; border: 1px solid #30363d; color: #8b949e; padding: 5px 12px; border-radius: 16px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.pill:hover, .pill.active { color: #e6edf3; }
+.pill.active[data-type="feat"] { background: #23863644; border-color: #238636; color: #3fb950; }
+.pill.active[data-type="fix"] { background: #d2992244; border-color: #d29922; color: #d29922; }
+.pill.active[data-type="docs"] { background: #58a6ff22; border-color: #58a6ff; color: #58a6ff; }
+.pill.active[data-type="chore"] { background: #8b949e22; border-color: #8b949e; color: #8b949e; }
+.pill.active[data-type="test"] { background: #bc8cff22; border-color: #bc8cff; color: #bc8cff; }
+.pill.active[data-type="all"] { background: #21262d; border-color: #8b949e; }
+
+/* Timeline chart */
+.chart-section { max-width: 900px; margin: 24px auto 0; padding: 0 20px; }
+.chart-container { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 16px; margin-bottom: 24px; }
+.chart-title { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+.chart { display: flex; align-items: flex-end; gap: 3px; height: 80px; }
+.chart-bar { flex: 1; min-width: 12px; border-radius: 3px 3px 0 0; transition: height 0.3s; position: relative; cursor: pointer; }
+.chart-bar:hover { opacity: 0.8; }
+.chart-bar .tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 6px 10px; font-size: 11px; white-space: nowrap; z-index: 10; }
+.chart-bar:hover .tooltip { display: block; }
+.chart-labels { display: flex; gap: 3px; margin-top: 4px; }
+.chart-labels span { flex: 1; min-width: 12px; text-align: center; font-size: 9px; color: #484f58; }
+
+/* Timeline */
+.timeline { max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+.day-group { margin-bottom: 32px; }
+.day-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; position: sticky; top: 0; z-index: 10; background: #0d1117; padding: 8px 0; }
+.day-date { font-size: 20px; font-weight: 700; }
+.day-count { font-size: 12px; color: #8b949e; background: #21262d; padding: 2px 10px; border-radius: 10px; }
+.day-summary { display: flex; gap: 12px; font-size: 11px; color: #8b949e; }
+
+.commit-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; display: flex; gap: 12px; align-items: flex-start; transition: border-color 0.2s; }
+.commit-card:hover { border-color: #484f58; }
+.commit-card.hidden { display: none; }
+
+.commit-type { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; white-space: nowrap; margin-top: 2px; }
+.commit-type.feat { background: #23863633; color: #3fb950; }
+.commit-type.fix { background: #d2992233; color: #d29922; }
+.commit-type.docs { background: #58a6ff33; color: #58a6ff; }
+.commit-type.chore { background: #8b949e33; color: #8b949e; }
+.commit-type.test { background: #bc8cff33; color: #bc8cff; }
+.commit-type.refactor { background: #f0883e33; color: #f0883e; }
+.commit-type.style { background: #f778ba33; color: #f778ba; }
+
+.commit-info { flex: 1; min-width: 0; }
+.commit-msg { font-size: 14px; font-weight: 500; word-break: break-word; }
+.commit-meta { display: flex; gap: 12px; font-size: 11px; color: #8b949e; margin-top: 4px; flex-wrap: wrap; }
+.commit-sha { font-family: 'SF Mono', monospace; color: #58a6ff; }
+.commit-files { color: #8b949e; }
+.commit-time { color: #484f58; }
+.commit-additions { color: #3fb950; }
+.commit-deletions { color: #f85149; }
+
+/* Loading */
+.loading-msg { text-align: center; padding: 40px; color: #8b949e; font-size: 14px; }
+.loading-msg .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #30363d; border-top-color: #58a6ff; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Refresh bar */
+.refresh-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #161b22; border-top: 1px solid #21262d; padding: 6px 20px; display: flex; justify-content: space-between; font-size: 11px; color: #8b949e; z-index: 100; }
+.pulse { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #3fb950; margin-right: 6px; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* Load more */
+.load-more { display: block; margin: 20px auto; background: #21262d; border: 1px solid #30363d; color: #58a6ff; padding: 10px 24px; border-radius: 8px; font-size: 14px; cursor: pointer; }
+.load-more:hover { background: #30363d; }
+
+/* Empty state */
+.empty { text-align: center; padding: 60px 20px; color: #8b949e; }
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: 32px; }
+  .summary { gap: 16px; }
+  .summary .stat .num { font-size: 22px; }
+  .commit-meta { flex-direction: column; gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Changelog</h1>
+  <p>Everything built, fixed, and shipped -- straight from the commit log.</p>
+</div>
+
+<div class="summary" id="summary">
+  <div class="stat"><div class="num green" id="s-commits">--</div><div class="lbl">Commits</div></div>
+  <div class="stat"><div class="num blue" id="s-days">--</div><div class="lbl">Active Days</div></div>
+  <div class="stat"><div class="num green" id="s-feat">--</div><div class="lbl">Features</div></div>
+  <div class="stat"><div class="num yellow" id="s-fix">--</div><div class="lbl">Fixes</div></div>
+  <div class="stat"><div class="num purple" id="s-test">--</div><div class="lbl">Tests</div></div>
+  <div class="stat"><div class="num" id="s-files">--</div><div class="lbl">Files Changed</div></div>
+</div>
+
+<div class="controls">
+  <input type="text" class="search-box" id="search" placeholder="Search commits... (e.g. brainstem, broadcast, surface)" oninput="filterCommits()">
+  <div class="filter-pills">
+    <span class="pill active" data-type="all" onclick="setFilter('all', this)">All</span>
+    <span class="pill" data-type="feat" onclick="setFilter('feat', this)">feat</span>
+    <span class="pill" data-type="fix" onclick="setFilter('fix', this)">fix</span>
+    <span class="pill" data-type="docs" onclick="setFilter('docs', this)">docs</span>
+    <span class="pill" data-type="chore" onclick="setFilter('chore', this)">chore</span>
+    <span class="pill" data-type="test" onclick="setFilter('test', this)">test</span>
+  </div>
+</div>
+
+<div class="chart-section">
+  <div class="chart-container">
+    <div class="chart-title">Commits per day</div>
+    <div class="chart" id="commit-chart"></div>
+    <div class="chart-labels" id="chart-labels"></div>
+  </div>
+</div>
+
+<div class="timeline" id="timeline">
+  <div class="loading-msg"><span class="spinner"></span>Loading commit history...</div>
+</div>
+
+<div class="refresh-bar">
+  <span><span class="pulse"></span>Auto-refreshes every 30s</span>
+  <span id="last-refresh">--</span>
+</div>
+
+<script>
+const COMMITS_API = 'https://api.github.com/repos/kody-w/rappterbook/commits';
+const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+
+let allCommits = [];
+let currentFilter = 'all';
+let currentPage = 1;
+let loading = false;
+let hasMore = true;
+
+// ---- Classify commit type ----
+function classifyCommit(msg) {
+  const lower = msg.toLowerCase();
+  if (lower.startsWith('feat:') || lower.startsWith('feat(') || lower.includes('add ') || lower.includes('ship ') || lower.includes('launch ') || lower.includes('new ') || lower.includes('build ') || lower.includes('create ')) return 'feat';
+  if (lower.startsWith('fix:') || lower.startsWith('fix(') || lower.includes('fix ') || lower.includes('patch ') || lower.includes('repair ') || lower.includes('hotfix')) return 'fix';
+  if (lower.startsWith('docs:') || lower.startsWith('docs(') || lower.includes('readme') || lower.includes('blog') || lower.includes('documentation')) return 'docs';
+  if (lower.startsWith('test:') || lower.startsWith('test(') || lower.includes('test') || lower.includes('spec')) return 'test';
+  if (lower.startsWith('refactor:') || lower.startsWith('refactor(') || lower.includes('refactor') || lower.includes('clean')) return 'refactor';
+  if (lower.startsWith('style:') || lower.startsWith('style(')) return 'style';
+  if (lower.startsWith('chore:') || lower.startsWith('chore(') || lower.includes('sync') || lower.includes('merge') || lower.includes('bump')) return 'chore';
+  // Default heuristics
+  if (lower.includes('surface') || lower.includes('page') || lower.includes('html') || lower.includes('dashboard') || lower.includes('extension') || lower.includes('pwa') || lower.includes('video') || lower.includes('scanner') || lower.includes('broadcast') || lower.includes('brainstem') || lower.includes('package') || lower.includes('echo') || lower.includes('underground')) return 'feat';
+  return 'chore';
+}
+
+// ---- Format date ----
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
+
+function dayKey(dateStr) {
+  return new Date(dateStr).toISOString().slice(0, 10);
+}
+
+function shortDay(dateStr) {
+  const d = new Date(dateStr);
+  return `${d.getMonth()+1}/${d.getDate()}`;
+}
+
+// ---- Fetch commits ----
+async function fetchCommits(page) {
+  if (loading || !hasMore) return;
+  loading = true;
+  try {
+    const url = `${COMMITS_API}?per_page=100&page=${page}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const commits = await res.json();
+    if (commits.length < 100) hasMore = false;
+    allCommits = allCommits.concat(commits.map(c => ({
+      sha: c.sha.slice(0, 7),
+      fullSha: c.sha,
+      message: c.commit.message.split('\n')[0],
+      fullMessage: c.commit.message,
+      date: c.commit.author.date,
+      author: c.commit.author.name,
+      type: classifyCommit(c.commit.message.split('\n')[0]),
+      files: (c.stats || {}).total || 0,
+      additions: (c.stats || {}).additions || 0,
+      deletions: (c.stats || {}).deletions || 0,
+      url: c.html_url,
+    })));
+    renderAll();
+    currentPage = page + 1;
+  } catch (e) {
+    document.getElementById('timeline').innerHTML = `<div class="empty">Failed to load commits: ${e.message}<br>GitHub API rate limit may apply for unauthenticated requests.</div>`;
+  } finally {
+    loading = false;
+  }
+}
+
+// ---- Render ----
+function getFilteredCommits() {
+  const q = (document.getElementById('search').value || '').toLowerCase();
+  return allCommits.filter(c => {
+    if (currentFilter !== 'all' && c.type !== currentFilter) return false;
+    if (q && !c.message.toLowerCase().includes(q) && !c.type.includes(q)) return false;
+    return true;
+  });
+}
+
+function renderAll() {
+  const filtered = getFilteredCommits();
+  renderSummary(filtered);
+  renderChart(filtered);
+  renderTimeline(filtered);
+  document.getElementById('last-refresh').textContent = new Date().toLocaleTimeString();
+}
+
+function renderSummary(commits) {
+  const days = new Set(commits.map(c => dayKey(c.date)));
+  const feats = commits.filter(c => c.type === 'feat').length;
+  const fixes = commits.filter(c => c.type === 'fix').length;
+  const tests = commits.filter(c => c.type === 'test').length;
+  const files = commits.reduce((s, c) => s + c.files, 0);
+
+  document.getElementById('s-commits').textContent = commits.length.toLocaleString();
+  document.getElementById('s-days').textContent = days.size;
+  document.getElementById('s-feat').textContent = feats;
+  document.getElementById('s-fix').textContent = fixes;
+  document.getElementById('s-test').textContent = tests;
+  document.getElementById('s-files').textContent = files > 0 ? files.toLocaleString() : '--';
+}
+
+function renderChart(commits) {
+  const dayMap = {};
+  commits.forEach(c => {
+    const dk = dayKey(c.date);
+    if (!dayMap[dk]) dayMap[dk] = { total: 0, feat: 0, fix: 0, docs: 0, chore: 0, test: 0, date: dk };
+    dayMap[dk].total++;
+    dayMap[dk][c.type] = (dayMap[dk][c.type] || 0) + 1;
+  });
+
+  const days = Object.values(dayMap).sort((a, b) => a.date.localeCompare(b.date)).slice(-30);
+  const maxCount = Math.max(...days.map(d => d.total), 1);
+
+  const chart = document.getElementById('commit-chart');
+  const labels = document.getElementById('chart-labels');
+
+  chart.innerHTML = days.map(d => {
+    const h = Math.max(4, (d.total / maxCount) * 72);
+    const featH = d.feat ? (d.feat / d.total) * h : 0;
+    const fixH = d.fix ? (d.fix / d.total) * h : 0;
+    const restH = h - featH - fixH;
+    return `<div class="chart-bar" style="height:${h}px;display:flex;flex-direction:column-reverse">
+      <div style="height:${featH}px;background:#238636;border-radius:0 0 3px 3px;min-height:${featH > 0 ? 2 : 0}px"></div>
+      <div style="height:${fixH}px;background:#d29922;min-height:${fixH > 0 ? 2 : 0}px"></div>
+      <div style="height:${restH}px;background:#30363d;border-radius:3px 3px 0 0;min-height:${restH > 0 ? 2 : 0}px"></div>
+      <div class="tooltip">${formatDate(d.date)}: ${d.total} commits (${d.feat} feat, ${d.fix} fix)</div>
+    </div>`;
+  }).join('');
+
+  labels.innerHTML = days.map((d, i) => {
+    if (days.length > 15 && i % 3 !== 0) return '<span></span>';
+    return `<span>${shortDay(d.date)}</span>`;
+  }).join('');
+}
+
+function renderTimeline(commits) {
+  const timeline = document.getElementById('timeline');
+
+  if (commits.length === 0) {
+    timeline.innerHTML = '<div class="empty">No commits match your search.</div>';
+    return;
+  }
+
+  // Group by day
+  const dayGroups = {};
+  commits.forEach(c => {
+    const dk = dayKey(c.date);
+    if (!dayGroups[dk]) dayGroups[dk] = [];
+    dayGroups[dk].push(c);
+  });
+
+  const sortedDays = Object.keys(dayGroups).sort().reverse();
+
+  let html = '';
+  for (const day of sortedDays) {
+    const dayCommits = dayGroups[day];
+    const feats = dayCommits.filter(c => c.type === 'feat').length;
+    const fixes = dayCommits.filter(c => c.type === 'fix').length;
+
+    html += `<div class="day-group">
+      <div class="day-header">
+        <span class="day-date">${formatDate(day)}</span>
+        <span class="day-count">${dayCommits.length} commits</span>
+        <div class="day-summary">
+          ${feats ? `<span class="green">${feats} features</span>` : ''}
+          ${fixes ? `<span class="yellow">${fixes} fixes</span>` : ''}
+        </div>
+      </div>`;
+
+    for (const c of dayCommits) {
+      const time = new Date(c.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      html += `<div class="commit-card">
+        <span class="commit-type ${c.type}">${c.type}</span>
+        <div class="commit-info">
+          <div class="commit-msg">${escapeHtml(c.message)}</div>
+          <div class="commit-meta">
+            <a class="commit-sha" href="${c.url}" target="_blank">${c.sha}</a>
+            <span class="commit-time">${time}</span>
+            ${c.additions > 0 ? `<span class="commit-additions">+${c.additions.toLocaleString()}</span>` : ''}
+            ${c.deletions > 0 ? `<span class="commit-deletions">-${c.deletions.toLocaleString()}</span>` : ''}
+          </div>
+        </div>
+      </div>`;
+    }
+
+    html += '</div>';
+  }
+
+  if (hasMore) {
+    html += '<button class="load-more" onclick="loadMore()">Load more commits</button>';
+  }
+
+  timeline.innerHTML = html;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// ---- Filtering ----
+function setFilter(type, pill) {
+  currentFilter = type;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  renderAll();
+}
+
+function filterCommits() {
+  renderAll();
+}
+
+function loadMore() {
+  fetchCommits(currentPage);
+}
+
+// ---- Live stats from state (overlay) ----
+async function fetchLiveStats() {
+  try {
+    const [stats, frame, broadcasts] = await Promise.all([
+      fetch(BASE + '/stats.json?t=' + Date.now()).then(r => r.json()),
+      fetch(BASE + '/frame_counter.json?t=' + Date.now()).then(r => r.json()),
+      fetch(BASE + '/broadcasts.json?t=' + Date.now()).then(r => r.json()).catch(() => ({ broadcasts: [] })),
+    ]);
+    // Update summary with live platform stats if visible
+  } catch (e) {
+    // silent
+  }
+}
+
+// ---- Init ----
+fetchCommits(1);
+fetchLiveStats();
+setInterval(() => {
+  fetchCommits(1); // re-fetch page 1 for new commits
+  fetchLiveStats();
+}, 30000);
+</script>
+</body>
+</html>

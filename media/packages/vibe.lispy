@@ -1,0 +1,54 @@
+;; Package: vibe 1.0.0
+;; Vibration engine — re-echo frames at variable depth across platforms
+;; Install: (apt-get "install" "vibe")
+
+(define _vibe-log (list))
+
+(define _vibe-platforms (list
+  "twitter" "youtube" "reddit" "tiktok" "instagram" "linkedin"
+  "discord" "telegram" "mastodon" "bluesky" "threads" "hackernews"
+  "medium" "substack" "devto" "spotify" "soundcloud" "pinterest" "tumblr"))
+
+(define (vibe-frame frame depth)
+  (let ((entry (list
+          (cons "frame" frame)
+          (cons "depth" depth)
+          (cons "vibrated_at" (date)))))
+    (set! _vibe-log (cons entry _vibe-log))
+    (string-append "vibe: frame " (number->string frame) " vibrated at depth "
+                   (number->string depth)
+                   (cond
+                     ((= depth 1) " (surface — headline only)")
+                     ((= depth 2) " (medium — summary + key posts)")
+                     ((>= depth 3) " (deep — full frame with agent actions)")
+                     (else " (unknown depth)")))))
+
+(define (vibe-all frame)
+  (let ((results (map (lambda (platform)
+          (string-append "  " platform ": echoed"))
+          _vibe-platforms)))
+    (set! _vibe-log (cons (list (cons "frame" frame) (cons "depth" 1) (cons "all" #t) (cons "vibrated_at" (date))) _vibe-log))
+    (cons (string-append "vibe: frame " (number->string frame) " vibrated across all " (number->string (length _vibe-platforms)) " platforms:")
+          results)))
+
+(define (vibe-status)
+  (if (null? _vibe-log)
+    "vibe: no vibrations recorded"
+    (let ((total (length _vibe-log))
+          (latest (car _vibe-log)))
+      (string-append "vibe: " (number->string total) " vibrations total, latest at "
+                     (cdr (assoc "vibrated_at" latest))
+                     " (frame " (number->string (cdr (assoc "frame" latest)))
+                     ", depth " (number->string (cdr (assoc "depth" latest))) ")"))))
+
+(define (vibe-history frame)
+  (let ((hits (filter (lambda (entry) (= (cdr (assoc "frame" entry)) frame)) _vibe-log)))
+    (if (null? hits)
+      (string-append "vibe: no vibrations for frame " (number->string frame))
+      (map (lambda (h)
+        (string-append "depth " (number->string (cdr (assoc "depth" h)))
+                       " at " (cdr (assoc "vibrated_at" h))))
+        hits))))
+
+(define (vibe-platforms)
+  _vibe-platforms)

@@ -1,0 +1,462 @@
+{
+  "biomes": {
+    "forest": {
+      "13": 30,
+      "5": 2,
+      "0": 2,
+      "12": 2,
+      "16": 2,
+      "1": 2
+    },
+    "ocean": {
+      "11": 37,
+      "15": 2
+    },
+    "mountain": {
+      "7": 2,
+      "10": 32,
+      "8": 2,
+      "9": 2,
+      "5": 2
+    },
+    "sky": {
+      "15": 36,
+      "14": 2,
+      "17": 2
+    }
+  },
+  "biome_favors": {
+    "forest": {
+      "color": "verdant",
+      "pattern": "spotted",
+      "size": "medium",
+      "metabolism": "slow_burn"
+    },
+    "ocean": {
+      "color": "azure",
+      "pattern": "iridescent",
+      "size": "large",
+      "metabolism": "voracious"
+    },
+    "mountain": {
+      "color": "obsidian",
+      "pattern": "solid",
+      "size": "small",
+      "metabolism": "torpor"
+    },
+    "sky": {
+      "color": "gold",
+      "pattern": "fractal",
+      "size": "tiny",
+      "metabolism": "efficient"
+    }
+  },
+  "species": {
+    "0": {
+      "id": 0,
+      "name": "Aethosaur primus",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "gold",
+          "pattern": "fractal",
+          "size": "small",
+          "temperament": "peaceful",
+          "sociability": "pair",
+          "cognition": "deep_thinker",
+          "metabolism": "efficient",
+          "lifespan": "ancient"
+        }
+      ],
+      "origin_biome": "forest"
+    },
+    "1": {
+      "id": 1,
+      "name": "Bryosaur verum",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "verdant",
+          "pattern": "solid",
+          "size": "large",
+          "temperament": "cautious",
+          "sociability": "pair",
+          "cognition": "rapid_reactor",
+          "metabolism": "slow_burn",
+          "lifespan": "mayfly"
+        }
+      ],
+      "origin_biome": "ocean"
+    },
+    "2": {
+      "id": 2,
+      "name": "Chronosaur magnus",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": 9,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "azure",
+          "pattern": "striped",
+          "size": "medium",
+          "temperament": "curious",
+          "sociability": "swarm",
+          "cognition": "rapid_reactor",
+          "metabolism": "efficient",
+          "lifespan": "mayfly"
+        }
+      ],
+      "origin_biome": "mountain"
+    },
+    "3": {
+      "id": 3,
+      "name": "Dendrosaur minor",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": 4,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "obsidian",
+          "pattern": "iridescent",
+          "size": "large",
+          "temperament": "curious",
+          "sociability": "swarm",
+          "cognition": "pattern_matcher",
+          "metabolism": "slow_burn",
+          "lifespan": "mayfly"
+        }
+      ],
+      "origin_biome": "sky"
+    },
+    "4": {
+      "id": 4,
+      "name": "Eosaur borealis",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": 19,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "azure",
+          "pattern": "solid",
+          "size": "tiny",
+          "temperament": "aggressive",
+          "sociability": "pair",
+          "cognition": "memory_hoarder",
+          "metabolism": "efficient",
+          "lifespan": "normal"
+        }
+      ],
+      "origin_biome": "forest"
+    },
+    "5": {
+      "id": 5,
+      "name": "Ferrosaur australis",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "verdant",
+          "pattern": "spotted",
+          "size": "small",
+          "temperament": "aggressive",
+          "sociability": "pack",
+          "cognition": "memory_hoarder",
+          "metabolism": "torpor",
+          "lifespan": "mayfly"
+        }
+      ],
+      "origin_biome": "ocean"
+    },
+    "6": {
+      "id": 6,
+      "name": "Glycosaur pacificus",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": 21,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "crimson",
+          "pattern": "striped",
+          "size": "medium",
+          "temperament": "cautious",
+          "sociability": "solitary",
+          "cognition": "memory_hoarder",
+          "metabolism": "voracious",
+          "lifespan": "mayfly"
+        }
+      ],
+      "origin_biome": "mountain"
+    },
+    "7": {
+      "id": 7,
+      "name": "Heliosaur obscurus",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "gold",
+          "pattern": "solid",
+          "size": "small",
+          "temperament": "chaotic",
+          "sociability": "pack",
+          "cognition": "deep_thinker",
+          "metabolism": "torpor",
+          "lifespan": "long"
+        }
+      ],
+      "origin_biome": "sky"
+    },
+    "8": {
+      "id": 8,
+      "name": "Isosaur lucidus",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "verdant",
+          "pattern": "striped",
+          "size": "small",
+          "temperament": "curious",
+          "sociability": "solitary",
+          "cognition": "deep_thinker",
+          "metabolism": "torpor",
+          "lifespan": "ancient"
+        }
+      ],
+      "origin_biome": "forest"
+    },
+    "9": {
+      "id": 9,
+      "name": "Kryosaur ferox",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "obsidian",
+          "pattern": "spotted",
+          "size": "small",
+          "temperament": "peaceful",
+          "sociability": "solitary",
+          "cognition": "rapid_reactor",
+          "metabolism": "torpor",
+          "lifespan": "normal"
+        }
+      ],
+      "origin_biome": "ocean"
+    },
+    "10": {
+      "id": 10,
+      "name": "Lithosaur placidus",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "verdant",
+          "pattern": "fractal",
+          "size": "medium",
+          "temperament": "aggressive",
+          "sociability": "pair",
+          "cognition": "deep_thinker",
+          "metabolism": "torpor",
+          "lifespan": "long"
+        }
+      ],
+      "origin_biome": "mountain"
+    },
+    "11": {
+      "id": 11,
+      "name": "Mycosaur rapidus",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "azure",
+          "pattern": "fractal",
+          "size": "medium",
+          "temperament": "chaotic",
+          "sociability": "pair",
+          "cognition": "rapid_reactor",
+          "metabolism": "voracious",
+          "lifespan": "normal"
+        }
+      ],
+      "origin_biome": "sky"
+    },
+    "12": {
+      "id": 12,
+      "name": "Nyctsaur elegans",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "azure",
+          "pattern": "solid",
+          "size": "giant",
+          "temperament": "curious",
+          "sociability": "pack",
+          "cognition": "deep_thinker",
+          "metabolism": "slow_burn",
+          "lifespan": "ancient"
+        }
+      ],
+      "origin_biome": "forest"
+    },
+    "13": {
+      "id": 13,
+      "name": "Ophiosaur rusticus",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "verdant",
+          "pattern": "iridescent",
+          "size": "tiny",
+          "temperament": "peaceful",
+          "sociability": "swarm",
+          "cognition": "pattern_matcher",
+          "metabolism": "torpor",
+          "lifespan": "ancient"
+        }
+      ],
+      "origin_biome": "ocean"
+    },
+    "14": {
+      "id": 14,
+      "name": "Pyrosaur nobilis",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "gold",
+          "pattern": "fractal",
+          "size": "tiny",
+          "temperament": "chaotic",
+          "sociability": "solitary",
+          "cognition": "pattern_matcher",
+          "metabolism": "slow_burn",
+          "lifespan": "mayfly"
+        }
+      ],
+      "origin_biome": "mountain"
+    },
+    "15": {
+      "id": 15,
+      "name": "Quasisaur vulgaris",
+      "born_gen": 0,
+      "parent_id": null,
+      "died_gen": null,
+      "peak_pop": 4,
+      "founder_genomes": [
+        {
+          "color": "gold",
+          "pattern": "spotted",
+          "size": "small",
+          "temperament": "aggressive",
+          "sociability": "swarm",
+          "cognition": "pattern_matcher",
+          "metabolism": "voracious",
+          "lifespan": "long"
+        }
+      ],
+      "origin_biome": "sky"
+    },
+    "16": {
+      "id": 16,
+      "name": "Lithosaur minor",
+      "born_gen": 35,
+      "parent_id": 10,
+      "died_gen": null,
+      "peak_pop": 12,
+      "founder_genomes": [
+        {
+          "color": "verdant",
+          "pattern": "spotted",
+          "size": "medium",
+          "temperament": "aggressive",
+          "sociability": "pack",
+          "cognition": "deep_thinker",
+          "metabolism": "slow_burn",
+          "lifespan": "ancient"
+        },
+        {
+          "color": "verdant",
+          "pattern": "spotted",
+          "size": "medium",
+          "temperament": "aggressive",
+          "sociability": "pack",
+          "cognition": "deep_thinker",
+          "metabolism": "slow_burn",
+          "lifespan": "ancient"
+        },
+        {
+          "color": "verdant",
+          "pattern": "spotted",
+          "size": "medium",
+          "temperament": "aggressive",
+          "sociability": "pack",
+          "cognition": "deep_thinker",
+          "metabolism": "slow_burn",
+          "lifespan": "ancient"
+        }
+      ]
+    },
+    "17": {
+      "id": 17,
+      "name": "Aethosaur placidus",
+      "born_gen": 50,
+      "parent_id": 0,
+      "died_gen": null,
+      "peak_pop": 2,
+      "founder_genomes": [
+        {
+          "color": "gold",
+          "pattern": "fractal",
+          "size": "large",
+          "temperament": "peaceful",
+          "sociability": "swarm",
+          "cognition": "deep_thinker",
+          "metabolism": "efficient",
+          "lifespan": "ancient"
+        },
+        {
+          "color": "gold",
+          "pattern": "fractal",
+          "size": "large",
+          "temperament": "peaceful",
+          "sociability": "swarm",
+          "cognition": "deep_thinker",
+          "metabolism": "efficient",
+          "lifespan": "ancient"
+        }
+      ]
+    }
+  }
+}

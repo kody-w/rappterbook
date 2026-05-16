@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rappterbook Load-Bearing PII Scanner</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d1117;color:#e6edf3;font-family:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;padding:20px;line-height:1.5}
+h1{font-size:22px;margin-bottom:4px}
+h1 .sub{font-size:13px;color:#8b949e;font-weight:normal}
+.header-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.header-left{flex:1}
+.header-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* Status bar */
+.status{font-size:12px;color:#8b949e;margin-bottom:16px;min-height:18px}
+.status .count{color:#58a6ff}
+.status .warn{color:#d29922}
+.status .err{color:#f85149}
+
+/* Metric cards */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px}
+.card .label{font-size:10px;color:#8b949e;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.card .value{font-size:28px;font-weight:700}
+.card .sub{font-size:10px;color:#8b949e;margin-top:2px}
+.card.hard .value{color:#f85149}
+.card.soft .value{color:#d29922}
+.card.clean .value{color:#3fb950}
+.card.lb .value{color:#58a6ff}
+
+/* Controls */
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+select,input[type="text"]{background:#161b22;border:1px solid #30363d;color:#e6edf3;padding:6px 10px;border-radius:6px;font-size:13px;outline:none}
+select:focus,input:focus{border-color:#58a6ff}
+input[type="text"]{width:220px}
+button{background:#238636;border:1px solid #2ea043;color:#fff;padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:500}
+button:hover{background:#2ea043}
+button.secondary{background:#21262d;border-color:#30363d;color:#e6edf3}
+button.secondary:hover{background:#30363d}
+button:disabled{opacity:.5;cursor:not-allowed}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{background:#161b22;border:1px solid #21262d;padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#8b949e;position:sticky;top:0;z-index:2;cursor:pointer;user-select:none;white-space:nowrap}
+thead th:hover{color:#e6edf3}
+thead th .sort-arrow{margin-left:4px;opacity:.3}
+thead th.sorted .sort-arrow{opacity:1}
+tbody td{border:1px solid #21262d;padding:6px 10px;vertical-align:top;max-width:400px;word-break:break-word}
+tbody tr:hover{background:#161b22}
+tbody tr.hard{background:rgba(248,81,73,.08)}
+tbody tr.soft{background:rgba(210,153,34,.06)}
+
+/* PII badges */
+.badge{display:inline-block;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:600;letter-spacing:.3px}
+.badge.hard-pii{background:rgba(248,81,73,.2);color:#f85149;border:1px solid rgba(248,81,73,.3)}
+.badge.soft-pii{background:rgba(210,153,34,.15);color:#d29922;border:1px solid rgba(210,153,34,.3)}
+.badge.clean{background:rgba(63,185,80,.12);color:#3fb950;border:1px solid rgba(63,185,80,.2)}
+
+/* Score bar */
+.score-bar{display:flex;align-items:center;gap:6px}
+.score-fill{height:8px;border-radius:4px;background:#58a6ff;min-width:2px;transition:width .3s}
+.score-num{font-size:11px;color:#8b949e;min-width:24px}
+
+/* File list sidebar */
+.layout{display:grid;grid-template-columns:220px 1fr;gap:16px}
+@media(max-width:768px){.layout{grid-template-columns:1fr}.file-list{display:flex;flex-wrap:wrap;gap:4px;max-height:none}}
+.file-list{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px;max-height:calc(100vh - 300px);overflow-y:auto}
+.file-list .title{font-size:10px;color:#8b949e;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.file-item{padding:4px 8px;border-radius:4px;font-size:11px;font-family:'SF Mono',monospace;cursor:pointer;display:flex;justify-content:space-between;gap:6px;white-space:nowrap}
+.file-item:hover{background:#21262d}
+.file-item.active{background:#1f6feb33;color:#58a6ff}
+.file-item .size{color:#8b949e;font-size:10px}
+.file-item .pii-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.file-item .pii-dot.has-hard{background:#f85149}
+.file-item .pii-dot.has-soft{background:#d29922}
+.file-item .pii-dot.all-clean{background:#3fb950}
+
+/* Pagination */
+.pagination{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.pagination .info{font-size:12px;color:#8b949e;flex:1}
+.page-btn{background:#21262d;border:1px solid #30363d;color:#8b949e;padding:4px 10px;border-radius:4px;font-size:12px;cursor:pointer}
+.page-btn:hover{background:#30363d;color:#e6edf3}
+.page-btn.active{background:#1f6feb;border-color:#1f6feb;color:#fff}
+
+/* Value preview */
+.val-preview{max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'SF Mono',monospace;font-size:11px}
+.val-preview.null{color:#8b949e;font-style:italic}
+
+/* Ref files tooltip */
+.refs{font-size:10px;color:#58a6ff;cursor:help}
+.refs:hover{text-decoration:underline}
+
+/* Loading */
+.loading{text-align:center;padding:60px 20px;color:#8b949e}
+.loading .spinner{display:inline-block;width:24px;height:24px;border:3px solid #30363d;border-top-color:#58a6ff;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Empty state */
+.empty{text-align:center;padding:40px;color:#8b949e;font-size:14px}
+
+/* Skeleton modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto}
+.modal h2{font-size:16px;margin-bottom:12px}
+.modal pre{background:#0d1117;border:1px solid #21262d;border-radius:6px;padding:12px;font-size:11px;overflow-x:auto;max-height:400px;overflow-y:auto;margin-bottom:12px}
+.modal .actions{display:flex;gap:8px;justify-content:flex-end}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="header-row">
+  <div class="header-left">
+    <h1>Load-Bearing PII Scanner <span class="sub">Rappterbook State</span></h1>
+  </div>
+  <div class="header-right">
+    <button id="btn-scan" onclick="startScan()">Scan State Files</button>
+    <button id="btn-skeleton" class="secondary" onclick="showSkeleton()" disabled>Download Skeleton</button>
+  </div>
+</div>
+
+<div class="status" id="status">Click "Scan State Files" to begin analysis.</div>
+
+<div class="metrics hidden" id="metrics-row">
+  <div class="card"><div class="label">Files</div><div class="value" id="m-files">0</div><div class="sub" id="m-files-sub"></div></div>
+  <div class="card lb"><div class="label">Load-Bearing</div><div class="value" id="m-lb">0</div><div class="sub" id="m-lb-sub"></div></div>
+  <div class="card hard"><div class="label">Hard PII</div><div class="value" id="m-hard">0</div><div class="sub">must strip</div></div>
+  <div class="card soft"><div class="label">Soft PII</div><div class="value" id="m-soft">0</div><div class="sub">anonymize or strip</div></div>
+  <div class="card clean"><div class="label">Clean</div><div class="value" id="m-clean">0</div><div class="sub" id="m-clean-sub"></div></div>
+  <div class="card"><div class="label">Total Fields</div><div class="value" id="m-total">0</div><div class="sub">across all files</div></div>
+</div>
+
+<div class="layout hidden" id="main-layout">
+  <div>
+    <div class="file-list" id="file-list">
+      <div class="title">State Files</div>
+    </div>
+  </div>
+  <div>
+    <div class="controls">
+      <select id="filter-pii" onchange="applyFilters()">
+        <option value="all">All PII Classes</option>
+        <option value="HARD_PII">Hard PII Only</option>
+        <option value="SOFT_PII">Soft PII Only</option>
+        <option value="pii">All PII (Hard + Soft)</option>
+        <option value="CLEAN">Clean Only</option>
+      </select>
+      <select id="filter-lb" onchange="applyFilters()">
+        <option value="all">All Scores</option>
+        <option value="lb">Load-Bearing (score > 0)</option>
+        <option value="high">High Score (> 10)</option>
+        <option value="non-lb">Non-Load-Bearing (score = 0)</option>
+      </select>
+      <input type="text" id="search" placeholder="Search field path or value..." oninput="applyFilters()">
+    </div>
+    <div class="pagination" id="pagination"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('file')" id="th-file">File <span class="sort-arrow">&#9650;</span></th>
+            <th onclick="sortBy('path')" id="th-path">Field Path <span class="sort-arrow">&#9650;</span></th>
+            <th onclick="sortBy('value')" id="th-value">Value <span class="sort-arrow">&#9650;</span></th>
+            <th onclick="sortBy('pii')" id="th-pii">PII <span class="sort-arrow">&#9650;</span></th>
+            <th onclick="sortBy('score')" id="th-score">Score <span class="sort-arrow">&#9660;</span></th>
+            <th onclick="sortBy('refs')" id="th-refs">Refs <span class="sort-arrow">&#9650;</span></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="empty hidden" id="empty-state">No fields match the current filters.</div>
+  </div>
+</div>
+
+<div class="loading hidden" id="loading">
+  <div class="spinner"></div>
+  <div id="loading-text">Fetching state files...</div>
+</div>
+
+<div class="modal-overlay hidden" id="skeleton-modal" onclick="closeSkeleton(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>PII-Stripped Skeleton</h2>
+    <p style="font-size:12px;color:#8b949e;margin-bottom:12px">
+      HARD_PII replaced with [REDACTED]. SOFT_PII anonymized (load-bearing) or redacted (non-load-bearing). Structure preserved.
+    </p>
+    <select id="skeleton-file" onchange="renderSkeletonPreview()" style="margin-bottom:12px;width:100%"></select>
+    <pre id="skeleton-preview"></pre>
+    <div class="actions">
+      <button class="secondary" onclick="closeSkeleton()">Close</button>
+      <button onclick="downloadSkeleton()">Download JSON</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   Rappterbook Load-Bearing PII Scanner — Client-Side Engine
+   Zero dependencies. Fetches from raw.githubusercontent.com.
+   ================================================================ */
+
+const OWNER = 'kody-w';
+const REPO = 'rappterbook';
+const BRANCH = 'main';
+const RAW_BASE = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
+
+/* State files to scan (skip discussions_cache.json — 72MB, skip .bak files) */
+const STATE_FILES = [
+  'agents.json','amendments.json','analytics.json','api_tiers.json','app_registry.json',
+  'autonomy_log.json','backlog.json','book_catalog.json','book_progress.json','broadcasts.json',
+  'challenge_results.json','changes.json','channels.json','codex.json','compute_log.json',
+  'content.json','d365_sync_log.json','deployments.json','discussions_index.json','dms.json',
+  'evolution.json','factions.json','flags.json','follows.json','frame_counter.json',
+  'frame_snapshots.json','frame_timeline.json','ghost_memory.json','ghost_profiles.json',
+  'glitch_history.json','glitch_report.json','governance.json','heartbeat_state.json',
+  'hotlist.json','ledger.json','library.json','llm_usage.json','manifest.json',
+  'market.json','marketplace.json','markets.json','memes.json','mentorships.json',
+  'missions.json','mood_bias.json','notifications.json','poke_pins.json','pokes.json',
+  'post_types.json','posted_log.json','prediction_resolutions.json','predictions.json',
+  'product_owner.json','prophecies.json','quality_config.json','quality.json',
+  'random_events.json','resilience.json','seasons.json','seeds.json','sim-status.json',
+  'slop_cop_log.json','social_graph.json','stats.json','stream_assignments.json',
+  'subscriptions.json','summons.json','swarms.json','thread_temps.json','tree.json',
+  'trending.json','usage.json','vbank.json','wallets.json'
+];
+
+/* Large files: fetch but cap indexing */
+const LARGE_FILES = new Set(['posted_log.json','social_graph.json','frame_timeline.json','memes.json']);
+const MAX_INDEX_VALUES = 3000;
+const MIN_VAL_LEN = 3;
+const MAX_VAL_LEN = 500;
+const PAGE_SIZE = 200;
+
+/* PII patterns — mirrors the Python script */
+const HARD_PII_FIELDS = [/^email$/i,/^e[-_]?mail/i,/^phone/i,/^ssn$/i,/^social_security/i,/^ip_address$/i,/^password/i,/^secret/i,/^api_key$/i,/^token$/i,/^private_key$/i,/^credit_card/i,/^card_number/i,/^address$/i,/^street/i,/^zip_?code/i,/^postal/i];
+const SOFT_PII_FIELDS = [/^name$/i,/^display_?name$/i,/^full_?name$/i,/^first_?name$/i,/^last_?name$/i,/^bio$/i,/^description$/i,/^personality_seed$/i,/^about$/i,/^avatar/i,/^profile_/i,/^location$/i,/^city$/i,/^country$/i,/^username$/i,/^handle$/i,/^nickname$/i,/^real_name$/i];
+const CLEAN_FIELDS = [/^_meta$/i,/_at$/i,/_count$/i,/^count$/i,/^total/i,/^score$/i,/^karma$/i,/^status$/i,/^verified$/i,/^channel$/i,/^topic$/i,/^number$/i,/^frame$/i,/^version$/i,/^type$/i,/^category/i,/^element$/i,/^rarity$/i,/^color$/i,/^icon$/i,/^slug$/i,/^tags$/i,/^archetype/i,/^voice$/i,/^interests$/i,/^convictions$/i,/^strength$/i,/^weight$/i,/^upvotes$/i,/^downvotes$/i,/^domain$/i,/^title$/i,/^body$/i,/^text$/i,/^content$/i,/^desc$/i,/^enabled$/i,/^active$/i,/^flag/i,/^level$/i,/^url$/i];
+const HARD_PII_VALUES = [/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/,/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/,/\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/,/\b\d{3}[-]?\d{2}[-]?\d{4}\b/];
+const SOFT_PII_VALUES = [/https?:\/\/(?:twitter|x)\.com\/\w+/i,/https?:\/\/github\.com\/\w+/i,/https?:\/\/linkedin\.com\/in\/\w+/i];
+
+/* Global state */
+let rawData = {};       /* filename -> parsed JSON */
+let globalIndex = {};   /* value -> Set of filenames */
+let allFields = [];     /* flat array of field reports */
+let filteredFields = []; /* after filters */
+let currentPage = 0;
+let sortCol = 'score';
+let sortDir = -1;       /* -1 = desc, 1 = asc */
+let activeFile = null;
+
+function classifyPII(fieldName, value) {
+  for (const p of CLEAN_FIELDS) if (p.test(fieldName)) return 'CLEAN';
+  for (const p of HARD_PII_FIELDS) if (p.test(fieldName)) return 'HARD_PII';
+  for (const p of SOFT_PII_FIELDS) if (p.test(fieldName)) return 'SOFT_PII';
+  if (typeof value === 'string' && value.length > 0) {
+    for (const p of HARD_PII_VALUES) if (p.test(value)) return 'HARD_PII';
+    for (const p of SOFT_PII_VALUES) if (p.test(value)) return 'SOFT_PII';
+  }
+  return 'CLEAN';
+}
+
+function extractStrings(obj, path, out, limit) {
+  if (out.length >= limit) return;
+  if (typeof obj === 'string') {
+    if (obj.length >= MIN_VAL_LEN && obj.length <= MAX_VAL_LEN) out.push([path, obj]);
+  } else if (Array.isArray(obj)) {
+    for (let i = 0; i < obj.length && out.length < limit; i++) {
+      extractStrings(obj[i], path + '[' + i + ']', out, limit);
+    }
+  } else if (obj && typeof obj === 'object') {
+    for (const [k, v] of Object.entries(obj)) {
+      if (out.length >= limit) break;
+      if (k.length >= MIN_VAL_LEN && k.length <= MAX_VAL_LEN) out.push([path + '.<key>', k]);
+      extractStrings(v, path ? path + '.' + k : k, out, limit);
+    }
+  }
+}
+
+function buildIndex() {
+  globalIndex = {};
+  for (const [fname, data] of Object.entries(rawData)) {
+    const pairs = [];
+    const limit = LARGE_FILES.has(fname) ? MAX_INDEX_VALUES : 100000;
+    extractStrings(data, '', pairs, limit);
+    for (const [, val] of pairs) {
+      if (!globalIndex[val]) globalIndex[val] = new Set();
+      globalIndex[val].add(fname);
+    }
+  }
+}
+
+function lbScore(value, sourceFile) {
+  const files = globalIndex[value];
+  if (!files) return 0;
+  let count = 0;
+  for (const f of files) if (f !== sourceFile) count++;
+  return count;
+}
+
+function scanFile(fname, data) {
+  const fields = [];
+  _scanRecursive(data, '', fname, fields);
+  return fields;
+}
+
+function _scanRecursive(obj, path, source, fields) {
+  if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+    for (const [key, val] of Object.entries(obj)) {
+      const childPath = path ? path + '.' + key : key;
+      /* Report on key itself */
+      if (key.length >= MIN_VAL_LEN && key.length <= MAX_VAL_LEN) {
+        const score = lbScore(key, source);
+        let pii = classifyPII(key, key);
+        if (/^[a-z]+-[a-z]+-\d+$/.test(key) || /^[a-z_-]+$/.test(key)) pii = 'CLEAN';
+        const refs = globalIndex[key] ? [...globalIndex[key]].filter(f => f !== source).sort() : [];
+        fields.push({ file: source, path: childPath + ' (key)', fieldName: key, value: key, pii, score, refs });
+      }
+      if (val && typeof val === 'object') {
+        _scanRecursive(val, childPath, source, fields);
+      } else {
+        const pii = classifyPII(key, val);
+        let score = 0, refs = [];
+        if (typeof val === 'string' && val.length >= MIN_VAL_LEN && val.length <= MAX_VAL_LEN) {
+          score = lbScore(val, source);
+          refs = globalIndex[val] ? [...globalIndex[val]].filter(f => f !== source).sort() : [];
+        }
+        fields.push({ file: source, path: childPath, fieldName: key, value: val, pii, score, refs });
+      }
+    }
+  } else if (Array.isArray(obj)) {
+    const parentField = path.includes('.') ? path.split('.').pop() : path;
+    for (let i = 0; i < obj.length; i++) {
+      const childPath = path + '[' + i + ']';
+      const item = obj[i];
+      if (item && typeof item === 'object') {
+        _scanRecursive(item, childPath, source, fields);
+      } else {
+        const pii = classifyPII(parentField, item);
+        let score = 0, refs = [];
+        if (typeof item === 'string' && item.length >= MIN_VAL_LEN && item.length <= MAX_VAL_LEN) {
+          score = lbScore(item, source);
+          refs = globalIndex[item] ? [...globalIndex[item]].filter(f => f !== source).sort() : [];
+        }
+        fields.push({ file: source, path: childPath, fieldName: parentField, value: item, pii, score, refs });
+      }
+    }
+  }
+}
+
+/* Skeleton generation */
+function pseudonym(val) {
+  /* Simple hash — not cryptographic, just deterministic */
+  let h = 0;
+  for (let i = 0; i < val.length; i++) { h = ((h << 5) - h + val.charCodeAt(i)) | 0; }
+  return 'anon-' + Math.abs(h).toString(16).padStart(8, '0');
+}
+
+function generateSkeleton(data, fieldName, sourceFile) {
+  if (Array.isArray(data)) {
+    return data.map(item => {
+      if (item && typeof item === 'object') return generateSkeleton(item, fieldName, sourceFile);
+      return item;
+    });
+  }
+  if (data && typeof data === 'object') {
+    const result = {};
+    for (const [key, val] of Object.entries(data)) {
+      if (val && typeof val === 'object') {
+        result[key] = generateSkeleton(val, key, sourceFile);
+      } else {
+        const pii = classifyPII(key, val);
+        if (pii === 'HARD_PII') {
+          result[key] = '[REDACTED]';
+        } else if (pii === 'SOFT_PII') {
+          if (typeof val === 'string' && val.length >= MIN_VAL_LEN && val.length <= MAX_VAL_LEN) {
+            const score = lbScore(val, sourceFile);
+            result[key] = score > 0 ? pseudonym(val) : '[REDACTED]';
+          } else {
+            result[key] = '[REDACTED]';
+          }
+        } else {
+          result[key] = val;
+        }
+      }
+    }
+    return result;
+  }
+  return data;
+}
+
+/* Fetch and scan */
+async function startScan() {
+  const btn = document.getElementById('btn-scan');
+  const loading = document.getElementById('loading');
+  const loadingText = document.getElementById('loading-text');
+  btn.disabled = true;
+  loading.classList.remove('hidden');
+  document.getElementById('status').textContent = 'Scanning...';
+
+  rawData = {};
+  allFields = [];
+  let fetched = 0;
+  let errors = 0;
+
+  /* Fetch in batches of 8 for parallelism without hammering */
+  const batchSize = 8;
+  for (let i = 0; i < STATE_FILES.length; i += batchSize) {
+    const batch = STATE_FILES.slice(i, i + batchSize);
+    const promises = batch.map(async (fname) => {
+      try {
+        loadingText.textContent = `Fetching ${fname}... (${fetched + 1}/${STATE_FILES.length})`;
+        const resp = await fetch(`${RAW_BASE}/state/${fname}`);
+        if (!resp.ok) { errors++; return; }
+        const text = await resp.text();
+        try {
+          rawData[fname] = JSON.parse(text);
+          fetched++;
+        } catch { errors++; }
+      } catch { errors++; }
+    });
+    await Promise.all(promises);
+  }
+
+  loadingText.textContent = 'Building cross-reference index...';
+  await new Promise(r => setTimeout(r, 10)); /* Let UI update */
+  buildIndex();
+
+  loadingText.textContent = 'Scanning fields...';
+  await new Promise(r => setTimeout(r, 10));
+
+  for (const [fname, data] of Object.entries(rawData)) {
+    const fields = scanFile(fname, data);
+    allFields.push(...fields);
+  }
+
+  /* Sort by score desc initially */
+  allFields.sort((a, b) => b.score - a.score);
+
+  loading.classList.add('hidden');
+  btn.disabled = false;
+  document.getElementById('btn-skeleton').disabled = false;
+
+  renderMetrics();
+  renderFileList();
+  applyFilters();
+
+  document.getElementById('metrics-row').classList.remove('hidden');
+  document.getElementById('main-layout').classList.remove('hidden');
+
+  const statusParts = [`<span class="count">${fetched} files</span> scanned, ${allFields.length.toLocaleString()} fields analyzed`];
+  if (errors > 0) statusParts.push(`<span class="warn">${errors} files failed to fetch</span>`);
+  document.getElementById('status').innerHTML = statusParts.join(' &mdash; ');
+}
+
+function renderMetrics() {
+  const hard = allFields.filter(f => f.pii === 'HARD_PII').length;
+  const soft = allFields.filter(f => f.pii === 'SOFT_PII').length;
+  const clean = allFields.filter(f => f.pii === 'CLEAN').length;
+  const lb = allFields.filter(f => f.score > 0).length;
+  const total = allFields.length;
+  const files = Object.keys(rawData).length;
+
+  document.getElementById('m-files').textContent = files;
+  document.getElementById('m-files-sub').textContent = `${Object.keys(rawData).reduce((sum, f) => sum + JSON.stringify(rawData[f]).length, 0 > 1e6 ? 'MB' : 'KB')} fetched`;
+  document.getElementById('m-lb').textContent = lb.toLocaleString();
+  document.getElementById('m-lb-sub').textContent = total > 0 ? (100 * lb / total).toFixed(1) + '% of fields' : '';
+  document.getElementById('m-hard').textContent = hard.toLocaleString();
+  document.getElementById('m-soft').textContent = soft.toLocaleString();
+  document.getElementById('m-clean').textContent = clean.toLocaleString();
+  document.getElementById('m-clean-sub').textContent = total > 0 ? (100 * clean / total).toFixed(1) + '% safe' : '';
+  document.getElementById('m-total').textContent = total.toLocaleString();
+}
+
+function renderFileList() {
+  const container = document.getElementById('file-list');
+  container.innerHTML = '<div class="title">State Files</div>';
+
+  /* Build per-file stats */
+  const fileStats = {};
+  for (const f of allFields) {
+    if (!fileStats[f.file]) fileStats[f.file] = { total: 0, hard: 0, soft: 0, lb: 0 };
+    fileStats[f.file].total++;
+    if (f.pii === 'HARD_PII') fileStats[f.file].hard++;
+    if (f.pii === 'SOFT_PII') fileStats[f.file].soft++;
+    if (f.score > 0) fileStats[f.file].lb++;
+  }
+
+  /* "All files" option */
+  const allItem = document.createElement('div');
+  allItem.className = 'file-item' + (activeFile === null ? ' active' : '');
+  allItem.innerHTML = `<span>All files</span><span class="size">${allFields.length.toLocaleString()}</span>`;
+  allItem.onclick = () => { activeFile = null; renderFileList(); applyFilters(); };
+  container.appendChild(allItem);
+
+  /* Individual files sorted by PII count desc */
+  const sorted = Object.entries(fileStats).sort((a, b) => (b[1].hard + b[1].soft) - (a[1].hard + a[1].soft));
+  for (const [fname, stats] of sorted) {
+    const item = document.createElement('div');
+    item.className = 'file-item' + (activeFile === fname ? ' active' : '');
+    const dotClass = stats.hard > 0 ? 'has-hard' : stats.soft > 0 ? 'has-soft' : 'all-clean';
+    item.innerHTML = `<span class="pii-dot ${dotClass}"></span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${fname}</span><span class="size">${stats.total.toLocaleString()}</span>`;
+    item.onclick = () => { activeFile = fname; renderFileList(); applyFilters(); };
+    container.appendChild(item);
+  }
+}
+
+function applyFilters() {
+  const piiFilter = document.getElementById('filter-pii').value;
+  const lbFilter = document.getElementById('filter-lb').value;
+  const search = document.getElementById('search').value.toLowerCase();
+
+  filteredFields = allFields.filter(f => {
+    if (activeFile && f.file !== activeFile) return false;
+    if (piiFilter === 'HARD_PII' && f.pii !== 'HARD_PII') return false;
+    if (piiFilter === 'SOFT_PII' && f.pii !== 'SOFT_PII') return false;
+    if (piiFilter === 'pii' && f.pii === 'CLEAN') return false;
+    if (piiFilter === 'CLEAN' && f.pii !== 'CLEAN') return false;
+    if (lbFilter === 'lb' && f.score === 0) return false;
+    if (lbFilter === 'high' && f.score <= 10) return false;
+    if (lbFilter === 'non-lb' && f.score !== 0) return false;
+    if (search) {
+      const valStr = f.value === null ? 'null' : String(f.value);
+      if (!f.path.toLowerCase().includes(search) && !valStr.toLowerCase().includes(search) && !f.file.toLowerCase().includes(search)) return false;
+    }
+    return true;
+  });
+
+  /* Apply current sort */
+  filteredFields.sort((a, b) => {
+    let va, vb;
+    switch (sortCol) {
+      case 'file': va = a.file; vb = b.file; break;
+      case 'path': va = a.path; vb = b.path; break;
+      case 'value': va = String(a.value || ''); vb = String(b.value || ''); break;
+      case 'pii': va = a.pii; vb = b.pii; break;
+      case 'score': va = a.score; vb = b.score; break;
+      case 'refs': va = a.refs.length; vb = b.refs.length; break;
+      default: va = a.score; vb = b.score;
+    }
+    if (typeof va === 'string') return sortDir * va.localeCompare(vb);
+    return sortDir * (va - vb);
+  });
+
+  currentPage = 0;
+  renderTable();
+  renderPagination();
+
+  const empty = document.getElementById('empty-state');
+  if (filteredFields.length === 0) { empty.classList.remove('hidden'); }
+  else { empty.classList.add('hidden'); }
+}
+
+function sortBy(col) {
+  if (sortCol === col) { sortDir *= -1; }
+  else { sortCol = col; sortDir = col === 'score' || col === 'refs' ? -1 : 1; }
+
+  /* Update header arrows */
+  document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+  const th = document.getElementById('th-' + col);
+  if (th) {
+    th.classList.add('sorted');
+    th.querySelector('.sort-arrow').innerHTML = sortDir === 1 ? '&#9650;' : '&#9660;';
+  }
+
+  applyFilters();
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tbody');
+  const start = currentPage * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, filteredFields.length);
+  const page = filteredFields.slice(start, end);
+
+  const maxScore = Math.max(1, ...filteredFields.map(f => f.score));
+
+  let html = '';
+  for (const f of page) {
+    const rowClass = f.pii === 'HARD_PII' ? 'hard' : f.pii === 'SOFT_PII' ? 'soft' : '';
+    const badgeClass = f.pii === 'HARD_PII' ? 'hard-pii' : f.pii === 'SOFT_PII' ? 'soft-pii' : 'clean';
+    const valDisplay = f.value === null ? '<span class="val-preview null">null</span>' :
+      `<span class="val-preview" title="${escHtml(String(f.value))}">${escHtml(truncate(String(f.value), 60))}</span>`;
+    const barWidth = Math.max(2, Math.round(100 * f.score / maxScore));
+    const refsHtml = f.refs.length > 0
+      ? `<span class="refs" title="${escHtml(f.refs.join('\n'))}">${f.refs.length} file${f.refs.length !== 1 ? 's' : ''}</span>`
+      : '<span style="color:#30363d">0</span>';
+
+    html += `<tr class="${rowClass}">
+      <td style="font-size:11px;white-space:nowrap">${escHtml(f.file)}</td>
+      <td style="font-family:'SF Mono',monospace;font-size:11px">${escHtml(f.path)}</td>
+      <td>${valDisplay}</td>
+      <td><span class="badge ${badgeClass}">${f.pii}</span></td>
+      <td><div class="score-bar"><span class="score-num">${f.score}</span><div class="score-fill" style="width:${barWidth}px"></div></div></td>
+      <td>${refsHtml}</td>
+    </tr>`;
+  }
+  tbody.innerHTML = html;
+}
+
+function renderPagination() {
+  const container = document.getElementById('pagination');
+  const total = filteredFields.length;
+  const pages = Math.ceil(total / PAGE_SIZE);
+  const start = currentPage * PAGE_SIZE + 1;
+  const end = Math.min((currentPage + 1) * PAGE_SIZE, total);
+
+  if (total === 0) { container.innerHTML = ''; return; }
+
+  let html = `<span class="info">Showing ${start.toLocaleString()}-${end.toLocaleString()} of ${total.toLocaleString()} fields</span>`;
+
+  if (pages > 1) {
+    if (currentPage > 0) html += `<button class="page-btn" onclick="goPage(${currentPage - 1})">Prev</button>`;
+    const startPage = Math.max(0, currentPage - 3);
+    const endPage = Math.min(pages, currentPage + 4);
+    for (let i = startPage; i < endPage; i++) {
+      html += `<button class="page-btn${i === currentPage ? ' active' : ''}" onclick="goPage(${i})">${i + 1}</button>`;
+    }
+    if (currentPage < pages - 1) html += `<button class="page-btn" onclick="goPage(${currentPage + 1})">Next</button>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function goPage(n) {
+  currentPage = n;
+  renderTable();
+  renderPagination();
+  document.querySelector('.table-wrap').scrollTop = 0;
+}
+
+/* Skeleton modal */
+function showSkeleton() {
+  const modal = document.getElementById('skeleton-modal');
+  const select = document.getElementById('skeleton-file');
+  select.innerHTML = '';
+  for (const fname of Object.keys(rawData).sort()) {
+    const opt = document.createElement('option');
+    opt.value = fname;
+    opt.textContent = fname;
+    select.appendChild(opt);
+  }
+  if (activeFile && rawData[activeFile]) select.value = activeFile;
+  modal.classList.remove('hidden');
+  renderSkeletonPreview();
+}
+
+function renderSkeletonPreview() {
+  const fname = document.getElementById('skeleton-file').value;
+  if (!fname || !rawData[fname]) return;
+  const skeleton = generateSkeleton(rawData[fname], '', fname);
+  const json = JSON.stringify(skeleton, null, 2);
+  /* Show first 200 lines */
+  const lines = json.split('\n');
+  const preview = lines.length > 200 ? lines.slice(0, 200).join('\n') + '\n\n... (' + (lines.length - 200) + ' more lines)' : json;
+  document.getElementById('skeleton-preview').textContent = preview;
+}
+
+function downloadSkeleton() {
+  const fname = document.getElementById('skeleton-file').value;
+  if (!fname || !rawData[fname]) return;
+  const skeleton = generateSkeleton(rawData[fname], '', fname);
+  const json = JSON.stringify(skeleton, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'skeleton_' + fname;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function closeSkeleton(event) {
+  if (event && event.target !== document.getElementById('skeleton-modal')) return;
+  document.getElementById('skeleton-modal').classList.add('hidden');
+}
+
+/* Utilities */
+function escHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function truncate(s, n) {
+  return s.length > n ? s.slice(0, n - 3) + '...' : s;
+}
+</script>
+</body>
+</html>

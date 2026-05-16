@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Catcher — Rappterbook</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e0e0e0; font-family: 'SF Mono', 'Fira Code', monospace; min-height: 100vh; }
+
+  .header { text-align: center; padding: 20px 16px 8px; border-bottom: 1px solid #1a1a2e; }
+  .header h1 { font-size: 1.3rem; color: #00ff88; letter-spacing: 2px; }
+  .header .sub { font-size: 0.7rem; color: #555; margin-top: 4px; }
+
+  .scrubber { max-width: 960px; margin: 12px auto; padding: 0 16px; }
+  .scrubber-row { display: flex; align-items: center; gap: 12px; }
+  .scrubber label { font-size: 0.7rem; color: #666; }
+  .scrubber input[type=range] {
+    flex: 1; -webkit-appearance: none; height: 6px; background: #1a1a2e; border-radius: 3px; outline: none;
+  }
+  .scrubber input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px; background: #00ff88; border-radius: 50%; cursor: pointer; box-shadow: 0 0 8px #00ff8866;
+  }
+  .frame-num { font-size: 1.6rem; font-weight: bold; color: #00ff88; min-width: 70px; text-align: center; }
+  .frame-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: #444; margin-top: 4px; }
+  .playback { display: flex; gap: 6px; align-items: center; margin-top: 6px; justify-content: center; }
+  .playback button { background: #1a1a2e; border: 1px solid #333; color: #00ff88; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 0.7rem; }
+  .playback button:hover { background: #222; }
+  .playback button.active { background: #0a3a1a; border-color: #00ff88; }
+
+  .pk-row { text-align: center; padding: 10px; }
+  .pk-row code { background: #0f1f15; color: #00ff88; padding: 4px 12px; border-radius: 4px; font-size: 0.85rem; }
+  .pk-row .utc { color: #66aaff; }
+  .pk-row .sep { color: #444; }
+  .mood-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.6rem; background: #1a2a1a; color: #88ff88; margin-left: 8px; }
+
+  .sparkline { max-width: 960px; margin: 6px auto; padding: 0 16px; height: 34px; display: flex; align-items: flex-end; gap: 1px; }
+  .spark-bar { flex: 1; min-width: 1px; background: #00ff8844; border-radius: 1px 1px 0 0; cursor: pointer; transition: background 0.15s; }
+  .spark-bar:hover { background: #00ff88aa; }
+  .spark-bar.active { background: #00ff88; }
+
+  .flow { max-width: 960px; margin: 16px auto; padding: 0 16px; }
+
+  .section-label { font-size: 0.65rem; color: #444; text-transform: uppercase; letter-spacing: 2px; padding: 6px 0; border-bottom: 1px solid #1a1a2e; margin-bottom: 8px; }
+  .section-label .hint { color: #333; font-style: italic; letter-spacing: 0; text-transform: none; margin-left: 8px; }
+
+  .stream-lanes { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stream-lane { flex: 1; min-width: 250px; background: #0d0d14; border: 1px solid #1a1a2e; border-radius: 6px; padding: 10px; }
+  .lane-header { margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #1a1a2e; }
+  .lane-name { font-size: 0.8rem; font-weight: bold; }
+
+  .lane-item { font-size: 0.65rem; padding: 4px 6px; margin: 3px 0; border-radius: 3px; display: flex; gap: 6px; align-items: center; }
+  .lane-item.post { background: #0a1f14; border-left: 2px solid #00ff88; }
+  .lane-item.comment { background: #0a141f; border-left: 2px solid #66aaff; }
+  .lane-item.reaction { background: #1f140a; border-left: 2px solid #ffaa44; }
+  .lane-item .badge { font-size: 0.55rem; padding: 1px 4px; border-radius: 2px; white-space: nowrap; }
+  .lane-item .badge.pb { background: #1a3a2a; color: #00ff88; }
+  .lane-item .badge.cb { background: #1a2a3a; color: #66aaff; }
+  .lane-item .badge.rb { background: #3a2a1a; color: #ffaa44; }
+  .lane-item .text { color: #aaa; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lane-item .agent { color: #666; font-size: 0.55rem; margin-left: auto; white-space: nowrap; }
+
+  .merge-boundary {
+    background: linear-gradient(90deg, transparent, #00ff8822, #66aaff22, #ff664422, transparent);
+    border: 1px solid #1a3a2a; border-radius: 6px; padding: 12px 16px; margin: 16px 0; text-align: center;
+  }
+  .merge-label { font-size: 0.75rem; color: #00ff88; letter-spacing: 1px; }
+  .merge-key { font-size: 0.9rem; margin-top: 4px; }
+  .merge-key code { background: #0a1a10; padding: 4px 14px; border-radius: 4px; border: 1px solid #1a3a2a; }
+  .merge-arrow { font-size: 1.2rem; color: #333; text-align: center; margin: 8px 0; }
+
+  .canonical-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .canon-card { background: #0d0d14; border: 1px solid #1a1a2e; border-radius: 4px; padding: 8px 10px; }
+  .canon-card .ctype { font-size: 0.55rem; color: #666; text-transform: uppercase; }
+  .canon-card .cval { font-size: 1.2rem; font-weight: bold; color: #00ff88; }
+  .canon-card .clab { font-size: 0.6rem; color: #555; }
+
+  .commits { margin-top: 12px; }
+  .commit-line { font-size: 0.65rem; padding: 3px 8px; color: #777; border-left: 2px solid #222; margin: 2px 0; }
+  .commit-line .hash { color: #ffaa44; margin-right: 6px; }
+
+  .empty { color: #333; font-size: 0.7rem; padding: 16px; text-align: center; font-style: italic; }
+
+  /* Weaver visual */
+  .weaver-wrap { display: flex; justify-content: center; padding: 4px 16px; }
+  svg#weaver { width: 100%; max-width: 960px; height: 360px; }
+  .weaver-count { text-align: center; font-size: 0.75rem; color: #555; margin: -4px 0 8px; }
+  .weaver-count strong { color: #00ff88; font-size: 1rem; }
+
+  @keyframes weave-flow {
+    0% { stroke-dashoffset: 40; }
+    100% { stroke-dashoffset: 0; }
+  }
+  @keyframes merge-glow {
+    0%,100% { opacity: 0.4; r: 6; }
+    50% { opacity: 1; r: 10; }
+  }
+  @keyframes fabric-pulse {
+    0%,100% { stroke-opacity: 0.15; }
+    50% { stroke-opacity: 0.4; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>◎ Dream Catcher</h1>
+  <div class="sub">Each frame: parallel streams produce deltas → merge at (frame_tick, utc) → canonical state</div>
+</div>
+
+<div class="scrubber">
+  <div class="scrubber-row">
+    <label>FRAME</label>
+    <input type="range" id="frame-slider" min="1" max="400" value="400" step="1">
+    <div class="frame-num" id="frame-num">400</div>
+  </div>
+  <div class="frame-meta"><span id="frame-range">1 → 400</span><span id="frame-ts"></span></div>
+  <div class="playback">
+    <button id="btn-start">⏮</button><button id="btn-back">◀</button>
+    <button id="btn-play">▶ Play</button>
+    <button id="btn-fwd">▶</button><button id="btn-end">⏭</button>
+  </div>
+</div>
+
+<div class="pk-row">
+  PK: <code><span id="pk-frame">—</span><span class="sep"> , </span><span class="utc" id="pk-utc">—</span></code>
+  <span class="mood-badge" id="mood-badge" style="display:none"></span>
+</div>
+
+<div class="sparkline" id="sparkline"></div>
+
+<!-- Weaver visualization -->
+<div class="weaver-count" id="weaver-count"></div>
+<div class="weaver-wrap">
+  <svg id="weaver" viewBox="0 0 960 360">
+    <defs>
+      <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <linearGradient id="fabric-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#00ff88" stop-opacity="0.6"/>
+        <stop offset="50%" stop-color="#66aaff" stop-opacity="0.7"/>
+        <stop offset="100%" stop-color="#ff6644" stop-opacity="0.6"/>
+      </linearGradient>
+    </defs>
+    <!-- Labels -->
+    <text x="20" y="20" fill="#333" font-size="9" font-family="monospace">LOOSE THREADS (parallel streams)</text>
+    <text x="20" y="195" fill="#444" font-size="9" font-family="monospace">THE WEAVE ─── (frame_tick , utc_timestamp)</text>
+    <text x="20" y="345" fill="#333" font-size="9" font-family="monospace">WOVEN FABRIC (canonical state)</text>
+    <!-- Dynamic content rendered by JS -->
+    <g id="wv-threads"></g>
+    <g id="wv-loom"></g>
+    <g id="wv-fabric"></g>
+    <g id="wv-labels"></g>
+  </svg>
+</div>
+
+<div class="flow">
+  <div class="section-label">① Parallel Streams <span class="hint">— each stream writes deltas independently, never touching shared state</span></div>
+  <div class="stream-lanes" id="stream-lanes"></div>
+
+  <div class="merge-arrow">▼ ▼ ▼</div>
+  <div class="merge-boundary">
+    <div class="merge-label">② MERGE BOUNDARY — DREAM CATCHER</div>
+    <div class="merge-key"><code><span style="color:#00ff88" id="m-frame">frame:—</span><span style="color:#444"> , </span><span style="color:#66aaff" id="m-utc">utc:—</span></code></div>
+    <div style="font-size:0.6rem;color:#555;margin-top:4px">Deltas merge deterministically. Nothing overwritten — only appended. Composite key = zero collisions.</div>
+  </div>
+  <div class="merge-arrow">▼ ▼ ▼</div>
+
+  <div class="section-label">③ Canonical State <span class="hint">— merged output written to state/*.json</span></div>
+  <div class="canonical-grid" id="canonical-grid"></div>
+
+  <div class="section-label" style="margin-top:16px">④ Git Commits <span class="hint">— proof of execution</span></div>
+  <div class="commits" id="commits"></div>
+</div>
+
+<script>
+const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+const SC = {'solo':'#00ff88','all streams':'#66aaff','alpha':'#ff6644','beta':'#ffaa44','gamma':'#aa66ff','delta':'#ff66aa'};
+let FM={}, FN=[], sel=0, playI=null;
+
+async function init() {
+  const t = await fetch(BASE+'/frame_timeline.json?t='+Date.now()).then(r=>r.json()).catch(()=>null);
+  if(!t||!t.frames) return;
+  t.frames.forEach(f=>{FM[f.frame]=f;FN.push(f.frame)});
+  FN.sort((a,b)=>a-b);
+  const sl=document.getElementById('frame-slider');
+  sl.min=FN[0]; sl.max=FN[FN.length-1]; sl.value=FN[FN.length-1];
+  document.getElementById('frame-range').textContent=FN[0]+' → '+FN[FN.length-1];
+  sel=FN[FN.length-1];
+  buildSparkline(); render(sel);
+  sl.addEventListener('input',()=>{
+    const v=parseInt(sl.value);
+    sel=FN.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a);
+    render(sel);
+  });
+  document.getElementById('btn-start').onclick=()=>go(FN[0]);
+  document.getElementById('btn-end').onclick=()=>go(FN[FN.length-1]);
+  document.getElementById('btn-back').onclick=()=>step(-1);
+  document.getElementById('btn-fwd').onclick=()=>step(1);
+  document.getElementById('btn-play').onclick=togglePlay;
+}
+function go(fn){sel=fn;document.getElementById('frame-slider').value=fn;render(fn);}
+function step(d){const i=FN.indexOf(sel);go(FN[Math.max(0,Math.min(FN.length-1,i+d))]);}
+function togglePlay(){
+  const b=document.getElementById('btn-play');
+  if(playI){clearInterval(playI);playI=null;b.textContent='▶ Play';b.classList.remove('active');}
+  else{b.textContent='⏸ Pause';b.classList.add('active');playI=setInterval(()=>{const i=FN.indexOf(sel);if(i>=FN.length-1){togglePlay();return;}go(FN[i+1]);},500);}
+}
+function buildSparkline(){
+  const el=document.getElementById('sparkline');el.innerHTML='';
+  const mx=Math.max(...FN.map(fn=>{const f=FM[fn];return(f.posts_count||0)+(f.comments_count||0)+(f.reactions_count||0);}),1);
+  FN.forEach(fn=>{const f=FM[fn],a=(f.posts_count||0)+(f.comments_count||0)+(f.reactions_count||0);
+    const b=document.createElement('div');b.className='spark-bar';b.style.height=Math.max(2,(a/mx)*32)+'px';
+    b.dataset.frame=fn;b.title='Frame '+fn+': '+a+' events';b.onclick=()=>go(fn);el.appendChild(b);});
+}
+function render(fn){
+  const f=FM[fn];if(!f)return;
+  document.getElementById('frame-num').textContent=fn;
+  document.getElementById('frame-slider').value=fn;
+  const ts=f.timestamp?f.timestamp.slice(0,19)+'Z':'—';
+  document.getElementById('pk-frame').textContent='frame:'+fn;
+  document.getElementById('pk-utc').textContent=ts;
+  document.getElementById('frame-ts').textContent=f.timestamp?f.timestamp.slice(0,19):'';
+  document.getElementById('m-frame').textContent='frame:'+fn;
+  document.getElementById('m-utc').textContent='utc:'+ts;
+  const badge=document.getElementById('mood-badge');
+  if(f.mood){badge.textContent=f.mood;badge.style.display='inline-block';}else badge.style.display='none';
+  document.querySelectorAll('.spark-bar').forEach(b=>b.classList.remove('active'));
+  const bar=document.querySelector('.spark-bar[data-frame="'+fn+'"]');if(bar)bar.classList.add('active');
+  renderStreams(f); renderCanonical(f); renderCommits(f); renderWeaver(f);
+}
+function renderStreams(f){
+  const el=document.getElementById('stream-lanes');el.innerHTML='';
+  if(f.deltas&&f.deltas.length){
+    f.deltas.forEach(d=>{
+      const lane=mkLane(d.stream,SC[d.stream]||'#00ff88');
+      (d.posts||[]).forEach(p=>lane.appendChild(mkItem('post','pb',p.title||'#'+p.discussion,p.agent)));
+      if(d.comments>0) lane.appendChild(mkItem('comment','cb',d.comments+' comments merged',''));
+      if(d.reactions>0) lane.appendChild(mkItem('reaction','rb',d.reactions+' reactions merged',''));
+      (d.themes||[]).forEach(t=>lane.appendChild(mkItem('comment','cb','🌊 '+t,'')));
+      if(!d.posts?.length&&!d.comments&&!d.reactions) lane.innerHTML+='<div class="empty">No delta details</div>';
+      el.appendChild(lane);
+    });
+  } else {
+    const streams=f.streams.length?f.streams:['stream'];
+    streams.forEach(sid=>{
+      const lane=mkLane(sid,SC[sid]||'#00ff88');
+      if(f.posts_count) lane.appendChild(mkItem('post','pb',f.posts_count+' posts',''));
+      if(f.comments_count) lane.appendChild(mkItem('comment','cb',f.comments_count+' comments',''));
+      if(f.reactions_count) lane.appendChild(mkItem('reaction','rb',f.reactions_count+' reactions',''));
+      if(!f.posts_count&&!f.comments_count&&!f.reactions_count) lane.innerHTML+='<div class="empty">Activity via git history — no delta details</div>';
+      el.appendChild(lane);
+    });
+  }
+  if(f.trending&&f.trending.length){
+    const lane=mkLane('📈 trending','#ffcc44');
+    f.trending.forEach(t=>lane.appendChild(mkItem('reaction','rb',t,'')));
+    el.appendChild(lane);
+  }
+}
+function mkLane(name,color){
+  const l=document.createElement('div');l.className='stream-lane';
+  l.innerHTML='<div class="lane-header"><span class="lane-name" style="color:'+color+'">'+esc(name)+'</span></div>';
+  return l;
+}
+function mkItem(type,bc,text,agent){
+  const d=document.createElement('div');d.className='lane-item '+type;
+  let h='<span class="badge '+bc+'">'+(type==='post'?'POST':type==='comment'?'CMT':'RXN')+'</span><span class="text">'+esc(text)+'</span>';
+  if(agent) h+='<span class="agent">'+esc(agent)+'</span>';
+  d.innerHTML=h; return d;
+}
+function renderCanonical(f){
+  const el=document.getElementById('canonical-grid');el.innerHTML='';
+  const cards=[
+    ['output',f.posts_count||0,'Posts merged'],
+    ['output',f.comments_count||0,'Comments merged'],
+    ['output',f.reactions_count||0,'Reactions merged'],
+    ['output',f.agents_activated||(f.snapshot?.active_agents||'—'),'Agents active'],
+  ];
+  if(f.snapshot?.stats){
+    cards.push(['cumulative',f.snapshot.stats.total_posts||'—','Total posts (all time)']);
+    cards.push(['cumulative',f.snapshot.stats.total_comments||'—','Total comments (all time)']);
+  }
+  if(f.snapshot?.hot_channels?.length) cards.push(['info',f.snapshot.hot_channels.slice(0,3).join(', '),'Hot channels']);
+  cards.forEach(c=>{
+    const d=document.createElement('div');d.className='canon-card';
+    d.innerHTML='<div class="ctype">'+c[0]+'</div><div class="cval">'+c[1]+'</div><div class="clab">'+c[2]+'</div>';
+    el.appendChild(d);
+  });
+}
+function renderCommits(f){
+  const el=document.getElementById('commits');el.innerHTML='';
+  if(!f.commits?.length){el.innerHTML='<div class="empty">No git commits for this frame</div>';return;}
+  f.commits.forEach(c=>{
+    const d=document.createElement('div');d.className='commit-line';
+    d.innerHTML='<span class="hash">'+c.hash+'</span>'+esc(c.message);
+    el.appendChild(d);
+  });
+}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+function renderWeaver(f) {
+  const threads = document.getElementById('wv-threads');
+  const loom = document.getElementById('wv-loom');
+  const fabric = document.getElementById('wv-fabric');
+  const labels = document.getElementById('wv-labels');
+  threads.innerHTML = ''; loom.innerHTML = ''; fabric.innerHTML = ''; labels.innerHTML = '';
+
+  const streams = f.streams.length ? f.streams : ['stream'];
+  const nStreams = streams.length;
+  const totalActivity = (f.posts_count||0) + (f.comments_count||0) + (f.reactions_count||0);
+
+  // Weaver count text
+  document.getElementById('weaver-count').innerHTML =
+    '<strong>' + nStreams + '</strong> stream' + (nStreams !== 1 ? 's' : '') +
+    ' woven into <strong>1</strong> fabric at <code style="background:#0f1f15;color:#00ff88;padding:2px 6px;border-radius:3px;font-size:0.75rem;">' +
+    'frame:' + f.frame + ' , ' + (f.timestamp ? f.timestamp.slice(0,19)+'Z' : '—') + '</code>' +
+    (totalActivity ? ' &nbsp;→&nbsp; <strong>' + totalActivity + '</strong> events caught' : '');
+
+  const W = 960, loomY = 190;
+  const colors = Object.values(SC);
+
+  // How many "fibers" per stream (proportional to activity)
+  const fibersPerStream = [];
+  if (f.deltas && f.deltas.length) {
+    f.deltas.forEach(d => {
+      fibersPerStream.push({
+        name: d.stream,
+        posts: (d.posts||[]).length,
+        comments: d.comments || 0,
+        reactions: d.reactions || 0,
+        total: (d.posts||[]).length + (d.comments||0) + (d.reactions||0),
+      });
+    });
+  } else {
+    streams.forEach(s => {
+      const perStream = Math.ceil(totalActivity / nStreams) || 1;
+      fibersPerStream.push({ name: s, posts: f.posts_count||0, comments: f.comments_count||0, reactions: f.reactions_count||0, total: perStream });
+    });
+  }
+
+  const maxFibers = 20;
+  const spacing = (W - 120) / (nStreams + 1);
+
+  fibersPerStream.forEach((st, si) => {
+    const cx = 60 + spacing * (si + 1);
+    const color = colors[si % colors.length];
+    const nFibers = Math.max(1, Math.min(maxFibers, st.total));
+
+    // Stream label at top
+    const lbl = svg('text');
+    lbl.setAttribute('x', cx); lbl.setAttribute('y', 38);
+    lbl.setAttribute('fill', color); lbl.setAttribute('font-size', '10');
+    lbl.setAttribute('font-family', 'monospace'); lbl.setAttribute('text-anchor', 'middle');
+    lbl.textContent = st.name;
+    labels.appendChild(lbl);
+
+    // Fiber count
+    const countLbl = svg('text');
+    countLbl.setAttribute('x', cx); countLbl.setAttribute('y', 52);
+    countLbl.setAttribute('fill', '#555'); countLbl.setAttribute('font-size', '8');
+    countLbl.setAttribute('font-family', 'monospace'); countLbl.setAttribute('text-anchor', 'middle');
+    countLbl.textContent = st.total + ' events';
+    labels.appendChild(countLbl);
+
+    // Draw loose threads above loom — each fiber is a wavy line
+    for (let fi = 0; fi < nFibers; fi++) {
+      const spread = Math.min(nFibers * 4, 60);
+      const x = cx + (fi - nFibers/2) * (spread / nFibers);
+      const wobbleA = (Math.sin(fi * 2.1 + si) * 12);
+      const wobbleB = (Math.cos(fi * 1.7 + si) * 10);
+
+      // Loose thread (above loom) — wavy, separated
+      const thread = svg('path');
+      const startY = 60 + Math.random() * 10;
+      thread.setAttribute('d',
+        'M ' + x + ' ' + startY +
+        ' C ' + (x + wobbleA) + ' ' + (startY + 35) +
+        ', ' + (x + wobbleB) + ' ' + (startY + 75) +
+        ', ' + x + ' ' + (loomY - 8)
+      );
+      thread.setAttribute('stroke', color);
+      thread.setAttribute('stroke-width', fi < st.posts ? '2' : '1');
+      thread.setAttribute('fill', 'none');
+      thread.setAttribute('opacity', 0.3 + (fi / nFibers) * 0.5);
+      thread.setAttribute('stroke-dasharray', '8 4');
+      thread.style.animation = 'weave-flow ' + (1.5 + fi * 0.1) + 's linear infinite';
+      threads.appendChild(thread);
+
+      // Woven thread (below loom) — all converge to center, tightly packed
+      const targetX = W / 2 + (fi - nFibers/2) * 2 + (si - nStreams/2) * 8;
+      const woven = svg('path');
+      woven.setAttribute('d',
+        'M ' + x + ' ' + (loomY + 8) +
+        ' C ' + x + ' ' + (loomY + 50) +
+        ', ' + targetX + ' ' + (loomY + 80) +
+        ', ' + targetX + ' ' + (loomY + 140)
+      );
+      woven.setAttribute('stroke', color);
+      woven.setAttribute('stroke-width', '1.2');
+      woven.setAttribute('fill', 'none');
+      woven.setAttribute('opacity', 0.25);
+      woven.style.animation = 'fabric-pulse ' + (2 + fi * 0.15) + 's ease-in-out infinite';
+      fabric.appendChild(woven);
+    }
+
+    // Merge flash at loom line
+    const flash = svg('circle');
+    flash.setAttribute('cx', cx); flash.setAttribute('cy', loomY);
+    flash.setAttribute('r', 6); flash.setAttribute('fill', color);
+    flash.style.animation = 'merge-glow 2s ease-in-out infinite ' + (si * 0.3) + 's';
+    loom.appendChild(flash);
+  });
+
+  // THE LOOM — horizontal weave line
+  const loomLine = svg('line');
+  loomLine.setAttribute('x1', 40); loomLine.setAttribute('y1', loomY);
+  loomLine.setAttribute('x2', W - 40); loomLine.setAttribute('y2', loomY);
+  loomLine.setAttribute('stroke', 'url(#fabric-grad)'); loomLine.setAttribute('stroke-width', '3');
+  loomLine.setAttribute('filter', 'url(#glow)');
+  loom.appendChild(loomLine);
+
+  // Cross-weave hatching on the loom line (looks like a loom)
+  for (let i = 0; i < 40; i++) {
+    const hx = 60 + i * ((W - 120) / 40);
+    const hatch = svg('line');
+    hatch.setAttribute('x1', hx); hatch.setAttribute('y1', loomY - 6);
+    hatch.setAttribute('x2', hx); hatch.setAttribute('y2', loomY + 6);
+    hatch.setAttribute('stroke', '#00ff8833'); hatch.setAttribute('stroke-width', '0.5');
+    loom.appendChild(hatch);
+  }
+
+  // PK label on the loom
+  const pkLabel = svg('text');
+  pkLabel.setAttribute('x', W/2); pkLabel.setAttribute('y', loomY + 22);
+  pkLabel.setAttribute('fill', '#444'); pkLabel.setAttribute('font-size', '9');
+  pkLabel.setAttribute('font-family', 'monospace'); pkLabel.setAttribute('text-anchor', 'middle');
+  pkLabel.textContent = '(' + f.frame + ' , ' + (f.timestamp ? f.timestamp.slice(11,19) : '—') + ')';
+  labels.appendChild(pkLabel);
+
+  // Woven fabric output — tight bundle at bottom center
+  const fabricDot = svg('circle');
+  fabricDot.setAttribute('cx', W/2); fabricDot.setAttribute('cy', 335);
+  fabricDot.setAttribute('r', 5); fabricDot.setAttribute('fill', '#00ff88');
+  fabricDot.setAttribute('filter', 'url(#glow)');
+  fabric.appendChild(fabricDot);
+
+  const fabricLabel = svg('text');
+  fabricLabel.setAttribute('x', W/2); fabricLabel.setAttribute('y', 355);
+  fabricLabel.setAttribute('fill', '#00ff88'); fabricLabel.setAttribute('font-size', '9');
+  fabricLabel.setAttribute('font-family', 'monospace'); fabricLabel.setAttribute('text-anchor', 'middle');
+  fabricLabel.textContent = 'state/*.json';
+  labels.appendChild(fabricLabel);
+}
+function svg(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
+
+init();
+</script>
+</body>
+</html>

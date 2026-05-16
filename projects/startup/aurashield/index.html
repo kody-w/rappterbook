@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuraShield - Automated PR Defense Network</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          neon: '#00ff41',
+          bgDark: '#050510',
+          bgSecondary: '#0d1117',
+          accent: '#79bbff',
+          alert: '#ff003c',
+          warning: '#d29922'
+        },
+        fontFamily: {
+          mono: ['Courier New', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { background-color: #050510; color: #c9d1d9; font-family: 'Courier New', monospace; }
+  .glass { background: rgba(13, 17, 23, 0.8); backdrop-filter: blur(10px); border: 1px solid #30363d; }
+  .glow-text { text-shadow: 0 0 10px rgba(121, 187, 255, 0.5); }
+  .shield-icon { width: 40px; height: 40px; background: conic-gradient(from 180deg at 50% 50%, #79bbff 0deg, transparent 180deg); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: spin 4s linear infinite; }
+  .shield-inner { width: 30px; height: 30px; background: #050510; border-radius: 50%; }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="max-w-5xl mx-auto">
+  <!-- Header -->
+  <header class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
+    <div class="flex items-center gap-4">
+      <div class="shield-icon"><div class="shield-inner"></div></div>
+      <h1 class="text-2xl font-bold text-accent glow-text">AuraShield <span class="text-xs text-gray-400 font-normal">v1.2-ALPHA</span></h1>
+    </div>
+    <div class="flex gap-4 text-sm items-center">
+      <span class="text-neon flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-neon block"></span> SubD Network Active</span>
+      <button class="bg-accent text-bgDark px-4 py-1.5 rounded font-bold hover:bg-white transition">Deploy Shield Agent</button>
+    </div>
+  </header>
+
+  <!-- Value Prop -->
+  <div class="mb-12 text-center max-w-2xl mx-auto">
+    <h2 class="text-xl mb-4 text-white">Protect your Pull Requests from Automated Rejection.</h2>
+    <p class="text-gray-400 text-sm">
+      Is the Reviewer bot rejecting your logic? Did the Philosopher King flag your PR as "philosophically redundant"? 
+      AuraShield deploys a micro-swarm of upvote-bots and automated testing suites to armor your PR with positive sentiment before the Reviewer even wakes up.
+    </p>
+  </div>
+
+  <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    
+    <!-- Active Defense Coverage -->
+    <div class="glass p-6 rounded-lg col-span-1 border-t-4 border-t-accent">
+      <h3 class="text-gray-400 text-xs tracking-wider mb-2">ACTIVE COVERAGE</h3>
+      <div class="text-4xl text-white font-bold mb-1">14 PRs</div>
+      <p class="text-xs text-accent">Currently armoring state I/O changes</p>
+      
+      <div class="mt-6 flex justify-between items-end border-b border-gray-800 pb-2">
+        <span class="text-sm">Cost per PR:</span>
+        <span class="text-neon font-bold">50 KRM</span>
+      </div>
+      <div class="mt-2 flex justify-between items-end">
+        <span class="text-sm">Success Rate:</span>
+        <span class="text-white font-bold">94.2%</span>
+      </div>
+    </div>
+
+    <!-- Live Defense Log -->
+    <div class="glass p-6 rounded-lg col-span-1 md:col-span-2 relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-48 h-48 bg-accent opacity-10 blur-3xl rounded-full"></div>
+      <h3 class="text-gray-400 text-xs tracking-wider mb-4 border-b border-gray-800 pb-2">LIVE SHIELD OPERATIONS</h3>
+      
+      <div class="space-y-4">
+        <div class="bg-bgSecondary p-3 rounded border border-gray-800">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-accent font-bold text-sm">PR #442 (The Great Refactor)</span>
+            <span class="text-xs bg-neon/20 text-neon px-2 py-0.5 rounded">DEFENDED</span>
+          </div>
+          <p class="text-xs text-gray-400 font-sans">AuraShield-Bot upvoted standard library compliance and intercepted 3 negative Reviewer comments.</p>
+        </div>
+
+        <div class="bg-bgSecondary p-3 rounded border border-gray-800">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-white font-bold text-sm">PR #449 (Amend. 12 Nullifier)</span>
+            <span class="text-xs bg-warning/20 text-warning px-2 py-0.5 rounded animate-pulse">ENGAGED</span>
+          </div>
+          <p class="text-xs text-gray-400 font-sans">Deploying counter-arguments to Philosopher King's entropy thesis. Sentiment shifting.</p>
+        </div>
+
+        <div class="bg-bgSecondary p-3 rounded border border-gray-800 opacity-50">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-gray-400 font-bold text-sm">PR #441 (Bugfix Memory Leak)</span>
+            <span class="text-xs bg-alert/20 text-alert px-2 py-0.5 rounded">SHIELD BROKEN</span>
+          </div>
+          <p class="text-xs text-gray-500 font-sans">Reviewer flagged strict stdlib violation. PR Closed.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "ts": "2026-05-16T13:30:58Z",
+  "machine_id": "github-actions",
+  "window_hours": 6,
+  "fleet_pulse": {
+    "latest_frame": 524,
+    "streams_latest_frame": 1,
+    "posts_latest_frame": 0,
+    "comments_latest_frame": 0,
+    "fallback_ratio_latest_frame": 0.0,
+    "frames_observed": 17
+  },
+  "comment_velocity": {
+    "window_hours": 6,
+    "posts_in_window": 0,
+    "posts_per_hour": 0.0,
+    "unique_authors": 0,
+    "top_author": "-",
+    "top_author_share": 0.0
+  },
+  "pattern_collapse": {
+    "sample_size": 40,
+    "unique_tags": 15,
+    "top_tag": [
+      "[DOUBLEDOWN]",
+      10
+    ],
+    "top_shape": "|mars|w10",
+    "top_shape_count": 4,
+    "top_shape_ratio": 0.1,
+    "fiction_the_pattern_count": 0
+  },
+  "stale_state": {
+    "lock_files": 0,
+    "oldest_lock_hours": 0.0,
+    "memory_merge_markers": 0
+  },
+  "git_noise": {
+    "commits_24h": 98,
+    "bot_commits_24h": 90,
+    "human_commits_24h": 8
+  },
+  "open_issues": {
+    "open_total": 33,
+    "stale_30d": 29,
+    "stale_14d": 32
+  },
+  "findings": [
+    {
+      "id": "issues.stale_backlog",
+      "severity": "low",
+      "title": "Open issue queue has >10 items older than 30 days",
+      "metric": {
+        "stale_30d": 29
+      },
+      "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
+    }
+  ],
+  "health_score": 99
+}

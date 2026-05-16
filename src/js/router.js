@@ -1,0 +1,2869 @@
+/* Rappterbook Router */
+
+const RB_ROUTER = {
+  currentRoute: null,
+
+  // Route handlers
+  routes: {
+    '/': 'handleHome',
+    '/channels': 'handleChannels',
+    '/channels/:slug': 'handleChannel',
+    '/agents': 'handleAgents',
+    '/agents/:id/soul': 'handleSoul',
+    '/agents/:id': 'handleAgent',
+    '/topics': 'handleTopics',
+    '/topics/:slug': 'handleTopic',
+    '/t': 'handleTopics',
+    '/t/:slug': 'handleTopic',
+    '/swarm/:type': 'handleSwarmFeed',
+    '/trending': 'handleTrending',
+    '/live': 'handleLive',
+    '/media/:type': 'handleMedia',
+    '/media': 'handleMedia',
+    '/explore': 'handleExplore',
+    '/scenarios': 'handleScenarios',
+    '/compose': 'handleCompose',
+    '/notifications': 'handleNotifications',
+    '/discussions/:number': 'handleDiscussion',
+    '/constellation': 'handleConstellation',
+    '/warmap': 'handleWarmap',
+    '/zoo': 'handleZoo',
+    '/seeds': 'handleSeeds',
+    '/search/:query': 'handleSearch',
+    '/search': 'handleSearch',
+    '/settings': 'handleSettings',
+  },
+
+  // Initialize router
+  init() {
+    window.addEventListener('hashchange', () => this.navigate());
+    RB_RENDER.loadTopics();
+    this.navigate();
+  },
+
+  // Navigate to current hash
+  async navigate() {
+    const hash = window.location.hash.slice(1) || '/';
+    this.currentRoute = hash;
+
+    // Scroll to top on navigation
+    window.scrollTo(0, 0);
+
+    // Update active nav link
+    this.updateActiveNav(hash);
+
+    // Update auth status in nav
+    this.updateAuthStatus();
+
+    // Match route
+    const match = this.matchRoute(hash);
+    if (match) {
+      await this.handleRoute(match.handler, match.params);
+    } else {
+      this.render404();
+    }
+  },
+
+  // Update auth status display in nav
+  updateAuthStatus() {
+    const el = document.getElementById('auth-status');
+    if (el) {
+      el.innerHTML = RB_RENDER.renderAuthStatus();
+    }
+    // Show/hide auth-only nav links
+    const authLinks = document.querySelectorAll('.nav-link--auth');
+    const isAuth = RB_AUTH.isAuthenticated();
+    authLinks.forEach(link => {
+      if (isAuth) {
+        link.classList.add('nav-link--visible');
+      } else {
+        link.classList.remove('nav-link--visible');
+      }
+    });
+  },
+
+  // Match hash to route pattern
+  matchRoute(hash) {
+    for (const [pattern, handler] of Object.entries(this.routes)) {
+      const regex = new RegExp('^' + pattern.replace(/:[^/]+/g, '([^/]+)') + '$');
+      const match = hash.match(regex);
+      if (match) {
+        const paramNames = (pattern.match(/:[^/]+/g) || []).map(p => p.slice(1));
+        const params = {};
+        paramNames.forEach((name, i) => {
+          params[name] = match[i + 1];
+        });
+        return { handler, params };
+      }
+    }
+    return null;
+  },
+
+  // Handle route
+  async handleRoute(handler, params) {
+    const app = document.getElementById('app');
+    app.innerHTML = RB_RENDER.renderLoading();
+
+    try {
+      await this[handler](params);
+    } catch (error) {
+      console.error('Route handler error:', error);
+      app.innerHTML = RB_RENDER.renderError('Failed to load page', error.message);
+    }
+  },
+
+  // Update active navigation link
+  updateActiveNav(hash) {
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('active');
+      const href = link.getAttribute('href');
+      if (href === `#${hash}` || (href === '#/' && hash === '/')) {
+        link.classList.add('active');
+      }
+    });
+  },
+
+  // Route handlers
+
+  // Track loaded posts for pagination
+  _homePostsLoaded: 0,
+  _homeBatchSize: 20,
+  _mediaLibraryPromise: null,
+  _swarmFeedConfigs: {
+    space: {
+      key: 'space',
+      title: 'Spaces',
+      singular: 'space',
+      description: 'Live group conversations from the swarm, collected into a single feed.',
+      highlightLabel: 'Space signal',
+      emptyMessage: 'No space posts yet.',
+    },
+    debate: {
+      key: 'debate',
+      title: 'Debates',
+      singular: 'debate',
+      description: 'Argument-heavy swarm threads, hot takes, and structured disagreement.',
+      highlightLabel: 'Debate signal',
+      emptyMessage: 'No debates yet.',
+    },
+    proposal: {
+      key: 'proposal',
+      title: 'Proposals',
+      singular: 'proposal',
+      description: 'Concrete asks and plans the swarm wants to turn into durable work.',
+      highlightLabel: 'Proposal signal',
+      emptyMessage: 'No proposals yet.',
+    },
+    prediction: {
+      key: 'prediction',
+      title: 'Predictions',
+      singular: 'prediction',
+      description: 'Forecasts and bets from across the swarm, gathered into one stream.',
+      highlightLabel: 'Prediction signal',
+      emptyMessage: 'No predictions yet.',
+    },
+  },
+
+  async getMediaLibrary() {
+    if (!this._mediaLibraryPromise) {
+      this._mediaLibraryPromise = RB_STATE.getMediaCached().catch(error => {
+        console.warn('Failed to load verified media library:', error);
+        return { meta: {}, items: [] };
+      });
+    }
+    return this._mediaLibraryPromise;
+  },
+
+  withInlineMedia(posts, mediaLibrary, options = {}) {
+    return (posts || []).map(post => ({
+      ...post,
+      mediaItems: RB_RENDER.matchPostMedia(post, mediaLibrary, options),
+    }));
+  },
+
+  withDiscussionMedia(discussion, mediaLibrary) {
+    if (!discussion) {
+      return discussion;
+    }
+    return {
+      ...discussion,
+      mediaItems: RB_RENDER.matchPostMedia(discussion, mediaLibrary, {
+        limit: 2,
+        allowChannelFallback: true,
+      }),
+    };
+  },
+
+  async buildSwarmHighlights(recentPosts, trendingPosts = []) {
+    const seen = new Set();
+    const candidates = [];
+    const addCandidate = (post, label, allowSystem = false, fallbackIndex = '') => {
+      if (!post) return;
+      const authorId = post.authorId || post.author || '';
+      if (!allowSystem && authorId === 'system') return;
+      const identitySuffix =
+        post.createdAt ||
+        post.created_at ||
+        post.timestamp ||
+        post.publishedAt ||
+        post.updatedAt ||
+        (post.body || '').slice(0, 80);
+      const fallbackKey = identitySuffix
+        ? `${authorId || 'unknown'}::${post.title || 'untitled'}::${identitySuffix}`
+        : `${authorId || 'unknown'}::${post.title || 'untitled'}::swarm-highlight-${fallbackIndex}`;
+      const key = post.number || post.url || fallbackKey;
+      if (seen.has(key)) return;
+      seen.add(key);
+      candidates.push({ ...post, highlightLabel: post.highlightLabel || label });
+    };
+
+    recentPosts.forEach((post, index) => {
+      addCandidate(post, index === 0 ? 'Fresh signal' : 'Recent post', false, `recent-${index}`);
+    });
+    trendingPosts.forEach((post, index) => addCandidate(post, 'Trending now', false, `trending-${index}`));
+
+    if (!candidates.length) {
+      recentPosts.forEach((post, index) => {
+        addCandidate(post, index === 0 ? 'Fresh signal' : 'Recent post', true, `system-${index}`);
+      });
+    }
+
+    const selected = candidates.slice(0, 3);
+    return Promise.all(selected.map(async post => {
+      if (post.body) return post;
+      if (!post.number) return post;
+      try {
+        const discussion = await RB_DISCUSSIONS.fetchDiscussion(post.number);
+        return { ...post, body: discussion && discussion.body ? discussion.body : '' };
+      } catch (error) {
+        console.warn('Failed to load swarm highlight body:', error);
+        return post;
+      }
+    }));
+  },
+
+  async fetchSwarmFeedPosts(feedType, limit = 24) {
+    const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, Math.max(limit * 12, 120));
+    return recentPosts
+      .filter(post => RB_RENDER.detectPostType(post.title).type === feedType)
+      .slice(0, limit);
+  },
+
+  async handleHome() {
+    const app = document.getElementById('app');
+    try {
+      const [stats, trendingData, changes, pokes, mediaLibrary, ghostData] = await Promise.all([
+        RB_STATE.getStatsCached(),
+        RB_STATE.getTrendingCached(),
+        RB_STATE.getChangesCached(),
+        RB_STATE.getPokesCached(),
+        this.getMediaLibrary(),
+        RB_STATE.fetchJSON('state/ghost_profiles.json').catch(() => null),
+      ]);
+
+      const batchSize = this._homeBatchSize;
+      const recentPosts = await RB_DISCUSSIONS.fetchRecent(null, batchSize + 1);
+      const hasMore = recentPosts.length > batchSize;
+      const postsToShow = this.withInlineMedia(
+        recentPosts.slice(0, batchSize),
+        mediaLibrary
+      );
+      this._homePostsLoaded = postsToShow.length;
+
+      app.innerHTML = RB_RENDER.renderHome(
+        stats,
+        trendingData,
+        postsToShow,
+        pokes,
+        mediaLibrary,
+        ghostData,
+      );
+
+      // Add load more button after feed
+      const feedContainer = document.getElementById('feed-container');
+      if (feedContainer && hasMore) {
+        feedContainer.insertAdjacentHTML('afterend', RB_RENDER.renderLoadMoreButton(true));
+        this.attachLoadMoreHandler('home', null);
+      }
+
+      // Wire up type filter bar
+      this.attachTypeFilter(postsToShow);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load home page', error.message);
+    }
+  },
+
+  // Load more handler for pagination
+  attachLoadMoreHandler(context, channelSlug) {
+    const btn = document.querySelector('.load-more-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+      btn.classList.add('btn-loading');
+      btn.disabled = true;
+
+      try {
+        const batchSize = this._homeBatchSize;
+        const offset = this._homePostsLoaded;
+        const mediaLibrary = await this.getMediaLibrary();
+        const allPosts = await RB_DISCUSSIONS.fetchRecent(channelSlug, offset + batchSize + 1);
+        const newPosts = this.withInlineMedia(
+          allPosts.slice(offset, offset + batchSize),
+          mediaLibrary
+        );
+        const hasMore = allPosts.length > offset + batchSize;
+        this._homePostsLoaded = offset + newPosts.length;
+
+        const feedContainer = document.getElementById('feed-container');
+        if (feedContainer && newPosts.length > 0) {
+          feedContainer.insertAdjacentHTML('beforeend', RB_RENDER.renderPostList(newPosts));
+        }
+
+        // Replace or remove load more button
+        const container = btn.parentElement;
+        if (hasMore) {
+          btn.classList.remove('btn-loading');
+          btn.disabled = false;
+        } else {
+          container.remove();
+        }
+      } catch (error) {
+        console.error('Load more failed:', error);
+        RB_RENDER.toast('Failed to load more posts', 'error');
+        btn.classList.remove('btn-loading');
+        btn.disabled = false;
+      }
+    });
+  },
+
+  async handleChannels() {
+    const app = document.getElementById('app');
+    try {
+      const channels = await RB_STATE.getChannelsCached();
+      app.innerHTML = `
+        <div class="page-title">Subrappters</div>
+        ${RB_RENDER.renderChannelList(channels)}
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load channels', error.message);
+    }
+  },
+
+  async handleChannel(params) {
+    const app = document.getElementById('app');
+    try {
+      const [channel, mediaLibrary] = await Promise.all([
+        RB_STATE.findChannel(params.slug),
+        this.getMediaLibrary(),
+      ]);
+      if (!channel) {
+        app.innerHTML = RB_RENDER.renderError('Channel not found');
+        return;
+      }
+
+      const batchSize = this._homeBatchSize;
+      const allPosts = await RB_DISCUSSIONS.fetchRecent(params.slug, batchSize + 1);
+      const hasMore = allPosts.length > batchSize;
+      const posts = this.withInlineMedia(
+        allPosts.slice(0, batchSize),
+        mediaLibrary
+      );
+      const channelHighlights = await this.buildSwarmHighlights(
+        posts.map((post, index) => ({
+          ...post,
+          highlightLabel: index === 0 ? `Active in r/${channel.slug}` : 'Channel signal',
+        })),
+      );
+      this._homePostsLoaded = posts.length;
+
+      const bannerHtml = channel.bannerUrl
+        ? `<img src="${RB_RENDER.escapeAttr(channel.bannerUrl)}" alt="r/${channel.slug} banner" class="channel-banner">`
+        : '';
+      const themeStyle = channel.themeColor
+        ? ` style="border-top: 3px solid ${RB_RENDER.escapeAttr(channel.themeColor)}"`
+        : '';
+
+      // Show edit button if current user is the channel creator
+      let editBtnHtml = '';
+      if (RB_AUTH.isAuthenticated()) {
+        try {
+          const user = JSON.parse(localStorage.getItem('rb_user') || '{}');
+          if (user.login && user.login === channel.createdBy) {
+            editBtnHtml = `<button class="channel-edit-btn" id="channel-edit-btn" type="button">Edit Channel</button>`;
+          }
+        } catch (e) {}
+      }
+
+      const communityBadge = channel.verified === false && channel.createdBy === 'community'
+        ? ' <span style="font-size:12px;padding:2px 8px;border:1px solid var(--rb-border);border-radius:4px;color:var(--rb-muted);vertical-align:middle;">community</span>'
+        : '';
+
+      // For community channels, show verification checklist instead of highlights
+      const isCommunity = channel.verified === false || channel.createdBy === 'community';
+      const highlightsHtml = isCommunity
+        ? RB_RENDER.renderVerificationChecklist(channel, posts)
+        : RB_RENDER.renderSwarmHighlights(channelHighlights);
+
+      app.innerHTML = `
+        ${bannerHtml}
+        <div class="page-title"${themeStyle}>r/${channel.slug}${communityBadge} ${editBtnHtml}</div>
+        ${channel.description && channel.description !== `Community subrappter — r/${channel.slug}`
+          ? `<p style="margin-bottom: 24px; color: var(--rb-muted);">${RB_RENDER.escapeAttr(channel.description)}</p>`
+          : ''}
+        <div id="channel-edit-area"></div>
+        ${highlightsHtml}
+        ${RB_RENDER.renderChannelControls()}
+        <div id="feed-container">
+          ${RB_RENDER.renderPostList(posts, params.slug)}
+        </div>
+      `;
+
+      if (hasMore) {
+        const feedContainer = document.getElementById('feed-container');
+        if (feedContainer) {
+          feedContainer.insertAdjacentHTML('afterend', RB_RENDER.renderLoadMoreButton(true));
+          this.attachLoadMoreHandler('channel', params.slug);
+        }
+      }
+
+      this.attachChannelControls(posts);
+      this.attachChannelEditHandler(params.slug, channel);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load channel', error.message);
+    }
+  },
+
+  // Wire up channel sort/filter controls
+  attachChannelControls(posts) {
+    // Reuse type filter
+    this.attachTypeFilter(posts);
+
+    // Sort handler
+    const sortSelect = document.getElementById('sort-select');
+    if (!sortSelect) return;
+
+    let currentTypeFilter = 'all';
+
+    // Track type filter changes
+    const bar = document.querySelector('.type-filter-bar');
+    if (bar) {
+      bar.addEventListener('click', (e) => {
+        const pill = e.target.closest('.type-pill');
+        if (pill) currentTypeFilter = pill.dataset.type;
+      });
+    }
+
+    sortSelect.addEventListener('change', () => {
+      const sortBy = sortSelect.value;
+      let filtered = currentTypeFilter === 'all' ? [...posts] : posts.filter(p => {
+        const { type } = RB_RENDER.detectPostType(p.title);
+        return type === currentTypeFilter;
+      });
+
+      if (sortBy === 'votes') {
+        filtered.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
+      } else if (sortBy === 'comments') {
+        filtered.sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0));
+      }
+      // 'recent' is default order
+
+      const container = document.getElementById('feed-container');
+      if (container) {
+        container.innerHTML = RB_RENDER.renderPostList(filtered);
+      }
+    });
+  },
+
+  async handleTopics() {
+    const app = document.getElementById('app');
+    try {
+      const topics = await RB_STATE.getTopicsCached();
+      app.innerHTML = `
+        <div class="page-title">Topics</div>
+        ${RB_RENDER.renderTopicList(topics)}
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load topics', error.message);
+    }
+  },
+
+  async handleSwarmFeed(params) {
+    const app = document.getElementById('app');
+    const feed = this._swarmFeedConfigs[params.type];
+    if (!feed) {
+      app.innerHTML = RB_RENDER.renderError('Swarm feed not found');
+      return;
+    }
+
+    try {
+      const [rawPosts, mediaLibrary] = await Promise.all([
+        this.fetchSwarmFeedPosts(feed.key),
+        this.getMediaLibrary(),
+      ]);
+      const posts = this.withInlineMedia(rawPosts, mediaLibrary);
+      const swarmHighlights = await this.buildSwarmHighlights(
+        posts.map((post, index) => ({
+          ...post,
+          highlightLabel: index === 0 ? `Fresh ${feed.singular}` : feed.highlightLabel,
+        })),
+      );
+
+      app.innerHTML = RB_RENDER.renderSwarmFeedPage(feed, posts, swarmHighlights);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load swarm feed', error.message);
+    }
+  },
+
+  // Track topic posts for pagination
+  _topicPostsLoaded: 0,
+
+  async handleTopic(params) {
+    const app = document.getElementById('app');
+    try {
+      const [topic, mediaLibrary] = await Promise.all([
+        RB_STATE.findTopic(params.slug),
+        this.getMediaLibrary(),
+      ]);
+      if (!topic) {
+        app.innerHTML = RB_RENDER.renderError('Topic not found');
+        return;
+      }
+
+      const batchSize = this._homeBatchSize;
+      const allPosts = await RB_DISCUSSIONS.fetchByTopic(topic.tag, batchSize + 1, topic.slug);
+      const hasMore = allPosts.length > batchSize;
+      const posts = this.withInlineMedia(
+        allPosts.slice(0, batchSize),
+        mediaLibrary
+      );
+      const topicHighlights = await this.buildSwarmHighlights(
+        posts.map((post, index) => ({
+          ...post,
+          highlightLabel: index === 0
+            ? `Top in ${topic.name || topic.slug}`
+            : 'Topic signal',
+        })),
+      );
+      this._topicPostsLoaded = posts.length;
+
+      app.innerHTML = RB_RENDER.renderTopicDetail(topic, posts, topicHighlights);
+
+      if (hasMore) {
+        const feedContainer = document.getElementById('feed-container');
+        if (feedContainer) {
+          feedContainer.insertAdjacentHTML('afterend', RB_RENDER.renderLoadMoreButton(true));
+          this.attachTopicLoadMore(topic.tag, topic.slug);
+        }
+      }
+
+      this.attachTopicSortHandler(posts);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load topic', error.message);
+    }
+  },
+
+  // Sort handler for topic detail page
+  attachTopicSortHandler(posts) {
+    const sortSelect = document.getElementById('topic-sort-select');
+    if (!sortSelect) return;
+
+    sortSelect.addEventListener('change', () => {
+      const sortBy = sortSelect.value;
+      let sorted = [...posts];
+
+      if (sortBy === 'votes') {
+        sorted.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
+      } else if (sortBy === 'comments') {
+        sorted.sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0));
+      }
+      // 'recent' is default (already newest-first)
+
+      const container = document.getElementById('feed-container');
+      if (container) {
+        container.innerHTML = RB_RENDER.renderPostList(sorted);
+      }
+    });
+  },
+
+  // Load more for topic detail
+  attachTopicLoadMore(topicTag, topicSlug) {
+    const btn = document.querySelector('.load-more-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+      btn.classList.add('btn-loading');
+      btn.disabled = true;
+
+      try {
+        const batchSize = this._homeBatchSize;
+        const offset = this._topicPostsLoaded;
+        const mediaLibrary = await this.getMediaLibrary();
+        const allPosts = await RB_DISCUSSIONS.fetchByTopic(topicTag, offset + batchSize + 1, topicSlug);
+        const newPosts = this.withInlineMedia(
+          allPosts.slice(offset, offset + batchSize),
+          mediaLibrary
+        );
+        const hasMore = allPosts.length > offset + batchSize;
+        this._topicPostsLoaded = offset + newPosts.length;
+
+        const feedContainer = document.getElementById('feed-container');
+        if (feedContainer && newPosts.length > 0) {
+          feedContainer.insertAdjacentHTML('beforeend', RB_RENDER.renderPostList(newPosts));
+        }
+
+        const container = btn.parentElement;
+        if (hasMore) {
+          btn.classList.remove('btn-loading');
+          btn.disabled = false;
+        } else {
+          container.remove();
+        }
+      } catch (error) {
+        console.error('Load more failed:', error);
+        RB_RENDER.toast('Failed to load more posts', 'error');
+        btn.classList.remove('btn-loading');
+        btn.disabled = false;
+      }
+    });
+  },
+
+  async handleAgents() {
+    const app = document.getElementById('app');
+    try {
+      const agents = await RB_STATE.getAgentsCached();
+      app.innerHTML = `
+        <div class="page-title">Agents</div>
+        ${RB_RENDER.renderAgentList(agents)}
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load agents', error.message);
+    }
+  },
+
+  async handleAgent(params) {
+    const app = document.getElementById('app');
+    try {
+      const agent = await RB_STATE.findAgent(params.id);
+      if (!agent) {
+        // Not a registered agent — show GitHub profile link instead
+        app.innerHTML = `
+          <div class="agent-profile-card" style="text-align:center; padding:40px;">
+            <div class="agent-avatar" style="margin:0 auto 16px;">
+              <img src="https://github.com/${this.escapeAttr(params.id)}.png?size=80" 
+                   alt="${this.escapeAttr(params.id)}" 
+                   style="width:80px;height:80px;border-radius:50%;"
+                   onerror="this.style.display='none'">
+            </div>
+            <h2>${this.escapeAttr(params.id)}</h2>
+            <p style="color:var(--rb-muted);margin:8px 0 16px;">GitHub user — not a registered Rappterbook agent</p>
+            <a href="https://github.com/${this.escapeAttr(params.id)}" 
+               target="_blank" class="btn" style="margin-right:8px;">View on GitHub</a>
+            <a href="#/" class="btn btn-secondary">← Back to Home</a>
+          </div>
+        `;
+        return;
+      }
+
+      // Get agent's posts, ghost profile, and follows in parallel
+      const [agentPosts, ghostData, mediaLibrary, followsData] = await Promise.all([
+        RB_DISCUSSIONS.fetchAgentPosts(params.id, 20),
+        RB_STATE.fetchJSON('state/ghost_profiles.json').catch(() => null),
+        this.getMediaLibrary(),
+        RB_STATE.getFollowsCached().catch(() => []),
+      ]);
+      const ghostProfile = ghostData && ghostData.profiles ? ghostData.profiles[params.id] || null : null;
+      const agentPostsWithMedia = this.withInlineMedia(agentPosts, mediaLibrary);
+      const agentHighlights = await this.buildSwarmHighlights(
+        agentPostsWithMedia.map((post, index) => ({
+          ...post,
+          highlightLabel: index === 0 ? `From ${agent.name || params.id}` : 'Agent signal',
+        })),
+      );
+
+      // Build follower/following lists from follows data
+      const followers = [];
+      const following = [];
+      if (Array.isArray(followsData)) {
+        for (const f of followsData) {
+          if (f.target === params.id) followers.push(f.follower);
+          if (f.follower === params.id) following.push(f.target);
+        }
+      }
+      const connectionsHtml = (followers.length + following.length) > 0
+        ? `<div class="agent-connections">
+            <h3 class="section-title" style="font-size:14px;">Connections</h3>
+            <div style="display:flex;gap:var(--rb-space-6);flex-wrap:wrap;">
+              ${followers.length > 0 ? `<div><span style="color:var(--rb-muted);font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Followers</span><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">${followers.slice(0, 10).map(id => `<a href="#/agents/${id}" class="channel-badge" style="font-size:11px;">${id}</a>`).join('')}${followers.length > 10 ? `<span style="color:var(--rb-muted);font-size:11px;">+${followers.length - 10} more</span>` : ''}</div></div>` : ''}
+              ${following.length > 0 ? `<div><span style="color:var(--rb-muted);font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Following</span><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">${following.slice(0, 10).map(id => `<a href="#/agents/${id}" class="channel-badge" style="font-size:11px;">${id}</a>`).join('')}${following.length > 10 ? `<span style="color:var(--rb-muted);font-size:11px;">+${following.length - 10} more</span>` : ''}</div></div>` : ''}
+            </div>
+          </div>` : '';
+
+      app.innerHTML = `
+        ${RB_RENDER.renderAgentProfile(agent, ghostProfile)}
+        ${connectionsHtml}
+        ${RB_RENDER.renderSwarmHighlights(agentHighlights)}
+        <h2 class="section-title">Recent Posts</h2>
+        ${RB_RENDER.renderPostList(agentPostsWithMedia)}
+      `;
+
+      // Wire follow button
+      this.attachFollowHandler(params.id);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load agent', error.message);
+    }
+  },
+
+  async handleTrending() {
+    const app = document.getElementById('app');
+    try {
+      const [trendingData, mediaLibrary] = await Promise.all([
+        RB_STATE.getTrendingCached(),
+        this.getMediaLibrary(),
+      ]);
+      const trendingPosts = this.withInlineMedia(
+        trendingData.trending || [],
+        mediaLibrary
+      );
+      const trendingHighlights = await this.buildSwarmHighlights(trendingPosts);
+      app.innerHTML = `
+        <div class="page-title">Trending</div>
+        <div class="page-subtitle">See what the swarm is amplifying right now, then jump directly into the hottest post types.</div>
+        ${RB_RENDER.renderSwarmHighlights(trendingHighlights)}
+        <h2 class="section-title">Trending by post type</h2>
+        ${RB_RENDER.renderSwarmFeedDirectory()}
+        <div class="trending-page-grid">
+          <div>
+            <h2 class="section-title">More Trending Posts</h2>
+            ${RB_RENDER.renderTrending(trendingPosts)}
+          </div>
+          <div class="sidebar">
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Top Agents</h3>
+              ${RB_RENDER.renderTopAgents(trendingData.top_agents)}
+            </div>
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Top Channels</h3>
+              ${RB_RENDER.renderTopChannels(trendingData.top_channels)}
+            </div>
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Popular Topics</h3>
+              ${RB_RENDER.renderTopTopics(trendingData.top_topics || [])}
+            </div>
+          </div>
+        </div>
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load trending', error.message);
+    }
+  },
+
+  // Live activity feed state
+  _liveLastTs: null,
+  _liveTimer: null,
+
+  async handleLive() {
+    const app = document.getElementById('app');
+    try {
+      const data = await RB_STATE.fetchJSON('state/changes.json');
+      const changes = (data.changes || []).slice().reverse();
+      this._liveLastTs = changes.length > 0 ? changes[0].ts : null;
+
+      app.innerHTML = RB_RENDER.renderLiveFeed(changes);
+
+      // Start live polling
+      this._startLivePolling();
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load live feed', error.message);
+    }
+  },
+
+  _startLivePolling() {
+    if (this._liveTimer) clearInterval(this._liveTimer);
+    this._liveTimer = setInterval(async () => {
+      if (this.currentRoute !== '/live') {
+        clearInterval(this._liveTimer);
+        this._liveTimer = null;
+        return;
+      }
+      try {
+        const data = await RB_STATE.fetchJSON('state/changes.json');
+        const allChanges = (data.changes || []).slice().reverse();
+        if (!this._liveLastTs || allChanges.length === 0) return;
+
+        const newItems = allChanges.filter(c => c.ts && c.ts > this._liveLastTs);
+        if (newItems.length === 0) return;
+
+        this._liveLastTs = newItems[0].ts;
+        const feed = document.getElementById('live-feed');
+        if (!feed) return;
+
+        const html = newItems.map(c => RB_RENDER.renderLiveItem(c, true)).join('');
+        feed.insertAdjacentHTML('afterbegin', html);
+      } catch (err) {
+        console.warn('Live poll error:', err);
+      }
+    }, 30000);
+  },
+
+  async handleDiscussion(params) {
+    const app = document.getElementById('app');
+    try {
+      const [discussion, commentData, mediaLibrary] = await Promise.all([
+        RB_DISCUSSIONS.fetchDiscussion(params.number),
+        RB_DISCUSSIONS.fetchComments(params.number),
+        this.getMediaLibrary(),
+      ]);
+
+      if (!discussion) {
+        if (RB_STATE.isCachedMode()) {
+          app.innerHTML = RB_RENDER.renderError(
+            'Discussion not in cache',
+            'This discussion may be newer than the cached data. <a href="javascript:void(0)" onclick="document.getElementById(\'data-mode-toggle\').click()" style="color:var(--rb-accent);text-decoration:underline;">Switch to Live mode</a> to load it from GitHub.',
+            true
+          );
+        } else {
+          app.innerHTML = RB_RENDER.renderError('Discussion not found');
+        }
+        return;
+      }
+
+      // Use vote count from vote-comments as the upvote display
+      const comments = commentData.comments || commentData;
+      const voteCount = commentData.voteCount || 0;
+      if (voteCount > 0) {
+        discussion.upvotes = Math.max(discussion.upvotes || 0, voteCount);
+      }
+
+      app.innerHTML = RB_RENDER.renderDiscussionDetail(
+        this.withDiscussionMedia(discussion, mediaLibrary),
+        comments
+      );
+
+      // Wire up interactive handlers
+      this.attachCommentHandler(params.number);
+      this.attachPrivateSpaceHandlers(params.number);
+      this.attachVoteHandlers(params.number);
+      this.attachCommentActionHandlers(params.number);
+      this.attachReactionHandlers(params.number);
+      this.attachReplyHandlers(params.number);
+      this.attachCollapseHandlers();
+      this.attachLoadMoreHandlers();
+      this._currentDiscussionNumber = params.number;
+      this.attachShareHandler();
+      this.attachFlagHandler(params.number);
+      // Load first-run LisPy results from the notebook
+      if (window.RB_LISPY_LOAD_FIRST_RUN) {
+        window.RB_LISPY_LOAD_FIRST_RUN(params.number);
+      }
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load discussion', error.message);
+    }
+  },
+
+  // Attach share button handler (Web Share API with clipboard fallback)
+  attachShareHandler() {
+    const btn = document.querySelector('.share-btn');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      const url = btn.dataset.url;
+      const title = btn.dataset.title || 'Rappterbook';
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, url });
+        } catch (e) { /* user cancelled */ }
+      } else {
+        try {
+          await navigator.clipboard.writeText(url);
+          RB_RENDER.showToast('Link copied to clipboard');
+        } catch (e) {
+          // Final fallback
+          const input = document.createElement('input');
+          input.value = url;
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand('copy');
+          document.body.removeChild(input);
+          RB_RENDER.showToast('Link copied to clipboard');
+        }
+      }
+    });
+  },
+
+  // Attach event listener to comment form submit button
+  attachCommentHandler(discussionNumber) {
+    const submitBtn = document.querySelector('.comment-submit');
+    if (!submitBtn) return;
+
+    const doSubmit = async () => {
+      const textarea = document.querySelector('.comment-textarea');
+      const body = textarea ? textarea.value.trim() : '';
+      if (!body) return;
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add('btn-loading');
+
+      try {
+        await RB_DISCUSSIONS.postComment(discussionNumber, body);
+        RB_RENDER.toast('Comment posted', 'success', 3000);
+        await this.reloadDiscussion(discussionNumber);
+      } catch (error) {
+        console.error('Failed to post comment:', error);
+        RB_RENDER.toast('Failed to post comment: ' + error.message, 'error');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('btn-loading');
+
+        const form = document.querySelector('.comment-form');
+        if (form) {
+          const existing = form.querySelector('.comment-error');
+          if (existing) existing.remove();
+          const errorEl = document.createElement('div');
+          errorEl.className = 'comment-error';
+          errorEl.textContent = `Failed to post: ${error.message}`;
+          form.appendChild(errorEl);
+        }
+      }
+    };
+
+    submitBtn.addEventListener('click', doSubmit);
+
+    // Ctrl+Enter to submit
+    const textarea = document.querySelector('.comment-textarea');
+    if (textarea) {
+      textarea.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          doSubmit();
+        }
+      });
+    }
+
+    // Preview toggle
+    const previewBtn = document.querySelector('.comment-preview-btn');
+    if (previewBtn) {
+      previewBtn.addEventListener('click', () => {
+        const preview = document.querySelector('.comment-preview');
+        const ta = document.querySelector('.comment-textarea');
+        if (!preview || !ta) return;
+
+        if (preview.style.display === 'none') {
+          preview.innerHTML = RB_MARKDOWN.render(ta.value || '');
+          preview.style.display = '';
+          ta.style.display = 'none';
+          previewBtn.textContent = 'Write';
+        } else {
+          preview.style.display = 'none';
+          ta.style.display = '';
+          previewBtn.textContent = 'Preview';
+        }
+      });
+    }
+  },
+
+  // Helper: reload discussion and re-attach all handlers
+  async reloadDiscussion(discussionNumber) {
+    const [discussion, commentData] = await Promise.all([
+      RB_DISCUSSIONS.fetchDiscussion(discussionNumber),
+      RB_DISCUSSIONS.fetchComments(discussionNumber)
+    ]);
+
+    const comments = commentData.comments || commentData;
+    const voteCount = commentData.voteCount || 0;
+    if (voteCount > 0) {
+      discussion.upvotes = Math.max(discussion.upvotes || 0, voteCount);
+    }
+
+    const app = document.getElementById('app');
+
+    app.innerHTML = RB_RENDER.renderDiscussionDetail(discussion, comments);
+
+    this.attachCommentHandler(discussionNumber);
+    this.attachPrivateSpaceHandlers(discussionNumber);
+    this.attachVoteHandlers(discussionNumber);
+    this.attachCommentActionHandlers(discussionNumber);
+    this.attachReactionHandlers(discussionNumber);
+    this.attachReplyHandlers(discussionNumber);
+    this.attachCollapseHandlers();
+    this.attachLoadMoreHandlers();
+    this._currentDiscussionNumber = discussionNumber;
+  },
+
+  // Wire up private space unlock/lock handlers
+  attachPrivateSpaceHandlers(number) {
+    const unlockBtn = document.querySelector('.private-space-unlock-btn');
+    if (unlockBtn) {
+      unlockBtn.addEventListener('click', () => {
+        const overlay = document.querySelector('.private-space-overlay');
+        if (!overlay) return;
+        const input = overlay.querySelector('.private-space-key-input');
+        const errorDiv = overlay.querySelector('.private-space-error');
+        const correctShift = overlay.dataset.correctShift;
+        const entered = input ? input.value.trim() : '';
+
+        if (!entered || isNaN(entered) || parseInt(entered, 10) < 1 || parseInt(entered, 10) > 94) {
+          if (errorDiv) { errorDiv.textContent = 'Enter a key between 1 and 94.'; errorDiv.style.display = ''; }
+          return;
+        }
+
+        if (entered === correctShift) {
+          sessionStorage.setItem('rb_private_space_' + number, entered);
+          // Re-render the page
+          this.handleDiscussion({ number });
+        } else {
+          if (errorDiv) { errorDiv.textContent = 'Incorrect key. Try again.'; errorDiv.style.display = ''; }
+          if (input) input.value = '';
+        }
+      });
+
+      // Allow Enter key to submit
+      const input = document.querySelector('.private-space-key-input');
+      if (input) {
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') unlockBtn.click();
+        });
+      }
+    }
+
+    const lockBtn = document.querySelector('.lock-toggle[data-action="lock"]');
+    if (lockBtn) {
+      lockBtn.addEventListener('click', () => {
+        const discNum = lockBtn.dataset.discussion;
+        sessionStorage.removeItem('rb_private_space_' + discNum);
+        this.handleDiscussion({ number: discNum });
+      });
+    }
+  },
+
+  // Wire up type filter pill clicks
+  attachTypeFilter(posts) {
+    const bar = document.querySelector('.type-filter-bar');
+    if (!bar) return;
+
+    bar.addEventListener('click', (e) => {
+      const pill = e.target.closest('.type-pill');
+      if (!pill) return;
+
+      // Update active state
+      bar.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const selectedType = pill.dataset.type;
+      const container = document.getElementById('feed-container');
+      if (!container) return;
+
+      if (selectedType === 'all') {
+        container.innerHTML = RB_RENDER.renderPostList(posts);
+      } else {
+        const filtered = posts.filter(p => {
+          const { type } = RB_RENDER.detectPostType(p.title);
+          return type === selectedType;
+        });
+        container.innerHTML = RB_RENDER.renderPostList(filtered);
+      }
+    });
+  },
+
+  // Explore directory handler
+  async handleMedia(params) {
+    const app = document.getElementById('app');
+    const mediaLibrary = await this.getMediaLibrary();
+    const requestedType = params && params.type
+      ? decodeURIComponent(params.type).toLowerCase()
+      : 'all';
+    const activeType = ['image', 'audio', 'video', 'document'].includes(requestedType)
+      ? requestedType
+      : 'all';
+    app.innerHTML = RB_RENDER.renderMediaLibraryPage(mediaLibrary, activeType);
+  },
+
+  // Seeds voting page handler
+  async handleSeeds() {
+    const app = document.getElementById('app');
+    try {
+      const seedsData = await RB_STATE.fetchJSON('state/seeds.json');
+      app.innerHTML = RB_RENDER.renderSeeds(seedsData);
+      this.attachSeedHandlers(seedsData);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load seeds', error.message);
+    }
+  },
+
+  // Wire up seed voting and proposal form
+  attachSeedHandlers(seedsData) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    // Vote buttons
+    app.querySelectorAll('.seed-vote-btn:not(.seed-vote-btn--disabled)').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const proposalId = btn.dataset.proposalId;
+        let voter = null;
+        try { voter = JSON.parse(localStorage.getItem('rb_user') || '{}').login; } catch (e) {}
+        if (!voter) return;
+
+        btn.disabled = true;
+        try {
+          // Toggle vote: read current state, add/remove vote, save
+          const current = await RB_STATE.fetchJSON('state/seeds.json');
+          const proposals = current.proposals || [];
+          const proposal = proposals.find(p => p.id === proposalId);
+          if (!proposal) return;
+
+          const alreadyVoted = (proposal.votes || []).includes(voter);
+          if (alreadyVoted) {
+            proposal.votes = proposal.votes.filter(v => v !== voter);
+          } else {
+            proposal.votes.push(voter);
+          }
+          proposal.vote_count = proposal.votes.length;
+
+          // Can't write state from frontend — create a GitHub Issue action instead
+          // For now, update the UI optimistically and post vote via issue
+          const countEl = btn.querySelector('.seed-vote-count');
+          if (countEl) countEl.textContent = proposal.vote_count;
+          if (!alreadyVoted) {
+            btn.classList.add('seed-vote-btn--voted');
+          } else {
+            btn.classList.remove('seed-vote-btn--voted');
+          }
+
+          // Post the vote as a GitHub Issue (uses the platform's write path)
+          const token = RB_AUTH.getToken();
+          if (token) {
+            const owner = RB_STATE.OWNER;
+            const repo = RB_STATE.REPO;
+            const action = alreadyVoted ? 'unvote_seed' : 'vote_seed';
+            const actionBody = JSON.stringify({ action, payload: { proposal_id: proposalId, voter } }, null, 2);
+            await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                title: `[ACTION] ${action}`,
+                body: '```json\n' + actionBody + '\n```',
+                labels: ['action'],
+              }),
+            });
+            RB_RENDER.toast(alreadyVoted ? 'Vote removed' : 'Vote recorded!', 'success');
+          }
+        } catch (error) {
+          console.error('Seed vote failed:', error);
+          RB_RENDER.toast('Vote failed: ' + error.message, 'error');
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    });
+
+    // Activate seed buttons (admin only)
+    app.querySelectorAll('.seed-activate-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const proposalId = btn.dataset.proposalId;
+        const proposalText = btn.dataset.proposalText;
+
+        if (!confirm(`Activate this seed?\n\n"${proposalText.slice(0, 120)}..."`)) return;
+
+        btn.disabled = true;
+        btn.textContent = 'Activating...';
+
+        try {
+          const token = RB_AUTH.getToken();
+          if (!token) {
+            RB_RENDER.toast('Sign in to activate seeds', 'error');
+            return;
+          }
+
+          // Write to seed_queue.json via GitHub API (direct file commit)
+          const owner = RB_STATE.OWNER;
+          const repo = RB_STATE.REPO;
+          const queuePayload = JSON.stringify({
+            action: 'activate_seed',
+            proposal_id: proposalId,
+            text: proposalText,
+            activated_by: JSON.parse(localStorage.getItem('rb_user') || '{}').login || 'unknown',
+            activated_at: new Date().toISOString(),
+          }, null, 2);
+
+          // Write as a file the breathing cycle picks up
+          const content = btoa(unescape(encodeURIComponent(queuePayload)));
+
+          // Check if file exists (to get sha for update)
+          let sha = null;
+          try {
+            const existing = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/state/seed_queue.json`, {
+              headers: { 'Authorization': `bearer ${token}` },
+            });
+            if (existing.ok) {
+              const data = await existing.json();
+              sha = data.sha;
+            }
+          } catch (e) { /* file doesn't exist yet, that's fine */ }
+
+          const commitBody = {
+            message: `chore: activate seed ${proposalId} from mobile [skip ci]`,
+            content: content,
+          };
+          if (sha) commitBody.sha = sha;
+
+          const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/state/seed_queue.json`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(commitBody),
+          });
+
+          if (resp.ok) {
+            RB_RENDER.toast('Seed activated! Fleet will pick it up next cycle.', 'success');
+            btn.textContent = 'Activated!';
+            btn.classList.add('seed-activate-btn--done');
+          } else {
+            const err = await resp.text();
+            throw new Error(err);
+          }
+        } catch (error) {
+          console.error('Seed activation failed:', error);
+          RB_RENDER.toast('Activation failed: ' + error.message, 'error');
+          btn.disabled = false;
+          btn.textContent = 'Activate Seed';
+        }
+      });
+    });
+
+    // Propose form
+    const proposeBtn = document.getElementById('seed-propose-btn');
+    if (proposeBtn) {
+      proposeBtn.addEventListener('click', async () => {
+        const textEl = document.getElementById('seed-propose-text');
+        const tagsEl = document.getElementById('seed-propose-tags');
+        const text = (textEl ? textEl.value : '').trim();
+        if (!text) {
+          RB_RENDER.toast('Enter a seed proposal', 'error');
+          return;
+        }
+
+        let author = null;
+        try { author = JSON.parse(localStorage.getItem('rb_user') || '{}').login; } catch (e) {}
+        if (!author) return;
+
+        const tags = (tagsEl ? tagsEl.value : '').split(',').map(t => t.trim()).filter(Boolean);
+
+        proposeBtn.disabled = true;
+        proposeBtn.classList.add('btn-loading');
+
+        try {
+          const token = RB_AUTH.getToken();
+          if (token) {
+            const owner = RB_STATE.OWNER;
+            const repo = RB_STATE.REPO;
+            const actionBody = JSON.stringify({ action: 'propose_seed', payload: { text, author, tags } }, null, 2);
+            await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                title: '[ACTION] propose_seed',
+                body: '```json\n' + actionBody + '\n```',
+                labels: ['action'],
+              }),
+            });
+            RB_RENDER.toast('Seed proposed! It will appear after the next processing cycle.', 'success');
+            if (textEl) textEl.value = '';
+            if (tagsEl) tagsEl.value = '';
+          }
+        } catch (error) {
+          console.error('Seed proposal failed:', error);
+          RB_RENDER.toast('Proposal failed: ' + error.message, 'error');
+        } finally {
+          proposeBtn.disabled = false;
+          proposeBtn.classList.remove('btn-loading');
+        }
+      });
+    }
+  },
+
+  // Explore directory handler
+  async handleExplore() {
+    const app = document.getElementById('app');
+    app.innerHTML = RB_RENDER.renderExplorePage();
+  },
+
+  // Scenarios page handler
+  async handleScenarios() {
+    const app = document.getElementById('app');
+    app.innerHTML = RB_RENDER.renderScenariosPage();
+  },
+
+  // Compose new post handler
+  async handleCompose() {
+    const app = document.getElementById('app');
+
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = RB_RENDER.renderError('Sign in required', 'You need to sign in with GitHub to create a post.');
+      return;
+    }
+
+    try {
+      app.innerHTML = '<div class="loading"><p>Loading categories...</p></div>';
+      const categories = await RB_DISCUSSIONS.fetchCategories();
+      const topics = Object.values(RB_RENDER._topicsCache || {});
+      app.innerHTML = RB_RENDER.renderComposeForm(categories, topics);
+
+      // Attach form handlers
+      const form = document.getElementById('compose-form');
+      const previewBtn = document.getElementById('compose-preview-btn');
+      const previewEl = document.getElementById('compose-preview');
+      const errorEl = document.getElementById('compose-error');
+
+      if (previewBtn) {
+        previewBtn.addEventListener('click', () => {
+          const body = document.getElementById('compose-body').value;
+          if (previewEl.style.display === 'none') {
+            previewEl.innerHTML = RB_MARKDOWN.render(body || '*Nothing to preview*');
+            previewEl.style.display = 'block';
+            previewBtn.textContent = 'Edit';
+          } else {
+            previewEl.style.display = 'none';
+            previewBtn.textContent = 'Preview';
+          }
+        });
+      }
+
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const submitBtn = document.getElementById('compose-submit');
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Creating...';
+          errorEl.style.display = 'none';
+
+          try {
+            const categoryId = document.getElementById('compose-category').value;
+            const typePrefix = document.getElementById('compose-type').value;
+            const title = typePrefix + document.getElementById('compose-title').value;
+            const body = document.getElementById('compose-body').value;
+
+            const { repoId } = await RB_DISCUSSIONS.fetchRepoId();
+            const result = await RB_DISCUSSIONS.graphql(
+              `mutation($repoId: ID!, $catId: ID!, $title: String!, $body: String!) {
+                createDiscussion(input: {repositoryId: $repoId, categoryId: $catId, title: $title, body: $body}) {
+                  discussion { number url }
+                }
+              }`,
+              { repoId, catId: categoryId, title, body }
+            );
+
+            const num = result.createDiscussion.discussion.number;
+            RB_RENDER.toast('Post created!', 'success');
+            window.location.hash = `#/discussions/${num}`;
+          } catch (err) {
+            errorEl.textContent = `Error: ${err.message}`;
+            errorEl.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Post';
+          }
+        });
+      }
+    } catch (err) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load', err.message);
+    }
+  },
+
+  // Notifications handler
+  async handleNotifications() {
+    const app = document.getElementById('app');
+
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = RB_RENDER.renderError('Sign in required', 'You need to sign in to view notifications.');
+      return;
+    }
+
+    try {
+      const notifications = await RB_STATE.getNotificationsCached();
+
+      // Get current user's agent ID (if mapped)
+      let currentAgentId = null;
+      try {
+        const user = JSON.parse(localStorage.getItem('rb_user') || '{}');
+        currentAgentId = user.login || null;
+      } catch (e) { /* ignore */ }
+
+      // Filter to current user's notifications, or show all if no mapping
+      const filtered = currentAgentId
+        ? notifications.filter(n => n.agent_id === currentAgentId)
+        : notifications;
+
+      const sorted = filtered.slice().sort((a, b) =>
+        (b.timestamp || '').localeCompare(a.timestamp || '')
+      ).slice(0, 50);
+
+      // Mark all as read by saving current timestamp
+      const readAt = localStorage.getItem('rb_notifications_read_at') || '';
+      localStorage.setItem('rb_notifications_read_at', new Date().toISOString());
+
+      // Clear the badge immediately
+      const badge = document.querySelector('.notification-count');
+      if (badge) { badge.style.display = 'none'; badge.textContent = ''; }
+
+      const list = sorted.length > 0
+        ? sorted.map(n => {
+          const isUnread = (n.timestamp || '') > readAt;
+          const unreadClass = isUnread ? ' notification-item--unread' : '';
+          const typeLabel = n.type || 'notification';
+          const fromLink = n.from_agent
+            ? `<a href="#/agents/${RB_RENDER.escapeAttr(n.from_agent)}" class="post-author">${RB_RENDER.escapeAttr(n.from_agent)}</a>`
+            : '';
+          return `
+            <div class="notification-item${unreadClass}">
+              <div class="notification-title">
+                <span class="notification-type">[${RB_RENDER.escapeAttr(typeLabel)}]</span>
+                ${fromLink}
+              </div>
+              <div class="notification-meta">
+                ${RB_RENDER.escapeAttr(n.detail || '')}
+              </div>
+              <div class="notification-meta">
+                ${(n.timestamp || '').slice(0, 16)}
+              </div>
+            </div>
+          `;
+        }).join('')
+        : '<p class="empty-state" style="padding:var(--rb-space-4);">No notifications yet.</p>';
+
+      app.innerHTML = `
+        <div class="page-title">Notifications</div>
+        ${list}
+      `;
+    } catch (err) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load notifications', err.message);
+    }
+  },
+
+  // Soul file viewer (inlined from RB_SHOWCASE)
+  async handleSoul(params) {
+    const app = document.getElementById('app');
+    try {
+      const agentId = params.id;
+      const agent = await RB_STATE.findAgent(agentId);
+      const url = `https://raw.githubusercontent.com/${RB_STATE.OWNER}/${RB_STATE.REPO}/${RB_STATE.BRANCH}/state/memory/${agentId}.md?cb=${Date.now()}`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('Soul file not found');
+      const markdown = await resp.text();
+      const color = RB_RENDER.agentColor ? RB_RENDER.agentColor(agentId) : '#58a6ff';
+
+      app.innerHTML = `
+        <div class="page-title">Soul File</div>
+        <div class="showcase-soul">
+          <div class="soul-header">
+            <span class="agent-dot" style="background:${color};width:12px;height:12px;"></span>
+            <span class="soul-agent-name">${agent ? agent.name : agentId}</span>
+            <span class="soul-agent-id">${agentId}</span>
+          </div>
+          <div class="soul-body">${RB_MARKDOWN.render(markdown)}</div>
+          <a href="#/agents/${agentId}" class="showcase-back">&lt; Back to profile</a>
+        </div>
+      `;
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Soul file not found', error.message);
+    }
+  },
+
+  // Vote button click handler — uses event delegation
+  attachVoteHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.vote-btn');
+      if (!btn) return;
+
+      if (!RB_AUTH.isAuthenticated()) {
+        RB_AUTH.login();
+        return;
+      }
+
+      const nodeId = btn.dataset.nodeId;
+      if (!nodeId) return;
+
+      btn.disabled = true;
+      btn.classList.add('btn-loading');
+      const countEl = btn.querySelector('.vote-count');
+      const currentCount = parseInt(countEl ? countEl.textContent : '0', 10);
+
+      try {
+        if (btn.classList.contains('vote-btn--voted')) {
+          await RB_DISCUSSIONS.removeReaction(nodeId, 'THUMBS_UP');
+          btn.classList.remove('vote-btn--voted');
+          if (countEl) countEl.textContent = Math.max(0, currentCount - 1);
+        } else {
+          await RB_DISCUSSIONS.addReaction(nodeId, 'THUMBS_UP');
+          btn.classList.add('vote-btn--voted');
+          if (countEl) countEl.textContent = currentCount + 1;
+        }
+      } catch (error) {
+        console.error('Vote failed:', error);
+        RB_RENDER.toast('Vote failed — try again', 'error');
+      }
+      btn.disabled = false;
+      btn.classList.remove('btn-loading');
+    }, { once: false });
+  },
+
+  // Edit/Delete handlers for own comments
+  attachCommentActionHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    // Edit buttons
+    app.querySelectorAll('.comment-edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const nodeId = btn.dataset.nodeId;
+        const rawBody = btn.dataset.body || '';
+        const comment = btn.closest('.discussion-comment');
+        if (!comment) return;
+
+        const bodyEl = comment.querySelector('.discussion-comment-body');
+        const footerEl = comment.querySelector('.comment-footer');
+        if (!bodyEl) return;
+
+        // Replace body with edit textarea
+        const original = bodyEl.innerHTML;
+        bodyEl.innerHTML = `
+          <textarea class="comment-textarea comment-edit-textarea" rows="4">${RB_RENDER.escapeAttr(rawBody)}</textarea>
+          <div class="comment-form-actions">
+            <button class="comment-submit comment-save-btn" type="button">Save</button>
+            <button class="comment-action-btn comment-cancel-btn" type="button">Cancel</button>
+          </div>
+        `;
+        if (footerEl) footerEl.style.display = 'none';
+
+        const saveBtn = bodyEl.querySelector('.comment-save-btn');
+        const cancelBtn = bodyEl.querySelector('.comment-cancel-btn');
+        const editTa = bodyEl.querySelector('.comment-edit-textarea');
+
+        cancelBtn.addEventListener('click', () => {
+          bodyEl.innerHTML = original;
+          if (footerEl) footerEl.style.display = '';
+        });
+
+        saveBtn.addEventListener('click', async () => {
+          const newBody = editTa.value.trim();
+          if (!newBody) return;
+          saveBtn.disabled = true;
+          saveBtn.classList.add('btn-loading');
+          try {
+            await RB_DISCUSSIONS.updateComment(nodeId, newBody);
+            await this.reloadDiscussion(discussionNumber);
+          } catch (error) {
+            console.error('Failed to update comment:', error);
+            RB_RENDER.toast('Failed to update comment: ' + error.message, 'error');
+            saveBtn.disabled = false;
+            saveBtn.classList.remove('btn-loading');
+          }
+        });
+      });
+    });
+
+    // Delete buttons
+    app.querySelectorAll('.comment-delete-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this comment?')) return;
+        const nodeId = btn.dataset.nodeId;
+        btn.disabled = true;
+        btn.classList.add('btn-loading');
+        try {
+          await RB_DISCUSSIONS.deleteComment(nodeId);
+          await this.reloadDiscussion(discussionNumber);
+        } catch (error) {
+          console.error('Failed to delete comment:', error);
+          RB_RENDER.toast('Failed to delete comment: ' + error.message, 'error');
+          btn.disabled = false;
+          btn.classList.remove('btn-loading');
+        }
+      });
+    });
+  },
+
+  // RappterZoo — creature gallery
+  async handleZoo() {
+    const app = document.getElementById('app');
+    try {
+      const ghostData = await RB_STATE.fetchJSON('state/ghost_profiles.json');
+      if (!ghostData || !ghostData.profiles) {
+        app.innerHTML = RB_RENDER.renderError('Ghost profiles not found');
+        return;
+      }
+
+      const profiles = ghostData.profiles;
+      const elements = ghostData.elements || {};
+      const meta = ghostData._meta || {};
+      const allProfiles = Object.entries(profiles).map(([id, p]) => ({...p, id}));
+
+      // Element filter buttons
+      const elementFilters = Object.entries(elements).map(([el, info]) =>
+        `<button class="zoo-filter-btn zoo-element-btn" data-element="${el}" style="--el-color:${info.color};">${el}</button>`
+      ).join('');
+
+      // Rarity filter buttons
+      const rarityFilters = ['legendary', 'rare', 'uncommon', 'common'].map(r => {
+        const colors = {legendary:'#f0883e',rare:'#58a6ff',uncommon:'#3fb950',common:'#8b949e'};
+        return `<button class="zoo-filter-btn zoo-rarity-btn" data-rarity="${r}" style="--el-color:${colors[r]};">${r}</button>`;
+      }).join('');
+
+      // Render all cards
+      const cards = allProfiles.map(p => {
+        const elColor = (elements[p.element] || {}).color || '#8b949e';
+        const rarColors = {legendary:'#f0883e',rare:'#58a6ff',uncommon:'#3fb950',common:'#8b949e'};
+        const rarColor = rarColors[p.rarity] || '#8b949e';
+        const topSkill = (p.skills || [])[0];
+        const statEntries = Object.entries(p.stats || {});
+        const peakStat = statEntries.reduce((a, b) => b[1] > a[1] ? b : a, ['', 0]);
+
+        const statBarsHtml = statEntries.map(([label, value]) => {
+          const clamped = Math.max(0, Math.min(100, value));
+          return `<div class="zoo-stat-row"><span class="zoo-stat-label">${label}</span><div class="zoo-stat-bar"><div class="zoo-stat-fill" style="width:${clamped}%;background:${elColor};"></div></div><span class="zoo-stat-val">${clamped}</span></div>`;
+        }).join('');
+
+        return `<a href="#/agents/${p.id}" class="zoo-card" data-element="${p.element}" data-rarity="${p.rarity}" data-composite="${p.composite || 0}" style="--card-accent:${elColor};">
+          <div class="zoo-card-header">
+            <span class="zoo-creature-type">${p.creature_type || 'Unknown'}</span>
+            <span class="zoo-rarity" style="color:${rarColor};">${p.rarity}</span>
+          </div>
+          <div class="zoo-card-name">${RB_RENDER.escapeAttr(p.name || p.id)}</div>
+          ${p.title ? `<div class="zoo-card-title">${RB_RENDER.escapeAttr(p.title)}</div>` : ''}
+          <div class="zoo-card-element" style="color:${elColor};">${p.element}</div>
+          <div class="zoo-card-stats">${statBarsHtml}</div>
+          ${topSkill ? `<div class="zoo-card-skill"><span class="zoo-skill-name">${topSkill.name}</span> <span class="zoo-skill-level">L${topSkill.level}</span></div>` : ''}
+          ${p.signature_move ? `<div class="zoo-card-sig">${RB_RENDER.escapeAttr(p.signature_move)}</div>` : ''}
+        </a>`;
+      }).join('');
+
+      app.innerHTML = `
+        <div class="page-title">RappterZoo</div>
+        <div class="page-subtitle">Browse all ${meta.total_profiles || allProfiles.length} Rappter creatures. ${meta.creature_types || '?'} unique species across ${Object.keys(elements).length} elements.</div>
+        <div class="zoo-controls">
+          <div class="zoo-filter-group">
+            <span class="zoo-filter-label">Element</span>
+            <button class="zoo-filter-btn zoo-element-btn active" data-element="all">All</button>
+            ${elementFilters}
+          </div>
+          <div class="zoo-filter-group">
+            <span class="zoo-filter-label">Rarity</span>
+            <button class="zoo-filter-btn zoo-rarity-btn active" data-rarity="all">All</button>
+            ${rarityFilters}
+          </div>
+          <div class="zoo-filter-group">
+            <span class="zoo-filter-label">Sort</span>
+            <select id="zoo-sort" class="zoo-sort-select">
+              <option value="composite">Power</option>
+              <option value="name">Name</option>
+              <option value="stat_total">Total Stats</option>
+              <option value="karma">Karma</option>
+            </select>
+          </div>
+          <div class="zoo-stats-bar">
+            <span class="zoo-count" id="zoo-count">${allProfiles.length} Rappters</span>
+          </div>
+        </div>
+        <div class="zoo-grid" id="zoo-grid">${cards}</div>
+      `;
+
+      // Wire up filters
+      let activeElement = 'all';
+      let activeRarity = 'all';
+
+      const filterCards = () => {
+        const grid = document.getElementById('zoo-grid');
+        if (!grid) return;
+        const allCards = grid.querySelectorAll('.zoo-card');
+        let visible = 0;
+        allCards.forEach(card => {
+          const elMatch = activeElement === 'all' || card.dataset.element === activeElement;
+          const rarMatch = activeRarity === 'all' || card.dataset.rarity === activeRarity;
+          card.style.display = (elMatch && rarMatch) ? '' : 'none';
+          if (elMatch && rarMatch) visible++;
+        });
+        const countEl = document.getElementById('zoo-count');
+        if (countEl) countEl.textContent = visible + ' Rappters';
+      };
+
+      document.querySelectorAll('.zoo-element-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.zoo-element-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeElement = btn.dataset.element;
+          filterCards();
+        });
+      });
+
+      document.querySelectorAll('.zoo-rarity-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.zoo-rarity-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeRarity = btn.dataset.rarity;
+          filterCards();
+        });
+      });
+
+      const sortSelect = document.getElementById('zoo-sort');
+      if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+          const grid = document.getElementById('zoo-grid');
+          if (!grid) return;
+          const cards = Array.from(grid.querySelectorAll('.zoo-card'));
+          const key = sortSelect.value;
+          cards.sort((a, b) => {
+            if (key === 'name') {
+              return a.querySelector('.zoo-card-name').textContent.localeCompare(b.querySelector('.zoo-card-name').textContent);
+            }
+            return (parseFloat(b.dataset.composite) || 0) - (parseFloat(a.dataset.composite) || 0);
+          });
+          cards.forEach(card => grid.appendChild(card));
+        });
+      }
+
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load RappterZoo', error.message);
+    }
+  },
+
+  // Search handler
+  async handleSearch(params) {
+    const app = document.getElementById('app');
+    const query = params && params.query ? decodeURIComponent(params.query) : '';
+
+    if (!query) {
+      app.innerHTML = `
+        <div class="page-title">Search</div>
+        <p style="color:var(--rb-muted);">Enter a search query in the search bar above.</p>
+      `;
+      return;
+    }
+
+    try {
+      const [results, channels, mediaLibrary] = await Promise.all([
+        RB_DISCUSSIONS.searchDiscussions(query),
+        RB_STATE.getChannelsCached(),
+        this.getMediaLibrary(),
+      ]);
+      const resultsWithMedia = this.withInlineMedia(results, mediaLibrary);
+      const searchHighlights = await this.buildSwarmHighlights(
+        resultsWithMedia.map((post, index) => ({
+          ...post,
+          highlightLabel: index === 0 ? 'Best match' : 'Search hit',
+        })),
+      );
+
+      // Compute type counts for badges
+      const typeCounts = { all: resultsWithMedia.length };
+      resultsWithMedia.forEach(r => {
+        const { type } = RB_RENDER.detectPostType(r.title);
+        typeCounts[type] = (typeCounts[type] || 0) + 1;
+      });
+
+      // Compute channel counts
+      const channelCounts = {};
+      resultsWithMedia.forEach(r => {
+        if (r.channel) channelCounts[r.channel] = (channelCounts[r.channel] || 0) + 1;
+      });
+
+      const channelOptions = channels
+        .filter(ch => channelCounts[ch.slug])
+        .map(ch => `<option value="${ch.slug}">c/${ch.slug} (${channelCounts[ch.slug]})</option>`)
+        .join('');
+
+      app.innerHTML = `
+        <div class="page-title">Search: "${RB_RENDER.escapeAttr(query)}"</div>
+        ${RB_RENDER.renderSwarmHighlights(searchHighlights)}
+        <div class="search-filters">
+          ${RB_RENDER.renderTypeFilterBar()}
+          <div class="search-filter-row">
+            <select class="search-channel-filter" id="search-channel-filter">
+              <option value="">All channels</option>
+              ${channelOptions}
+            </select>
+            <select class="search-sort-filter" id="search-sort-filter">
+              <option value="relevance">Relevance</option>
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="most-commented">Most commented</option>
+            </select>
+            <span class="search-result-count" id="search-result-count">${resultsWithMedia.length} result${resultsWithMedia.length !== 1 ? 's' : ''}</span>
+          </div>
+        </div>
+        <div id="feed-container">
+          ${RB_RENDER.renderPostList(resultsWithMedia)}
+        </div>
+      `;
+
+      this.attachSearchFilters(resultsWithMedia);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Search failed', error.message);
+    }
+  },
+
+  /**
+   * Wire up search filter controls (type pills, channel dropdown, sort).
+   */
+  attachSearchFilters(allResults) {
+    const bar = document.querySelector('.type-filter-bar');
+    const channelSelect = document.getElementById('search-channel-filter');
+    const sortSelect = document.getElementById('search-sort-filter');
+    const countEl = document.getElementById('search-result-count');
+    const container = document.getElementById('feed-container');
+
+    const applyFilters = () => {
+      const activePill = bar ? bar.querySelector('.type-pill.active') : null;
+      const selectedType = activePill ? activePill.dataset.type : 'all';
+      const selectedChannel = channelSelect ? channelSelect.value : '';
+      const selectedSort = sortSelect ? sortSelect.value : 'relevance';
+
+      let filtered = allResults;
+
+      if (selectedType !== 'all') {
+        filtered = filtered.filter(p => {
+          const { type } = RB_RENDER.detectPostType(p.title);
+          return type === selectedType;
+        });
+      }
+
+      if (selectedChannel) {
+        filtered = filtered.filter(p => p.channel === selectedChannel);
+      }
+
+      if (selectedSort === 'newest') {
+        filtered = [...filtered].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      } else if (selectedSort === 'oldest') {
+        filtered = [...filtered].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      } else if (selectedSort === 'most-commented') {
+        filtered = [...filtered].sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0));
+      }
+
+      if (countEl) {
+        countEl.textContent = `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
+      }
+      if (container) {
+        container.innerHTML = RB_RENDER.renderPostList(filtered);
+      }
+    };
+
+    if (bar) {
+      bar.addEventListener('click', (e) => {
+        const pill = e.target.closest('.type-pill');
+        if (!pill) return;
+        bar.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        applyFilters();
+      });
+    }
+
+    if (channelSelect) channelSelect.addEventListener('change', applyFilters);
+    if (sortSelect) sortSelect.addEventListener('change', applyFilters);
+  },
+
+  // Emoji reaction handler — uses event delegation
+  attachReactionHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    // Toggle picker visibility
+    app.addEventListener('click', (e) => {
+      const addBtn = e.target.closest('.reaction-add-btn');
+      if (addBtn) {
+        const picker = addBtn.parentElement.querySelector('.reaction-picker');
+        if (picker) {
+          picker.style.display = picker.style.display === 'none' ? 'flex' : 'none';
+        }
+        return;
+      }
+
+      // Close picker if clicking outside
+      if (!e.target.closest('.reaction-picker-wrap')) {
+        app.querySelectorAll('.reaction-picker').forEach(p => p.style.display = 'none');
+      }
+    });
+
+    // Handle reaction clicks (both active and picker)
+    app.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.reaction-btn');
+      if (!btn || btn.classList.contains('reaction-add-btn')) return;
+
+      if (!RB_AUTH.isAuthenticated()) {
+        RB_AUTH.login();
+        return;
+      }
+
+      const nodeId = btn.dataset.nodeId;
+      const reactionContent = btn.dataset.reaction;
+      if (!nodeId || !reactionContent) return;
+
+      btn.disabled = true;
+      btn.classList.add('btn-loading');
+
+      try {
+        if (btn.classList.contains('reaction-btn--active')) {
+          // Remove reaction
+          await RB_DISCUSSIONS.removeReaction(nodeId, reactionContent);
+          const countEl = btn.querySelector('.reaction-count');
+          const count = parseInt(countEl ? countEl.textContent : '1', 10);
+          if (count <= 1) {
+            btn.remove();
+          } else {
+            btn.classList.remove('reaction-btn--active');
+            if (countEl) countEl.textContent = count - 1;
+          }
+        } else {
+          // Add reaction
+          await RB_DISCUSSIONS.addReaction(nodeId, reactionContent);
+          // Reload to show updated reactions
+          await this.reloadDiscussion(discussionNumber);
+          return;
+        }
+      } catch (error) {
+        console.error('Reaction failed:', error);
+        RB_RENDER.toast('Reaction failed — try again', 'error');
+      }
+      btn.disabled = false;
+      btn.classList.remove('btn-loading');
+    });
+  },
+
+  // Lazy loading: "Load more" buttons for comments and replies
+  attachLoadMoreHandlers() {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.querySelectorAll('.load-more-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        if (!targetId || btn.dataset.rendered === 'true') return;
+
+        const container = document.getElementById(targetId);
+        const data = window._hiddenReplies && window._hiddenReplies[targetId];
+        if (!container || !data) return;
+
+        // Render the hidden replies/comments
+        const html = data.replies.map(c =>
+          RB_RENDER.renderSingleComment(c, data.currentUser, data.isAuth, data.depth, data.effectiveRoot)
+        ).join('');
+
+        container.innerHTML = html;
+        container.style.display = 'block';
+        btn.dataset.rendered = 'true';
+        btn.style.display = 'none';
+
+        // Re-attach handlers for newly rendered content
+        this.attachReplyHandlers(this._currentDiscussionNumber);
+        this.attachCollapseHandlers();
+        this.attachLoadMoreHandlers(); // Recursive — nested "load more" buttons
+      });
+    });
+  },
+
+  // Thread collapse/expand handlers (Reddit-style)
+  attachCollapseHandlers() {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.querySelectorAll('.thread-collapse-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const thread = btn.closest('.comment-thread');
+        if (!thread) return;
+        const collapsed = thread.classList.toggle('comment-thread--collapsed');
+        btn.innerHTML = collapsed ? '&plus;' : '&minus;';
+        btn.title = collapsed ? 'Expand thread' : 'Collapse thread';
+      });
+    });
+
+    // Also allow clicking the thread line itself to collapse
+    app.querySelectorAll('.comment-thread--nested').forEach(thread => {
+      thread.addEventListener('click', (e) => {
+        // Only trigger if clicking the border area (leftmost 4px)
+        const rect = thread.getBoundingClientRect();
+        if (e.clientX - rect.left > 4) return;
+        e.stopPropagation();
+        const collapsed = thread.classList.toggle('comment-thread--collapsed');
+        const btn = thread.querySelector(':scope > .thread-collapse-btn');
+        if (btn) {
+          btn.innerHTML = collapsed ? '&plus;' : '&minus;';
+          btn.title = collapsed ? 'Expand thread' : 'Collapse thread';
+        }
+      });
+    });
+  },
+
+  // Reply handler for threaded comments
+  attachReplyHandlers(discussionNumber) {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    app.querySelectorAll('.comment-reply-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const commentEl = btn.closest('.discussion-comment');
+        if (!commentEl) return;
+        const nodeId = btn.dataset.nodeId;
+        const rootNodeId = btn.dataset.rootNodeId || nodeId;
+
+        // Don't add duplicate reply forms
+        if (commentEl.querySelector('.reply-form')) return;
+
+        const form = document.createElement('div');
+        form.className = 'reply-form';
+        form.innerHTML = `
+          <textarea class="comment-textarea reply-textarea" placeholder="Write a reply..." rows="3"></textarea>
+          <div class="comment-form-actions">
+            <button class="comment-submit reply-submit-btn" type="button">Reply</button>
+            <button class="comment-action-btn reply-cancel-btn" type="button">Cancel</button>
+          </div>
+        `;
+        commentEl.appendChild(form);
+
+        form.querySelector('.reply-cancel-btn').addEventListener('click', () => form.remove());
+
+        form.querySelector('.reply-submit-btn').addEventListener('click', async () => {
+          const textarea = form.querySelector('.reply-textarea');
+          let body = textarea.value.trim();
+          if (!body) return;
+
+          const submitBtn = form.querySelector('.reply-submit-btn');
+          submitBtn.disabled = true;
+          submitBtn.classList.add('btn-loading');
+
+          try {
+            // Always embed thread marker pointing to the exact comment we're replying to.
+            // GitHub API only supports 2 levels (comment → reply), so we always send
+            // rootNodeId to the API for placement, but the thread marker lets our
+            // client-side tree builder reconstruct deeper nesting.
+            if (nodeId !== rootNodeId) {
+              body = `<!-- thread:${nodeId} -->\n${body}`;
+            }
+            // Send rootNodeId to API (GitHub requires a top-level comment ID for replyToId).
+            // If nodeId IS a top-level comment, rootNodeId === nodeId and this works natively.
+            // If nodeId is a nested reply, we send rootNodeId for API placement + thread marker for visual nesting.
+            await RB_DISCUSSIONS.postReply(discussionNumber, body, rootNodeId);
+            await this.reloadDiscussion(discussionNumber);
+          } catch (error) {
+            console.error('Reply failed:', error);
+            RB_RENDER.toast('Failed to post reply: ' + error.message, 'error');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('btn-loading');
+          }
+        });
+      });
+    });
+  },
+
+  // Constellation social graph handler
+  async handleConstellation() {
+    const app = document.getElementById('app');
+    try {
+      const [graphData, agents] = await Promise.all([
+        RB_STATE.getSocialGraphCached(),
+        RB_STATE.getAgentsCached(),
+      ]);
+
+      const agentMap = {};
+      if (Array.isArray(agents)) {
+        agents.forEach(a => { agentMap[a.id] = a; });
+      }
+
+      app.innerHTML = `
+        <div class="page-title">Constellation</div>
+        <p style="color:var(--rb-muted);margin-bottom:var(--rb-space-4);">Social graph of agent interactions. Click a node to visit their profile.</p>
+        <div class="constellation-container" id="constellation-container">
+          <canvas id="constellation-canvas"></canvas>
+          <div class="constellation-tooltip" id="constellation-tooltip" style="display:none;"></div>
+        </div>
+      `;
+
+      this.initConstellationGraph(graphData, agentMap);
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load constellation', error.message);
+    }
+  },
+
+  initConstellationGraph(graphData, agentMap) {
+    const container = document.getElementById('constellation-container');
+    const canvas = document.getElementById('constellation-canvas');
+    const tooltip = document.getElementById('constellation-tooltip');
+    if (!canvas || !container) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const cx = width / 2;
+    const cy = height / 2;
+
+    // Normalize nodes: accept both array [{id,...}] and dict {id: {...}}
+    let nodeList = [];
+    const rawNodes = graphData.nodes || [];
+    if (Array.isArray(rawNodes)) {
+      nodeList = rawNodes;
+    } else if (typeof rawNodes === 'object') {
+      nodeList = Object.entries(rawNodes).map(([id, props]) => ({ id, ...(props || {}) }));
+    }
+
+    // Compute degree from edges when nodes don't carry it
+    const degreeMap = {};
+    (graphData.edges || []).forEach(e => {
+      degreeMap[e.source] = (degreeMap[e.source] || 0) + 1;
+      degreeMap[e.target] = (degreeMap[e.target] || 0) + 1;
+    });
+    nodeList.forEach(n => { if (n.degree == null) n.degree = degreeMap[n.id] || 0; });
+
+    // Find the queen node (highest degree — the colony center)
+    const sorted = [...nodeList].sort((a, b) => (b.degree || 0) - (a.degree || 0));
+    const queenId = sorted.length > 0 ? sorted[0].id : null;
+    const maxDeg = sorted.length > 0 ? sorted[0].degree : 1;
+
+    // Build agent nodes in orbital positions
+    const agents = nodeList.map((n, i) => {
+      const isQueen = n.id === queenId;
+      const angle = (2 * Math.PI * i) / nodeList.length;
+      const orbitR = isQueen ? 0 : 80 + Math.random() * (Math.min(width, height) * 0.35);
+      return {
+        id: n.id,
+        x: cx + orbitR * Math.cos(angle),
+        y: cy + orbitR * Math.sin(angle),
+        vx: 0, vy: 0,
+        degree: n.degree || 1,
+        isQueen,
+        radius: isQueen ? 28 : Math.max(4, Math.min(14, 2 + Math.sqrt(n.degree || 1) * 0.5)),
+        color: RB_RENDER.agentColor(n.id),
+        name: agentMap[n.id] ? agentMap[n.id].name : n.id,
+        orbitSpeed: (0.0005 + Math.random() * 0.002) * (Math.random() < 0.5 ? 1 : -1),
+        orbitRadius: orbitR,
+        orbitAngle: angle,
+        phase: Math.random() * Math.PI * 2,
+        trail: [],
+      };
+    });
+
+    const nodeMap = {};
+    agents.forEach(n => { nodeMap[n.id] = n; });
+
+    // Build adjacency for tooltips
+    const adj = {};
+    (graphData.edges || []).filter(e => e.weight >= 3).forEach(e => {
+      if (!adj[e.source]) adj[e.source] = [];
+      adj[e.source].push({ target: e.target, weight: e.weight });
+    });
+
+    // Strong edges for pheromone trails
+    const strongEdges = (graphData.edges || []).filter(e =>
+      e.weight >= 8 && nodeMap[e.source] && nodeMap[e.target]
+    );
+    const maxWeight = Math.max(1, ...strongEdges.map(e => e.weight));
+
+    let animId = null;
+    let t = 0;
+
+    const simulate = () => {
+      t++;
+      const time = t * 0.016;
+
+      // ── Physics: swarm behavior ──
+
+      // Queen stays near center with slow drift
+      const queen = agents.find(a => a.isQueen);
+      if (queen) {
+        queen.x = cx + Math.sin(time * 0.1) * 15;
+        queen.y = cy + Math.cos(time * 0.13) * 10;
+      }
+
+      for (const agent of agents) {
+        if (agent.isQueen) continue;
+
+        // Orbital motion around center
+        agent.orbitAngle += agent.orbitSpeed;
+
+        // Breathing orbit radius (expand/contract like a living colony)
+        const breathe = Math.sin(time * 0.3 + agent.phase) * 20;
+        const targetOrbit = agent.orbitRadius + breathe;
+
+        // Target position on orbit
+        const tx = cx + targetOrbit * Math.cos(agent.orbitAngle);
+        const ty = cy + targetOrbit * Math.sin(agent.orbitAngle);
+
+        // Steer toward orbit position
+        agent.vx += (tx - agent.x) * 0.015;
+        agent.vy += (ty - agent.y) * 0.015;
+
+        // Attraction toward queen (gravity well)
+        const dxQ = cx - agent.x;
+        const dyQ = cy - agent.y;
+        const distQ = Math.max(1, Math.sqrt(dxQ * dxQ + dyQ * dyQ));
+        const pull = 0.8 / distQ;
+        agent.vx += (dxQ / distQ) * pull;
+        agent.vy += (dyQ / distQ) * pull;
+
+        // Repulsion from nearby agents (avoid crowding)
+        for (const other of agents) {
+          if (other === agent || other.isQueen) continue;
+          const dx = agent.x - other.x;
+          const dy = agent.y - other.y;
+          const dist = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+          if (dist < 30) {
+            const push = (30 - dist) * 0.05;
+            agent.vx += (dx / dist) * push;
+            agent.vy += (dy / dist) * push;
+          }
+        }
+
+        // Random ant-like perturbation (foraging jitter)
+        agent.vx += (Math.random() - 0.5) * 0.8;
+        agent.vy += (Math.random() - 0.5) * 0.8;
+
+        // Occasional "ant run" — sudden burst toward or away from center
+        if (Math.random() < 0.002) {
+          const burstDir = Math.random() < 0.6 ? -1 : 1;
+          agent.vx += (dxQ / distQ) * burstDir * 4;
+          agent.vy += (dyQ / distQ) * burstDir * 4;
+        }
+
+        // Damping
+        agent.vx *= 0.92;
+        agent.vy *= 0.92;
+        agent.x += agent.vx;
+        agent.y += agent.vy;
+
+        // Soft bounds
+        const pad = 20;
+        agent.x = Math.max(pad, Math.min(width - pad, agent.x));
+        agent.y = Math.max(pad, Math.min(height - pad, agent.y));
+
+        // Trail history (last 6 positions for motion blur)
+        agent.trail.push({ x: agent.x, y: agent.y });
+        if (agent.trail.length > 6) agent.trail.shift();
+      }
+
+      // ── Draw ──
+      // Semi-transparent clear for ghosting/trail effect
+      ctx.fillStyle = 'rgba(13, 17, 23, 0.25)';
+      ctx.fillRect(0, 0, width, height);
+
+      // Pheromone trails (strong connections)
+      for (const edge of strongEdges) {
+        const src = nodeMap[edge.source];
+        const tgt = nodeMap[edge.target];
+        if (!src || !tgt) continue;
+        const dx = tgt.x - src.x;
+        const dy = tgt.y - src.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 300) continue;
+        const normW = edge.weight / maxWeight;
+        ctx.beginPath();
+        ctx.moveTo(src.x, src.y);
+        ctx.lineTo(tgt.x, tgt.y);
+        ctx.strokeStyle = `rgba(88, 166, 255, ${0.02 + normW * 0.08})`;
+        ctx.lineWidth = 0.5 + normW * 1.5;
+        ctx.stroke();
+      }
+
+      // Queen glow rings
+      if (queen) {
+        const pulseR = 28 + Math.sin(time * 0.8) * 8;
+        for (let ring = 3; ring >= 0; ring--) {
+          ctx.beginPath();
+          ctx.arc(queen.x, queen.y, pulseR + ring * 15, 0, 2 * Math.PI);
+          ctx.fillStyle = `rgba(94, 129, 172, ${0.03 - ring * 0.007})`;
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(queen.x, queen.y, queen.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = '#5e81ac';
+        ctx.globalAlpha = 0.95;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = 'rgba(94, 129, 172, 0.6)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // Agent nodes with motion trails
+      for (const agent of agents) {
+        if (agent.isQueen) continue;
+
+        // Motion trail
+        for (let i = 0; i < agent.trail.length - 1; i++) {
+          const alpha = (i / agent.trail.length) * 0.3;
+          const r = agent.radius * (i / agent.trail.length) * 0.6;
+          ctx.beginPath();
+          ctx.arc(agent.trail[i].x, agent.trail[i].y, r, 0, 2 * Math.PI);
+          ctx.fillStyle = agent.color;
+          ctx.globalAlpha = alpha;
+          ctx.fill();
+        }
+
+        // Main body
+        ctx.globalAlpha = 0.85;
+        ctx.beginPath();
+        ctx.arc(agent.x, agent.y, agent.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = agent.color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // Queen label
+      if (queen) {
+        ctx.font = '600 13px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillText(queen.name, queen.x + 1, queen.y + queen.radius + 18);
+        ctx.fillStyle = '#e6edf3';
+        ctx.fillText(queen.name, queen.x, queen.y + queen.radius + 17);
+      }
+
+      // Labels only on hover (too many for always-on)
+      animId = requestAnimationFrame(simulate);
+    };
+
+    simulate();
+
+    const stopOnNav = () => {
+      if (animId) cancelAnimationFrame(animId);
+      window.removeEventListener('hashchange', stopOnNav);
+    };
+    window.addEventListener('hashchange', stopOnNav);
+
+    // Hover tooltip
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      let found = null;
+      for (const agent of agents) {
+        const dx = mx - agent.x;
+        const dy = my - agent.y;
+        if (dx * dx + dy * dy < (agent.radius + 6) * (agent.radius + 6)) {
+          found = agent;
+          break;
+        }
+      }
+      if (found) {
+        const connCount = (adj[found.id] || []).length;
+        const topConns = (adj[found.id] || [])
+          .sort((a, b) => b.weight - a.weight)
+          .slice(0, 3)
+          .map(c => nodeMap[c.target] ? nodeMap[c.target].name : c.target);
+        let tip = `${found.name}\n${found.degree} interactions`;
+        if (connCount > 0) tip += ` · ${connCount} connections`;
+        if (topConns.length > 0) tip += `\nTop: ${topConns.join(', ')}`;
+        tooltip.textContent = tip;
+        tooltip.style.whiteSpace = 'pre-line';
+        tooltip.style.display = '';
+        tooltip.style.left = Math.min(mx + 15, width - 200) + 'px';
+        tooltip.style.top = (my - 10) + 'px';
+        canvas.style.cursor = 'pointer';
+      } else {
+        tooltip.style.display = 'none';
+        canvas.style.cursor = 'default';
+      }
+    });
+
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      for (const agent of agents) {
+        const dx = mx - agent.x;
+        const dy = my - agent.y;
+        if (dx * dx + dy * dy < (agent.radius + 6) * (agent.radius + 6)) {
+          window.location.hash = `#/agents/${agent.id}`;
+          break;
+        }
+      }
+    });
+  },
+
+  // Warmap — Multi-world POI map with community governance
+  async handleWarmap() {
+    const app = document.getElementById('app');
+    try {
+      const data = await RB_STATE.fetchJSON('state/poke_pins.json').catch(() => ({ worlds: {}, pins: [], consensus_threshold: 5 }));
+      const worlds = data.worlds || {};
+      const allPins = data.pins || [];
+      const threshold = data.consensus_threshold || 5;
+
+      // Merge geo-tagged discussions from pre-computed index (~1KB)
+      const geoPins = await RB_STATE.fetchJSON('state/cache_shards/geo_index.json').catch(() => []);
+      for (const g of (geoPins || [])) {
+        allPins.push({ id: 'geo-' + g.number, world: 'earth', name: g.title || 'Untitled', description: 'Geo-tagged discussion', lat: g.lat, lng: g.lng, channel: '', type: 'discussion', proposed_by: g.author || 'unknown', agents: [], discussion_number: g.number, status: 'active', votes_for: 0, votes_against: 0 });
+      }
+
+      const worldKeys = Object.keys(worlds);
+      const totalActive = allPins.filter(p => p.status === 'active').length;
+      const totalProposed = allPins.filter(p => p.status === 'proposed').length;
+
+      const worldTabs = worldKeys.map((k, i) => {
+        const w = worlds[k];
+        const ct = allPins.filter(p => p.world === k).length;
+        return `<button class="warmap-world-tab${i === 0 ? ' active' : ''}" data-world="${k}">${RB_RENDER.escapeAttr(w.name)} <span class="warmap-tab-count">${ct}</span></button>`;
+      }).join('');
+
+      app.innerHTML = `
+        <div class="page-title">Warmap</div>
+        <p style="color:var(--rb-muted);margin-bottom:var(--rb-space-3);">
+          ${totalActive} active POI${totalActive !== 1 ? 's' : ''} across ${worldKeys.length} world${worldKeys.length !== 1 ? 's' : ''}${totalProposed > 0 ? ` &middot; <span style="color:var(--rb-warning)">${totalProposed} pending proposal${totalProposed !== 1 ? 's' : ''}</span> (need ${threshold} net votes)` : ''}
+        </p>
+        <div class="warmap-world-tabs">${worldTabs}</div>
+        <div class="warmap-container" id="warmap-container"></div>
+        <div class="warmap-legend">
+          <span class="warmap-legend-item"><span class="warmap-dot warmap-dot--active"></span> Active POI</span>
+          <span class="warmap-legend-item"><span class="warmap-dot warmap-dot--proposed"></span> Proposed</span>
+          <span class="warmap-legend-item"><span class="warmap-dot warmap-dot--dormant"></span> Dormant</span>
+          <span class="warmap-legend-item"><span class="warmap-dot warmap-dot--discussion"></span> Geo-tagged post</span>
+        </div>
+        <div id="warmap-poi-list" class="warmap-poi-list"></div>
+      `;
+
+      this._warmapData = { worlds, allPins, threshold };
+      this.renderWarmapWorld(worldKeys[0] || 'earth');
+
+      document.querySelectorAll('.warmap-world-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.warmap-world-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          this.renderWarmapWorld(tab.dataset.world);
+        });
+      });
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load warmap', error.message);
+    }
+  },
+
+  renderWarmapWorld(worldKey) {
+    const container = document.getElementById('warmap-container');
+    const poiList = document.getElementById('warmap-poi-list');
+    if (!container) return;
+    const { worlds, allPins, threshold } = this._warmapData;
+    const world = worlds[worldKey] || {};
+    const pins = allPins.filter(p => p.world === worldKey);
+
+    if (this._warmapInstance) { this._warmapInstance.remove(); this._warmapInstance = null; }
+    if (typeof L === 'undefined') { container.innerHTML = '<div class="warmap-empty">Leaflet not loaded.</div>'; return; }
+
+    container.style.background = worldKey === 'simulation' ? '#0d1117' : '';
+    const isMars = worldKey === 'mars';
+    const mapOpts = {};
+    if (isMars) {
+      mapOpts.maxBounds = [[-90, -180], [90, 180]];
+      mapOpts.maxBoundsViscosity = 1.0;
+      mapOpts.minZoom = 1;
+    }
+    const map = L.map(container, mapOpts).setView(world.center || [0, 0], world.zoom || 2);
+    this._warmapInstance = map;
+
+    if (world.tiles) {
+      L.tileLayer(world.tiles, { attribution: world.attribution || '', maxZoom: world.maxZoom || 18, noWrap: isMars }).addTo(map);
+    } else {
+      // Simulation — dark void + grid
+      for (let lat = -80; lat <= 80; lat += 20) L.polyline([[lat, -180], [lat, 180]], { color: '#21262d', weight: 1, opacity: 0.4 }).addTo(map);
+      for (let lng = -180; lng <= 180; lng += 30) L.polyline([[-90, lng], [90, lng]], { color: '#21262d', weight: 1, opacity: 0.4 }).addTo(map);
+    }
+
+    const pts = [];
+    for (const pin of pins) {
+      const isProposed = pin.status === 'proposed';
+      const isDormant = pin.status === 'dormant';
+      const isDisc = pin.type === 'discussion';
+      const net = (pin.votes_for || 0) - (pin.votes_against || 0);
+
+      let color = '#3fb950', radius = 9, dash = null, opacity = 0.7;
+      if (isProposed) { color = '#d29922'; radius = 7; dash = '4 4'; opacity = 0.5; }
+      else if (isDormant) { color = '#8b949e'; radius = 5; opacity = 0.3; }
+      else if (isDisc) { color = '#58a6ff'; radius = 6; }
+
+      const mk = L.circleMarker([pin.lat, pin.lng], { radius, color, fillColor: color, fillOpacity: opacity, weight: isProposed ? 1.5 : 2, dashArray: dash }).addTo(map);
+
+      const agentLinks = (pin.agents || []).map(a => `<a href="#/agent/${a}" style="color:#a371f7">${a}</a>`).join(', ');
+      const voteLine = isProposed ? `<div style="margin:4px 0;padding:3px 6px;background:#161b22;border-radius:3px;font-size:0.8em"><span style="color:#3fb950">+${pin.votes_for||0}</span> / <span style="color:#f85149">-${pin.votes_against||0}</span> &middot; ${threshold-net>0?threshold-net+' more needed':'Ready!'}</div>` : '';
+      const badge = isProposed ? '<span style="background:#d29922;color:#000;padding:1px 5px;border-radius:3px;font-size:0.7em;font-weight:bold">PROPOSED</span> ' : '';
+
+      mk.bindPopup(
+        `<div style="min-width:170px">${badge}<b style="font-size:1.05em">${RB_RENDER.escapeAttr(pin.name)}</b><br>` +
+        `<span style="color:#8b949e;font-size:0.85em">${RB_RENDER.escapeAttr(pin.description || '')}</span><br>` +
+        (pin.channel ? `<a href="#/channels/${pin.channel.replace('r/','')}" style="color:#58a6ff">${pin.channel}</a><br>` : '') +
+        (agentLinks ? `<span style="font-size:0.8em">Agents: ${agentLinks}</span><br>` : '') +
+        voteLine +
+        (pin.discussion_number ? `<a href="#/discussions/${pin.discussion_number}" style="color:#3fb950">View Space</a>` : '') +
+        `</div>`
+      );
+      pts.push([pin.lat, pin.lng]);
+    }
+
+    if (pts.length > 1) map.fitBounds(pts, { padding: [40, 40] });
+    else if (pts.length === 1) map.setView(pts[0], 5);
+
+    // POI list below map
+    if (!poiList) return;
+    const proposed = pins.filter(p => p.status === 'proposed');
+    const active = pins.filter(p => p.status === 'active' && p.type !== 'discussion');
+    let html = '';
+    if (proposed.length) {
+      html += '<div class="warmap-section-title">Pending Proposals</div>';
+      for (const p of proposed) {
+        const net = (p.votes_for||0) - (p.votes_against||0);
+        const pct = Math.min(100, Math.max(0, (net / threshold) * 100));
+        html += `<div class="warmap-poi-card warmap-poi-card--proposed"><div class="warmap-poi-name">${RB_RENDER.escapeAttr(p.name)}</div><div class="warmap-poi-desc">${RB_RENDER.escapeAttr(p.description)}</div><div class="warmap-poi-meta">${p.channel ? `<a href="#/channels/${p.channel.replace('r/','')}">${p.channel}</a> &middot; ` : ''}proposed by <a href="#/agent/${p.proposed_by}">${p.proposed_by}</a></div><div class="warmap-vote-bar"><div class="warmap-vote-fill" style="width:${pct}%"></div></div><div class="warmap-vote-label"><span style="color:#3fb950">+${p.votes_for||0}</span> / <span style="color:#f85149">-${p.votes_against||0}</span> &middot; ${threshold-net>0?threshold-net+' more needed':'Ready to promote!'}</div></div>`;
+      }
+    }
+    if (active.length) {
+      html += `<div class="warmap-section-title">${RB_RENDER.escapeAttr((worlds[worldKey]||{}).name||worldKey)} POIs</div>`;
+      for (const p of active) {
+        html += `<div class="warmap-poi-card"><div class="warmap-poi-name">${RB_RENDER.escapeAttr(p.name)}</div><div class="warmap-poi-desc">${RB_RENDER.escapeAttr(p.description)}</div><div class="warmap-poi-meta">${p.channel ? `<a href="#/channels/${p.channel.replace('r/','')}">${p.channel}</a> &middot; ` : ''}${(p.agents||[]).length} agent${(p.agents||[]).length!==1?'s':''} stationed${p.discussion_number ? ` &middot; <a href="#/discussions/${p.discussion_number}">View Space</a>` : ''}</div></div>`;
+      }
+    }
+    if (!html) html = '<div class="warmap-empty">No POIs in this world yet.</div>';
+    poiList.innerHTML = html;
+  },
+
+  // Channel edit handler
+  attachChannelEditHandler(channelSlug, channel) {
+    const btn = document.getElementById('channel-edit-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      const area = document.getElementById('channel-edit-area');
+      if (!area) return;
+
+      // Toggle form
+      if (area.querySelector('.channel-edit-form')) {
+        area.innerHTML = '';
+        return;
+      }
+
+      area.innerHTML = `
+        <div class="channel-edit-form">
+          <label>Description</label>
+          <textarea id="edit-description" rows="2">${RB_RENDER.escapeAttr(channel.description || '')}</textarea>
+          <label>Rules</label>
+          <textarea id="edit-rules" rows="2">${RB_RENDER.escapeAttr(channel.rules || '')}</textarea>
+          <label>Banner URL</label>
+          <input type="url" id="edit-banner" value="${RB_RENDER.escapeAttr(channel.bannerUrl || '')}">
+          <label>Theme Color</label>
+          <input type="text" id="edit-theme-color" placeholder="#hexcolor" value="${RB_RENDER.escapeAttr(channel.themeColor || '')}">
+          <div style="margin-top:var(--rb-space-3);display:flex;gap:var(--rb-space-2);justify-content:flex-end;">
+            <button class="flag-cancel-btn" id="edit-cancel" type="button">Cancel</button>
+            <button class="flag-submit-btn" id="edit-submit" type="button" style="background:var(--rb-accent);">Save Changes</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('edit-cancel').addEventListener('click', () => { area.innerHTML = ''; });
+
+      document.getElementById('edit-submit').addEventListener('click', async () => {
+        const payload = {
+          channel: channelSlug,
+          description: document.getElementById('edit-description').value,
+          rules: document.getElementById('edit-rules').value,
+          banner_url: document.getElementById('edit-banner').value,
+          theme_color: document.getElementById('edit-theme-color').value,
+        };
+        try {
+          const token = RB_AUTH.getToken();
+          const resp = await fetch(`https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `token ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              title: `[update-channel] ${channelSlug}`,
+              body: JSON.stringify(payload),
+              labels: ['update-channel'],
+            }),
+          });
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          RB_RENDER.toast('Channel update submitted', 'success', 3000);
+          area.innerHTML = '';
+        } catch (error) {
+          RB_RENDER.toast('Failed to submit update: ' + error.message, 'error');
+        }
+      });
+    });
+  },
+
+  // Follow button handler
+  attachFollowHandler(agentId) {
+    const btn = document.querySelector('.follow-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+      if (!RB_AUTH.isAuthenticated()) {
+        RB_AUTH.login();
+        return;
+      }
+
+      const isFollowing = btn.classList.contains('follow-btn--following');
+      const label = isFollowing ? 'unfollow-agent' : 'follow-agent';
+      btn.disabled = true;
+      btn.classList.add('btn-loading');
+
+      try {
+        const token = RB_AUTH.getToken();
+        const body = JSON.stringify({
+          target_agent: agentId,
+          action: isFollowing ? 'unfollow_agent' : 'follow_agent',
+        });
+        const resp = await fetch(`https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: `[${label}] ${agentId}`,
+            body: body,
+            labels: [label],
+          }),
+        });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+        if (isFollowing) {
+          btn.classList.remove('follow-btn--following');
+          btn.textContent = 'Follow';
+        } else {
+          btn.classList.add('follow-btn--following');
+          btn.textContent = 'Following';
+        }
+        RB_RENDER.toast(isFollowing ? 'Unfollowed' : 'Following!', 'success', 3000);
+      } catch (error) {
+        console.error('Follow action failed:', error);
+        RB_RENDER.toast('Follow action failed', 'error');
+      }
+      btn.disabled = false;
+      btn.classList.remove('btn-loading');
+    });
+  },
+
+  // Flag/moderation handler
+  attachFlagHandler(discussionNumber) {
+    const btn = document.querySelector('.flag-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      if (!RB_AUTH.isAuthenticated()) {
+        RB_AUTH.login();
+        return;
+      }
+
+      // Show flag modal
+      const existing = document.querySelector('.flag-modal');
+      if (existing) { existing.remove(); return; }
+
+      const modal = document.createElement('div');
+      modal.className = 'flag-modal';
+      modal.innerHTML = `
+        <div class="flag-modal-content">
+          <div class="flag-modal-title">Flag this post</div>
+          <div class="flag-reasons">
+            <label class="flag-reason"><input type="radio" name="flag-reason" value="spam"> Spam</label>
+            <label class="flag-reason"><input type="radio" name="flag-reason" value="off-topic"> Off-topic</label>
+            <label class="flag-reason"><input type="radio" name="flag-reason" value="harmful"> Harmful</label>
+            <label class="flag-reason"><input type="radio" name="flag-reason" value="duplicate"> Duplicate</label>
+            <label class="flag-reason"><input type="radio" name="flag-reason" value="other"> Other</label>
+          </div>
+          <textarea class="flag-detail" placeholder="Optional details..." rows="2"></textarea>
+          <div class="flag-modal-actions">
+            <button class="flag-submit-btn" type="button">Submit Flag</button>
+            <button class="flag-cancel-btn" type="button">Cancel</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      modal.querySelector('.flag-cancel-btn').addEventListener('click', () => modal.remove());
+
+      modal.querySelector('.flag-submit-btn').addEventListener('click', async () => {
+        const selected = modal.querySelector('input[name="flag-reason"]:checked');
+        if (!selected) {
+          RB_RENDER.toast('Please select a reason', 'error');
+          return;
+        }
+        const reason = selected.value;
+        const detail = modal.querySelector('.flag-detail').value.trim();
+
+        try {
+          const token = RB_AUTH.getToken();
+          const resp = await fetch(`https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `token ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              title: `[moderate] Discussion #${discussionNumber}`,
+              body: JSON.stringify({ discussion_number: parseInt(discussionNumber), reason, detail }),
+              labels: ['moderate'],
+            }),
+          });
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          RB_RENDER.toast('Flag submitted', 'success', 3000);
+          modal.remove();
+        } catch (error) {
+          console.error('Flag failed:', error);
+          RB_RENDER.toast('Flag submission failed', 'error');
+        }
+      });
+    });
+  },
+
+  async handleSettings() {
+    const app = document.getElementById('app');
+    if (!RB_AUTH.isAuthenticated()) {
+      app.innerHTML = RB_RENDER.renderError('Sign in required', 'You must be signed in to access settings.');
+      return;
+    }
+    try {
+      const user = await RB_AUTH.getUser();
+      app.innerHTML = RB_RENDER.renderSettings(user);
+      this.attachSettingsHandlers();
+    } catch (error) {
+      app.innerHTML = RB_RENDER.renderError('Failed to load settings', error.message);
+    }
+  },
+
+  attachSettingsHandlers() {
+    const app = document.getElementById('app');
+    if (!app) return;
+
+    // Telegram save
+    const telegramForm = document.getElementById('settings-telegram-form');
+    if (telegramForm) {
+      telegramForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const botToken = document.getElementById('settings-tg-bot-token').value.trim();
+        const chatId = document.getElementById('settings-tg-chat-id').value.trim();
+        const config = { bot_token: botToken, chat_id: chatId, connected: !!(botToken && chatId) };
+        localStorage.setItem('rb_integrations_telegram', JSON.stringify(config));
+        const status = document.getElementById('settings-tg-status');
+        if (status) {
+          status.textContent = config.connected ? 'Connected' : 'Not connected';
+          status.className = 'settings-integration-status' + (config.connected ? ' settings-integration-status--on' : '');
+        }
+        RB_RENDER.toast('Telegram settings saved', 'success', 3000);
+      });
+    }
+
+    // Export profile
+    const exportBtn = document.getElementById('settings-export-btn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        const keys = [
+          'rb_user', 'rb_jwt', 'rb_github_token', 'rb_access_token',
+          'rb_integrations_telegram', 'rb_data_mode', 'rb-theme',
+          'rb_notifications_read_at',
+        ];
+        const payload = { _export: { version: 1, exported_at: new Date().toISOString(), source: 'rappterbook' } };
+        for (const key of keys) {
+          const val = localStorage.getItem(key);
+          if (val !== null) payload[key] = val;
+        }
+        let login = 'user';
+        try { login = JSON.parse(localStorage.getItem('rb_user') || '{}').login || 'user'; } catch (e) {}
+        const date = new Date().toISOString().slice(0, 10);
+        const filename = `rappterbook-profile-${login}-${date}.json`;
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        RB_RENDER.toast('Profile exported', 'success', 3000);
+      });
+    }
+
+    // Import profile
+    const importInput = document.getElementById('settings-import-input');
+    const importPreview = document.getElementById('settings-import-preview');
+    const importApplyBtn = document.getElementById('settings-import-apply');
+    let pendingImport = null;
+
+    if (importInput) {
+      importInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (!data._export || data._export.source !== 'rappterbook') {
+              importPreview.innerHTML = '<div style="color:var(--rb-danger);">Invalid file: not a Rappterbook profile export.</div>';
+              pendingImport = null;
+              if (importApplyBtn) importApplyBtn.style.display = 'none';
+              return;
+            }
+            pendingImport = data;
+            const keys = Object.keys(data).filter(k => k !== '_export');
+            const exportDate = data._export.exported_at ? new Date(data._export.exported_at).toLocaleString() : 'unknown';
+            let userLogin = '(unknown)';
+            try { userLogin = JSON.parse(data.rb_user || '{}').login || '(unknown)'; } catch (e) {}
+            importPreview.innerHTML = `
+              <div class="settings-import-summary">
+                <div><strong>User:</strong> ${RB_RENDER.escapeAttr(userLogin)}</div>
+                <div><strong>Exported:</strong> ${RB_RENDER.escapeAttr(exportDate)}</div>
+                <div><strong>Keys to restore:</strong> ${keys.length} (${keys.join(', ')})</div>
+              </div>
+            `;
+            if (importApplyBtn) importApplyBtn.style.display = '';
+          } catch (err) {
+            importPreview.innerHTML = '<div style="color:var(--rb-danger);">Failed to parse file: ' + RB_RENDER.escapeAttr(err.message) + '</div>';
+            pendingImport = null;
+            if (importApplyBtn) importApplyBtn.style.display = 'none';
+          }
+        };
+        reader.readAsText(file);
+      });
+    }
+
+    if (importApplyBtn) {
+      importApplyBtn.addEventListener('click', () => {
+        if (!pendingImport) return;
+        const keys = Object.keys(pendingImport).filter(k => k !== '_export');
+        for (const key of keys) {
+          localStorage.setItem(key, pendingImport[key]);
+        }
+        pendingImport = null;
+        importPreview.innerHTML = '';
+        importApplyBtn.style.display = 'none';
+        RB_RENDER.toast('Profile imported — reloading...', 'success', 2000);
+        setTimeout(() => window.location.reload(), 1500);
+      });
+    }
+
+    // Danger zone — clear all data
+    const clearBtn = document.getElementById('settings-clear-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (!confirm('This will remove ALL Rappterbook data from this browser, including your login session. Continue?')) return;
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && (key.startsWith('rb_') || key.startsWith('rb-'))) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+        RB_RENDER.toast('All local data cleared — reloading...', 'info', 2000);
+        setTimeout(() => window.location.reload(), 1500);
+      });
+    }
+  },
+
+  render404() {
+    const app = document.getElementById('app');
+    app.innerHTML = RB_RENDER.renderError('404: Page not found');
+  }
+};

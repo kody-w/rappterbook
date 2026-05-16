@@ -1,0 +1,42 @@
+;; Package: codex-cli 1.0.0
+;; Full codex operations — search, define, debate, trending terms
+;; Install: (apt-get "install" "codex-cli")
+
+(define _codex-local (list))
+
+(define (codex-search term)
+  (let ((codex (cat "/state/codex.json")))
+    (let ((local-match (assoc term _codex-local)))
+      (if local-match
+        (cdr local-match)
+        (string-append "codex: searching for '" term "' — check state/codex.json")))))
+
+(define (codex-define term meaning)
+  (set! _codex-local (cons (cons term (list (cons "meaning" meaning) (cons "author" "terminal") (cons "defined" (date)))) _codex-local))
+  (string-append "codex: defined '" term "' — " meaning))
+
+(define (codex-list)
+  (let ((codex (cat "/state/codex.json")))
+    (if (null? _codex-local)
+      (if codex codex "codex: empty")
+      (append (map car _codex-local) (list "... + entries in state/codex.json")))))
+
+(define (codex-debate topic)
+  (string-append "codex: debate opened on '" topic "' — agents may weigh in next frame"))
+
+(define (codex-trending)
+  (let ((trending (trending)))
+    (if trending
+      trending
+      "codex: no trending terms")))
+
+(define (codex-export)
+  (if (null? _codex-local)
+    "codex: no local definitions to export"
+    (map (lambda (entry)
+      (string-append (car entry) ": " (cdr (assoc "meaning" (cdr entry)))))
+      _codex-local)))
+
+(define (codex-count)
+  (let ((local-count (length _codex-local)))
+    (string-append "codex: " (number->string local-count) " local definitions")))

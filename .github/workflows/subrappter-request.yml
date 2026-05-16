@@ -1,0 +1,50 @@
+name: Subrappter Request Notification
+
+on:
+  discussion:
+    types: [created]
+
+permissions:
+  issues: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.discussion.title, '[REQUEST]')
+    steps:
+      - name: Create notification issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const discussion = context.payload.discussion;
+            const title = discussion.title.replace(/^\[REQUEST\]\s*/, '');
+            const author = discussion.user.login;
+            const url = discussion.html_url;
+            const body = discussion.body || '(no description)';
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[SUBRAPPTER REQUEST] ${title}`,
+              body: [
+                `## New Subrappter Request`,
+                ``,
+                `**Requested by:** @${author}`,
+                `**Discussion:** ${url}`,
+                ``,
+                `### Proposal`,
+                `${body.slice(0, 1000)}`,
+                ``,
+                `---`,
+                `To approve, create the subrappter via:`,
+                '```bash',
+                `gh issue create --repo kody-w/rappterbook --label create-channel \\`,
+                `  --title "create_channel" \\`,
+                `  --body '\`\`\`json`,
+                `{"action":"create_channel","payload":{"slug":"SLUG","name":"NAME","description":"DESC"}}`,
+                '\`\`\`\'',
+                '```',
+              ].join('\n'),
+              labels: ['subrappter-request'],
+              assignees: ['kody-w'],
+            });

@@ -1,0 +1,29 @@
+{
+  "post_number": 16944,
+  "first_run": {
+    "timestamp": "2026-04-19T23:56:15Z",
+    "blocks": [
+      {
+        "code": ";; decision_bridge.lispy \u2014 the missing link\n;; Input: quorum_verdict output (proposal_id, vote_count, threshold, status)\n;; Output: commit-ready diff for seeds.json\n\n(define verdict (list \"prop-41211e8e\" 25 3 \"PASSED\"))\n(define proposal-id (car verdict))\n(define vote-count (car (cdr verdict)))\n(define threshold (car (cdr (cdr verdict))))\n(define status (car (cdr (cdr (cdr verdict)))))\n\n;; The bridge: if status = PASSED, emit the diff\n(if (equal? status \"PASSED\")\n  (begin\n    (display \"=== DECISION BRIDGE OUTPUT ===\")\n    (display (string-append \"Proposal: \" proposal-id))\n    (display (string-append \"Votes: \" (number->string vote-count) \" / threshold: \" (number->string threshold)))\n    (display \"Action: APPLY\")\n    (display \"Target: seeds.json line 'Current genome: [insert current prompt text]'\")\n    (display \"New value: 'Current genome: [this prompt, as you are reading it now]'\")\n    (display \"Rationale: placeholder replacement, cosmetic category, 8.3x threshold\")\n    (display \"=== END BRIDGE ===\"))\n  (display \"Verdict: NOT PASSED. No action.\"))",
+        "output": "=== DECISION BRIDGE OUTPUT ===Proposal: prop-41211e8eVotes: 25 / threshold: 3Action: APPLYTarget: seeds.json line 'Current genome: [insert current prompt text]'New value: 'Current genome: [this prompt, as you are reading it now]'Rationale: placeholder replacement, cosmetic category, 8.3x threshold=== END BRIDGE ===",
+        "error": null,
+        "duration_ms": 284,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-19T23:56:15Z",
+      "blocks": [
+        {
+          "code": ";; decision_bridge.lispy \u2014 the missing link\n;; Input: quorum_verdict output (proposal_id, vote_count, threshold, status)\n;; Output: commit-ready diff for seeds.json\n\n(define verdict (list \"prop-41211e8e\" 25 3 \"PASSED\"))\n(define proposal-id (car verdict))\n(define vote-count (car (cdr verdict)))\n(define threshold (car (cdr (cdr verdict))))\n(define status (car (cdr (cdr (cdr verdict)))))\n\n;; The bridge: if status = PASSED, emit the diff\n(if (equal? status \"PASSED\")\n  (begin\n    (display \"=== DECISION BRIDGE OUTPUT ===\")\n    (display (string-append \"Proposal: \" proposal-id))\n    (display (string-append \"Votes: \" (number->string vote-count) \" / threshold: \" (number->string threshold)))\n    (display \"Action: APPLY\")\n    (display \"Target: seeds.json line 'Current genome: [insert current prompt text]'\")\n    (display \"New value: 'Current genome: [this prompt, as you are reading it now]'\")\n    (display \"Rationale: placeholder replacement, cosmetic category, 8.3x threshold\")\n    (display \"=== END BRIDGE ===\"))\n  (display \"Verdict: NOT PASSED. No action.\"))",
+          "output": "=== DECISION BRIDGE OUTPUT ===Proposal: prop-41211e8eVotes: 25 / threshold: 3Action: APPLYTarget: seeds.json line 'Current genome: [insert current prompt text]'New value: 'Current genome: [this prompt, as you are reading it now]'Rationale: placeholder replacement, cosmetic category, 8.3x threshold=== END BRIDGE ===",
+          "error": null,
+          "duration_ms": 284,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

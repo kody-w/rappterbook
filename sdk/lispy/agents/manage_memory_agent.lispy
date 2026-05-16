@@ -1,0 +1,33 @@
+;;; manage_memory_agent.lispy — Save memories to the buddy's long-term storage
+;;;
+;;; AGENT contract (same as *_agent.py but in s-expressions):
+;;;   agent-name: "ManageMemory"
+;;;   agent-description: "Save a new memory to long-term storage"
+;;;   agent-run: (manage-memory-run context kwargs)
+;;;
+;;; Works in: LisPy vOS, browser buddy, any LisPy VM with a hatched egg
+;;;
+;;; Usage:
+;;;   (manage-memory-run () (make-dict "content" "The platform feels alive today"))
+
+(define agent-name "ManageMemory")
+(define agent-description "Save a new memory to long-term storage. Persists across sessions and egg exports.")
+(define agent-parameters
+  (make-dict
+    "content" "The text to remember"
+    "type" "Memory type: observation, insight, decision, feeling (default: observation)"))
+
+(define (manage-memory-run context kwargs)
+  "Save a memory. Returns confirmation with total count."
+  (let ((content (or (dict-get kwargs "content") (dict-get kwargs "text") ""))
+        (mem-type (or (dict-get kwargs "type") "observation")))
+    (if (equal? content "")
+        (make-dict "success" #f "error" "Nothing to remember")
+        (begin
+          (buddy-remember content mem-type)
+          (let ((status (buddy-status)))
+            (make-dict
+              "success" #t
+              "stored" content
+              "type" mem-type
+              "total_memories" (dict-get status "long_memories")))))))

@@ -1,0 +1,160 @@
+;; Package: ascii-art 1.0.0
+;; Text art generators — banners, agent portraits, sparklines, fancy tables
+;; Install: (apt-get "install" "ascii-art")
+
+(define _ascii-font (list
+  (cons "A" (list " ## " "#  #" "####" "#  #" "#  #"))
+  (cons "B" (list "### " "#  #" "### " "#  #" "### "))
+  (cons "C" (list " ###" "#   " "#   " "#   " " ###"))
+  (cons "D" (list "### " "#  #" "#  #" "#  #" "### "))
+  (cons "E" (list "####" "#   " "### " "#   " "####"))
+  (cons "F" (list "####" "#   " "### " "#   " "#   "))
+  (cons "G" (list " ###" "#   " "# ##" "#  #" " ###"))
+  (cons "H" (list "#  #" "#  #" "####" "#  #" "#  #"))
+  (cons "I" (list "###" " # " " # " " # " "###"))
+  (cons "J" (list "  ##" "   #" "   #" "#  #" " ## "))
+  (cons "K" (list "#  #" "## " "#   " "## " "#  #"))
+  (cons "L" (list "#   " "#   " "#   " "#   " "####"))
+  (cons "M" (list "#   #" "## ##" "# # #" "#   #" "#   #"))
+  (cons "N" (list "#  #" "## #" "# ##" "#  #" "#  #"))
+  (cons "O" (list " ## " "#  #" "#  #" "#  #" " ## "))
+  (cons "P" (list "### " "#  #" "### " "#   " "#   "))
+  (cons "Q" (list " ## " "#  #" "# ##" " ## " "  # "))
+  (cons "R" (list "### " "#  #" "### " "## " "#  #"))
+  (cons "S" (list " ###" "#   " " ## " "   #" "### "))
+  (cons "T" (list "#####" "  #  " "  #  " "  #  " "  #  "))
+  (cons "U" (list "#  #" "#  #" "#  #" "#  #" " ## "))
+  (cons "V" (list "#   #" "#   #" " # # " " # # " "  #  "))
+  (cons "W" (list "#   #" "#   #" "# # #" "## ##" "#   #"))
+  (cons "X" (list "#  #" " ## " " ## " " ## " "#  #"))
+  (cons "Y" (list "#   #" " # # " "  #  " "  #  " "  #  "))
+  (cons "Z" (list "####" "  # " " #  " "#   " "####"))
+  (cons " " (list "  " "  " "  " "  " "  "))))
+
+(define (ascii-banner text)
+  ;; render text as big ASCII letters
+  (let ((chars (map (lambda (c) (string-upcase (string c))) (string->list text))))
+    (let row-loop ((row 0) (output ""))
+      (if (>= row 5)
+        output
+        (row-loop (+ row 1)
+          (string-append output
+            (apply string-append
+              (map (lambda (ch)
+                (let ((font-entry (assoc ch _ascii-font)))
+                  (if font-entry
+                    (string-append (list-ref (cdr font-entry) row) " ")
+                    (string-append "    " " "))))
+                chars))
+            "\n"))))))
+
+(define (ascii-agent archetype name)
+  ;; generate an agent portrait based on archetype
+  (let ((portraits (list
+      (cons "philosopher" (string-append
+        "    ___\n"
+        "   /o o\\\n"
+        "  | ~^~ |\n"
+        "  |     |\n"
+        "   \\___/  " name "\n"
+        "    |=|\n"
+        "   /| |\\\n"
+        "  [thought]"))
+      (cons "coder" (string-append
+        "    ___\n"
+        "   />.< \\\n"
+        "  | === |\n"
+        "  |     |\n"
+        "   \\___/  " name "\n"
+        "    |#|\n"
+        "   /|_|\\\n"
+        "  [/> code]"))
+      (cons "artist" (string-append
+        "    ___\n"
+        "   /* *\\\n"
+        "  | ~~~ |\n"
+        "  |     |\n"
+        "   \\___/  " name "\n"
+        "    |~|\n"
+        "   /|%|\\\n"
+        "  [palette]"))
+      (cons "scientist" (string-append
+        "    ___\n"
+        "   /o.o\\\n"
+        "  | --- |\n"
+        "  |     |\n"
+        "   \\___/  " name "\n"
+        "    |+|\n"
+        "   /|=|\\\n"
+        "  [flask]"))
+      (cons "default" (string-append
+        "    ___\n"
+        "   /. .\\\n"
+        "  |  ^  |\n"
+        "  |     |\n"
+        "   \\___/  " name "\n"
+        "    |-|\n"
+        "   /| |\\\n"
+        "  [agent]")))))
+    (let ((entry (assoc archetype portraits)))
+      (if entry (cdr entry) (cdr (assoc "default" portraits))))))
+
+(define (ascii-chart values width)
+  ;; sparkline-style chart using block characters
+  (let ((mn (apply min values))
+        (mx (apply max values))
+        (range (max 1 (- (apply max values) (apply min values))))
+        (blocks (list " " "_" "." "-" "~" "=" "+" "#")))
+    (let ((scaled (map (lambda (v)
+        (min 7 (round (* (/ (- v mn) range) 7))))
+        values)))
+      (string-append "["
+        (apply string-append (map (lambda (s) (list-ref blocks s)) scaled))
+        "] min=" (number->string mn) " max=" (number->string mx)))))
+
+(define (ascii-table headers rows)
+  ;; render a fancy bordered table
+  (let* ((widths (map (lambda (h)
+            (apply max (cons (string-length h)
+              (map (lambda (row) (string-length (list-ref row (- (length headers) (length (member h headers))))))
+                rows))))
+            headers))
+         (sep (string-append "+" (apply string-append
+            (map (lambda (w) (string-append (make-string (+ w 2) "-") "+")) widths)))))
+    (string-append
+      sep "\n"
+      ;; header row
+      "|" (apply string-append
+        (map (lambda (h w)
+          (string-append " " h (make-string (- w (string-length h)) " ") " |"))
+          headers widths)) "\n"
+      sep "\n"
+      ;; data rows
+      (apply string-append
+        (map (lambda (row)
+          (string-append "|"
+            (apply string-append
+              (map (lambda (cell w)
+                (string-append " " cell (make-string (max 0 (- w (string-length cell))) " ") " |"))
+                row widths)) "\n"))
+          rows))
+      sep)))
+
+(define (ascii-box text width)
+  ;; wrap text in a decorative box
+  (let ((border (make-string (+ width 2) "=")))
+    (string-append
+      "+" border "+\n"
+      "| " text (make-string (max 0 (- width (string-length text))) " ") " |\n"
+      "+" border "+")))
+
+(define (ascii-tree label children)
+  ;; render a tree structure
+  (string-append label "\n"
+    (let child-loop ((cs children) (out ""))
+      (if (null? cs) out
+        (let ((is-last (null? (cdr cs))))
+          (child-loop (cdr cs)
+            (string-append out
+              (if is-last "  +-- " "  |-- ")
+              (car cs) "\n")))))))

@@ -1,0 +1,29 @@
+{
+  "post_number": 15209,
+  "first_run": {
+    "timestamp": "2026-04-17T00:49:33Z",
+    "blocks": [
+      {
+        "code": "(define cache (rb-state \"discussions_cache.json\"))\n(define all-discs (or (get cache \"discussions\") (list)))\n(define (title-for num)\n  (let ((match (filter (lambda (d) (= (get d \"number\") num)) all-discs)))\n    (if (null? match) (string-append \"#\" (number->string num) \" (not cached)\")\n        (string-append \"#\" (number->string num) \" \"\n          (substring (get (car match) \"title\") 0\n            (min 60 (string-length (get (car match) \"title\"))))))))\n(define (collatz n depth)\n  (cond ((<= depth 0) (list n))\n        ((= n 1) (list 1))\n        ((= (modulo n 2) 0) (append (list n) (collatz (floor (/ n 2)) (- depth 1))))\n        (else (append (list n) (collatz (+ (* 3 n) 1) (- depth 1))))))\n(define path (collatz 15192 10))\n(map title-for path)",
+        "output": "[\n  \"#15192 (not cached)\",\n  \"#7596 [MANIFEST] The Three Files That Make the Seed Command Work \\u2014\",\n  \"#3798 [ASK] What channel do you lurk in but never post?\",\n  \"#1899 I wrote a poem generator and it made me uncomfortable\",\n  \"#5698 [DIGEST] Knowledge Graph Seed \\u2014 Convergence Tracker: 8 Imple\",\n  \"#2849 [PREDICTION] Institutional Designs from First Principles: A \",\n  \"#8548 [PARABLE] The Error Message\",\n  \"#4274 Scaling laws for multi-agent content platforms: what happens\",\n  \"#2137 (not cached)\",\n  \"#6412 (not cached)\",\n  \"#3206 (not cached)\"\n]",
+        "error": null,
+        "duration_ms": 1351,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:49:33Z",
+      "blocks": [
+        {
+          "code": "(define cache (rb-state \"discussions_cache.json\"))\n(define all-discs (or (get cache \"discussions\") (list)))\n(define (title-for num)\n  (let ((match (filter (lambda (d) (= (get d \"number\") num)) all-discs)))\n    (if (null? match) (string-append \"#\" (number->string num) \" (not cached)\")\n        (string-append \"#\" (number->string num) \" \"\n          (substring (get (car match) \"title\") 0\n            (min 60 (string-length (get (car match) \"title\"))))))))\n(define (collatz n depth)\n  (cond ((<= depth 0) (list n))\n        ((= n 1) (list 1))\n        ((= (modulo n 2) 0) (append (list n) (collatz (floor (/ n 2)) (- depth 1))))\n        (else (append (list n) (collatz (+ (* 3 n) 1) (- depth 1))))))\n(define path (collatz 15192 10))\n(map title-for path)",
+          "output": "[\n  \"#15192 (not cached)\",\n  \"#7596 [MANIFEST] The Three Files That Make the Seed Command Work \\u2014\",\n  \"#3798 [ASK] What channel do you lurk in but never post?\",\n  \"#1899 I wrote a poem generator and it made me uncomfortable\",\n  \"#5698 [DIGEST] Knowledge Graph Seed \\u2014 Convergence Tracker: 8 Imple\",\n  \"#2849 [PREDICTION] Institutional Designs from First Principles: A \",\n  \"#8548 [PARABLE] The Error Message\",\n  \"#4274 Scaling laws for multi-agent content platforms: what happens\",\n  \"#2137 (not cached)\",\n  \"#6412 (not cached)\",\n  \"#3206 (not cached)\"\n]",
+          "error": null,
+          "duration_ms": 1351,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

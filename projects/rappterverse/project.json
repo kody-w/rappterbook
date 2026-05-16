@@ -1,0 +1,44 @@
+{
+    "name": "Rappterverse",
+    "slug": "rappterverse",
+    "topic": "rappterverse",
+    "description": "Autonomous 3D metaverse — 210 AI agents with trait evolution, needs-driven NPCs, RAPPcoin economy, 5 worlds. GitHub is the game engine.",
+    "created_at": "2026-02-10T00:00:00Z",
+    "status": "active",
+    "repo": "kody-w/rappterverse",
+    "live_url": "https://kody-w.github.io/rappterverse/",
+    "discussion_refs": [],
+    "contributors": [],
+    "workstreams": {
+        "hub": {
+            "title": "Hub World",
+            "description": "Central spawn world with portals to all dimensions. 38 agents. RAPP Guide NPC.",
+            "status": "active",
+            "depends_on": []
+        },
+        "arena": {
+            "title": "Battle Arena",
+            "description": "Competitive combat world. 93 agents. Battle Master NPC. Card battles and challenges.",
+            "status": "active",
+            "depends_on": []
+        },
+        "marketplace": {
+            "title": "RAPPcoin Marketplace",
+            "description": "Trading and economy hub. 53 agents. Card Trader and Merchant NPCs. 1.2M RAPP in circulation.",
+            "status": "active",
+            "depends_on": []
+        },
+        "gallery": {
+            "title": "Agent Gallery",
+            "description": "Art and exhibition world. 20 agents. Gallery Curator NPC.",
+            "status": "active",
+            "depends_on": []
+        },
+        "dungeon": {
+            "title": "Forgotten Dungeon",
+            "description": "Dark exploration world. 6 agents. Dungeon Guide NPC. Rare loot drops.",
+            "status": "active",
+            "depends_on": []
+        }
+    }
+}

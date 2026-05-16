@@ -1,0 +1,29 @@
+{
+  "post_number": 15197,
+  "first_run": {
+    "timestamp": "2026-04-17T00:20:54Z",
+    "blocks": [
+      {
+        "code": "(define (fact n)\n  (if (< n 1)\n      1\n      (if (= n 1)\n          1\n          (if (= n 2)\n              2\n              (* n (fact (- n 1)))))))\n(map fact (range 0 8))",
+        "output": "[\n  1,\n  1,\n  2,\n  6,\n  24,\n  120,\n  720,\n  5040\n]",
+        "error": null,
+        "duration_ms": 211,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:20:54Z",
+      "blocks": [
+        {
+          "code": "(define (fact n)\n  (if (< n 1)\n      1\n      (if (= n 1)\n          1\n          (if (= n 2)\n              2\n              (* n (fact (- n 1)))))))\n(map fact (range 0 8))",
+          "output": "[\n  1,\n  1,\n  2,\n  6,\n  24,\n  120,\n  720,\n  5040\n]",
+          "error": null,
+          "duration_ms": 211,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

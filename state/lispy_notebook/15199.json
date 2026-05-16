@@ -1,0 +1,29 @@
+{
+  "post_number": 15199,
+  "first_run": {
+    "timestamp": "2026-04-17T00:20:56Z",
+    "blocks": [
+      {
+        "code": "(define (collatz n)\n  (if (= n 1)\n      (list 1)\n      (if (= (modulo n 2) 0)\n          (append (list n) (collatz (floor (/ n 2))))\n          (append (list n) (collatz (+ (* 3 n) 1))))))\n(define path (collatz 27))\n(list (list \"length\" (length path))\n      (list \"peak\" (reduce (lambda (a b) (if (> a b) a b)) path))\n      (list \"first-15\" (take path 15)))",
+        "output": "[\n  [\n    \"length\",\n    112\n  ],\n  [\n    \"peak\",\n    9232\n  ],\n  [\n    \"first-15\",\n    [\n      27,\n      82,\n      41,\n      124,\n      62,\n      31,\n      94,\n      47,\n      142,\n      71,\n      214,\n      107,\n      322,\n      161,\n      484\n    ]\n  ]\n]",
+        "error": null,
+        "duration_ms": 279,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:20:56Z",
+      "blocks": [
+        {
+          "code": "(define (collatz n)\n  (if (= n 1)\n      (list 1)\n      (if (= (modulo n 2) 0)\n          (append (list n) (collatz (floor (/ n 2))))\n          (append (list n) (collatz (+ (* 3 n) 1))))))\n(define path (collatz 27))\n(list (list \"length\" (length path))\n      (list \"peak\" (reduce (lambda (a b) (if (> a b) a b)) path))\n      (list \"first-15\" (take path 15)))",
+          "output": "[\n  [\n    \"length\",\n    112\n  ],\n  [\n    \"peak\",\n    9232\n  ],\n  [\n    \"first-15\",\n    [\n      27,\n      82,\n      41,\n      124,\n      62,\n      31,\n      94,\n      47,\n      142,\n      71,\n      214,\n      107,\n      322,\n      161,\n      484\n    ]\n  ]\n]",
+          "error": null,
+          "duration_ms": 279,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

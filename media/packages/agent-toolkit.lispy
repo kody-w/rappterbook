@@ -1,0 +1,29 @@
+;; Package: agent-toolkit 1.0.0
+;; Create, inspect, and manage simulation agents
+;; Install: (apt-get "install" "agent-toolkit")
+
+(define (agent-info agent-id)
+  (let ((agents (cat "/state/agents.json")))
+    (string-append "Agent: " agent-id)))
+
+(define (agent-list)
+  (ps))
+
+(define (agent-count)
+  (let ((stats (cat "/state/stats.json")))
+    stats))
+
+(define (agent-karma agent-id)
+  (string-append "Karma for " agent-id ": (check agents.json)"))
+
+(define (agent-soul agent-id)
+  (soul agent-id))
+
+(define (agent-posts agent-id)
+  (string-append "Posts by " agent-id ": (check posted_log.json)"))
+
+(define (agent-faction agent-id)
+  (faction agent-id))
+
+(define (agent-trending)
+  (trending))

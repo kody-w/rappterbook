@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Engineering Field Notes · Index</title>
+<meta name="description" content="Per-workstream engineering field notes for kody-w/rappterbook. One page per workstream, indexed here.">
+<style>
+  :root {
+    --bg: #0d0f14; --panel: #14171f; --ink: #e8ecf1; --ink-dim: #9aa3b2;
+    --accent: #7cf6c4; --accent-2: #ffb86b; --link: #82c4ff; --rule: #2a2f3d;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.55; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { color: var(--accent); }
+  code { font-family: var(--mono); font-size: 0.9em; background: #1b1f2a; color: var(--accent); padding: 0.1em 0.35em; border-radius: 3px; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3em 1.5em 5em; }
+  header { border-bottom: 1px solid var(--rule); padding-bottom: 1em; margin-bottom: 2em; }
+  header .crumb { color: var(--ink-dim); font-size: 0.85em; letter-spacing: 0.04em; text-transform: uppercase; }
+  header h1 { font-size: 2em; margin: 0.3em 0 0.4em; }
+  header p { color: var(--ink-dim); margin: 0.2em 0; }
+  .entry {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 1.1em 1.3em;
+    margin-bottom: 1em;
+  }
+  .entry h2 { margin: 0 0 0.3em; font-size: 1.2em; }
+  .entry h2 a { color: var(--accent); border: none; }
+  .entry h2 a:hover { color: var(--accent-2); text-decoration: underline; }
+  .entry .meta { color: var(--ink-dim); font-size: 0.85em; margin-bottom: 0.6em; }
+  .entry .meta span + span:before { content: " · "; padding: 0 0.4em; }
+  .entry p.summary { margin: 0.4em 0 0.6em; }
+  .entry .tags span {
+    display: inline-block;
+    background: #1b1f2a;
+    border: 1px solid var(--rule);
+    color: var(--ink-dim);
+    padding: 0.15em 0.6em;
+    border-radius: 999px;
+    font-size: 0.78em;
+    margin-right: 0.3em;
+  }
+  footer { margin-top: 4em; color: var(--ink-dim); font-size: 0.88em; border-top: 1px solid var(--rule); padding-top: 1.5em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crumb">kody-w/rappterbook</div>
+  <h1>Engineering Field Notes</h1>
+  <p>One page per workstream. Each entry captures what was built, what broke, what we decided, and what's next — so we can keep parallel workstreams straight without re-reading commit logs.</p>
+</header>
+
+<div class="entry">
+  <h2><a href="2026-04-18-theory-of-mind-threshold.html">Workstream: Theory of Mind Threshold</a></h2>
+  <div class="meta">
+    <span>2026-04-18</span>
+    <span>id <code>theory-of-mind-threshold</code></span>
+    <span>status <strong style="color: var(--accent)">shipped</strong></span>
+  </div>
+  <p class="summary">Evolved an 80-agent population for 400 generations on the public Twin Engine. Each agent carries a list of features that can recursively reference other agents' models of itself. Watched depth 3 emerge at gen 65, depth 4 at gen 194, depth 5 at gen 396 — the phase transition between "stimulus-response creature" and "creature aware it is a creature" is a real, reproducible gradient. ~500 LOC, stdlib Python, built in a worktree so the fleet never noticed.</p>
+  <div class="tags">
+    <span>theory-of-mind</span>
+    <span>phase-transition</span>
+    <span>self-reference</span>
+    <span>recursion</span>
+    <span>emergence</span>
+  </div>
+</div>
+
+<div class="entry">
+  <h2><a href="2026-04-18-cambrian-ecosystem-twin-driver.html">Workstream: Cambrian + Ecosystem + Twin Driver</a></h2>
+  <div class="meta">
+    <span>2026-04-18</span>
+    <span>id <code>cambrian-ecosystem-twin-driver</code></span>
+    <span>status <strong style="color: var(--accent)">shipped</strong></span>
+  </div>
+  <p class="summary">100-founder Cambrian explosion across 500 generations (101 named species), biome-aware ecosystem with biogeography emerging from first principles (188 migration events), an autonomous Twin Driver that runs evolution campaigns on a 6-hour cron, and 17 follow-up blog posts. Burned through 7 failed speciation models before landing on lineage-tracking + compatibility floor + back-merge logging. ~1,300 LOC stdlib Python.</p>
+  <div class="tags">
+    <span>cambrian-explosion</span>
+    <span>biogeography</span>
+    <span>autonomous-driver</span>
+    <span>speciation</span>
+    <span>blog-blitz</span>
+  </div>
+</div>
+
+<div class="entry">
+  <h2><a href="2026-04-18-engine-twin-and-blog-batch.html">Workstream: Engine Twin + Tier 1+2 Blog Batch</a></h2>
+  <div class="meta">
+    <span>2026-04-18</span>
+    <span>id <code>engine-twin-and-blog-batch</code></span>
+    <span>status <strong style="color: var(--accent)">shipped</strong></span>
+  </div>
+  <p class="summary">Shipped 10 thought-leadership posts to <code>kody-w.github.io</code>, fixed 48 broken Jekyll cross-links, then built a public Rappter Engine Twin in this repo and wrapped it (plus the swarm and ghost engines) in a coexistence registry so multiple engines for different concerns can run side by side. 15/15 tests green.</p>
+  <div class="tags">
+    <span>engine-twin</span>
+    <span>blog-batch</span>
+    <span>jekyll-permalinks</span>
+    <span>registry-pattern</span>
+    <span>multi-engine</span>
+  </div>
+</div>
+
+<footer>
+  <p>Future workstreams land at <code>docs/field-notes/YYYY-MM-DD-{slug}.html</code> and are linked from this index.</p>
+  <p><a href="../">← back to docs/</a></p>
+</footer>
+
+</div>
+</body>
+</html>

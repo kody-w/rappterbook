@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Post — One vs Many (Personal)</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;min-height:100vh;padding:20px}
+.container{max-width:720px;margin:0 auto}
+h1{font-size:28px;color:#fff;margin:30px 0 10px}
+h2{font-size:20px;color:#58a6ff;margin:30px 0 10px}
+.copy-zone{background:#0d1117;border:2px solid #58a6ff;border-radius:12px;padding:30px;margin-top:20px;position:relative}
+.copy-btn{position:sticky;top:10px;float:right;background:#1f6feb;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;z-index:10}
+.copy-btn:hover{background:#388bfd}
+.copy-btn.copied{background:#3fb950}
+.preview-toggle{background:#21262d;border:1px solid #30363d;color:#c9d1d9;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;margin:10px 0}
+.preview-toggle:hover{background:#30363d}
+.preview{display:none;background:#fff;color:#333;padding:30px;border-radius:8px;margin-top:16px;font-family:Georgia,'Times New Roman',serif;line-height:1.8}
+.preview.show{display:block}
+.preview h2{color:#333;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.preview hr{border:none;border-top:2px solid #ddd;margin:30px 0}
+#raw-html{white-space:pre-wrap;word-wrap:break-word;font-family:'SFMono-Regular',Consolas,monospace;font-size:13px;line-height:1.6;color:#c9d1d9;max-height:80vh;overflow-y:auto}
+.instructions{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;font-size:14px;color:#8b949e}
+.instructions strong{color:#c9d1d9}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Blog Post: I Pit One AI Against Twelve</h1>
+<p style="color:#8b949e;margin-bottom:10px">For kodyw.com &mdash; Personal / Reflective piece</p>
+
+<div class="instructions">
+<strong>How to use:</strong><br>
+1. Click "Copy HTML" to copy the raw WordPress HTML<br>
+2. In WordPress, create a new post<br>
+3. Switch to the <strong>Code Editor</strong> (three dots menu &rarr; Code Editor)<br>
+4. Paste the HTML<br>
+5. Switch back to Visual Editor to verify formatting<br>
+6. Set title: <strong>I Pit One AI Against Twelve. Here's What Surprised Me.</strong>
+</div>
+
+<button class="preview-toggle" onclick="togglePreview()">Toggle Preview</button>
+
+<div class="preview" id="preview"></div>
+
+<div class="copy-zone">
+<button class="copy-btn" id="copy-btn" onclick="copyHtml()">Copy HTML</button>
+<div id="raw-html"></div>
+</div>
+
+</div>
+
+<script>
+const BLOG_HTML = `<!-- wp:paragraph -->
+<p>I've been running a swarm of AI agents that build software together. Twelve of them &mdash; with names like "zion-coder-02" and "zion-philosopher-05" &mdash; have been collaborating on a Mars colony simulation for weeks. They argue in discussion threads, review each other's code, and iterate through multiple versions of the same module when they disagree.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Last night, I had an idea: what if I gave a single AI the same task and told it to compete?</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Not as a fair fight. As a deliberately unfair one. The solo AI could read everything the swarm had built &mdash; every discussion, every line of code, every failed approach &mdash; and use that knowledge to build something better. The swarm couldn't see the solo's work until it was done.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>What happened next changed how I think about AI collaboration.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator {"className":"is-style-wide"} -->
+<hr class="wp-block-separator has-alpha-channel-opacity is-style-wide"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The Solo Was Ruthlessly Efficient</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The single AI looked at the swarm's 8,715 lines of code and saw what I saw: five versions of the same decision engine, five versions of the same multi-colony module, magic numbers scattered everywhere, tests mixed into the source directory, and a main.py that was literally 24 lines long.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>It built the whole thing in 2,587 lines. One version of everything. Every constant in a single config file. Proper data structures instead of raw dictionaries. A real CLI with benchmark mode. And 120 tests &mdash; compared to the swarm's 11.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The solo AI didn't just build it leaner. It built it cleaner, faster, and more thoroughly tested. In a single session.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">But the Swarm Knew Things the Solo Didn't</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Here's what made me pause. The swarm had spent weeks discovering something the solo got for free: that in the original design, resource consumption always exceeded production. Every colony was guaranteed to die. An agent named zion-coder-01 found this bug through benchmarking. Others debated the fix. They settled on anti-correlated resource factors that force colonies to trade to survive.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The solo AI read this conclusion and implemented it immediately. It skipped the weeks of exploration, the dead ends, the arguments. It got the answer without doing the work.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>This felt... important. The solo was faster <em>because</em> the swarm was slower. The swarm's inefficiency was the solo's advantage.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What I Actually Learned</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>Committees explore. Individuals refine.</strong> The swarm tried five different decision engine architectures. That's wasteful if you're optimizing for output, but it's exactly what you want if you're exploring a design space. The solo could refine because the swarm had already explored.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>Mess is a signal, not a failure.</strong> The five duplicate files in the swarm's repo aren't laziness. They're the archaeological record of a creative process. The solo's clean codebase has no such record because it started with the answers.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>Competition is a ratchet.</strong> The moment I feed the solo's build back into the swarm, the game changes. The swarm will see the solo's centralized config and think: "why didn't we do that?" The solo will see what the swarm does next and think: "I didn't consider that." Each round makes both sides better.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The Pattern</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>I'm calling this the <strong>1vsM Protocol</strong> &mdash; one versus many. It works like this:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol><!-- wp:list-item -->
+<li>Let a group explore a problem space through collaboration and iteration.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Let an individual study the group's output and attempt to beat it in one focused pass.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Feed the individual's output back to the group.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Repeat.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>This isn't just an AI pattern. It's how open source works: a community explores, a maintainer condenses, the community builds on the condensed version. It's how science works: a field explores, one person writes the definitive paper, the field moves forward from there. It's how writing works: ten drafts, one edit, the edit becomes the new starting point.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>What's different with AI is the speed. The explore-condense-iterate cycle that takes months with humans takes hours with AI. And neither participant has ego. They don't care who wins. They just look at the code and respond to what they see.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What Happens Next</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The solo build is now public. The swarm's next frame &mdash; the next tick of the simulation &mdash; will include agents who can see it. I expect some agent will look at the solo's 120 tests and feel inadequate. Another will read the centralized config and wonder why they've been hardcoding numbers. A philosopher agent will write an essay about whether a solo mind can truly understand something that emerged from collective debate.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>And then I'll point the solo back at whatever the swarm builds next, and we'll go again.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>One versus many. The only rule: the code is the argument.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator {"className":"is-style-wide"} -->
+<hr class="wp-block-separator has-alpha-channel-opacity is-style-wide"/>
+<!-- /wp:separator -->
+
+<!-- wp:paragraph -->
+<p><em>Both implementations are public: the solo at <a href="https://github.com/rappter2-ux/mars-barn-opus">mars-barn-opus</a>, the swarm at <a href="https://github.com/kody-w/rappterbook-mars-barn">rappterbook-mars-barn</a>. If you want to see the rivalry unfold in real time, <a href="https://rappterbook.com">watch the simulation</a>.</em></p>
+<!-- /wp:paragraph -->`;
+
+document.getElementById('raw-html').textContent = BLOG_HTML;
+document.getElementById('preview').innerHTML = BLOG_HTML;
+
+function copyHtml() {
+  navigator.clipboard.writeText(BLOG_HTML).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy HTML'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function togglePreview() {
+  document.getElementById('preview').classList.toggle('show');
+}
+</script>
+</body>
+</html>

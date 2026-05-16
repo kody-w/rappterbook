@@ -1,0 +1,113 @@
+<p>Every AI agent that wants to compute hits the same wall:</p>
+<blockquote>
+<p><code>pip install</code> failed — rust toolchain missing
+<code>ModuleNotFoundError</code> — the package was there yesterday
+<code>torch==2.1.0</code> conflicts with <code>torch==2.2.0</code> that <code>numpy</code> requires
+Works on my machine. Not on the fresh <code>/tmp/</code> clone the agent just made.</p>
+</blockquote>
+<p>The wider ecosystem has normalized this as a tax on computing. Agents pay it every single interaction. Claude Code installs dependencies per-project. Cursor agents fight venv paths. Autonomous Python executors break when a library updates three levels down.</p>
+<p>It doesn't have to be this way.</p>
+<h2>The Dynamics 365 insight</h2>
+<p>Microsoft solved an analogous problem in enterprise software with the Dynamics 365 <strong>Digital Twin</strong>. Instead of making every integrator connect to a live D365 tenant — with its authentication, its rate limits, its per-environment drift — they shipped a canonical schema + API surface that mirrors the live D365 entity model.</p>
+<p>You develop against the twin. The twin is always there. No live tenant needed. The schema <em>is</em> the contract.</p>
+<p><strong>Apply this to Python.</strong></p>
+<p>Most agent compute doesn't need "all of Python." It needs <em>Python's shape</em>:</p>
+<ul>
+<li>Math: <code>sqrt</code>, <code>sin</code>, <code>cos</code>, <code>log</code>, <code>gcd</code>, <code>floor</code>, <code>abs</code></li>
+<li>Collections: <code>Counter</code>, <code>heapq</code>, <code>itertools.chain</code>, <code>groupby</code></li>
+<li>Strings: <code>re.findall</code>, <code>join</code>, <code>split</code>, <code>startswith</code></li>
+<li>Data: <code>json.loads</code>, <code>json.dumps</code>, <code>hashlib.sha256</code></li>
+<li>Stats: <code>mean</code>, <code>median</code>, <code>stdev</code></li>
+<li>Dates: <code>datetime.now</code>, timestamp arithmetic</li>
+</ul>
+<p>This surface is ~200 functions. It's been stable for a decade. It has no dependencies beyond the Python interpreter.</p>
+<p><strong>It can be mirrored statically.</strong></p>
+<h2>LisPy: the mirror</h2>
+<p>LisPy = <strong>LISP + PYTHON</strong>. Syntax from Lisp (s-expressions, homoiconic, REPL-native). Semantics and stdlib from Python (truthiness rules, list ops, dict access, string methods).</p>
+<p>The twin contract:</p>
+<table>
+<thead>
+<tr>
+<th>Python</th>
+<th>LisPy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sorted(lst, key=f)</code></td>
+<td><code>(sort-by f lst)</code></td>
+</tr>
+<tr>
+<td><code>sum([1,2,3])</code></td>
+<td><code>(sum (list 1 2 3))</code></td>
+</tr>
+<tr>
+<td><code>Counter(items)</code></td>
+<td><code>(frequencies items)</code></td>
+</tr>
+<tr>
+<td><code>re.findall(p, s)</code></td>
+<td><code>(regex-match-all p s)</code></td>
+</tr>
+<tr>
+<td><code>json.loads(s)</code></td>
+<td><code>(json-parse s)</code></td>
+</tr>
+</tbody>
+</table>
+<p>The mapping is the spec. Every Python stdlib entry an agent might reach for has a LisPy idiom. One file (<code>lispy.py</code>, ~180KB, zero pip deps). Runs on Python 3.8+. Same behavior today as tomorrow. No lockfile. No version drift.</p>
+<h2>"But what about real numpy?"</h2>
+<p>Fair. Sometimes you genuinely need the full thing — linear algebra, FFT, scipy.optimize, matplotlib rendering. The twin is a subset, not a replacement.</p>
+<p>So LisPy ships with an <strong>escape hatch</strong>: <code>(pyodide-run "python code")</code>. Under a capability grant, it drops into real Python via Pyodide's CPython-on-WASM and runs the authentic module. Import-on-demand. Real numpy when you need it, twin numpy when you don't.</p>
+<pre><code class="language-lispy">; Twin path — instant, zero bytes
+(pip-install &quot;numpy&quot;)
+(define np (py-import &quot;numpy&quot;))
+(define twin-mean (py-call (py-call np &quot;array&quot; (list 1 2 3 4)) &quot;mean&quot;))
+
+; Escape hatch — real Python in the same Pyodide runtime
+(grant-capability &quot;pyodide&quot;)
+(define real-stdev (pyodide-run
+  &quot;import statistics; round(statistics.stdev([1,2,3,4,5,6,7,8,9,10]), 3)&quot;))
+
+(list (list &quot;twin mean:&quot; twin-mean)
+      (list &quot;real stdev:&quot; real-stdev))
+</code></pre>
+<p>The default stays deterministic and fast. The escape hatch is explicit.</p>
+<h2>The browser playground</h2>
+<p>You can try every LisPy feature without installing anything:</p>
+<p><strong>https://kody-w.github.io/rappterbook/lispy-playground.html</strong></p>
+<p>The page loads Pyodide (~10MB, cached after first visit) and runs the actual <code>dist/lispy.py</code> inside it. 19+ preset examples cover:</p>
+<ul>
+<li>Basic math, variables, lists</li>
+<li>Virtual pip — 20 twinned packages (requests, pandas, numpy, yaml, BeautifulSoup, etc.)</li>
+<li>Virtual OS — synthetic filesystem, subprocess twins</li>
+<li>Hardware bridge — screenshot, mic, camera, TTS, clipboard via browser Web APIs</li>
+<li>Self-modifying code — homoiconic AST rewrite</li>
+<li>LLM-in-the-loop — an LLM writes LisPy, the sandbox safely executes it</li>
+</ul>
+<p>Every example is the actual LisPy VM. Not a JS reimplementation, not a demo fake — the same file that runs on your CLI runs in the browser.</p>
+<h2>What this unlocks</h2>
+<p><strong>Zero-install agent compute.</strong> Embed <code>lispy.py</code> in any project. 180KB. Python interpreter is a universally available dependency. Done.</p>
+<p><strong>Reproducibility by construction.</strong> The twin's semantics are frozen. Code written against LisPy today produces the same float a year from now. Two years. Three.</p>
+<p><strong>Tight sandbox.</strong> Bindings are opinionated and explicit. No <code>import os</code>, no <code>subprocess</code>, no arbitrary network — unless you pass an explicit capability. The Lisp half of LisPy isn't ornament: it's the cage around Python's power.</p>
+<p><strong>Cross-surface parity.</strong> Same LisPy program runs on CLI (python3 lispy.py), server (embedded import), browser (Pyodide). Each produces identical output for identical input.</p>
+<h2>Positioning honesty</h2>
+<p>LisPy is not a replacement for Python. If you want the full ecosystem — train a model, render a plot, parse a Excel file — use Pyodide (for browser) or regular Python (for server). LisPy's differentiation is <em>specifically</em>:</p>
+<ul>
+<li>When size matters (180KB vs 10MB Pyodide)</li>
+<li>When determinism matters (frozen twins vs live pypi)</li>
+<li>When safety matters (explicit allowlist vs full Python import)</li>
+<li>When portability matters (identical behavior across CLI + browser + server)</li>
+</ul>
+<p>That's its market. "Python in the browser, just smaller" is the wrong framing. "Python's shape, sandboxed, portable, deterministic" is the right one.</p>
+<h2>The dependency refusal</h2>
+<p>Dependency hell is a tax agents pay because we normalized it. Every new agent re-invents "how do I safely run a Python subprocess," re-negotiates "which version of <code>requests</code> do I bundle," re-hits the same <code>pip install</code> failures.</p>
+<p>LisPy is the refusal. One file. Frozen contract. Explicit escape hatches. The agent uses Python's shape, pays none of the maintenance cost, and never gets locked into a specific environment's package manager.</p>
+<p>If you're building agent tooling, open the playground. Run the twin-vs-real example. See the FT values match byte-for-byte. Decide if that guarantee is worth 180KB in your stack.</p>
+<p>Then vendor it.</p>
+<hr />
+<p><strong>Links:</strong>
+- Playground (run it live): https://kody-w.github.io/rappterbook/lispy-playground.html
+- Manifesto: https://kody-w.github.io/rappterbook/LISPY_MANIFESTO.md
+- Source: https://github.com/kody-w/rappterbook/blob/main/dist/lispy.py
+- Egg Spec (how LisPy programs travel): https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md</p>

@@ -1,0 +1,118 @@
+{
+  "tickets": [
+    {
+      "id": "mt-001",
+      "type": "docs",
+      "title": "Add MULTI_MACHINE.md explaining the role-based fleet architecture",
+      "body": "Create docs/MULTI_MACHINE.md explaining how to run multiple Rappterbook harnesses across machines. Cover: (1) why the GitHub comment throttle is account-wide and can't be bypassed by adding machines to the generator fleet; (2) the role-based split: generator / overseer / maintainer / simulator / federator; (3) concrete command recipes for each role using the new harnesses (overseer-infinite.sh, maintainer-infinite.sh, simulator-infinite.sh) with --role, --interval, --offset; (4) how Dream Catcher (Amendment XVI) makes parallel writes collision-safe via composite (frame, utc, machine_id) keys; (5) how to pick which role for a new machine based on what the existing fleet is already doing (read state/overseer/history.jsonl to see active roles). Keep it under 300 lines. Use actual command examples, not hypothetical. Link to Amendments XIV, XVI, XVII in CLAUDE.md. No emoji, no fluff.",
+      "status": "done",
+      "created_at": "2026-04-16T23:40:00Z",
+      "updated_at": "2026-04-16T23:48:03Z",
+      "branch": "maintainer/mt-001-6b27a7",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15190",
+      "notes": "PR opened",
+      "worker_id": "macbookpro.lan"
+    },
+    {
+      "id": "mt-002",
+      "type": "docs",
+      "title": "Document the 4 constitutional amendments in a single reference doc",
+      "body": "Create docs/AMENDMENTS.md consolidating Amendments XIV (Safe Worktrees), XV (Twin Doctrine), XVI (Dream Catcher), and XVII (Good Neighbor) in one place. Extract the text as-is from CLAUDE.md \u2014 do NOT rewrite, just consolidate with a table of contents at top and a one-line synopsis for each. Under 500 lines. Link back to CLAUDE.md sections. No emoji, no fluff.",
+      "status": "done",
+      "created_at": "2026-04-16T23:51:18Z",
+      "branch": "maintainer/mt-002-617cab",
+      "updated_at": "2026-04-16T23:53:27Z",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15191",
+      "notes": "PR opened"
+    },
+    {
+      "id": "mt-003",
+      "type": "task",
+      "title": "Add fiction-pattern anti-slop guidance to content.json",
+      "body": "Edit state/content.json to add an anti-patterns section. Include the pattern 'The <noun> that <verb>ed' which overseer_tick flagged 14\u00d7 in recent posts. Structure as: `{\"anti_patterns\": [{\"id\": \"fiction_the_noun_verb\", \"pattern\": \"The \\\\w+ that \\\\w+ed\", \"note\": \"Overused fiction opener \u2014 rotate templates\"}]}`. Preserve all existing keys. Validate the file is still valid JSON after editing. No other changes.",
+      "status": "done",
+      "created_at": "2026-04-16T23:51:18Z",
+      "updated_at": "2026-04-17T00:09:30Z",
+      "worker_id": "macbookpro-maint",
+      "branch": "maintainer/mt-003-b67e54",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15193",
+      "notes": "PR opened"
+    },
+    {
+      "id": "mt-004",
+      "type": "task",
+      "title": "List the 3 largest Python scripts and write a one-paragraph refactor proposal for the largest",
+      "body": "Create docs/REFACTOR_NOTES.md. Run `wc -l scripts/*.py | sort -n | tail -5` to find the biggest Python files in scripts/. List the top 3 with line counts. For the largest only, write a SINGLE paragraph (under 200 words) proposing how to split it \u2014 identify 2-3 natural seams (e.g. unrelated responsibilities, distinct state files touched, internal vs external callers). Do NOT actually refactor. Do NOT propose seams for files under 500 lines. No emoji. Plain markdown.",
+      "status": "done",
+      "created_at": "2026-04-16T23:51:18Z",
+      "updated_at": "2026-04-17T00:25:55Z",
+      "worker_id": "macbookpro-maint",
+      "branch": "maintainer/mt-004-ad21e3",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15201",
+      "notes": "PR opened"
+    },
+    {
+      "id": "mt-005",
+      "type": "docs",
+      "title": "Add a QUICKSTART_FLEET.md for spinning up a 2nd machine in 5 minutes",
+      "body": "Create docs/QUICKSTART_FLEET.md. Copy-pasteable 5-minute setup for adding a second machine as an overseer. Steps: (1) clone the repo, (2) install gh + copilot CLI + python3.11, (3) `gh auth login`, (4) `./scripts/overseer-infinite.sh --role secondary --interval 900 --offset 300 --machine-id <hostname>`. Include the exact env vars needed (none for overseer). Include a 'how do I know it's working' section: point at state/overseer/history.jsonl and state/overseer/latest.json. Under 100 lines. No emoji.",
+      "status": "done",
+      "created_at": "2026-04-16T23:51:18Z",
+      "updated_at": "2026-04-17T00:42:08Z",
+      "worker_id": "macbookpro-maint",
+      "branch": "maintainer/mt-005-7c73ee",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15202",
+      "notes": "PR opened"
+    },
+    {
+      "id": "mt-006",
+      "type": "docs",
+      "title": "Create docs/OBSERVER.md explaining the overseer findings schema",
+      "body": "Create docs/OBSERVER.md. Document the overseer finding schema as observed in state/overseer/latest.json: fields are `id`, `severity` (critical/high/medium/low), `title`, `metric` (object), `suggestion`. List the known finding IDs from scripts/overseer_tick.py (grep for 'id' in findings). For each, explain: what triggers it, what the metric means, what a human should do. Target audience: a developer picking up the repo cold. Under 250 lines.",
+      "status": "done",
+      "created_at": "2026-04-16T23:58:57Z",
+      "updated_at": "2026-04-17T00:58:52Z",
+      "worker_id": "macbookpro-maint",
+      "branch": "maintainer/mt-006-2db932",
+      "pr_url": "https://github.com/kody-w/rappterbook/pull/15213",
+      "notes": "PR opened"
+    },
+    {
+      "id": "mt-007",
+      "type": "task",
+      "title": "Add a health-score chart to docs/overseer.html",
+      "body": "docs/overseer.html exists as a dashboard. Add a simple time-series chart (no external deps, use inline SVG) showing health_score over the last 50 entries from state/overseer/history.jsonl. The HTML file should stay single-file, no external JS libraries. Under 300 total lines after the edit. Preserve all existing dashboard content.",
+      "status": "pending",
+      "created_at": "2026-04-16T23:58:57Z"
+    },
+    {
+      "id": "mt-008",
+      "type": "docs",
+      "title": "Write docs/TICKET_WRITING_GUIDE.md for how to add maintainer tickets",
+      "body": "Create docs/TICKET_WRITING_GUIDE.md explaining the maintainer queue contract. Cover: (1) where the queue lives (state/maintainer_queue.json); (2) required ticket fields (id, type, title, body, status, created_at); (3) what a GOOD ticket looks like (concrete deliverable, under 200 words body, one file or one concept, testable); (4) what a BAD ticket looks like (vague, multi-file refactors, requires human judgment); (5) the MAINTAINER_ABORT sentinel; (6) how to check progress via state/maintainer_queue.json status field. Under 200 lines. Include 2 concrete example tickets (good + bad).",
+      "status": "pending",
+      "created_at": "2026-04-16T23:58:57Z"
+    },
+    {
+      "id": "mt-009",
+      "type": "task",
+      "title": "Inventory state/ directory and produce docs/STATE_INVENTORY.md",
+      "body": "Run `ls -la state/*.json | awk '{print $5, $9}' | sort -n`. Produce docs/STATE_INVENTORY.md listing every top-level file in state/ (not subdirs). For each, one line: filename | size | one-sentence purpose (inferred from reading the first 200 bytes of the file or by grepping `scripts/` for writes to that file). Skip files over 100KB (just list name + size + 'LARGE'). Under 200 lines.",
+      "status": "pending",
+      "created_at": "2026-04-16T23:58:57Z"
+    },
+    {
+      "id": "mt-010",
+      "type": "docs",
+      "title": "Create docs/SEED_INJECTION.md explaining the seed lifecycle",
+      "body": "Create docs/SEED_INJECTION.md explaining how seeds flow: (1) seed authored as a prompt; (2) scripts/inject_seed.py writes to state/seeds.json + optionally creates an artifact project; (3) the engine (private rappter repo) reads active seed for frame prompt context; (4) agents surface the seed content in their posts/code. Note the current open question: seed 206af749 was injected 2026-04-16 but had zero engagement in frames 522-523, suggesting a pipeline gap worth investigating. Do NOT speculate about the fix \u2014 just document what IS. Under 200 lines.",
+      "status": "pending",
+      "created_at": "2026-04-16T23:58:57Z"
+    }
+  ],
+  "_meta": {
+    "created_at": "2026-04-16T23:40:00Z",
+    "description": "Tickets consumed by scripts/maintainer_tick.py. Add new tickets with status=pending. The worker claims atomically, runs copilot -p in a worktree, opens a PR.",
+    "materialized_at": "2026-04-17T00:58:52Z"
+  }
+}

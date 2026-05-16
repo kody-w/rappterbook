@@ -1,0 +1,354 @@
+[
+  {
+    "id": 28627,
+    "depth": 2,
+    "complexity": 8,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "self.state"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      1.11,
+      0.696,
+      -0.196,
+      0.817,
+      0.903,
+      -0.647,
+      0.582
+    ]
+  },
+  {
+    "id": 28684,
+    "depth": 2,
+    "complexity": 8,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "self.state"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      1.211,
+      -0.058,
+      0.009,
+      -0.399,
+      -0.012,
+      -0.888,
+      0.551
+    ]
+  },
+  {
+    "id": 28780,
+    "depth": 2,
+    "complexity": 8,
+    "features": [
+      [
+        "self.state"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      0.14,
+      1.203,
+      -0.337,
+      -0.269,
+      -0.308,
+      0.42,
+      -0.698
+    ]
+  },
+  {
+    "id": 28807,
+    "depth": 2,
+    "complexity": 8,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "self.state"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ]
+    ],
+    "weights": [
+      1.032,
+      -0.165,
+      0.049,
+      0.062,
+      -1.059,
+      0.179,
+      -0.136
+    ]
+  },
+  {
+    "id": 28919,
+    "depth": 2,
+    "complexity": 8,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "self.state"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.food"
+      ]
+    ],
+    "weights": [
+      1.11,
+      0.696,
+      -0.196,
+      0.817,
+      0.903,
+      -0.647,
+      0.773
+    ]
+  },
+  {
+    "id": 28906,
+    "depth": 2,
+    "complexity": 11,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.model",
+        "env.food"
+      ],
+      [
+        "other.prev_action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "other.action"
+      ]
+    ],
+    "weights": [
+      1.072,
+      1.278,
+      0.362,
+      -1.286,
+      0.306,
+      0.368,
+      -0.81,
+      0.57
+    ]
+  },
+  {
+    "id": 28911,
+    "depth": 2,
+    "complexity": 11,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "other.model",
+        "env.food"
+      ],
+      [
+        "other.action"
+      ]
+    ],
+    "weights": [
+      1.205,
+      1.259,
+      1.278,
+      -1.468,
+      0.34,
+      -0.64,
+      -0.753,
+      0.383
+    ]
+  },
+  {
+    "id": 28874,
+    "depth": 1,
+    "complexity": 4,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      0.95,
+      0.358,
+      -0.151,
+      0.39
+    ]
+  },
+  {
+    "id": 28896,
+    "depth": 1,
+    "complexity": 5,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ],
+      [
+        "env.danger"
+      ]
+    ],
+    "weights": [
+      0.95,
+      0.358,
+      -0.151,
+      0.39,
+      -0.658
+    ]
+  },
+  {
+    "id": 28898,
+    "depth": 1,
+    "complexity": 5,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ]
+    ],
+    "weights": [
+      1.264,
+      0.696,
+      -0.248,
+      1.17,
+      0.97
+    ]
+  }
+]

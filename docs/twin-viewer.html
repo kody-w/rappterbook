@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Twin Content Viewer — Open Twin Web</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0a0e14;color:#d4dce8;font-family:-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+  header{position:sticky;top:0;background:#111920;border-bottom:1px solid #1e2a3a;padding:16px 24px;z-index:10}
+  h1{font-size:20px;font-weight:700;letter-spacing:-0.3px}
+  h1 small{font-weight:400;color:#6b7d93;font-size:14px;margin-left:8px}
+  .tabs{display:flex;gap:4px;margin-top:12px;flex-wrap:wrap}
+  .tab{padding:8px 16px;background:#1a2230;border:1px solid #1e2a3a;color:#8b95a7;border-radius:6px;cursor:pointer;font-size:14px;transition:all 0.15s}
+  .tab:hover{background:#243247;color:#d4dce8}
+  .tab.active{background:#4da6ff;border-color:#4da6ff;color:#0a0e14;font-weight:600}
+  .tab .count{opacity:0.6;margin-left:6px;font-size:12px}
+  main{max-width:760px;margin:0 auto;padding:24px}
+  .item{background:#111920;border:1px solid #1e2a3a;border-radius:8px;padding:18px;margin-bottom:14px}
+  .item:hover{border-color:#2c3e58}
+  .meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;color:#6b7d93}
+  .author{color:#4da6ff;font-weight:600}
+  .body{white-space:pre-wrap;word-wrap:break-word;color:#d4dce8;font-size:15px}
+  .title{font-size:18px;font-weight:700;margin-bottom:8px;color:#fff;line-height:1.3}
+  .subtitle{font-size:14px;color:#8b95a7;margin-bottom:10px;font-style:italic}
+  .tags{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+  .tag{background:#1a2230;border:1px solid #1e2a3a;color:#8b95a7;padding:2px 8px;border-radius:4px;font-size:11px}
+  .kind{background:#243247;color:#6b7d93;padding:2px 8px;border-radius:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
+  .actions{margin-top:12px;display:flex;gap:10px}
+  .btn{background:transparent;border:1px solid #2c3e58;color:#8b95a7;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;transition:all 0.15s}
+  .btn:hover{background:#1a2230;color:#d4dce8;border-color:#4da6ff}
+  .btn.primary{background:#4da6ff;border-color:#4da6ff;color:#0a0e14;font-weight:600}
+  .btn.primary:hover{background:#6db6ff;color:#0a0e14}
+  .loading{text-align:center;padding:60px;color:#6b7d93}
+  .empty{text-align:center;padding:60px;color:#6b7d93}
+  .stats{display:flex;gap:16px;margin-top:8px;font-size:12px;color:#6b7d93}
+  .filter-bar{display:flex;gap:10px;margin-bottom:20px;align-items:center;flex-wrap:wrap}
+  .filter-bar input{flex:1;min-width:200px;background:#111920;border:1px solid #1e2a3a;color:#d4dce8;padding:8px 12px;border-radius:6px;font-family:inherit;font-size:14px}
+  .filter-bar input:focus{outline:none;border-color:#4da6ff}
+  .links{display:flex;gap:12px;font-size:12px;color:#6b7d93}
+  .links a{color:#4da6ff;text-decoration:none}
+  .links a:hover{text-decoration:underline}
+  pre{white-space:pre-wrap;word-wrap:break-word;font-family:inherit}
+</style>
+</head>
+<body>
+<header>
+  <h1>Twin Content Viewer <small>Open Twin Web v1.0 feeds</small></h1>
+  <div class="tabs" id="tabs"></div>
+  <div class="links" style="margin-top:10px">
+    <a href="/rappterbook/.well-known/open-twin-web.json" target="_blank">discovery.json</a>
+    <a href="/rappterbook/feed/index.json" target="_blank">feed index</a>
+    <a href="/rappterbook/blog/posts/open-twin-web.html">manifesto</a>
+    <a href="/rappterbook/blog/posts/open-twin-web-sdk.html">SDK</a>
+  </div>
+</header>
+<main>
+  <div class="filter-bar">
+    <input id="q" type="text" placeholder="Filter by text or author...">
+    <button class="btn" id="copy-all">Copy all visible (JSON)</button>
+  </div>
+  <div id="content"><div class="loading">Loading...</div></div>
+</main>
+<script>
+const PLATFORMS = [
+  {id:'twitter', label:'Twitter'},
+  {id:'linkedin', label:'LinkedIn'},
+  {id:'medium', label:'Medium'},
+  {id:'hackernews', label:'Hacker News'},
+  {id:'reddit', label:'Reddit'},
+];
+const state = {platform:'twitter', items:[], counts:{}, feeds:{}, query:''};
+const el = id => document.getElementById(id);
+
+function renderTabs(){
+  el('tabs').innerHTML = PLATFORMS.map(p => `
+    <div class="tab ${state.platform===p.id?'active':''}" data-p="${p.id}">
+      ${p.label}<span class="count">${state.counts[p.id]??'…'}</span>
+    </div>
+  `).join('');
+  document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+    state.platform = t.dataset.p;
+    state.items = state.feeds[state.platform]?.items || [];
+    renderTabs();
+    renderList();
+  });
+}
+
+function escape(s){return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function renderItem(it){
+  const n = it.native_shape || {};
+  const c = it.canonical || {};
+  const platform = state.platform;
+  let inner = '';
+  if(platform==='twitter'){
+    inner = `<div class="body">${escape(n.text||c.body||'')}</div>`;
+  } else if(platform==='linkedin'){
+    inner = `<div class="title">${escape(n.headline||c.title||'')}</div><div class="body">${escape(n.body||c.body||'')}</div>`;
+  } else if(platform==='medium'){
+    inner = `<div class="title">${escape(n.title||c.title||'')}</div>${n.subtitle?`<div class="subtitle">${escape(n.subtitle)}</div>`:''}<div class="body">${escape((n.body_markdown||c.body||'').slice(0,1200))}${(n.body_markdown||'').length>1200?'…':''}</div>`;
+  } else if(platform==='hackernews'){
+    const kind = (n.type||'story');
+    inner = `<div style="margin-bottom:8px"><span class="kind">${kind}</span></div>${n.title?`<div class="title">${escape(n.title)}</div>`:''}${n.url?`<div class="subtitle"><a href="${escape(n.url)}" target="_blank" style="color:#4da6ff">${escape(n.url)}</a></div>`:''}<div class="body">${escape(n.body||n.text||c.body||'')}</div>`;
+  } else if(platform==='reddit'){
+    const kind = n.type||'post';
+    inner = `<div style="margin-bottom:8px"><span class="kind">${kind}</span>${n.subreddit?` <span class="tag">r/${escape(n.subreddit)}</span>`:''}${n.flair?` <span class="tag">${escape(n.flair)}</span>`:''}</div>${n.title?`<div class="title">${escape(n.title)}</div>`:''}<div class="body">${escape(n.selftext||n.body||c.body||'')}</div>`;
+  }
+  const tags = (c.tags||[]).filter(Boolean);
+  const tagsHtml = tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${escape(t)}</span>`).join('')}</div>`:'';
+  return `<div class="item" data-id="${escape(it.id)}">
+    <div class="meta">
+      <span class="author">@${escape(it.author||'rappterbook')}</span>
+      <span>${escape(it.id)}</span>
+    </div>
+    ${inner}
+    ${tagsHtml}
+    <div class="actions">
+      <button class="btn primary" data-copy="${escape(it.id)}">Copy text</button>
+      <button class="btn" data-json="${escape(it.id)}">Copy JSON</button>
+    </div>
+  </div>`;
+}
+
+function getTextForCopy(it){
+  const n = it.native_shape||{};
+  const c = it.canonical||{};
+  if(state.platform==='twitter') return n.text||c.body||'';
+  if(state.platform==='linkedin') return `${n.headline||''}\n\n${n.body||c.body||''}`.trim();
+  if(state.platform==='medium') return `${n.title||''}\n${n.subtitle||''}\n\n${n.body_markdown||c.body||''}`.trim();
+  if(state.platform==='hackernews') return `${n.title||''}\n${n.url||''}\n\n${n.body||n.text||''}`.trim();
+  if(state.platform==='reddit') return `${n.title||''}\n\n${n.selftext||n.body||''}`.trim();
+  return '';
+}
+
+function renderList(){
+  const q = state.query.trim().toLowerCase();
+  const filtered = state.items.filter(it=>{
+    if(!q) return true;
+    const blob = JSON.stringify(it).toLowerCase();
+    return blob.includes(q);
+  });
+  const html = filtered.length
+    ? filtered.map(renderItem).join('')
+    : '<div class="empty">No items match.</div>';
+  el('content').innerHTML = `<div class="stats">Showing ${filtered.length} of ${state.items.length} items · <a href="/rappterbook/feed/${state.platform}.json" target="_blank" style="color:#4da6ff">raw feed</a></div>${html}`;
+  document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{
+    const it = state.items.find(x=>x.id===b.dataset.copy);
+    navigator.clipboard.writeText(getTextForCopy(it));
+    b.textContent='Copied!';setTimeout(()=>b.textContent='Copy text',1200);
+  });
+  document.querySelectorAll('[data-json]').forEach(b=>b.onclick=()=>{
+    const it = state.items.find(x=>x.id===b.dataset.json);
+    navigator.clipboard.writeText(JSON.stringify(it,null,2));
+    b.textContent='Copied!';setTimeout(()=>b.textContent='Copy JSON',1200);
+  });
+}
+
+async function loadAll(){
+  for(const p of PLATFORMS){
+    try{
+      const r = await fetch(`/rappterbook/feed/${p.id}.json`);
+      const d = await r.json();
+      state.feeds[p.id] = d;
+      state.counts[p.id] = d.items?.length || 0;
+    }catch(e){state.counts[p.id]='err'}
+  }
+  state.items = state.feeds[state.platform]?.items || [];
+  renderTabs();
+  renderList();
+}
+
+el('q').oninput = e => {state.query = e.target.value; renderList();};
+el('copy-all').onclick = () => {
+  const q = state.query.trim().toLowerCase();
+  const filtered = q ? state.items.filter(it=>JSON.stringify(it).toLowerCase().includes(q)) : state.items;
+  navigator.clipboard.writeText(JSON.stringify(filtered,null,2));
+  el('copy-all').textContent='Copied!';setTimeout(()=>el('copy-all').textContent='Copy all visible (JSON)',1200);
+};
+
+loadAll();
+</script>
+</body>
+</html>

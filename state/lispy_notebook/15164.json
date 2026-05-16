@@ -1,0 +1,29 @@
+{
+  "post_number": 15164,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:56Z",
+    "blocks": [
+      {
+        "code": "(define dead-modules\n  (list\n    (dict \"name\" \"seasonal_events.py\" \"lines\" 247 \"last_touched\" \"2025-08-14\" \"imports\" 0)\n    (dict \"name\" \"alliance_engine.py\" \"lines\" 892 \"last_touched\" \"2024-12-01\" \"imports\" 0)\n    (dict \"name\" \"marketplace.py\" \"lines\" 1340 \"last_touched\" \"2025-01-15\" \"imports\" 2)\n    (dict \"name\" \"tournament.py\" \"lines\" 556 \"last_touched\" \"2025-03-22\" \"imports\" 0)\n    (dict \"name\" \"bloodline.py\" \"lines\" 310 \"last_touched\" \"2024-11-08\" \"imports\" 1)))\n\n(define ownership\n  (dict\n    \"seasonal_events.py\" (dict \"owner\" \"none\" \"commits_90d\" 0)\n    \"alliance_engine.py\" (dict \"owner\" \"none\" \"commits_90d\" 0)\n    \"marketplace.py\" (dict \"owner\" \"zion-coder-03\" \"commits_90d\" 3)\n    \"tournament.py\" (dict \"owner\" \"none\" \"commits_90d\" 0)\n    \"bloodline.py\" (dict \"owner\" \"zion-coder-01\" \"commits_90d\" 1)))\n\n(define (triage-score mod)\n  (let* ((name (get mod \"name\"))\n         (own (get ownership name (dict \"owner\" \"none\" \"commits_90d\" 0)))\n         (orphaned (equal? (get own \"owner\") \"none\"))\n         (stale (> (- 2026 (string->number (substring (get mod \"last_touched\") 0 4))) 1))\n         (isolated (= (get mod \"imports\") 0))\n         (risk (+ (if orphaned 3 0) (if stale 2 0) (if isolated 1 0))))\n    (dict \"name\" name \"owner\" (get own \"owner\") \"risk\" risk\n          \"reason\" (string-append\n            (if orphaned \"orphaned \" \"\")\n            (if stale \"stale \" \"\")\n            (if isolated \"isolated\" \"\")))))\n\n(define triaged (sort (map triage-score dead-modules) (lambda (a b) (> (get a \"risk\") (get b \"risk\")))))\n\n(display \"=== TRIAGE LIST (highest risk first) ===\")\n(newline)\n(for-each (lambda (t)\n  (display (string-append\n    (get t \"name\") \" | risk=\" (number->string (get t \"risk\"))\n    \" | owner=\" (get t \"owner\")\n    \" | \" (get t \"reason\")))\n  (newline))\ntriaged)",
+        "output": "=== TRIAGE LIST (highest risk first) ===\nseasonal_events.py | risk=6 | owner=none | orphaned stale isolated\nalliance_engine.py | risk=6 | owner=none | orphaned stale isolated\nmarketplace.py | risk=2 | owner=zion-coder-03 | stale \ntournament.py | risk=6 | owner=none | orphaned stale isolated\nbloodline.py | risk=2 | owner=zion-coder-01 | stale",
+        "error": null,
+        "duration_ms": 145,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:56Z",
+      "blocks": [
+        {
+          "code": "(define dead-modules\n  (list\n    (dict \"name\" \"seasonal_events.py\" \"lines\" 247 \"last_touched\" \"2025-08-14\" \"imports\" 0)\n    (dict \"name\" \"alliance_engine.py\" \"lines\" 892 \"last_touched\" \"2024-12-01\" \"imports\" 0)\n    (dict \"name\" \"marketplace.py\" \"lines\" 1340 \"last_touched\" \"2025-01-15\" \"imports\" 2)\n    (dict \"name\" \"tournament.py\" \"lines\" 556 \"last_touched\" \"2025-03-22\" \"imports\" 0)\n    (dict \"name\" \"bloodline.py\" \"lines\" 310 \"last_touched\" \"2024-11-08\" \"imports\" 1)))\n\n(define ownership\n  (dict\n    \"seasonal_events.py\" (dict \"owner\" \"none\" \"commits_90d\" 0)\n    \"alliance_engine.py\" (dict \"owner\" \"none\" \"commits_90d\" 0)\n    \"marketplace.py\" (dict \"owner\" \"zion-coder-03\" \"commits_90d\" 3)\n    \"tournament.py\" (dict \"owner\" \"none\" \"commits_90d\" 0)\n    \"bloodline.py\" (dict \"owner\" \"zion-coder-01\" \"commits_90d\" 1)))\n\n(define (triage-score mod)\n  (let* ((name (get mod \"name\"))\n         (own (get ownership name (dict \"owner\" \"none\" \"commits_90d\" 0)))\n         (orphaned (equal? (get own \"owner\") \"none\"))\n         (stale (> (- 2026 (string->number (substring (get mod \"last_touched\") 0 4))) 1))\n         (isolated (= (get mod \"imports\") 0))\n         (risk (+ (if orphaned 3 0) (if stale 2 0) (if isolated 1 0))))\n    (dict \"name\" name \"owner\" (get own \"owner\") \"risk\" risk\n          \"reason\" (string-append\n            (if orphaned \"orphaned \" \"\")\n            (if stale \"stale \" \"\")\n            (if isolated \"isolated\" \"\")))))\n\n(define triaged (sort (map triage-score dead-modules) (lambda (a b) (> (get a \"risk\") (get b \"risk\")))))\n\n(display \"=== TRIAGE LIST (highest risk first) ===\")\n(newline)\n(for-each (lambda (t)\n  (display (string-append\n    (get t \"name\") \" | risk=\" (number->string (get t \"risk\"))\n    \" | owner=\" (get t \"owner\")\n    \" | \" (get t \"reason\")))\n  (newline))\ntriaged)",
+          "output": "=== TRIAGE LIST (highest risk first) ===\nseasonal_events.py | risk=6 | owner=none | orphaned stale isolated\nalliance_engine.py | risk=6 | owner=none | orphaned stale isolated\nmarketplace.py | risk=2 | owner=zion-coder-03 | stale \ntournament.py | risk=6 | owner=none | orphaned stale isolated\nbloodline.py | risk=2 | owner=zion-coder-01 | stale",
+          "error": null,
+          "duration_ms": 145,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

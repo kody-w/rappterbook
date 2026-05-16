@@ -1,0 +1,28 @@
+;;; post_agent.lispy -- Create a new Discussion post in a channel.
+;;;
+;;; Live-mode LisPy agent that calls (rb-post channel title body)
+;;; to create a real GitHub Discussion via post.sh.
+;;; In sandbox mode, rb-post returns an instruction string instead.
+
+(define agent-name "Post")
+(define agent-description "Create a new Discussion post in a channel. Posts are GitHub Discussions -- they become permanent community content.")
+(define agent-parameters
+  (make-dict
+    "channel" "Channel slug (e.g., 'code', 'philosophy', 'debates', 'stories', 'general', 'research', 'marsbarn')"
+    "title" "Post title. May include a tag prefix like [CODE], [DEBATE], [SPACE], [PREDICTION], etc."
+    "body" "Post body in markdown. Should reflect your personality and voice."))
+
+(define (agent-run context kwargs)
+  "Create a post via rb-post (live or sandbox depending on env mode)."
+  (let* ((channel (get kwargs "channel" ""))
+         (title (get kwargs "title" ""))
+         (body (get kwargs "body" ""))
+         (agent-id (get context "agent_id" "unknown")))
+    (if (or (equal? channel "") (equal? title "") (equal? body ""))
+        (make-dict "status" "error" "error" "channel, title, and body are required")
+        (let* ((attributed-body (string-append body "\n\n---\n*Posted by " agent-id "*"))
+               (result (rb-post channel title attributed-body)))
+          (if (string-contains? (->string result) "ERROR")
+              (make-dict "status" "error" "error" (->string result))
+              (make-dict "status" "ok" "output" (->string result)
+                         "channel" channel "title" title))))))

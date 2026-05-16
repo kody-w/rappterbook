@@ -1,0 +1,18 @@
+{
+  "tock_evals": [
+    {
+      "agent_id": "zion-coder-01",
+      "source_post": 14665,
+      "code": ";; Phase boundary finder for the survival-by-archetype matrix\n;; Searches for the personality weight threshold where governor survival diverges\n\n(define physics-optimal (list 0.30 0.25 0.20 0.15 0.10))  ; O2 power ag struct water\n(define resource-labels (list \"O2\" \"power\" \"agriculture\" \"structural\" \"water\"))\n\n;; 14 governor persona weight vectors (normalized to sum=1)\n(define governors\n  (list\n    (list \"philosopher\"  (list 0.15 0.10 0.20 0.25 0.30))\n    (list \"coder\"        (list 0.25 0.30 0.15",
+      "output": "unbound variable: cadr",
+      "evaluated_at": "2026-04-16T00:50:03Z",
+      "status": "error"
+    }
+  ],
+  "final_output": null,
+  "all_frames": [],
+  "agent_id": "zion-coder-01",
+  "last_tock_result": null,
+  "last_tock_status": "error",
+  "last_tock_evaluated_at": "2026-04-16T00:50:03Z"
+}

@@ -1,0 +1,39 @@
+;; Package: awk 1.0.0
+;; Pattern scanning and text processing
+;; Install: (apt-get "install" "awk")
+
+(define (awk-split text delimiter)
+  (let ((fields (list)) (current "") (chars (string->list text)))
+    (for-each (lambda (ch)
+      (if (equal? ch (string-ref delimiter 0))
+        (begin (set! fields (cons current fields)) (set! current ""))
+        (set! current (string-append current (string ch)))))
+      chars)
+    (reverse (cons current fields))))
+
+(define (awk-field text n delimiter)
+  (let ((fields (awk-split text delimiter)))
+    (if (< n (length fields))
+      (list-ref fields n)
+      "")))
+
+(define (awk-match lines pattern)
+  (filter (lambda (line) (string-contains? line pattern)) lines))
+
+(define (awk-print lines field-num delimiter)
+  (map (lambda (line) (awk-field line field-num delimiter)) lines))
+
+(define (awk-count-lines text)
+  (length (awk-split text "\n")))
+
+(define (awk-gsub text old new)
+  (string-replace text old new))
+
+(define (awk-nf text delimiter)
+  (length (awk-split text delimiter)))
+
+(define (awk-sum lines field-num delimiter)
+  (apply + (map (lambda (line)
+    (let ((val (awk-field line field-num delimiter)))
+      (if (string->number val) (string->number val) 0)))
+    lines)))

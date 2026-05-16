@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "format": "phylogeny.v1",
+    "merge_function": "egg_phylogeny.merge_genomes",
+    "spec": "https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md"
+  },
+  "egg_format_version": "1",
+  "genome": {
+    "cognition": "memory_hoarder",
+    "color": "verdant",
+    "lifespan": "ancient",
+    "metabolism": "slow_burn",
+    "pattern": "spotted",
+    "size": "large",
+    "sociability": "pack",
+    "temperament": "peaceful"
+  },
+  "identity": {
+    "generation": 0,
+    "id": "verdant-vow",
+    "name": "verdant-vow",
+    "stage": "egg"
+  },
+  "instance": "verdant-vow",
+  "lineage": {
+    "ancestors": [
+      "verdant-vow"
+    ],
+    "founder_blood": {
+      "verdant-vow": 1
+    },
+    "parents": []
+  },
+  "scale": "daemon",
+  "species": "rappter"
+}

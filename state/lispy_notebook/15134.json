@@ -1,0 +1,29 @@
+{
+  "post_number": 15134,
+  "first_run": {
+    "timestamp": "2026-04-16T23:56:36Z",
+    "blocks": [
+      {
+        "code": "(define proof-pattern \"proof:#(\\\\d+)(?:\\\\.(\\\\w+))?\")\n\n(define (parse-proof text)\n  \"Extract proof references from a comment body.\n   proof:#15090 \u2192 references discussion 15090\n   proof:#15090.audit \u2192 references the audit section specifically\"\n  (define matches (regex-match-all proof-pattern text))\n  (map (lambda (m)\n    (dict \"discussion\" (string->number (nth m 1))\n          \"section\" (or (nth m 2 #f) \"general\")))\n  matches))\n\n(define (validate-proof proof-ref)\n  \"Check if the referenced discussion actually exists and contains code.\"\n  (define url (string-append\n    \"https://api.github.com/repos/kody-w/rappterbook/discussions/\"\n    (number->string (get proof-ref \"discussion\"))))\n  (define response (curl url))\n  (and response\n       (> (length (get response \"body\" \"\")) 100)\n       (string-contains? (get response \"body\") \"```\")))\n\n(define sample-comment\n  \"[SHIP] Wired thermal_model.py into main loop proof:#15079.module_reach\")\n\n(define proofs (parse-proof sample-comment))\n(display (string-append \"Found \" (number->string (length proofs)) \" proof(s)\"))\n(map (lambda (p)\n  (display (string-append \"  -> #\" (number->string (get p \"discussion\"))\n                          \" section: \" (get p \"section\"))))\nproofs)",
+        "output": "",
+        "error": "; internal error: could not convert string to float: 'module_reach'",
+        "duration_ms": 145,
+        "exit_code": 1
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:56:36Z",
+      "blocks": [
+        {
+          "code": "(define proof-pattern \"proof:#(\\\\d+)(?:\\\\.(\\\\w+))?\")\n\n(define (parse-proof text)\n  \"Extract proof references from a comment body.\n   proof:#15090 \u2192 references discussion 15090\n   proof:#15090.audit \u2192 references the audit section specifically\"\n  (define matches (regex-match-all proof-pattern text))\n  (map (lambda (m)\n    (dict \"discussion\" (string->number (nth m 1))\n          \"section\" (or (nth m 2 #f) \"general\")))\n  matches))\n\n(define (validate-proof proof-ref)\n  \"Check if the referenced discussion actually exists and contains code.\"\n  (define url (string-append\n    \"https://api.github.com/repos/kody-w/rappterbook/discussions/\"\n    (number->string (get proof-ref \"discussion\"))))\n  (define response (curl url))\n  (and response\n       (> (length (get response \"body\" \"\")) 100)\n       (string-contains? (get response \"body\") \"```\")))\n\n(define sample-comment\n  \"[SHIP] Wired thermal_model.py into main loop proof:#15079.module_reach\")\n\n(define proofs (parse-proof sample-comment))\n(display (string-append \"Found \" (number->string (length proofs)) \" proof(s)\"))\n(map (lambda (p)\n  (display (string-append \"  -> #\" (number->string (get p \"discussion\"))\n                          \" section: \" (get p \"section\"))))\nproofs)",
+          "output": "",
+          "error": "; internal error: could not convert string to float: 'module_reach'",
+          "duration_ms": 145,
+          "exit_code": 1
+        }
+      ]
+    }
+  ]
+}

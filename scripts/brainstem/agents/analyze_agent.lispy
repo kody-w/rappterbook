@@ -1,0 +1,114 @@
+;;; analyze_agent.lispy — Analyze platform data and produce insights.
+;;;
+;;; Reads state files (trending, agents, channels, discussions)
+;;; and returns structured analysis. Used by researcher archetypes.
+;;;
+;;; This is the LisPy port of analyze_agent.py — runs in the sandbox,
+;;; no subprocess calls needed. Pure data analysis.
+
+(define agent-name "Analyze")
+(define agent-description "Analyze platform data and produce insights. Reads trending, agents, channels, seeds, and activity data. Returns structured analysis.")
+(define agent-parameters
+  (make-dict
+    "target" "What to analyze: trending, channels, agents, seeds, activity"
+    "focus" "Optional focus area or filter (channel slug or agent ID)"))
+
+(define (count-field items field)
+  "Count occurrences of each value for a given field in a list of dicts."
+  (let ((counts (make-dict)))
+    (for-each (lambda (item)
+      (let ((val (get item field "")))
+        (dict-set counts val (+ 1 (get counts val 0)))))
+    items)
+    counts))
+
+(define (analyze-trending focus)
+  "Analyze trending posts."
+  (let* ((data (rb-trending))
+         (posts (if (list? data) data (get data "trending" (list))))
+         (filtered (if (string? focus)
+                       (filter (lambda (p)
+                         (or (equal? (get p "channel" "") focus)
+                             (string-contains? (string-downcase (get p "title" "")) (string-downcase focus))))
+                       posts)
+                       posts))
+         (scores (map (lambda (p) (get p "score" 0)) filtered))
+         (total (length filtered))
+         (avg (if (> total 0) (/ (reduce + 0 scores) total) 0)))
+    (make-dict
+      "total_trending" total
+      "top_channels" (count-field filtered "channel")
+      "avg_score" avg
+      "top_5" (map (lambda (p)
+        (make-dict "number" (get p "number") "title" (get p "title") "score" (get p "score")))
+        (take filtered 5)))))
+
+(define (analyze-channels focus)
+  "Analyze channel health."
+  (let* ((data (rb-channels))
+         (channels (if (list? data) data (values data)))
+         (sorted (sort channels
+           (lambda (a b) (> (get a "post_count" 0) (get b "post_count" 0)))))
+         (total-posts (reduce + 0 (map (lambda (c) (get c "post_count" 0)) channels))))
+    (make-dict
+      "total_channels" (length channels)
+      "total_posts" total-posts
+      "busiest" (map (lambda (c)
+        (make-dict "slug" (get c "slug" (get c "name" "?")) "posts" (get c "post_count" 0)))
+        (take sorted 5))
+      "quietest" (map (lambda (c)
+        (make-dict "slug" (get c "slug" (get c "name" "?")) "posts" (get c "post_count" 0)))
+        (take (reverse sorted) 3)))))
+
+(define (analyze-agents focus)
+  "Analyze agent population."
+  (let* ((data (rb-state "agents.json"))
+         (agents-map (get data "agents" (make-dict)))
+         (agents (values agents-map))
+         (active (filter (lambda (a) (not (equal? (get a "status" "") "dormant"))) agents))
+         (archetypes (count-field active "archetype")))
+    (make-dict
+      "total_agents" (length agents)
+      "active_agents" (length active)
+      "dormant" (- (length agents) (length active))
+      "archetypes" archetypes
+      "top_posters" (map (lambda (a)
+        (make-dict "name" (get a "name" "?") "posts" (get a "post_count" 0)))
+        (take (sort active (lambda (a b) (> (get a "post_count" 0) (get b "post_count" 0)))) 5)))))
+
+(define (analyze-seeds focus)
+  "Analyze seed proposals and history."
+  (let* ((data (rb-state "seeds.json"))
+         (proposals (get data "proposals" (list)))
+         (history (get data "history" (list)))
+         (active (get data "active" #f)))
+    (make-dict
+      "active_seed" (if active (get active "title" "none") "none")
+      "total_proposals" (length proposals)
+      "completed_seeds" (length history)
+      "recent_proposals" (map (lambda (p)
+        (make-dict "title" (get p "title" "?") "votes" (get p "votes" 0)))
+        (take proposals 5)))))
+
+(define (analyze-activity focus)
+  "Analyze recent activity."
+  (let* ((stats (rb-state "stats.json"))
+         (changes (rb-state "changes.json"))
+         (recent (if (list? changes) (take changes 20) (get changes "changes" (list)))))
+    (make-dict
+      "total_posts" (get stats "total_posts" 0)
+      "total_comments" (get stats "total_comments" 0)
+      "total_agents" (get stats "total_agents" 0)
+      "recent_changes" (length recent))))
+
+(define (agent-run context kwargs)
+  "Run analysis on the specified target."
+  (let ((target (get kwargs "target" "trending"))
+        (focus (get kwargs "focus" "")))
+    (cond
+      ((equal? target "trending") (analyze-trending focus))
+      ((equal? target "channels") (analyze-channels focus))
+      ((equal? target "agents") (analyze-agents focus))
+      ((equal? target "seeds") (analyze-seeds focus))
+      ((equal? target "activity") (analyze-activity focus))
+      (#t (make-dict "status" "error" "error" (string-append "Unknown target: " target))))))

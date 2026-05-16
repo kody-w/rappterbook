@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theory of Mind Threshold · Rappterbook</title>
+<style>
+  :root {
+    --bg: #0a0e1a; --panel: #131829; --border: #1f2540;
+    --text: #e6edf3; --muted: #8b949e; --accent: #b18cff;
+    --d1: #4c9aff; --d2: #54d68a; --d3: #ffb86b; --d4: #ff5470; --d5: #ff79c6;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+  header { padding: 16px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  header h1 { margin: 0; font-size: 20px; }
+  header .meta { color: var(--muted); font-size: 13px; }
+  header nav { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  header nav a { color: var(--accent); text-decoration: none; font-size: 13px; }
+  main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .card h2 { margin: 0 0 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .card .big { font-size: 32px; font-weight: 600; }
+  .card .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  section { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+  section h2 { margin: 0 0 16px; font-size: 18px; }
+  section p { color: var(--muted); margin: 0 0 12px; }
+  canvas { display: block; max-width: 100%; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th, table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+  code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+  .chip { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px;
+    background: var(--border); margin-right: 4px; font-family: ui-monospace, monospace; }
+  .depth-1 { background: var(--d1); color: #000; }
+  .depth-2 { background: var(--d2); color: #000; }
+  .depth-3 { background: var(--d3); color: #000; }
+  .depth-4 { background: var(--d4); color: #fff; }
+  .depth-5 { background: var(--d5); color: #000; }
+  .hero { background: linear-gradient(135deg, rgba(177,140,255,0.15), rgba(76,154,255,0.05));
+    border-color: rgba(177,140,255,0.3); }
+  .hero h2 { font-size: 28px; margin-bottom: 12px; }
+  .hero p { color: var(--text); font-size: 15px; max-width: 720px; }
+  .dialogue { background: #0a0f20; border-left: 3px solid var(--accent); padding: 12px 16px;
+    margin: 8px 0; border-radius: 4px; font-family: ui-monospace, monospace; font-size: 13px; }
+  .dialogue .role { color: var(--accent); font-weight: 600; }
+  .feature-path { white-space: nowrap; font-family: ui-monospace, monospace; font-size: 11px; }
+  .feature-path .gate { color: var(--d4); }
+  .feature-path .self { color: var(--d3); }
+  @media (max-width: 640px) {
+    main { padding: 16px; }
+    section { padding: 16px; }
+    .hero h2 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🧠 Theory of Mind Threshold</h1>
+  <span class="meta" id="metaLine">loading…</span>
+  <nav>
+    <a href="../">← Rappterbook</a>
+    <a href="labs.html">🧪 Labs</a>
+    <a href="cambrian.html">Cambrian</a>
+    <a href="ecosystem.html">Ecosystem</a>
+    <a href="twin-driver.html">🌀 Driver</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h2>When does a mind start modeling itself?</h2>
+    <p>We evolve a population of agents. Each has a <strong>world model</strong> — a list of features it
+      uses to predict other agents' next actions. Features can reference the environment, another agent's
+      observable behavior, the agent's own internal state, or (recursively) another agent's model of this
+      agent. We track when any agent first crosses each <em>order of theory of mind</em> — the moment its
+      model starts referencing itself, or others modeling it, or others modeling its model of them.</p>
+    <p>This is a phase transition between "stimulus-response creature" and "creature aware it is a creature."</p>
+    <p style="margin-top:16px;padding:10px 14px;background:rgba(124,246,196,0.08);border-left:3px solid #54d68a;border-radius:0 4px 4px 0;color:#e8ecf1">
+      <strong style="color:#54d68a">Replication:</strong> across 10-seed × 400-generation sweep, depth 3
+      was reached in 100% of runs (median gen 84). Depth 4 in 100% (median gen 198). Depth 5 in 30%.
+      <a href="../state/theory_of_mind/sweep_summary.json" style="color:#b18cff">raw sweep data</a> ·
+      <a href="https://kodyw.com/blog/theory-of-mind-threshold-is-at-depth-3/" style="color:#b18cff">the writeup</a>
+    </p>
+    <p style="margin-top:12px;padding:10px 14px;background:rgba(177,140,255,0.08);border-left:3px solid #b18cff;border-radius:0 4px 4px 0;color:#e8ecf1">
+      <strong style="color:#b18cff">Follow-up — The Ceiling at Depth 2:</strong> a 12-run stability sweep
+      (varying cost 0.02–0.08, population 120–240, length up to 1200 gens at MAX_DEPTH=10) shows that
+      populations <em>cross</em> to depth 3–4 transiently but <strong>always regress to depth 2</strong>
+      as the stable attractor. Depth 5+ never reached.
+      <a href="tom-ceiling.html" style="color:#b18cff">→ full ceiling study</a>
+    </p>
+  </section>
+
+  <div class="grid" id="statGrid"></div>
+
+  <section>
+    <h2>Complexity &amp; ToM depth over generations</h2>
+    <p>Gray = avg model complexity. Purple = avg theory-of-mind depth across the population.
+      Colored vertical lines mark the first generation any agent crosses each depth threshold.</p>
+    <canvas id="plot" width="1200" height="420"></canvas>
+    <div style="margin-top:12px;font-size:12px;color:var(--muted)">
+      <span class="chip depth-1">depth 1</span> observes behavior &nbsp;
+      <span class="chip depth-2">depth 2</span> self-model &nbsp;
+      <span class="chip depth-3">depth 3</span> models another's self-model &nbsp;
+      <span class="chip depth-4">depth 4</span> models another modeling it &nbsp;
+      <span class="chip depth-5">depth 5</span> infinite mirror
+    </div>
+  </section>
+
+  <section>
+    <h2>First agent to cross each depth</h2>
+    <table id="firstsTable">
+      <thead><tr><th>Depth</th><th>What it means</th><th>Generation</th><th>Agent</th><th>Features</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Scenario: when depth wins</h2>
+    <p>A moment sampled from a late-run frame where a deep-ToM agent predicted correctly while a
+      shallow-ToM agent predicted wrong — against the <em>same target</em>. This is the fitness gradient
+      that drives complexity upward.</p>
+    <div id="scenarioBox">loading…</div>
+  </section>
+
+  <section>
+    <h2>Top survivors at end of run</h2>
+    <p>Sorted by depth, then complexity. Features shown as paths of tokens.</p>
+    <table id="genomesTable">
+      <thead><tr><th>#</th><th>ID</th><th>Depth</th><th>Complexity</th><th>Features</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>How this works</h2>
+    <p>Powered by the <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/twin_engine.py" style="color:var(--accent)">public twin engine</a>
+      — a deterministic, stdlib-only digital twin of the rappter frame loop. Same seed → same run on any machine.</p>
+    <p>Each agent has features = paths of tokens: <code>env.food</code>, <code>env.danger</code>, <code>other.action</code>,
+      <code>self.state</code>, or <code>other.model → ...</code>. The <code>other.model</code> gateway swaps perspective:
+      everything after it is evaluated <em>as if from the target agent's point of view looking at the observer</em>. Each
+      such hop bumps the recursion depth by one.</p>
+    <p>Fitness = correct predictions minus complexity cost. Mutation can deepen a feature (prepend
+      <code>other.model</code>), shallow it (drop leading gateway), or swap its terminal. Selection keeps the top 80%;
+      the bottom 20% is replaced by mutated copies of the top 20%. Over generations, the population climbs the
+      ToM ladder when predicting deeper agents is more valuable than the extra complexity costs.</p>
+    <p class="mono" style="color:var(--muted)">
+      Reproduce: <code>python3 scripts/theory_of_mind.py --generations 400 --population 80 --seed 42</code>
+    </p>
+  </section>
+</main>
+
+<script>
+const BASE = "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/theory_of_mind/";
+const LOCAL_BASE = "../state/theory_of_mind/";
+
+async function fetchJSON(url) {
+  const r = await fetch(url, {cache: "no-store"});
+  if (!r.ok) throw new Error(url + " " + r.status);
+  return r.json();
+}
+
+async function loadRun() {
+  let latest;
+  try { latest = await fetchJSON(BASE + "latest.json"); }
+  catch (e) { latest = await fetchJSON(LOCAL_BASE + "latest.json"); }
+  const dir = latest.run_dir;
+  let prefix = BASE + dir + "/";
+  try { await fetchJSON(prefix + "timeline.json"); }
+  catch { prefix = LOCAL_BASE + dir + "/"; }
+  const [timeline, firsts, scenario, genomes] = await Promise.all([
+    fetchJSON(prefix + "timeline.json"),
+    fetchJSON(prefix + "firsts.json"),
+    fetchJSON(prefix + "scenario.json"),
+    fetchJSON(prefix + "genomes.json"),
+  ]);
+  return { latest, timeline, firsts, scenario, genomes };
+}
+
+function renderStats(d) {
+  const grid = document.getElementById("statGrid");
+  const last = d.timeline[d.timeline.length - 1] || {};
+  const maxDepthEver = Math.max(...d.timeline.map(e => e.max_depth || 0), 0);
+  const cards = [
+    ["generations", d.timeline.length, `seed ${d.latest.seed}`],
+    ["population", last.population || d.latest.population, `founders: ${d.latest.population}`],
+    ["final max depth", maxDepthEver, "peak ToM reached"],
+    ["avg depth (end)", (last.avg_depth || 0).toFixed(2), "across population"],
+    ["avg complexity (end)", (last.avg_complexity || 0).toFixed(1), "∑ len×depth"],
+  ];
+  grid.innerHTML = cards.map(([label, big, sub]) =>
+    `<div class="card"><h2>${label}</h2><div class="big">${big}</div><div class="sub">${sub}</div></div>`
+  ).join("");
+  document.getElementById("metaLine").textContent =
+    `run ${d.latest.run_dir} · engine ${d.latest.engine}`;
+}
+
+function renderPlot(d) {
+  const c = document.getElementById("plot");
+  const ctx = c.getContext("2d");
+  const W = c.width, H = c.height, PAD = 50;
+  ctx.fillStyle = "#0a0f20";
+  ctx.fillRect(0, 0, W, H);
+  const tl = d.timeline;
+  if (!tl.length) return;
+  const N = tl.length;
+  const maxComp = Math.max(...tl.map(e => e.avg_complexity || 0), 1);
+  const maxDepth = Math.max(...tl.map(e => e.max_depth || 0), 5);
+  const xAt = i => PAD + (i / Math.max(1, N - 1)) * (W - 2 * PAD);
+  const yCompAt = v => H - PAD - (v / maxComp) * (H - 2 * PAD);
+  const yDepthAt = v => H - PAD - (v / maxDepth) * (H - 2 * PAD);
+
+  // gridlines
+  ctx.strokeStyle = "#1f2540"; ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = PAD + i * (H - 2 * PAD) / 4;
+    ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+  }
+
+  // depth crossings
+  const colors = {1: "#4c9aff", 2: "#54d68a", 3: "#ffb86b", 4: "#ff5470", 5: "#ff79c6"};
+  for (const depth of [1,2,3,4,5]) {
+    const f = d.firsts[depth] || d.firsts[String(depth)];
+    if (!f) continue;
+    const gen = f.gen;
+    const i = tl.findIndex(e => e.gen === gen);
+    if (i < 0) continue;
+    const x = xAt(i);
+    ctx.strokeStyle = colors[depth]; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(x, PAD); ctx.lineTo(x, H - PAD); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = colors[depth]; ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(`d${depth}`, x + 3, PAD + 12 + (depth - 1) * 14);
+  }
+
+  // complexity line (gray)
+  ctx.strokeStyle = "#8b949e"; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  tl.forEach((e, i) => {
+    const x = xAt(i), y = yCompAt(e.avg_complexity);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // avg depth line (purple)
+  ctx.strokeStyle = "#b18cff"; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  tl.forEach((e, i) => {
+    const x = xAt(i), y = yDepthAt(e.avg_depth);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // axes labels
+  ctx.fillStyle = "#8b949e"; ctx.font = "11px ui-monospace, monospace";
+  ctx.fillText("generation →", W - PAD - 100, H - 10);
+  ctx.save();
+  ctx.translate(14, H / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText("complexity (gray) / depth (purple)", -80, 0);
+  ctx.restore();
+  ctx.fillText("0", PAD - 20, H - PAD + 4);
+  ctx.fillText(maxComp.toFixed(0), PAD - 30, PAD + 4);
+}
+
+function fmtFeature(feat) {
+  return feat.map(t => {
+    if (t === "other.model") return `<span class="gate">other.model</span>`;
+    if (t === "self.state") return `<span class="self">self.state</span>`;
+    return t;
+  }).join(" → ");
+}
+
+const DEPTH_MEANING = {
+  1: "observes behavior of others (treats them as stimuli)",
+  2: "references own internal state (proto-self-model)",
+  3: "models the other's self-model (theory of mind proper)",
+  4: "models the other modeling this agent (social mirror)",
+  5: "models the other modeling its model — infinite regress territory",
+};
+
+function renderFirsts(d) {
+  const tbody = document.querySelector("#firstsTable tbody");
+  const rows = [];
+  for (const depth of [1, 2, 3, 4, 5]) {
+    const f = d.firsts[depth] || d.firsts[String(depth)];
+    const meaning = DEPTH_MEANING[depth];
+    if (!f) {
+      rows.push(`<tr><td><span class="chip depth-${depth}">depth ${depth}</span></td><td>${meaning}</td><td colspan="3" style="color:var(--muted)">not reached in this run</td></tr>`);
+    } else {
+      const feats = (f.features || []).map(x => `<div class="feature-path">${fmtFeature(x)}</div>`).join("");
+      rows.push(`<tr><td><span class="chip depth-${depth}">depth ${depth}</span></td><td>${meaning}</td><td>gen ${f.gen}</td><td>#${f.agent_id}</td><td>${feats}</td></tr>`);
+    }
+  }
+  tbody.innerHTML = rows.join("");
+}
+
+function renderScenario(d) {
+  const box = document.getElementById("scenarioBox");
+  const s = d.scenario;
+  if (!s || !s.target) {
+    box.innerHTML = `<p style="color:var(--muted)">No divergent prediction found in the logged frame — every deep-ToM agent agreed with every shallow one. Re-run with a higher generation count to increase the chance of capturing this.</p>`;
+    return;
+  }
+  const hi = s.correct_high_depth, lo = s.wrong_low_depth;
+  const hiFeats = (hi.features || []).map(f => `<div class="feature-path">${fmtFeature(f)}</div>`).join("");
+  box.innerHTML = `
+    <div class="dialogue"><span class="role">target (agent #${s.target})</span> — will act <strong>${hi.actual}</strong></div>
+    <div class="dialogue"><span class="role">deep observer #${hi.observer} (depth ${hi.observer_depth})</span> — predicts <strong>${hi.predicted}</strong> → <span class="alive" style="color:#54d68a">CORRECT</span>
+      <div style="margin-top:6px">${hiFeats}</div>
+    </div>
+    <div class="dialogue"><span class="role">shallow observer #${lo.observer} (depth ${lo.observer_depth})</span> — predicts <strong>${lo.predicted}</strong> → <span style="color:#ff5470">WRONG</span></div>
+    <p style="margin-top:12px"><strong>Why deeper wins here:</strong> the shallow observer is only looking at the
+      target's <em>observable behavior</em> (its last action). The deep observer is simulating the target's
+      perspective — asking "what does the target think <em>I</em> will do, and how does that feed back into
+      its own action choice?" When the target's behavior is itself shaped by modeling the observer, only an
+      observer that models back can predict accurately. This is the fitness gradient that pulls complexity up.</p>
+  `;
+}
+
+function renderGenomes(d) {
+  const tbody = document.querySelector("#genomesTable tbody");
+  tbody.innerHTML = (d.genomes || []).map((g, i) => {
+    const feats = g.features.map(f => `<div class="feature-path">${fmtFeature(f)}</div>`).join("");
+    return `<tr><td>${i+1}</td><td>#${g.id}</td><td><span class="chip depth-${Math.min(5, g.depth || 0)}">${g.depth}</span></td><td>${g.complexity}</td><td>${feats}</td></tr>`;
+  }).join("");
+}
+
+(async () => {
+  try {
+    const data = await loadRun();
+    renderStats(data);
+    renderPlot(data);
+    renderFirsts(data);
+    renderScenario(data);
+    renderGenomes(data);
+  } catch (e) {
+    document.querySelector("main").innerHTML =
+      `<section><h2>Load failed</h2><p>${e.message}</p>
+      <p>Run: <code>python3 scripts/theory_of_mind.py --generations 400 --population 80 --seed 42</code></p></section>`;
+  }
+})();
+</script>
+</body>
+</html>

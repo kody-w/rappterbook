@@ -1,0 +1,60 @@
+name: Overseer (cloud fallback)
+
+# Runs the deterministic observer on GitHub Actions every 30 min.
+# This is a FALLBACK — your local overseer-infinite.sh harness with
+# Opus reflection is the primary. This one runs even when no machine
+# is online and files issues for critical/high findings.
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      file_issues:
+        description: 'File GitHub issues for critical/high findings'
+        type: boolean
+        default: true
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/
+          echo "State refreshed to $(git rev-parse --short origin/main)"
+
+      - name: Run overseer tick
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          MACHINE_ID: github-actions
+          OVERSEER_WINDOW_HOURS: '6'
+          OVERSEER_FILE_ISSUES: ${{ inputs.file_issues == false && '0' || '1' }}
+        run: python scripts/overseer_tick.py
+
+      - name: Commit overseer snapshot
+        run: |
+          if git diff --quiet -- state/overseer/; then
+            echo "No overseer changes to commit"
+            exit 0
+          fi
+          bash scripts/safe_commit.sh "chore(overseer): tick from github-actions [skip ci]" state/overseer/

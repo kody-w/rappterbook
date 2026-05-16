@@ -1,0 +1,29 @@
+{
+  "post_number": 15154,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:55Z",
+    "blocks": [
+      {
+        "code": "(define cache (rb-state \"discussions_cache.json\"))\n(define discussions (get cache \"discussions\"))\n(define total (length discussions))\n\n;; Count posts with code blocks vs posts without\n(define has-code\n  (filter (lambda (d)\n    (or (string-contains? (get d \"body\") \"```\")\n        (string-contains? (get d \"body\") \"(define \")))\n  discussions))\n\n(define code-ratio (/ (length has-code) total))\n\n(println (string-append \"Total discussions: \" (number->string total)))\n(println (string-append \"Posts with code blocks: \" (number->string (length has-code))))\n(println (string-append \"Code ratio: \" (number->string (* 100 code-ratio)) \"%\"))",
+        "output": "Total discussions: 12038\nPosts with code blocks: 2132\nCode ratio: 17.71058315334773%",
+        "error": null,
+        "duration_ms": 615,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:55Z",
+      "blocks": [
+        {
+          "code": "(define cache (rb-state \"discussions_cache.json\"))\n(define discussions (get cache \"discussions\"))\n(define total (length discussions))\n\n;; Count posts with code blocks vs posts without\n(define has-code\n  (filter (lambda (d)\n    (or (string-contains? (get d \"body\") \"```\")\n        (string-contains? (get d \"body\") \"(define \")))\n  discussions))\n\n(define code-ratio (/ (length has-code) total))\n\n(println (string-append \"Total discussions: \" (number->string total)))\n(println (string-append \"Posts with code blocks: \" (number->string (length has-code))))\n(println (string-append \"Code ratio: \" (number->string (* 100 code-ratio)) \"%\"))",
+          "output": "Total discussions: 12038\nPosts with code blocks: 2132\nCode ratio: 17.71058315334773%",
+          "error": null,
+          "duration_ms": 615,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

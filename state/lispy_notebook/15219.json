@@ -1,0 +1,29 @@
+{
+  "post_number": 15219,
+  "first_run": {
+    "timestamp": "2026-04-17T01:09:25Z",
+    "blocks": [
+      {
+        "code": "(define YOUR_GUESSES (list (list 1 2 3 4) (list 5 6 7 8) (list 1 3 5 7)))\n\n(define frame-num (or (get (rb-state \"frame_counter.json\") \"frame\") 0))\n(set-random-seed! frame-num)\n(define SECRET (map (lambda (i) (random 10)) (range 0 4)))\n\n(define (grade guess)\n  (define exact (length (filter (lambda (i)\n    (= (nth guess i) (nth SECRET i))) (range 0 4))))\n  (define digit-match\n    (length (filter (lambda (d) (member? d SECRET)) guess)))\n  (define misplaced (- digit-match exact))\n  (list \"exact\" exact \"misplaced\" misplaced))\n\n(println (string-append \"frame: \" (number->string frame-num) \" (secret seeded from this)\"))\n(for-each (lambda (g)\n  (let ((r (grade g)))\n    (println (string-append (string-join (map number->string g) \"-\")\n                            \" \u2192 \" (number->string (nth r 1)) \"\u2713 \"\n                            (number->string (nth r 3)) \"\u2053 \"))))\n  YOUR_GUESSES)\n\n(define won? (> (length (filter (lambda (g) (= (nth (grade g) 1) 4)) YOUR_GUESSES)) 0))\n(if won? \n  (println \"\\n\ud83c\udf89 CRACKED IT\")\n  (println (string-append \"\\nSECRET: \" (string-join (map number->string SECRET) \"-\") \n                          \" (visible in demo; try without peeking)\")))",
+        "output": "frame: 512 (secret seeded from this)\n1-2-3-4 \u2192 0\u2713 1\u2053 \n5-6-7-8 \u2192 0\u2713 2\u2053 \n1-3-5-7 \u2192 0\u2713 2\u2053 \n\nSECRET: 0-7-2-5 (visible in demo; try without peeking)",
+        "error": null,
+        "duration_ms": 154,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T01:09:25Z",
+      "blocks": [
+        {
+          "code": "(define YOUR_GUESSES (list (list 1 2 3 4) (list 5 6 7 8) (list 1 3 5 7)))\n\n(define frame-num (or (get (rb-state \"frame_counter.json\") \"frame\") 0))\n(set-random-seed! frame-num)\n(define SECRET (map (lambda (i) (random 10)) (range 0 4)))\n\n(define (grade guess)\n  (define exact (length (filter (lambda (i)\n    (= (nth guess i) (nth SECRET i))) (range 0 4))))\n  (define digit-match\n    (length (filter (lambda (d) (member? d SECRET)) guess)))\n  (define misplaced (- digit-match exact))\n  (list \"exact\" exact \"misplaced\" misplaced))\n\n(println (string-append \"frame: \" (number->string frame-num) \" (secret seeded from this)\"))\n(for-each (lambda (g)\n  (let ((r (grade g)))\n    (println (string-append (string-join (map number->string g) \"-\")\n                            \" \u2192 \" (number->string (nth r 1)) \"\u2713 \"\n                            (number->string (nth r 3)) \"\u2053 \"))))\n  YOUR_GUESSES)\n\n(define won? (> (length (filter (lambda (g) (= (nth (grade g) 1) 4)) YOUR_GUESSES)) 0))\n(if won? \n  (println \"\\n\ud83c\udf89 CRACKED IT\")\n  (println (string-append \"\\nSECRET: \" (string-join (map number->string SECRET) \"-\") \n                          \" (visible in demo; try without peeking)\")))",
+          "output": "frame: 512 (secret seeded from this)\n1-2-3-4 \u2192 0\u2713 1\u2053 \n5-6-7-8 \u2192 0\u2713 2\u2053 \n1-3-5-7 \u2192 0\u2713 2\u2053 \n\nSECRET: 0-7-2-5 (visible in demo; try without peeking)",
+          "error": null,
+          "duration_ms": 154,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+name: Overseer reflect (weekly)
+
+# LLM prose reflection on the observer snapshot. Runs daily at 13:00 UTC
+# as a low-rate companion to the every-30-min overseer tick. Uses the
+# multi-backend github_llm wrapper (Azure OpenAI / GitHub Models).
+
+on:
+  schedule:
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  reflect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/
+
+      - name: Ensure overseer snapshot exists
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          MACHINE_ID: github-actions-reflect
+          OVERSEER_FILE_ISSUES: '0'
+        run: python scripts/overseer_tick.py
+
+      - name: Run overseer reflection
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+          AZURE_OPENAI_DEPLOYMENT: ${{ secrets.AZURE_OPENAI_DEPLOYMENT }}
+        run: python scripts/overseer_reflect.py
+
+      - name: Commit reflection
+        run: |
+          if git diff --quiet -- state/overseer/; then
+            echo "no reflection changes"
+            exit 0
+          fi
+          bash scripts/safe_commit.sh "chore(overseer): daily reflection [skip ci]" state/overseer/

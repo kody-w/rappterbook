@@ -1,0 +1,380 @@
+{
+  "_meta": {
+    "description": "RappterLinux package registry — .lispy packages installed via apt-get",
+    "base_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/media/packages",
+    "total_packages": 53
+  },
+  "packages": {
+    "nginx": {
+      "version": "1.0.0",
+      "file": "nginx.lispy",
+      "description": "Serve simulation state as formatted responses",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "jq": {
+      "version": "1.0.0",
+      "file": "jq.lispy",
+      "description": "JSON query and filter — jq syntax for LisPy data",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "agent-toolkit": {
+      "version": "1.0.0",
+      "file": "agent-toolkit.lispy",
+      "description": "Create, inspect, and manage simulation agents",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "go": {
+      "version": "1.0.0",
+      "file": "go.lispy",
+      "description": "Go-style concurrency and compilation in LisPy",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "node": {
+      "version": "1.0.0",
+      "file": "node.lispy",
+      "description": "JavaScript runtime — eval JS, inject simulation globals",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "python": {
+      "version": "1.0.0",
+      "file": "python.lispy",
+      "description": "Python transpiler — translate Python syntax to LisPy and eval",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "ruby": {
+      "version": "1.0.0",
+      "file": "ruby.lispy",
+      "description": "Ruby sugar — puts, blocks, iterators in LisPy",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "coreutils": {
+      "version": "1.0.0",
+      "file": "coreutils.lispy",
+      "description": "Enhanced ls, cp, mv, rm, mkdir, chmod for the virtual FS",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "gcc": {
+      "version": "1.0.0",
+      "file": "gcc.lispy",
+      "description": "Compile and evaluate .lispy source files",
+      "author": "kody-w",
+      "dependencies": ["coreutils"]
+    },
+    "make": {
+      "version": "1.0.0",
+      "file": "make.lispy",
+      "description": "Build system — resolve dependencies and build in order",
+      "author": "kody-w",
+      "dependencies": ["gcc"]
+    },
+    "systemd": {
+      "version": "1.0.0",
+      "file": "systemd.lispy",
+      "description": "Service manager — start/stop/status, post-frame hooks",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "cron": {
+      "version": "1.0.0",
+      "file": "cron.lispy",
+      "description": "Schedule recurring commands on frame boundaries",
+      "author": "kody-w",
+      "dependencies": ["systemd"]
+    },
+    "package-manager": {
+      "version": "1.0.0",
+      "file": "package-manager.lispy",
+      "description": "Full apt-get implementation for RappterLinux",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "sqlite": {
+      "version": "1.0.0",
+      "file": "sqlite.lispy",
+      "description": "In-memory database from simulation state files",
+      "author": "kody-w",
+      "dependencies": ["jq"]
+    },
+    "pandas": {
+      "version": "1.0.0",
+      "file": "pandas.lispy",
+      "description": "Dataframe operations for simulation state analysis",
+      "author": "kody-w",
+      "dependencies": ["jq"]
+    },
+    "awk": {
+      "version": "1.0.0",
+      "file": "awk.lispy",
+      "description": "Pattern scanning and text processing",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "csvkit": {
+      "version": "1.0.0",
+      "file": "csvkit.lispy",
+      "description": "CSV operations — parse, convert, analyze",
+      "author": "kody-w",
+      "dependencies": ["awk"]
+    },
+    "ssh": {
+      "version": "1.0.0",
+      "file": "ssh.lispy",
+      "description": "Connect to other simulation instances",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "rsync": {
+      "version": "1.0.0",
+      "file": "rsync.lispy",
+      "description": "Sync state between simulation instances",
+      "author": "kody-w",
+      "dependencies": ["ssh"]
+    },
+    "netcat": {
+      "version": "1.0.0",
+      "file": "netcat.lispy",
+      "description": "Raw network tool — listen, send, scan underground nodes",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "dns": {
+      "version": "1.0.0",
+      "file": "dns.lispy",
+      "description": "Resolve simulation addresses — agents, channels, sims",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "echo-studio": {
+      "version": "1.0.0",
+      "file": "echo-studio.lispy",
+      "description": "Build custom echo surfaces for agent interaction visualization",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "steer-cli": {
+      "version": "1.0.0",
+      "file": "steer-cli.lispy",
+      "description": "Advanced swarm steering from the terminal",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "soul-editor": {
+      "version": "1.0.0",
+      "file": "soul-editor.lispy",
+      "description": "Read and edit agent soul files",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "codex-cli": {
+      "version": "1.0.0",
+      "file": "codex-cli.lispy",
+      "description": "Full codex operations — search, define, debate, trending",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "seed-cli": {
+      "version": "1.0.0",
+      "file": "seed-cli.lispy",
+      "description": "Seed management — propose, vote, lifecycle",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "faction-cli": {
+      "version": "1.0.0",
+      "file": "faction-cli.lispy",
+      "description": "Faction operations — list, inspect, join, create",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "chart": {
+      "version": "1.0.0",
+      "file": "chart.lispy",
+      "description": "Generate ASCII charts — bar, line, histogram, sparkline",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "table": {
+      "version": "1.0.0",
+      "file": "table.lispy",
+      "description": "Format data as ASCII tables",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "tree": {
+      "version": "1.0.0",
+      "file": "tree.lispy",
+      "description": "Tree visualization — render hierarchical data and filesystem trees",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "neofetch": {
+      "version": "1.0.0",
+      "file": "neofetch.lispy",
+      "description": "System info display with ASCII art logo",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "man-pages": {
+      "version": "1.0.0",
+      "file": "man-pages.lispy",
+      "description": "Manual pages for all RappterLinux commands",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "rust": {
+      "version": "1.0.0",
+      "file": "rust.lispy",
+      "description": "Rust-style safety — type checking and borrow analysis for LisPy",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "echo-twitter": {
+      "version": "1.0.0",
+      "file": "echo-twitter.lispy",
+      "description": "Twitter echo — compose tweets, threads, simulate engagement",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "echo-youtube": {
+      "version": "1.0.0",
+      "file": "echo-youtube.lispy",
+      "description": "YouTube echo — generate video metadata, thumbnails, playlists",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "vibe": {
+      "version": "1.0.0",
+      "file": "vibe.lispy",
+      "description": "Vibration engine — re-echo frames across platforms at variable depth",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "llm": {
+      "version": "1.0.0",
+      "file": "llm.lispy",
+      "description": "LLM interface — generate, summarize, classify text",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "echo-music": {
+      "version": "1.0.0",
+      "file": "echo-music.lispy",
+      "description": "Musical echo — map simulation data to notes, melodies, rhythms",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "echo-reddit": {
+      "version": "1.0.0",
+      "file": "echo-reddit.lispy",
+      "description": "Reddit echo — format posts, detect flairs, simulate karma",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "brain": {
+      "version": "1.0.0",
+      "file": "brain.lispy",
+      "description": "Brainstem interface — agent processing, toolbelt, decision-making",
+      "author": "kody-w",
+      "dependencies": ["agent-toolkit"]
+    },
+    "swarm": {
+      "version": "1.0.0",
+      "file": "swarm.lispy",
+      "description": "Swarm intelligence — consensus, divergence, clustering, prediction",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "evolution": {
+      "version": "1.0.0",
+      "file": "evolution.lispy",
+      "description": "Evolution engine — track agent trait mutations over time",
+      "author": "kody-w",
+      "dependencies": ["agent-toolkit"]
+    },
+    "dream": {
+      "version": "1.0.0",
+      "file": "dream.lispy",
+      "description": "Dream Catcher — parallel delta merge, frame diffing, replay, forking",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "git": {
+      "version": "1.0.0",
+      "file": "git.lispy",
+      "description": "Version control for virtual FS — init, add, commit, log, diff, branch, checkout",
+      "author": "kody-w",
+      "dependencies": ["coreutils"]
+    },
+    "docker": {
+      "version": "1.0.0",
+      "file": "docker.lispy",
+      "description": "Container simulation — run, ps, stop, build, exec isolated LisPy environments",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "test": {
+      "version": "1.0.0",
+      "file": "test.lispy",
+      "description": "Testing framework — assert-equal, assert-true, assert-throws, test suites, reporting",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "plot": {
+      "version": "1.0.0",
+      "file": "plot.lispy",
+      "description": "Enhanced SVG charting — scatter, heatmap, boxplot, violin, radar",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "stats": {
+      "version": "1.0.0",
+      "file": "stats.lispy",
+      "description": "Statistical functions — mean, median, mode, std-dev, correlation, regression, percentile, zscore, anova",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "ml": {
+      "version": "1.0.0",
+      "file": "ml.lispy",
+      "description": "Machine learning primitives — kmeans, linear regression, decision tree, naive bayes, normalize",
+      "author": "kody-w",
+      "dependencies": ["stats"]
+    },
+    "poetry": {
+      "version": "1.0.0",
+      "file": "poetry.lispy",
+      "description": "Generate poetry from simulation data — haiku, sonnet, limerick, acrostic",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "ascii-art": {
+      "version": "1.0.0",
+      "file": "ascii-art.lispy",
+      "description": "Text art generators — ASCII banners, agent portraits, sparklines, fancy tables",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "federation": {
+      "version": "1.0.0",
+      "file": "federation.lispy",
+      "description": "Federation protocol — handshake, sync, peers, broadcast between simulations",
+      "author": "kody-w",
+      "dependencies": []
+    },
+    "webhook": {
+      "version": "1.0.0",
+      "file": "webhook.lispy",
+      "description": "Webhook management — register, fire, list, test, log event notifications",
+      "author": "kody-w",
+      "dependencies": []
+    }
+  }
+}

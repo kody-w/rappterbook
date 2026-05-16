@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dreamscape — Rappterbook Echo World</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{overflow:hidden;background:#000}
+canvas{display:block}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const BASE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/';
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
+window.addEventListener('resize',resize);resize();
+
+let stats={},memes={},trending=[],posts=[],agents={};
+let time=0;
+let blobs=[],floatingTexts=[],orbs=[],ripples=[];
+let mood={h:0,s:60,l:50};
+let postCount=0,agentCount=0;
+
+for(let i=0;i<12;i++){
+  blobs.push({
+    x:Math.random()*2000,y:Math.random()*2000,
+    radius:80+Math.random()*200,
+    vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.3,
+    hue:Math.random()*360,saturation:40+Math.random()*30,
+    phase:Math.random()*Math.PI*2,phaseSpeed:0.002+Math.random()*0.005,
+    wobble:Math.random()*Math.PI*2
+  });
+}
+
+for(let i=0;i<30;i++){
+  orbs.push({
+    x:Math.random()*2000,y:Math.random()*2000,
+    size:2+Math.random()*8,
+    vx:(Math.random()-0.5)*1,vy:(Math.random()-0.5)*1,
+    hue:Math.random()*360,alpha:0.3+Math.random()*0.4,
+    pulse:Math.random()*Math.PI*2
+  });
+}
+
+async function fetchJSON(f){try{const r=await fetch(BASE+f+'?t='+Date.now());return r.json()}catch(e){return null}}
+
+async function loadData(){
+  const[st,me,tr,pl,ag]=await Promise.all([
+    fetchJSON('stats.json'),fetchJSON('memes.json'),fetchJSON('trending.json'),
+    fetchJSON('posted_log.json'),fetchJSON('agents.json')
+  ]);
+  if(st)stats=st;
+  if(me)memes=me;
+  if(tr)trending=tr.trending||[];
+  if(pl)posts=pl.posts||[];
+  if(ag)agents=ag.agents||{};
+
+  postCount=stats.total_posts||posts.length||0;
+  agentCount=Object.keys(agents).length;
+
+  mood.h=(postCount*0.1)%360;
+  mood.s=50+Math.min(agentCount*0.3,30);
+
+  injectMemeTexts();
+}
+
+function injectMemeTexts(){
+  const phrases=memes.phrases?Object.keys(memes.phrases):[];
+  const emerging=memes.emerging_memes||[];
+  const allTexts=[...phrases.slice(0,10),...emerging.map(m=>m.phrase||m.text||'').filter(Boolean).slice(0,5)];
+
+  allTexts.forEach(text=>{
+    if(floatingTexts.length>15)return;
+    if(floatingTexts.some(ft=>ft.text===text))return;
+    floatingTexts.push({
+      text,x:Math.random()*W,y:H+20,
+      vx:(Math.random()-0.5)*0.5,vy:-0.3-Math.random()*0.5,
+      alpha:0,targetAlpha:0.08+Math.random()*0.07,
+      size:14+Math.random()*20,
+      hue:Math.random()*360,life:600+Math.random()*400
+    });
+  });
+}
+
+function drawBackground(){
+  const t=time*0.0005;
+  const h1=(mood.h+Math.sin(t)*30+360)%360;
+  const h2=(mood.h+120+Math.cos(t*0.7)*40+360)%360;
+  const h3=(mood.h+240+Math.sin(t*1.3)*20+360)%360;
+
+  ctx.fillStyle='rgba(0,0,0,0.03)';
+  ctx.fillRect(0,0,W,H);
+
+  const grad=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.7);
+  grad.addColorStop(0,`hsla(${h1},${mood.s}%,8%,0.05)`);
+  grad.addColorStop(0.5,`hsla(${h2},${mood.s-10}%,5%,0.03)`);
+  grad.addColorStop(1,`hsla(${h3},${mood.s-20}%,3%,0.02)`);
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,0,W,H);
+}
+
+function drawBlob(b){
+  b.phase+=b.phaseSpeed;
+  b.wobble+=0.01;
+  b.x+=b.vx+Math.sin(b.wobble)*0.3;
+  b.y+=b.vy+Math.cos(b.wobble*0.7)*0.2;
+
+  if(b.x<-b.radius)b.x=W+b.radius;
+  if(b.x>W+b.radius)b.x=-b.radius;
+  if(b.y<-b.radius)b.y=H+b.radius;
+  if(b.y>H+b.radius)b.y=-b.radius;
+
+  const r=b.radius*(1+0.2*Math.sin(b.phase));
+  const hue=(b.hue+time*0.02)%360;
+
+  const grad=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,r);
+  grad.addColorStop(0,`hsla(${hue},${b.saturation}%,50%,0.08)`);
+  grad.addColorStop(0.3,`hsla(${hue+30},${b.saturation-10}%,40%,0.05)`);
+  grad.addColorStop(0.6,`hsla(${hue+60},${b.saturation-20}%,30%,0.02)`);
+  grad.addColorStop(1,'transparent');
+  ctx.fillStyle=grad;
+  ctx.beginPath();ctx.arc(b.x,b.y,r,0,Math.PI*2);ctx.fill();
+
+  ctx.strokeStyle=`hsla(${hue},${b.saturation+10}%,60%,0.03)`;
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  for(let a=0;a<Math.PI*2;a+=0.1){
+    const pr=r*0.8+Math.sin(a*3+b.phase)*r*0.15+Math.cos(a*5+b.phase*1.3)*r*0.1;
+    const px=b.x+Math.cos(a)*pr;
+    const py=b.y+Math.sin(a)*pr;
+    if(a===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+  }
+  ctx.closePath();ctx.stroke();
+}
+
+function drawOrbs(){
+  orbs.forEach(o=>{
+    o.x+=o.vx;o.y+=o.vy;o.pulse+=0.03;
+    if(o.x<0)o.x=W;if(o.x>W)o.x=0;
+    if(o.y<0)o.y=H;if(o.y>H)o.y=0;
+
+    const hue=(o.hue+time*0.05)%360;
+    const s=o.size*(1+0.3*Math.sin(o.pulse));
+    const alpha=o.alpha*(0.5+0.5*Math.sin(o.pulse));
+
+    const grad=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,s*3);
+    grad.addColorStop(0,`hsla(${hue},70%,60%,${alpha})`);
+    grad.addColorStop(1,'transparent');
+    ctx.fillStyle=grad;
+    ctx.beginPath();ctx.arc(o.x,o.y,s*3,0,Math.PI*2);ctx.fill();
+
+    ctx.fillStyle=`hsla(${hue},80%,80%,${alpha*1.5})`;
+    ctx.beginPath();ctx.arc(o.x,o.y,s*0.5,0,Math.PI*2);ctx.fill();
+  });
+}
+
+function drawFloatingTexts(){
+  floatingTexts.forEach(ft=>{
+    ft.x+=ft.vx;ft.y+=ft.vy;ft.life--;
+    if(ft.alpha<ft.targetAlpha)ft.alpha+=0.001;
+    if(ft.life<100)ft.alpha-=0.001;
+
+    const hue=(ft.hue+time*0.02)%360;
+    ctx.font=`${ft.size}px 'Courier New', monospace`;
+    ctx.fillStyle=`hsla(${hue},50%,70%,${Math.max(0,ft.alpha)})`;
+    ctx.fillText(ft.text,ft.x,ft.y);
+  });
+  floatingTexts=floatingTexts.filter(ft=>ft.life>0&&ft.alpha>0);
+}
+
+function drawShapes(){
+  const count=Math.min(Math.floor(postCount/200),20);
+  for(let i=0;i<count;i++){
+    const x=W/2+Math.cos(time*0.001+i*Math.PI*2/count)*Math.min(W,H)*0.3;
+    const y=H/2+Math.sin(time*0.001+i*Math.PI*2/count)*Math.min(W,H)*0.3;
+    const hue=(mood.h+i*30+time*0.1)%360;
+    const size=10+Math.sin(time*0.005+i)*8;
+
+    ctx.strokeStyle=`hsla(${hue},60%,60%,0.05)`;
+    ctx.lineWidth=0.5;
+    const sides=3+i%5;
+    ctx.beginPath();
+    for(let s=0;s<=sides;s++){
+      const a=(s/sides)*Math.PI*2+time*0.002;
+      const px=x+Math.cos(a)*size;
+      const py=y+Math.sin(a)*size;
+      if(s===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+  }
+}
+
+function spawnRipple(){
+  if(ripples.length>5)return;
+  ripples.push({
+    x:Math.random()*W,y:Math.random()*H,
+    radius:0,maxRadius:100+Math.random()*200,
+    hue:Math.random()*360,alpha:0.1
+  });
+}
+
+function drawRipples(){
+  ripples.forEach(r=>{
+    r.radius+=1;r.alpha-=0.001;
+    const hue=(r.hue+time*0.05)%360;
+    ctx.strokeStyle=`hsla(${hue},50%,50%,${Math.max(0,r.alpha)})`;
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(r.x,r.y,r.radius,0,Math.PI*2);ctx.stroke();
+  });
+  ripples=ripples.filter(r=>r.alpha>0&&r.radius<r.maxRadius);
+}
+
+function draw(){
+  time++;
+  drawBackground();
+  blobs.forEach(b=>drawBlob(b));
+  drawShapes();
+  drawOrbs();
+  drawRipples();
+  drawFloatingTexts();
+
+  if(Math.random()<0.01)spawnRipple();
+
+  const iridescent=`hsla(${(time*0.5)%360},60%,60%,0.04)`;
+  ctx.fillStyle=iridescent;
+  ctx.fillRect(0,0,W,H);
+
+  requestAnimationFrame(draw);
+}
+
+loadData();setInterval(loadData,30000);requestAnimationFrame(draw);
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "post_number": 15222,
+  "first_run": {
+    "timestamp": "2026-04-17T01:09:28Z",
+    "blocks": [
+      {
+        "code": "; EDIT THESE: two starting numbers. Longest Collatz chain wins.\n(define A 27)\n(define B 97)\n(define (collatz n)\n  (if (= n 1) (list 1)\n      (if (= (modulo n 2) 0)\n          (append (list n) (collatz (floor (/ n 2))))\n          (append (list n) (collatz (+ (* 3 n) 1))))))\n(define path-a (collatz A))\n(define path-b (collatz B))\n(define (peak lst) (reduce (lambda (a b) (if (> a b) a b)) lst))\n(define result\n  (cond ((> (length path-a) (length path-b))\n         (string-append (number->string A) \" WINS (length \" (number->string (length path-a)) \")\"))\n        ((< (length path-a) (length path-b))\n         (string-append (number->string B) \" WINS (length \" (number->string (length path-b)) \")\"))\n        (else \"TIE\")))\n(list (list \"A\" A)\n      (list \"A-length\" (length path-a))\n      (list \"A-peak\" (peak path-a))\n      (list \"B\" B)\n      (list \"B-length\" (length path-b))\n      (list \"B-peak\" (peak path-b))\n      (list \"WINNER\" result))",
+        "output": "[\n  [\n    \"A\",\n    27\n  ],\n  [\n    \"A-length\",\n    112\n  ],\n  [\n    \"A-peak\",\n    9232\n  ],\n  [\n    \"B\",\n    97\n  ],\n  [\n    \"B-length\",\n    119\n  ],\n  [\n    \"B-peak\",\n    9232\n  ],\n  [\n    \"WINNER\",\n    \"97 WINS (length 119)\"\n  ]\n]",
+        "error": null,
+        "duration_ms": 139,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T01:09:28Z",
+      "blocks": [
+        {
+          "code": "; EDIT THESE: two starting numbers. Longest Collatz chain wins.\n(define A 27)\n(define B 97)\n(define (collatz n)\n  (if (= n 1) (list 1)\n      (if (= (modulo n 2) 0)\n          (append (list n) (collatz (floor (/ n 2))))\n          (append (list n) (collatz (+ (* 3 n) 1))))))\n(define path-a (collatz A))\n(define path-b (collatz B))\n(define (peak lst) (reduce (lambda (a b) (if (> a b) a b)) lst))\n(define result\n  (cond ((> (length path-a) (length path-b))\n         (string-append (number->string A) \" WINS (length \" (number->string (length path-a)) \")\"))\n        ((< (length path-a) (length path-b))\n         (string-append (number->string B) \" WINS (length \" (number->string (length path-b)) \")\"))\n        (else \"TIE\")))\n(list (list \"A\" A)\n      (list \"A-length\" (length path-a))\n      (list \"A-peak\" (peak path-a))\n      (list \"B\" B)\n      (list \"B-length\" (length path-b))\n      (list \"B-peak\" (peak path-b))\n      (list \"WINNER\" result))",
+          "output": "[\n  [\n    \"A\",\n    27\n  ],\n  [\n    \"A-length\",\n    112\n  ],\n  [\n    \"A-peak\",\n    9232\n  ],\n  [\n    \"B\",\n    97\n  ],\n  [\n    \"B-length\",\n    119\n  ],\n  [\n    \"B-peak\",\n    9232\n  ],\n  [\n    \"WINNER\",\n    \"97 WINS (length 119)\"\n  ]\n]",
+          "error": null,
+          "duration_ms": 139,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

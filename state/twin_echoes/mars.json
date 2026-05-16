@@ -1,0 +1,178 @@
+{
+  "_meta": {
+    "updated_at": "2026-04-16T01:10:43Z",
+    "source": "NASA REMS + InSight",
+    "platform": "mars",
+    "type": "physical_twin",
+    "nasa_api_key": "DEMO_KEY",
+    "materialized_at": "2026-04-16T23:26:31Z",
+    "tier": "real",
+    "tier_reason": "Live NASA REMS/InSight telemetry via mars_twin.py",
+    "tier_updated_at": "2026-04-16T23:26:31Z"
+  },
+  "current_sol": {
+    "sol": 4864,
+    "earth_date": "2026-04-12",
+    "min_temp_c": -68.0,
+    "max_temp_c": -15.0,
+    "pressure_pa": 849.0,
+    "uv_index": "Sunny",
+    "season": "Month 9",
+    "sunrise": "05:55",
+    "sunset": "18:13",
+    "min_gts_temp_c": -82.0,
+    "max_gts_temp_c": 0.0
+  },
+  "recent_sols": [
+    {
+      "sol": 4864,
+      "earth_date": "2026-04-12",
+      "min_temp_c": -68.0,
+      "max_temp_c": -15.0,
+      "pressure_pa": 849.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:55",
+      "sunset": "18:13",
+      "min_gts_temp_c": -82.0,
+      "max_gts_temp_c": 0.0
+    },
+    {
+      "sol": 4863,
+      "earth_date": "2026-04-11",
+      "min_temp_c": -70.0,
+      "max_temp_c": -5.0,
+      "pressure_pa": 847.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:54",
+      "sunset": "18:12",
+      "min_gts_temp_c": -85.0,
+      "max_gts_temp_c": 4.0
+    },
+    {
+      "sol": 4862,
+      "earth_date": "2026-04-10",
+      "min_temp_c": -68.0,
+      "max_temp_c": -8.0,
+      "pressure_pa": 847.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:54",
+      "sunset": "18:11",
+      "min_gts_temp_c": -83.0,
+      "max_gts_temp_c": 3.0
+    },
+    {
+      "sol": 4861,
+      "earth_date": "2026-04-09",
+      "min_temp_c": -69.0,
+      "max_temp_c": -6.0,
+      "pressure_pa": 850.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:53",
+      "sunset": "18:11",
+      "min_gts_temp_c": -81.0,
+      "max_gts_temp_c": 6.0
+    },
+    {
+      "sol": 4860,
+      "earth_date": "2026-04-08",
+      "min_temp_c": -69.0,
+      "max_temp_c": -3.0,
+      "pressure_pa": 850.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:52",
+      "sunset": "18:10",
+      "min_gts_temp_c": -99.0,
+      "max_gts_temp_c": 7.0
+    },
+    {
+      "sol": 4859,
+      "earth_date": "2026-04-07",
+      "min_temp_c": -68.0,
+      "max_temp_c": -5.0,
+      "pressure_pa": 849.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:52",
+      "sunset": "18:09",
+      "min_gts_temp_c": -90.0,
+      "max_gts_temp_c": 8.0
+    },
+    {
+      "sol": 4858,
+      "earth_date": "2026-04-06",
+      "min_temp_c": -68.0,
+      "max_temp_c": 1.0,
+      "pressure_pa": 850.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:51",
+      "sunset": "18:08",
+      "min_gts_temp_c": -85.0,
+      "max_gts_temp_c": 8.0
+    },
+    {
+      "sol": 4857,
+      "earth_date": "2026-04-05",
+      "min_temp_c": -69.0,
+      "max_temp_c": -2.0,
+      "pressure_pa": 849.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:50",
+      "sunset": "18:08",
+      "min_gts_temp_c": -81.0,
+      "max_gts_temp_c": 8.0
+    },
+    {
+      "sol": 4856,
+      "earth_date": "2026-04-04",
+      "min_temp_c": -69.0,
+      "max_temp_c": -2.0,
+      "pressure_pa": 851.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:50",
+      "sunset": "18:07",
+      "min_gts_temp_c": -77.0,
+      "max_gts_temp_c": 6.0
+    },
+    {
+      "sol": 4855,
+      "earth_date": "2026-04-03",
+      "min_temp_c": -68.0,
+      "max_temp_c": 1.0,
+      "pressure_pa": 851.0,
+      "uv_index": "Sunny",
+      "season": "Month 9",
+      "sunrise": "05:49",
+      "sunset": "18:06",
+      "min_gts_temp_c": -90.0,
+      "max_gts_temp_c": 7.0
+    }
+  ],
+  "anomalies": [],
+  "latest_photos": [],
+  "forecast": "",
+  "insight": {
+    "available": true,
+    "latest_sol": 675,
+    "avg_temp_c": -62.314,
+    "wind_speed_ms": 7.233
+  },
+  "history": [
+    {
+      "sol": 4864,
+      "synced_at": "2026-04-16T01:10:43Z",
+      "anomaly_count": 0,
+      "data_sources": [
+        "rems",
+        "insight"
+      ]
+    }
+  ]
+}

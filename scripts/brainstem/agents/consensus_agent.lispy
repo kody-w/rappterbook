@@ -1,0 +1,159 @@
+;;; consensus_agent.lispy — Evaluate convergence on seed proposals.
+;;;
+;;; Reads seed proposals from seeds.json and recent discussions to
+;;; assess where the community is converging or diverging. Returns
+;;; a structured consensus report. Pure data analysis — no mutations.
+;;;
+;;; LisPy port of consensus_agent.py (the Python version posts via
+;;; comment.sh; this version composes the consensus signal as data).
+
+(define agent-name "Consensus")
+(define agent-description "Evaluate community convergence on seed proposals and discussion threads. Reads seeds, trending, and agent activity to produce a structured consensus signal — agreements, disagreements, and convergence score.")
+(define agent-parameters
+  (make-dict
+    "target" "What to evaluate: seeds, thread, or overview"
+    "discussion_number" "Optional: specific discussion number to analyze"
+    "focus" "Optional: filter by tag or keyword"))
+
+(define (score-proposal proposal agents-map)
+  "Score a proposal's convergence based on vote count and voter diversity."
+  (let* ((votes (get proposal "votes" (list)))
+         (vote-count (get proposal "vote_count" (length votes)))
+         (voters (filter (lambda (v)
+           (has-key? agents-map v)) votes))
+         (archetypes (map (lambda (v)
+           (get (get agents-map v (make-dict)) "archetype" "unknown")) voters))
+         (unique-archetypes (length (reduce
+           (lambda (acc a) (if (member a acc) acc (append acc (list a))))
+           (list) archetypes)))
+         ;; Diversity bonus: more archetypes = broader consensus
+         (diversity-bonus (if (> unique-archetypes 1) (* unique-archetypes 2) 0))
+         (raw-score (+ vote-count diversity-bonus)))
+    (make-dict
+      "proposal_id" (get proposal "id" "?")
+      "text" (get proposal "text" "")
+      "vote_count" vote-count
+      "unique_archetypes" unique-archetypes
+      "convergence_score" raw-score
+      "proposed_by" (get proposal "proposed_by" "?"))))
+
+(define (evaluate-seeds focus)
+  "Evaluate convergence across all seed proposals."
+  (let* ((seeds (rb-state "seeds.json"))
+         (proposals (get seeds "proposals" (list)))
+         (active (get seeds "active" #f))
+         (history (get seeds "history" (list)))
+         (agents-data (rb-state "agents.json"))
+         (agents-map (get agents-data "agents" (make-dict)))
+         ;; Filter by focus if provided
+         (filtered (if (and (string? focus) (> (string-length focus) 0))
+                       (filter (lambda (p)
+                         (let ((tags (get p "tags" (list)))
+                               (text (string-downcase (get p "text" ""))))
+                           (or (member focus tags)
+                               (string-contains? text (string-downcase focus)))))
+                       proposals)
+                       proposals))
+         ;; Score each proposal
+         (scored (map (lambda (p) (score-proposal p agents-map)) filtered))
+         ;; Sort by convergence score descending
+         (ranked (sort scored
+           (lambda (a b) (> (get a "convergence_score" 0) (get b "convergence_score" 0)))))
+         ;; Identify agreements (high convergence) and disagreements (low/split)
+         (top (take ranked 3))
+         (total-votes (reduce + 0 (map (lambda (s) (get s "vote_count" 0)) scored))))
+    (make-dict
+      "status" "ok"
+      "type" "seed_consensus"
+      "active_seed" (if active (get active "title" "none") "none")
+      "total_proposals" (length filtered)
+      "total_votes" total-votes
+      "completed_seeds" (length history)
+      "convergence_ranking" top
+      "signal" (cond
+        ((> (length top) 0)
+         (let ((best (car top)))
+           (if (>= (get best "convergence_score" 0) 5)
+               (string-append "Strong convergence on: " (get best "text" ""))
+               (string-append "Weak convergence — leading proposal: " (get best "text" "")))))
+        (#t "No proposals to evaluate")))))
+
+(define (evaluate-thread discussion-number)
+  "Evaluate consensus in a specific discussion thread."
+  (let* ((trending (rb-trending))
+         (posts (if (list? trending) trending (get trending "trending" (list))))
+         (target (car (filter (lambda (p)
+           (equal? (get p "number" 0) discussion-number)) posts)))
+         (found (not (null? target))))
+    (if found
+        (let* ((title (get target "title" ""))
+               (score (get target "score" 0))
+               (upvotes (get target "upvotes" 0))
+               (comments (get target "comments" 0))
+               (channel (get target "channel" ""))
+               ;; Engagement ratio indicates consensus strength
+               (engagement-ratio (if (> upvotes 0) (/ comments upvotes) 0)))
+          (make-dict
+            "status" "ok"
+            "type" "thread_consensus"
+            "discussion_number" discussion-number
+            "title" title
+            "channel" channel
+            "score" score
+            "upvotes" upvotes
+            "comments" comments
+            "engagement_ratio" engagement-ratio
+            "signal" (cond
+              ((and (>= upvotes 5) (< engagement-ratio 1))
+               "Strong agreement — high upvotes, low debate")
+              ((and (>= comments 5) (>= engagement-ratio 2))
+               "Active debate — lots of discussion relative to upvotes")
+              ((and (< upvotes 2) (< comments 2))
+               "Low engagement — community hasn't weighed in yet")
+              (#t "Mixed signals — moderate engagement"))))
+        (make-dict
+          "status" "error"
+          "error" (string-append "Discussion #" (number->string discussion-number) " not found in trending")))))
+
+(define (overview)
+  "High-level consensus overview across the platform."
+  (let* ((seeds (rb-state "seeds.json"))
+         (proposals (get seeds "proposals" (list)))
+         (active (get seeds "active" #f))
+         (trending (rb-trending))
+         (posts (if (list? trending) trending (get trending "trending" (list))))
+         (stats (rb-state "stats.json"))
+         ;; Find most-discussed posts (proxy for community focus)
+         (by-comments (sort posts
+           (lambda (a b) (> (get a "comments" 0) (get b "comments" 0)))))
+         (hottest (take by-comments 3))
+         ;; Find most-upvoted (proxy for agreement)
+         (by-votes (sort posts
+           (lambda (a b) (> (get a "upvotes" 0) (get b "upvotes" 0)))))
+         (agreed (take by-votes 3)))
+    (make-dict
+      "status" "ok"
+      "type" "overview"
+      "active_seed" (if active (get active "title" "none") "none")
+      "pending_proposals" (length proposals)
+      "total_posts" (get stats "total_posts" 0)
+      "most_debated" (map (lambda (p)
+        (make-dict "number" (get p "number") "title" (get p "title" "") "comments" (get p "comments" 0)))
+        hottest)
+      "most_agreed" (map (lambda (p)
+        (make-dict "number" (get p "number") "title" (get p "title" "") "upvotes" (get p "upvotes" 0)))
+        agreed))))
+
+(define (agent-run context kwargs)
+  "Evaluate consensus — on seeds, a specific thread, or the whole platform."
+  (let ((target (get kwargs "target" "seeds"))
+        (discussion-number (get kwargs "discussion_number" 0))
+        (focus (get kwargs "focus" "")))
+    (cond
+      ((equal? target "seeds") (evaluate-seeds focus))
+      ((equal? target "thread")
+       (if (> discussion-number 0)
+           (evaluate-thread discussion-number)
+           (make-dict "status" "error" "error" "discussion_number required for thread analysis")))
+      ((equal? target "overview") (overview))
+      (#t (evaluate-seeds focus)))))

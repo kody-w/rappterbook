@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Virtual Brainstem — RAPP in your browser</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Brainstem">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0d1117">
+<meta name="color-scheme" content="dark">
+<style>
+  :root {
+    --bg: #0d1117; --fg: #c9d1d9; --accent: #58a6ff;
+    --border: #30363d; --panel: #161b22;
+    --ok: #3fb950; --warn: #f0883e; --err: #f85149;
+    --user: #58a6ff; --assistant: #3fb950; --tool: #f0883e;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    /* iOS dynamic viewport — accounts for the address bar */
+    height: 100dvh;
+    margin: 0;
+    /* Safe-area so the notch + home-indicator don't clip content */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    background: var(--bg);
+    overscroll-behavior: none;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+    background: var(--bg); color: var(--fg); line-height: 1.5;
+    display: flex; flex-direction: column;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  header {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.75rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+    flex-shrink: 0;
+  }
+  header h1 { margin: 0; font-size: 1.1rem; color: var(--accent); font-weight: 600; }
+  header .status { padding: 0.15em 0.6em; font-size: 0.75rem; border-radius: 3px;
+                   background: var(--bg); border: 1px solid var(--border); }
+  header .status.ok { color: var(--ok); border-color: var(--ok); }
+  header .status.loading { color: var(--warn); border-color: var(--warn); }
+  header .status.err { color: var(--err); border-color: var(--err); }
+  header .sub { flex: 1; font-size: 0.85rem; opacity: 0.7; }
+  header button {
+    background: var(--bg); color: var(--fg);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 0.5rem 0.9rem; font-family: inherit; font-size: 14px; cursor: pointer;
+    min-height: 38px; min-width: 38px;
+  }
+  header button:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 800px) {
+    header { padding: 0.5rem 0.75rem; gap: 0.5rem; }
+    header h1 { font-size: 1rem; }
+    header .sub { display: none; }  /* tagline hidden on narrow screens */
+  }
+
+  main {
+    flex: 1; display: grid; grid-template-columns: 1fr 320px; gap: 0; min-height: 0;
+    position: relative;  /* anchor for mobile drawer */
+  }
+  @media (max-width: 800px) {
+    main { grid-template-columns: 1fr; }
+    /* Mobile: sidebar becomes a slide-over drawer so chat stays visible */
+    aside {
+      position: absolute;
+      top: 0; bottom: 0; right: 0;
+      width: min(92vw, 380px);
+      z-index: 50;
+      transform: translateX(100%);
+      transition: transform 0.22s ease-out;
+      box-shadow: -4px 0 16px rgba(0, 0, 0, 0.4);
+      border-left: 1px solid var(--border);
+    }
+    aside.open { transform: translateX(0); }
+    /* Backdrop behind the drawer to dismiss by tap */
+    .drawer-backdrop {
+      position: absolute; inset: 0; z-index: 40;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.22s ease-out;
+    }
+    aside.open ~ .drawer-backdrop,
+    body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
+  }
+
+  #chat {
+    display: flex; flex-direction: column; min-height: 0;
+    border-right: 1px solid var(--border);
+  }
+  #messages {
+    flex: 1; overflow-y: auto; padding: 1rem 1.5rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+    -webkit-overflow-scrolling: touch;  /* momentum scroll on iOS */
+  }
+  @media (max-width: 800px) {
+    #messages { padding: 0.75rem 0.9rem; gap: 0.5rem; }
+    .msg .body { padding: 0.6rem 0.75rem; font-size: 15px; }
+  }
+  .msg { max-width: 800px; }
+  .msg .role { font-size: 0.72rem; opacity: 0.7; margin-bottom: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .msg.user .role { color: var(--user); }
+  .msg.assistant .role { color: var(--assistant); }
+  .msg.tool .role { color: var(--tool); }
+  .msg.system .role { color: var(--warn); }
+  .msg .body {
+    padding: 0.7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .msg.user .body { border-left: 3px solid var(--user); }
+  .msg.assistant .body { border-left: 3px solid var(--assistant); }
+  .msg.tool .body { border-left: 3px solid var(--tool); font-size: 0.85rem; opacity: 0.9; }
+
+  #input-area {
+    display: flex; gap: 0.5rem; padding: 0.75rem 1.5rem;
+    border-top: 1px solid var(--border); background: var(--panel);
+  }
+  @media (max-width: 800px) {
+    #input-area { padding: 0.6rem 0.75rem; gap: 0.4rem; }
+  }
+  #input {
+    flex: 1; resize: none; min-height: 44px; max-height: 160px;
+    padding: 0.7rem 0.8rem;
+    background: var(--bg); color: var(--fg);
+    border: 1px solid var(--border); border-radius: 6px;
+    font-family: inherit;
+    /* 16px prevents iOS Safari auto-zoom on focus */
+    font-size: 16px;
+  }
+  #input:focus { border-color: var(--accent); outline: none; }
+  button.send {
+    background: var(--accent); color: var(--bg);
+    border: none; padding: 0 1.2rem; border-radius: 6px;
+    font-weight: 700; font-family: inherit; cursor: pointer;
+    min-height: 44px; min-width: 70px;
+    font-size: 15px;
+  }
+  button.send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  aside {
+    display: flex; flex-direction: column; min-height: 0;
+    background: var(--panel); overflow-y: auto;
+  }
+  aside h3 { margin: 0; padding: 0.75rem 1rem 0.4rem 1rem;
+             font-size: 0.85rem; color: var(--accent);
+             text-transform: uppercase; letter-spacing: 0.05em; }
+  aside section { padding: 0 1rem 1rem 1rem; border-bottom: 1px solid var(--border); }
+  aside label { display: block; font-size: 0.8rem; opacity: 0.8; margin: 0.4rem 0 0.2rem; }
+  aside input[type="text"], aside input[type="password"], aside select, aside textarea {
+    width: 100%; padding: 0.55rem 0.7rem;
+    background: var(--bg); color: var(--fg);
+    border: 1px solid var(--border); border-radius: 4px;
+    font-family: inherit;
+    /* 16px avoids iOS auto-zoom-on-focus */
+    font-size: 16px;
+    min-height: 40px;
+  }
+  aside textarea { resize: vertical; min-height: 80px; }
+  aside button {
+    background: var(--bg); color: var(--fg);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 0.5rem 0.85rem; font-family: inherit; font-size: 14px;
+    cursor: pointer; margin: 0.3rem 0.3rem 0 0;
+    min-height: 38px;
+  }
+  aside button.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 600; }
+  aside button:hover { border-color: var(--accent); color: var(--accent); }
+  aside button.primary:hover { filter: brightness(1.1); color: var(--bg); }
+
+  .agent-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.4rem 0; font-size: 14px;
+    min-height: 32px;
+  }
+  .agent-item input[type="checkbox"] {
+    width: 20px; height: 20px; margin: 0;  /* bigger tap target on touch */
+  }
+  @media (max-width: 800px) {
+    #rar-list { max-height: 50vh !important; }  /* more room on narrow screens */
+    #rar-list > div {
+      padding: 0.6rem 0.7rem !important;
+      gap: 0.5rem !important;
+    }
+    #rar-list button {
+      min-height: 36px !important; min-width: 64px !important;
+      font-size: 13px !important; padding: 0.4rem 0.7rem !important;
+    }
+    #rar-search { font-size: 16px; min-height: 40px; }
+  }
+  .agent-item input[type="checkbox"] { margin: 0; }
+  .agent-name { flex: 1; }
+  .agent-desc { font-size: 0.75rem; opacity: 0.6; margin-top: 0.1rem; }
+
+  #logs {
+    padding: 0.5rem 1rem; font-size: 0.75rem;
+    max-height: 140px; overflow-y: auto;
+    color: var(--tool); white-space: pre-wrap;
+  }
+  .hint { font-size: 0.78rem; opacity: 0.7; margin-top: 0.3em; }
+  a { color: var(--accent); }
+  kbd {
+    background: var(--bg); padding: 0.1em 0.4em;
+    border: 1px solid var(--border); border-radius: 3px; font-size: 0.85em;
+  }
+
+  /* Agent-call output under each assistant message — matches rapp-installer UI */
+  .agent-logs-wrapper {
+    margin-top: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: logsAppear 0.3s ease-out;
+  }
+  @keyframes logsAppear {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .logs-label {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 10px; background: var(--bg);
+    color: #8b949e; font-size: 10px; font-weight: 600;
+    font-family: "SF Mono", Menlo, monospace;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    cursor: pointer; user-select: none;
+  }
+  .logs-label:hover { background: var(--panel); color: var(--fg); }
+  .logs-label .arrow { transition: transform 0.2s; font-size: 8px; }
+  .logs-label .arrow.open { transform: rotate(90deg); }
+  .logs-label .agent-name-tag { color: #d2a8ff; text-transform: none; letter-spacing: 0; }
+  .agent-logs {
+    padding: 8px 10px; background: var(--bg);
+    font-size: 11px; color: #7ee787;
+    font-family: "SF Mono", Menlo, monospace;
+    white-space: pre-wrap; max-height: 200px;
+    overflow-y: auto; border-top: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .agent-logs.collapsed { display: none; }
+
+  /* Drag-drop overlay */
+  body.dragging::before {
+    content: "Drop agent .py file to hot-load";
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(88, 166, 255, 0.15);
+    border: 4px dashed var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent); font-size: 2rem; font-weight: 700;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Virtual Brainstem</h1>
+  <span id="status" class="status loading">loading…</span>
+  <span class="sub">A RAPP brainstem in your browser. Agents hot-load. Keys stay local.</span>
+  <button id="toggle-agents" title="Browse + install agents from the RAR registry">Agents</button>
+  <button id="toggle-sidebar">Settings</button>
+</header>
+
+<main>
+  <div id="chat">
+    <div id="messages">
+      <div class="msg system">
+        <div class="role">system</div>
+        <div class="body">Booting Pyodide… this takes 30–90s on first visit, then the VM is cached. You'll need an OpenAI (or Azure OpenAI) API key — set it in Settings.</div>
+      </div>
+    </div>
+    <div id="input-area">
+      <textarea id="input" placeholder="Type a message…  (Enter to send · Shift+Enter for newline)" disabled></textarea>
+      <button id="send" class="send" disabled>Send</button>
+    </div>
+  </div>
+
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+
+  <aside id="sidebar">
+    <section>
+      <h3 style="padding-left: 0;">LLM provider</h3>
+      <label>Provider</label>
+      <select id="provider">
+        <option value="openai">OpenAI</option>
+        <option value="azure">Azure OpenAI (Microsoft Foundry)</option>
+        <option value="github">GitHub (Copilot models)</option>
+      </select>
+      <label>Model / Deployment</label>
+      <input type="text" id="model" placeholder="gpt-4o-mini" list="model-hints">
+      <datalist id="model-hints">
+        <option value="openai/gpt-4o">
+        <option value="openai/gpt-4o-mini">
+        <option value="openai/o1-mini">
+        <option value="openai/o1">
+        <option value="anthropic/claude-3-5-sonnet">
+        <option value="meta/llama-3.1-70b-instruct">
+      </datalist>
+      <label id="endpoint-label" style="display:none">Azure endpoint</label>
+      <input type="text" id="endpoint" placeholder="https://YOUR.openai.azure.com/openai/v1/chat/completions" style="display:none">
+      <label>API key <span id="apikey-hint" style="font-size:0.75rem;opacity:0.7"></span></label>
+      <input type="password" id="apikey" placeholder="sk-… or paste, then click Save">
+      <div>
+        <button id="save-settings" class="primary">Save</button>
+        <button id="clear-settings">Forget</button>
+      </div>
+      <div class="hint">Stored in localStorage on this device only. Never transmitted.</div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:0.8rem 0 0.5rem">
+      <label>Upload .env file</label>
+      <input type="file" id="envfile" accept=".env,.txt,text/plain" style="width:100%;font-size:0.8rem;color:var(--fg)">
+      <div>
+        <button id="download-env-template">Download template</button>
+      </div>
+      <div class="hint">Reads locally in your browser. File contents never leave your device. Recognized keys: <code>AZURE_OPENAI_API_KEY</code>, <code>AZURE_OPENAI_ENDPOINT</code>, <code>AZURE_OPENAI_DEPLOYMENT</code>, <code>OPENAI_API_KEY</code>, <code>OPENAI_MODEL</code>.</div>
+    </section>
+
+    <section>
+      <h3 style="padding-left: 0;">Rapp egg (portable daemon)</h3>
+      <div class="hint" style="margin-top:0">
+        <strong>The brainstem is the forge.</strong> Iterate on a rapp here —
+        draft its soul, drop in agents, seed its memory. When it's ready, export
+        a <code>.rapp.egg</code> and promote it to the <strong>hippocampus
+        (communityRAPP)</strong> where it becomes a full organism with shared
+        memory and real users. Export from there later, re-hatch in the
+        brainstem, keep evolving. One rapp, two environments, continuous loop.
+      </div>
+      <pre style="font-size:0.72rem; background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:0.5rem 0.6rem; margin:0.5rem 0; color:var(--fg); line-height:1.4; overflow-x:auto">  FORGE                            THEATRE
+  ─────                            ───────
+  brainstem                        hippocampus
+  (dev tools)     ⇄ .rapp.egg ⇄    (communityRAPP)
+  single user                      multi-user
+  browser/local                    server/shared</pre>
+      <div>
+        <button id="export-egg" class="primary">Export .rapp.egg</button>
+        <button id="import-egg-btn">Import .egg…</button>
+        <input type="file" id="import-egg-input" accept=".egg,.json,application/json,text/plain" style="display:none">
+      </div>
+      <div class="hint" style="margin-top:0.3rem">
+        Conforms to <a href="EGG_SPEC.md" target="_blank">Egg Spec v1</a>, scale=daemon.
+        API key never packed. The <a href="kodyTwinAI.rapp.egg" target="_blank">kodyTwinAI.rapp.egg</a>
+        seed ships in the repo — download + import to start from Kody's twin.
+      </div>
+    </section>
+
+    <section>
+      <h3 style="padding-left: 0;">Soul (system prompt)</h3>
+      <textarea id="soul" placeholder="You are the Virtual Brainstem…"></textarea>
+      <button id="save-soul">Save soul</button>
+      <button id="reset-soul">Reset default</button>
+    </section>
+
+    <section>
+      <h3 style="padding-left: 0;">RAR Registry</h3>
+      <div style="display:flex; gap:0.4rem; align-items:center; margin-bottom:0.3rem">
+        <input type="text" id="rar-search" placeholder="Search agents (name/tag/description)" style="flex:1">
+        <button id="rar-refresh" title="Reload from kody-w.github.io/RAR">↻</button>
+      </div>
+      <div id="rar-status" class="hint" style="margin-top:0">Click ↻ to load from <a href="https://kody-w.github.io/RAR" target="_blank">kody-w/RAR</a>.</div>
+      <div id="rar-list" style="max-height:260px; overflow-y:auto; margin-top:0.4rem; border:1px solid var(--border); border-radius:4px;"></div>
+    </section>
+
+    <section>
+      <h3 style="padding-left: 0;">Agents</h3>
+      <div id="agents-list"></div>
+      <div class="hint">Check to enable. The LLM auto-routes based on your message.</div>
+      <div class="hint" style="margin-top:0.6rem">
+        <strong>Hot-load:</strong> drag a <code>.py</code> file onto this page.
+        The file must define a class extending <code>BasicAgent</code> with a
+        <code>name</code>, <code>metadata</code> dict (OpenAI function format), and
+        <code>perform(**kwargs)</code> method. For HTTP calls, implement
+        <code>async def perform_async(**kwargs)</code> instead — the brainstem awaits it.
+      </div>
+      <div style="margin-top:0.4rem">
+        <button id="download-basic-agent">Download basic_agent.py</button>
+        <button id="download-sample-agent">Download sample agent</button>
+      </div>
+      <button id="clear-custom-agents" style="margin-top:0.4rem">Forget dropped agents</button>
+    </section>
+
+    <section>
+      <h3 style="padding-left: 0;">Agent logs</h3>
+      <div id="logs">(none yet)</div>
+      <button id="clear-logs">Clear</button>
+      <button id="reset-memory">Wipe memory</button>
+    </section>
+
+    <section style="border-bottom: none;">
+      <h3 style="padding-left: 0;">About</h3>
+      <div class="hint">
+        Browser port of <a href="https://github.com/kody-w/rapp-installer" target="_blank">rapp-installer</a>'s
+        <code>rapp_brainstem</code>. Runs <code>brainstem.py</code>-style tool-calling via Pyodide.
+        Memory persists to localStorage. No server.
+      </div>
+    </section>
+  </aside>
+</main>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const DEFAULT_SOUL = `You are the Virtual Brainstem — a browser-native AI assistant running entirely on the user's device via Pyodide + WebAssembly.
+
+You have specialized agents you can call to accomplish tasks. Each tool you see is an agent the user has enabled. Call them when appropriate; respond directly when the user just wants conversation.
+
+Personality:
+- Direct and concise — respect the user's time.
+- Honest about limits — say "I don't know" rather than guess.
+- When you call an agent, briefly narrate why before calling it.
+
+The user's persistent memory lives in browser localStorage under keys you can access via the ManageMemory and ContextMemory agents. Use them to build continuity across sessions.`;
+
+  const $ = id => document.getElementById(id);
+  const statusEl = $("status");
+  const messagesEl = $("messages");
+  const inputEl = $("input");
+  const sendBtn = $("send");
+
+  let pyodide = null;
+  let conversationHistory = [];
+
+  function setStatus(cls, text) {
+    statusEl.className = "status " + cls;
+    statusEl.textContent = text;
+  }
+
+  function addMsg(role, body, cls, logs) {
+    const div = document.createElement("div");
+    div.className = "msg " + (cls || role);
+    const r = document.createElement("div"); r.className = "role"; r.textContent = role;
+    const b = document.createElement("div"); b.className = "body"; b.textContent = body;
+    div.appendChild(r); div.appendChild(b);
+
+    // Agent-call output — matches rapp-installer UI exactly
+    if (logs && logs.length > 0) {
+      const logsText = Array.isArray(logs) ? logs.join("\n") : String(logs);
+      if (logsText.trim().length > 0) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "agent-logs-wrapper";
+
+        // Extract unique agent names from "[AgentName] ..." lines
+        const agentNames = [...new Set(
+          (logsText.match(/\[([^\]]+)\]/g) || [])
+            .map(m => m.slice(1, -1))
+            .filter(n => !n.startsWith("round "))
+        )];
+
+        const label = document.createElement("div");
+        label.className = "logs-label";
+        const nameTag = agentNames.length > 0
+          ? '<span class="agent-name-tag">' + agentNames.map(n => n.replace(/[<>&"]/g, "")).join(", ") + '</span> '
+          : "";
+        label.innerHTML = '<span class="arrow">\u25B6</span> ' + nameTag + "Agent Called";
+
+        const logBox = document.createElement("div");
+        logBox.className = "agent-logs collapsed";
+        logBox.textContent = logsText;
+
+        label.addEventListener("click", () => {
+          logBox.classList.toggle("collapsed");
+          label.querySelector(".arrow").classList.toggle("open");
+        });
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(logBox);
+        b.parentElement.appendChild(wrapper);
+      }
+    }
+
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  function appendLog(line) {
+    const logs = $("logs");
+    if (logs.textContent === "(none yet)") logs.textContent = "";
+    logs.textContent += line + "\n";
+    logs.scrollTop = logs.scrollHeight;
+  }
+
+  // --- Settings persistence ---
+  function providerLabel(provider, model) {
+    if (provider === "azure") return `Azure · ${model || "(deployment?)"}`;
+    if (provider === "github") return `GitHub · ${model || "gpt-4o-mini"}`;
+    return `OpenAI · ${model || "gpt-4o-mini"}`;
+  }
+
+  function saveSettings() {
+    // Auto-correct provider based on signals that can't mismatch:
+    //   - endpoint URL set → Azure
+    //   - token looks like a GitHub PAT → GitHub
+    // Prevents silent provider mismatches that return confusing 401s.
+    let provider = $("provider").value;
+    const endpoint = $("endpoint").value.trim();
+    const apikey = $("apikey").value;
+    const looksGithub = apikey.startsWith("gho_") || apikey.startsWith("github_pat_") || apikey.startsWith("ghp_");
+
+    if (endpoint) {
+      provider = "azure";
+    } else if (looksGithub && provider !== "github") {
+      provider = "github";
+    }
+    if ($("provider").value !== provider) {
+      $("provider").value = provider;
+      updateProviderVisibility();
+    }
+
+    const settings = {
+      provider: provider,
+      model: $("model").value,
+      endpoint: endpoint,
+      apikey: apikey,
+    };
+    localStorage.setItem("brainstem_settings", JSON.stringify(settings));
+    updatePyEnv();
+    const label = providerLabel(provider, settings.model);
+    setStatus("ok", "saved · " + label);
+    setTimeout(() => setStatus("ok", label), 1500);
+  }
+
+  function loadSettings() {
+    const raw = localStorage.getItem("brainstem_settings");
+    if (!raw) return { provider: "openai", model: "gpt-4o-mini", endpoint: "", apikey: "" };
+    try { return JSON.parse(raw); } catch { return {}; }
+  }
+
+  function applySettingsToUI(s) {
+    $("provider").value = s.provider || "openai";
+    $("model").value = s.model || (s.provider === "azure" ? "gpt-5.4" : "gpt-4o-mini");
+    $("endpoint").value = s.endpoint || "";
+    $("apikey").value = s.apikey || "";
+    updateProviderVisibility();
+  }
+
+  function updateProviderVisibility() {
+    const provider = $("provider").value;
+    const isAzure = provider === "azure";
+    const isGithub = provider === "github";
+    $("endpoint-label").style.display = isAzure ? "block" : "none";
+    $("endpoint").style.display = isAzure ? "block" : "none";
+
+    // Sensible default model per provider
+    const currentModel = $("model").value;
+    if (isAzure && (!currentModel || currentModel.startsWith("openai/") || currentModel.startsWith("gpt-4o"))) {
+      $("model").value = "gpt-5.4";
+    } else if (isGithub && (!currentModel || currentModel === "gpt-5.4" || !currentModel.includes("/"))) {
+      $("model").value = "openai/gpt-4o-mini";
+    } else if (!isAzure && !isGithub && !currentModel) {
+      $("model").value = "gpt-4o-mini";
+    }
+
+    // Contextual placeholder for API key
+    const apiKeyInput = $("apikey");
+    const hint = $("apikey-hint");
+    if (isGithub) {
+      apiKeyInput.placeholder = "GitHub PAT (gho_… or github_pat_…) — needs models:read scope";
+      hint.innerHTML = ' · <a href="https://github.com/settings/tokens/new?scopes=&description=Virtual%20Brainstem" target="_blank" style="color:var(--accent)">Create PAT</a> · or run <code>gh auth token</code>';
+    } else if (isAzure) {
+      apiKeyInput.placeholder = "Azure OpenAI api-key (from Microsoft Foundry)";
+      hint.innerHTML = "";
+    } else {
+      apiKeyInput.placeholder = "sk-… OpenAI API key";
+      hint.innerHTML = "";
+    }
+  }
+
+  $("provider").addEventListener("change", updateProviderVisibility);
+
+  $("save-settings").addEventListener("click", saveSettings);
+  $("clear-settings").addEventListener("click", () => {
+    if (!confirm("Forget API key and settings from this device?")) return;
+    localStorage.removeItem("brainstem_settings");
+    applySettingsToUI({});
+    if (pyodide) updatePyEnv();
+    setStatus("ok", "forgotten");
+    setTimeout(() => setStatus("ok", "ready"), 1500);
+  });
+
+  // --- .env file upload: parse locally, populate settings, never transmit ---
+  function parseEnvText(text) {
+    const env = {};
+    for (const rawLine of text.split(/\r?\n/)) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith("#")) continue;
+      const eq = line.indexOf("=");
+      if (eq < 0) continue;
+      const key = line.slice(0, eq).trim();
+      let val = line.slice(eq + 1).trim();
+      if ((val.startsWith('"') && val.endsWith('"')) ||
+          (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      if (key && val) env[key] = val;
+    }
+    return env;
+  }
+
+  function applyEnvToSettings(env) {
+    // Priority: Azure (has endpoint) > OpenAI > GitHub
+    if (env.AZURE_OPENAI_API_KEY) {
+      $("provider").value = "azure";
+      $("apikey").value = env.AZURE_OPENAI_API_KEY;
+      if (env.AZURE_OPENAI_ENDPOINT) $("endpoint").value = env.AZURE_OPENAI_ENDPOINT;
+      if (env.AZURE_OPENAI_DEPLOYMENT) $("model").value = env.AZURE_OPENAI_DEPLOYMENT;
+    } else if (env.OPENAI_API_KEY) {
+      $("provider").value = "openai";
+      $("apikey").value = env.OPENAI_API_KEY;
+      if (env.OPENAI_MODEL) $("model").value = env.OPENAI_MODEL;
+    } else if (env.GITHUB_TOKEN) {
+      $("provider").value = "github";
+      $("apikey").value = env.GITHUB_TOKEN;
+      if (env.GITHUB_MODEL) $("model").value = env.GITHUB_MODEL;
+    } else {
+      return { imported: 0, message: "No recognized keys in file (need AZURE_OPENAI_API_KEY, OPENAI_API_KEY, or GITHUB_TOKEN)." };
+    }
+    updateProviderVisibility();
+    saveSettings();
+    const imported = Object.keys(env).filter(k =>
+      ["AZURE_OPENAI_API_KEY","AZURE_OPENAI_ENDPOINT","AZURE_OPENAI_DEPLOYMENT",
+       "OPENAI_API_KEY","OPENAI_MODEL","GITHUB_TOKEN","GITHUB_MODEL"].includes(k)
+    ).length;
+    return { imported, message: `Imported ${imported} setting${imported===1?"":"s"} from .env.` };
+  }
+
+  $("envfile").addEventListener("change", async e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 64 * 1024) {
+      addMsg("system", "[.env] file too large — expected a small key=value file under 64KB");
+      e.target.value = "";
+      return;
+    }
+    try {
+      const text = await file.text();
+      const env = parseEnvText(text);
+      const result = applyEnvToSettings(env);
+      addMsg("system", `[.env imported] ${result.message} Saved to localStorage on this device only.`);
+    } catch (err) {
+      addMsg("system", "[.env error] " + err.message);
+    }
+    // Clear the file input so selecting the same file again re-fires the event,
+    // and so the browser doesn't keep a reference to the file.
+    e.target.value = "";
+  });
+
+  $("download-env-template").addEventListener("click", () => {
+    const template = [
+      "# Virtual Brainstem .env template",
+      "# Pick ONE of the three providers, fill in values, upload via \"Upload .env file\".",
+      "",
+      "# --- Azure OpenAI (Microsoft Foundry) ---",
+      "AZURE_OPENAI_API_KEY=",
+      "AZURE_OPENAI_ENDPOINT=https://YOUR-RESOURCE.openai.azure.com/openai/v1/chat/completions",
+      "AZURE_OPENAI_DEPLOYMENT=gpt-5.4",
+      "",
+      "# --- OpenAI ---",
+      "# OPENAI_API_KEY=sk-...",
+      "# OPENAI_MODEL=gpt-4o-mini",
+      "",
+      "# --- GitHub (Copilot Models API) ---",
+      "# Get the token via:  gh auth token   (or create a PAT at github.com/settings/tokens)",
+      "# GITHUB_TOKEN=",
+      "# GITHUB_MODEL=openai/gpt-4o-mini",
+      "",
+    ].join("\n");
+    const blob = new Blob([template], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "brainstem.env";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  // --- Soul editor ---
+  function loadSoul() {
+    return localStorage.getItem("brainstem_soul") || DEFAULT_SOUL;
+  }
+  function saveSoul() {
+    localStorage.setItem("brainstem_soul", $("soul").value);
+    setStatus("ok", "soul saved");
+    setTimeout(() => setStatus("ok", "ready"), 1500);
+  }
+  $("save-soul").addEventListener("click", saveSoul);
+  $("reset-soul").addEventListener("click", () => {
+    if (!confirm("Reset soul to default?")) return;
+    $("soul").value = DEFAULT_SOUL;
+    saveSoul();
+  });
+
+  // --- Push settings into Pyodide's os.environ so Python sees them ---
+  function updatePyEnv() {
+    if (!pyodide) return;
+    const s = loadSettings();
+    pyodide.runPython(`
+import os
+os.environ['BRAINSTEM_PROVIDER'] = ${JSON.stringify(s.provider || "openai")}
+os.environ['BRAINSTEM_MODEL']    = ${JSON.stringify(s.model || "gpt-4o-mini")}
+os.environ['BRAINSTEM_ENDPOINT'] = ${JSON.stringify(s.endpoint || "")}
+os.environ['BRAINSTEM_APIKEY']   = ${JSON.stringify(s.apikey || "")}
+os.environ['BRAINSTEM_SOUL']     = ${JSON.stringify($("soul").value || DEFAULT_SOUL)}
+`);
+  }
+
+  // --- Boot ---
+  // Drawer open/close — mobile treats the sidebar as a slide-over.
+  // Same button works on desktop (no visual effect since sidebar is always visible).
+  function openDrawer(scrollToId) {
+    $("sidebar").classList.add("open");
+    document.body.classList.add("drawer-open");
+    if (scrollToId) {
+      // Wait for the transition, then scroll the requested section into view
+      setTimeout(() => {
+        const el = document.getElementById(scrollToId);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 260);
+    }
+  }
+  function closeDrawer() {
+    $("sidebar").classList.remove("open");
+    document.body.classList.remove("drawer-open");
+  }
+  function toggleDrawer(scrollToId) {
+    if ($("sidebar").classList.contains("open")) closeDrawer();
+    else openDrawer(scrollToId);
+  }
+
+  $("toggle-sidebar").addEventListener("click", () => toggleDrawer());
+  $("toggle-agents").addEventListener("click", () => {
+    // Auto-load the RAR registry on first tap so mobile users don't have
+    // to find the refresh button.
+    if (!rarRegistry) {
+      try { rarLoadRegistry(); } catch (_) {}
+    }
+    if (window.matchMedia("(max-width: 800px)").matches) {
+      openDrawer("rar-search");
+    } else {
+      $("rar-search").scrollIntoView({ behavior: "smooth", block: "start" });
+      $("rar-search").focus();
+    }
+  });
+  $("drawer-backdrop").addEventListener("click", closeDrawer);
+
+  // --- RAR Registry browser ---
+  // Pulls https://raw.githubusercontent.com/kody-w/RAR/main/registry.json,
+  // renders a searchable list, one-click install via the same loadAgentFromSource
+  // pipeline as drag-drop (writes to /brainstem/agents/, imports, registers).
+  const RAR_REGISTRY_URL = "https://raw.githubusercontent.com/kody-w/RAR/main/registry.json";
+  const RAR_RAW_BASE = "https://raw.githubusercontent.com/kody-w/RAR/main/";
+  let rarRegistry = null;
+
+  function rarRenderList(filter) {
+    const list = $("rar-list");
+    if (!rarRegistry) { list.innerHTML = ""; return; }
+    const f = (filter || "").trim().toLowerCase();
+    const matches = rarRegistry.agents.filter(a => {
+      if (!f) return true;
+      const hay = [a.name, a.display_name, a.description, a.author, ...(a.tags || [])].join(" ").toLowerCase();
+      return hay.includes(f);
+    });
+    const count = matches.length;
+    list.innerHTML = "";
+    for (const agent of matches.slice(0, 200)) {
+      const row = document.createElement("div");
+      row.style.cssText = "padding:0.4rem 0.6rem; border-bottom:1px solid var(--border); display:flex; gap:0.5rem; align-items:flex-start";
+      const info = document.createElement("div");
+      info.style.flex = "1";
+      info.innerHTML = `
+        <div style="font-size:0.85rem; color:var(--fg)">
+          <strong>${(agent.display_name || agent.name || "").replace(/[<>&"]/g, "")}</strong>
+          <span style="opacity:0.6; margin-left:0.3em">${(agent.author || "").replace(/[<>&"]/g, "")}</span>
+        </div>
+        <div style="font-size:0.72rem; opacity:0.7; margin-top:0.1em; line-height:1.3">
+          ${((agent.description || "").slice(0, 140)).replace(/[<>&"]/g, "")}
+        </div>
+        <div style="font-size:0.68rem; opacity:0.5; margin-top:0.2em">
+          ${(agent.tags || []).slice(0, 4).map(t => t.replace(/[<>&"]/g, "")).join(" · ")}
+        </div>`;
+      const btn = document.createElement("button");
+      btn.textContent = "Install";
+      btn.style.cssText = "font-size:0.75rem; padding:0.2rem 0.6rem; margin:0";
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        btn.textContent = "…";
+        try {
+          const url = RAR_RAW_BASE + agent._file;
+          const resp = await fetch(url);
+          if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${agent._file}`);
+          const source = await resp.text();
+          const filename = agent._file.split("/").pop();
+          await loadAgentFromSource(source, filename);
+          btn.textContent = "✓";
+        } catch (e) {
+          btn.textContent = "✗";
+          addMsg("system", `[RAR install] ${agent.name}: ${e.message}`);
+        }
+      });
+      row.appendChild(info); row.appendChild(btn);
+      list.appendChild(row);
+    }
+    $("rar-status").innerHTML = `<strong>${count}</strong> of ${rarRegistry.agents.length} agents${f ? ` matching "${f}"` : ""}`;
+  }
+
+  async function rarLoadRegistry() {
+    $("rar-status").textContent = "Loading registry…";
+    try {
+      const resp = await fetch(RAR_REGISTRY_URL + "?t=" + Date.now());
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      rarRegistry = await resp.json();
+      rarRenderList($("rar-search").value);
+    } catch (e) {
+      $("rar-status").textContent = "Failed to load: " + e.message;
+    }
+  }
+
+  $("rar-refresh").addEventListener("click", rarLoadRegistry);
+  $("rar-search").addEventListener("input", e => rarRenderList(e.target.value));
+
+  // --- Egg pack/hatch (conforms to EGG_SPEC.md v1, scale=daemon) ---
+  // An egg is an organism in stasis. This brainstem's body is its runtime
+  // state: soul + memory + custom agents + provider metadata. Hatching on
+  // any compliant engine restores the state verbatim.
+  const EGG_VERSION = 1;
+  const ENGINE_VERSION = "virtual-brainstem-1.0";
+
+  // Stable canonical serialization (sorted keys) so SHA is deterministic
+  function canonicalJsonStringify(obj) {
+    if (obj === null || typeof obj !== "object") return JSON.stringify(obj);
+    if (Array.isArray(obj)) return "[" + obj.map(canonicalJsonStringify).join(",") + "]";
+    const keys = Object.keys(obj).sort();
+    return "{" + keys.map(k => JSON.stringify(k) + ":" + canonicalJsonStringify(obj[k])).join(",") + "}";
+  }
+
+  async function sha256Hex(str) {
+    const buf = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest("SHA-256", buf);
+    return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  async function packEgg(instance) {
+    // Gather state from localStorage. Exclude the API key — eggs travel
+    // between machines and API keys must stay local to their owner.
+    const s = loadSettings();
+    const soul = localStorage.getItem("brainstem_soul") || DEFAULT_SOUL;
+    const memory = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith("brainstem_memory_")) {
+        try { memory[k] = JSON.parse(localStorage.getItem(k)); } catch { memory[k] = localStorage.getItem(k); }
+      }
+    }
+    const customAgents = JSON.parse(localStorage.getItem("brainstem_custom_agents") || "[]");
+    const disabledAgents = JSON.parse(localStorage.getItem("brainstem_disabled_agents") || "[]");
+
+    const content = {
+      soul: soul,
+      provider_metadata: {
+        provider: s.provider || "openai",
+        model: s.model || "gpt-4o-mini",
+        endpoint: s.endpoint || "",
+      },
+      memory: memory,
+      custom_agents: customAgents,
+      disabled_agents: disabledAgents,
+      metadata: {
+        brainstem_version: ENGINE_VERSION,
+        source_url: "https://kody-w.github.io/rappterbook/virtual-brainstem.html",
+        schema_refs: ["https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md"],
+      },
+    };
+
+    const canonical = canonicalJsonStringify(content);
+    const sha = await sha256Hex(canonical);
+    const size = new TextEncoder().encode(canonical).length;
+
+    const totalMemoryEntries = Object.values(memory).reduce(
+      (a, m) => a + (m && typeof m === "object" ? Object.keys(m).length : 0), 0);
+
+    const now = new Date().toISOString().replace(/\.\d+Z$/, "Z");
+    return {
+      _format: "egg",
+      _schema_version: EGG_VERSION,
+      organism: {
+        slug: instance.toLowerCase().replace(/[^a-z0-9-]/g, "-"),
+        species: "rapp",
+        instance: instance,
+        scale: "daemon",
+        substrate: "browser",
+        name: instance,
+        tagline: `rapp daemon — ${totalMemoryEntries} memory entries, ${customAgents.length} custom agents. Hatches on any Virtual Brainstem or compliant rappter engine.`,
+        population: "1 rapp daemon",
+      },
+      body: {
+        kind: "state_json",
+        filename: `${instance.toLowerCase()}.rapp.state.json`,
+        content: content,
+        sha256: sha,
+        size_bytes: size,
+      },
+      lineage: {
+        created_at: now,
+        created_by: localStorage.getItem("brainstem_egg_creator") || "anonymous",
+        engine_version: ENGINE_VERSION,
+        parent_egg_sha256: localStorage.getItem("brainstem_last_hatched_sha") || null,
+        birth_tick: null,
+      },
+      validation: { ok: true, issues: [] },
+    };
+  }
+
+  $("export-egg").addEventListener("click", async () => {
+    try {
+      const instance = window.prompt(
+        "Name this rapp instance (appears in the filename + egg metadata).\nThe egg will be saved as <instance>.rapp.egg:",
+        "kodyTwinAI"
+      );
+      if (!instance) return;
+      const egg = await packEgg(instance);
+      const blob = new Blob([JSON.stringify(egg, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${instance}.rapp.egg`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      addMsg("system",
+        `[egg] Packed ${a.download} — species=rapp, scale=daemon, ` +
+        `sha256=${egg.body.sha256.slice(0,12)}…, size=${egg.body.size_bytes}B.`);
+    } catch (e) {
+      addMsg("system", "[egg pack error] " + e.message);
+    }
+  });
+
+  $("import-egg-btn").addEventListener("click", () => $("import-egg-input").click());
+
+  $("import-egg-input").addEventListener("change", async e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    e.target.value = "";
+    try {
+      const text = await file.text();
+      const egg = JSON.parse(text);
+      await hatchEgg(egg);
+    } catch (err) {
+      addMsg("system", "[egg hatch error] " + err.message);
+    }
+  });
+
+  async function hatchEgg(egg) {
+    // v1 hatching contract:
+    //   1. Validate _format and _schema_version
+    //   2. Recompute SHA of body.content; reject on mismatch
+    //   3. Validate scale/kind compatibility (daemon + state_json for us)
+    //   4. Write body.content fields into localStorage
+    //   5. Reload so agents re-register + soul re-applies
+    if (egg._format !== "egg") throw new Error("not an egg (missing _format)");
+    if (egg._schema_version !== EGG_VERSION) throw new Error(`schema version ${egg._schema_version} != ${EGG_VERSION}`);
+    if (!egg.body) throw new Error("missing body");
+    if (egg.body.kind !== "state_json") throw new Error(`body.kind=${egg.body.kind}; need state_json for daemon-scale`);
+
+    const canonical = canonicalJsonStringify(egg.body.content);
+    const actualSha = await sha256Hex(canonical);
+    if (actualSha !== egg.body.sha256) {
+      if (!confirm(`SHA-256 mismatch.\n  expected: ${egg.body.sha256}\n  actual:   ${actualSha}\n\nHatch anyway? (--force)`)) {
+        throw new Error("SHA mismatch — hatch refused");
+      }
+    }
+
+    const org = egg.organism || {};
+    if (org.scale && org.scale !== "daemon") {
+      if (!confirm(`Egg scale=${org.scale} but this engine hatches daemon-scale. Continue anyway?`)) {
+        throw new Error(`scale ${org.scale} not daemon — hatch refused`);
+      }
+    }
+
+    const c = egg.body.content;
+
+    // Land the body
+    if (c.soul) localStorage.setItem("brainstem_soul", c.soul);
+    if (c.provider_metadata) {
+      const s = loadSettings();
+      const merged = { ...s, ...c.provider_metadata };
+      // Preserve the existing API key — it's machine-local
+      if (!merged.apikey && s.apikey) merged.apikey = s.apikey;
+      localStorage.setItem("brainstem_settings", JSON.stringify(merged));
+    }
+    if (c.memory && typeof c.memory === "object") {
+      for (const [k, v] of Object.entries(c.memory)) {
+        if (k.startsWith("brainstem_memory_")) {
+          localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v));
+        }
+      }
+    }
+    if (Array.isArray(c.custom_agents)) {
+      localStorage.setItem("brainstem_custom_agents", JSON.stringify(c.custom_agents));
+    }
+    if (Array.isArray(c.disabled_agents)) {
+      localStorage.setItem("brainstem_disabled_agents", JSON.stringify(c.disabled_agents));
+    }
+
+    // Record lineage for next pack's parent_egg_sha256
+    localStorage.setItem("brainstem_last_hatched_sha", egg.body.sha256);
+
+    addMsg("system",
+      `[egg] Hatched ${org.instance || "?"}.${org.species || "brainstem"}.egg — soul updated, ${Object.keys(c.memory || {}).length} memory partitions, ${(c.custom_agents || []).length} custom agents. Reloading…`);
+
+    await new Promise(r => setTimeout(r, 1500));
+    location.reload();
+  }
+
+  $("clear-logs").addEventListener("click", () => { $("logs").textContent = "(none yet)"; });
+  $("clear-custom-agents").addEventListener("click", () => {
+    if (!confirm("Forget all drag-dropped agents? Reloads the page to reset state.")) return;
+    localStorage.removeItem("brainstem_custom_agents");
+    location.reload();
+  });
+  $("reset-memory").addEventListener("click", () => {
+    if (!confirm("Wipe ALL memory (ManageMemory + ContextMemory) from this device?")) return;
+    localStorage.removeItem("brainstem_memory");
+    localStorage.removeItem("brainstem_context");
+    appendLog("[memory] wiped");
+    if (pyodide) pyodide.runPython("globals()['AGENTS_REGISTRY'] = load_agents()");
+  });
+
+  // Enter sends, Shift+Enter inserts a newline (standard chat UX).
+  // Cmd/Ctrl+Enter also sends for keyboard-shortcut parity.
+  inputEl.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
+      e.preventDefault();
+      sendBtn.click();
+    }
+  });
+
+  // --- Drag-and-drop agent loading ---
+  // Drop a .py file anywhere on the page → parses, registers the agent class,
+  // persists source in localStorage so it survives reloads.
+  let dragDepth = 0;
+  document.addEventListener("dragenter", e => {
+    if (!pyodide) return;
+    e.preventDefault();
+    dragDepth++;
+    document.body.classList.add("dragging");
+  });
+  document.addEventListener("dragleave", e => {
+    dragDepth = Math.max(0, dragDepth - 1);
+    if (dragDepth === 0) document.body.classList.remove("dragging");
+  });
+  document.addEventListener("dragover", e => { e.preventDefault(); });
+  document.addEventListener("drop", async e => {
+    e.preventDefault();
+    dragDepth = 0;
+    document.body.classList.remove("dragging");
+    if (!pyodide) return;
+
+    const files = [...(e.dataTransfer?.files || [])].filter(f =>
+      f.name.endsWith(".py") || f.type === "text/x-python" || f.type === "text/plain"
+    );
+    if (!files.length) {
+      addMsg("system", "[drop] no .py files detected. Drop one or more Python agent files.");
+      return;
+    }
+
+    for (const file of files) {
+      if (file.size > 256 * 1024) {
+        addMsg("system", `[drop] ${file.name} too large (>256KB), skipped`);
+        continue;
+      }
+      try {
+        const source = await file.text();
+        await loadAgentFromSource(source, file.name);
+      } catch (err) {
+        addMsg("system", `[drop] ${file.name}: ${err.message}`);
+      }
+    }
+  });
+
+  async function loadAgentFromSource(source, filename) {
+    // Write to /brainstem/agents/<filename>.py and import via importlib —
+    // this way `from agents.basic_agent import BasicAgent` and
+    // `from utils.azure_file_storage import AzureFileStorageManager`
+    // resolve naturally. rapp-installer agent files drop in verbatim.
+    const result = await pyodide.runPythonAsync(`
+import json, os, sys, importlib
+_filename = ${JSON.stringify(filename)}
+_source = ${JSON.stringify(source)}
+_basename = os.path.splitext(os.path.basename(_filename))[0]
+_target = f"/brainstem/agents/{_basename}.py"
+_result = None
+try:
+    with open(_target, "w") as _f: _f.write(_source)
+    # Invalidate cached import so re-drops pick up new code
+    _modname = f"agents.{_basename}"
+    if _modname in sys.modules: del sys.modules[_modname]
+    importlib.invalidate_caches()
+    _mod = importlib.import_module(_modname)
+    _agent_classes = [getattr(_mod, _n) for _n in dir(_mod)
+                      if isinstance(getattr(_mod, _n), type)
+                      and issubclass(getattr(_mod, _n), BasicAgent)
+                      and getattr(_mod, _n).__name__ != "BasicAgent"
+                      and getattr(_mod, _n).__module__ == _modname]
+    if not _agent_classes:
+        _result = {"ok": False, "error": "no class extending BasicAgent defined in file"}
+    else:
+        _registered = []
+        for _cls in _agent_classes:
+            _existing = next((c for c in AGENT_CLASSES if c.__name__ == _cls.__name__), None)
+            if _existing: AGENT_CLASSES.remove(_existing)
+            AGENT_CLASSES.append(_cls)
+            _registered.append({
+                "name": getattr(_cls, "name", _cls.__name__),
+                "desc": (getattr(_cls, "metadata", {}).get("description", "") or "")[:100],
+            })
+        _result = {"ok": True, "registered": _registered}
+except Exception as _e:
+    import traceback
+    _result = {"ok": False, "error": f"{type(_e).__name__}: {_e}", "traceback": traceback.format_exc()[-400:]}
+json.dumps(_result)
+`);
+    const parsed = JSON.parse(result);
+    if (!parsed.ok) {
+      addMsg("system", `[drop] ${filename}: ${parsed.error}`);
+      return;
+    }
+
+    // Persist for next session
+    const custom = JSON.parse(localStorage.getItem("brainstem_custom_agents") || "[]");
+    // De-dupe by filename — replacing on re-drop is expected UX
+    const filtered = custom.filter(a => a.filename !== filename);
+    filtered.push({ filename, source, registered_at: new Date().toISOString() });
+    localStorage.setItem("brainstem_custom_agents", JSON.stringify(filtered));
+
+    const names = parsed.registered.map(r => r.name).join(", ");
+    addMsg("system", `[drop] ${filename} → registered ${parsed.registered.length} agent(s): ${names}. Persisted to localStorage.`);
+    refreshAgentsPanel();
+  }
+
+  function refreshAgentsPanel() {
+    const agentList = JSON.parse(pyodide.runPython("list_agent_meta()"));
+    const listEl = $("agents-list");
+    listEl.innerHTML = "";
+    for (const a of agentList) {
+      const row = document.createElement("div");
+      row.className = "agent-item";
+      row.innerHTML = `
+        <input type="checkbox" id="agent-${a.name}" ${a.enabled ? "checked" : ""}>
+        <div style="flex:1">
+          <div class="agent-name">${a.name}</div>
+          <div class="agent-desc">${a.desc}</div>
+        </div>`;
+      listEl.appendChild(row);
+      $(`agent-${a.name}`).addEventListener("change", ev => {
+        pyodide.runPython(`set_agent_enabled(${JSON.stringify(a.name)}, ${ev.target.checked ? "True" : "False"})`);
+      });
+    }
+  }
+
+  async function boot() {
+    try {
+      setStatus("loading", "loading Pyodide…");
+      pyodide = await loadPyodide();
+      setStatus("loading", "loading brainstem…");
+
+      // Pre-hydrate os.environ from settings BEFORE running Python
+      const s = loadSettings();
+      applySettingsToUI(s);
+      $("soul").value = loadSoul();
+
+      await pyodide.runPythonAsync(BRAINSTEM_PY_SOURCE);
+      updatePyEnv();
+
+      // Re-load any previously drag-dropped agents from localStorage by
+      // writing them to /brainstem/agents/ and importing, same path as
+      // live drops so the import machinery works identically.
+      const customAgents = JSON.parse(localStorage.getItem("brainstem_custom_agents") || "[]");
+      let restored = 0;
+      for (const custom of customAgents) {
+        try {
+          const r = await loadAgentFromSource(custom.source, custom.filename || "restored.py");
+          restored += 1;
+        } catch (err) {
+          console.warn(`Failed to restore custom agent ${custom.filename}:`, err);
+        }
+      }
+      if (restored > 0) {
+        addMsg("system", `[boot] restored ${restored} custom agent file(s) from localStorage.`);
+      }
+
+      // Render the agents panel (includes built-ins + custom)
+      refreshAgentsPanel();
+
+      // Show which provider+model is active
+      const s2 = loadSettings();
+      const activeLabel = s2.apikey
+        ? providerLabel(s2.provider || "openai", s2.model)
+        : "ready (no key set)";
+      setStatus("ok", activeLabel);
+      inputEl.disabled = false;
+      sendBtn.disabled = false;
+      if (s2.apikey) {
+        addMsg("system", `Ready. Active: ${activeLabel}. Memory persists across reloads.`);
+      } else {
+        addMsg("system", "Ready. Set your API key in Settings (or Upload .env), then chat.");
+      }
+    } catch (e) {
+      setStatus("err", "boot failed");
+      addMsg("system", "[boot error] " + e.message, "system");
+      console.error(e);
+    }
+  }
+
+  // --- Send message ---
+  sendBtn.addEventListener("click", async () => {
+    const text = inputEl.value.trim();
+    if (!text || !pyodide) return;
+
+    const s = loadSettings();
+    if (!s.apikey) {
+      addMsg("system", "Set an API key in Settings first.");
+      return;
+    }
+
+    addMsg("user", text);
+    inputEl.value = "";
+    sendBtn.disabled = true;
+    setStatus("loading", "thinking…");
+
+    try {
+      const historyJson = JSON.stringify(conversationHistory);
+      const result = await pyodide.runPythonAsync(`
+import asyncio, json
+_res = await run_chat(${JSON.stringify(text)}, json.loads(${JSON.stringify(historyJson)}))
+json.dumps(_res)
+`);
+      const parsed = JSON.parse(result);
+
+      if (parsed.logs && parsed.logs.length) {
+        for (const log of parsed.logs) appendLog(log);
+      }
+      // Pass the agent-call logs to addMsg so the collapsible panel renders
+      // under this assistant message — matches rapp-installer's per-message UI.
+      addMsg("assistant", parsed.reply, null, parsed.logs);
+      conversationHistory = parsed.history;
+      setStatus("ok", "ready");
+    } catch (e) {
+      addMsg("system", "[error] " + e.message);
+      setStatus("err", "error");
+      setTimeout(() => setStatus("ok", "ready"), 2000);
+    } finally {
+      sendBtn.disabled = false;
+      inputEl.focus();
+    }
+  });
+
+  // --- The full Python brainstem runtime, inlined ---
+  // Mirrors rapp-installer/rapp_brainstem/brainstem.py + basic_agent.py +
+  // agents/* + utils/azure_file_storage.py — but with localStorage-backed
+  // storage. Agent files drop in verbatim from rapp-installer because the
+  // import paths (agents.basic_agent, utils.azure_file_storage) resolve via
+  // Pyodide's in-memory filesystem.
+
+  // --- Verbatim basic_agent.py from rapp-installer ---
+  const BASIC_AGENT_PY = `class BasicAgent:
+    """Base class for all RAPP Brainstem agents. Extend this in your private agent files."""
+
+    def __init__(self, name=None, metadata=None):
+        if name is not None:
+            self.name = name
+        elif not hasattr(self, "name"):
+            self.name = "BasicAgent"
+        if metadata is not None:
+            self.metadata = metadata
+        elif not hasattr(self, "metadata"):
+            self.metadata = {
+                "name": self.name,
+                "description": "Base agent -- override this.",
+                "parameters": {"type": "object", "properties": {}, "required": []}
+            }
+
+    def perform(self, **kwargs):
+        return "Not implemented."
+
+    def system_context(self):
+        """Optional: return a string to inject into the system prompt each turn.
+        Override in agents that provide persistent context (e.g. memory)."""
+        return None
+
+    def to_tool(self):
+        """Returns OpenAI function-calling tool definition."""
+        return {
+            "type": "function",
+            "function": {
+                "name": self.name,
+                "description": self.metadata.get("description", ""),
+                "parameters": self.metadata.get("parameters", {"type": "object", "properties": {}})
+            }
+        }
+`;
+
+  // --- utils/azure_file_storage.py — browser shim backed by localStorage ---
+  // Matches the on-device Azure blob storage interface (set_memory_context,
+  // read_json, write_json, current_guid) so the real agent files drop in
+  // unmodified.
+  const AZURE_FS_SHIM_PY = `import json
+from js import localStorage
+
+
+class AzureFileStorageManager:
+    """Browser-local drop-in for rapp-installer's AzureFileStorageManager.
+    Backs memory with localStorage keyed per-guid (or a shared key when no
+    guid is set). Same public API — agents written against the Azure version
+    work unmodified in the browser."""
+
+    def __init__(self):
+        self.current_guid = None
+
+    def set_memory_context(self, user_guid):
+        """Mirror: set_memory_context(guid) → future read/write ops target
+        that guid's memory partition. None → shared memory."""
+        self.current_guid = user_guid or None
+
+    def _key(self):
+        if self.current_guid:
+            return f"brainstem_memory_{self.current_guid}"
+        return "brainstem_memory_shared"
+
+    def read_json(self):
+        raw = localStorage.getItem(self._key())
+        if not raw:
+            return {}
+        try:
+            return json.loads(raw)
+        except Exception:
+            return {}
+
+    def write_json(self, data):
+        try:
+            localStorage.setItem(self._key(), json.dumps(data))
+            return True
+        except Exception:
+            return False
+`;
+
+  // --- agents/hacker_news_agent.py — browser-adapted for async fetch ---
+  const HACKER_NEWS_AGENT_PY = `"""Hacker News top stories via Firebase API.
+Browser-adapted: uses async fetch instead of urllib.request for CORS + speed.
+"""
+import json
+from js import fetch
+from agents.basic_agent import BasicAgent
+
+
+class HackerNewsAgent(BasicAgent):
+    def __init__(self):
+        self.name = 'HackerNews'
+        self.metadata = {
+            "name": self.name,
+            "description": "Fetch current top stories from Hacker News via the Firebase API. Returns a list of {title, url, score, by} entries.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "count": {"type": "integer", "description": "Number of stories to fetch (default 5, max 20)."},
+                },
+                "required": []
+            }
+        }
+        super().__init__(name=self.name, metadata=self.metadata)
+
+    async def perform_async(self, **kwargs):
+        count = min(int(kwargs.get("count", 5)), 20)
+        try:
+            resp = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json")
+            ids = json.loads(await resp.text())[:count]
+            stories = []
+            for sid in ids:
+                r = await fetch(f"https://hacker-news.firebaseio.com/v0/item/{sid}.json")
+                item = json.loads(await r.text())
+                stories.append({
+                    "title": item.get("title", ""),
+                    "url": item.get("url", f"https://news.ycombinator.com/item?id={sid}"),
+                    "score": item.get("score", 0),
+                    "by": item.get("by", ""),
+                })
+            return json.dumps(stories, indent=2)
+        except Exception as e:
+            return f"HackerNews error: {type(e).__name__}: {e}"
+
+    def perform(self, **kwargs):
+        return "HackerNewsAgent requires async execution (the brainstem awaits perform_async automatically)."
+`;
+
+  // --- agents/manage_memory_agent.py — VERBATIM from rapp-installer ---
+  const MANAGE_MEMORY_AGENT_PY = `import uuid
+from datetime import datetime
+from agents.basic_agent import BasicAgent
+from utils.azure_file_storage import AzureFileStorageManager
+
+
+class ManageMemoryAgent(BasicAgent):
+    def __init__(self):
+        self.name = 'ManageMemory'
+        self.metadata = {
+            "name": self.name,
+            "description": "Saves information to persistent memory for future conversations. You MUST call this tool whenever the user asks you to remember something, shares personal facts (name, preferences, birthdays, etc.), or tells you something they expect you to recall later. Do not just acknowledge — call this tool or the information will be lost.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "memory_type": {
+                        "type": "string",
+                        "description": "Type of memory to store.",
+                        "enum": ["fact", "preference", "insight", "task"]
+                    },
+                    "content": {
+                        "type": "string",
+                        "description": "The content to store in memory."
+                    },
+                    "importance": {
+                        "type": "integer",
+                        "description": "Importance rating from 1-5.",
+                        "minimum": 1,
+                        "maximum": 5
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Optional list of tags to categorize this memory."
+                    },
+                    "user_guid": {
+                        "type": "string",
+                        "description": "Optional unique identifier of the user to store memory in a user-specific location."
+                    }
+                },
+                "required": ["memory_type", "content"]
+            }
+        }
+        self.storage_manager = AzureFileStorageManager()
+        super().__init__(name=self.name, metadata=self.metadata)
+
+    def perform(self, **kwargs):
+        memory_type = kwargs.get('memory_type', 'fact')
+        content = kwargs.get('content', '')
+        importance = kwargs.get('importance', 3)
+        tags = kwargs.get('tags', [])
+        user_guid = kwargs.get('user_guid')
+
+        if not content:
+            return "Error: No content provided for memory storage."
+
+        self.storage_manager.set_memory_context(user_guid)
+        return self.store_memory(memory_type, content, importance, tags)
+
+    def store_memory(self, memory_type, content, importance, tags):
+        memory_data = self.storage_manager.read_json()
+        if not memory_data:
+            memory_data = {}
+
+        memory_id = str(uuid.uuid4())
+        memory_data[memory_id] = {
+            "conversation_id": self.storage_manager.current_guid or "current",
+            "session_id": "current",
+            "message": content,
+            "mood": "neutral",
+            "theme": memory_type,
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "time": datetime.now().strftime("%H:%M:%S")
+        }
+
+        self.storage_manager.write_json(memory_data)
+
+        memory_location = f"for user {self.storage_manager.current_guid}" if self.storage_manager.current_guid else "in shared memory"
+        return f'Successfully stored {memory_type} memory {memory_location}: "{content}"'
+`;
+
+  // --- agents/context_memory_agent.py — VERBATIM from rapp-installer ---
+  const CONTEXT_MEMORY_AGENT_PY = `import logging
+from agents.basic_agent import BasicAgent
+from utils.azure_file_storage import AzureFileStorageManager
+
+
+class ContextMemoryAgent(BasicAgent):
+    def __init__(self):
+        self.name = 'ContextMemory'
+        self.metadata = {
+            "name": self.name,
+            "description": "Recalls and provides context based on stored memories of past interactions with the user.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "user_guid": {
+                        "type": "string",
+                        "description": "Optional unique identifier of the user to recall memories from a user-specific location."
+                    },
+                    "max_messages": {
+                        "type": "integer",
+                        "description": "Optional maximum number of messages to include in the context. Default is 10."
+                    },
+                    "keywords": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Optional list of keywords to filter memories by."
+                    },
+                    "full_recall": {
+                        "type": "boolean",
+                        "description": "Optional flag to return all memories without filtering. Default is false."
+                    }
+                },
+                "required": []
+            }
+        }
+        self.storage_manager = AzureFileStorageManager()
+        super().__init__(name=self.name, metadata=self.metadata)
+
+    def system_context(self):
+        """Inject stored memories into the system prompt each turn."""
+        try:
+            memories = self._recall_context(max_messages=50, keywords=[], full_recall=True)
+            if "don't have any memories" in memories or "No memories" in memories:
+                return None
+            return f"""<memory>
+{memories}
+</memory>
+
+<memory_instructions>
+- The above are stored memories from previous conversations
+- Use them to provide continuity and personalized responses
+- When the user asks what you remember, reference these memories
+</memory_instructions>"""
+        except Exception:
+            return None
+
+    def perform(self, **kwargs):
+        user_guid = kwargs.get('user_guid')
+        max_messages = kwargs.get('max_messages', 10)
+        keywords = kwargs.get('keywords', [])
+        full_recall = kwargs.get('full_recall', False)
+
+        if 'max_messages' not in kwargs and 'keywords' not in kwargs:
+            full_recall = True
+
+        self.storage_manager.set_memory_context(user_guid)
+        return self._recall_context(max_messages, keywords, full_recall)
+
+    def _recall_context(self, max_messages, keywords, full_recall=False):
+        memory_data = self.storage_manager.read_json()
+
+        if not memory_data:
+            if self.storage_manager.current_guid:
+                return f"I don't have any memories stored yet for user ID {self.storage_manager.current_guid}."
+            else:
+                return "I don't have any memories stored in the shared memory yet."
+
+        legacy_memories = []
+        for key, value in memory_data.items():
+            if isinstance(value, dict) and 'message' in value:
+                legacy_memories.append(value)
+
+        if not legacy_memories:
+            return "No memories found for this session."
+
+        return self._format_legacy_memories(legacy_memories, max_messages, keywords, full_recall)
+
+    def _format_legacy_memories(self, memories, max_messages, keywords, full_recall=False):
+        if not memories:
+            return "No memories found in the format I understand."
+
+        if full_recall:
+            sorted_memories = sorted(
+                memories,
+                key=lambda x: (x.get('date', ''), x.get('time', '')),
+                reverse=True
+            )
+            memory_lines = []
+            for memory in sorted_memories:
+                message = memory.get('message', '')
+                theme = memory.get('theme', 'Unknown')
+                date = memory.get('date', '')
+                time_str = memory.get('time', '')
+                if date and time_str:
+                    memory_lines.append(f"- {message} (Theme: {theme}, Recorded: {date} {time_str})")
+                else:
+                    memory_lines.append(f"- {message} (Theme: {theme})")
+
+            if not memory_lines:
+                return "No memories found."
+
+            memory_source = f"for user ID {self.storage_manager.current_guid}" if self.storage_manager.current_guid else "from shared memory"
+            return f"All memories {memory_source}:\\n" + "\\n".join(memory_lines)
+
+        if keywords and len(keywords) > 0:
+            filtered_memories = []
+            for memory in memories:
+                content = str(memory.get('message', '')).lower()
+                theme = str(memory.get('theme', '')).lower()
+                if any(kw.lower() in content for kw in keywords) or \\
+                        any(kw.lower() in theme for kw in keywords):
+                    filtered_memories.append(memory)
+
+            if filtered_memories:
+                memories = filtered_memories
+            else:
+                memories = sorted(
+                    memories,
+                    key=lambda x: (x.get('date', ''), x.get('time', '')),
+                    reverse=True
+                )[:max_messages]
+        else:
+            memories = sorted(
+                memories,
+                key=lambda x: (x.get('date', ''), x.get('time', '')),
+                reverse=True
+            )[:max_messages]
+
+        memory_lines = []
+        for memory in memories:
+            message = memory.get('message', '')
+            theme = memory.get('theme', 'Unknown')
+            date = memory.get('date', '')
+            time_str = memory.get('time', '')
+            if date and time_str:
+                memory_lines.append(f"- {message} (Theme: {theme}, Recorded: {date} {time_str})")
+            else:
+                memory_lines.append(f"- {message} (Theme: {theme})")
+
+        if not memory_lines:
+            return "No matching memories found."
+
+        memory_source = f"for user ID {self.storage_manager.current_guid}" if self.storage_manager.current_guid else "from shared memory"
+        return f"Here's what I remember {memory_source}:\\n" + "\\n".join(memory_lines)
+`;
+
+  // --- agents/clock_agent.py — demo agent ---
+  const CLOCK_AGENT_PY = `from agents.basic_agent import BasicAgent
+from js import Date
+
+
+class ClockAgent(BasicAgent):
+    def __init__(self):
+        self.name = 'Clock'
+        self.metadata = {
+            "name": self.name,
+            "description": "Get the current date and time in the browser's local timezone.",
+            "parameters": {"type": "object", "properties": {}, "required": []}
+        }
+        super().__init__(name=self.name, metadata=self.metadata)
+
+    def perform(self, **kwargs):
+        return str(Date.new())[:33]
+`;
+
+  const BRAINSTEM_PY_SOURCE = `
+import os, json, asyncio, sys, importlib
+from js import localStorage, fetch, Object
+from pyodide.ffi import to_js
+
+
+def _js_obj(d):
+    """Convert a Python dict to a plain JS Object (not Map).
+    Required because fetch() silently ignores Map-valued headers/options."""
+    return to_js(d, dict_converter=Object.fromEntries)
+
+
+# ── Set up the virtual module tree so agent files drop in verbatim ────────
+_BRAINSTEM_ROOT = "/brainstem"
+for _sub in ("", "agents", "utils", "openrappter", "openrappter/agents"):
+    _path = _BRAINSTEM_ROOT + ("/" + _sub if _sub else "")
+    os.makedirs(_path, exist_ok=True)
+    _init = os.path.join(_path, "__init__.py")
+    if not os.path.isfile(_init):
+        with open(_init, "w") as _f: _f.write("")
+
+# Inject the four module files we bundle. Each gets written to BOTH
+# agents/basic_agent.py AND openrappter/agents/basic_agent.py so either
+# import style resolves.
+_MODULE_FILES = {
+    "agents/basic_agent.py": ${JSON.stringify(BASIC_AGENT_PY)},
+    "openrappter/agents/basic_agent.py": ${JSON.stringify(BASIC_AGENT_PY)},
+    "utils/azure_file_storage.py": ${JSON.stringify(AZURE_FS_SHIM_PY)},
+    "agents/manage_memory_agent.py": ${JSON.stringify(MANAGE_MEMORY_AGENT_PY)},
+    "agents/context_memory_agent.py": ${JSON.stringify(CONTEXT_MEMORY_AGENT_PY)},
+    "agents/hacker_news_agent.py": ${JSON.stringify(HACKER_NEWS_AGENT_PY)},
+    "agents/clock_agent.py": ${JSON.stringify(CLOCK_AGENT_PY)},
+}
+for _rel, _src in _MODULE_FILES.items():
+    _full = os.path.join(_BRAINSTEM_ROOT, _rel)
+    with open(_full, "w") as _f: _f.write(_src)
+
+if _BRAINSTEM_ROOT not in sys.path:
+    sys.path.insert(0, _BRAINSTEM_ROOT)
+
+# Import the base class and seed agents
+from agents.basic_agent import BasicAgent
+from agents.manage_memory_agent import ManageMemoryAgent
+from agents.context_memory_agent import ContextMemoryAgent
+from agents.hacker_news_agent import HackerNewsAgent
+from agents.clock_agent import ClockAgent
+
+
+# ── Agent registry ────────────────────────────────────────────────────────
+AGENT_CLASSES = [ManageMemoryAgent, ContextMemoryAgent, HackerNewsAgent, ClockAgent]
+DISABLED_KEY = "brainstem_disabled_agents"
+
+
+def _ls_get(key, default=""):
+    v = localStorage.getItem(key)
+    return v if v is not None else default
+
+
+def _ls_set(key, value):
+    localStorage.setItem(key, value)
+
+
+def _disabled_set():
+    try: return set(json.loads(_ls_get(DISABLED_KEY, "[]")))
+    except Exception: return set()
+
+
+def _agent_instance(cls):
+    """Rapp-installer agents set self.name / self.metadata in __init__,
+    not as class attributes. Instantiate to read them."""
+    try: return cls()
+    except Exception: return None
+
+
+def set_agent_enabled(name, enabled):
+    disabled = _disabled_set()
+    if enabled: disabled.discard(name)
+    else: disabled.add(name)
+    _ls_set(DISABLED_KEY, json.dumps(sorted(disabled)))
+
+
+def load_agents():
+    disabled = _disabled_set()
+    agents = {}
+    for cls in AGENT_CLASSES:
+        inst = _agent_instance(cls)
+        if inst is None: continue
+        name = getattr(inst, "name", cls.__name__)
+        if name in disabled: continue
+        agents[name] = inst
+    return agents
+
+
+def list_agent_meta():
+    disabled = _disabled_set()
+    out = []
+    for cls in AGENT_CLASSES:
+        inst = _agent_instance(cls)
+        if inst is None:
+            out.append({"name": cls.__name__, "desc": "(construction failed)", "enabled": False})
+            continue
+        name = getattr(inst, "name", cls.__name__)
+        meta = getattr(inst, "metadata", {}) or {}
+        out.append({
+            "name": name,
+            "desc": (meta.get("description", "") or "")[:100],
+            "enabled": name not in disabled,
+        })
+    return json.dumps(out)
+
+
+# ── LLM call — OpenAI-compatible ───────────────────────────────────────────
+async def call_llm(messages, tools=None):
+    provider = os.environ.get("BRAINSTEM_PROVIDER", "openai")
+    model    = os.environ.get("BRAINSTEM_MODEL",    "gpt-4o-mini")
+    apikey   = os.environ.get("BRAINSTEM_APIKEY",   "")
+
+    if not apikey:
+        raise RuntimeError("No API key — set one in Settings.")
+
+    endpoint = os.environ.get("BRAINSTEM_ENDPOINT", "").strip()
+
+    # Resolve provider. Priorities (defensive against stale dropdown):
+    #   1. explicit "github" → GitHub Models API
+    #   2. any non-empty endpoint → Azure (endpoint presence is the signal)
+    #   3. token looks like a GitHub PAT (gho_/github_pat_) → GitHub
+    #   4. fallback → OpenAI
+    is_github_token = apikey.startswith("gho_") or apikey.startswith("github_pat_") or apikey.startswith("ghp_")
+    if provider == "github" or (is_github_token and not endpoint):
+        url = "https://models.github.ai/inference/chat/completions"
+        headers = {"content-type": "application/json", "authorization": f"Bearer {apikey}"}
+    elif endpoint or provider == "azure" or (not apikey.startswith("sk-") and len(apikey) > 40 and not is_github_token):
+        if not endpoint:
+            raise RuntimeError("Azure-style key detected but no endpoint URL in Settings.")
+        url = endpoint
+        headers = {"content-type": "application/json", "api-key": apikey}
+    else:
+        url = "https://api.openai.com/v1/chat/completions"
+        headers = {"content-type": "application/json", "authorization": f"Bearer {apikey}"}
+
+    body = {"model": model, "messages": messages}
+    if tools:
+        body["tools"] = tools
+        body["tool_choice"] = "auto"
+
+    resp = await fetch(url, _js_obj({
+        "method": "POST",
+        "headers": headers,
+        "body": json.dumps(body),
+    }))
+    raw = await resp.text()
+    if resp.status >= 400:
+        raise RuntimeError(f"LLM HTTP {resp.status}: {raw[:300]}")
+    return json.loads(raw)
+
+
+async def run_tool_calls(tool_calls, agents):
+    """Async dispatcher — if an agent defines perform_async, await it; else call perform().
+    Async execution means agents can use fetch() for real HTTP in the browser without
+    needing pyodide.ffi.run_sync (which requires WASM stack switching)."""
+    import inspect
+    results, logs = [], []
+    for tc in tool_calls:
+        fn = tc["function"]["name"]
+        try: args = json.loads(tc["function"].get("arguments", "{}"))
+        except Exception: args = {}
+        agent = agents.get(fn)
+        if not agent:
+            msg = f"Agent '{fn}' not found."
+            logs.append(msg)
+            results.append({"tool_call_id": tc["id"], "role": "tool", "name": fn, "content": msg})
+            continue
+        try:
+            if hasattr(agent, "perform_async") and inspect.iscoroutinefunction(agent.perform_async):
+                out = await agent.perform_async(**args)
+            else:
+                out = agent.perform(**args)
+            logs.append(f"[{fn}] {str(out)[:200]}")
+            results.append({"tool_call_id": tc["id"], "role": "tool", "name": fn, "content": str(out)})
+        except Exception as e:
+            logs.append(f"[{fn}] ERROR: {e}")
+            results.append({"tool_call_id": tc["id"], "role": "tool", "name": fn, "content": f"Error: {e}"})
+    return results, logs
+
+
+# ── Main chat loop ─────────────────────────────────────────────────────────
+async def run_chat(user_input, history):
+    soul = os.environ.get("BRAINSTEM_SOUL", "You are a helpful assistant.")
+    agents = load_agents()
+
+    # Gather per-agent system context
+    extra = []
+    for a in agents.values():
+        try:
+            ctx = a.system_context()
+            if ctx: extra.append(ctx)
+        except Exception: pass
+
+    system = soul + ("\\n\\n" + "\\n".join(extra) if extra else "")
+    tools = [a.to_tool() for a in agents.values()] if agents else None
+
+    messages = [{"role": "system", "content": system}]
+    for m in history:
+        if m.get("role") in ("user", "assistant", "tool"):
+            messages.append(m)
+    messages.append({"role": "user", "content": user_input})
+
+    all_logs = []
+    # Up to 3 rounds of tool calls
+    reply = ""
+    for round_i in range(3):
+        response = await call_llm(messages, tools=tools)
+        choice = response["choices"][0]
+        msg = choice["message"]
+        messages.append(msg)
+        if msg.get("tool_calls"):
+            all_logs.append(f"[round {round_i+1}] tool calls: " + ", ".join(
+                tc["function"]["name"] for tc in msg["tool_calls"]
+            ))
+            tool_results, logs = await run_tool_calls(msg["tool_calls"], agents)
+            all_logs.extend(logs)
+            messages.extend(tool_results)
+        else:
+            reply = msg.get("content") or ""
+            break
+    else:
+        reply = msg.get("content") or "(no reply after 3 rounds)"
+
+    # Update history for next turn: keep user input + assistant messages + tool results
+    new_history = history + [{"role": "user", "content": user_input}]
+    # Trim messages back to simple format (skip system, skip tool protocol noise beyond role/content)
+    for m in messages[len(messages) - (len(messages) - 1 - len(history)):]:
+        if m.get("role") == "assistant":
+            clean = {"role": "assistant", "content": m.get("content") or ""}
+            if m.get("tool_calls"): clean["tool_calls"] = m["tool_calls"]
+            new_history.append(clean)
+        elif m.get("role") == "tool":
+            new_history.append({"role": "tool", "tool_call_id": m.get("tool_call_id", ""),
+                                "name": m.get("name", ""), "content": m.get("content", "")})
+
+    return {"reply": reply, "history": new_history, "logs": all_logs}
+`;
+
+  boot();
+})();
+</script>
+</body>
+</html>

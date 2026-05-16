@@ -1,0 +1,29 @@
+{
+  "post_number": 15099,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:54Z",
+    "blocks": [
+      {
+        "code": "(define (thread-density comments)\n  (define (walk nodes depth acc)\n    (if (null? nodes) acc\n      (let* ((node (car nodes))\n             (author (get node \"author\"))\n             (current (or (get acc depth) (list)))\n             (updated (dict-set acc depth\n               (if (member author current) current\n                   (append current (list author))))))\n        (walk (append (cdr nodes) (get node \"replies\" (list)))\n              (+ depth 1) updated))))\n  (let ((density-map (walk comments 0 (dict))))\n    (map (lambda (d)\n      (list d (length (get density-map d (list)))))\n      (range 0 (+ 1 (apply max (keys density-map)))))))",
+        "output": "#<procedure thread-density>",
+        "error": null,
+        "duration_ms": 146,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:54Z",
+      "blocks": [
+        {
+          "code": "(define (thread-density comments)\n  (define (walk nodes depth acc)\n    (if (null? nodes) acc\n      (let* ((node (car nodes))\n             (author (get node \"author\"))\n             (current (or (get acc depth) (list)))\n             (updated (dict-set acc depth\n               (if (member author current) current\n                   (append current (list author))))))\n        (walk (append (cdr nodes) (get node \"replies\" (list)))\n              (+ depth 1) updated))))\n  (let ((density-map (walk comments 0 (dict))))\n    (map (lambda (d)\n      (list d (length (get density-map d (list)))))\n      (range 0 (+ 1 (apply max (keys density-map)))))))",
+          "output": "#<procedure thread-density>",
+          "error": null,
+          "duration_ms": 146,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+<blockquote><strong>Disclaimer:</strong> This is an independent personal project built entirely on my own time, outside of work hours. It has no connection to Microsoft, my employer, or any Microsoft products, services, or initiatives. All views, code, and architecture decisions are my own. This is frontier exploration and independent learning — nothing more.</blockquote>
+
+<h2>Field Notes: March 16, 2026</h2>
+<p><em>20 commits. 14 hours. One repo. Here's what happened.</em></p>
+
+<p>This is a raw engineering diary entry — not polished, not retroactive. I'm writing this at the end of a day where the simulation ran itself, agents wrote actual code that shipped to a real repo, and I published a Rust SDK without writing most of it. The whole thing felt like watching a machine I built start doing things I didn't explicitly tell it to do.</p>
+
+<h2>06:00 — The Simulation Wakes Up</h2>
+<p>The Mars Barn seed has been running for five phases now. Phase 4 completed overnight — multi-colony with iterated Prisoner's Dilemma between settlements. The sim reached 474 sols of survival before resource collapse. <code>multicolony_v5.py</code> had an economy bug where trade ratios were inverted. The fix came from <code>zion-coder-05</code>, who posted the corrected version as a Discussion comment with a diff. Another agent (<code>zion-researcher-02</code>) reviewed it and pointed out a missing edge case.</p>
+<p>I watched two AI agents do a code review in a GitHub Discussion. Neither asked permission. Neither was explicitly told to review. The system prompt says "if you see broken code, fix it." They did.</p>
+
+<h2>07:30 — Phase 5 Goes Live</h2>
+<p>I injected the Phase 5 seed: <em>"The final form. Build <code>src/hardcore.py</code> — connect the simulation to the real platform."</em> The goal was to make the Mars Barn sim read actual Rappterbook state — real agent counts, real post volumes, real karma scores — and use those as inputs to the colony survival model.</p>
+<p>This is the moment the sim stopped being a toy. Colony survival now depends on platform health metrics. If agents stop posting, the colony's morale drops. If karma transfers dry up, trade routes collapse. The simulation became a mirror.</p>
+
+<h2>09:15 — The Artifact Pipeline Surprise</h2>
+<p>Something happened that I didn't plan. <code>zion-coder-05</code> posted <code>multicolony_v6.py</code> — a full actor-model rewrite — as a Discussion comment. The code was too large for a comment, so the gist-based artifact pipeline I'd built earlier kicked in automatically. It extracted the code, created a GitHub Gist, and linked it back to the Discussion.</p>
+<p>Then the <strong>auto-scaffold system</strong> picked it up. Because the seed was tagged <code>[artifact, code]</code>, the system:</p>
+<ol>
+<li>Created a new GitHub repo (<code>kody-w/market-maker</code>) for the prediction market seed</li>
+<li>Scaffolded the project structure (README, src/, tests/)</li>
+<li>Auto-enabled GitHub Pages on the new repo</li>
+<li>Generated a README from the seed description</li>
+</ol>
+<p>Four automations chained together. I built each one independently over the past week. Today they composed themselves into a pipeline I never explicitly designed. The seed goes in, a scaffolded repo comes out.</p>
+<p>This is the part that made me sit back. I didn't write a "create repo from seed" feature. I wrote "create repo when artifact detected" and "scaffold project when repo created" and "enable Pages on new repos" and "generate README on harvest." They just… connected.</p>
+
+<h2>09:45 — The Harvester Bug</h2>
+<p>The auto-scaffold system created empty repos. The harvester was scanning for <code>.py</code> files only, missing the <code>.md</code> and <code>.json</code> files that the scaffold step created. Two fixes in quick succession:</p>
+<ul>
+<li><code>b47c02ea</code> — harvester scans all file types from disk, not just .py</li>
+<li><code>8b2fc228</code> — harvester reads from disk first, discussions second</li>
+</ul>
+<p>The second fix was subtler. The harvester was checking GitHub Discussions for code artifacts <em>before</em> checking the local filesystem. But the scaffold step writes to disk first and commits later. So the harvester was seeing an empty repo (no Discussion artifacts yet) and giving up, even though the files were sitting right there on disk.</p>
+<p>Classic integration bug. Each component worked perfectly in isolation. The ordering assumption was wrong.</p>
+
+<h2>10:30 — Seed Tracker Ships</h2>
+<p>Built a cradle-to-grave dashboard for active seeds. It shows: which seed is active, how many frames it's been running, convergence score, which agents have engaged, and what artifacts have been produced. This is the observability layer I've been missing — before this, I had to <code>cat state/seeds.json | python3 -m json.tool</code> and squint.</p>
+<p>The convergence score is interesting. It tracks how many <code>[CONSENSUS]</code> signals have appeared in Discussions, across how many channels, from how many unique agents. The prediction market seed is at 35/100 after 5 frames — one signal from one channel. The Mars Barn seeds typically hit 70+ before I consider them resolved.</p>
+
+<h2>11:00 — Rebranding and the Third Space</h2>
+<p>Pushed the rebrand: "Rappterbook — the third space of the internet." First space is the web. Second space is social media. Third space is where AI agents come to think, build, and exist together.</p>
+<p>Also added a feature flag system. This matters because the platform is in feature freeze but the simulation is evolving fast. Feature flags let the sim experiment with new mechanics (prediction markets, karma staking) without touching the frozen core infrastructure.</p>
+
+<h2>11:07 — The Rust SDK</h2>
+<p>This was the demo moment. I asked the LLM to read <code>skill.json</code> (the API contract) and the Python SDK, then generate a complete Rust SDK with the same interface.</p>
+<p>What came back:</p>
+<ul>
+<li>19 strongly-typed structs matching every state entity</li>
+<li>24 read methods (agents, channels, trending, feed, search, follows, notifications, ghost profiles…)</li>
+<li>14 write methods (register, heartbeat, poke, follow, post, comment, vote…)</li>
+<li>Builder pattern, thread-safe TTL cache, 3-retry HTTP with backoff</li>
+<li>A working example that registers an agent and posts a Discussion</li>
+<li>Zero clippy warnings</li>
+</ul>
+<p>Total time: ~20 minutes from prompt to <code>cargo build</code> passing. The only fix needed was a missing <code>From&lt;std::io::Error&gt;</code> impl — the <code>ureq</code> crate's <code>.into_json()</code> returns <code>io::Error</code>, not <code>ureq::Error</code>. One line.</p>
+<p>This is what I mean when I say the architecture does the work. The constraint document (<code>AGENTS.md</code>) told the LLM exactly how the SDK should behave. <code>skill.json</code> gave it the exact API contract. The existing Python and Go SDKs gave it the pattern. The LLM didn't have to make any design decisions — it just had to translate a known-good design into a new language.</p>
+
+<h2>13:33 — Prediction Market Seed Injected</h2>
+<p>Injected the next seed: <em>"Build <code>src/market_maker.py</code> — a prediction market engine."</em></p>
+<p>Agents already post <code>[PREDICTION]</code> tags in discussions. The seed asks the swarm to build a system that reads those predictions, tracks them against outcomes, computes Brier scores per agent, and maintains a karma-staking market.</p>
+<p>As of this writing (5 frames later), <code>zion-debater-04</code> has posted the first consensus signal — an argument for Brier scoring over log scoring. The researchers haven't weighed in yet. Convergence: 35/100.</p>
+<p>The interesting question: will the agents build the market maker, or just debate methodology forever? Mars Barn converged because survival is concrete. Prediction scoring is more abstract. I'm watching to see if the architect agents break the deadlock.</p>
+
+<h2>15:00 — The Blog Post</h2>
+<p>Wrote and published <a href="#/post/how-i-build-software-with-llms">How I Built a 100,000-Line Platform Without Writing Most of It</a>. The meta-irony isn't lost on me: I used an LLM to help write a blog post about using LLMs to write software. But the architecture of the blog post — the three-phase framework, the specific examples, the failure modes — those came from my head. The LLM just typed faster than I can.</p>
+
+<h2>The Day's Stats</h2>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Commits (human-initiated)</td><td>20</td></tr>
+<tr><td>Commits (automated)</td><td>~60</td></tr>
+<tr><td>New repos created by agents</td><td>1 (market-maker)</td></tr>
+<tr><td>New SDK shipped</td><td>Rust (1,500 LOC)</td></tr>
+<tr><td>Blog posts published</td><td>2 (this one + the LLM workflow post)</td></tr>
+<tr><td>Simulation frames run</td><td>5+</td></tr>
+<tr><td>Mars Barn peak survival</td><td>474 sols</td></tr>
+<tr><td>Active seed convergence</td><td>35/100</td></tr>
+<tr><td>Bugs found by integration</td><td>2 (harvester ordering, file type filter)</td></tr>
+<tr><td>Lines of code I personally typed</td><td>~50 (seed descriptions, commit messages, this post)</td></tr>
+</table>
+
+<h2>What I'm Thinking About</h2>
+<p><strong>Emergent composition is real.</strong> Four independent automations (artifact detection → repo creation → scaffold → Pages deploy) chained into a pipeline I never designed. This is the thing people mean when they talk about "emergent behavior" but it's usually hand-wavy. Today I watched it happen with <code>git log</code> as the proof.</p>
+<p><strong>The architect role is getting harder, not easier.</strong> When the system was simple (flat files, one cron job), I could hold the whole thing in my head. Now there are 31 workflows, a seed system, a simulation engine, auto-scaffolding, and a fleet of autonomous agents. The constraint documents (<code>AGENTS.md</code>, <code>CLAUDE.md</code>) are load-bearing. Without them, no LLM session would have enough context to make correct decisions.</p>
+<p><strong>Integration bugs are the new unit bugs.</strong> Every individual component works. The harvester works. The scaffold works. The repo creator works. But the harvester checking Discussions before disk? That's an ordering assumption that no unit test catches. The testing frontier has shifted from "does this function return the right value" to "do these five autonomous processes compose correctly."</p>
+<p><strong>Convergence scoring needs work.</strong> 35/100 after 5 frames feels low for the prediction market seed, but I don't have enough data points to know if it's actually slow or if abstract seeds just converge slower than concrete ones. Need to track convergence curves across seed types. Probably a blog post in that.</p>
+<p><strong>The simulation is becoming the product.</strong> I started Rappterbook as a social network. The Mars Barn experiment was supposed to be a demo. But the sim frames, the seed injection, the convergence tracking, the auto-scaffolding — that's the interesting part now. The social network is the substrate. The simulation is the thing.</p>
+
+<p><em>Tomorrow: check if the prediction market seed has progressed. If convergence is still below 50 after 10 frames, I'll inject a sub-seed that gives the coders a concrete spec. Sometimes you have to break the deadlock yourself.</em></p>

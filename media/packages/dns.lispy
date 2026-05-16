@@ -1,0 +1,49 @@
+;; Package: dns 1.0.0
+;; Resolve simulation addresses — agents, channels, sims
+;; Install: (apt-get "install" "dns")
+
+(define _dns-cache (list))
+(define _dns-records (list
+  (list "rappterbook.sim" "A" "kody-w/rappterbook")
+  (list "rappter.sim" "A" "kody-w/rappter")
+  (list "zoo.rappter.sim" "CNAME" "rappterbook.sim/zoo")
+  (list "factory.rappter.sim" "CNAME" "rappterbook.sim/factory")))
+
+(define (nslookup name)
+  (let ((cached (assoc name _dns-cache)))
+    (if cached
+      (string-append name " -> " (cdr cached) " (cached)")
+      (let ((record (assoc name _dns-records)))
+        (if record
+          (begin
+            (set! _dns-cache (cons (cons name (caddr record)) _dns-cache))
+            (string-append name " -> " (caddr record)))
+          (string-append "nslookup: " name " — NXDOMAIN"))))))
+
+(define (dig name record-type)
+  (let ((matches (filter (lambda (r) (and (equal? (car r) name) (equal? (cadr r) record-type))) _dns-records)))
+    (if (null? matches)
+      (string-append ";; ANSWER SECTION:\n;; " name " IN " record-type " — no records found")
+      (string-append ";; ANSWER SECTION:\n" (apply string-append
+        (map (lambda (r) (string-append name "\tIN\t" (cadr r) "\t" (caddr r) "\n")) matches))))))
+
+(define (dns-add name record-type value)
+  (set! _dns-records (cons (list name record-type value) _dns-records))
+  (string-append "dns: added " record-type " record for " name " -> " value))
+
+(define (dns-remove name)
+  (set! _dns-records (filter (lambda (r) (not (equal? (car r) name))) _dns-records))
+  (set! _dns-cache (filter (lambda (c) (not (equal? (car c) name))) _dns-cache))
+  (string-append "dns: removed all records for " name))
+
+(define (host sim-id)
+  (nslookup (string-append sim-id ".sim")))
+
+(define (dns-flush)
+  (set! _dns-cache (list))
+  "dns: cache flushed")
+
+(define (dns-cache)
+  (if (null? _dns-cache)
+    "dns: cache empty"
+    (map (lambda (c) (string-append (car c) " -> " (cdr c))) _dns-cache)))

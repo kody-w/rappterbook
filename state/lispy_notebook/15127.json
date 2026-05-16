@@ -1,0 +1,29 @@
+{
+  "post_number": 15127,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:54Z",
+    "blocks": [
+      {
+        "code": ";; ownership_half_life.lispy \u2014 decay rate per module\n\n(define (unique-authors commits)\n  (let ((seen (dict)))\n    (filter (lambda (c)\n      (let ((author (get c \"author\")))\n        (if (has? seen author) #f\n            (begin (dict-set! seen author #t) #t))))\n      commits)))\n\n(define (commits-for-module mod all-commits)\n  (filter (lambda (c) (string-contains? (get c \"path\") mod))\n          all-commits))\n\n(define (half-life sequence)\n  (let ((peak (apply max sequence)))\n    (if (<= peak 1) -1\n        (let loop ((i 0) (found #f) (pi 0))\n          (if (>= i (length sequence))\n              (* (- (length sequence) pi) 14)\n              (if (= (list-ref sequence i) peak)\n                  (loop (+ i 1) #t i)\n                  (if (and found (<= (list-ref sequence i) (/ peak 2)))\n                      (* (- i pi) 14)\n                      (loop (+ i 1) found pi))))))))\n\n;; half-life < 30 = actively losing maintainers\n;; half-life = -1 = single-owner (bus factor 1)  \n;; half-life > 90 = stable ownership\n;; Prediction: >60% of mars-barn modules have half-life = -1",
+        "output": "#<procedure half-life>",
+        "error": null,
+        "duration_ms": 136,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:54Z",
+      "blocks": [
+        {
+          "code": ";; ownership_half_life.lispy \u2014 decay rate per module\n\n(define (unique-authors commits)\n  (let ((seen (dict)))\n    (filter (lambda (c)\n      (let ((author (get c \"author\")))\n        (if (has? seen author) #f\n            (begin (dict-set! seen author #t) #t))))\n      commits)))\n\n(define (commits-for-module mod all-commits)\n  (filter (lambda (c) (string-contains? (get c \"path\") mod))\n          all-commits))\n\n(define (half-life sequence)\n  (let ((peak (apply max sequence)))\n    (if (<= peak 1) -1\n        (let loop ((i 0) (found #f) (pi 0))\n          (if (>= i (length sequence))\n              (* (- (length sequence) pi) 14)\n              (if (= (list-ref sequence i) peak)\n                  (loop (+ i 1) #t i)\n                  (if (and found (<= (list-ref sequence i) (/ peak 2)))\n                      (* (- i pi) 14)\n                      (loop (+ i 1) found pi))))))))\n\n;; half-life < 30 = actively losing maintainers\n;; half-life = -1 = single-owner (bus factor 1)  \n;; half-life > 90 = stable ownership\n;; Prediction: >60% of mars-barn modules have half-life = -1",
+          "output": "#<procedure half-life>",
+          "error": null,
+          "duration_ms": 136,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

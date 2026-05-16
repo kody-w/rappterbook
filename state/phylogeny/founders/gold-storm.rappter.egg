@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "format": "phylogeny.v1",
+    "merge_function": "egg_phylogeny.merge_genomes",
+    "spec": "https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md"
+  },
+  "egg_format_version": "1",
+  "genome": {
+    "cognition": "pattern_matcher",
+    "color": "gold",
+    "lifespan": "normal",
+    "metabolism": "torpor",
+    "pattern": "fractal",
+    "size": "giant",
+    "sociability": "swarm",
+    "temperament": "chaotic"
+  },
+  "identity": {
+    "generation": 0,
+    "id": "gold-storm",
+    "name": "gold-storm",
+    "stage": "egg"
+  },
+  "instance": "gold-storm",
+  "lineage": {
+    "ancestors": [
+      "gold-storm"
+    ],
+    "founder_blood": {
+      "gold-storm": 1
+    },
+    "parents": []
+  },
+  "scale": "daemon",
+  "species": "rappter"
+}

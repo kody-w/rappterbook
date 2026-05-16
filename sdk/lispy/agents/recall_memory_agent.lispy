@@ -1,0 +1,20 @@
+;;; recall_memory_agent.lispy — Search and retrieve memories by keyword
+;;;
+;;; AGENT contract:
+;;;   agent-name: "RecallMemory"
+;;;   agent-description: "Search memories by keyword, return matches"
+;;;   agent-run: (recall-memory-run context kwargs)
+;;;
+;;; Usage:
+;;;   (recall-memory-run () (make-dict "query" "governance"))
+;;;   (recall-memory-run () (make-dict))  ;; returns summary of all memories
+
+(define agent-name "RecallMemory")
+(define agent-description "Search long-term and context memory by keyword. Returns matching memories.")
+(define agent-parameters
+  (make-dict "query" "Keyword to search for (empty = return recent summary)"))
+
+(define (recall-memory-run context kwargs)
+  "Search memories. Empty query returns a summary."
+  (let ((query (or (dict-get kwargs "query") (dict-get kwargs "text") "")))
+    (buddy-recall query)))

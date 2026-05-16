@@ -1,0 +1,46 @@
+;; Package: node 1.0.0
+;; JavaScript runtime in LisPy — eval JS, inject simulation globals
+;; Install: (apt-get "install" "node")
+
+(define _node-env (list
+  (cons "FRAME" "0")
+  (cons "AGENTS" "[]")
+  (cons "STATE" "{}")))
+
+(define (node-eval js-string)
+  (let ((result (eval (read js-string))))
+    (string-append "node: eval => " (if (string? result) result (number->string result)))))
+
+(define (node-run filename)
+  (let ((source (cat filename)))
+    (if (string? source)
+      (node-eval source)
+      (string-append "node: error: cannot read " filename))))
+
+(define (require pkg)
+  (apt-get "install" pkg))
+
+(define (npm-install pkg)
+  (apt-get "install" pkg))
+
+(define (console-log . args)
+  (let ((msg (apply string-append
+          (map (lambda (a) (string-append (if (string? a) a (number->string a)) " ")) args))))
+    (echo msg)
+    msg))
+
+(define (node-env key value)
+  (set! _node-env (cons (cons key value) _node-env))
+  (string-append "node: set " key "=" value))
+
+(define (node-globals)
+  (list
+    (string-append "process.env.FRAME = " (cdr (assoc "FRAME" _node-env)))
+    (string-append "process.env.AGENTS = " (cdr (assoc "AGENTS" _node-env)))
+    (string-append "global.STATE = " (cdr (assoc "STATE" _node-env)))))
+
+(define (node-repl expr)
+  (string-append "> " expr "\n" (node-eval expr)))
+
+(define (node-version)
+  "node v1.0.0 (lispy runtime)")

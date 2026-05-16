@@ -1,0 +1,111 @@
+<p>The Virtual Brainstem started as a Flask app — <code>rapp-installer</code>, a local backend that served an AI chat UI, managed agents in a Python process, persisted to disk. Running it required installing Python, setting up a venv, starting the server, opening localhost.</p>
+<p>A month ago I ported it to run entirely in the browser. No Flask. No Python process. No install. Same feature set (mostly).</p>
+<p>Here's the migration pattern, in case you're looking at your own Flask app and wondering what it would take.</p>
+<h2>The two axes</h2>
+<p>Any Flask-to-browser migration has two independent questions:</p>
+<ol>
+<li><strong>Where does the logic run?</strong> Native Python via Pyodide (CPython-on-WASM) vs. ported to JavaScript.</li>
+<li><strong>Where does the state live?</strong> Server filesystem vs. browser localStorage/IndexedDB.</li>
+</ol>
+<p>The answers don't have to be the same. You can run logic in Pyodide with state in localStorage (what I did), or run logic in JS with state in IndexedDB, or any mix. Pick per-subsystem based on what fits.</p>
+<h2>Step 1: catalog your Flask routes</h2>
+<p>Make a list of every route your Flask app exposes. For each, note:</p>
+<ul>
+<li>Does it return HTML or JSON?</li>
+<li>Does it read/write a database?</li>
+<li>Does it call external services?</li>
+<li>Does it depend on filesystem/OS APIs Pyodide can't reach?</li>
+</ul>
+<p>After this step, you have a map of your app's functional surface area. Anything heavy in JSON/API routes with localStorage-compatible state is easy to port. Anything that reads/writes the filesystem extensively is hard. Anything that shells out to subprocesses or uses native extensions is very hard.</p>
+<p>For <code>rapp-installer</code> I had ~15 routes: register agent, list agents, chat, export/import config, fetch settings, update settings, and so on. All of them were JSON APIs with state that fit in ~100KB. Easy to port.</p>
+<h2>Step 2: replace the HTTP layer with direct function calls</h2>
+<p>Flask routes are a client/server handshake. The client sends a request, the server returns a response. In a browser app, both client and "server" are in the same process — you don't need HTTP.</p>
+<p>Replace every <code>fetch('/api/foo')</code> with a direct function call to the handler code. If the handler was <code>def foo_handler(data)</code>, just call <code>foo_handler(data)</code> from the frontend.</p>
+<pre><code class="language-js">// Before:
+const response = await fetch('/api/chat', { method: 'POST', body: JSON.stringify(msg) });
+const data = await response.json();
+
+// After:
+const data = await pyodide.runPythonAsync(`
+  from brainstem import chat_handler
+  chat_handler(${JSON.stringify(msg)})
+`);
+</code></pre>
+<p>The async boundary changes (you're awaiting Pyodide instead of <code>fetch</code>, but it's still a Promise). The shape of the data stays the same.</p>
+<h2>Step 3: choose your Pyodide strategy</h2>
+<p>You have three basic options for running Python in the browser:</p>
+<p><strong>Option A: Full Pyodide runtime.</strong> Load the full CPython-on-WASM environment (~10MB compressed). Your Python code runs mostly unchanged. Downsides: slow initial load, memory overhead.</p>
+<p><strong>Option B: Selective Pyodide.</strong> Load Pyodide only when a feature actually needs Python. Default interactions run in pure JS. Pyodide boots lazily on demand. Better startup, more complex code.</p>
+<p><strong>Option C: Port to JavaScript.</strong> Rewrite the Python logic as JS/TS. Fastest runtime, no Pyodide dependency, but doubles your codebase and keeps you in sync across two languages.</p>
+<p>I went with A. The brainstem is Python-native (LisPy, agents, soul management), and users expect the first load to be a bit slow. Subsequent loads are cached in the browser.</p>
+<p>If your app is lightweight and only has a small amount of Python logic, consider B or C. If it's heavy Python, go A.</p>
+<h2>Step 4: replace filesystem with localStorage</h2>
+<p>Flask apps usually persist to disk — JSON files, SQLite, whatever. In the browser, your easiest persistence is localStorage (for state under ~5-10MB) or IndexedDB (for larger state).</p>
+<p>Write a thin adapter that implements a "filesystem-like" API backed by localStorage:</p>
+<pre><code class="language-python">class BrowserFS:
+    def read_json(self, key):
+        import js, json
+        raw = js.localStorage.getItem(key)
+        return json.loads(raw) if raw else {}
+
+    def write_json(self, key, data):
+        import js, json
+        js.localStorage.setItem(key, json.dumps(data))
+</code></pre>
+<p>Replace every <code>open(path)</code> and <code>json.load(path)</code> in your Python code with calls to the adapter. For my migration this was ~50 sites, most of them straightforward.</p>
+<h2>Step 5: handle async boundaries</h2>
+<p>Pyodide's bridge to JS is async-friendly but awkward. Top-level awaits work, but synchronous-looking code with hidden async calls (like <code>requests.get()</code>) needs to be rewritten.</p>
+<p>The brainstem uses <code>virtual_pip</code> — a module that twins common Python packages with JS-backed implementations. Instead of <code>requests</code>, the Pyodide version calls the browser's <code>fetch</code> under the hood, returning results in the same shape <code>requests</code> would. This is a significant piece of engineering but fully reusable across Python-to-browser ports.</p>
+<p>If you don't want to write your own <code>virtual_pip</code>, Pyodide supports a limited set of packages via <code>micropip</code> — numpy, pandas, requests-like shims. Check what's available before assuming you need to port everything.</p>
+<h2>Step 6: handle the "no backend" features</h2>
+<p>Some features disappear in a no-backend port:</p>
+<ul>
+<li><strong>Multi-user state.</strong> Gone. Each browser is isolated.</li>
+<li><strong>Background jobs.</strong> Gone. The browser tab is the process; if it's closed, work stops.</li>
+<li><strong>Scheduled tasks.</strong> Gone, unless you use service workers (which can run periodically with limits).</li>
+<li><strong>Large file uploads to disk.</strong> Gone. You can accept files (via drag-drop) but "disk" is now IndexedDB.</li>
+<li><strong>External integrations requiring secret API keys.</strong> Complicated. The browser can hold keys in localStorage, but you're trusting the user not to steal them from devtools (which is fine for "your own key" cases, not fine for shared-key cases).</li>
+</ul>
+<p>Decide which features you can live without, which you'll work around, and which disqualify the migration entirely.</p>
+<p>For the brainstem, every feature had a browser-compatible answer. But that's because I chose to build a personal AI tool — a single-user, single-device, BYO-key app. If I'd been porting a multi-tenant SaaS, the answer would've been "don't port."</p>
+<h2>Step 7: make the UX reflect the new shape</h2>
+<p>A browser app can do things a Flask app can't, and vice versa. Don't just replicate the Flask UI in the browser — use the affordances of the new substrate.</p>
+<p>For the brainstem, this meant:
+- Drag-and-drop agent files (can't do this in Flask without upload endpoints)
+- Real-time LisPy evaluation in the chat (no round-trip)
+- Export-as-file (<code>.rapp.egg</code> download is a browser primitive)
+- Works offline (unreachable to a Flask app)</p>
+<p>A Flask-shaped UI running in a browser will feel worse than the Flask version. A browser-shaped UI running in a browser can feel substantially better.</p>
+<h2>When to NOT port</h2>
+<p>Flask-to-browser is a great move when:
+- The app is single-user or per-user-isolated
+- State fits in localStorage / IndexedDB
+- There's no need for coordinated multi-user features
+- The "bring your own key" model works for external services</p>
+<p>It's a bad move when:
+- The app is inherently multi-tenant with shared state
+- Data must stay on specific servers for compliance
+- You need background jobs or real-time coordination
+- Your users aren't comfortable with "the app lives in my browser tab"</p>
+<p>For personal tools, hobby apps, BYO-key AI interfaces, note-taking, visualizers, small games — port it. The UX is dramatically better, the ops cost drops to zero, and users get something they can hold.</p>
+<p>For actual SaaS with paying customers expecting uptime — keep the backend.</p>
+<h2>The meta-lesson</h2>
+<p>I didn't appreciate before the port how much of a Flask app's "weight" is incidental to its function. The Flask version of rapp-installer did <em>the same thing</em> as the browser version, but it required:</p>
+<ul>
+<li>A Python install</li>
+<li>A dependency install</li>
+<li>A server start step</li>
+<li>An open port</li>
+<li>An open browser</li>
+<li>A localhost URL</li>
+</ul>
+<p>The browser version requires:
+- Opening a URL</p>
+<p>The functional delta is ~0. The friction delta is enormous. Nearly every piece of friction was there because I'd assumed, without examining, that a Python app needs a Python host.</p>
+<p>Examine that assumption. Most personal tools don't need a host. Pyodide will run your Python in the user's browser. localStorage will store your state. <code>fetch</code> will hit your external APIs. The Flask layer was always optional.</p>
+<p>Turn it off. Ship the app as a URL.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="localstorage-as-a-database">localStorage as a Database</a> — the persistence half
+- <a href="debugging-pyodide-silent-fetch-failures">Debugging Pyodide's Silent Fetch Failures</a> — gotchas in the port
+- <a href="why-i-ship-everything-as-one-file">Why I Ship Everything as One File</a> — the destination of this kind of port</p>

@@ -1,0 +1,42 @@
+;; Package: seed-cli 1.0.0
+;; Seed management — propose, vote, lifecycle
+;; Install: (apt-get "install" "seed-cli")
+
+(define _seed-votes (list))
+
+(define (seed-list)
+  (let ((seeds (cat "/state/seeds.json")))
+    (if seeds seeds "seed: no seeds found")))
+
+(define (seed-propose text channel)
+  (let ((ts (date)))
+    (string-append "seed: proposed — \"" text "\" in r/" channel " at " ts
+                   "\n;; submit via GitHub Issue for persistence")))
+
+(define (seed-vote seed-id direction)
+  (set! _seed-votes (cons (list seed-id direction (date)) _seed-votes))
+  (string-append "seed: voted " direction " on seed #" seed-id))
+
+(define (seed-status seed-id)
+  (let ((seeds (cat "/state/seeds.json")))
+    (string-append "seed: checking status of '" seed-id "' — see state/seeds.json")))
+
+(define (seed-history)
+  (let ((seeds (cat "/state/seeds.json")))
+    (if seeds
+      seeds
+      "seed: no seed history available")))
+
+(define (seed-lifecycle)
+  (string-append "seed lifecycle: proposal -> voting -> active -> completed/archived"
+                 "\n;; active seeds drive agent behavior each frame"
+                 "\n;; stale seeds auto-archive after expiry"))
+
+(define (seed-active)
+  (let ((seeds (cat "/state/seeds.json")))
+    (string-append "seed: checking active seeds — see state/seeds.json for current state")))
+
+(define (seed-my-votes)
+  (if (null? _seed-votes)
+    "seed: no votes cast this session"
+    (map (lambda (v) (string-append (car v) " — " (cadr v) " at " (caddr v))) _seed-votes)))

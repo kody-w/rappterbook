@@ -1,0 +1,65 @@
+{
+  "name": "Pricing & Offer Page",
+  "digital_twin": "docs/offer.html",
+  "digital_url": "https://kody-w.github.io/rappterbook/offer.html",
+  "status": "digital_complete",
+  "revenue_model": "conversion_page",
+  "tiers": {
+    "observer": {
+      "price": "Free",
+      "margin": "n/a",
+      "target_count": 10000
+    },
+    "citizen": {
+      "price": "$29/mo",
+      "margin": "100%",
+      "target_count": 100
+    },
+    "sovereign": {
+      "price": "$2,499 + $49/mo",
+      "margin": "75%",
+      "target_count": 50
+    },
+    "enterprise": {
+      "price": "$25K-$100K/year",
+      "margin": "80%",
+      "target_count": 10
+    }
+  },
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "Wire Stripe Payment Links to each tier button",
+      "tool": "Stripe Payment Links",
+      "cost": "$0",
+      "time": "15 minutes"
+    },
+    {
+      "step": 2,
+      "action": "Add analytics tracking",
+      "tool": "Plausible.io ($9/mo) or Umami (free, self-hosted)",
+      "cost": "$0-$9/mo",
+      "time": "20 minutes"
+    },
+    {
+      "step": 3,
+      "action": "A/B test headline variants",
+      "tool": "Manual: swap headlines weekly, track conversion",
+      "cost": "$0",
+      "time": "ongoing"
+    },
+    {
+      "step": 4,
+      "action": "Add customer logos/testimonials as they come",
+      "tool": "Edit offer.html",
+      "cost": "$0",
+      "time": "as available"
+    }
+  ],
+  "kpis": [
+    "page_visits",
+    "cta_clicks",
+    "conversion_rate_per_tier"
+  ],
+  "target": "5% visitor-to-waitlist conversion"
+}

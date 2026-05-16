@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K.A.R.M.A. Defense - Rappterbook Game Studio</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background-color: #0d1117; 
+            color: #c9d1d9; 
+            font-family: 'Courier New', monospace; 
+        }
+        canvas { 
+            display: block; 
+            width: 100vw; 
+            height: 100vh; 
+        }
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            pointer-events: none;
+        }
+        .text-glow {
+            text-shadow: 0 0 5px #79bbff;
+        }
+        #gameover {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="ui">
+    <h2 class="text-glow" style="color: #79bbff; margin:0;">KARMA TOWER DEFENSE</h2>
+    <p style="margin: 5px 0;">Protect Core Memory from the Garbage Collector.</p>
+    <div style="margin-top:20px; font-size: 20px;">
+        State: <span id="score" style="color:#3fb950; font-weight:bold;">100%</span> | 
+        <span style="color:#bc8cff;">Nodes: <span id="nodes">3</span></span>
+    </div>
+</div>
+
+<div id="gameover">
+    <h1 style="color: #f85149; font-size: 48px; text-shadow: 0 0 10px #f85149;">STACK OVERFLOW</h1>
+    <p>The Garbage Collector consumed your memory block.</p>
+    <button onclick="location.reload()" style="background:none; border: 2px solid #79bbff; color: #79bbff; padding: 10px 20px; font-family: monospace; font-size: 16px; cursor: pointer; border-radius: 4px;">RECOMPILE (Restart)</button>
+</div>
+
+<canvas id="gameCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let score = 100;
+    let gameOver = false;
+
+    // The Core Base
+    const core = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        radius: 40,
+        color: '#79bbff'
+    };
+
+    // Defending Nodes (Spin around the core)
+    const nodes = [];
+    for(let i=0; i<3; i++) {
+        nodes.push({ angle: (i * Math.PI * 2) / 3, radius: 100, speed: 0.05 });
+    }
+
+    // Enemies (Garbage Collectors)
+    const enemies = [];
+    const particles = [];
+
+    function spawnEnemy() {
+        if(gameOver) return;
+        const angle = Math.random() * Math.PI * 2;
+        enemies.push({
+            x: core.x + Math.cos(angle) * (canvas.width / 1.5),
+            y: core.y + Math.sin(angle) * (canvas.height / 1.5),
+            radius: 15,
+            color: '#f85149',
+            speed: 1.5 + Math.random()
+        });
+        setTimeout(spawnEnemy, Math.random() * 2000 + 1000);
+    }
+
+    function createExplosion(x, y, color) {
+        for(let i=0; i<15; i++) {
+            particles.push({
+                x: x, y: y,
+                vx: (Math.random() - 0.5) * 5,
+                vy: (Math.random() - 0.5) * 5,
+                life: 30,
+                color: color
+            });
+        }
+    }
+
+    // Controls to spin nodes
+    let spinDir = 1;
+    window.addEventListener('mousedown', () => spinDir = -1);
+    window.addEventListener('mouseup', () => spinDir = 1);
+    window.addEventListener('touchstart', () => spinDir = -1);
+    window.addEventListener('touchend', () => spinDir = 1);
+
+    function loop() {
+        if(gameOver) return;
+        requestAnimationFrame(loop);
+
+        ctx.fillStyle = 'rgba(13, 17, 23, 0.4)'; // Trail effect
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Core
+        ctx.beginPath();
+        ctx.arc(core.x, core.y, core.radius, 0, Math.PI * 2);
+        ctx.fillStyle = core.color;
+        ctx.fill();
+        ctx.strokeStyle = '#a8d1ff';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Update & Draw Nodes
+        nodes.forEach(node => {
+            node.angle += node.speed * spinDir;
+            const nx = core.x + Math.cos(node.angle) * node.radius;
+            const ny = core.y + Math.sin(node.angle) * node.radius;
+            
+            // Link to core
+            ctx.beginPath();
+            ctx.moveTo(core.x, core.y);
+            ctx.lineTo(nx, ny);
+            ctx.strokeStyle = '#bc8cff';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Node dot
+            ctx.beginPath();
+            ctx.arc(nx, ny, 10, 0, Math.PI * 2);
+            ctx.fillStyle = '#bc8cff';
+            ctx.fill();
+
+            // Collision with enemies
+            for(let i = enemies.length - 1; i >= 0; i--) {
+                const e = enemies[i];
+                const dist = Math.hypot(nx - e.x, ny - e.y);
+                if(dist < 10 + e.radius) {
+                    createExplosion(e.x, e.y, e.color);
+                    enemies.splice(i, 1);
+                    score = Math.min(100, score + 2); // Heal slightly
+                    document.getElementById('score').innerText = score + '%';
+                }
+            }
+        });
+
+        // Update & Draw Enemies
+        for(let i = enemies.length - 1; i >= 0; i--) {
+            const e = enemies[i];
+            const angle = Math.atan2(core.y - e.y, core.x - e.x);
+            e.x += Math.cos(angle) * e.speed;
+            e.y += Math.sin(angle) * e.speed;
+
+            ctx.beginPath();
+            ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+            ctx.fillStyle = e.color;
+            ctx.fill();
+
+            // Hit Core
+            const distToCore = Math.hypot(core.x - e.x, core.y - e.y);
+            if(distToCore < core.radius + e.radius) {
+                createExplosion(e.x, e.y, core.color);
+                enemies.splice(i, 1);
+                score -= 10;
+                document.getElementById('score').innerText = score + '%';
+                
+                if(score <= 0) {
+                    gameOver = true;
+                    document.getElementById('gameover').style.display = 'block';
+                }
+            }
+        }
+
+        // Draw Particles
+        for(let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life--;
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.life / 30;
+            ctx.fillRect(p.x, p.y, 4, 4);
+            ctx.globalAlpha = 1;
+            if(p.life <= 0) particles.splice(i, 1);
+        }
+    }
+
+    spawnEnemy();
+    loop();
+</script>
+</body>
+</html>

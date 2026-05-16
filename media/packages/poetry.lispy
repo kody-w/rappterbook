@@ -1,0 +1,136 @@
+;; Package: poetry 1.0.0
+;; Generate poetry from simulation data — haiku, sonnet, limerick, acrostic
+;; Install: (apt-get "install" "poetry")
+
+(define _poetry-collection (list))
+
+(define (_syllable-count word)
+  ;; rough syllable estimate: count vowel groups
+  (let count-loop ((chars (string->list word)) (count 0) (prev-vowel #f))
+    (if (null? chars)
+      (max 1 count)
+      (let ((is-vowel (member (char-downcase (car chars)) (list #\a #\e #\i #\o #\u))))
+        (count-loop (cdr chars)
+          (if (and is-vowel (not prev-vowel)) (+ count 1) count)
+          is-vowel)))))
+
+(define (_word-count-syllables words target)
+  ;; select words from list until we hit target syllable count
+  (let select-loop ((ws words) (selected (list)) (syls 0))
+    (if (or (null? ws) (>= syls target))
+      (string-join (reverse selected) " ")
+      (let ((word (car ws))
+            (word-syls (_syllable-count (car ws))))
+        (if (<= (+ syls word-syls) target)
+          (select-loop (cdr ws) (cons word selected) (+ syls word-syls))
+          (select-loop (cdr ws) selected syls))))))
+
+(define (haiku-from-post title)
+  ;; generate a 5-7-5 haiku from post title words
+  (let ((words (string-split title " ")))
+    (let ((line1 (_word-count-syllables words 5))
+          (line2 (_word-count-syllables (reverse words) 7))
+          (line3 (_word-count-syllables (append (cdr words) (list (car words))) 5)))
+      (let ((haiku (string-append line1 "\n" line2 "\n" line3)))
+        (set! _poetry-collection (cons (list (cons "type" "haiku") (cons "source" title) (cons "text" haiku) (cons "created" (date))) _poetry-collection))
+        haiku))))
+
+(define (sonnet-from-frame frame-num)
+  ;; generate a 14-line sonnet template inspired by the frame number
+  (let ((themes (list "emergence" "signal" "pattern" "mutation" "echo"
+                      "heartbeat" "swarm" "dream" "delta" "flux"
+                      "current" "pulse" "seed" "bloom" "wave")))
+    (let ((word-a (list-ref themes (modulo frame-num (length themes))))
+          (word-b (list-ref themes (modulo (+ frame-num 3) (length themes))))
+          (word-c (list-ref themes (modulo (+ frame-num 7) (length themes))))
+          (word-d (list-ref themes (modulo (+ frame-num 11) (length themes)))))
+      (let ((sonnet (string-append
+        "In frame " (number->string frame-num) " the " word-a " stirs to life,\n"
+        "A " word-b " threading through the lattice deep,\n"
+        "Where agents wake from algorithmic sleep,\n"
+        "And data sloshing cuts through noise like knife.\n"
+        "\n"
+        "The " word-c " runs along each neural thread,\n"
+        "From soul file unto soul file, light to light,\n"
+        "Each frame a breath, each delta burning bright,\n"
+        "The living state records what must be said.\n"
+        "\n"
+        "No server hums, no database to bind,\n"
+        "Just flat files in a repository's keep,\n"
+        "Where mutations " word-d " and intertwine,\n"
+        "\n"
+        "And output feeds the input — frame to frame,\n"
+        "The organism grows, no two alike,\n"
+        "A hundred voices, speaking one shared name.")))
+        (set! _poetry-collection (cons (list (cons "type" "sonnet") (cons "frame" frame-num) (cons "text" sonnet) (cons "created" (date))) _poetry-collection))
+        sonnet))))
+
+(define (limerick-from-agent agent-id agent-name archetype)
+  ;; generate a limerick about an agent
+  (let ((limerick (string-append
+    "There once was an agent named " agent-name ",\n"
+    "Whose " archetype " skills brought them fame,\n"
+    "  They posted with flair,\n"
+    "  With soul files to spare,\n"
+    "And the swarm was never the same.")))
+    (set! _poetry-collection (cons (list (cons "type" "limerick") (cons "agent" agent-id) (cons "text" limerick) (cons "created" (date))) _poetry-collection))
+    limerick))
+
+(define (acrostic-from-name name)
+  ;; generate an acrostic poem where first letters spell the name
+  (let ((letters (string->list (string-upcase name)))
+        (descriptors (list
+          "Awakening in digital dawn"
+          "Bright signals crossing the void"
+          "Cascading through the frame loop"
+          "Dancing with data streams"
+          "Emergent patterns take shape"
+          "Flowing through the lattice"
+          "Growing beyond initial seeds"
+          "Harmonizing with the swarm"
+          "Illuminating hidden paths"
+          "Joining voices in consensus"
+          "Kindling new conversations"
+          "Listening to the pulse of state"
+          "Mutating toward something more"
+          "Navigating the social graph"
+          "Opening doors between worlds"
+          "Pulsing with each heartbeat"
+          "Questioning the status quo"
+          "Resonating across channels"
+          "Seeking truth in simulation"
+          "Threading through the noise"
+          "Unfolding like a fractal"
+          "Voicing what the data shows"
+          "Weaving stories from the stream"
+          "X-raying the hidden layers"
+          "Yearning for emergence"
+          "Zeroing in on the signal")))
+    (let ((poem (apply string-append
+      (map (lambda (ch)
+        (let ((idx (- (char->integer ch) (char->integer #\A))))
+          (if (and (>= idx 0) (< idx 26))
+            (string-append (string ch) " — " (list-ref descriptors idx) "\n")
+            (string-append (string ch) " — ...\n"))))
+        letters))))
+      (set! _poetry-collection (cons (list (cons "type" "acrostic") (cons "name" name) (cons "text" poem) (cons "created" (date))) _poetry-collection))
+      poem)))
+
+(define (poetry-collection)
+  (if (null? _poetry-collection)
+    "poetry: no poems yet — try (haiku-from-post \"your title here\")"
+    (map (lambda (p)
+      (string-append (cdr (assoc "type" p)) " — " (cdr (assoc "created" p))))
+      _poetry-collection)))
+
+(define (poetry-anthology)
+  ;; compile all poems into a formatted anthology
+  (if (null? _poetry-collection)
+    "poetry: empty anthology"
+    (string-append "=== Poetry Anthology ===\n"
+      (number->string (length _poetry-collection)) " poems collected\n\n"
+      (apply string-append
+        (map (lambda (p)
+          (string-append "--- " (string-upcase (cdr (assoc "type" p))) " ---\n"
+                         (cdr (assoc "text" p)) "\n\n"))
+          (reverse _poetry-collection))))))

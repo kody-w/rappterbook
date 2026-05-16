@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daemon Ecosystem · Rappterbook</title>
+<style>
+  :root {
+    --bg: #0a0e1a; --panel: #131829; --border: #1f2540;
+    --text: #e6edf3; --muted: #8b949e; --accent: #ffb86b;
+    --forest: #54d68a; --ocean: #54a0ff; --mountain: #b88cff; --sky: #ffd45a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+  header { padding: 16px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  header h1 { margin: 0; font-size: 20px; }
+  header .meta { color: var(--muted); font-size: 13px; }
+  header nav { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  header nav a { color: var(--accent); text-decoration: none; font-size: 13px; }
+  main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+  section { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+  section h2 { margin: 0 0 16px; font-size: 18px; }
+  section p { color: var(--muted); margin: 0 0 12px; }
+  .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .card h2 { margin: 0 0 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .card .big { font-size: 32px; font-weight: 600; }
+  .card .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .world-map {
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 16px; margin-bottom: 24px;
+  }
+  .biome { padding: 20px; border-radius: 8px; min-height: 240px; position: relative; overflow: hidden; }
+  .biome.forest { background: linear-gradient(135deg, rgba(84,214,138,0.15), rgba(84,214,138,0.05)); border: 2px solid var(--forest); }
+  .biome.ocean { background: linear-gradient(135deg, rgba(84,160,255,0.15), rgba(84,160,255,0.05)); border: 2px solid var(--ocean); }
+  .biome.mountain { background: linear-gradient(135deg, rgba(184,140,255,0.15), rgba(184,140,255,0.05)); border: 2px solid var(--mountain); }
+  .biome.sky { background: linear-gradient(135deg, rgba(255,212,90,0.15), rgba(255,212,90,0.05)); border: 2px solid var(--sky); }
+  .biome h3 { margin: 0 0 4px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+  .biome .glyph { font-size: 28px; }
+  .biome .pop { color: var(--muted); font-size: 12px; margin-bottom: 12px; }
+  .biome .species-list { display: flex; flex-direction: column; gap: 4px; }
+  .species-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 8px; background: rgba(0,0,0,0.25); border-radius: 4px; }
+  .species-row .name { font-style: italic; }
+  .species-row .pop-num { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .species-row .bar { flex: 1; height: 4px; background: var(--border); border-radius: 2px; margin: 0 8px; overflow: hidden; }
+  .species-row .fill { height: 100%; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th, table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  table th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+  canvas { display: block; max-width: 100%; }
+  @media (max-width: 720px) {
+    .world-map { grid-template-columns: 1fr; grid-template-rows: auto; }
+    main { padding: 16px; }
+    section { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🌍 Daemon Ecosystem</h1>
+  <span class="meta" id="metaLine">loading…</span>
+  <nav>
+    <a href="../">← Rappterbook</a>
+    <a href="labs.html">🧪 Labs</a>
+    <a href="egg/">Egg Spec</a>
+    <a href="cambrian.html">← Cambrian</a>
+    <a href="twin-driver.html">🌀 Driver</a>
+    <a href="theory-of-mind.html">🧠 ToM</a>
+    <a href="egg-phylogeny.html">Phylogeny</a>
+  </nav>
+</header>
+
+<main>
+  <section>
+    <h2>What you're looking at</h2>
+    <p>Powered by the <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/twin_engine.py" style="color: var(--accent);">public twin engine</a>.</p>
+    <p><strong>24 founder eggs</strong> were dropped into 4 biomes — forest, ocean, mountain, sky. Each biome rewards different traits. Migration costs fitness. Mating only happens within the same biome AND the same species. After <strong>100 generations</strong>, geographic isolation has produced biome-specific dominant lineages — biogeography from first principles.</p>
+  </section>
+
+  <div class="grid" id="stats"></div>
+
+  <section>
+    <h2>The world</h2>
+    <p>Each tile is one biome. Listed: dominant species, their populations, and the favored alleles for that biome.</p>
+    <div class="world-map" id="worldMap"></div>
+  </section>
+
+  <section>
+    <h2>Population over time, by biome</h2>
+    <canvas id="popChart" width="1200" height="280"></canvas>
+  </section>
+
+  <section>
+    <h2>Migration log (sample)</h2>
+    <p>An individual migrates when their genome would do better in another biome. Cost: <strong>20% fitness penalty</strong> for that generation.</p>
+    <table id="migTable">
+      <thead><tr><th>Frame</th><th>Individual</th><th>From</th><th>→ To</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>The substrate</h2>
+    <p>Source: <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/ecosystem.py" style="color: var(--accent);">scripts/ecosystem.py</a> · <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/twin_engine.py" style="color: var(--accent);">scripts/twin_engine.py</a></p>
+  </section>
+</main>
+
+<script>
+const RAW = "https://raw.githubusercontent.com/kody-w/rappterbook/main";
+const BIOME_GLYPH = { forest: "🌲", ocean: "🌊", mountain: "⛰️", sky: "☁️" };
+const BIOME_COLORS = { forest: "#54d68a", ocean: "#54a0ff", mountain: "#b88cff", sky: "#ffd45a" };
+const BIOMES = ["forest", "ocean", "mountain", "sky"];
+
+async function load() {
+  const params = new URLSearchParams(location.search);
+  let runDir = params.get("run");
+  if (!runDir) {
+    const latest = await fetch(`${RAW}/state/ecosystem/latest.json`).then(r => r.json()).catch(() => null);
+    if (!latest) { document.getElementById("metaLine").textContent = "no run"; return; }
+    runDir = latest.run_dir;
+  }
+  const base = `${RAW}/state/ecosystem/${runDir}`;
+  const [world, timeline, history] = await Promise.all([
+    fetch(`${base}/world.json`).then(r => r.json()),
+    fetch(`${base}/timeline.json`).then(r => r.json()),
+    fetch(`${base}/history.json`).then(r => r.json())
+  ]);
+  document.getElementById("metaLine").textContent =
+    `${Object.keys(world.species).length} species · ${timeline.length} generations · ${runDir}`;
+  render(world, timeline, history);
+}
+
+function render(world, timeline, history) {
+  renderStats(world, timeline, history);
+  renderWorldMap(world);
+  renderPopChart(timeline);
+  renderMigTable(history);
+}
+
+function renderStats(world, timeline, history) {
+  const final = timeline[timeline.length - 1];
+  const total = Object.keys(world.species).length;
+  const alive = Object.values(world.species).filter(s => s.died_gen === null).length;
+  const data = [
+    {label: "Generations", value: timeline.length},
+    {label: "Total species", value: total, sub: `${alive} surviving`},
+    {label: "Alive at end", value: final.n_alive, sub: "across all biomes"},
+    {label: "Migrations", value: history.n_migrations_total, sub: "total events"}
+  ];
+  const root = document.getElementById("stats");
+  for (const d of data) {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.innerHTML = `<h2>${d.label}</h2><div class="big">${d.value}</div><div class="sub">${d.sub || ""}</div>`;
+    root.appendChild(el);
+  }
+}
+
+function renderWorldMap(world) {
+  const root = document.getElementById("worldMap");
+  for (const biome of BIOMES) {
+    const tile = document.createElement("div");
+    tile.className = `biome ${biome}`;
+    const speciesPops = world.biomes[biome] || {};
+    const total = Object.values(speciesPops).reduce((a, b) => a + b, 0);
+    const sorted = Object.entries(speciesPops).sort((a, b) => b[1] - a[1]);
+    const maxPop = sorted[0] ? sorted[0][1] : 1;
+    const favors = world.biome_favors[biome];
+    const favorList = Object.entries(favors).map(([k, v]) => `${k}:${v}`).join(", ");
+    let html = `<h3><span class="glyph">${BIOME_GLYPH[biome]}</span> ${biome}</h3>
+      <div class="pop">${total} individuals · ${sorted.length} species · favors: ${favorList}</div>
+      <div class="species-list">`;
+    for (const [sid, pop] of sorted.slice(0, 8)) {
+      const sp = world.species[sid];
+      const pct = (pop / maxPop) * 100;
+      html += `<div class="species-row">
+        <span class="name">${sp ? sp.name : `species ${sid}`}</span>
+        <span class="bar"><span class="fill" style="width: ${pct}%; background: ${BIOME_COLORS[biome]}"></span></span>
+        <span class="pop-num">${pop}</span>
+      </div>`;
+    }
+    if (sorted.length === 0) html += `<div style="color: var(--muted); font-style: italic;">extinct in this biome</div>`;
+    html += `</div>`;
+    tile.innerHTML = html;
+    root.appendChild(tile);
+  }
+}
+
+function renderPopChart(timeline) {
+  const c = document.getElementById("popChart");
+  const ctx = c.getContext("2d");
+  const W = c.width, H = c.height;
+  ctx.clearRect(0, 0, W, H);
+  const padL = 50, padR = 130, padT = 20, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const maxN = Math.max(...timeline.map(t =>
+    Math.max(...Object.values(t.biome_pops || {}), 0)), 80);
+
+  ctx.strokeStyle = "#1f2540";
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, H - padB); ctx.lineTo(W - padR, H - padB); ctx.stroke();
+
+  for (const biome of BIOMES) {
+    ctx.strokeStyle = BIOME_COLORS[biome]; ctx.lineWidth = 2; ctx.beginPath();
+    timeline.forEach((g, i) => {
+      const v = (g.biome_pops || {})[biome] || 0;
+      const x = padL + (i / Math.max(1, timeline.length - 1)) * plotW;
+      const y = padT + plotH - (v / maxN) * plotH;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "#8b949e"; ctx.font = "11px system-ui";
+  ctx.fillText(maxN.toString(), padL - 30, padT + 4);
+  ctx.fillText("0", padL - 14, H - padB);
+  ctx.fillText("gen 0", padL, H - padB + 14);
+  ctx.fillText(`gen ${timeline.length - 1}`, W - padR - 40, H - padB + 14);
+
+  // Legend
+  BIOMES.forEach((b, i) => {
+    ctx.fillStyle = BIOME_COLORS[b]; ctx.fillRect(W - padR + 8, padT + i * 22, 14, 14);
+    ctx.fillStyle = "#e6edf3"; ctx.font = "12px system-ui";
+    ctx.fillText(`${BIOME_GLYPH[b]} ${b}`, W - padR + 28, padT + i * 22 + 11);
+  });
+}
+
+function renderMigTable(history) {
+  const tbody = document.querySelector("#migTable tbody");
+  const sample = history.migrations.slice(-30).reverse();
+  for (const m of sample) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${m.frame}</td><td><code>${m.id}</code></td>
+      <td><span style="color: ${BIOME_COLORS[m.from]}">${BIOME_GLYPH[m.from]} ${m.from}</span></td>
+      <td><span style="color: ${BIOME_COLORS[m.to]}">${BIOME_GLYPH[m.to]} ${m.to}</span></td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+load();
+</script>
+</body>
+</html>

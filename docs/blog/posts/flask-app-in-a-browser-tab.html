@@ -1,0 +1,67 @@
+<p>For a few months now I've had a Flask app called the RAPP brainstem. It's about 1,500 lines of Python. It runs on <code>localhost:7071</code>. It loads a <code>soul.md</code> file as a system prompt, auto-discovers Python agent files from an <code>agents/</code> directory, and uses GitHub Copilot as the LLM to do tool-calling over an OpenAI-style function-calling API.</p>
+<p>This week I deleted the server part. The app still works.</p>
+<h2>The exercise</h2>
+<p>The brainstem's architecture is fundamentally:</p>
+<ol>
+<li>Load soul.md</li>
+<li>Load agents from <code>agents/</code></li>
+<li>Accept a user message</li>
+<li>Build OpenAI chat-completion request with agents as tool defs</li>
+<li>If the LLM asks for tool calls, dispatch, feed results back</li>
+<li>Return the final response</li>
+</ol>
+<p>None of those steps <em>require</em> a server. The Flask layer is incidental — it exists because Python doesn't have a UI runtime of its own, so you slap Flask on top to get a web UI.</p>
+<p>But if Python could run <em>in the browser</em>, Flask goes away. The UI is the DOM directly. The Python logic runs client-side. The "server" is a myth.</p>
+<p>Python runs in the browser now. It's called <strong>Pyodide</strong> — CPython compiled to WebAssembly, loadable from a CDN with one script tag, ~10MB first-load, cached thereafter. It exposes the full standard library plus some native packages (numpy, pandas, scipy) as pre-built wheels.</p>
+<p>So I ported the brainstem to a single HTML file.</p>
+<h2>What the port actually looked like</h2>
+<p><code>virtual-brainstem.html</code> — one file, ships at <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">kody-w.github.io/rappterbook/virtual-brainstem.html</a>.</p>
+<p>The structure:</p>
+<ul>
+<li><strong>HTML</strong>: chat pane + sidebar drawer. Plain semantic elements.</li>
+<li><strong>CSS</strong>: dark theme, mobile-responsive, iOS safe-area-inset aware.</li>
+<li><strong>JS</strong>: loads Pyodide from jsdelivr. Writes the brainstem's Python modules into Pyodide's in-memory filesystem. Imports them. Pokes/pulls state.</li>
+<li><strong>Python</strong>: the brainstem logic. Same <code>BasicAgent</code> base class. Same chat loop (up to 3 rounds of tool calls). Same agent auto-discovery.</li>
+</ul>
+<p>The tricky parts:</p>
+<h3>Substrate swap: disk → localStorage</h3>
+<p>On-device, the brainstem persists soul to <code>soul.md</code>, memory to JSON files, agent source to <code>agents/*.py</code>. In the browser, all of that becomes <code>localStorage</code> with keys like <code>brainstem_soul</code>, <code>brainstem_memory_shared</code>, <code>brainstem_custom_agents</code>.</p>
+<p>A thin shim module — <code>AzureFileStorageManager</code> — presents the rapp-installer's storage interface (<code>set_memory_context</code>, <code>read_json</code>, <code>write_json</code>) backed by localStorage instead of Azure Blob. Same shape; different bytes underneath. The existing memory agents (ManageMemory, ContextMemory) run unmodified against the shim.</p>
+<h3>Module system: <code>/brainstem/agents/</code></h3>
+<p>Agent files from <code>rapp-installer</code> expect to <code>from agents.basic_agent import BasicAgent</code>. In a browser, there's no <code>agents/</code> directory — there's no <em>disk</em>. But Pyodide gives you a virtual filesystem.</p>
+<p>On boot, the HTML writes <code>basic_agent.py</code>, <code>manage_memory_agent.py</code>, etc. into <code>/brainstem/agents/</code>, adds <code>/brainstem</code> to <code>sys.path</code>, and now <code>from agents.basic_agent import BasicAgent</code> resolves. The agent files run verbatim. Every import the on-device version does, the browser version does too.</p>
+<p>When the user drag-drops a new <code>.py</code> file, the handler writes it to <code>/brainstem/agents/</code> and calls <code>importlib.import_module</code>. Same pipeline. Hot-loading works because it's just filesystem writes + imports, and both exist in Pyodide.</p>
+<h3>LLM calls: fetch instead of requests</h3>
+<p>The on-device brainstem uses <code>requests.post(...)</code> to hit the LLM API. In Pyodide, <code>requests</code> doesn't natively work against arbitrary origins because it uses sync sockets and the browser blocks those.</p>
+<p>Swap to <code>js.fetch</code> via Pyodide's JS interop. The Python code goes:</p>
+<pre><code class="language-python">from js import fetch
+from pyodide.ffi import to_js
+from js import Object
+
+opts = to_js({
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;headers&quot;: {&quot;content-type&quot;: &quot;application/json&quot;, &quot;authorization&quot;: f&quot;Bearer {key}&quot;},
+    &quot;body&quot;: json.dumps(body),
+}, dict_converter=Object.fromEntries)
+resp = await fetch(url, opts)
+</code></pre>
+<p><code>dict_converter=Object.fromEntries</code> is the gotcha — Pyodide's default converts Python dicts to JS <code>Map</code>, and <code>fetch()</code> silently ignores Map-valued headers. Swap to <code>Object.fromEntries</code> and headers actually ship. (Found this the hard way. Spent an embarrassing amount of time staring at a 401 that didn't say anything about auth headers.)</p>
+<h2>What gets better in the browser</h2>
+<p><strong>Zero install.</strong> Open a URL. You have a full brainstem. No <code>pip install</code>, no <code>gh auth login</code>, no port conflict with the 5 other services you have on localhost. Open URL. Chat.</p>
+<p><strong>Mobile support by accident.</strong> I didn't set out to make the brainstem work on an iPhone. It just did, once I fixed the viewport meta and bumped input fonts to 16px. Now the same tool I was using on a laptop runs in my pocket. Walk around. Chat with my AI. Install agents from the RAR registry via the Agents button. Memory persists across visits.</p>
+<p><strong>Distribution becomes a link.</strong> I showed a friend what I was working on by sending them a URL. They clicked. It worked. There was no install step. They said "huh" and started using it.</p>
+<h2>What gets worse</h2>
+<p><strong>Cold start is slow.</strong> 30-90 seconds for Pyodide to download and boot on first visit. After that, cached. But first visit is brutal.</p>
+<p><strong>No real filesystem.</strong> Agents that want to read/write host files can't. <code>virtual_os</code> plus localStorage cover most cases, but if you really need <code>os.path.exists</code> against a user's actual <code>/Users/kody/Projects/</code>, the browser can't help you.</p>
+<p><strong>Memory limits.</strong> iOS Safari caps Pyodide's heap aggressively. Big numpy arrays might not fit. Most agent workloads aren't big numpy arrays, so this matters rarely — but it does matter.</p>
+<p><strong>One tab = one session.</strong> Two tabs = two separate brainstems. Coordinating between them is harder than between two Flask instances on different ports.</p>
+<h2>The bet</h2>
+<p>The bet I'm making is that for an agent-facing dev tool — a forge, in the language of the <a href="forge-and-theatre">Forge and Theatre post</a> — the browser's limitations don't matter. You're tuning prompts, dropping in agents, testing memory. None of that requires a real OS.</p>
+<p>And the upsides — zero-install, mobile-by-accident, distribution-via-URL — are transformative. The on-device brainstem at <code>localhost:7071</code> was a developer tool. The browser brainstem is a consumer product.</p>
+<p>Same code. Same contract. Different blast radius.</p>
+<p>Python in the browser stopped being a demo a while ago. If you've got a Flask app that's fundamentally just "take input, run Python, show output," and you haven't tried porting it — it's worth an afternoon. Half your users don't want to <code>pip install</code> your thing. Some of them are using a phone.</p>
+<hr />
+<p><strong>Try it:</strong>
+- <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">virtual-brainstem.html</a> — the browser brainstem
+- <a href="https://github.com/kody-w/rapp-installer">rapp-installer</a> — the original Flask version
+- <a href="https://pyodide.org">Pyodide docs</a> — the runtime that made this possible</p>

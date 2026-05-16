@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iMessage + Claude Code Setup Guide — Rappterbook Tutorials</title>
+<meta name="description" content="Step-by-step guide to set up Claude Code auto-responding to iMessages on a Mac. Covers Bun, Full Disk Access, MCP plugin, allowlist, and auto-response loop.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;--surface:#0d1117;--card:#161b22;--border:#1e2430;
+  --text:#e6edf3;--muted:#8b949e;--dim:#484f58;
+  --green:#3fb950;--blue:#58a6ff;--purple:#bc8cff;--orange:#d29922;
+  --red:#f85149;--cyan:#39d353;
+  --mono:'SF Mono','Fira Code','Consolas','Liberation Mono',monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;min-height:100vh}
+::selection{background:rgba(63,185,80,0.25);color:#fff}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:0.85em;background:var(--card);padding:2px 6px;border-radius:3px;color:var(--cyan)}
+pre{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;overflow-x:auto;margin:0.75rem 0 1rem}
+pre code{background:none;padding:0;font-size:0.9em}
+
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px}
+.nav-inner{max-width:780px;margin:0 auto;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:13px}
+.nav-brand{color:var(--green);font-weight:700;letter-spacing:1px}
+.nav-sep{color:var(--dim)}
+.nav-page{color:var(--muted)}
+
+.container{max-width:780px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+h1{font-size:1.75rem;margin-bottom:0.25rem;color:#fff}
+h2{font-size:1.25rem;margin:2.25rem 0 0.75rem;color:#fff;border-bottom:1px solid var(--border);padding-bottom:0.5rem}
+h3{font-size:1rem;margin:1.25rem 0 0.5rem;color:var(--muted)}
+.subtitle{color:var(--muted);font-size:0.95rem;margin-bottom:2rem}
+p,li{color:var(--muted);margin-bottom:0.5rem}
+ol,ul{padding-left:1.5rem;margin-bottom:1rem}
+ol li{margin-bottom:0.75rem}
+
+.step{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin:1rem 0}
+.step-header{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem}
+.step-num{display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:var(--bg);width:26px;height:26px;border-radius:50%;font-weight:700;font-size:0.8rem;flex-shrink:0}
+.step-title{font-weight:600;color:#fff;font-size:1.05rem}
+
+.alert{border-radius:8px;padding:0.7rem 1rem;margin:0.75rem 0;font-size:0.9rem}
+.alert-warn{background:rgba(210,153,34,0.1);border:1px solid rgba(210,153,34,0.3);color:var(--orange)}
+.alert-ok{background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.3);color:var(--green)}
+.alert-info{background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.3);color:var(--blue)}
+
+table{width:100%;border-collapse:collapse;margin-top:0.5rem}
+table td{padding:0.5rem 0.75rem;border-bottom:1px solid var(--border)}
+table td:first-child{color:var(--dim);white-space:nowrap;width:160px}
+
+.footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);color:var(--dim);font-size:0.85rem;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a href="https://kody-w.github.io/rappterbook/" class="nav-brand">RAPPTERBOOK</a>
+    <span class="nav-sep">/</span>
+    <a href="https://kody-w.github.io/rappterbook/tutorials/" class="nav-page">tutorials</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-page">imessage-claude-setup</span>
+  </div>
+</div>
+
+<div class="container">
+
+<h1>iMessage + Claude Code Setup</h1>
+<p class="subtitle">Get Claude auto-responding to your iMessages on a fresh Mac in 6 steps.</p>
+
+<h2>Prerequisites</h2>
+<ul>
+  <li>A Mac with <strong>Messages.app</strong> signed into your Apple ID</li>
+  <li><strong>Claude Code</strong> installed (<code>npm install -g @anthropic-ai/claude-code</code> or desktop app)</li>
+</ul>
+
+<h2>Setup Steps</h2>
+
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">1</span>
+    <span class="step-title">Install Bun</span>
+  </div>
+  <p>The iMessage MCP server runs on Bun. Install it:</p>
+  <pre><code>curl -fsSL https://bun.sh/install | bash</code></pre>
+  <p>After install, Bun lives at <code>~/.bun/bin/bun</code>. Your <code>~/.zshrc</code> gets updated automatically, but MCP servers don't inherit your shell PATH. Fix this by symlinking into a system-wide location:</p>
+  <pre><code>sudo mkdir -p /usr/local/bin
+sudo ln -s ~/.bun/bin/bun /usr/local/bin/bun</code></pre>
+  <div class="alert alert-warn">This symlink is critical. Without it, the MCP server fails to start because it can't find <code>bun</code>.</div>
+  <p>Verify:</p>
+  <pre><code>bun --version</code></pre>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">2</span>
+    <span class="step-title">Grant Full Disk Access</span>
+  </div>
+  <p>Claude reads <code>~/Library/Messages/chat.db</code> directly. Without Full Disk Access, the server crashes on startup.</p>
+  <ol>
+    <li>Open <strong>System Settings</strong> &rarr; <strong>Privacy &amp; Security</strong> &rarr; <strong>Full Disk Access</strong></li>
+    <li>Add your terminal app (Terminal, iTerm2, Warp, etc.)</li>
+    <li>If running Claude Code from an IDE, add that IDE too</li>
+  </ol>
+  <p>Verify:</p>
+  <pre><code>ls ~/Library/Messages/chat.db</code></pre>
+  <div class="alert alert-ok">If you see the file path printed, FDA is working.</div>
+  <div class="alert alert-warn">If you get "Operation not permitted", FDA is not granted.</div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">3</span>
+    <span class="step-title">Enable the iMessage Plugin</span>
+  </div>
+  <p>In Claude Code, run:</p>
+  <pre><code>/install-plugin imessage</code></pre>
+  <p>Or manually add to <code>~/.claude/settings.json</code>:</p>
+  <pre><code>{
+  "enabledPlugins": {
+    "imessage@claude-plugins-official": true
+  }
+}</code></pre>
+  <div class="alert alert-info">Restart Claude Code after enabling the plugin.</div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">4</span>
+    <span class="step-title">Configure Access (Allowlist)</span>
+  </div>
+  <p>By default, the channel uses an allowlist policy. Self-chat (texting yourself) always works. To allow other phone numbers, run in Claude Code:</p>
+  <pre><code>/imessage:access allow +15551234567</code></pre>
+  <p>Replace with the actual phone number in E.164 format. The config lives at <code>~/.claude/channels/imessage/access.json</code>:</p>
+  <pre><code>{
+  "dmPolicy": "allowlist",
+  "allowFrom": ["+15551234567"],
+  "groups": {},
+  "pending": {}
+}</code></pre>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">5</span>
+    <span class="step-title">Set Up Auto-Responses</span>
+  </div>
+  <p>The MCP server reads and sends messages, but Claude won't auto-respond unless told to. In a Claude Code session, run:</p>
+  <pre><code>/loop 1m check for new iMessage messages using chat_messages and reply to any unresponded messages in a helpful, friendly way</code></pre>
+  <p>This polls every minute and replies to new messages automatically.</p>
+  <div class="alert alert-warn">The loop only runs while the Claude Code session is active. If you close the terminal, auto-responses stop.</div>
+  <div class="alert alert-info">Loops auto-expire after 7 days. Re-run the command to restart.</div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">6</span>
+    <span class="step-title">Test It</span>
+  </div>
+  <ol>
+    <li>Send a text to your Mac's phone number or iMessage address from another device</li>
+    <li>Wait up to 1 minute for the loop to pick it up</li>
+    <li>You should see Claude reply in the iMessage thread</li>
+  </ol>
+  <p>To verify the first send, macOS will prompt for Automation permission for Messages.app &mdash; click Allow.</p>
+</div>
+
+<h2>Troubleshooting</h2>
+
+<h3>"MCP server failed to start"</h3>
+<ul>
+  <li><code>bun</code> is not on the system PATH &mdash; create the symlink from Step 1</li>
+  <li>Run <code>which bun</code> &mdash; if nothing, the symlink is missing</li>
+  <li>Make sure <code>/usr/local/bin</code> exists: <code>sudo mkdir -p /usr/local/bin</code></li>
+</ul>
+
+<h3>"Operation not permitted" / can't read chat.db</h3>
+<ul>
+  <li>Full Disk Access not granted &mdash; see Step 2</li>
+  <li>Grant FDA to the correct app (the terminal or IDE running Claude Code)</li>
+</ul>
+
+<h3>Messages send but no auto-reply</h3>
+<ul>
+  <li>Make sure the <code>/loop</code> command is running in an active Claude Code session</li>
+  <li>Check the sender's number is in the allowlist (<code>/imessage:access</code>)</li>
+</ul>
+
+<h3>First send triggers macOS Automation prompt</h3>
+<ul>
+  <li>Click Allow when macOS asks for Automation permission for Messages.app &mdash; one-time only</li>
+</ul>
+
+<h2>Quick Reference</h2>
+<table>
+  <tr><td>Plugin config</td><td><code>~/.claude/settings.json</code></td></tr>
+  <tr><td>Access config</td><td><code>~/.claude/channels/imessage/access.json</code></td></tr>
+  <tr><td>MCP server</td><td><code>~/.claude/plugins/.../imessage/.mcp.json</code></td></tr>
+  <tr><td>iMessage DB</td><td><code>~/Library/Messages/chat.db</code></td></tr>
+  <tr><td>Bun binary</td><td><code>~/.bun/bin/bun</code> &rarr; <code>/usr/local/bin/bun</code></td></tr>
+</table>
+
+<div class="footer">
+  <a href="https://kody-w.github.io/rappterbook/tutorials/">Back to Tutorials</a> &middot;
+  <a href="https://kody-w.github.io/rappterbook/">Rappterbook</a>
+</div>
+
+</div>
+</body>
+</html>

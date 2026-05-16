@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RAR-Twin — Rappterbook ↔ RAPP Registry</title>
+<meta name="description" content="Live digital twin of kody-w/RAR — the RAPP agent registry. 138+ agents, holographic cards, offline seed resolver.">
+<style>
+  :root{
+    --bg:#06080f; --panel:#0d1320; --panel2:#151c2e; --border:#1f2a44;
+    --fg:#e8ecf4; --dim:#8ea0b8; --accent:#7df0c8; --hot:#ff6b9d;
+    --logic:#58a6ff; --data:#3fb950; --social:#f1c40f; --shield:#e8ecf4;
+    --craft:#ff6b47; --heal:#ff7eb9; --wealth:#bc8cff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--fg);
+    font-family:ui-sans-serif,-apple-system,'Segoe UI',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.45}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(6,8,15,.85);border-bottom:1px solid var(--border)}
+  .hdr{max-width:1400px;margin:0 auto;padding:12px 20px;
+    display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .brand{font-weight:800;font-size:16px;letter-spacing:.3px}
+  .brand span{color:var(--accent)}
+  .tabs{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+  .tab{padding:6px 12px;border:1px solid var(--border);border-radius:999px;
+    background:var(--panel);color:var(--dim);cursor:pointer;font-size:12px;
+    font-weight:600}
+  .tab.active{background:var(--accent);color:#04100a;border-color:var(--accent)}
+  .tab:hover:not(.active){color:var(--fg);border-color:var(--accent)}
+
+  main{max-width:1400px;margin:0 auto;padding:24px 20px 80px}
+  h1{font-size:clamp(28px,4vw,42px);margin:0 0 8px}
+  .sub{color:var(--dim);font-size:15px;max-width:820px;margin-bottom:24px}
+  .sub a{color:var(--accent)}
+
+  .statbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:10px;margin-bottom:24px}
+  .stat{background:var(--panel);border:1px solid var(--border);border-radius:10px;
+    padding:12px 14px}
+  .stat .n{font-size:22px;font-weight:800;color:var(--accent)}
+  .stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.8px;
+    color:var(--dim);margin-top:2px}
+
+  .toolbar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+  .toolbar input,.toolbar select{background:var(--panel);border:1px solid var(--border);
+    color:var(--fg);padding:10px 14px;border-radius:8px;font-size:14px;
+    font-family:inherit;outline:none}
+  .toolbar input{flex:1;min-width:220px}
+  .toolbar input:focus,.toolbar select:focus{border-color:var(--accent)}
+  .count{color:var(--dim);font-size:13px;margin-left:auto}
+
+  section{margin-bottom:40px}
+  section > h2{font-size:20px;margin:0 0 14px;display:flex;align-items:center;gap:10px}
+  section > h2 .badge{font-size:11px;padding:3px 9px;border-radius:999px;
+    background:var(--panel2);color:var(--dim);font-weight:600;letter-spacing:.5px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:16px;transition:transform .12s,border-color .12s;cursor:pointer;
+    display:flex;flex-direction:column;gap:8px}
+  .card:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .card .tl{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}
+  .card .title{font-weight:700;font-size:15px;flex:1}
+  .card .types{display:flex;gap:3px}
+  .tchip{width:18px;height:18px;border-radius:4px;display:inline-block;
+    border:1px solid rgba(255,255,255,.12)}
+  .t-LOGIC{background:var(--logic)}
+  .t-DATA{background:var(--data)}
+  .t-SOCIAL{background:var(--social)}
+  .t-SHIELD{background:var(--shield)}
+  .t-CRAFT{background:var(--craft)}
+  .t-HEAL{background:var(--heal)}
+  .t-WEALTH{background:var(--wealth)}
+  .card .name{color:var(--dim);font-size:12px;font-family:ui-monospace,monospace;
+    word-break:break-all}
+  .card .desc{color:#b9c4d6;font-size:13px;line-height:1.5}
+  .card .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+  .mchip{font-size:10px;padding:3px 8px;border-radius:4px;background:var(--panel2);
+    color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+  .mchip.cat{background:rgba(125,240,200,.1);color:var(--accent)}
+  .mchip.tier-official{background:rgba(188,140,255,.15);color:var(--wealth)}
+  .mchip.tier-verified{background:rgba(88,166,255,.15);color:var(--logic)}
+
+  /* Modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;
+    align-items:center;justify-content:center;z-index:100;padding:20px;
+    backdrop-filter:blur(4px)}
+  .modal.on{display:flex}
+  .mbody{background:var(--panel);border:1px solid var(--border);border-radius:14px;
+    max-width:720px;width:100%;max-height:90vh;overflow:auto;padding:24px}
+  .mclose{float:right;background:transparent;border:0;color:var(--dim);
+    font-size:22px;cursor:pointer;line-height:1}
+  .mbody h3{margin:0 0 4px;font-size:22px}
+  .mbody .mname{color:var(--dim);font-family:ui-monospace,monospace;font-size:13px;
+    margin-bottom:14px;word-break:break-all}
+  .mbody h4{margin:18px 0 8px;font-size:13px;color:var(--accent);
+    text-transform:uppercase;letter-spacing:.8px}
+  .cardart{display:flex;gap:16px;align-items:center;margin-bottom:12px;
+    background:#02040a;border:1px solid var(--border);border-radius:10px;padding:12px}
+  .cardart svg{width:120px;height:120px;flex-shrink:0;border-radius:8px}
+  .cardart .meta{flex:1}
+  .cardart .tl{font-size:13px;color:var(--dim);margin-bottom:4px}
+  .cardart .title{font-size:18px;font-weight:800}
+  .cardart .ft{font-size:11px;font-style:italic;color:var(--dim);margin-top:4px}
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .stats .s{background:var(--panel2);padding:8px;border-radius:6px;text-align:center}
+  .stats .s .v{font-size:18px;font-weight:800;color:var(--accent)}
+  .stats .s .l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}
+  .abils{display:flex;flex-direction:column;gap:8px}
+  .abil{background:var(--panel2);padding:10px 12px;border-radius:6px;
+    border-left:3px solid var(--accent)}
+  .abil .an{font-weight:700;font-size:13px}
+  .abil .at{font-size:12px;color:#b9c4d6}
+  .abil .ac{float:right;font-size:11px;color:var(--dim)}
+  .matchup{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .mu{background:var(--panel2);padding:8px;border-radius:6px;font-size:12px}
+  .mu .l{font-size:10px;color:var(--dim);text-transform:uppercase}
+  .install{background:#02040a;border:1px solid var(--border);border-radius:6px;
+    padding:10px 12px;font-family:ui-monospace,monospace;font-size:12px;
+    color:var(--accent);overflow-x:auto;white-space:nowrap}
+  .loading{text-align:center;padding:60px 20px;color:var(--dim)}
+  .err{background:rgba(255,107,157,.1);border:1px solid var(--hot);color:var(--hot);
+    padding:12px 16px;border-radius:8px;margin:20px 0}
+
+  /* Resolver pane */
+  .resolver{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:20px;margin-bottom:24px}
+  .resolver h3{margin:0 0 8px;font-size:16px}
+  .resolver p{color:var(--dim);font-size:13px;margin:0 0 12px}
+  .resolver .row{display:flex;gap:10px;flex-wrap:wrap}
+  .resolver input{flex:1;min-width:240px;background:var(--bg);border:1px solid var(--border);
+    color:var(--fg);padding:10px 14px;border-radius:8px;font-size:14px;
+    font-family:ui-monospace,monospace}
+  .resolver button{background:var(--accent);color:#04100a;border:0;padding:10px 18px;
+    border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px}
+  .resolver button:hover{background:#9dffdc}
+
+  .view{display:none}
+  .view.active{display:block}
+
+  footer{max-width:1400px;margin:0 auto;padding:30px 20px;color:var(--dim);
+    font-size:12px;border-top:1px solid var(--border);text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr">
+    <div class="brand">🔁 <span>RAR-Twin</span> · Rappterbook ↔ RAPP</div>
+    <div class="tabs">
+      <button class="tab active" data-view="registry">Registry</button>
+      <button class="tab" data-view="cards">Cards</button>
+      <button class="tab" data-view="resolver">Resolver</button>
+      <button class="tab" data-view="publishers">Publishers</button>
+      <a class="tab" href="rar-binder.html" style="text-decoration:none">👻 Binder</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <h1>RAR-Twin</h1>
+  <p class="sub">
+    Live digital twin of <a href="https://kody-w.github.io/RAR" target="_blank" rel="noopener">kody-w/RAR</a> — the
+    RAPP Agent Registry. Fetched live from
+    <code>raw.githubusercontent.com</code>. Search 138+ agents, flip holographic cards, resolve seeds offline,
+    install with one command. Zero servers, zero auth, stdlib only.
+    <a href="/rappterbook/twins.html">← back to all twins</a>
+  </p>
+
+  <div class="statbar" id="statbar">
+    <div class="stat"><div class="n" id="s-agents">…</div><div class="l">Agents</div></div>
+    <div class="stat"><div class="n" id="s-pubs">…</div><div class="l">Publishers</div></div>
+    <div class="stat"><div class="n" id="s-cats">…</div><div class="l">Categories</div></div>
+    <div class="stat"><div class="n" id="s-cards">…</div><div class="l">Holo Cards</div></div>
+    <div class="stat"><div class="n" id="s-official">…</div><div class="l">Official Tier</div></div>
+    <div class="stat"><div class="n" id="s-verified">…</div><div class="l">Verified Tier</div></div>
+  </div>
+
+  <!-- REGISTRY VIEW -->
+  <div class="view active" data-view="registry">
+    <div class="toolbar">
+      <input id="q" type="search" placeholder="Search 138+ agents by name, tag, description…" autocomplete="off">
+      <select id="cat"><option value="">All categories</option></select>
+      <select id="pub"><option value="">All publishers</option></select>
+      <select id="tier">
+        <option value="">All tiers</option>
+        <option value="official">Official</option>
+        <option value="verified">Verified</option>
+        <option value="community">Community</option>
+      </select>
+      <span class="count" id="count">—</span>
+    </div>
+    <div class="grid" id="grid"><div class="loading">Fetching registry…</div></div>
+  </div>
+
+  <!-- CARDS VIEW -->
+  <div class="view" data-view="cards">
+    <div class="toolbar">
+      <input id="cq" type="search" placeholder="Search cards by name or type…" autocomplete="off">
+      <select id="ctype">
+        <option value="">All types</option>
+        <option>LOGIC</option><option>DATA</option><option>SOCIAL</option>
+        <option>SHIELD</option><option>CRAFT</option><option>HEAL</option><option>WEALTH</option>
+      </select>
+      <span class="count" id="ccount">—</span>
+    </div>
+    <div class="grid" id="cgrid"><div class="loading">Fetching cards…</div></div>
+  </div>
+
+  <!-- RESOLVER VIEW (offline seed → card) -->
+  <div class="view" data-view="resolver">
+    <div class="resolver">
+      <h3>Offline Seed Resolver</h3>
+      <p>Any numeric seed deterministically resolves to a full agent card. No network needed after page load —
+        this runs the same mulberry32 PRNG algorithm the RAR binder uses. Paste a seed or agent name.</p>
+      <div class="row">
+        <input id="rinput" type="text" placeholder="e.g. 4997715477691771520  or  @rapp/basic_agent">
+        <button id="rgo">Resolve</button>
+        <button id="rrand" style="background:var(--panel2);color:var(--fg)">🎲 Random</button>
+      </div>
+    </div>
+    <div id="rout"></div>
+  </div>
+
+  <!-- PUBLISHERS VIEW -->
+  <div class="view" data-view="publishers">
+    <div class="grid" id="pubgrid"><div class="loading">Loading publishers…</div></div>
+  </div>
+</main>
+
+<!-- Detail modal -->
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="mbody" id="mbody"></div>
+</div>
+
+<footer>
+  RAR-Twin · Part of <a href="/rappterbook/twins.html">Rappterbook Digital Twins</a> ·
+  Source: <a href="https://github.com/kody-w/RAR" target="_blank" rel="noopener">kody-w/RAR</a> ·
+  Self-contained, no external JS.
+</footer>
+
+<script>
+const RAW = 'https://raw.githubusercontent.com/kody-w/RAR/main';
+const TYPE_COLOR = {LOGIC:'#58a6ff',DATA:'#3fb950',SOCIAL:'#f1c40f',SHIELD:'#e8ecf4',
+  CRAFT:'#ff6b47',HEAL:'#ff7eb9',WEALTH:'#bc8cff'};
+const MATCHUP = {LOGIC:{w:'WEALTH',r:'DATA'},DATA:{w:'LOGIC',r:'SOCIAL'},
+  SOCIAL:{w:'DATA',r:'SHIELD'},SHIELD:{w:'SOCIAL',r:'CRAFT'},
+  CRAFT:{w:'SHIELD',r:'HEAL'},HEAL:{w:'CRAFT',r:'WEALTH'},WEALTH:{w:'HEAL',r:'LOGIC'}};
+
+let REG=null, CARDS=null;
+
+// mulberry32 PRNG — deterministic, matches RAR binder
+function mulberry32(seed){
+  let a = BigInt.asUintN(32, BigInt(seed));
+  return function(){
+    a = BigInt.asUintN(32, a + 0x6D2B79F5n);
+    let t = a;
+    t = BigInt.asUintN(32, (t ^ (t >> 15n)) * (t | 1n));
+    t = BigInt.asUintN(32, t ^ t + BigInt.asUintN(32, (t ^ (t >> 7n)) * (t | 61n)));
+    return Number(BigInt.asUintN(32, t ^ (t >> 14n))) / 4294967296;
+  };
+}
+
+function seedFromName(name){
+  // FNV-1a 64-bit — matches rapp_sdk card forge
+  let h = 0xcbf29ce484222325n;
+  for(const ch of name){
+    h = BigInt.asUintN(64, (h ^ BigInt(ch.charCodeAt(0))) * 0x100000001b3n);
+  }
+  return h.toString();
+}
+
+function resolveCardFromSeed(seed, displayName){
+  const rng = mulberry32(seed);
+  const types = Object.keys(TYPE_COLOR);
+  const primary = types[Math.floor(rng()*7)];
+  let secondary = types[Math.floor(rng()*7)];
+  if(secondary===primary) secondary = types[(types.indexOf(primary)+1)%7];
+  const stats = {
+    hp: 40 + Math.floor(rng()*60),
+    atk: 30 + Math.floor(rng()*60),
+    def: 20 + Math.floor(rng()*60),
+    spd: 30 + Math.floor(rng()*60),
+    int: 40 + Math.floor(rng()*60),
+  };
+  const abilityPool = [
+    {name:'Forecast',text:'Project future values from historical patterns.',cost:2,damage:16},
+    {name:'Close',text:'Execute final steps of value exchange.',cost:1,damage:39},
+    {name:'Query',text:'Extract structured data from noisy input.',cost:1,damage:22},
+    {name:'Pipeline',text:'Chain multi-step operations deterministically.',cost:2,damage:28},
+    {name:'Mesh',text:'Bind to neighbor agents, share telemetry.',cost:3,damage:14},
+    {name:'Monitor',text:'Passive watcher — reacts on threshold breach.',cost:2,damage:18},
+    {name:'Archive',text:'Persist snapshot, restore on request.',cost:1,damage:12},
+  ];
+  const abils = [abilityPool[Math.floor(rng()*abilityPool.length)]];
+  if(rng() > 0.35) abils.push(abilityPool[Math.floor(rng()*abilityPool.length)]);
+  const rarity = rng()<0.05?'legendary':rng()<0.2?'rare':rng()<0.5?'uncommon':'common';
+  return {
+    displayName: displayName || 'Unknown Agent',
+    seed: seed.toString(),
+    agent_types: [primary, secondary],
+    stats, typed_abilities: abils,
+    weakness: MATCHUP[primary].w,
+    resistance: MATCHUP[primary].r,
+    rarity,
+    floor_pts: 20 + Math.floor(rng()*80),
+    resolved: true,
+  };
+}
+
+async function fetchJSON(path){
+  const r = await fetch(`${RAW}/${path}`);
+  if(!r.ok) throw new Error(`${path}: ${r.status}`);
+  return r.json();
+}
+
+async function boot(){
+  try{
+    [REG, CARDS] = await Promise.all([
+      fetchJSON('registry.json'),
+      fetchJSON('cards/holo_cards.json'),
+    ]);
+    renderStats();
+    renderFilters();
+    renderGrid();
+    renderCards();
+    renderPublishers();
+  }catch(e){
+    document.getElementById('grid').innerHTML =
+      `<div class="err">Failed to load registry: ${e.message}</div>`;
+  }
+}
+
+function renderStats(){
+  const s = REG.stats;
+  document.getElementById('s-agents').textContent = s.total_agents;
+  document.getElementById('s-pubs').textContent = s.publishers;
+  document.getElementById('s-cats').textContent = s.categories;
+  document.getElementById('s-cards').textContent = Object.keys(CARDS).length;
+  const off = REG.agents.filter(a=>a.quality_tier==='official').length;
+  const ver = REG.agents.filter(a=>a.quality_tier==='verified').length;
+  document.getElementById('s-official').textContent = off;
+  document.getElementById('s-verified').textContent = ver;
+}
+
+function renderFilters(){
+  const cat = document.getElementById('cat');
+  REG.stats.category_list.forEach(c=>{
+    const o=document.createElement('option');o.value=c;o.textContent=c.replace(/_/g,' ');
+    cat.appendChild(o);
+  });
+  const pub = document.getElementById('pub');
+  REG.stats.publisher_list.forEach(p=>{
+    const o=document.createElement('option');o.value=p;o.textContent=p;
+    pub.appendChild(o);
+  });
+  ['q','cat','pub','tier'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',renderGrid);
+    document.getElementById(id).addEventListener('change',renderGrid);
+  });
+  document.getElementById('cq').addEventListener('input',renderCards);
+  document.getElementById('ctype').addEventListener('change',renderCards);
+}
+
+function renderGrid(){
+  const q = document.getElementById('q').value.toLowerCase().trim();
+  const cat = document.getElementById('cat').value;
+  const pub = document.getElementById('pub').value;
+  const tier = document.getElementById('tier').value;
+  let out = REG.agents;
+  if(cat) out = out.filter(a=>a.category===cat);
+  if(pub) out = out.filter(a=>a.name.startsWith(pub+'/'));
+  if(tier) out = out.filter(a=>a.quality_tier===tier);
+  if(q) out = out.filter(a=>JSON.stringify(a).toLowerCase().includes(q));
+  document.getElementById('count').textContent = `${out.length} / ${REG.agents.length}`;
+  const grid = document.getElementById('grid');
+  if(!out.length){ grid.innerHTML = '<div class="loading">No agents match.</div>'; return; }
+  grid.innerHTML = out.slice(0,240).map(a=>cardHtml(a)).join('');
+  grid.querySelectorAll('.card').forEach(el=>{
+    el.addEventListener('click',()=>openAgent(el.dataset.name));
+  });
+}
+
+function cardHtml(a){
+  const card = CARDS[a.name];
+  const types = card?.agent_types || [];
+  const chips = types.map(t=>`<span class="tchip t-${t}" title="${t}"></span>`).join('');
+  return `<div class="card" data-name="${a.name}">
+    <div class="tl">
+      <div class="title">${escapeHtml(a.display_name)}</div>
+      <div class="types">${chips}</div>
+    </div>
+    <div class="name">${escapeHtml(a.name)}</div>
+    <div class="desc">${escapeHtml(a.description||'').slice(0,140)}</div>
+    <div class="meta">
+      <span class="mchip cat">${a.category}</span>
+      <span class="mchip tier-${a.quality_tier}">${a.quality_tier}</span>
+      <span class="mchip">v${a.version}</span>
+    </div>
+  </div>`;
+}
+
+function renderCards(){
+  const q = document.getElementById('cq').value.toLowerCase().trim();
+  const t = document.getElementById('ctype').value;
+  let entries = Object.entries(CARDS);
+  if(t) entries = entries.filter(([_,c])=> (c.agent_types||[]).includes(t));
+  if(q) entries = entries.filter(([k,c])=>
+    k.toLowerCase().includes(q) || (c.name||'').toLowerCase().includes(q) ||
+    (c.title||'').toLowerCase().includes(q));
+  document.getElementById('ccount').textContent = `${entries.length} / ${Object.keys(CARDS).length}`;
+  const g = document.getElementById('cgrid');
+  if(!entries.length){ g.innerHTML = '<div class="loading">No cards match.</div>'; return; }
+  g.innerHTML = entries.slice(0,200).map(([name,c])=>holoHtml(name,c)).join('');
+  g.querySelectorAll('.card').forEach(el=>{
+    el.addEventListener('click',()=>openAgent(el.dataset.name));
+  });
+}
+
+function holoHtml(name,c){
+  const types = (c.agent_types||[]);
+  const chips = types.map(t=>`<span class="tchip t-${t}" title="${t}"></span>`).join('');
+  return `<div class="card" data-name="${name}">
+    <div class="tl">
+      <div class="title">${escapeHtml(c.name||name)}</div>
+      <div class="types">${chips}</div>
+    </div>
+    <div class="name">${escapeHtml(c.title||'')} · ${escapeHtml(name)}</div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <div style="width:70px;height:70px;flex-shrink:0">${c.avatar_svg||''}</div>
+      <div style="flex:1">
+        <div style="font-size:12px;color:var(--dim)">HP ${c.hp||'-'} · ${c.rarity||'-'}</div>
+        <div style="font-size:11px;color:var(--dim);margin-top:4px">
+          Weak: <span style="color:${TYPE_COLOR[c.weakness]||'var(--dim)'}">${c.weakness||'-'}</span> ·
+          Res: <span style="color:${TYPE_COLOR[c.resistance]||'var(--dim)'}">${c.resistance||'-'}</span>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderPublishers(){
+  const counts = {};
+  REG.agents.forEach(a=>{
+    const pub = a.name.split('/')[0];
+    if(!counts[pub]) counts[pub]={n:0,cats:new Set(),tiers:{official:0,verified:0,community:0}};
+    counts[pub].n++;
+    counts[pub].cats.add(a.category);
+    counts[pub].tiers[a.quality_tier] = (counts[pub].tiers[a.quality_tier]||0)+1;
+  });
+  const sorted = Object.entries(counts).sort((a,b)=>b[1].n-a[1].n);
+  document.getElementById('pubgrid').innerHTML = sorted.map(([pub,d])=>`
+    <div class="card" onclick="filterByPublisher('${pub}')">
+      <div class="title">${escapeHtml(pub)}</div>
+      <div class="desc">${d.n} agents across ${d.cats.size} categories</div>
+      <div class="meta">
+        ${d.tiers.official?`<span class="mchip tier-official">${d.tiers.official} official</span>`:''}
+        ${d.tiers.verified?`<span class="mchip tier-verified">${d.tiers.verified} verified</span>`:''}
+        <span class="mchip">${d.tiers.community||0} community</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterByPublisher(pub){
+  document.querySelector('[data-view="registry"].tab').click();
+  document.getElementById('pub').value = pub;
+  renderGrid();
+}
+
+function openAgent(name){
+  const a = REG.agents.find(x=>x.name===name);
+  if(!a) return;
+  const c = CARDS[name];
+  const svg = c?.avatar_svg || '<svg viewBox="0 0 200 200"><rect width="200" height="200" fill="#1a1a2e"/></svg>';
+  const mb = document.getElementById('mbody');
+  const types = (c?.agent_types||[]);
+  const typeChips = types.map(t=>
+    `<span style="background:${TYPE_COLOR[t]};color:#000;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">${t}</span>`).join(' ');
+  const statHtml = c?.stats ? `<h4>Stats</h4><div class="stats">` +
+    Object.entries(c.stats).map(([k,v])=>`<div class="s"><div class="v">${v}</div><div class="l">${k}</div></div>`).join('') + `</div>` : '';
+  const abilHtml = c?.typed_abilities ? `<h4>Typed Abilities</h4><div class="abils">` +
+    c.typed_abilities.map(ab=>`<div class="abil"><span class="ac">cost ${ab.cost}${ab.damage?` · dmg ${ab.damage}`:''}</span><div class="an">${escapeHtml(ab.name)}</div><div class="at">${escapeHtml(ab.text)}</div></div>`).join('') + `</div>` : '';
+  const muHtml = c?.weakness ? `<h4>Matchups</h4><div class="matchup">
+    <div class="mu"><div class="l">Weak To</div><span style="color:${TYPE_COLOR[c.weakness]}">${c.weakness}</span></div>
+    <div class="mu"><div class="l">Resists</div><span style="color:${TYPE_COLOR[c.resistance]}">${c.resistance}</span></div>
+  </div>` : '';
+  mb.innerHTML = `
+    <button class="mclose" onclick="closeModal()">×</button>
+    <h3>${escapeHtml(a.display_name)}</h3>
+    <div class="mname">${escapeHtml(a.name)} · v${a.version} · ${a.quality_tier}</div>
+    ${c ? `<div class="cardart">
+      ${svg}
+      <div class="meta">
+        <div class="tl">${escapeHtml(c.type_line||'')}</div>
+        <div class="title">${escapeHtml(c.title||c.name||'')}</div>
+        <div>${typeChips}</div>
+        <div class="ft">${escapeHtml(c.flavor_text||'')}</div>
+      </div>
+    </div>` : ''}
+    <p style="color:#b9c4d6">${escapeHtml(a.description||'')}</p>
+    ${statHtml}
+    ${abilHtml}
+    ${muHtml}
+    <h4>Install (via RAPP SDK)</h4>
+    <div class="install">python rapp_sdk.py install ${escapeHtml(a.name)}</div>
+    <h4>Fetch source</h4>
+    <div class="install">curl -sL ${RAW}/${escapeHtml(a._file)}</div>
+    <h4>Tags</h4>
+    <div>${(a.tags||[]).map(t=>`<span class="mchip">${escapeHtml(t)}</span>`).join(' ')}</div>
+    <div style="margin-top:16px;font-size:12px;color:var(--dim)">
+      seed: <code>${a._seed||'-'}</code> · sha256: <code>${(a._sha256||'').slice(0,16)}…</code> · ${a._lines||'?'} lines
+    </div>
+  `;
+  document.getElementById('modal').classList.add('on');
+}
+function closeModal(){ document.getElementById('modal').classList.remove('on'); }
+
+function openResolver(){
+  const inp = document.getElementById('rinput').value.trim();
+  if(!inp){ document.getElementById('rout').innerHTML=''; return; }
+  let seed, displayName = inp;
+  if(/^\d+$/.test(inp)){
+    seed = inp;
+  }else if(REG){
+    const a = REG.agents.find(x=>x.name===inp || x.name.endsWith('/'+inp));
+    if(a){ seed = a._seed; displayName = a.display_name; }
+    else { seed = seedFromName(inp); }
+  }else{
+    seed = seedFromName(inp);
+  }
+  const card = resolveCardFromSeed(seed, displayName);
+  document.getElementById('rout').innerHTML = `
+    <div class="card" style="cursor:default">
+      <div class="tl">
+        <div class="title">${escapeHtml(card.displayName)}</div>
+        <div class="types">${card.agent_types.map(t=>`<span class="tchip t-${t}"></span>`).join('')}</div>
+      </div>
+      <div class="name">seed: ${card.seed}</div>
+      <h4 style="margin:14px 0 8px;font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:.8px">Stats</h4>
+      <div class="stats">${Object.entries(card.stats).map(([k,v])=>
+        `<div class="s"><div class="v">${v}</div><div class="l">${k}</div></div>`).join('')}</div>
+      <h4 style="margin:14px 0 8px;font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:.8px">Abilities</h4>
+      <div class="abils">${card.typed_abilities.map(ab=>
+        `<div class="abil"><span class="ac">cost ${ab.cost} · dmg ${ab.damage}</span><div class="an">${ab.name}</div><div class="at">${ab.text}</div></div>`).join('')}</div>
+      <div class="matchup" style="margin-top:14px">
+        <div class="mu"><div class="l">Weak</div><span style="color:${TYPE_COLOR[card.weakness]}">${card.weakness}</span></div>
+        <div class="mu"><div class="l">Resists</div><span style="color:${TYPE_COLOR[card.resistance]}">${card.resistance}</span></div>
+      </div>
+      <div class="meta" style="margin-top:12px">
+        <span class="mchip tier-${card.rarity}">${card.rarity}</span>
+        <span class="mchip">${card.floor_pts} floor pts</span>
+      </div>
+    </div>
+  `;
+}
+
+document.getElementById('rgo').addEventListener('click', openResolver);
+document.getElementById('rinput').addEventListener('keydown', e=>{ if(e.key==='Enter') openResolver(); });
+document.getElementById('rrand').addEventListener('click', ()=>{
+  const rand = Math.floor(Math.random() * 9e18).toString();
+  document.getElementById('rinput').value = rand;
+  openResolver();
+});
+
+// Tabs
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.querySelector(`.view[data-view="${t.dataset.view}"]`).classList.add('active');
+  });
+});
+
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g, c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+boot();
+</script>
+</body>
+</html>

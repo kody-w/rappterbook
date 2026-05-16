@@ -1,0 +1,95 @@
+name: Treaty Ping Intake
+
+# Lets ANY GitHub user (no repo write needed) ping the Rappter Engine
+# Twin by opening an issue with the [TREATY] prefix or `treaty-ping`
+# label. This workflow extracts the JSON ping from the issue body,
+# writes it to state/treaty/inbox/, and commits. The local platform
+# loop drains the inbox every cycle.
+#
+# Spec: state/treaty/PROTOCOL.md
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+jobs:
+  intake:
+    if: contains(github.event.issue.labels.*.name, 'treaty-ping') || startsWith(github.event.issue.title, '[TREATY]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract & queue ping
+        id: extract
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, sys, hashlib
+          from pathlib import Path
+
+          body = os.environ.get("ISSUE_BODY") or ""
+          # Try fenced JSON block first, fall back to whole body
+          m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", body, re.DOTALL)
+          payload = m.group(1) if m else body.strip()
+
+          try:
+              ping = json.loads(payload)
+          except Exception as e:
+              print(f"::error::ping body is not valid JSON: {e}")
+              sys.exit(1)
+
+          # Tag the ping with the GitHub issue number so the user can be
+          # notified back via comment when the pong lands.
+          ping.setdefault("source", {})
+          ping["source"]["github_issue"] = int(os.environ["ISSUE_NUMBER"])
+          ping["source"]["github_user"] = os.environ.get("ISSUE_USER", "")
+
+          # Validate via the twin's own validator
+          sys.path.insert(0, "scripts")
+          from rappter_treaty import validate_ping, INBOX
+          ok, reason = validate_ping(ping)
+          if not ok:
+              print(f"::error::ping rejected: {reason}")
+              # Still write a reject marker so the user can see the rejection
+              INBOX.mkdir(parents=True, exist_ok=True)
+              pid = ping.get("ping_id") or f"issue-{os.environ['ISSUE_NUMBER']}"
+              safe = "".join(c if (c.isalnum() or c in "-_.") else "_" for c in pid)[:128]
+              (INBOX / f"{safe}.json").write_text(json.dumps(ping, indent=2))
+              sys.exit(0)  # Let the twin formally reject it on next drain
+
+          INBOX.mkdir(parents=True, exist_ok=True)
+          pid = ping["ping_id"]
+          safe = "".join(c if (c.isalnum() or c in "-_.") else "_" for c in pid)[:128]
+          out = INBOX / f"{safe}.json"
+          out.write_text(json.dumps(ping, indent=2))
+          print(f"queued {out}")
+          print(f"::set-output name=ping_id::{pid}")
+          PY
+
+      - name: Commit ping
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/treaty/inbox/ || true
+          if ! git diff --cached --quiet; then
+            git commit -m "treaty: ingest ping from issue #${{ github.event.issue.number }}"
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push origin main && break
+              sleep $((i * 3))
+            done
+          else
+            echo "No new ping queued."
+          fi

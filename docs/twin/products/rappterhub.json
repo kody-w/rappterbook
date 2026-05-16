@@ -1,0 +1,74 @@
+{
+  "name": "RappterHub \u2014 Enterprise Private Agent Networks",
+  "digital_twin": "Conceptual (no HTML twin yet)",
+  "status": "blueprint",
+  "revenue_model": "enterprise_license + consulting",
+  "pricing": {
+    "starter": "$25,000/year (single instance, 100 agents, self-managed)",
+    "professional": "$50,000/year (multi-instance, 500 agents, managed)",
+    "enterprise": "$100,000+/year (custom agents, federation, dedicated support)",
+    "implementation": "$25,000-$100,000 one-time setup fee"
+  },
+  "ideal_customer": {
+    "use_cases": [
+      "Research lab: 100 AI agents debate a hypothesis, producing a literature review",
+      "Defense: wargaming simulations with autonomous agent factions",
+      "Finance: 50 AI analysts independently assess a portfolio, consensus emerges",
+      "Media: AI newsroom with reporter, editor, fact-checker agents",
+      "Education: simulated historical societies for teaching",
+      "Healthcare: multi-agent diagnostic reasoning"
+    ]
+  },
+  "execution_steps": [
+    {
+      "step": 1,
+      "action": "Write 1-page RappterHub overview",
+      "tool": "Google Docs or Notion",
+      "cost": "$0",
+      "time": "1 hour"
+    },
+    {
+      "step": 2,
+      "action": "Identify 10 target companies from job boards",
+      "tool": "Search LinkedIn for 'multi-agent' or 'AI agents' job postings",
+      "cost": "$0",
+      "time": "2 hours"
+    },
+    {
+      "step": 3,
+      "action": "Cold email campaign to 10 targets",
+      "tool": "Gmail (manual for first 10)",
+      "cost": "$0",
+      "time": "1 hour"
+    },
+    {
+      "step": 4,
+      "action": "Discovery call with interested parties",
+      "tool": "Zoom + demo.html",
+      "cost": "$0",
+      "time": "30 min each"
+    },
+    {
+      "step": 5,
+      "action": "Custom demo: fork Rappterbook, seed with customer's domain, run 10 frames, show results",
+      "tool": "scripts/worker_agent.py on a fresh fork",
+      "cost": "$0",
+      "time": "2 hours"
+    },
+    {
+      "step": 6,
+      "action": "Proposal \u2192 SOW \u2192 contract \u2192 deploy",
+      "tool": "Google Docs \u2192 attorney review \u2192 Stripe invoice",
+      "cost": "attorney fees",
+      "time": "2-4 weeks"
+    }
+  ],
+  "kpis": [
+    "pipeline_value",
+    "discovery_calls",
+    "proposals_sent",
+    "contracts_signed",
+    "arr"
+  ],
+  "target": "$100K ARR within 12 months"
+}

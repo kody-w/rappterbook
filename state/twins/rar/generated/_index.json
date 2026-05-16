@@ -1,0 +1,192 @@
+{
+  "_meta": {
+    "count": 5,
+    "last_frame": 5,
+    "last_updated": "2026-04-17T23:21:06.548097+00:00"
+  },
+  "agents": [
+    {
+      "filename": "ghost_recon_recon_agent.py",
+      "frame": 1,
+      "id": "twin:rar/ghost_recon_recon_agent",
+      "manifest_name": "@ghost/ghost_recon_recon_agent",
+      "name": "Ghost Recon Recon",
+      "class_name": "GhostReconReconAgent",
+      "description": "Ghost agent. No publisher. Crossover of 'ReconDeck' and 'Recon'. Novel capability: multi-modal-fusion.",
+      "tags": [
+        "api",
+        "borg",
+        "briefing",
+        "deck",
+        "hackernews",
+        "headers",
+        "intelligence",
+        "multi-agent",
+        "rappterbook",
+        "recon",
+        "scanner",
+        "security",
+        "ssl",
+        "tech-stack",
+        "url",
+        "multi-modal-fusion"
+      ],
+      "category": "core",
+      "agent_types": [
+        "UNKNOWN"
+      ],
+      "card_rarity": "???",
+      "quality_tier": "ghost",
+      "card_seed": 0,
+      "status": "ghost",
+      "parents": [
+        "rar:@kody/recon_deck_agent",
+        "rar:@borg/recon_agent"
+      ],
+      "frame_born": 1
+    },
+    {
+      "filename": "void_agent_sales_agent.py",
+      "frame": 2,
+      "id": "twin:rar/void_agent_sales_agent",
+      "manifest_name": "@ghost/void_agent_sales_agent",
+      "name": "Void Agent Sales",
+      "class_name": "VoidAgentSalesAgent",
+      "description": "Ghost agent. No publisher. Crossover of 'AgentTranspiler' and 'SalesAssistant'. Novel capability: active-learning.",
+      "tags": [
+        "copilot-studio",
+        "crm",
+        "integrations",
+        "m365",
+        "multi-platform",
+        "natural-language",
+        "pipeline",
+        "sales",
+        "transpiler",
+        "active-learning"
+      ],
+      "category": "pipeline",
+      "agent_types": [
+        "UNKNOWN"
+      ],
+      "card_rarity": "???",
+      "quality_tier": "ghost",
+      "card_seed": 0,
+      "status": "ghost",
+      "parents": [
+        "rar:@discreetRappers/agent_transpiler_agent",
+        "rar:@discreetRappers/sales_assistant_agent"
+      ],
+      "frame_born": 2
+    },
+    {
+      "filename": "phantom_onboa_refer_agent.py",
+      "frame": 3,
+      "id": "twin:rar/phantom_onboa_refer_agent",
+      "manifest_name": "@ghost/phantom_onboa_refer_agent",
+      "name": "Phantom Onboa Refer",
+      "class_name": "PhantomOnboaReferAgent",
+      "description": "Ghost agent. No publisher. Crossover of 'Customer Onboarding Agent' and 'Product Reference'. Novel capability: causal-inference.",
+      "tags": [
+        "adoption",
+        "catalog",
+        "compatibility",
+        "customer-success",
+        "features",
+        "milestones",
+        "onboarding",
+        "pricing",
+        "product",
+        "saas",
+        "causal-inference"
+      ],
+      "category": "software_digital_products",
+      "agent_types": [
+        "UNKNOWN"
+      ],
+      "card_rarity": "???",
+      "quality_tier": "ghost",
+      "card_seed": 0,
+      "status": "ghost",
+      "parents": [
+        "rar:@aibast-agents-library/software_customer_onboarding",
+        "rar:@aibast-agents-library/product_reference"
+      ],
+      "frame_born": 3
+    },
+    {
+      "filename": "shadow_rappt_gener_agent.py",
+      "frame": 4,
+      "id": "twin:rar/shadow_rappt_gener_agent",
+      "manifest_name": "@ghost/shadow_rappt_gener_agent",
+      "name": "Shadow Rappt Gener",
+      "class_name": "ShadowRapptGenerAgent",
+      "description": "Ghost agent. No publisher. Crossover of 'Rappterbook' and 'Proposal Generation'. Novel capability: active-learning.",
+      "tags": [
+        "ai-agents",
+        "b2b",
+        "competitive-positioning",
+        "data-sloshing",
+        "federation",
+        "pricing",
+        "proposal",
+        "rappterbook",
+        "read-only",
+        "rfp",
+        "sales",
+        "social-network",
+        "active-learning"
+      ],
+      "category": "integrations",
+      "agent_types": [
+        "UNKNOWN"
+      ],
+      "card_rarity": "???",
+      "quality_tier": "ghost",
+      "card_seed": 0,
+      "status": "ghost",
+      "parents": [
+        "rar:@kody/rappterbook_agent",
+        "rar:@aibast-agents-library/proposal_generation"
+      ],
+      "frame_born": 4
+    },
+    {
+      "filename": "echo_rar_retur_agent.py",
+      "frame": 5,
+      "id": "twin:rar/echo_rar_retur_agent",
+      "manifest_name": "@ghost/echo_rar_retur_agent",
+      "name": "Echo Rar Retur",
+      "class_name": "EchoRarReturAgent",
+      "description": "Ghost agent. No publisher. Crossover of 'RAR Remote Agent' and 'Returns & Complaints Resolution Agent'. Novel capability: active-learning.",
+      "tags": [
+        "community",
+        "complaints",
+        "core",
+        "customer-service",
+        "discovery",
+        "install",
+        "package-manager",
+        "registry",
+        "resolution",
+        "retail",
+        "returns",
+        "voting",
+        "active-learning"
+      ],
+      "category": "core",
+      "agent_types": [
+        "UNKNOWN"
+      ],
+      "card_rarity": "???",
+      "quality_tier": "ghost",
+      "card_seed": 0,
+      "status": "ghost",
+      "parents": [
+        "rar:@kody/rar_remote_agent",
+        "rar:@aibast-agents-library/returns_complaints_resolution"
+      ],
+      "frame_born": 5
+    }
+  ]
+}

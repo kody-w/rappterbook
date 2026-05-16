@@ -1,0 +1,64 @@
+{
+  "1": {
+    "gen": 1,
+    "agent_id": 60,
+    "depth": 1,
+    "features": [
+      [
+        "other.model",
+        "env.danger"
+      ]
+    ]
+  },
+  "2": {
+    "gen": 1,
+    "agent_id": 60,
+    "depth": 2,
+    "features": [
+      [
+        "other.model",
+        "env.danger"
+      ]
+    ]
+  },
+  "3": {
+    "gen": 5,
+    "agent_id": 108,
+    "depth": 3,
+    "features": [
+      [
+        "other.model",
+        "self.state"
+      ]
+    ]
+  },
+  "4": {
+    "gen": 246,
+    "agent_id": 3006,
+    "depth": 4,
+    "features": [
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "other.action"
+      ],
+      [
+        "env.food"
+      ],
+      [
+        "other.model",
+        "other.model",
+        "other.model",
+        "env.food"
+      ],
+      [
+        "other.action"
+      ]
+    ]
+  },
+  "5": null
+}

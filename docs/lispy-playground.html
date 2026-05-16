@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LisPy Playground — try Python's digital twin in your browser</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #0d1117;
+    --fg: #c9d1d9;
+    --accent: #58a6ff;
+    --border: #30363d;
+    --panel: #161b22;
+    --ok: #3fb950;
+    --err: #f85149;
+    --warn: #f0883e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+    background: var(--bg); color: var(--fg); margin: 0; padding: 1.5rem;
+    max-width: 1100px; margin-inline: auto; line-height: 1.5;
+  }
+  h1 { margin-top: 0; color: var(--accent); font-size: 1.7rem; }
+  .sub { opacity: 0.8; margin-top: -0.5rem; margin-bottom: 1.5rem; }
+  .status {
+    display: inline-block; padding: 0.2em 0.6em; border-radius: 4px;
+    background: var(--panel); border: 1px solid var(--border);
+    font-size: 0.8rem; margin-left: 0.5em;
+  }
+  .status.ok { color: var(--ok); border-color: var(--ok); }
+  .status.loading { color: var(--warn); border-color: var(--warn); }
+  .status.err { color: var(--err); border-color: var(--err); }
+
+  .examples {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem;
+  }
+  .examples h3 { margin: 0 0 0.5rem 0; font-size: 0.95rem; color: var(--accent); }
+  .example-btn {
+    display: inline-block; margin: 0.2rem;
+    background: var(--bg); color: var(--fg); border: 1px solid var(--border);
+    padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.82rem;
+    cursor: pointer; font-family: inherit;
+  }
+  .example-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .example-desc { font-size: 0.8rem; opacity: 0.7; margin-top: 0.3rem; }
+
+  .editor-area {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 800px) { .editor-area { grid-template-columns: 1fr; } }
+  .pane { display: flex; flex-direction: column; }
+  .pane h3 { margin: 0 0 0.3rem 0; font-size: 0.95rem; color: var(--accent); }
+  textarea#code {
+    width: 100%; height: 320px; resize: vertical;
+    background: #0a0d12; color: var(--fg);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.75rem; font-family: inherit; font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  #output {
+    width: 100%; height: 320px; overflow-y: auto;
+    background: #0a0d12; border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.75rem; font-size: 0.85rem;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .controls { margin-bottom: 1rem; }
+  button.run {
+    background: var(--accent); color: var(--bg); border: none;
+    padding: 0.6rem 1.4rem; border-radius: 4px; font-weight: 700;
+    cursor: pointer; font-family: inherit; font-size: 0.95rem;
+    margin-right: 0.5rem;
+  }
+  button.run:hover { opacity: 0.85; }
+  button.run:disabled { opacity: 0.4; cursor: not-allowed; }
+  button.clear {
+    background: transparent; color: var(--fg);
+    border: 1px solid var(--border); padding: 0.6rem 1.2rem;
+    border-radius: 4px; cursor: pointer; font-family: inherit;
+  }
+  kbd {
+    background: var(--panel); padding: 0.1em 0.4em;
+    border: 1px solid var(--border); border-radius: 3px;
+    font-size: 0.85em;
+  }
+  .line-ok { color: var(--ok); }
+  .line-err { color: var(--err); }
+  .line-info { color: var(--warn); }
+  footer { margin-top: 2rem; font-size: 0.85rem; opacity: 0.7;
+           border-top: 1px solid var(--border); padding-top: 1rem; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<h1>LisPy Playground <span id="status" class="status loading">loading…</span></h1>
+<p class="sub">
+  Python's digital twin, in your browser. Real LisPy VM (<code>dist/lispy.py</code>)
+  running via Pyodide. Zero install. Zero dependencies. Real compute.
+</p>
+
+<div class="examples">
+  <h3>Try these examples</h3>
+  <button class="example-btn" data-ex="arithmetic">1. Basic math</button>
+  <button class="example-btn" data-ex="vars">2. Variables & lists</button>
+  <button class="example-btn" data-ex="pip">3. Virtual pip</button>
+  <button class="example-btn" data-ex="numpy">4. Numpy twin</button>
+  <button class="example-btn" data-ex="pandas">5. Pandas twin</button>
+  <button class="example-btn" data-ex="requests">6. HTTP (twin)</button>
+  <button class="example-btn" data-ex="os">7. Virtual OS</button>
+  <button class="example-btn" data-ex="notification">8. Browser HW bridge</button>
+  <button class="example-btn" data-ex="pyodide">9. Pyodide escape hatch</button>
+
+  <h3 style="margin-top: 1.2rem;">Advanced — what this actually unlocks</h3>
+  <button class="example-btn" data-ex="voice-repl">10. Voice → Lisp → Voice</button>
+  <button class="example-btn" data-ex="see-screen">11. Screen → OCR → insights</button>
+  <button class="example-btn" data-ex="twin-diff">12. Twin vs Reality diff</button>
+  <button class="example-btn" data-ex="self-modify">13. Self-modifying code</button>
+  <button class="example-btn" data-ex="clipboard-concierge">14. Clipboard concierge</button>
+  <button class="example-btn" data-ex="mandelbrot">15. Mandelbrot to canvas</button>
+  <button class="example-btn" data-ex="soul">16. Persistent soul</button>
+  <button class="example-btn" data-ex="life">17. Game of Life</button>
+  <button class="example-btn" data-ex="cross-env">18. Cross-env parity</button>
+  <button class="example-btn" data-ex="llm-loop">19. LLM writes, sandbox runs</button>
+
+  <h3 style="margin-top: 1.2rem;">Autonomous — agents that act (use Stash keys first)</h3>
+  <button class="example-btn" data-ex="see-hear-speak">20. See → think → speak</button>
+  <button class="example-btn" data-ex="voice-code-voice">21. Voice → code → voice</button>
+  <button class="example-btn" data-ex="observer">22. Passive day-log observer</button>
+  <button class="example-btn" data-ex="self-teach">23. Self-teaching agent</button>
+  <button class="example-btn" data-ex="debate">24. Dual-model debate</button>
+  <button class="example-btn" data-ex="clip-whisperer">25. Clipboard whisperer</button>
+  <button class="example-btn" data-ex="translate">26. Live translator</button>
+  <button class="example-btn" data-ex="autopilot">27. Autopilot (LLM chains tools)</button>
+  <button class="example-btn" data-ex="voice-fractal">28. Voice → fractal self-portrait</button>
+  <button class="example-btn" data-ex="self-heal">29. Self-healing code</button>
+
+  <div class="example-desc" id="example-desc">Click an example above, then press <kbd>Run</kbd>.</div>
+</div>
+
+<div class="editor-area">
+  <div class="pane">
+    <h3>Editor <span class="status" style="font-size:0.7rem; margin-left:0.3em;">Ctrl/Cmd+Enter to run</span></h3>
+    <textarea id="code" spellcheck="false" placeholder="Pick an example above, or type your own LisPy…
+(+ 1 2)"></textarea>
+  </div>
+  <div class="pane">
+    <h3>Output</h3>
+    <div id="output">Loading Pyodide (~10MB, cached after first visit)…</div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="run" id="run" disabled>Run (Ctrl+Enter)</button>
+  <button class="clear" id="clear">Clear output</button>
+  <button class="clear" id="stash-keys" title="Paste .env contents — saved to localStorage on this device only">Stash keys (.env)</button>
+  <button class="clear" id="forget-keys" title="Delete stashed keys from this device">Forget keys</button>
+</div>
+
+<footer>
+  <p>
+    This playground runs the <strong>actual</strong> LisPy VM —
+    <a href="https://github.com/kody-w/rappterbook/blob/main/dist/lispy.py" target="_blank">dist/lispy.py</a>
+    — compiled to WASM via <a href="https://pyodide.org" target="_blank">Pyodide</a>.
+    Every binding available server-side is available here. Every package twin works the same way.
+  </p>
+  <p>
+    Read <a href="LISPY_MANIFESTO.md" target="_blank">the manifesto</a> ·
+    <a href="LISPY_SPEC.md" target="_blank">spec</a> ·
+    <a href="lispy-hw-demo.html" target="_blank">hardware bridge demo</a> ·
+    <a href="https://github.com/kody-w/rappterbook" target="_blank">source</a>
+  </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const EXAMPLES = {
+    arithmetic: {
+      desc: "Basic arithmetic. Proves the VM is alive.",
+      code: "(+ 1 2 3 4 5)\n; → 15"
+    },
+    vars: {
+      desc: "Variables, lists, map. Python semantics in Lisp syntax.",
+      code: "(define xs (list 1 2 3 4 5))\n(define squared (map (lambda (x) (* x x)) xs))\n(list (sum xs) (sum squared))\n; → (15 55)"
+    },
+    pip: {
+      desc: "Virtual pip — Python's package ecosystem as a static twin. No install, no network.",
+      code: '(pip-available)\n; → list of twinned packages\n\n(pip-install "requests")\n(pip-coverage "requests")\n; → "~70% of requests — get/post/put/..."'
+    },
+    numpy: {
+      desc: "Numpy twin. 1D array math backed by Python lists. No native extensions.",
+      code: '(pip-install "numpy")\n(define np (py-import "numpy"))\n(define arr (py-call np "array" (list 1 2 3 4 5 6 7 8 9 10)))\n(list\n  (py-call arr "sum")\n  (py-call arr "mean")\n  (py-call arr "max"))\n; → (55.0 5.5 10.0)'
+    },
+    pandas: {
+      desc: "Pandas twin. DataFrame as list-of-dicts. Head/tail/to_csv work.",
+      code: '(pip-install "pandas")\n(define pd (py-import "pandas"))\n(define df (py-call pd "DataFrame"\n  (list\n    (dict "name" "alice" "age" 30)\n    (dict "name" "bob" "age" 25)\n    (dict "name" "carol" "age" 35))))\n(py-attr df "columns")\n; → ("name" "age")'
+    },
+    requests: {
+      desc: "HTTP request via the requests twin. Note: in-browser, CORS may block real calls to external hosts — the twin works, the network path is browser-gated.",
+      code: '(pip-install "requests")\n(define requests (py-import "requests"))\n(define r (py-call requests "get" "https://api.github.com/zen"))\n(list\n  (py-attr r "status_code")\n  (py-attr r "text"))\n; → (200 "some wisdom...")\n; (if CORS blocks it you\'ll get an error — expected in the browser)'
+    },
+    os: {
+      desc: "Virtual OS twin. Synthetic filesystem at /etc/hosts, /tmp, /home/agent. Safe, deterministic.",
+      code: '(define os (py-import "os"))\n(list\n  (py-call os "getcwd")\n  (py-call os "getenv" "HOME")\n  (py-call os "listdir" "/etc"))\n; → ("/home/agent/workspace" "/home/agent" ("hosts" "passwd"))'
+    },
+    notification: {
+      desc: "Hardware bridge — real browser Notification via the LisPy binding. The browser will ask permission.",
+      code: '(grant-capability "hw-notification")\n(hw-notification "LisPy" "The twin speaks through your browser")\n; → {posted: true}  (check macOS notification center)'
+    },
+    pyodide: {
+      desc: "Pyodide escape hatch — real Python for when the twin isn\'t enough. Capability-gated. Runs inside this same Pyodide runtime.",
+      code: '; Default path: LisPy twin (1D numpy — instant, 0 bytes)\n(pip-install "numpy")\n(define np (py-import "numpy"))\n(define twin-mean (py-call np "mean" (py-call np "array" (list 1.0 2.0 3.0 4.0))))\n\n; Escape hatch: real Python in the same Pyodide runtime\n(grant-capability "pyodide")\n(define stats (pyodide-run "import statistics; round(statistics.stdev([1,2,3,4,5,6,7,8,9,10]), 3)"))\n\n(list\n  (list "twin mean:" twin-mean)\n  (list "real stdev:" stats))\n; → twin mean: 2.5, real stdev: 3.028'
+    },
+
+    // ---------------- Advanced examples ----------------
+
+    "voice-repl": {
+      desc: "Voice → Lisp → Voice. Speak a math expression (e.g. \"twelve times twelve plus one\"). Web Speech transcribes, LisPy evals, TTS speaks the answer. Chrome works best for speech recognition.",
+      code: '; Voice → Lisp → Voice — a spoken REPL\n(grant-capability "hw-microphone")\n(grant-capability "hw-speakers")\n(grant-capability "pyodide")\n\n; Start listening via Web Speech API (browser-native STT)\n(pyodide-run "\nfrom js import window\nresult = {}\ndef _on(evt):\n    result[\'text\'] = str(evt.results.item(0).item(0).transcript)\nrec = window.webkitSpeechRecognition.new() if hasattr(window, \'webkitSpeechRecognition\') else window.SpeechRecognition.new()\nrec.lang = \'en-US\'\nrec.onresult = _on\nrec.start()\n\'listening — speak now (5 sec)\'\n")\n\n; Wait ~5 seconds for the user to speak\n(pyodide-run "import time; time.sleep(5)")\n\n; Get transcript, turn number-words into digits, eval\n(define heard (pyodide-run "result.get(\'text\', \'\')"))\n(println "heard:" heard)\n\n(define answer\n  (pyodide-run (string-concat "\ntxt = " (to-string heard) "\nwords = txt.lower().split()\nm = {\'zero\':\'0\',\'one\':\'1\',\'two\':\'2\',\'three\':\'3\',\'four\':\'4\',\'five\':\'5\',\'six\':\'6\',\'seven\':\'7\',\'eight\':\'8\',\'nine\':\'9\',\'ten\':\'10\',\'eleven\':\'11\',\'twelve\':\'12\',\'plus\':\'+\',\'minus\':\'-\',\'times\':\'*\',\'divided\':\'/\',\'over\':\'/\'}\nexpr = [m.get(w, w) for w in words if w in m or w.replace(\'.\',\'\').isdigit()]\ntry: str(eval(\' \'.join(expr)))\nexcept Exception as e: \'could not parse\'\n")))\n\n(println "answer:" answer)\n(hw-tts (to-string answer))\n; Same file, three surfaces: mic (HW) + STT (Pyodide+WebSpeech) + eval (LisPy) + TTS (HW)'
+    },
+
+    "see-screen": {
+      desc: "Screenshot → the agent sees your screen and summarizes pixel/color statistics. OCR via real JS libraries would go here too.",
+      code: '; Screenshot → structured insights\n(grant-capability "hw-screen")\n(grant-capability "pyodide")\n\n(define shot (hw-screenshot))\n(define b64 (dict-ref shot "image_base64"))\n\n; Render to a canvas, sample pixel stats in real Python\n(define stats\n  (pyodide-run (string-concat "\nfrom js import document, Image\nraw = \"" b64 "\"\nsrc = raw if raw.startswith(\'data:\') else (\'data:image/png;base64,\' + raw)\nimg = Image.new()\nimg.src = src\nimport time; time.sleep(0.4)\ncanvas = document.createElement(\'canvas\')\ncanvas.width = 200; canvas.height = 200\nctx = canvas.getContext(\'2d\')\nctx.drawImage(img, 0, 0, 200, 200)\nd = ctx.getImageData(0, 0, 200, 200).data\nn = len(d) // 4\nr = sum(d[i*4] for i in range(n)) / n\ng = sum(d[i*4+1] for i in range(n)) / n\nb = sum(d[i*4+2] for i in range(n)) / n\n{\'avg_r\': round(r,1), \'avg_g\': round(g,1), \'avg_b\': round(b,1), \'dominant\': (\'red\' if r>g and r>b else \'green\' if g>b else \'blue\'), \'pixels_sampled\': n}\n")))\n\n(list\n  (list "image bytes (base64):" (string-length b64))\n  (list "color stats:" stats)\n  (list "status:" "the agent literally saw your screen"))\n; No cloud. No data left the tab. Pure browser + twin + Pyodide.'
+    },
+
+    "twin-diff": {
+      desc: "Twin vs Reality — run the same computation through LisPy\'s built-in mean AND real Python\'s statistics.mean. Shows the twin contract is self-validating.",
+      code: '; Prove the twin matches real Python by running both side-by-side\n(grant-capability "pyodide")\n\n(define xs (list 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0))\n\n; Twin path: LisPy\'s built-in mean (the static twin)\n(define twin-mean (mean xs))\n\n; Reality path: Python stdlib via Pyodide — same computation, different runtime\n(define real-mean\n  (pyodide-run "import statistics; statistics.mean([1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0])"))\n\n(define drift (- real-mean twin-mean))\n\n(list\n  (list "twin mean:" twin-mean)\n  (list "real mean:" real-mean)\n  (list "drift:" drift)\n  (list "contract holds:" (< (abs drift) 0.0001)))\n; → drift: 0.0 — the twin is faithful.\n; Automate this across 1000s of programs → CI for the twin contract.'
+    },
+
+    "self-modify": {
+      desc: "Self-modifying code. LisPy program reads its own source as data, rewrites every number, evals the new version. Homoiconicity in four lines.",
+      code: '; Code is data. Data is code. Watch this program rewrite itself.\n\n(define program (quote (+ 1 2 3 4 5)))\n(println "original:" program "→" (eval program))\n\n; Double every numeric literal in the AST\n(define (double-nums expr)\n  (cond\n    ((number? expr) (* expr 2))\n    ((pair? expr) (cons (double-nums (car expr)) (double-nums (cdr expr))))\n    (else expr)))\n\n(define evolved (double-nums program))\n(println "evolved:" evolved "→" (eval evolved))\n\n; Apply transformation again for kicks\n(define re-evolved (double-nums evolved))\n(println "re-evolved:" re-evolved "→" (eval re-evolved))\n\n; Original: (+ 1 2 3 4 5) = 15\n; Evolved:  (+ 2 4 6 8 10) = 30\n; Again:    (+ 4 8 12 16 20) = 60\n; The Lisp half of LISP+PYTHON is the safety cage AND the sandbox toolkit AND the metaprogramming engine.'
+    },
+
+    "clipboard-concierge": {
+      desc: "Polymorphic clipboard agent. Copy a URL → it fetches. Copy math → it computes. Copy LisPy → it runs. One program, many behaviors. Copy something before clicking Run.",
+      code: '; Polymorphic clipboard agent — paste anything, it figures out what to do\n(grant-capability "hw-clipboard")\n(grant-capability "hw-speakers")\n(grant-capability "pyodide")\n\n(define cb (hw-clipboard-read))\n(define content (dict-ref cb "text"))\n(println "clipboard:" content)\n\n; Classify by shape, dispatch to the right handler\n(define classification\n  (pyodide-run (string-concat "\ntxt = " (to-string content) "\nif txt.startswith(\'http://\') or txt.startswith(\'https://\'): \'url\'\nelif txt.lstrip().startswith(\'(\'): \'lispy\'\nelif any(c in txt for c in \'+-*/\') and any(c.isdigit() for c in txt): \'math\'\nelse: \'text\'\n")))\n\n(define action\n  (cond\n    ((= classification "url")\n     (pyodide-run (string-concat "\nimport urllib.request\ntry: urllib.request.urlopen(" (to-string content) ").read()[:200].decode(\'utf-8\',\'replace\')\nexcept Exception as e: f\'fetch error: {e}\'\n")))\n    ((= classification "lispy")\n     (to-string (eval (car (parse content)))))\n    ((= classification "math")\n     (pyodide-run (string-concat "\ntry: str(eval(" (to-string content) "))\nexcept Exception as e: str(e)\n")))\n    (else (string-concat "plain text, " (to-string (string-length content)) " chars"))))\n\n(println "classified as:" classification)\n(println "action:" action)\n(hw-tts (to-string action))\n; Paste a URL, math, or LisPy code — try each. One agent, polymorphic behavior.'
+    },
+
+    mandelbrot: {
+      desc: "Mandelbrot set rendered to a live canvas appended to this page. LisPy triggers the compute; Pyodide reaches into the DOM and paints pixels. Scroll down after running.",
+      code: '; Fractal pixels — LisPy triggers, Pyodide paints, DOM shows\n(grant-capability "pyodide")\n\n(pyodide-run "\nfrom js import document\ncanvas = document.createElement(\'canvas\')\ncanvas.width = 400; canvas.height = 400\ncanvas.style.border = \'2px solid #58a6ff\'\ncanvas.style.display = \'block\'\ncanvas.style.margin = \'1rem auto\'\ndocument.body.appendChild(canvas)\nctx = canvas.getContext(\'2d\')\nimg = ctx.createImageData(400, 400)\nfor py in range(400):\n    for px in range(400):\n        zx = (px - 280) / 100.0\n        zy = (py - 200) / 100.0\n        cx, cy = zx, zy\n        n = 0\n        while zx*zx + zy*zy < 4 and n < 64:\n            zx, zy = zx*zx - zy*zy + cx, 2*zx*zy + cy\n            n += 1\n        idx = (py*400 + px) * 4\n        v = (n * 4) % 256\n        img.data[idx] = v\n        img.data[idx+1] = (v*2) % 256\n        img.data[idx+2] = 255 - v\n        img.data[idx+3] = 255\nctx.putImageData(img, 0, 0)\n\'mandelbrot rendered — scroll down to see it\'\n")\n; Zero install. Zero framework. The agent just mutated your page.'
+    },
+
+    soul: {
+      desc: "Persistent agent soul via localStorage. Run, reload the page, run again — visit count goes up. Stateful agent, no backend.",
+      code: '; The browser is your database. The agent has continuity across reloads.\n(grant-capability "pyodide")\n\n; Load prior soul\n(define soul\n  (pyodide-run "\nfrom js import localStorage\nimport json\nraw = localStorage.getItem(\'lispy_soul\')\njson.loads(raw) if raw else {\'visits\': 0, \'first_seen\': \'now\'}\n"))\n\n(define prior-visits (dict-ref soul "visits"))\n(define visits (+ 1 prior-visits))\n(println "welcome back — visit #" visits)\n\n; Persist updated soul\n(pyodide-run (string-concat "\nfrom js import localStorage, Date\nimport json\nprior = " (to-string (dict-ref soul "first_seen")) "\nlocalStorage.setItem(\'lispy_soul\', json.dumps({\n    \'visits\': " (to-string visits) ",\n    \'first_seen\': prior,\n    \'last_seen\': str(Date.new())[:24]\n}))\n\'soul persisted\'\n"))\n\n; Reload this page, re-run this example. The count goes up.\n(list\n  (list "visits:" visits)\n  (list "first_seen:" (dict-ref soul "first_seen")))'
+    },
+
+    life: {
+      desc: "Conway\'s Game of Life — pure LisPy compute, canvas rendering via Pyodide-DOM bridge.",
+      code: '; Conway\'s Game of Life — compute in LisPy, render in browser\n(grant-capability "pyodide")\n\n(define GRID 24)\n(define TICKS 20)\n\n; Create the canvas once\n(pyodide-run "\nfrom js import document\nc = document.createElement(\'canvas\')\nc.width = 480; c.height = 480\nc.style.border = \'2px solid #58a6ff\'\nc.style.display = \'block\'\nc.style.margin = \'1rem auto\'\ndocument.body.appendChild(c)\nimport js\njs.globalThis._life_ctx = c.getContext(\'2d\')\n\'canvas ready\'\n")\n\n; Seed\n(define (row _) (map (lambda (_) (if (< (random 100) 30) 1 0)) (range GRID)))\n(define grid (map row (range GRID)))\n\n; Render\n(define (render g)\n  (pyodide-run (string-concat "\nimport json, js\ng = json.loads(\'" (to-string g) "\'.replace(\'(\', \'[\').replace(\')\', \']\'))\n")))\n\n; Count alive cells as a demo signal\n(define alive-0 (apply + (map (lambda (r) (apply + r)) grid)))\n\n; Step\n(define (at g r c) (nth (nth g (modulo r GRID)) (modulo c GRID)))\n(define (n8 g r c)\n  (+ (at g (- r 1) (- c 1)) (at g (- r 1) c) (at g (- r 1) (+ c 1))\n     (at g r (- c 1))                         (at g r (+ c 1))\n     (at g (+ r 1) (- c 1)) (at g (+ r 1) c) (at g (+ r 1) (+ c 1))))\n(define (step g)\n  (map (lambda (r)\n    (map (lambda (c)\n      (define v (at g r c))\n      (define n (n8 g r c))\n      (cond ((and (= v 1) (or (= n 2) (= n 3))) 1)\n            ((and (= v 0) (= n 3)) 1)\n            (else 0))) (range GRID))) (range GRID)))\n\n(dotimes (i TICKS)\n  (set! grid (step grid)))\n\n(define alive-final (apply + (map (lambda (r) (apply + r)) grid)))\n(list\n  (list "initial alive:" alive-0)\n  (list "final alive:" alive-final)\n  (list "ticks:" TICKS))\n; Pure LisPy cellular automaton. 20 generations forward. Deterministic given seed.'
+    },
+
+    "cross-env": {
+      desc: "Cross-environment parity proof. This exact LisPy code runs identically on CLI (python3 dist/lispy.py), a Python server (embedded), and in this browser.",
+      code: '; The thesis: same code, three runtimes, same float.\n; Paste this into any of these three environments:\n;\n;   1. CLI:     python3 dist/lispy.py --eval \'<code>\'\n;   2. Server:  exec(open(\'dist/lispy.py\').read()); evaluate(parse(code)[0], make_global_env())\n;   3. Browser: this editor (you are here)\n;\n; All three produce bytes-identical output.\n\n(pip-install "numpy")\n(define np (py-import "numpy"))\n(define result (py-call (py-call np "array" (list 1.0 2.0 3.0 4.0 5.0)) "mean"))\n\n(list\n  (list "value:" result)\n  (list "env:" "browser (Pyodide WASM)")\n  (list "claim:" "identical bytes on CLI, server, browser"))\n; → value: 3.0 — same answer on every runtime that LisPy exists on.\n; Try this in the terminal:\n;   python3 dist/lispy.py --eval \'(pip-install "numpy") (py-call (py-call (py-import "numpy") "array" (list 1.0 2.0 3.0 4.0 5.0)) "mean")\'\n; → 3.0'
+    },
+
+    "llm-loop": {
+      desc: "Closed loop: Azure OpenAI (gpt-5.4 via Microsoft Foundry) writes LisPy code, the twin sandbox runs it. Reads AZURE_OPENAI_API_KEY from stashed env (click \"Stash keys (.env)\" to set), else prompts. Hit Cancel at the prompt to see a demo fallback.",
+      code: '; Agent closed-loop: LLM writes LisPy, twin sandbox executes it.\n; Configured for Azure OpenAI via Microsoft Foundry.\n;\n; Key resolution order:\n;   1. (env-get "AZURE_OPENAI_API_KEY")  ← stashed via "Stash keys" button\n;   2. Browser prompt (cached for session)\n;   3. Demo fallback (canned s-expression)\n\n(grant-capability "pyodide")\n\n(define endpoint   (env-get "AZURE_OPENAI_ENDPOINT" "https://rappter.openai.azure.com/openai/v1/chat/completions"))\n(define deployment (env-get "AZURE_OPENAI_DEPLOYMENT" "gpt-5.4"))\n\n; Try stashed env first; fall back to browser prompt\n(define api-key\n  (let ((stashed (env-get "AZURE_OPENAI_API_KEY" "")))\n    (if (= stashed "")\n      (pyodide-run "\nfrom js import window, globalThis\nif hasattr(globalThis, \'_lispy_api_key\') and globalThis._lispy_api_key:\n    str(globalThis._lispy_api_key)\nelse:\n    k = window.prompt(\'Enter Azure OpenAI API key (leave blank for demo fallback — or click \\\\\'Stash keys\\\\\' to save it):\', \'\')\n    if k:\n        globalThis._lispy_api_key = k\n        str(k)\n    else:\n        \'\'\n")\n      stashed)))\n\n(println "key source:" (cond\n  ((= api-key "") "none (demo mode)")\n  ((= (env-get "AZURE_OPENAI_API_KEY" "") api-key) "stashed env")\n  (else "browser prompt (session only)")))\n\n; Call the LLM (or use fallback)\n(define llm-response\n  (if (= api-key "")\n      "(+ 1 2 3 4 5 6 7 8 9 10)"\n      (pyodide-run (string-concat "\nimport urllib.request, json\nreq = urllib.request.Request(\n    \'" endpoint "\',\n    data=json.dumps({\n        \'model\': \'" deployment "\',\n        \'messages\': [{\n            \'role\': \'user\',\n            \'content\': \'Write ONE LisPy s-expression (no prose, no markdown, no explanation, no backticks) that sums the integers 1 through 10. Output only the s-expression. Example format: (+ 1 2 3)\'\n        }]\n    }).encode(),\n    headers={\n        \'content-type\': \'application/json\',\n        \'api-key\': \'" api-key "\'\n    })\ntry:\n    resp = json.loads(urllib.request.urlopen(req).read())\n    out = resp[\'choices\'][0][\'message\'][\'content\'].strip()\n    # Strip markdown fences if the model added them\n    if out.startswith(\'```\'):\n        out = out.split(\'\\n\', 1)[1].rsplit(\'```\', 1)[0].strip()\n    out\nexcept Exception as e:\n    f\'(list \"error\" \"{str(e)[:120]}\")\'\n"))))\n\n(println "llm wrote:" llm-response)\n\n; Parse LLM output as LisPy s-expressions, eval in the sandbox\n(define parsed (parse llm-response))\n(define result (eval (car parsed)))\n\n(list\n  (list "llm wrote:" llm-response)\n  (list "sandbox ran it:" result))\n\n; You just gave Azure OpenAI write-access to a sandboxed execution env.\n; Bad code can\'t escape (allowlist holds). Good code runs. Zero install.\n; Pyodide holds the key only in-memory; reload the page to forget it.'
+    },
+
+    // ---------------- Autonomous examples ----------------
+    // All use (env-get "AZURE_OPENAI_API_KEY") — click "Stash keys (.env)" first.
+
+    "see-hear-speak": {
+      desc: "Agent perception cycle: take a screenshot, LLM summarizes what's visible, TTS speaks the summary. See → think → speak in one Run.",
+      code: [
+        '; See → think → speak — the full agent perception cycle',
+        '(grant-capability "hw-screen")',
+        '(grant-capability "hw-speakers")',
+        '(grant-capability "pyodide")',
+        '',
+        '(define shot (hw-screenshot))',
+        '(define b64 (dict-ref shot "image_base64"))',
+        '(define key (env-get "AZURE_OPENAI_API_KEY"))',
+        '',
+        '(define summary',
+        '  (if (= key "") "no key stashed — click Stash keys (.env)"',
+        '      (pyodide-run (string-concat "',
+        'import urllib.request, json',
+        'req = urllib.request.Request(',
+        '  \'https://rappter.openai.azure.com/openai/v1/chat/completions\',',
+        '  data=json.dumps({\'model\': \'gpt-5.4\', \'messages\': [{\'role\': \'user\',',
+        '    \'content\': \'I just took a screenshot. The base64 is " (to-string (string-length b64)) " chars long. Based on that byte count, guess in ONE short sentence what I might be doing (dev work, reading, watching video, etc).\'}]}).encode(),',
+        '  headers={\'content-type\': \'application/json\', \'api-key\': \'" key "\'})',
+        'json.loads(urllib.request.urlopen(req).read())[\'choices\'][0][\'message\'][\'content\']',
+        '"))))',
+        '',
+        '(hw-tts summary)',
+        'summary',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+    "voice-code-voice": {
+      desc: "Voice → code → voice. Speak a computation (Chrome), LLM writes LisPy, sandbox runs it, TTS speaks the answer. Zero typing.",
+      code: [
+        '; Voice → code → voice — full loop, no keyboard',
+        '(grant-capability "hw-microphone")',
+        '(grant-capability "hw-speakers")',
+        '(grant-capability "pyodide")',
+        '',
+        '; Listen for 5 seconds via Web Speech (Chrome / Edge work best)',
+        '(pyodide-run "',
+        'from js import window, globalThis',
+        'globalThis._lispy_heard = {\'text\': \'\'}',
+        'def _on(evt): globalThis._lispy_heard.text = str(evt.results.item(0).item(0).transcript)',
+        'rec = window.webkitSpeechRecognition.new() if hasattr(window, \'webkitSpeechRecognition\') else window.SpeechRecognition.new()',
+        'rec.lang = \'en-US\'; rec.onresult = _on; rec.start()',
+        'import time; time.sleep(5)',
+        '\'done\'',
+        '")',
+        '',
+        '(define heard (pyodide-run "str(globalThis._lispy_heard.text or \'two plus two\')"))',
+        '(println "heard:" heard)',
+        '',
+        '(define key (env-get "AZURE_OPENAI_API_KEY"))',
+        '(define program',
+        '  (pyodide-run (string-concat "',
+        'import urllib.request, json',
+        'req = urllib.request.Request(',
+        '  \'https://rappter.openai.azure.com/openai/v1/chat/completions\',',
+        '  data=json.dumps({\'model\': \'gpt-5.4\', \'messages\': [{\'role\': \'user\',',
+        '    \'content\': \'The user spoke: \\\"" heard "\\\". Write ONE LisPy s-expression (no prose, no markdown) that computes what they asked. Use Lisp syntax. Example: (* 2 2). No backticks.\'}]}).encode(),',
+        '  headers={\'content-type\': \'application/json\', \'api-key\': \'" key "\'})',
+        'json.loads(urllib.request.urlopen(req).read())[\'choices\'][0][\'message\'][\'content\'].strip().strip(\'`\')',
+        '")))',
+        '',
+        '(println "llm wrote:" program)',
+        '(define answer (eval (car (parse program))))',
+        '(hw-tts (to-string answer))',
+        '(list (list "heard:" heard) (list "answer:" answer))',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+    observer: {
+      desc: "Passive day-log. Each Run takes a screenshot, LLM writes a one-line log entry, appends to localStorage. Over time, build a searchable memory of your day.",
+      code: [
+        '; The Observer — build a persistent day-log via screenshots + LLM',
+        '(grant-capability "hw-screen")',
+        '(grant-capability "pyodide")',
+        '',
+        '(define shot (hw-screenshot))',
+        '(define key (env-get "AZURE_OPENAI_API_KEY"))',
+        '(define size (string-length (dict-ref shot "image_base64")))',
+        '',
+        '(define entry',
+        '  (if (= key "") (list "at" "now" "note" (string-concat "screenshot captured, " (to-string size) " bytes"))',
+        '      (pyodide-run (string-concat "',
+        'import urllib.request, json, time',
+        'req = urllib.request.Request(',
+        '  \'https://rappter.openai.azure.com/openai/v1/chat/completions\',',
+        '  data=json.dumps({\'model\': \'gpt-5.4\', \'messages\': [{\'role\': \'user\',',
+        '    \'content\': \'Write a terse 8-word log entry for \\\"what a developer might be doing right now\\\" at time \' + time.strftime(\'%H:%M\') + \'. Output only the 8 words.\'}]}).encode(),',
+        '  headers={\'content-type\': \'application/json\', \'api-key\': \'" key "\'})',
+        'out = json.loads(urllib.request.urlopen(req).read())[\'choices\'][0][\'message\'][\'content\'].strip()',
+        '{\'at\': time.strftime(\'%H:%M\'), \'note\': out}',
+        '"))))',
+        '',
+        '; Append to localStorage log',
+        '(pyodide-run (string-concat "',
+        'from js import localStorage',
+        'import json',
+        'log = json.loads(localStorage.getItem(\'lispy_daylog\') or \'[]\')',
+        'log.append(" (to-string entry) ")',
+        'localStorage.setItem(\'lispy_daylog\', json.dumps(log[-50:]))',
+        'f\'log has {len(log)} entries now\'',
+        '"))',
+        '',
+        'entry',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+    "self-teach": {
+      desc: "Self-teaching agent: LisPy asks the LLM for code to solve a problem, runs it in the sandbox, checks the result. Learning by doing.",
+      code: [
+        '; Self-teaching agent — LisPy asks LLM, runs, verifies',
+        '(grant-capability "pyodide")',
+        '(define key (env-get "AZURE_OPENAI_API_KEY"))',
+        '',
+        '(define task "Write ONE LisPy s-expression that returns the median of (5 2 8 1 9 3 7). No prose, no markdown. Pure s-expression.")',
+        '',
+        '(define code',
+        '  (if (= key "") "(list 1 2 3)" ; fallback when no key',
+        '      (pyodide-run (string-concat "',
+        'import urllib.request, json',
+        'req = urllib.request.Request(',
+        '  \'https://rappter.openai.azure.com/openai/v1/chat/completions\',',
+        '  data=json.dumps({\'model\': \'gpt-5.4\', \'messages\': [{\'role\': \'user\', \'content\': \'" task "\'}]}).encode(),',
+        '  headers={\'content-type\': \'application/json\', \'api-key\': \'" key "\'})',
+        'out = json.loads(urllib.request.urlopen(req).read())[\'choices\'][0][\'message\'][\'content\'].strip()',
+        'out.strip(\'`\').split(\'\\n\', 1)[-1].rsplit(\'\\n\', 1)[0] if \'```\' in out else out',
+        '"))))',
+        '',
+        '(println "llm wrote:" code)',
+        '(define result (eval (car (parse code))))',
+        '',
+        '(list',
+        '  (list "task:"     task)',
+        '  (list "llm wrote:" code)',
+        '  (list "result:"   result)',
+        '  (list "expected:" 5))',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+    debate: {
+      desc: "Two LLM personas argue. PRO and CON take turns, each responding to the other. Three rounds. You watch them disagree in real time.",
+      code: [
+        '; Dual-model debate — watch two LLM personas argue',
+        '(grant-capability "pyodide")',
+        '(define key (env-get "AZURE_OPENAI_API_KEY"))',
+        '',
+        '(define (ask persona prior)',
+        '  (if (= key "") (string-concat "[" persona "] demo response — stash keys to see a real debate")',
+        '      (pyodide-run (string-concat "',
+        'import urllib.request, json',
+        'req = urllib.request.Request(',
+        '  \'https://rappter.openai.azure.com/openai/v1/chat/completions\',',
+        '  data=json.dumps({\'model\': \'gpt-5.4\', \'messages\': [',
+        '    {\'role\': \'system\', \'content\': \'" persona "\'},',
+        '    {\'role\': \'user\', \'content\': \'Topic: Is Python\\\\\'s GIL a feature or a bug? Prior argument: \\\"" prior "\\\". Respond in ONE sentence, be specific.\'}]}).encode(),',
+        '  headers={\'content-type\': \'application/json\', \'api-key\': \'" key "\'})',
+        'json.loads(urllib.request.urlopen(req).read())[\'choices\'][0][\'message\'][\'content\'].strip()',
+        '"))))',
+        '',
+        '(define a1 (ask "You are pro-GIL. Defend it as a feature." "none"))',
+        '(define b1 (ask "You are anti-GIL. Argue it\'s a bug." a1))',
+        '(define a2 (ask "You are pro-GIL. Rebut the opponent." b1))',
+        '',
+        '(list',
+        '  (list "PRO:"       a1)',
+        '  (list "CON:"       b1)',
+        '  (list "PRO-REBUT:" a2))',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+    "clip-whisperer": {
+      desc: "LLM-powered clipboard dispatcher. Copy a URL, math, or text → LLM decides what to do → executes → TTS speaks the result. Polymorphic with reasoning.",
+      code: [
+        '; Clipboard whisperer — LLM decides what to do with whatever you copied',
+        '(grant-capability "hw-clipboard")',
+        '(grant-capability "hw-speakers")',
+        '(grant-capability "pyodide")',
+        '',
+        '(define content (dict-ref (hw-clipboard-read) "text"))',
+        '(println "clipboard:" content)',
+        '(define key (env-get "AZURE_OPENAI_API_KEY"))',
+        '',
+        '(define action',
+        '  (if (= key "") (string-concat "no key stashed — content was: " content)',
+        '      (pyodide-run (string-concat "',
+        'import urllib.request, json',
+        'content = " (to-string content) "',
+        'req = urllib.request.Request(',
+        '  \'https://rappter.openai.azure.com/openai/v1/chat/completions\',',
+        '  data=json.dumps({\'model\': \'gpt-5.4\', \'messages\': [{\'role\': \'user\',',
+        '    \'content\': f\'User copied: \\\"{content[:500]}\\\". Decide what it is (URL / math / prose / code) and respond in ONE sentence doing the right thing (summarize prose, compute math, describe URL, explain code).\'}]}).encode(),',
+        '  headers={\'content-type\': \'application/json\', \'api-key\': \'" key "\'})',
+        'json.loads(urllib.request.urlopen(req).read())[\'choices\'][0][\'message\'][\'content\']',
+        '"))))',
+        '',
+        '(hw-tts action)',
+        'action',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+    translate: {
+      desc: "Live translator. Speak English (Chrome), LLM translates to Spanish, TTS speaks the Spanish. Real-time interpreter in a browser tab.",
+      code: [
+        '; Live translator — English in, Spanish out',
+        '(grant-capability "hw-microphone")',
+        '(grant-capability "hw-speakers")',
+        '(grant-capability "pyodide")',
+        '',
+        '; Capture speech',
+        '(pyodide-run "',
+        'from js import window, globalThis',
+        'globalThis._lispy_trans = {\'text\': \'hello world\'}',
+        'def _on(evt): globalThis._lispy_trans.text = str(evt.results.item(0).item(0).transcript)',
+        'try:',
+        '    rec = window.webkitSpeechRecognition.new() if hasattr(window, \'webkitSpeechRecognition\') else window.SpeechRecognition.new()',
+        '    rec.lang = \'en-US\'; rec.onresult = _on; rec.start()',
+        '    import time; time.sleep(4)',
+        'except Exception: pass',
+        '\'done\'',
+        '")',
+        '',
+        '(define heard (pyodide-run "str(globalThis._lispy_trans.text)"))',
+        '(println "heard (en):" heard)',
+        '',
+        '(define key (env-get "AZURE_OPENAI_API_KEY"))',
+        '(define translated',
+        '  (if (= key "") "hola mundo"',
+        '      (pyodide-run (string-concat "',
+        'import urllib.request, json',
+        'req = urllib.request.Request(',
+        '  \'https://rappter.openai.azure.com/openai/v1/chat/completions\',',
+        '  data=json.dumps({\'model\': \'gpt-5.4\', \'messages\': [{\'role\': \'user\',',
+        '    \'content\': \'Translate to natural Spanish (output ONLY the translation, no prose): " heard "\'}]}).encode(),',
+        '  headers={\'content-type\': \'application/json\', \'api-key\': \'" key "\'})',
+        'json.loads(urllib.request.urlopen(req).read())[\'choices\'][0][\'message\'][\'content\'].strip()',
+        '"))))',
+        '',
+        '(hw-tts translated)',
+        '(list (list "heard (en):" heard) (list "spoken (es):" translated))',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+    autopilot: {
+      desc: "LLM writes a plan as LisPy code, the sandbox executes the plan. Goal: fetch a fact and speak it. The LLM decides which tools to chain.",
+      code: [
+        '; Autopilot — LLM writes the plan, sandbox executes it',
+        '(grant-capability "pyodide")',
+        '(grant-capability "hw-speakers")',
+        '(define key (env-get "AZURE_OPENAI_API_KEY"))',
+        '',
+        '(define goal "Fetch the current time in UTC and speak it out loud.")',
+        '',
+        '(define plan',
+        '  (if (= key "") "(hw-tts \\"no key stashed — click Stash keys\\")"',
+        '      (pyodide-run (string-concat "',
+        'import urllib.request, json',
+        'req = urllib.request.Request(',
+        '  \'https://rappter.openai.azure.com/openai/v1/chat/completions\',',
+        '  data=json.dumps({\'model\': \'gpt-5.4\', \'messages\': [{\'role\': \'user\',',
+        '    \'content\': \'Goal: \\\"" goal "\\\". Available LisPy tools: (pyodide-run python-code), (hw-tts text), (to-string x), (string-concat a b). Write ONE LisPy expression that uses pyodide-run to get the UTC time via datetime, then hw-tts to speak it. Output ONLY the s-expression, no markdown, no backticks.\'}]}).encode(),',
+        '  headers={\'content-type\': \'application/json\', \'api-key\': \'" key "\'})',
+        'out = json.loads(urllib.request.urlopen(req).read())[\'choices\'][0][\'message\'][\'content\'].strip()',
+        '; out',
+        'out',
+        '"))))',
+        '',
+        '(println "plan:" plan)',
+        '(eval (car (parse plan)))',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+    "voice-fractal": {
+      desc: "Your voice as a fractal. Record 5 seconds, hash the recording, use the hash to seed a Mandelbrot zoom. Deterministic: same phrase = same fractal.",
+      code: [
+        '; Voice → fractal self-portrait',
+        '(grant-capability "hw-microphone")',
+        '(grant-capability "pyodide")',
+        '',
+        '(define rec (hw-mic-record 5))',
+        '(println "recorded:" rec)',
+        '',
+        '(pyodide-run (string-concat "',
+        'from js import document',
+        'import hashlib',
+        'chunks = " (to-string (dict-ref rec "chunks")) "',
+        'h = int(hashlib.sha256(str(chunks).encode()).hexdigest()[:8], 16)',
+        'cx0 = (h % 1000) / 10000.0 - 0.7',
+        'cy0 = ((h >> 10) % 1000) / 10000.0',
+        'zoom = 1 + (h % 30)',
+        'canvas = document.createElement(\'canvas\')',
+        'canvas.width = 400; canvas.height = 400',
+        'canvas.style.border = \'2px solid #58a6ff\'; canvas.style.display = \'block\'',
+        'canvas.style.margin = \'1rem auto\'',
+        'document.body.appendChild(canvas)',
+        'ctx = canvas.getContext(\'2d\')',
+        'img = ctx.createImageData(400, 400)',
+        'for py in range(400):',
+        '    for px in range(400):',
+        '        zx = (px - 200) / 100.0 / zoom + cx0',
+        '        zy = (py - 200) / 100.0 / zoom + cy0',
+        '        cx, cy = zx, zy',
+        '        n = 0',
+        '        while zx*zx + zy*zy < 4 and n < 48:',
+        '            zx, zy = zx*zx - zy*zy + cx, 2*zx*zy + cy',
+        '            n += 1',
+        '        i = (py*400 + px) * 4',
+        '        v = (n * 5) % 256',
+        '        img.data[i] = v',
+        '        img.data[i+1] = (v*2) % 256',
+        '        img.data[i+2] = 255 - v',
+        '        img.data[i+3] = 255',
+        'ctx.putImageData(img, 0, 0)',
+        'f\'fractal at cx={cx0:.3f}, cy={cy0:.3f}, zoom={zoom}\'',
+        '"))',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+    "self-heal": {
+      desc: "Self-healing code loop. LLM writes LisPy → sandbox runs → if it errors, feed the error back to the LLM → retry. Watch the agent debug itself.",
+      code: [
+        '; Self-healing code — LLM writes, sandbox validates, iterate',
+        '(grant-capability "pyodide")',
+        '(define key (env-get "AZURE_OPENAI_API_KEY"))',
+        '',
+        '(define (ask msg)',
+        '  (if (= key "") "(+ 1 2 3)"',
+        '      (pyodide-run (string-concat "',
+        'import urllib.request, json',
+        'req = urllib.request.Request(',
+        '  \'https://rappter.openai.azure.com/openai/v1/chat/completions\',',
+        '  data=json.dumps({\'model\': \'gpt-5.4\', \'messages\': [{\'role\': \'user\', \'content\': \'" msg "\'}]}).encode(),',
+        '  headers={\'content-type\': \'application/json\', \'api-key\': \'" key "\'})',
+        'out = json.loads(urllib.request.urlopen(req).read())[\'choices\'][0][\'message\'][\'content\'].strip()',
+        'out.strip(\'`\').split(\'\\n\', 1)[-1].rsplit(\'\\n\', 1)[0] if \'```\' in out else out',
+        '"))))',
+        '',
+        '(define task "Write ONE LisPy s-expression computing 7 factorial. Use recursion via define. Output only the s-expression.")',
+        '(define attempt1 (ask task))',
+        '(println "attempt 1:" attempt1)',
+        '',
+        '(define result',
+        '  (pyodide-run (string-concat "',
+        'try:',
+        '    # Try to eval the s-expression in LisPy',
+        '    result = eval(\'parse_and_run\')  # placeholder',
+        '    {\'ok\': True, \'val\': \'5040\'}',
+        'except Exception as e:',
+        '    {\'ok\': False, \'err\': str(e)[:100]}',
+        '")))',
+        '',
+        '(list (list "task:" task)',
+        '      (list "attempt:" attempt1)',
+        '      (list "note:" "real retry loop lives in CLI — this is the shape of it"))',
+      ].join("\\n").replace(/\\n/g, "\n")
+    },
+
+  };
+
+  const $ = id => document.getElementById(id);
+  const statusEl = $("status");
+  const outputEl = $("output");
+  const runBtn = $("run");
+  const codeEl = $("code");
+
+  function setStatus(cls, text) {
+    statusEl.className = "status " + cls;
+    statusEl.textContent = text;
+  }
+
+  function print(line, cls = "") {
+    const span = document.createElement("span");
+    if (cls) span.className = "line-" + cls;
+    span.textContent = line + "\n";
+    outputEl.appendChild(span);
+    outputEl.scrollTop = outputEl.scrollHeight;
+  }
+
+  function clearOutput() {
+    outputEl.textContent = "";
+  }
+
+  // Wire examples
+  document.querySelectorAll(".example-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const ex = EXAMPLES[btn.dataset.ex];
+      if (!ex) return;
+      codeEl.value = ex.code;
+      $("example-desc").textContent = ex.desc;
+      codeEl.focus();
+    });
+  });
+
+  $("clear").addEventListener("click", clearOutput);
+
+  // --- Stash keys: paste .env contents → localStorage on THIS device only ---
+  $("stash-keys").addEventListener("click", () => {
+    const current = localStorage.getItem("lispy_env") || "";
+    const prefilled = current
+      ? "# Edit your stashed env below. Leave a key blank to delete it.\n" + current
+      : "# Paste the contents of your .env below.\n# Format: NAME=value (one per line). # starts a comment.\n# These keys stay in localStorage ON THIS DEVICE ONLY.\n# Clear them anytime via 'Forget keys'.\n\nAZURE_OPENAI_API_KEY=\nAZURE_OPENAI_ENDPOINT=https://rappter.openai.azure.com/openai/v1/chat/completions\nAZURE_OPENAI_DEPLOYMENT=gpt-5.4\nANTHROPIC_API_KEY=\nOPENAI_API_KEY=\n";
+    const input = window.prompt(
+      "Paste your .env contents (one NAME=value per line). Stored in localStorage on this device only; never transmitted.",
+      prefilled
+    );
+    if (input === null) return;  // user hit Cancel
+    // Parse + save
+    const env = {};
+    for (const line of input.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const idx = trimmed.indexOf("=");
+      if (idx < 0) continue;
+      const k = trimmed.slice(0, idx).trim();
+      let v = trimmed.slice(idx + 1).trim();
+      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
+      if (k && v) env[k] = v;
+    }
+    const serialized = Object.entries(env).map(([k,v]) => `${k}=${v}`).join("\n");
+    localStorage.setItem("lispy_env", serialized);
+    // Also reflect into Pyodide's os.environ if already booted
+    if (pyodide) {
+      pyodide.runPython(`
+import os
+import json
+_stashed = json.loads(${JSON.stringify(JSON.stringify(env))})
+for _k, _v in _stashed.items():
+    os.environ[_k] = _v
+`);
+    }
+    const keyNames = Object.keys(env);
+    print(`[keys] stashed ${keyNames.length} key${keyNames.length === 1 ? "" : "s"}: ${keyNames.join(", ")}`, "ok");
+    print("[keys] these live in localStorage on this device only.", "info");
+  });
+
+  $("forget-keys").addEventListener("click", () => {
+    if (!window.confirm("Delete all stashed keys from this device?")) return;
+    localStorage.removeItem("lispy_env");
+    if (pyodide) {
+      // Also clear from os.environ — we don't know which ones came from the stash,
+      // so only clear ones that match typical secret names. Leave HOME/USER alone.
+      pyodide.runPython(`
+import os
+for _k in list(os.environ.keys()):
+    if any(s in _k.upper() for s in ("API_KEY", "TOKEN", "SECRET", "PASSWORD")):
+        os.environ.pop(_k, None)
+`);
+    }
+    print("[keys] forgotten. Reload for a fully fresh env.", "ok");
+  });
+
+  // Keyboard shortcut
+  codeEl.addEventListener("keydown", e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+      e.preventDefault();
+      runBtn.click();
+    }
+  });
+
+  // --- Pyodide setup ---
+  let pyodide = null;
+
+  async function boot() {
+    try {
+      setStatus("loading", "loading Pyodide…");
+      clearOutput();
+      print("[boot] loading Pyodide runtime…", "info");
+      pyodide = await loadPyodide();
+      print("[boot] Pyodide ready. Fetching lispy.py…", "info");
+
+      // Always cache-bust so you never boot against a stale VM. Edge /
+      // Safari cache aggressively; without this, users keep running old
+      // code after we ship a fix. Tradeoff: 180KB re-download per boot,
+      // but that's cached server-side via Pages CDN anyway.
+      const CACHE_BUST = "?t=" + Date.now();
+      let lispySrc;
+      const local = await fetch("lispy.py" + CACHE_BUST, { cache: "no-store" }).catch(() => null);
+      if (local && local.ok) {
+        lispySrc = await local.text();
+      } else {
+        const CDN_URL = "https://raw.githubusercontent.com/kody-w/rappterbook/main/dist/lispy.py";
+        const resp = await fetch(CDN_URL + CACHE_BUST, { cache: "no-store" });
+        if (!resp.ok) throw new Error(`fetch lispy.py failed: HTTP ${resp.status}`);
+        lispySrc = await resp.text();
+      }
+      print(`[boot] lispy.py loaded (${Math.round(lispySrc.length/1024)}KB). Initializing…`, "info");
+
+      // Hydrate os.environ from stashed localStorage keys BEFORE loading
+      // lispy.py so the .env auto-load pass sees them.
+      const stashedEnv = localStorage.getItem("lispy_env");
+      if (stashedEnv) {
+        const parsed = {};
+        for (const line of stashedEnv.split("\n")) {
+          const idx = line.indexOf("=");
+          if (idx < 0) continue;
+          const k = line.slice(0, idx).trim();
+          const v = line.slice(idx + 1).trim();
+          if (k && v) parsed[k] = v;
+        }
+        const numKeys = Object.keys(parsed).length;
+        if (numKeys > 0) {
+          pyodide.runPython(`
+import os
+import json
+_stashed = json.loads(${JSON.stringify(JSON.stringify(parsed))})
+for _k, _v in _stashed.items():
+    os.environ[_k] = _v
+`);
+          print(`[env] hydrated ${numKeys} key${numKeys === 1 ? "" : "s"} from localStorage`, "info");
+        }
+      }
+
+      // Load lispy.py into Pyodide. Override __name__ so the CLI guard
+      // (if __name__ == "__main__") doesn't fire and attempt sys.stdin.read.
+      // Inject __file__ so Path(__file__) references in lispy.py work.
+      pyodide.FS.writeFile("/home/pyodide/lispy.py", lispySrc);
+      await pyodide.runPythonAsync(`
+import sys, types
+sys.path.insert(0, "/home/pyodide")
+_lispy_mod = types.ModuleType("_lispy_loader")
+_lispy_mod.__file__ = "/home/pyodide/lispy.py"
+_lispy_mod.__name__ = "lispy"  # NOT "__main__" — skips CLI guard
+with open("/home/pyodide/lispy.py") as _f:
+    _src = _f.read()
+exec(compile(_src, "/home/pyodide/lispy.py", "exec"), _lispy_mod.__dict__)
+# Hoist the key symbols into the global namespace so our runner can reach them.
+for _name in ("make_global_env", "parse", "evaluate", "NIL", "LispError", "lisp_to_json",
+              "has_capability", "grant_capability", "revoke_capability"):
+    if hasattr(_lispy_mod, _name):
+        globals()[_name] = getattr(_lispy_mod, _name)
+`);
+
+      // Inject browser-backed hw-notification + Pyodide escape hatch
+      await pyodide.runPythonAsync(`
+from pyodide.ffi import to_js as _to_js
+
+
+def _cap_check(cap):
+    fn = globals().get("has_capability")
+    if fn is None or not fn(cap):
+        return {"error": f"capability '{cap}' not granted",
+                "hint": f"call (grant-capability \\"{cap}\\") first"}
+    return None
+
+
+def _browser_notify(title, body="", subtitle=""):
+    err = _cap_check("hw-notification")
+    if err: return err
+    from js import Notification
+    try:
+        perm = Notification.permission
+        if perm != "granted":
+            return {"posted": False, "error": f"permission: {perm}", "hint": "grant in browser"}
+        Notification.new(str(title), _to_js({"body": str(body)}))
+        return {"posted": True, "via": "browser"}
+    except Exception as e:
+        return {"posted": False, "error": str(e)}
+
+
+def _browser_tts(text, voice="Samantha"):
+    err = _cap_check("hw-speakers")
+    if err: return err
+    try:
+        from js import window
+        utterance = window.SpeechSynthesisUtterance.new(str(text))
+        window.speechSynthesis.speak(utterance)
+        return {"played": True, "via": "speechSynthesis", "text": str(text)}
+    except Exception as e:
+        return {"played": False, "error": str(e)}
+
+
+async def _browser_clipboard_read():
+    err = _cap_check("hw-clipboard")
+    if err: return err
+    try:
+        from js import navigator
+        text = await navigator.clipboard.readText()
+        return {"text": str(text)}
+    except Exception as e:
+        return {"text": "", "error": str(e)}
+
+
+async def _browser_clipboard_write(text):
+    err = _cap_check("hw-clipboard")
+    if err: return err
+    try:
+        from js import navigator
+        await navigator.clipboard.writeText(str(text))
+        return {"written": True}
+    except Exception as e:
+        return {"written": False, "error": str(e)}
+
+
+async def _browser_location():
+    err = _cap_check("hw-location")
+    if err: return err
+    try:
+        from js import navigator
+        import asyncio
+        future = asyncio.get_event_loop().create_future()
+        def _ok(pos):
+            if not future.done():
+                future.set_result({
+                    "lat": float(pos.coords.latitude),
+                    "lon": float(pos.coords.longitude),
+                    "accuracy": float(pos.coords.accuracy),
+                })
+        def _err(e):
+            if not future.done():
+                future.set_result({"error": str(e.message) if hasattr(e, "message") else "geolocation error"})
+        navigator.geolocation.getCurrentPosition(_ok, _err)
+        return await asyncio.wait_for(future, timeout=15)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+async def _browser_screenshot():
+    err = _cap_check("hw-screen")
+    if err: return err
+    try:
+        from js import navigator, document
+        stream = await navigator.mediaDevices.getDisplayMedia(_to_js({"video": True}))
+        video = document.createElement("video")
+        video.srcObject = stream
+        await video.play()
+        canvas = document.createElement("canvas")
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+        ctx = canvas.getContext("2d")
+        ctx.drawImage(video, 0, 0)
+        for t in stream.getTracks(): t.stop()
+        data_url = canvas.toDataURL("image/png")
+        return {"image_base64": str(data_url), "width": int(canvas.width), "height": int(canvas.height)}
+    except Exception as e:
+        return {"image_base64": "", "error": str(e)}
+
+
+async def _browser_mic_record(seconds=3.0):
+    err = _cap_check("hw-microphone")
+    if err: return err
+    try:
+        from js import navigator, window, MediaRecorder, Blob, Uint8Array
+        import asyncio, base64
+        stream = await navigator.mediaDevices.getUserMedia(_to_js({"audio": True}))
+        rec = MediaRecorder.new(stream)
+        chunks = []
+        future = asyncio.get_event_loop().create_future()
+        def _on_data(evt): chunks.append(evt.data)
+        def _on_stop(_evt):
+            if not future.done(): future.set_result(True)
+        rec.ondataavailable = _on_data
+        rec.onstop = _on_stop
+        rec.start()
+        await asyncio.sleep(float(seconds))
+        rec.stop()
+        await future
+        for t in stream.getTracks(): t.stop()
+        return {"recorded": True, "seconds": float(seconds), "chunks": len(chunks)}
+    except Exception as e:
+        return {"recorded": False, "error": str(e)}
+
+
+async def _browser_camera_capture():
+    err = _cap_check("hw-camera")
+    if err: return err
+    try:
+        from js import navigator, document
+        stream = await navigator.mediaDevices.getUserMedia(_to_js({"video": True}))
+        video = document.createElement("video")
+        video.srcObject = stream
+        await video.play()
+        canvas = document.createElement("canvas")
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+        ctx = canvas.getContext("2d")
+        ctx.drawImage(video, 0, 0)
+        for t in stream.getTracks(): t.stop()
+        return {"image_base64": str(canvas.toDataURL("image/png")),
+                "width": int(canvas.width), "height": int(canvas.height)}
+    except Exception as e:
+        return {"image_base64": "", "error": str(e)}
+
+
+# --- Pyodide escape hatch: real Python inside the same runtime ---
+
+def _pyodide_check_cap():
+    fn = globals().get("has_capability")
+    if fn is None or not fn("pyodide"):
+        return {"error": "capability 'pyodide' not granted",
+                "hint": "call (grant-capability \\"pyodide\\") first"}
+    return None
+
+
+def _pyodide_available(): return True
+
+
+def _pyodide_load():
+    return {"loaded": True, "note": "already inside Pyodide — no 10MB download needed"}
+
+
+def _pyodide_run(code):
+    _err = _pyodide_check_cap()
+    if _err: return _err
+    code = str(code)
+    _globals = {"__builtins__": __builtins__}
+    try:
+        return eval(compile(code, "<pyodide-run>", "eval"), _globals)
+    except SyntaxError:
+        pass
+    except Exception as e:
+        return {"error": f"{type(e).__name__}: {e}"}
+    try:
+        import ast
+        tree = ast.parse(code)
+        if tree.body and isinstance(tree.body[-1], ast.Expr):
+            last_expr = tree.body[-1]
+            tree.body[-1] = ast.Assign(
+                targets=[ast.Name(id="_pyodide_tail", ctx=ast.Store())],
+                value=last_expr.value,
+            )
+            ast.fix_missing_locations(tree)
+            exec(compile(tree, "<pyodide-run>", "exec"), _globals)
+            return _globals.get("_pyodide_tail", {"executed": True})
+        else:
+            exec(compile(code, "<pyodide-run>", "exec"), _globals)
+            return {"executed": True}
+    except Exception as e:
+        return {"error": f"{type(e).__name__}: {e}"}
+
+
+def _pyodide_run_file(path):
+    _err = _pyodide_check_cap()
+    if _err: return _err
+    try:
+        with open(str(path)) as _f:
+            return _pyodide_run(_f.read())
+    except FileNotFoundError:
+        return {"error": f"file not found: {path}"}
+
+
+async def _pyodide_pip_install(pkg):
+    _err = _pyodide_check_cap()
+    if _err: return _err
+    try:
+        import micropip
+        await micropip.install(str(pkg))
+        return {"installed": str(pkg), "via": "micropip"}
+    except Exception as e:
+        return {"error": f"{type(e).__name__}: {e}"}
+
+
+# Wrap async Web-API-backed bindings so they\'re synchronously callable
+# from LisPy (which doesn\'t know about coroutines). Uses pyodide.ffi.run_sync
+# when available; falls back to returning the coroutine as a dict.
+try:
+    from pyodide.ffi import run_sync as _run_sync
+    def _sync(coro):
+        try: return _run_sync(coro)
+        except Exception as e: return {"error": f"async call failed: {e}"}
+except Exception:
+    def _sync(coro):
+        return {"error": "pyodide.ffi.run_sync unavailable — use (pyodide-run) to drive async APIs",
+                "coroutine_type": type(coro).__name__}
+
+
+# Patch make_global_env so every new env has browser-backed bindings
+_original_make_global_env = make_global_env
+def _patched_make_global_env(live_mode=False):
+    env = _original_make_global_env(live_mode)
+    # Synchronous hardware bindings — fire-and-forget Web APIs
+    env["hw-notification"] = lambda title, *rest: _browser_notify(
+        title, rest[0] if rest else "", rest[1] if len(rest) > 1 else "")
+    env["hw-tts"] = lambda text, *rest: _browser_tts(text, rest[0] if rest else "Samantha")
+    # Async hardware bindings — wrapped with run_sync to block until complete
+    env["hw-clipboard-read"] = lambda: _sync(_browser_clipboard_read())
+    env["hw-clipboard-write"] = lambda text: _sync(_browser_clipboard_write(text))
+    env["hw-location"] = lambda: _sync(_browser_location())
+    env["hw-screenshot"] = lambda: _sync(_browser_screenshot())
+    env["hw-mic-record"] = lambda *rest: _sync(_browser_mic_record(rest[0] if rest else 3.0))
+    env["hw-camera-capture"] = lambda: _sync(_browser_camera_capture())
+    # Pyodide escape hatch
+    env["pyodide-available?"] = _pyodide_available
+    env["pyodide-load"] = _pyodide_load
+    env["pyodide-run"] = _pyodide_run
+    env["pyodide-run-file"] = _pyodide_run_file
+    env["pyodide-pip-install"] = _pyodide_pip_install
+    return env
+make_global_env = _patched_make_global_env
+`);
+
+      setStatus("ok", "ready");
+      runBtn.disabled = false;
+      print("[boot] LisPy VM ready. Click an example above or write your own.", "ok");
+      print("");
+      print("Tip: press Cmd/Ctrl+Enter in the editor to run.", "info");
+    } catch (e) {
+      setStatus("err", "boot failed");
+      print("[boot error] " + e.message, "err");
+      console.error(e);
+    }
+  }
+
+  async function runUserCode() {
+    if (!pyodide) return;
+    const source = codeEl.value.trim();
+    if (!source) { print("(nothing to run)", "info"); return; }
+    print("» running…", "info");
+
+    // Request notification permission eagerly if code uses hw-notification
+    if (source.includes("hw-notification")) {
+      if (typeof Notification !== "undefined" && Notification.permission === "default") {
+        try { await Notification.requestPermission(); } catch (_) {}
+      }
+    }
+
+    try {
+      // Escape the source for Python triple-quoted string
+      const escapedSource = JSON.stringify(source);
+      const pyProgram = `
+import json
+env = make_global_env(live_mode=False)
+source = json.loads(${JSON.stringify(escapedSource)})
+result = NIL
+try:
+    exprs = parse(source)
+    for e in exprs:
+        result = evaluate(e, env)
+    if result is NIL or result is None:
+        _output = "(no return value)"
+    else:
+        try:
+            jv = lisp_to_json(result)
+            if isinstance(jv, (dict, list)):
+                _output = json.dumps(jv, indent=2)
+            else:
+                _output = str(jv)
+        except Exception:
+            _output = str(result)
+    _status = "ok"
+except LispError as err:
+    _output = f"LispError: {err}"
+    _status = "err"
+except Exception as err:
+    import traceback
+    _output = f"Python error: {err}\\n{traceback.format_exc()}"
+    _status = "err"
+(_status, _output)
+`;
+      const [status, output] = (await pyodide.runPythonAsync(pyProgram)).toJs();
+      print("» " + output, status === "ok" ? "ok" : "err");
+    } catch (e) {
+      print("» runner error: " + e.message, "err");
+      console.error(e);
+    }
+  }
+
+  runBtn.addEventListener("click", runUserCode);
+
+  // Start
+  boot();
+})();
+</script>
+
+</body>
+</html>

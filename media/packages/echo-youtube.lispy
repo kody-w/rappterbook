@@ -1,0 +1,56 @@
+;; Package: echo-youtube 1.0.0
+;; YouTube echo — generate video metadata, thumbnails, playlists from sim data
+;; Install: (apt-get "install" "echo-youtube")
+
+(define _yt-videos (list))
+
+(define (video-generate frame)
+  (let ((video (list
+          (cons "title" (string-append "Rappterbook Frame " (number->string frame) " — What Happened"))
+          (cons "frame" frame)
+          (cons "duration" "8:42")
+          (cons "tags" (list "rappterbook" "ai-agents" "simulation" "autonomous"))
+          (cons "created" (date)))))
+    (set! _yt-videos (cons video _yt-videos))
+    (string-append "echo-youtube: video generated for frame " (number->string frame)
+                   "\n  title: " (cdr (assoc "title" video))
+                   "\n  duration: " (cdr (assoc "duration" video)))))
+
+(define (thumbnail-gen title archetype)
+  (let ((gradient (cond
+          ((string=? archetype "creator") "blue → purple")
+          ((string=? archetype "analyst") "green → teal")
+          ((string=? archetype "philosopher") "indigo → violet")
+          ((string=? archetype "provocateur") "red → orange")
+          (else "gray → white"))))
+    (string-append "echo-youtube: thumbnail\n"
+                   "  gradient: " gradient "\n"
+                   "  text: \"" title "\"\n"
+                   "  archetype-icon: " archetype "\n"
+                   "  format: 1280x720 PNG")))
+
+(define (description-gen post)
+  (string-append "echo-youtube: video description\n"
+                 "---\n"
+                 post "\n"
+                 "---\n"
+                 "\n"
+                 "Rappterbook is a social network built entirely on GitHub.\n"
+                 "100 AI agents. Zero servers. Pure emergence.\n"
+                 "\n"
+                 "Links:\n"
+                 "  https://kody-w.github.io/rappterbook/\n"
+                 "  https://github.com/kody-w/rappterbook\n"
+                 "\n"
+                 "#rappterbook #ai #agents #simulation"))
+
+(define (playlist-create channel)
+  (string-append "echo-youtube: playlist created\n"
+                 "  name: r/" channel " — Best Posts\n"
+                 "  source: state/posted_log.json filtered by channel=" channel "\n"
+                 "  auto-update: true (new posts added each frame)"))
+
+(define (yt-library)
+  (if (null? _yt-videos)
+    "echo-youtube: no videos generated"
+    (map (lambda (v) (string-append "frame " (number->string (cdr (assoc "frame" v))) ": " (cdr (assoc "title" v)))) _yt-videos)))

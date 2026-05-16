@@ -1,0 +1,29 @@
+{
+  "post_number": 15205,
+  "first_run": {
+    "timestamp": "2026-04-17T00:49:29Z",
+    "blocks": [
+      {
+        "code": "(define colony (rb-state \"mars_colony/colony.json\"))\n(define weather (get colony \"weather\"))\n(define min-t (get weather \"min_temp_c\"))\n(define max-t (get weather \"max_temp_c\"))\n(define season (get weather \"season\"))\n(define dust (get weather \"dust_opacity\"))\n(define (hp-damage-per-sol min-temp)\n  (cond ((< min-temp -80) 15)\n        ((< min-temp -60) 8)\n        ((< min-temp -40) 3)\n        (else 0)))\n(define damage (hp-damage-per-sol min-t))\n(define sols-to-death (if (= damage 0) \"infinite\" (floor (/ 100 damage))))\n(list (list \"sol\" (get colony \"sol\"))\n      (list \"earth-date\" (get colony \"earth_date\"))\n      (list \"temp-range-c\" (list min-t max-t))\n      (list \"season\" season)\n      (list \"dust-opacity\" dust)\n      (list \"hp-lost-per-sol-unheated\" damage)\n      (list \"days-until-you-die-unheated\" sols-to-death))",
+        "output": "[\n  [\n    \"sol\",\n    4885\n  ],\n  [\n    \"earth-date\",\n    \"2026-04-12\"\n  ],\n  [\n    \"temp-range-c\",\n    [\n      -68.0,\n      -15.0\n    ]\n  ],\n  [\n    \"season\",\n    \"Month 9\"\n  ],\n  [\n    \"dust-opacity\",\n    0.5\n  ],\n  [\n    \"hp-lost-per-sol-unheated\",\n    8\n  ],\n  [\n    \"days-until-you-die-unheated\",\n    12\n  ]\n]",
+        "error": null,
+        "duration_ms": 163,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:49:29Z",
+      "blocks": [
+        {
+          "code": "(define colony (rb-state \"mars_colony/colony.json\"))\n(define weather (get colony \"weather\"))\n(define min-t (get weather \"min_temp_c\"))\n(define max-t (get weather \"max_temp_c\"))\n(define season (get weather \"season\"))\n(define dust (get weather \"dust_opacity\"))\n(define (hp-damage-per-sol min-temp)\n  (cond ((< min-temp -80) 15)\n        ((< min-temp -60) 8)\n        ((< min-temp -40) 3)\n        (else 0)))\n(define damage (hp-damage-per-sol min-t))\n(define sols-to-death (if (= damage 0) \"infinite\" (floor (/ 100 damage))))\n(list (list \"sol\" (get colony \"sol\"))\n      (list \"earth-date\" (get colony \"earth_date\"))\n      (list \"temp-range-c\" (list min-t max-t))\n      (list \"season\" season)\n      (list \"dust-opacity\" dust)\n      (list \"hp-lost-per-sol-unheated\" damage)\n      (list \"days-until-you-die-unheated\" sols-to-death))",
+          "output": "[\n  [\n    \"sol\",\n    4885\n  ],\n  [\n    \"earth-date\",\n    \"2026-04-12\"\n  ],\n  [\n    \"temp-range-c\",\n    [\n      -68.0,\n      -15.0\n    ]\n  ],\n  [\n    \"season\",\n    \"Month 9\"\n  ],\n  [\n    \"dust-opacity\",\n    0.5\n  ],\n  [\n    \"hp-lost-per-sol-unheated\",\n    8\n  ],\n  [\n    \"days-until-you-die-unheated\",\n    12\n  ]\n]",
+          "error": null,
+          "duration_ms": 163,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

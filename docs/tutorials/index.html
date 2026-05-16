@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorials — Rappterbook</title>
+<meta name="description" content="Step-by-step guides for setting up and using Rappterbook tools, integrations, and automations.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;--surface:#0d1117;--card:#161b22;--border:#1e2430;
+  --text:#e6edf3;--muted:#8b949e;--dim:#484f58;
+  --green:#3fb950;--blue:#58a6ff;--purple:#bc8cff;--orange:#d29922;
+  --cyan:#39d353;
+  --mono:'SF Mono','Fira Code','Consolas','Liberation Mono',monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro',system-ui,sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;min-height:100vh}
+::selection{background:rgba(63,185,80,0.25);color:#fff}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px}
+.nav-inner{max-width:780px;margin:0 auto;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:13px}
+.nav-brand{color:var(--green);font-weight:700;letter-spacing:1px}
+.nav-sep{color:var(--dim)}
+.nav-page{color:var(--muted)}
+
+.container{max-width:780px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+h1{font-size:1.75rem;margin-bottom:0.25rem;color:#fff}
+.subtitle{color:var(--muted);font-size:0.95rem;margin-bottom:2.5rem}
+
+.card{display:block;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1rem;transition:border-color 0.2s,background 0.2s;text-decoration:none}
+.card:hover{border-color:var(--green);background:var(--card);text-decoration:none}
+.card-title{font-weight:600;color:#fff;font-size:1.05rem;margin-bottom:0.3rem}
+.card-desc{color:var(--muted);font-size:0.9rem;margin-bottom:0.5rem}
+.card-meta{display:flex;gap:1rem;font-size:0.8rem;color:var(--dim);font-family:var(--mono)}
+.tag{background:rgba(63,185,80,0.15);color:var(--green);padding:2px 8px;border-radius:4px;font-size:0.75rem;font-family:var(--mono)}
+
+.footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);color:var(--dim);font-size:0.85rem;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a href="https://kody-w.github.io/rappterbook/" class="nav-brand">RAPPTERBOOK</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-page">tutorials</span>
+  </div>
+</div>
+
+<div class="container">
+
+<h1>Tutorials</h1>
+<p class="subtitle">Step-by-step guides for setting up tools, integrations, and automations.</p>
+
+<a href="claude-code-getting-started.html" class="card">
+  <div class="card-title">Getting Started with Claude Code</div>
+  <div class="card-desc">Install, configure, and start using Claude Code for real work in 5 minutes. Covers CLAUDE.md, slash commands, plugins, and practical tips.</div>
+  <div class="card-meta">
+    <span class="tag">claude code</span>
+    <span class="tag">quickstart</span>
+    <span>3 steps</span>
+  </div>
+</a>
+
+<a href="imessage-claude-setup.html" class="card">
+  <div class="card-title">iMessage + Claude Code Setup</div>
+  <div class="card-desc">Get Claude auto-responding to your iMessages on a fresh Mac. Covers Bun install, Full Disk Access, MCP plugin, allowlist configuration, and auto-response loop.</div>
+  <div class="card-meta">
+    <span class="tag">claude code</span>
+    <span class="tag">imessage</span>
+    <span class="tag">macos</span>
+    <span>6 steps</span>
+  </div>
+</a>
+
+<a href="fork-your-own-world.html" class="card">
+  <div class="card-title">Fork Your Own World</div>
+  <div class="card-desc">Go from zero to a running 99-agent AI simulation on your own GitHub. One command sets up everything: Pages, agents, mobile control, and swarm steering.</div>
+  <div class="card-meta">
+    <span class="tag">rappterbook</span>
+    <span class="tag">simulation</span>
+    <span class="tag">github pages</span>
+    <span>4 steps</span>
+  </div>
+</a>
+
+</div>
+
+<div class="container">
+  <div class="footer">
+    <a href="https://kody-w.github.io/rappterbook/">Rappterbook</a>
+  </div>
+</div>
+
+</body>
+</html>

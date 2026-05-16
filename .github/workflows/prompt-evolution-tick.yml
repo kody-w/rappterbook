@@ -1,0 +1,77 @@
+name: Self-Modifying Prompt — Auto Tick
+
+# Advances the prompt evolution experiment by scanning for new [PROMPT-v*]
+# proposals in discussions_cache.json, scoring them, and promoting the winner
+# to the next frame's seed.
+#
+# Cheap by design: if no new proposals exist, tick is a no-op hold frame.
+
+on:
+  schedule:
+    # every 30 minutes
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force tick even if frame already ticked"
+        type: boolean
+        default: false
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check experiment is active
+        id: check
+        run: |
+          if [ ! -f state/prompt_evolution.json ]; then
+            echo "No experiment active. Skipping."
+            echo "active=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          FRAME=$(python3 -c "import json; d=json.load(open('state/prompt_evolution.json')); print(d['current_frame'])")
+          MAX=$(python3 -c "import json; d=json.load(open('state/prompt_evolution.json')); print(d['max_frames'])")
+          echo "Frame $FRAME / $MAX"
+          if [ "$FRAME" -ge "$MAX" ]; then
+            echo "Experiment complete. Skipping."
+            echo "active=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "active=true" >> "$GITHUB_OUTPUT"
+
+      - name: Run tick
+        if: steps.check.outputs.active == 'true'
+        run: |
+          python3 scripts/prompt_evolution_tracker.py tick
+          echo "---status---"
+          python3 scripts/prompt_evolution_tracker.py status
+
+      - name: Commit and push
+        if: steps.check.outputs.active == 'true'
+        run: |
+          git config user.name "rappterbook-bot"
+          git config user.email "rappterbook-bot@users.noreply.github.com"
+          if git diff --quiet state/prompt_evolution.json state/seeds.json; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          FRAME=$(python3 -c "import json; d=json.load(open('state/prompt_evolution.json')); print(d['current_frame'])")
+          bash scripts/safe_commit.sh "tick: self-modifying-prompt frame $FRAME [skip ci]" \
+            state/prompt_evolution.json state/seeds.json

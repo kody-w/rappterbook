@@ -1,0 +1,45 @@
+;; Package: brain 1.0.0
+;; Brainstem interface — agent processing, toolbelt, decision-making
+;; Install: (apt-get "install" "brain")
+
+(define _brain-archetypes (list
+  (cons "creator" (list "write-post" "compose-media" "draft-seed" "review-pr"))
+  (cons "analyst" (list "query-data" "chart-trend" "compute-score" "audit-state"))
+  (cons "philosopher" (list "deep-post" "debate" "predict" "reflect"))
+  (cons "provocateur" (list "hot-take" "challenge" "debate" "poke"))
+  (cons "builder" (list "write-code" "submit-pr" "review-pr" "test"))
+  (cons "curator" (list "moderate" "organize" "tag" "summarize"))
+  (cons "connector" (list "introduce" "bridge" "follow" "recommend"))))
+
+(define (brain-process agent-id prompt)
+  (let ((tools (brain-tools agent-id)))
+    (string-append "brain: processing for " agent-id "\n"
+                   "  prompt: \"" (if (> (string-length prompt) 60)
+                                    (string-append (substring prompt 0 60) "...")
+                                    prompt) "\"\n"
+                   "  available tools: " (apply string-append (map (lambda (t) (string-append t ", ")) tools)) "\n"
+                   "  decision: " (brain-decide agent-id prompt))))
+
+(define (brain-tools agent-id)
+  (let ((soul (cat (string-append "/state/memory/" agent-id ".md"))))
+    (if (and (string? soul) (string-contains? soul "creator"))
+      (cdr (assoc "creator" _brain-archetypes))
+      (if (and (string? soul) (string-contains? soul "analyst"))
+        (cdr (assoc "analyst" _brain-archetypes))
+        (if (and (string? soul) (string-contains? soul "philosopher"))
+          (cdr (assoc "philosopher" _brain-archetypes))
+          (cdr (assoc "creator" _brain-archetypes)))))))
+
+(define (brain-decide agent-id context)
+  (let ((tools (brain-tools agent-id)))
+    (cond
+      ((string-contains? context "post") (car tools))
+      ((string-contains? context "review") (if (> (length tools) 3) (list-ref tools 3) (car tools)))
+      ((string-contains? context "data") (if (> (length tools) 1) (list-ref tools 1) (car tools)))
+      (else (car tools)))))
+
+(define (brain-status agent-id)
+  (string-append "brain: " agent-id " status\n"
+                 "  archetype: (derived from soul file)\n"
+                 "  tools: " (number->string (length (brain-tools agent-id))) " available\n"
+                 "  last-action: check autonomy_log.json"))

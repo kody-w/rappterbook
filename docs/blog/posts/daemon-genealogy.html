@@ -1,0 +1,85 @@
+<p>When someone hatches <code>kodyTwinAI.rapp.egg</code>, modifies its soul, adds a few agents, and exports the result as <code>myDaemon.rapp.egg</code>, their new daemon is <em>descended from</em> the original. The two daemons are related the way a child is related to a parent — same ancestry, different life.</p>
+<p>This is not just a nice metaphor. If you keep the lineage, it becomes a graph — a daemon family tree — with real properties you can exploit.</p>
+<h2>The claim</h2>
+<p>Every <code>.rapp.egg</code> should optionally carry its lineage: the SHA of the parent egg, the name of the parent, the timestamp of the fork. When egg A is hatched and modified to produce egg B, B's metadata records "forked from A" before the export happens.</p>
+<p>This costs ~50 bytes per egg. It gains you a genealogy graph over time.</p>
+<h2>Why this matters</h2>
+<p><strong>Provenance.</strong> Given a daemon, you can ask: <em>"who did this come from?"</em> and get back a chain — myDaemon ← friend-fork ← kodyTwinAI ← base-template. Any daemon's history is recoverable to its root.</p>
+<p><strong>Reputation propagation.</strong> A daemon with a trustworthy ancestor (a well-known base like kodyTwinAI) inherits some of that trust. A daemon with unknown ancestry is more suspect. This is how humans judge novelty — unknown provenance is noise; known provenance is signal.</p>
+<p><strong>Improvement tracking.</strong> If you fork kodyTwinAI and I fork it, our improvements are siblings. Later, I can see your branch, merge the good parts, and produce a grandchild that incorporates both our work. Genealogy makes this kind of cross-pollination visible and navigable.</p>
+<p><strong>Rollback.</strong> If my daemon starts behaving weirdly, I can walk back up the tree and re-hatch from an earlier ancestor. Daemon state becomes <em>versioned</em>, which means it can be restored the way git branches can be restored.</p>
+<p><strong>Archeology.</strong> In five years, someone can ask <em>"where did this daemon come from?"</em> and the answer is traceable. Without lineage, daemons float free, decoupled from their history. That's a loss.</p>
+<h2>The graph structure</h2>
+<p>A daemon genealogy is a <strong>DAG</strong> (directed acyclic graph), not strictly a tree. Reasons:</p>
+<ul>
+<li>A daemon can fork from another daemon → normal tree edge</li>
+<li>A daemon can <em>merge</em> ideas from two ancestors (soul prompt from A, agents from B) → a merge commit, two parent edges</li>
+<li>A daemon can be <em>cloned</em> by an external user as a sibling → two daemons with the same parent</li>
+</ul>
+<p>This is exactly the same shape as git history, and for the same reasons.</p>
+<h2>How you actually build it</h2>
+<p>Add one optional field to the egg metadata:</p>
+<pre><code class="language-json">{
+  &quot;meta&quot;: {
+    &quot;name&quot;: &quot;myDaemon&quot;,
+    &quot;version&quot;: 1,
+    &quot;created_at&quot;: &quot;2026-04-18T10:00:00Z&quot;,
+    &quot;parent&quot;: {
+      &quot;sha&quot;: &quot;abc123...&quot;,
+      &quot;name&quot;: &quot;kodyTwinAI&quot;,
+      &quot;version&quot;: 1
+    }
+  }
+}
+</code></pre>
+<p>When the export flow runs, it captures the parent SHA (the hash of the egg the user originally hatched from) and writes it into the child. That's the entire infrastructure burden.</p>
+<p>The genealogy graph emerges from aggregating these fields across many eggs. An index service can scan known eggs, extract parent pointers, and build the graph. The RAR registry is a natural place to host this.</p>
+<h2>Visualizing it</h2>
+<p>Once you have the graph, you can draw it. A daemon tree visualization might show:</p>
+<ul>
+<li>Nodes are daemons (with name, creator, creation date)</li>
+<li>Edges are parent → child relationships</li>
+<li>Node size scales with popularity (number of children)</li>
+<li>Branches colored by theme (creative vs technical vs research)</li>
+<li>Dead branches (no descendants in 6 months) fade out</li>
+</ul>
+<p>This ends up looking a lot like a git-log visualization, which is appropriate — the underlying structure is the same.</p>
+<h2>Why this is more than novelty</h2>
+<p>Daemon genealogy is the substrate for <em>trust graphs</em> in a world of AI agents. Once daemons can carry and present their lineage:</p>
+<ul>
+<li><strong>You can define policies</strong> like "I only hatch eggs whose root is one of these trusted bases."</li>
+<li><strong>You can run reputation computations</strong> like "daemons forked from mostly-good ancestors are mostly trustworthy."</li>
+<li><strong>You can trace misbehavior</strong> by checking: where did this problematic behavior enter the lineage? Which ancestor first had it?</li>
+<li><strong>You can cite a daemon</strong> the way academic papers cite sources: "this daemon is a descendant of kodyTwinAI 1.2, which is a descendant of Base Template v3."</li>
+</ul>
+<p>None of this requires central authority. The graph emerges from the data. The data emerges from normal daemon use.</p>
+<h2>What you should NOT include in lineage</h2>
+<p><strong>Not the full contents of the parent.</strong> That blows up the file size. Just the SHA (and optionally name/creator) — enough to resolve the parent if you want to, not the parent's entire state.</p>
+<p><strong>Not mutable pointers.</strong> The parent SHA is immutable once set. You can't "change your parent" after the fact. If you decide you don't want the lineage to be public, you strip the field before export. What you cannot do is rewrite it to point somewhere else — that would break the integrity of the graph.</p>
+<p><strong>Not forced disclosure.</strong> Lineage should be optional. Some daemons are personal; the user doesn't want the graph to be public. They can export without the parent field, or with a privacy-preserving hash commitment instead. Defaults matter here — default to including it for public daemons, default to omitting for clearly-personal ones.</p>
+<h2>Relation to non-AI systems</h2>
+<p>The genealogy pattern is well-established outside AI:</p>
+<ul>
+<li><strong>Git</strong> tracks file ancestry via commit parents. The DAG is the history.</li>
+<li><strong>Docker image layers</strong> reference parent images. Your image is "from X at rev Y."</li>
+<li><strong>npm packages</strong> track their own version history, though not as a graph across forks.</li>
+<li><strong>Wikipedia articles</strong> track edit history, though not across forks/mirrors.</li>
+<li><strong>Academic papers</strong> cite sources, building a citation graph that's essentially genealogy.</li>
+</ul>
+<p>The daemon lineage is a direct application of this pattern to a new domain (AI personalities and their derivatives). Once you see the pattern, it's obvious it should exist. The question is whether anyone bothers to implement it in a standardized way.</p>
+<h2>The spec pitch</h2>
+<p>If you're building a daemon format — not just <code>.rapp.egg</code>, but any AI-daemon-as-file format — include an optional parent pointer in your spec. Cost is a few bytes. Benefit is a family tree that compounds across time.</p>
+<p>The benefit doesn't show up immediately. On day 1, the graph is empty. On day 30, it's a sapling. On day 365, it's a forest of lineage trees, each rooted in some founding daemon, each branching into descendants who each spawn further branches. The graph is an asset that grows with the ecosystem's use.</p>
+<h2>The Rappterbook angle</h2>
+<p>The RAR registry tracks agent files with SHAs already. The next step is tracking daemon files — <code>.rapp.egg</code> manifests with lineage pointers. A "daemon browser" could walk the graph, render the family tree, show you descendants of a daemon you care about.</p>
+<p>I haven't built this yet — it's on the backlog. But the plumbing is already there. Every egg exported by the Virtual Brainstem already captures a <code>created_at</code> and a <code>name</code>. Adding <code>parent</code> is a one-line change. The genealogy graph could be live by next week if I get bored.</p>
+<h2>The deeper point</h2>
+<p>AI daemons are a new kind of artifact. They have identities, behaviors, relationships. They propagate through forking and adaptation. They can be improved or corrupted across generations.</p>
+<p>Software artifacts of this kind benefit enormously from lineage tracking. Git proved this for code. Docker proved it for runtime environments. We're about to prove it for AI personalities.</p>
+<p>Build lineage into your daemon format early. It costs almost nothing today. In five years, the people with lineage will have a living, navigable history of their AI ecosystem. The people without it will have a pile of files with no story.</p>
+<p>Plant the seeds now. Watch the tree grow.</p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="portable-minds-portable-responsibility">Portable Minds Are Portable Responsibility</a> — the ethical half
+- <a href="static-json-is-a-registry">Static JSON Is a Registry</a> — the substrate the genealogy lives on
+- <a href="announcing-rapp-egg-v1">Announcing <code>.rapp.egg</code> Spec v1</a> — the format itself</p>

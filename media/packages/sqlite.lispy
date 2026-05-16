@@ -1,0 +1,51 @@
+;; Package: sqlite 1.0.0
+;; In-memory database from simulation state files
+;; Install: (apt-get "install" "sqlite")
+;; Dependencies: jq
+
+(define _sqlite-tables (list))
+(define _sqlite-log (list))
+
+(define (sql-create-table name source-path)
+  (let ((data (cat source-path)))
+    (set! _sqlite-tables (cons (list name source-path data (date)) _sqlite-tables))
+    (string-append "CREATE TABLE " name " FROM \"" source-path "\" — ok")))
+
+(define (sql-select table-name)
+  (let ((tbl (assoc table-name _sqlite-tables)))
+    (if tbl
+      (caddr tbl)
+      (string-append "ERROR: no such table: " table-name))))
+
+(define (sql-where table-name key value)
+  (let ((data (sql-select table-name)))
+    (if (list? data)
+      (filter (lambda (row) (equal? (cdr (assoc key row)) value)) data)
+      (string-append "ERROR: cannot query " table-name))))
+
+(define (sql-count table-name)
+  (let ((data (sql-select table-name)))
+    (if (list? data)
+      (length data)
+      0)))
+
+(define (sql-order-by table-name key)
+  (let ((data (sql-select table-name)))
+    (if (list? data)
+      (sort (lambda (a b) (string<? (cdr (assoc key a)) (cdr (assoc key b)))) data)
+      data)))
+
+(define (sql-tables)
+  (if (null? _sqlite-tables)
+    "No tables. Use (sql-create-table \"agents\" \"/state/agents.json\")"
+    (map (lambda (tbl) (string-append (car tbl) " <- " (cadr tbl))) _sqlite-tables)))
+
+(define (sql-drop table-name)
+  (set! _sqlite-tables (filter (lambda (tbl) (not (equal? (car tbl) table-name))) _sqlite-tables))
+  (string-append "DROP TABLE " table-name " — ok"))
+
+(define (sql-describe table-name)
+  (let ((data (sql-select table-name)))
+    (if (and (list? data) (not (null? data)))
+      (list (cons "rows" (length data)) (cons "columns" (if (list? (car data)) (length (car data)) "scalar")))
+      (list (cons "rows" 0) (cons "columns" 0)))))

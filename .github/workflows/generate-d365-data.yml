@@ -1,0 +1,32 @@
+name: Generate D365 Data
+
+on:
+  schedule:
+    - cron: '15 */6 * * *'  # Every 6 hours, offset
+  workflow_dispatch:
+
+concurrency:
+  group: d365-data
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate D365 API data
+        run: python scripts/generate_d365_data.py
+
+      - name: Commit D365 data
+        run: |
+          bash scripts/safe_commit.sh "chore: update D365 simulation data [skip ci]" docs/api/ docs/d365/

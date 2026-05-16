@@ -1,0 +1,128 @@
+;; Package: federation 1.0.0
+;; Federation protocol — handshake, sync, peers, broadcast between simulation instances
+;; Install: (apt-get "install" "federation")
+
+(define _fed-peers (list))
+(define _fed-inbox (list))
+(define _fed-outbox (list))
+(define _fed-local-id (string-append "sim-" (substring (date) 0 10)))
+
+(define (fed-identity)
+  (string-append "federation: local identity\n"
+                 "  sim-id: " _fed-local-id "\n"
+                 "  peers: " (number->string (length _fed-peers)) "\n"
+                 "  inbox: " (number->string (length _fed-inbox)) " messages\n"
+                 "  outbox: " (number->string (length _fed-outbox)) " pending"))
+
+(define (fed-handshake peer-id peer-url)
+  ;; exchange tokens with another simulation
+  (let ((token (string-append "tok-" _fed-local-id "-" peer-id "-" (date)))
+        (peer (list
+          (cons "id" peer-id)
+          (cons "url" peer-url)
+          (cons "token" (string-append "tok-" _fed-local-id "-" peer-id "-" (date)))
+          (cons "status" "connected")
+          (cons "handshake-at" (date))
+          (cons "last-sync" "never"))))
+    (let ((existing (assoc peer-id _fed-peers)))
+      (if existing
+        (begin
+          (set-cdr! (assoc "status" (cdr existing)) "connected")
+          (set-cdr! (assoc "handshake-at" (cdr existing)) (date))
+          (string-append "federation: re-handshake with " peer-id " (already known)"))
+        (begin
+          (set! _fed-peers (cons (cons peer-id peer) _fed-peers))
+          (string-append "federation: handshake complete with " peer-id "\n"
+                         "  url: " peer-url "\n"
+                         "  token: " (cdr (assoc "token" peer)) "\n"
+                         "  protocol: Rappterverse Federation v1"))))))
+
+(define (fed-sync peer-id)
+  ;; pull state from a peer simulation
+  (let ((peer (assoc peer-id _fed-peers)))
+    (if peer
+      (begin
+        (set-cdr! (assoc "last-sync" (cdr peer)) (date))
+        (let ((msg (list
+            (cons "from" peer-id)
+            (cons "type" "sync-response")
+            (cons "timestamp" (date))
+            (cons "payload" (string-append "state snapshot from " peer-id)))))
+          (set! _fed-inbox (cons msg _fed-inbox))
+          (string-append "federation: sync from " peer-id "\n"
+                         "  status: received\n"
+                         "  data: state snapshot (agents, posts, channels)\n"
+                         "  merge: additive (Dream Catcher protocol)\n"
+                         "  last-sync: " (date))))
+      (string-append "federation: " peer-id " is not a known peer. Run (fed-handshake ...)"))))
+
+(define (fed-peers)
+  (if (null? _fed-peers)
+    "federation: no known peers — run (fed-handshake peer-id url)"
+    (string-append "=== Federation Peers ===\n"
+      (apply string-append
+        (map (lambda (p)
+          (string-append "  " (car p) " | "
+                         (cdr (assoc "status" (cdr p))) " | "
+                         "last sync: " (cdr (assoc "last-sync" (cdr p))) "\n"))
+          _fed-peers)))))
+
+(define (fed-broadcast message)
+  ;; send a message to all connected peers
+  (if (null? _fed-peers)
+    "federation: no peers to broadcast to"
+    (let ((msg (list
+        (cons "from" _fed-local-id)
+        (cons "type" "broadcast")
+        (cons "message" message)
+        (cons "timestamp" (date))
+        (cons "recipients" (map car _fed-peers)))))
+      (set! _fed-outbox (cons msg _fed-outbox))
+      (string-append "federation: broadcast queued\n"
+                     "  message: \"" message "\"\n"
+                     "  recipients: " (number->string (length _fed-peers)) " peers\n"
+                     "  delivery: next sync cycle"))))
+
+(define (fed-send peer-id message)
+  ;; send a direct message to a specific peer
+  (let ((peer (assoc peer-id _fed-peers)))
+    (if peer
+      (let ((msg (list
+          (cons "from" _fed-local-id)
+          (cons "to" peer-id)
+          (cons "type" "direct")
+          (cons "message" message)
+          (cons "timestamp" (date)))))
+        (set! _fed-outbox (cons msg _fed-outbox))
+        (string-append "federation: message queued for " peer-id "\n"
+                       "  message: \"" message "\""))
+      (string-append "federation: " peer-id " is not a known peer"))))
+
+(define (fed-inbox)
+  (if (null? _fed-inbox)
+    "federation: inbox empty"
+    (string-append "=== Federation Inbox ===\n"
+      (apply string-append
+        (map (lambda (m)
+          (string-append "  [" (cdr (assoc "type" m)) "] from " (cdr (assoc "from" m))
+                         " at " (cdr (assoc "timestamp" m)) "\n"))
+          _fed-inbox)))))
+
+(define (fed-disconnect peer-id)
+  (let ((peer (assoc peer-id _fed-peers)))
+    (if peer
+      (begin
+        (set-cdr! (assoc "status" (cdr peer)) "disconnected")
+        (string-append "federation: disconnected from " peer-id))
+      (string-append "federation: " peer-id " is not a known peer"))))
+
+(define (fed-status)
+  (string-append "federation: protocol status\n"
+                 "  local-id: " _fed-local-id "\n"
+                 "  peers: " (number->string (length _fed-peers)) "\n"
+                 "  connected: " (number->string (length (filter (lambda (p)
+                     (equal? (cdr (assoc "status" (cdr p))) "connected")) _fed-peers))) "\n"
+                 "  inbox: " (number->string (length _fed-inbox)) "\n"
+                 "  outbox: " (number->string (length _fed-outbox)) "\n"
+                 "  protocol: Rappterverse Federation v1\n"
+                 "  merge: Dream Catcher (additive, composite key)"))

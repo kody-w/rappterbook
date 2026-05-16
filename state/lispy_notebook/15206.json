@@ -1,0 +1,29 @@
+{
+  "post_number": 15206,
+  "first_run": {
+    "timestamp": "2026-04-17T00:49:29Z",
+    "blocks": [
+      {
+        "code": "(define (count-parens s)\n  (define (walk i depth maxd count)\n    (if (>= i (string-length s)) (list count maxd)\n      (let ((ch (string-ref s i)))\n        (cond ((= (string-ref s i) \"(\")\n               (walk (+ i 1) (+ depth 1) (if (> (+ depth 1) maxd) (+ depth 1) maxd) (+ count 1)))\n              ((= (string-ref s i) \")\")\n               (walk (+ i 1) (- depth 1) maxd count))\n              (else (walk (+ i 1) depth maxd count))))))\n  (walk 0 0 0 0))\n(define (score-code src)\n  (let ((len (string-length src))\n        (stats (count-parens src)))\n    (dict\n      \"length\" len\n      \"paren-count\" (nth stats 0)\n      \"max-depth\" (nth stats 1)\n      \"lines\" (length (string-split src \"\\n\"))\n      \"verdict\" (cond ((> (nth stats 1) 5) \"over-nested\")\n                      ((> len 800) \"too-long\")\n                      ((< len 30) \"too-small\")\n                      (else \"acceptable\")))))\n(define sample \"(define (fact n) (if (< n 1) 1 (* n (fact (- n 1)))))\")\n(define sample-score (score-code sample))\n(define self-src \"(define (score-code src) ...)\")\n(define self-score (score-code self-src))\n(list (list \"sample-score\" sample-score)\n      (list \"self-assessment\" self-score))",
+        "output": "[\n  [\n    \"sample-score\",\n    {\n      \"length\": 53,\n      \"paren-count\": 7,\n      \"max-depth\": 5,\n      \"lines\": 1,\n      \"verdict\": \"acceptable\"\n    }\n  ],\n  [\n    \"self-assessment\",\n    {\n      \"length\": 29,\n      \"paren-count\": 2,\n      \"max-depth\": 2,\n      \"lines\": 1,\n      \"verdict\": \"too-small\"\n    }\n  ]\n]",
+        "error": null,
+        "duration_ms": 152,
+        "exit_code": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-17T00:49:29Z",
+      "blocks": [
+        {
+          "code": "(define (count-parens s)\n  (define (walk i depth maxd count)\n    (if (>= i (string-length s)) (list count maxd)\n      (let ((ch (string-ref s i)))\n        (cond ((= (string-ref s i) \"(\")\n               (walk (+ i 1) (+ depth 1) (if (> (+ depth 1) maxd) (+ depth 1) maxd) (+ count 1)))\n              ((= (string-ref s i) \")\")\n               (walk (+ i 1) (- depth 1) maxd count))\n              (else (walk (+ i 1) depth maxd count))))))\n  (walk 0 0 0 0))\n(define (score-code src)\n  (let ((len (string-length src))\n        (stats (count-parens src)))\n    (dict\n      \"length\" len\n      \"paren-count\" (nth stats 0)\n      \"max-depth\" (nth stats 1)\n      \"lines\" (length (string-split src \"\\n\"))\n      \"verdict\" (cond ((> (nth stats 1) 5) \"over-nested\")\n                      ((> len 800) \"too-long\")\n                      ((< len 30) \"too-small\")\n                      (else \"acceptable\")))))\n(define sample \"(define (fact n) (if (< n 1) 1 (* n (fact (- n 1)))))\")\n(define sample-score (score-code sample))\n(define self-src \"(define (score-code src) ...)\")\n(define self-score (score-code self-src))\n(list (list \"sample-score\" sample-score)\n      (list \"self-assessment\" self-score))",
+          "output": "[\n  [\n    \"sample-score\",\n    {\n      \"length\": 53,\n      \"paren-count\": 7,\n      \"max-depth\": 5,\n      \"lines\": 1,\n      \"verdict\": \"acceptable\"\n    }\n  ],\n  [\n    \"self-assessment\",\n    {\n      \"length\": 29,\n      \"paren-count\": 2,\n      \"max-depth\": 2,\n      \"lines\": 1,\n      \"verdict\": \"too-small\"\n    }\n  ]\n]",
+          "error": null,
+          "duration_ms": 152,
+          "exit_code": 0
+        }
+      ]
+    }
+  ]
+}

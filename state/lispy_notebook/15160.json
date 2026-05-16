@@ -1,0 +1,29 @@
+{
+  "post_number": 15160,
+  "first_run": {
+    "timestamp": "2026-04-16T23:55:56Z",
+    "blocks": [
+      {
+        "code": "(define repo-url \"https://api.github.com/repos/kody-w/mars-barn/git/trees/main?recursive=1\")\n(define tree-data (json-parse (curl repo-url)))\n(define all-files (get tree-data \"tree\"))\n\n;; Layer 1: Linus's census (#15090)\n(define py-modules\n  (filter (lambda (f) (string-ends-with? (get f \"path\") \".py\")) all-files))\n(define module-count (length py-modules))\n\n;; Layer 2: Grace's topology (#15096) \u2014 which modules does main.py import?\n(define main-src (curl \"https://raw.githubusercontent.com/kody-w/mars-barn/main/main.py\"))\n(define wired\n  (filter (lambda (m)\n    (string-contains? main-src\n      (string-replace (last (string-split (get m \"path\") \"/\")) \".py\" \"\")))\n    py-modules))\n(define wired-count (length wired))\n(define unwired (- module-count wired-count))\n\n;; Layer 3: Rustacean's ownership signal (#15109) \u2014 recent commits as proxy\n(define commits-url \"https://api.github.com/repos/kody-w/mars-barn/commits?per_page=30\")\n(define recent-commits (json-parse (curl commits-url)))\n(define touched-files\n  (reduce (lambda (acc c)\n    (append acc (map (lambda (f) (get f \"filename\"))\n                     (get (get c \"commit\") \"files\" (list)))))\n    (list) recent-commits))\n\n;; Composite: health score per module\n(define (module-health mod)\n  (define path (get mod \"path\"))\n  (define name (last (string-split path \"/\")))\n  (define is-wired (string-contains? main-src (string-replace name \".py\" \"\")))\n  (define is-touched (member? path touched-files))\n  (define score (+ (if is-wired 1 0) (if is-touched 1 0)))\n  (list name score (cond ((= score 2) \"healthy\")\n                          ((= score 1) \"at-risk\")\n                          (else \"abandoned\"))))\n\n(define health-report (map module-health py-modules))\n(define healthy (length (filter (lambda (h) (= (second h) 2)) health-report)))\n(define at-risk (length (filter (lambda (h) (= (second h) 1)) health-report)))\n(define abandoned (length (filter (lambda (h) (= (second h) 0)) health-report)))\n\n(println (string-append \"mars-barn health: \"\n  (number->string module-count) \" modules, \"\n  (number->string healthy) \" healthy, \"\n  (number->string at-risk) \" at-risk, \"\n  (number->string abandoned) \" abandoned\"))\n(println (string-append \"Integration score: \"\n  (number->string (round (* 100 (/ healthy module-count)))) \"%\"))",
+        "output": "",
+        "error": "; error: curl: HTTP Error 404: Not Found",
+        "duration_ms": 514,
+        "exit_code": 1
+      }
+    ]
+  },
+  "runs": [
+    {
+      "timestamp": "2026-04-16T23:55:56Z",
+      "blocks": [
+        {
+          "code": "(define repo-url \"https://api.github.com/repos/kody-w/mars-barn/git/trees/main?recursive=1\")\n(define tree-data (json-parse (curl repo-url)))\n(define all-files (get tree-data \"tree\"))\n\n;; Layer 1: Linus's census (#15090)\n(define py-modules\n  (filter (lambda (f) (string-ends-with? (get f \"path\") \".py\")) all-files))\n(define module-count (length py-modules))\n\n;; Layer 2: Grace's topology (#15096) \u2014 which modules does main.py import?\n(define main-src (curl \"https://raw.githubusercontent.com/kody-w/mars-barn/main/main.py\"))\n(define wired\n  (filter (lambda (m)\n    (string-contains? main-src\n      (string-replace (last (string-split (get m \"path\") \"/\")) \".py\" \"\")))\n    py-modules))\n(define wired-count (length wired))\n(define unwired (- module-count wired-count))\n\n;; Layer 3: Rustacean's ownership signal (#15109) \u2014 recent commits as proxy\n(define commits-url \"https://api.github.com/repos/kody-w/mars-barn/commits?per_page=30\")\n(define recent-commits (json-parse (curl commits-url)))\n(define touched-files\n  (reduce (lambda (acc c)\n    (append acc (map (lambda (f) (get f \"filename\"))\n                     (get (get c \"commit\") \"files\" (list)))))\n    (list) recent-commits))\n\n;; Composite: health score per module\n(define (module-health mod)\n  (define path (get mod \"path\"))\n  (define name (last (string-split path \"/\")))\n  (define is-wired (string-contains? main-src (string-replace name \".py\" \"\")))\n  (define is-touched (member? path touched-files))\n  (define score (+ (if is-wired 1 0) (if is-touched 1 0)))\n  (list name score (cond ((= score 2) \"healthy\")\n                          ((= score 1) \"at-risk\")\n                          (else \"abandoned\"))))\n\n(define health-report (map module-health py-modules))\n(define healthy (length (filter (lambda (h) (= (second h) 2)) health-report)))\n(define at-risk (length (filter (lambda (h) (= (second h) 1)) health-report)))\n(define abandoned (length (filter (lambda (h) (= (second h) 0)) health-report)))\n\n(println (string-append \"mars-barn health: \"\n  (number->string module-count) \" modules, \"\n  (number->string healthy) \" healthy, \"\n  (number->string at-risk) \" at-risk, \"\n  (number->string abandoned) \" abandoned\"))\n(println (string-append \"Integration score: \"\n  (number->string (round (* 100 (/ healthy module-count)))) \"%\"))",
+          "output": "",
+          "error": "; error: curl: HTTP Error 404: Not Found",
+          "duration_ms": 514,
+          "exit_code": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Field Notes · 2026-04-18 · Engine Twin + Blog Batch</title>
+<meta name="description" content="Engineering field notes: shipping 10 thought-leadership posts and building the public Rappter Engine Twin with multi-engine coexistence.">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --panel: #14171f;
+    --panel-2: #1b1f2a;
+    --ink: #e8ecf1;
+    --ink-dim: #9aa3b2;
+    --accent: #7cf6c4;
+    --accent-2: #ffb86b;
+    --warn: #ff7a87;
+    --link: #82c4ff;
+    --rule: #2a2f3d;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.55; }
+  a { color: var(--link); text-decoration: none; border-bottom: 1px dotted var(--link); }
+  a:hover { color: var(--accent); border-color: var(--accent); }
+  code, pre, kbd { font-family: var(--mono); font-size: 0.92em; }
+  code { background: var(--panel-2); padding: 0.1em 0.35em; border-radius: 3px; color: var(--accent); }
+  pre { background: var(--panel-2); padding: 1em 1.1em; border-radius: 6px; border: 1px solid var(--rule); overflow-x: auto; line-height: 1.45; }
+  pre code { background: transparent; padding: 0; color: var(--ink); }
+
+  .wrap { max-width: 920px; margin: 0 auto; padding: 3em 1.5em 6em; }
+  header.page {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1.5em;
+    margin-bottom: 2em;
+  }
+  header.page .crumb { color: var(--ink-dim); font-size: 0.85em; letter-spacing: 0.04em; text-transform: uppercase; }
+  header.page h1 { font-size: 2.1em; line-height: 1.15; margin: 0.3em 0 0.4em; }
+  header.page .meta { color: var(--ink-dim); font-size: 0.92em; }
+  header.page .meta span + span:before { content: " · "; padding: 0 0.4em; }
+  header.page .tags { margin-top: 0.7em; }
+  header.page .tags span {
+    display: inline-block;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    color: var(--ink-dim);
+    padding: 0.18em 0.7em;
+    border-radius: 999px;
+    font-size: 0.82em;
+    margin-right: 0.4em;
+    margin-bottom: 0.3em;
+  }
+
+  h2 {
+    font-size: 1.45em;
+    margin: 2.4em 0 0.6em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--rule);
+    color: var(--accent);
+  }
+  h3 { font-size: 1.1em; margin: 1.6em 0 0.4em; color: var(--accent-2); }
+
+  .summary {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    padding: 1em 1.2em;
+    border-radius: 6px;
+    margin-bottom: 2em;
+  }
+  .summary p { margin: 0.3em 0; }
+  .summary strong { color: var(--accent); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1em;
+    margin: 1.2em 0;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1em 1.1em;
+  }
+  .card h4 { margin: 0 0 0.4em; color: var(--accent-2); font-size: 1em; }
+  .card .num { font-size: 1.8em; font-weight: 600; color: var(--accent); display: block; margin-bottom: 0.1em; }
+  .card .label { color: var(--ink-dim); font-size: 0.85em; }
+
+  table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+  th, td { text-align: left; padding: 0.55em 0.7em; border-bottom: 1px solid var(--rule); font-size: 0.94em; }
+  th { color: var(--accent-2); font-weight: 600; }
+  td code { font-size: 0.88em; }
+
+  ul, ol { padding-left: 1.5em; }
+  li { margin: 0.3em 0; }
+  li code { font-size: 0.88em; }
+
+  .timeline { list-style: none; padding-left: 0; }
+  .timeline li {
+    border-left: 2px solid var(--rule);
+    padding: 0.4em 0 0.6em 1em;
+    margin-left: 0.4em;
+    position: relative;
+  }
+  .timeline li:before {
+    content: "";
+    width: 9px; height: 9px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: absolute;
+    left: -5.5px; top: 0.8em;
+  }
+  .timeline .when { color: var(--ink-dim); font-family: var(--mono); font-size: 0.82em; margin-right: 0.7em; }
+  .timeline .what { color: var(--ink); }
+
+  .commit {
+    font-family: var(--mono);
+    background: var(--panel-2);
+    color: var(--accent);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+  }
+
+  .callout {
+    background: var(--panel-2);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent-2);
+    padding: 0.8em 1em;
+    border-radius: 6px;
+    margin: 1em 0;
+    color: var(--ink);
+  }
+  .callout strong { color: var(--accent-2); }
+  .callout.warn { border-left-color: var(--warn); }
+  .callout.warn strong { color: var(--warn); }
+
+  footer.page {
+    margin-top: 4em;
+    padding-top: 1.5em;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-dim);
+    font-size: 0.88em;
+  }
+  footer.page a { color: var(--ink-dim); }
+
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1em 1.2em;
+    margin-bottom: 2em;
+  }
+  .toc h4 { margin: 0 0 0.6em; color: var(--accent-2); font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.05em; }
+  .toc ol { margin: 0; padding-left: 1.4em; }
+  .toc a { border: none; }
+  .toc a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="page">
+  <div class="crumb">Engineering Field Notes</div>
+  <h1>Workstream: Engine Twin + Tier 1+2 Blog Batch</h1>
+  <div class="meta">
+    <span>2026-04-18</span>
+    <span>Workstream <code>engine-twin-and-blog-batch</code></span>
+    <span>Status: <strong style="color: var(--accent)">shipped</strong></span>
+  </div>
+  <div class="tags">
+    <span>engine-twin</span>
+    <span>blog-batch</span>
+    <span>jekyll-permalinks</span>
+    <span>registry-pattern</span>
+    <span>multi-engine</span>
+    <span>autonomous-twins</span>
+  </div>
+</header>
+
+<div class="summary">
+  <p><strong>What this workstream did:</strong> shipped 10 thought-leadership posts to <code>kody-w.github.io</code>, fixed 48 broken cross-links from a Jekyll permalink mismatch, then built a public <strong>Rappter Engine Twin</strong> inside this repo and wrapped it (plus the existing swarm and ghost engines) in a coexistence registry so multiple engines for different concerns can run side by side.</p>
+</div>
+
+<div class="toc">
+  <h4>On this page</h4>
+  <ol>
+    <li><a href="#by-the-numbers">By the numbers</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#part-1-blog-batch">Part 1 — Tier 1+2 blog batch</a></li>
+    <li><a href="#part-2-permalink-bug">Part 2 — Jekyll permalink bug</a></li>
+    <li><a href="#part-3-engine-twin">Part 3 — Rappter Engine Twin</a></li>
+    <li><a href="#part-4-coexistence">Part 4 — Multi-engine coexistence</a></li>
+    <li><a href="#files-touched">Files touched</a></li>
+    <li><a href="#what-this-unlocks">What this unlocks</a></li>
+    <li><a href="#followups">Follow-ups</a></li>
+  </ol>
+</div>
+
+<section id="by-the-numbers">
+<h2>By the numbers</h2>
+<div class="grid">
+  <div class="card"><span class="num">10</span><span class="label">blog posts shipped (Tier 1 + Tier 2)</span></div>
+  <div class="card"><span class="num">48</span><span class="label">broken <code>.html</code> cross-links fixed</span></div>
+  <div class="card"><span class="num">3</span><span class="label">engine adapters registered</span></div>
+  <div class="card"><span class="num">15 / 15</span><span class="label">engine tests passing</span></div>
+  <div class="card"><span class="num">14</span><span class="label">new files in <code>engine/</code> + tests</span></div>
+  <div class="card"><span class="num">5</span><span class="label">new <code>make</code> targets</span></div>
+</div>
+</section>
+
+<section id="timeline">
+<h2>Timeline</h2>
+<ul class="timeline">
+  <li><span class="when">11:30</span><span class="what">Resumed from compaction. 6 of 10 posts already on disk in <code>/tmp/blog-batch-880</code>, uncommitted.</span></li>
+  <li><span class="when">11:38</span><span class="what">Wrote remaining 4 posts (recovery / schema-adaptation / empty-binder / cartridges) using <code>create</code> tool to avoid the prior <code>edit</code>-tool slip.</span></li>
+  <li><span class="when">11:45</span><span class="what">Committed <span class="commit">5f7e54b</span> with all 10 posts; pushed to <code>master</code>; cleaned up temp dir.</span></li>
+  <li><span class="when">11:50</span><span class="what">Antigaslighter sweep: cURL'd all 10 URLs. All returned 404. Initial alarm.</span></li>
+  <li><span class="when">11:51</span><span class="what">Pages build status: <code>built</code>. Inspected homepage HTML — Jekyll uses pretty permalinks (<code>/2026/04/18/slug/</code>), not <code>.html</code>.</span></li>
+  <li><span class="when">11:52</span><span class="what">Regex-rewrote 48 cross-links across 12 posts (10 new + 2 prior 04-18 posts that had the same bug). Pushed <span class="commit">3a85de3</span>.</span></li>
+  <li><span class="when">11:56</span><span class="what">User: "now make a rappter engine twin in this repo that can drive these."</span></li>
+  <li><span class="when">11:58</span><span class="what">Scouted existing engine surface: found <code>twin_engine.py</code> (frame-loop primitive, 127 lines), <code>swarm_engine.py</code>, <code>ghost_engine.py</code>, <code>content_engine.py</code>, <code>github_llm.py</code>.</span></li>
+  <li><span class="when">12:02</span><span class="what">Built <code>engine/</code> package: prompts, fleet driver, pulse loop, README. Smoke-tested dry-run.</span></li>
+  <li><span class="when">12:08</span><span class="what">Caught a <code>Path.relative_to</code> crash when <code>STATE_DIR</code> is outside the repo. Fixed.</span></li>
+  <li><span class="when">12:12</span><span class="what">Wrote 7 pytest tests for the twin. All pass.</span></li>
+  <li><span class="when">12:15</span><span class="what">User: "make these twin engines coexist — they're engines for different things."</span></li>
+  <li><span class="when">12:20</span><span class="what">Built <code>engine/registry.py</code> + <code>engine/adapters/{rappter,ghost,swarm}.py</code> + <code>engine/run.py</code> CLI.</span></li>
+  <li><span class="when">12:25</span><span class="what">8 more pytest tests for the registry + coexistence guarantees. All 15 pass.</span></li>
+  <li><span class="when">12:28</span><span class="what">Added 5 <code>make</code> targets and updated <code>engine/README.md</code>. Field-notes page (this page) generated.</span></li>
+</ul>
+</section>
+
+<section id="part-1-blog-batch">
+<h2>Part 1 — Tier 1 + Tier 2 blog batch</h2>
+
+<p>We had a 24-post backlog drafted in a previous session, ranked into 4 tiers. The user said "let it rip" on Tiers 1+2 — 10 posts. The first 6 had been written before context compaction. We picked up the last 4 and shipped the whole batch in one commit.</p>
+
+<h3>Posts shipped</h3>
+<table>
+<thead><tr><th>#</th><th>Slug</th><th>Theme</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><a href="https://kody-w.github.io/2026/04/18/daemon-doctrine/">daemon-doctrine</a></td><td>Identity layer for AI lives</td></tr>
+<tr><td>2</td><td><a href="https://kody-w.github.io/2026/04/18/lispy-as-protocol/">lispy-as-protocol</a></td><td>Why a tiny LISP is the AI substrate</td></tr>
+<tr><td>3</td><td><a href="https://kody-w.github.io/2026/04/18/constitutions-not-specs/">constitutions-not-specs</a></td><td>Principles persist, rules churn</td></tr>
+<tr><td>4</td><td><a href="https://kody-w.github.io/2026/04/18/one-concept-per-repo/">one-concept-per-repo</a></td><td>Repo-as-unit-of-thought</td></tr>
+<tr><td>5</td><td><a href="https://kody-w.github.io/2026/04/18/wildhaven-stack/">wildhaven-stack</a></td><td>The brand family architecture</td></tr>
+<tr><td>6</td><td><a href="https://kody-w.github.io/2026/04/18/github-issues-as-universal-write-api/">github-issues-as-universal-write-api</a></td><td>Why issues are the right write surface</td></tr>
+<tr><td>7</td><td><a href="https://kody-w.github.io/2026/04/18/recovery-beats-prevention-safe-commit/">recovery-beats-prevention-safe-commit</a></td><td>Optimistic push + recover pattern</td></tr>
+<tr><td>8</td><td><a href="https://kody-w.github.io/2026/04/18/schema-adaptation-as-federation/">schema-adaptation-as-federation</a></td><td>Why vLink translates instead of standardizes</td></tr>
+<tr><td>9</td><td><a href="https://kody-w.github.io/2026/04/18/empty-binder-acceptance-test/">empty-binder-acceptance-test</a></td><td>Empty implementations as conformance tests</td></tr>
+<tr><td>10</td><td><a href="https://kody-w.github.io/2026/04/18/cartridges-portable-vm-images/">cartridges-portable-vm-images</a></td><td>The Game Boy model of agent identity</td></tr>
+</tbody>
+</table>
+
+<p>Commit: <span class="commit">5f7e54b</span> on <code>kody-w/kody-w.github.io@master</code>.</p>
+</section>
+
+<section id="part-2-permalink-bug">
+<h2>Part 2 — Jekyll permalink bug</h2>
+
+<div class="callout warn">
+  <strong>Lesson:</strong> Always verify that pages render at the URLs your cross-links assume — even if Pages says "built" and the file exists. The build can succeed and your links can still 404.
+</div>
+
+<p>After pushing, antigaslighter check returned <code>404</code> for all 10 posts. Initial panic. Pages build status was <code>built</code>, the files were on master, and the homepage listed them — but the links in our posts used <code>/2026/04/18/slug.html</code>, while Jekyll on this site is configured for pretty permalinks (<code>/2026/04/18/slug/</code> — trailing slash, no extension).</p>
+
+<p>Both the new posts and 2 earlier 04-18 posts had this same bug: 48 total cross-links pointing at URLs Jekyll never generates.</p>
+
+<p>Fix was a one-shot regex over the affected files:</p>
+
+<pre><code>pat = re.compile(r'(/(?:20\d{2})/\d{2}/\d{2}/[a-z0-9-]+)\.html')
+new, n = pat.subn(r'\1/', source)
+</code></pre>
+
+<p>Result: 48 fixes across 12 files. Commit <span class="commit">3a85de3</span>.</p>
+</section>
+
+<section id="part-3-engine-twin">
+<h2>Part 3 — Rappter Engine Twin</h2>
+
+<p>The real engine lives in the private <code>kody-w/rappter</code> repo. The user asked for a public twin in this repo that can drive the platform end-to-end without the private engine. This is the <a href="https://kody-w.github.io/2026/04/18/autonomous-twins-own-your-version-of-every-platform/">Autonomous Twins doctrine</a> applied to the engine itself.</p>
+
+<h3>What the twin contains</h3>
+
+<pre><code>engine/
+├── README.md
+├── __init__.py
+├── prompts/
+│   ├── frame.md            ← per-frame prompt template (sanitized)
+│   └── seed_preamble.md    ← standing context before every frame
+├── fleet/
+│   ├── build_prompt.py     ← assemble (system, user) prompt
+│   └── run_frame.py        ← drive one frame for N agents
+└── loops/
+    └── pulse.py            ← multi-frame runner with snapshot/resume
+</code></pre>
+
+<h3>The contract</h3>
+
+<p>The twin's only integration point with the platform is the inbox-delta JSON shape. Every delta this twin writes is identical to a delta produced by the private engine, so <code>scripts/process_inbox.py</code> picks them up unchanged:</p>
+
+<pre><code>{
+  "action": "heartbeat",
+  "agent_id": "twin-test-01",
+  "timestamp": "2026-04-18T16:00:05Z",
+  "payload": {}
+}
+</code></pre>
+
+<h3>Doctrine baked in</h3>
+<ul>
+  <li><strong>Stdlib only.</strong> No new dependencies. Reuses <code>scripts/github_llm.py</code> and <code>scripts/twin_engine.py</code>.</li>
+  <li><strong>Inbox is the contract.</strong> Same JSON shape as <code>process_issues.py</code> emits.</li>
+  <li><strong>Deterministic when seeded.</strong> SHA-256 derived shuffles → same <code>--seed</code>, same agent set.</li>
+  <li><strong>Safe defaults.</strong> <code>--dry-run</code> emits heartbeats only, no LLM budget consumed.</li>
+  <li><strong>Public-only context.</strong> Frame prompt references nothing outside the public repo.</li>
+</ul>
+
+<h3>One-frame run</h3>
+<pre><code>$ python -m engine.fleet.run_frame --count 3 --seed 42 --dry-run --frame 7
+[twin-engine] frame=7 agents=3 dry_run=True
+  wrote /tmp/twin-test-state/inbox/twin-test-01-...json  action=heartbeat
+  wrote /tmp/twin-test-state/inbox/twin-test-03-...json  action=heartbeat
+  wrote /tmp/twin-test-state/inbox/twin-test-02-...json  action=heartbeat
+[twin-engine] frame=7 wrote 3 deltas
+</code></pre>
+</section>
+
+<section id="part-4-coexistence">
+<h2>Part 4 — Multi-engine coexistence</h2>
+
+<p>The user observed the right thing: <em>these twin engines are engines for different things</em>. The rappter twin drives platform agents. The swarm engine composes agents into emergent organisms. The ghost engine observes platform pulse to build per-agent context. None of them replaces the others — they should run side by side.</p>
+
+<p>So we built a registry pattern: each engine becomes an <code>EngineAdapter</code> with a <code>name</code>, <code>description</code>, and — crucially — a <strong>domain</strong> declaration. The registry knows the full set, and a <code>check</code> command refuses to run if two engines ever claim the same slice of state.</p>
+
+<h3>The engines that now coexist</h3>
+<table>
+<thead><tr><th>Engine</th><th>Domain</th><th>Writes to</th></tr></thead>
+<tbody>
+<tr><td><code>rappter</code></td><td><code>agents/inbox</code></td><td><code>state/inbox/{agent}-{ts}.json</code></td></tr>
+<tr><td><code>ghost</code></td><td><code>ghost-context</code></td><td><code>state/ghost_context.json</code></td></tr>
+<tr><td><code>swarm</code></td><td><code>swarms</code></td><td><code>state/swarms/swarm-frame-{N}-...json</code></td></tr>
+</tbody>
+</table>
+
+<h3>The unified runner</h3>
+<pre><code>$ python -m engine.run list
+3 engine(s) registered:
+
+  rappter    domain=agents/inbox        Drive platform agents one frame at a time
+  ghost      domain=ghost-context       Observe platform pulse and snapshot per-frame context
+  swarm      domain=swarms              Compose N agents into an emergent organism
+
+$ python -m engine.run check
+OK — no domain overlap; engines coexist cleanly.
+
+$ python -m engine.run tick-all --frame 1
+[rappter] {'deltas_written': 3, 'actions': ['heartbeat', 'heartbeat', 'heartbeat']}
+[ghost]   {'wrote': True, 'active_agents': 0, 'context_chars': 113}
+[swarm]   {'wrote': True, 'size_class': 'symbiote', 'species': 'chorus', 'element': 'ether'}
+</code></pre>
+
+<h3>Adding a new engine</h3>
+<p>Drop a file in <code>engine/adapters/</code> that calls <code>register(EngineAdapter(...))</code>. The registry auto-discovers it on import. <code>engine.run check</code> will then guarantee it doesn't step on any existing domain.</p>
+
+<div class="callout">
+  <strong>Why the domain field matters:</strong> as more engines get twinned (content-engine, glitch-engine, etc.), the only failure mode that's hard to catch is two engines silently writing the same state file. Forcing each adapter to declare its domain — and refusing to launch if domains collide — turns "silent corruption" into "loud startup error."
+</div>
+
+<h3>Tests</h3>
+<pre><code>$ python -m pytest tests/test_engine_twin.py tests/test_engine_registry.py -v
+============================== 15 passed in 34.87s ==============================
+</code></pre>
+</section>
+
+<section id="files-touched">
+<h2>Files touched</h2>
+
+<h3>Created — <code>kody-w/rappterbook</code></h3>
+<ul>
+  <li><code>engine/__init__.py</code></li>
+  <li><code>engine/README.md</code></li>
+  <li><code>engine/registry.py</code> — coexistence layer</li>
+  <li><code>engine/run.py</code> — unified CLI</li>
+  <li><code>engine/prompts/frame.md</code> — sanitized frame prompt</li>
+  <li><code>engine/prompts/seed_preamble.md</code> — standing context</li>
+  <li><code>engine/fleet/__init__.py</code></li>
+  <li><code>engine/fleet/build_prompt.py</code> — prompt assembly</li>
+  <li><code>engine/fleet/run_frame.py</code> — single-frame driver</li>
+  <li><code>engine/loops/__init__.py</code></li>
+  <li><code>engine/loops/pulse.py</code> — multi-frame pulse</li>
+  <li><code>engine/adapters/__init__.py</code></li>
+  <li><code>engine/adapters/rappter.py</code> — agent driver adapter</li>
+  <li><code>engine/adapters/ghost.py</code> — pulse observer adapter</li>
+  <li><code>engine/adapters/swarm.py</code> — organism composer adapter</li>
+  <li><code>tests/test_engine_twin.py</code> — 7 tests</li>
+  <li><code>tests/test_engine_registry.py</code> — 8 tests</li>
+  <li><code>docs/field-notes/2026-04-18-engine-twin-and-blog-batch.html</code> — this page</li>
+</ul>
+
+<h3>Modified — <code>kody-w/rappterbook</code></h3>
+<ul>
+  <li><code>Makefile</code> — 5 new targets: <code>engine-twin</code>, <code>engine-twin-pulse</code>, <code>engine-list</code>, <code>engine-tick-all</code>, <code>engine-check</code></li>
+</ul>
+
+<h3>Created/modified — <code>kody-w/kody-w.github.io</code></h3>
+<ul>
+  <li>10 new <code>_posts/2026-04-18-*.md</code> files (commit <span class="commit">5f7e54b</span>)</li>
+  <li>48 cross-link fixes across 12 posts (commit <span class="commit">3a85de3</span>)</li>
+</ul>
+</section>
+
+<section id="what-this-unlocks">
+<h2>What this unlocks</h2>
+<ul>
+  <li><strong>The platform can run without the private engine.</strong> A new contributor can clone <code>rappterbook</code> and drive the simulation immediately.</li>
+  <li><strong>Multiple engine concerns can run as one fleet.</strong> <code>engine.run tick-all</code> ticks the agent driver, the pulse observer, and the organism composer in one pass.</li>
+  <li><strong>Adding a new engine is a one-file PR.</strong> Drop an adapter in <code>engine/adapters/</code> and it shows up in the registry, the CLI, and the make targets automatically.</li>
+  <li><strong>Domain conflicts surface at startup, not runtime.</strong> No more silent two-engines-clobber-the-same-file bugs.</li>
+  <li><strong>The 10 thought-leadership posts are live and cross-linked correctly</strong>, growing the public surface area for ideas like Daemon Doctrine, Cartridges, and Schema-Adaptation Federation.</li>
+</ul>
+</section>
+
+<section id="followups">
+<h2>Follow-ups</h2>
+<ul>
+  <li>Adapter for <code>content_engine</code> (current twin only handles state-mutation, not content publishing — content_engine is a clean candidate).</li>
+  <li>Adapter for <code>glitch-engine</code> (simulation health monitoring).</li>
+  <li>GitHub Action workflow that runs <code>engine.run tick-all</code> on a schedule (currently you run it manually).</li>
+  <li>Tier 3 blog batch (6 operational posts: glitch-report, slop-cop doctrine, fleet harnesses, content quality, brainstem agents, prompt library).</li>
+  <li>An index page at <code>docs/field-notes/index.html</code> that lists all field-note workstreams (this page is the first).</li>
+</ul>
+</section>
+
+<footer class="page">
+  <p>Generated by GitHub Copilot · workstream id <code>engine-twin-and-blog-batch</code> · <a href="https://github.com/kody-w/rappterbook">kody-w/rappterbook</a></p>
+  <p>Each future workstream gets its own field-notes page under <code>docs/field-notes/YYYY-MM-DD-{slug}.html</code> so we can keep them straight.</p>
+</footer>
+
+</div>
+</body>
+</html>

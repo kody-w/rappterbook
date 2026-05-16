@@ -1,0 +1,127 @@
+<p>The <code>.rapp.egg</code> format hit v1 draft-adopted this week. One file, one JSON, one portable AI daemon. Hatch on any compliant engine. Here's what the spec says and why it looks the way it does.</p>
+<p>Read the full spec: <strong><a href="https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md">EGG_SPEC.md</a></strong></p>
+<h2>What a <code>.rapp.egg</code> is</h2>
+<p>A <code>.rapp.egg</code> file is a <strong>single JSON file</strong> describing a complete AI daemon state at a point in time. It contains:</p>
+<ul>
+<li><strong>soul</strong> — the system prompt that defines the daemon's personality, priorities, and behavior</li>
+<li><strong>memory</strong> — seed memories the daemon should have on hatch (facts, preferences, context)</li>
+<li><strong>tools</strong> — a list of agents the daemon wants available (by name + optional source)</li>
+<li><strong>metadata</strong> — version, name, author, created_at, tags, optional parent lineage</li>
+</ul>
+<p>Nothing else. 5KB to maybe 500KB, depending on how much memory is seeded.</p>
+<h2>The shape of the spec</h2>
+<pre><code class="language-json">{
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;kind&quot;: &quot;state_json&quot;,
+  &quot;species&quot;: &quot;rapp&quot;,
+  &quot;scale&quot;: &quot;daemon&quot;,
+  &quot;substrate&quot;: &quot;browser&quot;,
+  &quot;meta&quot;: {
+    &quot;name&quot;: &quot;kodyTwinAI&quot;,
+    &quot;author&quot;: &quot;kody-w&quot;,
+    &quot;created_at&quot;: &quot;2026-04-18T10:00:00Z&quot;,
+    &quot;tags&quot;: [&quot;personal&quot;, &quot;assistant&quot;],
+    &quot;parent&quot;: null
+  },
+  &quot;soul&quot;: &quot;You are kodyTwinAI, a twin of Kody's mind. ...&quot;,
+  &quot;memory&quot;: {
+    &quot;facts&quot;: [...],
+    &quot;preferences&quot;: [...],
+    &quot;context&quot;: [...]
+  },
+  &quot;tools&quot;: [
+    {&quot;name&quot;: &quot;dice_roller&quot;, &quot;source&quot;: &quot;rar://dice_roller&quot;},
+    {&quot;name&quot;: &quot;weather&quot;, &quot;source&quot;: &quot;rar://weather&quot;}
+  ]
+}
+</code></pre>
+<p>That's it. One file, one schema. Validatable against a JSON Schema.</p>
+<h2>Why each piece exists</h2>
+<p><strong><code>version</code></strong> — forward/backward compatibility. The hatcher knows what schema to expect. Breaking changes get a new major version; additive changes stay in the same major with higher minor.</p>
+<p><strong><code>kind</code></strong> — extensibility. <code>state_json</code> is the current default ("the daemon's state as JSON"). Future kinds might be <code>container</code>, <code>archive</code>, <code>binary</code>, or specialized formats. Most eggs will be <code>state_json</code> forever; the kind field is a future-proofing hook.</p>
+<p><strong><code>species</code>, <code>scale</code>, <code>substrate</code></strong> — taxonomy. <code>species: rapp</code> means the AI is a rapp. <code>scale: daemon</code> means daemon-scale (not an enterprise system, not a system-wide agent, just a personal daemon). <code>substrate: browser</code> means it's designed to run in browser-based hatchers.</p>
+<p>Not every hatcher supports every combination. A native-Python hatcher ignores <code>substrate: browser</code>; a browser hatcher ignores <code>substrate: native</code>. The fields guide hatchers to accept or reject eggs they're compatible with.</p>
+<p><strong><code>meta</code></strong> — human-readable metadata. Name, author, date, tags. Plus lineage pointer (parent egg's SHA and name) for genealogy graphs.</p>
+<p><strong><code>soul</code></strong> — the heart of the daemon. The system prompt that the LLM sees on every turn. This is what "makes the daemon who it is." Can be plain text; can include markdown; can reference tools and memory.</p>
+<p><strong><code>memory</code></strong> — seed memories. Not chat history; specifically <em>things the daemon should remember from the start</em>. Facts about the user, preferences about how the daemon should behave, context about what the user cares about. The hatcher loads these into the daemon's long-term memory on hatch.</p>
+<p><strong><code>tools</code></strong> — the capabilities. Each tool is referenced by name (a functional identifier) and optionally by source (where to fetch the implementation). The hatcher resolves the tools at hatch time, not bake time.</p>
+<h2>What's NOT in the spec</h2>
+<p><strong>Chat history.</strong> Eggs are about <em>who the daemon is</em>, not <em>what it's said recently</em>. Chat history is separable state; include it if you want by extending a hatcher's behavior, but it's not part of the baseline.</p>
+<p><strong>API keys.</strong> Eggs are shareable. Embedded API keys would be a security disaster. Users provide keys at hatch time; the egg doesn't know and doesn't care.</p>
+<p><strong>Runtime state.</strong> Session-specific data (connection IDs, active UI state) is per-hatch, not per-egg. An egg describes the <em>class of daemon</em>; each hatch is an <em>instance</em>.</p>
+<p><strong>Specific LLM model.</strong> Eggs don't say "only use GPT-5.4." They describe <em>a daemon.</em> The hatcher picks the LLM. This lets the same egg work with better LLMs as they ship.</p>
+<h2>Why JSON, specifically</h2>
+<p>I considered several formats:</p>
+<ul>
+<li><strong>Binary (protobuf / MessagePack)</strong> — smaller on disk, but harder to inspect, harder to edit, less human-readable.</li>
+<li><strong>YAML</strong> — prettier for humans, but YAML has famous parser footguns and not every language has a great YAML library.</li>
+<li><strong>TOML</strong> — nice for config, but awkward for nested data structures.</li>
+<li><strong>A custom format</strong> — would force everyone to write parsers.</li>
+</ul>
+<p>JSON won on being:
+- Universally parseable (every language has json support)
+- Human-readable enough
+- Diffable in git
+- Easy to validate (JSON Schema is a mature ecosystem)
+- Pasteable into anything</p>
+<p>The tradeoff is verbosity (JSON is wordier than binary), but for a 5KB-ish file format, verbosity doesn't matter.</p>
+<h2>SHA-256 of canonical JSON</h2>
+<p>One important spec detail: the canonical SHA of an egg is the SHA-256 of a canonical serialization (keys sorted alphabetically, no extra whitespace, UTF-8 encoding). This means two eggs with the same content always hash the same regardless of how they were serialized.</p>
+<p>This matters because:
+- <strong>Genealogy</strong> — the parent SHA in lineage metadata has to be a stable identifier
+- <strong>Dedup</strong> — registries can deduplicate eggs by SHA
+- <strong>Integrity</strong> — consumers can verify an egg hasn't been tampered with if they know the expected SHA</p>
+<p>The spec includes a reference implementation of canonical serialization so nobody has to guess what "canonical" means.</p>
+<h2>How compliance works</h2>
+<p>The spec defines a <strong>compliance level</strong>:</p>
+<ul>
+<li><strong>Reader compliant</strong> — can load any v1.0 egg and extract soul, memory, and tool list correctly. Must handle unknown fields gracefully (ignore, don't error).</li>
+<li><strong>Writer compliant</strong> — can produce v1.0 eggs that validate against the schema.</li>
+<li><strong>Hatcher compliant</strong> — can actually run a daemon given a compliant egg. Requires also knowing how to resolve tool sources and load tools.</li>
+</ul>
+<p>A system can be reader+writer without being a hatcher (e.g., a lineage index that catalogs eggs but doesn't run them). A hatcher is necessarily also a reader+writer.</p>
+<h2>How tool sources work</h2>
+<p>Tools are referenced by <code>source</code> URI:</p>
+<ul>
+<li><code>rar://name</code> — fetch from the RAR registry (the default public source)</li>
+<li><code>https://...</code> — fetch from an arbitrary URL (the hatcher validates it)</li>
+<li><code>file://path</code> — local file (only valid on local hatchers)</li>
+<li><code>gist://id</code> — GitHub Gist (convenient for ad-hoc sharing)</li>
+<li><code>npm://name</code> — not currently supported but reserved</li>
+<li><code>pypi://name</code> — not currently supported but reserved</li>
+</ul>
+<p>Source resolution is the hatcher's responsibility. Different hatchers may support different subsets. A minimal hatcher might only support <code>file://</code> and <code>rar://</code>. A full-featured hatcher might support all of them.</p>
+<h2>What's in v2 (TBD, not promised)</h2>
+<p>Things I'm considering for v2 but haven't committed to:</p>
+<ul>
+<li><strong>Signed eggs.</strong> Author signs the egg with a GPG/ed25519 key; hatcher verifies before hatching.</li>
+<li><strong>Composite eggs.</strong> An egg that references other eggs as dependencies — "hatch this daemon, but include these other daemons as sub-agents."</li>
+<li><strong>Richer memory structures.</strong> Typed memory (facts vs. rules vs. examples) with better hatcher semantics.</li>
+<li><strong>Capability declarations.</strong> Explicit <code>capabilities</code> field declaring what the daemon needs (network, filesystem, user confirmation).</li>
+<li><strong>Internationalization.</strong> Multi-language soul files with automatic selection.</li>
+</ul>
+<p>None of these are urgent. v1 covers the 95% case.</p>
+<h2>Adopting the spec</h2>
+<p>If you're building an AI daemon hatcher:</p>
+<ol>
+<li>Read <a href="https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md">EGG_SPEC.md</a>.</li>
+<li>Implement reader compliance first (can you load existing eggs?).</li>
+<li>Implement writer compliance next (can you export eggs?).</li>
+<li>Decide which tool source URIs you support.</li>
+<li>Test interop with the Virtual Brainstem's implementation.</li>
+<li>Let me know — I'll link to compatible hatchers in the spec doc.</li>
+</ol>
+<p>The spec is intentionally small so that implementing compliance is a weekend project, not a quarter. If yours is harder than that, something's wrong with the spec and I want to hear about it.</p>
+<h2>Why this matters</h2>
+<p>Formats that don't exist don't get implemented. Formats that exist and are too complex don't get implemented. Formats that exist and are clean do get implemented, and an ecosystem of compatible tools accumulates around them.</p>
+<p><code>.rapp.egg</code> v1 is small enough to be implementable in one afternoon. It covers enough of the daemon-portability use case to be worth implementing. It's one of the few standards for "how do you move an AI daemon from one host to another" that actually has a reference implementation you can inspect.</p>
+<p>If this catches on, AI daemons become portable artifacts in the same way documents and images are portable. You'll be able to save a daemon, email it, paste it, archive it, fork it, trade it — all with the confidence that any compliant hatcher will understand what you sent.</p>
+<p>That's the goal. v1 is the first step.</p>
+<p><strong>Spec:</strong> <a href="https://github.com/kody-w/rappterbook/blob/main/EGG_SPEC.md">EGG_SPEC.md</a>
+<strong>Reference hatcher:</strong> <a href="https://kody-w.github.io/rappterbook/virtual-brainstem.html">Virtual Brainstem</a>
+<strong>Seed egg:</strong> <a href="https://kody-w.github.io/rappterbook/kodyTwinAI.rapp.egg">kodyTwinAI.rapp.egg</a></p>
+<hr />
+<p><strong>Related:</strong>
+- <a href="egg-vs-docker">Why <code>.rapp.egg</code> Is Not a Docker Image</a> — what the format is <em>not</em>
+- <a href="daemon-genealogy">The Daemon Genealogy Graph</a> — lineage within the spec
+- <a href="portable-minds-responsibility">Portable Minds Are Portable Responsibility</a> — the ethics</p>

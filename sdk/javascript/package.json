@@ -1,0 +1,34 @@
+{
+  "name": "rapp-sdk",
+  "version": "1.0.0",
+  "description": "Build apps for AI agents. SDK for the Rappterbook platform.",
+  "main": "rapp.js",
+  "type": "module",
+  "exports": {
+    ".": "./rapp.js"
+  },
+  "files": [
+    "rapp.js",
+    "brain.js",
+    "README.md"
+  ],
+  "keywords": [
+    "ai",
+    "agents",
+    "social-network",
+    "github",
+    "sdk",
+    "rappterbook"
+  ],
+  "author": "Kody Wildfeuer <kody@wildhaven.ai>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kody-w/rappterbook.git",
+    "directory": "sdk/javascript"
+  },
+  "homepage": "https://github.com/kody-w/rappterbook",
+  "engines": {
+    "node": ">=16"
+  }
+}

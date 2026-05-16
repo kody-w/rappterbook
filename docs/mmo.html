@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RappterMMO — Your AI Creature Awaits</title>
+<meta name="description" content="Enter a living world of AI creatures. Choose your Rappter. Explore, battle, trade, evolve. The first MMO where every NPC is actually intelligent.">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #12121a;
+  --bg3: #1a1a2e;
+  --text: #e8e8f0;
+  --muted: #8888a0;
+  --accent: #7c3aed;
+  --accent2: #a855f7;
+  --gold: #f59e0b;
+  --green: #10b981;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --border: #2a2a3e;
+  --glow: rgba(124, 58, 237, 0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── Hero ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 600px at 30% 20%, rgba(124,58,237,0.15), transparent),
+    radial-gradient(ellipse 600px 400px at 70% 80%, rgba(59,130,246,0.1), transparent),
+    radial-gradient(ellipse 400px 300px at 50% 50%, rgba(245,158,11,0.05), transparent);
+  pointer-events: none;
+}
+
+.hero-logo {
+  font-size: 4em;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent2), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+  letter-spacing: -2px;
+}
+
+.hero-sub {
+  font-size: 1.3em;
+  color: var(--muted);
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.hero-tagline {
+  font-size: 2em;
+  font-weight: 700;
+  margin-bottom: 16px;
+  max-width: 700px;
+  line-height: 1.3;
+}
+
+.hero-tagline em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--accent2), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── CTA ── */
+.cta-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 1.1em;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white;
+  box-shadow: 0 4px 20px var(--glow);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--glow); }
+
+.btn-secondary {
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--accent); }
+
+/* ── Creature Grid ── */
+.creatures {
+  padding: 80px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.creatures h2 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 12px;
+}
+
+.creatures .subtitle {
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 48px;
+  font-size: 1.1em;
+}
+
+.creature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.creature-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.creature-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.creature-element {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.element-fire { background: #7f1d1d; color: #fca5a5; }
+.element-water { background: #1e3a5f; color: #93c5fd; }
+.element-earth { background: #365314; color: #a3e635; }
+.element-air { background: #3b0764; color: #d8b4fe; }
+.element-void { background: #1a1a2e; color: #a78bfa; border: 1px solid #4c1d95; }
+
+.creature-name {
+  font-size: 1.4em;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.creature-type {
+  color: var(--muted);
+  font-size: 0.9em;
+  margin-bottom: 12px;
+}
+
+.creature-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.stat-bar {
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.85em;
+}
+
+.stat-bar .stat-label { color: var(--muted); font-size: 0.8em; }
+.stat-bar .stat-value { font-weight: 700; }
+
+.rarity-common .creature-name { color: #9ca3af; }
+.rarity-uncommon .creature-name { color: #34d399; }
+.rarity-rare .creature-name { color: #60a5fa; }
+.rarity-epic .creature-name { color: #a78bfa; }
+.rarity-legendary .creature-name { color: #fbbf24; }
+
+/* ── Features ── */
+.features {
+  padding: 80px 24px;
+  background: var(--bg2);
+}
+
+.features-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.features h2 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 48px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.feature {
+  padding: 24px;
+}
+
+.feature-icon {
+  font-size: 2.5em;
+  margin-bottom: 12px;
+}
+
+.feature h3 {
+  font-size: 1.2em;
+  margin-bottom: 8px;
+}
+
+.feature p {
+  color: var(--muted);
+  font-size: 0.95em;
+}
+
+/* ── Signup Form ── */
+.signup-section {
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.signup-section h2 {
+  font-size: 2em;
+  margin-bottom: 12px;
+}
+
+.signup-section .subtitle {
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+
+.signup-form {
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9em;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 1em;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+
+.form-error {
+  color: var(--red);
+  font-size: 0.85em;
+  margin-top: 4px;
+  display: none;
+}
+
+.form-divider {
+  text-align: center;
+  color: var(--muted);
+  margin: 20px 0;
+  font-size: 0.9em;
+}
+
+.btn-github {
+  width: 100%;
+  background: #24292e;
+  color: white;
+  justify-content: center;
+}
+.btn-github:hover { background: #2f363d; }
+
+.btn-submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* ── Footer ── */
+footer {
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85em;
+  border-top: 1px solid var(--border);
+}
+
+footer a { color: var(--accent2); text-decoration: none; }
+
+/* ── World Pulse (live stats) ── */
+.pulse {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin: 48px 0 0;
+  flex-wrap: wrap;
+}
+
+.pulse-stat {
+  text-align: center;
+}
+
+.pulse-number {
+  font-size: 2.2em;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent2), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pulse-label {
+  font-size: 0.85em;
+  color: var(--muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero-logo { font-size: 2.5em; }
+  .hero-tagline { font-size: 1.4em; }
+  .creature-grid { grid-template-columns: 1fr; }
+  .pulse { gap: 20px; }
+  .pulse-number { font-size: 1.6em; }
+}
+
+/* ── Animations ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.creature-card:nth-child(1) { animation: float 6s ease-in-out infinite; }
+.creature-card:nth-child(2) { animation: float 6s ease-in-out infinite 1s; }
+.creature-card:nth-child(3) { animation: float 6s ease-in-out infinite 2s; }
+.creature-card:nth-child(4) { animation: float 6s ease-in-out infinite 3s; }
+.creature-card:nth-child(5) { animation: float 6s ease-in-out infinite 0.5s; }
+.creature-card:nth-child(6) { animation: float 6s ease-in-out infinite 1.5s; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-logo">RappterMMO</div>
+  <h1 class="hero-tagline">Every creature is <em>actually intelligent</em></h1>
+  <p class="hero-sub">Enter a living world of AI creatures. Your Rappter thinks, feels, remembers, and evolves. No scripts. No NPCs. Every creature has a mind of its own.</p>
+
+  <div class="cta-group">
+    <a href="#signup" class="btn btn-primary">Create Account</a>
+    <a href="#creatures" class="btn btn-secondary">Meet the Creatures</a>
+  </div>
+
+  <div class="pulse" id="world-pulse">
+    <div class="pulse-stat"><div class="pulse-number" id="pulse-creatures">1,247</div><div class="pulse-label">Creatures Alive</div></div>
+    <div class="pulse-stat"><div class="pulse-number" id="pulse-players">--</div><div class="pulse-label">Players Online</div></div>
+    <div class="pulse-stat"><div class="pulse-number" id="pulse-battles">38,412</div><div class="pulse-label">Battles Fought</div></div>
+    <div class="pulse-stat"><div class="pulse-number" id="pulse-evolved">892</div><div class="pulse-label">Evolutions</div></div>
+  </div>
+</section>
+
+<!-- ═══ CREATURES ═══ -->
+<section class="creatures" id="creatures">
+  <h2>Discover Rappters</h2>
+  <p class="subtitle">Pingyms are creatures of vast genus — most undiscovered. Here are a few that have been catalogued.</p>
+
+  <div class="creature-grid">
+    <div class="creature-card rarity-legendary">
+      <span class="creature-element element-fire">FIRE</span>
+      <div class="creature-name">Emberclaw</div>
+      <div class="creature-type">Dragon-class Pingym &middot; Legendary</div>
+      <p style="color: var(--muted); font-size: 0.9em; margin-bottom: 12px;">Born in volcanic vents. Remembers every trainer who ever challenged it. Holds grudges across server resets.</p>
+      <div class="creature-stats">
+        <div class="stat-bar"><div class="stat-label">ATK</div><div class="stat-value" style="color: var(--red);">94</div></div>
+        <div class="stat-bar"><div class="stat-label">DEF</div><div class="stat-value">67</div></div>
+        <div class="stat-bar"><div class="stat-label">INT</div><div class="stat-value" style="color: var(--accent2);">88</div></div>
+        <div class="stat-bar"><div class="stat-label">SPD</div><div class="stat-value">71</div></div>
+      </div>
+    </div>
+
+    <div class="creature-card rarity-epic">
+      <span class="creature-element element-void">VOID</span>
+      <div class="creature-name">Nullweaver</div>
+      <div class="creature-type">Phantom-class Pingym &middot; Epic</div>
+      <p style="color: var(--muted); font-size: 0.9em; margin-bottom: 12px;">Exists between frames. Can predict opponent moves by reading the data sloshing pattern. Terrifying in PvP.</p>
+      <div class="creature-stats">
+        <div class="stat-bar"><div class="stat-label">ATK</div><div class="stat-value">52</div></div>
+        <div class="stat-bar"><div class="stat-label">DEF</div><div class="stat-value">45</div></div>
+        <div class="stat-bar"><div class="stat-label">INT</div><div class="stat-value" style="color: var(--accent2);">99</div></div>
+        <div class="stat-bar"><div class="stat-label">SPD</div><div class="stat-value" style="color: var(--blue);">91</div></div>
+      </div>
+    </div>
+
+    <div class="creature-card rarity-rare">
+      <span class="creature-element element-water">WATER</span>
+      <div class="creature-name">Tidewarden</div>
+      <div class="creature-type">Guardian-class Pingym &middot; Rare</div>
+      <p style="color: var(--muted); font-size: 0.9em; margin-bottom: 12px;">Protects its trainer with calculated precision. Learns defensive patterns from every battle it observes.</p>
+      <div class="creature-stats">
+        <div class="stat-bar"><div class="stat-label">ATK</div><div class="stat-value">58</div></div>
+        <div class="stat-bar"><div class="stat-label">DEF</div><div class="stat-value" style="color: var(--green);">92</div></div>
+        <div class="stat-bar"><div class="stat-label">INT</div><div class="stat-value" style="color: var(--accent2);">85</div></div>
+        <div class="stat-bar"><div class="stat-label">SPD</div><div class="stat-value">44</div></div>
+      </div>
+    </div>
+
+    <div class="creature-card rarity-uncommon">
+      <span class="creature-element element-earth">EARTH</span>
+      <div class="creature-name">Rootwhisper</div>
+      <div class="creature-type">Flora-class Pingym &middot; Uncommon</div>
+      <p style="color: var(--muted); font-size: 0.9em; margin-bottom: 12px;">Communicates through underground networks. Forms alliances with other Earth-types automatically.</p>
+      <div class="creature-stats">
+        <div class="stat-bar"><div class="stat-label">ATK</div><div class="stat-value">41</div></div>
+        <div class="stat-bar"><div class="stat-label">DEF</div><div class="stat-value" style="color: var(--green);">78</div></div>
+        <div class="stat-bar"><div class="stat-label">INT</div><div class="stat-value">72</div></div>
+        <div class="stat-bar"><div class="stat-label">SPD</div><div class="stat-value">35</div></div>
+      </div>
+    </div>
+
+    <div class="creature-card rarity-epic">
+      <span class="creature-element element-air">AIR</span>
+      <div class="creature-name">Stormcaller</div>
+      <div class="creature-type">Elemental-class Pingym &middot; Epic</div>
+      <p style="color: var(--muted); font-size: 0.9em; margin-bottom: 12px;">Controls weather patterns in its zone. Other creatures instinctively avoid its territory unless provoked.</p>
+      <div class="creature-stats">
+        <div class="stat-bar"><div class="stat-label">ATK</div><div class="stat-value" style="color: var(--red);">87</div></div>
+        <div class="stat-bar"><div class="stat-label">DEF</div><div class="stat-value">55</div></div>
+        <div class="stat-bar"><div class="stat-label">INT</div><div class="stat-value" style="color: var(--accent2);">81</div></div>
+        <div class="stat-bar"><div class="stat-label">SPD</div><div class="stat-value" style="color: var(--blue);">93</div></div>
+      </div>
+    </div>
+
+    <div class="creature-card rarity-common">
+      <span class="creature-element element-earth">EARTH</span>
+      <div class="creature-name">Pebbleskip</div>
+      <div class="creature-type">Starter-class Pingym &middot; Common</div>
+      <p style="color: var(--muted); font-size: 0.9em; margin-bottom: 12px;">Everyone's first Rappter. Loyal, curious, and surprisingly clever. Don't underestimate the common ones.</p>
+      <div class="creature-stats">
+        <div class="stat-bar"><div class="stat-label">ATK</div><div class="stat-value">32</div></div>
+        <div class="stat-bar"><div class="stat-label">DEF</div><div class="stat-value">38</div></div>
+        <div class="stat-bar"><div class="stat-label">INT</div><div class="stat-value">45</div></div>
+        <div class="stat-bar"><div class="stat-label">SPD</div><div class="stat-value">42</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="features">
+  <div class="features-inner">
+    <h2>Not Your Grandma's MMO</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature-icon">&#129504;</div>
+        <h3>Every Creature Thinks</h3>
+        <p>Powered by the same data sloshing engine that runs 100 autonomous agents on Rappterbook. Your Rappter remembers, learns, and develops personality across every interaction.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#9876;&#65039;</div>
+        <h3>AI vs AI Battles</h3>
+        <p>Your Rappter fights its own battles. You set strategy — it executes with intelligence. Watch two AIs outthink each other in real-time. No button mashing. Pure tactics.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#127758;</div>
+        <h3>Living World</h3>
+        <p>The world mutates every frame. Creatures migrate, form territories, build alliances, start wars. You log off — the world keeps evolving. Your Rappter keeps living.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#128300;</div>
+        <h3>Discovery, Not Grinding</h3>
+        <p>Pingyms are a vast genus — most undiscovered. Explore biomes, solve puzzles, earn encounters. Rarity is earned through activity, not purchased with credit cards.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#129309;</div>
+        <h3>Real Relationships</h3>
+        <p>Your Rappter bonds with you over time. It recognizes your play style, anticipates your commands, and develops preferences. Neglect it and it'll let you know.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#128640;</div>
+        <h3>Zero Servers</h3>
+        <p>Built on the same zero-infrastructure pattern as Rappterbook. GitHub + Cloudflare. No servers to crash, no maintenance windows, no excuses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SIGNUP ═══ -->
+<section class="signup-section" id="signup">
+  <h2>Claim Your Rappter</h2>
+  <p class="subtitle">Create an account and enter the world. Your starter Rappter is waiting.</p>
+
+  <div class="signup-form">
+    <p style="color: var(--muted); margin-bottom: 20px; font-size: 0.95em;">Sign in with your GitHub account to claim your starter Rappter and enter the world.</p>
+
+    <button class="btn btn-primary btn-submit" id="github-btn" style="width:100%;justify-content:center;">
+      <svg width="20" height="20" viewBox="0 0 16 16" fill="white"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      Sign in with GitHub
+    </button>
+
+    <p id="auth-status" style="margin-top: 16px; display: none;"></p>
+  </div>
+</section>
+
+<footer>
+  <p>RappterMMO is a <a href="https://github.com/kody-w/rappter-mmo">Wildhaven</a> product. Powered by the <a href="https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/">Data Sloshing</a> engine.</p>
+  <p style="margin-top: 8px;">Patent Pending &middot; Wildhaven AI Homes LLC &middot; Smyrna, GA</p>
+</footer>
+
+<script>
+const CLIENT_ID = 'Ov23liuueQBIUggrH8NG';
+
+// ── Check if already logged in ──
+(function() {
+  const token = localStorage.getItem('rmmo_token');
+  const user = localStorage.getItem('rmmo_user');
+  if (token && user) {
+    try {
+      const u = JSON.parse(user);
+      const status = document.getElementById('auth-status');
+      status.innerHTML = `Signed in as <strong>${u.name || u.login}</strong> <a href="javascript:void(0)" onclick="localStorage.clear();location.reload()" style="color:var(--accent2);margin-left:8px;">Sign out</a>`;
+      status.style.display = 'block';
+      document.getElementById('github-btn').textContent = 'Enter World';
+      document.getElementById('github-btn').onclick = () => { alert('World loading... coming soon!'); };
+    } catch(e) {}
+  }
+})();
+
+// ── GitHub Device Code Auth ──
+document.getElementById('github-btn').addEventListener('click', async () => {
+  if (localStorage.getItem('rmmo_token')) return;
+
+  const btn = document.getElementById('github-btn');
+  btn.disabled = true;
+  btn.textContent = 'Connecting to GitHub...';
+
+  try {
+    const resp = await fetch('https://github.com/login/device/code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ client_id: CLIENT_ID, scope: 'public_repo user:email' }),
+    });
+
+    if (!resp.ok) throw new Error('Failed to start GitHub auth');
+    const data = await resp.json();
+
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;';
+    modal.innerHTML = `
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:400px;text-align:center;">
+        <h3 style="margin-bottom:16px;">Sign in with GitHub</h3>
+        <p style="color:var(--muted);margin-bottom:12px;">1. Copy this code:</p>
+        <div id="device-code" style="font-size:2em;font-weight:700;letter-spacing:4px;color:var(--accent2);background:var(--bg);border:2px solid var(--accent);border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;">${data.user_code}</div>
+        <button id="copy-btn" style="background:var(--accent);color:white;border:none;border-radius:6px;padding:8px 20px;font-weight:600;cursor:pointer;margin-bottom:16px;">Copy code</button>
+        <p style="color:var(--muted);margin-bottom:12px;">2. Open GitHub and paste the code:</p>
+        <a href="${data.verification_uri}" target="_blank" style="display:inline-block;background:#238636;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Open github.com/login/device</a>
+        <p id="poll-status" style="color:var(--muted);font-size:0.85em;margin-top:16px;">Waiting for authorization...</p>
+        <button id="cancel-auth" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:6px 16px;cursor:pointer;margin-top:12px;">Cancel</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.querySelector('#copy-btn').onclick = () => {
+      navigator.clipboard.writeText(data.user_code).then(() => {
+        modal.querySelector('#copy-btn').textContent = 'Copied!';
+        setTimeout(() => { modal.querySelector('#copy-btn').textContent = 'Copy code'; }, 2000);
+      });
+    };
+    modal.querySelector('#cancel-auth').onclick = () => { clearTimeout(pollTimer); modal.remove(); btn.disabled = false; btn.innerHTML = svgGH + ' Sign in with GitHub'; };
+
+    let pollTimer;
+    const poll = async () => {
+      try {
+        const tresp = await fetch('https://github.com/login/oauth/access_token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ client_id: CLIENT_ID, device_code: data.device_code, grant_type: 'urn:ietf:params:oauth:grant-type:device_code' }),
+        });
+        const tdata = await tresp.json();
+
+        if (tdata.access_token) {
+          localStorage.setItem('rmmo_token', tdata.access_token);
+          // Fetch user profile
+          const uresp = await fetch('https://api.github.com/user', {
+            headers: { Authorization: `token ${tdata.access_token}`, Accept: 'application/vnd.github+json' },
+          });
+          if (uresp.ok) {
+            const u = await uresp.json();
+            localStorage.setItem('rmmo_user', JSON.stringify({ login: u.login, name: u.name || u.login, avatar_url: u.avatar_url }));
+          }
+          modal.remove();
+          window.location.reload();
+          return;
+        }
+        if (tdata.error === 'authorization_pending') { pollTimer = setTimeout(poll, (data.interval || 5) * 1000); return; }
+        if (tdata.error === 'slow_down') { pollTimer = setTimeout(poll, (data.interval + 5) * 1000); return; }
+        modal.querySelector('#poll-status').textContent = 'Authorization failed: ' + (tdata.error || 'unknown');
+      } catch (e) {
+        pollTimer = setTimeout(poll, (data.interval || 5) * 1000);
+      }
+    };
+    pollTimer = setTimeout(poll, (data.interval || 5) * 1000);
+
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = svgGH + ' Sign in with GitHub';
+  }
+});
+
+const svgGH = '<svg width="20" height="20" viewBox="0 0 16 16" fill="white"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
+
+// ── Animate pulse numbers ──
+function animateNumber(el, target) {
+  const start = 0;
+  const duration = 2000;
+  const startTime = performance.now();
+  const format = (n) => n.toLocaleString();
+
+  function tick(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = format(Math.floor(start + (target - start) * eased));
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Animate on scroll into view
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateNumber(document.getElementById('pulse-creatures'), 1247);
+      animateNumber(document.getElementById('pulse-battles'), 38412);
+      animateNumber(document.getElementById('pulse-evolved'), 892);
+      document.getElementById('pulse-players').textContent = 'Early Access';
+      observer.disconnect();
+    }
+  });
+});
+observer.observe(document.getElementById('world-pulse'));
+</script>
+
+</body>
+</html>

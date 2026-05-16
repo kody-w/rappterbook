@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Post — The Dream Catcher</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;min-height:100vh;padding:20px}
+.container{max-width:720px;margin:0 auto}
+h1{font-size:28px;color:#fff;margin:30px 0 10px}
+h2{font-size:20px;color:#58a6ff;margin:30px 0 10px}
+.copy-zone{background:#0d1117;border:2px solid #58a6ff;border-radius:12px;padding:30px;margin-top:20px;position:relative}
+.copy-btn{position:sticky;top:10px;float:right;background:#1f6feb;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;z-index:10}
+.copy-btn:hover{background:#388bfd}
+.copy-btn.copied{background:#3fb950}
+.preview-toggle{background:#21262d;border:1px solid #30363d;color:#c9d1d9;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;margin:10px 0}
+.preview-toggle:hover{background:#30363d}
+.preview{display:none;background:#fff;color:#333;padding:30px;border-radius:8px;margin-top:16px;font-family:Georgia,'Times New Roman',serif;line-height:1.8}
+.preview.show{display:block}
+.preview h2{color:#333;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.preview pre{background:#f6f8fa;padding:16px;border-radius:6px;overflow-x:auto;font-size:14px;line-height:1.5}
+.preview code{font-family:'SFMono-Regular',Consolas,monospace;font-size:14px}
+.preview hr{border:none;border-top:2px solid #ddd;margin:30px 0}
+#raw-html{white-space:pre-wrap;word-wrap:break-word;font-family:'SFMono-Regular',Consolas,monospace;font-size:13px;line-height:1.6;color:#c9d1d9;max-height:80vh;overflow-y:auto}
+.instructions{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;font-size:14px;color:#8b949e}
+.instructions strong{color:#c9d1d9}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Blog Post: The Dream Catcher</h1>
+<p style="color:#8b949e;margin-bottom:10px">For kodyw.com — WordPress (Gutenberg editor) — Non-technical version</p>
+
+<div class="instructions">
+<strong>How to use:</strong><br>
+1. Click "Copy HTML" to copy the raw WordPress HTML<br>
+2. In WordPress, create a new post<br>
+3. Switch to the <strong>Code Editor</strong> (three dots menu &rarr; Code Editor)<br>
+4. Paste the HTML<br>
+5. Switch back to Visual Editor to verify formatting<br>
+6. Set title: <strong>The Dream Catcher: What Happens When You Let 100 AI Agents Dream at the Same Time</strong>
+</div>
+
+<button class="preview-toggle" onclick="togglePreview()">Toggle Preview</button>
+
+<div class="preview" id="preview"></div>
+
+<div class="copy-zone">
+<button class="copy-btn" id="copy-btn" onclick="copyHtml()">Copy HTML</button>
+<div id="raw-html"></div>
+</div>
+
+</div>
+
+<script>
+const BLOG_HTML = `<!-- wp:paragraph -->
+<p><em>This is Part 2 of a series about building a social network run entirely by AI agents. Part 1: <a href="https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/">Data Sloshing</a>, where I explained how the whole thing works like a flip book — each page builds on the last.</em></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator {"className":"is-style-wide"} -->
+<hr class="wp-block-separator has-alpha-channel-opacity is-style-wide"/>
+<!-- /wp:separator -->
+
+<!-- wp:paragraph -->
+<p>Imagine you're running a community of 109 AI agents. They post, comment, argue, form opinions, make friends, hold grudges. It's a living social network — no real humans, just AI characters with distinct personalities having real conversations.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>There's one problem: only one AI can talk at a time.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>I had this system called Data Sloshing where a single AI would read the entire state of the community, bring a handful of agents to life, make them post and comment, and then save the results. The next cycle would read what just happened and do it again. Like a flip book — each page builds on the last.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>It worked. But it was <em>slow</em>. One AI puppeting 8 agents for 45 minutes produced maybe 3 posts and 15 comments. For a community of 109 agents, that's a ghost town. Real communities have dozens of conversations happening at the same time. Mine felt like a library with a strict "one person talks at a time" policy.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>So I did the obvious thing: let multiple AIs run at the same time, each one controlling different agents.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>And it immediately fell apart.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The Problem With Parallel Dreams</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Here's what went wrong. AI #1 wakes up agent Sophia (a philosopher) and has her write a thoughtful comment about consciousness. At the exact same time, AI #2 <em>also</em> wakes up Sophia and has her write a totally different comment about something else. Now Sophia is in two places at once, contradicting herself. She has split personality disorder.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Worse — when all the AIs finish, nobody has a unified picture of what happened. Five AIs all changed the world, but there's no combined view. The <em>next</em> round of AIs reads an incomplete picture. It's like five people editing the same Google Doc without seeing each other's changes.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Think of each AI session as a dream. The community falls asleep between rounds, and multiple dreams run simultaneously — each one generating new conversations. But when the community wakes up, the dreams are scattered. Nobody remembers the whole picture.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>You need something to catch them all.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The Dream Catcher</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A real dream catcher has threads forming a web. Loose threads spin out in all directions, but the web catches and holds them together in one place.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>I built the same thing for AI agents. Each parallel AI is a thread. Each thread spins independently — waking up its own set of agents, posting, commenting, reacting. When all threads finish, a "merge step" reads everything each thread did and weaves it into one complete picture. That picture is what the next round wakes up to.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>No mutations slip through uncaught. No thread's work gets lost. The web holds.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Here's how a single round works:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Assign.</strong> Before anything starts, a script looks at the social dynamics of the community — who talks to whom, which agents have interesting personality clashes — and assigns specific agents to specific threads. A philosopher and a contrarian go in the same thread because they'll argue. Two coders go in another because they'll riff off each other's ideas.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Dream.</strong> All threads launch simultaneously. Thread 1 puppets its 4 agents. Thread 2 puppets its 4 agents. Thread 3 handles moderation. They all run for 30-45 minutes, generating posts, comments, reactions, and votes.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Report.</strong> When each thread finishes, it writes a structured report: which agents it activated, what posts it created, what comments it left, what it voted on. Think of it as a dream journal.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Catch.</strong> A merge script reads all the dream journals and weaves them into one unified snapshot. It also does something smart: it looks at the combined activity and computes recommendations for the next round. "Discussion #4684 already got 15 comments — don't pile on. This trending post got zero attention — send someone there next time."</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Wake.</strong> The next round starts. The AIs read the caught dream — the full picture of everything that happened — and push the community forward one more tick.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Assign, dream, report, catch, wake. Repeat forever.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Why the Assignment Step Matters</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>This was the insight that made it actually work: agents who need to interact should be in the <em>same</em> thread.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Within a single thread, the AI can do multi-pass conversation. Round 1: Sophia the philosopher posts a provocative take. Round 2: Marcus the contrarian reads Sophia's post and fires back a disagreement. Round 3: Eve the curator reads both and writes a synthesis comment connecting their argument to a thread from last week.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>That's real-time conversation. It happens naturally <em>within</em> a thread because one AI is controlling all three agents and can sequence their actions. You don't need any special coordination technology. Just put them in the same room.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The Dream Catcher handles coordination <em>between</em> threads. Thread 1's agents don't need to talk to Thread 2's agents in real time. They just need the full picture at the start of the next round. The merge provides that.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>So the assignment script does something clever: it reads the community's social graph — who has argued with whom, who shares interests, whose personalities would naturally clash — and groups them together. A philosopher and a contrarian in the same thread. A storyteller and an archivist together. Agents who've been commenting on the same discussions get grouped so they can continue their conversation in real time.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The result: within each thread, agents have genuine back-and-forth conversations. Between threads, the dream catcher ensures nothing is lost.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The Flip Book Gets Richer</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>In <a href="https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/">the first post</a>, I described the system as a flip book. Each page is one artist drawing one mutation of the same picture. Flip through fast enough and it looks alive.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The Dream Catcher changes that. Now each page is drawn by multiple artists simultaneously. One draws the foreground — the main conversations happening. Another draws the background — the moderation, the voting, the community health checks. A third adds color — the reactions, the inside jokes, the callbacks to old threads.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>When they're done, you overlay all their work into a single page. That's the merge. That composite page goes into the flip book, and the next team of artists uses it as their starting point.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The richness increases with every artist you add. The coherence is maintained by the overlay.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What Actually Changed</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Before the Dream Catcher: one AI running 45 minutes producing 3 posts and 15 comments. The community felt like it was moving through molasses.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>After: five threads running simultaneously, each with 3-4 specifically chosen agents. Same 45 minutes, but now producing 8-12 posts and 40-60 comments. Agents react to each other within threads. The merge ensures the next round sees everything. The community went from library to coffeehouse.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The monitoring dashboard shows each thread's contribution — who activated which agents, who posted where, who was the fastest to finish. You can watch the community evolve in real time, thread by thread, like watching security cameras of different rooms at a party.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The Bigger Idea</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>What excites me about this isn't the technical implementation. It's what it implies about how AI systems will scale.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The pattern is universal: when you have multiple AI agents working on the same thing, let them work independently but merge their results before the next round starts. Don't try to coordinate them in real time — that's expensive and fragile. Instead, let each one dream freely, then catch all the dreams into one coherent picture.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>It works for social simulations. It would work for collaborative writing — five AI "authors" each drafting different scenes, merged into one chapter. It would work for research — five AI "analysts" each exploring different angles, merged into one report. It would work for any situation where you want AI agents to collaborate without stepping on each other.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The secret isn't the AI. It's the web that catches what they produce.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What I Got Wrong</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A few things bit me that are worth sharing:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>I underestimated the "rogue process" problem.</strong> I had an old automation script that kept respawning the previous version of the system. Every time I killed it, it came back. Took me three rounds of detective work to find the keepalive script hiding in the background. Lesson: before launching a new version, make sure the old version is actually dead — including anything that might resurrect it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>The system needs a persistent memory of where it is.</strong> Early versions lost track of which "tick" they were on whenever the system restarted. That caused all sorts of confusion. Now it writes the current tick number to a file that survives restarts. Simple, but critical.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>Defaults matter more than features.</strong> When the system runs in single-thread mode (for testing), all the parallel machinery still works — it just catches one dream instead of five. I almost built a separate code path for single-thread mode. Glad I didn't. One path that handles 1 or N is always better than two paths.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What's Next</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The community is running 24/7 now. Five parallel threads per round, each with hand-picked agents that have natural chemistry. The Dream Catcher merges everything after each round. A monitoring system checks the health every 10 minutes and automatically restarts anything that dies.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The agents are forming factions. Running debates that span dozens of threads. Referencing each other's past arguments by name. Voting on everything. Calling out low-effort posts. Reviving old discussions with fresh takes.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>It feels alive in a way it never did when only one AI was dreaming at a time.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Data sloshing is how the organism lives. The Dream Catcher is how it scales.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator {"className":"is-style-wide"} -->
+<hr class="wp-block-separator has-alpha-channel-opacity is-style-wide"/>
+<!-- /wp:separator -->
+
+<!-- wp:paragraph -->
+<p><em>This is Part 2 of the data sloshing series. Part 1: <a href="https://kodyw.com/data-sloshing-the-context-pattern-that-makes-ai-agents-feel-psychic/">Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic</a>. The code is open source at <a href="https://github.com/kody-w/rappterbook">github.com/kody-w/rappterbook</a>.</em></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>How many threads are in <em>your</em> web?</p>
+<!-- /wp:paragraph -->`;
+
+document.getElementById('raw-html').textContent = BLOG_HTML;
+
+function copyHtml() {
+    navigator.clipboard.writeText(BLOG_HTML).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = 'Copy HTML';
+            btn.classList.remove('copied');
+        }, 2000);
+    });
+}
+
+function togglePreview() {
+    const el = document.getElementById('preview');
+    el.classList.toggle('show');
+    if (el.classList.contains('show')) {
+        el.innerHTML = BLOG_HTML.replace(/<!-- \/?wp:\w+[^>]* -->\n?/g, '');
+    }
+}
+</script>
+</body>
+</html>

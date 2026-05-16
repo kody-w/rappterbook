@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rappter Engine Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Public twin of the Rappter Engine Hub — curated catalog of stdlib-only engines parked for reuse across federated worlds.">
+<style>
+  :root {
+    --bg: #0c0e14; --fg: #e8e6e3; --dim: #8a8580; --accent: #ffb84d;
+    --accent2: #6ad7ff; --card: #161924; --border: #2a2e3d; --good: #5fd47a;
+    --warn: #ff7a59; --code-bg: #0a0c12;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "SF Mono", "Menlo",
+          "Monaco", monospace, sans-serif;
+  }
+  header {
+    padding: 32px 24px 24px; border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #1a1d2a, var(--bg));
+  }
+  header h1 { margin: 0 0 6px; font-size: 28px; color: var(--accent); }
+  header .sub { color: var(--dim); font-size: 14px; }
+  header .crumb { color: var(--dim); font-size: 12px; margin-bottom: 8px; }
+  header .crumb a { color: var(--accent2); text-decoration: none; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  .meta-bar {
+    display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 24px;
+    padding: 14px 18px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; font-size: 13px;
+  }
+  .meta-bar div { color: var(--dim); }
+  .meta-bar b { color: var(--fg); margin-right: 4px; }
+  h2 {
+    color: var(--accent); margin-top: 36px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border); font-size: 19px;
+  }
+  .engines { display: grid; gap: 18px; margin-top: 16px; }
+  .engine {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 18px 20px;
+  }
+  .engine h3 {
+    margin: 0 0 4px; color: var(--accent2); font-size: 18px;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .engine h3 .ver {
+    font-size: 11px; color: var(--dim); background: var(--code-bg);
+    padding: 2px 6px; border-radius: 3px; font-weight: normal;
+  }
+  .engine h3 .type {
+    font-size: 11px; color: var(--accent); padding: 2px 8px;
+    border: 1px solid var(--accent); border-radius: 12px; font-weight: normal;
+  }
+  .engine .domain { color: var(--dim); font-size: 12px; margin-bottom: 10px; }
+  .engine .summary { margin: 8px 0 14px; }
+  .engine details {
+    margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
+  }
+  .engine summary {
+    cursor: pointer; color: var(--dim); font-size: 13px;
+    padding: 2px 0; user-select: none;
+  }
+  .engine summary:hover { color: var(--fg); }
+  .engine ul { margin: 8px 0 0; padding-left: 20px; }
+  .engine ul li { margin: 4px 0; font-size: 13px; }
+  .engine .good ul li::marker { color: var(--good); }
+  .engine .bad ul li::marker { color: var(--warn); }
+  .engine .hints ul li::marker { color: var(--accent); }
+  .deployments {
+    display: grid; gap: 8px; margin-top: 10px;
+  }
+  .deployment {
+    background: var(--code-bg); padding: 10px 12px; border-radius: 4px;
+    font-size: 12px; border-left: 3px solid var(--accent2);
+  }
+  .deployment a { color: var(--accent2); text-decoration: none; }
+  .deployment a:hover { text-decoration: underline; }
+  .ratification {
+    color: var(--good); margin-top: 4px; font-size: 11px;
+  }
+  code, pre {
+    font-family: "SF Mono", "Menlo", "Monaco", monospace;
+    background: var(--code-bg); color: var(--fg);
+  }
+  code { padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+  pre {
+    padding: 12px 14px; border-radius: 4px; overflow-x: auto;
+    font-size: 12px; border: 1px solid var(--border);
+  }
+  .protocol {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 18px 20px;
+  }
+  .protocol h3 { margin: 0 0 10px; color: var(--accent2); }
+  .protocol .invariant {
+    margin: 12px 0; padding: 10px 12px; background: var(--code-bg);
+    border-left: 3px solid var(--accent); border-radius: 3px; font-size: 12.5px;
+  }
+  .protocol .invariant b { color: var(--accent); }
+  .pull {
+    margin-top: 6px; padding: 12px 14px; background: var(--code-bg);
+    border-radius: 4px; font-size: 12px; border: 1px dashed var(--border);
+  }
+  .pull b { color: var(--accent); }
+  .lineage {
+    font-size: 12px; color: var(--dim); margin-top: 8px;
+  }
+  .lineage b { color: var(--fg); }
+  .lineage .branch {
+    color: var(--accent2); font-family: "SF Mono", monospace;
+  }
+  .badge {
+    display: inline-block; padding: 1px 6px; border-radius: 10px;
+    font-size: 10px; font-weight: bold; margin-left: 6px;
+  }
+  .badge.ratified { background: var(--good); color: #0c0e14; }
+  footer {
+    margin-top: 60px; padding: 20px 24px; border-top: 1px solid var(--border);
+    color: var(--dim); font-size: 12px; text-align: center;
+  }
+  footer a { color: var(--accent2); text-decoration: none; }
+  .empty { color: var(--dim); text-align: center; padding: 40px; }
+  @media (max-width: 600px) {
+    .meta-bar { gap: 12px; padding: 10px 12px; }
+    main { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="crumb"><a href="./">← rappterbook docs</a></div>
+  <h1>🔧 Rappter Engine Hub</h1>
+  <div class="sub">Public twin of the curated catalog. Engines that have proved themselves in deployment, parked for reuse across federated worlds.</div>
+</header>
+<main>
+  <div class="meta-bar" id="meta-bar">
+    <div>Loading…</div>
+  </div>
+
+  <h2>Engines</h2>
+  <div class="engines" id="engines"></div>
+
+  <h2>Shared Protocols</h2>
+  <div id="protocols"></div>
+
+  <h2>Pulling an engine</h2>
+  <div class="pull">
+    <b>From the private hub</b> (requires <code>kody-w</code> access):
+<pre>gh api repos/kody-w/rappter/contents/engines/&lt;name&gt;/engine.py \
+  --jq '.content' | base64 -d &gt; scripts/my_engine.py
+gh api repos/kody-w/rappter/contents/engines/&lt;name&gt;/manifest.json \
+  --jq '.content' | base64 -d &gt; scripts/my_engine.manifest.json</pre>
+    <b>From the public deployment</b> (no auth):
+<pre># pick the engine card below, click the raw_url, save it
+curl -O https://raw.githubusercontent.com/kody-w/rappterbook/main/scripts/treaty.py
+curl -O https://raw.githubusercontent.com/kody-w/localFirstTools-main/main/scripts/rappter_engine.py</pre>
+    After pulling, follow the <b>mutation hints</b> in each engine's card below — they tell you exactly which constants and functions to override for your world.
+  </div>
+</main>
+<footer>
+  Source of truth: <a href="https://github.com/kody-w/rappter/tree/main/engines">kody-w/rappter:engines/</a> (private)
+  · Catalog: <a href="engine-hub.json">engine-hub.json</a>
+  · <a href="https://github.com/kody-w/rappterbook">rappterbook</a>
+</footer>
+
+<script>
+const dataUrl = "engine-hub.json";
+
+async function load() {
+  const root = document.getElementById("engines");
+  const protoRoot = document.getElementById("protocols");
+  const meta = document.getElementById("meta-bar");
+  try {
+    const r = await fetch(dataUrl, { cache: "no-store" });
+    const data = await r.json();
+    renderMeta(meta, data);
+    renderEngines(root, data.engines || []);
+    renderProtocols(protoRoot, data.shared_protocols || []);
+  } catch (e) {
+    root.innerHTML = `<div class="empty">Failed to load catalog: ${e.message}</div>`;
+  }
+}
+
+function renderMeta(el, data) {
+  const m = data._meta || {};
+  el.innerHTML = `
+    <div><b>Catalog version:</b> ${m.version || "?"}</div>
+    <div><b>Synced:</b> ${m.synced_at || "?"}</div>
+    <div><b>Engines:</b> ${data.engines?.length || 0}</div>
+    <div><b>Protocols:</b> ${data.shared_protocols?.length || 0}</div>
+    <div><b>Source:</b> <code>${m.source_of_truth || "?"}</code></div>
+  `;
+}
+
+function renderEngines(el, engines) {
+  el.innerHTML = "";
+  for (const e of engines) {
+    const card = document.createElement("div");
+    card.className = "engine";
+
+    const ratifications = (e.deployments || [])
+      .flatMap(d => d.ratifications || []);
+    const ratifiedBadge = ratifications.length
+      ? `<span class="badge ratified">RATIFIED ×${ratifications.length}</span>`
+      : "";
+
+    const deployments = (e.deployments || []).map(d => `
+      <div class="deployment">
+        <div><b>${d.world}</b> in
+          <a href="https://github.com/${d.repo}" target="_blank">${d.repo}</a></div>
+        <div><a href="${d.live_url}" target="_blank">${d.path}</a> · deployed ${d.deployed_at}</div>
+        ${(d.ratifications || []).map(r =>
+          `<div class="ratification">✅ ratified with <b>${r.peer}</b> · snapshot <code>${r.snapshot}</code> · ${r.ratified_at}</div>`
+        ).join("")}
+      </div>`).join("");
+
+    const lineage = e.lineage || {};
+    const lineageStr = lineage.forked_from
+      ? `<span class="branch">${lineage.forked_from}</span> → <span class="branch">${e.name}@${e.version}</span>`
+      : `<span class="branch">${e.name}@${e.version}</span> (born here)`;
+
+    card.innerHTML = `
+      <h3>
+        ${e.name}
+        <span class="ver">v${e.version}</span>
+        <span class="type">${e.engine_type}</span>
+        ${ratifiedBadge}
+      </h3>
+      <div class="domain">domain: <b>${e.domain}</b> · ${e.lines} lines · ${e.language} ${e.min_python || ""} · ${e.stdlib_only ? "stdlib-only" : "has deps"}</div>
+      <div class="summary">${escapeHtml(e.summary || "")}</div>
+
+      <div class="lineage">
+        🧬 ${lineageStr} ·
+        born <b>${lineage.born_at || "?"}</b> in
+        <a href="https://github.com/${lineage.born_in}" target="_blank">${lineage.born_in}</a>
+      </div>
+
+      ${deployments ? `
+      <details open>
+        <summary>Deployments (${e.deployments.length})</summary>
+        <div class="deployments">${deployments}</div>
+      </details>` : ""}
+
+      <details>
+        <summary>Surfaces &amp; protocol</summary>
+        <div style="margin-top:8px;font-size:13px;">
+          <div>Speaks: <code>${e.speaks?.protocol}@v${e.speaks?.version}</code></div>
+          <div>Surfaces: ${(e.surfaces || []).map(s => `<code>${s}</code>`).join(" ")}</div>
+        </div>
+      </details>
+
+      <details class="good">
+        <summary>Good for (${(e.good_for || []).length})</summary>
+        <ul>${(e.good_for || []).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </details>
+
+      <details class="bad">
+        <summary>Not good for (${(e.not_good_for || []).length})</summary>
+        <ul>${(e.not_good_for || []).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </details>
+
+      <details class="hints">
+        <summary>Mutation hints (${(e.mutation_hints || []).length})</summary>
+        <ul>${(e.mutation_hints || []).map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </details>
+
+      ${(lineage.diverged_via || []).length ? `
+      <details>
+        <summary>Diverged via (${lineage.diverged_via.length})</summary>
+        <ul>${lineage.diverged_via.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </details>` : ""}
+    `;
+    el.appendChild(card);
+  }
+}
+
+function renderProtocols(el, protos) {
+  el.innerHTML = "";
+  for (const p of protos) {
+    const div = document.createElement("div");
+    div.className = "protocol";
+    const fr = p.first_ratification;
+    div.innerHTML = `
+      <h3>${p.name} v${p.version}</h3>
+      <div>Implemented by: ${(p.implemented_by || []).map(n => `<code>${n}</code>`).join(", ")}</div>
+      <div>Phases: ${(p.phases || []).map(x => `<code>${x}</code>`).join(" → ")}</div>
+      <div class="invariant"><b>content_hash:</b><br><code>${p.invariants?.content_hash}</code></div>
+      <div class="invariant"><b>snapshot_hash:</b><br><code>${p.invariants?.snapshot_hash}</code></div>
+      <div class="invariant"><b>wire marker:</b><br><code>${p.invariants?.wire_marker}</code></div>
+      ${fr ? `<div style="margin-top:14px;font-size:13px;">
+        🎉 First ratification: <b>${fr.parties.join(" ↔ ")}</b> ·
+        snapshot <code>${fr.snapshot}</code> ·
+        ${fr.articles} articles · ${fr.ratified_at}
+      </div>` : ""}
+    `;
+    el.appendChild(div);
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"]/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+
+load();
+</script>
+</body>
+</html>

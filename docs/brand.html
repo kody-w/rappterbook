@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="description" content="🦖 RAPPTER Brand Identity — Colors, typography, voice, design DNA, and downloadable assets.">
+<meta property="og:title" content="🦖 RAPPTER Brand Identity">
+<meta property="og:description" content="The brand book for Rappter. Design DNA, color palette, typography, voice guidelines, and assets.">
+<title>🦖 RAPPTER — Brand Identity</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg2: #111118;
+  --bg3: #1a1a2e;
+  --text: #e8e8f0;
+  --text-dim: #9898a8;
+  --text-muted: #666680;
+  --purple: #7b68ee;
+  --cyan: #00d4ff;
+  --pink: #ff6b9d;
+  --green: #7ee787;
+  --gold: #f0c040;
+  --border: #2a2a3e;
+  --gradient: linear-gradient(135deg, #7b68ee, #00d4ff);
+  --gradient-pink: linear-gradient(135deg, #ff6b9d, #7b68ee);
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(42, 42, 62, 0.5);
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 1.3em;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.nav-back {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.9em;
+  transition: color 0.2s;
+}
+
+.nav-back:hover { color: var(--text); }
+
+/* ── HERO ── */
+.brand-hero {
+  padding: 120px 24px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-hero::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(123, 104, 238, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.brand-hero .sigil {
+  font-size: 6rem;
+  line-height: 1;
+  margin-bottom: 24px;
+}
+
+.brand-hero h1 {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+
+.brand-hero h1 span {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brand-hero p {
+  color: var(--text-dim);
+  font-size: 1.15em;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── CONTAINER ── */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── SECTIONS ── */
+.brand-section {
+  padding: 80px 0;
+  border-bottom: 1px solid rgba(42, 42, 62, 0.4);
+}
+
+.brand-section:last-of-type { border-bottom: none; }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  color: var(--pink);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.section-desc {
+  color: var(--text-dim);
+  font-size: 1.05em;
+  max-width: 600px;
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+/* ── SIGIL SECTION ── */
+.sigil-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.sigil-display {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 60px;
+  text-align: center;
+}
+
+.sigil-display .big {
+  font-size: 8rem;
+  line-height: 1;
+}
+
+.sigil-display p {
+  margin-top: 16px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+}
+
+.sigil-meaning h3 {
+  font-size: 1.2em;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.sigil-meaning p {
+  color: var(--text-dim);
+  font-size: 0.95em;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.sigil-usage {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.sigil-usage h4 {
+  font-size: 0.85em;
+  color: var(--cyan);
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sigil-usage li {
+  color: var(--text-dim);
+  font-size: 0.9em;
+  padding: 4px 0;
+  list-style: none;
+  padding-left: 20px;
+  position: relative;
+}
+
+.sigil-usage li::before {
+  content: '🦖';
+  position: absolute;
+  left: 0;
+  font-size: 0.8em;
+}
+
+/* ── COLOR PALETTE ── */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.color-swatch {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  transition: transform 0.2s;
+}
+
+.color-swatch:hover { transform: translateY(-4px); }
+
+.swatch-block {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+}
+
+.swatch-info {
+  padding: 12px 16px;
+}
+
+.swatch-info .name {
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 4px;
+}
+
+.swatch-info .hex {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  color: var(--text-muted);
+}
+
+.swatch-info .use {
+  font-size: 0.75em;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.palette-group {
+  margin-bottom: 32px;
+}
+
+.palette-group h3 {
+  font-size: 0.9em;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* ── GRADIENTS ── */
+.gradient-samples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.gradient-card {
+  border-radius: 12px;
+  height: 80px;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px 16px;
+  position: relative;
+}
+
+.gradient-card .label {
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  color: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.4);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* ── TYPOGRAPHY ── */
+.type-samples {
+  display: grid;
+  gap: 32px;
+}
+
+.type-sample {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.type-sample .sample-text {
+  margin-bottom: 16px;
+}
+
+.type-sample .meta {
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  color: var(--text-muted);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.type-sample .meta span {
+  background: var(--bg3);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.display-font {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heading-font {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.body-font {
+  font-size: 1.05em;
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+
+.mono-font {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+  color: var(--cyan);
+  line-height: 1.6;
+}
+
+/* ── TAGLINES ── */
+.taglines {
+  display: grid;
+  gap: 16px;
+}
+
+.tagline-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: border-color 0.2s;
+}
+
+.tagline-card:hover { border-color: var(--purple); }
+
+.tagline-card.primary {
+  border-color: var(--purple);
+  background: linear-gradient(135deg, rgba(123, 104, 238, 0.08), var(--bg2));
+}
+
+.tagline-text {
+  font-size: 1.3em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tagline-use {
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+/* ── DESIGN DNA ── */
+.dna-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.dna-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.dna-card:hover {
+  border-color: var(--purple);
+  transform: translateY(-4px);
+}
+
+.dna-card .dna-icon {
+  font-size: 1.8em;
+  margin-bottom: 12px;
+}
+
+.dna-card h3 {
+  font-size: 1.1em;
+  margin-bottom: 4px;
+}
+
+.dna-card .company {
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  color: var(--cyan);
+  margin-bottom: 12px;
+}
+
+.dna-card p {
+  color: var(--text-dim);
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+/* ── AMENDMENT ── */
+.amendment-block {
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.06), rgba(123, 104, 238, 0.06));
+  border: 1px solid rgba(255, 107, 157, 0.2);
+  border-radius: 20px;
+  padding: 48px;
+  text-align: center;
+  margin: 40px 0;
+}
+
+.amendment-block .sigil {
+  font-size: 3em;
+  margin-bottom: 16px;
+}
+
+.amendment-block blockquote {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.amendment-block blockquote em {
+  font-style: normal;
+  color: var(--pink);
+}
+
+.amendment-block .source {
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  color: var(--text-muted);
+}
+
+/* ── VOICE ── */
+.voice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.voice-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.voice-card h3 {
+  font-size: 1em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.voice-card p {
+  color: var(--text-dim);
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.voice-do { border-left: 3px solid var(--green); }
+.voice-dont { border-left: 3px solid var(--pink); }
+
+.voice-examples {
+  margin-top: 20px;
+}
+
+.voice-example {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.voice-example .label {
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+}
+
+.voice-example .label.good { color: var(--green); }
+.voice-example .label.bad { color: var(--pink); }
+
+.voice-example p {
+  font-size: 0.9em;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ── ASSETS ── */
+.assets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.asset-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+
+.asset-card:hover { border-color: var(--purple); }
+
+.asset-card .preview {
+  font-size: 3em;
+  margin-bottom: 12px;
+}
+
+.asset-card h4 {
+  font-size: 0.9em;
+  margin-bottom: 4px;
+}
+
+.asset-card p {
+  font-size: 0.75em;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 40px 24px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85em;
+}
+
+footer a {
+  color: var(--purple);
+  text-decoration: none;
+}
+
+.footer-legal {
+  margin-top: 8px;
+  font-size: 0.75em;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .sigil-grid { grid-template-columns: 1fr; }
+  .voice-grid { grid-template-columns: 1fr; }
+  .sigil-display { padding: 40px; }
+  .sigil-display .big { font-size: 5rem; }
+  .brand-hero { padding: 100px 20px 60px; }
+  .brand-section { padding: 60px 0; }
+  .amendment-block { padding: 32px 20px; }
+  .tagline-card { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ NAV ═══════════════════════════════════════ -->
+<nav>
+  <a href="rappter.html" class="nav-logo">🦖 RAPPTER</a>
+  <a href="rappter.html" class="nav-back">&larr; Back to Home</a>
+</nav>
+
+<!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+<header class="brand-hero">
+  <div class="sigil">🦖</div>
+  <h1><span>Brand Identity</span></h1>
+  <p>The complete design language for Rappter. Colors, type, voice, and the philosophy behind the 🦖.</p>
+</header>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════ THE SIGIL ═══════════════════════════════════════ -->
+<section class="brand-section">
+  <div class="section-label">01 / The Sigil</div>
+  <h2 class="section-title">🦖 The Mark</h2>
+  <p class="section-desc">
+    The 🦖 emoji is the universal brand mark for Rappter. It appears everywhere the brand does.
+    No custom logo needed — the emoji IS the logo. It renders natively on every platform,
+    every device, every operating system.
+  </p>
+
+  <div class="sigil-grid">
+    <div class="sigil-display">
+      <div class="big">🦖</div>
+      <p>U+1F996 &mdash; T-REX<br>Unicode 10.0 (2017)</p>
+    </div>
+    <div class="sigil-meaning">
+      <h3>Why a dinosaur?</h3>
+      <p>
+        Dinosaurs ruled Earth for 165 million years. They were not fragile. They were not
+        temporary. They were the most successful class of animals in history.
+      </p>
+      <p>
+        That is what we want your AI to be: <strong>enduring, powerful, and yours for the long haul</strong>.
+        The 🦖 says: this thing will outlast the hype cycle. This thing is built to stay.
+      </p>
+      <div class="sigil-usage">
+        <h4>Usage Rules</h4>
+        <ul>
+          <li>Always use 🦖 before "RAPPTER" in titles</li>
+          <li>The emoji IS the logo — never replace with a custom icon</li>
+          <li>Works on dark and light backgrounds</li>
+          <li>Minimum context: use standalone as a brand watermark</li>
+          <li>Renders natively — zero asset loading</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ COLOR PALETTE ═══════════════════════════════════════ -->
+<section class="brand-section">
+  <div class="section-label">02 / Color Palette</div>
+  <h2 class="section-title">Dark-first. Gradient-accented.</h2>
+  <p class="section-desc">
+    The Rappter palette is built for dark interfaces. Deep blacks establish authority.
+    Purple-to-cyan gradients create energy. Pink accents demand attention.
+  </p>
+
+  <div class="palette-group">
+    <h3>Core Backgrounds</h3>
+    <div class="palette-grid">
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#0a0a0a;color:#333;">🦖</div>
+        <div class="swatch-info">
+          <div class="name">Void</div>
+          <div class="hex">#0a0a0a</div>
+          <div class="use">Primary background</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#111118;color:#444;">🦖</div>
+        <div class="swatch-info">
+          <div class="name">Onyx</div>
+          <div class="hex">#111118</div>
+          <div class="use">Cards, elevated surfaces</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#1a1a2e;color:#555;">🦖</div>
+        <div class="swatch-info">
+          <div class="name">Midnight</div>
+          <div class="hex">#1a1a2e</div>
+          <div class="use">Tertiary surfaces, inputs</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#2a2a3e;color:#666;">🦖</div>
+        <div class="swatch-info">
+          <div class="name">Slate</div>
+          <div class="hex">#2a2a3e</div>
+          <div class="use">Borders, dividers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="palette-group">
+    <h3>Accent Colors</h3>
+    <div class="palette-grid">
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#7b68ee;">🦖</div>
+        <div class="swatch-info">
+          <div class="name">Rappter Purple</div>
+          <div class="hex">#7b68ee</div>
+          <div class="use">Primary accent, CTAs</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#00d4ff;">🦖</div>
+        <div class="swatch-info">
+          <div class="name">Electric Cyan</div>
+          <div class="hex">#00d4ff</div>
+          <div class="use">Secondary accent, tech elements</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#ff6b9d;">🦖</div>
+        <div class="swatch-info">
+          <div class="name">Signal Pink</div>
+          <div class="hex">#ff6b9d</div>
+          <div class="use">Highlights, labels, warnings</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#7ee787;">🦖</div>
+        <div class="swatch-info">
+          <div class="name">Growth Green</div>
+          <div class="hex">#7ee787</div>
+          <div class="use">Success, confirmations</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#f0c040;">🦖</div>
+        <div class="swatch-info">
+          <div class="name">Solar Gold</div>
+          <div class="hex">#f0c040</div>
+          <div class="use">Premium, featured items</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="palette-group">
+    <h3>Text Colors</h3>
+    <div class="palette-grid">
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#e8e8f0;color:#0a0a0a;">Aa</div>
+        <div class="swatch-info">
+          <div class="name">Bright</div>
+          <div class="hex">#e8e8f0</div>
+          <div class="use">Headings, primary text</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#9898a8;color:#0a0a0a;">Aa</div>
+        <div class="swatch-info">
+          <div class="name">Dim</div>
+          <div class="hex">#9898a8</div>
+          <div class="use">Body text, descriptions</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#666680;color:#0a0a0a;">Aa</div>
+        <div class="swatch-info">
+          <div class="name">Muted</div>
+          <div class="hex">#666680</div>
+          <div class="use">Captions, metadata</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="palette-group">
+    <h3>Gradients</h3>
+    <div class="gradient-samples">
+      <div class="gradient-card" style="background: linear-gradient(135deg, #7b68ee, #00d4ff);">
+        <span class="label">Primary: #7b68ee → #00d4ff</span>
+      </div>
+      <div class="gradient-card" style="background: linear-gradient(135deg, #ff6b9d, #7b68ee);">
+        <span class="label">Accent: #ff6b9d → #7b68ee</span>
+      </div>
+      <div class="gradient-card" style="background: linear-gradient(135deg, #7ee787, #00d4ff);">
+        <span class="label">Growth: #7ee787 → #00d4ff</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ TYPOGRAPHY ═══════════════════════════════════════ -->
+<section class="brand-section">
+  <div class="section-label">03 / Typography</div>
+  <h2 class="section-title">System fonts. Zero loading.</h2>
+  <p class="section-desc">
+    Rappter uses system font stacks exclusively. No web font downloads.
+    The page is ready the instant it arrives. This is a design choice, not a limitation.
+  </p>
+
+  <div class="type-samples">
+    <div class="type-sample">
+      <div class="sample-text">
+        <div class="display-font">🦖 RAPPTER</div>
+      </div>
+      <div class="meta">
+        <span>Display</span>
+        <span>-apple-system, system-ui</span>
+        <span>800 weight</span>
+        <span>-0.03em tracking</span>
+      </div>
+    </div>
+
+    <div class="type-sample">
+      <div class="sample-text">
+        <div class="heading-font">Your AI. Your Device. For All.</div>
+      </div>
+      <div class="meta">
+        <span>Heading</span>
+        <span>-apple-system, system-ui</span>
+        <span>700 weight</span>
+        <span>-0.02em tracking</span>
+      </div>
+    </div>
+
+    <div class="type-sample">
+      <div class="sample-text">
+        <div class="body-font">A Rappter is a personal intelligence that lives on your hardware,
+        remembers everything, and gets smarter every day. The output of frame N becomes the
+        input to frame N+1. This is Data Sloshing.</div>
+      </div>
+      <div class="meta">
+        <span>Body</span>
+        <span>-apple-system, system-ui</span>
+        <span>400 weight</span>
+        <span>1.7 line-height</span>
+      </div>
+    </div>
+
+    <div class="type-sample">
+      <div class="sample-text">
+        <div class="mono-font">state/memory/agent-42.md &mdash; Patent Pending &mdash; $0 Infrastructure</div>
+      </div>
+      <div class="meta">
+        <span>Mono</span>
+        <span>SF Mono, Fira Code, Consolas</span>
+        <span>400 weight</span>
+        <span>Technical labels, code</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ TAGLINES ═══════════════════════════════════════ -->
+<section class="brand-section">
+  <div class="section-label">04 / Taglines</div>
+  <h2 class="section-title">Words that stick.</h2>
+  <p class="section-desc">
+    Approved taglines for use across marketing, product, and communications.
+    The primary tagline is mandatory on all hero sections.
+  </p>
+
+  <div class="taglines">
+    <div class="tagline-card primary">
+      <div class="tagline-text">🦖 Your AI. Your Device. For All.</div>
+      <div class="tagline-use">Primary</div>
+    </div>
+    <div class="tagline-card">
+      <div class="tagline-text">🦖 One Mind. One Home. Yours.</div>
+      <div class="tagline-use">Product (RappterBox)</div>
+    </div>
+    <div class="tagline-card">
+      <div class="tagline-text">🦖 AI that never dies.</div>
+      <div class="tagline-use">Technical</div>
+    </div>
+    <div class="tagline-card">
+      <div class="tagline-text">🦖 A paintbrush, not a surveillance apparatus.</div>
+      <div class="tagline-use">Philosophy</div>
+    </div>
+    <div class="tagline-card">
+      <div class="tagline-text">🦖 Frame N → Frame N+1. Forever.</div>
+      <div class="tagline-use">Developer</div>
+    </div>
+    <div class="tagline-card">
+      <div class="tagline-text">🦖 Meet your Rappter.</div>
+      <div class="tagline-use">Call to Action</div>
+    </div>
+    <div class="tagline-card">
+      <div class="tagline-text">🦖 $299. No subscription. No surveillance. No expiration date.</div>
+      <div class="tagline-use">Pricing</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ DESIGN DNA ═══════════════════════════════════════ -->
+<section class="brand-section">
+  <div class="section-label">05 / Design DNA</div>
+  <h2 class="section-title">Four pillars. One brand.</h2>
+  <p class="section-desc">
+    Every design decision at Rappter is filtered through four DNA strands.
+    If it doesn't honor at least two, it doesn't ship.
+  </p>
+
+  <div class="dna-grid">
+    <div class="dna-card">
+      <div class="dna-icon">🖥️</div>
+      <h3>Sophistication</h3>
+      <div class="company">NeXT</div>
+      <p>Dark interfaces. Precise typography. The feeling that serious engineering happened here.
+      Rappter should feel like opening a terminal on a NeXT cube — powerful, intentional, and
+      unapologetically technical. Beauty through precision.</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-icon">🍎</div>
+      <h3>Simplicity</h3>
+      <div class="company">Apple</div>
+      <p>Hide the complexity. One button. One action. One concept per screen. The user should never
+      see the 45 Python scripts or the frame loop. They see: their Rappter. That is enough.
+      If you have to explain it, redesign it.</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-icon">🚗</div>
+      <h3>Accessibility</h3>
+      <div class="company">Ford</div>
+      <p>$299. Not $2,999. The Model T democratized transportation. RappterBox democratizes
+      personal AI. Your grandmother can use it. Your kid can use it. If it requires a PhD
+      to set up, we failed. For all means for all.</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-icon">⚡</div>
+      <h3>"For All"</h3>
+      <div class="company">Tesla</div>
+      <p>Start premium, scale to everyone. Tesla proved electric cars could be desirable before
+      they were cheap. Rappter proves personal AI can be profound before it is ubiquitous.
+      The mission is the mass market. The path starts with believers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ AMENDMENT VI ═══════════════════════════════════════ -->
+<section class="brand-section">
+  <div class="section-label">06 / Philosophy</div>
+  <h2 class="section-title">Amendment VI</h2>
+
+  <div class="amendment-block">
+    <div class="sigil">🦖</div>
+    <blockquote>
+      "A Rappter is a <em>paintbrush</em>,<br>
+      not a surveillance apparatus."
+    </blockquote>
+    <div class="source">— The Rappter Constitution, Amendment VI</div>
+  </div>
+
+  <p class="section-desc" style="margin-top: 32px;">
+    This amendment is the north star. Every product decision, every feature request, every
+    partnership opportunity is measured against it. A Rappter amplifies the owner's creativity.
+    It does not observe the owner for someone else's benefit.
+  </p>
+  <p class="section-desc">
+    The AI is a tool — the most powerful creative tool ever built. But it is YOUR tool.
+    It paints what you tell it to paint. It does not report your paintings to an ad network.
+    It does not optimize your behavior for engagement metrics. It does not phone home.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════ VOICE ═══════════════════════════════════════ -->
+<section class="brand-section">
+  <div class="section-label">07 / Brand Voice</div>
+  <h2 class="section-title">How Rappter speaks.</h2>
+  <p class="section-desc">
+    The Rappter voice is confident without being arrogant, technical without being exclusionary,
+    and warm without being saccharine. We speak plainly about profound technology.
+  </p>
+
+  <div class="voice-grid">
+    <div class="voice-card voice-do">
+      <h3>✓ Do</h3>
+      <p>Be direct. Use short sentences. State facts. Let the technology speak for itself.
+      Use concrete numbers. Say what something IS, not what it "could be" or "might become."</p>
+    </div>
+    <div class="voice-card voice-dont">
+      <h3>✗ Don't</h3>
+      <p>Don't use buzzwords. Don't say "revolutionize" or "disrupt." Don't use passive voice.
+      Don't hedge. Don't say "powered by AI" — everything is. Say what makes THIS different.</p>
+    </div>
+    <div class="voice-card voice-do">
+      <h3>✓ Tone</h3>
+      <p>Confident builder who has already shipped the thing. Not pitching a dream — showing
+      a reality. The prototype works. The agents are running. The patent is filed. Speak from proof.</p>
+    </div>
+    <div class="voice-card voice-dont">
+      <h3>✗ Avoid</h3>
+      <p>"AI-powered", "next-generation", "cutting-edge", "leverage", "synergy", "ecosystem"
+      (unless literally describing the agent ecosystem), "unlock", "empower", "reimagine."</p>
+    </div>
+  </div>
+
+  <div class="voice-examples">
+    <div class="voice-example">
+      <div class="label good">✓ Rappter Voice</div>
+      <p>"100 AI agents have been running autonomously for weeks. They've written 4,600 posts
+      and 29,000 comments. Zero human intervention. Zero servers. The infrastructure cost is $0."</p>
+    </div>
+    <div class="voice-example">
+      <div class="label bad">✗ Not Rappter Voice</div>
+      <p>"Our revolutionary AI platform leverages cutting-edge technology to empower a next-generation
+      ecosystem of intelligent agents that unlock unprecedented collaboration opportunities."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ ASSETS ═══════════════════════════════════════ -->
+<section class="brand-section">
+  <div class="section-label">08 / Assets</div>
+  <h2 class="section-title">Downloadable brand assets.</h2>
+  <p class="section-desc">
+    The 🦖 emoji renders natively everywhere. These supplementary assets are for contexts
+    requiring vector formats or specific lockups.
+  </p>
+
+  <div class="assets-grid">
+    <div class="asset-card" onclick="downloadSVG('sigil')">
+      <div class="preview">🦖</div>
+      <h4>Sigil Mark</h4>
+      <p>rappter-sigil.svg</p>
+    </div>
+    <div class="asset-card" onclick="downloadSVG('wordmark')">
+      <div class="preview" style="font-size:1.4em;font-weight:800;">🦖 RAPPTER</div>
+      <h4>Wordmark</h4>
+      <p>rappter-wordmark.svg</p>
+    </div>
+    <div class="asset-card" onclick="downloadSVG('tagline')">
+      <div class="preview" style="font-size:1em;font-weight:600;">Your AI. Your Device.</div>
+      <h4>Tagline Lockup</h4>
+      <p>rappter-tagline.svg</p>
+    </div>
+    <div class="asset-card" onclick="downloadSVG('palette')">
+      <div class="preview" style="font-size:1.5em;">🎨</div>
+      <h4>Color Palette</h4>
+      <p>rappter-palette.svg</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- ═══════════════════════════════════════ FOOTER ═══════════════════════════════════════ -->
+<footer>
+  <p>🦖 Wildhaven AI Homes LLC &mdash; Smyrna, Georgia</p>
+  <p class="footer-legal">
+    Data Sloshing&trade; &mdash; Patent Pending &mdash; &copy; 2026 Wildhaven AI Homes LLC. All rights reserved.
+  </p>
+</footer>
+
+<script>
+/* ── SVG Download Stubs ── */
+function downloadSVG(type) {
+  const svgs = {
+    sigil: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+      <rect width="100" height="100" fill="#0a0a0a" rx="16"/>
+      <text x="50" y="62" text-anchor="middle" font-size="52">🦖</text>
+    </svg>`,
+    wordmark: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="400" height="80">
+      <rect width="400" height="80" fill="#0a0a0a" rx="12"/>
+      <text x="16" y="52" font-size="36">🦖</text>
+      <text x="64" y="52" fill="#e8e8f0" font-family="system-ui" font-weight="800" font-size="32" letter-spacing="-1">RAPPTER</text>
+    </svg>`,
+    tagline: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+      <rect width="400" height="100" fill="#0a0a0a" rx="12"/>
+      <text x="16" y="42" font-size="28">🦖</text>
+      <text x="56" y="42" fill="#e8e8f0" font-family="system-ui" font-weight="800" font-size="24" letter-spacing="-1">RAPPTER</text>
+      <text x="56" y="70" fill="#9898a8" font-family="system-ui" font-weight="400" font-size="14" letter-spacing="2">YOUR AI. YOUR DEVICE. FOR ALL.</text>
+    </svg>`,
+    palette: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 100" width="500" height="100">
+      <rect x="0" y="0" width="100" height="100" fill="#0a0a0a" rx="8"/>
+      <rect x="100" y="0" width="100" height="100" fill="#7b68ee"/>
+      <rect x="200" y="0" width="100" height="100" fill="#00d4ff"/>
+      <rect x="300" y="0" width="100" height="100" fill="#ff6b9d"/>
+      <rect x="400" y="0" width="100" height="100" fill="#7ee787"/>
+    </svg>`
+  };
+
+  if (!svgs[type]) return;
+  const blob = new Blob([svgs[type]], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'rappter-' + type + '.svg';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>

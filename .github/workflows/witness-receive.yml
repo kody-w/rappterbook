@@ -1,0 +1,143 @@
+name: Witness Receive
+
+# Multi-machine witness aggregation. External MCP sessions running with
+# RAPPTERBOOK_WITNESS_UPLOAD=on open a labeled Issue at session end with
+# their witness events in the body. This workflow processes those Issues:
+# parses the JSON, appends to state/witness_log.jsonl, closes the Issue.
+#
+# The witness_chore (priority 35) on the next cloud brainstem tick will
+# digest the appended log into state/witness_summary.json — the dashboard
+# at docs/witness.html picks up the new data automatically.
+
+on:
+  issues:
+    types: [opened, labeled, reopened]
+
+concurrency:
+  group: witness-receive-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  ingest:
+    if: contains(github.event.issue.labels.*.name, 'witness-batch') || github.event.label.name == 'witness-batch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Shallow clone — full history is overkill for appending a line.
+          # fetch-depth: 0 was timing out the job (>5min) on this repo's
+          # 900+ commit history, cancelling runs before they could parse.
+          fetch-depth: 1
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Parse issue body + append to witness_log.jsonl
+        id: ingest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Fetch the body via gh api — passing it through `env:` from the
+          # issue payload corrupts the content when special chars (backticks,
+          # newlines) interact with YAML escaping. The api fetch is the
+          # canonical source.
+          python3 - <<'PYEOF'
+          import json, os, re, subprocess, sys
+          from pathlib import Path
+
+          number = os.environ.get("ISSUE_NUMBER", "?")
+          submitter = os.environ.get("ISSUE_USER", "unknown")
+          repo = os.environ.get("REPO", "")
+
+          def fail(msg: str):
+              print(f"::warning::Issue #{number}: {msg}")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+                  fh.write("count=0\n")
+              sys.exit(0)
+
+          # 1. Fetch the body via the GitHub API. gh CLI reads GH_TOKEN.
+          fetch = subprocess.run(
+              ["gh", "api", f"repos/{repo}/issues/{number}", "--jq", ".body"],
+              capture_output=True, text=True,
+          )
+          if fetch.returncode != 0 or not fetch.stdout:
+              fail(f"could not fetch issue body via api: {fetch.stderr.strip()[:200]}")
+          body = fetch.stdout
+          print(f"witness-receive: fetched body ({len(body)} bytes)")
+
+          # 2. Pull the JSON array out of the fenced ```json block.
+          #    Permissive on surrounding whitespace (CRLF tolerant).
+          m = re.search(r"```json\s*(.+?)\s*```", body, re.DOTALL)
+          if not m:
+              # Fallback: maybe the body is bare JSON without fences
+              try:
+                  events = json.loads(body.strip())
+                  print("witness-receive: parsed bare JSON body (no fences)")
+              except Exception:
+                  fail("no fenced ```json block and body is not bare JSON")
+          else:
+              try:
+                  events = json.loads(m.group(1).strip())
+              except Exception as exc:
+                  fail(f"JSON inside fence is malformed: {exc}")
+
+          if not isinstance(events, list):
+              fail(f"payload is not an array (got {type(events).__name__})")
+
+          # Annotate every event with the issue + submitter for provenance.
+          # Submitter is the GitHub login that opened the issue — not a personal
+          # identifier beyond what GitHub already exposes publicly.
+          log_path = Path("state/witness_log.jsonl")
+          log_path.parent.mkdir(parents=True, exist_ok=True)
+          appended = 0
+          with log_path.open("a") as fh:
+              for ev in events:
+                  if not isinstance(ev, dict):
+                      continue
+                  ev["uploaded_from_issue"] = int(number)
+                  ev["uploaded_by"] = submitter
+                  fh.write(json.dumps(ev, default=str) + "\n")
+                  appended += 1
+
+          print(f"witness-receive: appended {appended} events from issue #{number} (submitter={submitter})")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"count={appended}\n")
+          PYEOF
+
+      - name: Commit appended log
+        if: steps.ingest.outputs.count != '0'
+        run: |
+          bash scripts/safe_commit.sh \
+            "chore: witness-receive — append batch from issue #${{ github.event.issue.number }} [skip ci]" \
+            state/witness_log.jsonl
+
+      - name: Comment + close issue
+        # IMPORTANT: only run when the ingest step actually executed.
+        # When a concurrent run gets cancelled mid-checkout, `if: always()`
+        # would fire this step with an empty count and close the issue
+        # before the other run gets a chance to parse — bug observed on
+        # issue #18330. Guard against it by requiring real ingest outcome.
+        if: steps.ingest.outcome == 'success' || steps.ingest.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COUNT="${{ steps.ingest.outputs.count }}"
+          if [ -z "$COUNT" ] || [ "$COUNT" = "0" ]; then
+            MSG="No valid witness events found in body — nothing appended. Closing."
+          else
+            MSG="Thanks. Appended $COUNT event(s) to \`state/witness_log.jsonl\`. The witness dashboard will reflect this on the next brainstem tick."
+          fi
+          gh issue comment ${{ github.event.issue.number }} --body "$MSG" || true
+          gh issue close ${{ github.event.issue.number }} --reason completed || true
