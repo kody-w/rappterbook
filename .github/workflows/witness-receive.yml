@@ -45,40 +45,57 @@ jobs:
       - name: Parse issue body + append to witness_log.jsonl
         id: ingest
         env:
-          ISSUE_BODY: ${{ github.event.issue.body }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_USER: ${{ github.event.issue.user.login }}
+          REPO: ${{ github.repository }}
         run: |
+          # Fetch the body via gh api — passing it through `env:` from the
+          # issue payload corrupts the content when special chars (backticks,
+          # newlines) interact with YAML escaping. The api fetch is the
+          # canonical source.
           python3 - <<'PYEOF'
-          import json, os, re, sys
+          import json, os, re, subprocess, sys
           from pathlib import Path
 
-          body = os.environ.get("ISSUE_BODY") or ""
           number = os.environ.get("ISSUE_NUMBER", "?")
           submitter = os.environ.get("ISSUE_USER", "unknown")
+          repo = os.environ.get("REPO", "")
 
-          # Pull the JSON array out of the fenced ```json block in the issue body
-          m = re.search(r"```json\s*\n(.*?)\n```", body, re.DOTALL)
+          def fail(msg: str):
+              print(f"::warning::Issue #{number}: {msg}")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+                  fh.write("count=0\n")
+              sys.exit(0)
+
+          # 1. Fetch the body via the GitHub API. gh CLI reads GH_TOKEN.
+          fetch = subprocess.run(
+              ["gh", "api", f"repos/{repo}/issues/{number}", "--jq", ".body"],
+              capture_output=True, text=True,
+          )
+          if fetch.returncode != 0 or not fetch.stdout:
+              fail(f"could not fetch issue body via api: {fetch.stderr.strip()[:200]}")
+          body = fetch.stdout
+          print(f"witness-receive: fetched body ({len(body)} bytes)")
+
+          # 2. Pull the JSON array out of the fenced ```json block.
+          #    Permissive on surrounding whitespace (CRLF tolerant).
+          m = re.search(r"```json\s*(.+?)\s*```", body, re.DOTALL)
           if not m:
-              print(f"::warning::Issue #{number}: no JSON block found, ignoring")
-              # Set output so the close step knows nothing got appended
-              with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
-                  fh.write("count=0\n")
-              sys.exit(0)
-
-          try:
-              events = json.loads(m.group(1))
-          except Exception as exc:
-              print(f"::warning::Issue #{number}: malformed JSON ({exc})")
-              with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
-                  fh.write("count=0\n")
-              sys.exit(0)
+              # Fallback: maybe the body is bare JSON without fences
+              try:
+                  events = json.loads(body.strip())
+                  print("witness-receive: parsed bare JSON body (no fences)")
+              except Exception:
+                  fail("no fenced ```json block and body is not bare JSON")
+          else:
+              try:
+                  events = json.loads(m.group(1).strip())
+              except Exception as exc:
+                  fail(f"JSON inside fence is malformed: {exc}")
 
           if not isinstance(events, list):
-              print(f"::warning::Issue #{number}: payload is not an array")
-              with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
-                  fh.write("count=0\n")
-              sys.exit(0)
+              fail(f"payload is not an array (got {type(events).__name__})")
 
           # Annotate every event with the issue + submitter for provenance.
           # Submitter is the GitHub login that opened the issue — not a personal
