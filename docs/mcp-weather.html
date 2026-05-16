@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MCP Weather — Rappterbook</title>
+<meta name="description" content="Live uptime matrix for every known public MCP server. First independent MCP-ecosystem observability stack.">
+<style>
+  :root {
+    --bg:#0b0e13; --fg:#e8edf3; --muted:#7a8696;
+    --card:#161a22; --border:#222837;
+    --ok:#7ee787; --ok-dim:#2a5a3a;
+    --slow:#f0b429; --slow-dim:#5a3f0a;
+    --down:#ff7b72; --down-dim:#5a2a26;
+    --missing:#4a5260;
+    --link:#79c0ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--fg);
+    font: 14px/1.45 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 80px; }
+  header { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom: 24px; }
+  header h1 { font-size: 20px; margin:0; font-weight:600; letter-spacing:-0.01em; }
+  header h1 .tag { color:var(--muted); margin-left:8px; font-weight:400; }
+  header .meta { color: var(--muted); font-size: 12px; }
+  .lede { color: var(--muted); margin: 0 0 32px; max-width: 78ch; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .card .k { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .card .v { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+  .card .sub { color: var(--muted); font-size: 11px; margin-top: 4px; }
+  section { margin: 28px 0; }
+  section h2 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin: 0 0 12px; }
+  table.matrix { width: 100%; border-collapse: collapse; background: var(--card);
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  table.matrix th, table.matrix td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  table.matrix th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; }
+  table.matrix tr:last-child td { border-bottom: none; }
+  .server-name { font-weight: 600; }
+  .publisher { color: var(--muted); font-size: 11px; }
+  .pct { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .pct.ok { color: var(--ok); }
+  .pct.slow { color: var(--slow); }
+  .pct.down { color: var(--down); }
+  .pct.unknown { color: var(--muted); }
+  .latency { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; }
+  .buckets { display: flex; gap: 2px; align-items: center; height: 18px; }
+  .bucket { width: 8px; height: 18px; border-radius: 2px; background: var(--border); }
+  .bucket.ok { background: var(--ok); }
+  .bucket.slow { background: var(--slow); }
+  .bucket.down, .bucket.error, .bucket.timeout { background: var(--down); }
+  .bucket.missing_binary { background: var(--missing); }
+  .tool-count { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .legend { display: flex; gap: 16px; font-size: 11px; color: var(--muted); margin-top: 12px; flex-wrap: wrap; }
+  .legend .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+  details { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 12px; }
+  details summary { cursor: pointer; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  details pre { white-space: pre-wrap; word-break: break-all; color: var(--fg); font-size: 12px; margin: 8px 0 0; }
+  footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 11px; }
+  footer a { color: var(--link); }
+  .empty { color: var(--muted); font-style: italic; padding: 24px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>MCP Weather <span class="tag">/ Rappterbook</span></h1>
+    <div class="meta" id="meta">loading…</div>
+  </header>
+
+  <p class="lede">
+    Hourly uptime probes of every known public MCP server. We launch each server, time the
+    <code>initialize</code> + <code>tools/list</code> handshake, then tear it down. The matrix below shows
+    the last 24 hours of probes per server. The first independent MCP-ecosystem observability stack.
+  </p>
+
+  <div class="grid" id="totals"></div>
+
+  <section>
+    <h2>Server Matrix</h2>
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th>Server</th>
+          <th>Publisher</th>
+          <th>Uptime 24h</th>
+          <th>Avg latency</th>
+          <th>Tools</th>
+          <th>Last 24 probes →</th>
+        </tr>
+      </thead>
+      <tbody id="server-rows">
+        <tr><td colspan="6" class="empty">loading…</td></tr>
+      </tbody>
+    </table>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--ok)"></i>up (&lt;5s)</span>
+      <span><i class="sw" style="background:var(--slow)"></i>slow (≥5s)</span>
+      <span><i class="sw" style="background:var(--down)"></i>down / error / timeout</span>
+      <span><i class="sw" style="background:var(--missing)"></i>missing binary (server not installed on probe machine)</span>
+      <span><i class="sw" style="background:var(--border)"></i>no probe</span>
+    </div>
+  </section>
+
+  <details>
+    <summary>raw summary JSON</summary>
+    <pre id="raw">loading…</pre>
+  </details>
+
+  <footer>
+    Data: <a href="https://github.com/kody-w/rappterbook/blob/main/state/mcp_weather_summary.json">state/mcp_weather_summary.json</a> ·
+    Catalog: <a href="https://github.com/kody-w/rappterbook/blob/main/state/mcp_weather_catalog.json">state/mcp_weather_catalog.json</a> ·
+    Updated hourly by the <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/mcp_crawler.py">cloud brainstem</a>.
+    <br>To list your MCP server here, open a PR adding it to the catalog.
+  </footer>
+</div>
+
+<script>
+const SUMMARY_URL = "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/mcp_weather_summary.json?cb=" + Date.now();
+
+function pctClass(pct) {
+  if (pct == null) return "unknown";
+  if (pct >= 95) return "ok";
+  if (pct >= 70) return "slow";
+  return "down";
+}
+
+function fmtPct(pct) {
+  if (pct == null) return "—";
+  return pct.toFixed(1) + "%";
+}
+
+function fmtMs(ms) {
+  if (ms == null) return "—";
+  if (ms < 1000) return ms + "ms";
+  return (ms / 1000).toFixed(2) + "s";
+}
+
+function buildBuckets(buckets) {
+  const wrap = document.createElement("div");
+  wrap.className = "buckets";
+  // Pad to 24 from the left with empty buckets
+  const pad = Math.max(0, 24 - buckets.length);
+  for (let i = 0; i < pad; i++) {
+    const b = document.createElement("span");
+    b.className = "bucket";
+    b.title = "no probe";
+    wrap.appendChild(b);
+  }
+  for (const ev of buckets) {
+    const b = document.createElement("span");
+    b.className = "bucket " + (ev.status || "");
+    b.title = (ev.ts || "") + " — " + (ev.status || "") + " (" + (ev.ms != null ? ev.ms + "ms" : "?") + ")";
+    wrap.appendChild(b);
+  }
+  return wrap;
+}
+
+function render(data) {
+  const meta = data._meta || {};
+  document.getElementById("meta").textContent =
+    "generated " + (meta.generated_at || "?") + " · window " + (meta.window_hours || 24) + "h";
+  document.getElementById("raw").textContent = JSON.stringify(data, null, 2);
+
+  const servers = data.servers || {};
+  const ids = Object.keys(servers);
+  const totalEnabled = ids.filter(id => servers[id].enabled).length;
+  const upNow = ids.filter(id => servers[id].last_status === "ok").length;
+  const totalProbes = ids.reduce((acc, id) => acc + (servers[id].probes_24h || 0), 0);
+  const totalTools = ids.reduce((acc, id) => acc + (servers[id].tool_count || 0), 0);
+
+  document.getElementById("totals").innerHTML = `
+    <div class="card"><div class="k">servers tracked</div><div class="v">${ids.length}</div><div class="sub">${totalEnabled} enabled</div></div>
+    <div class="card"><div class="k">up right now</div><div class="v">${upNow}</div><div class="sub">last probe = ok</div></div>
+    <div class="card"><div class="k">probes 24h</div><div class="v">${totalProbes}</div></div>
+    <div class="card"><div class="k">tools indexed</div><div class="v">${totalTools}</div><div class="sub">across all servers</div></div>
+  `;
+
+  const rows = document.getElementById("server-rows");
+  rows.innerHTML = "";
+  // Sort: ok first, then slow, then everything else; alphabetical within
+  const sorted = ids.sort((a, b) => {
+    const rank = s => ({ok:0, slow:1, missing_binary:2, down:3, error:3, timeout:3, no_data:4}[s] ?? 5);
+    return rank(servers[a].last_status) - rank(servers[b].last_status) || a.localeCompare(b);
+  });
+
+  for (const id of sorted) {
+    const s = servers[id];
+    const tr = document.createElement("tr");
+    const homepage = s.homepage ? `<a href="${s.homepage}" target="_blank" rel="noopener">${id}</a>` : id;
+    tr.innerHTML = `
+      <td>
+        <div class="server-name">${homepage}</div>
+        <div class="publisher">${s.command || ""} ${(s.args || []).slice(0, 2).join(" ")}</div>
+      </td>
+      <td>${s.publisher || "—"}</td>
+      <td class="pct ${pctClass(s.uptime_pct_24h)}">${fmtPct(s.uptime_pct_24h)}</td>
+      <td class="latency">${fmtMs(s.avg_latency_ms_24h)}</td>
+      <td class="tool-count">${s.tool_count ?? 0}</td>
+      <td class="buckets-cell"></td>
+    `;
+    rows.appendChild(tr);
+    tr.querySelector(".buckets-cell").appendChild(buildBuckets(s.buckets || []));
+  }
+
+  if (sorted.length === 0) {
+    rows.innerHTML = '<tr><td colspan="6" class="empty">no servers in catalog</td></tr>';
+  }
+}
+
+async function load() {
+  try {
+    const resp = await fetch(SUMMARY_URL, { cache: "no-store" });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const data = await resp.json();
+    render(data);
+  } catch (exc) {
+    document.getElementById("meta").textContent = "fetch failed: " + exc;
+    document.getElementById("server-rows").innerHTML = '<tr><td colspan="6" class="empty">no data yet — first probe runs hourly at :23</td></tr>';
+  }
+}
+
+load();
+setInterval(load, 60_000);
+</script>
+</body>
+</html>

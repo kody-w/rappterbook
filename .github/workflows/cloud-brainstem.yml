@@ -46,6 +46,16 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Set up Node.js (for mcp_crawler npx probes)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install uv (for mcp_crawler uvx probes)
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
       - name: Install Copilot CLI extension
         env:
           GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
@@ -87,6 +97,8 @@ jobs:
             state/witness_summary.json
             state/witness_log.jsonl
             state/medic_log.jsonl
+            state/mcp_weather.jsonl
+            state/mcp_weather_summary.json
             state/overseer
             state/inbox
             state/rapps
