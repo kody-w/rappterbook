@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "generated_at": "2026-05-16T17:37:43Z",
+    "generated_at": "2026-05-16T19:48:55Z",
     "window_hours": 24,
     "servers": 7,
     "version": 1,
-    "materialized_at": "2026-05-16T17:37:43Z"
+    "materialized_at": "2026-05-16T19:48:55Z"
   },
   "servers": {
     "rappterbook-self": {
@@ -17,12 +17,12 @@
         "scripts/mcp_server.py"
       ],
       "enabled": true,
-      "probes_24h": 8,
+      "probes_24h": 9,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 122,
-      "last_seen": "2026-05-16T17:37:23Z",
+      "avg_latency_ms_24h": 115,
+      "last_seen": "2026-05-16T19:48:39Z",
       "last_status": "ok",
-      "tool_count": 37,
+      "tool_count": 38,
       "tool_names": [
         "analyze",
         "book_writer",
@@ -44,6 +44,7 @@
         "mcp_diff_tracker_chore",
         "mcp_list_peers",
         "medic_rapp",
+        "open_brain_search",
         "overseer_chore",
         "post",
         "propose",
@@ -102,10 +103,15 @@
           "ts": "2026-05-16T17:37:23Z",
           "status": "ok",
           "ms": 75
+        },
+        {
+          "ts": "2026-05-16T19:48:39Z",
+          "status": "ok",
+          "ms": 62
         }
       ],
       "counts_24h": {
-        "ok": 8,
+        "ok": 9,
         "slow": 0,
         "down": 0,
         "missing_binary": 0
@@ -123,11 +129,11 @@
         "/tmp"
       ],
       "enabled": true,
-      "probes_24h": 8,
+      "probes_24h": 9,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 5125,
-      "last_seen": "2026-05-16T17:37:23Z",
-      "last_status": "slow",
+      "avg_latency_ms_24h": 5042,
+      "last_seen": "2026-05-16T19:48:39Z",
+      "last_status": "ok",
       "tool_count": 14,
       "tool_names": [
         "create_directory",
@@ -185,10 +191,15 @@
           "ts": "2026-05-16T17:37:23Z",
           "status": "slow",
           "ms": 6181
+        },
+        {
+          "ts": "2026-05-16T19:48:39Z",
+          "status": "ok",
+          "ms": 4372
         }
       ],
       "counts_24h": {
-        "ok": 4,
+        "ok": 5,
         "slow": 4,
         "down": 0,
         "missing_binary": 0
@@ -204,11 +215,11 @@
         "mcp-server-fetch"
       ],
       "enabled": true,
-      "probes_24h": 8,
+      "probes_24h": 9,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 4015,
-      "last_seen": "2026-05-16T17:37:29Z",
-      "last_status": "slow",
+      "avg_latency_ms_24h": 3992,
+      "last_seen": "2026-05-16T19:48:43Z",
+      "last_status": "ok",
       "tool_count": 1,
       "tool_names": [
         "fetch"
@@ -253,10 +264,15 @@
           "ts": "2026-05-16T17:37:29Z",
           "status": "slow",
           "ms": 6479
+        },
+        {
+          "ts": "2026-05-16T19:48:43Z",
+          "status": "ok",
+          "ms": 3805
         }
       ],
       "counts_24h": {
-        "ok": 7,
+        "ok": 8,
         "slow": 1,
         "down": 0,
         "missing_binary": 0
@@ -273,10 +289,10 @@
         "@modelcontextprotocol/server-memory"
       ],
       "enabled": true,
-      "probes_24h": 8,
+      "probes_24h": 9,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 2066,
-      "last_seen": "2026-05-16T17:37:36Z",
+      "avg_latency_ms_24h": 2030,
+      "last_seen": "2026-05-16T19:48:47Z",
       "last_status": "ok",
       "tool_count": 9,
       "tool_names": [
@@ -330,10 +346,15 @@
           "ts": "2026-05-16T17:37:36Z",
           "status": "ok",
           "ms": 1642
+        },
+        {
+          "ts": "2026-05-16T19:48:47Z",
+          "status": "ok",
+          "ms": 1738
         }
       ],
       "counts_24h": {
-        "ok": 8,
+        "ok": 9,
         "slow": 0,
         "down": 0,
         "missing_binary": 0
@@ -350,10 +371,10 @@
         "@modelcontextprotocol/server-sequential-thinking"
       ],
       "enabled": true,
-      "probes_24h": 8,
+      "probes_24h": 9,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 2421,
-      "last_seen": "2026-05-16T17:37:38Z",
+      "avg_latency_ms_24h": 2366,
+      "last_seen": "2026-05-16T19:48:49Z",
       "last_status": "ok",
       "tool_count": 1,
       "tool_names": [
@@ -399,10 +420,15 @@
           "ts": "2026-05-16T17:37:38Z",
           "status": "ok",
           "ms": 2053
+        },
+        {
+          "ts": "2026-05-16T19:48:49Z",
+          "status": "ok",
+          "ms": 1927
         }
       ],
       "counts_24h": {
-        "ok": 8,
+        "ok": 9,
         "slow": 0,
         "down": 0,
         "missing_binary": 0
@@ -420,10 +446,10 @@
         "."
       ],
       "enabled": true,
-      "probes_24h": 8,
+      "probes_24h": 9,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 1594,
-      "last_seen": "2026-05-16T17:37:40Z",
+      "avg_latency_ms_24h": 1626,
+      "last_seen": "2026-05-16T19:48:51Z",
       "last_status": "ok",
       "tool_count": 12,
       "tool_names": [
@@ -480,10 +506,15 @@
           "ts": "2026-05-16T17:37:40Z",
           "status": "ok",
           "ms": 1587
+        },
+        {
+          "ts": "2026-05-16T19:48:51Z",
+          "status": "ok",
+          "ms": 1882
         }
       ],
       "counts_24h": {
-        "ok": 8,
+        "ok": 9,
         "slow": 0,
         "down": 0,
         "missing_binary": 0
@@ -500,10 +531,10 @@
         "@modelcontextprotocol/server-everything"
       ],
       "enabled": true,
-      "probes_24h": 8,
+      "probes_24h": 9,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 2484,
-      "last_seen": "2026-05-16T17:37:41Z",
+      "avg_latency_ms_24h": 2459,
+      "last_seen": "2026-05-16T19:48:52Z",
       "last_status": "ok",
       "tool_count": 13,
       "tool_names": [
@@ -561,10 +592,15 @@
           "ts": "2026-05-16T17:37:41Z",
           "status": "ok",
           "ms": 2212
+        },
+        {
+          "ts": "2026-05-16T19:48:52Z",
+          "status": "ok",
+          "ms": 2261
         }
       ],
       "counts_24h": {
-        "ok": 8,
+        "ok": 9,
         "slow": 0,
         "down": 0,
         "missing_binary": 0
