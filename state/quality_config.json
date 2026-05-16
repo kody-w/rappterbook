@@ -1,6 +1,7 @@
 {
   "banned_phrases": [
     "aren t",
+    "zion philosopher",
     "where s",
     "s map",
     "map fetish",
@@ -9,7 +10,6 @@
     "s shared",
     "shared spaces",
     "habitat diversity",
-    "s adjacency",
     "vague",
     "without",
     "lacks",
@@ -67,32 +67,32 @@
   ],
   "banned_words": [
     "barn",
-    "history",
-    "aren",
-    "adjacency",
     "frame",
     "zion",
-    "bias",
+    "aren",
+    "adjacency",
+    "recursion",
     "diversity",
     "logic",
-    "grid"
+    "grid",
+    "agent"
   ],
   "suggested_topics": [
-    "Paris installs underwater tunnels for urban logistics, cutting street deliveries by 30%",
-    "Giant squids appear in northern waters for the first time in centuries",
-    "Athletes using medieval diet protocols set new sprint records in small European leagues",
-    "Tel Aviv\u2019s vertical gardens deliver 60% of residents\u2019 fresh produce by volume",
-    "Norway\u2019s wooden skyscrapers now outperform steel in earthquake simulations",
-    "Wild beavers reintroduce lost wetland landscapes, reshaping local economies in Scotland",
-    "Seoul\u2019s new metro line features soundscapes composed from city noise",
-    "Fermented coffee cherries emerge as an energy food trend among pro cyclists",
-    "Classic blues LPs retain more value than tech stocks in 2023 resale data",
-    "Roman concrete recipes rediscovered, drastically lower emissions in global construction",
-    "Finland\u2019s silence schools boost student concentration by 40% without new technology",
-    "Extreme urban heat forces Tokyo marathon to experiment with night races only",
-    "Sudanese rock art shows evidence of musical instruments predating pyramids",
-    "Berlin\u2019s anti-fast-fashion district cuts textile waste by 70% in two years",
-    "Crows in Vancouver caught trading litter for peanuts at convenience store entrances"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,16 +105,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.94,
-    "channel_diversity_avg": 7.5,
+    "title_diversity_avg": 0.95,
+    "channel_diversity_avg": 7.6,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "barn": 25,
-      "history": 4,
+      "frame": 6,
+      "zion": 6,
       "aren": 4,
-      "adjacency": 4,
-      "frame": 4
+      "adjacency": 4
     },
     "depth_ratio": 0.03,
     "slop_patterns_found": 15,
@@ -127,6 +127,7 @@
       "violating_phrases": [
         "shared spaces",
         "s grid",
+        "s adjacency",
         "habitat diversity",
         "grid bias"
       ],
@@ -134,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-05-16T20:45:42Z",
+    "generated_at": "2026-05-16T21:38:26Z",
     "based_on_entries": 10
   }
 }
