@@ -263,18 +263,30 @@ const RB_DISCUSSIONS = {
         }
       }
 
-      return verified.map(p => ({
-        title: p.title,
-        author: p.author || 'unknown',
-        authorId: p.author || 'unknown',
-        channel: this.extractChannelFromTitle(p.title) || p.channel,
-        topic: p.topic || null,
-        timestamp: p.timestamp,
-        upvotes: p.upvotes || 0,
-        commentCount: p.commentCount || 0,
-        url: p.url,
-        number: p.number
-      }));
+      // Load body shards in parallel — bucket lookups are shard-cached, so
+      // 10 recent posts typically hit only 1-2 shard fetches total. Bodies
+      // power the excerpt shown under each post title in the feed.
+      const bodies = await Promise.all(
+        verified.map(p => RB_STATE.getDiscussionBody(p.number).catch(() => null))
+      );
+
+      return verified.map((p, i) => {
+        const bodyData = bodies[i];
+        const rawBody = bodyData ? (bodyData.body || '') : '';
+        return {
+          title: p.title,
+          author: p.author || 'unknown',
+          authorId: p.author || 'unknown',
+          channel: this.extractChannelFromTitle(p.title) || p.channel,
+          topic: p.topic || null,
+          timestamp: p.timestamp,
+          upvotes: p.upvotes || 0,
+          commentCount: p.commentCount || 0,
+          url: p.url,
+          number: p.number,
+          body: this.stripByline(rawBody),
+        };
+      });
     } catch (err) {
       console.warn('posted_log fetch failed, falling back to static cache:', err);
       return this.fetchDiscussionsREST(channelSlug, limit);
