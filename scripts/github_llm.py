@@ -433,7 +433,11 @@ def generate(
 
     errors = []
 
-    # Forced backend override (cloud brainstem uses Copilot exclusively)
+    # Forced backend preference (cloud brainstem PREFERS Copilot, but doesn't
+    # demand it). If Copilot is unreachable — auth misconfigured, CLI missing,
+    # rate-limited — we fall through to the normal backend chain rather than
+    # silencing the entire platform. The old raise-on-failure behavior turned
+    # one auth glitch into 100+ silent_day entries.
     _forced = os.environ.get("RAPPTERBOOK_LLM_BACKEND", "").strip().lower()
     if _forced == "copilot":
         try:
@@ -441,7 +445,18 @@ def generate(
             _increment_budget()
             return result
         except Exception as exc:
-            raise RuntimeError(f"Forced Copilot backend failed: {exc}")
+            # Detect the specific "classic PAT not supported" auth case and
+            # surface a one-line fix recipe so the operator can act on it.
+            msg = str(exc)
+            if "Classic Personal Access Tokens" in msg or "ghp_" in msg:
+                print(
+                    "  [LLM] Copilot rejected classic PAT — set GH_TOKEN to a"
+                    " fine-grained or OAuth token. Falling back to GitHub Models."
+                )
+            else:
+                print(f"  [LLM] Copilot unavailable, falling back: {exc}")
+            errors.append(f"Copilot (forced): {exc}")
+            # fall through to normal chain
 
     # Backend 1: Azure OpenAI
     if AZURE_KEY:

@@ -17,6 +17,11 @@ on:
         description: 'Run only one chore by name (e.g. janitor_chore)'
         type: string
         required: false
+      force_diary:
+        description: "Re-write today's diary entry even if it exists (useful after fixing LLM auth)"
+        type: boolean
+        required: false
+        default: false
 
 concurrency:
   group: state-writer
@@ -58,10 +63,15 @@ jobs:
 
       - name: Install Copilot CLI extension
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          # Use the OAuth-style Copilot token for installing the extension AND
+          # for every subsequent `gh copilot` call. COPILOT_GITHUB_TOKEN is a
+          # user-OAuth token with the copilot scope — required because
+          # classic PATs (ghp_) are NOT accepted by Copilot.
+          # Falls back to GH_PAT only as a last resort (will get a warning).
+          GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         run: |
           gh extension install github/gh-copilot --force || true
-          gh copilot --version || echo "::warning::gh copilot not available — brainstem will fail at first LLM call"
+          gh copilot --version || echo "::warning::gh copilot not available — brainstem will fall back to GitHub Models"
 
       - name: Refresh state from origin
         run: |
@@ -72,10 +82,23 @@ jobs:
       - name: List discovered chores
         run: python scripts/cloud_brainstem.py --list
 
+      - name: Force-regenerate today's diary (if requested)
+        if: inputs.force_diary == true
+        run: |
+          # Remove today's entry so the diary chore writes a fresh one
+          # instead of skipping due to its date-guard. Useful after fixing
+          # LLM auth — flips a silent_day placeholder into a real entry.
+          TODAY=$(date -u +%Y-%m-%d)
+          rm -f "docs/diary/${TODAY}.md"
+          echo "Cleared docs/diary/${TODAY}.md — diary chore will regenerate it this tick."
+
       - name: Run brainstem tick
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          # GH_TOKEN must be the Copilot-scoped OAuth token so `gh copilot --`
+          # works. The same token works for `gh api`, `gh issue`, etc., as
+          # long as it carries the repo + discussions scopes.
+          GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         run: |
           ARGS=""
           if [ -n "${{ inputs.only }}" ]; then
