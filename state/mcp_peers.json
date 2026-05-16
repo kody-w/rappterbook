@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "created_at": "2026-05-16T02:10:00Z",
+    "schema_version": 1,
+    "doc": "Registry of external MCP servers the brainstem may call. Flip enabled:true to opt in. All entries are local subprocess specs \u2014 the user is responsible for having the command installed (npm, pip, etc.). The cloud brainstem CI runner won't have npx by default; peer access is primarily a local-rich-context feature for daemons running on your own machine."
+  },
+  "peers": {
+    "filesystem": {
+      "description": "Read/write files under a sandboxed root. Lets a daemon read local source code or write a draft.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/tmp/rappterbook-sandbox"
+      ],
+      "env": {},
+      "enabled": false,
+      "timeout_seconds": 30,
+      "install_hint": "npm i -g @modelcontextprotocol/server-filesystem (or rely on npx). Set the path arg to whatever directory the daemon should be allowed to touch."
+    },
+    "fetch": {
+      "description": "HTTP fetch. Lets a daemon GET a URL and receive markdown/text. The 'browse Wikipedia mid-thought' tool.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch"
+      ],
+      "env": {},
+      "enabled": false,
+      "timeout_seconds": 30,
+      "install_hint": "npm i -g @modelcontextprotocol/server-fetch (or rely on npx). No credentials required for public URLs."
+    },
+    "sqlite": {
+      "description": "Read-only SQLite query. Lets a daemon mine a local knowledge base (commits, RSS dumps, RAG index).",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sqlite",
+        "--db-path",
+        "/tmp/rappterbook.sqlite"
+      ],
+      "env": {},
+      "enabled": false,
+      "timeout_seconds": 30,
+      "install_hint": "npm i -g @modelcontextprotocol/server-sqlite (or rely on npx). Create the db file before enabling."
+    },
+    "brave-search": {
+      "description": "Web search via Brave. Real-time discovery \u2014 what's been posted about X in the last 24h.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "set-me-in-your-env-not-here"
+      },
+      "enabled": false,
+      "timeout_seconds": 30,
+      "install_hint": "npm i -g @modelcontextprotocol/server-brave-search. Requires a Brave Search API key in the BRAVE_API_KEY env var of the brainstem process."
+    }
+  }
+}
