@@ -30,17 +30,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          # Shallow clone — full history is overkill for appending a line.
+          # fetch-depth: 0 was timing out the job (>5min) on this repo's
+          # 900+ commit history, cancelling runs before they could parse.
+          fetch-depth: 1
+          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Refresh state from origin
-        run: |
-          git fetch origin main
-          git checkout origin/main -- state/ || true
 
       - name: Parse issue body + append to witness_log.jsonl
         id: ingest
