@@ -10,8 +10,11 @@ on:
     types: [opened, labeled, reopened]
 
 concurrency:
+  # Cancel any in-flight run for the same issue. Two events (opened +
+  # labeled) commonly fire near-simultaneously; allowing both to race
+  # to safe_commit caused the 2026-05-16 orphan-commit incident.
   group: prompt-remix-${{ github.event.issue.number }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -26,10 +29,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Shallow — we only need to write one file (state/remixes.jsonl).
-          # Full history was responsible for the witness-receive timeouts
-          # we burned a PR on; not repeating that here.
-          fetch-depth: 1
+          # FULL history — fetch-depth: 1 caused the 2026-05-16 main-branch
+          # orphan-commit incident: safe_commit.sh's amend path on a shallow
+          # clone produced a parentless commit that overwrote the entire
+          # branch ancestry via force-with-lease. safe_commit.sh now has a
+          # shallow-repo guard, but defense in depth: ALSO checkout full
+          # history. We only write one file; the cost is bandwidth, not
+          # disk or runtime.
+          fetch-depth: 0
           ref: main
 
       - name: Set up Python
