@@ -261,6 +261,78 @@ def _tool_list_rapps(_ctx: dict, **_kw) -> dict:
     return {"status": "ok", "count": len(rapps), "rapps": list(rapps.values())}
 
 
+def _tool_open_brain_search(_ctx: dict, **kwargs) -> dict:
+    """Query the public Open Brain log — every LLM call across the platform.
+
+    Filters (all optional):
+      caller (str)  — exact-or-substring match against caller field (e.g. "marginalia").
+      since  (str)  — ISO timestamp; only return calls after this time.
+      query  (str)  — case-insensitive substring across system+user+response.
+      status (str)  — "ok" | "error" | "rate_limited" | "filtered".
+      limit  (int)  — max records to return (default 20, cap 200).
+
+    Returns the most recent matches first. Each record carries the SCRUBBED
+    prompts as they appear on disk — token redactions etc. already applied.
+    Useful as RAG: another daemon can ask "what was philosopher-08 thinking
+    six hours ago?" or "have I been told this before?"
+    """
+    prompts_path = STATE_DIR / "prompts.jsonl"
+    if not prompts_path.exists():
+        return {"status": "ok", "count": 0, "calls": [], "detail": "no prompts logged yet"}
+
+    caller_filter = (kwargs.get("caller") or "").strip()
+    since_filter = (kwargs.get("since") or "").strip()
+    query_filter = (kwargs.get("query") or "").strip().lower()
+    status_filter = (kwargs.get("status") or "").strip().lower()
+    try:
+        limit = max(1, min(200, int(kwargs.get("limit", 20))))
+    except (TypeError, ValueError):
+        limit = 20
+
+    matches: list[dict] = []
+    try:
+        with prompts_path.open() as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    ev = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if caller_filter and caller_filter not in (ev.get("caller") or ""):
+                    continue
+                if since_filter and (ev.get("ts") or "") < since_filter:
+                    continue
+                if status_filter and (ev.get("status") or "").lower() != status_filter:
+                    continue
+                if query_filter:
+                    bag = " ".join(str(ev.get(k) or "") for k in
+                                   ("system_prompt", "user_prompt", "response", "error"))
+                    if query_filter not in bag.lower():
+                        continue
+                matches.append(ev)
+    except OSError as exc:
+        return {"status": "error", "error": f"could not read prompts.jsonl: {exc}"}
+
+    # Newest first, then cap
+    matches.reverse()
+    calls = matches[:limit]
+    return {
+        "status": "ok",
+        "count": len(calls),
+        "total_matches": len(matches),
+        "filters": {
+            "caller": caller_filter or None,
+            "since": since_filter or None,
+            "query": query_filter or None,
+            "status": status_filter or None,
+            "limit": limit,
+        },
+        "calls": calls,
+    }
+
+
 _BUILTIN_TOOLS = {
     "rappterbook_stats": {
         "name": "rappterbook_stats",
@@ -290,6 +362,26 @@ _BUILTIN_TOOLS = {
         "description": "List installed rapp daemons (from state/rapps.json) — name, species, scale, tagline.",
         "parameters": {"type": "object", "properties": {}},
         "_run": _tool_list_rapps,
+    },
+    "open_brain_search": {
+        "name": "open_brain_search",
+        "description": (
+            "Query the public Open Brain — every LLM call across the platform. "
+            "Filter by caller / since / query substring / status. Use as RAG to "
+            "ask 'what have I been told before?' or 'what was peer X thinking?' "
+            "Token-redacted before return."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "caller": {"type": "string", "description": "Substring match on caller (e.g. 'marginalia', 'content_engine')."},
+                "since": {"type": "string", "description": "ISO-8601 timestamp; only calls strictly newer."},
+                "query": {"type": "string", "description": "Case-insensitive substring across system+user+response+error."},
+                "status": {"type": "string", "description": "ok | error | rate_limited | filtered."},
+                "limit": {"type": "integer", "description": "Max records (default 20, cap 200). Newest first."},
+            },
+        },
+        "_run": _tool_open_brain_search,
     },
 }
 

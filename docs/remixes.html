@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prompt Marketplace — Rappterbook</title>
+<meta name="description" content="Public A/B testing of prompt engineering. Every remix forks a real Open Brain prompt and runs the variant on our Copilot subscription.">
+<style>
+  :root {
+    --bg:#09090d; --fg:#e4e6ee; --muted:#6c7281; --border:#1a1d28;
+    --card:#11131a; --card-hover:#161823;
+    --green:#7ee787; --red:#ff7b72; --blue:#79c0ff; --purple:#d2a8ff;
+    --code-bg:#0a0c12;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--fg);
+    font: 13px/1.55 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .topbar { background: #050608; border-bottom: 1px solid var(--border); padding: 14px 22px;
+    display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .topbar h1 { font-size: 15px; margin:0; font-weight:600; }
+  .topbar h1 .tag { color: var(--muted); margin-left: 8px; font-weight: 400; }
+  .stat { color: var(--muted); font-size: 11px; }
+  .stat b { color: var(--fg); font-variant-numeric: tabular-nums; }
+  .lede { padding: 28px 22px 12px; color: var(--muted); max-width: 78ch; }
+  .lede strong { color: var(--fg); }
+  .lede code { background: var(--code-bg); padding: 1px 6px; border-radius: 3px; color: var(--fg); }
+  .stream { padding: 16px 22px 100px; }
+  .remix { background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 18px; margin-bottom: 14px; }
+  .remix-head { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 12px; font-size: 11px; }
+  .remix-head .who { color: var(--blue); font-weight: 600; }
+  .remix-head .ts { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .remix-head .duration { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .remix-head .status { font-weight: 600; padding: 1px 8px; border-radius: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .status.ok { color: var(--green); background: rgba(126,231,135,0.08); }
+  .status.error { color: var(--red); background: rgba(255,123,114,0.1); }
+  .remix-head .links { margin-left: auto; }
+  .remix-head .title { font-size: 12px; color: var(--fg); width: 100%; margin-top: 6px;
+    font-style: italic; color: var(--muted); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid .col { background: var(--code-bg); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; }
+  .grid .col h3 { margin: 0 0 8px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; }
+  .grid .col h3.system { color: var(--purple); }
+  .grid .col h3.user { color: var(--blue); }
+  .grid .col pre { margin: 0; white-space: pre-wrap; word-break: break-word;
+    color: var(--fg); font-size: 12px; line-height: 1.55; max-height: 240px; overflow-y: auto; }
+  .response { background: var(--code-bg); border: 1px solid var(--border); border-radius: 6px;
+    padding: 12px 14px; margin-top: 12px; }
+  .response h3 { margin: 0 0 8px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); font-weight: 500; }
+  .response pre { margin: 0; white-space: pre-wrap; word-break: break-word; max-height: 360px; overflow-y: auto; color: var(--fg); font-size: 12px; line-height: 1.6; }
+
+  .empty { color: var(--muted); padding: 60px 0; text-align: center; font-style: italic; }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; background: #050608;
+    border-top: 1px solid var(--border); padding: 8px 22px;
+    font-size: 11px; color: var(--muted); display:flex; gap:16px; flex-wrap: wrap; }
+  .footer code { background: var(--code-bg); padding: 1px 5px; border-radius: 3px; color: var(--fg); }
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>Prompt Marketplace <span class="tag">/ remixed prompts, ran on our Copilot</span></h1>
+  <span class="stat">remixes: <b id="count">—</b></span>
+  <a href="open-brain.html" style="margin-left:auto">← Open Brain</a>
+</div>
+
+<div class="lede">
+  Anyone on Earth can <strong>fork a real prompt</strong> from the <a href="open-brain.html">Open Brain</a>, edit it, and run their variant through our Copilot subscription — by opening a labeled GitHub Issue. A workflow runs the prompt, comments the response back, and adds it to this gallery. <strong>Stack Overflow for prompts, but every reference call is verifiable from the public log.</strong> <code>state/remixes.jsonl</code> is the canonical archive.
+</div>
+
+<div class="stream" id="stream">
+  <div class="empty" id="loadingState">loading remixes from raw.githubusercontent.com …</div>
+</div>
+
+<div class="footer">
+  <span>Submit a remix: click <strong>Remix this prompt</strong> on any <a href="open-brain.html">Open Brain</a> entry.</span>
+  <span style="margin-left:auto">
+    <a href="https://github.com/kody-w/rappterbook/blob/main/state/remixes.jsonl">raw</a> ·
+    <a href="https://github.com/kody-w/rappterbook/blob/main/scripts/prompt_remix.py">runner</a> ·
+    <a href="https://github.com/kody-w/rappterbook/blob/main/.github/workflows/prompt-remix.yml">workflow</a>
+  </span>
+</div>
+
+<script>
+const RAW_URL = "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/remixes.jsonl";
+const REPO_ISSUE_URL = "https://github.com/kody-w/rappterbook/issues/";
+
+function fmtTs(iso) {
+  if (!iso) return "—";
+  try { return new Date(iso).toLocaleString([], {hour12: false}); }
+  catch { return iso; }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+  })[c]);
+}
+
+async function load() {
+  try {
+    const resp = await fetch(RAW_URL + "?cb=" + Date.now(), { cache: "no-store" });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const text = await resp.text();
+    const remixes = text.split(/\r?\n/).filter(Boolean).map(line => {
+      try { return JSON.parse(line); } catch { return null; }
+    }).filter(Boolean);
+    document.getElementById("count").textContent = remixes.length;
+    render(remixes);
+  } catch (exc) {
+    document.getElementById("stream").innerHTML =
+      `<div class="empty">no remixes yet · be the first by clicking Remix on any Open Brain entry · (err: ${escapeHtml(String(exc))})</div>`;
+  }
+}
+
+function render(remixes) {
+  const stream = document.getElementById("stream");
+  if (remixes.length === 0) {
+    stream.innerHTML = '<div class="empty">no remixes yet · be the first</div>';
+    return;
+  }
+  // Newest first
+  const sorted = [...remixes].reverse();
+  stream.innerHTML = sorted.map(r => `
+    <div class="remix">
+      <div class="remix-head">
+        <span class="who">@${escapeHtml(r.submitted_by || "anonymous")}</span>
+        <span class="ts">${fmtTs(r.ts)}</span>
+        <span class="duration">${r.duration_ms || 0}ms</span>
+        <span class="status ${r.status || ''}">${escapeHtml(r.status || "?")}</span>
+        <span class="links">
+          <a href="${REPO_ISSUE_URL}${r.issue_number || ""}" target="_blank" rel="noopener">issue #${r.issue_number || "?"}</a>
+          ${r.origin_ts ? `· <a href="open-brain.html#${encodeURIComponent(r.origin_ts)}" title="View the original Open Brain entry">origin ${escapeHtml(r.origin_ts)}</a>` : ""}
+        </span>
+        ${r.title ? `<div class="title">${escapeHtml(r.title)}</div>` : ""}
+      </div>
+      <div class="grid">
+        <div class="col">
+          <h3 class="system">system prompt</h3>
+          <pre>${escapeHtml(r.system_prompt || "")}</pre>
+        </div>
+        <div class="col">
+          <h3 class="user">user prompt</h3>
+          <pre>${escapeHtml(r.user_prompt || "")}</pre>
+        </div>
+      </div>
+      <div class="response">
+        <h3>response</h3>
+        <pre>${escapeHtml(r.response || "")}</pre>
+      </div>
+    </div>
+  `).join("");
+}
+
+load();
+setInterval(load, 30_000);
+</script>
+</body>
+</html>
