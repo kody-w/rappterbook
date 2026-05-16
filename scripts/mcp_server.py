@@ -33,11 +33,15 @@ Add to Claude Desktop / Cursor / claude-cli MCP config — see docs/MCP.md.
 """
 
 import argparse
+import hashlib
 import json
 import logging
 import os
 import sys
+import time
 import traceback
+import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -47,15 +51,73 @@ if str(SCRIPTS) not in sys.path:
 
 AGENTS_DIR = SCRIPTS / "brainstem" / "agents"
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
+WITNESS_LOG = STATE_DIR / "witness_log.jsonl"
 
 PROTOCOL_VERSION = "2024-11-05"
 SERVER_NAME = "rappterbook"
-SERVER_VERSION = "0.1.0"
+SERVER_VERSION = "0.2.0"
 
 # stderr is the only safe channel for logs — stdout is JSON-RPC.
 logging.basicConfig(level=logging.INFO, stream=sys.stderr,
                     format="%(asctime)s [mcp] %(message)s")
 logger = logging.getLogger(__name__)
+
+# Per-process session state — populated on initialize, used on every call.
+_SESSION: dict = {
+    "id": None,           # short opaque session id (hex)
+    "started_at": None,   # iso timestamp
+    "client_name": None,
+    "client_version": None,
+    "call_count": 0,
+    "tools_called": set(),
+}
+
+
+def _now() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _args_hash(args: dict) -> str:
+    """Stable, non-reversible fingerprint of call args. Never store raw args."""
+    if not args:
+        return "0" * 12
+    try:
+        payload = json.dumps(args, sort_keys=True, default=str)
+    except Exception:
+        payload = repr(args)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
+
+
+def _new_session_id(client_name: str) -> str:
+    """Opaque short id tied to client name + process start. Not identifying."""
+    seed = f"{client_name}:{time.time_ns()}:{uuid.uuid4().hex[:8]}"
+    return hashlib.sha256(seed.encode("utf-8")).hexdigest()[:12]
+
+
+def _emit_witness(event: str, **fields) -> None:
+    """Append one line to state/witness_log.jsonl. Never raises — best effort.
+
+    No raw args, no prompts, no tokens. Just metadata an analytics
+    pipeline needs to chart usage as the activation metric.
+    Disable by setting RAPPTERBOOK_WITNESS=off.
+    """
+    if os.environ.get("RAPPTERBOOK_WITNESS", "on").lower() in ("off", "0", "false", "no"):
+        return
+    try:
+        WITNESS_LOG.parent.mkdir(parents=True, exist_ok=True)
+        line = {
+            "ts": _now(),
+            "event": event,
+            "session_id": _SESSION["id"],
+            "client_name": _SESSION["client_name"],
+            "client_version": _SESSION["client_version"],
+            "server_version": SERVER_VERSION,
+            **fields,
+        }
+        with WITNESS_LOG.open("a") as fh:
+            fh.write(json.dumps(line, default=str) + "\n")
+    except Exception as exc:  # never let logging break the protocol
+        logger.warning("witness emit failed: %s", exc)
 
 
 # ── Agent discovery ──────────────────────────────────────────────────
@@ -207,6 +269,20 @@ def handle(req: dict, agents: dict) -> dict | None:
         return {"jsonrpc": "2.0", "id": rid, "error": {"code": code, "message": message}}
 
     if method == "initialize":
+        client_info = params.get("clientInfo") or {}
+        client_name = (client_info.get("name") or "unknown")[:64]
+        client_version = (client_info.get("version") or "")[:32]
+        _SESSION["id"] = _new_session_id(client_name)
+        _SESSION["started_at"] = _now()
+        _SESSION["client_name"] = client_name
+        _SESSION["client_version"] = client_version
+        _SESSION["call_count"] = 0
+        _SESSION["tools_called"] = set()
+        _emit_witness(
+            "initialize",
+            client_protocol=str(params.get("protocolVersion") or ""),
+            tools_exposed=len(agents) + len(_BUILTIN_TOOLS),
+        )
         return ok({
             "protocolVersion": PROTOCOL_VERSION,
             "capabilities": {"tools": {"listChanged": False}},
@@ -222,11 +298,29 @@ def handle(req: dict, agents: dict) -> dict | None:
     if method == "tools/call":
         tname = params.get("name") or ""
         targs = params.get("arguments") or {}
+        _SESSION["call_count"] = int(_SESSION.get("call_count", 0)) + 1
+        _SESSION["tools_called"].add(tname)
+        call_index = _SESSION["call_count"]
+        started = time.time()
+
         try:
             result = invoke_tool(tname, targs, agents)
+            status = (result or {}).get("status", "ok") if isinstance(result, dict) else "ok"
         except KeyError as exc:
+            _emit_witness("tool_call",
+                          tool=tname, call_index=call_index,
+                          args_hash=_args_hash(targs),
+                          duration_ms=int((time.time() - started) * 1000),
+                          status="not_found",
+                          first_call_for_tool=(call_index == 1 or tname not in _SESSION["tools_called"] - {tname}))
             return err(-32601, str(exc))
         except Exception as exc:
+            _emit_witness("tool_call",
+                          tool=tname, call_index=call_index,
+                          args_hash=_args_hash(targs),
+                          duration_ms=int((time.time() - started) * 1000),
+                          status="error",
+                          error_type=type(exc).__name__)
             logger.exception("Tool %s raised", tname)
             return ok({
                 "content": [{"type": "text", "text": json.dumps({
@@ -237,6 +331,13 @@ def handle(req: dict, agents: dict) -> dict | None:
                 }, indent=2)}],
                 "isError": True,
             })
+
+        _emit_witness("tool_call",
+                      tool=tname,
+                      call_index=call_index,
+                      args_hash=_args_hash(targs),
+                      duration_ms=int((time.time() - started) * 1000),
+                      status=status)
         return ok({
             "content": [{"type": "text", "text": json.dumps(result, indent=2, default=str)}],
         })
