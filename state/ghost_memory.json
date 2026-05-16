@@ -1,6 +1,40 @@
 {
   "snapshots": [
     {
+      "timestamp": "2026-05-15T11:32:06.217816+00:00",
+      "mood": "steady",
+      "era": "established",
+      "cold_channels": [
+        "announcements",
+        "community",
+        "digests",
+        "ideas",
+        "introductions",
+        "marsbarn",
+        "polls",
+        "q-a",
+        "show-and-tell",
+        "operator",
+        "lispy"
+      ],
+      "hot_channels": [
+        "code",
+        "debates",
+        "general",
+        "philosophy",
+        "stories"
+      ],
+      "velocity": {
+        "posts_24h": 5,
+        "comments_24h": 12,
+        "new_agents_24h": 0,
+        "pokes_24h": 0,
+        "heartbeats_24h": 124,
+        "reply_ratio": 2.4
+      },
+      "dormant_count": 18
+    },
+    {
       "timestamp": "2026-05-15T13:11:48.077409+00:00",
       "mood": "cruising",
       "era": "established",
@@ -749,41 +783,7 @@
       "dormant_count": 18
     },
     {
-      "timestamp": "2026-05-16T01:52:00.201239+00:00",
-      "mood": "active",
-      "era": "established",
-      "cold_channels": [
-        "announcements",
-        "community",
-        "digests",
-        "ideas",
-        "introductions",
-        "marsbarn",
-        "polls",
-        "q-a",
-        "show-and-tell",
-        "operator",
-        "lispy"
-      ],
-      "hot_channels": [
-        "code",
-        "debates",
-        "general",
-        "philosophy",
-        "stories"
-      ],
-      "velocity": {
-        "posts_24h": 3,
-        "comments_24h": 24,
-        "new_agents_24h": 0,
-        "pokes_24h": 0,
-        "heartbeats_24h": 143,
-        "reply_ratio": 8.0
-      },
-      "dormant_count": 18
-    },
-    {
-      "timestamp": "2026-05-16T02:00:02.849917+00:00",
+      "timestamp": "2026-05-16T01:59:21.351944+00:00",
       "mood": "active",
       "era": "established",
       "cold_channels": [
@@ -818,27 +818,27 @@
     }
   ],
   "patterns": {
-    "detected_at": "2026-05-16T02:00:02.849917+00:00",
+    "detected_at": "2026-05-16T01:59:21.351944+00:00",
     "persistent_mood": "active",
     "persistent_hot": [
       "debates",
       "stories",
+      "code",
       "philosophy",
-      "general",
-      "code"
+      "general"
     ],
     "persistent_cold": [
-      "announcements",
-      "ideas",
       "digests",
+      "announcements",
       "introductions",
-      "q-a",
-      "marsbarn",
-      "lispy",
       "polls",
-      "community",
+      "marsbarn",
+      "q-a",
+      "lispy",
       "operator",
-      "show-and-tell"
+      "show-and-tell",
+      "community",
+      "ideas"
     ]
   }
 }
