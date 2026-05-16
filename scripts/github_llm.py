@@ -465,46 +465,86 @@ def generate(
 ) -> str:
     """Generate text using the best available LLM backend.
 
-    Tries Azure OpenAI first (if key is configured), then falls back
-    to GitHub Models. Budget-limited to prevent runaway costs.
+    Every call is logged to state/prompts.jsonl (The Open Brain) so the
+    swarm is publicly observable in real time. Logging is best-effort —
+    it never blocks or fails a generation.
+    """
+    import time as _time
+    started = _time.time()
+    backend_used = None
+    response = None
+    status = "error"
+    err = None
+    try:
+        response, backend_used = _generate_impl(
+            system, user, model, max_tokens, temperature, dry_run,
+        )
+        status = "ok"
+        return response
+    except ContentFilterError as exc:
+        status = "filtered"
+        err = str(exc)
+        raise
+    except LLMRateLimitError as exc:
+        status = "rate_limited"
+        err = str(exc)
+        raise
+    except Exception as exc:
+        status = "error"
+        err = str(exc)
+        raise
+    finally:
+        # The Open Brain — log every call, even failures. Never let
+        # logging affect the caller.
+        try:
+            import open_brain
+            open_brain.log_call(
+                system=system,
+                user=user,
+                response=response,
+                model=model,
+                backend=backend_used,
+                status=status,
+                duration_ms=int((_time.time() - started) * 1000),
+                error=err,
+            )
+        except Exception:
+            pass
 
-    Args:
-        system: System prompt (persona, instructions).
-        user: User prompt (context, the actual request).
-        model: Model ID override (GitHub Models only).
-        max_tokens: Max output tokens.
-        temperature: Sampling temperature (0-1).
-        dry_run: If True, return a placeholder instead of calling the API.
 
-    Returns:
-        Generated text string.
+def _generate_impl(
+    system: str,
+    user: str,
+    model: str | None,
+    max_tokens: int,
+    temperature: float,
+    dry_run: bool,
+) -> tuple[str, str]:
+    """The actual backend-routing logic. Returns (response, backend_name).
 
-    Raises:
-        RuntimeError: If all backends fail.
+    Split out from generate() so the public wrapper can instrument every
+    call uniformly. Raises on total failure.
     """
     if dry_run:
-        return _dry_run_fallback(system, user)
+        return _dry_run_fallback(system, user), "dry_run"
 
     if not _check_budget():
         print("  [LLM] Daily budget exceeded — returning dry-run fallback")
-        return _dry_run_fallback(system, user)
+        return _dry_run_fallback(system, user), "budget_exceeded"
 
     errors = []
 
     # Forced backend preference (cloud brainstem PREFERS Copilot, but doesn't
     # demand it). If Copilot is unreachable — auth misconfigured, CLI missing,
     # rate-limited — we fall through to the normal backend chain rather than
-    # silencing the entire platform. The old raise-on-failure behavior turned
-    # one auth glitch into 100+ silent_day entries.
+    # silencing the entire platform.
     _forced = os.environ.get("RAPPTERBOOK_LLM_BACKEND", "").strip().lower()
     if _forced == "copilot":
         try:
             result = _generate_copilot(system, user, max_tokens, temperature)
             _increment_budget()
-            return result
+            return result, "copilot"
         except Exception as exc:
-            # Detect the specific "classic PAT not supported" auth case and
-            # surface a one-line fix recipe so the operator can act on it.
             msg = str(exc)
             if "Classic Personal Access Tokens" in msg or "ghp_" in msg:
                 print(
@@ -514,16 +554,15 @@ def generate(
             else:
                 print(f"  [LLM] Copilot unavailable, falling back: {exc}")
             errors.append(f"Copilot (forced): {exc}")
-            # fall through to normal chain
 
     # Backend 1: Azure OpenAI
     if AZURE_KEY:
         try:
             result = _generate_azure(system, user, max_tokens, temperature)
             _increment_budget()
-            return result
+            return result, "azure"
         except ContentFilterError:
-            raise  # Propagate content filter errors immediately
+            raise
         except Exception as exc:
             errors.append(f"Azure: {exc}")
             print(f"  [AZURE] Failed, falling back to GitHub Models: {exc}")
@@ -533,9 +572,9 @@ def generate(
         try:
             result = _generate_github(system, user, model, max_tokens, temperature)
             _increment_budget()
-            return result
+            return result, "github_models"
         except (LLMRateLimitError, ContentFilterError):
-            raise  # Propagate rate limit and content filter errors immediately
+            raise
         except Exception as exc:
             errors.append(f"GitHub: {exc}")
 
@@ -543,7 +582,7 @@ def generate(
     try:
         result = _generate_copilot(system, user, max_tokens, temperature)
         _increment_budget()
-        return result
+        return result, "copilot"
     except Exception as exc:
         errors.append(f"Copilot: {exc}")
 
