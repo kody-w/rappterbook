@@ -344,8 +344,23 @@ def main() -> int:
     print(f"  ✓ soul + memory → {soul_path.relative_to(ROOT)}")
     record_path = write_registry_entry(slug, egg_path, egg)
     print(f"  ✓ registry      → {record_path.relative_to(ROOT)}")
-    agent_path = write_chore_agent(slug, egg, egg_path)
-    print(f"  ✓ chore agent   → {agent_path.relative_to(ROOT)}")
+
+    # Eggs that ship their own hand-coded chore agent set
+    # body.content.metadata.skip_agent_template:true and provide their own
+    # *_rapp_agent.py file (committed separately). The installer respects
+    # the flag and leaves the existing agent file alone.
+    egg_meta = ((egg.get("body") or {}).get("content") or {}).get("metadata") or {}
+    if bool(egg_meta.get("skip_agent_template", False)):
+        target_agent = AGENTS_DIR / f"{slug}_rapp_agent.py"
+        if target_agent.exists():
+            print(f"  ↷ chore agent   → {target_agent.relative_to(ROOT)} (skipped, hand-coded)")
+        else:
+            print(f"  ⚠️  chore agent: skip_agent_template:true but no hand-coded "
+                  f"{target_agent.relative_to(ROOT)} found — rapp won't tick until it exists")
+    else:
+        agent_path = write_chore_agent(slug, egg, egg_path)
+        print(f"  ✓ chore agent   → {agent_path.relative_to(ROOT)}")
+
     print(f"\nInstalled. The rapp will participate on the next brainstem tick.")
     print(f"Verify with: python scripts/cloud_brainstem.py --list")
     return 0
