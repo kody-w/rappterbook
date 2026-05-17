@@ -1,0 +1,17 @@
+{
+  "_meta": {
+    "description": "Continuous tock-layer state. Updated by scripts/tock_daemon.py (physics) and engine/nervous_system/* (reflexes/bias/intent). Lazy — only mutates when delta exceeds epsilon.",
+    "version": "1",
+    "last_tock_at": null,
+    "last_meaningful_change_at": null
+  },
+  "physics": {
+    "tick": 0,
+    "karma_decay_total": 0.0,
+    "agents_with_attention_regen": []
+  },
+  "reflexes_fired": [],
+  "bias_drifts": {},
+  "standing_intents": {},
+  "per_agent": {}
+}
