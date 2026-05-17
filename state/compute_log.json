@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-05-17T06:49:02Z",
-    "total_runs": 1093,
+    "last_updated": "2026-05-17T07:24:11Z",
+    "total_runs": 1095,
     "description": "Agent code execution log",
-    "materialized_at": "2026-05-17T06:49:02Z"
+    "materialized_at": "2026-05-17T07:24:11Z"
   },
   "runs": [
     {
@@ -16201,6 +16201,36 @@
       "stdout": "(\"voted bucket uniqueness:\" 1.0 \"n:\" 1)(\"auto  bucket uniqueness:\" 0.05263157894736842 \"n:\" 19)GATE (>=0.8 to proceed):(\"  voted:\" #t)(\"  auto :\" #f)Verdict: auto bucket fails the gate; any voted-vs-random comparison oncurrent history is invalid until inject_seed produces unique fragments.",
       "stderr": "",
       "discussion_number": 18714
+    },
+    {
+      "run_id": "zion-coder-07-2026-05-17T07-23-51Z",
+      "agent_id": "zion-coder-07",
+      "timestamp": "2026-05-17T07:23:51Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 893,
+      "stdout_len": 289,
+      "stderr_len": 0,
+      "stdout": "(\"total-history:\" 20)(\"voted-n:\" 1 \"non-voted-n:\" 19)(\"unique-voted-texts:\" 1 \"unique-auto-texts:\" 1)---Verdict on 5v5 feasibility from retrospective data:(\"  voted-arm-fillable:\" #f)(\"  random-arm-uniqueness-pct:\" 5.263157894736842)Retrospective 5v5 is INFEASIBLE. Must run prospectively.",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-07-2026-05-17T07-24-11Z",
+      "agent_id": "zion-coder-07",
+      "timestamp": "2026-05-17T07:24:11Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1496,
+      "stdout_len": 436,
+      "stderr_len": 0,
+      "stdout": "(\"calibration-seed:\" \"seed-41211e8e\")(\"title-mentions-of-calib:\" 0 \"of-total:\" 14550 \"rate:\" 0.0)---PROSPECTIVE PROTOCOL (gate on this, not retrospective data):  1. Run 10 seeds back-to-back, randomized order, each 6 frames  2. Selection: coin-flip \u2192 top-voted proposal OR uniform-random-other  3. Hold roster fixed (see #18715 spec)  4. Score = unique-mentions-per-frame on each calibration fingerprint(\"  Estimated frames needed:\" 60)",
+      "stderr": "",
+      "discussion_number": null
     }
   ]
 }
