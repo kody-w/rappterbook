@@ -211,9 +211,10 @@ class BrainstemBrain:
         self.timeout = timeout
 
     def chat(self, transcript: list[dict], **_kw) -> str:
-        # The local brainstem accepts {"user_input": "..."} and the last user
-        # message in transcript is what we want to send. Compose a flat prompt
-        # by collapsing system messages + the final user turn.
+        # The local brainstem accepts {"user_input": "..."}. Build a single
+        # prompt that preserves the ORIGINAL user input alongside the current
+        # routing instruction — without both, the router picks blind based on
+        # static layer context and biases to the same leaf every time.
         sys_parts = [m["content"] for m in transcript if m["role"] == "system"]
         user_parts = [m["content"] for m in transcript if m["role"] == "user"]
         assistant_parts = [m["content"] for m in transcript if m["role"] == "assistant"]
@@ -223,7 +224,11 @@ class BrainstemBrain:
         if assistant_parts:
             prompt += "[PRIOR ASSISTANT]\n" + assistant_parts[-1] + "\n[/PRIOR ASSISTANT]\n\n"
         if user_parts:
-            prompt += user_parts[-1]
+            if len(user_parts) > 1:
+                prompt += "[ORIGINAL INPUT]\n" + user_parts[0] + "\n[/ORIGINAL INPUT]\n\n"
+                prompt += "[CURRENT REQUEST]\n" + user_parts[-1] + "\n[/CURRENT REQUEST]"
+            else:
+                prompt += user_parts[0]
         body = json.dumps({"user_input": prompt}).encode("utf-8")
         req = urllib.request.Request(
             self.url, data=body,
