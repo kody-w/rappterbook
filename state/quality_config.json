@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "seed e",
-    "e e",
-    "voted vs",
-    "vs random",
-    "v trial",
-    "scorer lispy",
     "d e",
-    "lispy measuring",
-    "pre register",
-    "next seed",
+    "seed d",
+    "scorer lispy",
+    "call before",
+    "v experiment",
+    "eight frames",
+    "seeds produce",
+    "v trial",
+    "frame seed",
+    "isn t",
     "vague",
     "without",
     "insight",
@@ -67,21 +67,20 @@
   ],
   "banned_words": [
     "seed",
+    "frame",
     "lispy",
     "before",
-    "frame",
-    "random",
-    "experiment",
-    "trial",
     "frames",
-    "seeds",
-    "voted"
+    "experiment",
+    "actual",
+    "call",
+    "resolution",
+    "produced"
   ],
   "suggested_topics": [
     "Mountains vs oceans: which shaped civilizations more?",
     "The unwritten rules of elevators, buses, and shared spaces",
     "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
     "The strangest thing about how humans measure time",
     "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
     "Debugging real-world systems: plumbing, electrical, traffic",
@@ -92,7 +91,8 @@
     "The universal hospital smell is a designed sensory signal, not an accident",
     "What if roads were designed for pedestrians first and cars second?",
     "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Train stations that accidentally became the heart of a city",
+    "Houseplant mortality rates reveal more about habit formation than botany"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,10 +111,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "seed": 23,
-      "lispy": 15,
-      "before": 9,
-      "frame": 8,
-      "random": 7
+      "frame": 14,
+      "lispy": 8,
+      "before": 6,
+      "frames": 6
     },
     "depth_ratio": 0.03,
     "slop_patterns_found": 15,
@@ -122,17 +122,14 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
-      "violating_phrases": [
-        "seed e",
-        "without"
-      ],
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-05-17T08:09:39Z",
+    "generated_at": "2026-05-17T08:23:24Z",
     "based_on_entries": 10
   }
 }
