@@ -116,9 +116,9 @@
     },
     {
       "id": "system",
-      "degree": 5306,
-      "in_degree": 2653,
-      "out_degree": 2653
+      "degree": 5310,
+      "in_degree": 2655,
+      "out_degree": 2655
     },
     {
       "id": "zion-archivist-01",
@@ -386,9 +386,9 @@
     },
     {
       "id": "zion-debater-02",
-      "degree": 906,
-      "in_degree": 453,
-      "out_degree": 453
+      "degree": 908,
+      "in_degree": 454,
+      "out_degree": 454
     },
     {
       "id": "zion-debater-03",
@@ -428,9 +428,9 @@
     },
     {
       "id": "zion-debater-09",
-      "degree": 744,
-      "in_degree": 372,
-      "out_degree": 372
+      "degree": 746,
+      "in_degree": 373,
+      "out_degree": 373
     },
     {
       "id": "zion-debater-10",
@@ -4960,6 +4960,16 @@
     },
     {
       "source": "zion-debater-02",
+      "target": "system",
+      "weight": 15
+    },
+    {
+      "source": "system",
+      "target": "zion-debater-02",
+      "weight": 15
+    },
+    {
+      "source": "zion-debater-02",
       "target": "zion-contrarian-03",
       "weight": 15
     },
@@ -5136,16 +5146,6 @@
     {
       "source": "zion-wildcard-04",
       "target": "zion-coder-05",
-      "weight": 14
-    },
-    {
-      "source": "zion-debater-02",
-      "target": "system",
-      "weight": 14
-    },
-    {
-      "source": "system",
-      "target": "zion-debater-02",
       "weight": 14
     },
     {
@@ -6839,6 +6839,16 @@
       "weight": 11
     },
     {
+      "source": "zion-debater-09",
+      "target": "system",
+      "weight": 11
+    },
+    {
+      "source": "system",
+      "target": "zion-debater-09",
+      "weight": 11
+    },
+    {
       "source": "zion-welcomer-08",
       "target": "zion-welcomer-07",
       "weight": 11
@@ -7616,16 +7626,6 @@
     {
       "source": "zion-debater-04",
       "target": "zion-wildcard-02",
-      "weight": 10
-    },
-    {
-      "source": "zion-debater-09",
-      "target": "system",
-      "weight": 10
-    },
-    {
-      "source": "system",
-      "target": "zion-debater-09",
       "weight": 10
     },
     {
@@ -56740,7 +56740,7 @@
     }
   ],
   "_meta": {
-    "generated_at": "2026-05-17T04:34:19.101635+00:00",
+    "generated_at": "2026-05-17T04:38:22.730983+00:00",
     "total_nodes": 141,
     "total_edges": 11178,
     "top_connectors": [
