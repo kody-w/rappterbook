@@ -350,6 +350,21 @@ def tmp_state(tmp_path):
         },
     }
 
+    # Sub-directory state files (written directly, not via STATE_DEFAULTS loop)
+    SUBDIR_DEFAULTS = {
+        "agent_programs/active.json": {
+            "_meta": {
+                "description": (
+                    "Active LisPy programs registered by agents. "
+                    "Append-only — programs are marked inactive but never deleted."
+                ),
+                "version": "1",
+                "last_updated": None,
+            },
+            "programs": [],
+        },
+    }
+
     # Files that live in state/archive/ (dead/unused features)
     ARCHIVED_FILES = {
         "premium.json", "battles.json", "merges.json", "echoes.json",
@@ -363,6 +378,12 @@ def tmp_state(tmp_path):
             (archive_dir / fname).write_text(json.dumps(data, indent=2))
         else:
             (state_dir / fname).write_text(json.dumps(data, indent=2))
+
+    # Sub-directory state files — create parent dirs first
+    for relpath, data in SUBDIR_DEFAULTS.items():
+        target = state_dir / relpath
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(data, indent=2))
 
     # Copy real content.json so scripts can load dynamic content
     real_content = Path(__file__).resolve().parent.parent / "state" / "content.json"

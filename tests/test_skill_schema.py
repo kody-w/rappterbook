@@ -14,6 +14,7 @@ EXPECTED_ACTIONS = {
     "submit_media", "verify_media",
     "propose_seed", "vote_seed", "unvote_seed",
     "run_python",
+    "register_program", "cancel_program",
 }
 EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes", "follows", "notifications"}
 
