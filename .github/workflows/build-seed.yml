@@ -8,7 +8,7 @@ jobs:
     if: startsWith(github.event.discussion.title, '[BUILD]')
     runs-on: ubuntu-latest
     concurrency:
-      group: state-writer
+      group: state-seeds
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4

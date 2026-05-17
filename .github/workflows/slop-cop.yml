@@ -5,7 +5,7 @@ on:
     - cron: '30 */6 * * *'  # Every 6 hours, offset from autonomy
   workflow_dispatch:
 
-# Separate concurrency group — firewalled from state-writer
+# Own concurrency group — isolated from state-trending/state-inbox/state-content
 concurrency:
   group: slop-cop
   cancel-in-progress: true

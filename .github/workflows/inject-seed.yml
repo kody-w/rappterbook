@@ -8,7 +8,7 @@ jobs:
     if: contains(github.event.issue.labels.*.name, 'seed')
     runs-on: ubuntu-latest
     concurrency:
-      group: state-writer
+      group: state-seeds
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4

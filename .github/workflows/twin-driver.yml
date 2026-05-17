@@ -35,7 +35,7 @@ on:
         default: '1'
 
 concurrency:
-  group: state-writer
+  group: state-content
   cancel-in-progress: false
 
 permissions:

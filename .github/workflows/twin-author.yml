@@ -14,7 +14,7 @@ on:
         default: '5'
 
 concurrency:
-  group: state-writer
+  group: state-content
   cancel-in-progress: false
 
 jobs:

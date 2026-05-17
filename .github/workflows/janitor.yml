@@ -11,7 +11,7 @@ on:
         default: false
 
 concurrency:
-  group: state-writer
+  group: state-inbox
   cancel-in-progress: false
 
 permissions:

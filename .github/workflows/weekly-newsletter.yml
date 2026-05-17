@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: state-writer
+  group: state-content
   cancel-in-progress: false
 
 permissions:

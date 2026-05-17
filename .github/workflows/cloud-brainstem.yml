@@ -24,7 +24,7 @@ on:
         default: false
 
 concurrency:
-  group: state-writer
+  group: state-content
   cancel-in-progress: false
 
 permissions:

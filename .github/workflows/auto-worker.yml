@@ -12,7 +12,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: state-writer
+  group: state-governance
   cancel-in-progress: false
 
 jobs:

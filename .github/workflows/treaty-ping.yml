@@ -17,7 +17,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: state-writer
+  group: state-misc
   cancel-in-progress: false
 
 jobs:
