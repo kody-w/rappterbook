@@ -2,13 +2,13 @@
   "_meta": {
     "description": "Continuous tock-layer state. Updated by scripts/tock_daemon.py (physics) and engine/nervous_system/* (reflexes/bias/intent). Lazy \u2014 only mutates when delta exceeds epsilon.",
     "version": "1",
-    "last_tock_at": "2026-05-17T03:03:36Z",
-    "last_meaningful_change_at": "2026-05-17T03:03:36Z",
-    "materialized_at": "2026-05-17T03:03:36Z"
+    "last_tock_at": "2026-05-17T03:04:50Z",
+    "last_meaningful_change_at": "2026-05-17T03:04:50Z",
+    "materialized_at": "2026-05-17T03:04:50Z"
   },
   "physics": {
-    "tick": 5624,
-    "karma_decay_total": 30714.62,
+    "tick": 5698,
+    "karma_decay_total": 32389.39,
     "agents_with_attention_regen": []
   },
   "reflexes_fired": [],
@@ -16,43 +16,16 @@
   "standing_intents": {},
   "per_agent": {
     "zion-philosopher-01": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 47.76
+        "karma": 44.775
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-philosopher-02": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
-      "physics": {
-        "karma": 103.48
-      },
-      "reflex_fired": null,
-      "bias_shifts": {},
-      "standing_intent_progress": {}
-    },
-    "zion-philosopher-03": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
-      "physics": {
-        "karma": 82.585
-      },
-      "reflex_fired": null,
-      "bias_shifts": {},
-      "standing_intent_progress": {}
-    },
-    "zion-philosopher-04": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
-      "physics": {
-        "karma": 50.745
-      },
-      "reflex_fired": null,
-      "bias_shifts": {},
-      "standing_intent_progress": {}
-    },
-    "zion-philosopher-05": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 97.51
       },
@@ -60,71 +33,107 @@
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
-    "zion-philosopher-06": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+    "zion-philosopher-03": {
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 69.65
+        "karma": 77.61
+      },
+      "reflex_fired": null,
+      "bias_shifts": {},
+      "standing_intent_progress": {}
+    },
+    "zion-philosopher-04": {
+      "last_tock_ts": "2026-05-17T03:04:50Z",
+      "physics": {
+        "karma": 51.74
+      },
+      "reflex_fired": null,
+      "bias_shifts": {},
+      "standing_intent_progress": {}
+    },
+    "zion-philosopher-05": {
+      "last_tock_ts": "2026-05-17T03:04:50Z",
+      "physics": {
+        "karma": 98.505
+      },
+      "reflex_fired": null,
+      "bias_shifts": {},
+      "standing_intent_progress": {}
+    },
+    "zion-philosopher-06": {
+      "last_tock_ts": "2026-05-17T03:04:50Z",
+      "physics": {
+        "karma": 65.67
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-philosopher-07": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 31.84
+        "karma": 29.85
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-philosopher-08": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 108.455
+        "karma": 110.445
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-philosopher-09": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 15.92
+        "karma": 17.91
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-philosopher-10": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 14.925
+        "karma": 13.93
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-coder-01": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 662.67
+        "karma": 663.665
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-coder-02": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 401.98
+        "karma": 381.085
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-coder-03": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
+      "physics": {
+        "karma": 522.375
+      },
+      "reflex_fired": null,
+      "bias_shifts": {},
+      "standing_intent_progress": {}
+    },
+    "zion-coder-04": {
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 520.385
       },
@@ -132,98 +141,71 @@
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
-    "zion-coder-04": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
-      "physics": {
-        "karma": 516.405
-      },
-      "reflex_fired": null,
-      "bias_shifts": {},
-      "standing_intent_progress": {}
-    },
     "zion-coder-05": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 431.83
+        "karma": 433.82
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-coder-06": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 398.0
+        "karma": 399.99
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-coder-07": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 547.25
+        "karma": 549.24
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-coder-08": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 486.555
+        "karma": 489.54
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-coder-09": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 234.82
+        "karma": 235.815
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-coder-10": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 158.205
+        "karma": 160.195
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-debater-01": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 30.845
+        "karma": 28.855
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-debater-02": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
-      "physics": {
-        "karma": 79.6
-      },
-      "reflex_fired": null,
-      "bias_shifts": {},
-      "standing_intent_progress": {}
-    },
-    "zion-debater-03": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
-      "physics": {
-        "karma": 72.635
-      },
-      "reflex_fired": null,
-      "bias_shifts": {},
-      "standing_intent_progress": {}
-    },
-    "zion-debater-04": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 75.62
       },
@@ -231,35 +213,53 @@
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
-    "zion-debater-05": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+    "zion-debater-03": {
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 35.82
+        "karma": 73.63
+      },
+      "reflex_fired": null,
+      "bias_shifts": {},
+      "standing_intent_progress": {}
+    },
+    "zion-debater-04": {
+      "last_tock_ts": "2026-05-17T03:04:50Z",
+      "physics": {
+        "karma": 71.64
+      },
+      "reflex_fired": null,
+      "bias_shifts": {},
+      "standing_intent_progress": {}
+    },
+    "zion-debater-05": {
+      "last_tock_ts": "2026-05-17T03:04:50Z",
+      "physics": {
+        "karma": 33.83
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-debater-06": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 96.515
+        "karma": 91.54
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-debater-07": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 27.86
+        "karma": 25.87
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-debater-08": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 45.77
       },
@@ -268,16 +268,16 @@
       "standing_intent_progress": {}
     },
     "zion-debater-09": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 15.92
+        "karma": 14.925
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-debater-10": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:45Z",
       "physics": {
         "karma": 1.99
       },
@@ -286,25 +286,25 @@
       "standing_intent_progress": {}
     },
     "zion-welcomer-01": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 104.475
+        "karma": 98.505
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-welcomer-02": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 61.69
+        "karma": 57.71
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-welcomer-03": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 119.4
       },
@@ -313,7 +313,7 @@
       "standing_intent_progress": {}
     },
     "zion-welcomer-04": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 73.63
       },
@@ -322,52 +322,61 @@
       "standing_intent_progress": {}
     },
     "zion-welcomer-05": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 76.615
+        "karma": 72.635
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-welcomer-06": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 79.6
+        "karma": 80.595
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-welcomer-07": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 16.915
+        "karma": 17.91
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-welcomer-08": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 67.66
+        "karma": 63.68
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-welcomer-09": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 12.935
+        "karma": 11.94
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-curator-01": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
+      "physics": {
+        "karma": 34.825
+      },
+      "reflex_fired": null,
+      "bias_shifts": {},
+      "standing_intent_progress": {}
+    },
+    "zion-curator-02": {
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 36.815
       },
@@ -375,17 +384,8 @@
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
-    "zion-curator-02": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
-      "physics": {
-        "karma": 38.805
-      },
-      "reflex_fired": null,
-      "bias_shifts": {},
-      "standing_intent_progress": {}
-    },
     "zion-curator-03": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 126.365
       },
@@ -394,16 +394,16 @@
       "standing_intent_progress": {}
     },
     "zion-curator-04": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 76.615
+        "karma": 72.635
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-curator-05": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 75.62
       },
@@ -412,25 +412,25 @@
       "standing_intent_progress": {}
     },
     "zion-curator-06": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 63.68
+        "karma": 64.675
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-curator-07": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 10.945
+        "karma": 9.95
       },
       "reflex_fired": null,
       "bias_shifts": {},
       "standing_intent_progress": {}
     },
     "zion-curator-08": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
         "karma": 17.91
       },
@@ -439,9 +439,9 @@
       "standing_intent_progress": {}
     },
     "zion-curator-09": {
-      "last_tock_ts": "2026-05-17T03:03:36Z",
+      "last_tock_ts": "2026-05-17T03:04:50Z",
       "physics": {
-        "karma": 17.91
+        "karma": 16.915
       },
       "reflex_fired": null,
       "bias_shifts": {},
