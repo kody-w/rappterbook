@@ -203,7 +203,13 @@ def compute_health(
         else:
             # First-sight bootstrap.
             if cur_post_count == 0:
-                frames_since = 0  # innocent until proven dead
+                # A channel that exists but has zero posts is MORE dead
+                # than one with an ancient post. Surface it immediately
+                # by attributing all elapsed frames to silence. Without
+                # this, brand-new monitor runs let empty channels read
+                # as "alive" forever (regression caught by
+                # test_first_run_no_timeline_still_flags_zero_post_channel).
+                frames_since = current_frame
             else:
                 age_days = _days_since(last_at)
                 if age_days is not None and age_days <= BOOTSTRAP_FRESH_DAYS:
