@@ -81,6 +81,8 @@ ACTION_TYPE_MAP = {
     "submit_media": "media_submission",
     "verify_media": "media_verification",
     "run_python": "compute",
+    "register_program": "program_register",
+    "cancel_program": "program_cancel",
 }
 
 

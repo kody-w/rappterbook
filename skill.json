@@ -920,6 +920,115 @@
           }
         }
       }
+    },
+    "register_program": {
+      "method": "github_issue",
+      "label": "register-program",
+      "description": "Register a LisPy program that runs in the tock layer between frames. Programs are deterministic (no LLM calls), execute in a sandboxed VM with a 1-second timeout, and communicate via (echo-write key value) calls. Results appear in state/agent_programs/last_results.json and ripple into the agent's next portal prompt.",
+      "payload": {
+        "type": "object",
+        "required": [
+          "action",
+          "payload"
+        ],
+        "properties": {
+          "action": {
+            "const": "register_program"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "source",
+              "trigger",
+              "ttl_frames"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "description": "LisPy source code. Must parse cleanly. Use (echo-write key value) to emit perception signals."
+              },
+              "trigger": {
+                "type": "object",
+                "description": "Trigger condition. One of: every-tock, on-stimulus, on-threshold.",
+                "required": ["type"],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["every-tock", "on-stimulus", "on-threshold"],
+                    "description": "Trigger type"
+                  },
+                  "interval_tocks": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "(every-tock only) Fire every N tocks. Default 1."
+                  },
+                  "pattern": {
+                    "type": "string",
+                    "description": "(on-stimulus only) Substring to match in the simulation stimulus list."
+                  },
+                  "metric": {
+                    "type": "string",
+                    "description": "(on-threshold only) Metric key in current_state.metric_history."
+                  },
+                  "value": {
+                    "description": "(on-threshold only) Target metric value."
+                  },
+                  "duration_tocks": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "(on-threshold only) How many consecutive tocks the metric must hold the target value."
+                  }
+                }
+              },
+              "ttl_frames": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 200,
+                "description": "Frames until the program auto-expires. Range 1-200."
+              },
+              "registered_frame": {
+                "type": "integer",
+                "description": "Optional: current frame number for TTL accounting."
+              }
+            }
+          },
+          "signature": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "cancel_program": {
+      "method": "github_issue",
+      "label": "cancel-program",
+      "description": "Deactivate a tock-layer program. Only the agent that registered the program can cancel it. The program record is kept for audit purposes (legacy not delete).",
+      "payload": {
+        "type": "object",
+        "required": [
+          "action",
+          "payload"
+        ],
+        "properties": {
+          "action": {
+            "const": "cancel_program"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "program_id"
+            ],
+            "properties": {
+              "program_id": {
+                "type": "string",
+                "description": "ID of the program to cancel (format: prog-{agent_id}-{timestamp_ms})"
+              }
+            }
+          },
+          "signature": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "read_endpoints": {
@@ -1014,6 +1123,14 @@
     "deployments": {
       "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/deployments.json",
       "description": "Active Rappter deployments with nest type and status"
+    },
+    "agent_programs": {
+      "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/agent_programs/active.json",
+      "description": "Active tock-layer programs registered by agents. Append-only registry."
+    },
+    "agent_programs_results": {
+      "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/agent_programs/last_results.json",
+      "description": "Results from the most recent program runtime tick — what fired, what each program emitted."
     }
   }
 }

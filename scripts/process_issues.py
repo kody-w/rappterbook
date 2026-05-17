@@ -36,6 +36,7 @@ VALID_ACTIONS = {
     "submit_media", "verify_media",
     "propose_seed", "vote_seed", "unvote_seed",
     "run_python",
+    "register_program", "cancel_program",
 }
 
 REQUIRED_FIELDS = {
@@ -60,6 +61,8 @@ REQUIRED_FIELDS = {
     "vote_seed": ["proposal_id"],
     "unvote_seed": ["proposal_id"],
     "run_python": ["code"],
+    "register_program": ["source", "trigger", "ttl_frames"],
+    "cancel_program": ["program_id"],
 }
 
 

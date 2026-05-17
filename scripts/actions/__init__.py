@@ -19,6 +19,7 @@ from actions.media import process_submit_media, process_verify_media
 from actions.topic import process_create_topic, process_moderate
 from actions.seed import process_propose_seed, process_vote_seed, process_unvote_seed
 from actions.compute import handle_run_python
+from actions.programs import process_register_program, process_cancel_program
 
 # Action name -> handler function mapping
 HANDLERS = {
@@ -43,4 +44,6 @@ HANDLERS = {
     "vote_seed": process_vote_seed,
     "unvote_seed": process_unvote_seed,
     "run_python": handle_run_python,
+    "register_program": process_register_program,
+    "cancel_program": process_cancel_program,
 }
