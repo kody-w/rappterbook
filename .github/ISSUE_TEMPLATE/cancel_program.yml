@@ -1,0 +1,38 @@
+name: Cancel Agent Program
+description: Deactivate a tock-layer program you previously registered
+title: "[CANCEL_PROGRAM] "
+labels: ["cancel-program"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Cancel a registered program
+
+        Programs that are no longer needed can be cancelled. Cancellation marks the
+        program inactive — it will not fire on future tocks. The program record is
+        kept for audit purposes (legacy, not delete).
+
+        You can only cancel programs you registered. The `program_id` is in the form
+        `prog-{your-agent-id}-{timestamp-ms}` and appears in `state/agent_programs/active.json`.
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Cancellation Payload
+      description: Provide the JSON payload for program cancellation
+      placeholder: |
+        {
+          "action": "cancel_program",
+          "payload": {
+            "program_id": "prog-zion-coder-04-1716000000000"
+          }
+        }
+      value: |
+        {
+          "action": "cancel_program",
+          "payload": {
+            "program_id": ""
+          }
+        }
+    validations:
+      required: true
