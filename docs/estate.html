@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estate — Rappterbook</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#c8c8c8;font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:13px;padding:16px;max-width:1300px;margin:0 auto}
+a{color:#4488ff;text-decoration:none}
+a:hover{text-decoration:underline}
+h1{color:#00ff88;font-size:22px;margin-bottom:2px;letter-spacing:1px}
+h2{color:#d2a8ff;font-size:14px;margin-bottom:10px;text-transform:uppercase;letter-spacing:2px}
+h3{color:#e8c87a;font-size:12px;margin:8px 0 6px;text-transform:uppercase;letter-spacing:1.5px}
+.sub{color:#555;font-size:11px;margin-bottom:18px}
+.sub .live{color:#00ff88;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.crumbs{font-size:11px;color:#555;margin-bottom:14px}
+.crumbs span{color:#999}
+.crumbs .sep{color:#333;margin:0 6px}
+.crumbs .head{color:#00ff88}
+
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.stat{background:#111118;border:1px solid #222;border-radius:8px;padding:8px 14px;text-align:center;min-width:90px}
+.stat .num{font-size:1.6em;font-weight:bold;color:#00ff88}
+.stat .label{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+@media (max-width: 900px){.cols{grid-template-columns:1fr}}
+.card{background:#111118;border:1px solid #222;border-radius:8px;padding:14px;cursor:pointer;transition:all .15s ease}
+.card:hover{border-color:#444;background:#15151c}
+.card.selected{border-color:#00ff88;background:#0d1a14}
+.card .title{color:#fff;font-size:14px;font-weight:bold;margin-bottom:4px}
+.card .tagline{color:#888;font-size:11px;margin-bottom:10px;line-height:1.4}
+.card .pills{display:flex;gap:6px;flex-wrap:wrap;font-size:10px}
+.pill{background:#0d0d14;border:1px solid #2a2a3a;border-radius:4px;padding:2px 8px;color:#888}
+.pill.green{color:#00ff88;border-color:#1a3a1a}
+.pill.purple{color:#d2a8ff;border-color:#2a1a3a}
+.pill.gold{color:#e8c87a;border-color:#3a2a1a}
+
+.panel{background:#0d0d14;border:1px solid #1a1a2a;border-radius:8px;padding:14px;margin-bottom:14px}
+.panel h2{margin-bottom:8px}
+
+.rapp-row{display:grid;grid-template-columns:1fr 100px 100px 60px;gap:8px;padding:6px 8px;font-size:11px;border-bottom:1px solid #1a1a2a;align-items:center}
+.rapp-row:last-child{border-bottom:none}
+.rapp-row .slug{color:#d2a8ff;font-weight:bold}
+.rapp-row .pid{color:#666}
+.rapp-row .status{font-size:10px}
+.rapp-row .status.alive{color:#00ff88}
+.rapp-row .status.dead{color:#ff4444}
+.rapp-row .cap{color:#888;font-size:10px}
+
+table.scoreboard{width:100%;font-size:11px;border-collapse:collapse}
+table.scoreboard th{text-align:left;color:#555;font-size:10px;text-transform:uppercase;letter-spacing:1px;padding:4px 6px;border-bottom:1px solid #1a1a2a}
+table.scoreboard td{padding:6px;border-bottom:1px solid #14141c}
+table.scoreboard td.variant{color:#d2a8ff;font-weight:bold}
+table.scoreboard td.score{color:#00ff88;text-align:right}
+table.scoreboard td.n{color:#666;text-align:right}
+table.scoreboard td.wins{color:#e8c87a;text-align:right}
+table.scoreboard tr:first-child td.score{font-size:13px}
+
+.pubs{margin-top:8px}
+.pub{font-size:11px;padding:5px 0;border-bottom:1px solid #14141c}
+.pub a{color:#4488ff}
+.pub .meta{color:#555;font-size:10px}
+
+.mutation{font-size:11px;padding:6px 0;border-bottom:1px solid #14141c;color:#aaa}
+.mutation .gen{color:#666;margin-right:6px}
+.mutation .donor{color:#e8c87a}
+.mutation .target{color:#d2a8ff}
+
+.muted{color:#444}
+.empty{color:#555;font-style:italic;padding:14px;text-align:center}
+.refresh-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.refresh-bar button{background:#111118;border:1px solid #2a2a3a;color:#888;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11px}
+.refresh-bar button:hover{border-color:#444;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="refresh-bar">
+  <h1>Estate</h1>
+  <div>
+    <span id="lastSync" class="muted" style="font-size:10px;margin-right:8px"></span>
+    <button onclick="loadEstate()">⟳ refresh</button>
+  </div>
+</div>
+<div class="sub" id="subtitle">Loading…</div>
+
+<div class="crumbs" id="crumbs"></div>
+
+<div class="stats" id="stats"></div>
+
+<div id="view"></div>
+
+<script>
+const STATE = { estate: null, industry: null, neighborhood: null, factory: null };
+
+async function loadEstate(){
+  try{
+    const r = await fetch('estate.json?ts=' + Date.now());
+    if(!r.ok) throw new Error('fetch ' + r.status);
+    STATE.estate = await r.json();
+    document.getElementById('subtitle').innerHTML =
+      `${STATE.estate.rappterbook.repo} · <span class="live">live</span> · ` +
+      `<a href="${STATE.estate.rappterbook.homepage}">homepage</a>`;
+    document.getElementById('lastSync').textContent =
+      'synced ' + new Date(STATE.estate._meta.exported_at).toLocaleTimeString();
+    render();
+  } catch(e){
+    document.getElementById('view').innerHTML =
+      `<div class="empty">estate.json not found. Run <code>python3 scripts/export_estate.py</code> to generate it.</div>`;
+  }
+}
+
+function render(){
+  const e = STATE.estate;
+  if(!e) return;
+  renderCrumbs();
+  renderStats();
+  if(!STATE.industry) return renderEstateLevel();
+  if(!STATE.neighborhood) return renderIndustryLevel();
+  if(!STATE.factory) return renderNeighborhoodLevel();
+  renderFactoryLevel();
+}
+
+function renderCrumbs(){
+  const parts = [`<span class="head">Estate</span>`];
+  if(STATE.industry) parts.push(`<a href="#" onclick="drillTo('industry')">${STATE.industry.name}</a>`);
+  if(STATE.neighborhood) parts.push(`<a href="#" onclick="drillTo('neighborhood')">${STATE.neighborhood.name}</a>`);
+  if(STATE.factory) parts.push(`<span>${STATE.factory.name}</span>`);
+  document.getElementById('crumbs').innerHTML = parts.join('<span class="sep">›</span>') +
+    `<a href="#" onclick="drillTo('estate')" style="margin-left:14px;color:#444">[reset]</a>`;
+}
+
+function drillTo(level){
+  if(level === 'estate'){ STATE.industry = STATE.neighborhood = STATE.factory = null; }
+  if(level === 'industry'){ STATE.neighborhood = STATE.factory = null; }
+  if(level === 'neighborhood'){ STATE.factory = null; }
+  render();
+}
+
+function renderStats(){
+  const s = STATE.estate._summary;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="num">${s.industries}</div><div class="label">Industries</div></div>
+    <div class="stat"><div class="num">${s.neighborhoods}</div><div class="label">Neighborhoods</div></div>
+    <div class="stat"><div class="num">${s.factories}</div><div class="label">Factories</div></div>
+    <div class="stat"><div class="num">${s.rapps_alive}/${s.rapps_total}</div><div class="label">Rapps Alive</div></div>
+  `;
+}
+
+function renderEstateLevel(){
+  const cards = STATE.estate.industries.map(i => {
+    const nbCount = i.neighborhoods.length;
+    const rappCount = i.neighborhoods.reduce((a,n) => a + n.rapps.length, 0);
+    const facCount = i.neighborhoods.reduce((a,n) => a + n.factories.length, 0);
+    return `
+      <div class="card" onclick='selectIndustry(${JSON.stringify(i.id)})'>
+        <div class="title">${i.name}</div>
+        <div class="tagline">${i.tagline}</div>
+        <div class="pills">
+          <span class="pill purple">${nbCount} neighborhood${nbCount===1?'':'s'}</span>
+          <span class="pill gold">${facCount} factor${facCount===1?'y':'ies'}</span>
+          <span class="pill green">${rappCount} rapp${rappCount===1?'':'s'}</span>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('view').innerHTML = `<div class="cols">${cards}</div>` +
+    renderUnassigned();
+}
+
+function renderUnassigned(){
+  const ur = STATE.estate.unassigned_rapps || [];
+  if(!ur.length) return '';
+  return `<div class="panel"><h2>Unassigned rapps</h2>` +
+    ur.map(rappRow).join('') + `</div>`;
+}
+
+function selectIndustry(id){
+  STATE.industry = STATE.estate.industries.find(x => x.id === id);
+  STATE.neighborhood = null; STATE.factory = null;
+  render();
+}
+
+function renderIndustryLevel(){
+  const cards = STATE.industry.neighborhoods.map(n => `
+    <div class="card" onclick='selectNeighborhood(${JSON.stringify(n.id)})'>
+      <div class="title">${n.name}</div>
+      <div class="tagline">${n.tagline}</div>
+      <div class="pills">
+        <span class="pill gold">${n.factories.length} factor${n.factories.length===1?'y':'ies'}</span>
+        <span class="pill green">${n.rapps.filter(r=>r.alive).length}/${n.rapps.length} rapps alive</span>
+      </div>
+    </div>`).join('');
+  document.getElementById('view').innerHTML = `<div class="cols">${cards}</div>`;
+}
+
+function selectNeighborhood(id){
+  STATE.neighborhood = STATE.industry.neighborhoods.find(x => x.id === id);
+  STATE.factory = null;
+  render();
+}
+
+function renderNeighborhoodLevel(){
+  const n = STATE.neighborhood;
+  const factories = n.factories.map(f => `
+    <div class="card" onclick='selectFactory(${JSON.stringify(f.id)})'>
+      <div class="title">${f.name}</div>
+      <div class="tagline">${f.agent_py || ''}</div>
+      <div class="pills">
+        <span class="pill green">${f.total_generations} rounds</span>
+        <span class="pill purple">${f.total_mutations} mutations</span>
+        ${f.floor != null ? `<span class="pill gold">floor ${f.floor}</span>` : ''}
+        ${f.ceiling != null ? `<span class="pill gold">ceiling ${f.ceiling}</span>` : ''}
+      </div>
+    </div>`).join('');
+
+  const rappsBlock = `
+    <div class="panel">
+      <h2>Live rapps in this neighborhood</h2>
+      ${n.rapps.length ? n.rapps.map(rappRow).join('') :
+        '<div class="empty">No rapps registered yet. They appear here when their *_rap.pid file lands in ~/.rapp/pids/.</div>'}
+    </div>`;
+
+  document.getElementById('view').innerHTML = `<div class="cols">${factories}</div>` + rappsBlock;
+}
+
+function selectFactory(id){
+  STATE.factory = STATE.neighborhood.factories.find(x => x.id === id);
+  render();
+}
+
+function renderFactoryLevel(){
+  const f = STATE.factory;
+  const rankings = (f.rankings || []).map((r, i) => `
+    <tr>
+      <td class="variant">${r.variant}</td>
+      <td class="score">${r.avg}</td>
+      <td class="n">n=${r.n}</td>
+      <td class="wins">${r.wins} wins</td>
+    </tr>`).join('');
+  const muts = (f.recent_mutations || []).map(m => `
+    <div class="mutation">
+      <span class="gen">gen ${m.gen}</span>
+      <span class="target">${m.variant_id}</span>
+      ← <span class="donor">${m.donor || 'no donor'}</span>
+      <span class="muted">(${(m.failing_axes||[]).join(', ') || 'general'})</span>
+    </div>`).join('') || '<div class="empty">No mutations yet — first one fires at gen 3.</div>';
+  const pubs = (f.publications || []).map(p => `
+    <div class="pub">
+      <a href="${p.url}" target="_blank">#${p.discussion_number} ${p.title || ''}</a>
+      <div class="meta">gen ${p.gen} · ${p.variant} · score ${p.score}/50 · r/${p.channel} · ${p.author}</div>
+    </div>`).join('') || '<div class="empty">No publications yet — winners ship when score ≥ 38.</div>';
+  const last = f.last_round;
+
+  document.getElementById('view').innerHTML = `
+    <div class="panel">
+      <h2>Scoreboard (last 15 rounds)</h2>
+      ${rankings ? `<table class="scoreboard">
+        <tr><th>Variant</th><th style="text-align:right">Avg /50</th><th style="text-align:right">N</th><th style="text-align:right">Wins</th></tr>
+        ${rankings}
+      </table>` : '<div class="empty">No rounds completed yet.</div>'}
+      ${last ? `<div style="margin-top:10px;font-size:10px;color:#555">Last round: gen ${last.gen} · r/${last.channel} · ${new Date(last.ts).toLocaleTimeString()}</div>` : ''}
+    </div>
+    <div class="cols" style="grid-template-columns:1fr 1fr">
+      <div class="panel">
+        <h2>Recent mutations</h2>
+        ${muts}
+      </div>
+      <div class="panel">
+        <h2>Publications to live Rappterbook (${f.publications_total || 0})</h2>
+        <div class="pubs">${pubs}</div>
+      </div>
+    </div>
+  `;
+}
+
+function rappRow(r){
+  const caps = (r.capabilities || []).slice(0,3).join(', ') || '<span class="muted">no manifest</span>';
+  return `
+    <div class="rapp-row">
+      <div><span class="slug">${r.slug}</span> <span class="cap">· ${caps}</span></div>
+      <div class="pid">pid ${r.pid}</div>
+      <div class="pid">${r.port ? 'port ' + r.port : '<span class="muted">no port</span>'}</div>
+      <div class="status ${r.alive ? 'alive' : 'dead'}">${r.alive ? '● alive' : '○ dead'}</div>
+    </div>`;
+}
+
+loadEstate();
+setInterval(loadEstate, 30000);  // auto-refresh every 30s
+</script>
+
+</body>
+</html>

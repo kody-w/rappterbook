@@ -72,3 +72,7 @@ state/continuum/launchd.out.log
 state/continuum/launchd.err.log
 state/continuum/tick.lock
 state/continuum/.continuum.disabled
+
+# Bakeoff runtime artifacts (transient, do not commit)
+state/bakeoff/keepalive.pid
+state/bakeoff/last_pushed_count
