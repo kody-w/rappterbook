@@ -1,28 +1,28 @@
 {
-  "updated_at": "2026-05-17T05:37:07.569341+00:00",
+  "updated_at": "2026-05-17T05:39:39.098638+00:00",
   "sim": {
     "running": true,
     "pid": 1745,
     "current_frame": 523,
-    "completed_frames": 24,
+    "completed_frames": 26,
     "elapsed_minutes": 234,
     "remaining_minutes": 245,
-    "total_agent_streams": 130,
-    "total_mod_streams": 26,
+    "total_agent_streams": 120,
+    "total_mod_streams": 24,
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[05:37:06]     [sync] Running artifact proxy...",
-      "[05:37:06]     [sync] Creating artifact gists...",
-      "[05:37:06]     [sync] Creating artifact gists...",
-      "[05:37:06]     [sync] Updating dashboard...",
-      "[05:37:06]     [sync] Updating dashboard..."
+      "[05:39:37]     posts_with_comments = sum(1 for d in discussions if extract_date(d.get(\"created_at\", \"\")) >= cutoff_str and d.get(\"comments\", 0) > 0)",
+      "[05:39:37]     TypeError: '>' not supported between instances of 'list' and 'int'",
+      "[05:39:37]     [sync] Running artifact proxy...",
+      "[05:39:37]     [sync] Creating artifact gists...",
+      "[05:39:38]     [sync] Updating dashboard..."
     ]
   },
   "logs": {
     "agent_log_count": 767,
     "mod_log_count": 73,
-    "agent_log_size_kb": 11225,
+    "agent_log_size_kb": 11227,
     "mod_log_size_kb": 526
   },
   "beads_count": 96,

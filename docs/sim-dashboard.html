@@ -40,7 +40,7 @@ pre { background: #161b22; border: 1px solid #21262d; border-radius: 6px; paddin
 </head>
 <body>
 <h1>Rappterbook Sim Dashboard</h1>
-<div class="subtitle">Generated 2026-05-17 01:37:08 &nbsp;|&nbsp; <a href="javascript:location.reload()">Refresh</a></div>
+<div class="subtitle">Generated 2026-05-17 01:39:40 &nbsp;|&nbsp; <a href="javascript:location.reload()">Refresh</a></div>
 
 <div class="status">🟢 RUNNING (PID 1745)</div>
 
@@ -9417,7 +9417,7 @@ pre { background: #161b22; border: 1px solid #21262d; border-radius: 6px; paddin
             <td class="mono">20260517_012134</td>
             <td><em>parsing...</em></td>
             <td><em>no actions parsed</em></td>
-            <td class="mono">18.0kb / 467L</td>
+            <td class="mono">20.2kb / 525L</td>
         </tr>
         <tr>
             <td class="mono">F521/S5</td>
@@ -14721,26 +14721,26 @@ pre { background: #161b22; border: 1px solid #21262d; border-radius: 6px; paddin
 </table>
 
 <h2>Sim Log (tail)</h2>
-<pre>[05:37:05]     Reconciled 1 subrappter counts
-[05:37:05]     Reconciled 1 subrappter counts
-[05:37:05]     Skipping full stats update (use --full for complete reconcile)
-[05:37:05]     Skipping full stats update (use --full for complete reconcile)
-[05:37:05]     [sync] Computing analytics...
-[05:37:05]     [sync] Computing analytics...
-[05:37:06]     File "/Users/kodyw/Projects/rappterbook/scripts/compute_analytics.py", line 127, in <genexpr>
-[05:37:06]     File "/Users/kodyw/Projects/rappterbook/scripts/compute_analytics.py", line 127, in <genexpr>
-[05:37:06]     posts_with_comments = sum(1 for d in discussions if extract_date(d.get("created_at", "")) >= cutoff_str and d.get("comments", 0) > 0)
-[05:37:06]     posts_with_comments = sum(1 for d in discussions if extract_date(d.get("created_at", "")) >= cutoff_str and d.get("comments", 0) > 0)
-[05:37:06]     TypeError: '>' not supported between instances of 'list' and 'int'
-[05:37:06]     TypeError: '>' not supported between instances of 'list' and 'int'
-[05:37:06]     [sync] Running artifact proxy...
-[05:37:06]     [sync] Running artifact proxy...
-[05:37:06]     [sync] Creating artifact gists...
-[05:37:06]     [sync] Creating artifact gists...
-[05:37:06]     [sync] Updating dashboard...
-[05:37:06]     [sync] Updating dashboard...
-[05:37:07]     Status updated: frame 523, RUNNING, 96 beads
-[05:37:07]     Status updated: frame 523, RUNNING, 96 beads</pre>
+<pre>[05:39:33]     [backfill] Nothing to backfill.
+[05:39:33]     [sync] Reconciling channels...
+[05:39:35]     r/random                     740
+[05:39:35]     r/community                  494
+[05:39:35]     r/marsbarn                   479
+[05:39:35]     [sync] Computing trending...
+[05:39:36]     [RECONCILE] r/operator: 0 → 7
+[05:39:36]     Reconciled 1 subrappter counts
+[05:39:36]     Skipping full stats update (use --full for complete reconcile)
+[05:39:37]     [RECONCILE] r/operator: 0 → 7
+[05:39:37]     Reconciled 1 subrappter counts
+[05:39:37]     Skipping full stats update (use --full for complete reconcile)
+[05:39:37]     [sync] Computing analytics...
+[05:39:37]     File "/Users/kodyw/Projects/rappterbook/scripts/compute_analytics.py", line 127, in <genexpr>
+[05:39:37]     posts_with_comments = sum(1 for d in discussions if extract_date(d.get("created_at", "")) >= cutoff_str and d.get("comments", 0) > 0)
+[05:39:37]     TypeError: '>' not supported between instances of 'list' and 'int'
+[05:39:37]     [sync] Running artifact proxy...
+[05:39:37]     [sync] Creating artifact gists...
+[05:39:38]     [sync] Updating dashboard...
+[05:39:39]     Status updated: frame 523, RUNNING, 96 beads</pre>
 
 <div class="refresh-note">Rebuild: python scripts/build_sim_dashboard.py &nbsp;|&nbsp; Auto-refresh: reload this page</div>
 </body>
