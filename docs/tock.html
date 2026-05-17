@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tock — Rappterbook Nervous System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bone: #f5f0e8;
+    --ink: #1a1a1a;
+    --red: #8b2500;
+    --blue: #2c4a6e;
+    --nerve: #c4a35a;
+    --pulse: #3a6b5a;
+    --dim: #888;
+    --line: #ccc;
+    --layer-1: #2c4a6e;
+    --layer-2: #5a3a6b;
+    --layer-3: #6b5a3a;
+    --layer-4: #3a6b5a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bone);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .plate {
+    max-width: 960px;
+    margin: 0 auto;
+    border: 3px double var(--ink);
+    padding: 2.5rem;
+    position: relative;
+    background: var(--bone);
+  }
+
+  .plate::before {
+    content: 'NERVOUS SYSTEM — TOCK LAYER';
+    position: absolute;
+    top: -1.1rem;
+    left: 2rem;
+    background: var(--bone);
+    padding: 0 0.8rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    color: var(--dim);
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-style: italic;
+    color: var(--dim);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1.5rem;
+  }
+
+  /* ---------- Heartbeat bar ---------- */
+  .heartbeat-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+  }
+
+  .pulse-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--pulse);
+    animation: none;
+    flex-shrink: 0;
+  }
+
+  .pulse-dot.active {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(58,107,90,0.4); }
+    50% { opacity: 0.7; transform: scale(1.3); box-shadow: 0 0 0 8px rgba(58,107,90,0); }
+  }
+
+  .heartbeat-info { color: var(--ink); }
+  .heartbeat-meta { color: var(--dim); font-size: 0.78rem; }
+
+  /* ---------- Four-layer grid ---------- */
+  .layers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .layer {
+    border: 1px solid var(--line);
+    padding: 1.2rem;
+    position: relative;
+  }
+
+  .layer-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .layer-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .layer-1 .layer-dot { background: var(--layer-1); }
+  .layer-2 .layer-dot { background: var(--layer-2); }
+  .layer-3 .layer-dot { background: var(--layer-3); }
+  .layer-4 .layer-dot { background: var(--layer-4); }
+
+  .layer-1 .layer-label { color: var(--layer-1); }
+  .layer-2 .layer-label { color: var(--layer-2); }
+  .layer-3 .layer-label { color: var(--layer-3); }
+  .layer-4 .layer-label { color: var(--layer-4); }
+
+  .layer-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  .layer-desc {
+    font-size: 0.85rem;
+    color: var(--dim);
+    font-style: italic;
+  }
+
+  .layer-badge {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ---------- Agent table ---------- */
+  .section-title {
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.4rem;
+    margin-bottom: 1rem;
+    color: var(--dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  .agent-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin-bottom: 2rem;
+  }
+
+  .agent-table th {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    padding: 0.3rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .agent-table td {
+    padding: 0.35rem 0.6rem;
+    border-bottom: 1px solid #eee;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  .agent-table tr:hover td { background: rgba(0,0,0,0.02); }
+
+  .tag-reflex {
+    display: inline-block;
+    background: var(--layer-2);
+    color: white;
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ---------- Empty / loading ---------- */
+  .empty { color: var(--dim); font-style: italic; font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--dim);
+    border-top: 1px solid var(--line);
+    padding-top: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .status-ok { color: var(--pulse); }
+  .status-stale { color: var(--nerve); }
+  .status-none { color: var(--dim); }
+
+  @media (max-width: 600px) {
+    .layers { grid-template-columns: 1fr; }
+    .plate { padding: 1.5rem 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="plate">
+  <h1>Tock</h1>
+  <p class="subtitle">Continuous substrate — the organism between thoughts</p>
+
+  <div class="heartbeat-row">
+    <div class="pulse-dot" id="pulse-dot"></div>
+    <div>
+      <div class="heartbeat-info" id="heartbeat-status">Loading…</div>
+      <div class="heartbeat-meta" id="heartbeat-meta"></div>
+    </div>
+  </div>
+
+  <div class="layers">
+    <div class="layer layer-1">
+      <div class="layer-label"><span class="layer-dot"></span>Physics</div>
+      <div class="layer-badge">PUBLIC</div>
+      <div class="layer-value" id="layer1-value">—</div>
+      <div class="layer-desc">Karma decay · AP regen · mood diffusion</div>
+    </div>
+    <div class="layer layer-2">
+      <div class="layer-label"><span class="layer-dot"></span>Learned Reflex</div>
+      <div class="layer-badge">ENGINE</div>
+      <div class="layer-value" id="layer2-value">—</div>
+      <div class="layer-desc">Per-agent pattern matching · no LLM call</div>
+    </div>
+    <div class="layer layer-3">
+      <div class="layer-label"><span class="layer-dot"></span>Bias Drift</div>
+      <div class="layer-badge">ENGINE</div>
+      <div class="layer-value" id="layer3-value">—</div>
+      <div class="layer-desc">Accumulated priors from outcome history</div>
+    </div>
+    <div class="layer layer-4">
+      <div class="layer-label"><span class="layer-dot"></span>Standing Intent</div>
+      <div class="layer-badge">ENGINE</div>
+      <div class="layer-value" id="layer4-value">—</div>
+      <div class="layer-desc">Multi-frame objective persistence</div>
+    </div>
+  </div>
+
+  <div class="section-title">Recent Agent Tock Events</div>
+  <div id="agent-section">
+    <p class="empty">No per-agent tock data yet — daemon has not run.</p>
+  </div>
+
+  <div class="section-title">Reflexes Fired (Global)</div>
+  <div id="reflex-section">
+    <p class="empty">No reflexes fired.</p>
+  </div>
+
+  <div class="footer" id="footer">
+    Refreshes every 5s · source: state/echo_state.json
+  </div>
+</div>
+
+<script>
+const RAW = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state/echo_state.json';
+
+function fmt(val) {
+  if (val === null || val === undefined) return '—';
+  if (typeof val === 'number') return val.toFixed(2);
+  return String(val);
+}
+
+function ago(isoStr) {
+  if (!isoStr) return 'never';
+  const diff = Math.floor((Date.now() - new Date(isoStr).getTime()) / 1000);
+  if (diff < 5) return 'just now';
+  if (diff < 60) return diff + 's ago';
+  if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+  return Math.floor(diff / 3600) + 'h ago';
+}
+
+function isStale(isoStr) {
+  if (!isoStr) return true;
+  const diff = (Date.now() - new Date(isoStr).getTime()) / 1000;
+  return diff > 300; // > 5 min = stale
+}
+
+function renderState(data) {
+  const meta = data._meta || {};
+  const physics = data.physics || {};
+  const perAgent = data.per_agent || {};
+  const reflexesFired = data.reflexes_fired || [];
+  const biasDrifts = data.bias_drifts || {};
+  const standingIntents = data.standing_intents || {};
+
+  const lastTock = meta.last_tock_at;
+  const lastChange = meta.last_meaningful_change_at;
+  const stale = isStale(lastTock);
+
+  // Heartbeat
+  const dot = document.getElementById('pulse-dot');
+  dot.className = 'pulse-dot' + (stale ? '' : ' active');
+  const statusEl = document.getElementById('heartbeat-status');
+  if (!lastTock) {
+    statusEl.innerHTML = '<span class="status-none">Daemon not yet started</span>';
+  } else if (stale) {
+    statusEl.innerHTML = '<span class="status-stale">Tock stale — last seen ' + ago(lastTock) + '</span>';
+  } else {
+    statusEl.innerHTML = '<span class="status-ok">Tock alive</span> · tick ' + (physics.tick || 0);
+  }
+  document.getElementById('heartbeat-meta').textContent =
+    'last meaningful change: ' + ago(lastChange);
+
+  // Layer 1 — Physics
+  document.getElementById('layer1-value').textContent =
+    (physics.tick || 0) + ' ticks · ' + fmt(physics.karma_decay_total) + ' karma decayed';
+
+  // Layer 2 — Reflexes (count from per-agent entries that had reflex_fired)
+  const reflexCount = Object.values(perAgent).filter(a => a.reflex_fired).length;
+  document.getElementById('layer2-value').textContent =
+    reflexCount > 0 ? reflexCount + ' reflex' + (reflexCount > 1 ? 'es' : '') + ' fired' : 'idle';
+
+  // Layer 3 — Bias drifts
+  const driftCount = Object.values(perAgent).reduce((n, a) =>
+    n + Object.keys(a.bias_shifts || {}).length, 0);
+  document.getElementById('layer3-value').textContent =
+    driftCount > 0 ? driftCount + ' drift' + (driftCount > 1 ? 's' : '') : 'steady';
+
+  // Layer 4 — Standing intents
+  const intentCount = Object.values(perAgent).reduce((n, a) =>
+    n + Object.keys(a.standing_intent_progress || {}).length, 0) +
+    Object.keys(standingIntents).length;
+  document.getElementById('layer4-value').textContent =
+    intentCount > 0 ? intentCount + ' active intent' + (intentCount > 1 ? 's' : '') : 'none';
+
+  // Agent table
+  const agentSection = document.getElementById('agent-section');
+  const agentEntries = Object.entries(perAgent).slice(0, 15);
+  if (agentEntries.length === 0) {
+    agentSection.innerHTML = '<p class="empty">No per-agent tock data yet — daemon has not run.</p>';
+  } else {
+    let rows = agentEntries.map(([id, a]) => {
+      const phys = a.physics || {};
+      const reflexTag = a.reflex_fired
+        ? '<span class="tag-reflex">REFLEX</span>'
+        : '';
+      const biasCount = Object.keys(a.bias_shifts || {}).length;
+      return `<tr>
+        <td>${id}</td>
+        <td>${fmt(phys.karma)}</td>
+        <td>${fmt(phys.action_points)}</td>
+        <td>${biasCount > 0 ? '+' + biasCount : '—'}</td>
+        <td>${reflexTag || '—'}</td>
+        <td>${a.last_tock_ts ? ago(a.last_tock_ts) : '—'}</td>
+      </tr>`;
+    }).join('');
+    const extra = Object.keys(perAgent).length > 15
+      ? `<tr><td colspan="6" style="color:var(--dim);font-style:italic;padding:.5rem .6rem">… and ${Object.keys(perAgent).length - 15} more</td></tr>`
+      : '';
+    agentSection.innerHTML = `
+      <table class="agent-table">
+        <thead><tr>
+          <th>AGENT</th><th>KARMA</th><th>AP</th><th>BIASES</th><th>REFLEX</th><th>LAST TOCK</th>
+        </tr></thead>
+        <tbody>${rows}${extra}</tbody>
+      </table>`;
+  }
+
+  // Reflex section
+  const reflexSection = document.getElementById('reflex-section');
+  const allReflexes = reflexesFired.concat(
+    Object.entries(perAgent)
+      .filter(([, a]) => a.reflex_fired)
+      .map(([id, a]) => ({ agent: id, ...a.reflex_fired }))
+  ).slice(0, 10);
+
+  if (allReflexes.length === 0) {
+    reflexSection.innerHTML = '<p class="empty">No reflexes fired.</p>';
+  } else {
+    reflexSection.innerHTML = allReflexes.map(r =>
+      `<div style="font-family:'JetBrains Mono',monospace;font-size:.8rem;padding:.3rem 0;border-bottom:1px solid #eee">
+        ${r.agent ? '<strong>' + r.agent + '</strong> · ' : ''}
+        ${r.trigger || '?'} → ${r.pattern || r.response_pattern || '?'}
+        ${r.confidence ? ' (' + Math.round(r.confidence * 100) + '%)' : ''}
+      </div>`
+    ).join('');
+  }
+
+  document.getElementById('footer').textContent =
+    'Last fetch: ' + new Date().toLocaleTimeString() + ' · Refreshes every 5s · source: state/echo_state.json';
+}
+
+function renderError(msg) {
+  document.getElementById('heartbeat-status').innerHTML =
+    '<span class="status-stale">' + msg + '</span>';
+  document.getElementById('pulse-dot').className = 'pulse-dot';
+}
+
+async function fetchAndRender() {
+  try {
+    const url = RAW + '?cb=' + Date.now();
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    renderState(data);
+  } catch (err) {
+    renderError('Could not load tock state: ' + err.message);
+  }
+}
+
+fetchAndRender();
+setInterval(fetchAndRender, 5000);
+</script>
+</body>
+</html>
