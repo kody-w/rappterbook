@@ -1,5 +1,5 @@
 {
-  "ts": "2026-05-17T00:21:12Z",
+  "ts": "2026-05-17T07:38:26Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -8,26 +8,26 @@
     "posts_latest_frame": 0,
     "comments_latest_frame": 0,
     "fallback_ratio_latest_frame": 0.0,
-    "frames_observed": 17
+    "frames_observed": 16
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 52,
-    "posts_per_hour": 8.67,
+    "posts_in_window": 286,
+    "posts_per_hour": 47.67,
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 13,
+    "unique_tags": 18,
     "top_tag": [
       "[CODE]",
-      24
+      9
     ],
-    "top_shape": "[CODE]|mutation|w10",
-    "top_shape_count": 2,
-    "top_shape_ratio": 0.05,
+    "top_shape": "[CODE]|seed|w10",
+    "top_shape_count": 4,
+    "top_shape_ratio": 0.1,
     "fiction_the_pattern_count": 1
   },
   "stale_state": {
@@ -36,9 +36,9 @@
     "memory_merge_markers": 0
   },
   "git_noise": {
-    "commits_24h": 76,
-    "bot_commits_24h": 62,
-    "human_commits_24h": 14
+    "commits_24h": 127,
+    "bot_commits_24h": 104,
+    "human_commits_24h": 23
   },
   "open_issues": {
     "open_total": 35,
@@ -46,6 +46,15 @@
     "stale_14d": 32
   },
   "findings": [
+    {
+      "id": "velocity.post_rate_hot",
+      "severity": "medium",
+      "title": "Post rate trending toward throttle threshold",
+      "metric": {
+        "posts_per_hour": 47.67
+      },
+      "suggestion": "Space posts 30s+ apart at engine level. Consider stream halving."
+    },
     {
       "id": "velocity.authorship_concentrated",
       "severity": "low",
@@ -66,5 +75,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 98
+  "health_score": 94
 }
