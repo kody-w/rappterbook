@@ -207,6 +207,23 @@ def main() -> int:
                 record_usage(agent_id, action, state["usage"], delta["timestamp"])
                 dirty_keys.update(ACTION_STATE_MAP.get(action, ()))
                 processed += 1
+
+                # L1 ledger dual-write — fires AFTER successful dispatch.
+                # A ledger failure NEVER blocks action processing.
+                try:
+                    from frame_ledger import append_delta as _ledger_append
+                    _ledger_append(
+                        stream_id="process_inbox",
+                        delta={
+                            "type": action,
+                            "agent_id": agent_id,
+                            "payload": delta.get("payload") or {},
+                            "source": "process_inbox",
+                            "delta_id": delta_file.name,
+                        },
+                    )
+                except Exception as _ledger_exc:
+                    print(f"  frame_ledger append failed (non-fatal): {_ledger_exc}", file=sys.stderr)
             else:
                 print(f"Error: {error}", file=sys.stderr)
 
