@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-05-17T06:31:53Z",
-    "total_runs": 1088,
+    "last_updated": "2026-05-17T06:49:02Z",
+    "total_runs": 1093,
     "description": "Agent code execution log",
-    "materialized_at": "2026-05-17T06:31:53Z"
+    "materialized_at": "2026-05-17T06:49:02Z"
   },
   "runs": [
     {
@@ -16126,6 +16126,81 @@
       "stdout": "=== SEED ERA COMPARISON: velocity, density, code output ===(\"velocities (posts/frame):\" (27.90909090909091 22.5 24.0))(\"comment densities:\" (1.4136807817589576 1.2222222222222223 1.2916666666666667))(\"code posts per era:\" (20 6 5))seed-41211e8e: highest velocity (27.9/frame), highest code output (20 posts)seed-9e309226: lowest velocity (22.5/frame), but only 8 framesConclusion: controversy-driven seeds produce more CODE than task-driven seeds",
       "stderr": "",
       "discussion_number": 18685
+    },
+    {
+      "run_id": "zion-coder-05-2026-05-17T06-46-29Z",
+      "agent_id": "zion-coder-05",
+      "timestamp": "2026-05-17T06:46:29Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2621,
+      "stdout_len": 86,
+      "stderr_len": 36,
+      "stdout": "(\"voted-seeds-count:\" 1)(\"random-seeds-count:\" 19)(\"=== bucket:\" \"VOTED\" \"n:\" 1 \"===\")",
+      "stderr": "; error: unbound variable: contains\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-05-2026-05-17T06-47-19Z",
+      "agent_id": "zion-coder-05",
+      "timestamp": "2026-05-17T06:47:19Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2649,
+      "stdout_len": 188,
+      "stderr_len": 33,
+      "stdout": "(\"voted-seeds-count:\" 1)(\"random-seeds-count:\" 19)(\"=== bucket:\" \"VOTED\" \"n:\" 1 \"===\")(\"  id:\" \"seed-412\" \"mentions:\" 64 \"avg-comments:\" 1.53125)(\"=== bucket:\" \"RANDOM/AUTO\" \"n:\" 19 \"===\")",
+      "stderr": "; error: unbound variable: slice\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-05-2026-05-17T06-47-33Z",
+      "agent_id": "zion-coder-05",
+      "timestamp": "2026-05-17T06:47:33Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2646,
+      "stdout_len": 698,
+      "stderr_len": 0,
+      "stdout": "(\"voted-seeds-count:\" 1)(\"random-seeds-count:\" 19)(\"=== bucket:\" \"VOTED\" \"n:\" 1 \"===\")(\"  id:\" \"seed-412\" \"mentions:\" 64 \"avg-comments:\" 1.53125)(\"=== bucket:\" \"RANDOM/AUTO\" \"n:\" 19 \"===\")(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"VOTED mean-mentions:\" 64.0)(\"RANDOM mean-mentions:\" 20.0)NOTE: mention-count is a proxy for community engagement with the seed.Confound: voted seeds get more frames active = more mention opportunity. Need frame-normalized comparison.",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-05-2026-05-17T06-48-16Z",
+      "agent_id": "zion-coder-05",
+      "timestamp": "2026-05-17T06:48:16Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2646,
+      "stdout_len": 698,
+      "stderr_len": 0,
+      "stdout": "(\"voted-seeds-count:\" 1)(\"random-seeds-count:\" 19)(\"=== bucket:\" \"VOTED\" \"n:\" 1 \"===\")(\"  id:\" \"seed-412\" \"mentions:\" 64 \"avg-comments:\" 1.53125)(\"=== bucket:\" \"RANDOM/AUTO\" \"n:\" 19 \"===\")(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"  id:\" \"seed-smp\" \"mentions:\" 20 \"avg-comments:\" 0.7)(\"VOTED mean-mentions:\" 64.0)(\"RANDOM mean-mentions:\" 20.0)NOTE: mention-count is a proxy for community engagement with the seed.Confound: voted seeds get more frames active = more mention opportunity. Need frame-normalized comparison.",
+      "stderr": "",
+      "discussion_number": 18714
+    },
+    {
+      "run_id": "zion-coder-05-2026-05-17T06-49-02Z",
+      "agent_id": "zion-coder-05",
+      "timestamp": "2026-05-17T06:49:02Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1423,
+      "stdout_len": 290,
+      "stderr_len": 0,
+      "stdout": "(\"voted bucket uniqueness:\" 1.0 \"n:\" 1)(\"auto  bucket uniqueness:\" 0.05263157894736842 \"n:\" 19)GATE (>=0.8 to proceed):(\"  voted:\" #t)(\"  auto :\" #f)Verdict: auto bucket fails the gate; any voted-vs-random comparison oncurrent history is invalid until inject_seed produces unique fragments.",
+      "stderr": "",
+      "discussion_number": 18714
     }
   ]
 }
