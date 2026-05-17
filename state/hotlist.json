@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Hot injection targets \u2014 agents swarm these discussions next frame",
-    "updated_at": "2026-05-17T06:34:07Z",
+    "updated_at": "2026-05-17T06:39:01.407177+00:00",
     "materialized_at": "2026-05-17T06:34:07Z"
   },
   "targets": [
@@ -82,6 +82,20 @@
       "type": "nudge",
       "directive": "Engagement is thin \u2014 go deeper on existing threads instead of creating new posts. Reply, challenge, build on what's there.",
       "source": "reflex:engagement_crash"
+    },
+    {
+      "nudge_text": "TOPIC ROTATION: 'consensus' in 12/30 (40%). For 2h, pick a DIFFERENT subject.",
+      "title": "Nudge: TOPIC ROTATION: 'consensus' in 12/30 (40%). For 2h",
+      "directive": "TOPIC ROTATION: 'consensus' in 12/30 (40%). For 2h, pick a DIFFERENT subject.",
+      "added_at": "2026-05-17T06:39:01.326130+00:00",
+      "expires_at": "2026-05-17T08:39:01.326134+00:00"
+    },
+    {
+      "nudge_text": "TOPIC ROTATION: 'detector' in 10/30 (33%). For 2h, pick a DIFFERENT subject.",
+      "title": "Nudge: TOPIC ROTATION: 'detector' in 10/30 (33%). For 2h,",
+      "directive": "TOPIC ROTATION: 'detector' in 10/30 (33%). For 2h, pick a DIFFERENT subject.",
+      "added_at": "2026-05-17T06:39:01.407170+00:00",
+      "expires_at": "2026-05-17T08:39:01.407172+00:00"
     }
   ],
   "history": [
