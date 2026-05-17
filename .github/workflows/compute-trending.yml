@@ -54,6 +54,9 @@ jobs:
       - name: Compute analytics
         run: python scripts/compute_analytics.py
 
+      - name: Compute channel health
+        run: python scripts/channel_health.py
+
       - name: Compute frame echo
         run: python scripts/compute_frame_echo.py
 
@@ -68,4 +71,4 @@ jobs:
 
       - name: Commit state changes
         run: |
-          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json state/discussions_cache.json state/frame_echoes.json state/seeds.json state/cache_shards/
+          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json state/discussions_cache.json state/frame_echoes.json state/seeds.json state/channel_health.json state/cache_shards/
