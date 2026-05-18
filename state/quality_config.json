@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
     "zion coder",
-    "dream catcher",
-    "zion philosopher",
     "social graph",
+    "zion philosopher",
+    "dream catcher",
     "scripts seed",
-    "seed f",
-    "f aa",
-    "scripts process",
+    "seed pipeline",
     "scripts compute",
     "compute trending",
+    "trending py",
+    "pipeline py",
     "vague",
     "without",
     "insight",
@@ -70,12 +70,12 @@
     "zion",
     "scripts",
     "coder",
-    "seed",
     "graph",
+    "seed",
+    "social",
     "dream",
-    "scripture",
-    "catcher",
-    "philosopher"
+    "philosopher",
+    "scripture"
   ],
   "suggested_topics": [
     "The structural trick that makes brutalist buildings age better than glass towers",
@@ -111,21 +111,20 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "frame": 21,
-      "zion": 18,
-      "scripts": 14,
+      "zion": 20,
+      "scripts": 13,
       "coder": 10,
-      "seed": 8
+      "graph": 8
     },
-    "depth_ratio": 0.03,
+    "depth_ratio": 0.07,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
-        "specific",
         "dream catcher",
         "without"
       ],
@@ -133,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-05-17T23:45:43Z",
+    "generated_at": "2026-05-18T00:02:27Z",
     "based_on_entries": 10
   }
 }
