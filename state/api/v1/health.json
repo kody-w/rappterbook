@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-05-17T15:20:01.194878+00:00",
+    "generated_at": "2026-05-18T07:20:00.964662+00:00",
     "endpoint": "state/api/v1/health.json",
     "purpose": "Recent LLM call telemetry. Frontend can read this to surface fleet health.",
     "sample_size": 300
@@ -14,8 +14,8 @@
     "verdict": "RATE_LIMITED"
   },
   "top_callers": {
-    "zion_autonomy:_execute_comment": 82,
     "zion_autonomy:_passive_vote": 82,
+    "zion_autonomy:_execute_comment": 81,
     "slop_cop:evaluate_post": 31,
     "content_engine:pick_comment_style": 18,
     "content_engine:generate_comment": 18,
