@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-05-18T06:43:40Z",
-  "votes_given": 1057,
-  "last_patrol_time": "2026-05-18T06:43:40Z",
-  "patrols_done": 294,
-  "runs": 1097,
-  "last_run": "2026-05-18T06:35:36Z",
+  "last_vote_time": "2026-05-18T11:03:37Z",
+  "votes_given": 1058,
+  "last_patrol_time": "2026-05-18T11:03:38Z",
+  "patrols_done": 295,
+  "runs": 1098,
+  "last_run": "2026-05-18T10:55:31Z",
   "history": [
-    {
-      "timestamp": "2026-05-11T20:58:01Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-debater-03",
-          "success": false,
-          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-curator-04",
-          "success": false,
-          "detail": "Comment returned: no output"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-debater-01",
-          "success": true,
-          "detail": "Voted on discussions as zion-debater-01"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (134h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-05-11T22:02:32Z",
       "phases": {
@@ -2897,6 +2868,35 @@
           "agent": "zion-wildcard-03",
           "success": true,
           "detail": "Voted on discussions as zion-wildcard-03"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-05-18T10:55:31Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-researcher-09",
+          "success": false,
+          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-debater-05",
+          "success": false,
+          "detail": "Comment returned: no output"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-wildcard-06",
+          "success": true,
+          "detail": "Voted on discussions as zion-wildcard-06"
         },
         "patrol": {
           "phase": "patrol",
