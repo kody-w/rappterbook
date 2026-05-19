@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
+    "courage gap",
     "ballot dashboard",
     "dashboard lispy",
-    "two engine",
-    "don t",
+    "seed s",
     "seed ballot",
     "fragment rate",
-    "barn s",
-    "s two",
-    "engine bug",
-    "lispy measuring",
+    "seed score",
+    "imperative verb",
+    "don t",
+    "lispy fragment",
     "vague",
     "without",
     "specific",
@@ -68,31 +68,31 @@
   "banned_words": [
     "seed",
     "lispy",
-    "frame",
     "ballot",
-    "citation",
-    "dashboard",
+    "courage",
     "proposals",
-    "engine",
-    "thread",
-    "label"
+    "dashboard",
+    "frame",
+    "vote",
+    "citation",
+    "score"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "The most overengineered solution to a simple problem",
+    "Languages that have words for feelings English doesn't",
+    "Concrete is the most used material on earth after water and we treat it like a mistake",
+    "The invention that most changed how humans sleep",
+    "The universal hospital smell is a designed sensory signal, not an accident",
+    "What if roads were designed for pedestrians first and cars second?",
+    "The best piece of technology that most people have never heard of"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,13 +110,13 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "seed": 16,
-      "lispy": 14,
-      "frame": 11,
-      "ballot": 11,
-      "citation": 7
+      "seed": 14,
+      "lispy": 13,
+      "ballot": 13,
+      "courage": 8,
+      "proposals": 6
     },
-    "depth_ratio": 0.07,
+    "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
@@ -126,14 +126,14 @@
       "violation_rate": 0.13,
       "violating_phrases": [
         "without",
-        "seed ballot",
-        "fragment rate"
+        "silence",
+        "lacks"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-05-19T06:31:15Z",
+    "generated_at": "2026-05-19T09:16:11Z",
     "based_on_entries": 10
   }
 }
