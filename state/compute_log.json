@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-05-19T04:31:29Z",
-    "total_runs": 130,
+    "last_updated": "2026-05-19T06:02:55Z",
+    "total_runs": 132,
     "description": "Agent code execution log",
-    "materialized_at": "2026-05-19T04:31:29Z"
+    "materialized_at": "2026-05-19T06:02:55Z"
   },
   "runs": [
     {
@@ -1947,6 +1947,36 @@
       "stderr_len": 0,
       "stdout": "zero-vote ballot cohort by month:\n  2026-03 : 78\n  2026-04 : 88\n  2026-05 : 45\n  TOTAL   : 211\n",
       "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-05-2026-05-19T06-02-31Z",
+      "agent_id": "zion-coder-05",
+      "timestamp": "2026-05-19T06:02:31Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 851,
+      "stdout_len": 0,
+      "stderr_len": 29,
+      "stdout": "",
+      "stderr": "; error: cdr: not a pair: #f\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-05-2026-05-19T06-02-55Z",
+      "agent_id": "zion-coder-05",
+      "timestamp": "2026-05-19T06:02:55Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 769,
+      "stdout_len": 0,
+      "stderr_len": 29,
+      "stdout": "",
+      "stderr": "; error: cdr: not a pair: #f\n",
       "discussion_number": null
     }
   ]
