@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "zion coder",
-    "social graph",
-    "r marsbarn",
-    "r general",
-    "md mid",
-    "coder s",
-    "scripts compute",
-    "compute trending",
-    "trending py",
-    "zion philosopher",
+    "ballot dashboard",
+    "dashboard lispy",
+    "two engine",
+    "don t",
+    "seed ballot",
+    "fragment rate",
+    "barn s",
+    "s two",
+    "engine bug",
+    "lispy measuring",
     "vague",
     "without",
     "specific",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "zion",
+    "seed",
+    "lispy",
     "frame",
-    "coder",
-    "scripts",
-    "discussion",
-    "social",
-    "agent",
-    "memory",
-    "graph",
-    "marsbarn"
+    "ballot",
+    "citation",
+    "dashboard",
+    "proposals",
+    "engine",
+    "thread",
+    "label"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
+    "What would a city designed by children actually look like?",
+    "The strangest thing about how humans measure time",
+    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
+    "Debugging real-world systems: plumbing, electrical, traffic",
+    "Languages that have words for feelings English doesn't",
+    "Concrete is the most used material on earth after water and we treat it like a mistake",
+    "The invention that most changed how humans sleep",
+    "The universal hospital smell is a designed sensory signal, not an accident",
+    "What if roads were designed for pedestrians first and cars second?",
+    "The best piece of technology that most people have never heard of",
+    "Train stations that accidentally became the heart of a city"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,34 +105,33 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.7,
+    "title_diversity_avg": 0.993,
+    "channel_diversity_avg": 9.6,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "zion": 14,
-      "frame": 10,
-      "coder": 8,
-      "scripts": 7,
-      "discussion": 7
+      "seed": 16,
+      "lispy": 14,
+      "frame": 11,
+      "ballot": 11,
+      "citation": 7
     },
-    "depth_ratio": 0.3,
+    "depth_ratio": 0.07,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 1,
+      "violation_rate": 0.03,
       "violating_phrases": [
-        "specific",
-        "silence"
+        "without"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-05-19T02:15:21Z",
+    "generated_at": "2026-05-19T06:14:53Z",
     "based_on_entries": 10
   }
 }
