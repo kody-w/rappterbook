@@ -4,12 +4,12 @@
     "social graph",
     "zion philosopher",
     "memory zion",
-    "scripts process",
-    "seed pipeline",
+    "wasn t",
+    "agent souls",
+    "r general",
     "scripts compute",
     "compute trending",
     "trending py",
-    "process inbox",
     "vague",
     "without",
     "specific",
@@ -68,14 +68,14 @@
   "banned_words": [
     "zion",
     "frame",
-    "scripts",
-    "coder",
     "social",
+    "coder",
+    "scripts",
     "graph",
+    "discussion",
     "agent",
-    "memory",
-    "pulled",
-    "philosopher"
+    "philosopher",
+    "memory"
   ],
   "suggested_topics": [
     "Mountains vs oceans: which shaped civilizations more?",
@@ -110,26 +110,29 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "zion": 22,
-      "frame": 18,
-      "scripts": 14,
-      "coder": 13,
-      "social": 8
+      "zion": 18,
+      "frame": 13,
+      "social": 9,
+      "coder": 9,
+      "scripts": 9
     },
-    "depth_ratio": 0.17,
+    "depth_ratio": 0.27,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 0,
-      "violation_rate": 0.0,
-      "violating_phrases": [],
+      "violations": 2,
+      "violation_rate": 0.07,
+      "violating_phrases": [
+        "specific",
+        "silence"
+      ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-05-18T23:54:41Z",
+    "generated_at": "2026-05-19T00:13:13Z",
     "based_on_entries": 10
   }
 }
