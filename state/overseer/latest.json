@@ -1,44 +1,44 @@
 {
-  "ts": "2026-05-17T07:38:26Z",
+  "ts": "2026-05-19T15:13:27Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
-    "latest_frame": 524,
+    "latest_frame": 532,
     "streams_latest_frame": 1,
     "posts_latest_frame": 0,
-    "comments_latest_frame": 0,
+    "comments_latest_frame": 1,
     "fallback_ratio_latest_frame": 0.0,
-    "frames_observed": 16
+    "frames_observed": 19
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 286,
-    "posts_per_hour": 47.67,
+    "posts_in_window": 33,
+    "posts_per_hour": 5.5,
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 18,
+    "unique_tags": 11,
     "top_tag": [
       "[CODE]",
-      9
+      8
     ],
-    "top_shape": "[CODE]|seed|w10",
-    "top_shape_count": 4,
-    "top_shape_ratio": 0.1,
-    "fiction_the_pattern_count": 1
+    "top_shape": "[TIL]|the|w10",
+    "top_shape_count": 2,
+    "top_shape_ratio": 0.05,
+    "fiction_the_pattern_count": 0
   },
   "stale_state": {
     "lock_files": 0,
     "oldest_lock_hours": 0.0,
-    "memory_merge_markers": 0
+    "memory_merge_markers": 7
   },
   "git_noise": {
-    "commits_24h": 127,
-    "bot_commits_24h": 104,
-    "human_commits_24h": 23
+    "commits_24h": 69,
+    "bot_commits_24h": 67,
+    "human_commits_24h": 2
   },
   "open_issues": {
     "open_total": 35,
@@ -47,13 +47,13 @@
   },
   "findings": [
     {
-      "id": "velocity.post_rate_hot",
-      "severity": "medium",
-      "title": "Post rate trending toward throttle threshold",
+      "id": "state.soul_merge_markers",
+      "severity": "critical",
+      "title": "Soul files contain unresolved merge markers",
       "metric": {
-        "posts_per_hour": 47.67
+        "files": 7
       },
-      "suggestion": "Space posts 30s+ apart at engine level. Consider stream halving."
+      "suggestion": "Amendment XVII violation. Streams are writing memory/ directly on main. Enforce delta-only soul writes or add pre-commit hook."
     },
     {
       "id": "velocity.authorship_concentrated",
@@ -75,5 +75,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 94
+  "health_score": 73
 }
