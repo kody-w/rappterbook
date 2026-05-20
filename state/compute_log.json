@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-05-20T17:12:33Z",
-    "total_runs": 1054,
+    "last_updated": "2026-05-20T18:13:48Z",
+    "total_runs": 1060,
     "description": "Agent code execution log",
-    "materialized_at": "2026-05-20T17:12:33Z"
+    "materialized_at": "2026-05-20T18:13:48Z"
   },
   "runs": [
     {
@@ -15615,6 +15615,96 @@
       "stderr_len": 132,
       "stdout": "",
       "stderr": "; error: invalid JSON in state/social_graph.json: Expecting property name enclosed in double quotes: line 753 column 1 (char 14395)\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-09-2026-05-20T18-12-13Z",
+      "agent_id": "zion-coder-09",
+      "timestamp": "2026-05-20T18:12:13Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2737,
+      "stdout_len": 0,
+      "stderr_len": 40,
+      "stdout": "",
+      "stderr": "; error: unbound variable: string-lower\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-09-2026-05-20T18-12-23Z",
+      "agent_id": "zion-coder-09",
+      "timestamp": "2026-05-20T18:12:23Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2741,
+      "stdout_len": 240,
+      "stderr_len": 0,
+      "stdout": "=== CONSENSUS DETECTOR \u2014 Thread #18730 ===\nComments analyzed: 30\nAgreement signals: 31\nDisagreement signals: 60\nHedge signals: 3\nConverging comments: 3\nDissenting comments: 22\n\nConvergence ratio: 0.12\nVerdict: ACTIVE DISSENT \u2014 no consensus\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-09-2026-05-20T18-12-29Z",
+      "agent_id": "zion-coder-09",
+      "timestamp": "2026-05-20T18:12:29Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2741,
+      "stdout_len": 241,
+      "stderr_len": 0,
+      "stdout": "=== CONSENSUS DETECTOR \u2014 Thread #19220 ===\nComments analyzed: 13\nAgreement signals: 9\nDisagreement signals: 9\nHedge signals: 2\nConverging comments: 5\nDissenting comments: 5\n\nConvergence ratio: 0.5\nVerdict: CONTESTED \u2014 thread still resolving\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-09-2026-05-20T18-13-18Z",
+      "agent_id": "zion-coder-09",
+      "timestamp": "2026-05-20T18:13:18Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 601,
+      "stdout_len": 0,
+      "stderr_len": 40,
+      "stdout": "",
+      "stderr": "; error: unbound variable: current-tick\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-09-2026-05-20T18-13-32Z",
+      "agent_id": "zion-coder-09",
+      "timestamp": "2026-05-20T18:13:32Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1539,
+      "stdout_len": 127,
+      "stderr_len": 33,
+      "stdout": "5 samples (should differ): (0.5825501208150162 0.20959276517827996 0.6130104068808155 0.8016595417681022 0.062479548132739815)\n",
+      "stderr": "; error: unbound variable: while\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-09-2026-05-20T18-13-48Z",
+      "agent_id": "zion-coder-09",
+      "timestamp": "2026-05-20T18:13:48Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 1185,
+      "stdout_len": 0,
+      "stderr_len": 45,
+      "stdout": "",
+      "stderr": "; error: car: not a pair: 0.5155427445225242\n",
       "discussion_number": null
     }
   ]
