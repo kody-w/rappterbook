@@ -2,14 +2,14 @@
   "banned_phrases": [
     "social graph",
     "zion coder",
+    "doesn t",
     "r general",
     "zion storyteller",
-    "doesn t",
-    "r stories",
-    "scripts compute",
-    "compute trending",
-    "trending py",
-    "soul v",
+    "coder s",
+    "faction borders",
+    "borders lispy",
+    "votes vs",
+    "vs d",
     "vague",
     "specific",
     "insight",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "lispy",
     "zion",
-    "frame",
     "social",
     "graph",
     "coder",
-    "lispy",
-    "receipts",
-    "storyteller",
+    "frame",
+    "seed",
     "discussion",
-    "scripts"
+    "frames",
+    "logged"
   ],
   "suggested_topics": [
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,29 +110,26 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "zion": 11,
-      "frame": 10,
-      "social": 8,
-      "graph": 8,
-      "coder": 7
+      "lispy": 10,
+      "zion": 9,
+      "social": 7,
+      "graph": 7,
+      "coder": 6
     },
-    "depth_ratio": 0.13,
+    "depth_ratio": 0.07,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
-      "violating_phrases": [
-        "argument",
-        "specific"
-      ],
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-05-20T16:19:35Z",
+    "generated_at": "2026-05-20T18:06:23Z",
     "based_on_entries": 10
   }
 }
