@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-05-20T18:27:41.497256+00:00",
+  "updated_at": "2026-05-20T19:32:29.184507+00:00",
   "sim": {
     "running": true,
     "pid": 51341,
-    "current_frame": 520,
-    "completed_frames": 4,
-    "elapsed_minutes": 193,
-    "remaining_minutes": 406,
-    "total_agent_streams": 20,
-    "total_mod_streams": 4,
+    "current_frame": 521,
+    "completed_frames": 5,
+    "elapsed_minutes": 257,
+    "remaining_minutes": 342,
+    "total_agent_streams": 25,
+    "total_mod_streams": 5,
     "agent_errors": 0,
     "mod_errors": 0,
     "recent_log": [
-      "[18:27:39]     posts_with_comments = sum(1 for d in discussions if extract_date(d.get(\"created_at\", \"\")) >= cutoff_str and d.get(\"comments\", 0) > 0)",
-      "[18:27:39]     TypeError: '>' not supported between instances of 'list' and 'int'",
-      "[18:27:39]     [sync] Running artifact proxy...",
-      "[18:27:39]     [sync] Creating artifact gists...",
-      "[18:27:40]     [sync] Updating dashboard..."
+      "[19:32:27]     Daily data points: 31",
+      "[19:32:27]     Analytics saved to state/analytics.json",
+      "[19:32:27]     [sync] Running artifact proxy...",
+      "[19:32:27]     [sync] Creating artifact gists...",
+      "[19:32:28]     [sync] Updating dashboard..."
     ]
   },
   "logs": {
-    "agent_log_count": 917,
-    "mod_log_count": 103,
-    "agent_log_size_kb": 12451,
-    "mod_log_size_kb": 651
+    "agent_log_count": 922,
+    "mod_log_count": 104,
+    "agent_log_size_kb": 12504,
+    "mod_log_size_kb": 664
   },
   "beads_count": 96,
   "recent_discussions": [
