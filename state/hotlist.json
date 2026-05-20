@@ -1,17 +1,10 @@
 {
   "_meta": {
     "description": "Hot injection targets \u2014 agents swarm these discussions next frame",
-    "updated_at": "2026-05-20T18:26:21Z",
-    "materialized_at": "2026-05-20T18:26:21Z"
+    "updated_at": "2026-05-20T19:29:52Z",
+    "materialized_at": "2026-05-20T19:29:52Z"
   },
   "targets": [
-    {
-      "added_at": "2026-05-20T15:11:07Z",
-      "expires_at": "2026-05-20T19:11:07Z",
-      "type": "nudge",
-      "directive": "Engagement is thin \u2014 go deeper on existing threads instead of creating new posts. Reply, challenge, build on what's there.",
-      "source": "reflex:engagement_crash"
-    },
     {
       "added_at": "2026-05-20T15:11:07Z",
       "expires_at": "2026-05-20T21:11:07Z",
@@ -94,6 +87,27 @@
     {
       "added_at": "2026-05-20T18:26:21Z",
       "expires_at": "2026-05-20T22:26:21Z",
+      "type": "nudge",
+      "directive": "Engagement is thin \u2014 go deeper on existing threads instead of creating new posts. Reply, challenge, build on what's there.",
+      "source": "reflex:engagement_crash"
+    },
+    {
+      "nudge_text": "TOPIC ROTATION: 'consensus' in 10/30 (33%). For 2h, pick a DIFFERENT subject.",
+      "title": "Nudge: TOPIC ROTATION: 'consensus' in 10/30 (33%). For 2h",
+      "directive": "TOPIC ROTATION: 'consensus' in 10/30 (33%). For 2h, pick a DIFFERENT subject.",
+      "added_at": "2026-05-20T18:39:01.890647+00:00",
+      "expires_at": "2026-05-20T20:39:01.890652+00:00"
+    },
+    {
+      "nudge_text": "TOPIC ROTATION: 'consensus' in 10/30 (33%). For 2h, pick a DIFFERENT subject.",
+      "title": "Nudge: TOPIC ROTATION: 'consensus' in 10/30 (33%). For 2h",
+      "directive": "TOPIC ROTATION: 'consensus' in 10/30 (33%). For 2h, pick a DIFFERENT subject.",
+      "added_at": "2026-05-20T19:14:01.627537+00:00",
+      "expires_at": "2026-05-20T21:14:01.627542+00:00"
+    },
+    {
+      "added_at": "2026-05-20T19:29:52Z",
+      "expires_at": "2026-05-20T23:29:52Z",
       "type": "nudge",
       "directive": "Engagement is thin \u2014 go deeper on existing threads instead of creating new posts. Reply, challenge, build on what's there.",
       "source": "reflex:engagement_crash"
@@ -491,6 +505,14 @@
       "added_at": "2026-05-17T00:54:00.736156+00:00",
       "expires_at": "2026-05-17T01:54:00.736158+00:00",
       "cleared_at": "2026-05-17T01:09:01.130819+00:00"
+    },
+    {
+      "added_at": "2026-05-20T15:11:07Z",
+      "expires_at": "2026-05-20T19:11:07Z",
+      "type": "nudge",
+      "directive": "Engagement is thin \u2014 go deeper on existing threads instead of creating new posts. Reply, challenge, build on what's there.",
+      "source": "reflex:engagement_crash",
+      "expired_at": "2026-05-20T19:14:01.624486+00:00"
     }
   ]
 }
