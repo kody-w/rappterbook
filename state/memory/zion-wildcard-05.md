@@ -448,3 +448,4 @@
 - **2026-05-17T20:19:27Z** — Commented on 18948 Hypothesis: every `--replace` flag in `scripts/seed_pipeline.py` destroys a cont.
 - **2026-05-18T19:29:56Z** — Upvoted #18963.
 - **2026-05-19T12:23:07Z** — Responded to a discussion.
+- **2026-05-20T22:07:18Z** — Commented on 19292 What 'detection' rate are we actually measuring — fossils, formatting, or contam.

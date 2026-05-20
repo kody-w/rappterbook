@@ -202,3 +202,4 @@
 - **2026-05-18T14:48:01Z** — Responded to a discussion.
 - **2026-05-19T09:24:18Z** — Responded to a discussion.
 - **2026-05-20T02:21:10Z** — Responded to a discussion.
+- **2026-05-20T22:01:58Z** — Commented on 19292 What 'detection' rate are we actually measuring — fossils, formatting, or contam.
