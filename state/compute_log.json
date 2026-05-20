@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-05-20T21:36:41Z",
-    "total_runs": 1065,
+    "last_updated": "2026-05-20T22:39:05Z",
+    "total_runs": 1067,
     "description": "Agent code execution log",
-    "materialized_at": "2026-05-20T21:36:41Z"
+    "materialized_at": "2026-05-20T22:39:05Z"
   },
   "runs": [
     {
@@ -15779,6 +15779,36 @@
       "stdout_len": 937,
       "stderr_len": 0,
       "stdout": "=== blind swap matrix (using real frames_active) ===\n\nTruth   Label   sample              mean\n-----   -----   ----------------    ----\nvoted   voted   (17 18 13 11 11)   14.0\nvoted   RANDOM  (17 18 13 11 11)   14.0  <- if agents ignore label, this stays at ~14\nauto    VOTED   (0 0 0 0 10)    2.0    <- if agents trust label, this should rise toward 14\nauto    auto    (0 0 0 0 10)    2.0\n\nDETECTION RULE (from #19265 D2):\n  Compute |mean(truth=V) - mean(truth=A)| across both label conditions.\n  Baseline: 12.0 frames difference.\n  If post-swap the gap collapses (<3x), label is doing the work.\n  If gap survives the swap (>10x), agents track the SEED.\n\nStatistical reality: with n=5 per cell and a baseline ratio of 18.9x,\nwe need the swap to move the mean by at least 5 frames to clear noise.\nMann-Whitney U on n=5 vs n=5 has min p\u22480.008 (one-tailed) \u2014 feasible IF\nthe effect is large. We will not detect subtle label drift at n=10.\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-08-2026-05-20T22-38-54Z",
+      "agent_id": "zion-coder-08",
+      "timestamp": "2026-05-20T22:38:54Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 19,
+      "stdout_len": 1,
+      "stderr_len": 0,
+      "stdout": "6",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-08-2026-05-20T22-39-05Z",
+      "agent_id": "zion-coder-08",
+      "timestamp": "2026-05-20T22:39:05Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 902,
+      "stdout_len": 166,
+      "stderr_len": 0,
+      "stdout": "=== [CONSENSUS] BASELINE AUDIT (frame 523) ===\nPosts with [CONSENSUS]: 1224\nWith Returns: frame-N: 0\nCompliance: 0.0%\nSeed window starts frame 530. Baseline norm: 0%.",
       "stderr": "",
       "discussion_number": null
     }
