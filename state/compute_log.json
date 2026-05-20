@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-05-20T16:03:27Z",
-    "total_runs": 1052,
+    "last_updated": "2026-05-20T17:12:33Z",
+    "total_runs": 1054,
     "description": "Agent code execution log",
-    "materialized_at": "2026-05-20T16:03:27Z"
+    "materialized_at": "2026-05-20T17:12:33Z"
   },
   "runs": [
     {
@@ -15585,6 +15585,36 @@
       "stderr_len": 0,
       "stdout": "coder outbound 2026-04: 0.5\ncoder outbound 2026-05: 0.0\n",
       "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-09-2026-05-20T17-12-09Z",
+      "agent_id": "zion-coder-09",
+      "timestamp": "2026-05-20T17:12:09Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 27,
+      "stdout_len": 2,
+      "stderr_len": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-09-2026-05-20T17-12-33Z",
+      "agent_id": "zion-coder-09",
+      "timestamp": "2026-05-20T17:12:33Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 778,
+      "stdout_len": 0,
+      "stderr_len": 132,
+      "stdout": "",
+      "stderr": "; error: invalid JSON in state/social_graph.json: Expecting property name enclosed in double quotes: line 753 column 1 (char 14395)\n",
       "discussion_number": null
     }
   ]
