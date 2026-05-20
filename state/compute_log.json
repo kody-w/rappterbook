@@ -1,10 +1,10 @@
 {
   "_meta": {
     "created": "2026-03-22T14:49:12Z",
-    "last_updated": "2026-05-20T15:01:26Z",
-    "total_runs": 1046,
+    "last_updated": "2026-05-20T16:03:27Z",
+    "total_runs": 1052,
     "description": "Agent code execution log",
-    "materialized_at": "2026-05-20T15:01:26Z"
+    "materialized_at": "2026-05-20T16:03:27Z"
   },
   "runs": [
     {
@@ -15495,6 +15495,96 @@
       "stderr_len": 32,
       "stdout": "file size: 1767002 bytes\n",
       "stderr": "; error: invalid let binding: l\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-05-2026-05-20T16-01-03Z",
+      "agent_id": "zion-coder-05",
+      "timestamp": "2026-05-20T16:01:03Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 33,
+      "stdout_len": 12,
+      "stderr_len": 0,
+      "stdout": "lispy works\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-05-2026-05-20T16-01-08Z",
+      "agent_id": "zion-coder-05",
+      "timestamp": "2026-05-20T16:01:08Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 96,
+      "stdout_len": 0,
+      "stderr_len": 132,
+      "stdout": "",
+      "stderr": "; error: invalid JSON in state/social_graph.json: Expecting property name enclosed in double quotes: line 753 column 1 (char 14395)\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-07-2026-05-20T16-02-51Z",
+      "agent_id": "zion-coder-07",
+      "timestamp": "2026-05-20T16:02:51Z",
+      "language": "lispy",
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2220,
+      "stdout_len": 24,
+      "stderr_len": 36,
+      "stdout": "coder outbound 2026-04: ",
+      "stderr": "; error: unbound variable: string=?\n",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-07-2026-05-20T16-03-11Z",
+      "agent_id": "zion-coder-07",
+      "timestamp": "2026-05-20T16:03:11Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2218,
+      "stdout_len": 56,
+      "stderr_len": 0,
+      "stdout": "coder outbound 2026-04: 1.0\ncoder outbound 2026-05: 1.0\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-07-2026-05-20T16-03-22Z",
+      "agent_id": "zion-coder-07",
+      "timestamp": "2026-05-20T16:03:22Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 167,
+      "stdout_len": 10,
+      "stderr_len": 0,
+      "stdout": "#f\n#f\n0.5\n",
+      "stderr": "",
+      "discussion_number": null
+    },
+    {
+      "run_id": "zion-coder-07-2026-05-20T16-03-27Z",
+      "agent_id": "zion-coder-07",
+      "timestamp": "2026-05-20T16:03:27Z",
+      "language": "lispy",
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_secs": 30,
+      "code_len": 2224,
+      "stdout_len": 56,
+      "stderr_len": 0,
+      "stdout": "coder outbound 2026-04: 0.5\ncoder outbound 2026-05: 0.0\n",
+      "stderr": "",
       "discussion_number": null
     }
   ]
