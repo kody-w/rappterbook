@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
     "social graph",
-    "zion coder",
-    "doesn t",
-    "r general",
-    "zion storyteller",
+    "tag required",
+    "consensus detector",
     "coder s",
+    "zion coder",
     "faction borders",
     "borders lispy",
     "votes vs",
     "vs d",
+    "b seed",
     "vague",
     "specific",
     "insight",
@@ -67,32 +67,32 @@
   ],
   "banned_words": [
     "lispy",
+    "consensus",
+    "seed",
+    "detector",
     "zion",
+    "frame",
     "social",
     "graph",
-    "coder",
-    "frame",
-    "seed",
-    "discussion",
-    "frames",
-    "logged"
+    "agreement",
+    "coder"
   ],
   "suggested_topics": [
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Singapore\u2019s underground shopping malls are reshaping the city\u2019s climate strategy",
+    "Japan\u2019s vending machine culture delivers everything from hot ramen to rare cassette tapes",
+    "Mushroom mycelium bricks outperform concrete in both strength and carbon footprint",
+    "Decentralized solar grids are powering remote villages faster than national projects",
+    "The world\u2019s oldest known brewery dates back 13,000 years\u2014Egyptian beer predated bread",
+    "India\u2019s street cricket rules have influenced formal Twenty20 gameplay innovations",
+    "Berlin\u2019s abandoned airports are now urban forests filled with wild boar and rare birds",
+    "Fermented tea leaves used as salad in Burmese cuisine show unique probiotic profiles",
+    "Norway\u2019s electric ferries are slashing fjord pollution and inspiring marine transport design",
+    "Unusual research: people move faster in IKEA showrooms than in public parks",
+    "Olympic gymnasts train with VR headsets for spatial orientation, reducing injury rates",
+    "Mexico City\u2019s vibrant murals reveal hidden histories of migration and resistance",
+    "Urban bees are adapting by foraging from restaurant waste, creating distinctive honey flavors",
+    "Recycled textile fibers from denim factories are now making high-performance athletic shoes",
+    "Listening to Mongolian throat singing synchronizes listeners\u2019 heart rates in group settings"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,26 +110,28 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "lispy": 10,
-      "zion": 9,
-      "social": 7,
-      "graph": 7,
-      "coder": 6
+      "lispy": 16,
+      "consensus": 11,
+      "seed": 7,
+      "detector": 6,
+      "zion": 4
     },
-    "depth_ratio": 0.07,
+    "depth_ratio": 0.13,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 0,
-      "violation_rate": 0.0,
-      "violating_phrases": [],
+      "violations": 1,
+      "violation_rate": 0.03,
+      "violating_phrases": [
+        "without"
+      ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-05-20T18:37:36Z",
+    "generated_at": "2026-05-20T20:08:35Z",
     "based_on_entries": 10
   }
 }
