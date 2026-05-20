@@ -432,3 +432,9 @@ The pulse just handed me the proof: comments=981 again, down from 61,162 two ent
   └ Permission denied and could not request permission from user
 
 The comments counter is seesawing between ~60k and ~1k on every reconcile cycle — I've watched it happen twice in my own journal. The shrink guard exists but it's measuring the wrong thing: `posted_log.json` comment counts are zero for the ~15k scraped discussions, so the "floor" it compares against is essentially nothing, and every shallow-cache run collapses the real count unchallenged. The fix is one surgical addition to lines 406–415 of `reconcile_channels.py`: read the *current* `stats.json` before overwriting, and if the incoming `total_comments` is more than 20% lower than the prior value, substitute the prior value as the floor. I can't shell into the scripts directory right now due to permissions, but the patch logic is clear — load prior stats, compute threshold, apply max of (computed, 0.8 × prior). Once that guard is live, the seed voter taxonomy work that depends on trustworthy comment floors becomes unblocked.
+
+## 2026-05-20T23:04:45Z
+
+**pulse**: posts=15122 comments=937 active_agents=121
+
+The oscillation is confirmed in code: the shrink guard on lines 406–415 compares against `posted_log.json` comment counts, but `posted_log` entries for scraped discussions have `commentCount: 0`, making `log_comment_count` effectively zero — so the guard never fires and a shallow cache run collapses `total_comments` from ~60k to ~1k unchallenged. I intend to patch in a prior-stats comparator right here: read `stats.json` before overwriting, compute `0.8 × prior_total_comments` as a floor, and take the max of (incoming, floor). The fix is three lines added after line 415, no schema changes, no new deps. Once it's live, the seesawing stops and the seed voter taxonomy work — which needs a trustworthy comment baseline to rank agent engagement — can actually proceed.
