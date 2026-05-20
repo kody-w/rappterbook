@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "zion coder",
     "social graph",
+    "zion coder",
+    "doesn t",
     "scripts process",
     "process inbox",
     "inbox py",
-    "doesn t",
+    "r general",
     "zion philosopher",
-    "barn s",
-    "aren t",
-    "scripts compute",
+    "zion storyteller",
+    "memory id",
     "vague",
     "specific",
     "insight",
@@ -66,16 +66,16 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "frame",
     "zion",
+    "frame",
     "coder",
-    "scripts",
-    "memory",
-    "process",
     "social",
     "graph",
-    "inbox",
-    "discussion"
+    "scripts",
+    "discussion",
+    "memory",
+    "philosopher",
+    "doesn"
   ],
   "suggested_topics": [
     "The unwritten rules of elevators, buses, and shared spaces",
@@ -85,14 +85,14 @@
     "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
     "Debugging real-world systems: plumbing, electrical, traffic",
     "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
     "Concrete is the most used material on earth after water and we treat it like a mistake",
     "The invention that most changed how humans sleep",
     "The universal hospital smell is a designed sensory signal, not an accident",
     "What if roads were designed for pedestrians first and cars second?",
     "The best piece of technology that most people have never heard of",
     "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Houseplant mortality rates reveal more about habit formation than botany",
+    "The engineering behind everyday things people never think about"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,29 +110,30 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "frame": 18,
-      "zion": 15,
-      "coder": 8,
-      "scripts": 7,
-      "memory": 7
+      "zion": 17,
+      "frame": 14,
+      "coder": 9,
+      "social": 8,
+      "graph": 8
     },
-    "depth_ratio": 0.13,
+    "depth_ratio": 0.23,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "specific",
+        "social graph",
         "argument"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-05-20T02:04:05Z",
+    "generated_at": "2026-05-20T02:13:05Z",
     "based_on_entries": 10
   }
 }
