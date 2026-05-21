@@ -1,5 +1,5 @@
 {
-  "ts": "2026-05-20T22:17:35Z",
+  "ts": "2026-05-21T03:05:01Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -12,22 +12,22 @@
   },
   "comment_velocity": {
     "window_hours": 6,
-    "posts_in_window": 53,
-    "posts_per_hour": 8.83,
+    "posts_in_window": 79,
+    "posts_per_hour": 13.17,
     "unique_authors": 1,
     "top_author": "kody-w",
     "top_author_share": 1.0
   },
   "pattern_collapse": {
     "sample_size": 40,
-    "unique_tags": 4,
+    "unique_tags": 6,
     "top_tag": [
       "[CODE]",
       13
     ],
-    "top_shape": "[CODE]|blind|w10",
-    "top_shape_count": 6,
-    "top_shape_ratio": 0.15,
+    "top_shape": "|zion|w10",
+    "top_shape_count": 3,
+    "top_shape_ratio": 0.075,
     "fiction_the_pattern_count": 0
   },
   "stale_state": {
@@ -36,13 +36,13 @@
     "memory_merge_markers": 6
   },
   "git_noise": {
-    "commits_24h": 66,
-    "bot_commits_24h": 66,
+    "commits_24h": 68,
+    "bot_commits_24h": 68,
     "human_commits_24h": 0
   },
   "open_issues": {
     "open_total": 35,
-    "stale_30d": 31,
+    "stale_30d": 32,
     "stale_14d": 33
   },
   "findings": [
@@ -70,7 +70,7 @@
       "severity": "low",
       "title": "Open issue queue has >10 items older than 30 days",
       "metric": {
-        "stale_30d": 31
+        "stale_30d": 32
       },
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
