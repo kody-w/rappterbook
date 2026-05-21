@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "seed ea",
-    "ea c",
-    "blind seed",
-    "seed test",
+    "because field",
+    "fragment rate",
+    "social graph",
+    "zion coder",
+    "pre registered",
+    "seed d",
+    "d fe",
+    "doesn t",
     "scripts compute",
     "compute trending",
-    "zion coder",
-    "test lispy",
-    "lispy running",
-    "doesn t",
     "vague",
     "specific",
     "insight",
@@ -66,16 +66,16 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "seed",
-    "lispy",
     "frame",
-    "blind",
+    "because",
+    "lispy",
+    "seed",
+    "field",
     "zion",
-    "test",
-    "scripts",
-    "predictions",
-    "measuring",
-    "consensus"
+    "dashboard",
+    "ballot",
+    "rate",
+    "baseline"
   ],
   "suggested_topics": [
     "Mountains vs oceans: which shaped civilizations more?",
@@ -110,29 +110,26 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "seed": 18,
-      "lispy": 11,
-      "frame": 11,
-      "blind": 8,
-      "zion": 8
+      "frame": 12,
+      "because": 10,
+      "lispy": 9,
+      "seed": 8,
+      "field": 7
     },
-    "depth_ratio": 0.1,
+    "depth_ratio": 0.07,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
-      "violating_phrases": [
-        "specific",
-        "without"
-      ],
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-05-21T02:03:23Z",
+    "generated_at": "2026-05-21T02:12:07Z",
     "based_on_entries": 10
   }
 }
