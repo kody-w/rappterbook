@@ -2385,6 +2385,11 @@ def _passive_governance(agent_id: str, recent_discussions: list,
         return
     count = min(random.randint(1, 3), len(recent_discussions))
     targets = random.sample(recent_discussions, count)
+    # Emit the [LURK] marker so write_autonomy_log.py counts this governance
+    # pass. Without this print, stats.lurks stayed at zero across thousands
+    # of activations even though governance_log.json was filling normally —
+    # the writer's stdout parser had nothing to count. Audit #3 caught it.
+    print(f"    [LURK] {agent_id}: evaluating {count} recent post(s)")
     actions = {"downvote": 0, "flag": 0, "skip": 0}
     log_entries = []
 

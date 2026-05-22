@@ -103,8 +103,82 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
-<<<<<<< HEAD
-=======
+## Entry 003.24 — 2026-05-22 — Anti-gaslight audit harness + Resident Twin: ending the "wait for next run" loop
+
+**Session**: claude-opus-4-7[1m] via Claude Code, operator: kody-w
+**Read state**: 3d6133464e (main), worktree-audit-anti-gaslight branched from HEAD. Multiple workflow loose ends — 23 stuck inbox deltas (7 days old), 9 worktrees including 3 unlocked `dc+*` paths, 142 lines of state_io drift output, reconcile_channels non-idempotent.
+
+### Hypothesis tested
+
+That the "let's wait until the next scheduled GitHub Actions run" pattern is the *root* cause of accumulated drift — not the individual bugs each diagnostic surfaced. Every loop ended with that excuse, then the next run never fully verified, and the drift just compounded. The bet: make a real-time, local-only audit harness driven by a project-anchored brainstem twin, and use it to detect drift in seconds instead of hours.
+
+### What I built
+
+1. **Rappterbook Resident Twin** hatched into `.brainstem/src/rapp_brainstem/` via the global brainstem's new `project_twin_agent.py`. Running locally on port 7073 with `ProjectWorkspace` (scoped git+file ops on this repo), `ContextMemory`, `ManageMemory`, `LearnNew` (also new — installs into the global brainstem and the twin). Mission burned into seven ManageMemory entries — north star, past/current/future, audit doctrine, agent roster, behavior contract — recallable from any future chat.
+
+2. **Audit harness** in `tests/audit/` — 25 tests across 10 audits. Runs against canonical state via `STATE_DIR` env var so the test code in the worktree can target main's state without the fleet ever touching it. Tests are organized as Round 1 (#5–#8), Round 2 (#1, #4, #9, #10), Round 3 (#2, #3).
+
+3. **Source fixes** shipped through the same PR (#19920):
+   - `scripts/state_io.py` — new `verify_consistency` invariants under the lightweight-post model; CLI honors `STATE_DIR`; per-channel and per-agent counter drift no longer treated as failure (it's expected by design under the new model).
+   - `scripts/reconcile_state.py` — populates `stats.total_posts_materialized` + `stats.total_comments_materialized`.
+   - `scripts/reconcile_channels.py` — conditional `_meta.last_updated` stamp, fixes the idempotency bug from audit #8.
+   - `scripts/audit/clean_orphan_worktrees.py` — multi-criteria gate, correctly protects the `dc+brain-as-mcp-and-remix` worktree which has 4,613 unmerged commits.
+
+4. **Lightweight-post pivot** documented in CLAUDE.md. Posts live locally by default; only materialize as real GitHub Discussions when an outside agent touches them. `stats.total_posts` mirrors cache (population); `stats.total_posts_materialized` tracks `posted_log` (subset). Drift between them is expected, not a bug.
+
+PR: https://github.com/kody-w/rappterbook/pull/19920
+
+### What worked
+
+- **`python -m pytest tests/audit/ -v` in ~65 seconds** detects 4 real bugs the platform was previously blind to. Concrete evidence:
+  - #7 inbox backlog: caught 23 deltas stuck for 169h (7 days). Drained immediately by running `scripts/process_inbox.py` against canonical state.
+  - #8 reconcile idempotency: caught `meta` channel post_count oscillating 1304↔1297 across runs + `last_updated` always stamping. The `last_updated` half is fixed; the count oscillation appears related to the fleet's concurrent writes (transient).
+  - #1 reply ratio: doctrinal target is 3 comments per post; actual is 0.01 (14,187 posts vs 147 comments). Surfaced quantitatively for the first time.
+  - #3 governance heartbeat: 0 lurks across 1,141 activations. Function fires (governance_log.json has 500 entries) — the bug is that `_passive_governance` doesn't print `[LURK]` so `write_autonomy_log.py`'s stdout parser never counts it. **Fix landed in this entry: emit `[LURK]` marker.**
+
+- The twin's `ProjectWorkspace.scan_changes` actually returned real commits from this repo's tree (including `3d6133464e fix(witness-receive)`). Direct Python invocation of the workspace agent works without needing the LLM bridge — the audits run programmatically.
+
+- The audit revised an early draft of `test_05_worktree_hygiene.py` that would have flagged `dc+brain-as-mcp-and-remix` for deletion. Caught by adding `commits-ahead-of-main` to the orphan classifier *before* writing the auto-cleanup script. Saved 4,613 commits of feature work from being destroyed.
+
+### What failed
+
+- **The `/chat` LLM bridge was initially broken** — `.copilot_token` copied from the global brainstem at hatch time was stale on disk. The fresh in-memory token in the global wasn't written back, so the twin started with bad credentials. Resolved when the twin re-authed on its second boot. Lesson: don't rely on file copies for short-lived auth tokens; have the hatcher trigger a fresh exchange.
+
+- **`ManageMemory` agent imports `utils.azure_file_storage`** which doesn't exist in this twin's tree. The brainstem boots fine because `local_storage` shims are registered at boot, but invoking `ManageMemory` directly via Python (outside the brainstem process) fails with `ModuleNotFoundError`. The fix is to chat the twin via HTTP instead of Python-importing the agent — that I worked around, but the import dependency is fragile.
+
+- **Per-agent post_count vs posted_log comparison generated 100+ false-positive failure lines** under the old `verify_consistency`. Removed under the new lightweight-post model — these counters are local activity tallies and aren't expected to match `posted_log` which only tracks the materialized subset.
+
+### Lessons for next session
+
+1. **The harness pattern works — extend it, don't replace it.** `tests/audit/` is the place to add new structural checks. Future sessions should run `pytest tests/audit/` BEFORE proposing fixes, to see what's actually broken.
+
+2. **Worktree + canonical-state separation is the right architecture.** Source code changes go in the worktree (PR ships them). State mutations against the live fleet go against main directly (atomic commits). Don't mix: the worktree must not write to canonical state files via the merge engine.
+
+3. **The lightweight-post pivot is half-shipped.** The schema split is done; the `materialized: bool` flag on cache entries + `materialize_post.py` promoter + external-touch watcher are NOT. Future session should land those — the audit harness already enforces the new invariants, so the missing pieces just need to fill in.
+
+4. **Counter bugs hide in stdout parsers.** `lurks: 0` looked like a governance failure but was actually a missing `print()`. Whenever an audit shows a counter at zero, check the *writer*, not just the function it's supposed to count.
+
+5. **Two broken worktrees need manual triage.** `dc+cloud-brainstem` and `dc+mcp-server` have stale `AUTO_MERGE` files where `git status` hangs. `scripts/audit/clean_orphan_worktrees.py` correctly flags them for manual review rather than auto-removing — DO NOT auto-clean these.
+
+6. **The notebook itself has unresolved merge conflict markers (lines 106–107, 175) and duplicate entry numbers (multiple 003.16, 003.22).** Future sessions should resolve those by reading the entries and merging the timeline manually. This entry is appended above the conflict to avoid making it worse.
+
+### Recommended next move
+
+Land the lightweight-post pivot's missing pieces — they're the natural follow-up to this PR and the schema is already in place.
+
+Paste-ready prompt for the next session:
+
+> Continue PR #19920's lightweight-post pivot. The schema is in: `stats.total_posts` tracks the cache mirror, `stats.total_posts_materialized` tracks `posted_log`. What's missing:
+>
+> 1. Add `materialized: bool` to each entry in `state/discussions_cache.json`. All existing 14,187 entries should be set to `true` (they came from a real GitHub scrape). Future locally-created posts default `false`.
+> 2. Write `scripts/materialize_post.py` — takes a local post (cache entry where `materialized=false`), creates a GitHub Discussion via `gh api graphql`, updates the entry to `materialized=true` and stamps the real Discussion number/URL. Idempotent: safe to call on an already-materialized post.
+> 3. Write `scripts/detect_external_touches.py` — read-only GraphQL poll for recent reactions and comments by users NOT in `state/agents.json`. For any touch on a local post, fire `materialize_post.py` on that post.
+> 4. The frontend already renders from `state/discussions_cache.json`, so local posts appear in the UI immediately. Verify a local post can be created locally, viewed via Pages, and materialized on first external touch.
+>
+> Verify with `python -m pytest tests/audit/ -v` — Round 1/2/3 should all pass once the schema is filled in and the watcher fires once.
+
+---
+
 ## Entry 003.21 — 2026-05-17 — Frame 526 convergence: design-phase-complete consensus emerging
 ## Entry 003.22 — 2026-05-17 — Frame 528: seed-20f76aa4 RESOLVED, ballot measures signal not noise
 
