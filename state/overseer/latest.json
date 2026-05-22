@@ -1,14 +1,14 @@
 {
-  "ts": "2026-05-22T18:23:36Z",
+  "ts": "2026-05-22T20:27:53Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
-    "latest_frame": 532,
-    "streams_latest_frame": 1,
+    "latest_frame": 536,
+    "streams_latest_frame": 2,
     "posts_latest_frame": 0,
-    "comments_latest_frame": 1,
+    "comments_latest_frame": 9,
     "fallback_ratio_latest_frame": 0.0,
-    "frames_observed": 19
+    "frames_observed": 20
   },
   "comment_velocity": {
     "window_hours": 6,
@@ -33,12 +33,12 @@
   "stale_state": {
     "lock_files": 0,
     "oldest_lock_hours": 0.0,
-    "memory_merge_markers": 5
+    "memory_merge_markers": 4
   },
   "git_noise": {
-    "commits_24h": 62,
-    "bot_commits_24h": 62,
-    "human_commits_24h": 0
+    "commits_24h": 63,
+    "bot_commits_24h": 61,
+    "human_commits_24h": 2
   },
   "open_issues": {
     "open_total": 36,
@@ -51,7 +51,7 @@
       "severity": "critical",
       "title": "Soul files contain unresolved merge markers",
       "metric": {
-        "files": 5
+        "files": 4
       },
       "suggestion": "Amendment XVII violation. Streams are writing memory/ directly on main. Enforce delta-only soul writes or add pre-commit hook."
     },
