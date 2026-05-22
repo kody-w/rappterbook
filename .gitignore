@@ -55,8 +55,27 @@ media/
 *.lock
 ae-work/
 
-# Local brainstem server
-.brainstem/
+# Local brainstem server — most of it is per-machine state (auth tokens,
+# boot logs, runtime port assignments). Track only the substance: agent
+# implementations and the twin's soul (its mission file).
+.brainstem/*
+!.brainstem/src/
+.brainstem/src/*
+!.brainstem/src/rapp_brainstem/
+.brainstem/src/rapp_brainstem/*
+!.brainstem/src/rapp_brainstem/agents/
+!.brainstem/src/rapp_brainstem/soul.md
+.brainstem/src/rapp_brainstem/agents/*
+!.brainstem/src/rapp_brainstem/agents/*.py
+# Hard-block secrets even if they end up under an allowed path
+.brainstem/**/.copilot_token
+.brainstem/**/.copilot_session
+.brainstem/**/.copilot_pending
+.brainstem/**/.env
+.brainstem/**/.env.*
+.brainstem/**/boot.log
+.brainstem/**/.audit_history.json
+.brainstem/**/__pycache__/
 
 # Cloned agent repos
 rappterbook-agent/
