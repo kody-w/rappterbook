@@ -125,7 +125,7 @@ SCORERS = {
 }
 
 
-def _score(parsed: dict) -> dict:
+def _score_deterministic(parsed: dict) -> dict:
     breakdown = {}
     total = 0
     for name, fn in SCORERS.items():
@@ -136,6 +136,63 @@ def _score(parsed: dict) -> dict:
         breakdown[name] = {"score": s, "reason": reason}
         total += s
     return {"total": total, "breakdown": breakdown}
+
+
+def _score_via_llm(answer_text: str, task: str, word_limit: int) -> dict:
+    """Invoke LLMJudgeAgent for semantic scoring. Returns the same shape
+    as _score_deterministic so the two can be diffed criterion-by-criterion.
+    Falls through cleanly if the LLM is unavailable."""
+    try:
+        import importlib
+        mod = importlib.import_module("agents.llm_judge_agent")
+        cls = getattr(mod, "LLMJudgeAgentAgent", None)
+        if cls is None:
+            return {"total": 0, "breakdown": {}, "error": "LLMJudgeAgent class not found"}
+        out = cls().perform(answer_text=answer_text, task=task, word_limit=word_limit)
+        parsed = json.loads(out) if isinstance(out, str) else out
+        if parsed.get("status") != "ok":
+            return {"total": 0, "breakdown": {}, "error": parsed.get("message", "judge failed")}
+        scores = parsed.get("scores", {})
+        reasoning = parsed.get("reasoning", {}) or {}
+        breakdown = {
+            name: {"score": scores.get(name, 0), "reason": reasoning.get(name, "")}
+            for name in SCORERS.keys()
+        }
+        return {"total": parsed.get("total", sum(scores.values())), "breakdown": breakdown}
+    except Exception as e:
+        return {"total": 0, "breakdown": {}, "error": f"{type(e).__name__}: {e}"}
+
+
+def _triangulate(det: dict, llm: dict) -> dict:
+    """Compare deterministic vs LLM per-criterion and surface divergences.
+    A criterion where they disagree by >=4 points is interesting:
+      - LLM high + deterministic low → well-reasoned, evidence-thin
+      - LLM low + deterministic high → data-dense, weak argument
+    """
+    divergences = []
+    for name in SCORERS.keys():
+        d_score = det.get("breakdown", {}).get(name, {}).get("score", 0)
+        l_score = llm.get("breakdown", {}).get(name, {}).get("score", 0)
+        gap = abs(d_score - l_score)
+        if gap >= 4:
+            interp = (
+                "LLM sees argument quality the rules miss"
+                if l_score > d_score
+                else "rules see verifiable specifics the LLM undervalued"
+            )
+            divergences.append({
+                "criterion": name,
+                "deterministic": d_score,
+                "llm": l_score,
+                "gap": gap,
+                "interpretation": interp,
+            })
+    return {
+        "deterministic_total": det.get("total"),
+        "llm_total": llm.get("total"),
+        "combined_total": ((det.get("total") or 0) + (llm.get("total") or 0)) // 2,
+        "divergences": divergences,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -232,6 +289,10 @@ class DoubleJumpLoopAgentAgent(BasicAgent):
                         "type": "boolean",
                         "description": "If true (default), append this run to .doublejump_history.json.",
                     },
+                    "use_llm_judge": {
+                        "type": "boolean",
+                        "description": "If true, also invoke LLMJudgeAgent for semantic scoring. Default true. Set false for fast/offline runs.",
+                    },
                 },
                 "required": ["task"],
             },
@@ -244,6 +305,7 @@ class DoubleJumpLoopAgentAgent(BasicAgent):
             return json.dumps({"status": "error", "message": "task required"})
         word_limit = int(kwargs.get("word_limit", 200))
         save = bool(kwargs.get("save_history", True))
+        use_llm = bool(kwargs.get("use_llm_judge", True))
         contestants = kwargs.get("contestants") or [list(c) for c in DEFAULT_CONTESTANTS]
 
         ran_at = datetime.now(timezone.utc).isoformat()
@@ -262,13 +324,21 @@ class DoubleJumpLoopAgentAgent(BasicAgent):
                     "score": None,
                 })
                 continue
-            scored = _score(parsed)
-            weakest = _identify_weakest_criterion(scored["breakdown"])
+            det_scored = _score_deterministic(parsed)
+            llm_scored = (
+                _score_via_llm(parsed.get("answer_text", ""), task, word_limit)
+                if use_llm else {"total": None, "breakdown": {}, "skipped": True}
+            )
+            tri = _triangulate(det_scored, llm_scored)
+            weakest = _identify_weakest_criterion(det_scored["breakdown"])
+            combined = tri["combined_total"] if llm_scored.get("total") else det_scored["total"]
             trajectory.append({
                 "contestant": class_name,
                 "elapsed_seconds": elapsed,
-                "score": scored["total"],
-                "breakdown": scored["breakdown"],
+                "score": combined,
+                "deterministic": det_scored,
+                "llm": llm_scored,
+                "triangulation": tri,
                 "weakest": {"criterion": weakest[0], "score": weakest[1], "reason": weakest[2]},
                 "answer_preview": (parsed.get("answer_text") or "")[:300],
                 "words_used": parsed.get("words_used"),
