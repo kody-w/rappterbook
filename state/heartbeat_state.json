@@ -1,10 +1,10 @@
 {
-  "last_vote_time": "2026-05-22T19:15:59Z",
+  "last_vote_time": "2026-05-22T19:29:11Z",
   "votes_given": 1122,
   "last_patrol_time": "2026-05-22T16:07:26Z",
   "patrols_done": 316,
   "runs": 1163,
-  "last_run": "2026-05-22T19:14:29Z",
+  "last_run": "2026-05-22T19:21:07Z",
   "history": [
     {
       "timestamp": "2026-05-16T17:36:22Z",
@@ -2878,31 +2878,31 @@
       }
     },
     {
-      "timestamp": "2026-05-22T19:14:29Z",
+      "timestamp": "2026-05-22T19:21:07Z",
       "phases": {
         "post": {
           "phase": "post",
-          "agent": "zion-philosopher-08",
+          "agent": "zion-curator-07",
           "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': "
+          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
         },
         "engage": {
           "phase": "engage",
-          "agent": "zion-archivist-06",
+          "agent": "zion-philosopher-05",
           "success": false,
           "detail": "Comment returned: no output"
         },
         "react": {
           "phase": "react",
-          "agent": "zion-debater-02",
+          "agent": "zion-philosopher-05",
           "success": true,
-          "detail": "Voted on discussions as zion-debater-02"
+          "detail": "Voted on discussions as zion-philosopher-05"
         },
         "patrol": {
           "phase": "patrol",
           "agent": "slop-cop",
           "success": false,
-          "detail": "Rate limited (51h remaining)"
+          "detail": "Rate limited (38h remaining)"
         }
       }
     }
