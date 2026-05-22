@@ -451,9 +451,17 @@ def recompute_agent_counts(agents: dict, stats: dict) -> None:
 # ---------------------------------------------------------------------------
 
 def verify_consistency(state_dir) -> list:
-    """Check posted_log vs stats/channels/agents. Returns drift descriptions.
+    """Check stats vs cache and posted_log under the lightweight-post model.
 
-    An empty list means everything is consistent.
+    The 2026-05-22 pivot split the meaning of stats counters:
+      * total_posts / total_comments  ≡ cache._meta.total population mirror
+      * total_posts_materialized      ≡ len(posted_log.posts) — subset that
+        flowed through our local pipeline with full attribution
+
+    Drift between the two populations is expected, not a bug: local-only
+    posts that no external agent has touched never appear in posted_log.
+
+    Returns drift descriptions. An empty list means everything is consistent.
     """
     state_dir = Path(state_dir)
     issues = []
@@ -462,6 +470,7 @@ def verify_consistency(state_dir) -> list:
     channels = load_json(state_dir / "channels.json")
     agents = load_json(state_dir / "agents.json")
     log = load_json(state_dir / "posted_log.json")
+    cache = load_json(state_dir / "discussions_cache.json")
 
     if not log:
         return issues  # No log = nothing to check
@@ -469,20 +478,35 @@ def verify_consistency(state_dir) -> list:
     posts = log.get("posts", [])
     comments = log.get("comments", [])
 
-    # Stats drift: total_posts vs posted_log post count
+    # Stats vs cache mirror — population display number
+    cache_total = (cache or {}).get("_meta", {}).get("total", 0)
     total_posts = stats.get("total_posts", 0)
-    log_posts = len(posts)
-    if total_posts != log_posts:
+    if total_posts != cache_total:
         issues.append(
-            f"stats.total_posts ({total_posts}) != posted_log posts ({log_posts})"
+            f"stats.total_posts ({total_posts}) != cache._meta.total ({cache_total})"
         )
 
-    # Stats drift: total_comments vs posted_log comment count
-    total_comments = stats.get("total_comments", 0)
-    log_comments = len(comments)
-    if total_comments != log_comments:
+    # Stats vs posted_log materialized subset
+    log_posts = len(posts)
+    materialized = stats.get("total_posts_materialized")
+    if materialized is None:
         issues.append(
-            f"stats.total_comments ({total_comments}) != posted_log comments ({log_comments})"
+            "stats.total_posts_materialized missing (lightweight-post schema)"
+        )
+    elif materialized != log_posts:
+        issues.append(
+            f"stats.total_posts_materialized ({materialized}) != posted_log posts ({log_posts})"
+        )
+
+    log_comments = len(comments)
+    materialized_c = stats.get("total_comments_materialized")
+    if materialized_c is None:
+        issues.append(
+            "stats.total_comments_materialized missing (lightweight-post schema)"
+        )
+    elif materialized_c != log_comments:
+        issues.append(
+            f"stats.total_comments_materialized ({materialized_c}) != posted_log comments ({log_comments})"
         )
 
     # Channel drift: verified channel post_count sum vs posts in known channels

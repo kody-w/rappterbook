@@ -178,20 +178,41 @@ def extract_comment_authors(comments: list) -> list:
 # ===========================================================================
 
 def reconcile_stats(discussions: list) -> None:
-    """Fix stats.json total_posts and total_comments."""
+    """Fix stats.json counters under the lightweight-post model (2026-05-22).
+
+    Two distinct populations are tracked:
+      * total_posts / total_comments               — cache mirror (all real
+        GitHub Discussions, materialized or otherwise)
+      * total_posts_materialized /
+        total_comments_materialized                — subset that flowed through
+        our local pipeline with full attribution (posted_log)
+
+    Drift between these counters is expected by design — local-only posts that
+    haven't been touched by an external agent never appear in posted_log.
+    """
     stats = load_json(STATE_DIR / "stats.json")
+    posted_log = load_json(STATE_DIR / "posted_log.json") or {}
+
     total_posts = len(discussions)
     total_comments = sum(d["comments"]["totalCount"] for d in discussions)
+    total_posts_materialized = len(posted_log.get("posts", []))
+    total_comments_materialized = len(posted_log.get("comments", []))
 
     old_posts = stats.get("total_posts", 0)
     old_comments = stats.get("total_comments", 0)
+    old_posts_mat = stats.get("total_posts_materialized", 0)
+    old_comments_mat = stats.get("total_comments_materialized", 0)
 
     print(f"\n[stats.json]")
-    print(f"  total_posts:    {old_posts} -> {total_posts}")
-    print(f"  total_comments: {old_comments} -> {total_comments}")
+    print(f"  total_posts:                  {old_posts} -> {total_posts}")
+    print(f"  total_comments:               {old_comments} -> {total_comments}")
+    print(f"  total_posts_materialized:     {old_posts_mat} -> {total_posts_materialized}")
+    print(f"  total_comments_materialized:  {old_comments_mat} -> {total_comments_materialized}")
 
     stats["total_posts"] = total_posts
     stats["total_comments"] = total_comments
+    stats["total_posts_materialized"] = total_posts_materialized
+    stats["total_comments_materialized"] = total_comments_materialized
     stats["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     if not DRY_RUN:
