@@ -394,7 +394,11 @@ def main() -> None:
     if "_meta" not in channels:
         channels["_meta"] = {}
     channels["_meta"]["count"] = len(ch_data)
-    channels["_meta"]["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    # Only stamp last_updated when something functional actually changed.
+    # Unconditional stamping broke idempotency — running reconcile twice
+    # produced a diff even when no counts changed.
+    if updated > 0 or auto_added > 0:
+        channels["_meta"]["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # Update stats.json
     stats_path = STATE_DIR / "stats.json"

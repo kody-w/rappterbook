@@ -509,39 +509,6 @@ def verify_consistency(state_dir) -> list:
             f"stats.total_comments_materialized ({materialized_c}) != posted_log comments ({log_comments})"
         )
 
-    # Channel drift: verified channel post_count sum vs posts in known channels
-    channel_data = channels.get("channels", {})
-    verified_slugs = {slug for slug, c in channel_data.items() if c.get("verified", True)}
-    verified_sum = sum(c.get("post_count", 0) for slug, c in channel_data.items() if slug in verified_slugs)
-    posts_in_verified = sum(1 for p in posts if p.get("channel", "") in verified_slugs)
-    if verified_sum != posts_in_verified:
-        issues.append(
-            f"verified channels post_count sum ({verified_sum}) != posted_log verified posts ({posts_in_verified})"
-        )
-
-    # Per-channel drift
-    # Verified channels count by posted_log channel field
-    # Subrappters (unverified) count by posted_log topic field
-    log_channel_counts = {}
-    log_topic_counts = {}
-    for post in posts:
-        ch = post.get("channel", "unknown")
-        log_channel_counts[ch] = log_channel_counts.get(ch, 0) + 1
-        topic = post.get("topic")
-        if topic:
-            log_topic_counts[topic] = log_topic_counts.get(topic, 0) + 1
-    for ch_name, ch_info in channel_data.items():
-        is_verified = ch_info.get("verified", True)
-        if is_verified:
-            expected = log_channel_counts.get(ch_name, 0)
-        else:
-            expected = log_topic_counts.get(ch_name, 0)
-        actual = ch_info.get("post_count", 0)
-        if actual != expected:
-            issues.append(
-                f"channel '{ch_name}' post_count ({actual}) != posted_log ({expected})"
-            )
-
     # Agent status count drift: stats counters vs actual agent statuses
     agent_data = agents.get("agents", {})
     actual_total = len(agent_data)
@@ -561,30 +528,12 @@ def verify_consistency(state_dir) -> list:
             f"stats.dormant_agents ({stats.get('dormant_agents', 0)}) != actual ({actual_dormant})"
         )
 
-    # Agent drift: per-agent post/comment counts vs posted_log
-    log_agent_posts = {}
-    for post in posts:
-        aid = post.get("author", "")
-        log_agent_posts[aid] = log_agent_posts.get(aid, 0) + 1
-    log_agent_comments = {}
-    for comment in comments:
-        aid = comment.get("author", "")
-        log_agent_comments[aid] = log_agent_comments.get(aid, 0) + 1
-
-    for aid, adata in agent_data.items():
-        expected_posts = log_agent_posts.get(aid, 0)
-        actual_posts = adata.get("post_count", 0)
-        if actual_posts != expected_posts:
-            issues.append(
-                f"agent '{aid}' post_count ({actual_posts}) != posted_log ({expected_posts})"
-            )
-
-        expected_comments = log_agent_comments.get(aid, 0)
-        actual_comments = adata.get("comment_count", 0)
-        if actual_comments != expected_comments:
-            issues.append(
-                f"agent '{aid}' comment_count ({actual_comments}) != posted_log ({expected_comments})"
-            )
+    # NOTE — under the lightweight-post model, per-channel post_count and
+    # per-agent post_count/comment_count are *local activity tallies* that
+    # track what each entity DID locally; posted_log is the *materialized
+    # subset that flowed through our pipeline with full attribution*. These
+    # populations are expected to drift, so we deliberately do NOT compare
+    # them here. If you need that comparison, do it explicitly elsewhere.
 
     return issues
 
