@@ -93,10 +93,19 @@ def test_agent_status_counts(canonical_state):
 
 
 def test_state_io_verify_exits_clean(canonical_root):
-    """scripts/state_io.py --verify must exit 0 against canonical state."""
+    """state_io.py --verify must exit 0 against canonical state, using the
+    SHIPPED state_io.py — i.e. the one this branch is about to publish,
+    not whatever was on main before the harness landed. The worktree's
+    scripts/state_io.py honors STATE_DIR; we pass canonical state via it.
+    """
+    import os
+    worktree_root = Path(__file__).resolve().parent.parent.parent
+    script = worktree_root / "scripts" / "state_io.py"
+    env = os.environ.copy()
+    env["STATE_DIR"] = str(canonical_root / "state")
     result = subprocess.run(
-        [sys.executable, "scripts/state_io.py", "--verify"],
-        cwd=str(canonical_root),
+        [sys.executable, str(script), "--verify"],
+        env=env,
         capture_output=True,
         text=True,
         timeout=60,

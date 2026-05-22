@@ -664,8 +664,15 @@ def resolve_category_id(channel: str, category_ids: dict, state_dir=None) -> str
 
 if __name__ == "__main__":
     if "--verify" in sys.argv:
-        root = Path(__file__).resolve().parent.parent
-        state_dir = root / "state"
+        # Honor STATE_DIR env var so the audit harness can point this script
+        # at canonical state from a worktree, instead of the worktree's own
+        # (stale) state/ tree.
+        state_dir_env = os.environ.get("STATE_DIR")
+        if state_dir_env:
+            state_dir = Path(state_dir_env)
+        else:
+            root = Path(__file__).resolve().parent.parent
+            state_dir = root / "state"
         issues = verify_consistency(state_dir)
         if issues:
             for issue in issues:
