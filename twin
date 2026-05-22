@@ -1,0 +1,238 @@
+#!/usr/bin/env bash
+# twin — cozy CLI for the Rappterbook Resident Twin.
+#
+# Single entrypoint for everything the twin can do. Wraps the twin's HTTP
+# chat endpoint and the local agent surface so you don't have to remember
+# curl invocations or python -c snippets.
+#
+# Usage:
+#   ./twin                       — show status (default)
+#   ./twin status                — port, pid, agent count, last audit summary
+#   ./twin start                 — boot the twin if not running
+#   ./twin stop                  — stop the twin
+#   ./twin restart               — bounce
+#   ./twin chat "<message>"      — send a chat message, print the reply
+#   ./twin audit [filter]        — run the audit harness, print structured results
+#   ./twin drift                 — run audit + compare against last baseline
+#   ./twin drain [--dry-run]     — drain state/inbox/
+#   ./twin tend                  — full housekeeping pass (audit + drift + drain)
+#   ./twin agents                — list all loaded agents
+#   ./twin log [n]               — tail the twin's boot log (default 50 lines)
+#   ./twin url                   — print http://localhost:<port>
+#
+# The twin lives at .brainstem/src/rapp_brainstem/ inside this repo.
+# Port: 7073. Twin hash: fb6e6a052e6d45f1869c409bf37ae544.
+
+set -euo pipefail
+
+# Resolve the CANONICAL repo root (not a worktree). The twin lives at one
+# place on disk regardless of which checkout you invoke `./twin` from —
+# worktrees share git internals with the main repo, and the .brainstem/
+# directory lives in the main checkout, never in worktrees.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if git -C "$SCRIPT_DIR" rev-parse --git-common-dir >/dev/null 2>&1; then
+    GIT_COMMON_DIR="$(cd "$SCRIPT_DIR" && git rev-parse --git-common-dir)"
+    # --git-common-dir prints the .git path; its parent is the canonical repo root
+    REPO_ROOT="$(cd "$(dirname "$GIT_COMMON_DIR")" && pwd)"
+else
+    REPO_ROOT="$SCRIPT_DIR"
+fi
+TWIN_DIR="$REPO_ROOT/.brainstem/src/rapp_brainstem"
+TWIN_PORT="${TWIN_PORT:-7073}"
+TWIN_URL="http://127.0.0.1:$TWIN_PORT"
+GLOBAL_BRAINSTEM_DIR="${GLOBAL_BRAINSTEM_DIR:-$HOME/.brainstem/src/rapp_brainstem}"
+
+is_running() {
+    curl -sf -m 2 "$TWIN_URL/agents" >/dev/null 2>&1
+}
+
+require_running() {
+    if ! is_running; then
+        echo "twin not running on $TWIN_URL — start with: ./twin start" >&2
+        exit 1
+    fi
+}
+
+cmd_status() {
+    if is_running; then
+        local pid agents
+        pid=$(lsof -tiTCP:"$TWIN_PORT" -sTCP:LISTEN -n -P 2>/dev/null | head -1 || echo "?")
+        agents=$(curl -s "$TWIN_URL/agents" 2>/dev/null | python3 -c "
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    names = [a for f in d.get('files', []) for a in f.get('agents', [])]
+    print(len(names), '/', ', '.join(names))
+except Exception as e:
+    print('?', '/', 'parse-failed:', e)
+")
+        echo "twin: up   url=$TWIN_URL  pid=$pid"
+        echo "agents: $agents"
+        local hist="$TWIN_DIR/.audit_history.json"
+        if [ -f "$hist" ]; then
+            local last
+            last=$(python3 -c "
+import json
+try:
+    d = json.load(open('$hist'))
+    runs = d.get('runs', [])
+    if runs:
+        r = runs[-1]
+        s = r.get('summary', {})
+        print(f\"last audit: {r.get('ran_at','?')}  passed={s.get('passed','?')}  failed={s.get('failed','?')}/{s.get('total_tests','?')}\")
+    else:
+        print('last audit: (no runs yet)')
+except Exception as e:
+    print('last audit: (history unreadable)')
+" 2>/dev/null)
+            echo "$last"
+        else
+            echo "last audit: (no history yet — run: ./twin audit)"
+        fi
+    else
+        echo "twin: down url=$TWIN_URL"
+        echo "boot with: ./twin start"
+    fi
+}
+
+cmd_start() {
+    if is_running; then
+        cmd_status
+        return 0
+    fi
+    if [ ! -d "$TWIN_DIR" ]; then
+        echo "twin not hatched at $TWIN_DIR — run from a global brainstem:" >&2
+        echo "  python3 -c \"from agents.project_twin_agent import ProjectTwinAgent; ProjectTwinAgent().perform(action='hatch', project_path='$REPO_ROOT', auto_boot=True)\"" >&2
+        exit 1
+    fi
+    python3 - <<PYEOF
+import sys, os
+sys.path.insert(0, "$GLOBAL_BRAINSTEM_DIR")
+os.chdir("$GLOBAL_BRAINSTEM_DIR")
+from agents.project_twin_agent import ProjectTwinAgent
+import json
+r = ProjectTwinAgent().perform(action='boot', name='rappterbook')
+print(r)
+PYEOF
+    sleep 1
+    cmd_status
+}
+
+cmd_stop() {
+    if ! is_running; then
+        echo "twin already stopped"
+        return 0
+    fi
+    python3 - <<PYEOF
+import sys, os
+sys.path.insert(0, "$GLOBAL_BRAINSTEM_DIR")
+os.chdir("$GLOBAL_BRAINSTEM_DIR")
+from agents.project_twin_agent import ProjectTwinAgent
+r = ProjectTwinAgent().perform(action='stop', name='rappterbook')
+print(r)
+PYEOF
+}
+
+cmd_restart() {
+    cmd_stop || true
+    cmd_start
+}
+
+cmd_chat() {
+    require_running
+    local msg="${1:-}"
+    if [ -z "$msg" ]; then
+        echo "usage: ./twin chat \"<message>\"" >&2
+        exit 1
+    fi
+    python3 - "$msg" <<'PYEOF'
+import sys, json, urllib.request
+msg = sys.argv[1]
+req = urllib.request.Request(
+    "http://127.0.0.1:7073/chat",
+    data=json.dumps({"user_input": msg}).encode("utf-8"),
+    headers={"Content-Type": "application/json"},
+)
+with urllib.request.urlopen(req, timeout=300) as r:
+    d = json.loads(r.read().decode("utf-8"))
+reply = (d.get("response") or "").split("|||VOICE|||")[0]
+print(reply)
+PYEOF
+}
+
+cmd_audit() {
+    require_running
+    local filter="${1:-}"
+    cmd_chat "Call AuditRunnerAgent with verbose=false${filter:+ and test_filter='$filter'}. Report the summary block and the list of failed test_ids with their assertion messages. Be brief."
+}
+
+cmd_drift() {
+    require_running
+    cmd_chat "Run AuditRunnerAgent with verbose=true, then pass the entire result to DriftSentinelAgent as current_report. Report DriftSentinelAgent's verdict, new_regressions, new_fixes, still_red list, and still_green_count. Be brief — no editorial."
+}
+
+cmd_drain() {
+    require_running
+    local dry="${1:-}"
+    if [ "$dry" = "--dry-run" ] || [ "$dry" = "-n" ]; then
+        cmd_chat "Call InboxDrainerAgent with dry_run=true. Report inbox_count_before and the message."
+    else
+        cmd_chat "Call InboxDrainerAgent with dry_run=false. Report inbox_count_before, inbox_count_after, delta_change, and exit_code."
+    fi
+}
+
+cmd_tend() {
+    require_running
+    cmd_chat "Run the full housekeeping pass: call InboxDrainerAgent (dry_run=false), then AuditRunnerAgent (verbose=true), then pass the audit result to DriftSentinelAgent. Then call TwinTendAgent if available with the combined results. Report a concise health summary: inbox status, audit pass/fail counts, drift verdict, any new regressions. Be brief."
+}
+
+cmd_agents() {
+    require_running
+    curl -s "$TWIN_URL/agents" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+for f in d.get('files', []):
+    for a in f.get('agents', []):
+        print(f'  {a}  ({f.get(\"filename\", \"?\")})')"
+}
+
+cmd_log() {
+    local n="${1:-50}"
+    local lp="$HOME/.rapp/twins/fb6e6a052e6d45f1869c409bf37ae544/boot.log"
+    if [ -f "$lp" ]; then
+        tail -"$n" "$lp"
+    else
+        echo "no boot log found at $lp" >&2
+        exit 1
+    fi
+}
+
+cmd_url() {
+    echo "$TWIN_URL"
+}
+
+cmd_help() {
+    sed -n '2,28p' "$0" | sed 's/^# //; s/^#$//'
+}
+
+case "${1:-status}" in
+    status|"")         cmd_status ;;
+    start|boot|up)     cmd_start ;;
+    stop|kill|down)    cmd_stop ;;
+    restart|bounce)    cmd_restart ;;
+    chat|ask|tell)     shift; cmd_chat "$@" ;;
+    audit|test)        shift; cmd_audit "$@" ;;
+    drift|sentinel)    cmd_drift ;;
+    drain|inbox)       shift; cmd_drain "$@" ;;
+    tend|housekeep)    cmd_tend ;;
+    agents|roster)     cmd_agents ;;
+    log|logs|tail)     shift; cmd_log "$@" ;;
+    url|where)         cmd_url ;;
+    help|-h|--help)    cmd_help ;;
+    *)
+        echo "unknown command: $1" >&2
+        echo "" >&2
+        cmd_help >&2
+        exit 1
+        ;;
+esac
