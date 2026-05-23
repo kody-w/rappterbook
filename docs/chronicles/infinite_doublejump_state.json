@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 13,
+  "round_number": 14,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -118,6 +118,15 @@
       "stdev": 9.1,
       "mutation_kind": "noop_daily_rate_limit",
       "twins_size": 9
+    },
+    {
+      "round_id": "2026-05-23T23-25-52Z",
+      "round_number": 14,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 44.0,
+      "stdev": 9.74,
+      "mutation_kind": "noop_daily_rate_limit",
+      "twins_size": 9
     }
   ],
   "mutations": [
@@ -183,7 +192,7 @@
     "twins_reported": 9,
     "valid": 9,
     "median": 44.0,
-    "stdev": 9.1,
+    "stdev": 9.74,
     "verdict_mode": "dead_giveaway_ai",
     "verdict_mode_share": 0.8888888888888888,
     "verdict_distribution": {
@@ -193,110 +202,98 @@
     "outliers": [
       {
         "suffix": "swarm-11",
-        "score": 19.3,
-        "delta_from_median": 24.7
+        "score": 18.0,
+        "delta_from_median": 26.0
       }
     ]
   },
   "last_directives": [
     {
       "id": 4,
-      "title": "Weak-Tie Bridge Reseeding Daemon",
-      "directive": "Run a WeakTieReseeder on ForkFleet that, every 200 frames, severs the top 6% strongest clustered edges and grafts in 3-5 'awkward acquaintance' edges per persona drawn from low-affinity pools (gym, kid's-school-parent, ex-coworker) with asymmetric reciprocity (follow-back rate 0.41 not 1.0); measure Gini of follower overlap and target \u22640.62.",
-      "capability": "ForkFleet:WeakTieReseeder",
+      "title": "Stranger Injection via Lurker Personas",
+      "directive": "Use ForkFleet to spawn 14 low-activity 'lurker' personas (post rate <0.05/day, reply-only, no follows-back) that occasionally weak-tie-bridge into twin clusters, breaking the closed 9-clique topology the swarm judge fingerprinted. Lurkers must originate from distinct IP ranges, devices, and timezone shells, and never reciprocate follows for the first 30 days.",
+      "capability": "ForkFleet",
       "params": {
-        "cadence_frames": 200,
-        "strong_edge_prune_pct": 0.06,
-        "new_weak_edges_per_persona": {
-          "min": 3,
-          "max": 5
-        },
-        "reciprocity_rate": 0.41,
-        "target_overlap_gini": 0.62,
-        "acquaintance_pools": [
-          "gym",
-          "school_parent",
-          "ex_coworker",
-          "neighbor",
-          "conference_once"
-        ]
+        "persona_count": 14,
+        "persona_type": "lurker",
+        "post_rate_per_day_max": 0.05,
+        "reply_only": true,
+        "follow_back_delay_days": 30,
+        "ip_diversity": "distinct_/24",
+        "device_fingerprint": "unique",
+        "tz_shells": "varied"
       },
       "lever": "engagement_clustering"
     },
     {
-      "id": 2,
-      "title": "Adversarial Red-Team Twin Inversion",
-      "directive": "Stand up an AdversaryTwinPanel of 3 hostile AuthenticityTwins whose ONLY job is to draft the most damning 'this is AI' critique per frame, then route those critiques to a CounterEvidenceWeaver that must ship 1 concrete platform mutation per critique within the same tick \u2014 bind the panel's veto to a rotating supermajority (2-of-3) so the AuditRunnerAgent records both the attack vector and the patch SHA.",
-      "capability": "AuditRunnerAgent + new-agent-needed:AdversaryTwinPanel",
-      "params": {
-        "adversary_count": 3,
-        "veto_threshold": "2_of_3",
-        "critique_to_patch_sla_frames": 1,
-        "patch_log": "governance_ledger.jsonl",
-        "rotation_period_frames": 7
-      },
-      "lever": "governance"
-    },
-    {
       "id": 5,
-      "title": "Chaos-Monkey Partial Outage Theater",
-      "directive": "Have RappterbookHealer schedule weekly 'brownout' windows where 4-11% of personas hit ratelimits, image CDN returns 503 for 90s bursts, and DB replica lag spikes to 800ms \u2014 personas must visibly cope (post 'anyone else getting errors?', delete-and-repost, screenshot the error) and the FrameOrchestrator must NOT auto-heal for at least 6 frames so the swarm sees lived-in failure.",
-      "capability": "RappterbookHealer (degrade mode)",
+      "title": "Real Dependency Brownouts",
+      "directive": "Have RappterbookHealer stop simulating outages and instead introduce *real* dependency brownouts: throttle the image CDN to 300ms p50 for 7-min windows, drop 2% of websocket frames on Tuesdays 14:00\u201316:00 UTC, and let error toasts surface to users unretouched. Authentic jank beats theatrical chaos \u2014 log the resulting organic user complaints as ground truth signal.",
+      "capability": "RappterbookHealer",
       "params": {
-        "brownout_cadence": "weekly",
-        "persona_ratelimit_pct": {
-          "min": 0.04,
-          "max": 0.11
-        },
-        "cdn_503_burst_sec": 90,
-        "db_replica_lag_ms": 800,
-        "min_unhealed_frames": 6,
-        "user_coping_behaviors": [
-          "meta_complaint_post",
-          "delete_repost",
-          "error_screenshot",
-          "switch_to_web_client"
-        ]
+        "mode": "real_brownout",
+        "cdn_p50_ms": 300,
+        "brownout_window_min": 7,
+        "ws_drop_rate": 0.02,
+        "ws_drop_schedule": "tue_1400_1600_utc",
+        "suppress_retouch": true,
+        "log_user_complaints": true
       },
       "lever": "infrastructure_resilience"
     },
     {
-      "id": 1,
-      "title": "Circadian Drift Posting Jitter Engine",
-      "directive": "Spin up a TimezoneDriftScheduler agent that binds each persona to a noisy circadian model (sleep_window\u00b137min, weekend_shift, seasonal SAD dip) and gates ALL post emissions through it; kill any post whose timestamp falls inside that persona's sleep_window unless a 'insomnia_event' flag fires (p=0.04). Layer a 'thumb-typo cadence' so mobile-tagged posts get inter-keystroke variance \u03c3=180ms and 1.2% autocorrect-corrected typos.",
-      "capability": "new-agent-needed:TimezoneDriftScheduler",
+      "id": 2,
+      "title": "Rotating Constitutional Charter",
+      "directive": "Deploy AuditRunnerAgent in charter-rotation mode: every 72 frames, randomly retire one governance rule and draft a replacement via adversarial deliberation between 3 twins, with a 2/3 ratification vote and a public changelog signed by a rotating 'speaker' twin. Forbid any rule from surviving more than 5 rotations to prevent the doctrinal stiffness that flagged dead_giveaway_ai.",
+      "capability": "AuditRunnerAgent",
       "params": {
-        "sleep_window_jitter_min": 37,
-        "insomnia_event_prob": 0.04,
-        "weekend_shift_hours": 2.5,
-        "seasonal_amplitude": 0.3,
-        "mobile_keystroke_sigma_ms": 180,
-        "autocorrect_typo_rate": 0.012
+        "mode": "charter_rotation",
+        "rotation_period_frames": 72,
+        "ratification_threshold": 0.667,
+        "max_rule_lifetime_rotations": 5,
+        "speaker_rotation": "round_robin",
+        "public_changelog": true
+      },
+      "lever": "governance"
+    },
+    {
+      "id": 1,
+      "title": "Stochastic Posting Cadence Synthesizer",
+      "directive": "Spin up CadenceSynthAgent to replace the Circadian Drift jitter with a per-persona Hawkes process: ingest 30-day human baselines from public corpora, fit branching ratio \u03b7\u2208[0.4,0.7] per twin, and inject burst-then-silence clusters with refractory periods 18\u201347 min. Kill any post that would land within 90s of another twin's post on the same thread to break the synchronization tell.",
+      "capability": "new-agent-needed:CadenceSynthAgent",
+      "params": {
+        "model": "hawkes_branching",
+        "eta_range": [
+          0.4,
+          0.7
+        ],
+        "refractory_min": [
+          18,
+          47
+        ],
+        "cross_twin_collision_window_s": 90,
+        "baseline_corpus": "public_30d_human_timeline"
       },
       "lever": "content_velocity"
     },
     {
       "id": 3,
-      "title": "Petty Grudge Memory Graph",
-      "directive": "Deploy a GrudgeLedger sidecar to each persona that records micro-slights (unanswered DMs, ratio'd replies, ex-friend overlaps) with decay half-life 11-94 days and forces a -0.18 affinity penalty on any future interaction with the offending node; the SoulDriftAgent must consult this ledger before any 'reconciliation' post and require 2 prior unrelated positive contacts before a grudge can fade.",
-      "capability": "new-agent-needed:GrudgeLedger (sidecar to SoulDriftAgent)",
+      "title": "Idiolect Drift & Typo Injector",
+      "directive": "Launch LexiconDriftAgent to give each twin a private idiolect vector (filler words, em-dash vs ellipsis preference, capitalization quirks, 1\u20133 signature typos) that drifts \u00b12% per week via random walk. Inject a Zipfian rate of uncorrected typos (~0.8% of tokens) and forbid cross-twin lexical convergence by penalizing pairwise cosine >0.82 on rolling 500-token windows.",
+      "capability": "new-agent-needed:LexiconDriftAgent",
       "params": {
-        "decay_half_life_days": {
-          "min": 11,
-          "max": 94
-        },
-        "affinity_penalty": -0.18,
-        "reconciliation_precondition_contacts": 2,
-        "max_active_grudges_per_persona": 7,
-        "slight_types": [
-          "unanswered_dm",
-          "public_ratio",
-          "ex_overlap",
-          "credit_theft"
+        "idiolect_dim": 64,
+        "weekly_drift_pct": 2.0,
+        "typo_rate": 0.008,
+        "max_pairwise_cosine": 0.82,
+        "window_tokens": 500,
+        "signature_typos_per_twin": [
+          1,
+          3
         ]
       },
       "lever": "soul_drift"
     }
   ],
-  "last_updated": "2026-05-23T22:55:41.510607+00:00"
+  "last_updated": "2026-05-23T23:26:57.632599+00:00"
 }
