@@ -560,20 +560,26 @@ def _next_variant_directive(direction: str, prior_winner: str, gap_criterion: st
 
 
 # ---------------------------------------------------------------------------
-# Scoring — the LLM IS the watchman.
+# Scoring — deterministic verification + LLM judgment. The right mix.
 #
-# Earlier versions of this loop used deterministic regex scoring (numeric
-# token counts, Jaccard distance, sentence coherence). That was improvement
-# theater — counting proxies for quality instead of judging quality. The
-# brainstem is literally a thinking thing; if we don't trust it to read
-# the output and say what's good, we've built a measurement system that
-# can be gamed at every level.
-#
-# So: the LLM scores. The LLM identifies the gap. The LLM notices
-# convergence and pushes for divergence. The deterministic checks below
-# stay ONLY as safety rails — refusing to score outputs that aren't
-# answers (empty, error messages, absurd length). Those rails are
-# pre-judgment guards, not judgment.
+# History of this section:
+#   v1 (theater)      — pure regex/Jaccard scoring. The LLM was sidelined.
+#                       Mode collapse was MEASURED but not FOUGHT, and the
+#                       answers passed the scorer while saying nothing of
+#                       substance.
+#   v2 (theater 2.0)  — pure LLM scoring, deterministic stuff was yanked.
+#                       Live test produced confident hallucinated content
+#                       (fabricated `validate_governance` function, made-up
+#                       line numbers in zion_autonomy.py, non-existent
+#                       config/zion_constants.py file). All three cross-
+#                       judges accepted the fabrications because they
+#                       shared the same blind spots.
+#   v3 (this version) — deterministic VERIFIES, LLM JUDGES.
+#                       Each judge first runs grep/ls/sed to verify the
+#                       answer's concrete claims. The verification log is
+#                       handed to the LLM as evidence. The LLM scores
+#                       knowing which claims survived and which were
+#                       fabricated. Tools as witnesses; LLM as judge.
 # ---------------------------------------------------------------------------
 
 _JUDGE_SYSTEM = (
@@ -608,32 +614,240 @@ def _safety_rails(output: str) -> dict:
     return {"ok": True}
 
 
+# ---------------------------------------------------------------------------
+# Deterministic claim verification — the tools-as-witnesses layer.
+# Each judge runs these BEFORE asking the LLM to score. The verification
+# results become evidence the LLM uses to assess whether the candidate
+# answer is grounded or hallucinating.
+# ---------------------------------------------------------------------------
+
+import subprocess  # noqa: E402 — kept local to this section by intent
+
+_CANONICAL_ROOT = Path("/Users/kodyw/Documents/GitHub/Rappter/rappterbook")
+
+_CLAIM_PATH_RE = re.compile(
+    r"`?(?P<path>[\w./\-]+\.(?:py|md|json|sh|ya?ml|toml|html|css|js|txt))`?"
+    r"(?::(?P<line>\d+))?",
+)
+_CLAIM_FUNC_RE = re.compile(r"`(?P<name>[a-zA-Z_][a-zA-Z0-9_]*)\(\)`")
+_CLAIM_LINE_REF_RE = re.compile(r"\bline[s]?\s+\**(?P<n>\d+(?:[\s\-,–]+\d+)*)")
+_CLAIM_SHA_RE = re.compile(r"\bcommit\s+`?(?P<sha>[0-9a-f]{7,40})`?")
+
+
+def _resolve_repo_path(p: str) -> Path:
+    """Try to resolve a path to absolute under the canonical repo. Returns
+    the Path object regardless of existence."""
+    if os.path.isabs(p):
+        return Path(p)
+    return _CANONICAL_ROOT / p
+
+
+def _extract_claims(text: str) -> dict:
+    """Pull concrete claims out of an answer. Returns:
+      paths     — file paths cited (with optional :line suffix)
+      funcs     — function-call references like `do_thing()`
+      line_refs — bare "line 727" or "lines 588-593" references
+      shas      — commit SHA references
+    These are the verifiable units. Anything else stays subjective."""
+    paths = []
+    for m in _CLAIM_PATH_RE.finditer(text):
+        paths.append({"path": m.group("path"), "line": m.group("line")})
+    # Dedupe while preserving order
+    seen = set()
+    uniq_paths = []
+    for p in paths:
+        key = (p["path"], p["line"])
+        if key not in seen:
+            seen.add(key)
+            uniq_paths.append(p)
+
+    funcs = list({m.group("name") for m in _CLAIM_FUNC_RE.finditer(text)})
+    line_refs = [m.group("n") for m in _CLAIM_LINE_REF_RE.finditer(text)]
+    shas = list({m.group("sha") for m in _CLAIM_SHA_RE.finditer(text)})
+    return {
+        "paths": uniq_paths[:15],
+        "funcs": funcs[:15],
+        "line_refs": line_refs[:15],
+        "shas": shas[:10],
+    }
+
+
+def _verify_path(p: dict) -> dict:
+    """Verify a file-path claim exists, and if a line number was given,
+    return that line's actual content so the LLM judge can see whether
+    the answer's description of it is accurate."""
+    full = _resolve_repo_path(p["path"])
+    out = {"path": p["path"], "line": p.get("line"), "exists": full.exists()}
+    if not out["exists"]:
+        return out
+    out["is_file"] = full.is_file()
+    if p.get("line"):
+        try:
+            line_no = int(p["line"])
+        except (TypeError, ValueError):
+            return out
+        try:
+            with open(full, errors="replace") as f:
+                for i, raw in enumerate(f, 1):
+                    if i == line_no:
+                        out["line_content"] = raw.rstrip("\n")[:240]
+                        break
+                else:
+                    out["line_content"] = "<line beyond EOF>"
+        except OSError as e:
+            out["read_error"] = str(e)[:120]
+    return out
+
+
+def _verify_func(name: str) -> dict:
+    """grep -n for `def name` across the repo. Reports whether the
+    function actually exists and where."""
+    try:
+        p = subprocess.run(
+            ["grep", "-rn", "-l", f"def {name}", str(_CANONICAL_ROOT / "scripts")],
+            capture_output=True, text=True, timeout=8,
+        )
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError) as e:
+        return {"name": name, "exists": None, "error": str(e)[:120]}
+    files = [f.strip() for f in (p.stdout or "").splitlines() if f.strip()]
+    return {"name": name, "exists": bool(files), "files": files[:5]}
+
+
+def _verify_sha(sha: str) -> dict:
+    """Look up the commit in git log."""
+    try:
+        p = subprocess.run(
+            ["git", "-C", str(_CANONICAL_ROOT), "log", "-1", "--oneline", sha],
+            capture_output=True, text=True, timeout=8,
+        )
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError) as e:
+        return {"sha": sha, "exists": None, "error": str(e)[:120]}
+    return {"sha": sha, "exists": p.returncode == 0, "summary": (p.stdout or "").strip()[:120]}
+
+
+def _verify_claims(claims: dict) -> dict:
+    """Run all verifications for the extracted claims. Returns a structured
+    verdict per claim — exists / not / content snippet — that the LLM judge
+    will use as evidence."""
+    return {
+        "paths": [_verify_path(p) for p in claims["paths"]],
+        "funcs": [_verify_func(f) for f in claims["funcs"]],
+        "shas": [_verify_sha(s) for s in claims["shas"]],
+        "line_refs": claims["line_refs"],  # can't verify without an adjacent path
+    }
+
+
+def _format_verifications(verifications: dict) -> str:
+    """Compact representation of the verification log for the LLM judge.
+    Emphasises FAILED verifications so the judge knows what's fabricated."""
+    if not any(verifications[k] for k in ("paths", "funcs", "shas")):
+        return "  (no concrete claims found to verify)\n"
+    lines = []
+
+    paths = verifications.get("paths", [])
+    if paths:
+        lines.append("  Path claims:")
+        for p in paths:
+            status = "✓ exists" if p.get("exists") else "✗ NOT FOUND"
+            entry = f"    [{status}] {p['path']}"
+            if p.get("line") and p.get("line_content") is not None:
+                entry += f" line {p['line']} = {p['line_content']!r}"
+            elif p.get("line"):
+                entry += f" line {p['line']} (uncheckable)"
+            lines.append(entry)
+
+    funcs = verifications.get("funcs", [])
+    if funcs:
+        lines.append("  Function claims (grepped under scripts/):")
+        for f in funcs:
+            status = "✓ exists" if f.get("exists") else "✗ NOT FOUND"
+            entry = f"    [{status}] `{f['name']}()`"
+            if f.get("files"):
+                entry += f" — in {', '.join(f['files'][:2])}"
+            lines.append(entry)
+
+    shas = verifications.get("shas", [])
+    if shas:
+        lines.append("  Commit claims:")
+        for s in shas:
+            status = "✓ exists" if s.get("exists") else "✗ NOT FOUND"
+            lines.append(f"    [{status}] {s['sha']} — {s.get('summary', '')}")
+
+    return "\n".join(lines) + "\n"
+
+
+def _hallucination_rate(verifications: dict) -> float:
+    """Fraction of verifiable claims that failed verification. Used as a
+    sanity check on the LLM judge's score — if hallucination is high but
+    the LLM scored high, that's a signal the loop is theater."""
+    checked = 0
+    failed = 0
+    for p in verifications.get("paths", []):
+        checked += 1
+        if not p.get("exists"):
+            failed += 1
+    for f in verifications.get("funcs", []):
+        checked += 1
+        if f.get("exists") is False:
+            failed += 1
+    for s in verifications.get("shas", []):
+        checked += 1
+        if s.get("exists") is False:
+            failed += 1
+    if checked == 0:
+        return 0.0
+    return round(failed / checked, 3)
+
+
 def _judge_prompt(task: str, output: str, prior_winners: list, word_count: int,
-                  target_length: int) -> str:
-    """Build the user message for the LLM judge. Includes prior winners so
-    the judge can flag mode collapse — that's what 'watching' means here:
-    not just judging this one answer, but seeing the whole trajectory."""
+                  target_length: int, verifications: dict | None = None,
+                  hallucination_rate: float = 0.0) -> str:
+    """Build the user message for the LLM judge. Includes:
+      - the task and the candidate's answer
+      - prior winning answers (for mode-collapse detection)
+      - the DETERMINISTIC VERIFICATION LOG of the candidate's concrete claims
+        (file paths, function names, commits) — so the LLM knows which of
+        the answer's specifics are real and which are fabricated
+    """
     priors_block = ""
     if prior_winners:
         priors_block = "\n\nPRIOR WINNING ANSWERS (for mode-collapse detection):\n"
-        for i, p in enumerate(prior_winners[-3:], 1):  # last 3 winners is enough
+        for i, p in enumerate(prior_winners[-3:], 1):
             priors_block += f"\n[prior-{i}]\n{p[:1500]}\n"
+
+    verif_block = ""
+    if verifications is not None:
+        verif_block = (
+            "\n\nDETERMINISTIC VERIFICATION OF CANDIDATE'S CONCRETE CLAIMS\n"
+            "(file paths, function names, commits found in the answer were\n"
+            "checked against the actual repo — ✓ = real, ✗ = fabricated):\n"
+        ) + _format_verifications(verifications)
+        verif_block += f"\nHallucination rate (failed / checked claims): {hallucination_rate}\n"
+        verif_block += (
+            "\nHEAVILY PENALIZE answers whose claims FAILED verification — that's "
+            "confident fabrication, the worst failure mode. Reward answers whose "
+            "claims survived verification.\n"
+        )
+
     return (
         f"TASK:\n{task}\n\n"
         f"CANDIDATE ANSWER ({word_count} words, target ~{target_length}):\n"
         f"{output}\n"
+        f"{verif_block}"
         f"{priors_block}\n\n"
         "Score this answer. Return ONLY JSON in this exact shape:\n"
         '{\n'
         '  "score": <integer 0-100>,\n'
         '  "strongest": "<one short sentence: the best thing about this answer>",\n'
-        '  "gap": "<one short, ACTIONABLE sentence: what the next attempt should fix to get a higher score>",\n'
+        '  "gap": "<one short, ACTIONABLE sentence: what the next attempt should fix>",\n'
         '  "mode_collapse": <true|false>,\n'
-        '  "collapse_reason": "<empty string if mode_collapse is false, else one sentence saying how this answer mirrors the prior winners>"\n'
+        '  "collapse_reason": "<empty string if mode_collapse is false, else one sentence>",\n'
+        '  "hallucination_observed": <true|false>,\n'
+        '  "hallucination_note": "<empty if none, else one sentence citing the fabricated claim(s)>"\n'
         '}\n\n'
-        "Be honest. 70 is solid, 85 is excellent, 95+ is reserved for answers you cannot improve. "
-        "If you see mode collapse (this candidate hugs the prior winners' structure or content), say so — "
-        "the next variant must diverge."
+        "Honest calibration: 70 = solid, 85 = excellent, 95+ = unimprovable. "
+        "An answer with high hallucination rate must not score above 60 no "
+        "matter how persuasive the prose."
     )
 
 
@@ -832,12 +1046,23 @@ def _cross_judge(judge_contestant: dict, task: str, target_name: str,
             "judge_source": "safety_rails",
         }
 
+    # ── Tools-as-witnesses: deterministic verification BEFORE LLM judgment ──
+    # The judge runs grep/ls/sed against the candidate's concrete claims so
+    # the LLM scores knowing which claims survived the repo and which were
+    # fabricated. This is the missing piece that let the prior round's
+    # winning answer cite a non-existent `validate_governance` function.
+    claims = _extract_claims(target_output)
+    verifications = _verify_claims(claims)
+    hallucination = _hallucination_rate(verifications)
+
     judge_system = (
         judge_contestant["system"]
         + "\n\nIN THIS TURN you are NOT producing your own answer — you are "
         "JUDGING another voice's answer to the same task. Be fair but strict. "
         "Stay in your persona — your judgment should reflect what your voice "
-        "values. Return ONLY a JSON object, nothing else."
+        "values. A deterministic verification log of the candidate's concrete "
+        "claims has been run for you; use it as evidence. Return ONLY a JSON "
+        "object, nothing else."
     )
     user = _judge_prompt(
         task=task,
@@ -845,6 +1070,8 @@ def _cross_judge(judge_contestant: dict, task: str, target_name: str,
         prior_winners=prior_winners,
         word_count=len(target_output.split()),
         target_length=target_length,
+        verifications=verifications,
+        hallucination_rate=hallucination,
     )
     user = (
         f"You are judging the '{target_name}' voice's answer (not your own).\n\n"
@@ -877,7 +1104,16 @@ def _cross_judge(judge_contestant: dict, task: str, target_name: str,
         "strongest": parsed.get("strongest", "") or "no strongest specified",
         "mode_collapse": bool(parsed.get("mode_collapse", False)),
         "collapse_reason": parsed.get("collapse_reason", ""),
-        "judge_source": "llm_cross_judge",
+        "hallucination_rate": hallucination,
+        "hallucination_observed": bool(parsed.get("hallucination_observed", False)),
+        "hallucination_note": parsed.get("hallucination_note", ""),
+        "verifications": {
+            "paths_total": len(verifications.get("paths", [])),
+            "paths_failed": sum(1 for p in verifications.get("paths", []) if not p.get("exists")),
+            "funcs_total": len(verifications.get("funcs", [])),
+            "funcs_failed": sum(1 for f in verifications.get("funcs", []) if f.get("exists") is False),
+        },
+        "judge_source": "llm_cross_judge_with_tools",
         "raw_preview": llm["content"][:200],
     }
 
