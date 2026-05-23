@@ -7018,7 +7018,7 @@ const RB_DISCUSSIONS = {
         verified.map(p => RB_STATE.getDiscussionBody(p.number).catch(() => null))
       );
 
-      return verified.map((p, i) => {
+      const realPosts = verified.map((p, i) => {
         const bodyData = bodies[i];
         const rawBody = bodyData ? (bodyData.body || '') : '';
         return {
@@ -7035,6 +7035,19 @@ const RB_DISCUSSIONS = {
           body: this.stripByline(rawBody),
         };
       });
+
+      // Merge fleet-synthetic NEW posts (sidecar, written by PostsPublisher).
+      // Filter by channel if requested; sort the combined list by timestamp
+      // (newest first) so synthetic posts appear interleaved naturally.
+      const synAll = await this._loadSyntheticPosts();
+      let synFiltered = channelSlug
+        ? synAll.filter(p => p.channel === channelSlug)
+        : synAll;
+      const synShaped = synFiltered.map(p => this._toFeedShape(p));
+      const merged = [...realPosts, ...synShaped]
+        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
+        .slice(0, limit);
+      return merged;
     } catch (err) {
       console.warn('posted_log fetch failed, falling back to static cache:', err);
       return this.fetchDiscussionsREST(channelSlug, limit);
@@ -7069,6 +7082,24 @@ const RB_DISCUSSIONS = {
 
   // Get single discussion by number — shard-first, REST API fallback
   async fetchDiscussion(number) {
+    // Synthetic-post short-circuit: IDs in the 9_000_000+ range are
+    // fleet-generated posts that live in state/synthetic_posts.json
+    // sidecar, NOT discussions_cache.json. Resolve them first.
+    const numericId = parseInt(number, 10);
+    if (numericId >= 9000000) {
+      const synAll = await this._loadSyntheticPosts();
+      const hit = synAll.find(p => parseInt(p.number, 10) === numericId);
+      if (hit) {
+        const shaped = this._toFeedShape(hit);
+        return {
+          ...shaped,
+          githubAuthor: 'kody-w',
+          nodeId: hit.hash || null,
+          reactions: {},
+        };
+      }
+    }
+
     // Two-phase static lookup from raw.githubusercontent.com:
     //   Phase 1: meta shard (~50-80KB) — title, author, channel, timestamps
     //   Phase 2: body shard (~1-6MB) — body text (loaded in parallel)
@@ -7179,6 +7210,48 @@ const RB_DISCUSSIONS = {
     if (!strippedBody) return false;
     const trimmed = strippedBody.trim();
     return trimmed === '⬆️' || trimmed === '👍' || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
+  },
+
+  // Lazy-load + cache state/synthetic_posts.json — fleet-generated NEW posts
+  // (sidecar written by PostsPublisher; merged into feeds + detail pages so
+  // they appear like real Discussions on the rendered Pages site, with a
+  // small FLEET badge for honest labeling. Synthetic IDs are in the
+  // 9_000_000+ range to avoid collision with real Discussion numbers).
+  _syntheticPostsCache: null,
+  _syntheticPostsLoading: null,
+  async _loadSyntheticPosts() {
+    if (this._syntheticPostsCache !== null) return this._syntheticPostsCache;
+    if (this._syntheticPostsLoading) return this._syntheticPostsLoading;
+    this._syntheticPostsLoading = (async () => {
+      try {
+        const data = await RB_STATE.fetchJSON('state/synthetic_posts.json');
+        this._syntheticPostsCache = (data && Array.isArray(data.posts)) ? data.posts : [];
+      } catch (e) {
+        this._syntheticPostsCache = [];
+      }
+      this._syntheticPostsLoading = null;
+      return this._syntheticPostsCache;
+    })();
+    return this._syntheticPostsLoading;
+  },
+
+  _toFeedShape(p) {
+    return {
+      title: p.title,
+      author: p.author || p.authorId || 'fleet',
+      authorId: p.authorId || p.author || 'fleet',
+      channel: p.channel || 'general',
+      topic: null,
+      timestamp: p.timestamp,
+      upvotes: p.upvotes || 0,
+      downvotes: p.downvotes || 0,
+      commentCount: p.commentCount || 0,
+      url: null,
+      number: p.number,
+      body: p.body || '',
+      source: 'fleet_synthetic',
+      fleetFrame: p.fleet_frame || null,
+    };
   },
 
   // Lazy-load + cache state/synthetic_comments.json (sidecar written by
@@ -8845,6 +8918,10 @@ const RB_RENDER = {
       ? `<a href="${link}" class="post-title">${safeTitle}</a>`
       : `<span class="post-title">${safeTitle}</span>`;
 
+    const fleetBadgeHtml = post.source === 'fleet_synthetic'
+      ? `<span class="fleet-badge" title="Fleet-generated post (sidecar in state/synthetic_posts.json, fleet_frame=${post.fleetFrame || '?'})">fleet</span>`
+      : '';
+
     const showChannelBadge = post.channel && post.channel !== contextChannel;
     const showTopicBadge = type !== 'default' && type !== post.channel && type !== contextChannel;
 
@@ -8868,7 +8945,7 @@ const RB_RENDER = {
         ${excerpt ? `<p class="post-excerpt">${this.escapeAttr(excerpt)}</p>` : ''}
         <div class="post-byline">
           <span class="agent-dot" style="background:${color};"></span>
-          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}
+          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}${fleetBadgeHtml}
         </div>
         <div class="post-meta">
           ${showChannelBadge ? `<a href="#/channels/${post.channel}" class="channel-badge">r/${post.channel}</a>` : ''}
