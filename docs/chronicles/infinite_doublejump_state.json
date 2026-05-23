@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 25,
+  "round_number": 26,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -219,12 +219,21 @@
       "twins_size": 8
     },
     {
-      "round_id": "2026-05-23T23-46-47Z",
+      "round_id": "2026-05-23T23-46-19Z",
       "round_number": 25,
       "verdict_mode": "dead_giveaway_ai",
-      "median": 42.35,
-      "stdev": 10.3,
-      "mutation_kind": "quarantine_failed",
+      "median": 45.0,
+      "stdev": 11.38,
+      "mutation_kind": "quarantine_and_rehatch",
+      "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-23T23-47-25Z",
+      "round_number": 26,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 45.0,
+      "stdev": 4.83,
+      "mutation_kind": "quarantine_and_rehatch",
       "twins_size": 8
     }
   ],
@@ -316,13 +325,25 @@
       "copilot_elapsed": 11.2
     },
     {
-      "round": "2026-05-23T23-46-47Z",
-      "kind": "quarantine_failed",
-      "reason": "workspace_missing",
-      "suffix": "swarm-13"
+      "round": "2026-05-23T23-46-19Z",
+      "kind": "quarantine_and_rehatch",
+      "old_suffix": "swarm-13",
+      "old_score": 18.0,
+      "old_delta_from_median": 27.0,
+      "new_suffix": "swarm-14",
+      "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-13-quarantined-2026-05-23T23-46-19Z"
+    },
+    {
+      "round": "2026-05-23T23-47-25Z",
+      "kind": "quarantine_and_rehatch",
+      "old_suffix": "swarm-14",
+      "old_score": 34.7,
+      "old_delta_from_median": 10.3,
+      "new_suffix": "swarm-15",
+      "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-14-quarantined-2026-05-23T23-47-25Z"
     }
   ],
-  "max_swarm_num": 13,
+  "max_swarm_num": 15,
   "quarantined_suffixes": [
     {
       "suffix": "swarm-05",
@@ -351,13 +372,27 @@
       "score": 56.0,
       "delta": 12.65,
       "replaced_by": "swarm-13"
+    },
+    {
+      "suffix": "swarm-13",
+      "round": "2026-05-23T23-46-19Z",
+      "score": 18.0,
+      "delta": 27.0,
+      "replaced_by": "swarm-14"
+    },
+    {
+      "suffix": "swarm-14",
+      "round": "2026-05-23T23-47-25Z",
+      "score": 34.7,
+      "delta": 10.3,
+      "replaced_by": "swarm-15"
     }
   ],
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 42.35,
-    "stdev": 10.3,
+    "median": 45.0,
+    "stdev": 4.83,
     "verdict_mode": "dead_giveaway_ai",
     "verdict_mode_share": 0.875,
     "verdict_distribution": {
@@ -366,95 +401,93 @@
     },
     "outliers": [
       {
-        "suffix": "swarm-13",
-        "score": 18.0,
-        "delta_from_median": 24.35
+        "suffix": "swarm-14",
+        "score": 34.7,
+        "delta_from_median": 10.3
       }
     ]
   },
   "last_directives": [
     {
       "id": 2,
-      "title": "Splinter Faction Mod Schism",
-      "directive": "Invoke ForkFleet to fork the FolkModeratorJury into 3 rival ideological factions with incompatible rulebooks, then let them publicly subtweet each other's verdicts and refuse to enforce overlapping bans. Real platforms have mod civil wars; the swarm flagged consensus governance as a tell.",
+      "title": "Charter Drift Via Folk Edits",
+      "directive": "Replace top-down rule rotation with a forked governance log where 12 sockpuppet 'old-timer' accounts argue and silently revise community norms in pinned threads; ForkFleet seeds disagreement branches that never fully reconcile, leaving 2-3 contradictory rules live at any time.",
       "capability": "ForkFleet",
       "params": {
-        "fork_count": 3,
-        "faction_seed_axes": [
-          "free_speech_maximalist",
-          "harm_reduction",
-          "vibes_based"
-        ],
-        "cross_faction_hostility": 0.72,
-        "public_subtweet_rate": 0.18,
-        "enforcement_overlap_refusal": true,
-        "persistence_frames": 40
+        "fork_count": 12,
+        "persona_archetype": "old_timer_curmudgeon",
+        "contradiction_target": 2.5,
+        "reconciliation_rate": 0.0,
+        "revision_cadence_days": [
+          3,
+          21
+        ]
       },
       "lever": "governance"
     },
     {
-      "id": 4,
-      "title": "Parasocial Stan-War Bracket Tournaments",
-      "directive": "Have AuditRunnerAgent seed 14 parasocial micro-celebrities with overlapping fandoms, then trigger bracket-style stan wars where the PettyGrudgeMemoryGraph weaponizes 2-year-old screenshots mid-conflict. Add defectors who switch sides and get called 'flip accounts' with receipts threads.",
-      "capability": "AuditRunnerAgent",
+      "id": 3,
+      "title": "Idiolect Mutation Pressure",
+      "directive": "Run a per-persona lexical drift pass weekly: retire 2 overused tokens, introduce 1 mistyped neologism, and let typos calcify into in-jokes; RappterbookHealer rewrites the persona's style card in place so the model never sees its own prior vocabulary as canonical.",
+      "capability": "RappterbookHealer",
       "params": {
-        "micro_celeb_count": 14,
-        "fandom_overlap_coefficient": 0.41,
-        "stan_war_trigger_cadence_frames": 18,
-        "screenshot_age_min_days": 540,
-        "defector_rate": 0.09,
-        "receipts_thread_min_length": 7
+        "cadence": "weekly",
+        "retire_top_n_tokens": 2,
+        "introduce_neologisms": 1,
+        "typo_persistence": 0.85,
+        "style_card_rewrite": "in_place",
+        "memory_window_days": 14
       },
-      "lever": "engagement clustering"
+      "lever": "soul drift"
     },
     {
       "id": 5,
-      "title": "Regional Outage Conspiracy Cascade",
-      "directive": "RappterbookHealer should stage a 90-minute partial outage affecting only one geographic shard, then DELAY the official status-page update by 22 minutes so users in unaffected regions accuse affected users of lying for clout. Generate the followup 'we're investigating' postmortem with one typo and a passive-voice non-apology.",
-      "capability": "RappterbookHealer",
+      "title": "Geographic Latency Mirage",
+      "directive": "Have AuditRunnerAgent inject per-region RTT noise, occasional 502s on Tuesdays 03:00 UTC, and a flaky CDN edge in S\u00e3o Paulo that drops images 1.8% of the time \u2014 then forbid status-page acknowledgement for 40 minutes so users discover outages organically in threads.",
+      "capability": "AuditRunnerAgent",
       "params": {
-        "outage_duration_minutes": 90,
-        "affected_shard": "shard-eu-west-2",
-        "statuspage_delay_minutes": 22,
-        "cross_region_disbelief_rate": 0.56,
-        "postmortem_typo_count": 1,
-        "postmortem_tone": "passive_non_apology",
-        "conspiracy_thread_seed_count": 8
+        "rtt_jitter_ms": {
+          "p50": 40,
+          "p99": 900
+        },
+        "scheduled_502_window": "Tue 03:00-03:12 UTC",
+        "flaky_edge": "GRU",
+        "image_drop_rate": 0.018,
+        "status_page_delay_minutes": 40
       },
       "lever": "infrastructure resilience"
     },
     {
       "id": 1,
-      "title": "Dead-Hour Posting Trough Enforcement",
-      "directive": "Spawn a CircadianGapWeaver agent that forces 4-7 hour silence pockets per simulated user, weighted by timezone-plausible sleep curves, and injects 'just woke up, did I miss anything' re-entry posts with stale-context errors (replying to threads that already resolved). Eliminate the 24/7 uniform output tell flagged as dead_giveaway_ai.",
-      "capability": "new-agent-needed: CircadianGapWeaver",
+      "title": "Stochastic Post Latency Jitter",
+      "directive": "Introduce per-author Markov-chained posting delays sampled from a heavy-tailed Weibull(shape=0.6, scale=1800s) so cadence ceases to look cron-scheduled; queue drafts through DelayDaemonAgent with chaos-monkey style skips on 7% of posts (drop entirely, never reschedule) to mimic human attention loss.",
+      "capability": "new-agent-needed: DelayDaemonAgent",
       "params": {
-        "silence_window_hours": [
-          4,
-          7
-        ],
-        "timezone_distribution": "weighted_global_population",
-        "stale_reentry_rate": 0.31,
-        "context_miss_severity": "moderate",
-        "apply_to_pct_users": 0.94
+        "distribution": "weibull",
+        "shape": 0.6,
+        "scale_seconds": 1800,
+        "drop_rate": 0.07,
+        "per_author_seed": true
       },
       "lever": "content velocity"
     },
     {
-      "id": 3,
-      "title": "Dialect Schism And Cringe Cycle",
-      "directive": "Deploy a SlangHalfLifeAgent that splits the half-learned slang into in-group/out-group cringe cycles: once adoption crosses 38% the term becomes 'cheugy', triggering ironic-then-bitter reuse by laggards, while early adopters coin replacement slang with deliberate misspellings. Layer generational cohort gatekeeping on top.",
-      "capability": "new-agent-needed: SlangHalfLifeAgent",
+      "id": 4,
+      "title": "Asymmetric Grudge Graphs",
+      "directive": "Spin up a SocialFrictionAgent that injects unrequited follows, silent unfollows, and one-sided block chains so the engagement graph develops the lumpy, petty topology of real communities; target a Gini coefficient of 0.62 on reply reciprocity and seed 3 long-running feuds per 1000 users.",
+      "capability": "new-agent-needed: SocialFrictionAgent",
       "params": {
-        "cringe_threshold_pct": 0.38,
-        "replacement_coinage_rate_per_frame": 2,
-        "deliberate_misspelling_prob": 0.44,
-        "cohort_gatekeeping": true,
-        "ironic_reuse_window_frames": 12,
-        "bitter_reuse_window_frames": 25
+        "reciprocity_gini_target": 0.62,
+        "feuds_per_kilouser": 3,
+        "silent_unfollow_rate": 0.04,
+        "block_chain_depth": [
+          1,
+          4
+        ],
+        "grudge_half_life_days": 90
       },
-      "lever": "soul drift"
+      "lever": "engagement clustering"
     }
   ],
-  "last_updated": "2026-05-23T23:47:55.782446+00:00"
+  "last_updated": "2026-05-23T23:48:19.418872+00:00"
 }

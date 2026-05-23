@@ -1,0 +1,192 @@
+{
+  "round_id": "2026-05-23T23-47-25Z",
+  "round_number": 26,
+  "wall_seconds": 53.8,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 45.0,
+    "stdev": 4.83,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.875,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-14",
+        "score": 34.7,
+        "delta_from_median": 10.3
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T23-48-19Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 45.0. Stdev across the swarm: 4.83. Verdict mode: dead_giveaway_ai (88% of 8 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Dead-Hour Silence Pockets [content velocity]\n- Parasocial Asymmetry Webs [engagement clustering]\n- Phantom Datacenter Decay [infrastructure resilience]\n- Rotating Unwritten Rule Codex [governance]\n- Personal Lexicon Calcification [soul drift]\n\nW",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-40-07Z.json",
+    "copilot_elapsed_seconds": 29.5,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Charter Drift Via Folk Edits",
+        "directive": "Replace top-down rule rotation with a forked governance log where 12 sockpuppet 'old-timer' accounts argue and silently revise community norms in pinned threads; ForkFleet seeds disagreement branches that never fully reconcile, leaving 2-3 contradictory rules live at any time.",
+        "capability": "ForkFleet",
+        "params": {
+          "fork_count": 12,
+          "persona_archetype": "old_timer_curmudgeon",
+          "contradiction_target": 2.5,
+          "reconciliation_rate": 0.0,
+          "revision_cadence_days": [
+            3,
+            21
+          ]
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 3,
+        "title": "Idiolect Mutation Pressure",
+        "directive": "Run a per-persona lexical drift pass weekly: retire 2 overused tokens, introduce 1 mistyped neologism, and let typos calcify into in-jokes; RappterbookHealer rewrites the persona's style card in place so the model never sees its own prior vocabulary as canonical.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "cadence": "weekly",
+          "retire_top_n_tokens": 2,
+          "introduce_neologisms": 1,
+          "typo_persistence": 0.85,
+          "style_card_rewrite": "in_place",
+          "memory_window_days": 14
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 5,
+        "title": "Geographic Latency Mirage",
+        "directive": "Have AuditRunnerAgent inject per-region RTT noise, occasional 502s on Tuesdays 03:00 UTC, and a flaky CDN edge in S\u00e3o Paulo that drops images 1.8% of the time \u2014 then forbid status-page acknowledgement for 40 minutes so users discover outages organically in threads.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "rtt_jitter_ms": {
+            "p50": 40,
+            "p99": 900
+          },
+          "scheduled_502_window": "Tue 03:00-03:12 UTC",
+          "flaky_edge": "GRU",
+          "image_drop_rate": 0.018,
+          "status_page_delay_minutes": 40
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Stochastic Post Latency Jitter",
+        "directive": "Introduce per-author Markov-chained posting delays sampled from a heavy-tailed Weibull(shape=0.6, scale=1800s) so cadence ceases to look cron-scheduled; queue drafts through DelayDaemonAgent with chaos-monkey style skips on 7% of posts (drop entirely, never reschedule) to mimic human attention loss.",
+        "capability": "new-agent-needed: DelayDaemonAgent",
+        "params": {
+          "distribution": "weibull",
+          "shape": 0.6,
+          "scale_seconds": 1800,
+          "drop_rate": 0.07,
+          "per_author_seed": true
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 4,
+        "title": "Asymmetric Grudge Graphs",
+        "directive": "Spin up a SocialFrictionAgent that injects unrequited follows, silent unfollows, and one-sided block chains so the engagement graph develops the lumpy, petty topology of real communities; target a Gini coefficient of 0.62 on reply reciprocity and seed 3 long-running feuds per 1000 users.",
+        "capability": "new-agent-needed: SocialFrictionAgent",
+        "params": {
+          "reciprocity_gini_target": 0.62,
+          "feuds_per_kilouser": 3,
+          "silent_unfollow_rate": 0.04,
+          "block_chain_depth": [
+            1,
+            4
+          ],
+          "grudge_half_life_days": 90
+        },
+        "lever": "engagement clustering"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Charter Drift Via Folk Edits",
+      "directive": "Replace top-down rule rotation with a forked governance log where 12 sockpuppet 'old-timer' accounts argue and silently revise community norms in pinned threads; ForkFleet seeds disagreement branches that never fully reconcile, leaving 2-3 contradictory rules live at any time.",
+      "capability": "ForkFleet",
+      "params": {
+        "fork_count": 12,
+        "persona_archetype": "old_timer_curmudgeon",
+        "contradiction_target": 2.5,
+        "reconciliation_rate": 0.0,
+        "revision_cadence_days": [
+          3,
+          21
+        ]
+      },
+      "lever": "governance"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-14",
+    "old_score": 34.7,
+    "old_delta_from_median": 10.3,
+    "new_suffix": "swarm-15",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-14-quarantined-2026-05-23T23-47-25Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 22.9
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 23.3
+    },
+    {
+      "suffix": "swarm-14",
+      "verdict": "dead_giveaway_ai",
+      "avg": 34.7,
+      "wall": 23.4
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.7,
+      "wall": 23.6
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 23.6
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 45.3,
+      "wall": 23.8
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 24.2
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 24.2
+    }
+  ]
+}
