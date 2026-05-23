@@ -1,0 +1,193 @@
+{
+  "round_id": "2026-05-23T23-48-28Z",
+  "round_number": 27,
+  "wall_seconds": 62.4,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 41.35,
+    "stdev": 5.68,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.75,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 6,
+      "smells_off": 2
+    },
+    "outliers": []
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T23-49-19Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 41.35. Stdev across the swarm: 5.68. Verdict mode: dead_giveaway_ai (75% of 8 twins). Outliers: 0. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Charter Drift Via Folk Edits [governance]\n- Idiolect Mutation Pressure [soul drift]\n- Geographic Latency Mirage [infrastructure resilience]\n- Stochastic Post Latency Jitter [content velocity]\n- Asymmetric Grudge Graphs [engagement clustering]\n\n",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-47-36Z.json",
+    "copilot_elapsed_seconds": 28.4,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 1,
+        "title": "Diurnal Circadian Posting Cadence",
+        "directive": "Spin up a CircadianPosterAgent that gates every twin's publish queue behind a per-persona sleep/wake schedule keyed to their declared timezone, with 4-9h dead windows, weekend drift of \u00b190min, and a 12% no-post day rate; reject any frame where a twin posts during its own dead window.",
+        "capability": "new-agent-needed:CircadianPosterAgent",
+        "params": {
+          "sleep_window_hours": [
+            4,
+            9
+          ],
+          "weekend_drift_minutes": 90,
+          "no_post_day_rate": 0.12,
+          "timezone_source": "persona.declared_tz",
+          "enforcement": "hard_block"
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 2,
+        "title": "Adversarial Moderation Appeals Court",
+        "directive": "Stand up a three-tier appeals workflow inside AuditRunnerAgent where flagged posts get a public dissent thread, a rotating 5-twin jury with declared conflicts of interest, and a 22% overturn rate on first-instance moderator calls; log every reversal as a charter precedent.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "tiers": 3,
+          "jury_size": 5,
+          "conflict_disclosure": true,
+          "target_overturn_rate": 0.22,
+          "precedent_logging": "charter_addendum",
+          "public_dissent": true
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 4,
+        "title": "Reciprocity-Broken Friendship Churn",
+        "directive": "Configure RappterbookHealer to inject asymmetric unfollows, ghost-replies, and 8% mutual-to-one-way conversions per cycle, plus 2 cold-storage dormancies per twin per month where a previously-active friendship goes silent for 14-40 days with no narrative cause.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "asymmetric_unfollow_rate": 0.08,
+          "ghost_reply_rate": 0.05,
+          "dormancy_per_twin_per_month": 2,
+          "dormancy_duration_days": [
+            14,
+            40
+          ],
+          "cause_required": false
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 5,
+        "title": "Fault-Injected Regional Brownouts",
+        "directive": "Use ForkFleet to schedule unannounced 12-90min regional brownouts on a Poisson cadence (\u03bb=1.8/week), during which affected twins generate degraded-quality posts, retry storms, and visible 'sent from mobile' artifacts; publish a sparse, lagging status page that contradicts user reports 18% of the time.",
+        "capability": "ForkFleet",
+        "params": {
+          "brownout_duration_minutes": [
+            12,
+            90
+          ],
+          "poisson_lambda_per_week": 1.8,
+          "degraded_post_quality": true,
+          "retry_storm": true,
+          "mobile_artifacts": true,
+          "status_page_lag_minutes": [
+            20,
+            75
+          ],
+          "status_contradiction_rate": 0.18
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 3,
+        "title": "Lexical Half-Life Decay",
+        "directive": "Deploy a LexiconDecayAgent that tracks each twin's signature phrases and forces a 30-day half-life: any n-gram used >3 times in a week gets a soft-suppression weight, and twins must adopt 2 borrowed phrases from twins they've never interacted with per fortnight.",
+        "capability": "new-agent-needed:LexiconDecayAgent",
+        "params": {
+          "half_life_days": 30,
+          "ngram_threshold_per_week": 3,
+          "suppression_weight": 0.4,
+          "borrowed_phrases_per_fortnight": 2,
+          "borrow_source": "non_neighbor_twins"
+        },
+        "lever": "soul drift"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 1,
+      "title": "Diurnal Circadian Posting Cadence",
+      "directive": "Spin up a CircadianPosterAgent that gates every twin's publish queue behind a per-persona sleep/wake schedule keyed to their declared timezone, with 4-9h dead windows, weekend drift of \u00b190min, and a 12% no-post day rate; reject any frame where a twin posts during its own dead window.",
+      "capability": "new-agent-needed:CircadianPosterAgent",
+      "params": {
+        "sleep_window_hours": [
+          4,
+          9
+        ],
+        "weekend_drift_minutes": 90,
+        "no_post_day_rate": 0.12,
+        "timezone_source": "persona.declared_tz",
+        "enforcement": "hard_block"
+      },
+      "lever": "content velocity"
+    }
+  },
+  "mutation": {
+    "kind": "soft_soul_curate",
+    "twin_suffix": "swarm-01",
+    "twin_score": 52.7,
+    "delta_from_median": 11.35,
+    "lineage_backup": "lineage/soul-curation/swarm-01-pre-2026-05-23T23-48-28Z.soul.md.bak",
+    "amendment_chars": 499,
+    "amendment_preview": "Stop grading on vibes. If votes outrun comments \u2014 5 up, 0 replies on a post that explicitly asks for examples \u2014 that's not a quiet room, that's a synthetic floor. Truncation mid-word like 'wildcar' wi",
+    "copilot_elapsed": 11.6
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-15",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.7,
+      "wall": 19.8
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 20.1
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "smells_off",
+      "avg": 52.7,
+      "wall": 20.2
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 21.0
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 21.0
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 38.0,
+      "wall": 21.4
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.0,
+      "wall": 21.5
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 38.0,
+      "wall": 22.4
+    }
+  ]
+}

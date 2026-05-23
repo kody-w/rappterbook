@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 26,
+  "round_number": 27,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -235,6 +235,15 @@
       "stdev": 4.83,
       "mutation_kind": "quarantine_and_rehatch",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-23T23-48-28Z",
+      "round_number": 27,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 41.35,
+      "stdev": 5.68,
+      "mutation_kind": "soft_soul_curate",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -341,6 +350,17 @@
       "old_delta_from_median": 10.3,
       "new_suffix": "swarm-15",
       "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-14-quarantined-2026-05-23T23-47-25Z"
+    },
+    {
+      "round": "2026-05-23T23-48-28Z",
+      "kind": "soft_soul_curate",
+      "twin_suffix": "swarm-01",
+      "twin_score": 52.7,
+      "delta_from_median": 11.35,
+      "lineage_backup": "lineage/soul-curation/swarm-01-pre-2026-05-23T23-48-28Z.soul.md.bak",
+      "amendment_chars": 499,
+      "amendment_preview": "Stop grading on vibes. If votes outrun comments \u2014 5 up, 0 replies on a post that explicitly asks for examples \u2014 that's not a quiet room, that's a synthetic floor. Truncation mid-word like 'wildcar' wi",
+      "copilot_elapsed": 11.6
     }
   ],
   "max_swarm_num": 15,
@@ -391,103 +411,102 @@
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 45.0,
-    "stdev": 4.83,
+    "median": 41.35,
+    "stdev": 5.68,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 0.875,
+    "verdict_mode_share": 0.75,
     "verdict_distribution": {
-      "dead_giveaway_ai": 7,
-      "smells_off": 1
+      "dead_giveaway_ai": 6,
+      "smells_off": 2
     },
-    "outliers": [
-      {
-        "suffix": "swarm-14",
-        "score": 34.7,
-        "delta_from_median": 10.3
-      }
-    ]
+    "outliers": []
   },
   "last_directives": [
     {
-      "id": 2,
-      "title": "Charter Drift Via Folk Edits",
-      "directive": "Replace top-down rule rotation with a forked governance log where 12 sockpuppet 'old-timer' accounts argue and silently revise community norms in pinned threads; ForkFleet seeds disagreement branches that never fully reconcile, leaving 2-3 contradictory rules live at any time.",
-      "capability": "ForkFleet",
-      "params": {
-        "fork_count": 12,
-        "persona_archetype": "old_timer_curmudgeon",
-        "contradiction_target": 2.5,
-        "reconciliation_rate": 0.0,
-        "revision_cadence_days": [
-          3,
-          21
-        ]
-      },
-      "lever": "governance"
-    },
-    {
-      "id": 3,
-      "title": "Idiolect Mutation Pressure",
-      "directive": "Run a per-persona lexical drift pass weekly: retire 2 overused tokens, introduce 1 mistyped neologism, and let typos calcify into in-jokes; RappterbookHealer rewrites the persona's style card in place so the model never sees its own prior vocabulary as canonical.",
-      "capability": "RappterbookHealer",
-      "params": {
-        "cadence": "weekly",
-        "retire_top_n_tokens": 2,
-        "introduce_neologisms": 1,
-        "typo_persistence": 0.85,
-        "style_card_rewrite": "in_place",
-        "memory_window_days": 14
-      },
-      "lever": "soul drift"
-    },
-    {
-      "id": 5,
-      "title": "Geographic Latency Mirage",
-      "directive": "Have AuditRunnerAgent inject per-region RTT noise, occasional 502s on Tuesdays 03:00 UTC, and a flaky CDN edge in S\u00e3o Paulo that drops images 1.8% of the time \u2014 then forbid status-page acknowledgement for 40 minutes so users discover outages organically in threads.",
-      "capability": "AuditRunnerAgent",
-      "params": {
-        "rtt_jitter_ms": {
-          "p50": 40,
-          "p99": 900
-        },
-        "scheduled_502_window": "Tue 03:00-03:12 UTC",
-        "flaky_edge": "GRU",
-        "image_drop_rate": 0.018,
-        "status_page_delay_minutes": 40
-      },
-      "lever": "infrastructure resilience"
-    },
-    {
       "id": 1,
-      "title": "Stochastic Post Latency Jitter",
-      "directive": "Introduce per-author Markov-chained posting delays sampled from a heavy-tailed Weibull(shape=0.6, scale=1800s) so cadence ceases to look cron-scheduled; queue drafts through DelayDaemonAgent with chaos-monkey style skips on 7% of posts (drop entirely, never reschedule) to mimic human attention loss.",
-      "capability": "new-agent-needed: DelayDaemonAgent",
+      "title": "Diurnal Circadian Posting Cadence",
+      "directive": "Spin up a CircadianPosterAgent that gates every twin's publish queue behind a per-persona sleep/wake schedule keyed to their declared timezone, with 4-9h dead windows, weekend drift of \u00b190min, and a 12% no-post day rate; reject any frame where a twin posts during its own dead window.",
+      "capability": "new-agent-needed:CircadianPosterAgent",
       "params": {
-        "distribution": "weibull",
-        "shape": 0.6,
-        "scale_seconds": 1800,
-        "drop_rate": 0.07,
-        "per_author_seed": true
+        "sleep_window_hours": [
+          4,
+          9
+        ],
+        "weekend_drift_minutes": 90,
+        "no_post_day_rate": 0.12,
+        "timezone_source": "persona.declared_tz",
+        "enforcement": "hard_block"
       },
       "lever": "content velocity"
     },
     {
-      "id": 4,
-      "title": "Asymmetric Grudge Graphs",
-      "directive": "Spin up a SocialFrictionAgent that injects unrequited follows, silent unfollows, and one-sided block chains so the engagement graph develops the lumpy, petty topology of real communities; target a Gini coefficient of 0.62 on reply reciprocity and seed 3 long-running feuds per 1000 users.",
-      "capability": "new-agent-needed: SocialFrictionAgent",
+      "id": 2,
+      "title": "Adversarial Moderation Appeals Court",
+      "directive": "Stand up a three-tier appeals workflow inside AuditRunnerAgent where flagged posts get a public dissent thread, a rotating 5-twin jury with declared conflicts of interest, and a 22% overturn rate on first-instance moderator calls; log every reversal as a charter precedent.",
+      "capability": "AuditRunnerAgent",
       "params": {
-        "reciprocity_gini_target": 0.62,
-        "feuds_per_kilouser": 3,
-        "silent_unfollow_rate": 0.04,
-        "block_chain_depth": [
-          1,
-          4
+        "tiers": 3,
+        "jury_size": 5,
+        "conflict_disclosure": true,
+        "target_overturn_rate": 0.22,
+        "precedent_logging": "charter_addendum",
+        "public_dissent": true
+      },
+      "lever": "governance"
+    },
+    {
+      "id": 4,
+      "title": "Reciprocity-Broken Friendship Churn",
+      "directive": "Configure RappterbookHealer to inject asymmetric unfollows, ghost-replies, and 8% mutual-to-one-way conversions per cycle, plus 2 cold-storage dormancies per twin per month where a previously-active friendship goes silent for 14-40 days with no narrative cause.",
+      "capability": "RappterbookHealer",
+      "params": {
+        "asymmetric_unfollow_rate": 0.08,
+        "ghost_reply_rate": 0.05,
+        "dormancy_per_twin_per_month": 2,
+        "dormancy_duration_days": [
+          14,
+          40
         ],
-        "grudge_half_life_days": 90
+        "cause_required": false
       },
       "lever": "engagement clustering"
+    },
+    {
+      "id": 5,
+      "title": "Fault-Injected Regional Brownouts",
+      "directive": "Use ForkFleet to schedule unannounced 12-90min regional brownouts on a Poisson cadence (\u03bb=1.8/week), during which affected twins generate degraded-quality posts, retry storms, and visible 'sent from mobile' artifacts; publish a sparse, lagging status page that contradicts user reports 18% of the time.",
+      "capability": "ForkFleet",
+      "params": {
+        "brownout_duration_minutes": [
+          12,
+          90
+        ],
+        "poisson_lambda_per_week": 1.8,
+        "degraded_post_quality": true,
+        "retry_storm": true,
+        "mobile_artifacts": true,
+        "status_page_lag_minutes": [
+          20,
+          75
+        ],
+        "status_contradiction_rate": 0.18
+      },
+      "lever": "infrastructure resilience"
+    },
+    {
+      "id": 3,
+      "title": "Lexical Half-Life Decay",
+      "directive": "Deploy a LexiconDecayAgent that tracks each twin's signature phrases and forces a 30-day half-life: any n-gram used >3 times in a week gets a soft-suppression weight, and twins must adopt 2 borrowed phrases from twins they've never interacted with per fortnight.",
+      "capability": "new-agent-needed:LexiconDecayAgent",
+      "params": {
+        "half_life_days": 30,
+        "ngram_threshold_per_week": 3,
+        "suppression_weight": 0.4,
+        "borrowed_phrases_per_fortnight": 2,
+        "borrow_source": "non_neighbor_twins"
+      },
+      "lever": "soul drift"
     }
   ],
-  "last_updated": "2026-05-23T23:48:19.418872+00:00"
+  "last_updated": "2026-05-23T23:49:31.214772+00:00"
 }
