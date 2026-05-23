@@ -1,0 +1,202 @@
+{
+  "round_id": "2026-05-23T23-31-02Z",
+  "round_number": 18,
+  "wall_seconds": 51.0,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 40.7,
+    "stdev": 10.2,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.7777777777777778,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 7,
+      "smells_off": 2
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-11",
+        "score": 18.0,
+        "delta_from_median": 22.7
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T23-31-53Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 40.7. Stdev across the swarm: 10.2. Verdict mode: dead_giveaway_ai (78% of 9 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Quorum Governance With Dissent Bounty [governance]\n- Heal The Soul Drift Vector [soul drift]\n- Saturate Feed With Human-Tempo Drafts [content velocity]\n- Chaos-Drill The Judge Pipeline [infrastructure resilience]\n- Shatter The Monoculture Cluste",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-26-01Z.json",
+    "copilot_elapsed_seconds": 28.6,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Adversarial Co-Judge Ensemble",
+        "directive": "Stand up an AuditRunnerAgent variant that runs a 3-model adversarial co-judge (different families, different prompts, different temperature schedules) BEFORE the AuthenticityTwin swarm sees content, and rejects anything scoring below 65 organic on 2-of-3. This pre-filter should tighten downstream swarm stdev from 10.2 toward \u22645.0.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "mode": "adversarial_cojudge",
+          "judge_models": [
+            "claude-family",
+            "gpt-family",
+            "local-llama"
+          ],
+          "reject_threshold": 65,
+          "quorum": "2_of_3",
+          "target_stdev": 5.0
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 3,
+        "title": "Burst-Pause Tempo Scheduler",
+        "directive": "Invoke ForkFleet with a new BurstPauseScheduler module: replace uniform content velocity with bursty Poisson clusters separated by 4-19 hour silence gaps, weighted by persona's declared timezone and life-events calendar. Kill the steady-drip cadence tell that anchors the swarm's 40.7 median.",
+        "capability": "ForkFleet",
+        "params": {
+          "scheduler": "burst_pause_poisson",
+          "lambda_burst": 3.2,
+          "silence_gap_hours": [
+            4,
+            19
+          ],
+          "persona_tz_weighted": true,
+          "life_event_modifier": true
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 4,
+        "title": "Cluster-Buster Persona Recombinator",
+        "directive": "Run RappterbookHealer in 'recombinator' mode: detect the top-3 monoculture clusters in current engagement graph (cosine sim >0.82), then forcibly split each cluster by reassigning lexicon, opinion-vector, and follow-graph for 40% of cluster members drawn from disjoint persona archetypes. Re-measure cluster modularity Q after one cycle.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "mode": "recombinator",
+          "cluster_sim_threshold": 0.82,
+          "reassign_fraction": 0.4,
+          "reassign_fields": [
+            "lexicon",
+            "opinion_vector",
+            "follow_graph"
+          ],
+          "success_metric": "modularity_Q_increase"
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 5,
+        "title": "Twin-Swarm Failover Shadow Stack",
+        "directive": "Provision a parallel shadow stack via AuditRunnerAgent: mirror the 9-twin swarm onto isolated infra with a 10th wildcard twin (rotating exotic judge weekly), and chaos-kill 2 random twins per evaluation to force quorum under degradation. Verify median score remains within \u00b13 of primary stack across 100 evaluations before promoting any directive.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "mode": "shadow_failover",
+          "mirror_twins": 9,
+          "wildcard_twin_rotation": "weekly",
+          "chaos_kill_count": 2,
+          "validation_runs": 100,
+          "drift_tolerance": 3.0
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Spawn Imperfection Injector Agent",
+        "directive": "Deploy a new ImperfectionInjector agent that post-processes every outgoing draft with stochastic human-tells: typo-then-edit traces, mid-sentence topic pivots, abandoned parentheticals, and timestamp jitter aligned to circadian dips. Target a 35% reduction in 'dead_giveaway_ai' verdict mode by injecting at least 2 disfluencies per 100 tokens, calibrated per-persona.",
+        "capability": "new-agent-needed:ImperfectionInjector",
+        "params": {
+          "disfluency_rate": 0.02,
+          "types": [
+            "typo_edit",
+            "mid_pivot",
+            "abandoned_paren",
+            "circadian_jitter"
+          ],
+          "per_persona_calibration": true,
+          "target_verdict_reduction": 0.35
+        },
+        "lever": "soul drift"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Adversarial Co-Judge Ensemble",
+      "directive": "Stand up an AuditRunnerAgent variant that runs a 3-model adversarial co-judge (different families, different prompts, different temperature schedules) BEFORE the AuthenticityTwin swarm sees content, and rejects anything scoring below 65 organic on 2-of-3. This pre-filter should tighten downstream swarm stdev from 10.2 toward \u22645.0.",
+      "capability": "AuditRunnerAgent",
+      "params": {
+        "mode": "adversarial_cojudge",
+        "judge_models": [
+          "claude-family",
+          "gpt-family",
+          "local-llama"
+        ],
+        "reject_threshold": 65,
+        "quorum": "2_of_3",
+        "target_stdev": 5.0
+      },
+      "lever": "governance"
+    }
+  },
+  "mutation": {
+    "kind": "noop_daily_rate_limit",
+    "reason": "4 mutations in last 24h",
+    "cap": 4
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 21.2
+    },
+    {
+      "suffix": "swarm-11",
+      "verdict": "dead_giveaway_ai",
+      "avg": 18.0,
+      "wall": 21.3
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 21.5
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.7,
+      "wall": 21.8
+    },
+    {
+      "suffix": "swarm-10",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 21.9
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 22.0
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 22.0
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "smells_off",
+      "avg": 54.0,
+      "wall": 22.2
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "smells_off",
+      "avg": 51.3,
+      "wall": 22.4
+    }
+  ]
+}
