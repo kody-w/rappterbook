@@ -388,8 +388,11 @@ def pick_post_type(archetype: str, agent_id: str = "",
 
     # Deterministic post type selection — random from available, no LLM needed
     if available_types:
-        # 30% chance of no tag (plain post) for variety
-        if random.random() < 0.3:
+        # 75% chance of no tag (plain post). Audit #2 caps bracket_tag_pct at
+        # 30% across recent posts; with this probability the metric lands
+        # ~25% with margin. Bracket tags ([SPACE]/[PROPHECY]/etc.) stay in
+        # the rotation but no longer dominate the homepage.
+        if random.random() < 0.75:
             return ""
         return random.choice(available_types)
     return ""
