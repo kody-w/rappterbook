@@ -47,6 +47,13 @@ LINEAGE_SOULS.mkdir(parents=True, exist_ok=True)
 
 TWIN_GLOB = ("/Users/kodyw/.rapp/twins/rappid:v2:project:@kody-w/"
              "authenticity-twin:rappterbook-outside-visitor@local-swarm-*")
+TWIN_PATH_PREFIX = ("/Users/kodyw/.rapp/twins/rappid:v2:project:@kody-w/"
+                    "authenticity-twin:rappterbook-outside-visitor@local-")
+
+def _path_for_suffix(suffix: str) -> str:
+    """suffix is e.g. 'swarm-04' — returns the full twin workspace path."""
+    return TWIN_PATH_PREFIX + suffix
+
 N_POSTS_PER_TWIN = 3
 OUTLIER_SIGMA = 2.0
 MUTATION_DAILY_CAP = 4
@@ -199,7 +206,7 @@ def _amplify(consensus: dict, prior_directives: list | None) -> dict:
 
 def _quarantine_and_rehatch(outlier: dict, state: dict, round_id: str) -> dict:
     suffix = outlier["suffix"]
-    twin_ws = TWIN_GLOB.replace("*", suffix)
+    twin_ws = _path_for_suffix(suffix)
     if not os.path.isdir(twin_ws):
         return {"kind": "quarantine_failed", "reason": "workspace_missing",
                 "suffix": suffix}
@@ -267,7 +274,7 @@ def _soft_soul_curate(consensus: dict, twin_reports: list,
     # Kindest = highest avg score
     kindest = max(valid, key=lambda r: r["avg_authenticity_score"])
     suffix = kindest["_suffix"]
-    twin_ws = TWIN_GLOB.replace("*", suffix)
+    twin_ws = _path_for_suffix(suffix)
     soul_path = Path(twin_ws) / "soul.md"
     if not soul_path.exists():
         return {"kind": "soul_curate_failed", "reason": "soul_missing",
