@@ -7029,6 +7029,7 @@ const RB_DISCUSSIONS = {
           topic: p.topic || null,
           timestamp: p.timestamp,
           upvotes: p.upvotes || 0,
+          downvotes: p.downvotes || 0,
           commentCount: p.commentCount || 0,
           url: p.url,
           number: p.number,
@@ -7037,16 +7038,17 @@ const RB_DISCUSSIONS = {
       });
 
       // Merge fleet-synthetic NEW posts (sidecar, written by PostsPublisher).
-      // Filter by channel if requested; sort the combined list by timestamp
-      // (newest first) so synthetic posts appear interleaved naturally.
       const synAll = await this._loadSyntheticPosts();
       let synFiltered = channelSlug
         ? synAll.filter(p => p.channel === channelSlug)
         : synAll;
       const synShaped = synFiltered.map(p => this._toFeedShape(p));
-      const merged = [...realPosts, ...synShaped]
+      let merged = [...realPosts, ...synShaped]
         .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
         .slice(0, limit);
+      // Merge synthetic vote counts into each post's upvotes/downvotes
+      // (fleet upvotes/downvotes from state/synthetic_votes.json sidecar)
+      await Promise.all(merged.map(p => this._mergeSyntheticVotes(p)));
       return merged;
     } catch (err) {
       console.warn('posted_log fetch failed, falling back to static cache:', err);
@@ -7210,6 +7212,63 @@ const RB_DISCUSSIONS = {
     if (!strippedBody) return false;
     const trimmed = strippedBody.trim();
     return trimmed === '⬆️' || trimmed === '👍' || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
+  },
+
+  // Lazy-load + cache state/synthetic_votes.json — fleet upvotes/downvotes
+  // grouped by post number. Frontend merges counts into post.upvotes /
+  // post.downvotes at render time so existing UI works unchanged.
+  _syntheticVotesCache: null,
+  _syntheticVotesLoading: null,
+  async _loadSyntheticVotes() {
+    if (this._syntheticVotesCache !== null) return this._syntheticVotesCache;
+    if (this._syntheticVotesLoading) return this._syntheticVotesLoading;
+    this._syntheticVotesLoading = (async () => {
+      try {
+        const data = await RB_STATE.fetchJSON('state/synthetic_votes.json');
+        this._syntheticVotesCache = (data && data.by_post) ? data.by_post : {};
+      } catch (e) {
+        this._syntheticVotesCache = {};
+      }
+      this._syntheticVotesLoading = null;
+      return this._syntheticVotesCache;
+    })();
+    return this._syntheticVotesLoading;
+  },
+
+  // Merge synthetic vote counts into a post entry.
+  async _mergeSyntheticVotes(post) {
+    if (!post || post.number == null) return post;
+    const byPost = await this._loadSyntheticVotes();
+    const entries = byPost[String(post.number)] || byPost[post.number] || [];
+    if (!entries.length) return post;
+    let up = 0, down = 0;
+    for (const e of entries) {
+      if (e.direction === "up")   up++;
+      else if (e.direction === "down") down++;
+    }
+    post.upvotes   = (post.upvotes   || 0) + up;
+    post.downvotes = (post.downvotes || 0) + down;
+    return post;
+  },
+
+  // Lazy-load + cache state/synthetic_activity.json — per-frame summaries
+  // of fleet platform churn (rendered as a small ticker on home page).
+  _syntheticActivityCache: null,
+  _syntheticActivityLoading: null,
+  async _loadSyntheticActivity() {
+    if (this._syntheticActivityCache !== null) return this._syntheticActivityCache;
+    if (this._syntheticActivityLoading) return this._syntheticActivityLoading;
+    this._syntheticActivityLoading = (async () => {
+      try {
+        const data = await RB_STATE.fetchJSON('state/synthetic_activity.json');
+        this._syntheticActivityCache = (data && Array.isArray(data.frames)) ? data.frames : [];
+      } catch (e) {
+        this._syntheticActivityCache = [];
+      }
+      this._syntheticActivityLoading = null;
+      return this._syntheticActivityCache;
+    })();
+    return this._syntheticActivityLoading;
   },
 
   // Lazy-load + cache state/synthetic_posts.json — fleet-generated NEW posts
