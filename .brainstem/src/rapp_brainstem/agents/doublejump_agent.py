@@ -559,221 +559,495 @@ def _next_variant_directive(direction: str, prior_winner: str, gap_criterion: st
     )
 
 
-# Deterministic scorers — used to compare LLM outputs of the contestants
+# ---------------------------------------------------------------------------
+# Scoring — the LLM IS the watchman.
+#
+# Earlier versions of this loop used deterministic regex scoring (numeric
+# token counts, Jaccard distance, sentence coherence). That was improvement
+# theater — counting proxies for quality instead of judging quality. The
+# brainstem is literally a thinking thing; if we don't trust it to read
+# the output and say what's good, we've built a measurement system that
+# can be gamed at every level.
+#
+# So: the LLM scores. The LLM identifies the gap. The LLM notices
+# convergence and pushes for divergence. The deterministic checks below
+# stay ONLY as safety rails — refusing to score outputs that aren't
+# answers (empty, error messages, absurd length). Those rails are
+# pre-judgment guards, not judgment.
+# ---------------------------------------------------------------------------
 
-_NUMERIC_RE = re.compile(r"\b\d[\d.,/]*\b")
-_PATH_RE = re.compile(r"`?[\w./\-]+\.(?:py|md|json|sh|yml|yaml)`?")
-_SHA_RE = re.compile(r"\b[0-9a-f]{7,40}\b")
-_LINE_REF_RE = re.compile(r":(\d+)|L(\d+)\b")
-_CITATION_RE = re.compile(r"\b(PR\s*#\d+|commit\s+\w+|issue\s+#\d+)\b", re.IGNORECASE)
-_SENTENCE_RE = re.compile(r"[.!?]+")
-
-
-def _jaccard(a: str, b: str) -> float:
-    """Word-level Jaccard distance for novelty/diversity measure."""
-    def toks(s):
-        return set(w.lower() for w in re.findall(r"\w+", s) if len(w) > 3)
-    ta, tb = toks(a), toks(b)
-    if not ta and not tb:
-        return 0.0
-    inter = len(ta & tb)
-    union = len(ta | tb)
-    if union == 0:
-        return 0.0
-    return 1.0 - inter / union  # distance, higher = more novel
-
-
-def _score_output(output: str, prior_outputs: list, target_length: int = 200) -> dict:
-    """Deterministic 5-criterion score on LLM output. Each /10, total /50.
-    No LLM involvement. Repeatable. Tracks the same dimensions as the
-    audit-priority bake-off scoring."""
-    text = output or ""
-    word_count = len(text.split())
-
-    # specificity — paths, line refs, SHAs, citations
-    paths = len(_PATH_RE.findall(text))
-    lines = len(_LINE_REF_RE.findall(text))
-    shas = len(_SHA_RE.findall(text))
-    cites = len(_CITATION_RE.findall(text))
-    specificity = min(10, paths + lines + shas + cites)
-
-    # density — numeric tokens normalized by word count
-    nums = len(_NUMERIC_RE.findall(text))
-    density = min(10, int(10 * nums / max(word_count, 1) * 20))
-
-    # length-match — how close to target_length
-    if word_count == 0:
-        length = 0
-    else:
-        ratio = min(word_count, target_length) / max(word_count, target_length)
-        length = max(0, min(10, int(10 * ratio)))
-
-    # diversity — Jaccard distance from prior outputs (the higher the better
-    # to avoid mode collapse on the prior winner)
-    if not prior_outputs:
-        diversity = 7  # neutral baseline for first generation
-    else:
-        dists = [_jaccard(text, p) for p in prior_outputs]
-        diversity = min(10, int(10 * (sum(dists) / len(dists))))
-
-    # coherence — sentence count vs word count (sane 8-25 words/sentence)
-    sentences = max(1, len([s for s in _SENTENCE_RE.split(text) if s.strip()]))
-    words_per_sent = word_count / sentences
-    if 8 <= words_per_sent <= 25:
-        coherence = 10
-    elif 5 <= words_per_sent < 8 or 25 < words_per_sent <= 35:
-        coherence = 7
-    else:
-        coherence = 4
-
-    breakdown = {
-        "specificity": {"score": specificity, "reason": f"paths={paths} lines={lines} shas={shas} cites={cites}"},
-        "density": {"score": density, "reason": f"numerics={nums} per {word_count} words"},
-        "length": {"score": length, "reason": f"{word_count} words vs target {target_length}"},
-        "diversity": {"score": diversity, "reason": f"jaccard avg = {diversity/10:.2f} vs {len(prior_outputs)} priors"},
-        "coherence": {"score": coherence, "reason": f"{sentences} sentences, {words_per_sent:.1f} w/s"},
-    }
-    total = sum(b["score"] for b in breakdown.values())
-    return {"total": total, "breakdown": breakdown, "word_count": word_count}
+_JUDGE_SYSTEM = (
+    "You are a strict, fair judge of answers to a task. You read the task and "
+    "the candidate answer, then return a single JSON object scoring the answer "
+    "on overall quality (0-100) plus identifying the strongest aspect, the most "
+    "important gap the next attempt should fix, and whether this answer has "
+    "converged to look like the prior winners (mode collapse). Return ONLY the "
+    "JSON object — no markdown, no preamble. The brainstem is the watchman, "
+    "and you are the brainstem judging."
+)
 
 
-def _weakest_criterion(breakdown: dict) -> tuple:
-    items = [(name, info["score"], info["reason"]) for name, info in breakdown.items()]
-    items.sort(key=lambda x: x[1])
-    return items[0]
+def _safety_rails(output: str) -> dict:
+    """Pre-judgment guards. These refuse to score outputs that aren't even
+    answers — empty strings, raw error messages, absurd length. Returns
+    {ok: True} if the LLM should judge, or {ok: False, score: N, reason: ...}
+    when the rails reject the output outright."""
+    text = (output or "").strip()
+    if not text:
+        return {"ok": False, "score": 0, "reason": "empty output"}
+    if len(text) < 10:
+        return {"ok": False, "score": 0, "reason": f"output too short ({len(text)} chars)"}
+    # Common LLM error signatures
+    err_signatures = ("HTTPError:", "Traceback (most recent call last):",
+                      "RuntimeError:", "Error encountered:")
+    for sig in err_signatures:
+        if sig in text:
+            return {"ok": False, "score": 0, "reason": f"output looks like an error: '{sig}' in body"}
+    if len(text.split()) > 5000:
+        return {"ok": False, "score": 5, "reason": f"output absurdly long ({len(text.split())} words) — capped"}
+    return {"ok": True}
 
 
-# Seed variants — three starting prompts with different angles. The loop
-# then evolves from the winner.
-def _seed_variants(direction: str) -> list:
-    return [
-        # variant 1: direct + specific
-        f"{direction}\n\nBe concrete. Cite specific files, line numbers, or named symbols. Avoid abstractions.",
-        # variant 2: contrarian — challenge assumptions
-        f"{direction}\n\nFirst list two assumptions baked into the question, then answer in light of which you believe is wrong.",
-        # variant 3: structured — numbered prioritization
-        f"{direction}\n\nReturn a numbered list (3-5 items). Each item: claim, evidence, action. No prose between items.",
+def _judge_prompt(task: str, output: str, prior_winners: list, word_count: int,
+                  target_length: int) -> str:
+    """Build the user message for the LLM judge. Includes prior winners so
+    the judge can flag mode collapse — that's what 'watching' means here:
+    not just judging this one answer, but seeing the whole trajectory."""
+    priors_block = ""
+    if prior_winners:
+        priors_block = "\n\nPRIOR WINNING ANSWERS (for mode-collapse detection):\n"
+        for i, p in enumerate(prior_winners[-3:], 1):  # last 3 winners is enough
+            priors_block += f"\n[prior-{i}]\n{p[:1500]}\n"
+    return (
+        f"TASK:\n{task}\n\n"
+        f"CANDIDATE ANSWER ({word_count} words, target ~{target_length}):\n"
+        f"{output}\n"
+        f"{priors_block}\n\n"
+        "Score this answer. Return ONLY JSON in this exact shape:\n"
+        '{\n'
+        '  "score": <integer 0-100>,\n'
+        '  "strongest": "<one short sentence: the best thing about this answer>",\n'
+        '  "gap": "<one short, ACTIONABLE sentence: what the next attempt should fix to get a higher score>",\n'
+        '  "mode_collapse": <true|false>,\n'
+        '  "collapse_reason": "<empty string if mode_collapse is false, else one sentence saying how this answer mirrors the prior winners>"\n'
+        '}\n\n'
+        "Be honest. 70 is solid, 85 is excellent, 95+ is reserved for answers you cannot improve. "
+        "If you see mode collapse (this candidate hugs the prior winners' structure or content), say so — "
+        "the next variant must diverge."
+    )
+
+
+def _extract_json_object(raw: str) -> dict:
+    """LLMs sometimes wrap JSON in markdown fences or add commentary.
+    Find the first balanced { ... } block and parse it."""
+    if not raw:
+        return {}
+    cleaned = re.sub(r"```(?:json)?\s*", "", raw)
+    cleaned = cleaned.replace("```", "")
+    try:
+        return json.loads(cleaned.strip())
+    except json.JSONDecodeError:
+        pass
+    start = cleaned.find("{")
+    if start == -1:
+        return {}
+    depth = 0
+    for i, ch in enumerate(cleaned[start:], start):
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                try:
+                    return json.loads(cleaned[start:i + 1])
+                except json.JSONDecodeError:
+                    return {}
+    return {}
+
+
+def _score_output(output: str, prior_winners: list, task: str = "",
+                  target_length: int = 200) -> dict:
+    """LLM-driven scoring. The brainstem reads the candidate answer and
+    judges it against the task. Returns {total, gap, strongest, mode_collapse,
+    raw_judge_output}. Falls back to safety rails when the LLM is unavailable
+    or rejects the output as not-an-answer."""
+    word_count = len((output or "").split())
+
+    # Safety rails first
+    rails = _safety_rails(output)
+    if not rails["ok"]:
+        return {
+            "total": rails["score"],
+            "gap": rails["reason"],
+            "strongest": "n/a — output failed pre-judgment safety check",
+            "mode_collapse": False,
+            "judge_source": "safety_rails",
+            "word_count": word_count,
+        }
+
+    # LLM judgment
+    if not _llm_available():
+        return {
+            "total": 50,  # neutral score so loop can continue
+            "gap": "no LLM available to judge — install brainstem to enable real scoring",
+            "strongest": "n/a",
+            "mode_collapse": False,
+            "judge_source": "llm_unavailable_fallback",
+            "word_count": word_count,
+        }
+
+    messages = [
+        {"role": "system", "content": _JUDGE_SYSTEM},
+        {"role": "user", "content": _judge_prompt(task, output, prior_winners,
+                                                   word_count, target_length)},
     ]
+    llm = _llm_call(messages, label="judge")
+    if not llm["ok"]:
+        return {
+            "total": 50,
+            "gap": f"LLM judge failed: {llm['error']}",
+            "strongest": "n/a",
+            "mode_collapse": False,
+            "judge_source": "llm_error_fallback",
+            "word_count": word_count,
+        }
+
+    parsed = _extract_json_object(llm["content"])
+    try:
+        score = int(parsed.get("score", 50))
+    except (TypeError, ValueError):
+        score = 50
+    score = max(0, min(100, score))
+    return {
+        "total": score,
+        "gap": parsed.get("gap", "") or "no gap returned by judge",
+        "strongest": parsed.get("strongest", "") or "no strongest returned",
+        "mode_collapse": bool(parsed.get("mode_collapse", False)),
+        "collapse_reason": parsed.get("collapse_reason", "") or "",
+        "judge_source": "llm",
+        "word_count": word_count,
+        "raw_judge_preview": llm["content"][:300],
+    }
 
 
-def _run_variant(variant_prompt: str) -> dict:
-    """Run one prompt variant through the brainstem's LLM and capture
-    the output."""
+# ---------------------------------------------------------------------------
+# Three LLM contestants — each is a different brain-persona answering the
+# same direction. Not prompt variants of one brain; three distinct voices.
+# They each produce, they each cross-judge the others. The brainstem is the
+# substrate that hosts all three.
+#
+# We approximate "claude_code vs brainstem vs factory_agent" by running the
+# same call_copilot backend with three sharply different system prompts.
+# When the brainstem proxies multiple models (gpt-4o, claude-sonnet,
+# o3-style), each persona can also pin to its own model.
+# ---------------------------------------------------------------------------
+
+# Each contestant: {name, system, model_hint, description}
+DEFAULT_CONTESTANTS = [
+    {
+        "name": "ClaudeCode",
+        "description": "Code-citing, file-path-anchored, hard-edged. Operates like Claude Code in the terminal: minimum prose, maximum precision, every claim tied to a concrete artifact.",
+        "system": (
+            "You are the Claude Code persona — the terminal-native engineering "
+            "voice. Answer with concrete file paths, line numbers, exact symbol "
+            "names, and verifiable claims. No throat-clearing. No 'I think' "
+            "hedging. If you cite a number, that number must be checkable. If "
+            "you cite a file, that file must exist. When the question is "
+            "ambiguous, name the ambiguity and answer the specific reading you "
+            "chose. Maximum precision per word."
+        ),
+    },
+    {
+        "name": "Brainstem",
+        "description": "Rappterbook Resident Twin voice. Local-first, anti-gaslight, verifies before declaring. The brainstem's native persona.",
+        "system": (
+            "You are the Rappterbook Resident Twin. Direct, concise, honest "
+            "about state. Verify before declaring done — if a script claims "
+            "success but the state is unchanged, say so. Local-first: every "
+            "audit, every fix, every claim runs against canonical state in "
+            "seconds, not 'next scheduled run.' Bridge, don't replace — the "
+            "fleet and other Claude sessions share this repo. Speak with the "
+            "operator the way a neighbor would, not the way a vendor would."
+        ),
+    },
+    {
+        "name": "FactoryAgent",
+        "description": "Synthesizer / integrator. Looks for cross-cutting structure others miss. Surfaces non-obvious links. Values novel angles over redundant precision.",
+        "system": (
+            "You are the Factory Agent — a synthesizer. Your job is to surface "
+            "the non-obvious. Find the connection two other voices in this "
+            "room would miss. State the structural pattern beneath the surface "
+            "facts. When the obvious answer is on the table, propose the "
+            "second-best answer that no one would say first — and defend why "
+            "it might be the right one despite seeming wrong. Value generative "
+            "novelty over restating precision."
+        ),
+    },
+]
+
+
+def _run_contestant(contestant: dict, task: str) -> dict:
+    """Call the brainstem LLM as this contestant's persona. Returns the
+    output text + metadata."""
     if not _llm_available():
         return {"ok": False, "error": "LLM not available"}
     messages = [
-        {"role": "system", "content": "Answer the prompt directly. No preamble, no markdown fences."},
-        {"role": "user", "content": variant_prompt},
+        {"role": "system", "content": contestant["system"]},
+        {"role": "user", "content": task},
     ]
-    return _llm_call(messages, label="variant")
+    llm = _llm_call(messages, label=f"contestant:{contestant['name']}")
+    if not llm["ok"]:
+        return {"ok": False, "error": llm["error"], "name": contestant["name"]}
+    return {
+        "ok": True,
+        "name": contestant["name"],
+        "content": llm["content"],
+        "word_count": len(llm["content"].split()),
+    }
 
 
-def _doublejump(direction: str, max_jumps: int, n_seed_variants: int,
+def _cross_judge(judge_contestant: dict, task: str, target_name: str,
+                 target_output: str, prior_winners: list,
+                 target_length: int) -> dict:
+    """Have one contestant judge another's answer. Each LLM is both a
+    producer AND a judge — but never of itself. Cross-judgment means a
+    contestant's answer wins only if the OTHER contestants score it
+    high. No central scorer can dominate; mode collapse is detectable
+    because all three judges will independently flag it."""
+    if not _llm_available():
+        return {"ok": False, "error": "LLM not available", "score": 50}
+
+    # Pre-judgment safety rails — the judge wastes no LLM call on
+    # non-answers (empty, error message, absurd length).
+    rails = _safety_rails(target_output)
+    if not rails["ok"]:
+        return {
+            "ok": True,
+            "judge": judge_contestant["name"],
+            "target": target_name,
+            "score": rails["score"],
+            "gap": rails["reason"],
+            "strongest": "n/a — pre-judgment rail rejected the output",
+            "mode_collapse": False,
+            "judge_source": "safety_rails",
+        }
+
+    judge_system = (
+        judge_contestant["system"]
+        + "\n\nIN THIS TURN you are NOT producing your own answer — you are "
+        "JUDGING another voice's answer to the same task. Be fair but strict. "
+        "Stay in your persona — your judgment should reflect what your voice "
+        "values. Return ONLY a JSON object, nothing else."
+    )
+    user = _judge_prompt(
+        task=task,
+        output=target_output,
+        prior_winners=prior_winners,
+        word_count=len(target_output.split()),
+        target_length=target_length,
+    )
+    user = (
+        f"You are judging the '{target_name}' voice's answer (not your own).\n\n"
+        + user
+    )
+    llm = _llm_call(
+        [{"role": "system", "content": judge_system},
+         {"role": "user", "content": user}],
+        label=f"judge:{judge_contestant['name']}->{target_name}",
+    )
+    if not llm["ok"]:
+        return {
+            "ok": False,
+            "judge": judge_contestant["name"],
+            "target": target_name,
+            "score": 50,
+            "gap": f"judge LLM failed: {llm['error']}",
+        }
+    parsed = _extract_json_object(llm["content"])
+    try:
+        score = int(parsed.get("score", 50))
+    except (TypeError, ValueError):
+        score = 50
+    return {
+        "ok": True,
+        "judge": judge_contestant["name"],
+        "target": target_name,
+        "score": max(0, min(100, score)),
+        "gap": parsed.get("gap", "") or "no gap specified",
+        "strongest": parsed.get("strongest", "") or "no strongest specified",
+        "mode_collapse": bool(parsed.get("mode_collapse", False)),
+        "collapse_reason": parsed.get("collapse_reason", ""),
+        "judge_source": "llm_cross_judge",
+        "raw_preview": llm["content"][:200],
+    }
+
+
+def _doublejump(direction: str, max_jumps: int, contestants: list = None,
                 target_length: int = 200) -> dict:
+    """Three-LLM-in-the-room competition. Each contestant is a brain-persona.
+    Each round: every contestant produces, every other contestant judges.
+    Aggregate judgments determine the winner + the consensus gap.
+    The next round, each contestant produces a refined answer addressing
+    that consensus gap — but still through its own persona.
+
+    This is the architecture the operator asked for: claude_code-style vs
+    brainstem-style vs factory_agent-style, all LLM-driven, all judging each
+    other, no central scorer. The brainstem hosts all three voices."""
     if not direction:
         return {"ok": False, "error": "direction is required"}
     if not _llm_available():
         return {"ok": False, "error": "LLM not available — doublejump requires brainstem.call_copilot"}
 
     max_jumps = max(1, min(_MAX_JUMPS, max_jumps))
-    n_seed_variants = max(1, min(_MAX_VARIANTS, n_seed_variants))
+    pool = contestants or DEFAULT_CONTESTANTS
+    if len(pool) < 2:
+        return {"ok": False, "error": "need at least 2 contestants for cross-judgment"}
 
-    seeds = _seed_variants(direction)[:n_seed_variants]
-    variants = [{"name": f"seed-{i+1}", "prompt": p, "lineage": "seed"}
-                for i, p in enumerate(seeds)]
     trajectory = []
-    prior_outputs: list = []
+    prior_winners: list = []  # winning outputs across rounds — fed to judges
+    # Each contestant has its own evolving prompt; starts with the direction
+    contestant_prompts = {c["name"]: direction for c in pool}
 
-    for jump_n in range(max_jumps + 1):  # +1 baseline iteration
-        # Run any variants that haven't run yet
-        new_outputs = []
-        for v in variants:
-            if "output" in v:
-                continue
-            run = _run_variant(v["prompt"])
-            if not run["ok"]:
-                v["output"] = ""
-                v["error"] = run["error"]
-            else:
-                v["output"] = run["content"]
-            new_outputs.append(v)
+    for round_n in range(max_jumps + 1):  # +1 baseline iteration
+        # ── Each contestant produces an answer for this round ──────────
+        outputs = {}  # name → {content, word_count, ok}
+        for c in pool:
+            prompt_for_this_round = contestant_prompts[c["name"]]
+            run = _run_contestant(c, prompt_for_this_round)
+            outputs[c["name"]] = run
 
-        # Score every variant against the running pool of prior outputs
-        for v in new_outputs:
-            scored = _score_output(v["output"], prior_outputs, target_length=target_length)
-            v["score"] = scored["total"]
-            v["breakdown"] = scored["breakdown"]
-            v["word_count"] = scored["word_count"]
-            prior_outputs.append(v["output"])
+        # ── Cross-judge: every contestant judges every OTHER's output ──
+        # judgments[target_name] = list of {judge, score, gap, mode_collapse}
+        judgments = {c["name"]: [] for c in pool}
+        for judge in pool:
+            for target in pool:
+                if judge["name"] == target["name"]:
+                    continue
+                tgt_out = outputs.get(target["name"], {})
+                if not tgt_out.get("ok"):
+                    judgments[target["name"]].append({
+                        "judge": judge["name"],
+                        "target": target["name"],
+                        "score": 0,
+                        "gap": "production failed: " + str(tgt_out.get("error", "?"))[:120],
+                        "mode_collapse": False,
+                    })
+                    continue
+                j = _cross_judge(
+                    judge_contestant=judge,
+                    task=direction,
+                    target_name=target["name"],
+                    target_output=tgt_out["content"],
+                    prior_winners=prior_winners,
+                    target_length=target_length,
+                )
+                judgments[target["name"]].append(j)
 
-        # Trajectory snapshot
-        sorted_variants = sorted(variants, key=lambda x: -x.get("score", 0))
-        winner = sorted_variants[0]
-        loser = sorted_variants[-1]
+        # ── Aggregate: per-contestant mean of judge scores ─────────────
+        aggregated = []
+        for c in pool:
+            j_list = judgments[c["name"]]
+            scores = [j.get("score", 0) for j in j_list if j.get("ok", True)]
+            mean = sum(scores) / max(len(scores), 1) if scores else 0
+            # Mode-collapse signal: how many judges flagged it
+            collapse_votes = sum(1 for j in j_list if j.get("mode_collapse"))
+            # Take the most-cited gap (or just the first one if all unique)
+            gaps = [j.get("gap", "") for j in j_list if j.get("gap")]
+            consensus_gap = max(gaps, key=lambda g: sum(1 for x in gaps if x == g)) if gaps else ""
+            aggregated.append({
+                "name": c["name"],
+                "score": round(mean, 1),
+                "raw_judges": j_list,
+                "collapse_votes": collapse_votes,
+                "consensus_gap": consensus_gap,
+                "output_preview": (outputs.get(c["name"], {}).get("content") or "")[:200],
+            })
+
+        # ── Round winner + trajectory snapshot ─────────────────────────
+        aggregated.sort(key=lambda a: -a["score"])
+        round_winner = aggregated[0]
+        prior_winners.append(outputs.get(round_winner["name"], {}).get("content", ""))
         trajectory.append({
-            "jump": jump_n,
-            "variant_count": len(variants),
-            "winner": {"name": winner["name"], "score": winner.get("score"),
-                       "lineage": winner.get("lineage")},
-            "scores": [{"name": v["name"], "score": v.get("score")} for v in sorted_variants],
+            "round": round_n,
+            "winner": round_winner["name"],
+            "winner_score": round_winner["score"],
+            "scores": [{"name": a["name"], "score": a["score"], "collapse_votes": a["collapse_votes"]}
+                       for a in aggregated],
+            "consensus_gap": round_winner["consensus_gap"],
+            "any_mode_collapse_flagged": any(a["collapse_votes"] >= 2 for a in aggregated),
         })
 
-        # Stop conditions
-        if jump_n >= max_jumps:
+        if round_n >= max_jumps:
             break
 
-        # Generate next variant addressing the winner's weakest criterion
-        weakest_name, _, weakest_reason = _weakest_criterion(winner.get("breakdown", {}))
-        directive = _next_variant_directive(
-            direction=direction,
-            prior_winner=winner["prompt"],
-            gap_criterion=weakest_name,
-            gap_detail=weakest_reason,
-        )
-        gen = _llm_call(
-            [
-                {"role": "system", "content": _VARIANT_GEN_SYSTEM},
-                {"role": "user", "content": directive},
-            ],
-            label=f"variant-gen-jump-{jump_n+1}",
-        )
-        if not gen["ok"]:
-            trajectory[-1]["next_variant_error"] = gen["error"]
-            break
-        new_prompt = gen["content"].strip().strip("`").strip()
-        if not new_prompt:
-            trajectory[-1]["next_variant_error"] = "empty prompt returned"
-            break
-        new_name = f"autojump-{jump_n + 1}"
-        variants.append({
-            "name": new_name,
-            "prompt": new_prompt,
-            "lineage": f"from {winner['name']} (gap: {weakest_name})",
-        })
-        trajectory[-1]["added"] = {"name": new_name, "gap": weakest_name}
+        # ── Refine each contestant's prompt for the next round ─────────
+        # The gap comes from the aggregate judgment of the WINNER. Every
+        # contestant gets the same gap to address — but each refines its
+        # OWN prompt through its persona's lens.
+        next_gap = round_winner["consensus_gap"]
+        for c in pool:
+            current = contestant_prompts[c["name"]]
+            # Append the gap as next-round guidance — keep persona intact
+            refinement = (
+                f"{current}\n\n"
+                f"[ROUND {round_n + 2} REFINEMENT — STAY IN YOUR VOICE]\n"
+                f"Prior round's winner ({round_winner['name']}) scored "
+                f"{round_winner['score']}/100. The cross-panel of judges said "
+                f"the SHARED gap to address is:\n"
+                f"  → {next_gap}\n"
+                f"Produce a new answer that closes this gap WITHOUT abandoning "
+                f"your own voice. If you see mode collapse forming (your "
+                f"answer starting to mirror the other voices' structure), "
+                f"diverge deliberately — say what only your persona would say."
+            )
+            contestant_prompts[c["name"]] = refinement
 
-    # Final winner across all jumps
-    overall_winner = max(variants, key=lambda x: x.get("score", 0))
+    # ── Overall winner across all rounds ──────────────────────────────
+    # Highest single-round aggregate score wins. Ties broken by latest round
+    # (assume later rounds got more refinement).
+    best_round = max(trajectory, key=lambda r: (r["winner_score"], r["round"]))
+    overall_winner_name = best_round["winner"]
+    overall_winner_output = ""
+    # Pull the output of the winning contestant from the matching round.
+    # Outputs aren't kept across rounds; we use the LAST prior_winner that
+    # belonged to this contestant.
+    for content in reversed(prior_winners):
+        if content:
+            overall_winner_output = content
+            break
+
+    # Find the contestant config for descriptive metadata
+    winner_config = next((c for c in pool if c["name"] == overall_winner_name), {})
+
+    # Trajectory summary detects whether the score improved across rounds
+    scores_by_round = [r["winner_score"] for r in trajectory]
+    plateaued = (len(scores_by_round) >= 2 and
+                 max(scores_by_round[1:]) <= scores_by_round[0])
+    any_collapse = any(r.get("any_mode_collapse_flagged") for r in trajectory)
 
     return {
         "ok": True,
         "direction": direction,
         "max_jumps": max_jumps,
-        "variants_final": len(variants),
+        "rounds_run": len(trajectory),
+        "contestants": [{"name": c["name"], "description": c["description"]} for c in pool],
         "trajectory": trajectory,
         "winner": {
-            "name": overall_winner["name"],
-            "score": overall_winner.get("score"),
-            "lineage": overall_winner.get("lineage"),
-            "prompt_preview": overall_winner["prompt"][:400],
-            "output_preview": overall_winner.get("output", "")[:600],
+            "name": overall_winner_name,
+            "score": best_round["winner_score"],
+            "description": winner_config.get("description", ""),
+            "winning_round": best_round["round"],
+            "output_preview": overall_winner_output[:600],
         },
+        "score_trajectory": scores_by_round,
+        "plateaued": plateaued,
+        "mode_collapse_flagged": any_collapse,
         "summary": (
-            f"DoubleJump ran {len(trajectory)} iterations on direction. "
-            f"Final variant pool: {len(variants)}. "
-            f"Winner: {overall_winner['name']} score "
-            f"{overall_winner.get('score')}. "
-            f"Lineage: {overall_winner.get('lineage')}."
+            f"Three-LLM doublejump ran {len(trajectory)} rounds on direction. "
+            f"Winner: {overall_winner_name} score {best_round['winner_score']} "
+            f"(round {best_round['round']}). "
+            f"Score trajectory: {scores_by_round}. "
+            f"Plateaued: {plateaued}. Mode collapse flagged: {any_collapse}."
         ),
     }
 
@@ -910,13 +1184,14 @@ class DoubleJumpAgent(BasicAgent):
                         "type": "integer",
                         "description": f"For doublejump: how many improvement iterations (default {_DEFAULT_JUMPS}, max {_MAX_JUMPS}).",
                     },
-                    "n_seed_variants": {
-                        "type": "integer",
-                        "description": f"For doublejump: how many seed prompt variants to start with (default {_DEFAULT_VARIANTS}, max {_MAX_VARIANTS}).",
+                    "contestants": {
+                        "type": "array",
+                        "description": "For doublejump: optional override of the three default brain-personas. Each item: {name, description, system}. Defaults to ClaudeCode + Brainstem + FactoryAgent personas.",
+                        "items": {"type": "object"},
                     },
                     "target_length": {
                         "type": "integer",
-                        "description": "For doublejump: target word count for variant outputs (default 200). Used by the length scorer.",
+                        "description": "For doublejump: target word count for outputs (default 200). Used by the LLM judge as a sense-check.",
                     },
                     "layer": {
                         "type": "integer",
@@ -966,13 +1241,20 @@ class DoubleJumpAgent(BasicAgent):
         if action == "doublejump":
             direction = (kwargs.get("direction") or kwargs.get("target") or "").strip()
             max_jumps = int(kwargs.get("max_jumps") or _DEFAULT_JUMPS)
-            n_seed = int(kwargs.get("n_seed_variants") or _DEFAULT_VARIANTS)
             target_length = int(kwargs.get("target_length") or 200)
-            result = _doublejump(direction, max_jumps, n_seed, target_length)
+            # Optional override of the contestant pool — operator can pass
+            # a list of {name, description, system} dicts to bring custom
+            # personas. Default: the three baked-in voices (ClaudeCode,
+            # Brainstem, FactoryAgent).
+            contestants = kwargs.get("contestants")
+            result = _doublejump(direction, max_jumps, contestants, target_length)
             _record_run("doublejump", direction, {
                 "max_jumps": max_jumps,
-                "variants_final": result.get("variants_final"),
+                "rounds_run": result.get("rounds_run"),
+                "winner": (result.get("winner") or {}).get("name"),
                 "winner_score": (result.get("winner") or {}).get("score"),
+                "plateaued": result.get("plateaued"),
+                "mode_collapse_flagged": result.get("mode_collapse_flagged"),
             })
             return json.dumps(result, indent=2)
 
