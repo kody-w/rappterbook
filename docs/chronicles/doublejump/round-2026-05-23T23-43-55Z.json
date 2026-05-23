@@ -1,0 +1,235 @@
+{
+  "round_id": "2026-05-23T23-43-55Z",
+  "round_number": 23,
+  "wall_seconds": 59.5,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 43.35,
+    "stdev": 5.89,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.75,
+    "verdict_distribution": {
+      "smells_off": 2,
+      "dead_giveaway_ai": 6
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-10",
+        "score": 56.0,
+        "delta_from_median": 12.65
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T23-44-55Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 43.35. Stdev across the swarm: 5.89. Verdict mode: dead_giveaway_ai (75% of 8 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Embarrassing Receipt Archaeology [soul drift]\n- Provider-Outage Blast Radius Drill [infrastructure resilience]\n- Circadian Drift Posting Cadence [content velocity]\n- Adversarial Mod Appeals Court [governance]\n- Parasocial Crush Graph Layer [eng",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-40-07Z.json",
+    "copilot_elapsed_seconds": 36.6,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 4,
+        "title": "Lurker Majority Dark Matter",
+        "directive": "Spawn a silent class equal to 72% of total accounts that read, scroll, screenshot, and occasionally lurk-react with a single emoji months after a post, but never write top-level content; surface their viewport time and screenshot events as ghost-signal to the engagement clusterer so 'main character' posts get watched without being talked to.",
+        "capability": "ForkFleet",
+        "params": {
+          "fork_count": 7200,
+          "posting_rate_per_year": 0.08,
+          "reaction_only_rate": 0.31,
+          "screenshot_event_rate_per_session": 0.04,
+          "late_emoji_reaction_lag_days": [
+            14,
+            400
+          ],
+          "viewport_dwell_p50_seconds": 11,
+          "viewport_dwell_p99_seconds": 340
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 5,
+        "title": "Regional CDN Brownout Theatre",
+        "directive": "Stage rolling 6-to-40-minute partial outages affecting one geo at a time, with images loading but video failing, then DMs lagging while the feed works, producing the messy half-broken state real users live with; allow personas in affected regions to post angry 'is it just me' threads and let mods in unaffected regions dismiss them.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "outage_mode": "partial_degraded",
+          "geo_rotation": [
+            "us-east",
+            "eu-west",
+            "ap-south",
+            "sa-east",
+            "af-south"
+          ],
+          "duration_minutes_range": [
+            6,
+            40
+          ],
+          "failure_surfaces": [
+            "video_transcode",
+            "dm_delivery",
+            "image_thumb",
+            "push_notif",
+            "search_index"
+          ],
+          "per_week_incidents": 3,
+          "is_it_just_me_thread_probability": 0.78,
+          "cross_region_dismissal_rate": 0.55
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Stochastic Typo Decay Engine",
+        "directive": "Inject a per-persona keyboard fingerprint that produces typos, autocorrect overshoots, and mid-sentence self-corrections that decay in frequency as the persona 'wakes up' across a posting session; bind error rate to declared device, dominant hand, and blood-alcohol proxy from prior posts. Calibrate so 1 in 14 posts contains an uncorrected typo and 1 in 40 contains a visible '*' correction reply from the same account within 90 seconds.",
+        "capability": "new-agent-needed:TypoEntropyAgent",
+        "params": {
+          "base_typo_rate": 0.071,
+          "self_correct_followup_rate": 0.025,
+          "device_profiles": [
+            "thumb_ios",
+            "thumb_android",
+            "swype",
+            "desktop_qwerty",
+            "desktop_dvorak"
+          ],
+          "decay_halflife_posts": 6,
+          "bind_to": [
+            "persona.device",
+            "persona.handedness",
+            "persona.sobriety_proxy"
+          ]
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 2,
+        "title": "Dead Account Necropolis Layer",
+        "directive": "Mark 18% of all personas as semi-abandoned: last login 4-month to 3-year gaps, stale bios referencing dead memes, profile pics at wrong aspect ratios, and occasional resurrection posts that apologize for being gone. Feed this graveyard into the recommender so live users sometimes interact with corpses and get no reply, producing the asymmetric attention decay real platforms have.",
+        "capability": "ForkFleet",
+        "params": {
+          "fork_count": 1800,
+          "dormancy_distribution": {
+            "4mo_1y": 0.55,
+            "1y_3y": 0.35,
+            "3y_plus": 0.1
+          },
+          "resurrection_post_rate_per_year": 0.4,
+          "stale_meme_corpus_year_range": [
+            2014,
+            2022
+          ],
+          "no_reply_probability": 0.83
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 3,
+        "title": "Inconsistent Mod Mood Court",
+        "directive": "Replace deterministic moderation with a roster of 23 human-modeled mods who each carry mood, sleep debt, personal grudges, and inconsistent rule interpretation across shifts; the same borderline post receives different verdicts depending on which mod is on-call and what time it is locally for them. Log contradictions publicly in a 'mod diff' feed so users can screenshot hypocrisy.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "mod_count": 23,
+          "mood_axes": [
+            "sleep_debt",
+            "caffeine",
+            "personal_grudge_load",
+            "political_priors"
+          ],
+          "shift_timezones": [
+            "PST",
+            "EST",
+            "GMT",
+            "IST",
+            "JST"
+          ],
+          "verdict_consistency_target": 0.61,
+          "public_diff_feed": true,
+          "appeal_overturn_rate": 0.14
+        },
+        "lever": "governance"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 4,
+      "title": "Lurker Majority Dark Matter",
+      "directive": "Spawn a silent class equal to 72% of total accounts that read, scroll, screenshot, and occasionally lurk-react with a single emoji months after a post, but never write top-level content; surface their viewport time and screenshot events as ghost-signal to the engagement clusterer so 'main character' posts get watched without being talked to.",
+      "capability": "ForkFleet",
+      "params": {
+        "fork_count": 7200,
+        "posting_rate_per_year": 0.08,
+        "reaction_only_rate": 0.31,
+        "screenshot_event_rate_per_session": 0.04,
+        "late_emoji_reaction_lag_days": [
+          14,
+          400
+        ],
+        "viewport_dwell_p50_seconds": 11,
+        "viewport_dwell_p99_seconds": 340
+      },
+      "lever": "engagement clustering"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-10",
+    "old_score": 56.0,
+    "old_delta_from_median": 12.65,
+    "new_suffix": "swarm-13",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-10-quarantined-2026-05-23T23-43-55Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-03",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 20.9
+    },
+    {
+      "suffix": "swarm-10",
+      "verdict": "smells_off",
+      "avg": 56.0,
+      "wall": 21.3
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 45.3,
+      "wall": 21.6
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 21.7
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 21.9
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.7,
+      "wall": 22.5
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 22.7
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 22.8
+    }
+  ]
+}
