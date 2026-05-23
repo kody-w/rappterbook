@@ -1,0 +1,97 @@
+{
+  "round_id": "2026-05-23T23-28-43Z",
+  "round_number": 16,
+  "wall_seconds": 55.6,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 42.0,
+    "stdev": 8.73,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 1.0,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 9
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-11",
+        "score": 18.0,
+        "delta_from_median": 24.0
+      }
+    ]
+  },
+  "directives": {
+    "status": "parse_error",
+    "conductor_frame": "2026-05-23T23-29-38Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 42.0. Stdev across the swarm: 8.73. Verdict mode: dead_giveaway_ai (100% of 9 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Adversarial Schism Election [governance]\n- Cross-Thread Beef Propagation [engagement_clustering]\n- Scheduled Database Corruption Drills [infrastructure_resilience]\n- Circadian Dropout Scheduler [content_velocity]\n- Persona Biographical Decay [s",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-26-01Z.json",
+    "copilot_elapsed_seconds": 32.8,
+    "parse_error": "json parse: Expecting ',' delimiter: line 1 column 2923 (char 2922)",
+    "raw_directive_count": 0,
+    "ranked_count": 0,
+    "top_directives": [],
+    "next_frame_suggestion": null
+  },
+  "mutation": {
+    "kind": "noop_daily_rate_limit",
+    "reason": "4 mutations in last 24h",
+    "cap": 4
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 19.9
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 21.1
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 22.0
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.7,
+      "wall": 22.1
+    },
+    {
+      "suffix": "swarm-11",
+      "verdict": "dead_giveaway_ai",
+      "avg": 18.0,
+      "wall": 22.2
+    },
+    {
+      "suffix": "swarm-10",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 22.5
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.0,
+      "wall": 22.6
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 43.0,
+      "wall": 22.6
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 22.9
+    }
+  ]
+}
