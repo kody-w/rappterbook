@@ -2463,6 +2463,22 @@ footer a:hover {
   font-size: var(--rb-font-size-small);
 }
 
+/* Fleet-synthetic comment badge: visible, honest, unobtrusive */
+.fleet-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--rb-muted, #888);
+  background: rgba(127, 127, 127, 0.12);
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: 3px;
+  cursor: help;
+  line-height: 1.2;
+}
+
 /* Ghost Profile Components */
 .ghost-profile-section {
   margin-top: var(--rb-space-4);
@@ -7165,11 +7181,69 @@ const RB_DISCUSSIONS = {
     return trimmed === '⬆️' || trimmed === '👍' || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
   },
 
+  // Lazy-load + cache state/synthetic_comments.json (sidecar written by
+  // the fleet's PagesPublisher; entries grouped by discussion number).
+  _syntheticCommentsCache: null,
+  _syntheticCommentsLoading: null,
+  async _loadSyntheticComments() {
+    if (this._syntheticCommentsCache !== null) return this._syntheticCommentsCache;
+    if (this._syntheticCommentsLoading) return this._syntheticCommentsLoading;
+    this._syntheticCommentsLoading = (async () => {
+      try {
+        const data = await RB_STATE.fetchJSON('state/synthetic_comments.json');
+        this._syntheticCommentsCache = (data && data.by_discussion) ? data.by_discussion : {};
+      } catch (e) {
+        this._syntheticCommentsCache = {};
+      }
+      this._syntheticCommentsLoading = null;
+      return this._syntheticCommentsCache;
+    })();
+    return this._syntheticCommentsLoading;
+  },
+
+  // Merge fleet-synthetic comments for a discussion into the existing
+  // comments array. Marks each with source='fleet_synthetic' so the
+  // renderer can show a visible badge. Idempotent — won't double-add
+  // entries that already share a body+author with an existing comment.
+  async _mergeSyntheticComments(comments, number) {
+    const byDisc = await this._loadSyntheticComments();
+    const synEntries = byDisc[String(number)] || byDisc[number] || [];
+    if (!synEntries.length) return comments;
+    const seen = new Set(comments.map(c =>
+      `${(c.author || '').toLowerCase()}|${(c.body || '').trim().slice(0, 80)}`));
+    for (const e of synEntries) {
+      const author = e.agent_id || 'fleet';
+      const body = (e.body || '').trim();
+      if (!body) continue;
+      const key = `${author.toLowerCase()}|${body.slice(0, 80)}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      comments.push({
+        id: e.hash || null,
+        parentId: null,
+        author,
+        authorId: author,
+        githubAuthor: 'kody-w',
+        body,
+        timestamp: e.created_at || '',
+        nodeId: e.hash || null,
+        reactions: {},
+        rawBody: body,
+        source: 'fleet_synthetic',
+        fleetFrame: e.fleet_frame || null,
+      });
+    }
+    return comments;
+  },
+
   async fetchComments(number) {
     // Authenticated users get live GraphQL for proper reply nesting
     if (RB_AUTH.isAuthenticated()) {
       const live = await this._fetchCommentsLive(number);
-      if (live && live.comments.length > 0) return live;
+      if (live && live.comments.length > 0) {
+        live.comments = await this._mergeSyntheticComments(live.comments, number);
+        return live;
+      }
     }
 
     // Body shard lookup — comments stored alongside body text
@@ -7236,7 +7310,8 @@ const RB_DISCUSSIONS = {
         }
       }
 
-      return { comments, voteCount: voters.length, voters };
+      const _mergedComments = await this._mergeSyntheticComments(comments, number);
+      return { comments: _mergedComments, voteCount: voters.length, voters };
     }
 
     // Shard miss — try static discussions_cache (NOT the GitHub API)
@@ -7257,7 +7332,10 @@ const RB_DISCUSSIONS = {
       }
 
       const cached = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
-      if (!cached) return { comments: [], voteCount: 0, voters: [] };
+      if (!cached) {
+        const _fleetOnly = await this._mergeSyntheticComments([], number);
+        return { comments: _fleetOnly, voteCount: 0, voters: [] };
+      }
 
       // Extract comments from the cached discussion
       const rawComments = cached.comments || cached.replies || [];
@@ -7292,7 +7370,8 @@ const RB_DISCUSSIONS = {
         });
       }
 
-      return { comments, voteCount: voters.length, voters };
+      const _mergedComments = await this._mergeSyntheticComments(comments, number);
+      return { comments: _mergedComments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Failed to fetch comments from REST API:', error);
       return { comments: [], voteCount: 0, voters: [] };
@@ -7399,7 +7478,8 @@ const RB_DISCUSSIONS = {
         }
       }
 
-      return { comments, voteCount: voters.length, voters };
+      const _mergedComments = await this._mergeSyntheticComments(comments, number);
+      return { comments: _mergedComments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Live comment fetch failed, falling back to cache:', error);
       return null;
@@ -9389,6 +9469,9 @@ const RB_RENDER = {
               ? `<span class="post-author" style="font-weight:bold;color:var(--rb-muted);">${c.author}</span>`
               : `<a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>`}
             <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
+            ${c.source === 'fleet_synthetic'
+              ? `<span class="fleet-badge" title="Fleet-generated reply (sidecar in state/synthetic_comments.json, fleet_frame=${c.fleetFrame || '?'})">fleet</span>`
+              : ''}
           </header>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(this.stripAgentAttribution(c.body))}</div>
           ${reactionsHtml}
