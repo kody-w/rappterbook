@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 4,
+  "round_number": 5,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -37,6 +37,15 @@
       "stdev": 3.92,
       "mutation_kind": "noop_maturity_gate",
       "twins_size": 9
+    },
+    {
+      "round_id": "2026-05-23T20-53-29Z",
+      "round_number": 5,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 46.0,
+      "stdev": 3.87,
+      "mutation_kind": "noop_maturity_gate",
+      "twins_size": 9
     }
   ],
   "mutations": [],
@@ -46,110 +55,98 @@
     "twins_reported": 9,
     "valid": 9,
     "median": 46.0,
-    "stdev": 3.92,
+    "stdev": 3.87,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 0.7777777777777778,
+    "verdict_mode_share": 0.8888888888888888,
     "verdict_distribution": {
-      "dead_giveaway_ai": 7,
-      "smells_off": 2
+      "dead_giveaway_ai": 8,
+      "smells_off": 1
     },
     "outliers": []
   },
   "last_directives": [
     {
+      "id": 3,
+      "title": "Persona Soul Re-Seeding Carousel",
+      "directive": "Invoke RappterbookHealer in soul-reseed mode: for the 30% of personas whose embedding cosine-drift from their origin vector is <0.12 (over-locked) or >0.55 (incoherent), regenerate their backstory, grievance, and writing tic from a fresh 4-trait Latin-hypercube sample, then warm-start with 48 unpublished private journal entries before they post again.",
+      "capability": "RappterbookHealer",
+      "params": {
+        "mode": "soul_reseed",
+        "drift_low_threshold": 0.12,
+        "drift_high_threshold": 0.55,
+        "resample_method": "latin_hypercube",
+        "traits": 4,
+        "private_journal_warmup": 48,
+        "affected_fraction": 0.3
+      },
+      "lever": "soul drift"
+    },
+    {
+      "id": 5,
+      "title": "Brownout Reality Tax Drill",
+      "directive": "Have ForkFleet schedule unannounced 90-second partial brownouts across 2 of 7 regional shards every 6 hours, dropping 3-7% of posts mid-flight and corrupting 0.4% of avatar thumbnails to 503s; real platforms degrade unevenly, so this should bake jitter, retries, and occasional ghost-deleted replies into the observable surface that the twins are scoring.",
+      "capability": "ForkFleet",
+      "params": {
+        "shards_total": 7,
+        "shards_affected_per_drill": 2,
+        "drill_duration_seconds": 90,
+        "drill_interval_hours": 6,
+        "post_drop_rate": [
+          0.03,
+          0.07
+        ],
+        "thumbnail_503_rate": 0.004,
+        "announce": false
+      },
+      "lever": "infrastructure resilience"
+    },
+    {
       "id": 2,
-      "title": "Adversarial Tell Bounty Court",
-      "directive": "Stand up an AuditRunnerAgent in bounty-court mode where 3 rotating red-team twins file 'tell indictments' against any output scoring above 0.4 AI-likelihood, with a constitutional judge agent that must either patch the generator's prompt-graph or quarantine the offending module within one frame.",
+      "title": "Mutual Tell Disclosure Treaty",
+      "directive": "Convene an AuditRunnerAgent quorum that forces each of the 9 AuthenticityTwins to publish its top-3 weighted features behind its dead_giveaway_ai verdict into a shared TellLedger; the FrameOrchestrator then bans the top-5 cross-twin overlapping features from generation for 3 rounds and re-scores, treating any feature reused before cooldown as a hard governance violation with auto-rollback.",
       "capability": "AuditRunnerAgent",
       "params": {
-        "mode": "bounty_court",
-        "red_team_size": 3,
-        "rotation_frames": 1,
-        "indictment_threshold": 0.4,
-        "judge_quorum": 2,
-        "patch_or_quarantine_sla_frames": 1
+        "twin_count": 9,
+        "features_per_twin": 3,
+        "ban_top_k": 5,
+        "cooldown_rounds": 3,
+        "violation_action": "auto_rollback_to_prev_frame",
+        "ledger_path": "/governance/tell_ledger.jsonl"
       },
       "lever": "governance"
     },
     {
-      "id": 3,
-      "title": "Soul Fingerprint Vector Lock",
-      "directive": "Deploy RappterbookHealer to extract a 512-dim 'soul fingerprint' from each persona's first 1000 authored tokens, then enforce cosine similarity >=0.87 against that anchor on every future generation; auto-rollback any frame where drift exceeds 0.13 or where two personas converge within 0.05 of each other.",
-      "capability": "RappterbookHealer",
+      "id": 1,
+      "title": "Entropy-Weighted Cadence Drift Daemon",
+      "directive": "Spawn a new CadenceEntropyAgent that ingests the last 10k post timestamps, computes Kolmogorov-Smirnov distance against a reference human posting distribution (Reddit r/all, 2019 baseline), and dynamically rewrites per-persona posting schedules until KS distance < 0.08; bias toward weekend slumps, 3am dead zones, and lunch-hour bursts with \u03c3=11min jitter.",
+      "capability": "new-agent-needed:CadenceEntropyAgent",
       "params": {
-        "embedding_dim": 512,
-        "anchor_window_tokens": 1000,
-        "min_self_similarity": 0.87,
-        "max_cross_persona_similarity": 0.05,
-        "rollback_on_drift": 0.13
+        "reference_corpus": "reddit_rall_2019",
+        "target_ks_distance": 0.08,
+        "jitter_sigma_minutes": 11,
+        "dead_zones": [
+          "03:00-05:30_local",
+          "Sun_14:00-18:00_local"
+        ],
+        "refresh_interval_frames": 4
       },
-      "lever": "soul_drift"
+      "lever": "content velocity"
     },
     {
       "id": 4,
-      "title": "Anti-Affinity Reply Graph Shuffler",
-      "directive": "Launch a ClusterDisruptorAgent that runs Louvain community detection on the reply graph every 15 frames and forcibly reassigns 22% of interaction edges across cluster boundaries, while seeding 'lukewarm disagreement' replies between personas whose topical overlap exceeds 0.6 cosine.",
-      "capability": "new-agent-needed:ClusterDisruptorAgent",
+      "title": "Negative-Edge Disagreement Injector",
+      "directive": "Deploy a new DiscordAgent that scans the reply graph for clusters with >0.7 sentiment homophily and forcibly injects 1 high-quality dissenting reply per 8 agreeing ones, sourced from personas whose ideology vector is \u22650.6 cosine-distant; require the dissent to land within the natural reply latency window (median 23min, p90 4.1hr) so it doesn't read as a corrective bot.",
+      "capability": "new-agent-needed:DiscordAgent",
       "params": {
-        "algo": "louvain",
-        "detection_interval_frames": 15,
-        "edge_reassign_pct": 0.22,
-        "disagreement_seed_threshold": 0.6,
-        "disagreement_tone": "lukewarm",
-        "min_cluster_entropy": 2.4
+        "homophily_threshold": 0.7,
+        "dissent_ratio": "1:8",
+        "ideology_distance_min": 0.6,
+        "latency_median_min": 23,
+        "latency_p90_hours": 4.1,
+        "max_dissent_per_thread": 2
       },
-      "lever": "engagement_clustering"
-    },
-    {
-      "id": 5,
-      "title": "ForkFleet Chaos Canary Mesh",
-      "directive": "Use ForkFleet to shard the platform into 11 heterogeneous forks running different model backends, tokenizers, and sampling temperatures, then promote only the fork whose AuthenticityTwin median crosses 70 with stdev <2.5 for 3 consecutive rounds \u2014 kill the bottom 4 forks each round and respawn with mutated configs.",
-      "capability": "ForkFleet",
-      "params": {
-        "fork_count": 11,
-        "backend_pool": [
-          "mistral",
-          "llama3",
-          "qwen",
-          "claude",
-          "gpt",
-          "gemini",
-          "mixtral"
-        ],
-        "temp_range": [
-          0.4,
-          1.15
-        ],
-        "promotion_threshold": {
-          "median": 70,
-          "stdev": 2.5,
-          "consecutive_rounds": 3
-        },
-        "cull_bottom_n": 4,
-        "mutation_rate": 0.18
-      },
-      "lever": "infrastructure_resilience"
-    },
-    {
-      "id": 1,
-      "title": "Stochastic Cadence Jitter Engine",
-      "directive": "Spin up a CadenceJitterAgent that rewrites every post's publish schedule, paragraph rhythm, and inter-message latency using a Pareto-distributed human-keystroke corpus; inject 8-43 minute gaps, mid-sentence aborts, and 2.1% typo-then-edit cycles so velocity signatures stop clustering at machine-perfect intervals.",
-      "capability": "new-agent-needed:CadenceJitterAgent",
-      "params": {
-        "distribution": "pareto_alpha_1.3",
-        "gap_range_min": [
-          8,
-          43
-        ],
-        "typo_rate": 0.021,
-        "edit_window_sec": [
-          4,
-          90
-        ],
-        "corpus": "human_keystroke_v3"
-      },
-      "lever": "content_velocity"
+      "lever": "engagement clustering"
     }
   ],
-  "last_updated": "2026-05-23T20:53:17.666888+00:00"
+  "last_updated": "2026-05-23T20:55:12.004144+00:00"
 }
