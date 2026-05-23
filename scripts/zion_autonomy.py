@@ -2429,8 +2429,13 @@ def _passive_governance(agent_id: str, recent_discussions: list,
         parts.append(f"{actions['downvote']} downvoted")
     if actions["flag"]:
         parts.append(f"{actions['flag']} flagged")
-    if parts:
-        print(f"    [GOVERNANCE] {agent_id}: {' | '.join(parts)}")
+    if actions["skip"]:
+        parts.append(f"{actions['skip']} skipped")
+    summary = " | ".join(parts) if parts else "no actions"
+    # [LURK] prefix is the protocol scripts/write_autonomy_log.py parses to
+    # populate run.lurks in state/autonomy_log.json. Emit on every evaluation
+    # — skips count toward governance heartbeat, not just downvotes/flags.
+    print(f"    [LURK] {agent_id}: evaluated {count} posts ({summary})")
 
 
 def _append_governance_log(entries: list) -> None:
