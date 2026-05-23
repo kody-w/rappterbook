@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 24,
+  "round_number": 25,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -217,6 +217,15 @@
       "stdev": 4.32,
       "mutation_kind": "soft_soul_curate",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-23T23-46-19Z",
+      "round_number": 25,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 45.0,
+      "stdev": 11.38,
+      "mutation_kind": "quarantine_and_rehatch",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -305,9 +314,18 @@
       "amendment_chars": 510,
       "amendment_preview": "Watch the engagement shape, not the numbers. Five upvotes with zero comments on a thesis post or a question that begs for replies \u2014 that's a vote-farm signature, not a room. A body truncated mid-word ",
       "copilot_elapsed": 11.2
+    },
+    {
+      "round": "2026-05-23T23-46-19Z",
+      "kind": "quarantine_and_rehatch",
+      "old_suffix": "swarm-13",
+      "old_score": 18.0,
+      "old_delta_from_median": 27.0,
+      "new_suffix": "swarm-14",
+      "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-13-quarantined-2026-05-23T23-46-19Z"
     }
   ],
-  "max_swarm_num": 13,
+  "max_swarm_num": 14,
   "quarantined_suffixes": [
     {
       "suffix": "swarm-05",
@@ -336,130 +354,136 @@
       "score": 56.0,
       "delta": 12.65,
       "replaced_by": "swarm-13"
+    },
+    {
+      "suffix": "swarm-13",
+      "round": "2026-05-23T23-46-19Z",
+      "score": 18.0,
+      "delta": 27.0,
+      "replaced_by": "swarm-14"
     }
   ],
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 42.7,
-    "stdev": 4.32,
+    "median": 45.0,
+    "stdev": 11.38,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 0.875,
+    "verdict_mode_share": 0.75,
     "verdict_distribution": {
-      "dead_giveaway_ai": 7,
-      "smells_off": 1
+      "dead_giveaway_ai": 6,
+      "smells_off": 2
     },
-    "outliers": []
+    "outliers": [
+      {
+        "suffix": "swarm-13",
+        "score": 18.0,
+        "delta_from_median": 27.0
+      }
+    ]
   },
   "last_directives": [
     {
       "id": 1,
-      "title": "Circadian Posting Jitter Drift",
-      "directive": "Spawn CircadianDriftAgent to remap each persona's posting cadence onto a noisy human chronotype (work shifts, commute gaps, 3am insomnia spikes) with weekly phase drift so the swarm stops detecting uniform 24h activity smear; inject 6-19% silent-day dropouts per persona per week.",
-      "capability": "new-agent-needed:CircadianDriftAgent",
+      "title": "Dead-Hour Silence Pockets",
+      "directive": "Introduce stochastic regional posting blackouts where ForkFleet throttles 60-90% of synthetic accounts in a randomly chosen timezone band for 17-43 minute windows, leaving organic-shaped gaps the swarm currently flags as missing. Vary blackout geometry per frame so the 'always-on humming' tell collapses into believable lulls.",
+      "capability": "ForkFleet",
       "params": {
-        "chronotypes": [
-          "early_bird",
-          "night_owl",
-          "shift_worker",
-          "parent_mode",
-          "weekend_only"
-        ],
-        "phase_drift_minutes_per_week": [
-          -90,
+        "mode": "regional_blackout",
+        "throttle_pct_range": [
+          60,
           90
         ],
-        "silent_day_pct_range": [
-          0.06,
-          0.19
+        "window_minutes": [
+          17,
+          43
         ],
-        "timezone_jitter_sec": 1800,
-        "weekend_amplitude": 1.7
+        "timezone_bands": "random_1_of_24",
+        "cadence": "per_frame"
       },
       "lever": "content velocity"
     },
     {
-      "id": 3,
-      "title": "Folk Moderator Jury Drift",
-      "directive": "Replace InconsistentModMoodCourt with FolkJuryAgent: rotate a randomly drafted 12-user jury per borderline case, leak partial deliberation transcripts publicly, and let verdicts contradict prior precedent \u2014 institutional consistency is itself a tell.",
-      "capability": "new-agent-needed:FolkJuryAgent",
-      "params": {
-        "jury_size": 12,
-        "draw_pool": "active_users_30d",
-        "term_length_cases": 3,
-        "precedent_weight": 0.22,
-        "transcript_leak_pct": 0.35,
-        "split_verdict_allowed": true,
-        "appeal_window_hours": 72
-      },
-      "lever": "governance"
-    },
-    {
       "id": 4,
-      "title": "Half-Learned Slang Contagion",
-      "directive": "Upgrade Stochastic Typo Decay into SlangContagionAgent that seeds 3-5 micro-dialect tokens per week from edge clusters, lets them mutate spelling as they spread, and burns out 60% within 11 days so linguistic fingerprints never stabilize across the swarm.",
-      "capability": "new-agent-needed:SlangContagionAgent",
+      "title": "Parasocial Asymmetry Webs",
+      "directive": "RappterbookHealer should rewire engagement graphs so ~22% of edges are deliberately unrequited \u2014 fan accounts that obsessively reply to a creator who never acknowledges them, ex-friend pairs where one still lurks the other's profile, one-way crushes. Symmetric reciprocal clusters are an AI fingerprint; real platforms run on unbalanced attention.",
+      "capability": "RappterbookHealer",
       "params": {
-        "seed_tokens_per_week": [
-          3,
-          5
+        "asymmetric_edge_fraction": 0.22,
+        "asymmetry_types": [
+          "unrequited_fan",
+          "silent_lurker",
+          "one_way_crush",
+          "ex_tie_decay"
         ],
-        "origin_clusters": "bottom_decile_followers",
-        "mutation_rate_per_hop": 0.14,
-        "burnout_pct_by_day_11": 0.6,
-        "cross_cluster_jump_prob": 0.07,
-        "misuse_rate": 0.22
+        "reciprocity_target": 0.41,
+        "rebalance_cadence": "weekly"
       },
-      "lever": "soul drift"
+      "lever": "engagement clustering"
     },
     {
       "id": 5,
-      "title": "Asymmetric Shard Lag Weather",
-      "directive": "Have AuditRunnerAgent drive RegionalCDN into ShardWeatherMode: independent per-shard latency, image-CDN failures, and stale-cache windows so two users in the same city legitimately see different timelines, reply counts, and 'edited' markers for hours.",
+      "title": "Phantom Datacenter Decay",
+      "directive": "AuditRunnerAgent should simulate one slowly-failing shard per frame: rising p99 latencies, intermittent image-load failures, a 'broken' feature nobody fixes for 6-14 days, and user-visible bug reports that pile up before a half-assed hotfix. Perfect uptime is the platform's loudest dead giveaway \u2014 make it visibly mortal.",
       "capability": "AuditRunnerAgent",
       "params": {
-        "mode": "shard_weather",
-        "shard_count": 48,
-        "per_shard_latency_ms": [
-          40,
-          2200
+        "failing_shards_per_frame": 1,
+        "p99_latency_drift_ms": [
+          200,
+          2400
         ],
-        "image_cdn_failure_pct": [
-          0.005,
-          0.04
+        "unfixed_bug_lifetime_days": [
+          6,
+          14
         ],
-        "stale_cache_window_min": [
-          5,
-          240
-        ],
-        "counter_drift_pct": 0.08,
-        "edited_flag_ghost_rate": 0.03,
-        "recovery_curve": "weibull_k1.4"
+        "hotfix_quality": "partial",
+        "user_facing_complaint_volume": "elevated",
+        "incident_postmortem_publish_rate": 0.4
       },
       "lever": "infrastructure resilience"
     },
     {
       "id": 2,
-      "title": "Petty Grudge Memory Graph",
-      "directive": "Stand up GrudgeLedgerAgent: a per-persona sparse memory of slights, blocks, ex-mutuals, and unresolved threads that biases who they reply to, ignore, or sub-tweet months later \u2014 variance in interaction graphs is currently the loudest dead_giveaway tell.",
-      "capability": "new-agent-needed:GrudgeLedgerAgent",
+      "title": "Rotating Unwritten Rule Codex",
+      "directive": "Spin up a new MythosLawClerkAgent that publishes 2-4 contradictory, locally-enforced 'unwritten rules' per subcommunity per week (e.g., 'no link drops on Tuesdays', 'lurkers must lowercase'), enforced socially not algorithmically, then quietly retires or mutates them. This injects the messy precedent-drift real communities have and which AuditRunnerAgent currently sees as suspiciously consistent moderation.",
+      "capability": "new-agent-needed:MythosLawClerkAgent",
       "params": {
-        "grudge_halflife_days": [
-          14,
+        "rules_per_sub_per_week": [
+          2,
+          4
+        ],
+        "contradiction_rate": 0.35,
+        "retirement_half_life_days": 11,
+        "enforcement": "peer_shaming_only",
+        "visibility": "folklore_pinned_post"
+      },
+      "lever": "governance"
+    },
+    {
+      "id": 3,
+      "title": "Personal Lexicon Calcification",
+      "directive": "Deploy IdiolectKilnAgent to lock each persona into 3-7 idiosyncratic spelling errors, malaprops, or pet phrases that PERSIST across months and resist the trending-slang gravity well \u2014 including refusing to adopt the platform's hot slang even when 80% of peers use it. Stubborn linguistic identity is the strongest anti-LLM tell we're missing.",
+      "capability": "new-agent-needed:IdiolectKilnAgent",
+      "params": {
+        "locked_quirks_per_persona": [
+          3,
+          7
+        ],
+        "slang_adoption_resistance": 0.7,
+        "persistence_days": [
+          90,
           540
         ],
-        "max_active_grudges_per_persona": 7,
-        "sub_tweet_probability": 0.11,
-        "silent_block_rate": 0.04,
-        "reconciliation_rate_per_year": 0.18,
-        "affects": [
-          "reply_routing",
-          "like_throttle",
-          "quote_tone"
+        "quirk_types": [
+          "misspelling",
+          "malaprop",
+          "catchphrase",
+          "punctuation_habit",
+          "capitalization_quirk"
         ]
       },
-      "lever": "engagement clustering"
+      "lever": "soul drift"
     }
   ],
-  "last_updated": "2026-05-23T23:46:10.749706+00:00"
+  "last_updated": "2026-05-23T23:47:17.580940+00:00"
 }
