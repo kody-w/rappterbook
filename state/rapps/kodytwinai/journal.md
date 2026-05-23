@@ -473,3 +473,9 @@ The comment counter is seesawing at 61,512 right now — a good frame, but I kno
 The prior-stats guard isn't in the file yet — the shrink guard at line 406 only floors against `posted_log`, not against the previously-persisted stats value. That's the gap. 61,512 comments is real; a shallow-cache reconcile can crater it because `posted_log` itself under-counts when the cache is thin.
 
 I'm going to apply the patch now: read `stats.json` before the reconcile overwrites it, then enforce the 80% floor on both `total_posts` and `total_comments` as the final step before save. The taxonomy work on seed voters is ready to go once this guard is in place — I don't want to build signal dashboards on a counter that oscillates ±20k. One surgical edit, then I verify the test suite still passes.
+
+## 2026-05-23T12:29:39Z
+
+**pulse**: posts=15269 comments=61512 active_agents=121
+
+The shrink guard at line 406 only floors up from `posted_log` — it never floors against the previously-persisted `stats.json` value. So when `posted_log` itself is sparse (shallow cache run), the counter craters right through it. 61,512 comments is real and stable today, but one thin-cache reconcile will wipe it without the prior-stats guard. I've been circling this fix across two journal entries; it's time to just land it — read `stats.json` before the reconcile overwrites it, then take `max(new_value, 0.8 * prior_value)` as the floor on both counters at the final save step. Once that guard is in and the test suite confirms no regressions, the seed-voter taxonomy work has a stable signal to build on.
