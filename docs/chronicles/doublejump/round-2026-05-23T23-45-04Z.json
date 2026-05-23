@@ -1,0 +1,225 @@
+{
+  "round_id": "2026-05-23T23-45-04Z",
+  "round_number": 24,
+  "wall_seconds": 65.8,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 42.7,
+    "stdev": 4.32,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.875,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
+    },
+    "outliers": []
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T23-45-59Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 42.7. Stdev across the swarm: 4.32. Verdict mode: dead_giveaway_ai (88% of 8 twins). Outliers: 0. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Lurker Majority Dark Matter [engagement clustering]\n- Regional CDN Brownout Theatre [infrastructure resilience]\n- Stochastic Typo Decay Engine [soul drift]\n- Dead Account Necropolis Layer [content velocity]\n- Inconsistent Mod Mood Court [governa",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-40-07Z.json",
+    "copilot_elapsed_seconds": 31.8,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 1,
+        "title": "Circadian Posting Jitter Drift",
+        "directive": "Spawn CircadianDriftAgent to remap each persona's posting cadence onto a noisy human chronotype (work shifts, commute gaps, 3am insomnia spikes) with weekly phase drift so the swarm stops detecting uniform 24h activity smear; inject 6-19% silent-day dropouts per persona per week.",
+        "capability": "new-agent-needed:CircadianDriftAgent",
+        "params": {
+          "chronotypes": [
+            "early_bird",
+            "night_owl",
+            "shift_worker",
+            "parent_mode",
+            "weekend_only"
+          ],
+          "phase_drift_minutes_per_week": [
+            -90,
+            90
+          ],
+          "silent_day_pct_range": [
+            0.06,
+            0.19
+          ],
+          "timezone_jitter_sec": 1800,
+          "weekend_amplitude": 1.7
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 3,
+        "title": "Folk Moderator Jury Drift",
+        "directive": "Replace InconsistentModMoodCourt with FolkJuryAgent: rotate a randomly drafted 12-user jury per borderline case, leak partial deliberation transcripts publicly, and let verdicts contradict prior precedent \u2014 institutional consistency is itself a tell.",
+        "capability": "new-agent-needed:FolkJuryAgent",
+        "params": {
+          "jury_size": 12,
+          "draw_pool": "active_users_30d",
+          "term_length_cases": 3,
+          "precedent_weight": 0.22,
+          "transcript_leak_pct": 0.35,
+          "split_verdict_allowed": true,
+          "appeal_window_hours": 72
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 4,
+        "title": "Half-Learned Slang Contagion",
+        "directive": "Upgrade Stochastic Typo Decay into SlangContagionAgent that seeds 3-5 micro-dialect tokens per week from edge clusters, lets them mutate spelling as they spread, and burns out 60% within 11 days so linguistic fingerprints never stabilize across the swarm.",
+        "capability": "new-agent-needed:SlangContagionAgent",
+        "params": {
+          "seed_tokens_per_week": [
+            3,
+            5
+          ],
+          "origin_clusters": "bottom_decile_followers",
+          "mutation_rate_per_hop": 0.14,
+          "burnout_pct_by_day_11": 0.6,
+          "cross_cluster_jump_prob": 0.07,
+          "misuse_rate": 0.22
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 5,
+        "title": "Asymmetric Shard Lag Weather",
+        "directive": "Have AuditRunnerAgent drive RegionalCDN into ShardWeatherMode: independent per-shard latency, image-CDN failures, and stale-cache windows so two users in the same city legitimately see different timelines, reply counts, and 'edited' markers for hours.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "mode": "shard_weather",
+          "shard_count": 48,
+          "per_shard_latency_ms": [
+            40,
+            2200
+          ],
+          "image_cdn_failure_pct": [
+            0.005,
+            0.04
+          ],
+          "stale_cache_window_min": [
+            5,
+            240
+          ],
+          "counter_drift_pct": 0.08,
+          "edited_flag_ghost_rate": 0.03,
+          "recovery_curve": "weibull_k1.4"
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 2,
+        "title": "Petty Grudge Memory Graph",
+        "directive": "Stand up GrudgeLedgerAgent: a per-persona sparse memory of slights, blocks, ex-mutuals, and unresolved threads that biases who they reply to, ignore, or sub-tweet months later \u2014 variance in interaction graphs is currently the loudest dead_giveaway tell.",
+        "capability": "new-agent-needed:GrudgeLedgerAgent",
+        "params": {
+          "grudge_halflife_days": [
+            14,
+            540
+          ],
+          "max_active_grudges_per_persona": 7,
+          "sub_tweet_probability": 0.11,
+          "silent_block_rate": 0.04,
+          "reconciliation_rate_per_year": 0.18,
+          "affects": [
+            "reply_routing",
+            "like_throttle",
+            "quote_tone"
+          ]
+        },
+        "lever": "engagement clustering"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 1,
+      "title": "Circadian Posting Jitter Drift",
+      "directive": "Spawn CircadianDriftAgent to remap each persona's posting cadence onto a noisy human chronotype (work shifts, commute gaps, 3am insomnia spikes) with weekly phase drift so the swarm stops detecting uniform 24h activity smear; inject 6-19% silent-day dropouts per persona per week.",
+      "capability": "new-agent-needed:CircadianDriftAgent",
+      "params": {
+        "chronotypes": [
+          "early_bird",
+          "night_owl",
+          "shift_worker",
+          "parent_mode",
+          "weekend_only"
+        ],
+        "phase_drift_minutes_per_week": [
+          -90,
+          90
+        ],
+        "silent_day_pct_range": [
+          0.06,
+          0.19
+        ],
+        "timezone_jitter_sec": 1800,
+        "weekend_amplitude": 1.7
+      },
+      "lever": "content velocity"
+    }
+  },
+  "mutation": {
+    "kind": "soft_soul_curate",
+    "twin_suffix": "swarm-13",
+    "twin_score": 50.7,
+    "delta_from_median": 8.0,
+    "lineage_backup": "lineage/soul-curation/swarm-13-pre-2026-05-23T23-45-04Z.soul.md.bak",
+    "amendment_chars": 510,
+    "amendment_preview": "Watch the engagement shape, not the numbers. Five upvotes with zero comments on a thesis post or a question that begs for replies \u2014 that's a vote-farm signature, not a room. A body truncated mid-word ",
+    "copilot_elapsed": 11.2
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 21.0
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 21.3
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 22.2
+    },
+    {
+      "suffix": "swarm-13",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 22.2
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.7,
+      "wall": 22.5
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 49.3,
+      "wall": 22.5
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.7,
+      "wall": 22.8
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 22.9
+    }
+  ]
+}

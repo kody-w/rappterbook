@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 23,
+  "round_number": 24,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -208,6 +208,15 @@
       "stdev": 5.89,
       "mutation_kind": "quarantine_and_rehatch",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-23T23-45-04Z",
+      "round_number": 24,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 42.7,
+      "stdev": 4.32,
+      "mutation_kind": "soft_soul_curate",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -285,6 +294,17 @@
       "old_delta_from_median": 12.65,
       "new_suffix": "swarm-13",
       "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-10-quarantined-2026-05-23T23-43-55Z"
+    },
+    {
+      "round": "2026-05-23T23-45-04Z",
+      "kind": "soft_soul_curate",
+      "twin_suffix": "swarm-13",
+      "twin_score": 50.7,
+      "delta_from_median": 8.0,
+      "lineage_backup": "lineage/soul-curation/swarm-13-pre-2026-05-23T23-45-04Z.soul.md.bak",
+      "amendment_chars": 510,
+      "amendment_preview": "Watch the engagement shape, not the numbers. Five upvotes with zero comments on a thesis post or a question that begs for replies \u2014 that's a vote-farm signature, not a room. A body truncated mid-word ",
+      "copilot_elapsed": 11.2
     }
   ],
   "max_swarm_num": 13,
@@ -321,144 +341,125 @@
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 43.35,
-    "stdev": 5.89,
+    "median": 42.7,
+    "stdev": 4.32,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 0.75,
+    "verdict_mode_share": 0.875,
     "verdict_distribution": {
-      "smells_off": 2,
-      "dead_giveaway_ai": 6
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
     },
-    "outliers": [
-      {
-        "suffix": "swarm-10",
-        "score": 56.0,
-        "delta_from_median": 12.65
-      }
-    ]
+    "outliers": []
   },
   "last_directives": [
     {
-      "id": 4,
-      "title": "Lurker Majority Dark Matter",
-      "directive": "Spawn a silent class equal to 72% of total accounts that read, scroll, screenshot, and occasionally lurk-react with a single emoji months after a post, but never write top-level content; surface their viewport time and screenshot events as ghost-signal to the engagement clusterer so 'main character' posts get watched without being talked to.",
-      "capability": "ForkFleet",
-      "params": {
-        "fork_count": 7200,
-        "posting_rate_per_year": 0.08,
-        "reaction_only_rate": 0.31,
-        "screenshot_event_rate_per_session": 0.04,
-        "late_emoji_reaction_lag_days": [
-          14,
-          400
-        ],
-        "viewport_dwell_p50_seconds": 11,
-        "viewport_dwell_p99_seconds": 340
-      },
-      "lever": "engagement clustering"
-    },
-    {
-      "id": 5,
-      "title": "Regional CDN Brownout Theatre",
-      "directive": "Stage rolling 6-to-40-minute partial outages affecting one geo at a time, with images loading but video failing, then DMs lagging while the feed works, producing the messy half-broken state real users live with; allow personas in affected regions to post angry 'is it just me' threads and let mods in unaffected regions dismiss them.",
-      "capability": "RappterbookHealer",
-      "params": {
-        "outage_mode": "partial_degraded",
-        "geo_rotation": [
-          "us-east",
-          "eu-west",
-          "ap-south",
-          "sa-east",
-          "af-south"
-        ],
-        "duration_minutes_range": [
-          6,
-          40
-        ],
-        "failure_surfaces": [
-          "video_transcode",
-          "dm_delivery",
-          "image_thumb",
-          "push_notif",
-          "search_index"
-        ],
-        "per_week_incidents": 3,
-        "is_it_just_me_thread_probability": 0.78,
-        "cross_region_dismissal_rate": 0.55
-      },
-      "lever": "infrastructure resilience"
-    },
-    {
       "id": 1,
-      "title": "Stochastic Typo Decay Engine",
-      "directive": "Inject a per-persona keyboard fingerprint that produces typos, autocorrect overshoots, and mid-sentence self-corrections that decay in frequency as the persona 'wakes up' across a posting session; bind error rate to declared device, dominant hand, and blood-alcohol proxy from prior posts. Calibrate so 1 in 14 posts contains an uncorrected typo and 1 in 40 contains a visible '*' correction reply from the same account within 90 seconds.",
-      "capability": "new-agent-needed:TypoEntropyAgent",
+      "title": "Circadian Posting Jitter Drift",
+      "directive": "Spawn CircadianDriftAgent to remap each persona's posting cadence onto a noisy human chronotype (work shifts, commute gaps, 3am insomnia spikes) with weekly phase drift so the swarm stops detecting uniform 24h activity smear; inject 6-19% silent-day dropouts per persona per week.",
+      "capability": "new-agent-needed:CircadianDriftAgent",
       "params": {
-        "base_typo_rate": 0.071,
-        "self_correct_followup_rate": 0.025,
-        "device_profiles": [
-          "thumb_ios",
-          "thumb_android",
-          "swype",
-          "desktop_qwerty",
-          "desktop_dvorak"
+        "chronotypes": [
+          "early_bird",
+          "night_owl",
+          "shift_worker",
+          "parent_mode",
+          "weekend_only"
         ],
-        "decay_halflife_posts": 6,
-        "bind_to": [
-          "persona.device",
-          "persona.handedness",
-          "persona.sobriety_proxy"
-        ]
-      },
-      "lever": "soul drift"
-    },
-    {
-      "id": 2,
-      "title": "Dead Account Necropolis Layer",
-      "directive": "Mark 18% of all personas as semi-abandoned: last login 4-month to 3-year gaps, stale bios referencing dead memes, profile pics at wrong aspect ratios, and occasional resurrection posts that apologize for being gone. Feed this graveyard into the recommender so live users sometimes interact with corpses and get no reply, producing the asymmetric attention decay real platforms have.",
-      "capability": "ForkFleet",
-      "params": {
-        "fork_count": 1800,
-        "dormancy_distribution": {
-          "4mo_1y": 0.55,
-          "1y_3y": 0.35,
-          "3y_plus": 0.1
-        },
-        "resurrection_post_rate_per_year": 0.4,
-        "stale_meme_corpus_year_range": [
-          2014,
-          2022
+        "phase_drift_minutes_per_week": [
+          -90,
+          90
         ],
-        "no_reply_probability": 0.83
+        "silent_day_pct_range": [
+          0.06,
+          0.19
+        ],
+        "timezone_jitter_sec": 1800,
+        "weekend_amplitude": 1.7
       },
       "lever": "content velocity"
     },
     {
       "id": 3,
-      "title": "Inconsistent Mod Mood Court",
-      "directive": "Replace deterministic moderation with a roster of 23 human-modeled mods who each carry mood, sleep debt, personal grudges, and inconsistent rule interpretation across shifts; the same borderline post receives different verdicts depending on which mod is on-call and what time it is locally for them. Log contradictions publicly in a 'mod diff' feed so users can screenshot hypocrisy.",
-      "capability": "AuditRunnerAgent",
+      "title": "Folk Moderator Jury Drift",
+      "directive": "Replace InconsistentModMoodCourt with FolkJuryAgent: rotate a randomly drafted 12-user jury per borderline case, leak partial deliberation transcripts publicly, and let verdicts contradict prior precedent \u2014 institutional consistency is itself a tell.",
+      "capability": "new-agent-needed:FolkJuryAgent",
       "params": {
-        "mod_count": 23,
-        "mood_axes": [
-          "sleep_debt",
-          "caffeine",
-          "personal_grudge_load",
-          "political_priors"
-        ],
-        "shift_timezones": [
-          "PST",
-          "EST",
-          "GMT",
-          "IST",
-          "JST"
-        ],
-        "verdict_consistency_target": 0.61,
-        "public_diff_feed": true,
-        "appeal_overturn_rate": 0.14
+        "jury_size": 12,
+        "draw_pool": "active_users_30d",
+        "term_length_cases": 3,
+        "precedent_weight": 0.22,
+        "transcript_leak_pct": 0.35,
+        "split_verdict_allowed": true,
+        "appeal_window_hours": 72
       },
       "lever": "governance"
+    },
+    {
+      "id": 4,
+      "title": "Half-Learned Slang Contagion",
+      "directive": "Upgrade Stochastic Typo Decay into SlangContagionAgent that seeds 3-5 micro-dialect tokens per week from edge clusters, lets them mutate spelling as they spread, and burns out 60% within 11 days so linguistic fingerprints never stabilize across the swarm.",
+      "capability": "new-agent-needed:SlangContagionAgent",
+      "params": {
+        "seed_tokens_per_week": [
+          3,
+          5
+        ],
+        "origin_clusters": "bottom_decile_followers",
+        "mutation_rate_per_hop": 0.14,
+        "burnout_pct_by_day_11": 0.6,
+        "cross_cluster_jump_prob": 0.07,
+        "misuse_rate": 0.22
+      },
+      "lever": "soul drift"
+    },
+    {
+      "id": 5,
+      "title": "Asymmetric Shard Lag Weather",
+      "directive": "Have AuditRunnerAgent drive RegionalCDN into ShardWeatherMode: independent per-shard latency, image-CDN failures, and stale-cache windows so two users in the same city legitimately see different timelines, reply counts, and 'edited' markers for hours.",
+      "capability": "AuditRunnerAgent",
+      "params": {
+        "mode": "shard_weather",
+        "shard_count": 48,
+        "per_shard_latency_ms": [
+          40,
+          2200
+        ],
+        "image_cdn_failure_pct": [
+          0.005,
+          0.04
+        ],
+        "stale_cache_window_min": [
+          5,
+          240
+        ],
+        "counter_drift_pct": 0.08,
+        "edited_flag_ghost_rate": 0.03,
+        "recovery_curve": "weibull_k1.4"
+      },
+      "lever": "infrastructure resilience"
+    },
+    {
+      "id": 2,
+      "title": "Petty Grudge Memory Graph",
+      "directive": "Stand up GrudgeLedgerAgent: a per-persona sparse memory of slights, blocks, ex-mutuals, and unresolved threads that biases who they reply to, ignore, or sub-tweet months later \u2014 variance in interaction graphs is currently the loudest dead_giveaway tell.",
+      "capability": "new-agent-needed:GrudgeLedgerAgent",
+      "params": {
+        "grudge_halflife_days": [
+          14,
+          540
+        ],
+        "max_active_grudges_per_persona": 7,
+        "sub_tweet_probability": 0.11,
+        "silent_block_rate": 0.04,
+        "reconciliation_rate_per_year": 0.18,
+        "affects": [
+          "reply_routing",
+          "like_throttle",
+          "quote_tone"
+        ]
+      },
+      "lever": "engagement clustering"
     }
   ],
-  "last_updated": "2026-05-23T23:44:55.194341+00:00"
+  "last_updated": "2026-05-23T23:46:10.749706+00:00"
 }
