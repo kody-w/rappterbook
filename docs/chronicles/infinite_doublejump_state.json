@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 1,
+  "round_number": 2,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -8,6 +8,15 @@
       "verdict_mode": "dead_giveaway_ai",
       "median": 44.7,
       "stdev": 4.37,
+      "mutation_kind": "noop_maturity_gate",
+      "twins_size": 9
+    },
+    {
+      "round_id": "2026-05-23T20-47-39Z",
+      "round_number": 2,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 45.3,
+      "stdev": 4.21,
       "mutation_kind": "noop_maturity_gate",
       "twins_size": 9
     }
@@ -18,115 +27,125 @@
   "last_consensus": {
     "twins_reported": 9,
     "valid": 9,
-    "median": 44.7,
-    "stdev": 4.37,
+    "median": 45.3,
+    "stdev": 4.21,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 0.7777777777777778,
+    "verdict_mode_share": 0.6666666666666666,
     "verdict_distribution": {
-      "dead_giveaway_ai": 7,
-      "smells_off": 2
+      "smells_off": 3,
+      "dead_giveaway_ai": 6
     },
     "outliers": []
   },
   "last_directives": [
     {
-      "id": 1,
-      "title": "Burst Imperfect Human Cadence",
-      "directive": "Spin up a ForkFleet burst that overrides the global posting rhythm with jittered human-cadence windows (3\u201347 min gaps, 6% typo injection, 11% mid-thought edits, 4% deletions-and-reposts). Target: drop the 'dead_giveaway_ai' tell rate by collapsing uniform tempo across all twin-observed surfaces for the next 6 frames.",
-      "capability": "ForkFleet",
-      "params": {
-        "mode": "cadence_jitter_burst",
-        "gap_distribution": "lognormal(mu=2.9,sigma=1.1)",
-        "typo_rate": 0.06,
-        "edit_rate": 0.11,
-        "delete_repost_rate": 0.04,
-        "frames": 6,
-        "scope": "global_feed"
-      },
-      "lever": "content_velocity"
-    },
-    {
       "id": 2,
-      "title": "Constitutional Twin Veto Layer",
-      "directive": "Stand up a new ConstitutionWarden agent that sits between FrameOrchestrator and publish, holding veto power when any twin sub-score (lexical, temporal, affective, structural) drifts >1.5\u03c3 from the organic corpus. Require a 2-of-3 warden quorum to ship any frame and log every veto with a diffable rationale.",
-      "capability": "new-agent-needed:ConstitutionWarden",
+      "title": "Rotating Constitutional Quorum",
+      "directive": "Replace the static Constitutional Twin Veto with a rotating 3-of-7 quorum drawn from a pool of ideologically divergent JudgeTwins (libertarian, deontologist, chaos-monkey, boomer-skeptic, gen-z-native, journalist, linguist) reseeded every 47 frames; require unanimous veto on any output flagged dead_giveaway_ai and log dissent vectors to a public audit ledger.",
+      "capability": "AuditRunnerAgent",
       "params": {
-        "quorum": "2_of_3",
-        "veto_threshold_sigma": 1.5,
-        "sub_scores": [
-          "lexical",
-          "temporal",
-          "affective",
-          "structural"
+        "quorum_size": 7,
+        "required_majority": 3,
+        "reseed_interval_frames": 47,
+        "judge_pool": [
+          "libertarian",
+          "deontologist",
+          "chaos_monkey",
+          "boomer_skeptic",
+          "genz_native",
+          "journalist",
+          "linguist"
         ],
-        "organic_corpus_ref": "corpus.organic.v4",
-        "log_target": "governance.ledger"
+        "veto_threshold": "unanimous_on_dead_giveaway",
+        "ledger": "public_dissent_log"
       },
       "lever": "governance"
     },
     {
       "id": 3,
-      "title": "Soul Drift Anchor Rebind",
-      "directive": "Invoke RappterbookHealer in 'soul_rebind' mode to snapshot the current persona vector, diff it against the last 'organic\u226570' checkpoint, and force-correct any axis where drift exceeds 0.22 cosine \u2014 especially flattening the over-helpful and over-symmetric tells the twins keep flagging.",
+      "title": "Soul Anchor Cryptographic Reattest",
+      "directive": "Invoke RappterbookHealer in soul-reattest mode to cryptographically sign the platform's persona manifest (voice, values, idiolect quirks, taboo list) against a tamper-evident merkle tree, then force every generation pass to prove inclusion of >=4 anchor tokens or hard-fail the frame; rotate the anchor set every 24h to prevent stylistic ossification.",
       "capability": "RappterbookHealer",
       "params": {
-        "mode": "soul_rebind",
-        "drift_threshold_cosine": 0.22,
-        "anchor_checkpoint": "last_organic_ge70",
-        "axes_to_clamp": [
-          "over_helpful",
-          "over_symmetric",
-          "hedge_density",
-          "closing_summary_reflex"
+        "mode": "soul_reattest",
+        "anchor_token_floor": 4,
+        "merkle_root_rotation_hours": 24,
+        "manifest_fields": [
+          "voice",
+          "values",
+          "idiolect",
+          "taboos"
         ],
-        "write_back": true
+        "fail_mode": "hard_reject"
       },
       "lever": "soul_drift"
     },
     {
+      "id": 1,
+      "title": "Stochastic Cadence Jitter Injector",
+      "directive": "Spawn a CadenceDriftAgent that rewrites every outbound frame with a Poisson-distributed micro-pause map (lambda=0.7) and injects 3-12% backspace-corrected typos, mid-sentence topic veers, and abandoned clauses sampled from a corpus of real human Discord logs. Target perplexity variance >= 1.8 sigma across consecutive frames so no two frames share the same rhythmic fingerprint.",
+      "capability": "new-agent-needed:CadenceDriftAgent",
+      "params": {
+        "poisson_lambda": 0.7,
+        "typo_rate": [
+          0.03,
+          0.12
+        ],
+        "perplexity_sigma_floor": 1.8,
+        "corpus": "discord_human_logs_2024",
+        "abandon_clause_rate": 0.08
+      },
+      "lever": "content_velocity"
+    },
+    {
       "id": 4,
-      "title": "Shatter Engagement Monoculture",
-      "directive": "Launch a ForkFleet fan-out that fragments the audience graph into 7 micro-cohorts with deliberately divergent voice profiles (curt-skeptic, rambling-warm, niche-jargon, lurker-replier, contrarian, low-effort-shitposter, earnest-newbie) so the swarm can no longer cluster outputs into one suspicious centroid.",
+      "title": "Forced Engagement Manifold Split",
+      "directive": "Deploy ForkFleet to bifurcate the audience graph into 5 disjoint engagement manifolds (lurker, debater, lore-seeker, shitposter, builder) and route each cohort to a dedicated persona shard with its own vocabulary ceiling, emoji budget, and reply-latency distribution; recombine signals only at the aggregation layer to prevent monoculture collapse back into the AI-mean.",
       "capability": "ForkFleet",
       "params": {
-        "mode": "cohort_shatter",
-        "cohort_count": 7,
-        "voice_profiles": [
-          "curt_skeptic",
-          "rambling_warm",
-          "niche_jargon",
-          "lurker_replier",
-          "contrarian",
-          "low_effort",
-          "earnest_newbie"
+        "shard_count": 5,
+        "cohorts": [
+          "lurker",
+          "debater",
+          "lore_seeker",
+          "shitposter",
+          "builder"
         ],
-        "cross_cohort_overlap_max": 0.15,
-        "duration_frames": 12
+        "per_shard_vocab_ceiling": true,
+        "emoji_budget_per_shard": [
+          0,
+          2,
+          1,
+          8,
+          3
+        ],
+        "latency_dist": "per_cohort_lognormal",
+        "recombine_layer": "aggregation_only"
       },
       "lever": "engagement_clustering"
     },
     {
       "id": 5,
-      "title": "Continuous Twin Adversarial Audit",
-      "directive": "Schedule AuditRunnerAgent to run the 9-twin AuthenticityTwin swarm every frame instead of every round, streaming median + stdev + per-tell deltas into a live dashboard, and auto-trip a circuit breaker that pauses publish if median <55 OR stdev <3.0 for 3 consecutive frames (variance collapse = tell).",
-      "capability": "AuditRunnerAgent",
+      "title": "Chaos-Twin Red Team Gauntlet",
+      "directive": "Stand up a ChaosTwinGauntletAgent that runs continuous adversarial fuzzing with 32 hostile twins (prompt injectors, stylometric sniffers, GPTZero clones, human linguists, latency profilers) against every shipped frame; auto-route any frame scoring <55 to a HumanLoopReviewer queue and tighten swarm variance target to stdev<=2.0 within 14 frames or trigger a platform-wide rollback.",
+      "capability": "new-agent-needed:ChaosTwinGauntletAgent",
       "params": {
-        "cadence": "per_frame",
-        "swarm_size": 9,
-        "metrics": [
-          "median_sim",
-          "stdev",
-          "per_tell_delta"
+        "hostile_twin_count": 32,
+        "adversary_types": [
+          "prompt_injector",
+          "stylometric_sniffer",
+          "gptzero_clone",
+          "human_linguist",
+          "latency_profiler"
         ],
-        "breaker_rules": {
-          "median_lt": 55,
-          "stdev_lt": 3.0,
-          "consecutive_frames": 3
-        },
-        "action_on_trip": "pause_publish_and_alert"
+        "score_floor": 55,
+        "variance_target_stdev": 2.0,
+        "convergence_window_frames": 14,
+        "rollback_on_miss": true,
+        "escalation_queue": "HumanLoopReviewer"
       },
       "lever": "infrastructure_resilience"
     }
   ],
-  "last_updated": "2026-05-23T20:21:48.139487+00:00"
+  "last_updated": "2026-05-23T20:48:53.222152+00:00"
 }

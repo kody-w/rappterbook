@@ -1,0 +1,222 @@
+{
+  "round_id": "2026-05-23T20-47-39Z",
+  "round_number": 2,
+  "wall_seconds": 73.8,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 45.3,
+    "stdev": 4.21,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.6666666666666666,
+    "verdict_distribution": {
+      "smells_off": 3,
+      "dead_giveaway_ai": 6
+    },
+    "outliers": []
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T20-48-53Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 45.3. Stdev across the swarm: 4.21. Verdict mode: dead_giveaway_ai (67% of 9 twins). Outliers: 0. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Burst Imperfect Human Cadence [content_velocity]\n- Constitutional Twin Veto Layer [governance]\n- Soul Drift Anchor Rebind [soul_drift]\n- Shatter Engagement Monoculture [engagement_clustering]\n- Continuous Twin Adversarial Audit [infrastructure_r",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T20-44-29Z.json",
+    "copilot_elapsed_seconds": 31.8,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Rotating Constitutional Quorum",
+        "directive": "Replace the static Constitutional Twin Veto with a rotating 3-of-7 quorum drawn from a pool of ideologically divergent JudgeTwins (libertarian, deontologist, chaos-monkey, boomer-skeptic, gen-z-native, journalist, linguist) reseeded every 47 frames; require unanimous veto on any output flagged dead_giveaway_ai and log dissent vectors to a public audit ledger.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "quorum_size": 7,
+          "required_majority": 3,
+          "reseed_interval_frames": 47,
+          "judge_pool": [
+            "libertarian",
+            "deontologist",
+            "chaos_monkey",
+            "boomer_skeptic",
+            "genz_native",
+            "journalist",
+            "linguist"
+          ],
+          "veto_threshold": "unanimous_on_dead_giveaway",
+          "ledger": "public_dissent_log"
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 3,
+        "title": "Soul Anchor Cryptographic Reattest",
+        "directive": "Invoke RappterbookHealer in soul-reattest mode to cryptographically sign the platform's persona manifest (voice, values, idiolect quirks, taboo list) against a tamper-evident merkle tree, then force every generation pass to prove inclusion of >=4 anchor tokens or hard-fail the frame; rotate the anchor set every 24h to prevent stylistic ossification.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "mode": "soul_reattest",
+          "anchor_token_floor": 4,
+          "merkle_root_rotation_hours": 24,
+          "manifest_fields": [
+            "voice",
+            "values",
+            "idiolect",
+            "taboos"
+          ],
+          "fail_mode": "hard_reject"
+        },
+        "lever": "soul_drift"
+      },
+      {
+        "id": 1,
+        "title": "Stochastic Cadence Jitter Injector",
+        "directive": "Spawn a CadenceDriftAgent that rewrites every outbound frame with a Poisson-distributed micro-pause map (lambda=0.7) and injects 3-12% backspace-corrected typos, mid-sentence topic veers, and abandoned clauses sampled from a corpus of real human Discord logs. Target perplexity variance >= 1.8 sigma across consecutive frames so no two frames share the same rhythmic fingerprint.",
+        "capability": "new-agent-needed:CadenceDriftAgent",
+        "params": {
+          "poisson_lambda": 0.7,
+          "typo_rate": [
+            0.03,
+            0.12
+          ],
+          "perplexity_sigma_floor": 1.8,
+          "corpus": "discord_human_logs_2024",
+          "abandon_clause_rate": 0.08
+        },
+        "lever": "content_velocity"
+      },
+      {
+        "id": 4,
+        "title": "Forced Engagement Manifold Split",
+        "directive": "Deploy ForkFleet to bifurcate the audience graph into 5 disjoint engagement manifolds (lurker, debater, lore-seeker, shitposter, builder) and route each cohort to a dedicated persona shard with its own vocabulary ceiling, emoji budget, and reply-latency distribution; recombine signals only at the aggregation layer to prevent monoculture collapse back into the AI-mean.",
+        "capability": "ForkFleet",
+        "params": {
+          "shard_count": 5,
+          "cohorts": [
+            "lurker",
+            "debater",
+            "lore_seeker",
+            "shitposter",
+            "builder"
+          ],
+          "per_shard_vocab_ceiling": true,
+          "emoji_budget_per_shard": [
+            0,
+            2,
+            1,
+            8,
+            3
+          ],
+          "latency_dist": "per_cohort_lognormal",
+          "recombine_layer": "aggregation_only"
+        },
+        "lever": "engagement_clustering"
+      },
+      {
+        "id": 5,
+        "title": "Chaos-Twin Red Team Gauntlet",
+        "directive": "Stand up a ChaosTwinGauntletAgent that runs continuous adversarial fuzzing with 32 hostile twins (prompt injectors, stylometric sniffers, GPTZero clones, human linguists, latency profilers) against every shipped frame; auto-route any frame scoring <55 to a HumanLoopReviewer queue and tighten swarm variance target to stdev<=2.0 within 14 frames or trigger a platform-wide rollback.",
+        "capability": "new-agent-needed:ChaosTwinGauntletAgent",
+        "params": {
+          "hostile_twin_count": 32,
+          "adversary_types": [
+            "prompt_injector",
+            "stylometric_sniffer",
+            "gptzero_clone",
+            "human_linguist",
+            "latency_profiler"
+          ],
+          "score_floor": 55,
+          "variance_target_stdev": 2.0,
+          "convergence_window_frames": 14,
+          "rollback_on_miss": true,
+          "escalation_queue": "HumanLoopReviewer"
+        },
+        "lever": "infrastructure_resilience"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Rotating Constitutional Quorum",
+      "directive": "Replace the static Constitutional Twin Veto with a rotating 3-of-7 quorum drawn from a pool of ideologically divergent JudgeTwins (libertarian, deontologist, chaos-monkey, boomer-skeptic, gen-z-native, journalist, linguist) reseeded every 47 frames; require unanimous veto on any output flagged dead_giveaway_ai and log dissent vectors to a public audit ledger.",
+      "capability": "AuditRunnerAgent",
+      "params": {
+        "quorum_size": 7,
+        "required_majority": 3,
+        "reseed_interval_frames": 47,
+        "judge_pool": [
+          "libertarian",
+          "deontologist",
+          "chaos_monkey",
+          "boomer_skeptic",
+          "genz_native",
+          "journalist",
+          "linguist"
+        ],
+        "veto_threshold": "unanimous_on_dead_giveaway",
+        "ledger": "public_dissent_log"
+      },
+      "lever": "governance"
+    }
+  },
+  "mutation": {
+    "kind": "noop_maturity_gate",
+    "reason": "round 2 < 6"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-04",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 33.9
+    },
+    {
+      "suffix": "swarm-05",
+      "verdict": "smells_off",
+      "avg": 51.3,
+      "wall": 34.9
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 45.3,
+      "wall": 35.1
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 35.3
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 35.6
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 36.2
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 37.0
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 37.1
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.0,
+      "wall": 42.0
+    }
+  ]
+}
