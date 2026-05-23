@@ -56,8 +56,10 @@ def _path_for_suffix(suffix: str) -> str:
 
 N_POSTS_PER_TWIN = 3
 OUTLIER_SIGMA = 2.0
-MUTATION_DAILY_CAP = 4
-MATURITY_GATE_ROUNDS = 6
+# NO MATURITY GATE. NO DAILY RATE CAP. No timer-based "wait, do it later"
+# pretense (per the no-wait-modes-in-loops doctrine). Every tick that finds
+# a real signal mutates. Safety = per-action caps inside each mutator +
+# lineage backups + git-revertability, never artificial pauses.
 
 
 # ── STATE ──────────────────────────────────────────────────────────────────
@@ -349,19 +351,9 @@ def _soft_soul_curate(consensus: dict, twin_reports: list,
 
 def _pick_mutation(consensus: dict, twin_reports: list, directives: dict,
                    state: dict, round_id: str) -> dict:
-    if state["round_number"] < MATURITY_GATE_ROUNDS:
-        return {"kind": "noop_maturity_gate",
-                "reason": f"round {state['round_number']} < {MATURITY_GATE_ROUNDS}"}
-    # Daily rate limit: count mutations in last 24h
-    cutoff = (_now() - timedelta(hours=24)).isoformat()
-    recent_muts = [m for m in state["mutations"]
-                   if m.get("round", "") > cutoff and
-                   m.get("kind", "").startswith(("quarantine", "soft_soul"))]
-    if len(recent_muts) >= MUTATION_DAILY_CAP:
-        return {"kind": "noop_daily_rate_limit",
-                "reason": f"{len(recent_muts)} mutations in last 24h",
-                "cap": MUTATION_DAILY_CAP}
-    # Priority 1: outlier quarantine + rehatch
+    # NO MATURITY GATE. NO DAILY RATE CAP. If signal exists this tick, act
+    # this tick. (Per no-wait-modes-in-loops doctrine.)
+    # Priority 1: outlier quarantine + rehatch (highest-confidence signal)
     outliers = consensus.get("outliers") or []
     if outliers:
         return _quarantine_and_rehatch(outliers[0], state, round_id)
