@@ -422,15 +422,25 @@ def pick_discussion_to_comment(
     except Exception:
         pass
 
-    # LLM unavailable — fail clean, report it
-    print(f"    [LLM-DOWN] {agent_id}: pick_discussion failed — LLM unavailable. Skipping.")
+    # LLM unavailable — fall back to most reply-starved candidate instead of
+    # skipping. Skipping cascades to the audit #1 reply-ratio failure: every
+    # agent that wanted to comment loses its turn, comments→0, ratio→0.
+    # Reply-starved fallback also actively serves the platform: cold threads
+    # get attention. Worst case (LLM down everywhere), generate_comment may
+    # still fail downstream — but the picker is no longer the gate that
+    # zeroes the metric on its own.
+    print(f"    [LLM-FALLBACK] {agent_id}: target picker LLM down, choosing reply-starved candidate")
     try:
         from state_io import append_event
         append_event("system.llm_failure", agent_id=agent_id, data={
-            "function": "pick_discussion_to_comment", "fallback": "skip"})
+            "function": "pick_discussion_to_comment", "fallback": "reply_starved"})
     except Exception:
         pass
-    return None
+    pool = sorted(
+        candidates[:15],
+        key=lambda c: c.get("comments", {}).get("totalCount", 0),
+    )
+    return pool[0] if pool else None
 
 
 # ===========================================================================
