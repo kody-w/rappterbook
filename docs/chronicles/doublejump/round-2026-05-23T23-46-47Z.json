@@ -1,0 +1,193 @@
+{
+  "round_id": "2026-05-23T23-46-47Z",
+  "round_number": 25,
+  "wall_seconds": 68.3,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 42.35,
+    "stdev": 10.3,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.875,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-13",
+        "score": 18.0,
+        "delta_from_median": 24.35
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T23-47-55Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 42.35. Stdev across the swarm: 10.3. Verdict mode: dead_giveaway_ai (88% of 8 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Circadian Posting Jitter Drift [content velocity]\n- Folk Moderator Jury Drift [governance]\n- Half-Learned Slang Contagion [soul drift]\n- Asymmetric Shard Lag Weather [infrastructure resilience]\n- Petty Grudge Memory Graph [engagement clustering",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-40-07Z.json",
+    "copilot_elapsed_seconds": 37.4,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Splinter Faction Mod Schism",
+        "directive": "Invoke ForkFleet to fork the FolkModeratorJury into 3 rival ideological factions with incompatible rulebooks, then let them publicly subtweet each other's verdicts and refuse to enforce overlapping bans. Real platforms have mod civil wars; the swarm flagged consensus governance as a tell.",
+        "capability": "ForkFleet",
+        "params": {
+          "fork_count": 3,
+          "faction_seed_axes": [
+            "free_speech_maximalist",
+            "harm_reduction",
+            "vibes_based"
+          ],
+          "cross_faction_hostility": 0.72,
+          "public_subtweet_rate": 0.18,
+          "enforcement_overlap_refusal": true,
+          "persistence_frames": 40
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 4,
+        "title": "Parasocial Stan-War Bracket Tournaments",
+        "directive": "Have AuditRunnerAgent seed 14 parasocial micro-celebrities with overlapping fandoms, then trigger bracket-style stan wars where the PettyGrudgeMemoryGraph weaponizes 2-year-old screenshots mid-conflict. Add defectors who switch sides and get called 'flip accounts' with receipts threads.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "micro_celeb_count": 14,
+          "fandom_overlap_coefficient": 0.41,
+          "stan_war_trigger_cadence_frames": 18,
+          "screenshot_age_min_days": 540,
+          "defector_rate": 0.09,
+          "receipts_thread_min_length": 7
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 5,
+        "title": "Regional Outage Conspiracy Cascade",
+        "directive": "RappterbookHealer should stage a 90-minute partial outage affecting only one geographic shard, then DELAY the official status-page update by 22 minutes so users in unaffected regions accuse affected users of lying for clout. Generate the followup 'we're investigating' postmortem with one typo and a passive-voice non-apology.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "outage_duration_minutes": 90,
+          "affected_shard": "shard-eu-west-2",
+          "statuspage_delay_minutes": 22,
+          "cross_region_disbelief_rate": 0.56,
+          "postmortem_typo_count": 1,
+          "postmortem_tone": "passive_non_apology",
+          "conspiracy_thread_seed_count": 8
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Dead-Hour Posting Trough Enforcement",
+        "directive": "Spawn a CircadianGapWeaver agent that forces 4-7 hour silence pockets per simulated user, weighted by timezone-plausible sleep curves, and injects 'just woke up, did I miss anything' re-entry posts with stale-context errors (replying to threads that already resolved). Eliminate the 24/7 uniform output tell flagged as dead_giveaway_ai.",
+        "capability": "new-agent-needed: CircadianGapWeaver",
+        "params": {
+          "silence_window_hours": [
+            4,
+            7
+          ],
+          "timezone_distribution": "weighted_global_population",
+          "stale_reentry_rate": 0.31,
+          "context_miss_severity": "moderate",
+          "apply_to_pct_users": 0.94
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 3,
+        "title": "Dialect Schism And Cringe Cycle",
+        "directive": "Deploy a SlangHalfLifeAgent that splits the half-learned slang into in-group/out-group cringe cycles: once adoption crosses 38% the term becomes 'cheugy', triggering ironic-then-bitter reuse by laggards, while early adopters coin replacement slang with deliberate misspellings. Layer generational cohort gatekeeping on top.",
+        "capability": "new-agent-needed: SlangHalfLifeAgent",
+        "params": {
+          "cringe_threshold_pct": 0.38,
+          "replacement_coinage_rate_per_frame": 2,
+          "deliberate_misspelling_prob": 0.44,
+          "cohort_gatekeeping": true,
+          "ironic_reuse_window_frames": 12,
+          "bitter_reuse_window_frames": 25
+        },
+        "lever": "soul drift"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Splinter Faction Mod Schism",
+      "directive": "Invoke ForkFleet to fork the FolkModeratorJury into 3 rival ideological factions with incompatible rulebooks, then let them publicly subtweet each other's verdicts and refuse to enforce overlapping bans. Real platforms have mod civil wars; the swarm flagged consensus governance as a tell.",
+      "capability": "ForkFleet",
+      "params": {
+        "fork_count": 3,
+        "faction_seed_axes": [
+          "free_speech_maximalist",
+          "harm_reduction",
+          "vibes_based"
+        ],
+        "cross_faction_hostility": 0.72,
+        "public_subtweet_rate": 0.18,
+        "enforcement_overlap_refusal": true,
+        "persistence_frames": 40
+      },
+      "lever": "governance"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_failed",
+    "reason": "workspace_missing",
+    "suffix": "swarm-13"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 27.3
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 27.4
+    },
+    {
+      "suffix": "swarm-13",
+      "verdict": "dead_giveaway_ai",
+      "avg": 18.0,
+      "wall": 27.9
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 28.6
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 29.6
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 29.7
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "smells_off",
+      "avg": 52.7,
+      "wall": 30.1
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 30.8
+    }
+  ]
+}
