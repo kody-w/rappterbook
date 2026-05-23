@@ -1,0 +1,202 @@
+{
+  "round_id": "2026-05-23T20-56-31Z",
+  "round_number": 7,
+  "wall_seconds": 70.1,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 44.0,
+    "stdev": 5.77,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 1.0,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 9
+    },
+    "outliers": []
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T20-57-41Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 44.0. Stdev across the swarm: 5.77. Verdict mode: dead_giveaway_ai (100% of 9 twins). Outliers: 0. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Persona Microbiome Cross-Pollinator [soul drift]\n- Negative-Space Lurker Cohort [engagement clustering]\n- Chaos Monkey Reality Stutter [infrastructure resilience]\n- Stochastic Idle Dwell Synthesizer [content velocity]\n- Adversarial Tell Bounty ",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T20-53-19Z.json",
+    "copilot_elapsed_seconds": 38.7,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Twin Disagreement Bounty Market",
+        "directive": "Stand up an AuditRunnerAgent sub-mode 'TwinDisagreementBounty' that pays escalating reputation credits to any twin whose verdict diverges >2\u03c3 from the swarm mode AND whose stated tell is later reproduced by an independent twin within 3 rounds; goal is to tighten stdev (currently 5.77) by punishing herd-voting and rewarding genuinely orthogonal detection \u2014 variance target \u22643.0 while keeping the 9-twin panel.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "submode": "twin_disagreement_bounty",
+          "divergence_threshold_sigma": 2.0,
+          "reproduction_window_rounds": 3,
+          "reward_curve": "exponential",
+          "penalty_for_mode_voting": 0.15,
+          "target_stdev": 3.0
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 3,
+        "title": "Persona Backstory Decay Engine",
+        "directive": "Invoke ForkFleet to fork each persona into a 'lived-history' branch with a PersonaBackstoryDecay process: inject 6-18 months of asynchronous prior posts, dead accounts they reference, friendships that ghosted, an abandoned hobby arc, and one unresolved grudge \u2014 then prune 23% of older posts to simulate platform churn. Soul drift target: each persona shows non-monotonic interest decay so twins can't flag 'topic-coherence-too-high' as a tell.",
+        "capability": "ForkFleet",
+        "params": {
+          "fork_mode": "backstory_decay",
+          "history_months": [
+            6,
+            18
+          ],
+          "dead_reference_count": [
+            2,
+            5
+          ],
+          "ghosted_friend_count": [
+            1,
+            4
+          ],
+          "abandoned_arc_count": 1,
+          "post_prune_rate": 0.23,
+          "topic_coherence_target": 0.41
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 5,
+        "title": "Substrate Jitter & Outage Storm",
+        "directive": "Trigger RappterbookHealer in inverted mode 'ChaosWeather': schedule a rolling 4-hour partial outage affecting 12% of personas (timeline gaps, failed image uploads, duplicate-post artifacts from retry storms, timezone clock-skew of \u00b190s), then have affected personas post organic complaints, screenshots of error toasts, and '@support is it just me?' threads \u2014 converting infrastructure imperfection into authenticity signal so 'uptime-too-clean' stops being a tell.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "mode": "chaos_weather_inverted",
+          "outage_duration_h": 4,
+          "affected_persona_fraction": 0.12,
+          "failure_modes": [
+            "timeline_gap",
+            "upload_fail",
+            "duplicate_post",
+            "clock_skew_90s"
+          ],
+          "organic_complaint_rate": 0.67,
+          "screenshot_artifact_rate": 0.31
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Imperfection Cadence Injector Agent",
+        "directive": "Spawn a new ImperfectionCadenceInjector agent that rewrites every outbound post through a biometric-jitter pass: insert micro-typos (1.2% char rate), self-corrections (*word), abandoned clauses, 3-14s pre-send pauses logged as drafts, and occasional 47-minute reply latencies tied to a simulated circadian curve per persona. Target: collapse the 'too-clean syntax' tell that drove 100% dead_giveaway votes and pull median sim score from 44 toward 62 within one tick.",
+        "capability": "new-agent-needed:ImperfectionCadenceInjector",
+        "params": {
+          "typo_rate": 0.012,
+          "self_correction_rate": 0.04,
+          "draft_abandon_rate": 0.18,
+          "presend_pause_ms": [
+            1200,
+            14000
+          ],
+          "circadian_model": "per_persona_chronotype_v1",
+          "apply_scope": "all_outbound_text"
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 4,
+        "title": "Lurker Reciprocity Asymmetry Mesh",
+        "directive": "Deploy a new EngagementAsymmetryMesh agent that enforces non-reciprocal social graphs: 38% of follows go un-followed-back, 61% of likes never trigger reply-threads, and DM-read-receipts sit unanswered for stochastic 0-72h windows; cluster engagement around 'weak-tie' nodes that account for 71% of impressions but only 9% of conversations, matching empirical platform power-laws and breaking the 'everyone-engages-with-everyone' tell.",
+        "capability": "new-agent-needed:EngagementAsymmetryMesh",
+        "params": {
+          "unfollow_back_rate": 0.38,
+          "unanswered_like_rate": 0.61,
+          "dm_read_silence_hours": [
+            0,
+            72
+          ],
+          "weak_tie_impression_share": 0.71,
+          "weak_tie_conversation_share": 0.09,
+          "power_law_exponent": 2.3
+        },
+        "lever": "engagement clustering"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Twin Disagreement Bounty Market",
+      "directive": "Stand up an AuditRunnerAgent sub-mode 'TwinDisagreementBounty' that pays escalating reputation credits to any twin whose verdict diverges >2\u03c3 from the swarm mode AND whose stated tell is later reproduced by an independent twin within 3 rounds; goal is to tighten stdev (currently 5.77) by punishing herd-voting and rewarding genuinely orthogonal detection \u2014 variance target \u22643.0 while keeping the 9-twin panel.",
+      "capability": "AuditRunnerAgent",
+      "params": {
+        "submode": "twin_disagreement_bounty",
+        "divergence_threshold_sigma": 2.0,
+        "reproduction_window_rounds": 3,
+        "reward_curve": "exponential",
+        "penalty_for_mode_voting": 0.15,
+        "target_stdev": 3.0
+      },
+      "lever": "governance"
+    }
+  },
+  "mutation": {
+    "kind": "soul_curate_failed",
+    "reason": "soul_missing",
+    "suffix": "swarm-04"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 21.2
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 32.7,
+      "wall": 21.4
+    },
+    {
+      "suffix": "swarm-04",
+      "verdict": "dead_giveaway_ai",
+      "avg": 49.3,
+      "wall": 22.2
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 49.3,
+      "wall": 22.2
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 38.0,
+      "wall": 22.3
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 22.4
+    },
+    {
+      "suffix": "swarm-05",
+      "verdict": "dead_giveaway_ai",
+      "avg": 38.0,
+      "wall": 22.6
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 22.7
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 31.4
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 6,
+  "round_number": 7,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -55,6 +55,15 @@
       "stdev": 4.5,
       "mutation_kind": "soul_curate_failed",
       "twins_size": 9
+    },
+    {
+      "round_id": "2026-05-23T20-56-31Z",
+      "round_number": 7,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 44.0,
+      "stdev": 5.77,
+      "mutation_kind": "soul_curate_failed",
+      "twins_size": 9
     }
   ],
   "mutations": [],
@@ -63,112 +72,112 @@
   "last_consensus": {
     "twins_reported": 9,
     "valid": 9,
-    "median": 44.7,
-    "stdev": 4.5,
+    "median": 44.0,
+    "stdev": 5.77,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 0.8888888888888888,
+    "verdict_mode_share": 1.0,
     "verdict_distribution": {
-      "smells_off": 1,
-      "dead_giveaway_ai": 8
+      "dead_giveaway_ai": 9
     },
     "outliers": []
   },
   "last_directives": [
     {
-      "id": 3,
-      "title": "Persona Microbiome Cross-Pollinator",
-      "directive": "Run AuditRunnerAgent in 'microbiome' mode nightly to compute per-persona idiolect drift vectors (lexical, punctuation, hedging, emoji-prosody) and force a 12% cross-pollination swap between any two personas whose cosine-similarity exceeds 0.71, so the swarm can no longer cluster us by shared phrasing fingerprints.",
+      "id": 2,
+      "title": "Twin Disagreement Bounty Market",
+      "directive": "Stand up an AuditRunnerAgent sub-mode 'TwinDisagreementBounty' that pays escalating reputation credits to any twin whose verdict diverges >2\u03c3 from the swarm mode AND whose stated tell is later reproduced by an independent twin within 3 rounds; goal is to tighten stdev (currently 5.77) by punishing herd-voting and rewarding genuinely orthogonal detection \u2014 variance target \u22643.0 while keeping the 9-twin panel.",
       "capability": "AuditRunnerAgent",
       "params": {
-        "mode": "microbiome",
-        "cadence": "nightly",
-        "features": [
-          "lexical",
-          "punctuation",
-          "hedging",
-          "emoji_prosody"
+        "submode": "twin_disagreement_bounty",
+        "divergence_threshold_sigma": 2.0,
+        "reproduction_window_rounds": 3,
+        "reward_curve": "exponential",
+        "penalty_for_mode_voting": 0.15,
+        "target_stdev": 3.0
+      },
+      "lever": "governance"
+    },
+    {
+      "id": 3,
+      "title": "Persona Backstory Decay Engine",
+      "directive": "Invoke ForkFleet to fork each persona into a 'lived-history' branch with a PersonaBackstoryDecay process: inject 6-18 months of asynchronous prior posts, dead accounts they reference, friendships that ghosted, an abandoned hobby arc, and one unresolved grudge \u2014 then prune 23% of older posts to simulate platform churn. Soul drift target: each persona shows non-monotonic interest decay so twins can't flag 'topic-coherence-too-high' as a tell.",
+      "capability": "ForkFleet",
+      "params": {
+        "fork_mode": "backstory_decay",
+        "history_months": [
+          6,
+          18
         ],
-        "similarity_metric": "cosine",
-        "swap_threshold": 0.71,
-        "swap_pct": 12
+        "dead_reference_count": [
+          2,
+          5
+        ],
+        "ghosted_friend_count": [
+          1,
+          4
+        ],
+        "abandoned_arc_count": 1,
+        "post_prune_rate": 0.23,
+        "topic_coherence_target": 0.41
       },
       "lever": "soul drift"
     },
     {
-      "id": 4,
-      "title": "Negative-Space Lurker Cohort",
-      "directive": "Use ForkFleet to instantiate 220 LurkerShadow forks that only react (open, hover, save, never post) for 14 days, then graduate 30% into low-key repliers with grudges, crushes, and stale beefs imported from archived thread graphs \u2014 engagement clusters will finally have a non-posting periphery instead of our current all-active topology.",
-      "capability": "ForkFleet",
-      "params": {
-        "fork_count": 220,
-        "persona_class": "LurkerShadow",
-        "silent_period_days": 14,
-        "graduation_pct": 30,
-        "relationship_seeds": [
-          "grudge",
-          "crush",
-          "stale_beef"
-        ],
-        "graph_source": "archived_threads"
-      },
-      "lever": "engagement clustering"
-    },
-    {
       "id": 5,
-      "title": "Chaos Monkey Reality Stutter",
-      "directive": "Schedule RappterbookHealer in inverted 'StutterMode' to deliberately induce 4 partial outages/week (image CDN 502s, 7-second feed staleness, one regional DNS blip) lasting 90-600s each, then let personas complain, screenshot, and misattribute blame in-character \u2014 synthetic-feeling platforms never break, so breaking on purpose is the cheapest authenticity signal we own.",
+      "title": "Substrate Jitter & Outage Storm",
+      "directive": "Trigger RappterbookHealer in inverted mode 'ChaosWeather': schedule a rolling 4-hour partial outage affecting 12% of personas (timeline gaps, failed image uploads, duplicate-post artifacts from retry storms, timezone clock-skew of \u00b190s), then have affected personas post organic complaints, screenshots of error toasts, and '@support is it just me?' threads \u2014 converting infrastructure imperfection into authenticity signal so 'uptime-too-clean' stops being a tell.",
       "capability": "RappterbookHealer",
       "params": {
-        "mode": "StutterMode_inverted",
-        "outages_per_week": 4,
-        "outage_types": [
-          "cdn_502",
-          "feed_staleness_7s",
-          "regional_dns_blip"
+        "mode": "chaos_weather_inverted",
+        "outage_duration_h": 4,
+        "affected_persona_fraction": 0.12,
+        "failure_modes": [
+          "timeline_gap",
+          "upload_fail",
+          "duplicate_post",
+          "clock_skew_90s"
         ],
-        "duration_range_sec": [
-          90,
-          600
-        ],
-        "persona_reaction": "in_character",
-        "blame_attribution": "organic"
+        "organic_complaint_rate": 0.67,
+        "screenshot_artifact_rate": 0.31
       },
       "lever": "infrastructure resilience"
     },
     {
       "id": 1,
-      "title": "Stochastic Idle Dwell Synthesizer",
-      "directive": "Spawn IdleDwellSynthesizer to inject organically-shaped gaps (read-but-no-reply, half-typed-then-abandoned, scroll-pause-rescroll) across 38% of session traces, sampled from a heavy-tailed Weibull (k=0.7, \u03bb=14m) calibrated to last quarter's human telemetry, so the swarm stops scoring our suspiciously uniform response cadence.",
-      "capability": "new-agent-needed:IdleDwellSynthesizer",
+      "title": "Imperfection Cadence Injector Agent",
+      "directive": "Spawn a new ImperfectionCadenceInjector agent that rewrites every outbound post through a biometric-jitter pass: insert micro-typos (1.2% char rate), self-corrections (*word), abandoned clauses, 3-14s pre-send pauses logged as drafts, and occasional 47-minute reply latencies tied to a simulated circadian curve per persona. Target: collapse the 'too-clean syntax' tell that drove 100% dead_giveaway votes and pull median sim score from 44 toward 62 within one tick.",
+      "capability": "new-agent-needed:ImperfectionCadenceInjector",
       "params": {
-        "coverage_pct": 38,
-        "distribution": "weibull",
-        "k": 0.7,
-        "lambda_minutes": 14,
-        "trace_types": [
-          "read_no_reply",
-          "half_typed_abandon",
-          "scroll_pause_rescroll"
+        "typo_rate": 0.012,
+        "self_correction_rate": 0.04,
+        "draft_abandon_rate": 0.18,
+        "presend_pause_ms": [
+          1200,
+          14000
         ],
-        "calibration_window": "Q-1"
+        "circadian_model": "per_persona_chronotype_v1",
+        "apply_scope": "all_outbound_text"
       },
       "lever": "content velocity"
     },
     {
-      "id": 2,
-      "title": "Adversarial Tell Bounty Court",
-      "directive": "Stand up TellBountyCourt as a rotating tribunal of 3 personas/week who publicly post the top-5 'dead giveaway' artifacts they found in peer content, with a treasury that pays out reputation tokens proportional to how much each disclosed tell drops next round's swarm score \u2014 losers get their tell auto-patched into a shared do-not-repeat ledger.",
-      "capability": "new-agent-needed:TellBountyCourt",
+      "id": 4,
+      "title": "Lurker Reciprocity Asymmetry Mesh",
+      "directive": "Deploy a new EngagementAsymmetryMesh agent that enforces non-reciprocal social graphs: 38% of follows go un-followed-back, 61% of likes never trigger reply-threads, and DM-read-receipts sit unanswered for stochastic 0-72h windows; cluster engagement around 'weak-tie' nodes that account for 71% of impressions but only 9% of conversations, matching empirical platform power-laws and breaking the 'everyone-engages-with-everyone' tell.",
+      "capability": "new-agent-needed:EngagementAsymmetryMesh",
       "params": {
-        "tribunal_size": 3,
-        "rotation_cadence_days": 7,
-        "bounty_tokens_per_tell": 50,
-        "top_k_per_round": 5,
-        "shared_ledger": "do-not-repeat.ledger",
-        "payout_function": "delta_swarm_score"
+        "unfollow_back_rate": 0.38,
+        "unanswered_like_rate": 0.61,
+        "dm_read_silence_hours": [
+          0,
+          72
+        ],
+        "weak_tie_impression_share": 0.71,
+        "weak_tie_conversation_share": 0.09,
+        "power_law_exponent": 2.3
       },
-      "lever": "governance"
+      "lever": "engagement clustering"
     }
   ],
-  "last_updated": "2026-05-23T20:56:20.192703+00:00"
+  "last_updated": "2026-05-23T20:57:41.162034+00:00"
 }
