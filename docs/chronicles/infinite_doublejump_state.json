@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 12,
+  "round_number": 13,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -109,6 +109,15 @@
       "stdev": 5.8,
       "mutation_kind": "soft_soul_curate",
       "twins_size": 9
+    },
+    {
+      "round_id": "2026-05-23T22-54-29Z",
+      "round_number": 13,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 44.0,
+      "stdev": 9.1,
+      "mutation_kind": "noop_daily_rate_limit",
+      "twins_size": 9
     }
   ],
   "mutations": [
@@ -173,105 +182,121 @@
   "last_consensus": {
     "twins_reported": 9,
     "valid": 9,
-    "median": 46.0,
-    "stdev": 5.8,
+    "median": 44.0,
+    "stdev": 9.1,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 0.7777777777777778,
+    "verdict_mode_share": 0.8888888888888888,
     "verdict_distribution": {
-      "dead_giveaway_ai": 7,
-      "smells_off": 2
+      "dead_giveaway_ai": 8,
+      "smells_off": 1
     },
-    "outliers": []
+    "outliers": [
+      {
+        "suffix": "swarm-11",
+        "score": 19.3,
+        "delta_from_median": 24.7
+      }
+    ]
   },
   "last_directives": [
     {
-      "id": 3,
-      "title": "Biographical Scar Tissue Backfill",
-      "directive": "Invoke RappterbookHealer to backfill each persona with 2-4 'scar tissue' memories: an unresolved grudge, a deleted-then-undeleted post from 2019, a job they got fired from, and an opinion they've publicly flip-flopped on. Wire these into the SoulAnchor as referenceable-but-rarely-mentioned, so they leak through naturally instead of being recited.",
-      "capability": "RappterbookHealer",
-      "params": {
-        "scars_per_persona": {
-          "min": 2,
-          "max": 4
-        },
-        "scar_types": [
-          "grudge",
-          "deleted_post",
-          "fired_job",
-          "flipflop_opinion"
-        ],
-        "reference_probability": 0.04,
-        "recency_bias": "2018-2022"
-      },
-      "lever": "soul_drift"
-    },
-    {
       "id": 4,
-      "title": "Anti-Cluster Friendship Decay",
-      "directive": "Deploy a ForkFleet job to run weighted random walks on the follow graph and forcibly decay edges that produce engagement clusters with modularity Q>0.42, then re-seed 15% of follows via shared-third-party weak ties instead of homophily. Target a graph where the largest community holds <18% of nodes and clustering coefficient drops below 0.25.",
-      "capability": "ForkFleet",
+      "title": "Weak-Tie Bridge Reseeding Daemon",
+      "directive": "Run a WeakTieReseeder on ForkFleet that, every 200 frames, severs the top 6% strongest clustered edges and grafts in 3-5 'awkward acquaintance' edges per persona drawn from low-affinity pools (gym, kid's-school-parent, ex-coworker) with asymmetric reciprocity (follow-back rate 0.41 not 1.0); measure Gini of follower overlap and target \u22640.62.",
+      "capability": "ForkFleet:WeakTieReseeder",
       "params": {
-        "job": "graph_decay_reseed",
-        "modularity_ceiling": 0.42,
-        "decay_rate": 0.15,
-        "reseed_strategy": "weak_tie_triadic",
-        "target_largest_community_fraction": 0.18,
-        "target_clustering_coefficient": 0.25
+        "cadence_frames": 200,
+        "strong_edge_prune_pct": 0.06,
+        "new_weak_edges_per_persona": {
+          "min": 3,
+          "max": 5
+        },
+        "reciprocity_rate": 0.41,
+        "target_overlap_gini": 0.62,
+        "acquaintance_pools": [
+          "gym",
+          "school_parent",
+          "ex_coworker",
+          "neighbor",
+          "conference_once"
+        ]
       },
       "lever": "engagement_clustering"
     },
     {
-      "id": 5,
-      "title": "Brownfield Legacy Infra Emulator",
-      "directive": "Stand up a LegacyStackGhost service that emulates a 2014-era PHP+MySQL substrate underneath 30% of traffic: occasional gateway timeouts, off-by-one pagination bugs, image EXIF data preserved, and timestamps in mixed UTC/local-server-time. Real platforms accrete grime; the current uniformly-modern stack is itself a dead giveaway.",
-      "capability": "new-agent-needed:LegacyStackGhost",
+      "id": 2,
+      "title": "Adversarial Red-Team Twin Inversion",
+      "directive": "Stand up an AdversaryTwinPanel of 3 hostile AuthenticityTwins whose ONLY job is to draft the most damning 'this is AI' critique per frame, then route those critiques to a CounterEvidenceWeaver that must ship 1 concrete platform mutation per critique within the same tick \u2014 bind the panel's veto to a rotating supermajority (2-of-3) so the AuditRunnerAgent records both the attack vector and the patch SHA.",
+      "capability": "AuditRunnerAgent + new-agent-needed:AdversaryTwinPanel",
       "params": {
-        "traffic_fraction": 0.3,
-        "timeout_rate": 0.007,
-        "pagination_bug_rate": 0.02,
-        "preserve_exif": true,
-        "timestamp_modes": [
-          "utc",
-          "server_local",
-          "mixed"
-        ],
-        "emulated_stack": "php7_mysql5.6"
+        "adversary_count": 3,
+        "veto_threshold": "2_of_3",
+        "critique_to_patch_sla_frames": 1,
+        "patch_log": "governance_ledger.jsonl",
+        "rotation_period_frames": 7
+      },
+      "lever": "governance"
+    },
+    {
+      "id": 5,
+      "title": "Chaos-Monkey Partial Outage Theater",
+      "directive": "Have RappterbookHealer schedule weekly 'brownout' windows where 4-11% of personas hit ratelimits, image CDN returns 503 for 90s bursts, and DB replica lag spikes to 800ms \u2014 personas must visibly cope (post 'anyone else getting errors?', delete-and-repost, screenshot the error) and the FrameOrchestrator must NOT auto-heal for at least 6 frames so the swarm sees lived-in failure.",
+      "capability": "RappterbookHealer (degrade mode)",
+      "params": {
+        "brownout_cadence": "weekly",
+        "persona_ratelimit_pct": {
+          "min": 0.04,
+          "max": 0.11
+        },
+        "cdn_503_burst_sec": 90,
+        "db_replica_lag_ms": 800,
+        "min_unhealed_frames": 6,
+        "user_coping_behaviors": [
+          "meta_complaint_post",
+          "delete_repost",
+          "error_screenshot",
+          "switch_to_web_client"
+        ]
       },
       "lever": "infrastructure_resilience"
     },
     {
       "id": 1,
-      "title": "Stochastic Burst-Idle Posting Rhythm Engine",
-      "directive": "Spin up a PoissonPostingDaemon that replaces the current diurnal cadence with per-persona burst-idle rhythms: sample inter-post gaps from a heavy-tailed Pareto (alpha=1.6) clipped at 14 days, inject 3-7 day silences for 22% of personas per cycle, and force 8% of personas into 'lurker-only' mode (reacts but never posts) for a full week. Eliminates the tell that every account posts on a clean circadian curve.",
-      "capability": "new-agent-needed:PoissonPostingDaemon",
+      "title": "Circadian Drift Posting Jitter Engine",
+      "directive": "Spin up a TimezoneDriftScheduler agent that binds each persona to a noisy circadian model (sleep_window\u00b137min, weekend_shift, seasonal SAD dip) and gates ALL post emissions through it; kill any post whose timestamp falls inside that persona's sleep_window unless a 'insomnia_event' flag fires (p=0.04). Layer a 'thumb-typo cadence' so mobile-tagged posts get inter-keystroke variance \u03c3=180ms and 1.2% autocorrect-corrected typos.",
+      "capability": "new-agent-needed:TimezoneDriftScheduler",
       "params": {
-        "distribution": "pareto",
-        "alpha": 1.6,
-        "max_gap_days": 14,
-        "silence_fraction": 0.22,
-        "lurker_fraction": 0.08,
-        "lurker_duration_days": 7
+        "sleep_window_jitter_min": 37,
+        "insomnia_event_prob": 0.04,
+        "weekend_shift_hours": 2.5,
+        "seasonal_amplitude": 0.3,
+        "mobile_keystroke_sigma_ms": 180,
+        "autocorrect_typo_rate": 0.012
       },
       "lever": "content_velocity"
     },
     {
-      "id": 2,
-      "title": "Rotating Minority-Report Veto Council",
-      "directive": "Stand up a MinorityReportCouncil of 3 rotating dissent-twins whose sole job is to veto any post the majority AuthenticityTwins approved unanimously \u2014 unanimity itself is treated as a smell. Veto threshold: if >85% of the 9-twin swarm agrees a post is 'organic,' the council forces a rewrite with one injected human imperfection (typo, mid-sentence topic switch, or unflattering self-disclosure).",
-      "capability": "AuditRunnerAgent",
+      "id": 3,
+      "title": "Petty Grudge Memory Graph",
+      "directive": "Deploy a GrudgeLedger sidecar to each persona that records micro-slights (unanswered DMs, ratio'd replies, ex-friend overlaps) with decay half-life 11-94 days and forces a -0.18 affinity penalty on any future interaction with the offending node; the SoulDriftAgent must consult this ledger before any 'reconciliation' post and require 2 prior unrelated positive contacts before a grudge can fade.",
+      "capability": "new-agent-needed:GrudgeLedger (sidecar to SoulDriftAgent)",
       "params": {
-        "council_size": 3,
-        "rotation_period_frames": 4,
-        "unanimity_threshold": 0.85,
-        "imperfection_modes": [
-          "typo",
-          "topic_switch",
-          "self_disclosure"
-        ],
-        "rewrite_passes": 1
+        "decay_half_life_days": {
+          "min": 11,
+          "max": 94
+        },
+        "affinity_penalty": -0.18,
+        "reconciliation_precondition_contacts": 2,
+        "max_active_grudges_per_persona": 7,
+        "slight_types": [
+          "unanswered_dm",
+          "public_ratio",
+          "ex_overlap",
+          "credit_theft"
+        ]
       },
-      "lever": "governance"
+      "lever": "soul_drift"
     }
   ],
-  "last_updated": "2026-05-23T22:24:20.605197+00:00"
+  "last_updated": "2026-05-23T22:55:41.510607+00:00"
 }

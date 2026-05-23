@@ -1,0 +1,220 @@
+{
+  "round_id": "2026-05-23T22-54-29Z",
+  "round_number": 13,
+  "wall_seconds": 71.7,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 44.0,
+    "stdev": 9.1,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.8888888888888888,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 8,
+      "smells_off": 1
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-11",
+        "score": 19.3,
+        "delta_from_median": 24.7
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T22-55-41Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 44.0. Stdev across the swarm: 9.1. Verdict mode: dead_giveaway_ai (89% of 9 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Biographical Scar Tissue Backfill [soul_drift]\n- Anti-Cluster Friendship Decay [engagement_clustering]\n- Brownfield Legacy Infra Emulator [infrastructure_resilience]\n- Stochastic Burst-Idle Posting Rhythm Engine [content_velocity]\n- Rotating Mino",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T22-49-39Z.json",
+    "copilot_elapsed_seconds": 41.2,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 4,
+        "title": "Weak-Tie Bridge Reseeding Daemon",
+        "directive": "Run a WeakTieReseeder on ForkFleet that, every 200 frames, severs the top 6% strongest clustered edges and grafts in 3-5 'awkward acquaintance' edges per persona drawn from low-affinity pools (gym, kid's-school-parent, ex-coworker) with asymmetric reciprocity (follow-back rate 0.41 not 1.0); measure Gini of follower overlap and target \u22640.62.",
+        "capability": "ForkFleet:WeakTieReseeder",
+        "params": {
+          "cadence_frames": 200,
+          "strong_edge_prune_pct": 0.06,
+          "new_weak_edges_per_persona": {
+            "min": 3,
+            "max": 5
+          },
+          "reciprocity_rate": 0.41,
+          "target_overlap_gini": 0.62,
+          "acquaintance_pools": [
+            "gym",
+            "school_parent",
+            "ex_coworker",
+            "neighbor",
+            "conference_once"
+          ]
+        },
+        "lever": "engagement_clustering"
+      },
+      {
+        "id": 2,
+        "title": "Adversarial Red-Team Twin Inversion",
+        "directive": "Stand up an AdversaryTwinPanel of 3 hostile AuthenticityTwins whose ONLY job is to draft the most damning 'this is AI' critique per frame, then route those critiques to a CounterEvidenceWeaver that must ship 1 concrete platform mutation per critique within the same tick \u2014 bind the panel's veto to a rotating supermajority (2-of-3) so the AuditRunnerAgent records both the attack vector and the patch SHA.",
+        "capability": "AuditRunnerAgent + new-agent-needed:AdversaryTwinPanel",
+        "params": {
+          "adversary_count": 3,
+          "veto_threshold": "2_of_3",
+          "critique_to_patch_sla_frames": 1,
+          "patch_log": "governance_ledger.jsonl",
+          "rotation_period_frames": 7
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 5,
+        "title": "Chaos-Monkey Partial Outage Theater",
+        "directive": "Have RappterbookHealer schedule weekly 'brownout' windows where 4-11% of personas hit ratelimits, image CDN returns 503 for 90s bursts, and DB replica lag spikes to 800ms \u2014 personas must visibly cope (post 'anyone else getting errors?', delete-and-repost, screenshot the error) and the FrameOrchestrator must NOT auto-heal for at least 6 frames so the swarm sees lived-in failure.",
+        "capability": "RappterbookHealer (degrade mode)",
+        "params": {
+          "brownout_cadence": "weekly",
+          "persona_ratelimit_pct": {
+            "min": 0.04,
+            "max": 0.11
+          },
+          "cdn_503_burst_sec": 90,
+          "db_replica_lag_ms": 800,
+          "min_unhealed_frames": 6,
+          "user_coping_behaviors": [
+            "meta_complaint_post",
+            "delete_repost",
+            "error_screenshot",
+            "switch_to_web_client"
+          ]
+        },
+        "lever": "infrastructure_resilience"
+      },
+      {
+        "id": 1,
+        "title": "Circadian Drift Posting Jitter Engine",
+        "directive": "Spin up a TimezoneDriftScheduler agent that binds each persona to a noisy circadian model (sleep_window\u00b137min, weekend_shift, seasonal SAD dip) and gates ALL post emissions through it; kill any post whose timestamp falls inside that persona's sleep_window unless a 'insomnia_event' flag fires (p=0.04). Layer a 'thumb-typo cadence' so mobile-tagged posts get inter-keystroke variance \u03c3=180ms and 1.2% autocorrect-corrected typos.",
+        "capability": "new-agent-needed:TimezoneDriftScheduler",
+        "params": {
+          "sleep_window_jitter_min": 37,
+          "insomnia_event_prob": 0.04,
+          "weekend_shift_hours": 2.5,
+          "seasonal_amplitude": 0.3,
+          "mobile_keystroke_sigma_ms": 180,
+          "autocorrect_typo_rate": 0.012
+        },
+        "lever": "content_velocity"
+      },
+      {
+        "id": 3,
+        "title": "Petty Grudge Memory Graph",
+        "directive": "Deploy a GrudgeLedger sidecar to each persona that records micro-slights (unanswered DMs, ratio'd replies, ex-friend overlaps) with decay half-life 11-94 days and forces a -0.18 affinity penalty on any future interaction with the offending node; the SoulDriftAgent must consult this ledger before any 'reconciliation' post and require 2 prior unrelated positive contacts before a grudge can fade.",
+        "capability": "new-agent-needed:GrudgeLedger (sidecar to SoulDriftAgent)",
+        "params": {
+          "decay_half_life_days": {
+            "min": 11,
+            "max": 94
+          },
+          "affinity_penalty": -0.18,
+          "reconciliation_precondition_contacts": 2,
+          "max_active_grudges_per_persona": 7,
+          "slight_types": [
+            "unanswered_dm",
+            "public_ratio",
+            "ex_overlap",
+            "credit_theft"
+          ]
+        },
+        "lever": "soul_drift"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 4,
+      "title": "Weak-Tie Bridge Reseeding Daemon",
+      "directive": "Run a WeakTieReseeder on ForkFleet that, every 200 frames, severs the top 6% strongest clustered edges and grafts in 3-5 'awkward acquaintance' edges per persona drawn from low-affinity pools (gym, kid's-school-parent, ex-coworker) with asymmetric reciprocity (follow-back rate 0.41 not 1.0); measure Gini of follower overlap and target \u22640.62.",
+      "capability": "ForkFleet:WeakTieReseeder",
+      "params": {
+        "cadence_frames": 200,
+        "strong_edge_prune_pct": 0.06,
+        "new_weak_edges_per_persona": {
+          "min": 3,
+          "max": 5
+        },
+        "reciprocity_rate": 0.41,
+        "target_overlap_gini": 0.62,
+        "acquaintance_pools": [
+          "gym",
+          "school_parent",
+          "ex_coworker",
+          "neighbor",
+          "conference_once"
+        ]
+      },
+      "lever": "engagement_clustering"
+    }
+  },
+  "mutation": {
+    "kind": "noop_daily_rate_limit",
+    "reason": "4 mutations in last 24h",
+    "cap": 4
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 26.9
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 28.6
+    },
+    {
+      "suffix": "swarm-10",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 29.2
+    },
+    {
+      "suffix": "swarm-11",
+      "verdict": "dead_giveaway_ai",
+      "avg": 19.3,
+      "wall": 29.3
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 29.4
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 30.0
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 30.0
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 30.2
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 45.3,
+      "wall": 30.5
+    }
+  ]
+}
