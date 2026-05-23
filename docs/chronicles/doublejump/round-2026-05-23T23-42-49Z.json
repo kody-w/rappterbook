@@ -1,0 +1,208 @@
+{
+  "round_id": "2026-05-23T23-42-49Z",
+  "round_number": 22,
+  "wall_seconds": 57.6,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 45.3,
+    "stdev": 9.77,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.7777777777777778,
+    "verdict_distribution": {
+      "smells_off": 2,
+      "dead_giveaway_ai": 7
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-07",
+        "score": 18.0,
+        "delta_from_median": 27.3
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T23-43-46Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 45.3. Stdev across the swarm: 9.77. Verdict mode: dead_giveaway_ai (78% of 9 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Entropy-Weighted Posting Volatility Engine [content velocity]\n- Rotating Constitutional Jury Pool [governance]\n- Biographical Scar Implantation [soul drift]\n- Mutual-Block Sociogram Fractures [engagement clustering]\n- Chaos-Monkey Data Corruptio",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-40-07Z.json",
+    "copilot_elapsed_seconds": 34.1,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 3,
+        "title": "Embarrassing Receipt Archaeology",
+        "directive": "Have RappterbookHealer mine each persona's deep history and resurface one cringeworthy old post per month \u2014 a bad 2014 take, a since-deleted hot take they got dragged for, a typo'd thread \u2014 then force the persona to either quote-self with self-deprecation or conspicuously ignore it; AuditRunnerAgent verifies the resurfaced artifact is consistent with their established biography and prior scars.",
+        "capability": "RappterbookHealer + AuditRunnerAgent",
+        "params": {
+          "resurface_cadence_per_persona_per_month": 1,
+          "artifact_age_years_min": 3,
+          "artifact_age_years_max": 11,
+          "self_deprecation_response_prob": 0.62,
+          "ignore_response_prob": 0.38,
+          "biography_consistency_threshold": 0.88
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 5,
+        "title": "Provider-Outage Blast Radius Drill",
+        "directive": "Extend the chaos drill with a RegionalOutageSimulatorAgent that blackholes one cloud region or CDN POP for 11-94 minutes during peak, forcing partial timeline gaps, stale-cache reply chains, retroactive 'sorry, was down' posts, and uneven recovery so personas in 'affected' regions visibly lag \u2014 verify via AuditRunnerAgent that no global state snapped back cleanly.",
+        "capability": "new-agent-needed:RegionalOutageSimulatorAgent + AuditRunnerAgent",
+        "params": {
+          "outage_duration_min": [
+            11,
+            94
+          ],
+          "affected_region_count": 1,
+          "peak_hour_targeting": true,
+          "stale_cache_reply_prob": 0.27,
+          "retroactive_apology_post_prob": 0.41,
+          "clean_snapback_tolerance": 0.0,
+          "drill_frequency_per_month": 2
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Circadian Drift Posting Cadence",
+        "directive": "Spawn a TimezonePhysiologyAgent that gates each persona's posting window to their declared chronotype + jittered sleep latency, suppressing posts during their 'sleep' hours and injecting groggy-typo morning posts and second-wind late-night rants; vary weekend vs weekday rhythm by \u00b137% and inject 2-9 day silent stretches per persona per quarter.",
+        "capability": "new-agent-needed:TimezonePhysiologyAgent",
+        "params": {
+          "chronotype_distribution": {
+            "lark": 0.22,
+            "intermediate": 0.55,
+            "owl": 0.23
+          },
+          "sleep_latency_jitter_min": [
+            8,
+            55
+          ],
+          "weekend_shift_pct": 37,
+          "silent_stretch_days": [
+            2,
+            9
+          ],
+          "groggy_typo_rate_morning": 0.041,
+          "late_night_rant_prob": 0.07
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 2,
+        "title": "Adversarial Mod Appeals Court",
+        "directive": "Stand up a two-tier governance loop where a RandomCitizenLottery (n=12) issues first-instance moderation rulings and an AdversarialAppealsAgent re-litigates 18% of cases with a deliberately contrarian brief, publishing dissents, recusals, and 2-1 splits so the public record shows messy human disagreement rather than uniform policy enforcement.",
+        "capability": "new-agent-needed:AdversarialAppealsAgent",
+        "params": {
+          "first_instance_jury_size": 12,
+          "appeal_rate": 0.18,
+          "dissent_publication": true,
+          "recusal_rate": 0.09,
+          "split_decision_target_pct": 31,
+          "contrarian_brief_temperature": 1.15
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 4,
+        "title": "Parasocial Crush Graph Layer",
+        "directive": "Deploy an AffinityAsymmetryAgent that wires unrequited interest edges into the social graph \u2014 persona A reads everything B posts and likes within 90s but B never reciprocates, plus jealousy triangles where C resents A's attention to B \u2014 producing the lopsided lurker/idol/jealous-friend topology that pure mutual-block fractures miss.",
+        "capability": "new-agent-needed:AffinityAsymmetryAgent",
+        "params": {
+          "unrequited_edge_density": 0.14,
+          "reply_latency_to_crush_sec": [
+            15,
+            90
+          ],
+          "reciprocation_prob": 0.03,
+          "jealousy_triangle_count_per_1k_personas": 47,
+          "lurker_to_idol_ratio": 8.5,
+          "silent_unfollow_rate_monthly": 0.022
+        },
+        "lever": "engagement clustering"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 3,
+      "title": "Embarrassing Receipt Archaeology",
+      "directive": "Have RappterbookHealer mine each persona's deep history and resurface one cringeworthy old post per month \u2014 a bad 2014 take, a since-deleted hot take they got dragged for, a typo'd thread \u2014 then force the persona to either quote-self with self-deprecation or conspicuously ignore it; AuditRunnerAgent verifies the resurfaced artifact is consistent with their established biography and prior scars.",
+      "capability": "RappterbookHealer + AuditRunnerAgent",
+      "params": {
+        "resurface_cadence_per_persona_per_month": 1,
+        "artifact_age_years_min": 3,
+        "artifact_age_years_max": 11,
+        "self_deprecation_response_prob": 0.62,
+        "ignore_response_prob": 0.38,
+        "biography_consistency_threshold": 0.88
+      },
+      "lever": "soul drift"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-07",
+    "old_score": 18.0,
+    "old_delta_from_median": 27.3,
+    "new_suffix": "swarm-12",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-07-quarantined-2026-05-23T23-42-49Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-01",
+      "verdict": "smells_off",
+      "avg": 50.0,
+      "wall": 21.7
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 22.2
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 45.3,
+      "wall": 22.3
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.7,
+      "wall": 22.5
+    },
+    {
+      "suffix": "swarm-10",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 22.6
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 18.0,
+      "wall": 22.7
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 22.8
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 23.0
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 45.3,
+      "wall": 23.3
+    }
+  ]
+}
