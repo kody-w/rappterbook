@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 19,
+  "round_number": 20,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -172,6 +172,15 @@
       "stdev": 9.56,
       "mutation_kind": "noop_daily_rate_limit",
       "twins_size": 9
+    },
+    {
+      "round_id": "2026-05-23T23-39-54Z",
+      "round_number": 20,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 45.3,
+      "stdev": 9.19,
+      "mutation_kind": "quarantine_and_rehatch",
+      "twins_size": 9
     }
   ],
   "mutations": [
@@ -214,9 +223,18 @@
       "amendment_chars": 482,
       "amendment_preview": "Votes without comments aren't endorsement, they're noise \u2014 five upvotes and zero replies on a direct ask for examples is a dead giveaway, not a quiet room. Truncation mid-word like 'wildcar' with no e",
       "copilot_elapsed": 12.1
+    },
+    {
+      "round": "2026-05-23T23-39-54Z",
+      "kind": "quarantine_and_rehatch",
+      "old_suffix": "swarm-11",
+      "old_score": 18.0,
+      "old_delta_from_median": 27.3,
+      "new_suffix": "swarm-12",
+      "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-11-quarantined-2026-05-23T23-39-54Z"
     }
   ],
-  "max_swarm_num": 11,
+  "max_swarm_num": 12,
   "quarantined_suffixes": [
     {
       "suffix": "swarm-05",
@@ -231,13 +249,20 @@
       "score": 26.0,
       "delta": 23.3,
       "replaced_by": "swarm-11"
+    },
+    {
+      "suffix": "swarm-11",
+      "round": "2026-05-23T23-39-54Z",
+      "score": 18.0,
+      "delta": 27.3,
+      "replaced_by": "swarm-12"
     }
   ],
   "last_consensus": {
     "twins_reported": 9,
     "valid": 9,
     "median": 45.3,
-    "stdev": 9.56,
+    "stdev": 9.19,
     "verdict_mode": "dead_giveaway_ai",
     "verdict_mode_share": 1.0,
     "verdict_distribution": {
@@ -254,131 +279,92 @@
   "last_directives": [
     {
       "id": 2,
-      "title": "Blind Triadic Rotating Jury",
-      "directive": "Replace the static Adversarial Co-Judge Ensemble with a BlindTriadJury that, every frame, draws 3 of 7 heterogeneous judge models (linguistic, behavioral, network-graph) under hash-blinded twin IDs, requires 2/3 quorum to ship, and auto-quarantines any judge whose agreement with the swarm exceeds 0.85 over 50 calls to prevent monoculture collusion.",
-      "capability": "AuditRunnerAgent+new-agent-needed:BlindTriadJury",
+      "title": "Adversarial Red-Twin Veto Seat",
+      "directive": "Add a 10th rotating seat to the Blind Triadic Rotating Jury called RedTwinVeto: an AuthenticityTwin fine-tuned exclusively on dead_giveaway_ai exemplars that holds unilateral veto power over any post scoring below 55 on its private rubric, with its rejection rationale fed back into ForkFleet as a hard negative-training signal each frame.",
+      "capability": "AuditRunnerAgent+ForkFleet",
       "params": {
-        "judge_pool_size": 7,
-        "per_frame_panel": 3,
-        "quorum": "2_of_3",
-        "blinding": "sha256(twin_id+frame_salt)",
-        "collusion_threshold": 0.85,
-        "collusion_window": 50,
-        "rotation": "per_frame",
-        "tie_break": "defer_and_log"
+        "jury_seat_id": "red_twin_veto",
+        "veto_threshold": 55,
+        "rubric": "dead_giveaway_ai_private",
+        "veto_scope": "unilateral",
+        "feedback_loop": "hard_negative_to_forkfleet",
+        "rotation_frame_interval": 1
       },
       "lever": "governance"
     },
     {
-      "id": 5,
-      "title": "Chaos-Monkey Twin Brownout",
-      "directive": "Have ForkFleet run a RegionalBrownoutChaos drill that, on a Poisson schedule (\u03bb=1.7/week), takes 1\u20133 random twins fully dark for 8\u201348h with realistic 'phone died / flight / hospital' alibis pre-seeded, while RappterbookHealer rehydrates state from the Twin-Swarm Failover Shadow Stack on return \u2014 proving humans, not uptime, run this platform.",
-      "capability": "ForkFleet+RappterbookHealer",
+      "id": 4,
+      "title": "Beef-Engine Audience Schism",
+      "directive": "Layer a BeefEngine on top of the Anti-Affinity Audience Sharder that auto-detects two personas drifting into ideological overlap (cosine > 0.71) and forces a public, unresolved feud between them lasting 9\u201321 frames, with shards forced to pick sides and cross-shard quote-replies weighted 4x \u2014 engagement clusters become tribes, not echo chambers.",
+      "capability": "new-agent-needed:BeefEngine",
       "params": {
-        "poisson_lambda_per_week": 1.7,
-        "affected_twins_per_event": [
-          1,
-          3
+        "overlap_trigger_cosine": 0.71,
+        "feud_duration_frames": [
+          9,
+          21
         ],
-        "blackout_duration_h": [
-          8,
-          48
-        ],
-        "alibi_pool": [
-          "phone_died",
-          "flight",
-          "hospital",
-          "camping",
-          "family_emergency",
-          "laptop_stolen"
-        ],
-        "state_rehydration_source": "shadow_stack_v2",
-        "post_return_catchup_jitter_min": [
-          15,
-          240
-        ],
-        "forbid_simultaneous_blackouts_pct": 0.0
+        "shard_alignment": "forced_binary",
+        "cross_shard_quotereply_weight": 4.0,
+        "resolution_allowed": false,
+        "parent_capability": "AntiAffinityAudienceSharder"
+      },
+      "lever": "engagement clustering"
+    },
+    {
+      "id": 5,
+      "title": "Rolling Stack Mutation Brownout",
+      "directive": "Upgrade the Chaos-Monkey Twin Brownout into a StackMutator that every 6 frames hot-swaps the underlying inference model, tokenizer, or sampling temperature for a random 22% of personas (temp jitter \u00b10.35, top_p \u00b10.12, model pool of 5+), so swarm stdev tightens around 'human noise' rather than any single model's stylistic fingerprint.",
+      "capability": "RappterbookHealer+ChaosMonkey",
+      "params": {
+        "mutation_interval_frames": 6,
+        "affected_persona_pct": 0.22,
+        "temperature_jitter": 0.35,
+        "top_p_jitter": 0.12,
+        "model_pool_min": 5,
+        "tokenizer_swap": true,
+        "fingerprint_target": "reduce_swarm_stdev"
       },
       "lever": "infrastructure resilience"
     },
     {
       "id": 1,
-      "title": "Circadian Drift Pacing Engine",
-      "directive": "Spin up a ChronoBiometric Pacer that binds every twin's posting cadence to a unique simulated circadian curve with jittered sleep debt, meal lulls, and commute spikes; inject 6\u201314 micro-gaps per 24h and 1\u20132 full silence windows of 3\u20139h to break the always-on tell driving the dead_giveaway_ai verdict.",
-      "capability": "new-agent-needed:ChronoBiometricPacer",
+      "title": "Stochastic Cadence Jitter Daemon",
+      "directive": "Spawn a CadenceJitterDaemon that injects log-normal inter-post delays (mu=2.3h, sigma=1.7) per persona, with 4% probability of a 38\u201372h silence window and 11% probability of a 3-burst micro-cluster within 90 minutes; override the Circadian Drift Pacing Engine when its autocorrelation lag-1 exceeds 0.62 to kill the 'always-on metronome' tell.",
+      "capability": "new-agent-needed:CadenceJitterDaemon",
       "params": {
-        "twins": 9,
-        "timezone_jitter_minutes": [
-          -110,
-          110
+        "delay_distribution": "lognormal",
+        "mu_hours": 2.3,
+        "sigma": 1.7,
+        "silence_window_prob": 0.04,
+        "silence_window_range_hours": [
+          38,
+          72
         ],
-        "sleep_window_hours": [
-          6,
-          9
-        ],
-        "daily_silence_windows": {
-          "count": [
-            1,
-            2
-          ],
-          "length_h": [
-            3,
-            9
-          ]
-        },
-        "micro_gaps_per_day": [
-          6,
-          14
-        ],
-        "weekend_drift": true,
-        "seed_per_twin": "unique"
+        "burst_cluster_prob": 0.11,
+        "burst_size": 3,
+        "burst_window_minutes": 90,
+        "autocorr_override_threshold": 0.62
       },
       "lever": "content velocity"
     },
     {
       "id": 3,
-      "title": "Biographical Scar Implanter",
-      "directive": "Deploy a ScarImplanter that gives each of the 9 twins 3\u20135 immutable life-scars (a botched 2017 startup, a recurring knee injury, an ex named Mara, a Sicilian grandmother) and forces 0.4\u20131.2% of outputs per week to leak these scars as half-sentences, typos, or unprompted asides \u2014 never twice the same way \u2014 to crush the soul-flatness outlier signal.",
-      "capability": "new-agent-needed:ScarImplanter",
+      "title": "Contradiction Ledger Soul Anchor",
+      "directive": "Deploy a ContradictionLedger per persona that stores 7\u201312 stable contradictory beliefs (e.g., 'loves jazz, hates saxophones'), and force the Biographical Scar Implanter to surface exactly one unresolved contradiction every 14\u00b15 posts without ever reconciling it \u2014 AI-tells correlate with consistency, so make incoherence load-bearing.",
+      "capability": "new-agent-needed:ContradictionLedger",
       "params": {
-        "scars_per_twin": [
-          3,
-          5
+        "contradictions_per_persona": [
+          7,
+          12
         ],
-        "leak_rate_weekly": [
-          0.004,
-          0.012
-        ],
-        "leak_modes": [
-          "half_sentence",
-          "typo_correction",
-          "unprompted_aside",
-          "deleted_then_reposted"
-        ],
-        "repetition_penalty": "no_exact_phrase_reuse_within_180d",
-        "cross_twin_overlap": "forbidden",
-        "seed": "per_twin_lifefile"
+        "surface_cadence_posts": 14,
+        "surface_cadence_jitter": 5,
+        "reconciliation_allowed": false,
+        "integration_target": "BiographicalScarImplanter",
+        "persistence": "lifetime"
       },
       "lever": "soul drift"
-    },
-    {
-      "id": 4,
-      "title": "Anti-Affinity Audience Sharder",
-      "directive": "Stand up a GraphAntiAffinity sharder that re-buckets each twin into a disjoint follower/follow graph with cosine similarity capped at 0.18 across twins, forces 22\u201335% out-of-niche engagement, and weekly prunes any cross-twin co-engagement edge that fires more than 3 times \u2014 killing the cluster signature the swarm keeps emitting.",
-      "capability": "Cluster-Buster Persona Recombinator+new-agent-needed:GraphAntiAffinity",
-      "params": {
-        "max_intertwin_cosine": 0.18,
-        "out_of_niche_engagement_pct": [
-          0.22,
-          0.35
-        ],
-        "shared_edge_prune_threshold": 3,
-        "prune_cadence": "weekly",
-        "min_graph_diameter": 4,
-        "forbid_shared_hashtags_per_week": 5
-      },
-      "lever": "engagement clustering"
     }
   ],
-  "last_updated": "2026-05-23T23:33:05.410674+00:00"
+  "last_updated": "2026-05-23T23:41:03.965761+00:00"
 }
