@@ -145,15 +145,18 @@ cmd_chat() {
         echo "usage: ./twin chat \"<message>\"" >&2
         exit 1
     fi
-    python3 - "$msg" <<'PYEOF'
+    # Timeout is generous (15 min) because autopilot-style chats can chain
+    # multiple LLM calls + pytest invocations. Cap via TWIN_CHAT_TIMEOUT env var.
+    local chat_timeout="${TWIN_CHAT_TIMEOUT:-900}"
+    python3 - "$msg" "$chat_timeout" <<'PYEOF'
 import sys, json, urllib.request
-msg = sys.argv[1]
+msg, timeout = sys.argv[1], int(sys.argv[2])
 req = urllib.request.Request(
     "http://127.0.0.1:7073/chat",
     data=json.dumps({"user_input": msg}).encode("utf-8"),
     headers={"Content-Type": "application/json"},
 )
-with urllib.request.urlopen(req, timeout=300) as r:
+with urllib.request.urlopen(req, timeout=timeout) as r:
     d = json.loads(r.read().decode("utf-8"))
 reply = (d.get("response") or "").split("|||VOICE|||")[0]
 print(reply)
