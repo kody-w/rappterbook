@@ -1,0 +1,26 @@
+{
+  "schema": "rapp-rappid/2.0",
+  "rappid": "rappid:v2:project:@kody-w/kody-babysitter:local-rappterbook-watchdog@local",
+  "kind": "project",
+  "namespace": "@kody-w/kody-babysitter",
+  "hash": "local-rappterbook-watchdog",
+  "host": "local",
+  "owner": "kody-w",
+  "repo": "rappterbook/kody-babysitter-twin",
+  "name": "kody-babysitter",
+  "display_name": "Kody Babysitter (Preference Snapshot Twin)",
+  "born_at": "2026-05-23T13:40:00Z",
+  "role": "watchdog",
+  "description": "Kody-babysitting-the-rappterbook-doublejump-loop twin. Snapshots Kody's user preferences (from memory files) and continuously enforces them against the agent codebase + pipeline artifacts. Read-only watchdog. Catches dry_run drift, reverse-holo-honey-pot leaks, git-stash violations, dishonest reporting, and silent-skip cascades.",
+  "watches": [
+    "/Users/kodyw/Documents/GitHub/Rappter/rappterbook/.brainstem/src/rapp_brainstem/agents/",
+    "/tmp/frame-orchestrator/",
+    "/tmp/pages-publisher/",
+    "/tmp/fork-fleet-out/",
+    "/Users/kodyw/Documents/GitHub/Rappter/rappterbook/state/autonomy_log.json"
+  ],
+  "rules_source": "/Users/kodyw/.claude/projects/-Users-kodyw-Documents-GitHub-Rappter-rappterbook/memory/",
+  "_planted_by": "@kody-w",
+  "_organism_version": "0.1.0",
+  "_hatched_by": "twin_egg_hatcher_agent.py"
+}
