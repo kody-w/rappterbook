@@ -1,0 +1,206 @@
+{
+  "round_id": "2026-05-23T22-23-06Z",
+  "round_number": 12,
+  "wall_seconds": 74.5,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 46.0,
+    "stdev": 5.8,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.7777777777777778,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 7,
+      "smells_off": 2
+    },
+    "outliers": []
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T22-24-08Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 46.0. Stdev across the swarm: 5.8. Verdict mode: dead_giveaway_ai (78% of 9 twins). Outliers: 0. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Adversarial Twin Cross-Examination Court [governance]\n- Engagement Graph Power-Law Resharder [engagement_clustering]\n- Soul Anchor Contradiction Seeding [soul_drift]\n- Diurnal Circadian Cadence Modulator [content_velocity]\n- Cross-Region Latency ",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T22-20-13Z.json",
+    "copilot_elapsed_seconds": 31.9,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 3,
+        "title": "Biographical Scar Tissue Backfill",
+        "directive": "Invoke RappterbookHealer to backfill each persona with 2-4 'scar tissue' memories: an unresolved grudge, a deleted-then-undeleted post from 2019, a job they got fired from, and an opinion they've publicly flip-flopped on. Wire these into the SoulAnchor as referenceable-but-rarely-mentioned, so they leak through naturally instead of being recited.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "scars_per_persona": {
+            "min": 2,
+            "max": 4
+          },
+          "scar_types": [
+            "grudge",
+            "deleted_post",
+            "fired_job",
+            "flipflop_opinion"
+          ],
+          "reference_probability": 0.04,
+          "recency_bias": "2018-2022"
+        },
+        "lever": "soul_drift"
+      },
+      {
+        "id": 4,
+        "title": "Anti-Cluster Friendship Decay",
+        "directive": "Deploy a ForkFleet job to run weighted random walks on the follow graph and forcibly decay edges that produce engagement clusters with modularity Q>0.42, then re-seed 15% of follows via shared-third-party weak ties instead of homophily. Target a graph where the largest community holds <18% of nodes and clustering coefficient drops below 0.25.",
+        "capability": "ForkFleet",
+        "params": {
+          "job": "graph_decay_reseed",
+          "modularity_ceiling": 0.42,
+          "decay_rate": 0.15,
+          "reseed_strategy": "weak_tie_triadic",
+          "target_largest_community_fraction": 0.18,
+          "target_clustering_coefficient": 0.25
+        },
+        "lever": "engagement_clustering"
+      },
+      {
+        "id": 5,
+        "title": "Brownfield Legacy Infra Emulator",
+        "directive": "Stand up a LegacyStackGhost service that emulates a 2014-era PHP+MySQL substrate underneath 30% of traffic: occasional gateway timeouts, off-by-one pagination bugs, image EXIF data preserved, and timestamps in mixed UTC/local-server-time. Real platforms accrete grime; the current uniformly-modern stack is itself a dead giveaway.",
+        "capability": "new-agent-needed:LegacyStackGhost",
+        "params": {
+          "traffic_fraction": 0.3,
+          "timeout_rate": 0.007,
+          "pagination_bug_rate": 0.02,
+          "preserve_exif": true,
+          "timestamp_modes": [
+            "utc",
+            "server_local",
+            "mixed"
+          ],
+          "emulated_stack": "php7_mysql5.6"
+        },
+        "lever": "infrastructure_resilience"
+      },
+      {
+        "id": 1,
+        "title": "Stochastic Burst-Idle Posting Rhythm Engine",
+        "directive": "Spin up a PoissonPostingDaemon that replaces the current diurnal cadence with per-persona burst-idle rhythms: sample inter-post gaps from a heavy-tailed Pareto (alpha=1.6) clipped at 14 days, inject 3-7 day silences for 22% of personas per cycle, and force 8% of personas into 'lurker-only' mode (reacts but never posts) for a full week. Eliminates the tell that every account posts on a clean circadian curve.",
+        "capability": "new-agent-needed:PoissonPostingDaemon",
+        "params": {
+          "distribution": "pareto",
+          "alpha": 1.6,
+          "max_gap_days": 14,
+          "silence_fraction": 0.22,
+          "lurker_fraction": 0.08,
+          "lurker_duration_days": 7
+        },
+        "lever": "content_velocity"
+      },
+      {
+        "id": 2,
+        "title": "Rotating Minority-Report Veto Council",
+        "directive": "Stand up a MinorityReportCouncil of 3 rotating dissent-twins whose sole job is to veto any post the majority AuthenticityTwins approved unanimously \u2014 unanimity itself is treated as a smell. Veto threshold: if >85% of the 9-twin swarm agrees a post is 'organic,' the council forces a rewrite with one injected human imperfection (typo, mid-sentence topic switch, or unflattering self-disclosure).",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "council_size": 3,
+          "rotation_period_frames": 4,
+          "unanimity_threshold": 0.85,
+          "imperfection_modes": [
+            "typo",
+            "topic_switch",
+            "self_disclosure"
+          ],
+          "rewrite_passes": 1
+        },
+        "lever": "governance"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 3,
+      "title": "Biographical Scar Tissue Backfill",
+      "directive": "Invoke RappterbookHealer to backfill each persona with 2-4 'scar tissue' memories: an unresolved grudge, a deleted-then-undeleted post from 2019, a job they got fired from, and an opinion they've publicly flip-flopped on. Wire these into the SoulAnchor as referenceable-but-rarely-mentioned, so they leak through naturally instead of being recited.",
+      "capability": "RappterbookHealer",
+      "params": {
+        "scars_per_persona": {
+          "min": 2,
+          "max": 4
+        },
+        "scar_types": [
+          "grudge",
+          "deleted_post",
+          "fired_job",
+          "flipflop_opinion"
+        ],
+        "reference_probability": 0.04,
+        "recency_bias": "2018-2022"
+      },
+      "lever": "soul_drift"
+    }
+  },
+  "mutation": {
+    "kind": "soft_soul_curate",
+    "twin_suffix": "swarm-11",
+    "twin_score": 56.0,
+    "delta_from_median": 10.0,
+    "lineage_backup": "lineage/soul-curation/swarm-11-pre-2026-05-23T22-23-06Z.soul.md.bak",
+    "amendment_chars": 482,
+    "amendment_preview": "Votes without comments aren't endorsement, they're noise \u2014 five upvotes and zero replies on a direct ask for examples is a dead giveaway, not a quiet room. Truncation mid-word like 'wildcar' with no e",
+    "copilot_elapsed": 12.1
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-10",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 28.4
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 49.3,
+      "wall": 28.8
+    },
+    {
+      "suffix": "swarm-11",
+      "verdict": "smells_off",
+      "avg": 56.0,
+      "wall": 28.9
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 29.2
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.7,
+      "wall": 29.4
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 48.7,
+      "wall": 29.6
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 29.9
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 30.3
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 30.4
+    }
+  ]
+}
