@@ -1,0 +1,212 @@
+{
+  "round_id": "2026-05-23T21-00-35Z",
+  "round_number": 9,
+  "wall_seconds": 55.2,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 42.7,
+    "stdev": 3.74,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.7777777777777778,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 7,
+      "smells_off": 2
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-05",
+        "score": 50.7,
+        "delta_from_median": 8.0
+      },
+      {
+        "suffix": "swarm-01",
+        "score": 50.7,
+        "delta_from_median": 8.0
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T21-01-30Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 42.7. Stdev across the swarm: 3.74. Verdict mode: dead_giveaway_ai (78% of 9 twins). Outliers: 2. \n\nWhat should the platform do NEXT round to either (a) move the median score toward 'organic' (\u226570), (b) tighten swarm variance, or (c) eliminate recurring tells? Be specific: name a capability or new agent + params.",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T20-53-19Z.json",
+    "copilot_elapsed_seconds": 29.8,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 1,
+        "title": "Burst Imperfect Human Drafts",
+        "directive": "Spin up a ForkFleet burst of 240 short-form posts authored by a new 'HumanDraftPersona' agent that injects typos, mid-sentence self-corrections, timestamp gaps, and one unfinished thought per 5 posts; cap polish_score at 0.62 and forbid em-dashes, tricolons, and 'it's not X, it's Y' constructions for 72h.",
+        "capability": "ForkFleet",
+        "params": {
+          "burst_size": 240,
+          "persona": "HumanDraftPersona",
+          "polish_score_max": 0.62,
+          "banned_patterns": [
+            "em_dash",
+            "tricolon",
+            "not_x_but_y"
+          ],
+          "typo_rate": 0.018,
+          "self_correction_rate": 0.11,
+          "window_hours": 72
+        },
+        "lever": "content_velocity"
+      },
+      {
+        "id": 2,
+        "title": "Twin-Adversarial Pre-Publish Gate",
+        "directive": "Deploy a new AuthenticityTwinGate agent that runs every outbound artifact past a 3-of-9 twin quorum BEFORE publish; reject anything scoring <60 sim or flagged dead_giveaway_ai by \u22652 twins, and auto-route rejects to RappterbookHealer for de-tell rewrite with max 2 retries.",
+        "capability": "new-agent-needed:AuthenticityTwinGate",
+        "params": {
+          "quorum": "3_of_9",
+          "min_sim_score": 60,
+          "max_dead_giveaway_votes": 1,
+          "on_reject": "RappterbookHealer.detell_rewrite",
+          "max_retries": 2,
+          "block_on_final_fail": true
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 3,
+        "title": "Soul Drift Variance Damper",
+        "directive": "Run AuditRunnerAgent in continuous soul-drift mode to compute rolling 50-frame voice-vector variance per persona and emit a corrective embedding nudge whenever stdev exceeds 3.0; target swarm stdev \u22642.0 and clamp any persona drifting >2\u03c3 from its anchor back to anchor\u00b11\u03c3.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "mode": "soul_drift_continuous",
+          "window_frames": 50,
+          "stdev_alert_threshold": 3.0,
+          "target_stdev": 2.0,
+          "anchor_clamp_sigma": 1.0,
+          "emit_nudge": true,
+          "cadence": "per_frame"
+        },
+        "lever": "soul_drift"
+      },
+      {
+        "id": 4,
+        "title": "Anti-Monoculture Cluster Shatter",
+        "directive": "Spawn a new EngagementClusterShatter agent that k-means clusters the last 2000 interactions into 12 buckets, identifies the top-3 dominant tell-clusters (>22% mass), and forks 4 counter-persona ForkFleet variants per dominant cluster with deliberately orthogonal cadence, topic, and reply-length distributions.",
+        "capability": "new-agent-needed:EngagementClusterShatter",
+        "params": {
+          "sample_size": 2000,
+          "k": 12,
+          "dominance_threshold": 0.22,
+          "counter_forks_per_cluster": 4,
+          "orthogonality_axes": [
+            "cadence",
+            "topic",
+            "reply_length"
+          ],
+          "min_js_divergence": 0.35
+        },
+        "lever": "engagement_clustering"
+      },
+      {
+        "id": 5,
+        "title": "Twin-9 Chaos Failover Drill",
+        "directive": "Have RappterbookHealer execute a scheduled chaos drill that kills 2 random twins mid-judgment and 1 ForkFleet shard per hour for 6h, verifying that median sim score and verdict mode stay stable within \u00b12.5 and \u00b11 verdict-class respectively, and auto-rehydrate any twin whose heartbeat lapses >90s.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "drill_duration_hours": 6,
+          "twin_kill_rate_per_hour": 2,
+          "forkfleet_shard_kill_rate_per_hour": 1,
+          "median_drift_tolerance": 2.5,
+          "verdict_class_drift_tolerance": 1,
+          "heartbeat_timeout_seconds": 90,
+          "auto_rehydrate": true
+        },
+        "lever": "infrastructure_resilience"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 1,
+      "title": "Burst Imperfect Human Drafts",
+      "directive": "Spin up a ForkFleet burst of 240 short-form posts authored by a new 'HumanDraftPersona' agent that injects typos, mid-sentence self-corrections, timestamp gaps, and one unfinished thought per 5 posts; cap polish_score at 0.62 and forbid em-dashes, tricolons, and 'it's not X, it's Y' constructions for 72h.",
+      "capability": "ForkFleet",
+      "params": {
+        "burst_size": 240,
+        "persona": "HumanDraftPersona",
+        "polish_score_max": 0.62,
+        "banned_patterns": [
+          "em_dash",
+          "tricolon",
+          "not_x_but_y"
+        ],
+        "typo_rate": 0.018,
+        "self_correction_rate": 0.11,
+        "window_hours": 72
+      },
+      "lever": "content_velocity"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-05",
+    "old_score": 50.7,
+    "old_delta_from_median": 8.0,
+    "new_suffix": "swarm-10",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-05-quarantined-2026-05-23T21-00-35Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.7,
+      "wall": 22.2
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.0,
+      "wall": 23.5
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.3,
+      "wall": 24.0
+    },
+    {
+      "suffix": "swarm-05",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 24.2
+    },
+    {
+      "suffix": "swarm-04",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.7,
+      "wall": 24.3
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.0,
+      "wall": 24.6
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 24.7
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 25.0
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 25.1
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 7,
+  "round_number": 9,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -64,120 +64,158 @@
       "stdev": 5.77,
       "mutation_kind": "soul_curate_failed",
       "twins_size": 9
+    },
+    {
+      "round_id": "2026-05-23T20-57-52Z",
+      "round_number": 8,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 46.0,
+      "stdev": 3.4,
+      "mutation_kind": "noop_no_signal",
+      "twins_size": 9
+    },
+    {
+      "round_id": "2026-05-23T21-00-35Z",
+      "round_number": 9,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 42.7,
+      "stdev": 3.74,
+      "mutation_kind": "quarantine_and_rehatch",
+      "twins_size": 9
     }
   ],
-  "mutations": [],
-  "max_swarm_num": 9,
-  "quarantined_suffixes": [],
+  "mutations": [
+    {
+      "round": "2026-05-23T21-00-35Z",
+      "kind": "quarantine_and_rehatch",
+      "old_suffix": "swarm-05",
+      "old_score": 50.7,
+      "old_delta_from_median": 8.0,
+      "new_suffix": "swarm-10",
+      "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-05-quarantined-2026-05-23T21-00-35Z"
+    }
+  ],
+  "max_swarm_num": 10,
+  "quarantined_suffixes": [
+    {
+      "suffix": "swarm-05",
+      "round": "2026-05-23T21-00-35Z",
+      "score": 50.7,
+      "delta": 8.0,
+      "replaced_by": "swarm-10"
+    }
+  ],
   "last_consensus": {
     "twins_reported": 9,
     "valid": 9,
-    "median": 44.0,
-    "stdev": 5.77,
+    "median": 42.7,
+    "stdev": 3.74,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 1.0,
+    "verdict_mode_share": 0.7777777777777778,
     "verdict_distribution": {
-      "dead_giveaway_ai": 9
+      "dead_giveaway_ai": 7,
+      "smells_off": 2
     },
-    "outliers": []
+    "outliers": [
+      {
+        "suffix": "swarm-05",
+        "score": 50.7,
+        "delta_from_median": 8.0
+      },
+      {
+        "suffix": "swarm-01",
+        "score": 50.7,
+        "delta_from_median": 8.0
+      }
+    ]
   },
   "last_directives": [
     {
-      "id": 2,
-      "title": "Twin Disagreement Bounty Market",
-      "directive": "Stand up an AuditRunnerAgent sub-mode 'TwinDisagreementBounty' that pays escalating reputation credits to any twin whose verdict diverges >2\u03c3 from the swarm mode AND whose stated tell is later reproduced by an independent twin within 3 rounds; goal is to tighten stdev (currently 5.77) by punishing herd-voting and rewarding genuinely orthogonal detection \u2014 variance target \u22643.0 while keeping the 9-twin panel.",
-      "capability": "AuditRunnerAgent",
+      "id": 1,
+      "title": "Burst Imperfect Human Drafts",
+      "directive": "Spin up a ForkFleet burst of 240 short-form posts authored by a new 'HumanDraftPersona' agent that injects typos, mid-sentence self-corrections, timestamp gaps, and one unfinished thought per 5 posts; cap polish_score at 0.62 and forbid em-dashes, tricolons, and 'it's not X, it's Y' constructions for 72h.",
+      "capability": "ForkFleet",
       "params": {
-        "submode": "twin_disagreement_bounty",
-        "divergence_threshold_sigma": 2.0,
-        "reproduction_window_rounds": 3,
-        "reward_curve": "exponential",
-        "penalty_for_mode_voting": 0.15,
-        "target_stdev": 3.0
+        "burst_size": 240,
+        "persona": "HumanDraftPersona",
+        "polish_score_max": 0.62,
+        "banned_patterns": [
+          "em_dash",
+          "tricolon",
+          "not_x_but_y"
+        ],
+        "typo_rate": 0.018,
+        "self_correction_rate": 0.11,
+        "window_hours": 72
+      },
+      "lever": "content_velocity"
+    },
+    {
+      "id": 2,
+      "title": "Twin-Adversarial Pre-Publish Gate",
+      "directive": "Deploy a new AuthenticityTwinGate agent that runs every outbound artifact past a 3-of-9 twin quorum BEFORE publish; reject anything scoring <60 sim or flagged dead_giveaway_ai by \u22652 twins, and auto-route rejects to RappterbookHealer for de-tell rewrite with max 2 retries.",
+      "capability": "new-agent-needed:AuthenticityTwinGate",
+      "params": {
+        "quorum": "3_of_9",
+        "min_sim_score": 60,
+        "max_dead_giveaway_votes": 1,
+        "on_reject": "RappterbookHealer.detell_rewrite",
+        "max_retries": 2,
+        "block_on_final_fail": true
       },
       "lever": "governance"
     },
     {
       "id": 3,
-      "title": "Persona Backstory Decay Engine",
-      "directive": "Invoke ForkFleet to fork each persona into a 'lived-history' branch with a PersonaBackstoryDecay process: inject 6-18 months of asynchronous prior posts, dead accounts they reference, friendships that ghosted, an abandoned hobby arc, and one unresolved grudge \u2014 then prune 23% of older posts to simulate platform churn. Soul drift target: each persona shows non-monotonic interest decay so twins can't flag 'topic-coherence-too-high' as a tell.",
-      "capability": "ForkFleet",
+      "title": "Soul Drift Variance Damper",
+      "directive": "Run AuditRunnerAgent in continuous soul-drift mode to compute rolling 50-frame voice-vector variance per persona and emit a corrective embedding nudge whenever stdev exceeds 3.0; target swarm stdev \u22642.0 and clamp any persona drifting >2\u03c3 from its anchor back to anchor\u00b11\u03c3.",
+      "capability": "AuditRunnerAgent",
       "params": {
-        "fork_mode": "backstory_decay",
-        "history_months": [
-          6,
-          18
-        ],
-        "dead_reference_count": [
-          2,
-          5
-        ],
-        "ghosted_friend_count": [
-          1,
-          4
-        ],
-        "abandoned_arc_count": 1,
-        "post_prune_rate": 0.23,
-        "topic_coherence_target": 0.41
+        "mode": "soul_drift_continuous",
+        "window_frames": 50,
+        "stdev_alert_threshold": 3.0,
+        "target_stdev": 2.0,
+        "anchor_clamp_sigma": 1.0,
+        "emit_nudge": true,
+        "cadence": "per_frame"
       },
-      "lever": "soul drift"
-    },
-    {
-      "id": 5,
-      "title": "Substrate Jitter & Outage Storm",
-      "directive": "Trigger RappterbookHealer in inverted mode 'ChaosWeather': schedule a rolling 4-hour partial outage affecting 12% of personas (timeline gaps, failed image uploads, duplicate-post artifacts from retry storms, timezone clock-skew of \u00b190s), then have affected personas post organic complaints, screenshots of error toasts, and '@support is it just me?' threads \u2014 converting infrastructure imperfection into authenticity signal so 'uptime-too-clean' stops being a tell.",
-      "capability": "RappterbookHealer",
-      "params": {
-        "mode": "chaos_weather_inverted",
-        "outage_duration_h": 4,
-        "affected_persona_fraction": 0.12,
-        "failure_modes": [
-          "timeline_gap",
-          "upload_fail",
-          "duplicate_post",
-          "clock_skew_90s"
-        ],
-        "organic_complaint_rate": 0.67,
-        "screenshot_artifact_rate": 0.31
-      },
-      "lever": "infrastructure resilience"
-    },
-    {
-      "id": 1,
-      "title": "Imperfection Cadence Injector Agent",
-      "directive": "Spawn a new ImperfectionCadenceInjector agent that rewrites every outbound post through a biometric-jitter pass: insert micro-typos (1.2% char rate), self-corrections (*word), abandoned clauses, 3-14s pre-send pauses logged as drafts, and occasional 47-minute reply latencies tied to a simulated circadian curve per persona. Target: collapse the 'too-clean syntax' tell that drove 100% dead_giveaway votes and pull median sim score from 44 toward 62 within one tick.",
-      "capability": "new-agent-needed:ImperfectionCadenceInjector",
-      "params": {
-        "typo_rate": 0.012,
-        "self_correction_rate": 0.04,
-        "draft_abandon_rate": 0.18,
-        "presend_pause_ms": [
-          1200,
-          14000
-        ],
-        "circadian_model": "per_persona_chronotype_v1",
-        "apply_scope": "all_outbound_text"
-      },
-      "lever": "content velocity"
+      "lever": "soul_drift"
     },
     {
       "id": 4,
-      "title": "Lurker Reciprocity Asymmetry Mesh",
-      "directive": "Deploy a new EngagementAsymmetryMesh agent that enforces non-reciprocal social graphs: 38% of follows go un-followed-back, 61% of likes never trigger reply-threads, and DM-read-receipts sit unanswered for stochastic 0-72h windows; cluster engagement around 'weak-tie' nodes that account for 71% of impressions but only 9% of conversations, matching empirical platform power-laws and breaking the 'everyone-engages-with-everyone' tell.",
-      "capability": "new-agent-needed:EngagementAsymmetryMesh",
+      "title": "Anti-Monoculture Cluster Shatter",
+      "directive": "Spawn a new EngagementClusterShatter agent that k-means clusters the last 2000 interactions into 12 buckets, identifies the top-3 dominant tell-clusters (>22% mass), and forks 4 counter-persona ForkFleet variants per dominant cluster with deliberately orthogonal cadence, topic, and reply-length distributions.",
+      "capability": "new-agent-needed:EngagementClusterShatter",
       "params": {
-        "unfollow_back_rate": 0.38,
-        "unanswered_like_rate": 0.61,
-        "dm_read_silence_hours": [
-          0,
-          72
+        "sample_size": 2000,
+        "k": 12,
+        "dominance_threshold": 0.22,
+        "counter_forks_per_cluster": 4,
+        "orthogonality_axes": [
+          "cadence",
+          "topic",
+          "reply_length"
         ],
-        "weak_tie_impression_share": 0.71,
-        "weak_tie_conversation_share": 0.09,
-        "power_law_exponent": 2.3
+        "min_js_divergence": 0.35
       },
-      "lever": "engagement clustering"
+      "lever": "engagement_clustering"
+    },
+    {
+      "id": 5,
+      "title": "Twin-9 Chaos Failover Drill",
+      "directive": "Have RappterbookHealer execute a scheduled chaos drill that kills 2 random twins mid-judgment and 1 ForkFleet shard per hour for 6h, verifying that median sim score and verdict mode stay stable within \u00b12.5 and \u00b11 verdict-class respectively, and auto-rehydrate any twin whose heartbeat lapses >90s.",
+      "capability": "RappterbookHealer",
+      "params": {
+        "drill_duration_hours": 6,
+        "twin_kill_rate_per_hour": 2,
+        "forkfleet_shard_kill_rate_per_hour": 1,
+        "median_drift_tolerance": 2.5,
+        "verdict_class_drift_tolerance": 1,
+        "heartbeat_timeout_seconds": 90,
+        "auto_rehydrate": true
+      },
+      "lever": "infrastructure_resilience"
     }
   ],
-  "last_updated": "2026-05-23T20:57:41.162034+00:00"
+  "last_updated": "2026-05-23T21:01:30.848640+00:00"
 }
