@@ -83,13 +83,27 @@ REQUIREMENTS for the new file (NONE are optional — the brainstem loader enforc
   * Inherit from BasicAgent and implement perform(**kwargs) that returns a JSON string
   * In __init__ you MUST do all three of these, in order:
       1. self.name = "{agent_metadata_name}"
-      2. self.metadata = {{"name": self.name, "description": "<one sentence>", "parameters": {{...}}}}
+      2. self.metadata = a dict with EXACTLY this top-level shape (no shortcuts — the brainstem passes it to Copilot as a function-calling tool schema, and Copilot returns HTTP 400 if it's malformed):
+            {{
+                "name": self.name,
+                "description": "<one sentence>",
+                "parameters": {{
+                    "type": "object",
+                    "properties": {{
+                        "task": {{"type": "string", "description": "..."}},
+                        "word_limit": {{"type": "integer", "description": "..."}}
+                    }},
+                    "required": ["task"]
+                }}
+            }}
+        Do NOT write `"parameters": {{"word_limit": 300}}` — that's a default value, not a JSON Schema, and it breaks chat for the entire brainstem.
       3. super().__init__(name=self.name, metadata=self.metadata)
-    Skipping ANY of these (especially super().__init__) makes the agent unloadable. The prior winner does this — copy that exact pattern.
+    Skipping ANY of these (especially super().__init__ or the JSON-Schema parameter shape) makes the agent unloadable OR breaks chat. The prior winner does this — copy that exact pattern.
   * Use only Python stdlib + subprocess (no pip dependencies)
   * Verify every numeric or path claim via subprocess (grep/git/ls/cat/python -c) BEFORE composing the answer
   * Stay under the requested word_limit in the output
   * Use try/except ImportError for BasicAgent at module top, exactly like the prior winner
+  * For audit-summary calls, prefer the cached helper: `from agents._audit_cache import cached_pytest_audit_summary` — calling it directly is essentially free on repeated invocations, while spawning your own `pytest` subprocess costs ~60-90 seconds per call. Always try the cache first; fall back to direct pytest only if the import fails.
   * Output the COMPLETE file — full module from the first line to the last
 
 The point is to address THE SPECIFIC GAP listed above. Do not change the overall structure; tighten the verification step or the composer to fix the criterion that scored low.
@@ -197,10 +211,40 @@ def _smoke_test(module_name: str, class_name: str, task: str, word_limit: int,
     if not hasattr(inst, "name") or not getattr(inst, "name"):
         return {"ok": False, "error": "self.name attribute missing — agent did not call super().__init__"}
 
+    # metadata.parameters MUST be a valid JSON Schema object (it gets passed
+    # to Copilot as a function-calling tool schema). Anything else returns
+    # HTTP 400 and breaks chat for the whole brainstem. This caught a real
+    # bug: an LLM-generated agent had `"parameters": {"word_limit": 300}`
+    # — that's a default value, not a schema. Loader accepted it; chat died.
+    params = md.get("parameters", {})
+    if not isinstance(params, dict):
+        return {"ok": False, "error": "metadata.parameters must be a dict (JSON Schema object)"}
+    if params.get("type") != "object":
+        return {
+            "ok": False,
+            "error": "metadata.parameters must be a JSON Schema with type='object'",
+            "got": str(params)[:200],
+        }
+    properties = params.get("properties")
+    if not isinstance(properties, dict):
+        return {
+            "ok": False,
+            "error": "metadata.parameters.properties must be a dict",
+            "got": str(params)[:200],
+        }
+    # Each property MUST itself be a dict with a `type` field.
+    for prop_name, prop_def in properties.items():
+        if not isinstance(prop_def, dict) or not prop_def.get("type"):
+            return {
+                "ok": False,
+                "error": f"metadata.parameters.properties['{prop_name}'] is not a valid JSON Schema (must have a 'type')",
+                "got": str(prop_def)[:200],
+            }
+
     return {
         "ok": True,
         "passed_checks": ["import", "class_found", "instantiate", "has_perform",
-                          "has_metadata", "has_name_attr"],
+                          "has_metadata", "has_name_attr", "valid_param_schema"],
         "agent_name": getattr(inst, "name"),
         "floor": floor_score,
         "note": "smoke is import+contract only; perform() exercised by next loop run",
@@ -427,9 +471,38 @@ class DoubleJumpAutopilotAgentAgent(BasicAgent):
                 "new_agent": new_metadata_name,
                 "module": new_module,
                 "path": str(new_path),
-                "smoke_score": smoke["score"],
+                "smoke_score": smoke.get("score", "n/a"),
                 "smoke_floor": floor,
+                "smoke_checks": smoke.get("passed_checks", []),
             })
+
+        # Flat summary_text — the twin's chat LLM consumes this directly
+        # without parsing deep JSON, eliminating the "KeyError: 'score'"
+        # response-composition failures from earlier runs.
+        jump_lines = []
+        for j in jumps:
+            status = j.get("status", "?")
+            if status in ("loop_ran", "target_reached"):
+                jump_lines.append(
+                    f"jump {j.get('jump')}: {status} — winner={j.get('winner')} "
+                    f"score={j.get('winner_score')} contestants={j.get('contestants_count')}"
+                )
+            elif status == "agent_added":
+                jump_lines.append(
+                    f"jump {j.get('jump')}: agent_added — {j.get('new_agent')} "
+                    f"(smoke={j.get('smoke_score', 'n/a')} floor={j.get('smoke_floor', 'n/a')})"
+                )
+            elif status in ("smoke_failed", "compile_failed", "codegen_failed", "save_failed"):
+                err = j.get("error") or j.get("smoke_result", {}).get("error") or "?"
+                jump_lines.append(f"jump {j.get('jump')}: {status} — {str(err)[:120]}")
+            else:
+                jump_lines.append(f"jump {j.get('jump')}: {status}")
+        summary_text = (
+            f"Autopilot ran {len(jumps)} jump(s). "
+            f"Best: {best_agent_name} score {best_score_so_far}. "
+            f"Contestants final: {len(contestants)}. "
+            + " | ".join(jump_lines)
+        )
 
         result = {
             "status": "ok",
@@ -441,6 +514,7 @@ class DoubleJumpAutopilotAgentAgent(BasicAgent):
             "best_agent": best_agent_name,
             "contestants_final": contestants,
             "jumps": jumps,
+            "summary_text": summary_text,
         }
 
         if not dry_run:

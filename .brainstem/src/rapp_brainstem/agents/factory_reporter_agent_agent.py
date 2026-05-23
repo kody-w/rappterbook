@@ -53,6 +53,16 @@ def _extract_entities(task: str) -> dict:
 
 
 def _audit_summary() -> dict:
+    """Cached pytest summary. Within an autopilot session the platform
+    state doesn't change between contestant calls, so we serve from
+    the process-wide cache (TTL 5 minutes by default) to skip ~60s
+    of pytest overhead per call."""
+    try:
+        from agents._audit_cache import cached_pytest_audit_summary
+        return cached_pytest_audit_summary()
+    except ImportError:
+        pass
+    # Fallback if the cache module isn't present
     tests_root = CANONICAL_ROOT if (CANONICAL_ROOT / "tests" / "audit").exists() else WORKTREE_ROOT
     if not (tests_root / "tests" / "audit").exists():
         return {"ok": False, "error": "tests/audit/ not found"}
@@ -61,12 +71,10 @@ def _audit_summary() -> dict:
     out = p.get("stdout", "") + "\n" + p.get("stderr", "")
     m = re.search(r"(\d+)\s+failed,?\s+(\d+)\s+passed", out)
     if m:
-        return {"ok": True, "failed": int(m.group(1)), "passed": int(m.group(2)),
-                "raw_summary": out.strip().splitlines()[-3:]}
+        return {"ok": True, "failed": int(m.group(1)), "passed": int(m.group(2))}
     m = re.search(r"(\d+)\s+passed", out)
     if m:
-        return {"ok": True, "failed": 0, "passed": int(m.group(1)),
-                "raw_summary": out.strip().splitlines()[-3:]}
+        return {"ok": True, "failed": 0, "passed": int(m.group(1))}
     return {"ok": False, "raw": out[-500:]}
 
 

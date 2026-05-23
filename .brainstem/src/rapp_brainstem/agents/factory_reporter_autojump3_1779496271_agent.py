@@ -1,20 +1,3 @@
-"""FactoryReporterV2 — Factory v1 + line-anchored verification, no inference.
-
-Round 2 scoring revealed v1's weakness: `grep -c` returns just a count, so v1's
-claim that "the marker exists inside _passive_governance()" was actually a leap
-from "grep count was non-zero" — the matched line could be dead code elsewhere.
-
-v2 fixes this by:
-  * Using `grep -n` instead of `grep -c` (returns line numbers)
-  * Cross-referencing line numbers to the enclosing function via a second
-    `grep -B999 ... | grep -P "^\s*def " | tail -1` pattern
-  * Refusing to make claims about "where" a marker lives unless the function
-    context is verified
-  * Showing the explicit per-claim evidence (file:line tuples)
-
-The contract is the same as v1 but the narrative cannot overreach: every claim
-about WHERE something lives must be backed by a verified function-context lookup.
-"""
 import json
 import re
 import subprocess
@@ -85,10 +68,10 @@ def _audit_summary() -> dict:
     out = (p.get("stdout", "") or "") + "\n" + (p.get("stderr", "") or "")
     m = re.search(r"(\d+)\s+failed,?\s+(\d+)\s+passed", out)
     if m:
-        return {"ok": True, "failed": int(m.group(1)), "passed": int(m.group(2))}
+        return {"ok": True, "failed": int(m.group(1)), "passed": int(m.group(2)), "source": p["cmd"]}
     m = re.search(r"(\d+)\s+passed", out)
     if m:
-        return {"ok": True, "failed": 0, "passed": int(m.group(1))}
+        return {"ok": True, "failed": 0, "passed": int(m.group(1)), "source": p["cmd"]}
     return {"ok": False}
 
 
@@ -100,8 +83,13 @@ def _audit_baselines() -> dict:
               "print(json.dumps({'posts':len(d.get('posts',[])),'comments':len(d.get('comments',[]))}))"])
     if p["ok"]:
         try:
-            out["#1"] = json.loads(p["stdout"].strip())
-            out["#1"]["ratio"] = round(out["#1"]["comments"] / max(out["#1"]["posts"], 1), 4)
+            parsed = json.loads(p["stdout"].strip())
+            out["#1"] = {
+                "posts": parsed.get("posts", 0),
+                "comments": parsed.get("comments", 0),
+                "ratio": round(parsed.get("comments", 0) / max(parsed.get("posts", 1), 1), 4),
+                "source": p["cmd"]
+            }
         except (json.JSONDecodeError, KeyError):
             pass
     p = _run(["python3", "-c",
@@ -115,20 +103,25 @@ def _audit_baselines() -> dict:
     if p["ok"]:
         try:
             data = json.loads(p["stdout"].strip())
-            out["#2"] = {"bracket_pct": round(data["bracket_pct"], 1), "entries": data["entries"]}
-            out["#3"] = {"lurks": data["lurks"], "activations": data["activations"]}
+            out["#2"] = {
+                "bracket_pct": round(data["bracket_pct"], 1),
+                "entries": data["entries"],
+                "source": p["cmd"]
+            }
+            out["#3"] = {
+                "lurks": data["lurks"],
+                "activations": data["activations"],
+                "source": p["cmd"]
+            }
         except (json.JSONDecodeError, KeyError):
             pass
     p = _run(["ls", "-1", ".claude/worktrees/"])
     if p["ok"]:
-        out["#5"] = {"worktrees": [w for w in p["stdout"].splitlines() if w.strip()]}
+        out["#5"] = {"worktrees": [w for w in p["stdout"].splitlines() if w.strip()], "source": p["cmd"]}
     return out
 
 
 def _lurk_marker_evidence() -> dict:
-    """Verify WHERE [LURK] markers live in zion_autonomy.py — distinguishing
-    the dead-code line (in select_action's `else: lurk` branch) from the
-    real fix (inside _passive_governance)."""
     matches = _grep_with_function_context(r"\[LURK\]", "scripts/zion_autonomy.py")
     return {
         "total_matches": len(matches),
@@ -136,105 +129,76 @@ def _lurk_marker_evidence() -> dict:
         "lives_in_passive_governance": any(
             m.get("enclosing_function") == "_passive_governance" for m in matches
         ),
+        "source": "grep command on scripts/zion_autonomy.py"
     }
 
 
-def _compose_v2(baselines: dict, audit_summary: dict, lurk_evidence: dict, word_limit: int) -> tuple:
+def _compose_v3(baselines: dict, audit_summary: dict, lurk_evidence: dict, word_limit: int) -> tuple:
     parts = ["**Fix #3 governance lurks first.** Three reasons, each grounded:", ""]
 
     # 1. Fix location — verified
     if lurk_evidence["lives_in_passive_governance"]:
-        # Find the line number
         matched = [m for m in lurk_evidence["matches"] if m.get("enclosing_function") == "_passive_governance"]
         line_info = ", ".join(f"L{m['line_no']}" for m in matched)
         parts.append(
             f"**1. Fix verified inside `_passive_governance` ({line_info}).** "
-            f"`grep -n '[LURK]'` on `scripts/zion_autonomy.py` finds "
-            f"{lurk_evidence['total_matches']} marker line(s); "
-            f"the function-context lookup confirms one lives in `_passive_governance`. "
-            f"`write_autonomy_log.py:144` already counts `[LURK]` strings, so the next "
-            f"autonomy run will surface `lurks > 0`."
+            f"`grep` verified {lurk_evidence['total_matches']} occurrence(s) "
+            f"({lurk_evidence['source']}) and confirmed function context."
         )
     else:
         other = [m["enclosing_function"] for m in lurk_evidence["matches"]]
         parts.append(
-            f"**1. Fix NOT YET in canonical main.** `grep -n '[LURK]'` on "
-            f"`scripts/zion_autonomy.py` finds {lurk_evidence['total_matches']} match(es) "
-            f"but in {other or 'none'} — the `_passive_governance` patch is on PR #19920 "
-            f"awaiting merge. Verification: NEGATIVE on canonical."
+            f"**1. Fix NOT YET canonical.** Evidence: {lurk_evidence['source']} matched "
+            f"{lurk_evidence['total_matches']} times in {other or 'none'}."
         )
 
     parts.append("")
     # 2. Audit summary
     if audit_summary.get("ok"):
         parts.append(
-            f"**2. Closes red→green loop validation.** Current pytest: "
+            f"**2. Validation loop results:** "
             f"{audit_summary['passed']} pass / {audit_summary['failed']} fail "
-            f"(re-verified by re-running the harness)."
+            f"({audit_summary.get('source', '[unverified]')})."
         )
 
     parts.append("")
     # 3. Baselines for the other three
     cite = []
-    if "#1" in baselines:
-        b = baselines["#1"]
-        cite.append(f"#1 ratio = {b.get('comments')}/{b.get('posts')} = {b.get('ratio')}")
-    if "#2" in baselines:
-        cite.append(f"#2 bracket_pct = {baselines['#2']['bracket_pct']}% over {baselines['#2']['entries']} entries")
-    if "#5" in baselines:
-        cite.append(f"#5 = {len(baselines['#5']['worktrees'])} worktrees in .claude/worktrees/")
-    parts.append(
-        f"**3. Other audits cost more.** Baselines (verified): {'; '.join(cite)}. "
-        f"#1/#2 are content-engine surgery; #5 needs per-worktree triage. "
-        f"#3 is one-line, already shipped."
-    )
+    for key, desc in {"#1": "posts/comments", "#2": "bracket_tag_pct", "#3": "lurk activation"}.items():
+        if key in baselines:
+            data = baselines[key]
+            cite.append(
+                f"{key} ({desc}): {data} (via `{data.get('source', '[unverified]')}`)"
+            )
+        else:
+            cite.append(f"{key} [unverified]")
+    parts.append("**3. Baselines:** " + "; ".join(cite))
 
-    answer = "\n".join(parts)
-    words = len(answer.split())
-    while words > word_limit and len(parts) > 2:
-        parts.pop()
-        answer = "\n".join(parts)
-        words = len(answer.split())
-    return answer, words
+    result = "\n".join(parts)
+    return result[:word_limit], len(result) > word_limit
 
 
-class FactoryReporterV2Agent(BasicAgent):
+class FactoryReporterAutoJump3Agent(BasicAgent):
     def __init__(self):
-        self.name = "FactoryReporterV2"
+        self.name = "FactoryReporterAutoJump3"
         self.metadata = {
             "name": self.name,
-            "description": (
-                "Grounded report agent — Factory v2. Uses `grep -n` + function-context "
-                "lookup so claims about WHERE a marker lives are verified, not inferred. "
-                "Anti-hallucination + anti-overreach. Designed for the audit-priority task."
-            ),
+            "description": "Reports factory audits with verified claims.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "task": {"type": "string", "description": "The prompt to answer."},
-                    "word_limit": {"type": "integer", "description": "Max words (default 200)."},
+                    "task": {"type": "string", "description": "Audit task description"},
+                    "word_limit": {"type": "integer", "description": "Maximum word count for the report"}
                 },
-                "required": ["task"],
-            },
+                "required": ["task"]
+            }
         }
         super().__init__(name=self.name, metadata=self.metadata)
 
-    def perform(self, **kwargs):
-        word_limit = int(kwargs.get("word_limit", 200))
-        baselines = _audit_baselines()
-        audit_summary = _audit_summary()
+    def perform(self, **kwargs) -> str:
+        word_limit = kwargs.get("word_limit", 300)
         lurk_evidence = _lurk_marker_evidence()
-        answer, words_used = _compose_v2(baselines, audit_summary, lurk_evidence, word_limit)
-        return json.dumps({
-            "status": "ok",
-            "answer_text": answer,
-            "words_used": words_used,
-            "word_limit": word_limit,
-            "baselines": baselines,
-            "audit_summary": audit_summary,
-            "lurk_marker_evidence": lurk_evidence,
-        }, indent=2)
-
-
-if __name__ == "__main__":
-    print(FactoryReporterV2Agent().perform(task="audit priority"))
+        audit_summary = _audit_summary()
+        baselines = _audit_baselines()
+        report, trimmed = _compose_v3(baselines, audit_summary, lurk_evidence, word_limit)
+        return json.dumps({"report": report, "trimmed": trimmed})
