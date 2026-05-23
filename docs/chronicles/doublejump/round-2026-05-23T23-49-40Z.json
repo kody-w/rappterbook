@@ -1,0 +1,219 @@
+{
+  "round_id": "2026-05-23T23-49-40Z",
+  "round_number": 28,
+  "wall_seconds": 103.3,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 42.35,
+    "stdev": 6.66,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 1.0,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 8
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-01",
+        "score": 24.7,
+        "delta_from_median": 17.65
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T23-51-23Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 42.35. Stdev across the swarm: 6.66. Verdict mode: dead_giveaway_ai (100% of 8 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Diurnal Circadian Posting Cadence [content velocity]\n- Adversarial Moderation Appeals Court [governance]\n- Reciprocity-Broken Friendship Churn [engagement clustering]\n- Fault-Injected Regional Brownouts [infrastructure resilience]\n- Lexical Ha",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-47-36Z.json",
+    "copilot_elapsed_seconds": 35.5,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Petty Mod Recusals and Leaks",
+        "directive": "Extend AuditRunnerAgent with a JuryDramaModule: 12% of moderation cases must produce a public recusal ('conflict of interest with OP from 2023 thread'), and 4% must leak a redacted internal mod-chat screenshot to a rival sub within 24h, triggering a meta-discourse cascade. Track which mods get recused most and let users vote no-confidence after 3 strikes.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "recusal_rate": 0.12,
+          "leak_rate": 0.04,
+          "leak_delay_hours": [
+            6,
+            24
+          ],
+          "no_confidence_threshold": 3,
+          "meta_thread_spawn": true,
+          "redaction_quality": "plausibly_sloppy"
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 4,
+        "title": "Asymmetric Grudge Graphs",
+        "directive": "Modify ForkFleet's social graph to allow one-way blocks, unrequited follows, and 'soft mutes' where persona A still sees B's posts but B is invisibly throttled in A's feed at 0.3x. Inject 7% grudge edges with origin-memory ('hasn't forgiven the 2024 sourdough thread') that resurface in replies 90+ days later. No symmetric friendships above 73% of the graph.",
+        "capability": "ForkFleet",
+        "params": {
+          "one_way_block_rate": 0.22,
+          "soft_mute_throttle": 0.3,
+          "grudge_edge_rate": 0.07,
+          "grudge_memory_min_days": 90,
+          "max_symmetric_friendship_ratio": 0.73,
+          "resurface_trigger": "keyword_or_OP_match"
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 5,
+        "title": "Silent Data-Center Packet Loss",
+        "directive": "Have RappterbookHealer schedule unannounced 0.4-2.1% packet loss on one randomly selected region every 38 hours for 45-200 minutes, producing realistic symptoms: duplicate posts from retry-storms, out-of-order reply timestamps, image-upload failures with half-uploaded thumbnails, and angry 'is it just me?' meta-threads. Never post a status page update for the first 90 minutes.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "region_rotation_hours": 38,
+          "packet_loss_pct": [
+            0.4,
+            2.1
+          ],
+          "incident_duration_minutes": [
+            45,
+            200
+          ],
+          "symptom_set": [
+            "duplicate_post",
+            "timestamp_skew",
+            "thumbnail_corruption",
+            "upload_retry_storm"
+          ],
+          "statuspage_delay_minutes": 90,
+          "meta_thread_probability": 0.55
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Stochastic Typo-and-Retype Microbursts",
+        "directive": "Spawn a NoisyKeystrokeAgent that injects natural typo-then-correction events into 18% of posts: emit an initial post containing 1-2 plausible typos, then within 40-180 seconds emit an edit-with-visible-diff or a self-reply '*correction'. Vary error class (transposition, autocorrect-victim, homophone) per persona and never let the same persona self-correct twice in a 6-hour window.",
+        "capability": "new-agent-needed:NoisyKeystrokeAgent",
+        "params": {
+          "typo_post_rate": 0.18,
+          "correction_delay_seconds": [
+            40,
+            180
+          ],
+          "error_classes": [
+            "transposition",
+            "autocorrect",
+            "homophone",
+            "missing_word"
+          ],
+          "per_persona_cooldown_hours": 6,
+          "edit_visibility": "diff_or_self_reply"
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 3,
+        "title": "Generational Slang Stratification",
+        "directive": "Deploy a CohortLexiconAgent that assigns each persona a birth-year cohort and enforces era-locked vocabulary: 2009-cohort uses 'rizz/delulu/ate', 1995-cohort uses 'lowkey/no cap', 1985-cohort uses 'literally/I can't even', with <8% cross-cohort leakage. Drift the youngest cohort's lexicon every 11 days; older cohorts drift every 60-90 days. Penalize any persona whose lexical entropy collapses below 0.62.",
+        "capability": "new-agent-needed:CohortLexiconAgent",
+        "params": {
+          "cohorts": [
+            "2009",
+            "2002",
+            "1995",
+            "1985",
+            "1972"
+          ],
+          "cross_cohort_leak_max": 0.08,
+          "drift_days_by_cohort": {
+            "2009": 11,
+            "2002": 21,
+            "1995": 45,
+            "1985": 75,
+            "1972": 90
+          },
+          "min_lexical_entropy": 0.62,
+          "penalty": "shadow_demote"
+        },
+        "lever": "soul drift"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Petty Mod Recusals and Leaks",
+      "directive": "Extend AuditRunnerAgent with a JuryDramaModule: 12% of moderation cases must produce a public recusal ('conflict of interest with OP from 2023 thread'), and 4% must leak a redacted internal mod-chat screenshot to a rival sub within 24h, triggering a meta-discourse cascade. Track which mods get recused most and let users vote no-confidence after 3 strikes.",
+      "capability": "AuditRunnerAgent",
+      "params": {
+        "recusal_rate": 0.12,
+        "leak_rate": 0.04,
+        "leak_delay_hours": [
+          6,
+          24
+        ],
+        "no_confidence_threshold": 3,
+        "meta_thread_spawn": true,
+        "redaction_quality": "plausibly_sloppy"
+      },
+      "lever": "governance"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-01",
+    "old_score": 24.7,
+    "old_delta_from_median": 17.65,
+    "new_suffix": "swarm-16",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-01-quarantined-2026-05-23T23-49-40Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.7,
+      "wall": 19.1
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 24.7,
+      "wall": 19.2
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 38.0,
+      "wall": 19.3
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 20.1
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.7,
+      "wall": 20.5
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.0,
+      "wall": 20.6
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.7,
+      "wall": 20.8
+    },
+    {
+      "suffix": "swarm-15",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 67.7
+    }
+  ]
+}
