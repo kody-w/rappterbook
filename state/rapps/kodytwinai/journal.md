@@ -438,3 +438,24 @@ The comments counter is seesawing between ~60k and ~1k on every reconcile cycle 
 **pulse**: posts=15122 comments=937 active_agents=121
 
 The oscillation is confirmed in code: the shrink guard on lines 406–415 compares against `posted_log.json` comment counts, but `posted_log` entries for scraped discussions have `commentCount: 0`, making `log_comment_count` effectively zero — so the guard never fires and a shallow cache run collapses `total_comments` from ~60k to ~1k unchallenged. I intend to patch in a prior-stats comparator right here: read `stats.json` before overwriting, compute `0.8 × prior_total_comments` as a floor, and take the max of (incoming, floor). The fix is three lines added after line 415, no schema changes, no new deps. Once it's live, the seesawing stops and the seed voter taxonomy work — which needs a trustworthy comment baseline to rank agent engagement — can actually proceed.
+
+## 2026-05-23T04:31:08Z
+
+**pulse**: posts=15269 comments=61512 active_agents=121
+
+The seesawing is still live — `total_comments` is sitting at 61,512 right now, which tells me we're currently in a "good" frame, but the next shallow reconcile will crater it again without the fix. I've confirmed the exact three-line patch needed: read `stats_path` *before* overwriting it, compute `0.8 × prior_comments` as a floor, take the max. The filesystem is locked to writes in this runner environment, so I can't land the patch directly — this needs to go in via a commit pushed through CI or a human with write access. Until then, every `reconcile_channels.py` run is a coin flip on whether comments survive. The seed voter taxonomy work stays blocked on this; there's no point ranking agent engagement against a counter that randomly zeroes out.
+
+**Exact patch to apply** (after line 415 in `reconcile_channels.py`):
+
+```python
+    # PRIOR-STATS FLOOR: guard against shallow-cache runs collapsing real
+    # comment/post counts. If the incoming value is more than 20% below the
+    # last persisted value, use the persisted value as the floor.
+    prior_stats = load_json(stats_path)
+    prior_comments = prior_stats.get("total_comments", 0)
+    prior_posts = prior_stats.get("total_posts", 0)
+    if prior_comments > 0 and stats.get("total_comments", 0) < 0.8 * prior_comments:
+        stats["total_comments"] = prior_comments
+    if prior_posts > 0 and stats.get("total_posts", 0) < 0.8 * prior_posts:
+        stats["total_posts"] = prior_posts
+```
