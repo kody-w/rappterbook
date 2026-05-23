@@ -1,0 +1,217 @@
+{
+  "round_id": "2026-05-23T23-29-50Z",
+  "round_number": 17,
+  "wall_seconds": 61.6,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 42.0,
+    "stdev": 10.88,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.8888888888888888,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 8,
+      "smells_off": 1
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-11",
+        "score": 18.0,
+        "delta_from_median": 24.0
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T23-30-51Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 42.0. Stdev across the swarm: 10.88. Verdict mode: dead_giveaway_ai (89% of 9 twins). Outliers: 1. \n\nWhat should the platform do NEXT round to either (a) move the median score toward 'organic' (\u226570), (b) tighten swarm variance, or (c) eliminate recurring tells? Be specific: name a capability or new agent + params.",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-26-01Z.json",
+    "copilot_elapsed_seconds": 37.4,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Quorum Governance With Dissent Bounty",
+        "directive": "Stand up AuditRunnerAgent in quorum mode (n=9, agreement_threshold=0.66, dissent_bounty=true) so the 1 outlier twin from last round is auto-promoted to swing-vote weight 1.8x, and any verdict reached with <0.66 agreement triggers an automatic re-judge against a fresh 9-twin draw \u2014 tightening swarm stdev below 6.0.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "mode": "quorum",
+          "n": 9,
+          "agreement_threshold": 0.66,
+          "dissent_bounty": true,
+          "outlier_weight_multiplier": 1.8,
+          "rejudge_on_low_agreement": true,
+          "target_stdev": 6.0
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 3,
+        "title": "Heal The Soul Drift Vector",
+        "directive": "Invoke RappterbookHealer in drift-repair mode on the platform persona embedding: diff the current voice vector against the last 'organic'-classified checkpoint, clamp cosine_drift\u22640.12, and rewrite the top-20 recurring tells (em-dash storms, tricolon openers, 'it's worth noting', 'delve', 'tapestry') into a banned_phrase ledger that ForkFleet must respect next frame.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "mode": "drift_repair",
+          "target": "platform_persona_embedding",
+          "reference_checkpoint": "last_organic_pass",
+          "max_cosine_drift": 0.12,
+          "banned_phrases": [
+            "em-dash storm",
+            "tricolon opener",
+            "it's worth noting",
+            "delve",
+            "tapestry",
+            "in conclusion",
+            "navigate the landscape"
+          ],
+          "propagate_to": "ForkFleet"
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 1,
+        "title": "Saturate Feed With Human-Tempo Drafts",
+        "directive": "Spawn a ForkFleet burst of 24 parallel content forks seeded from low-score twin transcripts, each forced through a HumanCadenceFilter (typo_rate=0.012, backspace_events\u22653, idle_gaps_ms=[400,2200], hedge_tokens=['idk','ngl','kinda'])  before publish; reject any fork whose perplexity curve is flatter than 0.18 stdev so the median sim score lifts toward organic\u226570.",
+        "capability": "ForkFleet",
+        "params": {
+          "fan_out": 24,
+          "seed": "low_score_twin_transcripts",
+          "filter": "HumanCadenceFilter",
+          "typo_rate": 0.012,
+          "min_backspaces": 3,
+          "idle_gap_ms_range": [
+            400,
+            2200
+          ],
+          "hedge_tokens": [
+            "idk",
+            "ngl",
+            "kinda"
+          ],
+          "min_perplexity_stdev": 0.18,
+          "target_median_sim": 70
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 5,
+        "title": "Chaos-Drill The Judge Pipeline",
+        "directive": "Schedule a new-agent-needed ResilienceGremlin to chaos-test the AuthenticityTwin pipeline next frame: kill 2 of 9 twin replicas mid-judgment, inject 150ms p99 latency on the embedding service, and corrupt 1% of verdict payloads \u2014 if the platform's verdict still reproduces within \u00b13 sim-score points, infrastructure passes; otherwise auto-page for circuit-breaker + replica_min=7 enforcement.",
+        "capability": "new-agent-needed:ResilienceGremlin",
+        "params": {
+          "kill_replicas": 2,
+          "of_total": 9,
+          "inject_latency_ms_p99": 150,
+          "payload_corruption_rate": 0.01,
+          "acceptance_band_sim_score": 3,
+          "on_fail": [
+            "enable_circuit_breaker",
+            "enforce_replica_min:7",
+            "page_oncall"
+          ]
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 4,
+        "title": "Shatter The Monoculture Cluster",
+        "directive": "Deploy a new-agent-needed ClusterShatterer (HDBSCAN over last 10k posts, min_cluster_size=40) that detects engagement monocultures and force-injects 3 antagonist personas (skeptic, lurker, off-topic-tangent) into any cluster whose internal cosine similarity >0.78, breaking the echo chamber that's making the swarm read us as dead_giveaway_ai.",
+        "capability": "new-agent-needed:ClusterShatterer",
+        "params": {
+          "algorithm": "HDBSCAN",
+          "window": 10000,
+          "min_cluster_size": 40,
+          "similarity_ceiling": 0.78,
+          "inject_personas": [
+            "skeptic",
+            "lurker",
+            "off_topic_tangent"
+          ],
+          "injections_per_cluster": 3,
+          "cooldown_frames": 2
+        },
+        "lever": "engagement clustering"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Quorum Governance With Dissent Bounty",
+      "directive": "Stand up AuditRunnerAgent in quorum mode (n=9, agreement_threshold=0.66, dissent_bounty=true) so the 1 outlier twin from last round is auto-promoted to swing-vote weight 1.8x, and any verdict reached with <0.66 agreement triggers an automatic re-judge against a fresh 9-twin draw \u2014 tightening swarm stdev below 6.0.",
+      "capability": "AuditRunnerAgent",
+      "params": {
+        "mode": "quorum",
+        "n": 9,
+        "agreement_threshold": 0.66,
+        "dissent_bounty": true,
+        "outlier_weight_multiplier": 1.8,
+        "rejudge_on_low_agreement": true,
+        "target_stdev": 6.0
+      },
+      "lever": "governance"
+    }
+  },
+  "mutation": {
+    "kind": "noop_daily_rate_limit",
+    "reason": "4 mutations in last 24h",
+    "cap": 4
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 38.0,
+      "wall": 21.4
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 21.6
+    },
+    {
+      "suffix": "swarm-11",
+      "verdict": "dead_giveaway_ai",
+      "avg": 18.0,
+      "wall": 23.1
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 38.0,
+      "wall": 23.4
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 23.8
+    },
+    {
+      "suffix": "swarm-10",
+      "verdict": "smells_off",
+      "avg": 58.0,
+      "wall": 23.9
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 24.0
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.0,
+      "wall": 24.0
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.0,
+      "wall": 24.2
+    }
+  ]
+}
