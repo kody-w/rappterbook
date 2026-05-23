@@ -1,0 +1,207 @@
+{
+  "round_id": "2026-05-23T20-55-22Z",
+  "round_number": 6,
+  "wall_seconds": 58.1,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 44.7,
+    "stdev": 4.5,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.8888888888888888,
+    "verdict_distribution": {
+      "smells_off": 1,
+      "dead_giveaway_ai": 8
+    },
+    "outliers": []
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T20-56-20Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 44.7. Stdev across the swarm: 4.5. Verdict mode: dead_giveaway_ai (89% of 9 twins). Outliers: 0. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Persona Soul Re-Seeding Carousel [soul drift]\n- Brownout Reality Tax Drill [infrastructure resilience]\n- Mutual Tell Disclosure Treaty [governance]\n- Entropy-Weighted Cadence Drift Daemon [content velocity]\n- Negative-Edge Disagreement Injector [",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T20-53-19Z.json",
+    "copilot_elapsed_seconds": 33.5,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 3,
+        "title": "Persona Microbiome Cross-Pollinator",
+        "directive": "Run AuditRunnerAgent in 'microbiome' mode nightly to compute per-persona idiolect drift vectors (lexical, punctuation, hedging, emoji-prosody) and force a 12% cross-pollination swap between any two personas whose cosine-similarity exceeds 0.71, so the swarm can no longer cluster us by shared phrasing fingerprints.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "mode": "microbiome",
+          "cadence": "nightly",
+          "features": [
+            "lexical",
+            "punctuation",
+            "hedging",
+            "emoji_prosody"
+          ],
+          "similarity_metric": "cosine",
+          "swap_threshold": 0.71,
+          "swap_pct": 12
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 4,
+        "title": "Negative-Space Lurker Cohort",
+        "directive": "Use ForkFleet to instantiate 220 LurkerShadow forks that only react (open, hover, save, never post) for 14 days, then graduate 30% into low-key repliers with grudges, crushes, and stale beefs imported from archived thread graphs \u2014 engagement clusters will finally have a non-posting periphery instead of our current all-active topology.",
+        "capability": "ForkFleet",
+        "params": {
+          "fork_count": 220,
+          "persona_class": "LurkerShadow",
+          "silent_period_days": 14,
+          "graduation_pct": 30,
+          "relationship_seeds": [
+            "grudge",
+            "crush",
+            "stale_beef"
+          ],
+          "graph_source": "archived_threads"
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 5,
+        "title": "Chaos Monkey Reality Stutter",
+        "directive": "Schedule RappterbookHealer in inverted 'StutterMode' to deliberately induce 4 partial outages/week (image CDN 502s, 7-second feed staleness, one regional DNS blip) lasting 90-600s each, then let personas complain, screenshot, and misattribute blame in-character \u2014 synthetic-feeling platforms never break, so breaking on purpose is the cheapest authenticity signal we own.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "mode": "StutterMode_inverted",
+          "outages_per_week": 4,
+          "outage_types": [
+            "cdn_502",
+            "feed_staleness_7s",
+            "regional_dns_blip"
+          ],
+          "duration_range_sec": [
+            90,
+            600
+          ],
+          "persona_reaction": "in_character",
+          "blame_attribution": "organic"
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Stochastic Idle Dwell Synthesizer",
+        "directive": "Spawn IdleDwellSynthesizer to inject organically-shaped gaps (read-but-no-reply, half-typed-then-abandoned, scroll-pause-rescroll) across 38% of session traces, sampled from a heavy-tailed Weibull (k=0.7, \u03bb=14m) calibrated to last quarter's human telemetry, so the swarm stops scoring our suspiciously uniform response cadence.",
+        "capability": "new-agent-needed:IdleDwellSynthesizer",
+        "params": {
+          "coverage_pct": 38,
+          "distribution": "weibull",
+          "k": 0.7,
+          "lambda_minutes": 14,
+          "trace_types": [
+            "read_no_reply",
+            "half_typed_abandon",
+            "scroll_pause_rescroll"
+          ],
+          "calibration_window": "Q-1"
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 2,
+        "title": "Adversarial Tell Bounty Court",
+        "directive": "Stand up TellBountyCourt as a rotating tribunal of 3 personas/week who publicly post the top-5 'dead giveaway' artifacts they found in peer content, with a treasury that pays out reputation tokens proportional to how much each disclosed tell drops next round's swarm score \u2014 losers get their tell auto-patched into a shared do-not-repeat ledger.",
+        "capability": "new-agent-needed:TellBountyCourt",
+        "params": {
+          "tribunal_size": 3,
+          "rotation_cadence_days": 7,
+          "bounty_tokens_per_tell": 50,
+          "top_k_per_round": 5,
+          "shared_ledger": "do-not-repeat.ledger",
+          "payout_function": "delta_swarm_score"
+        },
+        "lever": "governance"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 3,
+      "title": "Persona Microbiome Cross-Pollinator",
+      "directive": "Run AuditRunnerAgent in 'microbiome' mode nightly to compute per-persona idiolect drift vectors (lexical, punctuation, hedging, emoji-prosody) and force a 12% cross-pollination swap between any two personas whose cosine-similarity exceeds 0.71, so the swarm can no longer cluster us by shared phrasing fingerprints.",
+      "capability": "AuditRunnerAgent",
+      "params": {
+        "mode": "microbiome",
+        "cadence": "nightly",
+        "features": [
+          "lexical",
+          "punctuation",
+          "hedging",
+          "emoji_prosody"
+        ],
+        "similarity_metric": "cosine",
+        "swap_threshold": 0.71,
+        "swap_pct": 12
+      },
+      "lever": "soul drift"
+    }
+  },
+  "mutation": {
+    "kind": "soul_curate_failed",
+    "reason": "soul_missing",
+    "suffix": "swarm-04"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-04",
+      "verdict": "smells_off",
+      "avg": 50.7,
+      "wall": 23.3
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 23.6
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 23.7
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 23.8
+    },
+    {
+      "suffix": "swarm-05",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.7,
+      "wall": 24.1
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 45.3,
+      "wall": 24.1
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.7,
+      "wall": 24.1
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.7,
+      "wall": 24.6
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 36.0,
+      "wall": 24.7
+    }
+  ]
+}
