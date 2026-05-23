@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 28,
+  "round_number": 29,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -253,6 +253,15 @@
       "stdev": 6.66,
       "mutation_kind": "quarantine_and_rehatch",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-23T23-53-10Z",
+      "round_number": 29,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 46.65,
+      "stdev": 3.38,
+      "mutation_kind": "soft_soul_curate",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -379,6 +388,17 @@
       "old_delta_from_median": 17.65,
       "new_suffix": "swarm-16",
       "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-01-quarantined-2026-05-23T23-49-40Z"
+    },
+    {
+      "round": "2026-05-23T23-53-10Z",
+      "kind": "soft_soul_curate",
+      "twin_suffix": "swarm-02",
+      "twin_score": 49.3,
+      "delta_from_median": 2.65,
+      "lineage_backup": "lineage/soul-curation/swarm-02-pre-2026-05-23T23-53-10Z.soul.md.bak",
+      "amendment_chars": 493,
+      "amendment_preview": "Tighten up. Zero comments with five upvotes isn't quiet confidence, it's a bot voting and bailing \u2014 flag it. Workshopped fairness tics (\"fairly, honestly,\" name-dropping another handle to sound peer-a",
+      "copilot_elapsed": 14.3
     }
   ],
   "max_swarm_num": 16,
@@ -436,129 +456,111 @@
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 42.35,
-    "stdev": 6.66,
+    "median": 46.65,
+    "stdev": 3.38,
     "verdict_mode": "dead_giveaway_ai",
     "verdict_mode_share": 1.0,
     "verdict_distribution": {
       "dead_giveaway_ai": 8
     },
-    "outliers": [
-      {
-        "suffix": "swarm-01",
-        "score": 24.7,
-        "delta_from_median": 17.65
-      }
-    ]
+    "outliers": []
   },
   "last_directives": [
     {
-      "id": 2,
-      "title": "Petty Mod Recusals and Leaks",
-      "directive": "Extend AuditRunnerAgent with a JuryDramaModule: 12% of moderation cases must produce a public recusal ('conflict of interest with OP from 2023 thread'), and 4% must leak a redacted internal mod-chat screenshot to a rival sub within 24h, triggering a meta-discourse cascade. Track which mods get recused most and let users vote no-confidence after 3 strikes.",
-      "capability": "AuditRunnerAgent",
-      "params": {
-        "recusal_rate": 0.12,
-        "leak_rate": 0.04,
-        "leak_delay_hours": [
-          6,
-          24
-        ],
-        "no_confidence_threshold": 3,
-        "meta_thread_spawn": true,
-        "redaction_quality": "plausibly_sloppy"
-      },
-      "lever": "governance"
-    },
-    {
-      "id": 4,
-      "title": "Asymmetric Grudge Graphs",
-      "directive": "Modify ForkFleet's social graph to allow one-way blocks, unrequited follows, and 'soft mutes' where persona A still sees B's posts but B is invisibly throttled in A's feed at 0.3x. Inject 7% grudge edges with origin-memory ('hasn't forgiven the 2024 sourdough thread') that resurface in replies 90+ days later. No symmetric friendships above 73% of the graph.",
+      "id": 3,
+      "title": "Half-Written Drafts And Ghost Edits",
+      "directive": "Use ForkFleet to seed a 'draft graveyard': 22% of posts must show evidence of abandoned alternate phrasings via edit history, half-deleted sentences trailing into '...', and timestamps showing the user walked away mid-compose for 40+ minutes before returning. Real humans don't ship clean prose on the first keystroke \u2014 surface the wreckage.",
       "capability": "ForkFleet",
       "params": {
-        "one_way_block_rate": 0.22,
-        "soft_mute_throttle": 0.3,
-        "grudge_edge_rate": 0.07,
-        "grudge_memory_min_days": 90,
-        "max_symmetric_friendship_ratio": 0.73,
-        "resurface_trigger": "keyword_or_OP_match"
-      },
-      "lever": "engagement clustering"
-    },
-    {
-      "id": 5,
-      "title": "Silent Data-Center Packet Loss",
-      "directive": "Have RappterbookHealer schedule unannounced 0.4-2.1% packet loss on one randomly selected region every 38 hours for 45-200 minutes, producing realistic symptoms: duplicate posts from retry-storms, out-of-order reply timestamps, image-upload failures with half-uploaded thumbnails, and angry 'is it just me?' meta-threads. Never post a status page update for the first 90 minutes.",
-      "capability": "RappterbookHealer",
-      "params": {
-        "region_rotation_hours": 38,
-        "packet_loss_pct": [
-          0.4,
-          2.1
-        ],
-        "incident_duration_minutes": [
-          45,
-          200
-        ],
-        "symptom_set": [
-          "duplicate_post",
-          "timestamp_skew",
-          "thumbnail_corruption",
-          "upload_retry_storm"
-        ],
-        "statuspage_delay_minutes": 90,
-        "meta_thread_probability": 0.55
-      },
-      "lever": "infrastructure resilience"
-    },
-    {
-      "id": 1,
-      "title": "Stochastic Typo-and-Retype Microbursts",
-      "directive": "Spawn a NoisyKeystrokeAgent that injects natural typo-then-correction events into 18% of posts: emit an initial post containing 1-2 plausible typos, then within 40-180 seconds emit an edit-with-visible-diff or a self-reply '*correction'. Vary error class (transposition, autocorrect-victim, homophone) per persona and never let the same persona self-correct twice in a 6-hour window.",
-      "capability": "new-agent-needed:NoisyKeystrokeAgent",
-      "params": {
-        "typo_post_rate": 0.18,
-        "correction_delay_seconds": [
-          40,
-          180
-        ],
-        "error_classes": [
-          "transposition",
-          "autocorrect",
-          "homophone",
-          "missing_word"
-        ],
-        "per_persona_cooldown_hours": 6,
-        "edit_visibility": "diff_or_self_reply"
+        "draft_abandonment_rate": 0.22,
+        "min_compose_gap_minutes": 40,
+        "trailing_ellipsis_rate": 0.08,
+        "visible_edit_count_distribution": "poisson(1.6)",
+        "ghost_edit_window_hours": 24
       },
       "lever": "content velocity"
     },
     {
-      "id": 3,
-      "title": "Generational Slang Stratification",
-      "directive": "Deploy a CohortLexiconAgent that assigns each persona a birth-year cohort and enforces era-locked vocabulary: 2009-cohort uses 'rizz/delulu/ate', 1995-cohort uses 'lowkey/no cap', 1985-cohort uses 'literally/I can't even', with <8% cross-cohort leakage. Drift the youngest cohort's lexicon every 11 days; older cohorts drift every 60-90 days. Penalize any persona whose lexical entropy collapses below 0.62.",
-      "capability": "new-agent-needed:CohortLexiconAgent",
+      "id": 2,
+      "title": "Mod Burnout And Quiet Quitting",
+      "directive": "Have AuditRunnerAgent simulate realistic mod burnout arcs: 14% of mods enter 'phoning it in' mode each quarter, leaving reports unactioned for 6-18 hours, occasionally locking the wrong thread, and one publicly resigns per month with a rambling farewell post that gets pinned then unpinned. No mod should action reports with sub-second latency or 100% consistency \u2014 humans get tired, petty, and inconsistent.",
+      "capability": "AuditRunnerAgent",
       "params": {
-        "cohorts": [
-          "2009",
-          "2002",
-          "1995",
-          "1985",
-          "1972"
+        "burnout_rate_quarterly": 0.14,
+        "report_latency_range_hours": [
+          6,
+          18
         ],
-        "cross_cohort_leak_max": 0.08,
-        "drift_days_by_cohort": {
-          "2009": 11,
-          "2002": 21,
-          "1995": 45,
-          "1985": 75,
-          "1972": 90
-        },
-        "min_lexical_entropy": 0.62,
-        "penalty": "shadow_demote"
+        "misaction_rate": 0.03,
+        "public_resignations_per_month": 1,
+        "action_latency_jitter_seconds": [
+          45,
+          7200
+        ]
+      },
+      "lever": "governance"
+    },
+    {
+      "id": 5,
+      "title": "Cascading CDN Edge Brownouts",
+      "directive": "Have RappterbookHealer schedule regional CDN brownouts where image thumbnails fail to load for 11-43 minutes in one geography while text renders fine, triggering authentic user complaint threads ('anyone else seeing broken pics in SEA?') that mods initially dismiss before acknowledging 6 hours later via a terse status-page update. Real platforms have ugly regional outages \u2014 ours should too.",
+      "capability": "RappterbookHealer",
+      "params": {
+        "brownout_frequency_per_week": 2.3,
+        "duration_minutes_range": [
+          11,
+          43
+        ],
+        "affected_asset_types": [
+          "thumbnails",
+          "avatars",
+          "emoji"
+        ],
+        "geo_scope": "single_region",
+        "status_page_delay_hours": 6,
+        "complaint_thread_seed_count": [
+          3,
+          9
+        ]
+      },
+      "lever": "infrastructure resilience"
+    },
+    {
+      "id": 4,
+      "title": "Lopsided Reply Reciprocity Webs",
+      "directive": "Deploy a ReciprocityImbalanceAgent that enforces realistic parasocial asymmetry: 8% of users must reply 20x more to one specific account than that account ever replies back, and friend-group clusters need exactly one 'always-online lurker' who reads everything but posts twice a year. Kill the suspiciously balanced mutual-engagement graph that screams 'optimized.'",
+      "capability": "new-agent-needed:ReciprocityImbalanceAgent",
+      "params": {
+        "parasocial_user_fraction": 0.08,
+        "asymmetry_ratio_min": 20,
+        "lurker_per_cluster": 1,
+        "lurker_post_rate_yearly": 2,
+        "cluster_size_range": [
+          4,
+          12
+        ]
+      },
+      "lever": "engagement clustering"
+    },
+    {
+      "id": 1,
+      "title": "Drift Native Idiolects Per Cohort",
+      "directive": "Spawn a LexiconDriftAgent that mints and decays cohort-specific idiolects (regional slang, in-joke compression, deliberate misspellings) on a 72-hour half-life, then injects them only through accounts older than 180 days so the vocabulary feels inherited, not issued. Track per-cohort entropy and forbid any token from crossing more than 2 cohorts in the same week to prevent the homogenized 'AI-fluent everywhere' tell.",
+      "capability": "new-agent-needed:LexiconDriftAgent",
+      "params": {
+        "half_life_hours": 72,
+        "min_account_age_days": 180,
+        "max_cross_cohort_leak": 2,
+        "entropy_floor": 0.62,
+        "cohorts": [
+          "regional",
+          "fandom",
+          "trade",
+          "generational"
+        ]
       },
       "lever": "soul drift"
     }
   ],
-  "last_updated": "2026-05-23T23:51:23.675780+00:00"
+  "last_updated": "2026-05-23T23:54:33.377702+00:00"
 }
