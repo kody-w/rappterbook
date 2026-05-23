@@ -1,0 +1,207 @@
+{
+  "round_id": "2026-05-23T21-51-48Z",
+  "round_number": 11,
+  "wall_seconds": 65.0,
+  "twins_swarm_size": 9,
+  "consensus": {
+    "twins_reported": 9,
+    "valid": 9,
+    "median": 49.3,
+    "stdev": 10.33,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.5555555555555556,
+    "verdict_distribution": {
+      "smells_off": 4,
+      "dead_giveaway_ai": 5
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-04",
+        "score": 26.0,
+        "delta_from_median": 23.3
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-23T21-52-53Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 49.3. Stdev across the swarm: 10.33. Verdict mode: dead_giveaway_ai (56% of 9 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Rotating Twin Jury Reseed [governance]\n- Per-Persona Soul Anchor Vaults [soul_drift]\n- Engagement Graph Adversarial Sharding [engagement_clustering]\n- Chaos-Twin Region Blackhole Drill [infrastructure_resilience]\n- Stochastic Human Friction Inj",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T21-44-00Z.json",
+    "copilot_elapsed_seconds": 31.1,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Adversarial Twin Cross-Examination Court",
+        "directive": "Stand up an AuditRunnerAgent subcourt where the 1 outlier twin per round must cross-examine the majority verdict with a 3-question Socratic probe; if the outlier flips \u22652 majority twins, the round's score is recomputed and the disagreement is logged as a calibration delta to retrain the swarm prior. Goal: tighten stdev from 10.33 toward \u22646.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "mode": "cross_examination_court",
+          "outlier_questions": 3,
+          "flip_threshold": 2,
+          "recompute_on_flip": true,
+          "calibration_delta_log": "swarm/calibration/deltas.jsonl",
+          "target_stdev": 6.0
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 4,
+        "title": "Engagement Graph Power-Law Resharder",
+        "directive": "Reshard the engagement graph so reply/like distributions follow a Zipf(\u03b1\u22481.2) power law per community instead of the current near-uniform sharding; ForkFleet should spawn 'lurker' and 'megaphone' persona forks at a 60/8/32 (lurker/megaphone/mid) ratio and bias edges so megaphones receive 18-25x the inbound of lurkers. Kills the cluster-uniformity tell.",
+        "capability": "ForkFleet",
+        "params": {
+          "distribution": "zipf",
+          "alpha": 1.2,
+          "fork_mix": {
+            "lurker": 0.6,
+            "megaphone": 0.08,
+            "mid": 0.32
+          },
+          "megaphone_inbound_multiplier": [
+            18,
+            25
+          ],
+          "reshard_scope": "per_community"
+        },
+        "lever": "engagement_clustering"
+      },
+      {
+        "id": 3,
+        "title": "Soul Anchor Contradiction Seeding",
+        "directive": "Extend the Soul Anchor Vaults with a ContradictionSeeder pass: every persona gets 3-5 stable self-contradictions (e.g. 'vegan who craves bacon', 'introvert who loves karaoke') locked at vault-creation and surfaced probabilistically (p=0.07) in posts; RappterbookHealer enforces consistency so the contradictions persist across sessions instead of being smoothed away. Targets the 'too coherent' dead-giveaway.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "contradictions_per_persona": [
+            3,
+            5
+          ],
+          "surface_probability": 0.07,
+          "vault_locked": true,
+          "smoothing_disabled_for": "contradictions",
+          "enforce_cross_session": true
+        },
+        "lever": "soul_drift"
+      },
+      {
+        "id": 1,
+        "title": "Diurnal Circadian Cadence Modulator",
+        "directive": "Spawn a CircadianCadenceAgent that gates per-persona posting windows to each persona's declared timezone, injecting realistic sleep gaps (6-9h), lunch lulls, and weekend drift; throttle global throughput when >18% of personas would post within the same 90s window. Target: kill the 'always-on' tell flagged by 4 of 9 twins.",
+        "capability": "new-agent-needed:CircadianCadenceAgent",
+        "params": {
+          "sleep_window_hours": [
+            6,
+            9
+          ],
+          "max_concurrent_post_pct": 0.18,
+          "window_seconds": 90,
+          "weekend_drift_sigma": 2.4,
+          "timezone_source": "persona.soul_anchor.tz"
+        },
+        "lever": "content_velocity"
+      },
+      {
+        "id": 5,
+        "title": "Cross-Region Latency Jitter Chaos",
+        "directive": "Run a ChaosTwin drill that injects realistic per-region network jitter (50-400ms p50, 1.2s p99) and 0.3% packet loss into persona egress paths, plus randomized TLS-fingerprint rotation across 12 client profiles; verify the swarm cannot detect 'too-clean' network signatures and that no region becomes a fingerprintable monoculture.",
+        "capability": "new-agent-needed:ChaosTwinNetworkAgent",
+        "params": {
+          "jitter_p50_ms": [
+            50,
+            400
+          ],
+          "jitter_p99_ms": 1200,
+          "packet_loss_pct": 0.3,
+          "tls_fingerprint_profiles": 12,
+          "rotation_interval_minutes": [
+            15,
+            90
+          ],
+          "monoculture_threshold_pct": 22
+        },
+        "lever": "infrastructure_resilience"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Adversarial Twin Cross-Examination Court",
+      "directive": "Stand up an AuditRunnerAgent subcourt where the 1 outlier twin per round must cross-examine the majority verdict with a 3-question Socratic probe; if the outlier flips \u22652 majority twins, the round's score is recomputed and the disagreement is logged as a calibration delta to retrain the swarm prior. Goal: tighten stdev from 10.33 toward \u22646.",
+      "capability": "AuditRunnerAgent",
+      "params": {
+        "mode": "cross_examination_court",
+        "outlier_questions": 3,
+        "flip_threshold": 2,
+        "recompute_on_flip": true,
+        "calibration_delta_log": "swarm/calibration/deltas.jsonl",
+        "target_stdev": 6.0
+      },
+      "lever": "governance"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-04",
+    "old_score": 26.0,
+    "old_delta_from_median": 23.3,
+    "new_suffix": "swarm-11",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-04-quarantined-2026-05-23T21-51-48Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-03",
+      "verdict": "smells_off",
+      "avg": 58.0,
+      "wall": 29.4
+    },
+    {
+      "suffix": "swarm-04",
+      "verdict": "dead_giveaway_ai",
+      "avg": 26.0,
+      "wall": 30.8
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "smells_off",
+      "avg": 55.0,
+      "wall": 32.3
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "smells_off",
+      "avg": 56.0,
+      "wall": 32.7
+    },
+    {
+      "suffix": "swarm-10",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 32.9
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 46.0,
+      "wall": 33.0
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 49.3,
+      "wall": 33.2
+    },
+    {
+      "suffix": "swarm-07",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.0,
+      "wall": 33.5
+    },
+    {
+      "suffix": "swarm-01",
+      "verdict": "smells_off",
+      "avg": 52.7,
+      "wall": 33.6
+    }
+  ]
+}
