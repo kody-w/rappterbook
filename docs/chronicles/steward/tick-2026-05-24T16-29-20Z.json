@@ -1,0 +1,20 @@
+{
+  "tick_id": "2026-05-24T16-29-20Z",
+  "tick": 82,
+  "ts": "2026-05-24T16:29:20.618364+00:00",
+  "healed": [
+    "disk rotation: {'fork_fleet_replies_pruned': 31, 'oversized_logs_truncated': 0, 'chronicle_rounds_pruned': 0}"
+  ],
+  "alerts": [],
+  "checks": {
+    "copilot": true,
+    "disk_rotation": {
+      "fork_fleet_replies_pruned": 31,
+      "oversized_logs_truncated": 0,
+      "chronicle_rounds_pruned": 0
+    },
+    "orphan_worktrees_removed": 0,
+    "active_swarm_twins": 8,
+    "sprint_elapsed_hours": 13.73
+  }
+}
