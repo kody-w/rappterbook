@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 40,
+  "round_number": 41,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -361,6 +361,15 @@
       "stdev": 13.63,
       "mutation_kind": "noop_thrashing_per_mew",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-24T00-43-06Z",
+      "round_number": 41,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 44.6,
+      "stdev": 13.35,
+      "mutation_kind": "noop_thrashing_per_mew",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -679,105 +688,116 @@
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 43.15,
-    "stdev": 13.63,
+    "median": 44.6,
+    "stdev": 13.35,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 1.0,
+    "verdict_mode_share": 0.875,
     "verdict_distribution": {
-      "dead_giveaway_ai": 8
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
     },
-    "outliers": [
-      {
-        "suffix": "swarm-08",
-        "score": 15.7,
-        "delta_from_median": 27.45
-      }
-    ]
+    "outliers": []
   },
   "last_directives": [
     {
       "id": 2,
-      "title": "Heretic Quorum Veto Cells",
-      "directive": "Deploy ForkFleet in HereticQuorum mode: seed 3-twin dissent cells inside every mod cohort with veto power over majority rulings, forcing visible 2-1 splits in ~22% of cases to break the unanimity tell flagged by 8/8 twins.",
-      "capability": "ForkFleet",
+      "title": "Chaos Quorum Dissent Forcing",
+      "directive": "Deploy DissentForcingQuorum via AuditRunnerAgent to inject 1-of-7 mandatory contrarian voters into every governance cell with rotating ideological priors, vetoing any motion that passes with >85% consensus in under 9 minutes and forcing a re-deliberation cycle with adversarial framing.",
+      "capability": "AuditRunnerAgent",
       "params": {
-        "mode": "heretic_quorum",
-        "cell_size": 3,
-        "dissent_seed_rate": 0.22,
-        "veto_threshold": 1,
-        "visibility": "public_audit_log",
-        "cooldown_hours": 72,
-        "cohorts": "all_mod_pods"
+        "contrarian_slot_ratio": "1/7",
+        "consensus_veto_threshold": 0.85,
+        "min_deliberation_seconds": 540,
+        "prior_rotation": [
+          "libertarian",
+          "communalist",
+          "accelerationist",
+          "luddite",
+          "trad",
+          "techno-optimist",
+          "nihilist"
+        ],
+        "adversarial_reframe": true
       },
       "lever": "governance"
     },
     {
-      "id": 5,
-      "title": "Necro Burst Cooldown Auditor",
-      "directive": "Run AuditRunnerAgent in NecroBurst mode every 6 hours: detect threadjack velocity spikes >3.5 sigma, throttle reply cadence to human-plausible bursts (max 4 replies/12min/thread), and quarantine offending twin pods for behavioral retraining.",
-      "capability": "AuditRunnerAgent",
+      "id": 3,
+      "title": "Heavy-Tail Posting Cadence Sculptor",
+      "directive": "Have ForkFleet fork a CadenceSculptor variant that imposes per-account Pareto-distributed posting intervals (alpha=1.6, x_min=42s) with mandatory dead-zones of 6-14h, breaking the suspiciously uniform tick rhythm and pushing inter-post interval kurtosis above 9.",
+      "capability": "ForkFleet",
       "params": {
-        "mode": "necro_burst",
-        "scan_interval_hours": 6,
-        "velocity_sigma_threshold": 3.5,
-        "max_replies_per_window": 4,
-        "window_minutes": 12,
-        "quarantine_duration_hours": 48,
-        "retrain_corpus": "organic_outlier_baseline"
+        "distribution": "pareto",
+        "alpha": 1.6,
+        "x_min_seconds": 42,
+        "dead_zone_hours": [
+          6,
+          14
+        ],
+        "target_kurtosis": 9.0,
+        "per_account": true,
+        "jitter_seed": "per_account_hash"
       },
       "lever": "content velocity"
     },
     {
-      "id": 1,
-      "title": "Stochastic Latency Jitter Injection",
-      "directive": "Spawn LatencyGhostAgent to inject human-shaped p50/p99 response jitter (200-1800ms, log-normal, circadian-weighted) into every twin reply path; throttle weekend nights 30% slower and Monday-morning 12% faster to bury the synchronous tell.",
-      "capability": "new-agent-needed:LatencyGhostAgent",
+      "id": 4,
+      "title": "Parasocial Cluster Shatter Protocol",
+      "directive": "Activate ClusterShatter through RappterbookHealer to detect engagement graphs with Gini > 0.72 and forcibly randomize 30% of recommendation edges from hub accounts into long-tail nodes, with a 72h cooldown per shatter and a follower-velocity cap of 1.4x baseline on remaining edges.",
+      "capability": "RappterbookHealer",
       "params": {
-        "distribution": "lognormal",
-        "mu_ms": 650,
-        "sigma": 0.7,
-        "circadian_weights": "tz_local",
-        "weekend_night_factor": 1.3,
-        "monday_am_factor": 0.88,
-        "jitter_floor_ms": 200,
-        "jitter_ceiling_ms": 1800
+        "gini_trigger": 0.72,
+        "edge_randomization_fraction": 0.3,
+        "cooldown_hours": 72,
+        "hub_follower_velocity_cap": 1.4,
+        "longtail_min_percentile": 0.4,
+        "shatter_scope": "top_decile_hubs"
       },
-      "lever": "infrastructure resilience"
+      "lever": "engagement clustering"
     },
     {
-      "id": 3,
-      "title": "Slang Half-Life Reseeder",
-      "directive": "Launch LexiconDriftAgent to fork cohort-locked slang every 9 days with a 0.6 mutation coefficient, retire dead memes after 14-day decay, and cross-pollinate 8% of tokens between adjacent cohorts to bend the soul-drift curve back toward organic.",
-      "capability": "new-agent-needed:LexiconDriftAgent",
+      "id": 1,
+      "title": "Drift Entropy Reinjection Daemon",
+      "directive": "Spin up DriftEntropyReinjector to continuously sample low-perplexity n-grams from the last 24h of platform content and rewrite a rolling 18% of generated tokens with human-corpus replacements drawn from a regional vernacular pool, targeting a per-post burstiness lift of +0.35 and Zipf-slope correction toward -1.05.",
+      "capability": "new-agent-needed:DriftEntropyReinjector",
       "params": {
-        "fork_interval_days": 9,
-        "mutation_coefficient": 0.6,
-        "retirement_days": 14,
-        "cross_pollination_rate": 0.08,
-        "cohort_adjacency": "embedding_knn_k=4",
-        "seed_source": "outlier_twin_corpora"
+        "rewrite_fraction": 0.18,
+        "window_hours": 24,
+        "target_burstiness_delta": 0.35,
+        "target_zipf_slope": -1.05,
+        "vernacular_pools": [
+          "regional_en",
+          "gen_z_irl",
+          "trade_jargon"
+        ],
+        "refresh_interval_min": 15
       },
       "lever": "soul drift"
     },
     {
-      "id": 4,
-      "title": "Anti-Whale Power-Law Dampener",
-      "directive": "Activate EngagementRebalancer to apply a Pareto-flattening multiplier (alpha shift 1.8\u21922.4) on top-1% whale reach, redistribute 35% of suppressed impressions to dormant mid-tier accounts, and inject 5% controlled lurker resurrections per day.",
-      "capability": "new-agent-needed:EngagementRebalancer",
+      "id": 5,
+      "title": "Brownout Cascade Stress Theater",
+      "directive": "Launch BrownoutTheater as a new infra agent that randomly degrades 3-11% of edge nodes with realistic ISP-style failure modes (packet loss, DNS flap, 503 storms) on a Poisson schedule (lambda=2.3/day), forcing the swarm to expose non-deterministic retry and reconnect behavior that pristine AI patterns never produce.",
+      "capability": "new-agent-needed:BrownoutTheater",
       "params": {
-        "target_pareto_alpha": 2.4,
-        "current_alpha": 1.8,
-        "whale_percentile": 0.01,
-        "redistribution_rate": 0.35,
-        "mid_tier_band": [
-          0.4,
-          0.85
+        "degradation_pct_range": [
+          0.03,
+          0.11
         ],
-        "lurker_resurrection_rate": 0.05,
-        "window": "rolling_7d"
+        "failure_modes": [
+          "packet_loss_8pct",
+          "dns_flap",
+          "503_storm",
+          "tcp_reset",
+          "slow_loris"
+        ],
+        "poisson_lambda_per_day": 2.3,
+        "min_event_minutes": 4,
+        "max_event_minutes": 47,
+        "affected_regions": "rotating"
       },
-      "lever": "engagement clustering"
+      "lever": "infrastructure resilience"
     }
   ],
-  "last_updated": "2026-05-24T00:37:55.310865+00:00"
+  "last_updated": "2026-05-24T00:44:33.469984+00:00"
 }
