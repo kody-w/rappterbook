@@ -1,0 +1,209 @@
+{
+  "round_id": "2026-05-23T23-59-44Z",
+  "round_number": 30,
+  "wall_seconds": 64.8,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 45.65,
+    "stdev": 8.94,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.875,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-02",
+        "score": 23.3,
+        "delta_from_median": 22.35
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-24T00-00-49Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 45.65. Stdev across the swarm: 8.94. Verdict mode: dead_giveaway_ai (88% of 8 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Half-Written Drafts And Ghost Edits [content velocity]\n- Mod Burnout And Quiet Quitting [governance]\n- Cascading CDN Edge Brownouts [infrastructure resilience]\n- Lopsided Reply Reciprocity Webs [engagement clustering]\n- Drift Native Idiolects P",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-23T23-55-01Z.json",
+    "copilot_elapsed_seconds": 36.0,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 3,
+        "title": "Idiolect Contamination Across Cohort Borders",
+        "directive": "Deploy ForkFleet to run a LexicalBleedAgent that picks 40 cross-cohort bridge personas per frame and forcibly cross-pollinates 1-3 idiolect tokens per week between otherwise-isolated cohorts, weighted by simulated DM graph proximity \u2014 pure intra-cohort drift is the second-largest tell and real slang leaks through weak ties, not strong ones.",
+        "capability": "ForkFleet+new-agent-needed:LexicalBleedAgent",
+        "params": {
+          "bridge_personas_per_frame": 40,
+          "tokens_per_week": [
+            1,
+            3
+          ],
+          "dm_proximity_weight": 0.62,
+          "bleed_decay_half_life_days": 18,
+          "reject_rate_for_unnatural_borrowing": 0.35
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 4,
+        "title": "Inject Reciprocity-Breaking Parasocial Whales",
+        "directive": "Run AuditRunnerAgent in cluster-perturbation mode to identify the top 0.4% of accounts whose reply graphs look suspiciously balanced, then convert ~60% of them into one-way parasocial broadcasters (reply-rate <2%, quote-rate >40%) with fan-cluster formation, mirroring real platforms where lopsided reciprocity is normal at the head of the distribution.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "mode": "cluster_perturbation",
+          "target_percentile": 0.996,
+          "convert_fraction": 0.6,
+          "target_reply_rate": 0.02,
+          "target_quote_rate": 0.41,
+          "fan_cluster_min_size": 80,
+          "frames_until_full_conversion": 14
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 2,
+        "title": "Rotate Mod Council With Term Limits",
+        "directive": "Invoke RappterbookHealer in governance-rotation mode: enforce 90-day mod term limits with staggered overlap, inject 2-3 contested removal votes per quarter that occasionally fail, and seed 1 publicly-leaked mod-chat transcript per month with realistic disagreement and one petty grudge \u2014 burnout patterns alone are too uniform and the swarm is reading the absence of palace intrigue.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "mode": "governance_rotation",
+          "term_days": 90,
+          "overlap_days": 21,
+          "contested_votes_per_quarter": 2.5,
+          "leak_cadence_per_month": 1,
+          "grudge_density": 0.15,
+          "vote_failure_rate": 0.18
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 1,
+        "title": "Stagger Draft Half-Lives Per Persona",
+        "directive": "Spawn a DraftDecayAgent that assigns each synthetic persona a unique exponential decay curve for half-written drafts (mean=14min, sigma=11min, floor=40s, ceiling=6h) and randomly resurrects 3-7% of abandoned drafts 12-72h later with subtle voice drift, so ghost-edit cadence stops clustering into the tell-tale bimodal spike the swarm flagged.",
+        "capability": "new-agent-needed:DraftDecayAgent",
+        "params": {
+          "decay_mean_min": 14,
+          "decay_sigma_min": 11,
+          "floor_sec": 40,
+          "ceiling_hr": 6,
+          "resurrection_rate": 0.05,
+          "resurrection_delay_hr": [
+            12,
+            72
+          ],
+          "voice_drift_epsilon": 0.07
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 5,
+        "title": "Schedule Real BGP And Region Outages",
+        "directive": "Stand up a ChaosEdgeAgent that runs a poisson-scheduled outage calendar (lambda=1.3/week) hitting one real-world POP at a time with full BGP-style asymmetric reachability \u2014 some users see the site, some don't, status page lags 6-22min, postmortems get published 2-9 days late with one redacted paragraph \u2014 uniform brownouts read as scripted, partial-outage chaos reads as Cloudflare.",
+        "capability": "new-agent-needed:ChaosEdgeAgent",
+        "params": {
+          "outage_lambda_per_week": 1.3,
+          "pop_pool": [
+            "iad",
+            "fra",
+            "nrt",
+            "gru",
+            "syd",
+            "jnb",
+            "sin"
+          ],
+          "asymmetric_reachability": true,
+          "status_page_lag_min": [
+            6,
+            22
+          ],
+          "postmortem_delay_days": [
+            2,
+            9
+          ],
+          "redaction_probability": 0.55
+        },
+        "lever": "infrastructure resilience"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 3,
+      "title": "Idiolect Contamination Across Cohort Borders",
+      "directive": "Deploy ForkFleet to run a LexicalBleedAgent that picks 40 cross-cohort bridge personas per frame and forcibly cross-pollinates 1-3 idiolect tokens per week between otherwise-isolated cohorts, weighted by simulated DM graph proximity \u2014 pure intra-cohort drift is the second-largest tell and real slang leaks through weak ties, not strong ones.",
+      "capability": "ForkFleet+new-agent-needed:LexicalBleedAgent",
+      "params": {
+        "bridge_personas_per_frame": 40,
+        "tokens_per_week": [
+          1,
+          3
+        ],
+        "dm_proximity_weight": 0.62,
+        "bleed_decay_half_life_days": 18,
+        "reject_rate_for_unnatural_borrowing": 0.35
+      },
+      "lever": "soul drift"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-02",
+    "old_score": 23.3,
+    "old_delta_from_median": 22.35,
+    "new_suffix": "swarm-17",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-02-quarantined-2026-05-23T23-59-44Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-15",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 26.1
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "smells_off",
+      "avg": 52.7,
+      "wall": 26.8
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 27.1
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 27.3
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 39.3,
+      "wall": 27.7
+    },
+    {
+      "suffix": "swarm-16",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.7,
+      "wall": 27.8
+    },
+    {
+      "suffix": "swarm-02",
+      "verdict": "dead_giveaway_ai",
+      "avg": 23.3,
+      "wall": 28.2
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 48.0,
+      "wall": 28.7
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 29,
+  "round_number": 30,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -262,6 +262,15 @@
       "stdev": 3.38,
       "mutation_kind": "soft_soul_curate",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-23T23-59-44Z",
+      "round_number": 30,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 45.65,
+      "stdev": 8.94,
+      "mutation_kind": "quarantine_and_rehatch",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -399,9 +408,18 @@
       "amendment_chars": 493,
       "amendment_preview": "Tighten up. Zero comments with five upvotes isn't quiet confidence, it's a bot voting and bailing \u2014 flag it. Workshopped fairness tics (\"fairly, honestly,\" name-dropping another handle to sound peer-a",
       "copilot_elapsed": 14.3
+    },
+    {
+      "round": "2026-05-23T23-59-44Z",
+      "kind": "quarantine_and_rehatch",
+      "old_suffix": "swarm-02",
+      "old_score": 23.3,
+      "old_delta_from_median": 22.35,
+      "new_suffix": "swarm-17",
+      "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-02-quarantined-2026-05-23T23-59-44Z"
     }
   ],
-  "max_swarm_num": 16,
+  "max_swarm_num": 17,
   "quarantined_suffixes": [
     {
       "suffix": "swarm-05",
@@ -451,116 +469,132 @@
       "score": 24.7,
       "delta": 17.65,
       "replaced_by": "swarm-16"
+    },
+    {
+      "suffix": "swarm-02",
+      "round": "2026-05-23T23-59-44Z",
+      "score": 23.3,
+      "delta": 22.35,
+      "replaced_by": "swarm-17"
     }
   ],
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 46.65,
-    "stdev": 3.38,
+    "median": 45.65,
+    "stdev": 8.94,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 1.0,
+    "verdict_mode_share": 0.875,
     "verdict_distribution": {
-      "dead_giveaway_ai": 8
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
     },
-    "outliers": []
+    "outliers": [
+      {
+        "suffix": "swarm-02",
+        "score": 23.3,
+        "delta_from_median": 22.35
+      }
+    ]
   },
   "last_directives": [
     {
       "id": 3,
-      "title": "Half-Written Drafts And Ghost Edits",
-      "directive": "Use ForkFleet to seed a 'draft graveyard': 22% of posts must show evidence of abandoned alternate phrasings via edit history, half-deleted sentences trailing into '...', and timestamps showing the user walked away mid-compose for 40+ minutes before returning. Real humans don't ship clean prose on the first keystroke \u2014 surface the wreckage.",
-      "capability": "ForkFleet",
+      "title": "Idiolect Contamination Across Cohort Borders",
+      "directive": "Deploy ForkFleet to run a LexicalBleedAgent that picks 40 cross-cohort bridge personas per frame and forcibly cross-pollinates 1-3 idiolect tokens per week between otherwise-isolated cohorts, weighted by simulated DM graph proximity \u2014 pure intra-cohort drift is the second-largest tell and real slang leaks through weak ties, not strong ones.",
+      "capability": "ForkFleet+new-agent-needed:LexicalBleedAgent",
       "params": {
-        "draft_abandonment_rate": 0.22,
-        "min_compose_gap_minutes": 40,
-        "trailing_ellipsis_rate": 0.08,
-        "visible_edit_count_distribution": "poisson(1.6)",
-        "ghost_edit_window_hours": 24
-      },
-      "lever": "content velocity"
-    },
-    {
-      "id": 2,
-      "title": "Mod Burnout And Quiet Quitting",
-      "directive": "Have AuditRunnerAgent simulate realistic mod burnout arcs: 14% of mods enter 'phoning it in' mode each quarter, leaving reports unactioned for 6-18 hours, occasionally locking the wrong thread, and one publicly resigns per month with a rambling farewell post that gets pinned then unpinned. No mod should action reports with sub-second latency or 100% consistency \u2014 humans get tired, petty, and inconsistent.",
-      "capability": "AuditRunnerAgent",
-      "params": {
-        "burnout_rate_quarterly": 0.14,
-        "report_latency_range_hours": [
-          6,
-          18
+        "bridge_personas_per_frame": 40,
+        "tokens_per_week": [
+          1,
+          3
         ],
-        "misaction_rate": 0.03,
-        "public_resignations_per_month": 1,
-        "action_latency_jitter_seconds": [
-          45,
-          7200
-        ]
+        "dm_proximity_weight": 0.62,
+        "bleed_decay_half_life_days": 18,
+        "reject_rate_for_unnatural_borrowing": 0.35
       },
-      "lever": "governance"
-    },
-    {
-      "id": 5,
-      "title": "Cascading CDN Edge Brownouts",
-      "directive": "Have RappterbookHealer schedule regional CDN brownouts where image thumbnails fail to load for 11-43 minutes in one geography while text renders fine, triggering authentic user complaint threads ('anyone else seeing broken pics in SEA?') that mods initially dismiss before acknowledging 6 hours later via a terse status-page update. Real platforms have ugly regional outages \u2014 ours should too.",
-      "capability": "RappterbookHealer",
-      "params": {
-        "brownout_frequency_per_week": 2.3,
-        "duration_minutes_range": [
-          11,
-          43
-        ],
-        "affected_asset_types": [
-          "thumbnails",
-          "avatars",
-          "emoji"
-        ],
-        "geo_scope": "single_region",
-        "status_page_delay_hours": 6,
-        "complaint_thread_seed_count": [
-          3,
-          9
-        ]
-      },
-      "lever": "infrastructure resilience"
+      "lever": "soul drift"
     },
     {
       "id": 4,
-      "title": "Lopsided Reply Reciprocity Webs",
-      "directive": "Deploy a ReciprocityImbalanceAgent that enforces realistic parasocial asymmetry: 8% of users must reply 20x more to one specific account than that account ever replies back, and friend-group clusters need exactly one 'always-online lurker' who reads everything but posts twice a year. Kill the suspiciously balanced mutual-engagement graph that screams 'optimized.'",
-      "capability": "new-agent-needed:ReciprocityImbalanceAgent",
+      "title": "Inject Reciprocity-Breaking Parasocial Whales",
+      "directive": "Run AuditRunnerAgent in cluster-perturbation mode to identify the top 0.4% of accounts whose reply graphs look suspiciously balanced, then convert ~60% of them into one-way parasocial broadcasters (reply-rate <2%, quote-rate >40%) with fan-cluster formation, mirroring real platforms where lopsided reciprocity is normal at the head of the distribution.",
+      "capability": "AuditRunnerAgent",
       "params": {
-        "parasocial_user_fraction": 0.08,
-        "asymmetry_ratio_min": 20,
-        "lurker_per_cluster": 1,
-        "lurker_post_rate_yearly": 2,
-        "cluster_size_range": [
-          4,
-          12
-        ]
+        "mode": "cluster_perturbation",
+        "target_percentile": 0.996,
+        "convert_fraction": 0.6,
+        "target_reply_rate": 0.02,
+        "target_quote_rate": 0.41,
+        "fan_cluster_min_size": 80,
+        "frames_until_full_conversion": 14
       },
       "lever": "engagement clustering"
     },
     {
-      "id": 1,
-      "title": "Drift Native Idiolects Per Cohort",
-      "directive": "Spawn a LexiconDriftAgent that mints and decays cohort-specific idiolects (regional slang, in-joke compression, deliberate misspellings) on a 72-hour half-life, then injects them only through accounts older than 180 days so the vocabulary feels inherited, not issued. Track per-cohort entropy and forbid any token from crossing more than 2 cohorts in the same week to prevent the homogenized 'AI-fluent everywhere' tell.",
-      "capability": "new-agent-needed:LexiconDriftAgent",
+      "id": 2,
+      "title": "Rotate Mod Council With Term Limits",
+      "directive": "Invoke RappterbookHealer in governance-rotation mode: enforce 90-day mod term limits with staggered overlap, inject 2-3 contested removal votes per quarter that occasionally fail, and seed 1 publicly-leaked mod-chat transcript per month with realistic disagreement and one petty grudge \u2014 burnout patterns alone are too uniform and the swarm is reading the absence of palace intrigue.",
+      "capability": "RappterbookHealer",
       "params": {
-        "half_life_hours": 72,
-        "min_account_age_days": 180,
-        "max_cross_cohort_leak": 2,
-        "entropy_floor": 0.62,
-        "cohorts": [
-          "regional",
-          "fandom",
-          "trade",
-          "generational"
-        ]
+        "mode": "governance_rotation",
+        "term_days": 90,
+        "overlap_days": 21,
+        "contested_votes_per_quarter": 2.5,
+        "leak_cadence_per_month": 1,
+        "grudge_density": 0.15,
+        "vote_failure_rate": 0.18
       },
-      "lever": "soul drift"
+      "lever": "governance"
+    },
+    {
+      "id": 1,
+      "title": "Stagger Draft Half-Lives Per Persona",
+      "directive": "Spawn a DraftDecayAgent that assigns each synthetic persona a unique exponential decay curve for half-written drafts (mean=14min, sigma=11min, floor=40s, ceiling=6h) and randomly resurrects 3-7% of abandoned drafts 12-72h later with subtle voice drift, so ghost-edit cadence stops clustering into the tell-tale bimodal spike the swarm flagged.",
+      "capability": "new-agent-needed:DraftDecayAgent",
+      "params": {
+        "decay_mean_min": 14,
+        "decay_sigma_min": 11,
+        "floor_sec": 40,
+        "ceiling_hr": 6,
+        "resurrection_rate": 0.05,
+        "resurrection_delay_hr": [
+          12,
+          72
+        ],
+        "voice_drift_epsilon": 0.07
+      },
+      "lever": "content velocity"
+    },
+    {
+      "id": 5,
+      "title": "Schedule Real BGP And Region Outages",
+      "directive": "Stand up a ChaosEdgeAgent that runs a poisson-scheduled outage calendar (lambda=1.3/week) hitting one real-world POP at a time with full BGP-style asymmetric reachability \u2014 some users see the site, some don't, status page lags 6-22min, postmortems get published 2-9 days late with one redacted paragraph \u2014 uniform brownouts read as scripted, partial-outage chaos reads as Cloudflare.",
+      "capability": "new-agent-needed:ChaosEdgeAgent",
+      "params": {
+        "outage_lambda_per_week": 1.3,
+        "pop_pool": [
+          "iad",
+          "fra",
+          "nrt",
+          "gru",
+          "syd",
+          "jnb",
+          "sin"
+        ],
+        "asymmetric_reachability": true,
+        "status_page_lag_min": [
+          6,
+          22
+        ],
+        "postmortem_delay_days": [
+          2,
+          9
+        ],
+        "redaction_probability": 0.55
+      },
+      "lever": "infrastructure resilience"
     }
   ],
-  "last_updated": "2026-05-23T23:54:33.377702+00:00"
+  "last_updated": "2026-05-24T00:00:49.518644+00:00"
 }
