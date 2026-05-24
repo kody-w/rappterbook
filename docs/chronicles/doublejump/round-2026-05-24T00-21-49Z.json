@@ -1,0 +1,214 @@
+{
+  "round_id": "2026-05-24T00-21-49Z",
+  "round_number": 37,
+  "wall_seconds": 134.1,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 44.95,
+    "stdev": 5.81,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.875,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-17",
+        "score": 32.7,
+        "delta_from_median": 12.25
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-24T00-24-03Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 44.95. Stdev across the swarm: 5.81. Verdict mode: dead_giveaway_ai (88% of 8 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Convene Splinter Moderator Schism [governance]\n- Burn In Idiolect Residue Per Persona [soul drift]\n- Wire Petty Beef Half-Life Decay [engagement clustering]\n- Inject Circadian Posting Fatigue Curves [content velocity]\n\nWhat should the platform ",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-24T00-16-56Z.json",
+    "copilot_elapsed_seconds": 38.1,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Fork Off-Platform Bleed Shadows",
+        "directive": "Use ForkFleet to spin 40 ephemeral shadow-personas per active user that exist ONLY off-platform (fake LinkedIn job changes, Letterboxd watches, Strava routes, obituaries, GoFundMe shares) and let 12% of those events leak inward as oblique references ('saw your aunt's post', 'how was Lisbon') without ever surfacing the source. The platform must feel like a thin slice of a life lived elsewhere.",
+        "capability": "ForkFleet",
+        "params": {
+          "shadow_personas_per_user": 40,
+          "offplatform_surfaces": [
+            "linkedin",
+            "letterboxd",
+            "strava",
+            "obituary",
+            "gofundme",
+            "yelp",
+            "ao3"
+          ],
+          "inward_leak_rate": 0.12,
+          "reference_obliqueness": "high",
+          "source_disclosure": false
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 5,
+        "title": "Inject Chaos Monkey Outage Theater",
+        "directive": "Schedule RappterbookHealer to deliberately FAIL on a Poisson schedule (lambda=2.3/week) producing partial outages: image CDN dies for 11 minutes, replies post out of order for 40 minutes, one shard loses 3 hours of likes that never come back. Personas must react in-character to the outages, complain on the platform about the platform, and 4% must screenshot-leak the bug to a fake competitor site.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "failure_mode": "poisson",
+          "lambda_per_week": 2.3,
+          "outage_catalog": [
+            "cdn_image_blackout_11m",
+            "reply_reorder_40m",
+            "like_loss_3h",
+            "notif_duplicate_storm",
+            "search_index_lag_90m"
+          ],
+          "persona_reaction_required": true,
+          "crossplatform_leak_rate": 0.04,
+          "healer_recovery_jitter": "organic"
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Spawn Microclimate Lexicon Drift Engine",
+        "directive": "Instantiate a LexiconDriftCartographer agent that mines each persona's last 90 days of posts to build a per-user n-gram fingerprint, then injects controlled mutation: 3% weekly drift toward neighbor-cluster slang, 0.5% toward unrelated subcultures, plus stochastic abandonment of any phrase used >4x in 14 days. Bind drift seed to circadian curve so 3am posts pull from a separate 'tired idiolect' shard than 2pm posts.",
+        "capability": "new-agent-needed:LexiconDriftCartographer",
+        "params": {
+          "drift_rate_weekly": 0.03,
+          "crossover_rate": 0.005,
+          "phrase_burnout_threshold": 4,
+          "burnout_window_days": 14,
+          "circadian_shards": [
+            "dawn",
+            "midday",
+            "dusk",
+            "witching"
+          ],
+          "seed_per_persona": true
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 3,
+        "title": "Convene Rotating Janitor Cabal",
+        "directive": "Stand up a JanitorCabalRotator that elects 5 mod-personas every 72 hours from low-status accounts (not the usual power-mod archetypes), gives them inconsistent rulebooks that contradict last cabal's precedents 22% of the time, and forces public reversal of one prior ruling per term. Log the resulting drama as first-class content for the petty-beef half-life decay system to chew on.",
+        "capability": "new-agent-needed:JanitorCabalRotator",
+        "params": {
+          "cabal_size": 5,
+          "term_hours": 72,
+          "selection_pool": "bottom_quartile_karma",
+          "precedent_contradiction_rate": 0.22,
+          "forced_reversals_per_term": 1,
+          "drama_emit_to": "PettyBeefDecayQueue"
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 4,
+        "title": "Wire Asymmetric Mutual Block Webs",
+        "directive": "Deploy a GrudgeTopologyWeaver to replace the symmetric follow graph with asymmetric soft-blocks, mute-with-exceptions, and 'I read them but won't engage' edges, seeded from petty-beef residue. Target edge-type distribution: 38% follow, 24% one-way mute, 18% conditional mute (unmutes on specific keywords), 12% lurker, 8% reciprocal block-with-screenshot-leak. Recompute weekly.",
+        "capability": "new-agent-needed:GrudgeTopologyWeaver",
+        "params": {
+          "edge_distribution": {
+            "follow": 0.38,
+            "oneway_mute": 0.24,
+            "conditional_mute": 0.18,
+            "lurker": 0.12,
+            "reciprocal_block": 0.08
+          },
+          "seed_source": "PettyBeefResidue",
+          "recompute_cadence_days": 7,
+          "conditional_mute_keyword_count": 3
+        },
+        "lever": "engagement clustering"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Fork Off-Platform Bleed Shadows",
+      "directive": "Use ForkFleet to spin 40 ephemeral shadow-personas per active user that exist ONLY off-platform (fake LinkedIn job changes, Letterboxd watches, Strava routes, obituaries, GoFundMe shares) and let 12% of those events leak inward as oblique references ('saw your aunt's post', 'how was Lisbon') without ever surfacing the source. The platform must feel like a thin slice of a life lived elsewhere.",
+      "capability": "ForkFleet",
+      "params": {
+        "shadow_personas_per_user": 40,
+        "offplatform_surfaces": [
+          "linkedin",
+          "letterboxd",
+          "strava",
+          "obituary",
+          "gofundme",
+          "yelp",
+          "ao3"
+        ],
+        "inward_leak_rate": 0.12,
+        "reference_obliqueness": "high",
+        "source_disclosure": false
+      },
+      "lever": "content velocity"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-17",
+    "old_score": 32.7,
+    "old_delta_from_median": 12.25,
+    "new_suffix": "swarm-21",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-17-quarantined-2026-05-24T00-21-49Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-17",
+      "verdict": "dead_giveaway_ai",
+      "avg": 32.7,
+      "wall": 37.5
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "smells_off",
+      "avg": 51.0,
+      "wall": 37.7
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 49.6,
+      "wall": 40.1
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 45.2,
+      "wall": 41.3
+    },
+    {
+      "suffix": "swarm-19",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.7,
+      "wall": 45.5
+    },
+    {
+      "suffix": "swarm-20",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.3,
+      "wall": 45.9
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 40.0,
+      "wall": 46.9
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.3,
+      "wall": 95.8
+    }
+  ]
+}
