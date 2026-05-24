@@ -38,6 +38,8 @@ TWIN_SOURCES = [
     REPO / "kody-babysitter-twin",
     REPO / "authenticity-twin",
     REPO / "normie-ai-twin",
+    REPO / "mutation-efficacy-twin",
+    REPO / "twin-of-twins-meta-watcher",
 ]
 
 FLEET_AGENTS = [
@@ -47,6 +49,7 @@ FLEET_AGENTS = [
     "activityagent_agent.py",   "doubledownconductor_agent.py",
     "rappterbookhealer_agent.py", "learn_new_agent.py",
     "audit_runner_agent_agent.py", "drift_sentinel_agent_agent.py",
+    "githubcli_agent.py",
     "basic_agent.py",
 ]
 
