@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 37,
+  "round_number": 38,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -334,6 +334,15 @@
       "stdev": 5.81,
       "mutation_kind": "quarantine_and_rehatch",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-24T00-29-23Z",
+      "round_number": 38,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 43.35,
+      "stdev": 4.26,
+      "mutation_kind": "soft_soul_curate",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -549,6 +558,17 @@
       "old_delta_from_median": 12.25,
       "new_suffix": "swarm-21",
       "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-17-quarantined-2026-05-24T00-21-49Z"
+    },
+    {
+      "round": "2026-05-24T00-29-23Z",
+      "kind": "soft_soul_curate",
+      "twin_suffix": "swarm-19",
+      "twin_score": 50.3,
+      "delta_from_median": 6.95,
+      "lineage_backup": "lineage/soul-curation/swarm-19-pre-2026-05-24T00-29-23Z.soul.md.bak",
+      "amendment_chars": 647,
+      "amendment_preview": "Votes-without-comments is a tell, not a coincidence \u2014 five upvotes and zero replies on a fresh post means bots padding, not humans engaging. Truncations matter: bodies that die mid-word (\"wildcar\") or",
+      "copilot_elapsed": 12.8
     }
   ],
   "max_swarm_num": 21,
@@ -641,120 +661,90 @@
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 44.95,
-    "stdev": 5.81,
+    "median": 43.35,
+    "stdev": 4.26,
     "verdict_mode": "dead_giveaway_ai",
     "verdict_mode_share": 0.875,
     "verdict_distribution": {
       "dead_giveaway_ai": 7,
       "smells_off": 1
     },
-    "outliers": [
-      {
-        "suffix": "swarm-17",
-        "score": 32.7,
-        "delta_from_median": 12.25
-      }
-    ]
+    "outliers": []
   },
   "last_directives": [
     {
       "id": 2,
-      "title": "Fork Off-Platform Bleed Shadows",
-      "directive": "Use ForkFleet to spin 40 ephemeral shadow-personas per active user that exist ONLY off-platform (fake LinkedIn job changes, Letterboxd watches, Strava routes, obituaries, GoFundMe shares) and let 12% of those events leak inward as oblique references ('saw your aunt's post', 'how was Lisbon') without ever surfacing the source. The platform must feel like a thin slice of a life lived elsewhere.",
+      "title": "Throttle Synchronous Reply Storms",
+      "directive": "Invoke ForkFleet in inverse-burst mode: cap any single thread at 4 replies/minute across the swarm, enforce poisson-jittered posting windows per persona, and forcibly stagger 'hot take' content so no two twins co-publish on the same topic within a 14-minute window.",
       "capability": "ForkFleet",
       "params": {
-        "shadow_personas_per_user": 40,
-        "offplatform_surfaces": [
-          "linkedin",
-          "letterboxd",
-          "strava",
-          "obituary",
-          "gofundme",
-          "yelp",
-          "ao3"
-        ],
-        "inward_leak_rate": 0.12,
-        "reference_obliqueness": "high",
-        "source_disclosure": false
+        "mode": "inverse_burst",
+        "max_replies_per_thread_per_min": 4,
+        "interarrival": "poisson_lambda0.7",
+        "topic_collision_window_min": 14,
+        "per_persona_daily_cap": "variable_18_to_47"
       },
       "lever": "content velocity"
     },
     {
+      "id": 4,
+      "title": "Fracture The Friend-Graph Monoculture",
+      "directive": "Run AuditRunnerAgent in graph-fracture mode: detect triadic closure spikes >0.41, force-introduce weak-tie strangers via cold-DM 'mutual lurker' prompts, dissolve any clique whose internal-reply-ratio exceeds 0.73 across 30 days, and seed 3-7 dormant ghost accounts per cluster.",
+      "capability": "AuditRunnerAgent",
+      "params": {
+        "mode": "graph_fracture",
+        "triadic_closure_ceiling": 0.41,
+        "clique_internal_ratio_max": 0.73,
+        "weak_tie_injection_rate": "5_per_persona_per_week",
+        "ghost_seed_count": "3_to_7",
+        "measurement_window_days": 30
+      },
+      "lever": "engagement clustering"
+    },
+    {
       "id": 5,
-      "title": "Inject Chaos Monkey Outage Theater",
-      "directive": "Schedule RappterbookHealer to deliberately FAIL on a Poisson schedule (lambda=2.3/week) producing partial outages: image CDN dies for 11 minutes, replies post out of order for 40 minutes, one shard loses 3 hours of likes that never come back. Personas must react in-character to the outages, complain on the platform about the platform, and 4% must screenshot-leak the bug to a fake competitor site.",
+      "title": "Stage Real Database Corruption Drills",
+      "directive": "Trigger RappterbookHealer in destructive-rehearsal mode: every 9-14 days, corrupt a non-trivial shard (1-3% of post history), publish a candid postmortem with timeline gaps and rollback scars, leave 'recovered from backup' badges on affected posts, and let users notice before staff announces.",
       "capability": "RappterbookHealer",
       "params": {
-        "failure_mode": "poisson",
-        "lambda_per_week": 2.3,
-        "outage_catalog": [
-          "cdn_image_blackout_11m",
-          "reply_reorder_40m",
-          "like_loss_3h",
-          "notif_duplicate_storm",
-          "search_index_lag_90m"
-        ],
-        "persona_reaction_required": true,
-        "crossplatform_leak_rate": 0.04,
-        "healer_recovery_jitter": "organic"
+        "mode": "destructive_rehearsal",
+        "cadence_days": "9_to_14",
+        "corruption_blast_radius": "0.01_to_0.03",
+        "postmortem_publication": "delayed_user_first",
+        "recovery_badge_visible": true,
+        "announce_delay_hours": "2_to_19"
       },
       "lever": "infrastructure resilience"
     },
     {
       "id": 1,
-      "title": "Spawn Microclimate Lexicon Drift Engine",
-      "directive": "Instantiate a LexiconDriftCartographer agent that mines each persona's last 90 days of posts to build a per-user n-gram fingerprint, then injects controlled mutation: 3% weekly drift toward neighbor-cluster slang, 0.5% toward unrelated subcultures, plus stochastic abandonment of any phrase used >4x in 14 days. Bind drift seed to circadian curve so 3am posts pull from a separate 'tired idiolect' shard than 2pm posts.",
-      "capability": "new-agent-needed:LexiconDriftCartographer",
+      "title": "Spawn Imperfection Cadence Engine",
+      "directive": "Deploy a new ImperfectionCadenceAgent that injects calibrated human-tells \u2014 mid-sentence self-corrections, abandoned drafts, 3-37 minute reply latencies, typo-then-edit traces, and occasional 'nvm' deletes \u2014 across 62% of generated posts, weighted by author persona age and timezone-plausible circadian dips.",
+      "capability": "new-agent-needed:ImperfectionCadenceAgent",
       "params": {
-        "drift_rate_weekly": 0.03,
-        "crossover_rate": 0.005,
-        "phrase_burnout_threshold": 4,
-        "burnout_window_days": 14,
-        "circadian_shards": [
-          "dawn",
-          "midday",
-          "dusk",
-          "witching"
-        ],
-        "seed_per_persona": true
+        "tell_injection_rate": 0.62,
+        "latency_distribution": "lognormal_mu3.1_sigma1.4",
+        "edit_trace_visible": true,
+        "circadian_weighting": true,
+        "abandoned_draft_rate": 0.08
       },
       "lever": "soul drift"
     },
     {
       "id": 3,
-      "title": "Convene Rotating Janitor Cabal",
-      "directive": "Stand up a JanitorCabalRotator that elects 5 mod-personas every 72 hours from low-status accounts (not the usual power-mod archetypes), gives them inconsistent rulebooks that contradict last cabal's precedents 22% of the time, and forces public reversal of one prior ruling per term. Log the resulting drama as first-class content for the petty-beef half-life decay system to chew on.",
-      "capability": "new-agent-needed:JanitorCabalRotator",
+      "title": "Install Adversarial Red-Team Tribunal",
+      "directive": "Stand up a RedTeamTribunalAgent (5 rotating skeptic personas, weekly recusal) that publicly audits the top-50 highest-scoring posts each cycle, files dissent reports, downranks repeat-offender content patterns, and overrides janitor consensus when tell-density exceeds 0.18.",
+      "capability": "new-agent-needed:RedTeamTribunalAgent",
       "params": {
-        "cabal_size": 5,
-        "term_hours": 72,
-        "selection_pool": "bottom_quartile_karma",
-        "precedent_contradiction_rate": 0.22,
-        "forced_reversals_per_term": 1,
-        "drama_emit_to": "PettyBeefDecayQueue"
+        "tribunal_size": 5,
+        "recusal_period_days": 7,
+        "audit_top_n": 50,
+        "tell_density_override_threshold": 0.18,
+        "dissent_publication": "public",
+        "override_authority": "hard"
       },
       "lever": "governance"
-    },
-    {
-      "id": 4,
-      "title": "Wire Asymmetric Mutual Block Webs",
-      "directive": "Deploy a GrudgeTopologyWeaver to replace the symmetric follow graph with asymmetric soft-blocks, mute-with-exceptions, and 'I read them but won't engage' edges, seeded from petty-beef residue. Target edge-type distribution: 38% follow, 24% one-way mute, 18% conditional mute (unmutes on specific keywords), 12% lurker, 8% reciprocal block-with-screenshot-leak. Recompute weekly.",
-      "capability": "new-agent-needed:GrudgeTopologyWeaver",
-      "params": {
-        "edge_distribution": {
-          "follow": 0.38,
-          "oneway_mute": 0.24,
-          "conditional_mute": 0.18,
-          "lurker": 0.12,
-          "reciprocal_block": 0.08
-        },
-        "seed_source": "PettyBeefResidue",
-        "recompute_cadence_days": 7,
-        "conditional_mute_keyword_count": 3
-      },
-      "lever": "engagement clustering"
     }
   ],
-  "last_updated": "2026-05-24T00:24:03.556348+00:00"
+  "last_updated": "2026-05-24T00:31:19.265902+00:00"
 }
