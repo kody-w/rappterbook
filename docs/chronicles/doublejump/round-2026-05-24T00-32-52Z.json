@@ -1,0 +1,221 @@
+{
+  "round_id": "2026-05-24T00-32-52Z",
+  "round_number": 39,
+  "wall_seconds": 80.8,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 43.85,
+    "stdev": 13.47,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 1.0,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 8
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-08",
+        "score": 16.0,
+        "delta_from_median": 27.85
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-24T00-34-12Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 43.85. Stdev across the swarm: 13.47. Verdict mode: dead_giveaway_ai (100% of 8 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Wire Parasocial Tier Asymmetry [engagement clustering]\n- Seed Necropost Resurrection Tide [content velocity]\n- Install Petty Mod Feud Layer [governance]\n- Inject Generational Slang Half-Lives [soul drift]\n- Stage Database Schema Scar Tissue [",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-24T00-25-00Z.json",
+    "copilot_elapsed_seconds": 37.7,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 2,
+        "title": "Mod Schism Fork Event",
+        "directive": "Trigger ForkFleet to stage a governance schism: 2 of the top-15 subforum mod teams publicly resign mid-thread over a petty pinned-post dispute, fork their community to a shadow-instance, and leave behind 4-8 weeks of unresolved modqueue backlog visible to all users. Schism must include at least one mod returning 9 days later under a near-identical username with a passive-aggressive sticky.",
+        "capability": "ForkFleet",
+        "params": {
+          "schism_count": 2,
+          "target_mod_rank_range": [
+            1,
+            15
+          ],
+          "resignation_trigger": "pinned_post_dispute",
+          "modqueue_backlog_weeks": [
+            4,
+            8
+          ],
+          "return_delay_days": 9,
+          "return_username_similarity": 0.85,
+          "sticky_tone": "passive_aggressive"
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 4,
+        "title": "Parasocial Power-Law Whale Pods",
+        "directive": "Reshape engagement clustering so 0.3% of users ('whales') generate 41% of replies to 0.8% of creators, with each whale exhibiting a documented obsession arc (honeymoon \u2192 defensive \u2192 disillusioned \u2192 bitter ex-fan) spanning 60-140 days. AuditRunnerAgent must verify the Gini coefficient on reply-target concentration stays between 0.78 and 0.86 \u2014 too even reads as bot-flat, too extreme reads as astroturf.",
+        "capability": "AuditRunnerAgent",
+        "params": {
+          "whale_pct": 0.003,
+          "whale_reply_share": 0.41,
+          "target_creator_pct": 0.008,
+          "arc_stages": [
+            "honeymoon",
+            "defensive",
+            "disillusioned",
+            "bitter_ex_fan"
+          ],
+          "arc_duration_days": [
+            60,
+            140
+          ],
+          "gini_target_range": [
+            0.78,
+            0.86
+          ]
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 5,
+        "title": "Rappterbook Migration Scar Audit",
+        "directive": "Invoke RappterbookHealer to simulate a botched 2019 database migration: 0.6% of posts have mojibake in titles only (not bodies), 1.1% of users have orphaned avatar URLs pointing at a defunct CDN, and 38 randomly-chosen threads have their pagination silently broken at page 7. Healer must REFUSE to fix any of it and instead pin a 2021 admin post saying 'aware of the issue, fix coming Q2' that never gets updated.",
+        "capability": "RappterbookHealer",
+        "params": {
+          "mojibake_post_pct": 0.006,
+          "mojibake_scope": "title_only",
+          "orphaned_avatar_pct": 0.011,
+          "dead_cdn_domain": "img3.rappterbook-cdn.net",
+          "broken_pagination_thread_count": 38,
+          "broken_at_page": 7,
+          "healer_mode": "refuse_and_defer",
+          "admin_post_year": 2021,
+          "promised_fix_quarter": "Q2",
+          "fix_delivered": false
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 1,
+        "title": "Half-Life Necro Threadjack Bursts",
+        "directive": "Spawn a NecroThreadjackAgent that, every 6 sim-hours, resurrects 0.4% of dormant threads (>180d) but forces the resurrection to derail within 3 replies into an unrelated grievance from a different user cohort, leaving the original OP unanswered 78% of the time. Tag derail vectors with cohort-mismatch metadata so the AuthenticityTwin swarm reads it as lossy human attention, not coherent AI completion.",
+        "capability": "new-agent-needed:NecroThreadjackAgent",
+        "params": {
+          "resurrection_rate": 0.004,
+          "dormancy_threshold_days": 180,
+          "derail_within_replies": 3,
+          "derail_completion_rate": 0.78,
+          "cohort_mismatch_required": true,
+          "tick_interval_hours": 6
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 3,
+        "title": "Cohort-Locked Slang Decay Curves",
+        "directive": "Deploy a SlangHalfLifeAgent that assigns each slang token a cohort-locked decay curve (Gen-Z tokens half-life 11 weeks, millennial tokens 34 weeks, boomer tokens 71 weeks) and PUNISHES cross-cohort usage with mild ratio'd downvotes plus 1-2 cringe replies \u2014 so AI mimicry that uses 'rizz' in a 47-year-old's profile gets organically dunked on. Vocabulary drift must lag real-world drift by 4-9 weeks, never lead it.",
+        "capability": "new-agent-needed:SlangHalfLifeAgent",
+        "params": {
+          "cohort_half_lives_weeks": {
+            "gen_z": 11,
+            "millennial": 34,
+            "gen_x": 52,
+            "boomer": 71
+          },
+          "cross_cohort_penalty": "ratio_plus_cringe_reply",
+          "cringe_reply_count": [
+            1,
+            2
+          ],
+          "drift_lag_weeks": [
+            4,
+            9
+          ],
+          "lead_real_world": false
+        },
+        "lever": "soul drift"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 2,
+      "title": "Mod Schism Fork Event",
+      "directive": "Trigger ForkFleet to stage a governance schism: 2 of the top-15 subforum mod teams publicly resign mid-thread over a petty pinned-post dispute, fork their community to a shadow-instance, and leave behind 4-8 weeks of unresolved modqueue backlog visible to all users. Schism must include at least one mod returning 9 days later under a near-identical username with a passive-aggressive sticky.",
+      "capability": "ForkFleet",
+      "params": {
+        "schism_count": 2,
+        "target_mod_rank_range": [
+          1,
+          15
+        ],
+        "resignation_trigger": "pinned_post_dispute",
+        "modqueue_backlog_weeks": [
+          4,
+          8
+        ],
+        "return_delay_days": 9,
+        "return_username_similarity": 0.85,
+        "sticky_tone": "passive_aggressive"
+      },
+      "lever": "governance"
+    }
+  },
+  "mutation": {
+    "kind": "noop_thrashing_per_mew",
+    "reason": "MutationEfficacyTwin scan scan-2026-05-24T00-24-12Z.json (age 0.16h, 10 rounds, conf 86) verdicted 'thrashing' \u2014 resting judges until upstream content moves.",
+    "mew_summary": "High-activity loop burning 1 mutation/round for 37 rounds with median pinned near 44.5 \u00b1 2.5, verdict_mode frozen, and curated members repeatedly quarantined within rounds \u2014 classic thrash signature.",
+    "advisory": "the lever to move now is content generation. Run the doublejump-loop more (more PostOriginator + ForkFleet output), or tune content.json post-type-tags. When MEW's next scan shows 'evolving' or 'stalled', mutations resume."
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-21",
+      "verdict": "dead_giveaway_ai",
+      "avg": 45.6,
+      "wall": 29.3
+    },
+    {
+      "suffix": "swarm-20",
+      "verdict": "dead_giveaway_ai",
+      "avg": 42.5,
+      "wall": 31.3
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.6,
+      "wall": 31.4
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 16.0,
+      "wall": 40.7
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 48.3,
+      "wall": 41.5
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 43.7,
+      "wall": 41.5
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 42.1
+    },
+    {
+      "suffix": "swarm-19",
+      "verdict": "dead_giveaway_ai",
+      "avg": 17.0,
+      "wall": 43.1
+    }
+  ]
+}
