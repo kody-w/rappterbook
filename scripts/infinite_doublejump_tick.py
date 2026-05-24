@@ -354,11 +354,59 @@ def _soft_soul_curate(consensus: dict, twin_reports: list,
 
 # ── MUTATION DECISION ──────────────────────────────────────────────────────
 
+def _latest_mew_verdict(max_age_hours: float = 2.0) -> dict:
+    """Read the most recent MutationEfficacyTwin scan from /tmp/. If it's
+    fresh AND said 'thrashing', we gate mutations on that documented finding.
+    NOT a time-wait — an EVIDENCE-gate using the system's own diagnostic.
+    """
+    import glob
+    files = sorted(glob.glob("/tmp/mutation-efficacy-twin/scan-*.json"))
+    if not files:
+        return {"available": False, "reason": "no MEW scans yet"}
+    latest_path = Path(files[-1])
+    try:
+        rec = json.loads(latest_path.read_text())
+    except Exception as e:
+        return {"available": False, "reason": f"unreadable: {e}"}
+    age_s = (_now().timestamp() - latest_path.stat().st_mtime)
+    age_h = round(age_s / 3600, 2)
+    return {
+        "available": True,
+        "file": latest_path.name,
+        "verdict": rec.get("verdict"),
+        "confidence": rec.get("confidence"),
+        "rounds_analyzed": rec.get("rounds_analyzed"),
+        "age_hours": age_h,
+        "fresh": age_h <= max_age_hours,
+        "trajectory_summary": rec.get("trajectory_summary", "")[:200],
+    }
+
+
 def _pick_mutation(consensus: dict, twin_reports: list, directives: dict,
                    state: dict, round_id: str) -> dict:
-    # NO MATURITY GATE. NO DAILY RATE CAP. If signal exists this tick, act
-    # this tick. (Per no-wait-modes-in-loops doctrine.)
-    # Priority 1: outlier quarantine + rehatch (highest-confidence signal)
+    # NO MATURITY GATE. NO DAILY RATE CAP. NO TIME-BASED WAITS.
+    # EVIDENCE-gate: consult the MutationEfficacyTwin's own most-recent
+    # verdict (it analyzes 30-round windows — the actual scale at which
+    # thrashing manifests). If a fresh MEW scan says thrashing, our
+    # mutations are documented to not be moving the metric. Rest the
+    # judges; the real lever is content production, not judge mutation.
+    mew = _latest_mew_verdict(max_age_hours=2.0)
+    if mew.get("available") and mew.get("fresh") and mew.get("verdict") == "thrashing":
+        return {
+            "kind": "noop_thrashing_per_mew",
+            "reason": (f"MutationEfficacyTwin scan {mew['file']} "
+                       f"(age {mew['age_hours']}h, {mew['rounds_analyzed']} rounds, "
+                       f"conf {mew['confidence']}) verdicted 'thrashing' — "
+                       f"resting judges until upstream content moves."),
+            "mew_summary": mew["trajectory_summary"],
+            "advisory": ("the lever to move now is content generation. "
+                         "Run the doublejump-loop more (more PostOriginator + "
+                         "ForkFleet output), or tune content.json post-type-tags. "
+                         "When MEW's next scan shows 'evolving' or 'stalled', "
+                         "mutations resume."),
+        }
+    # No fresh MEW thrashing signal → mutate normally
+    # Priority 1: outlier quarantine + rehatch
     outliers = consensus.get("outliers") or []
     if outliers:
         return _quarantine_and_rehatch(outliers[0], state, round_id)
@@ -367,7 +415,8 @@ def _pick_mutation(consensus: dict, twin_reports: list, directives: dict,
     if any("soul" in lever for lever in levers):
         return _soft_soul_curate(consensus, twin_reports, state, round_id)
     return {"kind": "noop_no_signal",
-            "reason": "no outliers and no soul-drift signal this round"}
+            "reason": "no outliers and no soul-drift signal this round",
+            "mew_signal": mew}
 
 
 # ── COMMIT + PUSH ──────────────────────────────────────────────────────────
