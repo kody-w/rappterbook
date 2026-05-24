@@ -1,5 +1,5 @@
 {
-  "ts": "2026-05-24T16:29:18Z",
+  "ts": "2026-05-24T17:23:44Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -36,9 +36,9 @@
     "memory_merge_markers": 4
   },
   "git_noise": {
-    "commits_24h": 534,
-    "bot_commits_24h": 69,
-    "human_commits_24h": 465
+    "commits_24h": 562,
+    "bot_commits_24h": 70,
+    "human_commits_24h": 492
   },
   "open_issues": {
     "open_total": 36,
@@ -60,8 +60,8 @@
       "severity": "low",
       "title": "Commit rate makes history unreadable",
       "metric": {
-        "commits_24h": 534,
-        "human": 465
+        "commits_24h": 562,
+        "human": 492
       },
       "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
     },
