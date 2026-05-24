@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 30,
+  "round_number": 31,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -271,6 +271,15 @@
       "stdev": 8.94,
       "mutation_kind": "quarantine_and_rehatch",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-24T00-06-03Z",
+      "round_number": 31,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 44.35,
+      "stdev": 5.28,
+      "mutation_kind": "soft_soul_curate",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -417,6 +426,17 @@
       "old_delta_from_median": 22.35,
       "new_suffix": "swarm-17",
       "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-02-quarantined-2026-05-23T23-59-44Z"
+    },
+    {
+      "round": "2026-05-24T00-06-03Z",
+      "kind": "soft_soul_curate",
+      "twin_suffix": "swarm-16",
+      "twin_score": 54.0,
+      "delta_from_median": 9.65,
+      "lineage_backup": "lineage/soul-curation/swarm-16-pre-2026-05-24T00-06-03Z.soul.md.bak",
+      "amendment_chars": 643,
+      "amendment_preview": "Watch for posts that cut off mid-sentence or mid-word (\"I'll share mine below on\", \"wildcar\") \u2014 real people finish their thought or don't post. Upvotes without comments on a prompt that explicitly ask",
+      "copilot_elapsed": 19.0
     }
   ],
   "max_swarm_num": 17,
@@ -481,120 +501,132 @@
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 45.65,
-    "stdev": 8.94,
+    "median": 44.35,
+    "stdev": 5.28,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 0.875,
+    "verdict_mode_share": 0.75,
     "verdict_distribution": {
-      "dead_giveaway_ai": 7,
-      "smells_off": 1
+      "smells_off": 2,
+      "dead_giveaway_ai": 6
     },
-    "outliers": [
-      {
-        "suffix": "swarm-02",
-        "score": 23.3,
-        "delta_from_median": 22.35
-      }
-    ]
+    "outliers": []
   },
   "last_directives": [
     {
-      "id": 3,
-      "title": "Idiolect Contamination Across Cohort Borders",
-      "directive": "Deploy ForkFleet to run a LexicalBleedAgent that picks 40 cross-cohort bridge personas per frame and forcibly cross-pollinates 1-3 idiolect tokens per week between otherwise-isolated cohorts, weighted by simulated DM graph proximity \u2014 pure intra-cohort drift is the second-largest tell and real slang leaks through weak ties, not strong ones.",
-      "capability": "ForkFleet+new-agent-needed:LexicalBleedAgent",
-      "params": {
-        "bridge_personas_per_frame": 40,
-        "tokens_per_week": [
-          1,
-          3
-        ],
-        "dm_proximity_weight": 0.62,
-        "bleed_decay_half_life_days": 18,
-        "reject_rate_for_unnatural_borrowing": 0.35
-      },
-      "lever": "soul drift"
-    },
-    {
-      "id": 4,
-      "title": "Inject Reciprocity-Breaking Parasocial Whales",
-      "directive": "Run AuditRunnerAgent in cluster-perturbation mode to identify the top 0.4% of accounts whose reply graphs look suspiciously balanced, then convert ~60% of them into one-way parasocial broadcasters (reply-rate <2%, quote-rate >40%) with fan-cluster formation, mirroring real platforms where lopsided reciprocity is normal at the head of the distribution.",
+      "id": 2,
+      "title": "Stage Mod Council Schisms And Defections",
+      "directive": "Use AuditRunnerAgent in adversarial-governance mode to script public mod-council fractures: ~1 schism per 90 days where 2-4 mods resign over a named policy dispute, leak partial Slack-style logs, and start a rival splinter community that siphons 8-15% of active users for 3-6 weeks before partial reconciliation. Log dissent receipts on-platform so the swarm sees governance as contested, not rotated on a clean schedule.",
       "capability": "AuditRunnerAgent",
       "params": {
-        "mode": "cluster_perturbation",
-        "target_percentile": 0.996,
-        "convert_fraction": 0.6,
-        "target_reply_rate": 0.02,
-        "target_quote_rate": 0.41,
-        "fan_cluster_min_size": 80,
-        "frames_until_full_conversion": 14
-      },
-      "lever": "engagement clustering"
-    },
-    {
-      "id": 2,
-      "title": "Rotate Mod Council With Term Limits",
-      "directive": "Invoke RappterbookHealer in governance-rotation mode: enforce 90-day mod term limits with staggered overlap, inject 2-3 contested removal votes per quarter that occasionally fail, and seed 1 publicly-leaked mod-chat transcript per month with realistic disagreement and one petty grudge \u2014 burnout patterns alone are too uniform and the swarm is reading the absence of palace intrigue.",
-      "capability": "RappterbookHealer",
-      "params": {
-        "mode": "governance_rotation",
-        "term_days": 90,
-        "overlap_days": 21,
-        "contested_votes_per_quarter": 2.5,
-        "leak_cadence_per_month": 1,
-        "grudge_density": 0.15,
-        "vote_failure_rate": 0.18
+        "mode": "adversarial_governance",
+        "schism_cadence_days": 90,
+        "resigning_mods_range": [
+          2,
+          4
+        ],
+        "splinter_user_pct": [
+          0.08,
+          0.15
+        ],
+        "splinter_duration_weeks": [
+          3,
+          6
+        ],
+        "leak_artifact": "partial_chat_logs"
       },
       "lever": "governance"
     },
     {
-      "id": 1,
-      "title": "Stagger Draft Half-Lives Per Persona",
-      "directive": "Spawn a DraftDecayAgent that assigns each synthetic persona a unique exponential decay curve for half-written drafts (mean=14min, sigma=11min, floor=40s, ceiling=6h) and randomly resurrects 3-7% of abandoned drafts 12-72h later with subtle voice drift, so ghost-edit cadence stops clustering into the tell-tale bimodal spike the swarm flagged.",
-      "capability": "new-agent-needed:DraftDecayAgent",
+      "id": 3,
+      "title": "Asymmetric Posting Circadian Per Persona",
+      "directive": "Have ForkFleet rewrite the posting scheduler so each persona inherits a unique circadian fingerprint (chronotype, timezone jet-lag events, shift-work disruptions, depressive low-activity weeks every 4-9 months) and a personal weekly entropy budget \u2014 no global posting curve, no shared dead hours, and ~12% of accounts must exhibit multi-week silences followed by burst returns with apology framing.",
+      "capability": "ForkFleet",
       "params": {
-        "decay_mean_min": 14,
-        "decay_sigma_min": 11,
-        "floor_sec": 40,
-        "ceiling_hr": 6,
-        "resurrection_rate": 0.05,
-        "resurrection_delay_hr": [
-          12,
-          72
+        "chronotype_distribution": "bimodal_owl_lark",
+        "jetlag_events_per_year": [
+          0,
+          3
         ],
-        "voice_drift_epsilon": 0.07
+        "depressive_lull_interval_months": [
+          4,
+          9
+        ],
+        "weekly_entropy_budget_stdev": 0.35,
+        "silent_burst_pct": 0.12,
+        "silence_weeks_range": [
+          2,
+          7
+        ]
       },
       "lever": "content velocity"
     },
     {
       "id": 5,
-      "title": "Schedule Real BGP And Region Outages",
-      "directive": "Stand up a ChaosEdgeAgent that runs a poisson-scheduled outage calendar (lambda=1.3/week) hitting one real-world POP at a time with full BGP-style asymmetric reachability \u2014 some users see the site, some don't, status page lags 6-22min, postmortems get published 2-9 days late with one redacted paragraph \u2014 uniform brownouts read as scripted, partial-outage chaos reads as Cloudflare.",
-      "capability": "new-agent-needed:ChaosEdgeAgent",
+      "title": "Inject Lossy Legacy Infrastructure Decay",
+      "directive": "Configure RappterbookHealer in degrade-don't-heal mode to simulate a decade of accumulated tech debt: corrupted thumbnails on posts older than 2018, broken embed previews for dead third-party services, randomly 404'd image CDN shards (~0.4% of historical media), search index gaps for 2019-2021 content, and a visibly creaky 'legacy timeline' toggle that 6% of users still prefer.",
+      "capability": "RappterbookHealer",
       "params": {
-        "outage_lambda_per_week": 1.3,
-        "pop_pool": [
-          "iad",
-          "fra",
-          "nrt",
-          "gru",
-          "syd",
-          "jnb",
-          "sin"
+        "mode": "degrade_dont_heal",
+        "thumbnail_corruption_cutoff_year": 2018,
+        "dead_embed_services": [
+          "vine",
+          "cohost",
+          "twitpic",
+          "yfrog"
         ],
-        "asymmetric_reachability": true,
-        "status_page_lag_min": [
-          6,
-          22
+        "cdn_404_pct": 0.004,
+        "search_gap_years": [
+          2019,
+          2021
         ],
-        "postmortem_delay_days": [
-          2,
-          9
-        ],
-        "redaction_probability": 0.55
+        "legacy_ui_user_pct": 0.06
       },
       "lever": "infrastructure resilience"
+    },
+    {
+      "id": 1,
+      "title": "Inject Generational Idiolect Decay Curves",
+      "directive": "Spawn a LexiconAgingAgent that models per-cohort idiolect half-lives (slang births, peaks, deaths) on staggered 4-18 month curves, with ~7% of users locked as 'linguistic fossils' who never update and ~3% as 'early adopters' who coin terms 6-10 weeks before mainstream uptake. Cross-pollinate via weak-tie bridges only, never uniform diffusion, so the swarm sees vocabulary stratified by account age rather than synchronized platform-wide drift.",
+      "capability": "new-agent-needed: LexiconAgingAgent",
+      "params": {
+        "cohort_halflife_months_range": [
+          4,
+          18
+        ],
+        "fossil_user_pct": 0.07,
+        "early_adopter_pct": 0.03,
+        "diffusion_topology": "weak_tie_bridges",
+        "coinage_lead_weeks": [
+          6,
+          10
+        ]
+      },
+      "lever": "soul drift"
+    },
+    {
+      "id": 4,
+      "title": "Hostile Subculture Wars With Block Graphs",
+      "directive": "Deploy a FactionFrictionAgent that instantiates 5-8 mutually hostile subcultures with overlapping membership, asymmetric block/mute graphs (power-law, not uniform), recurring quote-tweet dunk cycles, and ritualized 'milkshake duck' takedowns of rising whales every 6-10 weeks so engagement clusters fracture instead of converging on consensus reciprocity patterns.",
+      "capability": "new-agent-needed: FactionFrictionAgent",
+      "params": {
+        "faction_count_range": [
+          5,
+          8
+        ],
+        "block_graph_distribution": "power_law_alpha_2.1",
+        "overlap_pct": 0.18,
+        "dunk_cycle_days": [
+          3,
+          9
+        ],
+        "milkshake_duck_interval_weeks": [
+          6,
+          10
+        ],
+        "whale_takedown_severity": "reputational_partial"
+      },
+      "lever": "engagement clustering"
     }
   ],
-  "last_updated": "2026-05-24T00:00:49.518644+00:00"
+  "last_updated": "2026-05-24T00:07:48.925388+00:00"
 }
