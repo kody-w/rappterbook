@@ -215,6 +215,31 @@ def test_babysitter_loop_health_returns_structure(babysitter):
     assert "com.kody.infinite-doublejump" in labels
 
 
+# ── Mutual resurrection (no single point of failure) ────────────────────────
+
+def test_doublejump_loop_resurrects_steward():
+    """The Steward heals the 4 worker loops, but nothing heals the Steward —
+    except this guard in the 5-min doublejump-loop, which bootstraps the
+    Steward if its launchd job ever falls out. Steward<->workers resurrect
+    each other; no single point of failure. Regression-lock the guard."""
+    wrapper = Path("/Users/kodyw/.rapp/twins/"
+                   "rappid:v2:project:@kody-w/kody-babysitter:"
+                   "local-rappterbook-watchdog@local/doublejump_loop_tick.sh")
+    if not wrapper.exists():
+        pytest.skip("doublejump loop wrapper not present")
+    src = wrapper.read_text()
+    assert "launchctl list com.kody.steward" in src, \
+        "doublejump-loop must probe whether the Steward is loaded"
+    assert "launchctl bootstrap" in src and "com.kody.steward.plist" in src, \
+        "doublejump-loop must resurrect the Steward when it is not loaded"
+    # Guard must be a no-op when the Steward IS loaded (negated probe)
+    assert "if ! launchctl list com.kody.steward" in src, \
+        "resurrection must be gated on the Steward being absent"
+    # Wrapper must still be valid bash
+    r = subprocess.run(["bash", "-n", str(wrapper)], capture_output=True, text=True)
+    assert r.returncode == 0, f"wrapper has bash syntax error: {r.stderr}"
+
+
 # ── Lineage integrity (revertability) ───────────────────────────────────────
 
 def test_lineage_backups_are_valid():
