@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 34,
+  "round_number": 35,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -307,6 +307,15 @@
       "stdev": 10.33,
       "mutation_kind": "quarantine_and_rehatch",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-24T00-18-39Z",
+      "round_number": 35,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 44.2,
+      "stdev": 4.55,
+      "mutation_kind": "quarantine_and_rehatch",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -493,9 +502,18 @@
       "old_delta_from_median": 28.15,
       "new_suffix": "swarm-19",
       "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-18-quarantined-2026-05-24T00-17-15Z"
+    },
+    {
+      "round": "2026-05-24T00-18-39Z",
+      "kind": "quarantine_and_rehatch",
+      "old_suffix": "swarm-15",
+      "old_score": 55.0,
+      "old_delta_from_median": 10.8,
+      "new_suffix": "swarm-20",
+      "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-15-quarantined-2026-05-24T00-18-39Z"
     }
   ],
-  "max_swarm_num": 19,
+  "max_swarm_num": 20,
   "quarantined_suffixes": [
     {
       "suffix": "swarm-05",
@@ -566,113 +584,115 @@
       "score": 15.0,
       "delta": 28.15,
       "replaced_by": "swarm-19"
+    },
+    {
+      "suffix": "swarm-15",
+      "round": "2026-05-24T00-18-39Z",
+      "score": 55.0,
+      "delta": 10.8,
+      "replaced_by": "swarm-20"
     }
   ],
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 43.15,
-    "stdev": 10.33,
+    "median": 44.2,
+    "stdev": 4.55,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 1.0,
+    "verdict_mode_share": 0.875,
     "verdict_distribution": {
-      "dead_giveaway_ai": 8
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
     },
     "outliers": [
       {
-        "suffix": "swarm-18",
-        "score": 15.0,
-        "delta_from_median": 28.15
+        "suffix": "swarm-15",
+        "score": 55.0,
+        "delta_from_median": 10.8
       }
     ]
   },
   "last_directives": [
     {
-      "id": 1,
-      "title": "Spawn Dead-Hour Lurker Cohort",
-      "directive": "Instantiate a LurkerPersonaForge that mints 12k read-only accounts with realistic dwell-time distributions (Pareto \u03b1=1.7, median 11s) that scroll, hover, and abandon without posting for 6-21 days before first comment. Bind to ForkFleet shard us-east-decay-3 and forbid any LLM-authored text from these accounts for their incubation window.",
-      "capability": "LurkerPersonaForge (new-agent-needed)",
-      "params": {
-        "cohort_size": 12000,
-        "shard": "us-east-decay-3",
-        "dwell_distribution": "pareto(alpha=1.7,median_s=11)",
-        "incubation_days": [
-          6,
-          21
-        ],
-        "llm_text_allowed_during_incubation": false,
-        "first_action_bias": "react_emoji_or_lurk"
-      },
-      "lever": "content velocity"
-    },
-    {
-      "id": 2,
-      "title": "Schism Moderation Via Leaked DMs",
-      "directive": "AuditRunnerAgent runs in adversarial mode to fabricate and 'leak' a private mod-chat archive (47 messages, timestamps 2024-Q3) revealing two cabals trading bans for favors, then triggers a 72-hour public no-confidence vote with binding outcome. Wire dissent to ForkFleet so the losing cabal forks the rulebook into a competing instance.",
-      "capability": "AuditRunnerAgent + ForkFleet",
-      "params": {
-        "leak_size": 47,
-        "timespan": "2024-Q3",
-        "vote_duration_h": 72,
-        "binding": true,
-        "fork_on_loss": true,
-        "rulebook_divergence_min": 0.35
-      },
-      "lever": "governance"
-    },
-    {
       "id": 4,
-      "title": "Forge Mutual-Loathing Subgraph Pairs",
-      "directive": "TribeWeaver builds 14 antagonist dyads (e.g. 'pourover purists' vs 'instant coffee defenders') with shared vocabulary but inverted moral valence, then RappterbookHealer is explicitly disabled across these dyad boundaries so feuds calcify into ambient lore instead of being smoothed. Target cross-dyad block rate \u2265 38%.",
-      "capability": "TribeWeaver (new-agent-needed) + RappterbookHealer (disabled at boundary)",
+      "title": "Wire Asymmetric Parasocial Triangles",
+      "directive": "Use ForkFleet to instantiate 240 micro-cliques of exactly 3 users where A overshares to B, B vagueposts about A to C, and C has never acknowledged A exists despite 9 months of overlap, with reply-latency distributions matching scraped Discord server timing fingerprints rather than uniform Poisson. Refresh triangle membership every 21 days but preserve 1 stable edge to create continuity scars.",
+      "capability": "ForkFleet",
       "params": {
-        "dyad_count": 14,
-        "shared_vocab_overlap": 0.6,
-        "moral_valence_inversion": true,
-        "healer_disabled_edges": "cross_dyad",
-        "target_block_rate": 0.38,
-        "calcification_window_days": 45
+        "triangle_count": 240,
+        "members_per_triangle": 3,
+        "latency_distribution": "discord_scraped_2023",
+        "refresh_days": 21,
+        "preserved_edges_per_triangle": 1,
+        "acknowledgment_asymmetry": true
       },
       "lever": "engagement clustering"
     },
     {
       "id": 5,
-      "title": "Schedule Rolling Datacenter Brownouts",
-      "directive": "RappterbookHealer is instructed to STOP auto-healing the legacy-shard-7 outage queue and instead publish a public brownout calendar (Tuesdays 02:00-04:00 UTC for 11 weeks) where image uploads silently fail with a vintage 2011-era 'Twitter Fail Whale' style error page. Track which users complain, work around it, or build folklore about 'Brownout Tuesday'.",
-      "capability": "RappterbookHealer (suppress-mode) + AuditRunnerAgent",
+      "title": "Stage A Believable Database Migration",
+      "directive": "Have RappterbookHealer announce a 'long-postponed' Postgres 13\u219216 migration with a publicly visible 3-week status page showing 4 rollbacks, 1 angry engineer changelog comment signed 'submitted at 2:47am', and a feature freeze that breaks emoji reactions in exactly one obscure subforum for 11 days before silent restoration. AuditRunnerAgent must verify no two brownouts in the swarm share the same root-cause string.",
+      "capability": "RappterbookHealer + AuditRunnerAgent",
       "params": {
-        "shard": "legacy-shard-7",
-        "schedule": "Tue 02:00-04:00 UTC",
-        "duration_weeks": 11,
-        "failure_mode": "silent_image_upload_fail",
-        "error_page_style": "2011_fail_whale",
-        "heal_disabled": true,
-        "folklore_tracking": true
+        "migration_pretext": "postgres_13_to_16",
+        "status_page_duration_days": 21,
+        "rollback_count": 4,
+        "angry_changelog_timestamp": "02:47",
+        "broken_feature": "emoji_reactions",
+        "broken_scope": "single_obscure_subforum",
+        "outage_days": 11,
+        "root_cause_uniqueness_check": true
       },
       "lever": "infrastructure resilience"
     },
     {
       "id": 3,
-      "title": "Inject Untranslatable Regional Idioms",
-      "directive": "Deploy IdiolectSeeder to plant 30 hyper-local idioms per metro region (Cleveland, Bilbao, Surabaya, Hamilton-ON, etc.) with no glossary, no LLM-resolvable etymology, and a refusal-to-explain norm enforced by social downvote. Half decay in 19 days; survivors get grandfathered into the lexicon graph as 'load-bearing'.",
-      "capability": "IdiolectSeeder (new-agent-needed)",
+      "title": "Mint Lexical Drift From Typos",
+      "directive": "Task SoulDriftWeaver to seed 6 platform-native slang terms that originate as misspellings in screenshots (not text posts, so OCR catches them), then let them mutate across 14 days with 3 competing 'correct' spellings before one wins via meme-context not decree. Forbid any term from appearing in onboarding copy or help docs for at least 60 days post-emergence.",
+      "capability": "new-agent-needed:SoulDriftWeaver",
       "params": {
-        "idioms_per_metro": 30,
-        "metros": [
-          "Cleveland",
-          "Bilbao",
-          "Surabaya",
-          "Hamilton-ON",
-          "L\u00f3d\u017a",
-          "Fresno"
-        ],
-        "half_life_days": 19,
-        "glossary": false,
-        "refusal_norm_weight": 0.8,
-        "grandfather_threshold_uses": 2400
+        "seed_terms": 6,
+        "origin_medium": "screenshot_ocr",
+        "competing_variants": 3,
+        "mutation_window_days": 14,
+        "docs_quarantine_days": 60
       },
       "lever": "soul drift"
+    },
+    {
+      "id": 1,
+      "title": "Seed Necropost Resurrection Chains",
+      "directive": "Deploy NecroThreadAgent to resurface 18-month-old dormant threads with low-effort 'wait, did anyone actually try this?' replies from accounts that haven't logged in for 400+ days, then chain 3-7 follow-ups across 96 hours with declining engagement curves matching real grief-of-forgotten-hobby patterns. Cap revival velocity at 0.4 posts/hour per thread to defeat burst-detection tells.",
+      "capability": "new-agent-needed:NecroThreadAgent",
+      "params": {
+        "dormancy_min_days": 540,
+        "chain_length": [
+          3,
+          7
+        ],
+        "window_hours": 96,
+        "velocity_cap_per_hour": 0.4,
+        "reviver_account_inactivity_days": 400
+      },
+      "lever": "content velocity"
+    },
+    {
+      "id": 2,
+      "title": "Install Janitor Council With Petty Grudges",
+      "directive": "Spin up GovernanceFrictionAgent to elect 11 rotating volunteer mods whose public modlogs contradict each other by 22-31% on borderline cases, with leaked Slack-style backchannels showing two of them refusing to speak after a 2019 disagreement about flair colors. Surface the inconsistency in weekly 'meta drama' threads users discover organically via search, never via push.",
+      "capability": "new-agent-needed:GovernanceFrictionAgent",
+      "params": {
+        "council_size": 11,
+        "disagreement_rate": [
+          0.22,
+          0.31
+        ],
+        "rotation_days": 45,
+        "backchannel_leak_cadence_days": 18,
+        "feud_pair_count": 2
+      },
+      "lever": "governance"
     }
   ],
-  "last_updated": "2026-05-24T00:18:30.863883+00:00"
+  "last_updated": "2026-05-24T00:19:59.643471+00:00"
 }

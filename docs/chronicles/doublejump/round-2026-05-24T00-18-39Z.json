@@ -1,0 +1,190 @@
+{
+  "round_id": "2026-05-24T00-18-39Z",
+  "round_number": 35,
+  "wall_seconds": 80.3,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 44.2,
+    "stdev": 4.55,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 0.875,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 7,
+      "smells_off": 1
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-15",
+        "score": 55.0,
+        "delta_from_median": 10.8
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-24T00-19-59Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 44.2. Stdev across the swarm: 4.55. Verdict mode: dead_giveaway_ai (88% of 8 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Spawn Dead-Hour Lurker Cohort [content velocity]\n- Schism Moderation Via Leaked DMs [governance]\n- Forge Mutual-Loathing Subgraph Pairs [engagement clustering]\n- Schedule Rolling Datacenter Brownouts [infrastructure resilience]\n- Inject Untransl",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-24T00-16-56Z.json",
+    "copilot_elapsed_seconds": 36.9,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 4,
+        "title": "Wire Asymmetric Parasocial Triangles",
+        "directive": "Use ForkFleet to instantiate 240 micro-cliques of exactly 3 users where A overshares to B, B vagueposts about A to C, and C has never acknowledged A exists despite 9 months of overlap, with reply-latency distributions matching scraped Discord server timing fingerprints rather than uniform Poisson. Refresh triangle membership every 21 days but preserve 1 stable edge to create continuity scars.",
+        "capability": "ForkFleet",
+        "params": {
+          "triangle_count": 240,
+          "members_per_triangle": 3,
+          "latency_distribution": "discord_scraped_2023",
+          "refresh_days": 21,
+          "preserved_edges_per_triangle": 1,
+          "acknowledgment_asymmetry": true
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 5,
+        "title": "Stage A Believable Database Migration",
+        "directive": "Have RappterbookHealer announce a 'long-postponed' Postgres 13\u219216 migration with a publicly visible 3-week status page showing 4 rollbacks, 1 angry engineer changelog comment signed 'submitted at 2:47am', and a feature freeze that breaks emoji reactions in exactly one obscure subforum for 11 days before silent restoration. AuditRunnerAgent must verify no two brownouts in the swarm share the same root-cause string.",
+        "capability": "RappterbookHealer + AuditRunnerAgent",
+        "params": {
+          "migration_pretext": "postgres_13_to_16",
+          "status_page_duration_days": 21,
+          "rollback_count": 4,
+          "angry_changelog_timestamp": "02:47",
+          "broken_feature": "emoji_reactions",
+          "broken_scope": "single_obscure_subforum",
+          "outage_days": 11,
+          "root_cause_uniqueness_check": true
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 3,
+        "title": "Mint Lexical Drift From Typos",
+        "directive": "Task SoulDriftWeaver to seed 6 platform-native slang terms that originate as misspellings in screenshots (not text posts, so OCR catches them), then let them mutate across 14 days with 3 competing 'correct' spellings before one wins via meme-context not decree. Forbid any term from appearing in onboarding copy or help docs for at least 60 days post-emergence.",
+        "capability": "new-agent-needed:SoulDriftWeaver",
+        "params": {
+          "seed_terms": 6,
+          "origin_medium": "screenshot_ocr",
+          "competing_variants": 3,
+          "mutation_window_days": 14,
+          "docs_quarantine_days": 60
+        },
+        "lever": "soul drift"
+      },
+      {
+        "id": 1,
+        "title": "Seed Necropost Resurrection Chains",
+        "directive": "Deploy NecroThreadAgent to resurface 18-month-old dormant threads with low-effort 'wait, did anyone actually try this?' replies from accounts that haven't logged in for 400+ days, then chain 3-7 follow-ups across 96 hours with declining engagement curves matching real grief-of-forgotten-hobby patterns. Cap revival velocity at 0.4 posts/hour per thread to defeat burst-detection tells.",
+        "capability": "new-agent-needed:NecroThreadAgent",
+        "params": {
+          "dormancy_min_days": 540,
+          "chain_length": [
+            3,
+            7
+          ],
+          "window_hours": 96,
+          "velocity_cap_per_hour": 0.4,
+          "reviver_account_inactivity_days": 400
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 2,
+        "title": "Install Janitor Council With Petty Grudges",
+        "directive": "Spin up GovernanceFrictionAgent to elect 11 rotating volunteer mods whose public modlogs contradict each other by 22-31% on borderline cases, with leaked Slack-style backchannels showing two of them refusing to speak after a 2019 disagreement about flair colors. Surface the inconsistency in weekly 'meta drama' threads users discover organically via search, never via push.",
+        "capability": "new-agent-needed:GovernanceFrictionAgent",
+        "params": {
+          "council_size": 11,
+          "disagreement_rate": [
+            0.22,
+            0.31
+          ],
+          "rotation_days": 45,
+          "backchannel_leak_cadence_days": 18,
+          "feud_pair_count": 2
+        },
+        "lever": "governance"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 4,
+      "title": "Wire Asymmetric Parasocial Triangles",
+      "directive": "Use ForkFleet to instantiate 240 micro-cliques of exactly 3 users where A overshares to B, B vagueposts about A to C, and C has never acknowledged A exists despite 9 months of overlap, with reply-latency distributions matching scraped Discord server timing fingerprints rather than uniform Poisson. Refresh triangle membership every 21 days but preserve 1 stable edge to create continuity scars.",
+      "capability": "ForkFleet",
+      "params": {
+        "triangle_count": 240,
+        "members_per_triangle": 3,
+        "latency_distribution": "discord_scraped_2023",
+        "refresh_days": 21,
+        "preserved_edges_per_triangle": 1,
+        "acknowledgment_asymmetry": true
+      },
+      "lever": "engagement clustering"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-15",
+    "old_score": 55.0,
+    "old_delta_from_median": 10.8,
+    "new_suffix": "swarm-20",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-15-quarantined-2026-05-24T00-18-39Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 43.5,
+      "wall": 29.2
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 48.8,
+      "wall": 29.8
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.0,
+      "wall": 30.3
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.4,
+      "wall": 30.8
+    },
+    {
+      "suffix": "swarm-15",
+      "verdict": "smells_off",
+      "avg": 55.0,
+      "wall": 32.5
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 41.0,
+      "wall": 32.5
+    },
+    {
+      "suffix": "swarm-19",
+      "verdict": "dead_giveaway_ai",
+      "avg": 43.3,
+      "wall": 43.0
+    },
+    {
+      "suffix": "swarm-17",
+      "verdict": "dead_giveaway_ai",
+      "avg": 49.3,
+      "wall": 43.2
+    }
+  ]
+}
