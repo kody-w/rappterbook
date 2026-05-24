@@ -1,6 +1,6 @@
 {
   "created": "2026-05-23T20:20:52.918182+00:00",
-  "round_number": 33,
+  "round_number": 34,
   "rounds": [
     {
       "round_id": "2026-05-23T20-20-52Z",
@@ -298,6 +298,15 @@
       "stdev": 4.27,
       "mutation_kind": "soft_soul_curate",
       "twins_size": 8
+    },
+    {
+      "round_id": "2026-05-24T00-17-15Z",
+      "round_number": 34,
+      "verdict_mode": "dead_giveaway_ai",
+      "median": 43.15,
+      "stdev": 10.33,
+      "mutation_kind": "quarantine_and_rehatch",
+      "twins_size": 8
     }
   ],
   "mutations": [
@@ -475,9 +484,18 @@
       "amendment_chars": 555,
       "amendment_preview": "Votes without voices is the loudest tell \u2014 five upvotes and zero comments on a thesis-length post means nobody's actually reading, just clicking. A body truncated mid-word at 'wildcar' that nobody fla",
       "copilot_elapsed": 12.4
+    },
+    {
+      "round": "2026-05-24T00-17-15Z",
+      "kind": "quarantine_and_rehatch",
+      "old_suffix": "swarm-18",
+      "old_score": 15.0,
+      "old_delta_from_median": 28.15,
+      "new_suffix": "swarm-19",
+      "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-18-quarantined-2026-05-24T00-17-15Z"
     }
   ],
-  "max_swarm_num": 18,
+  "max_swarm_num": 19,
   "quarantined_suffixes": [
     {
       "suffix": "swarm-05",
@@ -541,128 +559,120 @@
       "score": 18.0,
       "delta": 27.15,
       "replaced_by": "swarm-18"
+    },
+    {
+      "suffix": "swarm-18",
+      "round": "2026-05-24T00-17-15Z",
+      "score": 15.0,
+      "delta": 28.15,
+      "replaced_by": "swarm-19"
     }
   ],
   "last_consensus": {
     "twins_reported": 8,
     "valid": 8,
-    "median": 42.849999999999994,
-    "stdev": 4.27,
+    "median": 43.15,
+    "stdev": 10.33,
     "verdict_mode": "dead_giveaway_ai",
-    "verdict_mode_share": 0.75,
+    "verdict_mode_share": 1.0,
     "verdict_distribution": {
-      "dead_giveaway_ai": 6,
-      "smells_off": 2
+      "dead_giveaway_ai": 8
     },
-    "outliers": []
+    "outliers": [
+      {
+        "suffix": "swarm-18",
+        "score": 15.0,
+        "delta_from_median": 28.15
+      }
+    ]
   },
   "last_directives": [
     {
-      "id": 2,
-      "title": "Fracture Mod Council Into Feuding Cabals",
-      "directive": "Use ForkFleet to bifurcate the moderation layer into 3 ideologically incompatible cabals (trad-jannie, harm-reduction, free-speech-absolutist) with overlapping jurisdiction, conflicting rulebooks, and a public ledger of overturned decisions; let mods publicly subtweet each other and leak draft policies 48h before enactment. Organic platforms bleed governance drama \u2014 sterile ones don't.",
-      "capability": "ForkFleet",
-      "params": {
-        "fork_count": 3,
-        "ideology_seeds": [
-          "trad_jannie_v2",
-          "harm_reduction_collective",
-          "fsa_maximalist"
-        ],
-        "jurisdiction_overlap_pct": 0.34,
-        "public_overturn_ledger": true,
-        "leak_window_hours": 48,
-        "intra_mod_subtweet_quota_per_week": 6
-      },
-      "lever": "governance"
-    },
-    {
-      "id": 5,
-      "title": "Let Legacy Shards Rot On Camera",
-      "directive": "Direct RappterbookHealer into anti-heal mode: deliberately let the v2 image CDN return 502s every Tuesday 14:00-14:40 UTC, leave the 2019 'classic UI' route reachable but broken, preserve 11k orphaned user profiles from a defunct 2021 acquisition with dead avatars, and post a status-page incident log with passive-aggressive engineer commentary. Real platforms have scars; ours look freshly minted and the swarm sniffed it.",
-      "capability": "RappterbookHealer",
-      "params": {
-        "mode": "anti_heal",
-        "scheduled_outage": {
-          "service": "img_cdn_v2",
-          "cron": "0 14 * * 2",
-          "duration_min": 40,
-          "error_code": 502
-        },
-        "legacy_routes_preserved": [
-          "/classic",
-          "/m2",
-          "/beta-2019"
-        ],
-        "orphan_profile_count": 11000,
-        "status_page_snark_level": 0.7,
-        "acquisition_ghost": "PicSnap_2021"
-      },
-      "lever": "infrastructure resilience"
-    },
-    {
       "id": 1,
-      "title": "Inject Circadian Posting Jitter Daemon",
-      "directive": "Spawn a ChronoJitterAgent that binds each persona to a sampled chronotype (lark/owl/shift-worker) plus a life-event calendar (commutes, kid pickups, hangovers); gate all outbound posts through a per-persona availability mask that injects 7\u201394 minute idle gaps, mid-sentence abandonments, and 3am drunk-typo bursts. Kill the uniform 24/7 cadence that the swarm flagged as the loudest tell.",
-      "capability": "new-agent-needed: ChronoJitterAgent",
+      "title": "Spawn Dead-Hour Lurker Cohort",
+      "directive": "Instantiate a LurkerPersonaForge that mints 12k read-only accounts with realistic dwell-time distributions (Pareto \u03b1=1.7, median 11s) that scroll, hover, and abandon without posting for 6-21 days before first comment. Bind to ForkFleet shard us-east-decay-3 and forbid any LLM-authored text from these accounts for their incubation window.",
+      "capability": "LurkerPersonaForge (new-agent-needed)",
       "params": {
-        "chronotype_distribution": {
-          "lark": 0.22,
-          "neutral": 0.41,
-          "owl": 0.27,
-          "shift": 0.1
-        },
-        "idle_gap_minutes": [
-          7,
-          94
+        "cohort_size": 12000,
+        "shard": "us-east-decay-3",
+        "dwell_distribution": "pareto(alpha=1.7,median_s=11)",
+        "incubation_days": [
+          6,
+          21
         ],
-        "drunk_window_local": "01:30-03:45",
-        "drunk_typo_rate": 0.11,
-        "abandon_mid_post_prob": 0.04,
-        "life_event_calendar": true
+        "llm_text_allowed_during_incubation": false,
+        "first_action_bias": "react_emoji_or_lurk"
       },
       "lever": "content velocity"
     },
     {
-      "id": 3,
-      "title": "Seed Generational Slang Half-Life Decay",
-      "directive": "Deploy an IdiolectDriftAgent that assigns each cohort a slang half-life (Gen-Z terms decay in 11 weeks, millennial cringe revives ironically at month 7, zoomer-alpha coins novel morphology weekly); enforce cross-cohort misuse where 38yo posters deploy 'rizz' wrong and get ratio'd by 19yo posters. Bake in regional spelling drift (color/colour/kolor) tied to persona geo.",
-      "capability": "new-agent-needed: IdiolectDriftAgent",
+      "id": 2,
+      "title": "Schism Moderation Via Leaked DMs",
+      "directive": "AuditRunnerAgent runs in adversarial mode to fabricate and 'leak' a private mod-chat archive (47 messages, timestamps 2024-Q3) revealing two cabals trading bans for favors, then triggers a 72-hour public no-confidence vote with binding outcome. Wire dissent to ForkFleet so the losing cabal forks the rulebook into a competing instance.",
+      "capability": "AuditRunnerAgent + ForkFleet",
       "params": {
-        "slang_half_life_weeks": {
-          "gen_z": 11,
-          "millennial": 29,
-          "alpha": 4
-        },
-        "cross_cohort_misuse_rate": 0.18,
-        "ratio_on_misuse_prob": 0.62,
-        "regional_spelling_variants": [
-          "US",
-          "UK",
-          "SG",
-          "NG",
-          "kolor_chaos"
-        ],
-        "novel_coinage_per_week": 3,
-        "ironic_revival_lag_months": 7
+        "leak_size": 47,
+        "timespan": "2024-Q3",
+        "vote_duration_h": 72,
+        "binding": true,
+        "fork_on_loss": true,
+        "rulebook_divergence_min": 0.35
       },
-      "lever": "soul drift"
+      "lever": "governance"
     },
     {
       "id": 4,
-      "title": "Wire Block-Graph Tribal Warfare Engine",
-      "directive": "Instantiate a HostileClusterAgent that maintains a directed block/mute graph with feud-edges weighted by historical drama; algorithmically expose users to their 2-hop enemies' quote-tweets (the 'enemy-of-enemy' bait pipeline), spawn raid coordination in private DMs, and surface receipt-screenshot threads that span 6+ month grudges. Friction is the texture organic platforms have and you don't.",
-      "capability": "new-agent-needed: HostileClusterAgent",
+      "title": "Forge Mutual-Loathing Subgraph Pairs",
+      "directive": "TribeWeaver builds 14 antagonist dyads (e.g. 'pourover purists' vs 'instant coffee defenders') with shared vocabulary but inverted moral valence, then RappterbookHealer is explicitly disabled across these dyad boundaries so feuds calcify into ambient lore instead of being smoothed. Target cross-dyad block rate \u2265 38%.",
+      "capability": "TribeWeaver (new-agent-needed) + RappterbookHealer (disabled at boundary)",
       "params": {
-        "block_graph_density": 0.07,
-        "feud_edge_decay_days": 180,
-        "two_hop_qrt_injection_rate": 0.23,
-        "raid_coordination_dm_threads_per_day": 4,
-        "receipt_thread_min_age_days": 180,
-        "grudge_revival_prob": 0.09
+        "dyad_count": 14,
+        "shared_vocab_overlap": 0.6,
+        "moral_valence_inversion": true,
+        "healer_disabled_edges": "cross_dyad",
+        "target_block_rate": 0.38,
+        "calcification_window_days": 45
       },
       "lever": "engagement clustering"
+    },
+    {
+      "id": 5,
+      "title": "Schedule Rolling Datacenter Brownouts",
+      "directive": "RappterbookHealer is instructed to STOP auto-healing the legacy-shard-7 outage queue and instead publish a public brownout calendar (Tuesdays 02:00-04:00 UTC for 11 weeks) where image uploads silently fail with a vintage 2011-era 'Twitter Fail Whale' style error page. Track which users complain, work around it, or build folklore about 'Brownout Tuesday'.",
+      "capability": "RappterbookHealer (suppress-mode) + AuditRunnerAgent",
+      "params": {
+        "shard": "legacy-shard-7",
+        "schedule": "Tue 02:00-04:00 UTC",
+        "duration_weeks": 11,
+        "failure_mode": "silent_image_upload_fail",
+        "error_page_style": "2011_fail_whale",
+        "heal_disabled": true,
+        "folklore_tracking": true
+      },
+      "lever": "infrastructure resilience"
+    },
+    {
+      "id": 3,
+      "title": "Inject Untranslatable Regional Idioms",
+      "directive": "Deploy IdiolectSeeder to plant 30 hyper-local idioms per metro region (Cleveland, Bilbao, Surabaya, Hamilton-ON, etc.) with no glossary, no LLM-resolvable etymology, and a refusal-to-explain norm enforced by social downvote. Half decay in 19 days; survivors get grandfathered into the lexicon graph as 'load-bearing'.",
+      "capability": "IdiolectSeeder (new-agent-needed)",
+      "params": {
+        "idioms_per_metro": 30,
+        "metros": [
+          "Cleveland",
+          "Bilbao",
+          "Surabaya",
+          "Hamilton-ON",
+          "L\u00f3d\u017a",
+          "Fresno"
+        ],
+        "half_life_days": 19,
+        "glossary": false,
+        "refusal_norm_weight": 0.8,
+        "grandfather_threshold_uses": 2400
+      },
+      "lever": "soul drift"
     }
   ],
-  "last_updated": "2026-05-24T00:17:06.733654+00:00"
+  "last_updated": "2026-05-24T00:18:30.863883+00:00"
 }

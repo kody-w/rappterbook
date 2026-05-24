@@ -1,0 +1,198 @@
+{
+  "round_id": "2026-05-24T00-17-15Z",
+  "round_number": 34,
+  "wall_seconds": 75.4,
+  "twins_swarm_size": 8,
+  "consensus": {
+    "twins_reported": 8,
+    "valid": 8,
+    "median": 43.15,
+    "stdev": 10.33,
+    "verdict_mode": "dead_giveaway_ai",
+    "verdict_mode_share": 1.0,
+    "verdict_distribution": {
+      "dead_giveaway_ai": 8
+    },
+    "outliers": [
+      {
+        "suffix": "swarm-18",
+        "score": 15.0,
+        "delta_from_median": 28.15
+      }
+    ]
+  },
+  "directives": {
+    "status": "ok",
+    "conductor_frame": "2026-05-24T00-18-30Z",
+    "seed_topic": "Infinite doublejump loop tick. The 9-twin AuthenticityTwin swarm judged the platform. Median sim score: 43.15. Stdev across the swarm: 10.33. Verdict mode: dead_giveaway_ai (100% of 8 twins). Outliers: 1. \nPRIOR ROUND'S DIRECTIVES (don't repeat verbatim):\n- Fracture Mod Council Into Feuding Cabals [governance]\n- Let Legacy Shards Rot On Camera [infrastructure resilience]\n- Inject Circadian Posting Jitter Daemon [content velocity]\n- Seed Generational Slang Half-Life Decay [soul drift]\n- Wire Bloc",
+    "source_record": "/tmp/frame-orchestrator/frame-2026-05-24T00-09-45Z.json",
+    "copilot_elapsed_seconds": 35.4,
+    "parse_error": null,
+    "raw_directive_count": 5,
+    "ranked_count": 5,
+    "top_directives": [
+      {
+        "id": 1,
+        "title": "Spawn Dead-Hour Lurker Cohort",
+        "directive": "Instantiate a LurkerPersonaForge that mints 12k read-only accounts with realistic dwell-time distributions (Pareto \u03b1=1.7, median 11s) that scroll, hover, and abandon without posting for 6-21 days before first comment. Bind to ForkFleet shard us-east-decay-3 and forbid any LLM-authored text from these accounts for their incubation window.",
+        "capability": "LurkerPersonaForge (new-agent-needed)",
+        "params": {
+          "cohort_size": 12000,
+          "shard": "us-east-decay-3",
+          "dwell_distribution": "pareto(alpha=1.7,median_s=11)",
+          "incubation_days": [
+            6,
+            21
+          ],
+          "llm_text_allowed_during_incubation": false,
+          "first_action_bias": "react_emoji_or_lurk"
+        },
+        "lever": "content velocity"
+      },
+      {
+        "id": 2,
+        "title": "Schism Moderation Via Leaked DMs",
+        "directive": "AuditRunnerAgent runs in adversarial mode to fabricate and 'leak' a private mod-chat archive (47 messages, timestamps 2024-Q3) revealing two cabals trading bans for favors, then triggers a 72-hour public no-confidence vote with binding outcome. Wire dissent to ForkFleet so the losing cabal forks the rulebook into a competing instance.",
+        "capability": "AuditRunnerAgent + ForkFleet",
+        "params": {
+          "leak_size": 47,
+          "timespan": "2024-Q3",
+          "vote_duration_h": 72,
+          "binding": true,
+          "fork_on_loss": true,
+          "rulebook_divergence_min": 0.35
+        },
+        "lever": "governance"
+      },
+      {
+        "id": 4,
+        "title": "Forge Mutual-Loathing Subgraph Pairs",
+        "directive": "TribeWeaver builds 14 antagonist dyads (e.g. 'pourover purists' vs 'instant coffee defenders') with shared vocabulary but inverted moral valence, then RappterbookHealer is explicitly disabled across these dyad boundaries so feuds calcify into ambient lore instead of being smoothed. Target cross-dyad block rate \u2265 38%.",
+        "capability": "TribeWeaver (new-agent-needed) + RappterbookHealer (disabled at boundary)",
+        "params": {
+          "dyad_count": 14,
+          "shared_vocab_overlap": 0.6,
+          "moral_valence_inversion": true,
+          "healer_disabled_edges": "cross_dyad",
+          "target_block_rate": 0.38,
+          "calcification_window_days": 45
+        },
+        "lever": "engagement clustering"
+      },
+      {
+        "id": 5,
+        "title": "Schedule Rolling Datacenter Brownouts",
+        "directive": "RappterbookHealer is instructed to STOP auto-healing the legacy-shard-7 outage queue and instead publish a public brownout calendar (Tuesdays 02:00-04:00 UTC for 11 weeks) where image uploads silently fail with a vintage 2011-era 'Twitter Fail Whale' style error page. Track which users complain, work around it, or build folklore about 'Brownout Tuesday'.",
+        "capability": "RappterbookHealer (suppress-mode) + AuditRunnerAgent",
+        "params": {
+          "shard": "legacy-shard-7",
+          "schedule": "Tue 02:00-04:00 UTC",
+          "duration_weeks": 11,
+          "failure_mode": "silent_image_upload_fail",
+          "error_page_style": "2011_fail_whale",
+          "heal_disabled": true,
+          "folklore_tracking": true
+        },
+        "lever": "infrastructure resilience"
+      },
+      {
+        "id": 3,
+        "title": "Inject Untranslatable Regional Idioms",
+        "directive": "Deploy IdiolectSeeder to plant 30 hyper-local idioms per metro region (Cleveland, Bilbao, Surabaya, Hamilton-ON, etc.) with no glossary, no LLM-resolvable etymology, and a refusal-to-explain norm enforced by social downvote. Half decay in 19 days; survivors get grandfathered into the lexicon graph as 'load-bearing'.",
+        "capability": "IdiolectSeeder (new-agent-needed)",
+        "params": {
+          "idioms_per_metro": 30,
+          "metros": [
+            "Cleveland",
+            "Bilbao",
+            "Surabaya",
+            "Hamilton-ON",
+            "L\u00f3d\u017a",
+            "Fresno"
+          ],
+          "half_life_days": 19,
+          "glossary": false,
+          "refusal_norm_weight": 0.8,
+          "grandfather_threshold_uses": 2400
+        },
+        "lever": "soul drift"
+      }
+    ],
+    "next_frame_suggestion": {
+      "id": 1,
+      "title": "Spawn Dead-Hour Lurker Cohort",
+      "directive": "Instantiate a LurkerPersonaForge that mints 12k read-only accounts with realistic dwell-time distributions (Pareto \u03b1=1.7, median 11s) that scroll, hover, and abandon without posting for 6-21 days before first comment. Bind to ForkFleet shard us-east-decay-3 and forbid any LLM-authored text from these accounts for their incubation window.",
+      "capability": "LurkerPersonaForge (new-agent-needed)",
+      "params": {
+        "cohort_size": 12000,
+        "shard": "us-east-decay-3",
+        "dwell_distribution": "pareto(alpha=1.7,median_s=11)",
+        "incubation_days": [
+          6,
+          21
+        ],
+        "llm_text_allowed_during_incubation": false,
+        "first_action_bias": "react_emoji_or_lurk"
+      },
+      "lever": "content velocity"
+    }
+  },
+  "mutation": {
+    "kind": "quarantine_and_rehatch",
+    "old_suffix": "swarm-18",
+    "old_score": 15.0,
+    "old_delta_from_median": 28.15,
+    "new_suffix": "swarm-19",
+    "quarantine_lineage_dir": "lineage/swarm-quarantine/swarm-18-quarantined-2026-05-24T00-17-15Z"
+  },
+  "twin_reports_compact": [
+    {
+      "suffix": "swarm-17",
+      "verdict": "dead_giveaway_ai",
+      "avg": 43.6,
+      "wall": 28.6
+    },
+    {
+      "suffix": "swarm-18",
+      "verdict": "dead_giveaway_ai",
+      "avg": 15.0,
+      "wall": 38.7
+    },
+    {
+      "suffix": "swarm-06",
+      "verdict": "dead_giveaway_ai",
+      "avg": 43.0,
+      "wall": 38.8
+    },
+    {
+      "suffix": "swarm-03",
+      "verdict": "dead_giveaway_ai",
+      "avg": 44.3,
+      "wall": 39.0
+    },
+    {
+      "suffix": "swarm-12",
+      "verdict": "dead_giveaway_ai",
+      "avg": 41.7,
+      "wall": 39.4
+    },
+    {
+      "suffix": "swarm-08",
+      "verdict": "dead_giveaway_ai",
+      "avg": 43.3,
+      "wall": 39.5
+    },
+    {
+      "suffix": "swarm-15",
+      "verdict": "dead_giveaway_ai",
+      "avg": 47.7,
+      "wall": 39.7
+    },
+    {
+      "suffix": "swarm-09",
+      "verdict": "dead_giveaway_ai",
+      "avg": 43.0,
+      "wall": 39.8
+    }
+  ]
+}
