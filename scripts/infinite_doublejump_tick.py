@@ -54,7 +54,12 @@ def _path_for_suffix(suffix: str) -> str:
     """suffix is e.g. 'swarm-04' — returns the full twin workspace path."""
     return TWIN_PATH_PREFIX + suffix
 
-N_POSTS_PER_TWIN = 3
+# Bumped from 3→6 per MutationEfficacyTwin's "thrashing" diagnosis: with only
+# 3 posts per twin × 9 twins judging a small overlap set, the swarm median
+# was pinned around 44 regardless of mutations — mutations had no lever on
+# the content pool because the pool was too small. Doubling sample coverage
+# gives the median actual purchase on platform content quality changes.
+N_POSTS_PER_TWIN = 6
 OUTLIER_SIGMA = 2.0
 # NO MATURITY GATE. NO DAILY RATE CAP. No timer-based "wait, do it later"
 # pretense (per the no-wait-modes-in-loops doctrine). Every tick that finds

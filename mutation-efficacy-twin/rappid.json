@@ -1,0 +1,22 @@
+{
+  "schema": "rapp-rappid/2.0",
+  "rappid": "rappid:v2:project:@kody-w/mutation-efficacy-twin:infinite-doublejump-judge@local",
+  "kind": "project",
+  "namespace": "@kody-w/mutation-efficacy-twin",
+  "hash": "infinite-doublejump-judge",
+  "host": "local",
+  "owner": "kody-w",
+  "repo": "rappterbook/mutation-efficacy-twin",
+  "name": "mutation-efficacy-twin",
+  "display_name": "Mutation Efficacy Twin (is the loop EVOLVING or thrashing?)",
+  "born_at": "2026-05-24T00:00:00Z",
+  "role": "evolution-effectiveness-judge",
+  "description": "Reads the last N rounds of the infinite-doublejump chronicle and asks the question no other twin asks: is this system genuinely converging toward consensus + harshness over time, or is it thrashing in a circle and just LOOKING evolutionary? Per-scan verdict: evolving | stalled | thrashing. Watches for the failure mode where mutations fire dutifully but the median/stdev never changes — the temporal version of the gaslight pattern.",
+  "watches": [
+    "docs/chronicles/doublejump/round-*.json",
+    "docs/chronicles/infinite_doublejump_state.json"
+  ],
+  "_planted_by": "@kody-w",
+  "_organism_version": "0.1.0",
+  "_hatched_by": "twin_egg_hatcher_agent.py"
+}

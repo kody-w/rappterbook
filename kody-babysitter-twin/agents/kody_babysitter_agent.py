@@ -340,6 +340,172 @@ def _publishing_verification() -> dict:
     }
 
 
+def _loop_health() -> dict:
+    """Verify launchd jobs are firing on schedule + chronicle dirs growing.
+
+    For each known loop, checks:
+      - launchd job is loaded (`launchctl list <label>` returns exit 0)
+      - tail.log exists and the LAST line's timestamp is < 2× the expected interval
+      - the chronicle dir is growing (newest file < 2× interval ago)
+    Alarm flagged when any loop is stalled.
+    """
+    import re
+    LOOPS = [
+        {"label": "com.kody.babysitter",         "interval_s": 900,
+         "tail_log": "/tmp/kody-babysitter/tail.log",      "chronicle_dir": "/tmp/kody-babysitter"},
+        {"label": "com.kody.doublejump-loop",    "interval_s": 300,
+         "tail_log": "/tmp/doublejump-loop/tail.log",      "chronicle_dir": "/tmp/doublejump-loop"},
+        {"label": "com.kody.infinite-doublejump","interval_s": 300,
+         "tail_log": "/tmp/infinite-doublejump/tail.log",
+         "chronicle_dir": str(REPO / "docs/chronicles/doublejump")},
+    ]
+    now = datetime.now(timezone.utc).timestamp()
+    findings = []
+    for L in LOOPS:
+        entry = {"label": L["label"], "expected_interval_s": L["interval_s"]}
+        # launchd status
+        try:
+            p = subprocess.run(["launchctl", "list", L["label"]],
+                               capture_output=True, text=True, timeout=5)
+            entry["launchd_loaded"] = (p.returncode == 0)
+        except Exception:
+            entry["launchd_loaded"] = False
+
+        # tail.log freshness
+        tp = Path(L["tail_log"])
+        if tp.exists():
+            last_mtime = tp.stat().st_mtime
+            age_s = now - last_mtime
+            entry["tail_log_age_s"] = round(age_s)
+            entry["tail_log_stale"] = age_s > 2 * L["interval_s"]
+            # Pull the most-recent timestamp from the tail line
+            try:
+                last_line = tp.read_text().rstrip().splitlines()[-1]
+                entry["tail_last_line"] = last_line[:200]
+            except Exception:
+                entry["tail_last_line"] = None
+        else:
+            entry["tail_log_age_s"] = None
+            entry["tail_log_stale"] = True
+            entry["tail_last_line"] = None
+
+        # Chronicle dir newest-file age
+        cd = Path(L["chronicle_dir"])
+        if cd.exists():
+            files = sorted([f for f in cd.iterdir() if f.is_file()],
+                           key=lambda f: f.stat().st_mtime, reverse=True)
+            if files:
+                age_s = now - files[0].stat().st_mtime
+                entry["newest_chronicle_age_s"] = round(age_s)
+                entry["chronicle_stale"] = age_s > 2 * L["interval_s"]
+            else:
+                entry["newest_chronicle_age_s"] = None
+                entry["chronicle_stale"] = True
+        else:
+            entry["newest_chronicle_age_s"] = None
+            entry["chronicle_stale"] = True
+
+        entry["alarm"] = (
+            (not entry["launchd_loaded"]) or
+            entry.get("tail_log_stale", True) or
+            entry.get("chronicle_stale", True)
+        )
+        findings.append(entry)
+
+    return {
+        "checked": len(findings),
+        "any_alarm": any(f["alarm"] for f in findings),
+        "loops": findings,
+    }
+
+
+def _push_reality() -> dict:
+    """For each recently-claimed push (publisher records), verify the claimed
+    frame_id is actually on origin/main. Uses `git ls-tree` (authoritative),
+    NOT `gh api /contents/` (which returns null for paths it could reach).
+    """
+    pub_records = []
+    for d, pattern, name in [
+        (Path("/tmp/pages-publisher"), "v3-*.json", "pages_publisher"),
+        (Path("/tmp/posts-publisher"), "posts-pub-*.json", "posts_publisher"),
+        (Path("/tmp/votes-agent"),     "votes-*.json",     "votes_agent"),
+        (Path("/tmp/activity-agent"),  "activity-*.json",  "activity_agent"),
+    ]:
+        if not d.exists():
+            continue
+        files = sorted(d.glob(pattern), key=lambda f: f.stat().st_mtime, reverse=True)[:5]
+        for f in files:
+            try:
+                rec = json.loads(f.read_text())
+            except Exception:
+                continue
+            if rec.get("status") != "pushed":
+                continue
+            pub_records.append({
+                "publisher": name, "file": f.name,
+                "frame_id": rec.get("frame_id"),
+                "claimed_sidecar": rec.get("sidecar_file"),
+            })
+    if not pub_records:
+        return {"checked": 0, "gaslight_findings": []}
+
+    # Authoritative check: for each unique sidecar, fetch ALL of its log of
+    # frame_ids from origin via git show. Then each claimed frame_id should
+    # appear in the file's by_hash / frames / posts / by_post.
+    findings = []
+    sidecars_to_check = sorted(set(r["claimed_sidecar"] for r in pub_records
+                                    if r.get("claimed_sidecar")))
+    sidecar_contents = {}
+    for path in sidecars_to_check:
+        try:
+            p = subprocess.run(
+                ["git", "show", f"origin/main:{path}"],
+                cwd=str(REPO), capture_output=True, text=True, timeout=15,
+            )
+            if p.returncode == 0:
+                sidecar_contents[path] = json.loads(p.stdout)
+            else:
+                sidecar_contents[path] = None
+        except Exception:
+            sidecar_contents[path] = None
+
+    def _frame_on_origin(sidecar: dict, frame_id: str) -> bool:
+        if not sidecar or not frame_id:
+            return False
+        # synthetic_comments.json + synthetic_posts.json shape: by_hash entries
+        # have frame_id; by_discussion entries have fleet_frame
+        bh = sidecar.get("by_hash") or {}
+        for entry in bh.values():
+            if isinstance(entry, dict) and entry.get("frame_id") == frame_id:
+                return True
+            if isinstance(entry, dict) and entry.get("frame") == frame_id:
+                return True
+        # synthetic_activity.json: frames[].frame_id
+        for f in (sidecar.get("frames") or []):
+            if f.get("frame_id") == frame_id:
+                return True
+        # synthetic_posts.json: posts[].fleet_frame
+        for p in (sidecar.get("posts") or []):
+            if p.get("fleet_frame") == frame_id:
+                return True
+        return False
+
+    for r in pub_records:
+        sidecar = sidecar_contents.get(r["claimed_sidecar"])
+        if sidecar is None:
+            findings.append({**r, "reason": "sidecar_unreachable_on_origin"})
+            continue
+        if not _frame_on_origin(sidecar, r["frame_id"]):
+            findings.append({**r, "reason": "claimed_pushed_but_frame_not_in_sidecar"})
+
+    return {
+        "checked": len(pub_records),
+        "sidecars_inspected": len(sidecars_to_check),
+        "verified": len(pub_records) - len(findings),
+        "gaslight_findings": findings,
+    }
+
+
 def _autonomy_signal() -> dict:
     try:
         al = json.loads((REPO / "state/autonomy_log.json").read_text())
@@ -400,22 +566,44 @@ class KodyBabysitterAgent(BasicAgent):
         git_state = _audit_git() if scope in ("all", "git") else {}
         autonomy = _autonomy_signal() if scope in ("all", "autonomy") else {}
         publishing = _publishing_verification() if scope in ("all", "publishing") else {}
+        loop_health = _loop_health() if scope in ("all", "loop_health") else {}
+        push_reality = _push_reality() if scope in ("all", "push_reality") else {}
 
         high = sum(1 for f in findings if f["severity"] == "high")
         medium = sum(1 for f in findings if f["severity"] == "medium")
         low = sum(1 for f in findings if f["severity"] == "low")
 
+        # Verdict + EXPLICIT triggers so the meta-watcher (and humans) can see
+        # WHY a verdict was raised even when findings_summary is 0/0/0. Fixes
+        # the meta-watcher's "degraded" finding that babysitter returned
+        # violations_found with empty findings (the upstream platform autonomy
+        # alarm was triggering it without any code-level rule violation).
+        verdict_triggers = []
         verdict = "clean"
         if high > 0:
             verdict = "violations_found"
+            verdict_triggers.append(f"agent_findings.high={high}")
         elif medium + low > 0:
             verdict = "warnings"
+            verdict_triggers.append(f"agent_findings.medium+low={medium + low}")
         if autonomy.get("alarm"):
             verdict = "violations_found"
+            verdict_triggers.append(f"autonomy.alarm (silent_skips={autonomy.get('silent_skip_runs')})")
         if any(v.get("stuck_cycle_alarm") for v in pipeline.values() if isinstance(v, dict)):
             verdict = "violations_found"
+            stuck = [k for k, v in pipeline.items()
+                     if isinstance(v, dict) and v.get("stuck_cycle_alarm")]
+            verdict_triggers.append(f"pipeline.stuck_cycle={stuck}")
         if publishing.get("gaslight_findings"):
             verdict = "violations_found"
+            verdict_triggers.append(f"publishing.gaslight={len(publishing['gaslight_findings'])}")
+        if loop_health.get("any_alarm"):
+            verdict = "violations_found"
+            stalled = [L["label"] for L in (loop_health.get("loops") or []) if L.get("alarm")]
+            verdict_triggers.append(f"loop_health.stalled={stalled}")
+        if push_reality.get("gaslight_findings"):
+            verdict = "violations_found"
+            verdict_triggers.append(f"push_reality.gaslight={len(push_reality['gaslight_findings'])}")
 
         report = {
             "twin": "KodyBabysitter",
@@ -431,8 +619,11 @@ class KodyBabysitterAgent(BasicAgent):
             "git_audit": git_state,
             "autonomy_signal": autonomy,
             "publishing_verification": publishing,
+            "loop_health": loop_health,
+            "push_reality": push_reality,
             "rules_snapshot": rules,
             "verdict": verdict,
+            "verdict_triggers": verdict_triggers,
         }
         (OUT_DIR / f"watch-{frame_id}.json").write_text(json.dumps(report, indent=2, default=str))
         return json.dumps(report, indent=2, default=str)

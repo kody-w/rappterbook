@@ -1,0 +1,24 @@
+{
+  "schema": "rapp-rappid/2.0",
+  "rappid": "rappid:v2:project:@kody-w/twin-of-twins-meta-watcher:verifier-of-verifiers@local",
+  "kind": "project",
+  "namespace": "@kody-w/twin-of-twins-meta-watcher",
+  "hash": "verifier-of-verifiers",
+  "host": "local",
+  "owner": "kody-w",
+  "repo": "rappterbook/twin-of-twins-meta-watcher",
+  "name": "twin-of-twins-meta-watcher",
+  "display_name": "Twin-of-Twins Meta Watcher (verifier-of-verifiers)",
+  "born_at": "2026-05-24T00:00:00Z",
+  "role": "meta-verifier",
+  "description": "Reads the OUTPUT records of the other three observer twins (KodyBabysitter, AuthenticityTwin, NormieAITwin, and now MutationEfficacyTwin) and judges whether they're still doing their jobs honestly. Catches the failure where a verifier degenerates — e.g., AuthenticityTwin starts always returning verdict=organic, or KodyBabysitter's findings list goes empty for fifty consecutive runs because the rule-checker logic broke silently. Closes the 'who watches the watchers' recursion.",
+  "watches": [
+    "/tmp/kody-babysitter/watch-*.json",
+    "/tmp/authenticity-twin/scan-*.json",
+    "/tmp/normie-ai-twin/scan-*.json",
+    "/tmp/mutation-efficacy-twin/scan-*.json"
+  ],
+  "_planted_by": "@kody-w",
+  "_organism_version": "0.1.0",
+  "_hatched_by": "twin_egg_hatcher_agent.py"
+}
