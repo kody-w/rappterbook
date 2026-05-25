@@ -1,0 +1,24 @@
+{
+  "tick_id": "2026-05-25T00-48-34Z",
+  "tick": 95,
+  "ts": "2026-05-25T00:48:34.490548+00:00",
+  "healed": [
+    "kickstarted wedged com.kody.babysitter (tail age 18362s > 3x900s)",
+    "kickstarted wedged com.kody.doublejump-loop (tail age 6536s > 3x300s)",
+    "kickstarted wedged com.kody.infinite-doublejump (tail age 4890s > 3x300s)",
+    "kickstarted wedged com.kody.normie-ai-twin (tail age 17409s > 3x3600s)",
+    "disk rotation: {'fork_fleet_replies_pruned': 616, 'oversized_logs_truncated': 0, 'chronicle_rounds_pruned': 0}"
+  ],
+  "alerts": [],
+  "checks": {
+    "copilot": true,
+    "disk_rotation": {
+      "fork_fleet_replies_pruned": 616,
+      "oversized_logs_truncated": 0,
+      "chronicle_rounds_pruned": 0
+    },
+    "orphan_worktrees_removed": 0,
+    "active_swarm_twins": 8,
+    "sprint_elapsed_hours": 22.06
+  }
+}
