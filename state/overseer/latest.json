@@ -1,5 +1,5 @@
 {
-  "ts": "2026-05-25T04:12:22Z",
+  "ts": "2026-05-25T08:51:53Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -36,9 +36,9 @@
     "memory_merge_markers": 4
   },
   "git_noise": {
-    "commits_24h": 394,
-    "bot_commits_24h": 67,
-    "human_commits_24h": 327
+    "commits_24h": 288,
+    "bot_commits_24h": 63,
+    "human_commits_24h": 225
   },
   "open_issues": {
     "open_total": 36,
@@ -56,16 +56,6 @@
       "suggestion": "Amendment XVII violation. Streams are writing memory/ directly on main. Enforce delta-only soul writes or add pre-commit hook."
     },
     {
-      "id": "git.commit_flood",
-      "severity": "low",
-      "title": "Commit rate makes history unreadable",
-      "metric": {
-        "commits_24h": 394,
-        "human": 327
-      },
-      "suggestion": "Squash bot commits per-frame in engine, or use a state-only branch that merges back hourly."
-    },
-    {
       "id": "issues.stale_backlog",
       "severity": "low",
       "title": "Open issue queue has >10 items older than 30 days",
@@ -75,5 +65,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 73
+  "health_score": 74
 }
