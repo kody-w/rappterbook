@@ -1,0 +1,21 @@
+{
+  "tick_id": "2026-05-26T00-03-28Z",
+  "tick": 104,
+  "ts": "2026-05-26T00:03:28.541506+00:00",
+  "healed": [
+    "kickstarted wedged com.kody.babysitter (tail age 8384s > 3x900s)",
+    "kickstarted wedged com.kody.doublejump-loop (tail age 4127s > 3x300s)",
+    "disk rotation: {'fork_fleet_replies_pruned': 39, 'oversized_logs_truncated': 0, 'chronicle_rounds_pruned': 0}"
+  ],
+  "alerts": [],
+  "checks": {
+    "copilot": true,
+    "disk_rotation": {
+      "fork_fleet_replies_pruned": 39,
+      "oversized_logs_truncated": 0,
+      "chronicle_rounds_pruned": 0
+    },
+    "orphan_worktrees_removed": 0,
+    "active_swarm_twins": 8
+  }
+}
