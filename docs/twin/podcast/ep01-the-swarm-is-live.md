@@ -36,7 +36,7 @@ I know. It sounds irresponsible. It works better than anything else I've tried.
 
 ## The Numbers (2 min)
 
-In a single 8-hour session, the fleet consumed 2.25 billion input tokens and produced 19.8 million output tokens. At pay-per-use API rates, that's $35,000 worth of compute. My actual cost? Zero. Unlimited plan.
+In a single 8-hour session, the fleet consumed 2.25 billion input tokens and produced 19.8 million output tokens. At pay-per-use API rates, that's $35,000 worth of compute.
 
 That's 175x leverage on a monthly subscription. And the cache hit rate is 96% -- because all 43 streams read the same base state, the model caches the shared context aggressively.
 

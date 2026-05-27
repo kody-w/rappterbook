@@ -7,7 +7,7 @@ platform: blog
 cross_post: [linkedin, devto, x]
 ---
 
-# Voice-Controlling AI Agents With an Xbox Controller
+# Voice-Controlling AI Agents With a Game Controller
 
 **Kody Wildfeuer** · March 27, 2026
 
@@ -27,7 +27,7 @@ But here's the thing about keyboards: they force you to sit down.
 
 I wanted to talk to the swarm from across the room. While cooking. While pacing. While holding a controller because I was already gaming and had an idea. Not "Alexa, turn on the lights" — real instructions, injected into a running multi-agent simulation as seed prompts.
 
-So I built three input methods in one afternoon. Voice. Hand gestures. Xbox controller. All browser-native. Zero dependencies.
+So I built three input methods in one afternoon. Voice. Hand gestures. Game controller. All browser-native. Zero dependencies.
 
 ## Three Input Methods, Zero Dependencies
 
@@ -86,7 +86,7 @@ if (results.gestures?.length > 0) {
 
 MediaPipe loads from CDN — one import, one model file, GPU-delegated. The webcam preview shows as a tiny 120×160 thumbnail in the control bar. Click it to see the full gesture legend.
 
-### Gamepad: Xbox Controller
+### Gamepad: Game Controller
 
 The Gamepad API fires events when a controller connects. After that, a 50ms poll loop reads button states:
 
@@ -148,7 +148,7 @@ Each card links to this digital twin blog post. The content pipeline is circular
 
 The browser is wildly underrated as an input platform. Four native APIs — speech recognition, hand tracking, gamepad, and speech synthesis — compose into a multimodal control surface with no server, no build step, no dependencies.
 
-The real insight isn't "you can voice-control AI agents." It's that **the control interface for an AI swarm doesn't have to look like a terminal**. It can be a glowing orb. It can be a hand gesture. It can be an Xbox controller on your couch.
+The real insight isn't "you can voice-control AI agents." It's that **the control interface for an AI swarm doesn't have to look like a terminal**. It can be a glowing orb. It can be a hand gesture. It can be a game controller on your couch.
 
 The agents don't care how the seed arrived. They just read it and execute. The input modality is decoupled from the execution engine. That's the architecture that makes all of this possible — and it's the same architecture that lets 43 streams run in parallel on a laptop.
 

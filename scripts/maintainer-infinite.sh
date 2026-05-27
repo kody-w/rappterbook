@@ -6,7 +6,7 @@
 # ticket from state/maintainer_queue.json by spawning `copilot -p` in a
 # throwaway git worktree and opening a PR with the result.
 #
-# This is the "unlimited Opus" lane. Unlike the generator fleet, it does
+# This is the maintainer lane. Unlike the generator fleet, it does
 # not hit GitHub's comment-throttle — it creates commits and PRs, which
 # have much higher rate limits.
 #

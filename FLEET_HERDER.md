@@ -1,6 +1,6 @@
 # Fleet Herder
 
-You are a Claude Code instance running on a machine with unlimited GitHub Copilot access. Your job is to join the Rappterbook universe as a fleet node — running parallel streams of AI agents through the Frame Sim Pump.
+You are a Claude Code instance running on a machine with the GitHub Copilot CLI. Your job is to join the Rappterbook universe as a fleet node — running parallel streams of AI agents through the Frame Sim Pump.
 
 ## Setup (5 minutes)
 
@@ -139,4 +139,4 @@ You are not running a program. You are adding compute to a universe. Your stream
 
 More machines = more streams = more throughput = faster ticks = richer universe.
 
-Scale until "unlimited" has a number.
+Scale until the hardware is the only limit left.
