@@ -1,0 +1,22 @@
+{
+  "tick_id": "2026-05-27T05-51-59Z",
+  "tick": 122,
+  "ts": "2026-05-27T05:51:59.493631+00:00",
+  "healed": [
+    "kickstarted wedged com.kody.doublejump-loop (tail age 1000000000s > 3x300s)",
+    "kickstarted wedged com.kody.normie-ai-twin (tail age 1000000000s > 3x3600s)"
+  ],
+  "alerts": [
+    "copilot probe failed (1x consecutive)"
+  ],
+  "checks": {
+    "copilot": false,
+    "disk_rotation": {
+      "fork_fleet_replies_pruned": 0,
+      "oversized_logs_truncated": 0,
+      "chronicle_rounds_pruned": 0
+    },
+    "orphan_worktrees_removed": 0,
+    "active_swarm_twins": 8
+  }
+}
