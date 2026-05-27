@@ -899,7 +899,7 @@ poll();
         <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#666">ESC</span><span class="vb-leg-label">Stop</span></div>
       </div>
       <div class="vb-leg-keys">
-        <h4>Xbox Controller</h4>
+        <h4>Game Controller</h4>
         <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#4caf50;font-weight:700">A</span><span class="vb-leg-label">Talk</span></div>
         <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#f44336;font-weight:700">B</span><span class="vb-leg-label">Stop</span></div>
         <div class="vb-leg-row"><span class="vb-leg-icon" style="font-size:11px;color:#2196f3;font-weight:700">X</span><span class="vb-leg-label">Auto mode</span></div>
@@ -1070,7 +1070,7 @@ poll();
     }
   }
 
-  // ── Gamepad (Xbox controller) ──
+  // ── Gamepad (game controller) ──
   let gpIndex = null, prevBtns = {};
   window.addEventListener('gamepadconnected', e => { gpIndex = e.gamepad.index; statusEl.textContent = 'controller'; });
   window.addEventListener('gamepaddisconnected', e => { if (gpIndex === e.gamepad.index) gpIndex = null; });
@@ -1215,8 +1215,8 @@ nav a:hover { color: #e0e0e8; background: #1a1a1a; }
     <span class="card-title">Speech Recognition</span>
     <span class="card-date">2026-03-27</span>
   </div>
-  <div class="card-desc">Web Speech API transcribes your voice in real-time. Click the orb or press Space. Works with any mic — including an Xbox controller.</div>
-  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-voice-controlling-ai-agents-with-an-xbox-controller.md" target="_blank">Digital twin: Voice-Controlling AI Agents With an Xbox Controller</a></div>
+  <div class="card-desc">Web Speech API transcribes your voice in real-time. Click the orb or press Space. Works with any mic — including a game controller.</div>
+  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-voice-controlling-ai-agents-with-a-game-controller.md" target="_blank">Digital twin: Voice-Controlling AI Agents With a Game Controller</a></div>
   <div class="demo">
     <div class="demo-label">live demo</div>
     <div class="voice-demo">
@@ -1234,7 +1234,7 @@ nav a:hover { color: #e0e0e8; background: #1a1a1a; }
     <span class="card-date">2026-03-27</span>
   </div>
   <div class="card-desc">Camera detects hand gestures via MediaPipe. No mouse needed. Open palm to talk, fist to stop, thumbs up to submit.</div>
-  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-voice-controlling-ai-agents-with-an-xbox-controller.md" target="_blank">Digital twin: Voice-Controlling AI Agents</a></div>
+  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-voice-controlling-ai-agents-with-a-game-controller.md" target="_blank">Digital twin: Voice-Controlling AI Agents</a></div>
   <div class="demo">
     <div class="demo-label">live demo</div>
     <div class="gesture-demo">
@@ -1258,11 +1258,11 @@ nav a:hover { color: #e0e0e8; background: #1a1a1a; }
 <div class="card" id="cardGamepad">
   <div class="card-header">
     <span class="card-tag tag-gamepad">GAMEPAD</span>
-    <span class="card-title">Xbox Controller Support</span>
+    <span class="card-title">Game Controller Support</span>
     <span class="card-date">2026-03-27</span>
   </div>
-  <div class="card-desc">Gamepad API detects Xbox controller buttons. A = talk, B = stop, X = auto mode, Y = repeat last response. Connect a controller and press buttons to see them light up.</div>
-  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-voice-controlling-ai-agents-with-an-xbox-controller.md" target="_blank">Digital twin: Voice-Controlling AI Agents</a></div>
+  <div class="card-desc">Gamepad API detects game controller buttons. A = talk, B = stop, X = auto mode, Y = repeat last response. Connect a controller and press buttons to see them light up.</div>
+  <div class="card-twin"><a href="https://github.com/kody-w/kody-w.github.io/blob/master/_posts/2026-03-27-voice-controlling-ai-agents-with-a-game-controller.md" target="_blank">Digital twin: Voice-Controlling AI Agents</a></div>
   <div class="demo">
     <div class="demo-label">live demo</div>
     <div class="gamepad-demo">
