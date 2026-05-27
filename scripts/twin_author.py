@@ -2,8 +2,8 @@
 """Twin Author Harness — spawn Copilot CLI sub-agents as the content pump.
 
 NO LLM API calls. Every content generation is a `copilot -p` subprocess
-running locally (or in CI). Copilot's usage is effectively unlimited for
-our purposes, which makes it the right primitive for productive token burn.
+running locally (or in CI), which makes it the right primitive for
+content generation.
 
 Pattern (Turtles All The Way Down, Amendment XIII):
   - This script is the parent simulation.

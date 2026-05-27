@@ -172,11 +172,11 @@ def generate_echo(surface: str, context: dict, dry_run: bool = False) -> dict | 
         print(f"  [{surface}] Would generate with prompt: {user_prompt[:100]}...")
         return {"surface": surface, "dry_run": True, "prompt": user_prompt}
 
-    # Generate via Copilot CLI (PRIMARY — unlimited) with github_llm as fallback
+    # Generate via Copilot CLI (PRIMARY) with github_llm as fallback
     content = None
     copilot = os.environ.get("COPILOT_PATH", "/Users/kodyw/.local/bin/copilot")
 
-    # Try Copilot CLI first — unlimited, no rate limits
+    # Try Copilot CLI first
     if os.path.exists(copilot):
         try:
             import subprocess, tempfile
