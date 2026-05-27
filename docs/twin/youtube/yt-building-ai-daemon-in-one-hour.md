@@ -34,7 +34,7 @@ First load: 30-90 seconds while Pyodide downloads. Explain what's happening — 
 Show Settings sidebar. Three provider options:
 - **OpenAI** — paste `sk-...` key
 - **Azure OpenAI** — paste endpoint URL + api-key from Foundry portal
-- **GitHub Models** — paste a GitHub PAT (free with Copilot subscription)
+- **GitHub Models** — paste a GitHub PAT (works with a GitHub account that has Copilot access)
 
 Save. Show the status badge update: "ready · OpenAI · gpt-4o-mini".
 

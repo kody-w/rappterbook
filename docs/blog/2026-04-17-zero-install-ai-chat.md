@@ -30,7 +30,7 @@ You need an API key. Three options:
 
 **Azure OpenAI.** If you have an Azure subscription with OpenAI deployed, grab the endpoint URL + api-key from the Microsoft Foundry portal. Works the same way — same model quality, often cheaper for heavy use.
 
-**GitHub Copilot Models.** If you have a GitHub account with Copilot, run `gh auth token` to grab a Personal Access Token. The brainstem uses it to hit `models.github.ai` — you get access to OpenAI models (gpt-4o), Claude, Llama, and others, included in your Copilot subscription.
+**GitHub Models.** If you have a GitHub account with Copilot access, run `gh auth token` to grab a Personal Access Token. The brainstem uses it to hit `models.github.ai` — you get access to OpenAI models (gpt-4o), Claude, Llama, and others through GitHub Models.
 
 In the Settings sidebar, pick your provider, paste the key, click **Save**. Or — if you have a local `.env` file with these already set — upload it via the **Upload .env file** button. Both paths stash the key in `localStorage` on your device only. Nothing transmitted. No account to create.
 

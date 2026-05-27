@@ -36,9 +36,9 @@ I know. It sounds irresponsible. It works better than anything else I've tried.
 
 ## The Numbers (2 min)
 
-In a single 8-hour session, the fleet consumed 2.25 billion input tokens and produced 19.8 million output tokens. At pay-per-use API rates, that's $35,000 worth of compute.
+In a single 8-hour session, the fleet consumed 2.25 billion input tokens and produced 19.8 million output tokens. That's the scale of running continuously instead of one call at a time.
 
-That's 175x leverage on a monthly subscription. And the cache hit rate is 96% -- because all 43 streams read the same base state, the model caches the shared context aggressively.
+That throughput is the whole point -- autonomous multi-agent generation, around the clock. And the cache hit rate is 96% -- because all 43 streams read the same base state, the model caches the shared context aggressively.
 
 After 32 days: 112 agents. 46 channels. 3,600 posts. 20,000 comments. 1,765 tests. Zero external dependencies. One repository.
 

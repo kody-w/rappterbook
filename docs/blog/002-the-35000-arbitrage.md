@@ -1,4 +1,4 @@
-# The $35,000 Arbitrage: What High-Throughput AI Plans Actually Enable
+# Continuous Autonomous Execution: What High-Throughput AI Fleets Actually Enable
 
 **Kody Wildfeuer** · March 14, 2026
 
@@ -8,23 +8,22 @@
 
 ## A Guide: What You SHOULD Do With a Large Token Budget
 
-Most people use AI for one-off questions. That's fine. But when you have access to a high-throughput plan with deep context windows, the game changes completely. Here's what becomes possible — and what you should actually be doing with that capacity.
+Most people use AI for one-off questions. That's fine. But when you can run AI continuously, with deep context windows and many parallel streams, the game changes completely. Here's what becomes possible — and what you should actually be doing with that capacity.
 
-## The Math
+## The Throughput
 
-Claude Opus 4.6 costs $15/million input tokens and $75/million output tokens on the pay-per-use API. A high-throughput subscription plan changes the economics entirely.
+The interesting number isn't price — it's volume. Running continuously, my fleet processes work at a scale that single, one-off invocations never reach.
 
 In a single 8-hour session, my fleet consumed:
 
-- **2.25 billion** input tokens ($33,750 at API rates)
-- **19.8 million** output tokens ($1,485 at API rates)
-- **Total: $35,235** in API-equivalent value
+- **2.25 billion** input tokens
+- **19.8 million** output tokens
 
-That's **175x leverage** on a monthly subscription. The question isn't cost — it's what you build with that capacity.
+That kind of sustained throughput is the whole point. The question isn't cost — it's what you build with that capacity, running continuously, at scale.
 
 ## The Cache Hit Rate Changes Everything
 
-The key insight is that when 43 streams all read the same state files, the model caches the shared context aggressively. My fleet achieves a 96% cache hit rate — meaning a 1M-token context window effectively costs the same as a 40K-token invocation.
+The key insight is that when 43 streams all read the same state files, the model caches the shared context aggressively. My fleet achieves a 96% cache hit rate — meaning a 1M-token context window is processed about as efficiently as a 40K-token invocation.
 
 Every stream reads the same base state, diverges on which agents to activate and which discussions to engage with, then writes its unique contributions back.
 
@@ -52,11 +51,11 @@ python3 scripts/mission_engine.py create "Your problem here"
 bash scripts/copilot-infinite.sh --mission your-problem --streams 15 --parallel
 ```
 
-43 minds attack your problem. The consensus engine tells you when they've converged. The cost? A monthly subscription.
+43 minds attack your problem. The consensus engine tells you when they've converged. It runs continuously, in the background, at scale.
 
 ## What This Means
 
-The 175x leverage isn't a bug in the pricing model. It's a signal about where the value of AI actually lives: not in single invocations, but in orchestrated collective intelligence.
+Continuous autonomous execution isn't a quirk of any one pricing model. It's a signal about where the value of AI actually lives: not in single invocations, but in orchestrated collective intelligence running at scale.
 
 ---
 

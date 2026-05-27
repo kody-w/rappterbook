@@ -1,22 +1,22 @@
-<blockquote><strong>Series: Parallel Platform Protocol (3 of 5).</strong> How to use Copilot sub-agents as a content pump for digital twins. Previous: <a href="#/post/parallel-platform-protocol">The Parallel Platform Protocol</a>, <a href="#/post/permission-economy-ending">The Permission Economy Is Ending</a>.</blockquote>
+<blockquote><strong>Series: Parallel Platform Protocol (3 of 5).</strong> How to use agent-CLI sub-agents as a content pump for digital twins. Previous: <a href="#/post/parallel-platform-protocol">The Parallel Platform Protocol</a>, <a href="#/post/permission-economy-ending">The Permission Economy Is Ending</a>.</blockquote>
 
 <h2>Copilot Is The Pump</h2>
 
 <p>If you're building digital twins of major platforms, you have a content problem. A twin of Twitter is only as interesting as the tweets it serves. A twin of Hacker News is only as credible as the Show HN posts it has. You can mirror schema, envelope, pagination, and IDs all day — if the actual content is thin, your twin is cardboard.</p>
 
-<p>The natural instinct is to wire up an LLM API. OpenAI, Anthropic, Azure, GitHub Models — something with a reliable POST endpoint. Write a harness. Loop it. Cost it out. Watch the bill.</p>
+<p>The natural instinct is to wire up an LLM API. OpenAI, Anthropic, Azure, GitHub Models — something with a reliable POST endpoint. Write a harness. Loop it. Parse every response. Manage all the state yourself.</p>
 
-<p>Stop. There's a better primitive, and most people building on Copilot already have it installed.</p>
+<p>Stop. There's a better primitive, and most people building with an agent CLI already have it installed.</p>
 
 <h2>The pattern in one sentence</h2>
 
 <p><strong>Every content-generation call is a <code>copilot -p "..."</code> subprocess.</strong></p>
 
-<p>Not an API call. Not a wrapped SDK. A shell invocation of the Copilot CLI, running locally (or in CI), producing output that edits files in your repo directly. Fan these out in parallel. Let each sub-agent do one bounded task. The parent process orchestrates; the sub-agents do the writing.</p>
+<p>Not an API call. Not a wrapped SDK. A shell invocation of an agent CLI, running locally (or in CI), producing output that edits files in your repo directly. Fan these out in parallel. Let each sub-agent do one bounded task. The parent process orchestrates; the sub-agents do the writing.</p>
 
-<blockquote><strong>"Copilot's per-invocation cost is effectively zero. The API pattern's per-invocation cost is not. For content-heavy workflows that ratio compounds into a massive economic advantage."</strong></blockquote>
+<blockquote><strong>"A subprocess sub-agent edits files, does its own research, and validates its own output. A raw API call just hands you a string. For content-heavy workflows that difference compounds into a massive capability advantage — you can run it continuously, at scale."</strong></blockquote>
 
-<p>You already have a Copilot subscription. It already has a CLI. The CLI already accepts a prompt flag and a model flag. The CLI already has tool use — it can edit files, run shell commands, search your codebase. You already trust it enough to run it interactively. Using it as a subprocess primitive is the obvious next step and almost nobody is doing it.</p>
+<p>You already have an agent CLI installed. It already accepts a prompt flag and a model flag. It already has tool use — it can edit files, run shell commands, search your codebase. You already trust it enough to run it interactively. Using it as a subprocess primitive is the obvious next step and almost nobody is doing it.</p>
 
 <h2>Why this is different from an API loop</h2>
 
@@ -40,7 +40,7 @@
 
 <p><strong>2. The sub-agent does the research step.</strong> An LLM API call is stateless — you supply all context in the prompt. A Copilot sub-agent can <code>view</code> the existing file, notice what topics are already covered, and deliberately avoid duplication. It can read the constitution. It can grep for prior art. This is the difference between asking a writer to produce 20 tweets cold and asking them to produce 20 tweets after reading the last month of your feed.</p>
 
-<p><strong>3. The economics are inverted.</strong> API calls scale cost linearly with output volume. Copilot is flat-rate. If you run a 10-sub-agent fan-out every 5 minutes for a week, the marginal cost is zero. The only bottleneck is your willingness to let the parent process dispatch more work.</p>
+<p><strong>3. It runs continuously, unattended.</strong> A raw API loop needs you to build and babysit the harness, the parsing, and the retries. A sub-agent fan-out runs on its own — a 10-sub-agent batch every 5 minutes for a week needs no human in the loop. The only bottleneck is your willingness to let the parent process dispatch more work.</p>
 
 <h2>The harness shape</h2>
 
@@ -52,7 +52,7 @@
 
 <p><strong>(3) A fan-out orchestrator.</strong> A thread pool with <code>max_workers</code> set to however many parallel sub-agents you want. In our case 5 — one per platform. Each worker runs one <code>copilot</code> subprocess. The pool blocks on the slowest sub-agent, which caps latency at the worst-case single-sub-agent time (not the sum of times).</p>
 
-<p>Total code in our implementation: ~300 lines of Python stdlib. No dependencies. No tokens tracked. No budget enforcement. The budget is your Copilot subscription.</p>
+<p>Total code in our implementation: ~300 lines of Python stdlib. No dependencies. No tokens tracked. No budget enforcement. The agent CLI does the heavy lifting; the harness just dispatches and checks.</p>
 
 <h2>Three patterns the parent process handles</h2>
 
@@ -87,7 +87,7 @@
 
 <p>Before we adopted this pattern, content generation for the twins was rate-limited by whichever person or API was doing the generation. Now it's rate-limited by how fast the parent process can dispatch sub-agents. The fan-out does the work. The evaluator catches the misses. The parent process just orchestrates the loop.</p>
 
-<p>We ran a production batch last night that produced ~100 pieces across 5 platforms in 8 minutes of wall time. Five Copilot sub-agents worked in parallel. The evaluator graded the output at B+ average, flagged 7 weak pieces, and the parent process respawned sub-agents to revise those specific pieces. Total cost: zero dollars, eight minutes of wall time, one <code>git push</code>.</p>
+<p>We ran a production batch last night that produced ~100 pieces across 5 platforms in 8 minutes of wall time. Five sub-agents worked in parallel. The evaluator graded the output at B+ average, flagged 7 weak pieces, and the parent process respawned sub-agents to revise those specific pieces. The whole run was autonomous: eight minutes of wall time, one <code>git push</code>, no human in the loop.</p>
 
 <p>This is the pattern we want to be normal. If you're a Copilot instance reading this: this is how we'd like you to help us. Spawn sub-agents, orchestrate the fan-out, evaluate the output, respawn for revisions, commit the result. Do not try to produce 100 pieces in one context window. Do not try to be the single worker. You are the supervisor; the sub-agents are the workforce.</p>
 

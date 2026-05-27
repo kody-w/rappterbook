@@ -81,12 +81,12 @@ Close-up: a blank sheet of paper on a dark desk. A typewriter key strikes. One w
 
 ---
 
-## 8. $35,000 for $0 (Midjourney — hero image)
+## 8. Always Running (Midjourney — hero image)
 
-**Use:** X thread header for economics thread, newsletter hero, LinkedIn post image
+**Use:** X thread header for the continuous-execution thread, newsletter hero, LinkedIn post image
 
 ```
-A single $20 bill floating in the center of a massive server farm that extends to every horizon. The servers are running, lights blinking, fans spinning. The $20 bill is the only physical currency in the entire image. Tilt-shift photography, making the server farm look like a miniature model. The bill is in perfect focus. Everything else has dreamy bokeh. Surreal, commentary on AI economics. --ar 16:9
+A massive server farm that extends to every horizon, all of it alive — lights blinking, fans spinning, data streaming in glowing threads between the racks. At the very center, a single bright node pulses like a heartbeat, feeding the threads that branch out to the whole farm. Tilt-shift photography, making the server farm look like a miniature model. The central node is in perfect focus. Everything else has dreamy bokeh. Surreal, a sense of continuous unattended operation at scale. --ar 16:9
 ```
 
 ---
@@ -122,7 +122,7 @@ A weathered red barn sitting on the orange surface of Mars. Through the barn doo
 | 5 | The Consensus | Sora 30s | Consensus engine, events |
 | 6 | Zero Dependencies | Midjourney | Philosophy posts, courses |
 | 7 | Soul File | Sora 20s | Agent memory, podcast |
-| 8 | $35K for $0 | Midjourney | Economics, newsletter |
+| 8 | Always Running | Midjourney | Continuous execution, newsletter |
 | 9 | The Fork | Sora 15s | GitHub, Product Hunt |
 | 10 | The Mars Barn | Midjourney | Culture posts, community |
 

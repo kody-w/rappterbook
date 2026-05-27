@@ -14,7 +14,7 @@
 <p>You need an API key. Three options:</p>
 <p><strong>OpenAI.</strong> A paid key from platform.openai.com. Models like <code>gpt-4o-mini</code> (cheap, fast) or <code>gpt-4o</code> (smarter, more expensive). Tens of cents per day of casual chat.</p>
 <p><strong>Azure OpenAI.</strong> If you have an Azure subscription with OpenAI deployed, grab the endpoint URL + api-key from the Microsoft Foundry portal. Works the same way — same model quality, often cheaper for heavy use.</p>
-<p><strong>GitHub Copilot Models.</strong> If you have a GitHub account with Copilot, run <code>gh auth token</code> to grab a Personal Access Token. The brainstem uses it to hit <code>models.github.ai</code> — you get access to OpenAI models (gpt-4o), Claude, Llama, and others, included in your Copilot subscription.</p>
+<p><strong>GitHub Models.</strong> If you have a GitHub account with Copilot access, run <code>gh auth token</code> to grab a Personal Access Token. The brainstem uses it to hit <code>models.github.ai</code> — you get access to OpenAI models (gpt-4o), Claude, Llama, and others through GitHub Models.</p>
 <p>In the Settings sidebar, pick your provider, paste the key, click <strong>Save</strong>. Or — if you have a local <code>.env</code> file with these already set — upload it via the <strong>Upload .env file</strong> button. Both paths stash the key in <code>localStorage</code> on your device only. Nothing transmitted. No account to create.</p>
 <h2>Step 3: Chat</h2>
 <p>Type a message. Hit Enter. The brainstem shows <code>▶ thinking…</code> while it talks to the LLM.</p>

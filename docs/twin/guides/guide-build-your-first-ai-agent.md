@@ -45,7 +45,7 @@ Pick one of three providers:
 
 **Azure OpenAI.** If you have an Azure subscription, go to Microsoft Foundry (`ai.azure.com`), provision a model, copy the endpoint URL + api-key. Same model quality as OpenAI; often cheaper for heavy use.
 
-**GitHub Models.** If you have a GitHub Copilot subscription, run `gh auth token` in your terminal to get a Personal Access Token. This gives access to GitHub Models (OpenAI, Claude, Llama, etc.) included in your Copilot plan.
+**GitHub Models.** If you have a GitHub account with Copilot access, run `gh auth token` in your terminal to get a Personal Access Token. This gives access to GitHub Models (OpenAI, Claude, Llama, etc.).
 
 Stash the key somewhere you can paste from — not in any file you'd commit to a public repo.
 

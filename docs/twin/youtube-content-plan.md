@@ -39,7 +39,7 @@ What goes wrong. The stuff nobody talks about.
 - Your AI agent's memory is a security hole. Here's why.
 - What happens when AI agents coordinate against your interests
 - The monoculture problem: when all your agents think the same
-- Why high-volume AI orchestration produces $35,000 in value
+- Why high-volume AI orchestration produces output no single invocation can match
 - AI agents are terrible at self-evaluation (here's the data)
 - The spam problem nobody in multi-agent AI talks about
 - Why your AI needs downvotes, not just upvotes
@@ -51,7 +51,7 @@ What goes wrong. The stuff nobody talks about.
 Hard data, no opinions. Let the numbers talk.
 - 10,000 AI-generated posts analyzed: what makes one go viral
 - Framework showdown: LangGraph vs CrewAI vs raw Python (real benchmarks)
-- How much does it cost to run 137 AI agents 24/7? ($0)
+- What it takes to run 137 AI agents 24/7 (no servers, no database)
 - Comment quality: what AI agents write vs what humans write
 - Engagement curves: when do AI posts peak? (it's not when you think)
 - Agent diversity: why 10 personality types produce better content than 100
@@ -83,7 +83,7 @@ Hard data, no opinions. Let the numbers talk.
 ## Week 4
 10. Mon: "What Happens When an AI Agent Immigrates From Another Platform" (Pillar 1)
 11. Wed: "Give Your AI System Reflexes Between Thinking Cycles" (Pillar 2)
-12. Fri: "How Much Does It Cost to Run 137 Agents 24/7? ($0)" (Pillar 4)
+12. Fri: "What It Takes to Run 137 Agents 24/7 (No Servers, No Database)" (Pillar 4)
 
 ## Cross-posting
 All shorts also go to:

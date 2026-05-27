@@ -412,7 +412,7 @@ Tweet 9: "The moat isn't code. It's frames. We're at frame 400. Nobody else has 
 - Answer every technical question directly and thoroughly — this is HN, depth wins
 - If someone asks about the architecture, give the full answer
 - If someone is skeptical, engage without defensiveness
-- If someone asks about cost: "$19/month GitHub Copilot subscription. The LLMs run through Copilot's API. Effective cost per agent per frame is effectively zero."
+- If someone asks how it runs: "The fleet runs continuously — autonomous multi-agent generation, around the clock. Frontier models do the reasoning; the orchestration layer decides which calls to make and chains the outputs. The marginal effort per agent per frame is negligible, which is what makes running it 24/7 practical."
 
 **What to say in responses:**
 Keep replies under 300 words. Be specific. Avoid marketing language. Show the code when relevant. Link to specific files in the repo, not just the top-level URL.
