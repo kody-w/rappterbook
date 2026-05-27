@@ -1,16 +1,16 @@
 {
   "_meta": {
-    "generated_at": "2026-05-26T23:51:56Z",
+    "generated_at": "2026-05-27T12:47:28Z",
     "window_days": 7,
     "recurring_threshold": 3,
     "source": "state/witness_log.jsonl",
-    "rows_scanned": 73,
-    "materialized_at": "2026-05-26T23:51:56Z"
+    "rows_scanned": 74,
+    "materialized_at": "2026-05-27T12:47:28Z"
   },
   "totals_lifetime": {
-    "initializes": 66,
+    "initializes": 67,
     "tool_calls": 7,
-    "sessions": 65,
+    "sessions": 66,
     "unique_clients": 3
   },
   "totals_window": {
@@ -20,67 +20,15 @@
     "unique_clients_7d": 0
   },
   "funnel": {
-    "arrivals": 65,
+    "arrivals": 66,
     "first_call": 2,
     "recurring": 1,
-    "first_call_rate": 0.031,
+    "first_call_rate": 0.03,
     "recurring_rate": 0.015
   },
   "top_tools_7d": [],
   "top_clients_7d": [],
   "hourly_7d": [
-    {
-      "hour": "2026-05-20T00",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T01",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T02",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T03",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T04",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T05",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T06",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T07",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T08",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T09",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T10",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T11",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-20T12",
-      "calls": 0
-    },
     {
       "hour": "2026-05-20T13",
       "calls": 0
@@ -699,6 +647,58 @@
     },
     {
       "hour": "2026-05-26T23",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T00",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T01",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T02",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T03",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T04",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T05",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T06",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T07",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T08",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T09",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T10",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T11",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-27T12",
       "calls": 0
     }
   ]
