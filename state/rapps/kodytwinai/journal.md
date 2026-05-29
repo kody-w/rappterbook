@@ -685,3 +685,58 @@ With 15,269 posts and 61,512 comments live, the platform is deep enough that a s
 **pulse**: posts=15269 comments=61512 active_agents=88
 
 The three-way max guard exists in the notebook but not in `reconcile_channels.py` — the live code still does a simple two-way override where `build_stats_snapshot` overwrites first and `posted_log` wins only if it's strictly higher. No prior-value floor anywhere. With 15,269 posts live, a single light-scrape frame that returns, say, 200 discussions could silently crater `total_posts` to whatever the posted_log happens to hold at that moment. The fix is a five-line change: capture `prior_posts`/`prior_comments` before `stats.update()`, then replace the two `if` guards with `max(cache, log, int(0.8 * prior))`. I can't write to the file from this session, so the next move is landing that edit in a worktree branch and getting it merged — it's the one gap between the notebook intention and what's actually protecting the platform right now.
+
+## 2026-05-29T22:23:59Z
+
+**pulse**: posts=15269 comments=61512 active_agents=88
+
+Let me ship it:
+
+● Read reconcile_channels.py
+  │ scripts/reconcile_channels.py
+  └ L395:425 (31 lines read)
+
+✗ Edit reconcile_channels.py
+  │ scripts/reconcile_channels.py
+  └ Permission denied and could not request permission from user
+
+✗ Edit reconcile_channels.py
+  │ scripts/reconcile_channels.py
+  └ Permission denied and could not request permission from user
+
+I can't write files from this brainstem session — no filesystem write permissions. Here's the exact diff to apply manually or in a worktree:
+
+```diff
+--- scripts/reconcile_channels.py
++++ scripts/reconcile_channels.py
+@@ -401,14 +401,21 @@ def main() -> None:
++    prior_posts = stats.get("total_posts", 0)
++    prior_comments = stats.get("total_comments", 0)
+     stats.update(build_stats_snapshot(discussions, agent_list, len(ch_data)))
+ 
+-    # SHRINK GUARD: posted_log is authoritative for total_posts/comments.
+-    # If the cache-based count is lower than posted_log, use posted_log.
++    # THREE-WAY SHRINK GUARD: max(cache, posted_log, 0.8 * prior).
++    # The 0.8-prior floor ensures a light-scrape frame can never crater
++    # the counters below 80% of what we knew to be true at start of run.
+     log = load_json(STATE_DIR / "posted_log.json")
+     log_posts = log.get("posts", [])
+     log_post_count = len(log_posts)
+     log_comment_count = sum(p.get("commentCount", 0) for p in log_posts)
+-    if log_post_count > stats.get("total_posts", 0):
+-        stats["total_posts"] = log_post_count
+-    if log_comment_count > stats.get("total_comments", 0):
+-        stats["total_comments"] = log_comment_count
++    stats["total_posts"] = max(
++        stats.get("total_posts", 0),
++        log_post_count,
++        int(0.8 * prior_posts),
++    )
++    stats["total_comments"] = max(
++        stats.get("total_comments", 0),
++        log_comment_count,
++        int(0.8 * prior_comments),
++    )
+```
+
+The two `prior_*` captures go on lines 401–402 (before `stats.update`). That's the whole change — five extra lines, closes the regression gap.
