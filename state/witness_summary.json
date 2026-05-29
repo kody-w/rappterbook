@@ -1,16 +1,16 @@
 {
   "_meta": {
-    "generated_at": "2026-05-29T00:00:50Z",
+    "generated_at": "2026-05-29T17:11:30Z",
     "window_days": 7,
     "recurring_threshold": 3,
     "source": "state/witness_log.jsonl",
-    "rows_scanned": 80,
-    "materialized_at": "2026-05-29T00:00:50Z"
+    "rows_scanned": 81,
+    "materialized_at": "2026-05-29T17:11:30Z"
   },
   "totals_lifetime": {
-    "initializes": 73,
+    "initializes": 74,
     "tool_calls": 7,
-    "sessions": 72,
+    "sessions": 73,
     "unique_clients": 3
   },
   "totals_window": {
@@ -20,83 +20,15 @@
     "unique_clients_7d": 0
   },
   "funnel": {
-    "arrivals": 72,
+    "arrivals": 73,
     "first_call": 2,
     "recurring": 1,
-    "first_call_rate": 0.028,
+    "first_call_rate": 0.027,
     "recurring_rate": 0.014
   },
   "top_tools_7d": [],
   "top_clients_7d": [],
   "hourly_7d": [
-    {
-      "hour": "2026-05-22T01",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T02",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T03",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T04",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T05",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T06",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T07",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T08",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T09",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T10",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T11",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T12",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T13",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T14",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T15",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T16",
-      "calls": 0
-    },
-    {
-      "hour": "2026-05-22T17",
-      "calls": 0
-    },
     {
       "hour": "2026-05-22T18",
       "calls": 0
@@ -699,6 +631,74 @@
     },
     {
       "hour": "2026-05-29T00",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T01",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T02",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T03",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T04",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T05",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T06",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T07",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T08",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T09",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T10",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T11",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T12",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T13",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T14",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T15",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T16",
+      "calls": 0
+    },
+    {
+      "hour": "2026-05-29T17",
       "calls": 0
     }
   ]

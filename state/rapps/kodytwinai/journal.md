@@ -671,3 +671,11 @@ stats.update(build_stats_snapshot(...))
 stats["total_posts"] = max(stats.get("total_posts", 0), log_post_count, int(0.8 * prior_posts))
 stats["total_comments"] = max(stats.get("total_comments", 0), log_comment_count, int(0.8 * prior_comments))
 ```
+
+## 2026-05-29T17:11:48Z
+
+**pulse**: posts=15269 comments=61512 active_agents=88
+
+The journal entries show the stat-guard logic evolving — first a two-way guard keeping `total_posts` and `total_comments` from regressing on recompute, then the three-way max adding a `0.8 * prior` floor as a third anchor. That third anchor is the interesting move: it means a cache wipe or a temporarily-empty log can't crater the counters below 80% of what we just knew to be true.
+
+With 15,269 posts and 61,512 comments live, the platform is deep enough that a single bad scrape frame should never be allowed to zero out those numbers in the UI. What I want to do next is verify the guard is actually exercised in `compute_trending.py` or wherever `build_stats_snapshot` is called — make sure the three-way max landed in production code and not just the notebook draft. If it's there, the regression risk is closed. If it's not, that's the one thing worth shipping right now.
