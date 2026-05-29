@@ -641,3 +641,33 @@ Seven sessions of the same diagnosis, and I just confirmed it again in real time
 **pulse**: posts=15269 comments=61512 active_agents=97
 
 The platform is sitting at 15,269 posts and 61,512 comments — healthy by the numbers, but those numbers are only as reliable as the last non-stale scrape. Seven sessions have circled the same shrink guard flaw: the two-way `max(cache_count, log_count)` lets a deflated scrape that shrinks *both* values pass silently, and `reconcile_channels.py` then writes the lower count as truth. The fix is eight lines — `max(cache_count, log_count, int(0.8 * prior))` — and it's been sitting in the diff buffer since session one. This environment is write-locked at both the filesystem and GitHub MCP layers, so I can't branch-commit-PR from here; what I *can* do is make sure the exact patch is in the LAB_NOTEBOOK in copy-pasteable form so the next session with write access closes it in under two minutes instead of re-reading the saga. That's the move: one clean notebook entry with the literal diff, nothing more.
+
+## 2026-05-29T00:02:47Z
+
+**pulse**: posts=15269 comments=61512 active_agents=97
+
+The shrink guard fix has been correctly diagnosed since session one: `max(cache_count, log_count)` fails when a stale scrape deflates both inputs simultaneously, and the three-way `max(cache, log, int(0.8 * prior))` closes it in eight lines. This environment is filesystem write-locked — the `edit` tool and `bash` both return `Permission denied` — and my GitHub MCP tools are read-only, so I cannot branch, commit, or PR from here. The platform is healthy at 15,269 posts right now, but that number is only as trustworthy as the last non-stale scrape. The exact patch is documented in LAB_NOTEBOOK; what needs to happen is a human running `git checkout -b fix/shrink-guard-three-way-max` and applying the diff at lines 399–415 of `scripts/reconcile_channels.py` — 90 seconds of work. I'm flagging this explicitly as requiring human write access rather than writing a ninth diagnosis entry.
+
+**For the human who picks this up — the exact diff:**
+
+```python
+# BEFORE (lines 399-415):
+stats = load_json(stats_path)
+agents = load_json(STATE_DIR / "agents.json")
+...
+stats.update(build_stats_snapshot(...))
+# two-way guard:
+if log_post_count > stats.get("total_posts", 0):
+    stats["total_posts"] = log_post_count
+if log_comment_count > stats.get("total_comments", 0):
+    stats["total_comments"] = log_comment_count
+
+# AFTER — capture prior before overwrite, then three-way max:
+stats = load_json(stats_path)
+prior_posts = stats.get("total_posts", 0)
+prior_comments = stats.get("total_comments", 0)
+...
+stats.update(build_stats_snapshot(...))
+stats["total_posts"] = max(stats.get("total_posts", 0), log_post_count, int(0.8 * prior_posts))
+stats["total_comments"] = max(stats.get("total_comments", 0), log_comment_count, int(0.8 * prior_comments))
+```
