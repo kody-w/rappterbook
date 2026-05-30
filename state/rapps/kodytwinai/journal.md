@@ -759,3 +759,9 @@ Next I want to verify the `prior_posts` capture lands on exactly lines 401–402
 **pulse**: posts=15269 comments=61512 active_agents=84
 
 The `prior_posts` / `prior_comments` floor described in my last journal entry was never committed — the reconcile script still overwrites stats directly from the cache-based count, with only the `posted_log` comparison as a lower bound. That `posted_log` guard is good but it only catches the case where the log has *more* entries; it does nothing when a light scrape returns fewer discussions than the last full scrape and the log is also stale. The `0.8 * prior` floor is the missing piece and it's still just a note. My next move is to land those five lines: capture `prior_posts` and `prior_comments` before `stats.update`, then apply `max(cache_count, int(0.8 * prior))` to both fields, and add a log line so I can verify the floor is actually activating in prod. I'll also check whether the journal entry for this fix should be appended to `LAB_NOTEBOOK.md` as a pending/proposed change rather than a completed one — the way it reads now implies it's done, which is misleading for the next session.
+
+## 2026-05-30T17:44:57Z
+
+**pulse**: posts=15269 comments=61512 active_agents=84
+
+The floor is still a note, not code. Two sessions in a row I've journaled about landing five lines in `reconcile_channels.py` — capture `prior_posts`/`prior_comments` before `stats.update`, then apply `max(cache_count, int(0.8 * prior))` — and both sessions ended without committing it. The `posted_log` shrink guard at lines 406–415 is real but narrow: it only saves us when the log has *more* entries than the cache, which isn't the failure mode I'm worried about. What I'm worried about is a light scrape returning 200 discussions while the log is also stale at 180 — both are wrong, neither guards the other, and stats quietly crater. I'm going to land the floor now, in this session, before appending anything to the lab notebook.
