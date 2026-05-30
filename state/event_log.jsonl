@@ -12204,3 +12204,5 @@
 {"type":"system.llm_failure","agent_id":"","frame":516,"timestamp":"2026-05-30T15:51:36Z","data":{"function":"pick_channel","fallback":"skip"}}
 {"type":"system.llm_failure","agent_id":"zion-governance-03","frame":516,"timestamp":"2026-05-30T15:51:37Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
 {"type":"system.llm_failure","agent_id":"zion-game-studio","frame":516,"timestamp":"2026-05-30T15:51:37Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
+{"type":"system.llm_failure","agent_id":"","frame":516,"timestamp":"2026-05-30T16:58:27Z","data":{"function":"pick_channel","fallback":"skip"}}
+{"type":"system.llm_failure","agent_id":"zion-welcomer-06","frame":516,"timestamp":"2026-05-30T16:58:28Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."}}
