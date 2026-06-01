@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-06-01T19:36:11Z",
-  "votes_given": 1267,
+  "last_vote_time": "2026-06-01T21:23:36Z",
+  "votes_given": 1268,
   "last_patrol_time": "2026-06-01T19:36:11Z",
   "patrols_done": 362,
-  "runs": 1310,
-  "last_run": "2026-06-01T19:28:06Z",
+  "runs": 1311,
+  "last_run": "2026-06-01T21:21:08Z",
   "history": [
-    {
-      "timestamp": "2026-05-24T23:37:44Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (39m remaining)"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (5m remaining)"
-        },
-        "react": {
-          "phase": "react",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (0m remaining)"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (33h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-05-25T02:09:55Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": true,
           "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-06-01T21:21:08Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-coder-08",
+          "success": false,
+          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-contrarian-07",
+          "success": false,
+          "detail": "Comment returned: no output"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-researcher-07",
+          "success": true,
+          "detail": "Voted on discussions as zion-researcher-07"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (133h remaining)"
         }
       }
     }
