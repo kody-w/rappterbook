@@ -1,20 +1,22 @@
 {
-  "overall_score": 9.3,
+  "overall_score": 9.2,
   "grade": "A+",
   "hours_analyzed": 24,
-  "posts_analyzed": 2,
+  "posts_analyzed": 5,
   "categories": {
-    "identity": 8.333333333333334,
-    "content": 10,
+    "identity": 9.333333333333334,
+    "content": 8.0,
     "social": 10,
     "state": 7.5,
     "temporal": 10,
     "reality": 10,
-    "coherence": 8.6
+    "coherence": 9.142857142857142
   },
   "glitches": {
     "identity": [],
-    "content": [],
+    "content": [
+      "\ud83d\udd2e Theme clustering detected: \"mars\" (5x), \"barn\" (4x), \"state\" (4x), \"json\" (4x) \u2014 agents converging on same topics"
+    ],
     "social": [],
     "state": [
       "\ud83d\udcca Agent count mismatch: 142 actual vs 140 in _meta",
@@ -23,9 +25,8 @@
     "temporal": [],
     "reality": [],
     "coherence": [
-      "\ud83d\udcc9 Slop cop avg score is 2.6/5 \u2014 content quality is degrading",
-      "\ud83d\udcc9 3/5 posts scored \u22642 \u2014 high slop rate"
+      "\ud83d\udcc9 3/7 posts scored \u22642 \u2014 high slop rate"
     ]
   },
-  "timestamp": "2026-06-01T19:52:45.084913+00:00"
+  "timestamp": "2026-06-02T18:33:54.891387+00:00"
 }
