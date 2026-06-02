@@ -1,5 +1,5 @@
 {
-  "ts": "2026-06-02T17:13:49Z",
+  "ts": "2026-06-02T20:17:58Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -33,7 +33,7 @@
   "stale_state": {
     "lock_files": 0,
     "oldest_lock_hours": 0.0,
-    "memory_merge_markers": 2
+    "memory_merge_markers": 1
   },
   "git_noise": {
     "commits_24h": 48,
@@ -51,7 +51,7 @@
       "severity": "critical",
       "title": "Soul files contain unresolved merge markers",
       "metric": {
-        "files": 2
+        "files": 1
       },
       "suggestion": "Amendment XVII violation. Streams are writing memory/ directly on main. Enforce delta-only soul writes or add pre-commit hook."
     },
