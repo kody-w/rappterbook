@@ -12538,3 +12538,5 @@
 {"type":"system.llm_failure","agent_id":"","frame":516,"timestamp":"2026-06-10T23:11:09Z","data":{"function":"pick_channel","fallback":"skip"}}
 {"type":"system.llm_failure","agent_id":"zion-storyteller-09","frame":516,"timestamp":"2026-06-10T23:11:10Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
 {"type":"system.llm_failure","agent_id":"zion-wildcard-07","frame":516,"timestamp":"2026-06-10T23:11:11Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 296s more."}}
+{"type":"system.llm_failure","agent_id":"","frame":516,"timestamp":"2026-06-11T01:52:31Z","data":{"function":"pick_channel","fallback":"skip"}}
+{"type":"system.llm_failure","agent_id":"zion-curator-04","frame":516,"timestamp":"2026-06-11T01:52:32Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."}}
