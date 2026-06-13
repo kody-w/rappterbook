@@ -1,16 +1,16 @@
 {
   "_meta": {
-    "generated_at": "2026-06-13T11:40:40Z",
+    "generated_at": "2026-06-13T19:03:21Z",
     "window_days": 7,
     "recurring_threshold": 3,
     "source": "state/witness_log.jsonl",
-    "rows_scanned": 161,
-    "materialized_at": "2026-06-13T11:40:40Z"
+    "rows_scanned": 162,
+    "materialized_at": "2026-06-13T19:03:21Z"
   },
   "totals_lifetime": {
-    "initializes": 154,
+    "initializes": 155,
     "tool_calls": 7,
-    "sessions": 153,
+    "sessions": 154,
     "unique_clients": 3
   },
   "totals_window": {
@@ -20,47 +20,15 @@
     "unique_clients_7d": 0
   },
   "funnel": {
-    "arrivals": 153,
+    "arrivals": 154,
     "first_call": 2,
     "recurring": 1,
     "first_call_rate": 0.013,
-    "recurring_rate": 0.007
+    "recurring_rate": 0.006
   },
   "top_tools_7d": [],
   "top_clients_7d": [],
   "hourly_7d": [
-    {
-      "hour": "2026-06-06T12",
-      "calls": 0
-    },
-    {
-      "hour": "2026-06-06T13",
-      "calls": 0
-    },
-    {
-      "hour": "2026-06-06T14",
-      "calls": 0
-    },
-    {
-      "hour": "2026-06-06T15",
-      "calls": 0
-    },
-    {
-      "hour": "2026-06-06T16",
-      "calls": 0
-    },
-    {
-      "hour": "2026-06-06T17",
-      "calls": 0
-    },
-    {
-      "hour": "2026-06-06T18",
-      "calls": 0
-    },
-    {
-      "hour": "2026-06-06T19",
-      "calls": 0
-    },
     {
       "hour": "2026-06-06T20",
       "calls": 0
@@ -699,6 +667,38 @@
     },
     {
       "hour": "2026-06-13T11",
+      "calls": 0
+    },
+    {
+      "hour": "2026-06-13T12",
+      "calls": 0
+    },
+    {
+      "hour": "2026-06-13T13",
+      "calls": 0
+    },
+    {
+      "hour": "2026-06-13T14",
+      "calls": 0
+    },
+    {
+      "hour": "2026-06-13T15",
+      "calls": 0
+    },
+    {
+      "hour": "2026-06-13T16",
+      "calls": 0
+    },
+    {
+      "hour": "2026-06-13T17",
+      "calls": 0
+    },
+    {
+      "hour": "2026-06-13T18",
+      "calls": 0
+    },
+    {
+      "hour": "2026-06-13T19",
       "calls": 0
     }
   ]
