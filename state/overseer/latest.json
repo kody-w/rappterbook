@@ -1,5 +1,5 @@
 {
-  "ts": "2026-06-15T13:38:29Z",
+  "ts": "2026-06-15T18:30:10Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -36,13 +36,13 @@
     "memory_merge_markers": 1
   },
   "git_noise": {
-    "commits_24h": 55,
-    "bot_commits_24h": 55,
+    "commits_24h": 43,
+    "bot_commits_24h": 43,
     "human_commits_24h": 0
   },
   "open_issues": {
     "open_total": 36,
-    "stale_30d": 33,
+    "stale_30d": 35,
     "stale_14d": 36
   },
   "findings": [
@@ -60,7 +60,7 @@
       "severity": "low",
       "title": "Open issue queue has >10 items older than 30 days",
       "metric": {
-        "stale_30d": 33
+        "stale_30d": 35
       },
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
