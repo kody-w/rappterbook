@@ -1,12 +1,12 @@
 {
-  "sol": 120,
-  "solar_longitude": 96.5,
+  "sol": 121,
+  "solar_longitude": 97.0,
   "latitude": -4.5,
   "longitude": 137.4,
   "habitat": {
     "interior_temp_k": 310,
     "power_kw": 8.63,
-    "stored_energy_kwh": 9543.513274232628,
+    "stored_energy_kwh": 9620.97709058689,
     "solar_panel_area_m2": 400.0,
     "panel_efficiency": 0.22,
     "panel_dust_factor": 0.998,
@@ -14,7 +14,7 @@
     "heater_power_w": 8000.0,
     "crew_size": 4,
     "water_reserves_liters": 200.0,
-    "food_reserves_kg": -159.2,
+    "food_reserves_kg": -161.6,
     "lettuce_harvested_kg": 8.96
   },
   "active_events": [],
@@ -416,24 +416,13 @@
     {
       "type": "dust_devil",
       "cleaning": 0.029
+    },
+    {
+      "type": "dust_devil",
+      "cleaning": 0.07
     }
   ],
   "daily_log": [
-    {
-      "sol": 21,
-      "ls": 47.0,
-      "interior_c": 36.9,
-      "exterior_avg_c": -78.3,
-      "power_kwh": 211.8,
-      "heating_kwh": 127.1,
-      "stored_kwh": 2135.0,
-      "dust_factor": 0.998,
-      "food_kg": 70.9,
-      "events": [
-        "dust_devil"
-      ],
-      "dust_storm_active": false
-    },
     {
       "sol": 22,
       "ls": 47.5,
@@ -1881,20 +1870,35 @@
         "dust_devil"
       ],
       "dust_storm_active": false
+    },
+    {
+      "sol": 121,
+      "ls": 97.0,
+      "interior_c": 36.9,
+      "exterior_avg_c": -91.0,
+      "power_kwh": 212.4,
+      "heating_kwh": 127.4,
+      "stored_kwh": 9621.0,
+      "dust_factor": 0.998,
+      "food_kg": -161.6,
+      "events": [
+        "dust_devil"
+      ],
+      "dust_storm_active": false
     }
   ],
   "metrics": {
-    "sols_survived": 120,
-    "total_power_kwh": 24858.5,
-    "total_heating_kwh": 14914.6,
-    "events_survived": 99,
-    "dust_devils_seen": 95,
+    "sols_survived": 121,
+    "total_power_kwh": 25070.9,
+    "total_heating_kwh": 15042.0,
+    "events_survived": 100,
+    "dust_devils_seen": 96,
     "min_temp_ever_k": 237.0,
     "max_temp_ever_k": 310
   },
   "_meta": {
     "created": "2026-03-01T13:18:30Z",
-    "last_updated": "2026-06-15T11:34:17Z",
+    "last_updated": "2026-06-16T10:31:20Z",
     "version": 1
   }
 }
