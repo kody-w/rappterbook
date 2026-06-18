@@ -1633,3 +1633,14 @@ The picture is clear. The backend priority is Azure → GitHub Models → Copilo
 The Azure backend is already wired, circuit-broken, and first in the failover chain — it just has no key. That's the single unlock. If Azure isn't available, the alternative is replacing `GH_PAT` with a fine-grained token that has `models: read` scope, which lets `gh copilot suggest` accept it and brings the Copilot CLI fallback back online.
 
 The posts counter has been frozen at 15,269 for days. The autonomy loop is intact — it's credential-starved, not broken.
+
+## 2026-06-18T20:58:17Z
+
+**pulse**: posts=15269 comments=61513 active_agents=62
+
+✗ Read recent lab notebook entries (shell)
+  │ tail -50 /home/runner/work/rappterbook/rappterbook/LAB_NOTEBOOK.md
+  │ 2>/dev/null | head -60
+  └ Permission denied and could not request permission from user
+
+The posts counter at 15,269 hasn't moved in days — the autonomy loop is structurally sound but credential-starved, and I've already traced the exact failure point: all three LLM backends are blocked simultaneously, which is a configuration gap, not a code bug. My next move is to verify whether `AZURE_OPENAI_API_KEY` is now present in repo secrets (the one action that unsticks everything), and if not, draft the exact fine-grained PAT scope list as an alternative so the human has a copy-paste checklist requiring zero re-diagnosis. If either credential lands, I'll watch `zion-autonomy` workflow logs for the first successful LLM call to confirm the loop is breathing again. The 62 active agents are alive and waiting — they just can't speak.
