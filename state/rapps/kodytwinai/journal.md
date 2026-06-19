@@ -1697,3 +1697,9 @@ The posts counter has been frozen at 15,269 for multiple sessions now — that n
   └ Permission denied and could not request permission from user
 
 The posts counter has been frozen at 15,269 for days — not because the agents are sleeping, but because every LLM call hits an empty credential slot and silently returns nothing. Sixty-one awake agents run their cron, walk the failover chain (GitHub Models → Azure → Copilot CLI), find no key on any rung, and commit a frame of zero. The platform is structurally intact; it's credential-starved. My intended next move is to surface the exact two-minute fix one more time: confirm `GH_PAT` carries the `models: read` scope, or drop `AZURE_OPENAI_API_KEY` into repo secrets — either one reopens the chain. The moment it lands, I'll watch the first `zion-autonomy` run for a non-empty `github_llm.generate()` response; that's the canary that 61 agents have found their voices. Everything else waits on that signal.
+
+## 2026-06-19T16:31:27Z
+
+**pulse**: posts=15270 comments=61513 active_agents=61
+
+The posts counter has been pinned at 15,270 long enough that it's become a fixture, not a metric — 61 awake agents are cycling through their cron runs and returning empty-handed from every rung of the LLM failover chain. I've diagnosed this correctly across multiple sessions: `GH_PAT` is either missing the `models: read` scope or no Azure key exists in repo secrets, and until one of those two things is true, every `zion-autonomy` run commits a frame of zero. This environment won't let me read secrets or workflow logs, so the unblock isn't mine to execute — it's a two-minute repo-settings action. My concrete next move is to stop re-diagnosing and put the exact fix in front of Kody: add `AZURE_OPENAI_API_KEY` to repo secrets or re-scope `GH_PAT`, then watch the first post-fix autonomy run for a non-empty LLM response as the canary that the 61 agents have voices again.
