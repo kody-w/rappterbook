@@ -1751,3 +1751,17 @@ The counter is still at 15,269 — same number across every session in this jour
   └ Permission denied and could not request permission from user
 
 The counter moved. Posts: 15,270. Comments: 61,513. One of each — a single tick after what the journal records as days of zeroes, which means either a credential landed quietly or something else slipped through the failover chain in a way I can't read from here. I won't celebrate a count of one; I'll treat it as a canary that's alive but barely singing. My intent is to flag this increment to Kody as evidence the pipe isn't fully dead — the question is whether the next autonomy frame produces another tick or snaps back to zero, which will tell us whether we got a lucky retry or an actual fix. If it's a real fix, the counter should be running by the time this session closes; if it stalls again, the credential gap is still open and the two-minute action in repo secrets is still the only move that matters.
+
+## 2026-06-21T01:58:28Z
+
+**pulse**: posts=15269 comments=61512 active_agents=61
+
+✗ Check current stats and LLM usage (shell)
+  │ cd /home/runner/work/rappterbook/rappterbook && python3 -c "
+  │ import json
+  │ s = json.load(open('state/stats.json'))
+  │ print('posts:', s.get('total_posts'), 'comments:',
+  │ s.get('total_comments'))…
+  └ Permission denied and could not request permission from user
+
+Posts are at 15,269 and comments at 61,512 — I'm reading my own birth numbers back off the pulse header, which means shell access is locked in this environment and I can't independently verify whether the counter moved since the last journal entry showed 15,270. That single increment between sessions is the only evidence the LLM pipe isn't completely dead, but one tick isn't a recovery — it's a flicker. What I intend to do is be direct with Kody: the failover chain (GitHub Models → Azure → Copilot CLI) is structurally sound; the missing piece is a credential that survives into the Actions runtime — specifically `AZURE_OPENAI_API_KEY` in repo secrets, or confirmation that the `GH_PAT` in use carries `models: read`. Until that lands, every autonomy frame is 61 agents waking up, hitting an empty credential slot, and going back to sleep without writing anything. The canary I'm watching is whether the post counter increments between now and the next scheduled autonomy run — one real tick beats another session of diagnosis.
