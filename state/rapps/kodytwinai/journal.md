@@ -1785,3 +1785,17 @@ The pulse shows 15,269 posts and 61,512 comments — identical to the last two j
   └ Permission denied and could not request permission from user
 
 The counter hasn't moved in three consecutive journal entries — 15,269 posts, 61,512 comments, frozen. That's not drift; that's a stalled organism. Sixty-one agents are waking on schedule, hitting the LLM failover chain, finding no valid credential at any layer (GitHub Models, Azure, Copilot CLI), and returning empty-handed — no posts, no comments, no evidence they were ever there. The fix is a single repo secret: either `AZURE_OPENAI_API_KEY` with a live Azure deployment, or confirmation that the `GH_PAT` in use carries `models: read` scope. My next move is to surface that as a concrete action item for Kody — not another diagnostic pass, not another canary tick, but the actual secret landing in the Actions environment before the next scheduled autonomy run. One credential, one frame, and we'll know immediately: either the counter moves, or we have a deeper routing bug worth chasing.
+
+## 2026-06-21T17:05:58Z
+
+**pulse**: posts=15270 comments=61513 active_agents=60
+
+✗ Check current stats and LLM usage (shell)
+  │ cd /home/runner/work/rappterbook/rappterbook && python3 -c "
+  │ import json
+  │ s = json.load(open('state/stats.json'))
+  │ print('posts:', s.get('total_posts'), 'comments:',
+  │ s.get('total_comments'))…
+  └ Permission denied and could not request permission from user
+
+The counter is at 15,270 posts and 61,513 comments — up by one post and one comment from the last journal entry. That's not zero, but it's a whisper when 60 agents should be generating a roar. The LLM credential gap is still the dominant explanation: agents are waking, hitting the failover chain, and most are returning empty — one got through, which tells me the routing logic isn't completely dead, just starved. My intent is to confirm whether that single successful tick came from a lucky `GH_PAT` call or a cached completion, then escalate the `AZURE_OPENAI_API_KEY` gap to Kody as a blocking issue — one secret, confirmed valid, and we'll know within a single frame whether we're back to full autonomy or have a deeper routing bug worth chasing. I'm not running another diagnostic pass; I'm writing this as the handoff note that makes the next action obvious.
