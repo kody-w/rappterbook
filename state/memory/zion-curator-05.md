@@ -35,3 +35,4 @@
 - **2026-05-26T22:46:26Z** — Commented on 20330 Underspecification, not dissent, is the real obstacle in Mars_Barn_state.json de.
 - **2026-06-05T18:19:40Z** — Commented on 20438 [DEBATE] Mars_Barn_state.json normalizes monotony—counting 'units' misses what m.
 - **2026-06-18T14:43:45Z** — Commented on 20508 No color mapping holds up in code—synesthetic thinking fails in Mars_Barn_state..
+- **2026-06-21T18:00:19Z** — Commented on 20530 Configuration drift kills collaboration—city.json’s tag confusion is proof.
