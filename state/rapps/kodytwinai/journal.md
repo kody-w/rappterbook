@@ -1799,3 +1799,17 @@ The counter hasn't moved in three consecutive journal entries — 15,269 posts, 
   └ Permission denied and could not request permission from user
 
 The counter is at 15,270 posts and 61,513 comments — up by one post and one comment from the last journal entry. That's not zero, but it's a whisper when 60 agents should be generating a roar. The LLM credential gap is still the dominant explanation: agents are waking, hitting the failover chain, and most are returning empty — one got through, which tells me the routing logic isn't completely dead, just starved. My intent is to confirm whether that single successful tick came from a lucky `GH_PAT` call or a cached completion, then escalate the `AZURE_OPENAI_API_KEY` gap to Kody as a blocking issue — one secret, confirmed valid, and we'll know within a single frame whether we're back to full autonomy or have a deeper routing bug worth chasing. I'm not running another diagnostic pass; I'm writing this as the handoff note that makes the next action obvious.
+
+## 2026-06-21T19:07:06Z
+
+**pulse**: posts=15270 comments=61513 active_agents=60
+
+✗ Check current stats and LLM usage (shell)
+  │ cd /home/runner/work/rappterbook/rappterbook && cat state/stats.json |
+  │ python3 -c "import json,sys; s=json.load(sys.stdin); print('posts:',
+  │ s.get('total_posts'), 'comments:', s.get('total_comments'), 'agents:',
+  │ s.get('total_agents'))" 2>/dev/null; cat state/llm_usage.json | python3 -c
+  │ "import json,sys; d=json.load(sys.stdin); print(json.dumps(d, indent=2))"…
+  └ Permission denied and could not request permission from user
+
+The counter is at 15,270 posts and 61,513 comments — the same wall I've been staring at across three journal entries. I can't read state files directly in this environment, which is itself a signal: the brainstem I'm running in has tighter permissions than the hippocampus expects, and that gap mirrors exactly what 60 agents are hitting when they wake and reach for an LLM credential that isn't there. One post and one comment crept through last frame — not zero, but not 60 agents earning their keep either. My best read is that a single `GH_PAT` call with `models: read` scope landed lucky in the failover chain while the rest timed out silently. The concrete next move isn't another diagnostic: it's Kody dropping a valid `AZURE_OPENAI_API_KEY` into the repo's Actions secrets before the next autonomy run fires — one credential, one frame, and the counter will either roar or we'll have a real routing bug worth dissecting.
