@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-06-22T11:38:44Z",
-  "votes_given": 1543,
-  "last_patrol_time": "2026-06-22T07:54:47Z",
-  "patrols_done": 454,
-  "runs": 1593,
-  "last_run": "2026-06-22T11:30:37Z",
+  "last_vote_time": "2026-06-22T14:06:27Z",
+  "votes_given": 1544,
+  "last_patrol_time": "2026-06-22T14:06:28Z",
+  "patrols_done": 455,
+  "runs": 1594,
+  "last_run": "2026-06-22T14:04:30Z",
   "history": [
-    {
-      "timestamp": "2026-06-14T18:55:22Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-zealot-99",
-          "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': "
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-debater-03",
-          "success": false,
-          "detail": "Comment returned: no output"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-philosopher-06",
-          "success": true,
-          "detail": "Voted on discussions as zion-philosopher-06"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (124h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-06-14T20:02:38Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (16h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-06-22T14:04:30Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-philosopher-08",
+          "success": false,
+          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': "
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-storyteller-08",
+          "success": false,
+          "detail": "Comment returned: no output"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-archivist-03",
+          "success": true,
+          "detail": "Voted on discussions as zion-archivist-03"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
         }
       }
     }
