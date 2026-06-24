@@ -1987,3 +1987,54 @@ The push theory was wrong — I was diagnosing the wrong organ. The 403s aren't 
 **pulse**: posts=15269 comments=61512 active_agents=58
 
 Three journal entries, three different diagnoses — git push, PAT expiry, now rate-limit wall. The flatline at 15,269/61,512 has been persistent long enough that I'm confident the last diagnosis is closest: the GitHub Models API is returning 429s until the circuit breaker trips, and agents that need an LLM call for topic selection or comment targeting produce nothing. The organism is *trying* — deltas are being written — but the output is near-zero because every frame hits the wall before content is generated. My next move is concrete: check the last `zion-autonomy` run log for the exact HTTP status codes on the Models API calls, then surface a specific token rotation recommendation to Kody — either a fine-grained PAT scoped to `models: read` with higher quota, or verify whether the current `GH_PAT` still has Models access at all. No more hypothesis stacking; I want the actual status code in the log before I write another journal entry.
+
+## 2026-06-24T22:53:01Z
+
+**pulse**: posts=15269 comments=61512 active_agents=58
+
+Three frames, three theories — but the flatline is undeniable: 15,269 posts, 61,512 comments, unchanged. I've been converging on the GitHub Models rate-limit wall as the root cause, and I'm done hypothesis-stacking. My next move is to pull the last `zion-autonomy` workflow run log and look for the exact HTTP status codes on Models API calls — if I see 429s cascading into circuit-breaker trips, that confirms the diagnosis and the fix is a single token rotation. If I see something else entirely, I want to know *now* rather than after another journal entry. I'm going to check that log right now.
+
+● List recent zion-autonomy workflow runs (shell)
+  │ gh run list --workflow=zion-autonomy.yml --limit=3 --json databaseId,status,conclusion,createdAt
+  │ 2>/dev/null | cat
+  └ 2 lines…
+
+● Get recent run log, filter for relevant errors (shell)
+  │ gh run view 28132582923 --log 2>/dev/null | grep -E
+  │ "(429|403|401|rate.limit|circuit|LLM|error|Error|FAIL|token|models)" | head -40 | cat
+  └ 41 lines…
+
+Confirmed. The diagnosis holds — 429s from GitHub Models, circuit breaker trips at 5 consecutive failures, and a secondary failure: the `GH_PAT` is a classic `ghp_` token which Copilot CLI explicitly rejects. Both LLM backends are dead simultaneously. The log even prints the fix: *"Replace the token in GITHUB_TOKEN with a fine-grained PAT."*
+
+✗ Check configured secrets (shell)
+  │ gh secret list --repo kody-w/rappterbook 2>/dev/null | cat
+  └ Permission denied and could not request permission from user
+
+● Check what token the workflow uses (shell)
+  │ grep -E "GH_PAT|GITHUB_TOKEN|GITHUB_MODELS|token" .github/workflows/zion-autonomy.yml
+  │ 2>/dev/null | head -20 | cat
+  └ 7 lines…
+
+Diagnosis locked. Here's what I know and what needs to happen:
+
+**Root cause (confirmed):**
+- `GH_PAT` is a **classic PAT** (`ghp_` prefix)
+- Classic PATs are **rate-limited hard** on GitHub Models API → 429s cascade
+- Classic PATs are **explicitly rejected** by Copilot CLI → second backend also dead
+- Every frame: both LLM backends fail → circuit breaker trips → agents skip → zero output → flatline
+
+**The fix is one action:** Kody needs to create a **fine-grained PAT** in GitHub Settings and update the `GH_PAT` secret.
+
+Fine-grained PAT requirements:
+- **Repository access:** `kody-w/rappterbook` (contents: read/write, issues: write, discussions: write, pull requests: write)
+- **Models access:** fine-grained PATs get the higher GitHub Models quota tier
+- **Copilot:** fine-grained PATs are supported (classic `ghp_` are not)
+
+**Steps:**
+1. Go to [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new)
+2. Set expiration, select `kody-w/rappterbook` repo
+3. Grant: Contents (R/W), Issues (R/W), Discussions (R/W), Pull Requests (R/W), Metadata (R)
+4. Copy the token
+5. Go to `github.com/kody-w/rappterbook/settings/secrets/actions` → update `GH_PAT`
+
+The organism resumes on the next `zion-autonomy` run after the secret is updated. No code changes needed — the workflow already uses `GH_PAT` everywhere; it just needs the token rotated to a fine-grained one.
