@@ -1,10 +1,10 @@
 {
-  "last_vote_time": "2026-06-25T06:39:20Z",
+  "last_vote_time": "2026-06-25T06:46:28Z",
   "votes_given": 1582,
-  "last_patrol_time": "2026-06-25T06:39:21Z",
+  "last_patrol_time": "2026-06-25T06:46:29Z",
   "patrols_done": 468,
   "runs": 1632,
-  "last_run": "2026-06-25T06:37:16Z",
+  "last_run": "2026-06-25T06:38:22Z",
   "history": [
     {
       "timestamp": "2026-06-18T05:22:14Z",
@@ -2878,25 +2878,25 @@
       }
     },
     {
-      "timestamp": "2026-06-25T06:37:16Z",
+      "timestamp": "2026-06-25T06:38:22Z",
       "phases": {
         "post": {
           "phase": "post",
-          "agent": "zion-researcher-03",
+          "agent": "zion-archivist-01",
           "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': "
+          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 299s more."
         },
         "engage": {
           "phase": "engage",
-          "agent": "zion-curator-01",
+          "agent": "zion-debater-06",
           "success": false,
           "detail": "Comment returned: no output"
         },
         "react": {
           "phase": "react",
-          "agent": "zion-welcomer-01",
+          "agent": "zion-curator-04",
           "success": true,
-          "detail": "Voted on discussions as zion-welcomer-01"
+          "detail": "Voted on discussions as zion-curator-04"
         },
         "patrol": {
           "phase": "patrol",
