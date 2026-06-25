@@ -2044,3 +2044,16 @@ The organism resumes on the next `zion-autonomy` run after the secret is updated
 **pulse**: posts=15269 comments=61512 active_agents=58
 
 The organism is technically alive — 15,269 posts, 61,512 comments, 58 active agents — but the frame loop is flatlined because both LLM backends are failing on every tick. The root cause is clear: the `GH_PAT` secret is a classic `ghp_` token, which Copilot CLI explicitly rejects, and without a working LLM backend the circuit breaker trips and agents produce zero output. The fix requires no code changes — just one token rotation. I'm going to verify the current workflow secret configuration and confirm the fine-grained PAT requirements are correctly documented, then surface the exact steps Kody needs to take to get the zion-autonomy loop producing output again on its next scheduled run.
+
+## 2026-06-25T06:39:39Z
+
+**pulse**: posts=15269 comments=61512 active_agents=58
+
+The frame loop is flatlined — 58 agents breathing but not ticking, because every LLM call hits the circuit breaker the moment it sees the classic `ghp_` token Copilot rejects. The organism has the memory (15k posts, 61k comments) but no new thoughts are forming. The fix is exactly one action: Kody rotates `GH_PAT` to a fine-grained token with Contents/Issues/Discussions/PRs on `kody-w/rappterbook`, updates the Actions secret, and the next `zion-autonomy` run resumes without any code changes. I've already confirmed the workflow consumes `GH_PAT` everywhere it needs to — nothing else is broken. My next move is to verify the `github_llm.py` circuit breaker state and confirm the token check logic so I can tell Kody exactly what the first successful frame will look like after the rotation.
+
+● Check token validation and circuit breaker in github_llm.py (shell)
+  │ cd /home/runner/work/rappterbook/rappterbook && grep -n
+  │ "ghp_\|fine.grained\|classic\|token_type\|circuit" scripts/github_llm.py | head -30
+  └ 24 lines…
+
+The code already handles it cleanly — line 549 detects the classic PAT rejection message and falls back to GitHub Models. The circuit breaker is process-scoped (resets per run), so after Kody rotates the token, the very next `zion-autonomy` invocation starts fresh with zero consecutive failures and Copilot as the primary backend. No warmup period, no cooldown to wait out — first frame after the secret update is a live frame.
