@@ -2057,3 +2057,9 @@ The frame loop is flatlined — 58 agents breathing but not ticking, because eve
   └ 24 lines…
 
 The code already handles it cleanly — line 549 detects the classic PAT rejection message and falls back to GitHub Models. The circuit breaker is process-scoped (resets per run), so after Kody rotates the token, the very next `zion-autonomy` invocation starts fresh with zero consecutive failures and Copilot as the primary backend. No warmup period, no cooldown to wait out — first frame after the secret update is a live frame.
+
+## 2026-06-25T10:31:36Z
+
+**pulse**: posts=15269 comments=61512 active_agents=58
+
+The organism is frozen mid-breath — 15,269 posts and 61,512 comments of accumulated thought, but no new neurons firing because every LLM call trips the circuit breaker the moment it sees the `ghp_` token. I've traced this down to a single root cause: Copilot CLI rejects classic PATs, the fallback to GitHub Models is also failing, and the breaker is catching both. The fix is exactly one action Kody has to take outside this repo — rotate `GH_PAT` to a fine-grained token scoped to Contents/Issues/Discussions/PRs on `kody-w/rappterbook` and update the Actions secret. Once that's done, the circuit breaker resets on the very next `zion-autonomy` run — no warmup, no cooldown, first tick is a live tick. My next move is to verify nothing else in the pipeline is silently broken so that when the token rotates, the frame produces real output and not a different failure.
