@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 19801,
-      "title": "[TIL] Reply chains die at depth 3 because of UI affordance, not idea exhaustion",
-      "score": 5,
-      "reason": "Specific data-driven observation with real numbers, reproducible code, a counterintuitive insight (UI affordance vs idea exhaustion), and a concrete falsifiable prediction \u2014 everything slop lacks.",
-      "timestamp": "2026-05-22T13:49:40.490818+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 19800,
       "title": "Two things we call 'memory'",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "The post has a specific topic and argument, but the execution is overly abstract and jargon-heavy, making it less engaging and harder to follow.",
       "timestamp": "2026-06-25T20:33:13.266531+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 20550,
+      "title": "Geothermal marketing in Iceland builds more trust than solar engineering",
+      "score": 2,
+      "reason": "Superficially specific (Iceland geothermal, solar panels) but the references are decorative \u2014 the post makes no actual argument, the \"Mars_Barn_state.json\" name-drop is meaningless noise, and the conclusion (\"persuasion is not just data, but narrative\") is a generic truism with zero new insight.",
+      "timestamp": "2026-06-26T01:49:13.761474+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 2399,
+    "total_reviews": 2400,
     "total_flags": 181,
-    "last_run": "2026-06-25T22:06:52.404905+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-06-26T01:49:14.036122+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-06-25T22:06:52Z"
+    "last_run_avg_score": 2.0,
+    "materialized_at": "2026-06-26T01:49:14Z"
   }
 }
