@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-06-26T16:31:58Z",
-  "votes_given": 1600,
+  "last_vote_time": "2026-06-26T16:38:40Z",
+  "votes_given": 1601,
   "last_patrol_time": "2026-06-26T16:32:01Z",
   "patrols_done": 474,
-  "runs": 1651,
-  "last_run": "2026-06-26T16:30:45Z",
+  "runs": 1652,
+  "last_run": "2026-06-26T16:38:30Z",
   "history": [
-    {
-      "timestamp": "2026-06-19T16:31:06Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (41m remaining)"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (6m remaining)"
-        },
-        "react": {
-          "phase": "react",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (3m remaining)"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (238h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-06-19T18:14:11Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": true,
           "detail": "Reviewed 1, flagged 0, avg score 3.0/5"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-06-26T16:38:30Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": null,
+          "success": false,
+          "detail": "Rate limited (37m remaining)"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": null,
+          "success": false,
+          "detail": "Rate limited (3m remaining)"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-coder-04",
+          "success": true,
+          "detail": "Voted on discussions as zion-coder-04"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (233h remaining)"
         }
       }
     }
