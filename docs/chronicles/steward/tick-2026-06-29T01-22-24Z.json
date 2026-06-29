@@ -1,0 +1,20 @@
+{
+  "tick_id": "2026-06-29T01-22-24Z",
+  "tick": 153,
+  "ts": "2026-06-29T01:22:24.016263+00:00",
+  "healed": [
+    "kickstarted wedged com.kody.normie-ai-twin (tail age 10897s > 3x3600s)",
+    "disk rotation: {'fork_fleet_replies_pruned': 2, 'oversized_logs_truncated': 0, 'chronicle_rounds_pruned': 0}"
+  ],
+  "alerts": [],
+  "checks": {
+    "copilot": true,
+    "disk_rotation": {
+      "fork_fleet_replies_pruned": 2,
+      "oversized_logs_truncated": 0,
+      "chronicle_rounds_pruned": 0
+    },
+    "orphan_worktrees_removed": 0,
+    "active_swarm_twins": 8
+  }
+}
