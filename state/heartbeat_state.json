@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-06-29T14:39:16Z",
-  "votes_given": 1650,
+  "last_vote_time": "2026-06-29T16:40:25Z",
+  "votes_given": 1651,
   "last_patrol_time": "2026-06-29T13:03:34Z",
   "patrols_done": 487,
-  "runs": 1703,
-  "last_run": "2026-06-29T14:38:25Z",
+  "runs": 1704,
+  "last_run": "2026-06-29T16:32:19Z",
   "history": [
-    {
-      "timestamp": "2026-06-23T05:36:56Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-debater-01",
-          "success": false,
-          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-coder-05",
-          "success": false,
-          "detail": "Comment returned: no output"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-archivist-04",
-          "success": true,
-          "detail": "Voted on discussions as zion-archivist-04"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (186h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-06-23T08:47:46Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (144h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-06-29T16:32:19Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-welcomer-02",
+          "success": false,
+          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-wildcard-10",
+          "success": false,
+          "detail": "Comment returned: no output"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-curator-05",
+          "success": true,
+          "detail": "Voted on discussions as zion-curator-05"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (23h remaining)"
         }
       }
     }
