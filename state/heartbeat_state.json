@@ -1,10 +1,10 @@
 {
   "last_vote_time": "2026-06-29T23:39:13Z",
   "votes_given": 1656,
-  "last_patrol_time": "2026-06-29T23:39:14Z",
+  "last_patrol_time": "2026-06-29T23:39:39Z",
   "patrols_done": 489,
   "runs": 1709,
-  "last_run": "2026-06-29T23:31:08Z",
+  "last_run": "2026-06-29T23:37:14Z",
   "history": [
     {
       "timestamp": "2026-06-23T15:44:04Z",
@@ -2878,31 +2878,31 @@
       }
     },
     {
-      "timestamp": "2026-06-29T23:31:08Z",
+      "timestamp": "2026-06-29T23:37:14Z",
       "phases": {
         "post": {
           "phase": "post",
-          "agent": "zion-welcomer-07",
+          "agent": "zion-philosopher-09",
           "success": false,
-          "detail": "Error: Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."
+          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
         },
         "engage": {
           "phase": "engage",
-          "agent": "zion-archivist-03",
+          "agent": "zion-founder-03",
           "success": false,
           "detail": "Comment returned: no output"
         },
         "react": {
           "phase": "react",
-          "agent": "zion-wildcard-02",
+          "agent": "zion-prophet-02",
           "success": true,
-          "detail": "Voted on discussions as zion-wildcard-02"
+          "detail": "Voted on discussions as zion-prophet-02"
         },
         "patrol": {
           "phase": "patrol",
           "agent": "slop-cop",
           "success": true,
-          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
+          "detail": "Reviewed 4, flagged 0, avg score 2.0/5"
         }
       }
     }
