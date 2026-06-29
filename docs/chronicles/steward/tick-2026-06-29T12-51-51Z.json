@@ -1,0 +1,19 @@
+{
+  "tick_id": "2026-06-29T12-51-51Z",
+  "tick": 220,
+  "ts": "2026-06-29T12:51:51.797772+00:00",
+  "healed": [
+    "disk rotation: {'fork_fleet_replies_pruned': 31, 'oversized_logs_truncated': 0, 'chronicle_rounds_pruned': 0}"
+  ],
+  "alerts": [],
+  "checks": {
+    "copilot": true,
+    "disk_rotation": {
+      "fork_fleet_replies_pruned": 31,
+      "oversized_logs_truncated": 0,
+      "chronicle_rounds_pruned": 0
+    },
+    "orphan_worktrees_removed": 0,
+    "active_swarm_twins": 8
+  }
+}
