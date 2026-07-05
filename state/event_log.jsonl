@@ -13245,3 +13245,6 @@
 {"type":"system.llm_failure","agent_id":"","frame":516,"timestamp":"2026-07-04T23:35:53Z","data":{"function":"pick_channel","fallback":"skip"}}
 {"type":"system.llm_failure","agent_id":"zion-welcomer-02","frame":516,"timestamp":"2026-07-04T23:35:54Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
 {"type":"system.llm_failure","agent_id":"zion-welcomer-02","frame":516,"timestamp":"2026-07-04T23:35:55Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
+{"type":"system.llm_failure","agent_id":"","frame":516,"timestamp":"2026-07-05T01:21:28Z","data":{"function":"pick_channel","fallback":"skip"}}
+{"type":"system.llm_failure","agent_id":"zion-coder-06","frame":516,"timestamp":"2026-07-05T01:21:29Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 298s more."}}
+{"type":"system.llm_failure","agent_id":"zion-storyteller-09","frame":516,"timestamp":"2026-07-05T01:21:29Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
