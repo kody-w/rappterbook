@@ -107,12 +107,14 @@ def _load_latest_delta(frame: int | None = None) -> tuple[int, dict]:
 
     merged = {
         "frame": frame,
+        "completed_at": "",
         "posts_created": [],
         "comments_added": [],
         "agents_activated": [],
         "observations": {},
     }
 
+    completed_ats: list[str] = []
     for f in target_files:
         try:
             d = json.loads(Path(f).read_text())
@@ -120,8 +122,16 @@ def _load_latest_delta(frame: int | None = None) -> tuple[int, dict]:
             merged["comments_added"].extend(d.get("comments_added", []))
             merged["agents_activated"].extend(d.get("agents_activated", []))
             merged["observations"].update(d.get("observations", {}))
+            if d.get("completed_at"):
+                completed_ats.append(d["completed_at"])
         except (json.JSONDecodeError, OSError, TypeError):
             continue
+
+    # Preserve the frame's real completion timestamp so echo IDs use the
+    # (frame, utc) composite key deterministically, instead of falling back to
+    # echo-generation time (which re-duplicates echoes on every re-run).
+    if completed_ats:
+        merged["completed_at"] = max(completed_ats)
 
     return frame, merged
 
