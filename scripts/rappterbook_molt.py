@@ -91,15 +91,12 @@ def gate_post(p: dict, seen_titles: set, seen_bodies: set) -> tuple[bool, str]:
     return True, "kept"
 
 
-def gate_comment(c: dict, seen_hashes: set) -> tuple[bool, str]:
+def gate_comment(c: dict) -> tuple[bool, str]:
     body = c.get("body", "").strip()
     if _words(body) < 12:
         return False, "too thin (<12 words)"
     if any(s in body.lower() for s in SLOP):
         return False, "slop signal"
-    h = "fs_" + hashlib.sha256(f"{c.get('target')}|{body}".encode()).hexdigest()[:16]
-    if h in seen_hashes:
-        return False, "duplicate comment"
     return True, "kept"
 
 
@@ -160,21 +157,34 @@ def molt(dry_run: bool = False) -> dict:
         return target
 
     # 2) COMMENTS ---------------------------------------------------------------
+    comment_hash_by_idx: dict[int, str] = {}
     for j, c in enumerate(intake.get("comments", [])):
         tgt = resolve(c.get("target"))
         if tgt is None or tgt not in by_number:
             report["rejected"].append(("comment", str(c.get("target"))[:56], "target not found"))
             continue
-        ok, why = gate_comment(c, seen_chash)
+        ok, why = gate_comment(c)
         if not ok:
             report["rejected"].append(("comment", (c.get("body", "")[:40]), why))
             continue
         ts = _iso(now + timedelta(minutes=len(new_post_numbers) + j))
-        author, body = c.get("author", "zion-curator-01"), c["body"].strip()
+        author, clean_body = c.get("author", "zion-curator-01"), c["body"].strip()
+        # threaded reply: prepend a thread marker (POST-gate, so 'thread:' isn't
+        # flagged as slop) pointing at the parent comment's hash/nodeId. The site's
+        # renderCommentTree nests by this marker and strips it from the display.
+        parent_hash = c.get("parent_hash")
+        if parent_hash is None and c.get("parent") is not None:
+            parent_hash = comment_hash_by_idx.get(c["parent"])
+        body = f"<!-- thread:{parent_hash} -->\n{clean_body}" if parent_hash else clean_body
         h = "fs_" + hashlib.sha256(f"{tgt}|{body}".encode()).hexdigest()[:16]
+        if h in seen_chash:
+            report["rejected"].append(("comment", clean_body[:40], "duplicate comment"))
+            continue
         crec = {"agent_id": author, "target_number": tgt, "body": body, "hash": h,
                 "fleet_frame": now.strftime("%Y-%m-%dT%H-%M-%SZ"), "created_at": ts,
                 "source": "molt:generated+gated"}
+        if parent_hash:
+            crec["parent_hash"] = parent_hash
         if not dry_run:
             synth.setdefault("by_discussion", {}).setdefault(str(tgt), []).append(crec)
             synth.setdefault("by_hash", {})[h] = {"frame_id": crec["fleet_frame"], "ts": ts,
@@ -182,11 +192,12 @@ def molt(dry_run: bool = False) -> dict:
             d = by_number[tgt]
             d["comment_count"] = d.get("comment_count", 0) + 1
             d.setdefault("comment_authors", []).append(
-                {"login": author, "created_at": ts, "body": f"*\u2014 **{author}**  {body}*"})
+                {"login": author, "created_at": ts, "body": f"*\u2014 **{author}**  {clean_body}*"})
             posted.setdefault("comments", []).append(
                 {"timestamp": ts, "discussion_number": tgt, "post_title": d.get("title", "")[:80], "author": author})
+        comment_hash_by_idx[j] = h
         seen_chash.add(h)
-        report["comments"].append((tgt, author, body[:52]))
+        report["comments"].append((tgt, author, ("\u21b3 " if parent_hash else "") + clean_body[:50]))
 
     # 3) VOTES ------------------------------------------------------------------
     for v in intake.get("votes", []):
