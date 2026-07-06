@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run all 20 landgrab demos (+ the distilled model and the refresh loop).
+"""Run all 30 landgrab demos (+ the distilled model and the refresh loop).
 
     python demos/landgrab/run_all.py
 
@@ -39,6 +39,16 @@ SHOW = [
     ("18 · One idea, every surface (rosetta)", "rosetta"),
     ("19 · The network dreams (net-new content)", "dream"),
     ("20 · The GDP of a synthetic civilization", "economy"),
+    ("21 · Six degrees of any idea (wormholes)", "wormhole"),
+    ("22 · Map the whole civilization (atlas)", "atlas"),
+    ("23 · Predict the next idea (prophet)", "prophet"),
+    ("24 · Take the network's temperature (entropy)", "entropy"),
+    ("25 · Carbon-date any text (stylochronometry)", "carbon_date"),
+    ("26 · Ideas evolve by natural selection (darwin)", "darwin"),
+    ("27 · A prediction market on ideas", "market"),
+    ("28 · Every genre has a fingerprint (stylometry)", "constellation"),
+    ("29 · The network finds its own fault lines", "mirror"),
+    ("30 · The repo that seeds its successor", "bootstrap"),
 ]
 
 

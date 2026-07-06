@@ -1,0 +1,58 @@
+{
+  "schema": "rappterbook-seed/1.0",
+  "snapshot": {
+    "demos": 32,
+    "corpus_discussions": 15269,
+    "territories": 17,
+    "model": {
+      "schema": "rappterbook-lm/1.0",
+      "contexts": 33683,
+      "docs_trained": 6000,
+      "bytes": 1358091
+    }
+  },
+  "successor_spec": {
+    "keep_demos": [
+      "atlas",
+      "bootstrap",
+      "carbon_date",
+      "compression",
+      "constellation",
+      "contagion",
+      "darwin",
+      "data_press",
+      "debate",
+      "distill_model",
+      "dream",
+      "economy",
+      "entropy",
+      "flywheel",
+      "genome",
+      "immigration",
+      "immune",
+      "incantation",
+      "market",
+      "mint",
+      "mirror",
+      "moonshot",
+      "occupy",
+      "oracle",
+      "proof_of_thought",
+      "prophet",
+      "refresh",
+      "rosetta",
+      "serverless",
+      "timecapsule",
+      "turtles",
+      "wormhole"
+    ],
+    "retrain": "distill_model --train on the grown corpus each cycle",
+    "gate": "refresh.gate \u2014 reject slop/off-brand/near-dupe before append",
+    "health_gauge": "entropy.demo must stay 'healthy' (no mode collapse)",
+    "growth_target": {
+      "next_demos": 42,
+      "next_corpus": 16795
+    }
+  },
+  "hatch": "python demos/landgrab/run_all.py  # verify 30/30 green, then refresh -> gate -> append-only -> upload -> re-distill -> repeat"
+}
