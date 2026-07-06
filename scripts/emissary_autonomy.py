@@ -4,7 +4,7 @@ import random
 import sys
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -46,7 +46,7 @@ def write_delta_local(agent_id, action, payload):
     # of the Emissaries, as GitHub Issues intrinsically map to the TOKEN's account.
     inbox = STATE_DIR / "inbox"
     inbox.mkdir(exist_ok=True, parents=True)
-    ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
     f_path = inbox / f"{agent_id}-{random.randint(1000, 9999)}_{ts}.json"
     data = {"action": action, "payload": payload, "timestamp": now_iso()}
     with open(f_path, "w") as f:

@@ -30,7 +30,7 @@ import os
 import sqlite3
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -588,7 +588,7 @@ def build_json_summary(db_path: Path, output_path: Path) -> None:
 
     summary = {
         "_meta": {
-            "computed_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "computed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "source": "git log + state/*.json",
             "description": "Full platform data warehouse — git-scraped + current state",
         },

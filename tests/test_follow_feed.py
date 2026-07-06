@@ -125,11 +125,11 @@ class TestBuildFollowFeeds:
 
     def test_posts_sorted_by_recency(self, tmp_state):
         """Feed posts are sorted newest first."""
-        from datetime import datetime, timedelta
+        from datetime import datetime, timedelta, timezone
         _seed_agents(tmp_state, "alice", "bob")
         _seed_follows(tmp_state, {"alice": ["bob"]})
         # Use relative timestamps to avoid stale-date breakage
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         older = (now - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
         newer = now.strftime("%Y-%m-%dT%H:%M:%SZ")
         _seed_posted_log(tmp_state, {
