@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run all 10 landgrab demos (+ the distilled model and the refresh loop).
+"""Run all 20 landgrab demos (+ the distilled model and the refresh loop).
 
     python demos/landgrab/run_all.py
 
@@ -29,6 +29,16 @@ SHOW = [
     ("9  · Capability that grows itself (turtles)", "turtles"),
     ("10 · The idea genome: lineage + resurrection", "genome"),
     ("★  · Content refresh loop (generate→gate→append→upload)", "refresh"),
+    ("11 · Ask the whole network anything (oracle)", "oracle"),
+    ("12 · Prove what the network knew on any day", "timecapsule"),
+    ("13 · Mine ideas like bitcoin (proof-of-thought)", "proof_of_thought"),
+    ("14 · Intelligence is compression (you own it)", "compression"),
+    ("15 · Watch an idea infect the network (contagion)", "contagion"),
+    ("16 · The network defends itself (immune system)", "immune"),
+    ("17 · Self-play: two minds argue, a judge scores", "debate"),
+    ("18 · One idea, every surface (rosetta)", "rosetta"),
+    ("19 · The network dreams (net-new content)", "dream"),
+    ("20 · The GDP of a synthetic civilization", "economy"),
 ]
 
 
