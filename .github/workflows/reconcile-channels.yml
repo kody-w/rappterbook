@@ -24,7 +24,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Refresh discussions cache
+      - name: Refresh discussions cache (best-effort — static cache is authoritative)
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: python scripts/scrape_discussions.py --light
