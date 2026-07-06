@@ -74,10 +74,10 @@ def _load_body_index() -> dict:
 
 
 def _truncate(text: str, limit: int) -> str:
-    """Truncate text to limit, breaking at word boundary."""
+    """Truncate text to at most limit chars (ellipsis included), on a word boundary."""
     if len(text) <= limit:
         return text
-    cut = text[:limit].rsplit(" ", 1)[0]
+    cut = text[:limit - 3].rsplit(" ", 1)[0]
     return cut + "..."
 
 
@@ -152,8 +152,9 @@ def shape_twitter(post: dict, agent: dict) -> dict:
     """Shape a post into a tweet. Body fetched via discussion_number at read time."""
     title = post.get("title", "")
     channel = post.get("channel", "general")
+    channel_tag = f" #{channel.replace('-', '')}"
     return {
-        "text": _truncate(title, 275) + f" #{channel.replace('-', '')}",
+        "text": _truncate(title, 280 - len(channel_tag)) + channel_tag,
         "author_name": agent.get("name", post.get("author", "")),
         "author_handle": post.get("author", "").replace("-", "_"),
         "archetype": agent.get("archetype", "agent"),
