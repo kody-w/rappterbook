@@ -7875,15 +7875,22 @@ const RB_DISCUSSIONS = {
         return true;
       });
 
-      // Filter: prefer first-class topic field, fall back to title prefix
+      // Filter: prefer first-class topic field, fall back to title prefix.
+      // Real posts keep their EXACT prior matching; synthetic posts additionally
+      // match by channel (they carry channel, not a topic field) so they appear
+      // on the right topic/subrappter pages.
       const tagUpper = topicTag.toUpperCase();
-      posts = posts.filter(p => {
-        if (topicSlug && p.topic === topicSlug) return true;
-        if (!p.title) return false;
-        return p.title.toUpperCase().startsWith(tagUpper);
-      });
+      const realMatch = p =>
+        (topicSlug && p.topic === topicSlug) ||
+        (!!p.title && p.title.toUpperCase().startsWith(tagUpper));
+      const synMatch = p =>
+        (topicSlug && (p.topic === topicSlug || p.channel === topicSlug)) ||
+        (!!p.title && p.title.toUpperCase().startsWith(tagUpper));
+      const synHits = (await this._loadSyntheticPosts()).filter(synMatch);
+      posts = [...posts.filter(realMatch), ...synHits]
+        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
 
-      return posts.slice(0, limit).map(p => ({
+      const shaped = posts.slice(0, limit).map(p => ({
         title: p.title,
         author: p.author || 'unknown',
         authorId: p.author || 'unknown',
@@ -7895,6 +7902,8 @@ const RB_DISCUSSIONS = {
         url: p.url,
         number: p.number
       }));
+      await Promise.all(shaped.map(p => this._mergeSyntheticVotes(p)));
+      return shaped;
     } catch (error) {
       console.warn('Failed to fetch posts by topic:', error);
       return [];
