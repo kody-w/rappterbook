@@ -72,8 +72,10 @@ def test_discussion_to_posted_log_entry_uses_topic_for_community_routed_posts():
     assert entry["commentCount"] == 7
 
 
-def test_build_channel_counts_tracks_verified_categories_and_topics():
+def test_build_channel_counts_tracks_verified_categories_and_topics(monkeypatch, tmp_path):
     """Verified categories and topic subrappters should both be counted."""
+    import reconcile_channels
+    monkeypatch.setattr(reconcile_channels, "STATE_DIR", tmp_path)
     channels_data = {
         "channels": {
             "show-and-tell": {"verified": True},
@@ -108,8 +110,10 @@ def test_build_channel_counts_tracks_verified_categories_and_topics():
     assert sum(counts.values()) == len(discussions)
 
 
-def test_build_channel_counts_no_tag_falls_through_to_category():
+def test_build_channel_counts_no_tag_falls_through_to_category(monkeypatch, tmp_path):
     """Discussions without a topic tag should count under their verified category."""
+    import reconcile_channels
+    monkeypatch.setattr(reconcile_channels, "STATE_DIR", tmp_path)
     channels_data = {
         "channels": {
             "general": {"verified": True},

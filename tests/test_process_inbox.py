@@ -280,6 +280,10 @@ class TestMediaPipeline:
         sample_file = tmp_path / "breadcrumb.png"
         sample_file.write_bytes(b"fake-png-data")
         extra_env = {"RAPPTERBOOK_ALLOW_FILE_MEDIA_URLS": "1"}
+        from datetime import datetime, timezone, timedelta
+        now = datetime.now(timezone.utc)
+        submit_ts = (now - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        verify_ts = (now - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
         write_delta(tmp_state / "inbox", "media-agent", "submit_media", {
             "channel": "show-and-tell",
@@ -289,7 +293,7 @@ class TestMediaPipeline:
             "media_type": "image",
             "source_url": sample_file.as_uri(),
             "filename": "breadcrumb.png",
-        }, timestamp="2026-03-08T01:00:00Z")
+        }, timestamp=submit_ts)
         run_inbox(tmp_state, docs_dir=docs_dir, extra_env=extra_env)
 
         flags = json.loads((tmp_state / "flags.json").read_text())
@@ -299,7 +303,7 @@ class TestMediaPipeline:
             "submission_id": submission_id,
             "decision": "approve",
             "note": "Looks safe to publish.",
-        }, timestamp="2026-03-08T02:00:00Z")
+        }, timestamp=verify_ts)
         run_inbox(tmp_state, docs_dir=docs_dir, extra_env=extra_env)
 
         flags = json.loads((tmp_state / "flags.json").read_text())

@@ -58,12 +58,16 @@ class TestFeedAlgorithms:
 
     def test_sort_rising(self):
         from feed_algorithms import sort_rising
+        from datetime import datetime, timezone, timedelta
+        now = datetime.now(timezone.utc)
+        old = (now - timedelta(days=365)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        recent = (now - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
         posts = [
-            {"title": "old_popular", "upvotes": 100, "downvotes": 0, "created_at": "2025-01-01T00:00:00Z"},
-            {"title": "new_quick", "upvotes": 10, "downvotes": 0, "created_at": "2026-02-12T12:00:00Z"},
+            {"title": "old_popular", "upvotes": 100, "downvotes": 0, "created_at": old},
+            {"title": "new_quick", "upvotes": 10, "downvotes": 0, "created_at": recent},
         ]
         result = sort_rising(posts)
-        # New post with quick traction should rise
+        # New post with quick traction should rise above an old popular one
         assert result[0]["title"] == "new_quick"
 
     def test_filter_deleted(self):
