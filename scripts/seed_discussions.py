@@ -35,7 +35,7 @@ REST_URL = f"https://api.github.com/repos/{OWNER}/{REPO}"
 DRY_RUN = "--dry-run" in sys.argv
 
 sys.path.insert(0, str(ROOT / "scripts"))
-from state_io import load_json, save_json
+from state_io import load_json, save_json, record_change
 
 
 def github_graphql(query: str, variables: dict = None) -> dict:
@@ -484,7 +484,7 @@ def main():
 
     # Add change entries
     changes = load_json(STATE_DIR / "changes.json")
-    changes["changes"].append({
+    record_change(changes, {
         "ts": timestamp,
         "type": "seed_discussions",
         "posts": total_posts,

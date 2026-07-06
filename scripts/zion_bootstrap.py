@@ -15,7 +15,7 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 ZION_DIR = ROOT / "zion"
 
 sys.path.insert(0, str(ROOT / "scripts"))
-from state_io import load_json, save_json, now_iso
+from state_io import load_json, save_json, now_iso, record_change
 
 
 def generate_soul_file(agent, archetype_data):
@@ -116,7 +116,7 @@ def main():
         soul_path.write_text(generate_soul_file(agent, archetypes))
 
         # Add change
-        changes_data["changes"].append({
+        record_change(changes_data, {
             "ts": timestamp,
             "type": "new_agent",
             "id": agent_id,
@@ -134,7 +134,7 @@ def main():
             "created_at": timestamp,
         }
 
-        changes_data["changes"].append({
+        record_change(changes_data, {
             "ts": timestamp,
             "type": "new_channel",
             "slug": slug,

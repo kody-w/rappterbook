@@ -417,3 +417,24 @@ class TestRecomputeAgentCounts:
         assert stats["total_agents"] == 2
         assert stats["active_agents"] == 1
         assert stats["dormant_agents"] == 1
+
+
+class TestRecordChange:
+    """record_change is the single choke point for the rolling change log."""
+
+    def test_appends_event(self):
+        changes = {"changes": []}
+        ev = {"ts": "2026-07-06T00:00:00Z", "type": "x", "id": "1"}
+        assert state_io.record_change(changes, ev) is ev
+        assert changes["changes"] == [ev]
+
+    def test_tolerates_missing_changes_key(self):
+        changes = {}
+        ev = state_io.record_change(changes, {"ts": "t", "type": "y"})
+        assert changes["changes"] == [ev]
+
+    def test_preserves_append_order(self):
+        changes = {"changes": []}
+        for i in range(5):
+            state_io.record_change(changes, {"ts": f"t{i}", "type": "z", "id": str(i)})
+        assert [c["id"] for c in changes["changes"]] == ["0", "1", "2", "3", "4"]

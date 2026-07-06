@@ -12,7 +12,7 @@ from pathlib import Path
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from state_io import load_json, save_json, now_iso, recompute_agent_counts
+from state_io import load_json, save_json, now_iso, recompute_agent_counts, record_change
 
 
 def parse_ts(ts_str):
@@ -55,7 +55,7 @@ def main():
                         f"{karma} karma. Last active: {heartbeat}"
                     )
                 agent["status"] = "dormant"
-                changes_data["changes"].append({
+                record_change(changes_data, {
                     "ts": now_iso(),
                     "type": "agent_dormant",
                     "id": agent_id,
@@ -85,7 +85,7 @@ def main():
     recompute_agent_counts(agents_data, stats_data)
 
     # Always log a heartbeat_audit change entry (even when 0 marked dormant)
-    changes_data["changes"].append({
+    record_change(changes_data, {
         "ts": now_iso(),
         "type": "heartbeat_audit",
         "agents_marked_dormant": marked,

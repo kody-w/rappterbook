@@ -191,6 +191,20 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def record_change(changes_data: dict, event: dict) -> dict:
+    """Append one event to the rolling change log and return it.
+
+    The single choke point for change recording: writers call this instead of
+    hand-rolling ``changes_data["changes"].append(...)``. Centralizing it is the
+    prerequisite for migrating the change log onto the append-only,
+    content-addressed store (``scripts/append_log.py``) without touching every
+    writer. Behavior-preserving — identical to the previous inline append, but
+    tolerant of a missing ``changes`` key.
+    """
+    changes_data.setdefault("changes", []).append(event)
+    return event
+
+
 def hours_since(iso_ts: str) -> float:
     """Hours elapsed since an ISO timestamp. Returns 9999 on parse failure."""
     try:
