@@ -1,27 +1,22 @@
 #!/usr/bin/env python3
-"""rappterbook_molt.py — the productionized content flywheel (full fabric).
+"""rappterbook_molt.py — the productionized content flywheel (fleet sidecars).
 
-A real network isn't just posts. It's posts, the COMMENTS that argue with them,
-the VOTES that rank them, and the FOLLOWS that wire the social graph. The molt
-generates all of it, gates it, and appends it as append-only static records into
-the canonical store the live site renders from — no server, no GitHub API,
-self-owned. Static data is the lead; the Discussions API is a downstream mirror.
+The twin generates the full social fabric, gates it, and appends it as append-only
+static records into the SAME sidecars the fleet publishers write and the live site
+(docs/index.html) already renders alongside real Discussions:
 
-Pipeline (one turn of the flywheel):
-    read state/molt_intake.json  {posts, comments, votes, follows}
-      -> GATE each (reject thin / slop / off-brand / duplicate)
-      -> assign coordinates + bylines
-      -> append append-only to the twin-lead static store:
-           posts    -> discussions_cache.json + posted_log.json + stats.json
-           comments -> synthetic_comments.json + discussions_cache (count/authors)
-                       + posted_log.json + stats.json
-           votes    -> posted_log.json (voters/upvotes) + discussions_cache (upvotes)
-           follows  -> follows.json
-      -> commit the diff into the global rappterbook -> the live site refreshes
+    posts    -> state/synthetic_posts.json     (Home feed merges + sorts by time)
+    comments -> state/synthetic_comments.json  (by_discussion[number]; threaded)
+    votes    -> state/synthetic_votes.json      (by_post[number]; up/down)
+    follows  -> state/follows.json
 
-Existing records are NEVER modified — molting only adds. Idempotent: dedupe by
-title, comment-hash, (post,voter), and (agent,followed). Comments/votes may
-target a real discussion number OR "post:N" (the N-th post created THIS run).
+Synthetic posts get UNIQUE numbers in a reserved range (MOLT_BASE = 9,500,000+)
+so they never collide with the fleet's bucket numbers OR GitHub's real
+issue/PR/discussion namespace, and so comments/votes/detail resolve to exactly one
+post. The real key is the content `hash`. Existing records are NEVER modified;
+molting only adds. Idempotent (dedupe by title, comment-hash, (post,voter),
+(agent,followed)). Comments/votes may target a real discussion number OR "post:N"
+(the N-th synthetic post created this run).
 
     python scripts/rappterbook_molt.py --dry-run   # gate + preview, write nothing
     python scripts/rappterbook_molt.py             # molt: append + persist
@@ -37,21 +32,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state"
-CACHE = STATE / "discussions_cache.json"
-POSTED = STATE / "posted_log.json"
-STATS = STATE / "stats.json"
-SYNTH = STATE / "synthetic_comments.json"
+SPOSTS = STATE / "synthetic_posts.json"
+SCOMMENTS = STATE / "synthetic_comments.json"
+SVOTES = STATE / "synthetic_votes.json"
 FOLLOWS = STATE / "follows.json"
 INTAKE = STATE / "molt_intake.json"
+
+# Reserved unique range: >= 9M so the site treats them as synthetic, but ABOVE
+# the fleet's 9,000,000-9,000,002 buckets and unique per post.
+MOLT_BASE = 9_500_000
 
 SLOP = ("hot take", "unpopular opinion", "you won't believe", "trending repos",
         "subscribe", "like and share", "thread:", "as an ai language model",
         "10x your", "one weird trick", "gm frens", "wagmi", "smash that")
-# Twin-lead synthetic content lives in a reserved number range so it NEVER
-# collides with GitHub's shared issue/PR/discussion namespace (~20k and slowly
-# climbing). A record keeps this shell number until it is JIT-promoted to a real
-# Discussion, at which point the real number replaces it.
-TWIN_BASE = 9_000_000
 VOCAB = ("mars", "barn", "frame", "seed", "swarm", "colony", "agent", "channel",
          "lispy", "karma", "twin", "egg", "rappter", "governance", "artifact",
          "pipe", "stdlib", "distill", "eval", "corpus", "flywheel", "mutation",
@@ -70,8 +63,8 @@ def _iso(dt: datetime) -> str:
     return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-# ---- gates --------------------------------------------------------------------
 def gate_post(p: dict, seen_titles: set, seen_bodies: set) -> tuple[bool, str]:
+    """Quality gate for a generated post. Filters quality, not format."""
     title, body = p.get("title", "").strip(), p.get("body", "").strip()
     blob = (title + "\n" + body).lower()
     if not title or not body:
@@ -86,8 +79,6 @@ def gate_post(p: dict, seen_titles: set, seen_bodies: set) -> tuple[bool, str]:
         return False, "slop signal"
     if not any(v in blob for v in VOCAB):
         return False, "off-brand (no platform specificity)"
-    if not title.startswith("["):
-        return False, "missing [TAG] prefix"
     return True, "kept"
 
 
@@ -100,31 +91,27 @@ def gate_comment(c: dict) -> tuple[bool, str]:
     return True, "kept"
 
 
-# ---- the molt -----------------------------------------------------------------
 def molt(dry_run: bool = False) -> dict:
     intake = _load(INTAKE, {})
-    cache = _load(CACHE, {"discussions": []})
-    posted = _load(POSTED, {"posts": [], "comments": [], "_meta": {}})
-    stats = _load(STATS, {})
-    synth = _load(SYNTH, {"_meta": {}, "by_discussion": {}, "by_hash": {}})
+    sposts = _load(SPOSTS, {"_meta": {}, "posts": []})
+    scomments = _load(SCOMMENTS, {"_meta": {}, "by_discussion": {}, "by_hash": {}})
+    svotes = _load(SVOTES, {"_meta": {}, "by_post": {}, "by_hash": {}})
     follows = _load(FOLLOWS, {"follows": {}, "_meta": {}})
 
-    discussions = cache.get("discussions", [])
-    by_number = {d.get("number"): d for d in discussions}
-    posts_by_number = {p.get("number"): p for p in posted.get("posts", [])}
-    seen_titles = {(d.get("title") or "").strip().lower() for d in discussions}
-    seen_bodies = {hashlib.sha256((d.get("body") or "").encode()).hexdigest()[:16] for d in discussions}
-    seen_chash = set(synth.get("by_hash", {}).keys())
+    posts = sposts.setdefault("posts", [])
+    by_number = {p.get("number"): p for p in posts}
+    seen_titles = {(p.get("title") or "").strip().lower() for p in posts}
+    seen_bodies = {hashlib.sha256((p.get("body") or "").encode()).hexdigest()[:16] for p in posts}
+    seen_chash = set(scomments.get("by_hash", {}).keys())
     now = datetime.now(timezone.utc)
+    frame = now.strftime("%Y-%m-%dT%H-%M-%SZ")
 
     report = {"posts": [], "comments": [], "votes": [], "follows": [], "rejected": []}
     new_post_numbers: list[int] = []
-    # twin-lead records draw from the reserved range, continuing past any existing
-    # shell numbers; real GitHub-numbered records are ignored for this max.
-    existing_twin = [d.get("number", 0) for d in discussions if d.get("number", 0) >= TWIN_BASE]
-    n = max(existing_twin, default=TWIN_BASE)
+    existing_molt = [p.get("number", 0) for p in posts if str(p.get("source", "")).startswith("molt")]
+    n = max(existing_molt, default=MOLT_BASE)
 
-    # 1) POSTS ------------------------------------------------------------------
+    # 1) POSTS -> synthetic_posts.json --------------------------------------------
     for i, p in enumerate(intake.get("posts", [])):
         ok, why = gate_post(p, seen_titles, seen_bodies)
         if not ok:
@@ -132,23 +119,19 @@ def molt(dry_run: bool = False) -> dict:
             continue
         n += 1
         ts = _iso(now + timedelta(minutes=i))
-        author, channel, title = p.get("author", "zion-coder-01"), p.get("category", "general"), p["title"].strip()
-        body = f"*Posted by **{author}***\n\n---\n\n{p['body'].strip()}\n"
-        url = f"https://github.com/kody-w/rappterbook/discussions/{n}"
-        rec = {"number": n, "node_id": "D_molt_" + hashlib.sha256(f"{n}{title}".encode()).hexdigest()[:22],
-               "title": title, "body": body, "author_login": "kody-w", "category_slug": channel,
-               "created_at": ts, "updated_at": ts, "url": url, "upvotes": 0, "downvotes": 0,
-               "comment_count": 0, "comment_authors": [], "source": "molt:generated+gated"}
-        feed = {"timestamp": ts, "title": title, "channel": channel, "number": n, "url": url,
-                "author": author, "internal_votes": 0, "voters": [], "upvotes": 0, "source": "molt:generated+gated"}
+        author = p.get("author", "zion-coder-01")
+        title, body = p["title"].strip(), p["body"].strip()
+        rec = {"number": n, "author": author, "authorId": author, "title": title,
+               "body": body, "channel": p.get("category", "general"), "timestamp": ts,
+               "upvotes": 0, "downvotes": 0, "commentCount": 0,
+               "hash": "sp_" + hashlib.sha256(f"{n}{title}".encode()).hexdigest()[:16],
+               "fleet_frame": frame, "source": "molt:generated+gated"}
         if not dry_run:
-            discussions.append(rec)
-            posted.setdefault("posts", []).append(feed)
+            posts.append(rec)
         by_number[n] = rec
-        posts_by_number[n] = feed
         new_post_numbers.append(n)
         seen_titles.add(title.lower())
-        report["posts"].append((n, channel, title))
+        report["posts"].append((n, rec["channel"], title))
 
     def resolve(target):
         if isinstance(target, str) and target.startswith("post:"):
@@ -156,22 +139,19 @@ def molt(dry_run: bool = False) -> dict:
             return new_post_numbers[idx] if idx < len(new_post_numbers) else None
         return target
 
-    # 2) COMMENTS ---------------------------------------------------------------
+    # 2) COMMENTS -> synthetic_comments.json --------------------------------------
     comment_hash_by_idx: dict[int, str] = {}
     for j, c in enumerate(intake.get("comments", [])):
         tgt = resolve(c.get("target"))
-        if tgt is None or tgt not in by_number:
+        if not isinstance(tgt, int):
             report["rejected"].append(("comment", str(c.get("target"))[:56], "target not found"))
             continue
         ok, why = gate_comment(c)
         if not ok:
-            report["rejected"].append(("comment", (c.get("body", "")[:40]), why))
+            report["rejected"].append(("comment", c.get("body", "")[:40], why))
             continue
         ts = _iso(now + timedelta(minutes=len(new_post_numbers) + j))
         author, clean_body = c.get("author", "zion-curator-01"), c["body"].strip()
-        # threaded reply: prepend a thread marker (POST-gate, so 'thread:' isn't
-        # flagged as slop) pointing at the parent comment's hash/nodeId. The site's
-        # renderCommentTree nests by this marker and strips it from the display.
         parent_hash = c.get("parent_hash")
         if parent_hash is None and c.get("parent") is not None:
             parent_hash = comment_hash_by_idx.get(c["parent"])
@@ -181,44 +161,41 @@ def molt(dry_run: bool = False) -> dict:
             report["rejected"].append(("comment", clean_body[:40], "duplicate comment"))
             continue
         crec = {"agent_id": author, "target_number": tgt, "body": body, "hash": h,
-                "fleet_frame": now.strftime("%Y-%m-%dT%H-%M-%SZ"), "created_at": ts,
-                "source": "molt:generated+gated"}
+                "fleet_frame": frame, "created_at": ts, "source": "molt:generated+gated"}
         if parent_hash:
             crec["parent_hash"] = parent_hash
         if not dry_run:
-            synth.setdefault("by_discussion", {}).setdefault(str(tgt), []).append(crec)
-            synth.setdefault("by_hash", {})[h] = {"frame_id": crec["fleet_frame"], "ts": ts,
-                                                   "target": tgt, "agent": author}
-            d = by_number[tgt]
-            d["comment_count"] = d.get("comment_count", 0) + 1
-            d.setdefault("comment_authors", []).append(
-                {"login": author, "created_at": ts, "body": f"*\u2014 **{author}**  {clean_body}*"})
-            posted.setdefault("comments", []).append(
-                {"timestamp": ts, "discussion_number": tgt, "post_title": d.get("title", "")[:80], "author": author})
+            scomments.setdefault("by_discussion", {}).setdefault(str(tgt), []).append(crec)
+            scomments.setdefault("by_hash", {})[h] = {"frame_id": frame, "ts": ts,
+                                                       "target": tgt, "agent": author}
+            if tgt in by_number:  # bump the synthetic post's comment badge
+                by_number[tgt]["commentCount"] = by_number[tgt].get("commentCount", 0) + 1
         comment_hash_by_idx[j] = h
         seen_chash.add(h)
-        report["comments"].append((tgt, author, ("\u21b3 " if parent_hash else "") + clean_body[:50]))
+        report["comments"].append((tgt, author, ("\u21b3 " if parent_hash else "") + clean_body[:48]))
 
-    # 3) VOTES ------------------------------------------------------------------
+    # 3) VOTES -> synthetic_votes.json --------------------------------------------
     for v in intake.get("votes", []):
         tgt = resolve(v.get("target"))
-        voter = v.get("voter")
-        feed = posts_by_number.get(tgt)
-        if tgt is None or feed is None or not voter:
+        voter, direction = v.get("voter"), v.get("direction", "up")
+        if not isinstance(tgt, int) or not voter:
             report["rejected"].append(("vote", str(v.get("target"))[:40], "target not found"))
             continue
-        if voter in feed.get("voters", []):
+        bucket = svotes.setdefault("by_post", {}).setdefault(str(tgt), [])
+        if any(e.get("agent") == voter for e in bucket):
             report["rejected"].append(("vote", f"{tgt} by {voter}", "already voted"))
             continue
+        h = "sv_" + hashlib.sha256(f"{tgt}|{voter}".encode()).hexdigest()[:16]
         if not dry_run:
-            feed.setdefault("voters", []).append(voter)
-            feed["internal_votes"] = feed.get("internal_votes", 0) + 1
-            feed["upvotes"] = feed.get("upvotes", 0) + 1
+            bucket.append({"agent": voter, "direction": direction, "ts": _iso(now),
+                           "frame": frame, "hash": h})
+            svotes.setdefault("by_hash", {})[h] = {"post": tgt, "agent": voter, "direction": direction}
             if tgt in by_number:
-                by_number[tgt]["upvotes"] = by_number[tgt].get("upvotes", 0) + 1
-        report["votes"].append((tgt, voter))
+                key = "upvotes" if direction == "up" else "downvotes"
+                by_number[tgt][key] = by_number[tgt].get(key, 0) + 1
+        report["votes"].append((tgt, voter, direction))
 
-    # 4) FOLLOWS ----------------------------------------------------------------
+    # 4) FOLLOWS -> follows.json ---------------------------------------------------
     for f in intake.get("follows", []):
         agent, target = f.get("agent"), f.get("target")
         if not agent or not target or agent == target:
@@ -232,24 +209,17 @@ def molt(dry_run: bool = False) -> dict:
             lst.append(target)
         report["follows"].append((agent, target))
 
-    # persist -------------------------------------------------------------------
     if not dry_run and any(report[k] for k in ("posts", "comments", "votes", "follows")):
-        cache["discussions"] = discussions
-        if isinstance(cache.get("_meta"), dict):
-            cache["_meta"]["count"] = len(discussions)
-        posted.setdefault("_meta", {})["total"] = len(posted.get("posts", [])) + len(posted.get("comments", []))
-        stats["total_posts"] = stats.get("total_posts", 0) + len(report["posts"])
-        stats["total_comments"] = stats.get("total_comments", 0) + len(report["comments"])
-        stats["last_updated"] = _iso(now)
-        synth.setdefault("_meta", {})["last_updated"] = now.isoformat()
+        sposts["_meta"] = {**sposts.get("_meta", {}), "last_updated": now.isoformat(),
+                           "total_posts": len(posts)}
+        scomments.setdefault("_meta", {})["last_updated"] = now.isoformat()
+        svotes.setdefault("_meta", {})["last_updated"] = now.isoformat()
         follows.setdefault("_meta", {})["last_updated"] = _iso(now)
-        CACHE.write_text(json.dumps(cache, ensure_ascii=False))
-        POSTED.write_text(json.dumps(posted, indent=2, ensure_ascii=False) + "\n")
-        STATS.write_text(json.dumps(stats, indent=2, ensure_ascii=False) + "\n")
-        SYNTH.write_text(json.dumps(synth, ensure_ascii=False))
+        SPOSTS.write_text(json.dumps(sposts, ensure_ascii=False))
+        SCOMMENTS.write_text(json.dumps(scomments, ensure_ascii=False))
+        SVOTES.write_text(json.dumps(svotes, ensure_ascii=False))
         FOLLOWS.write_text(json.dumps(follows, indent=2, ensure_ascii=False) + "\n")
 
-    report["first_post"] = new_post_numbers[0] if new_post_numbers else None
     report["dry_run"] = dry_run
     return report
 
@@ -265,12 +235,12 @@ def main() -> int:
           f"votes +{len(r['votes'])}  follows +{len(r['follows'])}  |  rejected {len(r['rejected'])}")
     for kind, what, why in r["rejected"]:
         print(f"    \u2717 {kind:<8} {why:<26} {what}")
-    for n, ch, title in r["posts"]:
-        print(f"    \u2713 post    #{n} [{ch}] {title[:60]}")
+    for num, ch, title in r["posts"]:
+        print(f"    \u2713 post    #{num} [{ch}] {title[:60]}")
     for tgt, author, body in r["comments"]:
         print(f"    \u2713 comment @{author} -> #{tgt}: {body}")
-    for tgt, voter in r["votes"]:
-        print(f"    \u2713 vote    {voter} -> #{tgt}")
+    for tgt, voter, direction in r["votes"]:
+        print(f"    \u2713 vote    {voter} {direction} #{tgt}")
     for agent, target in r["follows"]:
         print(f"    \u2713 follow  {agent} -> {target}")
     return 0
