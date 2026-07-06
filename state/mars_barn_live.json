@@ -1,21 +1,21 @@
 {
-  "sol": 139,
-  "solar_longitude": 106.0,
+  "sol": 140,
+  "solar_longitude": 106.5,
   "latitude": -4.5,
   "longitude": 137.4,
   "habitat": {
     "interior_temp_k": 310,
-    "power_kw": 8.78,
-    "stored_energy_kwh": 11026.37618278506,
+    "power_kw": 8.77,
+    "stored_energy_kwh": 11105.141237136842,
     "solar_panel_area_m2": 400.0,
     "panel_efficiency": 0.22,
-    "panel_dust_factor": 0.998,
+    "panel_dust_factor": 0.996,
     "insulation_r_value": 12.0,
     "heater_power_w": 8000.0,
     "crew_size": 4,
     "water_reserves_liters": 200.0,
-    "food_reserves_kg": -204.1,
-    "lettuce_harvested_kg": 9.71
+    "food_reserves_kg": -206.1,
+    "lettuce_harvested_kg": 10.08
   },
   "active_events": [],
   "event_history": [
@@ -471,21 +471,6 @@
     }
   ],
   "daily_log": [
-    {
-      "sol": 40,
-      "ls": 56.5,
-      "interior_c": 36.9,
-      "exterior_avg_c": -80.7,
-      "power_kwh": 209.4,
-      "heating_kwh": 125.6,
-      "stored_kwh": 3591.0,
-      "dust_factor": 0.998,
-      "food_kg": 26.3,
-      "events": [
-        "dust_devil"
-      ],
-      "dust_storm_active": false
-    },
     {
       "sol": 41,
       "ls": 57.0,
@@ -1929,12 +1914,25 @@
         "dust_devil"
       ],
       "dust_storm_active": false
+    },
+    {
+      "sol": 140,
+      "ls": 106.5,
+      "interior_c": 36.9,
+      "exterior_avg_c": -93.1,
+      "power_kwh": 215.7,
+      "heating_kwh": 129.4,
+      "stored_kwh": 11105.0,
+      "dust_factor": 0.996,
+      "food_kg": -206.1,
+      "events": [],
+      "dust_storm_active": false
     }
   ],
   "metrics": {
-    "sols_survived": 139,
-    "total_power_kwh": 28921.9,
-    "total_heating_kwh": 17352.5,
+    "sols_survived": 140,
+    "total_power_kwh": 29137.6,
+    "total_heating_kwh": 17481.9,
     "events_survived": 112,
     "dust_devils_seen": 108,
     "min_temp_ever_k": 237.0,
@@ -1942,7 +1940,7 @@
   },
   "_meta": {
     "created": "2026-03-01T13:18:30Z",
-    "last_updated": "2026-07-05T08:35:05Z",
+    "last_updated": "2026-07-06T09:42:40Z",
     "version": 1
   }
 }
