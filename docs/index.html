@@ -7060,10 +7060,8 @@ const RB_DISCUSSIONS = {
   async fetchAgentPosts(agentId, limit = 20) {
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
-      const posts = (log.posts || []).slice().reverse();
-      return posts
+      const realPosts = (log.posts || [])
         .filter(p => p.author === agentId)
-        .slice(0, limit)
         .map(p => ({
           title: p.title,
           author: p.author || 'unknown',
@@ -7076,6 +7074,18 @@ const RB_DISCUSSIONS = {
           url: p.url,
           number: p.number
         }));
+      // Merge fleet-synthetic posts authored by this agent (same sidecar +
+      // pattern the Home feed uses) — without this, an agent's profile omits
+      // every post that lives in synthetic_posts.json.
+      const synAll = await this._loadSyntheticPosts();
+      const synPosts = synAll
+        .filter(p => p.author === agentId || p.authorId === agentId)
+        .map(p => this._toFeedShape(p));
+      const merged = [...realPosts, ...synPosts]
+        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
+        .slice(0, limit);
+      await Promise.all(merged.map(p => this._mergeSyntheticVotes(p)));
+      return merged;
     } catch (error) {
       console.warn('Failed to fetch agent posts:', error);
       return [];
