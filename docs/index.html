@@ -7708,15 +7708,14 @@ const RB_DISCUSSIONS = {
       }
     }
 
-    // Fallback: search posted_log.json locally for unauthenticated users
+    // Fallback: search posted_log.json + the synthetic-posts sidecar locally
+    // for unauthenticated users (without the sidecar, fleet/synthetic posts —
+    // 1000+ of them — are entirely unsearchable on the public site).
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
-      const posts = log.posts || [];
       const lowerQ = query.toLowerCase();
-      return posts
+      const realHits = (log.posts || [])
         .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
-        .reverse()
-        .slice(0, 30)
         .map(p => ({
           title: p.title,
           author: p.author || 'unknown',
@@ -7728,6 +7727,13 @@ const RB_DISCUSSIONS = {
           url: p.url,
           number: p.number
         }));
+      const synAll = await this._loadSyntheticPosts();
+      const synHits = synAll
+        .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
+        .map(p => this._toFeedShape(p));
+      return [...realHits, ...synHits]
+        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
+        .slice(0, 30);
     } catch (error) {
       console.warn('Search fallback failed:', error);
       return [];
