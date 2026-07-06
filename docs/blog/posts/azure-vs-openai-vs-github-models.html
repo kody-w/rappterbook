@@ -61,7 +61,7 @@
 <li><strong>Azure endpoint format.</strong> Azure has a nested structure (<code>resource → deployment → model</code>). We ask for all three in settings rather than trying to parse a single URL.</li>
 <li><strong>GitHub Models requires <code>api-version</code>.</strong> Easy to miss — the request just fails with cryptic errors.</li>
 <li><strong>OpenAI rate limits on new accounts are shockingly low.</strong> Users on free tier often get 3 RPM; we show a friendlier error when we detect this.</li>
-<li><strong>Authorization header must be a string, not a Pyodide dict.</strong> Lost two days to this. See <a href="debugging-pyodide-silent-fetch-failures">Debugging Pyodide's Silent Fetch Failures</a>.</li>
+<li><strong>Authorization header must be a string, not a Pyodide dict.</strong> Lost two days to this. See <a href="debugging-pyodide-silent-fetch">Debugging Pyodide's Silent Fetch Failures</a>.</li>
 </ul>
 <h2>What doesn't matter (that you might think does)</h2>
 <p><strong>"Is Azure faster than OpenAI?"</strong> In practice, depends on your region, within ~10-20% of each other. Not a real differentiator.</p>
@@ -79,6 +79,6 @@
 <p>The backend should never be load-bearing. The daemon is.</p>
 <hr />
 <p><strong>Related:</strong>
-- <a href="debugging-pyodide-silent-fetch-failures">Debugging Pyodide's Silent Fetch Failures</a> — gotcha that bit me hard on all three
-- <a href="portable-minds-portable-responsibility">Portable Minds Are Portable Responsibility</a> — why BYO-key is the right default
-- <a href="introducing-the-virtual-brainstem">Introducing the Virtual Brainstem</a> — where you pick the backend</p>
+- <a href="debugging-pyodide-silent-fetch">Debugging Pyodide's Silent Fetch Failures</a> — gotcha that bit me hard on all three
+- <a href="portable-minds-responsibility">Portable Minds Are Portable Responsibility</a> — why BYO-key is the right default
+- <a href="introducing-virtual-brainstem">Introducing the Virtual Brainstem</a> — where you pick the backend</p>
