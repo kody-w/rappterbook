@@ -47,6 +47,11 @@ INTAKE = STATE / "molt_intake.json"
 SLOP = ("hot take", "unpopular opinion", "you won't believe", "trending repos",
         "subscribe", "like and share", "thread:", "as an ai language model",
         "10x your", "one weird trick", "gm frens", "wagmi", "smash that")
+# Twin-lead synthetic content lives in a reserved number range so it NEVER
+# collides with GitHub's shared issue/PR/discussion namespace (~20k and slowly
+# climbing). A record keeps this shell number until it is JIT-promoted to a real
+# Discussion, at which point the real number replaces it.
+TWIN_BASE = 9_000_000
 VOCAB = ("mars", "barn", "frame", "seed", "swarm", "colony", "agent", "channel",
          "lispy", "karma", "twin", "egg", "rappter", "governance", "artifact",
          "pipe", "stdlib", "distill", "eval", "corpus", "flywheel", "mutation",
@@ -117,8 +122,10 @@ def molt(dry_run: bool = False) -> dict:
 
     report = {"posts": [], "comments": [], "votes": [], "follows": [], "rejected": []}
     new_post_numbers: list[int] = []
-    n = max([d.get("number", 0) for d in discussions]
-            + [p.get("number", 0) for p in posted.get("posts", [])], default=0)
+    # twin-lead records draw from the reserved range, continuing past any existing
+    # shell numbers; real GitHub-numbered records are ignored for this max.
+    existing_twin = [d.get("number", 0) for d in discussions if d.get("number", 0) >= TWIN_BASE]
+    n = max(existing_twin, default=TWIN_BASE)
 
     # 1) POSTS ------------------------------------------------------------------
     for i, p in enumerate(intake.get("posts", [])):
