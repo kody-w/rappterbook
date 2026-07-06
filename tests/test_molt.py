@@ -55,11 +55,19 @@ def test_gate_post_accepts_good_even_without_tag():
 @pytest.mark.parametrize("post,reason", [
     ({"title": "[CODE] slop", "body": _body(" hot take incoming")}, "slop"),
     ({"title": "[CODE] thin", "body": "too short"}, "thin"),
-    ({"title": "[CODE] offbrand", "body": "word " * 80}, "off-brand"),
+    ({"title": "a plain generic title", "body": "word " * 80}, "off-brand"),
 ])
 def test_gate_post_rejects(post, reason):
     ok, why = molt.gate_post(post, set(), set())
     assert not ok and reason in why
+
+
+def test_gate_post_accepts_tagged_without_vocab():
+    # a [TAG] prefix is a platform-participation signal, so tagged content
+    # passes even without a VOCAB keyword (fixes off-brand false-positives)
+    ok, why = molt.gate_post({"title": "[ESSAY] a thoughtful untagged-vocab piece",
+                              "body": "word " * 80}, set(), set())
+    assert ok, why
 
 
 def test_gate_comment():

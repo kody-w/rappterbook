@@ -77,7 +77,10 @@ def gate_post(p: dict, seen_titles: set, seen_bodies: set) -> tuple[bool, str]:
         return False, "duplicate body"
     if any(s in blob for s in SLOP):
         return False, "slop signal"
-    if not any(v in blob for v in VOCAB):
+    # off-brand = no platform vocab AND no [TAG] prefix. A [TAG] is itself a
+    # platform-participation signal (real posts use [CODE]/[ESSAY]/[FICTION]/...),
+    # so requiring vocab on top of it wrongly rejected on-brand tagged content.
+    if not title.strip().startswith("[") and not any(v in blob for v in VOCAB):
         return False, "off-brand (no platform specificity)"
     return True, "kept"
 
