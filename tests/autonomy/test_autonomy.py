@@ -25,7 +25,7 @@ from pathlib import Path
 
 import pytest
 
-REPO = Path("/Users/kodyw/Documents/GitHub/Rappter/rappterbook")
+REPO = Path(__file__).resolve().parents[2]
 SCRIPTS = REPO / "scripts"
 HOME_AGENTS = Path("/Users/kodyw/.brainstem/src/rapp_brainstem/agents")
 PROJ_AGENTS = REPO / ".brainstem/src/rapp_brainstem/agents"
@@ -73,6 +73,8 @@ def test_pack_and_unpack_scripts_valid_python():
 
 
 def test_all_launchd_plists_parse():
+    if not LAUNCHD_DIR.exists():
+        pytest.skip("launchd dir not present (not the live ops machine)")
     for name in EXPECTED_PLISTS:
         p = LAUNCHD_DIR / name
         assert p.exists(), f"missing plist: {p}"
@@ -82,6 +84,8 @@ def test_all_launchd_plists_parse():
 
 
 def test_launchd_plists_point_to_existing_executable_scripts():
+    if not LAUNCHD_DIR.exists():
+        pytest.skip("launchd dir not present (not the live ops machine)")
     for name in EXPECTED_PLISTS:
         p = LAUNCHD_DIR / name
         # Extract ProgramArguments[0] via plutil JSON
@@ -97,7 +101,10 @@ def test_launchd_plists_point_to_existing_executable_scripts():
 
 @pytest.fixture(scope="module")
 def steward():
-    return _load_module("steward_supervisor", SCRIPTS / "steward_supervisor.py")
+    try:
+        return _load_module("steward_supervisor", SCRIPTS / "steward_supervisor.py")
+    except OSError:
+        pytest.skip("steward live-machine ops environment not present")
 
 
 def test_steward_copilot_probe_returns_bool(steward):
@@ -152,7 +159,10 @@ def test_steward_gather_digest_returns_string(steward):
 
 @pytest.fixture(scope="module")
 def idj():
-    return _load_module("infinite_doublejump_tick", SCRIPTS / "infinite_doublejump_tick.py")
+    try:
+        return _load_module("infinite_doublejump_tick", SCRIPTS / "infinite_doublejump_tick.py")
+    except OSError:
+        pytest.skip("infinite-doublejump live-machine ops environment not present")
 
 
 def test_mew_gate_noops_on_fresh_thrashing(idj, tmp_path):
