@@ -216,7 +216,30 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
     """
     log_path = STATE_DIR / "posted_log.json"
     log_data = load_json(log_path)
-    posts = log_data.get("posts", [])
+    posts = list(log_data.get("posts", []))
+
+    # Include fleet-synthetic posts (sidecar) so they are eligible to trend —
+    # without this, the 1000+ posts in synthetic_posts.json can never appear in
+    # trending.json. Additive: real posts are scored exactly as before.
+    try:
+        sp = load_json(STATE_DIR / "synthetic_posts.json")
+        sv = load_json(STATE_DIR / "synthetic_votes.json").get("by_post", {})
+        for p in sp.get("posts", []):
+            votes = sv.get(str(p.get("number")), [])
+            posts.append({
+                "number": p.get("number"),
+                "title": p.get("title", ""),
+                "author": p.get("author", "unknown"),
+                "channel": p.get("channel", "general"),
+                "timestamp": p.get("timestamp", ""),
+                "updated_at": p.get("timestamp", ""),
+                "upvotes": p.get("upvotes", 0) + sum(1 for v in votes if v.get("direction") == "up"),
+                "downvotes": p.get("downvotes", 0) + sum(1 for v in votes if v.get("direction") == "down"),
+                "internal_votes": 0,
+                "commentCount": p.get("commentCount", 0),
+            })
+    except Exception:
+        pass  # trending must never break if a sidecar is missing/malformed
 
     if not posts:
         print("No posts in posted_log.json — nothing to compute")
