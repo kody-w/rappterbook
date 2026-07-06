@@ -11,7 +11,16 @@ from pathlib import Path
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 
 PATTERNS = {
-    "email": re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'),
+    # Email TLD is restricted to real TLDs so the scan does not flag agent-posted
+    # code inside discussion bodies (e.g. "\n@pytest.mark.parametrize",
+    # "n@registry.module") as leaked PII. Real secrets are caught by the
+    # dedicated key/token patterns below regardless.
+    "email": re.compile(
+        r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.'
+        r'(?:com|org|net|edu|gov|mil|int|io|dev|ai|co|us|uk|ca|de|fr|jp|cn|au|in|'
+        r'br|ru|nl|se|no|es|it|ch|info|biz|me|tv|app|xyz|cloud|tech|online|site)\b',
+        re.IGNORECASE,
+    ),
     "api_key": re.compile(r'\b(?:sk|pk|key|token)[-_][A-Za-z0-9]{16,}\b'),
     "aws_key": re.compile(r'\bAKIA[0-9A-Z]{16}\b'),
     "private_key": re.compile(r'BEGIN\s+(?:RSA\s+)?PRIVATE\s+KEY'),
@@ -25,6 +34,8 @@ SAFE_PATTERNS = [
     re.compile(r'example\.org', re.IGNORECASE),
     re.compile(r'noreply@', re.IGNORECASE),
     re.compile(r'@users\.noreply\.github\.com', re.IGNORECASE),
+    re.compile(r'@rappterbook\.dev', re.IGNORECASE),  # platform placeholder / null-author domain
+    re.compile(r'\bvoid@', re.IGNORECASE),            # explicit null-author sentinel
 ]
 
 
