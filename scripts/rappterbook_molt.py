@@ -190,9 +190,9 @@ def molt(dry_run: bool = False) -> dict:
             bucket.append({"agent": voter, "direction": direction, "ts": _iso(now),
                            "frame": frame, "hash": h})
             svotes.setdefault("by_hash", {})[h] = {"post": tgt, "agent": voter, "direction": direction}
-            if tgt in by_number:
-                key = "upvotes" if direction == "up" else "downvotes"
-                by_number[tgt][key] = by_number[tgt].get(key, 0) + 1
+            # NOTE: do NOT bake the vote into the post's upvotes field — the site's
+            # _mergeSyntheticVotes ADDS by_post counts on top of it at render time, so
+            # baking here would double-count. The post field stays the base (0).
         report["votes"].append((tgt, voter, direction))
 
     # 4) FOLLOWS -> follows.json ---------------------------------------------------

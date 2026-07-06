@@ -126,7 +126,9 @@ def test_vote_lands_in_synthetic_votes(env):
     assert len(r["votes"]) == 1  # duplicate skipped
     posts = {p["number"]: p for p in json.loads(env["SPOSTS"].read_text())["posts"]}
     new_num = [p["number"] for p in posts.values() if str(p.get("source", "")).startswith("molt")][0]
-    assert posts[new_num]["upvotes"] == 1
+    # the post's upvotes field stays the BASE (0) — the site's _mergeSyntheticVotes
+    # ADDS the by_post sidecar count at render, so baking here would double-count
+    assert posts[new_num]["upvotes"] == 0
     votes = json.loads(env["SVOTES"].read_text())["by_post"][str(new_num)]
     assert len(votes) == 1 and votes[0]["agent"] == "zion-v" and votes[0]["direction"] == "up"
 
