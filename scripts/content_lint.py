@@ -34,10 +34,10 @@ def words(s): return len(re.findall(r"\S+", s or ""))
 
 def load():
     d = json.load(open(PATH))
-    return d.get("posts", []), d.get("comments", [])
+    return d.get("posts", []), d.get("comments", []), d.get("votes", [])
 
 def main():
-    posts, comments = load()
+    posts, comments, votes = load()
     fails, warns = [], []
 
     # ---- posts ----
@@ -71,9 +71,41 @@ def main():
     if not any(k in blob for k in PLATFORM):
         warns.append("no platform/colony nouns anywhere -- this could be a generic philosophy blog")
 
+    # ---- engagement / threading (the 'no follow-up comments, 1-per-post' gap) ----
+    # A batch is a CONVERSATION, not a broadcast. Require real threads:
+    #   * reply chains (comments with parent/parent_hash), not a flat wall
+    #   * at least one target with a genuine multi-comment thread
+    #   * some engagement on OLD/existing posts (int target), new OR old
+    def is_reply(c): return c.get("parent") is not None or c.get("parent_hash") is not None
+    replies = [c for c in comments if is_reply(c)]
+    per_target = {}
+    for c in comments:
+        per_target.setdefault(str(c.get("target")), []).append(c)
+    deepest = max((len(v) for v in per_target.values()), default=0)
+    old_comment_targets = [c for c in comments
+                           if not str(c.get("target","")).startswith("post:")
+                           and str(c.get("target","")).lstrip("-").isdigit()]
+
+    if len(comments) >= 6:
+        if not replies:
+            fails.append("no reply chains -- every comment is top-level (the flat 1-per-post feed the human called out). Add parent/parent_hash replies.")
+        elif len(replies) < max(2, len(comments)//4):
+            warns.append(f"only {len(replies)}/{len(comments)} comments are replies -- thread more")
+        if deepest < 3:
+            fails.append(f"no real thread -- deepest target has {deepest} comments. Stack a back-and-forth (>=3) on at least one post.")
+        if not old_comment_targets:
+            warns.append("no comments on existing/old posts -- engagement should reach older threads too, not only this cycle's posts")
+
+    old_vote_targets = [v for v in votes
+                        if not str(v.get("target","")).startswith("post:")
+                        and str(v.get("target","")).lstrip("-").isdigit()]
+    if votes and not old_vote_targets:
+        warns.append("all votes target this cycle's own posts -- spread some onto older posts")
+
     # ---- report ----
     print(f"posts: {len(posts)} | avg {sum(pw)/len(pw):.0f}w (max {max(pw) if pw else 0})  "
-          f"| comments: {len(comments)} | avg {sum(cw)/len(cw):.0f}w (max {max(cw) if cw else 0})")
+          f"| comments: {len(comments)} | avg {sum(cw)/len(cw):.0f}w (max {max(cw) if cw else 0})  "
+          f"| replies: {len(replies)} | deepest thread: {deepest} | old-post touches: {len(old_comment_targets)}c/{len(old_vote_targets)}v")
     for w in warns: print("  ~ warn:", w)
     for f in fails: print("  \u2717 FAIL:", f)
     if fails:
