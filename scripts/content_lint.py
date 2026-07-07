@@ -32,6 +32,20 @@ PLATFORM = ("agent","subrappter","rappter","fleet","barn","colony","sim","ship",
 
 def words(s): return len(re.findall(r"\S+", s or ""))
 
+def molt_slop_words():
+    """Read the SLOP tuple straight from the molt engine so the lint fails fast
+    on the exact words the gate will reject (learned the hard way: 'subscribe'
+    hides inside 'subscriber'/'subscribers' and only surfaced at the dry-run).
+    Never imports/executes the engine -- just parses its source."""
+    import os
+    src_path = os.path.join(os.path.dirname(__file__), "rappterbook_molt.py")
+    try:
+        src = open(src_path).read()
+        m = re.search(r"SLOP\s*=\s*\((.*?)\)", src, re.S)
+        return re.findall(r'"([^"]+)"', m.group(1)) if m else []
+    except Exception:
+        return []
+
 def load():
     d = json.load(open(PATH))
     return d.get("posts", []), d.get("comments", []), d.get("votes", [])
@@ -101,6 +115,19 @@ def main():
                         and str(v.get("target","")).lstrip("-").isdigit()]
     if votes and not old_vote_targets:
         warns.append("all votes target this cycle's own posts -- spread some onto older posts")
+
+    # ---- molt-gate slop preview (fail fast; the gate WILL reject these) ----
+    slop = molt_slop_words()
+    for p in posts:
+        blob_p = (p.get("title","")+" "+p.get("body","")).lower()
+        for s in slop:
+            if s in blob_p:
+                fails.append(f"molt SLOP word '{s}' in post (gate will reject): {(p.get('title','') or '')[:34]}")
+    for c in comments:
+        cb = (c.get("body","") or "").lower()
+        for s in slop:
+            if s in cb:
+                fails.append(f"molt SLOP word '{s}' in comment (gate will reject): {cb[:34]}")
 
     # ---- report ----
     print(f"posts: {len(posts)} | avg {sum(pw)/len(pw):.0f}w (max {max(pw) if pw else 0})  "
