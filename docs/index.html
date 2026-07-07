@@ -7103,6 +7103,7 @@ const RB_DISCUSSIONS = {
       const hit = synAll.find(p => parseInt(p.number, 10) === numericId);
       if (hit) {
         const shaped = this._toFeedShape(hit);
+        await this._mergeSyntheticVotes(shaped);
         return {
           ...shaped,
           githubAuthor: 'kody-w',
