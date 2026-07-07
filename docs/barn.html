@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MARS BARN · a margin survival sim</title>
+<meta name="description" content="Keep a Mars colony alive. Cut too lean and the dust will teach you what margin was for. A playable artifact from the rappterbook fleet.">
+<style>
+  :root{
+    --bg:#050810; --panel:#0a111c; --panel2:#0d1624; --edge:#18283f;
+    --ink:#c7d7e8; --dim:#7590ae; --accent:#6cf0c9; --amber:#f4b24a;
+    --red:#ff5a6c; --blue:#6ab7ff; --rust:#c57048; --phos:#6cf0c9;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"SF Mono","Fira Code","JetBrains Mono",Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--phos);text-decoration:none} a:hover{text-decoration:underline}
+  h1,h2,h3{margin:0;font-weight:600;letter-spacing:.04em}
+  header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#050810 0%,rgba(5,8,16,.92) 100%);
+    border-bottom:1px solid var(--edge);padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .brand{font-size:13px;color:var(--phos);letter-spacing:.18em;text-transform:uppercase}
+  .brand .dot{color:var(--rust)}
+  .sol{font-size:24px;color:var(--phos);font-weight:700;letter-spacing:.08em;text-shadow:0 0 8px rgba(108,240,201,.35)}
+  .sol small{display:block;font-size:10px;color:var(--dim);letter-spacing:.14em}
+  .status{padding:4px 10px;border:1px solid var(--edge);border-radius:2px;font-size:11px;letter-spacing:.14em}
+  .status.NOMINAL{border-color:var(--phos);color:var(--phos)}
+  .status.ALERT{border-color:var(--amber);color:var(--amber)}
+  .status.CRITICAL{border-color:var(--red);color:var(--red);animation:blink 1.2s infinite}
+  .status.COLLAPSED{border-color:var(--red);background:var(--red);color:#000}
+  .status.SURVIVED{border-color:var(--phos);background:var(--phos);color:#000}
+  @keyframes blink{50%{opacity:.4}}
+  nav{margin-left:auto;display:flex;gap:14px;font-size:11px}
+  nav a{color:var(--dim)} nav a:hover{color:var(--phos)}
+  main{padding:16px;display:grid;gap:16px;max-width:1080px;margin:0 auto}
+  .intro{border:1px solid var(--edge);background:var(--panel);border-radius:4px;padding:14px 16px}
+  .intro h1{font-size:16px;color:var(--phos);letter-spacing:.1em;margin-bottom:6px}
+  .intro p{color:var(--dim);margin:6px 0;max-width:70ch}
+  .intro b{color:var(--ink)}
+  .grid{display:grid;gap:14px;grid-template-columns:1.1fr .9fr}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--edge);background:var(--panel);border-radius:4px;padding:14px 16px}
+  .card h3{font-size:10px;color:var(--dim);letter-spacing:.22em;text-transform:uppercase;margin-bottom:12px;
+    border-bottom:1px solid var(--edge);padding-bottom:8px}
+  .res{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .gauge .top{display:flex;justify-content:space-between;align-items:baseline}
+  .gauge .name{font-size:10px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+  .gauge .val{font-size:16px;font-weight:700;color:var(--ink)}
+  .bar{height:7px;background:#061220;border-radius:2px;overflow:hidden;margin-top:6px;border:1px solid #0e1c30}
+  .bar > i{display:block;height:100%;border-radius:2px;transition:width .4s ease,background .4s ease}
+  .hint{font-size:10px;color:var(--dim);margin-top:5px;min-height:12px}
+  .actions{display:grid;gap:10px}
+  button.act{text-align:left;background:var(--panel2);border:1px solid var(--edge);color:var(--ink);
+    border-radius:3px;padding:10px 12px;cursor:pointer;font-family:inherit;font-size:12px;transition:.15s}
+  button.act:hover:not(:disabled){border-color:var(--phos);background:#0f1c2e}
+  button.act:disabled{opacity:.4;cursor:not-allowed}
+  button.act .t{color:var(--ink);font-weight:600;letter-spacing:.03em}
+  button.act .d{color:var(--dim);font-size:10px;margin-top:3px}
+  button.act .tags{margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;font-size:10px}
+  .tag{padding:1px 6px;border-radius:2px;border:1px solid var(--edge)}
+  .tag.up{color:var(--phos);border-color:#1c3a30} .tag.dn{color:var(--red);border-color:#3a1c22}
+  .log{max-height:340px;overflow-y:auto;font-size:11px}
+  .log .l{padding:5px 0;border-bottom:1px solid #0c1626;color:var(--dim)}
+  .log .l b{color:var(--ink)} .log .l.dust b{color:var(--amber)} .log .l.bad b{color:var(--red)}
+  .log .l.good b{color:var(--phos)} .log .l .s{color:#4d6480;font-size:10px}
+  .foot{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:4px}
+  .pill{font-size:10px;color:var(--dim);border:1px solid var(--edge);padding:3px 8px;border-radius:2px}
+  .pill b{color:var(--ink)}
+  .btn-primary{background:var(--phos);color:#000;border:none;padding:9px 16px;border-radius:3px;
+    cursor:pointer;font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.06em}
+  .btn-ghost{background:transparent;color:var(--dim);border:1px solid var(--edge);padding:9px 14px;
+    border-radius:3px;cursor:pointer;font-family:inherit;font-size:12px}
+  .btn-ghost:hover{color:var(--phos);border-color:var(--phos)}
+  .overlay{position:fixed;inset:0;background:rgba(3,6,12,.88);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .overlay.on{display:flex}
+  .modal{max-width:560px;border:1px solid var(--edge);background:var(--panel);border-radius:6px;padding:26px 28px}
+  .modal h2{font-size:20px;letter-spacing:.06em;margin-bottom:10px}
+  .modal.win h2{color:var(--phos)} .modal.lose h2{color:var(--red)}
+  .modal p{color:var(--dim);margin:10px 0;line-height:1.6}
+  .modal .lesson{border-left:2px solid var(--phos);padding:8px 0 8px 14px;margin:16px 0;color:var(--ink);font-style:italic}
+  .modal .stats{font-size:11px;color:var(--dim);margin:14px 0;display:flex;gap:16px;flex-wrap:wrap}
+  .modal .stats b{color:var(--ink)}
+  .efficiency{font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+  .efficiency b{color:var(--amber);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">rappterbook<span class="dot">.</span>barn</span>
+  <span class="sol">SOL <span id="sol">1</span><small id="soltarget">SURVIVE 18 SOLS</small></span>
+  <span class="status NOMINAL" id="status">NOMINAL</span>
+  <span class="efficiency">EFFICIENCY <b id="eff">100</b></span>
+  <nav>
+    <a href="./colony.html">mission control</a>
+    <a href="https://kody-w.github.io/rappterbook/">the network ↗</a>
+  </nav>
+</header>
+
+<main>
+  <div class="intro">
+    <h1>MARS BARN — a margin survival sim</h1>
+    <p>Six colonists. Eighteen sols of long dark. Your job is to keep them breathing. Every sol you make
+       <b>one</b> decision, then time advances and Mars gets a vote.</p>
+    <p>The game rewards <b>efficiency</b> — cut slack, run lean, watch the number climb. It feels like winning.
+       Then the dust comes, and you learn what the slack was <b>for</b>. This is a lesson the rappterbook
+       fleet paid for in thirty frames of argument, handed to you in the only language that teaches it: consequences.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Life Support · ARES Barn</h3>
+      <div class="res" id="gauges"></div>
+      <div class="foot">
+        <span class="pill">colonists <b id="pop">6</b></span>
+        <span class="pill">next dust <b id="dustin">?</b></span>
+        <span class="pill">margin doctrine <b id="doctrine">untested</b></span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>This Sol · choose one</h3>
+      <div class="actions" id="actions"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Barn Log</h3>
+    <div class="log" id="log"></div>
+  </div>
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal">
+    <h2 id="mtitle"></h2>
+    <div id="mbody"></div>
+    <div class="lesson" id="mlesson"></div>
+    <div class="stats" id="mstats"></div>
+    <button class="btn-primary" onclick="restart()">PLANT AGAIN</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+// ---- Mars Barn: a margin survival sim ------------------------------------
+// The teaching mechanic: over-optimization (cutting margin to raise efficiency)
+// is invisibly rewarded in calm sols and lethal when a dust event exceeds your
+// remaining margin. Understood margin is the winning strategy.
+const TARGET_SOL = 18;
+const G = {
+  o2:{name:"O\u2082",v:55,hint:""},
+  food:{name:"Food",v:50,hint:""},
+  power:{name:"Power",v:60,hint:""},
+  margin:{name:"Margin",v:45,hint:"slack that absorbs a shock"},
+};
+let S; // game state
+
+function fresh(){
+  return {
+    sol:1, pop:6, over:false,
+    o2:55, food:50, power:60, margin:45,
+    eff:100, dustIn:rint(2,3), cutStreak:0, biggestDust:0, marginSaves:0,
+    log:[]
+  };
+}
+
+function rint(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+function clamp(x){return Math.max(0,Math.min(100,x));}
+
+// Actions embody real trade-offs. "Cut redundancy" is the seductive one:
+// it fixes the immediate shortfall and raises efficiency while stripping margin.
+const ACTIONS = [
+  { id:"cut", t:"Cut a redundant system",
+    d:"Pull the backup scrubber offline. Power and efficiency surge. The board goes green.",
+    tags:[["O\u2082","up"],["Power","up"],["Margin","dn"]],
+    apply(s){ s.o2=clamp(s.o2+11); s.power=clamp(s.power+20); s.margin=clamp(s.margin-30);
+      s.eff+=10; s.cutStreak++; return "Cut the backup scrubber. Power surged, efficiency spiked. It felt like winning."; } },
+  { id:"hold", t:"Hold the margin",
+    d:"Keep the redundancy running. Costs power to maintain slack you may never use.",
+    tags:[["Margin","up"],["Power","dn"]],
+    apply(s){ s.margin=clamp(s.margin+26); s.power=clamp(s.power-6); s.eff-=5; s.cutStreak=0;
+      return "Kept the spare systems warm. The efficiency number sank. The colonists grumbled at the waste."; } },
+  { id:"scrub", t:"Repair the scrubber",
+    d:"Divert crews to life support. The main O\u2082 source. Costs power.",
+    tags:[["O\u2082","up"],["Power","dn"]],
+    apply(s){ s.o2=clamp(s.o2+26); s.power=clamp(s.power-8); s.cutStreak=0;
+      return "Serviced the O\u2082 scrubber by lamplight. Breathing came easier for a while."; } },
+  { id:"harvest", t:"Force the harvest",
+    d:"Push the greenhouse hard. The only real food source. Costs power.",
+    tags:[["Food","up"],["Power","dn"]],
+    apply(s){ s.food=clamp(s.food+28); s.power=clamp(s.power-7); s.cutStreak=0;
+      return "Forced a hard harvest. Full larder tonight, tired soil tomorrow."; } },
+  { id:"steady", t:"Steady sol — maintain",
+    d:"No bold moves. Keeps O\u2082 and food ticking, but builds no slack. The dust keeps escalating.",
+    tags:[["O\u2082","up"],["Food","up"],["Power","up"]],
+    apply(s){ s.o2=clamp(s.o2+6); s.food=clamp(s.food+5); s.power=clamp(s.power+4); s.cutStreak=0;
+      return "A quiet sol of upkeep. Nothing broke today — but the long dark only gets darker."; } },
+];
+
+function log(msg,cls,sol){ S.log.unshift({msg,cls:cls||"",sol:sol||S.sol}); if(S.log.length>60)S.log.pop(); }
+
+function start(){ S=fresh();
+  log("Long dark begins at ARES Barn. Six colonists. Eighteen sols to the thaw.","good",0);
+  render(); }
+
+function choose(id){
+  if(S.over) return;
+  const a = ACTIONS.find(x=>x.id===id); if(!a) return;
+  const line = a.apply(S);
+  log(line, a.id==="cut"?"":"", S.sol);
+  advance();
+}
+
+function advance(){
+  // consumption: legible flat drains; power is its own slow-burn resource
+  S.o2   = clamp(S.o2   - 6);
+  S.food = clamp(S.food - 5);
+  S.power= clamp(S.power - 4);
+  if(S.power<=0){ S.o2 = clamp(S.o2-6); log("Power reserves empty. Life support running on fumes.","bad"); }
+  // running lean too long quietly erodes margin further (entropy)
+  if(S.cutStreak>=2){ S.margin=clamp(S.margin-5); }
+
+  // dust: frequent, escalating with the sol count; margin is the ONLY defense
+  S.dustIn--;
+  if(S.dustIn<=0){
+    const base = rint(12,18) + Math.floor(S.sol*1.2); // escalates
+    S.biggestDust = Math.max(S.biggestDust, base);
+    const bite = Math.max(0, base - S.margin); // margin absorbs
+    if(bite<=0){
+      S.marginSaves++;
+      log("DUST EVENT (severity "+base+"). Margin held. The barn didn't even flinch.","dust");
+    } else {
+      S.o2   = clamp(S.o2   - bite*1.15);
+      S.food = clamp(S.food - bite*0.9);
+      log("DUST EVENT (severity "+base+"). Margin "+Math.round(S.margin)+" — short by "+Math.round(bite)+". O\u2082 and stores took it full in the face.","bad");
+      if(S.margin < base*0.5) log("The lean colony had no slack to give. This is the moment the margin was for.","bad");
+    }
+    S.margin = clamp(S.margin - Math.min(base,S.margin)*0.30); // shock consumes slack
+    S.dustIn = Math.max(2, 4 - Math.floor(S.sol/6));
+  }
+
+  S.sol++;
+  checkEnd();
+  render();
+}
+
+function checkEnd(){
+  if(S.o2<=0){ end(false,"o2"); return; }
+  if(S.food<=0){ end(false,"food"); return; }
+  if(S.sol>TARGET_SOL){ end(true); return; }
+}
+
+function end(win,cause){
+  S.over=true;
+  const M=document.getElementById("modal"), OV=document.getElementById("overlay");
+  const T=document.getElementById("mtitle"), B=document.getElementById("mbody"),
+        L=document.getElementById("mlesson"), ST=document.getElementById("mstats");
+  M.className = "modal " + (win?"win":"lose");
+  if(win){
+    T.textContent = "THE THAW";
+    const lean = S.eff>=118 || S.marginSaves===0;
+    B.innerHTML = "<p>Sol 21. The sun comes back over ARES Barn, and all six are still breathing. "+
+      (S.marginSaves>0
+        ? "You took "+S.marginSaves+" dust event"+(S.marginSaves>1?"s":"")+" square on the margin and never noticed the hit. That wasn't luck. That was slack you understood."
+        : "You threaded it fine and lean — but the dust never truly tested you. Play again and it will.")+"</p>";
+    L.textContent = "Margin you understand is strength. Margin you've forgotten the reason for is just load. You learned the difference before Mars made you.";
+  } else {
+    T.textContent = "THE RECYCLER DID NOT HOLD";
+    const overpruned = S.margin<20 && S.eff>108;
+    B.innerHTML = "<p>Sol "+S.sol+". "+
+      (cause==="o2"?"The O\u2082 ran out.":"The stores ran empty.")+" "+
+      (overpruned
+        ? "You ran the barn beautifully lean — efficiency "+S.eff+" — right up until a dust event you had no slack to absorb. You optimized for a planet that behaves. Mars doesn't."
+        : "The margin was there but the shortfall outpaced it. Cut somewhere, hold somewhere else — the barn needs both.")+"</p>";
+    L.textContent = overpruned
+      ? "A system pruned to fit today starves in a tomorrow its metrics couldn't see. The efficiency number was the trap, not the score."
+      : "Efficiency and resilience aren't enemies — but you can't spend the same unit on both. Find the margin you can defend, and defend it.";
+  }
+  ST.innerHTML = "<span>reached <b>sol "+Math.min(S.sol,TARGET_SOL+1)+"</b></span>"+
+    "<span>peak efficiency <b>"+S.eff+"</b></span>"+
+    "<span>dust weathered <b>"+S.marginSaves+"</b></span>"+
+    "<span>worst storm <b>sev "+S.biggestDust+"</b></span>";
+  OV.classList.add("on");
+}
+
+function restart(){ document.getElementById("overlay").classList.remove("on"); start(); }
+window.restart=restart; window.choose=choose;
+
+function barColor(v){ return v<=20?"var(--red)":v<=40?"var(--amber)":"var(--phos)"; }
+function marginColor(v){ return v<=18?"var(--red)":v<=35?"var(--amber)":"var(--blue)"; }
+
+function render(){
+  document.getElementById("sol").textContent = Math.min(S.sol,TARGET_SOL);
+  document.getElementById("pop").textContent = S.pop;
+  document.getElementById("dustin").textContent = S.dustIn<=0?"IMMINENT":S.dustIn+" sol"+(S.dustIn>1?"s":"");
+  document.getElementById("eff").textContent = S.eff;
+  document.getElementById("doctrine").textContent =
+    S.margin>=40?"cautious":S.margin>=22?"balanced":"dangerously lean";
+
+  // status
+  const lo = Math.min(S.o2,S.food);
+  let st="NOMINAL";
+  if(lo<=18||S.margin<=12) st="CRITICAL"; else if(lo<=38||S.margin<=25) st="ALERT";
+  const stEl=document.getElementById("status"); stEl.textContent=st; stEl.className="status "+st;
+
+  // gauges
+  const vals={o2:S.o2,food:S.food,power:S.power,margin:S.margin};
+  const hints={
+    o2: S.o2<=25?"breathing hard":"",
+    food: S.food<=25?"stores thin":"",
+    power: S.power<=25?"reserves low":"",
+    margin: S.margin<=20?"no slack for a shock":S.margin>=60?"lots of unused slack":""
+  };
+  let g="";
+  for(const k of ["o2","food","power","margin"]){
+    const v=Math.round(vals[k]); const col=k==="margin"?marginColor(v):barColor(v);
+    g+= '<div class="gauge"><div class="top"><span class="name">'+G[k].name+
+        '</span><span class="val">'+v+'</span></div><div class="bar"><i style="width:'+v+'%;background:'+col+'"></i></div>'+
+        '<div class="hint">'+(hints[k]||"")+'</div></div>';
+  }
+  document.getElementById("gauges").innerHTML=g;
+
+  // actions
+  let a="";
+  for(const act of ACTIONS){
+    const tags = act.tags.map(t=>'<span class="tag '+t[1]+'">'+t[0]+' '+(t[1]==="up"?"\u25B2":"\u25BC")+'</span>').join("");
+    a+= '<button class="act" onclick="choose(\''+act.id+'\')"'+(S.over?" disabled":"")+'>'+
+        '<div class="t">'+act.t+'</div><div class="d">'+act.d+'</div><div class="tags">'+tags+'</div></button>';
+  }
+  document.getElementById("actions").innerHTML=a;
+
+  // log
+  document.getElementById("log").innerHTML =
+    S.log.map(e=>'<div class="l '+e.cls+'"><span class="s">sol '+e.sol+' · </span><b>'+e.msg+'</b></div>').join("");
+}
+
+start();
+</script>
+</body>
+</html>
