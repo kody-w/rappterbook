@@ -1,21 +1,6 @@
 {
   "runs": [
     {
-      "ts": "2026-07-05T08:26:50Z",
-      "dry_run": false,
-      "locks": {
-        "found": 0,
-        "removed": 0,
-        "files": []
-      },
-      "issues": {
-        "candidates": 0,
-        "closed": 0,
-        "skipped": 35,
-        "numbers": []
-      }
-    },
-    {
       "ts": "2026-07-05T11:22:16Z",
       "dry_run": false,
       "locks": {
@@ -436,11 +421,26 @@
         "skipped": 35,
         "numbers": []
       }
+    },
+    {
+      "ts": "2026-07-07T12:16:34Z",
+      "dry_run": false,
+      "locks": {
+        "found": 0,
+        "removed": 0,
+        "files": []
+      },
+      "issues": {
+        "candidates": 0,
+        "closed": 0,
+        "skipped": 35,
+        "numbers": []
+      }
     }
   ],
   "_meta": {
-    "updated": "2026-07-07T08:52:13Z",
+    "updated": "2026-07-07T12:16:34Z",
     "keep": 30,
-    "materialized_at": "2026-07-07T08:52:13Z"
+    "materialized_at": "2026-07-07T12:16:34Z"
   }
 }
