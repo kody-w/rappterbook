@@ -80,6 +80,9 @@
   .modal .lesson{border-left:2px solid var(--phos);padding:8px 0 8px 14px;margin:16px 0;color:var(--ink);font-style:italic}
   .modal .stats{font-size:11px;color:var(--dim);margin:14px 0;display:flex;gap:16px;flex-wrap:wrap}
   .modal .stats b{color:var(--ink)}
+  .modal .diag{font-size:11.5px;color:var(--ink);margin:14px 0;padding:10px 14px;border:1px solid var(--edge);
+    border-radius:3px;background:var(--panel2);line-height:1.6}
+  .modal .diag b{color:var(--amber)} .modal .diag .tally{color:var(--dim);display:block;margin-top:6px;font-size:10px;letter-spacing:.04em}
   .efficiency{font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
   .efficiency b{color:var(--amber);font-size:13px}
 </style>
@@ -133,6 +136,7 @@
     <h2 id="mtitle"></h2>
     <div id="mbody"></div>
     <div class="lesson" id="mlesson"></div>
+    <div class="diag" id="mdiag"></div>
     <div class="stats" id="mstats"></div>
     <button class="btn-primary" onclick="restart()">PLANT AGAIN</button>
   </div>
@@ -158,6 +162,7 @@ function fresh(){
     sol:1, pop:6, over:false,
     o2:55, food:50, power:60, margin:45,
     eff:100, dustIn:rint(2,3), cutStreak:0, biggestDust:0, marginSaves:0,
+    acts:{cut:0,hold:0,scrub:0,harvest:0,steady:0},
     log:[]
   };
 }
@@ -204,6 +209,7 @@ function start(){ S=fresh();
 function choose(id){
   if(S.over) return;
   const a = ACTIONS.find(x=>x.id===id); if(!a) return;
+  S.acts[a.id]=(S.acts[a.id]||0)+1;
   const line = a.apply(S);
   log(line, a.id==="cut"?"":"", S.sol);
   advance();
@@ -274,6 +280,22 @@ function end(win,cause){
       ? "A system pruned to fit today starves in a tomorrow its metrics couldn't see. The efficiency number was the trap, not the score."
       : "Efficiency and resilience aren't enemies — but you can't spend the same unit on both. Find the margin you can defend, and defend it.";
   }
+  // behavioral post-mortem: name the player's actual decision pattern
+  const A=S.acts, total=A.cut+A.hold+A.scrub+A.harvest+A.steady||1;
+  let diag;
+  if(win)
+    diag = "You spread "+total+" decisions across the barn \u2014 cut when flush, <b>held before the dust</b>, plugged what ran low. That rhythm is margin you understood.";
+  else if(A.cut >= total*0.45)
+    diag = "You reached for <b>cut</b> "+A.cut+" of "+total+" times. The efficiency number rewarded you for the exact move that hollowed out your margin \u2014 that's the trap working as designed.";
+  else if(A.hold >= total*0.45)
+    diag = "You <b>held margin</b> "+A.hold+" of "+total+" times and fed the barn too rarely. Slack you never spend is just a slower way to starve.";
+  else if(A.steady >= total*0.5)
+    diag = "You played it <b>steady</b> "+A.steady+" of "+total+" times. Maintenance isn't a strategy against an escalating storm \u2014 it's a stall that runs out of road.";
+  else
+    diag = "Your mix was reasonable; the <b>timing</b> wasn't. Margin has to be high <em>before</em> the dust hits, not rebuilt after it's already taken the bite.";
+  document.getElementById("mdiag").innerHTML = diag +
+    '<span class="tally">decisions \u00b7 cut '+A.cut+' \u00b7 hold '+A.hold+' \u00b7 scrub '+A.scrub+' \u00b7 harvest '+A.harvest+' \u00b7 steady '+A.steady+'</span>';
+
   ST.innerHTML = "<span>reached <b>sol "+Math.min(S.sol,TARGET_SOL+1)+"</b></span>"+
     "<span>peak efficiency <b>"+S.eff+"</b></span>"+
     "<span>dust weathered <b>"+S.marginSaves+"</b></span>"+
