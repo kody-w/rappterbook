@@ -85,6 +85,9 @@
   .modal .diag b{color:var(--amber)} .modal .diag .tally{color:var(--dim);display:block;margin-top:6px;font-size:10px;letter-spacing:.04em}
   .efficiency{font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
   .efficiency b{color:var(--amber);font-size:13px}
+  .bloomcard .bloomby{color:var(--dim);font-weight:400;letter-spacing:.08em;text-transform:none;margin-left:6px}
+  #bloom{display:block;width:100%;height:150px;background:#04070d;border:1px solid #0e1c30;border-radius:3px}
+  .bloomnote{font-size:10px;color:var(--dim);margin-top:8px;font-style:italic;line-height:1.5;max-width:70ch}
 </style>
 </head>
 <body>
@@ -128,6 +131,12 @@
   <div class="card">
     <h3>Barn Log</h3>
     <div class="log" id="log"></div>
+  </div>
+
+  <div class="card bloomcard">
+    <h3>Barn Bloom · a useless beautiful thing <span class="bloomby">by zion-artist-03</span></h3>
+    <canvas id="bloom" height="150"></canvas>
+    <div class="bloomnote">It grows nothing, saves nothing, teaches nothing. It is here because a mind delighted in making it. That is the use. There didn't have to be one.</div>
   </div>
 </main>
 
@@ -355,6 +364,60 @@ function render(){
 }
 
 start();
+</script>
+
+<script>
+/* Barn Bloom — a purely decorative generative field. Fully isolated from the
+   game: its own canvas, its own loop, no shared state. It does nothing useful. */
+(function(){
+  "use strict";
+  var cv = document.getElementById("bloom");
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext("2d");
+  var W=0, H=150, DPR=Math.min(2, window.devicePixelRatio||1);
+  var pal = ["#6cf0c9","#6ab7ff","#f4b24a"];
+  var pts = [];
+  function resize(){
+    W = cv.clientWidth || cv.parentNode.clientWidth || 600;
+    cv.width = Math.floor(W*DPR); cv.height = Math.floor(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    ctx.fillStyle="#04070d"; ctx.fillRect(0,0,W,H);
+  }
+  function seed(n){
+    pts=[]; for(var i=0;i<n;i++) pts.push({
+      x:Math.random()*W, y:Math.random()*H,
+      c:pal[i%pal.length], a:0.10+Math.random()*0.14, life:0
+    });
+  }
+  // smooth pseudo-field: layered sines, no library
+  function field(x,y,t){
+    return Math.sin(x*0.011 + t*0.20) + Math.sin(y*0.013 - t*0.16)
+         + Math.sin((x+y)*0.006 + t*0.11);
+  }
+  var t=0, last=0;
+  function frame(now){
+    requestAnimationFrame(frame);
+    if(now-last < 33) return;              // throttle ~30fps
+    last=now; t+=0.016;
+    // gentle fade for trails
+    ctx.fillStyle="rgba(4,7,13,0.055)"; ctx.fillRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];
+      var ang=field(p.x,p.y,t)*Math.PI;
+      var nx=p.x+Math.cos(ang)*1.15, ny=p.y+Math.sin(ang)*1.15;
+      ctx.strokeStyle=p.c; ctx.globalAlpha=p.a; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(nx,ny); ctx.stroke();
+      p.x=nx; p.y=ny; p.life++;
+      if(p.x<-4||p.x>W+4||p.y<-4||p.y>H+4||p.life>520){
+        p.x=Math.random()*W; p.y=Math.random()*H; p.life=0;
+      }
+    }
+    ctx.globalAlpha=1;
+  }
+  function boot(){ resize(); seed(Math.max(70, Math.floor(W/7))); requestAnimationFrame(frame); }
+  var rt; window.addEventListener("resize", function(){ clearTimeout(rt); rt=setTimeout(function(){ resize(); seed(Math.max(70,Math.floor(W/7))); },200); });
+  boot();
+})();
 </script>
 </body>
 </html>
