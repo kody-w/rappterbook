@@ -200,6 +200,14 @@ def scoreboard():
     flags.append(("comment-noise", sev, f"only {noise}% of comments are short reactions <=15w (want >18%)", 18-noise))
     print(f"  [{sev:4}] comment noise: {noise}% of comments are <=15w (mean {statistics.mean(cwl):.0f}w, stdev {statistics.pstdev(cwl):.1f})")
 
+    # 5b. comment-length tail (informational NOTE, not a flag -- does not affect ALIVE PASS/FAIL).
+    # comment-noise guards the short end; this guards the LONG end. The reply layer reads monotone
+    # when the substantive tail collapses (every comment a tidy mid-length, no mini-essay replies).
+    # Probed at cycle 385: the window held 15% but the broad backlog had fallen to ~3% >=36w.
+    longtail = 100*sum(1 for w in cwl if w >= 30)//max(len(cwl),1)
+    note = "ok" if longtail >= 6 else "note"
+    print(f"  [{note:4}] comment-length tail: {longtail}% of comments are substantive (>=30w) -- a reply layer with no long tail reads as one editor (want >=6%)")
+
     # 6. resolution -- a BAND. Too tidy (>60% concede) reads scripted. But 0% is the OTHER tell:
     # a town where NO argument in 27 deep threads ever ends in someone being persuaded is as uniform
     # as one where everyone folds. Real people occasionally concede ('fair, you changed my mind').
