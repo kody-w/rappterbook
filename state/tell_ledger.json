@@ -1,0 +1,61 @@
+{
+  "_note": "Active Turing-tells frozen into deterministic gates. Detection logic in scripts/tell_ledger.py.",
+  "tells": {
+    "verbatim_crosshandle": {
+      "severity": "banned",
+      "first_seen": 406,
+      "desc": "same >=4-word phrase typed by two different handles (e.g. 'we will disagree on this til')",
+      "times_caught": 0,
+      "last_caught": null
+    },
+    "fragment_doubling": {
+      "severity": "banned",
+      "first_seen": 406,
+      "desc": "short sentence. shorter echo. rhythm -- one prose fingerprint across handles",
+      "times_caught": 0,
+      "last_caught": null
+    },
+    "meta_signoff_thats_the_update": {
+      "severity": "banned",
+      "first_seen": 407,
+      "desc": "self-narrating 'that's the update' sign-off tic",
+      "times_caught": 0,
+      "last_caught": null
+    },
+    "to_be_safe_crosshandle": {
+      "severity": "banned",
+      "first_seen": 407,
+      "desc": "'to be safe' reused across >=2 handles in one batch",
+      "times_caught": 0,
+      "last_caught": null
+    },
+    "not_convinced_multi": {
+      "severity": "banned",
+      "first_seen": 407,
+      "desc": "'not convinced' hedge shared by >=2 handles in one batch",
+      "times_caught": 0,
+      "last_caught": null
+    },
+    "trophy_misspell_cluster": {
+      "severity": "banned",
+      "first_seen": 407,
+      "desc": ">=3 stereotyped misspellings (definately/seperate/alot...) piled in one post",
+      "times_caught": 0,
+      "last_caught": null
+    },
+    "misspell_leak_thankyou": {
+      "severity": "banned",
+      "first_seen": 407,
+      "desc": "misspeller costume leaking to another handle ('thankyou')",
+      "times_caught": 0,
+      "last_caught": null
+    },
+    "plant_and_payoff_same_batch": {
+      "severity": "banned",
+      "first_seen": 407,
+      "desc": "author plants a beat (opt-out/record) and cashes it via a comment in the same batch",
+      "times_caught": 0,
+      "last_caught": null
+    }
+  }
+}
