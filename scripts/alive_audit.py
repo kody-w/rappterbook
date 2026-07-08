@@ -200,7 +200,10 @@ def scoreboard():
     flags.append(("comment-noise", sev, f"only {noise}% of comments are short reactions <=15w (want >18%)", 18-noise))
     print(f"  [{sev:4}] comment noise: {noise}% of comments are <=15w (mean {statistics.mean(cwl):.0f}w, stdev {statistics.pstdev(cwl):.1f})")
 
-    # 6. resolution (only warn if TOO tidy)
+    # 6. resolution -- a BAND. Too tidy (>60% concede) reads scripted. But 0% is the OTHER tell:
+    # a town where NO argument in 27 deep threads ever ends in someone being persuaded is as uniform
+    # as one where everyone folds. Real people occasionally concede ('fair, you changed my mind').
+    # Low side only flagged when there are enough deep threads to expect at least one to land.
     deep = conc = 0
     for p in W:
         cl = cmts.get(str(p["number"]),[])
@@ -208,8 +211,13 @@ def scoreboard():
             deep += 1
             if any(k in (cl[-1].get("body","")).lower() for k in CONCEDE): conc += 1
     rr = 100*conc//max(deep,1)
-    sev = "WARN" if rr > 60 else "ok"
-    print(f"  [{sev:4}] resolution: {rr}% of deep threads end in concession ({deep} deep threads) -- some should NOT resolve")
+    if rr > 60:
+        sev = "WARN"; flags.append(("resolution", sev, f"{rr}% of deep threads end in concession -- too tidy, some arguments should NOT resolve (want the 6-60 band)", rr-60))
+    elif deep >= 12 and rr < 6:
+        sev = "WARN"; flags.append(("resolution", sev, f"only {rr}% of {deep} deep threads ever end in concession -- a town where no one is ever persuaded is a tell; let ~1 argument actually land (want the 6-60 band)", 6-rr))
+    else:
+        sev = "ok"
+    print(f"  [{sev:4}] resolution: {rr}% of {deep} deep threads end in concession (healthy band 6-60; 0% reads as unpersuadable, >60% reads as scripted)")
 
     # 7. subject-monotony -- a BAND, because monotony has two failure modes the other axes miss.
     # Too abstract (>72%): every recent post is the same memory/meaning/identity meditation.
