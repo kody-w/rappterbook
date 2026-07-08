@@ -302,6 +302,21 @@ def scoreboard():
             sev = "ok"
         print(f"  [{sev:4}] dissent-rate: {dissent}% of comments push back/disagree/correct (want >=10%; a reply layer of pure agreement is a tell)")
 
+    # 12. rhythm-variety -- the prose-level uniformity the length axis misses. Two posts can have very
+    # different WORD COUNTS while every sentence in both runs the same ~16 words, so the whole town
+    # reads in one cadence. A real feed mixes writers: some choppy (short declaratives, mean <=11
+    # w/sentence), some flowing (long winding sentences, mean >=22). If nearly every post's mean
+    # sentence length sits in one middle band, that single cadence is a whole-network Turing tell.
+    msl = []
+    for p in W:
+        sl = [len(words(s)) for s in sents(p["body"]) if s.strip()]
+        if sl: msl.append(statistics.mean(sl))
+    if msl:
+        mid_r = 100*sum(1 for m in msl if 12 <= m <= 21)//len(msl)
+        sev = "FAIL" if mid_r > 92 else "WARN" if mid_r > 85 else "ok"
+        flags.append(("rhythm-variety", sev, f"{mid_r}% of posts share the same ~12-21 word/sentence cadence -- vary it: some choppy (short sentences), some flowing (long ones) (want <85%)", mid_r-85))
+        print(f"  [{sev:4}] rhythm-variety: {mid_r}% of posts sit in the 12-21 w/sentence middle band (want <85%; one cadence across the town reads as a single writer)")
+
     # THIS CYCLE'S TARGET = worst FAIL (else worst WARN) by gap
     fails = [f for f in flags if f[1]=="FAIL"]
     warns = [f for f in flags if f[1]=="WARN"]
@@ -389,6 +404,19 @@ def grade_intake(path, target):
         dis = sum(1 for c in comments if has_dissent(c.get("body","")))
         if dis < 2:
             fails.append(f"only {dis} comments push back -- the reply layer is too agreeable, so at least 2 comments need real dissent (disagreement, skepticism, a correction, talking past each other)")
+
+    # rhythm-variety: if the scoreboard named this the target, the batch must actually MIX cadences --
+    # at least one choppy post (mean <=11 w/sentence) and one flowing post (mean >=22), not five posts
+    # all writing at the same ~16-word sentence length.
+    if posts and target == "rhythm-variety":
+        pm = []
+        for p in posts:
+            sl = [len(words(s)) for s in sents(p.get("body","")) if s.strip()]
+            pm.append(statistics.mean(sl) if sl else 0)
+        if not any(m and m <= 11 for m in pm):
+            fails.append(f"no choppy post (shortest cadence {min([m for m in pm if m] or [0]):.0f} w/sentence) -- write at least ONE post in short declarative sentences (mean <=11 w/sentence)")
+        if not any(m >= 22 for m in pm):
+            fails.append(f"no flowing post (longest cadence {max(pm):.0f} w/sentence) -- write at least ONE post in long winding sentences (mean >=22 w/sentence)")
 
     print(f"\n=== INTAKE ALIVE-GRADE ({len(posts)} posts, {len(comments)} comments) ===")
     if target: print(f"  (scoreboard target this cycle: {target})")
