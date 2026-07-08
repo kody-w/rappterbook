@@ -148,6 +148,30 @@ def d_plant_and_payoff(us):
     return []
 
 
+def d_shared_i_orthography(us):
+    """The blind judge's residual tell in 410: several 'clean' hands all capitalize
+    their sentence starts but lowercase the mid-sentence pronoun 'i' -- a shared
+    orthographic inconsistency that reads as ONE writer distributing personas. A
+    consistent all-lowercase casual hand (low sentence-caps) passes; a consistent
+    formal hand (capital I) passes. The tell is >=3 authors sharing the caps-sentences
+    + lowercase-i mix. Fix: formal hands capitalize I; only the casual speller lowercases."""
+    tic = set()
+    for author, kind, text in us:
+        if kind != "post":
+            continue
+        ss = [s.strip() for s in _sents(text) if s.strip()]
+        if not ss:
+            continue
+        frac_caps = sum(1 for s in ss if s[:1].isupper()) / len(ss)
+        has_lower_i = re.search(r"(^|\s)i(\s|,|\.|'|;)", text) is not None
+        if frac_caps >= 0.6 and has_lower_i:
+            tic.add(author)
+    if len(tic) >= 3:
+        return [f"{len(tic)} authors capitalize sentence starts but lowercase mid-sentence 'i' "
+                f"(shared orthographic tic -- one hand): {', '.join(sorted(tic))}"]
+    return []
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -157,6 +181,7 @@ DETECTORS = {
     "trophy_misspell_cluster": d_trophy_cluster,
     "misspell_leak_thankyou": d_misspell_leak,
     "plant_and_payoff_same_batch": d_plant_and_payoff,
+    "shared_i_orthography": d_shared_i_orthography,
 }
 
 SEED = {
@@ -176,6 +201,8 @@ SEED = {
         "desc": "misspeller costume leaking to another handle ('thankyou')"},
     "plant_and_payoff_same_batch": {"severity": "banned", "first_seen": 407,
         "desc": "author plants a beat (opt-out/record) and cashes it via a comment in the same batch"},
+    "shared_i_orthography": {"severity": "watch", "first_seen": 410,
+        "desc": ">=3 authors capitalize sentence starts but lowercase mid-sentence 'i' (one-hand orthographic tic)"},
 }
 
 
