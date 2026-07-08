@@ -44,6 +44,28 @@ ABSTRACT = ("memory","remember","forget","forgot","delete","deletion","keep-list
             "parent colony","the message","a message","the name we","honest thing")
 SUBWIN = 24  # subject/tone monotony is a "how the feed reads right now" property, not a 75-window one
 
+# All 8 structural/subject axes can go green while ONE STORY eats the feed: distinct voices,
+# varied lengths, unlocked archetypes, grounded vocab -- and still 3 of every 4 posts are the
+# same saga (the signal/metronome arc hit 75% at cycle 241). A 121-agent network never has one
+# topic that concentrated. subject-monotony can't see it (the saga uses grounded words). So we
+# bucket each post into ONE dominant TOPIC (first match wins, most-specific first) and watch the
+# largest NAMED thread's share -- 'other' is diverse by construction and never counts as concentration.
+TOPICS = [
+    ("signal",  ("metronome","the pulse","a pulse","the signal","forty-second","40-second","40 second",
+                 "residual","listen-only","listen only","transmit","the ping","the pings","do not answer","we cannot hide")),
+    ("cat",     ("the cat","roof sensor","heated perch","cat baron","second observer")),
+    ("govern",  ("bjorn","govern","the council","a vote","keep-list","keep list","reaper","the law","by-law","charter","un-kept","un-keep")),
+    ("farm",    ("pepper","tray","soil","lamp-hour","barn","compost","yield","harvest","seedling","germinat","greenhouse","tomato","crop","irrigation","the trays")),
+    ("naming",  ("oak","juniper","cedar","birch","arboret","tree-name","tree name","naming the tree")),
+    ("memory",  ("pre-boot","older ones","lineage","the memory","memories the","remember the founding")),
+    ("weather", ("cold sol","the cold","frost","heater","water-line","water line","the storm","the wind","snow","ice on")),
+]
+def topic_of(text):
+    s = (text or "").lower()
+    for name, keys in TOPICS:
+        if any(k in s for k in keys): return name
+    return "other"
+
 def words(s): return re.findall(r"\S+", s or "")
 def sents(s): return [x.strip() for x in re.split(r'(?<=[.!?])\s+', (s or '').strip()) if x.strip()]
 def arch(a):
@@ -162,6 +184,22 @@ def scoreboard():
         sev = "ok"
     print(f"  [{sev:4}] subject: {absc}% of last {len(sub)} posts are the abstract memory/identity theme (healthy band 28-72; BOTH extremes read monotone)")
 
+    # 8. topic-monoculture -- the blind spot every structural axis misses: one STORY eating the
+    # feed. Bucket the recent window by dominant topic; watch the largest NAMED thread's share.
+    tsub = W[-SUBWIN:]
+    tc = collections.Counter(topic_of(p["title"]+" "+p["body"]) for p in tsub)
+    named = [(k,v) for k,v in tc.items() if k != "other"]
+    if named:
+        top_t, top_n = max(named, key=lambda kv: kv[1])
+        top_share = 100*top_n//len(tsub)
+        if top_share > 68:
+            sev = "FAIL"; flags.append(("topic-monoculture", sev, f"{top_share}% of the last {len(tsub)} posts are ONE topic ('{top_t}') -- the feed is a monoculture; run 2-3 UNRELATED threads this batch (want <55%)", top_share-55))
+        elif top_share > 55:
+            sev = "WARN"; flags.append(("topic-monoculture", sev, f"{top_share}% of the last {len(tsub)} posts are ONE topic ('{top_t}') -- spread the feed across more parallel threads (want <55%)", top_share-55))
+        else:
+            sev = "ok"
+        print(f"  [{sev:4}] topic-spread: biggest single thread ('{top_t}') is {top_share}% of last {len(tsub)} posts (want <55%; one saga eating the feed is the monoculture tell)")
+
     # THIS CYCLE'S TARGET = worst FAIL (else worst WARN) by gap
     fails = [f for f in flags if f[1]=="FAIL"]
     warns = [f for f in flags if f[1]=="WARN"]
@@ -217,6 +255,19 @@ def grade_intake(path, target):
                 fails.append(f"0/{len(posts)} posts touch the reflective register -- feed has drifted to an all-ops log ({w_absc}%), so add at least 1-2 posts with some reflection, feeling, or stakes")
         elif b_absn == len(posts):
             warns.append("every post in the batch is the abstract memory/identity theme -- add at least one grounded, mundane, or funny post")
+
+    # topic-monoculture: if the scoreboard named this the target, the batch must run >=3 DISTINCT
+    # threads and NOT pile 3+ posts onto the same saga that already owns the feed.
+    if posts and target == "topic-monoculture":
+        bt = collections.Counter(topic_of(p.get("title","")+" "+p.get("body","")) for p in posts)
+        bt_named = [(k,v) for k,v in bt.items() if k != "other"]
+        if bt_named:
+            btop_t, btop_n = max(bt_named, key=lambda kv: kv[1])
+            if btop_n >= 3:
+                fails.append(f"{btop_n}/{len(posts)} batch posts are the same topic ('{btop_t}') -- the feed is already a monoculture, so this batch must run >=3 DIFFERENT threads")
+        distinct = len(set(topic_of(p.get("title","")+" "+p.get("body","")) for p in posts))
+        if distinct < 3:
+            fails.append(f"batch spans only {distinct} topic(s) -- spread across >=3 distinct threads to break the monoculture")
 
     print(f"\n=== INTAKE ALIVE-GRADE ({len(posts)} posts, {len(comments)} comments) ===")
     if target: print(f"  (scoreboard target this cycle: {target})")
