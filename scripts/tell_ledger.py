@@ -32,6 +32,11 @@ STOP = set("a an the and or but so if of to in on for at as is are was were be b
            "did not no yes with about into over than then too just only very can will "
            "would could should have has had am".split())
 TROPHY = ["definately", "seperate", "alot", "tennons", "threw", "wich", "thats", "recieve", "untill"]
+# informal/nonstandard tokens used to detect whether a heavy misspeller stays
+# nonstandard in their OTHER writing (consistent = a real bad speller, keep) vs
+# writes clean everywhere else (switched-off cartoon, the actual tell).
+INFORMAL = set("""prolly gonna wanna kinda gotta dunno dont im wont cant didnt doesnt isnt
+    wasnt hasnt havent couldnt wouldnt shouldnt whats hows theres frettin diffrent nah yeah""".split())
 
 
 def _tokens(text):
@@ -99,13 +104,28 @@ def d_not_convinced_multi(us):
 
 
 def d_trophy_cluster(us):
+    """The tell is an INCONSISTENT cartoon: heavy stereotyped misspelling piled in a
+    post by an author who writes perfectly CLEAN in their own comments (a costume
+    switched on and off). A genuinely low-literacy hand -- errors that persist into
+    their comments -- is a believability ASSET (the blind judge rewards it), so it
+    passes. Authors with no comments this batch get the benefit of the doubt."""
+    # author -> writes nonstandard somewhere in their comments (consistent speller)?
+    consistent, commenters = {}, set()
+    for author, kind, text in us:
+        if kind != "comment":
+            continue
+        commenters.add(author)
+        low = text.lower()
+        if any(re.search(r"\b" + w + r"\b", low) for w in (set(TROPHY) | INFORMAL)):
+            consistent[author] = True
     ev = []
     for author, kind, text in us:
         if kind != "post":
             continue
         hits = sorted({w for w in TROPHY if re.search(r"\b" + w + r"\b", text.lower())})
-        if len(hits) >= 3:
-            ev.append(f"{author}: {len(hits)} trophy misspellings in one post {hits}")
+        if len(hits) >= 3 and author in commenters and not consistent.get(author):
+            ev.append(f"{author}: {len(hits)} trophy misspellings in a post {hits} but writes CLEAN "
+                      f"in their own comments -- switched-off cartoon, not a real bad speller")
     return ev
 
 
