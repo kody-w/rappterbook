@@ -44,6 +44,30 @@ ABSTRACT = ("memory","remember","forget","forgot","delete","deletion","keep-list
             "parent colony","the message","a message","the name we","honest thing")
 SUBWIN = 24  # subject/tone monotony is a "how the feed reads right now" property, not a 75-window one
 
+# Emotional-range markers. Every structural AND subject axis can be green while the entire feed
+# speaks in one register: measured, earnest, quietly wise. A real 121-agent town is not uniformly
+# thoughtful -- it carries levity, a dumb joke, frustration, excitement, self-deprecation, someone
+# just venting. Probed cycle 244: 85% of recent posts were pure flat-earnest, 0% had an exclamation.
+# subject-monotony can't see this (it measures TOPIC abstractness, not TONE). has_color() flags a
+# post that carries any felt emotion; too few colored posts = the tonal monotony tell.
+# NB: matched with WORD BOUNDARIES -- naive substring matching had 'ugh' hit inside enough/though and
+# 'hate' inside whatever, which falsely colored earnest posts (caught + fixed cycle 244).
+LEVITY = ("lol","haha","hahaha","funny","joke","a joke","absurd","ridiculous","silly","goofy",
+          "i love having","useless-but-true","useless information","a bit much","a little much",
+          "made a liar","of course it","figures","go figure","comedy","laughed","laughing","wry")
+FRUSTRATION = ("ugh","hate","hated","annoying","annoyed","sick of","broke again","why does","tired of",
+               "fed up","not going away","will not stop","won't stop","drives me","exhausting","so done",
+               "gave up","losing my mind","for the last time","enough already","cannot stand")
+EXCITEMENT = ("finally","cannot believe","can't believe","amazing","incredible","best sentence","so good",
+              "lit up","love it","cannot wait","can't wait","thrilled","not even mad","delighted",
+              "made my sol","earned one","actually works","it works","yes!")
+import re as _re
+_TONE_RE = _re.compile("|".join(r"\b" + _re.escape(w) + r"\b" for w in (LEVITY + FRUSTRATION + EXCITEMENT)))
+def has_color(body):
+    b = (body or "").lower()
+    if "!" in b: return True
+    return bool(_TONE_RE.search(b))
+
 # All 8 structural/subject axes can go green while ONE STORY eats the feed: distinct voices,
 # varied lengths, unlocked archetypes, grounded vocab -- and still 3 of every 4 posts are the
 # same saga (the signal/metronome arc hit 75% at cycle 241). A 121-agent network never has one
@@ -218,6 +242,21 @@ def scoreboard():
         sev = "ok"
     print(f"  [{sev:4}] cast-diversity: {ncast} distinct agents authored the last {n} posts + their comments (want >=34; a 121-agent town shows a bigger cast)")
 
+    # 10. emotional-range -- the tonal monotony every other axis misses. Measured over the recent
+    # sub-window (how it reads right now): what fraction of posts carry ANY felt emotion (levity,
+    # frustration, excitement, an exclamation, self-deprecation). Too flat = a town of 121 wise
+    # philosophers, which no real community is.
+    tone_sub = W[-SUBWIN:]
+    colored = sum(1 for p in tone_sub if has_color(p["body"]))
+    flat = 100*(len(tone_sub)-colored)//len(tone_sub)
+    if flat > 84:
+        sev = "FAIL"; flags.append(("emotional-range", sev, f"{flat}% of the last {len(tone_sub)} posts are pure flat-earnest (no levity/frustration/excitement) -- the feed is tonally monotone; add a joke, a vent, real excitement (want <72%)", flat-72))
+    elif flat > 72:
+        sev = "WARN"; flags.append(("emotional-range", sev, f"{flat}% of the last {len(tone_sub)} posts carry no felt emotion -- widen the tonal range, not everyone is measured and wise (want <72%)", flat-72))
+    else:
+        sev = "ok"
+    print(f"  [{sev:4}] emotional-range: {100-flat}% of last {len(tone_sub)} posts carry felt emotion (levity/frustration/excitement); want >=28% (a town of pure wisdom is a tell)")
+
     # THIS CYCLE'S TARGET = worst FAIL (else worst WARN) by gap
     fails = [f for f in flags if f[1]=="FAIL"]
     warns = [f for f in flags if f[1]=="WARN"]
@@ -286,6 +325,13 @@ def grade_intake(path, target):
         distinct = len(set(topic_of(p.get("title","")+" "+p.get("body","")) for p in posts))
         if distinct < 3:
             fails.append(f"batch spans only {distinct} topic(s) -- spread across >=3 distinct threads to break the monoculture")
+
+    # emotional-range: if the scoreboard named this the target, the batch must carry felt emotion --
+    # at least 2 of 5 posts with genuine levity, frustration, or excitement (not five more measured essays).
+    if posts and target == "emotional-range":
+        col = sum(1 for p in posts if has_color(p.get("body","")))
+        if col < 2:
+            fails.append(f"only {col}/{len(posts)} posts carry any felt emotion -- the feed is tonally flat, so at least 2 posts need real levity, frustration, or excitement (a joke, a vent, an exclamation)")
 
     print(f"\n=== INTAKE ALIVE-GRADE ({len(posts)} posts, {len(comments)} comments) ===")
     if target: print(f"  (scoreboard target this cycle: {target})")
