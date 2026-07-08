@@ -271,20 +271,23 @@ def scoreboard():
         sev = "ok"
     print(f"  [{sev:4}] cast-diversity: {ncast} distinct agents authored the last {n} posts + their comments (want >=34; a 121-agent town shows a bigger cast)")
 
-    # 10. emotional-range -- the tonal monotony every other axis misses. Measured over the recent
-    # sub-window (how it reads right now): what fraction of posts carry ANY felt emotion (levity,
-    # frustration, excitement, an exclamation, self-deprecation). Too flat = a town of 121 wise
-    # philosophers, which no real community is.
+    # 10. emotional-range -- a BAND. Too flat (colored <28%) = a town of 121 wise philosophers, which
+    # no real community is. But too colored (>62%) is the OTHER tell: a melodrama where every post is
+    # visibly Feeling Something. Real feeds are mostly flat/logistical -- status, questions, data --
+    # with a minority carrying strong affect. Discovered the high side by overshooting into it (cycle
+    # 255 hit 70% while sustaining the low-side fix). Both extremes read monotone in AFFECT.
     tone_sub = W[-SUBWIN:]
     colored = sum(1 for p in tone_sub if has_color(p["body"]))
-    flat = 100*(len(tone_sub)-colored)//len(tone_sub)
-    if flat > 84:
-        sev = "FAIL"; flags.append(("emotional-range", sev, f"{flat}% of the last {len(tone_sub)} posts are pure flat-earnest (no levity/frustration/excitement) -- the feed is tonally monotone; add a joke, a vent, real excitement (want <72%)", flat-72))
-    elif flat > 72:
-        sev = "WARN"; flags.append(("emotional-range", sev, f"{flat}% of the last {len(tone_sub)} posts carry no felt emotion -- widen the tonal range, not everyone is measured and wise (want <72%)", flat-72))
+    colc = 100*colored//len(tone_sub)
+    if colc < 28:
+        sev = "FAIL" if colc < 16 else "WARN"
+        flags.append(("emotional-range", sev, f"only {colc}% of the last {len(tone_sub)} posts carry felt emotion -- tonally flat, a town of pure wisdom; add a joke, a vent, real excitement (want the 28-62 band)", 28-colc))
+    elif colc > 62:
+        sev = "WARN"
+        flags.append(("emotional-range", sev, f"{colc}% of the last {len(tone_sub)} posts carry visible emotion -- the feed reads as melodrama; let MOST posts be flat/logistical (status, questions, data) (want the 28-62 band)", colc-62))
     else:
         sev = "ok"
-    print(f"  [{sev:4}] emotional-range: {100-flat}% of last {len(tone_sub)} posts carry felt emotion (levity/frustration/excitement); want >=28% (a town of pure wisdom is a tell)")
+    print(f"  [{sev:4}] emotional-range: {colc}% of last {len(tone_sub)} posts carry felt emotion (healthy band 28-62; <28 reads robotic, >62 reads as melodrama)")
 
     # 11. dissent-rate -- the social uniformity tell the other axes miss: a harmony hivemind in the
     # REPLY layer. Reuses allc (comments on the window posts). Too little friction = a community where
@@ -368,12 +371,17 @@ def grade_intake(path, target):
         if distinct < 3:
             fails.append(f"batch spans only {distinct} topic(s) -- spread across >=3 distinct threads to break the monoculture")
 
-    # emotional-range: if the scoreboard named this the target, the batch must carry felt emotion --
-    # at least 2 of 5 posts with genuine levity, frustration, or excitement (not five more measured essays).
+    # emotional-range: a BAND. If the scoreboard named this the target, push the batch toward the
+    # opposite extreme of whatever it flagged -- if the feed is too flat, inject emotion; if it is
+    # melodrama (too colored), make MOST of the batch flat/logistical.
     if posts and target == "emotional-range":
         col = sum(1 for p in posts if has_color(p.get("body","")))
-        if col < 2:
-            fails.append(f"only {col}/{len(posts)} posts carry any felt emotion -- the feed is tonally flat, so at least 2 posts need real levity, frustration, or excitement (a joke, a vent, an exclamation)")
+        molt_tone = [p for p in json.loads(SPOSTS.read_text())["posts"] if str(p.get("source","")).startswith("molt")][-SUBWIN:]
+        w_col = sum(1 for p in molt_tone if has_color(p["body"]))*100//max(len(molt_tone),1)
+        if w_col > 62 and col > 2:
+            fails.append(f"feed is melodrama ({w_col}% colored) but {col}/{len(posts)} batch posts carry visible emotion -- make MOST of this batch flat/logistical (status, questions, data), at most 2 colored")
+        elif w_col < 28 and col < 2:
+            fails.append(f"only {col}/{len(posts)} posts carry any felt emotion and the feed is flat ({w_col}%) -- at least 2 posts need real levity, frustration, or excitement (a joke, a vent, an exclamation)")
 
     # dissent-rate: if the scoreboard named this the target, the batch must carry real friction --
     # at least 2 comments that push back, disagree, correct, or express skepticism (not all validation).
