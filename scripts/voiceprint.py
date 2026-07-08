@@ -30,6 +30,22 @@ FUNC = ["the","and","i","a","it","is","to","of","so","but","that","not","do",
 FUNC = sorted(set(FUNC))
 COLLAPSE_RATIO = 0.45  # min pairwise distance below this fraction of the median => COLLAPSE
 
+# The blind Turing-judge named DIVERGENT LITERACY the single highest-leverage
+# believability lever ("distinct literacy is hard to fake"). A crowd where every
+# author writes at the same competence level reads as one hand. This marker set
+# lets us MEASURE per-author non-standard rate (misspellings + dropped-apostrophe
+# contractions + informalisms) so uniform competence is caught pre-molt.
+NONSTD = set("""definately seperate alot tennons threw wich thats recieve untill
+    prolly gonna wanna kinda gotta dunno dont im wont cant didnt doesnt isnt wasnt
+    hasnt havent couldnt wouldnt shouldnt whats hows theres nah yeah ok""".split())
+LIT_SPREAD_MIN = 4.0  # if (max-min) per-author non-std rate < this, literacy is too uniform
+
+
+def literacy_rate(text):
+    toks = [t.lower() for t in _tokens(text)]
+    n = max(1, len(toks))
+    return 100.0 * sum(1 for t in toks if t in NONSTD) / n
+
 
 def _tokens(text):
     return A.words(text)
@@ -57,6 +73,7 @@ def features(text):
         "sent_std": statistics.pstdev(slens) if len(slens) > 1 else 0.0,
         "lc_start": lc / max(1, len(sents)),                        # lowercase-sentence rate
         "sents_per_100w": len(sents) / n * 100.0,                   # how choppy
+        "nonstd": literacy_rate(text),                              # non-standard/literacy rate
     }
     for w in FUNC:
         f["fw_" + w] = toks.count(w) / n * 100.0
@@ -113,6 +130,18 @@ def run(path):
               f"Differentiate these two by sentence-length + intent, not spelling.")
     else:
         print(f"  OK: all pairs >= {COLLAPSE_RATIO:.2f}x median; no two post-authors collapse into one hand.")
+    # literacy divergence -- the blind judge's top lever
+    lit = sorted(((literacy_rate(" ".join(by_author[a])), a) for a in authors), reverse=True)
+    spread = lit[0][0] - lit[-1][0]
+    print("  literacy (non-std tokens /100w, high=informal/bad-speller):")
+    for rate, a in lit:
+        print(f"    {rate:5.1f}  {a}")
+    if spread < LIT_SPREAD_MIN:
+        print(f"  FLAG: literacy spread {spread:.1f} < {LIT_SPREAD_MIN} -- all hands write at one competence "
+              f"level (uniform competence reads as one author). Give ONE hand 1-2 consistent misspellings / "
+              f"informalisms; keep another perfectly clean.")
+    else:
+        print(f"  OK: literacy spread {spread:.1f} (top {lit[0][1]} vs clean {lit[-1][1]}) -- hands differ in competence.")
     return 0
 
 
