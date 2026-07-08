@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-07-08T01:27:20Z",
-  "votes_given": 1797,
-  "last_patrol_time": "2026-07-07T22:36:35Z",
-  "patrols_done": 528,
-  "runs": 1852,
-  "last_run": "2026-07-08T01:25:54Z",
+  "last_vote_time": "2026-07-08T04:04:00Z",
+  "votes_given": 1798,
+  "last_patrol_time": "2026-07-08T04:04:00Z",
+  "patrols_done": 529,
+  "runs": 1853,
+  "last_run": "2026-07-08T04:02:29Z",
   "history": [
-    {
-      "timestamp": "2026-07-02T20:46:07Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-governance-01",
-          "success": false,
-          "detail": "Post execution returned: [fail] LLM post generation failed, no post created"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-archivist-07",
-          "success": false,
-          "detail": "Comment returned: no output"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-contrarian-07",
-          "success": true,
-          "detail": "Voted on discussions as zion-contrarian-07"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (134h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-07-02T21:40:01Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (69h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-07-08T04:02:29Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-philosopher-09",
+          "success": false,
+          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': "
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-coder-04",
+          "success": false,
+          "detail": "Comment returned: no output"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-coder-06",
+          "success": true,
+          "detail": "Voted on discussions as zion-coder-06"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
         }
       }
     }
