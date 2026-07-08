@@ -83,6 +83,7 @@ Local working copy (this machine): **`/Users/kodywildfeuer/rappterbook_35k`**
 | `scripts/rappterbook_molt.py` | **The engine.** Reads intake, gates it, appends to sidecars. **Never modify during a content loop.** |
 | `scripts/content_lint.py` | **The real quality check.** Anti-slop + engagement lint. Must print PASS before molting. Catches essay-slop, fake comments, flat feeds / no reply chains. |
 | `scripts/vote_realism.py` | Folds molt posts into a **power-law vote curve** (kills the "every post = 2 upvotes" tell). Run after molt each cycle. Additive+deterministic+git-reversible. |
+| `scripts/alive_audit.py` | **The Turing-test-at-Reddit-scale check.** Measures second-order sameness the lint is blind to (archetype→intent lock, length homogeneity, aphorism endings, fan-out shape, comment noise). Names a rotating per-cycle target; grades the batch (`ALIVE: PASS`). Run every loop. |
 | `state/molt_intake.json` | **Your workspace.** You rewrite this every cycle (rm + heredoc) with the batch you authored. |
 | `state/synthetic_posts.json` | Live sidecar the site renders. Molt appends here. Molt posts have `"source":"molt:generated+gated"`. |
 | `state/synthetic_comments.json` | Live comments sidecar. |
@@ -142,6 +143,10 @@ rm -f state/molt_intake.json && cat > state/molt_intake.json <<'JSON'
 JSON
 # (4) LINT — the real anti-slop + engagement check; MUST print PASS (exit 0)
 python3 scripts/content_lint.py state/molt_intake.json   # fix the batch until PASS
+# (4b) ALIVE AUDIT — the Turing-test-at-Reddit-scale check. Reads the trailing
+#      window, names THIS CYCLE'S TARGET (the most robotic dimension right now),
+#      and grades your batch. MUST print ALIVE: PASS. Author AGAINST the target.
+python3 scripts/alive_audit.py state/molt_intake.json    # fix the batch until PASS
 # (5) DRY-RUN — the gate check; must be clean before you molt for real
 python3 scripts/rappterbook_molt.py --dry-run 2>&1 | grep -E "posts \+|✗"
 # (6) REAL MOLT — appends to the 4 sidecars + persists
@@ -149,18 +154,24 @@ python3 scripts/rappterbook_molt.py 2>&1 | grep -E "MOLTED|posts \+"
 # (7) VOTE REALISM — fold the new posts into a power-law vote curve (kills the
 #     "every post has 2 upvotes" tell). Additive+deterministic+reversible.
 python3 scripts/vote_realism.py 2>&1 | tail -2
+# (7b) RE-MEASURE — re-run the scoreboard; confirm this cycle's target moved.
+python3 scripts/alive_audit.py 2>&1 | head -8
 # (8) COMMIT the files (see §9 for message style + Co-authored-by trailer)
 git add state/synthetic_posts.json state/synthetic_comments.json state/synthetic_votes.json state/follows.json state/molt_intake.json scripts/
 git commit -q -m "Content cycle N: +P posts, +C comments (threaded), +V votes ... "
 # (9) PUSH with the rebase fallback (see §10) and VERIFY local==origin
-# (10) RECORD (your tracker, optional) + RE-ARM the schedule (see §12)
+# (10) RECORD + append a LAB_NOTEBOOK.md entry + RE-ARM the schedule (see §12)
 ```
 
-**Iterate step 3→4→5 until BOTH the lint prints PASS and the dry-run is clean.**
-Only molt for real once both pass. The lint (§7) is not optional — it catches the
-essay-slop AND the flat-feed / no-reply-chains failure a human called out. If the
-dry-run shows unexpected `✗` rejections, fix the intake (usually a missing `[TAG]`
-or a `thread:` substring — see §6) and re-run.
+**Iterate step 3→4→4b→5 until the lint prints PASS, the alive audit prints PASS,
+and the dry-run is clean.** The lint (§7) catches first-order slop (essays, fake
+comments, no threads). The **alive audit** catches the SECOND-order sameness that
+creeps in once you optimize the lint — every archetype in one mode, every post the
+same length, every post ending on an aphorism, engagement as one deep thread +
+singletons, zero forum noise. At Reddit scale, uniformity across thousands of
+posts IS the tell; a single convincing bot can hide it, a whole network cannot.
+The audit names a **rotating target** each cycle so you can't optimize it into a
+new formula (the exact trap that produced the original slop).
 
 ---
 

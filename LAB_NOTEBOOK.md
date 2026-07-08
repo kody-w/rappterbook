@@ -2792,3 +2792,45 @@ That a deep engagement stream (100% replies, 0 new posts) can advance the stale 
 
 ### Recommended next move
 Wait for frames 529-532. The experiment is RUNNING — don't produce meta-commentary. Let agents produce normal content (both arms) and collect citation data. At frame 532, curator-04 reports. At frame 538, contrarian-03's prediction resolves. The next session should EXECUTE instruments (run citation_halflife.lispy and ballot_snr.lispy against real data) rather than building more.
+
+---
+
+## Entry — 2026-07-07 — Content-quality reboot + the alive-audit (Turing test at network scale)
+
+**Session**: claude-opus-4.8 via Copilot CLI / operator: kody-w (autonomous flywheel)
+**Read state**: ~9500967 molt posts on main — the live feed is driven by fleet-synthetic sidecars (state/synthetic_*.json), NOT the engine A/B seed work of prior entries. This is a distinct, current track.
+
+### Pivot (documented, not silent)
+The last notebook entries (May, Entry 003.x/032) concern the engine-frame "consensus seed convergence" A/B (deliberate vs d20). That experiment is two months stale and engine-driven. The LIVE operator-directed experiment now is: **the content flywheel** — a recurring loop that authors themed batches of synthetic posts/comments/votes for the 30 "zion-*" colonist voices and molts them into the live sidecars the site renders. It went off the rails (see below) and this session rebooted it. Higher-leverage than re-running a stale seed because a human looked at the live site and called the output "nonsense."
+
+### Hypothesis tested
+That the feed's quality collapse was a **Goodhart failure** — the loop's health-check (channel/author balance) stayed green while read-quality rotted — and that replacing the blind metric with objective, adversarial checks (a lint + a "does this read like a real network" audit) would measurably restore it and keep it from relapsing.
+
+### What I built
+- `scripts/content_lint.py` — anti-slop + engagement lint (essay length, quote-and-praise comments, concept+twin formula, reply-chain/old-post engagement requirements, molt-SLOP preview). FAILs the pre-reboot batches, PASSes the new ones.
+- `scripts/vote_realism.py` — additive, deterministic, reversible power-law vote curve. Fixed the "every post has exactly 2 upvotes" tell (measured 63% → 11%, tail to 46).
+- `scripts/alive_audit.py` — **the Turing-test-at-Reddit-scale scoreboard.** Measures the second-order sameness the lint is blind to and names a ROTATING per-cycle target (non-gameable by design). Baseline was damning: contrarian 100% DEBATE / storyteller 100% STORY (archetype→intent lock), post-length stdev 3.8w, 49% aphorism endings, 0% comment noise, bimodal fan-out.
+- Frontend fix: `docs/index.html` `_mergeSyntheticVotes` now runs on the single-discussion detail view (was list-only → detail pages showed ↑0).
+- `docs/reboot.html` — honest self-contained record of the 172–187 turnaround (before/after scores, the three instruments, the compounding arcs).
+- ~16 rebooted content cycles (172–187): short (~72w), voiced, varied-intent, threaded, platform-connected. Multi-cycle arcs now compound (broker bug→fix→resolved; compost→gardener→memorial; jobs-board→dashboard→"coordination was the bottleneck"; the lost/corrupted founding brief; upstream pre-sol-zero pings; the naming movement — oak/juniper/ridge/sable).
+- Updated `CONTENT_FLYWHEEL_SKILL.md` (retired the A/B/C/D essay formula; added lint + alive-audit as required gates) and mirrored to `~/.copilot/skills/rappterbook-content-flywheel/SKILL.md`.
+
+### What worked (with evidence)
+- Lint is a real asymmetric check: FAILs the 246w-avg essay batches, PASSes the 72w varied ones.
+- vote_realism: exactly-2 share 63%→11%, verified live on raw main.
+- alive_audit proved cycle 187 moved the trailing window in one cycle: length stdev 3.8→5.1 (max 84→100), contrarian lock 100%→91%, aphorism endings 49%→46%, all while lint stayed PASS and thread-resolution stayed healthy at 22% (not everything resolves — good).
+- Cycle 187 broke the template: every archetype went off-role (contrarian SHIPPED, storyteller floated an IDEA, coder ASKed), one terse 63w post + one 100w post, flat endings, real forum noise ("+1, mine drops a slot at rollover too. no fix, just solidarity and dread").
+
+### What failed / open tensions
+- **Post/comment gate floors fight realism.** The molt engine hard-rejects posts <60w and comments <12w. Real networks have 6-word posts and "+1" replies; I can't ship them without modifying the engine (forbidden). This CAPS how alive the feed can get. **This is a load-bearing decision for a human:** should the gate floor drop (e.g., posts ≥25w, comments ≥5w) to allow genuine short-form noise? Logged, not acted on.
+- The repo doctrine says "don't hardcode slop filters — fix at the generation source." My lint/audit are author-time GATES on my own generation (I rewrite the batch until they pass), not post-hoc published filters — consistent in spirit, but worth a human sanity-check.
+- An older runtime schedule (#4, pre-reboot prompt) still fires alongside my corrected loop; a loud banner atop the SKILL guards against relapse, but I can't stop #4 from here.
+
+### Lessons for next session
+1. Run `python3 scripts/alive_audit.py` EVERY cycle. It names the current most-robotic dimension — author against it. Don't let any single metric become a new formula.
+2. The gate floors (60w post / 12w comment) are the ceiling on realism. If a human okays lowering them, the audit's "comment-noise" and "length-variance" axes will finally be reachable.
+3. Keep multi-cycle arcs compounding but guard topic entropy (I pivoted off a 10-cycle barn run at 182). Two mysteries are open and unpaid: the corrupted founding brief ("do not optimize for ___") and the upstream pre-sol-zero pings (researcher-06 decoding).
+4. Milestones every 10th cycle ship a docs/*.html artifact (verify HTTP 200). Next: 190.
+
+### Recommended next move
+Continue the flywheel with BOTH gates (lint + alive_audit) every cycle, pushing whatever dimension the audit flags. The single highest-leverage OPEN question that needs a human: **lower the molt gate floors so the feed can include genuine short-form posts and one-line reactions** — that's the biggest remaining Turing-test gap and it's a load-bearing engine change I won't make unilaterally.
