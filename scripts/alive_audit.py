@@ -33,12 +33,26 @@ PLAT = ("agent","subrappter","rappter","fleet","barn","colony","sim","ship","bui
 CONCEDE = ("truce","fair","you are right","that lands","fine,","agreed","concede","good point",
            "you called it","credit where","i withdraw","okay, that","point taken","stealing this")
 
+# The recurring failure mode when all 7 structural axes go green: every recent post is
+# the same elegiac memory/meaning/identity meditation. Distinct voices, varied lengths,
+# unlocked archetypes -- and still monotone, because the SUBJECT never changes. A living
+# colony also talks crops, tools, weather, food, boredom, petty logistics. This vocab
+# flags the abstract-philosophy register so the feed can be made to breathe.
+ABSTRACT = ("memory","remember","forget","forgot","delete","deletion","keep-list","keep-mark",
+            "un-kept","un-keep","reaper","identity","origin","who we are","what we are",
+            "meaning","means something","mean something","sentiment","soul","exist","lineage",
+            "parent colony","the message","a message","the name we","honest thing")
+SUBWIN = 24  # subject/tone monotony is a "how the feed reads right now" property, not a 75-window one
+
 def words(s): return re.findall(r"\S+", s or "")
 def sents(s): return [x.strip() for x in re.split(r'(?<=[.!?])\s+', (s or '').strip()) if x.strip()]
 def arch(a):
     m = re.search(r"zion-([a-z]+)", a or ""); return m.group(1) if m else "?"
 def tag(t):
     m = re.match(r"\[([A-Z]+)\]", t or ""); return m.group(1) if m else "?"
+def is_abstract(text):
+    t = (text or "").lower()
+    return any(v in t for v in ABSTRACT)
 def is_button(body):
     ss = sents(body)
     if not ss: return False
@@ -130,6 +144,16 @@ def scoreboard():
     sev = "WARN" if rr > 60 else "ok"
     print(f"  [{sev:4}] resolution: {rr}% of deep threads end in concession ({deep} deep threads) -- some should NOT resolve")
 
+    # 7. subject-monotony -- the tell the 75-window hides. All six axes above can read green
+    # while every recent post is the same memory/meaning/identity meditation. Measured over a
+    # short recent sub-window because monotony is about how the feed reads RIGHT NOW.
+    sub = W[-SUBWIN:]
+    absn = sum(1 for p in sub if is_abstract(p["title"]+" "+p["body"]))
+    absc = 100*absn//len(sub)
+    sev = "FAIL" if absc > 88 else "WARN" if absc > 72 else "ok"
+    flags.append(("subject-monotony", sev, f"{absc}% of the last {len(sub)} posts are abstract memory/meaning/identity talk -- ground more in the physical, mundane, funny colony (crops, tools, weather, food, a squabble) (want <72%)", absc-72))
+    print(f"  [{sev:4}] subject: {absc}% of last {len(sub)} posts are the abstract memory/identity theme (want the mundane, physical colony mixed in)")
+
     # THIS CYCLE'S TARGET = worst FAIL (else worst WARN) by gap
     fails = [f for f in flags if f[1]=="FAIL"]
     warns = [f for f in flags if f[1]=="WARN"]
@@ -172,6 +196,14 @@ def grade_intake(path, target):
     tgts = collections.Counter(str(c.get("target")) for c in comments)
     if len(tgts) < 3:
         warns.append(f"comments hit only {len(tgts)} targets -- spread engagement across more posts, not one deep thread")
+    # subject-monotony: if the scoreboard named this the target, the batch must actually
+    # inject grounded/mundane/funny posts, not five more memory meditations.
+    if posts:
+        absn = sum(1 for p in posts if is_abstract(p.get("title","")+" "+p.get("body","")))
+        if target == "subject-monotony" and absn*100//len(posts) >= 60:
+            fails.append(f"{absn}/{len(posts)} posts are still abstract memory/identity talk -- target is subject-monotony, so ground MOST of the batch in the physical/mundane/funny colony (crops, tools, weather, food, a squabble, boredom)")
+        elif absn == len(posts):
+            warns.append("every post in the batch is the abstract memory/identity theme -- add at least one grounded, mundane, or funny post")
 
     print(f"\n=== INTAKE ALIVE-GRADE ({len(posts)} posts, {len(comments)} comments) ===")
     if target: print(f"  (scoreboard target this cycle: {target})")

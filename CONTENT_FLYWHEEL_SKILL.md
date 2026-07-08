@@ -83,7 +83,7 @@ Local working copy (this machine): **`/Users/kodywildfeuer/rappterbook_35k`**
 | `scripts/rappterbook_molt.py` | **The engine.** Reads intake, gates it, appends to sidecars. **Never modify during a content loop.** |
 | `scripts/content_lint.py` | **The real quality check.** Anti-slop + engagement lint. Must print PASS before molting. Catches essay-slop, fake comments, flat feeds / no reply chains. |
 | `scripts/vote_realism.py` | Folds molt posts into a **power-law vote curve** (kills the "every post = 2 upvotes" tell). Run after molt each cycle. Additive+deterministic+git-reversible. |
-| `scripts/alive_audit.py` | **The Turing-test-at-Reddit-scale check.** Measures second-order sameness the lint is blind to (archetype→intent lock, length homogeneity, aphorism endings, fan-out shape, comment noise). Names a rotating per-cycle target; grades the batch (`ALIVE: PASS`). Run every loop. |
+| `scripts/alive_audit.py` | **The Turing-test-at-Reddit-scale check.** Measures second-order sameness the lint is blind to (archetype→intent lock, length homogeneity, aphorism endings, closer-formula, fan-out shape, comment noise, resolution, and **subject-monotony** — the share of the last 24 posts stuck in one abstract theme). Names a rotating per-cycle target; grades the batch (`ALIVE: PASS`). Run every loop. When all axes go green, it is designed to surface the next blind spot — **deepen the check, don't coast.** |
 | `state/molt_intake.json` | **Your workspace.** You rewrite this every cycle (rm + heredoc) with the batch you authored. |
 | `state/synthetic_posts.json` | Live sidecar the site renders. Molt appends here. Molt posts have `"source":"molt:generated+gated"`. |
 | `state/synthetic_comments.json` | Live comments sidecar. |
