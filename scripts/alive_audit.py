@@ -45,6 +45,19 @@ def is_button(body):
     fin = ss[-1]
     return len(words(fin)) <= 9 and not any(k in fin.lower() for k in PLAT)
 
+def closer_family(body):
+    """A normalized signature of how a post ENDS. Catches closer-formulas -- e.g.
+    when you kill aphorism endings (button-endings) but replace them with 'in the
+    X channel' on every post. Gaming one ending metric hardens another; this sees
+    both. Real posts end many different ways; no single family should dominate."""
+    b = (body or "").lower().strip()
+    m = re.search(r"in (?:the|your|our|my) [\w-]+ (channel|vault|thread|feed|log|poll)\b[^.]*\.?\s*$", b)
+    if m: return f"in-the-_-{m.group(1)}"
+    m = re.search(r"(in|to|from|for) (?:the|your|our|my) ([\w-]+) (channel|vault)\b", b[-60:])
+    if m: return f"_-{m.group(3)}"
+    ws = re.findall(r"[a-z'-]+", b)
+    return " ".join(ws[-3:]) if len(ws) >= 3 else " ".join(ws)
+
 def scoreboard():
     posts = json.loads(SPOSTS.read_text())["posts"]
     cmts  = json.loads(SCMTS.read_text())["by_discussion"]
@@ -68,6 +81,14 @@ def scoreboard():
     sev = "FAIL" if btn > 45 else "WARN" if btn > 30 else "ok"
     flags.append(("button-endings", sev, f"{btn}% mic-drop endings (want <30%)", btn-30))
     print(f"  [{sev:4}] button endings: {btn}% of posts end on a short aphorism")
+
+    # 2b. closer-formula (the tell you create when you game button-endings)
+    fams = collections.Counter(closer_family(p["body"]) for p in W)
+    dom_fam, dom_n = fams.most_common(1)[0]
+    domc = 100*dom_n//n
+    sev = "FAIL" if domc > 35 else "WARN" if domc > 22 else "ok"
+    flags.append(("closer-formula", sev, f"{domc}% of posts end the same way ('{dom_fam}') -- vary how posts CLOSE (want <22%)", domc-22))
+    print(f"  [{sev:4}] closer-formula: {domc}% share the dominant ending '{dom_fam}'")
 
     # 3. comment fan-out shape
     cc = [len(cmts.get(str(p["number"]),[])) for p in W]
@@ -131,6 +152,13 @@ def grade_intake(path, target):
         if max(pwl) < 90: warns.append(f"no long post (longest {max(pwl)}w) -- let one run to ~95-105w")
         btn = 100*sum(1 for p in posts if is_button(p["body"]))//len(posts)
         if btn > 40: fails.append(f"{btn}% of posts end on an aphorism -- most should end flat/logistical, ration the mic-drop")
+        # closer-formula within the batch: don't end 3+ of 5 posts the same way
+        cfam = collections.Counter(closer_family(p["body"]) for p in posts)
+        cf_top, cf_n = cfam.most_common(1)[0]
+        if cf_n >= 3:
+            fails.append(f"{cf_n}/{len(posts)} posts end the same way ('{cf_top}') -- vary the CLOSER (end on a detail, a question, mid-thought; not all 'in the X channel')")
+        elif cf_n == 2 and "channel" in cf_top or "vault" in cf_top:
+            warns.append(f"{cf_n} posts end '{cf_top}' -- watch the channel-closer habit")
     # archetype-break: at least one post whose author archetype defies its usual intent
     usual = {"coder":"SHOW","contrarian":"DEBATE","storyteller":"STORY","researcher":"ASK","welcomer":"GENERAL"}
     broke = [p for p in posts if usual.get(arch(p.get("author","")),None) not in (None, tag(p.get("title","")))]
