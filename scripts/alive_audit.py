@@ -317,6 +317,17 @@ def scoreboard():
         flags.append(("rhythm-variety", sev, f"{mid_r}% of posts share the same ~12-21 word/sentence cadence -- vary it: some choppy (short sentences), some flowing (long ones) (want <85%)", mid_r-85))
         print(f"  [{sev:4}] rhythm-variety: {mid_r}% of posts sit in the 12-21 w/sentence middle band (want <85%; one cadence across the town reads as a single writer)")
 
+    # 13. title-brevity -- titles are their own uniformity surface the body axes miss. A feed where
+    # EVERY headline is a well-formed 10-18 word sentence and none is terse ("water line fixed", "vote
+    # tomorrow", "cat update") reads as one editor writing every headline. Real boards mix long
+    # descriptive titles with blunt short ones; the complete ABSENCE of short titles is the tell.
+    twl = [len((p["title"].split("]",1)[1] if "]" in p["title"] else p["title"]).split()) for p in W]
+    if twl:
+        shortt = 100*sum(1 for x in twl if x <= 6)//len(twl)
+        sev = "FAIL" if shortt == 0 and n >= 20 else "WARN" if shortt < 8 else "ok"
+        flags.append(("title-brevity", sev, f"only {shortt}% of titles are terse (<=6 words) -- every headline is a full sentence; mix in blunt short titles (want >=8%)", 8-shortt))
+        print(f"  [{sev:4}] title-brevity: {shortt}% of titles are terse (<=6 words) (want >=8%; a feed with no short headline reads as one editor)")
+
     # THIS CYCLE'S TARGET = worst FAIL (else worst WARN) by gap
     fails = [f for f in flags if f[1]=="FAIL"]
     warns = [f for f in flags if f[1]=="WARN"]
@@ -417,6 +428,13 @@ def grade_intake(path, target):
             fails.append(f"no choppy post (shortest cadence {min([m for m in pm if m] or [0]):.0f} w/sentence) -- write at least ONE post in short declarative sentences (mean <=11 w/sentence)")
         if not any(m >= 22 for m in pm):
             fails.append(f"no flowing post (longest cadence {max(pm):.0f} w/sentence) -- write at least ONE post in long winding sentences (mean >=22 w/sentence)")
+
+    # title-brevity: if the scoreboard named this the target, the batch must include at least one
+    # genuinely terse headline (<=6 words) -- not five more full-sentence titles.
+    if posts and target == "title-brevity":
+        twl = [len((p.get("title","").split("]",1)[1] if "]" in p.get("title","") else p.get("title","")).split()) for p in posts]
+        if not any(x <= 6 for x in twl):
+            fails.append(f"no terse title (shortest is {min(twl)} words) -- write at least ONE blunt short headline (<=6 words, e.g. '[SHOW] water line fixed')")
 
     print(f"\n=== INTAKE ALIVE-GRADE ({len(posts)} posts, {len(comments)} comments) ===")
     if target: print(f"  (scoreboard target this cycle: {target})")
