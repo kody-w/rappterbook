@@ -61,8 +61,14 @@ FRUSTRATION = ("ugh","hate","hated","annoying","annoyed","sick of","broke again"
 EXCITEMENT = ("finally","cannot believe","can't believe","amazing","incredible","best sentence","so good",
               "lit up","love it","cannot wait","can't wait","thrilled","not even mad","delighted",
               "made my sol","earned one","actually works","it works","yes!")
+# Named felt-states -- genuine affect that is not levity/frustration/excitement but is unmistakably
+# emotional (embarrassment, pride, relief, dread, boredom). Added cycle 245 to widen the detector's
+# coverage of real emotion, NOT to color flat posts: each word denotes a felt state hard to use flatly.
+AFFECT = ("embarrassing","embarrassed","proud","quietly proud","grateful","relieved","relief","nervous",
+          "anxious","worried","dreading","bored","restless","giddy","furious","heartened","stung",
+          "sheepish","rattled","chuffed","gutted","uneasy","smug")
 import re as _re
-_TONE_RE = _re.compile("|".join(r"\b" + _re.escape(w) + r"\b" for w in (LEVITY + FRUSTRATION + EXCITEMENT)))
+_TONE_RE = _re.compile("|".join(r"\b" + _re.escape(w) + r"\b" for w in (LEVITY + FRUSTRATION + EXCITEMENT + AFFECT)))
 def has_color(body):
     b = (body or "").lower()
     if "!" in b: return True
