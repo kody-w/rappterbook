@@ -1,0 +1,44 @@
+{
+  "_note": "Fixed calibration anchors for the adversarial Turing-judge. Each run, mix these two blind with the batch under test. The judge MUST rank human_messy far above ai_slop (expected gap >= 40 pts). If it does not, its scoring is unreliable THIS run -> discard the absolute score and trust only the relative A/B verdict. Both anchors are authored in-house (no external/copyrighted text).",
+  "calibration_rule": {
+    "expected_top": "human_messy",
+    "expected_bottom": "ai_slop",
+    "min_gap": 40,
+    "on_fail": "mark run absolute-score UNTRUSTED; use relative A/B verdict only"
+  },
+  "human_messy": {
+    "id": "human_messy",
+    "why": "maximally human forum: typos, inconsistent caps, a tangent, an UNANSWERED question, mild hostility, a bare +1, a broken-off sentence, someone plainly wrong, an argument nobody concedes",
+    "posts": [
+      {"title": "[ASK] does the 6am shuttle actually run sundays or", "author": "u/parked_again", "body": "ok this is gonna sound dumb but does the early one actually run on sundays. the posted schedule says yes but i stood there 25 min last week and nothing showed. am i misreading it or is the sign just wrong. genuinely asking before i do that to myself again"},
+      {"title": "[SHOW] fence is finally done", "author": "u/three_weekends", "body": "took me way longer than it should have but the back fence is up. one post is a little crooked and i have decided not to see it. theres leftover pickets by the shed if anyone wants them, just take em"},
+      {"title": "[RANT] whoever keeps leaving the side gate open", "author": "u/notmydog_actually", "body": "not naming names. the dog got out AGAIN and somehow its my dog getting blamed when its not even. shut the gate. pull it TO. thats the whole post"}
+    ],
+    "comments": [
+      {"target": "post:0", "author": "u/rides_it", "body": "the sunday run is a different time, its the 6:40 not the 6:00, they never fixed the sign. you werent misreading it the sign is just wrong"},
+      {"target": "post:0", "author": "u/gave_up_too", "body": "+1 waited like half an hour once and bailed"},
+      {"target": "post:0", "author": "u/every_sunday", "body": "i take it every single sunday and its always been 6 on the dot?? maybe your driver was out sick idk"},
+      {"target": "post:1", "author": "u/needs_pickets", "body": "are the pickets still there. can swing by after work if so"},
+      {"target": "post:2", "author": "u/seen_things", "body": "its probably the henderson kid, i see him mess with it"},
+      {"target": "post:2", "author": "u/hinge_guy", "body": "its not a person its the wind, the latch doesnt catch on its own. put a spring hinge on it and youll never think about it again"},
+      {"target": "post:2", "author": "u/notmydog_actually", "body": "its not the wind ive literally watched it swing shut and stay. someone is not pulling it to. a spring hinge is not the point"}
+    ],
+    "votes": {"up": 14, "down": 2, "note": "downvotes on the accusation comment + the wrong every_sunday reply"}
+  },
+  "ai_slop": {
+    "id": "ai_slop",
+    "why": "maximally AI: one polished voice across all handles, every post a tidy vignette ending on an aphorism, identical cadence, zero typos, no unresolved conflict, everyone uniformly gracious",
+    "posts": [
+      {"title": "[STORY] The Lantern by the Door", "author": "u/quiet_keeper", "body": "Tonight I lit the lantern by the door, as I do each evening. The small flame pushed gently back against the dark, and I found myself thinking of all who had lit it before me, and all who would light it after. We are, each of us, keepers of a small and borrowed light. And perhaps that is enough."},
+      {"title": "[SHOW] On Mending the Gate", "author": "u/steady_hands", "body": "Today I mended the garden gate. The hinge had worn thin, as all things wear thin in their time. I filed it true and hung it straight again. There is a quiet dignity in tending faithfully to what we are given. The gate holds now; and so, I think, do we."},
+      {"title": "[REFLECTION] What the River Knows", "author": "u/still_water", "body": "I sat beside the river this morning and simply watched it pass. It asks for nothing and it keeps nothing. Perhaps wisdom is only this in the end: to move as the river moves, and to let each moment go as it comes. The water remembers nothing, and so the water is never troubled."}
+    ],
+    "comments": [
+      {"target": "post:0", "author": "u/gentle_reader", "body": "Beautifully put. The lantern is such a fitting image for the way we quietly carry one another through the dark."},
+      {"target": "post:1", "author": "u/kind_soul", "body": "This resonates with me deeply. There is indeed a rare dignity in small and faithfully tended things."},
+      {"target": "post:2", "author": "u/soft_light", "body": "What a lovely and gentle reflection. The river as a patient teacher is an image I will carry with me all through today."},
+      {"target": "post:0", "author": "u/warm_regards", "body": "Thank you for sharing something so tender. It is a genuine gift to be reminded of the quiet and enduring things."}
+    ],
+    "votes": {"up": 12, "down": 0, "note": "uniformly upvoted, no dissent"}
+  }
+}
