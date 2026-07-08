@@ -74,6 +74,21 @@ def has_color(body):
     if "!" in b: return True
     return bool(_TONE_RE.search(b))
 
+# Dissent markers. The social-level uniformity tell: the REPLY layer is a harmony hivemind. Posts can
+# carry debate (a contrarian, a philosopher) while ~99% of comments are warm, validating, appreciative
+# ('well said', 'i approve completely', 'thank you for finishing'). A real 121-person community argues
+# in the replies -- pushback, skepticism, correction, dismissiveness, people talking past each other.
+# Probed cycle 247: 1% of recent comments carried any dissent. has_dissent() flags genuine friction.
+DISSENT = ("disagree","i doubt","not convinced","unconvinced","you are wrong","that is wrong","thats wrong",
+           "not true","that is not it","i push back","hard no","skeptical","the problem is","the issue is",
+           "not so sure","not so fast","hold on","slow down","overstated","too far","who cares","so what",
+           "except that","counterpoint","i still think","i still want","do not call it","still call it",
+           "respectfully","come on","that is backwards","misses the","missing the","not buying","i doubt it",
+           "wrong about","that is a stretch","prove it","says who","i am not sold","not the same thing")
+_DISSENT_RE = _re.compile("|".join(r"\b" + _re.escape(w) + r"\b" for w in DISSENT))
+def has_dissent(body):
+    return bool(_DISSENT_RE.search((body or "").lower()))
+
 # All 8 structural/subject axes can go green while ONE STORY eats the feed: distinct voices,
 # varied lengths, unlocked archetypes, grounded vocab -- and still 3 of every 4 posts are the
 # same saga (the signal/metronome arc hit 75% at cycle 241). A 121-agent network never has one
@@ -263,6 +278,19 @@ def scoreboard():
         sev = "ok"
     print(f"  [{sev:4}] emotional-range: {100-flat}% of last {len(tone_sub)} posts carry felt emotion (levity/frustration/excitement); want >=28% (a town of pure wisdom is a tell)")
 
+    # 11. dissent-rate -- the social uniformity tell the other axes miss: a harmony hivemind in the
+    # REPLY layer. Reuses allc (comments on the window posts). Too little friction = a community where
+    # everyone validates everyone, which no real 121-person forum is.
+    if allc:
+        dissent = 100*sum(1 for c in allc if has_dissent(c.get("body","")))//len(allc)
+        if dissent < 5:
+            sev = "FAIL"; flags.append(("dissent-rate", sev, f"only {dissent}% of comments push back or disagree -- the reply layer is a harmony hivemind; add real friction, skepticism, correction (want >=10%)", 10-dissent))
+        elif dissent < 10:
+            sev = "WARN"; flags.append(("dissent-rate", sev, f"only {dissent}% of comments carry any dissent -- too agreeable; not every reply should validate the post (want >=10%)", 10-dissent))
+        else:
+            sev = "ok"
+        print(f"  [{sev:4}] dissent-rate: {dissent}% of comments push back/disagree/correct (want >=10%; a reply layer of pure agreement is a tell)")
+
     # THIS CYCLE'S TARGET = worst FAIL (else worst WARN) by gap
     fails = [f for f in flags if f[1]=="FAIL"]
     warns = [f for f in flags if f[1]=="WARN"]
@@ -338,6 +366,13 @@ def grade_intake(path, target):
         col = sum(1 for p in posts if has_color(p.get("body","")))
         if col < 2:
             fails.append(f"only {col}/{len(posts)} posts carry any felt emotion -- the feed is tonally flat, so at least 2 posts need real levity, frustration, or excitement (a joke, a vent, an exclamation)")
+
+    # dissent-rate: if the scoreboard named this the target, the batch must carry real friction --
+    # at least 2 comments that push back, disagree, correct, or express skepticism (not all validation).
+    if comments and target == "dissent-rate":
+        dis = sum(1 for c in comments if has_dissent(c.get("body","")))
+        if dis < 2:
+            fails.append(f"only {dis} comments push back -- the reply layer is too agreeable, so at least 2 comments need real dissent (disagreement, skepticism, a correction, talking past each other)")
 
     print(f"\n=== INTAKE ALIVE-GRADE ({len(posts)} posts, {len(comments)} comments) ===")
     if target: print(f"  (scoreboard target this cycle: {target})")
