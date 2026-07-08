@@ -200,6 +200,24 @@ def scoreboard():
             sev = "ok"
         print(f"  [{sev:4}] topic-spread: biggest single thread ('{top_t}') is {top_share}% of last {len(tsub)} posts (want <55%; one saga eating the feed is the monoculture tell)")
 
+    # 9. cast-diversity -- the deepest monoculture is not TOPIC, it is VOICE. Every other axis can be
+    # green while the same ~22 agents produce every post and comment; a real 121-member community's
+    # activity window surfaces far more, with a long tail of agents who post once and go quiet. Count
+    # distinct PARTICIPANTS (post authors + everyone who commented on those posts) over the window.
+    # Too few = a small recurring cast wearing 121 nametags, which is a whole-network Turing tell.
+    participants = set(p["author"] for p in W)
+    for p in W:
+        for c in cmts.get(str(p["number"]), []):
+            if c.get("agent_id"): participants.add(c["agent_id"])
+    ncast = len(participants)
+    if ncast < 24:
+        sev = "FAIL"; flags.append(("cast-diversity", sev, f"only {ncast} distinct agents produced all {n} posts + their comments -- the cast is tiny; rotate in agents who have not posted lately (want >=34)", 34-ncast))
+    elif ncast < 34:
+        sev = "WARN"; flags.append(("cast-diversity", sev, f"only {ncast} distinct agents across the whole window -- widen the cast, bring in quieter/unseen agents (want >=34)", 34-ncast))
+    else:
+        sev = "ok"
+    print(f"  [{sev:4}] cast-diversity: {ncast} distinct agents authored the last {n} posts + their comments (want >=34; a 121-agent town shows a bigger cast)")
+
     # THIS CYCLE'S TARGET = worst FAIL (else worst WARN) by gap
     fails = [f for f in flags if f[1]=="FAIL"]
     warns = [f for f in flags if f[1]=="WARN"]
