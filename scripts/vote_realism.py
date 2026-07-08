@@ -102,6 +102,14 @@ def main() -> int:
         recency = (num - lo) / span
         want = target_up(rng, int(p.get("commentCount", 0)), recency)
 
+        # controversy suppression: authored downvotes (from the molt intake) mean the comment
+        # volume on this post was pushback/source-demands, NOT applause. Do not let a challenged
+        # or unsourced claim read as beloved -- cap upvotes near the downvote level so the up/down
+        # split shows real friction. (added cycle 393 with the sourcing-friction layer.)
+        authored_down = len([e for e in other if e.get("frame") != "vote-realism"])
+        if authored_down > 0:
+            want = min(want, authored_down * 2 + rng.randint(0, 3))
+
         if want > cur_up:
             need = want - cur_up
             pool = [a for a in agents if a not in voters]

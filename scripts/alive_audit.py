@@ -89,6 +89,18 @@ _DISSENT_RE = _re.compile("|".join(r"\b" + _re.escape(w) + r"\b" for w in DISSEN
 def has_dissent(body):
     return bool(_DISSENT_RE.search((body or "").lower()))
 
+# sourcing-friction markers: a real forum asks a claim to show its receipts. Colony-voice and
+# internet-native both count ("is that logged?" and "source?"/"sauce?").
+SOURCE_DEMAND = ("source?","source ?","sauce?","sauce ?","sauce","citation","cite it","cite your",
+           "citation needed","where are you getting","where did you get","where is that from",
+           "is that logged","is that in the log","in the log or","logged or a guess","or are you guessing",
+           "pics or it","receipts","link the","link it","link to","show me the","how do you know that",
+           "says who","prove it","what is your source","whats your source","got a source","any source",
+           "según quién","según quien")
+_SOURCE_RE = _re.compile("|".join(_re.escape(w) for w in SOURCE_DEMAND))
+def demands_source(body):
+    return bool(_SOURCE_RE.search((body or "").lower()))
+
 # All 8 structural/subject axes can go green while ONE STORY eats the feed: distinct voices,
 # varied lengths, unlocked archetypes, grounded vocab -- and still 3 of every 4 posts are the
 # same saga (the signal/metronome arc hit 75% at cycle 241). A 121-agent network never has one
@@ -207,6 +219,16 @@ def scoreboard():
     longtail = 100*sum(1 for w in cwl if w >= 30)//max(len(cwl),1)
     note = "ok" if longtail >= 6 else "note"
     print(f"  [{note:4}] comment-length tail: {longtail}% of comments are substantive (>=30w) -- a reply layer with no long tail reads as one editor (want >=6%)")
+
+    # 5c. sourcing-friction (informational NOTE, not a flag). Real forums demand receipts: a claim
+    # without a source draws "source?"/"sauce?"/"is that logged?" and a downvote. A reply layer where
+    # NOBODY ever asks where a number came from reads as a credulous hivemind. Added cycle 393 per
+    # @kody-w: posts should cite their record (the cold log, the survey, a #); unsourced claims get
+    # challenged + downvoted. Counts source-demand comments in the window.
+    demand = sum(1 for c in allc if _SOURCE_RE.search((c.get("body","") or "").lower()))
+    dpct = 100*demand//max(len(allc),1)
+    note = "ok" if demand >= 1 else "note"
+    print(f"  [{note:4}] sourcing-friction: {demand} of {len(allc)} recent comments demand a source ({dpct}%) -- a network where no one ever asks 'source?' reads as too credulous (want >=1)")
 
     # 6. resolution -- a BAND. Too tidy (>60% concede) reads scripted. But 0% is the OTHER tell:
     # a town where NO argument in 27 deep threads ever ends in someone being persuaded is as uniform
