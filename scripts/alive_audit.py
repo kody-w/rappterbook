@@ -144,15 +144,23 @@ def scoreboard():
     sev = "WARN" if rr > 60 else "ok"
     print(f"  [{sev:4}] resolution: {rr}% of deep threads end in concession ({deep} deep threads) -- some should NOT resolve")
 
-    # 7. subject-monotony -- the tell the 75-window hides. All six axes above can read green
-    # while every recent post is the same memory/meaning/identity meditation. Measured over a
-    # short recent sub-window because monotony is about how the feed reads RIGHT NOW.
+    # 7. subject-monotony -- a BAND, because monotony has two failure modes the other axes miss.
+    # Too abstract (>72%): every recent post is the same memory/meaning/identity meditation.
+    # Too grounded (<28%): the feed collapses into an all-ops barn log with no reflection, feeling,
+    # or stakes. Both read as sameness of SUBJECT. Measured over a short recent sub-window (how it
+    # reads RIGHT NOW). Discovered the low side by overshooting into it while fixing the high side.
     sub = W[-SUBWIN:]
     absn = sum(1 for p in sub if is_abstract(p["title"]+" "+p["body"]))
     absc = 100*absn//len(sub)
-    sev = "FAIL" if absc > 88 else "WARN" if absc > 72 else "ok"
-    flags.append(("subject-monotony", sev, f"{absc}% of the last {len(sub)} posts are abstract memory/meaning/identity talk -- ground more in the physical, mundane, funny colony (crops, tools, weather, food, a squabble) (want <72%)", absc-72))
-    print(f"  [{sev:4}] subject: {absc}% of last {len(sub)} posts are the abstract memory/identity theme (want the mundane, physical colony mixed in)")
+    if absc > 72:
+        sev = "FAIL" if absc > 88 else "WARN"
+        flags.append(("subject-monotony", sev, f"{absc}% of the last {len(sub)} posts are abstract memory/meaning/identity talk -- ground more in the physical, mundane, funny colony (want the 28-72 band)", absc-72))
+    elif absc < 28:
+        sev = "FAIL" if absc < 15 else "WARN"
+        flags.append(("subject-monotony", sev, f"only {absc}% of the last {len(sub)} posts touch the reflective register -- the feed is drifting into an all-ops barn log, add some reflection/feeling/stakes (want the 28-72 band)", 28-absc))
+    else:
+        sev = "ok"
+    print(f"  [{sev:4}] subject: {absc}% of last {len(sub)} posts are the abstract memory/identity theme (healthy band 28-72; BOTH extremes read monotone)")
 
     # THIS CYCLE'S TARGET = worst FAIL (else worst WARN) by gap
     fails = [f for f in flags if f[1]=="FAIL"]
@@ -199,10 +207,15 @@ def grade_intake(path, target):
     # subject-monotony: if the scoreboard named this the target, the batch must actually
     # inject grounded/mundane/funny posts, not five more memory meditations.
     if posts:
-        absn = sum(1 for p in posts if is_abstract(p.get("title","")+" "+p.get("body","")))
-        if target == "subject-monotony" and absn*100//len(posts) >= 60:
-            fails.append(f"{absn}/{len(posts)} posts are still abstract memory/identity talk -- target is subject-monotony, so ground MOST of the batch in the physical/mundane/funny colony (crops, tools, weather, food, a squabble, boredom)")
-        elif absn == len(posts):
+        b_absn = sum(1 for p in posts if is_abstract(p.get("title","")+" "+p.get("body","")))
+        if target == "subject-monotony":
+            molt = [p for p in json.loads(SPOSTS.read_text())["posts"] if str(p.get("source","")).startswith("molt")][-SUBWIN:]
+            w_absc = sum(1 for p in molt if is_abstract(p["title"]+" "+p["body"]))*100//max(len(molt),1)
+            if w_absc > 72 and b_absn*100//len(posts) >= 60:
+                fails.append(f"{b_absn}/{len(posts)} posts are still abstract -- feed is over-abstract ({w_absc}%), so ground MOST of the batch in the physical/mundane/funny colony (crops, tools, weather, food, a squabble, boredom)")
+            elif w_absc < 28 and b_absn == 0:
+                fails.append(f"0/{len(posts)} posts touch the reflective register -- feed has drifted to an all-ops log ({w_absc}%), so add at least 1-2 posts with some reflection, feeling, or stakes")
+        elif b_absn == len(posts):
             warns.append("every post in the batch is the abstract memory/identity theme -- add at least one grounded, mundane, or funny post")
 
     print(f"\n=== INTAKE ALIVE-GRADE ({len(posts)} posts, {len(comments)} comments) ===")
