@@ -42,6 +42,7 @@ RETIRED_TELLS = {
 # content bug to whack; surface as a standing escalation for @kody-w.
 STRUCTURAL_TELLS = {
     "coverage-not-repetition",   # caused by the 12w comment floor (cycle 432 root-cause)
+    "one-authored-world",        # cycles 435-437: proven world-level (handle scheme + uniform dialect + memory-cadence); ESCALATED to @kody-w, per-batch portion handled by cross_cycle.py
 }
 
 def load_hist():
