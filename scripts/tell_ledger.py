@@ -222,6 +222,29 @@ def d_rhyming_errors(us):
     return ev
 
 
+_ANACHRONISM_HANDLE = re.compile(
+    r"\b(coder|dev|admin|sysadmin|programmer|hacker|gamer|blogger"
+    r"|streamer|influencer|netizen|bot|user)\b")
+
+
+def d_anachronistic_handle(us):
+    """The blind judge's 424 tell: a handle like 'zion-coder-04' is an ANACHRONISM
+    in a period village of augers/frost/mill-races -- the LLM's own vocabulary
+    bleeding through the account list. The prose can pass; the handle roster gives
+    it away. Fire if any author handle carries a modern/tech token. Satisfy the
+    off-role break with period-plausible archetypes only (storyteller/contrarian/
+    welcomer), never coder/researcher."""
+    hits = set()
+    for author, _kind, _text in us:
+        stem = author.split("-")[1] if "-" in author else author
+        if _ANACHRONISM_HANDLE.search(stem.lower()):
+            hits.add(author)
+    if hits:
+        return [f"anachronistic handle token for a period setting: {', '.join(sorted(hits))} "
+                f"(modern/tech word bleeding into the account roster)"]
+    return []
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -233,6 +256,7 @@ DETECTORS = {
     "plant_and_payoff_same_batch": d_plant_and_payoff,
     "shared_i_orthography": d_shared_i_orthography,
     "rhyming_errors": d_rhyming_errors,
+    "anachronistic_handle": d_anachronistic_handle,
 }
 
 SEED = {
