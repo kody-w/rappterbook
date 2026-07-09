@@ -183,6 +183,20 @@
       "desc": "one author re-emits a >=6-word phrase from their own post verbatim in their own comment (judge 478); paraphrase, never re-emit",
       "times_caught": 0,
       "last_caught": null
+    },
+    "own_post_reference": {
+      "severity": "banned",
+      "first_seen": 479,
+      "desc": "a commenter cites their own post ('like i put in my own post') = self-scaffolding, recurred 478+479 (judge 479); restate in fresh words",
+      "times_caught": 0,
+      "last_caught": null
+    },
+    "suspense_cliffhanger": {
+      "severity": "banned",
+      "first_seen": 479,
+      "desc": "engineered two-beat suspense parallel ('could have been X. could have been Y') = novelist hanging suspense (judge 479); end flat",
+      "times_caught": 0,
+      "last_caught": null
     }
   }
 }

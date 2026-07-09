@@ -97,6 +97,46 @@ def d_self_reemission(us):
     return ev
 
 
+_OWN_POST_REF = re.compile(r"\blike i (put|said|wrote|posted)( it)?( up)? in my (own )?(post|thread)\b"
+                           r"|\bas i (put|said) (up )?in my (own )?post\b"
+                           r"|\bi already (put|said) up ?top\b", re.I)
+
+
+def d_own_post_reference(us):
+    """The blind judge's 479 cross-batch tell: a commenter points back at their OWN post -- croll's
+    'like i put in my own post' (479) mirroring morl's 'like i put up in my own post' (478). Real
+    people just restate the point; the self-cross-linking narration ('like i said in my post') is
+    the generator threading its own scaffolding together, and it recurred verbatim across two
+    crowds. Just say the thing again in fresh words; never cite your own post."""
+    ev = []
+    for author, kind, text in us:
+        if kind == "comment" and _OWN_POST_REF.search(text.lower()):
+            ev.append(f"{author} (comment): self-cross-links to own post ('like i put in my own post') "
+                      f"-- restate the point in fresh words, never cite your own post")
+    return ev
+
+
+_CLIFFHANGER = re.compile(
+    r"could(?:ve|'ve| have) been [\w ]{1,28}[.,;] ?could(?:ve|'ve| have) been"
+    r"|might(?:ve|'ve| have) been [\w ]{1,28}[.,;] ?might(?:ve|'ve| have) been"
+    r"|maybe [\w ]{1,20}[.,;] ?maybe [\w ]{1,20}[.,;] ?maybe ", re.I)
+
+
+def d_suspense_cliffhanger(us):
+    """The blind judge's 479 STRONGEST tell: a hand closes on an engineered two-beat suspense
+    parallel -- croll's 'could have been nothing at all. could have been a body at the coops.' No
+    neighbour reporting a light on a lane deals a balanced ominous cliffhanger; that is a novelist
+    hanging suspense, not a person posting. Fire on the 'could/might have been X ... could/might
+    have been Y' (or triple-'maybe') parallel-suspense construction."""
+    ev = []
+    for author, kind, text in us:
+        m = _CLIFFHANGER.search(text.lower())
+        if m:
+            ev.append(f"{author} ({kind}): manufactured suspense cliffhanger (\"...{m.group(0)[:48]}...\") "
+                      f"-- a novelist hanging suspense; end flat, dont deal an ominous two-beat parallel")
+    return ev
+
+
 def d_fragment_doubling(us):
     """Original tell (cycle 406): the 'short sentence. shorter echo.' rhythm appearing
     across MULTIPLE handles as one shared prose fingerprint. A single genuinely-curt
@@ -665,6 +705,8 @@ def d_staged_prop_callback(us):
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "self_reemission": d_self_reemission,
+    "own_post_reference": d_own_post_reference,
+    "suspense_cliffhanger": d_suspense_cliffhanger,
     "fragment_doubling": d_fragment_doubling,
     "meta_signoff_thats_the_update": d_meta_signoff,
     "to_be_safe_crosshandle": d_to_be_safe,
@@ -695,6 +737,10 @@ SEED = {
         "desc": "same >=4-word phrase typed by two different handles (e.g. 'we will disagree on this til')"},
     "self_reemission": {"severity": "banned", "first_seen": 478,
         "desc": "one author re-emits a >=6-word phrase from their own post verbatim in their own comment (judge 478, morl kitling line); paraphrase yourself, never re-emit the exact string"},
+    "own_post_reference": {"severity": "banned", "first_seen": 479,
+        "desc": "a commenter cites their OWN post ('like i put in my own post') = generator threading its own scaffolding, recurred across 478+479 (judge 479); restate in fresh words, never cite your own post"},
+    "suspense_cliffhanger": {"severity": "banned", "first_seen": 479,
+        "desc": "an engineered two-beat suspense parallel ('could have been nothing. could have been a body at the coops') = a novelist hanging suspense not a person (judge 479); end flat"},
     "fragment_doubling": {"severity": "banned", "first_seen": 406,
         "desc": "short sentence. shorter echo. rhythm -- one prose fingerprint across handles"},
     "meta_signoff_thats_the_update": {"severity": "banned", "first_seen": 407,
