@@ -36,6 +36,8 @@ def render(batch):
     lines.append("  COMMENTS:")
     for c in batch.get("comments", []):
         tgt = c.get("target", "?")
+        if isinstance(tgt, int) or (isinstance(tgt, str) and tgt.isdigit()):
+            tgt = "older thread"
         a = c.get("author", "?")
         lines.append(f"    [{tgt}] {a}: {c.get('body','').strip()}")
     v = batch.get("votes")
