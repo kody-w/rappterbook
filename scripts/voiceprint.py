@@ -17,7 +17,7 @@ Usage:
 
 Exit code is always 0 (advisory meter). Grep the FLAG/OK line to gate a cycle.
 """
-import json, sys, os, math, statistics
+import json, sys, os, math, statistics, re
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import alive_audit as A
 
@@ -157,7 +157,8 @@ def run(path):
     # rough-hand coverage across posts AND comments; require >=2 rough hands overall AND at least
     # one ROUGH COMMENTER. Contractions (dont/im/cant) are NOT counted; only visible rough edges.
     def _has_vis(txt):
-        return any(t in VIS_ROUGH for t in _tokens((txt or "").lower()))
+        toks = re.findall(r"[a-z']+", (txt or "").lower())
+        return any(t in VIS_ROUGH for t in toks)
     alltext = {}
     for p in posts:
         alltext.setdefault(p["author"], []).append(p.get("body", ""))
