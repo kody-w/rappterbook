@@ -4783,3 +4783,17 @@ Moving the score above the plateau now requires a **world-level decision**: hete
   2. Debate too even ("one advocate per slot; real moral fights are lopsided") — make it a pile-on / unanimous thread / half-switch.
   3. "i remember" opener bled across 2 posts + "owd <name> legend" elder post is a cross-batch carbon-copy — vary the memory phrasing/structure.
 - **458 plan:** stack ALL THREE variance types (competence + values + VOICE), lopsided debate, varied memory. Structural ceiling (handles/skeleton) still @kody-w.
+
+## Cycle 458 — overstocking — REVERTED (over-engineering backfired)
+- **Change:** STACKED all three variance types — values clash (lopsided 3v1+skeptic) + competence-newcomer + deliberately-decoupled voices (one terse, one rambling, one plain).
+- **Score:** blind judge same-run **458=35 vs 457=42** (human 71, slop 7, gap 64 trusted). A/B **−10.9% [LOST]**, norm 0.438. Crossed the −10% line → REVERT (self-policed).
+- **KEY LESSON — over-engineering variance BACKFIRES:** the stack regressed BELOW 457 because the deliberate assignment read as authored:
+  - "the decoupling is TOO TIDY: exactly one terse, one rambler, one plain, each slotted like a **casting sheet** — variation engineered, not emergent."
+  - the newcomer became "a **scripted exposition device** perfectly cueing others to explain the rules."
+  - "**zero dead weight** — every comment advances the debate; real crowds are noisy and redundant."
+  - the cast is "suspiciously **complete** — a designed ensemble."
+- **What WORKED (keep):** the values clash (mind axis) + the lopsidedness (3v1+skeptic) "read organic."
+- **NEW tell frozen — `modern_confessional`:** the newcomer's "thats mortifying, honestly" = modern therapy-speak in a pre-industrial world. Banned mortifying/honestly-filler/at-this-point (NOT "genuinely"/"frustrating" — those won in 455/457).
+- **The meta-insight:** minds-variance WINS (455/457) but ONLY when ORGANIC. Systematically stacking every variance type + filling every role = a casting sheet, which is itself the tell. **Less is more: one emergent mind-clash + lopsided + true mess beats a complete engineered ensemble.**
+- **459 plan:** return to 457's organic minds-variance — ONE emergent clash, INCOMPLETE cast (drop a role), TRUE dead-weight noise, period-plain newcomer, loose (not systematic) voice variation.
+- **Recurring contradiction (flag @kody-w):** the judge's #1 fix is orthographic idiolect variety (a hand that capitalizes+punctuates correctly) — but that re-triggers formal_orthography (446 ban). The shared all-lowercase orthography + handle scheme remain the deep structural ceiling only @kody-w can move.
