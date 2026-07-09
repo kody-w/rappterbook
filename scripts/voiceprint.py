@@ -106,6 +106,7 @@ def dist(a, b):
 def run(path):
     d = json.load(open(path))
     posts = d.get("posts", [])
+    comments = d.get("comments", [])
     # group post bodies by author (post-authors are the divergence target)
     by_author = {}
     for p in posts:
@@ -149,21 +150,36 @@ def run(path):
               f"informalisms spread across several of them.")
     else:
         print(f"  OK: literacy spread {spread:.1f} (top {lit[0][1]} vs clean {lit[-1][1]}) -- hands differ in competence.")
-    # gradient check (blind judge, cycle 427): VISIBLE misspellings/dialect must not be
-    # quarantined in ONE "designated misspeller" while everyone else writes spotless --
-    # that bimodal spike reads as one author in a rustic costume, not a crowd with a
-    # literacy gradient. Contractions (dont/im/cant/thats) are NOT counted here; only
-    # visible rough edges. The fix is 2-3 hands each carrying a DIFFERENT light error.
-    vis_authors = sorted({a for a in authors
-                          if any(t in VIS_ROUGH for t in _tokens(" ".join(by_author[a]).lower()))})
-    if len(authors) >= 3 and len(vis_authors) == 1:
-        print(f"  FLAG: bimodal literacy -- every visible misspelling/dialect sits in ONE hand "
-              f"({vis_authors[0]}) while the rest write clean. That is a SPIKE, not a GRADIENT (one author "
-              f"in a misspeller costume). Give 2-3 hands DIFFERENT light rough edges (a stray misspelling, "
-              f"a dialect slip like 'i seen'/'me end', a dropped letter) -- never the same costume word twice.")
-    elif len(vis_authors) >= 2:
-        print(f"  OK: literacy gradient -- visible rough edges spread across {len(vis_authors)} hands "
-              f"({', '.join(vis_authors)}), not spiked in one.")
+    # gradient check (blind judge, cycles 427/429): VISIBLE misspellings/dialect must not be
+    # quarantined in ONE "designated misspeller" while everyone else writes spotless -- and it
+    # must extend to the COMMENT layer, not just posts (cycle 429: all posts had a gradient but
+    # every commenter wrote clean, so the roughness still read as one author's costume). Build
+    # rough-hand coverage across posts AND comments; require >=2 rough hands overall AND at least
+    # one ROUGH COMMENTER. Contractions (dont/im/cant) are NOT counted; only visible rough edges.
+    def _has_vis(txt):
+        return any(t in VIS_ROUGH for t in _tokens((txt or "").lower()))
+    alltext = {}
+    for p in posts:
+        alltext.setdefault(p["author"], []).append(p.get("body", ""))
+    for c in comments:
+        alltext.setdefault(c["author"], []).append(c.get("body", ""))
+    vis_all = sorted({a for a in alltext if _has_vis(" ".join(alltext[a]))})
+    comment_authors = {c["author"] for c in comments}
+    vis_comment = sorted({a for a in comment_authors
+                          if _has_vis(" ".join(x.get("body", "") for x in comments if x["author"] == a))})
+    if len(alltext) >= 3 and len(vis_all) <= 1:
+        who = vis_all[0] if vis_all else "nobody"
+        print(f"  FLAG: bimodal literacy -- visible rough edges sit in {len(vis_all)} hand(s) ({who}) across the "
+              f"WHOLE batch while everyone else writes clean. That is a costume, not a gradient. Give 2-3 hands "
+              f"DIFFERENT light rough edges (a stray misspelling, 'i seen'/'me end', a dropped letter).")
+    elif comment_authors and len(vis_comment) < 2:
+        print(f"  FLAG: clean comment layer -- only {len(vis_comment)} commenter carries a visible rough edge; "
+              f"the rest write spotless while roughness sits in the posts. Real crowds have SEVERAL rough "
+              f"commenters. Give >=2 commenters a visible slip (misspelling/dialect), and do NOT make the "
+              f"post-OP the most polished voice present.")
+    else:
+        print(f"  OK: literacy gradient -- visible rough edges spread across {len(vis_all)} hands incl. "
+              f"{len(vis_comment)} commenter(s) ({', '.join(vis_all)}), not spiked in one.")
     return 0
 
 
