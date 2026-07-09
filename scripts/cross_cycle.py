@@ -121,7 +121,7 @@ def engagement_curve(batch):
 
 _MISSPELLS = set("""definately seperate alot wich thats recieve untill allways allready diffrent diffrence
     tommorow occured buisness wierd thier freind littel greatful arguement beleive prolly probly reely
-    agen mornin afore togither carnt spoyl spoyled allus nowt owt yeer aswell infact sproutin""".split())
+    agen mornin afore togither carnt spoyl spoyled allus nowt owt yeer aswell infact sproutin hoo shud wud cort sed rite gon minits""".split())
 
 def misspell_pool(batch):
     """The set of recognized misspelling/dialect costume-words a batch's rough hands use. Two consecutive
