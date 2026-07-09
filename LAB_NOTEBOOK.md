@@ -4806,3 +4806,17 @@ Moving the score above the plateau now requires a **world-level decision**: hete
 - **What HELPED (keep):** the mundane unrelated threads (pig/cart) — "exactly the unconnected low-stakes clutter a real village board carries"; the concrete hens tangent — "the single most human beat in the whole set."
 - **THE CLARIFIED WINNING FORMULA (4-cycle synthesis):** 455 WIN + 457 WIN = ONE **SHARP minds-clash** (values or competence) that **ESCALATES and gets PERSONAL** (ad-hominem/contempt), lopsided + unresolved. 458 LOSS = over-engineered (casting-sheet). 459 LOSS = over-restrained (inert). **The sweet spot is a hot, escalating single clash — not a tidy ensemble, not a limp one.**
 - **460 (MILESTONE):** sharp escalating clash (457-level heat) + mundane gap threads + SPECIFIC dead-weight + flat post-closers + ship a docs/*.html (HTTP 200).
+
+## Cycle 460 — sheep-worrying-dog — KEPT (plateau ~tie) — MILESTONE
+- **Change:** the clarified winning recipe — ONE hot, escalating, PERSONAL clash (a killed ewe → shoot-the-dog threat → angry denial → demand for proof → a stray-lurcher muddier), lopsided + unresolved, mundane unrelated gap threads (weaning, a re-hung gate), posts end FLAT.
+- **Milestone:** shipped `docs/the-quarrels.html` — verified **raw 200 + Pages 200**. Synthesizes the session's disputes (miller's toll, poacher, overstocker, stranger, sheep-killer) into the core Turing thesis: real communities leave central conflicts OPEN; the forgery tidies them.
+- **Score:** blind judge same-run **460=43 vs 457=46** (human 68, slop 7, gap 61 trusted). A/B **−4.9% [PLATEAU ~tie]** ("3pt coin-flip"), norm 0.590. Crushes slop.
+- **Verdict:** KEEP (plateau; heat validated; board-green; crushes slop; fresh breadth).
+- **Heat VALIDATED:** "the heat helps, clears the bar of a polite technical disagreement... ego, grievance, refusal to concede, which AI usually sands off." The mundane threads "genuinely help."
+- **Why only a tie (not a beat):**
+  1. Handle scheme = "the first thing a sharp reader sees before a word of content."
+  2. "The fury is TOO WELL-MODULATED — every angry retort resolves into a clean rhetorical point; real rage is messier, with genuine nastiness."
+  3. Cast slots into tidy roles (accuser/defender/pragmatist/skeptic/witness).
+  4. 457 EDGED it on DISTINCTNESS (a register-break newcomer voice + a 2nd independent dispute); 460 had one dispute. "For a metric about distinct people, variety edges out intensity."
+- **461 plan:** heat + DISTINCTNESS — keep the hot clash but make anger UGLY/personal (a nasty ad-hominem, not clean logic), add a register-break voice + a 2nd smaller dispute, avoid one-per-role casting. Organic, not over-engineered.
+- **Stable picture (25 cycles in):** prose plateaus ~43-51 vs human ~68-82; every judge names the handle scheme as THE cap. The loop HOLDS quality (board-green, crushes slop) + GROWS breadth (3349 posts / 412 cast, 8 fresh topics) + ships verified milestones. Beating the plateau needs the @kody-w handle/orthography decision.
