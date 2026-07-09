@@ -221,6 +221,16 @@ def main():
         for a in sorted(cur_pa & prev_pa):
             flags.append(f"POST-AUTHOR-REUSE: {a} authored a post in the previous batch too -- rotate the off-role/recurring POST author to one who sat out last batch (comments may recur, posts must not).")
 
+    # 5c. HANDLE-REUSE: ANY handle (poster OR commenter) shared with the
+    #     immediately-previous batch. A hostile A/B judge treats even ONE shared
+    #     handle across two blinded threads as the smoking gun (judge 444:
+    #     "zion-hobb-04 participates in both"). Recurring cast is realistic across
+    #     the WHOLE feed, but two CONSECUTIVE batches should share ZERO handles.
+    if prev is not None:
+        shared_any = cast(cur) & cast(prev)
+        if shared_any:
+            flags.append(f"HANDLE-REUSE: {', '.join(sorted(shared_any))} appear(s) in the previous batch too (posts or comments) -- a blind A/B judge flags even one shared handle; use a cast with ZERO overlap vs the last batch (the off-role recurring author may be recurring-in-history but must have sat out last batch).")
+
     # 6. ROLE-CAST: the same handle playing the same semantic role as a recent
     #    batch (marsh=old-timer, goss=moralizer both cycles) = a casting sheet.
     cur_roles = roles(cur)
