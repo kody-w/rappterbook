@@ -45,7 +45,9 @@ LIT_SPREAD_MIN = 4.0  # if (max-min) per-author non-std rate < this, literacy is
 # writes. Used only for the bimodal-literacy (gradient) check, NOT the spread rate.
 VIS_ROUGH = set("""wich definately allways allready diffrent seperate alot hoo greatful
     arguement tommorow recieve untill beleive occured buisness wierd thier freind littel
-    probly prolly reely aint nowt owt summat naught wintel neice tho thru""".split())
+    probly prolly reely aint nowt owt summat naught wintel neice tho thru
+    idk lol lmao ngl tbh imo imho rn deffo dunno gonna wanna kinda sorta gotta
+    ppl u ur cuz coz tho2 def prob""".split())
 
 
 def literacy_rate(text):
