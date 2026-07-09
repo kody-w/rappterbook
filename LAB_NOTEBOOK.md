@@ -4683,3 +4683,14 @@ Shipped TWO durable meta-checks (the per-batch gates + blind judge only see ONE 
 - STILL coupled on: the 5-post skeleton + the SHOW hogging replies + the dead-weight now a recurring COMMUNITY-CARE/vulnerable-person subplot (447 sick neighbour ~ 448 fretting mother).
 - 449 MANDATE: ORGANIC per-author ORTHOGRAPHY -- (a) one hot hand uses EMPHASIS-CAPS on whole words (shouting, NOT capital-I -- passes formal_orthography); (b) one very terse hand ("+1"/"aye"); (c) rest lowercase-casual, varied typo density; DECOUPLE the caps-hand from the critic role. Vary the dead-weight OFF a vulnerable-person subplot. Keep all wins. Judge vs 447 (last KEPT).
 - ARC: 6 wins + 2 plateaus + 2 clean self-policed reverts (441, 448); norm peaked 0.515 (447). The orthography lever is now understood as a BAND (not formal-hand, not uniform-lowercase, but organic per-author). tell_ledger 14, cross_cycle 9.
+
+## Cycle 449 — thatch/roof — REVERTED (self-policed)
+- **Change:** organic orthography experiment — one hot hand (wray) used EMPHASIS-CAPS on whole words (TWO/MY/GONE/NOT), one terse hand at the 12w comment floor (+1...), rest lowercase; re-thatch [SHOW] magnet at post 2; buried memory (marrey/catt).
+- **Score:** blind judge same-run — **449=40 vs 447=68** (human 80, slop 6, gap 74 trusted). norm 0.459 < 447's 0.515. **LOST −38% A/B margin.**
+- **Verdict:** REVERT (genuinely damaged). `git revert` both commits; back to 447 baseline; verified local==origin.
+- **Two tells frozen (banned):**
+  - `emphasis_allcaps` — ALLCAPS emphasis = modern typographic shouting grafted onto an archaic village voice ("over TWO full days... left it dryin for MY ridge... just GONE"). Carry stress via word choice/rhythm, never caps.
+  - `onscreen_confession` — the culprit confessing + offering restitution on-screen ("youre right it was me... ill cut you fresh to square it") = orchestrated whodunit closure, one author scripting accuser AND accused. Central accusations must stay OPEN/sour.
+- **ROOT CAUSE (escalating, 3rd flag):** the alive_audit **resolution axis** (requires a concession marker in a last comment) MANUFACTURES a resolution-compulsion — compulsion-to-resolve → tidying-resolution → onscreen-confession. Load-bearing gate; flag @kody-w. Workaround for 450: land the concession on a low-stakes SIDE thread (materials/method), keep the batch's central conflict post OPEN.
+- **Also learned:** the literal terse "+1" one-liner is ENGINE-BLOCKED (12w comment floor rejects <12w) — a structural ceiling like the human anchor's true one-word replies being impossible.
+- **Verified:** tell_ledger.py both new detectors FIRE on /tmp/mi_449.json, CLEAN on 447 baseline; accountability all-PASS (TREND logs the self-policed revert).
