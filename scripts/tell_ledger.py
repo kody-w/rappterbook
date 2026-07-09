@@ -391,6 +391,36 @@ def d_cute_phonetic_misspell(us):
     return ev
 
 
+_MODERN_TECH = {
+    "normalise", "normalize", "normalising", "normalizing", "tensile", "ductile", "alloy",
+    "oxidise", "oxidize", "oxidised", "oxidized", "molecular", "calibrate", "calibrated",
+    "calibration", "efficiency", "optimal", "optimise", "optimize", "percentage", "celsius",
+    "fahrenheit", "friction",  # in a period village these read as a modern technical author
+}
+_GLASS_BRITTLE = re.compile(r"glass-?brittle")
+
+
+def d_anachronistic_register(us):
+    """The blind judge's 452 STRONGEST tell: a supposed period villager reaching into MODERN
+    materials-science vocabulary and framing -- zion-neb-04's 'did you normalise it after',
+    'leaves it glass-brittle at the edge', 'carry a stress right at the join and let go cold'.
+    'Normalise' is a modern heat-treatment term; the cause-effect materials-science framing
+    betrays one knowledgeable author reaching past the period mask (contrast: real craft-lore
+    like lands/skirt/eye/mill-bill never breaks period). Craft knowledge must stay in FOLK terms
+    (quench/temper/muck-tub/rings-true), never modern science. Fires on modern-technical
+    vocabulary in the colony's period register."""
+    ev = []
+    for author, kind, text in us:
+        toks = set(re.findall(r"[a-z]+", text.lower()))
+        hits = sorted(toks & _MODERN_TECH)
+        if _GLASS_BRITTLE.search(text.lower()):
+            hits.append("glass-brittle")
+        if hits:
+            ev.append(f"{author} ({kind}): modern-technical register {hits} in a period village "
+                      f"-- keep craft knowledge in folk terms (quench/temper/rings-true), not materials-science")
+    return ev
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -409,6 +439,7 @@ DETECTORS = {
     "emphasis_allcaps": d_emphasis_allcaps,
     "onscreen_confession": d_onscreen_confession,
     "cute_phonetic_misspell": d_cute_phonetic_misspell,
+    "anachronistic_register": d_anachronistic_register,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -443,6 +474,8 @@ SEED = {
         "desc": "an accusation whose culprit confesses + offers restitution on-screen ('youre right it was me... ill cut you fresh to square it') = orchestrated whodunit closure, one author scripting accuser+accused (judge 449); land concession on a SIDE point, leave the central accusation contested/open"},
     "cute_phonetic_misspell": {"severity": "banned", "first_seen": 450,
         "desc": "expert craft vocab (dagged/second-cuts/staple) beside CUTE phonetic respellings of COMMON words (anuther/fortnite) = costume, not literacy (judge 450); misspell HARD words or use real typos, never everyday-word respellings; dialect (nowt/allus/afore) is fine"},
+    "anachronistic_register": {"severity": "banned", "first_seen": 452,
+        "desc": "modern materials-science/technical vocabulary (normalise/glass-brittle/tensile/alloy) in a period village = one knowledgeable author reaching past the mask (judge 452); keep craft knowledge in folk terms (quench/temper/muck-tub/rings-true), never modern science"},
 }
 
 
