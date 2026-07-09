@@ -273,6 +273,34 @@ def d_debate_summary_narrator(us):
     return ev
 
 
+_THREAD_META = re.compile(
+    r"same as we ?a?re( all)?( doing)? now"                          # "same as we are now"
+    r"|filling (in )?the gaps?( in)?( after| after the fact)"        # "filling the gaps in after the fact"
+    r"|we ?a?re all (just )?(guessing|filling|making it up|reckoning)"  # "were all just guessing"
+    r"|none of us (really |actually )?(saw|know|knows) (it|what|for)"   # "none of us really saw it"
+    r"|(theyre|we ?a?re|were) all (just )?filling (in )?the gaps"
+    r"|after the fact,? same as"
+    , re.I)
+
+
+def d_thread_meta_narration(us):
+    """The blind judge's 469 STRONGEST tell: a bystander steps OUT of their own account
+    to narrate the whole crowd's EPISTEMIC state -- zion-hoad-02's 'theyre all filling
+    the gaps in after the fact same as we are now'. The clause 'same as we are now' is the
+    author reaching through a villager to name the story's own theme (unreliable collective
+    memory); a real witness reports what THEY saw, they do not editorialize the epistemology
+    of the whole thread. Sibling of debate_summary_narrator (faction-labeling) -- this is the
+    collective-memory meta variant. Keep each hand's uncertainty PARTICULAR to them; no hand
+    may narrate what 'we all' are doing. Fire on any collective-epistemic meta-clause."""
+    ev = []
+    for author, kind, text in us:
+        m = _THREAD_META.search(text.lower())
+        if m:
+            ev.append(f"{author} ({kind}): thread-meta narration (\"...{m.group(0)}...\") "
+                      f"-- names the crowd's own collective-memory epistemics; keep uncertainty particular, not meta")
+    return ev
+
+
 _APHORISTIC_THESIS = re.compile(
     r"a (place|row|colony|village|community|home|man|people) is (the sum of|not \w+ by|proven by|nothing (but|more|without)|made by)"
     r"|the (sum|measure|making|worth|mark) of a (place|row|colony|man|community|home)"
@@ -543,6 +571,7 @@ DETECTORS = {
     "mechanical_character_tag": d_mechanical_character_tag,
     "modern_confessional": d_modern_confessional,
     "staged_prop_callback": d_staged_prop_callback,
+    "thread_meta_narration": d_thread_meta_narration,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -585,6 +614,8 @@ SEED = {
         "desc": "modern confessional/therapy-speak (mortifying/honestly-as-filler/at-this-point/to-be-fair/not-gonna-lie) in a pre-industrial world (judge 458); keep plainness PERIOD-plain, not modern self-aware confession"},
     "staged_prop_callback": {"severity": "banned", "first_seen": 465,
         "desc": "a comment detonates a prop planted in another author's post -- crediting a named maker via '<name> just mended/built' across accounts (judge 465), incl. stale-name slips when an author was swapped; let a post's object live only in that post, never call it out by another handle"},
+    "thread_meta_narration": {"severity": "banned", "first_seen": 469,
+        "desc": "a bystander narrates the whole crowd's epistemic state ('filling the gaps after the fact same as we are now') = author reaching through a villager to name the story's own theme (judge 469); sibling of debate_summary_narrator; keep each hand's uncertainty particular, no hand narrates what we all are doing"},
 }
 
 
