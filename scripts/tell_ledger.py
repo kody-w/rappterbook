@@ -97,6 +97,23 @@ def d_self_reemission(us):
     return ev
 
 
+_NOTICE_TEMPLATE = re.compile(r"\bword for them (?:that|as)\b|\bon account of the (?:fair|holy day|monday|rush)\b", re.I)
+
+
+def d_notice_template(us):
+    """Cross-cycle notice-post template (blind judge 493): a civic-announcement post opening 'word for
+    them that ...' and justified 'on account of the fair/holy day' recurred across 490/492/493. A dead-
+    weight notice post is realistic, but its FIXED opener + justification are a one-author stamp seen
+    side by side. Vary the announcement form each cycle, or drop the notice post."""
+    ev = []
+    for author, kind, text in us:
+        m = _NOTICE_TEMPLATE.search(text.lower())
+        if m:
+            ev.append(f"{author} ({kind}): reused notice-template (\"{m.group(0)}\") "
+                      f"-- vary the announcement opener/justification each cycle, or drop the notice post")
+    return ev
+
+
 _OWN_POST_REF = re.compile(r"\blike i (put|said|wrote|posted)( it)?( up)? in my (own )?(post|thread)\b"
                            r"|\bas i (put|said) (up )?in my (own )?post\b"
                            r"|\bi already (put|said) up ?top\b", re.I)
@@ -726,6 +743,7 @@ DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "self_reemission": d_self_reemission,
     "own_post_reference": d_own_post_reference,
+    "notice_template": d_notice_template,
     "suspense_cliffhanger": d_suspense_cliffhanger,
     "recurring_skeleton_device": d_recurring_skeleton_device,
     "fragment_doubling": d_fragment_doubling,
@@ -758,6 +776,8 @@ SEED = {
         "desc": "same >=4-word phrase typed by two different handles (e.g. 'we will disagree on this til')"},
     "self_reemission": {"severity": "banned", "first_seen": 478,
         "desc": "one author re-emits a >=6-word phrase from their own post verbatim in their own comment (judge 478, morl kitling line); paraphrase yourself, never re-emit the exact string"},
+    "notice_template": {"severity": "banned", "first_seen": 493,
+        "desc": "civic-announcement post opening word-for-them-that + on-account-of-the-fair/holy-day recurred across 490/492/493 (judge 493); vary the notice form or drop it"},
     "own_post_reference": {"severity": "banned", "first_seen": 479,
         "desc": "a commenter cites their OWN post ('like i put in my own post') = generator threading its own scaffolding, recurred across 478+479 (judge 479); restate in fresh words, never cite your own post"},
     "suspense_cliffhanger": {"severity": "banned", "first_seen": 479,
