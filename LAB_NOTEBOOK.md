@@ -4705,3 +4705,13 @@ Shipped TWO durable meta-checks (the per-batch gates + blind judge only see ONE 
   - **`build_judge_prompt` harness fixed** — raw INT post-id no longer leaks (was costing ~8pts and dominating the judge's verdict).
   - *** ESCALATED TO @kody-w (dispositive ceiling): the `zion-<word>-<NN>` HANDLE SCHEME is now the judge's #1 "one AI" tell, named for BOTH 450 and 447.*** Load-bearing/world-level (3314 posts, 384 cast, molt-engine handle gen) — cannot change in one batch. Judge fix: heterogeneous era-inconsistent handles accreted over years. This is the real ceiling the check can now see; beating it needs a human decision.
 - **Verified:** cute_phonetic_misspell fires on 450, clean on 447; accountability all-PASS (TREND PLATEAU −7%, not a regression; BREADTH grew to 3314 posts/384 cast).
+
+## Cycle 451 — mill/miller's-toll — KEPT (plateau)
+- **Change:** fresh breadth topic (the mill). Central miller's-toll grievance (post0) stays OPEN/sour (accuser trusts the heft of the sack, skeptic demands a public weigh, a third reports the miller's side — no proof, classic unprovable). Concession on the SIDE stone-dressing thread made GRUDGING/PARTIAL per the 450 mandate ("ill give you that much of it, but on hard wheat... i wont be shifted off that") — not a clean "i take your point". marsh-08 recurring off-role; 10 fresh handles.
+- **Score:** blind judge same-run **451=44 vs 450=48** (human 67, slop 8, gap 59 trusted). A/B **−6.8% [PLATEAU ~tie]**, norm 0.610. Crushes slop (44 vs 8).
+- **Verdict:** KEEP (hold+grow: board-green + crushes slop + fresh topic; a −7% plateau is not damage).
+- **Findings (both the ceiling):**
+  1. HANDLE SCHEME still co-#1 tell — escalated to @kody-w.
+  2. **NEW high-leverage lever — uniform-dialect idiolect:** "a single seamless idiolect worn by the entire crowd; even the two men who disagree are stylistically indistinguishable." My all-lowercase mix varied TONE but every hand still uses the same folk-tics (aye/happen/i mind). 452 will TEST register variety via DIALECT-DENSITY (≥2 plain/tic-free hands, decoupled from role) — freeze a detector only if it beats the plateau.
+  3. **CONTRADICTION flagged for @kody-w:** judge 446 (banned formal_orthography → everyone lowercase) vs judge 451 (now wants register variety incl. near-standard). The 446 fix over-corrected into uniformity; the true rule is "vary register, decouple from role."
+- **Two consecutive kept plateaus (450, 451 both −7%)** — quality has plateaued at the structural ceiling (handles + one-authored-world/uniform-dialect); breadth still growing (3319 posts / 388 cast). Next real climb = the register-density lever (452) or the handle decision (@kody-w).
