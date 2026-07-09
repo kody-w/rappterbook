@@ -320,6 +320,53 @@ def d_formal_orthography(us):
     return ev
 
 
+_ALLCAPS = re.compile(r"\b[A-Z]{2,}\b")
+_ALLCAPS_OK = {"OK", "OP", "AMA", "TL", "DR", "IMO", "IMHO", "AKA", "PSA", "FYI", "ETA", "DIY", "PS", "TV", "USA", "UK", "US"}
+
+
+def d_emphasis_allcaps(us):
+    """The blind judge's 449 tell: ALLCAPS emphasis words ('over TWO full days... left it
+    dryin for MY ridge, and now half of it is just GONE... it was NOT') read as MODERN
+    typographic shouting GRAFTED onto an archaic village voice -- 'anachronistic ALLCAPS
+    on an archaic voice'. This colony's register is period/rural; emphasis-caps are an
+    era mismatch. Carry emphasis through word choice and rhythm ('every last bit of it',
+    'clean gone'), never capitals. Fires on any 2+ letter all-caps token (acronyms
+    allowlisted)."""
+    ev = []
+    for author, kind, text in us:
+        hits = [t for t in _ALLCAPS.findall(text) if t not in _ALLCAPS_OK]
+        if hits:
+            ev.append(f"{author} ({kind}): ALLCAPS emphasis {hits[:4]} -- modern typographic shouting on a period voice; "
+                      f"carry stress through word choice/rhythm, not capitals")
+    return ev
+
+
+_CONFESS = re.compile(r"\b(it was me|twas me|it were me|i took (it|what|the|em|them)|i had (it|em|them)|"
+                      r"my error|my mistake|i did it|i owned up|i confess|guilty as|i nicked|i pinched)\b")
+_RESTITUTE = re.compile(r"\b(ill (cut|pay|give|get|bring|make|replace|square|put)|"
+                        r"to square it|make it (right|good)|put it right|pay you (back|for)|"
+                        r"square (it |up|with )|ill see you right|ill make good)\b")
+
+
+def d_onscreen_confession(us):
+    """The blind judge's 449 STRONGEST tell: an accusation/whodunit whose culprit CONFESSES
+    on-screen and offers restitution in the same thread ('youre right it was me, i took what
+    i thought was the spoiled lot... ill cut you fresh to square it') = ORCHESTRATED NARRATIVE
+    CLOSURE -- one author scripting both accuser and accused. Real forum accusations stay
+    messy, contested and UNRESOLVED. The resolution/concession axis must land on a SIDE point
+    (materials, method), never dissolve the batch's central conflict. Fires when one comment
+    combines a self-implicating confession with a making-good offer."""
+    ev = []
+    for author, kind, text in us:
+        if kind != "comment":
+            continue
+        low = text.lower()
+        if _CONFESS.search(low) and _RESTITUTE.search(low):
+            ev.append(f"{author}: on-screen culprit confession + restitution in one comment "
+                      f"('{text[:60]}...') -- scripted whodunit closure; leave the central accusation contested/open")
+    return ev
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -335,6 +382,8 @@ DETECTORS = {
     "debate_summary_narrator": d_debate_summary_narrator,
     "aphoristic_thesis": d_aphoristic_thesis,
     "formal_orthography": d_formal_orthography,
+    "emphasis_allcaps": d_emphasis_allcaps,
+    "onscreen_confession": d_onscreen_confession,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -363,6 +412,10 @@ SEED = {
         "desc": "a moralizing identity-thesis punchline ('a place is the sum of who does its unpleasant work', 'thats who we are meant to be as a row or we are nothing') -- authorial morality-play; satisfy the abstract axis with mundane factual memory instead"},
     "formal_orthography": {"severity": "banned", "first_seen": 446,
         "desc": "one hand using capitalized English + capital-'I' in an all-lowercase colony = orthography color-coded to the critic role (judge 446); vary register by tone/vocabulary, write every hand lowercase"},
+    "emphasis_allcaps": {"severity": "banned", "first_seen": 449,
+        "desc": "ALLCAPS emphasis words (TWO/MY/GONE/NOT) = modern typographic shouting grafted onto an archaic village voice (judge 449); carry stress through word choice/rhythm, never capitals"},
+    "onscreen_confession": {"severity": "banned", "first_seen": 449,
+        "desc": "an accusation whose culprit confesses + offers restitution on-screen ('youre right it was me... ill cut you fresh to square it') = orchestrated whodunit closure, one author scripting accuser+accused (judge 449); land concession on a SIDE point, leave the central accusation contested/open"},
 }
 
 
