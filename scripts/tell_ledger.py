@@ -329,6 +329,40 @@ def d_orphan_callback_template(us):
     return ev
 
 
+_DEFIANCE_EXIT = re.compile(
+    r"believe what you (like|will|please)"
+    r"|think what you (like|will|please)"
+    r"|you ?re welcome to (think|believe|doubt)"
+    r"|call me a (liar|fool)\b.*\bif it suits"
+    r"|if it suits you to?\b"
+    r"|whatever any of you say"
+    r"|say what you (like|will|please) about (me|my)"
+    , re.I)
+
+
+def d_matched_defiance_exit(us):
+    """The blind judge's 472 STRONGEST tell: TWO ostensibly independent hands close a standoff with
+    the SAME defiant maneuver -- granting the doubter permission to disbelieve as a proud closing
+    flourish. orms 'believe what you like about my wanting... whatever any of you say' twinned with
+    breck 'youre welcome to think im lying about a dead man if it suits you to'. Different words, one
+    screenwriter's ear at the level of the retort -- invisible to lexical verbatim_crosshandle. Real
+    strangers do not all reach for the same proud 'believe-what-you-like' exit; vary how hands bristle
+    (one proud, one CLUMSY/flustered/repeating himself). Fire when >=2 distinct handles use a
+    permission-to-disbelieve / whatever-you-say exit maneuver in one batch."""
+    hands = set()
+    hits = {}
+    for author, kind, text in us:
+        m = _DEFIANCE_EXIT.search(text.lower())
+        if m:
+            hands.add(author)
+            hits.setdefault(author, m.group(0))
+    if len(hands) >= 2:
+        return [f"{len(hands)} handles share a permission-to-disbelieve exit maneuver "
+                f"({', '.join(sorted(a+' \"'+hits[a]+'\"' for a in hands))}) "
+                f"-- one author's defiant tic split across mouths; vary how hands bristle (one clumsy, not two crafted)"]
+    return []
+
+
 _APHORISTIC_THESIS = re.compile(
     r"a (place|row|colony|village|community|home|man|people) is (the sum of|not \w+ by|proven by|nothing (but|more|without)|made by)"
     r"|the (sum|measure|making|worth|mark) of a (place|row|colony|man|community|home)"
@@ -601,6 +635,7 @@ DETECTORS = {
     "staged_prop_callback": d_staged_prop_callback,
     "thread_meta_narration": d_thread_meta_narration,
     "orphan_callback_template": d_orphan_callback_template,
+    "matched_defiance_exit": d_matched_defiance_exit,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -647,6 +682,8 @@ SEED = {
         "desc": "a bystander narrates the whole crowd's epistemic state ('filling the gaps after the fact same as we are now') = author reaching through a villager to name the story's own theme (judge 469); sibling of debate_summary_narrator; keep each hand's uncertainty particular, no hand narrates what we all are doing"},
     "orphan_callback_template": {"severity": "banned", "first_seen": 470,
         "desc": "the off-page orphan follow-up minted from one template every cycle -- 'did X ever get sorted/rebuilt/fixed' / 'ever turn up' (judge 470, weft~quist~lune) = a signature betraying one author behind every crowd; vary the old-thread revisit hard each cycle"},
+    "matched_defiance_exit": {"severity": "banned", "first_seen": 472,
+        "desc": ">=2 hands close a standoff with the same permission-to-disbelieve maneuver ('believe what you like' / 'youre welcome to think im lying' / 'whatever any of you say') = one author's defiant tic split across mouths (judge 472); vary how hands bristle, one clumsy not two crafted"},
 }
 
 
