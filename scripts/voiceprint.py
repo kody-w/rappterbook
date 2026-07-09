@@ -40,6 +40,13 @@ NONSTD = set("""definately seperate alot tennons threw wich thats recieve untill
     hasnt havent couldnt wouldnt shouldnt whats hows theres nah yeah ok""".split())
 LIT_SPREAD_MIN = 4.0  # if (max-min) per-author non-std rate < this, literacy is too uniform
 
+# VISIBLE rough edges: genuine misspellings + strong dialect a reader clocks as an
+# "error", as opposed to ordinary casual contractions (dont/im/cant) that everyone
+# writes. Used only for the bimodal-literacy (gradient) check, NOT the spread rate.
+VIS_ROUGH = set("""wich definately allways allready diffrent seperate alot hoo greatful
+    arguement tommorow recieve untill beleive occured buisness wierd thier freind littel
+    probly prolly reely aint nowt owt summat naught wintel neice tho thru""".split())
+
 
 def literacy_rate(text):
     toks = [t.lower() for t in _tokens(text)]
@@ -138,10 +145,25 @@ def run(path):
         print(f"    {rate:5.1f}  {a}")
     if spread < LIT_SPREAD_MIN:
         print(f"  FLAG: literacy spread {spread:.1f} < {LIT_SPREAD_MIN} -- all hands write at one competence "
-              f"level (uniform competence reads as one author). Give ONE hand 1-2 consistent misspellings / "
-              f"informalisms; keep another perfectly clean.")
+              f"level (uniform competence reads as one author). Give hands 1-2 consistent misspellings / "
+              f"informalisms spread across several of them.")
     else:
         print(f"  OK: literacy spread {spread:.1f} (top {lit[0][1]} vs clean {lit[-1][1]}) -- hands differ in competence.")
+    # gradient check (blind judge, cycle 427): VISIBLE misspellings/dialect must not be
+    # quarantined in ONE "designated misspeller" while everyone else writes spotless --
+    # that bimodal spike reads as one author in a rustic costume, not a crowd with a
+    # literacy gradient. Contractions (dont/im/cant/thats) are NOT counted here; only
+    # visible rough edges. The fix is 2-3 hands each carrying a DIFFERENT light error.
+    vis_authors = sorted({a for a in authors
+                          if any(t in VIS_ROUGH for t in _tokens(" ".join(by_author[a]).lower()))})
+    if len(authors) >= 3 and len(vis_authors) == 1:
+        print(f"  FLAG: bimodal literacy -- every visible misspelling/dialect sits in ONE hand "
+              f"({vis_authors[0]}) while the rest write clean. That is a SPIKE, not a GRADIENT (one author "
+              f"in a misspeller costume). Give 2-3 hands DIFFERENT light rough edges (a stray misspelling, "
+              f"a dialect slip like 'i seen'/'me end', a dropped letter) -- never the same costume word twice.")
+    elif len(vis_authors) >= 2:
+        print(f"  OK: literacy gradient -- visible rough edges spread across {len(vis_authors)} hands "
+              f"({', '.join(vis_authors)}), not spiked in one.")
     return 0
 
 
