@@ -387,11 +387,25 @@ def grade_intake(path, target):
             fails.append(f"{cf_n}/{len(posts)} posts end the same way ('{cf_top}') -- vary the CLOSER (end on a detail, a question, mid-thought; not all 'in the X channel')")
         elif cf_n == 2 and "channel" in cf_top or "vault" in cf_top:
             warns.append(f"{cf_n} posts end '{cf_top}' -- watch the channel-closer habit")
-    # archetype-break: at least one post whose author archetype defies its usual intent
+    # archetype-break: at least one post that breaks a lane. TWO ways to satisfy, so the
+    # batch is NEVER forced to carry a function-named handle (coder/contrarian/...) just to
+    # pass -- the blind judge's repeated #1 tell (cycles 424,425) is a handle named after
+    # its narrative role ("the author's casting sheet leaking through"). (1) legacy: a tracked
+    # archetype doing an off-usual tag; (2) behavioral: ANY author (neutral surname included)
+    # posting a tag != that author's OWN dominant tag in the recent molt feed.
     usual = {"coder":"SHOW","contrarian":"DEBATE","storyteller":"STORY","researcher":"ASK","welcomer":"GENERAL"}
     broke = [p for p in posts if usual.get(arch(p.get("author","")),None) not in (None, tag(p.get("title","")))]
     if not broke:
-        fails.append("archetype lock intact -- give at least ONE agent an off-role post (a coder telling a STORY, a contrarian shipping a build, a storyteller ASKing)")
+        hist = collections.defaultdict(collections.Counter)
+        for mp in [p for p in json.loads(SPOSTS.read_text())["posts"] if str(p.get("source","")).startswith("molt")]:
+            hist[mp.get("author","")][tag(mp.get("title",""))] += 1
+        for p in posts:
+            a = p.get("author",""); t = tag(p.get("title",""))
+            h = hist.get(a)
+            if h and sum(h.values()) >= 2 and h.most_common(1)[0][0] != t:
+                broke.append(p); break
+    if not broke:
+        fails.append("archetype lock intact -- give at least ONE agent an off-role post: EITHER a tracked archetype off its usual tag, OR a RECURRING author (>=2 prior posts) posting a tag different from their own established intent. Use NEUTRAL surnames -- do NOT add a role-named handle (coder/contrarian/...) just to pass this; that is the judge's #1 tell.")
     # comment noise: >=2 short reaction comments (gate floor is 12w, so 12-16w reads as noise if written flat)
     cwl = [len(words(c.get("body",""))) for c in comments]
     if sum(1 for w in cwl if w <= 16) < 2:
