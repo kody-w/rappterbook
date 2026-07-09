@@ -459,6 +459,27 @@ def d_mechanical_character_tag(us):
     return ev
 
 
+_MODERN_CONFESSIONAL = re.compile(
+    r"\bmortifying\b|\bat this point\b|,\s*honestly\b|\bhonestly,|\bnot gonna lie\b|"
+    r"\bto be fair\b|\bno offense\b|\bngl\b|\btbh\b|\bkind of a\b|\ba bit much\b")
+
+
+def d_modern_confessional(us):
+    """The blind judge's 458 tell: the plain newcomer slipped into MODERN CONFESSIONAL /
+    therapy-speak inside a pre-industrial world -- 'thats mortifying, honestly'. A period
+    newcomer can be plain and emotional ('this is really frustrating', 'genuinely no idea' --
+    both praised as human in 455/457) but must NOT use modern self-aware confessional fillers
+    (mortifying / honestly-as-filler / at this point / to be fair / not gonna lie). Keep the
+    plainness PERIOD-plain, not modern-therapy."""
+    ev = []
+    for author, kind, text in us:
+        hits = _MODERN_CONFESSIONAL.findall(text.lower())
+        if hits:
+            ev.append(f"{author} ({kind}): modern-confessional register ('{text[:50]}...') "
+                      f"-- period-plain, not modern therapy-speak (mortifying/honestly-filler/at-this-point)")
+    return ev
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -479,6 +500,7 @@ DETECTORS = {
     "cute_phonetic_misspell": d_cute_phonetic_misspell,
     "anachronistic_register": d_anachronistic_register,
     "mechanical_character_tag": d_mechanical_character_tag,
+    "modern_confessional": d_modern_confessional,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
