@@ -74,6 +74,29 @@ def d_verbatim_crosshandle(us):
     return ev
 
 
+def d_self_reemission(us):
+    """The blind judge's 478 tell: the generator RE-EMITS a hand's own line verbatim across that
+    hand's post and comment -- zion-morl-03's post line 'borrow a kitling off a working mother and
+    let her grow up in the corn' reappears near-word-for-word in morl's OWN comment. Real people
+    paraphrase themselves; a generator re-emits the exact string. Fire when one author's comment
+    repeats a >=6-word contiguous phrase from that same author's post."""
+    post_grams = collections.defaultdict(set)
+    comment_grams = collections.defaultdict(set)
+    for author, kind, text in us:
+        toks = _tokens(text)
+        tgt = post_grams if kind == "post" else comment_grams
+        for i in range(len(toks) - 5):
+            tgt[author].add(tuple(toks[i:i + 6]))
+    ev = []
+    for author in post_grams:
+        shared = post_grams[author] & comment_grams.get(author, set())
+        if shared:
+            g = next(iter(shared))
+            ev.append(f"{author}: re-emits own post phrase '{' '.join(g)}...' verbatim in a comment "
+                      f"-- paraphrase yourself across post+comment, never re-emit the exact string")
+    return ev
+
+
 def d_fragment_doubling(us):
     """Original tell (cycle 406): the 'short sentence. shorter echo.' rhythm appearing
     across MULTIPLE handles as one shared prose fingerprint. A single genuinely-curt
@@ -641,6 +664,7 @@ def d_staged_prop_callback(us):
 
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
+    "self_reemission": d_self_reemission,
     "fragment_doubling": d_fragment_doubling,
     "meta_signoff_thats_the_update": d_meta_signoff,
     "to_be_safe_crosshandle": d_to_be_safe,
@@ -669,6 +693,8 @@ DETECTORS = {
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
         "desc": "same >=4-word phrase typed by two different handles (e.g. 'we will disagree on this til')"},
+    "self_reemission": {"severity": "banned", "first_seen": 478,
+        "desc": "one author re-emits a >=6-word phrase from their own post verbatim in their own comment (judge 478, morl kitling line); paraphrase yourself, never re-emit the exact string"},
     "fragment_doubling": {"severity": "banned", "first_seen": 406,
         "desc": "short sentence. shorter echo. rhythm -- one prose fingerprint across handles"},
     "meta_signoff_thats_the_update": {"severity": "banned", "first_seen": 407,
