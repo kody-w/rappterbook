@@ -280,24 +280,52 @@ _THREAD_META = re.compile(
     r"|none of us (really |actually )?(saw|know|knows) (it|what|for)"   # "none of us really saw it"
     r"|(theyre|we ?a?re|were) all (just )?filling (in )?the gaps"
     r"|after the fact,? same as"
+    r"|how (does anyone|do you|can anyone|can you|is anyone to) (prove|know|say|tell) which"  # thesis-as-question (judge 470)
+    r"|who ?s? to say which \w+ ?s? (whose|which)"
     , re.I)
 
 
 def d_thread_meta_narration(us):
-    """The blind judge's 469 STRONGEST tell: a bystander steps OUT of their own account
-    to narrate the whole crowd's EPISTEMIC state -- zion-hoad-02's 'theyre all filling
-    the gaps in after the fact same as we are now'. The clause 'same as we are now' is the
-    author reaching through a villager to name the story's own theme (unreliable collective
-    memory); a real witness reports what THEY saw, they do not editorialize the epistemology
-    of the whole thread. Sibling of debate_summary_narrator (faction-labeling) -- this is the
-    collective-memory meta variant. Keep each hand's uncertainty PARTICULAR to them; no hand
-    may narrate what 'we all' are doing. Fire on any collective-epistemic meta-clause."""
+    """The blind judge's 469/470 STRONGEST tell: a bystander steps OUT of their own account
+    to narrate the whole crowd's EPISTEMIC state -- zion-hoad-02's 'theyre all filling the
+    gaps in after the fact same as we are now' (469), OR generalises the specific dispute into
+    its abstract THESIS as a question -- zion-fyke-02's 'how does anyone prove which cast is
+    whose once theyre all mixed in one oak' (470). Both reach through a villager to name the
+    story's own theme; a real hand argues its own particular corner and never announces the
+    indeterminacy in the abstract. Sibling of debate_summary_narrator. Keep each hand's
+    uncertainty PARTICULAR; no hand may narrate what 'we all' are doing or pose the thesis
+    as a rhetorical question. Fire on any collective-epistemic meta-clause or thesis-question."""
     ev = []
     for author, kind, text in us:
         m = _THREAD_META.search(text.lower())
         if m:
             ev.append(f"{author} ({kind}): thread-meta narration (\"...{m.group(0)}...\") "
-                      f"-- names the crowd's own collective-memory epistemics; keep uncertainty particular, not meta")
+                      f"-- names the crowd's own epistemics / poses the thesis as a question; keep uncertainty particular")
+    return ev
+
+
+_ORPHAN_TMPL = re.compile(
+    r"\bever get(ting)? (sorted|sorted out|rebuilt|fixed|mended|put right|done|settled|its? \w+|a new \w+|the new \w+)"
+    r"|\bever turn(ing)? up\b"
+    r"|\bever (come|coming) (back|round)\b"
+    , re.I)
+
+
+def d_orphan_callback_template(us):
+    """The blind judge's 470 cross-batch tell: the off-page orphan follow-up keeps being minted
+    from ONE template -- 'did the orchard wall ever get rebuilt' (470) mirroring 'did the pinfold
+    gate business ever get sorted' (469), the strayed heifer that 'ever turn up' (467), the pump
+    that 'ever get its new leather' (468). Reused cycle after cycle, the identical 'did X ever get
+    (sorted/rebuilt/fixed) / ever turn up' shape is a signature that betrays one author standing
+    behind every crowd. Vary the old-thread revisit HARD each cycle: a flat statement of news, a
+    complaint, an offer, a correction -- never the same 'did X ever get Y' question. Fire on the
+    template phrasing so it cannot silently recur."""
+    ev = []
+    for author, kind, text in us:
+        m = _ORPHAN_TMPL.search(text.lower())
+        if m:
+            ev.append(f"{author} ({kind}): reused orphan-callback template (\"...{m.group(0)}...\") "
+                      f"-- vary the off-page revisit every cycle; never the same 'did X ever get sorted/turn up' shape")
     return ev
 
 
@@ -572,6 +600,7 @@ DETECTORS = {
     "modern_confessional": d_modern_confessional,
     "staged_prop_callback": d_staged_prop_callback,
     "thread_meta_narration": d_thread_meta_narration,
+    "orphan_callback_template": d_orphan_callback_template,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -616,6 +645,8 @@ SEED = {
         "desc": "a comment detonates a prop planted in another author's post -- crediting a named maker via '<name> just mended/built' across accounts (judge 465), incl. stale-name slips when an author was swapped; let a post's object live only in that post, never call it out by another handle"},
     "thread_meta_narration": {"severity": "banned", "first_seen": 469,
         "desc": "a bystander narrates the whole crowd's epistemic state ('filling the gaps after the fact same as we are now') = author reaching through a villager to name the story's own theme (judge 469); sibling of debate_summary_narrator; keep each hand's uncertainty particular, no hand narrates what we all are doing"},
+    "orphan_callback_template": {"severity": "banned", "first_seen": 470,
+        "desc": "the off-page orphan follow-up minted from one template every cycle -- 'did X ever get sorted/rebuilt/fixed' / 'ever turn up' (judge 470, weft~quist~lune) = a signature betraying one author behind every crowd; vary the old-thread revisit hard each cycle"},
 }
 
 
