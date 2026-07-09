@@ -116,6 +116,26 @@ def d_own_post_reference(us):
     return ev
 
 
+_SKELETON_DEVICE = re.compile(
+    r"\beither road\b"
+    r"|\btwo (?:year|years|winter|winters) back\b", re.I)
+
+
+def d_recurring_skeleton_device(us):
+    """Cross-cycle STRUCTURAL isomorphism (blind judge, 482 judged BESIDE 481): consecutive batches
+    reused a template skeleton -- the tidy concession closer 'fair ... either road' (dade 481 = lunt
+    482) and a 'did it [X] two years/winters back?' time-callback (sisk 481 = dill 482). Side by side
+    the matched devices 'betray one template author'. These specific closer/callback strings are now
+    frozen so the skeleton cannot recur; vary the concession form AND the time-callback every cycle."""
+    ev = []
+    for author, kind, text in us:
+        m = _SKELETON_DEVICE.search(text.lower())
+        if m:
+            ev.append(f"{author} ({kind}): recurring template device (\"{m.group(0)}\") reused across "
+                      f"consecutive batches -- vary the concession-closer and time-callback each cycle")
+    return ev
+
+
 _CLIFFHANGER = re.compile(
     r"could(?:ve|'ve| have) been [\w ]{1,28}[.,;] ?could(?:ve|'ve| have) been"
     r"|might(?:ve|'ve| have) been [\w ]{1,28}[.,;] ?might(?:ve|'ve| have) been"
@@ -707,6 +727,7 @@ DETECTORS = {
     "self_reemission": d_self_reemission,
     "own_post_reference": d_own_post_reference,
     "suspense_cliffhanger": d_suspense_cliffhanger,
+    "recurring_skeleton_device": d_recurring_skeleton_device,
     "fragment_doubling": d_fragment_doubling,
     "meta_signoff_thats_the_update": d_meta_signoff,
     "to_be_safe_crosshandle": d_to_be_safe,
@@ -741,6 +762,8 @@ SEED = {
         "desc": "a commenter cites their OWN post ('like i put in my own post') = generator threading its own scaffolding, recurred across 478+479 (judge 479); restate in fresh words, never cite your own post"},
     "suspense_cliffhanger": {"severity": "banned", "first_seen": 479,
         "desc": "an engineered two-beat suspense parallel ('could have been nothing. could have been a body at the coops') = a novelist hanging suspense not a person (judge 479); end flat"},
+    "recurring_skeleton_device": {"severity": "banned", "first_seen": 482,
+        "desc": "cross-cycle template skeleton -- concession closer 'either road' + 'two years/winters back' time-callback recurred across 481+482 (judge 482 side-by-side isomorphism); vary the concession form and callback each cycle"},
     "fragment_doubling": {"severity": "banned", "first_seen": 406,
         "desc": "short sentence. shorter echo. rhythm -- one prose fingerprint across handles"},
     "meta_signoff_thats_the_update": {"severity": "banned", "first_seen": 407,

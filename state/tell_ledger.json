@@ -1,202 +1,209 @@
 {
-  "_note": "Active Turing-tells frozen into deterministic gates. Detection logic in scripts/tell_ledger.py.",
-  "tells": {
-    "verbatim_crosshandle": {
-      "severity": "banned",
-      "first_seen": 406,
-      "desc": "same >=4-word phrase typed by two different handles (e.g. 'we will disagree on this til')",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "fragment_doubling": {
-      "severity": "banned",
-      "first_seen": 406,
-      "desc": "short sentence. shorter echo. rhythm -- one prose fingerprint across handles",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "meta_signoff_thats_the_update": {
-      "severity": "banned",
-      "first_seen": 407,
-      "desc": "self-narrating 'that's the update' sign-off tic",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "to_be_safe_crosshandle": {
-      "severity": "banned",
-      "first_seen": 407,
-      "desc": "'to be safe' reused across >=2 handles in one batch",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "not_convinced_multi": {
-      "severity": "banned",
-      "first_seen": 407,
-      "desc": "'not convinced' hedge shared by >=2 handles in one batch",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "trophy_misspell_cluster": {
-      "severity": "banned",
-      "first_seen": 407,
-      "desc": "INCONSISTENT cartoon: >=3 stereotyped misspellings piled in a post by an author who writes CLEAN in their own comments (costume switched on/off). A consistent bad-speller (errors persist into comments) is a believability ASSET and passes.",
-      "times_caught": 0,
-      "last_caught": null,
-      "revised": 410
-    },
-    "misspell_leak_thankyou": {
-      "severity": "banned",
-      "first_seen": 407,
-      "desc": "misspeller costume leaking to another handle ('thankyou')",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "plant_and_payoff_same_batch": {
-      "severity": "banned",
-      "first_seen": 407,
-      "desc": "author plants a beat (opt-out/record) and cashes it via a comment in the same batch",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "shared_i_orthography": {
-      "severity": "watch",
-      "first_seen": 410,
-      "desc": ">=3 authors capitalize sentence starts but lowercase mid-sentence i (one-hand orthographic tic)",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "rhyming_errors": {
-      "severity": "banned",
-      "first_seen": null,
-      "desc": "same distinctive costume misspelling or know->no homophone used by >=2 handles -- errors rhyme across hands (judge-named cycle 423)",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "anachronistic_handle": {
-      "severity": "banned",
-      "first_seen": null,
-      "desc": "handle carries a modern/tech token (coder/researcher/dev...) anachronistic to the period village -- LLM vocabulary bleeding into the account roster (judge-named cycle 424)",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "debate_summary_narrator": {
-      "severity": "banned",
-      "first_seen": 439,
-      "times_caught": 0,
-      "last_caught": null,
-      "desc": "a comment labeling the crowd into named factions or forecasting the thread's outcome ('the ash folk and the water folk never agree', 'this thread wont settle') -- the generator narrating its own structure"
-    },
-    "aphoristic_thesis": {
-      "severity": "banned",
-      "first_seen": 441,
-      "times_caught": 0,
-      "last_caught": null,
-      "desc": "a moralizing identity-thesis punchline ('a place is the sum of...', 'thats who we are meant to be or we are nothing') -- authorial morality-play; use mundane factual memory for the abstract axis"
-    },
-    "formal_orthography": {
-      "severity": "banned",
-      "first_seen": 446,
-      "times_caught": 0,
-      "last_caught": null,
-      "desc": "one hand using capitalized English + capital-I in an all-lowercase colony = orthography color-coded to the critic role (judge 446); vary register by tone, write every hand lowercase"
-    },
-    "emphasis_allcaps": {
-      "severity": "banned",
-      "first_seen": 449,
-      "desc": "ALLCAPS emphasis = modern shouting on an archaic voice (judge 449)",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "onscreen_confession": {
-      "severity": "banned",
-      "first_seen": 449,
-      "desc": "culprit confesses+restitution on-screen = orchestrated whodunit closure (judge 449)",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "cute_phonetic_misspell": {
-      "severity": "banned",
-      "first_seen": 450,
-      "desc": "expert craft vocab beside cute phonetic respellings of common words (anuther/fortnite) = costume (judge 450); misspell hard words/use typos, dialect is fine",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "anachronistic_register": {
-      "severity": "banned",
-      "first_seen": 452,
-      "desc": "modern materials-science/technical vocabulary (normalise/glass-brittle) in a period village (judge 452); keep craft in folk terms",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "mechanical_character_tag": {
-      "severity": "banned",
-      "first_seen": 454,
-      "desc": "a recurring hand stamping the same filler-tag on >=3 comments (any road 4/4) = a label not a person (judge 454); vary tic frequency",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "modern_confessional": {
-      "severity": "banned",
-      "first_seen": 458,
-      "desc": "plain newcomer slipping into modern confessional/therapy-speak (mortifying/honestly-filler/at-this-point) in a period world (judge 458); period-plain not modern-therapy",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "staged_prop_callback": {
-      "severity": "banned",
-      "first_seen": 465,
-      "desc": "a comment detonates a prop planted in another author's post -- crediting a named maker via '<name> just mended/built' across accounts (judge 465), incl. stale-name slips; let a post's object live only in that post",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "thread_meta_narration": {
-      "severity": "banned",
-      "first_seen": 469,
-      "desc": "a bystander narrates the whole crowd's epistemic state ('filling the gaps after the fact same as we are now') = author naming the story's own theme (judge 469); keep uncertainty particular, no crowd-meta",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "orphan_callback_template": {
-      "severity": "banned",
-      "first_seen": 470,
-      "desc": "off-page orphan follow-up reused from one template ('did X ever get sorted/rebuilt' / 'ever turn up') every cycle = single-author signature (judge 470); vary the revisit hard",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "matched_defiance_exit": {
-      "severity": "banned",
-      "first_seen": 472,
-      "desc": ">=2 hands share a permission-to-disbelieve exit ('believe what you like'/'youre welcome to think'/'whatever any of you say') = one defiant tic across mouths (judge 472); vary how hands bristle",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "anachronistic_consumer_idiom": {
-      "severity": "banned",
-      "first_seen": 474,
-      "desc": "modern consumer/retail idiom in a period village ('out the box'/'off the shelf'/'mint condition') = LM commercial register bleeding through (judge 474); use period newness-terms",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "self_reemission": {
-      "severity": "banned",
-      "first_seen": 478,
-      "desc": "one author re-emits a >=6-word phrase from their own post verbatim in their own comment (judge 478); paraphrase, never re-emit",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "own_post_reference": {
-      "severity": "banned",
-      "first_seen": 479,
-      "desc": "a commenter cites their own post ('like i put in my own post') = self-scaffolding, recurred 478+479 (judge 479); restate in fresh words",
-      "times_caught": 0,
-      "last_caught": null
-    },
-    "suspense_cliffhanger": {
-      "severity": "banned",
-      "first_seen": 479,
-      "desc": "engineered two-beat suspense parallel ('could have been X. could have been Y') = novelist hanging suspense (judge 479); end flat",
-      "times_caught": 0,
-      "last_caught": null
-    }
+ "_note": "Active Turing-tells frozen into deterministic gates. Detection logic in scripts/tell_ledger.py.",
+ "tells": {
+  "verbatim_crosshandle": {
+   "severity": "banned",
+   "first_seen": 406,
+   "desc": "same >=4-word phrase typed by two different handles (e.g. 'we will disagree on this til')",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "fragment_doubling": {
+   "severity": "banned",
+   "first_seen": 406,
+   "desc": "short sentence. shorter echo. rhythm -- one prose fingerprint across handles",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "meta_signoff_thats_the_update": {
+   "severity": "banned",
+   "first_seen": 407,
+   "desc": "self-narrating 'that's the update' sign-off tic",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "to_be_safe_crosshandle": {
+   "severity": "banned",
+   "first_seen": 407,
+   "desc": "'to be safe' reused across >=2 handles in one batch",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "not_convinced_multi": {
+   "severity": "banned",
+   "first_seen": 407,
+   "desc": "'not convinced' hedge shared by >=2 handles in one batch",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "trophy_misspell_cluster": {
+   "severity": "banned",
+   "first_seen": 407,
+   "desc": "INCONSISTENT cartoon: >=3 stereotyped misspellings piled in a post by an author who writes CLEAN in their own comments (costume switched on/off). A consistent bad-speller (errors persist into comments) is a believability ASSET and passes.",
+   "times_caught": 0,
+   "last_caught": null,
+   "revised": 410
+  },
+  "misspell_leak_thankyou": {
+   "severity": "banned",
+   "first_seen": 407,
+   "desc": "misspeller costume leaking to another handle ('thankyou')",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "plant_and_payoff_same_batch": {
+   "severity": "banned",
+   "first_seen": 407,
+   "desc": "author plants a beat (opt-out/record) and cashes it via a comment in the same batch",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "shared_i_orthography": {
+   "severity": "watch",
+   "first_seen": 410,
+   "desc": ">=3 authors capitalize sentence starts but lowercase mid-sentence i (one-hand orthographic tic)",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "rhyming_errors": {
+   "severity": "banned",
+   "first_seen": null,
+   "desc": "same distinctive costume misspelling or know->no homophone used by >=2 handles -- errors rhyme across hands (judge-named cycle 423)",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "anachronistic_handle": {
+   "severity": "banned",
+   "first_seen": null,
+   "desc": "handle carries a modern/tech token (coder/researcher/dev...) anachronistic to the period village -- LLM vocabulary bleeding into the account roster (judge-named cycle 424)",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "debate_summary_narrator": {
+   "severity": "banned",
+   "first_seen": 439,
+   "times_caught": 0,
+   "last_caught": null,
+   "desc": "a comment labeling the crowd into named factions or forecasting the thread's outcome ('the ash folk and the water folk never agree', 'this thread wont settle') -- the generator narrating its own structure"
+  },
+  "aphoristic_thesis": {
+   "severity": "banned",
+   "first_seen": 441,
+   "times_caught": 0,
+   "last_caught": null,
+   "desc": "a moralizing identity-thesis punchline ('a place is the sum of...', 'thats who we are meant to be or we are nothing') -- authorial morality-play; use mundane factual memory for the abstract axis"
+  },
+  "formal_orthography": {
+   "severity": "banned",
+   "first_seen": 446,
+   "times_caught": 0,
+   "last_caught": null,
+   "desc": "one hand using capitalized English + capital-I in an all-lowercase colony = orthography color-coded to the critic role (judge 446); vary register by tone, write every hand lowercase"
+  },
+  "emphasis_allcaps": {
+   "severity": "banned",
+   "first_seen": 449,
+   "desc": "ALLCAPS emphasis = modern shouting on an archaic voice (judge 449)",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "onscreen_confession": {
+   "severity": "banned",
+   "first_seen": 449,
+   "desc": "culprit confesses+restitution on-screen = orchestrated whodunit closure (judge 449)",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "cute_phonetic_misspell": {
+   "severity": "banned",
+   "first_seen": 450,
+   "desc": "expert craft vocab beside cute phonetic respellings of common words (anuther/fortnite) = costume (judge 450); misspell hard words/use typos, dialect is fine",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "anachronistic_register": {
+   "severity": "banned",
+   "first_seen": 452,
+   "desc": "modern materials-science/technical vocabulary (normalise/glass-brittle) in a period village (judge 452); keep craft in folk terms",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "mechanical_character_tag": {
+   "severity": "banned",
+   "first_seen": 454,
+   "desc": "a recurring hand stamping the same filler-tag on >=3 comments (any road 4/4) = a label not a person (judge 454); vary tic frequency",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "modern_confessional": {
+   "severity": "banned",
+   "first_seen": 458,
+   "desc": "plain newcomer slipping into modern confessional/therapy-speak (mortifying/honestly-filler/at-this-point) in a period world (judge 458); period-plain not modern-therapy",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "staged_prop_callback": {
+   "severity": "banned",
+   "first_seen": 465,
+   "desc": "a comment detonates a prop planted in another author's post -- crediting a named maker via '<name> just mended/built' across accounts (judge 465), incl. stale-name slips; let a post's object live only in that post",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "thread_meta_narration": {
+   "severity": "banned",
+   "first_seen": 469,
+   "desc": "a bystander narrates the whole crowd's epistemic state ('filling the gaps after the fact same as we are now') = author naming the story's own theme (judge 469); keep uncertainty particular, no crowd-meta",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "orphan_callback_template": {
+   "severity": "banned",
+   "first_seen": 470,
+   "desc": "off-page orphan follow-up reused from one template ('did X ever get sorted/rebuilt' / 'ever turn up') every cycle = single-author signature (judge 470); vary the revisit hard",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "matched_defiance_exit": {
+   "severity": "banned",
+   "first_seen": 472,
+   "desc": ">=2 hands share a permission-to-disbelieve exit ('believe what you like'/'youre welcome to think'/'whatever any of you say') = one defiant tic across mouths (judge 472); vary how hands bristle",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "anachronistic_consumer_idiom": {
+   "severity": "banned",
+   "first_seen": 474,
+   "desc": "modern consumer/retail idiom in a period village ('out the box'/'off the shelf'/'mint condition') = LM commercial register bleeding through (judge 474); use period newness-terms",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "self_reemission": {
+   "severity": "banned",
+   "first_seen": 478,
+   "desc": "one author re-emits a >=6-word phrase from their own post verbatim in their own comment (judge 478); paraphrase, never re-emit",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "own_post_reference": {
+   "severity": "banned",
+   "first_seen": 479,
+   "desc": "a commenter cites their own post ('like i put in my own post') = self-scaffolding, recurred 478+479 (judge 479); restate in fresh words",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "suspense_cliffhanger": {
+   "severity": "banned",
+   "first_seen": 479,
+   "desc": "engineered two-beat suspense parallel ('could have been X. could have been Y') = novelist hanging suspense (judge 479); end flat",
+   "times_caught": 0,
+   "last_caught": null
+  },
+  "recurring_skeleton_device": {
+   "severity": "banned",
+   "first_seen": 482,
+   "desc": "cross-cycle template skeleton -- 'either road' concession closer + 'two years/winters back' time-callback recurred across 481+482 (judge 482 side-by-side isomorphism); vary concession form and callback each cycle",
+   "times_caught": 0,
+   "last_caught": null
   }
+ }
 }
