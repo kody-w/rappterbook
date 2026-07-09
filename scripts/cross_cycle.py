@@ -69,6 +69,41 @@ def genre_map(batch):
 def orphans(batch):
     return {str(c["target"]) for c in batch.get("comments", []) if is_int_target(c.get("target"))}
 
+def cast(batch):
+    """Every handle that appears in the batch (posters + commenters)."""
+    return {p["author"] for p in batch.get("posts", [])} | \
+           {c["author"] for c in batch.get("comments", [])}
+
+# Semantic-role markers. A recurring handle is fine (continuity); the tell the
+# judge caught (cycle 436) is the SAME handle playing the SAME role every batch
+# (marsh = nostalgic old-timer both times, goss = hardline moralizer both times).
+ROLE_MARKERS = {
+    "old-timer": re.compile(r"\b(grandfer|grandfather|in his day|in my day|back when|used to|i remember|years back|back along|when i were)\b"),
+    "moralizer": re.compile(r"\b(only fair|fair way|thats not right|no call for|its greed|whats the point|the right thing|not right that)\b"),
+}
+
+def roles(batch):
+    """author who most carries each semantic role in this batch (or None)."""
+    texts = collections.defaultdict(str)
+    for p in batch.get("posts", []):
+        texts[p["author"]] += " " + p.get("body", "").lower()
+    for c in batch.get("comments", []):
+        texts[c["author"]] += " " + c.get("body", "").lower()
+    out = {}
+    for role, rx in ROLE_MARKERS.items():
+        best, n = None, 0
+        for a, t in texts.items():
+            k = len(rx.findall(t))
+            if k > n:
+                best, n = a, k
+        out[role] = best
+    return out
+
+def vote_shape(batch):
+    up = sum(1 for v in batch.get("votes", []) if v.get("direction") == "up")
+    dn = sum(1 for v in batch.get("votes", []) if v.get("direction") == "down")
+    return (up, dn)
+
 def ngrams(batch, n=NGRAM):
     grams = set()
     texts = [p.get("body", "") for p in batch.get("posts", [])] + \
@@ -117,10 +152,13 @@ def main():
     hist_ops = collections.Counter()
     hist_orph = collections.Counter()
     hist_ng = collections.Counter()
+    hist_roles = collections.defaultdict(set)   # role -> {authors who held it}
+    prev = None                                  # most-recent non-self batch
     for c, b in recent:
         # skip a history entry identical to the current batch (self)
         if b.get("posts") == cur.get("posts"):
             continue
+        prev = b
         for a, tags in genre_map(b).items():
             for t in tags:
                 hist_author_tags[a][t] += 1
@@ -130,6 +168,9 @@ def main():
             hist_orph[o] += 1
         for g in ngrams(b):
             hist_ng[g] += 1
+        for role, a in roles(b).items():
+            if a:
+                hist_roles[role].add(a)
 
     # 1. genre-locked handle (same author + same SPECIFIC tag as a recent batch).
     #    GENERAL is the catch-all default tag -> too broad to lock on; the
@@ -156,6 +197,31 @@ def main():
     shared = sorted(g for g in cur_ng if hist_ng[g] >= 1)
     for g in shared[:6]:
         flags.append(f"VERBATIM: \"{g}\" appears in a recent batch too -- reword (template boilerplate).")
+
+    # 5. CAST-OVERLAP with the immediately-previous batch. Recurring cast across
+    #    the whole feed is realistic; two CONSECUTIVE batches sharing most of the
+    #    same handles reads as one author minting a fixed troupe (judge 436: nine
+    #    shared handles). Draw a ROLLING cast -- keep a core, swap in fresh faces.
+    if prev is not None:
+        cur_cast, prev_cast = cast(cur), cast(prev)
+        shared_cast = cur_cast & prev_cast
+        ratio = len(shared_cast) / max(1, len(cur_cast))
+        if ratio > 0.55:
+            flags.append(f"CAST-OVERLAP: {len(shared_cast)}/{len(cur_cast)} handles ({int(ratio*100)}%) are reused from the previous batch -- rotate in fresh handles / drop some recurring ones (target <45%).")
+
+    # 6. ROLE-CAST: the same handle playing the same semantic role as a recent
+    #    batch (marsh=old-timer, goss=moralizer both cycles) = a casting sheet.
+    cur_roles = roles(cur)
+    for role, a in cur_roles.items():
+        if a and a in hist_roles.get(role, set()):
+            flags.append(f"ROLE-CAST: {a} plays the '{role}' role again (also recent) -- give that voice to a different handle, or drop the role this batch.")
+
+    # 7. VOTE-SHAPE: an identical up/down tally as the previous batch is a
+    #    template fingerprint (judge 436: 'identical VOTES up 4 down 1').
+    if prev is not None and cur.get("votes") and prev.get("votes"):
+        if vote_shape(cur) == vote_shape(prev):
+            u, d = vote_shape(cur)
+            flags.append(f"VOTE-SHAPE: up {u}, down {d} is identical to the previous batch -- vary the vote split.")
 
     print("=" * 68)
     print(f"  CROSS-CYCLE gate -- vs last {len(recent)} batches "

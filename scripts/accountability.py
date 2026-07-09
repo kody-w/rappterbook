@@ -36,6 +36,7 @@ FEED = "state/synthetic_posts.json"
 # recurrence count is expected/historical, not an open debt.
 RETIRED_TELLS = {
     "handle-tell",  # neutral period-clean surnames; judge 426 "clean win, no role-matching"
+    "designated-misspeller",  # within-hand literacy (clean hand fumbles one word, rough hand nails a hard one); held un-named across cycles 435 + 436
 }
 # Tells known to be ENGINE/STRUCTURAL-caused (never-modify-engine) -> not a
 # content bug to whack; surface as a standing escalation for @kody-w.
