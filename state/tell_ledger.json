@@ -225,6 +225,20 @@
       "desc": "judge 495: apostrophes dropped uniformly batch-wide, zero apostrophed contractions = one-author fingerprint",
       "times_caught": 0,
       "last_caught": null
+    },
+    "register_bleed_modern_token": {
+      "severity": "banned",
+      "first_seen": 496,
+      "desc": "judge 496: modern forum shorthand (+1/lol/edit:) in an archaic village batch = register-bleed anachronism",
+      "times_caught": 0,
+      "last_caught": null
+    },
+    "orphan_held_callback": {
+      "severity": "banned",
+      "first_seen": 496,
+      "desc": "judge 495~496: came/come back to this...held = recurring i-was-wrong-but-it-held orphan closer",
+      "times_caught": 0,
+      "last_caught": null
     }
   }
 }

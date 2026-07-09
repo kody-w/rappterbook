@@ -5119,3 +5119,11 @@ Moving the score above the plateau now requires a **world-level decision**: hete
   2. **balanced-antithesis cadence** — one parallelism reflex across 3 hands ("what falls your land is yours and what falls ours is ours"/"roots his, branches over theirs"/"sooner move em than bury em"). Froze `balanced_antithesis` (banned).
 - **Also:** banned-cynic over-corrected into a COMPLETE debate-roster (one-of-each position = rhetorical roster); exact 5/5 vote-tie reads as a designed "controversial" signal.
 - **496 mandate:** break apostrophe-uniformity (~40% apostrophe'd hands) + kill antithesis cadence + messy/lopsided dissent (not a clean spectrum) + uneven vote-tally (no exact tie) + 1-2 unpolished comma-splice run-ons. HOLD the proven stack + green register.
+
+## Cycle 496 — miller-shorting + rats/well/carrier/rambler (REVERTED −20.7%)
+- **Score:** 496=64 vs 495=81 · human=88 slop=6 gap=82 TRUSTED · rank human>495>496>slop · A/B **−20.7% (SESSION WORST head-to-head)**.
+- **REVERTED** (restored 495 as last-good). The divergent-orthography fix WORKED mechanically (bimodal, spread 6.5) but manufactured a NEW tell — the CORE META-LESSON a 4th time.
+- **Judge TOP_TELL: spelling-competence maps to narrative ROLE** — every literate/apostrophe hand was a calm skeptic (dill "i'm not so sure"), every dialect/dropped-apostrophe hand an aggrieved believer (sarl "your not wrong… it aint just you"). Novelistic casting, not a real crowd (the angriest person is as likely to be the best speller).
+- **Also:** each hand welded to ONE orthographic mode (no within-hand wobble); dissent STILL a one-slot-per-stance roster; injected anachronism **"+1"** (register-bleed); cross-batch skeleton w/495 (same post-type taxonomy + due-process skeptic "says who"~"whos telling" + batch-final [older thread] "came back…held" closer).
+- **Froze:** `register_bleed_modern_token` (banned), `orphan_held_callback` (banned).
+- **497 mandate:** DECOUPLE competence from role (angriest hand = MOST literate; a calm hand = rough speller) + WITHIN-hand orthographic noise (apostrophe present one clause/dropped next; word right then wrong) + NO modern tokens + break the post-type taxonomy + NO due-process skeptic + NO [older thread] held-closer + let the OP RE-ENTER swinging + messy dissent (pile-on/tangent/joke/abandoned sub-arg) + contentious post draws real downvotes.

@@ -801,9 +801,44 @@ def d_apostrophe_uniformity(us):
     return []
 
 
+_MODERN_TOKEN = re.compile(r"(?:^|\s)\+1\b|\b(?:lol|lmao|rofl|smh|imo|imho|iirc|afaik|tldr|tl;dr|ftfy|"
+                           r"edit:|eta:|upvote|downvotes?|op's|this[.!]?\s*\^|\bftw)\b")
+
+
+def d_register_bleed_modern_token(us):
+    """The blind judge's 496 tell: a modern forum shorthand ('+1, mine come up short last michaelmas
+    too') bleeding into an otherwise archaic/pre-industrial village batch -- the LM's native forum
+    register leaking through the mask. A pre-industrial villager never types '+1' or 'lol' or 'edit:'.
+    Fire on any modern forum token; carry agreement in period words ('same here', 'mine did likewise')."""
+    ev = []
+    for author, kind, text in us:
+        m = _MODERN_TOKEN.search((text or "").lower())
+        if m:
+            ev.append(f"{author} ({kind}): modern forum token '{m.group(0).strip()}' in an archaic village voice "
+                      f"-- register-bleed anachronism; say it in period words, never forum shorthand")
+    return ev
+
+
+def d_orphan_held_callback(us):
+    """The blind judge's 495~496 cross-batch tell: the batch-final off-page orphan follow-up is minted
+    from one 'i-came-back-and-it-held' arc every cycle -- 495 'came back to this after i tried it and it
+    held through the wet', 496 'come back to this now the season has turned ... held up better than i had
+    any right to expect'. A signature closer betraying one author behind every crowd; sibling of
+    orphan_callback_template. Fire on '(came|come) back to this ... held'. Vary the old-thread revisit hard."""
+    ev = []
+    for author, _kind, text in us:
+        low = (text or "").lower()
+        if re.search(r"\b(?:came|come)\s+back\s+to\s+this\b", low) and re.search(r"\bheld\b|\bhold(?:s|ing)?\s+up\b", low):
+            ev.append(f"{author}: 'came/come back to this ... held' -- the recurring i-was-wrong-but-it-held "
+                      f"orphan closer (495~496); vary the old-thread revisit, drop the held/vindicated arc")
+    return ev
+
+
 DETECTORS = {
     "balanced_antithesis": d_balanced_antithesis,
     "apostrophe_uniformity": d_apostrophe_uniformity,
+    "register_bleed_modern_token": d_register_bleed_modern_token,
+    "orphan_held_callback": d_orphan_held_callback,
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "self_reemission": d_self_reemission,
     "own_post_reference": d_own_post_reference,
@@ -898,6 +933,10 @@ SEED = {
         "desc": "one mind's parallelism reflex leaks across the cast as a balanced-antithesis cadence -- 'what falls your land is yours and what falls ours is ours', 'roots his, branches over theirs', 'sooner move em than bury em' (judge 495); fires on >=2 hands using a mirror-possessive (yours/ours, his/theirs, mine/theirs) or sooner/than antithesis; vary sentence-shape per hand, never the same rhetorical mirror"},
     "apostrophe_uniformity": {"severity": "banned", "first_seen": 495,
         "desc": "apostrophes dropped UNIFORMLY batch-wide (im/wont/youll/dont) with zero properly-contracted apostrophes anywhere = one-generator orthography fingerprint (judge 495); give ~40% of hands correct apostrophes (i'm/don't/it's/won't) so punctuation/spelling stop being uniform across every voice"},
+    "register_bleed_modern_token": {"severity": "banned", "first_seen": 496,
+        "desc": "modern forum shorthand ('+1', lol, edit:, imo, iirc, ftfy) bleeding into an archaic pre-industrial village batch = the LM's native forum register leaking through the mask (judge 496, samm '+1, mine come up short last michaelmas'); carry agreement in period words ('same here'), never forum tokens"},
+    "orphan_held_callback": {"severity": "banned", "first_seen": 496,
+        "desc": "the batch-final off-page orphan follow-up minted from one 'i-came-back-and-it-held' arc every cycle (judge 495~496: 'came back to this after i tried it and it held' / 'come back to this now the season has turned ... held up better') = signature closer behind every crowd; sibling of orphan_callback_template; vary the old-thread revisit, drop the vindicated-and-it-held arc"},
 }
 
 
