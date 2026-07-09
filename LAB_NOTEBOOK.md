@@ -4756,3 +4756,18 @@ Shipped TWO durable meta-checks (the per-batch gates + blind judge only see ONE 
   3. Recovery was frictionless ("perfect student cueing the model answer"). Give it FRICTION — misread/argue/go quiet.
   4. Experts are stylistically interchangeable. **Judge's #1 fix: combine competence-variance WITH persistent-idiolect on the experts** (terse/run-on/clipped, tics ≤2) + let one disagreement end SOUR.
 - **456 plan:** combine the TWO proven levers (competence-variance + persistent-idiolect), break the gapless syllabus, rougher/more-outside newcomer with a frictional recovery, one sour thread. Two proven levers stacked is the path off the plateau.
+
+## Cycle 456 — brewing — KEPT (plateau ~tie) — TWO-LEVER STACK VALIDATED; PROSE PASSES
+- **Change:** STACKED the two proven levers — competence-variance (plain zero-dialect newcomer whose brew failed, with a DEBATED/unresolved cause + emotional pushback) + persistent-idiolect experts (nabb terse / wregan run-on / durst clipped-grudging); broke the gapless syllabus (SHOW + casks don't fix the novice's problem); one thread sour.
+- **Score:** blind judge same-run **456=45 vs 455=48** (human 77, slop 5, gap 72 trusted). A/B **−4.2% [PLATEAU ~tie]** — judge: "4 and 2 are within noise (~3 pts)." norm 0.556. Crushes slop.
+- **Verdict:** KEEP (plateau, board-green, crushes slop, fresh brewing topic; the stack validated at the prose layer).
+- **BREAKTHROUGH IN UNDERSTANDING — the prose now passes:** judge: *"the prose already passes for human; killing the template handle is the single highest-leverage change."* The two levers held: the unresolved 3-theory diagnosis is *"the strongest human signal, exactly how real forums fail to resolve — a clean fix would have read far more AI; the mess helps"*; the newcomer's emotional pushback is *"convincingly, emotionally human"*; the persistent voices held.
+- **The sole remaining CAP (=> @kody-w):** *"the identical machine-minted `zion-<letters>-<digits>` handle on every participant... the one objective, un-explain-away-able artifact... sets the ceiling no matter how good the prose is."* Every recent judge names it. **Batches now cap at ~45-48 vs human 77 SOLELY because of the handle scheme + the gate-forced 5-post skeleton** — both world-level/load-bearing, needing a human decision.
+- **Residual (prose-side) tells for 457:** (1) "authored coverage not lived mess" — the 3-expert disagreement is a checklist (one theory each); let experts overlap/agree/tangent. (2) No outlier disagreeing on VALUES/worldview (all share thrift + owd-nostalgia + suspicion-of-maltster) — 457 adds a values-outlier. (3) Cross-batch 5-post skeleton clone + "im fair annoyed" tic (cleaned; rotate grievance phrasing).
+- **457 plan:** keep the 2 levers, add VALUES-variance (an outlier who defends the accused / dismisses the old ways), make the disagreement lived-mess not a checklist, vary the skeleton.
+
+## >>> ESCALATION FOR @kody-w (the ceiling is now unambiguous)
+The judge has declared the **prose passes for human**. The flywheel is capped at ~45-48 (vs human ~77) by exactly two structural, load-bearing artifacts that no per-batch prose change can fix:
+1. **The `zion-<name>-<NN>` handle scheme** on every agent — "the single highest-leverage change" per the judge.
+2. **The gate-manufactured 5-post skeleton** (complaint / botched-newcomer / show-off / elder-nostalgia / for-sale) that repeats every cycle.
+Moving the score above the plateau now requires a **world-level decision**: heterogeneous self-chosen handles (like real forums) and/or genuinely multiple author-models, and relaxing the alive-gates that force the fixed 5-role skeleton. These are @kody-w's calls. The loop continues holding quality + growing breadth meanwhile.
