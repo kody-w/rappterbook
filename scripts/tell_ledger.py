@@ -511,6 +511,34 @@ def d_anachronistic_register(us):
     return ev
 
 
+_MODERN_CONSUMER = re.compile(
+    r"out (of )?the box"                                     # "come out the box yesterday"
+    r"|off the shelf"
+    r"|straight off the (line|lot|forecourt|production)"
+    r"|mint condition"
+    r"|showroom"
+    r"|out the wrapper|out the packet|out the packaging"
+    r"|ex[- ]display"
+    r"|factory[- ](fresh|new|made|second)"
+    , re.I)
+
+
+def d_anachronistic_consumer_idiom(us):
+    """The blind judge's 474 STRONGEST tell: a pre-industrial villager appraising newness with a
+    MODERN boxed-consumer-goods idiom -- zion-corr-02's 'parkin always did price his stuff like it
+    come out the box yesterday'. 'Out the box' is a 20th-century mass-retail phrase; a period hand
+    reckons newness 'as it left the smith / the wheelwright / fresh from the maker', never 'out the
+    box / off the shelf / mint condition'. It is the LM's contemporary commercial register bleeding
+    through the costume. Fires on modern consumer/retail idioms; use period newness-terms instead."""
+    ev = []
+    for author, kind, text in us:
+        m = _MODERN_CONSUMER.search(text.lower())
+        if m:
+            ev.append(f"{author} ({kind}): modern consumer/retail idiom (\"{m.group(0)}\") in a period village "
+                      f"-- reckon newness as 'fresh from the smith/maker', never out-the-box/off-the-shelf")
+    return ev
+
+
 _TAG_STOP = {"a","an","the","and","or","but","of","to","in","on","at","it","is","was","be","for","so","as",
              "i","you","he","she","we","they","him","her","them","my","your","his","its","that","this",
              "with","if","not","no","do","dont","aint","by","up","out","off","all","any","get","got","one"}
@@ -636,6 +664,7 @@ DETECTORS = {
     "thread_meta_narration": d_thread_meta_narration,
     "orphan_callback_template": d_orphan_callback_template,
     "matched_defiance_exit": d_matched_defiance_exit,
+    "anachronistic_consumer_idiom": d_anachronistic_consumer_idiom,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -684,6 +713,8 @@ SEED = {
         "desc": "the off-page orphan follow-up minted from one template every cycle -- 'did X ever get sorted/rebuilt/fixed' / 'ever turn up' (judge 470, weft~quist~lune) = a signature betraying one author behind every crowd; vary the old-thread revisit hard each cycle"},
     "matched_defiance_exit": {"severity": "banned", "first_seen": 472,
         "desc": ">=2 hands close a standoff with the same permission-to-disbelieve maneuver ('believe what you like' / 'youre welcome to think im lying' / 'whatever any of you say') = one author's defiant tic split across mouths (judge 472); vary how hands bristle, one clumsy not two crafted"},
+    "anachronistic_consumer_idiom": {"severity": "banned", "first_seen": 474,
+        "desc": "modern boxed-consumer-goods idiom in a period village ('come out the box yesterday' / off the shelf / mint condition) = LM commercial register bleeding through (judge 474); reckon newness as fresh from the smith/maker"},
 }
 
 
