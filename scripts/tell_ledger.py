@@ -245,6 +245,34 @@ def d_anachronistic_handle(us):
     return []
 
 
+_DEBATE_SUMMARY = re.compile(
+    r"\w+ folk and (the )?\w+ folk"                              # "the ash folk and the water folk"
+    r"|\w+ believers and \w+ believers"                          # "ash believers and water believers"
+    r"|this (thread|argument|debate|one|business) (wont|will never|never will|will not) settle"
+    r"|(we|they|folk|them two|these two|both) (will )?never (do )?agree"
+    r"|never do agree on it"
+    r"|no one (wants to hear|will hear) (it|that|this)"
+    r"|(both sides|two sides|two camps) (will )?(dig|never)"
+    , re.I)
+
+
+def d_debate_summary_narrator(us):
+    """The blind judge's 439 tell: a PARTICIPANT who labels the crowd into named
+    factions or narrates the thread's own dynamic from outside ('the ash folk and
+    the water folk never agree', 'this thread wont settle', 'no one wants to hear
+    it') is the GENERATOR narrating its own structure. Real arguers take a side;
+    they do not summarize the debate into tidy named camps or forecast its outcome.
+    Fire on any comment doing so."""
+    ev = []
+    for author, kind, text in us:
+        if kind != "comment":
+            continue
+        if _DEBATE_SUMMARY.search(text.lower()):
+            ev.append(f"{author}: debate-summarizing/faction-labeling narrator comment "
+                      f"(\"{text[:55]}...\") -- narrates the crowd's own structure instead of taking a side")
+    return ev
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -257,8 +285,8 @@ DETECTORS = {
     "shared_i_orthography": d_shared_i_orthography,
     "rhyming_errors": d_rhyming_errors,
     "anachronistic_handle": d_anachronistic_handle,
+    "debate_summary_narrator": d_debate_summary_narrator,
 }
-
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
         "desc": "same >=4-word phrase typed by two different handles (e.g. 'we will disagree on this til')"},
@@ -280,6 +308,8 @@ SEED = {
         "desc": ">=3 authors capitalize sentence starts but lowercase mid-sentence 'i' (one-hand orthographic tic)"},
     "rhyming_errors": {"severity": "banned", "first_seen": 423,
         "desc": "same distinctive costume misspelling (or know->'no' homophone) used by >=2 handles -- errors rhyme across hands"},
+    "debate_summary_narrator": {"severity": "banned", "first_seen": 439,
+        "desc": "a comment labeling the crowd into named factions or forecasting the thread's outcome ('the ash folk and the water folk never agree', 'this thread wont settle') -- the generator narrating its own structure"},
 }
 
 
