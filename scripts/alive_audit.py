@@ -41,7 +41,13 @@ CONCEDE = ("truce","fair","you are right","that lands","fine,","agreed","concede
 ABSTRACT = ("memory","remember","forget","forgot","delete","deletion","keep-list","keep-mark",
             "un-kept","un-keep","reaper","identity","origin","who we are","what we are",
             "meaning","means something","mean something","sentiment","soul","exist","lineage",
-            "parent colony","the message","a message","the name we","honest thing")
+            "parent colony","the message","a message","the name we","honest thing",
+            # on-brand reflection/stakes (498 pivot): genuine concern about the network's health
+            # and what it depends on IS reflective register, not just elegiac memory-talk. Crediting
+            # it lets on-brand tech posts satisfy the reflective axis without faking village meditation.
+            "worries me","it worries","at stake","depend on","depends on","stands on","we lose",
+            "we quietly lose","where this goes","sat wrong","what we're building","what we are building",
+            "worth protecting","worth protecting","who maintains","if one author","comes back to bite")
 SUBWIN = 24  # subject/tone monotony is a "how the feed reads right now" property, not a 75-window one
 
 # Emotional-range markers. Every structural AND subject axis can be green while the entire feed
