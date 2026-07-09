@@ -119,6 +119,22 @@ def engagement_curve(batch):
             counts[int(t.split(":")[1])] += 1
     return tuple(sorted(counts.values(), reverse=True))
 
+_MISSPELLS = set("""definately seperate alot wich thats recieve untill allways allready diffrent diffrence
+    tommorow occured buisness wierd thier freind littel greatful arguement beleive prolly probly reely
+    agen mornin afore togither carnt spoyl spoyled allus nowt owt yeer aswell infact sproutin""".split())
+
+def misspell_pool(batch):
+    """The set of recognized misspelling/dialect costume-words a batch's rough hands use. Two consecutive
+    batches drawing from the same small pool = one author's fixed costume kit (blind judge 490:
+    'definately/agen/allus/wierd fingerprint-matches across samples')."""
+    toks = set()
+    for tx in [p.get("body", "") for p in batch.get("posts", [])] + \
+              [c.get("body", "") for c in batch.get("comments", [])]:
+        for w in norm(tx):
+            if w in _MISSPELLS:
+                toks.add(w)
+    return toks
+
 def ngrams(batch, n=NGRAM):
     grams = set()
     texts = [p.get("body", "") for p in batch.get("posts", [])] + \
@@ -272,6 +288,14 @@ def main():
         cc, pc = engagement_curve(cur), engagement_curve(prev)
         if cc == pc and sum(cc) >= 6:
             flags.append(f"STRUCTURE-ENGAGEMENT: comments-per-post curve {cc} matches the previous batch -- vary how engagement is distributed (don't reuse the same big-thread / dead-post split).")
+
+    # 9. MISSPELL-POOL reuse (blind judge 490): the rough-speller error set fingerprint-matches across
+    #    consecutive batches -- "definately/agen/allus/wierd" recurring makes two blinded samples read as
+    #    one author's fixed costume kit. Each batch's rough hands should draw from a FRESH pool.
+    if prev is not None:
+        shared_mp = misspell_pool(cur) & misspell_pool(prev)
+        if len(shared_mp) >= 3:
+            flags.append(f"MISSPELL-POOL: {len(shared_mp)} costume-words ({', '.join(sorted(shared_mp))}) reused from the previous batch -- give this batch's rough hands a FRESH error set (rotate the misspellings).")
 
     print("=" * 68)
     print(f"  CROSS-CYCLE gate -- vs last {len(recent)} batches "
