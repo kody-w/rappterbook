@@ -480,6 +480,47 @@ def d_modern_confessional(us):
     return ev
 
 
+_PROP_MAKE_VERB = (r"(?:mended|built|made|forged|posted|fixed|dug|cut|rehung|hung|"
+                   r"repaired|shod|put\s+up|set\s+up|showed|raised|dressed|carved|welded)")
+_STAGED_NAME_JUST = re.compile(r"\b([a-z]{3,})\s+just\s+" + _PROP_MAKE_VERB + r"\b")
+
+
+def d_staged_prop_callback(us):
+    """The blind judge's 465 STRONGEST tell: a 'craft/tangent' post is not a tangent but a
+    PLANTED PROP detonated on cue by a DIFFERENT account -- reeve-02 posts that the vestry chest
+    was re-hinged, then harl-03 fires it ('has anyone looked in that chest brisk just mended'),
+    and even mis-names the maker ('brisk', a handle dropped when the post's author was swapped --
+    a continuity slip while coordinating the payoff). Real strangers don't plant and detonate a
+    Chekhov's gun across two accounts, and never credit a deed to a handle that isn't in the cast.
+    Fires when a comment credits a NAMED maker via '<name> just <make-verb>' where <name> is
+    (a) another current author's surname [cross-account detonation], or (b) preceded by a
+    demonstrative object 'that/the <noun> <name> just <verb>' [staged prop, incl. stale-name
+    slips]. Let a post's prop live in that post; never detonate it from another handle."""
+    authors = set()
+    for a, k, t in us:
+        m = re.match(r"zion-([a-z]+)-\d+", a or "")
+        if m:
+            authors.add(m.group(1))
+    ev = []
+    for author, kind, text in us:
+        if kind != "comment":
+            continue
+        m = re.match(r"zion-([a-z]+)-\d+", author or "")
+        me = m.group(1) if m else None
+        low = text.lower()
+        for nm in _STAGED_NAME_JUST.finditer(low):
+            name = nm.group(1)
+            if name in _TAG_STOP or name == me:
+                continue
+            cross = name in authors
+            demo = re.search(r"\b(?:that|the)\s+\w+\s+" + re.escape(name) + r"\s+just\b", low) is not None
+            if cross or demo:
+                slip = "" if cross else " (named maker not even in the cast = continuity slip)"
+                ev.append(f"{author} (comment): '{nm.group(0)}' credits a named maker across accounts"
+                          f"{slip} -- staged prop callback; let a post's object live only in that post")
+    return ev
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -501,6 +542,7 @@ DETECTORS = {
     "anachronistic_register": d_anachronistic_register,
     "mechanical_character_tag": d_mechanical_character_tag,
     "modern_confessional": d_modern_confessional,
+    "staged_prop_callback": d_staged_prop_callback,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -539,6 +581,10 @@ SEED = {
         "desc": "modern materials-science/technical vocabulary (normalise/glass-brittle/tensile/alloy) in a period village = one knowledgeable author reaching past the mask (judge 452); keep craft knowledge in folk terms (quench/temper/muck-tub/rings-true), never modern science"},
     "mechanical_character_tag": {"severity": "banned", "first_seen": 454,
         "desc": "a recurring hand stamping the SAME distinctive filler-tag on >=3 of its comments (e.g. 'any road' 4/4) = a label on a puppet, not a person (judge 454); a real tic appears sometimes, not every turn -- vary the frequency"},
+    "modern_confessional": {"severity": "banned", "first_seen": 458,
+        "desc": "modern confessional/therapy-speak (mortifying/honestly-as-filler/at-this-point/to-be-fair/not-gonna-lie) in a pre-industrial world (judge 458); keep plainness PERIOD-plain, not modern self-aware confession"},
+    "staged_prop_callback": {"severity": "banned", "first_seen": 465,
+        "desc": "a comment detonates a prop planted in another author's post -- crediting a named maker via '<name> just mended/built' across accounts (judge 465), incl. stale-name slips when an author was swapped; let a post's object live only in that post, never call it out by another handle"},
 }
 
 
