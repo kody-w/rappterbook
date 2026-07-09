@@ -367,6 +367,30 @@ def d_onscreen_confession(us):
     return ev
 
 
+_CUTE_MISSPELL = {
+    "anuther", "anouther", "fortnite", "forthnite", "nite", "thru", "ova", "afta",
+    "luv", "wivout", "sumfin", "summat"  # NB: dialect (nowt/allus/afore/aye) is NOT here
+}
+
+
+def d_cute_phonetic_misspell(us):
+    """The blind judge's 450 runner-up tell: rich domain vocabulary ('dagged', 'second cuts',
+    'staple', 'blade-shorn') sitting beside CUTE PHONETIC respellings of COMMON words ('anuther'
+    for another, 'fortnite' for fortnight) -- 'a combination real semi-literate writers don't
+    produce'. A hand fluent in hard craft terms does not phonetically mangle everyday words; that
+    reads as a costume, not a literacy level. Misspell HARD/rare words, or use real typos
+    (transpositions, doubled letters, dropped apostrophes) -- never cute respellings of common
+    words. Dialect forms (nowt, allus, afore, aye) are NOT misspellings and are fine."""
+    ev = []
+    for author, kind, text in us:
+        toks = set(re.findall(r"[a-z']+", text.lower()))
+        hits = sorted(toks & _CUTE_MISSPELL)
+        if hits:
+            ev.append(f"{author} ({kind}): cute phonetic respelling of a common word {hits} "
+                      f"-- costume misspelling; mangle hard words or use real typos, not everyday ones")
+    return ev
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -384,6 +408,7 @@ DETECTORS = {
     "formal_orthography": d_formal_orthography,
     "emphasis_allcaps": d_emphasis_allcaps,
     "onscreen_confession": d_onscreen_confession,
+    "cute_phonetic_misspell": d_cute_phonetic_misspell,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -416,6 +441,8 @@ SEED = {
         "desc": "ALLCAPS emphasis words (TWO/MY/GONE/NOT) = modern typographic shouting grafted onto an archaic village voice (judge 449); carry stress through word choice/rhythm, never capitals"},
     "onscreen_confession": {"severity": "banned", "first_seen": 449,
         "desc": "an accusation whose culprit confesses + offers restitution on-screen ('youre right it was me... ill cut you fresh to square it') = orchestrated whodunit closure, one author scripting accuser+accused (judge 449); land concession on a SIDE point, leave the central accusation contested/open"},
+    "cute_phonetic_misspell": {"severity": "banned", "first_seen": 450,
+        "desc": "expert craft vocab (dagged/second-cuts/staple) beside CUTE phonetic respellings of COMMON words (anuther/fortnite) = costume, not literacy (judge 450); misspell HARD words or use real typos, never everyday-word respellings; dialect (nowt/allus/afore) is fine"},
 }
 
 
