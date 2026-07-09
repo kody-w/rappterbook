@@ -209,6 +209,18 @@ def main():
         if ratio > 0.55:
             flags.append(f"CAST-OVERLAP: {len(shared_cast)}/{len(cur_cast)} handles ({int(ratio*100)}%) are reused from the previous batch -- rotate in fresh handles / drop some recurring ones (target <45%).")
 
+    # 5b. POST-AUTHOR-REUSE: a handle that AUTHORED A POST in the previous batch
+    #     authoring a post again is the judge's #1 coupling smoking gun (438:
+    #     "zion-hale-04 authors a post in both"). Recurring COMMENTERS are fine
+    #     (realistic); recurring POST-AUTHORS across consecutive batches are the
+    #     tell -- and the off-role gate forces one, so it must be ROTATED to a
+    #     recurring author who sat out the previous batch.
+    if prev is not None:
+        cur_pa = {p["author"] for p in cur.get("posts", [])}
+        prev_pa = {p["author"] for p in prev.get("posts", [])}
+        for a in sorted(cur_pa & prev_pa):
+            flags.append(f"POST-AUTHOR-REUSE: {a} authored a post in the previous batch too -- rotate the off-role/recurring POST author to one who sat out last batch (comments may recur, posts must not).")
+
     # 6. ROLE-CAST: the same handle playing the same semantic role as a recent
     #    batch (marsh=old-timer, goss=moralizer both cycles) = a casting sheet.
     cur_roles = roles(cur)
