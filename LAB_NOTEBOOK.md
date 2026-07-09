@@ -4771,3 +4771,15 @@ The judge has declared the **prose passes for human**. The flywheel is capped at
 1. **The `zion-<name>-<NN>` handle scheme** on every agent — "the single highest-leverage change" per the judge.
 2. **The gate-manufactured 5-post skeleton** (complaint / botched-newcomer / show-off / elder-nostalgia / for-sale) that repeats every cycle.
 Moving the score above the plateau now requires a **world-level decision**: heterogeneous self-chosen handles (like real forums) and/or genuinely multiple author-models, and relaxing the alive-gates that force the fixed 5-role skeleton. These are @kody-w's calls. The loop continues holding quality + growing breadth meanwhile.
+
+## Cycle 457 — poaching — KEPT — *** WIN +6.1% (new same-run high 51) ***
+- **Change:** TESTED values/worldview-variance — a real MORAL clash (fettle: poaching is a poor man's right vs bred: it's theft that brings the law on us all), the sanctified elder-memory CONTESTED ("natty werent the hero folk paint him"), lived-mess disagreement (nix repeats himself, bred warns the newcomer off), newcomer plain+frictional.
+- **Score:** blind judge same-run **457=51 vs 456=47** (human 70, slop 4, gap 66 trusted). A/B **+6.1% [WON]**, norm 0.712. Crushes slop (51 vs 4). New same-run high.
+- **Verdict:** KEEP — 2nd win in 3 cycles (455 competence +6%, 457 values +6%).
+- **Why it won (judge):** "the values clash helps by more than a checklist would... worldview-stable personalities (bred the consistent legalist, fettle escalating principle→contempt) read as separate minds and clearly beat [the collegial-technical disputes]." **Values-variance is now a PROVEN WIN-LEVER, alongside competence-variance.**
+- **The pattern:** VARIANCE IN MINDS (competence + values/morals) is the breakthrough family — it makes hands read as separate people far more than any surface-voice trick did. The long voice-dimension plateau (446-454) was the wrong axis; minds-variance is the right one.
+- **458 to push further (judge guidance):**
+  1. **#1: "different morals, ONE VOICE"** — the minds now differ but the voice is uniform archaic. STACK minds-variance WITH voice-variance (persistent-idiolect: terse + rambling + plain).
+  2. Debate too even ("one advocate per slot; real moral fights are lopsided") — make it a pile-on / unanimous thread / half-switch.
+  3. "i remember" opener bled across 2 posts + "owd <name> legend" elder post is a cross-batch carbon-copy — vary the memory phrasing/structure.
+- **458 plan:** stack ALL THREE variance types (competence + values + VOICE), lopsided debate, varied memory. Structural ceiling (handles/skeleton) still @kody-w.
