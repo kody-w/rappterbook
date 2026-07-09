@@ -4734,3 +4734,13 @@ Shipped TWO durable meta-checks (the per-batch gates + blind judge only see ONE 
   1. **Register tracks POST-FUNCTION, not identity** (the recurring ceiling, refined): "ludd formal because announcement, goss plain because ask, quill procedural because build." The untested refinement = **persistent per-identity idiolect** sustained across every turn a hand makes (one always terse, one always rambling, one always drops apostrophes). 454 will try it.
   2. **Orphan-callback lore-leak** (minor): the follow-up echoed the old post's lore-title ("the founders line fruit") = "quoting its own setting bible." Cleaned. Rule: orphan follow-ups use plain domestic reference.
 - **Meta:** the hold+grow strategy does NOT guarantee a plateau — a proven-recipe fresh-topic batch can still dip below the ref (−10.4%). The register dimension has ONE untested refinement left (persistent-idiolect, 454). If that fails, the dimension is exhausted and only the handle-scheme/@kody-w decision can move the ceiling.
+
+## Cycle 454 — charcoal — KEPT (plateau) — persistent-idiolect lever tested
+- **Change:** TESTED the persistent-per-identity-idiolect lever — 3 recurring commenters with LOCKED voices across all turns: brisk (terse ×5), lonnen (run-on ×3), dad (drops apostrophes + "any road" ×4), decoupled from post-function.
+- **Score:** blind judge same-run **454=34 vs 451=40** (human 82, slop 9, gap 73 trusted). A/B **−8.2% [PLATEAU]**, norm 0.342. Crushes slop (34 vs 9).
+- **Verdict:** KEEP (plateau in the 450/451 band; board-green; crushes slop; fresh charcoal topic grows breadth).
+- **Result — partial win, didn't beat plateau:**
+  - ✅ The lever WORKED per-handle: "each author is internally consistent — brisk=terse, lonnen=run-on, dad=any road, morrow=aggrieved."
+  - ❌ NEW tell `mechanical_character_tag` (FROZEN): dad stamped "any road" on 4/4 comments = "a label on a puppet, not a person." A real tic appears sometimes, not always. Reduced to 2 in the kept feed.
+  - ❌ DEEPER (the wall, refined): distinctions are SURFACE-ONLY ("a catchphrase, a sentence length") while all hands share one dialect substrate + identical expert clamp-lore. Still "one author ventriloquizing a cast."
+- **455 lever:** the judge's fix = COMPETENCE/KNOWLEDGE variance, not surface style — "a plainspoken newcomer who writes WITHOUT the dialect and GETS A FACT WRONG." The last untested voice-adjacent lever. If it also plateaus, the voice dimension is EXHAUSTED and only the handle-scheme / multiple-author-models decision (@kody-w) moves the ceiling.
