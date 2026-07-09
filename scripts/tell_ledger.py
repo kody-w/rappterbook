@@ -421,6 +421,44 @@ def d_anachronistic_register(us):
     return ev
 
 
+_TAG_STOP = {"a","an","the","and","or","but","of","to","in","on","at","it","is","was","be","for","so","as",
+             "i","you","he","she","we","they","him","her","them","my","your","his","its","that","this",
+             "with","if","not","no","do","dont","aint","by","up","out","off","all","any","get","got","one"}
+
+
+def d_mechanical_character_tag(us):
+    """The blind judge's 454 tell: a recurring hand stamping the SAME distinctive filler-tag on
+    almost every comment reads as 'a label fastened onto a puppet, not a person' -- zion-dad-03
+    closing 4 of 4 comments with 'any road'. A real tic shows up SOMETIMES, not 100% of the time.
+    The persistent-idiolect lever is good, but a surface tag applied to >=3 of one author's turns
+    is caricature. Vary the tic frequency; let an idiolect breathe."""
+    ev = []
+    by_author = collections.defaultdict(list)
+    for author, kind, text in us:
+        if kind == "comment":
+            by_author[author].append(text.lower())
+    for author, comments in by_author.items():
+        if len(comments) < 3:
+            continue
+        gram_hits = collections.Counter()
+        for body in comments:
+            toks = re.findall(r"[a-z]+", body)
+            grams = set()
+            for n in (2, 3):
+                for i in range(len(toks) - n + 1):
+                    g = tuple(toks[i:i + n])
+                    if any(w not in _TAG_STOP for w in g):
+                        grams.add(g)
+            for g in grams:
+                gram_hits[g] += 1
+        for g, n in gram_hits.items():
+            if n >= 3:
+                ev.append(f"{author}: filler-tag '{' '.join(g)}' stamped on {n} of {len(comments)} comments "
+                          f"-- mechanical character-label; a tic should appear sometimes, not on every turn")
+                break
+    return ev
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -440,6 +478,7 @@ DETECTORS = {
     "onscreen_confession": d_onscreen_confession,
     "cute_phonetic_misspell": d_cute_phonetic_misspell,
     "anachronistic_register": d_anachronistic_register,
+    "mechanical_character_tag": d_mechanical_character_tag,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -476,6 +515,8 @@ SEED = {
         "desc": "expert craft vocab (dagged/second-cuts/staple) beside CUTE phonetic respellings of COMMON words (anuther/fortnite) = costume, not literacy (judge 450); misspell HARD words or use real typos, never everyday-word respellings; dialect (nowt/allus/afore) is fine"},
     "anachronistic_register": {"severity": "banned", "first_seen": 452,
         "desc": "modern materials-science/technical vocabulary (normalise/glass-brittle/tensile/alloy) in a period village = one knowledgeable author reaching past the mask (judge 452); keep craft knowledge in folk terms (quench/temper/muck-tub/rings-true), never modern science"},
+    "mechanical_character_tag": {"severity": "banned", "first_seen": 454,
+        "desc": "a recurring hand stamping the SAME distinctive filler-tag on >=3 of its comments (e.g. 'any road' 4/4) = a label on a puppet, not a person (judge 454); a real tic appears sometimes, not every turn -- vary the frequency"},
 }
 
 
