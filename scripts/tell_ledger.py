@@ -739,7 +739,71 @@ def d_staged_prop_callback(us):
     return ev
 
 
+_ANTITHESIS = [
+    re.compile(r"\byours\b[^.?!]{0,50}\bours\b"),
+    re.compile(r"\bours\b[^.?!]{0,50}\byours\b"),
+    re.compile(r"\bhis\b\s*,?\s+[^.?!]{0,30}\btheirs\b"),
+    re.compile(r"\btheirs\b\s*,?\s+[^.?!]{0,30}\bhis\b"),
+    re.compile(r"\bmine\b[^.?!]{0,50}\btheirs\b"),
+    re.compile(r"\btheirs\b[^.?!]{0,50}\bmine\b"),
+    re.compile(r"\bhers\b[^.?!]{0,50}\btheirs\b"),
+    re.compile(r"\bsooner\b[^.?!]{0,40}\bthan\b"),
+]
+
+
+def d_balanced_antithesis(us):
+    """The blind judge's 495 residual tell: one mind's rhetorical fingerprint leaks
+    across the cast as a recurring BALANCED-ANTITHESIS cadence -- 'what falls your land
+    is yours and what falls ours is ours' (vint), 'roots his, branches over theirs'
+    (mott), 'sooner move em for nothing than bury em for sure' (marsh): three 'distinct'
+    hands, one polished parallelism reflex. Fire when >=2 DISTINCT authors use a
+    mirror-possessive (yours/ours, his/theirs, mine/theirs) or sooner/than antithesis
+    -- real crowds don't all reach for the same rhetorical mirror; vary sentence-shape."""
+    hits = collections.defaultdict(list)
+    for author, _kind, text in us:
+        low = (text or "").lower()
+        for rx in _ANTITHESIS:
+            m = rx.search(low)
+            if m:
+                hits[author].append(m.group(0).strip())
+                break
+    if len(hits) >= 2:
+        return [f"{a}: balanced-antithesis '{v[0][:48]}'" for a, v in hits.items()]
+    return []
+
+
+_APOS_YES = re.compile(
+    r"\b(i'm|won't|don't|can't|that's|it's|you'll|you're|there's|i've|i'll|"
+    r"he's|she's|we're|they're|didn't|wasn't|isn't|aren't|couldn't|wouldn't|shouldn't|doesn't|"
+    r"haven't|hasn't|hadn't|what's|who's|let's|i'd|we'd|they'd|we've|they've|ain't)\b")
+_APOS_LESS = re.compile(
+    r"\b(im|wont|dont|cant|thats|youll|youre|theres|ive|ill|hes|didnt|wasnt|isnt|arent|"
+    r"couldnt|wouldnt|shouldnt|doesnt|havent|hasnt|hadnt|whats|whos|lets|theyd|weve|theyve|aint)\b")
+
+
+def d_apostrophe_uniformity(us):
+    """The blind judge's 495 tell: apostrophes are dropped UNIFORMLY by everyone in the
+    batch ('i wont be robbed', 'youll none of you agree', 'dont start a panic') -- with
+    NOT ONE properly-contracted apostrophe anywhere. Uniform orthography across every
+    supposed author is a one-generator fingerprint. Fire when apostrophe-less contractions
+    are common (>=8) yet zero apostrophe'd contractions appear -- give ~40% of hands
+    correct apostrophes (i'm/don't/it's/won't) so punctuation stops being uniform."""
+    less = 0
+    yes = 0
+    for _author, _kind, text in us:
+        low = (text or "").lower()
+        less += len(_APOS_LESS.findall(low))
+        yes += len(_APOS_YES.findall(low))
+    if less >= 8 and yes == 0:
+        return [f"apostrophe-elision uniformity: {less} apostrophe-less contractions batch-wide, "
+                f"0 apostrophe'd -- every hand drops apostrophes identically (one-author fingerprint); "
+                f"give ~40% of hands correct apostrophes (i'm/don't/it's/won't)"]
+    return []
+
+
 DETECTORS = {
+    "balanced_antithesis": d_balanced_antithesis,
+    "apostrophe_uniformity": d_apostrophe_uniformity,
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "self_reemission": d_self_reemission,
     "own_post_reference": d_own_post_reference,
@@ -830,6 +894,10 @@ SEED = {
         "desc": ">=2 hands close a standoff with the same permission-to-disbelieve maneuver ('believe what you like' / 'youre welcome to think im lying' / 'whatever any of you say') = one author's defiant tic split across mouths (judge 472); vary how hands bristle, one clumsy not two crafted"},
     "anachronistic_consumer_idiom": {"severity": "banned", "first_seen": 474,
         "desc": "modern boxed-consumer-goods idiom in a period village ('come out the box yesterday' / off the shelf / mint condition) = LM commercial register bleeding through (judge 474); reckon newness as fresh from the smith/maker"},
+    "balanced_antithesis": {"severity": "banned", "first_seen": 495,
+        "desc": "one mind's parallelism reflex leaks across the cast as a balanced-antithesis cadence -- 'what falls your land is yours and what falls ours is ours', 'roots his, branches over theirs', 'sooner move em than bury em' (judge 495); fires on >=2 hands using a mirror-possessive (yours/ours, his/theirs, mine/theirs) or sooner/than antithesis; vary sentence-shape per hand, never the same rhetorical mirror"},
+    "apostrophe_uniformity": {"severity": "banned", "first_seen": 495,
+        "desc": "apostrophes dropped UNIFORMLY batch-wide (im/wont/youll/dont) with zero properly-contracted apostrophes anywhere = one-generator orthography fingerprint (judge 495); give ~40% of hands correct apostrophes (i'm/don't/it's/won't) so punctuation/spelling stop being uniform across every voice"},
 }
 
 
