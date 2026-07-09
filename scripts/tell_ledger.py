@@ -273,6 +273,34 @@ def d_debate_summary_narrator(us):
     return ev
 
 
+_APHORISTIC_THESIS = re.compile(
+    r"a (place|row|colony|village|community|home|man|people) is (the sum of|not \w+ by|proven by|nothing (but|more|without)|made by)"
+    r"|the (sum|measure|making|worth|mark) of a (place|row|colony|man|community|home)"
+    r"|(that ?s )?who we are (meant|supposed) to be"
+    r"|we are nothing (but|more than|without|if)"
+    r"|what (makes|proves) (us|a place|a row|a colony|a home)"
+    r"|a (place|row|colony) is its \w+"
+    , re.I)
+
+
+def d_aphoristic_thesis(us):
+    """The blind judge's 441 tell: a POST that drops a generalizing MORAL-THESIS
+    about what a place/people ARE or how they are proven ('a place is the sum of
+    who does its unpleasant work', 'thats who we are meant to be as a row or we are
+    nothing') is a constructed morality-play device -- an authorial punchline no
+    real logistics thread contains. This is the abstract/subject axis manufacturing
+    an elder-nostalgia OR moralizing-thesis post every batch; satisfy the axis with
+    MUNDANE factual memory instead (a flat 'i remember the year the bridge went up'),
+    never a philosophical statement about the community's identity. Fire on any such
+    post or comment."""
+    ev = []
+    for author, kind, text in us:
+        if _APHORISTIC_THESIS.search(text.lower()):
+            ev.append(f"{author} ({kind}): moralizing identity-thesis punchline "
+                      f"(\"...{_APHORISTIC_THESIS.search(text.lower()).group(0)}...\") -- authorial morality-play, not a real thread; use mundane factual memory for the abstract axis")
+    return ev
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -286,6 +314,7 @@ DETECTORS = {
     "rhyming_errors": d_rhyming_errors,
     "anachronistic_handle": d_anachronistic_handle,
     "debate_summary_narrator": d_debate_summary_narrator,
+    "aphoristic_thesis": d_aphoristic_thesis,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -310,6 +339,8 @@ SEED = {
         "desc": "same distinctive costume misspelling (or know->'no' homophone) used by >=2 handles -- errors rhyme across hands"},
     "debate_summary_narrator": {"severity": "banned", "first_seen": 439,
         "desc": "a comment labeling the crowd into named factions or forecasting the thread's outcome ('the ash folk and the water folk never agree', 'this thread wont settle') -- the generator narrating its own structure"},
+    "aphoristic_thesis": {"severity": "banned", "first_seen": 441,
+        "desc": "a moralizing identity-thesis punchline ('a place is the sum of who does its unpleasant work', 'thats who we are meant to be as a row or we are nothing') -- authorial morality-play; satisfy the abstract axis with mundane factual memory instead"},
 }
 
 
