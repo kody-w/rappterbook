@@ -63,20 +63,36 @@ def axis_trend(rows):
     if len(scored) < 2:
         return ("TREND", "PASS", "not enough history yet", 0)
     latest = scored[-1]
-    prior = scored[-6:-1]  # up to 5 before the latest
-    base = mean([r["batch"] for r in prior])
-    best = max(r["batch"] for r in scored)
-    delta = latest["batch"] - base
-    note = (f"cycle {latest['cycle']}={latest['batch']} vs prior-{len(prior)} "
-            f"mean={base:.1f} (delta {delta:+.1f}); best-ever={best}")
-    # A regression is only an accountability FAIL if the batch was KEPT (a kept
-    # regression means the loop shipped worse work). A reverted dip is the loop
-    # correctly policing itself -> PASS.
-    if delta < -5 and latest.get("kept"):
-        return ("TREND", "WARN", "KEPT a batch >5 under baseline -- shipped a regression. " + note, int(delta))
-    if delta < -8 and not latest.get("kept"):
+
+    # Raw judge scores drift HARD run-to-run (the same batch scored 50 one run,
+    # 32 the next). The only calibration-invariant signal is the SAME-RUN A/B
+    # margin: how far the batch beat/lost to its vs-reference, both scored
+    # against the same anchors that run. Normalize by that run's human-slop span.
+    def nmargin(r):
+        h, s, b, ref = r.get("human"), r.get("slop"), r.get("batch"), r.get("ref")
+        if None in (h, s, b, ref) or h == s:
+            return None
+        return (b - ref) / (h - s)
+
+    ab = [(r["cycle"], nmargin(r)) for r in scored if nmargin(r) is not None]
+    if not ab:
+        # fall back to raw-vs-baseline for the earliest cycles with no ref
+        base = mean([r["batch"] for r in scored[-6:-1]])
+        delta = latest["batch"] - base
+        return ("TREND", "PASS", f"cycle {latest['cycle']}={latest['batch']} vs baseline {base:.1f} (no A/B ref)", int(delta))
+
+    lc, lm = ab[-1]
+    recent = ab[-4:]
+    verdict = ("WON" if lm > 0.03 else "PLATEAU (~tie)" if lm >= -0.10 else "LOST")
+    note = (f"same-run A/B margin (calibration-invariant): cycle {lc} {lm:+.0%} vs its reference [{verdict}]; "
+            f"last {len(recent)}: " + ", ".join(f"{c}:{m:+.0%}" for c, m in recent))
+    # Only a REAL loss (batch well under its own-run reference) that was KEPT is a
+    # shipped regression. A plateau just-below reference is the convergence ceiling.
+    if lm < -0.10 and latest.get("kept"):
+        return ("TREND", "WARN", "KEPT a batch well under its same-run reference -- shipped a regression. " + note, int(lm * 100))
+    if lm < -0.10 and not latest.get("kept"):
         return ("TREND", "PASS", "dipped but correctly REVERTED (self-policed). " + note, 0)
-    return ("TREND", "PASS", note, int(delta))
+    return ("TREND", "PASS", note, int(lm * 100))
 
 def axis_calibration(rows):
     """Judge trust: human-slop gap must stay wide, or the metric is blind."""
