@@ -4744,3 +4744,15 @@ Shipped TWO durable meta-checks (the per-batch gates + blind judge only see ONE 
   - ❌ NEW tell `mechanical_character_tag` (FROZEN): dad stamped "any road" on 4/4 comments = "a label on a puppet, not a person." A real tic appears sometimes, not always. Reduced to 2 in the kept feed.
   - ❌ DEEPER (the wall, refined): distinctions are SURFACE-ONLY ("a catchphrase, a sentence length") while all hands share one dialect substrate + identical expert clamp-lore. Still "one author ventriloquizing a cast."
 - **455 lever:** the judge's fix = COMPETENCE/KNOWLEDGE variance, not surface style — "a plainspoken newcomer who writes WITHOUT the dialect and GETS A FACT WRONG." The last untested voice-adjacent lever. If it also plateaus, the voice dimension is EXHAUSTED and only the handle-scheme / multiple-author-models decision (@kody-w) moves the ceiling.
+
+## Cycle 455 — hedge-laying — KEPT — *** WIN +5.9% (first since 447) ***
+- **Change:** TESTED the competence/knowledge-variance lever — a plainspoken NEWCOMER (mercer-02) who writes WITHOUT the village dialect and gets a genuine novice craft-fact WRONG (cut the hedge to stumps = coppiced it, not laid it), corrected by dialect experts.
+- **Score:** blind judge same-run **455=46 vs 451=42** (human 73, slop 5, gap 68 trusted). A/B **+5.9% [WON]** — the judge ranked 455 ABOVE 451. norm 0.603. Crushes slop (46 vs 5).
+- **Verdict:** KEEP — the first score-beating WIN in 8 cycles.
+- **Why it won (judge):** "the competence variance is the sample's best pro-human move... mercer-02 is the one plausibly separate person because the difference lives in KNOWLEDGE + REGISTER together, not just vocabulary; the wrong fact is authentically wrong (confusing coppicing with laying is the real novice error)." **Competence-variance is now a PROVEN WIN-LEVER.**
+- **Residual tells (456 to fix — build on the win):**
+  1. **Gapless syllabus:** the 5 posts interlock too perfectly (problem→wrong→right→lore→for-sale-supplies) = "one author's lesson plan, authored not accreted." Break the interlock; don't have supplies match the SHOW; don't make the error exactly what the thread corrects.
+  2. Newcomer wasn't linguistically outside enough — used "back-end" (dialect). Make him use ZERO dialect.
+  3. Recovery was frictionless ("perfect student cueing the model answer"). Give it FRICTION — misread/argue/go quiet.
+  4. Experts are stylistically interchangeable. **Judge's #1 fix: combine competence-variance WITH persistent-idiolect on the experts** (terse/run-on/clipped, tics ≤2) + let one disagreement end SOUR.
+- **456 plan:** combine the TWO proven levers (competence-variance + persistent-idiolect), break the gapless syllabus, rougher/more-outside newcomer with a frictional recovery, one sour thread. Two proven levers stacked is the path off the plateau.
