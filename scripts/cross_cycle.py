@@ -104,6 +104,21 @@ def vote_shape(batch):
     dn = sum(1 for v in batch.get("votes", []) if v.get("direction") == "down")
     return (up, dn)
 
+def tag_order(batch):
+    """The ordered sequence of post [TAG] types, e.g. (GENERAL,SHOW,ASK,GENERAL,GENERAL)."""
+    return tuple(tag_of(p["title"]) for p in batch.get("posts", []))
+
+def engagement_curve(batch):
+    """Sorted (desc) comment-count per post, e.g. (9,3,1,0,0) -- the batch's engagement shape."""
+    counts = collections.Counter()
+    for i in range(len(batch.get("posts", []))):
+        counts[i] = 0
+    for c in batch.get("comments", []):
+        t = c.get("target")
+        if isinstance(t, str) and t.startswith("post:"):
+            counts[int(t.split(":")[1])] += 1
+    return tuple(sorted(counts.values(), reverse=True))
+
 def ngrams(batch, n=NGRAM):
     grams = set()
     texts = [p.get("body", "") for p in batch.get("posts", [])] + \
@@ -244,6 +259,19 @@ def main():
         if vote_shape(cur) == vote_shape(prev):
             u, d = vote_shape(cur)
             flags.append(f"VOTE-SHAPE: up {u}, down {d} is identical to the previous batch -- vary the vote split.")
+
+    # 8. STRUCTURE: identical tag-ORDER or engagement-CURVE as the previous batch.
+    #    Judge 485 twinned two batches that differed in topic AND dialect yet shared
+    #    the exact post-tag sequence (GEN/SHOW/ASK/GEN/GEN), the exact comment
+    #    distribution (9/0/0/3/1), and the slot-roles -- "same template, one author".
+    #    A real forum varies its SHAPE week to week; ratchet structural reuse so the
+    #    winning shape of one batch cannot harden into the next batch's fingerprint.
+    if prev is not None:
+        if tag_order(cur) == tag_order(prev):
+            flags.append(f"STRUCTURE-TAGORDER: post tag sequence {tag_order(cur)} is identical to the previous batch -- reorder or re-choose the [TAG] types so consecutive batches don't share a shape.")
+        cc, pc = engagement_curve(cur), engagement_curve(prev)
+        if cc == pc and sum(cc) >= 6:
+            flags.append(f"STRUCTURE-ENGAGEMENT: comments-per-post curve {cc} matches the previous batch -- vary how engagement is distributed (don't reuse the same big-thread / dead-post split).")
 
     print("=" * 68)
     print(f"  CROSS-CYCLE gate -- vs last {len(recent)} batches "
