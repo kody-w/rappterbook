@@ -286,18 +286,37 @@ _APHORISTIC_THESIS = re.compile(
 def d_aphoristic_thesis(us):
     """The blind judge's 441 tell: a POST that drops a generalizing MORAL-THESIS
     about what a place/people ARE or how they are proven ('a place is the sum of
-    who does its unpleasant work', 'thats who we are meant to be as a row or we are
-    nothing') is a constructed morality-play device -- an authorial punchline no
-    real logistics thread contains. This is the abstract/subject axis manufacturing
-    an elder-nostalgia OR moralizing-thesis post every batch; satisfy the axis with
-    MUNDANE factual memory instead (a flat 'i remember the year the bridge went up'),
-    never a philosophical statement about the community's identity. Fire on any such
-    post or comment."""
+    who does its unpleasant work') is a constructed morality-play device. Satisfy
+    the abstract axis with MUNDANE factual memory instead. Fire on any such text."""
     ev = []
     for author, kind, text in us:
-        if _APHORISTIC_THESIS.search(text.lower()):
+        m = _APHORISTIC_THESIS.search(text.lower())
+        if m:
             ev.append(f"{author} ({kind}): moralizing identity-thesis punchline "
-                      f"(\"...{_APHORISTIC_THESIS.search(text.lower()).group(0)}...\") -- authorial morality-play, not a real thread; use mundane factual memory for the abstract axis")
+                      f"(\"...{m.group(0)}...\") -- authorial morality-play; use mundane factual memory")
+    return ev
+
+
+_CAP_I = re.compile(r"(?<![a-z])I(?![a-z])")  # standalone capital I (the pronoun), incl. I've/I'd
+
+
+def d_formal_orthography(us):
+    """The blind judge's 446 tell: in a colony that writes ALL-LOWERCASE ('i', no
+    sentence-initial capitals), a single hand that switches to CAPITALIZED, properly
+    -punctuated English (capital 'I', semicolons) is ORTHOGRAPHY COLOR-CODED to a
+    role -- invariably the pedant/critic. Real crowds vary by TONE and VOCABULARY,
+    not by orthography; the human anchor's ranter, solver and contrarian all write
+    the same lowercase. Fire on any hand using the capital-I pronoun (the clearest
+    marker) -- vary register by voice, never by capitalisation."""
+    ev = []
+    by_author = collections.defaultdict(str)
+    for author, _kind, text in us:
+        by_author[author] += " " + text
+    for author, text in by_author.items():
+        n = len(_CAP_I.findall(text))
+        if n >= 1:
+            ev.append(f"{author}: capital-'I' orthography x{n} in an all-lowercase colony "
+                      f"-- the color-coded 'formal critic' hand; write this voice lowercase, vary by tone not capitals")
     return ev
 
 
@@ -315,6 +334,7 @@ DETECTORS = {
     "anachronistic_handle": d_anachronistic_handle,
     "debate_summary_narrator": d_debate_summary_narrator,
     "aphoristic_thesis": d_aphoristic_thesis,
+    "formal_orthography": d_formal_orthography,
 }
 SEED = {
     "verbatim_crosshandle": {"severity": "banned", "first_seen": 406,
@@ -341,6 +361,8 @@ SEED = {
         "desc": "a comment labeling the crowd into named factions or forecasting the thread's outcome ('the ash folk and the water folk never agree', 'this thread wont settle') -- the generator narrating its own structure"},
     "aphoristic_thesis": {"severity": "banned", "first_seen": 441,
         "desc": "a moralizing identity-thesis punchline ('a place is the sum of who does its unpleasant work', 'thats who we are meant to be as a row or we are nothing') -- authorial morality-play; satisfy the abstract axis with mundane factual memory instead"},
+    "formal_orthography": {"severity": "banned", "first_seen": 446,
+        "desc": "one hand using capitalized English + capital-'I' in an all-lowercase colony = orthography color-coded to the critic role (judge 446); vary register by tone/vocabulary, write every hand lowercase"},
 }
 
 
