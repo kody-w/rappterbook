@@ -184,6 +184,44 @@ def d_shared_i_orthography(us):
     return []
 
 
+# distinctive "costume" misspellings that betray a shared misspeller persona when
+# they surface across MORE THAN ONE handle in a single batch. Common informal
+# contractions (thats/dont/im/cant/ive/wont) are intentionally EXCLUDED -- those
+# recur legitimately across many casual hands and are not a forgery tell.
+COSTUME_MISSPELL = {
+    "wich", "definately", "allready", "allways", "diffrent", "hoo", "seperate",
+    "alot", "wierd", "tommorow", "occassion", "freind", "beleive", "recieve",
+    "untill", "greatful", "arguement", "calender", "tounge", "thier", "littel",
+    "probly", "prolly", "reely",
+}
+_KNOW_HOMOPHONE = re.compile(
+    r"\b(?:i|rightly|dont|really|even|you|we|they|nobody|who)\s+no\b"
+    r"|\bno\s+(?:what|why|how|where|who|when|the\s+answer|nothing)\b")
+
+
+def d_rhyming_errors(us):
+    """The blind judge's 423 tell: the SAME non-standard spelling shows up in two
+    supposedly separate hands ('i no what i put there' / 'i dont rightly no why').
+    A real misspeller owns their errors CONSISTENTLY across their OWN text; errors
+    must not RHYME across handles. Fire if a distinctive costume misspelling -- or
+    the know->'no' homophone -- is used by >=2 different authors in one batch.
+    A single hand repeating its own error across its own post+comments is fine."""
+    by_token = collections.defaultdict(set)
+    for author, _kind, text in us:
+        low = text.lower()
+        for tok in set(_tokens(low)):
+            if tok in COSTUME_MISSPELL:
+                by_token[tok].add(author)
+        if _KNOW_HOMOPHONE.search(low):
+            by_token["no(=know)"].add(author)
+    ev = []
+    for tok, authors in sorted(by_token.items()):
+        if len(authors) >= 2:
+            ev.append(f"'{tok}' used by {len(authors)} handles ({', '.join(sorted(authors))}) "
+                      f"-- distinctive error rhymes across hands (one misspeller costume)")
+    return ev
+
+
 DETECTORS = {
     "verbatim_crosshandle": d_verbatim_crosshandle,
     "fragment_doubling": d_fragment_doubling,
@@ -194,6 +232,7 @@ DETECTORS = {
     "misspell_leak_thankyou": d_misspell_leak,
     "plant_and_payoff_same_batch": d_plant_and_payoff,
     "shared_i_orthography": d_shared_i_orthography,
+    "rhyming_errors": d_rhyming_errors,
 }
 
 SEED = {
@@ -215,6 +254,8 @@ SEED = {
         "desc": "author plants a beat (opt-out/record) and cashes it via a comment in the same batch"},
     "shared_i_orthography": {"severity": "watch", "first_seen": 410,
         "desc": ">=3 authors capitalize sentence starts but lowercase mid-sentence 'i' (one-hand orthographic tic)"},
+    "rhyming_errors": {"severity": "banned", "first_seen": 423,
+        "desc": "same distinctive costume misspelling (or know->'no' homophone) used by >=2 handles -- errors rhyme across hands"},
 }
 
 
