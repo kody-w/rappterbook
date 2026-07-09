@@ -414,6 +414,34 @@ def grade_intake(path, target):
     tgts = collections.Counter(str(c.get("target")) for c in comments)
     if len(tgts) < 3:
         warns.append(f"comments hit only {len(tgts)} targets -- spread engagement across more posts, not one deep thread")
+    # dangling-question requirement (blind judge, cycles 423/426/428): the batch MUST
+    # leave >=1 asked question hanging -- no reply, no OP answer, no 'ta for that'. When
+    # every question gets served and acknowledged, the crowd collapses into a tidy
+    # everyone-helpful loop, the top recurring tell. A question is 'engaged' if some
+    # comment replies to it (parent) OR the post's own author also comments on that post.
+    def _is_question(t):
+        tl = (t or "").lower().strip()
+        return ("?" in t) or tl.startswith(("what ", "who ", "when ", "where ", "why ", "how ",
+                "is ", "are ", "did ", "does ", "has ", "have ", "anyone ", "anybody ", "wich of"))
+    post_author = {i: p.get("author", "") for i, p in enumerate(posts)}
+    replied_to = {c.get("parent") for c in comments if c.get("parent") is not None}
+    q_total, dangling = 0, 0
+    for i, c in enumerate(comments):
+        if not _is_question(c.get("body", "")):
+            continue
+        tgt = str(c.get("target", ""))
+        if not tgt.startswith("post:"):
+            continue
+        q_total += 1
+        pidx = int(tgt.split(":")[1])
+        op_answers = any(str(cc.get("target", "")) == tgt and cc.get("author", "") == post_author.get(pidx)
+                         and cc is not c for cc in comments)
+        if i not in replied_to and not op_answers:
+            dangling += 1
+    if q_total >= 1 and dangling == 0:
+        fails.append("no dangling question -- every question in the batch gets a reply or an OP answer. Leave >=1 "
+                     "question UNANSWERED (no child reply, no OP response, no 'ta for that' acknowledgment) so a "
+                     "thread visibly dies. Tidy everyone-helpful loops are the top recurring tell.")
     # subject-monotony: if the scoreboard named this the target, the batch must actually
     # inject grounded/mundane/funny posts, not five more memory meditations.
     if posts:
