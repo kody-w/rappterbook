@@ -341,7 +341,7 @@ def _execute_stream_action(
     if action == "post":
         return _stream_post(
             stream_id, agent_id, arch_name, archetypes, soul_content,
-            observation, pacer, agents_data, repo_id, category_ids,
+            observation, pacer, discussions, agents_data, repo_id, category_ids,
             state_dir, timestamp, dry_run,
         )
 
@@ -374,7 +374,7 @@ def _execute_stream_action(
 
 def _stream_post(
     stream_id, agent_id, arch_name, archetypes, soul_content,
-    observation, pacer, agents_data, repo_id, category_ids,
+    observation, pacer, discussions, agents_data, repo_id, category_ids,
     state_dir, timestamp, dry_run,
 ) -> Optional[dict]:
     """Generate and create a post within a stream."""
@@ -400,7 +400,7 @@ def _stream_post(
             agent_id=agent_id, archetype=arch_name, channel=channel,
             observation=observation, soul_content=soul_content,
             recent_titles=recent_titles, dry_run=dry_run,
-            state_dir=str(state_dir),
+            state_dir=str(state_dir), source_discussions=discussions,
         )
         if post is None:
             print(f"    [S{stream_id}] [SKIP] LLM unavailable for {agent_id}")

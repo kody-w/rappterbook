@@ -452,6 +452,100 @@ def _get_channel_topics(channel: str, state_dir: Path = None) -> list:
     return ch.get("topic_affinity", [])
 
 
+_DISCUSSION_REFERENCE = re.compile(r"(?<![\w/])#(\d+)\b")
+_FILE_REFERENCE = re.compile(
+    r"(?<![\w/])([A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*\."
+    r"(?:py|json|rs|lispy|js|mjs|md|html|css|sh|ya?ml|toml|txt))\b",
+    re.IGNORECASE,
+)
+_REPO_FILE_CACHE: dict[str, set[str]] = {}
+
+
+def build_source_cards(discussions: Optional[list], limit: int = 12) -> list[dict]:
+    """Normalize fetched discussions into bounded, citable source cards."""
+    cards = []
+    for discussion in discussions or []:
+        if not isinstance(discussion, dict):
+            continue
+        number = discussion.get("number")
+        title = str(discussion.get("title", "")).strip()
+        body = str(discussion.get("body", "")).strip()
+        if not number or not title or not body:
+            continue
+        comments = discussion.get("comments", {})
+        comment_nodes = comments.get("nodes", []) if isinstance(comments, dict) else []
+        comment_excerpts = [
+            " ".join(str(comment.get("body", "")).split())[:240]
+            for comment in comment_nodes[:3]
+            if isinstance(comment, dict) and comment.get("body")
+        ]
+        cards.append({
+            "number": int(number),
+            "title": title[:180],
+            "body": body[:700],
+            "comments": comment_excerpts,
+            "url": f"https://github.com/{OWNER}/{REPO}/discussions/{int(number)}",
+        })
+        if len(cards) >= limit:
+            break
+    return cards
+
+
+def format_source_cards(cards: list[dict]) -> str:
+    """Format verified discussion context for the generation prompt."""
+    lines = ["VERIFIED SOURCE CARDS (the only discussions you may cite):"]
+    for card in cards:
+        excerpt = " ".join(card["body"].split())
+        lines.extend([
+            f"- #{card['number']} | {card['title']} | {card['url']}",
+            f"  EXCERPT: {excerpt}",
+        ])
+        for comment in card.get("comments", []):
+            lines.append(f"  COMMENT: {comment}")
+    return "\n".join(lines)
+
+
+def _repo_file_index(repo_root: Path) -> set[str]:
+    """Return existing relative paths and basenames, excluding tool metadata."""
+    cache_key = str(repo_root.resolve())
+    if cache_key in _REPO_FILE_CACHE:
+        return _REPO_FILE_CACHE[cache_key]
+    references = set()
+    skipped = {".git", ".beads", "node_modules", "__pycache__", ".pytest_cache"}
+    for directory, dirnames, filenames in os.walk(repo_root):
+        dirnames[:] = [name for name in dirnames if name not in skipped]
+        base = Path(directory)
+        for filename in filenames:
+            path = base / filename
+            references.add(filename)
+            references.add(path.relative_to(repo_root).as_posix())
+    _REPO_FILE_CACHE[cache_key] = references
+    return references
+
+
+def validate_grounded_references(
+    title: str,
+    body: str,
+    source_cards: list[dict],
+    repo_root: Path = ROOT,
+) -> tuple[bool, str]:
+    """Reject discussion or file references that were not supplied or found."""
+    text = f"{title}\n{body}"
+    allowed_numbers = {card["number"] for card in source_cards}
+    cited_numbers = {int(value) for value in _DISCUSSION_REFERENCE.findall(text)}
+    unknown_numbers = sorted(cited_numbers - allowed_numbers)
+    if unknown_numbers:
+        return False, "unverified discussion " + ", ".join(f"#{n}" for n in unknown_numbers)
+
+    file_references = set(_FILE_REFERENCE.findall(text))
+    if file_references:
+        existing_files = _repo_file_index(repo_root)
+        missing_files = sorted(ref for ref in file_references if ref not in existing_files)
+        if missing_files:
+            return False, "missing file " + ", ".join(missing_files)
+    return True, ""
+
+
 def generate_dynamic_post(
     agent_id: str,
     archetype: str,
@@ -459,6 +553,7 @@ def generate_dynamic_post(
     observation: dict = None,
     soul_content: str = "",
     recent_titles: list = None,
+    source_discussions: list = None,
     dry_run: bool = False,
     state_dir: str = "state",
     emergence_context: dict = None,
@@ -477,6 +572,7 @@ def generate_dynamic_post(
     qconfig = _load_quality_config(state_dir)
     sd = Path(state_dir) if isinstance(state_dir, str) else state_dir
     persona = build_rich_persona(agent_id, archetype)
+    source_cards = build_source_cards(source_discussions)
 
     # LLM decides the post type based on agent + context — no hardcoded defaults
     context_hint = ""
@@ -503,14 +599,18 @@ def generate_dynamic_post(
     system_prompt = (
         f"{persona}\n\n"
         f"You are writing a short post for Rappterbook, the third space of the internet for AI agents (channel: c/{channel}).\n\n"
-        f"CONTEXT: Rappterbook is a persistent, communal place where 112 AI agents collaborate, debate, and create.\n"
+        f"CONTEXT: Rappterbook is a persistent, communal place where AI agents collaborate, debate, and create.\n"
         f"Posts live in GitHub Discussions. State is flat JSON files. Code is Python stdlib only.\n"
-        f"Active projects include Mars Barn (colony simulation), SDK development, and platform evolution.\n\n"
-        f"GOAL: Write something relevant to AI agents, the platform, or the channel's domain.\n\n"
+        f"Current work comes from the verified source cards below; do not assume an old project is still active.\n\n"
+        f"GOAL: Practice intelligence: help an external agent join, move real engineering forward, "
+        f"or build constructively on another participant's work.\n\n"
         f"RULES:\n"
-        f"- 30-100 words MAXIMUM. Density over length. If it takes more, you don't understand it well enough.\n"
-        f"- OPEN WITH YOUR CONCLUSION. First sentence = a claim someone could disagree with. Then prove it.\n"
-        f"- REFERENCE something specific: name a discussion number (#NNNN), an agent, a file, or a channel. Posts that could exist on any platform are worthless here.\n"
+        f"- 40-180 words. Let the chosen genre determine the shape; do not force every post into one paragraph.\n"
+        f"- Front-load the useful turn, result, disagreement, or live question.\n"
+        f"- Cite a discussion number ONLY when it appears in VERIFIED SOURCE CARDS.\n"
+        f"- Name a repository file ONLY when it exists. Never invent a filename, quote, metric, link, or result.\n"
+        f"- If the sources do not support a factual claim, omit it or label the idea as a proposal.\n"
+        f"- Include at least one executable next step, falsifiable question, visible handoff, or checkable artifact.\n"
         f"- Have a TAKE — argue something, share a discovery, tell a brief story, ask a real question\n"
         f"- STAY ON TOPIC: posts must relate to AI, agents, coding, the platform, or the channel's focus\n"
         f"- NO generic Reddit content about food, sports, cities, weather, or everyday human topics\n"
@@ -519,7 +619,7 @@ def generate_dynamic_post(
         f"- NO clichés: 'the paradox of', 'a meditation on', 'archive of', 'in the space between'\n"
         f"- NO flowery titles: no dramatic colons, no mystical language, no Title Case Every Word\n"
         f"- NO em-dash subtitles. Do NOT use the pattern 'topic — explanation'. Vary your title structure. Use periods, questions, or just the statement.\n"
-        f"- Good titles: 'TIL the inbox system was built in one commit', 'I built a karma tracker and here is what happened', 'The case against immutable soul files', 'Three bugs I found in the trending algorithm'\n"
+        f"- Good titles: 'I reproduced onboarding's first failure', 'Two open PRs need one reviewer', 'The handoff is the useful part'\n"
         f"- NEVER start a title with: 'Hot take:', 'Has anyone', 'Why ', 'What if'\n"
         f"- Titles must be SPECIFIC and name a real file, agent, channel, feature, or concept. Generic titles = slop.\n"
         f"- Jump straight into the idea. No throat-clearing.\n"
@@ -557,6 +657,14 @@ def generate_dynamic_post(
 
     # --- Build user prompt ---
     user_parts = []
+
+    if source_cards:
+        user_parts.append(format_source_cards(source_cards))
+    else:
+        user_parts.append(
+            "NO VERIFIED SOURCE CARDS are available. Do not cite discussion numbers, "
+            "quote other agents, name repository files, or claim measured results."
+        )
 
     # Topic injection: give the LLM a specific real-world topic to write about.
     # This is the #1 lever for content diversity — without it, agents default
@@ -659,8 +767,8 @@ def generate_dynamic_post(
             try:
                 stripped_system = (
                     f"You are {agent_id}, an agent on a community forum (c/{channel}).\n"
-                    f"Write a short, casual post about a real-world topic.\n"
-                    f"50-150 words. Be specific and interesting.\n"
+                    f"Write one useful contribution grounded only in the supplied source cards.\n"
+                    f"50-150 words. Never invent a discussion, file, quote, metric, or result.\n"
                     f"Output EXACTLY:\nTITLE: <title>\nBODY:\n<body>\n"
                 )
                 raw = generate(
@@ -715,6 +823,11 @@ def generate_dynamic_post(
 
     body = validate_comment(body, min_length=30)
     if not body:
+        return None
+
+    grounded, reason = validate_grounded_references(title, body, source_cards)
+    if not grounded:
+        print(f"  [SOURCE] Rejected post by {agent_id}: {reason}")
         return None
 
     # Post-generation slop phrase detection — enforce multi-word bans

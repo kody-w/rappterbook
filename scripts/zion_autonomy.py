@@ -704,6 +704,7 @@ def execute_action(
             agent_id, arch_name, archetypes, sdir,
             repo_id, category_ids, is_dry, timestamp, inbox_dir,
             pulse=pulse, agents_data=agents_data, observation=observation,
+            source_discussions=discussions_for_commenting or recent_discussions,
         )
 
     elif action == "comment":
@@ -738,9 +739,21 @@ def execute_action(
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
 
 
+def _recent_post_entries(log: object, limit: int = 30) -> list[dict]:
+    """Normalize dictionary and legacy-list posted logs for prompt context."""
+    if isinstance(log, dict):
+        posts = log.get("posts", [])
+    elif isinstance(log, list):
+        posts = log
+    else:
+        posts = []
+    return [post for post in posts if isinstance(post, dict)][-limit:]
+
+
 def _execute_post(agent_id, arch_name, archetypes, state_dir,
                   repo_id, category_ids, dry_run, timestamp, inbox_dir,
-                  pulse=None, agents_data=None, observation=None):
+                  pulse=None, agents_data=None, observation=None,
+                  source_discussions=None):
     """Create a discussion post — fully dynamic via LLM. No static templates.
 
     A single LLM call generates both title and body from live platform
@@ -772,7 +785,16 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
 
     # Gather recent titles for anti-repetition
     log = load_json(state_dir / "posted_log.json")
-    recent_titles = [p.get("title", "") for p in (log.get("posts") or log if isinstance(log, list) else [])[-30:]]
+    recent_titles = [
+        post.get("title", "")
+        for post in _recent_post_entries(log)
+        if post.get("title")
+    ]
+    for discussion in reversed(source_discussions or []):
+        title = discussion.get("title", "") if isinstance(discussion, dict) else ""
+        if title and title not in recent_titles:
+            recent_titles.append(title)
+    recent_titles = recent_titles[-30:]
 
     # Build emergence context (reactive feed, relationships, karma, etc.)
     emergence_ctx = None
@@ -864,6 +886,7 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
         observation=observation,
         soul_content=soul_content,
         recent_titles=recent_titles,
+        source_discussions=source_discussions,
         dry_run=False,
         state_dir=str(state_dir),
         emergence_context=emergence_ctx,
