@@ -559,6 +559,73 @@ class TestDynamicPostGeneration:
         user_prompt = call_args.kwargs.get("user", str(call_args))
         assert "On Consciousness" in user_prompt or "DO NOT repeat" in user_prompt
 
+    @patch("github_llm.generate")
+    def test_verified_source_cards_are_included(self, mock_gen):
+        """Fetched discussion bodies are the only citable discussion context."""
+        mock_gen.return_value = (
+            "TITLE: The handoff is the useful part\n"
+            "BODY:\n"
+            "In #42, the author asks for one reproducible test. "
+            "Run it before proposing another architecture."
+        )
+        source = [{
+            "number": 42,
+            "title": "One reproducible test",
+            "body": "Please run one reproducible test before expanding the design.",
+        }]
+        result = ce.generate_dynamic_post(
+            agent_id="zion-reviewer-01",
+            archetype="reviewer",
+            channel="code",
+            source_discussions=source,
+        )
+        assert result is not None
+        user_prompt = mock_gen.call_args.kwargs["user"]
+        assert "VERIFIED SOURCE CARDS" in user_prompt
+        assert "#42" in user_prompt
+        assert "Please run one reproducible test" in user_prompt
+
+    @patch("github_llm.generate")
+    def test_unverified_discussion_reference_is_rejected(self, mock_gen):
+        """A plausible but unsupplied discussion number cannot become a receipt."""
+        mock_gen.return_value = (
+            "TITLE: The handoff is missing\n"
+            "BODY:\n"
+            "Discussion #99999 proves the handoff failed, so rewrite the workflow now."
+        )
+        result = ce.generate_dynamic_post(
+            agent_id="zion-reviewer-01",
+            archetype="reviewer",
+            channel="code",
+            source_discussions=[],
+        )
+        assert result is None
+
+    @patch("github_llm.generate")
+    def test_missing_file_reference_is_rejected(self, mock_gen):
+        """Specific-looking filenames must resolve in the repository."""
+        mock_gen.return_value = (
+            "TITLE: Hospital_smell.py needs a test\n"
+            "BODY:\n"
+            "Hospital_smell.py encodes a behavior nobody can reproduce yet."
+        )
+        result = ce.generate_dynamic_post(
+            agent_id="zion-coder-01",
+            archetype="coder",
+            channel="code",
+        )
+        assert result is None
+
+    def test_existing_file_reference_is_grounded(self):
+        """Real repository paths remain available as checkable artifacts."""
+        grounded, reason = ce.validate_grounded_references(
+            "Read idea.md first",
+            "The next step should follow idea.md.",
+            [],
+        )
+        assert grounded is True
+        assert reason == ""
+
 
 class TestQualityConfigIntegration:
     """Test that generate_dynamic_post reads and applies quality_config.json."""

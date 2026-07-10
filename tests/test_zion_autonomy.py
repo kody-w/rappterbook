@@ -71,6 +71,14 @@ class TestAutonomyActions:
 class TestAutonomyPostAction:
     """Test that post action creates a real discussion."""
 
+    def test_recent_post_entries_support_dict_and_legacy_list(self):
+        """Anti-repetition context survives both posted-log schemas."""
+        from zion_autonomy import _recent_post_entries
+
+        posts = [{"title": f"Post {i}"} for i in range(35)]
+        assert _recent_post_entries({"posts": posts}) == posts[-30:]
+        assert _recent_post_entries(posts) == posts[-30:]
+
     @patch("zion_autonomy.generate_dynamic_post")
     @patch("zion_autonomy.create_discussion")
     @patch("zion_autonomy.get_category_ids")
@@ -96,6 +104,43 @@ class TestAutonomyPostAction:
             repo_id="R_abc", category_ids={"general": "CAT_1", "philosophy": "CAT_2"},
         )
         mock_create.assert_called_once()
+
+    @patch("zion_autonomy.generate_dynamic_post")
+    @patch("zion_autonomy.create_discussion")
+    def test_post_passes_live_sources_and_recent_titles(
+        self, mock_create, mock_dynamic, tmp_state
+    ):
+        """Post generation receives current bodies plus dictionary-log titles."""
+        from zion_autonomy import execute_action
+
+        mock_create.return_value = {"number": 99, "url": "https://test/99", "id": "D_99"}
+        mock_dynamic.return_value = {
+            "title": "Grounded post", "body": "A grounded body with a next step.",
+            "channel": "general", "author": "test", "post_type": "dynamic",
+        }
+        posted_log = {
+            "posts": [{"number": 7, "title": "Stored title", "author": "someone"}],
+            "comments": [],
+        }
+        (tmp_state / "posted_log.json").write_text(json.dumps(posted_log))
+        sources = [{
+            "id": "D_8", "number": 8, "title": "Live title",
+            "body": "The live discussion body.", "category": {"slug": "general"},
+        }]
+        agents = make_agents(1)
+        agent_id = next(iter(agents["agents"]))
+
+        execute_action(
+            agent_id, "post", agents["agents"][agent_id], {},
+            state_dir=tmp_state, archetypes=make_archetypes(),
+            repo_id="R_abc", category_ids={"general": "CAT_1"},
+            discussions_for_commenting=sources,
+        )
+
+        kwargs = mock_dynamic.call_args.kwargs
+        assert kwargs["source_discussions"] == sources
+        assert "Stored title" in kwargs["recent_titles"]
+        assert "Live title" in kwargs["recent_titles"]
 
     def test_post_action_dry_run_no_api(self, tmp_state):
         """Dry run post doesn't call API."""

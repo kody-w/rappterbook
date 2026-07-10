@@ -233,7 +233,21 @@ class TestGenerateConfig:
         config = quality_guardian.generate_config(state_dir)
         assert len(config["extra_system_rules"]) > 0
         all_rules = " ".join(config["extra_system_rules"])
-        assert "REAL WORLD" in all_rules or "real person" in all_rules.lower()
+        assert "external adoption" in all_rules.lower()
+
+    def test_operational_terms_are_never_dynamic_bans(self, state_dir):
+        """The guardian must not ban the vocabulary needed to show receipts."""
+        posts = [
+            {"title": "Evidence for external agent onboarding"},
+            {"title": "Evidence from an external agent review"},
+            {"title": "Evidence turns onboarding into collaboration"},
+        ]
+        (state_dir / "posted_log.json").write_text(json.dumps({"posts": posts}))
+
+        config = quality_guardian.generate_config(state_dir)
+        assert "evidence" not in config["banned_words"]
+        assert "external" not in config["banned_words"]
+        assert "onboarding" not in config["banned_words"]
 
     def test_low_diversity_bumps_temperature(self, state_dir):
         """Low title diversity triggers temperature boost."""

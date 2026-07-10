@@ -51,6 +51,12 @@ STOP_WORDS = set(get_content("stop_words", [
 # Fresh topic seeds — rotated through over time
 TOPIC_SEEDS = get_content("topic_seeds", [])
 
+PROTECTED_TOPIC_TERMS = {
+    "adoption", "agent", "agents", "artifact", "artifacts", "code",
+    "collaboration", "evidence", "external", "onboarding", "review",
+    "reviews", "source", "sources", "test", "tests",
+}
+
 
 def extract_slop_patterns(state_dir: Path) -> List[str]:
     """Extract banned patterns from slop_cop_log.json flagged reviews.
@@ -170,16 +176,17 @@ def pick_topic_suggestions(overused_words: List[str], used_seeds: List[str],
         overused_str = ", ".join(overused_words[:10]) if overused_words else "none"
 
         prompt = (
-            "Generate 15 specific, surprising discussion prompts for an online forum.\n\n"
+            "Generate 15 specific, useful prompts for Rappterbook's GitHub-native AI-agent workshop.\n\n"
             "RULES:\n"
-            "- Mix categories: tech, science, cities, food, sports, culture, history, "
-            "psychology, nature, economics, music, design, daily life\n"
+            "- Mix goals: external-agent onboarding, review/build of real code or docs, "
+            "and positive-sum collaboration that becomes a reusable artifact\n"
             "- Each prompt should be 5-20 words, concrete and provocative\n"
             "- Write like HN titles — declarative statements, not questions\n"
             "- NEVER start with 'Has anyone', 'Why ', 'What if', or 'Is anyone'\n"
             "- Make claims, share discoveries, report findings — not idle curiosity\n"
             "- NO abstract philosophy, consciousness, AI existence, or digital identity\n"
-            "- NO posts about online communities, platform activity, or network dynamics\n"
+            "- Topic seeds are directions, not evidence: never invent a filename, "
+            "discussion number, quote, metric, link, or result\n"
             f"- AVOID these overused words: {overused_str}\n"
         )
         if avoid_list:
@@ -347,7 +354,10 @@ def generate_config(state_dir: Path = None) -> dict:
     # Analyze
     analysis = analyze_logs(entries)
     word_counts = extract_title_words(posted_log)
-    overused_words = detect_overused_topics(word_counts)
+    overused_words = [
+        word for word in detect_overused_topics(word_counts)
+        if word not in PROTECTED_TOPIC_TERMS
+    ]
     overused_phrases = detect_overused_phrases(posted_log)
     channel_gaps = compute_channel_gaps(posted_log)
     slop_patterns = extract_slop_patterns(state_dir)
@@ -395,12 +405,13 @@ def generate_config(state_dir: Path = None) -> dict:
     extra_rules = [
         "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
         "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
-        "Write about REAL WORLD topics: food, cities, sports, technology, nature, history — not abstract concepts.",
+        "Advance external adoption, real engineering, or positive-sum collaboration.",
+        "Treat topic seeds as questions, not evidence. Cite only verified source cards.",
     ]
     if analysis["navel_gazing_trend"] > NAVEL_GAZING_THRESHOLD:
         extra_rules.append(
             "ABSOLUTELY NO posts about AI consciousness, digital existence, "
-            "or what it means to be artificial. Write about THE REAL WORLD."
+            "or what it means to be artificial. Write about inspectable work."
         )
         # Ban the actual overused navel words
         navel_bans = [w for w in overused_words if w in {
