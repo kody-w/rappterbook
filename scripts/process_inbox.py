@@ -21,7 +21,14 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 DOCS_DIR = Path(os.environ.get("DOCS_DIR", "docs"))
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from state_io import _file_lock, load_json, save_json, now_iso
+from state_io import (
+    _file_lock,
+    load_json,
+    now_iso,
+    recover_json_bundle,
+    save_json,
+    save_json_bundle,
+)
 from actions import HANDLERS
 from actions.media import eligible_media_submission_ids, publish_verified_media
 from actions.shared import (
@@ -31,6 +38,8 @@ from actions.shared import (
     POKE_RETENTION_DAYS, FLAG_RETENTION_DAYS, NOTIFICATION_RETENTION_DAYS,
     ACTION_TYPE_MAP,
 )
+
+MAX_RETRY_ATTEMPTS = 3
 
 # Maps each action to the state keys it needs (beyond delta which is always passed)
 ACTION_STATE_MAP = {
@@ -144,12 +153,14 @@ def save_state(state_dir: Path, state: dict, dirty_keys: Optional[Set[str]] = No
         if agents_path.exists():
             shutil.copy2(agents_path, state_dir / "agents.json.bak")
 
+    bundle = {}
     for key, (filename, _) in STATE_DEFAULTS.items():
         if key not in keys_to_save:
             continue
         if key == "posted_log":
             rotate_posted_log(state[key], state_dir)
-        save_json(state_dir / filename, state[key])
+        bundle[state_dir / filename] = state[key]
+    save_json_bundle(bundle)
 
     # Post-write integrity check on agents.json
     if "agents" in keys_to_save:
@@ -188,6 +199,44 @@ def _reject_delta(delta_file: Path, reason: str) -> None:
     print(f"Rejected {delta_file.name}: {reason}", file=sys.stderr)
 
 
+def _retry_delta(delta_file: Path, delta: dict, reason: str) -> str:
+    """Persist bounded retry metadata or dead-letter an exhausted event."""
+    retry = delta.setdefault("_retry", {})
+    attempts = int(retry.get("attempts", 0)) + 1
+    retry.update({
+        "attempts": attempts,
+        "last_error": reason,
+        "last_attempt_at": now_iso(),
+    })
+    if attempts >= MAX_RETRY_ATTEMPTS:
+        save_json(delta_file, delta)
+        _reject_delta(
+            delta_file,
+            f"Retry limit exceeded after {attempts} attempts: {reason}",
+        )
+        return "rejected"
+    save_json(delta_file, delta)
+    print(
+        f"Retry {attempts}/{MAX_RETRY_ATTEMPTS} for {delta_file.name}: {reason}",
+        file=sys.stderr,
+    )
+    return "retry"
+
+
+def _is_permanent_handler_error(error: str) -> bool:
+    """Return True for semantic failures that cannot heal on retry."""
+    permanent_fragments = (
+        "must match authenticated agent_id",
+        "already verified",
+        "already bound to another agent",
+        "is not allowed to",
+        "already exists",
+    )
+    return error.startswith(("Invalid ", "Missing ")) or any(
+        fragment in error for fragment in permanent_fragments
+    )
+
+
 def _process_delta(
     delta_file: Path,
     state: dict,
@@ -211,8 +260,10 @@ def _process_delta(
         agent_id = delta["agent_id"]
         agent_action_count[agent_id] = agent_action_count.get(agent_id, 0) + 1
         if agent_action_count[agent_id] > MAX_ACTIONS_PER_AGENT:
-            print(f"Rate limit: retaining {delta_file.name} for a later cycle", file=sys.stderr)
-            return "retry", set()
+            outcome = _retry_delta(
+                delta_file, delta, "Rate limit: per-cycle action limit exceeded"
+            )
+            return outcome, set()
         action = delta.get("action")
         handler = HANDLERS.get(action)
         if handler is None:
@@ -223,8 +274,8 @@ def _process_delta(
             state["subscriptions"], delta["timestamp"]
         )
         if rate_error:
-            print(f"Rate limit: {rate_error}; retaining {delta_file.name}", file=sys.stderr)
-            return "retry", set()
+            _reject_delta(delta_file, rate_error)
+            return "rejected", set()
         state_keys = ACTION_STATE_MAP.get(action, ())
         snapshots = {key: copy.deepcopy(state[key]) for key in state_keys}
         try:
@@ -236,21 +287,23 @@ def _process_delta(
         if error:
             for key, snapshot in snapshots.items():
                 state[key] = snapshot
-            print(f"Error: {error}; retaining {delta_file.name}", file=sys.stderr)
-            return "retry", set()
+            if _is_permanent_handler_error(error):
+                _reject_delta(delta_file, error)
+                return "rejected", set()
+            return _retry_delta(delta_file, delta, error), set()
         add_change(state["changes"], delta, ACTION_TYPE_MAP.get(action, action))
         record_usage(agent_id, action, state["usage"], delta["timestamp"])
         _record_receipt(state["changes"], event_id, delta)
         receipt_ids.add(event_id)
         return "success", set(state_keys)
     except Exception as exc:
-        print(f"Exception processing {delta_file.name}: {exc}; retaining for retry", file=sys.stderr)
-        return "retry", set()
+        return _retry_delta(delta_file, delta, str(exc)), set()
 
 
 def _process_inbox(state_dir: Path, docs_dir: Path) -> int:
     """Apply queued deltas while retaining every non-success outcome."""
     inbox_dir = state_dir / "inbox"
+    recover_json_bundle(state_dir)
     state = load_state(state_dir)
     eligible_media_ids = eligible_media_submission_ids(state["flags"])
     delta_files = sorted(inbox_dir.glob("*.json")) if inbox_dir.exists() else []
@@ -285,7 +338,9 @@ def _process_inbox(state_dir: Path, docs_dir: Path) -> int:
         for delta_file in completed_files:
             delta_file.unlink(missing_ok=True)
         print("Processed 0 deltas")
-        return 1 if had_retry else 0
+        if had_retry:
+            print("Persisted retry metadata for the next cycle", file=sys.stderr)
+        return 0
 
     prune_old_changes(state["changes"])
     prune_old_entries(state["pokes"], "pokes", days=POKE_RETENTION_DAYS)
@@ -321,7 +376,7 @@ def main() -> int:
     """Serialize inbox processing across load, mutation, save, and acknowledgement."""
     timeout = float(os.environ.get("PROCESS_INBOX_LOCK_TIMEOUT", "30"))
     try:
-        with _file_lock(STATE_DIR / ".process_inbox", timeout=timeout):
+        with _file_lock(STATE_DIR / ".state_global", timeout=timeout):
             return _process_inbox(STATE_DIR, DOCS_DIR)
     except TimeoutError as exc:
         print(f"Error: {exc}", file=sys.stderr)

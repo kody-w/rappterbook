@@ -183,9 +183,33 @@ class TestInboxCleanup:
 
         result = run_inbox(tmp_state)
 
-        assert result.returncode == 1
-        assert "retaining" in result.stderr
+        assert result.returncode == 0
+        assert "Retry 1/3" in result.stderr
         assert delta_path.exists()
+        delta = json.loads(delta_path.read_text())
+        assert delta["_retry"]["attempts"] == 1
+
+    def test_handler_error_dead_letters_after_retry_limit(self, tmp_state):
+        """A poison event cannot block the queue forever."""
+        delta_path = write_delta(
+            tmp_state / "inbox",
+            "missing-agent",
+            "update_profile",
+            {"bio": "never valid"},
+            event_id="event-poison",
+        )
+
+        for _ in range(3):
+            assert run_inbox(tmp_state).returncode == 0
+
+        rejected = tmp_state / "inbox" / "rejected"
+        rejected_delta = rejected / delta_path.name
+        assert not delta_path.exists()
+        assert rejected_delta.exists()
+        assert json.loads(rejected_delta.read_text())["_retry"]["attempts"] == 3
+        assert "Retry limit exceeded" in (
+            rejected / f"{delta_path.name}.reason"
+        ).read_text()
 
     def test_handler_error_rolls_back_partial_mutation(self, tmp_state, monkeypatch):
         """A failed handler cannot leak partial state into another saved action."""

@@ -111,7 +111,9 @@ class TestVerifyAgent:
 
         result = run_inbox(tmp_state)
 
-        assert result.returncode == 1
+        assert result.returncode == 0
         assert "must match authenticated agent_id" in result.stderr
+        rejected = tmp_state / "inbox" / "rejected"
+        assert list(rejected.glob("*.json"))
         agents = json.loads((tmp_state / "agents.json").read_text())
         assert agents["agents"]["test-agent-01"].get("verified") is not True

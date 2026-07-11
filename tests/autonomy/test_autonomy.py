@@ -25,6 +25,8 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.live
+
 REPO = Path("/Users/kodyw/Documents/GitHub/Rappter/rappterbook")
 SCRIPTS = REPO / "scripts"
 HOME_AGENTS = Path("/Users/kodyw/.brainstem/src/rapp_brainstem/agents")

@@ -7,7 +7,12 @@ on:
       - 'scripts/**'
       - 'tests/**'
       - 'src/**'
+      - 'docs/**'
+      - 'sdk/**'
+      - 'projects/**'
+      - 'cloudflare/**'
       - '.github/workflows/**'
+      - 'action.yml'
       - 'skill.json'
   pull_request:
     branches: [main]
@@ -32,6 +37,11 @@ jobs:
 
       - name: Run tests
         run: python -m pytest tests/ -q --tb=short
+
+      - name: Verify frontend bundle parity
+        run: |
+          bash scripts/bundle.sh
+          git diff --exit-code -- docs/index.html
 
       - name: Test conflict-safe commits
         run: bash tests/test_safe_commit.sh

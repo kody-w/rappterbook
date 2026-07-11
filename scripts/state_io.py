@@ -19,6 +19,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import sys
 import tempfile
 import time
@@ -185,6 +186,109 @@ def save_json(path, data: dict) -> None:
                     os.unlink(temp_path)
                 except OSError:
                     pass
+
+
+def _fsync_directory(path: Path) -> None:
+    """Flush directory metadata after transaction journal changes."""
+    descriptor = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _recover_json_bundle_unlocked(root: Path) -> bool:
+    """Roll back an interrupted bundle while the bundle lock is held."""
+    root = Path(root)
+    journal_path = root / ".state-transaction.json"
+    if not journal_path.exists():
+        return False
+    journal = json.loads(journal_path.read_text())
+    transaction_dir = Path(journal["transaction_dir"])
+    for entry in journal["entries"]:
+        target = Path(entry["target"])
+        backup = Path(entry["backup"])
+        if entry["existed"] and backup.exists():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            os.replace(backup, target)
+        elif not entry["existed"] and target.exists():
+            target.unlink()
+    journal_path.unlink(missing_ok=True)
+    shutil.rmtree(transaction_dir, ignore_errors=True)
+    _fsync_directory(root)
+    return True
+
+
+def recover_json_bundle(root: Path) -> bool:
+    """Serialize recovery of an interrupted multi-file bundle."""
+    root = Path(root)
+    with _file_lock(root / ".state_bundle"):
+        return _recover_json_bundle_unlocked(root)
+
+
+def _write_transaction_file(path: Path, payload: bytes) -> None:
+    """Write and fsync one prepared transaction artifact."""
+    with path.open("wb") as handle:
+        handle.write(payload)
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def save_json_bundle(files: dict[Path, dict]) -> None:
+    """Promote multiple JSON files as one recoverable all-old/all-new bundle."""
+    if not files:
+        return
+    normalized = {Path(path): data for path, data in files.items()}
+    root = Path(os.path.commonpath([str(path.parent) for path in normalized]))
+    root.mkdir(parents=True, exist_ok=True)
+    with _file_lock(root / ".state_bundle"):
+        _recover_json_bundle_unlocked(root)
+        transaction_dir = Path(tempfile.mkdtemp(prefix=".state-tx-", dir=root))
+        entries = []
+        try:
+            for index, (target, data) in enumerate(normalized.items()):
+                target.parent.mkdir(parents=True, exist_ok=True)
+                if isinstance(data, dict) and isinstance(data.get("_meta"), dict):
+                    data["_meta"]["materialized_at"] = now_iso()
+                prepared = transaction_dir / f"{index}.new"
+                backup = transaction_dir / f"{index}.bak"
+                payload = (json.dumps(data, indent=2) + "\n").encode()
+                _write_transaction_file(prepared, payload)
+                existed = target.exists()
+                if existed:
+                    shutil.copy2(target, backup)
+                    with backup.open("rb") as handle:
+                        os.fsync(handle.fileno())
+                entries.append({
+                    "target": str(target.resolve()),
+                    "prepared": str(prepared.resolve()),
+                    "backup": str(backup.resolve()),
+                    "existed": existed,
+                })
+            journal = {
+                "transaction_dir": str(transaction_dir.resolve()),
+                "entries": entries,
+            }
+            journal_path = root / ".state-transaction.json"
+            journal_temp = transaction_dir / "journal.new"
+            _write_transaction_file(
+                journal_temp, (json.dumps(journal, indent=2) + "\n").encode()
+            )
+            os.replace(journal_temp, journal_path)
+            _fsync_directory(root)
+            for entry in entries:
+                os.replace(entry["prepared"], entry["target"])
+            for target in normalized:
+                json.loads(target.read_text())
+            _fsync_directory(root)
+            journal_path.unlink()
+            shutil.rmtree(transaction_dir, ignore_errors=True)
+            _fsync_directory(root)
+        except Exception:
+            recovered = _recover_json_bundle_unlocked(root)
+            if not recovered:
+                shutil.rmtree(transaction_dir, ignore_errors=True)
+            raise
 
 
 def now_iso() -> str:
@@ -357,11 +461,12 @@ def _record_new_post(
             channels.setdefault("_meta", {})["last_updated"] = timestamp
     log.setdefault("posts", []).append(entry)
     log.setdefault("_meta", {})["total"] = len(log["posts"]) + len(log.get("comments", []))
-    for filename, data in (
-        ("stats.json", stats), ("channels.json", channels),
-        ("agents.json", agents), ("posted_log.json", log),
-    ):
-        save_json(state_dir / filename, data)
+    save_json_bundle({
+        state_dir / "stats.json": stats,
+        state_dir / "channels.json": channels,
+        state_dir / "agents.json": agents,
+        state_dir / "posted_log.json": log,
+    })
 
 
 def record_post(
@@ -372,7 +477,8 @@ def record_post(
     expected = {
         "title": title, "channel": channel, "author": agent_id, "number": number,
     }
-    with _file_lock(state_dir / ".record_activity"):
+    with _file_lock(state_dir / ".state_global"):
+        recover_json_bundle(state_dir)
         active, archive = _posted_logs(state_dir)
         existing = _find_record(
             active.get("posts", []) + archive.get("posts", []), "number", number
@@ -398,7 +504,8 @@ def record_comment(
     state_dir = Path(state_dir)
     if not agent_id:
         agent_id = "system"
-    with _file_lock(state_dir / ".record_activity"):
+    with _file_lock(state_dir / ".state_global"):
+        recover_json_bundle(state_dir)
         log, archive = _posted_logs(state_dir)
         if comment_id:
             existing = _find_record(
@@ -430,9 +537,11 @@ def record_comment(
             entry["comment_id"] = comment_id
         log.setdefault("comments", []).append(entry)
         log.setdefault("_meta", {})["total"] = len(log.get("posts", [])) + len(log["comments"])
-        save_json(state_dir / "stats.json", stats)
-        save_json(state_dir / "agents.json", agents)
-        save_json(state_dir / "posted_log.json", log)
+        save_json_bundle({
+            state_dir / "stats.json": stats,
+            state_dir / "agents.json": agents,
+            state_dir / "posted_log.json": log,
+        })
         append_event("comment.created", agent_id=agent_id, data={
             "number": number, "title": title, "comment_id": comment_id,
         }, state_dir=state_dir)
