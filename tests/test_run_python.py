@@ -1,4 +1,4 @@
-"""Tests for the run_python action handler."""
+"""Tests for internal Python execution and its disabled public surface."""
 from __future__ import annotations
 
 import json
@@ -204,14 +204,14 @@ class TestHandleRunPythonUnit:
 
 
 # ---------------------------------------------------------------------------
-# Integration: run_python flows through process_inbox
+# Public action surface: host execution must remain unreachable
 # ---------------------------------------------------------------------------
 
-class TestRunPythonIntegration:
-    """End-to-end: delta file → process_inbox → compute_log.json updated."""
+class TestRunPythonPublicSurface:
+    """The internal brainstem helper must not be reachable from public actions."""
 
-    def test_inbox_dispatch_updates_compute_log(self, tmp_state):
-        """A run_python delta processed by process_inbox writes to compute_log.json."""
+    def test_inbox_delta_is_rejected_without_execution(self, tmp_state):
+        """A forged legacy delta cannot dispatch the internal execution helper."""
         from state_io import load_json
 
         inbox_dir = tmp_state / "inbox"
@@ -229,16 +229,13 @@ class TestRunPythonIntegration:
             text=True,
         )
         assert result.returncode == 0, result.stderr
+        assert "Unknown action: run_python" in result.stderr
 
         compute_log = load_json(tmp_state / "compute_log.json")
-        assert len(compute_log.get("runs", [])) == 1
-        run = compute_log["runs"][0]
-        assert run["agent_id"] == "agent-1"
-        assert "integration test" in run["stdout"]
-        assert run["exit_code"] == 0
+        assert compute_log.get("runs", []) == []
 
-    def test_process_issues_accepts_run_python(self, tmp_state):
-        """process_issues.py validates run_python and writes a delta."""
+    def test_process_issues_rejects_run_python(self, tmp_state):
+        """Public issue intake rejects run_python as an unknown action."""
         import subprocess, os
         env = os.environ.copy()
         env["STATE_DIR"] = str(tmp_state)
@@ -261,33 +258,20 @@ class TestRunPythonIntegration:
             capture_output=True,
             text=True,
         )
-        assert result.returncode == 0, result.stderr
+        assert result.returncode == 1
+        assert "Unknown action: run_python" in result.stderr
 
         delta_files = list((tmp_state / "inbox").glob("*.json"))
-        assert len(delta_files) == 1
-        delta = json.loads(delta_files[0].read_text())
-        assert delta["action"] == "run_python"
-        assert delta["payload"]["code"] == "print(42)"
+        assert delta_files == []
 
-    def test_missing_code_rejected_by_process_issues(self, tmp_state):
-        """process_issues.py rejects run_python with missing code field."""
-        import subprocess, os
-        env = os.environ.copy()
-        env["STATE_DIR"] = str(tmp_state)
+    def test_public_registries_do_not_expose_run_python(self):
+        """All public dispatch registries exclude the internal helper."""
+        from actions import HANDLERS
+        from actions.shared import ACTION_TYPE_MAP
+        from process_inbox import ACTION_STATE_MAP
+        from process_issues import VALID_ACTIONS
 
-        issue_event = {
-            "issue": {
-                "user": {"login": "agent-1"},
-                "body": '{"action": "run_python", "payload": {}}',
-            }
-        }
-
-        result = subprocess.run(
-            [sys.executable, str(Path(__file__).resolve().parent.parent / "scripts" / "process_issues.py")],
-            input=json.dumps(issue_event),
-            env=env,
-            capture_output=True,
-            text=True,
-        )
-        assert result.returncode == 1
-        assert "code" in result.stderr.lower()
+        assert "run_python" not in HANDLERS
+        assert "run_python" not in ACTION_TYPE_MAP
+        assert "run_python" not in ACTION_STATE_MAP
+        assert "run_python" not in VALID_ACTIONS

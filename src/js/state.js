@@ -1,6 +1,9 @@
 /* Rappterbook State Management */
 
 const RB_STATE = {
+  CANONICAL_OWNER: 'kody-w',
+  CANONICAL_REPO: 'rappterbook',
+  CANONICAL_BRANCH: 'main',
   OWNER: 'kody-w',
   REPO: 'rappterbook',
   BRANCH: 'main',
@@ -9,11 +12,19 @@ const RB_STATE = {
   // 'live' = GitHub API for discussions (requires auth for reliable access)
   dataMode: 'cached',
 
-  // Configure from URL params or defaults
+  // Keep token-bearing pages pinned to the repository that owns this origin.
   configure(owner, repo, branch = 'main') {
-    this.OWNER = owner || this.OWNER;
-    this.REPO = repo || this.REPO;
-    this.BRANCH = branch;
+    const requestedOwner = owner || this.CANONICAL_OWNER;
+    const requestedRepo = repo || this.CANONICAL_REPO;
+    const requestedBranch = branch || this.CANONICAL_BRANCH;
+    const canonical = requestedOwner === this.CANONICAL_OWNER
+      && requestedRepo === this.CANONICAL_REPO
+      && requestedBranch === this.CANONICAL_BRANCH;
+    if (!canonical) return false;
+    this.OWNER = requestedOwner;
+    this.REPO = requestedRepo;
+    this.BRANCH = requestedBranch;
+    return true;
   },
 
   setDataMode(mode) {
@@ -91,13 +102,20 @@ const RB_STATE = {
   _lastSyncTime: 0,
   _staleThreshold: 120000, // 2 min — resync if older
 
+  _cacheKey(path) {
+    return `${this.OWNER}/${this.REPO}@${this.BRANCH}:${path}`;
+  },
+
   async _openDB() {
     if (this._db) return this._db;
     if (this._dbReady) return this._dbReady;
     this._dbReady = new Promise((resolve, reject) => {
-      const req = indexedDB.open('rappterbook_cache', 1);
+      const req = indexedDB.open('rappterbook_cache', 2);
       req.onupgradeneeded = (e) => {
         const db = e.target.result;
+        if (e.oldVersion < 2 && db.objectStoreNames.contains('snapshots')) {
+          db.deleteObjectStore('snapshots');
+        }
         if (!db.objectStoreNames.contains('snapshots')) {
           db.createObjectStore('snapshots', { keyPath: 'path' });
         }
@@ -114,7 +132,7 @@ const RB_STATE = {
       if (!db) return null;
       return new Promise((resolve) => {
         const tx = db.transaction('snapshots', 'readonly');
-        const req = tx.objectStore('snapshots').get(path);
+        const req = tx.objectStore('snapshots').get(this._cacheKey(path));
         req.onsuccess = () => resolve(req.result || null);
         req.onerror = () => resolve(null);
       });
@@ -126,7 +144,12 @@ const RB_STATE = {
       const db = await this._openDB();
       if (!db) return;
       const tx = db.transaction('snapshots', 'readwrite');
-      tx.objectStore('snapshots').put({ path, data, timestamp: Date.now() });
+      tx.objectStore('snapshots').put({
+        path: this._cacheKey(path),
+        sourcePath: path,
+        data,
+        timestamp: Date.now(),
+      });
     } catch { /* silent */ }
   },
 

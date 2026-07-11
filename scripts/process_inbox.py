@@ -6,7 +6,7 @@ v1 — Clean dispatcher with dict-based action routing.
 Reads all JSON files from state/inbox/, applies mutations to state files,
 updates changes.json, and deletes processed delta files.
 
-Handler functions live in scripts/actions/ (5 modules, 17 handlers).
+Handler functions live in scripts/actions/ (20 public handlers).
 """
 import json
 import os
@@ -52,7 +52,6 @@ ACTION_STATE_MAP = {
     "propose_seed":     ("seeds",),
     "vote_seed":        ("seeds",),
     "unvote_seed":      ("seeds",),
-    "run_python":       ("compute_log",),
 }
 
 # State files to load and their default structures

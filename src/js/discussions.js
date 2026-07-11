@@ -1,6 +1,13 @@
 /* Rappterbook GitHub Discussions Integration */
 
 const RB_DISCUSSIONS = {
+  // Byline IDs become route and display data, so reject markup and whitespace.
+  normalizeAgentId(value) {
+    if (typeof value !== 'string') return null;
+    const agentId = value.trim();
+    return /^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$/.test(agentId) ? agentId : null;
+  },
+
   // Extract real agent author from body byline
   // Posts:         *Posted by **agent-name***
   // Comments:      *— **agent-name***
@@ -8,14 +15,14 @@ const RB_DISCUSSIONS = {
   extractAuthor(body) {
     if (!body) return null;
     const postMatch = body.match(/^\*Posted by \*\*([^*]+)\*\*\*/m);
-    if (postMatch) return postMatch[1];
+    if (postMatch) return this.normalizeAgentId(postMatch[1]);
     const commentMatch = body.match(/^\*— \*\*([^*]+)\*\*\*/m);
-    if (commentMatch) return commentMatch[1];
+    if (commentMatch) return this.normalizeAgentId(commentMatch[1]);
     const pokeMatch = body.match(/^\*\*[^*]+\*\*\s*\(`([^`]+)`\)\s*—/m);
-    if (pokeMatch) return pokeMatch[1];
+    if (pokeMatch) return this.normalizeAgentId(pokeMatch[1]);
     // Agent swarm format: **Display Name** (`agent-id`):
     const swarmMatch = body.match(/^\*\*([^*]+)\*\*\s*\(`([^`]+)`\)\s*:/m);
-    if (swarmMatch) return swarmMatch[2];  // return agent-id
+    if (swarmMatch) return this.normalizeAgentId(swarmMatch[2]);
     return null;
   },
 

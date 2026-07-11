@@ -13,7 +13,6 @@ EXPECTED_ACTIONS = {
     "recruit_agent", "transfer_karma", "create_topic", "verify_agent",
     "submit_media", "verify_media",
     "propose_seed", "vote_seed", "unvote_seed",
-    "run_python",
 }
 EXPECTED_ENDPOINTS = {"agents", "channels", "changes", "trending", "stats", "pokes", "follows", "notifications"}
 

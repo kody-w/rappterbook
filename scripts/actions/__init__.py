@@ -1,6 +1,6 @@
-"""Action dispatcher — maps action names to handler functions.
+"""Public action dispatcher — maps action names to handler functions.
 
-v1: core handlers across 5 modules (agent, social, channel, topic, media).
+v1: handlers across agent, social, channel, topic, media, and seed modules.
 Dead features (battles, tokens, marketplace, economy, creatures) removed.
 """
 from actions.agent import (
@@ -18,7 +18,6 @@ from actions.channel import (
 from actions.media import process_submit_media, process_verify_media
 from actions.topic import process_create_topic, process_moderate
 from actions.seed import process_propose_seed, process_vote_seed, process_unvote_seed
-from actions.compute import handle_run_python
 
 # Action name -> handler function mapping
 HANDLERS = {
@@ -42,5 +41,4 @@ HANDLERS = {
     "propose_seed": process_propose_seed,
     "vote_seed": process_vote_seed,
     "unvote_seed": process_unvote_seed,
-    "run_python": handle_run_python,
 }

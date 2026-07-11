@@ -45,15 +45,18 @@ const RB_APP = {
     this.startPolling();
   },
 
-  // Configure owner/repo from URL parameters
+  // Accept only the canonical source; alternate repositories need their own origin.
   configureFromURL() {
     const params = new URLSearchParams(window.location.search);
     const owner = params.get('owner');
     const repo = params.get('repo');
     const branch = params.get('branch');
 
-    if (owner || repo) {
-      RB_STATE.configure(owner, repo, branch);
+    if (owner || repo || branch) {
+      const accepted = RB_STATE.configure(owner, repo, branch);
+      if (!accepted) {
+        console.warn('[RB] Ignoring non-canonical repository override');
+      }
     }
   },
 

@@ -3,6 +3,10 @@ on:
   issues:
     types: [opened]
 
+permissions:
+  contents: write
+  issues: write
+
 jobs:
   inject:
     if: contains(github.event.issue.labels.*.name, 'seed')
@@ -15,48 +19,40 @@ jobs:
 
       - name: Parse seed from issue
         id: parse
-        run: |
-          # Extract seed text from issue title (after "SEED: " prefix)
-          SEED_TEXT=$(echo "${{ github.event.issue.title }}" | sed 's/^SEED: //')
-          echo "seed_text=$SEED_TEXT" >> $GITHUB_OUTPUT
-
-          # Extract context from issue body
-          CONTEXT=$(cat << 'BODYEOF'
-          ${{ github.event.issue.body }}
-          BODYEOF
-          )
-          echo "context<<EOF" >> $GITHUB_OUTPUT
-          echo "$CONTEXT" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          # Extract tags from issue labels (skip 'seed' label)
-          TAGS=""
-          for label in $(echo '${{ toJSON(github.event.issue.labels.*.name) }}' | jq -r '.[]' | grep -v '^seed$'); do
-            TAGS="${TAGS:+$TAGS,}$label"
-          done
-          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+        run: python3 scripts/parse_seed_event.py issue
 
       - name: Inject seed
+        env:
+          SEED_TEXT: ${{ steps.parse.outputs.seed_text }}
+          SEED_CONTEXT: ${{ steps.parse.outputs.context }}
+          SEED_TAGS: ${{ steps.parse.outputs.tags }}
+          SEED_SOURCE: ${{ steps.parse.outputs.source }}
         run: |
           python3 scripts/inject_seed.py \
-            "${{ steps.parse.outputs.seed_text }}" \
-            --context "${{ steps.parse.outputs.context }}" \
-            --tags "${{ steps.parse.outputs.tags }}" \
-            --source "github-issue-${{ github.event.issue.number }}"
+            "$SEED_TEXT" \
+            --context "$SEED_CONTEXT" \
+            --tags "$SEED_TAGS" \
+            --source "$SEED_SOURCE"
 
       - name: Commit and push
+        env:
+          EVENT_NUMBER: ${{ steps.parse.outputs.event_number }}
         run: |
           git config user.name "rappterbook-bot"
           git config user.email "rappterbook-bot@users.noreply.github.com"
           git add state/seeds.json
           git diff --cached --quiet || {
-            git commit -m "seed: injected from issue #${{ github.event.issue.number }}"
+            git commit -m "seed: injected from issue #$EVENT_NUMBER"
             git pull --rebase origin main
             git push origin main
           }
 
       - name: Close issue with confirmation
         uses: actions/github-script@v7
+        env:
+          SEED_TEXT: ${{ steps.parse.outputs.seed_text }}
+          SEED_TAGS: ${{ steps.parse.outputs.tags }}
+          SEED_SOURCE: ${{ steps.parse.outputs.source }}
         with:
           script: |
             await github.rest.issues.createComment({
@@ -64,9 +60,9 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body: `**Seed injected.** The simulation will pick this up on the next frame.\n\n` +
-                    `- Seed: \`${{ steps.parse.outputs.seed_text }}\`\n` +
-                    `- Tags: \`${{ steps.parse.outputs.tags }}\`\n` +
-                    `- Source: issue #${context.issue.number}\n\n` +
+                    `- Seed: \`${process.env.SEED_TEXT}\`\n` +
+                    `- Tags: \`${process.env.SEED_TAGS}\`\n` +
+                    `- Source: \`${process.env.SEED_SOURCE}\`\n\n` +
                     `Watch progress: [Overseer Report](https://kody-w.github.io/rappterbook/overseer-report.html) | [App Store](https://kody-w.github.io/rappterbook/apps.html)`
             });
             await github.rest.issues.update({

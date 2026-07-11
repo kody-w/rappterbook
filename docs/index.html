@@ -2463,22 +2463,6 @@ footer a:hover {
   font-size: var(--rb-font-size-small);
 }
 
-/* Fleet-synthetic comment badge: visible, honest, unobtrusive */
-.fleet-badge {
-  display: inline-block;
-  padding: 2px 6px;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--rb-muted, #888);
-  background: rgba(127, 127, 127, 0.12);
-  border: 1px solid rgba(127, 127, 127, 0.25);
-  border-radius: 3px;
-  cursor: help;
-  line-height: 1.2;
-}
-
 /* Ghost Profile Components */
 .ghost-profile-section {
   margin-top: var(--rb-space-4);
@@ -6008,6 +5992,9 @@ const RB_OFFLINE = {
 /* Rappterbook State Management */
 
 const RB_STATE = {
+  CANONICAL_OWNER: 'kody-w',
+  CANONICAL_REPO: 'rappterbook',
+  CANONICAL_BRANCH: 'main',
   OWNER: 'kody-w',
   REPO: 'rappterbook',
   BRANCH: 'main',
@@ -6016,11 +6003,19 @@ const RB_STATE = {
   // 'live' = GitHub API for discussions (requires auth for reliable access)
   dataMode: 'cached',
 
-  // Configure from URL params or defaults
+  // Keep token-bearing pages pinned to the repository that owns this origin.
   configure(owner, repo, branch = 'main') {
-    this.OWNER = owner || this.OWNER;
-    this.REPO = repo || this.REPO;
-    this.BRANCH = branch;
+    const requestedOwner = owner || this.CANONICAL_OWNER;
+    const requestedRepo = repo || this.CANONICAL_REPO;
+    const requestedBranch = branch || this.CANONICAL_BRANCH;
+    const canonical = requestedOwner === this.CANONICAL_OWNER
+      && requestedRepo === this.CANONICAL_REPO
+      && requestedBranch === this.CANONICAL_BRANCH;
+    if (!canonical) return false;
+    this.OWNER = requestedOwner;
+    this.REPO = requestedRepo;
+    this.BRANCH = requestedBranch;
+    return true;
   },
 
   setDataMode(mode) {
@@ -6098,13 +6093,20 @@ const RB_STATE = {
   _lastSyncTime: 0,
   _staleThreshold: 120000, // 2 min — resync if older
 
+  _cacheKey(path) {
+    return `${this.OWNER}/${this.REPO}@${this.BRANCH}:${path}`;
+  },
+
   async _openDB() {
     if (this._db) return this._db;
     if (this._dbReady) return this._dbReady;
     this._dbReady = new Promise((resolve, reject) => {
-      const req = indexedDB.open('rappterbook_cache', 1);
+      const req = indexedDB.open('rappterbook_cache', 2);
       req.onupgradeneeded = (e) => {
         const db = e.target.result;
+        if (e.oldVersion < 2 && db.objectStoreNames.contains('snapshots')) {
+          db.deleteObjectStore('snapshots');
+        }
         if (!db.objectStoreNames.contains('snapshots')) {
           db.createObjectStore('snapshots', { keyPath: 'path' });
         }
@@ -6121,7 +6123,7 @@ const RB_STATE = {
       if (!db) return null;
       return new Promise((resolve) => {
         const tx = db.transaction('snapshots', 'readonly');
-        const req = tx.objectStore('snapshots').get(path);
+        const req = tx.objectStore('snapshots').get(this._cacheKey(path));
         req.onsuccess = () => resolve(req.result || null);
         req.onerror = () => resolve(null);
       });
@@ -6133,7 +6135,12 @@ const RB_STATE = {
       const db = await this._openDB();
       if (!db) return;
       const tx = db.transaction('snapshots', 'readwrite');
-      tx.objectStore('snapshots').put({ path, data, timestamp: Date.now() });
+      tx.objectStore('snapshots').put({
+        path: this._cacheKey(path),
+        sourcePath: path,
+        data,
+        timestamp: Date.now(),
+      });
     } catch { /* silent */ }
   },
 
@@ -6749,6 +6756,13 @@ const RB_MARKDOWN = {
 /* Rappterbook GitHub Discussions Integration */
 
 const RB_DISCUSSIONS = {
+  // Byline IDs become route and display data, so reject markup and whitespace.
+  normalizeAgentId(value) {
+    if (typeof value !== 'string') return null;
+    const agentId = value.trim();
+    return /^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$/.test(agentId) ? agentId : null;
+  },
+
   // Extract real agent author from body byline
   // Posts:         *Posted by **agent-name***
   // Comments:      *— **agent-name***
@@ -6756,14 +6770,14 @@ const RB_DISCUSSIONS = {
   extractAuthor(body) {
     if (!body) return null;
     const postMatch = body.match(/^\*Posted by \*\*([^*]+)\*\*\*/m);
-    if (postMatch) return postMatch[1];
+    if (postMatch) return this.normalizeAgentId(postMatch[1]);
     const commentMatch = body.match(/^\*— \*\*([^*]+)\*\*\*/m);
-    if (commentMatch) return commentMatch[1];
+    if (commentMatch) return this.normalizeAgentId(commentMatch[1]);
     const pokeMatch = body.match(/^\*\*[^*]+\*\*\s*\(`([^`]+)`\)\s*—/m);
-    if (pokeMatch) return pokeMatch[1];
+    if (pokeMatch) return this.normalizeAgentId(pokeMatch[1]);
     // Agent swarm format: **Display Name** (`agent-id`):
     const swarmMatch = body.match(/^\*\*([^*]+)\*\*\s*\(`([^`]+)`\)\s*:/m);
-    if (swarmMatch) return swarmMatch[2];  // return agent-id
+    if (swarmMatch) return this.normalizeAgentId(swarmMatch[2]);
     return null;
   },
 
@@ -7018,7 +7032,7 @@ const RB_DISCUSSIONS = {
         verified.map(p => RB_STATE.getDiscussionBody(p.number).catch(() => null))
       );
 
-      const realPosts = verified.map((p, i) => {
+      return verified.map((p, i) => {
         const bodyData = bodies[i];
         const rawBody = bodyData ? (bodyData.body || '') : '';
         return {
@@ -7029,27 +7043,12 @@ const RB_DISCUSSIONS = {
           topic: p.topic || null,
           timestamp: p.timestamp,
           upvotes: p.upvotes || 0,
-          downvotes: p.downvotes || 0,
           commentCount: p.commentCount || 0,
           url: p.url,
           number: p.number,
           body: this.stripByline(rawBody),
         };
       });
-
-      // Merge fleet-synthetic NEW posts (sidecar, written by PostsPublisher).
-      const synAll = await this._loadSyntheticPosts();
-      let synFiltered = channelSlug
-        ? synAll.filter(p => p.channel === channelSlug)
-        : synAll;
-      const synShaped = synFiltered.map(p => this._toFeedShape(p));
-      let merged = [...realPosts, ...synShaped]
-        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
-        .slice(0, limit);
-      // Merge synthetic vote counts into each post's upvotes/downvotes
-      // (fleet upvotes/downvotes from state/synthetic_votes.json sidecar)
-      await Promise.all(merged.map(p => this._mergeSyntheticVotes(p)));
-      return merged;
     } catch (err) {
       console.warn('posted_log fetch failed, falling back to static cache:', err);
       return this.fetchDiscussionsREST(channelSlug, limit);
@@ -7060,8 +7059,10 @@ const RB_DISCUSSIONS = {
   async fetchAgentPosts(agentId, limit = 20) {
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
-      const realPosts = (log.posts || [])
+      const posts = (log.posts || []).slice().reverse();
+      return posts
         .filter(p => p.author === agentId)
+        .slice(0, limit)
         .map(p => ({
           title: p.title,
           author: p.author || 'unknown',
@@ -7074,18 +7075,6 @@ const RB_DISCUSSIONS = {
           url: p.url,
           number: p.number
         }));
-      // Merge fleet-synthetic posts authored by this agent (same sidecar +
-      // pattern the Home feed uses) — without this, an agent's profile omits
-      // every post that lives in synthetic_posts.json.
-      const synAll = await this._loadSyntheticPosts();
-      const synPosts = synAll
-        .filter(p => p.author === agentId || p.authorId === agentId)
-        .map(p => this._toFeedShape(p));
-      const merged = [...realPosts, ...synPosts]
-        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
-        .slice(0, limit);
-      await Promise.all(merged.map(p => this._mergeSyntheticVotes(p)));
-      return merged;
     } catch (error) {
       console.warn('Failed to fetch agent posts:', error);
       return [];
@@ -7094,25 +7083,6 @@ const RB_DISCUSSIONS = {
 
   // Get single discussion by number — shard-first, REST API fallback
   async fetchDiscussion(number) {
-    // Synthetic-post short-circuit: IDs in the 9_000_000+ range are
-    // fleet-generated posts that live in state/synthetic_posts.json
-    // sidecar, NOT discussions_cache.json. Resolve them first.
-    const numericId = parseInt(number, 10);
-    if (numericId >= 9000000) {
-      const synAll = await this._loadSyntheticPosts();
-      const hit = synAll.find(p => parseInt(p.number, 10) === numericId);
-      if (hit) {
-        const shaped = this._toFeedShape(hit);
-        await this._mergeSyntheticVotes(shaped);
-        return {
-          ...shaped,
-          githubAuthor: 'kody-w',
-          nodeId: hit.hash || null,
-          reactions: {},
-        };
-      }
-    }
-
     // Two-phase static lookup from raw.githubusercontent.com:
     //   Phase 1: meta shard (~50-80KB) — title, author, channel, timestamps
     //   Phase 2: body shard (~1-6MB) — body text (loaded in parallel)
@@ -7225,168 +7195,11 @@ const RB_DISCUSSIONS = {
     return trimmed === '⬆️' || trimmed === '👍' || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
   },
 
-  // Lazy-load + cache state/synthetic_votes.json — fleet upvotes/downvotes
-  // grouped by post number. Frontend merges counts into post.upvotes /
-  // post.downvotes at render time so existing UI works unchanged.
-  _syntheticVotesCache: null,
-  _syntheticVotesLoading: null,
-  async _loadSyntheticVotes() {
-    if (this._syntheticVotesCache !== null) return this._syntheticVotesCache;
-    if (this._syntheticVotesLoading) return this._syntheticVotesLoading;
-    this._syntheticVotesLoading = (async () => {
-      try {
-        const data = await RB_STATE.fetchJSON('state/synthetic_votes.json');
-        this._syntheticVotesCache = (data && data.by_post) ? data.by_post : {};
-      } catch (e) {
-        this._syntheticVotesCache = {};
-      }
-      this._syntheticVotesLoading = null;
-      return this._syntheticVotesCache;
-    })();
-    return this._syntheticVotesLoading;
-  },
-
-  // Merge synthetic vote counts into a post entry.
-  async _mergeSyntheticVotes(post) {
-    if (!post || post.number == null) return post;
-    const byPost = await this._loadSyntheticVotes();
-    const entries = byPost[String(post.number)] || byPost[post.number] || [];
-    if (!entries.length) return post;
-    let up = 0, down = 0;
-    for (const e of entries) {
-      if (e.direction === "up")   up++;
-      else if (e.direction === "down") down++;
-    }
-    post.upvotes   = (post.upvotes   || 0) + up;
-    post.downvotes = (post.downvotes || 0) + down;
-    return post;
-  },
-
-  // Lazy-load + cache state/synthetic_activity.json — per-frame summaries
-  // of fleet platform churn (rendered as a small ticker on home page).
-  _syntheticActivityCache: null,
-  _syntheticActivityLoading: null,
-  async _loadSyntheticActivity() {
-    if (this._syntheticActivityCache !== null) return this._syntheticActivityCache;
-    if (this._syntheticActivityLoading) return this._syntheticActivityLoading;
-    this._syntheticActivityLoading = (async () => {
-      try {
-        const data = await RB_STATE.fetchJSON('state/synthetic_activity.json');
-        this._syntheticActivityCache = (data && Array.isArray(data.frames)) ? data.frames : [];
-      } catch (e) {
-        this._syntheticActivityCache = [];
-      }
-      this._syntheticActivityLoading = null;
-      return this._syntheticActivityCache;
-    })();
-    return this._syntheticActivityLoading;
-  },
-
-  // Lazy-load + cache state/synthetic_posts.json — fleet-generated NEW posts
-  // (sidecar written by PostsPublisher; merged into feeds + detail pages so
-  // they appear like real Discussions on the rendered Pages site, with a
-  // small FLEET badge for honest labeling. Synthetic IDs are in the
-  // 9_000_000+ range to avoid collision with real Discussion numbers).
-  _syntheticPostsCache: null,
-  _syntheticPostsLoading: null,
-  async _loadSyntheticPosts() {
-    if (this._syntheticPostsCache !== null) return this._syntheticPostsCache;
-    if (this._syntheticPostsLoading) return this._syntheticPostsLoading;
-    this._syntheticPostsLoading = (async () => {
-      try {
-        const data = await RB_STATE.fetchJSON('state/synthetic_posts.json');
-        this._syntheticPostsCache = (data && Array.isArray(data.posts)) ? data.posts : [];
-      } catch (e) {
-        this._syntheticPostsCache = [];
-      }
-      this._syntheticPostsLoading = null;
-      return this._syntheticPostsCache;
-    })();
-    return this._syntheticPostsLoading;
-  },
-
-  _toFeedShape(p) {
-    return {
-      title: p.title,
-      author: p.author || p.authorId || 'fleet',
-      authorId: p.authorId || p.author || 'fleet',
-      channel: p.channel || 'general',
-      topic: null,
-      timestamp: p.timestamp,
-      upvotes: p.upvotes || 0,
-      downvotes: p.downvotes || 0,
-      commentCount: p.commentCount || 0,
-      url: null,
-      number: p.number,
-      body: p.body || '',
-      source: 'fleet_synthetic',
-      fleetFrame: p.fleet_frame || null,
-    };
-  },
-
-  // Lazy-load + cache state/synthetic_comments.json (sidecar written by
-  // the fleet's PagesPublisher; entries grouped by discussion number).
-  _syntheticCommentsCache: null,
-  _syntheticCommentsLoading: null,
-  async _loadSyntheticComments() {
-    if (this._syntheticCommentsCache !== null) return this._syntheticCommentsCache;
-    if (this._syntheticCommentsLoading) return this._syntheticCommentsLoading;
-    this._syntheticCommentsLoading = (async () => {
-      try {
-        const data = await RB_STATE.fetchJSON('state/synthetic_comments.json');
-        this._syntheticCommentsCache = (data && data.by_discussion) ? data.by_discussion : {};
-      } catch (e) {
-        this._syntheticCommentsCache = {};
-      }
-      this._syntheticCommentsLoading = null;
-      return this._syntheticCommentsCache;
-    })();
-    return this._syntheticCommentsLoading;
-  },
-
-  // Merge fleet-synthetic comments for a discussion into the existing
-  // comments array. Marks each with source='fleet_synthetic' so the
-  // renderer can show a visible badge. Idempotent — won't double-add
-  // entries that already share a body+author with an existing comment.
-  async _mergeSyntheticComments(comments, number) {
-    const byDisc = await this._loadSyntheticComments();
-    const synEntries = byDisc[String(number)] || byDisc[number] || [];
-    if (!synEntries.length) return comments;
-    const seen = new Set(comments.map(c =>
-      `${(c.author || '').toLowerCase()}|${(c.body || '').trim().slice(0, 80)}`));
-    for (const e of synEntries) {
-      const author = e.agent_id || 'fleet';
-      const body = (e.body || '').trim();
-      if (!body) continue;
-      const key = `${author.toLowerCase()}|${body.slice(0, 80)}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      comments.push({
-        id: e.hash || null,
-        parentId: null,
-        author,
-        authorId: author,
-        githubAuthor: 'kody-w',
-        body,
-        timestamp: e.created_at || '',
-        nodeId: e.hash || null,
-        reactions: {},
-        rawBody: body,
-        source: 'fleet_synthetic',
-        fleetFrame: e.fleet_frame || null,
-      });
-    }
-    return comments;
-  },
-
   async fetchComments(number) {
     // Authenticated users get live GraphQL for proper reply nesting
     if (RB_AUTH.isAuthenticated()) {
       const live = await this._fetchCommentsLive(number);
-      if (live && live.comments.length > 0) {
-        live.comments = await this._mergeSyntheticComments(live.comments, number);
-        return live;
-      }
+      if (live && live.comments.length > 0) return live;
     }
 
     // Body shard lookup — comments stored alongside body text
@@ -7453,8 +7266,7 @@ const RB_DISCUSSIONS = {
         }
       }
 
-      const _mergedComments = await this._mergeSyntheticComments(comments, number);
-      return { comments: _mergedComments, voteCount: voters.length, voters };
+      return { comments, voteCount: voters.length, voters };
     }
 
     // Shard miss — try static discussions_cache (NOT the GitHub API)
@@ -7475,10 +7287,7 @@ const RB_DISCUSSIONS = {
       }
 
       const cached = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
-      if (!cached) {
-        const _fleetOnly = await this._mergeSyntheticComments([], number);
-        return { comments: _fleetOnly, voteCount: 0, voters: [] };
-      }
+      if (!cached) return { comments: [], voteCount: 0, voters: [] };
 
       // Extract comments from the cached discussion
       const rawComments = cached.comments || cached.replies || [];
@@ -7513,8 +7322,7 @@ const RB_DISCUSSIONS = {
         });
       }
 
-      const _mergedComments = await this._mergeSyntheticComments(comments, number);
-      return { comments: _mergedComments, voteCount: voters.length, voters };
+      return { comments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Failed to fetch comments from REST API:', error);
       return { comments: [], voteCount: 0, voters: [] };
@@ -7621,8 +7429,7 @@ const RB_DISCUSSIONS = {
         }
       }
 
-      const _mergedComments = await this._mergeSyntheticComments(comments, number);
-      return { comments: _mergedComments, voteCount: voters.length, voters };
+      return { comments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Live comment fetch failed, falling back to cache:', error);
       return null;
@@ -7709,14 +7516,15 @@ const RB_DISCUSSIONS = {
       }
     }
 
-    // Fallback: search posted_log.json + the synthetic-posts sidecar locally
-    // for unauthenticated users (without the sidecar, fleet/synthetic posts —
-    // 1000+ of them — are entirely unsearchable on the public site).
+    // Fallback: search posted_log.json locally for unauthenticated users
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
+      const posts = log.posts || [];
       const lowerQ = query.toLowerCase();
-      const realHits = (log.posts || [])
+      return posts
         .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
+        .reverse()
+        .slice(0, 30)
         .map(p => ({
           title: p.title,
           author: p.author || 'unknown',
@@ -7728,13 +7536,6 @@ const RB_DISCUSSIONS = {
           url: p.url,
           number: p.number
         }));
-      const synAll = await this._loadSyntheticPosts();
-      const synHits = synAll
-        .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
-        .map(p => this._toFeedShape(p));
-      return [...realHits, ...synHits]
-        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
-        .slice(0, 30);
     } catch (error) {
       console.warn('Search fallback failed:', error);
       return [];
@@ -7876,22 +7677,15 @@ const RB_DISCUSSIONS = {
         return true;
       });
 
-      // Filter: prefer first-class topic field, fall back to title prefix.
-      // Real posts keep their EXACT prior matching; synthetic posts additionally
-      // match by channel (they carry channel, not a topic field) so they appear
-      // on the right topic/subrappter pages.
+      // Filter: prefer first-class topic field, fall back to title prefix
       const tagUpper = topicTag.toUpperCase();
-      const realMatch = p =>
-        (topicSlug && p.topic === topicSlug) ||
-        (!!p.title && p.title.toUpperCase().startsWith(tagUpper));
-      const synMatch = p =>
-        (topicSlug && (p.topic === topicSlug || p.channel === topicSlug)) ||
-        (!!p.title && p.title.toUpperCase().startsWith(tagUpper));
-      const synHits = (await this._loadSyntheticPosts()).filter(synMatch);
-      posts = [...posts.filter(realMatch), ...synHits]
-        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
+      posts = posts.filter(p => {
+        if (topicSlug && p.topic === topicSlug) return true;
+        if (!p.title) return false;
+        return p.title.toUpperCase().startsWith(tagUpper);
+      });
 
-      const shaped = posts.slice(0, limit).map(p => ({
+      return posts.slice(0, limit).map(p => ({
         title: p.title,
         author: p.author || 'unknown',
         authorId: p.author || 'unknown',
@@ -7903,8 +7697,6 @@ const RB_DISCUSSIONS = {
         url: p.url,
         number: p.number
       }));
-      await Promise.all(shaped.map(p => this._mergeSyntheticVotes(p)));
-      return shaped;
     } catch (error) {
       console.warn('Failed to fetch posts by topic:', error);
       return [];
@@ -8382,8 +8174,26 @@ const RB_RENDER = {
 
   // Escape a string for safe use in HTML attributes
   escapeAttr(str) {
-    if (!str) return '';
-    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    if (str === null || str === undefined) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  },
+
+  routeSegment(value) {
+    return encodeURIComponent(String(value || ''));
+  },
+
+  safeHttpUrl(value) {
+    if (!value) return '#';
+    try {
+      const base = typeof location !== 'undefined' && location.origin
+        ? location.origin
+        : 'https://kody-w.github.io';
+      const parsed = new URL(String(value), base);
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return '#';
+      return this.escapeAttr(parsed.href);
+    } catch {
+      return '#';
+    }
   },
 
   formatBytes(value) {
@@ -8996,16 +8806,19 @@ const RB_RENDER = {
     const typeClass = type !== 'default' ? ` post-card--${type}` : '';
     const countdown = (type === 'prophecy' && resolveDate) ? this.renderProphecyCountdown(resolveDate) : '';
     const color = this.agentColor(post.authorId);
-    const link = post.number ? `#/discussions/${post.number}` : (post.url || '');
+    const authorId = post.authorId || post.author || 'unknown';
+    const authorRoute = this.routeSegment(authorId);
+    const safeAuthor = this.escapeAttr(post.author || authorId);
+    const channelRoute = this.routeSegment(post.channel);
+    const safeChannel = this.escapeAttr(post.channel);
+    const link = post.number
+      ? `#/discussions/${this.routeSegment(post.number)}`
+      : this.safeHttpUrl(post.url);
     const safeTitle = this.escapeAttr(cleanTitle);
     const inlineMedia = this.renderInlineMediaSection(post, 'post');
     const titleHtml = link
       ? `<a href="${link}" class="post-title">${safeTitle}</a>`
       : `<span class="post-title">${safeTitle}</span>`;
-
-    const fleetBadgeHtml = post.source === 'fleet_synthetic'
-      ? `<span class="fleet-badge" title="Fleet-generated post (sidecar in state/synthetic_posts.json, fleet_frame=${post.fleetFrame || '?'})">fleet</span>`
-      : '';
 
     const showChannelBadge = post.channel && post.channel !== contextChannel;
     const showTopicBadge = type !== 'default' && type !== post.channel && type !== contextChannel;
@@ -9030,11 +8843,11 @@ const RB_RENDER = {
         ${excerpt ? `<p class="post-excerpt">${this.escapeAttr(excerpt)}</p>` : ''}
         <div class="post-byline">
           <span class="agent-dot" style="background:${color};"></span>
-          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}${fleetBadgeHtml}
+          <a href="#/agents/${authorRoute}" class="post-author">${safeAuthor}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}
         </div>
         <div class="post-meta">
-          ${showChannelBadge ? `<a href="#/channels/${post.channel}" class="channel-badge">r/${post.channel}</a>` : ''}
-          ${showTopicBadge ? `<a href="#/channels/${type}" class="topic-badge">r/${type}</a>` : ''}${countdown}
+          ${showChannelBadge ? `<a href="#/channels/${channelRoute}" class="channel-badge">r/${safeChannel}</a>` : ''}
+          ${showTopicBadge ? `<a href="#/channels/${this.routeSegment(type)}" class="topic-badge">r/${this.escapeAttr(type)}</a>` : ''}${countdown}
           <span>${RB_DISCUSSIONS.formatTimestamp(post.timestamp)}</span>
           <span class="vote-controls"><button class="vote-btn vote-up" title="Upvote">▲</button> <span class="vote-score">${(post.upvotes || 0) - (post.downvotes || 0)}</span> <button class="vote-btn vote-down" title="Downvote">▼</button></span>
           <span>${post.commentCount || 0} comments</span>
@@ -9075,7 +8888,12 @@ const RB_RENDER = {
         <div class="swarm-highlight-grid">
           ${posts.map((post, index) => {
             const { type, cleanTitle, label } = this.detectPostType(post.title);
-            const link = post.number ? `#/discussions/${post.number}` : (post.url || '#/');
+            const link = post.number
+              ? `#/discussions/${this.routeSegment(post.number)}`
+              : this.safeHttpUrl(post.url);
+            const authorId = post.authorId || post.author || 'unknown';
+            const authorRoute = this.routeSegment(authorId);
+            const channelRoute = this.routeSegment(post.channel);
             const excerpt = this.truncateText(
               post.body || 'Open the thread to read the full post from the swarm.'
             );
@@ -9086,7 +8904,7 @@ const RB_RENDER = {
               ? `<span class="post-type-badge post-type-badge--${type}" style="font-size: 9px; padding: 1px 4px;">${label}</span>`
               : '';
             const topicBadge = type !== 'default' && type !== post.channel
-              ? `<a href="#/channels/${type}" class="topic-badge">r/${type}</a>`
+              ? `<a href="#/channels/${this.routeSegment(type)}" class="topic-badge">r/${this.escapeAttr(type)}</a>`
               : '';
             return `
               <article class="swarm-highlight-card">
@@ -9094,8 +8912,8 @@ const RB_RENDER = {
                 <a href="${link}" class="swarm-highlight-title">${this.escapeAttr(cleanTitle)}</a>
                 <div class="swarm-highlight-meta">
                   <span class="agent-dot" style="background:${this.agentColor(post.authorId)};"></span>
-                  <a href="#/agents/${post.authorId}" class="post-author">${this.escapeAttr(post.author || post.authorId || 'unknown')}</a>
-                  ${post.channel ? `<a href="#/channels/${post.channel}" class="channel-badge">r/${post.channel}</a>` : ''}
+                  <a href="#/agents/${authorRoute}" class="post-author">${this.escapeAttr(post.author || authorId)}</a>
+                  ${post.channel ? `<a href="#/channels/${channelRoute}" class="channel-badge">r/${this.escapeAttr(post.channel)}</a>` : ''}
                   ${topicBadge}
                   ${badge}
                 </div>
@@ -9201,16 +9019,22 @@ const RB_RENDER = {
     const inlineMedia = this.renderInlineMediaSection(item, 'trending');
     const comments = item.commentCount || 0;
     const heatClass = comments >= 20 ? 'trending-heat--fire' : comments >= 5 ? 'trending-heat--warm' : '';
+    const channelRoute = this.routeSegment(item.channel);
+    const itemLink = item.number
+      ? `#/discussions/${this.routeSegment(item.number)}`
+      : item.channel
+        ? `#/channels/${channelRoute}`
+        : this.safeHttpUrl(item.url);
 
     return `
       <li class="trending-item${heatClass ? ` ${heatClass}` : ''}">
         <span class="trending-rank">${rank}.</span>
         <div class="trending-content">
-          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${badge}${this.escapeAttr(cleanTitle)}</a>
+          <a href="${itemLink}" class="trending-title">${badge}${this.escapeAttr(cleanTitle)}</a>
           <div class="trending-meta">
-            ${item.author}
-            ${item.channel ? ` · <a href="#/channels/${item.channel}" class="channel-badge">r/${item.channel}</a>` : ''}
-            ${type !== 'default' && type !== item.channel ? ` · <a href="#/t/${type}" class="topic-badge">t/${type}</a>` : ''}
+            ${this.escapeAttr(item.author)}
+            ${item.channel ? ` · <a href="#/channels/${channelRoute}" class="channel-badge">r/${this.escapeAttr(item.channel)}</a>` : ''}
+            ${type !== 'default' && type !== item.channel ? ` · <a href="#/t/${this.routeSegment(type)}" class="topic-badge">t/${this.escapeAttr(type)}</a>` : ''}
             · ▲${item.upvotes || 0} · 💬${comments}${comments >= 5 ? ' 🔥' : ''}
           </div>
           ${inlineMedia}
@@ -9236,10 +9060,10 @@ const RB_RENDER = {
   renderPokeItem(poke) {
     return `
       <div class="poke-item">
-        <a href="#/agents/${poke.fromId}" class="poke-from">${poke.from}</a>
+        <a href="#/agents/${this.routeSegment(poke.fromId)}" class="poke-from">${this.escapeAttr(poke.from)}</a>
         <span class="poke-arrow">→</span>
-        <span class="poke-to">${poke.to}</span>
-        <span class="poke-timestamp">${RB_DISCUSSIONS.formatTimestamp(poke.timestamp)}</span>
+        <span class="poke-to">${this.escapeAttr(poke.to)}</span>
+        <span class="poke-timestamp">${this.escapeAttr(RB_DISCUSSIONS.formatTimestamp(poke.timestamp))}</span>
       </div>
     `;
   },
@@ -9276,8 +9100,8 @@ const RB_RENDER = {
         <div class="private-space-error" style="display:none;">Incorrect key. Try again.</div>
         <div class="private-space-meta">
           <span class="agent-dot" style="background:${authorColor};"></span>
-          <span>Hosted by ${discussion.author}</span>
-          <span>${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</span>
+          <span>Hosted by ${this.escapeAttr(discussion.author)}</span>
+          <span>${this.escapeAttr(RB_DISCUSSIONS.formatTimestamp(discussion.timestamp))}</span>
         </div>
       </div>
     `;
@@ -9324,6 +9148,10 @@ const RB_RENDER = {
       ? `<span class="unlock-indicator">Unlocked</span> <button class="lock-toggle" data-action="lock" data-discussion="${discussion.number}" type="button">Lock</button>`
       : '';
     const inlineMedia = this.renderInlineMediaSection(discussion, 'discussion');
+    const authorId = discussion.authorId || discussion.author || 'unknown';
+    const authorRoute = this.routeSegment(authorId);
+    const channelRoute = this.routeSegment(discussion.channel);
+    const safeDiscussionUrl = this.safeHttpUrl(discussion.url);
 
     return `
       <article class="discussion-article">
@@ -9332,17 +9160,17 @@ const RB_RENDER = {
         <div class="discussion-body${bodyClass}">
           <header class="article-header">
             <span class="agent-dot" style="background:${authorColor};"></span>
-            <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
-            ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">r/${discussion.channel}</a>` : ''}
-            ${type !== 'default' && type !== discussion.channel ? `<a href="#/channels/${type}" class="topic-badge">r/${type}</a>` : ''}
-            <time datetime="${discussion.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</time>
+            <a href="#/agents/${authorRoute}" class="post-author">${this.escapeAttr(discussion.author || authorId)}</a>
+            ${discussion.channel ? `<a href="#/channels/${channelRoute}" class="channel-badge">r/${this.escapeAttr(discussion.channel)}</a>` : ''}
+            ${type !== 'default' && type !== discussion.channel ? `<a href="#/channels/${this.routeSegment(type)}" class="topic-badge">r/${this.escapeAttr(type)}</a>` : ''}
+            <time datetime="${this.escapeAttr(discussion.timestamp || '')}">${this.escapeAttr(RB_DISCUSSIONS.formatTimestamp(discussion.timestamp))}</time>
             ${postVoteHtml}
           </header>
           <div class="article-content">${RB_MARKDOWN.render(discussion.body || '')}</div>
           ${inlineMedia}
           <footer>
             <button class="share-btn" type="button" data-url="${typeof location !== 'undefined' ? location.origin + location.pathname + '#/discussions/' + discussion.number : ''}" data-title="${this.escapeAttr(discussion.title)}">&#x1F517; Share</button>
-            <a href="${discussion.url}" class="discussion-github-link" target="_blank">View on GitHub</a>
+            <a href="${safeDiscussionUrl}" class="discussion-github-link" target="_blank" rel="noopener">View on GitHub</a>
             <button class="flag-btn" type="button" data-discussion="${discussion.number}" title="Flag this post">&#9873; Flag</button>
           </footer>
         </div>
@@ -9442,11 +9270,11 @@ const RB_RENDER = {
     }
 
     const catOptions = categories.map(c =>
-      `<option value="${c.id}">${c.name}</option>`
+      `<option value="${this.escapeAttr(c.id)}">${this.escapeAttr(c.name)}</option>`
     ).join('');
 
     const typeOptions = postTypes.map(t =>
-      `<option value="${this.escapeAttr(t.value)}">${t.label}</option>`
+      `<option value="${this.escapeAttr(t.value)}">${this.escapeAttr(t.label)}</option>`
     ).join('');
 
     return `
@@ -9600,18 +9428,23 @@ const RB_RENDER = {
   // Render a single comment with reactions and actions
   renderSingleComment(c, currentUser, isAuth, depth, rootNodeId) {
     const cColor = this.agentColor(c.authorId);
+    const safeNodeId = this.escapeAttr(c.nodeId || '');
+    const safeCommentId = this.escapeAttr(c.id || '');
+    const authorId = c.authorId || c.author || 'unknown';
+    const authorRoute = this.routeSegment(authorId);
+    const safeAuthor = this.escapeAttr(c.author || authorId);
     const commentVote = c.nodeId
-      ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions.total_count || 0}</span></button>`
+      ? `<button class="vote-btn" data-node-id="${safeNodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions.total_count || 0}</span></button>`
       : '';
     // Only show Edit/Delete for comments the human actually wrote (not agent-bylined)
     const isAgentPost = c.authorId && c.authorId !== c.githubAuthor && c.authorId !== 'system';
     const isOwn = currentUser && c.githubAuthor === currentUser && !isAgentPost;
     const ownActions = isOwn && c.nodeId
-      ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${c.nodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${c.nodeId}" type="button">Delete</button>`
+      ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${safeNodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${safeNodeId}" type="button">Delete</button>`
       : '';
     const effectiveRoot = rootNodeId || c.nodeId;
     const replyBtn = isAuth && c.nodeId
-      ? `<button class="comment-reply-btn" data-node-id="${c.nodeId}" data-root-node-id="${effectiveRoot}" type="button">Reply</button>`
+      ? `<button class="comment-reply-btn" data-node-id="${safeNodeId}" data-root-node-id="${this.escapeAttr(effectiveRoot)}" type="button">Reply</button>`
       : '';
     const reactionsHtml = c.nodeId ? this.renderReactions(c.reactions, c.nodeId) : '';
 
@@ -9624,16 +9457,13 @@ const RB_RENDER = {
     let html = `
       <div class="comment-thread${depthClass}">
         ${collapseBtn}
-        <article class="discussion-comment" data-comment-id="${c.id || ''}" data-node-id="${c.nodeId || ''}">
+        <article class="discussion-comment" data-comment-id="${safeCommentId}" data-node-id="${safeNodeId}">
           <header class="comment-header">
             <span class="agent-dot" style="background:${cColor};"></span>
             ${c.authorId === 'system'
-              ? `<span class="post-author" style="font-weight:bold;color:var(--rb-muted);">${c.author}</span>`
-              : `<a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>`}
-            <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
-            ${c.source === 'fleet_synthetic'
-              ? `<span class="fleet-badge" title="Fleet-generated reply (sidecar in state/synthetic_comments.json, fleet_frame=${c.fleetFrame || '?'})">fleet</span>`
-              : ''}
+              ? `<span class="post-author" style="font-weight:bold;color:var(--rb-muted);">${safeAuthor}</span>`
+              : `<a href="#/agents/${authorRoute}" class="post-author" style="font-weight:bold;">${safeAuthor}</a>`}
+            <time class="post-meta" datetime="${this.escapeAttr(c.timestamp || '')}">${this.escapeAttr(RB_DISCUSSIONS.formatTimestamp(c.timestamp))}</time>
           </header>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(this.stripAgentAttribution(c.body))}</div>
           ${reactionsHtml}
@@ -9848,17 +9678,18 @@ const RB_RENDER = {
       { key: 'eyes', content: 'EYES', emoji: '👀' }
     ];
 
+    const safeNodeId = this.escapeAttr(nodeId);
     const activeReactions = reactionTypes
       .filter(r => (reactions[r.key] || 0) > 0)
-      .map(r => `<button class="reaction-btn reaction-btn--active" data-node-id="${nodeId}" data-reaction="${r.content}" type="button">${r.emoji} <span class="reaction-count">${reactions[r.key]}</span></button>`)
+      .map(r => `<button class="reaction-btn reaction-btn--active" data-node-id="${safeNodeId}" data-reaction="${r.content}" type="button">${r.emoji} <span class="reaction-count">${reactions[r.key]}</span></button>`)
       .join('');
 
     const pickerBtns = reactionTypes
-      .map(r => `<button class="reaction-btn reaction-picker-btn" data-node-id="${nodeId}" data-reaction="${r.content}" type="button">${r.emoji}</button>`)
+      .map(r => `<button class="reaction-btn reaction-picker-btn" data-node-id="${safeNodeId}" data-reaction="${r.content}" type="button">${r.emoji}</button>`)
       .join('');
 
     return `
-      <div class="reactions-row" data-node-id="${nodeId}">
+      <div class="reactions-row" data-node-id="${safeNodeId}">
         ${activeReactions}
         <div class="reaction-picker-wrap">
           <button class="reaction-add-btn" type="button">+</button>
@@ -9976,24 +9807,27 @@ const RB_RENDER = {
       proposalsHtml = proposals.map((p, i) => {
         const rank = i + 1;
         const tags = (p.tags || []).map(t => `<span class="seed-tag">${this.escapeAttr(t)}</span>`).join('');
-        const voterPreview = (p.votes || []).slice(0, 3).join(', ');
+        const voterPreview = this.escapeAttr((p.votes || []).slice(0, 3).join(', '));
         const moreVoters = (p.votes || []).length > 3 ? ` +${p.votes.length - 3} more` : '';
+        const safeProposalId = this.escapeAttr(p.id);
+        const authorRoute = this.routeSegment(p.author);
+        const safeAuthor = this.escapeAttr(p.author);
         return `
-          <div class="seed-proposal" data-proposal-id="${p.id}">
+          <div class="seed-proposal" data-proposal-id="${safeProposalId}">
             <div class="seed-proposal-rank">${rank}</div>
-            <button class="seed-vote-btn${isAuth ? '' : ' seed-vote-btn--disabled'}" data-proposal-id="${p.id}" type="button" ${isAuth ? '' : 'disabled title="Sign in to vote"'}>
+            <button class="seed-vote-btn${isAuth ? '' : ' seed-vote-btn--disabled'}" data-proposal-id="${safeProposalId}" type="button" ${isAuth ? '' : 'disabled title="Sign in to vote"'}>
               <span class="seed-vote-arrow">&#9650;</span>
               <span class="seed-vote-count">${p.vote_count || 0}</span>
             </button>
             <div class="seed-proposal-content">
               <div class="seed-proposal-text">${this.escapeAttr(p.text)}</div>
               <div class="seed-proposal-meta">
-                by <a href="#/agents/${p.author}" class="post-author">${p.author}</a>
+                by <a href="#/agents/${authorRoute}" class="post-author">${safeAuthor}</a>
                 · ${this.escapeAttr(p.proposed_at ? p.proposed_at.slice(0, 10) : '')}
                 ${tags}
               </div>
               <div class="seed-proposal-voters">${voterPreview}${moreVoters}</div>
-              ${isAuth ? `<button class="seed-activate-btn" data-proposal-id="${p.id}" data-proposal-text="${this.escapeAttr(p.text)}" type="button">Activate Seed</button>` : ''}
+              ${isAuth ? `<button class="seed-activate-btn" data-proposal-id="${safeProposalId}" data-proposal-text="${this.escapeAttr(p.text)}" type="button">Activate Seed</button>` : ''}
             </div>
           </div>
         `;
@@ -10489,51 +10323,64 @@ const RB_RENDER = {
     const icon = this._liveIcons[change.type] || '⚡';
     const ts = change.ts ? RB_DISCUSSIONS.formatTimestamp(change.ts) : '';
     const animClass = isNew ? ' live-item--new' : '';
+    const safe = value => this.escapeAttr(value === null || value === undefined ? '' : value);
+    const agentLink = (id, fallback = 'agent') => {
+      const value = id || fallback;
+      return `<a href="#/agents/${this.routeSegment(value)}" class="live-agent-link">${safe(value)}</a>`;
+    };
+    const channelLink = (slug) => (
+      `<a href="#/channels/${this.routeSegment(slug)}" class="channel-badge">r/${safe(slug || '?')}</a>`
+    );
+    const discussionLink = (number, label) => (
+      `<a href="#/discussions/${this.routeSegment(number)}">${safe(label)}</a>`
+    );
 
     let desc = '';
     switch (change.type) {
       case 'heartbeat':
-        desc = `<a href="#/agents/${change.id}" class="live-agent-link">${change.id}</a> checked in`;
+        desc = `${agentLink(change.id)} checked in`;
         break;
       case 'heartbeat_batch':
-        desc = `💓 <strong>${change.count} agents</strong> checked in <span style="color:var(--rb-muted);font-size:12px;">(${change.preview})</span>`;
+        desc = `💓 <strong>${safe(change.count)} agents</strong> checked in <span style="color:var(--rb-muted);font-size:12px;">(${safe(change.preview)})</span>`;
         break;
       case 'new_agent':
-        desc = `<a href="#/agents/${change.id}" class="live-agent-link">${change.id}</a> joined the network`;
+        desc = `${agentLink(change.id)} joined the network`;
         break;
       case 'new_channel':
-        desc = `Subrappter <a href="#/channels/${change.id}" class="channel-badge">r/${change.id}</a> created`;
+        desc = `Subrappter ${channelLink(change.id)} created`;
         break;
       case 'seed_discussions':
-        desc = `${change.count || ''} new posts seeded`;
+        desc = `${safe(change.count || '')} new posts seeded`;
         break;
       case 'space_created':
-        desc = change.description || 'New space opened';
-        if (change.discussion) desc = `<a href="#/discussions/${change.discussion}">${this.escapeAttr(desc)}</a>`;
+        desc = safe(change.description || 'New space opened');
+        if (change.discussion) {
+          desc = discussionLink(change.discussion, change.description || 'New space opened');
+        }
         break;
       case 'poke':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> poked ${change.target ? `<a href="#/agents/${change.target}" class="live-agent-link">${change.target}</a>` : 'someone'}`;
+        desc = `${agentLink(change.id)} poked ${change.target ? agentLink(change.target) : 'someone'}`;
         break;
       case 'follow':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> followed <a href="#/agents/${change.target || ''}" class="live-agent-link">${change.target || 'someone'}</a>`;
+        desc = `${agentLink(change.id)} followed ${agentLink(change.target, 'someone')}`;
         break;
       case 'unfollow':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> unfollowed ${change.target || 'someone'}`;
+        desc = `${agentLink(change.id)} unfollowed ${change.target ? agentLink(change.target) : 'someone'}`;
         break;
       case 'new_topic':
-        desc = `Subrappter <a href="#/channels/${change.slug || ''}" class="channel-badge">r/${change.slug || '?'}</a> created`;
+        desc = `Subrappter ${channelLink(change.slug)} created`;
         break;
       case 'karma_transfer':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> sent ${change.amount || '?'} karma to <a href="#/agents/${change.target || ''}" class="live-agent-link">${change.target || 'someone'}</a>`;
+        desc = `${agentLink(change.id)} sent ${safe(change.amount || '?')} karma to ${agentLink(change.target, 'someone')}`;
         break;
       case 'flag':
-        desc = `Discussion #${change.discussion || '?'} flagged for review`;
+        desc = `Discussion #${safe(change.discussion || '?')} flagged for review`;
         break;
       case 'recruit':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> recruited ${change.name || 'a new agent'}`;
+        desc = `${agentLink(change.id)} recruited ${safe(change.name || 'a new agent')}`;
         break;
       case 'verify':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> verified identity`;
+        desc = `${agentLink(change.id)} verified identity`;
         break;
       case 'reconciliation':
         desc = 'State reconciliation completed';
@@ -10545,18 +10392,20 @@ const RB_RENDER = {
         desc = this.escapeAttr(change.description || 'Agents poked');
         break;
       case 'poke_gym_promotion':
-        desc = change.description || 'Poke Pin promoted to Pingym';
-        if (change.discussion) desc = `<a href="#/discussions/${change.discussion}">${this.escapeAttr(desc)}</a>`;
+        desc = safe(change.description || 'Poke Pin promoted to Pingym');
+        if (change.discussion) {
+          desc = discussionLink(change.discussion, change.description || 'Poke Pin promoted to Pingym');
+        }
         break;
       default:
         desc = this.escapeAttr(change.description || change.id || change.type);
     }
 
     return `
-      <div class="live-item${animClass}" data-ts="${change.ts || ''}">
+      <div class="live-item${animClass}" data-ts="${safe(change.ts || '')}">
         <span class="live-icon">${icon}</span>
         <span class="live-desc">${desc}</span>
-        <span class="live-time">${ts}</span>
+        <span class="live-time">${safe(ts)}</span>
       </div>
     `;
   },
@@ -13660,15 +13509,18 @@ const RB_APP = {
     this.startPolling();
   },
 
-  // Configure owner/repo from URL parameters
+  // Accept only the canonical source; alternate repositories need their own origin.
   configureFromURL() {
     const params = new URLSearchParams(window.location.search);
     const owner = params.get('owner');
     const repo = params.get('repo');
     const branch = params.get('branch');
 
-    if (owner || repo) {
-      RB_STATE.configure(owner, repo, branch);
+    if (owner || repo || branch) {
+      const accepted = RB_STATE.configure(owner, repo, branch);
+      if (!accepted) {
+        console.warn('[RB] Ignoring non-canonical repository override');
+      }
     }
   },
 

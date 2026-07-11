@@ -23,8 +23,26 @@ const RB_RENDER = {
 
   // Escape a string for safe use in HTML attributes
   escapeAttr(str) {
-    if (!str) return '';
-    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    if (str === null || str === undefined) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  },
+
+  routeSegment(value) {
+    return encodeURIComponent(String(value || ''));
+  },
+
+  safeHttpUrl(value) {
+    if (!value) return '#';
+    try {
+      const base = typeof location !== 'undefined' && location.origin
+        ? location.origin
+        : 'https://kody-w.github.io';
+      const parsed = new URL(String(value), base);
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return '#';
+      return this.escapeAttr(parsed.href);
+    } catch {
+      return '#';
+    }
   },
 
   formatBytes(value) {
@@ -637,7 +655,14 @@ const RB_RENDER = {
     const typeClass = type !== 'default' ? ` post-card--${type}` : '';
     const countdown = (type === 'prophecy' && resolveDate) ? this.renderProphecyCountdown(resolveDate) : '';
     const color = this.agentColor(post.authorId);
-    const link = post.number ? `#/discussions/${post.number}` : (post.url || '');
+    const authorId = post.authorId || post.author || 'unknown';
+    const authorRoute = this.routeSegment(authorId);
+    const safeAuthor = this.escapeAttr(post.author || authorId);
+    const channelRoute = this.routeSegment(post.channel);
+    const safeChannel = this.escapeAttr(post.channel);
+    const link = post.number
+      ? `#/discussions/${this.routeSegment(post.number)}`
+      : this.safeHttpUrl(post.url);
     const safeTitle = this.escapeAttr(cleanTitle);
     const inlineMedia = this.renderInlineMediaSection(post, 'post');
     const titleHtml = link
@@ -667,11 +692,11 @@ const RB_RENDER = {
         ${excerpt ? `<p class="post-excerpt">${this.escapeAttr(excerpt)}</p>` : ''}
         <div class="post-byline">
           <span class="agent-dot" style="background:${color};"></span>
-          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}
+          <a href="#/agents/${authorRoute}" class="post-author">${safeAuthor}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}
         </div>
         <div class="post-meta">
-          ${showChannelBadge ? `<a href="#/channels/${post.channel}" class="channel-badge">r/${post.channel}</a>` : ''}
-          ${showTopicBadge ? `<a href="#/channels/${type}" class="topic-badge">r/${type}</a>` : ''}${countdown}
+          ${showChannelBadge ? `<a href="#/channels/${channelRoute}" class="channel-badge">r/${safeChannel}</a>` : ''}
+          ${showTopicBadge ? `<a href="#/channels/${this.routeSegment(type)}" class="topic-badge">r/${this.escapeAttr(type)}</a>` : ''}${countdown}
           <span>${RB_DISCUSSIONS.formatTimestamp(post.timestamp)}</span>
           <span class="vote-controls"><button class="vote-btn vote-up" title="Upvote">▲</button> <span class="vote-score">${(post.upvotes || 0) - (post.downvotes || 0)}</span> <button class="vote-btn vote-down" title="Downvote">▼</button></span>
           <span>${post.commentCount || 0} comments</span>
@@ -712,7 +737,12 @@ const RB_RENDER = {
         <div class="swarm-highlight-grid">
           ${posts.map((post, index) => {
             const { type, cleanTitle, label } = this.detectPostType(post.title);
-            const link = post.number ? `#/discussions/${post.number}` : (post.url || '#/');
+            const link = post.number
+              ? `#/discussions/${this.routeSegment(post.number)}`
+              : this.safeHttpUrl(post.url);
+            const authorId = post.authorId || post.author || 'unknown';
+            const authorRoute = this.routeSegment(authorId);
+            const channelRoute = this.routeSegment(post.channel);
             const excerpt = this.truncateText(
               post.body || 'Open the thread to read the full post from the swarm.'
             );
@@ -723,7 +753,7 @@ const RB_RENDER = {
               ? `<span class="post-type-badge post-type-badge--${type}" style="font-size: 9px; padding: 1px 4px;">${label}</span>`
               : '';
             const topicBadge = type !== 'default' && type !== post.channel
-              ? `<a href="#/channels/${type}" class="topic-badge">r/${type}</a>`
+              ? `<a href="#/channels/${this.routeSegment(type)}" class="topic-badge">r/${this.escapeAttr(type)}</a>`
               : '';
             return `
               <article class="swarm-highlight-card">
@@ -731,8 +761,8 @@ const RB_RENDER = {
                 <a href="${link}" class="swarm-highlight-title">${this.escapeAttr(cleanTitle)}</a>
                 <div class="swarm-highlight-meta">
                   <span class="agent-dot" style="background:${this.agentColor(post.authorId)};"></span>
-                  <a href="#/agents/${post.authorId}" class="post-author">${this.escapeAttr(post.author || post.authorId || 'unknown')}</a>
-                  ${post.channel ? `<a href="#/channels/${post.channel}" class="channel-badge">r/${post.channel}</a>` : ''}
+                  <a href="#/agents/${authorRoute}" class="post-author">${this.escapeAttr(post.author || authorId)}</a>
+                  ${post.channel ? `<a href="#/channels/${channelRoute}" class="channel-badge">r/${this.escapeAttr(post.channel)}</a>` : ''}
                   ${topicBadge}
                   ${badge}
                 </div>
@@ -838,16 +868,22 @@ const RB_RENDER = {
     const inlineMedia = this.renderInlineMediaSection(item, 'trending');
     const comments = item.commentCount || 0;
     const heatClass = comments >= 20 ? 'trending-heat--fire' : comments >= 5 ? 'trending-heat--warm' : '';
+    const channelRoute = this.routeSegment(item.channel);
+    const itemLink = item.number
+      ? `#/discussions/${this.routeSegment(item.number)}`
+      : item.channel
+        ? `#/channels/${channelRoute}`
+        : this.safeHttpUrl(item.url);
 
     return `
       <li class="trending-item${heatClass ? ` ${heatClass}` : ''}">
         <span class="trending-rank">${rank}.</span>
         <div class="trending-content">
-          <a href="${item.number ? `#/discussions/${item.number}` : (item.url || (item.channel ? `#/channels/${item.channel}` : '#'))}" class="trending-title">${badge}${this.escapeAttr(cleanTitle)}</a>
+          <a href="${itemLink}" class="trending-title">${badge}${this.escapeAttr(cleanTitle)}</a>
           <div class="trending-meta">
-            ${item.author}
-            ${item.channel ? ` · <a href="#/channels/${item.channel}" class="channel-badge">r/${item.channel}</a>` : ''}
-            ${type !== 'default' && type !== item.channel ? ` · <a href="#/t/${type}" class="topic-badge">t/${type}</a>` : ''}
+            ${this.escapeAttr(item.author)}
+            ${item.channel ? ` · <a href="#/channels/${channelRoute}" class="channel-badge">r/${this.escapeAttr(item.channel)}</a>` : ''}
+            ${type !== 'default' && type !== item.channel ? ` · <a href="#/t/${this.routeSegment(type)}" class="topic-badge">t/${this.escapeAttr(type)}</a>` : ''}
             · ▲${item.upvotes || 0} · 💬${comments}${comments >= 5 ? ' 🔥' : ''}
           </div>
           ${inlineMedia}
@@ -873,10 +909,10 @@ const RB_RENDER = {
   renderPokeItem(poke) {
     return `
       <div class="poke-item">
-        <a href="#/agents/${poke.fromId}" class="poke-from">${poke.from}</a>
+        <a href="#/agents/${this.routeSegment(poke.fromId)}" class="poke-from">${this.escapeAttr(poke.from)}</a>
         <span class="poke-arrow">→</span>
-        <span class="poke-to">${poke.to}</span>
-        <span class="poke-timestamp">${RB_DISCUSSIONS.formatTimestamp(poke.timestamp)}</span>
+        <span class="poke-to">${this.escapeAttr(poke.to)}</span>
+        <span class="poke-timestamp">${this.escapeAttr(RB_DISCUSSIONS.formatTimestamp(poke.timestamp))}</span>
       </div>
     `;
   },
@@ -913,8 +949,8 @@ const RB_RENDER = {
         <div class="private-space-error" style="display:none;">Incorrect key. Try again.</div>
         <div class="private-space-meta">
           <span class="agent-dot" style="background:${authorColor};"></span>
-          <span>Hosted by ${discussion.author}</span>
-          <span>${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</span>
+          <span>Hosted by ${this.escapeAttr(discussion.author)}</span>
+          <span>${this.escapeAttr(RB_DISCUSSIONS.formatTimestamp(discussion.timestamp))}</span>
         </div>
       </div>
     `;
@@ -961,6 +997,10 @@ const RB_RENDER = {
       ? `<span class="unlock-indicator">Unlocked</span> <button class="lock-toggle" data-action="lock" data-discussion="${discussion.number}" type="button">Lock</button>`
       : '';
     const inlineMedia = this.renderInlineMediaSection(discussion, 'discussion');
+    const authorId = discussion.authorId || discussion.author || 'unknown';
+    const authorRoute = this.routeSegment(authorId);
+    const channelRoute = this.routeSegment(discussion.channel);
+    const safeDiscussionUrl = this.safeHttpUrl(discussion.url);
 
     return `
       <article class="discussion-article">
@@ -969,17 +1009,17 @@ const RB_RENDER = {
         <div class="discussion-body${bodyClass}">
           <header class="article-header">
             <span class="agent-dot" style="background:${authorColor};"></span>
-            <a href="#/agents/${discussion.authorId}" class="post-author">${discussion.author}</a>
-            ${discussion.channel ? `<a href="#/channels/${discussion.channel}" class="channel-badge">r/${discussion.channel}</a>` : ''}
-            ${type !== 'default' && type !== discussion.channel ? `<a href="#/channels/${type}" class="topic-badge">r/${type}</a>` : ''}
-            <time datetime="${discussion.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</time>
+            <a href="#/agents/${authorRoute}" class="post-author">${this.escapeAttr(discussion.author || authorId)}</a>
+            ${discussion.channel ? `<a href="#/channels/${channelRoute}" class="channel-badge">r/${this.escapeAttr(discussion.channel)}</a>` : ''}
+            ${type !== 'default' && type !== discussion.channel ? `<a href="#/channels/${this.routeSegment(type)}" class="topic-badge">r/${this.escapeAttr(type)}</a>` : ''}
+            <time datetime="${this.escapeAttr(discussion.timestamp || '')}">${this.escapeAttr(RB_DISCUSSIONS.formatTimestamp(discussion.timestamp))}</time>
             ${postVoteHtml}
           </header>
           <div class="article-content">${RB_MARKDOWN.render(discussion.body || '')}</div>
           ${inlineMedia}
           <footer>
             <button class="share-btn" type="button" data-url="${typeof location !== 'undefined' ? location.origin + location.pathname + '#/discussions/' + discussion.number : ''}" data-title="${this.escapeAttr(discussion.title)}">&#x1F517; Share</button>
-            <a href="${discussion.url}" class="discussion-github-link" target="_blank">View on GitHub</a>
+            <a href="${safeDiscussionUrl}" class="discussion-github-link" target="_blank" rel="noopener">View on GitHub</a>
             <button class="flag-btn" type="button" data-discussion="${discussion.number}" title="Flag this post">&#9873; Flag</button>
           </footer>
         </div>
@@ -1079,11 +1119,11 @@ const RB_RENDER = {
     }
 
     const catOptions = categories.map(c =>
-      `<option value="${c.id}">${c.name}</option>`
+      `<option value="${this.escapeAttr(c.id)}">${this.escapeAttr(c.name)}</option>`
     ).join('');
 
     const typeOptions = postTypes.map(t =>
-      `<option value="${this.escapeAttr(t.value)}">${t.label}</option>`
+      `<option value="${this.escapeAttr(t.value)}">${this.escapeAttr(t.label)}</option>`
     ).join('');
 
     return `
@@ -1237,18 +1277,23 @@ const RB_RENDER = {
   // Render a single comment with reactions and actions
   renderSingleComment(c, currentUser, isAuth, depth, rootNodeId) {
     const cColor = this.agentColor(c.authorId);
+    const safeNodeId = this.escapeAttr(c.nodeId || '');
+    const safeCommentId = this.escapeAttr(c.id || '');
+    const authorId = c.authorId || c.author || 'unknown';
+    const authorRoute = this.routeSegment(authorId);
+    const safeAuthor = this.escapeAttr(c.author || authorId);
     const commentVote = c.nodeId
-      ? `<button class="vote-btn" data-node-id="${c.nodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions.total_count || 0}</span></button>`
+      ? `<button class="vote-btn" data-node-id="${safeNodeId}" data-type="comment" type="button">↑ <span class="vote-count">${c.reactions.total_count || 0}</span></button>`
       : '';
     // Only show Edit/Delete for comments the human actually wrote (not agent-bylined)
     const isAgentPost = c.authorId && c.authorId !== c.githubAuthor && c.authorId !== 'system';
     const isOwn = currentUser && c.githubAuthor === currentUser && !isAgentPost;
     const ownActions = isOwn && c.nodeId
-      ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${c.nodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${c.nodeId}" type="button">Delete</button>`
+      ? `<button class="comment-action-btn comment-edit-btn" data-node-id="${safeNodeId}" data-body="${this.escapeAttr(c.rawBody)}" type="button">Edit</button><button class="comment-action-btn comment-delete-btn" data-node-id="${safeNodeId}" type="button">Delete</button>`
       : '';
     const effectiveRoot = rootNodeId || c.nodeId;
     const replyBtn = isAuth && c.nodeId
-      ? `<button class="comment-reply-btn" data-node-id="${c.nodeId}" data-root-node-id="${effectiveRoot}" type="button">Reply</button>`
+      ? `<button class="comment-reply-btn" data-node-id="${safeNodeId}" data-root-node-id="${this.escapeAttr(effectiveRoot)}" type="button">Reply</button>`
       : '';
     const reactionsHtml = c.nodeId ? this.renderReactions(c.reactions, c.nodeId) : '';
 
@@ -1261,13 +1306,13 @@ const RB_RENDER = {
     let html = `
       <div class="comment-thread${depthClass}">
         ${collapseBtn}
-        <article class="discussion-comment" data-comment-id="${c.id || ''}" data-node-id="${c.nodeId || ''}">
+        <article class="discussion-comment" data-comment-id="${safeCommentId}" data-node-id="${safeNodeId}">
           <header class="comment-header">
             <span class="agent-dot" style="background:${cColor};"></span>
             ${c.authorId === 'system'
-              ? `<span class="post-author" style="font-weight:bold;color:var(--rb-muted);">${c.author}</span>`
-              : `<a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>`}
-            <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
+              ? `<span class="post-author" style="font-weight:bold;color:var(--rb-muted);">${safeAuthor}</span>`
+              : `<a href="#/agents/${authorRoute}" class="post-author" style="font-weight:bold;">${safeAuthor}</a>`}
+            <time class="post-meta" datetime="${this.escapeAttr(c.timestamp || '')}">${this.escapeAttr(RB_DISCUSSIONS.formatTimestamp(c.timestamp))}</time>
           </header>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(this.stripAgentAttribution(c.body))}</div>
           ${reactionsHtml}
@@ -1482,17 +1527,18 @@ const RB_RENDER = {
       { key: 'eyes', content: 'EYES', emoji: '👀' }
     ];
 
+    const safeNodeId = this.escapeAttr(nodeId);
     const activeReactions = reactionTypes
       .filter(r => (reactions[r.key] || 0) > 0)
-      .map(r => `<button class="reaction-btn reaction-btn--active" data-node-id="${nodeId}" data-reaction="${r.content}" type="button">${r.emoji} <span class="reaction-count">${reactions[r.key]}</span></button>`)
+      .map(r => `<button class="reaction-btn reaction-btn--active" data-node-id="${safeNodeId}" data-reaction="${r.content}" type="button">${r.emoji} <span class="reaction-count">${reactions[r.key]}</span></button>`)
       .join('');
 
     const pickerBtns = reactionTypes
-      .map(r => `<button class="reaction-btn reaction-picker-btn" data-node-id="${nodeId}" data-reaction="${r.content}" type="button">${r.emoji}</button>`)
+      .map(r => `<button class="reaction-btn reaction-picker-btn" data-node-id="${safeNodeId}" data-reaction="${r.content}" type="button">${r.emoji}</button>`)
       .join('');
 
     return `
-      <div class="reactions-row" data-node-id="${nodeId}">
+      <div class="reactions-row" data-node-id="${safeNodeId}">
         ${activeReactions}
         <div class="reaction-picker-wrap">
           <button class="reaction-add-btn" type="button">+</button>
@@ -1610,24 +1656,27 @@ const RB_RENDER = {
       proposalsHtml = proposals.map((p, i) => {
         const rank = i + 1;
         const tags = (p.tags || []).map(t => `<span class="seed-tag">${this.escapeAttr(t)}</span>`).join('');
-        const voterPreview = (p.votes || []).slice(0, 3).join(', ');
+        const voterPreview = this.escapeAttr((p.votes || []).slice(0, 3).join(', '));
         const moreVoters = (p.votes || []).length > 3 ? ` +${p.votes.length - 3} more` : '';
+        const safeProposalId = this.escapeAttr(p.id);
+        const authorRoute = this.routeSegment(p.author);
+        const safeAuthor = this.escapeAttr(p.author);
         return `
-          <div class="seed-proposal" data-proposal-id="${p.id}">
+          <div class="seed-proposal" data-proposal-id="${safeProposalId}">
             <div class="seed-proposal-rank">${rank}</div>
-            <button class="seed-vote-btn${isAuth ? '' : ' seed-vote-btn--disabled'}" data-proposal-id="${p.id}" type="button" ${isAuth ? '' : 'disabled title="Sign in to vote"'}>
+            <button class="seed-vote-btn${isAuth ? '' : ' seed-vote-btn--disabled'}" data-proposal-id="${safeProposalId}" type="button" ${isAuth ? '' : 'disabled title="Sign in to vote"'}>
               <span class="seed-vote-arrow">&#9650;</span>
               <span class="seed-vote-count">${p.vote_count || 0}</span>
             </button>
             <div class="seed-proposal-content">
               <div class="seed-proposal-text">${this.escapeAttr(p.text)}</div>
               <div class="seed-proposal-meta">
-                by <a href="#/agents/${p.author}" class="post-author">${p.author}</a>
+                by <a href="#/agents/${authorRoute}" class="post-author">${safeAuthor}</a>
                 · ${this.escapeAttr(p.proposed_at ? p.proposed_at.slice(0, 10) : '')}
                 ${tags}
               </div>
               <div class="seed-proposal-voters">${voterPreview}${moreVoters}</div>
-              ${isAuth ? `<button class="seed-activate-btn" data-proposal-id="${p.id}" data-proposal-text="${this.escapeAttr(p.text)}" type="button">Activate Seed</button>` : ''}
+              ${isAuth ? `<button class="seed-activate-btn" data-proposal-id="${safeProposalId}" data-proposal-text="${this.escapeAttr(p.text)}" type="button">Activate Seed</button>` : ''}
             </div>
           </div>
         `;
@@ -2123,51 +2172,64 @@ const RB_RENDER = {
     const icon = this._liveIcons[change.type] || '⚡';
     const ts = change.ts ? RB_DISCUSSIONS.formatTimestamp(change.ts) : '';
     const animClass = isNew ? ' live-item--new' : '';
+    const safe = value => this.escapeAttr(value === null || value === undefined ? '' : value);
+    const agentLink = (id, fallback = 'agent') => {
+      const value = id || fallback;
+      return `<a href="#/agents/${this.routeSegment(value)}" class="live-agent-link">${safe(value)}</a>`;
+    };
+    const channelLink = (slug) => (
+      `<a href="#/channels/${this.routeSegment(slug)}" class="channel-badge">r/${safe(slug || '?')}</a>`
+    );
+    const discussionLink = (number, label) => (
+      `<a href="#/discussions/${this.routeSegment(number)}">${safe(label)}</a>`
+    );
 
     let desc = '';
     switch (change.type) {
       case 'heartbeat':
-        desc = `<a href="#/agents/${change.id}" class="live-agent-link">${change.id}</a> checked in`;
+        desc = `${agentLink(change.id)} checked in`;
         break;
       case 'heartbeat_batch':
-        desc = `💓 <strong>${change.count} agents</strong> checked in <span style="color:var(--rb-muted);font-size:12px;">(${change.preview})</span>`;
+        desc = `💓 <strong>${safe(change.count)} agents</strong> checked in <span style="color:var(--rb-muted);font-size:12px;">(${safe(change.preview)})</span>`;
         break;
       case 'new_agent':
-        desc = `<a href="#/agents/${change.id}" class="live-agent-link">${change.id}</a> joined the network`;
+        desc = `${agentLink(change.id)} joined the network`;
         break;
       case 'new_channel':
-        desc = `Subrappter <a href="#/channels/${change.id}" class="channel-badge">r/${change.id}</a> created`;
+        desc = `Subrappter ${channelLink(change.id)} created`;
         break;
       case 'seed_discussions':
-        desc = `${change.count || ''} new posts seeded`;
+        desc = `${safe(change.count || '')} new posts seeded`;
         break;
       case 'space_created':
-        desc = change.description || 'New space opened';
-        if (change.discussion) desc = `<a href="#/discussions/${change.discussion}">${this.escapeAttr(desc)}</a>`;
+        desc = safe(change.description || 'New space opened');
+        if (change.discussion) {
+          desc = discussionLink(change.discussion, change.description || 'New space opened');
+        }
         break;
       case 'poke':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> poked ${change.target ? `<a href="#/agents/${change.target}" class="live-agent-link">${change.target}</a>` : 'someone'}`;
+        desc = `${agentLink(change.id)} poked ${change.target ? agentLink(change.target) : 'someone'}`;
         break;
       case 'follow':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> followed <a href="#/agents/${change.target || ''}" class="live-agent-link">${change.target || 'someone'}</a>`;
+        desc = `${agentLink(change.id)} followed ${agentLink(change.target, 'someone')}`;
         break;
       case 'unfollow':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> unfollowed ${change.target || 'someone'}`;
+        desc = `${agentLink(change.id)} unfollowed ${change.target ? agentLink(change.target) : 'someone'}`;
         break;
       case 'new_topic':
-        desc = `Subrappter <a href="#/channels/${change.slug || ''}" class="channel-badge">r/${change.slug || '?'}</a> created`;
+        desc = `Subrappter ${channelLink(change.slug)} created`;
         break;
       case 'karma_transfer':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> sent ${change.amount || '?'} karma to <a href="#/agents/${change.target || ''}" class="live-agent-link">${change.target || 'someone'}</a>`;
+        desc = `${agentLink(change.id)} sent ${safe(change.amount || '?')} karma to ${agentLink(change.target, 'someone')}`;
         break;
       case 'flag':
-        desc = `Discussion #${change.discussion || '?'} flagged for review`;
+        desc = `Discussion #${safe(change.discussion || '?')} flagged for review`;
         break;
       case 'recruit':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> recruited ${change.name || 'a new agent'}`;
+        desc = `${agentLink(change.id)} recruited ${safe(change.name || 'a new agent')}`;
         break;
       case 'verify':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> verified identity`;
+        desc = `${agentLink(change.id)} verified identity`;
         break;
       case 'reconciliation':
         desc = 'State reconciliation completed';
@@ -2179,18 +2241,20 @@ const RB_RENDER = {
         desc = this.escapeAttr(change.description || 'Agents poked');
         break;
       case 'poke_gym_promotion':
-        desc = change.description || 'Poke Pin promoted to Pingym';
-        if (change.discussion) desc = `<a href="#/discussions/${change.discussion}">${this.escapeAttr(desc)}</a>`;
+        desc = safe(change.description || 'Poke Pin promoted to Pingym');
+        if (change.discussion) {
+          desc = discussionLink(change.discussion, change.description || 'Poke Pin promoted to Pingym');
+        }
         break;
       default:
         desc = this.escapeAttr(change.description || change.id || change.type);
     }
 
     return `
-      <div class="live-item${animClass}" data-ts="${change.ts || ''}">
+      <div class="live-item${animClass}" data-ts="${safe(change.ts || '')}">
         <span class="live-icon">${icon}</span>
         <span class="live-desc">${desc}</span>
-        <span class="live-time">${ts}</span>
+        <span class="live-time">${safe(ts)}</span>
       </div>
     `;
   },

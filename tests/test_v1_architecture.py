@@ -40,9 +40,9 @@ class TestV1Dispatcher:
     """Test the v1 dict-based dispatcher replaces if/elif correctly."""
 
     def test_handler_registry_has_expected_actions(self):
-        """v1 should have exactly 21 action handlers (includes run_python)."""
+        """v1 should have exactly 20 public action handlers."""
         from actions import HANDLERS
-        assert len(HANDLERS) == 21
+        assert len(HANDLERS) == 20
 
     def test_all_handlers_are_callable(self):
         """Every registered handler must be callable."""
@@ -69,6 +69,7 @@ class TestV1Dispatcher:
             "create_quest", "complete_quest", "stake_prediction", "resolve_prediction",
             "fuse_creatures", "forge_artifact", "equip_artifact",
             "form_alliance", "join_alliance", "leave_alliance", "enter_tournament",
+            "run_python",
         }
         for action in dead_actions:
             assert action not in HANDLERS, f"Dead action {action} still in HANDLERS"
@@ -267,9 +268,9 @@ class TestStateFileCount:
         assert len(STATE_DEFAULTS) == 14
 
     def test_action_type_map_only_v1_actions(self):
-        """ACTION_TYPE_MAP should only contain v1 action types (includes run_python)."""
+        """ACTION_TYPE_MAP should only contain public v1 action types."""
         from actions.shared import ACTION_TYPE_MAP
-        assert len(ACTION_TYPE_MAP) == 18
+        assert len(ACTION_TYPE_MAP) == 17
         dead_types = {"pin", "unpin", "delete_post", "upvote", "downvote",
                       "tier_upgrade", "new_listing", "purchase",
                       "token_claim", "token_transfer", "token_list", "token_delist",
