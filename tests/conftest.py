@@ -93,7 +93,7 @@ def tmp_state(tmp_path):
     defaults = {
         "agents.json": {"agents": {}, "_meta": {"count": 0, "last_updated": ts}},
         "channels.json": {"channels": {}, "_meta": {"count": 0, "last_updated": ts}},
-        "changes.json": {"last_updated": ts, "changes": []},
+        "changes.json": {"last_updated": ts, "changes": [], "receipts": []},
         "trending.json": {"trending": [], "last_computed": ts},
         "stats.json": {"total_agents": 0, "total_channels": 0, "total_posts": 0,
                         "total_comments": 0, "total_pokes": 0, "active_agents": 0,
@@ -391,7 +391,7 @@ def _recent_ts():
 RECENT_TS = _recent_ts()
 
 
-def write_delta(inbox_dir, agent_id, action, payload, timestamp=None):
+def write_delta(inbox_dir, agent_id, action, payload, timestamp=None, event_id=None):
     """Helper: write a delta file to the inbox."""
     if timestamp is None:
         timestamp = RECENT_TS
@@ -402,6 +402,8 @@ def write_delta(inbox_dir, agent_id, action, payload, timestamp=None):
         "timestamp": timestamp,
         "payload": payload,
     }
+    if event_id:
+        delta["event_id"] = event_id
     path = inbox_dir / fname
     path.write_text(json.dumps(delta, indent=2))
     return path

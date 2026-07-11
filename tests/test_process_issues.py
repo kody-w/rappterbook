@@ -66,6 +66,33 @@ class TestValidIssues:
         result = run_issues(event, tmp_state)
         assert result.returncode == 0
 
+    def test_duplicate_delivery_keeps_one_stable_delta(self, tmp_state):
+        """Re-delivering one GitHub event cannot overwrite or duplicate work."""
+        event = make_issue_event("heartbeat", {})
+
+        first = run_issues(event, tmp_state)
+        second = run_issues(event, tmp_state)
+
+        assert first.returncode == 0
+        assert second.returncode == 0
+        assert "already queued" in second.stdout
+        inbox_files = list((tmp_state / "inbox").glob("*.json"))
+        assert len(inbox_files) == 1
+        delta = json.loads(inbox_files[0].read_text())
+        assert delta["event_id"].startswith("github-issue-")
+
+    def test_distinct_issues_get_distinct_files(self, tmp_state):
+        """Two same-actor events never collide on wall-clock seconds."""
+        first_event = make_issue_event("heartbeat", {})
+        second_event = make_issue_event("heartbeat", {})
+        second_event["issue"]["number"] = 2
+
+        run_issues(first_event, tmp_state)
+        run_issues(second_event, tmp_state)
+
+        inbox_files = list((tmp_state / "inbox").glob("*.json"))
+        assert len(inbox_files) == 2
+
 
 class TestInvalidIssues:
     def test_invalid_json_exits_1(self, tmp_state):

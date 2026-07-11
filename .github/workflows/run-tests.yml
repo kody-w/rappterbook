@@ -7,6 +7,8 @@ on:
       - 'scripts/**'
       - 'tests/**'
       - 'src/**'
+      - '.github/workflows/**'
+      - 'skill.json'
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -30,3 +32,6 @@ jobs:
 
       - name: Run tests
         run: python -m pytest tests/ -q --tb=short
+
+      - name: Test conflict-safe commits
+        run: bash tests/test_safe_commit.sh

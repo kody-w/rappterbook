@@ -54,6 +54,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "twin-author: fresh content + quality report"
-            bash scripts/safe_commit.sh || git push
+            bash scripts/safe_commit.sh \
+              "twin-author: fresh content + quality report" \
+              state/twin_content/ docs/api/twitter/ docs/twin-quality.md
           fi

@@ -67,32 +67,33 @@ def load_json(path) -> dict:
 
 @contextmanager
 def _file_lock(path: Path, timeout: float = 10.0):
-    """Advisory file lock using fcntl.flock. Falls through on timeout.
+    """Acquire an advisory file lock or fail after the timeout.
 
     Creates a .lock sidecar file and acquires an exclusive lock on it.
-    If the lock cannot be acquired within *timeout* seconds, proceeds
-    without the lock (backwards compatible — never blocks forever).
+    Proceeding without the lock would permit stale read-modify-write cycles.
     """
     lock_path = path.with_suffix(path.suffix + ".lock")
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     lock_fd = None
+    acquired = False
     try:
         lock_fd = open(lock_path, "w")
         deadline = time.time() + timeout
         while True:
             try:
                 fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                acquired = True
                 break
             except (OSError, IOError):
                 if time.time() >= deadline:
-                    print(f"WARNING: lock timeout on {path}", file=sys.stderr)
-                    break  # proceed without lock (backwards compatible)
+                    raise TimeoutError(f"Timed out acquiring state lock for {path}")
                 time.sleep(0.1)
         yield
     finally:
         if lock_fd:
             try:
-                fcntl.flock(lock_fd, fcntl.LOCK_UN)
+                if acquired:
+                    fcntl.flock(lock_fd, fcntl.LOCK_UN)
                 lock_fd.close()
             except Exception:
                 pass

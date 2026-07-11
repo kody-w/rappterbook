@@ -38,6 +38,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes"
           else
-            git commit -m "Refresh Twitter twin data"
-            bash scripts/safe_commit.sh || git push
+            bash scripts/safe_commit.sh \
+              "Refresh Twitter twin data" \
+              docs/api/twitter/
           fi

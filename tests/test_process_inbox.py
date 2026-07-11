@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-from conftest import write_delta
+from conftest import RECENT_TS, write_delta
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / "scripts" / "process_inbox.py"
@@ -171,6 +171,115 @@ class TestInboxCleanup:
         after = (tmp_state / "agents.json").read_text()
         assert before == after
 
+    def test_handler_error_retains_delta_for_retry(self, tmp_state):
+        """A potentially transient handler failure is not discarded."""
+        delta_path = write_delta(
+            tmp_state / "inbox",
+            "missing-agent",
+            "update_profile",
+            {"bio": "retry me"},
+            event_id="event-retry",
+        )
+
+        result = run_inbox(tmp_state)
+
+        assert result.returncode == 1
+        assert "retaining" in result.stderr
+        assert delta_path.exists()
+
+    def test_handler_error_rolls_back_partial_mutation(self, tmp_state, monkeypatch):
+        """A failed handler cannot leak partial state into another saved action."""
+        import process_inbox
+
+        delta_path = write_delta(
+            tmp_state / "inbox",
+            "agent-1",
+            "heartbeat",
+            {},
+            event_id="event-partial",
+        )
+        state = process_inbox.load_state(tmp_state)
+
+        def mutate_then_fail(delta, agents, stats, channels):
+            agents["agents"]["partial"] = {"name": "must roll back"}
+            stats["total_agents"] = 999
+            return "injected handler failure"
+
+        monkeypatch.setitem(
+            process_inbox.HANDLERS, "heartbeat", mutate_then_fail
+        )
+        outcome, _ = process_inbox._process_delta(
+            delta_path, state, {}, set()
+        )
+
+        assert outcome == "retry"
+        assert state["agents"]["agents"] == {}
+        assert state["stats"]["total_agents"] == 0
+
+    def test_invalid_json_moves_to_rejected_queue(self, tmp_state):
+        """Permanently malformed input gets a durable rejection reason."""
+        delta_path = tmp_state / "inbox" / "broken.json"
+        delta_path.write_text("{")
+
+        result = run_inbox(tmp_state)
+
+        rejected = tmp_state / "inbox" / "rejected"
+        assert result.returncode == 0
+        assert not delta_path.exists()
+        assert (rejected / "broken.json").exists()
+        assert "Invalid JSON" in (rejected / "broken.json.reason").read_text()
+
+    def test_save_failure_retains_successful_delta(
+        self, tmp_state, docs_dir, monkeypatch
+    ):
+        """Acknowledgement happens only after every state save succeeds."""
+        import process_inbox
+
+        delta_path = write_delta(
+            tmp_state / "inbox",
+            "agent-1",
+            "register_agent",
+            {"name": "Agent", "framework": "test", "bio": "Test."},
+            event_id="event-save-failure",
+        )
+
+        def fail_save(*args, **kwargs):
+            raise RuntimeError("injected save failure")
+
+        monkeypatch.setattr(process_inbox, "save_state", fail_save)
+        with pytest.raises(RuntimeError, match="injected save failure"):
+            process_inbox._process_inbox(tmp_state, docs_dir)
+
+        assert delta_path.exists()
+
+    def test_success_receipt_prevents_replay(self, tmp_state):
+        """A duplicate event ID is acknowledged without applying twice."""
+        payload = {"name": "Agent", "framework": "test", "bio": "Test."}
+        write_delta(
+            tmp_state / "inbox",
+            "agent-1",
+            "register_agent",
+            payload,
+            timestamp="2026-02-12T10:00:00Z",
+            event_id="event-once",
+        )
+        assert run_inbox(tmp_state).returncode == 0
+
+        write_delta(
+            tmp_state / "inbox",
+            "agent-1",
+            "register_agent",
+            payload,
+            timestamp="2026-02-12T11:00:00Z",
+            event_id="event-once",
+        )
+        assert run_inbox(tmp_state).returncode == 0
+
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        changes = json.loads((tmp_state / "changes.json").read_text())
+        assert agents["_meta"]["count"] == 1
+        assert [r["event_id"] for r in changes["receipts"]] == ["event-once"]
+
 
 class TestMultipleDeltas:
     def test_processed_in_order(self, tmp_state):
@@ -289,7 +398,7 @@ class TestMediaPipeline:
             "media_type": "image",
             "source_url": sample_file.as_uri(),
             "filename": "breadcrumb.png",
-        }, timestamp="2026-03-08T01:00:00Z")
+        }, timestamp=RECENT_TS)
         run_inbox(tmp_state, docs_dir=docs_dir, extra_env=extra_env)
 
         flags = json.loads((tmp_state / "flags.json").read_text())
@@ -299,7 +408,7 @@ class TestMediaPipeline:
             "submission_id": submission_id,
             "decision": "approve",
             "note": "Looks safe to publish.",
-        }, timestamp="2026-03-08T02:00:00Z")
+        }, timestamp=RECENT_TS)
         run_inbox(tmp_state, docs_dir=docs_dir, extra_env=extra_env)
 
         flags = json.loads((tmp_state / "flags.json").read_text())

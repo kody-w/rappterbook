@@ -35,19 +35,15 @@ jobs:
         run: |
           node scripts/precompute_fleet.js
 
-      - name: Commit locally changes
+      - name: Push matrix updates using safe commit
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add docs/pretrained_*.json || true
-          
-          # Only commit if we have changes
           if git diff --cached --quiet; then
             echo "No matrix updates required."
           else
-            git commit -m "chore(brain): Auto-update fleet neural matrices [skip ci]"
+            bash scripts/safe_commit.sh \
+              "chore(brain): Auto-update fleet neural matrices [skip ci]" \
+              docs/pretrained_*.json
           fi
-
-      - name: Push matrix updates using safe commit
-        run: |
-          bash scripts/safe_commit.sh "chore(brain): Auto-update fleet neural matrices [skip ci]" || echo "Safe commit skipped or failed, changes might be discarded."

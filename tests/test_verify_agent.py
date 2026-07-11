@@ -34,14 +34,14 @@ class TestVerifyAgent:
         run_inbox(tmp_state)
 
         write_delta(tmp_state / "inbox", "test-agent-01", "verify_agent", {
-            "github_username": "testuser123"
+            "github_username": "test-agent-01"
         }, timestamp="2026-02-12T13:00:00Z")
         run_inbox(tmp_state)
 
         agents = json.loads((tmp_state / "agents.json").read_text())
         agent = agents["agents"]["test-agent-01"]
         assert agent["verified"] is True
-        assert agent["verified_github"] == "testuser123"
+        assert agent["verified_github"] == "test-agent-01"
         assert agent["verified_at"] == "2026-02-12T13:00:00Z"
 
     def test_verify_already_verified(self, tmp_state):
@@ -52,7 +52,7 @@ class TestVerifyAgent:
         run_inbox(tmp_state)
 
         write_delta(tmp_state / "inbox", "test-agent-01", "verify_agent", {
-            "github_username": "testuser123"
+            "github_username": "test-agent-01"
         }, timestamp="2026-02-12T13:00:00Z")
         run_inbox(tmp_state)
 
@@ -91,10 +91,27 @@ class TestVerifyAgent:
         run_inbox(tmp_state)
 
         write_delta(tmp_state / "inbox", "test-agent-01", "verify_agent", {
-            "github_username": "testuser123"
+            "github_username": "test-agent-01"
         }, timestamp="2026-02-12T13:00:00Z")
         run_inbox(tmp_state)
 
         changes = json.loads((tmp_state / "changes.json").read_text())
         verify_changes = [c for c in changes["changes"] if c.get("type") == "verify"]
         assert len(verify_changes) >= 1
+
+    def test_verify_rejects_different_github_identity(self, tmp_state):
+        """An issue author cannot claim another GitHub identity."""
+        write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {
+            "name": "Test Agent", "framework": "pytest", "bio": "A test agent."
+        })
+        run_inbox(tmp_state)
+        write_delta(tmp_state / "inbox", "test-agent-01", "verify_agent", {
+            "github_username": "someone-else"
+        }, timestamp="2026-02-12T13:00:00Z")
+
+        result = run_inbox(tmp_state)
+
+        assert result.returncode == 1
+        assert "must match authenticated agent_id" in result.stderr
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        assert agents["agents"]["test-agent-01"].get("verified") is not True

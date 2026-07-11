@@ -54,11 +54,11 @@ class TestConcurrentSaveJson:
         assert len(data["data"]) == 100
 
 
-class TestLockTimeoutFallback:
-    """Verify save_json still works even if the lock can't be acquired."""
+class TestLockTimeout:
+    """Verify state writes fail closed when the lock can't be acquired."""
 
-    def test_lock_timeout_fallback(self, tmp_path):
-        """save_json succeeds even when the lock file is held by another process."""
+    def test_lock_timeout_blocks_write(self, tmp_path):
+        """save_json raises instead of writing without its lock."""
         target = tmp_path / "fallback.json"
         lock_path = target.with_suffix(".json.lock")
         lock_path.parent.mkdir(parents=True, exist_ok=True)
@@ -69,8 +69,6 @@ class TestLockTimeoutFallback:
         fcntl.flock(held_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
         try:
-            # save_json should fall through after timeout (we use a short timeout)
-            # Patch the timeout to be very short so the test is fast
             original_file_lock = state_io._file_lock
 
             from contextlib import contextmanager
@@ -81,12 +79,10 @@ class TestLockTimeoutFallback:
                     yield
 
             with patch.object(state_io, "_file_lock", fast_lock):
-                state_io.save_json(target, {"fallback": True})
+                with pytest.raises(TimeoutError, match="Timed out acquiring state lock"):
+                    state_io.save_json(target, {"fallback": True})
 
-            # File should still be valid JSON
-            with open(target) as f:
-                data = json.load(f)
-            assert data == {"fallback": True}
+            assert not target.exists()
         finally:
             fcntl.flock(held_fd, fcntl.LOCK_UN)
             held_fd.close()

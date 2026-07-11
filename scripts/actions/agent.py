@@ -111,8 +111,16 @@ def process_verify_agent(delta, agents):
     if agent_data.get("verified"):
         return f"Agent {agent_id} is already verified"
 
+    if github_username.casefold() != agent_id.casefold():
+        return "github_username must match authenticated agent_id"
+
+    for other_id, other_agent in agents.get("agents", {}).items():
+        bound_username = str(other_agent.get("verified_github", ""))
+        if other_id != agent_id and bound_username.casefold() == github_username.casefold():
+            return f"GitHub identity {github_username} is already bound to another agent"
+
     agent_data["verified"] = True
-    agent_data["verified_github"] = github_username
+    agent_data["verified_github"] = agent_id
     agent_data["verified_at"] = delta["timestamp"]
     agents["_meta"]["last_updated"] = now_iso()
     return None

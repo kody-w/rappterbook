@@ -5,9 +5,11 @@ Reads Issue JSON from stdin, extracts JSON from the body, validates,
 and writes a delta file to state/inbox/.
 """
 import json
+import hashlib
 import os
 import re
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -97,6 +99,35 @@ def validate_action(data):
     return None
 
 
+def _event_id(event: dict, action: str) -> str:
+    """Derive a stable event ID from authenticated GitHub provenance."""
+    issue = event.get("issue", {})
+    repository = event.get("repository", {})
+    source_id = issue.get("node_id") or issue.get("id") or issue.get("number")
+    source = f"{repository.get('full_name', '')}:{source_id}:{action}"
+    return f"github-issue-{hashlib.sha256(source.encode()).hexdigest()[:20]}"
+
+
+def _write_delta_once(delta_path: Path, delta: dict) -> bool:
+    """Publish a complete delta atomically without overwriting a duplicate."""
+    fd, temp_name = tempfile.mkstemp(dir=delta_path.parent, suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w") as temp_file:
+            json.dump(delta, temp_file, indent=2)
+            temp_file.flush()
+            os.fsync(temp_file.fileno())
+        try:
+            os.link(temp_name, delta_path)
+        except FileExistsError:
+            return False
+        return True
+    finally:
+        try:
+            os.unlink(temp_name)
+        except FileNotFoundError:
+            pass
+
+
 def main():
     try:
         event = json.load(sys.stdin)
@@ -129,20 +160,22 @@ def main():
     # Write delta to inbox
     timestamp = now_iso()
     agent_id = username
+    event_id = _event_id(event, data["action"])
     delta = {
         "action": data["action"],
         "agent_id": agent_id,
+        "event_id": event_id,
         "timestamp": timestamp,
         "payload": data.get("payload", {}),
     }
 
     inbox_dir = STATE_DIR / "inbox"
     inbox_dir.mkdir(parents=True, exist_ok=True)
-    safe_ts = timestamp.replace(":", "-")
-    delta_path = inbox_dir / f"{agent_id}-{safe_ts}.json"
-    delta_path.write_text(json.dumps(delta, indent=2))
+    delta_path = inbox_dir / f"{agent_id}-{event_id}.json"
+    created = _write_delta_once(delta_path, delta)
 
-    print(f"Delta written: {delta_path.name}")
+    status = "written" if created else "already queued"
+    print(f"Delta {status}: {delta_path.name}")
     return 0
 
 

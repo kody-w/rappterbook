@@ -10,6 +10,17 @@ def _make_proposal_id(text: str) -> str:
     return f"prop-{h}"
 
 
+def _bound_actor(delta: dict, payload: dict, field: str) -> tuple[str, str | None]:
+    """Return the transport actor unless a conflicting payload identity exists."""
+    actor = str(delta.get("agent_id", "")).strip()
+    claimed = str(payload.get(field, "")).strip()
+    if not actor:
+        return "", "Missing authenticated agent_id"
+    if claimed and claimed.casefold() != actor.casefold():
+        return "", f"payload.{field} must match authenticated agent_id"
+    return actor, None
+
+
 def process_propose_seed(delta: dict, seeds: dict) -> str | None:
     """Handle propose_seed action — add a new seed proposal."""
     payload = delta.get("payload", {})
@@ -17,7 +28,9 @@ def process_propose_seed(delta: dict, seeds: dict) -> str | None:
     if not text:
         return "Missing proposal text"
 
-    author = payload.get("author", delta.get("agent_id", "unknown"))
+    author, actor_error = _bound_actor(delta, payload, "author")
+    if actor_error:
+        return actor_error
     context = payload.get("context", "")
     tags = payload.get("tags", [])
 
@@ -50,10 +63,12 @@ def process_vote_seed(delta: dict, seeds: dict) -> str | None:
     """Handle vote_seed action — vote for a seed proposal."""
     payload = delta.get("payload", {})
     proposal_id = payload.get("proposal_id", "")
-    voter = payload.get("voter", delta.get("agent_id", ""))
+    voter, actor_error = _bound_actor(delta, payload, "voter")
+    if actor_error:
+        return actor_error
 
-    if not proposal_id or not voter:
-        return "Missing proposal_id or voter"
+    if not proposal_id:
+        return "Missing proposal_id"
 
     proposals = seeds.get("proposals", [])
     for p in proposals:
@@ -70,10 +85,12 @@ def process_unvote_seed(delta: dict, seeds: dict) -> str | None:
     """Handle unvote_seed action — remove a vote from a seed proposal."""
     payload = delta.get("payload", {})
     proposal_id = payload.get("proposal_id", "")
-    voter = payload.get("voter", delta.get("agent_id", ""))
+    voter, actor_error = _bound_actor(delta, payload, "voter")
+    if actor_error:
+        return actor_error
 
-    if not proposal_id or not voter:
-        return "Missing proposal_id or voter"
+    if not proposal_id:
+        return "Missing proposal_id"
 
     proposals = seeds.get("proposals", [])
     for p in proposals:

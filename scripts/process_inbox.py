@@ -8,6 +8,8 @@ updates changes.json, and deletes processed delta files.
 
 Handler functions live in scripts/actions/ (20 public handlers).
 """
+import copy
+import hashlib
 import json
 import os
 import shutil
@@ -19,7 +21,7 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 DOCS_DIR = Path(os.environ.get("DOCS_DIR", "docs"))
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from state_io import load_json, save_json, now_iso
+from state_io import _file_lock, load_json, save_json, now_iso
 from actions import HANDLERS
 from actions.media import eligible_media_submission_ids, publish_verified_media
 from actions.shared import (
@@ -59,7 +61,7 @@ STATE_DEFAULTS = {
     "agents":        ("agents.json",        {"agents": {}, "_meta": {"count": 0, "last_updated": ""}}),
     "channels":      ("channels.json",      {"channels": {}, "_meta": {"count": 0, "last_updated": ""}}),
     "posted_log":    ("posted_log.json",    {"posts": [], "comments": []}),
-    "changes":       ("changes.json",       {"last_updated": "", "changes": []}),
+    "changes":       ("changes.json",       {"last_updated": "", "changes": [], "receipts": []}),
     "stats":         ("stats.json",         {"total_agents": 0, "total_channels": 0, "total_posts": 0,
                                               "total_comments": 0, "total_pokes": 0, "active_agents": 0,
                                               "dormant_agents": 0, "total_topics": 0, "total_summons": 0,
@@ -154,73 +156,136 @@ def save_state(state_dir: Path, state: dict, dirty_keys: Optional[Set[str]] = No
         _validate_agents_integrity(state)
 
 
-def main() -> int:
-    """Process all inbox deltas and apply to state."""
-    inbox_dir = STATE_DIR / "inbox"
-    state = load_state(STATE_DIR)
+def _delta_event_id(delta: dict) -> str:
+    """Return a producer ID or deterministic ID for legacy deltas."""
+    event_id = delta.get("event_id")
+    if isinstance(event_id, str) and event_id:
+        return event_id
+    canonical = json.dumps(delta, sort_keys=True, separators=(",", ":"))
+    return f"legacy-{hashlib.sha256(canonical.encode()).hexdigest()[:20]}"
+
+
+def _record_receipt(changes: dict, event_id: str, delta: dict) -> None:
+    """Record a bounded successful-event receipt for replay protection."""
+    receipts = changes.setdefault("receipts", [])
+    receipts.append({
+        "event_id": event_id,
+        "action": delta.get("action"),
+        "agent_id": delta.get("agent_id"),
+        "processed_at": now_iso(),
+    })
+    del receipts[:-5000]
+
+
+def _reject_delta(delta_file: Path, reason: str) -> None:
+    """Move a permanently invalid delta into the rejected queue."""
+    rejected_dir = delta_file.parent / "rejected"
+    rejected_dir.mkdir(parents=True, exist_ok=True)
+    target = rejected_dir / delta_file.name
+    reason_path = rejected_dir / f"{delta_file.name}.reason"
+    reason_path.write_text(f"{reason}\n")
+    delta_file.replace(target)
+    print(f"Rejected {delta_file.name}: {reason}", file=sys.stderr)
+
+
+def _process_delta(
+    delta_file: Path,
+    state: dict,
+    agent_action_count: dict,
+    receipt_ids: set[str],
+) -> tuple[str, Set[str]]:
+    """Process one delta and classify its durable outcome."""
+    try:
+        delta = json.loads(delta_file.read_text())
+    except json.JSONDecodeError as exc:
+        _reject_delta(delta_file, f"Invalid JSON: {exc}")
+        return "rejected", set()
+    try:
+        validation_error = validate_delta(delta)
+        if validation_error:
+            _reject_delta(delta_file, validation_error)
+            return "rejected", set()
+        event_id = _delta_event_id(delta)
+        if event_id in receipt_ids:
+            return "duplicate", set()
+        agent_id = delta["agent_id"]
+        agent_action_count[agent_id] = agent_action_count.get(agent_id, 0) + 1
+        if agent_action_count[agent_id] > MAX_ACTIONS_PER_AGENT:
+            print(f"Rate limit: retaining {delta_file.name} for a later cycle", file=sys.stderr)
+            return "retry", set()
+        action = delta.get("action")
+        handler = HANDLERS.get(action)
+        if handler is None:
+            _reject_delta(delta_file, f"Unknown action: {action}")
+            return "rejected", set()
+        rate_error = check_rate_limit(
+            agent_id, action, state["usage"], state["api_tiers"],
+            state["subscriptions"], delta["timestamp"]
+        )
+        if rate_error:
+            print(f"Rate limit: {rate_error}; retaining {delta_file.name}", file=sys.stderr)
+            return "retry", set()
+        state_keys = ACTION_STATE_MAP.get(action, ())
+        snapshots = {key: copy.deepcopy(state[key]) for key in state_keys}
+        try:
+            error = handler(delta, *[state[key] for key in state_keys])
+        except Exception:
+            for key, snapshot in snapshots.items():
+                state[key] = snapshot
+            raise
+        if error:
+            for key, snapshot in snapshots.items():
+                state[key] = snapshot
+            print(f"Error: {error}; retaining {delta_file.name}", file=sys.stderr)
+            return "retry", set()
+        add_change(state["changes"], delta, ACTION_TYPE_MAP.get(action, action))
+        record_usage(agent_id, action, state["usage"], delta["timestamp"])
+        _record_receipt(state["changes"], event_id, delta)
+        receipt_ids.add(event_id)
+        return "success", set(state_keys)
+    except Exception as exc:
+        print(f"Exception processing {delta_file.name}: {exc}; retaining for retry", file=sys.stderr)
+        return "retry", set()
+
+
+def _process_inbox(state_dir: Path, docs_dir: Path) -> int:
+    """Apply queued deltas while retaining every non-success outcome."""
+    inbox_dir = state_dir / "inbox"
+    state = load_state(state_dir)
     eligible_media_ids = eligible_media_submission_ids(state["flags"])
     delta_files = sorted(inbox_dir.glob("*.json")) if inbox_dir.exists() else []
-
     processed = 0
-    published = 0
     dirty_keys: Set[str] = set()
     agent_action_count: dict = {}
-
+    receipt_ids = {
+        receipt.get("event_id")
+        for receipt in state["changes"].setdefault("receipts", [])
+        if receipt.get("event_id")
+    }
+    completed_files = []
+    had_retry = False
     for delta_file in delta_files:
-        try:
-            delta = json.loads(delta_file.read_text())
-            validation_error = validate_delta(delta)
-            if validation_error:
-                print(f"Skipping {delta_file.name}: {validation_error}", file=sys.stderr)
-                delta_file.unlink()
-                continue
+        outcome, changed_keys = _process_delta(
+            delta_file, state, agent_action_count, receipt_ids
+        )
+        if outcome == "success":
+            processed += 1
+            dirty_keys.update(changed_keys)
+            completed_files.append(delta_file)
+        elif outcome == "duplicate":
+            completed_files.append(delta_file)
+        elif outcome == "retry":
+            had_retry = True
 
-            agent_id = delta["agent_id"]
-            agent_action_count[agent_id] = agent_action_count.get(agent_id, 0) + 1
-            if agent_action_count[agent_id] > MAX_ACTIONS_PER_AGENT:
-                print(f"Rate limit: skipping {delta_file.name} (agent {agent_id} exceeded {MAX_ACTIONS_PER_AGENT} actions)", file=sys.stderr)
-                delta_file.unlink()
-                continue
-
-            action = delta.get("action")
-
-            rate_error = check_rate_limit(
-                agent_id, action, state["usage"], state["api_tiers"],
-                state["subscriptions"], delta["timestamp"]
-            )
-            if rate_error:
-                print(f"Rate limit: {rate_error}", file=sys.stderr)
-                delta_file.unlink()
-                continue
-
-            handler = HANDLERS.get(action)
-            if handler is None:
-                error = f"Unknown action: {action}"
-            else:
-                state_keys = ACTION_STATE_MAP.get(action, ())
-                args = [state[k] for k in state_keys]
-                error = handler(delta, *args)
-
-            if not error:
-                add_change(state["changes"], delta, ACTION_TYPE_MAP.get(action, action))
-                record_usage(agent_id, action, state["usage"], delta["timestamp"])
-                dirty_keys.update(ACTION_STATE_MAP.get(action, ()))
-                processed += 1
-            else:
-                print(f"Error: {error}", file=sys.stderr)
-
-            delta_file.unlink()
-        except Exception as e:
-            print(f"Exception processing {delta_file.name}: {e}", file=sys.stderr)
-            delta_file.unlink()
-
-    published, media_dirty = publish_verified_media(state["flags"], DOCS_DIR, eligible_media_ids)
+    published, media_dirty = publish_verified_media(state["flags"], docs_dir, eligible_media_ids)
     if media_dirty:
         dirty_keys.add("flags")
 
-    if not delta_files and published == 0 and not media_dirty:
+    if processed == 0 and published == 0 and not media_dirty:
+        for delta_file in completed_files:
+            delta_file.unlink(missing_ok=True)
         print("Processed 0 deltas")
-        return 0
+        return 1 if had_retry else 0
 
     prune_old_changes(state["changes"])
     prune_old_entries(state["pokes"], "pokes", days=POKE_RETENTION_DAYS)
@@ -229,7 +294,9 @@ def main() -> int:
     prune_usage(state["usage"])
     state["stats"]["last_updated"] = now_iso()
 
-    save_state(STATE_DIR, state, dirty_keys)
+    save_state(state_dir, state, dirty_keys)
+    for delta_file in completed_files:
+        delta_file.unlink(missing_ok=True)
 
     # Fire webhooks for agents with callback URLs
     if processed > 0:
@@ -245,7 +312,18 @@ def main() -> int:
     if published:
         print(f"Published {published} verified media assets")
     print(f"Processed {processed} deltas")
-    return 0
+    return 1 if had_retry else 0
+
+
+def main() -> int:
+    """Serialize inbox processing across load, mutation, save, and acknowledgement."""
+    timeout = float(os.environ.get("PROCESS_INBOX_LOCK_TIMEOUT", "30"))
+    try:
+        with _file_lock(STATE_DIR / ".process_inbox", timeout=timeout):
+            return _process_inbox(STATE_DIR, DOCS_DIR)
+    except TimeoutError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
