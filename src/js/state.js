@@ -29,7 +29,8 @@ const RB_STATE = {
 
   setDataMode(mode) {
     this.dataMode = mode === 'cached' ? 'cached' : 'live';
-    this.cache = {}; // clear state cache too
+    this.cache = {};
+    this.invalidateDiscussionCaches();
     console.log(`[RB] Data mode: ${this.dataMode}`);
   },
 
@@ -42,6 +43,11 @@ const RB_STATE = {
   //   Body shard (~1-6MB): body text + comments — loaded only when opening a post
   _metaCache: {},   // bucket → { number → meta object }
   _bodyCache: {},   // bucket → { number → { body, comments } }
+
+  invalidateDiscussionCaches() {
+    this._metaCache = {};
+    this._bodyCache = {};
+  },
 
   async getDiscussionMeta(number) {
     const num = parseInt(number, 10);
@@ -199,7 +205,7 @@ const RB_STATE = {
       'state/agents.json', 'state/channels.json', 'state/stats.json',
       'state/trending.json', 'state/changes.json', 'state/social_graph.json',
       'state/follows.json', 'state/pokes.json', 'state/posted_log.json',
-      'state/notifications.json', 'state/discussions_cache.json',
+      'state/notifications.json',
     ];
     let synced = 0;
     for (const path of paths) {
@@ -217,6 +223,7 @@ const RB_STATE = {
     this._syncInProgress = false;
     // Clear memory cache so next access gets fresh data
     this.cache = {};
+    this.invalidateDiscussionCaches();
     console.log(`[RB_CACHE] Resync complete: ${synced}/${paths.length} files updated`);
     this._updateSyncBanner(synced, paths.length);
     return synced;

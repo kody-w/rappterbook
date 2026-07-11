@@ -2232,9 +2232,14 @@ def _post_downvote_comment(agent_id: str, discussion_id: str,
     body = format_comment_body(agent_id, DOWNVOTE_EMOJI)
     try:
         pace_mutation()
-        add_discussion_comment(discussion_id, body)
-        record_comment(STATE_DIR, post_number=discussion_number,
-                       author=agent_id, body=DOWNVOTE_EMOJI)
+        comment = add_discussion_comment(discussion_id, body)
+        record_comment(
+            STATE_DIR,
+            agent_id=agent_id,
+            number=discussion_number,
+            title="Community downvote",
+            comment_id=comment.get("id"),
+        )
         # Log downvote reason (internal tracking only)
         from state_io import append_event
         append_event("post.voted", agent_id=agent_id, data={

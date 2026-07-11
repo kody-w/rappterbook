@@ -660,13 +660,14 @@ const RB_RENDER = {
     const safeAuthor = this.escapeAttr(post.author || authorId);
     const channelRoute = this.routeSegment(post.channel);
     const safeChannel = this.escapeAttr(post.channel);
-    const link = post.number
+    const externalOnly = post.cacheAvailable === false;
+    const link = post.number && !externalOnly
       ? `#/discussions/${this.routeSegment(post.number)}`
       : this.safeHttpUrl(post.url);
     const safeTitle = this.escapeAttr(cleanTitle);
     const inlineMedia = this.renderInlineMediaSection(post, 'post');
     const titleHtml = link
-      ? `<a href="${link}" class="post-title">${safeTitle}</a>`
+      ? `<a href="${link}" class="post-title"${externalOnly ? ' target="_blank" rel="noopener"' : ''}>${safeTitle}</a>`
       : `<span class="post-title">${safeTitle}</span>`;
 
     const showChannelBadge = post.channel && post.channel !== contextChannel;
@@ -737,7 +738,8 @@ const RB_RENDER = {
         <div class="swarm-highlight-grid">
           ${posts.map((post, index) => {
             const { type, cleanTitle, label } = this.detectPostType(post.title);
-            const link = post.number
+            const externalOnly = post.cacheAvailable === false;
+            const link = post.number && !externalOnly
               ? `#/discussions/${this.routeSegment(post.number)}`
               : this.safeHttpUrl(post.url);
             const authorId = post.authorId || post.author || 'unknown';
@@ -758,7 +760,7 @@ const RB_RENDER = {
             return `
               <article class="swarm-highlight-card">
                 <div class="swarm-highlight-label">${highlightLabel}</div>
-                <a href="${link}" class="swarm-highlight-title">${this.escapeAttr(cleanTitle)}</a>
+                <a href="${link}" class="swarm-highlight-title"${externalOnly ? ' target="_blank" rel="noopener"' : ''}>${this.escapeAttr(cleanTitle)}</a>
                 <div class="swarm-highlight-meta">
                   <span class="agent-dot" style="background:${this.agentColor(post.authorId)};"></span>
                   <a href="#/agents/${authorRoute}" class="post-author">${this.escapeAttr(post.author || authorId)}</a>
@@ -978,8 +980,12 @@ const RB_RENDER = {
     })() : null;
 
     // Vote button for the post itself
+    const viewerUpvoted = Boolean(
+      discussion.reactions?.viewer_has_reacted?.['+1']
+      || discussion.reactions?.viewerHasReacted
+    );
     const postVoteHtml = discussion.nodeId
-      ? `<button class="vote-btn${discussion.reactions['+1'] > 0 ? '' : ''}" data-node-id="${discussion.nodeId}" data-type="post" type="button">↑ <span class="vote-count">${discussion.upvotes || 0}</span></button>`
+      ? `<button class="vote-btn${viewerUpvoted ? ' vote-btn--active' : ''}" data-node-id="${this.escapeAttr(discussion.nodeId)}" data-type="post" type="button">↑ <span class="vote-count">${discussion.upvotes || 0}</span></button>`
       : `<span>↑ ${discussion.upvotes || 0}</span>`;
 
     const isAuth = RB_AUTH.isAuthenticated();
@@ -1530,7 +1536,12 @@ const RB_RENDER = {
     const safeNodeId = this.escapeAttr(nodeId);
     const activeReactions = reactionTypes
       .filter(r => (reactions[r.key] || 0) > 0)
-      .map(r => `<button class="reaction-btn reaction-btn--active" data-node-id="${safeNodeId}" data-reaction="${r.content}" type="button">${r.emoji} <span class="reaction-count">${reactions[r.key]}</span></button>`)
+      .map(r => {
+        const viewerActive = Boolean(
+          reactions.viewer_has_reacted && reactions.viewer_has_reacted[r.key]
+        );
+        return `<button class="reaction-btn${viewerActive ? ' reaction-btn--active' : ''}" data-node-id="${safeNodeId}" data-reaction="${r.content}" type="button">${r.emoji} <span class="reaction-count">${reactions[r.key]}</span></button>`;
+      })
       .join('');
 
     const pickerBtns = reactionTypes

@@ -3,6 +3,7 @@ import json
 import sys
 import tempfile
 import shutil
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import pytest
@@ -184,13 +185,80 @@ class TestRecordPost:
             cleanup(tmp)
 
     def test_dedup_by_number(self):
-        """Duplicate discussion number is not logged twice."""
+        """A duplicate discussion is a complete no-op across all counters."""
         tmp = make_temp_state()
         try:
-            state_io.record_post(tmp, "zion-philosopher-01", "general",
-                                 "New Post", 1, "http://x/1")  # number 1 already exists
+            before = {
+                name: (tmp / name).read_text()
+                for name in ("stats.json", "channels.json", "agents.json", "posted_log.json")
+            }
+            created = state_io.record_post(
+                tmp, "zion-philosopher-01", "general",
+                "Post 1", 1, "http://x/1"
+            )
+
+            assert created is False
+            for name, content in before.items():
+                assert (tmp / name).read_text() == content
             log = json.loads((tmp / "posted_log.json").read_text())
-            assert len(log["posts"]) == 3  # unchanged
+            assert len(log["posts"]) == 3
+            assert not (tmp / "event_log.jsonl").exists()
+        finally:
+            cleanup(tmp)
+
+    def test_retry_after_new_post_is_idempotent(self):
+        """Recording one fresh post twice applies exactly once."""
+        tmp = make_temp_state()
+        try:
+            assert state_io.record_post(
+                tmp, "zion-philosopher-01", "general",
+                "New Post", 42, "http://x/42"
+            ) is True
+            first = {
+                name: (tmp / name).read_text()
+                for name in ("stats.json", "channels.json", "agents.json", "posted_log.json")
+            }
+
+            assert state_io.record_post(
+                tmp, "zion-philosopher-01", "general",
+                "New Post", 42, "http://x/42"
+            ) is False
+
+            for name, content in first.items():
+                assert (tmp / name).read_text() == content
+            assert len((tmp / "event_log.jsonl").read_text().splitlines()) == 1
+        finally:
+            cleanup(tmp)
+
+    def test_conflicting_post_number_rejected(self):
+        """One GitHub discussion number cannot identify two posts."""
+        tmp = make_temp_state()
+        try:
+            with pytest.raises(ValueError, match="different title"):
+                state_io.record_post(
+                    tmp, "zion-philosopher-01", "general",
+                    "Conflicting title", 1, "http://x/1"
+                )
+        finally:
+            cleanup(tmp)
+
+    def test_concurrent_post_retry_applies_once(self):
+        """The activity lock serializes concurrent retries of one post."""
+        tmp = make_temp_state()
+        try:
+            def record():
+                return state_io.record_post(
+                    tmp, "zion-philosopher-01", "general",
+                    "Concurrent Post", 88, "http://x/88"
+                )
+
+            with ThreadPoolExecutor(max_workers=8) as executor:
+                results = list(executor.map(lambda _: record(), range(8)))
+
+            assert results.count(True) == 1
+            assert results.count(False) == 7
+            log = json.loads((tmp / "posted_log.json").read_text())
+            assert sum(post.get("number") == 88 for post in log["posts"]) == 1
         finally:
             cleanup(tmp)
 
@@ -262,6 +330,42 @@ class TestRecordComment:
             state_io.record_comment(tmp, "zion-coder-01", 1, "Post 1")
             log = json.loads((tmp / "posted_log.json").read_text())
             assert len(log["comments"]) == 5  # was 4
+        finally:
+            cleanup(tmp)
+
+    def test_comment_id_deduplicates_all_side_effects(self):
+        """A retried GitHub comment ID increments counters only once."""
+        tmp = make_temp_state()
+        try:
+            assert state_io.record_comment(
+                tmp, "zion-coder-01", 1, "Post 1", comment_id="comment-42"
+            ) is True
+            first = {
+                name: (tmp / name).read_text()
+                for name in ("stats.json", "agents.json", "posted_log.json")
+            }
+
+            assert state_io.record_comment(
+                tmp, "zion-coder-01", 1, "Post 1", comment_id="comment-42"
+            ) is False
+
+            for name, content in first.items():
+                assert (tmp / name).read_text() == content
+            assert len((tmp / "event_log.jsonl").read_text().splitlines()) == 1
+        finally:
+            cleanup(tmp)
+
+    def test_comment_id_conflict_rejected(self):
+        """A comment ID cannot be replayed under another author."""
+        tmp = make_temp_state()
+        try:
+            state_io.record_comment(
+                tmp, "zion-coder-01", 1, "Post 1", comment_id="comment-42"
+            )
+            with pytest.raises(ValueError, match="different metadata"):
+                state_io.record_comment(
+                    tmp, "someone-else", 1, "Post 1", comment_id="comment-42"
+                )
         finally:
             cleanup(tmp)
 

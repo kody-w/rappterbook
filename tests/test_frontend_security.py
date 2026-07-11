@@ -101,3 +101,23 @@ def test_app_routes_all_source_overrides_through_state_guard() -> None:
 
     assert "if (owner || repo || branch)" in app_source
     assert "RB_STATE.configure(owner, repo, branch)" in app_source
+
+
+def test_reaction_count_is_not_viewer_ownership() -> None:
+    """Aggregate reactions are active only when GitHub says the viewer reacted."""
+    render_path = ROOT / "src" / "js" / "render.js"
+    result = _run_javascript(
+        render_path,
+        """({
+          aggregateOnly: RB_RENDER.renderReactions({ '+1': 3 }, 'node-1'),
+          viewerOwned: RB_RENDER.renderReactions({
+            '+1': 3, viewer_has_reacted: { '+1': true }
+          }, 'node-1')
+        })""",
+        prelude=(
+            "const RB_DISCUSSIONS = { formatTimestamp: value => String(value || '') };"
+        ),
+    )
+
+    assert "reaction-btn--active" not in result["aggregateOnly"]
+    assert "reaction-btn--active" in result["viewerOwned"]

@@ -16,12 +16,25 @@ import os
 from pathlib import Path
 
 SHARD_SIZE = 250  # discussions per shard
+MAX_META_SHARD_BYTES = 1024 * 1024
+MAX_BODY_SHARD_BYTES = 8 * 1024 * 1024
 
 # Fields kept in the lightweight meta shard
 META_FIELDS = {
     "number", "node_id", "title", "author_login", "category_slug",
     "created_at", "url", "upvotes", "downvotes", "comment_count",
 }
+
+
+def write_bounded_json(path: Path, data, max_bytes: int) -> int:
+    """Write compact JSON only when its encoded payload fits the byte budget."""
+    payload = json.dumps(data, separators=(",", ":")).encode()
+    if len(payload) > max_bytes:
+        raise RuntimeError(
+            f"{path.name} is {len(payload)} bytes; shard limit is {max_bytes}"
+        )
+    path.write_bytes(payload)
+    return len(payload)
 
 
 def shard_cache(state_dir: str | None = None) -> None:
@@ -61,8 +74,8 @@ def shard_cache(state_dir: str | None = None) -> None:
             },
             "discussions": meta_items,
         }
-        meta_path.write_text(json.dumps(meta_data, separators=(",", ":")))
-        meta_kb = meta_path.stat().st_size // 1024
+        meta_bytes = write_bounded_json(meta_path, meta_data, MAX_META_SHARD_BYTES)
+        meta_kb = meta_bytes // 1024
 
         # Body shard: body text + comments, keyed by discussion number
         body_name = f"body_{bucket:05d}.json"
@@ -77,8 +90,8 @@ def shard_cache(state_dir: str | None = None) -> None:
             if d.get("comment_authors"):
                 entry["comment_authors"] = d["comment_authors"]
             body_map[str(d["number"])] = entry
-        body_path.write_text(json.dumps(body_map, separators=(",", ":")))
-        body_kb = body_path.stat().st_size // 1024
+        body_bytes = write_bounded_json(body_path, body_map, MAX_BODY_SHARD_BYTES)
+        body_kb = body_bytes // 1024
 
         index[str(bucket)] = {
             "file": meta_name,

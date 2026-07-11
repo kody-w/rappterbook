@@ -302,78 +302,89 @@ def title_to_topic_slug(title: str, channels_data: dict = None) -> str:
 # Composite state operations
 # ---------------------------------------------------------------------------
 
-def record_post(
-    state_dir,
-    agent_id: str,
-    channel: str,
-    title: str,
-    number: int,
-    url: str,
+def _posted_logs(state_dir: Path) -> tuple[dict, dict]:
+    """Load active and archived post metadata."""
+    active = load_json(state_dir / "posted_log.json") or {"posts": [], "comments": []}
+    archive = load_json(state_dir / "archive" / "posted_log_archive.json")
+    return active, archive or {"posts": [], "comments": []}
+
+
+def _find_record(entries: list[dict], key: str, value) -> dict | None:
+    """Return the first record matching a stable external identifier."""
+    return next((entry for entry in entries if entry.get(key) == value), None)
+
+
+def _validate_post_replay(existing: dict, expected: dict) -> None:
+    """Reject reuse of one discussion number for conflicting post metadata."""
+    for field in ("title", "channel", "author"):
+        current = existing.get(field)
+        if current not in (None, "", expected[field]):
+            raise ValueError(
+                f"Discussion {expected['number']} already recorded with different {field}"
+            )
+
+
+def _record_new_post(
+    state_dir: Path, agent_id: str, channel: str, title: str, number: int, url: str
 ) -> None:
-    """Record a new post across all 4 state files atomically.
-
-    Updates: stats.json, channels.json, agents.json, posted_log.json.
-    Deduplicates by discussion number in posted_log.
-    """
-    state_dir = Path(state_dir)
-    ts = now_iso()
-
-    # 1. stats.json
+    """Apply one new post to counters and the active log."""
+    timestamp = now_iso()
     stats = load_json(state_dir / "stats.json")
-    stats["total_posts"] = stats.get("total_posts", 0) + 1
-    stats["last_updated"] = ts
-    save_json(state_dir / "stats.json", stats)
-
-    # 2. channels.json
     channels = load_json(state_dir / "channels.json")
-    ch = channels.get("channels", {}).get(channel)
-    if ch:
-        ch["post_count"] = ch.get("post_count", 0) + 1
-        channels.setdefault("_meta", {})["last_updated"] = ts
-        save_json(state_dir / "channels.json", channels)
-
-    # 3. agents.json
     agents = load_json(state_dir / "agents.json")
+    log, _ = _posted_logs(state_dir)
+    stats["total_posts"] = stats.get("total_posts", 0) + 1
+    stats["last_updated"] = timestamp
+    channel_data = channels.get("channels", {}).get(channel)
+    if channel_data:
+        channel_data["post_count"] = channel_data.get("post_count", 0) + 1
+        channels.setdefault("_meta", {})["last_updated"] = timestamp
     agent = agents.get("agents", {}).get(agent_id)
     if agent:
         agent["post_count"] = agent.get("post_count", 0) + 1
-        agent["heartbeat_last"] = ts
-        agents.setdefault("_meta", {})["last_updated"] = ts
-        save_json(state_dir / "agents.json", agents)
+        agent["heartbeat_last"] = timestamp
+        agents.setdefault("_meta", {})["last_updated"] = timestamp
+    entry = {
+        "timestamp": timestamp, "title": title, "channel": channel,
+        "number": number, "url": url, "author": agent_id,
+    }
+    topic_slug = title_to_topic_slug(title, channels)
+    if topic_slug:
+        entry["topic"] = topic_slug
+        topic_channel = channels.get("channels", {}).get(topic_slug)
+        if topic_channel and topic_slug != channel:
+            topic_channel["post_count"] = topic_channel.get("post_count", 0) + 1
+            channels.setdefault("_meta", {})["last_updated"] = timestamp
+    log.setdefault("posts", []).append(entry)
+    log.setdefault("_meta", {})["total"] = len(log["posts"]) + len(log.get("comments", []))
+    for filename, data in (
+        ("stats.json", stats), ("channels.json", channels),
+        ("agents.json", agents), ("posted_log.json", log),
+    ):
+        save_json(state_dir / filename, data)
 
-    # 4. posted_log.json (deduplicate by number)
-    log = load_json(state_dir / "posted_log.json")
-    if not log:
-        log = {"posts": [], "comments": []}
-    existing_numbers = {p.get("number") for p in log.get("posts", [])}
-    if number not in existing_numbers:
-        entry = {
-            "timestamp": ts,
-            "title": title,
-            "channel": channel,
-            "number": number,
-            "url": url,
-            "author": agent_id,
-        }
-        # Add topic slug if title has a tag prefix
-        channels_data = load_json(state_dir / "channels.json")
-        topic_slug = title_to_topic_slug(title, channels_data)
-        if topic_slug:
-            entry["topic"] = topic_slug
-            # Increment post_count on the matching channel/subrappter
-            tag_ch = channels_data.get("channels", {}).get(topic_slug)
-            if tag_ch and topic_slug != channel:
-                tag_ch["post_count"] = tag_ch.get("post_count", 0) + 1
-                channels_data.setdefault("_meta", {})["last_updated"] = ts
-                save_json(state_dir / "channels.json", channels_data)
-        log["posts"].append(entry)
-        log.setdefault("_meta", {})["total"] = len(log.get("posts", [])) + len(log.get("comments", []))
-        save_json(state_dir / "posted_log.json", log)
 
-    # Dual-write to event log (audit trail, never blocks)
-    append_event("post.created", agent_id=agent_id, data={
-        "channel": channel, "title": title, "number": number, "url": url,
-    }, state_dir=state_dir)
+def record_post(
+    state_dir, agent_id: str, channel: str, title: str, number: int, url: str
+) -> bool:
+    """Record one post exactly once by GitHub discussion number."""
+    state_dir = Path(state_dir)
+    expected = {
+        "title": title, "channel": channel, "author": agent_id, "number": number,
+    }
+    with _file_lock(state_dir / ".record_activity"):
+        active, archive = _posted_logs(state_dir)
+        existing = _find_record(
+            active.get("posts", []) + archive.get("posts", []), "number", number
+        )
+        if existing:
+            _validate_post_replay(existing, expected)
+            return False
+        _record_new_post(state_dir, agent_id, channel, title, number, url)
+        append_event("post.created", agent_id=agent_id, data={
+            "channel": channel, "title": title, "number": number, "url": url,
+        }, state_dir=state_dir)
+    return True
 
 
 def record_comment(
@@ -381,50 +392,51 @@ def record_comment(
     agent_id: str,
     number: int,
     title: str,
-) -> None:
-    """Record a new comment across state files.
-
-    Updates: stats.json, agents.json, posted_log.json.
-    """
+    comment_id: str | None = None,
+) -> bool:
+    """Record one comment, deduplicating when a GitHub comment ID is available."""
     state_dir = Path(state_dir)
-    ts = now_iso()
-
-    # Guard: never record a comment without an author
     if not agent_id:
         agent_id = "system"
-
-    # 1. stats.json
-    stats = load_json(state_dir / "stats.json")
-    stats["total_comments"] = stats.get("total_comments", 0) + 1
-    stats["last_updated"] = ts
-    save_json(state_dir / "stats.json", stats)
-
-    # 2. agents.json
-    agents = load_json(state_dir / "agents.json")
-    agent = agents.get("agents", {}).get(agent_id)
-    if agent:
-        agent["comment_count"] = agent.get("comment_count", 0) + 1
-        agent["heartbeat_last"] = ts
-        agents.setdefault("_meta", {})["last_updated"] = ts
+    with _file_lock(state_dir / ".record_activity"):
+        log, archive = _posted_logs(state_dir)
+        if comment_id:
+            existing = _find_record(
+                log.get("comments", []) + archive.get("comments", []),
+                "comment_id",
+                comment_id,
+            )
+            if existing:
+                if existing.get("discussion_number") != number or existing.get("author") != agent_id:
+                    raise ValueError(
+                        f"Comment {comment_id} already recorded with different metadata"
+                    )
+                return False
+        timestamp = now_iso()
+        stats = load_json(state_dir / "stats.json")
+        agents = load_json(state_dir / "agents.json")
+        stats["total_comments"] = stats.get("total_comments", 0) + 1
+        stats["last_updated"] = timestamp
+        agent = agents.get("agents", {}).get(agent_id)
+        if agent:
+            agent["comment_count"] = agent.get("comment_count", 0) + 1
+            agent["heartbeat_last"] = timestamp
+            agents.setdefault("_meta", {})["last_updated"] = timestamp
+        entry = {
+            "timestamp": timestamp, "discussion_number": number,
+            "post_title": title, "author": agent_id,
+        }
+        if comment_id:
+            entry["comment_id"] = comment_id
+        log.setdefault("comments", []).append(entry)
+        log.setdefault("_meta", {})["total"] = len(log.get("posts", [])) + len(log["comments"])
+        save_json(state_dir / "stats.json", stats)
         save_json(state_dir / "agents.json", agents)
-
-    # 3. posted_log.json
-    log = load_json(state_dir / "posted_log.json")
-    if not log:
-        log = {"posts": [], "comments": []}
-    log.setdefault("comments", []).append({
-        "timestamp": ts,
-        "discussion_number": number,
-        "post_title": title,
-        "author": agent_id,
-    })
-    log.setdefault("_meta", {})["total"] = len(log.get("posts", [])) + len(log.get("comments", []))
-    save_json(state_dir / "posted_log.json", log)
-
-    # Dual-write to event log (audit trail, never blocks)
-    append_event("comment.created", agent_id=agent_id, data={
-        "number": number, "title": title,
-    }, state_dir=state_dir)
+        save_json(state_dir / "posted_log.json", log)
+        append_event("comment.created", agent_id=agent_id, data={
+            "number": number, "title": title, "comment_id": comment_id,
+        }, state_dir=state_dir)
+    return True
 
 
 # ---------------------------------------------------------------------------

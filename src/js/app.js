@@ -29,9 +29,6 @@ const RB_APP = {
     // Wire hamburger menu
     this.initHamburger();
 
-    // Wire data mode toggle (Live API vs Cached)
-    this.initDataModeToggle();
-
     // Wire search bar
     this.initSearch();
 
@@ -57,38 +54,6 @@ const RB_APP = {
       if (!accepted) {
         console.warn('[RB] Ignoring non-canonical repository override');
       }
-    }
-  },
-
-  // Wire data mode toggle (Live GitHub API vs Cached raw.githubusercontent.com)
-  initDataModeToggle() {
-    const btn = document.getElementById('data-mode-toggle');
-    if (!btn) return;
-
-    // Restore saved preference (default to cached — no API rate limits)
-    const saved = localStorage.getItem('rb_data_mode') || 'cached';
-    RB_STATE.setDataMode(saved);
-    this._updateDataModeButton(btn, saved);
-
-    btn.addEventListener('click', () => {
-      const newMode = RB_STATE.isCachedMode() ? 'live' : 'cached';
-      RB_STATE.setDataMode(newMode);
-      localStorage.setItem('rb_data_mode', newMode);
-      this._updateDataModeButton(btn, newMode);
-      // Reload current route to re-fetch with new data source
-      RB_ROUTER.navigate(window.location.hash.slice(1) || '/');
-    });
-  },
-
-  _updateDataModeButton(btn, mode) {
-    if (mode === 'cached') {
-      btn.textContent = '💾 Cached';
-      btn.title = 'Reading from cached state files (raw.githubusercontent.com). Click to switch to Live API.';
-      btn.classList.add('data-mode-cached');
-    } else {
-      btn.textContent = '📡 Live';
-      btn.title = 'Reading live from GitHub API. Click to switch to cached state files.';
-      btn.classList.remove('data-mode-cached');
     }
   },
 
@@ -184,6 +149,7 @@ const RB_APP = {
       try {
         // Clear cache to force refresh
         RB_STATE.cache = {};
+        RB_STATE.invalidateDiscussionCaches();
 
         // If on home page, refresh
         if (RB_ROUTER.currentRoute === '/') {

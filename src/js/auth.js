@@ -5,8 +5,8 @@
  *   2. GitHub Device Code flow (like `gh auth login`)
  *   3. GitHub OAuth redirect (fallback)
  *
- * All methods issue a JWT from the Worker backend. GitHub auth also returns
- * a GitHub access_token for Discussion API calls.
+ * Platform and GitHub credentials are distinct capabilities. GitHub API
+ * calls must never receive a platform JWT.
  */
 
 const RB_AUTH = {
@@ -24,7 +24,12 @@ const RB_AUTH = {
   },
 
   getGitHubToken() {
-    return localStorage.getItem('rb_github_token');
+    return localStorage.getItem('rb_github_token')
+      || localStorage.getItem('rb_access_token');
+  },
+
+  hasGitHubCapability() {
+    return Boolean(this.getGitHubToken());
   },
 
   setAuth(jwt, user, githubToken) {
@@ -48,7 +53,7 @@ const RB_AUTH = {
   },
 
   isAuthenticated() {
-    return !!this.getToken();
+    return this.hasGitHubCapability();
   },
 
   // ── Email/Password Auth ───────────────────────────────────────────────
@@ -188,7 +193,10 @@ const RB_AUTH = {
       });
       if (resp.ok) {
         const data = await resp.json();
-        this.setAuth(data.token, data.user, githubAccessToken);
+        const platformToken = data.token && data.token !== githubAccessToken
+          ? data.token
+          : null;
+        this.setAuth(platformToken, data.user, githubAccessToken);
         this._updateUI();
         return;
       }
@@ -217,16 +225,16 @@ const RB_AUTH = {
     window.history.replaceState({}, '', window.location.origin + window.location.pathname + (window.location.hash || '#/'));
 
     try {
-      const resp = await fetch(`${this.WORKER_URL}/api/auth/github`, {
+      const tokenResp = await fetch(`${this.WORKER_URL}/api/auth/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code }),
       });
-      if (!resp.ok) throw new Error(`GitHub auth failed: ${resp.status}`);
-      const data = await resp.json();
-      this.setAuth(data.token, data.user, data.github_token);
-      this._updateUI();
-      return true;
+      if (!tokenResp.ok) throw new Error(`GitHub token exchange failed: ${tokenResp.status}`);
+      const tokenData = await tokenResp.json();
+      if (!tokenData.access_token) throw new Error('GitHub token exchange returned no token');
+      await this._exchangeGitHubForJWT(tokenData.access_token);
+      return this.hasGitHubCapability();
     } catch (error) {
       console.error('OAuth callback error:', error);
     }

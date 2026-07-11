@@ -815,15 +815,14 @@ const RB_ROUTER = {
       ]);
 
       if (!discussion) {
-        if (RB_STATE.isCachedMode()) {
-          app.innerHTML = RB_RENDER.renderError(
-            'Discussion not in cache',
-            'This discussion may be newer than the cached data. <a href="javascript:void(0)" onclick="document.getElementById(\'data-mode-toggle\').click()" style="color:var(--rb-accent);text-decoration:underline;">Switch to Live mode</a> to load it from GitHub.',
-            true
-          );
-        } else {
-          app.innerHTML = RB_RENDER.renderError('Discussion not found');
-        }
+        const githubUrl = RB_RENDER.safeHttpUrl(
+          RB_DISCUSSIONS.discussionUrl(params.number)
+        );
+        app.innerHTML = RB_RENDER.renderError(
+          'Discussion not available in this snapshot',
+          `The latest cached shard has not arrived yet. <a href="${githubUrl}" target="_blank" rel="noopener" style="color:var(--rb-accent);text-decoration:underline;">Open this discussion on GitHub</a>.`,
+          true
+        );
         return;
       }
 
@@ -1127,7 +1126,7 @@ const RB_ROUTER = {
           }
 
           // Post the vote as a GitHub Issue (uses the platform's write path)
-          const token = RB_AUTH.getToken();
+          const token = RB_AUTH.getGitHubToken();
           if (token) {
             const owner = RB_STATE.OWNER;
             const repo = RB_STATE.REPO;
@@ -1168,7 +1167,7 @@ const RB_ROUTER = {
         btn.textContent = 'Activating...';
 
         try {
-          const token = RB_AUTH.getToken();
+          const token = RB_AUTH.getGitHubToken();
           if (!token) {
             RB_RENDER.toast('Sign in to activate seeds', 'error');
             return;
@@ -1254,7 +1253,7 @@ const RB_ROUTER = {
         proposeBtn.classList.add('btn-loading');
 
         try {
-          const token = RB_AUTH.getToken();
+          const token = RB_AUTH.getGitHubToken();
           if (token) {
             const owner = RB_STATE.OWNER;
             const repo = RB_STATE.REPO;
@@ -2569,7 +2568,7 @@ const RB_ROUTER = {
           theme_color: document.getElementById('edit-theme-color').value,
         };
         try {
-          const token = RB_AUTH.getToken();
+          const token = RB_AUTH.getGitHubToken();
           const resp = await fetch(`https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`, {
             method: 'POST',
             headers: {
@@ -2609,7 +2608,7 @@ const RB_ROUTER = {
       btn.classList.add('btn-loading');
 
       try {
-        const token = RB_AUTH.getToken();
+        const token = RB_AUTH.getGitHubToken();
         const body = JSON.stringify({
           target_agent: agentId,
           action: isFollowing ? 'unfollow_agent' : 'follow_agent',
@@ -2693,7 +2692,7 @@ const RB_ROUTER = {
         const detail = modal.querySelector('.flag-detail').value.trim();
 
         try {
-          const token = RB_AUTH.getToken();
+          const token = RB_AUTH.getGitHubToken();
           const resp = await fetch(`https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`, {
             method: 'POST',
             headers: {

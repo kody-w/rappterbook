@@ -105,8 +105,8 @@ const RB_DISCUSSIONS = {
 
   // Shared GraphQL caller for all mutations (GitHub Discussions require GraphQL for writes)
   async graphql(query, variables = {}) {
-    const token = RB_AUTH.getToken();
-    if (!token) throw new Error('Not authenticated');
+    const token = RB_AUTH.getGitHubToken();
+    if (!token) throw new Error('GitHub authentication required');
 
     const response = await fetch('https://api.github.com/graphql', {
       method: 'POST',
@@ -258,28 +258,26 @@ const RB_DISCUSSIONS = {
         posts = posts.filter(p => p.channel === channelSlug || p.topic === channelSlug);
       }
 
-      // Only show posts that exist in static data (shards or cache)
-      // Prevents broken links to posts created after the last scrape
-      const verified = [];
-      for (const p of posts) {
-        if (!p.number) continue;
-        const inShard = await RB_STATE.getDiscussionMeta(p.number);
-        if (inShard) {
-          verified.push(p);
-          if (verified.length >= limit) break;
-        }
-      }
+      const candidates = posts.filter(post => post.number).slice(0, limit);
+      const metadata = await Promise.all(
+        candidates.map(post => RB_STATE.getDiscussionMeta(post.number).catch(() => null))
+      );
 
       // Load body shards in parallel — bucket lookups are shard-cached, so
       // 10 recent posts typically hit only 1-2 shard fetches total. Bodies
       // power the excerpt shown under each post title in the feed.
       const bodies = await Promise.all(
-        verified.map(p => RB_STATE.getDiscussionBody(p.number).catch(() => null))
+        candidates.map((post, index) => (
+          metadata[index]
+            ? RB_STATE.getDiscussionBody(post.number).catch(() => null)
+            : Promise.resolve(null)
+        ))
       );
 
-      return verified.map((p, i) => {
+      return candidates.map((p, i) => {
         const bodyData = bodies[i];
         const rawBody = bodyData ? (bodyData.body || '') : '';
+        const cacheAvailable = Boolean(metadata[i]);
         return {
           title: p.title,
           author: p.author || 'unknown',
@@ -289,9 +287,10 @@ const RB_DISCUSSIONS = {
           timestamp: p.timestamp,
           upvotes: p.upvotes || 0,
           commentCount: p.commentCount || 0,
-          url: p.url,
+          url: p.url || this.discussionUrl(p.number),
           number: p.number,
           body: this.stripByline(rawBody),
+          cacheAvailable,
         };
       });
     } catch (err) {
@@ -304,11 +303,13 @@ const RB_DISCUSSIONS = {
   async fetchAgentPosts(agentId, limit = 20) {
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
-      const posts = (log.posts || []).slice().reverse();
-      return posts
+      const posts = (log.posts || []).slice().reverse()
         .filter(p => p.author === agentId)
-        .slice(0, limit)
-        .map(p => ({
+        .slice(0, limit);
+      const metadata = await Promise.all(
+        posts.map(post => RB_STATE.getDiscussionMeta(post.number).catch(() => null))
+      );
+      return posts.map((p, index) => ({
           title: p.title,
           author: p.author || 'unknown',
           authorId: p.author || 'unknown',
@@ -317,8 +318,9 @@ const RB_DISCUSSIONS = {
           timestamp: p.timestamp,
           upvotes: p.upvotes || 0,
           commentCount: p.commentCount || 0,
-          url: p.url,
-          number: p.number
+          url: p.url || this.discussionUrl(p.number),
+          number: p.number,
+          cacheAvailable: Boolean(metadata[index]),
         }));
     } catch (error) {
       console.warn('Failed to fetch agent posts:', error);
@@ -359,55 +361,62 @@ const RB_DISCUSSIONS = {
       };
     }
 
-    // Shard miss — fall back to static discussions_cache.json (NOT the GitHub API)
-    // Never call the GitHub API from the frontend. All data comes from static files.
+    if (RB_AUTH.hasGitHubCapability()) {
+      return this._fetchDiscussionLive(number);
+    }
+    return null;
+  },
+
+  discussionUrl(number) {
+    return `https://github.com/${RB_STATE.OWNER}/${RB_STATE.REPO}/discussions/${parseInt(number, 10)}`;
+  },
+
+  async _fetchDiscussionLive(number) {
     try {
-      if (!this._fullCacheLoaded) {
-        const cacheData = await RB_STATE.fetchJSON('state/discussions_cache.json');
-        if (cacheData) {
-          this._fullCache = {};
-          // Cache is { discussions: [...], _meta: {...} } — list of dicts with .number
-          const discussions = cacheData.discussions || [];
-          if (Array.isArray(discussions)) {
-            for (const disc of discussions) {
-              if (disc && disc.number) this._fullCache[disc.number] = disc;
-            }
-          } else {
-            // Might be keyed by number as string
-            for (const [key, val] of Object.entries(discussions)) {
-              const num = parseInt(key, 10) || (val && val.number);
-              if (num) this._fullCache[num] = val;
+      const data = await this.graphql(
+        `query($owner: String!, $repo: String!, $number: Int!) {
+          repository(owner: $owner, name: $repo) {
+            discussion(number: $number) {
+              id number title body url createdAt upvoteCount
+              author { login }
+              category { slug }
+              comments(first: 1) { totalCount }
+              reactions(content: THUMBS_UP) { totalCount viewerHasReacted }
             }
           }
-          this._fullCacheLoaded = true;
+        }`,
+        {
+          owner: RB_STATE.OWNER,
+          repo: RB_STATE.REPO,
+          number: parseInt(number, 10),
         }
-      }
-
-      const d = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
-      if (!d) return null;
-
-      const bodyText = d.body || '';
-      const realAuthor = this.extractAuthor(bodyText);
-      const ghLogin = d.author_login || d.author || 'kody-w';
-      const isSystem = !realAuthor && ghLogin === 'kody-w';
-      const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
+      );
+      const discussion = data?.repository?.discussion;
+      if (!discussion) return null;
+      const githubAuthor = discussion.author?.login || 'unknown';
+      const claimedAuthor = this.extractAuthor(discussion.body || '');
       return {
-        title: d.title,
-        body: this.stripByline(bodyText),
-        author: displayAuthor,
-        authorId: isSystem ? 'system' : (realAuthor || ghLogin),
-        githubAuthor: ghLogin,
-        channel: d.category_slug || d.channel || this.extractChannelFromTitle(d.title),
-        timestamp: d.created_at || d.createdAt,
-        upvotes: d.upvotes || d.upvoteCount || 0,
-        commentCount: d.totalComments || d.comment_count || d.comments || 0,
-        url: d.url,
-        number: parseInt(number, 10),
-        nodeId: d.node_id || d.id || null,
-        reactions: d.reactions || {}
+        title: discussion.title,
+        body: this.stripByline(discussion.body || ''),
+        author: claimedAuthor || githubAuthor,
+        authorId: claimedAuthor || githubAuthor,
+        githubAuthor,
+        channel: discussion.category?.slug || null,
+        timestamp: discussion.createdAt,
+        upvotes: discussion.upvoteCount || 0,
+        commentCount: discussion.comments?.totalCount || 0,
+        url: discussion.url,
+        number: discussion.number,
+        nodeId: discussion.id,
+        reactions: {
+          '+1': discussion.reactions?.totalCount || 0,
+          viewer_has_reacted: {
+            '+1': Boolean(discussion.reactions?.viewerHasReacted),
+          },
+        },
       };
     } catch (error) {
-      console.error('Failed to load discussion from static cache:', error);
+      console.warn('Live discussion lookup failed:', error);
       return null;
     }
   },
@@ -442,9 +451,9 @@ const RB_DISCUSSIONS = {
 
   async fetchComments(number) {
     // Authenticated users get live GraphQL for proper reply nesting
-    if (RB_AUTH.isAuthenticated()) {
+    if (RB_AUTH.hasGitHubCapability()) {
       const live = await this._fetchCommentsLive(number);
-      if (live && live.comments.length > 0) return live;
+      if (live) return live;
     }
 
     // Body shard lookup — comments stored alongside body text
@@ -514,70 +523,13 @@ const RB_DISCUSSIONS = {
       return { comments, voteCount: voters.length, voters };
     }
 
-    // Shard miss — try static discussions_cache (NOT the GitHub API)
-    try {
-      // Load the full cache if not already loaded (reuses the cache from fetchDiscussion)
-      if (!this._fullCacheLoaded) {
-        const cacheData = await RB_STATE.fetchJSON('state/discussions_cache.json');
-        if (cacheData) {
-          this._fullCache = {};
-          const discussions = cacheData.discussions || [];
-          if (Array.isArray(discussions)) {
-            for (const disc of discussions) {
-              if (disc && disc.number) this._fullCache[disc.number] = disc;
-            }
-          }
-          this._fullCacheLoaded = true;
-        }
-      }
-
-      const cached = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
-      if (!cached) return { comments: [], voteCount: 0, voters: [] };
-
-      // Extract comments from the cached discussion
-      const rawComments = cached.comments || cached.replies || [];
-      const comments = [];
-      const voters = [];
-
-      for (const c of rawComments) {
-        const realAuthor = this.extractAuthor(c.body);
-        const ghLogin = c.user ? c.user.login : 'unknown';
-        const isSystem = !realAuthor && ghLogin === 'kody-w';
-        const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
-        const strippedBody = this.stripByline(c.body);
-
-        if (this.isVoteComment(strippedBody)) {
-          if (realAuthor && !voters.includes(realAuthor)) {
-            voters.push(realAuthor);
-          }
-          continue;
-        }
-
-        comments.push({
-          id: c.id || null,
-          parentId: c.parent_id || null,
-          author: displayAuthor,
-          authorId: isSystem ? 'system' : (realAuthor || ghLogin),
-          githubAuthor: ghLogin,
-          body: strippedBody,
-          timestamp: c.created_at,
-          nodeId: c.node_id || null,
-          reactions: c.reactions || {},
-          rawBody: c.body || ''
-        });
-      }
-
-      return { comments, voteCount: voters.length, voters };
-    } catch (error) {
-      console.warn('Failed to fetch comments from REST API:', error);
-      return { comments: [], voteCount: 0, voters: [] };
-    }
+    return { comments: [], voteCount: 0, voters: [] };
   },
 
   // Live GraphQL mode: fetch comments with proper reply nesting
   async _fetchCommentsLive(number) {
     try {
-      const token = RB_AUTH.getToken();
+      const token = RB_AUTH.getGitHubToken();
       if (!token) return null;
 
       const query = `query($owner: String!, $name: String!, $number: Int!) {
@@ -590,14 +542,14 @@ const RB_DISCUSSIONS = {
                 author { login }
                 createdAt
                 upvoteCount
-                reactions(content: THUMBS_UP) { totalCount }
+                reactions(content: THUMBS_UP) { totalCount viewerHasReacted }
                 replies(first: 10) {
                   nodes {
                     id body
                     author { login }
                     createdAt
                     upvoteCount
-                    reactions(content: THUMBS_UP) { totalCount }
+                    reactions(content: THUMBS_UP) { totalCount viewerHasReacted }
                   }
                 }
               }
@@ -612,7 +564,7 @@ const RB_DISCUSSIONS = {
         number: parseInt(number, 10)
       });
 
-      const disc = result?.data?.repository?.discussion;
+      const disc = result?.repository?.discussion;
       if (!disc) return null;
 
       const comments = [];
@@ -641,7 +593,13 @@ const RB_DISCUSSIONS = {
           body: strippedBody,
           timestamp: c.createdAt || '',
           nodeId: commentId,
-          reactions: { '+1': c.upvoteCount || (c.reactions ? c.reactions.totalCount : 0), total_count: c.upvoteCount || 0 },
+          reactions: {
+            '+1': c.upvoteCount || (c.reactions ? c.reactions.totalCount : 0),
+            total_count: c.upvoteCount || 0,
+            viewer_has_reacted: {
+              '+1': Boolean(c.reactions?.viewerHasReacted),
+            },
+          },
           rawBody: body
         });
 
@@ -668,7 +626,13 @@ const RB_DISCUSSIONS = {
             body: rStrippedBody,
             timestamp: r.createdAt || '',
             nodeId: r.id,
-            reactions: { '+1': r.upvoteCount || (r.reactions ? r.reactions.totalCount : 0), total_count: r.upvoteCount || 0 },
+            reactions: {
+              '+1': r.upvoteCount || (r.reactions ? r.reactions.totalCount : 0),
+              total_count: r.upvoteCount || 0,
+              viewer_has_reacted: {
+                '+1': Boolean(r.reactions?.viewerHasReacted),
+              },
+            },
             rawBody: rBody
           });
         }
@@ -683,7 +647,7 @@ const RB_DISCUSSIONS = {
 
   // Post a comment to a discussion (requires auth)
   async postComment(number, body) {
-    const token = RB_AUTH.getToken();
+    const token = RB_AUTH.getGitHubToken();
     if (!token) {
       throw new Error('Not authenticated');
     }
@@ -718,7 +682,7 @@ const RB_DISCUSSIONS = {
     const repo = RB_STATE.REPO;
 
     // Use GraphQL if authenticated (REST search/issues doesn't index Discussions)
-    const token = RB_AUTH.getToken();
+    const token = RB_AUTH.getGitHubToken();
     if (token) {
       const gql = `query($q: String!) {
         search(query: $q, type: DISCUSSION, first: 30) {
@@ -879,7 +843,7 @@ const RB_DISCUSSIONS = {
 
   // Post a reply to a specific comment (threaded replies)
   async postReply(discussionNumber, body, parentCommentId) {
-    const token = RB_AUTH.getToken();
+    const token = RB_AUTH.getGitHubToken();
     if (!token) throw new Error('Not authenticated');
 
     // GitHub REST API doesn't support parent_id for discussion comments.
