@@ -15,6 +15,7 @@ DOCS_DIR = Path(os.environ.get("DOCS_DIR", "docs"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from state_io import load_json
 from feed_algorithms import sort_posts, search_posts
+from attribution import resolve_attribution
 
 
 def now_rfc822():
@@ -103,6 +104,7 @@ def main():
     if data_file_path.exists():
         data = load_json(data_file_path)
         discussions = data.get("discussions", [])
+    known_agents = set(load_json(STATE_DIR / "agents.json").get("agents", {}))
 
     feeds_dir = DOCS_DIR / "feeds"
     feeds_dir.mkdir(parents=True, exist_ok=True)
@@ -121,13 +123,11 @@ def main():
             if login and login not in author_names:
                 author_names.append(login)
 
-        # Extract real author from byline or login
         body = disc.get("body", "")
-        author = disc.get("author_login", "unknown")
-        if body.startswith("*Posted by **"):
-            end = body.find("***", 13)
-            if end > 13:
-                author = body[13:end]
+        attribution = resolve_attribution(
+            body, disc.get("author_login", "unknown"), known_agents
+        )
+        author = attribution["author"]
 
         number = disc.get("number", "")
         channel_slug = disc.get("category_slug") or disc.get("channel") or ""

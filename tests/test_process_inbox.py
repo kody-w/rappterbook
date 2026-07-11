@@ -280,6 +280,32 @@ class TestInboxCleanup:
         assert agents["_meta"]["count"] == 1
         assert [r["event_id"] for r in changes["receipts"]] == ["event-once"]
 
+    def test_mixed_success_and_retry_commits_progress(self, tmp_state):
+        """A retryable sibling cannot replay already-saved successful work."""
+        success_path = write_delta(
+            tmp_state / "inbox",
+            "agent-a",
+            "register_agent",
+            {"name": "Agent A", "framework": "test", "bio": "Test."},
+            event_id="event-success",
+        )
+        retry_path = write_delta(
+            tmp_state / "inbox",
+            "missing-agent",
+            "update_profile",
+            {"bio": "retry"},
+            event_id="event-retry",
+        )
+
+        result = run_inbox(tmp_state)
+
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        assert result.returncode == 0
+        assert "agent-a" in agents["agents"]
+        assert not success_path.exists()
+        assert retry_path.exists()
+        assert "Retained retryable deltas" in result.stderr
+
 
 class TestMultipleDeltas:
     def test_processed_in_order(self, tmp_state):

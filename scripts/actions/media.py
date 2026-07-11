@@ -26,6 +26,7 @@ ALLOWED_MEDIA_HOSTS = {
     "media.githubusercontent.com",
     "private-user-images.githubusercontent.com",
 }
+MAX_MEDIA_REDIRECTS = 4
 ALLOWED_EXTENSIONS = {
     "image": {".png", ".jpg", ".jpeg", ".gif", ".webp"},
     "audio": {".mp3", ".wav", ".ogg", ".m4a"},
@@ -89,7 +90,13 @@ def _validated_source_url(url: str) -> Optional[str]:
     parsed = urllib.parse.urlparse(url)
     if parsed.scheme == "file" and os.environ.get(ALLOW_FILE_URLS_ENV) == "1":
         return url
-    if parsed.scheme != "https" or parsed.netloc not in ALLOWED_MEDIA_HOSTS:
+    if (
+        parsed.scheme != "https"
+        or parsed.hostname not in ALLOWED_MEDIA_HOSTS
+        or parsed.username
+        or parsed.password
+        or parsed.port not in (None, 443)
+    ):
         return None
     return url
 
@@ -229,10 +236,40 @@ def eligible_media_submission_ids(flags: dict) -> Set[str]:
     }
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """Expose redirects to the validator instead of following automatically."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+def _open_validated_media(source_url: str):
+    """Open media after validating every URL in a bounded redirect chain."""
+    opener = urllib.request.build_opener(_NoRedirect)
+    current_url = source_url
+    for _ in range(MAX_MEDIA_REDIRECTS + 1):
+        validated_url = _validated_source_url(current_url)
+        if not validated_url:
+            raise ValueError(f"Media redirect target is not allowed: {current_url}")
+        request = urllib.request.Request(
+            validated_url,
+            headers={"User-Agent": "rappterbook-media-publisher/1.0"},
+        )
+        try:
+            return opener.open(request, timeout=30)
+        except urllib.error.HTTPError as exc:
+            if exc.code not in (301, 302, 303, 307, 308):
+                raise
+            location = exc.headers.get("Location")
+            if not location:
+                raise ValueError("Media redirect is missing a Location header") from exc
+            current_url = urllib.parse.urljoin(validated_url, location)
+    raise ValueError(f"Media exceeded {MAX_MEDIA_REDIRECTS} redirects")
+
+
 def _download_media_bytes(source_url: str) -> Tuple[bytes, str]:
-    """Fetch media bytes and return the payload with its content type."""
-    request = urllib.request.Request(source_url, headers={"User-Agent": "rappterbook-media-publisher/1.0"})
-    with urllib.request.urlopen(request, timeout=30) as response:
+    """Fetch media bytes after validating redirects and response size."""
+    with _open_validated_media(source_url) as response:
         content_length = response.headers.get("Content-Length")
         if content_length and int(content_length) > MAX_MEDIA_BYTES:
             raise ValueError(f"Media exceeds {MAX_MEDIA_BYTES} byte limit")

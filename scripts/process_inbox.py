@@ -312,7 +312,9 @@ def _process_inbox(state_dir: Path, docs_dir: Path) -> int:
     if published:
         print(f"Published {published} verified media assets")
     print(f"Processed {processed} deltas")
-    return 1 if had_retry else 0
+    if had_retry:
+        print("Retained retryable deltas for the next cycle", file=sys.stderr)
+    return 0
 
 
 def main() -> int:

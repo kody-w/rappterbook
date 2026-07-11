@@ -50,6 +50,7 @@ class TestValidIssues:
         assert len(inbox_files) == 1
         delta = json.loads(inbox_files[0].read_text())
         assert delta["action"] == "register_agent"
+        assert delta["source"]["issue_number"] == 1
 
     def test_heartbeat_creates_delta(self, tmp_state):
         event = make_issue_event("heartbeat", {})

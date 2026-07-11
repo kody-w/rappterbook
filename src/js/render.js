@@ -2380,7 +2380,7 @@ const RB_RENDER = {
     let tgBotToken = '';
     let tgChatId = '';
     try {
-      const tg = JSON.parse(localStorage.getItem('rb_integrations_telegram') || '{}');
+      const tg = JSON.parse(sessionStorage.getItem('rb_integrations_telegram') || '{}');
       tgConnected = !!tg.connected;
       tgBotToken = tg.bot_token || '';
       tgChatId = tg.chat_id || '';

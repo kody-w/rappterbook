@@ -2743,7 +2743,8 @@ const RB_ROUTER = {
         const botToken = document.getElementById('settings-tg-bot-token').value.trim();
         const chatId = document.getElementById('settings-tg-chat-id').value.trim();
         const config = { bot_token: botToken, chat_id: chatId, connected: !!(botToken && chatId) };
-        localStorage.setItem('rb_integrations_telegram', JSON.stringify(config));
+        sessionStorage.setItem('rb_integrations_telegram', JSON.stringify(config));
+        localStorage.removeItem('rb_integrations_telegram');
         const status = document.getElementById('settings-tg-status');
         if (status) {
           status.textContent = config.connected ? 'Connected' : 'Not connected';
@@ -2757,15 +2758,18 @@ const RB_ROUTER = {
     const exportBtn = document.getElementById('settings-export-btn');
     if (exportBtn) {
       exportBtn.addEventListener('click', () => {
-        const keys = [
-          'rb_user', 'rb_jwt', 'rb_github_token', 'rb_access_token',
-          'rb_integrations_telegram', 'rb_data_mode', 'rb-theme',
-          'rb_notifications_read_at',
-        ];
-        const payload = { _export: { version: 1, exported_at: new Date().toISOString(), source: 'rappterbook' } };
+        const keys = ['rb-theme', 'rb_notifications_read_at'];
+        const payload = {
+          _export: {
+            version: 2,
+            exported_at: new Date().toISOString(),
+            source: 'rappterbook',
+          },
+          preferences: {},
+        };
         for (const key of keys) {
           const val = localStorage.getItem(key);
-          if (val !== null) payload[key] = val;
+          if (val !== null) payload.preferences[key] = val;
         }
         let login = 'user';
         try { login = JSON.parse(localStorage.getItem('rb_user') || '{}').login || 'user'; } catch (e) {}
@@ -2804,16 +2808,22 @@ const RB_ROUTER = {
               if (importApplyBtn) importApplyBtn.style.display = 'none';
               return;
             }
-            pendingImport = data;
-            const keys = Object.keys(data).filter(k => k !== '_export');
+            const allowedKeys = ['rb-theme', 'rb_notifications_read_at'];
+            const preferences = data.preferences && typeof data.preferences === 'object'
+              ? data.preferences
+              : {};
+            pendingImport = {};
+            for (const key of allowedKeys) {
+              if (typeof preferences[key] === 'string') {
+                pendingImport[key] = preferences[key];
+              }
+            }
+            const keys = Object.keys(pendingImport);
             const exportDate = data._export.exported_at ? new Date(data._export.exported_at).toLocaleString() : 'unknown';
-            let userLogin = '(unknown)';
-            try { userLogin = JSON.parse(data.rb_user || '{}').login || '(unknown)'; } catch (e) {}
             importPreview.innerHTML = `
               <div class="settings-import-summary">
-                <div><strong>User:</strong> ${RB_RENDER.escapeAttr(userLogin)}</div>
                 <div><strong>Exported:</strong> ${RB_RENDER.escapeAttr(exportDate)}</div>
-                <div><strong>Keys to restore:</strong> ${keys.length} (${keys.join(', ')})</div>
+                <div><strong>Preferences to restore:</strong> ${keys.length} (${keys.map(key => RB_RENDER.escapeAttr(key)).join(', ')})</div>
               </div>
             `;
             if (importApplyBtn) importApplyBtn.style.display = '';
@@ -2830,8 +2840,7 @@ const RB_ROUTER = {
     if (importApplyBtn) {
       importApplyBtn.addEventListener('click', () => {
         if (!pendingImport) return;
-        const keys = Object.keys(pendingImport).filter(k => k !== '_export');
-        for (const key of keys) {
+        for (const key of Object.keys(pendingImport)) {
           localStorage.setItem(key, pendingImport[key]);
         }
         pendingImport = null;
@@ -2855,6 +2864,14 @@ const RB_ROUTER = {
           }
         }
         keysToRemove.forEach(k => localStorage.removeItem(k));
+        const sessionKeys = [];
+        for (let i = 0; i < sessionStorage.length; i++) {
+          const key = sessionStorage.key(i);
+          if (key && (key.startsWith('rb_') || key.startsWith('rb-'))) {
+            sessionKeys.push(key);
+          }
+        }
+        sessionKeys.forEach(k => sessionStorage.removeItem(k));
         RB_RENDER.toast('All local data cleared — reloading...', 'info', 2000);
         setTimeout(() => window.location.reload(), 1500);
       });

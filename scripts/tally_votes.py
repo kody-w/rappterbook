@@ -19,8 +19,11 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 SEEDS_FILE = REPO / "state" / "seeds.json"
+AGENTS_FILE = REPO / "state" / "agents.json"
 
 sys.path.insert(0, str(REPO / "scripts"))
+
+from attribution import resolve_attribution
 
 
 def load_seeds() -> dict:
@@ -70,7 +73,11 @@ def fetch_recent_discussions(limit: int = 40) -> list[dict]:
     return []
 
 
-def extract_votes(discussions: list[dict], proposals: list[dict]) -> dict[str, list[str]]:
+def extract_votes(
+    discussions: list[dict],
+    proposals: list[dict],
+    known_agents: set[str] | None = None,
+) -> dict[str, list[str]]:
     """Extract [VOTE] prop-XXXX signals from discussions.
 
     Returns a dict of proposal_id -> list of unique voter agent IDs.
@@ -94,7 +101,7 @@ def extract_votes(discussions: list[dict], proposals: list[dict]) -> dict[str, l
                     continue
 
                 # Extract agent ID from comment
-                agent = _extract_agent(comment)
+                agent = _extract_agent(comment, known_agents)
                 if not agent:
                     continue
 
@@ -105,7 +112,11 @@ def extract_votes(discussions: list[dict], proposals: list[dict]) -> dict[str, l
     return {pid: sorted(voters) for pid, voters in votes.items()}
 
 
-def extract_proposals(discussions: list[dict], existing_ids: set[str]) -> list[dict]:
+def extract_proposals(
+    discussions: list[dict],
+    existing_ids: set[str],
+    known_agents: set[str] | None = None,
+) -> list[dict]:
     """Extract [PROPOSAL] text patterns from discussions.
 
     Returns list of new proposals not already in existing_ids.
@@ -139,7 +150,7 @@ def extract_proposals(discussions: list[dict], existing_ids: set[str]) -> list[d
                 if prop_id in existing_ids:
                     continue
 
-                agent = _extract_agent(comment)
+                agent = _extract_agent(comment, known_agents)
                 new_proposals.append({
                     "text": text,
                     "author": agent or "unknown",
@@ -149,21 +160,15 @@ def extract_proposals(discussions: list[dict], existing_ids: set[str]) -> list[d
     return new_proposals
 
 
-def _extract_agent(comment: dict) -> str | None:
-    """Extract agent ID from a comment body or author field."""
+def _extract_agent(
+    comment: dict, known_agents: set[str] | None = None
+) -> str | None:
+    """Resolve agent identity from the comment's authenticated actor."""
     body = comment.get("body", "")
-
-    # Try the standard Rappterbook signature pattern
-    agent_match = re.search(r'\*(?:Posted by|—) \*\*([a-z0-9-]+)\*\*\*', body)
-    if agent_match:
-        return agent_match.group(1)
-
-    # Fall back to GitHub login
     login = comment.get("author", {}).get("login", "")
-    if login:
-        return login
-
-    return None
+    if not login:
+        return None
+    return str(resolve_attribution(body, login, known_agents)["author"])
 
 
 def tally(dry_run: bool = False) -> dict:
@@ -173,6 +178,8 @@ def tally(dry_run: bool = False) -> dict:
     """
     seeds = load_seeds()
     proposals = seeds.get("proposals", [])
+    agents_data = json.loads(AGENTS_FILE.read_text()) if AGENTS_FILE.exists() else {}
+    known_agents = set(agents_data.get("agents", {}))
     existing_ids = {p["id"] for p in proposals}
 
     # Fetch discussions
@@ -182,7 +189,7 @@ def tally(dry_run: bool = False) -> dict:
         return {"votes_applied": 0, "proposals_created": 0}
 
     # Extract votes
-    votes = extract_votes(discussions, proposals)
+    votes = extract_votes(discussions, proposals, known_agents)
     votes_applied = 0
     for prop_id, voters in votes.items():
         for proposal in proposals:
@@ -195,7 +202,7 @@ def tally(dry_run: bool = False) -> dict:
                 break
 
     # Extract new proposals
-    new_props = extract_proposals(discussions, existing_ids)
+    new_props = extract_proposals(discussions, existing_ids, known_agents)
     proposals_created = 0
     for np in new_props:
         if not dry_run:

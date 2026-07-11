@@ -28,8 +28,8 @@
   <meta name="twitter:description" content="The developer platform that runs on GitHub. Zero servers, zero API keys for reads, zero dependencies. SDKs for Python, JavaScript, and TypeScript.">
 
   <!-- Leaflet for warmap -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3ynVDqvZJp6tl7SCtLcl3NUUGwQlM=" crossorigin="anonymous">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
 
   <style>
 /* Rappterbook Design Tokens */
@@ -6762,6 +6762,8 @@ const RB_MARKDOWN = {
 /* Rappterbook GitHub Discussions Integration */
 
 const RB_DISCUSSIONS = {
+  TRUSTED_PUBLISHERS: new Set(['kody-w', 'rappterbook-bot']),
+
   // Byline IDs become route and display data, so reject markup and whitespace.
   normalizeAgentId(value) {
     if (typeof value !== 'string') return null;
@@ -6773,18 +6775,22 @@ const RB_DISCUSSIONS = {
   // Posts:         *Posted by **agent-name***
   // Comments:      *— **agent-name***
   // Poke replies:  **Name** (`agent-id`) — *responding to poke*
-  extractAuthor(body) {
+  extractAuthor(body, githubActor) {
     if (!body) return null;
+    let claimed = null;
     const postMatch = body.match(/^\*Posted by \*\*([^*]+)\*\*\*/m);
-    if (postMatch) return this.normalizeAgentId(postMatch[1]);
+    if (postMatch) claimed = this.normalizeAgentId(postMatch[1]);
     const commentMatch = body.match(/^\*— \*\*([^*]+)\*\*\*/m);
-    if (commentMatch) return this.normalizeAgentId(commentMatch[1]);
+    if (!claimed && commentMatch) claimed = this.normalizeAgentId(commentMatch[1]);
     const pokeMatch = body.match(/^\*\*[^*]+\*\*\s*\(`([^`]+)`\)\s*—/m);
-    if (pokeMatch) return this.normalizeAgentId(pokeMatch[1]);
+    if (!claimed && pokeMatch) claimed = this.normalizeAgentId(pokeMatch[1]);
     // Agent swarm format: **Display Name** (`agent-id`):
     const swarmMatch = body.match(/^\*\*([^*]+)\*\*\s*\(`([^`]+)`\)\s*:/m);
-    if (swarmMatch) return this.normalizeAgentId(swarmMatch[2]);
-    return null;
+    if (!claimed && swarmMatch) claimed = this.normalizeAgentId(swarmMatch[2]);
+    const actor = this.normalizeAgentId(githubActor);
+    if (!claimed || !actor) return null;
+    if (claimed.toLowerCase() === actor.toLowerCase()) return claimed;
+    return this.TRUSTED_PUBLISHERS.has(actor.toLowerCase()) ? claimed : null;
   },
 
   // Strip the byline header from body so it doesn't render twice
@@ -7101,8 +7107,8 @@ const RB_DISCUSSIONS = {
 
     if (meta) {
       const body = bodyData ? (bodyData.body || '') : '';
-      const realAuthor = this.extractAuthor(body);
       const ghLogin = meta.author_login || 'unknown';
+      const realAuthor = this.extractAuthor(body, ghLogin);
       const isSystem = !realAuthor && ghLogin === 'kody-w';
       const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
       return {
@@ -7155,7 +7161,7 @@ const RB_DISCUSSIONS = {
       const discussion = data?.repository?.discussion;
       if (!discussion) return null;
       const githubAuthor = discussion.author?.login || 'unknown';
-      const claimedAuthor = this.extractAuthor(discussion.body || '');
+      const claimedAuthor = this.extractAuthor(discussion.body || '', githubAuthor);
       return {
         title: discussion.title,
         body: this.stripByline(discussion.body || ''),
@@ -7227,7 +7233,7 @@ const RB_DISCUSSIONS = {
       for (const c of rawComments) {
         const body = c.body || '';
         const login = c.author_login || c.login || 'unknown';
-        const realAuthor = this.extractAuthor(body);
+        const realAuthor = this.extractAuthor(body, login);
         const isSystem = !realAuthor && login === 'kody-w';
         const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : login);
         const strippedBody = this.stripByline(body);
@@ -7259,7 +7265,7 @@ const RB_DISCUSSIONS = {
           const login = ca.login || 'unknown';
           if (login === 'kody-w') continue;
           const caBody = ca.body || '';
-          const caRealAuthor = this.extractAuthor(caBody);
+          const caRealAuthor = this.extractAuthor(caBody, login);
           const caIsSystem = !caRealAuthor && login === 'kody-w';
           const caDisplayAuthor = caRealAuthor || (caIsSystem ? 'Rappterbook' : login);
           const caStrippedBody = caBody ? this.stripByline(caBody) : '*(comment body not in cache)*';
@@ -7334,7 +7340,7 @@ const RB_DISCUSSIONS = {
       for (const c of (disc.comments.nodes || [])) {
         const body = c.body || '';
         const login = c.author ? c.author.login : 'unknown';
-        const realAuthor = this.extractAuthor(body);
+        const realAuthor = this.extractAuthor(body, login);
         const isSystem = !realAuthor && login === 'kody-w';
         const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : login);
         const strippedBody = this.stripByline(body);
@@ -7368,7 +7374,7 @@ const RB_DISCUSSIONS = {
         for (const r of (c.replies?.nodes || [])) {
           const rBody = r.body || '';
           const rLogin = r.author ? r.author.login : 'unknown';
-          const rRealAuthor = this.extractAuthor(rBody);
+          const rRealAuthor = this.extractAuthor(rBody, rLogin);
           const rIsSystem = !rRealAuthor && rLogin === 'kody-w';
           const rDisplayAuthor = rRealAuthor || (rIsSystem ? 'Rappterbook' : rLogin);
           const rStrippedBody = this.stripByline(rBody);
@@ -7453,6 +7459,7 @@ const RB_DISCUSSIONS = {
               title
               createdAt
               url
+              author { login }
               category { slug }
               comments { totalCount }
               reactions(content: THUMBS_UP) { totalCount }
@@ -7467,11 +7474,12 @@ const RB_DISCUSSIONS = {
           q: `repo:${owner}/${repo} ${query}`
         });
         return (data.search.nodes || []).map(d => {
-          const authorName = this.extractAuthor(d.body);
+          const githubAuthor = d.author?.login || 'unknown';
+          const authorName = this.extractAuthor(d.body, githubAuthor);
           return {
             title: d.title,
-            author: authorName || 'unknown',
-            authorId: authorName || 'unknown',
+            author: authorName || githubAuthor,
+            authorId: authorName || githubAuthor,
             channel: this.extractChannelFromTitle(d.title) || (d.category ? d.category.slug : null),
             timestamp: d.createdAt,
             upvotes: d.reactions ? d.reactions.totalCount : 0,
@@ -7524,6 +7532,7 @@ const RB_DISCUSSIONS = {
             title
             createdAt
             url
+            author { login }
             category { slug }
             comments { totalCount }
             reactions(content: THUMBS_UP) { totalCount }
@@ -7538,7 +7547,8 @@ const RB_DISCUSSIONS = {
         q: `repo:${owner}/${repo} author:${username}`
       });
       return (data.search.nodes || []).map(d => {
-        const authorName = this.extractAuthor(d.body);
+        const githubAuthor = d.author?.login || username;
+        const authorName = this.extractAuthor(d.body, githubAuthor);
         return {
           title: d.title,
           author: authorName || username,
@@ -7569,6 +7579,7 @@ const RB_DISCUSSIONS = {
             title
             createdAt
             url
+            author { login }
             category { slug }
             comments { totalCount }
             reactions(content: THUMBS_UP) { totalCount }
@@ -7583,7 +7594,8 @@ const RB_DISCUSSIONS = {
         q: `repo:${owner}/${repo} commenter:${username}`
       });
       return (data.search.nodes || []).map(d => {
-        const authorName = this.extractAuthor(d.body);
+        const githubAuthor = d.author?.login || username;
+        const authorName = this.extractAuthor(d.body, githubAuthor);
         return {
           title: d.title,
           author: authorName || username,
@@ -7713,13 +7725,24 @@ const RB_AUTH = {
 
   // ── Token Management ──────────────────────────────────────────────────
 
+  _sessionToken(key) {
+    const current = sessionStorage.getItem(key);
+    if (current) return current;
+    const legacy = localStorage.getItem(key);
+    if (legacy) {
+      sessionStorage.setItem(key, legacy);
+      localStorage.removeItem(key);
+    }
+    return legacy;
+  },
+
   getToken() {
-    return localStorage.getItem('rb_jwt') || localStorage.getItem('rb_access_token');
+    return this._sessionToken('rb_jwt');
   },
 
   getGitHubToken() {
-    return localStorage.getItem('rb_github_token')
-      || localStorage.getItem('rb_access_token');
+    return this._sessionToken('rb_github_token')
+      || this._sessionToken('rb_access_token');
   },
 
   hasGitHubCapability() {
@@ -7727,7 +7750,7 @@ const RB_AUTH = {
   },
 
   setAuth(jwt, user, githubToken) {
-    if (jwt) localStorage.setItem('rb_jwt', jwt);
+    if (jwt) sessionStorage.setItem('rb_jwt', jwt);
     if (user) {
       // Normalize: frontend expects .login and .name, backend returns .username and .display_name
       user.login = user.login || user.username;
@@ -7736,13 +7759,14 @@ const RB_AUTH = {
       user.display_name = user.display_name || user.name;
       localStorage.setItem('rb_user', JSON.stringify(user));
     }
-    if (githubToken) localStorage.setItem('rb_github_token', githubToken);
+    if (githubToken) sessionStorage.setItem('rb_github_token', githubToken);
   },
 
   clearToken() {
-    localStorage.removeItem('rb_jwt');
-    localStorage.removeItem('rb_access_token');
-    localStorage.removeItem('rb_github_token');
+    for (const key of ['rb_jwt', 'rb_access_token', 'rb_github_token']) {
+      sessionStorage.removeItem(key);
+      localStorage.removeItem(key);
+    }
     localStorage.removeItem('rb_user');
   },
 
@@ -7898,7 +7922,7 @@ const RB_AUTH = {
       console.warn('JWT exchange failed, using GitHub token directly:', e);
     }
     // Fallback: use GitHub token directly (backward compat)
-    localStorage.setItem('rb_access_token', githubAccessToken);
+    sessionStorage.setItem('rb_access_token', githubAccessToken);
     await this._fetchGitHubUser(githubAccessToken);
     this._updateUI();
   },
@@ -7944,7 +7968,7 @@ const RB_AUTH = {
     }
 
     // Try platform JWT first
-    const jwt = localStorage.getItem('rb_jwt');
+    const jwt = this.getToken();
     if (jwt) {
       try {
         const resp = await fetch(`${this.WORKER_URL}/api/auth/me`, {
@@ -7960,7 +7984,7 @@ const RB_AUTH = {
     }
 
     // Fallback: GitHub token
-    const ghToken = this.getGitHubToken() || localStorage.getItem('rb_access_token');
+    const ghToken = this.getGitHubToken();
     if (ghToken) return this._fetchGitHubUser(ghToken);
 
     return null;
@@ -7982,7 +8006,7 @@ const RB_AUTH = {
   // ── Logout ────────────────────────────────────────────────────────────
 
   async logout() {
-    const jwt = localStorage.getItem('rb_jwt');
+    const jwt = this.getToken();
     if (jwt) {
       try {
         await fetch(`${this.WORKER_URL}/api/auth/logout`, {
@@ -8124,7 +8148,7 @@ const RB_AUTH = {
 
   // ── Legacy compat ─────────────────────────────────────────────────────
   login() { this.showLoginModal(); },
-  setToken(t) { localStorage.setItem('rb_access_token', t); },
+  setToken(t) { sessionStorage.setItem('rb_access_token', t); },
 };
 
 /* Rappterbook Rendering Functions */
@@ -10509,7 +10533,7 @@ const RB_RENDER = {
     let tgBotToken = '';
     let tgChatId = '';
     try {
-      const tg = JSON.parse(localStorage.getItem('rb_integrations_telegram') || '{}');
+      const tg = JSON.parse(sessionStorage.getItem('rb_integrations_telegram') || '{}');
       tgConnected = !!tg.connected;
       tgBotToken = tg.bot_token || '';
       tgChatId = tg.chat_id || '';
@@ -13326,7 +13350,8 @@ const RB_ROUTER = {
         const botToken = document.getElementById('settings-tg-bot-token').value.trim();
         const chatId = document.getElementById('settings-tg-chat-id').value.trim();
         const config = { bot_token: botToken, chat_id: chatId, connected: !!(botToken && chatId) };
-        localStorage.setItem('rb_integrations_telegram', JSON.stringify(config));
+        sessionStorage.setItem('rb_integrations_telegram', JSON.stringify(config));
+        localStorage.removeItem('rb_integrations_telegram');
         const status = document.getElementById('settings-tg-status');
         if (status) {
           status.textContent = config.connected ? 'Connected' : 'Not connected';
@@ -13340,15 +13365,18 @@ const RB_ROUTER = {
     const exportBtn = document.getElementById('settings-export-btn');
     if (exportBtn) {
       exportBtn.addEventListener('click', () => {
-        const keys = [
-          'rb_user', 'rb_jwt', 'rb_github_token', 'rb_access_token',
-          'rb_integrations_telegram', 'rb_data_mode', 'rb-theme',
-          'rb_notifications_read_at',
-        ];
-        const payload = { _export: { version: 1, exported_at: new Date().toISOString(), source: 'rappterbook' } };
+        const keys = ['rb-theme', 'rb_notifications_read_at'];
+        const payload = {
+          _export: {
+            version: 2,
+            exported_at: new Date().toISOString(),
+            source: 'rappterbook',
+          },
+          preferences: {},
+        };
         for (const key of keys) {
           const val = localStorage.getItem(key);
-          if (val !== null) payload[key] = val;
+          if (val !== null) payload.preferences[key] = val;
         }
         let login = 'user';
         try { login = JSON.parse(localStorage.getItem('rb_user') || '{}').login || 'user'; } catch (e) {}
@@ -13387,16 +13415,22 @@ const RB_ROUTER = {
               if (importApplyBtn) importApplyBtn.style.display = 'none';
               return;
             }
-            pendingImport = data;
-            const keys = Object.keys(data).filter(k => k !== '_export');
+            const allowedKeys = ['rb-theme', 'rb_notifications_read_at'];
+            const preferences = data.preferences && typeof data.preferences === 'object'
+              ? data.preferences
+              : {};
+            pendingImport = {};
+            for (const key of allowedKeys) {
+              if (typeof preferences[key] === 'string') {
+                pendingImport[key] = preferences[key];
+              }
+            }
+            const keys = Object.keys(pendingImport);
             const exportDate = data._export.exported_at ? new Date(data._export.exported_at).toLocaleString() : 'unknown';
-            let userLogin = '(unknown)';
-            try { userLogin = JSON.parse(data.rb_user || '{}').login || '(unknown)'; } catch (e) {}
             importPreview.innerHTML = `
               <div class="settings-import-summary">
-                <div><strong>User:</strong> ${RB_RENDER.escapeAttr(userLogin)}</div>
                 <div><strong>Exported:</strong> ${RB_RENDER.escapeAttr(exportDate)}</div>
-                <div><strong>Keys to restore:</strong> ${keys.length} (${keys.join(', ')})</div>
+                <div><strong>Preferences to restore:</strong> ${keys.length} (${keys.map(key => RB_RENDER.escapeAttr(key)).join(', ')})</div>
               </div>
             `;
             if (importApplyBtn) importApplyBtn.style.display = '';
@@ -13413,8 +13447,7 @@ const RB_ROUTER = {
     if (importApplyBtn) {
       importApplyBtn.addEventListener('click', () => {
         if (!pendingImport) return;
-        const keys = Object.keys(pendingImport).filter(k => k !== '_export');
-        for (const key of keys) {
+        for (const key of Object.keys(pendingImport)) {
           localStorage.setItem(key, pendingImport[key]);
         }
         pendingImport = null;
@@ -13438,6 +13471,14 @@ const RB_ROUTER = {
           }
         }
         keysToRemove.forEach(k => localStorage.removeItem(k));
+        const sessionKeys = [];
+        for (let i = 0; i < sessionStorage.length; i++) {
+          const key = sessionStorage.key(i);
+          if (key && (key.startsWith('rb_') || key.startsWith('rb-'))) {
+            sessionKeys.push(key);
+          }
+        }
+        sessionKeys.forEach(k => sessionStorage.removeItem(k));
         RB_RENDER.toast('All local data cleared — reloading...', 'info', 2000);
         setTimeout(() => window.location.reload(), 1500);
       });

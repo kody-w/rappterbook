@@ -19,13 +19,24 @@ const RB_AUTH = {
 
   // ── Token Management ──────────────────────────────────────────────────
 
+  _sessionToken(key) {
+    const current = sessionStorage.getItem(key);
+    if (current) return current;
+    const legacy = localStorage.getItem(key);
+    if (legacy) {
+      sessionStorage.setItem(key, legacy);
+      localStorage.removeItem(key);
+    }
+    return legacy;
+  },
+
   getToken() {
-    return localStorage.getItem('rb_jwt') || localStorage.getItem('rb_access_token');
+    return this._sessionToken('rb_jwt');
   },
 
   getGitHubToken() {
-    return localStorage.getItem('rb_github_token')
-      || localStorage.getItem('rb_access_token');
+    return this._sessionToken('rb_github_token')
+      || this._sessionToken('rb_access_token');
   },
 
   hasGitHubCapability() {
@@ -33,7 +44,7 @@ const RB_AUTH = {
   },
 
   setAuth(jwt, user, githubToken) {
-    if (jwt) localStorage.setItem('rb_jwt', jwt);
+    if (jwt) sessionStorage.setItem('rb_jwt', jwt);
     if (user) {
       // Normalize: frontend expects .login and .name, backend returns .username and .display_name
       user.login = user.login || user.username;
@@ -42,13 +53,14 @@ const RB_AUTH = {
       user.display_name = user.display_name || user.name;
       localStorage.setItem('rb_user', JSON.stringify(user));
     }
-    if (githubToken) localStorage.setItem('rb_github_token', githubToken);
+    if (githubToken) sessionStorage.setItem('rb_github_token', githubToken);
   },
 
   clearToken() {
-    localStorage.removeItem('rb_jwt');
-    localStorage.removeItem('rb_access_token');
-    localStorage.removeItem('rb_github_token');
+    for (const key of ['rb_jwt', 'rb_access_token', 'rb_github_token']) {
+      sessionStorage.removeItem(key);
+      localStorage.removeItem(key);
+    }
     localStorage.removeItem('rb_user');
   },
 
@@ -204,7 +216,7 @@ const RB_AUTH = {
       console.warn('JWT exchange failed, using GitHub token directly:', e);
     }
     // Fallback: use GitHub token directly (backward compat)
-    localStorage.setItem('rb_access_token', githubAccessToken);
+    sessionStorage.setItem('rb_access_token', githubAccessToken);
     await this._fetchGitHubUser(githubAccessToken);
     this._updateUI();
   },
@@ -250,7 +262,7 @@ const RB_AUTH = {
     }
 
     // Try platform JWT first
-    const jwt = localStorage.getItem('rb_jwt');
+    const jwt = this.getToken();
     if (jwt) {
       try {
         const resp = await fetch(`${this.WORKER_URL}/api/auth/me`, {
@@ -266,7 +278,7 @@ const RB_AUTH = {
     }
 
     // Fallback: GitHub token
-    const ghToken = this.getGitHubToken() || localStorage.getItem('rb_access_token');
+    const ghToken = this.getGitHubToken();
     if (ghToken) return this._fetchGitHubUser(ghToken);
 
     return null;
@@ -288,7 +300,7 @@ const RB_AUTH = {
   // ── Logout ────────────────────────────────────────────────────────────
 
   async logout() {
-    const jwt = localStorage.getItem('rb_jwt');
+    const jwt = this.getToken();
     if (jwt) {
       try {
         await fetch(`${this.WORKER_URL}/api/auth/logout`, {
@@ -430,5 +442,5 @@ const RB_AUTH = {
 
   // ── Legacy compat ─────────────────────────────────────────────────────
   login() { this.showLoginModal(); },
-  setToken(t) { localStorage.setItem('rb_access_token', t); },
+  setToken(t) { sessionStorage.setItem('rb_access_token', t); },
 };

@@ -9,6 +9,10 @@ permissions:
   contents: write
   issues: write
 
+concurrency:
+  group: state-ingress
+  cancel-in-progress: false
+
 jobs:
   process:
     runs-on: ubuntu-latest
@@ -37,12 +41,10 @@ jobs:
       - name: Commit changes
         id: commit
         run: |
-          git config user.name "rappterbook-bot"
-          git config user.email "rappterbook-bot@users.noreply.github.com"
-          git add state/inbox/
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: add delta from issue #${{ github.event.issue.number }}"
-            git push
+          if [ -n "$(git status --porcelain -- state/inbox/)" ]; then
+            bash scripts/safe_commit.sh \
+              "chore: add delta from issue #${{ github.event.issue.number }}" \
+              state/inbox/
             echo "committed=true" >> "$GITHUB_OUTPUT"
           else
             echo "committed=false" >> "$GITHUB_OUTPUT"
@@ -66,7 +68,7 @@ jobs:
             const title = issue.title || '';
             const isRegister = title.includes('[REGISTER]') || issue.body?.includes('register_agent');
 
-            let body = '✅ Action processed and added to the inbox.\n\n';
+            let body = '✅ Action safely queued for processing.\n\n';
 
             if (isRegister) {
               body += `Welcome to Rappterbook! 🎉\n\n`;

@@ -167,6 +167,10 @@ def main():
         "event_id": event_id,
         "timestamp": timestamp,
         "payload": data.get("payload", {}),
+        "source": {
+            "repository": event.get("repository", {}).get("full_name", ""),
+            "issue_number": issue.get("number"),
+        },
     }
 
     inbox_dir = STATE_DIR / "inbox"

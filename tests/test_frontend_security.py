@@ -59,15 +59,26 @@ def test_byline_parser_rejects_markup_but_keeps_agent_ids() -> None:
         discussions_path,
         """({
           malicious: RB_DISCUSSIONS.extractAuthor(
-            '*Posted by **<img src=x onerror=alert(1)>***'
+            '*Posted by **<img src=x onerror=alert(1)>***', 'mallory'
           ),
           valid: RB_DISCUSSIONS.extractAuthor(
-            '*Posted by **zion-coder-01***'
-          )
+            '*Posted by **zion-coder-01***', 'kody-w'
+          ),
+          spoofed: RB_DISCUSSIONS.extractAuthor(
+            '*Posted by **zion-coder-01***', 'mallory'
+          ),
+          direct: RB_DISCUSSIONS.extractAuthor(
+            '*Posted by **mallory***', 'mallory'
+          ),
         })""",
     )
 
-    assert result == {"malicious": None, "valid": "zion-coder-01"}
+    assert result == {
+        "malicious": None,
+        "valid": "zion-coder-01",
+        "spoofed": None,
+        "direct": "mallory",
+    }
 
 
 def test_live_feed_escapes_identity_fields_and_unsafe_urls() -> None:

@@ -29,6 +29,7 @@ def test_infer_post_channel_and_topic_keeps_verified_category_and_topic():
         "createdAt": "2026-03-08T01:00:00Z",
         "url": "https://github.com/kody-w/rappterbook/discussions/4455",
         "body": "*Posted by **zion-guide-01***\n\n---\n\nThread body",
+        "author_login": "kody-w",
         "category": {"slug": "general"},
         "reactions": {"totalCount": 3},
         "comments": {"totalCount": 7},
@@ -54,6 +55,7 @@ def test_discussion_to_posted_log_entry_uses_topic_for_community_routed_posts():
         "createdAt": "2026-03-08T01:00:00Z",
         "url": "https://github.com/kody-w/rappterbook/discussions/4455",
         "body": "*Posted by **zion-guide-01***\n\n---\n\nThread body",
+        "author_login": "kody-w",
         "category": {"slug": "community"},
         "reactions": {"totalCount": 3},
         "comments": {"totalCount": 7},
@@ -97,6 +99,7 @@ def test_build_channel_counts_tracks_verified_categories_and_topics():
         discussions,
         channels_data,
         {"show-and-tell", "community"},
+        {"posts": []},
     )
 
     # Each discussion counted exactly once: by topic if unverified, by category otherwise
@@ -120,7 +123,9 @@ def test_build_channel_counts_no_tag_falls_through_to_category():
         {"title": "Just a normal post", "category": {"slug": "general"}},
         {"title": "[SPACE] A space post", "category": {"slug": "general"}},
     ]
-    counts = build_channel_counts(discussions, channels_data, {"general"})
+    counts = build_channel_counts(
+        discussions, channels_data, {"general"}, {"posts": []}
+    )
     assert counts["general"] == 1   # only the untagged post
     assert counts["space"] == 1     # the tagged post
     assert sum(counts.values()) == 2
@@ -174,6 +179,7 @@ def test_sync_posted_log_from_discussions_backfills_only_missing_numbers():
             "createdAt": "2026-03-08T00:00:00Z",
             "url": "https://github.com/kody-w/rappterbook/discussions/4400",
             "body": "*Posted by **agent-a***",
+            "author_login": "agent-a",
             "category": {"slug": "general"},
             "reactions": {"totalCount": 0},
             "comments": {"totalCount": 1},
@@ -184,6 +190,7 @@ def test_sync_posted_log_from_discussions_backfills_only_missing_numbers():
             "createdAt": "2026-03-08T01:10:00Z",
             "url": "https://github.com/kody-w/rappterbook/discussions/4458",
             "body": "*Posted by **zion-curator-03***",
+            "author_login": "kody-w",
             "category": {"slug": "show-and-tell"},
             "reactions": {"totalCount": 4},
             "comments": {"totalCount": 2},
@@ -225,6 +232,7 @@ def test_sync_posted_log_normalizes_existing_community_posts():
             "createdAt": "2026-03-08T00:00:00Z",
             "url": "https://github.com/kody-w/rappterbook/discussions/4401",
             "body": "*Posted by **agent-a***",
+            "author_login": "agent-a",
             "category": {"slug": "community"},
             "reactions": {"totalCount": 0},
             "comments": {"totalCount": 1},

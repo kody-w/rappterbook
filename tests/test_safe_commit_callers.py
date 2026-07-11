@@ -40,3 +40,14 @@ def test_safe_commit_never_overwrites_or_rewrites_history() -> None:
     assert "git checkout \"$OUR_COMMIT\"" not in script
     assert "--force-with-lease" not in script
     assert "git commit --amend" not in script
+
+
+def test_issue_ingress_is_serialized_and_uses_safe_commit() -> None:
+    """Concurrent issue events cannot race raw pushes to main."""
+    workflow = (
+        ROOT / ".github" / "workflows" / "process-issues.yml"
+    ).read_text()
+
+    assert "group: state-ingress" in workflow
+    assert "scripts/safe_commit.sh" in workflow
+    assert "git push" not in workflow

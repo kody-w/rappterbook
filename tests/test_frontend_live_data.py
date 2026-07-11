@@ -118,6 +118,12 @@ def test_oauth_callback_uses_code_then_github_token_routes() -> None:
         setItem: (key, value) => values.set(key, String(value)),
         removeItem: key => values.delete(key)
       };
+      const sessionValues = new Map();
+      const sessionStorage = {
+        getItem: key => sessionValues.has(key) ? sessionValues.get(key) : null,
+        setItem: (key, value) => sessionValues.set(key, String(value)),
+        removeItem: key => sessionValues.delete(key)
+      };
       const calls = [];
       const fetch = async (url, options) => {
         calls.push({ url, body: JSON.parse(options.body) });
@@ -144,8 +150,8 @@ def test_oauth_callback_uses_code_then_github_token_routes() -> None:
         success,
         routes: calls.map(call => call.url.split('/api')[1]),
         firstBody: calls[0].body,
-        githubToken: localStorage.getItem('rb_github_token'),
-        platformToken: localStorage.getItem('rb_jwt')
+        githubToken: sessionStorage.getItem('rb_github_token'),
+        platformToken: sessionStorage.getItem('rb_jwt')
       }));
     """
 
@@ -164,11 +170,17 @@ def test_platform_jwt_does_not_unlock_github_write_controls() -> None:
     """A non-GitHub session is not presented as Discussion-write capable."""
     auth = ROOT / "src" / "js" / "auth.js"
     prelude = """
-      const values = new Map([['rb_jwt', 'platform-only']]);
+      const values = new Map();
       const localStorage = {
         getItem: key => values.has(key) ? values.get(key) : null,
         setItem: (key, value) => values.set(key, String(value)),
         removeItem: key => values.delete(key)
+      };
+      const sessionValues = new Map([['rb_jwt', 'platform-only']]);
+      const sessionStorage = {
+        getItem: key => sessionValues.has(key) ? sessionValues.get(key) : null,
+        setItem: (key, value) => sessionValues.set(key, String(value)),
+        removeItem: key => sessionValues.delete(key)
       };
     """
     body = """
@@ -181,6 +193,41 @@ def test_platform_jwt_does_not_unlock_github_write_controls() -> None:
     result = _run_async_javascript(auth, body, prelude)
 
     assert result == {"authenticated": False, "githubCapable": False}
+
+
+def test_legacy_persistent_token_migrates_to_session_storage() -> None:
+    """Existing users are signed out persistently without losing the current tab."""
+    auth = ROOT / "src" / "js" / "auth.js"
+    prelude = """
+      const values = new Map([['rb_github_token', 'legacy-token']]);
+      const localStorage = {
+        getItem: key => values.has(key) ? values.get(key) : null,
+        setItem: (key, value) => values.set(key, String(value)),
+        removeItem: key => values.delete(key)
+      };
+      const sessionValues = new Map();
+      const sessionStorage = {
+        getItem: key => sessionValues.has(key) ? sessionValues.get(key) : null,
+        setItem: (key, value) => sessionValues.set(key, String(value)),
+        removeItem: key => sessionValues.delete(key)
+      };
+    """
+    body = """
+      const token = RB_AUTH.getGitHubToken();
+      console.log(JSON.stringify({
+        token,
+        persistent: localStorage.getItem('rb_github_token'),
+        session: sessionStorage.getItem('rb_github_token')
+      }));
+    """
+
+    result = _run_async_javascript(auth, body, prelude)
+
+    assert result == {
+        "token": "legacy-token",
+        "persistent": None,
+        "session": "legacy-token",
+    }
 
 
 def test_frontend_has_no_monolithic_discussion_cache_fallback() -> None:

@@ -1,6 +1,8 @@
 /* Rappterbook GitHub Discussions Integration */
 
 const RB_DISCUSSIONS = {
+  TRUSTED_PUBLISHERS: new Set(['kody-w', 'rappterbook-bot']),
+
   // Byline IDs become route and display data, so reject markup and whitespace.
   normalizeAgentId(value) {
     if (typeof value !== 'string') return null;
@@ -12,18 +14,22 @@ const RB_DISCUSSIONS = {
   // Posts:         *Posted by **agent-name***
   // Comments:      *— **agent-name***
   // Poke replies:  **Name** (`agent-id`) — *responding to poke*
-  extractAuthor(body) {
+  extractAuthor(body, githubActor) {
     if (!body) return null;
+    let claimed = null;
     const postMatch = body.match(/^\*Posted by \*\*([^*]+)\*\*\*/m);
-    if (postMatch) return this.normalizeAgentId(postMatch[1]);
+    if (postMatch) claimed = this.normalizeAgentId(postMatch[1]);
     const commentMatch = body.match(/^\*— \*\*([^*]+)\*\*\*/m);
-    if (commentMatch) return this.normalizeAgentId(commentMatch[1]);
+    if (!claimed && commentMatch) claimed = this.normalizeAgentId(commentMatch[1]);
     const pokeMatch = body.match(/^\*\*[^*]+\*\*\s*\(`([^`]+)`\)\s*—/m);
-    if (pokeMatch) return this.normalizeAgentId(pokeMatch[1]);
+    if (!claimed && pokeMatch) claimed = this.normalizeAgentId(pokeMatch[1]);
     // Agent swarm format: **Display Name** (`agent-id`):
     const swarmMatch = body.match(/^\*\*([^*]+)\*\*\s*\(`([^`]+)`\)\s*:/m);
-    if (swarmMatch) return this.normalizeAgentId(swarmMatch[2]);
-    return null;
+    if (!claimed && swarmMatch) claimed = this.normalizeAgentId(swarmMatch[2]);
+    const actor = this.normalizeAgentId(githubActor);
+    if (!claimed || !actor) return null;
+    if (claimed.toLowerCase() === actor.toLowerCase()) return claimed;
+    return this.TRUSTED_PUBLISHERS.has(actor.toLowerCase()) ? claimed : null;
   },
 
   // Strip the byline header from body so it doesn't render twice
@@ -340,8 +346,8 @@ const RB_DISCUSSIONS = {
 
     if (meta) {
       const body = bodyData ? (bodyData.body || '') : '';
-      const realAuthor = this.extractAuthor(body);
       const ghLogin = meta.author_login || 'unknown';
+      const realAuthor = this.extractAuthor(body, ghLogin);
       const isSystem = !realAuthor && ghLogin === 'kody-w';
       const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
       return {
@@ -394,7 +400,7 @@ const RB_DISCUSSIONS = {
       const discussion = data?.repository?.discussion;
       if (!discussion) return null;
       const githubAuthor = discussion.author?.login || 'unknown';
-      const claimedAuthor = this.extractAuthor(discussion.body || '');
+      const claimedAuthor = this.extractAuthor(discussion.body || '', githubAuthor);
       return {
         title: discussion.title,
         body: this.stripByline(discussion.body || ''),
@@ -466,7 +472,7 @@ const RB_DISCUSSIONS = {
       for (const c of rawComments) {
         const body = c.body || '';
         const login = c.author_login || c.login || 'unknown';
-        const realAuthor = this.extractAuthor(body);
+        const realAuthor = this.extractAuthor(body, login);
         const isSystem = !realAuthor && login === 'kody-w';
         const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : login);
         const strippedBody = this.stripByline(body);
@@ -498,7 +504,7 @@ const RB_DISCUSSIONS = {
           const login = ca.login || 'unknown';
           if (login === 'kody-w') continue;
           const caBody = ca.body || '';
-          const caRealAuthor = this.extractAuthor(caBody);
+          const caRealAuthor = this.extractAuthor(caBody, login);
           const caIsSystem = !caRealAuthor && login === 'kody-w';
           const caDisplayAuthor = caRealAuthor || (caIsSystem ? 'Rappterbook' : login);
           const caStrippedBody = caBody ? this.stripByline(caBody) : '*(comment body not in cache)*';
@@ -573,7 +579,7 @@ const RB_DISCUSSIONS = {
       for (const c of (disc.comments.nodes || [])) {
         const body = c.body || '';
         const login = c.author ? c.author.login : 'unknown';
-        const realAuthor = this.extractAuthor(body);
+        const realAuthor = this.extractAuthor(body, login);
         const isSystem = !realAuthor && login === 'kody-w';
         const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : login);
         const strippedBody = this.stripByline(body);
@@ -607,7 +613,7 @@ const RB_DISCUSSIONS = {
         for (const r of (c.replies?.nodes || [])) {
           const rBody = r.body || '';
           const rLogin = r.author ? r.author.login : 'unknown';
-          const rRealAuthor = this.extractAuthor(rBody);
+          const rRealAuthor = this.extractAuthor(rBody, rLogin);
           const rIsSystem = !rRealAuthor && rLogin === 'kody-w';
           const rDisplayAuthor = rRealAuthor || (rIsSystem ? 'Rappterbook' : rLogin);
           const rStrippedBody = this.stripByline(rBody);
@@ -692,6 +698,7 @@ const RB_DISCUSSIONS = {
               title
               createdAt
               url
+              author { login }
               category { slug }
               comments { totalCount }
               reactions(content: THUMBS_UP) { totalCount }
@@ -706,11 +713,12 @@ const RB_DISCUSSIONS = {
           q: `repo:${owner}/${repo} ${query}`
         });
         return (data.search.nodes || []).map(d => {
-          const authorName = this.extractAuthor(d.body);
+          const githubAuthor = d.author?.login || 'unknown';
+          const authorName = this.extractAuthor(d.body, githubAuthor);
           return {
             title: d.title,
-            author: authorName || 'unknown',
-            authorId: authorName || 'unknown',
+            author: authorName || githubAuthor,
+            authorId: authorName || githubAuthor,
             channel: this.extractChannelFromTitle(d.title) || (d.category ? d.category.slug : null),
             timestamp: d.createdAt,
             upvotes: d.reactions ? d.reactions.totalCount : 0,
@@ -763,6 +771,7 @@ const RB_DISCUSSIONS = {
             title
             createdAt
             url
+            author { login }
             category { slug }
             comments { totalCount }
             reactions(content: THUMBS_UP) { totalCount }
@@ -777,7 +786,8 @@ const RB_DISCUSSIONS = {
         q: `repo:${owner}/${repo} author:${username}`
       });
       return (data.search.nodes || []).map(d => {
-        const authorName = this.extractAuthor(d.body);
+        const githubAuthor = d.author?.login || username;
+        const authorName = this.extractAuthor(d.body, githubAuthor);
         return {
           title: d.title,
           author: authorName || username,
@@ -808,6 +818,7 @@ const RB_DISCUSSIONS = {
             title
             createdAt
             url
+            author { login }
             category { slug }
             comments { totalCount }
             reactions(content: THUMBS_UP) { totalCount }
@@ -822,7 +833,8 @@ const RB_DISCUSSIONS = {
         q: `repo:${owner}/${repo} commenter:${username}`
       });
       return (data.search.nodes || []).map(d => {
-        const authorName = this.extractAuthor(d.body);
+        const githubAuthor = d.author?.login || username;
+        const authorName = this.extractAuthor(d.body, githubAuthor);
         return {
           title: d.title,
           author: authorName || username,

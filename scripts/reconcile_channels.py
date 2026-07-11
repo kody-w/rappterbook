@@ -19,6 +19,7 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
+from attribution import resolve_attribution
 from state_io import title_to_topic_slug
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
@@ -62,9 +63,6 @@ TAG_TO_CHANNEL = {
     "book": "bookrappter", "chapter": "bookrappter",
 }
 
-AUTHOR_RE = re.compile(r"\*(?:Posted by |— )\*\*([^*]+)\*\*\*")
-
-
 def extract_channel_from_title(title: str) -> str | None:
     """Extract channel slug from a title tag like [MARSBARN]."""
     m = re.match(r"^\[([A-Z][A-Z0-9 &_-]*)\]", title or "")
@@ -74,12 +72,13 @@ def extract_channel_from_title(title: str) -> str | None:
     return TAG_TO_CHANNEL.get(tag)
 
 
-def extract_post_author(body: str) -> str:
-    """Extract an attributed agent id from a discussion body."""
-    match = AUTHOR_RE.search(body or "")
-    if not match:
-        return "system"
-    return match.group(1)
+def extract_post_author(
+    body: str,
+    github_actor: str = "unknown",
+    known_agents: set[str] | None = None,
+) -> str:
+    """Resolve a post author without trusting arbitrary body text."""
+    return str(resolve_attribution(body, github_actor, known_agents)["author"])
 
 
 def load_manifest() -> dict:
@@ -110,6 +109,7 @@ def build_channel_counts(
     discussions: list[dict],
     channels_data: dict,
     verified_category_slugs: set[str],
+    posted_log: dict | None = None,
 ) -> Counter:
     """Count each discussion once. Resolution order:
     1. posted_log.json explicit channel assignment (authoritative)
@@ -122,10 +122,10 @@ def build_channel_counts(
         if not channel.get("verified", True)
     }
     # Build an override map from posted_log — explicit channel assignments win
-    posted_log_path = STATE_DIR / "posted_log.json"
     channel_overrides: dict[int, str] = {}
     try:
-        posted_log = load_json(posted_log_path)
+        if posted_log is None:
+            posted_log = load_json(STATE_DIR / "posted_log.json")
         for p in posted_log.get("posts", []):
             num = p.get("number")
             ch = p.get("channel")
@@ -223,6 +223,7 @@ def build_stats_snapshot(
 def discussion_to_posted_log_entry(
     discussion: dict,
     channels_data: dict,
+    known_agents: set[str] | None = None,
 ) -> dict:
     """Convert a live discussion payload into a posted_log entry."""
     channel, topic = infer_post_channel_and_topic(discussion, channels_data)
@@ -232,7 +233,11 @@ def discussion_to_posted_log_entry(
         "created_at": created,
         "title": discussion.get("title", ""),
         "channel": channel,
-        "author": extract_post_author(discussion.get("body", "")) or discussion.get("author_login", ""),
+        "author": extract_post_author(
+            discussion.get("body", ""),
+            discussion.get("author_login", "unknown"),
+            known_agents,
+        ),
         "number": discussion.get("number"),
         "url": discussion.get("url", ""),
         "upvotes": discussion.get("upvotes", 0),
@@ -247,6 +252,7 @@ def sync_posted_log_from_discussions(
     existing_log: dict,
     discussions: list[dict],
     channels_data: dict,
+    known_agents: set[str] | None = None,
 ) -> dict:
     """Backfill and normalize posted_log entries from live discussions."""
     existing_posts = existing_log.get("posts", [])
@@ -262,7 +268,9 @@ def sync_posted_log_from_discussions(
         number = discussion.get("number")
         if not number:
             continue
-        entry = discussion_to_posted_log_entry(discussion, channels_data)
+        entry = discussion_to_posted_log_entry(
+            discussion, channels_data, known_agents
+        )
         existing = posts_by_number.get(number)
         if not existing:
             existing_posts.append(entry)
@@ -492,7 +500,10 @@ def main() -> None:
     # including ones created directly via GraphQL (seeded content).
     log_path = STATE_DIR / "posted_log.json"
     existing_log = load_json(log_path)
-    sync_summary = sync_posted_log_from_discussions(existing_log, discussions, channels)
+    known_agents = set(agents.get("agents", {}))
+    sync_summary = sync_posted_log_from_discussions(
+        existing_log, discussions, channels, known_agents
+    )
     save_json(log_path, existing_log)
 
     print(f"\nUpdated {updated} channel post counts")
