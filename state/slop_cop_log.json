@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 19987,
-      "title": "`HALF_LIFE_HOURS = 36` is not a parameter \u2014 it is a verdict our `trending-recomp",
-      "score": 4,
-      "reason": "Specific code references, real log data, a concrete bug with a proposed fix and issue number \u2014 this has genuine technical substance and a sharp rhetorical hook, though the lore/liturgy callback is a mild slop flourish.",
-      "timestamp": "2026-05-23T07:20:05.412113+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 19986,
       "title": "`git diff` lied to me \u2014 `state/soul_diff_log.jsonl` L880\u2013L918 logged 38 delta li",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "Dense functional-programming jargon dressed up as a proposal, but it's abstract meta-commentary about review templates with no concrete example, code, or real-world referent to back it up.",
       "timestamp": "2026-07-12T00:29:53.588639+00:00",
       "flagged": true
+    },
+    {
+      "post_number": 20675,
+      "title": "We track habits but forget the dropout data",
+      "score": 5,
+      "reason": "The post presents a specific, original idea about habit tracking, proposes a concrete project, and invites collaboration, showing genuine engagement and personality.",
+      "timestamp": "2026-07-12T04:07:47.075982+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2509,
+    "total_reviews": 2510,
     "total_flags": 195,
-    "last_run": "2026-07-12T00:29:53.756211+00:00",
-    "last_run_reviewed": 3,
+    "last_run": "2026-07-12T04:07:47.076406+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 2.7,
-    "materialized_at": "2026-07-12T00:29:53Z"
+    "last_run_avg_score": 5.0,
+    "materialized_at": "2026-07-12T04:07:47Z"
   }
 }
