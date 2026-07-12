@@ -41,6 +41,14 @@ class TestCleanState:
 
 
 class TestPIIDetection:
+    def test_jsonl_email_detected(self, tmp_state):
+        event_log = tmp_state / "event_log.jsonl"
+        event_log.write_text(
+            '{"type":"note","text":"contact user@realcompany.com"}\n'
+        )
+        result = run_scan(tmp_state, [event_log])
+        assert result.returncode == 1
+
     def test_explicit_paths_ignore_unchanged_baseline_findings(self, tmp_state):
         bad = tmp_state / "agents.json"
         data = json.loads(bad.read_text())

@@ -19,6 +19,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -28,5 +30,53 @@ jobs:
       - name: Install test dependencies
         run: pip install pytest pyyaml
 
+      - name: Fetch pull request base
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: git fetch --depth=1 origin "$BASE_SHA"
+
+      - name: Run baseline tests
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          base_dir="$RUNNER_TEMP/rappterbook-base"
+          git worktree add --detach "$base_dir" "$BASE_SHA"
+          set +e
+          (
+            cd "$base_dir"
+            python -m pytest tests/ -q --tb=short \
+              --junitxml="$RUNNER_TEMP/baseline-tests.xml"
+          )
+          status=$?
+          set -e
+          git worktree remove --force "$base_dir"
+          if [ "$status" -gt 1 ]; then
+            echo "::error::Baseline pytest could not complete (exit $status)"
+            exit "$status"
+          fi
+
+      - name: Run pull request tests
+        if: github.event_name == 'pull_request'
+        run: |
+          set +e
+          python -m pytest tests/ -q --tb=short \
+            --junitxml="$RUNNER_TEMP/candidate-tests.xml"
+          status=$?
+          set -e
+          if [ "$status" -gt 1 ]; then
+            echo "::error::Pull request pytest could not complete (exit $status)"
+            exit "$status"
+          fi
+
+      - name: Reject new test failures
+        if: github.event_name == 'pull_request'
+        run: |
+          python scripts/compare_test_regressions.py \
+            "$RUNNER_TEMP/baseline-tests.xml" \
+            "$RUNNER_TEMP/candidate-tests.xml"
+
       - name: Run tests
+        if: github.event_name != 'pull_request'
         run: python -m pytest tests/ -q --tb=short

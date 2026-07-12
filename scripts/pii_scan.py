@@ -64,7 +64,9 @@ def _scan_paths(paths):
     all_findings = []
     for filepath in paths:
         path = Path(filepath)
-        if path.is_file() and path.suffix in {".json", ".md"}:
+        if not path.exists():
+            raise FileNotFoundError(f"Changed state path not found: {path}")
+        if path.is_file() and path.suffix in {".json", ".jsonl", ".md"}:
             all_findings.extend(scan_file(path))
     return all_findings
 
@@ -73,19 +75,22 @@ def _changed_state_paths(ref):
     """Return state files added or modified relative to a git ref."""
     result = subprocess.run(
         [
-            "git", "diff", "--name-only", "--diff-filter=ACMR",
+            "git", "diff", "--name-only", "-z", "--diff-filter=ACMR",
             ref, "HEAD", "--", "state/",
         ],
         capture_output=True,
-        text=True,
         check=False,
     )
     if result.returncode != 0:
         raise RuntimeError(
             f"Could not determine changed state files from {ref}: "
-            f"{result.stderr.strip()}"
+            f"{os.fsdecode(result.stderr).strip()}"
         )
-    return [Path(line) for line in result.stdout.splitlines() if line]
+    return [
+        Path(os.fsdecode(raw_path))
+        for raw_path in result.stdout.split(b"\0")
+        if raw_path
+    ]
 
 
 def main(argv=None):
@@ -119,11 +124,15 @@ def main(argv=None):
     else:
         paths = [
             filepath
-            for ext in ("*.json", "*.md")
+            for ext in ("*.json", "*.jsonl", "*.md")
             for filepath in STATE_DIR.rglob(ext)
         ]
 
-    all_findings = _scan_paths(paths)
+    try:
+        all_findings = _scan_paths(paths)
+    except OSError as exc:
+        print(f"Could not scan state files: {exc}", file=sys.stderr)
+        return 1
 
     if all_findings:
         print(f"Found {len(all_findings)} PII/secret matches:", file=sys.stderr)
